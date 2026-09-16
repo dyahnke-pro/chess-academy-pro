@@ -1635,6 +1635,28 @@ export function buildReviewSegments(
         },
         { rating: rating ?? 1500, weaknesses: studentWeaknesses ?? [] },
         { facts: kept, squares: facetSquares, incoming: facetIncoming },
+        // REVIEW IS A WALK: the student asked to be taken through the game, so a
+        // quiet moment is a shorter beat, never a skipped one. Gating review on
+        // the live-surface importance check cut this game to 6 narrated plies.
+        'walk',
+        // HOW TO THINK, not just what happened (David 2026-09-16). The signals
+        // are ones this loop already holds — the attributor's own
+        // `ignored-threat` finding, the cost, the move that was there — so the
+        // habit is earned by a computed condition, never generic advice.
+        {
+          // THE REAL COST, not a bucket keyed off the classification label. The
+          // buckets (60/150/300) made every inaccuracy look like 0.6 pawns, so a
+          // 1.2-pawn inaccuracy never cleared the forcing-scan bar. Same formula
+          // the spoken "costing about X points" uses, so the habit and the
+          // number can never disagree.
+          cpLossCp: m.evaluation != null && m.preMoveEval != null
+            ? Math.abs(m.evaluation - m.preMoveEval)
+            : null,
+          bestSan: bestMoveSan ?? null,
+          ignoredThreat: fundamentals.some((f) => f.id === 'ignored-threat'),
+          isStudentMove: playerColor !== undefined && moverColor === playerColor,
+          ply: m.ply,
+        },
       );
       // SILENCE IS A COMPUTED VERDICT, so it has to be explainable — emit what
       // went quiet and why, or a future session cannot tell a deliberate

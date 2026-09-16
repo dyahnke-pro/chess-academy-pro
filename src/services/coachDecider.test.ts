@@ -18,7 +18,7 @@ const decided: ImportanceSignals = { ...blunder, evalCpWhitePov: 2000 };
 
 describe('coachDecider — one door for the whole decision', () => {
   it('a real moment speaks, and the one-claim duplicate is already collapsed', () => {
-    const d = decide(blunder, student, bundle);
+    const d = decide(blunder, student, bundle, 'interrupt');
     expect(d.speak).toBe(true);
     expect(d.spoken).toContain(BATTERY);
     expect(d.spoken).not.toContain(PIN);      // same geometry, theirs wins
@@ -26,19 +26,19 @@ describe('coachDecider — one door for the whole decision', () => {
   });
 
   it('a decided game is silent — the contested gate, not a second criticality', () => {
-    const d = decide(decided, student, bundle);
+    const d = decide(decided, student, bundle, 'interrupt');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('importance');
   });
 
   it("this student's need can silence a moment the board thinks is fine", () => {
-    const d = decide(blunder, { ...student, need: { speak: false } }, bundle);
+    const d = decide(blunder, { ...student, need: { speak: false } }, bundle, 'interrupt');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('need');
   });
 
   it('ABSENT need data is not silence — a cold student meets a teaching coach', () => {
-    const d = decide(blunder, { ...student, need: null }, bundle);
+    const d = decide(blunder, { ...student, need: null }, bundle, 'interrupt');
     expect(d.speak).toBe(true);
   });
 
@@ -46,14 +46,33 @@ describe('coachDecider — one door for the whole decision', () => {
     for (const [sig, st] of [
       [blunder, student], [decided, student], [blunder, { ...student, need: { speak: false } }],
     ] as const) {
-      const d = decide(sig, st, bundle);
+      const d = decide(sig, st, bundle, 'interrupt');
       expect(d.spoken.length + d.quiet.length).toBe(bundle.facts.length);
     }
   });
 
   it('ordering puts the most important fact first', () => {
-    const d = decide(blunder, student, bundle);
+    const d = decide(blunder, student, bundle, 'interrupt');
     expect(d.spoken[0]).toBe(BATTERY); // tactic (84) outranks consequence (12)
+  });
+});
+
+describe('posture — what silence MEANS on this surface', () => {
+  it("a WALK never loses a ply to the moment gate — the student asked for the sequence", () => {
+    // The live-surface gate applied to review cut a 46-ply game to 6 narrated
+    // plies with every test green. Only reading the narration caught it.
+    const d = decide(decided, student, bundle, 'walk');
+    expect(d.speak).toBe(true);
+  });
+
+  it('an INTERRUPT surface must earn the interruption', () => {
+    expect(decide(decided, student, bundle, 'interrupt').speak).toBe(false);
+  });
+
+  it("the student's own need still silences a walk — that gate is theirs, not the board's", () => {
+    const d = decide(blunder, { ...student, need: { speak: false } }, bundle, 'walk');
+    expect(d.speak).toBe(false);
+    expect(d.reason).toBe('need');
   });
 });
 

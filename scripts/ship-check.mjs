@@ -311,6 +311,7 @@ const GATE_TESTS = [
   'src/services/exchangeLedger.test.ts',
   'src/services/factSelector.test.ts',
   'src/services/coachDecider.test.ts',
+  'src/services/methodBeat.test.ts',
   'src/services/mapConcurrent.test.ts',
   'src/services/reviewFacetRank.test.ts',
   'src/services/reviewNarrationDefects.test.ts',

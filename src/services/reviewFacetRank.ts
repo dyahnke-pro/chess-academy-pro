@@ -28,7 +28,8 @@ export type FacetTag =
   | 'sac' | 'sac-why' | 'forced' | 'king' | 'rook7' | 'passer'
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
-  | 'plan-now' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence';
+  | 'plan-now' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
+  | 'method';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -78,6 +79,12 @@ export const FACET_RANK: Record<FacetTag, number> = {
   'plan-middlegame': 16,
   'plan-opening': 14,
   consequence: 12,
+  // THE METHOD CLOSES THE BEAT (2026-09-16). Ranked last on purpose: the board
+  // fact comes first, the principle it broke next, and the habit that finds it
+  // next time is the takeaway. Leading with the habit preaches before the
+  // student has seen the evidence. It only ever fires on moments whose floor is
+  // 0 (critical / blunder / must-defend), so a low rank never silences it.
+  method: 8,
 };
 
 const TAG_RE = /^\[([a-z0-9-]+)\]/;

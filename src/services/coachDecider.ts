@@ -32,7 +32,23 @@
 import { computeImportance, type ImportanceSignals, type ImportanceTier } from './narrationImportance';
 import { selectFacts, type QuietFact } from './factSelector';
 import { rankFacets } from './reviewFacetRank';
+import { methodBeatFor, type MethodSignals } from './methodBeat';
 import type { WeaknessSignal } from './weaknessSignal';
+
+/** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
+ *
+ *  • 'walk'      — review / Watch: the coach is narrating a sequence the student
+ *                  asked to be walked through. Every ply is a beat. Importance
+ *                  RANKS the moment and sets the floor; it must NOT decide
+ *                  whether the ply speaks, because the student came for the walk.
+ *  • 'interrupt' — Play / live boards: silence is the default and the coach has
+ *                  to EARN the interruption, so importance gates.
+ *
+ *  This distinction was learned the hard way, twice in one night. Applying the
+ *  live-surface gate to review cut a 46-ply walk to SIX narrated plies, and
+ *  every unit test stayed green — only reading the narration caught it. A
+ *  surface must declare its posture; there is no safe default. */
+export type SurfacePosture = 'walk' | 'interrupt';
 
 /** What this student brings to the board. */
 export interface StudentContext {
@@ -53,6 +69,10 @@ export interface FactBundle {
   /** Facts describing what the OPPONENT is doing TO the student. */
   incoming?: ReadonlySet<string>;
 }
+
+/** What the student should have DONE differently in their head. Optional: a
+ *  surface that cannot supply these simply gets no method beat. */
+export type MethodContext = Omit<MethodSignals, 'tier'> & { ply?: number };
 
 export interface CoachDecision {
   /** Does this moment speak at all? */
@@ -79,13 +99,20 @@ export function decide(
   signals: ImportanceSignals,
   student: StudentContext,
   bundle: FactBundle,
+  posture: SurfacePosture,
+  /** When supplied, the decider also decides whether to teach the METHOD here —
+   *  the habit that would have found the move. It lives in THIS computer, not
+   *  at a call site, because it is a teaching decision and it needs the tier
+   *  this function computes (David 2026-09-16: how to think IS the teaching). */
+  method?: MethodContext,
 ): CoachDecision {
   const importance = computeImportance(signals, student.rating);
   const base = { tier: importance.tier, rank: importance.rank };
 
-  // 1 — THE MOMENT. `computeImportance` already applies the contested gate, so
-  // a swing inside a decided game never reaches here as important.
-  if (!importance.speak) {
+  // 1 — THE MOMENT, but ONLY where silence is the default. On a 'walk' the
+  // student asked for the sequence, so an unimportant moment is a QUIETER beat,
+  // never a missing one.
+  if (posture === 'interrupt' && !importance.speak) {
     return { ...base, speak: false, reason: 'importance', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) };
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
@@ -105,5 +132,11 @@ export function decide(
   );
   // 5 — THE ORDER. Importance first, with the student's own holes raised.
   const spoken = rankFacets(selection.spoken, student.weaknesses);
+  // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
+  // then the principle it broke, then the habit that finds it next time.
+  if (method) {
+    const beat = methodBeatFor({ ...method, tier: importance.tier }, method.ply ?? 0);
+    if (beat) spoken.push(`[method] ${beat}`);
+  }
   return { ...base, speak: true, reason: 'spoken', spoken, quiet: selection.quiet };
 }
