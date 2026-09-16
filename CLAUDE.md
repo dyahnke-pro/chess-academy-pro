@@ -581,6 +581,17 @@ be relaxed, because a slow call no longer blocks the others — and no beat is
 ever dropped for time. Do NOT remove the deadline before the pool wire lands, or
 one wedged worker hangs the walk forever and the student gets nothing.
 
+Mapped 2026-09-16 so the next session does not re-derive it: `computePvLine`
+reads only `evaluation` and `topLines` off an analysis, while the pool's
+`DedicatedWorker.analyzePosition(fen, depth, budgetMs?)` returns
+`{evaluation, bestMove, depth, pv}` — so the adapter must synthesise a rank-1
+`topLines` entry from `bestMove`+`pv`. The lease already exists as
+`acquirePool(size)` (private; warm workers ping-checked, fresh spawns for the
+shortfall, throws only when NO worker can be had — then fall back to the
+singleton exactly as today). Export a `acquirePvEngines(size)` returning
+PvEngine adapters plus a release, and distribute the projection passes across
+them with a work queue.
+
 ### G5. Verbosity setting is RESPECTED, not hinted at.
 
 `coachNarration` has three values: `silent` / `brief` / `full`.
