@@ -67,16 +67,32 @@ export const SAME_CLAIM_JACCARD = 0.6;
  *  computed fact; a quiet one admits only what is worth interrupting calm for.
  *  These are FLOORS on `facetRank`, whose own table runs ~12 (consequence) to
  *  ~100 (principle), plus a weakness boost of ≤30. */
+/** 🔒 THE BAR IS A FLOOR, NOT A SHAPER (corrected 2026-09-16, same hour, after
+ *  READING the output). The first numbers here ran 40–101 and cut the Alapin
+ *  review from 44 narrated plies to SIX — quiet plies land on tier 'none', and a
+ *  bar above every rank silences the whole ply. That is precisely the "things
+ *  don't get stated, teachings left out" failure David banned, arriving through
+ *  the door marked 'importance'.
+ *
+ *  Two rules that keep it honest:
+ *   1. SUBSUMPTION does the real work. Collapsing four readings of one diagonal
+ *      is a judgement about DUPLICATION and is always safe. The bar only sweeps
+ *      genuine trivia (the `consequence` band at 12, "it nudged the balance your
+ *      way"). If the coach still says too much, tighten subsumption first.
+ *   2. THE BAR MAY NEVER SILENCE A PLY. Whether a quiet ply speaks at all is the
+ *      NEED gate's decision (N2), made from the student's own data. A per-fact
+ *      floor must not re-litigate it — so no tier's bar may sit above the lowest
+ *      real fact rank, and `none` is not a mute. */
 const BAR_BY_TIER: Record<ImportanceTier, number> = {
   mate: 0,          // everything — nothing outranks a forced mate on the board
   'only-move': 0,
   blunder: 0,
   'must-defend': 0,
   critical: 0,
-  swing: 20,        // drop only the tail (consequence-class trivia)
-  teaching: 55,     // a calm taught moment: the lasting facts, not the inventory
-  convert: 40,      // a won game: the conversion facts, not the scenery
-  none: 101,        // the moment did not earn voice at all
+  swing: 0,
+  teaching: 20,     // sweeps the consequence-band tail only
+  convert: 20,
+  none: 20,         // NOT a mute — ply-level silence belongs to the need gate
 };
 
 export function barForTier(tier: ImportanceTier): number {

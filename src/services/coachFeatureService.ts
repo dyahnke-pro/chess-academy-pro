@@ -27,6 +27,8 @@ import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewF
 import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
 import { renderStructureAtoms } from './structureProse';
 import { rankFacets } from './reviewFacetRank';
+import { selectFacts } from './factSelector';
+import { computeImportance } from './narrationImportance';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead } from './reviewTeachingPoints';
@@ -1472,6 +1474,9 @@ export function buildReviewSegments(
       // Key squares each facet NAMED, coupled from the computer (never scraped)
       // so the review can lead the eye with a yellow highlight per kept facet.
       const facetSquares = new Map<string, readonly string[]>();
+      // Facts describing what the OPPONENT is doing TO the student, coupled from
+      // the tactic detector's own `beneficiary` — the selector's tie-break.
+      const facetIncoming = new Set<string>();
       const facets = computeMoveFacets({
         fundamentals,
         fenBefore: fenPair.fenBefore,
@@ -1488,7 +1493,7 @@ export function buildReviewSegments(
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
-      }, facetSquares);
+      }, facetSquares, facetIncoming);
       // Drop an identical STATIC state facet already spoken on an earlier ply
       // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.
@@ -1602,7 +1607,42 @@ export function buildReviewSegments(
       // by importance and adds this student's weakness boost, so the fact that
       // most changes what they do next leads the beat. The SET is unchanged —
       // ranking reorders, it never drops (G4.5).
-      let orderedKept = rankFacets(kept, studentWeaknesses ?? []);
+      // 🔒 THE COMPUTER CUTS, AT NARRATION TIME — not a branch in code (David
+      // 2026-09-16: "we don't make a cut on the code side, the computer that
+      // ranks the narrations does. At narrations time. If the battery is more
+      // important than the pin, then the pin stays quiet and the battery wins").
+      //
+      // `rankFacets` orders and, by design, never drops. That left four readings
+      // of ONE diagonal — the pin, the battery, the lone defender, the royal
+      // guard — all speaking as separate findings. `selectFacts` adds the two
+      // things ordering cannot do: it COLLAPSES facts whose squares coincide to
+      // the single most important one (their incoming threat beating your
+      // standing asset at equal rank), and it drops what is below the moment's
+      // value BAR. A bar is not a cap: on a critical moment every computed fact
+      // still clears it (G4.5).
+      const tier = computeImportance({
+        decision: null,          // no per-ply criticality scan in the review pass
+        cpLossCp: m.classification === 'blunder' ? 300
+          : m.classification === 'mistake' ? 150
+            : m.classification === 'inaccuracy' ? 60 : null,
+        threatNet: 0,
+        teachingBeat: fundamentalLed || !!causalLead,
+        evalCpWhitePov: m.evaluation ?? null,
+        wdl: null,
+      }, rating ?? 1500).tier;
+      const selection = selectFacts(kept, facetSquares, tier, studentWeaknesses ?? [], facetIncoming);
+      // SILENCE IS A COMPUTED VERDICT, so it has to be explainable — emit what
+      // went quiet and why, or a future session cannot tell a deliberate
+      // collapse from a lost fact.
+      if (selection.quiet.length > 0) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachFeatureService.factSelector',
+          summary: `ply ${m.ply}: ${selection.spoken.length} spoken, ${selection.quiet.length} quiet (${selection.quiet.map((q) => q.why).join(',')})`,
+        });
+      }
+      let orderedKept = rankFacets(selection.spoken, studentWeaknesses ?? []);
       if (fundamentalLed) {
         const principle = orderedKept.filter((f) => /^\[principle\]/.test(f));
         if (principle.length > 0) orderedKept = [...principle, ...orderedKept.filter((f) => !/^\[principle\]/.test(f))];

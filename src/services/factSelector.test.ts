@@ -81,7 +81,10 @@ describe('factSelector — a BAR, not a cap (G4.5)', () => {
     expect(barForTier('mate')).toBe(0);
     expect(barForTier('blunder')).toBe(0);
     expect(barForTier('swing')).toBeLessThan(barForTier('teaching'));
-    expect(barForTier('none')).toBeGreaterThan(100); // nothing speaks
+    // 'none' is NOT a mute — a per-fact floor may never silence a whole ply;
+    // that decision belongs to the need gate (N2). Regressing this cut the
+    // Alapin review from 44 narrated plies to 6.
+    expect(barForTier('none')).toBeLessThan(30);
   });
 
   it('every fact is accounted for — spoken or explainably quiet', () => {

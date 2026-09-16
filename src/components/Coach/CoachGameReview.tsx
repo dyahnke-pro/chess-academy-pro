@@ -91,37 +91,38 @@ import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType, MoveClassification, StockfishAnalysis } from '../../types';
 
-/** THE FULL-DETAIL INVENTORY REGISTER IS CUT (David 2026-09-16, after reading
- *  the real output side by side: "I see what you mean by full detail now. Thank
- *  you for showing me that. Cut it.").
+/** THE REGISTER IS BACK ON, AND THE COMPUTER CUTS IT (David 2026-09-16:
+ *  "we don't make a cut on the code side, the computer that ranks the
+ *  narrations does. At narrations time").
  *
- *  What he read: the uncapped aggregator speaks EVERY computed facet on every
- *  move in rank order, so a 46-ply game ran 3,242 words against the one-beat
- *  register's 1,060 — and the extra words were an inventory, not teaching
- *  ("You're balanced" at ply 1; "Undefended right now: their pawn on e4" at ply
- *  4). It also went SILENT on three plies where the one-beat register spoke.
+ *  HISTORY, so nobody re-derives this the wrong way twice. David read the
+ *  full-detail output and said "cut it", and the first attempt cut it HERE — a
+ *  branch flip that stopped a whole register rendering. That was the wrong
+ *  shape: it silenced his complaint (four readings of one diagonal at ply 23)
+ *  by accident rather than by decision, it threw away every OTHER fact on the
+ *  ply along with the duplicate, and it was scoped to review while the coach is
+ *  one system.
  *
- *  So review runs the one-beat register for every user. There is no Settings
- *  toggle: a switch that can turn the inventory back on is not a cut. The
- *  branch survives as a DIAGNOSTIC only, reachable by `?uncapped=1` or
- *  `window.__REVIEW_UNCAPPED__ = true` when a session needs to read the full
- *  computed inventory for itself.
+ *  The right shape is `factSelector`, called at narration time inside
+ *  `buildReviewSegments`: it collapses facts whose squares coincide to the
+ *  single most important one, and drops what falls under the moment's value
+ *  bar. So the register renders every computed fact it ever did, and a computer
+ *  — not a code path — decides which of them speak.
  *
- *  🔒 THIS IS NOT A CAP AND MUST NOT BECOME ONE (G4.5). What was cut is a
- *  RENDERING REGISTER — how many computed facts get read aloud per move. The
- *  PROJECTION passes stay UNCAPPED: `augmentWithProjections` is now called with
- *  scope 'full' unconditionally, so every deep threat, opponent threat and
- *  prophylactic line is still computed and still played out. Those are the
- *  "here's how you take advantage" beats David asked for; the `'mistakes'`
- *  scope would have silently reinstated three `: 2` budgets. Never re-couple
- *  the projection scope to this flag. */
+ *  🔒 DO NOT CUT A REGISTER IN CODE AGAIN. If the coach says too much, the fix
+ *  is in the selector's bar or its subsumption, where it applies to every
+ *  surface, and where silence stays a computed, explainable verdict.
+ *
+ *  `?uncapped=0` still forces the old one-beat cascade for a quick manual
+ *  comparison; `reviewFullDetail` on the profile remains unread (its Settings
+ *  row is gone and stays gone — the choice is the computer's, not a toggle). */
 function isReviewUncapped(): boolean {
   try {
-    if (typeof window === 'undefined') return false;
-    if (new URLSearchParams(window.location.search).get('uncapped') === '1') return true;
-    if ((window as unknown as { __REVIEW_UNCAPPED__?: boolean }).__REVIEW_UNCAPPED__ === true) return true;
-    return false;
-  } catch { return false; }
+    if (typeof window === 'undefined') return true;
+    if (new URLSearchParams(window.location.search).get('uncapped') === '0') return false;
+    if ((window as unknown as { __REVIEW_UNCAPPED__?: boolean }).__REVIEW_UNCAPPED__ === false) return false;
+    return true;
+  } catch { return true; }
 }
 
 interface CoachGameReviewProps {
