@@ -32,7 +32,7 @@
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, type QuietFact } from './factSelector';
 import { rankFacets } from './reviewFacetRank';
-import { methodBeatFor, type MethodSignals } from './methodBeat';
+import { methodBeatFor, type MethodSignals, type HabitNeed } from './methodBeat';
 import type { WeaknessSignal } from './weaknessSignal';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
@@ -182,8 +182,45 @@ export function decide(
   // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
   // then the principle it broke, then the habit that finds it next time.
   if (method) {
-    const beat = methodBeatFor({ ...method, tier: importance.tier }, method.ply ?? 0);
+    // The habit bar is the STUDENT'S OWN RECORD, not a flat number. `habitNeed`
+    // passed by the caller wins; otherwise it is derived here from the weakness
+    // spine, so every surface gets the same answer from the same door.
+    const beat = methodBeatFor(
+      { ...method, tier: importance.tier, habitNeed: method.habitNeed ?? habitNeedFrom(student.weaknesses) },
+      method.ply ?? 0,
+    );
     if (beat) spoken.push(`[method] ${beat}`);
   }
   return { ...base, speak: true, reason: 'spoken', spoken, quiet: selection.quiet };
+}
+
+/** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.
+ *
+ *  A method beat is earned by RECURRENCE, not by the size of one slip (David
+ *  2026-09-16, after his Alapin review spoke zero method: 2 inaccuracies and 2
+ *  mistakes, none of which cleared the flat `cpLoss >= 100` bar). The spine
+ *  already tracks recurrence per cluster; this joins those clusters to the
+ *  habit that would have caught them.
+ *
+ *  Matching is on `clusterId`, the spine's documented join key — never on
+ *  `label`, which is display text and is explicitly "never used for matching".
+ *  A cluster must be genuinely open (`openCount > 0`) to count: a hole the
+ *  student has since closed is not a habit they still need taught. */
+function habitNeedFrom(weaknesses: readonly WeaknessSignal[]): HabitNeed {
+  const need: HabitNeed = {};
+  for (const w of weaknesses) {
+    if (w.openCount <= 0) continue;
+    const id = w.clusterId.toLowerCase();
+    // Missing what the OPPONENT was doing — hanging pieces, allowed tactics.
+    if (/hanging|allowed|ignored-threat|undefended|missed-threat/.test(id)) need['opponent-threat'] = true;
+    // Missing a shot that was forcing — the checks-and-captures scan.
+    if (/tactic|fork|pin|skewer|discovered|double-check|back-rank|mate|deflection|overload/.test(id)) {
+      need['forcing-scan'] = true;
+    }
+    // Falling apart at the moments that decide the game.
+    if (/blunder|critical|time|rush|conversion/.test(id)) need['slow-down'] = true;
+    // Picking the first move that looks right.
+    if (/candidate|calculation|impulse|premature/.test(id)) need['candidates'] = true;
+  }
+  return need;
 }

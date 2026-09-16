@@ -27,6 +27,7 @@ import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewF
 import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
 import { renderStructureAtoms } from './structureProse';
 import { decide } from './coachDecider';
+import type { MethodHabit } from './methodBeat';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead } from './reviewTeachingPoints';
@@ -1274,6 +1275,12 @@ export function buildReviewSegments(
     { re: / — hemmed in behind its own pawns on the same colour, with almost nowhere to go/, sub: '' },
   ];
   const spokenRefrains = new Set<number>();
+  // A HABIT IS A ROUTINE, NOT A RUNNING TOTAL. One ledger for the whole game, so
+  // "ask what THEY want" is taught once and the later slips carry board facts
+  // instead of the same lecture. This is what lets the method BAR be need-driven
+  // (methodBeat.ts) without the ten-plies-in-a-row drumbeat coming back — a bar
+  // tuned to suppress repetition suppresses teaching too.
+  const spokenHabits = new Set<MethodHabit>();
   const applyRefrainOnce = (text: string): string => {
     let out = text;
     REFRAINS.forEach((r, idx) => {
@@ -1656,6 +1663,7 @@ export function buildReviewSegments(
           ignoredThreat: fundamentals.some((f) => f.id === 'ignored-threat'),
           isStudentMove: playerColor !== undefined && moverColor === playerColor,
           ply: m.ply,
+          saidHabits: spokenHabits,
         },
       );
       // SILENCE IS A COMPUTED VERDICT, so it has to be explainable — emit what

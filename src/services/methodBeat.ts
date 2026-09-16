@@ -31,7 +31,36 @@ export interface MethodSignals {
   ignoredThreat: boolean;
   /** Was the student the mover? Method is taught to the person playing. */
   isStudentMove: boolean;
+  /** THE HABITS THIS STUDENT'S OWN DATA SAYS THEY KEEP MISSING (David
+   *  2026-09-16). Derived in `coachDecider` from the weakness spine — never
+   *  re-derived here, and never inferred from the position.
+   *
+   *  WHY THIS EXISTS. The bars below (cpLoss >= 100, tier critical/only-move)
+   *  were set high earlier the same night because the beat was firing on ten
+   *  student plies in a row — a drumbeat. That over-corrected: a clean-ish real
+   *  game (David's Alapin: 2 inaccuracies, 2 mistakes, nothing sharper) then
+   *  heard ZERO method, which is "teachings left out" arriving from the other
+   *  side. A flat cp threshold is the wrong instrument for "does this student
+   *  need the habit" — their own recurrence is (N2). When their spine flags the
+   *  habit, the bar drops to any graded slip. */
+  habitNeed?: HabitNeed;
+  /** Habits already spoken THIS GAME. Say-once is what stops the drumbeat now,
+   *  which is the right place for it: a bar tuned to suppress repetition
+   *  suppresses teaching too. Mutated by the caller across the walk. */
+  saidHabits?: Set<MethodHabit>;
 }
+
+/** The habit classes the method layer teaches. Named so the say-once ledger and
+ *  the need lookup share one vocabulary and cannot drift. */
+export type MethodHabit = 'opponent-threat' | 'forcing-scan' | 'slow-down' | 'candidates';
+
+/** Which habits this student keeps breaking, by their own record. */
+export type HabitNeed = Partial<Record<MethodHabit, boolean>>;
+
+/** The cp bar for the forcing scan: normally a real cost, but ANY graded slip
+ *  when the student's own data says they habitually miss forcing shots. */
+const FORCING_CP = 100;
+const FORCING_CP_WHEN_NEEDED = 1;
 
 /** Stems rotate on the ply so a long game never repeats a sentence verbatim
  *  (the narration-voice rule: vary the stem, never the claim). */
@@ -47,36 +76,50 @@ function pick(variants: readonly string[], v: number): string {
  */
 export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | null {
   if (!s.isStudentMove) return null; // you teach the method to the player
+  // SAY-ONCE per habit per game. A habit is a routine, not a running total —
+  // hearing "ask what THEY want" on every slip is nagging, and nagging is how a
+  // student learns to tune the coach out. Once it has been taught this game the
+  // beat stays quiet and the board facts carry the ply.
+  const said = s.saidHabits;
+  const need = s.habitNeed ?? {};
+  const claim = (h: MethodHabit, text: string): string | null => {
+    if (said?.has(h)) return null;
+    said?.add(h);
+    return text;
+  };
 
   // 1 — OPPONENT INTENT. They had something going and it was played past. This
   // is the single most common habit gap, and the most teachable.
   if (s.ignoredThreat) {
-    return pick([
+    return claim('opponent-threat', pick([
       'The habit that catches this: before your own idea, ask what THEY want — their threat comes first, every move.',
       'Make this the routine — their threat before your plan. Ask what they are trying to do before you ask what you want.',
       'One question would have caught it: what is their move doing? Answer that before choosing your own.',
-    ], plyForVariety);
+    ], plyForVariety));
   }
 
   // 2 — THE FORCING SCAN. The move that was there was a check or a capture, so
   // the method that finds it is the forcing scan, named concretely.
-  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && s.cpLossCp !== null && s.cpLossCp >= 100) {
-    return pick([
+  const forcingBar = need['forcing-scan'] ? FORCING_CP_WHEN_NEEDED : FORCING_CP;
+  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && s.cpLossCp !== null && s.cpLossCp >= forcingBar) {
+    return claim('forcing-scan', pick([
       'The move you wanted was a forcing one, so start there: list the checks and the captures before anything quiet.',
       'When something is available it is usually forcing — run the checks and captures first, then look at quiet moves.',
       'Habit for positions like this: every check, every capture, in order, before you consider a quiet move.',
-    ], plyForVariety);
+    ], plyForVariety));
   }
 
   // 3 — SLOW DOWN. The position had real decision leverage: the right move
   // mattered here more than it does on an ordinary move. The app has always
   // KNOWN this (`criticalityScan` is rating-scaled) and never said it.
-  if (s.tier === 'critical' || s.tier === 'only-move') {
-    return pick([
+  const slowTier = s.tier === 'critical' || s.tier === 'only-move'
+    || (need['slow-down'] === true && (s.tier === 'blunder' || s.tier === 'swing'));
+  if (slowTier) {
+    return claim('slow-down', pick([
       'This was the moment to slow down — positions where one move decides it are worth more time than the ten quiet moves around them.',
       'Spend your clock here, not on the easy moves — this is the kind of position that decides games.',
       'Worth noticing for next time: this position was a fork in the road, and those deserve real thinking time.',
-    ], plyForVariety);
+    ], plyForVariety));
   }
 
   return null; // empty > generic
