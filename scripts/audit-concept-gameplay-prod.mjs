@@ -116,6 +116,17 @@ async function dismissGates(page) {
 
 /** Narration lines the app itself reported as SPOKEN (summary preview + the
  *  full line in details). Instrument 3. */
+/** The FULL spoken sentence, for reading back. `spokenLines` below builds
+ *  summary+details strings because that is what the concept MATCHER greps; the
+ *  app's own event carries the whole line in `narrationText`, and a report that
+ *  saves the 120-char preview is a report you cannot read the narration from
+ *  (2026-09-16). */
+function spokenProse(listener) {
+  return listener.getCapturedEvents()
+    .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText)
+    .map((e) => String(e.narrationText));
+}
+
 function spokenLines(listener) {
   return listener.getCapturedEvents()
     .filter((e) => /coach-narration-spoken|voice-speak-invoked/i.test(e.kind ?? ''))
@@ -246,7 +257,7 @@ async function main() {
   // count (2026-09-16) — so diagnosing a red row meant re-running a 6-minute
   // prod audit to see the lines it already had in memory. David's standing
   // order is to READ the narration; the report has to carry it.
-  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, results, spokenLines: spokenLines(listener), listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, pageErrors };
+  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, results, spokenLines: spokenLines(listener), spokenProse: spokenProse(listener), listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, pageErrors };
   await writeFile(`${OUT_DIR}/report.json`, JSON.stringify(report, null, 2));
   const failed = results.filter((r) => !r.pass);
   console.log(`\n${results.length - failed.length}/${results.length} green — report at ${OUT_DIR}/report.json`);
