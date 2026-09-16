@@ -849,3 +849,36 @@ STRANDED on separate surfaces while the narration describes and diagnoses.
    posture. Today only review goes through it.
 3. Threat identification as a habit, and candidate-move discipline in flow.
 4. Concept-level SRS (today `FlashcardRecord` is opening-keyed).
+
+## §15. Overnight results, read off the narration
+
+Same Alapin game, same builder, through the session:
+
+| stage | plies spoken | words |
+|---|---|---|
+| before any of this | 43 / 46 | 3,242 |
+| the bad first bar (caught by reading) | 6 / 46 | 684 |
+| decider wired without posture (caught by reading) | 6 / 46 | 801 |
+| shipped | 43 / 46 | 3,147 |
+
+Ply 23 went from ten clauses to seven with nothing lost: the pin collapsed into
+the battery (one diagonal, one claim), and the two `[delta]` clauses describing
+that same diagonal from both ends collapsed into each other. Ply 1 no longer
+spends a sentence on "You're balanced".
+
+**Twice tonight a change passed every test and silenced 37 plies.** Both times
+the only instrument that caught it was printing the narration and reading it.
+That is now the habit: after any change to the decider, print the walk.
+
+**Three gates I wrote went stale within hours** by pinning call-site TEXT
+(`selectFacts(kept, facetSquares, tier` → `decide(`). Gates assert the DOOR and
+the BEHAVIOUR; `coachDecider.test.ts` owns "no surface composes the decision by
+hand", and nothing else should re-assert it against a call signature.
+
+**Caps removed tonight (G4.5):** three `.slice(0, 2)` in `boardDelta` (opened
+lines, blocked lines) and the `hits.slice(0, 2)` inside the opened-line clause,
+now an "a, b and c" list.
+
+**Blast radius, verified:** `computeMoveFacets` and `computeBoardDelta` each
+have exactly ONE production caller (the review facet path), so Learn and Play
+narration is untouched by tonight's changes.
