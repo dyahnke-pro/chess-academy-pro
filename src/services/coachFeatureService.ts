@@ -26,9 +26,7 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
 import { renderStructureAtoms } from './structureProse';
-import { rankFacets } from './reviewFacetRank';
-import { selectFacts } from './factSelector';
-import { computeImportance } from './narrationImportance';
+import { decide } from './coachDecider';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead } from './reviewTeachingPoints';
@@ -1620,29 +1618,36 @@ export function buildReviewSegments(
       // standing asset at equal rank), and it drops what is below the moment's
       // value BAR. A bar is not a cap: on a critical moment every computed fact
       // still clears it (G4.5).
-      const tier = computeImportance({
-        decision: null,          // no per-ply criticality scan in the review pass
-        cpLossCp: m.classification === 'blunder' ? 300
-          : m.classification === 'mistake' ? 150
-            : m.classification === 'inaccuracy' ? 60 : null,
-        threatNet: 0,
-        teachingBeat: fundamentalLed || !!causalLead,
-        evalCpWhitePov: m.evaluation ?? null,
-        wdl: null,
-      }, rating ?? 1500).tier;
-      const selection = selectFacts(kept, facetSquares, tier, studentWeaknesses ?? [], facetIncoming);
+      // ONE DOOR (David 2026-09-16: "I want one unified deciding computer").
+      // Importance, this student's need, subsumption, the floor and the order
+      // are a SINGLE call now — review does not compose them itself, so it
+      // cannot drift from the surface that adopts the decider next.
+      const decision = decide(
+        {
+          decision: null,          // no per-ply criticality scan in the review pass
+          cpLossCp: m.classification === 'blunder' ? 300
+            : m.classification === 'mistake' ? 150
+              : m.classification === 'inaccuracy' ? 60 : null,
+          threatNet: 0,
+          teachingBeat: fundamentalLed || !!causalLead,
+          evalCpWhitePov: m.evaluation ?? null,
+          wdl: null,
+        },
+        { rating: rating ?? 1500, weaknesses: studentWeaknesses ?? [] },
+        { facts: kept, squares: facetSquares, incoming: facetIncoming },
+      );
       // SILENCE IS A COMPUTED VERDICT, so it has to be explainable — emit what
       // went quiet and why, or a future session cannot tell a deliberate
       // collapse from a lost fact.
-      if (selection.quiet.length > 0) {
+      if (decision.quiet.length > 0) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
-          source: 'coachFeatureService.factSelector',
-          summary: `ply ${m.ply}: ${selection.spoken.length} spoken, ${selection.quiet.length} quiet (${selection.quiet.map((q) => q.why).join(',')})`,
+          source: 'coachFeatureService.coachDecider',
+          summary: `ply ${m.ply}: ${decision.spoken.length} spoken, ${decision.quiet.length} quiet (${decision.reason}; ${decision.quiet.map((q) => q.why).join(',')})`,
         });
       }
-      let orderedKept = rankFacets(selection.spoken, studentWeaknesses ?? []);
+      let orderedKept = decision.spoken;
       if (fundamentalLed) {
         const principle = orderedKept.filter((f) => /^\[principle\]/.test(f));
         if (principle.length > 0) orderedKept = [...principle, ...orderedKept.filter((f) => !/^\[principle\]/.test(f))];
