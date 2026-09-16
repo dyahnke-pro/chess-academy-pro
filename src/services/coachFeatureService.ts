@@ -443,7 +443,7 @@ export async function generateReviewNarrationSegments(
     total > 0
       ? `The engine flagged ${total} moment(s) to look at — ${blunders} blunder(s) and ${mistakes} mistake(s).`
       : 'The engine flagged no significant errors in this game.',
-    keyMoments.length > 0 ? `Watch especially for ${keyMoments.slice(0, 2).join(', and ')}.` : '',
+    keyMoments.length > 0 ? `Watch especially for ${joinClauses(keyMoments)}.` : '',
   ].filter(Boolean).join(' ');
 
   const verdict =
@@ -2159,7 +2159,7 @@ export function buildReviewSegments(
       const studentPovCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
       const assess = assessPositionalEdge(fenPair.fenAfter, studentColorWB, studentPovCp);
       if (assess.reasons.length >= 2 && assess.verdict && assess.verdict !== 'balanced') {
-        narration = `Step back and take stock — you're ${assess.verdict} here, and it's worth knowing exactly why: ${joinClauses(assess.reasons.slice(0, 3))}.`;
+        narration = `Step back and take stock — you're ${assess.verdict} here, and it's worth knowing exactly why: ${joinClauses(assess.reasons)}.`;
         assessmentShown = true;
         narrationSource = 'assessment';
       }
@@ -2637,9 +2637,14 @@ async function augmentWithProjections(
         : studentPovCp >= 50 ? "you're clearly better"
           : studentPovCp > -50 ? "it's about level"
             : studentPovCp > -150 ? "you're a bit worse" : "you're in trouble";
-    // Two reasons at most: the line is already long, and the top two are the
-    // ranked ones. No reasons computed → the word alone, never an invented why.
-    const why = assess.reasons.slice(0, 2).join('; ');
+    // EVERY computed reason speaks (David 2026-09-16: "I DONT WANT ANYTHING
+    // LIMITED!!! We cannot set hard caps!!! That's how things don't get stated
+    // or teachings left out"). This line shipped with a slice(0, 2) on the
+    // reasoning that the line was already long — cost-flavoured reasoning about
+    // length, which the quality-is-the-only-metric rule bans outright. If the
+    // board supports four reasons the student hears four. No reasons computed →
+    // the word alone, never an invented why.
+    const why = assess.reasons.join('; ');
     return why ? `${word}: ${why}` : word;
   };
   // Render the projected line in the DNA register — the SAME voice as the rest
@@ -2700,7 +2705,11 @@ async function augmentWithProjections(
   // Budget: 'full' (uncapped) needs room for punishment + plan + consequence;
   // 'mistakes' (capped production) caps at 2 punishment lines per game so the
   // review prep never stalls on Stockfish.
-  let budget = scope === 'full' ? 999 : 3; // uncapped: every eligible move (David 2026-07-24)
+  // NO COUNT CEILING in either scope (David 2026-09-16). The scopes already
+  // differ in WHICH passes run; capping the number of lines on top of that
+  // dropped real teaching on the 4th flagged move onward for no reason but
+  // thrift. The per-call deadline still protects latency.
+  let budget = Number.POSITIVE_INFINITY;
   const PROJ_TIMEOUT_MS = 7000;
 
   // #3 — PUNISHMENT projection on BOTH SIDES' mistakes/blunders: the engine PV
@@ -2734,7 +2743,7 @@ async function augmentWithProjections(
   // understanding, never just the name. Seeding firstUci reuses the stored
   // analysis' own top line, so this is usually a cache hit, not fresh engine
   // time. Biggest swings first so the budget lands on the moves that matter.
-  let whyBudget = scope === 'full' ? 999 : 3; // uncapped: every better-move delta
+  let whyBudget = Number.POSITIVE_INFINITY; // every better-move delta (no ceiling)
   // THE DELTA (David 2026-07-24: "the delta is what computes why a stockfish
   // move is good — wire it in"): the method of comparison proves the concrete
   // reason the better move beats the played one (engine-verified ablation), so
@@ -2791,7 +2800,7 @@ async function augmentWithProjections(
   // claim, the static sentence is REPLACED by the engine's line, voiced
   // through the same per-ply fact-computers. Truth from the engine,
   // mechanism from the statics — never a static story the engine disowns.
-  let confirmBudget = scope === 'full' ? 999 : 3; // uncapped: every threat confirmation
+  let confirmBudget = Number.POSITIVE_INFINITY; // every threat confirmation (no ceiling)
   for (const s of segments) {
     if (confirmBudget <= 0) break;
     if (!s.staticThreat) continue;
@@ -2961,8 +2970,7 @@ async function augmentWithProjections(
       .filter((s) => s.ply >= 14 && !(s.evalAfter !== null && Math.abs(s.evalAfter) >= 5000))
       .map((s) => ({ s, mob: lowestMinorMobility(s.fenAfter) }))
       .filter((c) => c.mob <= 2)
-      .sort((a, b) => a.mob - b.mob)
-      .slice(0, 2);
+      .sort((a, b) => a.mob - b.mob);
     let best: { seg: ReviewMoveSegment; text: string; swing: number } | null = null;
     for (const c of candidates) {
       const res = await raceTimeout(
@@ -3141,8 +3149,8 @@ async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<v
   }));
   // SPEAK the scheme SEAT-AWARE — "your f1-bishop to d3", "expect their knight
   // to head for e7" — never a sideless mix of both armies in one clause.
-  const mineT = [...targets.entries()].filter(([f]) => sideOf(f) === 'student').slice(0, 2);
-  const theirsT = [...targets.entries()].filter(([f]) => sideOf(f) === 'opponent').slice(0, 2);
+  const mineT = [...targets.entries()].filter(([f]) => sideOf(f) === 'student');
+  const theirsT = [...targets.entries()].filter(([f]) => sideOf(f) === 'opponent');
   const list = (xs: Array<[string, { to: string; piece: string }]>, poss: string): string =>
     xs.map(([from, t]) => `${poss} ${from}-${t.piece} to ${t.to}`).join(' and ');
   const bits: string[] = [];

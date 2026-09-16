@@ -425,12 +425,12 @@ export function computeMoveFacets(ctx: MoveFactContext, outSquares?: Map<string,
     const theirMinority = findMinorityAttack(fenAfter, enemyWB2);
     if (theirMinority) { const f = `[minority] They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`; facets.push(f); recSquares(f, [theirMinority.target]); }
     for (const cc of findColorComplexWeakness(fenAfter)) {
-      const sqs = cc.squares.slice(0, 2).join(' and ');
-      if (cc.side === enemyWB2) { const f = `[complex] Their ${cc.complex} squares are weak — ${sqs} are holes their bishop can't cover; a knight belongs on one.`; facets.push(f); recSquares(f, cc.squares.slice(0, 2)); break; }
+      const sqs = andList([...cc.squares]);
+      if (cc.side === enemyWB2) { const f = `[complex] Their ${cc.complex} squares are weak — ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} their bishop can't cover; a knight belongs on one.`; facets.push(f); recSquares(f, cc.squares); break; }
     }
     for (const cc of findColorComplexWeakness(fenAfter)) {
-      const sqs = cc.squares.slice(0, 2).join(' and ');
-      if (cc.side === studentColorWB) { const f = `[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}.`; facets.push(f); recSquares(f, cc.squares.slice(0, 2)); break; }
+      const sqs = andList([...cc.squares]);
+      if (cc.side === studentColorWB) { const f = `[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}.`; facets.push(f); recSquares(f, cc.squares); break; }
     }
     // FORWARD PLANS — what to DO from here + exactly HOW (David 2026-07-20: "add
     // in more future plans … and exactly how to do those plans"). EVERY applicable
@@ -570,6 +570,16 @@ export function computeThroughLine(fensAfter: string[], studentColorWB: Color | 
 function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
 function lowerFirst(s: string): string { return s.charAt(0).toLowerCase() + s.slice(1); }
 
+/** Join EVERY item as English ("a, b and c"). No cap — David 2026-09-16: "I
+ *  DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!! That's how things
+ *  don't get stated or teachings left out." A long list is a phrasing problem,
+ *  never a reason to drop a computed fact. */
+function andList(xs: readonly string[]): string {
+  if (xs.length <= 1) return xs[0] ?? '';
+  if (xs.length === 2) return `${xs[0]} and ${xs[1]}`;
+  return `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`;
+}
+
 // The move-quality label, spoken as English. The old template read
 // "<Classification> move" — so the coach literally said "inaccuracy move" and
 // "great move" in the same breath (David 2026-09-15, reading a prod review
@@ -626,8 +636,8 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
       if (a.attackers(sq, pc.color).includes(to)) fights.push(sq);
     }
     const bits: string[] = [];
-    if (eyes.length) bits.push(`eyes ${eyes.slice(0, 2).join(' and ')}`);
-    if (fights.length) bits.push(`fights for ${fights.join(' and ')}`);
+    if (eyes.length) bits.push(`eyes ${andList(eyes)}`);
+    if (fights.length) bits.push(`fights for ${andList(fights)}`);
     if (!bits.length) return null;
     return `The ${pieceWord(pc.type)} on ${to} now ${bits.join(', ')}.`;
   } catch {
