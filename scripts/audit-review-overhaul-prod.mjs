@@ -237,6 +237,8 @@ const run = async () => {
     // to step the board to that moment, THEN commit. Two taps, in order.
     if (await has(page, '[data-testid="review-turning-point-card"]')) {
       const chip = page.locator('[data-testid^="turning-point-pick-"]').first();
+      const chips = await page.locator('[data-testid^="turning-point-pick-"]').count().catch(() => -1);
+      log(`  [turning] card present; ${chips} candidate chip(s)`);
       if (await chip.count() > 0) {
         await chip.click({ timeout: 2000, force: true }).catch(() => undefined);
         await page.waitForTimeout(500);
@@ -367,9 +369,11 @@ const run = async () => {
   // existed and nothing ever answered it (found 2026-09-16: the THESIS row read
   // as a broken N1 wire for two runs while the product was fine). Wait for it
   // here, answer it, and let the reveal speak.
-  await until(() => has(page, '[data-testid="review-turning-point-card"]'), 45000, 500);
+  const turnCardUp = await until(() => has(page, '[data-testid="review-turning-point-card"]'), 45000, 500);
+  log(`  [turning] waited for card after walk end: present=${turnCardUp}`);
   await resolveCards();
-  await until(() => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text)), 20000, 500);
+  const revealed = await until(() => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text)), 20000, 500);
+  log(`  [turning] reveal spoken=${revealed}`);
 
   // THESIS (unified-coach N1, 2026-09-15): THE ONE SELECTOR's game-level thesis
   // is spoken at the turning-point REVEAL, retrospective register, exactly once,
