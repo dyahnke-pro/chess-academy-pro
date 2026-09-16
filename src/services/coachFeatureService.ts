@@ -2752,6 +2752,48 @@ async function augmentWithProjections(
   // you take advantage" — same computed line, correct seat. Runs in BOTH
   // scopes; in 'mistakes' scope it's the only pass.
   const studentColorName = studentColorWB === 'w' ? 'white' : 'black';
+  /** BATCH a set of position probes across the worker pool (CLAUDE.md G4.6).
+   *
+   *  Every `computePvLine` is ~7 engine calls (a root read plus one per ply of
+   *  playout) and `stockfishEngine` is a SINGLETON whose queue deliberately
+   *  serializes, so `Promise.all` over projections buys nothing — the calls just
+   *  queue. With one engine per pool worker a batch costs about the slowest
+   *  probe instead of the sum.
+   *
+   *  This exists because cutting the projection caps (G4.5) made three passes
+   *  unbounded, and unbounded × serialized took the post-dive review REGENERATE
+   *  from 1.8s to 30.2s on prod (audit 2026-09-16). The fix for "uncapped is
+   *  slow" is ALWAYS to make it parallel, never to put the cap back.
+   *
+   *  Returns a FEN→line map. A pool that cannot be had degrades to the
+   *  singleton exactly as before: slower, never quieter. */
+  const pvBatch = async (fens: readonly string[], maxPlies: number): Promise<Map<string, PvLine | null>> => {
+    const out = new Map<string, PvLine | null>();
+    const unique = [...new Set(fens)];
+    if (unique.length === 0) return out;
+    const batchPool = unique.length > 1
+      ? await import('./gameAnalysisService')
+        .then((m) => m.acquirePvEngines(unique.length))
+        .catch(() => null)
+      : null;
+    try {
+      const engines = batchPool?.engines ?? [];
+      const lines = await mapConcurrent(
+        unique,
+        engines.length > 0 ? engines.length : 1,
+        (fen, i) => raceTimeout(
+          computePvLine(fen, { maxPlies, ...(engines.length > 0 ? { engine: engines[i % engines.length] } : {}) }),
+          PROJ_TIMEOUT_MS,
+          null,
+        ),
+      );
+      unique.forEach((fen, i) => out.set(fen, lines[i] ?? null));
+    } finally {
+      batchPool?.release();
+    }
+    return out;
+  };
+
   // 🔒 RUN THESE CONCURRENTLY ACROSS THE WORKER POOL (CLAUDE.md G4.6). This is
   // the pass whose count became unbounded when the caps came out (G4.5), and
   // every call used to queue behind the previous one inside the stockfishEngine
@@ -2901,6 +2943,26 @@ async function augmentWithProjections(
   // when the position is in check (forcing lines are the punishment pass's
   // job) and on one-move threats (the static call-out already owns those).
   let deepBudget = scope === 'full' ? 999 : 2; // uncapped: every deep threat
+  // POOLED PRE-PASS (G4.6): collect every null-move probe this loop will want,
+  // run them concurrently, then walk the loop reading the results. The collect
+  // repeats the loop's own SYNCHRONOUS filters and deliberately omits the budget
+  // so it is a SUPERSET — a probe the loop never reaches is wasted work, but a
+  // probe the loop wants and cannot find would silently drop a beat.
+  const deepFens = new Map<string, string>(); // segment fenAfter -> nullFen
+  for (const s of segments) {
+    if (s.playerColor !== studentColorName) continue;
+    if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    if (s.narration && /engine confirms it|if they try to run/i.test(s.narration)) continue;
+    try {
+      const parts = s.fenAfter.split(' ');
+      if (parts[1] === (studentColorWB === 'w' ? 'w' : 'b')) continue;
+      if (new Chess(s.fenAfter).inCheck()) continue;
+      parts[1] = studentColorWB;
+      parts[3] = '-';
+      deepFens.set(s.fenAfter, parts.join(' '));
+    } catch { /* an unparseable segment simply contributes no probe */ }
+  }
+  const deepPv = await pvBatch([...deepFens.values()], deepThreatPlies);
   for (const s of segments) {
     if (deepBudget <= 0) break;
     if (s.playerColor !== studentColorName) continue;
@@ -2923,7 +2985,7 @@ async function augmentWithProjections(
       // push the engine past its natural limits!!! Solid and honest is
       // paramount"). One move belongs to the static call-out; 2-4 moves
       // belong here.
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: deepThreatPlies }), PROJ_TIMEOUT_MS, null);
+      const line = deepPv.get(nullFen) ?? null;
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static call-out
       const studentPovNow = s.evalAfter !== null ? (studentColorWB === 'w' ? s.evalAfter : -s.evalAfter) : null;
       const lastPly = line.plies[line.plies.length - 1];
@@ -2962,6 +3024,21 @@ async function augmentWithProjections(
   // fresh search, G0).
   let deepOppBudget = scope === 'full' ? 999 : 2; // uncapped: every opponent deep threat
   const oppWB: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
+  // POOLED PRE-PASS (G4.6) — same superset-collect as #5 above.
+  const deepOppFens = new Map<string, string>();
+  for (const s of segments) {
+    if (s.playerColor === studentColorName) continue;
+    if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    try {
+      const parts = s.fenAfter.split(' ');
+      if (parts[1] === oppWB) continue;
+      if (new Chess(s.fenAfter).inCheck()) continue;
+      parts[1] = oppWB;
+      parts[3] = '-';
+      deepOppFens.set(s.fenAfter, parts.join(' '));
+    } catch { /* an unparseable segment simply contributes no probe */ }
+  }
+  const deepOppPv = await pvBatch([...deepOppFens.values()], deepThreatPlies);
   for (let i = 0; i < segments.length; i++) {
     const s = segments[i];
     if (deepOppBudget <= 0) break;
@@ -2979,7 +3056,7 @@ async function augmentWithProjections(
       const nullFen = parts.join(' ');
       // Same honest window as #5: 7 plies (4 opponent moves), and the eval
       // claim requires the VERIFIED terminal — never the unverified root.
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: deepThreatPlies }), PROJ_TIMEOUT_MS, null);
+      const line = deepOppPv.get(nullFen) ?? null;
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static opponent call-out
       // Don't re-narrate the same move the one-move call-out already named.
       const stripGl = (x: string): string => x.replace(/[+#!?]+$/, '');
@@ -3121,6 +3198,23 @@ async function augmentWithProjections(
   {
     let prophyBudget = scope === 'full' ? 999 : 2; // uncapped: every prophylactic move
     const studentPov = (cp: number): number => (studentColorWB === 'w' ? cp : -cp);
+    // POOLED PRE-PASS (G4.6) — superset-collect, same synchronous filters, no budget.
+    const prophyFens = new Map<string, string>();
+    for (const s of segments) {
+      if (s.narration) continue;
+      if (s.playerColor !== studentColorName) continue;
+      if (s.ply < 10) continue;
+      if (/[x+=]/.test(s.san)) continue;
+      if (s.evalBefore === null || s.evalAfter === null) continue;
+      const parts = s.fenBefore.split(' ');
+      if (parts.length < 4) continue;
+      parts[1] = parts[1] === 'w' ? 'b' : 'w';
+      parts[3] = '-';
+      const nf = parts.join(' ');
+      try { new Chess(nf); } catch { continue; }
+      prophyFens.set(s.fenBefore, nf);
+    }
+    const prophyPv = await pvBatch([...prophyFens.values()], 3);
     for (const s of segments) {
       if (prophyBudget <= 0) break;
       if (s.narration) continue;                            // fill only silent moves
@@ -3134,7 +3228,7 @@ async function augmentWithProjections(
       parts[3] = '-';
       const nullFen = parts.join(' ');
       try { new Chess(nullFen); } catch { continue; }        // flip must be a legal position
-      const threatLine = await raceTimeout(computePvLine(nullFen, { maxPlies: 3 }), PROJ_TIMEOUT_MS, null);
+      const threatLine = prophyPv.get(nullFen) ?? null;
       if (!threatLine || threatLine.plies.length === 0) continue;
       const beforeEval = studentPov(s.evalBefore);
       const afterEval = studentPov(s.evalAfter);

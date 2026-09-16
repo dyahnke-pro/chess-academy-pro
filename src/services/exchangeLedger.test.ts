@@ -173,3 +173,20 @@ describe('the full-detail inventory register is CUT (David 2026-09-16)', () => {
     expect(src).toMatch(/augmentWithProjections\(segments,[^)]*'full', playerRating\)/);
   });
 });
+
+describe('uncapped projections are POOLED, never serialized (G4.6)', () => {
+  it('the three unbounded passes batch their probes instead of awaiting in a loop', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const src = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
+    // Cutting the projection caps (G4.5) made three passes unbounded. Unbounded
+    // × serialized-on-the-singleton took the post-dive review regenerate from
+    // 1.8s to 30.2s on prod. The answer to "uncapped is slow" is parallel,
+    // never a reinstated cap — so each pass must pre-batch through `pvBatch`.
+    expect(src).toMatch(/const pvBatch = async/);
+    expect(src.match(/await pvBatch\(/g) ?? []).toHaveLength(3);
+    // …and none of those passes may go back to awaiting one probe per iteration.
+    expect(src).not.toMatch(/const line = await raceTimeout\(computePvLine\(nullFen/);
+    expect(src).not.toMatch(/const threatLine = await raceTimeout\(computePvLine\(nullFen/);
+  });
+});
