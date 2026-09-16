@@ -12,7 +12,6 @@ import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
-import { introducedChessTerms } from './voiceContainment';
 // (removed spokenTacticNote / generalizedTeaching — review no longer voices a
 // floating tactic-pattern note; that teaching lives on the tactics drill.)
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
@@ -35,7 +34,7 @@ import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
 import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
-import { voiceFacts, voiceReviewLines } from './coachApi';
+import { voiceFacts } from './coachApi';
 // Post-game review narration is now GROUNDED (David 2026-07-09): the intro,
 // closing, and recap are COMPUTED from the engine annotations and phrased by
 // `voiceFacts` — no coachService.ask / free-LLM prose, no per-move segment
@@ -1027,7 +1026,6 @@ const MIDDLEGAME_ORIENTATION_MIN_PLY = 16;
  *  computer facts"). On timeout the walk ships the deterministic, still-grounded
  *  templates rather than hanging "Preparing…". Worst case ≈ 55s to ready. */
 const REVIEW_INTRO_VOICE_TIMEOUT_MS = 18000;
-const REVIEW_HOUSE_VOICE_TIMEOUT_MS = 38000;
 // Stockfish projection budget — bounds the ONE prep await that was try/catch-only
 // so a wedged engine worker can never leave the walk stuck on "Preparing…".
 const REVIEW_AUGMENT_TIMEOUT_MS = 20000;
@@ -3830,88 +3828,33 @@ export async function generateReviewNarration(params: {
   // Never a regression. The review's intro / closing / recap FRAMING is warmed
   // separately (free-speak narrative arc). The seat-stamp above (MINE/YOURS) has
   // already handed the house voice the computed possessive on every reference.
+  // 🔒 THE COMPUTED PROSE IS THE VOICE — no phrasing model on the review walk
+  // (David 2026-09-16: "cut but pass through dna").
+  //
+  // This used to hand every computed line to a batched LLM rewrite and then
+  // defend the result with TEN acceptance conditions — board accuracy, seat,
+  // mover, numbers, facet coverage, an introduced-square guard, a proper-noun
+  // corruption guard, a verbatim-repeat check, a mate/sacrifice keyword keeper
+  // and a punish/advantage frame keeper — any one of which reverted to the
+  // template anyway, behind a 38s timeout. G0's own test says a stack of
+  // validators means the model is still DECIDING, and the cure is to stop
+  // giving it the choice. The chat side already settled this: "the DNA register
+  // lives in the computed prose + the general-speak prompt, not a per-answer
+  // LLM call" (coachApi, 2026-09-02).
+  //
+  // So the computed text ships, routed through the ONE chokepoint with
+  // `preferRaw` — which short-circuits to `speakableFacts` with no model call,
+  // stripping internal headers and notation the ear should never hear. Same
+  // register, nothing to validate, no timeout, and a line can no longer be
+  // dropped or reworded by a model that never saw the board.
   if (coachNarration !== 'silent') {
-    try {
-      // A fundamentals-led line is DNA-register template text spoken RAW —
-      // deterministic by contract (David 2026-09-05); the warm pass stays on the
-      // other lines.
-      const toVoice = segments
-        .filter((s) => s.narration && s.narration.trim().length > 0 && !(s.fundamentals && s.fundamentals.length > 0))
-        .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
-      if (toVoice.length > 0) {
-        const warmed = await raceTimeout(
-          voiceReviewLines(toVoice, { studentRating: playerRating, coverAll: uncapped }),
-          REVIEW_HOUSE_VOICE_TIMEOUT_MS,
-          new Map<number, string>(),
-        );
-        // PROPER-NOUN CORRUPTION GUARD (David 2026-09-07, his Traxler review on
-        // prod: the warm pass voiced "Traxeller structure" for the Traxler). The
-        // fidelity nets guard squares/SANs/numbers/seats but not the opening's
-        // NAME — a name is a fact the LLM must not garble. Take the distinctive
-        // words of the opening name (drop the generic opening vocabulary the model
-        // may legitimately rephrase away), and reject a warmed line that CORRUPTS
-        // one: it contains a near-variant (same first 4 letters, not the exact
-        // word) while the exact word is absent. Pure OMISSION is allowed (a
-        // rephrase may say "this structure" instead of naming it); only a garbled
-        // near-miss is rejected.
-        const GENERIC_OPENING_WORDS = new Set(['game', 'attack', 'defense', 'defence', 'opening', 'variation', 'system', 'gambit', 'line', 'counterattack', 'counter', 'knight', 'knights', 'normal', 'king', 'kings', "king's", 'march', 'two', 'main', 'classical', 'modern']);
-        const nameWords = (openingName ?? '').split(/[\s,:]+/).filter((wd) => wd.length >= 5 && !GENERIC_OPENING_WORDS.has(wd.toLowerCase()));
-        const corruptsName = (det: string, warmed: string): boolean => {
-          for (const nw of nameWords) {
-            if (!det.includes(nw)) continue;            // fact didn't state it → nothing to protect
-            if (warmed.includes(nw)) continue;          // preserved verbatim → fine
-            const stem = nw.slice(0, 4).toLowerCase();
-            // A token in the warmed line that shares the name's first 4 letters but
-            // isn't the exact word = a garbled variant ("Traxeller" vs "Traxler").
-            const garbled = (warmed.match(/[A-Za-z]{4,}/g) ?? []).some((tok) => tok.toLowerCase().startsWith(stem) && tok !== nw);
-            if (garbled) return true;
-          }
-          return false;
-        };
-        // No spoken line may repeat verbatim across the walk (audit R10) — a
-        // duplicate keeps the deterministic template, which carries the ply's own
-        // move so it stays distinct.
-        const spokenLines = new Set<string>();
-        for (const s of segments) {
-          const w = warmed.get(s.ply);
-          if (!w || !s.narration) { if (s.narration) spokenLines.add(s.narration.trim().toLowerCase()); continue; }
-          const det = s.narration;
-          const isRepeat = spokenLines.has(w.trim().toLowerCase());
-          // Accept the warmed (house-voiced) line ONLY if it (a) is board-accurate
-          // AND (b) KEEPS every load-bearing word the fact carried — a mate line
-          // must still say "mate/checkmate", a sacrifice "sacrifice", the
-          // projection FRAME must not flip seats — else the deterministic template
-          // ships verbatim so a canary can never be flattened away.
-          const keepsMate = !/\bcheckmate\b/i.test(det) || /\b(checkmate|mate)\b/i.test(w);
-          const keepsSac = !/\bsacrific/i.test(det) || /\bsacrific/i.test(w);
-          const keepsPunishFrame = !/how it gets punished/i.test(det)
-            || !/you (can still |could |)(punish|take advantage)/i.test(w);
-          const keepsAdvantageFrame = !/how you take advantage/i.test(det)
-            || !/(gets|you get) punished/i.test(w);
-          if (!isRepeat && keepsMate && keepsSac && keepsPunishFrame && keepsAdvantageFrame
-            && !corruptsName(det, w)
-            // INTRODUCED-SQUARE/TERM GUARD (real-game review audit 2026-09-09):
-            // the warm persistently turned d3's "guarding e4" into a pawn "digs
-            // into c4" — a square the fact never named. voiceReviewLines runs this
-            // net per line in CAPPED mode but SKIPS it for cover-all (coachApi.ts
-            // 3023), leaving the uncapped review with no square-introduction guard
-            // at all. Enforce it here for BOTH modes: a warmed line may restate any
-            // square the fact already gives, never invent one. Board-accuracy alone
-            // can't catch it (a control-phrased "eyeing c4" is board-true; only the
-            // FACT knows c4 was never on the table for this move).
-            && introducedChessTerms(det, w).length === 0
-            && narrationBoardAccurate(w, s.fenAfter)
-            && narrationSeatFaithful(w, s.fenAfter, playerColor === 'white' ? 'w' : 'b')
-            && narrationMoverFaithful(w, s.playerColor === playerColor)
-            && narrationNumbersFaithful(det, w)
-            // COVERAGE — the LLM never chooses which facts to state: a warm that
-            // dropped a facet (any bundle whose square/SAN anchors all vanished)
-            // is rejected and the full deterministic text ships.
-            && narrationCoversFacets(det, w)) s.narration = w;
-          spokenLines.add(s.narration.trim().toLowerCase());
-        }
-      }
-    } catch { /* keep the deterministic templates */ }
+    for (const s of segments) {
+      if (!s.narration || s.narration.trim().length === 0) continue;
+      try {
+        const spoken = await voiceFacts(s.narration, { preferRaw: true, intent: 'review-walk' });
+        if (spoken && spoken.trim().length > 0) s.narration = spoken;
+      } catch { /* keep the computed template — it is already the voice */ }
+    }
   }
 
   // STRIP DIAGNOSTIC [tags] from EVERY spoken line — ALWAYS, not just uncapped

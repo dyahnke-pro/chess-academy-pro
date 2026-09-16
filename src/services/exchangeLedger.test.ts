@@ -120,3 +120,15 @@ describe('one verdict computer — a verdict without its reason is the eval bar 
     expect(verdictBand(null)).toBeNull();
   });
 });
+
+describe('no phrasing model on the review walk (David 2026-09-16: "cut but pass through dna")', () => {
+  it('coachFeatureService no longer calls the batched warm pass or its acceptance nets', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const src = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
+    expect(src).not.toMatch(/voiceReviewLines\(/);
+    expect(src).not.toMatch(/REVIEW_HOUSE_VOICE_TIMEOUT_MS/);
+    // The computed prose goes through the ONE chokepoint, raw.
+    expect(src).toMatch(/voiceFacts\([^)]*preferRaw: true/);
+  });
+});
