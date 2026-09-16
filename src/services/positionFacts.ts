@@ -29,6 +29,7 @@ import { structurePlan } from './boardPlan';
 import { matchClauseKind, matchTacticPattern, boostFor, type WeaknessSignal } from './weaknessSignal';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard } from './conceptEngine';
+import { liveMethodBeatFor } from './methodBeat';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -96,7 +97,7 @@ export interface PositionFactsResult {
   clauses: ClauseItem[];
 }
 
-export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept';
+export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -278,8 +279,12 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // notable moments, never every quiet ply.
   let fundamentalText = '';
   const bestUci = analysis.topLines?.[0]?.moves?.[0] ?? null;
-  if (studentToMove && !openingPhase && (importance.speak || input.teachingBeat)
-    && bestUci && bestUci.length >= 4) {
+  // The engine's move here as SAN, resolved ONCE. The fundamental clause needs
+  // it, and so does the method beat — whose whole gate is "is the move that is
+  // there a forcing one", which only the SAN can answer. Resolving it in one
+  // place keeps the two from disagreeing about the same move.
+  let bestSanHere: string | null = null;
+  if (bestUci && bestUci.length >= 4) {
     try {
       const probe = new Chess(fen);
       const bm = probe.move({
@@ -287,11 +292,12 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
         to: bestUci.slice(2, 4),
         promotion: bestUci.length > 4 ? bestUci[4] : undefined,
       });
-      if (bm) {
-        const idea = strategicWhyImperative(fen, bm.san, moverColor === 'w' ? 'white' : 'black');
-        if (idea) fundamentalText = `The plan here: ${idea}.`;
-      }
-    } catch { /* no fundamental → stay silent */ }
+      bestSanHere = bm ? bm.san : null;
+    } catch { bestSanHere = null; }
+  }
+  if (studentToMove && !openingPhase && (importance.speak || input.teachingBeat) && bestSanHere) {
+    const idea = strategicWhyImperative(fen, bestSanHere, moverColor === 'w' ? 'white' : 'black');
+    if (idea) fundamentalText = `The plan here: ${idea}.`;
   }
 
   // THE COMPUTED CONCEPT — the teachable idea of this position, from the SAME
@@ -309,8 +315,25 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     if (lead && lead.source !== 'positional') concept = { id: lead.id, source: lead.source, full: lead.full };
   } catch { concept = null; }
 
+  // THE METHOD BEAT — the same computer the review path uses, in its live
+  // register. Its signals are already on the table: the engine's move here, and
+  // whether a real threat is STANDING (the must-defend probe, not the prose).
+  // `studentToMove` is the mover test — you teach the habit to the player.
+  // Stems rotate on the position's own halfmove count so a long game never
+  // repeats one verbatim.
+  let methodBeat: string | null = null;
+  try {
+    const halfmove = Number.parseInt(fen.split(' ')[5] ?? '0', 10) || 0;
+    methodBeat = liveMethodBeatFor({
+      bestSan: bestSanHere,
+      threatStanding: mustDefend.net > 0,
+      isStudentMove: studentToMove,
+      realChoice: !!deliberation?.isRealChoice,
+    }, halfmove);
+  } catch { methodBeat = null; }
+
   const clauses = applyWeaknessBoost(
-    buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept }),
+    buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
     input.studentWeaknesses ?? [],
   );
   return {
@@ -377,6 +400,8 @@ function buildClauses(a: {
    *  analysis) — the teachable idea, joined to the briefing as a ranked fact.
    *  Null when nothing teachable / positional-only (no walk-over). */
   concept: { id: string; source: string; full: string } | null;
+  /** The habit to run in this position, present tense. Null when none earned. */
+  methodBeat: string | null;
 }): ClauseItem[] {
   const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
   // A latent danger to your own king — or a STATUS band-change, or a live
@@ -493,6 +518,14 @@ function buildClauses(a: {
   if (structureText) ranked.push({ kind: 'structure-plan', rank: 35, text: structureText });
   // Convert-mode — decided game, one beat.
   if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
+  // THE METHOD, last (David 2026-09-16: "Calling out pins and forks isn't
+  // teaching. Future moves, how to think, threat identification, that is
+  // teaching"). Until now the habit teaching reached post-game review ONLY; the
+  // four live surfaces that share this composer taught none. Ranked lowest on
+  // purpose so it CLOSES the beat — the board fact, then the idea, then the
+  // routine that finds it next time. Gated on the same computed signals as the
+  // retrospective register, so it is never generic advice on a quiet board.
+  if (a.methodBeat) ranked.push({ kind: 'method', rank: 10, text: a.methodBeat });
 
   return ranked.sort((a2, b2) => b2.rank - a2.rank);
 }

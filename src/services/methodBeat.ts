@@ -81,3 +81,86 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
 
   return null; // empty > generic
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// THE PRESENT-TENSE REGISTER — the same method, taught on a LIVE board.
+//
+// `methodBeatFor` above is RETROSPECTIVE: it grades a move that was played, so
+// it says "the move you wanted was a forcing one". Speaking that on a live board
+// is a register violation (CLAUDE.md: review is retrospective, in-game is
+// present tense) AND a lie — nothing has been played yet.
+//
+// This is deliberately the SAME computer, not a second one (David 2026-09-16: "I
+// want one unified deciding computer. Merge them if possible"). Same gating
+// signals, same ordering, same empty>generic rule; only the tense and the
+// direction of the signal change: retrospectively the habit is earned by a
+// threat the student PLAYED PAST, prospectively by a threat that is STANDING.
+//
+// What is NOT here, on purpose: the "slow down, this is a fork in the road"
+// beat. `positionFacts` already emits exactly that as its `key-moment` clause
+// ("Only one move really holds here — this is the moment to slow down"), so a
+// method beat for it would be two sentences making one claim — the pin-and-
+// battery duplication the fact selector exists to collapse. When a beat's claim
+// is already spoken by a fact, the method beat stays quiet.
+
+export interface LiveMethodSignals {
+  /** The engine's move here, SAN — what the method would find. */
+  bestSan: string | null;
+  /** Is a REAL threat standing against the student right now? From the
+   *  must-defend probe, not from re-reading the prose. */
+  threatStanding: boolean;
+  /** Is the student the one to move? You teach the method to the player. */
+  isStudentMove: boolean;
+  /** Does this position hold a GENUINE choice — several moves worth weighing,
+   *  not one obvious recapture? From `buildDeliberation`, which already ran.
+   *  This is what earns the candidate-move habit; teaching "list your
+   *  candidates" on a forced recapture would be noise. */
+  realChoice?: boolean;
+}
+
+/**
+ * The habit to run in THIS position, or null when none is earned.
+ *
+ * Ordered by teaching value, same as the retrospective register: the opponent's
+ * intent first (the most common gap and the most teachable), then the forcing
+ * scan when the move that is there is forcing.
+ */
+export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0): string | null {
+  if (!s.isStudentMove) return null;
+
+  // 1 — THREAT IDENTIFICATION AS A HABIT. The board already names the threat
+  // elsewhere in the briefing; this names the ROUTINE that finds it unprompted
+  // next time, which is the thing the app was not teaching at all.
+  if (s.threatStanding) {
+    return pick([
+      'Before you pick a move: what is their last move doing? Answer that first, every time — their idea comes before yours.',
+      'Run the question now — what are they threatening? Deal with the answer before you look at your own plan.',
+      'The habit here is order of operations: their threat first, your idea second. Never the other way round.',
+    ], plyForVariety);
+  }
+
+  // 2 — THE FORCING SCAN, prospectively. The move that is there is a check or a
+  // capture, so name the scan that finds it rather than the move itself.
+  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan)) {
+    return pick([
+      'Start with the forcing moves here — every check, every capture, before you look at anything quiet.',
+      'List the checks and the captures first. Something in this position is forcing, and quiet moves can wait.',
+      'Scan forcing first: checks, then captures, then the quiet moves. That order is what finds shots like this.',
+    ], plyForVariety);
+  }
+
+  // 3 — CANDIDATE-MOVE DISCIPLINE. The position holds a real choice, so the
+  // habit that matters is naming the candidates BEFORE calculating any of them.
+  // The briefing's `deliberation` clause says WHICH moves are in the running;
+  // this teaches the routine of finding them yourself, which is the half the
+  // student has to own. It is last because it is the most general of the three.
+  if (s.realChoice) {
+    return pick([
+      'Name your candidates before you calculate: two or three moves you would consider, then compare them. Picking first and checking after is how good moves get missed.',
+      'Two or three candidate moves, written down in your head, before any calculation — then work out which one holds up.',
+      'The discipline here is listing the options first. Decide what the candidates are, then spend your thinking on comparing them.',
+    ], plyForVariety);
+  }
+
+  return null; // empty > generic
+}

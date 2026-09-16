@@ -26,6 +26,36 @@ describe('computePositionFacts — the composer', () => {
     expect(r.clauses).toHaveLength(0);
   });
 
+  // A WIRE THAT DOES NOT FIRE IS NOT A WIRE (CLAUDE.md). The method beat reached
+  // post-game review only; these four surfaces share this composer and taught no
+  // method at all. This proves a real habit comes OUT, and that it CLOSES the
+  // briefing rather than preaching before the evidence.
+  // NB fullmove 14: the method beat sits BELOW the opening gate ("in the opening
+  // nothing but a real hanging threat speaks"), on purpose — the habit rides a
+  // middlegame briefing, it does not add a second sentence to move five.
+  it('closes the briefing with the METHOD — the habit, last', async () => {
+    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const method = r.clauses.filter((c) => c.kind === 'method');
+    expect(method).toHaveLength(1);
+    expect(method[0].text).toMatch(/their|they/i);
+    // LAST — the board fact, then the idea, then the routine.
+    expect(r.clauses[r.clauses.length - 1].kind).toBe('method');
+    // It teaches the ROUTINE; the must-defend clause already named the threat,
+    // so the method beat must not restate the piece or the square.
+    expect(method[0].text).not.toMatch(/knight|e5/i);
+  });
+
+  it('teaches no method to a student who is not the one to move', async () => {
+    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'b', analysis: flat });
+    expect(r.clauses.some((c) => c.kind === 'method')).toBe(false);
+  });
+
+  it('stays out of the opening — the habit rides a middlegame briefing', async () => {
+    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
+    expect(r.clauses.some((c) => c.kind === 'must-defend')).toBe(true);
+    expect(r.clauses.some((c) => c.kind === 'method')).toBe(false);
+  });
+
   it('names the standing must-defend, board-true', async () => {
     // White Ne5 hangs to …dxe5; inject a balanced analysis so the position reads contested.
     const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });

@@ -1015,3 +1015,47 @@ surfaces and READING it, then the prod audits:
 (review, unchanged — it must not move), and the EXHAUSTIVE routing audit for
 chat. A drop in narrated plies is the failure signature to watch for; it has
 appeared twice and passed every unit test both times.
+
+
+### §17.1 — D4 LANDED (2026-09-16): the live surfaces teach METHOD
+
+The smallest piece of the merge, done first because it is purely additive — it
+can add a sentence, never silence one.
+
+`methodBeat.ts` gained a PRESENT-TENSE register (`liveMethodBeatFor`) beside the
+retrospective one. Same computer, same gating signals, same empty>generic rule;
+only the tense and the direction of the signal differ — retrospectively the
+habit is earned by a threat the student PLAYED PAST, prospectively by a threat
+that is STANDING. Speaking the review stems on a live board would be both a
+register violation and a lie: nothing has been played yet.
+
+`computePositionFacts` emits it as a `method` clause at rank 10 — the lowest, so
+it CLOSES the briefing. All four live surfaces get it at once, because they share
+the composer.
+
+What it says, read off a real position (Ne5 hanging, student to move, fullmove
+14), in the order the student hears it:
+
+```
+[must-defend] rank=75 :: They're threatening to win the knight on e5 — that
+                         has to be met first.
+[method]      rank=10 :: The habit here is order of operations: their threat
+                         first, your idea second. Never the other way round.
+```
+
+That is the difference David named: the first line calls out the threat, the
+second teaches the routine that finds it unprompted next time.
+
+Two gates it deliberately respects rather than loosening:
+- **The opening gate.** `buildClauses` returns early in the opening with nothing
+  but a real hanging threat or castle-now. The method clause sits below that
+  return, so it rides a middlegame briefing and never adds a second sentence to
+  move five. The test asserts this rather than working around it.
+- **No duplicate claim.** The "slow down, this is a fork in the road" beat is NOT
+  ported to the live register, because `positionFacts` already emits exactly that
+  as its `key-moment` clause. Two sentences making one claim is the
+  pin-and-battery duplication the fact selector exists to collapse.
+
+Still owed from §17: D1 (coupled squares on `ClauseItem`), D2 (`FactBundle.rank`
+passthrough), D3 (required `posture`), D5 (delete the direct `computeImportance`
+call and extend the door gate).
