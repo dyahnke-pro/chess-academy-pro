@@ -3841,10 +3841,14 @@ export function computePunishFacts(
     // 1. What is ON the board for the punisher — the detector's audited prose.
     try {
       const t = detectTactics(postInaccuracyFen);
-      for (const tac of t.tactics.filter((x) => x.beneficiary === student).slice(0, 3)) {
+      // NO CAP (CLAUDE.md G4.5, David 2026-09-16). These are the detector's
+      // audited facts about the punishing position — if four tactics are on the
+      // board the student hears four. Truncating at three was thrift, and the
+      // fourth was as true as the first.
+      for (const tac of t.tactics.filter((x) => x.beneficiary === student)) {
         lines.push(tac.description);
       }
-      for (const h of t.hangingPieces.filter((x) => x.color !== student).slice(0, 2)) {
+      for (const h of t.hangingPieces.filter((x) => x.color !== student)) {
         lines.push(`the opponent's ${PUNISH_PIECE_WORD[h.piece] ?? 'piece'} on ${h.square} is undefended`);
       }
     } catch { /* detector optional */ }
