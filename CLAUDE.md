@@ -546,11 +546,33 @@ G5 specifies. Nothing else may cap.
 **SWEEP STATUS — do not let this be forgotten (2026-09-16).**
 - DONE, review path: 8 caps removed (verdict reasons ×2, intro key moments, the
   three projection COUNT budgets, trapped-minor candidates, `eyes` and the
-  colour-complex squares). Shared `andList` added.
-- OWED, 61 sites: `groundedAnswer.ts` 53 (coach chat), `openingGenerator.ts` 7
-  (Watch/Learn generation), `positionFacts.ts` 1. Convert site by site, then run
-  the EXHAUSTIVE routing audit (`audit-coach-all-questions-prod.mjs`) — that is
-  the only thing that proves the chat lanes still answer — and READ the answers.
+  colour-complex squares).
+- DONE, coach chat (`groundedAnswer.ts`): every remaining cap converted. The
+  fact-lists now speak in full through `andList`/`orList`; three sites became a
+  BAR instead (master moves at ≥2% of the games at that position, the student's
+  worst fundamentals at ≥25% of their own worst count, both always naming the
+  leader) because a bar admits anything worth ≥X regardless of count. Three
+  SENTENCE clips also went — the book passage, the book definition and the
+  endgame mechanism were each truncated to 2-3 sentences, which deleted the
+  clause that made them a definition ("the defender can save only one" is the
+  sentence that makes a fork a fork).
+- DONE, `openingGenerator.ts`: the 24-ply clip on the LINE FACTS block (past
+  move 12 the model had NO computed facts, so it went silent or invented — a G0
+  hole wearing a thrift costume), the 8-square `eyes` clip, the 6-theme clip.
+- `positionFacts.ts` had NO cap — its lone `.slice(0, 2)` is a UCI substring.
+  The "61 sites" count included false positives of that shape; the real total was
+  ~48 + 3.
+- **NOT caps, deliberately left, do not churn them:** the drill stage's 5 lines
+  and the find-the-move stage's 5 branchpoints size an EXERCISE SET, and the 3
+  quiz distractors are a question's shape. None of them withholds a computed
+  fact from the student. Both sites carry a comment saying so.
+- **Shared helper:** `src/utils/andList.ts` (`andList` / `orList` /
+  `countedList`) is the single source of truth. `reviewFullData.ts` had its own
+  private copy; it now imports this one. A call site that wants a `.slice(0, N)`
+  in front of it wants a different RENDERING, not a truncation.
+- OWED: run the EXHAUSTIVE routing audit (`audit-coach-all-questions-prod.mjs`)
+  — that is the only thing that proves the chat lanes still answer — and READ
+  the answers.
 
 ### G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").
 

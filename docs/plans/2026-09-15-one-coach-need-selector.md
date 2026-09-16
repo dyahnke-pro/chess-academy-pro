@@ -919,3 +919,99 @@ that reduce time WITHOUT losing content, in order:
 
 Measure this number again after any narration change. It is the one the student
 actually experiences.
+
+---
+
+## §17 — THE DECIDER REACHES ONE SURFACE. Here is the gap, and the build that closes it (2026-09-16)
+
+David locked ONE deciding computer (CLAUDE.md §G4.5.15). It is built, and
+`coachFeatureService` (post-game review) goes through it. **No other surface
+does.** This section states the gap plainly so the next session does not have to
+re-derive it, and designs the merge rather than half-wiring it.
+
+### What actually routes through `coachDecider.decide()` today
+
+| surface | entry point | goes through `decide()`? |
+|---|---|---|
+| Post-game review | `coachFeatureService` | **yes** — posture `'walk'` |
+| Learn (`/coach/teach`) per-position read | `CoachTeachPage` → `computePositionFacts` | no |
+| Read-this-position | `usePositionNarration` → `computePositionFacts` | no |
+| Live play commentary | `useLiveCoach` → `computePositionFacts` | no |
+| Phase transitions | `usePhaseNarration` → `computePositionFacts` | no |
+| Coach chat | `groundedAnswer` assemblers → `voiceFacts` | no |
+
+So four of the five live narration paths share ONE composer —
+`computePositionFacts` — and that composer calls `computeImportance` directly
+(`positionFacts.ts:193`). It therefore gets steps **1** (importance) and **5**
+(order, via its own rank model + `applyWeaknessBoost`) and **misses 3**
+(subsume), **4** (floor) and **6** (method).
+
+Consequence, stated concretely: on the live surfaces the coach can still say the
+pin AND the battery about the same diagonal — the exact duplication David called
+"a bit much" — because subsumption never runs there. And it teaches no METHOD at
+all: "how to think" reaches review only.
+
+### Why it was not wired tonight
+
+`decide()` takes facts as `readonly string[]` plus a coupled
+`Map<fact, squares>`, and orders them with `rankFacets` (review's `[tag]`
+vocabulary). `computePositionFacts` works on `ClauseItem { kind, rank, text }`,
+which has **no squares** and a **different ranking model**. Two things follow:
+
+1. **Subsumption would be a NO-OP.** `factSelector` refuses to collapse a fact
+   with no squares, by design — "silence must never be a guess". Wiring it
+   before the geometry is coupled produces a wire that does not fire, which
+   CLAUDE.md calls out as not a wire at all.
+2. **`rankFacets` would MANGLE the order.** positionFacts' clause ranks are
+   carefully tuned (tactic 70 under must-defend, technique 39 just above
+   `fundamental`). Handing untagged text to the review ranker would throw that
+   away and silently reorder every live narration.
+
+Shipping either without being able to READ the resulting narration is how the
+two self-inflicted silences of 2026-09-16 happened. The prod review audit was
+the only instrument that caught them, and it was occupied.
+
+### The build (do it in this order)
+
+**D1 — `ClauseItem.squares?: readonly string[]`, coupled at emission.**
+Same rule as the review facets: the geometry comes from the computer that
+produced the clause, NEVER scraped back out of the prose. The producers that
+already know their squares: `mustDefend` (the threatened square + the attacker),
+`leansOn` / `opponentLeansOn` (the supporter + what it holds), `kingExposure` and
+`centralKingDanger` (the king square + the open lines), `latentDanger` /
+`tradeDanger` (the pin geometry), `concept` (the tactic's `involvedSquares`).
+Leave the rest uncoupled — an uncoupled clause is simply never collapsed, which
+is the safe direction.
+
+**D2 — `FactBundle.rank?: ReadonlyMap<string, number>`.** When a surface supplies
+its own ranks, `decide()` step 5 orders by those (descending) instead of calling
+`rankFacets`. Review passes none and is unchanged; positionFacts passes its
+clause ranks and keeps its tuned order. This is what makes ONE door possible
+without forcing one vocabulary on both.
+
+**D3 — `PositionFactsInput.posture: SurfacePosture`, REQUIRED.** No default
+(G4.5.15: there is no safe default). The four callers declare:
+- `CoachTeachPage` lesson walk → `'walk'`
+- `usePositionNarration` (the student TAPPED "read this position") → `'walk'`;
+  silence would be a dead button, and G5 already exempts this tap from verbosity
+- `useLiveCoach` → `'interrupt'`
+- `usePhaseNarration` → `'interrupt'`
+
+**D4 — method beat on the live surfaces.** `computePositionFacts` already knows
+`cpLossCp` and the tier; `opponentIntent` already computes the ignored-threat
+signal. That is every input `methodBeatFor` needs. This is the smallest piece and
+the largest teaching win — it is additive (it can only ADD a sentence), so it can
+land before D1–D3 if the narration cannot be read that day.
+
+**D5 — delete the direct `computeImportance` call** from `positionFacts.ts` and
+extend `coachDecider.test.ts`'s door gate to cover it, so the composer cannot
+drift back out.
+
+### How it is verified — not by a green suite
+
+Every step ends by PRINTING the narration for a real position on each of the four
+surfaces and READING it, then the prod audits:
+`audit-concept-gameplay-prod.mjs` (Learn, live), `audit-review-overhaul-prod.mjs`
+(review, unchanged — it must not move), and the EXHAUSTIVE routing audit for
+chat. A drop in narrated plies is the failure signature to watch for; it has
+appeared twice and passed every unit test both times.

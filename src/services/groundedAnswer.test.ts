@@ -134,14 +134,19 @@ describe('assembleWeaknessRecommendation — the grounded "what should I train" 
     expect(a!.facts).toMatch(/drill your mistakes/i);
     expect(a!.sources).toContain('data:your-games');
   });
-  it('caps at the top 3 and skips zero-open / unlabeled rows', () => {
+  // G4.5 (David 2026-09-16, emphatic: "I DONT WANT ANYTHING LIMITED!!!"). This
+  // test used to PIN a `.slice(0, 3)`; it now pins its absence. A weakness is
+  // dropped only for being empty (zero open instances) or unlabeled — never for
+  // being fourth.
+  it('names EVERY open weakness — no count cap — and skips zero-open / unlabeled rows', () => {
     const a = assembleWeaknessRecommendation([
       w('A', 5, 'tactical'), w('B', 4, 'tactical'), w('C', 3, 'tactical'), w('D', 2, 'tactical'),
       w('Z', 0, 'tactical'), w('', 8, 'tactical'),
     ]);
     expect(a!.facts).toContain('A (5 times)');
-    expect(a!.facts).not.toContain('D (2 times)'); // 4th, dropped
-    expect(a!.facts).not.toContain('Z ('); // zero-open, dropped
+    expect(a!.facts).toContain('D (2 times)'); // 4th — still spoken
+    expect(a!.facts).not.toContain('Z ('); // zero-open, dropped (not a cap)
+    expect(a!.facts).not.toMatch(/\(8 times\)/); // unlabeled, dropped
   });
   it('filters to a named topic bucket when scoped', () => {
     const rows = [w('Rook endgames', 9, 'endgame'), w('Forks', 4, 'tactical'), w('Pins', 3, 'tactical')];
@@ -225,17 +230,17 @@ describe('assembleStatsAnswer — grounded "what\'s my rating / record / win rat
 });
 
 describe('assembleStrengthsAnswer — grounded "what am I good at"', () => {
-  it('voices the top strengths (capped at 3)', () => {
+  it('voices EVERY computed strength — no count cap (G4.5)', () => {
     const a = assembleStrengthsAnswer([
       '62% win rate as White',
       '4 games with zero blunders',
       'Strong opening preparation (81% accuracy)',
-      'a fourth strength that should be dropped',
+      'a fourth strength that must still be spoken',
     ]);
     expect(a).not.toBeNull();
     expect(a!.facts).toMatch(/What you do well, from your own games:/);
     expect(a!.facts).toMatch(/62% win rate as White/);
-    expect(a!.facts).not.toMatch(/fourth strength/);
+    expect(a!.facts).toMatch(/fourth strength/);
     expect(a!.sources).toContain('data:your-games');
   });
   it('phrases a single strength without a list', () => {
@@ -302,10 +307,9 @@ describe('assembleOpeningTrapsAnswer — grounded "traps in my strongest opening
     expect(a!.facts).toMatch(/Want me to show you\? Say "teach me the traps in the Italian Game" and I'll build a lesson plan that walks every one of them\./);
     expect(a!.sources).toContain('data:your-games');
   });
-  it('caps trap weapons at 3', () => {
+  it('names EVERY verified trap weapon — no count cap (G4.5)', () => {
     const a = assembleOpeningTrapsAnswer({ sides: [{ name: 'X', color: 'white', traps: ['a', 'b', 'c', 'd', 'e'], warnings: [] }] });
-    expect(a!.facts).toMatch(/a; b; c\./);
-    expect(a!.facts).not.toMatch(/\bd; e\b/);
+    expect(a!.facts).toMatch(/a; b; c; d; e\./);
   });
   it('appends the WLPP teaching-system explanation only when asked', () => {
     const withSys = assembleOpeningTrapsAnswer({ sides: [white], explainSystem: true });
@@ -348,19 +352,18 @@ describe('assembleReviewDueAnswer — grounded "what\'s due for review today"', 
     });
     expect(a).not.toBeNull();
     expect(a!.facts).toMatch(/14 cards due for review right now across 2 openings/);
-    expect(a!.facts).toMatch(/Mostly the Caro-Kann Defense \(9\), the Italian Game \(5\)/);
+    expect(a!.facts).toMatch(/Across the Caro-Kann Defense \(9\) and the Italian Game \(5\)/);
     expect(a!.facts).toMatch(/Say "review my openings" and I'll run today's reps/);
     expect(a!.sources).toContain('data:your-games');
   });
-  it('caps the per-opening breakdown at 3', () => {
+  it('breaks down EVERY opening with cards due — no count cap (G4.5)', () => {
     const a = assembleReviewDueAnswer({
       dueCount: 20, totalEnrolled: 50,
       dueOpenings: [
         { name: 'A', dueCards: 8 }, { name: 'B', dueCards: 6 }, { name: 'C', dueCards: 4 }, { name: 'D', dueCards: 2 },
       ],
     });
-    expect(a!.facts).toMatch(/the A \(8\), the B \(6\), the C \(4\)/);
-    expect(a!.facts).not.toMatch(/the D \(2\)/);
+    expect(a!.facts).toMatch(/the A \(8\), the B \(6\), the C \(4\) and the D \(2\)/);
   });
   it('handles the singular "1 card" grammar', () => {
     const a = assembleReviewDueAnswer({ dueCount: 1, totalEnrolled: 10, dueOpenings: [{ name: 'X', dueCards: 1 }] });
@@ -858,7 +861,7 @@ describe('assembleFundamentalsAnswer — personalizes to the student\'s weak fun
 });
 
 describe('assembleConceptAnswer — Phase 5 (voice the book corpus, not memory)', () => {
-  it('voices the first sentences of the book passage + a book source', () => {
+  it('voices the WHOLE book passage + a book source (no sentence cap — G4.5)', () => {
     const a = assembleConceptAnswer(concept({
       passages: [{
         bookSlug: 'capablanca-chess-fundamentals', bookTitle: 'Chess Fundamentals', author: 'Capablanca',
@@ -867,8 +870,10 @@ describe('assembleConceptAnswer — Phase 5 (voice the book corpus, not memory)'
       }],
     }));
     expect(a!.facts).toMatch(/^Fork: A fork is a double attack/);
-    expect(a!.facts).toContain('strikes two targets'); // second sentence kept
-    expect(a!.facts).not.toContain('save only one'); // third sentence dropped (cap at 2)
+    expect(a!.facts).toContain('strikes two targets');
+    // The third sentence is the one that makes a fork a fork. Clipping the
+    // passage at two sentences deleted the teaching (G4.5).
+    expect(a!.facts).toContain('save only one');
     expect(a!.sources).toEqual(['book:capablanca-chess-fundamentals']);
   });
   it('falls back to the curated definition + concept source when no passage', () => {

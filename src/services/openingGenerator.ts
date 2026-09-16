@@ -3210,7 +3210,10 @@ export function buildLineFactsBlock(openingName?: string): string {
   try {
     const c = new Chess();
     const facts: string[] = [];
-    for (const [i, raw] of entry.moves.slice(0, 24).entries()) {
+    // EVERY ply of the line (G4.5). The 24-ply clip left the model with NO
+    // computed facts past move 12 — so on a deep spine it either went silent or
+    // had to invent, which is the G0 failure the block exists to prevent.
+    for (const [i, raw] of entry.moves.entries()) {
       const m = c.move(stripSanAnnotations(raw));
       if (!m) break;
       const side = m.color === 'w' ? 'White' : 'Black';
@@ -3227,7 +3230,10 @@ export function buildLineFactsBlock(openingName?: string): string {
           parts[1] = m.color;
           parts[3] = '-';
           const view = new Chess(parts.join(' '));
-          const eyes = [...new Set(view.moves({ square: m.to, verbose: true }).map((x) => x.to))].slice(0, 8);
+          // Every square it eyes (G4.5: "no ceiling on … squares in an
+          // enumeration"). A queen on an open board sees more than eight, and
+          // the ones past the eighth were the ones the prose then could not cite.
+          const eyes = [...new Set(view.moves({ square: m.to, verbose: true }).map((x) => x.to))];
           if (eyes.length > 0) bits.push(`from ${m.to} it eyes ${eyes.join(', ')}`);
         } catch { /* reachability read optional */ }
       }
@@ -3396,6 +3402,10 @@ async function generateDrillFromDb(
   );
   if (branches.length === 0) return null;
   const studentSide = inferStudentSideFromName(entry.canonicalName);
+  // NOT a narration cap (G4.5): this sizes an EXERCISE SET, it does not decide
+  // what the coach says about a position. Nothing computed is withheld from the
+  // student — the drill simply carries five lines. Raising it is a pedagogy +
+  // generation-cost decision, not a G4.5 fix.
   const picked = branches.slice(0, 5);
   // Build the line skeletons from the DB (legal by construction).
   const lines = picked.map((b) => ({
@@ -3521,7 +3531,9 @@ async function generateFindMoveFromDb(
   // (later plies — those are the more specific decisions of the
   // named opening, the ones the student actually needs to memorize).
   branchpoints.sort((a, b) => b.plyIndex - a.plyIndex);
-  const picked = branchpoints.slice(0, 5).reverse(); // re-order earliest-first for narrative flow
+  // Same class as the drill stage above: an EXERCISE-SET size, not a cap on
+  // what gets stated. Deepest-first selection, then earliest-first for flow.
+  const picked = branchpoints.slice(0, 5).reverse();
 
   const systemPrompt = `You are an expert chess coach writing find-the-move puzzles. For each branchpoint below, output:
 - prompt: ONE sentence framing the question. Mention whose turn and the strategic context. Examples:
@@ -4049,7 +4061,7 @@ The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT
 
   const lessonsBlock = prepared
     .map((l, i) => {
-      const themesLine = l.themes.slice(0, 6).join(', ');
+      const themesLine = l.themes.join(', '); // every computed theme (G4.5)
       return `Lesson ${i + 1} (rating ${l.rating}; themes: ${themesLine}):
   setupFen: ${l.setupFen}
   Opponent's mistake (inaccuracy): ${l.inaccuracy}

@@ -206,6 +206,11 @@ const run = async () => {
   // Pause first (any intervention pauses), then jump by clicking Back/Forward
   // like a human would. Cards that mount are resolved by clicking.
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
+  // The turning-point card is answered AT MOST ONCE per run. Without this the
+  // walk loop re-entered the retry block on every one of its 80 iterations while
+  // the card sat there unanswered — 3 attempts x ~13s x 80 = the run never
+  // finished, and a hung audit tells you less than a failing one (2026-09-16).
+  let turningHandled = false;
   const resolveCards = async () => {
     for (const [c, sel] of [
       ['discussion-reason-picker', '[data-testid="discussion-reason-option"]'],
@@ -235,7 +240,8 @@ const run = async () => {
     }
     // THE TURNING-POINT CARD — answer it the way a human does: tap a candidate
     // to step the board to that moment, THEN commit. Two taps, in order.
-    if (await has(page, '[data-testid="review-turning-point-card"]')) {
+    if (!turningHandled && await has(page, '[data-testid="review-turning-point-card"]')) {
+      turningHandled = true;
       // PAUSE FIRST. `handleWalkForward` DISMISSES this card by design (David
       // 2026-07-19: forward must never leave a frozen board), and
       // `turningAskedRef` means a dismissed card never returns. With playback
@@ -243,13 +249,19 @@ const run = async () => {
       // never rendered — three attempts, three `confirm=false`, on a coach that
       // works: the isolated probe (scripts/probe-turning-card.mjs), which pauses
       // before answering, gets the thesis spoken every time.
-      const st = await page.locator('[data-testid="review-play-pause-btn"]').first()
-        .getAttribute('data-state', { timeout: 2000 }).catch(() => null);
-      if (st === 'playing') {
-        await page.locator('[data-testid="review-play-pause-btn"]').first()
-          .click({ timeout: 2000, force: true }).catch(() => undefined);
-        await page.waitForTimeout(300);
+      // POLL until it is actually paused; never read the state ONCE. A single
+      // `getAttribute` that times out (or catches) returns null, which is not
+      // 'playing', so the pause was SKIPPED — the walk then advanced out from
+      // under the tap and `handleWalkForward` dismissed the card by design.
+      const pauseBtn = page.locator('[data-testid="review-play-pause-btn"]').first();
+      let paused = false;
+      for (let i = 0; i < 6 && !paused; i += 1) {
+        const st = await pauseBtn.getAttribute('data-state', { timeout: 2000 }).catch(() => null);
+        if (st === 'paused') { paused = true; break; }
+        await pauseBtn.click({ timeout: 2000, force: true }).catch(() => undefined);
+        await page.waitForTimeout(350);
       }
+      log(`  [turning] playback paused=${paused}`);
       const chip = page.locator('[data-testid^="turning-point-pick-"]').first();
       const chips = await page.locator('[data-testid^="turning-point-pick-"]').count().catch(() => -1);
       log(`  [turning] card present; ${chips} candidate chip(s)`);
@@ -265,6 +277,19 @@ const run = async () => {
         const confirmSel = '[data-testid="review-turning-point-confirm"]';
         const revealed = () => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text));
         for (let attempt = 1; attempt <= 3 && !revealed(); attempt += 1) {
+          // Re-check the card EVERY attempt. Retrying against a card that is
+          // already gone reports three identical `confirm=false` lines and hides
+          // what actually happened (2026-09-16: the pause had silently no-op'd,
+          // so attempt 1 raced a forward that dismissed it).
+          if (!(await has(page, '[data-testid="review-turning-point-card"]'))) {
+            log(`  [turning] attempt ${attempt}: card is GONE before the tap — dismissed, not answered`);
+            break;
+          }
+          // Scroll it into view ourselves: the component's own
+          // scroll-the-card-into-view effect had the wrong testid for this one
+          // card (fixed 2026-09-16), and a smooth-scrolling container can still
+          // move the chip between Playwright's scroll and its click.
+          await chip.scrollIntoViewIfNeeded({ timeout: 2000 }).catch(() => undefined);
           await chip.click({ timeout: 2000, force: true }).catch(() => undefined);
           const confirmUp = await until(() => has(page, confirmSel), 5000, 250);
           if (confirmUp) {

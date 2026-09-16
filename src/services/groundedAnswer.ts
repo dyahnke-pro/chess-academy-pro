@@ -35,6 +35,7 @@ import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
+import { andList, orList } from '../utils/andList';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -278,11 +279,11 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
-  const named = loose.slice(0, 3).map((l) => `the ${REVIEW_PIECE_NAME[l.type]} on ${l.sq}`);
+  const named = andList(loose.map((l) => `the ${REVIEW_PIECE_NAME[l.type]} on ${l.sq}`));
   const pts = `${loose[0].g} point${loose[0].g === 1 ? '' : 's'}`;
   const facts = scanTheirs
-    ? `Yes — ${named.join(', ')} ${loose.length > 1 ? 'are' : 'is'} loose; you can win about ${pts}.`
-    : `Careful — ${named.join(', ')} ${loose.length > 1 ? 'are' : 'is'} hanging; they can win about ${pts}.`;
+    ? `Yes — ${named} ${loose.length > 1 ? 'are' : 'is'} loose; you can win about ${pts}.`
+    : `Careful — ${named} ${loose.length > 1 ? 'are' : 'is'} hanging; they can win about ${pts}.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
@@ -329,13 +330,13 @@ export function assembleBoardPlanAnswer(
     const sw = strongestWeakestPiece(fen, oppColor);
     if (sw.strongest) bits.push(`their ${REVIEW_PIECE_NAME[sw.strongest.piece]} on ${sw.strongest.square} is their most active piece`);
     const oppFiles = findOpenFiles(fen);
-    const theirFiles = [...new Set([...oppFiles.open, ...(oppColor === 'w' ? oppFiles.whiteSemiOpen : oppFiles.blackSemiOpen)])].slice(0, 2);
-    if (theirFiles.length) bits.push(`they'll contest the ${theirFiles.join(' and ')}-file`);
+    const theirFiles = [...new Set([...oppFiles.open, ...(oppColor === 'w' ? oppFiles.whiteSemiOpen : oppFiles.blackSemiOpen)])];
+    if (theirFiles.length) bits.push(`they'll contest the ${andList(theirFiles)} file${theirFiles.length > 1 ? 's' : ''}`);
     const flipped = fen.split(' ');
     if (flipped.length >= 6 && flipped[1] !== oppColor) { flipped[1] = oppColor; flipped[3] = '-'; }
     let theirBreaks: string[] = [];
-    try { theirBreaks = findPawnBreaks(flipped.join(' ')).slice(0, 2); } catch { theirBreaks = []; }
-    if (theirBreaks.length) bits.push(`they can break with ${theirBreaks.join(', ')}`);
+    try { theirBreaks = findPawnBreaks(flipped.join(' ')); } catch { theirBreaks = []; }
+    if (theirBreaks.length) bits.push(`they can break with ${andList(theirBreaks)}`);
     if (bits.length === 0) return null;
     return { facts: `Their side of it: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
@@ -350,22 +351,24 @@ export function assembleBoardPlanAnswer(
 
   // A pawn break to open the position (findPawnBreaks reads the side to move).
   if (chess.turn() === myC) {
-    const breaks = findPawnBreaks(fen).slice(0, 2);
-    if (breaks.length) levers.push(`break with ${breaks.join(' or ')} to open the position`);
+    const breaks = findPawnBreaks(fen);
+    if (breaks.length) levers.push(`break with ${orList(breaks)} to open the position`);
   }
   // A rook belongs on an open / half-open file.
   const files = findOpenFiles(fen);
-  const rookFiles = [...new Set([...files.open, ...(myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)])].slice(0, 2);
-  if (rookFiles.length) levers.push(`put a rook on the ${rookFiles.join(' or ')}-file`);
+  const rookFiles = [...new Set([...files.open, ...(myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)])];
+  if (rookFiles.length) levers.push(`put a rook on the ${orList(rookFiles)} file${rookFiles.length > 1 ? 's' : ''}`);
   // An outpost — a hole in THEIR camp a knight can occupy.
   const holes = findWeakSquares(fen);
-  const oppHoles = (myC === 'w' ? holes.black : holes.white).slice(0, 2);
-  if (oppHoles.length) levers.push(`plant a knight on ${oppHoles.join(' or ')}`);
+  const oppHoles = (myC === 'w' ? holes.black : holes.white);
+  if (oppHoles.length) levers.push(`plant a knight on ${orList(oppHoles)}`);
   // Improve your worst-placed piece.
   const sw = strongestWeakestPiece(fen, myC);
   if (sw.weakest) levers.push(`improve your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
 
-  const top = levers.slice(0, 3);
+  // Every lever the board earned — no ceiling (G4.5). They are already ordered
+  // most→least decisive, so a long list reads as a ranked plan, not a dump.
+  const top = levers;
   if (trump && top.length) {
     return { facts: `${trump} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
@@ -452,11 +455,11 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
-  const named = wins.slice(0, 2).map((w) => `the ${REVIEW_PIECE_NAME[w.type]} on ${w.sq}`);
+  const named = andList(wins.map((w) => `the ${REVIEW_PIECE_NAME[w.type]} on ${w.sq}`));
   const winPart = wins.length > 0
     ? (isOpp
-        ? `they're eyeing ${named.join(' and ')} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'} if you don't cover it`
-        : `you can win ${named.join(' and ')} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'}`)
+        ? `they're eyeing ${named} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'} if you don't cover it`
+        : `you can win ${named} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'}`)
     : '';
   const checkPart = inCheck ? `your king is in check` : '';
   const facts = [checkPart, winPart].filter(Boolean).join(', and ') + '.';
@@ -506,7 +509,7 @@ export function assembleMovePurposeAnswer(fen: string, ask: string | null | unde
     const after = new Chess(applied.after ?? fen);
     const me: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
     const central = squaresAttackedBy(after, applied.to, me).filter((s) => !after.get(s) && CENTRAL_SQ.has(s));
-    clauses.push(central.length > 0 ? `develops toward the centre, covering ${central.slice(0, 3).join(', ')}` : `is a quiet developing move`);
+    clauses.push(central.length > 0 ? `develops toward the centre, covering ${andList(central)}` : `is a quiet developing move`);
   }
   const body = clauses.length > 1 ? `${clauses.slice(0, -1).join(', ')} and ${clauses[clauses.length - 1]}` : clauses[0];
   return { facts: `${san} ${body}.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
@@ -784,9 +787,9 @@ export function assemblePiecePurposeAnswer(
         const central = attacked.filter((t) => !chess.get(t) && CENTRAL_SQ.has(t));
         const hits = attacked.flatMap((t) => { const q = chess.get(t); return q && q.color === me ? [`your ${REVIEW_PIECE_NAME[q.type]} on ${t}`] : []; });
         const clauses: string[] = [];
-        if (hits.length) clauses.push(`eyes ${hits.slice(0, 3).join(', ')}`);
-        if (central.length) clauses.push(`covers ${central.slice(0, 3).join(', ')} in the centre`);
-        const body = clauses.length > 0 ? clauses.join(' and ') : `covers ${attacked.slice(0, 4).join(', ')}`;
+        if (hits.length) clauses.push(`eyes ${andList(hits)}`);
+        if (central.length) clauses.push(`covers ${andList(central)} in the centre`);
+        const body = clauses.length > 0 ? clauses.join(' and ') : `covers ${andList(attacked)}`;
         return {
           facts: `Their ${pieceName} on ${parsed.square} ${body}.`,
           bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
@@ -818,19 +821,18 @@ export function assemblePiecePurposeAnswer(
 
   const clauses: string[] = [];
   if (s.targets.length > 0) {
-    const named = s.targets.slice(0, 2).map((t) => `the ${REVIEW_PIECE_NAME[t.type]} on ${t.sq}`);
-    clauses.push(`attacks ${named.join(' and ')}`);
+    clauses.push(`attacks ${andList(s.targets.map((t) => `the ${REVIEW_PIECE_NAME[t.type]} on ${t.sq}`))}`);
   }
   if (s.xray) {
     clauses.push(`x-rays the ${REVIEW_PIECE_NAME[s.xray.type]} on ${s.xray.sq} behind the piece on ${s.xray.through}`);
   }
   if (s.controlledCentral.length > 0) {
-    clauses.push(`controls ${s.controlledCentral.slice(0, 3).join(', ')}`);
+    clauses.push(`controls ${andList(s.controlledCentral)}`);
   }
   if (clauses.length === 0) {
     const quiet = s.attacked.filter((t) => !chess.get(t));
     clauses.push(quiet.length > 0
-      ? `isn't hitting anything active — it just covers ${quiet.slice(0, 3).join(', ')}`
+      ? `isn't hitting anything active — it just covers ${andList(quiet)}`
       : `has no scope here — it's hemmed in`);
   }
 
@@ -1282,7 +1284,9 @@ export function assembleAppHelpAnswer(opts: {
 export function assembleCapabilitiesOverview(
   entries: ReadonlyArray<{ title: string; blurb: string }>,
 ): GroundedAnswer | null {
-  const clean = entries.filter((e) => e.title?.trim() && e.blurb?.trim()).slice(0, 6);
+  // No ceiling (G4.5): the CALLER curates the headline set. A second silent
+  // slice here would drop a capability the moment a seventh one is added.
+  const clean = entries.filter((e) => e.title?.trim() && e.blurb?.trim());
   if (clean.length === 0) return null;
   const lines = clean.map((e) => `${e.title} — ${e.blurb.trim()}`);
   const facts =
@@ -1328,8 +1332,7 @@ export function assembleTeachingAnswer(opts: {
     );
     const cues = lesson.beats
       .map((b) => b.sayShort)
-      .filter((s): s is string => !!s && s.trim().length > 0)
-      .slice(0, 3);
+      .filter((s): s is string => !!s && s.trim().length > 0);
     if (cues.length > 0) parts.push(`The ideas you'll drill: ${cues.join('; ')}.`);
     const extras: string[] = [];
     if (opts.extras?.plans) extras.push(`${opts.extras.plans} middlegame plan${opts.extras.plans === 1 ? '' : 's'}`);
@@ -2246,7 +2249,7 @@ export function quietPurposePhrase(
       // Without this the mistake narration produced "It develops the king to
       // g5" on a bare K+N endgame — David's logged Kg3 puzzle.
       if (mv.piece === 'k') {
-        return `brings the king to ${mv.to}, where it covers ${eyes.slice(0, 2).join(' and ')}`;
+        return `brings the king to ${mv.to}, where it covers ${andList(eyes)}`;
       }
       // DEVELOPMENT means coming off the back rank. A piece already in play
       // that merely improves is being REPOSITIONED, and calling that
@@ -2255,7 +2258,7 @@ export function quietPurposePhrase(
       // above: say what the move actually is.
       const homeRank = mc === 'w' ? '1' : '8';
       const verb = mv.from[1] === homeRank ? 'develops' : 'repositions';
-      return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, eyeing ${eyes.slice(0, 2).join(' and ')}`;
+      return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, eyeing ${andList(eyes)}`;
     }
     return null;
   } catch {
@@ -2405,7 +2408,7 @@ export function assembleMovePurpose(opts: {
       }
     });
     if (eyes.length > 0) {
-      clauses.push(`The ${pieceName} develops to ${mv.to}, eyeing ${eyes.slice(0, 2).join(' and ')}.`);
+      clauses.push(`The ${pieceName} develops to ${mv.to}, eyeing ${andList(eyes)}.`);
     } else {
       clauses.push(`The ${pieceName} develops to ${mv.to}.`);
     }
@@ -2765,8 +2768,12 @@ export function assembleTacticsAnswer(
     (!!motifM && /\b(is\s+there|any|do\s+i\s+have|can\s+i|available)\b/.test(t));
   if (opportunityAsk) {
     if (tactics.boardFacts?.mateInOne) parts.push(`Yes — checkmate in one: ${tactics.boardFacts.mateInOne}.`);
-    for (const o of tactics.opportunities.slice(0, 2)) if (o.description) parts.push(`${o.description}.`);
-    for (const im of tactics.immediate.slice(0, 2)) if (im.description && parts.length < 2) parts.push(`${im.description}.`);
+    // EVERY computed shot, not the first two (G4.5). Duplicate sentences are
+    // collapsed — that is subsumption (one claim, said once), not a cap.
+    const said = new Set(parts);
+    const push = (d: string | undefined) => { if (!d) return; const line = `${d}.`; if (!said.has(line)) { said.add(line); parts.push(line); } };
+    for (const o of tactics.opportunities) push(o.description);
+    for (const im of tactics.immediate) push(im.description);
     if (parts.length > 0) {
       return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'] };
     }
@@ -2794,11 +2801,11 @@ export function assembleTacticsAnswer(
   if (leadConcept && leadConcept.source !== 'positional') parts.push(leadConcept.full);
   // Immediate tactics on the board now — voice the engine's own descriptions
   // (skipping the one the concept sentence already taught).
-  for (const t of tactics.immediate.slice(0, 2)) {
+  for (const t of tactics.immediate) {
     if (t.description && t.type !== spokenConceptId) parts.push(`${t.description}.`);
   }
   // The STUDENT's pieces left hanging — warn concretely.
-  for (const h of tactics.hanging.filter((p) => p.color === sc).slice(0, 2)) {
+  for (const h of tactics.hanging.filter((p) => p.color === sc)) {
     parts.push(`Your ${REVIEW_PIECE_NAME[h.piece] ?? h.piece} on ${h.square} is hanging.`);
   }
   // Nothing concrete yet → surface the top threat, then the top opportunity.
@@ -2830,7 +2837,17 @@ export function assembleTacticsAnswer(
 export function assembleMasterPlayAnswer(current: MasterPlayResult): GroundedAnswer | null {
   if (current.source === 'none' || current.moves.length === 0) return null;
   const fmt = (n: number): string => n.toLocaleString('en-US');
-  const top = current.moves.slice(0, 3);
+  // A BAR, NOT A CAP (G4.5/G4.5.1): every move masters actually play here is
+  // named — the floor sweeps the 1-in-2000 curiosities that are noise, not
+  // theory. A position with six real tries says all six; `.slice(0, 3)` used to
+  // delete the fourth-most-played move in the Ruy no matter how many games it
+  // had. Anything at or above 2% of the games at this position clears it, and
+  // the leader always does (so a position with one dominant move still speaks).
+  const REAL_SHARE = 0.02;
+  const totalHere = current.totalGames > 0
+    ? current.totalGames
+    : current.moves.reduce((n, m) => n + m.games, 0);
+  const top = current.moves.filter((m, i) => i === 0 || totalHere <= 0 || m.games / totalHere >= REAL_SHARE);
   const lead = top[0];
   const leadWhite = Math.round(lead.whitePct * 100);
   const leadDraw = Math.round(lead.drawPct * 100);
@@ -2846,7 +2863,7 @@ export function assembleMasterPlayAnswer(current: MasterPlayResult): GroundedAns
   ];
   const others = top.slice(1);
   if (others.length > 0) {
-    parts.push(`Masters also play ${others.map((m) => `${m.san} (${fmt(m.games)} games)`).join(' and ')}.`);
+    parts.push(`Masters also play ${andList(others.map((m) => `${m.san} (${fmt(m.games)} games)`))}.`);
   }
 
   let fromTo: { from: string; to: string } | null = null;
@@ -2988,8 +3005,11 @@ export function assembleEndgameTechniqueAnswer(opts: {
   const rule = opts.rule?.trim();
   const why = opts.why?.trim();
   if (!rule) return null;
-  // Keep it tight: the rule, then the first 2 sentences of the mechanism.
-  const whyShort = why ? why.split(/(?<=[.!?])\s+/).slice(0, 2).join(' ').trim() : '';
+  // The WHOLE mechanism (G4.5) — the old "keep it tight, first 2 sentences"
+  // silently dropped the tail of an authored endgame explanation, which is
+  // where the technique usually finishes. Brevity is the student's `brief`
+  // verbosity setting, never a truncation here.
+  const whyShort = why;
   const parts = [`${cap(opts.name)}: ${rule}`];
   if (whyShort) parts.push(whyShort);
   if (opts.history?.trim()) parts.push(opts.history.trim());
@@ -3013,8 +3033,10 @@ export function assembleTheoryAnswer(hit: {
 }): GroundedAnswer | null {
   const raw = hit.passage.text?.trim();
   if (!raw) return null;
-  // First 2-3 sentences keep it tight; the model may compress further.
-  const trimmed = raw.split(/(?<=[.!?])\s+/).slice(0, 3).join(' ').trim();
+  // The WHOLE passage (G4.5). It is already a distilled corpus excerpt (a few
+  // hundred characters); slicing it to three sentences deleted the conclusion
+  // of the very idea the student asked about.
+  const trimmed = raw;
   if (!trimmed) return null;
   const source = hit.passage.bookSlug ? `book:${hit.passage.bookSlug}` : `concept:${hit.conceptId}`;
   return {
@@ -3030,7 +3052,9 @@ export function assembleConceptAnswer(concept: ConceptEntry): GroundedAnswer | n
   let definition: string | null = null;
   let source: string | null = null;
   if (passage?.text?.trim()) {
-    definition = passage.text.trim().split(/(?<=[.!?])\s+/).slice(0, 2).join(' ').trim();
+    // The whole passage (G4.5) — a two-sentence clip of a book definition
+    // routinely cut the clause that made it a definition at all.
+    definition = passage.text.trim();
     source = `book:${passage.bookSlug}`;
   } else if (concept.fallbackDefinition?.trim()) {
     definition = concept.fallbackDefinition.trim();
@@ -3127,10 +3151,14 @@ export function assembleFundamentalsAnswer(
   const exampleReviewId = FUNDAMENTALS_EXAMPLE_REVIEW[topic];
   // PERSONALIZED — the fundamentals THIS student breaks most, from their games.
   if (topic === 'general' && weak && weak.length > 0) {
-    const top = weak.slice(0, 3);
-    const lead = `The fundamentals costing you the most, from your own games: ${top
-      .map((w) => `${w.label} (${w.count} time${w.count === 1 ? '' : 's'})`)
-      .join(', ')}.`;
+    // A BAR, NOT A CAP (G4.5). `.slice(0, 3)` hid the fourth-worst fundamental
+    // no matter how often the student broke it. The floor is relative to their
+    // own worst habit, so a real recurring problem is always named and a
+    // one-off from twenty games ago does not dilute "costing you the most".
+    const worst = Math.max(...weak.map((w) => w.count), 1);
+    const top = weak.filter((w, i) => i === 0 || w.count / worst >= 0.25);
+    const lead = `The fundamentals costing you the most, from your own games: ${andList(top
+      .map((w) => `${w.label} (${w.count} time${w.count === 1 ? '' : 's'})`))}.`;
     const teach = top.map((w) => w.device).filter(Boolean).join(' ');
     return {
       facts: `${lead} ${teach}`.trim(),
@@ -3215,8 +3243,9 @@ export function assembleFamousGameAnswer(key: FamousGameKey): (GroundedAnswer & 
 export function assembleProgressAnswer(badHabits: ReadonlyArray<BadHabit>): GroundedAnswer | null {
   const open = badHabits
     .filter((h) => !h.isResolved && h.description)
-    .sort((a, b) => b.occurrences - a.occurrences)
-    .slice(0, 3);
+    .sort((a, b) => b.occurrences - a.occurrences);
+  // Every open habit (G4.5), most-frequent first — a student asking about their
+  // progress is owed all of it, not the first three.
   if (open.length === 0) return null;
 
   const phrase = (h: BadHabit): string =>
@@ -3445,8 +3474,10 @@ export function assembleWeaknessRecommendation(
   const pool = topic ? weaknesses.filter((w) => w.bucket === topic) : weaknesses;
   const open = pool
     .filter((w) => w.openCount > 0 && !!w.label)
-    .sort((a, b) => b.openCount - a.openCount)
-    .slice(0, 3);
+    .sort((a, b) => b.openCount - a.openCount);
+  // No ceiling (G4.5): every open weakness the student's own games earned is
+  // named, most-frequent first. `.slice(0, 3)` hid the fourth one from a
+  // student who asked what to train — the exact "teachings left out" failure.
   if (open.length === 0) return null;
 
   const phrase = (w: WeaknessLike): string =>
@@ -3532,7 +3563,7 @@ export function assembleOpeningProfileAnswer(opts: {
     // both colors requested — one per side
     facts = `Your ${label} opening as White is ${stat(white[0])}; as Black it's ${stat(black[0])}.`;
   } else {
-    const list = rows.slice(0, 3);
+    const list = rows; // every opening the stats earned, ranked (G4.5)
     facts =
       list.length === 1
         ? `Your ${label} opening is ${stat(list[0])}.`
@@ -3599,7 +3630,9 @@ export function assembleStatsAnswer(s: StatsLike): GroundedAnswer | null {
  * stops getting a weakness-dump. Returns null when no strengths computed. G0.
  */
 export function assembleStrengthsAnswer(strengths: ReadonlyArray<string>): GroundedAnswer | null {
-  const open = strengths.filter((s) => !!s && s.trim().length > 0).slice(0, 3);
+  // Every computed strength (G4.5) — the caller already only emits ones the
+  // student's games actually support.
+  const open = strengths.filter((s) => !!s && s.trim().length > 0);
   if (open.length === 0) return null;
   const facts =
     open.length === 1
@@ -3720,13 +3753,16 @@ export function assembleOpeningTrapsAnswer(opts: {
   let firstDrillName = '';
   for (const s of sides) {
     if (!firstDrillName) firstDrillName = s.name;
-    const traps = clean(s.traps).slice(0, 3);
-    const warns = clean(s.warnings).slice(0, 2);
+    // EVERY verified trap and warning this opening carries (G4.5). The old
+    // 3/2 clip meant a student asking "what traps do I have?" was told about
+    // three of five and never learned the other two existed.
+    const traps = clean(s.traps);
+    const warns = clean(s.warnings);
     const side = s.color === 'white' ? 'White' : 'Black';
     let line = opts.named
       ? `The ${s.name} (a ${side} opening) has real, verified traps.`
       : `Your strongest ${side} opening is the ${s.name}.`;
-    if (traps.length) line += ` Trap weapons you can spring: ${traps.join('; ')}.`;
+    if (traps.length) line += ` Trap weapon${traps.length === 1 ? '' : 's'} you can spring: ${traps.join('; ')}.`;
     if (warns.length) line += ` Watch out for: ${warns.join('; ')}.`;
     parts.push(line);
   }
@@ -3775,11 +3811,13 @@ export function assembleReviewDueAnswer(s: ReviewDueLike): GroundedAnswer | null
     };
   }
 
-  const openings = s.dueOpenings.filter((o) => o.name && o.dueCards > 0).slice(0, 3);
+  // Every opening with cards due (G4.5) — "mostly X, Y and Z" used to hide the
+  // fourth opening from a student deciding what to review today.
+  const openings = s.dueOpenings.filter((o) => o.name && o.dueCards > 0);
   const acrossN = s.dueOpenings.filter((o) => o.dueCards > 0).length;
   const across = acrossN > 1 ? ` across ${acrossN} openings` : '';
   const breakdown = openings.length
-    ? ` Mostly ${openings.map((o) => `the ${o.name} (${o.dueCards})`).join(', ')}.`
+    ? ` ${openings.length > 1 ? 'Across' : 'In'} ${andList(openings.map((o) => `the ${o.name} (${o.dueCards})`))}.`
     : '';
   const facts =
     `You've got ${s.dueCount} card${s.dueCount === 1 ? '' : 's'} due for review right now${across}.` +
@@ -3900,17 +3938,20 @@ export function assembleWeaknessBriefingAnswer(lc: WeaknessLifecycleLike): Groun
   if (lc.mostPressing) {
     parts.push(`The one to work on first is ${lc.mostPressing.label.toLowerCase()} — ${lc.mostPressing.recentCount} recent slip${lc.mostPressing.recentCount === 1 ? '' : 's'}.`);
   }
-  const persist = lc.persistent.slice(0, 3).map((e) => e.label.toLowerCase());
+  // EVERY lifecycle entry the computer produced (G4.5). The 3/2/3 clips meant
+  // a student's fourth persistent habit — and the fourth thing they had fixed,
+  // which is the encouraging half — were silently dropped from the briefing.
+  const persist = lc.persistent.map((e) => e.label.toLowerCase());
   if (persist.length > 0) {
-    parts.push(`Persistent across your games: ${persist.join(', ')}.`);
+    parts.push(`Persistent across your games: ${andList(persist)}.`);
   }
-  const emerge = lc.emerging.slice(0, 2).map((e) => e.label.toLowerCase());
+  const emerge = lc.emerging.map((e) => e.label.toLowerCase());
   if (emerge.length > 0) {
-    parts.push(`Newer: ${emerge.join(', ')}.`);
+    parts.push(`Newer: ${andList(emerge)}.`);
   }
-  const fixed = lc.fixed.slice(0, 3).map((e) => e.label.toLowerCase());
+  const fixed = lc.fixed.map((e) => e.label.toLowerCase());
   if (fixed.length > 0) {
-    parts.push(`You've cleaned up ${fixed.join(', ')} — they used to show up and don't anymore. Nice.`);
+    parts.push(`You've cleaned up ${andList(fixed)} — they used to show up and don't anymore. Nice.`);
   }
   if (parts.length === 0) return null;
   parts.push('Say "drill it" and I\'ll build a set from your most-pressing pattern.');
@@ -3934,18 +3975,18 @@ export function assembleWeaknessLifecycleAnswer(
     if (lc.fixed.length === 0) {
       return { facts: `Nothing has fully dropped off yet — your recurring patterns are all still showing up in recent games. Keep drilling and they'll start clearing.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
     }
-    const named = lc.fixed.slice(0, 4).map((e) => e.label.toLowerCase());
-    return { facts: `You've cleaned these up — they used to appear and are gone from your recent games: ${named.join(', ')}. That's real progress you made yourself.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    const named = lc.fixed.map((e) => e.label.toLowerCase());
+    return { facts: `You've cleaned these up — they used to appear and are gone from your recent games: ${andList(named)}. That's real progress you made yourself.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
   if (kind === 'persistent') {
     if (lc.persistent.length === 0) {
       return { facts: `Nothing is dragging across your whole history — your recent errors are mostly newer patterns, not old habits. Ask me what's most pressing and I'll point you at it.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
     }
-    const named = lc.persistent.slice(0, 4).map((e) => {
+    const named = lc.persistent.map((e) => {
       const arrow = e.trend === 'improving' ? ' (easing off)' : e.trend === 'worsening' ? ' (getting worse)' : '';
       return `${e.label.toLowerCase()}${arrow}`;
     });
-    return { facts: `These keep showing up across your games: ${named.join(', ')}. Those are the habits to break — say "drill it" and I'll build a set.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    return { facts: `These keep showing up across your games: ${andList(named)}. Those are the habits to break — say "drill it" and I'll build a set.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
   // pressing
   if (!lc.mostPressing) {
@@ -4915,7 +4956,10 @@ export function assembleGameReviewAnswer(opts: {
   );
   if (critical.length > 0) {
     parts.push('Critical moments:');
-    for (const m of critical.slice(0, 8)) {
+    // EVERY critical moment (G4.5: "no ceiling on … moments in a recap"). A
+    // messy 40-move game has more than eight, and the ones past the eighth were
+    // exactly the late-game collapses the student most needed to see.
+    for (const m of critical) {
       const dot = m.color === 'black' ? '…' : '.';
       const evalStr = m.evaluation !== null ? `eval ${m.evaluation > 0 ? '+' : ''}${(m.evaluation / 100).toFixed(1)} for White` : '';
       // ROOT the "why" in the engine-reasoning walk: name the engine's preferred
@@ -5260,8 +5304,10 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
       p.verdict === 'winnable' || p.verdict === 'balanced-tension';
     const onMe = pressuredTargets(fen, oppC).filter(underPressure);
     const onThem = pressuredTargets(fen, myC).filter(underPressure);
-    const mine = onMe.length ? `Under pressure for you: ${onMe.slice(0, 3).map((p) => `the ${REVIEW_PIECE_NAME[p.piece]} on ${p.square}`).join(', ')}.` : '';
-    const theirs = onThem.length ? `You're pressuring ${onThem.slice(0, 3).map((p) => `the ${REVIEW_PIECE_NAME[p.piece]} on ${p.square}`).join(', ')}.` : '';
+    // Every contested piece (G4.5) — the fourth one under pressure is exactly
+    // the one the student has not noticed.
+    const mine = onMe.length ? `Under pressure for you: ${andList(onMe.map((p) => `the ${REVIEW_PIECE_NAME[p.piece]} on ${p.square}`))}.` : '';
+    const theirs = onThem.length ? `You're pressuring ${andList(onThem.map((p) => `the ${REVIEW_PIECE_NAME[p.piece]} on ${p.square}`))}.` : '';
     if (!mine && !theirs) return { facts: 'Nothing is under real pressure right now — attackers and defenders balance out.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return { facts: [mine, theirs].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
@@ -5270,17 +5316,17 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     const targets = findAttackTargets(fen, myC);
     const turn = fen.split(' ')[1];
     const grabs = turn === myC ? findPawnGrabs(fen).filter((g) => g.safe && g.see > 0) : [];
-    const tg = targets.length ? `Aim at ${targets.slice(0, 3).join(', ')} — ${opp}'s weak points.` : '';
-    const gr = grabs.length ? `Free pawn${grabs.length > 1 ? 's' : ''}: ${grabs.slice(0, 2).map((g) => g.capture).join(', ')}.` : '';
+    const tg = targets.length ? `Aim at ${andList(targets)} — ${opp}'s weak point${targets.length > 1 ? 's' : ''}.` : '';
+    const gr = grabs.length ? `Free pawn${grabs.length > 1 ? 's' : ''}: ${andList(grabs.map((g) => g.capture))}.` : '';
     if (tg || gr) return { facts: [tg, gr].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
     // No concrete target yet — name what to work toward: their weak pawns, then
     // the holes to provoke, then "make one with a break". Never a bare deflect.
     const wp = findWeakPawns(fen, oppC);
     const weak = [...wp.isolated, ...wp.backward, ...wp.doubled];
-    if (weak.length) return { facts: `No loose piece to grab, but ${opp}'s ${weak.slice(0, 2).join(', ')} pawn${weak.length > 1 ? 's are' : ' is'} the long-term target — pile up on ${weak.length > 1 ? 'them' : 'it'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (weak.length) return { facts: `No loose piece to grab, but ${opp}'s ${andList(weak)} pawn${weak.length > 1 ? 's are' : ' is'} the long-term target — pile up on ${weak.length > 1 ? 'them' : 'it'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     const holes = findWeakSquares(fen);
-    const oppHoles = (myC === 'w' ? holes.black : holes.white).slice(0, 2);
-    if (oppHoles.length) return { facts: `Nothing hanging yet — the target is the weak square${oppHoles.length > 1 ? 's' : ''} on ${oppHoles.join(', ')}; occupy ${oppHoles.length > 1 ? 'them' : 'it'} and build from there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const oppHoles = (myC === 'w' ? holes.black : holes.white);
+    if (oppHoles.length) return { facts: `Nothing hanging yet — the target is the weak square${oppHoles.length > 1 ? 's' : ''} on ${andList(oppHoles)}; occupy ${oppHoles.length > 1 ? 'them' : 'it'} and build from there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return { facts: `No target yet — the structure is solid, so provoke a weakness with a pawn break before you attack.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
@@ -5298,7 +5344,7 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     if (turn !== myC) return { facts: `It's not your move, so there's no break to play this instant — line one up for when it's your turn.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     const breaks = findPawnBreaks(fen);
     if (breaks.length === 0) return { facts: 'No pawn break available right now — the structure is locked or none makes contact.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
-    return { facts: `Your pawn break${breaks.length > 1 ? 's' : ''}: ${breaks.slice(0, 3).join(', ')} — that's how you open the position.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `Your pawn break${breaks.length > 1 ? 's' : ''}: ${andList(breaks)} — that's how you open the position.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'structure-name') {
@@ -5347,9 +5393,9 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     // No textbook maneuver fired — still give direction: send the worst-placed
     // piece toward an outpost (a hole in their camp) or just to a better square.
     const holes = findWeakSquares(fen);
-    const oppHoles = (myC === 'w' ? holes.black : holes.white).slice(0, 1);
+    const oppHoles = (myC === 'w' ? holes.black : holes.white);
     const sw = strongestWeakestPiece(fen, myC);
-    if (sw.weakest && oppHoles.length) return { facts: `No forced maneuver, but your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square} is your worst piece — route it toward the outpost on ${oppHoles[0]}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (sw.weakest && oppHoles.length) return { facts: `No forced maneuver, but your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square} is your worst piece — route it toward the outpost${oppHoles.length > 1 ? 's' : ''} on ${orList(oppHoles)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     if (sw.weakest) return { facts: `No forced maneuver here — the improving move is to reroute your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}, your least active piece, to a more useful square.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return null;
   }

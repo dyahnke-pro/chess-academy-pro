@@ -2791,7 +2791,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           '[data-testid="review-theory-ask"]',
           '[data-testid="review-theory-playback"]',
           '[data-testid="review-principle-quiz"]',
-          '[data-testid="review-turning-card"]',
+          // NB the id is `review-turning-point-card`. It read
+          // `review-turning-card` from the day this list was written, so the ONE
+          // card that blocks the walk — and gates the thesis — was the only card
+          // never scrolled into view. On desktop it opened below the fold inside
+          // the middle scroller, which is the "thin sliver below the board"
+          // defect this effect exists to kill. Gated now by
+          // CoachGameReview.cardScroll.test.ts so the two can never drift again.
+          '[data-testid="review-turning-point-card"]',
+          '[data-testid="review-turning-point-reveal"]',
           '[data-testid="review-trap-card"]',
           '[data-testid="review-rewind-card"]',
           '[data-testid="discussion-practice-panel"]',

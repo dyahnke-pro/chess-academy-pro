@@ -30,6 +30,7 @@ import { detectOpening } from './openingDetectionService';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
+import { andList } from '../utils/andList';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -620,15 +621,6 @@ export function computeThroughLine(fensAfter: string[], studentColorWB: Color | 
 function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
 function lowerFirst(s: string): string { return s.charAt(0).toLowerCase() + s.slice(1); }
 
-/** Join EVERY item as English ("a, b and c"). No cap — David 2026-09-16: "I
- *  DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!! That's how things
- *  don't get stated or teachings left out." A long list is a phrasing problem,
- *  never a reason to drop a computed fact. */
-function andList(xs: readonly string[]): string {
-  if (xs.length <= 1) return xs[0] ?? '';
-  if (xs.length === 2) return `${xs[0]} and ${xs[1]}`;
-  return `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`;
-}
 
 // The move-quality label, spoken as English. The old template read
 // "<Classification> move" — so the coach literally said "inaccuracy move" and
