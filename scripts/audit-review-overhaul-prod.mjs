@@ -240,17 +240,26 @@ const run = async () => {
       const chips = await page.locator('[data-testid^="turning-point-pick-"]').count().catch(() => -1);
       log(`  [turning] card present; ${chips} candidate chip(s)`);
       if (await chip.count() > 0) {
-        await chip.click({ timeout: 2000, force: true }).catch(() => undefined);
-        await page.waitForTimeout(500);
-        // Confirm exists only after the preview; fall back to a second tap on
-        // the same chip, which commits it too.
-        if (await has(page, '[data-testid="review-turning-point-confirm"]')) {
-          await page.locator('[data-testid="review-turning-point-confirm"]').first()
-            .click({ timeout: 2000, force: true }).catch(() => undefined);
-        } else {
+        // WAIT FOR STATE, NEVER A FIXED DELAY. The first tap only PREVIEWS; the
+        // Confirm button does not exist until React has re-rendered with that
+        // preview. A fixed 500ms then "tap the chip again" raced that render:
+        // if the first tap had not landed in state yet, the second tap just set
+        // the preview again and NOTHING ever committed — the card stayed up, no
+        // reveal was spoken, and the THESIS row failed on a coach that was fine
+        // (two full prod runs, 0 reveals, 2026-09-16). Retry the whole
+        // tap→confirm cycle and stop as soon as the reveal actually speaks.
+        const confirmSel = '[data-testid="review-turning-point-confirm"]';
+        const revealed = () => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text));
+        for (let attempt = 1; attempt <= 3 && !revealed(); attempt += 1) {
           await chip.click({ timeout: 2000, force: true }).catch(() => undefined);
+          const confirmUp = await until(() => has(page, confirmSel), 5000, 250);
+          if (confirmUp) {
+            await page.locator(confirmSel).first().click({ timeout: 2000, force: true }).catch(() => undefined);
+          }
+          const spoke = await until(revealed, 8000, 250);
+          log(`  [turning] attempt ${attempt}: confirm=${confirmUp} reveal=${spoke}`);
+          if (spoke) break;
         }
-        await page.waitForTimeout(400);
       }
     }
     if (await has(page, '[data-testid="review-turning-point-reveal"]')) {
