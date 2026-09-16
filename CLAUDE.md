@@ -2959,8 +2959,30 @@ the App Store**, and reaching them takes a SEPARATE, deliberate step: an Xcode
 Cloud build + TestFlight + a store submission, which only happens when David asks
 (see the iOS build rule in Deployment Policy).
 
-So `main` is NOT the paying-customer blast radius, and it must not be treated as
-one. Concretely, these are all WRONG and have each cost real time:
+🔴 **CORRECTED 2026-09-16 (David: "Main does go to App Store when ota is
+initiated"). The old wording here — "the ONLY thing that reaches paying iOS
+users is a deliberate TestFlight / App Store build … never a `main` push,
+whatever it touches" — was WRONG and is DELETED, not appended to.** There is a
+SECOND path from `main` to paying iOS users and it needs no native build at all:
+an **OTA publish** (`.github/workflows/ota-publish.yml`) ships the web bundle
+straight to the installed app.
+
+What makes the standing order still correct is that OTA is **MANUAL ONLY** —
+David removed the `push: branches: [main]` auto-trigger on 2026-09-07 ("I want
+to control ota, remove the auto send"). So a push to `main` still reaches nobody
+but the web app, and pushing freely remains right.
+
+**But the gate moved, it did not disappear. An OTA dispatch ships WHATEVER IS
+SITTING ON `main` AT THAT MOMENT.** So "broken code on main is fine as long as
+it gets fixed" (David 2026-09-16, and he is right — the web app is unmanned) is
+true right up until someone dispatches OTA, and then main's current state is the
+paying customer's state. Therefore: **ship-check before an OTA DISPATCH, not
+before every push.** Before dispatching, confirm `main` is green and that
+anything known-broken since the last publish has actually landed — the
+forward-only guard protects the pointer's ORDER, never the bundle's QUALITY.
+
+So `main` is NOT the paying-customer blast radius at PUSH time, and it must not
+be treated as one. Concretely, these are all WRONG and have each cost real time:
 
 - holding a finished, green change off `main` "because paying customers";
 - treating a `main` push as a release requiring extra ceremony;
@@ -2978,9 +3000,10 @@ The standing order is unchanged and means what it says: **work on `main`, push t
 `main`, by default, without asking.** The web deploy is the fast, reversible,
 low-stakes half of this project — that is exactly why it is the default. Caution
 belongs at the App Store submission, which is a different action on a different
-day. The ONLY thing that reaches paying iOS users is a deliberate TestFlight /
-App Store build you cut when David asks — never a `main` push, whatever it
-touches.
+day. Paying iOS users are reached by exactly two deliberate acts, both of which
+someone has to initiate: a TestFlight / App Store build, or an **OTA dispatch**
+(see the correction at the top of this section). Never by a `main` push itself,
+whatever it touches.
 
 ### 🔴🔴 THE APP IS LIVE ON THE APP STORE WITH PAYING CUSTOMERS (David 2026-08-03, LOCKED: "Lock into your memory where I stand with the App Store. It's live, have 21 downloads, and 2 paying members").
 
