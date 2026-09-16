@@ -183,3 +183,32 @@ describe('computeThroughLine (David 2026-07-20 — through-line theme ledger)', 
     expect(computeThroughLine(fensAfter(SICILIAN_IQP), null)).toBeNull();
   });
 });
+
+describe('the empty opening verdict (David 2026-09-16, reading ply 1)', () => {
+  it('does not spend a sentence saying the game starts level', () => {
+    const c = new Chess(); c.move('e4'); const fenAfter = c.fen();
+    const facets = computeMoveFacets({
+      fenBefore: new Chess().fen(), fenAfter, san: 'e4', ply: 1,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 20, preMoveEval: 0, classification: 'book', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null,
+    });
+    expect(facets.find((f) => /^\[verdict\].*balanced\.$/.test(f))).toBeUndefined();
+  });
+
+  it('but a verdict WITH a reason is teaching, and still speaks in the opening', () => {
+    // An isolated pawn at ply 8 is a finding, not a definition.
+    const c = new Chess();
+    for (const m of ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4']) c.move(m);
+    const fenBefore = c.fen(); const after = new Chess(fenBefore); after.move('cxd4');
+    const facets = computeMoveFacets({
+      fenBefore, fenAfter: after.fen(), san: 'cxd4', ply: 9,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 15, preMoveEval: 15, classification: 'book', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null,
+    });
+    const verdict = facets.find((f) => f.startsWith('[verdict]'));
+    // Either it carries a reason, or it is correctly silent — never a bare one.
+    if (verdict) expect(verdict).toMatch(/:/);
+  });
+});

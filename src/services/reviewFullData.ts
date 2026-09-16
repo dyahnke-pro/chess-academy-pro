@@ -165,6 +165,10 @@ function matingSideIsStudent(sans: string[], studentColorWB: Color | null): bool
  * Every computed facet for this move, ordered, each a prose clause. The uncapped
  * review joins them into the move's narration. This function IS the data inventory.
  */
+/** Book depth for the empty-verdict rule. Ten plies is five moves a side — the
+ *  span where "balanced" is a definition rather than a finding. */
+const OPENING_VERDICT_SILENT_PLY = 10;
+
 export function computeMoveFacets(
   ctx: MoveFactContext,
   outSquares?: Map<string, readonly string[]>,
@@ -397,7 +401,18 @@ export function computeMoveFacets(
   // (the eval at the mated position reads 0/odd). The mate is named by [move].
   if (studentColorWB && !san.includes('#')) {
     const assess = assessPositionalEdge(fenAfter, studentColorWB, studentPovCp);
-    if (assess.verdict) {
+    // A BARE "you're balanced" IN THE OPENING SAYS NOTHING (David 2026-09-16,
+    // reading ply 1 of his own game: "You're balanced" after 1.e4). It is
+    // trivially true of every opening position — the student knows the game
+    // starts level — so it is a sentence spent on no information. Suppressed
+    // ONLY when all three hold: it is still book depth, the verdict is the
+    // neutral one, AND there is no REASON attached. A verdict with reasons
+    // ("balanced: their pawn on d6 is isolated") is real teaching and always
+    // speaks, and any non-neutral verdict speaks at any ply.
+    const emptyOpeningVerdict = ctx.ply <= OPENING_VERDICT_SILENT_PLY
+      && assess.reasons.length === 0
+      && /^balanced$/i.test(assess.verdict ?? '');
+    if (assess.verdict && !emptyOpeningVerdict) {
       const why = assess.reasons.length ? `: ${assess.reasons.join('; ')}` : '';
       facets.push(`[verdict] You're ${assess.verdict}${why}.`);
     }
