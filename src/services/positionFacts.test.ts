@@ -21,7 +21,7 @@ const flat = { topLines: [line(1, 20), line(2, 15), line(3, 10)], evaluation: 20
 
 describe('computePositionFacts — the composer', () => {
   it('stays SILENT in a quiet position (no clause earns voice)', async () => {
-    const r = await computePositionFacts({ fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis: flat });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis: flat });
     expect(r.importance.speak).toBe(false);
     expect(r.clauses).toHaveLength(0);
   });
@@ -34,7 +34,7 @@ describe('computePositionFacts — the composer', () => {
   // nothing but a real hanging threat speaks"), on purpose — the habit rides a
   // middlegame briefing, it does not add a second sentence to move five.
   it('closes the briefing with the METHOD — the habit, last', async () => {
-    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
     const method = r.clauses.filter((c) => c.kind === 'method');
     expect(method).toHaveLength(1);
     expect(method[0].text).toMatch(/their|they/i);
@@ -45,20 +45,51 @@ describe('computePositionFacts — the composer', () => {
     expect(method[0].text).not.toMatch(/knight|e5/i);
   });
 
+  // THE DOOR IS WIRED — and a wire that does not fire is not a wire. These
+  // prove steps 3-6 of `coachDecider` actually ran over this composer's output,
+  // not that the import exists.
+  it('the door keeps THIS composer\'s ranking scale, not the review ranker\'s', async () => {
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    // must-defend (75) must outrank method (10). `rankFacets` knows neither of
+    // these texts, so if the review ranker had been applied the order would be
+    // whatever its default produces — this is the passthrough firing.
+    const kinds = r.clauses.map((c) => c.kind);
+    expect(kinds.indexOf('must-defend')).toBeLessThan(kinds.indexOf('method'));
+    expect(r.clauses).toEqual([...r.clauses].sort((a, b) => b.rank - a.rank));
+  });
+
+  it('returns the quiet trail — silence is a verdict you can read back', async () => {
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    expect(Array.isArray(r.quiet)).toBe(true);
+    for (const q of r.quiet) expect(['subsumed', 'below-bar']).toContain(q.why);
+  });
+
+  it('the METHOD beat is never subsumed — it carries no squares, and it is not a restatement of a fact', async () => {
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    expect(r.clauses.some((c) => c.kind === 'method')).toBe(true);
+    expect(r.quiet.some((q) => /habit|order of operations/i.test(q.text))).toBe(false);
+  });
+
+  it('couples the geometry at emission — a must-defend names the square it is about', async () => {
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const md = r.clauses.find((c) => c.kind === 'must-defend');
+    expect(md?.squares).toEqual(['e5']);
+  });
+
   it('teaches no method to a student who is not the one to move', async () => {
-    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'b', analysis: flat });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'b', analysis: flat });
     expect(r.clauses.some((c) => c.kind === 'method')).toBe(false);
   });
 
   it('stays out of the opening — the habit rides a middlegame briefing', async () => {
-    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
     expect(r.clauses.some((c) => c.kind === 'must-defend')).toBe(true);
     expect(r.clauses.some((c) => c.kind === 'method')).toBe(false);
   });
 
   it('names the standing must-defend, board-true', async () => {
     // White Ne5 hangs to …dxe5; inject a balanced analysis so the position reads contested.
-    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
     expect(r.mustDefend.net).toBe(3);
     expect(r.importance.speak).toBe(true);
     expect(r.clauses[0].text).toMatch(/threatening to win the knight on e5/);
@@ -67,7 +98,7 @@ describe('computePositionFacts — the composer', () => {
   it('speaks the delayed-castling warning IN the opening when the king is stuck in the centre (§9)', async () => {
     // Move 8, White king still on e1, e4/d5 tension, Black rook aimed down the
     // e-file — the "castle now" moment must speak even inside the opening window.
-    const r = await computePositionFacts({ fen: '4r1k1/8/8/3p4/4P3/8/8/4K3 w - - 0 8', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ posture: 'walk', fen: '4r1k1/8/8/3p4/4P3/8/8/4K3 w - - 0 8', moverColor: 'w', studentColor: 'w', analysis: flat });
     const ck = r.clauses.find((c) => /king is still in the centre/i.test(c.text));
     expect(ck).toBeTruthy();
     expect(ck?.text).toMatch(/e-file/);
@@ -76,7 +107,7 @@ describe('computePositionFacts — the composer', () => {
   it('speaks the king-safety clause when a castled king is exposed under fire (§9)', async () => {
     // Broken kingside shelter (f2/g2 gone), Black queen h4 + rook g8 on it; past
     // the opening so §9 fires.
-    const r = await computePositionFacts({ fen: '5rk1/8/8/8/7q/8/7P/5RK1 w - - 0 20', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ posture: 'walk', fen: '5rk1/8/8/8/7q/8/7P/5RK1 w - - 0 20', moverColor: 'w', studentColor: 'w', analysis: flat });
     const ke = r.clauses.find((c) => /king's cover is thin/i.test(c.text));
     expect(ke).toBeTruthy();
   });
@@ -85,7 +116,7 @@ describe('computePositionFacts — the composer', () => {
     // Same hanging-knight board, but the student is up big and on move — the
     // teaching shifts from "you must survive" to "don't let them punch back".
     const winning = { ...flat, topLines: [line(1, 260), line(2, 240), line(3, 220)], evaluation: 260, wdl: { win: 600, draw: 260, loss: 140 } };
-    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: winning });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: winning });
     expect(r.mustDefend.net).toBe(3);
     const md = r.clauses.find((c) => c.kind === 'must-defend');
     expect(md?.text).toMatch(/don't let them punch back/);
@@ -95,7 +126,7 @@ describe('computePositionFacts — the composer', () => {
   it('frames the decision as the OPPONENT’s intent when the opponent is on move', async () => {
     // Opponent (White) is to move in a sharp MIDDLEGAME position; student is Black.
     const sharp = { ...flat, topLines: [line(1, 300), line(2, 20), line(3, 10)], evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 } };
-    const r = await computePositionFacts({ fen: 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14', moverColor: 'w', studentColor: 'b', analysis: sharp });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14', moverColor: 'w', studentColor: 'b', analysis: sharp });
     expect(r.importance.speak).toBe(true);
     // No "your critical moment" — it's the opponent's decision, framed as theirs.
     expect(r.clauses.some((c) => c.kind === 'opponent-intent')).toBe(true);
@@ -105,7 +136,7 @@ describe('computePositionFacts — the composer', () => {
   it('calls a critical moment when one move stands far ahead (mover-POV)', async () => {
     // White to move in a MIDDLEGAME, best line +300 vs the field at +20/+10 → only-move.
     const sharp = { ...flat, topLines: [line(1, 300), line(2, 20), line(3, 10)], evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 } };
-    const r = await computePositionFacts({ fen: 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: sharp });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: sharp });
     expect(r.importance.speak).toBe(true);
     expect(r.clauses.some((c) => /critical moment|only one move/i.test(c.text))).toBe(true);
   });
@@ -115,7 +146,7 @@ describe('computePositionFacts — the composer', () => {
     // "knife-edge" / "best piece, trade it off" — that flooded move one.
     const evalBoard = vi.fn().mockResolvedValue('');
     const sharp = { ...flat, topLines: [line(1, 300), line(2, 20), line(3, 10)], evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 } };
-    const r = await computePositionFacts({ fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', moverColor: 'w', studentColor: 'w', analysis: sharp, evalBoard });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', moverColor: 'w', studentColor: 'w', analysis: sharp, evalBoard });
     expect(r.clauses.some((c) => c.kind === 'key-moment' || c.kind === 'opponent-intent')).toBe(false);
     expect(r.clauses.some((c) => c.kind === 'student-leans' || c.kind === 'opponent-leans')).toBe(false);
     expect(evalBoard).not.toHaveBeenCalled(); // no perturbation probe in the opening
@@ -124,10 +155,10 @@ describe('computePositionFacts — the composer', () => {
   it('runs the expensive perturbation ONLY when the moment matters (and out of the opening)', async () => {
     const evalBoard = vi.fn().mockResolvedValue('');
     // Quiet → not called.
-    await computePositionFacts({ fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis: flat, evalBoard });
+    await computePositionFacts({ posture: 'walk', fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis: flat, evalBoard });
     expect(evalBoard).not.toHaveBeenCalled();
     // Must-defend (important) in a MIDDLEGAME → called. (Ne5 hangs to …dxe5.)
-    await computePositionFacts({ fen: 'r1bqk2r/ppp2ppp/3p1n2/4N3/1bB1P3/2N5/PPPP1PPP/R1BQ1RK1 w kq - 0 12', moverColor: 'w', studentColor: 'w', analysis: flat, evalBoard });
+    await computePositionFacts({ posture: 'walk', fen: 'r1bqk2r/ppp2ppp/3p1n2/4N3/1bB1P3/2N5/PPPP1PPP/R1BQ1RK1 w kq - 0 12', moverColor: 'w', studentColor: 'w', analysis: flat, evalBoard });
     expect(evalBoard).toHaveBeenCalled();
   });
 
@@ -138,7 +169,7 @@ describe('computePositionFacts — the composer', () => {
     // teaches the IDEA, never the SAN, so it never hands over the move.
     const lineWithMoves = { rank: 1, evaluation: 20, moves: ['f1d1'], mate: null };
     const analysis = { ...flat, topLines: [lineWithMoves, line(2, 15), line(3, 10)] };
-    const r = await computePositionFacts({
+    const r = await computePositionFacts({ posture: 'walk',
       fen: 'r4rk1/pp3ppp/2n1bn2/2b5/8/2N1BN2/PP3PPP/R4RK1 w - - 0 14',
       moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true,
     });
@@ -153,7 +184,7 @@ describe('computePositionFacts — the composer', () => {
 
   it('goes quiet in a DECIDED game — a swing there is not important', async () => {
     const decided = { ...flat, topLines: [line(1, 800), line(2, 780), line(3, 760)], evaluation: 800, wdl: { win: 980, draw: 18, loss: 2 } };
-    const r = await computePositionFacts({ fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis: decided, cpLossCp: 300 });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis: decided, cpLossCp: 300 });
     expect(r.importance.contested).toBe(false);
     expect(r.clauses).toHaveLength(0); // the swing is silenced by the contested gate
   });
@@ -169,7 +200,7 @@ describe('the concrete opponent-intent clause (fires through positionFacts)', ()
       topLines: [lineM(1, 300, ['f1e1', 'a7a6']), lineM(2, 20, ['c1g5', 'h7h6'])],
       evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 },
     };
-    const r = await computePositionFacts({
+    const r = await computePositionFacts({ posture: 'walk',
       fen: 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14',
       moverColor: 'w', studentColor: 'b', analysis: sharp,
     });
@@ -185,7 +216,7 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
   it('warns when the student\'s own bishop is pinned to the king — even in a quiet spot', async () => {
     // White (student) to move, move 14. Bishop e5 lined in front of Ke1 down the
     // e-file, Black rook on e8. Flat/quiet analysis — the warning fires anyway.
-    const r = await computePositionFacts({
+    const r = await computePositionFacts({ posture: 'walk',
       fen: '4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat,
     });
     expect(r.latentDanger).not.toBeNull();
@@ -195,7 +226,7 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
   });
 
   it('does not warn when it is the opponent\'s move (not the student\'s concern)', async () => {
-    const r = await computePositionFacts({
+    const r = await computePositionFacts({ posture: 'walk',
       fen: '4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'b', analysis: flat,
     });
     expect(r.latentDanger).toBeNull();
@@ -204,7 +235,7 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
   it('warns about a TRADE that would create a pin (v2), preferring it over the standing warning', async () => {
     // White to move: Bxe5 would line the bishop up in front of its own king on
     // the open e-file with the black rook — a pin the trade creates.
-    const r = await computePositionFacts({
+    const r = await computePositionFacts({ posture: 'walk',
       fen: '4r1k1/8/8/4n3/3B4/8/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat,
     });
     expect(r.tradeDanger).not.toBeNull();
@@ -216,7 +247,7 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
 
 describe('clauseText', () => {
   it('drops kinds a surface already covers (no walk-over)', async () => {
-    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });
     const withMd = clauseText(r.clauses);
     const withoutMd = clauseText(r.clauses, ['must-defend']);
     expect(withMd.some((t) => /threatening to win/.test(t))).toBe(true);
@@ -232,7 +263,7 @@ describe('positionFacts — the computed CONCEPT joins the spoken briefing (one 
   } as unknown as import('../types').StockfishAnalysis;
 
   it('adds a ranked "concept" clause for an ending, above the fundamental tier', async () => {
-    const r = await computePositionFacts({ fen: rookEndingFen, moverColor: 'w', studentColor: 'w', analysis, rating: 1500 });
+    const r = await computePositionFacts({ posture: 'walk', fen: rookEndingFen, moverColor: 'w', studentColor: 'w', analysis, rating: 1500 });
     const concept = r.clauses.find((c) => c.kind === 'concept');
     expect(concept).toBeDefined();
     expect(concept!.rank).toBeGreaterThanOrEqual(39);
@@ -240,7 +271,7 @@ describe('positionFacts — the computed CONCEPT joins the spoken briefing (one 
   });
 
   it('speaks no concept in the opening (nothing but a real threat speaks there)', async () => {
-    const r = await computePositionFacts({ fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis });
+    const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis });
     expect(r.clauses.find((c) => c.kind === 'concept')).toBeUndefined();
   });
 });

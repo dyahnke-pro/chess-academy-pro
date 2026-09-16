@@ -111,3 +111,37 @@ describe('isContested', () => {
     expect(isContested(null, null)).toBe(true);
   });
 });
+
+describe('standingDanger — the carve-out that used to live outside the door', () => {
+  const quiet = {
+    decision: null, cpLossCp: null, threatNet: 0, teachingBeat: false,
+    evalCpWhitePov: 0, wdl: null,
+  } as const;
+
+  it('speaks on a quiet board when a standing danger was found', () => {
+    expect(computeImportance({ ...quiet }).speak).toBe(false);
+    const v = computeImportance({ ...quiet, standingDanger: true });
+    expect(v.speak).toBe(true);
+    expect(v.tier).toBe('must-defend');
+    expect(v.reasons.join(' ')).toMatch(/standing danger/i);
+  });
+
+  it('is NOT gated by the contested test — a pin aimed at your king is most dangerous when the eval looks settled', () => {
+    // A thoroughly decided game: every contested-gated signal goes quiet here.
+    const decided = { ...quiet, evalCpWhitePov: 1200, wdl: [980, 15, 5] as const };
+    expect(computeImportance({ ...decided, cpLossCp: 400 }).tier).not.toBe('blunder');
+    expect(computeImportance({ ...decided, standingDanger: true }).speak).toBe(true);
+  });
+
+  it('ranks just under a live hang — that one is now, this one is next move', () => {
+    const hang = computeImportance({ ...quiet, threatNet: 5 });
+    const standing = computeImportance({ ...quiet, standingDanger: true });
+    expect(standing.rank).toBeLessThan(hang.rank);
+    expect(standing.rank).toBeGreaterThan(0);
+  });
+
+  it('a surface that runs no such probe is unaffected', () => {
+    expect(computeImportance({ ...quiet, standingDanger: false }).speak).toBe(false);
+    expect(computeImportance({ ...quiet }).rank).toBe(computeImportance({ ...quiet, standingDanger: false }).rank);
+  });
+});

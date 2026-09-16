@@ -112,10 +112,15 @@ export interface LiveMethodSignals {
   /** Is the student the one to move? You teach the method to the player. */
   isStudentMove: boolean;
   /** Does this position hold a GENUINE choice — several moves worth weighing,
-   *  not one obvious recapture? From `buildDeliberation`, which already ran.
-   *  This is what earns the candidate-move habit; teaching "list your
-   *  candidates" on a forced recapture would be noise. */
+   *  not one obvious recapture? From `buildDeliberation`, which already ran. */
   realChoice?: boolean;
+  /** The moment's importance tier. The candidate habit needs it: `realChoice`
+   *  alone is TRUE on most middlegame plies, so gating on it made this beat
+   *  fire on every single student move (read off a real game walk: ten
+   *  consecutive plies, same habit). A habit repeated every move is not a
+   *  habit, it is nagging. The choice is worth teaching where the choice
+   *  actually decides something. */
+  tier?: ImportanceTier;
 }
 
 /**
@@ -149,12 +154,12 @@ export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0): stri
     ], plyForVariety);
   }
 
-  // 3 — CANDIDATE-MOVE DISCIPLINE. The position holds a real choice, so the
-  // habit that matters is naming the candidates BEFORE calculating any of them.
+  // 3 — CANDIDATE-MOVE DISCIPLINE. A real choice AND a moment that turns on it.
   // The briefing's `deliberation` clause says WHICH moves are in the running;
   // this teaches the routine of finding them yourself, which is the half the
-  // student has to own. It is last because it is the most general of the three.
-  if (s.realChoice) {
+  // student has to own. It is last because it is the most general of the three,
+  // and it is the narrowest-gated for the same reason — see `tier` above.
+  if (s.realChoice && (s.tier === 'critical' || s.tier === 'only-move' || s.tier === 'blunder' || s.tier === 'swing')) {
     return pick([
       'Name your candidates before you calculate: two or three moves you would consider, then compare them. Picking first and checking after is how good moves get missed.',
       'Two or three candidate moves, written down in your head, before any calculation — then work out which one holds up.',

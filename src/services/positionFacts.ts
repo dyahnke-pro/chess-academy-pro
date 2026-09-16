@@ -17,7 +17,9 @@ import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
 import { strategicWhyImperative } from './moveFundamentals';
-import { computeImportance, type ImportanceVerdict } from './narrationImportance';
+import { type ImportanceVerdict } from './narrationImportance';
+import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
+import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
@@ -34,6 +36,17 @@ import { liveMethodBeatFor } from './methodBeat';
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 export interface PositionFactsInput {
+  /** HOW THIS SURFACE LISTENS — required, no default (CLAUDE.md §G4.5.15).
+   *
+   *  `'walk'` = the student asked for this sequence or tapped to hear it
+   *  (a Learn lesson, "read this position"), so importance RANKS the moment and
+   *  never silences it. `'interrupt'` = silence is the default and the coach has
+   *  to earn the word (live play, phase transitions).
+   *
+   *  There is no safe default: guessing wrong in one direction makes a lesson
+   *  mute, and in the other makes a play surface chatty. A new caller fails to
+   *  compile until it says which it is. */
+  posture: SurfacePosture;
   fen: string;
   /** The side to move at `fen`. Decision-leverage belongs to this side. */
   moverColor: 'w' | 'b';
@@ -93,8 +106,13 @@ export interface PositionFactsResult {
    *  the student's own move / in the opening. */
   opponentIntent: OpponentIntent | null;
   /** Board-true clauses, most-important-first, each TAGGED by kind so a surface
-   *  can emit only what its existing lanes don't already cover (no walk-over). */
+   *  can emit only what its existing lanes don't already cover (no walk-over).
+   *  What survived the deciding computer — subsumed duplicates are gone. */
   clauses: ClauseItem[];
+  /** Every clause the door did NOT speak, with its reason (`subsumed` + the
+   *  winner, or `below-bar`). The observability trail: silence here is a
+   *  computed verdict, and this is how you read it back. */
+  quiet: QuietFact[];
 }
 
 export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method';
@@ -139,6 +157,19 @@ export interface ClauseItem {
    *  hole through the canonical vocabulary bridge — a fork concept lands on a
    *  fork-blind student's `analysis:tactic:fork`, not on a generic bucket. */
   conceptId?: string;
+  /** THE GEOMETRY THIS CLAUSE IS ABOUT — coupled AT EMISSION from the computer
+   *  that produced it, never scraped back out of the prose.
+   *
+   *  This is what lets `factSelector` recognise two clauses as ONE CLAIM: the
+   *  pin warning and the must-defend can describe the same three squares, and
+   *  only coupled geometry can prove it (CLAUDE.md §G4.5.1). A clause with NO
+   *  squares is never collapsed — we cannot prove it is a duplicate, and
+   *  silence must never be a guess — so leaving this undefined is the safe
+   *  direction, not a shortcut. Omitted on purpose where the clause makes no
+   *  board claim at all: `status` (an eval band), `key-moment` (a property of
+   *  the moment), `convert`, and `method` (a habit, which must survive every
+   *  collapse because it is never a restatement of a fact). */
+  squares?: readonly string[];
 }
 
 /** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
@@ -186,35 +217,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     criticalitySignalsFromAnalysis(analysis, { looseMaterial: input.looseNow ?? 0, threatNet: mustDefend.net }),
   );
 
-  // The verdict: does it speak, and how does it rank?
-  const gap12 = moverGap12(analysis, moverColor);
   const evalCpWhitePov = analysis.isMate
     ? (analysis.mateIn ?? 0) > 0 ? 100000 : -100000
     : analysis.evaluation;
-  const importance = computeImportance({
-    decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
-    cpLossCp: input.cpLossCp ?? null,
-    threatNet: mustDefend.net,
-    teachingBeat: !!input.teachingBeat,
-    evalCpWhitePov,
-    // WdlRead {win,draw,loss} → the [w,d,l] tuple the importance model reads.
-    // (Passing the object directly makes wdl[0]/wdl[2] undefined → every
-    // position falsely reads "decided" and goes silent.)
-    wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
-  }, rating);
-
-  // Perturbation is expensive → only when the moment earns it AND a probe fn was
-  // supplied AND we're out of the opening. Probe BOTH sides: the student's
-  // asset, and the opponent's best piece (name their asset + how to undermine
-  // it). A teaching beat alone no longer opens this gate — the "best piece"
-  // read is a real middlegame imbalance, not opening narration. Its own
-  // thresholds still gate whether there's a genuine supporter.
-  let leansOn: LeansOn | null = null;
-  let opponentLeansOn: LeansOn | null = null;
-  if (importance.speak && input.evalBoard && !openingPhase && importance.rank >= 45) {
-    try { leansOn = await computeLeansOn(fen, studentColor, input.evalBoard); } catch { leansOn = null; }
-    try { opponentLeansOn = await computeLeansOn(fen, opponentColor, input.evalBoard); } catch { opponentLeansOn = null; }
-  }
 
   // The weighing (the discussion) — the top candidates + why each falls short.
   // Only the STUDENT's own move is worth weighing out loud, and never in the
@@ -261,6 +266,55 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const statusText = (!openingPhase && input.prevEvalCpWhitePov != null)
     ? statusBandChange(evalCpWhitePov * sSign, input.prevEvalCpWhitePov * sSign)
     : '';
+
+  // ── THE VERDICT ────────────────────────────────────────────────────────────
+  // Step 1 of the ONE deciding computer (`coachDecider`). It runs HERE, below
+  // the cheap chess.js probes, because two of its inputs come from them: a
+  // standing danger this model has no other way to see, and the status band
+  // change, which is a teaching beat.
+  //
+  // This composer used to call `computeImportance` itself and then carry a
+  // PRIVATE escape hatch — "speak anyway if a pin/king-danger/band-change was
+  // found" — because those probes are not among the importance model's inputs.
+  // That escape was a second whether-rule living outside the door, and a second
+  // rule is exactly what the merge exists to delete. Feeding the signals in
+  // instead means the door decides and the carve-out survives as a REASON, not
+  // as a bypass.
+  const gap12 = moverGap12(analysis, moverColor);
+  // A pin or skewer aimed at your own king/queen, a castled king with a broken
+  // shelter under real fire, a central king with the file about to open, or a
+  // trade that would create one of those. Pure geometry, no engine — and, like
+  // must-defend, NOT gated by the contested test: a standing danger is most
+  // dangerous precisely where the eval looks settled.
+  const standingDanger = !!(latentDanger || tradeDanger || kingExposure || centralKingDanger);
+  const { importance, speaks } = judgeMoment({
+    decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
+    cpLossCp: input.cpLossCp ?? null,
+    threatNet: mustDefend.net,
+    // A band change IS a declared beat — "you've taken the better side" is the
+    // general's read, and the importance model already knows how to rank one
+    // (contested-gated to the convert beat in a decided game).
+    teachingBeat: !!input.teachingBeat || statusText.length > 0,
+    standingDanger,
+    evalCpWhitePov,
+    // WdlRead {win,draw,loss} → the [w,d,l] tuple the importance model reads.
+    // (Passing the object directly makes wdl[0]/wdl[2] undefined → every
+    // position falsely reads "decided" and goes silent.)
+    wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
+  }, rating, input.posture);
+
+  // Perturbation is expensive → only when the moment earns it AND a probe fn was
+  // supplied AND we're out of the opening. Probe BOTH sides: the student's
+  // asset, and the opponent's best piece (name their asset + how to undermine
+  // it). A teaching beat alone no longer opens this gate — the "best piece"
+  // read is a real middlegame imbalance, not opening narration. Its own
+  // thresholds still gate whether there's a genuine supporter.
+  let leansOn: LeansOn | null = null;
+  let opponentLeansOn: LeansOn | null = null;
+  if (importance.speak && input.evalBoard && !openingPhase && importance.rank >= 45) {
+    try { leansOn = await computeLeansOn(fen, studentColor, input.evalBoard); } catch { leansOn = null; }
+    try { opponentLeansOn = await computeLeansOn(fen, opponentColor, input.evalBoard); } catch { opponentLeansOn = null; }
+  }
 
   // STRUCTURE→PLAN — the campaign line, from a CLEAR pawn structure (passed pawn
   // / IQP). Board-true, textbook, conservative (null when ambiguous). Only when
@@ -309,10 +363,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // `fundamental`, it IS the teaching idea). Positional leads are excluded here:
   // `fundamental` / `structure-plan` already carry them — no walk-over. Never
   // fails the briefing.
-  let concept: { id: string; source: string; full: string } | null = null;
+  let concept: { id: string; source: string; full: string; squares: readonly string[] } | null = null;
   try {
     const lead = conceptForBoard(fen, { analysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
-    if (lead && lead.source !== 'positional') concept = { id: lead.id, source: lead.source, full: lead.full };
+    if (lead && lead.source !== 'positional') concept = { id: lead.id, source: lead.source, full: lead.full, squares: lead.squares };
   } catch { concept = null; }
 
   // THE METHOD BEAT — the same computer the review path uses, in its live
@@ -329,16 +383,65 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       threatStanding: mustDefend.net > 0,
       isStudentMove: studentToMove,
       realChoice: !!deliberation?.isRealChoice,
+      tier: importance.tier,
     }, halfmove);
   } catch { methodBeat = null; }
 
-  const clauses = applyWeaknessBoost(
-    buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
+  const composed = applyWeaknessBoost(
+    buildClauses({ importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
     input.studentWeaknesses ?? [],
   );
+
+  // ── THE DOOR, STEPS 3-6 ────────────────────────────────────────────────────
+  // SUBSUME, then FLOOR, then ORDER. This is what these four surfaces were
+  // missing: the clauses were each individually gated and ranked, but nothing
+  // ever noticed that two of them could be ONE CLAIM about ONE geometry. A pin
+  // aimed at your king and a must-defend on the piece in front of it name the
+  // same three squares; before this they both spoke.
+  //
+  // The scale is OURS, not the review ranker's — hence `order`. The bar is 0 on
+  // purpose and that is not a loophole: every clause here is emitted by a
+  // computer with its own tight gate (a pin was FOUND, a piece IS hanging),
+  // unlike review's facet inventory, which carries a low-value consequence band
+  // worth sweeping. There is nothing here to floor, so flooring would only mean
+  // deleting a fact that a probe had already proved. Silence on these surfaces
+  // is step 1's job, and step 1 has already run.
+  const clauseByText = new Map<string, ClauseItem>();
+  for (const c of composed) if (!clauseByText.has(c.text)) clauseByText.set(c.text, c);
+  const decision = decide(
+    {
+      decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
+      cpLossCp: input.cpLossCp ?? null,
+      threatNet: mustDefend.net,
+      teachingBeat: !!input.teachingBeat || statusText.length > 0,
+      standingDanger,
+      evalCpWhitePov,
+      wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
+    },
+    { rating, weaknesses: input.studentWeaknesses ?? [] },
+    {
+      facts: composed.map((c) => c.text),
+      squares: new Map(composed.flatMap((c) => (c.squares && c.squares.length ? [[c.text, c.squares] as const] : []))),
+      // WHAT THEY ARE DOING TO YOU — the tie-break inside a same-claim group,
+      // taken from the clause KIND (which computer produced it), never guessed
+      // from the prose. Their threat, their idea and their best piece are all
+      // questions you have to answer; your own assets are not.
+      incoming: new Set(composed.filter((c) => c.kind === 'must-defend' || c.kind === 'opponent-intent' || c.kind === 'opponent-leans' || c.kind === 'latent-danger').map((c) => c.text)),
+      order: { rank: new Map(composed.map((c) => [c.text, c.rank] as const)), bar: 0 },
+    },
+    input.posture,
+    // No method context: this composer already emits its own method beat in the
+    // PRESENT-tense register (`liveMethodBeatFor`). Passing one here would
+    // append the RETROSPECTIVE stem too — two habits, one of them a lie about a
+    // move nobody has played yet.
+  );
+  const clauses = decision.spoken.flatMap((t) => { const c = clauseByText.get(t); return c ? [c] : []; });
+
   return {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, tradeDanger, opponentIntent,
     clauses,
+    /** Every clause the door silenced, and why — the observability trail. */
+    quiet: decision.quiet,
   };
 }
 
@@ -380,6 +483,9 @@ function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSig
  *  explains both sides. Empty when nothing earns voice. */
 function buildClauses(a: {
   importance: ImportanceVerdict;
+  /** The door's verdict for this surface's posture — whether the moment speaks
+   *  at all. Distinct from `importance.speak`, which is posture-blind. */
+  speaks: boolean;
   mustDefend: MustDefend;
   leansOn: LeansOn | null;
   opponentLeansOn: LeansOn | null;
@@ -399,17 +505,18 @@ function buildClauses(a: {
   /** The lead COMPUTED CONCEPT of the position (conceptEngine, from the same
    *  analysis) — the teachable idea, joined to the briefing as a ranked fact.
    *  Null when nothing teachable / positional-only (no walk-over). */
-  concept: { id: string; source: string; full: string } | null;
+  concept: { id: string; source: string; full: string; squares: readonly string[] } | null;
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
-  // A latent danger to your own king — or a STATUS band-change, or a live
-  // must-defend (a piece hangs next move) — is worth a word even in an otherwise
-  // quiet/decided spot; none of these needs the importance gate to fire (B#1: a
-  // real hang must never be silenced by a decided-but-winning eval).
-  const liveMustDefend = mustDefend.net >= 3 && mustDefend.pieces[0] != null;
-  if (!importance.speak && !liveMustDefend && !latentDanger && !tradeDanger && !statusText && !kingExposure && !centralKingDanger) return [];
+  const { importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
+  // THE WHETHER-QUESTION IS THE DOOR'S. This used to be a private escape hatch
+  // here — "speak anyway if a pin / king-danger / band-change was found",
+  // because the importance model had no input for any of them. Those signals
+  // are fed to `judgeMoment` now (`standingDanger`, and a band change as a
+  // teaching beat), so the carve-out lives in the model as a REASON instead of
+  // living out here as a bypass, and every surface inherits it.
+  if (!speaks) return [];
   const ranked: ClauseItem[] = [];
 
   // THE STATUS LINE LEADS the briefing (the general's opening read) — highest
@@ -430,16 +537,27 @@ function buildClauses(a: {
   // Prefer the actionable TRADE warning ("before you trade on X…") when present;
   // otherwise the standing-alignment warning. Only one, never both.
   if (tradeDanger) {
-    ranked.push({ kind: 'latent-danger', rank: 82, text: tradeDangerClause(tradeDanger) });
+    ranked.push({
+      kind: 'latent-danger', rank: 82, text: tradeDangerClause(tradeDanger),
+      // The alignment AND the capture that creates it — that whole geometry is
+      // the claim, so a must-defend about the same pieces is the same claim.
+      squares: [tradeDanger.enemySquare, tradeDanger.frontSquare, tradeDanger.backSquare, tradeDanger.tradeFrom, tradeDanger.tradeTo],
+    });
   } else if (latentDanger) {
-    ranked.push({ kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger) });
+    ranked.push({
+      kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger),
+      squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare],
+    });
   }
 
   // §9 king-safety — an exposed castled king under real fire. Ranks just below
   // the pin/skewer warnings: a drafty king is a standing danger, not a routine
   // plan. Uses the 'latent-danger' kind (same prophylactic family).
   if (kingExposure) {
-    ranked.push({ kind: 'latent-danger', rank: 78, text: kingExposureClause(kingExposure) });
+    ranked.push({
+      kind: 'latent-danger', rank: 78, text: kingExposureClause(kingExposure),
+      squares: [kingExposure.kingSquare, ...kingExposure.attackerSquares],
+    });
   }
 
   // Incoming fire — the opponent's standing threat against the student (their
@@ -461,13 +579,17 @@ function buildClauses(a: {
       text: winning
         ? `You're on top — don't let them punch back: they're threatening the ${PNAME[p.piece.toLowerCase()]} on ${p.square}, so shore that up before you press.`
         : `They're threatening to win the ${PNAME[p.piece.toLowerCase()]} on ${p.square} — that has to be met first.`,
+      squares: [p.square],
     });
   }
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
   // ranked just under a live hanging threat. Its gate (central king + tension +
   // aligned enemy heavy) is tight enough to stay off calm development.
   if (centralKingDanger) {
-    ranked.push({ kind: 'latent-danger', rank: 74, text: centralKingDangerClause(centralKingDanger) });
+    ranked.push({
+      kind: 'latent-danger', rank: 74, text: centralKingDangerClause(centralKingDanger),
+      squares: [centralKingDanger.kingSquare, centralKingDanger.aimedFrom, centralKingDanger.tensionSquare],
+    });
   }
   // In the opening, nothing but a real hanging threat / castle-now speaks — no
   // "critical moment" / "knife-edge" / "best piece, trade it off" on move one.
@@ -488,7 +610,13 @@ function buildClauses(a: {
   // gate-clean sentence, spoken verbatim (G0).
   if (concept) {
     const rank = concept.source === 'tactic' ? 70 : 39;
-    ranked.push({ kind: 'concept', rank, text: concept.full, conceptId: concept.source === 'tactic' ? concept.id : undefined });
+    ranked.push({
+      kind: 'concept', rank, text: concept.full,
+      conceptId: concept.source === 'tactic' ? concept.id : undefined,
+      // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
+      // first, then targets) — exactly the geometry the sentence names.
+      squares: concept.squares,
+    });
   }
 
   // Decision leverage — framed by whose move it is.
@@ -501,7 +629,12 @@ function buildClauses(a: {
     // intent from the fan (guide-don't-tell: their idea, your reply withheld);
     // fall back to the generic sharpness line when there's no concrete move.
     if (opponentIntent) {
-      ranked.push({ kind: 'opponent-intent', rank: 55, text: opponentIntentFacts(opponentIntent, { revealReply: false }) });
+      ranked.push({
+        kind: 'opponent-intent', rank: 55, text: opponentIntentFacts(opponentIntent, { revealReply: false }),
+        // The idea the sentence actually names is plan[0] — couple ITS squares,
+        // not every plan's, or the set stops describing the claim.
+        squares: opponentIntent.plans[0]?.squares,
+      });
     } else if (importance.tier === 'only-move') {
       ranked.push({ kind: 'opponent-intent', rank: 55, text: `The opponent is on a knife-edge here — only one move keeps them in it.` });
     } else if (importance.tier === 'critical') {
@@ -509,8 +642,16 @@ function buildClauses(a: {
     }
   }
   // The campaign — the student's asset, and the opponent's (with the counter).
-  if (leansOn) ranked.push({ kind: 'student-leans', rank: 40, text: `Your ${leansOn.piece} on ${leansOn.square} is doing the work — it leans on the ${leansOn.leansOn.piece} on ${leansOn.leansOn.square}, so keep that support in place.` });
-  if (opponentLeansOn) ranked.push({ kind: 'opponent-leans', rank: 45, text: `Their ${opponentLeansOn.piece} on ${opponentLeansOn.square} is their best piece — but it leans on the ${opponentLeansOn.leansOn.piece} on ${opponentLeansOn.leansOn.square}; take that away and it's ordinary.` });
+  if (leansOn) ranked.push({
+    kind: 'student-leans', rank: 40,
+    text: `Your ${leansOn.piece} on ${leansOn.square} is doing the work — it leans on the ${leansOn.leansOn.piece} on ${leansOn.leansOn.square}, so keep that support in place.`,
+    squares: [leansOn.square, leansOn.leansOn.square],
+  });
+  if (opponentLeansOn) ranked.push({
+    kind: 'opponent-leans', rank: 45,
+    text: `Their ${opponentLeansOn.piece} on ${opponentLeansOn.square} is their best piece — but it leans on the ${opponentLeansOn.leansOn.piece} on ${opponentLeansOn.leansOn.square}; take that away and it's ordinary.`,
+    squares: [opponentLeansOn.square, opponentLeansOn.leansOn.square],
+  });
   // The FUNDAMENTAL the student's best move serves — the teaching idea, ranked
   // just above the structural plan (it is the concrete plan for THIS move).
   if (fundamentalText) ranked.push({ kind: 'fundamental', rank: 38, text: fundamentalText });

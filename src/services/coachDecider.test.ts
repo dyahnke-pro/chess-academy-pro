@@ -77,17 +77,38 @@ describe('posture — what silence MEANS on this surface', () => {
 });
 
 describe('ONE door — no surface composes the decision itself', () => {
-  it('review calls the decider, not its parts', async () => {
+  // `positionFacts` is the composer behind FOUR live surfaces (Learn,
+  // read-this-position, live play commentary, phase transitions) plus the "Why?"
+  // button — so it drifting is five surfaces drifting. It called
+  // `computeImportance` directly until 2026-09-16 and therefore never subsumed
+  // anything: the pin and the must-defend about one geometry both spoke.
+  const SURFACES = ['src/services/coachFeatureService.ts', 'src/services/positionFacts.ts'];
+
+  it.each(SURFACES)('%s calls the decider, not its parts', async (file) => {
     const { readFileSync } = await import('node:fs');
     const { join } = await import('node:path');
-    const src = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
+    const src = readFileSync(join(process.cwd(), file), 'utf8');
     const code = src.split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
-    expect(code).toMatch(/decide\(/);
+    expect(code).toMatch(/\bdecide\(/);
     // Composing importance + selection + ranking by hand is how the three
     // deciders drifted apart in the first place. The parts stay exported for
-    // their own unit tests; a SURFACE reaches them only through `decide`.
+    // their own unit tests; a SURFACE reaches them only through `decide` (or
+    // through `judgeMoment`, which IS the door's first step, for a composer that
+    // needs the tier before it has facts to hand over).
     expect(code).not.toMatch(/computeImportance\(/);
     expect(code).not.toMatch(/selectFacts\(/);
     expect(code).not.toMatch(/rankFacets\(/);
+  });
+
+  it('every surface that composes a briefing DECLARES a posture', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    // There is no safe default (CLAUDE.md §G4.5.15): guessing 'interrupt' makes
+    // a lesson mute, guessing 'walk' makes a play surface chatty. TypeScript
+    // enforces this at the call sites; this pins the TYPE itself, so nobody
+    // "fixes" a compile error by giving the field a default.
+    const src = readFileSync(join(process.cwd(), 'src/services/positionFacts.ts'), 'utf8');
+    expect(src).toMatch(/posture: SurfacePosture;/);
+    expect(src).not.toMatch(/posture\?: SurfacePosture/);
   });
 });

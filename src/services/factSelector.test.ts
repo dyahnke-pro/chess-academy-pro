@@ -100,3 +100,40 @@ describe('factSelector — a BAR, not a cap (G4.5)', () => {
     expect(r.spoken).toHaveLength(2);
   });
 });
+
+describe("a surface's own scale — rank and bar travel together", () => {
+  it('orders and floors by the SUPPLIED scale, not by the facet tags', () => {
+    // Untagged text: `facetRank` knows none of it, so without `order` these
+    // would all score the same and the authoring order would decide.
+    const facts = ['they are threatening the knight on e5', 'the plan here: take the centre', 'a habit to run next time'];
+    const rank = new Map([[facts[0], 75], [facts[1], 38], [facts[2], 10]]);
+    const out = selectFacts(facts, new Map(), 'none', [], new Set(), { rank, bar: 0 });
+    expect(out.spoken).toEqual(facts);      // 75 > 38 > 10
+    expect(out.quiet).toEqual([]);          // bar 0 floors nothing
+  });
+
+  it('a bar in the supplied scale sweeps by THAT scale', () => {
+    const facts = ['high', 'low'];
+    const rank = new Map([['high', 75], ['low', 10]]);
+    const out = selectFacts(facts, new Map(), 'none', [], new Set(), { rank, bar: 20 });
+    expect(out.spoken).toEqual(['high']);
+    expect(out.quiet).toEqual([{ text: 'low', why: 'below-bar' }]);
+  });
+
+  it('subsumption still runs under a supplied scale — the winner is the higher rank', () => {
+    const facts = ['the pin on the e-file', 'the battery on the e-file'];
+    const squares = new Map([[facts[0], ['e1', 'e2', 'e8']], [facts[1], ['e1', 'e2', 'e8']]]);
+    const rank = new Map([[facts[0], 40], [facts[1], 70]]);
+    const out = selectFacts(facts, squares, 'none', [], new Set(), { rank, bar: 0 });
+    expect(out.spoken).toEqual([facts[1]]);
+    expect(out.quiet).toEqual([{ text: facts[0], why: 'subsumed', by: facts[1] }]);
+  });
+
+  it('a fact with no squares is never collapsed, whatever its rank', () => {
+    const facts = ['the pin on the e-file', 'a habit with no geometry'];
+    const squares = new Map([[facts[0], ['e1', 'e2', 'e8']]]);
+    const rank = new Map([[facts[0], 70], [facts[1], 10]]);
+    const out = selectFacts(facts, squares, 'none', [], new Set(), { rank, bar: 0 });
+    expect(out.spoken).toEqual(facts);
+  });
+});

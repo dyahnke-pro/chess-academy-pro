@@ -1090,3 +1090,86 @@ Deliberately not shipped in the same night as the sweep itself: it is a third
 behaviour change to the same lane, and the instrument that would prove it — the
 exhaustive routing audit with its answers READ — takes the better part of an hour
 per run.
+
+### §17.3 — D1–D5 LANDED (2026-09-16), and what READING the output actually showed
+
+The live composer now goes through the door. `positionFacts` no longer calls
+`computeImportance`; it calls `judgeMoment` (step 1 of the same door, exported so
+a composer can read the tier it needs *before* it has facts to hand over) and
+then `decide()` for steps 3–6. The door gate covers it, and the posture is a
+REQUIRED field, so all FIVE call sites had to declare — there were five, not
+four: Learn, read-this-position, live play, phase transitions, **and the "Why?"
+button** (`whyBestMove`), which this doc had missed.
+
+| surface | posture | why |
+|---|---|---|
+| Learn (`CoachTeachPage`) | `walk` | the student asked for the lesson |
+| read-this-position | `walk` | they TAPPED it; silence is a dead button |
+| "Why?" button | `walk` | same — an explicit request |
+| live play commentary | `interrupt` | silence is the default |
+| phase transitions | `interrupt` | mid-game, unasked-for |
+
+**The private whether-rule is gone.** `buildClauses` used to carry an escape
+hatch — "speak anyway if a pin / king-danger / band-change was found" — because
+the importance model has no input for any of them. That was a second
+whether-rule living outside the door. Those signals are fed IN now
+(`ImportanceSignals.standingDanger`, and a status band change as a teaching
+beat), so the carve-out survives as a REASON inside the model and every surface
+inherits it. Ranked 74, just under a live hang, and ungated by the contested
+test for the same reason must-defend is: a pin aimed at your king is most
+dangerous exactly where the eval looks settled.
+
+**Two vocabularies, one door.** `FactBundle.order = { rank, bar }` lets a surface
+supply its own scale. Review passes none and gets `rankFacets` + `barForTier`,
+unchanged; the composer passes its tuned clause ranks and a bar of 0. The bar is
+0 deliberately and it is not a loophole: every clause here comes from a computer
+with its own tight gate (a pin was FOUND, a piece IS hanging), unlike review's
+facet inventory, which carries a low-value consequence band worth sweeping.
+Flooring here could only delete a fact a probe had already proved.
+
+#### The honest result: subsumption collapsed NOTHING on a real game
+
+Walked all 36 plies of the Alapin through the composer and printed every clause
+and every quiet verdict. **`subsumed = 0`.** The mechanism is wired and gated;
+it found no duplicates, because with today's coupling the live clauses rarely
+describe the same geometry:
+
+- `must-defend` couples ONE square; `latent-danger` couples three (enemy, front,
+  back). Jaccard 1/3 — below the 0.6 bar, correctly: a hanging piece and a pin
+  through it are related, not the same claim.
+- `opponent-leans` [piece, supporter] vs `opponent-intent` [from, to] share at
+  most one square.
+
+So the review finding does NOT transfer: **the duplication on the live surfaces
+is not geometric.** The pairs that actually overlap in MEANING are
+`fundamental` ("the plan here: …") and `structure-plan` ("you're playing with the
+isolated pawn…"), which carry no squares at all and never will — they are plans,
+not geometry. Collapsing those needs a different mechanism than Jaccard.
+
+Do not read `subsumed = 0` as "the wire is dead" — the gates prove steps 3–6 run
+(order preserved by the composer's own scale, quiet trail returned, the method
+beat never collapsed). Read it as: the next lever is elsewhere.
+
+#### What reading the output DID catch — a defect shipped hours earlier
+
+The method beat fired on **every single student ply** — ten in a row, the same
+"name your candidates" habit. Cause: I gated it on `deliberation.isRealChoice`,
+which is true on most middlegame plies. A habit repeated every move is not a
+habit, it is nagging — the exact "it says too much" failure, reintroduced by the
+build that was supposed to add teaching. It is now gated on the moment mattering
+too (`critical` / `only-move` / `blunder` / `swing`), which is a value bar, not a
+cap. 40 clauses → 30 on the same walk, with nothing else lost. Gate:
+`methodBeat.live.test.ts` → "does NOT fire on an ordinary ply that merely has
+options".
+
+Every unit test was green before and after. Only printing the narration found it.
+
+#### Next lever, with the evidence
+
+The same walk shows `latent-danger` speaking the SAME sentence on consecutive
+plies ("your pawn on d4 and your queen share that file") — a standing fact
+re-earned every ply. That is the **say-once** problem, and it is the real source
+of repetition on the live surfaces, not geometric duplication. `positionFacts` is
+stateless by design, so this needs a caller-owned "recently spoken" set passed
+in — the same shape as the review path's per-lesson dedupe. That is the next
+build, and the walk above is the measurement to re-run against it.

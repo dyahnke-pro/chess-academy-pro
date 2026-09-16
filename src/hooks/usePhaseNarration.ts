@@ -586,6 +586,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       try {
         if (stockfishAnalysis?.topLines?.length) {
           const pf = await computePositionFacts({
+            // Mid-game, unasked-for. The transition has to earn its sentence.
+            posture: 'interrupt',
             fen: event.fen,
             moverColor: event.fen.split(' ')[1] === 'b' ? 'b' : 'w',
             studentColor: event.playerColor === 'white' ? 'w' : 'b',

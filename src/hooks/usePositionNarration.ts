@@ -234,6 +234,10 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       try {
         if (stockfishAnalysis?.topLines?.length) {
           const pf = await computePositionFacts({
+            // The student TAPPED "read this position". Silence would be a dead
+            // button — the same reasoning that exempts this surface from the
+            // verbosity gate (CLAUDE.md §G5, third sanctioned exemption).
+            posture: 'walk',
             fen: args.fen,
             moverColor: args.fen.split(' ')[1] === 'b' ? 'b' : 'w',
             studentColor: posStudentCC,

@@ -29,7 +29,7 @@
 //   5. ORDER — most-important-first, with the student's weaknesses raised.
 // Steps 1–2 decide WHETHER, 3–5 decide WHAT. Silence at any step is a computed
 // verdict with a reason attached — never an absence.
-import { computeImportance, type ImportanceSignals, type ImportanceTier } from './narrationImportance';
+import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, type QuietFact } from './factSelector';
 import { rankFacets } from './reviewFacetRank';
 import { methodBeatFor, type MethodSignals } from './methodBeat';
@@ -68,11 +68,47 @@ export interface FactBundle {
   squares: ReadonlyMap<string, readonly string[]>;
   /** Facts describing what the OPPONENT is doing TO the student. */
   incoming?: ReadonlySet<string>;
+  /** THE SURFACE'S OWN SCALE, when it has one — the ranks AND the bar that
+   *  belongs to them. Steps 4 and 5 use these instead of `barForTier` +
+   *  `rankFacets`.
+   *
+   *  This exists so ONE door can serve two vocabularies. Review's facts carry
+   *  `[tag]` prefixes that `rankFacets` knows how to order; the live composer's
+   *  clauses carry their own tuned ranks (a named tactic at 70 sits under a
+   *  must-defend at 75 and above a generic critical moment at 65 — deliberate,
+   *  and separately tested). Handing that text to the review ranker would throw
+   *  the tuning away and silently reorder every live narration, which is exactly
+   *  the kind of change that passes every unit test. A surface with no scale of
+   *  its own omits this and gets the review ranker, unchanged. */
+  order?: { rank: ReadonlyMap<string, number>; bar: number };
 }
 
 /** What the student should have DONE differently in their head. Optional: a
  *  surface that cannot supply these simply gets no method beat. */
 export type MethodContext = Omit<MethodSignals, 'tier'> & { ply?: number };
+
+/** Step 1 of the door, on its own.
+ *
+ *  A COMPOSER needs the moment's verdict BEFORE it has facts to hand over — the
+ *  tier picks which clause it writes, and an expensive probe is only worth
+ *  running on a moment that earned it. Without this such a surface has to call
+ *  `computeImportance` itself, which is how it ends up composing its own
+ *  decision out of the three modules and drifting from every other surface.
+ *
+ *  This is NOT a second door: it is the first step of the same one, and
+ *  `decide` runs it internally. A surface may read the verdict; only `decide`
+ *  decides. */
+export interface MomentVerdict {
+  importance: ImportanceVerdict;
+  /** Does this moment speak at all, given the surface's posture? On a `'walk'`
+   *  it always does — the student asked for the sequence. */
+  speaks: boolean;
+}
+
+export function judgeMoment(signals: ImportanceSignals, rating: number, posture: SurfacePosture): MomentVerdict {
+  const importance = computeImportance(signals, rating);
+  return { importance, speaks: posture === 'walk' || importance.speak };
+}
 
 export interface CoachDecision {
   /** Does this moment speak at all? */
@@ -106,13 +142,13 @@ export function decide(
    *  this function computes (David 2026-09-16: how to think IS the teaching). */
   method?: MethodContext,
 ): CoachDecision {
-  const importance = computeImportance(signals, student.rating);
+  const { importance, speaks } = judgeMoment(signals, student.rating, posture);
   const base = { tier: importance.tier, rank: importance.rank };
 
   // 1 — THE MOMENT, but ONLY where silence is the default. On a 'walk' the
   // student asked for the sequence, so an unimportant moment is a QUIETER beat,
   // never a missing one.
-  if (posture === 'interrupt' && !importance.speak) {
+  if (!speaks) {
     return { ...base, speak: false, reason: 'importance', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) };
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
@@ -129,9 +165,16 @@ export function decide(
     importance.tier,
     student.weaknesses,
     bundle.incoming ?? new Set(),
+    bundle.order,
   );
-  // 5 — THE ORDER. Importance first, with the student's own holes raised.
-  const spoken = rankFacets(selection.spoken, student.weaknesses);
+  // 5 — THE ORDER. The surface's own ranks when it supplied them, else the
+  // review ranker. Either way the student's holes are raised: `rankFacets` does
+  // it by tag, and a surface that ranks its own facts has already applied its
+  // weakness boost before handing them over (positionFacts does).
+  const order = bundle.order;
+  const spoken = order
+    ? [...selection.spoken].sort((x, y) => (order.rank.get(y) ?? 0) - (order.rank.get(x) ?? 0))
+    : rankFacets(selection.spoken, student.weaknesses);
   // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
   // then the principle it broke, then the habit that finds it next time.
   if (method) {

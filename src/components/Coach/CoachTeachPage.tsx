@@ -8249,6 +8249,9 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   if (studentBest?.topLines?.length) {
                     const pf = await computePositionFacts({
+                      // The student asked for this lesson — every taught position
+                      // is a beat, so importance ranks it and never mutes it.
+                      posture: 'walk',
                       fen: probe.fen(),
                       moverColor: probe.turn(),
                       studentColor: playerColor === 'white' ? 'w' : 'b',

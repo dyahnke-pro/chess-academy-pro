@@ -75,19 +75,28 @@ describe('liveMethodBeatFor', () => {
     expect(both!).toMatch(/their|they/i);
   });
 
-  it('teaches candidate-move discipline when the position holds a real choice', () => {
-    const beat = liveMethodBeatFor({ ...base, bestSan: 'Nf3', realChoice: true });
+  it('teaches candidate-move discipline when a real choice DECIDES something', () => {
+    const beat = liveMethodBeatFor({ ...base, bestSan: 'Nf3', realChoice: true, tier: 'critical' });
     expect(beat).toBeTruthy();
     expect(beat!).toMatch(/candidate|options/i);
   });
 
   it('does NOT teach candidate discipline on a forced recapture (no real choice)', () => {
-    expect(liveMethodBeatFor({ ...base, bestSan: 'Nf3', realChoice: false })).toBeNull();
+    expect(liveMethodBeatFor({ ...base, bestSan: 'Nf3', realChoice: false, tier: 'critical' })).toBeNull();
+  });
+
+  // THE DRUMBEAT GUARD. `realChoice` is true on most middlegame plies, so gating
+  // on it alone made this habit fire on EVERY student move — ten in a row on a
+  // real game walk. A habit repeated every move is not a habit, it is nagging.
+  it('does NOT fire on an ordinary ply that merely has options', () => {
+    for (const tier of ['none', 'teaching', 'convert'] as const) {
+      expect(liveMethodBeatFor({ ...base, bestSan: 'Nf3', realChoice: true, tier }), tier).toBeNull();
+    }
   });
 
   it('a standing threat and a forcing move both outrank the candidate habit', () => {
-    expect(liveMethodBeatFor({ ...base, bestSan: 'Nf3', threatStanding: true, realChoice: true })!).toMatch(/their|they/i);
-    expect(liveMethodBeatFor({ ...base, bestSan: 'Qxh7+', realChoice: true })!).toMatch(/check|captur|forcing/i);
+    expect(liveMethodBeatFor({ ...base, bestSan: 'Nf3', threatStanding: true, realChoice: true, tier: 'critical' })!).toMatch(/their|they/i);
+    expect(liveMethodBeatFor({ ...base, bestSan: 'Qxh7+', realChoice: true, tier: 'critical' })!).toMatch(/check|captur|forcing/i);
   });
 
   it('exactly ONE habit speaks per position — never a stack of advice', () => {

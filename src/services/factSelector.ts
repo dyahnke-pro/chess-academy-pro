@@ -127,9 +127,15 @@ export function selectFacts(
    *  coupled from the detector's `beneficiary`, never inferred from the prose.
    *  Used ONLY to break a tie inside a same-claim group (see below). */
   incoming: ReadonlySet<string> = new Set(),
+  /** A surface's OWN ranking scale, when it has one. `rank` and `bar` travel
+   *  together on purpose: a bar is meaningless in a scale it did not come from,
+   *  and splitting them into two optionals is how they end up disagreeing. When
+   *  omitted, facts are ranked by their `[tag]` and swept by `barForTier`. */
+  order?: { rank: ReadonlyMap<string, number>; bar: number },
 ): FactSelection {
-  const bar = barForTier(tier);
-  const scored = facets.map((text, i) => ({ text, i, rank: facetRank(text, signals), sq: squares.get(text) ?? [] }));
+  const bar = order ? order.bar : barForTier(tier);
+  const rankOf = (text: string): number => (order ? (order.rank.get(text) ?? 0) : facetRank(text, signals));
+  const scored = facets.map((text, i) => ({ text, i, rank: rankOf(text), sq: squares.get(text) ?? [] }));
   // Highest rank first; authoring order breaks ties so the result is stable.
   const byRank = [...scored].sort((a, b) => (b.rank - a.rank) || (a.i - b.i));
 

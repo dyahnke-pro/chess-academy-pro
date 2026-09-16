@@ -220,6 +220,8 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         try {
           if (cached?.topLines?.length && ctx.fenAfter) {
             const pf = await computePositionFacts({
+              // A live game. Silence is the default; the coach earns the word.
+              posture: 'interrupt',
               fen: ctx.fenAfter,
               moverColor: ctx.fenAfter.split(' ')[1] === 'b' ? 'b' : 'w',
               studentColor: playerColor === 'white' ? 'w' : 'b',

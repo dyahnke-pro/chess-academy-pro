@@ -35,6 +35,14 @@ export interface ImportanceSignals {
   /** A declared teaching beat here (opening name / plan / keystone). NOT
    *  eval-driven — this is the curriculum, and it speaks in a quiet position. */
   teachingBeat: boolean;
+  /** A chess.js-computed STANDING DANGER: a pin/skewer in waiting on your own
+   *  king or queen, a castled king with a broken shelter under real fire, a
+   *  central king with the file about to open, or a trade that would create one
+   *  of those. The engine-derived signals cannot see any of these, and they are
+   *  most dangerous where the eval looks settled — so, like `threatNet`, this is
+   *  NOT gated by the contested test. Optional: a surface that runs no such
+   *  probe simply omits it. */
+  standingDanger?: boolean;
   /** White-POV cp at this position — for the contested gate + the mate override. */
   evalCpWhitePov: number | null;
   /** Stockfish WDL (per-mille) at this position — the practical contested read. */
@@ -120,6 +128,15 @@ export function computeImportance(s: ImportanceSignals, rating = 1500): Importan
   // The old `if (contested)` gate silenced a real hang whenever the student was
   // clearly winning — the purpose-built winning-framing beat could never fire.
   if (s.threatNet >= 3) bump(75, 'must-defend', `must-defend: ${s.threatNet} hangs`);
+
+  // A STANDING DANGER, same reasoning and the same ungated treatment: a pin or
+  // skewer in waiting on your own king/queen, a castled king whose shelter is
+  // broken with real attackers on it, a central king with the file about to
+  // open. Pure chess.js geometry, so the engine-derived signals above cannot
+  // see it at all — and it is most dangerous exactly where the eval looks
+  // settled, which is what the contested gate would otherwise silence. Ranked
+  // just under must-defend: a live hang is now, this is next move.
+  if (s.standingDanger) bump(74, 'must-defend', 'a standing danger on the board');
 
   // A forced mate outranks everything, contested-gate or not.
   if (s.evalCpWhitePov != null && Math.abs(s.evalCpWhitePov) >= MATE_CP) {

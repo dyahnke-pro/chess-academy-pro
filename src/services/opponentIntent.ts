@@ -25,6 +25,10 @@ export interface OpponentPlan {
   studentReply: string | null;
   /** Eval of this line (white-POV cp; mate → ±100000). */
   evalCp: number;
+  /** The squares their idea moves between — coupled HERE, where the UCI is in
+   *  hand, so a consumer never has to re-parse the SAN to learn the geometry
+   *  (CLAUDE.md §G4.5.1: never scrape squares back out of prose). */
+  squares: readonly string[];
 }
 
 export interface OpponentIntent {
@@ -75,7 +79,8 @@ export function buildOpponentIntent(input: {
     }
     const evalCp = l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation;
     // De-dup: two lines can share a first move (rare with MultiPV, but guard).
-    if (!plans.some((p) => p.opponentMove === opponentMove)) plans.push({ opponentMove, studentReply, evalCp });
+    const squares = [l.moves[0].slice(0, 2), l.moves[0].slice(2, 4)];
+    if (!plans.some((p) => p.opponentMove === opponentMove)) plans.push({ opponentMove, studentReply, evalCp, squares });
   }
   return plans.length ? { plans } : null;
 }
