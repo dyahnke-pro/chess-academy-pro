@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-09-16",
- "videosDistilled": 429,
- "noteCount": 7480,
+ "videosDistilled": 428,
+ "noteCount": 7477,
  "notes": [
   {
    "id": "vc--4hTQEnwa7s-2",
@@ -248519,67 +248519,6 @@
    "concepts": [],
    "sources": [
     "yt:sqVkwtfaFwI"
-   ],
-   "positionSource": "high"
-  },
-  {
-   "id": "vc-sqpNZmRg7oc-3",
-   "lineSan": [
-    "e4",
-    "d5",
-    "exd5"
-   ],
-   "opening": null,
-   "phase": "opening",
-   "explains": "One last game against a 1600 who trots out the Scandinavian, meeting your king-pawn with an immediate central strike.",
-   "teaches": "",
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:sqpNZmRg7oc"
-   ],
-   "positionSource": "high"
-  },
-  {
-   "id": "vc-sqpNZmRg7oc-4",
-   "lineSan": [
-    "e4",
-    "d5",
-    "exd5",
-    "Qxd5"
-   ],
-   "opening": null,
-   "phase": "opening",
-   "explains": "He recaptures with the queen, and this is the whole problem with the Scandi: the queen is out early and about to become a target.",
-   "teaches": [
-    "Scandinavian: the early queen is exposed to tempo"
-   ],
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:sqpNZmRg7oc"
-   ],
-   "positionSource": "high"
-  },
-  {
-   "id": "vc-sqpNZmRg7oc-5",
-   "lineSan": [
-    "e4",
-    "d5",
-    "exd5",
-    "Qxd5",
-    "Nc3"
-   ],
-   "opening": null,
-   "phase": "opening",
-   "explains": "The knight to c3 is the best move — it develops a piece and gains a free tempo by hitting the queen.",
-   "teaches": [
-    "Develop with tempo against the exposed queen"
-   ],
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:sqpNZmRg7oc"
    ],
    "positionSource": "high"
   },

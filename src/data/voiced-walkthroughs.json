@@ -49322,8 +49322,7 @@
    "hzotV0aslmY",
    "ieznxMQccW0",
    "rgLTiUZAWQY",
-   "s3ea8V8twrY",
-   "sqpNZmRg7oc"
+   "s3ea8V8twrY"
   ],
   "narratedNodes": 78,
   "totalNodes": 99,
@@ -49406,16 +49405,6 @@
                     {
                      "idea": "The queen to d8 is one of the possible retreats.",
                      "shortIdea": "The queen to d8 is one of the possible retreats.",
-                     "arrows": [
-                      {
-                       "from": "d5",
-                       "to": "d8"
-                      }
-                     ]
-                    },
-                    {
-                     "idea": "He retreats all the way home to d8, so you've already gained ground for nothing.",
-                     "shortIdea": "He retreats all the way home to d8, so you've already gained ground for nothing.",
                      "arrows": [
                       {
                        "from": "d5",
