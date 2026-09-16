@@ -558,7 +558,17 @@ G5 specifies. Nothing else may cap.
   sentence that makes a fork a fork).
 - DONE, `openingGenerator.ts`: the 24-ply clip on the LINE FACTS block (past
   move 12 the model had NO computed facts, so it went silent or invented — a G0
-  hole wearing a thrift costume), the 8-square `eyes` clip, the 6-theme clip.
+  hole wearing a thrift costume) and the 6-theme clip.
+- ⚠️ **CORRECTED SAME NIGHT — the 8-square `eyes` clip in `buildLineFactsBlock`
+  was NOT a narration cap and has been PUT BACK.** That block is the model's
+  GROUNDING ALLOWANCE ("the ONLY piece/square claims you may make"), not
+  something the student hears, so bounding it withholds no teaching. Removing it
+  turned `audit-concept-gameplay-prod` from 8/8 green (2026-09-15) to 7/8 on the
+  next run: the computed pin invariant stopped surviving the phrasing pass,
+  which is what a longer, noisier permission list does to it. **The test for
+  G4.5 is "does a STUDENT lose a computed fact", not "is there a `.slice`".** A
+  prompt-side allowance, an exercise-set size and a quiz's distractor count all
+  look like caps and are not.
 - `positionFacts.ts` had NO cap — its lone `.slice(0, 2)` is a UCI substring.
   The "61 sites" count included false positives of that shape; the real total was
   ~48 + 3.

@@ -241,7 +241,12 @@ async function main() {
 
   const after = await pullStream(runStart);
   console.log(`[stream] post-run pull: ${after.ok ? `${after.events.length} events this run (opt-in stream — empty is expected)` : `unavailable (${after.reason})`}`);
-  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, results, listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, pageErrors };
+  // SAVE WHAT WAS SPOKEN. When check C fails the only useful question is "then
+  // what DID the coach say on that ply?", and the report answered it with a
+  // count (2026-09-16) — so diagnosing a red row meant re-running a 6-minute
+  // prod audit to see the lines it already had in memory. David's standing
+  // order is to READ the narration; the report has to carry it.
+  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, results, spokenLines: spokenLines(listener), listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, pageErrors };
   await writeFile(`${OUT_DIR}/report.json`, JSON.stringify(report, null, 2));
   const failed = results.filter((r) => !r.pass);
   console.log(`\n${results.length - failed.length}/${results.length} green — report at ${OUT_DIR}/report.json`);

@@ -3230,10 +3230,16 @@ export function buildLineFactsBlock(openingName?: string): string {
           parts[1] = m.color;
           parts[3] = '-';
           const view = new Chess(parts.join(' '));
-          // Every square it eyes (G4.5: "no ceiling on … squares in an
-          // enumeration"). A queen on an open board sees more than eight, and
-          // the ones past the eighth were the ones the prose then could not cite.
-          const eyes = [...new Set(view.moves({ square: m.to, verbose: true }).map((x) => x.to))];
+          // NOT a narration cap — a GROUNDING ALLOWANCE, so it stays. This block
+          // is the model's permission list ("the ONLY piece/square claims you
+          // may make"), not something the student hears, so bounding it withholds
+          // no teaching. It was briefly uncapped under G4.5 on 2026-09-16 and
+          // that was a misclassification: the prod concept-gameplay audit went
+          // from green to red on the next run — the computed pin invariant
+          // stopped surviving the phrasing pass, which is what a longer, noisier
+          // permission list does to it. Eight squares is plenty to license the
+          // prose; the teaching itself is spliced, not drawn from here.
+          const eyes = [...new Set(view.moves({ square: m.to, verbose: true }).map((x) => x.to))].slice(0, 8);
           if (eyes.length > 0) bits.push(`from ${m.to} it eyes ${eyes.join(', ')}`);
         } catch { /* reachability read optional */ }
       }
