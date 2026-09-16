@@ -5044,6 +5044,35 @@ huge LLM-cache blobs in openingNarrations/cachedOpenings and the
 audit-log noise in meta) and downloads `david-games.json`. Drop
 that download at `audit-reports/.fixtures/david-games.json`.
 
+### 🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").
+
+A coach change is almost never one-surface. The computers are SHARED — `coachDecider`,
+`positionFacts`, `voiceFacts`, the weakness spine, `describeThreatRecognition` — so a
+change made for review reaches Learn through a function Learn also calls, and a green
+review audit says nothing about it.
+
+**The standing pair, both muted, both 3-instrument:**
+- **REVIEW** → `scripts/audit-review-overhaul-prod.mjs` (seeds a real unanalyzed game,
+  walks every ply, reads the narration back off the listener).
+- **LEARN** → `scripts/audit-concept-gameplay-prod.mjs` (drives a real Learn session on a
+  lesson whose taught spine LANDS a tactic, answers as a student, and proves the listener
+  HEARD the computed sentence mid-lesson). `audit-teach-on-topic-prod.mjs` is the
+  alternate when the change is about lesson SCOPE or repetition rather than the tactic.
+
+**RUN THEM SEQUENTIALLY, NEVER CONCURRENTLY, AND NEVER ALONGSIDE ship-check.** Both drive
+a real browser with real Stockfish workers; two at once starve each other and produce
+timeouts that read exactly like product failures. This is not hypothetical — on
+2026-09-16 a review run was invalidated because typechecks and vitest were run beside it,
+and three rows failed for want of CPU ("end reached=false") while the product was fine.
+A contaminated audit is worse than no audit: it costs the time AND sends you chasing a
+bug that is not there.
+
+**REPORT THE NARRATIONS FROM BOTH, not the pass count.** The row count is the harness;
+the prose is the product (David, repeatedly: "Fire does not equal green. Show me the
+narrations as well."). Every real defect this session — the bare-SAN narration, the
+"make that your knight" grammar, three stacked HOW blocks, the seat inversion, the
+false-timeline signal beat — was found by READING output that every gate passed.
+
 ### Standard post-deploy audit ritual
 
 **Non-negotiable.** This implements gate G1 from §NON-NEGOTIABLE
