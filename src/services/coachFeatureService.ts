@@ -26,11 +26,11 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
 import { renderStructureAtoms } from './structureProse';
-import { decide } from './coachDecider';
-import type { MethodHabit } from './methodBeat';
+import { decide, habitNeedFrom } from './coachDecider';
+import { habitIsOwed, type MethodHabit } from './methodBeat';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
-import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead } from './reviewTeachingPoints';
+import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
 import { walkBookLine } from './theoryDeparture';
@@ -1180,6 +1180,10 @@ export function buildReviewSegments(
   // peer of the live speakDeepestLookahead), keyed by the shot's SAN so the same
   // combination is called out once per game.
   const deepShotAnnounced = new Set<string>();
+  // FORESIGHT-AS-A-SKILL beats, deduped on the geometry they describe. The same
+  // alignment can recur for plies; naming it once is teaching, naming it five
+  // times is the drumbeat the method layer already learned not to be.
+  const signalsAnnounced = new Set<string>();
   let orientationShown = false;
   // The enumerated POSITIONAL VERDICT ("you're better here, and here's why:
   // bishop pair, the open file, his weak pawn") — Danya's signature teaching
@@ -1281,6 +1285,10 @@ export function buildReviewSegments(
   // (methodBeat.ts) without the ten-plies-in-a-row drumbeat coming back — a bar
   // tuned to suppress repetition suppresses teaching too.
   const spokenHabits = new Set<MethodHabit>();
+  // WHICH HABITS THIS STUDENT STILL OWES, read off the spine ONCE per game —
+  // it is a property of the student, not of the ply, so computing it per move
+  // would be the same answer N times.
+  const reviewHabitNeed = habitNeedFrom(studentWeaknesses ?? []);
   const applyRefrainOnce = (text: string): string => {
     let out = text;
     REFRAINS.forEach((r, idx) => {
@@ -1816,6 +1824,32 @@ export function buildReviewSegments(
       if (!fundamentalLed && narration && isStudentMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
         const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor });
         if (failed) narration = `${narration} ${failed.line}`;
+      }
+    }
+    // FORESIGHT AS A SKILL — "here was the signal" (David 2026-09-16: "Future
+    // moves, how to think, threat identification, that is teaching"). Every beat
+    // above this one is about the move that was PLAYED: what it was, why it
+    // failed, what it conceded, what was better. None of them says what was
+    // readable on the board BEFORE the shot existed — and that is the part that
+    // transfers to the next game.
+    //
+    // GATED ON THEIR OWN RECORD, never on the size of the slip (the same
+    // correction the slow-down beat took the same night). A student who reliably
+    // finds forcing shots does not need to be taught how to look for them; one
+    // whose spine says they keep walking past them does. `habitIsOwed` treats an
+    // UNSCORED habit as owed on purpose — a student with no history yet is a
+    // student who has not proven they can see it.
+    {
+      const isStudentMove = playerColor ? moverColor === playerColor : !m.isCoachMove;
+      const flagged = m.classification === 'mistake' || m.classification === 'blunder'
+        || m.classification === 'inaccuracy' || m.classification === 'miss';
+      if (narration && isStudentMove && flagged && habitIsOwed(reviewHabitNeed, 'forcing-scan')) {
+        // `moverColor` is the long form here; the board computers speak 'w'/'b'.
+        const signal = buildMissedShotSignal(fenPair.fenBefore, m.bestMove, moverColor === 'white' ? 'w' : 'b', m.san);
+        if (signal && !signalsAnnounced.has(signal)) {
+          signalsAnnounced.add(signal);
+          narration = `${narration} ${signal}`;
+        }
       }
     }
     // THE LASTING CONCESSION (David 2026-07-21, IMG_4571: "What serious

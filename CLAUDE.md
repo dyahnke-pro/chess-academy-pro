@@ -2071,6 +2071,19 @@ call `ReadNotifications`.)
 difference between "working" and "wedged"? If not, you have already broken this
 rule — fix the instrument before you wait on it.
 
+🔒 **AND THE SAME DISEASE IN THE TYPECHECKER: `npx tsc --noEmit` IS VACUOUS IN
+THIS REPO — IT ALWAYS EXITS 0 (found 2026-09-16).** The root `tsconfig.json` is
+`{"files": [], "references": [...]}` — the Vite project-references layout — so a
+bare `tsc` compiles NOTHING and reports success having checked nothing. A whole
+session's worth of "typecheck clean" can mean nothing at all. The real command is
+**`npm run typecheck`** (`tsc -b --force`), and it is what ship-check runs.
+
+It is not academic: a `'white' | 'black'` passed into a `'w' | 'b'` parameter
+sailed through the bare check, and at runtime the board computer compared
+`c.turn() !== 'white'`, never matched, and returned null — so a freshly-wired
+narration beat was SILENT with a green typecheck behind it. Only reading the
+output caught it. Never verify a change with bare `tsc`.
+
 **🔒🔒 CHECK FOR A MESSAGE FROM DAVID WHENEVER YOU'RE WAITING — ALL SESSIONS
 (David 2026-09-06, LOCKED: "If you're sitting and waiting for something, at
 least check to see if I have sent you a message. Lock that in for ALL

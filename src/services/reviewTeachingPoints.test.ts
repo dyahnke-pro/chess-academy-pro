@@ -4,6 +4,7 @@ import {
   attackerDefenderCount, royalDefenderTarget, rookOnSeventh,
   badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlan, deriveNextPlans,
   buildReviewDeepestLookahead,
+  buildMissedShotSignal,
 } from './reviewTeachingPoints';
 
 function fenAfter(sans: string[]): string {
@@ -329,5 +330,61 @@ describe('buildReviewDeepestLookahead — the student FOUND it (David 2026-09-16
     // Either it names the shot, or the position sets up no fork/mate at all —
     // what it must NEVER do is call the played move a missed one.
     if (missed !== null) expect(missed).not.toContain('e6 was the shot');
+  });
+});
+
+// ── FORESIGHT AS A SKILL (David 2026-09-16) ─────────────────────────────────
+// The Berlin mirror: Black to move, and ...Bc5 is the shot — it sets up the
+// Nxf2 fork of the queen on d1 and the rook on h1. The student played Be7.
+describe('buildMissedShotSignal — here was the signal', () => {
+  const fenBefore = 'rnbqkb1r/pp3ppp/2p5/3pp3/B3n3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 6';
+
+  it('names the alignment that was readable before the shot existed', () => {
+    const say = buildMissedShotSignal(fenBefore, 'f8c5', 'b', 'Be7');
+    expect(say).toBeTruthy();
+    expect(say).toContain('queen on d1');
+    expect(say).toContain('rook on h1');
+    expect(say).toContain('f2');
+  });
+
+  // 🔒 THE BEAT MUST NOT CITE A SQUARE ITS OWN SENTENCE SAYS DID NOT EXIST YET.
+  // The first version appended the guard clause and produced "the signal was on
+  // the board before Bc5 ever existed — … backed up by your piece on c5", where
+  // c5 is the square Bc5 LANDS on. Board-true geometry, false timeline. Only
+  // reading the output caught it; this holds it.
+  it('never cites the guard square the shot itself creates', () => {
+    const say = buildMissedShotSignal(fenBefore, 'f8c5', 'b', 'Be7');
+    expect(say).not.toMatch(/backed up|nothing of|covers /);
+    // c5 may appear ONLY as part of the shot's own SAN (`Bc5`) — never as a
+    // square the sentence claims was already occupied. Strip the SANs and the
+    // landing square must be gone.
+    expect((say ?? '').replace(/\bBc5\b/g, '')).not.toContain('c5');
+  });
+
+  it('speaks from the mover seat — the victims are THEIRS, never yours', () => {
+    const say = buildMissedShotSignal(fenBefore, 'f8c5', 'b', 'Be7');
+    expect(say).toMatch(/\btheir\b/);
+    expect(say).not.toMatch(/\byours\b|\byour piece\b|\byou cover\b/);
+  });
+
+  it('is SILENT when the student actually played the shot', () => {
+    expect(buildMissedShotSignal(fenBefore, 'f8c5', 'b', 'Bc5')).toBeNull();
+  });
+
+  it('is SILENT when the best move sets up nothing forcing', () => {
+    expect(buildMissedShotSignal(fenBefore, 'b8d7', 'b', 'Be7')).toBeNull();
+  });
+
+  it('shares ONE scan with the played-well register — same board, two voices', () => {
+    const missed = buildMissedShotSignal(fenBefore, 'f8c5', 'b', 'Be7');
+    const found = buildReviewDeepestLookahead(fenBefore, 'f8c5', 'b', 'Be7');
+    expect(missed).toBeTruthy();
+    expect(found).toBeTruthy();
+    expect(missed).not.toBe(found);
+    // Both describe the same geometry; neither invents a square the other lacks.
+    for (const sq of ['d1', 'h1']) {
+      expect(missed).toContain(sq);
+      expect(found).toContain(sq);
+    }
   });
 });

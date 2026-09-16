@@ -34,7 +34,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { legalSeeGainOn } from './positionReadingService';
-import { captureHasCounterTactic, detectNewThreat } from './groundedAnswer';
+import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { isKnightOutpost } from './forwardTeaching';
 
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -447,6 +447,36 @@ export function buildReviewDeepestLookahead(
    *  See the found-it guard below for why this is not optional. */
   playedSan: string | null,
 ): string | null {
+  const shot = scanBestMoveShot(fenBefore, bestMoveUci, moverColorWB, playedSan);
+  if (!shot) return null;
+  return shot.threat.kind === 'mate'
+    ? `Look deeper — ${shot.san} was the shot: it forces mate. That's the kind of idea to hunt a move ahead.`
+    : `Look deeper — ${shot.san} was the shot: it ${shot.threat.detail}. That's the fork to spot a move ahead.`;
+}
+
+/** The combination the engine's best move sets up, as the structured package —
+ *  ONE scan serving BOTH registers.
+ *
+ *  Review says two different things about the same shot depending on whether the
+ *  student found it: "that was the shot" when they played well and simply did not
+ *  see the follow-up, and "here was the SIGNAL you could have read" when they
+ *  erred. Those are two renderings of one computed fact, so they must not be two
+ *  scans — a second detector is how the two registers drift into disagreeing
+ *  about the same board. */
+export interface BestMoveShot {
+  /** The best move in SAN, played from `fenBefore`. */
+  san: string;
+  /** The position AFTER the best move — the board the geometry describes. */
+  fenAfter: string;
+  threat: DetectedThreat;
+}
+
+export function scanBestMoveShot(
+  fenBefore: string,
+  bestMoveUci: string | null,
+  moverColorWB: 'w' | 'b',
+  playedSan: string | null,
+): BestMoveShot | null {
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
   try {
     const chess = new Chess(fenBefore);
@@ -476,15 +506,53 @@ export function buildReviewDeepestLookahead(
           && (pm.promotion ?? null) === (mv.promotion ?? null)) return null;
       } catch { /* an unparseable played SAN must never silence a real beat */ }
     }
-    const threat = detectNewThreat(fenBefore, chess.fen(), moverColorWB);
+    const fenAfter = chess.fen();
+    const threat = detectNewThreat(fenBefore, fenAfter, moverColorWB);
     // Only the combinations — a bare capture is the better-move teaching's job.
     if (!threat || (threat.kind !== 'fork' && threat.kind !== 'mate')) return null;
-    return threat.kind === 'mate'
-      ? `Look deeper — ${mv.san} was the shot: it forces mate. That's the kind of idea to hunt a move ahead.`
-      : `Look deeper — ${mv.san} was the shot: it ${threat.detail}. That's the fork to spot a move ahead.`;
+    return { san: mv.san, fenAfter, threat };
   } catch {
     return null;
   }
+}
+
+/**
+ * FORESIGHT AS A SKILL — "here was the signal" (David 2026-09-16, the teaching
+ * audit's top gap: "Future moves, how to think, threat identification, that is
+ * teaching").
+ *
+ * On a move the student got WRONG, review already says what the move was, why it
+ * failed, what it conceded and what the better move was. Not one of those says
+ * what was READABLE ON THE BOARD a move before the shot existed — and that is
+ * the skill. Recovering from a mistake is not transferable; seeing the alignment
+ * that makes the tactic possible is.
+ *
+ * The geometry computer for this already existed (`describeThreatRecognition`)
+ * and had exactly one caller, the Learn spot-it drill, firing only on threats
+ * AGAINST the student. This is the same computer at the other seat: the student
+ * is the MOVER of the shot they missed, so every possessive flips (which is why
+ * the seat is a required parameter there, not a default).
+ *
+ * The CALLER gates on whether this student actually needs the forcing-scan habit
+ * — a student who reliably finds shots does not need to be told how to look for
+ * them. Silence is a computed verdict, not an absence.
+ */
+export function buildMissedShotSignal(
+  fenBefore: string,
+  bestMoveUci: string | null,
+  moverColorWB: 'w' | 'b',
+  playedSan: string | null,
+): string | null {
+  const shot = scanBestMoveShot(fenBefore, bestMoveUci, moverColorWB, playedSan);
+  if (!shot) return null;
+  // ONLY THE ALIGNMENT, never the guard. The guard clause is usually CREATED by
+  // the very move this sentence says predates it (see `forkAlignmentClause`), so
+  // including it would make the beat contradict itself on the board it describes.
+  // Mate keeps its silence for now: the honest mate signal is the king's flight
+  // count at `fenBefore`, which is a computation that does not exist yet, and a
+  // generic "a mating net was forming" teaches nothing (empty > generic).
+  if (shot.threat.kind !== 'fork') return null;
+  return `And the signal was there before ${shot.san} ever existed — their ${forkAlignmentClause(shot.threat)}. Two pieces inside one attacker's reach is the shape to hunt.`;
 }
 
 /** Can the opponent still WIN the `side` piece sitting on `sq` (value `val`),

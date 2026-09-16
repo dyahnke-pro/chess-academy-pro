@@ -225,9 +225,27 @@ describe('opponent-threat teaching — identify, recognize, prevent (David 2026-
   it('recognition names the geometry to spot', async () => {
     const { detectNewThreat, describeThreatRecognition } = await import('./groundedAnswer');
     const t = detectNewThreat(fenBefore, fenAfter, 'b');
-    const r = describeThreatRecognition(t!, fenAfter, 'w');
+    const r = describeThreatRecognition(t!, fenAfter, 'w', true);
     expect(r).toMatch(/knight's-hop from f2/);
     expect(r).toMatch(/queen on d1 and rook on h1/);
+  });
+
+  // THE SEAT IS A PARAMETER, NOT AN ASSUMPTION. Same board, same threat — only
+  // who is being forked changes. When the student is the MOVER (this is the shot
+  // they missed, not the one they walked into), every possessive has to flip; a
+  // "yours" surviving here is the function teaching the wrong perspective.
+  it('flips every possessive when the student is the mover, not the victim', async () => {
+    const { detectNewThreat, describeThreatRecognition } = await import('./groundedAnswer');
+    const t = detectNewThreat(fenBefore, fenAfter, 'b');
+    const victimSeat = describeThreatRecognition(t!, fenAfter, 'w', true);
+    const moverSeat = describeThreatRecognition(t!, fenAfter, 'w', false);
+    expect(moverSeat).toBeTruthy();
+    // The geometry is seat-invariant — it is a fact about the board.
+    expect(moverSeat).toMatch(/knight's-hop from f2/);
+    expect(moverSeat).toMatch(/queen on d1 and rook on h1/);
+    // The possessives are not.
+    expect(moverSeat).not.toMatch(/\byours\b|\byou cover\b|\btheir piece\b/);
+    expect(moverSeat).not.toBe(victimSeat);
   });
 
   it('prevention explains d4 as undermining the guard', async () => {

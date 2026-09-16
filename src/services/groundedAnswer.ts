@@ -5757,6 +5757,34 @@ export function describeStudentThreat(
 const PIECE_VALUE_LOCAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /**
+ * THE ALIGNMENT — the half of a fork's geometry that is readable BEFORE the
+ * fork exists, factored out so the two registers cannot drift apart.
+ *
+ * A fork's geometry has two halves and they are true at DIFFERENT times. The
+ * ALIGNMENT (the victims sitting inside one piece's reach of the landing square)
+ * is true before the move: the mover's move cannot move the VICTIM's pieces, so
+ * those squares are unchanged. The GUARD (what backs the landing square up) is
+ * frequently CREATED by the move — in the Berlin, `Bc5` is what puts a defender
+ * on c5 in the first place.
+ *
+ * Reading the shipped beat caught exactly that: a "the signal was on the board
+ * before Bc5 ever existed" sentence that then cited c5, a square that only
+ * exists after Bc5. Splitting the clause is what makes the retrospective
+ * register honest, and it is a split in the COMPUTER rather than a second
+ * detector, so the live and review renderings keep describing one geometry.
+ */
+export function forkAlignmentClause(threat: DetectedThreat): string {
+  const sanPieceLetter = /^([NBRQK])/.exec(threat.san);
+  const forkerType = sanPieceLetter ? sanPieceLetter[1].toLowerCase() : 'p';
+  const geom = forkerType === 'n'
+    ? `sitting one knight's-hop from ${threat.landing}`
+    : forkerType === 'p'
+      ? `both caught by a pawn on ${threat.landing}`
+      : `both in the ${REVIEW_PIECE_NAME[forkerType]}'s line from ${threat.landing}`;
+  return `${threat.targets.join(' and ')} ${geom}`;
+}
+
+/**
  * describeThreatRecognition — TEACH THE PATTERN (David 2026-07-22: "TEACH the
  * user how to identify and prevent it"). Names the board geometry that made
  * the threat possible, computed from the DetectedThreat package — the
@@ -5766,16 +5794,34 @@ export function describeThreatRecognition(
   threat: DetectedThreat,
   fenAfter: string,
   victimWB: 'w' | 'b',
+  /** IS THE VICTIM THE STUDENT? REQUIRED — a new caller must decide, it must
+   *  never default.
+   *
+   *  The fork clause names two possessions: who covers the landing square (the
+   *  VICTIM's defenders) and who backs it up (the MOVER's guards). Both were
+   *  hardcoded to the student because the one caller for two years
+   *  (`buildDrillThreatSpot`, the Learn spot-it drill) always has the student as
+   *  the victim. The moment this fires on the student's OWN missed shot the
+   *  seats swap, and the sentence says "nothing of yours covers d5" about the
+   *  OPPONENT's cover — a perspective inversion inside the function whose whole
+   *  job is to teach. Optional-with-a-default would have shipped that silently;
+   *  required means the compiler asks. */
+  victimIsStudent: boolean,
 ): string | null {
   try {
     const c = new Chess(fenAfter);
     if (threat.kind === 'fork') {
+      // The VICTIM defends the landing square; the MOVER backs it up. Which of
+      // those is "yours" flips with the seat — never assume.
+      const victimPoss = victimIsStudent ? 'yours' : 'theirs';
+      const victimCovers = victimIsStudent ? 'you cover' : 'they cover';
+      const moverPoss = victimIsStudent ? 'their' : 'your';
       const victimGuards = c.attackers(threat.landing as Square, victimWB).length;
       const guardBit = victimGuards === 0
-        ? `and nothing of yours covers ${threat.landing}`
+        ? `and nothing of ${victimPoss} covers ${threat.landing}`
         : threat.guards.length > 0
-          ? `and ${threat.landing} is backed up by their piece on ${threat.guards[0]}`
-          : `even though you cover ${threat.landing}`;
+          ? `and ${threat.landing} is backed up by ${moverPoss} piece on ${threat.guards[0]}`
+          : `even though ${victimCovers} ${threat.landing}`;
       // The geometry depends on the FORKING PIECE — "one knight's-hop" is only
       // true for a knight fork; detectNewThreat scans EVERY piece's moves, so a
       // queen/rook/bishop fork must not get the knight's-hop lie (board-awareness
@@ -5784,14 +5830,7 @@ export function describeThreatRecognition(
       // (Nxf2) the landing square still holds the VICTIM (the f2 pawn), so
       // reading it there misread the knight as a pawn and dropped the
       // knight's-hop geometry entirely (fidelity test, Berlin ...Bc5→Nxf2).
-      const sanPieceLetter = /^([NBRQK])/.exec(threat.san);
-      const forkerType = sanPieceLetter ? sanPieceLetter[1].toLowerCase() : 'p';
-      const geom = forkerType === 'n'
-        ? `sitting one knight's-hop from ${threat.landing}`
-        : forkerType === 'p'
-          ? `both caught by a pawn on ${threat.landing}`
-          : `both in the ${REVIEW_PIECE_NAME[forkerType]}'s line from ${threat.landing}`;
-      return `the pattern to spot: ${threat.targets.join(' and ')} ${geom}, ${guardBit} — that alignment IS the fork, a move before it lands`;
+      return `the pattern to spot: ${forkAlignmentClause(threat)}, ${guardBit} — that alignment IS the fork, a move before it lands`;
     }
     if (threat.kind === 'capture') {
       const cell = c.get(threat.landing as Square);

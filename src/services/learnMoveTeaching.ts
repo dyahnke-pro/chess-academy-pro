@@ -124,7 +124,8 @@ export function buildDrillThreatSpot(
   const opponentWB: 'w' | 'b' = studentWB === 'w' ? 'b' : 'w';
   const threat = detectNewThreat(fenBeforeOpponentReply, fenAfterOpponentReply, opponentWB);
   if (!threat) return null;
-  return describeThreatRecognition(threat, fenAfterOpponentReply, studentWB);
+  // The OPPONENT moved, so the student is the victim — seat declared explicitly.
+  return describeThreatRecognition(threat, fenAfterOpponentReply, studentWB, true);
 }
 
 /**
