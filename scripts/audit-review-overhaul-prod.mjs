@@ -325,7 +325,14 @@ const run = async () => {
   let reachedEnd = false;
   const flaggedLeads = new Map(); // ply → { badge, lead }
   const plyNarr = new Map();      // ply → { badge, narr } — every ply the walk showed
-  for (let i = 0; i < 400; i++) {
+  // STEP BUDGET. 400 polls at 1500ms reached ply 45 of 46 and ran out — the
+  // walk auto-advances on the (muted) voice promise, whose delay is proportional
+  // to the beat's LENGTH, so richer narration makes the walk legitimately
+  // slower. Three rows then failed for a reason that had nothing to do with
+  // them: the recap, the turning-point card and Show-me all need the walk to
+  // REACH the end. Poll more often rather than waiting longer, so the budget
+  // tracks the walk instead of the clock.
+  for (let i = 0; i < 900; i++) {
     await resolveCards();
     const n = (await readWalkPly(page))?.n ?? 0;
     const b = await txt(page, '[data-testid="review-classification-badge"]');
@@ -340,7 +347,7 @@ const run = async () => {
     if (n >= total) { reachedEnd = true; break; }
     const st = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state', { timeout: 3000 }).catch(() => null);
     if (st === 'paused') { await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined); }
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(1000);
   }
   const RECAP_RE = /of your \w+ flagged move|carry into the next game|The pattern: you \w/i;
   await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
