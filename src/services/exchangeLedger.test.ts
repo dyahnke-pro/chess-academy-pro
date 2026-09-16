@@ -77,3 +77,30 @@ describe('attribution — an alternating line never says a subjectless "winning 
     expect(narrateDnaLine(plies)).toMatch(/winning the/);
   });
 });
+
+describe('one verdict computer — a verdict without its reason is the eval bar read aloud', () => {
+  it('the projected line ends on the SAME vocabulary the per-move verdict uses', async () => {
+    const { assessPositionalEdge } = await import('./reviewPositionalAssessment');
+    // +120 for the student. The private `verdictWord` in augmentWithProjections
+    // called this band "you're clearly better"; assessPositionalEdge calls it
+    // "a bit better" — so one review could say both about the same number.
+    expect(assessPositionalEdge('8/8/4k3/8/8/4K3/4P3/8 w - - 0 40', 'w', 120).verdict).toBe('a bit better');
+    expect(assessPositionalEdge('8/8/4k3/8/8/4K3/4P3/8 w - - 0 40', 'w', 200).verdict).toBe('clearly better');
+  });
+  it('carries a BOARD reason at the end of the Alapin line, not just the word', async () => {
+    const { Chess } = await import('chess.js');
+    const { assessPositionalEdge } = await import('./reviewPositionalAssessment');
+    const c = new Chess(PLY29);
+    for (const san of ['Kxd7', 'Nxa8', 'Nexd4', 'Rd1', 'e5']) c.move(san);
+    const a = assessPositionalEdge(c.fen(), 'b', 120);
+    expect(a.reasons.length).toBeGreaterThan(0);
+    expect(a.reasons.join(' ')).toMatch(/outpost on d4|further developed/);
+  });
+  it('no second cp-to-word ladder survives in the projection code', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const src = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
+    expect(src).not.toMatch(/const verdictWord\s*=/);
+    expect(src).toMatch(/assessPositionalEdge/);
+  });
+});

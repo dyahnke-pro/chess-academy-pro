@@ -28,6 +28,7 @@ import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewF
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { renderStructureAtoms } from './structureProse';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
+import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
@@ -2613,13 +2614,34 @@ async function augmentWithProjections(
   // reliable window (Phase 2, David 2026-09-07: "spell the lines out for
   // everyone", "the more advanced player should get a DEEPER calculation").
   const deepThreatPlies = pvDepthForRating(rating);
-  const verdictWord = (studentPovCp: number | null): string => {
+  // 🔒 A VERDICT WITHOUT ITS REASON IS THE EVAL BAR READ ALOUD (David
+  // 2026-09-16, on the shipped ply-29 line: "Why is the user clearly better?
+  // That sentence is missing"). The Narration Voice Rules call a sentence that
+  // names no square, piece or concept filler, and G0 says the coach voices
+  // FACTS, not a number — "you're clearly better" is the number.
+  //
+  // The app already computes the reasons: `assessPositionalEdge` returns
+  // {verdict, reasons} and the per-move [verdict] facet has been speaking
+  // "You're clearly better: you have the bishop pair" all along. This private
+  // `verdictWord` was a SECOND, dumber verdict computer over the same bands,
+  // and the projected lines got that one — the exact two-computers-one-job
+  // split David named. There is now one verdict computer; this reads the
+  // TERMINAL position of the line, so the reasons describe where the line
+  // ENDS, which is what the verdict is about.
+  const verdictAtEnd = (line: PvLine, studentPovCp: number | null): string => {
     if (studentPovCp === null) return 'the position stays balanced';
-    if (studentPovCp >= 150) return "you're winning";
-    if (studentPovCp >= 50) return "you're clearly better";
-    if (studentPovCp > -50) return "it's about level";
-    if (studentPovCp > -150) return "you're a bit worse";
-    return "you're in trouble";
+    const endFen = line.plies[line.plies.length - 1]?.fenAfter ?? null;
+    const assess = endFen ? assessPositionalEdge(endFen, studentColorWB, studentPovCp) : { verdict: null, reasons: [] };
+    const word = assess.verdict
+      ? `you're ${assess.verdict}`
+      : studentPovCp >= 150 ? "you're winning"
+        : studentPovCp >= 50 ? "you're clearly better"
+          : studentPovCp > -50 ? "it's about level"
+            : studentPovCp > -150 ? "you're a bit worse" : "you're in trouble";
+    // Two reasons at most: the line is already long, and the top two are the
+    // ranked ones. No reasons computed → the word alone, never an invented why.
+    const why = assess.reasons.slice(0, 2).join('; ');
+    return why ? `${word}: ${why}` : word;
   };
   // Render the projected line in the DNA register — the SAME voice as the rest
   // of the walk, written in code, no LLM (David 2026-09-07: "run dna through
@@ -2658,7 +2680,7 @@ async function augmentWithProjections(
     // student has to resolve alone.
     const opposed = net != null && ledger != null && ledger.netPawns !== 0
       && ((ledger.netPawns < 0 && studentPov >= 50) || (ledger.netPawns > 0 && studentPov <= -50));
-    return `${withNet}${opposed ? ', but ' : ' — and '}${verdictWord(studentPov)}`;
+    return `${withNet}${opposed ? ', but ' : ' — and '}${verdictAtEnd(line, studentPov)}`;
   };
   // David 2026-07-24: "we NEED arrows showing the lines the coach mentions. The
   // delta!" — whenever a projection line is spoken (render() above), the board
