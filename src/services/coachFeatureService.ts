@@ -27,6 +27,7 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { renderStructureAtoms } from './structureProse';
+import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
@@ -2634,15 +2635,30 @@ async function augmentWithProjections(
     const clause = narrateDnaLine(line.plies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), { studentColor: studentColorWB });
     const lastPly = line.plies[line.plies.length - 1];
     if (lastPly?.facts.isMate) return `${clause} — and it's mate`;
+    // THE NET OF THE SEQUENCE (N7). A line that trades on BOTH sides leaves the
+    // student counting captures in their head; the ledger says the outcome in
+    // piece names. Silent on a one-sided win or a plain recapture, so it only
+    // ever ADDS the thing the line could not show.
+    const ledger = line.plies.length > 0
+      ? computeExchangeLedger(line.plies[0].fenBefore, line.plies.map((p) => p.san), studentColorWB)
+      : null;
+    const net = describeExchange(ledger);
+    const withNet = net ? `${clause} — ${net}` : clause;
     // Append an outcome verdict ONLY when the terminal position was actually
     // re-evaluated (D#1). `terminalEvalCp === null` on a non-mate line means the
     // verify pass failed (`delivers=false`); falling back to the ROOT eval would
     // spell "you're winning" on a line the engine never confirmed. The gated
     // passes (#3/#5) never reach that state, but the ungated better-line pass
     // (#4) could — so narrate the line WITHOUT a verdict rather than invent one.
-    if (line.terminalEvalCp == null) return clause;
+    if (line.terminalEvalCp == null) return withNet;
     const studentPov = studentColorWB === 'w' ? line.terminalEvalCp : -line.terminalEvalCp;
-    return `${clause} — and ${verdictWord(studentPov)}`;
+    // COMPENSATION READS "BUT", NOT "AND" (N7). When the ledger and the engine
+    // disagree in sign — material lost, position won, or the reverse — that
+    // tension IS the lesson, and "and" flattens it into a contradiction the
+    // student has to resolve alone.
+    const opposed = net != null && ledger != null && ledger.netPawns !== 0
+      && ((ledger.netPawns < 0 && studentPov >= 50) || (ledger.netPawns > 0 && studentPov <= -50));
+    return `${withNet}${opposed ? ', but ' : ' — and '}${verdictWord(studentPov)}`;
   };
   // David 2026-07-24: "we NEED arrows showing the lines the coach mentions. The
   // delta!" — whenever a projection line is spoken (render() above), the board

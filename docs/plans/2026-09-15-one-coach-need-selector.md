@@ -412,3 +412,85 @@ Read CLAUDE.md standard + this doc + `docs/coach-system-map.md` §4. Start at N1
 Do not rebuild anything in §1. Every phase: ship-check → push `main` → bundle
 hash advanced → the phase's audits on prod (muted) → vacuity check on any edited
 audit → report in three lines.
+
+## 8. N7 — THE EXCHANGE LEDGER: who won what, across a line (David 2026-09-16: "Now is the time for it")
+
+### The find (surface map, 2026-09-16)
+
+David asked why the fixed ply gave no plan. Chasing that produced a bigger
+defect than the missing plan, in the sentence the review DOES speak there.
+
+`augmentWithProjections` pass #3 already runs on BOTH sides' mistakes and
+frames the opponent's as **"Here's how you take advantage: …"**. It fires at
+ply 29 of David's Alapin (Nc7+, the opponent's mistake, −1.8). What it renders,
+verified by running `narrateDnaLine` on the real line:
+
+> Here's how you take advantage: Kxd7, **winning the knight**, the king trains
+> on the knight on c7 — pressure they have to answer, then Nxa8, **winning the
+> rook**, the knight reaches into your half…, Nexd4, **winning the pawn**, …
+
+Three captures, phrased identically, **none attributed**. Two are the
+student's; the middle one is the OPPONENT taking the student's rook. Under a
+heading that says "here's how YOU take advantage", a student reads "winning the
+rook" as their own gain. It is the precise complaint the app's most engaged
+real user wrote in feedback: *"I have a hard time understanding if they are
+talking about me or the opponent."*
+
+And the sentence that would settle it — the NET — does not exist anywhere:
+*you take the knight, they take the rook back, you come out with two knights
+for the rook, which is why the engine still calls the fork a mistake.*
+
+### Correction to what was said earlier this session
+
+Reported to David as "no computer produces that sentence today". Half wrong:
+the punishment LINE exists and fires. What does not exist is per-move
+attribution inside it and the net ledger over it. Stated here so the next
+reader does not inherit the wrong premise.
+
+### The build
+
+**N7a — attribute every capture in a projected line.** `dnaMoveClause` already
+knows `mv.color` and (since 2026-09-15) the student's colour. A capture clause
+becomes seat-stamped under the one perspective law: the student's captures read
+"you win the …", the opponent's "they take the … back". Never a subjectless
+"winning the rook" in an alternating line.
+
+**N7b — `exchangeLedger.ts`, a new pure computer.** `computeExchangeLedger(
+fenBefore, sans, studentColorWB)` walks the line with chess.js and returns what
+each side captured, plus `describeExchange()` → the human sentence in piece
+names, never raw points: "you come out with two knights for the rook". Null
+when nothing is exchanged, or when the line is a clean one-sided win (the line
+already said it — Narration Voice Rule 3, don't restate the picture).
+NB there are already FOUR `materialBalance` exports plus two `countMaterial`s
+in `src/services` (conceptEngine, materialClaimValidator, narratedContinuation,
+gamePhaseService, positionReadingService, boardUtils) — none of them is a
+ledger over a SEQUENCE, so this is not a fifth copy of the same thing. The
+duplication is real rot and is logged in §6b as its own sweep; do not fold it
+into this build.
+
+**N7c — wire it to every projection, not to ply 29.** `render()` in
+`augmentWithProjections` appends the ledger to any spoken line that exchanges
+material on both sides. That covers the punishment pass, the better-line pass
+and the threat pass at once — one computer, every caller, per invariant 1.
+
+### Gates
+
+`exchangeLedger.test.ts` on the REAL boards this came from: the ply-29 Alapin
+line nets two knights for the rook; a clean one-sided win returns null (no
+restatement); an even trade returns null; a line where the student LOSES on net
+inside an "advantage" frame is reported from the student's seat. Plus a case in
+`reviewNarrationDefects.test.ts` proving no subjectless "winning the …" survives
+in an alternating line.
+
+### Audit
+
+`audit-review-overhaul-prod.mjs` — read the spoken text at the forked ply and
+assert the net sentence is present and seat-correct. Per David 2026-09-15, the
+audit reads the NARRATION, not a pass count.
+
+### Explicitly NOT in this build
+
+The missing forcing PLAN in `deriveNextPlans` (eight plans, all assuming a
+quiet board). With the ledger speaking the net, ply 29 teaches correctly
+without one. Whether a ninth plan is still owed is a judgement to make after
+reading the shipped output, not before.

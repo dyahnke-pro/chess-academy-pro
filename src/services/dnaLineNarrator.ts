@@ -106,7 +106,17 @@ export function dnaMoveClause(
   // recapture (materialGained < 1) says nothing here — the concept clause
   // below carries it, so the line never reads "wins material" on a swap.
   const bits: string[] = [];
-  if (mv.captured && facts.materialGained >= 1) bits.push(`winning the ${facts.captured}`);
+  // ATTRIBUTE THE CAPTURE when the student's seat is known (N7, David
+  // 2026-09-16). A one-sided line reads fine subjectless, but a projected line
+  // ALTERNATES, and "Kxd7, winning the knight … then Nxa8, winning the rook"
+  // under a heading promising the student an advantage tells them they won the
+  // rook that was just taken from them. One perspective law: you / they.
+  const moverIsStudent = studentColor === null || mv.color === studentColor;
+  if (mv.captured && facts.materialGained >= 1) {
+    bits.push(studentColor === null
+      ? `winning the ${facts.captured}`
+      : moverIsStudent ? `you win the ${facts.captured}` : `they take the ${facts.captured}`);
+  }
   if (facts.tacticLanded) bits.push(`landing a ${tacticWord(facts.tacticLanded)}`);
   if (facts.promotion) bits.push(`promoting to a ${facts.promotion}`);
   // NOT "with check" — the SAN's "+" is spelled out as "check" by the TTS
@@ -121,7 +131,7 @@ export function dnaMoveClause(
   // The board-true positional concept — the SAME DNA voice the rest of the
   // walk speaks. buildReviewMoveTeaching never returns null and never
   // restates the move.
-  const teach = buildReviewMoveTeaching(fenBefore, san, studentColor === null || mv.color === studentColor);
+  const teach = buildReviewMoveTeaching(fenBefore, san, moverIsStudent);
   // The outpost is already in `bits` when the move gained one — the universal
   // teacher says it too, so the line read "planting an outpost on d5, secures an
   // outpost on d5" (David 2026-09-15, prod transcript). One fact, one clause.
