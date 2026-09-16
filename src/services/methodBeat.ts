@@ -166,7 +166,16 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   // student keeps misstepping in is worth naming even when they got this one
   // right — that is the warning David asked for, and it is why found-it alone
   // must not decide.
-  const slowOwed = habitIsOwed(need, 'slow-down');
+  //
+  // THE OVERRIDE READS `=== 'open'` STRICTLY, NOT `habitIsOwed`, AND THAT IS
+  // DELIBERATE — do not "simplify" it to the helper. The two answer different
+  // questions. `habitIsOwed` asks "should the coach teach this habit at all",
+  // where UNKNOWN must read as yes (a cold student never meets a mute coach).
+  // This asks "does this student's own record justify warning someone who
+  // played the move WELL" — and that needs positive evidence. Through the
+  // helper, a brand-new user with no weakness data at all would be told "this
+  // was the moment to slow down" on the critical move they just found, which is
+  // precisely the correction David said they had not earned.
   if (s.tier === 'only-move') {
     // FOUND IT → name the moment, never scold. Telling someone who solved it
     // that they should have spent longer is the wrong sentence for the same

@@ -87,6 +87,26 @@ describe('a method beat needs something to correct', () => {
     expect(methodBeatFor(base({ tier: 'critical', cpLossCp: 120, bestSan: 'Nf3' }))).toMatch(/slow down|clock|thinking time/i);
   });
 
+  // THE OVERRIDE, BOTH DIRECTIONS (David 2026-09-16: "If the user finds the
+  // correct move more often than not maybe it can stay quiet. But a more
+  // complicated position similar to where the user has misstepped before would
+  // warrant the warning"). Evidence of the hole is what buys the warning on a
+  // move they played WELL — and the absence of evidence must never buy it,
+  // which is why the override reads `=== 'open'` and not `habitIsOwed` (that
+  // helper treats unknown as owed, correctly, for a different question).
+  it('warns on a move played WELL when their record says they misstep here', () => {
+    const beat = methodBeatFor(base({
+      tier: 'critical', cpLossCp: 0, bestSan: 'Nf3', habitNeed: { 'slow-down': 'open' },
+    }));
+    expect(beat).toMatch(/slow down|clock|thinking time/i);
+  });
+
+  it('a student whose slow-down hole is CLOSED is not warned on a move played well', () => {
+    expect(methodBeatFor(base({
+      tier: 'critical', cpLossCp: 0, bestSan: 'Nf3', habitNeed: { 'slow-down': 'closed' },
+    }))).toBeNull();
+  });
+
   it('an UNKNOWN cost does not mute it — null is not zero', () => {
     // An ungraded ply has no cpLoss. Absent data never mutes the coach.
     expect(methodBeatFor(base({ tier: 'critical', cpLossCp: null, bestSan: 'Nf3' }))).toBeTruthy();
