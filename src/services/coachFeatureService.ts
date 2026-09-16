@@ -26,6 +26,7 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
 import { renderStructureAtoms } from './structureProse';
+import { rankFacets } from './reviewFacetRank';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead } from './reviewTeachingPoints';
@@ -1593,10 +1594,17 @@ export function buildReviewSegments(
       // the front of the facets so the flagged move leads with WHY it was flagged;
       // the causal cross-move chain, when present, still leads ahead of it (it is
       // itself the deeper positional lesson). Non-flagged plies are unchanged.
-      let orderedKept = kept;
+      // 🔒 THE COMPUTER RANKS, THE ORDER IS NOT AUTHORING ORDER (David
+      // 2026-09-16). These facets used to be spoken in the order the code
+      // happened to push them; the hard caps that were just removed had been
+      // the only thing deciding what a student heard FIRST. `rankFacets` sorts
+      // by importance and adds this student's weakness boost, so the fact that
+      // most changes what they do next leads the beat. The SET is unchanged —
+      // ranking reorders, it never drops (G4.5).
+      let orderedKept = rankFacets(kept, studentWeaknesses ?? []);
       if (fundamentalLed) {
-        const principle = kept.filter((f) => /^\[principle\]/.test(f));
-        if (principle.length > 0) orderedKept = [...principle, ...kept.filter((f) => !/^\[principle\]/.test(f))];
+        const principle = orderedKept.filter((f) => /^\[principle\]/.test(f));
+        if (principle.length > 0) orderedKept = [...principle, ...orderedKept.filter((f) => !/^\[principle\]/.test(f))];
       }
       // The causal chain LEADS the beat when present (it's the cross-move story).
       const uncappedParts = causalLead ? [causalLead, ...orderedKept] : orderedKept;

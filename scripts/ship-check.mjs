@@ -310,6 +310,7 @@ const GATE_TESTS = [
   'src/services/structureProse.test.ts',
   'src/services/exchangeLedger.test.ts',
   'src/services/mapConcurrent.test.ts',
+  'src/services/reviewFacetRank.test.ts',
   'src/services/reviewNarrationDefects.test.ts',
   'src/services/needScore.test.ts',
   'src/services/reviewNeedGate.test.ts',
