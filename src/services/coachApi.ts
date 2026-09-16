@@ -59,6 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
+import { isEndgameByMaterial } from './gamePhaseService';
 import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental, type PositionalTopic as PositionalTopicType } from './groundedAnswer';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
@@ -5241,7 +5242,31 @@ export async function getCoachChatResponse(
         // verified), NOT the LLM free-synthesizing moves. assemblePlanAnswer
         // replays the PV and packages the student's moves + the expected reply;
         // voiceFacts says them. Falls through when there's no engine plan.
-        if (grounding.planQuestion && grounding.enginePlan && grounding.currentFen) {
+        //
+        // TWO LANES, ONE PHRASING. "How do I win this ending?" trips BOTH
+        // `isPlanQuestion` and `isEndgameQuestion`, and the plan lane is
+        // dispatched ~250 lines ahead of the endgame lane — so it always won,
+        // and a student who said "ending" got a generic plan with no
+        // acknowledgement that they had asked about an endgame at all (prod
+        // routing sweep, 2026-09-16). The BOARD decides which lane owns it, not
+        // the phrasing (G0):
+        //   • a REAL ending (<=16 men) -> defer entirely; the endgame lane below
+        //     has the tablebase, which is perfect play and outranks a PV;
+        //   • not an ending yet -> the plan is still the useful answer, but it
+        //     leads with the honest phase read instead of ignoring the question.
+        // Guarding on the phrasing alone would have been the wrong fix: "how do
+        // I win this?" trips `isEndgameQuestion` too, and diverting that common
+        // middlegame ask to "we're not in an endgame yet" would be a regression.
+        const menOnBoard = (grounding.currentFen?.split(' ')[0].match(/[a-zA-Z]/g) ?? []).length;
+        // ONE definition of "endgame" (CLAUDE.md: fix the drift, don't add a
+        // second vocabulary). `isEndgameByMaterial` is the app's canonical
+        // predicate — queens off, or a side reduced to king plus one piece. A
+        // piece COUNT would disagree with it on exactly the positions that
+        // matter: 18 men with the queens traded is an ending, and 14 men with
+        // both queens on is not. The count is only ever the number we SAY.
+        const boardIsAnEnding = !!grounding.currentFen && isEndgameByMaterial(grounding.currentFen);
+        const deferToEndgameLane = grounding.endgameQuestion === true && boardIsAnEnding;
+        if (grounding.planQuestion && !deferToEndgameLane && grounding.enginePlan && grounding.currentFen) {
           const answer = assemblePlanAnswer({
             fen: grounding.currentFen,
             pvSan: grounding.enginePlan.pvSan,
@@ -5250,7 +5275,10 @@ export async function getCoachChatResponse(
             studentSide: grounding.enginePlan.studentSide,
           });
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan', preferRaw: true });
+            const phaseRead = grounding.endgameQuestion === true && !boardIsAnEnding && menOnBoard > 0
+              ? `We're not in an endgame yet — ${menOnBoard} pieces are still on the board. From here: `
+              : '';
+            const voiced = await voiceFacts(`${phaseRead}${answer.facts}`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -5498,7 +5526,12 @@ export async function getCoachChatResponse(
           // army still on the board the honest answer is that it isn't an
           // endgame yet — computed by piece count, no engine, no LLM choice.
           const pieceCount = (grounding.currentFen.split(' ')[0].match(/[a-zA-Z]/g) ?? []).length;
-          if (pieceCount > 16) {
+          // Same canonical predicate as the plan-lane deferral above. This used
+          // to read `pieceCount > 16`, a SECOND definition of "endgame" that
+          // disagreed with `isEndgameByMaterial` on the interesting positions —
+          // a queenless 18-man ending was told it was not an endgame, and a
+          // 14-man position with both queens on was handed to the tablebase.
+          if (!isEndgameByMaterial(grounding.currentFen)) {
             const notYet = `We're not in an endgame yet — ${pieceCount} pieces are still on the board. Ask me again when the position thins out, or ask for the best move here.`;
             const voicedNotYet = await voiceFacts(notYet, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
             if (voicedNotYet) return voicedNotYet;

@@ -59,7 +59,14 @@ const ACCEPT = {
   'tactics-live': /fork|pin|skewer|hanging|threat|mate|nothing is hanging|no immediate tactic|king.{0,40}(safe|exposed|castled)|pawn shield/i,
   'master-play': /master|most (common|popular)|book|game/i,
   'player-games': /game|line|don'?t have|can'?t|which player|no player/i,
-  'endgame-tablebase': /endgame|tablebase|king|pawn|not (?:in )?an endgame|pieces are still on the board|too many pieces/i,
+  // The board this section drives is the START position, where there IS no
+  // tablebase and no ending. Two answers are honest there and the lane accepts
+  // both: the phase read ("not an endgame yet — 32 pieces are still on the
+  // board"), and a correct VERDICT for a draw/win phrasing ("roughly balanced —
+  // this could well be a draw"), which is what "is this a draw?" actually asks.
+  // Demanding endgame vocabulary on a 32-man board would be demanding the coach
+  // say something untrue about the position (2026-09-16).
+  'endgame-tablebase': /endgame|tablebase|king|pawn|not (?:in )?an endgame|pieces are still on the board|too many pieces|balanced|draw|drawn|winning|losing|convert/i,
   'move-rating': /good|fine|solid|book|inaccuracy|mistake|blunder|best|reasonable|top move|gave up nothing|engine'?s (top|best)|no move|haven'?t (played|made)/i,
   weakness: /weak|work on|struggl|mistake|haven'?t (played|analyzed) enough|play a few more|analyze a few/i,
   progress: /improv|pattern|haven'?t played enough|play a few more/i,
