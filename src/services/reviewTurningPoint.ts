@@ -71,6 +71,19 @@ export function moveLabel(s: TurningPointSegmentLike): string {
   return `${s.moveNumber}${s.playerColor === 'black' ? '…' : '.'} ${s.san}`;
 }
 
+/**
+ * The same locator, SPOKEN. `moveLabel` is right on a chip and wrong in the
+ * voice: the TTS sanitizer expands the SAN but leaves the number prefix, so
+ * "12. Ne5" is read "twelve knight to e5" — the robotic move-number prefix
+ * CLAUDE.md §G9.4 bans (found 2026-09-16 in the shipped turning-point reveal).
+ * Moving the number out of prefix position into a phrase keeps the locator and
+ * reads naturally: "move 12, knight to e5".
+ */
+export function spokenMoveLabel(label: string): string {
+  const m = /^(\d+)(?:\.\.\.|…|\.)\s*(.+)$/.exec(label.trim());
+  return m ? `move ${m[1]}, ${m[2]}` : label;
+}
+
 /** The move's cost to the side that played it, in pawns (mover POV). */
 function swingPawns(s: TurningPointSegmentLike): number | null {
   if (typeof s.evalBefore !== 'number' || typeof s.evalAfter !== 'number') return null;

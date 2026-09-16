@@ -31,7 +31,7 @@ import type { CoachSurface } from '../coach/types';
 import { computeNeed, coldStudent, type StudentNeedContext, type NeedVerdict } from './needScore';
 import { matchTacticPattern, boostFor } from './weaknessSignal';
 import type { TacticPatternType } from '../types/tacticTypes';
-import { turningPointCandidates, moveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
+import { turningPointCandidates, moveLabel, spokenMoveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import { buildCausalChain, type CausalChain } from './causalChain';
 import { structurePlan } from './boardPlan';
@@ -261,17 +261,19 @@ export type ThesisRegister = 'retrospective' | 'present';
  */
 export function renderThesis(t: Thesis, register: ThesisRegister): string {
   const word = t.tactic ? tacticWord(t.tactic) : null;
+  // The thesis is SPOKEN, so the locator drops its move-number prefix (G9.4).
+  const label = t.label ? spokenMoveLabel(t.label) : t.label;
   switch (t.kind) {
     case 'turned': {
       const swing = t.swingPawns !== null ? ` — about ${t.swingPawns.toFixed(1)} pawns` : '';
       return register === 'retrospective'
-        ? `The game turned at ${t.label}${swing}${word ? `; a ${word} landed there` : ''}.`
-        : `This turns at ${t.label}${swing}${word ? ` — the ${word} lands there` : ''}.`;
+        ? `The game turned at ${label}${swing}${word ? `; a ${word} landed there` : ''}.`
+        : `This turns at ${label}${swing}${word ? ` — the ${word} lands there` : ''}.`;
     }
     case 'landed':
       return register === 'retrospective'
-        ? `The moment was ${t.label}: the ${word ?? 'tactic'} landed there.`
-        : `Watch ${t.label} — that is where the ${word ?? 'tactic'} lands.`;
+        ? `The moment was ${label}: the ${word ?? 'tactic'} landed there.`
+        : `Watch ${label} — that is where the ${word ?? 'tactic'} lands.`;
     case 'plan':
       return t.plan ?? '';
     case 'none':

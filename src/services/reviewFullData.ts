@@ -265,7 +265,18 @@ export function computeMoveFacets(
     && ctx.ply >= ctx.forcedRunStartPly
     && matingSideIsStudent(ctx.allSans, studentColorWB);
   if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book' && !insideStudentForcedMate) {
-    const swingBit = swing != null ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
+    // COST IS ONLY A COST ON A MOVE THAT COST SOMETHING (found 2026-09-16 by
+    // reading the shipped review of David's Alapin: ply 31 spoke "that was a
+    // great move, costing about 0.6 points" — a self-contradiction the student
+    // reads as the coach not understanding its own verdict). `swing` is
+    // |eval delta|, direction-free, so on a GREAT/BRILLIANT move it measures the
+    // gain and the word "costing" inverts it. We do not have a computed
+    // direction here we trust enough to say "gaining", so the honest move is
+    // silence on the positive classes — empty > invented.
+    const costsPoints = ctx.classification === 'inaccuracy'
+      || ctx.classification === 'mistake'
+      || ctx.classification === 'blunder';
+    const swingBit = swing != null && costsPoints ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
     // WHY it's a mistake, when we can prove it (a premature central break). Danya
     // leads with the positional reason, THEN names the better move — so does this.
     const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')

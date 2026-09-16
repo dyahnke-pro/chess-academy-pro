@@ -3692,19 +3692,47 @@ const PROJECTION_MARKER = /(here's how you take advantage|the line runs|why [nbr
 const V_ALT = '(captures?|forks?|gives?|wins?|throws?|takes?|sacrifices?|opens?|creates?|comes|breaks?|castles?|plants?|attacks?|develops?|settles?|recaptures?|adds?|meets?|drops?|walks?|holds?|plays?|goes|trades?|offers?|bears?|lands?|skewers?|strips?|grabs?)';
 const SUBJECT_VERB = new RegExp(`\\b(You|It|Your opponent|The (?:knight|bishop|rook|queen|king|pawn)) ${V_ALT}\\b`, 'g');
 const SERIES_VERB = new RegExp(`, ${V_ALT}\\b`, 'g');
-function toPastHead(head: string): string {
-  let h = head;
+// PRESCRIPTIVE SENTENCES ARE NEVER PAST-TENSED (found 2026-09-16 by reading the
+// shipped review of David's Alapin). The retrospective register describes what
+// HAPPENED; a plan describes what to DO NEXT, and past-tensing it produces
+// ungrammatical nonsense the student reads as the coach losing the thread —
+// "don't play a single attacking move until it was fixed", "a piece doing
+// nothing means you were effectively playing down a piece". `PROJECTION_MARKER`
+// cut the tail at the FIRST engine-line marker, which protected a plan only when
+// one happened to sit after it: the same walk said "Watch what they're building"
+// on one ply and "Watch what they were building" on another, purely on ordering.
+// Registers don't take turns in one string, so the decision is made PER SENTENCE.
+const PRESCRIPTIVE = /(the plan (?:from here|is)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run)/i;
+/** Case-preserving contraction rewrite: "You're" → "You were", never "you were"
+ *  mid-narration with a lowercase head (the `/gi` replacement used to lowercase
+ *  every sentence it opened). */
+function sub(h: string, re: RegExp, past: string): string {
+  return h.replace(re, (m) => (m[0] === m[0].toUpperCase() ? past[0].toUpperCase() + past.slice(1) : past));
+}
+function toPastSentence(sentence: string): string {
+  if (PRESCRIPTIVE.test(sentence)) return sentence;
+  let h = sentence;
   // contractions / state-of-being → past
-  h = h.replace(/\bthat's\b/gi, 'that was').replace(/\bit's\b/gi, 'it was')
-       .replace(/\byou're\b/gi, 'you were').replace(/\bthey're\b/gi, 'they were')
-       .replace(/\bthere's\b/gi, 'there was').replace(/\bis still\b/gi, 'was still');
+  h = sub(h, /\bthat's\b/gi, 'that was');
+  h = sub(h, /\bit's\b/gi, 'it was');
+  h = sub(h, /\byou're\b/gi, 'you were');
+  h = sub(h, /\bthey're\b/gi, 'they were');
+  h = sub(h, /\bthere's\b/gi, 'there was');
+  h = sub(h, /\bis still\b/gi, 'was still');
   // "points a pawn storm" is a verb; "2 points of material" is a noun — only the verb.
   h = h.replace(/\bpoints a\b/gi, 'pointed a');
   h = h.replace(SUBJECT_VERB, (_m, subj: string, verb: string) => `${subj} ${PAST_VERB[verb.toLowerCase()] ?? verb}`);
   h = h.replace(SERIES_VERB, (_m, verb: string) => `, ${PAST_VERB[verb.toLowerCase()] ?? verb}`);
   return h;
 }
-function pastTenseReviewNarration(segments: ReviewMoveSegment[]): void {
+function toPastHead(head: string): string {
+  // Split on sentence ends but KEEP the delimiter, so reassembly is lossless.
+  return head.split(/(?<=[.!?])(\s+)/).map((piece, i) => (i % 2 === 1 ? piece : toPastSentence(piece))).join('');
+}
+/** Exported for the register gate (`reviewRegister.test.ts`) — the three
+ *  defects it pins were live in the shipped voice while every other test was
+ *  green, so the rewrite needs a test that can reach it directly. */
+export function pastTenseReviewNarration(segments: ReviewMoveSegment[]): void {
   for (const s of segments) {
     if (!s.narration) continue;
     const m = PROJECTION_MARKER.exec(s.narration);
@@ -3721,6 +3749,24 @@ function varyRepeatedStems(segments: ReviewMoveSegment[]): void {
   for (const s of segments) {
     if (!s.narration) continue;
     let t = s.narration;
+
+    // STACKED PLANS ON ONE PLY — vary the stem, never drop a plan (G4.5: a long
+    // list is a PHRASING problem, never a truncation). Found 2026-09-16 reading
+    // David's Alapin review: ply 31 won a piece and three agendas fired at once,
+    // so one breath opened "The plan from here is to…" three times — a form
+    // letter, and the drumbeat is what reads as "the coach says too much". Every
+    // plan and every method survives verbatim; only the 2nd and 3rd stem change.
+    // WITHIN the segment (cross-ply repetition is already deduped by the caller),
+    // so the counter is local and resets on each narration.
+    {
+      let nth = 0;
+      t = t.replace(/\bThe plan from here is to /g, (m0) => {
+        nth += 1;
+        if (nth === 1) return m0;
+        const forms = ['Alongside that, aim to ', 'And the third piece of it: ', 'On top of that, work to '];
+        return forms[(nth - 2) % forms.length];
+      });
+    }
 
     // "Clean." confirmation tag — keep the first, then rotate/drop.
     if (/\bClean\./.test(t)) {
