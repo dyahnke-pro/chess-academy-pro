@@ -2590,6 +2590,27 @@ function raceTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
  *  2026-07-24, full-game read: "Nxc3…d6…f5…Bd7…Ng5…Nf6" narrated as "a deeper
  *  threat brewing" — a 7-ply quiet maneuver). The plan-beats teach quiet ideas
  *  in words; the projection passes speak only forcing tactics. */
+/** Run `fn` over `items` with at most `limit` in flight, preserving order.
+ *  Used to spread the review's engine reads across the worker pool without
+ *  firing every line at once (G4.6). */
+export async function mapConcurrent<T, R>(
+  items: readonly T[],
+  limit: number,
+  fn: (item: T, index: number) => Promise<R>,
+): Promise<R[]> {
+  const out: R[] = Array.from({ length: items.length });
+  let next = 0;
+  const lanes = Array.from({ length: Math.max(1, Math.min(limit, items.length)) }, async () => {
+    for (;;) {
+      const i = next++;
+      if (i >= items.length) return;
+      out[i] = await fn(items[i], i);
+    }
+  });
+  await Promise.all(lanes);
+  return out;
+}
+
 function isForcingProjection(line: PvLine): boolean {
   if (line.plies.length === 0) return false;
   if (line.plies[line.plies.length - 1].facts.isMate) return true;
@@ -2708,8 +2729,8 @@ async function augmentWithProjections(
   // NO COUNT CEILING in either scope (David 2026-09-16). The scopes already
   // differ in WHICH passes run; capping the number of lines on top of that
   // dropped real teaching on the 4th flagged move onward for no reason but
-  // thrift. The per-call deadline still protects latency.
-  let budget = Number.POSITIVE_INFINITY;
+  // thrift. The punishment pass no longer carries a counter at all — it batches
+  // every flagged move across the pool (G4.6).
   const PROJ_TIMEOUT_MS = 7000;
 
   // #3 — PUNISHMENT projection on BOTH SIDES' mistakes/blunders: the engine PV
@@ -2720,19 +2741,51 @@ async function augmentWithProjections(
   // you take advantage" — same computed line, correct seat. Runs in BOTH
   // scopes; in 'mistakes' scope it's the only pass.
   const studentColorName = studentColorWB === 'w' ? 'white' : 'black';
-  for (const s of segments) {
-    if (budget <= 0) break;
-    if (s.classification !== 'mistake' && s.classification !== 'blunder') continue;
-    const isStudentSlip = s.playerColor === studentColorName;
-    const line = await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
-    if (line && line.delivers && line.plies.length >= 2) {
-      const frame = isStudentSlip
-        ? `Here's how it gets punished from here: ${render(line, true)}.`
-        : `Here's how you take advantage: ${render(line, true)}.`;
-      s.narration = `${s.narration ?? ''} ${frame}`.trim();
-      attachLineArrows(s, line, 4); // punishment/advantage line
-      budget -= 1;
-    }
+  // 🔒 RUN THESE CONCURRENTLY ACROSS THE WORKER POOL (CLAUDE.md G4.6). This is
+  // the pass whose count became unbounded when the caps came out (G4.5), and
+  // every call used to queue behind the previous one inside the stockfishEngine
+  // singleton — ~7 engine calls per line, times every flagged move, strictly in
+  // series. With one engine per pool worker the batch costs about the slowest
+  // line instead of the sum, and no beat is dropped for time. `acquirePvEngines`
+  // returns null when no worker can be had, in which case every call falls back
+  // to the singleton exactly as before — slower, never quieter.
+  const flaggedForPunish = segments.filter(
+    (s) => s.classification === 'mistake' || s.classification === 'blunder',
+  );
+  // LAZY import on purpose: `gameAnalysisService` already imports from THIS
+  // module (`detectBadHabitsFromGame`), so a static import here would close a
+  // module cycle — the class of bug that surfaces as an undefined binding at
+  // runtime and never in a unit test. A dynamic import at call time has no
+  // static edge.
+  const pool = flaggedForPunish.length > 1
+    ? await import('./gameAnalysisService')
+      .then((m) => m.acquirePvEngines(flaggedForPunish.length))
+      .catch(() => null)
+    : null;
+  try {
+    const engines = pool?.engines ?? [];
+    const lines = await mapConcurrent(
+      flaggedForPunish,
+      engines.length > 0 ? engines.length : 1,
+      (s, i) => raceTimeout(
+        computePvLine(s.fenAfter, { maxPlies: 6, ...(engines.length > 0 ? { engine: engines[i % engines.length] } : {}) }),
+        PROJ_TIMEOUT_MS,
+        null,
+      ),
+    );
+    flaggedForPunish.forEach((s, i) => {
+      const line = lines[i];
+      const isStudentSlip = s.playerColor === studentColorName;
+      if (line && line.delivers && line.plies.length >= 2) {
+        const frame = isStudentSlip
+          ? `Here's how it gets punished from here: ${render(line, true)}.`
+          : `Here's how you take advantage: ${render(line, true)}.`;
+        s.narration = `${s.narration ?? ''} ${frame}`.trim();
+        attachLineArrows(s, line, 4); // punishment/advantage line
+      }
+    });
+  } finally {
+    pool?.release();
   }
   // #4 — THE BETTER-LINE WHY (David 2026-07-21, IMG_4577: "Need to know why
   // Bf2 was better. The better lines need the why narrations. A deeper
@@ -3026,25 +3079,23 @@ async function augmentWithProjections(
   // (the verdict/middlegame-plan fact appears in the bundle text).
   const planSeg = segments.find((s) => s.narrationSource === 'assessment' || s.narrationSource === 'orientation')
     ?? segments.find((s) => s.narration && (s.narration.includes('[verdict]') || s.narration.includes('[plan-middlegame]')));
-  if (planSeg && budget > 0) {
+  if (planSeg) {
     const line = await raceTimeout(computePvLine(planSeg.fenAfter, { maxPlies: 8 }), PROJ_TIMEOUT_MS, null);
     if (line && line.delivers && line.plies.length >= 2) {
       planSeg.narration = `${planSeg.narration ?? ''} [plan-line] Played out from here, the plan runs ${render(line)}.`.trim();
       attachLineArrows(planSeg, line, 2); // plan realization line
-      budget -= 1;
     }
   }
 
-  // #2 — consequence projection on the student's strongest moves.
+  // #2 — consequence projection on the student's strongest moves. No ceiling
+  // (G4.5): every great/brilliant move earns its follow-up line.
   for (const s of segments) {
-    if (budget <= 0) break;
     if (s === planSeg) continue;
     if (s.classification !== 'great' && s.classification !== 'brilliant') continue;
     const line = await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
     if (line && line.delivers && line.plies.length >= 2) {
       s.narration = `${s.narration ?? ''} [consequence] Follow it up and it goes ${render(line)}.`.trim();
       attachLineArrows(s, line, 2); // consequence line
-      budget -= 1;
     }
   }
 

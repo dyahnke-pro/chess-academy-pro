@@ -192,6 +192,7 @@ import {
   INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
 } from './engineConstants';
 import { winPercent, capEval } from './accuracyService';
+import type { PvEngine } from './pvPlayback';
 import { detectBrilliancy, verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type EvalToStore } from './positionEvalCache';
 
@@ -713,6 +714,73 @@ function scheduleIdleRetire(): void {
   }, POOL_IDLE_RETIRE_MS);
   // Don't keep the process alive for this in Node/test contexts.
   (_idleRetireTimer as { unref?: () => void }).unref?.();
+}
+
+/**
+ * A POOL-BACKED `PvEngine` set for the review's projection passes (CLAUDE.md
+ * G4.6, David 2026-09-16: "we need to fix that seven second lag").
+ *
+ * The lag was never the per-call deadline. One projected line is ~7 engine
+ * calls (a root read plus one per playout ply), `stockfishEngine` is a
+ * singleton whose queue deliberately SERIALIZES every request so they don't
+ * cancel each other, and the number of lines is now unbounded (G4.5) — so a
+ * game with a dozen flagged moves became ~84 sequential depth-14 analyses, and
+ * the deadline was hiding it by aborting slow ones. Aborting a line is a hard
+ * cap on teaching wearing a latency costume.
+ *
+ * `computePvLine` already takes an `engine`, so the seam exists: hand it one
+ * engine per pool worker and the caller can run N lines concurrently, costing
+ * about the slowest instead of the sum.
+ *
+ * Shape note: a pool worker reports `{evaluation, bestMove, depth, pv}` with no
+ * MultiPV fan, while `computePvLine` reads `evaluation` and `topLines`. A
+ * rank-1 line synthesised from `bestMove` + `pv` is exactly what it consumes
+ * (`topLines[0].moves`), so nothing is lost on this path. Do NOT reach for
+ * these engines where a real MultiPV fan is needed (decision-leverage /
+ * `moverGap12` read the rank-2 line) — those belong on the singleton.
+ *
+ * Returns null when no worker can be had; the caller then uses the singleton
+ * exactly as before, so this can only ever make the review faster, never
+ * quieter.
+ */
+export interface PooledPvEngines {
+  engines: PvEngine[];
+  release: () => void;
+}
+
+export async function acquirePvEngines(
+  size: number,
+  budgetMs = 6_000,
+): Promise<PooledPvEngines | null> {
+  let workers: DedicatedWorker[];
+  try {
+    workers = await acquirePool(Math.max(1, Math.min(size, WORKER_POOL_SIZE)));
+  } catch {
+    return null; // no worker at all — caller falls back to the singleton
+  }
+  if (workers.length === 0) return null;
+  const engines: PvEngine[] = workers.map((w) => ({
+    async analyzePosition(fen: string, depth: number): Promise<StockfishAnalysis> {
+      const r = await w.analyzePosition(fen, depth, budgetMs);
+      const mate = Math.abs(r.evaluation) >= MATE_EVAL_THRESHOLD;
+      return {
+        bestMove: r.bestMove,
+        evaluation: r.evaluation,
+        isMate: mate,
+        // The pool worker reports mate as ±MATE_EVAL_VALUE and does not carry
+        // the distance; null is honest here — never a fabricated mateIn.
+        mateIn: null,
+        depth: r.depth,
+        topLines: [{ rank: 1, evaluation: r.evaluation, moves: r.pv, mate: null }],
+        nodesPerSecond: 0,
+      };
+    },
+  }));
+  let released = false;
+  return {
+    engines,
+    release: () => { if (!released) { released = true; releasePool(workers); } },
+  };
 }
 
 /** Hand workers back to the warm set for the next run; surplus past the pool
