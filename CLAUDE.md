@@ -4449,7 +4449,22 @@ gated `__playMove`/`__seed*` hook that lets you drive a surface deterministicall
 driven by hand otherwise. Combine with the three instruments (Playwright +
 audit-stream + narration listener) per §G1.
 
-### 🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!"). The reference is `scripts/audit-review-real-game.mjs` (18/18); clone it per surface.
+### 🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").
+
+🔴 **REFERENCE CORRECTED 2026-09-16 — clone `scripts/audit-review-overhaul-prod.mjs`,
+NOT `audit-review-real-game.mjs`.** The five principles below are unchanged and
+still locked; only the file you copy has moved. This file used to name
+`audit-review-real-game.mjs` here as "the reference (18/18)" while the
+post-deploy matrix ALSO said it was stale — so CLAUDE.md asserted both, and a
+reader could pick either side (the exact failure the Lake Butler correction rule
+exists to stop: when you correct a claim, DELETE the one you replace). The old
+script has read "Ply 0/0" since the 2026-09-05 overhaul, every rubric row
+false-fails, and it encodes R2, which the 2026-09-15 need standard RETIRED.
+
+⚠️ **It is NOT dead code — do not delete it blind.**
+`scripts/audit-review-fleet-newgames.mjs:117` spawns it. Repointing the fleet
+audit (or repairing the script) comes first; a delete today breaks the fleet
+run. Verified 2026-09-16 per the "prove it's unused before deleting" rule.
 
 For any surface that produces an EXPERIENCE (post-game review, Watch/matchup,
 a taught walkthrough, a lesson), a green feature-wire smoke is NOT an audit.
