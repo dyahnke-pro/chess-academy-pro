@@ -1,192 +1,192 @@
 {
- "videoId": "1tbpB-Qrqds",
- "title": "Sacking A Piece in the Alapin | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: Alapin Variation",
- "studentSide": "white",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
- "source": "yt:1tbpB-Qrqds",
- "moves": [
-  {
-   "ply": 2,
-   "t": 99.5,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "line": [
-    "e4",
-    "c5"
-   ],
-   "spoken": "You take White and meet the Sicilian — today you play normal theory, then deliberately sacrifice a piece and show how to fight back from a lost position."
-  },
-  {
-   "ply": 3,
-   "t": 103,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
-   "line": [
-    "c3"
-   ],
-   "spoken": "You open the Alapin with c3."
-  },
-  {
-   "ply": 4,
-   "t": 107.5,
-   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 3",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 111.5,
-   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
-   "line": [
-    "d4"
-   ],
-   "spoken": "You strike with d4."
-  },
-  {
-   "ply": 7,
-   "t": 114.5,
-   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
-   "line": [
-    "cxd4",
-    "cxd4"
-   ],
-   "spoken": "The c-pawns come off on d4."
-  },
-  {
-   "ply": 8,
-   "t": 116.5,
-   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
-   "line": [
-    "e6"
-   ],
-   "spoken": "Black plays e6."
-  },
-  {
-   "ply": 9,
-   "t": 120,
-   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 1 5",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": "You develop the knight to c3 — though the bishop to g5 would have been a fine chance to hang it; now Black just plays ...Nf6."
-  },
-  {
-   "ply": 10,
-   "t": 135.5,
-   "fen": "r1bqk1nr/pp1p1ppp/2n1p3/8/1b1PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
-   "line": [
-    "Bb4"
-   ],
-   "spoken": "Black pins with the bishop to b4 — and here's your chance: you play the bishop to g5."
-  },
-  {
-   "ply": 11,
-   "t": 143.5,
-   "fen": "r1bqk1nr/pp1p1ppp/2n1p3/6B1/1b1PP3/2N5/PP3PPP/R2QKBNR b KQkq - 3 6",
-   "line": [
-    "Bg5"
-   ],
-   "spoken": "You play the bishop to g5 — a believable blunder, and at least it develops a piece."
-  },
-  {
-   "ply": 12,
-   "t": 156,
-   "fen": "r1bqk2r/pp1p1ppp/2n1pn2/6B1/1b1PP3/2N5/PP3PPP/R2QKBNR w KQkq - 4 7",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": "Black develops the knight to f6."
-  },
-  {
-   "ply": 13,
-   "t": 177,
-   "fen": "r1bqk2r/pp1p1ppp/B1n1pn2/6B1/1b1PP3/2N5/PP3PPP/R2QK1NR b KQkq - 5 7",
-   "line": [
-    "Ba6"
-   ],
-   "spoken": "You even offer the bishop to a6 — all but begging Black to win material; it's oddly hard to give a piece away."
-  },
-  {
-   "ply": 14,
-   "t": 190,
-   "fen": "r1bqk2r/pp1p1ppp/B1n1pn2/6B1/3PP3/2b5/PP3PPP/R2QK1NR w KQkq - 0 8",
-   "line": [
-    "Bxc3+"
-   ],
-   "spoken": "Black takes on c3 with check."
-  },
-  {
-   "ply": 15,
-   "t": 192,
-   "fen": "r1bqk2r/pp1p1ppp/B1n1pn2/6B1/3PP3/2P5/P4PPP/R2QK1NR b KQkq - 0 8",
-   "line": [
-    "bxc3"
-   ],
-   "spoken": "You recapture, bxc3."
-  },
-  {
-   "ply": 16,
-   "t": 194,
-   "fen": "r1bqk2r/p2p1ppp/p1n1pn2/6B1/3PP3/2P5/P4PPP/R2QK1NR w KQkq - 0 9",
-   "line": [
-    "bxa6"
-   ],
-   "spoken": "Black wins your bishop, the pawn recapturing on a6 — the sacrifice is complete, and you've even traded off another pair of minors, making it harder on yourself. Now the recovery begins, a full piece down. First, know this: ...e5 does not win the knight back — after ...h6, the bishop to h4, ...g5 unpins, and if the bishop drops to g3 the knight is free. Basic, but essential."
-  },
-  {
-   "ply": 17,
-   "t": 254.5,
-   "fen": "r1bqk2r/p2p1ppp/p1n1pn2/4P1B1/3P4/2P5/P4PPP/R2QK1NR b KQkq - 0 9",
-   "line": [
-    "e5"
-   ],
-   "spoken": "So you play e5 — in a situation like this it's a genuine attempt to complicate the game."
-  },
-  {
-   "ply": 18,
-   "t": 259.5,
-   "fen": "r1bqk2r/p2p1pp1/p1n1pn1p/4P1B1/3P4/2P5/P4PPP/R2QK1NR w KQkq - 0 10",
-   "line": [
-    "h6"
-   ],
-   "spoken": "Black plays h6. It slightly weakens his structure, but down a piece a small weakness isn't enough — you need something concrete. The idea is to take on f6: after ...hxg5 you push to g7, and even after ...Rg8 you defend the g7-pawn indirectly with the queen to h5 — if the rook grabs g7, the queen forks on h8. Recovery rarely comes in a single move: build tension and sow doubt."
-  },
-  {
-   "ply": 19,
-   "t": 351.5,
-   "fen": "r1bqk2r/p2p1pp1/p1n1pP1p/6B1/3P4/2P5/P4PPP/R2QK1NR b KQkq - 0 10",
-   "line": [
-    "exf6"
-   ],
-   "spoken": "You capture on f6."
-  },
-  {
-   "ply": 20,
-   "t": 358,
-   "fen": "r1bqk2r/p2p1pp1/p1n1pP2/6p1/3P4/2P5/P4PPP/R2QK1NR w KQkq - 0 11",
-   "line": [
-    "hxg5"
-   ],
-   "spoken": "Black wins your bishop, recapturing on g5."
-  },
-  {
-   "ply": 21,
-   "t": 359,
-   "fen": "r1bqk2r/p2p1pP1/p1n1p3/6p1/3P4/2P5/P4PPP/R2QK1NR b KQkq - 0 11",
-   "line": [
-    "fxg7"
-   ],
-   "spoken": "You push to g7 and set the queen toward h5, sowing doubt. This game is really about recovery technique when you're lost, and the principles are these. Complicate — pose your opponent decision after decision, because decisions breed fatigue and doubt. Keep your pieces active — bring the rook in with h4 rather than a timid g3, and ask the \"Shankland question\": what happens if you just do it anyway, developing and ignoring a pawn? Defend key pawns by developing, not by a passive king move — a rook to d3 both guards c3 and prepares to lift to g3. Manoeuvre the knight toward a dream square like d6, via f7. Use a break like d5 not only to lure the bishop off b7 but to open lines and strip away defenders. And once you win material back, convert with a passed pawn — push it hard while the opponent is passive, escort it with a rook cutting off the king, and finish with the ladder-mate technique, bringing your own king up to guard the checking square so the rooks can deliver mate. Even dead lost, purposeful, problem-posing play saves a remarkable number of games.",
-   "reanchor": true
-  },
-  {
-   "ply": 3,
-   "t": 2102.5,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
-   "line": [],
-   "spoken": ""
-  }
- ]
+  "videoId": "1tbpB-Qrqds",
+  "title": "Sacking A Piece in the Alapin | The Sensei Speedrun | Grandmaster Naroditsky",
+  "openingName": "Sicilian Defense: Alapin Variation",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-25",
+  "source": "yt:1tbpB-Qrqds",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 99.5,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "c5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 3,
+      "t": 103,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "c3"
+      ],
+      "spoken": "You open the Alapin with c3."
+    },
+    {
+      "ply": 4,
+      "t": 107.5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 3",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 111.5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+      "line": [
+        "d4"
+      ],
+      "spoken": "You strike with d4."
+    },
+    {
+      "ply": 7,
+      "t": 114.5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+      "line": [
+        "cxd4",
+        "cxd4"
+      ],
+      "spoken": "The c-pawns come off on d4."
+    },
+    {
+      "ply": 8,
+      "t": 116.5,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
+      "line": [
+        "e6"
+      ],
+      "spoken": "Black plays e6."
+    },
+    {
+      "ply": 9,
+      "t": 120,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 1 5",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "You develop the knight to c3 — though the bishop to g5 would have been a fine chance to hang it; now Black just plays ...Nf6."
+    },
+    {
+      "ply": 10,
+      "t": 135.5,
+      "fen": "r1bqk1nr/pp1p1ppp/2n1p3/8/1b1PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
+      "line": [
+        "Bb4"
+      ],
+      "spoken": "Black pins with the bishop to b4 — and here's your chance: you play the bishop to g5."
+    },
+    {
+      "ply": 11,
+      "t": 143.5,
+      "fen": "r1bqk1nr/pp1p1ppp/2n1p3/6B1/1b1PP3/2N5/PP3PPP/R2QKBNR b KQkq - 3 6",
+      "line": [
+        "Bg5"
+      ],
+      "spoken": "You play the bishop to g5 — a believable blunder, and at least it develops a piece."
+    },
+    {
+      "ply": 12,
+      "t": 156,
+      "fen": "r1bqk2r/pp1p1ppp/2n1pn2/6B1/1b1PP3/2N5/PP3PPP/R2QKBNR w KQkq - 4 7",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "Black develops the knight to f6."
+    },
+    {
+      "ply": 13,
+      "t": 177,
+      "fen": "r1bqk2r/pp1p1ppp/B1n1pn2/6B1/1b1PP3/2N5/PP3PPP/R2QK1NR b KQkq - 5 7",
+      "line": [
+        "Ba6"
+      ],
+      "spoken": "You even offer the bishop to a6 — all but begging Black to win material; it's oddly hard to give a piece away."
+    },
+    {
+      "ply": 14,
+      "t": 190,
+      "fen": "r1bqk2r/pp1p1ppp/B1n1pn2/6B1/3PP3/2b5/PP3PPP/R2QK1NR w KQkq - 0 8",
+      "line": [
+        "Bxc3+"
+      ],
+      "spoken": "Black takes on c3 with check."
+    },
+    {
+      "ply": 15,
+      "t": 192,
+      "fen": "r1bqk2r/pp1p1ppp/B1n1pn2/6B1/3PP3/2P5/P4PPP/R2QK1NR b KQkq - 0 8",
+      "line": [
+        "bxc3"
+      ],
+      "spoken": "You recapture, bxc3."
+    },
+    {
+      "ply": 16,
+      "t": 194,
+      "fen": "r1bqk2r/p2p1ppp/p1n1pn2/6B1/3PP3/2P5/P4PPP/R2QK1NR w KQkq - 0 9",
+      "line": [
+        "bxa6"
+      ],
+      "spoken": "Black wins your bishop, the pawn recapturing on a6 — the sacrifice is complete, and you've even traded off another pair of minors, making it harder on yourself. Now the recovery begins, a full piece down. First, know this: ...e5 does not win the knight back — after ...h6, the bishop to h4, ...g5 unpins, and if the bishop drops to g3 the knight is free. Basic, but essential."
+    },
+    {
+      "ply": 17,
+      "t": 254.5,
+      "fen": "r1bqk2r/p2p1ppp/p1n1pn2/4P1B1/3P4/2P5/P4PPP/R2QK1NR b KQkq - 0 9",
+      "line": [
+        "e5"
+      ],
+      "spoken": "So you play e5 — in a situation like this it's a genuine attempt to complicate the game."
+    },
+    {
+      "ply": 18,
+      "t": 259.5,
+      "fen": "r1bqk2r/p2p1pp1/p1n1pn1p/4P1B1/3P4/2P5/P4PPP/R2QK1NR w KQkq - 0 10",
+      "line": [
+        "h6"
+      ],
+      "spoken": "Black plays h6. It slightly weakens his structure, but down a piece a small weakness isn't enough — you need something concrete. The idea is to take on f6: after ...hxg5 you push to g7, and even after ...Rg8 you defend the g7-pawn indirectly with the queen to h5 — if the rook grabs g7, the queen forks on h8. Recovery rarely comes in a single move: build tension and sow doubt."
+    },
+    {
+      "ply": 19,
+      "t": 351.5,
+      "fen": "r1bqk2r/p2p1pp1/p1n1pP1p/6B1/3P4/2P5/P4PPP/R2QK1NR b KQkq - 0 10",
+      "line": [
+        "exf6"
+      ],
+      "spoken": "You capture on f6."
+    },
+    {
+      "ply": 20,
+      "t": 358,
+      "fen": "r1bqk2r/p2p1pp1/p1n1pP2/6p1/3P4/2P5/P4PPP/R2QK1NR w KQkq - 0 11",
+      "line": [
+        "hxg5"
+      ],
+      "spoken": "Black wins your bishop, recapturing on g5."
+    },
+    {
+      "ply": 21,
+      "t": 359,
+      "fen": "r1bqk2r/p2p1pP1/p1n1p3/6p1/3P4/2P5/P4PPP/R2QK1NR b KQkq - 0 11",
+      "line": [
+        "fxg7"
+      ],
+      "spoken": "You push to g7 and set the queen toward h5, sowing doubt. This game is really about recovery technique when you're lost, and the principles are these. Complicate — pose your opponent decision after decision, because decisions breed fatigue and doubt. Keep your pieces active — bring the rook in with h4 rather than a timid g3, and ask the \"Shankland question\": what happens if you just do it anyway, developing and ignoring a pawn? Defend key pawns by developing, not by a passive king move — a rook to d3 both guards c3 and prepares to lift to g3. Manoeuvre the knight toward a dream square like d6, via f7. Use a break like d5 not only to lure the bishop off b7 but to open lines and strip away defenders. And once you win material back, convert with a passed pawn — push it hard while the opponent is passive, escort it with a rook cutting off the king, and finish with the ladder-mate technique, bringing your own king up to guard the checking square so the rooks can deliver mate. Even dead lost, purposeful, problem-posing play saves a remarkable number of games.",
+      "reanchor": true
+    },
+    {
+      "ply": 3,
+      "t": 2102.5,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+      "line": [],
+      "spoken": ""
+    }
+  ]
 }

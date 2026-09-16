@@ -1,7 +1,7 @@
 {
- "generatedAt": "2026-09-13",
+ "generatedAt": "2026-09-16",
  "videosDistilled": 429,
- "noteCount": 7482,
+ "noteCount": 7480,
  "notes": [
   {
    "id": "vc--4hTQEnwa7s-2",
@@ -21189,23 +21189,6 @@
    "concepts": [],
    "sources": [
     "yt:1rcEbI44WqE"
-   ],
-   "positionSource": "high"
-  },
-  {
-   "id": "vc-1tbpB-Qrqds-2",
-   "lineSan": [
-    "e4",
-    "c5"
-   ],
-   "opening": null,
-   "phase": "opening",
-   "explains": "You take White and meet the Sicilian — today you play normal theory, then deliberately sacrifice a piece and show how to fight back from a lost position.",
-   "teaches": "",
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:1tbpB-Qrqds"
    ],
    "positionSource": "high"
   },
@@ -59324,7 +59307,7 @@
    ],
    "opening": null,
    "phase": "opening",
-   "explains": "g6 — the King's Indian, the OG opening I started in top-level play with.",
+   "explains": "g6 — the King's Indian, the OG opening I started top-level play with.",
    "teaches": "",
    "plans": "",
    "concepts": [],
@@ -124045,39 +124028,6 @@
    "positionSource": "high"
   },
   {
-   "id": "vc-OwrIaWwPJvM-18",
-   "lineSan": [
-    "e4",
-    "c5",
-    "Bc4",
-    "Nc6",
-    "b3",
-    "Nf6",
-    "d3",
-    "e6",
-    "Bb2",
-    "d5",
-    "exd5",
-    "exd5",
-    "Bb5",
-    "Qa5+",
-    "Nc3",
-    "d4",
-    "Bxc6+",
-    "bxc6"
-   ],
-   "opening": null,
-   "phase": "middlegame",
-   "explains": "The bishop takes c6, b-takes-c6 — you don't care about that; he's got to give up a pawn for the knight, and you're just going to be up a full piece for no compensation. This stuff people will try to do to you; you can play the bishop to e7 or the bishop to b6, it doesn't matter, as long as you cover the check — and he doesn't even get a pawn for the knight. Now a trick question: can you castle here? Don't get caught — it is actually possible to castle, because after the queen takes c7 you play the rook to e8 and pin the king. Sometimes your brain tells you something is impossible, but before concluding that, ask what happens if you do it anyway — that awakens the possibility of finding something like this. So you're up a full piece, and there's nothing else to really talk about — you can just go about trading as many pieces as possible. His queen, over on e3, is very clearly vulnerable; you can attack it by shifting the knight over to d5, opening a channel between the bishops, or you can take the knight and start trading pieces, ruining his structure. The game is essentially over — you take all the pieces, up a knight, his kingside completely ruined, and you approach fifteen hundred. These triple pawns remind me of a famous game. Now you win another piece — you take the knight, removing the defender from the bishop, and you're up two pieces; the rest you know the drill: put a rook to e8, and don't forget to deploy the remainder of your pieces.",
-   "teaches": "",
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:OwrIaWwPJvM"
-   ],
-   "positionSource": "high"
-  },
-  {
    "id": "vc-PACqm__Sne8-3",
    "lineSan": [
     "e4",
@@ -138663,7 +138613,7 @@
    ],
    "opening": null,
    "phase": "opening",
-   "explains": "You play e5 for once — you haven't gone for it much in top-level play, even though it's what most people play.",
+   "explains": "You play e5 for once — you haven't gone for it much top-level play, even though it's what most people play.",
    "teaches": "",
    "plans": "",
    "concepts": [],
