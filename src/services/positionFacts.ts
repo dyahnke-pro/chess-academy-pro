@@ -31,7 +31,8 @@ import { structurePlan } from './boardPlan';
 import { matchClauseKind, matchTacticPattern, boostFor, type WeaknessSignal } from './weaknessSignal';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard } from './conceptEngine';
-import { liveMethodBeatFor } from './methodBeat';
+import { liveMethodBeatFor, habitIsOwed } from './methodBeat';
+import { habitNeedFrom } from './coachDecider';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -415,7 +416,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   } catch { methodBeat = null; }
 
   const composed = applyWeaknessBoost(
-    buildClauses({ importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
+    buildClauses({ slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
     input.studentWeaknesses ?? [],
   );
 
@@ -512,6 +513,10 @@ function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSig
  *  is to move, the opponent's INTENT ("they have a real decision") — so the coach
  *  explains both sides. Empty when nothing earns voice. */
 function buildClauses(a: {
+  /** Does this student's own record still owe them the slow-down teaching?
+   *  Computed by the caller from the weakness lifecycle (`habitNeedFrom`), not
+   *  re-derived here — one door, one answer. */
+  slowDownOwed: boolean;
   importance: ImportanceVerdict;
   /** The door's verdict for this surface's posture — whether the moment speaks
    *  at all. Distinct from `importance.speak`, which is posture-blind. */
@@ -650,9 +655,27 @@ function buildClauses(a: {
   }
 
   // Decision leverage — framed by whose move it is.
-  if (studentToMove) {
+  //
+  // FORWARD-LOOKING AND ALGO-GATED (David 2026-09-16: "this should also be algo
+  // based. All narrations should. If the user finds the correct move more often
+  // than not maybe it can stay quiet. But a more complicated position similar to
+  // where the user has misstepped before would warrant the warning").
+  //
+  // This clause is the LIVE, pre-move half of the slow-down teaching — it fires
+  // while the student is still choosing, which is the register Learn and Play
+  // need (review's is retrospective and lives in `methodBeat`). It used to gate
+  // on TIER ALONE, so a student who reliably handles only-move positions heard
+  // it every single time. Now their own lifecycle decides: a CLOSED or FADING
+  // slow-down habit means they find these, so the coach stays quiet and lets
+  // them play. An OPEN one — or no record at all — still speaks, because this
+  // is the shape they have misstepped in before, and because a cold student
+  // must never meet a mute coach.
+  if (studentToMove && a.slowDownOwed) {
     if (importance.tier === 'only-move') ranked.push({ kind: 'key-moment', rank: 85, text: `Only one move really holds here — this is the moment to slow down.` });
     else if (importance.tier === 'critical') ranked.push({ kind: 'key-moment', rank: 65, text: `This is a critical moment — the choice here is the one that decides it.` });
+  } else if (studentToMove) {
+    // Owed nothing here — their record says they handle these. Silence is the
+    // computed verdict, not an absence.
   } else {
     // The opponent is on move → explain their intent, not a "slow down" to the
     // student who isn't choosing anything right now. Prefer the CONCRETE named

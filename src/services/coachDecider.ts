@@ -32,7 +32,7 @@
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, type QuietFact } from './factSelector';
 import { rankFacets } from './reviewFacetRank';
-import { methodBeatFor, type MethodSignals, type HabitNeed, type MethodHabit } from './methodBeat';
+import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WeaknessSignal } from './weaknessSignal';
 
@@ -209,11 +209,29 @@ export function decide(
 export function habitNeedFrom(weaknesses: readonly WeaknessSignal[]): HabitNeed {
   const need: HabitNeed = {};
   for (const w of weaknesses) {
-    if (w.openCount <= 0) continue;
     const habit = habitForCluster(w.clusterId);
-    if (habit) need[habit] = true;
+    if (!habit) continue;
+    const standing = standingOf(w);
+    // Worst standing wins: two clusters map to one habit (hung-material and
+    // missed-opponents-threat are both 'opponent-threat'), and a habit they
+    // still break in ONE of them is still open.
+    if (standing === 'open' || need[habit] === undefined) need[habit] = standing;
+    else if (standing === 'fading' && need[habit] === 'closed') need[habit] = 'fading';
   }
   return need;
+}
+
+/** WHERE ONE CLUSTER STANDS — the lifecycle already computed this; we only read
+ *  it. `fixed` means they stopped erring here, so the coach stops warning about
+ *  it; `occasional` + improving means they mostly find it now. Everything else
+ *  is still open. A cluster with no open instances is closed regardless of what
+ *  the lifecycle says, and a cluster the lifecycle never scored (no sample
+ *  floor) is treated as OPEN — unknown must never read as "they have it". */
+function standingOf(w: WeaknessSignal): HabitStanding {
+  if (w.openCount <= 0) return 'closed';
+  if (w.lifecycleStatus === 'fixed') return 'closed';
+  if (w.lifecycleStatus === 'occasional' && w.trend === 'improving') return 'fading';
+  return 'open';
 }
 
 /** One cluster id → one habit, or null when the weakness is real but is not a

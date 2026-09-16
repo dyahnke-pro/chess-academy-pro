@@ -54,8 +54,29 @@ export interface MethodSignals {
  *  the need lookup share one vocabulary and cannot drift. */
 export type MethodHabit = 'opponent-threat' | 'forcing-scan' | 'slow-down' | 'candidates';
 
-/** Which habits this student keeps breaking, by their own record. */
-export type HabitNeed = Partial<Record<MethodHabit, boolean>>;
+/** WHERE THIS STUDENT STANDS ON A HABIT, from their own record (David
+ *  2026-09-16: "If the user finds the correct move more often than not maybe it
+ *  can stay quiet. But a more complicated position similar to where the user has
+ *  misstepped before would warrant the warning").
+ *
+ *  A boolean could not say that. The weakness lifecycle already computes it:
+ *    'closed'  — lifecycle `fixed`: they have stopped erring here. Stay quiet.
+ *    'fading'  — `occasional` AND improving: they mostly find it now. Quiet.
+ *    'open'    — `persistent` / `emerging` / occasional-not-improving. WARN,
+ *                even on a position they would probably have got right, because
+ *                this is the shape they have misstepped in before.
+ *  ABSENT means UNKNOWN, not closed — a student with no record gets taught
+ *  (the cold-start prior; absent data never mutes the coach). */
+export type HabitStanding = 'open' | 'fading' | 'closed';
+
+/** Where this student stands on each habit. Absent = unknown = teach. */
+export type HabitNeed = Partial<Record<MethodHabit, HabitStanding>>;
+
+/** The habit is owed unless their own record says they have it. */
+export function habitIsOwed(need: HabitNeed, habit: MethodHabit): boolean {
+  const standing = need[habit];
+  return standing !== 'closed' && standing !== 'fading';
+}
 
 /** The cp bar for the forcing scan: normally a real cost, but ANY graded slip
  *  when the student's own data says they habitually miss forcing shots. */
@@ -106,7 +127,9 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
 
   // 2 — THE FORCING SCAN. The move that was there was a check or a capture, so
   // the method that finds it is the forcing scan, named concretely.
-  const forcingBar = need['forcing-scan'] ? FORCING_CP_WHEN_NEEDED : FORCING_CP;
+  // An OPEN forcing-scan habit drops the bar to any graded slip; a closed or
+  // fading one leaves the ordinary bar in place.
+  const forcingBar = need['forcing-scan'] === 'open' ? FORCING_CP_WHEN_NEEDED : FORCING_CP;
   if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && s.cpLossCp !== null && s.cpLossCp >= forcingBar) {
     return claim('forcing-scan', pick([
       'The move you wanted was a forcing one, so start there: list the checks and the captures before anything quiet.',
@@ -132,8 +155,36 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   // an ungraded ply must not silence the beat, because absent data never mutes
   // the coach (the same rule the cold-start prior follows).
   const foundIt = s.cpLossCp !== null && s.cpLossCp < SLIP_CP;
-  const slowTier = !foundIt && (s.tier === 'critical' || s.tier === 'only-move'
-    || (need['slow-down'] === true && (s.tier === 'blunder' || s.tier === 'swing')));
+  // ONLY-MOVE FIRES EITHER WAY (David 2026-09-16: "The slow down beat can fire
+  // at a critical moment. When there is only one move that holds equality").
+  // Recognising a position where exactly one move holds IS the lesson, and it
+  // is worth teaching to the student who found it as much as to the one who
+  // did not — that is the skill, not the recovery. Every OTHER tier still needs
+  // a real slip, because "you should have slowed down" on a move they played
+  // well is a correction they did not earn.
+  // THEIR RECORD CAN OVERRIDE "they found it". A position of the shape this
+  // student keeps misstepping in is worth naming even when they got this one
+  // right — that is the warning David asked for, and it is why found-it alone
+  // must not decide.
+  const slowOwed = habitIsOwed(need, 'slow-down');
+  if (s.tier === 'only-move') {
+    // FOUND IT → name the moment, never scold. Telling someone who solved it
+    // that they should have spent longer is the wrong sentence for the same
+    // computed fact; what they need is to recognise the shape next time.
+    return claim('slow-down', foundIt
+      ? pick([
+        'Worth marking this one: only one move held here, and you found it. That shape — one move holds, everything else slides — is what to slow down for next time.',
+        'That was an only-move position and you solved it. Learn the feel of them: when just one move keeps the balance, it is worth every second you can give it.',
+        'Exactly one move held the position and it was the one you played. Positions like this are the ones to spend your clock on — notice them early.',
+      ], plyForVariety)
+      : pick([
+        'This was the moment to slow down — positions where one move decides it are worth more time than the ten quiet moves around them.',
+        'Spend your clock here, not on the easy moves — this is the kind of position that decides games.',
+        'Worth noticing for next time: this position was a fork in the road, and those deserve real thinking time.',
+      ], plyForVariety));
+  }
+  const slowTier = (!foundIt || need['slow-down'] === 'open') && (s.tier === 'critical'
+    || (need['slow-down'] === 'open' && (s.tier === 'blunder' || s.tier === 'swing')));
   if (slowTier) {
     return claim('slow-down', pick([
       'This was the moment to slow down — positions where one move decides it are worth more time than the ten quiet moves around them.',

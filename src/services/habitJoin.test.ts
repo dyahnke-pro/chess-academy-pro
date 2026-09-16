@@ -59,15 +59,44 @@ describe('the closed set is covered exhaustively', () => {
 });
 
 describe('habitNeedFrom', () => {
-  it('a CLOSED hole is not a habit they still need taught', () => {
-    expect(habitNeedFrom([w('hung-material', 0)])).toEqual({});
+  it('a hole with nothing open reads CLOSED — they are not owed the warning', () => {
+    expect(habitNeedFrom([w('hung-material', 0)])['opponent-threat']).toBe('closed');
   });
-  it('an open hole sets its habit', () => {
-    expect(habitNeedFrom([w('hung-material')])['opponent-threat']).toBe(true);
+  it('an open hole reads OPEN', () => {
+    expect(habitNeedFrom([w('hung-material')])['opponent-threat']).toBe('open');
   });
   it('joins across BOTH vocabularies at once', () => {
     const need = habitNeedFrom([w('analysis:tactic:fork'), w('botched-conversion')]);
-    expect(need['forcing-scan']).toBe(true);
-    expect(need['slow-down']).toBe(true);
+    expect(need['forcing-scan']).toBe('open');
+    expect(need['slow-down']).toBe('open');
+  });
+
+  // ── "IF THEY FIND IT MORE OFTEN THAN NOT, STAY QUIET" ────────────────────
+  // David 2026-09-16. The lifecycle already computes this; standingOf only reads it.
+  it('a FIXED cluster is closed — they stopped erring here', () => {
+    const fixed = { ...w('hung-material'), lifecycleStatus: 'fixed' } as never;
+    expect(habitNeedFrom([fixed])['opponent-threat']).toBe('closed');
+  });
+
+  it('OCCASIONAL + improving is fading — they mostly find it now', () => {
+    const fading = { ...w('hung-material'), lifecycleStatus: 'occasional', trend: 'improving' } as never;
+    expect(habitNeedFrom([fading])['opponent-threat']).toBe('fading');
+  });
+
+  it('OCCASIONAL but NOT improving is still open', () => {
+    const stuck = { ...w('hung-material'), lifecycleStatus: 'occasional', trend: 'flat' } as never;
+    expect(habitNeedFrom([stuck])['opponent-threat']).toBe('open');
+  });
+
+  it('an UNSCORED cluster reads OPEN — unknown must never read as "they have it"', () => {
+    expect(habitNeedFrom([w('hung-material')])['opponent-threat']).toBe('open');
+  });
+
+  it('the WORST standing wins when two clusters map to one habit', () => {
+    // hung-material and missed-opponents-threat are both 'opponent-threat'.
+    const fixed = { ...w('hung-material'), lifecycleStatus: 'fixed' } as never;
+    const open = w('missed-opponents-threat');
+    expect(habitNeedFrom([fixed, open])['opponent-threat']).toBe('open');
+    expect(habitNeedFrom([open, fixed])['opponent-threat']).toBe('open');
   });
 });

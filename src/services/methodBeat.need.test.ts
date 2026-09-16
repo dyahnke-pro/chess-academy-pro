@@ -20,7 +20,7 @@ describe('method beat — need-scaled bar', () => {
   });
 
   it('the SAME slip earns it when their own record says they miss forcing shots', () => {
-    const beat = methodBeatFor(base({ habitNeed: { 'forcing-scan': true } }));
+    const beat = methodBeatFor(base({ habitNeed: { 'forcing-scan': 'open' } }));
     expect(beat).toBeTruthy();
     expect(beat).toMatch(/check|captur|forcing/i);
   });
@@ -32,7 +32,7 @@ describe('method beat — need-scaled bar', () => {
   it('slow-down widens to blunder/swing only when that is their hole', () => {
     expect(methodBeatFor(base({ tier: 'blunder', bestSan: 'Nf3', cpLossCp: 300 }))).toBeNull();
     const beat = methodBeatFor(base({
-      tier: 'blunder', bestSan: 'Nf3', cpLossCp: 300, habitNeed: { 'slow-down': true },
+      tier: 'blunder', bestSan: 'Nf3', cpLossCp: 300, habitNeed: { 'slow-down': 'open' },
     }));
     expect(beat).toMatch(/slow down|clock|thinking time/i);
   });
@@ -96,5 +96,43 @@ describe('a method beat needs something to correct', () => {
     // `ignoredThreat` comes from the attributor, which is flagged-only — this
     // pins the CONTRACT so a future caller cannot start passing it on good moves.
     expect(methodBeatFor(base({ ignoredThreat: false, cpLossCp: 0, bestSan: 'Nf3', tier: 'consequence' }))).toBeNull();
+  });
+});
+
+// ── ONLY-MOVE IS THE ONE THAT FIRES EITHER WAY ───────────────────────────────
+// David 2026-09-16: "The slow down beat can fire at a critical moment. When
+// there is only one move that holds equality." Recognising that shape IS the
+// skill, so it is taught to the student who found it as much as to the one who
+// did not — but never in the scolding register.
+describe('only-move teaches whether or not they found it', () => {
+  it('FIRES when the student found the only move', () => {
+    expect(methodBeatFor(base({ tier: 'only-move', cpLossCp: 0, bestSan: 'Nf3' }))).toBeTruthy();
+  });
+
+  it('does NOT scold the student who found it', () => {
+    const beat = methodBeatFor(base({ tier: 'only-move', cpLossCp: 0, bestSan: 'Nf3' })) ?? '';
+    expect(beat).toMatch(/you found it|you solved it|it was the one you played/i);
+    // "should have" / "was the moment to" is the miss register — wrong here.
+    expect(beat).not.toMatch(/this was the moment to slow down/i);
+  });
+
+  it('still uses the corrective register when they missed it', () => {
+    const beat = methodBeatFor(base({ tier: 'only-move', cpLossCp: 220, bestSan: 'Nf3' })) ?? '';
+    expect(beat).toMatch(/moment to slow down|Spend your clock|fork in the road/i);
+    expect(beat).not.toMatch(/you found it|you solved it/i);
+  });
+
+  it('a merely CRITICAL moment played well stays silent — only-move is the carve-out', () => {
+    expect(methodBeatFor(base({ tier: 'critical', cpLossCp: 0, bestSan: 'Nf3' }))).toBeNull();
+  });
+
+  it('say-once still holds across both registers', () => {
+    const said = new Set<MethodHabit>();
+    // bestSan must be QUIET on both, or the second call lands on the
+    // forcing-scan habit (a different, unclaimed one) and this proves nothing.
+    const a = methodBeatFor(base({ tier: 'only-move', cpLossCp: 0, bestSan: 'Nf3', saidHabits: said }));
+    const b = methodBeatFor(base({ tier: 'only-move', cpLossCp: 220, bestSan: 'Nf3', saidHabits: said }));
+    expect(a).toBeTruthy();
+    expect(b).toBeNull();
   });
 });
