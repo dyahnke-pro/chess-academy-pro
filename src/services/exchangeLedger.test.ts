@@ -142,3 +142,34 @@ describe('no phrasing model on the review walk (David 2026-09-16: "cut but pass 
     expect(comp).not.toMatch(/warm: true/);
   });
 });
+
+describe('the full-detail inventory register is CUT (David 2026-09-16)', () => {
+  it('review does not default to the uncapped inventory register', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const comp = readFileSync(join(process.cwd(), 'src/components/Coach/CoachGameReview.tsx'), 'utf8');
+    const fn = comp.slice(comp.indexOf('function isReviewUncapped'), comp.indexOf('interface CoachGameReviewProps'));
+    // Every exit must be false unless a DIAGNOSTIC opt-in fired. A STANDALONE
+    // `return true;` (not guarded by an `if` on the same line) is the default
+    // flipping back — that is the regression this gate exists to catch.
+    expect(fn).not.toMatch(/^\s*return true;\s*$/m);
+    // …and both unguarded exits (fallthrough + catch) must be false.
+    expect(fn.match(/return false;/g) ?? []).toHaveLength(3);
+    expect(fn).toMatch(/get\('uncapped'\) === '1'/);
+    expect(fn).toMatch(/__REVIEW_UNCAPPED__ === true/);
+    // No user-facing switch may reach it — a toggle is not a cut.
+    const settings = readFileSync(join(process.cwd(), 'src/components/Settings/SettingsPage.tsx'), 'utf8');
+    expect(settings).not.toMatch(/review-full-detail-toggle/);
+    expect(settings).not.toMatch(/handleToggle\('reviewFullDetail'/);
+  });
+
+  it('keeps the PROJECTION passes uncapped — the register was cut, not the facts (G4.5)', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const src = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
+    // Re-coupling the scope to the register flag silently reinstates three
+    // `scope === 'full' ? 999 : 2` budgets.
+    expect(src).not.toMatch(/uncapped \? 'full' : 'mistakes'/);
+    expect(src).toMatch(/augmentWithProjections\(segments,[^)]*'full', playerRating\)/);
+  });
+});

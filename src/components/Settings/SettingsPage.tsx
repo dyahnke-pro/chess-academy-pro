@@ -892,7 +892,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'reviewFullDetail' | 'coachBoardMarkersOn', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'coachBoardMarkersOn', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -926,13 +926,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         onChange={(v) => void handleToggle('calcHintVoice', v)}
         testId="calc-hint-voice-toggle"
       />
-      <ToggleRow
-        label="Deep Review Detail"
-        tooltip="On by default: post-game reviews narrate every computed fact on every move — tactics, structure, plans, and played-out future lines — the same full voice as Learn. Turn OFF for a faster, shorter one-idea-per-move walk. Applies the next time a review opens."
-        checked={profile.preferences.reviewFullDetail ?? true}
-        onChange={(v) => void handleToggle('reviewFullDetail', v)}
-        testId="review-full-detail-toggle"
-      />
+      {/* "Deep Review Detail" REMOVED 2026-09-16. It switched review onto the
+          full-detail inventory register, which David cut after reading its real
+          output (3,242 words vs 1,060 on the same game, and an inventory rather
+          than teaching). A toggle that can turn it back on is not a cut, so the
+          row is gone; the branch survives as a `?uncapped=1` diagnostic only.
+          `reviewFullDetail` stays on UserPreferences so existing profiles that
+          persisted it are not invalidated — nothing reads it. */}
       {/* Legacy coachVerbosity + coachCommentaryVerbosity UIs removed.
           The fields stay on UserPreferences and are read by
           resolveCoachNarration() and resolveVerbosity() as a migration

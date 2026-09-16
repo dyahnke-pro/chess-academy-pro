@@ -963,12 +963,12 @@ export interface UserPreferences {
    *  off in Settings. Routed through voiceService.speakLecture, so it
    *  still stays silent when coachNarration is 'silent'. */
   calcHintVoice?: boolean;
-  /** DEEP REVIEW DETAIL (David 2026-07-21: "we have a toggle switch — at
-   *  least we should"). When true, the post-game review walk narrates in
-   *  the full-data register — every computed facet on every move plus the
-   *  future-position projections — instead of the standard one-beat
-   *  cascade. The same mode the `?uncapped=1` diagnostic uses, now a
-   *  user-facing choice. Off by default. */
+  /** @deprecated DEAD FIELD as of 2026-09-16 — nothing reads it. It used to
+   *  select the full-detail inventory register for the post-game review walk;
+   *  David cut that register after reading its output, and its Settings row was
+   *  removed with it. The field stays declared ONLY so profiles that already
+   *  persisted it remain valid — do not re-wire it, and do not add a new
+   *  preference that turns the inventory register back on. */
   reviewFullDetail?: boolean;
   /** How much the coach says PER TURN when it does talk. Wired through
    *  to the brain's TEACH_MODE_ADDITION + OPERATOR_BASE_BODY teaching

@@ -442,6 +442,10 @@ export function buildReviewDeepestLookahead(
   fenBefore: string,
   bestMoveUci: string | null,
   moverColorWB: 'w' | 'b',
+  /** The move the student ACTUALLY played at this ply, in SAN. Required — a
+   *  caller that cannot say what was played must pass `null` deliberately.
+   *  See the found-it guard below for why this is not optional. */
+  playedSan: string | null,
 ): string | null {
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
   try {
@@ -451,6 +455,27 @@ export function buildReviewDeepestLookahead(
     const promotion = bestMoveUci.slice(4) || undefined;
     const mv = chess.move({ from, to, promotion });
     if (!mv) return null;
+    // 🔒 THE STUDENT FOUND IT — SAY NOTHING (David 2026-09-16, read off the
+    // shipped Alapin review at ply 32). The caller's gate is
+    // classification ∈ {null, book, good}, and PLAYING THE ENGINE'S BEST MOVE
+    // classifies as `good` — so this beat fired on moves the student had just
+    // made and told them to hunt for it a move ahead. Worse, the played move's
+    // own threat is already narrated present-tense one clause earlier, so the
+    // student heard the same fork twice: once true, once as a miss they never
+    // made. `playedSan` is a REQUIRED parameter rather than an optional so a
+    // future caller fails to compile instead of silently reopening this.
+    // Compared by COORDINATES, never by SAN string: the same move renders as
+    // `Nxd4` or `Nexd4` depending on whether a second knight can reach the
+    // square, so a string compare silently stops matching the moment a position
+    // needs disambiguation — a guard that fails open is worse than none.
+    if (playedSan !== null) {
+      try {
+        const probe = new Chess(fenBefore);
+        const pm = probe.move(playedSan);
+        if (pm && pm.from === mv.from && pm.to === mv.to
+          && (pm.promotion ?? null) === (mv.promotion ?? null)) return null;
+      } catch { /* an unparseable played SAN must never silence a real beat */ }
+    }
     const threat = detectNewThreat(fenBefore, chess.fen(), moverColorWB);
     // Only the combinations — a bare capture is the better-move teaching's job.
     if (!threat || (threat.kind !== 'fork' && threat.kind !== 'mate')) return null;

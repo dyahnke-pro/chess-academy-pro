@@ -91,26 +91,37 @@ import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType, MoveClassification, StockfishAnalysis } from '../../types';
 
-/** FULL-DETAIL review is now the DEFAULT (David 2026-09-13: "There are no caps!
- *  Review gets the same level of care and attention!! Same voice, spoken in past
- *  tense"). Review gets the full per-move teaching every time, matching the
- *  uncapped Learn voice — the compressed one-beat register was a hidden cap that
- *  gave real users LESS than the diagnostic showed. The "Deep Review Detail"
- *  Settings toggle (David 2026-07-21: "we have a toggle switch — at least we
- *  should") is now an explicit OPT-OUT: set `reviewFullDetail === false` for the
- *  faster, one-beat review. `?uncapped=0` forces it off for a quick manual check;
- *  `window.__REVIEW_UNCAPPED__` still works but is redundant now. No localStorage
- *  (project rule). */
+/** THE FULL-DETAIL INVENTORY REGISTER IS CUT (David 2026-09-16, after reading
+ *  the real output side by side: "I see what you mean by full detail now. Thank
+ *  you for showing me that. Cut it.").
+ *
+ *  What he read: the uncapped aggregator speaks EVERY computed facet on every
+ *  move in rank order, so a 46-ply game ran 3,242 words against the one-beat
+ *  register's 1,060 — and the extra words were an inventory, not teaching
+ *  ("You're balanced" at ply 1; "Undefended right now: their pawn on e4" at ply
+ *  4). It also went SILENT on three plies where the one-beat register spoke.
+ *
+ *  So review runs the one-beat register for every user. There is no Settings
+ *  toggle: a switch that can turn the inventory back on is not a cut. The
+ *  branch survives as a DIAGNOSTIC only, reachable by `?uncapped=1` or
+ *  `window.__REVIEW_UNCAPPED__ = true` when a session needs to read the full
+ *  computed inventory for itself.
+ *
+ *  🔒 THIS IS NOT A CAP AND MUST NOT BECOME ONE (G4.5). What was cut is a
+ *  RENDERING REGISTER — how many computed facts get read aloud per move. The
+ *  PROJECTION passes stay UNCAPPED: `augmentWithProjections` is now called with
+ *  scope 'full' unconditionally, so every deep threat, opponent threat and
+ *  prophylactic line is still computed and still played out. Those are the
+ *  "here's how you take advantage" beats David asked for; the `'mistakes'`
+ *  scope would have silently reinstated three `: 2` budgets. Never re-couple
+ *  the projection scope to this flag. */
 function isReviewUncapped(): boolean {
   try {
-    const pref = useAppStore.getState().activeProfile?.preferences.reviewFullDetail;
-    if (pref === false) return false; // explicit opt-out → fast one-beat review
-    if (pref === true) return true;
-    if (typeof window === 'undefined') return true;
-    if (new URLSearchParams(window.location.search).get('uncapped') === '0') return false;
-    if ((window as unknown as { __REVIEW_UNCAPPED__?: boolean }).__REVIEW_UNCAPPED__ === false) return false;
-    return true; // DEFAULT: full detail, same care as Learn
-  } catch { return true; }
+    if (typeof window === 'undefined') return false;
+    if (new URLSearchParams(window.location.search).get('uncapped') === '1') return true;
+    if ((window as unknown as { __REVIEW_UNCAPPED__?: boolean }).__REVIEW_UNCAPPED__ === true) return true;
+    return false;
+  } catch { return false; }
 }
 
 interface CoachGameReviewProps {

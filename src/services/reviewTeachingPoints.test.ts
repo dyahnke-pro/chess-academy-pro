@@ -272,21 +272,21 @@ describe('findTrappedPiece (David 2026-07-21 — "the trapped piece was the quee
 describe('buildReviewDeepestLookahead (review-register deep look-ahead)', () => {
   it('returns null on missing / malformed best move', () => {
     const start = new Chess().fen();
-    expect(buildReviewDeepestLookahead(start, null, 'w')).toBeNull();
-    expect(buildReviewDeepestLookahead(start, 'e2', 'w')).toBeNull(); // too short
-    expect(buildReviewDeepestLookahead('not-a-fen', 'e2e4', 'w')).toBeNull();
+    expect(buildReviewDeepestLookahead(start, null, 'w', null)).toBeNull();
+    expect(buildReviewDeepestLookahead(start, 'e2', 'w', null)).toBeNull(); // too short
+    expect(buildReviewDeepestLookahead('not-a-fen', 'e2e4', 'w', null)).toBeNull();
   });
 
   it('returns null when the best move sets up nothing forcing (quiet development)', () => {
     // 1.e4 e5 — best move like Nf3 develops but sets up no fork/mate.
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
-    expect(buildReviewDeepestLookahead(fen, 'g1f3', 'w')).toBeNull();
+    expect(buildReviewDeepestLookahead(fen, 'g1f3', 'w', null)).toBeNull();
   });
 
   it('names the shot retrospectively when the best move sets up a royal fork', () => {
     // Black king e8 + queen a8, white knight c3. Nd5 sets up Nc7+ forking king + queen.
     const fen = 'q3k3/8/8/8/8/2N5/8/4K3 w - - 0 1';
-    const say = buildReviewDeepestLookahead(fen, 'c3d5', 'w');
+    const say = buildReviewDeepestLookahead(fen, 'c3d5', 'w', null);
     expect(say).toBeTruthy();
     expect(say!.toLowerCase()).toContain('shot');
     expect(say!.toLowerCase()).toMatch(/fork/);
@@ -296,11 +296,38 @@ describe('buildReviewDeepestLookahead (review-register deep look-ahead)', () => 
   it('stays silent on a plain winning capture (owned by the better-move teaching)', () => {
     // Rxd4 just wins a hanging knight — a bare capture, no fork/mate follow-up.
     const fen = '4k3/8/8/8/3n4/8/8/3RK3 w - - 0 1';
-    expect(buildReviewDeepestLookahead(fen, 'd1d4', 'w')).toBeNull();
+    expect(buildReviewDeepestLookahead(fen, 'd1d4', 'w', null)).toBeNull();
   });
 
   it('never throws on an illegal best move for the position', () => {
     const start = new Chess().fen();
-    expect(buildReviewDeepestLookahead(start, 'e2e5', 'w')).toBeNull();
+    expect(buildReviewDeepestLookahead(start, 'e2e5', 'w', null)).toBeNull();
+  });
+});
+
+describe('buildReviewDeepestLookahead — the student FOUND it (David 2026-09-16)', () => {
+  it('is silent when the played move IS the shot', () => {
+    // Ply 32 of David's Alapin: the student played the engine's move, and the
+    // beat still said "Look deeper — Nexd4 was the shot", duplicating the
+    // present-tense threat narrated one clause earlier.
+    const fen = 'N3kb1r/pp2pppp/8/3pP3/3P4/8/PP2nPPP/R3KB1R b KQk - 0 16';
+    const played = buildReviewDeepestLookahead(fen, 'e2d4', 'b', 'Nxd4');
+    expect(played).toBeNull();
+  });
+
+  it('matches by coordinates, so disambiguation notation cannot reopen it', () => {
+    // Two black knights bear on d4 (e2 and c6) — chess.js renders the move
+    // `Nexd4`, and a naive SAN compare against a caller passing `Nxd4` (or vice
+    // versa) would fail open and call the played move a miss.
+    const two = 'N3kb1r/pp2pppp/2n5/3pP3/3P4/8/PP2nPPP/R3KB1R b KQk - 0 16';
+    expect(buildReviewDeepestLookahead(two, 'e2d4', 'b', 'Nexd4')).toBeNull();
+  });
+
+  it('still speaks when the student played something ELSE', () => {
+    const fen = 'N3kb1r/pp2pppp/8/3pP3/3P4/8/PP2nPPP/R3KB1R b KQk - 0 16';
+    const missed = buildReviewDeepestLookahead(fen, 'e2d4', 'b', 'e6');
+    // Either it names the shot, or the position sets up no fork/mate at all —
+    // what it must NEVER do is call the played move a missed one.
+    if (missed !== null) expect(missed).not.toContain('e6 was the shot');
   });
 });

@@ -1029,11 +1029,12 @@ const MIDDLEGAME_ORIENTATION_MIN_PLY = 16;
 const REVIEW_INTRO_VOICE_TIMEOUT_MS = 18000;
 // Stockfish projection budget — bounds the ONE prep await that was try/catch-only
 // so a wedged engine worker can never leave the walk stuck on "Preparing…".
-const REVIEW_AUGMENT_TIMEOUT_MS = 20000;
-// UNCAPPED = "hear EVERYTHING the review has to say about every move" (David
-// 2026-07-24: "remove any caps… then we cap down as needed"). The projection
-// passes run with effectively-unlimited budgets in uncapped mode, so the ceiling
-// is time, not a per-pass count — give them room to cover both sides deeply.
+// THE CEILING IS TIME, NEVER A PER-PASS COUNT (David 2026-07-24: "remove any
+// caps"; G4.5). The projection passes run with unlimited budgets on EVERY
+// review — that did not change when the inventory rendering register was cut on
+// 2026-09-16 — so give them room to cover both sides deeply. The shorter
+// 20s sibling constant was deleted with the capped scope it belonged to; do not
+// reintroduce a second, tighter deadline as a back-door cap.
 const REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED = 75000;
 
 /** Reframe a seat-free `buildReviewMoveTeaching` sentence as the OPPONENT's, so
@@ -1968,7 +1969,7 @@ export function buildReviewSegments(
       // voice, guaranteed spoken (a direct computed beat, never LLM-mediated),
       // deduped per game by the shot's SAN.
       if (!m.isCoachMove && (m.classification === null || m.classification === 'book' || m.classification === 'good')) {
-        const shot = buildReviewDeepestLookahead(fenPair.fenBefore, m.bestMove, playerColor === 'white' ? 'w' : 'b');
+        const shot = buildReviewDeepestLookahead(fenPair.fenBefore, m.bestMove, playerColor === 'white' ? 'w' : 'b', m.san);
         if (shot) {
           // Dedupe on the WHOLE shot sentence, not just its SAN (D#5). Two
           // different shots later in the game can share a SAN (a knight jump that
@@ -3772,9 +3773,15 @@ export async function generateReviewNarration(params: {
     // a wedged Stockfish projection could stall the walk forever. Race it; on
     // timeout the segments keep whatever projections already landed (best-effort)
     // and the walk still becomes ready.
+    // 🔒 SCOPE IS ALWAYS 'full' — NEVER re-couple it to `uncapped` (G4.5, David
+    // 2026-09-16). The inventory RENDERING register was cut; the PROJECTIONS
+    // were not. `'mistakes'` scope reinstates three `scope === 'full' ? 999 : 2`
+    // budgets (deep threats, opponent deep threats, prophylactic moves), which
+    // is exactly the hard cap G4.5 forbids — it would delete the "here's how you
+    // take advantage" lines David asked for while looking like a tidy-up.
     await raceTimeout(
-      augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', uncapped ? 'full' : 'mistakes', playerRating),
-      uncapped ? REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED : REVIEW_AUGMENT_TIMEOUT_MS,
+      augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', 'full', playerRating),
+      REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED,
       undefined,
     );
   } catch { /* projections are best-effort; the walk ships without them */ }

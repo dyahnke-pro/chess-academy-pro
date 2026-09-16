@@ -552,6 +552,67 @@ G5 specifies. Nothing else may cap.
   the EXHAUSTIVE routing audit (`audit-coach-all-questions-prod.mjs`) — that is
   the only thing that proves the chat lanes still answer — and READ the answers.
 
+### G4.5.1 A REGISTER IS NOT A CAP — the full-detail inventory was CUT, the facts were not (David 2026-09-16: "I see what you mean by full detail now. Thank you for showing me that. Cut it.").
+
+Read side by side on David's Alapin game, the two review registers were:
+
+| register | plies spoken | words |
+|---|---|---|
+| full-detail inventory (was the default) | 43 / 46 | 3,242 |
+| one-beat (now the only one) | 44 / 46 | ~1,037 |
+
+The inventory spoke every computed facet on every move in rank order. The extra
+2,200 words were not teaching: "You're balanced" at ply 1, "Undefended right
+now: their pawn on e4" at ply 4. It also went SILENT on three plies the
+one-beat register narrates — full detail saying LESS is the inversion G4.5
+exists to prevent. So it is cut, and there is **no Settings toggle**: a switch
+that turns it back on is not a cut. It survives ONLY as a `?uncapped=1` /
+`window.__REVIEW_UNCAPPED__` diagnostic for a session that wants to read the
+raw computed inventory. `reviewFullDetail` remains declared on
+`UserPreferences` purely so already-persisted profiles stay valid; NOTHING
+reads it, and no new preference may re-expose the register.
+
+🚨 **DO NOT "TIDY" THIS INTO A CAP.** What was cut is a RENDERING REGISTER (how
+many computed facts get read aloud per move). The PROJECTION passes stay
+UNCAPPED: `augmentWithProjections` is called with scope `'full'`
+UNCONDITIONALLY, and the `uncapped ? 'full' : 'mistakes'` ternary is gone. The
+`'mistakes'` scope reinstates three `scope === 'full' ? 999 : 2` budgets (deep
+threats, opponent deep threats, prophylactic moves) — re-coupling the scope to
+the register flag would delete the "here's how you take advantage" beats while
+looking like a cleanup. The 20s `REVIEW_AUGMENT_TIMEOUT_MS` was deleted with
+that scope; do not reintroduce a tighter deadline as a back-door cap.
+
+**Lost with the register, honestly:** `reviewFacetRank` (N9) orders a FACET
+LIST, and the one-beat path renders one beat rather than a list, so nothing
+calls it on the shipped path. N2's need gate is NOT lost — the one-beat cascade
+has carried it since N2 landed (`coachFeatureService`, the `needHere.speak`
+clause on the quiet-opening-ply branch), and the N7 exchange ledger is NOT lost
+either (it lives in `render()` inside `augmentWithProjections`, which runs in
+both scopes). Verify those two claims in the source before trusting this
+paragraph — that is how they were established.
+
+Gates: `exchangeLedger.test.ts` → "the full-detail inventory register is CUT"
+(no standalone `return true` in `isReviewUncapped`, no Settings toggle, scope
+never re-coupled).
+
+### G4.5.2 NEVER TELL A STUDENT TO FIND A MOVE THEY PLAYED (found reading the shipped register, 2026-09-16).
+
+`buildReviewDeepestLookahead` names the combination the engine's best move sets
+up, in review's retrospective voice ("Look deeper — Nd5 was the shot"). Its
+caller gates on `classification ∈ {null, book, good}` — and PLAYING the best
+move classifies as `good`, so on David's Alapin ply 32 the student played
+`Nexd4` and heard "Look deeper — Nexd4 was the shot: it forks the king and rook
+on a1" one clause after the true present-tense "You're now threatening Nc2+ —
+it forks the king and rook on a1." The same fork, twice, the second time as a
+miss they never made.
+
+Fixed at the root: `playedSan` is a **required** parameter (a new caller fails
+to compile rather than silently reopening it), and the match is by
+**COORDINATES, never SAN string** — the same move renders `Nxd4` or `Nexd4`
+depending on whether a second knight can reach the square, so a string compare
+fails open exactly when the position is interesting. When you add a beat that
+says what the student SHOULD have found, ask first whether they found it.
+
 ### G4.6 THE REVIEW-PREP LAG IS SERIALIZED ENGINE CALLS, NOT THE TIMEOUT (David 2026-09-16: "we need to fix that seven second lag").
 
 Diagnosed 2026-09-16; the timeout is a symptom, not the cause. Three layers

@@ -714,3 +714,41 @@ no-ranking**: N9 orders the facets and never drops, and the N2 need bar
 currently gates the PLY, not the FACET. Gating a facet on need — not on a count
 — is the only correct way to quiet ply-1 "you're balanced" without
 reintroducing a cap. That is the N8 `ClauseItem` build (§10), not a new rule.
+
+---
+
+## §12. THE FULL-DETAIL REGISTER IS CUT (David 2026-09-16)
+
+He read §11's side-by-side and said: "I see what you mean by full detail now.
+Thank you for showing me that. Cut it."
+
+**Done.** `isReviewUncapped()` is diagnostic-only (`?uncapped=1` /
+`window.__REVIEW_UNCAPPED__`), the "Deep Review Detail" Settings row is gone,
+and `reviewFullDetail` is a dead field kept only so persisted profiles stay
+valid. The full rationale is CLAUDE.md §G4.5.1.
+
+**What I checked BEFORE cutting**, because flipping this default would
+otherwise have silently reverted the session's work:
+
+| build | inside the cut branch? | survives |
+|---|---|---|
+| N2 need gate | also at `coachFeatureService` `needHere.speak` on the capped path | ✅ |
+| N7 exchange ledger | in `render()` inside `augmentWithProjections`, both scopes | ✅ |
+| pool wire (G4.6) | `augmentWithProjections`, both scopes | ✅ |
+| N9 `reviewFacetRank` | ranks a FACET LIST; the one-beat path renders one beat | ❌ unreachable |
+
+N9 is the honest loss and is recorded as such — the one-beat path has no list to
+order. Do not delete `reviewFacetRank.ts`: it is the ordering the typed-fact
+build (§10) needs the moment facts become `ClauseItem[]` with ONE renderer.
+
+**The trap avoided.** Scope was `uncapped ? 'full' : 'mistakes'`. Flipping the
+flag alone would have silently reinstated three `scope === 'full' ? 999 : 2`
+projection budgets — a hard cap (G4.5 violation) arriving as a side effect of a
+register change. Scope is now `'full'` unconditionally and gated by a test.
+
+### D4, found while reading the register that now ships
+
+A beat told the student to find a move they had just played (ply 32, `Nexd4`),
+duplicating the true present-tense threat one clause earlier. Root-fixed in
+`buildReviewDeepestLookahead` with a REQUIRED `playedSan` and a coordinate
+match. See CLAUDE.md §G4.5.2. D1–D3 from §11 remain open.
