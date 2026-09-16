@@ -215,7 +215,13 @@ const run = async () => {
       ['review-trap-card', '[data-testid="review-trap-pick-leave"]'],
       ['review-trap-reveal', '[data-testid="review-trap-done"]'],
       ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
-      ['review-turning-point-card', '[data-testid="review-turning-point-confirm"]'],
+      // review-turning-point-card is NOT in this table — see the block below.
+      // Confirm only EXISTS once a candidate chip has been tapped, so a
+      // click-if-present on Confirm silently no-ops against a fresh card, the
+      // card is never answered, no reveal fires, and the THESIS check then
+      // hard-fails on a product that was working (found 2026-09-16). This is
+      // the "a silent no-op is a failed test, not a pass" class.
+
       // The reveal is SPOKEN after the pick — a human reads/hears it before
       // tapping Done. Dismissing it 400ms after confirm cancelled the speech
       // and the THESIS line never reached the listener (2026-09-15). Handled
@@ -226,6 +232,24 @@ const run = async () => {
       ['review-sequence-playback', '[data-testid="review-sequence-skip"]'],
     ]) {
       if (await has(page, `[data-testid="${c}"]`) && await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500, force: true }).catch(() => undefined); await page.waitForTimeout(400); }
+    }
+    // THE TURNING-POINT CARD — answer it the way a human does: tap a candidate
+    // to step the board to that moment, THEN commit. Two taps, in order.
+    if (await has(page, '[data-testid="review-turning-point-card"]')) {
+      const chip = page.locator('[data-testid^="turning-point-pick-"]').first();
+      if (await chip.count() > 0) {
+        await chip.click({ timeout: 2000, force: true }).catch(() => undefined);
+        await page.waitForTimeout(500);
+        // Confirm exists only after the preview; fall back to a second tap on
+        // the same chip, which commits it too.
+        if (await has(page, '[data-testid="review-turning-point-confirm"]')) {
+          await page.locator('[data-testid="review-turning-point-confirm"]').first()
+            .click({ timeout: 2000, force: true }).catch(() => undefined);
+        } else {
+          await chip.click({ timeout: 2000, force: true }).catch(() => undefined);
+        }
+        await page.waitForTimeout(400);
+      }
     }
     if (await has(page, '[data-testid="review-turning-point-reveal"]')) {
       // Wait for the reveal's spoken line (the thesis) to land in the listener,
@@ -362,6 +386,13 @@ const run = async () => {
     const owed = thesisKind === 'turned' && (cardPly === null || thesisPly === cardPly);
     if (askIdx === -1) {
       await add('THESIS spoken-once-at-reveal', true, 'no turning-point card this game (fewer than 2 costed moments) — thesis withheld by design');
+    } else if (!lines.some((t) => /^(You called it\.|Not quite\.)/.test(t))) {
+      // The reveal is what SPEAKS the thesis, and it only fires on a commit.
+      // If no reveal line was ever spoken the card was never answered — that is
+      // a DRIVER failure, and reporting it as a broken N1 wire sent a session
+      // chasing a product bug that did not exist (2026-09-16).
+      await add('THESIS spoken-once-at-reveal', false,
+        `DRIVER: the turning-point card was never answered (no reveal line spoken), so the thesis had no moment to fire — fix the driver, not the coach`);
     } else if (!kindM) {
       await add('THESIS spoken-once-at-reveal', false, `card rendered but the selector emitted NO thesis kind — the N1 wire did not run (spoken=${thesisCount})`);
     } else if (!owed) {
