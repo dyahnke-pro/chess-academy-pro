@@ -51,6 +51,23 @@ function developedCount(all: Located[], color: Color): number {
  * eval in centipawns from the student's perspective (positive = student better);
  * pass null to omit the verdict word (reasons still computed).
  */
+/**
+ * THE ONE cp → verdict-word ladder for the whole app (David 2026-09-16, after
+ * the third copy of it turned up in a live prod bundle). Two ladders existed
+ * over the same bands with DIFFERENT words — at +120 one said "clearly better"
+ * and the other "a bit better" — so a single review could contradict itself.
+ * Deleting the duplicate is not enough: the fix is that there is exactly one
+ * place the mapping lives, and every caller reads it from here.
+ */
+export function verdictBand(studentPovEvalCp: number | null): PositionalAssessment['verdict'] {
+  if (studentPovEvalCp === null) return null;
+  if (studentPovEvalCp >= 150) return 'clearly better';
+  if (studentPovEvalCp >= 50) return 'a bit better';
+  if (studentPovEvalCp > -50) return 'balanced';
+  if (studentPovEvalCp > -150) return 'a bit worse';
+  return 'in trouble';
+}
+
 export function assessPositionalEdge(
   fen: string,
   studentColorWB: Color,
@@ -66,14 +83,7 @@ export function assessPositionalEdge(
   const enemy: Color = me === 'w' ? 'b' : 'w';
 
   // ── Verdict word from the eval (the future, encoded) ──
-  let verdict: PositionalAssessment['verdict'] = null;
-  if (studentPovEvalCp !== null) {
-    if (studentPovEvalCp >= 150) verdict = 'clearly better';
-    else if (studentPovEvalCp >= 50) verdict = 'a bit better';
-    else if (studentPovEvalCp > -50) verdict = 'balanced';
-    else if (studentPovEvalCp > -150) verdict = 'a bit worse';
-    else verdict = 'in trouble';
-  }
+  const verdict: PositionalAssessment['verdict'] = verdictBand(studentPovEvalCp);
 
   const reasons: string[] = [];
 

@@ -25,7 +25,7 @@ import { detectPieceItineraries } from './reviewPieceItinerary';
 import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
-import { assessPositionalEdge } from './reviewPositionalAssessment';
+import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
 import { renderStructureAtoms } from './structureProse';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
@@ -844,13 +844,18 @@ function buildDeterministicNarration(params: {
   // strong move has no nameable geometry (a quiet consolidating move). Grounded
   // in the engine eval, never praise-for-praise's-sake.
   const studentEvalCp = evaluation === null ? null : (moverColor === 'white' ? evaluation : -evaluation);
-  const studentEvalWord =
-    studentEvalCp === null ? null
-      : studentEvalCp >= 300 ? "you're winning"
-      : studentEvalCp >= 100 ? "you're clearly better"
-      : studentEvalCp >= 40 ? 'you hold a pull'
-      : studentEvalCp >= -40 ? 'the position stays balanced'
-      : null;
+  // ONE LADDER (David 2026-09-16). This was a FOURTH cp-to-word mapping, with
+  // its own bands (300/100/40) AND its own words ("you hold a pull") — so the
+  // same +120 could be "clearly better" in this beat and "a bit better" in the
+  // positional verdict two plies later. The bands differing might be
+  // defensible; the same WORDS meaning different evals is not, and the student
+  // hears the contradiction. Reads `verdictBand` like every other caller.
+  // Silent when the student is worse: this clause only ever decorates a GOOD
+  // move, so it states an edge or says nothing (empty > generic).
+  const evalBand = verdictBand(studentEvalCp);
+  const studentEvalWord = evalBand === null || evalBand === 'a bit worse' || evalBand === 'in trouble'
+    ? null
+    : evalBand === 'balanced' ? 'the position stays balanced' : `you're ${evalBand}`;
 
   // Swing magnitude in pawns (positive = how much the moving side
   // conceded). Both evals are centipawns, white POV; the absolute
@@ -2652,12 +2657,11 @@ async function augmentWithProjections(
     if (studentPovCp === null) return 'the position stays balanced';
     const endFen = line.plies[line.plies.length - 1]?.fenAfter ?? null;
     const assess = endFen ? assessPositionalEdge(endFen, studentColorWB, studentPovCp) : { verdict: null, reasons: [] };
-    const word = assess.verdict
-      ? `you're ${assess.verdict}`
-      : studentPovCp >= 150 ? "you're winning"
-        : studentPovCp >= 50 ? "you're clearly better"
-          : studentPovCp > -50 ? "it's about level"
-            : studentPovCp > -150 ? "you're a bit worse" : "you're in trouble";
+    // The fallback reads THE SAME ladder (`verdictBand`), never a second one.
+    // The first cut of this fix deleted `verdictWord` and then re-created its
+    // vocabulary right here as the no-assessment branch — caught only by
+    // grepping the deployed bundle. One ladder, one vocabulary, one place.
+    const word = `you're ${assess.verdict ?? verdictBand(studentPovCp) ?? 'balanced'}`;
     // EVERY computed reason speaks (David 2026-09-16: "I DONT WANT ANYTHING
     // LIMITED!!! We cannot set hard caps!!! That's how things don't get stated
     // or teachings left out"). This line shipped with a slice(0, 2) on the

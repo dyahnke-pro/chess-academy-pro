@@ -96,11 +96,27 @@ describe('one verdict computer — a verdict without its reason is the eval bar 
     expect(a.reasons.length).toBeGreaterThan(0);
     expect(a.reasons.join(' ')).toMatch(/outpost on d4|further developed/);
   });
-  it('no second cp-to-word ladder survives in the projection code', async () => {
+  it('ONE ladder — no second cp-to-word mapping anywhere outside reviewPositionalAssessment', async () => {
     const { readFileSync } = await import('node:fs');
     const { join } = await import('node:path');
+    // The first cut of this fix deleted `verdictWord` and then rebuilt its
+    // vocabulary inline in the replacement; the gate passed because it only
+    // looked for the old NAME. It was caught by grepping the deployed prod
+    // bundle. Scan for the WORDS now, not the identifier.
     const src = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
     expect(src).not.toMatch(/const verdictWord\s*=/);
-    expect(src).toMatch(/assessPositionalEdge/);
+    // Match a LADDER — a centipawn comparison feeding a quoted verdict phrase —
+    // not the bare words, which legitimately appear in comments and in unrelated
+    // prose ("exactly right when you're winning").
+    expect(src).not.toMatch(/Cp\s*>=?\s*-?\d+\s*\?\s*["'`](you're|it's|the position)/);
+    expect(src).toMatch(/verdictBand/);
+  });
+  it('verdictBand is the single source for the bands, and assessPositionalEdge reads it', async () => {
+    const { verdictBand, assessPositionalEdge } = await import('./reviewPositionalAssessment');
+    const fen = '8/8/4k3/8/8/4K3/4P3/8 w - - 0 40';
+    for (const cp of [400, 150, 120, 50, 0, -60, -200]) {
+      expect(assessPositionalEdge(fen, 'w', cp).verdict, `cp ${cp}`).toBe(verdictBand(cp));
+    }
+    expect(verdictBand(null)).toBeNull();
   });
 });
