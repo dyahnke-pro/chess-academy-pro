@@ -362,6 +362,31 @@ const run = async () => {
       await add('NEED silent-where-not-needed', leaked.length === 0, leaked.length ? `per-move beat on ${leaked.map((r) => r.ply).join(',')} where need said silent` : 'no per-move beat where need said silent');
     }
   }
+  // LEDGER (unified-coach N7, 2026-09-16): a projected line that trades on BOTH
+  // sides must attribute every capture and state the NET. The defect this
+  // replaces was a line reading "Kxd7, winning the knight … then Nxa8, winning
+  // the rook" under "here's how you take advantage" — the rook being the
+  // student's, taken from them. Read the SPOKEN text, not a pass count.
+  {
+    const spokenAll = spoken().map((x) => x.text);
+    // Any line that names two or more captures is an alternating line.
+    const lines = spokenAll.filter((t) => /take advantage|gets punished|the engine confirms/i.test(t));
+    const unseated = lines.filter((t) => /\bwinning the (pawn|knight|bishop|rook|queen)\b/.test(t));
+    const attributed = lines.filter((t) => /\byou win the \w+|\bthey take the \w+/.test(t));
+    await add('LEDGER captures-attributed',
+      lines.length === 0 || unseated.length === 0,
+      lines.length === 0
+        ? 'no projected line spoken this game (no flagged mistake reached the projection budget)'
+        : `${attributed.length}/${lines.length} projected lines attributed; ${unseated.length} still subjectless`);
+    const netLines = spokenAll.filter((t) => /come out (ahead|behind) on material|that trade is even/.test(t));
+    await add('LEDGER net-stated-when-both-sides-trade',
+      lines.length === 0 || netLines.length > 0 || !lines.some((t) => /you win the \w+/.test(t) && /they take the \w+/.test(t)),
+      netLines.length ? `net stated: "${netLines[0].slice(0, 120)}"` : 'no two-sided projected line this game');
+    // The ledger must never read as a point total (piece names only).
+    await add('LEDGER named-in-pieces-not-points',
+      netLines.every((t) => !/on material,[^.]*\d/.test(t)),
+      netLines.length ? 'piece names only' : 'n/a — no net stated');
+  }
   // ACC — board accuracy of every "<piece> on <square>" claim, on the board AFTER
   // that ply (present-tense text only; a projected line is about a future board).
   const PIECE = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
