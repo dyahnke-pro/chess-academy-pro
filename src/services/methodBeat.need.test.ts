@@ -70,3 +70,31 @@ describe('method beat — SAY-ONCE is what stops the drumbeat', () => {
     expect(methodBeatFor(base({ isStudentMove: false, ignoredThreat: true }))).toBeNull();
   });
 });
+
+// ── "IF THEY MAKE THE CORRECT MOVE THIS PHRASE SHOULDN'T FIRE" ───────────────
+// David 2026-09-16, reading the opponent-threat beat. He was right about that
+// one — `attributePrinciples` returns [] on an unflagged move, so `ignoredThreat`
+// cannot be true when the student played well. SLOW-DOWN had no such guard: it
+// gated on the MOMENT's tier alone, so finding the only move in a critical
+// position still earned "this was the moment to slow down".
+describe('a method beat needs something to correct', () => {
+  it('stays SILENT on a critical moment the student got right', () => {
+    const beat = methodBeatFor(base({ tier: 'critical', cpLossCp: 0, bestSan: 'Nf3' }));
+    expect(beat).toBeNull();
+  });
+
+  it('still teaches when they got it right-ish but really did drop something', () => {
+    expect(methodBeatFor(base({ tier: 'critical', cpLossCp: 120, bestSan: 'Nf3' }))).toMatch(/slow down|clock|thinking time/i);
+  });
+
+  it('an UNKNOWN cost does not mute it — null is not zero', () => {
+    // An ungraded ply has no cpLoss. Absent data never mutes the coach.
+    expect(methodBeatFor(base({ tier: 'critical', cpLossCp: null, bestSan: 'Nf3' }))).toBeTruthy();
+  });
+
+  it('the opponent-threat beat is unreachable on a good move by construction', () => {
+    // `ignoredThreat` comes from the attributor, which is flagged-only — this
+    // pins the CONTRACT so a future caller cannot start passing it on good moves.
+    expect(methodBeatFor(base({ ignoredThreat: false, cpLossCp: 0, bestSan: 'Nf3', tier: 'consequence' }))).toBeNull();
+  });
+});

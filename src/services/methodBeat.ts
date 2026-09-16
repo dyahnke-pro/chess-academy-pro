@@ -61,6 +61,12 @@ export type HabitNeed = Partial<Record<MethodHabit, boolean>>;
  *  when the student's own data says they habitually miss forcing shots. */
 const FORCING_CP = 100;
 const FORCING_CP_WHEN_NEEDED = 1;
+/** Below a KNOWN cost this small the student essentially found the move; there
+ *  is nothing to correct, so the corrective beat stays quiet. Deliberately
+ *  small — a "did they err at all" test, not a severity bar (the tier already
+ *  carries severity, and stacking a bar on it would be the flat-threshold
+ *  mistake all over again). */
+const SLIP_CP = 30;
 
 /** Stems rotate on the ply so a long game never repeats a sentence verbatim
  *  (the narration-voice rule: vary the stem, never the claim). */
@@ -112,8 +118,22 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   // 3 — SLOW DOWN. The position had real decision leverage: the right move
   // mattered here more than it does on an ordinary move. The app has always
   // KNOWN this (`criticalityScan` is rating-scaled) and never said it.
-  const slowTier = s.tier === 'critical' || s.tier === 'only-move'
-    || (need['slow-down'] === true && (s.tier === 'blunder' || s.tier === 'swing'));
+  // A METHOD BEAT IS A CORRECTION, SO IT NEEDS SOMETHING TO CORRECT (David
+  // 2026-09-16: "If they make the correct move this phrase shouldn't fire").
+  // He said it of the opponent-threat beat, which is already safe — the
+  // attributor returns nothing on an unflagged move, so `ignoredThreat` cannot
+  // be true when the student played well. SLOW-DOWN had no such guard: it gated
+  // purely on the MOMENT's tier, so finding the only move in a critical
+  // position still earned "this was the moment to slow down" — a correction the
+  // student earned the right not to hear, the same family as never telling them
+  // to find a move they played. The moment being critical is what makes the
+  // lesson worth teaching; the slip is what makes it theirs.
+  // NULL IS "UNKNOWN", NOT "ZERO". Only a KNOWN small cost means they found it;
+  // an ungraded ply must not silence the beat, because absent data never mutes
+  // the coach (the same rule the cold-start prior follows).
+  const foundIt = s.cpLossCp !== null && s.cpLossCp < SLIP_CP;
+  const slowTier = !foundIt && (s.tier === 'critical' || s.tier === 'only-move'
+    || (need['slow-down'] === true && (s.tier === 'blunder' || s.tier === 'swing')));
   if (slowTier) {
     return claim('slow-down', pick([
       'This was the moment to slow down — positions where one move decides it are worth more time than the ten quiet moves around them.',
