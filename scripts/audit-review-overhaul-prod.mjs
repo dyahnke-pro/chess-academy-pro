@@ -236,6 +236,20 @@ const run = async () => {
     // THE TURNING-POINT CARD — answer it the way a human does: tap a candidate
     // to step the board to that moment, THEN commit. Two taps, in order.
     if (await has(page, '[data-testid="review-turning-point-card"]')) {
+      // PAUSE FIRST. `handleWalkForward` DISMISSES this card by design (David
+      // 2026-07-19: forward must never leave a frozen board), and
+      // `turningAskedRef` means a dismissed card never returns. With playback
+      // still running, the walk advanced out from under the tap and Confirm
+      // never rendered — three attempts, three `confirm=false`, on a coach that
+      // works: the isolated probe (scripts/probe-turning-card.mjs), which pauses
+      // before answering, gets the thesis spoken every time.
+      const st = await page.locator('[data-testid="review-play-pause-btn"]').first()
+        .getAttribute('data-state', { timeout: 2000 }).catch(() => null);
+      if (st === 'playing') {
+        await page.locator('[data-testid="review-play-pause-btn"]').first()
+          .click({ timeout: 2000, force: true }).catch(() => undefined);
+        await page.waitForTimeout(300);
+      }
       const chip = page.locator('[data-testid^="turning-point-pick-"]').first();
       const chips = await page.locator('[data-testid^="turning-point-pick-"]').count().catch(() => -1);
       log(`  [turning] card present; ${chips} candidate chip(s)`);
@@ -359,8 +373,11 @@ const run = async () => {
       flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
     }
     if (n >= total) { reachedEnd = true; break; }
+    // NEVER RESUME WHILE THE TURNING-POINT CARD IS UP — resuming advances the
+    // walk, which dismisses it unanswered (see the pause note in resolveCards).
+    const cardBlocking = await has(page, '[data-testid="review-turning-point-card"]');
     const st = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state', { timeout: 3000 }).catch(() => null);
-    if (st === 'paused') { await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined); }
+    if (st === 'paused' && !cardBlocking) { await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined); }
     await page.waitForTimeout(1000);
   }
   const RECAP_RE = /of your \w+ flagged move|carry into the next game|The pattern: you \w/i;
