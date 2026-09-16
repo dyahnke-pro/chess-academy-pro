@@ -24,6 +24,9 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { QUESTION_MATRIX, allPhrasings } from './audit-lib/coach-question-matrix.mjs';
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
+import { seedProfileGames } from './audit-lib/seed-profile-games.mjs';
+import { seedWeaknessProfile } from './audit-lib/seed-weakness-profile.mjs';
 
 // EXHAUSTIVE by default (coach audit 2026-09-11): iterate EVERY phrasing per
 // lane, not one seeded draw — a single seeded run is a SAMPLE in depth, which
@@ -156,6 +159,8 @@ const pickPhrasing = (entry) => {
 
 const byId = new Map(QUESTION_MATRIX.map((e) => [e.id, e]));
 const results = [];
+/** Lane ids whose answer was the cold-data upload gate rather than real data. */
+const emptyStateAnswers = [];
 let CURRENT_ASK = '';
 const record = (id, pass, detail, note = '') => {
   results.push({ id, pass, detail, note, asked: CURRENT_ASK });
@@ -284,9 +289,34 @@ try {
   console.log('   (played 1.e4 on the free board)');
 } catch { console.log('   (no free-board move — lanes still answer, some via empty-state)'); }
 
+// DID THIS DEVICE HAVE ANYTHING TO SAY? Tracked so the coverage grid can tell a
+// lane answered FROM DATA apart from one that honestly answered "import some
+// games first". Both are on-contract on a cold device; only the first tells you
+// what a real user reads.
+let profileSeeded = false;
+
 for (const [section, ids] of SECTIONS) {
   console.log(`\n── section: ${section} ──`);
   if (section !== 'board') { await gotoTeach(); }
+  // SEED BEFORE THE PROFILE LANES. A fresh prod device has no games, so every
+  // one of them answers with the upload gate and the audit counts it a pass —
+  // 25 lanes testing the empty state (CLAUDE.md's fixture rule). Prefer David's
+  // real fixture when the container has it; fall back to a small synthetic
+  // history so the lanes are exercised either way.
+  if (section === 'profile' && !profileSeeded) {
+    const fx = await loadFixtureIntoIDB(page).catch(() => ({ loaded: false, reason: 'loader threw' }));
+    if (fx.loaded) {
+      console.log(`   [seed] real fixture: ${fx.wrote} rows / ${fx.stores} stores`);
+      profileSeeded = true;
+    } else {
+      const g = await seedProfileGames(page).catch((e) => ({ ok: false, reason: String(e).slice(0, 60) }));
+      const w = await seedWeaknessProfile(page).catch((e) => ({ ok: false, reason: String(e).slice(0, 60) }));
+      console.log(`   [seed] fixture absent (${fx.reason}) → synthetic: games=${g.ok ? g.wrote : `FAILED ${g.reason}`} mistakes=${w.ok ? w.wrote : `FAILED ${w.reason}`}`);
+      profileSeeded = !!(g.ok || w.ok);
+    }
+    // The surface caches its Dexie read on mount — reload so the lanes see it.
+    await gotoTeach();
+  }
   for (const id of ids) {
     const entry = byId.get(id);
     if (!entry) { record(id, false, 'not in matrix'); continue; }
@@ -328,7 +358,12 @@ for (const [section, ids] of SECTIONS) {
     let pass = acc ? acc.test(reply) : reply.length > 20;
     // A profile/personal-game lane answered with the cold-data upload gate is
     // on-contract (correct behaviour with no games imported).
-    if (!pass && PROFILE_LANES.has(id) && UPLOAD_GATE.test(reply)) pass = true;
+    // A profile lane answered with the upload gate is ON-CONTRACT but it is not
+    // the same result as one answered from data — record which, so "25 green"
+    // can never again mean "25 empty states".
+    const gated = PROFILE_LANES.has(id) && UPLOAD_GATE.test(reply);
+    if (!pass && gated) pass = true;
+    if (gated) emptyStateAnswers.push(id);
     record(id, pass, `"${reply.slice(0, 130)}"`, pass ? '' : 'reply is off-contract for this lane');
    }
   }
@@ -342,6 +377,15 @@ if (browserDead) {
   console.log('     work running alongside a long Chromium session — run it alone.)');
 }
 
+if (emptyStateAnswers.length) {
+  const uniq = [...new Set(emptyStateAnswers)];
+  console.log(`\n⚠️  ${emptyStateAnswers.length} answer(s) across ${uniq.length} lane(s) were the EMPTY STATE, not data:`);
+  console.log(`    ${uniq.join(', ')}`);
+  console.log('    On-contract for a device with no games — but those lanes did NOT');
+  console.log('    exercise the sentence a real user reads. Seeding is above; if it');
+  console.log('    reported FAILED, fix that before reading anything into these rows.');
+}
+
 const passed = results.filter((r) => r.pass).length;
 console.log(`\n── coverage grid ──`);
 for (const r of results) console.log(`${r.pass ? '✅' : '❌'} ${r.id}`);
@@ -351,7 +395,7 @@ for (const e of pageErrors.slice(0, 5)) console.log(`  PAGEERROR: ${e}`);
 console.log(`audit_run_id: ${RUN_ID}`);
 const dir = `audit-reports/coach-all-questions-${new Date().toISOString().replace(/[:.]/g, '-')}`;
 mkdirSync(dir, { recursive: true });
-writeFileSync(`${dir}/report.json`, JSON.stringify({ runId: RUN_ID, base: BASE, partial: browserDead, results, pageErrors }, null, 2));
+writeFileSync(`${dir}/report.json`, JSON.stringify({ runId: RUN_ID, base: BASE, partial: browserDead, emptyStateAnswers: [...new Set(emptyStateAnswers)], results, pageErrors }, null, 2));
 console.log(`report: ${dir}/report.json`);
 try { await browser.close(); } catch { /* already gone */ }
 // A partial run is never a pass, however many of its checks were green.
