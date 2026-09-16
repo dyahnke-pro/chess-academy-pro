@@ -2031,6 +2031,46 @@ voice — recalibrate immediately.
 
 ## ⏰ Standing notes
 
+**🔒🔒 NEVER RUN BLIND, NEVER WAIT SILENT — A LONG COMMAND IS ALWAYS OBSERVABLE AND ALWAYS NARRATED (David 2026-09-16, LOCKED: "Lock this in so it never happens again. For any session.").**
+
+From David's side, a session that is legitimately BLOCKED and a session that is
+STUCK look **identical**: both produce nothing. He should never have to ask
+"are you frozen?" to find out which one he has. Two halves, both mandatory:
+
+**1. NEVER BLINDFOLD THE COMMAND.** The 2026-09-16 case: ship-check was started
+as `npm run ship-check 2>&1 | tail -30`. `tail` buffers its whole input until
+the upstream process exits, so a ~6-minute gated run produced **zero bytes** for
+its entire life — no phase results, no progress, nothing to monitor, and no way
+to tell a hung gate from a slow one. Self-inflicted, and it is the same disease
+this file calls out everywhere else: *an instrument that reports nothing is
+indistinguishable from a green one.* So:
+- **Long-running work writes to a LOG FILE** (`> /tmp/<thing>.log 2>&1`), never
+  into a buffering pipe. Banned as the outer stage of a long command: `| tail`,
+  `| head`, `| sort`, `| wc`, `> /dev/null` — all of them either swallow the
+  stream or withhold it until exit. Filter when you READ the log, never on the
+  way in.
+- **Then watch the log**, so progress arrives as it happens: `Monitor` on
+  `tail -f <log> | grep --line-buffered -E "<success|failure signatures>"`. The
+  filter must match the FAILURE strings too — a monitor that greps only for the
+  success marker stays silent through a crash, which is the same blindfold in a
+  different costume.
+- **Prefer a command that can be watched over one that only reports at the end.**
+  If a tool genuinely emits nothing until it finishes, say so up front and give
+  the expected duration, so silence is a stated fact rather than an inference.
+
+**2. NEVER WAIT SILENT.** Ending the turn IS how a session waits (the harness
+re-invokes on completion), and that is correct — but ending it with no words is
+not. Before any block, say in one line: **what is running, how you will know it
+finished, and what happens next.** On each phase that lands, one short line. A
+wait is not an excuse to go quiet; the whole point of the cadence is that David
+can read the state without asking for it. (This composes with the check-for-a-
+message rule below — while you are blocked you also have the spare cycles to
+call `ReadNotifications`.)
+
+**The test:** if David glanced at the terminal right now, could he tell the
+difference between "working" and "wedged"? If not, you have already broken this
+rule — fix the instrument before you wait on it.
+
 **🔒🔒 CHECK FOR A MESSAGE FROM DAVID WHENEVER YOU'RE WAITING — ALL SESSIONS
 (David 2026-09-06, LOCKED: "If you're sitting and waiting for something, at
 least check to see if I have sent you a message. Lock that in for ALL
