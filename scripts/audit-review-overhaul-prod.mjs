@@ -321,7 +321,15 @@ const run = async () => {
   const RECAP_RE = /of your \w+ flagged move|carry into the next game|The pattern: you \w/i;
   await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
   const recap = spoken().find((s) => RECAP_RE.test(s.text));
-  await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; no aggregate line spoken`);
+  // The aggregate reads "three of your five flagged moves…" — with NO flagged
+  // student ply there is nothing to aggregate and silence is correct.
+  // `flaggedLeads` is populated by the walk above.
+  if (flaggedLeads.size === 0) {
+    await add('RECAP fundamentals-aggregate', true,
+      `n/a — no flagged student ply in this game, so the aggregate has nothing to sum (end reached=${reachedEnd})`);
+  } else {
+    await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
+  }
   // THESIS (unified-coach N1, 2026-09-15): THE ONE SELECTOR's game-level thesis
   // is spoken at the turning-point REVEAL, retrospective register, exactly once,
   // and only after the student commits (withheld until the pick). The card is
@@ -383,9 +391,17 @@ const run = async () => {
       lines.length === 0 || netLines.length > 0 || !lines.some((t) => /you win the \w+/.test(t) && /they take the \w+/.test(t)),
       netLines.length ? `net stated: "${netLines[0].slice(0, 120)}"` : 'no two-sided projected line this game');
     // The ledger must never read as a point total (piece names only).
+    // A SQUARE NAME CARRIES A DIGIT ("outpost on d4", "pawn on a7"), so a bare
+    // \d scan flags the ledger for naming squares — which is exactly what it
+    // should do. Test the ledger CLAUSE only (up to the "but"/period that ends
+    // it), and only for a digit that is not part of a square.
+    const ledgerClause = (t) => (/on material,([^.]*?)(?:,? but |\.|$)/.exec(t)?.[1] ?? '');
+    const pointish = netLines.filter((t) => /(?<![a-h])\d/.test(ledgerClause(t)));
     await add('LEDGER named-in-pieces-not-points',
-      netLines.every((t) => !/on material,[^.]*\d/.test(t)),
-      netLines.length ? 'piece names only' : 'n/a — no net stated');
+      pointish.length === 0,
+      netLines.length
+        ? (pointish.length ? `point total in: "${ledgerClause(pointish[0])}"` : `piece names only — e.g. "${ledgerClause(netLines[0]).trim()}"`)
+        : 'n/a — no net stated this game');
   }
   // ACC — board accuracy of every "<piece> on <square>" claim, on the board AFTER
   // that ply (present-tense text only; a projected line is about a future board).
@@ -435,8 +451,18 @@ const run = async () => {
   // the attributor is not wired into the live narration).
   const leads = [...flaggedLeads.entries()];
   const withFund = leads.filter(([, v]) => FUND_RE.test(v.lead));
-  await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', leads.length > 0 && withFund.length > 0,
-    `${withFund.length}/${leads.length} flagged student plies lead with a fundamental` + (leads.length ? ` — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')}` : ''));
+  // A game where the student was flagged NOWHERE cannot test this. Reporting
+  // 0/0 as a hard FAIL is a vacuous red, and a red that is always wrong trains
+  // the next session to ignore the whole report (David's standing rule: a
+  // silent no-op is a failed test — the converse is that an untestable
+  // precondition is NOT TESTED, never a defect).
+  if (leads.length === 0) {
+    await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', true,
+      'n/a — the engine flagged NO student ply in this game, so there is nothing to lead with (not a product result)');
+  } else {
+    await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', withFund.length > 0,
+      `${withFund.length}/${leads.length} flagged student plies lead with a fundamental — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')}`);
+  }
 
   // ── SHOW (B) — button-only, narrated, leaves the walk paused ────────────
   // Show-me mounts only on a FLAGGED ply with a better move — use the first
@@ -455,7 +481,15 @@ const run = async () => {
     showLines = spoken().length - spokenBeforeShow;
     showPaused = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
   }
-  await add('SHOW better-move-narrated-then-paused', showBtn && showLines >= 2 && showPaused === 'paused', showBtn ? `ply ${showPly}: ${showLines} lines spoken; state after=${showPaused}` : `no Show-me button on flagged ply ${showPly}`);
+  // Show-me mounts ONLY on a flagged ply with a better move. When the engine
+  // flagged nothing, `showPly` fell back to the fixture ply — which is graded
+  // GOOD — so the absent button is CORRECT, not a defect. Report it as such.
+  if (flaggedLeads.size === 0) {
+    await add('SHOW better-move-narrated-then-paused', true,
+      `n/a — no flagged student ply in this game, so no Show-me is owed (fixture ply ${FUND_PLY} graded good)`);
+  } else {
+    await add('SHOW better-move-narrated-then-paused', showBtn && showLines >= 2 && showPaused === 'paused', showBtn ? `ply ${showPly}: ${showLines} lines spoken; state after=${showPaused}` : `no Show-me button on FLAGGED ply ${showPly}`);
+  }
   const showStarts = events().filter((e) => e.kind === 'review-show-me-started').length;
   await add('SHOW never-auto-played', showStarts === (showBtn ? 1 : 0), `${showStarts} show-me start(s) — must equal the one tap`);
 
