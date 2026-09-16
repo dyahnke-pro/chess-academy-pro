@@ -552,48 +552,76 @@ G5 specifies. Nothing else may cap.
   the EXHAUSTIVE routing audit (`audit-coach-all-questions-prod.mjs`) — that is
   the only thing that proves the chat lanes still answer — and READ the answers.
 
-### G4.5.1 A REGISTER IS NOT A CAP — the full-detail inventory was CUT, the facts were not (David 2026-09-16: "I see what you mean by full detail now. Thank you for showing me that. Cut it.").
+### G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").
 
-Read side by side on David's Alapin game, the two review registers were:
+⚠️ **This REPLACES an earlier version of G4.5.1 that said the full-detail
+register had been cut.** That was the first attempt and it was the wrong shape;
+the claim is deleted rather than appended to, per the Lake Butler rule. The
+register renders again — `factSelector` decides.
 
-| register | plies spoken | words |
+**What went wrong first.** David read the full-detail output ("calling out the
+pins and the batteries was a bit much") and said "cut it". The first fix flipped
+`isReviewUncapped()` off. That silenced his complaint BY ACCIDENT: it threw away
+every other fact on the ply along with the duplicate, it was scoped to review
+while the coach is one system, and it put the decision in a code path instead of
+in a computer.
+
+**The three deciders, and the one that was missing.**
+
+| decider | question | scope |
 |---|---|---|
-| full-detail inventory (was the default) | 43 / 46 | 3,242 |
-| one-beat (now the only one) | 44 / 46 | ~1,037 |
+| `computeImportance` | does this MOMENT earn voice | position-level, rating-scaled, contested-gated |
+| need score (N2) | does THIS STUDENT need teaching here | per ply, from their own data |
+| **`factSelector`** (new) | **which FACTS at this moment speak** | per fact |
 
-The inventory spoke every computed facet on every move in rank order. The extra
-2,200 words were not teaching: "You're balanced" at ply 1, "Undefended right
-now: their pawn on e4" at ply 4. It also went SILENT on three plies the
-one-beat register narrates — full detail saying LESS is the inversion G4.5
-exists to prevent. So it is cut, and there is **no Settings toggle**: a switch
-that turns it back on is not a cut. It survives ONLY as a `?uncapped=1` /
-`window.__REVIEW_UNCAPPED__` diagnostic for a session that wants to read the
-raw computed inventory. `reviewFullDetail` remains declared on
-`UserPreferences` purely so already-persisted profiles stay valid; NOTHING
-reads it, and no new preference may re-expose the register.
+`reviewFacetRank` orders and, by its own contract, never drops — so once a
+moment earned voice, every fact computed at it spoke. That is why one ply named
+the pin, the battery, the lone defender AND the royal guard: four readings of
+ONE geometry (the d1–e2–g4 diagonal), delivered as four findings.
 
-🚨 **DO NOT "TIDY" THIS INTO A CAP.** What was cut is a RENDERING REGISTER (how
-many computed facts get read aloud per move). The PROJECTION passes stay
-UNCAPPED: `augmentWithProjections` is called with scope `'full'`
-UNCONDITIONALLY, and the `uncapped ? 'full' : 'mistakes'` ternary is gone. The
-`'mistakes'` scope reinstates three `scope === 'full' ? 999 : 2` budgets (deep
-threats, opponent deep threats, prophylactic moves) — re-coupling the scope to
-the register flag would delete the "here's how you take advantage" beats while
-looking like a cleanup. The 20s `REVIEW_AUGMENT_TIMEOUT_MS` was deleted with
-that scope; do not reintroduce a tighter deadline as a back-door cap.
+**TWO MECHANISMS, and ranking alone is not enough.** Ranking gives a total order
+across UNRELATED facts. Between the pin and the battery you do not want an
+order — you want one to win BECAUSE THEY ARE THE SAME CLAIM. So `factSelector`:
+1. **SUBSUMES** facts whose square sets coincide (Jaccard ≥ 0.6 — NOT
+   containment, which would let a one-square fact be eaten by any larger fact
+   mentioning that square) down to the highest-ranked one.
+2. **Applies a value BAR** to what survives.
 
-**Lost with the register, honestly:** `reviewFacetRank` (N9) orders a FACET
-LIST, and the one-beat path renders one beat rather than a list, so nothing
-calls it on the shipped path. N2's need gate is NOT lost — the one-beat cascade
-has carried it since N2 landed (`coachFeatureService`, the `needHere.speak`
-clause on the quiet-opening-ply branch), and the N7 exchange ledger is NOT lost
-either (it lives in `render()` inside `augmentWithProjections`, which runs in
-both scopes). Verify those two claims in the source before trusting this
-paragraph — that is how they were established.
+**The tie-break is a chess judgement, scoped INSIDE a same-claim group.** At
+equal rank the fact describing what the OPPONENT is doing TO the student wins —
+their battery bearing on your bishop is a question you must answer; your pin is
+a standing asset. The flag comes from the tactic detector's own `beneficiary`,
+coupled at emission, never inferred from the prose. It is deliberately NOT a
+global rank bonus: the `FACET_RANK` bands sit 1–4 apart, so a bonus would vault
+a tactic over the move's own verdict.
 
-Gates: `exchangeLedger.test.ts` → "the full-detail inventory register is CUT"
-(no standalone `return true` in `isReviewUncapped`, no Settings toggle, scope
-never re-coupled).
+🚨 **THE BAR IS A FLOOR, NOT A SHAPER — and it may NEVER mute a ply.** The first
+numbers ran 40–101 and cut the Alapin review from 44 narrated plies to SIX,
+because a quiet ply lands on tier `none` and a bar above every rank silences
+everything. That is the "things don't get stated, teachings left out" failure
+arriving through the door marked "importance". Bars are now 0 for every
+important tier and 20 elsewhere, which sweeps only the `consequence` band. If
+the coach still says too much, **tighten SUBSUMPTION, never raise the bar** —
+ply-level silence belongs to the need gate. Gate:
+`factSelector.test.ts` asserts `barForTier('none') < 30`.
+
+**A bar is still not a cap** (G4.5): a cap stops after N regardless of worth; a
+bar admits anything worth ≥ X regardless of count. On a critical moment every
+computed fact clears it.
+
+**SUBSUMPTION NEEDS COUPLED SQUARES.** A fact with no squares is never
+collapsed — we cannot prove it is the same claim and silence must never be a
+guess. Today only the `[tactic]` and `[loose]` facets couple squares (from
+`tac.involvedSquares`). **`[delta]` does not, so two lines describing ONE
+diagonal opening from both ends still both speak** — `computeBoardDelta` returns
+strings and loses the squares at its boundary. Coupling squares there is the
+next increment and where the real tightening comes from. NEVER scrape squares
+back out of prose to compare geometry; that is the anti-pattern behind this
+session's other bugs.
+
+**Projection scope stays `'full'` unconditionally** — `augmentWithProjections`
+must never be re-coupled to the register flag; `'mistakes'` scope reinstates
+three `scope === 'full' ? 999 : 2` budgets.
 
 ### G4.5.2 NEVER TELL A STUDENT TO FIND A MOVE THEY PLAYED (found reading the shipped register, 2026-09-16).
 

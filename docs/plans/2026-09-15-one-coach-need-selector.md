@@ -752,3 +752,55 @@ A beat told the student to find a move they had just played (ply 32, `Nexd4`),
 duplicating the true present-tense threat one clause earlier. Root-fixed in
 `buildReviewDeepestLookahead` with a REQUIRED `playedSan` and a coordinate
 match. See CLAUDE.md §G4.5.2. D1–D3 from §11 remain open.
+
+---
+
+## §13. THE CUT MOVED INTO THE COMPUTER (David 2026-09-16, correcting §12)
+
+> "we don't make a cut on the code side, the computer that ranks the narrations
+> does. At narrations time. If the battery is more important than the pin, then
+> the pin stays quiet and the battery wins."
+
+§12's cut is **reverted**. `isReviewUncapped()` defaults true again; the register
+renders every computed fact it ever did. `src/services/factSelector.ts` decides
+which of them speak. Doctrine: CLAUDE.md §G4.5.1 (which replaces, not appends
+to, the version §12 produced).
+
+### Evidence — ply 23 of David's Alapin, same facts, different decision
+
+```
+BEFORE  Your bishop on g4 pins their bishop on e2 against their queen on d1.
+        Your queen on d7 is the only defender of your bishop on g4…
+        Their queen on d1 and their bishop on e2 form a battery on the diagonal…
+
+AFTER   Your queen on d7 is the only defender of your bishop on g4…
+        Their queen on d1 and their bishop on e2 form a battery on the diagonal…
+```
+
+| | plies spoken | words |
+|---|---|---|
+| before the selector | 43 / 46 | 3,242 |
+| the bad first bar | 6 / 46 | 684 |
+| shipped | 43 / 46 | 3,204 |
+
+### The mistake in the middle, recorded because it is the instructive one
+
+The first bar (40–101 by tier) cut the review to SIX narrated plies. A quiet ply
+lands on tier `none`, and a bar above every fact rank silences the whole ply —
+the banned failure wearing the word "importance". Only READING the output caught
+it; every test was green. Bars are now 0/20, `factSelector.test.ts` asserts
+`barForTier('none') < 30`, and the rule is: tighten subsumption, never the bar.
+
+### What is still owed
+
+1. **`[delta]` facets are geometry-blind.** `computeBoardDelta` returns strings,
+   so two clauses describing one diagonal opening from both ends cannot be seen
+   as one claim. This is why only 38 words came out. Coupling squares there is
+   the next increment and the bulk of the remaining win.
+2. **Unify across surfaces.** `factSelector` is wired into review only. Learn,
+   play phase-transitions, read-position and chat still speak unselected facts.
+3. **N8 typed facts** (§10) subsume this: once facts carry `squares`/`subject`/
+   `claimId` natively, the coupling above stops being per-emitter plumbing.
+
+D1–D3 from §11 remain open. D4 (telling the student to find a move they played)
+is fixed — CLAUDE.md §G4.5.2.
