@@ -405,7 +405,42 @@ describe('internal composed-prompt surfaces skip user-intent detection', () => {
     // against exactly this kind of false positive. Every real phrasing still
     // routes ("drill me on tactics" → tactics, "drill my endgames" → endgame),
     // so nothing user-facing regressed — the canary was pointed at a bug.
-    expect(g?.bestMoveQuestion).toBe(true);
+    //
+    // `bestMoveQuestion` went the same way (2026-09-16). "Best move: Qe3." is a
+    // DECLARATION inside a system prompt, not a question, and the best-move
+    // detector is right not to fire on it. Asserting it here was pinning a
+    // second false positive, so the mirror has moved to text that legitimately
+    // trips a detector — see the test below, which is the real contract:
+    // surface decides whether the detectors RUN, and it must not decide by
+    // accident of what a prompt fragment happens to contain.
     expect(g?.tacticsQuestion).toBe(true);
+  });
+
+  // THE REAL MIRROR: one genuine user question, asked on both surfaces. On a
+  // user surface the detectors run; on an internal (composed-prompt) surface
+  // they are skipped. Nothing about the assertion depends on a prompt fragment
+  // accidentally looking like a question.
+  const REAL_USER_ASK = "what's the best move here?";
+
+  it('game-chat surface: a REAL user question trips the best-move detector', async () => {
+    const { provider, getGrounding } = captureProvider();
+    await coachService.ask(
+      { surface: 'game-chat', ask: REAL_USER_ASK, liveState: { surface: 'game-chat', fen: FEN } },
+      { providerOverride: provider },
+    );
+    const g = getGrounding();
+    expect(g?.internalAsk).toBeUndefined();
+    expect(g?.bestMoveQuestion).toBe(true);
+  });
+
+  it('hint surface: the SAME real question is NOT detected (internal path)', async () => {
+    const { provider, getGrounding } = captureProvider();
+    await coachService.ask(
+      { surface: 'hint', ask: REAL_USER_ASK, liveState: { surface: 'hint', fen: FEN } },
+      { providerOverride: provider },
+    );
+    const g = getGrounding();
+    expect(g?.internalAsk).toBe(true);
+    expect(g?.bestMoveQuestion).toBe(false);
   });
 });

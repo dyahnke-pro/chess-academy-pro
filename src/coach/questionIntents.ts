@@ -899,6 +899,16 @@ export function isEndgameWeaknessQuestion(ask: string | undefined): boolean {
  *  so this detector can be broad on the "how does X play / show me X's games"
  *  shape without name-matching every pro. Distinct from `isMasterPlayQuestion`
  *  (aggregate master practice) — this is ONE player's actual games. */
+// "do you have a game in this opening?" — an AVAILABILITY ask about the pro's
+// game corpus. It is pulled out of the list below because it collides with the
+// second-person veto: that veto exists to stop "why did YOU play that move?"
+// (about the coach's own move in the lesson) reaching this lane, and its
+// `do\s+you` arm was ALSO vetoing this perfectly good phrasing. A blanket veto
+// on "do you" was too blunt for a detector whose own vocabulary contains
+// "do you have a game" (found by the paraphrase matrix, 2026-09-16).
+const GAME_AVAILABILITY_SRC = String.raw`\b(?:do\s+you\s+have|is\s+there|got|have\s+you\s+got)\s+(?:a\s+|any\s+)?games?\s+(?:in|with|for|from|of|here)\b`;
+const GAME_AVAILABILITY_RE = new RegExp(GAME_AVAILABILITY_SRC, 'i');
+
 const PLAYER_GAMES_QUESTION_RE = anyOf([
   String.raw`\bhow\s+does\s+(?:he|she|they|\w+)\s+(?:play|handle|treat|approach|continue|meet)\b`,
   // PRESENT-TENSE named-player arm: "how Magnus plays the Catalan", "teach me
@@ -920,8 +930,10 @@ const PLAYER_GAMES_QUESTION_RE = anyOf([
   String.raw`\bhow\s+did\s+(?:he|she|they|the\s+(?:pro|master|player|gm)|\w+)\s+(?:win|handle|beat|play|do)\b`,
   // "show/find me a game where/of/in <player> …" — a game-lookup, not "his games"
   String.raw`\b(?:show|find|got|see|pull\s+up|get)\s+(?:me\s+)?(?:a\s+|one\s+|any\s+)?games?\s+(?:where|of|from|in\s+which|with|that)\b`,
-  // "do you have / is there a game in/for this opening/line"
-  String.raw`\b(?:do\s+you\s+have|is\s+there|got|have\s+you\s+got)\s+(?:a\s+|any\s+)?games?\s+(?:in|with|for|from|of|here)\b`,
+  // "do you have / is there a game in/for this opening/line" — see
+  // GAME_AVAILABILITY_RE below; it is named separately because the
+  // second-person veto must not swallow it.
+  GAME_AVAILABILITY_SRC,
   // "what game shows/demonstrates this idea"
   String.raw`\bwhat\s+games?\s+(?:shows?|demonstrates?|illustrates?|has|features?)\b`,
   // "show me a hikaru game (in this line)" — a NAMED player's game, the name
@@ -937,7 +949,10 @@ export function isPlayerGamesQuestion(ask: string | undefined): boolean {
   // in the lesson (move-purpose), NOT a pro lookup — same greedy-\w+ trap; a
   // mid-lesson "why did you play that?" was misrouting to "which player do you
   // mean?" (David 2026-09-09 teach audit).
-  if (/\b(?:did|has|do|does|will|would|can)\s+(?:i|you)\b/i.test(ask)) return false;
+  // …but "do you have a game in this line?" is an availability ask about the
+  // pro's corpus, not a question about a move the coach played, so it is exempt.
+  if (!GAME_AVAILABILITY_RE.test(ask)
+    && /\b(?:did|has|do|does|will|would|can)\s+(?:i|you)\b/i.test(ask)) return false;
   return PLAYER_GAMES_QUESTION_RE.test(ask);
 }
 

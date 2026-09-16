@@ -270,8 +270,18 @@ describe('grounding — intent detection', () => {
     );
     // forceEngage builds the grounding context (cache warmed) but no assembler
     // answers "tell me about this" and no engine snapshot is threaded — so the
-    // grounded default serves the honest line, NOT the free 'Sure.' (RIP).
-    expect(r).toContain("can't verify");
+    // grounded default speaks, NOT the free 'Sure.' (RIP).
+    //
+    // WHAT THE DEFAULT IS NOW. These assertions used to pin the literal stock
+    // refusal "can't verify". The default has since improved: with no engine it
+    // states the gap honestly AND still says what the BOARD knows ("Material is
+    // even, and I don't have an engine read on this exact position … your king
+    // is still in the centre"). That is the G0 direction — computed facts in
+    // place of a refusal — so the contract, not the code, was stale. What must
+    // hold is the contract itself: the LLM's text never surfaces, and the reply
+    // is honest about what is not known.
+    expect(r).not.toContain('Sure.');
+    expect(r).toMatch(/don'?t have an engine read|can'?t verify|nothing is decided yet/i);
     expect(masterPlayCache.has(STARTING_FEN_4)).toBe(true);
   });
 });
@@ -298,7 +308,9 @@ describe('grounding — the grounded default (no free-compose)', () => {
 
   it('serves the honest stock line when nothing can be grounded (no engine data)', async () => {
     const { response, counters } = await ask('what should I play here?', ['I recommend Nh6. Masters favor e4.']);
-    expect(response).toContain("can't verify"); // grounded default — no free-compose
+    // Honest about the missing engine read (see the note above on why this is
+    // no longer the literal stock string), and board-true about the rest.
+    expect(response).toMatch(/don'?t have an engine read|can'?t verify|nothing is decided yet/i);
     expect(response).not.toContain('Nh6');       // the LLM's invented move NEVER reaches the user
     expect(counters.llmCalls).toBe(0);           // the LLM is never called to decide chess
   });
@@ -337,7 +349,8 @@ describe('grounding — the grounded default (no free-compose)', () => {
       '', undefined, 'chat_response', 1024, undefined, undefined, undefined,
       { currentFen: STARTING_FEN, surface: '/coach/teach', sessionId: 'test-session' },
     );
-    expect(r).toContain("can't verify"); // no engine data → honest default, not free prose
+    expect(r).toMatch(/don'?t have an engine read|can'?t verify|nothing is decided yet/i);
+    expect(r).not.toContain('Sicilian');  // the hallucinated naming NEVER surfaces
     expect(counters.llmCalls).toBe(0);
   });
 });

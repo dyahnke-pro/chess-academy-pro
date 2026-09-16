@@ -1059,3 +1059,34 @@ Two gates it deliberately respects rather than loosening:
 Still owed from §17: D1 (coupled squares on `ClauseItem`), D2 (`FactBundle.rank`
 passthrough), D3 (required `posture`), D5 (delete the direct `computeImportance`
 call and extend the door gate).
+
+### §17.2 — What the uncapping exposed: the plan lane's "worst piece" lever has no bar
+
+Read off LIVE prod, the plan lane at the start position after 1.e4:
+
+```
+No single trump yet — the plan is to break with d4 or f4 to open the
+position; improve your rook on h1.
+```
+
+"Improve your rook on h1" on move one is not false — the h1 rook IS the
+least-active piece — but it is not teaching either. `strongestWeakestPiece`'s
+weakest-piece lever fires unconditionally, with no quality bar at all, and a
+piece sitting on its home square in the opening is undeveloped, not misplaced.
+
+It is NOT a regression from the cap sweep (there were only two levers at that
+position, so it cleared the old `.slice(0, 3)` as well), but the sweep makes the
+class more visible: with no count cap, every low-quality lever now reaches the
+student instead of being crowded out by chance.
+
+The fix is a BAR, never a cap (G4.5): name the worst piece when it is genuinely
+misplaced — out of the opening, or off its home square, or with materially less
+scope than its counterpart — and stay silent otherwise. Silence there is the
+computed verdict, not a truncation. Same shape as the two bars this sweep already
+added (master moves at >=2% of the games, fundamentals at >=25% of the student's
+own worst count).
+
+Deliberately not shipped in the same night as the sweep itself: it is a third
+behaviour change to the same lane, and the instrument that would prove it — the
+exhaustive routing audit with its answers READ — takes the better part of an hour
+per run.

@@ -4,7 +4,7 @@
 // its read from computed facts alone. A WIRE THAT DOES NOT FIRE IS NOT A
 // WIRE: this proves a REAL note comes out of the retrieval for a REAL taught
 // position and lands in the hook's prompt block, not that an import exists.
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../services/danyaTeachingService';
 import { __setFarmedCorporaCache } from '../services/farmedCorpusData';
@@ -18,11 +18,20 @@ const VOICED = JSON.parse(
 describe('position read corpus wiring', () => {
   // Exercise the real runtime path: inject voiced (the sole exact-position
   // corpus) into the secondary index the hook's `teachingSourceForBoard` reads.
-  beforeEach(() => {
+  //
+  // ONCE, not per test, with an explicit timeout. The sync warm replays every
+  // voiced line through chess.js — 7,482 notes, ~10.4s — so it had grown past
+  // vitest's default 10s HOOK timeout and this gate had gone red purely on
+  // corpus growth, which is the worst way for a "does the wire fire" test to
+  // die: it looks like the wire broke. The index is read-only once built, so
+  // building it per test bought nothing. (Product is unaffected — the app calls
+  // the ASYNC `warmSecondaryPositionIndex` from its boot prewarm, off the
+  // critical path.)
+  beforeAll(() => {
     __setFarmedCorporaCache([{ key: 'voiced', data: VOICED as never }]);
     warmSecondaryPositionIndexSync();
-  });
-  afterEach(() => { __setFarmedCorporaCache(undefined); });
+  }, 120_000);
+  afterAll(() => { __setFarmedCorporaCache(undefined); });
 
   it('a real VOICED position yields a real spoken note through the exact call chain the hook uses', async () => {
     // Voiced is the sole exact-position corpus on the coach tab now (David
