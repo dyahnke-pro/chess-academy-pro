@@ -882,3 +882,40 @@ now an "a, b and c" list.
 **Blast radius, verified:** `computeMoveFacets` and `computeBoardDelta` each
 have exactly ONE production caller (the review facet path), so Learn and Play
 narration is untouched by tonight's changes.
+
+## §16. THE NUMBER THAT MATTERS MOST, and it is not the word count
+
+The audit's step budget ran out at ply 45 of 46 because the walk auto-advances
+on the voice promise, whose delay is proportional to the beat's LENGTH. Fixing
+the budget is a one-line driver change. The finding underneath it is not:
+
+| | |
+|---|---|
+| spoken | 3,147 words over 43 plies |
+| per ply | **73 words** |
+| at 150 wpm | **~29 seconds per ply, ~21 minutes per review** |
+
+That is the honest cost of "no caps" as it stands today, and it is the same
+complaint David opened with on 2026-09-15 — review "takes too long and says too
+much". Subsumption cut duplication (10 clauses → 7 on the dense ply) but the
+BEATS are still long, because every fact that clears a low floor speaks.
+
+**Do NOT respond by raising the bar.** That is the reflex the bad-bar incident
+already punished, and it deletes teaching rather than tightening it. The levers
+that reduce time WITHOUT losing content, in order:
+
+1. **More subsumption, more coupled geometry.** Every facet that still lacks
+   squares (`[does]`, `[count]`, `[royal]`, `[king]`, `[worst]`) is a fact that
+   cannot be recognised as a duplicate of one already spoken. `[does]` in
+   particular enumerates every square a piece now eyes and frequently restates
+   what a `[tactic]` clause just said.
+2. **Say-once across the GAME, not just the ply.** A standing fact ("their d4
+   pawn is isolated") re-earns its place on many plies. There is a say-once
+   ledger for some clauses; it does not cover the facet inventory.
+3. **Shorter renderings of the same fact.** 73 words per ply is a PHRASING
+   number as much as a selection one.
+4. **Need, harder.** N2 currently gates quiet OPENING plies only. A familiar,
+   well-played middlegame ply is still fully narrated.
+
+Measure this number again after any narration change. It is the one the student
+actually experiences.
