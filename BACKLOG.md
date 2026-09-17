@@ -94,3 +94,38 @@ Root cause worth fixing structurally: the retirement commit swept `src/`,
 `public/`, `data/` and `docs/` — and **zero** files under `scripts/`. Instruments
 are outside the blast-radius habit, and nothing runs them on a schedule, so a
 script that dies at import produces no signal at all.
+
+---
+
+## 4. Live Learn defects found reading a full game (2026-09-17)
+
+First complete Learn game ever captured with a working narration wire — 22
+plies to checkmate, 233 spoken lines, 630 audit events. Report:
+`audit-reports/learn-full-game-2026-09-17T03-43-47-467Z/`. None of these are
+fixed; each needs its own root-cause pass.
+
+1. **A 184cp blunder is "under the floor, nothing to call."** Two coach moves in
+   one game — `Qc7` at 122cp and `Qxc5` at 184cp — were classified as not worth
+   mentioning. The advanced rating band's own threshold is 50cp. Whatever floor
+   `coachVerdict` applies is mis-scaled or inverted.
+
+2. **The coach coaches after checkmate.** Ply 22 speaks "Checkmate." and then
+   continues with "The move is Rd1", "Re1 is playable, but not as precise",
+   "Their king is still in the centre — every line that opens toward it is worth
+   looking at." The terminal position must end the advice lanes.
+
+3. **A false claim about a captured piece, UNFLAGGED.** "Your knight on b5 is
+   hanging" spoken at ply 22; b5 was captured at ply 7 (`axb5`) and the student
+   had no knights left at all. The board-checker covered 116 of 233 lines — only
+   those carrying a FEN — so 117 lines ship unchecked and at least one is false.
+   Fix the COVERAGE, not just the claim.
+
+4. **Internal state in the voice.** "You're down 2 points of material here (no
+   engine eval on this exact spot)." The parenthetical is the app explaining its
+   own plumbing; the Narration Voice Rules ban interface references outright.
+
+5. **Instrument, not product: the board-checker false-positives on
+   hypotheticals.** It flagged "a4 was the move — it *would* create a passed pawn
+   on b4" because b4 is empty now. Conditional and projected claims are not
+   claims about the current board and must not be graded as such — this is the
+   same class as the "fen" substring matching inside "de-fen-se".
