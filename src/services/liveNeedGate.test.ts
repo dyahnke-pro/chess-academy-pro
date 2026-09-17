@@ -83,6 +83,22 @@ describe('the live need gate', () => {
  * exists, or that the field is on the interface, would prove neither.
  */
 import { computePositionFacts } from './positionFacts';
+import { FAMILIAR_REPS, type StudentNeedContext } from './needScore';
+
+/** A student who has PLAYED THIS LINE RIGHT, repeatedly — the case the live
+ *  coach could not see. Past cold start (so no rating prior carries it), no
+ *  known holes, no book departures here, and `FAMILIAR_REPS` correct
+ *  repetitions at this ply, which decays the familiarity term to nothing.
+ *  LOUD_FEN is fullmove 14 with White to move, so the composer derives ply 27;
+ *  `lineReps` is 0-based, hence index 26. Built from the real constants rather
+ *  than a hand-picked number, so a change to the threshold moves this with it. */
+const PLAYED_IT_RIGHT_FIVE_TIMES: StudentNeedContext = {
+  rating: 1500,
+  gamesPlayed: 40,
+  signals: [],
+  bookDepartures: [],
+  lineReps: Array.from({ length: 40 }, (_, i) => (i === 26 ? FAMILIAR_REPS : 0)),
+};
 
 const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [], mate: null });
 // A position where the coach demonstrably HAS something to say — the same
@@ -105,7 +121,7 @@ describe('the need gate reaches the LIVE composer', () => {
   it('GOES QUIET on the student\'s own ply when need says they do not need it', async () => {
     const r = await computePositionFacts({
       posture: 'walk', fen: LOUD_FEN, moverColor: 'w', studentColor: 'w', analysis: flat,
-      studentNeed: { score: 10, speak: false, reasons: ['line played correctly five times'], prior: false },
+      studentNeedContext: PLAYED_IT_RIGHT_FIVE_TIMES,
     });
     expect(r.clauses).toHaveLength(0);
   });
@@ -125,7 +141,7 @@ describe('the need gate reaches the LIVE composer', () => {
     // the coach on every one of the opponent's plies — half of every game.
     const gated = await computePositionFacts({
       posture: 'walk', fen: OPP_FEN, moverColor: 'w', studentColor: 'b', analysis: flat,
-      studentNeed: { score: 0, speak: false, reasons: ['opponent move'], prior: false },
+      studentNeedContext: PLAYED_IT_RIGHT_FIVE_TIMES,
     });
     expect(gated.clauses.length).toBe(control.clauses.length);
   });

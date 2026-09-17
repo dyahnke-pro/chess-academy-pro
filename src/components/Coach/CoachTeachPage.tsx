@@ -6847,7 +6847,7 @@ export function CoachTeachPage(): JSX.Element {
   // their results. Review has computed it since N2; Learn never did, so the
   // coach said the same thing on a line the student has played right five times.
   // Cold / still loading reads as SPEAK — a fresh install meets a teaching coach.
-  const studentNeed = useStudentNeed({
+  const studentNeedRef = useStudentNeed({
     rating: activeProfile?.currentRating ?? 1200,
     studentColor: playerColor,
     // Honest nulls: Learn tracks the opening by NAME, not by id/eco. Without
@@ -8404,16 +8404,10 @@ export function CoachTeachPage(): JSX.Element {
                       analysis: studentBest,
                       evalBoard: (f) => stockfishEngine.evalBoard(f),
                       studentWeaknesses: weaknessSignalsRef.current,
-                      // WHOSE decision is this? `probe.turn()` is the side ABOUT
-                      // to move, and the teaching moment belongs to them. The
-                      // decider applies need only when that side is the student
-                      // (positionFacts' mover guard), so this is safe to pass
-                      // unconditionally — and `computeNeed`'s own opponent-move
-                      // rule never gets the chance to mute the coach.
-                      studentNeed: studentNeed.needAt({
-                        ply: probe.history().length + 1,
-                        studentMove: probe.turn() === (playerColor === 'white' ? 'w' : 'b'),
-                      }),
+                      // The CONTEXT — the composer derives the ply from the FEN
+                      // and owns the mover guard, so this surface decides none
+                      // of it (§G4.5.15, and `surfaceContract.scan` enforces it).
+                      studentNeedContext: studentNeedRef.current,
                       alreadySaid: saidStandingRef.current,
                     });
                     for (const t of pf.remember) saidStandingRef.current.add(t);

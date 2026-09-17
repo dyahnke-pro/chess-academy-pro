@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**761 lines · 7 exports · 9 importers · 4 tests · 3 audits**
+**779 lines · 7 exports · 9 importers · 4 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,7 +50,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8420`
+- `src/components/Coach/CoachTeachPage.tsx:8414`
 - `src/hooks/useLiveCoach.ts:249`
 - `src/hooks/usePhaseNarration.ts:616`
 - `src/hooks/usePositionNarration.ts:249`
@@ -68,10 +68,10 @@
 - `src/hooks/usePhaseNarration.ts:603`
 - `src/hooks/usePositionNarration.ts:236`
 - `src/services/computerAccuracy.audit.test.ts:112`
-- `src/services/liveNeedGate.test.ts:101`
-- `src/services/liveNeedGate.test.ts:106`
-- `src/services/liveNeedGate.test.ts:120`
-- `src/services/liveNeedGate.test.ts:126`
+- `src/services/liveNeedGate.test.ts:117`
+- `src/services/liveNeedGate.test.ts:122`
+- `src/services/liveNeedGate.test.ts:136`
+- `src/services/liveNeedGate.test.ts:142`
 - `src/services/positionFacts.test.ts:24`
 - `src/services/positionFacts.test.ts:37`
 - `src/services/positionFacts.test.ts:52`

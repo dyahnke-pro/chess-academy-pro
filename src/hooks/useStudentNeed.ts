@@ -9,9 +9,9 @@
 // latest at fire-time without re-rendering the board, and stay inert until
 // loaded ([] / cold reads as SPEAK, never as silence).
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { loadStudentNeedContext } from '../services/studentNeedLoader';
-import { computeNeed, coldStudent, type StudentNeedContext, type NeedPlyInput, type NeedVerdict } from '../services/needScore';
+import { coldStudent, type StudentNeedContext } from '../services/needScore';
 
 export interface UseStudentNeedArgs {
   rating: number;
@@ -23,16 +23,14 @@ export interface UseStudentNeedArgs {
   sans: readonly string[];
 }
 
-export interface UseStudentNeedResult {
-  /** The loaded context ({} cold until the Dexie read lands). */
-  ref: React.RefObject<StudentNeedContext>;
-  /** The per-ply verdict. Pure and synchronous — safe inside a narration
-   *  callback. Returns the cold-start verdict until the context loads, which
-   *  CLEARS the bar by design: a fresh install must meet a teaching coach. */
-  needAt: (ply: NeedPlyInput) => NeedVerdict;
-}
+// 🔒 THIS HOOK DOES NOT DECIDE ANYTHING. Its first draft exposed a `needAt()`
+// that called `computeNeed` — and `surfaceContract.scan` failed the push for it,
+// correctly: a surface computing its own need is a surface deciding its own
+// voice (§G4.5.15). The hook does the one thing only it can — the Dexie read —
+// and hands the CONTEXT to `computePositionFacts`, which owns the verdict, the
+// ply derivation and the mover guard.
 
-export function useStudentNeed(args: UseStudentNeedArgs): UseStudentNeedResult {
+export function useStudentNeed(args: UseStudentNeedArgs): React.RefObject<StudentNeedContext> {
   const { rating, studentColor, openingId, eco } = args;
   const ref = useRef<StudentNeedContext>(coldStudent(rating));
   // The line is read at FIRE time, not captured, so a mid-game reload does not
@@ -52,6 +50,5 @@ export function useStudentNeed(args: UseStudentNeedArgs): UseStudentNeedResult {
     // it) — not on every ply.
   }, [rating, studentColor, openingId, eco]);
 
-  const needAt = useCallback((ply: NeedPlyInput): NeedVerdict => computeNeed(ply, ref.current), []);
-  return { ref, needAt };
+  return ref;
 }

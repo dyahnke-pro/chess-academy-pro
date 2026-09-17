@@ -33,7 +33,7 @@ import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard } from './conceptEngine';
 import { liveMethodBeatFor, habitIsOwed } from './methodBeat';
 import { habitNeedFrom } from './coachDecider';
-import type { NeedVerdict } from './needScore';
+import { computeNeed, type StudentNeedContext } from './needScore';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -118,7 +118,7 @@ export interface PositionFactsInput {
    *  reads as speak, and importance alone decides — exactly as before.
    *
    *  OPTIONAL + inert: omitted → identical behaviour to before. */
-  studentNeed?: NeedVerdict | null;
+  studentNeedContext?: StudentNeedContext | null;
 }
 
 export interface PositionFactsResult {
@@ -462,6 +462,24 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // worth sweeping. There is nothing here to floor, so flooring would only mean
   // deleting a fact that a probe had already proved. Silence on these surfaces
   // is step 1's job, and step 1 has already run.
+  // THE STUDENT'S NEED (N2) — computed HERE, never at a call site.
+  //
+  // The ply comes off the FEN rather than from the caller: fullmove + side to
+  // move give it exactly, and a derived number cannot drift the way four call
+  // sites each passing their own would.
+  //
+  // 🚨 THE MOVER GUARD. `computeNeed` returns speak:false for an opponent move
+  // by contract — right for review, whose walk narrates the student's moves.
+  // The live surfaces narrate BOTH sides ("they answer …e6"), so asking it
+  // about an opponent ply would mute half of every game. Need answers "does
+  // THIS STUDENT need teaching here", which is only ever a question about their
+  // own decision; on the opponent's ply it is null and importance decides.
+  const studentIsMoving = input.moverColor === input.studentColor;
+  const plyNumber = (fullmove - 1) * 2 + (input.moverColor === 'b' ? 1 : 0) + 1;
+  const needVerdict = studentIsMoving && input.studentNeedContext
+    ? computeNeed({ ply: plyNumber, studentMove: true }, input.studentNeedContext)
+    : null;
+
   const clauseByText = new Map<string, ClauseItem>();
   for (const c of composed) if (!clauseByText.has(c.text)) clauseByText.set(c.text, c);
   const decision = decide(
@@ -480,7 +498,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // The mover guard — see `studentNeed` on the input. Need answers "does
       // THIS STUDENT need teaching here", which is only a question about their
       // own move; on the opponent's ply it is null and importance decides.
-      need: input.moverColor === input.studentColor ? (input.studentNeed ?? null) : null,
+      need: needVerdict,
     },
     {
       facts: composed.map((c) => c.text),
