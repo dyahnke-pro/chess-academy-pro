@@ -461,7 +461,26 @@ const run = async () => {
 
   // STEP PAST THE LAST PLY — the closing lives at lastPly + 1, so something has
   // to take that step: auto-advance if it resumes, else the forward control.
-  const RECAP_RE = /of your \w+ flagged move|carry into the next game|The pattern: you \w/i;
+  // 🔒 MATCH THE CONTRACT, NOT ONE PHRASING (fixed 2026-09-17, after this row
+  // false-failed a recap that had spoken FIVE times).
+  //
+  // The old regex was `/of your \w+ flagged move|carry into the next game|The
+  // pattern: you \w/`, and every branch of it encoded a phrasing that no longer
+  // ships. `renderFundamentalsRecap` was corrected the same day to stop saying
+  // "one of your one flagged move" — the x-of-y shape only reads as English
+  // while y is genuinely bigger than x — so with a single flagged ply it now
+  // says "The pattern: YOUR ONE flagged move …". That matches none of the
+  // three: there is no "of your", the "carry into the next game" close needs
+  // two flagged moves, and "The pattern: you \w" wants a space where the text
+  // has the "r" of "your".
+  //
+  // CLAUDE.md is explicit that this is the author's job — "AUDITS ARE LIVING —
+  // UPDATE THE AUDIT BEFORE YOU RUN IT" — and it was not done. The lasting fix
+  // is to stop pinning the SUBJECT at all: the stable contract is the "The
+  // pattern:" lead plus the flagged-move vocabulary, so every subject shape the
+  // renderer can produce (one / both / all three / two-of-five / the
+  // subject-less fallback) matches without the audit knowing which.
+  const RECAP_RE = /The pattern:[^.]*flagged move|The pattern: you \w|carry into the next game/i;
   for (let i = 0; i < 20; i += 1) {
     if (spoken().some((x) => RECAP_RE.test(x.text))) break;
     const st = await page.locator('[data-testid="review-play-pause-btn"]').first()
