@@ -411,6 +411,12 @@ const GATE_TESTS = [
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──
   'src/services/bucketPipelineAudit.test.ts', // captured answer → right bucket + drill (delivery) + ranking/dedup/SRS (organization)
   'src/hooks/useDiscussionPractice.test.ts',  // faucet: rating-adaptive slip picker, good-move non-blocking line, response logging
+  // A stubbed chess.js is a second implementation nobody keeps in step: three
+  // files carried one and two of them took 17 tests red on `main` unnoticed.
+  'src/test/noChessJsMock.test.ts',
+  // The board's FEN must be LIVE, not the render snapshot — a same-tick read
+  // after a mutation returned the PRE-mutation position and broke a takeback.
+  'src/hooks/useChessGame.liveFen.test.tsx',
 ];
 
 // ── THE CONTEXT GATE (David 2026-09-17, non-negotiable: "You must gain context

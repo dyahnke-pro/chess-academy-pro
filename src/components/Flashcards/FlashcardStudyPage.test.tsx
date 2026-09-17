@@ -55,28 +55,12 @@ vi.mock('../../services/flashcardService', () => ({
   getFlashcardsByMode: mockGetFlashcardsByMode,
 }));
 
-vi.mock('chess.js', () => {
-  class Chess {
-    fen(): string { return 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3'; }
-    turn(): string { return 'b'; }
-    isGameOver(): boolean { return false; }
-    inCheck(): boolean { return false; }
-    isCheck(): boolean { return false; }
-    isCheckmate(): boolean { return false; }
-    isDraw(): boolean { return false; }
-    isStalemate(): boolean { return false; }
-    isInsufficientMaterial(): boolean { return false; }
-    isThreefoldRepetition(): boolean { return false; }
-    history(): string[] { return []; }
-    moves(): string[] { return []; }
-    move(): null { return null; }
-    undo(): null { return null; }
-    reset(): void { /* noop */ }
-    load(): void { /* noop */ }
-    board(): never[] { return []; }
-  }
-  return { Chess };
-});
+// NO chess.js MOCK — CLAUDE.md: "chess.js: Do NOT mock — use the real library
+// in tests". A stub is a second implementation that must be kept in step with
+// the first, and these stubs were not: the identical one in
+// AnalysisBoardPage.test.tsx had no `pgn()`, so all 8 of its tests went red on
+// `main` the moment useChessGame started returning one. The board is mocked at
+// the react-chessboard boundary below, which is the right seam.
 
 vi.mock('react-chessboard', () => ({
   Chessboard: () => <div data-testid="chessboard">Board</div>,

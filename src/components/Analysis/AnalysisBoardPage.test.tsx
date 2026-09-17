@@ -28,28 +28,17 @@ vi.mock('../../services/stockfishEngine', () => ({
   },
 }));
 
-vi.mock('chess.js', () => {
-  class Chess {
-    fen(): string { return 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'; }
-    turn(): string { return 'w'; }
-    isGameOver(): boolean { return false; }
-    inCheck(): boolean { return false; }
-    isCheck(): boolean { return false; }
-    isCheckmate(): boolean { return false; }
-    isDraw(): boolean { return false; }
-    isStalemate(): boolean { return false; }
-    isInsufficientMaterial(): boolean { return false; }
-    isThreefoldRepetition(): boolean { return false; }
-    history(): string[] { return []; }
-    moves(): string[] { return []; }
-    move(): null { return null; }
-    undo(): null { return null; }
-    reset(): void { /* noop */ }
-    load(): void { /* noop */ }
-    board(): never[] { return []; }
-  }
-  return { Chess };
-});
+// NO chess.js MOCK. CLAUDE.md's mocking conventions say so outright ("chess.js:
+// Do NOT mock — use the real library in tests"), and this file showed why: the
+// hand-rolled Chess class here had no `pgn()`, so when `useChessGame` began
+// returning `pgn: chess.pgn()` for the review's adaptGameRecord, EVERY render of
+// the hook threw `TypeError: chess.pgn is not a function` and all 8 tests below
+// went red — on `main`, in no gate list, unnoticed. A stub of a library is a
+// second implementation that has to be kept in step with the first, and this one
+// silently was not. The real library needs no maintenance and cannot drift.
+//
+// Nothing here depended on the stub: every assertion is about rendered UI, and
+// the board itself is mocked at the react-chessboard boundary below.
 
 vi.mock('react-chessboard', () => ({
   Chessboard: () => <div data-testid="chessboard">Board</div>,

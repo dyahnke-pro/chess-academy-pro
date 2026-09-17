@@ -26,22 +26,14 @@ async function seedFully(): Promise<void> {
 
 // Mock chess.js to avoid heavy chess computation in unit tests.
 // We just need to verify the data loader logic, not FEN accuracy.
-vi.mock('chess.js', () => {
-  class Chess {
-    private _fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-    move(san: string): { from: string; to: string; promotion: string | undefined } {
-      // Return a fake Move object — from/to derived from first two chars of SAN
-      const from = san.length >= 2 ? san[0] + san[1] : 'a1';
-      const to = san.length >= 4 ? san[2] + san[3] : 'a2';
-      this._fen = `mock-fen-after-${san}`;
-      return { from, to, promotion: undefined };
-    }
-    fen(): string {
-      return this._fen;
-    }
-  }
-  return { Chess };
-});
+// NO chess.js MOCK — CLAUDE.md: "chess.js: Do NOT mock — use the real library in
+// tests". The stub that used to sit here faked `move()` to derive from/to from
+// the first characters of a SAN and returned a `mock-fen-after-<san>` sentinel
+// that NOTHING asserted on: it existed only to stop a throw. Removing it left
+// all 29 tests green against the real library, and removed a second
+// implementation of chess that had to be kept in step with the first. Its twins
+// in AnalysisBoardPage.test.tsx and FlashcardStudyPage.test.tsx were not kept in
+// step, and took 17 tests red on `main` with them.
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
