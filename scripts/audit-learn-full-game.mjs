@@ -31,7 +31,15 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { pickStudentMove } from './audit-lib/student-player.mjs';
-import BAKE from '../src/data/walkthrough-narrations.json' with { type: 'json' };
+// 🔒 THE GENERIC TEACH BAKE WAS RETIRED 2026-08-26 and this script imported it,
+// so it has died at load with ERR_MODULE_NOT_FOUND ever since — three weeks in
+// which nobody could play a full Learn game, which is exactly why every recent
+// reading of this surface was a 29-ply slice (David 2026-09-17: "you need to
+// play the entire game, gather all information").
+//
+// The line to follow now comes from the LIVE repertoire — the same pgn the app
+// itself plays — instead of a dataset that no longer ships.
+import REPERTOIRE from '../src/data/repertoire.json' with { type: 'json' };
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `learn-full-${Math.random().toString(36).slice(2, 10)}`;
@@ -58,11 +66,12 @@ const ASK = process.env.AUDIT_ASK ?? 'play the Vienna Gambit against me';
  *  audit reverts to its own player, which is where the middlegame lives. */
 const FOLLOW = (() => {
   const wanted = (process.env.AUDIT_FOLLOW ?? ASK).toLowerCase();
-  const entries = Object.values(BAKE.narrations ?? {});
-  const hit = entries
-    .filter((e) => wanted.includes(e.openingName.toLowerCase()))
-    .sort((a, b) => b.openingName.length - a.openingName.length)[0];
-  return hit ? { name: hit.openingName, spine: hit.spine } : null;
+  const hit = (REPERTOIRE ?? [])
+    .filter((e) => e?.name && e?.pgn && wanted.includes(String(e.name).toLowerCase()))
+    .sort((a, b) => String(b.name).length - String(a.name).length)[0];
+  if (!hit) return null;
+  const spine = String(hit.pgn).replace(/\d+\.(\.\.)?/g, ' ').trim().split(/\s+/).filter(Boolean);
+  return spine.length ? { name: hit.name, spine } : null;
 })();
 
 /** The spine's next move, or null once the game has left the line. */
@@ -484,6 +493,8 @@ async function main() {
       while (n < h.length && n < FOLLOW.spine.length && h[n] === FOLLOW.spine[n]) n += 1;
       return n;
     })(),
+    // Kept as the raw signal, but it is EXPECTED empty since the bake's
+    // retirement — do not read a zero here as missing teaching.
     openingPliesTaught: [...new Set(bakedPlies)].sort((a, b) => a - b),
     linesSpoken: totalSpoken, silentPlies, falseClaims: allFalse, pageErrors, gameOverUi,
     streamDelta: postEvents.length - preEvents.length,
@@ -523,14 +534,13 @@ async function main() {
   console.log(`   SELECT event, kind, count() FROM events WHERE event IN ('coach_beat_offered','improving_move_offered')`);
   console.log(`   AND properties.audit_run_id='${RUN_ID}' GROUP BY event, kind`);
   if (FOLLOW) {
-    const taught = report.openingPliesTaught;
     console.log(`opening line        ${report.spineReached}/${FOLLOW.spine.length} plies of ${FOLLOW.name} played`);
     // Two plies happen per turn and the coach says one thing per turn, so a
     // fully-taught opening reads as half its plies. Say that, rather than
     // leave a "7 of 14" to be read as half the teaching going missing.
     const turns = transcript.filter((t) => t.ply && report.spineReached >= t.ply * 2 - 1).length;
-    console.log(`opening taught      ${taught.length} plies over ${turns} turn(s) on the line — one per turn by design`);
-    if (taught.length) console.log(`                    moves ${taught.join(', ')}`);
+    const spokeOn = transcript.filter((t) => t.ply && report.spineReached >= t.ply * 2 - 1 && (t.said ?? []).length).length;
+    console.log(`opening taught      spoke on ${spokeOn} of ${turns} turn(s) while on the line`);
   }
   // ── BUILD #3: THE FUNDAMENTAL, NAMED IN LEARN NARRATION (David 2026-09-07) ──
   //
@@ -661,10 +671,17 @@ async function main() {
   const mutedMiddlegame = transcript.filter((t) => t.phase === 'middlegame').length >= 8
     && middlegameBeats === 0;
   if (mutedMiddlegame) console.log('❌ a real middlegame went by with no computed beat at all');
-  // A game that stayed on a baked line and got no opening teaching is the
-  // failure this run exists to catch — silence there is what David heard.
-  const untaughtOpening = Boolean(FOLLOW) && report.spineReached >= 4 && report.openingPliesTaught.length === 0;
-  if (untaughtOpening) console.log(`❌ played ${report.spineReached} plies of a BAKED opening and taught none of them`);
+  // 🔒 RE-ANCHORED 2026-09-17. This asserted `openingPliesTaught`, counted from
+  // the app's `CoachTeachPage.bakedOpeningTeaching` event — which stopped
+  // existing when `bakedNarrationFor` was deleted on 2026-08-26. So the count
+  // was permanently zero and this check was permanently TRUE, a guaranteed
+  // exit(1) on a dataset that no longer ships. Audits are living (CLAUDE.md):
+  // it now measures what the surface actually owes today — a game that walked
+  // a real theory line and said NOTHING while on it.
+  const onLineTurns = transcript.filter((t) => t.ply && FOLLOW && report.spineReached >= t.ply * 2 - 1);
+  const onLineSpoke = onLineTurns.filter((t) => (t.said ?? []).length > 0).length;
+  const untaughtOpening = Boolean(FOLLOW) && report.spineReached >= 4 && onLineSpoke === 0;
+  if (untaughtOpening) console.log(`❌ walked ${report.spineReached} plies of ${FOLLOW.name} and spoke on none of them`);
   const gameOverBroken = gameOverUi.startsWith('BROKEN');
   if (gameOverBroken) console.log(`❌ the finished game did not keep the board: ${gameOverUi}`);
   if (gameOverBroken || allFalse.length > 0 || pageErrors.length > 0 || mutedMiddlegame || untaughtOpening
