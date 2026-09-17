@@ -413,6 +413,18 @@ const GATE_TESTS = [
   'src/hooks/useDiscussionPractice.test.ts',  // faucet: rating-adaptive slip picker, good-move non-blocking line, response logging
 ];
 
+// ── THE CONTEXT GATE (David 2026-09-17, non-negotiable: "You must gain context
+// before each build! Make that impossible to forget or bypass.") ──────────────
+//
+// CLAUDE.md has said "MAP EVERY SURFACE BEFORE BUILDING" since 2026-09-08 and it
+// was bypassed anyway. A rule in a markdown file is a convention, and this repo's
+// own doctrine is that conventions rot while gates do not — so the rule runs here
+// and FAILS THE PUSH. `--verify` REGENERATES each changed surface's map from the
+// code and diffs it against the committed one, which proves the map is FRESH
+// instead of merely present: a map written before the change cannot match the
+// code after it. Runs FIRST because it is the cheapest step (<1s) and because a
+// build started without context should stop before anything else is spent on it.
+runStep('context gate', 'node', ['scripts/surface-map.mjs', '--verify']);
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);
 // PRODUCTION BUILD (2026-07-12, the corpus-bundle incident): typecheck+lint
 // can be green while `npm run build` FAILS — a data JSON inlined into the

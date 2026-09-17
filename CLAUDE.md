@@ -73,6 +73,28 @@ Before starting ANY coach / narration / grounding / weakness / teaching build:
 - Shipped sub-system: `docs/plans/2026-09-07-causal-chain-engine.md` (the
   cross-move cause→effect engine — moves do not exist in isolation).
 
+🔒🔒 **THE MAP IS NOW A GATE, NOT A PROMISE — `node scripts/surface-map.mjs`
+(David 2026-09-17, non-negotiable: "You must gain context before each build!
+Make that impossible to forget or bypass").** The rule below was written
+2026-09-08 and bypassed on 2026-09-17 anyway — a session read three bad
+sentences off a 29-ply slice and patched three files having mapped nothing, and
+David caught it. A rule in this file is a CONVENTION, and the doctrine two
+sections up says conventions rot while gates do not. So:
+
+- `node scripts/surface-map.mjs --changed` DERIVES the map from the code —
+  every importer, every call site with line numbers, the tests, the audits that
+  reach it, and the locked CLAUDE.md sections that govern it — into
+  `docs/surface-maps/`. It cannot be hand-waved because nothing in it is typed
+  by hand.
+- **ship-check runs `--verify` FIRST and fails the push.** It REGENERATES each
+  changed surface's map and diffs it against the committed one, so the map is
+  proven FRESH rather than merely present: one written before the change cannot
+  match the code after it.
+- It takes under a second, and it answers the questions that actually decide a
+  build — who calls this, is there an audit, which locked rule applies. The
+  first run of it replaced twenty minutes of grepping: `curatedBeatSource` has
+  exactly ONE production call site and ZERO audits, which is the whole finding.
+
 🚨 **MAP EVERY SURFACE BEFORE BUILDING (David 2026-09-08, emphatic).** No coach
 build starts as code until you've mapped the target surface ENTIRELY *and* every
 neighboring/touching surface for blast radius — the shared computers
