@@ -90,14 +90,38 @@ export interface NeedVerdict {
   prior: boolean;
 }
 
-/** Rating-band prior for a student with no data. Every band clears the bar —
- *  "defaults to TEACH" — weaker bands by more, so a per-ply tie-break (e.g. a
- *  later cap on beats per game) keeps their teaching first. */
-export function coldStartPrior(rating: number): number {
-  if (rating < 1000) return 70;
-  if (rating < 1400) return 62;
-  if (rating < 1800) return 55;
-  return NEED_THRESHOLD; // strong players still get taught cold — the bar exactly
+/**
+ * THE COLD START ASSUMES THE STUDENT KNOWS NOTHING (David 2026-09-17: "Teach
+ * from what we are building now. From move one. The most liberal narration
+ * pattern. Assuming the user knows nothing." + "Not elo based. I want it to be
+ * capabilities of our system.").
+ *
+ * This used to be a rating LADDER — 70/62/55/threshold by band. Two things were
+ * wrong with that. It read an ELO, which is the axis David rejected; and the
+ * ELO it read is, for any student who never imported games, the profile default
+ * of 800 for life (see the plan doc §4) — so the "band" was not measuring
+ * anything about the student at all.
+ *
+ * Under the capability model a cold student has NO evidence: every capability is
+ * UNKNOWN, which is not mastery and not a hole. The honest response to unknown
+ * is to teach it, so the prior is the ceiling for everyone, with no parameter to
+ * get wrong.
+ *
+ * WHY THIS CANNOT FLOOD THE STUDENT, and it is structural rather than lucky:
+ *  • NEED IS A VETO, NEVER A PROMOTER. `coachDecider.decide` gates on importance
+ *    FIRST and only then consults need, which can only return silent. Maxing the
+ *    prior therefore stops need from vetoing a cold student — it cannot open a
+ *    moment importance already closed, so Play stays the pure playing surface
+ *    its contract requires.
+ *  • THE BOARD RATIONS THE BREADTH. Teaching every unknown capability does not
+ *    mean teaching 25 things: only the one or two the position in front of the
+ *    student actually demonstrates can fire at all.
+ *  • WITHIN A PLY, `factSelector` collapses same-claim facts and the 7 bare
+ *    clause kinds are one-per-ply by construction.
+ *  • ACROSS PLIES, `alreadySaid` carries the say-once set forward.
+ */
+export function coldStartPrior(): number {
+  return 100;
 }
 
 /** 0–1: how much of this line the student has already played correctly. */
@@ -159,7 +183,7 @@ export function computeNeed(p: NeedPlyInput, ctx: StudentNeedContext): NeedVerdi
   if (p.onThread) { score += 35; reasons.push('on the causal thread'); }
   let prior = false;
   if (ctx.gamesPlayed < COLD_START_GAMES) {
-    const pr = coldStartPrior(ctx.rating);
+    const pr = coldStartPrior();
     if (pr > score) { score = pr; prior = true; reasons.push(`cold start (${ctx.gamesPlayed} games) — rating prior`); }
   }
   score = Math.max(0, Math.min(100, score));

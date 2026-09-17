@@ -22,12 +22,17 @@ describe('needScore — cold start defaults to TEACH', () => {
       const v = computeNeed({ ply: 3, studentMove: true }, coldStudent(rating));
       expect(v.speak, `rating ${rating}`).toBe(true);
       expect(v.prior).toBe(true);
-      expect(coldStartPrior(rating)).toBeGreaterThanOrEqual(NEED_THRESHOLD);
+      expect(coldStartPrior()).toBeGreaterThanOrEqual(NEED_THRESHOLD);
     }
   });
   it('weaker bands get a higher prior than stronger ones (their teaching leads a tie-break)', () => {
-    expect(coldStartPrior(800)).toBeGreaterThan(coldStartPrior(1600));
-    expect(coldStartPrior(1600)).toBeGreaterThan(coldStartPrior(2200));
+    // NO LONGER A RATING LADDER (2026-09-17). It took a rating, which is the
+    // axis the capability model rejects — and for any student who never
+    // imported games that rating is the profile default of 800 for life, so the
+    // band measured nothing. A cold student has no evidence, every capability
+    // is UNKNOWN, and unknown means teach it: one ceiling, no parameter.
+    expect(coldStartPrior()).toBe(100);
+    expect(coldStartPrior.length, 'the prior must take NO rating').toBe(0);
   });
   it('the opponent\'s move never has need', () => {
     expect(computeNeed({ ply: 4, studentMove: false }, coldStudent(900)).speak).toBe(false);
