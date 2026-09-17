@@ -32,7 +32,17 @@ export interface RenderOptions {
   rating?: number;
 }
 
-type Depth = 'full' | 'medium' | 'tight';
+export type Depth = 'full' | 'medium' | 'tight';
+/** How much of the chain gets SPOKEN. A SUPPORT decider (ratingBands
+ *  ADAPTIVE_DECIDERS): it FALLS as the student improves — a beginner needs
+ *  every link, a 2200 wants one line. Exported so the adaptive-decider gate can
+ *  prove that direction against the code instead of taking the comment's word.
+ *  Do NOT reconcile it with a CAPACITY decider (pvBandForRating,
+ *  getTacticLookahead); they run the opposite way on purpose. */
+export function causalChainDepth(rating: number): Depth {
+  return depthFor(rating);
+}
+
 function depthFor(rating: number): Depth {
   if (rating < 1400) return 'full';
   if (rating <= 2000) return 'medium';

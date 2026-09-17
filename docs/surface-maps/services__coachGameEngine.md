@@ -60,7 +60,7 @@
 - `src/services/coachGameEngine.test.ts:351`
 - `src/services/coachGameEngine.test.ts:352`
 - `src/services/linePickerPopularity.ts:135`
-- `src/services/ratingBands.test.ts:56`
+- `src/services/ratingBands.test.ts:63`
 
 ### `getRandomLegalMove` (function) — 7 call sites
 - `src/components/Coach/CoachGamePage.tsx:2594`

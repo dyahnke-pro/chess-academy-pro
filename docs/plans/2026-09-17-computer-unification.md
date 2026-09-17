@@ -274,7 +274,37 @@ BEFORE choosing an axis. Re-verified today, the 2026-09-08 inventory still holds
 
   What (A) actually leaves: nothing to unify. The doctrine needed writing down,
   not the code changing. Recorded here so this is not re-derived a third time.
-* **(B) depth/ply** — `pvBandForRating`, `depthFor`, `getTacticLookahead`.
+* **(B) depth/ply — NOT duplicates either, and the reason generalises. DONE
+  2026-09-17.** Three functions with "depth" in the job description, answering
+  three different questions: `pvBandForRating` (how many player-moves of the PV
+  a mistake puzzle asks for, 1200/1700), `getTacticLookahead` (how many plies
+  the coach SCANS for a tactic, 1000/1400/1800), `causalChainDepth` (how many
+  SENTENCES get spoken, 1400/2000). The third runs BACKWARD from the other two.
+
+  That is the same shape as (A), and it is the real Phase-7 finding:
+
+  **THERE ARE TWO KINDS OF ADAPTIVE DECIDER, AND THEY RUN IN OPPOSITE
+  DIRECTIONS.** CAPACITY — how much CHESS the student can handle (calculation
+  horizon, puzzle depth, how subtle a mistake is worth teaching) — RISES with
+  strength. SUPPORT — how much HELP they get (warnings, sentences of
+  scaffolding, which hint rung) — FALLS with strength. Beginner: teach only big
+  mistakes, warn often, explain every link. Advanced: teach the subtleties, warn
+  rarely, one line.
+
+  Two deciders of the same kind may be reconciled. Two of different kinds never
+  may — and because each decider's tests only pin its own numbers, merging them
+  inverts both pedagogies with nothing going red. Encoded as
+  `ADAPTIVE_DECIDERS` in `ratingBands.ts`: a `Record` over the union of all
+  seven, so a NEW decider fails to compile until someone declares its kind, and
+  each entry's declared SLOPE is proved against the real function at three
+  ratings by `ratingBands.test.ts` (negative control run: flipping one
+  declaration fails the build with the measured numbers in the message).
+
+  **Boundaries deliberately NOT unified.** Where "how far can you calculate"
+  changes is not where "how subtle a mistake matters" changes. Flattening all
+  seven onto `coreRatingTier`'s 1000/2000 would move real students between real
+  behaviours with no evidence any individual move is right. Written into the
+  code so the next session does not do it for tidiness.
 * **(C) verbosity** — 7 sites, and a WARNING that comes with them: these encode
   the USER's G5 choice. "The algo governs importance/depth; G5 stays the user's
   own ceiling. Reconcile, don't erase the user's setting."

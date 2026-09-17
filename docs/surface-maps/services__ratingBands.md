@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**68 lines · 4 exports · 7 importers · 1 tests · 0 audits**
+**155 lines · 9 exports · 7 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -28,15 +28,15 @@
 ### `coreRatingTier` (function) — 12 call sites
 - `src/services/criticalityScan.ts:73`
 - `src/services/hintRegister.ts:65`
-- `src/services/ratingBands.test.ts:9`
-- `src/services/ratingBands.test.ts:10`
-- `src/services/ratingBands.test.ts:11`
-- `src/services/ratingBands.test.ts:12`
-- `src/services/ratingBands.test.ts:13`
-- `src/services/ratingBands.test.ts:14`
-- `src/services/ratingBands.test.ts:15`
+- `src/services/ratingBands.test.ts:16`
+- `src/services/ratingBands.test.ts:17`
+- `src/services/ratingBands.test.ts:18`
 - `src/services/ratingBands.test.ts:19`
 - `src/services/ratingBands.test.ts:20`
+- `src/services/ratingBands.test.ts:21`
+- `src/services/ratingBands.test.ts:22`
+- `src/services/ratingBands.test.ts:26`
+- `src/services/ratingBands.test.ts:27`
 - `src/services/slipDetector.ts:79`
 
 ### `ExplorerBand` (interface) — 0 call sites
@@ -44,16 +44,31 @@
 
 ### `explorerBandFor` (function) — 11 call sites
 - `src/services/coachGameEngine.ts:245`
-- `src/services/ratingBands.test.ts:30`
-- `src/services/ratingBands.test.ts:38`
-- `src/services/ratingBands.test.ts:44`
-- `src/services/ratingBands.test.ts:46`
-- `src/services/ratingBands.test.ts:48`
+- `src/services/ratingBands.test.ts:37`
+- `src/services/ratingBands.test.ts:45`
+- `src/services/ratingBands.test.ts:51`
 - `src/services/ratingBands.test.ts:53`
-- `src/services/ratingBands.test.ts:61`
-- `src/services/ratingBands.test.ts:62`
-- `src/services/ratingBands.test.ts:63`
+- `src/services/ratingBands.test.ts:55`
+- `src/services/ratingBands.test.ts:60`
+- `src/services/ratingBands.test.ts:68`
+- `src/services/ratingBands.test.ts:69`
+- `src/services/ratingBands.test.ts:70`
 - `src/services/theoryDeparture.ts:63`
+
+### `DeciderKind` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `DeciderSlope` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `AdaptiveDecider` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `AdaptiveDeciderId` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `ADAPTIVE_DECIDERS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 

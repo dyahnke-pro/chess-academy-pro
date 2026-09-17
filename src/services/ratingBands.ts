@@ -65,3 +65,90 @@ export function explorerBandFor(rating: number | null | undefined): ExplorerBand
     : [EXPLORER_BUCKETS[i - 1], EXPLORER_BUCKETS[i]];
   return { band: pair.join(','), bandLabel: `around ${pair[0]}–${pair[1]}` };
 }
+
+// ── THE TWO KINDS OF ADAPTIVE DECIDER ────────────────────────────────────────
+//
+// `docs/plans/2026-09-08-unified-coach.md` §Phase 7 says "unify the adaptive
+// deciders". Read literally that is WRONG and would break the app in a way no
+// test would catch, because the deciders are not one family — they are two,
+// and they run in OPPOSITE directions on purpose:
+//
+//   CAPACITY — how much CHESS the student can handle. Calculation horizon,
+//     puzzle depth, how subtle a mistake is worth teaching. RISES with
+//     strength: a 900 cannot use a five-move line; a 2200 wants the subtlety.
+//
+//   SUPPORT — how much HELP the student gets. Threat warnings, sentences of
+//     scaffolding, which hint rung they start on. FALLS with strength: a
+//     beginner needs the warning spelled out; a strong player should find it.
+//
+// Beginner: teach only big mistakes, but warn often, and explain every link.
+// Advanced: teach the subtleties, warn rarely, say it in one line.
+//
+// Two deciders of the SAME kind may be reconciled. Two of DIFFERENT kinds may
+// never be — merging them inverts both pedagogies at once, and because each
+// decider's own tests only pin its own numbers, nothing downstream goes red.
+// That is precisely how this would be shipped by a session following the plan.
+//
+// Boundaries are deliberately NOT unified. Where "how far can you calculate"
+// changes is not where "how subtle a mistake matters" changes; both are honest
+// questions about the same student with different answers. Do not flatten them
+// onto coreRatingTier's 1000/2000 without evidence that each move is right.
+
+export type DeciderKind = 'capacity' | 'support';
+
+/** Direction the decider's own RETURN VALUE moves as rating rises. Stated
+ *  separately from the kind because a capacity decider can express itself as
+ *  an inverse (`criticalityThresholds` returns a BAR, so more capacity = a
+ *  lower number). The gate runs each probe and proves this matches the code,
+ *  so the two fields cannot silently disagree. */
+export type DeciderSlope = 'rises' | 'falls';
+
+export interface AdaptiveDecider {
+  kind: DeciderKind;
+  slope: DeciderSlope;
+  /** What question this decider answers, in one line. */
+  answers: string;
+}
+
+/** Every rating-scaled decider in the coach. A `Record` over the union, so a
+ *  NEW decider fails to compile until someone decides which kind it is — the
+ *  question this whole section exists to force. */
+export type AdaptiveDeciderId =
+  | 'criticalityThresholds'
+  | 'pvBandForRating'
+  | 'getTacticLookahead'
+  | 'alertSensitivityMultiplier'
+  | 'causalChainDepth'
+  | 'hintStartTier'
+  | 'wrongTriesBeforeHint';
+
+export const ADAPTIVE_DECIDERS: Record<AdaptiveDeciderId, AdaptiveDecider> = {
+  criticalityThresholds: {
+    kind: 'capacity', slope: 'falls',
+    answers: 'how big must a mistake be before it is worth TEACHING about',
+  },
+  pvBandForRating: {
+    kind: 'capacity', slope: 'rises',
+    answers: 'how many player-moves of the engine line a mistake puzzle asks for',
+  },
+  getTacticLookahead: {
+    kind: 'capacity', slope: 'rises',
+    answers: 'how many plies ahead the coach scans for a tactic to surface',
+  },
+  alertSensitivityMultiplier: {
+    kind: 'support', slope: 'rises',
+    answers: 'how big must a danger be before the coach WARNS about it',
+  },
+  causalChainDepth: {
+    kind: 'support', slope: 'falls',
+    answers: 'how many sentences of the cause-effect chain get spoken',
+  },
+  hintStartTier: {
+    kind: 'support', slope: 'falls',
+    answers: 'which rung of the hint ladder the first tap lands on',
+  },
+  wrongTriesBeforeHint: {
+    kind: 'capacity', slope: 'rises',
+    answers: 'how long the student is left to struggle before help is offered',
+  },
+};

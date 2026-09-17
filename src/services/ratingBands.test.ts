@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { coreRatingTier, explorerBandFor } from './ratingBands';
+import {
+  coreRatingTier, explorerBandFor, ADAPTIVE_DECIDERS, type AdaptiveDeciderId,
+} from './ratingBands';
+import { criticalityThresholds } from './criticalityScan';
+import { pvBandForRating } from './mistakePuzzleService';
+import { getTacticLookahead } from './tacticAlertService';
+import { alertSensitivityMultiplier, hintStartTier, wrongTriesBeforeHint } from './skillScaling';
+import { causalChainDepth } from './causalChainVoice';
 import { ratingBandFor as amateurBand } from './amateurPlayCache';
 import { ratingBandFor as theoryBand } from './theoryDeparture';
 import { explorerBandForElo } from './coachGameEngine';
@@ -61,5 +68,52 @@ describe('explorerBandFor — ONE explorer band for every surface', () => {
     expect(explorerBandFor(undefined).band).toBe(explorerBandFor(1200).band);
     expect(explorerBandFor(null).band).toBe(explorerBandFor(1200).band);
     expect(explorerBandFor(Number.NaN).band).toBe(explorerBandFor(1200).band);
+  });
+});
+
+describe('ADAPTIVE_DECIDERS — two kinds, and the code must match the declaration', () => {
+  // The registry is only worth having if it is CHECKED. Each decider is probed
+  // at three ratings and its declared slope proved against what it actually
+  // returns — so a curve that gets rewritten without updating its entry (or an
+  // entry written from the comment rather than the code) fails the build.
+  const LOW = 900, MID = 1600, HIGH = 2300;
+  const DEPTH_RANK: Record<string, number> = { tight: 1, medium: 2, full: 3 };
+
+  const probes: Record<AdaptiveDeciderId, (r: number) => number> = {
+    criticalityThresholds: (r) => criticalityThresholds(r).critical,
+    pvBandForRating: (r) => pvBandForRating(r).max,
+    getTacticLookahead: (r) => getTacticLookahead(r),
+    alertSensitivityMultiplier: (r) => alertSensitivityMultiplier(r),
+    causalChainDepth: (r) => DEPTH_RANK[causalChainDepth(r)],
+    hintStartTier: (r) => hintStartTier(r),
+    wrongTriesBeforeHint: (r) => wrongTriesBeforeHint(r),
+  };
+
+  it('every declared slope is what the code actually does', () => {
+    for (const [id, decl] of Object.entries(ADAPTIVE_DECIDERS)) {
+      const p = probes[id as AdaptiveDeciderId];
+      const [lo, mid, hi] = [p(LOW), p(MID), p(HIGH)];
+      const msg = `${id} is declared to ${decl.slope} with rating — it returns ${lo} / ${mid} / ${hi} at ${LOW} / ${MID} / ${HIGH}`;
+      if (decl.slope === 'rises') expect(hi, msg).toBeGreaterThan(lo);
+      else expect(hi, msg).toBeLessThan(lo);
+      // monotone, never a bump in the middle
+      if (decl.slope === 'rises') expect(mid, `${msg} — non-monotone`).toBeGreaterThanOrEqual(lo);
+      else expect(mid, `${msg} — non-monotone`).toBeLessThanOrEqual(lo);
+    }
+  });
+
+  it('has an entry for every decider — the registry cannot go stale silently', () => {
+    expect(Object.keys(ADAPTIVE_DECIDERS).sort()).toEqual(Object.keys(probes).sort());
+    expect(Object.keys(ADAPTIVE_DECIDERS).length).toBeGreaterThanOrEqual(7);
+  });
+
+  it('the two kinds genuinely disagree — this is not a distinction without a difference', () => {
+    const kinds = new Set(Object.values(ADAPTIVE_DECIDERS).map((d) => d.kind));
+    expect(kinds, 'both kinds must be populated or the doctrine is vacuous').toEqual(new Set(['capacity', 'support']));
+    // The point of the split: two deciders can answer questions about the same
+    // student and correctly move in opposite directions. If every decider ever
+    // agreed, the registry would be ceremony.
+    const slopes = new Set(Object.values(ADAPTIVE_DECIDERS).map((d) => d.slope));
+    expect(slopes.size, 'no decider disagrees with another — re-check the probes').toBe(2);
   });
 });
