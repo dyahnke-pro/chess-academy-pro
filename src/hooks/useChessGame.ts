@@ -365,8 +365,20 @@ export function useChessGame(
   }, [clearSelection]);
 
   return useMemo(() => ({
-    fen,
-    position: fen,
+    // 🔒 LIVE, not the render-time string. `fen` is React state, so a caller
+    // that mutates the board and reads `game.fen` in the SAME TICK gets the
+    // PRE-mutation position — and every read looks correct, because one render
+    // later it is. That cost a coach takeback: `handleTakeBack` undid the move
+    // and then re-derived the FEN from this field, so the dictated replacement
+    // was probed against the position it had just undone, found illegal, and
+    // silently skipped — leaving the board taken back with nothing played.
+    // A getter off the live chess object makes the whole class impossible
+    // instead of asking ~60 call sites to remember which tick they are in.
+    // Safe as a getter because it returns a STRING: no referential identity to
+    // bust a consumer's memo. `history` deliberately stays render-stable — it
+    // returns a fresh array per call and would bust those caches.
+    get fen() { return chessRef.current.fen(); },
+    get position() { return chessRef.current.fen(); },
     pgn: chess.pgn(),
     getFen,
     turn,

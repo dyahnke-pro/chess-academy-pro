@@ -3308,16 +3308,30 @@ export function CoachTeachPage(): JSX.Element {
           // pre-move position is rebuilt from history and the move validated
           // there; a correction that would not be legal leaves the board exactly
           // as it was rather than taking back and then failing to replace.
-          const priorSans = gameRef.current.history.slice(0, -1);
+          const fullHistory = gameRef.current.history;
+          const undoneSan = fullHistory[fullHistory.length - 1];
+          const priorSans = fullHistory.slice(0, -1);
           let legalThere: string | null = null;
           try {
             const probe = new Chess();
             for (const s of priorSans) probe.move(s);
             legalThere = probe.move(cmd.san)?.san ?? null;
           } catch { legalThere = null; }
-          if (legalThere && handleTakeBack(1).ok && playDictatedMove(legalThere)) {
-            captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'corrected-last', san: legalThere });
-            appendTurn(`Taken back — ${sanToSpeech(legalThere)} instead. Your move.`);
+          if (legalThere) {
+            if (handleTakeBack(1).ok) {
+              if (playDictatedMove(legalThere)) {
+                captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'corrected-last', san: legalThere });
+                appendTurn(`Taken back — ${sanToSpeech(legalThere)} instead. Your move.`);
+                return;
+              }
+              // The move was legal in the rebuilt position but the board refused
+              // it. Put back what was taken away before saying anything: a half-
+              // finished correction leaves the student a move down with no sign
+              // of it, which is worse than the correction simply not happening.
+              playDictatedMove(undoneSan);
+            }
+            captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'correction-failed', san: cmd.san });
+            appendTurn(`I couldn't swap ${sanToSpeech(undoneSan)} for ${sanToSpeech(cmd.san)} — the board is back as it was.`);
             return;
           }
           captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'correction-illegal', san: cmd.san });
