@@ -20,7 +20,7 @@
 // twenty-one seconds later. He reported it as the hints being bad moves. They
 // were good moves for the wrong player.
 import { describe, it, expect } from 'vitest';
-import { noteAdvisesSide, noteSuitsStudentSide } from './noteAnchorIntegrity';
+import { noteAdvisesSide, noteSuitsStudentSide, noteSeatMatches } from './noteAnchorIntegrity';
 import { assembleMoveEvalAnswer } from './groundedAnswer';
 
 describe('which side a note is advising', () => {
@@ -87,5 +87,38 @@ describe('whose best move it is', () => {
     // and pass no colour; they must read exactly as before.
     const answer = assembleMoveEvalAnswer({ fen: BLACK_TO_MOVE, bestMoveUci: 'd8b6' });
     expect(answer?.facts).toContain('The best move is Qb6');
+  });
+});
+
+// ── THE DECLARED SEAT (2026-09-17) ───────────────────────────────────────────
+// `noteAdvisesSide` reads recommendation VERBS, which the third-person farmed
+// corpora use and the second-person voiced corpus never does: "your knight
+// belongs on d5" names no colour, so the inference returns null and the note
+// is served to either seat. `studentSide` is stamped at build time from the
+// source video's own field, so it is a fact about the prose, not a reading of
+// it — and it decides.
+describe('the declared seat beats the inferred one', () => {
+  it('a voiced note is refused to the other seat', () => {
+    const note = { studentSide: 'white' as const, explains: 'Your knight belongs on d5; they cannot chase it.' };
+    expect(noteAdvisesSide(note)).toBeNull();          // the inference is blind here…
+    expect(noteSuitsStudentSide(note, 'black')).toBe(true); // …so the old guard lets it through
+    expect(noteSeatMatches(note, 'white')).toBe(true);
+    expect(noteSeatMatches(note, 'black')).toBe(false);
+  });
+
+  it('an unknown seat cannot license second-person prose', () => {
+    const note = { studentSide: 'black' as const, explains: 'Your bishop eyes h2.' };
+    expect(noteSeatMatches(note, null)).toBe(false);
+    expect(noteSeatMatches(note, undefined)).toBe(false);
+  });
+
+  it('a note with no declared seat still falls through to the prose inference', () => {
+    const advice = { plans: 'Black should wait with a6.' };
+    expect(noteSeatMatches(advice, 'black')).toBe(true);
+    expect(noteSeatMatches(advice, 'white')).toBe(false);
+    // …and an unknown seat stays permissive there, exactly as before: the
+    // fail-closed rule is about pronouns, and this note has none.
+    expect(noteSeatMatches(advice, null)).toBe(true);
+    expect(noteSeatMatches({ explains: 'The d5 square is weak.' }, null)).toBe(true);
   });
 });

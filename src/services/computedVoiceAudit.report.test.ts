@@ -333,7 +333,7 @@ describe('computed voice audit', () => {
           })(),
           corpus: (() => {
             try {
-              const src = teachingSourceForBoard(history, fenAfterReply, openingName,
+              const src = teachingSourceForBoard(history, fenAfterReply, openingName, game.student,
                 (n) => !corpusSeen.has(n.id) && noteStaysInScope(n, openingName)
                   && gradeBorrowedTeaching(spokenBeatText(n), fenAfterReply, 'audit.avail').length > 0);
               return src ? gradeBorrowedTeaching(spokenBeatText(src.note), fenAfterReply, 'audit.avail') : '';
@@ -380,7 +380,7 @@ describe('computed voice audit', () => {
             // The surface's own predicate: a tier keeps looking rather than
             // handing back a note the voice will drop.
             const src = teachingSourceForBoard(
-              history, fenAfterReply, openingName,
+              history, fenAfterReply, openingName, game.student,
               (note) => !corpusSeen.has(note.id)
                 && noteStaysInScope(note, openingName)
                 && gradeBorrowedTeaching(spokenBeatText(note), fenAfterReply, 'audit.tier').length > 0,

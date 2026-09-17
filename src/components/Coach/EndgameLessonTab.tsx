@@ -596,7 +596,8 @@ function PositionRunner({
   useEffect(() => {
     if (!playout.isComplete || corpusNote !== null) return;
     try {
-      const src = teachingSourceForBoard([], position.fen, null);
+      // An endgame study: the student is the side to move.
+      const src = teachingSourceForBoard([], position.fen, null, position.fen.split(' ')[1] === 'b' ? 'black' : 'white');
       const exact = src ? spokenBeatText(src.note).trim() : '';
       let note = src && exact ? generalizedTeaching(src.origin, exact) : '';
       if (!note) {

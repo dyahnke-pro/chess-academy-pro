@@ -4831,7 +4831,7 @@ export function CoachTeachPage(): JSX.Element {
               const entry = resolveOpeningEntry(requestedName);
               if (entry) spine.push(...entry.moves);
             }
-            return noteCoverageForLine(spine);
+            return noteCoverageForLine(spine, inferStudentSideFromName(requestedName));
           } catch {
             return 0;
           }
@@ -7201,7 +7201,7 @@ export function CoachTeachPage(): JSX.Element {
 
     // ── THE TAUGHT NOTE + its lead-the-eye arrows ──────────────────────────
     try {
-      const noteText = noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
+      const noteText = noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current, null, args.studentColor);
       if (noteText) {
         factLines.push(`Coaching note taught at THIS position: ${noteText}`);
         noteLine = noteText;
@@ -7423,6 +7423,14 @@ export function CoachTeachPage(): JSX.Element {
           history,
           args.fenAfterReply,
           openingNow,
+          // THE SEAT, and it binds even though the coach is the opponent here.
+          // The `coachIsOpponent` carve-out below reframes a note that ADVISES
+          // the other side into the coach's own first person — but that works
+          // on third-person prose ("White should…"). A voiced note with a
+          // declared seat speaks in the SECOND person, and there is no rewrite
+          // that turns "your knight" into the opponent's knight. So a
+          // wrong-seat voiced note is dropped here rather than reframed.
+          args.studentColor,
           (note) =>
             !teachNoteSeenIdsRef.current.has(note.id)
             // A note whose own prose teaches a DIFFERENT opening ("In the
@@ -9110,7 +9118,7 @@ export function CoachTeachPage(): JSX.Element {
                     // origins (opening-family / structure / concept) keep the
                     // provenance-labeled fact line, no arrows — they are not
                     // about this board.
-                    const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current);
+                    const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current, null, playerColor);
                     if (noteText) {
                       facts.push(`Coaching note taught at THIS position: ${noteText}`);
                       // Voiced by the instant pass instead (which also
@@ -9134,7 +9142,7 @@ export function CoachTeachPage(): JSX.Element {
                         });
                       }
                     } else {
-                      const source = teachingSourceForBoard(historyAfterReply, probe.fen());
+                      const source = teachingSourceForBoard(historyAfterReply, probe.fen(), null, playerColor);
                       if (source) facts.push(teachingFactLine(source));
                     }
                   } catch { /* corpus is a bonus, never a blocker */ }
@@ -10521,6 +10529,7 @@ export function CoachTeachPage(): JSX.Element {
             [...openingSans, ...local.history()],
             local.fen(),
             taughtOpening,
+            playerColor,
           );
           if (source && !continuationNoteIds.has(source.note.id)) {
             const graded = gradeNarrationText(

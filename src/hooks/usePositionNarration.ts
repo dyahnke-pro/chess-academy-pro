@@ -274,7 +274,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       let requiredNote = '';
       try {
         const historySans = args.pgn.split(/\s+/).map((t) => t.replace(/^\d+\.+/, '')).filter((t) => t && !/^(?:1-0|0-1|1\/2-1\/2|\*)$/.test(t));
-        const src = teachingSourceForBoard(historySans, args.fen, args.openingName ?? null);
+        const src = teachingSourceForBoard(historySans, args.fen, args.openingName ?? null, args.playerColor);
         if (src) {
           const noteLine = generalizedTeaching(src.origin, spokenBeatText(src.note));
           if (noteLine.trim().length > 0) {

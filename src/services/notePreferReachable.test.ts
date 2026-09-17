@@ -22,7 +22,7 @@ import '../test/loadFullCorpus';
 /** Walk the taught lines and record what selection returns per ply. */
 function walk(limit: number): { plies: number; withNote: number; mismatched: number } {
   let plies = 0; let withNote = 0; let mismatched = 0;
-  for (const entry of (repertoire as Array<{ pgn?: string }>).slice(0, limit)) {
+  for (const entry of (repertoire as Array<{ pgn?: string; color?: string }>).slice(0, limit)) {
     if (!entry.pgn) continue;
     const board = new Chess();
     const hist: string[] = [];
@@ -31,7 +31,7 @@ function walk(limit: number): { plies: number; withNote: number; mismatched: num
       if (!mv) break;
       hist.push(mv.san);
       plies += 1;
-      const note = noteAtPosition(hist, board.fen());
+      const note = noteAtPosition(hist, board.fen(), null, entry.color === 'black' ? 'black' : 'white');
       if (!note) continue;
       withNote += 1;
       if (note.opening && !openingReachesPosition(note.opening, hist)) mismatched += 1;

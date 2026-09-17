@@ -141,7 +141,12 @@ describe('derived note anchors', () => {
     const line = ['e4', 'd5', 'exd5', 'Nf6', 'Bb5+', 'Bd7'];
     expect(allDerivedAnchors()['dt-g6']).toEqual(line);
     const fen = fenAfter(line)!;
-    const note = noteAtPosition(line, fen, 'Scandinavian Defense');
+    // WHITE — and the seat is load-bearing, not boilerplate. The voiced notes
+    // sitting at this board teach the WHITE side against the Scandinavian, so
+    // they carry `studentSide: 'white'`. Passing 'black' (or no seat at all)
+    // now refuses them, which is the whole point of the guard: their prose
+    // says "your bishop" about White's bishop.
+    const note = noteAtPosition(line, fen, 'Scandinavian Defense', 'white');
     expect(note, 'no note selected at a position the corpus demonstrably teaches').toBeTruthy();
   });
 

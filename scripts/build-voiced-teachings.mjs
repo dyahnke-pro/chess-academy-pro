@@ -38,6 +38,13 @@ let videos = 0, skipped = 0;
 for (const f of files) {
   const j = JSON.parse(readFileSync(`${SRC}/${f}`, 'utf8'));
   const id = j.videoId || f.replace('.json', '');
+  // Fail loudly rather than defaulting: an undeclared seat silently becomes a
+  // WRONG seat on half the corpus, and the guard downstream cannot tell a
+  // default from a fact. All 430 sources declare it today.
+  const seat = j.studentSide;
+  if (seat !== 'white' && seat !== 'black') {
+    throw new Error(`${f}: studentSide must be 'white' or 'black', got ${JSON.stringify(seat)}`);
+  }
   let used = false;
   // Fen-anchored main line: each accepted node carries its cumulative lineSan and
   // the board after it, guaranteed to replay to that node's own recorded fen.
@@ -64,6 +71,13 @@ for (const f of files) {
       concepts: [],
       sources: [`yt:${id}`],
       positionSource: 'high',
+      // The SEAT the prose was authored from. Voiced narration says "you/your"
+      // for the video's student and "they/their" for the opponent, so a note
+      // served to a student sitting on the OTHER side inverts every pronoun in
+      // it — "your knight" becomes a claim about the opponent's piece, on a
+      // board where the geometry is identical. The position match cannot see
+      // that: both seats share the FEN. Carried here so selection can refuse.
+      studentSide: seat,
     });
     used = true;
   }

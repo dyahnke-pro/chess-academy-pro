@@ -79,7 +79,7 @@ describe('Vienna — what the student actually hears', () => {
         ...secondaryNotesForFen(fen),
       ]) candidates.set(n.id, n);
 
-      const selected = noteAtPosition(history, fen, LESSON);
+      const selected = noteAtPosition(history, fen, LESSON, 'white');
 
       // For a SILENT ply, attribute every candidate to the first gate that
       // refuses it. This is the line that answers "is the matrix necessary" —

@@ -260,7 +260,9 @@ export function TacticDrillPage(): JSX.Element {
     try {
       // POSITION first — exact and rare. A puzzle that happens to sit on a
       // taught line gets the note written about that very board.
-      const source = teachingSourceForBoard([], puzzle.fen, openingFilter);
+      // The solver is the side to move on the drill's board — that is whose
+      // seat a second-person note has to be written from.
+      const source = teachingSourceForBoard([], puzzle.fen, openingFilter, puzzle.fen.split(' ')[1] === 'b' ? 'black' : 'white');
       const exact = source ? spokenBeatText(source.note).trim() : '';
       let note = source && exact ? generalizedTeaching(source.origin, exact) : '';
 

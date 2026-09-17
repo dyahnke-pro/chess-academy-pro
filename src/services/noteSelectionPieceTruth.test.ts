@@ -55,7 +55,7 @@ describe('note selection is piece-true before the gate ever sees it', () => {
   it.each(BOARDS)('teachingSourceForBoard offers nothing piece-false on %s', (fen) => {
     // No `accept` predicate — deliberately. Production passes the gate in as
     // the predicate, so testing WITH one would test the backup, not the root.
-    const src = teachingSourceForBoard([], fen, null);
+    const src = teachingSourceForBoard([], fen, null, null);
     if (!src) return;                       // silence is an honest answer
     const spoken = spokenBeatText(src.note);
     expect(
@@ -91,7 +91,7 @@ describe('note selection is piece-true before the gate ever sees it', () => {
     // (`endgameNoteForLesson`) and the tactics drill via
     // `tacticNoteForPuzzleThemes`, where the floating corpus belongs.
     for (const fen of BOARDS) {
-      const src = teachingSourceForBoard([], fen, null);
+      const src = teachingSourceForBoard([], fen, null, null);
       if (src) expect(src.origin).toBe('position');
     }
   });

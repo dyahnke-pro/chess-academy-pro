@@ -5,6 +5,7 @@ import { strategicWhySelfContained } from './moveFundamentals';
 import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
 import { gradeNarrationText } from './coachAnswerGates';
 import type { MistakeClassification, MistakeGamePhase, MistakeNarration } from '../types';
+import { sideToMove } from './conceptEngine';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -354,7 +355,8 @@ function buildNoteRead(
     // by at all. The distilled note still LEADS wherever the corpus genuinely
     // teaches THIS position; where it does not, the grounded board read behind
     // it is the honest answer.
-    const note = noteAtPosition([], fen, openingName ?? null);
+    // The solver is the side to move; that is the seat this note must address.
+    const note = noteAtPosition([], fen, openingName ?? null, sideToMove(fen));
     if (!note) return '';
     const graded = gradeNarrationText(
       spokenBeatText(note),

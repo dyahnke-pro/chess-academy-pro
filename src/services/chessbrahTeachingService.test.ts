@@ -59,7 +59,7 @@ describe('gap tier reaches the packages the coach hands the LLM', () => {
   };
 
   it('the facts-package note builder returns a gap note when the primary is silent', () => {
-    const note = teachingNoteForBoard(TAIMANOV, fenAfter(TAIMANOV), 'Sicilian Taimanov');
+    const note = teachingNoteForBoard(TAIMANOV, fenAfter(TAIMANOV), 'Sicilian Taimanov', null);
     expect(note, 'facts package went empty on a gap opening').not.toBeNull();
     expect(note?.id.startsWith('cb-'), `expected a gap-tier note, got ${note?.id}`).toBe(true);
   });
@@ -67,7 +67,7 @@ describe('gap tier reaches the packages the coach hands the LLM', () => {
   it('derives the opening itself when the caller passes none', () => {
     // Every existing facts-package call site omits the opening name, so the
     // gap tier is only reachable if the service resolves it from the history.
-    const note = teachingNoteForBoard(TAIMANOV, fenAfter(TAIMANOV));
+    const note = teachingNoteForBoard(TAIMANOV, fenAfter(TAIMANOV), null, null);
     expect(note?.id.startsWith('cb-')).toBe(true);
   });
 
@@ -109,7 +109,7 @@ describe('gap tier reaches the packages the coach hands the LLM', () => {
 
   it('a covered opening still answers from the primary corpus, not the gap tier', () => {
     const CARO = ['e4', 'c6', 'd4', 'd5'];
-    const note = teachingNoteForBoard(CARO, fenAfter(CARO), 'Caro-Kann Defence');
+    const note = teachingNoteForBoard(CARO, fenAfter(CARO), 'Caro-Kann Defence', null);
     expect(note?.id.startsWith('cb-'), 'gap tier displaced primary teaching').toBe(false);
   });
 });
@@ -121,7 +121,7 @@ describe('the walkthrough splice can see the gap corpus', () => {
     // Take a real positioned gap note and ask for its exact line.
     const note = secondaryNotesForPosition(SAMPLE_LINE);
     expect(note.length, `no secondary note at ${SAMPLE_LINE.join(' ')}`).toBeGreaterThan(0);
-    const spliced = noteAtPosition(SAMPLE_LINE);
+    const spliced = noteAtPosition(SAMPLE_LINE, undefined, null, null);
     expect(spliced?.id.startsWith('cb-')).toBe(true);
   });
 });

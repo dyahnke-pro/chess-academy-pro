@@ -43,13 +43,13 @@ describe('danyaTeachingService — transpositions + staleness', () => {
     const fen = fenAfter(note.lineSan);
     const viaFen = secondaryNotesForFen(fen);
     expect(viaFen.some((n) => n.id === note.id)).toBe(true);
-    const viaTransposition = noteAtPosition(['h3', 'h6'], fen); // bogus history, right board
+    const viaTransposition = noteAtPosition(['h3', 'h6'], fen, null, note.studentSide ?? null); // bogus history, right board
     expect(viaTransposition).not.toBeNull();
   });
 
   it('exact-prefix match still wins without a FEN', () => {
     const note = positioned.find((n) => n.lineSan.length >= 3) ?? positioned[0];
-    const hit = noteAtPosition(note.lineSan);
+    const hit = noteAtPosition(note.lineSan, undefined, null, note.studentSide ?? null);
     expect(hit).not.toBeNull();
     expect(hit!.lineSan.join(' ')).toBe(note.lineSan.join(' '));
   });
@@ -68,10 +68,10 @@ describe('danyaTeachingService — transpositions + staleness', () => {
       extended.push(c.move(legal[0]).san);
     }
     // Found at its EXACT anchor…
-    expect(noteAtPosition(note.lineSan)?.id).toBe(note.id);
+    expect(noteAtPosition(note.lineSan, undefined, null, note.studentSide ?? null)?.id).toBe(note.id);
     // …never at the stale-extended board (unless a different note truly sits
     // there, which would carry a different id).
-    const stale = noteAtPosition(extended, fenAfter(extended));
+    const stale = noteAtPosition(extended, fenAfter(extended), null, note.studentSide ?? null);
     expect(stale?.id === note.id).toBe(false);
   });
 
@@ -151,13 +151,13 @@ describe('noteAtPosition — stays on the opening being taught', () => {
     warmSecondaryPositionIndexSync();
     const fen = fenAfter(tagged.lineSan);
     // A lesson on an unrelated opening drops the foreign-tagged note.
-    expect(noteAtPosition(tagged.lineSan, fen, 'Zzyzx Gambit Nonsense')).toBeNull();
+    expect(noteAtPosition(tagged.lineSan, fen, 'Zzyzx Gambit Nonsense', tagged.studentSide ?? null)).toBeNull();
     __setFarmedCorporaCache(undefined);
   });
 
   it('never teaches from an anchor too short to identify a position', () => {
     for (const shallow of [['e4'], ['d4'], ['e4', 'e5'], ['d4', 'd5']]) {
-      const hit = noteAtPosition(shallow, fenAfter(shallow));
+      const hit = noteAtPosition(shallow, fenAfter(shallow), null, null);
       expect(hit, `a ${shallow.length}-ply anchor is not position teaching`).toBeNull();
     }
   });
@@ -171,7 +171,7 @@ describe('scoped to the taught opening', () => {
     // for a board past book, not for a lesson requested by name.
     const sans = ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5'];
     const fen = fenAfter(sans);
-    const note = supportNoteForPly(sans, fen, 'Vienna Game: Vienna Gambit');
+    const note = supportNoteForPly(sans, fen, 'Vienna Game: Vienna Gambit', 'white');
     if (note) {
       expect(noteOpeningConflicts(note.opening, 'Vienna Game: Vienna Gambit')).toBe(false);
     }
@@ -200,18 +200,18 @@ describe('scoped to the taught opening', () => {
 // tag, and for a Caro-Kann lesson the tag agrees.
 describe('the first few moves of a lesson', () => {
   it('never teaches from an anchor too short to be about the position', () => {
-    for (const [lesson, line] of [
-      ['Caro-Kann Defense: Advance Variation', ['e4', 'c6', 'd4']],
-      ['Vienna Game: Copycat Variation', ['e4', 'e5', 'Nc3']],
-      ["King's Indian Defense", ['d4', 'Nf6', 'c4']],
-    ] as Array<[string, string[]]>) {
+    for (const [lesson, line, seat] of [
+      ['Caro-Kann Defense: Advance Variation', ['e4', 'c6', 'd4'], 'black'],
+      ['Vienna Game: Copycat Variation', ['e4', 'e5', 'Nc3'], 'white'],
+      ["King's Indian Defense", ['d4', 'Nf6', 'c4'], 'black'],
+    ] as Array<[string, string[], 'white' | 'black']>) {
       const chess = new Chess();
       const prefix: string[] = [];
       for (const san of line) {
         chess.move(san);
         prefix.push(san);
-        const note = noteAtPosition(prefix, chess.fen(), lesson)
-          ?? supportNoteForPly(prefix, chess.fen(), lesson);
+        const note = noteAtPosition(prefix, chess.fen(), lesson, seat)
+          ?? supportNoteForPly(prefix, chess.fen(), lesson, seat);
         if (note) {
           expect(
             note.lineSan.length,

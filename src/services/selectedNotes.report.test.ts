@@ -87,7 +87,7 @@ describe('selected notes', () => {
         history.push(move.san);
         pliesWalked += 1;
         const fen = chess.fen();
-        const note = noteAtPosition(history, fen, lesson, seen);
+        const note = noteAtPosition(history, fen, lesson, seat, seen);
         if (!note) continue;
         const graded = gradeNarrationText(spokenBeatText(note), fen, 'report.selectedNotes');
         if (!graded?.trim()) continue;
@@ -108,7 +108,9 @@ describe('selected notes', () => {
       }
     };
 
+    let seat: 'white' | 'black' = 'white';
     for (const entry of REPERTOIRE) {
+      seat = entry.color === 'black' ? 'black' : 'white';
       if (entry.pgn) walk(entry.name, sansOf(entry.pgn));
       for (const v of entry.variations ?? []) {
         if (v.pgn) walk(`${entry.name}: ${v.name}`, sansOf(v.pgn));
@@ -193,7 +195,7 @@ describe('selected notes', () => {
         const fen = chess.fen();
         // The selector, asked at the note's own board, with the lesson scoped
         // to the note's own opening — the friendliest case that can occur.
-        const picked = noteAtPosition([...line], fen, note.opening ?? null, new Set());
+        const picked = noteAtPosition([...line], fen, note.opening ?? null, note.studentSide ?? null, new Set());
         if (picked?.id !== note.id) continue;
         const graded = gradeNarrationText(spokenBeatText(picked), fen, 'report.anchorReach');
         if (!graded?.trim()) continue;

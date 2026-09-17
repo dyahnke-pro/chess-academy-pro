@@ -344,3 +344,39 @@ export function noteSuitsStudentSide(
   if (advises === null || advises === 'both') return true;
   return advises === studentSide;
 }
+
+/**
+ * May this note's PRONOUNS be spoken to a student on `studentSide`?
+ *
+ * `noteSuitsStudentSide` above INFERS a side from recommendation verbs
+ * ("White should…"). That works on the farmed corpora, which narrate in the
+ * third person — and it is blind on the VOICED corpus, which is the only
+ * exact-position source the play surfaces still speak (David 2026-08-26). A
+ * voiced note says "you" and "your" for the seat the video was taught from and
+ * "they/their" for the other, so it names no colour at all: `noteAdvisesSide`
+ * returns null for essentially all 7,477 of them, `noteSuitsStudentSide`
+ * returns true, and the note is served to either seat.
+ *
+ * Served to the wrong one, every pronoun inverts. The geometry still matches —
+ * both seats share the FEN, which is exactly why position selection cannot see
+ * this — so the sentence is fluent, board-true, and about the opponent's
+ * pieces. The Learn audit heard it: a game-reference line coached the student
+ * on moves their opponent had to find.
+ *
+ * DECLARED BEATS INFERRED. `studentSide` is stamped on each voiced note by
+ * `build-voiced-teachings.mjs` from its source video's own field, so it is a
+ * fact rather than a reading of the prose. When it is present it decides, and
+ * it decides FAIL-CLOSED: an unknown seat cannot license first-person prose,
+ * because a coin flip between "your knight" and "their knight" is not a fifty
+ * percent win, it is a fifty percent lie. Notes with no declared seat fall
+ * through to the prose inference, so nothing that worked before changes.
+ */
+export function noteSeatMatches(
+  note: { studentSide?: 'white' | 'black'; explains?: string; teaches?: string; plans?: string },
+  studentSide: 'white' | 'black' | null | undefined,
+): boolean {
+  if (note.studentSide === 'white' || note.studentSide === 'black') {
+    return note.studentSide === studentSide;
+  }
+  return noteSuitsStudentSide(note, studentSide);
+}

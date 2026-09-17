@@ -51,7 +51,7 @@ describe('the piece gate, priced', () => {
         // read the board — but `teachingSourceForBoard` wants the array.
         new Chess(fen);
       } catch { continue; }
-      const src = teachingSourceForBoard(history, fen, null);
+      const src = teachingSourceForBoard(history, fen, null, null);
       if (!src) continue;
       const raw = spokenBeatText(src.note);
       if (!raw.trim()) continue;
@@ -67,7 +67,7 @@ describe('the piece gate, priced', () => {
         // turn: the tier keeps looking. Measuring the refusal alone would
         // overstate the price of telling the truth.
         const replacement = teachingSourceForBoard(
-          history, fen, null,
+          history, fen, null, null,
           (n) => gradeBorrowedTeaching(spokenBeatText(n), fen, 'report.pieceGate.replacement').length > 0,
         );
         refused.push({

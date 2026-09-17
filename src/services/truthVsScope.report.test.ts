@@ -34,7 +34,7 @@ import {
   noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope,
 } from './noteAnchorIntegrity';
 
-interface Entry { name?: string; pgn?: string }
+interface Entry { name?: string; pgn?: string; color?: 'white' | 'black' }
 const sansOf = (pgn: string): string[] =>
   (pgn || '').trim().split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t));
 
@@ -109,7 +109,7 @@ describe('truth vs scope at silent plies', () => {
         const fen = board.fen();
         t.plies += 1;
 
-        const sel = noteAtPosition(history, fen, entry.name ?? null);
+        const sel = noteAtPosition(history, fen, entry.name ?? null, entry.color ?? null);
         if (sel && spokenBeatText(sel).trim()) continue;
         t.silent += 1;
 

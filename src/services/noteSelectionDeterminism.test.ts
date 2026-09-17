@@ -26,10 +26,13 @@ import { noteArrowSourceAt } from './openingGenerator';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import repertoireRaw from '../data/repertoire.json';
 
-interface Entry { id: string; name: string; pgn: string }
+interface Entry { id: string; name: string; pgn: string; color?: string }
 const REPERTOIRE = repertoireRaw as unknown as Entry[];
 
 const normFen = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+
+/** The seat a repertoire entry is taught from — the seat guard's input. */
+const seatOf = (e: Entry): 'white' | 'black' => (e.color === 'black' ? 'black' : 'white');
 
 /** SAN prefix + resulting FEN for every ply of a PGN. */
 function walk(pgn: string): Array<{ prefix: string[]; fen: string }> {
@@ -86,7 +89,7 @@ describe('note selection is position-determined', () => {
     for (const entry of REPERTOIRE) {
       if (!entry.pgn) continue;
       for (const step of walk(entry.pgn)) {
-        const note = noteAtPosition(step.prefix, step.fen, entry.name);
+        const note = noteAtPosition(step.prefix, step.fen, entry.name, seatOf(entry));
         if (!note) continue;
         selections += 1;
         const authoredAt = notePositionFen(note.lineSan);
@@ -118,14 +121,14 @@ describe('note selection is position-determined', () => {
       const seen = new Set<string>();
       for (const step of walk(entry.pgn)) {
         const before = new Set(seen);
-        const text = noteArrowSourceAt(step.prefix, step.fen, seen, entry.name);
+        const text = noteArrowSourceAt(step.prefix, step.fen, seen, entry.name, seatOf(entry));
         if (!text) continue;
         spliced += 1;
         const chosen = [...seen].find((id) => !before.has(id));
         if (!chosen) continue;
         // The id must belong to a note whose line reproduces this board. Resolve
         // it back through the same lookup rather than trusting the text.
-        const note = noteAtPosition(step.prefix, step.fen, entry.name, before);
+        const note = noteAtPosition(step.prefix, step.fen, entry.name, seatOf(entry), before);
         if (!note || note.id !== chosen) {
           offences.push(`${entry.name} ply ${step.prefix.length}: spliced ${chosen} unreachable by position lookup`);
           continue;
@@ -169,7 +172,7 @@ describe('teaching notes carry honest provenance', () => {
     for (const entry of REPERTOIRE) {
       if (!entry.pgn) continue;
       for (const step of walk(entry.pgn)) {
-        const source = teachingSourceForBoard(step.prefix, step.fen, entry.name);
+        const source = teachingSourceForBoard(step.prefix, step.fen, entry.name, seatOf(entry));
         if (source?.origin !== 'position') continue;
         claimed += 1;
         if (notePositionFen(source.note.lineSan) !== normFen(step.fen)) {

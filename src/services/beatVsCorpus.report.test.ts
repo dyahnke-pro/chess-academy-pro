@@ -19,7 +19,7 @@ import { loadSpokenBake } from '../test/loadSpokenBake';
 import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
 import { curatedBeatAt, warmCuratedBeatIndexSync, curatedBeatStats } from './curatedBeatSource';
 
-interface Entry { name?: string; pgn?: string }
+interface Entry { name?: string; pgn?: string; color?: 'white' | 'black' }
 
 const sansOf = (pgn: string): string[] =>
   (pgn || '').trim().split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t));
@@ -71,7 +71,7 @@ describe('beats vs corpus — which one can speak, and where', () => {
         byPhase[phase].plies += 1;
 
         const beat = curatedBeatAt(history, fen, beatSeen, entry.name ?? null);
-        const note = noteAtPosition(history, fen, entry.name ?? null);
+        const note = noteAtPosition(history, fen, entry.name ?? null, entry.color ?? null);
         // A note that cannot be spoken has not taught anything, so require
         // speakable text on both sides rather than mere existence.
         const beatText = (beat as { text?: string } | null)?.text?.trim() ?? '';

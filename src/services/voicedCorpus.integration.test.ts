@@ -75,13 +75,32 @@ describe('voiced fires on the play surfaces; floating stays out', () => {
   afterAll(() => { __setFarmedCorporaCache(undefined); });
 
   it('noteAtPosition (review / teach / free-play splice) returns the voiced note', () => {
-    expect(noteAtPosition(anchored.lineSan, fen)?.id).toBe(anchored.id);
+    expect(noteAtPosition(anchored.lineSan, fen, null, anchored.studentSide ?? null)?.id).toBe(anchored.id);
   });
 
   it('teachingSourceForBoard (read-position / think-aloud / tactics-exact) returns it as origin=position', () => {
-    const src = teachingSourceForBoard(anchored.lineSan, fen);
+    const src = teachingSourceForBoard(anchored.lineSan, fen, null, anchored.studentSide ?? null);
     expect(src?.note.id).toBe(anchored.id);
     expect(src?.origin).toBe('position');
+  });
+
+  // 🔒 THE SEAT GUARD (2026-09-17). A voiced note narrates in the second person
+  // — "your knight", "they answer" — from the seat its source video was taught
+  // from. Both seats share the FEN, so position selection cannot tell them
+  // apart, and 572 of the 1,542 plies of `repertoire.json` that reach a voiced
+  // note reached one written from the OTHER side. The student heard "your
+  // bishop" about their opponent's bishop, fluently and board-truthfully.
+  //
+  // There is no rewrite that flips second-person prose, so the wrong seat is
+  // refused, not reframed — and an UNKNOWN seat is refused too, because a coin
+  // flip between "your" and "their" is not half right, it is half a lie.
+  it('REFUSES the same note to the other seat, and to no seat at all', () => {
+    const seat = anchored.studentSide;
+    expect(seat, 'the voiced build must stamp a seat on every note').toMatch(/^(white|black)$/);
+    const other = seat === 'white' ? 'black' : 'white';
+    expect(noteAtPosition(anchored.lineSan, fen, null, other)?.id).not.toBe(anchored.id);
+    expect(noteAtPosition(anchored.lineSan, fen, null, null)?.id).not.toBe(anchored.id);
+    expect(teachingSourceForBoard(anchored.lineSan, fen, null, other)?.note.id).not.toBe(anchored.id);
   });
 
   it('never yields a FLOATING note on a play surface', () => {
@@ -93,7 +112,7 @@ describe('voiced fires on the play surfaces; floating stays out', () => {
     __setFarmedCorporaCache([{ key: 'voiced', data: { notes: [...bundle.notes, floating] } as never }]);
     warmSecondaryPositionIndexSync();
     const ruySans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'];
-    const src = teachingSourceForBoard(ruySans, fenFor(ruySans), 'Ruy Lopez');
+    const src = teachingSourceForBoard(ruySans, fenFor(ruySans), 'Ruy Lopez', 'white');
     // Silence is fine; a floating note surfacing is not.
     if (src) {
       expect(src.origin).toBe('position');

@@ -103,7 +103,7 @@ describe('coach surface scorecard', () => {
 
         // ── LEARN / the taught note (also the openings Watch beat source) ──
         let t0 = performance.now();
-        const src = teachingSourceForBoard(history, fen, null);
+        const src = teachingSourceForBoard(history, fen, null, null);
         const noteText = src ? spokenBeatText(src.note) : '';
         const note = noteText ? generalizedTeaching(src!.origin, noteText) : '';
         push('learn:corpus-note', note, fen, performance.now() - t0);

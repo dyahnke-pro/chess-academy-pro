@@ -31,7 +31,7 @@ describe('the live-game corpus lane', () => {
     const spoken: string[] = [];
     const seen = new Set<string>();
     for (const { prefix, fen } of walk(VIENNA_GAMBIT)) {
-      const src = teachingSourceForBoard(prefix, fen, 'Vienna Game');
+      const src = teachingSourceForBoard(prefix, fen, 'Vienna Game', 'white');
       if (!src || seen.has(src.note.id)) continue;
       seen.add(src.note.id);
       const t = spokenBeatText(src.note);
@@ -54,7 +54,7 @@ describe('the live-game corpus lane', () => {
     const seen = new Set<string>();
     let sawForeign = false;
     for (const { prefix, fen } of walk(VIENNA_GAMBIT)) {
-      const src = teachingSourceForBoard(prefix, fen, null);
+      const src = teachingSourceForBoard(prefix, fen, null, 'white');
       if (!src || seen.has(src.note.id)) continue;
       seen.add(src.note.id);
       expect(src.origin).toBe('position');

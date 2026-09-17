@@ -43,7 +43,7 @@ import {
   noteStaysInScope,
 } from './noteAnchorIntegrity';
 
-interface RepertoireEntry { name?: string; pgn?: string }
+interface RepertoireEntry { name?: string; pgn?: string; color?: 'white' | 'black' }
 
 const sansOf = (pgn: string): string[] =>
   (pgn || '').trim().split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t));
@@ -142,7 +142,7 @@ describe('note filter funnel — where candidate notes die', () => {
         byPhase[phase].withCandidate += 1;
         tally.candidatesSeen += uniq.size;
 
-        const selected = noteAtPosition(history, fen, entry.name ?? null);
+        const selected = noteAtPosition(history, fen, entry.name ?? null, entry.color ?? null);
         if (selected) {
           tally.pliesWithSelection += 1;
           byPhase[phase].selected += 1;

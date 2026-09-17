@@ -52,7 +52,7 @@ describe('ruy provenance', () => {
     for (const san of LINE) {
       board.move(san);
       history.push(san);
-      const note = noteAtPosition(history, board.fen(), 'Ruy Lopez', seen);
+      const note = noteAtPosition(history, board.fen(), 'Ruy Lopez', 'white', seen);
       const text = note ? spokenBeatText(note).trim() : '';
       if (!note || !text) {
         console.log(`ply ${String(history.length).padStart(2)} ${san.padEnd(5)} · silent`);

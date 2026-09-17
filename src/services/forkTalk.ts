@@ -104,7 +104,9 @@ export function buildForkTalk(opts: {
     // carry what he TEACHES about each continuation when the corpus covers it).
     let teachingNote: string | null = null;
     try {
-      const note = noteAtPosition([...historySans, p.san], p.fenAfter, det?.name ?? null);
+      // `mover` is the student's seat — the note is looked up at the board
+      // AFTER their candidate, but the pronouns are still theirs.
+      const note = noteAtPosition([...historySans, p.san], p.fenAfter, det?.name ?? null, mover);
       if (note) teachingNote = `${note.teaches}${note.plans ? ` ${note.plans}` : ''}`.trim();
     } catch { /* corpus is a bonus, never a blocker */ }
     built.push({ san: p.san, from: p.from, to: p.to, headsInto, character, does, teachingNote });

@@ -19,6 +19,7 @@ import type { Move } from 'chess.js';
 import { describeMoveGeometry } from './groundedAnswer';
 import { teachingSourceForBoard } from './danyaTeachingService';
 import { sanToSpeech } from '../utils/sanToSpeech';
+import { sideToMove } from './conceptEngine';
 
 /** The concrete floor: name the piece/square/concept from chess.js flags.
  *  Never generic filler ("keeping to the main line"). */
@@ -68,6 +69,8 @@ export function groundedMoveWhy(
       [...historyBefore, mv.san],
       fenAfter,
       openingName,
+      // The mover is the student; `fenAfter` has already flipped the turn.
+      sideToMove(fenBefore),
       (_note, origin) => origin === 'position',
     );
     const noteWhy = src?.note.teaches?.trim() || src?.note.explains?.trim() || '';
@@ -93,7 +96,7 @@ export function positionTeachingWhy(fen: string, openingName?: string | null): s
   // student. That is the 2026-08-04 defect (teaching authored at one position
   // spoken as if it described another), and it is invisible at runtime: the
   // prose is fluent and the board never contradicts a hypothetical.
-  const src = teachingSourceForBoard([], fen, openingName, (_note, origin) => origin === 'position');
+  const src = teachingSourceForBoard([], fen, openingName, sideToMove(fen), (_note, origin) => origin === 'position');
   const text = src?.note.teaches?.trim() || src?.note.explains?.trim() || '';
   return text || null;
 }

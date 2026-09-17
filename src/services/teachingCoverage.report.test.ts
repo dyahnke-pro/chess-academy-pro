@@ -98,12 +98,12 @@ function walk(pgn: string): Array<{ prefix: string[]; fen: string }> {
 // Two sessions have now mistaken it for headroom.
 type Tier = 'exact' | 'support' | 'transfer-or-concept' | 'none';
 
-function tierAt(prefix: string[], fen: string, openingName: string): { tier: Tier; id: string | null } {
-  const exact = noteAtPosition(prefix, fen, openingName);
+function tierAt(prefix: string[], fen: string, openingName: string, seat: 'white' | 'black'): { tier: Tier; id: string | null } {
+  const exact = noteAtPosition(prefix, fen, openingName, seat);
   if (exact) return { tier: 'exact', id: exact.id };
-  const support = supportNoteForPly(prefix, fen, openingName);
+  const support = supportNoteForPly(prefix, fen, openingName, seat);
   if (support) return { tier: 'support', id: support.id };
-  const wider = teachingNoteForBoard(prefix, fen, openingName);
+  const wider = teachingNoteForBoard(prefix, fen, openingName, seat);
   return wider ? { tier: 'transfer-or-concept', id: wider.id } : { tier: 'none', id: null };
 }
 
@@ -111,6 +111,7 @@ interface ModelGame {
   id: string;
   openingId?: string;
   pgn: string;
+  studentSide?: 'white' | 'black';
 }
 const MODEL_GAMES = modelGamesRaw as unknown as ModelGame[];
 
@@ -159,8 +160,9 @@ describe('teaching coverage report (Phase 0 measurement)', () => {
       const seenIds = new Set<string>();
       let spliced = 0;
       for (const step of steps) {
-        if (noteArrowSourceAt(step.prefix, step.fen, seenIds, entry.name)) spliced += 1;
-        const { tier, id } = tierAt(step.prefix, step.fen, entry.name);
+        const seat: 'white' | 'black' = entry.color === 'black' ? 'black' : 'white';
+        if (noteArrowSourceAt(step.prefix, step.fen, seenIds, entry.name, seat)) spliced += 1;
+        const { tier, id } = tierAt(step.prefix, step.fen, entry.name, seat);
         if (tier === 'exact') exact += 1;
         else if (tier === 'support') support += 1;
         else if (tier === 'transfer-or-concept') tiered += 1;
@@ -322,8 +324,8 @@ describe('teaching coverage report (Phase 0 measurement)', () => {
         // inside a named lesson on purpose, and whether review should re-enable
         // them is precisely the design question — measuring them as if they
         // were live would beg it.
-        const exact = noteAtPosition(step.prefix, step.fen, openingName);
-        const note = exact ?? supportNoteForPly(step.prefix, step.fen, openingName);
+        const exact = noteAtPosition(step.prefix, step.fen, openingName, game.studentSide ?? null);
+        const note = exact ?? supportNoteForPly(step.prefix, step.fen, openingName, game.studentSide ?? null);
         if (!note) continue;
         if (exact) bucket.exact += 1;
         else bucket.support += 1;

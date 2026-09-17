@@ -18,6 +18,7 @@ import { developmentRead, kingSafetyRead, findPieceQuality, findWeakPawns, findP
 import { describeMoveGeometry } from './groundedAnswer';
 import { detectPrincipleViolations } from './principleDetector';
 import { teachingSourceForBoard, teachingFactLine } from './danyaTeachingService';
+import { sideToMove } from './conceptEngine';
 
 export interface ThinkAloudLine {
   /** SAN of the line's first move (student POV candidates). */
@@ -119,7 +120,7 @@ export function buildThinkAloud(opts: {
   // around it was false, and a deliberation weighing a false premise reaches a
   // false conclusion. `teachingFactLine` states the provenance (2026-08-04).
   try {
-    const source = teachingSourceForBoard(historySans, fen);
+    const source = teachingSourceForBoard(historySans, fen, null, sideToMove(fen));
     // The whole beat, `plans` included — that field carries what the position
     // is heading toward, which is exactly what a deliberation should weigh.
     if (source) facts.push(teachingFactLine(source));

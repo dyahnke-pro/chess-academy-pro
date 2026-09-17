@@ -84,7 +84,7 @@ describe('a relation check, priced before it is wired', () => {
     const wouldRefuse: Array<{ fen: string; claimed: string[]; text: string; replaced: boolean }> = [];
 
     for (const fen of BOARDS) {
-      const src = teachingSourceForBoard([], fen, null);
+      const src = teachingSourceForBoard([], fen, null, null);
       if (!src) continue;
       const text = spokenBeatText(src.note);
       if (!text.trim()) continue;
@@ -95,7 +95,7 @@ describe('a relation check, priced before it is wired', () => {
       // selection, so a refused note means the tier keeps looking — measuring
       // the refusal alone would overstate the price, exactly as it would have
       // for the piece gate.
-      const replacement = teachingSourceForBoard([], fen, null,
+      const replacement = teachingSourceForBoard([], fen, null, null,
         (n) => unprovenRelations(spokenBeatText(n), fen).length === 0 && spokenBeatText(n).trim().length > 0);
       wouldRefuse.push({ fen, claimed: bad, text: text.slice(0, 120), replaced: Boolean(replacement) });
     }

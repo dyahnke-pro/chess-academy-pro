@@ -21,7 +21,7 @@ import { loadSpokenBake } from '../test/loadSpokenBake';
 import { noteAtPosition, notesForPrefix, notesForFen, spokenBeatText, type DanyaNote } from './danyaTeachingService';
 import { secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
 
-interface Entry { name?: string; pgn?: string }
+interface Entry { name?: string; pgn?: string; color?: 'white' | 'black' }
 
 const sansOf = (pgn: string): string[] =>
   (pgn || '').trim().split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t));
@@ -76,7 +76,7 @@ describe('positioned-note delivery', () => {
           for (const n of pos) offered.add(n.id);
         }
 
-        const sel = noteAtPosition(history, fen, entry.name ?? null);
+        const sel = noteAtPosition(history, fen, entry.name ?? null, entry.color ?? null);
         const said = sel ? spokenBeatText(sel).trim().length > 0 : false;
         if (said) {
           t.pliesWhereSomethingSpoke += 1;

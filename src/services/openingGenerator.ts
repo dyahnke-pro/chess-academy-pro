@@ -1224,7 +1224,11 @@ export function noteArrowSourceAt(
   historySans: string[],
   fen: string,
   seenIds: Set<string>,
-  openingName?: string | null,
+  openingName: string | null | undefined,
+  /** The seat this lesson is taught from. REQUIRED — a voiced note's "you"
+   *  belongs to the video's student, and served to the other side it becomes a
+   *  claim about the opponent's pieces. See `noteSeatMatches`. */
+  studentSide: 'white' | 'black' | null,
 ): string | null {
   try {
     // POSITION ONLY — move-prefix or transposition into this very FEN. This is
@@ -1239,7 +1243,7 @@ export function noteArrowSourceAt(
     // result here left 647 of 1,310 plies silent, because retrieval kept handing
     // back a note the lesson had already spoken and had no way to be asked for
     // the next one.
-    const note = noteAtPosition(historySans, fen, openingName, seenIds);
+    const note = noteAtPosition(historySans, fen, openingName, studentSide, seenIds);
     if (!note) return null;
     // SPOKEN register, not the full beat. `teachingBeatText` concatenates
     // explains+teaches+plans (median 544 chars) and the splice then stacked
@@ -2223,6 +2227,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
           branchSeq[k].fen,
           branchNoteIds,
           entry.canonicalName,
+          studentSide,
         ),
       );
     }
@@ -2471,7 +2476,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // contract holds — it replaces beat two, never adds a third.
       const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
       const landed = landedTacticTeaching(preFen, p.san);
-      const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
+      const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName, studentSide);
       const refuted = refutedByPly[i];
       if (teaching) {
         plyNoteText[i] = teaching;

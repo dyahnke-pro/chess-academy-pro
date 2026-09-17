@@ -45,7 +45,10 @@ describe('position read corpus wiring', () => {
     for (const n of lines) {
       const c = new Chess();
       for (const s of n.lineSan) c.move(s);
-      const src = teachingSourceForBoard(n.lineSan, c.fen(), null);
+      // The note's OWN seat — the hook passes the live student's, and a
+      // mismatch is now refused, so driving it with the wrong one would make
+      // this vacuous in the opposite direction.
+      const src = teachingSourceForBoard(n.lineSan, c.fen(), null, n.studentSide ?? null);
       if (!src || src.origin !== 'position') continue;
       const line = generalizedTeaching(src.origin, spokenBeatText(src.note));
       if (line.trim().length > 0) { spoken = line; break; }
@@ -55,7 +58,7 @@ describe('position read corpus wiring', () => {
 
   it('the hook injects the note as a REQUIRED verbatim lead (source pin)', () => {
     const src = readFileSync('src/hooks/usePositionNarration.ts', 'utf8');
-    expect(src).toContain('teachingSourceForBoard(historySans, args.fen');
+    expect(src).toContain('teachingSourceForBoard(historySans, args.fen, args.openingName ?? null, args.playerColor)');
     expect(src).toContain('LEAD WITH THIS VERIFIED TEACHING NOTE');
     // …and it rides the SAME additionalContext the model actually receives.
     expect(src).toMatch(/\$\{requiredNote\}\$\{requiredLookahead\}/);

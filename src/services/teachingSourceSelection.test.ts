@@ -34,7 +34,7 @@ const VIENNA = ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5'];
 describe('the opening never borrows another position ideas', () => {
   it.each([1, 2, 3, 4, 5, 6])('ply %i selects nothing, or a note about THIS line', (n) => {
     const { history, fen } = boardAfter(VIENNA.slice(0, n));
-    const src = teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit');
+    const src = teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit', 'white');
     if (!src) return; // silence is a valid answer and the common one
     expect(['position', 'opening-family']).toContain(src.origin);
   });
@@ -45,7 +45,7 @@ describe('the opening never borrows another position ideas', () => {
     // as "not forced silent by phase": whether a note exists depends on the
     // corpus, so this only proves the gate above is phase-scoped.
     const mid = '2rq1rk1/pb1nbppp/1p2pn2/3p4/2PP4/1PN1PN2/PB2BPPP/2RQ1RK1 w - - 0 12';
-    const src = teachingSourceForBoard([], mid, null);
+    const src = teachingSourceForBoard([], mid, null, 'white');
     if (src) expect(['position', 'opening-family', 'structure', 'concept']).toContain(src.origin);
   });
 });
@@ -53,7 +53,7 @@ describe('the opening never borrows another position ideas', () => {
 describe('selection keeps looking until the caller can use the note', () => {
   it('never hands back a rejected note (exact-position only)', () => {
     const { history, fen } = boardAfter(VIENNA);
-    const first = teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit');
+    const first = teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit', 'white');
     // Exact-position only since 2026-08-26 (no opening-family/structure/concept
     // fallback): silence is valid and common when no voiced note sits here.
     if (!first) return;
@@ -71,7 +71,7 @@ describe('selection keeps looking until the caller can use the note', () => {
 
   it('a predicate that refuses everything gets silence, not a violation', () => {
     const { history, fen } = boardAfter(VIENNA);
-    expect(teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit', () => false)).toBeNull();
+    expect(teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit', 'white', () => false)).toBeNull();
   });
 });
 
@@ -125,7 +125,7 @@ describe('past the opening, teaching is board-read or silent', () => {
   it.each([['a middlegame', MIDDLEGAME], ['an endgame', ENDGAME]])(
     'never answers %s from the opening-family tier',
     (_label, fen) => {
-      const src = teachingSourceForBoard([], fen, 'Vienna Game: Vienna Gambit');
+      const src = teachingSourceForBoard([], fen, 'Vienna Game: Vienna Gambit', 'white');
       if (src) expect(src.origin).not.toBe('opening-family');
     },
   );
@@ -134,7 +134,7 @@ describe('past the opening, teaching is board-read or silent', () => {
     // The tier is not disabled — it is scoped. An opening board is exactly
     // where "a general idea in this opening" is a true and useful thing to say.
     const { history, fen } = boardAfter(['e4', 'e5', 'Nc3']);
-    const src = teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit');
+    const src = teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit', 'white');
     if (src) expect(['position', 'opening-family']).toContain(src.origin);
   });
 });

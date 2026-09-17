@@ -26,7 +26,7 @@ import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
-import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, noteSuitsStudentSide } from './noteAnchorIntegrity';
+import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, noteSuitsStudentSide, noteSeatMatches } from './noteAnchorIntegrity';
 import { bakedSpoken, loadSpokenBake } from './spokenNoteBake';
 import { falseConfigurationClaim } from './configurationClaims';
 import { logAppAudit } from './appAuditor';
@@ -64,6 +64,14 @@ export interface DanyaNote {
    * never inherit verified authority through an omission.
    */
   positionSource?: 'high' | 'medium' | 'inferred';
+  /**
+   * The SEAT the prose was authored from — present on the voiced corpus, which
+   * narrates in the second person ("your knight", "they answer"). Stamped from
+   * the source video's own `studentSide`, never read off the prose. See
+   * `noteSeatMatches`: served to the other seat, every pronoun in the note
+   * inverts while the board stays a perfect match.
+   */
+  studentSide?: 'white' | 'black';
 }
 
 interface TeachingsBundle {
@@ -316,7 +324,10 @@ export function notesForPrefix(historySans: string[], maxNotes = Infinity, withi
 export function supportNoteForPly(
   historySans: string[],
   fen: string,
-  openingName?: string | null,
+  openingName: string | null | undefined,
+  /** The student's seat. REQUIRED — see `noteAtPosition`. A borrowed note has
+   *  pronouns too, and borrowing does not make them the student's. */
+  studentSide: 'white' | 'black' | null,
   /** Notes the caller has already spoken, so this can advance to the next
    *  usable one instead of returning a repeat the caller must discard.
    *
@@ -357,6 +368,11 @@ export function supportNoteForPly(
     // variation foreign to this lesson is out of scope — David's 2026-08-05
     // run heard "In the Fantasy…" inside a Tartakower lesson.
     && noteStaysInScope(n, openingName)
+    // THE SEAT. Declared on the voiced corpus, inferred from prose elsewhere.
+    // Last in the chain because it is the cheapest to reason about and the
+    // most absolute: everything above asks whether the note is about this
+    // BOARD, this asks whether its pronouns are about this STUDENT.
+    && noteSeatMatches(n, studentSide)
     && !exclude?.has(n.id);
   try {
     // STRUCTURE TRANSFER IS OFF INSIDE A TAUGHT LESSON (David 2026-08-02:
@@ -385,7 +401,13 @@ export function supportNoteForPly(
  *
  *  Counts the EXACT tier only, and each note once — an opening-level note that
  *  matches everywhere is not coverage of the line. */
-export function noteCoverageForLine(historySans: readonly string[]): number {
+export function noteCoverageForLine(
+  historySans: readonly string[],
+  /** The seat this lesson will be taught from. Coverage must be measured with
+   *  the same seat filter delivery uses, or it counts notes that will never be
+   *  spoken and routes the lesson to a path that then has nothing to say. */
+  studentSide: 'white' | 'black' | null,
+): number {
   if (historySans.length === 0) return 0;
   const seen = new Set<string>();
   const chess = new Chess();
@@ -397,7 +419,7 @@ export function noteCoverageForLine(historySans: readonly string[]): number {
       break;
     }
     prefix.push(san);
-    const note = noteAtPosition(prefix, chess.fen());
+    const note = noteAtPosition(prefix, chess.fen(), null, studentSide);
     if (note && !seen.has(note.id)) seen.add(note.id);
   }
   return seen.size;
@@ -416,8 +438,21 @@ export function noteCoverageForLine(historySans: readonly string[]): number {
 // same fuzziness, smaller. `noteSelectionDeterminism.test.ts` is the proof.
 export function noteAtPosition(
   historySans: string[],
-  fen?: string,
-  openingName?: string | null,
+  fen: string | undefined,
+  openingName: string | null | undefined,
+  /**
+   * The side the STUDENT is sitting on, REQUIRED — there is no safe default.
+   *
+   * A voiced note's prose is written from a seat ("your knight", "they
+   * answer"), and both seats share the FEN, so position selection cannot tell
+   * the two apart. This was optional-shaped for exactly one release and every
+   * caller that omitted it served either seat's prose to either student.
+   * Required means a NEW caller has to decide rather than inherit the bug.
+   *
+   * `null` is a real answer — a spectator/demo board where the student plays
+   * neither side — and it fails CLOSED: a seated note is not spoken at all.
+   */
+  studentSide: 'white' | 'black' | null,
   /** Notes the caller has already spoken. See `supportNoteForPly`. */
   exclude?: ReadonlySet<string>,
 ): DanyaNote | null {
@@ -458,6 +493,10 @@ export function noteAtPosition(
     // variation foreign to this lesson is out of scope — David's 2026-08-05
     // run heard "In the Fantasy…" inside a Tartakower lesson.
     && noteStaysInScope(n, openingName)
+    // THE SEAT. Declared on the voiced corpus, inferred from prose elsewhere.
+    // Last in the chain because everything above asks whether the note is
+    // about this BOARD; this asks whether its pronouns are about this STUDENT.
+    && noteSeatMatches(n, studentSide)
     && !exclude?.has(n.id);
   // WHEN SEVERAL NOTES SIT AT ONE BOARD, PREFER THE ONE WHOSE OWN OPENING GETS
   // HERE. Measured over the 1,310 plies of repertoire.json: 44.6% of selected
@@ -568,7 +607,9 @@ export interface TeachingSource {
 export function teachingSourceForBoard(
   historySans: string[],
   fen: string,
-  openingName?: string | null,
+  openingName: string | null | undefined,
+  /** The student's seat. REQUIRED — see `noteAtPosition`, which this feeds. */
+  studentSide: 'white' | 'black' | null,
   /**
    * A note the CALLER can actually use. Every tier keeps looking until one
    * passes, instead of handing back its first pick and letting the caller
@@ -590,7 +631,7 @@ export function teachingSourceForBoard(
   // has nothing more to offer and the next tier is the better answer.
   const rejected = new Set<string>();
   for (let attempt = 0; attempt < 4; attempt += 1) {
-    const exact = noteAtPosition(historySans, fen, openingName, rejected);
+    const exact = noteAtPosition(historySans, fen, openingName, studentSide, rejected);
     if (!exact) break;
     if (accept(exact, 'position')) return { note: exact, origin: 'position' };
     rejected.add(exact.id);
@@ -616,9 +657,11 @@ export function teachingSourceForBoard(
 export function teachingNoteForBoard(
   historySans: string[],
   fen: string,
-  openingName?: string | null,
+  openingName: string | null | undefined,
+  /** The student's seat. REQUIRED — see `noteAtPosition`. */
+  studentSide: 'white' | 'black' | null,
 ): DanyaNote | null {
-  return teachingSourceForBoard(historySans, fen, openingName)?.note ?? null;
+  return teachingSourceForBoard(historySans, fen, openingName, studentSide)?.note ?? null;
 }
 
 /**
