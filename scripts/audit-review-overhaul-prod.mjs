@@ -41,13 +41,88 @@ import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { seedWeaknessProfile } from './audit-lib/seed-weakness-profile.mjs';
 import { exploreOnFreeBoard, readWalkPly } from './audit-lib/review-explore.mjs';
 import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
+import { SEEDS, pickRealGame, fetchGameById } from './audit-lib/source-real-game.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
-const GID = process.env.AUDIT_GID || `audit-alapin-overhaul-${Date.now()}`;
-const PGN = '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6 7. Nf3 d6 8. exd6 Qxd6 9. Be2 Bg4 10. Nb5 Qd7 11. Bf4 Nd5 12. Ne5 Bxe2 13. Qxe2 Nxf4 14. Nxd7 Nxe2 15. Nc7+ Kxd7 16. Nxa8 Nexd4 17. Rd1 e5 18. a3 Bc5 19. b4 Nxb4 20. axb4 Bxb4+ 21. Kf1 Rxa8 22. Rb1 a5 23. h4 Rc8 0-1';
-const FUND_PLY = 12;    // 6...Nb6 — the fixture move
-const EXPLORE_PLY = 11; // after 6.Nc3 — Black (the student) to move
-const SANS = (() => { const c = new Chess(); c.loadPgn(PGN); return c.history(); })();
+
+/**
+ * 🔄 A NEW GAME EVERY RUN (David 2026-09-17: "I want new games audited each
+ * time. No good to have the same one over and over. It doesn't tell us anything
+ * new.").
+ *
+ * This audit used to replay ONE hardcoded PGN — David's Alapin — so every run
+ * re-read a board we had already read. That is a regression test wearing an
+ * audit's clothes. The fleet wrapper (`audit-review-fleet-newgames.mjs`) has
+ * always sourced fresh real games, but it spawned `audit-review-real-game.mjs`,
+ * which has been STALE since the 2026-09-05 overhaul — so the rotation never
+ * actually reached a working audit and every review run was the same game.
+ *
+ * ROTATE FOR DISCOVERY, PIN FOR DIAGNOSIS. If the board changes every run then
+ * a red row is ambiguous — regression, or just a different position? So the run
+ * PRINTS the exact command that reproduces it:
+ *   default            → a fresh real master game (G3-sourced, chess.js-verified)
+ *   AUDIT_GAME_ID=<id> → re-run that exact game
+ *   AUDIT_GAME=fixture → David's Alapin, the known baseline
+ */
+const FIXTURE = {
+  id: 'fixture-alapin',
+  white: 'KaiserlicheHoheit',
+  black: 'Knight_Mare_01',
+  result: '0-1',
+  studentSide: 'black',
+  seedName: 'Alapin fixture (David\'s own game)',
+  movetext: '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6 7. Nf3 d6 8. exd6 Qxd6 9. Be2 Bg4 10. Nb5 Qd7 11. Bf4 Nd5 12. Ne5 Bxe2 13. Qxe2 Nxf4 14. Nxd7 Nxe2 15. Nc7+ Kxd7 16. Nxa8 Nexd4 17. Rd1 e5 18. a3 Bc5 19. b4 Nxb4 20. axb4 Bxb4+ 21. Kf1 Rxa8 22. Rb1 a5 23. h4 Rc8 0-1',
+};
+
+async function resolveGame() {
+  const mode = process.env.AUDIT_GAME || '';
+  if (mode === 'fixture') return { ...FIXTURE, how: 'AUDIT_GAME=fixture' };
+  // A caller that already sourced a game (the fleet wrapper) hands it straight
+  // in — no point querying the explorer twice for a game it already verified.
+  if (process.env.AUDIT_PGN) {
+    const result = process.env.AUDIT_RESULT || '*';
+    const side = process.env.AUDIT_STUDENT === 'black' ? 'black' : 'white';
+    return {
+      id: process.env.AUDIT_GID || 'supplied',
+      white: process.env.AUDIT_WHITE || 'White',
+      black: process.env.AUDIT_BLACK || 'Black',
+      result,
+      studentSide: side,
+      seedName: process.env.AUDIT_SEED_NAME || 'supplied by caller',
+      movetext: process.env.AUDIT_PGN,
+      // "AUDIT_PGN=<supplied>" would reproduce NOTHING — a reproduce line that
+      // cannot be pasted is the same disease as an audit that reports green
+      // having verified nothing. The caller passes the source id so a red row
+      // from a rotated fleet run can be re-run on the exact same board.
+      how: process.env.AUDIT_SOURCE_ID
+        ? `AUDIT_GAME_ID=${process.env.AUDIT_SOURCE_ID} AUDIT_STUDENT=${side}`
+        : `AUDIT_STUDENT=${side} AUDIT_PGN='${process.env.AUDIT_PGN}'`,
+    };
+  }
+  const byId = process.env.AUDIT_GAME_ID;
+  if (byId) {
+    const g = await fetchGameById(BASE, byId).catch(() => null);
+    if (g) return { ...g, studentSide: process.env.AUDIT_STUDENT || 'white', how: `AUDIT_GAME_ID=${byId}` };
+    log(`[game] AUDIT_GAME_ID=${byId} could not be fetched — falling back to a fresh pick`);
+  }
+  const idx = process.env.AUDIT_SEED_INDEX ? Number(process.env.AUDIT_SEED_INDEX) : Date.now();
+  // Walk the seed list from the rotation point so one empty explorer answer
+  // does not abort the run — "the explorer had nothing" is not a product bug.
+  for (let i = 0; i < SEEDS.length; i += 1) {
+    const seedIdx = (Math.abs(Math.floor(idx)) + i) % SEEDS.length;
+    const g = await pickRealGame(BASE, SEEDS[seedIdx]).catch(() => null);
+    if (g) return { ...g, how: `AUDIT_GAME_ID=${g.id} AUDIT_STUDENT=${g.studentSide}` };
+  }
+  log('[game] no real game could be sourced (explorer unreachable?) — using the fixture so the run still reports');
+  return { ...FIXTURE, how: 'AUDIT_GAME=fixture' };
+}
+
+const GID = process.env.AUDIT_GID || `audit-review-overhaul-${Date.now()}`;
+let GAME = FIXTURE;          // replaced in main() before any use
+let PGN = FIXTURE.movetext;
+let SANS = [];
+let FUND_PLY = 12;           // chosen from the engine's own flags, per game
+let EXPLORE_PLY = 11;        // a student-to-move ply, derived below
 
 const log = (s) => console.log(s);
 const has = async (p, sel) => { try { return (await p.locator(sel).count()) > 0; } catch { return false; } };
@@ -131,22 +206,40 @@ const run = async () => {
   };
   const add = async (id, pass, detail) => { const w = await workerCount(); results.push({ id, pass, detail: `${detail} [workers=${w}]` }); log(`  ${pass ? '✅' : '❌'} ${id}: ${detail} [workers=${w}]`); };
 
+  // ── RESOLVE THE GAME, then derive the plies FROM IT ─────────────────────
+  GAME = await resolveGame();
+  PGN = GAME.movetext;
+  SANS = (() => { const c = new Chess(); c.loadPgn(PGN); return c.history(); })();
+  // The student's own plies, 1-indexed: White = odd, Black = even.
+  const studentPlies = SANS.map((_, i) => i + 1)
+    .filter((n) => (n % 2 === 1) === (GAME.studentSide === 'white'));
+  // Land in the MIDDLEGAME, not on move 2 — a book move has nothing to teach
+  // and the fundamentals lead would be legitimately empty there. The engine's
+  // own flags refine this later (see FUND_PLY reassignment after the walk).
+  FUND_PLY = studentPlies[Math.min(5, studentPlies.length - 1)] ?? 12;
+  EXPLORE_PLY = FUND_PLY - 1 > 0 ? FUND_PLY - 1 : 1;
+  log(`[game] ${GAME.seedName ?? 'pinned'} — ${GAME.white} vs ${GAME.black} ${GAME.result}, student=${GAME.studentSide}, ${SANS.length} plies (id=${GAME.id})`);
+  log(`[game] REPRODUCE THIS EXACT RUN:  ${GAME.how} node scripts/audit-review-overhaul-prod.mjs`);
+  log(`[game] fund ply=${FUND_PLY} explore ply=${EXPLORE_PLY}`);
+
   const streamBefore = await pullAuditStream(Date.now() - 60000);
   for (let i = 0; i < 4; i++) { try { await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 60000 }); break; } catch { await page.waitForTimeout(1500); } }
   await dismiss();
   await page.waitForTimeout(2500);
 
-  // SEED — David's real game, UNANALYZED. Student = Black by handle.
-  const seed = await page.evaluate(async ({ gid, pgn }) => {
+  // SEED — the RESOLVED game (a fresh real one unless pinned), UNANALYZED. The
+  // student is identified by handle, so the seat follows whichever side the
+  // sourced game put them on.
+  const seed = await page.evaluate(async ({ gid, pgn, g }) => {
     const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
     const db = await open();
     const put = (store, val) => new Promise((res, rej) => { const t = db.transaction(store, 'readwrite'); t.objectStore(store).put(val); t.oncomplete = () => res(true); t.onerror = () => rej(t.error); });
     const getAll = (store) => new Promise((res, rej) => { const t = db.transaction(store, 'readonly'); const rq = t.objectStore(store).getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
-    await put('games', { id: gid, pgn, white: 'KaiserlicheHoheit', black: 'Knight_Mare_01', result: '0-1', date: '2026.09.03', event: "Let's Play!", eco: 'B22', whiteElo: 1392, blackElo: 1378, source: 'chesscom', termination: 'resignation', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
+    await put('games', { id: gid, pgn, white: g.white, black: g.black, result: g.result, date: '2026.09.03', event: "Let's Play!", eco: g.eco ?? 'B22', whiteElo: 1392, blackElo: 1378, source: 'chesscom', termination: 'resignation', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
     const profs = await getAll('profiles');
-    for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = 'Knight_Mare_01'; p.preferences.coachNarration = 'full'; await put('profiles', p); }
+    for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = g.studentSide === 'white' ? g.white : g.black; p.preferences.coachNarration = 'full'; await put('profiles', p); }
     return { profiles: profs.length };
-  }, { gid: GID, pgn: PGN }).catch((e) => ({ error: String(e) }));
+  }, { gid: GID, pgn: PGN, g: GAME }).catch((e) => ({ error: String(e) }));
   log(`[seed] ${JSON.stringify(seed)}`);
 
   // OPT-IN: seed a real weakness spine. A cold prod device has NO accumulated
@@ -171,7 +264,12 @@ const run = async () => {
   const badge = cardUp ? await txt(page, `${cardSel} [data-testid="review-game-outcome"]`) : '';
   const outcome = cardUp ? await page.locator(`${cardSel} [data-testid="review-game-outcome"]`).first().getAttribute('data-outcome').catch(() => '') : '';
   const cardText = cardUp ? await txt(page, cardSel) : '';
-  await add('CARD win-not-0-1', cardUp && badge === 'WIN' && outcome === 'win' && !/\b0-1\b/.test(cardText) && /vs KaiserlicheHoheit/.test(cardText),
+  // The card names the OPPONENT, whoever the sourced game gave us — never a
+  // hardcoded handle, or the row only ever passes on one game.
+  const OPP = GAME.studentSide === 'white' ? GAME.black : GAME.white;
+  const wantBadge = GAME.result === '1/2-1/2' ? 'DRAW'
+    : (GAME.result === '1-0') === (GAME.studentSide === 'white') ? 'WIN' : 'LOSS';
+  await add(`CARD badge-${wantBadge.toLowerCase()}-not-raw-result`, cardUp && badge === wantBadge && !/\b(0-1|1-0)\b/.test(cardText) && cardText.includes(OPP),
     cardUp ? `badge="${badge}" outcome=${outcome} text="${cardText.slice(0, 70)}"` : 'card never rendered');
 
   // No card = nothing to open. Fail NOW rather than wait out the 300s analysis
@@ -355,8 +453,8 @@ const run = async () => {
   // inside REVIEW_POSITION_BUDGET_MS on THIS hardware (native Stockfish: 52cp at
   // d14 = "good" under the 5% band, 128cp at d16). The product contract — a
   // flagged ply LEADS with its fundamental — is FUNDLEAD below.
-  log(`  ${flagged ? '✅' : '⚠️ '} FUND fixture-ply-graded (info): 6...Nb6 badge=${fundBadge || 'none'} — engine truth at the app's budget, see [engine] rows`);
-  await add('FUND fixture-ply-leads-with-fundamentals', onFund && (!flagged || FUND_RE.test(lead)), onFund ? `lead="${lead.slice(0, 120)}"` : 'unreached');
+  log(`  ${flagged ? '✅' : '⚠️ '} FUND probe-ply-graded (info): ply ${FUND_PLY} (${SANS[FUND_PLY - 1] ?? '?'}) badge=${fundBadge || 'none'} — engine truth at the app's budget, see [engine] rows`);
+  await add('FUND probe-ply-leads-with-fundamentals', onFund && (!flagged || FUND_RE.test(lead)), onFund ? `lead="${lead.slice(0, 120)}"` : 'unreached');
   await add('FUND no-we-our', !/\b(we|our|us)\b/i.test(fundNarr), /\b(we|our|us)\b/i.test(fundNarr) ? `perspective leak: "${fundNarr.slice(0, 80)}"` : 'you/your + they/their only');
 
   // ── FREE + EXPL (D) — the student tries THEIR OWN alternative on the free board
@@ -701,7 +799,7 @@ const run = async () => {
   // GOOD — so the absent button is CORRECT, not a defect. Report it as such.
   if (flaggedLeads.size === 0) {
     await add('SHOW better-move-narrated-then-paused', true,
-      `n/a — no flagged student ply in this game, so no Show-me is owed (fixture ply ${FUND_PLY} graded good)`);
+      `n/a — no flagged student ply in this game, so no Show-me is owed (probe ply ${FUND_PLY} graded good)`);
   } else {
     await add('SHOW better-move-narrated-then-paused', showBtn && showLines >= 2 && showPaused === 'paused', showBtn ? `ply ${showPly}: ${showLines} lines spoken; state after=${showPaused}` : `no Show-me button on FLAGGED ply ${showPly}`);
   }
@@ -838,14 +936,14 @@ const run = async () => {
   // a borderline ~40-60cp move and varies run-to-run — the SAME engine truth the
   // cold-open FUND check treats as informational, not a gate.
   const gradedAfterDive = !annots2.error && typeof annots2.depth === 'number' && !!annots2.row && annots2.row !== 'none';
-  await add('FUND fixture-ply-graded-after-dive', gradedAfterDive, `6...Nb6 depth=${annots2.depth ?? '?'} (${annots2.row ?? annots2.error})`);
+  await add('FUND probe-ply-graded-after-dive', gradedAfterDive, `ply ${FUND_PLY} depth=${annots2.depth ?? '?'} (${annots2.row ?? annots2.error})`);
   // The PRODUCT contract, identical to the cold-open FUND check: WHEN the
   // reopened+deepened ply is flagged, its narration LEADS with the fundamental;
   // when the engine grades it GOOD, leading with mechanics is correct. Requiring
   // `flagged2` here (the old check) tested engine variance, not the product, and
   // false-red'd a working reopen — the cold-open FUNDLEAD already proves the
   // fundamentals-first narration on the same run.
-  await add('FUND fixture-ply-leads-with-fundamentals-after-dive', reachedFund2 && (!flagged2 || FUND_RE.test(lead2)), reachedFund2 ? `flagged=${flagged2} lead="${lead2.slice(0, 120)}"` : 'reopened walk did not reach the fixture ply');
+  await add('FUND probe-ply-leads-with-fundamentals-after-dive', reachedFund2 && (!flagged2 || FUND_RE.test(lead2)), reachedFund2 ? `flagged=${flagged2} lead="${lead2.slice(0, 120)}"` : 'reopened walk did not reach the probe ply');
 
   await add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
 

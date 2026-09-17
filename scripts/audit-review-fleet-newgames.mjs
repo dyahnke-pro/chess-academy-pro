@@ -6,7 +6,7 @@
  * a PGN from memory): the masters explorer picks the games, the game-export
  * proxy delivers the full PGN, chess.js verifies legality before a game is
  * allowed into the fleet. Each game then runs the LOCKED real-game experience
- * audit (scripts/audit-review-real-game.mjs) end-to-end against prod.
+ * audit (scripts/audit-review-overhaul-prod.mjs) end-to-end against prod.
  *
  * On top of the per-game verdicts, this wrapper aggregates PASS-FIRING
  * STATISTICS — the grounding data for the claim that engine lines are
@@ -22,99 +22,26 @@
  */
 import { spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { Chess } from 'chess.js';
+// The picker moved to audit-lib so the live review audit can rotate games too —
+// one copy, because two would drift the moment one grew a bound or a seed.
+import { SEEDS, pickRealGame } from './audit-lib/source-real-game.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 
-// Diverse profiles: both colors, wins AND losses AND a draw, different
-// openings, different game lengths. The explorer decides WHICH games —
-// we only declare the opening seed + what result the student side needs.
-const SEEDS = [
-  { name: 'Najdorf (student=White, win)',      play: 'e2e4,c7c5,g1f3,d7d6,d2d4,c5d4,f3d4,g8f6,b1c3,a7a6', student: 'white', want: 'white' },
-  { name: 'Caro-Kann (student=Black, win)',    play: 'e2e4,c7c6,d2d4,d7d5', student: 'black', want: 'black' },
-  { name: 'QGD (student=Black, LOSS)',         play: 'd2d4,d7d5,c2c4,e7e6,b1c3,g8f6', student: 'black', want: 'white' },
-  { name: "King's Indian (student=White, LOSS)", play: 'd2d4,g8f6,c2c4,g7g6,b1c3,f8g7,e2e4,d7d6', student: 'white', want: 'black' },
-  { name: 'Ruy Lopez (student=White, DRAW)',   play: 'e2e4,e7e5,g1f3,b8c6,f1b5,a7a6', student: 'white', want: 'draw' },
-  // (The English seed found no legal black-win candidate in runs 1-3 — the
-  // French position has a deep master-game pool with black wins.)
-  { name: 'French (student=Black, win)',       play: 'e2e4,e7e6,d2d4,d7d5', student: 'black', want: 'black' },
-  // ── extended to 10 games (David: "the ten game test") — 4 more diverse
-  //    never-audited profiles across both colors + all three results.
-  { name: 'Italian Game (student=White, win)', play: 'e2e4,e7e5,g1f3,b8c6,f1c4', student: 'white', want: 'white' },
-  { name: 'Sicilian Dragon (student=Black, win)', play: 'e2e4,c7c5,g1f3,d7d6,d2d4,c5d4,f3d4,g8f6,b1c3,g7g6', student: 'black', want: 'black' },
-  { name: 'Slav (student=Black, DRAW)',        play: 'd2d4,d7d5,c2c4,c7c6', student: 'black', want: 'draw' },
-  { name: 'Scandinavian (student=Black, LOSS)', play: 'e2e4,d7d5,e4d5,d8d5,b1c3', student: 'black', want: 'white' },
-];
-
 const seen = new Set();
-
-async function fetchJson(url) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`${r.status} ${url}`);
-  return r.json();
-}
-async function fetchText(url) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`${r.status} ${url}`);
-  return r.text();
-}
-
-/** Strip headers/comments/NAGs from an exported PGN → bare movetext + result. */
-function movetextOf(raw) {
-  const noHeaders = raw.replace(/^\[.*\]\s*$/gm, '').trim();
-  const clean = noHeaders
-    .replace(/\{[^}]*\}/g, ' ')
-    .replace(/\$\d+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  return clean;
-}
-
-/** Legality gate (G3): every SAN must replay. Returns the CANONICAL
- *  chess.js-regenerated movetext (clean numbering, no annotation residue —
- *  the same string the app AND the child audit both parse) + ply count,
- *  or null on any illegal token. */
-function verifyLegal(movetext) {
-  const sans = movetext.replace(/\d+\.(\.\.)?\s*/g, '').replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, '').trim()
-    .split(/\s+/).filter((t) => t && !/^\.+$/.test(t));
-  const c = new Chess();
-  for (const s of sans) {
-    try { c.move(s.replace(/[?!]+$/, '')); } catch { return null; }
-  }
-  // MOVETEXT ONLY — chess.js pgn() prepends seven-tag headers and appends
-  // '*', which poisoned the child audit's SAN parse (run 2 game 1: replay
-  // froze on '[Event' and every board check compared against the start
-  // position). Strip headers + the result placeholder.
-  const canonical = c.pgn().replace(/^\[[^\]]*\]\s*$/gm, '').replace(/\s*\*\s*$/, '').replace(/\s+/g, ' ').trim();
-  return { plyCount: sans.length, canonical };
-}
-
-async function pickGame(seed) {
-  const ex = await fetchJson(`${BASE}/api/lichess-explorer?source=masters&play=${seed.play}`);
-  const candidates = (ex.topGames || []).filter((g) => {
-    const res = g.winner === 'white' ? 'white' : g.winner === 'black' ? 'black' : 'draw';
-    return res === seed.want && g.id && !seen.has(g.id);
-  });
-  for (const g of candidates) {
-    try {
-      const raw = await fetchText(`${BASE}/api/lichess-game-export?id=${g.id}`);
-      const legal = verifyLegal(movetextOf(raw));
-      // 16..100 plies: long enough to exercise every pass, short enough for
-      // the child audit's analysis-readiness budget (a 126-ply QGD grind
-      // overran it and aborted before the walk — fleet run 1, game 3).
-      if (!legal || legal.plyCount < 16 || legal.plyCount > 100) continue;
-      seen.add(g.id);
-      const result = seed.want === 'draw' ? '1/2-1/2' : seed.want === 'white' ? '1-0' : '0-1';
-      return { id: g.id, players: `${g.white?.name ?? '?'} vs ${g.black?.name ?? '?'}`, movetext: legal.canonical, plyCount: legal.plyCount, result };
-    } catch { /* next candidate */ }
-  }
-  return null;
-}
 
 function runChild(env, logPath) {
   return new Promise((resolve) => {
     let out = '';
-    const child = spawn(process.execPath, ['scripts/audit-review-real-game.mjs'], {
+    // ⚠️ THIS USED TO SPAWN `audit-review-real-game.mjs`, WHICH HAS BEEN STALE
+    // SINCE THE 2026-09-05 REVIEW OVERHAUL — its own header says the ply readout
+    // moved and it reads "Ply 0/0", every rubric row false-fails, and it encodes
+    // R2, which the 2026-09-15 need standard RETIRED. So this wrapper faithfully
+    // sourced a fresh real game for every seed and then fed it to a dead script:
+    // the rotation never reached a working audit, and every review run anyone
+    // actually read was the one hardcoded Alapin fixture (David 2026-09-17: "I
+    // want new games audited each time... It doesn't tell us anything new").
+    const child = spawn(process.execPath, ['scripts/audit-review-overhaul-prod.mjs'], {
       env: { ...process.env, ...env },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
@@ -157,7 +84,7 @@ for (let i = 0; i < SEEDS.length; i++) {
   const seed = SEEDS[i];
   console.log(`\n━━━ Game ${i + 1}/${SEEDS.length}: ${seed.name} ━━━`);
   let game = null;
-  try { game = await pickGame(seed); } catch (e) { console.log(`  source error: ${e.message}`); }
+  try { game = await pickRealGame(BASE, seed, seen); } catch (e) { console.log(`  source error: ${e.message}`); }
   if (!game) { console.log('  ✗ no legal candidate game — SKIPPED (reported honestly)'); results.push({ seed: seed.name, verdict: 'NO-GAME' }); continue; }
   console.log(`  ${game.players} (${game.id}, ${game.plyCount} plies, ${game.result})`);
   const logPath = `${outDir}/game-${i + 1}.log`;
@@ -167,6 +94,10 @@ for (let i = 0; i < SEEDS.length; i++) {
     AUDIT_PGN: `${game.movetext.replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, '')} ${game.result}`.trim(),
     AUDIT_STUDENT: seed.student,
     AUDIT_RESULT: game.result,
+    AUDIT_WHITE: game.white ?? '?',
+    AUDIT_BLACK: game.black ?? '?',
+    AUDIT_SEED_NAME: seed.name,
+    AUDIT_SOURCE_ID: game.id,   // so the child can print a REPRODUCIBLE command
   }, logPath);
   const meets = /VERDICT: ✅ MEETS STANDARD/.test(out);
   const fails = [...out.matchAll(/❌ FAIL\s+(\S+)/g)].map((m) => m[1]);

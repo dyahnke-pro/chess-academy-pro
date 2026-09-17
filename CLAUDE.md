@@ -4892,10 +4892,13 @@ exists to stop: when you correct a claim, DELETE the one you replace). The old
 script has read "Ply 0/0" since the 2026-09-05 overhaul, every rubric row
 false-fails, and it encodes R2, which the 2026-09-15 need standard RETIRED.
 
-⚠️ **It is NOT dead code — do not delete it blind.**
-`scripts/audit-review-fleet-newgames.mjs:117` spawns it. Repointing the fleet
-audit (or repairing the script) comes first; a delete today breaks the fleet
-run. Verified 2026-09-16 per the "prove it's unused before deleting" rule.
+✅ **RESOLVED 2026-09-17 — the fleet was repointed and the stale script DELETED.**
+This paragraph used to say "it is NOT dead code, `audit-review-fleet-newgames.mjs:117`
+spawns it, repointing the fleet comes first"; the fleet now spawns
+`audit-review-overhaul-prod.mjs`, so that precondition is met and the claim is
+removed rather than appended to. The fleet had been sourcing a fresh real game
+per seed and feeding it to a DEAD script — which is why every review run anyone
+read was the one hardcoded fixture.
 
 For any surface that produces an EXPERIENCE (post-game review, Watch/matchup,
 a taught walkthrough, a lesson), a green feature-wire smoke is NOT an audit.
@@ -5276,7 +5279,7 @@ After every `git push origin main`:
 
    | If you changed… | Run |
    |---|---|
-   | `/coach/review/*` | `scripts/audit-coach-review.mjs` + `scripts/audit-back-from-review.mjs`. NB `audit-review-real-game.mjs` is STALE since the 2026-09-05 overhaul (reads "Ply 0/0", every row false-fails) — the living review audit is `audit-review-overhaul-prod.mjs` (next row), which since 2026-09-15 also carries the N1 THESIS (spoken once at the turning-point reveal, withheld until the pick) and the N2 NEED contracts (R2's sentence count is RETIRED — coverage is asserted AGAINST the app's own `review-need-coverage` rows: owed plies narrated, silent where need said silent) |
+   | `/coach/review/*` | `scripts/audit-coach-review.mjs` + `scripts/audit-back-from-review.mjs`. NB `audit-review-real-game.mjs` was DELETED 2026-09-17 (stale since the 2026-09-05 overhaul: read "Ply 0/0", every row false-failed, and it encoded the retired R2); the living review audit is `audit-review-overhaul-prod.mjs` (next row), which **rotates a NEW real master game every run** (G3-sourced through the app's own explorer proxy, chess.js-verified) and PRINTS the command to reproduce that exact game — rotate for discovery, pin for diagnosis (David 2026-09-17: "I want new games audited each time. No good to have the same one over and over"). `AUDIT_GAME=fixture` forces the old Alapin baseline; `AUDIT_GAME_ID=<id>` re-runs one game. It also carries, since 2026-09-15, the N1 THESIS (spoken once at the turning-point reveal, withheld until the pick) and the N2 NEED contracts (R2's sentence count is RETIRED — coverage is asserted AGAINST the app's own `review-need-coverage` rows: owed plies narrated, silent where need said silent) |
    | `/coach/review/*` — the 2026-09-05 overhaul contracts (non-blocking open, fundamentals-FIRST narration, auto-advance + ⏯, free board / narrated exploration, button-only Show-me, recap, WIN/LOSS card) | `scripts/audit-review-overhaul-prod.mjs` (3-instrument, MUTED; seeds David's Alapin unanalyzed). The Explore button is GONE — any review audit that clicks `walk-explore-toggle-btn` is stale; drive the free board through `scripts/audit-lib/review-explore.mjs` |
    | `/coach/review/*` — the INSTANT-REOPEN contract specifically (narration cache, `review-walk-skipped`) | `scripts/audit-review-reopen-probe.mjs`. 🔴 The overhaul audit CANNOT test this and never could: it reopens only after the background deep dive, which rewrites the annotations and so legitimately changes the narration cache key. Its old `REOPEN instant-no-rerun` row failed the product for two days over a rebuild that was correct. This probe separates first-open (91.3s, real analysis) from reopen-unchanged (1.7s, cache HIT proven by the app's own `review-walk-skipped` event, not by a stopwatch) |
    | `/coach/play` | `scripts/audit-coach-play.mjs` (event-contract smoke) **+ the FULL-GAME STANDARD below for any substantive coach/play/review change** |
