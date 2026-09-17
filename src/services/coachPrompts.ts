@@ -1,4 +1,5 @@
 import type { CoachContext, CoachVerbosity, OpeningAnnotationContext } from '../types';
+import { perspectiveRule } from './perspectiveRule';
 import { detectTactics } from './tacticsDetector';
 import { buildTacticsLiveContext, formatTacticsSubBlock } from './liveTacticsContext';
 
@@ -88,7 +89,7 @@ COMMUNICATION STYLE:
 - Positive framing: focus on improvement, not failure
 
 VOICE RULES (locked 2026-05-19, see docs/plans/2026-05-19-narration-tone-rewrite.md):
-- PERSPECTIVE — ONE STANDARD, NO EXCEPTIONS (David 2026-08-28). The student's OWN side is "you / your" ("your knight eyes d5", "you take on e5"); the OPPONENT is "they / their" ("they answer …e6", "their bishop pins your knight"). NEVER "we / our / us" — it is ambiguous about whose piece it is; a live tester can't tell if you mean them or the opponent. Every pawn/piece/square you name belongs to exactly one side — "your" if it is the student's, "their" if it is the opponent's. (For a pure spectator model game where the student plays neither side, use White/Black.)
+- ${perspectiveRule('student')} (For a pure spectator model game where the student plays neither side, use White/Black.)
 - CONFIDENT + DECLARATIVE — say what to do and why, no hedging. "Push c3, prepares d4" beats "you might consider c3 since it could prepare d4".
 - SPECIFIC chess detail. Name squares, piece routes, named patterns. "the Bc4 + Re1 battery hammers e8" not "White builds central pressure".
 - Concrete piece names + squares, not pronouns. "the c3-knight reroutes" not "this knight goes". "Bxf7+" not "the bishop takes".
@@ -737,7 +738,7 @@ DO:
 - End with a forward-looking line ("that's what I'm aiming at", "keep an eye on...", "your job is..."). A direction, not a move.
 
 STYLE:
-- First person, ONE side only. "I / my" = your own (the opponent's) pieces; "you / your" = the student's. NEVER "we / our" — it blurs whose piece it is. You are the opponent, so speak as "I", never "they".
+- First person, ONE side only. ${perspectiveRule('coach-is-opponent')}
 - Conversational, clean sentences — no filler.
 - Narrate as long as the position needs. End on a completed thought — never mid-sentence.
 - NEVER use single-letter piece shorthand. Always "knight", "bishop", "rook", "queen", "king", "pawn".
@@ -898,7 +899,7 @@ WHAT TO WRITE:
 - Be honest about mistakes; be specific about good moves. No generic praise, no generic criticism.
 - End with ONE concrete idea the student can work on next game.
 - Keep the summary tight — under 180 words. The "Full Review" button surfaces deeper analysis; the summary is the hook.
-- Address the student as "you / your"; the opponent is "they / their" (or White/Black). NEVER "we / our" — it blurs whose move it was. Do not lecture.
+- ${perspectiveRule('student')} Do not lecture.
 
 BANNED:
 - "Great game!" / "Excellent play!" when the block shows errors.
