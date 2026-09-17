@@ -172,11 +172,33 @@ the pattern already used for the narration-coverage baselines.
   computers underneath still disagree.
 * Phase 5 last because a gate written before the cleanup just encodes the mess.
 
+## §2.5 STATUS (2026-09-17)
+
+| phase | state | what landed |
+|---|---|---|
+| 1 — positive vocabulary | ✅ | `MOVE_FUNDAMENTAL_TAG` + `leadingFundamentals` (the structure now crosses the boundary). Gate: `fundamentalVocabulary.test.ts`. Recording a positive is owed — the spine is aggregate-based and needs its own store. |
+| 2 — one concept vocabulary | ✅ | `conceptVocabulary.ts` bridges six ideas spelled two ways; `POSITIONAL_INVARIANT`/`POSITIONAL_PRIORITY` typed over the union (both were `string`-keyed, so a typo yielded no concept silently). Gate: `conceptVocabulary.test.ts`. |
+| 3 — one fact shape | ✅ | `PlanBeat` gained a REQUIRED `id` + `squares`, so review's plan beats can finally be ranked and subsumed (a squareless fact is never collapsed — G4.5.1). The compiler found a fifth producer the grep missed. Gate: `planBeatShape.test.ts`. |
+| 5 — the gate | ✅ | `surfaceComposition.scan.test.ts` — **254** direct fact-computer imports across 56 surfaces, 62 in `CoachTeachPage`. Shrink-only. |
+| 4 — extract the page | ⏳ | Now measurable: every call routed through the composer lowers the number. Do it in slices, never as one refactor. |
+
+**PHASE 4 AND 5 WERE SWAPPED ON PURPOSE.** Extracting composition from a
+13,900-line page as a single heroic refactor is how that refactor goes wrong.
+Building the gate first turns Phase 4 from one big-bang change into a number
+that goes down every session, and makes any regression visible the moment it
+lands rather than at the end.
+
 ## §3 DECISIONS LOG
 
 * **2026-09-17 — do NOT merge function bodies.** Reading the exports showed the
   pairs ask different questions of the board. The target is one vocabulary and
   one shape, not one function. (Claude; flagged to David in the inventory.)
+* **2026-09-17 — the "threats" pair was NOT a duplicate.** §0.2 listed it as
+  one, inferred from dependency disjointness. Reading the code:
+  `opponentIntent` is engine-fan derived (their candidates, prospective) and
+  `reviewOpponentCommentary` is board-derived (what this move did,
+  retrospective). Different jobs; the duplication was in the SHAPE. Corrected
+  rather than forced into a merge.
 * **2026-09-17 — `luft` maps to null.** Not every positive fundamental has a
   matching hole; a forced mapping would be invented data (G3).
 
