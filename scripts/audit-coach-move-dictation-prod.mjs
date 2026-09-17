@@ -163,10 +163,17 @@ async function main() {
     const cOn = await waitForPiece(page, 'c3', 'wN');
     const board = await readBoard(page);
     const cOff = board.f3 !== 'wN';
+    // ALWAYS capture what the coach SAID, pass or fail. A board read says the
+    // correction did not happen; only the reply says WHICH path ran — and the
+    // three candidate paths (the takeback intent router, the correction branch,
+    // the brain) leave an IDENTICAL board: the move off, nothing on. Three
+    // rounds were spent guessing between them for want of this one string.
+    const t3 = (await page.locator('[data-testid="teach-transcript"]').innerText().catch(() => ''))
+      .replace(/\s+/g, ' ').slice(-260);
     rec('C corrected-last: the dictated move REPLACES the one the coach played',
       cOn && cOff,
-      cOn && cOff ? 'wN on c3 and f3 is clear — the coach undid its own move and played the dictated one'
-        : `c3 knight=${cOn ? 'yes' : 'no'}, f3 still occupied by ${board.f3 ?? 'nothing'}`);
+      cOn && cOff ? `wN on c3 and f3 is clear — the coach undid its own move and played the dictated one | said: ${t3.slice(-120)}`
+        : `c3 knight=${cOn ? 'yes' : 'no'}, f3 holds ${board.f3 ?? 'nothing'} | coach said: ${t3}`);
     if (cOn && cOff) { chess.undo(); chess.move('Nc3'); }
   } else {
     rec('C corrected-last: the dictated move REPLACES the one the coach played', false, 'SKIPPED — A failed');

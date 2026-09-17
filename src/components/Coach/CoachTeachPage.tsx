@@ -2843,7 +2843,19 @@ export function CoachTeachPage(): JSX.Element {
         void positionNarration.narrate();
         return;
       }
-      if (routed && (routed.kind === 'take_back_move' || routed.kind === 'reset_board')) {
+      // A takeback that ALSO NAMES THE REPLACEMENT is a correction, not a bare
+      // takeback — "no, take that back and play Nc3" has two halves and this
+      // router only does the first. It ran here, undid the coach's move, said
+      // "Took it back — your move again", and returned, so the dictation branch
+      // below (which undoes AND plays) was never reached. On prod that looked
+      // exactly like a broken correction: the move came off, nothing went on.
+      //
+      // Deciding it with the SAME parser the dictation branch uses keeps one
+      // source of truth — and the parser returning null for a bare "undo" is
+      // what keeps this router's real job intact.
+      const correctionNamesAMove = routed?.kind === 'take_back_move'
+        && parseCoachMoveCommand(text, liveFenRef.current)?.corrects === true;
+      if (routed && !correctionNamesAMove && (routed.kind === 'take_back_move' || routed.kind === 'reset_board')) {
         setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);
         const outcome = routed.kind === 'take_back_move'
           ? handleTakeBack(routed.count)
