@@ -11,6 +11,7 @@
  */
 
 import type { TacticPattern, TacticPatternType } from '../types/tacticTypes';
+import { type PositionalConceptId, asPositionalConcept } from './conceptVocabulary';
 import type { MatchupClass, MatchupResult } from './endgameMatchup';
 import type { StockfishAnalysis } from '../types';
 import { criticalityThresholds } from './criticalityScan';
@@ -643,7 +644,10 @@ import { boardConcepts } from './boardConcepts';
 
 /** Positional-tag → invariant (computed vocabulary; general + reusable). Only the
  *  board-PROVABLE tags boardConcepts emits — never intent judgements. */
-const POSITIONAL_INVARIANT: Record<string, { name: string; full: string; short: string }> = {
+// Typed over the union (2026-09-17): this and POSITIONAL_PRIORITY were both
+// `string`-keyed, so a typo in either produced NO concept, silently. A Record
+// over PositionalConceptId makes a missing or misspelled member fail to compile.
+const POSITIONAL_INVARIANT: Record<PositionalConceptId, { name: string; full: string; short: string }> = {
   'passed-pawn': { name: 'Passed pawn', full: 'A passed pawn: no enemy pawn can stop it, so push it — enemy pieces must drop back to babysit it, and that ties them down.', short: 'Passed pawn — push it.' },
   'knight-outpost': { name: 'Knight outpost', full: 'A knight outpost: a knight on a hole the enemy pawns can no longer challenge is a monster — it can\'t be kicked, so build the position around it.', short: 'Outpost — it can\'t be kicked.' },
   'king-safety': { name: 'King safety', full: 'The king is exposed: before anything else, count its flight squares and the attackers heading its way — safety comes before ambition.', short: 'King safety — count the attackers.' },
@@ -656,20 +660,21 @@ const POSITIONAL_INVARIANT: Record<string, { name: string; full: string; short: 
 };
 
 /** Most-instructive-first, so the lead positional concept is the decisive one. */
-const POSITIONAL_PRIORITY = ['passed-pawn', 'knight-outpost', 'king-safety', 'pawn-storm', 'piece-activity', 'open-file', 'bishop-pair', 'pawn-structure', 'development'];
+const POSITIONAL_PRIORITY: readonly PositionalConceptId[] = ['passed-pawn', 'knight-outpost', 'king-safety', 'pawn-storm', 'piece-activity', 'open-file', 'bishop-pair', 'pawn-structure', 'development'];
 
 /** Tags SHARP enough to LEAD a quiet position on their own. The rest (bishop
  *  pair, a pawn weakness, a development lead) are true on nearly every
  *  middlegame — platitudes as a lead ("empty > generic"). They ride only as
  *  SUPPORTS behind a real lead. Measured 2026-09-14: letting them lead took
  *  puzzle silence 57%→3% while agreement did not move — noise, not teaching. */
-const POSITIONAL_LEAD_ELIGIBLE = new Set(['passed-pawn', 'knight-outpost', 'king-safety', 'pawn-storm', 'piece-activity', 'open-file']);
+const POSITIONAL_LEAD_ELIGIBLE = new Set<PositionalConceptId>(['passed-pawn', 'knight-outpost', 'king-safety', 'pawn-storm', 'piece-activity', 'open-file']);
 
 /** Drop positional platitudes that would be the LEAD (or the only) concept.
  *  A generic positional idea is fine as a support behind a real lead. */
 function dropGenericLead(out: ComputedConcept[]): ComputedConcept[] {
   const lead = out[0];
-  if (!lead || lead.source !== 'positional' || POSITIONAL_LEAD_ELIGIBLE.has(lead.id)) return out;
+  const leadTag = lead ? asPositionalConcept(lead.id) : null;
+  if (!lead || lead.source !== 'positional' || (leadTag && POSITIONAL_LEAD_ELIGIBLE.has(leadTag))) return out;
   return out.filter((c) => c.source !== 'positional');
 }
 
@@ -685,7 +690,6 @@ export function positionalConcepts(fen: string): ComputedConcept[] {
   for (const tag of POSITIONAL_PRIORITY) {
     if (!bc.concepts.includes(tag)) continue;
     const t = POSITIONAL_INVARIANT[tag];
-    if (!t) continue;
     // Sharp ideas may lead a quiet position; generic ones are supports only.
     const importance = POSITIONAL_LEAD_ELIGIBLE.has(tag) ? 0.4 : 0.3;
     out.push({ id: tag, name: t.name, source: 'positional', squares: [], full: t.full, short: t.short, importance });

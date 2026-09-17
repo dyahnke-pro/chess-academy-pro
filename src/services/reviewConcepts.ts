@@ -24,6 +24,7 @@
  * pieces but avoids exchanging pawns").
  */
 import { Chess, type Square, type PieceSymbol } from 'chess.js';
+import type { ReviewConceptId } from './conceptVocabulary';
 
 export interface ConceptCtx {
   fenBefore: string;
@@ -40,9 +41,7 @@ export interface ConceptCtx {
 
 export interface ConceptBeat {
   /** Stable concept key (for the dedup ledger + telemetry). */
-  concept: 'simplify-when-ahead' | 'outpost' | 'open-lines-at-king' | 'two-bishops'
-    | 'convert-dont-rush' | 'passed-pawn-push' | 'rook-seventh' | 'rook-open-file'
-    | 'king-safety-castle' | 'centralize-king' | 'space-advantage' | 'create-weakness';
+  concept: ReviewConceptId;
   /** The fact string, board-anchored; the house voice phrases it. */
   text: string;
   /** Independent reference (concept:<id> | reputable URL). */

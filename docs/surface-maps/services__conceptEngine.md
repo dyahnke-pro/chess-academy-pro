@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**705 lines · 19 exports · 20 importers · 6 tests · 25 audits**
+**709 lines · 19 exports · 21 importers · 7 tests · 25 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/conceptCoverage.report.test.ts`
 - `src/services/conceptEngine.test.ts`
+- `src/services/conceptVocabulary.test.ts`
 - `src/services/dnaLineNarrator.ts`
 - `src/services/endgameDrillService.test.ts`
 - `src/services/endgameTechnique.test.ts`
@@ -183,9 +184,10 @@
 - `src/services/conceptEngine.test.ts:246`
 - `src/services/conceptEngine.test.ts:258`
 
-### `positionalConcepts` (function) — 2 call sites
+### `positionalConcepts` (function) — 3 call sites
 - `src/services/conceptEngine.test.ts:186`
 - `src/services/conceptEngine.test.ts:190`
+- `src/services/conceptVocabulary.test.ts:63`
 
 ### `tacticInvariant` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7144`
@@ -201,6 +203,7 @@
 
 - `src/services/conceptCoverage.report.test.ts`
 - `src/services/conceptEngine.test.ts`
+- `src/services/conceptVocabulary.test.ts`
 - `src/services/endgameDrillService.test.ts`
 - `src/services/endgameTechnique.test.ts`
 - `src/services/tacticTypeUnification.test.ts`

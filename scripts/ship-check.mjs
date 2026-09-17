@@ -438,6 +438,10 @@ const GATE_TESTS = [
   // weakness tags, 10 positives filed under nothing — and the positive ids were
   // destroyed at the module boundary before anyone could map them.
   'src/services/fundamentalVocabulary.test.ts',
+  // The concept axis carried two vocabularies spelling six of the same ideas
+  // differently — knight-outpost vs outpost, passed-pawn vs passed-pawn-push —
+  // so a live weakness could never match the review beat that taught it.
+  'src/services/conceptVocabulary.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',
