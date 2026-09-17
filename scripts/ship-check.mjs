@@ -451,6 +451,10 @@ const GATE_TESTS = [
   'src/coach/surfaceComposition.scan.test.ts',
   // The forget-on-rewind say-once rule, implemented twice under two ref names.
   'src/services/standingFactMemory.test.ts',
+  // Importance gates the INTERRUPT and scaled by rating alone — identical for a
+  // student with 200 analysed games and one with zero, while needScore had been
+  // data-driven all along. Raise-only; a hole must never invent a moment.
+  'src/services/importanceStudentTerm.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',

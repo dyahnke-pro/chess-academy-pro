@@ -83,11 +83,41 @@ export function isContested(
 }
 
 /**
- * The importance verdict. rating scales the swing/decision bars (a 2-pawn swing
- * is a must-know for a 1200; a 0.5 subtlety is for a 2200 — the slip-detector
- * doctrine, shared with `criticalityThresholds`).
+ * The importance verdict.
+ *
+ * `rating` scales the swing/decision bars (a 2-pawn swing is a must-know for a
+ * 1200; a 0.5 subtlety is for a 2200 — the slip-detector doctrine, shared with
+ * `criticalityThresholds`). Per the ALGO-BASED supreme law, the rating is the
+ * COLD-START PRIOR: it stands in where we have no data on this student.
+ *
+ * `studentBoost` is the DATA term — how much THIS student's own recorded
+ * mistakes raise this moment. It is `boostFor(match)` computed by the CALLER
+ * with the existing fine-grained join (`matchTacticPattern(conceptId) ??
+ * matchClauseKind(kind)`), the same one `positionFacts`, `reviewFacetRank` and
+ * `needScore` already use.
+ *
+ * 🚨 WHY IT ARRIVES PRE-MATCHED INSTEAD OF BEING LOOKED UP HERE. The first
+ * design had this function do its own `Record<ImportanceTier, cluster>` lookup.
+ * That would have been a FOURTH join of facts to holes beside three finer ones,
+ * free to drift from them — and it would have joined on a LOSSY key, since an
+ * `ImportanceTier` of 'blunder' can be a hung piece, a missed mate or a bad
+ * trade. One authored row would have discarded the exact specificity the
+ * student's data carries. Caught 2026-09-17 when David asked "is this algo
+ * based?" — it was not. The join stays where it already is; only its RESULT
+ * comes here.
+ *
+ * RAISE-ONLY, structurally. `boostFor` returns 0 or positive (0 for a hole the
+ * lifecycle marks `fixed`), so data can lift a moment over the interrupt bar
+ * and can never push one under it. That matters because nothing yet records
+ * CORRECT play, so "no weakness here" cannot be told apart from "never met it"
+ * — absent is not silent. A negative term would be inferring mastery from
+ * missing data.
  */
-export function computeImportance(s: ImportanceSignals, rating = 1500): ImportanceVerdict {
+export function computeImportance(
+  s: ImportanceSignals,
+  rating = 1500,
+  studentBoost = 0,
+): ImportanceVerdict {
   const contested = isContested(s.evalCpWhitePov, s.wdl);
   const th = criticalityThresholds(rating);
   const reasons: string[] = [];
@@ -141,6 +171,18 @@ export function computeImportance(s: ImportanceSignals, rating = 1500): Importan
   // A forced mate outranks everything, contested-gate or not.
   if (s.evalCpWhitePov != null && Math.abs(s.evalCpWhitePov) >= MATE_CP) {
     bump(100, 'mate', 'forced mate on the board');
+  }
+
+  // ── THE STUDENT TERM (algo-based supreme law) ────────────────────────────
+  // Their own recorded mistakes raise this moment. RAISE-ONLY and only on a
+  // moment that ALREADY fired: a weakness makes a real moment more worth
+  // stopping for, it never MANUFACTURES one out of a quiet ply. Without that
+  // guard a persistent hole would make every position important and the coach
+  // would interrupt constantly — the "things don't get stated" failure inverted
+  // into "nothing can be heard over the noise".
+  if (studentBoost > 0 && rank > 0) {
+    rank += studentBoost;
+    reasons.push(`this student's own recorded weakness (+${studentBoost})`);
   }
 
   return { speak: rank > 0, rank, tier, reasons, contested };

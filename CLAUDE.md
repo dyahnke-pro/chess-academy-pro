@@ -3460,6 +3460,56 @@ signals (`scanCriticality`, `cpLoss`, the threat probe, the note/bake tiers) —
 do NOT add a second parallel criticality (that is the walk-over this build
 exists to remove).
 
+### 🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").
+
+The sibling of G0. G0 says the LLM decides nothing — facts are computed in code.
+This says the CODE decides nothing by hand either: every decision about WHAT to
+teach, WHEN to interrupt and HOW DEEP to go is computed FROM THIS STUDENT'S OWN
+RECORDED DATA, not from a table somebody authored.
+
+**THE ORDER, and it is not negotiable:**
+1. **THEIR RECORDED MISTAKES ARE THE SOURCE.** The weakness spine, the
+   misconception tags, the book departures, the line familiarity — their real
+   history decides what this coach says to this person.
+2. **RATING IS THE COLD-START PRIOR, AND ONLY THAT.** A student with no data
+   gets taught at their level so a fresh install never meets a mute coach
+   (`coldStartPrior`, `COLD_START_GAMES`). The prior FADES as games arrive. A
+   rating is a stand-in for missing data — never a substitute for data we have.
+3. **ABSENT ≠ SILENT.** No recorded weakness for a motif does NOT mean mastery;
+   it may mean they have never met it. Data may RAISE a decision freely and may
+   only LOWER one on real evidence of the positive — which today we do not
+   record at all (see the OWED item below).
+
+🚨 **THE FAILURE THIS RULE EXISTS TO STOP — a near-miss on 2026-09-17, caught
+only because David asked "is this algo based?"** The plan was to make
+`computeImportance` student-aware by adding a hand-written
+`Record<ImportanceTier, weaknessCluster>` table. It would have been the FOURTH
+join of facts to holes, beside three that already exist and are finer-grained:
+
+```
+positionFacts:565    matchTacticPattern(conceptId) ?? matchClauseKind(kind)
+reviewFacetRank:116  matchClauseKind(clauseKindForTag(tag))
+needScore:121        matchTacticPattern(conceptId) ?? matchClauseKind(clauseKind)
+```
+
+…and it would have joined on a LOSSY key: an `ImportanceTier` of `'blunder'`
+can be a hung piece, a missed mate or a bad trade, so one authored row would
+have thrown away exactly the specificity the student's data carries. A
+hand-authored mapping beside a computed one is the rot rule wearing a
+personalisation costume.
+
+**THE TEST, before you add any adaptive decision:**
+- Is the number COMPUTED from their history, or did I type it? If I typed it, it
+  is a prior at best and belongs behind the cold-start gate.
+- Does a join for this already exist? Reuse it. Never author a second, coarser
+  one — pass the ALREADY-MATCHED result in instead.
+- Can it make the coach QUIETER on missing data? Then it is wrong (see 3).
+
+**OWED, and it gates the "lower" direction:** nothing records CORRECT play, so a
+fixed weakness can only decay by absence, never by evidence. Until a positive
+record exists, every data term is RAISE-ONLY. `boostFor` already returns 0 or
+positive, so the asymmetry is structural rather than a second tunable to tune.
+
 ### 🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").
 
 The strength-calibration PICKER is gone (2026-09-02, "go fully adaptive"). The

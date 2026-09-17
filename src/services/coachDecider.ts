@@ -60,6 +60,20 @@ export interface StudentContext {
    *  means "no need data" — which is NOT the same as "no need": a cold student
    *  must never meet a mute coach, so absent reads as speak. */
   need?: { speak: boolean } | null;
+  /** HOW MUCH THIS STUDENT'S OWN HISTORY RAISES THIS MOMENT — `boostFor(match)`
+   *  for the best-matching fact here, computed by the SURFACE with the existing
+   *  fine-grained join (`matchTacticPattern(conceptId) ?? matchClauseKind(kind)`).
+   *
+   *  It arrives pre-matched because `FactBundle.facts` is `string[]` — by the
+   *  time facts reach this door they are PROSE, and joining prose to a weakness
+   *  would mean scraping a concept back out of a sentence. The surface still
+   *  holds the structured clauses, so the match belongs there; only its RESULT
+   *  travels. (The first design had the decider do its own
+   *  `Record<ImportanceTier, cluster>` lookup — a fourth, coarser join beside
+   *  three existing ones, on a lossy key. See narrationImportance.)
+   *
+   *  Absent or 0 = no data / a hole the lifecycle marks `fixed`. RAISE-ONLY. */
+  momentBoost?: number;
 }
 
 /** The facts a surface computed at this moment, with the geometry coupled from
@@ -111,8 +125,14 @@ export interface MomentVerdict {
   speaks: boolean;
 }
 
-export function judgeMoment(signals: ImportanceSignals, rating: number, posture: SurfacePosture): MomentVerdict {
-  const importance = computeImportance(signals, rating);
+export function judgeMoment(
+  signals: ImportanceSignals,
+  rating: number,
+  posture: SurfacePosture,
+  /** The student term — see `StudentContext.momentBoost`. Raise-only. */
+  momentBoost = 0,
+): MomentVerdict {
+  const importance = computeImportance(signals, rating, momentBoost);
   return { importance, speaks: posture === 'walk' || importance.speak };
 }
 
@@ -148,7 +168,7 @@ export function decide(
    *  this function computes (David 2026-09-16: how to think IS the teaching). */
   method?: MethodContext,
 ): CoachDecision {
-  const { importance, speaks } = judgeMoment(signals, student.rating, posture);
+  const { importance, speaks } = judgeMoment(signals, student.rating, posture, student.momentBoost ?? 0);
   const base = { tier: importance.tier, rank: importance.rank };
 
   // 1 — THE MOMENT, but ONLY where silence is the default. On a 'walk' the

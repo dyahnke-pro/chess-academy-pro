@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:4435) — names `usePhaseNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:5315) — names `usePhaseNarration`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:4526) — names `usePhaseNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:5407) — names `usePhaseNarration`
 
 ## Who calls in
 

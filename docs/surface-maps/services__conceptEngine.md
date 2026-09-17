@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5314) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:5406) — names `conceptEngine`
 
 ## Who calls in
 

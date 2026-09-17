@@ -510,6 +510,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     {
       rating,
       weaknesses: input.studentWeaknesses ?? [],
+      // THE DATA TERM (algo-based supreme law): matched HERE, where the clauses
+      // are still structured. By the time they reach the door they are prose.
+      momentBoost: momentWeaknessBoost(composed, input.studentWeaknesses ?? []),
       // The mover guard — see `studentNeed` on the input. Need answers "does
       // THIS STUDENT need teaching here", which is only a question about their
       // own move; on the opponent's ply it is null and importance decides.
@@ -553,6 +556,31 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
  * untouched, so the wire is inert until a surface feeds a profile. Pure: never
  * mutates the input clauses. G0 — the SPINE decides, the LLM never sees this.
  */
+/**
+ * THE MOMENT'S STUDENT TERM — the largest boost any clause here earns from this
+ * student's own recorded mistakes, for `coachDecider`'s importance step.
+ *
+ * It reuses `applyWeaknessBoost`'s join EXACTLY (concept id through the tactic
+ * bridge, else the clause kind) rather than introducing a second, coarser one —
+ * a moment is more worth interrupting for when a fact AT it matches a hole they
+ * keep falling in. Returns 0 when there is no data, no match, or the lifecycle
+ * marks the hole `fixed`: raise-only, because nothing records CORRECT play yet
+ * and absent is not the same as mastered.
+ */
+function momentWeaknessBoost(clauses: readonly ClauseItem[], signals: readonly WeaknessSignal[]): number {
+  if (signals.length === 0) return 0;
+  let best = 0;
+  for (const c of clauses) {
+    const match = c.kind === 'concept'
+      ? (c.conceptId ? matchTacticPattern(c.conceptId as TacticPatternType, signals) : null)
+      : matchClauseKind(c.kind, signals);
+    if (!match) continue;
+    const b = boostFor(match);
+    if (b > best) best = b;
+  }
+  return best;
+}
+
 function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSignal[]): ClauseItem[] {
   if (signals.length === 0) return clauses;
   let changed = false;
