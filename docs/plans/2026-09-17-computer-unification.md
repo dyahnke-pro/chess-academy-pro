@@ -240,22 +240,56 @@ every rating-scaled decision that lives outside the one algo.
 Both are real. But Phase 7 is the LOCKED plan and it should have been checked
 BEFORE choosing an axis. Re-verified today, the 2026-09-08 inventory still holds:
 
-* **(A) importance/criticality** — `criticalityThresholds` (criticalityScan.ts:71)
-  is named as the de-facto ROOT: `computeImportance`, `minSwingPawns`,
-  `scanCriticality` and `computePositionFacts` all derive from it, so **absorb it
-  FIRST**. Then `computeImportance` (narrationImportance.ts:82),
-  `computeCriticality`/`criticalitySignalsFromAnalysis` (criticality.ts — the one
-  criticality decider NOT rating-scaled), `minSwingPawns` (reviewTurningPoint.ts),
-  `isCriticalThreat` + `alertSensitivityMultiplier`.
+* **(A) importance/criticality — LARGELY DISPROVEN, verified by reading 2026-09-17.**
+  The 2026-09-08 inventory named five orphans of `criticalityThresholds`. Read
+  one by one, they are not orphans:
+  - `computeImportance` (narrationImportance.ts:122) — ALREADY derives from it.
+  - `minSwingPawns` (reviewTurningPoint.ts:64) — ALREADY derives from it
+    (`criticalityThresholds(rating).critical / 100`, one line).
+  - `computeCriticality` / `criticalitySignalsFromAnalysis` (criticality.ts) —
+    **not the same concept at all.** It is a 0–100 SHARPNESS score of the
+    position from engine signals (MultiPV spread, only-move gap, seldepth
+    spike, loose material). It takes no rating and scales by none. The
+    inventory conflated the WORD "criticality". Nothing to absorb.
+  - `isCriticalThreat` + `alertSensitivityMultiplier` — **a different axis, on
+    purpose.** Measured side by side:
+
+    | rating | `criticalityThresholds.critical` | `alertSensitivityMultiplier` |
+    |---|---|---|
+    | 600 | 200 cp | 0.60× |
+    | 1500 | 100 cp | 1.00× |
+    | 2400 | 50 cp | 1.40× |
+
+    They run in OPPOSITE directions. DIAGNOSIS ("was this mistake worth
+    teaching") falls as the student improves — don't stop a 900 over a 50cp
+    inaccuracy. HELP ("should I warn you about this danger") rises — a beginner
+    needs the warning, a strong player should spot it. Beginner: teach only big
+    mistakes, warn often. Advanced: teach subtleties, warn rarely. **Merging
+    them inverts the pedagogy on both axes at once and nothing downstream would
+    go red.** Consumer sets are already cleanly disjoint (9 diagnosis files vs
+    2 help files, no file reads both). Gate added:
+    `skillScaling.test.ts` asserts the opposite slopes AND the disjointness, so
+    the next session that reads the plan doc and tries to "absorb" them fails
+    the build with the reason in the message.
+
+  What (A) actually leaves: nothing to unify. The doctrine needed writing down,
+  not the code changing. Recorded here so this is not re-derived a third time.
 * **(B) depth/ply** — `pvBandForRating`, `depthFor`, `getTacticLookahead`.
 * **(C) verbosity** — 7 sites, and a WARNING that comes with them: these encode
   the USER's G5 choice. "The algo governs importance/depth; G5 stays the user's
   own ceiling. Reconcile, don't erase the user's setting."
 * **(D) rating bands** — **two `ratingBandFor`** (`amateurPlayCache.ts:34` and
   `theoryDeparture.ts:59` — a name collision with different returns) plus
-  `explorerBandForElo`: three overlapping explorer-band pickers. And
-  `hintStartTier` (skillScaling.ts:49) is exported but UNWIRED — verified again
-  2026-09-17, the only importer is its own test. Delete or wire it in the sweep.
+  `explorerBandForElo`: three overlapping explorer-band pickers. **DONE
+  2026-09-17** — `ratingBands.explorerBandFor` is now the only picker; all three
+  delegate; gate in `ratingBands.test.ts`. Two real teaching bugs fell out: the
+  band never CONTAINED a 1300 or a 1900 player on the theory path, and the top
+  band was a lone bucket because one private bucket list stopped at 2200.
+  `hintStartTier` (skillScaling.ts:49) was UNWIRED — **WIRED 2026-09-17**, not
+  deleted: `AnalysisPracticePage` has a real 1–3 hint ladder that started every
+  student at tier 1 regardless of rating, so a 900 tapped three times to reach
+  the rung they needed. It now starts where the student's recorded tactics skill
+  says (rating as the cold-start prior only).
 * **the completeness gate** — a test that every fact-computer and every tool is
   REACHABLE by the selector/spine: "a note comes OUT / tool CAN be invoked
   proof, not an import check".

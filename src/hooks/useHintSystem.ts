@@ -389,10 +389,17 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             arrows.push({ startSquare: from, endSquare: to, color: TIER3_ARROW_COLOR });
           }
 
-          voiceService.stop();
-          void voiceService.speakForced(tier3Text).catch(() => undefined);
-
           if (fenRef.current !== fen) { setHintState((s) => ({ ...s, isAnalyzing: false })); return; }
+          // THE TEXT FIRST, THE VOICE SECOND. The computed answer IS the hint;
+          // speaking it is a side effect, so it cannot come first. Ordered the
+          // other way round (until 2026-09-17), anything that made the speak
+          // CALL throw — as opposed to reject, which the .catch covers —
+          // escaped this async block past its bare `finally`, and `nudgeText`
+          // was never set: the student's tap produced NOTHING, no text and no
+          // arrow. Every voiceService.speak* is `async` so it cannot throw
+          // synchronously in production; what exposed this was a partial test
+          // mock with no `speakForced`. The ordering is right regardless — a
+          // side effect must never sit in front of the deliverable.
           setHintState((s) => ({
             ...s,
             nudgeText: tier3Text,
@@ -400,6 +407,10 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             ghostMove: null,
             isAnalyzing: false,
           }));
+          try {
+            voiceService.stop();
+            void voiceService.speakForced(tier3Text).catch(() => undefined);
+          } catch { /* voice is a side effect — never let it eat the hint */ }
           return;
         }
       } finally {

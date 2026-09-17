@@ -3,15 +3,39 @@ import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { TacticSetupBoard } from './TacticSetupBoard';
 import { buildSetupPuzzle, resetFactoryCounter } from '../../test/factories';
 
+// THE HINT NUDGE IS CODE-COMPUTED, NOT AN LLM ANSWER (G0 inversion 2026-09-06).
+// This block used to mock `coachService.ask` and rely on its text BECOMING the
+// nudge — the comment here said so. After the inversion `useHintSystem`'s one-tap
+// tier-3 branch computes the answer from a real Stockfish read and never calls
+// the brain, so the mock stopped mattering and the nudge row went red on `main`:
+// with no engine mock, `analyzePosition` never resolves in jsdom, `bestMoveUci`
+// is absent, and `nudgeText` stays null. The engine mock below is the dependency
+// the computed path actually has. Mirrors useHintSystem.test.ts.
+vi.mock('../../services/stockfishEngine', () => ({
+  stockfishEngine: {
+    initialize: vi.fn().mockResolvedValue(undefined),
+    analyzePosition: vi.fn().mockResolvedValue({
+      bestMove: 'g1f3',
+      evaluation: 30,
+      isMate: false,
+      mateIn: null,
+      depth: 10,
+      topLines: [],
+      nodesPerSecond: 0,
+    }),
+    stop: vi.fn(),
+  },
+}));
+vi.mock('../../hooks/stockfishFenCache', () => ({
+  getCachedStockfish: vi.fn(() => undefined),
+  setCachedStockfish: vi.fn(),
+}));
+
 // API-leak guard (WO-TEST-CLEANUP-01 Part A) — intercepts modern
-// brain entry point + all 6 network-wrapping coachApi exports.
+// brain entry point + all 6 network-wrapping coachApi exports. Kept as a LEAK
+// GUARD: nothing here should reach the brain, and a call means it did.
 vi.mock('../../coach/coachService', () => ({
   coachService: {
-    // Non-empty text so `hintState.nudgeText` populates and the
-    // `hint-nudge` conditional render fires for the hint-level-2
-    // assertion. Distinctive prefix is greppable in any future
-    // debugging — if this string shows up in production logs,
-    // the brain path was unmocked when it shouldn't have been.
     ask: vi.fn().mockResolvedValue({
       text: '[TEST MOCK] hint nudge text',
       toolCallIds: [],
@@ -37,15 +61,21 @@ vi.mock('../../services/coachApi', async (importOriginal) => {
 const mockSpeak = vi.fn().mockResolvedValue(undefined);
 const mockStop = vi.fn();
 
-vi.mock('../../services/voiceService', () => ({
-  voiceService: {
-    speak: (...args: unknown[]): Promise<void> => mockSpeak(...args) as Promise<void>,
-    stop: (): void => { mockStop(); },
-    warmup: vi.fn().mockResolvedValue(undefined),
-    clearCache: vi.fn(),
-    isPlaying: vi.fn().mockReturnValue(false),
-  },
-}));
+// The COMPLETE mock — every speak* the service has, so a path that starts
+// calling a new one cannot throw here. This file is why it exists: it listed
+// `speak` and not `speakForced`, the tier-3 hint moved onto `speakForced` in
+// the 2026-09-06 G0 inversion, the call threw, and the nudge row went red
+// reading as a product failure.
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return {
+    voiceService: buildVoiceServiceMock({
+      speak: vi.fn((...args: unknown[]) => mockSpeak(...args) as Promise<void>),
+      speakForced: vi.fn((...args: unknown[]) => mockSpeak(...args) as Promise<void>),
+      stop: vi.fn(() => { mockStop(); }),
+    }),
+  };
+});
 
 vi.mock('../../services/tacticNarrationService', () => ({
   setupIntro: (): string => 'Find the setup move.',

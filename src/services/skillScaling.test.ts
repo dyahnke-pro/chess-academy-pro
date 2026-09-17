@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import { alertSensitivityMultiplier, hintStartTier, wrongTriesBeforeHint } from './skillScaling';
+import { criticalityThresholds } from './criticalityScan';
 
 describe('alertSensitivityMultiplier', () => {
   it('is ~1.0 at the 1500 anchor with neutral skill', () => {
@@ -61,5 +64,63 @@ describe('wrongTriesBeforeHint', () => {
   it('sharpens by category skill', () => {
     expect(wrongTriesBeforeHint(1500, 100)).toBe(3); // strong-for-rating → struggle longer
     expect(wrongTriesBeforeHint(1500, 0)).toBe(1);   // weak-for-rating → help sooner
+  });
+});
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// THE TWO RATING SCALERS RUN IN OPPOSITE DIRECTIONS, AND THAT IS CORRECT.
+//
+// The app has exactly two rating-scaled centipawn bars and they look like
+// duplicates. They are not. Measured:
+//
+//   rating   criticalityThresholds.critical   alertSensitivityMultiplier
+//   600      200 cp                           0.60×
+//   1500     100 cp                           1.00×
+//   2400      50 cp                           1.40×
+//
+// DIAGNOSIS (criticalityThresholds) — "was this mistake worth TEACHING about".
+//   The bar FALLS as the student improves: don't stop a 900 over a 50cp
+//   inaccuracy, they have bigger problems; a 2200 wants the subtleties.
+// HELP (alertSensitivityMultiplier) — "should I WARN you about this danger".
+//   The bar RISES as the student improves: a beginner needs the warning; a
+//   strong player should be left to spot it themselves.
+//
+// Beginner: teach only big mistakes, but warn often. Advanced: teach
+// subtleties, warn rarely. Merging these inverts the pedagogy on both axes at
+// once and nothing downstream would go red — so this is the gate.
+describe('the diagnosis bar and the help bar are DIFFERENT computers', () => {
+  it('run in OPPOSITE directions across the rating range', () => {
+    const diagnosis = [600, 1500, 2400].map((r) => criticalityThresholds(r).critical);
+    const help = [600, 1500, 2400].map((r) => alertSensitivityMultiplier(r));
+    // diagnosis falls...
+    expect(diagnosis[0], 'the teaching bar must FALL as the student improves').toBeGreaterThan(diagnosis[2]);
+    // ...help rises. If a "unification" ever makes these agree, one of the two
+    // pedagogies has been inverted.
+    expect(help[0], 'the warning bar must RISE as the student improves').toBeLessThan(help[2]);
+  });
+
+  it('no file mixes the two axes — a teaching computer never reads the help bar', () => {
+    const SRC = join(process.cwd(), 'src');
+    const files: string[] = [];
+    const walk = (d: string): void => {
+      for (const e of readdirSync(d)) {
+        const f = join(d, e);
+        if (statSync(f).isDirectory()) walk(f);
+        else if (/\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f)) files.push(f);
+      }
+    };
+    walk(SRC);
+    // Non-vacuity: a scan that found nothing passes for the wrong reason.
+    expect(files.length, 'the source walk found nothing — this check is vacuous').toBeGreaterThan(400);
+    const both = files.filter((f) => {
+      const src = readFileSync(f, 'utf-8');
+      return src.includes('criticalityThresholds') && src.includes('alertSensitivityMultiplier');
+    });
+    expect(
+      both.map((f) => f.replace(`${process.cwd()}/`, '')),
+      'a file reading BOTH bars is either merging two pedagogies or applying the wrong one — ' +
+      'diagnosis (criticalityThresholds) answers "teach this?", help (alertSensitivityMultiplier) answers "warn about this?"',
+    ).toEqual([]);
   });
 });

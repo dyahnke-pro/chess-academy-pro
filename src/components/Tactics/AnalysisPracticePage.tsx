@@ -23,6 +23,7 @@ import { recordReadingResult } from '../../services/analysisPracticeStats';
 import { determinePlayerColor } from '../../services/mistakePuzzleService';
 import { captureEvent } from '../../services/analytics';
 import { logAppAudit } from '../../services/appAuditor';
+import { hintStartTier } from '../../services/skillScaling';
 import type { GameRecord } from '../../types';
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
@@ -148,6 +149,13 @@ export function AnalysisPracticePage(): JSX.Element {
   const [grade, setGrade] = useState<ReadingGrade | null>(null);
   const [grading, setGrading] = useState(false);
   const [hintTier, setHintTier] = useState(0);            // 0 = none, 1-3
+  // Where the ladder STARTS, per student (David 2026-07-03: all training aids
+  // adaptive). `hintStartTier` was written for exactly this ladder and never
+  // wired, so every student at every rating began at tier 1 — the vaguest rung.
+  // A 900-rated player tapped three times to reach the rung they needed; a
+  // 2000 got the region handed to them on tap two. Algo-based: the recorded
+  // tactics skill governs, the rating is only the cold-start prior.
+  const startTier = hintStartTier(rating, activeProfile?.skillRadar?.tactics);
   const [selectedSquare, setSelectedSquare] = useState<Square | null>(null);
   const [demoFen, setDemoFen] = useState<string | null>(null); // non-null while the line plays out
   const [demoing, setDemoing] = useState(false);
@@ -269,10 +277,10 @@ export function AnalysisPracticePage(): JSX.Element {
       setGrade(g);                                     // reveal answer + Next
       await playDemo(question.demoLine);
     } else {
-      setHintTier(attemptsRef.current);
+      setHintTier(Math.max(startTier, attemptsRef.current));
       setAnswer(''); setSelectedSquare(null);          // keep going
     }
-  }, [question, grading, grade, demoing, hintTier, playDemo, next]);
+  }, [question, grading, grade, demoing, hintTier, playDemo, next, startTier]);
 
   const onSquareClick = useCallback((sqr: string) => {
     if (grade || demoing) return;
@@ -293,8 +301,8 @@ export function AnalysisPracticePage(): JSX.Element {
 
   const showHint = useCallback(() => {
     if (grade) return;
-    setHintTier((t) => Math.min((t || 0) + 1, 3));
-  }, [grade]);
+    setHintTier((t) => (t === 0 ? startTier : Math.min(t + 1, 3)));
+  }, [grade, startTier]);
 
   return (
     <div
