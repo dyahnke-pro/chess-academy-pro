@@ -433,18 +433,20 @@ const run = async () => {
     if (st === 'paused' && !cardBlocking) { await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined); }
     await page.waitForTimeout(1000);
   }
-  const RECAP_RE = /of your \w+ flagged move|carry into the next game|The pattern: you \w/i;
-  await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
-  const recap = spoken().find((s) => RECAP_RE.test(s.text));
-  // The aggregate reads "three of your five flagged moves…" — with NO flagged
-  // student ply there is nothing to aggregate and silence is correct.
-  // `flaggedLeads` is populated by the walk above.
-  if (flaggedLeads.size === 0) {
-    await add('RECAP fundamentals-aggregate', true,
-      `n/a — no flagged student ply in this game, so the aggregate has nothing to sum (end reached=${reachedEnd})`);
-  } else {
-    await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
-  }
+  // ── ORDER MATTERS, AND IT WAS WRONG (fixed 2026-09-17) ───────────────────
+  // The recap wait used to run HERE, before the turning-point card was
+  // answered. It could never pass. The closing is spoken by `useReviewPlayback`
+  // only at `lastPly + 1` (it clamps to `Math.min(ply, lastPly + 1)`), the card
+  // is raised AT `currentPly === moves.length`, and the walk loop above refuses
+  // to resume while that card is up — correctly, since resuming dismisses it
+  // unanswered. So the walk sat parked one step short of the closing for the
+  // whole 60s wait, and the row reported the PRODUCT silent when it was this
+  // instrument holding the door shut.
+  //
+  // The narration was never in doubt: driving the same Alapin game through the
+  // real `generateReviewNarration` returns "The pattern: one of your two
+  // flagged moves handed over a tempo." Answer the card, let the reveal speak,
+  // STEP PAST the last ply, and only then listen.
   // THE TURNING-POINT CARD FIRES AFTER THE WALK ENDS — the component raises it
   // when currentPly === moves.length, which is AFTER the step loop above has
   // already broken out. So the loop's last `resolveCards()` ran before the card
@@ -456,6 +458,42 @@ const run = async () => {
   await resolveCards();
   const revealed = await until(() => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text)), 20000, 500);
   log(`  [turning] reveal spoken=${revealed}`);
+
+  // STEP PAST THE LAST PLY — the closing lives at lastPly + 1, so something has
+  // to take that step: auto-advance if it resumes, else the forward control.
+  const RECAP_RE = /of your \w+ flagged move|carry into the next game|The pattern: you \w/i;
+  for (let i = 0; i < 20; i += 1) {
+    if (spoken().some((x) => RECAP_RE.test(x.text))) break;
+    const st = await page.locator('[data-testid="review-play-pause-btn"]').first()
+      .getAttribute('data-state', { timeout: 2000 }).catch(() => null);
+    if (st === 'paused') {
+      await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
+    }
+    // `review-forward-btn` is the real testid — verified in CoachGameReview.tsx
+    // rather than guessed, after three selector-shaped misses in one audit run
+    // tonight taught that lesson the expensive way.
+    await page.locator('[data-testid="review-forward-btn"]').first()
+      .click({ timeout: 1500 }).catch(() => undefined);
+    await page.waitForTimeout(1000);
+  }
+  await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
+  const recap = spoken().find((s) => RECAP_RE.test(s.text));
+  // The aggregate reads "three of your five flagged moves…" — with NO flagged
+  // student ply there is nothing to aggregate and silence is correct.
+  // `flaggedLeads` is populated by the walk above.
+  if (flaggedLeads.size === 0) {
+    // 🚨 NOT A PASS. This branch used to report `true` with "n/a — nothing to
+    // aggregate", which is the row DECLINING TO TEST ITSELF: it went green on
+    // every run until the walk happened to flag a ply, and then failed on its
+    // first real evaluation. The seeded Alapin carries two flagged student
+    // moves (the harness reads back "one of your two flagged moves handed over
+    // a tempo"), so zero here means the WALK stopped seeing them, which is a
+    // finding about this instrument and worth the red.
+    await add('RECAP fundamentals-aggregate', false,
+      `the walk recorded NO flagged student ply, but the seeded game has two — this row cannot evaluate itself (end reached=${reachedEnd})`);
+  } else {
+    await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
+  }
 
   // THESIS (unified-coach N1, 2026-09-15): THE ONE SELECTOR's game-level thesis
   // is spoken at the turning-point REVEAL, retrospective register, exactly once,
