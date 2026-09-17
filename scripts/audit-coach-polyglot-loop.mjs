@@ -31,6 +31,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { falseBoardClaims, resolveClaimFen } from './audit-lib/board-claims.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
@@ -227,6 +228,7 @@ async function main() {
       };
 
       const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 1180, height: 940 } });
+      await ctx.addInitScript(autoDismissCalibration);
       const page = await ctx.newPage();
   await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
       const sameKeySeen = new Set();

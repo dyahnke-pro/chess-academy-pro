@@ -20,6 +20,7 @@
 import { readFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
@@ -61,6 +62,7 @@ const FILL_SIG = [/stakes out [a-h][1-8]/i, /develops, covering/i, /takes the lo
 const listener = await startAuditListener();
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
 await blockTtsNetwork(page);
 

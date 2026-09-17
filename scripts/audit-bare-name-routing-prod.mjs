@@ -24,6 +24,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { enableAuditCapture } from './audit-lib/enable-audit-capture.mjs';
 
@@ -34,6 +35,7 @@ const REAL_NAME = 'The Vienna';
 const events = [];
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 1280, height: 900 } });
+await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit);
 // The audit-stream is opt-in/off by default (2026-09-11); turn it on so the
 // app EMITS its audit events for the interceptor below to see. The route

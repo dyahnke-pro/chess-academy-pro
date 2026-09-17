@@ -4,6 +4,7 @@
 // judge whether it leads with real teaching / carries a grounded reason.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { sleep } from './audit-lib/board-drive.mjs';
 
@@ -19,6 +20,7 @@ async function dismiss(p) {
 async function main() {
   const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);
   const p = await ctx.newPage();
   // The answer text IS what speakReadAloud speaks; on-device TTS audibility is
   // the device-only check (G7). coach-narration-spoken is a logAppAudit event

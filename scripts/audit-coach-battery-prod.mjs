@@ -13,6 +13,7 @@
 //   [AUDIT_FAMILY=theory] [AUDIT_BATCH=0] [AUDIT_N=20] node scripts/audit-coach-battery-prod.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import fs from 'node:fs';
 
@@ -107,6 +108,7 @@ const rec = (family, q, pass, detail) => { results.push({ family, q, pass, detai
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit);
 await ctx.addInitScript((id) => { try { localStorage.setItem('auditRunId', id); } catch { /* private */ } }, RUN_ID);
 const page = await ctx.newPage();

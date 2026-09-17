@@ -12,11 +12,13 @@
 // the chat surface (the actual bug).
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const page = await (await browser.newContext(sandboxContextOptions())).newPage();
+await page.addInitScript(autoDismissCalibration);
 await page.addInitScript(muteTtsForAudit);
 
 const results = [];

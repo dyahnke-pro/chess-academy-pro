@@ -18,6 +18,7 @@
 // Every assertion below therefore proves it had data before it may pass.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
@@ -32,6 +33,7 @@ const LESSON_BUDGET_MS = Number(process.env.AUDIT_LESSON_BUDGET_MS ?? 600_000);
 const listener = await startAuditListener();
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit);
 const page = await ctx.newPage();
 // A RELOAD LOOKS EXACTLY LIKE A BOARD BUG (2026-09-13). When a deploy landed

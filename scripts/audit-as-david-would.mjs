@@ -16,6 +16,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
@@ -31,6 +32,7 @@ async function main() {
   mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);
   const page = await ctx.newPage();
 

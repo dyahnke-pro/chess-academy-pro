@@ -14,6 +14,7 @@ import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { pickStudentMove } from './audit-lib/student-player.mjs';
 import OPENINGS_DB from '../src/data/openings-lichess.json' with { type: 'json' };
@@ -74,6 +75,7 @@ async function main() {
     args: sandboxLaunchArgs(),
   });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);
   await ctx.addInitScript((id) => { localStorage.setItem('auditRunId', id); }, RUN_ID);
   const page = await ctx.newPage();

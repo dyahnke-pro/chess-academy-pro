@@ -52,23 +52,35 @@ describe('audit scripts can reach prod from the sandbox', () => {
     expect(handRolled, `hand-rolled args omit the proxy + TLS pin: ${handRolled.join(', ')}`).toEqual([]);
   });
 
-  it('every clicking audit neutralises the first-run overlay', () => {
+  it('every clicking audit injects autoDismissCalibration — the HELPER, not a ghost', () => {
     // The SECOND thing that stops an audit reaching prod, found the moment the
     // first was fixed: `audit-coach-tactical-awareness` got through to the page
-    // and then timed out clicking the chat box, because the strength-calibration
-    // bubble is a full-screen role="dialog" that intercepts pointer events on
-    // every fresh context. 36 clicking audits never injected the dismissal.
+    // and then timed out clicking the chat box, because a full-screen
+    // role="dialog" intercepts pointer events on every fresh context.
     //
-    // `autoDismissCalibration` is CSS-based ON PURPOSE — clicking the skill band
-    // fires an async Dexie write, and in a container where that write stalls the
-    // bubble never detaches, so a band-click alone hangs forever. Any audit that
-    // rolls its own click-to-dismiss is reintroducing that hang.
+    // 🔴 TIGHTENED 2026-09-17, and the loosening is what made it necessary. This
+    // used to accept `strength-calibration-bubble` or `skill-band` as proof an
+    // audit was protected. That bubble was DELETED from the app on 2026-09-02,
+    // so those two strings stopped meaning anything — and **94 clicking audits
+    // were passing this gate by naming an element that no longer renders**,
+    // while the overlay that DOES still render (`page-help-modal`, PageHelp.tsx)
+    // went unhandled in every one of them. A gate satisfied by a ghost reports
+    // protection it is not providing, which is worse than no gate: it is the
+    // "green by absence" failure, and it hid here for two weeks.
+    //
+    // Only the helper counts now. `autoDismissCalibration` is CSS-based ON
+    // PURPOSE — a hand-rolled click-to-dismiss fires an async Dexie write, and
+    // where that write stalls the dialog never detaches, so the click HANGS
+    // instead of timing out. It also kills page-help, which is the live one.
     const clicking = driving.filter((f) => /chat-text-input|clickReq|\.click\(/.test(f.src));
     expect(clicking.length).toBeGreaterThan(50);
     const missing = clicking
-      .filter((f) => !/autoDismissCalibration|strength-calibration-bubble|skill-band/.test(f.src))
+      // audit-strength-calibration asserts the bubble is ABSENT — that is its
+      // whole contract, so it must not have overlays suppressed under it.
+      .filter((f) => f.name !== 'audit-strength-calibration.mjs')
+      .filter((f) => !f.src.includes('autoDismissCalibration'))
       .map((f) => f.name);
-    expect(missing, `the first-run bubble will eat their first click: ${missing.join(', ')}`).toEqual([]);
+    expect(missing, `an overlay will eat their first click: ${missing.join(', ')}`).toEqual([]);
   });
 
   it('every browser-driving audit is MUTED', () => {

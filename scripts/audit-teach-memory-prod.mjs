@@ -8,6 +8,7 @@
 //   [AUDIT_OPENING="grand prix attack"] node scripts/audit-teach-memory-prod.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -15,6 +16,7 @@ const ASK = process.env.AUDIT_OPENING || 'grand prix attack';
 
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const p = await (await b.newContext(sandboxContextOptions())).newPage();
+await p.addInitScript(autoDismissCalibration);
 await blockTtsNetwork(p);   // instrument keeps the request; the provider never sees it
 const ttsTexts = [];
 p.on('request', (r) => {

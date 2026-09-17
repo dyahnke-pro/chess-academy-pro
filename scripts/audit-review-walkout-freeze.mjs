@@ -18,6 +18,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -35,6 +36,7 @@ const run = async () => {
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 390, height: 844 } });
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await ctx.newPage();
   const errs = [];

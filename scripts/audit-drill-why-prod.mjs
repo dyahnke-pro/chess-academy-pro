@@ -23,6 +23,7 @@ import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { enableAuditCapture } from './audit-lib/enable-audit-capture.mjs';
 
@@ -91,6 +92,7 @@ async function main() {
     deviceScaleFactor: 2,
     userAgent: 'AuditDrillWhyBot/1.0 (chromium)',
   });
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);     // G1 — never spend TTS money
   await ctx.addInitScript(enableAuditCapture);  // make the app EMIT so we can capture
 

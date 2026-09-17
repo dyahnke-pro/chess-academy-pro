@@ -31,6 +31,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { enableAuditCapture } from './audit-lib/enable-audit-capture.mjs';
 import { attachVoiceListener, voiceLines, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
@@ -78,6 +79,7 @@ const run = async () => {
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: [...sandboxLaunchArgs(), ...(process.env.AUDIT_LISTENER === '1' ? LISTENER_LAUNCH_ARGS : [])] });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
+  await ctx.addInitScript(autoDismissCalibration);
   // Opt-in stream is off by default (2026-09-11); enable it so the app EMITS
   // its audit events for the page.route interceptor below to capture. The route
   // fulfills locally, so nothing reaches prod.

@@ -18,7 +18,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useRef } from 'react';
 import { useChessGame } from './useChessGame';
 
-function useGameWithRef() {
+function useGameWithRef(): { game: ReturnType<typeof useChessGame>; ref: { current: ReturnType<typeof useChessGame> } } {
   const game = useChessGame();
   const ref = useRef(game);
   ref.current = game;

@@ -4,6 +4,7 @@
 // the caught-up/empty-queue fork. Live prod brain via full proxy interception.
 import { chromium } from 'playwright';
 import { attachProxyInterception } from './audit-lib/proxy-intercept.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
@@ -14,6 +15,7 @@ const push = (kind, detail) => breaks.push({ input: current, kind, detail: (deta
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 await attachProxyInterception(ctx);
 const page = await ctx.newPage();

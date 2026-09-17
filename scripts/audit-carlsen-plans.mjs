@@ -3,6 +3,7 @@
 // RENDER (not the -empty fallback) on the right tab. Matrix: /openings/*.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const BASE = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 const results=[]; const rec=(n,s,d)=>{results.push({n,s,d});console.log(`  [${s}] ${n}${d?': '+d:''}`);};
@@ -20,7 +21,8 @@ const VARPLANS=[
  ['pro-carlsen-french','Advance'],
 ];
 const browser=await chromium.launch({executablePath:await resolveChromiumExecutable(),headless:true,args:sandboxLaunchArgs()});
-const ctx=await browser.newContext(sandboxContextOptions());const page=await ctx.newPage();
+const ctx=await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);const page=await ctx.newPage();
   await page.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 async function dismissOnboarding(){try{await page.locator('[data-testid="skill-band-intermediate"]').click({timeout:5000});}catch{}}
 async function dismissHelp(){const m=page.locator('[data-testid="page-help-modal"]');if(await m.count()>0){await page.keyboard.press('Escape').catch(()=>null);await m.waitFor({state:'detached',timeout:5000}).catch(()=>null);}}

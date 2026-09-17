@@ -3,6 +3,7 @@
 // scoping. Runs against LIVE prod. AUDIT_SANDBOX=1 for the resigned cert.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 
 const PROD = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -14,6 +15,7 @@ const browser = await chromium.launch({
   args: [...sandboxLaunchArgs(), '--autoplay-policy=no-user-gesture-required'],
 });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
   await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 const tts = [];

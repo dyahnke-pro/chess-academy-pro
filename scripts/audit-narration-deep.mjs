@@ -41,6 +41,7 @@
  */
 import { chromium } from 'playwright-core';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -205,6 +206,7 @@ async function main() {
     deviceScaleFactor: 2,
     userAgent: 'AuditNarrationDeepBot/1.0 (chromium)',
   });
+  await ctx.addInitScript(autoDismissCalibration);
 
   let allConsoleErrors = [];
   let allPageErrors = [];

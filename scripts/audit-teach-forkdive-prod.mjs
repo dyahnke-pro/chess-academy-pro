@@ -22,6 +22,7 @@
 import { chromium } from 'playwright';
 import { writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 
@@ -57,6 +58,7 @@ const listener = await startAuditListener();
 const before = await pullStream();
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const p = await (await b.newContext(sandboxContextOptions())).newPage();
+await p.addInitScript(autoDismissCalibration);
 await blockTtsNetwork(p);   // instrument keeps the request; the provider never sees it
 const ttsTexts = [];
 p.on('request', (r) => {

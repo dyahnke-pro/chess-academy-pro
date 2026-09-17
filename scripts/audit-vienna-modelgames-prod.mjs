@@ -12,6 +12,7 @@
 // Run: AUDIT_SANDBOX=1 node scripts/audit-vienna-modelgames-prod.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 
@@ -42,6 +43,7 @@ async function main() {
     ...(proxyServer ? { proxy: { server: proxyServer } } : {}),
   });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await ctx.newPage();
   const pageErrors = [];

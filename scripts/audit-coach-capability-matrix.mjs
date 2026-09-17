@@ -19,6 +19,7 @@
 import { chromium } from 'playwright';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { readPlacement, placementOf, samePlacement, sleep } from './audit-lib/board-drive.mjs';
 
@@ -51,6 +52,7 @@ async function dismiss(p) {
 
 async function newTeachPage(browser) {
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);
   const p = await ctx.newPage();
   const errs = [];
   p.on('pageerror', (e) => errs.push('pageerror: ' + String(e).slice(0, 100)));

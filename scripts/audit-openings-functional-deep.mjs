@@ -10,6 +10,7 @@
 // Run: AUDIT_SANDBOX=1 [AUDIT_OPENING=vienna-game] node scripts/audit-openings-functional-deep.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 
@@ -34,6 +35,7 @@ async function main() {
     ...(isLocal ? {} : { proxy: { server: process.env.HTTPS_PROXY || process.env.HTTP_PROXY } }),
   });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await ctx.newPage();
   const errs = [];

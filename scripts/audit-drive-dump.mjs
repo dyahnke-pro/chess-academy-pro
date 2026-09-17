@@ -2,6 +2,7 @@
 // the chat ANSWER apart from an ambient position-narration bubble. Not committed.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -10,6 +11,7 @@ const QS = (process.env.AUDIT_QS || 'is this a draw?|whose turn is it?|what colo
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit);
 await ctx.addInitScript((id) => { try { localStorage.setItem('auditRunId', id); } catch {} }, `dump-${Date.now().toString(36)}`);
 const page = await ctx.newPage();

@@ -6,6 +6,7 @@
 // WHY computeLiveBoardVerdict returns null through the real path.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { degrade, describeDegradations } from './audit-lib/degrade.mjs';
 
@@ -31,6 +32,7 @@ const QUESTIONS = [
 const events = [];
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await b.newContext({ ...sandboxContextOptions(), viewport: { width: 1280, height: 900 } });
+await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit);
 const p = await ctx.newPage();
 

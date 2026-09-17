@@ -1,4 +1,5 @@
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 import { chromium } from 'playwright';
@@ -29,6 +30,7 @@ const fingerprint = (say) => { const w = norm(say).split(' ').filter((x) => x.le
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
   await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 const tts = [];

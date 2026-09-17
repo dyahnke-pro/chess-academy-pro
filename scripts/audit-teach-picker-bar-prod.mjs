@@ -23,6 +23,7 @@
 //   node scripts/audit-teach-picker-bar-prod.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -44,6 +45,7 @@ const ctx = await b.newContext({
   isMobile: true,
   deviceScaleFactor: 3,
 });
+await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit); // SILENT — no synthesis, no bill (non-negotiable)
 const p = await ctx.newPage();
 const pageErrors = [];

@@ -10,6 +10,7 @@ import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { readFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 
@@ -47,6 +48,7 @@ const rec = (label, pass, note = '') => { results.push({ label, pass, note }); c
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 const pageErrors = [];

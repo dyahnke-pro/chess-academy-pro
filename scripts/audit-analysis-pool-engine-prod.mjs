@@ -38,6 +38,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
@@ -99,6 +100,7 @@ async function main() {
     args: sandboxLaunchArgs(),
   });
   const context = await browser.newContext(sandboxContextOptions());
+  await context.addInitScript(autoDismissCalibration);
   await context.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await context.newPage();
 

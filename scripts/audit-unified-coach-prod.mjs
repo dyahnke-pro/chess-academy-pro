@@ -24,6 +24,7 @@
 // proves the shared spine→surface path they all ride, via the picker.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { seedWeaknessProfile, SEED_FORK_FEN } from './audit-lib/seed-weakness-profile.mjs';
@@ -34,6 +35,7 @@ const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.ap
 const listener = await startAuditListener();
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
 await blockTtsNetwork(page);
 

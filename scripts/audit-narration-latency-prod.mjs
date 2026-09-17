@@ -22,6 +22,7 @@ import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 
@@ -73,6 +74,7 @@ async function main() {
     userAgent: 'AuditNarrationBot/1.0 (chromium)',
     ...sandboxContextOptions(),
   });
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   await ctx.addInitScript(
     ({ url, secret }) => {

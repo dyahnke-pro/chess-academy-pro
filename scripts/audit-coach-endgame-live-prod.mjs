@@ -13,6 +13,7 @@
 //   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-coach-endgame-live-prod.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import fs from 'node:fs';
 
@@ -79,6 +80,7 @@ const rec = (name, q, pass, detail) => { results.push({ name, q, pass, detail })
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript(muteTtsForAudit);
 await ctx.addInitScript((id) => { try { localStorage.setItem('auditRunId', id); } catch { /* private */ } }, RUN_ID);
 const page = await ctx.newPage();

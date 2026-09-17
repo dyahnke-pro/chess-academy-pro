@@ -8,6 +8,7 @@
 // no speakers, so the listener + tts-request evidence is the voice gate).
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 
@@ -24,6 +25,7 @@ const CORPUS_MARKS = [
 const listener = await startAuditListener();
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const p = await (await b.newContext(sandboxContextOptions())).newPage();
+await p.addInitScript(autoDismissCalibration);
 await blockTtsNetwork(p);   // instrument keeps the request; the provider never sees it
 const ttsTexts = [];
 p.on('request', (r) => {

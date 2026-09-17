@@ -64,7 +64,7 @@ describe('the strength-calibration bubble is gone (2026-09-02)', () => {
       // innocent — a `waitForTimeout(1500)` two lines under a COMMENT about the
       // bubble is not waiting on the bubble. That is the same error as matching
       // "fen" inside "de-fen-se": fix the instrument, never the code it libels.
-      let from = 0;
+      const from = 0;
       for (let i = src.indexOf(BUBBLE); i !== -1; i = src.indexOf(BUBBLE, i + 1)) {
         const start = Math.max(src.lastIndexOf(';', i), src.lastIndexOf('{', i), from) + 1;
         const semi = src.indexOf(';', i);

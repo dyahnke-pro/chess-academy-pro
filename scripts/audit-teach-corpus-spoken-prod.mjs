@@ -17,6 +17,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 
@@ -138,6 +139,7 @@ console.log(`[probe] "${ASK}" — ${notes.length} positioned notes, ${marks.leng
 const listener = await startAuditListener();
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await b.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 // MUTED + run-stamped (David 2026-08-06): the spoken marks are read back from
 // PostHog (coach_narration_spoken.narration_text carries the FULL line, incl.
 // on the muted tier), keyed by audit_run_id — the local listener cannot attach

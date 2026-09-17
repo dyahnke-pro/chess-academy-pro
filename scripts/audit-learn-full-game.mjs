@@ -29,6 +29,7 @@ import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { pickStudentMove } from './audit-lib/student-player.mjs';
@@ -175,6 +176,7 @@ async function main() {
   const executablePath = await resolveChromiumExecutable();
   const browser = await chromium.launch({ executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);
   // MUTED BY DEFAULT (G1) — the mute emits the SAME coach-narration-spoken event
   // with the SAME full text, so reading WHAT was said costs nothing.
   //

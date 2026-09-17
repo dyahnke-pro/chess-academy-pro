@@ -3,6 +3,7 @@
 // (KIA 9, Reti/Slav/English full), and (b) a gem opening surfaces its weapons.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 
@@ -13,6 +14,7 @@ const results = [];
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 

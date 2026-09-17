@@ -4,6 +4,7 @@
 //   ASK="how does naroditsky play the caro-kann" node scripts/audit-pro-fork-prod.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { sleep } from './audit-lib/board-drive.mjs';
 
@@ -20,6 +21,7 @@ async function dismiss(p) {
 async function main() {
   const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);
   const p = await ctx.newPage();
   // NB: coach-narration-spoken is a logAppAudit event, not a window event — the
   // spoken line is captured via the narration-listener sidecar (G1), not here.

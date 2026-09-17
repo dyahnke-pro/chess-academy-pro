@@ -10,6 +10,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir } from 'node:fs/promises';
 
@@ -23,6 +24,7 @@ async function main() {
   const executablePath = await resolveChromiumExecutable(false);
   const browser = await chromium.launch({ headless: true, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, userAgent: 'AuditLeafBot/1.0' });
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   // Trap any navigation to /coach/home and print the JS stack that caused it.
   await ctx.addInitScript(() => {

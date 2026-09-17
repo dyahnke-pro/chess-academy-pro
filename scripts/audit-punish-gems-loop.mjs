@@ -39,6 +39,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
@@ -236,6 +237,7 @@ const lineSig = (dicts) => dicts.map(destToken).join('-');
 
 async function makeCtx(browser) {
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);
   // 🚨 MUTED (David 2026-08-16: "so we don't burn through my tts budget").
   // 86 openings × Watch + Learn is exactly the shape that ran him $100 over in
   // a day, and it buys nothing: the mute emits the SAME

@@ -7,6 +7,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { exploreOnFreeBoard } from './audit-lib/review-explore.mjs';
 
@@ -18,6 +19,7 @@ const rec = (fn, reached, ok, note) => grid.push({ fn, reached, ok, note: (note 
 
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await b.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const p = await ctx.newPage();
 p.on('pageerror', (e) => pageErrs.push(e.message.slice(0, 120)));

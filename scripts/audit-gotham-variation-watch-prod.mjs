@@ -7,6 +7,7 @@
 // / [data-testid="walkthrough-back"]; the curated LessonPlayer does not.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const PROD = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -24,6 +25,7 @@ function rec(name, status, detail) { results.push({ name, status, detail }); con
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 

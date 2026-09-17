@@ -19,6 +19,7 @@
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { join } from 'node:path';
 
@@ -83,6 +84,7 @@ async function main() {
     deviceScaleFactor: 2,
     userAgent: 'AuditTacticsBot/1.0 (chromium)',
   });
+  await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 
   await ctx.addInitScript(

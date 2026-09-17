@@ -1,4 +1,5 @@
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
@@ -23,6 +24,7 @@ const listener = await startAuditListener();
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 await ctx.addInitScript((u) => { try { localStorage.setItem('auditStreamUrl', u); } catch {} }, listener.url);
 const page = await ctx.newPage();
   await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it

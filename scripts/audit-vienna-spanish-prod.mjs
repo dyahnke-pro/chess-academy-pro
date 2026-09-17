@@ -7,6 +7,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 
@@ -54,6 +55,7 @@ async function run() {
     args: sandboxLaunchArgs(),
   });
   const context = await browser.newContext(sandboxContextOptions());
+  await context.addInitScript(autoDismissCalibration);
   const page = await context.newPage();
   await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
   const ttsTexts = [];

@@ -7,6 +7,7 @@
 //       + the /api/tts synthesis calls = proof the Watch narration FIRES.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
@@ -28,6 +29,7 @@ console.log('=== (1) Playwright (audit config injected pre-boot) ===');
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: [...sandboxLaunchArgs(), '--autoplay-policy=no-user-gesture-required'] });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
   await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 await page.addInitScript(({ url, secret }) => {

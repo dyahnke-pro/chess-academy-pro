@@ -5,12 +5,14 @@
 // unique phrase "watch the ideas as the moves play out".
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const REQ = process.env.AUDIT_TEACH_REQ || 'Teach me the Caro-Kann';
 const EXPECT = (process.env.AUDIT_TEACH_EXPECT || 'caro').toLowerCase();
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const p = await (await b.newContext(sandboxContextOptions())).newPage();
+await p.addInitScript(autoDismissCalibration);
 await p.addInitScript(muteTtsForAudit);
 async function dismiss(){
   for (const [gate, btn] of [

@@ -34,6 +34,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { falseBoardClaims, resolveClaimFen } from './audit-lib/board-claims.mjs';
 import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
@@ -77,6 +78,7 @@ async function main() {
       deviceScaleFactor: 2,
       userAgent: 'AuditCoachPlayListenBot/1.0 (chromium)',
     });
+    await ctx.addInitScript(autoDismissCalibration);
     await ctx.addInitScript(
       ({ url, secret }) => {
         try { window.localStorage.setItem('auditStreamUrl', url); window.localStorage.setItem('auditStreamSecret', secret); } catch { /* */ }

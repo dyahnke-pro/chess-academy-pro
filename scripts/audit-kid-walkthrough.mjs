@@ -11,6 +11,7 @@
  */
 import { chromium } from 'playwright';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import {
   resolveChromiumExecutable,
   sandboxLaunchArgs,
@@ -93,6 +94,7 @@ async function run() {
   const executablePath = await resolveChromiumExecutable();
   const browser = await chromium.launch({ headless: true, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ viewport: { width: 420, height: 900 }, ...sandboxContextOptions() });
+  await ctx.addInitScript(autoDismissCalibration);
   const page = await ctx.newPage();
   await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 
