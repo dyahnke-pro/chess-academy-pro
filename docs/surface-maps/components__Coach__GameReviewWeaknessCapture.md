@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**269 lines · 3 exports · 2 importers · 2 tests · 1 audits**
+**254 lines · 3 exports · 2 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,9 +20,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `buildBlunders` (function) — 1 call site
 - `src/services/fundamentalsRecordLoop.integration.test.ts:69`
 
-### `buildCapabilityPlies` (function) — 2 call sites
+### `buildCapabilityPlies` (function) — 3 call sites
 - `src/services/capabilityEvidence.test.ts:142`
-- `src/services/capabilityEvidence.test.ts:160`
+- `src/services/capabilityEvidence.test.ts:169`
+- `src/services/capabilityEvidence.test.ts:190`
 
 ### `GameReviewWeaknessCapture` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

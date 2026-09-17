@@ -8,6 +8,7 @@ import { Chess } from 'chess.js';
 // passive path write to the SAME bucket; this just front-runs it.
 
 import { captureMisconception } from './discussionPractice';
+import { recordCapabilitiesShown } from './capabilityEvidence';
 import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
@@ -42,6 +43,15 @@ export interface BlunderForAnalysis {
   evalAfterPlayed?: number;
 }
 
+/** One ply the student played that was NOT a mistake — the POSITIVE half of the
+ *  same game. Passed in rather than re-derived so the caller walks the game
+ *  ONCE and both halves come out of one pass. */
+export interface CapabilityPly {
+  fenBefore: string;
+  playedSan: string;
+  cpLoss: number | null;
+}
+
 export interface AutoAnalyzeOptions {
   openingId?: string;
   openingName?: string;
@@ -50,11 +60,20 @@ export interface AutoAnalyzeOptions {
    *  weaknesses. Imported games of a repertoire the user claims to know
    *  count; first-exposure lines don't. */
   learned: boolean;
+  /** The student's non-mistake plies. Omitted = the caller has no positive
+   *  evidence to file (an imported game with no per-ply data, say) — an honest
+   *  absence, never a reason to invent one. */
+  capabilityPlies?: readonly CapabilityPly[];
+  /** Which side the student played — required to attribute the positive half. */
+  playerColor?: 'white' | 'black';
 }
 
 export interface AutoAnalyzeResult {
   classified: number;
   logged: number;
+  /** Capabilities RECORDED as held from the same game. Reported so a caller —
+   *  or a gate — can prove the positive half fired rather than assume it. */
+  capabilitiesHeld: number;
 }
 
 function cpToWords(cpLoss?: number): string | undefined {
@@ -108,7 +127,26 @@ export async function autoAnalyzeBlunders(
     if (result.classification && result.classification.tag !== 'none') classified += 1;
     if (result.logged) logged += 1;
   }
-  return { classified, logged };
+
+  // AND THE POSITIVE HALF OF THE SAME GAME. Both halves are captured by ONE
+  // service call so a surface never has to know there are two — the caller
+  // walks the game once and hands over both sets. Keeping this here rather
+  // than in the component is also what stops a UI surface importing a fact
+  // computer directly (surfaceComposition.scan).
+  let capabilitiesHeld = 0;
+  if (opts.capabilityPlies?.length && opts.playerColor) {
+    for (const ply of opts.capabilityPlies) {
+      capabilitiesHeld += await recordCapabilitiesShown({
+        fenBefore: ply.fenBefore,
+        playedSan: ply.playedSan,
+        moverColor: opts.playerColor,
+        cpLoss: ply.cpLoss,
+        origin: 'review',
+        ...(opts.sourceGameId ? { sourceGameId: opts.sourceGameId } : {}),
+      });
+    }
+  }
+  return { classified, logged, capabilitiesHeld };
 }
 
 /** Populate the Thinking-Errors bucket from a game's ALREADY-COMPUTED
@@ -135,7 +173,7 @@ export async function autoAnalyzeGameMisconceptions(
   gameId: string,
   username?: string,
 ): Promise<AutoAnalyzeResult> {
-  const empty: AutoAnalyzeResult = { classified: 0, logged: 0 };
+  const empty: AutoAnalyzeResult = { classified: 0, logged: 0, capabilitiesHeld: 0 };
 
   const game = await db.games.get(gameId);
   if (!game) return empty;
@@ -289,7 +327,7 @@ export async function backfillMisconceptionsFromAnalyzedGames(
   const flagKey = 'misconceptions_backfill_v2';
   if (!opts?.force) {
     const done = await db.meta.get(flagKey);
-    if (done?.value === 'true') return { classified: 0, logged: 0 };
+    if (done?.value === 'true') return { classified: 0, logged: 0, capabilitiesHeld: 0 };
   }
 
   const prefs = useAppStore.getState().activeProfile?.preferences;
@@ -324,5 +362,5 @@ export async function backfillMisconceptionsFromAnalyzedGames(
     source: 'autoAnalyzeGame.backfillMisconceptionsFromAnalyzedGames',
     summary: `backfill swept ${games.length} games — classified=${classified} logged=${logged}`,
   });
-  return { classified, logged };
+  return { classified, logged, capabilitiesHeld: 0 };
 }

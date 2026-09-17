@@ -144,6 +144,36 @@ describe('the review capture actually feeds it — a real game, real rows', () =
     expect(plies.map((p) => p.playedSan)).toEqual(['e4', 'Nf3', 'Bc4']);
   }, 20_000);
 
+  // THE REAL PATH, after the ceiling fix: the component hands BOTH sets to ONE
+  // `autoAnalyzeBlunders` call, so the positive half rides the service the
+  // negative half already used. Asserting through the recorder alone would no
+  // longer prove the production wire.
+  it('autoAnalyzeBlunders records the positive half from the same call', async () => {
+    vi.resetModules();
+    vi.doMock('./discussionPractice', () => ({
+      captureMisconception: vi.fn(() => Promise.resolve({ logged: false, classification: null })),
+    }));
+    const { autoAnalyzeBlunders } = await import('./autoAnalyzeGame');
+    const { buildCapabilityPlies } = await import('../components/Coach/GameReviewWeaknessCapture');
+
+    const c = new Chess();
+    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'];
+    const moves = sans.map((san) => {
+      c.move(san);
+      return { san, fen: c.fen(), moveNumber: 1, classification: 'good',
+               evaluation: 20, preMoveEval: 20, bestMove: null, pv: null };
+    }) as unknown as Parameters<typeof buildCapabilityPlies>[0];
+
+    const res = await autoAnalyzeBlunders([], {
+      learned: true,
+      capabilityPlies: buildCapabilityPlies(moves, 'white'),
+      playerColor: 'white',
+    });
+    expect(res.capabilitiesHeld, 'the one-call path recorded NOTHING').toBeGreaterThan(0);
+    expect(await db.capabilityEvidence.count()).toBe(res.capabilitiesHeld);
+    vi.doUnmock('./discussionPractice');
+  }, 20_000);
+
   it('driving those plies through the recorder writes real held rows', async () => {
     const { buildCapabilityPlies } = await import('../components/Coach/GameReviewWeaknessCapture');
     const c = new Chess();

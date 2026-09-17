@@ -72,7 +72,7 @@ describe('autoAnalyzeGameMisconceptions', () => {
     const after2 = await db.misconceptionTags.where('sourceGameId').equals('g-idem').count();
 
     expect(after1).toBeGreaterThan(0);
-    expect(second).toEqual({ classified: 0, logged: 0 });
+    expect(second).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0 });
     expect(after2).toBe(after1);
   });
 
@@ -97,7 +97,7 @@ describe('autoAnalyzeGameMisconceptions', () => {
 
     // Second call short-circuits on the meta flag — no new work.
     const second = await backfillMisconceptionsFromAnalyzedGames();
-    expect(second).toEqual({ classified: 0, logged: 0 });
+    expect(second).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0 });
   });
 
   it('no-ops on a game with no annotations', async () => {
@@ -110,6 +110,6 @@ describe('autoAnalyzeGameMisconceptions', () => {
       annotations: null,
     });
     await db.games.put(game);
-    expect(await autoAnalyzeGameMisconceptions('g-bare')).toEqual({ classified: 0, logged: 0 });
+    expect(await autoAnalyzeGameMisconceptions('g-bare')).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0 });
   });
 });

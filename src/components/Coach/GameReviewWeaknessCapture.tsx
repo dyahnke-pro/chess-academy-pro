@@ -13,7 +13,6 @@ import { BookOpen, Target, Check, Loader2 } from 'lucide-react';
 import { scanTheoryDeviation, type TheoryDeviation } from '../../services/theoryDeviationScan';
 import { Chess } from 'chess.js';
 import { autoAnalyzeBlunders, type BlunderForAnalysis } from '../../services/autoAnalyzeGame';
-import { recordCapabilitiesShown } from '../../services/capabilityEvidence';
 import { pvUciToSan } from '../../services/principleAttribution';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { hasMisconceptionsForGame } from '../../services/misconceptionService';
@@ -196,26 +195,12 @@ export function GameReviewWeaknessCapture({
       sourceGameId: gameId,
       // Deliberate user capture of their own game → it counts.
       learned: true,
+      // BOTH HALVES, ONE PASS. The game is walked once; `buildBlunders` keeps
+      // the failures and `buildCapabilityPlies` keeps what it throws away.
+      capabilityPlies: buildCapabilityPlies(moves, playerColor),
+      playerColor,
     });
     setLoggedCount(result.logged);
-
-    // AND THE POSITIVE HALF, from the SAME game (David 2026-09-17: "Not elo
-    // based. I want it to be capabilities of our system."). Until now the only
-    // record of success was `recordTagDrillResult`, which matches on a tag the
-    // student ALREADY has an open instance of — so a capability they were never
-    // caught lacking had no way to be recorded, and real play contributed
-    // nothing positive at all. Sequential and fire-and-forget: the capture's
-    // own result must not depend on it.
-    for (const ply of buildCapabilityPlies(moves, playerColor)) {
-      await recordCapabilitiesShown({
-        fenBefore: ply.fenBefore,
-        playedSan: ply.playedSan,
-        moverColor: playerColor,
-        cpLoss: ply.cpLoss,
-        origin: 'review',
-        ...(gameId ? { sourceGameId: gameId } : {}),
-      });
-    }
     setCaptureState('done');
   }, [captureState, blunders, openingId, openingName, gameId]);
 
