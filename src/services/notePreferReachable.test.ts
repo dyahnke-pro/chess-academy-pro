@@ -12,16 +12,33 @@
 // disagree and the prose has already passed `noteDescribesPosition`, the ANCHOR
 // is the trustworthy half. A note that both names a foreign opening and fails
 // board truth was already dropped one filter earlier.
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
 import repertoire from '../data/repertoire.json';
 import { noteAtPosition } from './danyaTeachingService';
 import { openingReachesPosition } from './openingBranches';
-import '../test/loadFullCorpus';
+// 🔒 CALL IT, DO NOT MERELY IMPORT IT (2026-09-17). `loadFullCorpus` exports a
+// FUNCTION and does nothing on import, so this side-effect-only import primed
+// nothing: selection saw the two STATIC corpora, which have been floating-only
+// since the anchored farmed notes were archived on 2026-08-26, and the exact
+// tier therefore returned ZERO notes over 1,300+ plies.
+//
+// The floors below are the numbers this gate was WRITTEN against, so they are
+// the proof it was once measuring a loaded corpus and stopped. The helper's own
+// header warns about exactly this failure — "a gate written without it passes
+// while testing a fifth of the data" — and this gate fell into it.
+import { loadFullCorpus } from '../test/loadFullCorpus';
 
-/** Walk the taught lines and record what selection returns per ply. */
-function walk(limit: number): { plies: number; withNote: number; mismatched: number } {
-  let plies = 0; let withNote = 0; let mismatched = 0;
+/** Walk the taught lines and record what selection returns per ply.
+ *
+ *  TWO coverage counts, because TWO mechanisms can drop a note and conflating
+ *  them makes this gate blame the wrong one:
+ *   • `withNote`   — what the student on THIS line's seat actually hears.
+ *   • `eitherSeat` — what the corpus has at that board for either seat. This is
+ *     the number the anchor PREFERENCE is answerable for; it is seat-blind, so
+ *     it isolates the preference from the seat guard. */
+function walk(limit: number): { plies: number; withNote: number; eitherSeat: number; mismatched: number } {
+  let plies = 0; let withNote = 0; let eitherSeat = 0; let mismatched = 0;
   for (const entry of (repertoire as Array<{ pgn?: string; color?: string }>).slice(0, limit)) {
     if (!entry.pgn) continue;
     const board = new Chess();
@@ -31,25 +48,61 @@ function walk(limit: number): { plies: number; withNote: number; mismatched: num
       if (!mv) break;
       hist.push(mv.san);
       plies += 1;
-      const note = noteAtPosition(hist, board.fen(), null, entry.color === 'black' ? 'black' : 'white');
+      const seat: 'white' | 'black' = entry.color === 'black' ? 'black' : 'white';
+      const other: 'white' | 'black' = seat === 'white' ? 'black' : 'white';
+      const note = noteAtPosition(hist, board.fen(), null, seat);
+      if (note || noteAtPosition(hist, board.fen(), null, other)) eitherSeat += 1;
       if (!note) continue;
       withNote += 1;
       if (note.opening && !openingReachesPosition(note.opening, hist)) mismatched += 1;
     }
   }
-  return { plies, withNote, mismatched };
+  return { plies, withNote, eitherSeat, mismatched };
 }
 
 describe('the anchor preference', () => {
+  beforeAll(() => {
+    const loaded = loadFullCorpus();
+    const total = loaded.reduce((n, c) => n + c.notes, 0);
+    // Non-vacuity: with the fetched corpora missing from disk every assertion
+    // below would measure an empty index and this gate would be theatre.
+    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+  }, 180_000);
+
   it('does not cost coverage — the whole reason it is a preference', () => {
     // The floor is the measured pre-change number. A future change that turns
     // this into a hard reject will fail here, loudly, with the coverage it cost.
-    const { plies, withNote } = walk(120);
+    //
+    // 🔒 MEASURED SEAT-BLIND, ON PURPOSE (2026-09-17). This asserted the
+    // student's-seat count, which conflates the preference with the SEAT GUARD
+    // added the same day — and the guard's job is precisely to refuse notes, so
+    // the gate would have read a deliberate correctness fix as a coverage
+    // regression and pushed the next reader to weaken the guard. The preference
+    // is answerable for whether the corpus is REACHED here; who may hear it is
+    // the guard's question and has its own assertion below.
+    const { plies, eitherSeat } = walk(120);
     expect(plies).toBeGreaterThan(1000);
     expect(
-      withNote,
+      eitherSeat,
       'selection got quieter — a preference must never drop a note',
     ).toBeGreaterThanOrEqual(160);
+  });
+
+  it('the seat guard is what costs the rest, and it costs lies', () => {
+    // Over the same 1,310 plies: 205 boards have a note for SOME seat, 131 for
+    // the seat this line is taught from. The 74-note gap is voiced prose
+    // written from the other side of the board — "your knight" about the
+    // opponent's knight — which is why the guard refuses it rather than
+    // reframing it (second-person prose cannot be flipped). See
+    // `noteSeatMatches`.
+    //
+    // A FLOOR, so a future change that silently widens the guard shows up here.
+    // If this number has to move down again, the question to answer first is
+    // whether the newly-refused notes are lies too.
+    const { withNote, eitherSeat } = walk(120);
+    expect(withNote, 'the seat guard got hungrier — check what it is now refusing')
+      .toBeGreaterThanOrEqual(125);
+    expect(eitherSeat).toBeGreaterThan(withNote);
   });
 
   it('prefers a note whose opening really reaches the board', () => {
