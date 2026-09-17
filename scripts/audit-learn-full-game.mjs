@@ -30,6 +30,7 @@ import { Chess } from 'chess.js';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { pickStudentMove } from './audit-lib/student-player.mjs';
 // 🔒 THE GENERIC TEACH BAKE WAS RETIRED 2026-08-26 and this script imported it,
 // so it has died at load with ERR_MODULE_NOT_FOUND ever since — three weeks in
@@ -184,6 +185,22 @@ async function main() {
   if (process.env.AUDIT_UNMUTED === '1') console.log('[tts] UNMUTED — real synthesis, one game, granted');
   else await ctx.addInitScript(muteTtsForAudit);
   await ctx.addInitScript(`localStorage.setItem('auditRunId', ${JSON.stringify(RUN_ID)});`);
+  // 🔒 THE STREAM IS OPT-IN AND OFF BY DEFAULT SINCE 2026-09-11 (CLAUDE.md G2),
+  // and this script read narration by intercepting `/api/audit` POSTs — which a
+  // fresh prod device never makes. So every narration number it produced was
+  // structurally zero, and it printed TWO red rows off that zero:
+  // "a real middlegame went by with no computed beat" and "walked N plies and
+  // spoke on none of them". A full unmuted game on 2026-09-17 reported 0 spoken
+  // lines over 29 plies while the same surface had given another audit 107.
+  //
+  // The sanctioned fix is the loopback sidecar: the app posts to a local
+  // listener (never to prod), and the existing request hook sees those posts
+  // because they are page-initiated.
+  const listener = await startAuditListener();
+  console.log(`[listener] up at ${listener.url}`);
+  await ctx.addInitScript(({ url, secret }) => {
+    try { window.localStorage.setItem('auditStreamUrl', url); window.localStorage.setItem('auditStreamSecret', secret); } catch { /* ignore */ }
+  }, { url: listener.url, secret: listener.secret });
 
   const page = await ctx.newPage();
   const pageErrors = [];
@@ -194,7 +211,7 @@ async function main() {
   const rawPayloads = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));
   page.on('request', (req) => {
-    if (!req.url().includes('/api/audit')) return;
+    if (!req.url().includes('/api/audit') && !req.url().includes('/audit-stream')) return;
     try {
       const body = JSON.parse(req.postData() ?? '{}');
       rawPayloads.push(body);
@@ -481,6 +498,7 @@ async function main() {
 
   await page.screenshot({ path: `${OUT}/final.png`, fullPage: true }).catch(() => {});
   await browser.close();
+  await listener.stop().catch(() => {});
 
   await sleep(3000);
   const postEvents = await pullStream(before);
@@ -516,6 +534,7 @@ async function main() {
     // retirement — do not read a zero here as missing teaching.
     openingPliesTaught: [...new Set(bakedPlies)].sort((a, b) => a - b),
     linesSpoken: totalSpoken, silentPlies, falseClaims: allFalse, pageErrors, gameOverUi,
+    listenerEvents: listener.getCapturedEvents().length,
     clickTimings,
     slowestInputMs: clickTimings.reduce((m, c) => Math.max(m, c.ms), 0),
     inputsOver2s: clickTimings.filter((c) => c.ms > 2000).length,
@@ -524,7 +543,15 @@ async function main() {
   };
   writeFileSync(`${OUT}/report.json`, JSON.stringify(report, null, 2));
 
+  const captured = listener.getCapturedEvents().length;
   console.log('\n──────── SUMMARY ────────');
+  if (captured === 0) {
+    console.log('🚨 THE INSTRUMENT CAPTURED NOTHING — every narration number below is');
+    console.log('   meaningless. Do NOT read "0 lines spoken" as a silent coach; fix the');
+    console.log('   wire first (listener up? auditStreamUrl set? stream opt-in honoured?).');
+  } else {
+    console.log(`listener captured   ${captured} app audit events (instrument alive)`);
+  }
   console.log(`plies played        ${ply} (${report.result})`);
   console.log(`phases reached      ${phases.join(', ') || 'none'}`);
   console.log(`lines spoken        ${totalSpoken}   silent plies: ${silentPlies}`);
