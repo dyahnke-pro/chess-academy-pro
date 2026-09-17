@@ -17,8 +17,15 @@
  * Modes covered (coachMoveCommand's three, plus the consumption event):
  *   A. side-swap-open  — "play d4" at move 0: the coach TAKES White and plays it
  *   B. armed-pending   — mid-game "play Nf3": armed, then played as the NEXT reply
- *   C. pending-illegal — a dictated move the position outran must degrade
- *                        honestly (fall back, not freeze, not play something else)
+ *   C. corrected-last  — "no, take that back and play Nc3" AFTER the coach has
+ *                        moved: the played move comes OFF the board and the
+ *                        dictated one goes on. Both halves are asserted — a
+ *                        takeback that leaves the old piece standing is the
+ *                        silent half-failure an ack-only check cannot see.
+ *   D. back-then-type  — the student hits Takeback themselves, THEN types the
+ *                        move. This path routes through liveFenRef's re-sync,
+ *                        not through the correction branch, so it is proven
+ *                        separately rather than assumed from C.
  *
  * Muted (G1): this reads text and board state, never audio.
  */
@@ -54,6 +61,19 @@ async function waitForPiece(page, square, piece, ms = 45_000) {
     await sleep(1000);
   }
   return false;
+}
+
+/** Wait until the board differs from `before` (i.e. someone moved), return the new board. */
+async function waitForBoardChange(page, before, ms = 60_000) {
+  const key = (b) => Object.entries(b).sort().map(([k, v]) => `${k}${v}`).join(',');
+  const was = key(before);
+  const end = Date.now() + ms;
+  while (Date.now() < end) {
+    const now = await readBoard(page);
+    if (Object.keys(now).length > 0 && key(now) !== was) return now;
+    await sleep(1000);
+  }
+  return null;
 }
 
 async function say(page, text) {
@@ -133,6 +153,56 @@ async function main() {
   } else {
     rec('B1 armed-pending: the coach acknowledges it will play the dictated move', false, 'SKIPPED — A failed, no game to dictate into');
     rec('B2 armed-pending PLAYED: the coach\'s next reply IS the dictated Nf3', false, 'SKIPPED — A failed');
+  }
+
+  // ── C. correction: take back what you played and play THIS instead ───────
+  // 1.d4 d5 2.Nf3 is on the board. Nc3 is legal in the position BEFORE Nf3,
+  // so the correction must land. Both halves matter: f3 must EMPTY.
+  if (aOk) {
+    await say(page, 'no, take that back and play Nc3');
+    const cOn = await waitForPiece(page, 'c3', 'wN');
+    const board = await readBoard(page);
+    const cOff = board.f3 !== 'wN';
+    rec('C corrected-last: the dictated move REPLACES the one the coach played',
+      cOn && cOff,
+      cOn && cOff ? 'wN on c3 and f3 is clear — the coach undid its own move and played the dictated one'
+        : `c3 knight=${cOn ? 'yes' : 'no'}, f3 still occupied by ${board.f3 ?? 'nothing'}`);
+    if (cOn && cOff) { chess.undo(); chess.move('Nc3'); }
+  } else {
+    rec('C corrected-last: the dictated move REPLACES the one the coach played', false, 'SKIPPED — A failed');
+  }
+
+  // ── D. the student takes back with the BUTTON, then types the move ────────
+  // A different route into the same outcome: the undo happens outside the
+  // command handler, so this proves liveFenRef re-syncs and the dictation
+  // routes as play-it-now rather than arming for a turn that already passed.
+  const cLanded = rows.find((r) => r.id.startsWith('C '))?.pass === true;
+  if (cLanded) {
+    const beforeMine = await readBoard(page);
+    const mine = chess.moves({ verbose: true }).find((m) => m.san === 'Nf6') ?? chess.moves({ verbose: true })[0];
+    await page.locator(`[data-square="${mine.from}"]`).first().click({ timeout: 30_000, force: true });
+    await sleep(250);
+    await page.locator(`[data-square="${mine.to}"]`).first().click({ timeout: 30_000, force: true });
+    chess.move(mine.san);
+    console.log(`   › student played ${mine.san}`);
+    const afterMine = await waitForBoardChange(page, beforeMine, 30_000);
+    const coachReplied = afterMine ? await waitForBoardChange(page, afterMine, 90_000) : null;
+    if (!coachReplied) {
+      rec('D back-then-type: Takeback then "play Bf4" puts the bishop on f4', false,
+        'the coach never replied, so there was nothing to take back');
+    } else {
+      const tb = page.locator('[data-testid="teach-takeback"]');
+      await tb.waitFor({ state: 'visible', timeout: 15_000 });
+      await tb.click({ timeout: 30_000, force: true });
+      await sleep(1500);
+      await say(page, 'play Bf4');
+      const dOk = await waitForPiece(page, 'f4', 'wB');
+      rec('D back-then-type: Takeback then "play Bf4" puts the bishop on f4',
+        dOk, dOk ? 'wB on f4 after an undo the command handler never saw — liveFenRef re-synced'
+                 : 'f4 has no white bishop after 45s — the typed move did not route as play-it-now');
+    }
+  } else {
+    rec('D back-then-type: Takeback then "play Bf4" puts the bishop on f4', false, 'SKIPPED — C failed');
   }
 
   // ── the app's own account of what it did ─────────────────────────────────
