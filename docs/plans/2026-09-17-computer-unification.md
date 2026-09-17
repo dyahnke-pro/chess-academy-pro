@@ -199,11 +199,84 @@ Building the gate first turns Phase 4 from one big-bang change into a number
 that goes down every session, and makes any regression visible the moment it
 lands rather than at the end.
 
+## §2.6 PHASE 4, SHARPENED (measured 2026-09-17, after slice 1)
+
+**The ASSEMBLER is already shared. The FACT PRODUCTION is not.**
+`buildVoicePackage(facts, alreadySaid?, spokenKeys?)` owns ranking and the
+one-fact-one-utterance dedupe, and BOTH Teach (directly) and Review (through
+`coachFeatureService`) reach it. So "what gets spoken, in what order, without
+repeating" is unified already.
+
+What the page owns alone is everything BEFORE that call: producing the facts
+from ~62 computers. So Phase 4 is not "extract the narration layer" — it is:
+
+> **`buildLearnFacts(ctx) → VoiceFact[]`** — one producer the page calls
+> instead of orchestrating 62 computers inline, shaped so Play can call it too.
+
+That is a much better-defined job than the original phrasing, and it explains
+why the surfaces still diverge despite sharing the assembler: they agree on how
+to SAY things and disagree on what there is to say.
+
+### Pairwise overlap (non-infrastructure), measured
+* Teach ∩ Review — `voicePackage`, `chessConceptService`, `openingIntentCapture`, `liveTacticsContext`
+* Teach ∩ Play — `phaseTransitionDetector`, `openingDetectionService`, `weaknessAnalyzer`, `boardClaimValidator`, `groundedAnswer`, `tacticClaimValidator`, `liveTacticsContext`
+* Review ∩ Play — `accuracyService`, `missedTacticService`, `coachFeatureService`, `autoAnalyzeGame`, `liveTacticsContext`
+
+`liveTacticsContext` is the ONLY teaching computer all three share. Note Play
+reaches the REVIEW composer (`coachFeatureService`) while Teach does not — so
+Teach is the outlier, not review-vs-live.
+
+## §2.7 🚨 THIS PLAN IS THE *FACT* AXIS — THE LOCKED PLAN'S PHASE 7 IS THE *ADAPTIVE-DECIDER* AXIS, AND IT IS STILL UNTOUCHED
+
+Caught 2026-09-17 when David said "regain context soon to make sure you have not
+missed anything" and the two coach docs were re-read. He was right.
+
+`docs/plans/2026-09-08-unified-coach.md` **§Phase 7 — CONSOLIDATION** already
+specifies a consolidation, with a verified inventory, and it is NOT the one this
+document has been executing. This plan reconciled VOCABULARIES and SHAPES
+(fundamentals, concepts, PlanBeat). Phase 7 is about the ADAPTIVE DECIDERS —
+every rating-scaled decision that lives outside the one algo.
+
+Both are real. But Phase 7 is the LOCKED plan and it should have been checked
+BEFORE choosing an axis. Re-verified today, the 2026-09-08 inventory still holds:
+
+* **(A) importance/criticality** — `criticalityThresholds` (criticalityScan.ts:71)
+  is named as the de-facto ROOT: `computeImportance`, `minSwingPawns`,
+  `scanCriticality` and `computePositionFacts` all derive from it, so **absorb it
+  FIRST**. Then `computeImportance` (narrationImportance.ts:82),
+  `computeCriticality`/`criticalitySignalsFromAnalysis` (criticality.ts — the one
+  criticality decider NOT rating-scaled), `minSwingPawns` (reviewTurningPoint.ts),
+  `isCriticalThreat` + `alertSensitivityMultiplier`.
+* **(B) depth/ply** — `pvBandForRating`, `depthFor`, `getTacticLookahead`.
+* **(C) verbosity** — 7 sites, and a WARNING that comes with them: these encode
+  the USER's G5 choice. "The algo governs importance/depth; G5 stays the user's
+  own ceiling. Reconcile, don't erase the user's setting."
+* **(D) rating bands** — **two `ratingBandFor`** (`amateurPlayCache.ts:34` and
+  `theoryDeparture.ts:59` — a name collision with different returns) plus
+  `explorerBandForElo`: three overlapping explorer-band pickers. And
+  `hintStartTier` (skillScaling.ts:49) is exported but UNWIRED — verified again
+  2026-09-17, the only importer is its own test. Delete or wire it in the sweep.
+* **the completeness gate** — a test that every fact-computer and every tool is
+  REACHABLE by the selector/spine: "a note comes OUT / tool CAN be invoked
+  proof, not an import check".
+
+**Sequence from here:** finish or park the fact axis, then run Phase 7 starting
+at `criticalityThresholds`, because the plan says everything else derives from
+it. Do not start at the leaves.
+
 ## §3 DECISIONS LOG
 
 * **2026-09-17 — do NOT merge function bodies.** Reading the exports showed the
   pairs ask different questions of the board. The target is one vocabulary and
   one shape, not one function. (Claude; flagged to David in the inventory.)
+* **2026-09-17 — DO NOT extract the `activeTokenRef` counter.** It appears in
+  three hooks (`usePhaseNarration`, `usePositionNarration`, `useReviewPlayback`)
+  and is genuinely the same idiom: increment on a cancel-worthy event, capture
+  the token, compare before applying. It was considered for a Phase-4 slice and
+  REJECTED — unlike the forget-on-rewind rule, it has no subtlety to drift.
+  Increment/capture/compare is three lines with nothing to get wrong
+  differently, so a module would buy indirection and no safety. Extracting for
+  the sake of the number is churn.
 * **2026-09-17 — the "threats" pair was NOT a duplicate.** §0.2 listed it as
   one, inferred from dependency disjointness. Reading the code:
   `opponentIntent` is engine-fan derived (their candidates, prospective) and
