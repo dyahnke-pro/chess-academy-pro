@@ -236,3 +236,22 @@ AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY MATRIX_SECTION=actions node scripts/aud
 ```
 
 - `audit-stream-optin-prod.mjs` — the 2026-09-11 opt-in contract: a fresh device must make ZERO `/api/audit-stream` POSTs, and an explicitly-enabled one must still POST (both halves, so a broken stream cannot pass as "default off").
+
+### `audit-review-reopen-probe.mjs` — the INSTANT-REOPEN contract
+
+Separates two things the overhaul audit conflated for two days:
+
+| | measured | verdict |
+|---|---|---|
+| A first open | 91.3s, `review-segments-generated` | real analysis — slow is correct |
+| B reopen, annotations unchanged | **1.7s, `review-walk-skipped`** | the contract, and it HOLDS |
+| C reopen after the deep dive | rebuild, no spinner, no second dive | the key legitimately changed |
+
+The app's own audit event decides it, not a stopwatch: `review-walk-skipped`
+means the narration cache served it, `review-segments-generated` means it was
+rebuilt. A timing alone cannot tell those apart, which is exactly why the
+overhaul audit's `REOPEN instant-no-rerun` row spent two days failing the
+product for a rebuild that was correct.
+
+Muted. Run it whenever the review narration cache, its key, or the deep-dive
+annotation rewrite changes.
