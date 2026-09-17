@@ -69,6 +69,7 @@ import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
+import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import {
   createPhaseTransitionState,
@@ -6839,6 +6840,25 @@ export function CoachTeachPage(): JSX.Element {
   // THE STUDENT MODEL (Phase 1) — re-ranks the coach-reply teaching briefing
   // toward the holes this student keeps falling in. Ref-held; read at speak-time.
   const weaknessSignalsRef = useWeaknessSignals();
+  // …AND THE OTHER HALF OF IT (N2). Weaknesses say which holes they keep falling
+  // in and RAISE what leads; need says whether this student needs teaching HERE
+  // AT ALL — book departures in this opening, weakness match for what the ply
+  // teaches, line familiarity (five correct repetitions decay it to silence),
+  // their results. Review has computed it since N2; Learn never did, so the
+  // coach said the same thing on a line the student has played right five times.
+  // Cold / still loading reads as SPEAK — a fresh install meets a teaching coach.
+  const studentNeed = useStudentNeed({
+    rating: activeProfile?.currentRating ?? 1200,
+    studentColor: playerColor,
+    // Honest nulls: Learn tracks the opening by NAME, not by id/eco. Without
+    // them the departure + opening-score terms simply do not fire; familiarity
+    // and the weakness term — which are what make a repeated line go quiet —
+    // still do. A fabricated id would scope the departures to the wrong opening,
+    // which is worse than a term that stays silent.
+    openingId: null,
+    eco: null,
+    sans: gameRef.current.history,
+  });
   // SAY-ONCE across the lesson. A standing fact (the pawn structure, a pin in
   // waiting, which piece is doing the work) is re-derived at every taught
   // position, so without this the same sentence opens beat after beat.
@@ -8384,6 +8404,16 @@ export function CoachTeachPage(): JSX.Element {
                       analysis: studentBest,
                       evalBoard: (f) => stockfishEngine.evalBoard(f),
                       studentWeaknesses: weaknessSignalsRef.current,
+                      // WHOSE decision is this? `probe.turn()` is the side ABOUT
+                      // to move, and the teaching moment belongs to them. The
+                      // decider applies need only when that side is the student
+                      // (positionFacts' mover guard), so this is safe to pass
+                      // unconditionally — and `computeNeed`'s own opponent-move
+                      // rule never gets the chance to mute the coach.
+                      studentNeed: studentNeed.needAt({
+                        ply: probe.history().length + 1,
+                        studentMove: probe.turn() === (playerColor === 'white' ? 'w' : 'b'),
+                      }),
                       alreadySaid: saidStandingRef.current,
                     });
                     for (const t of pf.remember) saidStandingRef.current.add(t);

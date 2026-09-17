@@ -33,6 +33,7 @@ import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard } from './conceptEngine';
 import { liveMethodBeatFor, habitIsOwed } from './methodBeat';
 import { habitNeedFrom } from './coachDecider';
+import type { NeedVerdict } from './needScore';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -91,6 +92,33 @@ export interface PositionFactsInput {
    *  OPTIONAL + inert: omitted or empty → identical behavior to before (the wire
    *  does nothing until a surface feeds it). NEVER passed on kid surfaces. */
   studentWeaknesses?: readonly WeaknessSignal[];
+  /** THE STUDENT'S NEED AT THIS PLY (N2) — the second half of the student model,
+   *  and the half the live surfaces never had.
+   *
+   *  `studentWeaknesses` above says which holes this student keeps falling in,
+   *  and it RAISES what leads. It cannot say the other thing: whether this
+   *  student needs teaching HERE AT ALL. That verdict is `computeNeed` —
+   *  book-departure history in this opening, weakness match for what the ply
+   *  teaches, line familiarity (five correct repetitions DECAY it to silence),
+   *  and their results in the opening. Review has computed it since N2; the
+   *  live surfaces never did, so the coach repeated itself on a line the
+   *  student has played right five times and pressed no harder on the line
+   *  they keep losing. That is the "narrate where the data says they need it"
+   *  standard (David 2026-09-15) applied to the surface they actually play on.
+   *
+   *  A VERDICT, not a context: `computeNeed` is pure but the context behind it
+   *  is a Dexie read, and this module stays synchronous and pure. The caller
+   *  loads once per game (`useStudentNeed`) and computes per ply.
+   *
+   *  🚨 THE DECIDER ONLY EVER SEES THIS ON THE STUDENT'S OWN PLY. `computeNeed`
+   *  returns `speak: false` for an opponent move by contract — correct in
+   *  review, where the walk narrates the student's moves. Live narrates BOTH
+   *  sides ("they answer …e6"), so handing it through on an opponent ply would
+   *  mute half of every game. On those plies the decider gets `null`, which
+   *  reads as speak, and importance alone decides — exactly as before.
+   *
+   *  OPTIONAL + inert: omitted → identical behaviour to before. */
+  studentNeed?: NeedVerdict | null;
 }
 
 export interface PositionFactsResult {
@@ -446,7 +474,14 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       evalCpWhitePov,
       wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
     },
-    { rating, weaknesses: input.studentWeaknesses ?? [] },
+    {
+      rating,
+      weaknesses: input.studentWeaknesses ?? [],
+      // The mover guard — see `studentNeed` on the input. Need answers "does
+      // THIS STUDENT need teaching here", which is only a question about their
+      // own move; on the opponent's ply it is null and importance decides.
+      need: input.moverColor === input.studentColor ? (input.studentNeed ?? null) : null,
+    },
     {
       facts: composed.map((c) => c.text),
       squares: new Map(composed.flatMap((c) => (c.squares && c.squares.length ? [[c.text, c.squares] as const] : []))),

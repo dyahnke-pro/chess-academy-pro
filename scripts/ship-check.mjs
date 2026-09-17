@@ -411,6 +411,9 @@ const GATE_TESTS = [
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──
   'src/services/bucketPipelineAudit.test.ts', // captured answer → right bucket + drill (delivery) + ranking/dedup/SRS (organization)
   'src/hooks/useDiscussionPractice.test.ts',  // faucet: rating-adaptive slip picker, good-move non-blocking line, response logging
+  // The live surfaces see the student's NEED, and only on their own ply — the
+  // mover guard is what stops half of every game going mute.
+  'src/services/liveNeedGate.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',
