@@ -3,6 +3,7 @@ import type { BoardHighlight } from '../types';
 import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
 import { findHangingPieces } from './tacticClassifier';
 import { capturesWinMaterial } from './positionReadingService';
+import { isRealPin } from './pinGeometry';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -208,10 +209,21 @@ function findPins(chess: Chess): TacticPattern[] {
         const first = piecesOnRay[0];
         const second = piecesOnRay[1];
 
+        // A PIN THE FRONT PIECE CANNOT LEAVE IS NOT A PIN (2026-09-17). Prod
+        // spoke "rook on h1 pins pawn on h7 against rook on h8" — the pawn's
+        // pushes stay on the h-file, so nothing was ever exposed. The escape
+        // test IS the concept engine's own invariant; `pinGeometry` holds it
+        // once so the two detectors cannot drift apart again.
         if (
           first.color === enemyColor &&
           second.color === enemyColor &&
-          PIECE_VALUE[second.type] > PIECE_VALUE[first.type]
+          isRealPin({
+            chess,
+            dir,
+            pinned: first.square,
+            frontValue: PIECE_VALUE[first.type] ?? 0,
+            behindValue: PIECE_VALUE[second.type] ?? 0,
+          })
         ) {
           pins.push({
             type: 'pin',

@@ -222,6 +222,12 @@ async function askAndPlay(page, listener, ask, label) {
   // must not satisfy this one (2026-09-15: the first game's pin ended the
   // second run on its first tick).
   const spokenStart = spokenLines(listener).length;
+  // Committed moves are cumulative on the listener too. Without this baseline
+  // the second ask reads the FIRST game's coach moves and declares a game
+  // started before a board exists — which is how the typo run opened with
+  // "coach played (nothing read yet)" and then played from ply 0 against a
+  // mirror that was already wrong (2026-09-17).
+  const sansStart = committedSans(listener).length;
 
   // ── the game has to START ─────────────────────────────────────────────────
   //
@@ -231,16 +237,18 @@ async function askAndPlay(page, listener, ask, label) {
   // unanswered is the harness failing, not the coach.
   let walkthrough = null;
   let boardUp = false;
+  let tapped = false;
   while (Date.now() - started < LESSON_BUDGET_MS) {
     for (const t of WALKTHROUGH_TESTIDS) {
       if (!walkthrough && (await page.locator(`[data-testid="${t}"]`).count()) > 0) walkthrough = t;
     }
     if (walkthrough) break;
     const chips = page.locator('[data-testid^="message-choice-chip-"], [data-testid^="coach-choice-chip-"], [data-testid^="teach-picker-openings"] button');
-    if ((await chips.count()) > 0) {
+    if (!tapped && (await chips.count()) > 0) {
       const labels = await chips.allInnerTexts();
       const want = labels.findIndex((l) => CHIP_PICK.test(l));
       if (want >= 0) {
+        tapped = true;
         await chips.nth(want).click({ force: true }).catch(() => {});
         console.log(`[picker] ${label}: tapped "${labels[want].replace(/\s+/g, ' ').slice(0, 60)}" of ${labels.length} chips`);
         await page.waitForTimeout(2500);
@@ -249,7 +257,7 @@ async function askAndPlay(page, listener, ask, label) {
     }
     // The coach opens because the student took Black. Its first committed move
     // IS the signal that a game started — not a panel, not a sentence.
-    if (committedSans(listener).length > 0) { boardUp = true; break; }
+    if (committedSans(listener).length > sansStart) { boardUp = true; break; }
     if (!boardUp && (await page.locator('[data-square="e4"]').count()) > 0) {
       const placed = await readPlacement(page);
       if (placed.e4 === 'wP' || placed.d4 === 'wP' || placed.c4 === 'wP' || placed.f4 === 'wP') { boardUp = true; break; }
@@ -267,7 +275,14 @@ async function askAndPlay(page, listener, ask, label) {
 
   // ── play it ───────────────────────────────────────────────────────────────
   const chess = new Chess();
-  await absorbOneMove(page, chess);
+  {
+    // The coach has White and opens on its own. Read that off the board before
+    // the student moves, or the mirror is a move behind for the whole game.
+    const openBy = Date.now() + 60_000;
+    while (Date.now() < openBy && chess.history().length === 0) {
+      if (!(await absorbOneMove(page, chess))) await page.waitForTimeout(2500);
+    }
+  }
   console.log(`[open] ${label}: coach played ${chess.history().at(-1) ?? '(nothing read yet)'}`);
   const moves = [];
   let onBook = true;

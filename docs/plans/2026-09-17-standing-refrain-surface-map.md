@@ -77,3 +77,23 @@ things the terse form does not: a NEED GATE (silence it when the student is
 already attacking or blockading the square — otherwise it is a scold) and a
 CADENCE. It is also tense-odd in review's retrospective register. Build the
 reference first, read it on a real game, then decide.
+
+## 7. "A third composer bypasses the fold" — CHECKED 2026-09-17, it does not
+
+Raised as a suspected hole and disproven by reading the call order, so nobody
+re-derives it:
+
+`assessPositionalEdge` has exactly three consumers and **all three land in
+`segments[].narration` before the fold runs**:
+
+| consumer | where | when |
+|---|---|---|
+| per-ply `[verdict]` facet | `reviewFullData:415` | inside `buildReviewSegments` |
+| "step back and take stock" | `coachFeatureService:2297` | inside `buildReviewSegments` |
+| projection terminal `verdictAtEnd` | `coachFeatureService:2791` | inside `augmentWithProjections` |
+
+`generateReviewNarration` awaits `augmentWithProjections` (4048) and only then
+runs the fold (4080). So the ordering the design called for is the ordering the
+code has, and there is no fourth path. If a NEW composer is ever added it must
+write to `segment.narration` before that line — that, and not the fold, is the
+thing to check.

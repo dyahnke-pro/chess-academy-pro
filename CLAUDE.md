@@ -3203,6 +3203,43 @@ Spoken text comes from `pickNarrationText(annotation, length)` (`src/services/wa
 
 ### Narration Voice Rules (IMPORTANT)
 
+### 🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).
+
+A student PLAYING the Scandinavian as Black heard, on move three:
+
+> "Here's the whole story of the Scandinavian in a single move. **Black snatches
+> your e-pawn** — but look what it costs **him**…"
+
+That is `antiScandinavian.ts`: the lesson for the WHITE side, addressed to a
+Black student, handing them the opponent's pieces. Every guard the app had
+passed it, and each one was correct at its own job:
+
+- the BOARD matched — the position after `1.e4 d5 2.exd5 Qxd5 3.Nc3` is the same
+  board whichever seat you are in;
+- the OPENING NAME did not conflict — both lessons are about the Scandinavian;
+- every CLAIM was board-true — `narrationAccuracy` had nothing to object to.
+
+**The rule.** A teaching claim that addresses the student ("your e-pawn", "you
+can pile on it") is SEAT-RELATIVE, so the seat is part of what identifies it —
+not a presentation detail applied afterwards. Any selector that hands such a
+claim to a live game takes the student's seat as a **REQUIRED** parameter and
+refuses the other side's. Required, so a new caller must decide its answer
+instead of inheriting a silent default — the same reason the seat parameter on
+`describeThreatRecognition` is required.
+
+**And the seat is usually already there.** `LessonScript.orientation` has been a
+required field the whole time; the voiced corpus carries `studentSide`; the
+repertoire entries carry `color`. Nothing had to be inferred and nothing had to
+be added — the data was sitting on the object being indexed and no selector read
+it. Before writing a heuristic that guesses a side from prose, look for the field
+that already states it.
+
+**Sweep status:** `curatedBeatAt` (2026-09-17, `IndexedBeat.seat` from
+`lesson.orientation`), `noteAtPosition` / `teachingSourceForBoard` /
+`supportNoteForPly` / `noteCoverageForLine` (2026-09-17, `noteSeatMatches`).
+When you add a new teaching source, ask which seat it is written from before you
+ask which position it is about.
+
 ### 🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").
 
 The coach spoke a different perspective on different tabs — sometimes "we/our", sometimes "you", sometimes by color — and a live tester couldn't tell whose piece a sentence meant. ONE standard, everywhere:

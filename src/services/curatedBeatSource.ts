@@ -72,6 +72,11 @@ interface IndexedBeat {
   lesson: string;
   /** The opening this beat's lesson teaches — the key before any `::`. */
   openingId: string;
+  /** 🔒 THE SEAT THE LESSON IS WRITTEN FROM (`LessonScript.orientation`). A
+   *  beat addresses the student directly — "Black snatches YOUR e-pawn" — so a
+   *  beat authored for White is not merely less useful to a Black student, it
+   *  is WRONG: it hands them the opponent's pieces. */
+  seat: 'white' | 'black';
   say: string;
   moves: string[];
 }
@@ -128,6 +133,7 @@ function indexSome(limit: number): boolean {
             id: `${key}#${beat.id}`,
             lesson: lesson.title,
             openingId: key.split('::')[0],
+            seat: lesson.orientation,
             say,
             moves: beat.moves,
           };
@@ -171,10 +177,33 @@ export function warmCuratedBeatIndexSync(): void {
 export function curatedBeatAt(
   historySans: readonly string[],
   fen: string,
-  exclude?: ReadonlySet<string>,
+  exclude: ReadonlySet<string> | undefined,
   /** The opening actually being played. A beat may only teach in ITS OWN
    *  opening — see `MIN_BEAT_PLIES` for why the board cannot enforce this. */
-  openingName?: string | null,
+  openingName: string | null,
+  /**
+   * 🔒 THE SEAT THE STUDENT IS SITTING IN. REQUIRED — a new caller must decide
+   * its answer rather than inherit a silent default (the same reason
+   * `describeThreatRecognition`'s seat parameter is required).
+   *
+   * Found on prod 2026-09-17, reading a real game. A student PLAYING the
+   * Scandinavian as Black heard, on move three:
+   *
+   *     "Here's the whole story of the Scandinavian in a single move. Black
+   *      snatches your e-pawn — but look what it costs him…"
+   *
+   * That is `antiScandinavian.ts`, the lesson for the WHITE side, and every
+   * guard here passed it: the board is identical whichever seat you are in, the
+   * opening NAME does not conflict (both lessons are about the Scandinavian),
+   * and every claim in the prose is board-true. Only the seat separates a
+   * lesson about beating the Scandinavian from a lesson about playing it, and
+   * the seat was the one thing nothing read — although `LessonScript` has
+   * carried `orientation` as a required field the whole time.
+   *
+   * `null` means the seat is genuinely unknown (a static position with no game
+   * around it); the guard then stands down rather than guessing.
+   */
+  studentSide: 'white' | 'black' | null,
 ): CuratedBeat | null {
   try {
     // Deliberately does NOT build on demand: that is the 5s freeze. Until the
@@ -193,6 +222,9 @@ export function curatedBeatAt(
       if (beat.moves.length < MIN_BEAT_PLIES) continue;
       if (isLessonScaffolding(beat.say)) continue;
       if (noteOpeningConflicts(openingNameFor(beat.openingId), openingName)) continue;
+      // A lesson written from the other side of the board addresses the
+      // student as the opponent. Never speak it.
+      if (studentSide && beat.seat !== studentSide) continue;
       // Already true by construction (the FEN matches), so this only ever fires
       // on a beat whose prose outran its own board — which the build-time
       // accuracy gate should have caught first.

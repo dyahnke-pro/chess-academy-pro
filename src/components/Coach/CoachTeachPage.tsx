@@ -197,6 +197,7 @@ import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
 import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
+import { tacticInvariant } from '../../services/conceptEngine';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
 import { backwardLook } from '../../services/backwardLook';
@@ -1657,6 +1658,25 @@ export function CoachTeachPage(): JSX.Element {
    *  passed in as `priorKeys` and topped up with each spoken package's
    *  `spokenSentenceKeys`. Cleared on a new game. */
   const spokenKeysRef = useRef(new Set<string>());
+  /** 🔒 THE CONCEPT IS TAUGHT IN THE GAME, NOT ONLY IN THE LECTURE (found
+   *  reading a real prod game, 2026-09-17: 107 spoken lines, not one carrying a
+   *  computed invariant). `landedTacticTeaching` splices the engine's invariant
+   *  into a BAKED walkthrough beat, so a student who asks to be TAUGHT an
+   *  opening hears "a pin freezes the piece in front" — and a student PLAYING
+   *  one hears "There's a pin here for you — have a look." Same computer, same
+   *  detected pattern, and the teaching reached only the surface that was not a
+   *  game.
+   *
+   *  The invariant names the CONCEPT, never the square, so it does not breach
+   *  the honesty contract — the move the student is meant to find stays
+   *  withheld. What changes is that they are told what the shape they are
+   *  hunting for actually does.
+   *
+   *  Taught ONCE per type per game, then referred to by name: the second pin of
+   *  a game is a new instance of a lesson already given, exactly the rule
+   *  `standingRefrains` applies in review. Cleared with the other per-game
+   *  memories in `startOpeningPlay`. */
+  const conceptTaughtRef = useRef<Set<string>>(new Set());
   /** The last gem callout spoken, so a gem that stays live across plies is
    *  named once rather than nagged every move. */
   const gemSeenRef = useRef<string | null>(null);
@@ -1958,6 +1978,7 @@ export function CoachTeachPage(): JSX.Element {
     planSaidRef.current.clear();
     positionalSaidRef.current.clear();
     spokenKeysRef.current.clear();
+    conceptTaughtRef.current.clear();
     gameRef.current.setOrientation(studentSide);
     setPlayerColor(studentSide);
     liveFenRef.current = gameRef.current.fen;
@@ -1986,8 +2007,19 @@ export function CoachTeachPage(): JSX.Element {
     // the coach's d4 himself). Same resolver the colour selector uses — the
     // baked spine and the opening's own book line first, engine behind them —
     // so an opening with no book entry still gets a first move.
+    // 🔒 WHO OWNS THE LINE IS NOT THE SAME QUESTION AS WHO IS BLACK (prod tape,
+    // 2026-09-17). This branch said "I'll play the X" on EVERY black-seat game,
+    // so a student who asked to play the Scandinavian themselves — a Black
+    // defence, so they take Black, so the coach opens — was told the coach
+    // would be playing it. Whether the coach owns the line is a separate fact:
+    // it owns the line exactly when the student is NOT sitting in the seat the
+    // line belongs to. The coach still opens either way; only the sentence
+    // changes.
+    const coachOwnsLine = inferStudentSideFromName(openingName) !== studentSide;
     if (studentSide === 'black') {
-      say(`You're Black — I'll play the ${openingName}.`);
+      say(coachOwnsLine
+        ? `You're Black — I'll play the ${openingName}.`
+        : `You're Black — play the ${openingName} and I'll talk you through it. I'll open.`);
       void (async () => {
         const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
         if (
@@ -2006,7 +2038,9 @@ export function CoachTeachPage(): JSX.Element {
         }
       })();
     } else {
-      say(`You're White — play the ${openingName} and I'll talk you through it.`);
+      say(coachOwnsLine
+        ? `You're White — open, and I'll answer with the ${openingName}.`
+        : `You're White — play the ${openingName} and I'll talk you through it.`);
     }
   }, [playDictatedMove, walkthrough]);
 
@@ -6992,6 +7026,16 @@ export function CoachTeachPage(): JSX.Element {
       // student, call the net at mate-in-N (David 2026-08-23), falling back to
       // the board-pattern mate-in-1 when no engine read is in hand. The move is
       // WITHHELD (honesty contract) — name the mate, let them find the start.
+      /** The engine's invariant for this pattern, the FIRST time the game
+       *  meets it. Concept only — no squares, so nothing the student is meant
+       *  to find is handed over. */
+      const conceptTail = (type: string | null | undefined): string => {
+        if (!type || conceptTaughtRef.current.has(type)) return '';
+        const inv = tacticInvariant(type);
+        if (!inv) return '';
+        conceptTaughtRef.current.add(type);
+        return ` Remember — ${inv.full}`;
+      };
       const engineMateN = pendingEngineMateRef.current
         && samePosition(pendingEngineMateRef.current.fen, args.fenAfterReply)
         ? pendingEngineMateRef.current.movesToMate
@@ -7018,7 +7062,7 @@ export function CoachTeachPage(): JSX.Element {
           // underscores taken out. `tacticWord` is the same map the plan lane
           // uses; an unnamed pattern says nothing rather than saying its id.
           const word = tacticWord(t.type);
-          tacticLine = word ? `There's a ${word} here for you — have a look.` : null;
+          tacticLine = word ? `There's a ${word} here for you — have a look.${conceptTail(t.type)}` : null;
           myTacticType = word ? t.type : null;
           if (word) tacticSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         }
@@ -7034,7 +7078,7 @@ export function CoachTeachPage(): JSX.Element {
         const ends = [t.squares[0] ?? '', t.squares[t.squares.length - 1] ?? ''];
         threatKey = `vs:${t.type}:${ends.join('')}`;
         threatSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
-        threatLine = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.`;
+        threatLine = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.${conceptTail(t.type)}`;
         // SAY WHOSE, WHEN BOTH ARE THE SAME SHAPE. David's transcript, 02:50:
         // "Watch out — queen on a5 pins knight on c3 against king on e1.
         //  There's a real pin here for you — look for it."
@@ -7045,7 +7089,9 @@ export function CoachTeachPage(): JSX.Element {
         // read correctly alone and collide only when they land on the same
         // tactic type in one utterance, so that is where it is fixed.
         if (myTacticType && myTacticType === t.type) {
-          tacticLine = `You've got a ${tacticWord(myTacticType) ?? 'chance'} of your own here — a different one. See it?`;
+          // The concept has just been taught on the threat line above, so this
+          // one refers back to it rather than repeating the lesson.
+          tacticLine = `You've got a ${tacticWord(myTacticType) ?? 'chance'} of your own here — a different one. See it?${conceptTail(myTacticType)}`;
         }
       } else if (tctx.threats.length > 0) {
         // NOT ON THE BOARD YET — AND THAT IS THE POINT. The branch above warns
@@ -7367,7 +7413,7 @@ export function CoachTeachPage(): JSX.Element {
       // corpus leads and the masterclass beat fills where the corpus can't.
       const beat = noteLine
         ? null
-        : curatedBeatAt(history, args.fenAfterReply, curatedBeatSeenRef.current, announcedOpeningNameRef.current);
+        : curatedBeatAt(history, args.fenAfterReply, curatedBeatSeenRef.current, announcedOpeningNameRef.current, playerColor);
       if (beat) {
         curatedBeatSeenRef.current.add(beat.id);
         curatedLine = beat.text;

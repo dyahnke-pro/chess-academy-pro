@@ -7,6 +7,7 @@ import type {
   UpcomingTactic,
 } from '../types/tacticTypes';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import { isRealPin } from './pinGeometry';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -224,10 +225,19 @@ function detectPin(
     const first = piecesOnRay[0];
     const second = piecesOnRay[1];
 
+    // Same escape test as `tacticsDetector.findPins`, from the same helper —
+    // see `pinGeometry.ts`. Value and geometry alone called a pawn pinned
+    // along its own file a pin.
     if (
       first.color === oppositeColor(movingColor) &&
       second.color === oppositeColor(movingColor) &&
-      pieceValue(second.type) > pieceValue(first.type)
+      isRealPin({
+        chess: chessAfter,
+        dir,
+        pinned: first.square,
+        frontValue: pieceValue(first.type),
+        behindValue: pieceValue(second.type),
+      })
     ) {
       return {
         type: 'pin',

@@ -70,7 +70,7 @@ describe('beats vs corpus — which one can speak, and where', () => {
         t.plies += 1;
         byPhase[phase].plies += 1;
 
-        const beat = curatedBeatAt(history, fen, beatSeen, entry.name ?? null);
+        const beat = curatedBeatAt(history, fen, beatSeen, entry.name ?? null, entry.color === 'black' ? 'black' : 'white');
         const note = noteAtPosition(history, fen, entry.name ?? null, entry.color ?? null);
         // A note that cannot be spoken has not taught anything, so require
         // speakable text on both sides rather than mere existence.
