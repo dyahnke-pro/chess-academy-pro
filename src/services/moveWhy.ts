@@ -10,12 +10,28 @@
 // eyeing key squares" (the vague filler David banned, 2026-08-12). When the
 // position gives nothing concrete to say, it returns '' (silence over filler).
 import { Chess } from 'chess.js';
+import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause } from './keySquares';
+import { andList } from '../utils/andList';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CENTER = new Set(['d4', 'd5', 'e4', 'e5']);
-const BIG_CENTER = new Set(['c4', 'c5', 'd4', 'd5', 'e4', 'e5', 'f4', 'f5']);
+// Q1 ONLY (pawn occupation). Every "what does this piece EYE" filter below now
+// uses `keyTargetSquares` — filtering this list is why the coach could never
+// say a developing piece looks at f7. See keySquares.ts.
+const BIG_CENTER = new Set(CENTRAL_SQUARES);
 
 type Sq = string;
+
+/** Q2 — the squares from `targets` worth NAMING: the centre, the opponent's
+ *  standing holes, and the squares beside their king. One helper so the three
+ *  call sites below cannot drift apart again. */
+function q2(targets: readonly Sq[], board: Chess, mover: 'w' | 'b'): Sq[] {
+  const allowed = new Set(keyTargetSquares(board, mover === 'w' ? 'white' : 'black'));
+  return targets.filter((s) => allowed.has(s) && (() => {
+    const occ = board.get(s as Parameters<Chess['get']>[0]);
+    return !occ || occ.color !== mover; // own piece there = defended, not eyed
+  })());
+}
 const FILES = 'abcdefgh';
 function sq(file: number, rank: number): Sq | null {
   if (file < 0 || file > 7 || rank < 0 || rank > 7) return null;
@@ -126,21 +142,23 @@ export function computeMoveWhyDetail(fenBefore: string, san: string): MoveWhy {
 
   // A developing minor piece or pawn that grips real central squares → name them.
   if (piece === 'n' || piece === 'b') {
-    const central = targets.filter((s) => BIG_CENTER.has(s)).slice(0, 2);
-    if (central.length) return { text: `The ${name} to ${to} develops, covering ${central.join(' and ')}.`, squares: [to, ...central] };
+    // Q2, and no slice (G4.5) — the cap dropped computed squares the student
+    // never heard, and would have cut f7 straight back out.
+    const central = q2(targets, after, color);
+    if (central.length) return { text: `The ${name} to ${to} develops, covering ${andList(central)}${kingZoneClause(kingZoneAmong(central, after, color === 'w' ? 'white' : 'black'))}.`, squares: [to, ...central] };
     return { text: `The ${name} to ${to} comes into the game.`, squares: [to] };
   }
   if (piece === 'p') {
     const guards = targets.filter((s) => BIG_CENTER.has(s));
-    if (guards.length) return { text: `The pawn to ${to} stakes out ${guards.join(' and ')}.`, squares: [to, ...guards] };
+    if (guards.length) return { text: `The pawn to ${to} stakes out ${andList(guards)}.`, squares: [to, ...guards] };
     return none;
   }
   if (piece === 'r') {
     return { text: `The rook swings to ${to}, eyeing the file.`, squares: [to] };
   }
   if (piece === 'q') {
-    const central = targets.filter((s) => BIG_CENTER.has(s)).slice(0, 2);
-    if (central.length) return { text: `The queen to ${to} eyes ${central.join(' and ')}.`, squares: [to, ...central] };
+    const central = q2(targets, after, color);
+    if (central.length) return { text: `The queen to ${to} eyes ${andList(central)}${kingZoneClause(kingZoneAmong(central, after, color === 'w' ? 'white' : 'black'))}.`, squares: [to, ...central] };
     return none;
   }
   return none;

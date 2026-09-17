@@ -424,6 +424,9 @@ const GATE_TESTS = [
   // The perspective law was written into five prompts in five wordings, and
   // every copy banned we/our while permitting "he's up a point of material".
   'src/services/perspectiveRule.test.ts',
+  // ONE list answered TWO questions in five files, and the difference was f7 —
+  // the coach could not say Ng5 eyes it.
+  'src/services/keySquares.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',

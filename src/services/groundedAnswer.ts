@@ -13,6 +13,7 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { Chess } from 'chess.js';
+import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
   legalSeeGain, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
@@ -90,7 +91,9 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
 
 const FILES = 'abcdefgh';
 const RANKS = '12345678';
-const CENTRAL_SQ = new Set(['c4', 'd4', 'e4', 'f4', 'c5', 'd5', 'e5', 'f5', 'd3', 'e3', 'd6', 'e6']);
+// ONE Q2 vocabulary (`keySquares.ts`). This was a fourth private copy — the
+// centre plus the standing holes, and, like the other three, no f7.
+const CENTRAL_SQ = new Set(POSITIONAL_TARGETS);
 const PIECE_WORD_TO_SYM: Record<string, PieceSymbol> = {
   pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k',
 };
@@ -2163,7 +2166,8 @@ export function describeMoveGeometry(
   return null;
 }
 
-const CENTRAL_SQUARES: ReadonlyArray<string> = ['d4', 'd5', 'e4', 'e5', 'c4', 'c5', 'f4', 'f5'];
+// CENTRAL_SQUARES / keyTargetSquares / kingZoneAmong live in `keySquares.ts` —
+// TWO vocabularies for TWO questions, shared by all four sites that had the bug.
 
 /** True when NO enemy pawn can ever advance to attack `sq` — the classic
  *  outpost test. For a white piece on (file, rank) the attacking squares are
@@ -2249,9 +2253,17 @@ export function quietPurposePhrase(
         ? `stakes out the centre with the pawn to ${mv.to}`
         : null;
     }
-    // A developed piece that now eyes central squares.
-    const eyes = CENTRAL_SQUARES.filter((s) => {
-      try { return b.attackers(s as Square, mc).includes(mv.to); } catch { return false; }
+    // A developed piece that now eyes a square worth naming — the centre AND
+    // the squares beside their king. See `keyTargetSquares`.
+    // A square held by the mover's OWN piece is DEFENDED, not "eyed" — Ng5
+    // read as "eyeing e4" where e4 is White's own pawn. `reviewMoveTeaching`
+    // already excluded those (`controlsCentral`); this lane did not.
+    const eyes = keyTargetSquares(b, moverColor).filter((s) => {
+      try {
+        const occ = b.get(s as Square);
+        if (occ && occ.color === mc) return false;
+        return b.attackers(s as Square, mc).includes(mv.to);
+      } catch { return false; }
     });
     if (eyes.length > 0) {
       // A KING never "develops" — development is about bringing pieces off the
@@ -2270,7 +2282,11 @@ export function quietPurposePhrase(
       // above: say what the move actually is.
       const homeRank = mc === 'w' ? '1' : '8';
       const verb = mv.from[1] === homeRank ? 'develops' : 'repositions';
-      return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, eyeing ${andList(eyes)}`;
+      // Pressure on the king's own squares is a different kind of fact from
+      // central influence, and saying so is the teaching — "eyeing e4 and f7"
+      // buries the point of Ng5 in a list.
+      return `${verb} the ${REVIEW_PIECE_NAME[mv.piece]} to ${mv.to}, eyeing ${andList(eyes)}`
+        + kingZoneClause(kingZoneAmong(eyes, b, moverColor));
     }
     return null;
   } catch {
@@ -2412,15 +2428,18 @@ export function assembleMovePurpose(opts: {
       : `The pawn advances to ${mv.to}, grabbing space on the ${'abc'.includes(mv.to[0]) ? 'queenside' : 'kingside'}.`);
   } else {
     const mc = opts.moverColor === 'white' ? 'w' : 'b';
-    const eyes = CENTRAL_SQUARES.filter((s) => {
+    const eyes = keyTargetSquares(afterBoard, opts.moverColor).filter((s) => {
       try {
+        const occ = afterBoard.get(s as Square);
+        if (occ && occ.color === mc) return false; // own piece there = defended, not eyed
         return afterBoard.attackers(s as Square, mc).includes(mv.to);
       } catch {
         return false;
       }
     });
     if (eyes.length > 0) {
-      clauses.push(`The ${pieceName} develops to ${mv.to}, eyeing ${andList(eyes)}.`);
+      clauses.push(`The ${pieceName} develops to ${mv.to}, eyeing ${andList(eyes)}`
+        + `${kingZoneClause(kingZoneAmong(eyes, afterBoard, opts.moverColor))}.`);
     } else {
       clauses.push(`The ${pieceName} develops to ${mv.to}.`);
     }

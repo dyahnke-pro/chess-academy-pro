@@ -17,6 +17,8 @@
 // pulls from without an import cycle.
 
 import { Chess } from 'chess.js';
+import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
+import { andList } from '../utils/andList';
 import type { Square } from 'chess.js';
 import { landingIsSafe } from './positionReadingService';
 import { classifyPhase } from './gamePhaseService';
@@ -54,9 +56,9 @@ export interface MoveFundamental {
 const PIECE_NAME: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
-/** The squares "fighting for the center" is allowed to name. */
-const CENTER: readonly string[] = ['d4', 'd5', 'e4', 'e5', 'c4', 'c5', 'f4', 'f5'];
-const CORE_CENTER: readonly string[] = ['d4', 'd5', 'e4', 'e5'];
+/** The squares "fighting for the center" is allowed to name — Q1, occupation.
+ *  The Q2 set (what a piece EYES) is `keyTargetSquares`; see keySquares.ts. */
+const CENTER: readonly string[] = [...CENTRAL_SQUARES];
 
 function fileOf(sq: string): string { return sq[0]; }
 function rankOf(sq: string): number { return Number(sq[1]); }
@@ -88,7 +90,9 @@ function isOutpost(board: Chess, sq: string, mover: 'w' | 'b'): boolean {
 
 /** Central squares the piece on `to` now attacks (from the after-move board). */
 function eyesCenter(after: Chess, to: string, mover: 'w' | 'b'): string[] {
-  return CENTER.filter((s) => {
+  // Q2 — the centre AND the squares beside their king. Filtering the Q1 list
+  // here is why `Bc4` could never be said to look at f7.
+  return keyTargetSquares(after, mover === 'w' ? 'white' : 'black').filter((s) => {
     try { return after.attackers(s as Square, mover).includes(to as Square); }
     catch { return false; }
   });
@@ -224,10 +228,26 @@ export function computeMoveFundamentals(
   const homeRank = mover === 'w' ? 1 : 8;
   if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && !out.some((f) => f.id === 'outpost')) {
     const name = PIECE_NAME[mv.piece];
-    const eyes = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s)).slice(0, 2);
+    // NO SLICE (G4.5). This was `.filter(CORE_CENTER).slice(0, 2)` — two
+    // truncations stacked: the narrow four-square centre, then a hard cap of
+    // two. Between them the f7 a developing bishop stares at could not survive
+    // even once it was computed.
+    const eyes = eyesCenter(after, mv.to, mover);
+    const seat = mover === 'w' ? 'white' as const : 'black' as const;
+    const nearKing = kingZoneAmong(eyes, after, seat);
+    // "fighting for the center on <list>" may only list CENTRAL squares — a
+    // hole or a king-zone square in that list makes the sentence false, which
+    // is the same defect the 2026-07-22 wing-pawn fix removed. Each kind of
+    // square gets the clause that is true of it.
+    const central = eyes.filter((s) => CENTRAL_SQUARES.includes(s));
+    // "leaning on e6", not "the hole on e6" — at move three Black's e-pawn is
+    // still home, so e6 is an empty square, not yet a hole. Say what is true.
+    const holes = eyes.filter((s) => standingHoles(seat).includes(s) && !nearKing.includes(s));
     const homeAfter = countHomeMinors(after, mover);
     const weight = Math.min(82, 55 + 6 * (homeAfter + 1));
-    const centerTail = eyes.length ? `, fighting for the center on ${eyes.join(' and ')}` : '';
+    const centerTail = (central.length ? `, fighting for the center on ${andList(central)}` : '')
+      + (holes.length ? `, leaning on ${andList(holes)}` : '')
+      + kingZoneClause(nearKing);
     out.push({
       id: 'development',
       weight,
@@ -256,9 +276,9 @@ export function computeMoveFundamentals(
     // the French guards d4). Caught live by the prod hint audit 2026-09-06: the
     // coach had no why for c3 and fell to the bare "that's the strongest move".
     // A wing pawn (a3 guards only b4) never qualifies — b4 is not the center.
-    const guards = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s)).slice(0, 2);
+    const guards = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s));
     if (guards.length > 0) {
-      const g = guards.join(' and ');
+      const g = andList(guards); // no slice (G4.5) — CORE_CENTER is four squares
       out.push({
         id: 'center',
         weight: 55,
@@ -269,8 +289,8 @@ export function computeMoveFundamentals(
       });
     }
   } else if (mv.piece !== 'p' && mv.piece !== 'k' && rankOf(mv.from) !== homeRank && !out.some((f) => f.id === 'development' || f.id === 'outpost')) {
-    const eyes = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s)).slice(0, 2);
-    if (eyes.length >= 2) {
+    const eyes = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s));
+    if (eyes.length >= 2) { // a THRESHOLD, not a cap — two core squares is the bar
       out.push({
         id: 'center',
         weight: 52,

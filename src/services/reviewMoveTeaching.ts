@@ -15,11 +15,13 @@
  * tense Watch/Learn teaching voice. It states the idea the move served.
  */
 import { Chess } from 'chess.js';
+import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause } from './keySquares';
 import type { Move } from 'chess.js';
 import { describeStructure } from './boardStructure';
 
-const CENTER = new Set(['d4', 'd5', 'e4', 'e5']);
-const BROAD_CENTER = new Set(['c4', 'c5', 'd4', 'd5', 'e4', 'e5', 'f4', 'f5']);
+// Q1 — OCCUPATION. A pawn reaching one of these has staked the centre.
+const CENTER = new Set(CORE_CENTER);
+const BROAD_CENTER = new Set(CENTRAL_SQUARES);
 const FIANCHETTO = new Set(['b2', 'g2', 'b7', 'g7']);
 
 type Sq = Parameters<Chess['get']>[0];
@@ -28,7 +30,10 @@ type Sq = Parameters<Chess['get']>[0];
  *  excluding it avoids overstating (David 2026-07-19: no non-applicable
  *  reasons — don't say a blocked bishop "rakes toward" its own pawn). */
 function controlsCentral(chess: Chess, s: string, mover: 'w' | 'b'): boolean {
-  if (!CENTER.has(s)) return false;
+  // Q2 — the centre, the standing holes AND the squares beside their king.
+  // This read `CENTER` (four squares), which is why a knight hopping to g5 in
+  // the Two Knights could not be said to bear down on f7.
+  if (!keyTargetSquares(chess, mover === 'w' ? 'white' : 'black').includes(s)) return false;
   const occ = chess.get(s as Sq);
   return !occ || occ.color !== mover;
 }
@@ -277,12 +282,21 @@ export function buildReviewMoveTeaching(
 
   // Minor-piece development — carry what the picture doesn't: the squares it
   // now bears on. Never "develops the knight" (restates the move).
-  if (mv.piece === 'n' && !minorAttacksPiece) {
+  //
+  // 🔒 A CHECK IS NOT A DEVELOPING GLOSS. `isDevelopingGloss` skips these two
+  // branches when the move gives check, so the check clause below still wins.
+  // Caught by a regression when the Q2 vocabulary widened to include the
+  // squares beside the enemy king: `Bb5+` suddenly HAD a target there (d7), so
+  // this branch returned "The bishop rakes toward c4 and d7" and swallowed
+  // "Forces the king to react" entirely. The widening was right; the ordering
+  // was always wrong and nothing had exercised it.
+  const isDevelopingGloss = !minorAttacksPiece && !mv.san.includes('+');
+  if (mv.piece === 'n' && isDevelopingGloss) {
     const targets = knightCentralTargets(chess, mv.to, mv.color);
     if (targets.length) return `The knight bears down on ${list(targets)}, fighting for the center.`;
     // no central target → fall through to the light developing tag
   }
-  if (mv.piece === 'b' && !minorAttacksPiece) {
+  if (mv.piece === 'b' && isDevelopingGloss) {
     if (FIANCHETTO.has(mv.to)) return 'The bishop takes aim along the long diagonal.';
     const targets = bishopCentralTargets(chess, mv.to, mv.color);
     if (targets.length) return `The bishop rakes toward ${list(targets)}.`;
@@ -402,9 +416,13 @@ export function buildReviewMoveTeaching(
     }
   }
   // (d) Controls central squares, or reaches into the opponent's half.
-  const central = eyes.controlled.filter((s) => BROAD_CENTER.has(s));
+  // Q2, and NO SLICE (G4.5): `.slice(0, 3)` dropped computed squares the
+  // student never heard. A long list is a phrasing problem — `list` handles it.
+  const targets = keyTargetSquares(chess, mv.color === 'w' ? 'white' : 'black');
+  const central = eyes.controlled.filter((s) => targets.includes(s));
   if (central.length) {
-    return `The ${PIECE_NOUN[mv.piece]} clamps down on ${list(central.slice(0, 3))}, fighting for the center.`;
+    const nearKing = kingZoneAmong(central, chess, mv.color === 'w' ? 'white' : 'black');
+    return `The ${PIECE_NOUN[mv.piece]} clamps down on ${list(central)}, fighting for the center${kingZoneClause(nearKing)}.`;
   }
   const advanced = eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4));
   if (advanced.length) {
