@@ -54,7 +54,34 @@ const INFRA = new Set([
   // they are NOT here. If you add something to this list, it must be provable
   // that it answers no question about the board.
   'standingFactMemory',
+  // `learnMemory` is the same class again: the Learn producer's per-game
+  // say-once slots and one `newGame()` that forgets them. It was EXTRACTED OUT
+  // of CoachTeachPage, so the import count rose by one while the coupling FELL
+  // by nine refs — uncounted, the gate would punish the exact move it exists
+  // to encourage.
+  //
+  // Neither entry is taken on trust: MEMORY_HOLDERS below proves mechanically
+  // that these two import nothing and name no piece, square or chess term.
+  // "It computes no chess fact" is exactly the sentence a cheat would write
+  // too, so it is CHECKED.
+  'learnMemory',
 ]);
+
+/** The INFRA entries that claim to be pure memory, checked below. */
+const MEMORY_HOLDERS = ['standingFactMemory', 'learnMemory'];
+
+/** The vocabulary of a chess JUDGEMENT — pieces, evaluation, tactics, material.
+ *
+ *  ⚠️ A first cut of this list also banned `fen`/`san`, and it FAILED
+ *  `standingFactMemory`, which reads a FEN's fullmove counter to tell whether
+ *  the board went backwards. That was the list being wrong, not the module:
+ *  pulling the move NUMBER off a FEN string is bookkeeping — it asks nothing
+ *  about what is ON the board. A FEN passing through a module proves nothing;
+ *  what proves a computer is REASONING about pieces, eval or tactics. So the
+ *  list bans that, and the zero-imports check below carries the rest of the
+ *  weight (a memory holder that wanted a real fact would have to import one). */
+const CHESS_WORDS =
+  /\b(?:Chess|pawn|knight|bishop|rook|queen|king|castl|capture|checkmate|check\b|tactic|eval|centipawn|material|threat|attack|blunder)\w*/i;
 
 function walk(dir: string): string[] {
   const out: string[] = [];
@@ -117,6 +144,24 @@ describe('surface composition — the coach/third-coach divergence, measured', (
     const teach = factImports(join(ROOT, 'components/Coach/CoachTeachPage.tsx'));
     expect(teach.length, 'the scan found no fact computers in the largest surface').toBeGreaterThan(20);
     expect(teach).toContain('positionFacts');
+  });
+
+  it('every INFRA memory-holder provably computes nothing', () => {
+    for (const mod of MEMORY_HOLDERS) {
+      const src = readFileSync(join(ROOT, 'services', `${mod}.ts`), 'utf8');
+      // Strip comments: the docs explain the bug each one fixed, in chess terms.
+      const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+      expect(
+        [...code.matchAll(/^import .*$/gm)].map((m) => m[0]),
+        `${mod} imports something — it is not pure memory`,
+      ).toEqual([]);
+      const chess = code.match(CHESS_WORDS);
+      expect(
+        chess?.[0] ?? null,
+        `${mod} names "${chess?.[0]}" — it answers a question about the board, ` +
+        'so it is a fact computer and does not belong in INFRA',
+      ).toBeNull();
+    }
   });
 
   it('INFRA never hides a real computer', () => {

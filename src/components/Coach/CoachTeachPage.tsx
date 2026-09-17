@@ -11,6 +11,7 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
+import { createLearnMemory, type LearnMemory } from '../../services/learnMemory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -1599,9 +1600,6 @@ export function CoachTeachPage(): JSX.Element {
   /** Notes already spliced into this game's narration (same dedup contract as
    *  the walkthrough's `noteArrowSourceAt` seenIds — a note teaches once). */
   const teachNoteSeenIdsRef = useRef(new Set<string>());
-  /** Masterclass beats already spoken this game. A lesson teaches the same
-   *  idea at several plies; hearing it twice is what makes a coach sound stuck. */
-  const curatedBeatSeenRef = useRef(new Set<string>());
   /** Fundamentals the coach has already NAMED IN FULL this game (David
    *  2026-09-07: "Learn it needs to be added into the narration"). The Learn
    *  narration leads a slip's beat with the fundamental it neglected — the same
@@ -1661,18 +1659,6 @@ export function CoachTeachPage(): JSX.Element {
    *  same pin is still coming three moves later — so without this the coach
    *  chants. A five-ply sample from a real game repeated one line four times. */
   const planSaidRef = useRef<Set<string>>(new Set());
-  /** Pawn-structure families already NAMED this game — the structure is stable
-   *  across many plies, so like the plan and the engine reads it is said once as
-   *  it crystallises, then referred back to, never re-announced every ply. */
-  const structureSaidRef = useRef<Set<string>>(new Set());
-  /** Engine readings already spoken this game — WDL and sharpness are stable
-   *  across many plies by nature, so without this the coach repeats "you come
-   *  out on top three times in four" every move it holds. Same contract as
-   *  `planSaidRef`. */
-  const engineReadSaidRef = useRef<Set<string>>(new Set());
-  /** Pieces already called out this game, so "improve your worst piece" names
-   *  a given square once rather than every ply it stays idle. */
-  const pieceQualitySaidRef = useRef<Set<string>>(new Set());
   /** The moment Stockfish reports a forced mate FOR the student, the async engine
    *  pass flags it here (keyed by the FEN it read) so the instant package can call
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
@@ -1709,28 +1695,23 @@ export function CoachTeachPage(): JSX.Element {
    *  `standingRefrains` applies in review. Cleared with the other per-game
    *  memories in `startOpeningPlay`. */
   const conceptTaughtRef = useRef<Set<string>>(new Set());
-  /** The last gem callout spoken, so a gem that stays live across plies is
-   *  named once rather than nagged every move. */
-  const gemSeenRef = useRef<string | null>(null);
-  /** The board a gem callout was spoken ON, so the coach's own verdict can tell
-   *  whether the curated lane already named THIS move.
+  /** The Learn producer's PER-GAME memory — one object, one `newGame()`, so a
+   *  slot added to it cannot be forgotten-to-forget (see `learnMemory.ts`).
    *
-   *  🔒 NOT `gemSeenRef`. That one holds the last callout for the whole game —
-   *  reading it as "a gem fired" would mute every coach verdict from the first
-   *  gem to the final move. The question is never "has a gem ever fired", it is
-   *  "did one fire about the move I am judging". */
-  const gemFenRef = useRef<string | null>(null);
+   *  It holds the five say-once memories that NEITHER of this file's two
+   *  "fresh game" resets covered, and which therefore silenced the coach for
+   *  the rest of a session after one mention. Both reset sites now call
+   *  `newGame()`; the remaining per-game refs migrate in later slices, with
+   *  `learnMemory.test.ts` holding the outstanding count as a shrink-only
+   *  ceiling.
+   *
+   *  🔒 `gemFen` is NOT `gemSeen`. `gemSeen` holds the last callout for the whole
+   *  game — reading it as "a gem fired" would mute every coach verdict from the
+   *  first gem to the final move. The question is never "has a gem ever fired",
+   *  it is "did one fire about the move I am judging". */
+  const learnMemRef = useRef<LearnMemory>(createLearnMemory());
   /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
    *  alerts") — a persisting danger alerts once, not every turn. */
-  /** Generic teaching clauses `buildPlayCommentary` has already used this game.
-   *  The principle is worth saying once; the fact speaks every time. */
-  const saidExplainersRef = useRef(new Set<string>());
-  /** The last computed read spoken. A standing board feature (an outpost, an
-   *  open file) survives many plies, and the lane had NO repeat guard at all —
-   *  the tactic and threat lanes each had one — so it re-narrated the identical
-   *  sentence turn after turn. Measured on a Vienna walk: the e4-outpost line
-   *  spoke on two consecutive moves, verbatim. */
-  const lastComputedRef = useRef('');
 
   /** Last spoken TACTIC key, so a standing opportunity does not nag every ply. */
   const lastTacticRef = useRef('');
@@ -1774,8 +1755,6 @@ export function CoachTeachPage(): JSX.Element {
   // coach's next reply is exactly the dictated move (validated legal at
   // consume time; silently dropped with an audit if the position moved on).
   const pendingCoachMoveRef = useRef<string | null>(null);
-  /** Last ply a think-aloud deliberation fired (#20 throttle). */
-  const thinkAloudLastPlyRef = useRef(-999);
   const rejectedTemptingCountRef = useRef(0);
   const priorityFirstLastPlyRef = useRef(-999);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
@@ -2004,9 +1983,15 @@ export function CoachTeachPage(): JSX.Element {
     walkthrough.stop();
     voiceService.stop();
     gameRef.current.resetGame();
-    // A new game is a new set of things to say. Both said-sets are per-GAME,
-    // not per-session — without the reset the second game inherits the first
-    // one's memory and starts out quieter than it should.
+    // A new game is a new set of things to say: every per-game memory is
+    // per-GAME, not per-session — without the reset the second game inherits
+    // the first one's memory and starts out quieter than it should.
+    //
+    // 🔒 `newGame()` forgets EVERYTHING the Learn memory holds, so a slot added
+    // there is reset here for free. The hand-listed refs below are the ones
+    // not yet migrated into it (learnMemory.test.ts holds that count as a
+    // shrink-only ceiling) — the list is the debt, not the design.
+    learnMemRef.current.newGame();
     planSaidRef.current.clear();
     positionalSaidRef.current.clear();
     spokenKeysRef.current.clear();
@@ -7343,9 +7328,9 @@ export function CoachTeachPage(): JSX.Element {
     // opportunity and withholds the move.
     try {
       const gem = findLivePunishment(null, history);
-      if (gem && gem.callout && gemSeenRef.current !== gem.callout) {
-        gemSeenRef.current = gem.callout;
-        gemFenRef.current = args.fenAfterReply;
+      if (gem && gem.callout && learnMemRef.current.gemSeen !== gem.callout) {
+        learnMemRef.current.gemSeen = gem.callout;
+        learnMemRef.current.gemFen = args.fenAfterReply;
         gemLine = gem.callout;
         factLines.push(`GEM ALERT (verified inaccuracy by the coach's last move): ${gem.callout}`);
         captureEvent('gem_alert_spoken', { surface: 'coach-teach' });
@@ -7403,7 +7388,7 @@ export function CoachTeachPage(): JSX.Element {
       const beat = buildPlayCommentary({
         fen: args.fenAfterReply,
         studentColor: playerColor,
-        saidExplainers: saidExplainersRef.current,
+        saidExplainers: learnMemRef.current.saidExplainers,
         // ROOT CAUSE, not the gate. Both this composer and the tactics alert
         // above read `detectTactics` off THIS board, and neither knew the
         // other had spoken — so both announced the same loose piece and the
@@ -7431,11 +7416,11 @@ export function CoachTeachPage(): JSX.Element {
         // and a text guard sails straight past it. Measured on a Vienna walk —
         // the e4-outpost beat spoke on moves 4 and 5, the second time minus
         // its moral.
-        if (beat.key && beat.key === lastComputedRef.current) {
+        if (beat.key && beat.key === learnMemRef.current.lastComputed) {
           computedLine = null;
         } else {
           computedLine = beat.spoken;
-          lastComputedRef.current = beat.key;
+          learnMemRef.current.lastComputed = beat.key;
         }
         // ── WHICH BEATS ACTUALLY REACH ANYONE ──────────────────────────────
         //
@@ -7526,9 +7511,9 @@ export function CoachTeachPage(): JSX.Element {
       // corpus leads and the masterclass beat fills where the corpus can't.
       const beat = noteLine
         ? null
-        : curatedBeatAt(history, args.fenAfterReply, curatedBeatSeenRef.current, announcedOpeningNameRef.current, playerColor, 'live');
+        : curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, announcedOpeningNameRef.current, playerColor, 'live');
       if (beat) {
-        curatedBeatSeenRef.current.add(beat.id);
+        learnMemRef.current.curatedBeatSeen.add(beat.id);
         curatedLine = beat.text;
         teachingTierRef.current = 'curated';
         factLines.push(`Masterclass beat (${beat.lesson}): ${beat.text}`);
@@ -8287,13 +8272,13 @@ export function CoachTeachPage(): JSX.Element {
                     } catch { /* the gap nudge is a bonus, never a blocker */ }
                     // NAME THE STRUCTURE the moment it crystallises — his closing
                     // lesson ("catalogue the typical structures and their plans").
-                    // Reliable say-once (structureSaidRef), NOT the rate-fair
+                    // Reliable say-once (learnMem.structureSaid), NOT the rate-fair
                     // behaviour scheduler that shadowed it: the family is stable, so
                     // it is announced once as it appears and then referred back to.
                     try {
                       const struct = namedPawnStructure(probe.fen());
-                      if (struct && !structureSaidRef.current.has(struct.name)) {
-                        structureSaidRef.current.add(struct.name);
+                      if (struct && !learnMemRef.current.structureSaid.has(struct.name)) {
+                        learnMemRef.current.structureSaid.add(struct.name);
                         const line = gradeNarrationText(`${struct.name} — ${struct.plan}.`, probe.fen(), 'CoachTeachPage.structure')?.trim();
                         if (line) queueSpokenHint(probe.fen(), line);
                       }
@@ -8363,7 +8348,7 @@ export function CoachTeachPage(): JSX.Element {
                   // for a draw" / "three moves hold equally" reads are pre-existing
                   // wordy lanes, not his DNA.
                   if (!NARRATE_DNA_ONLY && studentBest) {
-                    for (const r of engineReadLines(studentBest, playerColor, engineReadSaidRef.current)) {
+                    for (const r of engineReadLines(studentBest, playerColor, learnMemRef.current.engineReadSaid)) {
                       queueSpokenHint(probe.fen(), r.text, 'computed');
                       captureEvent('engine_read_spoken', { surface: 'coach-teach', kind: r.kind });
                     }
@@ -8390,7 +8375,7 @@ export function CoachTeachPage(): JSX.Element {
                     // on the phase so it never fires on an undeveloped opening
                     // piece (David 2026-08-23).
                     const isMiddlegame = Number(probe.fen().split(' ')[5] ?? '0') >= 10;
-                    for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, pieceQualitySaidRef.current, { isMiddlegame })) {
+                    for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, learnMemRef.current.pieceQualitySaid, { isMiddlegame })) {
                       queueSpokenHint(probe.fen(), q.text, 'computed', q.squares);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
@@ -8402,7 +8387,7 @@ export function CoachTeachPage(): JSX.Element {
                     // pieces on" is a pre-existing lane, not his DNA. Piece-quality
                     // above STAYS (his "trade their best / improve your worst").
                     const split = NARRATE_DNA_ONLY ? null : parseEvalSplit(raw);
-                    const splitLine = split ? evalSplitLine(split, playerColor, pieceQualitySaidRef.current) : null;
+                    const splitLine = split ? evalSplitLine(split, playerColor, learnMemRef.current.pieceQualitySaid) : null;
                     if (splitLine) {
                       queueSpokenHint(probe.fen(), splitLine, 'computed');
                       captureEvent('eval_split_spoken', { surface: 'coach-teach' });
@@ -8602,7 +8587,7 @@ export function CoachTeachPage(): JSX.Element {
                       // plain recommendation is the fallback.
                       let thinkMoment = null;
                       const thinkEligible =
-                        plyNow - thinkAloudLastPlyRef.current >= scaleGap(THINK_ALOUD_MIN_PLY_GAP, discussion.hintDial.register) &&
+                        plyNow - learnMemRef.current.thinkAloudLastPly >= scaleGap(THINK_ALOUD_MIN_PLY_GAP, discussion.hintDial.register) &&
                         classifyPhase(probe.fen(), historyAfterReply.length) === 'middlegame';
                       if (thinkEligible) {
                         try {
@@ -8633,7 +8618,7 @@ export function CoachTeachPage(): JSX.Element {
                         } catch { /* deliberation is a bonus, never a blocker */ }
                       }
                       if (thinkMoment) {
-                        thinkAloudLastPlyRef.current = plyNow;
+                        learnMemRef.current.thinkAloudLastPly = plyNow;
                         captureEvent('think_aloud_offered', { surface: 'coach-teach', withheld: thinkMoment.withheldSan });
                         facts.push(thinkMoment.facts);
                       } else if (recUci && recUci.length >= 4) {
@@ -9102,7 +9087,8 @@ export function CoachTeachPage(): JSX.Element {
                   try {
                     const chainHistory = historyAfterReply;
                     if (chainHistory.length <= 2) {
-                      announcedTrapsRef.current.clear(); // fresh game
+                      learnMemRef.current.newGame(); // fresh game — forgets every slot it holds
+                      announcedTrapsRef.current.clear();
                       announcedOpeningNameRef.current = null;
                       teachNoteSeenIdsRef.current.clear();
                       fundamentalSeenRef.current.clear();
@@ -9832,8 +9818,8 @@ export function CoachTeachPage(): JSX.Element {
                     // the curated one has spoken. The gem is strictly the better
                     // sentence — engine-verified, hand-narrated, tiered — and it
                     // withholds the move, which this one has no reason to.
-                    const gemCalledIt = gemFenRef.current !== null
-                      && samePosition(gemFenRef.current, cm.fenAfter);
+                    const gemCalledIt = learnMemRef.current.gemFen !== null
+                      && samePosition(learnMemRef.current.gemFen, cm.fenAfter);
                     if (look && !gemCalledIt) {
                       queueSpokenHint(cm.fenAfter, look.line, look.kind);
                       captureEvent('coach_inaccuracy_called', {
