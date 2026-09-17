@@ -357,9 +357,33 @@ BEFORE choosing an axis. Re-verified today, the 2026-09-08 inventory still holds
   student at tier 1 regardless of rating, so a 900 tapped three times to reach
   the rung they needed. It now starts where the student's recorded tactics skill
   says (rating as the cold-start prior only).
-* **the completeness gate** — a test that every fact-computer and every tool is
-  REACHABLE by the selector/spine: "a note comes OUT / tool CAN be invoked
-  proof, not an import check".
+* **the completeness gate — DONE 2026-09-17,
+  `src/coach/tools/registry.completeness.test.ts`.** Until now the only claim
+  was a COMMENT at the top of `registry.ts`: "all 23 registered + reachable —
+  verified 2026-09-08". NOTHING in the whole suite imported `COACH_TOOLS`, so
+  that line was a promise, and a promise rots. Five checks:
+  1. no tool file exists that the registry never lists (the "built but mounted
+     nowhere" class), read from each file's own `name:` literal so a module that
+     is never IMPORTED is still seen;
+  2. `getTool(name)` resolves every registered tool and no two share a name;
+  3. `getToolDefinitions()` ships every contract to the LLM and leaks no
+     executor;
+  4. **proof, not an import check** — every tool is actually INVOKED with no
+     args and no surface. An ACTUATOR must return `{ok:false}` with a reason
+     ("don't claim the board was reset on a surface that has none"); a READ tool
+     may honestly succeed and must then return a payload. The first cut got this
+     wrong and flagged `lookup_player_games`, whose no-filter default genuinely
+     means "the best games we have" — the test was wrong, not the tool, and the
+     split made the check STRONGER rather than looser.
+  5. the same standard for computers: **4 spine modules have ZERO production
+     importers** — `coachChatService` (10 exports; CoachChatPage does not import
+     it), `tacticDrillService` (3 exports and no test — a second drill-queue
+     builder beside the live one, which builds from `puzzlesByOpening`),
+     `threatCheck` (the computer behind the card David removed on 2026-08-05),
+     `openingNameClaimValidator`. Held as a shrink-only ceiling, NOT deleted:
+     two of the sweep's own first candidates were false (`coachsCall` is reached
+     by a DYNAMIC import a static regex missed), which is the "prove it's
+     actually dead" rule earning its keep.
 
 **Sequence from here:** finish or park the fact axis, then run Phase 7 starting
 at `criticalityThresholds`, because the plan says everything else derives from
