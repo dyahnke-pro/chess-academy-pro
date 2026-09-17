@@ -417,3 +417,73 @@ Read §0 first — it is measured, not remembered. Then §1 Phase order. The liv
 composer is `positionFacts`, the review composer is `coachFeatureService`, and
 the door is `coachDecider.decide()`. Regenerate any surface map with
 `node scripts/surface-map.mjs <file>` before changing that file.
+
+
+## §4 THE RATING INPUT — measured 2026-09-17, code REVERTED, finding kept
+
+Not built. The first attempt was wrong in a way worth writing down, and David
+caught it in one line ("Sounded like you are setting a generic teaching elo").
+
+### The defect, measured
+
+EVERY write to `profile.currentRating` requires an IMPORT:
+
+| writer | fires when |
+|---|---|
+| `dbService` profile creation | always — seeds **800** |
+| `strengthCalibrationService.applyStrength` | first boot, `source === 'imported-games'` ONLY |
+| `gameAnalysisService:2165` | `continue`s unless `source` is lichess/chesscom |
+| Settings / Onboarding | the user types it |
+
+`getPlayerRatingEstimate` HAS a coach-games arm — a running K=32 ELO over the
+games the student actually played here, the only genuinely adaptive signal the
+app computes. `calibrateStrength` rejects it (`imported-games` only) and then
+short-circuits forever on `strengthCalibrated`. Nothing else reads it: the
+service has exactly TWO importers and one is its own test.
+
+So a student who never imports is **800 for life**, and 800 buys them
+(measured):
+
+| rating | teach bar | tactic scan | explorer band | hint starts | alert mult |
+|---|---|---|---|---|---|
+| **800** | **200cp** | **1 ply** | 1000,1200 | **tier 3 — answer on tap one** | 0.69 |
+| 1200 | 100cp | 2 ply | 1200,1400 | tier 3 | 0.87 |
+| 1600 | 100cp | 6 ply | 1600,1800 | tier 2 | 1.04 |
+| 2000 | 100cp | 10 ply | 2000,2200 | tier 1 | 1.22 |
+
+At 800 only BLUNDERS are ever taught — every mistake and inaccuracy is silent —
+and the hint ladder hands over the answer on the first tap. `dbService`'s own
+comment says 800 is "only ever live until calibration runs at boot (imported
+games, else the first-run skill picker)"; **the picker was deleted 2026-09-02**,
+so the comment describes a path that no longer exists.
+
+### Why the first fix was wrong
+
+Writing the estimate back makes it its own input: boot 1 replays ten games from
+800 and stores 950, boot 2 replays the SAME ten from 950 and stores 1100 — the
+rating climbs forever on no new evidence. The attempted cure anchored the
+running ELO at `DEFAULT_RATING` (1200), which kills the drift and is GENERIC:
+K=32 moves at most ±160 over five games, so a real 700 lands ~1040 — the
+anchor's number, not theirs. Replacing one hard-coded rating with another is
+not an algo.
+
+### The correct shape (not built)
+
+A per-student baseline, stored ONCE and never rewritten by the estimate:
+
+* `ratingBaseline` = the imported rating when there is one, else the first
+  evidence-backed reading; written once.
+* the coach-games estimate is then `baseline + f(their games)` — a pure
+  function of THEIR play, so re-running it every boot converges instead of
+  drifting, and no two students share an anchor.
+* the refresh writes `currentRating` ONLY (the puzzle SRS owns `puzzleRating`)
+  and only from an evidence-backed source, so a Settings rating survives until
+  real games contradict it.
+* gate: replay the same fixed game set through two consecutive refreshes and
+  assert the rating does not move — the compounding bug, caught by construction.
+
+Also still open (secondary, and smaller than it looked): the call-site
+fallbacks. `selectUserRating` already exists with the right 1200 prior and ~40
+sites hand-roll `activeProfile?.currentRating ?? 1200` instead, five of them
+`?? 1420`. That only bites when the profile is null, which is rare — the 800 is
+the defect that actually reaches students.
