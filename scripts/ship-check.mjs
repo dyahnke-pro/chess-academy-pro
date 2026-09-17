@@ -430,6 +430,10 @@ const GATE_TESTS = [
   // The fork two moves out — four gates, a two-move domain, and a rank BELOW
   // must-defend so foresight never speaks over live material.
   'src/services/latentFork.test.ts',
+  // The coach told you to push a passer without ever checking whose queens
+  // first — and the obvious fix, a tempo count per plan, compares pawn pushes
+  // against rook moves.
+  'src/services/planRace.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',

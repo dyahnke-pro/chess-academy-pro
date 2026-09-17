@@ -804,6 +804,44 @@ depending on whether a second knight can reach the square, so a string compare
 fails open exactly when the position is interesting. When you add a beat that
 says what the student SHOULD have found, ask first whether they found it.
 
+### G4.5.3 NEVER HAND OUT AN INSTRUCTION YOU HAVE NOT TESTED — and two plans only RACE when they run the same kind of plan (found reading the code, 2026-09-17).
+
+The sibling of G4.5.2. That one says don't tell a student to find a move they
+already played. This one says don't tell them to run a race you never looked at.
+
+`structurePlan` was an else-chain — `if (mine) { … return }`, and only THEN the
+enemy-passer branch — so whenever the student had a passed pawn of their own the
+rest was unreachable and the coach said *"Your passed pawn on b5 is the trump
+here — push it and make them deal with the promotion"* with runners on BOTH
+wings, having never checked whether THEIRS queens first.
+
+**THE RULE ON RACES.** `deriveNextPlans` emits eight plan kinds. The obvious
+build — "count the tempi to each plan's key square" — is WRONG: only three kinds
+have a countable arrival (push the passer, blockade the isolani, seize the file)
+and those three count in DIFFERENT UNITS (pawn pushes, minor hops, rook moves).
+A cross-kind number reports "their plan is faster" when their plan is seizing a
+file, which is not a terminal event at all. **A race is real only when both sides
+run the SAME plan kind toward the SAME kind of terminal event** — two passers
+(unit: pushes to promotion), or both wanting the SAME open file. Everything else
+is SILENT. That is a computed verdict, not a cap (G4.5).
+
+Narrow is not thin: measured over 11,028 real positions, passer-race fires 818
+times and file-collision 809. **Measure the branch before calling it dead** — the
+first read of the file-collision census said "this can never fire" and was wrong.
+
+**A COUNT IS ONLY HONEST IF THE THING CAN MOVE.** The first draft called a pawn
+on a2 "6 pushes from queening" with an enemy knight on a3 and the pawn unable to
+move at all. Only RUNNING passers race. And the SIDE TO MOVE is half the
+arithmetic: level counts are not a tie, they are a race the mover wins, because
+your Nth move lands before their Nth. State the counts and the consequence,
+never the result — "if nobody interferes", because a middlegame piece can still
+blockade.
+
+`planRace.ts` is the one computer; `[plan-race]` ranks 21, ABOVE the `plan-now`
+(20) it corrects — an instruction heard before its disqualification has already
+been acted on. Deduped by VERDICT, never by the counts (they change every push);
+a FLIP is the one repeat worth hearing. Gate: `planRace.test.ts`.
+
 ### G4.6 THE REVIEW-PREP LAG IS SERIALIZED ENGINE CALLS, NOT THE TIMEOUT (David 2026-09-16: "we need to fix that seven second lag").
 
 Diagnosed 2026-09-16; the timeout is a symptom, not the cause. Three layers

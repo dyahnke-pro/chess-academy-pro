@@ -41,6 +41,41 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     expect(all).toMatch(/\[opening\]/);
   });
 
+  it('THE RACE COMES OUT of the review surface as a [plan-race] facet', () => {
+    // "A wire that does not fire is not a wire" — the planRace unit gate proves
+    // the COMPUTER; this proves the facet actually emerges from the surface a
+    // student hears. Fischer–Spassky 1972 move 27: White's e5 and Black's d4 are
+    // both passed and both three pushes from queening, with the move White's.
+    const FISCHER_BEFORE = '1r3n1k/r5p1/4q2p/p1p1Pp2/2Bp4/1P5Q/P5PP/2R2RK1 b - - 0 26';
+    const c = new Chess(FISCHER_BEFORE);
+    const mv = c.move('Qe7');
+    expect(mv).toBeTruthy();
+    const facets = computeMoveFacets({
+      fenBefore: FISCHER_BEFORE,
+      fenAfter: c.fen(),
+      san: 'Qe7',
+      ply: 52,
+      moverColor: 'black',
+      playerColor: 'white',
+      studentColorWB: 'w',
+      evaluation: 60,
+      preMoveEval: 55,
+      classification: 'good',
+      bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 },
+      allSans: [],
+      forcedRunStartPly: null,
+    });
+    const race = facets.find((f) => f.startsWith('[plan-race]'));
+    expect(race, `no [plan-race] in: ${facets.join(' | ')}`).toBeTruthy();
+    // It is the RETROSPECTIVE register here — review, not a live board.
+    expect(race).toMatch(/both sides had a runner/i); // cap()'d at the facet boundary
+    expect(race).toMatch(/e5/);
+    expect(race).toMatch(/d4/);
+    // …and with queens on it must not issue the endgame marching order.
+    expect(race).toMatch(/queens came off/);
+  });
+
   it('attributes a non-good OPPONENT move to the opponent, never the student (opera ply-14 bug)', () => {
     // A quiet opponent move (…Qe7) yields no [move] mechanics facet, so [quality]
     // is the only mover clue. It MUST carry "Your opponent:" — else the LLM credits

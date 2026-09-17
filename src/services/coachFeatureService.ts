@@ -1224,6 +1224,11 @@ export function buildReviewSegments(
   // ply later. Square specifics are stripped from the key so "attack the king on
   // e8" and "attack the king on e8 before it runs" collapse to one goal.
   const planGoalsSeen = new Set<string>();
+  // The RACE verdict last spoken. Keyed on WHO ARRIVES FIRST, not on the counts:
+  // the counts change on every push, so keying on them would re-announce the race
+  // each ply. A flip — you were winning the race and now you are not — IS the
+  // moment worth teaching, and it is the only repeat this lets through.
+  let lastRaceVerdict: string | null = null;
   const standingSig = (f: string): string =>
     f.replace(/^\[[a-z0-9-]+\]\s*/, '')
       .toLowerCase()
@@ -1555,6 +1560,14 @@ export function buildReviewSegments(
             : f;
           if (planGoalsSeen.has(goalKey)) continue;
           planGoalsSeen.add(goalKey);
+          keptRaw.push(f);
+          continue;
+        }
+        // The RACE — once, then only when the verdict FLIPS (see lastRaceVerdict).
+        if (/^\[plan-race\]/.test(f)) {
+          const verdict = /they get there first|they got there first/i.test(f) ? 'them' : 'you';
+          if (lastRaceVerdict === verdict) continue;
+          lastRaceVerdict = verdict;
           keptRaw.push(f);
           continue;
         }

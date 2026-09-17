@@ -174,3 +174,78 @@ fixed; each needs its own root-cause pass.
    `buildVoicePackage`'s novelty set matches whole sentences, so two lessons
    teaching the same move in different words evade both. The dedupe term that is
    missing is the beat's SUBJECT (the move it leads with), not its text.
+
+8. **DONE — plan versus plan: the coach told you to run a race it had never
+   looked at.** `structurePlan` (boardPlan.ts) is an else-chain: `if (mine)
+   { … return }` and only THEN the enemy-passer branch. So whenever the student
+   had a passed pawn of their own, everything below was unreachable and the
+   coach said *"Your passed pawn on b5 is the trump here — push it and make them
+   deal with the promotion"* with runners on BOTH wings, having never once
+   checked whether THEIRS queens first. Not an abstract "no plan-vs-plan" gap —
+   the coach handing out an instruction it had not tested.
+
+   **The build order in the task said "tempo count to each plan's key square".
+   That is WRONG and was corrected before a line was written.** `deriveNextPlans`
+   emits eight plan kinds; only three have a countable arrival (push the passer,
+   blockade the isolani, seize the file) and those three count in DIFFERENT
+   UNITS — pawn pushes, minor-piece hops, rook moves. A cross-kind number reports
+   "their plan is faster" when their plan is seizing a file, which is not a
+   terminal event at all. **A race is real only when both sides run the SAME plan
+   kind toward the SAME kind of terminal event**; everything else is silent.
+   Measured over 11,028 real positions from 120 model games: passer-race fires
+   818 times (all 818 speak), file-collision 2,757 (809 speak) — so the narrow
+   rule is not a thin rule, and my own "this branch is near-dead" suspicion about
+   the file collision was disproven by the census rather than acted on.
+
+   Four defects in the first draft, every one found by READING the prose the
+   probe printed, none by a type or a test:
+   - **a blockaded pawn was counted as running** — a2 with an enemy knight on a3,
+     unable to move at all, reported as "6 pushes from queening". The same class
+     of lie the whole item exists to kill. Only RUNNING passers (front square
+     empty) enter the race now; a blockaded one already has its teaching in
+     `structurePlan` ("dislodge that blockader").
+   - **side to move was ignored** — equal counts returned silence, when both
+     runners three away and your move means YOU queen first. That is the clearest
+     case there is and the draft threw it away. `youQueenFirst` folds the move in:
+     moving first wins a tie, because your Nth move lands before their Nth.
+   - **"1 pushes"**.
+   - the clause promised a result; it now says "if nobody interferes", because a
+     middlegame piece can still blockade (don't overstate the why).
+
+   **Two more caught only by reading REAL GAMES, after the constructed FENs were
+   all green** (the constructed positions were bare kings and pawns, so neither
+   could possibly have shown up there):
+   - **a file collision replaced the passer plan.** Karpov–Kasparov move 14:
+     White has a passed d-pawn AND a contested c-file, and the unfiltered race
+     handed back the c-file clause — so the student heard about the file and the
+     passed pawn was never mentioned. Only a PASSER race may stand in for the
+     passer plan; the file collision reaches review through its own facet, where
+     it sits BESIDE the plan instead of deleting it.
+   - **the imperative was phase-blind.** Fischer–Spassky 1972 move 27: both
+     runners three pushes away, the move White's — and with queens and rooks
+     still on, "push, and make them be the one who stops to defend" sends the
+     student into a sharp middlegame. With queens on, the race is a standing FACT,
+     not a marching order: *"you get there first once the queens come off — that
+     race is your reason to trade into the endgame, not to go pushing into the
+     middlegame."* Better chess, and it teaches why you would want the trade.
+     `deriveNextPlans` already gates its escort clause on `queensOn` for exactly
+     this reason; this now matches it.
+
+   **And a PRE-EXISTING bug it exposed: `planMemory.stepPlan` compared the
+   rendered SENTENCE to decide whether the plan had changed.** So any plan naming
+   a square that moves re-announced itself on every push — "your passed pawn on
+   b5" became "on b6" and read as the coach changing its mind about the plan it
+   had just given. `structurePlanFact` now returns `{ text, id }` and the fold
+   compares the ID, so advancing the pawn you were told to advance is a `carry`
+   and only a genuinely different plan — or a race whose winner FLIPPED — is a
+   `changed`. The carried text still refreshes, so a re-mention names b6 not b5.
+   Comparing rendered prose to establish identity is the same anti-pattern as
+   scraping squares back out of a sentence.
+
+   `[plan-race]` ranks **21** — above `plan-now` (20), below `endgame` (22):
+   the race CORRECTS the plan, so hearing "push your passer" first and "theirs
+   queens first" second is backwards. Deduped by VERDICT, not by counts — the
+   counts change every push, so a count key would re-announce every ply; a FLIP
+   (you were winning that race, now you are not) is the one repeat worth hearing.
+   `stepsToPromote` moved from boardPlan to planRace so there is one copy.
+   Gate: `planRace.test.ts`.

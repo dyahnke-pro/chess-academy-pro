@@ -28,7 +28,7 @@ export type FacetTag =
   | 'sac' | 'sac-why' | 'forced' | 'king' | 'rook7' | 'passer'
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
-  | 'plan-now' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
+  | 'plan-now' | 'plan-race' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'method';
 
 /**
@@ -74,6 +74,11 @@ export const FACET_RANK: Record<FacetTag, number> = {
   'opp-target': 26,
   'opp-dev': 24,
   endgame: 22,
+  // THE RACE OUTRANKS THE PLAN IT CORRECTS. `plan-now` says "push your passer";
+  // `plan-race` says whether that plan arrives in time. Hearing the instruction
+  // first and the disqualification second is backwards — the student has already
+  // committed to the idea by then.
+  'plan-race': 21,
   'plan-now': 20,
   'plan-line': 18,
   'plan-middlegame': 16,
@@ -120,7 +125,7 @@ function clauseKindForTag(tag: FacetTag): string {
   switch (tag) {
     case 'loose': case 'threat': case 'count': case 'royal': case 'trapped': return 'must-defend';
     case 'tactic': case 'sac': case 'sac-why': case 'forced': return 'latent-danger';
-    case 'endgame': case 'passer': case 'consequence': return 'convert';
+    case 'endgame': case 'passer': case 'consequence': case 'plan-race': return 'convert';
     case 'principle': case 'structure': case 'complex': case 'minority':
     case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': return 'structure-plan';
     default: return 'status';

@@ -5,21 +5,43 @@ import { Chess } from 'chess.js';
 import { stepPlan, foldPlans, EMPTY_PLAN_STATE, planProgressText } from './planMemory';
 
 describe('stepPlan', () => {
+  const PASSER = { id: 'passer-mine', text: 'push the passed pawn' };
+  const IQP = { id: 'iqp-theirs', text: 'blockade the isolated pawn' };
+
   it('announces the first plan, carries the same plan, marks a different one as changed', () => {
-    const a = stepPlan(EMPTY_PLAN_STATE, 10, 'push the passed pawn');
+    const a = stepPlan(EMPTY_PLAN_STATE, 10, PASSER);
     expect(a.event).toBe('announce');
-    expect(a.next).toEqual({ plan: 'push the passed pawn', announcedAt: 10 });
-    const b = stepPlan(a.next, 12, 'push the passed pawn');
+    expect(a.next).toEqual({ plan: 'push the passed pawn', id: 'passer-mine', announcedAt: 10 });
+    const b = stepPlan(a.next, 12, PASSER);
     expect(b.event).toBe('carry');
-    expect(b.next).toBe(a.next);
-    const c = stepPlan(b.next, 14, 'blockade the isolated pawn');
+    expect(b.next.announcedAt).toBe(10);
+    const c = stepPlan(b.next, 14, IQP);
     expect(c.event).toBe('changed');
     expect(c.next.announcedAt).toBe(14);
   });
+
+  it('IDENTITY, NOT PROSE — advancing the pawn you were told to advance is not a new plan', () => {
+    // The regression this replaced: stepPlan compared the rendered sentence, so
+    // "your passed pawn on b5" → "on b6" read as the coach changing its mind
+    // about the plan it had just given.
+    const a = stepPlan(EMPTY_PLAN_STATE, 10, { id: 'passer-mine', text: 'your passed pawn on b5 is the trump' });
+    const b = stepPlan(a.next, 12, { id: 'passer-mine', text: 'your passed pawn on b6 is the trump' });
+    expect(b.event).toBe('carry');
+    // …and the carried TEXT refreshes, so a re-mention names b6, not stale b5.
+    expect(b.next.plan).toContain('b6');
+    expect(b.next.announcedAt).toBe(10);
+  });
+
+  it('a race whose WINNER FLIPS really is a new plan', () => {
+    const a = stepPlan(EMPTY_PLAN_STATE, 10, { id: 'passer-race:you', text: 'the race is yours' });
+    const b = stepPlan(a.next, 12, { id: 'passer-race:them', text: 'they get there first' });
+    expect(b.event).toBe('changed');
+  });
+
   it('a ply with no plan leaves the state untouched (none)', () => {
-    const a = stepPlan({ plan: 'x', announcedAt: 3 }, 5, null);
+    const a = stepPlan({ plan: 'x', id: 'iqp-mine', announcedAt: 3 }, 5, null);
     expect(a.event).toBe('none');
-    expect(a.next).toEqual({ plan: 'x', announcedAt: 3 });
+    expect(a.next).toEqual({ plan: 'x', id: 'iqp-mine', announcedAt: 3 });
   });
 });
 
@@ -47,6 +69,6 @@ describe('foldPlans over a sequence', () => {
   });
   it('progress text exists only while a plan is in force', () => {
     expect(planProgressText(EMPTY_PLAN_STATE)).toBe('');
-    expect(planProgressText({ plan: 'x', announcedAt: 1 })).toMatch(/Same plan/);
+    expect(planProgressText({ plan: 'x', id: 'iqp-mine', announcedAt: 1 })).toMatch(/Same plan/);
   });
 });

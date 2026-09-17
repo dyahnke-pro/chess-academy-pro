@@ -27,6 +27,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan } from './revie
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
+import { planRaceClause } from './planRace';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
@@ -502,6 +503,14 @@ export function computeMoveFacets(
     for (const plan of deriveNextPlans(fenAfter, studentColorWB)) {
       facets.push(`[plan-now] ${cap(plan)}.`);
     }
+    // PLAN VERSUS PLAN — the RACE, in the retrospective register. `deriveNextPlans`
+    // above states the student's agenda; it has never stated whose agenda arrives
+    // first, which is the actual teaching when both sides are running. Silent
+    // unless the two sides are running the SAME kind of plan toward the same kind
+    // of terminal event — a cross-kind tempo number (pawn pushes vs rook moves)
+    // is incomparable, and a confidently wrong number is worse than silence.
+    const race = planRaceClause(fenAfter, studentColorWB, 'review');
+    if (race) facets.push(`[plan-race] ${cap(race)}.`);
   }
 
   // ── 7. SACRIFICE — compensation + mechanism + king-shield removal ──

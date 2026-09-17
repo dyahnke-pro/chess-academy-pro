@@ -2876,7 +2876,7 @@ export async function voiceReviewLines(
   const coverAllClause = opts.coverAll
     ? 'EACH numbered item is a BUNDLE of several computed facts about ONE move, each tagged ' +
       'in [brackets] ([move], [quality], [tactic], [loose], [count], [royal], [verdict], [trapped], ' +
-      '[structure], [king], [rook7], [badbishop], [worst], [passer], [plan-now], [sac], ' +
+      '[structure], [king], [rook7], [badbishop], [worst], [passer], [plan-now], [plan-race], [sac], ' +
       '[forced], [plan-opening], [plan-middlegame], [plan-line], [consequence], [opening], ' +
       '[opp-target], [endgame]). ' +
       'Voice EVERY fact in the bundle into ONE flowing spoken passage for that move — a ' +
