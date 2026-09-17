@@ -129,3 +129,18 @@ fixed; each needs its own root-cause pass.
    on b4" because b4 is empty now. Conditional and projected claims are not
    claims about the current board and must not be graded as such — this is the
    same class as the "fen" substring matching inside "de-fen-se".
+
+6. **A Watch-register paragraph in a live game — 58% of the curated beats.**
+   `curatedBeatAt` has exactly ONE caller, `CoachTeachPage:7462`, the live game
+   reply; Watch and the LessonPlayer do not use it. So hand-authored masterclass
+   prose written to be WATCHED is served to somebody mid-GAME. Measured over the
+   19,259 beats carrying a `say`: 41% (8,021) are second-person and seat-bound,
+   58% (11,238) are third-person ("White throws the b-pawn at the bishop"), of
+   which 5,634 name no colour at all. The live standard is student = "you/your",
+   opponent = "they/their"; a bare colour mid-flow is sanctioned only for a pure
+   spectator model game. The beat goes into `factLines` for the phrasing pass
+   rather than being recited, so the model COULD reframe it — it demonstrably
+   does not, which is how "Black snatches your e-pawn" reached a Black student.
+   Fix by reframing at selection or by ranking curated beats below the computed
+   lanes on live surfaces. **Do NOT fix it by loosening the seat guard** — that
+   doubles the reach of the violation instead of removing it.
