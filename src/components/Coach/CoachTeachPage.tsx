@@ -3291,6 +3291,38 @@ export function CoachTeachPage(): JSX.Element {
             appendTurn(`I'll take ${fenSide}. ${sanToSpeech(cmd.san)} — your move.`);
             return;
           }
+        } else if (cmd.corrects && gameRef.current.history.length > 0) {
+          // (c2) CORRECTING THE MOVE THE COACH JUST PLAYED — "no, play Nc3
+          // instead" (David 2026-09-17: "i want all three options available").
+          //
+          // Reaching this branch already proves the coach's move is the LAST one
+          // on the board: it is the student's turn (fenSide === playerColor) and
+          // the game is past its start, so the previous ply was the coach's.
+          // That is the only case a correction is safe — undoing further would
+          // discard the student's own move with it, and silently throwing away
+          // something they played is worse than not helping.
+          //
+          // LEGALITY IS CHECKED BEFORE ANYTHING IS UNDONE. `cmd.san` was parsed
+          // against the FLIPPED current board, which has the right side to move
+          // but the wrong position — the coach's move is still on it. So the
+          // pre-move position is rebuilt from history and the move validated
+          // there; a correction that would not be legal leaves the board exactly
+          // as it was rather than taking back and then failing to replace.
+          const priorSans = gameRef.current.history.slice(0, -1);
+          let legalThere: string | null = null;
+          try {
+            const probe = new Chess();
+            for (const s of priorSans) probe.move(s);
+            legalThere = probe.move(cmd.san)?.san ?? null;
+          } catch { legalThere = null; }
+          if (legalThere && handleTakeBack(1).ok && playDictatedMove(legalThere)) {
+            captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'corrected-last', san: legalThere });
+            appendTurn(`Taken back — ${sanToSpeech(legalThere)} instead. Your move.`);
+            return;
+          }
+          captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'correction-illegal', san: cmd.san });
+          appendTurn(`I can't play ${sanToSpeech(cmd.san)} there — it isn't legal in the position before my move, so I've left the board as it is.`);
+          return;
         } else {
           // (c) The student's turn mid-game (or a coach-side move parsed on
           // the flipped board) — arm it as the coach's next reply.

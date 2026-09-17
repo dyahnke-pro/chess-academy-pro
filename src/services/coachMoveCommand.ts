@@ -20,6 +20,22 @@ export interface CoachMoveCommand extends ParsedSpokenMove {
   /** Legal for the side to move on the given FEN right now. False = parsed
    *  on the flipped board (a coach-side move while it's the student's turn). */
   playableNow: boolean;
+  /**
+   * The student is CORRECTING the move the coach just played ("no, play Nc3
+   * instead"), not queuing the next one (David 2026-09-17).
+   *
+   * Until now every dictation armed the NEXT reply, so the natural way a person
+   * corrects a coach — "play X instead" — was answered with "got it, after your
+   * move…", which is not what was asked. The move already on the board stayed
+   * there.
+   *
+   * This flag only says the student MEANT a correction. Whether one is possible
+   * is the caller's judgement: it must undo a ply, so it is refused unless the
+   * coach's move is genuinely the last one on the board. Taking back further
+   * would discard the student's own move too, and silently throwing away
+   * something they played is worse than not helping.
+   */
+  corrects: boolean;
 }
 
 /** Leading politeness / address tokens we skip before the command verb. */
@@ -31,6 +47,13 @@ const PREFIX_RE = /^(?:(?:ok(?:ay)?|please|now|coach|hey|and|then)[,!\s]+)*/i;
  *  "let's play the Italian" (no leading verb) stays an opening request. */
 const VERB_RE = /^(?:you\s+)?(?:play|make|open\s+with|start\s+with|go\s+with|respond\s+with|reply\s+with|answer\s+with|move)\b\s*/i;
 const CASTLE_RE = /^(?:you\s+)?(castles?|castling)\b/i;
+
+/**
+ * The student is replacing the coach's last move rather than queuing the next.
+ * Either a leading refusal ("no, play Nc3"), an explicit takeback phrased as one
+ * ("take that back and play Nc3"), or a trailing "instead" / "rather".
+ */
+const CORRECTION_RE = /^(?:no|nope|nah|wait|actually|hold on|undo|take (?:that|it) back)\b|\b(?:instead|rather)\b\s*$/i;
 
 /** A move REPORT ("I played e4") or a question is never a command. */
 const REPORT_RE = /\b(?:i|we)\s+(?:just\s+)?(?:played|play|moved|went)\b/i;
@@ -56,7 +79,14 @@ export function parseCoachMoveCommand(text: string, fen: string): CoachMoveComma
   if (!trimmed || trimmed.length > 80) return null;
   if (REPORT_RE.test(trimmed) || /\?\s*$/.test(trimmed)) return null;
 
-  const afterPrefix = trimmed.replace(PREFIX_RE, '');
+  const corrects = CORRECTION_RE.test(trimmed);
+  // The correction words are not part of the move phrase — strip them from both
+  // ends before the verb match, or "no, play Nc3 instead" never finds its verb.
+  const cleaned = trimmed
+    .replace(/^(?:no|nope|nah|wait|actually|hold on|undo|take (?:that|it) back)\b[,!.\s]*/i, '')
+    .replace(/[,\s]*\b(?:instead|rather)\b\s*\.?$/i, '')
+    .trim();
+  const afterPrefix = cleaned.replace(PREFIX_RE, '');
   let phrase: string | null = null;
   if (CASTLE_RE.test(afterPrefix)) {
     // "castle kingside" — the verb IS the move; parseSpokenMove handles it.
@@ -69,12 +99,12 @@ export function parseCoachMoveCommand(text: string, fen: string): CoachMoveComma
   if (!phrase) return null;
 
   const now = parseSpokenMove(phrase, fen);
-  if (now) return { ...now, playableNow: true };
+  if (now) return { ...now, playableNow: true, corrects };
 
   const flipped = flipTurn(fen);
   if (flipped) {
     const later = parseSpokenMove(phrase, flipped);
-    if (later) return { ...later, playableNow: false };
+    if (later) return { ...later, playableNow: false, corrects };
   }
   return null;
 }

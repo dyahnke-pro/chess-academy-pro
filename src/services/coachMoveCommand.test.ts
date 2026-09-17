@@ -56,3 +56,43 @@ describe('parseCoachMoveCommand', () => {
     expect(parseCoachMoveCommand('play Ke2', START)).toBeNull(); // illegal on both sides
   });
 });
+
+// ── CORRECTING THE MOVE JUST PLAYED (David 2026-09-17) ────────────────────────
+// "i want all three options available to the user": play it now, queue it for
+// next, or take the last one back and replace it. Only the phrasing tells the
+// three apart, so the phrasing is what is pinned here.
+describe('correction intent', () => {
+  const AFTER_1E4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+
+  it('"no, play Nc3 instead" is a CORRECTION, not a queued move', () => {
+    const cmd = parseCoachMoveCommand('no, play Nc3 instead', AFTER_1E4);
+    expect(cmd?.san).toBe('Nc3');
+    expect(cmd?.corrects).toBe(true);
+  });
+
+  it('"take that back and play Nc3" is a correction', () => {
+    const cmd = parseCoachMoveCommand('take that back and play Nc3', AFTER_1E4);
+    expect(cmd?.san).toBe('Nc3');
+    expect(cmd?.corrects).toBe(true);
+  });
+
+  it('a trailing "instead" alone marks the correction', () => {
+    expect(parseCoachMoveCommand('play Nc3 instead', AFTER_1E4)?.corrects).toBe(true);
+  });
+
+  it('a PLAIN dictation is NOT a correction — it still queues the next reply', () => {
+    const cmd = parseCoachMoveCommand('play Nc3', AFTER_1E4);
+    expect(cmd?.san).toBe('Nc3');
+    expect(cmd?.corrects).toBe(false);
+  });
+
+  it('spoken form survives the correction wrapper', () => {
+    const cmd = parseCoachMoveCommand('no, play knight to c3 instead', AFTER_1E4);
+    expect(cmd?.san).toBe('Nc3');
+    expect(cmd?.corrects).toBe(true);
+  });
+
+  it('a correction naming an ILLEGAL move still parses as nothing', () => {
+    expect(parseCoachMoveCommand('no, play Nc9 instead', AFTER_1E4)).toBeNull();
+  });
+});
