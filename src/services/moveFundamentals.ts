@@ -22,6 +22,7 @@ import { andList } from '../utils/andList';
 import type { Square } from 'chess.js';
 import { landingIsSafe } from './positionReadingService';
 import { classifyPhase } from './gamePhaseService';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -52,6 +53,49 @@ export interface MoveFundamental {
   /** Board squares the clause references (arrows / highlights). */
   squares: string[];
 }
+
+/**
+ * 🔗 THE POSITIVE HALF FILES UNDER THE SAME HOLES AS THE NEGATIVE HALF
+ * (2026-09-17, the computer-unification map — docs/plans/2026-09-17-computer-unification.md).
+ *
+ * The app carried TWO fundamentals vocabularies and they never reconciled:
+ *   • NEGATIVE — `FundamentalId` in principleAttribution, 33 members, each
+ *     mapped to a `MisconceptionTagId` by `FUNDAMENTAL_TAG`, feeding the
+ *     weakness spine, the drills and the need score.
+ *   • POSITIVE — `MoveFundamentalId` here, 10 members, mapped to NOTHING. The
+ *     type appeared in exactly one file: this one.
+ *
+ * So the coach could name what a student did WRONG at 33 levels of resolution
+ * and what they did RIGHT at one — all ten positives collapse into the single
+ * `ClauseKind` 'fundamental'. And playing the thing correctly was never
+ * recorded against the matching hole, so a student who had FIXED a weakness got
+ * no evidence of it in their own model.
+ *
+ * This is the rot rule at the top of CLAUDE.md (two vocabularies that mean the
+ * same thing and never reconcile — `TacticPatternType discovery` vs
+ * `TacticType discovered_attack`), applied to the axis the coach uses most.
+ *
+ * A `Record` over the union, so a NEW positive fundamental fails to compile
+ * until someone decides where it files. `null` is an HONEST answer and not a
+ * placeholder: not every strength has a matching hole in the tag set, and
+ * inventing one would be fabricated data (G3). Two are null today and that is
+ * the correct count, not a backlog.
+ */
+export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId | null> = {
+  development: 'neglected-development',
+  'king-safety': 'weakened-king-safety',
+  space: 'space-conceded',
+  'passed-pawn': 'passed-pawn-neglected',
+  'king-activity': 'passive-king-endgame',
+  'open-file': 'passive-rook',
+  prophylaxis: 'missed-opponents-threat',
+  outpost: 'misplaced-piece',
+  // No tag names "ceded the centre" — `space-conceded` is the space axis, not
+  // the centre one, and mapping here would file centre evidence under space.
+  center: null,
+  // Making luft is not the inverse of any hole we track.
+  luft: null,
+};
 
 const PIECE_NAME: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -452,6 +496,29 @@ export function pickLeadingFundamentals(funds: readonly MoveFundamental[]): Move
   return lead;
 }
 
+/**
+ * The LEADING fundamentals as STRUCTURE — ids, weights, squares and all three
+ * registers.
+ *
+ * 🚨 Why this is exported. `renderStrategic` below computes exactly this and
+ * then joins it into one string, so every consumer of this module received
+ * `string | null` and the `id` never crossed the module boundary. That is how
+ * the positive half came to file under nothing: not because the mapping was
+ * missing, but because the thing to map was destroyed on the way out.
+ *
+ * It is the same defect as comparing rendered prose to decide a plan's identity
+ * (planMemory, fixed 2026-09-17) and as a plan that computes a square and says
+ * "a square". A caller that wants prose still calls `strategicWhy*`; a caller
+ * that wants to RECORD what the student got right calls this.
+ */
+export function leadingFundamentals(
+  fenBefore: string,
+  moveSan: string,
+  moverColor: 'white' | 'black',
+): MoveFundamental[] {
+  return pickLeadingFundamentals(computeMoveFundamentals(fenBefore, moveSan, moverColor));
+}
+
 /** Woven, fundamental-first render of the leading fundamental(s). `form` picks
  *  the led clause (append after an already-named move) or the self-contained
  *  clause (names the piece). Returns null when nothing fires. */
@@ -461,7 +528,7 @@ function renderStrategic(
   moverColor: 'white' | 'black',
   form: 'led' | 'selfContained' | 'imperative',
 ): string | null {
-  const lead = pickLeadingFundamentals(computeMoveFundamentals(fenBefore, moveSan, moverColor));
+  const lead = leadingFundamentals(fenBefore, moveSan, moverColor);
   if (lead.length === 0) return null;
   return lead.map((f) => f[form]).join(', and ');
 }

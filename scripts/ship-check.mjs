@@ -434,6 +434,10 @@ const GATE_TESTS = [
   // first — and the obvious fix, a tempo count per plan, compares pawn pushes
   // against rook moves.
   'src/services/planRace.test.ts',
+  // The coach carried two fundamentals vocabularies — 33 negatives filed under
+  // weakness tags, 10 positives filed under nothing — and the positive ids were
+  // destroyed at the module boundary before anyone could map them.
+  'src/services/fundamentalVocabulary.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',
