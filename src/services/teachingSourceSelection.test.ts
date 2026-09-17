@@ -16,9 +16,16 @@
 //    positions like this"), all noise in a Vienna. In the opening there is no
 //    "kind of position" yet — only a specific line — so the borrow tiers stay
 //    shut and silence is the honest answer.
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect , beforeAll} from 'vitest';
 import { Chess } from 'chess.js';
-import './../test/loadFullCorpus';
+// 🔒 CALL IT, DO NOT MERELY IMPORT IT (2026-09-17). `loadFullCorpus` exports a
+// FUNCTION and does nothing on import, so the side-effect-only import that used
+// to sit here primed NOTHING: selection saw only the two STATIC corpora (danya +
+// chessbrah, 11,385 of 58,124 notes — 19.6%), and since 2026-08-26 those ship
+// FLOATING-ONLY, so any exact-position assertion was querying an index that
+// cannot contain a hit. Every check in this file was green against a fifth of
+// the data.
+import { loadFullCorpus } from './../test/loadFullCorpus';
 import { teachingSourceForBoard } from './danyaTeachingService';
 import { noteStaysInScope, notePhaseMatchesBoardWords, noteRecommendsALegalMove } from './noteAnchorIntegrity';
 
@@ -32,6 +39,14 @@ function boardAfter(sans: string[]): { history: string[]; fen: string } {
 const VIENNA = ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5'];
 
 describe('the opening never borrows another position ideas', () => {
+  beforeAll(() => {
+    const loaded = loadFullCorpus();
+    const total = loaded.reduce((n, c) => n + c.notes, 0);
+    // Non-vacuity: with the fetched corpora missing from disk every assertion
+    // below would measure an empty index and this gate would be theatre.
+    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+  }, 180_000);
+
   it.each([1, 2, 3, 4, 5, 6])('ply %i selects nothing, or a note about THIS line', (n) => {
     const { history, fen } = boardAfter(VIENNA.slice(0, n));
     const src = teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit', 'white');

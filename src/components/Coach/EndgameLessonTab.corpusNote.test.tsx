@@ -6,9 +6,16 @@
  * not merely that the retrieval function exists. Playout is mocked to its
  * completed state; the corpus + retrieval are REAL (full 4-corpus load).
  */
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi , beforeAll} from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '../../test/loadFullCorpus';
+// 🔒 CALL IT, DO NOT MERELY IMPORT IT (2026-09-17). `loadFullCorpus` exports a
+// FUNCTION and does nothing on import, so the side-effect-only import that used
+// to sit here primed NOTHING: selection saw only the two STATIC corpora (danya +
+// chessbrah, 11,385 of 58,124 notes — 19.6%), and since 2026-08-26 those ship
+// FLOATING-ONLY, so any exact-position assertion was querying an index that
+// cannot contain a hit. Every check in this file was green against a fifth of
+// the data.
+import { loadFullCorpus } from '../../test/loadFullCorpus';
 import { EndgameLessonTab } from './EndgameLessonTab';
 import { getRookEndings } from '../../services/endgameLessonsService';
 import { endgameNoteForLesson } from '../../services/danyaTeachingService';
@@ -39,6 +46,14 @@ vi.mock('../../hooks/useEndgamePlayout', () => ({
 }));
 
 describe('endgame corpus note renders on the surface', () => {
+  beforeAll(() => {
+    const loaded = loadFullCorpus();
+    const total = loaded.reduce((n, c) => n + c.notes, 0);
+    // Non-vacuity: with the fetched corpora missing from disk every assertion
+    // below would measure an empty index and this gate would be theatre.
+    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+  }, 180_000);
+
   // Sync render + assert — the retrieval is synchronous and the card is on
   // the first committed frame; the generous timeout covers the full-corpus
   // import cost (~6s), not any UI wait.

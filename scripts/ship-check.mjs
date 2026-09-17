@@ -414,6 +414,9 @@ const GATE_TESTS = [
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',
+  // Four gates were green against 19.6% of the teaching corpus because
+  // `import '../test/loadFullCorpus'` primes nothing — it exports a function.
+  'src/test/loadFullCorpusIsCalled.test.ts',
   // 159 scripts waited on an element deleted 2026-09-02 — 52.6 min of dead
   // wall-clock per fleet run, and two pro-rep audits crashing outright.
   'src/test/noDeadCalibrationBubble.test.ts',

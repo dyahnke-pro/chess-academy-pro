@@ -9,8 +9,20 @@
  * must EXIST in the endgame phase of the loaded corpus, so a re-farm that
  * drops a concept fails here instead of silently orphaning the lookup.
  */
-import { describe, expect, it } from 'vitest';
-import './../test/loadFullCorpus';
+import { describe, expect, it , beforeAll} from 'vitest';
+// 🔒 CALL IT, DO NOT MERELY IMPORT IT (2026-09-17). `loadFullCorpus` exports a
+// FUNCTION and does nothing on import, so the side-effect-only import that used
+// to sit here primed NOTHING: selection saw only the two STATIC corpora (11,385
+// of 58,124 notes — 19.6%), and since 2026-08-26 those ship FLOATING-ONLY.
+//
+// MEASURED BOTH WAYS, because a fix that changes no number needs saying so: the
+// endgame lane fires on **22 lessons either way**. Loading 52,802 further notes
+// moves it not at all, which is consistent with what the corpus actually holds —
+// only ~1.4% of endgame notes carry a position, so this surface is served by the
+// CONCEPT tier, not the exact-position one. The gate was not hiding a defect; it
+// was simply not measuring what it claimed to. It is now, and the floor below
+// records the real number instead of the one it happened to clear.
+import { loadFullCorpus } from './../test/loadFullCorpus';
 import {
   ENDGAME_LESSON_CONCEPTS,
   endgameNoteForLesson,
@@ -23,6 +35,14 @@ import { getAllEndgameLessons } from './endgameLessonsService';
 const NAMES_A_SQUARE = /\b[a-hA-H][1-8]\b/;
 
 describe('endgame corpus wiring', () => {
+  beforeAll(() => {
+    const loaded = loadFullCorpus();
+    const total = loaded.reduce((n, c) => n + c.notes, 0);
+    // Non-vacuity: with the fetched corpora missing from disk every assertion
+    // below would measure an empty index and this gate would be theatre.
+    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+  }, 180_000);
+
   const lessons = getAllEndgameLessons();
 
   it('every lesson in the catalog has a concept mapping', () => {
@@ -66,7 +86,7 @@ describe('endgame corpus wiring', () => {
     // honest gaps (two-weaknesses, breakthrough, wrong-rook-pawn-bishop,
     // stalemate-stalking, insufficient-material, vancura) close by
     // FARMING those ideas, never by loosening the guards.
-    expect(fired, `fired for: ${firedLessons.join(', ')}`).toBeGreaterThanOrEqual(18);
+    expect(fired, `fired for: ${firedLessons.join(', ')}`).toBeGreaterThanOrEqual(22);
   });
 
   it('dedupes across a lesson session — the same note is never handed out twice', () => {

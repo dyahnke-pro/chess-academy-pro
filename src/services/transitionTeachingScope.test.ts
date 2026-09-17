@@ -14,8 +14,15 @@
 // Sicilian and clears any token-overlap check against a Dragon. Wrong
 // sub-line inside the right family is a separate, unsolved problem, and it
 // needs the board, not the name.
-import { describe, it, expect } from 'vitest';
-import '../test/loadFullCorpus';
+import { describe, it, expect , beforeAll} from 'vitest';
+// 🔒 CALL IT, DO NOT MERELY IMPORT IT (2026-09-17). `loadFullCorpus` exports a
+// FUNCTION and does nothing on import, so the side-effect-only import that used
+// to sit here primed NOTHING: selection saw only the two STATIC corpora (danya +
+// chessbrah, 11,385 of 58,124 notes — 19.6%), and since 2026-08-26 those ship
+// FLOATING-ONLY, so any exact-position assertion was querying an index that
+// cannot contain a hit. Every check in this file was green against a fifth of
+// the data.
+import { loadFullCorpus } from '../test/loadFullCorpus';
 import { transitionTeachingSourceForGame } from './danyaTeachingService';
 import { noteStaysInScope } from './noteAnchorIntegrity';
 
@@ -39,6 +46,14 @@ const GAMES: Array<[string, string[], string]> = [
 ];
 
 describe('a transition ritual stays inside the opening being played', () => {
+  beforeAll(() => {
+    const loaded = loadFullCorpus();
+    const total = loaded.reduce((n, c) => n + c.notes, 0);
+    // Non-vacuity: with the fetched corpora missing from disk every assertion
+    // below would measure an empty index and this gate would be theatre.
+    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+  }, 180_000);
+
   it.each(GAMES)('%s picks a note that belongs to it', (name, sans, fen) => {
     const src = transitionTeachingSourceForGame({ historySans: sans, fen, openingName: name });
     if (!src) return; // silence is in scope by definition
