@@ -442,6 +442,10 @@ const GATE_TESTS = [
   // differently — knight-outpost vs outpost, passed-pawn vs passed-pawn-push —
   // so a live weakness could never match the review beat that taught it.
   'src/services/conceptVocabulary.test.ts',
+  // PlanBeat carried text+arrows only — no id, no squares — so review's plan
+  // beats fell straight through the decider's subsumption (a fact with no
+  // squares is never collapsed) and nothing could rank or dedupe them.
+  'src/services/planBeatShape.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',

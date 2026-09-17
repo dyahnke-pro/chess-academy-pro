@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**209 lines · 2 exports · 3 importers · 1 tests · 0 audits**
+**225 lines · 2 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,13 +13,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/planBeatShape.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewOpponentCommentary.test.ts`
 
 ## Exports and every call site
 
-### `buildOpponentMoveTeaching` (function) — 8 call sites
+### `buildOpponentMoveTeaching` (function) — 10 call sites
 - `src/services/coachFeatureService.ts:2535`
+- `src/services/planBeatShape.test.ts:39`
+- `src/services/planBeatShape.test.ts:53`
 - `src/services/reviewFullData.ts:558`
 - `src/services/reviewOpponentCommentary.test.ts:12`
 - `src/services/reviewOpponentCommentary.test.ts:20`
@@ -28,8 +31,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpponentCommentary.test.ts:53`
 - `src/services/reviewOpponentCommentary.test.ts:60`
 
-### `buildOpponentDevelopmentRead` (function) — 7 call sites
+### `buildOpponentDevelopmentRead` (function) — 8 call sites
 - `src/services/coachFeatureService.ts:2512`
+- `src/services/planBeatShape.test.ts:69`
 - `src/services/reviewFullData.ts:564`
 - `src/services/reviewOpponentCommentary.test.ts:73`
 - `src/services/reviewOpponentCommentary.test.ts:77`
@@ -39,6 +43,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/planBeatShape.test.ts`
 - `src/services/reviewOpponentCommentary.test.ts`
 
 ## Audits that reach it

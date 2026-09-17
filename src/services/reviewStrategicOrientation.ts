@@ -86,9 +86,50 @@ export interface PlanArrow {
   color: string;
 }
 
+/**
+ * WHAT A PLAN BEAT IS, and why it gained an id and squares (2026-09-17, the
+ * computer-unification map §0.2 — docs/plans/2026-09-17-computer-unification.md).
+ *
+ * The coach had THREE shapes for "a thing it says" and each carried a different
+ * subset: `ComputedConcept` (id + squares + two registers + importance),
+ * `MoveFundamental` (id + squares + three registers + weight), and this — text
+ * and arrows only.
+ *
+ * That was not cosmetic. `coachDecider`'s subsumption pass collapses facts that
+ * are the SAME CLAIM by comparing their square sets, and G4.5.1 is explicit that
+ * a fact with no squares is NEVER collapsed ("we cannot prove it is the same
+ * claim and silence must never be a guess"). With no squares, every plan beat
+ * fell straight through subsumption — so review could state one idea twice from
+ * two producers and nothing could tell they were one claim. With no id, nothing
+ * could rank it, dedupe it across plies, or file it under a weakness.
+ *
+ * Both are REQUIRED, so a new beat producer must decide them instead of
+ * inheriting a silent default. The squares are emitted from the SAME data that
+ * builds the arrows — never scraped back out of the prose.
+ */
+export type PlanBeatId =
+  | 'opponent-move'
+  | 'opponent-development'
+  | 'opening-development'
+  | 'his-plan'
+  | 'masters-plan'
+  | 'middlegame-orientation';
+
 export interface PlanBeat {
+  id: PlanBeatId;
   text: string;
   arrows: PlanArrow[];
+  /** The squares this beat's claim is about — the subsumption key. Derived from
+   *  the same board data as `arrows`, so it can never disagree with them. */
+  squares: string[];
+}
+
+/** The squares an arrow set touches — one place, so every producer couples the
+ *  same geometry its arrows already prove. */
+export function squaresOfArrows(arrows: readonly PlanArrow[]): string[] {
+  const out = new Set<string>();
+  for (const a of arrows) { out.add(a.startSquare); out.add(a.endSquare); }
+  return [...out];
 }
 
 const PLAN_BLUE = '#3b82f6'; // the student's plan
@@ -285,7 +326,7 @@ export function buildOpeningDevelopmentPlan(
     const jobs = devJobs(mine);
     const castleBit = mine.castled ? '' : mine.canCastle ? ', then castle' : ', then get the king to safety by hand — its castling rights are gone';
     const jobsClause = jobs ? ` Right now: ${jobs}${castleBit}.` : '';
-    return { text: `${lead}${second}${jobsClause}`, arrows };
+    return { id: 'opening-development', text: `${lead}${second}${jobsClause}`, arrows, squares: squaresOfArrows(arrows) };
   }
 
   // FALLBACK: the board-computed developing plan for an uncurated opening. State
@@ -328,6 +369,7 @@ const applyMoveFen = (f: string, san: string): string | null => {
  *  (chronological order, central break flagged) + PLAN_BLUE lead-the-eye arrows
  *  on each of that side's moves. Shared by the his-games + masters beats. */
 function renderPlanBeat(
+  id: PlanBeatId,
   fen: string,
   side: 'w' | 'b',
   sideMoves: string[],
@@ -355,7 +397,7 @@ function renderPlanBeat(
     }
     curSide = curSide === 'w' ? 'b' : 'w';
   }
-  return { text, arrows };
+  return { id, text, arrows, squares: squaresOfArrows(arrows) };
 }
 
 /** PRIMARY opening-plan beat — grounded in HIS OWN games (David 2026-07-23).
@@ -373,7 +415,7 @@ export function buildHisGroundedPlanBeat(
   const conf = plan.total >= 100
     ? `the well-trodden plan here, scoring ${plan.leadWinPct}% in this structure`
     : `a reliable plan in this structure (${plan.leadWinPct}%)`;
-  return renderPlanBeat(fen, plan.side, plan.sideMoves, plan.line, openingName, conf, 'plan');
+  return renderPlanBeat('his-plan', fen, plan.side, plan.sideMoves, plan.line, openingName, conf, 'plan');
 }
 
 /** A master position needs at least this many games to teach its main line. */
@@ -425,7 +467,7 @@ export function buildMastersGroundedPlanBeat(
   }
   if (sideMoves.length === 0) return null;
   const conf = `the main line here (${total} master games)`;
-  return renderPlanBeat(fen, side, sideMoves, line, openingName, conf, 'main line');
+  return renderPlanBeat('masters-plan', fen, side, sideMoves, line, openingName, conf, 'main line');
 }
 
 // ─── MIDDLEGAME ORIENTATION (pawn majorities) ────────────────────────────────
@@ -547,5 +589,5 @@ export function buildMiddlegameOrientation(
   const first = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
   const rest = parts.slice(1);
   const text = rest.length ? `${first}; ${rest.join('; ')}.` : `${first}.`;
-  return { text, arrows };
+  return { id: 'middlegame-orientation', text, arrows, squares: squaresOfArrows(arrows) };
 }

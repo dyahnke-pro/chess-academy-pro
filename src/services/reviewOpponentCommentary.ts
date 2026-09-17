@@ -69,8 +69,10 @@ export function buildOpponentMoveTeaching(
       const attackers = chess.attackers(hp.square as Square, enemy);
       if (attackers.includes(to as Square)) {
         return {
+          id: 'opponent-move',
           text: `Watch out — that ${movedLabel} leaves your ${PIECE_LABEL[hp.piece] ?? 'piece'} on ${hp.square} loose.`,
           arrows: [{ startSquare: to, endSquare: hp.square, color: OPP_AMBER }],
+          squares: [to, hp.square],
         };
       }
     }
@@ -93,10 +95,12 @@ export function buildOpponentMoveTeaching(
         const attackers = chess.attackers(sq as Square, enemy);
         if (attackers.includes(to as Square)) {
           return {
+            id: 'opponent-move',
             // Present tense, not "lasting" — durability is a future claim
             // this read can't verify (board-awareness sweep, 2026-07-22).
             text: `Your opponent's ${movedLabel} trains on your weak pawn on ${sq} — a target they can keep working on.`,
             arrows: [{ startSquare: to, endSquare: sq, color: OPP_AMBER }],
+            squares: [to, sq],
           };
         }
       }
@@ -110,8 +114,13 @@ export function buildOpponentMoveTeaching(
       const outpost = struct.outposts.find((o) => o.color === enemy && o.square === to);
       if (outpost) {
         return {
+          id: 'opponent-move',
           text: `Your opponent plants a ${movedLabel} on ${to} — an outpost no pawn of yours can challenge.`,
           arrows: [],
+          // No arrow (the claim is about the square itself, not a line), but the
+          // square IS known — so the beat can still be subsumed against another
+          // fact about the same outpost.
+          squares: [to],
         };
       }
     }
@@ -130,11 +139,13 @@ export function buildOpponentMoveTeaching(
       });
       if (eyed.length > 0) {
         return {
+          id: 'opponent-move',
           text: `Your opponent's ${movedLabel} steps in eyeing ${eyed.join(' and ')} — contesting the centre.`,
           // EVERY square the sentence just named. The text says
           // `eyed.join(' and ')` — all of them — while this drew the first two,
           // so the student heard three squares and found two arrows.
           arrows: eyed.map((sq) => ({ startSquare: to, endSquare: sq, color: OPP_AMBER })),
+          squares: [to, ...eyed],
         };
       }
     } catch { /* fall through */ }
@@ -200,8 +211,13 @@ export function buildOpponentDevelopmentRead(
   if (pawnMoves >= 4 && pawnMoves > devMoves && undevMinors >= 2) {
     const minorWord = undevMinors >= 3 ? 'three minor pieces' : 'two minor pieces';
     return {
+      id: 'opponent-development',
       text: `Look at your opponent's setup — ${pawnMoves} pawn moves already, and ${minorWord} still sitting on the back rank. All those pawn pushes came at the cost of development. That's your cue to take over: get your pieces active and open the position before they ever catch up.`,
       arrows: [],
+      // HONESTLY EMPTY: this read is about the whole setup, not any square, so
+      // it must never be collapsed against a square-anchored fact. An invented
+      // square here would make subsumption silence a true, unrelated claim.
+      squares: [],
     };
   }
   return null;

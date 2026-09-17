@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**552 lines · 7 exports · 6 importers · 3 tests · 1 audits**
+**594 lines · 9 exports · 7 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/coachFeatureService.ts`
 - `src/services/groundedPlanBeat.test.ts`
+- `src/services/planBeatShape.test.ts`
 - `src/services/planPrescriptions.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewOpponentCommentary.ts`
@@ -27,8 +28,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PlanArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `PlanBeatId` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `PlanBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `squaresOfArrows` (function) — 3 call sites
+- `src/services/planBeatShape.test.ts:43`
+- `src/services/planBeatShape.test.ts:55`
+- `src/services/planBeatShape.test.ts:78`
 
 ### `buildOpeningDevelopmentPlan` (function) — 12 call sites
 - `src/services/coachFeatureService.ts:2262`
@@ -68,6 +77,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/groundedPlanBeat.test.ts`
+- `src/services/planBeatShape.test.ts`
 - `src/services/planPrescriptions.test.ts`
 - `src/services/reviewStrategicOrientation.test.ts`
 
