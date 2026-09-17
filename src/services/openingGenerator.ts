@@ -3664,7 +3664,7 @@ Emit a JSON object: { questions: [ ${picked.length} entries, in the same order, 
 // (Italian → Bxf7+ themes; Caro-Kann → tempo/structure punishments)
 // shapes the prose framing. No moves are LLM-emitted.
 
-interface RawPuzzle {
+export interface RawPuzzle {
   id: string;
   fen: string;
   moves: string;
@@ -3825,7 +3825,7 @@ function scoreDistractor(san: string): number {
   return score;
 }
 
-interface PreparedPunishLesson {
+export interface PreparedPunishLesson {
   setupFen: string;
   inaccuracy: string;
   punishment: string;
@@ -3833,6 +3833,12 @@ interface PreparedPunishLesson {
   distractors: { san: string }[];
   themes: string[];
   rating: number;
+  /** 🔒 THE SEAT THIS PUZZLE PUTS THE STUDENT IN — COMPUTED, never assumed.
+   *  A Lichess puzzle carries the opening's tag whichever side is solving, so
+   *  half of them hand a Scandinavian student White's pieces. The solver moves
+   *  SECOND (moves[0] is the opponent's blunder), so the seat is exactly the
+   *  side to move after the inaccuracy. See the filter in generatePunishFromDb. */
+  studentColor: 'white' | 'black';
   /** Code-computed board facts — the ONLY claims the label prose may make.
    *  See computePunishFacts. */
   computedFacts: string;
@@ -3946,7 +3952,32 @@ export function computePunishFacts(
 /** Walk one Lichess puzzle into a PunishLesson skeleton.
  *  Returns null when the puzzle's UCI sequence doesn't replay
  *  cleanly or when we can't generate at least 2 distractors. */
-function preparePunishFromPuzzle(p: RawPuzzle): PreparedPunishLesson | null {
+/**
+ * 🔒 WHICH SEAT A PUZZLE PUTS THE STUDENT IN — read off the board, never taken
+ * from the opening tag.
+ *
+ * A Lichess puzzle's `fen` is the position BEFORE the opponent's blunder;
+ * `moves[0]` is that blunder and `moves[1]` is the solution the student plays.
+ * So the student's colour is simply the side to move once the blunder is on the
+ * board. Exported because the gate must measure the SAME function production
+ * uses — a second copy of this rule in a test is a rule that can drift.
+ *
+ * Returns null when the sequence does not replay (G3: an unplayable puzzle
+ * teaches nothing).
+ */
+export function punishStudentColor(puzzleFen: string, uciMoves: readonly string[]): 'white' | 'black' | null {
+  if (uciMoves.length < 2) return null;
+  try {
+    const c = new Chess(puzzleFen);
+    const m = uciMoves[0];
+    if (!c.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m.slice(4) || undefined })) return null;
+    return c.turn() === 'w' ? 'white' : 'black';
+  } catch {
+    return null;
+  }
+}
+
+export function preparePunishFromPuzzle(p: RawPuzzle): PreparedPunishLesson | null {
   const uciMoves = p.moves.split(/\s+/).filter(Boolean);
   if (uciMoves.length < 2) return null; // need at least inaccuracy + punishment
   const chess = new Chess(p.fen);
@@ -3982,6 +4013,9 @@ function preparePunishFromPuzzle(p: RawPuzzle): PreparedPunishLesson | null {
     distractors,
     themes: p.themes,
     rating: p.rating,
+    // The side to move once the opponent has blundered IS the student here —
+    // they play `punishment`. ONE implementation of the rule, shared with the gate.
+    studentColor: punishStudentColor(p.fen, uciMoves) ?? (new Chess(postInaccuracyFen).turn() === 'w' ? 'white' : 'black'),
     computedFacts: computePunishFacts(postInaccuracyFen, punishment, followup, distractors),
   };
 }
@@ -4014,12 +4048,34 @@ async function generatePunishFromDb(
     return a.rating - b.rating;
   });
 
-  // Walk top candidates; keep first 5 that prepare cleanly.
+  // 🔒 ONE SEAT PER STAGE — the student never plays the other side's pieces.
+  //
+  // Found reading a real prod lesson (2026-09-17). A student being taught the
+  // Scandinavian as BLACK heard:
+  //
+  //   "One last game against a 1600 who trots out the Scandinavian, meeting
+  //    YOUR KING-PAWN with an immediate strike in the center."
+  //
+  // — which is only true from White's chair. The seat was not mis-inferred:
+  // `inferStudentSideFromName` returns 'black' for every Scandinavian name.
+  // The batch was mixed. A Lichess puzzle carries the opening's tag whoever is
+  // solving, and NOTHING here filtered on that, so the prompt declared one seat
+  // over lessons that had two. The model, handed a FEN with White to move and a
+  // White punishing move, wrote from White's chair — correctly for that lesson,
+  // and wrong for the lesson the student asked for.
+  //
+  // MEASURED over 33 openings and 2,530 tag-matching puzzles: 50.8% seated the
+  // student on the WRONG side. A coin flip. Filtering costs 2 of the 33 their
+  // punish stage (Catalan, Benko) — the honest price, and empty beats a drill
+  // that teaches the opponent's side of the student's own opening.
+  const studentSide = inferStudentSideFromName(entry.canonicalName);
   const prepared: PreparedPunishLesson[] = [];
   for (const p of matching) {
     if (prepared.length >= 5) break;
     const lesson = preparePunishFromPuzzle(p);
-    if (lesson) prepared.push(lesson);
+    if (!lesson) continue;
+    if (lesson.studentColor !== studentSide) continue;
+    prepared.push(lesson);
   }
   if (prepared.length < 2) return null; // not enough to make a stage
 
@@ -4048,8 +4104,7 @@ async function generatePunishFromDb(
   // into a prompt about positions the opening never reaches, which is the
   // conflation with the volume turned up. It stays on every stage that IS the
   // opening — only this puzzle-derived one loses it.
-  const studentSide = inferStudentSideFromName(entry.canonicalName);
-  const systemPrompt = `You are an expert chess coach narrating tactical lessons drawn from real games. The student plays ${studentSide}.
+  const systemPrompt = `You are an expert chess coach narrating tactical lessons drawn from real games. The student plays ${studentSide} — in EVERY lesson below, without exception, and each lesson's own block restates it.
 
 THESE POSITIONS ARE NOT OPENING THEORY. Each one is a middlegame position from a game that happened to begin with the ${entry.canonicalName}, often more than ten moves earlier. The opening name is PROVENANCE ONLY. Never claim the position shows that opening's ideas, pressure, structure or plans, and never name the opening as the reason a move works — you cannot see how this position was reached, so any such claim would be invented. Describe ONLY what the given FEN shows.
 
@@ -4073,7 +4128,7 @@ The SANs and FENs are GIVEN by the puzzle database — DO NOT alter them, do NOT
   const lessonsBlock = prepared
     .map((l, i) => {
       const themesLine = l.themes.join(', '); // every computed theme (G4.5)
-      return `Lesson ${i + 1} (rating ${l.rating}; themes: ${themesLine}):
+      return `Lesson ${i + 1} (rating ${l.rating}; the student plays ${l.studentColor} and makes the punishing move; themes: ${themesLine}):
   setupFen: ${l.setupFen}
   Opponent's mistake (inaccuracy): ${l.inaccuracy}
   Punishing move: ${l.punishment}

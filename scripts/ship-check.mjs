@@ -418,6 +418,9 @@ const GATE_TESTS = [
   // third party — "he takes away Black's pin", said to the person who just
   // played it. The register is part of the selection, like the seat.
   'src/services/curatedBeatRegister.test.ts',
+  // A Lichess puzzle carries the opening's tag whichever side is solving, so
+  // 58% of the punish stage seated the student in the opponent's chair.
+  'src/services/punishStageSeat.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',
