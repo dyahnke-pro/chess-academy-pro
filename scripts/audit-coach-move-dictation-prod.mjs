@@ -150,6 +150,10 @@ async function main() {
     rec('B2 armed-pending PLAYED: the coach\'s next reply IS the dictated Nf3',
       bOk, bOk ? 'board shows wN on f3 — dictation beat book and engine'
                : 'f3 has no white knight after 45s — the armed move was not played');
+    // Keep the node-side mirror level with the real board. Without this the
+    // mirror sat at 1.d4 d5, so C's undo popped the STUDENT's move and chess.js
+    // threw "Invalid move: Nc3" — an audit crash on a row the app had passed.
+    if (bOk) chess.move('Nf3');
   } else {
     rec('B1 armed-pending: the coach acknowledges it will play the dictated move', false, 'SKIPPED — A failed, no game to dictate into');
     rec('B2 armed-pending PLAYED: the coach\'s next reply IS the dictated Nf3', false, 'SKIPPED — A failed');
@@ -168,8 +172,11 @@ async function main() {
     // three candidate paths (the takeback intent router, the correction branch,
     // the brain) leave an IDENTICAL board: the move off, nothing on. Three
     // rounds were spent guessing between them for want of this one string.
-    const t3 = (await page.locator('[data-testid="teach-transcript"]').innerText().catch(() => ''))
-      .replace(/\s+/g, ' ').slice(-260);
+    const full3 = (await page.locator('[data-testid="teach-transcript"]').innerText().catch(() => ''))
+      .replace(/\s+/g, ' ');
+    // Both ends: the panel is not reliably oldest-first, so a one-sided slice
+    // can hand back the opening greeting instead of the reply being judged.
+    const t3 = full3.length > 300 ? `${full3.slice(0, 150)} … ${full3.slice(-150)}` : full3;
     rec('C corrected-last: the dictated move REPLACES the one the coach played',
       cOn && cOff,
       cOn && cOff ? `wN on c3 and f3 is clear — the coach undid its own move and played the dictated one | said: ${t3.slice(-120)}`
