@@ -64,7 +64,6 @@ async function seed(page) {
 async function dismissGates(page) {
   for (const [gate, btn] of [
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-beginner"]'],
   ]) {
     try { const g = page.locator(gate); await g.waitFor({ timeout: 6000 }); await page.locator(btn).click(); await g.waitFor({ state: 'detached', timeout: 12000 }); } catch { /* not shown */ }
   }

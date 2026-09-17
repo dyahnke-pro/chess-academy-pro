@@ -40,7 +40,7 @@ async function boot() {
   await page.goto(`${PROD}/`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await page.waitForTimeout(1500);
   const bub = page.locator('[data-testid="strength-calibration-bubble"]');
-  if (await bub.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 }).catch(() => null); await bub.waitFor({ state: 'detached', timeout: 10000 }).catch(() => null); }
+  if (await bub.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 }).catch(() => null);  }
   await page.goto(`${PROD}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await page.waitForTimeout(2500);
   const consent = page.locator('[data-testid="ai-consent-allow"]');

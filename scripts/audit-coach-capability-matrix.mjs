@@ -45,7 +45,6 @@ const lines = (t) => t.split('\n').map((s) => s.trim()).filter(Boolean);
 async function dismiss(p) {
   for (const [g, btn] of [
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
   ]) { try { const G = p.locator(g); await G.waitFor({ timeout: 8000 }); await p.locator(btn).click(); await G.waitFor({ state: 'detached', timeout: 15000 }); } catch { /* */ } }
   try { const m = p.locator('[data-testid="page-help-modal"]'); await m.waitFor({ timeout: 4000 }); await p.keyboard.press('Escape'); await m.waitFor({ state: 'detached', timeout: 5000 }); } catch { /* */ }
 }

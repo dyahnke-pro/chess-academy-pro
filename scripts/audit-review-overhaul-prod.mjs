@@ -110,7 +110,6 @@ const run = async () => {
     for (let i = 0; i < 6; i++) {
       for (const [s, c] of [
         ['[data-testid="ai-consent-allow"]', '[data-testid="ai-consent-allow"]'],
-        ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
         ['[data-testid="page-help-modal"]', '[data-testid="page-help-modal"] button'],
       ]) { if (await has(page, s)) { try { await page.locator(c).first().click({ timeout: 2500 }); } catch { /* */ } } }
       await page.waitForTimeout(400);

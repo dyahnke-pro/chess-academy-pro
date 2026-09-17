@@ -155,7 +155,6 @@ async function main() {
   // for the calibration bubble to DETACH (its applyStrength is async).
   const OVERLAYS = [
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
     ['[data-testid="page-help-modal"]', '[data-testid="page-help-close"]'],
   ];
   const deadline = Date.now() + 45_000;

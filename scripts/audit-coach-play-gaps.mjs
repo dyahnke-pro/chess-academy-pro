@@ -119,7 +119,6 @@ async function main() {
   // ── Shared helpers (selectors lifted verbatim from the existing audits) ──
   async function dismissOverlays() {
     await Promise.race([
-      page.locator(sel('strength-calibration-bubble')).waitFor({ state: 'visible', timeout: 6000 }).catch(() => undefined),
       page.locator(sel('page-help-modal')).waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined),
     ]);
     for (let i = 0; i < 4; i++) {
@@ -129,7 +128,6 @@ async function main() {
         acted = true;
         await page.locator(sel('skill-band-intermediate')).first().click({ timeout: 4000 })
           .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => undefined));
-        await calib.waitFor({ state: 'detached', timeout: 18000 }).catch(() => undefined);
       }
       const help = page.locator(sel('page-help-modal'));
       if (await help.count()) {

@@ -50,7 +50,6 @@ try {
   // board; the init script dismisses, give it a beat.
   await page.waitForTimeout(3000);
   for (const [gate, btn] of [
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
   ]) {
     try { const g = page.locator(gate); await g.waitFor({ timeout: 6000 }); await page.locator(btn).click(); await g.waitFor({ state: 'detached', timeout: 15_000 }); } catch { /* absent */ }
   }

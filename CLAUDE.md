@@ -427,15 +427,30 @@ The pattern (battle-tested 2026-05-16 + 2026-05-28):
    stall so I can't drive past Watch" is now a STALE excuse: seed-unlock and
    drive the whole loop.
 
-5. **Onboarding bubble blocks fresh-context audits.** A fresh
-   Playwright context shows the strength-calibration bubble before any
-   surface mounts. Dismiss it FIRST: wait for
-   `[data-testid="strength-calibration-bubble"]`, click
-   `[data-testid="skill-band-intermediate"]`, wait for `detached`
-   (the bubble's `applyStrength` is async — 15s timeout is safe).
-   Then dismiss any `[data-testid="page-help-modal"]` that
-   auto-opens on the destination surface. Without these dismissals,
-   every click `intercepts pointer events` and the audit times out.
+5. **🔴 THE STRENGTH-CALIBRATION BUBBLE IS GONE — deleted 2026-09-02 (David:
+   "remove strength calibration → go fully adaptive"). The instruction that
+   used to sit here, telling every session to wait for
+   `[data-testid="strength-calibration-bubble"]` and click a skill band, is
+   DELETED rather than annotated** (the Lake Butler rule: when you correct a
+   claim, remove the one you are replacing, or the next reader can pick either
+   side). Nothing in `src/` renders that testid; difficulty is fully adaptive
+   with no first-run step. Consent is now the only first-run prompt.
+
+   It was not free to leave lying around. On 2026-09-17 a sweep found **159
+   audit scripts still waiting on it — 52.6 minutes of dead wall-clock per
+   fleet run** — and two pro-rep audits (`audit-pro-gothamchess-prod`,
+   `audit-pro-naroditsky-full-9`) whose wait had neither a `.catch` nor an
+   enclosing `try`, so they had been CRASHING since the day it was removed.
+   The sweep took that to 36s. What survives is the doctrine's real half:
+
+   **The page-help modal DOES still exist** (`PageHelp.tsx`), auto-opens on
+   many surfaces, and intercepts the first click. Neutralise it — and anything
+   like it — by injecting `autoDismissCalibration`
+   (`scripts/audit-lib/auto-dismiss.mjs`) on the CONTEXT, which kills overlays
+   with CSS rather than clicking them. The helper keeps its historical name;
+   its calibration half is now a no-op against a build that no longer has one,
+   and it is gated so no new script may start chasing the bubble again
+   (`src/test/noDeadCalibrationBubble.test.ts`).
 
 6. **Deferred-seed timing.** On a cold context, `runSeedOnce` →
    `startDeferredSeed` runs `loadEcoData` (~25s for 3300 entries)

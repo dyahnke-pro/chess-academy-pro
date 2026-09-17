@@ -56,9 +56,7 @@ async function main() {
     // Dismiss onboarding bubble + page-help modal.
     try {
       const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-      await bubble.waitFor({ state: 'visible', timeout: 12000 });
       await page.locator('[data-testid="skill-band-intermediate"]').click();
-      await bubble.waitFor({ state: 'detached', timeout: 15000 });
     } catch { /* bubble may not appear on a warm context */ }
     try { await page.locator('[data-testid="page-help-modal"] button').first().click({ timeout: 4000 }); } catch { /* */ }
 

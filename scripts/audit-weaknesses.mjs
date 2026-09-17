@@ -154,7 +154,6 @@ async function main() {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
     if (await bubble.isVisible().catch(() => false)) {
       await page.locator('[data-testid="skill-band-intermediate"]').click();
-      await bubble.waitFor({ state: 'detached', timeout: 15_000 }).catch(() => {});
     }
     return 'page mounted';
   });

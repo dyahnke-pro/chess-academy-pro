@@ -171,7 +171,6 @@ async function main() {
     const calib = page.locator('[data-testid="strength-calibration-bubble"]');
     if (await calib.count().catch(() => 0)) {
       await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 5000 }).catch(() => {});
-      await calib.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
     }
   };
   const dismissHelp = async (page) => {

@@ -65,7 +65,7 @@ async function main() {
     await page.waitForTimeout(4500);
     try { if (await page.locator('[data-testid="page-help-modal"]').count()) await page.keyboard.press('Escape'); } catch {}
     // dismiss strength bubble if present
-    try { const b = page.locator('[data-testid="strength-calibration-bubble"]'); if (await b.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => {}); await b.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {}); } } catch {}
+    try { const b = page.locator('[data-testid="strength-calibration-bubble"]'); if (await b.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => {});  } } catch {}
     console.log(`URL: ${page.url()}\nFEN: ${await scrapeFen(page)}`);
   } else if (cmd === 'white') {
     const cs = page.locator('[data-testid="color-selector"]');

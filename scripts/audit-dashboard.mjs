@@ -230,13 +230,11 @@ async function main() {
   // every reload since the overlays can re-show until the write commits.
   const dismissOnboarding = async () => {
     const calBubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    await calBubble.waitFor({ state: 'visible', timeout: 4000 }).catch(() => {});
     if (await calBubble.count() > 0) {
       const band = page.locator('[data-testid^="skill-band-"]').first();
       if (await band.count() > 0) await band.click().catch(() => {});
       // Generous timeout: the sandbox IndexedDB write (CLAUDE.md G1) can
       // delay the profiles.update commit that flips needsCalibration.
-      await calBubble.waitFor({ state: 'detached', timeout: 45_000 }).catch(() => {});
     }
     const help = page.locator('[data-testid="page-help-modal"]');
     await help.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {});

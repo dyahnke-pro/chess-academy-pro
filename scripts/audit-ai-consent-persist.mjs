@@ -79,10 +79,8 @@ async function main() {
   // Clear the strength-calibration bubble so the consent modal can surface.
   async function dismissCalibration() {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    await bubble.waitFor({ timeout: 30_000 }).catch(() => undefined);
     if (await bubble.count()) {
       await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => undefined);
-      await bubble.waitFor({ state: 'detached', timeout: 45_000 }).catch(() => undefined);
     }
   }
 

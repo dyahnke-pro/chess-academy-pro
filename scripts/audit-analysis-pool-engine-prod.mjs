@@ -128,9 +128,7 @@ async function main() {
     // Fresh context → the strength-calibration bubble eats the first click.
     try {
       const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-      await bubble.waitFor({ state: 'visible', timeout: 8000 });
       await page.locator('[data-testid="skill-band-intermediate"]').click();
-      await bubble.waitFor({ state: 'detached', timeout: 15_000 });
     } catch { /* no bubble — fine */ }
 
     // The AI-consent modal is the ONE sanctioned pop-up (CLAUDE.md) and it is a

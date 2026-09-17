@@ -64,9 +64,7 @@ page.on('pageerror', (e) => pageErrors.push(`pageerror: ${e.message}`));
 async function dismissOnboarding() {
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    await bubble.waitFor({ timeout: 8000 });
     await page.locator('[data-testid="skill-band-intermediate"]').click();
-    await bubble.waitFor({ state: 'detached', timeout: 15000 });
   } catch { /* no bubble — fine on a warm context */ }
   try {
     const help = page.locator('[data-testid="page-help-modal"]');

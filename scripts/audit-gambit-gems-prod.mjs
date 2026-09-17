@@ -21,10 +21,8 @@ const rec = (name, ok, detail = '') => { results.push({ name, ok, detail }); con
 
 async function dismissModals(page) {
   const cal = page.locator('[data-testid="strength-calibration-bubble"]');
-  await cal.waitFor({ state: 'visible', timeout: 4000 }).catch(() => {});
   if (await cal.count() > 0) {
     await page.locator('[data-testid^="skill-band-"]').first().click({ timeout: 5000 }).catch(() => {});
-    await cal.waitFor({ state: 'detached', timeout: 45000 }).catch(() => {});
   }
   const help = page.locator('[data-testid="page-help-modal"]');
   if (await help.isVisible().catch(() => false)) {

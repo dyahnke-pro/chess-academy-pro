@@ -10,12 +10,11 @@ const page = await browser.newContext(sandboxContextOptions()).then(c => c.newPa
 
 await page.goto(PROD, { waitUntil: 'domcontentloaded', timeout: 20000 });
 // Dismiss strength-calibration
-await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 8000 }).catch(() => null);
+
 await page.waitForTimeout(3000);
 const bubble = await page.locator('[data-testid="strength-calibration-bubble"]').count();
 if (bubble > 0) {
   await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
-  await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 });
 }
 
 console.log('waiting 60s for full deferred seed...');

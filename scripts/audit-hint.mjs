@@ -113,7 +113,6 @@ async function main() {
     if (await calib.count()) {
       await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 })
         .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => undefined));
-      await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => undefined);
     }
     const help = page.locator('[data-testid="page-help-modal"]');
     if (await help.count()) {
@@ -123,7 +122,6 @@ async function main() {
   }
 
   await record('boot + clear overlays', async () => {
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'visible', timeout: 8000 }).catch(() => undefined);
     await clearOverlays();
   });
 

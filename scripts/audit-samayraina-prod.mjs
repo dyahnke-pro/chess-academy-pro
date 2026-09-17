@@ -23,7 +23,7 @@ const browser = await chromium.launch({ executablePath: await resolveChromiumExe
 const ctx = await browser.newContext(sandboxContextOptions());
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
-async function dismissOnboarding() { try { await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ timeout: 12000 }); await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }); await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }); } catch { /* */ } }
+async function dismissOnboarding() { try {  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });  } catch { /* */ } }
 async function dismissHelp() { const m = page.locator('[data-testid="page-help-modal"]'); if (await m.count() > 0) { await page.keyboard.press('Escape').catch(() => null); await m.waitFor({ state: 'detached', timeout: 5000 }).catch(() => null); } }
 
 const t0 = Date.now() - 60000;

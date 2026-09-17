@@ -15,7 +15,6 @@ await p.addInitScript(muteTtsForAudit);
 async function dismiss(){
   for (const [gate, btn] of [
     ['[data-testid="ai-consent-modal"]','[data-testid="ai-consent-allow"]'],
-    ['[data-testid="strength-calibration-bubble"]','[data-testid="skill-band-intermediate"]'],
   ]) {
     try { const g=p.locator(gate); await g.waitFor({timeout:8000}); await p.locator(btn).click(); await g.waitFor({state:'detached',timeout:15000}); } catch{}
   }

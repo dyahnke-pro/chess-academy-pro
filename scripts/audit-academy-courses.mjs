@@ -31,9 +31,7 @@ page.on('pageerror', (e) => pageErrors.push(e.message));
 try {
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
   try {
-    await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 8000 });
     await page.click('[data-testid="skill-band-intermediate"]');
-    await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { state: 'detached', timeout: 15000 });
   } catch { /* no bubble */ }
 
   // Academy shelves (anti/gambits seed in the deferred backfill → re-poll)

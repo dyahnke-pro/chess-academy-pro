@@ -42,9 +42,7 @@ async function dismissFirstRunGates(page) {
 
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
     try {
-      await bubble.waitFor({ state: 'visible', timeout: pass === 0 ? 8000 : 1500 });
       await page.locator('[data-testid="skill-band-intermediate"]').click();
-      await bubble.waitFor({ state: 'detached', timeout: 15000 });
       log('dismissed strength-calibration bubble');
     } catch {
       /* already calibrated in this context */

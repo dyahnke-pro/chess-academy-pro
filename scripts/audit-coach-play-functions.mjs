@@ -31,7 +31,6 @@ const nuke = async () => {
     if (await b.isVisible({ timeout: 3000 })) {
       await page.locator(sel('skill-band-intermediate')).click({ timeout: 4000 })
         .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => {}));
-      await b.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
     }
   } catch { /* none */ }
   // page-help modal — close it via its own controls.

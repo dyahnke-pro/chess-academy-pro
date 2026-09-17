@@ -44,7 +44,7 @@ async function main() {
   const detail = page.locator('[data-testid="opening-detail"]');
   async function gotoDetail() {
     await page.goto(OPENING_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-    try { const bub = page.locator('[data-testid="strength-calibration-bubble"]'); await bub.waitFor({ state: 'visible', timeout: 6000 }); await page.locator('[data-testid="skill-band-intermediate"]').click(); await bub.waitFor({ state: 'detached', timeout: 10000 }); } catch { /* */ }
+    try { const bub = page.locator('[data-testid="strength-calibration-bubble"]');  await page.locator('[data-testid="skill-band-intermediate"]').click();  } catch { /* */ }
     // Fully CLOSE the page-help modal (it auto-opens and overlays the page —
     // clicking the wrong button leaves it covering content). Use its real close.
     try { const m = page.locator('[data-testid="page-help-modal"]'); if (await m.count()) { await page.locator('[data-testid="page-help-close"]').click({ timeout: 3000 }); await m.waitFor({ state: 'detached', timeout: 5000 }); } } catch { /* */ }

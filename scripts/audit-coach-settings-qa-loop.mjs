@@ -121,7 +121,6 @@ async function main() {
         const calib = page.locator('[data-testid="strength-calibration-bubble"]');
         if (await calib.count()) {
           await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => {});
-          await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => {});
         }
         const help = page.locator('[data-testid="page-help-modal"]');
         if (await help.count()) { await page.keyboard.press('Escape'); await help.waitFor({ state: 'detached', timeout: 8000 }).catch(() => {}); }
@@ -202,7 +201,6 @@ async function main() {
         // ── boot ──
         inFlight = `${label} boot`;
         await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-        await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
         await clearOverlays();
 
         const route = surface === 'learn' ? '/coach/teach' : '/coach/play';

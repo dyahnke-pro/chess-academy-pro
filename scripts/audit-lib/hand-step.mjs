@@ -50,7 +50,6 @@ for (const a of actions) {
       const bubble = page.locator('[data-testid="strength-calibration-bubble"]').first();
       if (await bubble.isVisible().catch(() => false)) {
         await page.locator('[data-testid="skill-band-intermediate"]').first().click({ force: true }).catch(() => {});
-        await bubble.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
       }
       await dismissModals();
       log(`  did goto ${a.path}`);

@@ -107,10 +107,8 @@ async function openDetail(page, openingId) {
   // openings), so it dismisses cleanly even under the sandbox openings-write
   // stall. Must clear it before the page-help modal / plan buttons.
   const calBubble = page.locator('[data-testid="strength-calibration-bubble"]');
-  await calBubble.waitFor({ state: 'visible', timeout: 4_000 }).catch(() => {});
   if (await calBubble.count() > 0) {
     await page.locator('[data-testid^="skill-band-"]').first().click({ timeout: 5_000 }).catch(() => {});
-    await calBubble.waitFor({ state: 'detached', timeout: 45_000 }).catch(() => {});
   }
   // The "How to use a Masterclass" PageHelp modal auto-opens on first visit
   // and intercepts clicks. In the sandbox the "seen" flag can't persist

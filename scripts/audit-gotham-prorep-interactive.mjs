@@ -28,9 +28,7 @@ async function freshPage() {
 
 async function dismissOnboarding(page) {
   try {
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ timeout: 12000 });
     await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 });
   } catch { /* not shown */ }
 }
 async function dismissHelp(page) {

@@ -55,7 +55,6 @@ async function main() {
   for (const t of [1, 3, 6, 10, 15, 22, 30]) {
     await page.waitForTimeout((t === 1 ? 1 : t - [0,1,3,6,10,15,22][[1,3,6,10,15,22,30].indexOf(t)]) * 1000);
     const r = await responsive(page);
-    const hb = await hitTest(page, 'strength-calibration-bubble').catch(() => '?');
     const ht = await hitTest(page, 'section-openings').catch(() => '?');
     const bubble = await page.locator('[data-testid="strength-calibration-bubble"]').count();
     log(`  t+${t}s: responsive=${r} | bubble=${bubble} | section-openings=${ht}`);

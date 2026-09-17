@@ -106,9 +106,7 @@ async function main() {
   // Dismiss the strength-calibration bubble (first-run).
   try {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    await bubble.waitFor({ state: 'visible', timeout: 8000 });
     await page.locator('[data-testid="skill-band-intermediate"]').click();
-    await bubble.waitFor({ state: 'detached', timeout: 15000 });
   } catch { /* already calibrated */ }
 
   // Poll-dismiss the "How to use a Masterclass" page-help modal — it can

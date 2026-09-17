@@ -14,7 +14,6 @@ async function dismiss(page) {
   const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
   if (await bubble.count().catch(() => 0)) {
     await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
-    await bubble.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
   }
   const help = page.locator('[data-testid="page-help-modal"]');
   if (await help.count().catch(() => 0)) {

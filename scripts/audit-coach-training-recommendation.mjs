@@ -77,7 +77,7 @@ try {
   await page.goto(`${PROD}/`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await page.waitForTimeout(1500);
   const bub = page.locator('[data-testid="strength-calibration-bubble"]');
-  if (await bub.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 }).catch(() => null); await bub.waitFor({ state: 'detached', timeout: 12000 }).catch(() => null); }
+  if (await bub.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 }).catch(() => null);  }
 
   // Seed the weakness profile into the prod-origin IndexedDB.
   const seeded = await page.evaluate(async (rows) => {

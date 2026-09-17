@@ -102,20 +102,13 @@ async function main() {
   const isEmpty = async (page, sq) => { try { return await page.evaluate((s) => { const el = document.querySelector(`[data-square="${s}"]`); return !el || !(el.querySelector('[data-piece],img,[draggable="true"],[class*="piece"]') || el.getAttribute('data-piece')); }, sq); } catch { return false; } };
   const occupied = async (page, sq) => !(await isEmpty(page, sq));
   const blackOcc = async (page) => { try { return await page.evaluate(() => { const o = []; document.querySelectorAll('[data-square]').forEach((s) => { const n = s.getAttribute('data-square') || ''; if (!/[78]$/.test(n)) return; if (s.querySelector('[data-piece],img,[draggable="true"],[class*="piece"]') || s.getAttribute('data-piece')) o.push(n); }); return o.sort().join(','); }); } catch { return ''; } };
-  const dismissOnboard = async (page) => {
-    // The strength-calibration bubble's applyStrength is async; one click can
-    // land before the Zustand profile is ready, so the bubble lingers and
-    // intercepts the hub-tile click. Retry the band-pick until it detaches.
-    await page.waitForTimeout(2500);
-    const c = page.locator('[data-testid="strength-calibration-bubble"]');
-    for (let i = 0; i < 5; i++) {
-      if (!(await c.count().catch(() => 0))) return; // gone
-      await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 5000, force: true }).catch(() => {});
-      const detached = await c.waitFor({ state: 'detached', timeout: 8000 }).then(() => true).catch(() => false);
-      if (detached) return;
-      await page.waitForTimeout(1000);
-    }
-  };
+  // The strength-calibration bubble was REMOVED from the app on 2026-09-02
+  // (David: "remove strength calibration → go fully adaptive"). This retry loop
+  // used to click its skill band until the dialog detached; with no dialog it
+  // returned on its first line, so the whole function was dead weight. The
+  // page-help modal, which DOES still exist, is handled by dismissHelp below
+  // and by `autoDismissCalibration`'s CSS.
+  const dismissOnboard = async (page) => { await page.waitForTimeout(500); };
   const dismissHelp = async (page) => { const h = page.locator('[data-testid="page-help-close"]').first(); if (await h.count().catch(() => 0)) await h.click({ timeout: 3000 }).catch(() => {}); };
   const gotoLearn = async (page) => {
     await page.goto(`${BASE_URL}/coach/home`, { waitUntil: 'domcontentloaded', timeout: BOOT }).catch(() => {});

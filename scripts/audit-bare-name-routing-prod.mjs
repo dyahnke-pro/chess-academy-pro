@@ -61,10 +61,7 @@ const record = (id, pass, detail) => {
 
 async function dismissGates() {
   try {
-    const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    await bubble.waitFor({ state: 'visible', timeout: 8000 });
     await page.locator('[data-testid="skill-band-intermediate"]').click();
-    await bubble.waitFor({ state: 'detached', timeout: 15_000 });
   } catch { /* none */ }
   try {
     const consent = page.locator('[data-testid="ai-consent-modal"]');

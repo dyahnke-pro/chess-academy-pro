@@ -47,7 +47,6 @@ const run = async () => {
       let acted = false;
       for (const [sel, click] of [
         ['[data-testid="ai-consent-allow"]', '[data-testid="ai-consent-allow"]'],
-        ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
         ['[data-testid="page-help-modal"]', '[data-testid="page-help-modal"] button'],
       ]) { if (await has(sel)) { try { await page.locator(click).first().click({ timeout: 3000 }); acted = true; } catch { /* */ } } }
       await page.waitForTimeout(500);

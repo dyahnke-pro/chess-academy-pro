@@ -18,7 +18,6 @@ const page = await ctx.newPage();
 async function dismissGates() {
   for (const [gate, btn] of [
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-beginner"]'],
   ]) {
     try {
       await page.locator(gate).waitFor({ timeout: 8000 });

@@ -47,7 +47,7 @@ page.on('pageerror', (e) => appErrors.push(e.message));
 page.on('request', (r) => { if (r.url().includes('/api/tts')) ttsCount++; });
 
 async function dismissOnboarding() {
-  try { await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ timeout: 12000 }); await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }); await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }); } catch { /* */ }
+  try {  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });  } catch { /* */ }
 }
 async function dismissHelp() {
   const m = page.locator('[data-testid="page-help-modal"]');

@@ -47,7 +47,6 @@ const OFF_HOME = () => {
 
 async function dismiss(page) {
   for (const [wait, click] of [
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
     ['[data-testid="page-help-modal"]', '[data-testid="page-help-close"]'],
   ]) {
     const el = page.locator(wait).first();

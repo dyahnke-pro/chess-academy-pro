@@ -48,7 +48,6 @@ async function clearOverlays(page) {
   // surface). Mirrors audit-coach-play's clearFirstRunOverlays.
   await Promise.race([
     page.locator('[data-testid="page-help-modal"]').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}),
-    page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}),
   ]);
   for (let i = 0; i < 4; i++) {
     let acted = false;
@@ -57,7 +56,6 @@ async function clearOverlays(page) {
       acted = true;
       await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 })
         .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => {}));
-      await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => {});
     }
     const help = page.locator('[data-testid="page-help-modal"]');
     if (await help.count()) {

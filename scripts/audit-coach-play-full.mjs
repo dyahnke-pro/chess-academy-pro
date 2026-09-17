@@ -160,7 +160,6 @@ async function main() {
     if (await calib.count()) {
       await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 })
         .catch(async () => { await page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => {}); });
-      await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => {});
     }
     const help = page.locator('[data-testid="page-help-modal"]');
     if (await help.count()) {
@@ -196,7 +195,6 @@ async function main() {
       const a = window.__AUDIT__;
       return !!a && typeof a.isStreamHydrated === 'function' && a.isStreamHydrated();
     }, { timeout: 15000 }).catch(() => {});
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
     await clearOverlays();
 
     // ── A. Opening lock — coach plays the Italian against us ────────

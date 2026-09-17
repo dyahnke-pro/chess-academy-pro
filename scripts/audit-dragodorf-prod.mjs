@@ -23,9 +23,7 @@ try {
   await page.goto(`${PROD}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
   // Dismiss onboarding calibration bubble.
   try {
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ timeout: 12000 });
     await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 });
   } catch { /* not shown */ }
   // Let the deferred pro-rep reconcile run (PRO_DATA_REVISION migration seeds the new opening).
   await page.waitForTimeout(58000);

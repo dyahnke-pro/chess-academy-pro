@@ -107,7 +107,6 @@ async function main() {
 
   // Onboarding + consent gates, or nothing below is interactive.
   for (const [wait, click] of [
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
     ['[data-testid="page-help-modal"]', '[data-testid="page-help-close"]'],
   ]) {

@@ -50,7 +50,6 @@ async function main() {
   step('open /coach/teach, deal with whatever pops up');
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
   for (const [wait, click] of [
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
     ['[data-testid="page-help-modal"]', '[data-testid="page-help-close"]'],
   ]) {

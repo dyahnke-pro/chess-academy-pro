@@ -56,7 +56,7 @@ async function run(browser, text) {
       return !!a && typeof a.isStreamHydrated === 'function' && a.isStreamHydrated();
     }, { timeout: 45000 }).catch(() => {});
     const calib = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await calib.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => {}); await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => {}); }
+    if (await calib.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => {});  }
     const help = page.locator('[data-testid="page-help-modal"]'); if (await help.count()) { await page.keyboard.press('Escape'); await page.waitForTimeout(500); }
     const input = page.locator('[data-testid="chat-text-input"]');
     await mkdir(SHOT_DIR, { recursive: true }).catch(() => {});

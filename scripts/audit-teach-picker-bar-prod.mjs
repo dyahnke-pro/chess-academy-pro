@@ -52,7 +52,6 @@ p.on('pageerror', (e) => pageErrors.push(String(e).slice(0, 200)));
 async function dismiss() {
   for (const [gate, btn] of [
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
   ]) {
     try {
       const g = p.locator(gate);

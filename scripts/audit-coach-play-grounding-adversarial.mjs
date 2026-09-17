@@ -38,7 +38,7 @@ const inputEnabled = () => page.locator('[data-testid="chat-text-input"]').first
 const lastAssistant = () => page.locator('[data-testid="chat-message-assistant"]').first().innerText().catch(() => '');
 async function clearOverlays() {
   const calib = page.locator('[data-testid="strength-calibration-bubble"]');
-  if (await calib.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => null); await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => null); }
+  if (await calib.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => null);  }
   const consent = page.locator('[data-testid="ai-consent-allow"]');
   if (await consent.count() && await consent.isVisible().catch(() => false)) { await consent.click({ force: true, timeout: 4000 }).catch(() => null); await page.locator('[data-testid="ai-consent-modal"]').waitFor({ state: 'detached', timeout: 6000 }).catch(() => null); }
   const help = page.locator('[data-testid="page-help-modal"]');

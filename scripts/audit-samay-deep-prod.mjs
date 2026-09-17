@@ -85,15 +85,13 @@ async function drive(testidSel, id, label, expectMount = true) {
 console.log(`[setup] ${URL}`);
 await page.goto(URL + '/', { waitUntil: 'domcontentloaded', timeout: 30000 });
 try {
-  await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 10000 });
   await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 8000 });
-  await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { state: 'detached', timeout: 15000 });
 } catch (e) { console.log('[setup] bubble: ' + String(e).slice(0, 60)); }
 if (PASS >= 3) {
   console.log('[pass 3] cold-cache: clearing IndexedDB then reloading…');
   await page.evaluate(async () => { for (const d of await indexedDB.databases()) if (d.name) indexedDB.deleteDatabase(d.name); }).catch(() => {});
   await page.goto(URL + '/', { waitUntil: 'domcontentloaded', timeout: 30000 });
-  try { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 8000 }); await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { state: 'detached', timeout: 15000 }); } catch {}
+  try { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 8000 });  } catch {}
 }
 console.log('[setup] 60s deferred seed…');
 await page.waitForTimeout(60000);

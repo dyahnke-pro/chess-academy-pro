@@ -52,7 +52,7 @@ async function boot() {
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.waitForTimeout(11000);
   const bub = page.locator('[data-testid="strength-calibration-bubble"]').first();
-  if (await bub.isVisible().catch(() => false)) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ force: true }).catch(() => {}); await bub.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {}); }
+  if (await bub.isVisible().catch(() => false)) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ force: true }).catch(() => {});  }
   for (const t of ['ai-consent-allow', 'page-help-modal-close', 'page-help-got-it']) { const el = page.locator(`[data-testid="${t}"]`).first(); if (await el.isVisible().catch(() => false)) { await el.click({ force: true }).catch(() => {}); await page.waitForTimeout(300); } }
 }
 async function ask(q) {

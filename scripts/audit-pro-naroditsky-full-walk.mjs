@@ -159,12 +159,10 @@ try {
   }, { url: listener.url, secret: LOCAL_LISTENER_SECRET });
 
   // Onboarding dismiss
-  await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 8000 }).catch(() => null);
   await page.waitForTimeout(3000);
   const bubbleCount = await page.locator('[data-testid="strength-calibration-bubble"]').count();
   if (bubbleCount > 0) {
     await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }).catch(() => null);
   }
 
   // Deferred-seed wait (per CLAUDE.md G1: pro-rep entries land ~30s, full seed ~50s)

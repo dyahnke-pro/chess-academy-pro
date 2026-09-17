@@ -80,7 +80,6 @@ const nodeEntries = () => listener.getCapturedEvents()
 async function dismissGates() {
   for (const [gate, btn] of [
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
   ]) {
     try {
       const g = page.locator(gate);

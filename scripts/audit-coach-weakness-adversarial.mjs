@@ -133,7 +133,7 @@ async function boot() {
   await page.goto(`${PROD}/`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await page.waitForTimeout(1500);
   const bub = page.locator('[data-testid="strength-calibration-bubble"]');
-  if (await bub.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 }).catch(() => null); await bub.waitFor({ state: 'detached', timeout: 12000 }).catch(() => null); }
+  if (await bub.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 4000 }).catch(() => null);  }
   const seeded = await page.evaluate(async (rows) => new Promise((resolve) => {
     const req = indexedDB.open('ChessAcademyDB');
     req.onsuccess = () => { const db = req.result; if (!db.objectStoreNames.contains('classifiedTactics')) return resolve('no-store'); const tx = db.transaction('classifiedTactics', 'readwrite'); const s = tx.objectStore('classifiedTactics'); for (const r of rows) s.put(r); tx.oncomplete = () => resolve('ok'); tx.onerror = () => resolve('tx-err'); };

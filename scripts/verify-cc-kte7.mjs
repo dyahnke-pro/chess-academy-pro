@@ -12,7 +12,7 @@ const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { w
 const page = await ctx.newPage();
 const nuke = async () => {
   try { const b = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await b.isVisible({ timeout: 1200 })) { await page.locator('[data-testid="skill-band-intermediate"]').click(); await b.waitFor({ state: 'detached', timeout: 15000 }); } } catch {}
+    if (await b.isVisible({ timeout: 1200 })) { await page.locator('[data-testid="skill-band-intermediate"]').click();  } } catch {}
   await page.evaluate(() => document.querySelectorAll('[role="dialog"][aria-modal="true"]').forEach((n) => n.remove()));
 };
 await page.goto(`${BASE}/coach/library?cb=${Date.now()}`, { waitUntil: 'networkidle' });

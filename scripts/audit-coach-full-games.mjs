@@ -260,7 +260,6 @@ async function main() {
     const calib = page.locator('[data-testid="strength-calibration-bubble"]');
     if (await calib.isVisible().catch(() => false)) {
       await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => {});
-      await calib.waitFor({ state: 'detached', timeout: 15_000 }).catch(() => {});
     }
     const help = page.locator('[data-testid="page-help-modal"]');
     if (await help.isVisible().catch(() => false)) {

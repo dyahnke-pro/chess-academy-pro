@@ -36,7 +36,6 @@ for (let i = 0; i < 30 && quiet < 2; i++) {
   const band = page.locator('[data-testid="skill-band-intermediate"]');
   if (await band.count().catch(() => 0)) {
     await band.click({ timeout: 3000 }).catch(() => {});
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
     acted = true;
   }
   const consent = page.locator('[data-testid="ai-consent-allow"]');

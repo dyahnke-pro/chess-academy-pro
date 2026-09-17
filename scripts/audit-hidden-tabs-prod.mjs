@@ -17,8 +17,7 @@ const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
 
 async function dismiss() {
-  try { const b = page.locator('[data-testid="strength-calibration-bubble"]'); await b.waitFor({ timeout: 8000 });
-    await page.locator('[data-testid="skill-band-intermediate"]').click(); await b.waitFor({ state: 'detached', timeout: 15000 }); } catch {}
+  try { const b = page.locator('[data-testid="strength-calibration-bubble"]');    await page.locator('[data-testid="skill-band-intermediate"]').click();  } catch {}
   try { const m = page.locator('[data-testid="page-help-modal"]'); await m.waitFor({ timeout: 4000 });
     await page.keyboard.press('Escape'); await m.waitFor({ state: 'detached', timeout: 5000 }); } catch {}
 }

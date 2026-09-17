@@ -28,7 +28,7 @@ async function dismissOverlays() {
   for (let i = 0; i < 4; i++) {
     let acted = false;
     const b = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await b.count() > 0) { acted = true; await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => null); await b.waitFor({ state: 'detached', timeout: 15000 }).catch(() => null); }
+    if (await b.count() > 0) { acted = true; await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => null);  }
     const h = page.locator('[data-testid="page-help-modal"]');
     if (await h.count() > 0) { acted = true; await page.keyboard.press('Escape').catch(() => null); await h.waitFor({ state: 'detached', timeout: 2500 }).catch(async () => { await h.locator('button').last().click({ force: true }).catch(() => null); await h.waitFor({ state: 'detached', timeout: 2500 }).catch(() => null); }); }
     if (!acted) return;

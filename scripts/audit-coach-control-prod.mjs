@@ -25,7 +25,6 @@ const check = (name, pass, detail) => { results.push({ name, pass, detail }); };
 async function dismissGates() {
   for (const [gate, btn] of [
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
-    ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
   ]) {
     try { const g = page.locator(gate); await g.waitFor({ timeout: 8000 }); await page.locator(btn).click(); await g.waitFor({ state: 'detached', timeout: 15000 }); } catch { /* absent */ }
   }

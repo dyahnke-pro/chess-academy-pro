@@ -30,10 +30,8 @@ async function dismissModals(page) {
   // First-run strength-calibration bubble + PageHelp modal intercept clicks
   // (re-open every load in the sandbox — IndexedDB write-stall, CLAUDE.md G1).
   const cal = page.locator('[data-testid="strength-calibration-bubble"]');
-  await cal.waitFor({ state: 'visible', timeout: 4000 }).catch(() => {});
   if (await cal.count() > 0) {
     await page.locator('[data-testid^="skill-band-"]').first().click({ timeout: 5000 }).catch(() => {});
-    await cal.waitFor({ state: 'detached', timeout: 45000 }).catch(() => {});
   }
   const help = page.locator('[data-testid="page-help-modal"]');
   if (await help.isVisible().catch(() => false)) {

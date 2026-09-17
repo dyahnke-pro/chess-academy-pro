@@ -30,9 +30,7 @@ async function main() {
 
   const dismiss = async () => {
     await page.locator('[data-testid="ai-consent-allow"]').click({ timeout: 5000 }).catch(() => {});
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'visible', timeout: 6000 }).catch(() => {});
     await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => {});
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
     const help = page.locator('[data-testid="page-help-modal"] [aria-label="Close"], [data-testid="page-help-close"]');
     if (await help.count()) await help.first().click({ timeout: 3000 }).catch(() => {});
   };

@@ -29,7 +29,6 @@ const sleep = (ms) => new Promise((r) => { setTimeout(r, ms); });
 
 const OVERLAYS = [
   ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
-  ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
   ['[data-testid="page-help-modal"]', '[data-testid="page-help-close"]'],
 ];
 

@@ -83,16 +83,12 @@ function isAppBreak(text) {
 // until dismissed (its applyStrength is async). Wait for it, pick a band, wait
 // for it to detach — exactly the reference-audit dance — or nothing mounts.
 async function dismissOnboarding(page) {
-  await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 10000 }).catch(() => null);
-  await sleep(2500); // profile-init beat (handlePick exits early on !activeProfile)
-  if ((await page.locator('[data-testid="strength-calibration-bubble"]').count()) > 0) {
-    await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000, force: true }).catch(() => {});
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 })
-      .catch(async () => {
-        await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000, force: true }).catch(() => {});
-        await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
-      });
-  }
+  // The strength-calibration bubble was REMOVED from the app on 2026-09-02
+  // (David: "remove strength calibration → go fully adaptive"). The onboarding
+  // block that used to live here waited up to 23s for an element that no longer
+  // renders, then skipped its own body because the count was zero. Deleted
+  // rather than left to burn the clock; `autoDismissCalibration` still
+  // neutralises the page-help modal, which DOES still exist.
 }
 
 async function dismissBubbles(page) {

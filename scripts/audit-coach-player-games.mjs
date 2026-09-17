@@ -59,9 +59,7 @@ async function main() {
     // Dismiss the strength-calibration bubble if it appears (fresh context).
     try {
       const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-      await bubble.waitFor({ state: 'visible', timeout: 8000 });
       await page.locator('[data-testid="skill-band-intermediate"]').click();
-      await bubble.waitFor({ state: 'detached', timeout: 15_000 });
     } catch { /* no bubble — fine */ }
 
     // Let the deferred seed run (loadProGameReferences lands with the

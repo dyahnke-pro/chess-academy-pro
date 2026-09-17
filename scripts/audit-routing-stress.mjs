@@ -37,7 +37,7 @@ async function go(path, waitMs = 1500) {
   await page.waitForTimeout(waitMs);
 }
 async function dismiss() {
-  try { const b = page.locator('[data-testid="strength-calibration-bubble"]'); if (await b.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 3000 }).catch(() => null); await b.waitFor({ state: 'detached', timeout: 8000 }).catch(() => null); } } catch { /* */ }
+  try { const b = page.locator('[data-testid="strength-calibration-bubble"]'); if (await b.count()) { await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 3000 }).catch(() => null);  } } catch { /* */ }
   const h = page.locator('[data-testid="page-help-modal"]'); if (await h.count()) { await page.keyboard.press('Escape').catch(() => null); await h.waitFor({ state: 'detached', timeout: 3000 }).catch(() => null); }
 }
 const alive = async () => { try { return (await page.evaluate(() => document.querySelector('#root')?.children.length > 0)) === true; } catch { return false; } };

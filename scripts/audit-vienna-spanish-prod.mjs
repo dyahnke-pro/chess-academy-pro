@@ -16,10 +16,7 @@ const SPANISH_MARKERS = ['Bienvenidos', 'ajedrez', 'apertura', 'blancas', 'cabal
 
 async function dismissOverlays(page) {
   try {
-    const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    await bubble.waitFor({ state: 'visible', timeout: 6000 });
     await page.locator('[data-testid="skill-band-intermediate"]').click();
-    await bubble.waitFor({ state: 'detached', timeout: 15000 });
   } catch { /* not shown */ }
   try {
     const help = page.locator('[data-testid="page-help-modal"]');

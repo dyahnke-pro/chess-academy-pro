@@ -37,7 +37,7 @@ let ttsCount = 0;
 page.on('pageerror', (e) => appErrors.push(e.message));
 page.on('request', (r) => { if (r.url().includes('/api/tts')) ttsCount++; });
 
-async function dismissOnboarding() { try { await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ timeout: 12000 }); await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }); await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }); } catch { /* */ } }
+async function dismissOnboarding() { try {  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });  } catch { /* */ } }
 async function dismissHelp() { const m = page.locator('[data-testid="page-help-modal"]'); if (await m.count() > 0) { await page.keyboard.press('Escape').catch(() => null); await m.waitFor({ state: 'detached', timeout: 5000 }).catch(async () => { await m.locator('button').last().click({ force: true }).catch(() => null); await m.waitFor({ state: 'detached', timeout: 5000 }).catch(() => null); }); } }
 
 // Seed linesPlayed:[-1] into the opening record via raw IndexedDB, with an

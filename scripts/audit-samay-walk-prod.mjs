@@ -116,7 +116,7 @@ async function walkWatch(id, label, expected) {
 
 // setup
 await page.goto(URL + '/', { waitUntil: 'domcontentloaded', timeout: 30000 });
-try { await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 10000 }); await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 8000 }); await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { state: 'detached', timeout: 15000 }); } catch {}
+try {  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 8000 });  } catch {}
 console.log('[setup] 60s seed…'); await page.waitForTimeout(60000);
 await openDetail(OPENINGS[0]);
 const unlock = await seedUnlockedOpenings(page, OPENINGS);

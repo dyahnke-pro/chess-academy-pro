@@ -136,7 +136,6 @@ async function dismiss(page) {
   if (await b.isVisible({ timeout: 1500 }).catch(() => false)) {
     await page.locator(sel('skill-band-intermediate')).click({ timeout: 5000 })
       .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => {}));
-    await b.waitFor({ state: 'detached', timeout: 12000 }).catch(() => {});
   }
   const h = page.locator(sel('page-help-modal'));
   if (await h.isVisible({ timeout: 1200 }).catch(() => false)) {

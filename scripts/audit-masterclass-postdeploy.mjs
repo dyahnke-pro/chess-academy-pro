@@ -48,11 +48,10 @@ page.on('request', req => {
 
 const runStart = Date.now();
 await page.goto(`${PROD}/`, { waitUntil: 'domcontentloaded', timeout: 25000 });
-await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 8000 }).catch(() => {});
+
 await page.waitForTimeout(3000);
 if (await page.locator('[data-testid="strength-calibration-bubble"]').count() > 0) {
   await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => {});
-  await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
 }
 process.stdout.write('  seeding');
 for (let i = 0; i < 14; i++) { await page.waitForTimeout(5000); process.stdout.write('.');

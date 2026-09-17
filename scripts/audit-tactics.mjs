@@ -328,11 +328,9 @@ async function main() {
   ];
   async function dismissOnboarding() {
     const calBubble = page.locator('[data-testid="strength-calibration-bubble"]');
-    await calBubble.waitFor({ state: 'visible', timeout: 4000 }).catch(() => {});
     if (await calBubble.count() > 0) {
       const band = page.locator('[data-testid^="skill-band-"]').first();
       if (await band.count() > 0) await band.click().catch(() => {});
-      await calBubble.waitFor({ state: 'detached', timeout: 45_000 }).catch(() => {});
     }
     // Pre-seed all pagehelp-seen flags so no surface auto-opens its help.
     await page.evaluate((ids) => new Promise((resolve) => {

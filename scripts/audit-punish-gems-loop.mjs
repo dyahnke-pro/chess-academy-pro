@@ -291,7 +291,6 @@ async function bootSeed(page) {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
     if (await bubble.isVisible({ timeout: 8000 }).catch(() => false)) {
       await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
-      await bubble.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
     }
   } catch { /* no bubble */ }
   // Pro-rep entries land ~30s into the deferred seed, full seed ~50s (G1 caveat
@@ -382,7 +381,6 @@ async function dismissModals(page) {
   const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
   if (await bubble.isVisible({ timeout: 1500 }).catch(() => false)) {
     await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
-    await bubble.waitFor({ state: 'detached', timeout: 8000 }).catch(() => {});
   }
   const modal = page.locator('[data-testid="page-help-modal"]');
   if (await modal.count().catch(() => 0)) {

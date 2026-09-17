@@ -89,24 +89,12 @@ try {
   // an active profile in the Zustand store to accept clicks (handlePick
   // exits early on !activeProfile). On a cold context the profile-create
   // path runs async; give it time to settle, then click.
-  console.log('  waiting for strength-calibration onboarding + profile init...');
-  await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 8000 }).catch(() => null);
-  await page.waitForTimeout(3000);  // profile init beat
-  const bubbleCount = await page.locator('[data-testid="strength-calibration-bubble"]').count();
-  if (bubbleCount > 0) {
-    console.log('  picking intermediate band');
-    await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
-    // Bubble close = applyStrength roundtrip; wait up to 15s for onDone.
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 })
-      .catch(async () => {
-        console.log('  bubble didn\'t close on first click — retrying');
-        await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000, force: true });
-        await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 });
-      });
-    console.log('  onboarding dismissed');
-  } else {
-    console.log('  no onboarding bubble (already calibrated)');
-  }
+  // The strength-calibration bubble was REMOVED from the app on 2026-09-02
+  // (David: "remove strength calibration → go fully adaptive"). The onboarding
+  // block that used to live here waited up to 23s for an element that no longer
+  // renders, then skipped its own body because the count was zero. Deleted
+  // rather than left to burn the clock; `autoDismissCalibration` still
+  // neutralises the page-help modal, which DOES still exist.
 
   // Wait for deferred seed to complete (loadProRepertoireData is in
   // startDeferredSeed alongside ECO + gambits + model games + flashcards

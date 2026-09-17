@@ -19,7 +19,7 @@ const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
 const appErrors = [];
 page.on('pageerror', e => appErrors.push(e.message));
-async function dO() { try { await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ timeout: 12000 }); await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }); await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }); } catch {} }
+async function dO() { try {  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });  } catch {} }
 async function dH() { const m = page.locator('[data-testid="page-help-modal"]'); if (await m.count() > 0) { await page.keyboard.press('Escape').catch(() => 0); await m.waitFor({ state: 'detached', timeout: 5000 }).catch(() => 0); } }
 async function openProTab() {
   await page.goto(`${PROD}/openings`, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => 0);

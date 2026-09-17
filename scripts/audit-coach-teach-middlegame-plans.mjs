@@ -58,9 +58,7 @@ async function dismissOnboarding(page) {
   // Strength-calibration bubble blocks every click on a fresh context.
   const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
   if (await bubble.count().catch(() => 0)) {
-    await bubble.first().waitFor({ timeout: 15_000 }).catch(() => undefined);
     await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(() => undefined);
-    await bubble.first().waitFor({ state: 'detached', timeout: 15_000 }).catch(() => undefined);
   }
   // A page-help modal sometimes auto-opens on the destination surface.
   const help = page.locator('[data-testid="page-help-modal"]');

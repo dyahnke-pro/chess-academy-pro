@@ -26,9 +26,7 @@ async function mount(label, url, testid, timeout = 60000) {
 // dismiss first-run bubble
 await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 90000 });
 try {
-  await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ timeout: 15000 });
   await page.locator('[data-testid="skill-band-intermediate"]').click();
-  await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 20000 });
   console.log('calibration dismissed');
 } catch { console.log('no calibration bubble'); }
 

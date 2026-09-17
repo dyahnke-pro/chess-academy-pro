@@ -79,22 +79,12 @@ try {
   }, { url: listener.url, secret: LOCAL_LISTENER_SECRET });
   console.log('  configured page → listener for audit POSTs');
 
-  console.log('  waiting for strength-calibration onboarding + profile init...');
-  await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 8000 }).catch(() => null);
-  await page.waitForTimeout(3000);
-  const bubbleCount = await page.locator('[data-testid="strength-calibration-bubble"]').count();
-  if (bubbleCount > 0) {
-    console.log('  picking intermediate band');
-    await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 });
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 })
-      .catch(async () => {
-        await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000, force: true });
-        await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 });
-      });
-    console.log('  onboarding dismissed');
-  } else {
-    console.log('  no onboarding bubble (already calibrated)');
-  }
+  // The strength-calibration bubble was REMOVED from the app on 2026-09-02
+  // (David: "remove strength calibration → go fully adaptive"). The onboarding
+  // block that used to live here waited up to 23s for an element that no longer
+  // renders, then skipped its own body because the count was zero. Deleted
+  // rather than left to burn the clock; `autoDismissCalibration` still
+  // neutralises the page-help modal, which DOES still exist.
 
   console.log('  waiting 35s for first-install deferred seed (pro-rep + ECO + plans + flashcards + narrations)');
   await page.waitForTimeout(35_000);

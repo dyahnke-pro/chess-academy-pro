@@ -21,7 +21,7 @@ page.on('pageerror', (e) => breaks.push({ kind: 'pageerror', detail: (e.message 
 
 async function dismiss() {
   const cb = page.locator('[data-testid="strength-calibration-bubble"]');
-  if (await cb.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => null); await cb.waitFor({ state: 'detached', timeout: 12000 }).catch(() => null); }
+  if (await cb.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => null);  }
   const c = page.locator('[data-testid="ai-consent-allow"]');
   if (await c.count() && await c.isVisible().catch(() => false)) { await c.click({ force: true }).catch(() => null); await page.locator('[data-testid="ai-consent-modal"]').waitFor({ state: 'detached', timeout: 6000 }).catch(() => null); }
   const h = page.locator('[data-testid="page-help-modal"]');

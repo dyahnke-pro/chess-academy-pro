@@ -53,7 +53,6 @@ async function dismissBubble() {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
     if (!(await bubble.isVisible().catch(() => false))) return;
     await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
-    await bubble.waitFor({ state: 'detached', timeout: 12000 }).catch(() => {});
     await page.waitForTimeout(400);
   }
 }
@@ -153,7 +152,6 @@ async function highlightedSquares() {
     const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
     if (await bubble.isVisible({ timeout: 8000 }).catch(() => false)) {
       await page.locator('[data-testid="skill-band-intermediate"]').click().catch(() => {});
-      await bubble.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
     }
   } catch {}
   console.log('  waiting for deferred seed…');

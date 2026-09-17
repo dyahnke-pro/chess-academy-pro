@@ -17,8 +17,7 @@ const rec = (n, ok, d = '') => { results.push({ n, ok, d }); console.log(`${ok ?
 
 async function dismiss(page) {
   const cal = page.locator('[data-testid="strength-calibration-bubble"]');
-  await cal.waitFor({ state: 'visible', timeout: 4000 }).catch(() => {});
-  if (await cal.count() > 0) { await page.locator('[data-testid^="skill-band-"]').first().click({ timeout: 5000 }).catch(() => {}); await cal.waitFor({ state: 'detached', timeout: 45000 }).catch(() => {}); }
+  if (await cal.count() > 0) { await page.locator('[data-testid^="skill-band-"]').first().click({ timeout: 5000 }).catch(() => {});  }
   const help = page.locator('[data-testid="page-help-modal"]');
   if (await help.isVisible().catch(() => false)) { await page.locator('[data-testid="page-help-close"]').click({ timeout: 5000 }).catch(() => {}); await help.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {}); }
 }

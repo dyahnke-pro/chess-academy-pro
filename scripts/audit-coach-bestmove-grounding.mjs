@@ -33,9 +33,7 @@ async function main() {
   try {
     await page.goto(`${BASE_URL}/coach`, { waitUntil: 'domcontentloaded', timeout: BOOT });
     // Dismiss onboarding + page-help.
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'visible', timeout: 6000 }).catch(() => {});
     await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 }).catch(() => {});
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 15000 }).catch(() => {});
     await page.locator('[data-testid="coach-action-play"]').click({ timeout: 8000 }).catch(async () => {
       await page.goto(`${BASE_URL}/coach/play`, { waitUntil: 'domcontentloaded', timeout: BOOT });
     });

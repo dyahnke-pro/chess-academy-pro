@@ -9,7 +9,7 @@ const rec=(n,s,d)=>{results.push({n,s,d});console.log(`  [${s}] ${n}${d?': '+d:'
 const browser=await chromium.launch({executablePath:await resolveChromiumExecutable(),headless:true,args:sandboxLaunchArgs()});
 const ctx=await browser.newContext(sandboxContextOptions());const page=await ctx.newPage();
   await page.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
-async function dismissOnboarding(){try{await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({timeout:12000});await page.locator('[data-testid="skill-band-intermediate"]').click({timeout:5000});await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({state:'detached',timeout:15000});}catch{}}
+async function dismissOnboarding(){try{await page.locator('[data-testid="skill-band-intermediate"]').click({timeout:5000});}catch{}}
 async function dismissHelp(){const m=page.locator('[data-testid="page-help-modal"]');if(await m.count()>0){await page.keyboard.press('Escape').catch(()=>null);await m.waitFor({state:'detached',timeout:5000}).catch(()=>null);}}
 console.log(`=== Carlsen Watch-depth audit vs ${BASE} ===\n`);
 await page.goto(`${BASE}/`,{waitUntil:'domcontentloaded',timeout:30000});

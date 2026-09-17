@@ -56,7 +56,7 @@ async function main() {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.waitForFunction(() => { const a = window.__AUDIT__; return !!a?.isStreamHydrated?.(); }, { timeout: 20000 }).catch(() => {});
     const calib = page.locator('[data-testid="strength-calibration-bubble"]');
-    if (await calib.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 5000 }).catch(() => {}); await calib.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {}); }
+    if (await calib.count()) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 5000 }).catch(() => {});  }
     await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.waitForTimeout(2500);
     const help = page.locator('[data-testid="page-help-modal"]'); if (await help.count()) { await page.keyboard.press('Escape'); await page.waitForTimeout(500); }

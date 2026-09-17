@@ -277,7 +277,6 @@ async function main() {
     await Promise.race([
       page.locator('[data-testid="ai-consent-modal"]').waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined),
       page.locator('[data-testid="page-help-modal"]').waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined),
-      page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'visible', timeout: 1500 }).catch(() => undefined),
     ]);
     // The AI-CONSENT sheet (App Store compliance, 2026-07) blocks first-run
     // BEFORE the calibration bubble — the rot that took this audit red on CI
@@ -300,7 +299,6 @@ async function main() {
         acted = true;
         await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 })
           .catch(() => page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => undefined));
-        await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => undefined);
       }
       const help = page.locator('[data-testid="page-help-modal"]');
       if (await help.count()) {
@@ -321,8 +319,6 @@ async function main() {
 
   await record('unlock-first-run', async () => {
     // The calibration bubble can pop a beat after boot — give it a moment.
-    await page.locator('[data-testid="strength-calibration-bubble"]')
-      .waitFor({ state: 'visible', timeout: 8000 }).catch(() => undefined);
     await clearFirstRunOverlays();
   });
 
