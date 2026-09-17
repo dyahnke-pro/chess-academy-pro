@@ -912,8 +912,20 @@ const run = async () => {
     const by = {}; for (const e of churn) { const k = `${e.kind}|${String(e.source ?? '').split('.').pop()}`; by[k] = (by[k] ?? 0) + 1; }
     log(`  [pool churn since reopen] ${JSON.stringify(by)}`);
   }
+  // 🚨 REPORT THE PLY IT MEASURED, NEVER THE CONSTANT. This printed
+  // "heap 209MB at ply ${FUND_PLY}" — the CONSTANT interpolated into the
+  // string — while the walk sat at ply 0 for the entire loop (2026-09-17). A
+  // green row quoting a number it never read is the exact failure the vacuity
+  // check exists to catch, and it masked the neighbouring red below.
+  const heapPly = (await readWalkPly(page))?.n ?? null;
   if (blown) { await add('HEAP reopened-walk-stays-sane', false, 'renderer heap exploded on the reopened walk'); }
-  else { await dumpProfile('reopened-walk'); await add('HEAP reopened-walk-stays-sane', true, `heap ${await heapMB()}MB at ply ${FUND_PLY}`); }
+  else { await dumpProfile('reopened-walk'); await add('HEAP reopened-walk-stays-sane', true, `heap ${await heapMB()}MB at ply ${heapPly ?? 'UNREADABLE'}`); }
+  // The reopened walk must actually BE a walk before anything navigates it. A
+  // null readout makes `goTo` read 0, click forward 80×, and fail — which is
+  // what produced the after-dive red: the AUDIT never started the walk, the
+  // product was fine.
+  await add('REOPEN walk-readout-is-live', heapPly !== null,
+    heapPly !== null ? `ply readout reads ${heapPly}` : 'no ply readout on the reopened walk — navigation below cannot work');
   await settle();
   // The banner fills once this ply's line is generated; give it a beat.
   await until(async () => (await txt(page, '[data-testid="review-narration-banner"]')).length > 0, 60000, 1000);

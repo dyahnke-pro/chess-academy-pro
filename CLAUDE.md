@@ -584,7 +584,7 @@ to be done LATER (not now):
   provider migration is the durable fix so the app is never cliff-edged
   by a single TTS vendor again.
 
-### G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — the ONLY cap is the student's own short/brief verbosity setting (David 2026-09-16, emphatic: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!! That's how things don't get stated or teachings left out" → "The only cap should be the short verbosity coach setting").
+### G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").
 
 A `.slice(0, N)` on a list of COMPUTED FACTS is a ship-blocking defect. Every
 one ever found was written for readability or thrift and every one silently
@@ -592,11 +592,28 @@ deleted teaching the board had already earned. This is the
 quality-is-the-only-metric rule (G5 §QUALITY, David 2026-07-06) applied to a
 code class nobody had swept for.
 
-**THE RULE.** If code computed a fact, the student hears it. No ceiling on the
-number of reasons in a verdict, moments in a recap, engine lines per game,
-squares in an enumeration, loose pieces named, or pawn levers listed. A long
-list is a PHRASING problem — use an `andList` ("a, b and c"), or a count plus
-the list ("four holes: d5, b5, c4 and e4") — never a truncation.
+**THE RULE.** 🔴 **CORRECTED 2026-09-17.** This paragraph used to read "If code
+computed a fact, the student hears it." That was WRONG and is DELETED rather
+than appended to — it contradicted G4.5.1 (written the very next day, which has
+`factSelector` SUBSUME duplicate claims and apply a value floor: "if the battery
+is more important than the pin, then the pin stays quiet and the battery wins").
+The file asserted both, so the next reader could pick either side.
+
+What is actually banned is a CAP — a number in code that stops after N
+**regardless of worth**: `.slice(0, N)`, "first 3 reasons", "top 2 moments".
+A cap cannot know what it is deleting. What DECIDES is the RANKING COMPUTER, at
+narration time: rank a fact worth hearing and the student hears it; let it be
+subsumed by a better statement of the same claim, or fall under the floor, and
+it stays quiet. So there is no ceiling on the number of reasons in a verdict,
+moments in a recap, engine lines per game, squares in an enumeration, loose
+pieces named or pawn levers listed — the count is whatever clears the ranker,
+which on a critical moment is all of them. A long list of facts that all cleared
+is a PHRASING problem — use an `andList` ("a, b and c"), or a count plus the
+list ("four holes: d5, b5, c4 and e4") — never a truncation.
+
+**THE TEST stays the same:** ask whether a STUDENT loses a fact that the ranker
+judged worth hearing. If yes, it is this defect. If the ranker judged it not
+worth hearing, silence is the correct, computed answer — not a cap.
 
 **THE ONE SANCTIONED CAP** is `coachNarration` = `silent` / `brief`
 (`applyBriefVoiceCap`, 2 sentences / 30 words, §G5 below). That is not the app
