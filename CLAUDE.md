@@ -5054,10 +5054,18 @@ review audit says nothing about it.
 **The standing pair, both muted, both 3-instrument:**
 - **REVIEW** → `scripts/audit-review-overhaul-prod.mjs` (seeds a real unanalyzed game,
   walks every ply, reads the narration back off the listener).
-- **LEARN** → `scripts/audit-concept-gameplay-prod.mjs` (drives a real Learn session on a
-  lesson whose taught spine LANDS a tactic, answers as a student, and proves the listener
-  HEARD the computed sentence mid-lesson). `audit-teach-on-topic-prod.mjs` is the
-  alternate when the change is about lesson SCOPE or repetition rather than the tactic.
+- **LEARN** → `scripts/audit-concept-gameplay-prod.mjs` — and it **PLAYS A GAME**, it does
+  not ask for a lesson. 🔒 **A WALKTHROUGH IS THE WRONG SURFACE FOR THIS AUDIT (David
+  2026-09-17: "Replace teach me x opening. I want to hear only the computer. That is the
+  surface you are scoped to.").** The script used to ask "Teach me the Scandinavian
+  Defense, Lasker Variation" and read the walkthrough back — but a walkthrough's beats are
+  BAKED AT GENERATION TIME by `openingGenerator`, so the run went green without touching
+  one line of the live computed path (`coachDecider`, `factSelector`, `standingRefrains`,
+  `positionFacts`, `playCommentary`, the phase transitions). It now asks the coach to PLAY
+  the line, takes the student's seat and pushes real moves on the real board, so every
+  line it reads back was computed on the position in front of it. A walkthrough mounting
+  is now a **FAIL** row, not a pass. `audit-teach-on-topic-prod.mjs` is the alternate when
+  the change is about lesson SCOPE or repetition rather than the live computer.
 
 **RUN THEM SEQUENTIALLY, NEVER CONCURRENTLY, AND NEVER ALONGSIDE ship-check.** Both drive
 a real browser with real Stockfish workers; two at once starve each other and produce
@@ -5144,7 +5152,7 @@ After every `git push origin main`:
    | `src/data/pro-game-references.json` (any pro-rep build) | `scripts/audit-coach-player-games.mjs` + `npx vitest run src/data/proGameReferences.test.ts` |
    | `public/data/*-teachings.json` (any farmed corpus) or `farmedCorpusData` / `secondaryCorpora` | `scripts/audit-farmed-corpus-prod.mjs` + `npx vitest run src/data/secondaryTeachings.test.ts src/services/farmedCorpusData.test.ts` — a farmed corpus is FETCHED, not bundled, so a green build proves nothing about whether the running app can actually reach it |
    | computed-concept engine (`conceptEngine`, `endgameTechnique`, `matePatterns`, `puzzleConceptHint`/`Explanation`, `positionFacts` concept clause, `dnaLineNarrator` invariants) | `scripts/audit-concept-engine-prod.mjs` (muted, 3-instrument: hub → Master Level, drill → computed concept explanation, listener) + `npx vitest run src/services/conceptEngine.test.ts src/services/endgameTechnique.test.ts src/services/matePatterns.test.ts` |
-   | the concept SPOKEN during live gameplay (Learn walkthrough per-ply narration, `landedTacticTeaching` splice, `computePlyFacts.tacticLanded`, the tactic classifier `detectTacticType`) | `scripts/audit-concept-gameplay-prod.mjs` (muted, 3-instrument: asks Learn for a lesson whose taught spine LANDS a tactic — "Scandinavian Defense, Lasker Variation", ply-10 …Bg4 pin — answers forks like a student, and proves the narration listener heard the engine's invariant sentence spoken mid-lesson; off-canonical ask too) + `npx vitest run src/services/tacticTypeUnification.test.ts src/hooks/usePhaseNarration.test.ts src/hooks/useLiveCoach.test.tsx src/hooks/usePositionNarration.test.ts` |
+   | the concept SPOKEN during live gameplay (the live composer, `coachDecider`, `factSelector`, `positionFacts`, `playCommentary`, phase transitions, `computePlyFacts.tacticLanded`, the tactic classifier `detectTacticType`) | `scripts/audit-concept-gameplay-prod.mjs` (muted, 3-instrument: asks the coach to **PLAY** "Scandinavian Defense, Lasker Variation", takes Black, pushes real moves — …Bg4 pins Nf3 to d1 — and proves the narration listener heard the engine's invariant sentence spoken mid-GAME; a mounted walkthrough FAILS the row; off-canonical ask too) + `npx vitest run src/services/tacticTypeUnification.test.ts src/hooks/usePhaseNarration.test.ts src/hooks/useLiveCoach.test.tsx src/hooks/usePositionNarration.test.ts` |
    | coach surfaces (any) — tactical-awareness wiring | `scripts/audit-coach-tactical-awareness.mjs` (verifies the TacticsLiveContext block fires + rating-adaptive lookahead lands in {1,2,4,6}) |
    | unified-coach personalization (weakness spine → surfaces, custom lesson) | `scripts/audit-unified-coach-prod.mjs` (SEEDS a real weakness profile via `audit-lib/seed-weakness-profile.mjs` so the inert-until-fed functions fire, then drives the P5 custom-lesson picker → concept teaching → own-position drill; 3-instrument. Every personalization function rides the same weakness spine this exercises) |
    | `/coach/endgame` + `/coach/session/middlegame` | `scripts/audit-coach-middlegame-endgame.mjs` (mode coverage matrix: which of Teach/Drill/Quiz/Trap/Play each surface supports today) |
