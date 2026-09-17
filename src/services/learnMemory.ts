@@ -71,6 +71,31 @@ export interface LearnMemory {
    *  `plyNow - last >= gap` then fails for as many plies as the last game was
    *  long — muting the lane precisely at the start of the new game. */
   thinkAloudLastPly: number;
+  /** The opening name last ANNOUNCED. Per game: a second game of the same
+   *  line must be named again, because the student is being told what they are
+   *  now playing, not being reminded of a fact they already hold. */
+  announcedOpeningName: string | null;
+  /**
+   * Note how many plies are on the board. Forgets everything when the board
+   * has gone BACKWARDS — a new or rewound game. Returns true when it forgot.
+   *
+   * 🚨 THIS, not the call sites, is what makes the reset reliable. The two
+   * hand-placed "fresh game" sites are PATH-DEPENDENT, and a second game
+   * reaches the board by paths neither covers — measured on prod 2026-09-17,
+   * with two games of the same line in one mount playing an IDENTICAL first
+   * fourteen plies: the opening was announced four times in game 1 and ZERO
+   * times in game 2. One reset ran on `historyAfterReply.length <= 2`, which
+   * is never true on the first coach reply of a game the student plays as
+   * Black (`e4 d5 exd5` is already 3); the other hangs off one intent branch.
+   *
+   * The board cannot be fooled by any of that. It is the same rule
+   * `standingFactMemory` states for the same reason — neither surface has a
+   * game id, so without it a second game inherits the first game's silence —
+   * and rewinding is the safe direction to be wrong in: forgetting makes the
+   * coach repeat itself, suppressing makes it mute for a reason nobody can
+   * trace.
+   */
+  observe(plies: number): boolean;
   /** Forget everything. Every "a new game starts" site calls THIS. */
   newGame(): void;
 }
@@ -81,6 +106,7 @@ export function createLearnMemory(): LearnMemory {
   const structureSaid = new Set<string>();
   const engineReadSaid = new Set<string>();
   const pieceQualitySaid = new Set<string>();
+  let lastPlies = 0;
   const mem: LearnMemory = {
     curatedBeatSeen,
     saidExplainers,
@@ -91,6 +117,13 @@ export function createLearnMemory(): LearnMemory {
     gemFen: null,
     lastComputed: '',
     thinkAloudLastPly: NEVER_FIRED,
+    announcedOpeningName: null,
+    observe(plies: number): boolean {
+      const forgot = plies < lastPlies;
+      if (forgot) mem.newGame();
+      lastPlies = plies;
+      return forgot;
+    },
     newGame(): void {
       curatedBeatSeen.clear();
       saidExplainers.clear();
@@ -101,6 +134,8 @@ export function createLearnMemory(): LearnMemory {
       mem.gemFen = null;
       mem.lastComputed = '';
       mem.thinkAloudLastPly = NEVER_FIRED;
+      mem.announcedOpeningName = null;
+      lastPlies = 0;
     },
   };
   return mem;

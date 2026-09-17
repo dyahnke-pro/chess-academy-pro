@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**13883 lines · 3 exports · 5 importers · 6 tests · 8 audits**
+**13889 lines · 3 exports · 5 importers · 6 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,5 +50,6 @@
 - `scripts/audit-concept-gameplay-prod.mjs`
 - `scripts/audit-learn-comprehensive.mjs`
 - `scripts/audit-learn-full-game.mjs`
+- `scripts/audit-second-game-memory-prod.mjs`
 - `scripts/audit-teach-forkdive-prod.mjs`
 - `scripts/audit-teach-play-picker-prod.mjs`

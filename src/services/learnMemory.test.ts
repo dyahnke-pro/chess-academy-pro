@@ -37,7 +37,11 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     // here too without editing this test — and then caught if newGame() skips
     // it. This is the whole point of the object: you cannot add a memory and
     // forget to forget it.
-    const slots = (Object.keys(mem) as Array<keyof LearnMemory>).filter((k) => k !== 'newGame');
+    // Filter METHODS by type, not by name: a second method (observe) was added
+    // and a name-based filter flagged it as an unforgotten slot. Any new DATA
+    // slot is still caught, which is the point.
+    const slots = (Object.keys(mem) as Array<keyof LearnMemory>)
+      .filter((k) => typeof mem[k] !== 'function');
     expect(slots.length).toBeGreaterThan(5);
     for (const k of slots) {
       const v = mem[k];
@@ -61,6 +65,26 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
         : v === null || v === '' || v === NEVER_FIRED;
       expect(clean, `newGame() did not forget "${k}" — add it to newGame()`).toBe(true);
     }
+  });
+
+  it('observe() forgets when the board goes BACKWARDS — a second game', () => {
+    const mem = createLearnMemory();
+    mem.announcedOpeningName = 'Scandinavian Defense: Lasker Variation';
+    mem.curatedBeatSeen.add('beat-1');
+    expect(mem.observe(14), 'a game in progress must not forget').toBe(false);
+    expect(mem.observe(16)).toBe(false);
+    // A NEW game: the board is back near the start.
+    expect(mem.observe(1), 'fewer plies than before = a new or rewound game').toBe(true);
+    expect(mem.announcedOpeningName).toBeNull();
+    expect(mem.curatedBeatSeen.size).toBe(0);
+  });
+
+  it('the per-ply observe is wired into the page — not just the two intent sites', () => {
+    const src = readFileSync(PAGE, 'utf8');
+    expect(
+      /learnMemRef\.current\.observe\(/.test(src),
+      'the board-driven forget is what makes the reset path-independent',
+    ).toBe(true);
   });
 
   it('a think-aloud ply reset reads as "never fired", not as a future ply', () => {

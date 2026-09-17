@@ -1596,7 +1596,6 @@ export function CoachTeachPage(): JSX.Element {
    *  recognition, or refinement like Vienna Game → Vienna Gambit). The Play
    *  page has had announce-on-first-recognition since WO-NARRATION-CADENCE;
    *  Learn never got the wire. */
-  const announcedOpeningNameRef = useRef<string | null>(null);
   /** Notes already spliced into this game's narration (same dedup contract as
    *  the walkthrough's `noteArrowSourceAt` seenIds — a note teaches once). */
   const teachNoteSeenIdsRef = useRef(new Set<string>());
@@ -7060,6 +7059,13 @@ export function CoachTeachPage(): JSX.Element {
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
     const history = args.historyAfterReply;
+    // 🔒 A NEW GAME IS DETECTED FROM THE BOARD, NOT FROM A CODE PATH.
+    // This runs on every ply, so it is the one place that cannot be bypassed
+    // by whichever intent branch started the game. See `learnMemory.observe`
+    // for the prod measurement that forced it: two games of one line in a
+    // single mount, identical first fourteen plies, the opening announced four
+    // times in game 1 and never in game 2.
+    learnMemRef.current.observe(history.length);
 
     // ── TACTICS ALERT ──────────────────────────────────────────────────────
     // Built with a NULL analysis on purpose: `immediate`, `hanging` and
@@ -7269,9 +7275,9 @@ export function CoachTeachPage(): JSX.Element {
     // ── OPENING ANNOUNCEMENT ───────────────────────────────────────────────
     try {
       const det = detectOpening(history);
-      if (det && det.name && det.name !== announcedOpeningNameRef.current) {
-        const firstResolve = announcedOpeningNameRef.current === null;
-        announcedOpeningNameRef.current = det.name;
+      if (det && det.name && det.name !== learnMemRef.current.announcedOpeningName) {
+        const firstResolve = learnMemRef.current.announcedOpeningName === null;
+        learnMemRef.current.announcedOpeningName = det.name;
         // A PLACEHOLDER NAME EARNS NO KEY IDEA. David 2026-08-08, from a live
         // run: after 1.e4 e5 the coach said "This game is now the King's Pawn
         // Game. Key idea: The queen is the last piece still out of the fight…
@@ -7511,7 +7517,7 @@ export function CoachTeachPage(): JSX.Element {
       // corpus leads and the masterclass beat fills where the corpus can't.
       const beat = noteLine
         ? null
-        : curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, announcedOpeningNameRef.current, playerColor, 'live');
+        : curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.announcedOpeningName, playerColor, 'live');
       if (beat) {
         learnMemRef.current.curatedBeatSeen.add(beat.id);
         curatedLine = beat.text;
@@ -7562,7 +7568,7 @@ export function CoachTeachPage(): JSX.Element {
         // five of twelve plies died that way, three of them re-picking the
         // exact note the previous ply had already rejected. The predicate makes
         // every tier keep looking instead.
-        const openingNow = announcedOpeningNameRef.current;
+        const openingNow = learnMemRef.current.announcedOpeningName;
         const src = teachingSourceForBoard(
           history,
           args.fenAfterReply,
@@ -9089,7 +9095,7 @@ export function CoachTeachPage(): JSX.Element {
                     if (chainHistory.length <= 2) {
                       learnMemRef.current.newGame(); // fresh game — forgets every slot it holds
                       announcedTrapsRef.current.clear();
-                      announcedOpeningNameRef.current = null;
+                      // (opening name now forgotten by learnMemory.observe, from the board)
                       teachNoteSeenIdsRef.current.clear();
                       fundamentalSeenRef.current.clear();
                       lastTacticRef.current = '';
@@ -9110,9 +9116,9 @@ export function CoachTeachPage(): JSX.Element {
                     // it — the name was context, never an event.
                     try {
                       const det = detectOpening(chainHistory);
-                      if (det && det.name && det.name !== announcedOpeningNameRef.current) {
-                        const firstResolve = announcedOpeningNameRef.current === null;
-                        announcedOpeningNameRef.current = det.name;
+                      if (det && det.name && det.name !== learnMemRef.current.announcedOpeningName) {
+                        const firstResolve = learnMemRef.current.announcedOpeningName === null;
+                        learnMemRef.current.announcedOpeningName = det.name;
                         // Idea source spans ALL the speaking-note corpora
                         // (David 2026-08-07: "make sure all the notes get
                         // wired in"): primary first (house voice), then the
@@ -9146,7 +9152,7 @@ export function CoachTeachPage(): JSX.Element {
                         // NOT spoken from here any more — the announcement
                         // is voiced by the instant pass, seconds earlier.
                         // In practice this block no longer runs at all: that
-                        // pass already set `announcedOpeningNameRef`, so the
+                        // pass already set `learnMem.announcedOpeningName`, so the
                         // name-changed test above is false. It stays as the
                         // fallback path for any turn the instant pass could
                         // not run.
