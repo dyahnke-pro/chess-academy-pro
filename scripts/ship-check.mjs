@@ -414,6 +414,10 @@ const GATE_TESTS = [
   // The live surfaces see the student's NEED, and only on their own ply — the
   // mover guard is what stops half of every game going mute.
   'src/services/liveNeedGate.test.ts',
+  // A Watch-register beat speaking on a live board narrates the student to a
+  // third party — "he takes away Black's pin", said to the person who just
+  // played it. The register is part of the selection, like the seat.
+  'src/services/curatedBeatRegister.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',

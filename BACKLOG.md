@@ -130,17 +130,47 @@ fixed; each needs its own root-cause pass.
    claims about the current board and must not be graded as such — this is the
    same class as the "fen" substring matching inside "de-fen-se".
 
-6. **A Watch-register paragraph in a live game — 58% of the curated beats.**
-   `curatedBeatAt` has exactly ONE caller, `CoachTeachPage:7462`, the live game
-   reply; Watch and the LessonPlayer do not use it. So hand-authored masterclass
-   prose written to be WATCHED is served to somebody mid-GAME. Measured over the
-   19,259 beats carrying a `say`: 41% (8,021) are second-person and seat-bound,
-   58% (11,238) are third-person ("White throws the b-pawn at the bishop"), of
-   which 5,634 name no colour at all. The live standard is student = "you/your",
-   opponent = "they/their"; a bare colour mid-flow is sanctioned only for a pure
-   spectator model game. The beat goes into `factLines` for the phrasing pass
-   rather than being recited, so the model COULD reframe it — it demonstrably
-   does not, which is how "Black snatches your e-pawn" reached a Black student.
-   Fix by reframing at selection or by ranking curated beats below the computed
-   lanes on live surfaces. **Do NOT fix it by loosening the seat guard** — that
-   doubles the reach of the violation instead of removing it.
+6. **FIXED (2026-09-17) — a Watch-register paragraph in a live game.**
+   `curatedBeatAt` has exactly ONE caller, `CoachTeachPage`'s live game reply;
+   Watch and the LessonPlayer read their beats straight off `getLessonScript`.
+   So hand-authored masterclass prose written to be WATCHED was served to
+   somebody mid-GAME. Measured on five real opening lines: **44 of 93 plies
+   fired a beat and 36 spoke as a spectator** — "Before White commits to the big
+   central break, **he** takes away Black's pin", "**So let's rewind.**", said to
+   the person who had just played those moves.
+
+   🔴 **The earlier diagnosis here was WRONG and is deleted rather than
+   annotated: "the beat goes into `factLines` for the phrasing pass … so the
+   model COULD reframe it."** There is no model on that path. `buildVoicePackage`
+   produces `pkg.spoken`, which is spoken verbatim — deliberately, as the purest
+   G0. So the input's register IS the output's register, and no prompt change
+   could ever have fixed this.
+
+   The fix: `beatRegister(say, seat)` classifies the SOURCE at index time and
+   `curatedBeatAt` takes the surface's register as a REQUIRED parameter. It never
+   rewrites prose — a regex turning "White does" into "you does" is what that
+   road leads to. The guard is a `continue`, so a position holding both a
+   spectator beat and a clean one still teaches: the live walk fell from 44 plies
+   to **32, not to 8**. What speaks now reads right — "Bb5 — the Ruy Lopez …
+   you're leaning on the whole point", "White grabs kingside space with h4,
+   threatening to trap your bishop. You make a quiet hole with h6."
+   Gate: `curatedBeatRegister.test.ts`. Doctrine: CLAUDE.md, under THE SEAT IS
+   PART OF THE SELECTION.
+
+   **OWED — bake a live rendering for the other 2,436.** 1,312 of 3,748 beats are
+   live-safe today. The rest are CORRECT where they live (Watch is supposed to
+   say "White develops the knight") and must not be rewritten in place; they need
+   an ADDITIVE second rendering, generated offline and gated exactly like the
+   bake — `narrationAccuracy` for the board claims, `perspectiveVoice` for
+   we/our, plus a check that the new text is `live-safe`. **Do NOT "recover" the
+   2,436 by loosening either guard** — the seat or the register — that doubles
+   the reach of the violation instead of removing it.
+
+7. **Consecutive plies re-announce the same move from different lessons.**
+   Reading the post-fix Italian walk: ply 5 "Bc4 — the Italian bishop", ply 6
+   "Bc4 — the Italian bishop, pointed straight at f7", then ply 7 "c3 — modest",
+   ply 8 "c3 — quiet, but loaded", ply 9 "c3 and d3 — the Giuoco Pianissimo".
+   Five beats, three distinct ideas. `curatedBeatSeenRef` dedupes by beat ID and
+   `buildVoicePackage`'s novelty set matches whole sentences, so two lessons
+   teaching the same move in different words evade both. The dedupe term that is
+   missing is the beat's SUBJECT (the move it leads with), not its text.

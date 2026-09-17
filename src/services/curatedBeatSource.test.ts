@@ -26,7 +26,7 @@ describe('curatedBeatAt', () => {
     const line = ['e4', 'e5', 'Nc3', 'Nc6', 'Bc4', 'Bc5', 'Qg4'];
     const chess = new Chess();
     for (const san of line) chess.move(san);
-    const beat = curatedBeatAt(line, chess.fen(), undefined, null, null);
+    const beat = curatedBeatAt(line, chess.fen(), undefined, null, null, 'watch');
     expect(beat, 'no curated beat at the Copycat position').toBeTruthy();
     expect(beat!.text.toLowerCase()).toContain('copycat');
   });
@@ -35,7 +35,7 @@ describe('curatedBeatAt', () => {
     const seen = new Set<string>();
     let taught = 0;
     for (const { prefix, fen } of walk(['e4', 'e5', 'Nc3', 'Nc6', 'Bc4', 'Bc5', 'Qg4', 'Qf6', 'Nd5'])) {
-      const beat = curatedBeatAt(prefix, fen, seen, null, null);
+      const beat = curatedBeatAt(prefix, fen, seen, null, null, 'watch');
       if (beat) { seen.add(beat.id); taught += 1; }
     }
     expect(taught, 'the Copycat taught nothing across the line').toBeGreaterThan(1);
@@ -49,22 +49,22 @@ describe('curatedBeatAt', () => {
     const a = new Chess(); for (const s of authored) a.move(s);
     const b = new Chess(); for (const s of transposed) b.move(s);
     expect(b.fen().split(' ').slice(0, 4)).toEqual(a.fen().split(' ').slice(0, 4));
-    expect(curatedBeatAt(transposed, b.fen(), undefined, null, null)).toBeTruthy();
+    expect(curatedBeatAt(transposed, b.fen(), undefined, null, null, 'watch')).toBeTruthy();
   });
 
   it('says nothing on a position no lesson teaches', () => {
     const chess = new Chess();
     for (const san of ['a3', 'a6', 'h3', 'h6', 'a4', 'a5']) chess.move(san);
-    expect(curatedBeatAt(['a3', 'a6', 'h3', 'h6', 'a4', 'a5'], chess.fen(), undefined, null, null)).toBeNull();
+    expect(curatedBeatAt(['a3', 'a6', 'h3', 'h6', 'a4', 'a5'], chess.fen(), undefined, null, null, 'watch')).toBeNull();
   });
 
   it('never repeats a beat the game already spoke', () => {
     const line = ['e4', 'e5', 'Nc3', 'Nc6', 'Bc4', 'Bc5', 'Qg4'];
     const chess = new Chess();
     for (const san of line) chess.move(san);
-    const first = curatedBeatAt(line, chess.fen(), undefined, null, null);
+    const first = curatedBeatAt(line, chess.fen(), undefined, null, null, 'watch');
     expect(first).toBeTruthy();
-    expect(curatedBeatAt(line, chess.fen(), new Set([first!.id]), null, null)).toBeNull();
+    expect(curatedBeatAt(line, chess.fen(), new Set([first!.id]), null, null, 'watch')).toBeNull();
   });
 
   it('THE SECOND REGRESSION: a shared-prefix beat does not teach another opening', () => {
@@ -76,7 +76,7 @@ describe('curatedBeatAt', () => {
     // lesson's own opening can.
     const chess = new Chess();
     for (const san of ['e4', 'e5']) chess.move(san);
-    expect(curatedBeatAt(['e4', 'e5'], chess.fen(), undefined, 'Vienna Game', null)).toBeNull();
+    expect(curatedBeatAt(['e4', 'e5'], chess.fen(), undefined, 'Vienna Game', null, 'watch')).toBeNull();
   });
 
   it('refuses a beat whose lesson teaches a DIFFERENT opening', () => {
@@ -89,7 +89,7 @@ describe('curatedBeatAt', () => {
     for (const san of line) {
       chess.move(san);
       prefix.push(san);
-      const beat = curatedBeatAt([...prefix], chess.fen(), seen, 'Vienna Game', null);
+      const beat = curatedBeatAt([...prefix], chess.fen(), seen, 'Vienna Game', null, 'watch');
       if (!beat) continue;
       seen.add(beat.id);
       expect(beat.id.toLowerCase(), `${beat.id} taught inside a Vienna`).not.toContain('ruy');
@@ -106,7 +106,9 @@ describe('curatedBeatAt', () => {
     for (const san of ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5', 'fxe5', 'Nxe4']) {
       chess.move(san);
       prefix.push(san);
-      const beat = curatedBeatAt([...prefix], chess.fen(), seen, 'Vienna Game', null);
+      // 'live' on purpose — this test's whole subject IS the live surface, and
+      // theatre is only refused there (on Watch it is the correct register).
+      const beat = curatedBeatAt([...prefix], chess.fen(), seen, 'Vienna Game', null, 'live');
       if (!beat) continue;
       seen.add(beat.id);
       expect(beat.text.toLowerCase()).not.toMatch(/^welcome\b|today we (?:study|look at|learn)/);
@@ -152,19 +154,19 @@ describe('the seat guard', () => {
 
   it('does not hand a Black student the White-side Scandinavian lesson', () => {
     const { history, fen } = afterNc3();
-    const beat = curatedBeatAt(history, fen, undefined, null, 'black');
+    const beat = curatedBeatAt(history, fen, undefined, null, 'black', 'watch');
     expect(beat?.text ?? '').not.toMatch(/snatches your e-pawn/i);
   });
 
   it('…and a White student still gets it', () => {
     const { history, fen } = afterNc3();
     // The anti-Scandinavian IS the right lesson for the student facing it.
-    const beat = curatedBeatAt(history, fen, undefined, null, 'white');
+    const beat = curatedBeatAt(history, fen, undefined, null, 'white', 'watch');
     expect(beat, 'the White-side beat was lost along with the wrong-seat one').not.toBeNull();
   });
 
   it('stands down when the seat is genuinely unknown rather than guessing', () => {
     const { history, fen } = afterNc3();
-    expect(curatedBeatAt(history, fen, undefined, null, null)).not.toBeNull();
+    expect(curatedBeatAt(history, fen, undefined, null, null, 'watch')).not.toBeNull();
   });
 });

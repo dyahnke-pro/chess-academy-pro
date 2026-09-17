@@ -7491,7 +7491,7 @@ export function CoachTeachPage(): JSX.Element {
       // corpus leads and the masterclass beat fills where the corpus can't.
       const beat = noteLine
         ? null
-        : curatedBeatAt(history, args.fenAfterReply, curatedBeatSeenRef.current, announcedOpeningNameRef.current, playerColor);
+        : curatedBeatAt(history, args.fenAfterReply, curatedBeatSeenRef.current, announcedOpeningNameRef.current, playerColor, 'live');
       if (beat) {
         curatedBeatSeenRef.current.add(beat.id);
         curatedLine = beat.text;

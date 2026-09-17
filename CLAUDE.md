@@ -3277,6 +3277,34 @@ that already states it.
 When you add a new teaching source, ask which seat it is written from before you
 ask which position it is about.
 
+**AND ITS SIBLING — THE REGISTER (found reading the live tape the same day).**
+The seat asks WHOSE lesson this is. The register asks WHO IS BEING SPOKEN TO,
+and it is the second term a position cannot identify. A masterclass beat is
+authored for WATCH, where "White develops the knight; Black answers …" is the
+CORRECT register (see TWO DISTINCT NARRATION REGISTERS below) — replayed onto a
+live board it becomes a coach narrating the student to a third party:
+
+> "Before White commits to the big central break, **he** takes away Black's pin"
+> "**So let's rewind.** Black pokes the bishop…"
+
+— said to the person who had just played those moves themselves. Measured on
+five real opening lines: 44 of 93 plies fired a beat and 36 spoke this way.
+
+`beatRegister(say, seat)` classifies the SOURCE — it never rewrites the prose.
+(A regex turning "White does" into "you does" is the obvious wrong answer;
+English verb agreement is why the honest fix for the rest is an OFFLINE bake of
+a live rendering, tracked in BACKLOG §4.6.) A beat is `spectator` when it names
+the student's own side as an actor, uses a personal pronoun beside a colour, or
+carries lesson theatre; otherwise `live-safe`. `curatedBeatAt` takes the
+surface's register as a REQUIRED parameter and the guard is a `continue`, so a
+position holding both a spectator beat and a clean one still teaches — which is
+why the live walk only fell from 44 plies to 32, not to 8.
+
+The split is not arbitrary: it lands exactly on Narration Voice Rule 3 — the
+beats that teach the POSITION survive, the ones that narrate the PLAYERS do not.
+1,312 of 3,748 are live-safe today; that number should RISE as the bake lands
+and must never reach zero (`curatedBeatRegister.test.ts`).
+
 ### 🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").
 
 The coach spoke a different perspective on different tabs — sometimes "we/our", sometimes "you", sometimes by color — and a live tester couldn't tell whose piece a sentence meant. ONE standard, everywhere:

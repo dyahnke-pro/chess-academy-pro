@@ -10,7 +10,7 @@
 
 - **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:931) — names `CoachTeachPage`
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2663) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:5219) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:5247) — names `CoachTeachPage`
 
 ## Who calls in
 

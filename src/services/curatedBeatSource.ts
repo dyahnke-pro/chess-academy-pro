@@ -44,12 +44,67 @@ import repertoireRaw from '../data/repertoire.json';
  *  number, same reasoning, as `MIN_TEACHING_ANCHOR_PLIES` in the corpus. */
 const MIN_BEAT_PLIES = 3;
 
-/** Lesson framing, not position teaching. A beat is written to be heard at the
- *  START of a class ("Welcome. Today we study…", "By the end of this lesson…"),
- *  which is nonsense narrated over move four of somebody's live game. */
-const SCAFFOLDING = /^(?:welcome\b|today we|in this lesson|by the end of|let's begin|we'll start)/i;
-const isLessonScaffolding = (say: string): boolean =>
-  SCAFFOLDING.test(say.trim()) || /\btoday we (?:study|look at|learn)\b/i.test(say);
+/** 🔒 THE REGISTER IS PART OF THE SELECTION — the sibling of the seat guard
+ *  below (found reading the live tape, 2026-09-17).
+ *
+ *  A masterclass beat is authored for WATCH, and CLAUDE.md's TWO REGISTERS rule
+ *  says Watch prose is SUPPOSED to read "White develops the knight; Black
+ *  answers …" — the student is a spectator there, so naming the colours is
+ *  right. The live game is the other register entirely: the student is PLAYING,
+ *  so their own side is "you/your" and the opponent is "they/their".
+ *
+ *  Replaying the first without translating it produces, on a live board, a
+ *  coach narrating the student to a third party. Measured on five real opening
+ *  lines: 44 of 93 plies fired a beat, and 36 of them spoke this way —
+ *
+ *    "Before White commits to the big central break, HE takes away Black's pin"
+ *    "So LET'S REWIND. Black pokes the bishop…"
+ *    "White does not attack the pawn. White attacks its defender"
+ *
+ *  — spoken to the person who had just played those moves themselves.
+ *
+ *  THE RULE: a beat that refers to a PLAYER in the third person, or carries
+ *  lesson theatre, is Watch-register and may not speak on a live board. A beat
+ *  that teaches the POSITION is register-free and speaks anywhere. That split is
+ *  not arbitrary — it is Narration Voice Rule 3 ("the voice is the position
+ *  teaching the student, not a narrator describing a game"), and the census
+ *  falls exactly along it: of 3,748 beats, the 1,238 that survive are the ones
+ *  about the board.
+ *
+ *  It is a CLASSIFICATION of the source, never a rewrite of the prose. Turning
+ *  "White does" into "you does" is what a regex would produce, and the offline
+ *  bake of a live rendering for the other 2,510 is the owed follow-up — not
+ *  something to attempt on a string at runtime. */
+export type BeatRegister = 'live-safe' | 'spectator';
+
+/** Lesson framing, not position teaching — "Welcome. Today we study…", and the
+ *  mid-beat theatre the old start-anchored check let through ("So let's
+ *  rewind.", "here is the secret of the whole opening"), which is nonsense
+ *  narrated over move four of somebody's live game. */
+const THEATRE = /(?:^\s*(?:welcome\b|let'?s begin|we'?ll start))|\b(?:today we (?:study|look at|learn)|in this lesson|by the end of this lesson|let'?s rewind|so let'?s rewind|here is the secret|you'?ll see today)\b/i;
+
+/** A third-person personal pronoun standing in for a PLAYER. Scoped to a
+ *  sentence that also names a colour, so a historical aside ("Fischer and his
+ *  1972 match") is not swept up with "…and HE takes away Black's pin". */
+const PLAYER_PRONOUN = /\b(?:he|him|his)\b/i;
+const COLOUR = /\b(?:White|Black)\b/;
+
+/**
+ * The register a beat is written in, given the seat its lesson teaches from.
+ * Pure and exported so the gate measures the same function the runtime uses.
+ */
+export function beatRegister(say: string, seat: 'white' | 'black'): BeatRegister {
+  if (THEATRE.test(say)) return 'spectator';
+  // The student's OWN side named as an actor. The beat's seat IS the student's
+  // seat by the time it is a candidate (the seat guard below), so this is the
+  // student being talked ABOUT rather than TO.
+  const ownSide = seat === 'white' ? /\bWhite\b/ : /\bBlack\b/;
+  if (ownSide.test(say)) return 'spectator';
+  for (const sentence of say.split(/(?<=[.!?])\s+/)) {
+    if (COLOUR.test(sentence) && PLAYER_PRONOUN.test(sentence)) return 'spectator';
+  }
+  return 'live-safe';
+}
 
 /** openingId → the opening's NAME, so the same tag-conflict guard the corpus
  *  uses can judge a beat. Ids are stable; names are what the guard compares. */
@@ -77,6 +132,9 @@ interface IndexedBeat {
    *  beat authored for White is not merely less useful to a Black student, it
    *  is WRONG: it hands them the opponent's pieces. */
   seat: 'white' | 'black';
+  /** The register the beat is written in — computed once, at index time, from
+   *  its own prose and seat. A live surface admits only 'live-safe'. */
+  register: BeatRegister;
   say: string;
   moves: string[];
 }
@@ -134,6 +192,7 @@ function indexSome(limit: number): boolean {
             lesson: lesson.title,
             openingId: key.split('::')[0],
             seat: lesson.orientation,
+            register: beatRegister(say, lesson.orientation),
             say,
             moves: beat.moves,
           };
@@ -204,6 +263,23 @@ export function curatedBeatAt(
    * around it); the guard then stands down rather than guessing.
    */
   studentSide: 'white' | 'black' | null,
+  /**
+   * 🔒 THE REGISTER THIS SURFACE SPEAKS IN. REQUIRED, for the same reason the
+   * seat is: a new caller must decide its answer rather than inherit a silent
+   * default.
+   *
+   * `'live'` — the student is PLAYING this position, so their own side is
+   * "you/your". Only `live-safe` beats may speak (see `beatRegister`).
+   * `'watch'` — the student is watching a demo game unfold, which is the
+   * register every beat was authored in. Everything speaks.
+   *
+   * NO PRODUCTION CALLER PASSES `'watch'` TODAY, and that is not an oversight:
+   * the Watch player reads its beats straight off `getLessonScript`, so it
+   * never comes through here. The arm exists because the parameter is only
+   * honest if the other register has a name — and because making it REQUIRED
+   * is what stops the next caller inheriting `'live'` without deciding.
+   */
+  surfaceRegister: 'live' | 'watch',
 ): CuratedBeat | null {
   try {
     // Deliberately does NOT build on demand: that is the 5s freeze. Until the
@@ -220,7 +296,11 @@ export function curatedBeatAt(
       seen.add(beat.id);
       if (exclude?.has(beat.id)) continue;
       if (beat.moves.length < MIN_BEAT_PLIES) continue;
-      if (isLessonScaffolding(beat.say)) continue;
+      // Register, like the seat, is part of what identifies the claim. A
+      // Watch-register beat is CORRECT where it lives and wrong here; the loop
+      // falls through to the next candidate at this position rather than
+      // mangling the prose. See `beatRegister`.
+      if (surfaceRegister === 'live' && beat.register !== 'live-safe') continue;
       if (noteOpeningConflicts(openingNameFor(beat.openingId), openingName)) continue;
       // A lesson written from the other side of the board addresses the
       // student as the opponent. Never speak it.
@@ -240,8 +320,12 @@ export function curatedBeatAt(
 
 /** Index size, for audits and the coverage report. `built` is false while the
  *  prewarm is still running. */
-export function curatedBeatStats(): { beats: number; positions: number; built: boolean } {
+export function curatedBeatStats(): { beats: number; positions: number; built: boolean; liveSafe: number } {
   let beats = 0;
-  for (const list of byFen.values()) beats += list.length;
-  return { beats, positions: byFen.size, built: isBuilt() };
+  let liveSafe = 0;
+  for (const list of byFen.values()) {
+    beats += list.length;
+    for (const b of list) if (b.register === 'live-safe') liveSafe += 1;
+  }
+  return { beats, positions: byFen.size, built: isBuilt(), liveSafe };
 }
