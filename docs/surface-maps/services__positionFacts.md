@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**779 lines · 7 exports · 9 importers · 4 tests · 3 audits**
+**814 lines · 7 exports · 9 importers · 5 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:101) — names `positionFacts`
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — the ONLY cap is the student's own short/brief verbosity setting (David 2026-09-16, emphatic: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!! That's how things don't get stated or teachings left out" → "The only cap should be the short verbosity coach setting").** (CLAUDE.md:642) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5124) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:5228) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5152) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:5256) — names `positionFacts`
 
 ## Who calls in
 
@@ -62,12 +62,13 @@
 - `src/services/positionFacts.test.ts:284`
 - `src/services/whyBestMove.ts:93`
 
-### `computePositionFacts` (function) — 44 call sites
+### `computePositionFacts` (function) — 45 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8396`
 - `src/hooks/useLiveCoach.ts:232`
 - `src/hooks/usePhaseNarration.ts:603`
 - `src/hooks/usePositionNarration.ts:236`
 - `src/services/computerAccuracy.audit.test.ts:112`
+- `src/services/latentFork.test.ts:148`
 - `src/services/liveNeedGate.test.ts:117`
 - `src/services/liveNeedGate.test.ts:122`
 - `src/services/liveNeedGate.test.ts:136`
@@ -111,6 +112,7 @@
 ## Tests
 
 - `src/services/computerAccuracy.audit.test.ts`
+- `src/services/latentFork.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`

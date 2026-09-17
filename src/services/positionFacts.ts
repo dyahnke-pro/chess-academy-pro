@@ -24,6 +24,7 @@ import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
+import { detectLatentFork, latentForkClause, type LatentFork } from './latentFork';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
@@ -137,6 +138,10 @@ export interface PositionFactsResult {
   /** A pin/skewer in waiting on the student's own king/queen (the prevention
    *  layer). Null when the geometry isn't there. */
   latentDanger: LatentDanger | null;
+  /** A knight fork exactly two quiet moves away, for EITHER side — the
+   *  foresight sibling of `latentDanger`. Null when nothing survives its four
+   *  gates. Exposed like its sibling so audits can read it back. */
+  latentFork: LatentFork | null;
   /** A TRADE the student could make that would CREATE a pin on their own
    *  king/queen (v2). Null when no capture creates one. */
   tradeDanger: TradeDanger | null;
@@ -297,6 +302,16 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const tradeDanger = (!openingPhase && studentToMove)
     ? detectTradeCreatesPin(fen, studentColor)
     : null;
+  // THE FORK TWO MOVES OUT — the foresight sibling of the pin-in-waiting above.
+  // BOTH seats: the student's own opportunity AND the fork coming at them, the
+  // student's first (a plan you can execute beats a plan you must prevent).
+  // Unlike the pin warnings this runs in the opening too — the Sicilian's
+  // Nb5–c7 IS an opening idea — and on either side's move, because a fork you
+  // can see coming is worth naming whoever is about to move.
+  const studentSeat = studentColor === 'w' ? 'white' as const : 'black' as const;
+  const latentFork = detectLatentFork(fen, studentSeat)
+    ?? detectLatentFork(fen, studentSeat === 'white' ? 'black' : 'white');
+
   // §9 king-safety — a castled king with a broken shelter AND real attackers on
   // it. Both conditions, so it never fires on a harmlessly-nicked shield.
   const kingExposure = (!openingPhase && studentToMove)
@@ -444,7 +459,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   } catch { methodBeat = null; }
 
   const composed = applyWeaknessBoost(
-    buildClauses({ slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
+    buildClauses({ slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
     input.studentWeaknesses ?? [],
   );
 
@@ -520,7 +535,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const clauses = decision.spoken.flatMap((t) => { const c = clauseByText.get(t); return c ? [c] : []; });
 
   return {
-    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, tradeDanger, opponentIntent,
+    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, latentFork, tradeDanger, opponentIntent,
     clauses,
     /** Every clause the door silenced, and why — the observability trail. */
     quiet: decision.quiet,
@@ -581,6 +596,11 @@ function buildClauses(a: {
   openingPhase: boolean;
   deliberation: Deliberation | null;
   latentDanger: LatentDanger | null;
+  latentFork: LatentFork | null;
+  /** 🔒 The student's seat — REQUIRED by `latentForkClause`, because the same
+   *  fork geometry is an opportunity from one chair and a warning from the
+   *  other. Never inferred here. */
+  studentSeat: 'white' | 'black';
   tradeDanger: TradeDanger | null;
   opponentIntent: OpponentIntent | null;
   statusText: string;
@@ -597,7 +617,7 @@ function buildClauses(a: {
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
 }): ClauseItem[] {
-  const { importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
+  const { importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
   // THE WHETHER-QUESTION IS THE DOOR'S. This used to be a private escape hatch
   // here — "speak anyway if a pin / king-danger / band-change was found",
   // because the importance model had no input for any of them. Those signals
@@ -635,6 +655,21 @@ function buildClauses(a: {
     ranked.push({
       kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger),
       squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare],
+    });
+  }
+
+  // 🚨 RANK 70 — BELOW `must-defend` (75), DELIBERATELY. Its siblings above sit
+  // at 78–82, which already puts a latent pin OVER a piece hanging right now;
+  // copying that number would have put a fork TWO MOVES AWAY over live
+  // material, which is plainly wrong. Foresight is valuable and it is not
+  // urgent. (Whether the existing 80/82 is itself too high is a real question
+  // and a separate one — not to be changed as a side effect of this build.)
+  if (latentFork) {
+    ranked.push({
+      kind: 'latent-danger', rank: 70, text: latentForkClause(latentFork, studentSeat),
+      // The destination and both targets ARE the claim — so a tactic clause
+      // about the same geometry subsumes this one rather than stacking on it.
+      squares: [latentFork.square, ...latentFork.targets.map((t) => t.square)],
     });
   }
 

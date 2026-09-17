@@ -95,7 +95,26 @@ function outpostWhy(chess: Chess, square: Square, color: Color): string {
  * the piece isn't a knight, or no reachable supported outpost exists — the
  * common case, so the surface simply omits the route (empty > invented).
  */
-export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute | null {
+/**
+ * 🔒 ONE BFS, TWO CALLERS (2026-09-17). `computePieceRoute` hunts the nearest
+ * OUTPOST (target unknown until found); `movesToReach` hunts a NAMED square.
+ * Same walk, different stopping condition — so the condition is a predicate and
+ * there is exactly one implementation to keep correct.
+ *
+ * Travels through EMPTY squares only: a route that needs a capture is not a
+ * quiet manoeuvre, and counting it would understate the tempo cost.
+ *
+ * Knight-only TODAY, and the `piece.type !== 'n'` guard says so at the top
+ * rather than pretending otherwise. A slider's route needs blocker handling the
+ * hop table cannot express; when that lands, it lands HERE and both callers get
+ * it at once.
+ */
+function bfsRoute(
+  fen: string,
+  fromSquare: Square,
+  stop: (chess: Chess, sq: Square, color: Color) => boolean,
+  maxHops: number,
+): { chess: Chess; color: Color; target: Square; route: Square[] } | null {
   let chess: Chess;
   try {
     chess = new Chess(fen);
@@ -103,17 +122,16 @@ export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute |
     return null;
   }
   const piece = chess.get(fromSquare);
-  if (!piece || piece.type !== 'n') return null; // knights only
+  if (!piece || piece.type !== 'n') return null; // knights only — see the note above
   const color = piece.color;
 
-  const MAX_HOPS = 4;
   const visited = new Set<string>([fromSquare]);
   const queue: Array<{ sq: Square; path: Square[] }> = [{ sq: fromSquare, path: [] }];
   while (queue.length > 0) {
     const head = queue.shift();
     if (!head) break;
     const { sq: cur, path } = head;
-    if (path.length >= MAX_HOPS) continue;
+    if (path.length >= maxHops) continue;
     const cf = fileIdx(cur);
     const cr = rankIdx(cur);
     for (const [df, dr] of KNIGHT_DELTAS) {
@@ -123,18 +141,40 @@ export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute |
       if (chess.get(next)) continue;
       visited.add(next);
       const nextPath = [...path, next];
-      if (isKnightOutpost(chess, next, color)) {
-        // BFS → the first outpost reached is the shortest route.
-        return {
-          piece: 'n',
-          from: fromSquare,
-          target: next,
-          route: nextPath,
-          why: outpostWhy(chess, next, color),
-        };
+      if (stop(chess, next, color)) {
+        // BFS → the first square that satisfies the predicate is the shortest route.
+        return { chess, color, target: next, route: nextPath };
       }
       queue.push({ sq: next, path: nextPath });
     }
   }
   return null;
+}
+
+/**
+ * How many quiet moves this piece needs to REACH `target`, or null when it
+ * cannot inside `maxHops`. The tempo count the latent-fork detector needs: a
+ * fork two moves away is a different teaching moment from one four moves away.
+ */
+export function movesToReach(
+  fen: string,
+  fromSquare: Square,
+  target: Square,
+  maxHops = 4,
+): number | null {
+  if (fromSquare === target) return 0;
+  const found = bfsRoute(fen, fromSquare, (_c, sq) => sq === target, maxHops);
+  return found ? found.route.length : null;
+}
+
+export function computePieceRoute(fen: string, fromSquare: Square): PieceRoute | null {
+  const found = bfsRoute(fen, fromSquare, (c, sq, color) => isKnightOutpost(c, sq, color), 4);
+  if (!found) return null;
+  return {
+    piece: 'n',
+    from: fromSquare,
+    target: found.target,
+    route: found.route,
+    why: outpostWhy(found.chess, found.target, found.color),
+  };
 }

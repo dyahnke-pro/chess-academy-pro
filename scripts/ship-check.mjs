@@ -427,6 +427,9 @@ const GATE_TESTS = [
   // ONE list answered TWO questions in five files, and the difference was f7 —
   // the coach could not say Ng5 eyes it.
   'src/services/keySquares.test.ts',
+  // The fork two moves out — four gates, a two-move domain, and a rank BELOW
+  // must-defend so foresight never speaks over live material.
+  'src/services/latentFork.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',
