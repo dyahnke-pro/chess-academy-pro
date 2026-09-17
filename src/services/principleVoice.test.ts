@@ -56,3 +56,37 @@ describe('renderFundamentalsRecap — the aggregate is the lesson', () => {
     expect(renderFundamentalsRecap(per, 2)).toBe(renderFundamentalsRecap(per, 2));
   });
 });
+
+describe('the recap SUBJECT reads as English at every count', () => {
+  // "The pattern: one of your one flagged move handed over a tempo." — read off
+  // the live prod recap on 2026-09-17. The x-of-y shape divides a number by
+  // itself when every flagged move shares the fault, and the result is not a
+  // sentence. Each count below is a shape, not a number.
+  const attrs = (n: number): PrincipleAttribution[][] =>
+    Array.from({ length: n }, () => [{ id: 'tempo-handed', evidence: '' } as unknown as PrincipleAttribution]);
+
+  it('one flagged move names it, never "one of your one"', () => {
+    const text = renderFundamentalsRecap(attrs(1), 1);
+    expect(text).toMatch(/your one flagged move handed over a tempo/i);
+    expect(text).not.toMatch(/one of your one/i);
+  });
+
+  it('two, both sharing the fault, says both', () => {
+    expect(renderFundamentalsRecap(attrs(2), 2)).toMatch(/both of your flagged moves/i);
+  });
+
+  it('three or more, all sharing it, says all three', () => {
+    expect(renderFundamentalsRecap(attrs(3), 3)).toMatch(/all three of your flagged moves/i);
+  });
+
+  it('a genuine subset keeps the x-of-y shape', () => {
+    expect(renderFundamentalsRecap(attrs(2), 5)).toMatch(/two of your five flagged moves/i);
+  });
+
+  it('never divides a number by itself, at any count', () => {
+    for (let n = 1; n <= 6; n += 1) {
+      const text = renderFundamentalsRecap(attrs(n), n) ?? '';
+      expect(text, `n=${n}: ${text}`).not.toMatch(/\b(\w+) of your \1\b/i);
+    }
+  });
+});

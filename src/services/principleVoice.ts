@@ -541,8 +541,21 @@ export function renderFundamentalsRecap(perMove: readonly (readonly PrincipleAtt
   const [topId, topN] = ranked[0];
   const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
   const w = (n: number) => words[n] ?? String(n);
-  const lead = flaggedCount > 0
-    ? `The pattern: ${w(topN)} of your ${w(flaggedCount)} flagged move${flaggedCount === 1 ? '' : 's'} ${RECAP_NOUN[topId]}.`
+  // "one of your one flagged move" — read off the live prod recap, 2026-09-17.
+  // The x-of-y shape only reads as English while y is genuinely bigger than x.
+  // When every flagged move shares the same fault there is no subset to name,
+  // and the sentence should say THAT instead of dividing a number by itself.
+  // A count is not a phrasing.
+  const subject = ((): string | null => {
+    if (flaggedCount <= 0) return null;
+    if (flaggedCount === 1) return 'your one flagged move';
+    if (topN >= flaggedCount) {
+      return flaggedCount === 2 ? 'both of your flagged moves' : `all ${w(flaggedCount)} of your flagged moves`;
+    }
+    return `${w(topN)} of your ${w(flaggedCount)} flagged moves`;
+  })();
+  const lead = subject
+    ? `The pattern: ${subject} ${RECAP_NOUN[topId]}.`
     : `The pattern: you ${RECAP_NOUN[topId]} ${w(topN)} time${topN === 1 ? '' : 's'}.`;
   const runner = ranked[1] && ranked[1][1] >= 2 ? ` Behind it, you ${RECAP_NOUN[ranked[1][0]]} ${w(ranked[1][1])} times.` : '';
   const close = movesWithOne >= 2 ? ' That is the one thing to carry into the next game.' : '';

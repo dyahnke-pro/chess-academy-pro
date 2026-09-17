@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**551 lines · 5 exports · 8 importers · 4 tests · 2 audits**
+**564 lines · 5 exports · 8 importers · 4 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -54,11 +54,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:37`
 - `src/services/principleVoice.test.ts:39`
 
-### `renderFundamentalsRecap` (function) — 4 call sites
+### `renderFundamentalsRecap` (function) — 9 call sites
 - `src/services/coachFeatureService.ts:4192`
 - `src/services/principleVoice.test.ts:47`
 - `src/services/principleVoice.test.ts:52`
 - `src/services/principleVoice.test.ts:56`
+- `src/services/principleVoice.test.ts:69`
+- `src/services/principleVoice.test.ts:75`
+- `src/services/principleVoice.test.ts:79`
+- `src/services/principleVoice.test.ts:83`
+- `src/services/principleVoice.test.ts:88`
 
 ## Tests
 
