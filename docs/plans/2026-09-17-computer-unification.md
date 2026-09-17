@@ -305,9 +305,46 @@ BEFORE choosing an axis. Re-verified today, the 2026-09-08 inventory still holds
   seven onto `coreRatingTier`'s 1000/2000 would move real students between real
   behaviours with no evidence any individual move is right. Written into the
   code so the next session does not do it for tidiness.
-* **(C) verbosity** — 7 sites, and a WARNING that comes with them: these encode
-  the USER's G5 choice. "The algo governs importance/depth; G5 stays the user's
-  own ceiling. Reconcile, don't erase the user's setting."
+* **(C) verbosity — ONE REAL BUG, fixed 2026-09-17. The G5 warning was right and
+  the user's setting was the thing being lost.** Five verbosity-ish preferences
+  exist; only two are live. `coachNarration` (silent/brief/full) governs the
+  VOICE — G5, untouched. `coachResponseLength` (minimal/normal/verbose) governs
+  CHAT TEXT length; G5 says that split is deliberate ("the chat bubble still
+  shows the full prose; only the spoken voice obeys the brief budget"), so they
+  are NOT duplicates. `coachVerbosity`, `phaseNarrationVerbosity` and
+  `coachCommentaryVerbosity` are the three LEGACY fields the unified setting
+  replaced; `resolveCoachNarration` reads them as a migration fallback.
+
+  The bug: `coachApi.getCoachVerbosity()` read the LEGACY `coachVerbosity`
+  directly, in the opposite direction. Its Settings row was removed and NOTHING
+  in the app writes it (measured: every occurrence is a default, all
+  `'unlimited'`), so `getVerbosityInstruction` returned the FULL block for every
+  user on that path — "walk through the move, both sides' plans, alternatives,
+  past games... no length cap". The student's real choice arrived beside it as a
+  SECOND block from `loadResponseLengthAddition`. Both go into one array literal
+  at `buildSystemPromptFor`. A student on Minimal got "at most 8 words, NO
+  multi-sentence responses" and "no length cap" in the SAME system prompt.
+
+  Worse, the two blocks were unequal in the wrong direction: the surviving one
+  (`VERBOSITY_INSTRUCTIONS.fast`) was SOFT — "direct and immediate", no number —
+  which is precisely what G5 bans after a production audit caught the brain
+  shipping 497 characters on "brief".
+
+  Fixed: `getCoachVerbosity` derives from `coachResponseLength` via a
+  `Record<'minimal'|'normal'|'verbose', CoachVerbosity>` (legacy field honoured
+  for a profile that still carries one, else 'medium' — what
+  coachResponseLength's own documented default has always meant); the numeric
+  ceilings moved into VERBOSITY_INSTRUCTIONS, where NO_SCAFFOLDING_RULE already
+  lives; `loadResponseLengthAddition` deleted. One dial, one block. Gate:
+  `coachPrompts.verbosity.test.ts` — the capped tiers must state a NUMBER, no
+  tier may carry both a ceiling and "no length cap", every tier keeps the
+  no-scaffolding rule, and coachApi may not compose a second length block.
+
+  The modern chat path (`coachService` → `envelope.ts`) was already coherent —
+  it reads `coachResponseLength` into its own block and never touched
+  `coachVerbosity`. Only the legacy coachApi path (walkthrough narrator,
+  opening-section narrator, smart search, kid puzzles, middlegame planner,
+  CoachGameReview) carried the contradiction.
 * **(D) rating bands** — **two `ratingBandFor`** (`amateurPlayCache.ts:34` and
   `theoryDeparture.ts:59` — a name collision with different returns) plus
   `explorerBandForElo`: three overlapping explorer-band pickers. **DONE

@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1266 lines · 29 exports · 10 importers · 5 tests · 1 audits**
+**1275 lines · 29 exports · 11 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:881) — names `coachPrompts`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3320) — names `coachPrompts`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:936) — names `coachPrompts`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3375) — names `coachPrompts`
 
 ## Who calls in
 
@@ -23,11 +23,18 @@
 - `src/services/coachApi.ts`
 - `src/services/coachChatService.ts`
 - `src/services/coachPrompts.test.ts`
+- `src/services/coachPrompts.verbosity.test.ts`
 
 ## Exports and every call site
 
-### `getVerbosityInstruction` (function) — 1 call site
-- `src/services/coachApi.ts:816`
+### `getVerbosityInstruction` (function) — 7 call sites
+- `src/services/coachApi.ts:836`
+- `src/services/coachPrompts.verbosity.test.ts:23`
+- `src/services/coachPrompts.verbosity.test.ts:24`
+- `src/services/coachPrompts.verbosity.test.ts:26`
+- `src/services/coachPrompts.verbosity.test.ts:31`
+- `src/services/coachPrompts.verbosity.test.ts:32`
+- `src/services/coachPrompts.verbosity.test.ts:38`
 
 ### `SYSTEM_PROMPT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -138,6 +145,7 @@
 - `src/hooks/useHintSystem.test.ts`
 - `src/hooks/usePositionNarration.test.ts`
 - `src/services/coachPrompts.test.ts`
+- `src/services/coachPrompts.verbosity.test.ts`
 
 ## Audits that reach it
 

@@ -806,9 +806,29 @@ async function callChatWithConfig(
   return await callDeepSeek(config.apiKey, model, allMessages, maxTokens, task);
 }
 
+/** `coachResponseLength` is THE live chat-length dial (Settings → Personality →
+ *  Verbosity). `coachVerbosity` is legacy: its Settings row was removed, nothing
+ *  in the app writes it, and every default is 'unlimited' — so reading it
+ *  directly pinned EVERY user's prompt to the FULL block ("walk through the
+ *  move, both sides' plans, alternatives, past games... no length cap"),
+ *  whatever they had chosen. On this path the user's real choice arrived
+ *  separately as a second block, so a student on Minimal got "≤8 words, NO
+ *  multi-sentence responses" and "no length cap" in ONE system prompt. G5 says
+ *  the setting is RESPECTED, not hinted at; a prompt arguing with itself is
+ *  neither. One dial, one block. */
+const RESPONSE_LENGTH_TO_VERBOSITY: Record<'minimal' | 'normal' | 'verbose', CoachVerbosity> = {
+  minimal: 'fast',
+  normal: 'medium',
+  verbose: 'unlimited',
+};
+
 async function getCoachVerbosity(): Promise<CoachVerbosity> {
-  const profile = await db.profiles.get('main');
-  return profile?.preferences.coachVerbosity ?? 'unlimited';
+  const prefs = (await db.profiles.get('main'))?.preferences;
+  if (prefs?.coachResponseLength) return RESPONSE_LENGTH_TO_VERBOSITY[prefs.coachResponseLength];
+  // A profile from before the unified dial may still carry the legacy field;
+  // honour it. Otherwise 'medium', which is what coachResponseLength's own
+  // documented default ('normal') has always meant.
+  return prefs?.coachVerbosity ?? 'medium';
 }
 
 function buildSystemPromptWithVerbosity(base: string, verbosity: CoachVerbosity, addition?: string): string {
@@ -3220,7 +3240,7 @@ export async function getCoachChatResponse(
    *  provider's call errors. */
   forceProvider?: AiProvider,
   /** Kid-mode safety lane. When true, skips both
-   *  `loadPersonalityAddition` and `loadResponseLengthAddition` so the
+   *  `loadPersonalityAddition` so the
    *  user's coach personality dials (edgy / drill-sergeant / profanity
    *  intensity) cannot bleed into kid surfaces. Kid callers should use
    *  `getKidLlmResponse` rather than passing this flag directly. See
@@ -3270,7 +3290,6 @@ export async function getCoachChatResponse(
   // mode (and any future "neutral voice" surface) can guarantee no
   // adult personality leaks in — see comment on the parameter above.
   const personalityAddition = skipPersonality ? '' : await loadPersonalityAddition();
-  const responseLengthAddition = skipPersonality ? '' : await loadResponseLengthAddition();
 
   // ── STEP-BY-STEP MOVE NARRATION — computed facts, voiced directly ──
   // The engine-driven Learn turn is INTERNAL: the surface already played the
@@ -5816,7 +5835,9 @@ export async function getCoachChatResponse(
       verbosity,
       [
         personalityAddition,
-        responseLengthAddition,
+        // responseLengthAddition is GONE from here: it said the same thing as
+        // the verbosity block above it and, until getCoachVerbosity was wired
+        // to the same dial, contradicted it. One dial, one block.
         groundingBlock,
         bookGroundingBlock,
         verifiedPuzzleBlock,
@@ -6130,25 +6151,13 @@ async function loadPersonalityAddition(): Promise<string> {
   }
 }
 
-/** Read the user's coachResponseLength preference (Settings →
- *  Personality → Verbosity) and render the matching modulator. Same
- *  shape as the verbosity blocks in `coach/envelope.ts` so legacy
- *  callers feel identical to the chat surfaces. Default 'normal'
- *  matches /coach/teach's tightness. */
-async function loadResponseLengthAddition(): Promise<string> {
-  try {
-    const profile = await db.profiles.get('main');
-    const level = profile?.preferences.coachResponseLength ?? 'normal';
-    const blocks: Record<'minimal' | 'normal' | 'verbose', string> = {
-      minimal: '═══ VERBOSITY: MINIMAL ═══\nHard ceiling: ONE short sentence per turn, ≤8 words. NO multi-sentence responses, NO bullet points, NO past-games stats.',
-      normal: '═══ VERBOSITY: NORMAL ═══\nDefault tightness. Ceiling: ONE short sentence per turn (≤15 words) plus an optional one-line teaching beat when the position genuinely warrants it. NO multi-paragraph commentary, NO bullet-point agendas.',
-      verbose: '═══ VERBOSITY: VERBOSE ═══\nLecture shape allowed: set up positions, demonstrate candidate moves, name the IDEA, ground in Stockfish, cite master games. No length cap.',
-    };
-    return blocks[level];
-  } catch {
-    return '';
-  }
-}
+// loadResponseLengthAddition — DELETED 2026-09-17. It rendered a SECOND
+// verbosity block from `coachResponseLength` beside the one
+// `getVerbosityInstruction` rendered from the dead `coachVerbosity` field, so
+// the prompt carried two length rules that disagreed. `getCoachVerbosity` now
+// derives from `coachResponseLength` itself and its numeric ceilings moved into
+// VERBOSITY_INSTRUCTIONS, where the NO_SCAFFOLDING_RULE already lives. One dial,
+// one block.
 
 // callCommentaryWithConfig — DELETED with getCoachCommentary (its only caller).
 

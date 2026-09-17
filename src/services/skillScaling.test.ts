@@ -113,10 +113,15 @@ describe('the diagnosis bar and the help bar are DIFFERENT computers', () => {
     walk(SRC);
     // Non-vacuity: a scan that found nothing passes for the wrong reason.
     expect(files.length, 'the source walk found nothing — this check is vacuous').toBeGreaterThan(400);
-    const both = files.filter((f) => {
-      const src = readFileSync(f, 'utf-8');
-      return src.includes('criticalityThresholds') && src.includes('alertSensitivityMultiplier');
-    });
+    // BLAME BY STATEMENT, NOT BY PROXIMITY. A first cut matched the bare
+    // identifiers and flagged `ratingBands.ts`, whose only sin is DOCUMENTING
+    // both bars in the ADAPTIVE_DECIDERS registry — the very place the
+    // distinction is written down. Applying a bar is a CALL; naming one in a
+    // comment or a registry key is not. (Same lesson perspectiveRule.test.ts
+    // learned when it reported four innocent files.)
+    const callsBoth = (src: string): boolean =>
+      /\bcriticalityThresholds\s*\(/.test(src) && /\balertSensitivityMultiplier\s*\(/.test(src);
+    const both = files.filter((f) => callsBoth(readFileSync(f, 'utf-8')));
     expect(
       both.map((f) => f.replace(`${process.cwd()}/`, '')),
       'a file reading BOTH bars is either merging two pedagogies or applying the wrong one — ' +

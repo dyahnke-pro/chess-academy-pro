@@ -30,6 +30,11 @@ REWRITE EXAMPLES (study these):
 const VERBOSITY_INSTRUCTIONS: Record<Exclude<CoachVerbosity, 'none'>, string> = {
   fast: `VERBOSITY: BRIEF — the student wants chess, not prose.
 
+HARD CEILING: ONE short sentence per turn, at most 8 words. No multi-sentence
+responses, no bullet points, no past-game stats. This is a NUMBER, not a mood:
+a production audit caught the brain shipping 497 characters on "brief" when the
+rule was only soft phrasing (CLAUDE.md G5).
+
 How to speak at this tier:
 - Direct and immediate. Open with the chess fact itself.
 - One idea per response. Pick the SINGLE most important thing — the threat, the pattern, the verdict — and ship that. Don't try to teach three things at once; chain the others to later turns.
@@ -39,6 +44,10 @@ How to speak at this tier:
 
 ${NO_SCAFFOLDING_RULE}`,
   medium: `VERBOSITY: NORMAL — natural pacing.
+
+CEILING: ONE short sentence per turn (at most 15 words), plus an optional
+one-line teaching beat when the position genuinely warrants it. No
+multi-paragraph commentary, no bullet-point agendas.
 
 How to speak at this tier:
 - Cover the chess idea, then maybe one beat of "what to look for next." That's usually enough.

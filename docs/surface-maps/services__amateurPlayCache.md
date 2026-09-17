@@ -39,7 +39,7 @@
 
 ### `getCachedAmateurPlay` (function) — 2 call sites
 - `src/services/amateurPlayCache.test.ts:38`
-- `src/services/coachApi.ts:1645`
+- `src/services/coachApi.ts:1665`
 
 ### `warmAmateurPlay` (function) — 2 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8497`
