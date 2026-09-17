@@ -144,7 +144,7 @@ function puzzleToLessonPosition(p: RawPuzzle, _lessonName: string): EndgameLesso
   // as a draw position rather than a win).
   const result: EndgameLessonPosition['result'] =
     studentSide === 'white' ? 'white-wins' : 'black-wins';
-  return {
+  const pos: EndgameLessonPosition = {
     fen: startFen,
     title: 'Drill',
     explanation: '',
@@ -152,13 +152,53 @@ function puzzleToLessonPosition(p: RawPuzzle, _lessonName: string): EndgameLesso
     bestMove: sanSequence[0],
     solution: sanSequence,
     source: `Lichess puzzle #${p.id} (rating ${p.rating})`,
-    // Concept hint sourced from the puzzle's theme tags. Surfaces
-    // only after a wrong first move, so the student gets a shove
-    // toward the tactic name without losing the cold-find aspect.
-    // null when no theme matches — UI then falls back to the
-    // lesson's narration.rule.
-    conceptHint: conceptHintForPuzzle({ fen: p.fen, moves: p.moves, themes: p.themes }) ?? undefined,
   };
+  // 🔒 THE CONCEPT HINT IS COMPUTED ON READ, NOT ON BUILD (2026-09-17).
+  //
+  // It surfaces ONLY after a wrong first move, and the student plays one drill
+  // at a time — but `getDrillPositionsForLesson` converts up to 200 puzzles up
+  // front, so this was computed 200 times for a string that is usually never
+  // shown. Measured on 200 real puzzles: the chess.js replay costs 151ms and
+  // `conceptHintForPuzzle` costs 49,663ms — 250ms each, 330x the replay. That
+  // is the whole of the 32-second freeze when a student taps an endgame tile
+  // (`EndgameLessonTab.test.tsx` had been timing out at 5s for exactly this).
+  //
+  // The comment that used to sit here said the per-puzzle replay cost stays
+  // "under a frame budget". That was true of the replay and was never true of
+  // the hint, which was added later — a cost assumption that outlived the code
+  // it described.
+  //
+  // A lazy accessor rather than dropping the field: every consumer reads
+  // `position.conceptHint` (EndgameLessonTab.tsx:938, CalculationTab.tsx:335)
+  // and the original puzzle's fen/moves/themes are NOT recoverable from an
+  // EndgameLessonPosition, so the hint cannot be recomputed at the call site.
+  // Cached after the first read; a throw yields undefined, exactly as the
+  // eager version's `?? undefined` did.
+  defineLazyConceptHint(pos, p);
+  return pos;
+}
+
+/** Attach `conceptHint` as a cached, compute-on-first-read property. */
+function defineLazyConceptHint(pos: EndgameLessonPosition, p: RawPuzzle): void {
+  let cached: string | undefined;
+  let computed = false;
+  Object.defineProperty(pos, 'conceptHint', {
+    // Non-enumerable ON PURPOSE: an enumerable getter is evaluated by object
+    // spread and by JSON.stringify, either of which would silently restore the
+    // eager cost the moment someone copies a position. Nothing spreads these
+    // today (checked), and this makes it not matter if someone starts.
+    enumerable: false,
+    configurable: true,
+    get(): string | undefined {
+      if (!computed) {
+        computed = true;
+        try {
+          cached = conceptHintForPuzzle({ fen: p.fen, moves: p.moves, themes: p.themes }) ?? undefined;
+        } catch { cached = undefined; }
+      }
+      return cached;
+    },
+  });
 }
 
 /** Return drill positions for a lesson, sourced from the Lichess
