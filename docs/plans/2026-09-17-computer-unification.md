@@ -567,3 +567,83 @@ answers better.
    tag, with the provenance shape §CAPABILITY PARITY already demands.
 3. Re-point the deciders that don't need a scalar.
 4. Derive the two that do, and say so at the call site.
+
+
+## §6 PHASE 4, RE-SIZED BY READING IT (2026-09-17 context pass)
+
+David: "Regain context. Read entire surfaces?" — yes, and it changed the plan.
+
+### The producer is bounded, not smeared
+
+`CoachTeachPage` is 13,897 lines, but composition is not spread through it:
+
+| region | lines | what |
+|---|---|---|
+| `handleSubmit` | 2716–6766 | chat turn routing (~4,050) |
+| **`computeInstantTeaching`** | **6996–7956** | **the fact producer (~960)** |
+| `handleStudentMove` | 7974–10016 | the live per-move lane (~2,040) |
+
+~3,000 lines of the 13,897 are the composition. The rest — routing, UI, the
+11-phase walkthrough state machine — stays put and was never the target.
+
+### The producer's SHAPE is already right
+
+`computeInstantTeaching` is a series of LANES, each a self-contained
+`try { … } catch { /* never a blocker */ }` producing at most one
+`string | null` plus its squares — gem, tactic, threat, opening announce,
+computed, note, curated, teaching, plan, behaviour, positional — and then ONE
+assembly into `buildVoicePackage([...])` with declared `kind`s.
+
+So it already ends in the shared assembler with the shared vocabulary. §2.6's
+claim holds: the assembler is shared, the production is not. `buildLearnFacts(ctx)
+→ VoiceFact[]` is therefore a LIFT, not a redesign.
+
+### 🚨 AND THE REAL BLOCKER IS THE MEMORY, NOT THE LINES
+
+Measured closure surface of those 960 lines: **18 refs + 4 outer bindings**.
+Fifteen of the eighteen are SAY-ONCE MEMORY —
+
+    spokenKeysRef · spokenTacticLinesRef · spokenThreatLinesRef
+    teachNoteSeenIdsRef · curatedBeatSeenRef · gemSeenRef · gemFenRef
+    saidExplainersRef · positionalSaidRef · conceptTaughtRef
+    lastComputedRef · lastTacticRef · lastThreatRef
+    announcedOpeningNameRef · behaviorSchedulerRef
+
+**That is why no other surface can have this producer: its state lives in
+Learn's React tree.** Review and Play cannot call it not because the lanes are
+entangled — they are not — but because fifteen pieces of cross-ply memory are
+`useRef`s in a component.
+
+It is also the same defect `standingFactMemory` was extracted for earlier today
+("the say-once set and its forget-on-rewind rule", pulled out because it was
+implemented TWICE). There are fifteen more of it in one function.
+
+### So the first slice is the memory, not the lanes
+
+1. **Consolidate the 15 say-once refs into ONE memory object**, modelled on
+   `standingFactMemory` (already built, already tested, already carries the
+   forget-on-rewind rule). Learn holds one ref instead of fifteen.
+2. Only THEN lift the lanes: with the memory in the context, the producer's
+   remaining closure is that object + rating + playerColor + the board — which
+   IS the `ctx` signature.
+3. The cross-ply guard becomes reviewable for the first time, which is what
+   "most liberal narration from move one" actually depends on (§the cold start).
+
+Doing (2) before (1) would move fifteen refs into a new file and call it
+progress — the exact "extracting a composer that calls disjoint computers just
+moves the divergence" failure this plan warned about, one level down.
+
+### Two defects found while reading
+
+* **`coachIsOpponent` is a tautology.** `Boolean(args.studentColor)` on a
+  `'white' | 'black'` is always `true`, so `noteSuitsStudentSide` is never
+  called. NOT a live bug — this builder only runs on the coach-reply path where
+  the coach genuinely is the opponent, and the comment says so. It is a latent
+  TRAP: it reads like a seat guard, and a future caller on a surface where the
+  coach is not playing would inherit a silent `true`. The locked seat rule says
+  that parameter must be REQUIRED so a new caller decides.
+* **A second rating shape, missed by the earlier sweep.** 12 sites read
+  `puzzleRating ?? currentRating ?? 1200` — a different FIELD, not a different
+  fallback. Four are inside the producer's region. So the Learn lane sets its
+  teaching bar from the PUZZLE SRS rating, moved by puzzle results, rather than
+  from play.
