@@ -1251,12 +1251,36 @@ export interface ChatMessage {
    * lived in the transient input-bar `coachChoices` state, so typing the
    * next message stranded the question with no chips (David 2026-07-18
    * screenshot: three "Did you mean one of these?" prompts, zero chips).
+   *
+   * 🔒 THE CHIP'S LABEL AND ITS COMMAND ARE TWO FIELDS, NOT ONE STRING
+   * (found on prod by the Learn audit, 2026-09-17).
+   *
+   * This was `string[]`, doing both jobs at once, and the fuzzy "did you mean"
+   * picker set it to the bare canonical opening names. So a student who typed
+   * "lets play the scandinavian lasker variaton" — misspelled, therefore
+   * routed to the picker — tapped a chip that submitted a BARE NAME, and a
+   * bare name routes to TEACH. Their ask to PLAY became a lesson.
+   *
+   * The opening identifies WHAT they meant; it does not identify what they
+   * ASKED FOR. Same class as the seat and register guards shipped the same
+   * day: an identity term dropped at a selection boundary. Two required
+   * fields mean a new picker cannot quietly reuse the label as the command.
    */
-  choices?: string[];
+  choices?: ChatChoice[];
   metadata?: {
     actions?: { type: string; id: string }[];
     annotations?: BoardAnnotationCommand[];
   };
+}
+
+/** A tappable coach chip: what the student SEES, and what tapping it SENDS.
+ *  Both required — see `ChatMessage.choices`. */
+export interface ChatChoice {
+  /** Shown on the chip. */
+  label: string;
+  /** Submitted to `handleSubmit` on tap. Usually the label; it differs when
+   *  the chip has to carry the student's INTENT as well as their subject. */
+  submit: string;
 }
 
 export type CoachGameStatus = 'pregame' | 'playing' | 'blunder_pause' | 'gameover' | 'postgame';

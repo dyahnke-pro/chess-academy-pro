@@ -97,7 +97,10 @@ describe('ChatMessage — inline "did you mean" choice chips (David 2026-07-18)'
         <ChatMessage
           message={baseMessage({
             content: 'Did you mean one of these? Tap one to start.',
-            choices: ["King's Indian Attack", 'Sicilian Defense: Dragon Variation'],
+            choices: [
+              { label: "King's Indian Attack", submit: "King's Indian Attack" },
+              { label: 'Sicilian Defense: Dragon Variation', submit: 'Sicilian Defense: Dragon Variation' },
+            ],
           })}
           onPickChoice={onPick}
         />
@@ -110,10 +113,39 @@ describe('ChatMessage — inline "did you mean" choice chips (David 2026-07-18)'
     expect(onPick).toHaveBeenCalledWith('Sicilian Defense: Dragon Variation');
   });
 
+  // 🔒 THE DEFECT THIS TYPE EXISTS TO STOP (Learn audit on prod, 2026-09-17).
+  // The chip used to be ONE string doing two jobs, so the fuzzy "did you mean"
+  // picker submitted a BARE OPENING NAME — and a bare name routes to TEACH.
+  // A student who typed "lets play the scandinavian lasker variaton" got a
+  // LESSON. The label is what they SEE; the submit is what they ASKED FOR.
+  it('SHOWS the opening but SENDS the intent when the two differ', () => {
+    const onPick = vi.fn();
+    render(
+      <MemoryRouter>
+        <ChatMessage
+          message={baseMessage({
+            content: 'Did you mean one of these? Tap one to start.',
+            choices: [{
+              label: 'Scandinavian Defense: Lasker Variation',
+              submit: 'Play the Scandinavian Defense: Lasker Variation with me',
+            }],
+          })}
+          onPickChoice={onPick}
+        />
+      </MemoryRouter>,
+    );
+    // The chip reads as the opening — a chip labelled "Play the … with me"
+    // would be a worse picker, which is why these are two fields and not one.
+    expect(screen.getByTestId('message-choice-chip-0')).toHaveTextContent('Scandinavian Defense: Lasker Variation');
+    fireEvent.click(screen.getByTestId('message-choice-chip-0'));
+    expect(onPick).toHaveBeenCalledWith('Play the Scandinavian Defense: Lasker Variation with me');
+    expect(onPick).not.toHaveBeenCalledWith('Scandinavian Defense: Lasker Variation');
+  });
+
   it('renders no chips when onPickChoice is absent (streaming placeholder)', () => {
     render(
       <MemoryRouter>
-        <ChatMessage message={baseMessage({ choices: ['A', 'B'] })} />
+        <ChatMessage message={baseMessage({ choices: [{ label: 'A', submit: 'A' }, { label: 'B', submit: 'B' }] })} />
       </MemoryRouter>,
     );
     expect(screen.queryByTestId('message-choice-chips')).not.toBeInTheDocument();
@@ -123,7 +155,7 @@ describe('ChatMessage — inline "did you mean" choice chips (David 2026-07-18)'
     const onPick = vi.fn();
     render(
       <MemoryRouter>
-        <ChatMessage message={baseMessage({ role: 'user', choices: ['A', 'B'] })} onPickChoice={onPick} />
+        <ChatMessage message={baseMessage({ role: 'user', choices: [{ label: 'A', submit: 'A' }, { label: 'B', submit: 'B' }] })} onPickChoice={onPick} />
       </MemoryRouter>,
     );
     expect(screen.queryByTestId('message-choice-chips')).not.toBeInTheDocument();

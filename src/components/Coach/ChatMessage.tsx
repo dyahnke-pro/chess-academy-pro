@@ -274,14 +274,17 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
           >
             {choices.map((choice, i) => (
               <button
-                key={`mchoice-${i}-${choice}`}
+                key={`mchoice-${i}-${choice.label}`}
                 type="button"
-                onClick={() => onPickChoice(choice)}
+                // The chip SENDS `submit` and SHOWS `label`. They are usually
+                // the same; where they differ, the chip is carrying the
+                // student's intent as well as their subject — see ChatChoice.
+                onClick={() => onPickChoice(choice.submit)}
                 className="px-3 py-1.5 rounded-full border-2 border-theme-accent/40 bg-theme-accent/10 text-sm text-theme-text hover:bg-theme-accent/20 hover:border-theme-accent transition-colors min-h-[36px]"
                 data-testid={`message-choice-chip-${i}`}
-                data-choice={choice}
+                data-choice={choice.label}
               >
-                {choice}
+                {choice.label}
               </button>
             ))}
           </div>

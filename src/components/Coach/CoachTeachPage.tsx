@@ -264,7 +264,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
-import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
+import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseText } from '../../services/positionFacts';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
@@ -367,6 +367,36 @@ const MATCHUP_HINT_RE = /\b(?:vs\.?|versus|against)\b/i;
 /** The exact chip label that starts the narrated middle+endgame continuation
  *  after a lesson (David 2026-07-18). Kept as a constant so the leaf offer
  *  and the handleSubmit intercept can't drift apart. */
+/** The stage a student's verb asked for. Named once so the declaration below
+ *  and `chipSubmitForStage` cannot drift apart. */
+type StageHint = 'concepts' | 'findMove' | 'drill' | 'punish' | 'play-real';
+
+/** Chips whose LABEL is also the command — the ordinary case. The fuzzy
+ *  "did you mean" picker is the one site where they differ, because its chip
+ *  has to carry the student's INTENT as well as the opening they meant; see
+ *  `ChatChoice` and `chipSubmitForStage` below. */
+const plainChips = (labels: readonly string[]): ChatChoice[] =>
+  labels.map((label) => ({ label, submit: label }));
+
+/**
+ * 🔒 WHAT A PICKER CHIP SENDS, PER INTENT — a Record so a NEW stage fails to
+ * compile until someone decides its answer, rather than silently inheriting
+ * the bare name (the defect this fixes).
+ *
+ * Only `play-real` is verified: the Learn audit proves "Play the <name> with
+ * me" starts a real game (row A, 4 plies), while a bare name starts a lesson.
+ * The others map to the bare name DELIBERATELY — that is today's behaviour,
+ * and inventing a phrasing I have not driven through the router would risk
+ * mis-routing a stage that currently works. Verify one, then change its line.
+ */
+const chipSubmitForStage: Record<StageHint, (name: string) => string> = {
+  'play-real': (name) => `Play the ${name} with me`,
+  concepts: (name) => name,
+  findMove: (name) => name,
+  drill: (name) => name,
+  punish: (name) => name,
+};
+
 const CONTINUE_GAME_CHIP = 'Watch the middlegame and endgame';
 
 /** How long a line takes to READ, as the floor for how long its position stays
@@ -2648,7 +2678,7 @@ export function CoachTeachPage(): JSX.Element {
         role: 'assistant',
         content: msg,
         timestamp: Date.now(),
-        choices: [CONTINUE_GAME_CHIP],
+        choices: plainChips([CONTINUE_GAME_CHIP]),
       },
     ]);
     useCoachMemoryStore.getState().appendConversationMessage({
@@ -2901,7 +2931,7 @@ export function CoachTeachPage(): JSX.Element {
           { id: uid('more-u'), role: 'user', content: text, timestamp: Date.now() },
           { id: uid('more-c'), role: 'assistant', timestamp: Date.now(),
             content: page.length ? 'Here are the rest — pick one.' : "That's every trap I have for this opening.",
-            ...(page.length ? { choices: page } : {}) },
+            ...(page.length ? { choices: plainChips(page) } : {}) },
         ]);
         return;
       }
@@ -2931,7 +2961,7 @@ export function CoachTeachPage(): JSX.Element {
               content: page.length
                 ? 'Want to keep going down the list?'
                 : "That's every trap I have for this opening.",
-              ...(page.length ? { choices: page } : {}) },
+              ...(page.length ? { choices: plainChips(page) } : {}) },
           ]);
           void voiceService.speakForced(taught).catch(() => undefined);
           return;
@@ -4106,13 +4136,7 @@ export function CoachTeachPage(): JSX.Element {
       // long comment block above `if (!opts?.kickoff)`. Don't
       // re-declare it here; doing so would shadow the outer let and
       // re-introduce the "not defined" pageerror on the brain path.
-      let stageHint:
-        | 'concepts'
-        | 'findMove'
-        | 'drill'
-        | 'punish'
-        | 'play-real'
-        | null = null;
+      let stageHint: StageHint | null = null;
       let stageStrippedInput = effectiveInput;
       for (const sp of STAGE_PATTERNS) {
         const sm = stageStrippedInput.match(sp.regex);
@@ -4460,7 +4484,7 @@ export function CoachTeachPage(): JSX.Element {
               `so they can't face each other on one board. Want to learn either one on its own?`;
             setMessages((prev) => [...prev, {
               id: `${mTurnId}-c`, role: 'assistant', content: xProse,
-              timestamp: Date.now(), choices: [plan.whiteName, plan.blackName],
+              timestamp: Date.now(), choices: plainChips([plan.whiteName, plan.blackName]),
             }]);
             useCoachMemoryStore.getState().appendConversationMessage({
               surface: 'chat-teach', role: 'coach', text: xProse,
@@ -4677,7 +4701,15 @@ export function CoachTeachPage(): JSX.Element {
             role: 'assistant',
             content: prose,
             timestamp: Date.now(),
-            choices: topNames,
+            // 🔒 THE CHIP CARRIES THE INTENT, NOT JUST THE OPENING.
+            // `stageHint` already holds the verb the student typed (parsed by
+            // the shared STAGE_PATTERNS table upstream), so nothing is
+            // re-parsed here. Without this the chip submitted a bare name and
+            // "lets play the scandinavian lasker variaton" opened a LESSON.
+            choices: topNames.map((label) => ({
+              label,
+              submit: stageHint ? chipSubmitForStage[stageHint](label) : label,
+            })),
           }]);
           useCoachMemoryStore.getState().appendConversationMessage({
             surface: 'chat-teach',
@@ -6621,7 +6653,7 @@ export function CoachTeachPage(): JSX.Element {
           // `[CHOICES:]` marker — attached to the message so they persist
           // with the question instead of vanishing from the input bar on
           // the next turn (David 2026-07-18).
-          ...(extractedChoices.length > 0 ? { choices: extractedChoices } : {}),
+          ...(extractedChoices.length > 0 ? { choices: plainChips(extractedChoices) } : {}),
           // Opt-in follow-up picker the grounded answer attached
           // (David 2026-07-04) — tappable chip, never auto-launched.
           ...(result.actionOffer && result.actionOffer.length > 0
