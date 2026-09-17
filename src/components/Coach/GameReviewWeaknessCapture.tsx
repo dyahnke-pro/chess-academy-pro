@@ -13,6 +13,7 @@ import { BookOpen, Target, Check, Loader2 } from 'lucide-react';
 import { scanTheoryDeviation, type TheoryDeviation } from '../../services/theoryDeviationScan';
 import { Chess } from 'chess.js';
 import { autoAnalyzeBlunders, type BlunderForAnalysis } from '../../services/autoAnalyzeGame';
+import { recordCapabilitiesShown } from '../../services/capabilityEvidence';
 import { pvUciToSan } from '../../services/principleAttribution';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { hasMisconceptionsForGame } from '../../services/misconceptionService';
@@ -105,6 +106,45 @@ export function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'bl
   return out;
 }
 
+/**
+ * THE MIRROR OF `buildBlunders` — the moves it throws away.
+ *
+ * `buildBlunders` walks the whole game with `fenBefore`, `playedSan` and
+ * `cpLoss` all in hand, and on line one of its filter discards every move that
+ * was not a blunder or mistake. That single `continue` is where the POSITIVE
+ * half of the student model was being lost: the one function that sees the
+ * student's whole game kept only the failures.
+ *
+ * Same walk, same inputs, opposite filter. What comes out is handed to
+ * `capabilitiesShown`, which decides whether anything was actually demonstrated
+ * — the board has to have POSED the question (`MoveFundamental.weight`) and the
+ * move has to have ANSWERED it. "They didn't blunder" is not evidence, so most
+ * moves yield nothing and that is correct.
+ */
+export function buildCapabilityPlies(
+  moves: CoachGameMove[],
+  playerColor: 'white' | 'black',
+): Array<{ fenBefore: string; playedSan: string; cpLoss: number | null }> {
+  const sign = playerColor === 'white' ? 1 : -1;
+  const out: Array<{ fenBefore: string; playedSan: string; cpLoss: number | null }> = [];
+  for (let i = 0; i < moves.length; i++) {
+    const move = moves[i];
+    const side = i % 2 === 0 ? 'white' : 'black';
+    if (side !== playerColor) continue;
+    if (move.classification === 'blunder' || move.classification === 'mistake') continue;
+    const cpLoss =
+      move.preMoveEval !== null && move.evaluation !== null
+        ? (move.preMoveEval - move.evaluation) * sign
+        : null;
+    out.push({
+      fenBefore: i > 0 ? moves[i - 1].fen : START_FEN,
+      playedSan: move.san,
+      cpLoss,
+    });
+  }
+  return out;
+}
+
 export function GameReviewWeaknessCapture({
   moves,
   playerColor,
@@ -158,6 +198,24 @@ export function GameReviewWeaknessCapture({
       learned: true,
     });
     setLoggedCount(result.logged);
+
+    // AND THE POSITIVE HALF, from the SAME game (David 2026-09-17: "Not elo
+    // based. I want it to be capabilities of our system."). Until now the only
+    // record of success was `recordTagDrillResult`, which matches on a tag the
+    // student ALREADY has an open instance of — so a capability they were never
+    // caught lacking had no way to be recorded, and real play contributed
+    // nothing positive at all. Sequential and fire-and-forget: the capture's
+    // own result must not depend on it.
+    for (const ply of buildCapabilityPlies(moves, playerColor)) {
+      await recordCapabilitiesShown({
+        fenBefore: ply.fenBefore,
+        playedSan: ply.playedSan,
+        moverColor: playerColor,
+        cpLoss: ply.cpLoss,
+        origin: 'review',
+        ...(gameId ? { sourceGameId: gameId } : {}),
+      });
+    }
     setCaptureState('done');
   }, [captureState, blunders, openingId, openingName, gameId]);
 

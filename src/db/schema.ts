@@ -26,6 +26,7 @@ import type {
 } from '../types';
 import type { WalkthroughTree } from '../types/walkthroughTree';
 import type { MasterPlayResult } from '../services/masterPlayTypes';
+import type { CapabilityEvidenceRecord } from '../services/capabilityEvidence';
 
 /** A cached LLM-generated opening walkthrough tree. Once an opening
  *  is requested via "Teach me [opening]" and successfully generated,
@@ -197,6 +198,7 @@ class ChessAcademyDB extends Dexie {
   freeTier!: EntityTable<FreeTierRecord, 'id'>;
   coachCurriculum!: EntityTable<CoachCurriculumRecord, 'id'>;
   positionEvals!: EntityTable<PositionEvalRecord, 'fen'>;
+  capabilityEvidence!: EntityTable<CapabilityEvidenceRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -946,6 +948,14 @@ class ChessAcademyDB extends Dexie {
     // v35 — per-FEN Stockfish eval cache (David 2026-09-05, "how does chess.com
     // analyze so fast" → item 3, the eval cache). Additive store, no migration.
     this.version(35).stores({ positionEvals: 'fen, updatedAt' });
+
+    // v36 — the POSITIVE half of the student model (David 2026-09-17: "Not elo
+    // based. I want it to be capabilities of our system."). Until now success
+    // was recorded in exactly one place — `recordTagDrillResult`, from two
+    // puzzle pages — and only against a tag the student ALREADY had an open
+    // instance of, so there was no path to "they can do this" and real play
+    // contributed nothing positive. Additive store, no migration.
+    this.version(36).stores({ capabilityEvidence: 'id, tag, outcome, recordedAt, origin, [tag+outcome]' });
   }
 }
 
