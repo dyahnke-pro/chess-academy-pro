@@ -10,6 +10,7 @@
  * actions.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createStandingFactMemory, fullmoveOf } from '../../services/standingFactMemory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -6894,8 +6895,10 @@ export function CoachTeachPage(): JSX.Element {
   // SAY-ONCE across the lesson. A standing fact (the pawn structure, a pin in
   // waiting, which piece is doing the work) is re-derived at every taught
   // position, so without this the same sentence opens beat after beat.
-  const saidStandingRef = useRef<Set<string>>(new Set());
-  const lastLessonFullmoveRef = useRef(0);
+  // …and it FORGETS when the board goes backwards. The rule lives in
+  // `standingFactMemory` — this file and usePhaseNarration each carried their
+  // own copy of it under different ref names.
+  const standingRef = useRef(createStandingFactMemory());
   const positionNarration = usePositionNarration({
     fen: game.fen,
     pgn: game.history.join(' '),
@@ -8421,9 +8424,7 @@ export function CoachTeachPage(): JSX.Element {
                   // phase hook: forgetting makes the coach repeat a standing
                   // fact; suppressing wrongly makes it mute for a reason nobody
                   // can trace, so the doubt resolves toward forgetting.
-                  const lessonFullmove = Number.parseInt(probe.fen().split(' ')[5] ?? '1', 10) || 1;
-                  if (lessonFullmove < lastLessonFullmoveRef.current) saidStandingRef.current = new Set();
-                  lastLessonFullmoveRef.current = lessonFullmove;
+                  standingRef.current.observe(fullmoveOf(probe.fen()));
                   if (studentBest?.topLines?.length) {
                     const pf = await computePositionFacts({
                       // The student asked for this lesson — every taught position
@@ -8440,9 +8441,9 @@ export function CoachTeachPage(): JSX.Element {
                       // and owns the mover guard, so this surface decides none
                       // of it (§G4.5.15, and `surfaceContract.scan` enforces it).
                       studentNeedContext: studentNeedRef.current,
-                      alreadySaid: saidStandingRef.current,
+                      alreadySaid: standingRef.current.said,
                     });
-                    for (const t of pf.remember) saidStandingRef.current.add(t);
+                    standingRef.current.rememberAll(pf.remember);
                     for (const c of clauseText(pf.clauses, ['must-defend'])) {
                       queueSpokenHint(probe.fen(), c, 'computed');
                     }

@@ -449,6 +449,8 @@ const GATE_TESTS = [
   // The coach/third-coach divergence as a shrink-only number: 254 direct
   // fact-computer imports across 56 surfaces, 62 of them in CoachTeachPage.
   'src/coach/surfaceComposition.scan.test.ts',
+  // The forget-on-rewind say-once rule, implemented twice under two ref names.
+  'src/services/standingFactMemory.test.ts',
   // A stubbed chess.js is a second implementation nobody keeps in step: three
   // files carried one and two of them took 17 tests red on `main` unnoticed.
   'src/test/noChessJsMock.test.ts',

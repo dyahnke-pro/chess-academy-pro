@@ -44,6 +44,16 @@ const INFRA = new Set([
   'coachNonAnswer', 'coachAnswerGates', 'linePickerPopularity',
   'trapPlayPosition', 'stageEntryValidity', 'playerGameRequest',
   'proGameReferenceService',
+  // `standingFactMemory` computes NO chess fact — it is the say-once set and
+  // its forget-on-rewind rule, the same class as a cache. Added here when the
+  // rule was extracted from the two surfaces that each carried a copy.
+  //
+  // ⚠️ This is the shape of the cheat this gate warns about, so it is stated
+  // out loud: moving a real computer into INFRA would lower the count without
+  // routing a single call. The test below names nine computers and asserts
+  // they are NOT here. If you add something to this list, it must be provable
+  // that it answers no question about the board.
+  'standingFactMemory',
 ]);
 
 function walk(dir: string): string[] {

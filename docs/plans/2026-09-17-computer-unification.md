@@ -180,7 +180,18 @@ the pattern already used for the narration-coverage baselines.
 | 2 — one concept vocabulary | ✅ | `conceptVocabulary.ts` bridges six ideas spelled two ways; `POSITIONAL_INVARIANT`/`POSITIONAL_PRIORITY` typed over the union (both were `string`-keyed, so a typo yielded no concept silently). Gate: `conceptVocabulary.test.ts`. |
 | 3 — one fact shape | ✅ | `PlanBeat` gained a REQUIRED `id` + `squares`, so review's plan beats can finally be ranked and subsumed (a squareless fact is never collapsed — G4.5.1). The compiler found a fifth producer the grep missed. Gate: `planBeatShape.test.ts`. |
 | 5 — the gate | ✅ | `surfaceComposition.scan.test.ts` — **254** direct fact-computer imports across 56 surfaces, 62 in `CoachTeachPage`. Shrink-only. |
-| 4 — extract the page | ⏳ | Now measurable: every call routed through the composer lowers the number. Do it in slices, never as one refactor. |
+| 4 — extract the page | 🔨 started | First slice: `standingFactMemory` — the forget-on-rewind say-once rule was implemented TWICE (usePhaseNarration + CoachTeachPage, different ref names, and the page's comment admitted "same reasoning as the phase hook"). One copy now. |
+
+⚠️ **A LIMIT OF THE PHASE-5 METRIC, found by tripping it on the first slice.**
+Extracting a shared rule into a service that both surfaces IMPORT does not lower
+the count — it raised it 254→256, and the gate correctly went red on my own
+change. The metric measures *how many modules a surface reaches into*, so only
+routing through a COMPOSER moves it; sharing a helper does not. That is arguably
+the right incentive (the page still reaches into 63 modules), but it means
+Phase 4 progress shows up as a falling number only for composer work, and
+duplicate-rule extraction has to be judged on its own merit. `standingFactMemory`
+is classified INFRA because it computes no chess fact — stated out loud in the
+test, because it is the exact shape of the cheat that gate warns about.
 
 **PHASE 4 AND 5 WERE SWAPPED ON PURPOSE.** Extracting composition from a
 13,900-line page as a single heroic refactor is how that refactor goes wrong.

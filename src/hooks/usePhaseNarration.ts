@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createStandingFactMemory, fullmoveOf } from '../services/standingFactMemory';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
@@ -126,15 +127,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
   // SAY-ONCE across the game — see useLiveCoach for the reasoning. Phase
   // transitions are rarer, but the structure line is exactly the kind of
   // standing fact that would open every one of them identically.
-  const saidRef = useRef<Set<string>>(new Set());
-  // …and the set FORGETS when the board goes backwards. This hook has no game
-  // id (it is mounted per play session), so a second game inside one mount
-  // would inherit the first game's silence. The fullmove number going DOWN is
-  // the honest signal that we are on a different game — or at least a rewound
-  // one, and rewinding is the safe direction to be wrong in: forgetting makes
-  // the coach repeat itself, suppressing makes it mute for a reason nobody can
-  // trace.
-  const lastFullmoveRef = useRef(0);
+  // …and the set FORGETS when the board goes backwards. The rule (and the
+  // reasoning) lives in `standingFactMemory` — CoachTeachPage carried its own
+  // copy of it, under different ref names, with a comment admitting as much.
+  const standingRef = useRef(createStandingFactMemory());
   const [isNarrating, setIsNarrating] = useState(false);
   const [currentText, setCurrentText] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -596,9 +592,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // drops the eval/decision framing (David 2026-08-23). Reuses the analysis
       // already read; the importance model gates whether anything speaks.
       try {
-        const fullmove = Number.parseInt(event.fen.split(' ')[5] ?? '1', 10) || 1;
-        if (fullmove < lastFullmoveRef.current) saidRef.current = new Set();
-        lastFullmoveRef.current = fullmove;
+        standingRef.current.observe(fullmoveOf(event.fen));
         if (stockfishAnalysis?.topLines?.length) {
           const pf = await computePositionFacts({
             // Mid-game, unasked-for. The transition has to earn its sentence.
@@ -610,9 +604,9 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             analysis: stockfishAnalysis,
             evalBoard: (f) => stockfishEngine.evalBoard(f),
             studentWeaknesses: weaknessRef.current,
-            alreadySaid: saidRef.current,
+            alreadySaid: standingRef.current.said,
           });
-          for (const t of pf.remember) saidRef.current.add(t);
+          for (const t of pf.remember) standingRef.current.said.add(t);
           const cl = clauseText(pf.clauses, ['key-moment', 'convert']);
           if (cl.length) { transitionSentence += ` ${cl.join(' ')}`; pfConcrete = true; }
         }
