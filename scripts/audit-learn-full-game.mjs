@@ -174,7 +174,15 @@ async function main() {
   const executablePath = await resolveChromiumExecutable();
   const browser = await chromium.launch({ executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
-  await ctx.addInitScript(muteTtsForAudit);
+  // MUTED BY DEFAULT (G1) — the mute emits the SAME coach-narration-spoken event
+  // with the SAME full text, so reading WHAT was said costs nothing.
+  //
+  // AUDIT_UNMUTED=1 buys the one thing the mute can only approximate: real
+  // synthesis is the real clock, so voice-gated auto-advance, the speech-chain
+  // serialization and mid-word cutoff are only observable with it off. Granted
+  // per-run by David (2026-09-17) for ONE full game; never for a loop.
+  if (process.env.AUDIT_UNMUTED === '1') console.log('[tts] UNMUTED — real synthesis, one game, granted');
+  else await ctx.addInitScript(muteTtsForAudit);
   await ctx.addInitScript(`localStorage.setItem('auditRunId', ${JSON.stringify(RUN_ID)});`);
 
   const page = await ctx.newPage();
@@ -258,6 +266,7 @@ async function main() {
 
   const chess = new Chess();
   const transcript = [];
+  const clickTimings = [];
   let ply = 0;
 
   // The coach has White and opens on its own; read that off the board first or
@@ -288,9 +297,19 @@ async function main() {
 
     const spokenBefore = spoken.length;
     const beatsBefore = beats.length;
-    await page.locator(`[data-square="${legal.from}"]`).first().click({ timeout: 8000, force: true });
+    // ⏱ TIME THE CLICK. Unmuted on 2026-09-17 a forced click on b1 hung past
+    // 8s AFTER the element resolved and scrolled — which `force: true` already
+    // rules out as an actionability stall, so the main thread was blocked. If
+    // that is real synthesis blocking input, the student meets it as a board
+    // that will not take a move while the coach is talking. Measure it rather
+    // than fail at an arbitrary ceiling.
+    const clickT0 = Date.now();
+    await page.locator(`[data-square="${legal.from}"]`).first().click({ timeout: 45_000, force: true });
     await page.waitForTimeout(200);
-    await page.locator(`[data-square="${legal.to}"]`).first().click({ timeout: 8000, force: true });
+    await page.locator(`[data-square="${legal.to}"]`).first().click({ timeout: 45_000, force: true });
+    const clickMs = Date.now() - clickT0 - 200;
+    clickTimings.push({ ply: ply + 1, san: legal.san, ms: clickMs });
+    if (clickMs > 2000) console.log(`[slow-input] ply ${ply + 1} ${legal.san}: board took ${(clickMs / 1000).toFixed(1)}s to accept the move`);
     chess.move(legal.san);
     ply += 1;
     if (chess.isGameOver()) { transcript.push({ ply, studentMove: legal.san, note: 'game over on the student move' }); break; }
@@ -497,6 +516,9 @@ async function main() {
     // retirement — do not read a zero here as missing teaching.
     openingPliesTaught: [...new Set(bakedPlies)].sort((a, b) => a - b),
     linesSpoken: totalSpoken, silentPlies, falseClaims: allFalse, pageErrors, gameOverUi,
+    clickTimings,
+    slowestInputMs: clickTimings.reduce((m, c) => Math.max(m, c.ms), 0),
+    inputsOver2s: clickTimings.filter((c) => c.ms > 2000).length,
     streamDelta: postEvents.length - preEvents.length,
     pgn: chess.pgn(), transcript,
   };
