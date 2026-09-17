@@ -487,3 +487,83 @@ fallbacks. `selectUserRating` already exists with the right 1200 prior and ~40
 sites hand-roll `activeProfile?.currentRating ?? 1200` instead, five of them
 `?? 1420`. That only bites when the profile is null, which is rare — the 800 is
 the defect that actually reaches students.
+
+
+## §5 THE BASELINE IS A CAPABILITY PROFILE, NOT AN ELO (David 2026-09-17: "Not elo based. I want it to be capabilities of our system.")
+
+This REPLACES §4's proposed fix. §4 argued about which NUMBER to anchor the
+first baseline at; David rejected the framing outright, and he is right — a
+scalar is lossy in exactly the place it matters. Two students at 1200, one who
+hangs pieces but calculates well and one who never hangs but has no plan, get
+IDENTICAL teaching today. The app already knows the difference and throws it
+away to produce one integer.
+
+### The vocabulary already exists and is already closed
+
+`src/data/misconceptionTags.ts` — **25 named tags + `other`**:
+
+    left-book-early · neglected-development · king-stuck-center · greedy-pawn-grab
+    tempo-handed · space-conceded · hung-material · missed-tactic · calculation-depth
+    missed-opponents-threat · overvalued-attack · poisoned-pawn · weakened-king-safety
+    created-pawn-weakness · misplaced-piece · bad-trade · overextended-pawn
+    capture-toward-centre · bad-trade-material · passive-king-endgame
+    mistimed-pawn-break · botched-conversion · passed-pawn-neglected · passive-rook
+    no-plan
+
+It is persisted, it is the closed set the classifier must choose from, and it is
+ALREADY joined to computed facts by three matchers (`matchTacticPattern`,
+`matchClauseKind`, `clauseKindForTag`) and bridged to `MoveFundamentalId` /
+`PositionalConceptId` / `ReviewConceptId` by this session's earlier work. There
+is nothing to invent — the capability axis is the one the app already speaks.
+
+### This is a PROMOTION, not a rewrite
+
+`positionFacts:515` already computes `momentWeaknessBoost(clauses, weaknesses)`
+and feeds it to the decider. The capability model is:
+
+* promote that join from a **modifier on a rating-driven base** to the
+  **primary**, and
+* demote the rating to what the ALGO-BASED rule already says it is — a
+  cold-start prior, nothing more.
+
+### 🚨 THE BLOCKER, and it is load-bearing
+
+**The app records FAILURES and never SUCCESSES.** `weaknessSpine:403` says it
+outright: "un-solved tactic (no puzzle success yet) counts as open." So a
+capability can be `broken` or `unknown` — never `held`. A profile built on that
+can only ever degrade, and "they have this one" is unsayable.
+
+That is task #65, which CLAUDE.md lists as OWED and as gating the "lower"
+direction of the weakness boost. Under a capability baseline it stops being a
+decay-curve nicety and becomes **the critical path**: without the positive
+half there is no capability profile, only a defect list.
+
+### The cold start needs NO number
+
+Unknown capability = teach it. The obvious objection — 25 unknowns means the
+coach never shuts up — does not hold, because **the BOARD rations it, not a
+rating**: you only teach the capability the position in front of the student
+actually demonstrates. One position exercises one or two. That is self-limiting
+by construction, it needs no prior, and it is strictly more honest than
+guessing a band. A fresh student is taught what the board shows them, and the
+profile fills in from what they then do.
+
+### What genuinely still needs a scalar (and only these)
+
+* `explorerBandFor` — the Lichess explorer API accepts rating buckets ONLY.
+  External interface, not our design.
+* Stockfish opponent strength — an engine needs an ELO.
+
+Both should read a number DERIVED from the capability profile and labelled as
+derived, so nobody mistakes it for the student model. Every other rating-scaled
+decider (`criticalityThresholds`, `getTacticLookahead`, `hintStartTier`,
+`alertSensitivityMultiplier`) is asking a question the capability profile
+answers better.
+
+### Order
+
+1. **#65 first** — record correct play. Nothing else is possible without it.
+2. `CapabilityProfile` over the closed tag set: `held | broken | unknown` per
+   tag, with the provenance shape §CAPABILITY PARITY already demands.
+3. Re-point the deciders that don't need a scalar.
+4. Derive the two that do, and say so at the call site.
