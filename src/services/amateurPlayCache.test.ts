@@ -23,10 +23,13 @@ describe('ratingBandFor', () => {
     expect(ratingBandFor(1450).band).toBe('1400,1600');
     expect(ratingBandFor(1450).bandLabel).toContain('1400–1600');
     expect(ratingBandFor(950).band).toBe('1000,1200');
-    expect(ratingBandFor(2400).band).toBe('2200');
+    // Delegates to ratingBands.explorerBandFor since 2026-09-17: this used to
+    // return a LONE '2200' because its private bucket list stopped there and
+    // had nothing to pair with. 2500 is a real explorer bucket.
+    expect(ratingBandFor(2400).band).toBe('2200,2500');
   });
-  it('defaults sanely on garbage', () => {
-    expect(ratingBandFor(NaN).band).toBe('1600,1800');
+  it('defaults an unrated student to the 1200 cold-start prior', () => {
+    expect(ratingBandFor(NaN).band).toBe('1200,1400');
   });
 });
 

@@ -50,7 +50,12 @@ const SURFACE_PATTERNS = [
   /^src\/components\/Coach\//,
   /^src\/coach\//,
   /^src\/hooks\/use(Teach|LiveCoach|PhaseNarration|PositionNarration|StrictNarration|WalkthroughRunner|ChessGame|DiscussionPractice)/,
-  /^src\/services\/(coach|narration|teaching|voice|weakness|review|tactic|position|concept|note|corpus|curated|method|fact|ply|opening|refuted|plan|grounded|mistake|drill|explain|pin|threat|importance|need|selector|decider|lookahead|dna|principle|exchange|criticality|attribut|transfer|foresight|habit|misconception)[A-Za-z]*\.ts$/,
+  // `rating|amateur|theory` added 2026-09-17: ratingBands is THE rating→tier
+  // and rating→explorer-band taxonomy (criticality, slip interjection, hint
+  // register, and the band deciding whose games we quote back); amateurPlayCache
+  // and theoryDeparture are its two biggest consumers and are fact producers in
+  // their own right. All three carry spine blast radius and owed a map.
+  /^src\/services\/(coach|narration|teaching|voice|weakness|review|tactic|position|concept|note|corpus|curated|method|fact|ply|opening|refuted|plan|grounded|mistake|drill|explain|pin|threat|importance|need|selector|decider|lookahead|dna|principle|exchange|criticality|attribut|transfer|foresight|habit|misconception|rating|amateur|theory)[A-Za-z]*\.ts$/,
 ];
 
 const isSurface = (p) => SURFACE_PATTERNS.some((re) => re.test(p)) && /\.(ts|tsx)$/.test(p) && !/\.test\.tsx?$/.test(p);

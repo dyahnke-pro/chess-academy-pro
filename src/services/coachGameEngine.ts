@@ -13,6 +13,7 @@ import { teachableSlipAt } from './gemCrushLines';
 import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
+import { explorerBandFor } from './ratingBands';
 
 // Budget for the skill-limited opponent search before falling back to a
 // movetime best-move. 8s (was 5s) gives the slower single-threaded iOS engine
@@ -141,9 +142,6 @@ export function breakBookProbability(targetElo: number): number {
   return 0.1; // 1500–1600: mostly book, the occasional own move
 }
 
-/** Lichess explorer rating buckets. A bucket labelled 1600 holds games by
- *  players rated 1600-1799, so the label is the FLOOR of the band. */
-const EXPLORER_BUCKETS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const;
 
 /**
  * The two buckets closest to `targetElo` — the pool a player at this level
@@ -244,14 +242,7 @@ export function slipsAllowed(
 }
 
 export function explorerBandForElo(targetElo: number): string {
-  const floors = EXPLORER_BUCKETS.filter((b) => b <= targetElo);
-  const base = floors.length > 0 ? floors[floors.length - 1] : EXPLORER_BUCKETS[0];
-  const i = EXPLORER_BUCKETS.indexOf(base);
-  // Pair downward at the top of the range so the strongest band still has two.
-  const pair = i + 1 < EXPLORER_BUCKETS.length
-    ? [EXPLORER_BUCKETS[i], EXPLORER_BUCKETS[i + 1]]
-    : [EXPLORER_BUCKETS[i - 1], EXPLORER_BUCKETS[i]];
-  return pair.join(',');
+  return explorerBandFor(targetElo).band;
 }
 
 function shouldBreakBook(targetElo: number): boolean {

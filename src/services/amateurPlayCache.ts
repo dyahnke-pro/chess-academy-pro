@@ -12,6 +12,7 @@
 import { fetchLichessExplorer } from './lichessExplorerService';
 import { positionFen } from './masterPlayCache';
 import { logAppAudit } from './appAuditor';
+import { explorerBandFor } from './ratingBands';
 
 export interface AmateurPlayEntry {
   /** The ratings buckets queried (e.g. "1400,1600"). */
@@ -27,22 +28,10 @@ const entries = new Map<string, AmateurPlayEntry>();
 const inFlight = new Set<string>();
 const KID_SURFACE_RE = /(^|\/)kid(\/|$)/i;
 
-/** Lichess explorer rating buckets. The band = the two buckets bracketing
- *  the student's rating, for sample size at the student's actual level. */
-const BUCKETS = [1000, 1200, 1400, 1600, 1800, 2000, 2200];
-
-export function ratingBandFor(rating: number): { band: string; bandLabel: string } {
-  const r = Number.isFinite(rating) ? rating : 1600;
-  let lower = BUCKETS[0];
-  for (const b of BUCKETS) {
-    if (b <= r) lower = b;
-  }
-  const idx = BUCKETS.indexOf(lower);
-  const upper = BUCKETS[Math.min(idx + 1, BUCKETS.length - 1)];
-  const band = lower === upper ? `${lower}` : `${lower},${upper}`;
-  const bandLabel = lower === upper ? `around ${lower}` : `around ${lower}–${upper}`;
-  return { band, bandLabel };
-}
+/** The band = the two buckets bracketing the student's rating, for sample size
+ *  at the student's actual level. ONE picker for every surface —
+ *  `ratingBands.explorerBandFor`; this re-export is the historical name. */
+export const ratingBandFor = explorerBandFor;
 
 /** Cache-only read — NEVER touches the network (the narration contract). */
 export function getCachedAmateurPlay(fen: string): AmateurPlayEntry | null {

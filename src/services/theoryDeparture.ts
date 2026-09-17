@@ -16,6 +16,7 @@ import { Chess } from 'chess.js';
 import { lookupMasterPlay } from './masterPlayLookup';
 import { fetchLichessExplorer } from './lichessExplorerService';
 import type { MasterPlayResult } from './masterPlayTypes';
+import { explorerBandFor } from './ratingBands';
 
 export interface TheoryLookup {
   (fen: string): Promise<MasterPlayResult>;
@@ -55,12 +56,11 @@ const MAX_SCAN_PLIES = 30;
 const defaultLookup: TheoryLookup = (fen) =>
   lookupMasterPlay(fen, { triggeredBy: 'manual', surface: 'game-review' });
 
-/** The amateur band around a student rating, as the explorer expects. */
+/** The amateur band around a student rating, as the explorer expects. ONE
+ *  picker for every surface — `ratingBands.explorerBandFor`. The hand-written
+ *  ladder this replaced disagreed with it at 1300 and 1900. */
 export function ratingBandFor(rating: number | null | undefined): string {
-  if (!rating || rating < 1200) return '1000,1200';
-  if (rating < 1600) return '1400,1600';
-  if (rating < 2000) return '1600,1800';
-  return '2000,2200';
+  return explorerBandFor(rating).band;
 }
 
 /**
