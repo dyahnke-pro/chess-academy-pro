@@ -95,4 +95,31 @@ describe('correction intent', () => {
   it('a correction naming an ILLEGAL move still parses as nothing', () => {
     expect(parseCoachMoveCommand('no, play Nc9 instead', AFTER_1E4)).toBeNull();
   });
+
+  // STACKED corrections — the shape a person actually says, and the shape this
+  // missed. "no, take that back and play Nc3" is David's own wording for the
+  // feature; one strip pass removed "no, ", left "take that back and play Nc3",
+  // found no verb and returned NULL. The sentence then went to the brain, whose
+  // take_back TOOL undid the coach's move and played nothing — so the board
+  // looked exactly like a half-run correction and the prod audit read it as a
+  // broken branch rather than a parse miss.
+  it.each([
+    'no, take that back and play Nc3',
+    'take that back and play Nc3',
+    'no, take it back and play Nc3',
+    'undo and play Nc3',
+    'wait, no, play Nc3 instead',
+    'actually take that back and play Nc3 instead',
+  ])('parses the stacked correction %j', (text) => {
+    const cmd = parseCoachMoveCommand(text, AFTER_1E4);
+    expect(cmd?.san).toBe('Nc3');
+    expect(cmd?.corrects).toBe(true);
+  });
+
+  it('a bare takeback with NO move named is not a move command', () => {
+    // It is a takeback request for the brain's tool, not a dictation — parsing
+    // it as a command would swallow the tool call.
+    expect(parseCoachMoveCommand('no, take that back', AFTER_1E4)).toBeNull();
+    expect(parseCoachMoveCommand('undo', AFTER_1E4)).toBeNull();
+  });
 });

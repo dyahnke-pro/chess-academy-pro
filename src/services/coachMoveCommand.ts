@@ -82,10 +82,25 @@ export function parseCoachMoveCommand(text: string, fen: string): CoachMoveComma
   const corrects = CORRECTION_RE.test(trimmed);
   // The correction words are not part of the move phrase — strip them from both
   // ends before the verb match, or "no, play Nc3 instead" never finds its verb.
-  const cleaned = trimmed
-    .replace(/^(?:no|nope|nah|wait|actually|hold on|undo|take (?:that|it) back)\b[,!.\s]*/i, '')
-    .replace(/[,\s]*\b(?:instead|rather)\b\s*\.?$/i, '')
-    .trim();
+  //
+  // STRIP REPEATEDLY. People stack these, and the phrasing David actually asked
+  // for stacks two: "no, take that back and play Nc3". A single pass removed
+  // only "no, ", left "take that back and play Nc3", failed to find the verb,
+  // returned null — and the sentence fell through to the brain, whose take_back
+  // TOOL undid the coach's move and played nothing. The board ended up exactly
+  // as a broken correction would leave it, which is how this hid: the undo was
+  // real, so it looked like the correction branch had half-run.
+  let cleaned = trimmed;
+  for (let i = 0; i < 4; i++) {
+    const before = cleaned;
+    cleaned = cleaned
+      .replace(/^(?:no|nope|nah|wait|actually|hold on|undo|take (?:that|it) back)\b[,!.\s]*/i, '')
+      // the connective that joins a stacked correction to its move
+      .replace(/^(?:and|then)\b[,\s]*/i, '')
+      .replace(/[,\s]*\b(?:instead|rather)\b\s*\.?$/i, '')
+      .trim();
+    if (cleaned === before) break;
+  }
   const afterPrefix = cleaned.replace(PREFIX_RE, '');
   let phrase: string | null = null;
   if (CASTLE_RE.test(afterPrefix)) {
