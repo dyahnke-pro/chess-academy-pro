@@ -72,6 +72,11 @@ function isRelevant(text: string): boolean {
 }
 
 describe('coach surface scorecard', () => {
+  // 180s, like the other 21 corpus-loading suites: `loadFullCorpus` parses
+  // ~37 MB of JSON and builds the FEN index, which is real work, not a flake
+  // to paper over. Vitest's DEFAULT hook timeout is 10s, and these four files
+  // were the only ones that never overrode it — so they failed on a clean
+  // tree, blocking every push, while 21 siblings doing the same work passed.
   beforeAll(() => {
     loadFullCorpus();
     // THE BAKE MUST BE LOADED OR HALF THE SURFACES ARE SILENT BY DESIGN.
@@ -81,7 +86,7 @@ describe('coach surface scorecard', () => {
     // fetches this at boot; the harness has to do it explicitly.
     const raw = JSON.parse(readFileSync('public/data/corpus-spoken.json', 'utf8')) as Record<string, { spoken?: string; kind?: string; unspeakable?: string }>;
     __setSpokenBakeCache(new Map(Object.entries(raw)));
-  });
+  }, 180_000);
 
   it('scores narration quality, speed and accuracy across every surface', () => {
     const lines: Line[] = [];

@@ -22,7 +22,12 @@ describe('tactic notes by puzzle theme', () => {
   // the app `loadSpokenBake` runs at boot; nothing in vitest fetches it, so
   // without this the whole tier is silent and the test measures the harness.
   // Same reason `loadFullCorpus` exists.
-  beforeAll(() => { loadFullCorpus(); loadSpokenBake(); });
+  // 180s, like the other 21 corpus-loading suites: `loadFullCorpus` parses
+  // ~37 MB of JSON and builds the FEN index, which is real work, not a flake
+  // to paper over. Vitest's DEFAULT hook timeout is 10s, and these four files
+  // were the only ones that never overrode it — so they failed on a clean
+  // tree, blocking every push, while 21 siblings doing the same work passed.
+  beforeAll(() => { loadFullCorpus(); loadSpokenBake(); }, 180_000);
 
   it('a back-rank puzzle gets a note that teaches the back rank', () => {
     const hit = tacticNoteForPuzzleThemes({ themes: ['backRankMate', 'endgame', 'mate', 'mateIn2', 'short'] });

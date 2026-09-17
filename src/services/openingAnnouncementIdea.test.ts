@@ -20,7 +20,12 @@ import { notesForOpening } from './danyaTeachingService';
 const GENERIC = /^(?:king's|queen's) pawn (?:game|opening)$|^(?:irregular|uncommon)\b/i;
 
 describe('the announcement key idea', () => {
-  beforeAll(() => { loadFullCorpus(); });
+  // 180s, like the other 21 corpus-loading suites: `loadFullCorpus` parses
+  // ~37 MB of JSON and builds the FEN index, which is real work, not a flake
+  // to paper over. Vitest's DEFAULT hook timeout is 10s, and these four files
+  // were the only ones that never overrode it — so they failed on a clean
+  // tree, blocking every push, while 21 siblings doing the same work passed.
+  beforeAll(() => { loadFullCorpus(); }, 180_000);
 
   it('THE REGRESSION: a placeholder name is recognised as one', () => {
     for (const n of ["King's Pawn Game", "Queen's Pawn Game", "King's Pawn Opening", 'Irregular Opening']) {

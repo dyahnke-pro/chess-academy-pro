@@ -115,7 +115,12 @@ interface LaneHit { game: string; ply: number; kind: VoiceFactKind; text: string
 
 describe('computed voice audit', () => {
   let eng: Engine;
-  beforeAll(() => { loadFullCorpus(); eng = new Engine(); });
+  // 180s, like the other 21 corpus-loading suites: `loadFullCorpus` parses
+  // ~37 MB of JSON and builds the FEN index, which is real work, not a flake
+  // to paper over. Vitest's DEFAULT hook timeout is 10s, and these four files
+  // were the only ones that never overrode it — so they failed on a clean
+  // tree, blocking every push, while 21 siblings doing the same work passed.
+  beforeAll(() => { loadFullCorpus(); eng = new Engine(); }, 180_000);
   afterAll(() => { eng?.stop(); });
 
   it('drives every computed lane over real games and reports what it says', async () => {
