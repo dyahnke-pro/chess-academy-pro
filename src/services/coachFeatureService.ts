@@ -25,6 +25,7 @@ import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
+import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
 import { habitIsOwed, type MethodHabit } from './methodBeat';
@@ -1278,6 +1279,14 @@ export function buildReviewSegments(
     { re: / — a piece that sees nothing defends nothing/, sub: '' },
     { re: / more attackers than defenders, so/, sub: ' so' },
     { re: / — hemmed in behind its own pawns on the same colour, with almost nowhere to go/, sub: '' },
+    // THE EVAL-SHIFT EXPLAINER — 8 times in one 33-ply review. This one STRIPS
+    // rather than referring back (unlike the standing facts in
+    // `standingRefrains.ts`), because its tail is not a fact of its own: "the
+    // new pressure the move creates" / "the lines it opened" are POINTERS to
+    // the [does] and [delta] facets already spoken in the same breath. There is
+    // nothing to call back to. What the student needs every time is the number
+    // and the direction; what they need once is what "positional" means here.
+    { re: /: the shift is positional — [^.]*(?=\.)/, sub: ': the shift is positional' },
   ];
   const spokenRefrains = new Set<number>();
   // A HABIT IS A ROUTINE, NOT A RUNNING TOTAL. One ledger for the whole game, so
@@ -4054,6 +4063,25 @@ export async function generateReviewNarration(params: {
   // already played, so the actual-move clauses speak in past tense (the
   // hypothetical projection tails + live threats stay present).
   pastTenseReviewNarration(segments);
+  // STANDING FACTS TEACH ONCE AND REFER AFTER (David 2026-09-16: "Once a plan
+  // is announced we can use common language to readdress it. 'Don't forget
+  // about the isolated pawn'"). On his own Alapin, `their pawn on d4 is
+  // isolated — a target you can pile on` spoke ELEVEN times, seven of them on
+  // consecutive plies about the same pawn: `assessPositionalEdge` is stateless
+  // and its two callers — the per-ply [verdict] facet and the projection
+  // terminal — never compared notes.
+  //
+  // Here, and not inside either composer, because the projections are built
+  // later over the whole game at once: a ledger in either one would let a
+  // projection at ply 12 refer back to a full form that is not spoken until ply
+  // 20. Walking the finished segments IN PLY ORDER makes the first mention in
+  // READING order the full one, by construction.
+  {
+    const refrainLedger = emptyRefrainLedger();
+    for (const s of [...segments].sort((a, b) => a.ply - b.ply)) {
+      if (s.narration) s.narration = foldStandingRefrains(s.narration, refrainLedger);
+    }
+  }
 
   // BOOK-GROUNDED DEV TARGETS (David 2026-07-21, IMG_4569: the plan arrow said
   // g1→f3 while the theory lecture's masters data plays Ne2 — two "authorities"
