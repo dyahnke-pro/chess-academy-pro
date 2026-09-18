@@ -29,7 +29,13 @@ export default defineConfig({
     // They're meant to run on demand via `npm run test:perf` (or
     // just `vitest run src/test/benchmarks/`). Default `npm test`
     // and `npm run test:run` therefore stay green.
-    exclude: ['node_modules/**', 'e2e/**', 'src/test/benchmarks/**'],
+    // `.claude/**` holds agent WORKTREES — full checkouts of this repo living
+    // INSIDE it. They are gitignored, but vitest globs the filesystem, not git,
+    // so without this every test file runs once per worktree. Three worktrees
+    // turned voicedCorpusIntegrity into three extra runs that each shelled out
+    // to a builder from the wrong cwd and failed — a red gate with nothing wrong
+    // in the code (2026-09-18).
+    exclude: ['node_modules/**', 'e2e/**', 'src/test/benchmarks/**', '.claude/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
