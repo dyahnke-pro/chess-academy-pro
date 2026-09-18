@@ -452,13 +452,57 @@ describe('useChessGame', () => {
 
     it('executes a move on second click to legal destination', () => {
       const { result } = renderHook(() => useChessGame());
-      // Each click must be a separate act so the hook re-renders with updated
-      // selectedSquare before the second onSquareClick closure is evaluated.
       act(() => { result.current.onSquareClick('e2'); }); // select
       act(() => { result.current.onSquareClick('e4'); }); // move
 
       expect(result.current.history).toHaveLength(1);
       expect(result.current.history[0]).toBe('e4');
+      expect(result.current.selectedSquare).toBeNull();
+    });
+
+    // 🔒 THE SECOND TAP MUST NOT NEED A RENDER IN BETWEEN (prod, 2026-09-18).
+    //
+    // The two clicks above sit in SEPARATE `act` calls, so React commits a
+    // render between them and the second click always sees the first one's
+    // selection. That is the friendly case, and it is the only one this file
+    // used to test — the version of this test that shipped for months even
+    // carried a comment saying each click "must be a separate act", which
+    // wrote the defect down as if it were a requirement.
+    //
+    // A real student taps twice in a few hundred milliseconds, and when the
+    // main thread is busy (the coach runs engine analyses right after its
+    // reply) React has NOT committed in between. Measured on prod at the same
+    // position with the same squares: a 250ms gap between taps was silently
+    // REFUSED; a 2.5s gap landed. The move vanished with no error and no sound.
+    //
+    // ONE `act` = no commit between the clicks = the real interaction.
+    it('executes the move when BOTH clicks land before React re-renders', () => {
+      const { result } = renderHook(() => useChessGame());
+
+      act(() => {
+        result.current.onSquareClick('e2'); // tap the piece
+        result.current.onSquareClick('e4'); // tap the square, same tick
+      });
+
+      expect(result.current.history).toEqual(['e4']);
+      expect(result.current.selectedSquare).toBeNull();
+    });
+
+    // The same thing for a CAPTURE, which is the shape that actually caught it:
+    // Qxd5 in the Scandinavian, where the destination holds an enemy piece. A
+    // dropped second tap re-selects the destination instead, and an enemy-
+    // occupied square has no legal moves for the side to move — so the
+    // selection cleared and the move was gone without a trace.
+    it('executes a CAPTURE when both clicks land before a re-render', () => {
+      // 1.e4 d5 2.exd5 — Black to move, Qd8xd5 is the student's move.
+      const { result } = renderHook(() => useChessGame('rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2'));
+
+      act(() => {
+        result.current.onSquareClick('d8');
+        result.current.onSquareClick('d5');
+      });
+
+      expect(result.current.history).toEqual(['Qxd5']);
       expect(result.current.selectedSquare).toBeNull();
     });
 

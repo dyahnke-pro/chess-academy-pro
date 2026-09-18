@@ -229,20 +229,39 @@ INSTRUMENT being believable, or reaches the STUDENT as a wrong/repeated line.
 
 ### A. The loop cannot close (highest — these are the app, not polish)
 
-0. 🔴 **NEW (#77) — the first coach reply of a game intermittently blows 90s.**
-   Found by the standing Learn audit twice on 2026-09-18. Four prior runs were
-   8/8 at 5 plies in 23-28s; two tonight were 7/8 at 4 plies in 136s with "no
-   coach reply after Qxd5". 136/135/136s is not variance — it is the audit's
-   `replyBy = +90_000` budget plus startup, so ONE turn ate 90 seconds. The
-   same-run evidence settles the cause: in run 2, same prod, same minute, same
-   position, the canonical game stalled at 136s and the typo game finished 5
-   plies in 30s. Intermittent, worst on a run's first game. NOT the corpus fix —
-   that change has a ZERO character delta (50,210 before and after; it changed
-   shape, not text). Row C's red is downstream: the concept it looks for is
-   posed at ply 5 and the game never gets there. A real user meets this as a
-   90-second dead board on their first move. Instrument the first turn's legs
-   (cold LLM / the serialized Stockfish singleton / the deferred seed) before
-   touching the concept engine.
+0. ✅ **FIXED (#77) — CLICK-TO-MOVE SILENTLY DROPPED THE STUDENT'S MOVE.**
+   🔴 The entry here previously read "the first coach reply of a game
+   intermittently blows 90s" and blamed a cold LLM / the serialized Stockfish
+   singleton. THAT WAS WRONG and is deleted rather than annotated. The coach was
+   never slow: measured on prod it answered in 4.5–4.9s every time.
+
+   What actually happened: `useChessGame.onSquareClick` read the current
+   selection out of REACT STATE, so the second tap of a click-move only saw the
+   first tap's selection if React had COMMITTED a render in between. When it had
+   not, the tap fell through to "select this square instead" — and an
+   enemy-occupied destination has no legal moves for the side to move, so the
+   selection cleared and THE MOVE VANISHED with no error, no sound, no feedback.
+
+   Proven on prod, same position, same two squares: a 250ms gap between taps was
+   REFUSED; a 2.5s gap landed in 0.5s; a DRAG always worked (a drag needs no
+   state to survive between two events). The window stretches past 250ms exactly
+   when the coach's narration pipeline is running engine analyses on the main
+   thread — i.e. right after its reply, which is when the student is tapping.
+
+   Fix: the selection is now held in REFS, which update synchronously; the state
+   still drives the selection ring and the legal-move dots. Both refs are written
+   in the only two places that write the selection, so they cannot drift. It
+   lands on all 39 surfaces that use `useChessGame` at once.
+
+   Why no test caught it: the existing test put each click in its own `act`, so
+   React always committed in between — and its comment said each click "must be
+   a separate act", writing the defect down as a requirement. Two new tests put
+   both clicks in ONE `act` (one of them the real `Qxd5` capture), and were
+   verified to FAIL on the old code and pass on the new.
+
+   The Learn audit's row C red was downstream of this all along: the audit's own
+   clicks were being dropped, so the game never reached the ply that poses the
+   concept, and the audit reported it as "no coach reply".
 
 1. ✅ **DONE (fe8e50cd3 + c4715f593) — GREY TEACHES, and it feeds the RANKER.**
    Not the per-tag need prior this item originally described: David corrected the

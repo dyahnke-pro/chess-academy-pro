@@ -113,6 +113,31 @@ export function useChessGame(
   const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const [legalMoves, setLegalMoves] = useState<string[]>([]);
+  // ── CLICK-TO-MOVE READS THE SELECTION SYNCHRONOUSLY, NOT OFF A COMMITTED
+  //    RENDER (found on prod 2026-09-18).
+  //
+  // Click-to-move is the only interaction in the app that spans TWO events:
+  // tap the piece, then tap the square. `onSquareClick` used to read
+  // `selectedSquare`/`legalMoves` out of REACT STATE, so the second tap only
+  // saw the first one's selection if React had COMMITTED a render in between.
+  // When it had not, the second tap fell through to "select this square
+  // instead" — an enemy-occupied square has no legal moves, so it cleared the
+  // selection and THE MOVE VANISHED with no error, no sound and no feedback.
+  //
+  // It is not theoretical and it is not rare: the coach's narration pipeline
+  // runs engine analyses on the main thread in the moments right after its
+  // reply, which is exactly when the student is tapping. Measured on prod, at
+  // the same position with the same two squares: a 250ms gap between taps was
+  // REFUSED, a 2.5s gap landed in 0.5s. Dragging never showed it, because a
+  // drag needs no state to survive between two events.
+  //
+  // A ref is the truth the handler reads; the state still drives the selection
+  // ring and the legal-move dots. Same reason `liveFenRef` exists on the coach
+  // surface: when handlers run without yielding to React, only a ref is
+  // current. Both are written in exactly TWO places — `selectSquare` and
+  // `clearSelection` — which is what keeps them from drifting apart.
+  const selectedSquareRef = useRef<string | null>(null);
+  const legalMovesRef = useRef<string[]>([]);
   const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>(initialOrientation);
 
   // Derived state — computed directly from chess instance each render.
@@ -203,6 +228,8 @@ export function useChessGame(
   // ─── Selection helpers ───────────────────────────────────────────────────────
 
   const clearSelection = useCallback((): void => {
+    selectedSquareRef.current = null;
+    legalMovesRef.current = [];
     setSelectedSquare(null);
     setLegalMoves([]);
   }, []);
@@ -223,6 +250,8 @@ export function useChessGame(
     const moves = chessRef.current.moves({ square: square as Square, verbose: true });
     const destinations = [...new Set(moves.map((m) => m.to))];
     if (destinations.length > 0) {
+      selectedSquareRef.current = square;
+      legalMovesRef.current = destinations;
       setSelectedSquare(square);
       setLegalMoves(destinations);
     } else {
@@ -248,21 +277,27 @@ export function useChessGame(
   }, [executeMove, clearSelection]);
 
   const onSquareClick = useCallback((square: string): MoveResult | null => {
+    // The REFS, never the state — see the note where they are declared. The
+    // second tap of a click-move must see the first tap's selection even when
+    // React has not re-rendered in between, which under load it has not.
+    const selected = selectedSquareRef.current;
+    const legal = legalMovesRef.current;
+
     // Clicking the already-selected square deselects it
-    if (selectedSquare === square) {
+    if (selected === square) {
       clearSelection();
       return null;
     }
 
     // If a legal move destination is clicked, execute the move
-    if (selectedSquare !== null && legalMoves.includes(square)) {
-      const piece = chessRef.current.get(selectedSquare as Square);
+    if (selected !== null && legal.includes(square)) {
+      const piece = chessRef.current.get(selected as Square);
       const isPromotion =
         piece?.type === 'p' &&
         ((piece.color === 'w' && square[1] === '8') ||
           (piece.color === 'b' && square[1] === '1'));
 
-      const result = executeMove(selectedSquare, square, isPromotion ? 'q' : undefined);
+      const result = executeMove(selected, square, isPromotion ? 'q' : undefined);
       clearSelection();
       return result;
     }
@@ -270,7 +305,7 @@ export function useChessGame(
     // Otherwise try to select the clicked square
     selectSquare(square);
     return null;
-  }, [selectedSquare, legalMoves, clearSelection, selectSquare, executeMove]);
+  }, [clearSelection, selectSquare, executeMove]);
 
   const flipBoard = useCallback((): void => {
     setBoardOrientation((prev) => (prev === 'white' ? 'black' : 'white'));
