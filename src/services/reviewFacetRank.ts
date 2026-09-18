@@ -29,7 +29,7 @@ export type FacetTag =
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
-  | 'method';
+  | 'note' | 'method';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -56,6 +56,11 @@ export const FACET_RANK: Record<FacetTag, number> = {
   sac: 72,
   'sac-why': 71,
   king: 70,
+  // THE AUTHORED TEACHING about this exact position (the farmed/voiced corpus
+  // — 90% of what the coach has to say, per the corpus doctrine). Ranked ABOVE
+  // the board description and BELOW everything forcing: it explains the idea,
+  // which matters after the student knows what is hanging and what it cost.
+  note: 64,
   // What the move DID to the position, and the eval story behind it.
   does: 60,
   delta: 58,

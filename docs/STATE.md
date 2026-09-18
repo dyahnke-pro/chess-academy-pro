@@ -28,13 +28,13 @@ the coach says — an unrated player gets the full detectors (CLAUDE.md).
 
 ## SAY — which surfaces can reach the corpus?
 
-- **review**: 0 file(s)
+- **review**: 1 file(s)
 - **teach**: 1 file(s)
 - **tactics**: 1 file(s)
 - **endgame**: 0 file(s)
 - **read-position**: 1 file(s)
 
-🚨 **ZERO on: review, endgame.** A surface that coaches without the corpus
+🚨 **ZERO on: endgame.** A surface that coaches without the corpus
 coaches from nothing — and review is where the diagnosis happens.
 
 ## GROWTH — the third-coach tax

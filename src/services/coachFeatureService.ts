@@ -32,6 +32,9 @@ import { habitIsOwed, type MethodHabit } from './methodBeat';
 import { recurrenceClause } from './misconceptionCallbacks';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
+import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
+import { beatRegister } from './curatedBeatSource';
+import { gradeNarrationText } from './coachAnswerGates';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
@@ -1172,6 +1175,9 @@ export function buildReviewSegments(
   const boostByPly = selectorPkg.boostByPly;
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
+  /** Corpus notes already spoken this game. Doubles as `noteAtPosition`'s own
+   *  exclude set, so the selector skips them instead of re-picking and losing. */
+  const notesSaidThisGame = new Set<string>();
   const segments: ReviewMoveSegment[] = [];
   // §7: the endgame phase is announced once per game (the first quiet student
   // move that's in a readable endgame), not on every endgame ply.
@@ -1542,6 +1548,46 @@ export function buildReviewSegments(
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
       }, facetSquares, facetIncoming);
+      // ── THE CORPUS REACHES REVIEW ───────────────────────────────────────
+      //
+      // "EVERY COACHING SURFACE GETS THE CORPUS ... a surface that coaches
+      // without them is coaching from nothing" — and review, where the
+      // diagnosis happens, had ZERO corpus calls. `buildReviewSegments` is the
+      // producer (the component only renders what this returns), so the note
+      // has to be spliced HERE.
+      //
+      // EXACT-POSITION ONLY, per the 2026-08-26 fencing: `noteAtPosition`
+      // selects by the note's own taught line producing THIS board, never by
+      // opening-name overlap — the selection bug that once narrated a
+      // Caro-Kann lesson at move two of a different game. Floating notes stay
+      // fenced to the tactics drill and endgame lessons.
+      //
+      // The SEAT is required and fails closed: both colours share a FEN, so a
+      // note authored from the other side would be handed to this student
+      // wholesale. Board-graded on top, because a corpus note is prose about a
+      // position and the board is still the ground truth.
+      try {
+        const noteSeat = playerColor ?? null;
+        const priorSans = sansForRun.slice(0, m.ply);
+        const corpusNote = noteAtPosition(priorSans, fenPair.fenAfter, openingName ?? null, noteSeat, notesSaidThisGame);
+        const noteText = corpusNote ? spokenBeatText(corpusNote)?.trim() : '';
+        // REGISTER, not just position. A corpus note authored for a WATCH
+        // audience narrates the players in the third person ("White develops
+        // the knight..."), and replayed into review that becomes the coach
+        // describing the student to a stranger. `beatRegister` is the same
+        // classifier the live lane uses — it never rewrites prose, it only
+        // decides whether this source can be spoken to a seated student.
+        const register = noteText && noteSeat ? beatRegister(noteText, noteSeat) : 'spectator';
+        if (noteText && register === 'live-safe') {
+          const graded = gradeNarrationText(noteText, fenPair.fenAfter, 'buildReviewSegments.note')?.trim();
+          // Say each note ONCE per game — a standing idea re-earns its place on
+          // every ply and would otherwise repeat verbatim.
+          if (graded && !notesSaidThisGame.has(graded)) {
+            notesSaidThisGame.add(graded);
+            facets.push(`[note] ${graded}`);
+          }
+        }
+      } catch { /* the corpus is a bonus on this lane, never a blocker */ }
       // Drop an identical STATIC state facet already spoken on an earlier ply
       // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.

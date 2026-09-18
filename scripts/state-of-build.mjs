@@ -81,14 +81,22 @@ function measure() {
   const CORPUS = /teachingNoteForBoard|noteAtPosition|teachingSourceForBoard|tacticNoteForPuzzleThemes|endgameNoteForLesson/;
   const corpusReach = Object.fromEntries(
     [
-      ['review', 'src/components/Coach/CoachGameReview'],
+      // 🚨 MEASURE THE PRODUCER, NOT THE RENDERER. This read only
+      // `CoachGameReview`, but review's narration is built by
+      // `buildReviewSegments` in coachFeatureService — the component just
+      // renders what it returns. The 🚨 it printed was RIGHT (review really
+      // had no corpus), but it would have gone on printing 0 after a correct
+      // fix, and an instrument that cannot see the fix is the next session's
+      // wild goose chase.
+      ['review', 'src/components/Coach/CoachGameReview|src/services/coachFeatureService'],
       ['teach', 'src/components/Coach/CoachTeachPage'],
       ['tactics', 'src/components/Tactics'],
       ['endgame', 'src/components/Coach/CoachEndgame'],
       ['read-position', 'src/hooks/usePositionNarration'],
-    ].map(([name, prefix]) => [
+    ].map(([name, prefixes]) => [
       name,
-      FILES.filter((f) => f.startsWith(prefix) && CORPUS.test(read(f))).length,
+      // A surface can be more than one file — the renderer AND its producer.
+      FILES.filter((f) => prefixes.split('|').some((p) => f.startsWith(p)) && CORPUS.test(read(f))).length,
     ]),
   );
 

@@ -44,8 +44,8 @@
 ### `coldStudent` (function) — 15 call sites
 - `src/hooks/useStudentNeed.ts:35`
 - `src/services/capabilityRead.test.ts:23`
-- `src/services/coachFeatureService.ts:1157`
-- `src/services/coachFeatureService.ts:4056`
+- `src/services/coachFeatureService.ts:1160`
+- `src/services/coachFeatureService.ts:4102`
 - `src/services/needCoverage.report.test.ts:88`
 - `src/services/needScore.test.ts:22`
 - `src/services/needScore.test.ts:38`
@@ -86,7 +86,7 @@
 - `src/services/capabilityRead.test.ts:64`
 - `src/services/capabilityRead.test.ts:75`
 - `src/services/capabilityRead.test.ts:76`
-- `src/services/coachFeatureService.ts:1157`
+- `src/services/coachFeatureService.ts:1160`
 - `src/services/needCoverage.report.test.ts:78`
 - `src/services/needScore.test.ts:22`
 - `src/services/needScore.test.ts:38`
