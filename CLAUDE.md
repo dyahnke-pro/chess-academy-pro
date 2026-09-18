@@ -2,6 +2,111 @@
 
 This file is loaded automatically in every Claude Code session. Follow these instructions exactly.
 
+---
+
+# 🎯 THE FOUNDATION — READ THIS FIRST, EVERY SESSION (David 2026-09-18, LOCKED: "This realization is the foundation of your memory. Anytime you regain context it starts at this foundation.")
+
+Everything below this section is detail hanging off this. A session that reads
+5,000 lines of gates without knowing what they are IN SERVICE OF will optimise a
+file instead of the app. Start here.
+
+## The app, in one line
+
+**The coach learns you, and what it learned changes what it says next.**
+
+Openings → Coach → Weaknesses → Tactics are **stations, not the loop**. The loop
+is that the output of every session becomes the input of the next one. A coach
+that forgets between games is not running the loop — it is replaying the intro.
+
+## The tools are COMPUTERS
+
+The coach's toolkit is the deterministic calculators that have been built into
+it: `positionFacts`, `detectTactics`, `conceptEngine`'s invariants, `causalChain`,
+`planRace`, the exchange ledger, `refutedAlternative`, `methodBeat`,
+`criticalityScan`, `latentDanger`, the fundamentals, `computePvLine`. Each one is
+a unit of chess the coach genuinely OWNS.
+
+**Every computer is DUAL-USE.** The same computer that TEACHES a pin is the one
+that CATCHES you walking past one. Diagnosis and instruction speak ONE
+vocabulary — the computed fact. That is the reason the loop can close at all:
+not two systems kept in sync, one vocabulary used in both directions.
+
+It is also why an enum split is fatal rather than cosmetic. `discovery` vs
+`discovered_attack` broke no detector — it broke the SHARED VOCABULARY, so the
+computer still taught and silently stopped diagnosing, with every test green.
+
+## Why determinism
+
+Not tidiness. Determinism is what lets the CODE MAKE A WRONG ANSWER IMPOSSIBLE
+TO EXPRESS — required parameters, `Record<Union, …>` so a new member fails to
+compile until someone answers for it, one source of truth.
+
+🚨 **A GATE THAT FIRES MEANS THE WRONG THING WAS STILL POSSIBLE** (David
+2026-09-18, emphatic: "The code doesn't fucking allow it!!!"). Gates are backups
+that should never fire. Never settle for a watcher when you can remove the
+choice. Do NOT describe gates as "watching for David" — that is the bandaid
+mentality this project exists to kill.
+
+Determinism gives you CHECKABILITY, not truth. A computer can be deterministically
+wrong (`findPins` called a pin something the front piece could walk out of —
+repeatable and false). The board stays the ground truth.
+
+**The shape of the rule — three tiers, do not conflate them:**
+- **FACTS — always deterministic.** G0's whole purpose.
+- **PHRASING — varied, but ROTATED, not rolled.** Keyed on something stable (ply,
+  occurrence count, a hash — see `methodBeat`, `coachFeatureService`), so it is
+  resume-safe and testable. Never `Math.random`.
+- **THE OPPONENT'S MOVES — genuinely random, ON PURPOSE.** Stockfish `Skill Level`
+  picks a weaker move deliberately; the search is time-boxed. Make it
+  deterministic to satisfy a tidy principle and the sparring partner becomes a
+  book. An audit must therefore never diff two games by PLY — match on POSITION.
+
+## How the app GROWS
+
+**Not more prompts, not more content — MORE COMPUTERS.** Each one buys two things
+at once: something new to teach, AND a new hole it can see you fall into. Every
+square, piece relation and plan mapped deterministically is another square inch
+the coach can teach on and catch you stumbling on.
+
+**A computer only serves the loop if it is wired BOTH WAYS.** One that can teach
+a fact but has no path to record that you MISSED it is half-built — it feeds the
+lesson and never reaches the student model. That is the capability-parity rule
+(below) stated at the root.
+
+## Where it is going: the HEAT MAP (David 2026-09-18)
+
+Today the model records FAILURE only, so a weakness can be added by evidence but
+can only decay by ABSENCE. The coach can tell you what you are bad at; it cannot
+yet tell you that you have GOTTEN BETTER.
+
+The target is a heat map of error→strength with **three** states, feeding the
+ranking computer:
+- **RED** — repeated failure. Most teaching, most narration.
+- **GREEN** — PROVEN held (`capabilityEvidence`: the board POSED the question and
+  the student ANSWERED it — both halves computed). The ranker may go QUIET here.
+- **GREY** — never asked. NOT the same as green; absent ≠ mastered. Still earns
+  teaching, at lower urgency than red.
+
+Green is what the app cannot say today. Once it can, silence becomes a computed
+verdict instead of a guess.
+
+## 🧭 THE REGAIN ORDER — how every session starts
+
+1. **Start at this foundation.** Not "what is the task" — what does this do for
+   the loop, and which job does it serve (sense / model / decide / say)?
+2. **Locate the project in it.** Which direction of the loop, which computer.
+3. **MAP THE ENTIRE SURFACE.** Every detail, DERIVED not recalled — every
+   importer, call site, gate, and locked rule (`node scripts/surface-map.mjs
+   --changed`). A hand census undercounts: one in this session read two lists and
+   said six where the code said ten.
+4. **Wire surgically.** Minimal incision, precise placement.
+
+**The tension between 3 and 4 IS the discipline: map everything, then touch
+almost nothing.** Most failures are the exact inverse — narrow understanding,
+broad changes.
+
+---
+
 ## 👋 The user
 
 The user is **David**, the developer/owner. Address him by name when
