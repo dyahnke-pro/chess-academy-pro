@@ -148,20 +148,43 @@ person first. Do not build a second, parallel strength estimator.
 Green is what the app cannot say today. Once it can, silence becomes a computed
 verdict instead of a guess.
 
-## 🧭 THE REGAIN ORDER — how every session starts
+## 🧭 THE FOUR LEVELS OF CONTEXT — gain ALL FOUR before any build (David 2026-09-18: "You gain context on all 4 before you start any new build. Like lines in an outline. Each numeral gains its own context. This is a fundamental principal.")
 
-1. **Start at this foundation.** Not "what is the task" — what does this do for
-   the loop, and which job does it serve (sense / model / decide / say)?
-2. **Locate the project in it.** Which direction of the loop, which computer.
-3. **MAP THE ENTIRE SURFACE.** Every detail, DERIVED not recalled — every
-   importer, call site, gate, and locked rule (`node scripts/surface-map.mjs
-   --changed`). A hand census undercounts: one in this session read two lists and
-   said six where the code said ten.
-4. **Wire surgically.** Minimal incision, precise placement.
+🚨 **THIS RANKS ABOVE G0 AND ABOVE THE DETERMINISM LAW.** Those two govern
+HOW you build. This governs WHETHER and WHERE. A perfectly G0-compliant,
+perfectly deterministic change to the wrong thing is still wasted work — so
+this is gained first, every time.
 
-**The tension between 3 and 4 IS the discipline: map everything, then touch
-almost nothing.** Most failures are the exact inverse — narrow understanding,
-broad changes.
+**It is an OUTLINE, not a sequence you pass through. Each numeral is its own act
+of gaining context.** You do not skim I on the way to IV. You gain I, then gain
+II, then gain III, then gain IV.
+
+**I. THE FOUNDATION — why anything exists.**
+The section above: the coach learns you and what it learned changes what it says
+next; the tools are computers; every computer is dual-use; determinism is what
+lets the code make a wrong answer impossible; the app grows by adding computers;
+the heat map is where it is going. *Answers: does this work matter at all?*
+
+**II. THE STATE — what is built, what is half-built, what is blocking.**
+`PLAN.md` (+ the live task list). Not the vision and not the code: the honest
+present position, with numbers. *Answers: where does this fit, and what does it
+unblock?* A session that skips II builds something real into a place that
+already had a blocker in front of it.
+
+**III. THE SURFACE — derived from the code, never recalled.**
+`node scripts/surface-map.mjs --changed` — every importer, every call site with
+line numbers, the tests, the audits that reach it, the locked rules that govern
+it. ship-check `--verify` proves it FRESH. *Answers: what is the blast radius?*
+A hand census undercounts — one in this session read two lists and said six
+where the code said ten.
+
+**IV. THE CODE — read the thing itself, end to end.**
+No skimming, no sampling a 2,500-line file and guessing at the rest. Cite line
+numbers. *Answers: what is actually there?*
+
+**THEN wire surgically.** The tension between III/IV and the wiring IS the
+discipline: **map everything, then touch almost nothing.** Most failures are the
+exact inverse — narrow understanding, broad changes.
 
 ---
 
