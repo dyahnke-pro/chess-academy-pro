@@ -1674,7 +1674,6 @@ export function CoachTeachPage(): JSX.Element {
    *  already dedupes within a turn; this is the CROSS-turn, cross-lane guarantee —
    *  passed in as `priorKeys` and topped up with each spoken package's
    *  `spokenSentenceKeys`. Cleared on a new game. */
-  const spokenKeysRef = useRef(new Set<string>());
   /** 🔒 THE CONCEPT IS TAUGHT IN THE GAME, NOT ONLY IN THE LECTURE (found
    *  reading a real prod game, 2026-09-17: 107 spoken lines, not one carrying a
    *  computed invariant). `landedTacticTeaching` splices the engine's invariant
@@ -1693,7 +1692,6 @@ export function CoachTeachPage(): JSX.Element {
    *  a game is a new instance of a lesson already given, exactly the rule
    *  `standingRefrains` applies in review. Cleared with the other per-game
    *  memories in `startOpeningPlay`. */
-  const conceptTaughtRef = useRef<Set<string>>(new Set());
   /** The Learn producer's PER-GAME memory — one object, one `newGame()`, so a
    *  slot added to it cannot be forgotten-to-forget (see `learnMemory.ts`).
    *
@@ -1993,8 +1991,6 @@ export function CoachTeachPage(): JSX.Element {
     learnMemRef.current.newGame();
     planSaidRef.current.clear();
     positionalSaidRef.current.clear();
-    spokenKeysRef.current.clear();
-    conceptTaughtRef.current.clear();
     gameRef.current.setOrientation(studentSide);
     setPlayerColor(studentSide);
     liveFenRef.current = gameRef.current.fen;
@@ -7134,10 +7130,10 @@ export function CoachTeachPage(): JSX.Element {
        *  meets it. Concept only — no squares, so nothing the student is meant
        *  to find is handed over. */
       const conceptTail = (type: string | null | undefined): string => {
-        if (!type || conceptTaughtRef.current.has(type)) return '';
+        if (!type || learnMemRef.current.conceptTaught.has(type)) return '';
         const inv = tacticInvariant(type);
         if (!inv) return '';
-        conceptTaughtRef.current.add(type);
+        learnMemRef.current.conceptTaught.add(type);
         return ` Remember — ${inv.full}`;
       };
       const engineMateN = pendingEngineMateRef.current
@@ -7846,7 +7842,7 @@ export function CoachTeachPage(): JSX.Element {
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
-    ], undefined, spokenKeysRef.current);
+    ], undefined, learnMemRef.current.spokenKeys);
     // DNA WHITELIST, NO COUNT CAP — INSTANT package. Drop any non-DNA kind, then
     // speak EVERY DNA fact that survived, rank-sorted (gem/note/mistake lead).
     //
@@ -7856,13 +7852,13 @@ export function CoachTeachPage(): JSX.Element {
     // breath. The wall that cap was fighting was REPETITION, not count — a lane
     // saying the same thing another already said. That is now handled properly:
     // the double-phrase gate drops in-turn twins, and the per-game novelty set
-    // (`spokenKeysRef`) drops anything said on an earlier turn. What is left is
+    // (`learnMem.spokenKeys`) drops anything said on an earlier turn. What is left is
     // every DISTINCT important fact, most-important first — which is exactly what
     // a briefing should be, and what "no budget on the coach narrations" always
     // meant.
     const instantDna = instantFull.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind));
     const pkg = (NARRATE_DNA_ONLY && instantDna.length < instantFull.kept.length)
-      ? buildVoicePackage(instantDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: args.fenAfterReply })), undefined, spokenKeysRef.current)
+      ? buildVoicePackage(instantDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: args.fenAfterReply })), undefined, learnMemRef.current.spokenKeys)
       : instantFull;
 
     // ── LEAD THE EYE ON THE COMPUTED LANES ─────────────────────────────────
@@ -9530,7 +9526,7 @@ export function CoachTeachPage(): JSX.Element {
                   lines.push(instant.pkg.spoken);
                   // Feed what was actually SPOKEN into the per-game novelty set so
                   // no later turn (or the late package below) repeats it.
-                  for (const k of spokenSentenceKeys(instant.pkg)) spokenKeysRef.current.add(k);
+                  for (const k of spokenSentenceKeys(instant.pkg)) learnMemRef.current.spokenKeys.add(k);
                   // The arrow rides only when the THREAT actually SURVIVED
                   // into the utterance — an arrow pointing at a claim the
                   // package refused is the same lie drawn instead of said.
@@ -9875,7 +9871,7 @@ export function CoachTeachPage(): JSX.Element {
                   const fullPkg = buildVoicePackage(
                     pending.lines.map(({ kind, text, squares }) => ({ kind, text, squares, fen: pending.fen })),
                     instantSpokenText,
-                    spokenKeysRef.current,
+                    learnMemRef.current.spokenKeys,
                   );
                   // DNA WHITELIST, NO COUNT CAP (David 2026-09-13: "anything
                   // deemed important enough to tell the user should not be hard
@@ -9887,14 +9883,14 @@ export function CoachTeachPage(): JSX.Element {
                     ? buildVoicePackage(
                       lateDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: pending.fen })),
                       instantSpokenText,
-                      spokenKeysRef.current,
+                      learnMemRef.current.spokenKeys,
                     )
                     : fullPkg;
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);
                     // Record the late package's phrases too — the per-game set is
                     // what keeps the NEXT turn from repeating any of them.
-                    for (const k of spokenSentenceKeys(hintPkg)) spokenKeysRef.current.add(k);
+                    for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
                     // AND MARK WHAT SURVIVED. The squares came in on the facts,
                     // so the board draws the ones belonging to lanes the package
                     // KEPT — a refused claim takes its marks away with it, which

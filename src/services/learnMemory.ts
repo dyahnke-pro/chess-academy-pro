@@ -71,6 +71,19 @@ export interface LearnMemory {
    *  `plyNow - last >= gap` then fails for as many plies as the last game was
    *  long — muting the lane precisely at the start of the new game. */
   thinkAloudLastPly: number;
+  /** EVERY phrase the coach has spoken this game, across every lane and both
+   *  packages of every turn — the CROSS-turn, cross-lane repeat guard.
+   *
+   *  🚨 It is also the last thing that kept the second game quiet after the
+   *  board-driven forget landed, and the reason is worth stating: the teachings
+   *  that stayed silent were exactly the ones whose sentence is IDENTICAL
+   *  between games ("This game is now the Scandinavian Defense.", the pin
+   *  invariant), while the threat lines — different text, different board —
+   *  came back immediately. A session-lived phrase set does not make the coach
+   *  repeat less; it makes it teach the same lesson to only the first game. */
+  readonly spokenKeys: Set<string>;
+  /** Concept invariants already taught this game, by tactic type. */
+  readonly conceptTaught: Set<string>;
   /** The opening name last ANNOUNCED. Per game: a second game of the same
    *  line must be named again, because the student is being told what they are
    *  now playing, not being reminded of a fact they already hold. */
@@ -106,6 +119,8 @@ export function createLearnMemory(): LearnMemory {
   const structureSaid = new Set<string>();
   const engineReadSaid = new Set<string>();
   const pieceQualitySaid = new Set<string>();
+  const spokenKeys = new Set<string>();
+  const conceptTaught = new Set<string>();
   let lastPlies = 0;
   const mem: LearnMemory = {
     curatedBeatSeen,
@@ -113,6 +128,8 @@ export function createLearnMemory(): LearnMemory {
     structureSaid,
     engineReadSaid,
     pieceQualitySaid,
+    spokenKeys,
+    conceptTaught,
     gemSeen: null,
     gemFen: null,
     lastComputed: '',
@@ -130,6 +147,8 @@ export function createLearnMemory(): LearnMemory {
       structureSaid.clear();
       engineReadSaid.clear();
       pieceQualitySaid.clear();
+      spokenKeys.clear();
+      conceptTaught.clear();
       mem.gemSeen = null;
       mem.gemFen = null;
       mem.lastComputed = '';
