@@ -6,6 +6,47 @@
 
 # PLAN — closing the loop (2026-09-18)
 
+## 2026-09-18 — end of night: the two owed post-deploy audits
+
+Both run against the live bundle `index-7h-hez6i.js` (commit `cb2ef99b1`),
+SEQUENTIALLY, nothing else on the box.
+
+**LEARN — `audit-concept-gameplay-prod` 8/8 GREEN.** The rating change is
+verified on the surface it could have broken. Real prose off the listener:
+the coach named the opening aloud ("This game is now the Scandinavian
+Defense"), then spoke the computed invariant mid-GAME — *"Careful — your
+queen on d5 is attacked and nothing's defending it. There's a pin here for
+you — have a look. Remember — a pin freezes the piece in front: it can't
+move without exposing the more valuable piece behind it."* Correct seat,
+correct board, concept voiced from the live computer rather than a bake.
+
+**REVIEW — `audit-review-overhaul-prod`.** Every PRODUCT contract passed
+across 54 narrated plies (board-accuracy, seat, no-trade-win, need
+coverage 11/12 owed plies, exchange ledger, perspective). The two reds were
+both the INSTRUMENT, and both are fixed:
+
+- RECAP/FUNDLEAD concluded "the engine flagged NO student ply" from the
+  WALK, and RECAP hardcoded "the seeded game has two" from the days this
+  audit ran one fixture. It now rotates a fresh master game each run, so a
+  GM draw with genuinely zero flagged plies red-failed a healthy product
+  against a constant about a different game. Both now corroborate against
+  the annotation record in Dexie (`[engine record] 0 flagged student
+  ply(s)`), which took FUNDLEAD red → green on proof instead of
+  self-declaration.
+- HEAP printed "renderer heap exploded" on a run whose heap sat flat at
+  350MB and whose only trip was the worker census. It now names which of
+  its three trip causes fired.
+
+**Two findings carried forward, not fixed tonight:**
+- **#21** the pthread census is the multi-threaded SINGLETON, not the pool
+  (which has been single-thread since 2026-09-07), and it is INTERMITTENT —
+  70 workers in one run, 1 in the next on the same game.
+- **#70** the review audit's verdict is not reproducible: three runs, three
+  different red sets, because the background deep dive is a race the
+  harness neither waits on nor reports. A verdict that changes run to run
+  makes both colours meaningless.
+
+
 ## The one disease behind everything landed tonight
 
 **A computer wired ONE WAY ONLY, with prose describing the half that is not
