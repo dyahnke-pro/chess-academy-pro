@@ -25,7 +25,8 @@ const ctxWith = (profile: CapabilityProfile): StudentNeedContext => ({
 // `onThread` gives the ply a real need to LOWER FROM. Without it every base
 // score is 0 and the clamp makes the whole term unobservable — which is itself
 // correct behaviour (nothing to quiet), but it tests nothing.
-const ply = (tags: MisconceptionTagId[]) => ({ ply: 9, studentMove: true, onThread: true, capabilityTags: tags });
+const ply = (tags: MisconceptionTagId[]) =>
+  ({ ply: 9, studentMove: true, clauseKind: null, onThread: true, posedTags: tags, playedCleanly: true });
 
 describe('the capability profile is READ by the need computer', () => {
   it('GREEN — a proven capability LOWERS need', () => {
@@ -58,13 +59,21 @@ describe('the capability profile is READ by the need computer', () => {
     expect(v.score).toBeLessThanOrEqual(computeNeed(ply([TAG]), ctxWith(new Map())).score);
   });
 
-  it('a ply with NO demonstrated capability is untouched — this is the blunder guard', () => {
-    // `capabilitiesShown` returns [] for a move costing a pawn or more, so a ply
-    // the student got wrong arrives here with no tags. Green therefore cannot
-    // silence a blunder, structurally rather than by a guard someone must
-    // remember to keep.
+  it('a ply with NO posed capability is untouched', () => {
     const proven = ctxWith(new Map([[TAG, { held: 99, broken: 0 }]]));
     expect(computeNeed(ply([]), proven).score).toBe(computeNeed(ply([]), ctxWith(new Map())).score);
+  });
+
+  it('GREEN cannot silence a ply the student got WRONG — the blunder guard', () => {
+    // This used to be structural-by-accident: `capabilitiesShown` pre-filtered
+    // the list, so green was safe only because of WHICH list the caller passed
+    // — a property no reader of `capabilityTerm` could check. The tags are now
+    // POSED (ungated, so the weakness term can still see the hole) and the
+    // guard travels beside them, so this has to be asserted directly.
+    const proven = ctxWith(new Map([[TAG, { held: 99, broken: 0 }]]));
+    const blundered = { ...ply([TAG]), playedCleanly: false };
+    expect(computeNeed(blundered, proven).score)
+      .toBe(computeNeed(blundered, ctxWith(new Map())).score);
   });
 });
 
@@ -78,13 +87,18 @@ describe('the wire fires — a reader exists outside the test', () => {
   it('a production caller computes the ply tags from the board', () => {
     const src = readFileSync('src/services/teachingSelector.ts', 'utf8');
     expect(src, 'the join is computed by the same computer that writes green, never authored')
-      .toMatch(/capabilitiesShown\(/);
-    expect(src).toMatch(/capabilityTags:/);
+      .toMatch(/capabilitiesPosed\(/);
+    expect(src).toMatch(/posedTags:/);
+    // POSED, not pre-filtered: the lane must hand the guard across separately,
+    // or the weakness term goes blind on exactly the plies it should speak on.
+    expect(src).toMatch(/playedCleanly:\s*movePlayedCleanly\(/);
+    expect(src, 'the mistake guard must NOT be pre-applied to the tag list')
+      .not.toMatch(/capabilitiesPosed\([^)]*cpLoss/);
   });
 
   it('the cp-loss sign is derived per colour — white falls, black rises', () => {
     // The sign is the trap this repo has been bitten by before. A wrong sign
-    // hands a blunder to `capabilitiesShown` as a clean move, which would record
+    // hands a blunder to `movePlayedCleanly` as a clean move, which would record
     // green for a mistake AND quiet the ply that most needed teaching.
     const src = readFileSync('src/services/teachingSelector.ts', 'utf8');
     expect(src).toMatch(/playerColor === 'white'\s*\?\s*p\.evalBefore - p\.evalAfter\s*:\s*p\.evalAfter - p\.evalBefore/);

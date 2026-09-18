@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**284 lines · 11 exports · 12 importers · 6 tests · 0 audits**
+**333 lines · 11 exports · 12 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -73,16 +73,18 @@
 ### `HELD_FOR_PROVEN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeNeed` (function) — 30 call sites
+### `computeNeed` (function) — 36 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/capabilityRead.test.ts:33`
 - `src/services/capabilityRead.test.ts:34`
-- `src/services/capabilityRead.test.ts:41`
-- `src/services/capabilityRead.test.ts:46`
-- `src/services/capabilityRead.test.ts:51`
-- `src/services/capabilityRead.test.ts:56`
-- `src/services/capabilityRead.test.ts:58`
-- `src/services/capabilityRead.test.ts:67`
+- `src/services/capabilityRead.test.ts:35`
+- `src/services/capabilityRead.test.ts:42`
+- `src/services/capabilityRead.test.ts:47`
+- `src/services/capabilityRead.test.ts:52`
+- `src/services/capabilityRead.test.ts:57`
+- `src/services/capabilityRead.test.ts:59`
+- `src/services/capabilityRead.test.ts:64`
+- `src/services/capabilityRead.test.ts:75`
+- `src/services/capabilityRead.test.ts:76`
 - `src/services/coachFeatureService.ts:1151`
 - `src/services/needCoverage.report.test.ts:78`
 - `src/services/needScore.test.ts:22`
@@ -102,8 +104,12 @@
 - `src/services/needWeaknessWire.test.ts:55`
 - `src/services/needWeaknessWire.test.ts:62`
 - `src/services/needWeaknessWire.test.ts:76`
+- `src/services/needWeaknessWire.test.ts:112`
+- `src/services/needWeaknessWire.test.ts:117`
+- `src/services/needWeaknessWire.test.ts:130`
+- `src/services/needWeaknessWire.test.ts:134`
 - `src/services/positionFacts.ts:497`
-- `src/services/teachingSelector.ts:259`
+- `src/services/teachingSelector.ts:264`
 
 ## Tests
 

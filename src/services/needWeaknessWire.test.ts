@@ -82,3 +82,60 @@ describe('need sees the student on a familiar line', () => {
     expect(src.match(/matchClauseKind\(/g)?.length ?? 0).toBe(1);
   });
 });
+
+/**
+ * THE REVIEW LANE. `teachingSelector` supplies `conceptId` (a tactic) and no
+ * clause kind, so before 2026-09-18 a student whose hole was POSITIONAL,
+ * STRUCTURAL or an endgame-conversion problem got no weakness term at all on
+ * the surface where diagnosis happens — review could only see tactical holes.
+ *
+ * The route that closes it is `posedTags` -> `matchTag`, landing on the coach's
+ * OWN captures: `fromMisconception` files those rows under the misconception
+ * tag itself, so they are reachable by tag and by nothing else.
+ */
+const coachCapturedHole = {
+  clusterId: 'ignored-opponent-threat',
+  bucket: 'tactics',
+  label: 'Ignores what the opponent is doing',
+  openCount: 5,
+  severity: 70,
+  lifecycleStatus: 'persistent',
+  trend: 'worsening',
+  puzzleThemes: [],
+  total: 11,
+} as unknown as WeaknessSignal;
+
+describe('the review lane reaches non-tactical holes', () => {
+  const ctx = { ...experienced, signals: [coachCapturedHole] };
+
+  it('is SILENT on a tactic id alone — the shape of the review-lane bug', () => {
+    const v = computeNeed({ ply: 11, studentMove: true, clauseKind: null }, ctx);
+    expect(v.speak).toBe(false);
+  });
+
+  it('SPEAKS when the board POSED the capability the student keeps failing', () => {
+    const v = computeNeed({
+      ply: 11, studentMove: true, clauseKind: null,
+      posedTags: ['ignored-opponent-threat'] as never,
+      playedCleanly: false,   // they got it WRONG — the hole is most live here
+    }, ctx);
+    expect(v.speak).toBe(true);
+    expect(v.reasons.join(' ')).toContain('ignored-opponent-threat');
+  });
+
+  it('raises need on a BLUNDERED ply — the guard belongs to green, not to need', () => {
+    // The old shape pre-filtered the tag list by clean play, so a blundered ply
+    // arrived with NO tags and the weakness term went blind exactly where the
+    // student needed teaching most. Posed tags survive a bad move.
+    const wrong = computeNeed({
+      ply: 11, studentMove: true, clauseKind: null,
+      posedTags: ['ignored-opponent-threat'] as never, playedCleanly: false,
+    }, ctx);
+    const right = computeNeed({
+      ply: 11, studentMove: true, clauseKind: null,
+      posedTags: ['ignored-opponent-threat'] as never, playedCleanly: true,
+    }, ctx);
+    expect(wrong.speak).toBe(true);
+    expect(right.speak).toBe(true);
+  });
+});

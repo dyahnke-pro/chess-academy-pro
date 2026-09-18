@@ -99,7 +99,42 @@ export function capabilitiesShown(
   moverColor: 'white' | 'black',
   cpLoss: number | null,
 ): Array<{ tag: MisconceptionTagId; posedImportance: number }> {
-  if (cpLoss != null && cpLoss >= MISTAKE_CP) return [];
+  if (!movePlayedCleanly(cpLoss)) return [];
+  return capabilitiesPosed(fenBefore, playedSan, moverColor);
+}
+
+/**
+ * WAS THE MOVE CLEAN ENOUGH TO DEMONSTRATE ANYTHING — the one place that
+ * judgement is made, so no caller re-derives the threshold.
+ */
+export function movePlayedCleanly(cpLoss: number | null): boolean {
+  return !(cpLoss != null && cpLoss >= MISTAKE_CP);
+}
+
+/**
+ * WHAT THE BOARD ASKED, regardless of how the student answered.
+ *
+ * This is the same computer as `capabilitiesShown` MINUS the mistake guard, and
+ * the split matters because the two halves of the student model need different
+ * things from it:
+ *
+ *  • GREEN ("they can do this") needs posed AND answered cleanly — a move that
+ *    dropped a pawn demonstrates nothing, which is why `capabilitiesShown`
+ *    guards.
+ *  • NEED ("do they need teaching here") needs only POSED. A ply where the
+ *    student's known hole was live is exactly where teaching belongs, and it is
+ *    MOST live on the plies they got wrong — so applying the green guard there
+ *    would blind the coach precisely at the moment it should speak.
+ *
+ * Extracted rather than copied: one computer, two consumers, the guard visible
+ * at the boundary instead of hidden in which list a caller happened to be
+ * handed.
+ */
+export function capabilitiesPosed(
+  fenBefore: string,
+  playedSan: string,
+  moverColor: 'white' | 'black',
+): Array<{ tag: MisconceptionTagId; posedImportance: number }> {
   const out: Array<{ tag: MisconceptionTagId; posedImportance: number }> = [];
   const seen = new Set<string>();
   for (const f of leadingFundamentals(fenBefore, playedSan, moverColor)) {

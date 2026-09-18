@@ -30,7 +30,7 @@
 // this same function (invariant: one computer set).
 
 import type { WeaknessSignal } from './weaknessSignal';
-import { matchClauseKind, matchTacticPattern, boostFor, MAX_WEAKNESS_BOOST } from './weaknessSignal';
+import { matchClauseKind, matchTacticPattern, matchTag, boostFor, MAX_WEAKNESS_BOOST } from './weaknessSignal';
 import { bookDepartureIsCostly, type BookDepartureRow } from './bookDepartureWeakness';
 import type { TacticPatternType } from '../types/tacticTypes';
 import type { CapabilityProfile } from './capabilityEvidence';
@@ -109,18 +109,29 @@ export interface NeedPlyInput {
   /** The ply lies on the game's causal thread (selector `onThread`). */
   onThread?: boolean;
   /**
-   * The capabilities this ply actually DEMONSTRATES, from `capabilitiesShown` —
-   * the same computer that WRITES the green record, used in the other
-   * direction. That is the dual-use rule, and it is why no fourth
-   * fact-to-hole mapping is authored here: the join is computed from the board,
-   * not typed into a table.
+   * WHAT THE BOARD ASKED at this ply, from `capabilitiesPosed` — the same
+   * computer that WRITES the green record, used in the other direction. That is
+   * the dual-use rule, and it is why no fourth fact-to-hole mapping is authored
+   * here: the join is computed from the board, not typed into a table.
    *
-   * Empty/absent ⇒ the board did not pose a question we can name, so nothing is
-   * lowered. Note `capabilitiesShown` already returns [] for a move that cost a
-   * pawn or more, which is what makes it STRUCTURALLY impossible for green to
-   * quiet a ply the student just blundered — no guard required.
+   * 🚨 POSED, not "shown". These are ungated by how the student answered,
+   * because the two terms below need opposite things from them:
+   *  • `capabilityTerm` (GREEN) also requires `playedCleanly` — a move that
+   *    dropped a pawn demonstrates nothing.
+   *  • `weaknessTerm` needs only that the question was ASKED. A known hole is
+   *    most live on the plies the student got WRONG, so filtering by clean play
+   *    would blind the coach exactly where it should speak.
+   *
+   * This used to be a pre-filtered `capabilityTags` list, which hid the guard
+   * inside whichever list a caller happened to be handed — two vocabularies for
+   * one idea, the shape the rot rule bans. One list, one visible guard.
+   *
+   * Empty/absent ⇒ the board posed no question we can name.
    */
-  capabilityTags?: readonly MisconceptionTagId[];
+  posedTags?: readonly MisconceptionTagId[];
+  /** Was the move clean enough to DEMONSTRATE a capability
+   *  (`movePlayedCleanly`)? Only the green term reads it. */
+  playedCleanly?: boolean;
 }
 
 export interface NeedVerdict {
@@ -183,10 +194,43 @@ function departureTerm(ply: number, ctx: StudentNeedContext): { score: number; r
   return { score, reason: `book departure here in ${here.length} game(s)${costly ? ', costly' : ''}` };
 }
 
+/**
+ * THE THREE ROUTES TO A HOLE, and why all three are needed.
+ *
+ * Each reaches a different part of the student's record, and a lane supplying
+ * only one is blind to the rest:
+ *  • `conceptId`   → TACTICAL holes (fork, pin, skewer …) via the vocabulary bridge.
+ *  • `clauseKind`  → POSITIONAL, STRUCTURAL and ENDGAME-CONVERSION holes, which
+ *                    have no tactic id and are reachable no other way.
+ *  • `posedTags`   → the COACH'S OWN captures. `fromMisconception` files those
+ *                    rows under the misconception tag itself, so a hole the
+ *                    student admitted in "why did you play that?" joins here and
+ *                    nowhere else.
+ *
+ * The review lane supplied only `conceptId` until 2026-09-18 and was therefore
+ * blind to a positional student entirely. Every matcher already existed; none
+ * of this is a new table.
+ */
+/** The most-pressing hole among the tags this board POSED. Ungated by how the
+ *  move went — see `posedTags`. */
+function bestPosedMatch(p: NeedPlyInput, ctx: StudentNeedContext): WeaknessSignal | null {
+  if (!p.posedTags?.length) return null;
+  let best: WeaknessSignal | null = null;
+  let bestB = 0;
+  for (const tag of p.posedTags) {
+    const m = matchTag(tag, ctx.signals);
+    if (!m) continue;
+    const b = boostFor(m);
+    if (b > bestB) { bestB = b; best = m; }
+  }
+  return best;
+}
+
 function weaknessTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
   if (ctx.signals.length === 0) return { score: 0, reason: null };
   const match = (p.conceptId ? matchTacticPattern(p.conceptId, ctx.signals) : null)
-    ?? (p.clauseKind ? matchClauseKind(p.clauseKind, ctx.signals) : null);
+    ?? (p.clauseKind ? matchClauseKind(p.clauseKind, ctx.signals) : null)
+    ?? bestPosedMatch(p, ctx);
   if (!match) return { score: 0, reason: null };
   // boostFor is 0–MAX_WEAKNESS_BOOST; a persistent, worsening hole alone clears the bar.
   const score = Math.round((boostFor(match) / MAX_WEAKNESS_BOOST) * 55);
@@ -224,9 +268,14 @@ export const HELD_FOR_PROVEN = 3;
  * lower with.
  */
 function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
-  if (!p.capabilityTags?.length || ctx.capabilities.size === 0) return { score: 0, reason: null };
+  // THE GREEN GUARD, now explicit. It used to live inside `capabilitiesShown`,
+  // so this term was safe only because of which list the caller passed — a
+  // property no reader of this function could check. A ply the student
+  // blundered proves nothing and may never be quieted by green.
+  if (p.playedCleanly === false) return { score: 0, reason: null };
+  if (!p.posedTags?.length || ctx.capabilities.size === 0) return { score: 0, reason: null };
   const proven: string[] = [];
-  for (const tag of p.capabilityTags) {
+  for (const tag of p.posedTags) {
     const e = ctx.capabilities.get(tag);
     if (!e) continue;                          // GREY — never asked, never lowered
     if (e.broken > 0) continue;                // RED — the negative half owns this

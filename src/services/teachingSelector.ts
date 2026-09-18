@@ -37,7 +37,7 @@ import { buildCausalChain, type CausalChain } from './causalChain';
 import { structurePlan } from './boardPlan';
 import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
-import { capabilitiesShown } from './capabilityEvidence';
+import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface SelectorPly {
@@ -252,22 +252,26 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     const cpLoss = (p.evalBefore == null || p.evalAfter == null)
       ? null
       : Math.max(0, p.playerColor === 'white' ? p.evalBefore - p.evalAfter : p.evalAfter - p.evalBefore);
-    let capabilityTags: string[] = [];
+    // WHAT THE BOARD ASKED — ungated by how the move went, because the need and
+    // the green terms want opposite things from it (see `posedTags`). The green
+    // guard travels beside it as `playedCleanly` instead of being pre-applied,
+    // so this lane can raise need on a hole that was live precisely on a ply
+    // the student got wrong.
+    let posedTags: string[] = [];
     try {
-      capabilityTags = capabilitiesShown(p.fenBefore, p.san, p.playerColor, cpLoss).map((c) => c.tag);
-    } catch { capabilityTags = []; }
+      posedTags = capabilitiesPosed(p.fenBefore, p.san, p.playerColor).map((c) => c.tag);
+    } catch { posedTags = []; }
     needByPly.set(p.ply, computeNeed({
       ply: p.ply, studentMove: true,
       conceptId: tactic as import('../types/tacticTypes').TacticPatternType | null,
-      // 🚨 KNOWN GAP, stated rather than defaulted (which is why `clauseKind` is
-      // required). `conceptId` reaches TACTICAL holes only; the positional,
-      // structural and endgame ones match through `matchClauseKind`, so a
-      // student whose weakness is positional gets no weakness term on THIS
-      // lane. Closing it means carrying the ply's positionFacts clause kind
-      // into the selector, which this pass does not compute.
+      // Still null, and now honestly so: this pass computes no positionFacts
+      // clause. The positional/structural holes it used to miss are reached
+      // through `posedTags` → `matchTag`, which lands on the coach's own
+      // misconception captures — a route that needed no new table.
       clauseKind: null,
       onThread: onThread.has(p.ply),
-      capabilityTags: capabilityTags as readonly import('../data/misconceptionTags').MisconceptionTagId[],
+      posedTags: posedTags as readonly import('../data/misconceptionTags').MisconceptionTagId[],
+      playedCleanly: movePlayedCleanly(cpLoss),
     }, student));
   }
 
