@@ -30,6 +30,7 @@ import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centra
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { structurePlan } from './boardPlan';
 import { matchClauseKind, matchTacticPattern, boostFor, type WeaknessSignal } from './weaknessSignal';
+import { studentMomentBoost } from './studentMomentBoost';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard } from './conceptEngine';
 import { liveMethodBeatFor, habitIsOwed } from './methodBeat';
@@ -94,6 +95,18 @@ export interface PositionFactsInput {
    *  OPTIONAL + inert: omitted or empty → identical behavior to before (the wire
    *  does nothing until a surface feeds it). NEVER passed on kid surfaces. */
   studentWeaknesses?: readonly WeaknessSignal[];
+  /**
+   * WHAT THE BOARD ASKED of the student on the move just played, plus whether
+   * that move was clean enough to have DEMONSTRATED anything.
+   *
+   * 🚨 THE TWO TRAVEL TOGETHER BY TYPE, deliberately. Tags without the guard
+   * let the GREEN term quiet a ply the student blundered; the guard without
+   * tags is inert. Making them one object means a caller cannot supply half.
+   * `playedCleanly: null` is honest for a ply this surface could not grade —
+   * green then withholds (unknown is not clean) while GREY still teaches,
+   * because grey asks only whether the question was posed.
+   */
+  posed?: { tags: readonly import('../data/misconceptionTags').MisconceptionTagId[]; playedCleanly: boolean | null };
   /** THE STUDENT'S NEED AT THIS PLY (N2) — the second half of the student model,
    *  and the half the live surfaces never had.
    *
@@ -501,6 +514,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // known hole on a familiar line is silent.
       clauseKind: needFor.clauseKind,
       conceptId: needFor.conceptId,
+      // THE HEAT MAP ON THE LIVE LANE. Tags and guard travel together — see
+      // `posed` on the input.
+      posedTags: input.posed?.tags,
+      playedCleanly: input.posed?.playedCleanly ?? undefined,
     }, input.studentNeedContext)
     : null;
 
@@ -521,7 +538,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       weaknesses: input.studentWeaknesses ?? [],
       // THE DATA TERM (algo-based supreme law): matched HERE, where the clauses
       // are still structured. By the time they reach the door they are prose.
-      momentBoost: momentWeaknessBoost(composed, input.studentWeaknesses ?? []),
+      // ONE BOOST COMPUTER, fed by every lane (`studentMomentBoost`): red from
+      // the clause->hole join this surface already holds, grey from what the
+      // board posed. Replaces the weakness-only boost, which could not see the
+      // heat map at all.
+      momentBoost: studentMomentBoost({
+        hole: needFor.hole,
+        posedTags: input.posed?.tags,
+        capabilities: input.studentNeedContext?.capabilities,
+      }),
       // The mover guard — see `studentNeed` on the input. Need answers "does
       // THIS STUDENT need teaching here", which is only a question about their
       // own move; on the opponent's ply it is null and importance decides.
@@ -579,10 +604,12 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
 /**
  * THE ONE clause→hole join, and the only place it is written.
  *
- * It was hand-written TWICE (momentWeaknessBoost + applyWeaknessBoost) and a
- * third copy was about to be added for the need wire below. A duplicated join
- * is the drifting-constant the rot rule bans: the two copies agreed today, and
- * nothing made them agree tomorrow.
+ * It was hand-written TWICE and a third copy was about to be added for the need
+ * wire below. A duplicated join is the drifting-constant the rot rule bans: the
+ * two copies agreed today, and nothing made them agree tomorrow.
+ *
+ * Consumers now: `applyWeaknessBoost` (fact ordering) and `needClauseFor`
+ * (which feeds both the need score and, via its matched hole, the ranker).
  */
 function clauseHole(c: ClauseItem, signals: readonly WeaknessSignal[]): WeaknessSignal | null {
   return c.kind === 'concept'
@@ -590,17 +617,6 @@ function clauseHole(c: ClauseItem, signals: readonly WeaknessSignal[]): Weakness
     : matchClauseKind(c.kind, signals);
 }
 
-function momentWeaknessBoost(clauses: readonly ClauseItem[], signals: readonly WeaknessSignal[]): number {
-  if (signals.length === 0) return 0;
-  let best = 0;
-  for (const c of clauses) {
-    const match = clauseHole(c, signals);
-    if (!match) continue;
-    const b = boostFor(match);
-    if (b > best) best = b;
-  }
-  return best;
-}
 
 /**
  * WHICH CLAUSE THE NEED SCORE IS ABOUT — the fix for a live coach that could
@@ -625,20 +641,22 @@ function momentWeaknessBoost(clauses: readonly ClauseItem[], signals: readonly W
 function needClauseFor(
   clauses: readonly ClauseItem[],
   signals: readonly WeaknessSignal[],
-): { clauseKind: string | null; conceptId: TacticPatternType | null } {
+): { clauseKind: string | null; conceptId: TacticPatternType | null; hole: WeaknessSignal | null } {
   let best: ClauseItem | null = null;
+  let bestHole: WeaknessSignal | null = null;
   let bestB = 0;
   for (const c of clauses) {
     const match = clauseHole(c, signals);
     if (!match) continue;
     const b = boostFor(match);
-    if (b > bestB) { bestB = b; best = c; }
+    if (b > bestB) { bestB = b; best = c; bestHole = match; }
   }
   const pick = best ?? clauses[0] ?? null;
-  if (!pick) return { clauseKind: null, conceptId: null };
+  if (!pick) return { clauseKind: null, conceptId: null, hole: bestHole };
   return {
     clauseKind: pick.kind,
     conceptId: pick.kind === 'concept' && pick.conceptId ? (pick.conceptId as TacticPatternType) : null,
+    hole: bestHole,
   };
 }
 

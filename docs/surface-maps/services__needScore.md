@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**333 lines · 11 exports · 12 importers · 6 tests · 0 audits**
+**339 lines · 11 exports · 13 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,7 @@
 - `src/services/openingGenerator.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/studentMomentBoost.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/teachingSelector.ts`
 
@@ -43,8 +44,8 @@
 ### `coldStudent` (function) — 15 call sites
 - `src/hooks/useStudentNeed.ts:35`
 - `src/services/capabilityRead.test.ts:23`
-- `src/services/coachFeatureService.ts:1151`
-- `src/services/coachFeatureService.ts:4027`
+- `src/services/coachFeatureService.ts:1157`
+- `src/services/coachFeatureService.ts:4056`
 - `src/services/needCoverage.report.test.ts:88`
 - `src/services/needScore.test.ts:22`
 - `src/services/needScore.test.ts:38`
@@ -55,7 +56,7 @@
 - `src/services/reviewNeedGate.test.ts:58`
 - `src/services/reviewNeedGate.test.ts:80`
 - `src/services/studentNeedLoader.ts:128`
-- `src/services/teachingSelector.ts:237`
+- `src/services/teachingSelector.ts:245`
 
 ### `NeedPlyInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -85,7 +86,7 @@
 - `src/services/capabilityRead.test.ts:64`
 - `src/services/capabilityRead.test.ts:75`
 - `src/services/capabilityRead.test.ts:76`
-- `src/services/coachFeatureService.ts:1151`
+- `src/services/coachFeatureService.ts:1157`
 - `src/services/needCoverage.report.test.ts:78`
 - `src/services/needScore.test.ts:22`
 - `src/services/needScore.test.ts:38`
@@ -108,8 +109,8 @@
 - `src/services/needWeaknessWire.test.ts:117`
 - `src/services/needWeaknessWire.test.ts:130`
 - `src/services/needWeaknessWire.test.ts:134`
-- `src/services/positionFacts.ts:497`
-- `src/services/teachingSelector.ts:264`
+- `src/services/positionFacts.ts:510`
+- `src/services/teachingSelector.ts:284`
 
 ## Tests
 

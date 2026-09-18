@@ -272,7 +272,13 @@ function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: numb
   // so this term was safe only because of which list the caller passed — a
   // property no reader of this function could check. A ply the student
   // blundered proves nothing and may never be quieted by green.
-  if (p.playedCleanly === false) return { score: 0, reason: null };
+  //
+  // Requires TRUE, not "not false": a lane that cannot grade the move (a book
+  // move, a missing pre-move read) knows NOTHING about how it went, and unknown
+  // may never be read as clean. Grey is unaffected — it asks only whether the
+  // board POSED the question, so the live lane can still teach an unproven
+  // capability on a ply it could not grade.
+  if (p.playedCleanly !== true) return { score: 0, reason: null };
   if (!p.posedTags?.length || ctx.capabilities.size === 0) return { score: 0, reason: null };
   const proven: string[] = [];
   for (const tag of p.posedTags) {

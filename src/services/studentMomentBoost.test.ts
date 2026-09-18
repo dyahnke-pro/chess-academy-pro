@@ -108,3 +108,30 @@ describe('the door cannot offer a lane a way to forget the student', () => {
     expect(src).not.toMatch(/\n {2}clauseKind\?:/);
   });
 });
+
+describe('the live lane feeds the heat map too', () => {
+  it('positionFacts routes its boost through the ONE computer', () => {
+    const src = readFileSync('src/services/positionFacts.ts', 'utf8');
+    expect(src).toMatch(/momentBoost: studentMomentBoost\(\{/);
+    expect(src, 'the weakness-only boost is gone, not shadowed')
+      .not.toMatch(/function momentWeaknessBoost/);
+  });
+
+  it('the live lane passes the STUDENT move, never the coach reply', () => {
+    // 🚨 THE ATTRIBUTION TRAP. At this call site `probe`/`m` are the COACH's
+    // reply (`const probe = new Chess(move.fen); const m = probe.move(reply)`),
+    // while `fenBefore` + `move.san` are the student's. Using the former files
+    // the OPPONENT's posed capabilities under the student — green for a move
+    // they never made, and grey for a question they were never asked.
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src).toMatch(/capabilitiesPosed\(fenBefore, move\.san, playerColor\)/);
+    expect(src).not.toMatch(/capabilitiesPosed\(probe/);
+    expect(src).not.toMatch(/capabilitiesPosed\([^)]*m\.san/);
+  });
+
+  it('an ungraded ply is never read as clean', () => {
+    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(src, 'null must survive to the guard — unknown is not clean')
+      .toMatch(/playedCleanly: studentCpLoss == null \? null :/);
+  });
+});

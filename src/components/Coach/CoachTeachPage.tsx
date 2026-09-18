@@ -269,6 +269,7 @@ import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseText } from '../../services/positionFacts';
+import { capabilitiesPosed, movePlayedCleanly } from '../../services/capabilityEvidence';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
@@ -7999,6 +8000,10 @@ export function CoachTeachPage(): JSX.Element {
     // settles on the new position. A guard on the FEN, not a hope: if the read
     // is for any other board this stays null and the backward look simply does
     // not fire, which is the honest failure.
+    // THE STUDENT'S OWN COST, hoisted so the heat-map wire below can read it.
+    // `grade` is block-scoped to the narration branch, and the capability guard
+    // must NEVER read "ungraded" as "clean" — null stays null.
+    let studentCpLoss: number | null = null;
     const preStudentRead = latestEvalRef.current?.fen === fenBefore
       ? latestEvalRef.current.analysis ?? null
       : null;
@@ -8055,6 +8060,7 @@ export function CoachTeachPage(): JSX.Element {
           analysisBefore: preStudentRead,
           studentColor: playerColor === 'white' ? 'w' : 'b',
         });
+        if (grade) studentCpLoss = grade.cpLossCp;
         if (grade?.worthSpeaking && grade.clause) {
           setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: grade.clause, timestamp: Date.now() }]);
           void voiceService.speak(grade.clause);
@@ -8432,6 +8438,17 @@ export function CoachTeachPage(): JSX.Element {
                       analysis: studentBest,
                       evalBoard: (f) => stockfishEngine.evalBoard(f),
                       studentWeaknesses: weaknessSignalsRef.current,
+                      // THE HEAT MAP ON THE LIVE LANE. What the board asked of
+                      // the STUDENT's move — `fenBefore` + `move.san`, never
+                      // `probe`/`m`, which are the COACH's reply and would file
+                      // the opponent's posed capabilities under the student.
+                      // The guard travels with the tags by type; null means
+                      // this ply could not be graded, so green withholds while
+                      // grey still teaches.
+                      posed: {
+                        tags: capabilitiesPosed(fenBefore, move.san, playerColor).map((c) => c.tag),
+                        playedCleanly: studentCpLoss == null ? null : movePlayedCleanly(studentCpLoss),
+                      },
                       // The CONTEXT — the composer derives the ply from the FEN
                       // and owns the mover guard, so this surface decides none
                       // of it (§G4.5.15, and `surfaceContract.scan` enforces it).
