@@ -160,6 +160,36 @@ export interface PieceQualityLine {
 }
 
 /**
+ * 🚨 A PIECE THAT HAS NEVER MOVED IS NOT "DOING THE MOST WORK" (found reading a
+ * real prod game, 2026-09-18).
+ *
+ * On move THREE of the Scandinavian the coach said, three times: "Their rook on
+ * a1 is the piece doing the most work for them — trading it off takes the sting
+ * out of the position." That rook is on its starting square, has no legal move,
+ * and cannot be traded. It won the lane only because the comparison is RELATIVE
+ * — a piece is measured against the mean of its own KIND on this board, so with
+ * both rooks asleep the one that happens to defend a2 edges the other and gets
+ * crowned. A relative ranking with no floor always names somebody.
+ *
+ * The `d >= 0.3` bar does not catch it: that measures how far the piece is above
+ * its own kind, never whether its kind is doing anything at all.
+ *
+ * Note this is NOT a rook ban. "Their rook on the open d-file is doing the most
+ * work — trade it off" is real teaching, so the guard lifts once the piece has
+ * actually moved, or once the game reaches a middlegame where a home-square rook
+ * can genuinely own an open file.
+ */
+const HOME_SQUARES: Record<'w' | 'b', Record<string, readonly string[]>> = {
+  w: { r: ['a1', 'h1'], n: ['b1', 'g1'], b: ['c1', 'f1'], q: ['d1'], k: ['e1'], p: [] },
+  b: { r: ['a8', 'h8'], n: ['b8', 'g8'], b: ['c8', 'f8'], q: ['d8'], k: ['e8'], p: [] },
+};
+
+function onHomeSquare(v: PieceValue): boolean {
+  const side = v.color === 'w' ? 'w' : 'b';
+  return (HOME_SQUARES[side][v.piece.toLowerCase()] ?? []).includes(v.square.toLowerCase());
+}
+
+/**
  * The two sentences this table earns: their best-placed piece, and the
  * student's worst-placed one.
  *
@@ -195,7 +225,11 @@ export function pieceQualityLines(
   // THEIR BEST — the piece outperforming its own kind by the most. Pawns are
   // excluded: a pawn's contribution swings on structure rather than on where
   // one pawn "is", and "trade off their best pawn" is not a plan.
+  // Home-square pieces are out until the middlegame — see `onHomeSquare`. The
+  // sibling branch below already excludes rooks and gates on `isMiddlegame`;
+  // this branch had neither guard, which is how a move-3 rook won the lane.
   const best = theirs.filter((v) => v.piece.toLowerCase() !== 'p')
+    .filter((v) => opts?.isMiddlegame === true || !onHomeSquare(v))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => b.d - a.d)[0];
   if (best && best.d >= 0.3) {

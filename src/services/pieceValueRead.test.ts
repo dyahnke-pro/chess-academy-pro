@@ -203,4 +203,41 @@ describe('pieceQualityLines — worst piece only in the middlegame (David 2026-0
     const lines = pieceQualityLines(REAL_TABLE, 'white', undefined, { isMiddlegame: true });
     expect(lines.find((l) => l.kind === 'your-worst-piece')?.text).toContain('bishop on c1');
   });
+
+  // 🚨 THE MOVE-3 ROOK (found reading a real prod Learn game, 2026-09-18).
+  // The coach said, three times in one game: "Their rook on a1 is the piece
+  // doing the most work for them — trading it off takes the sting out of the
+  // position." On move three of the Scandinavian that rook has never moved, has
+  // no legal move, and cannot be traded. It won because the comparison is
+  // RELATIVE to its own kind: with both rooks asleep, the one defending a2 edges
+  // the other, and a relative ranking with no floor always names somebody.
+  describe('a piece that has never moved is not doing the most work', () => {
+    // Both white rooks home; a1 scores above h1, as it did on the real board.
+    const openingValues = [
+      { square: 'a1', piece: 'R', color: 'w', value: 0.9 },
+      { square: 'h1', piece: 'R', color: 'w', value: 0.1 },
+      { square: 'c3', piece: 'N', color: 'w', value: 0.5 },
+      { square: 'd5', piece: 'q', color: 'b', value: -0.4 },
+    ];
+
+    it('does NOT crown a home-square rook in the opening', () => {
+      const lines = pieceQualityLines(openingValues, 'black', undefined, { isMiddlegame: false });
+      const best = lines.find((l) => l.kind === 'their-best-piece');
+      expect(best?.text ?? '', 'a rook on its starting square cannot be traded off').not.toMatch(/rook on a1/);
+    });
+
+    it('STILL crowns a rook that has actually moved — this is not a rook ban', () => {
+      const moved = openingValues.map((v) => (v.square === 'a1' ? { ...v, square: 'd1' } : v));
+      const lines = pieceQualityLines(moved, 'black', undefined, { isMiddlegame: false });
+      const best = lines.find((l) => l.kind === 'their-best-piece');
+      expect(best?.text ?? '', 'an open-file rook IS real teaching — do not delete it').toMatch(/rook on d1/);
+    });
+
+    it('lifts the guard in a middlegame, where a home rook can own an open file', () => {
+      const lines = pieceQualityLines(openingValues, 'black', undefined, { isMiddlegame: true });
+      const best = lines.find((l) => l.kind === 'their-best-piece');
+      expect(best?.text ?? '').toMatch(/rook on a1/);
+    });
+  });
+
 });
