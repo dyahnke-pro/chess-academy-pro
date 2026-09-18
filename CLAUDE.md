@@ -104,6 +104,47 @@ finds itself feeding a rating into a narration gate has the wrong input: the
 question is always what the student's own record says, and when the record is
 empty the answer is TEACH.
 
+## STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")
+
+And since the rating's job is strength, strength does not need a prior either.
+**The BOARD is the calibration.** The opponent adjusts as the first game is
+played; nothing has to be known about the person before they sit down.
+
+🚨 **THE SIGNAL STARTS ON MOVE 2, NOT IN THE MIDDLEGAME.** A session wrote
+"three moves of book tells you nothing — everyone plays e4" and David corrected
+it with three counterexamples, all of which are ALREADY COMPUTED detectors:
+
+| signal | detector | why it is early | what it reads |
+|---|---|---|---|
+| **a gem blunder** | `punish-gems.json` | can land move 3-4 | THE STRONGEST. Gems are MINED AT RATING BANDS (amateur explorer 1600/1800/2000) with frequency data — so walking into one is a mistake **with a known population attached**. It places the student against real data, instantly, with no question asked. Sitting in the data today, unused for this. |
+| **off book in N moves** | `theoryDeparture` | the ply itself is the reading | a KNOWLEDGE signal, not a mistake — different information, and it arrives sooner |
+| **an early mistake** | cpLoss | any ply | cpLoss does not care what move number it is |
+
+So the correction that matters: **book moves played CORRECTLY tell you little;
+every DEPARTURE is signal.** Signal quality soonest-to-latest: gem hit →
+book-departure ply → cpLoss at a critical moment → everything else. None of them
+need the middlegame.
+
+**TWO TRAPS — the naive version of this is a known death spiral:**
+1. **MEASURE AGAINST THE POSITION, NEVER THE RESULT.** If the opponent is too
+   strong and crushing them, their cpLoss inflates and a result-based adjuster
+   reads "weak player" when the truth is "bad matchup", then makes it worse.
+   cpLoss against the engine's best move at that position is immune — use it.
+2. **DAMP IT.** One blunder must not move the estimate 300 points. Confidence
+   NARROWS; it does not swing. (Unlike the weakness model's raise-only rule,
+   strength must recover UPWARD quickly too — a tilting player mis-rated down
+   must not be stuck there.)
+
+**Prefer DECISION MOMENTS to plies** where you can — `criticalityScan` gapCp and
+`computeImportance` already say which moments posed a real question.
+
+🔒 **ONE DETECTOR, TWO CONSUMERS — this is the dual-use rule one layer up.**
+"Did they answer the question the board posed" is exactly what
+`capabilityEvidence` records for the heat map, AND exactly what says how hard
+the opponent should play. Strength and teaching calibrate off the SAME
+measurement, both from move one, neither needing to be told anything about the
+person first. Do not build a second, parallel strength estimator.
+
 Green is what the app cannot say today. Once it can, silence becomes a computed
 verdict instead of a guess.
 
