@@ -492,8 +492,16 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // own decision; on the opponent's ply it is null and importance decides.
   const studentIsMoving = input.moverColor === input.studentColor;
   const plyNumber = (fullmove - 1) * 2 + (input.moverColor === 'b' ? 1 : 0) + 1;
+  const needFor = needClauseFor(composed, input.studentWeaknesses ?? []);
   const needVerdict = studentIsMoving && input.studentNeedContext
-    ? computeNeed({ ply: plyNumber, studentMove: true }, input.studentNeedContext)
+    ? computeNeed({
+      ply: plyNumber,
+      studentMove: true,
+      // See `needClauseFor`: without these the weakness term cannot fire, and a
+      // known hole on a familiar line is silent.
+      clauseKind: needFor.clauseKind,
+      conceptId: needFor.conceptId,
+    }, input.studentNeedContext)
     : null;
 
   const clauseByText = new Map<string, ClauseItem>();
@@ -568,18 +576,70 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
  * marks the hole `fixed`: raise-only, because nothing records CORRECT play yet
  * and absent is not the same as mastered.
  */
+/**
+ * THE ONE clause→hole join, and the only place it is written.
+ *
+ * It was hand-written TWICE (momentWeaknessBoost + applyWeaknessBoost) and a
+ * third copy was about to be added for the need wire below. A duplicated join
+ * is the drifting-constant the rot rule bans: the two copies agreed today, and
+ * nothing made them agree tomorrow.
+ */
+function clauseHole(c: ClauseItem, signals: readonly WeaknessSignal[]): WeaknessSignal | null {
+  return c.kind === 'concept'
+    ? (c.conceptId ? matchTacticPattern(c.conceptId as TacticPatternType, signals) : null)
+    : matchClauseKind(c.kind, signals);
+}
+
 function momentWeaknessBoost(clauses: readonly ClauseItem[], signals: readonly WeaknessSignal[]): number {
   if (signals.length === 0) return 0;
   let best = 0;
   for (const c of clauses) {
-    const match = c.kind === 'concept'
-      ? (c.conceptId ? matchTacticPattern(c.conceptId as TacticPatternType, signals) : null)
-      : matchClauseKind(c.kind, signals);
+    const match = clauseHole(c, signals);
     if (!match) continue;
     const b = boostFor(match);
     if (b > best) best = b;
   }
   return best;
+}
+
+/**
+ * WHICH CLAUSE THE NEED SCORE IS ABOUT — the fix for a live coach that could
+ * not see the student's holes.
+ *
+ * `computeNeed` takes a `clauseKind`/`conceptId` and re-runs the same join
+ * internally (`weaknessTerm`). This call site passed NEITHER, so on every live
+ * surface that term — the biggest in the score, at 55 of a 50 bar — was
+ * structurally dead, while `input.studentWeaknesses` sat right here feeding
+ * `momentBoost`. Measured on a real-shaped profile: a student with a
+ * persistent, worsening hanging-piece hole, on a line they had played
+ * correctly five times, scored 0 and the coach went SILENT; handed the clause
+ * kind it already had, the same ply scores 55 and speaks.
+ *
+ * No prod audit could see it. Every audit runs on a fresh device, where
+ * `gamesPlayed < COLD_START_GAMES` makes the cold-start prior 100 and masks
+ * the dead term completely — green on the one profile that cannot show it.
+ *
+ * Prefer the clause that MATCHES a hole (that is the one need is about); with
+ * no match, the top-ranked clause still honestly names what this ply teaches.
+ */
+function needClauseFor(
+  clauses: readonly ClauseItem[],
+  signals: readonly WeaknessSignal[],
+): { clauseKind: string | null; conceptId: TacticPatternType | null } {
+  let best: ClauseItem | null = null;
+  let bestB = 0;
+  for (const c of clauses) {
+    const match = clauseHole(c, signals);
+    if (!match) continue;
+    const b = boostFor(match);
+    if (b > bestB) { bestB = b; best = c; }
+  }
+  const pick = best ?? clauses[0] ?? null;
+  if (!pick) return { clauseKind: null, conceptId: null };
+  return {
+    clauseKind: pick.kind,
+    conceptId: pick.kind === 'concept' && pick.conceptId ? (pick.conceptId as TacticPatternType) : null,
+  };
 }
 
 function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSignal[]): ClauseItem[] {
@@ -590,9 +650,7 @@ function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSig
     // canonical vocabulary bridge (weakness → selector wire, unified-coach P1):
     // a fork concept meets a fork-blind student's hole exactly. Non-tactic
     // concepts (technique/matchup) have no honest single-hole mapping → no boost.
-    const match = c.kind === 'concept'
-      ? (c.conceptId ? matchTacticPattern(c.conceptId as TacticPatternType, signals) : null)
-      : matchClauseKind(c.kind, signals);
+    const match = clauseHole(c, signals);
     if (!match) return c;
     const b = boostFor(match);
     if (b <= 0) return c;

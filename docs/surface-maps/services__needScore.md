@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**270 lines · 11 exports · 11 importers · 5 tests · 0 audits**
+**284 lines · 11 exports · 12 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@
 - `src/services/liveNeedGate.test.ts`
 - `src/services/needCoverage.report.test.ts`
 - `src/services/needScore.test.ts`
+- `src/services/needWeaknessWire.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewNeedGate.test.ts`
@@ -42,8 +43,8 @@
 ### `coldStudent` (function) — 15 call sites
 - `src/hooks/useStudentNeed.ts:35`
 - `src/services/capabilityRead.test.ts:23`
-- `src/services/coachFeatureService.ts:1146`
-- `src/services/coachFeatureService.ts:4022`
+- `src/services/coachFeatureService.ts:1151`
+- `src/services/coachFeatureService.ts:4027`
 - `src/services/needCoverage.report.test.ts:88`
 - `src/services/needScore.test.ts:22`
 - `src/services/needScore.test.ts:38`
@@ -72,7 +73,7 @@
 ### `HELD_FOR_PROVEN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeNeed` (function) — 26 call sites
+### `computeNeed` (function) — 30 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
 - `src/services/capabilityRead.test.ts:33`
 - `src/services/capabilityRead.test.ts:34`
@@ -82,7 +83,7 @@
 - `src/services/capabilityRead.test.ts:56`
 - `src/services/capabilityRead.test.ts:58`
 - `src/services/capabilityRead.test.ts:67`
-- `src/services/coachFeatureService.ts:1146`
+- `src/services/coachFeatureService.ts:1151`
 - `src/services/needCoverage.report.test.ts:78`
 - `src/services/needScore.test.ts:22`
 - `src/services/needScore.test.ts:38`
@@ -97,7 +98,11 @@
 - `src/services/needScore.test.ts:82`
 - `src/services/needScore.test.ts:83`
 - `src/services/needScore.test.ts:88`
-- `src/services/positionFacts.ts:496`
+- `src/services/needWeaknessWire.test.ts:49`
+- `src/services/needWeaknessWire.test.ts:55`
+- `src/services/needWeaknessWire.test.ts:62`
+- `src/services/needWeaknessWire.test.ts:76`
+- `src/services/positionFacts.ts:497`
 - `src/services/teachingSelector.ts:259`
 
 ## Tests
@@ -106,6 +111,7 @@
 - `src/services/liveNeedGate.test.ts`
 - `src/services/needCoverage.report.test.ts`
 - `src/services/needScore.test.ts`
+- `src/services/needWeaknessWire.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 
 ## Audits that reach it

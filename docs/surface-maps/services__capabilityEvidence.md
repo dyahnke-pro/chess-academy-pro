@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**176 lines · 7 exports · 3 importers · 1 tests · 0 audits**
+**176 lines · 7 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,10 @@
 - `src/db/schema.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/capabilityEvidence.test.ts`
+- `src/services/capabilityRead.test.ts`
+- `src/services/needScore.ts`
+- `src/services/studentNeedLoader.ts`
+- `src/services/teachingSelector.ts`
 
 ## Exports and every call site
 
@@ -31,12 +35,13 @@
 ### `CapabilityProfile` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `capabilitiesShown` (function) — 5 call sites
+### `capabilitiesShown` (function) — 6 call sites
 - `src/services/capabilityEvidence.test.ts:29`
 - `src/services/capabilityEvidence.test.ts:38`
 - `src/services/capabilityEvidence.test.ts:39`
 - `src/services/capabilityEvidence.test.ts:47`
 - `src/services/capabilityEvidence.test.ts:53`
+- `src/services/teachingSelector.ts:257`
 
 ### `recordCapabilitiesShown` (function) — 6 call sites
 - `src/services/autoAnalyzeGame.ts:139`
@@ -46,14 +51,16 @@
 - `src/services/capabilityEvidence.test.ts:98`
 - `src/services/capabilityEvidence.test.ts:191`
 
-### `getCapabilityProfile` (function) — 3 call sites
+### `getCapabilityProfile` (function) — 4 call sites
 - `src/services/capabilityEvidence.test.ts:72`
 - `src/services/capabilityEvidence.test.ts:81`
 - `src/services/capabilityEvidence.test.ts:198`
+- `src/services/studentNeedLoader.ts:113`
 
 ## Tests
 
 - `src/services/capabilityEvidence.test.ts`
+- `src/services/capabilityRead.test.ts`
 
 ## Audits that reach it
 

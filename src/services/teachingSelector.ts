@@ -259,6 +259,13 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     needByPly.set(p.ply, computeNeed({
       ply: p.ply, studentMove: true,
       conceptId: tactic as import('../types/tacticTypes').TacticPatternType | null,
+      // 🚨 KNOWN GAP, stated rather than defaulted (which is why `clauseKind` is
+      // required). `conceptId` reaches TACTICAL holes only; the positional,
+      // structural and endgame ones match through `matchClauseKind`, so a
+      // student whose weakness is positional gets no weakness term on THIS
+      // lane. Closing it means carrying the ply's positionFacts clause kind
+      // into the selector, which this pass does not compute.
+      clauseKind: null,
       onThread: onThread.has(p.ply),
       capabilityTags: capabilityTags as readonly import('../data/misconceptionTags').MisconceptionTagId[],
     }, student));

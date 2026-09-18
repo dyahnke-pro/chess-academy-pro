@@ -1143,7 +1143,12 @@ export function buildReviewSegments(
     ? (!studentNeed || studentNeed.gamesPlayed < COLD_START_GAMES)
       ? new Map(moves.slice(0, usable)
           .filter((mv) => (mv.ply % 2 === 1 ? 'white' : 'black') === playerColor)
-          .map((mv) => [mv.ply, computeNeed({ ply: mv.ply, studentMove: true }, studentNeed ?? coldStudent(rating ?? DEFAULT_STUDENT_RATING))] as const))
+          // `clauseKind: null` is the honest answer on THIS branch, not a
+          // default: it is the cold-start fast path (no student data, or fewer
+          // than COLD_START_GAMES games), where every data term is zero and the
+          // prior decides regardless. The warm path below goes through
+          // `selectTeaching`, which computes the ply's concept properly.
+          .map((mv) => [mv.ply, computeNeed({ ply: mv.ply, studentMove: true, clauseKind: null }, studentNeed ?? coldStudent(rating ?? DEFAULT_STUDENT_RATING))] as const))
       : (() => {
         try {
           return selectTeaching({

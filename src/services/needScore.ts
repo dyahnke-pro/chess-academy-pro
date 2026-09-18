@@ -89,9 +89,23 @@ export interface NeedPlyInput {
   studentMove: boolean;
   /** The computed concept of the ply (a landed / available tactic), when any. */
   conceptId?: TacticPatternType | null;
-  /** The positionFacts clause kind the ply's teaching would carry, when known
-   *  ('fundamental' / 'structure-plan' / 'must-defend' / …). */
-  clauseKind?: string | null;
+  /**
+   * The positionFacts clause kind the ply's teaching would carry
+   * ('fundamental' / 'structure-plan' / 'must-defend' / 'convert' / …).
+   *
+   * 🚨 REQUIRED, and `null` is a real answer — a caller must DECIDE rather than
+   * inherit a silent default. It was optional until 2026-09-18 and the live
+   * lane (`positionFacts`) simply never passed it, which made `weaknessTerm`
+   * — the largest term in the score, 55 against a 50 bar — structurally dead
+   * on every live surface. A student with a persistent hole, on a line they
+   * knew, scored 0 and the coach said nothing.
+   *
+   * This is the half of the weakness join that `conceptId` cannot cover:
+   * `matchTacticPattern` reaches TACTICAL holes, while the positional,
+   * structural and endgame ones are only reachable through `matchClauseKind`.
+   * A caller supplying only `conceptId` is blind to the second kind.
+   */
+  clauseKind: string | null;
   /** The ply lies on the game's causal thread (selector `onThread`). */
   onThread?: boolean;
   /**
