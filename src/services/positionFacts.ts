@@ -31,6 +31,7 @@ import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from '.
 import { structurePlan } from './boardPlan';
 import { matchClauseKind, matchTacticPattern, boostFor, type WeaknessSignal } from './weaknessSignal';
 import { studentMomentBoost } from './studentMomentBoost';
+import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard } from './conceptEngine';
 import { liveMethodBeatFor, habitIsOwed } from './methodBeat';
@@ -99,14 +100,19 @@ export interface PositionFactsInput {
    * WHAT THE BOARD ASKED of the student on the move just played, plus whether
    * that move was clean enough to have DEMONSTRATED anything.
    *
-   * 🚨 THE TWO TRAVEL TOGETHER BY TYPE, deliberately. Tags without the guard
-   * let the GREEN term quiet a ply the student blundered; the guard without
-   * tags is inert. Making them one object means a caller cannot supply half.
-   * `playedCleanly: null` is honest for a ply this surface could not grade —
-   * green then withholds (unknown is not clean) while GREY still teaches,
-   * because grey asks only whether the question was posed.
+   * 🚨 THE SURFACE HANDS OVER RAW BOARD DATA, NOT A COMPUTED ANSWER. The first
+   * cut had the caller run `capabilitiesPosed` itself and pass the tags — which
+   * made the component compose one more fact-computer and pushed
+   * `CoachTeachPage` through its own composition ceiling (63 > 62). The ceiling
+   * was right: "each surface composing its own producer is the tax on the ONE
+   * mechanism the app grows by." A move's SAN and the board before it are facts
+   * the surface already holds; the computing belongs here.
+   *
+   * `cpLoss: null` is honest for a ply the surface could not grade — green then
+   * withholds (unknown is not clean) while GREY still teaches, because grey
+   * asks only whether the question was posed.
    */
-  posed?: { tags: readonly import('../data/misconceptionTags').MisconceptionTagId[]; playedCleanly: boolean | null };
+  lastMove?: { fenBefore: string; san: string; cpLoss: number | null };
   /** THE STUDENT'S NEED AT THIS PLY (N2) — the second half of the student model,
    *  and the half the live surfaces never had.
    *
@@ -505,6 +511,19 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // own decision; on the opponent's ply it is null and importance decides.
   const studentIsMoving = input.moverColor === input.studentColor;
   const plyNumber = (fullmove - 1) * 2 + (input.moverColor === 'b' ? 1 : 0) + 1;
+  // WHAT THE BOARD ASKED of the move just played — computed HERE from the raw
+  // board data the surface handed over (see `lastMove`), so no surface has to
+  // compose this computer itself.
+  const posed: { tags: readonly import('../data/misconceptionTags').MisconceptionTagId[]; playedCleanly: boolean | undefined } = (() => {
+    const lm = input.lastMove;
+    if (!lm) return { tags: [], playedCleanly: undefined };
+    try {
+      return {
+        tags: capabilitiesPosed(lm.fenBefore, lm.san, input.studentColor === 'w' ? 'white' : 'black').map((c) => c.tag),
+        playedCleanly: lm.cpLoss == null ? undefined : movePlayedCleanly(lm.cpLoss),
+      };
+    } catch { return { tags: [], playedCleanly: undefined }; }
+  })();
   const needFor = needClauseFor(composed, input.studentWeaknesses ?? []);
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({
@@ -516,8 +535,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       conceptId: needFor.conceptId,
       // THE HEAT MAP ON THE LIVE LANE. Tags and guard travel together — see
       // `posed` on the input.
-      posedTags: input.posed?.tags,
-      playedCleanly: input.posed?.playedCleanly ?? undefined,
+      posedTags: posed.tags,
+      playedCleanly: posed.playedCleanly,
     }, input.studentNeedContext)
     : null;
 
@@ -544,7 +563,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // heat map at all.
       momentBoost: studentMomentBoost({
         hole: needFor.hole,
-        posedTags: input.posed?.tags,
+        posedTags: posed.tags,
         capabilities: input.studentNeedContext?.capabilities,
       }),
       // The mover guard — see `studentNeed` on the input. Need answers "does

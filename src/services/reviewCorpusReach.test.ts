@@ -23,7 +23,15 @@ const RUY = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Be7',
   'Re1', 'b5', 'Bb3', 'd6', 'c3', 'O-O', 'h3', 'Na5'];
 
 describe('review can reach the corpus', () => {
-  beforeAll(() => { loadFullCorpus(); }, 60000);
+  beforeAll(() => {
+    const loaded = loadFullCorpus();
+    // NON-VACUITY FLOOR. `loadFullCorpus` returns empty bundles BY DESIGN when
+    // `public/data/*.json` is missing, so every assertion below would pass
+    // against an empty index by a different route and this gate would be
+    // theatre. Two of the four corpora are fetched, not bundled.
+    const total = loaded.reduce((n, c) => n + c.notes, 0);
+    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+  }, 180_000);
 
   it('the producer asks the corpus at all', () => {
     const src = readFileSync('src/services/coachFeatureService.ts', 'utf8');
@@ -41,12 +49,11 @@ describe('review can reach the corpus', () => {
     for (let i = 0; i < RUY.length; i += 1) {
       c.move(RUY[i]);
       const note = noteAtPosition(RUY.slice(0, i + 1), c.fen(), 'Ruy Lopez', 'white');
-      const text = note ? spokenBeatText(note)?.trim() : '';
+      const text = note ? spokenBeatText(note).trim() : '';
       if (!text) continue;
       const reg = beatRegister(text, 'white');
       spoke.push(`[${reg}] ply ${i + 1} (${RUY[i]}): ${text.slice(0, 80)}`);
     }
-    // eslint-disable-next-line no-console
     console.log(`REVIEW-CORPUS-REACH ${spoke.length}/${RUY.length} plies\n  ${spoke.slice(0, 5).join('\n  ')}`);
     expect(spoke.length, 'no note anywhere on a heavily-covered mainline means the wire is dead')
       .toBeGreaterThan(0);

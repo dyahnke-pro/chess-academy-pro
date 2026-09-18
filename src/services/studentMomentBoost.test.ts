@@ -124,14 +124,21 @@ describe('the live lane feeds the heat map too', () => {
     // the OPPONENT's posed capabilities under the student — green for a move
     // they never made, and grey for a question they were never asked.
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src).toMatch(/capabilitiesPosed\(fenBefore, move\.san, playerColor\)/);
-    expect(src).not.toMatch(/capabilitiesPosed\(probe/);
-    expect(src).not.toMatch(/capabilitiesPosed\([^)]*m\.san/);
+    expect(src, "the student's own board and move, handed over raw")
+      .toMatch(/lastMove: \{ fenBefore, san: move\.san, cpLoss: studentCpLoss \}/);
+    expect(src, 'never the coach reply').not.toMatch(/lastMove: \{[^}]*probe/);
+    expect(src, 'never the coach reply').not.toMatch(/lastMove: \{[^}]*san: m\.san/);
+    // and the surface must NOT compose the computer itself — that is the
+    // composition ceiling, which this wire tripped on its first cut.
+    expect(src).not.toMatch(/capabilitiesPosed\(/);
   });
 
   it('an ungraded ply is never read as clean', () => {
+    const pf = readFileSync('src/services/positionFacts.ts', 'utf8');
+    expect(pf, 'null must survive to the guard — unknown is not clean')
+      .toMatch(/lm\.cpLoss == null \? undefined : movePlayedCleanly\(lm\.cpLoss\)/);
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src, 'null must survive to the guard — unknown is not clean')
-      .toMatch(/playedCleanly: studentCpLoss == null \? null :/);
+    expect(src, 'the surface must not pre-decide it either')
+      .toMatch(/cpLoss: studentCpLoss/);
   });
 });

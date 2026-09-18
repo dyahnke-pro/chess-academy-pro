@@ -109,7 +109,7 @@
 - `src/services/needWeaknessWire.test.ts:117`
 - `src/services/needWeaknessWire.test.ts:130`
 - `src/services/needWeaknessWire.test.ts:134`
-- `src/services/positionFacts.ts:510`
+- `src/services/positionFacts.ts:529`
 - `src/services/teachingSelector.ts:284`
 
 ## Tests

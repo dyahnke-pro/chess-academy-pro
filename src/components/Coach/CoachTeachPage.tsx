@@ -269,7 +269,6 @@ import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseText } from '../../services/positionFacts';
-import { capabilitiesPosed, movePlayedCleanly } from '../../services/capabilityEvidence';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
@@ -8438,17 +8437,15 @@ export function CoachTeachPage(): JSX.Element {
                       analysis: studentBest,
                       evalBoard: (f) => stockfishEngine.evalBoard(f),
                       studentWeaknesses: weaknessSignalsRef.current,
-                      // THE HEAT MAP ON THE LIVE LANE. What the board asked of
-                      // the STUDENT's move — `fenBefore` + `move.san`, never
-                      // `probe`/`m`, which are the COACH's reply and would file
-                      // the opponent's posed capabilities under the student.
-                      // The guard travels with the tags by type; null means
-                      // this ply could not be graded, so green withholds while
-                      // grey still teaches.
-                      posed: {
-                        tags: capabilitiesPosed(fenBefore, move.san, playerColor).map((c) => c.tag),
-                        playedCleanly: studentCpLoss == null ? null : movePlayedCleanly(studentCpLoss),
-                      },
+                      // THE HEAT MAP ON THE LIVE LANE — raw board data only, so
+                      // this surface does not compose yet another computer (the
+                      // composition ceiling caught exactly that). The STUDENT's
+                      // move: `fenBefore` + `move.san`, never `probe`/`m`,
+                      // which are the COACH's reply and would file the
+                      // opponent's posed capabilities under the student.
+                      // `cpLoss: null` means this ply could not be graded, so
+                      // green withholds while grey still teaches.
+                      lastMove: { fenBefore, san: move.san, cpLoss: studentCpLoss },
                       // The CONTEXT — the composer derives the ply from the FEN
                       // and owns the mover guard, so this surface decides none
                       // of it (§G4.5.15, and `surfaceContract.scan` enforces it).
