@@ -588,6 +588,26 @@ const run = async () => {
   // pattern:" lead plus the flagged-move vocabulary, so every subject shape the
   // renderer can produce (one / both / all three / two-of-five / the
   // subject-less fallback) matches without the audit knowing which.
+  // 🚨 ASK THE ENGINE, NEVER THE WALK. Two rows below (FUNDLEAD, RECAP) used to
+  // conclude "the engine flagged NO student ply" from `flaggedLeads` — which is
+  // populated BY THE WALK, so a walk that stopped seeing flagged plies reported
+  // itself healthy, and RECAP hardcoded "the seeded game has two" from the days
+  // this audit ran ONE fixture. It now rotates a fresh master game every run
+  // (2026-09-17), so a GM draw with genuinely zero flagged plies red-failed a
+  // working product against a constant describing a different game.
+  // The annotation record in Dexie is what the engine actually decided; read it
+  // and let both rows corroborate against it. Zero-in-db + zero-in-walk is a
+  // real property of the game; N-in-db + zero-in-walk is the walk defect the
+  // red was built for.
+  const dbFlagged = await page.evaluate(async ([gid, side]) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    const g = await new Promise((res, rej) => { const t = db.transaction('games', 'readonly'); const rq = t.objectStore('games').get(gid); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    const rows = (g?.annotations ?? []).filter((a) => a.color === side && /inaccuracy|mistake|blunder/i.test(String(a.classification ?? '')));
+    return { n: rows.length, at: rows.slice(0, 6).map((a) => `${a.moveNumber}${side === 'white' ? '.' : '...'}${a.move ?? '?'} ${a.classification}`) };
+  }, [GID, GAME.studentSide]).catch((e) => ({ n: -1, at: [], error: String(e) }));
+  log(`  [engine record] ${dbFlagged.n} flagged student ply(s)${dbFlagged.at.length ? ' — ' + dbFlagged.at.join(', ') : ''}`);
+
   const RECAP_RE = /The pattern:[^.]*flagged move|The pattern: you \w|carry into the next game/i;
   for (let i = 0; i < 20; i += 1) {
     if (spoken().some((x) => RECAP_RE.test(x.text))) break;
@@ -783,26 +803,6 @@ const run = async () => {
   await add('SEAT mover-never-reattributed', seatFails.length === 0, seatFails.length ? seatFails.slice(0, 3).join(' | ') : `every narrated ply keeps its seat (${plyNarr.size} plies)`);
   await add('NOTRADEWIN even-trade-not-profit', tradeFails.length === 0, tradeFails.length ? tradeFails.slice(0, 3).join(' | ') : 'no even trade narrated as material won');
 
-
-  // 🚨 ASK THE ENGINE, NEVER THE WALK. Two rows below (FUNDLEAD, RECAP) used to
-  // conclude "the engine flagged NO student ply" from `flaggedLeads` — which is
-  // populated BY THE WALK, so a walk that stopped seeing flagged plies reported
-  // itself healthy, and RECAP hardcoded "the seeded game has two" from the days
-  // this audit ran ONE fixture. It now rotates a fresh master game every run
-  // (2026-09-17), so a GM draw with genuinely zero flagged plies red-failed a
-  // working product against a constant describing a different game.
-  // The annotation record in Dexie is what the engine actually decided; read it
-  // and let both rows corroborate against it. Zero-in-db + zero-in-walk is a
-  // real property of the game; N-in-db + zero-in-walk is the walk defect the
-  // red was built for.
-  const dbFlagged = await page.evaluate(async ([gid, side]) => {
-    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
-    const db = await open();
-    const g = await new Promise((res, rej) => { const t = db.transaction('games', 'readonly'); const rq = t.objectStore('games').get(gid); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
-    const rows = (g?.annotations ?? []).filter((a) => a.color === side && /inaccuracy|mistake|blunder/i.test(String(a.classification ?? '')));
-    return { n: rows.length, at: rows.slice(0, 6).map((a) => `${a.moveNumber}${side === 'white' ? '.' : '...'}${a.move ?? '?'} ${a.classification}`) };
-  }, [GID, GAME.studentSide]).catch((e) => ({ n: -1, at: [], error: String(e) }));
-  log(`  [engine record] ${dbFlagged.n} flagged student ply(s)${dbFlagged.at.length ? ' — ' + dbFlagged.at.join(', ') : ''}`);
 
   // FUNDLEAD — across the walk, every flagged STUDENT ply the auto-advance
   // passed leads with a fundamentals verdict when one attached; at least one
