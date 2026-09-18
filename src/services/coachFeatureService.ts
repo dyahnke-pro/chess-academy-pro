@@ -1139,16 +1139,22 @@ export function buildReviewSegments(
   // context) clears the bar on the rating prior at every ply, so the thread /
   // landed-tactic computation cannot change a verdict — skip the selector and
   // stamp the prior directly (keeps the legacy callers' walk at its old cost).
-  const needByPly: ReadonlyMap<number, NeedVerdict> = playerColor
+  // 🚨 KEEP THE WHOLE PACKAGE. This used to end `.needByPly`, throwing away
+  // everything else the selector computed — including the student term the
+  // RANKER needs. Review's `decide()` then passed no `momentBoost` at all, so
+  // on the surface where diagnosis happens a student's own recorded holes could
+  // not raise a single moment: the weaknesses were loaded, used to ORDER facts,
+  // and ignored by the computer that decides how much a moment is worth saying.
+  const selectorPkg: { needByPly: ReadonlyMap<number, NeedVerdict>; boostByPly: ReadonlyMap<number, number> } = playerColor
     ? (!studentNeed || studentNeed.gamesPlayed < COLD_START_GAMES)
-      ? new Map(moves.slice(0, usable)
+      ? { boostByPly: new Map(), needByPly: new Map(moves.slice(0, usable)
           .filter((mv) => (mv.ply % 2 === 1 ? 'white' : 'black') === playerColor)
           // `clauseKind: null` is the honest answer on THIS branch, not a
           // default: it is the cold-start fast path (no student data, or fewer
           // than COLD_START_GAMES games), where every data term is zero and the
           // prior decides regardless. The warm path below goes through
           // `selectTeaching`, which computes the ply's concept properly.
-          .map((mv) => [mv.ply, computeNeed({ ply: mv.ply, studentMove: true, clauseKind: null }, studentNeed ?? coldStudent(rating ?? DEFAULT_STUDENT_RATING))] as const))
+          .map((mv) => [mv.ply, computeNeed({ ply: mv.ply, studentMove: true, clauseKind: null }, studentNeed ?? coldStudent(rating ?? DEFAULT_STUDENT_RATING))] as const)) }
       : (() => {
         try {
           return selectTeaching({
@@ -1158,10 +1164,12 @@ export function buildReviewSegments(
               evalBefore: mv.preMoveEval, evalAfter: mv.evaluation, classification: mv.classification,
             })),
             studentColor: playerColor, rating, kind: 'game', surface: 'review', student: studentNeed,
-          }).needByPly;
-        } catch { return new Map<number, NeedVerdict>(); }
+          });
+        } catch { return { needByPly: new Map<number, NeedVerdict>(), boostByPly: new Map<number, number>() }; }
       })()
-    : new Map<number, NeedVerdict>();
+    : { needByPly: new Map<number, NeedVerdict>(), boostByPly: new Map<number, number>() };
+  const needByPly = selectorPkg.needByPly;
+  const boostByPly = selectorPkg.boostByPly;
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
   const segments: ReviewMoveSegment[] = [];
@@ -1683,7 +1691,14 @@ export function buildReviewSegments(
           evalCpWhitePov: m.evaluation ?? null,
           wdl: null,
         },
-        { rating: rating ?? DEFAULT_STUDENT_RATING, weaknesses: studentWeaknesses ?? [] },
+        {
+          rating: rating ?? DEFAULT_STUDENT_RATING,
+          weaknesses: studentWeaknesses ?? [],
+          // THE STUDENT TERM FOR THE RANKER — red or grey, raise-only, applied
+          // by `computeImportance` under `rank > 0` so it re-weights a moment a
+          // computer already produced and never manufactures one.
+          momentBoost: boostByPly.get(m.ply) ?? 0,
+        },
         { facts: kept, squares: facetSquares, incoming: facetIncoming },
         // REVIEW IS A WALK: the student asked to be taken through the game, so a
         // quiet moment is a shorter beat, never a skipped one. Gating review on

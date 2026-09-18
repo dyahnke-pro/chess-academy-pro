@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**383 lines · 17 exports · 7 importers · 2 tests · 3 audits**
+**403 lines · 17 exports · 7 importers · 2 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -54,7 +54,7 @@
 
 ### `selectTeaching` (function) — 14 call sites
 - `src/hooks/usePhaseNarration.ts:510`
-- `src/services/coachFeatureService.ts:1154`
+- `src/services/coachFeatureService.ts:1160`
 - `src/services/needCoverage.report.test.ts:60`
 - `src/services/openingGenerator.ts:516`
 - `src/services/openingGenerator.ts:2718`

@@ -29,7 +29,7 @@
 import { Chess, type Color } from 'chess.js';
 import type { CoachSurface } from '../coach/types';
 import { computeNeed, coldStudent, type StudentNeedContext, type NeedVerdict } from './needScore';
-import { matchTacticPattern, boostFor } from './weaknessSignal';
+import { matchTacticPattern, matchTag, boostFor } from './weaknessSignal';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { turningPointCandidates, moveLabel, spokenMoveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
 import { landedTacticTeaching } from './dnaLineNarrator';
@@ -38,6 +38,7 @@ import { structurePlan } from './boardPlan';
 import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
+import { studentMomentBoost } from './studentMomentBoost';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface SelectorPly {
@@ -114,6 +115,13 @@ export interface TeachingPackage {
    *  surface speaks the plan on 'announce' and refers to progress otherwise —
    *  never re-announces. */
   planByPly: ReadonlyMap<number, PlanPly>;
+  /** THE STUDENT TERM FOR THE RANKER, per student ply (David 2026-09-18: "the
+   *  ranking computer decides ... which teachings are important enough to
+   *  say"). RAISE-ONLY and applied under `rank > 0`, so it re-weights a moment
+   *  a computer already produced and never manufactures one. Red (a recorded
+   *  hole) or grey (a posed capability with no record) — see
+   *  `studentMomentBoost`. */
+  boostByPly: ReadonlyMap<number, number>;
 }
 
 export const MAX_MOMENTS = 3;
@@ -163,7 +171,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   const { plies, kind } = input;
   const rating = input.rating ?? DEFAULT_STUDENT_RATING;
   const studentWB: Color = input.studentColor === 'white' ? 'w' : 'b';
-  if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind, needByPly: new Map(), planByPly: new Map() };
+  if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind, needByPly: new Map(), planByPly: new Map(), boostByPly: new Map() };
 
   // 1. Landed tactics, per ply (cheap; the same computer the live beat speaks).
   const landedByPly = new Map<number, string>();
@@ -237,6 +245,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   const student = input.student ?? coldStudent(rating);
   const tacticByPly = new Map<number, string | null>(moments.map((m) => [m.ply, m.tactic] as const));
   const needByPly = new Map<number, NeedVerdict>();
+  const boostByPly = new Map<number, number>();
   for (const p of plies) {
     if (p.playerColor !== input.studentColor) continue;
     const tactic = tacticByPly.get(p.ply) ?? landedByPly.get(p.ply) ?? null;
@@ -261,6 +270,17 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     try {
       posedTags = capabilitiesPosed(p.fenBefore, p.san, p.playerColor).map((c) => c.tag);
     } catch { posedTags = []; }
+    // THE RANKER'S STUDENT TERM. Same tags, same profile, the other direction:
+    // red or grey raises how much this moment is worth saying, and the ranker
+    // decides. Computed here because this is where the board's posed
+    // capabilities are already in hand.
+    const hole = (tactic ? matchTacticPattern(tactic as import('../types/tacticTypes').TacticPatternType, student?.signals ?? []) : null)
+      ?? posedTags.map((t) => matchTag(t, student?.signals ?? [])).find((m) => m) ?? null;
+    boostByPly.set(p.ply, studentMomentBoost({
+      hole,
+      posedTags: posedTags as readonly import('../data/misconceptionTags').MisconceptionTagId[],
+      capabilities: student?.capabilities,
+    }));
     needByPly.set(p.ply, computeNeed({
       ply: p.ply, studentMove: true,
       conceptId: tactic as import('../types/tacticTypes').TacticPatternType | null,
@@ -279,7 +299,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   let planByPly: Map<number, PlanPly>;
   try { planByPly = foldPlans(plies, input.studentColor); } catch { planByPly = new Map(); }
 
-  return { thesis, moments, chain, onThread, kind, needByPly, planByPly };
+  return { thesis, moments, chain, onThread, kind, needByPly, planByPly, boostByPly };
 }
 
 export type ThesisRegister = 'retrospective' | 'present';
