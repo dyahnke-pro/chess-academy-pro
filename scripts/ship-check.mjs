@@ -481,6 +481,17 @@ const GATE_TESTS = [
 // code after it. Runs FIRST because it is the cheapest step (<1s) and because a
 // build started without context should stop before anything else is spent on it.
 runStep('context gate', 'node', ['scripts/surface-map.mjs', '--verify']);
+//
+// THE SAME GATE, ONE LEVEL UP (David 2026-09-18: "You do not miss this step
+// ever again"). The four levels of context are I. FOUNDATION, II. STATE,
+// III. SURFACE, IV. CODE — and III has been ungameable since the line above
+// landed, while II was a promise. A promise is a convention, and this repo's
+// own doctrine is that conventions rot. So level II is DERIVED from the code
+// and verified exactly the way the surface map is: `--verify` regenerates
+// docs/STATE.md and fails the push when the committed copy disagrees with what
+// the code now says. Nothing in it is typed by hand, so it cannot be
+// hand-waved, and a state written before the change cannot survive it.
+runStep('state gate  ', 'node', ['scripts/state-of-build.mjs', '--verify']);
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);
 // PRODUCTION BUILD (2026-07-12, the corpus-bundle incident): typecheck+lint
 // can be green while `npm run build` FAILS — a data JSON inlined into the
