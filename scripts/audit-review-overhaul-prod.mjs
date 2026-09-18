@@ -237,7 +237,17 @@ const run = async () => {
     const getAll = (store) => new Promise((res, rej) => { const t = db.transaction(store, 'readonly'); const rq = t.objectStore(store).getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
     await put('games', { id: gid, pgn, white: g.white, black: g.black, result: g.result, date: '2026.09.03', event: "Let's Play!", eco: g.eco ?? 'B22', whiteElo: 1392, blackElo: 1378, source: 'chesscom', termination: 'resignation', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
     const profs = await getAll('profiles');
-    for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = g.studentSide === 'white' ? g.white : g.black; p.preferences.coachNarration = 'full'; await put('profiles', p); }
+    for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = g.studentSide === 'white' ? g.white : g.black; p.preferences.coachNarration = 'full';
+      // STOP THE AUTO-IMPORT THE LINE ABOVE WOULD TRIGGER (2026-09-18). The
+      // username we seed is a PGN DISPLAY NAME ("Carlsen, M."), so
+      // `autoImportScheduler` fired a real chess.com request for it and the API
+      // answered 410 — a console error this audit then reported as a product
+      // defect. Marking the import just-run uses the scheduler's OWN `isDue`
+      // gate, so nothing is stubbed and the cause is removed rather than the
+      // symptom filtered. Note a VALID username here would be worse, not
+      // better: the audit would import a stranger's games into the profile.
+      p.preferences.lastChessComAutoImportAt = Date.now();
+      p.preferences.lastLichessAutoImportAt = Date.now(); await put('profiles', p); }
     return { profiles: profs.length };
   }, { gid: GID, pgn: PGN, g: GAME }).catch((e) => ({ error: String(e) }));
   log(`[seed] ${JSON.stringify(seed)}`);
@@ -719,7 +729,18 @@ const run = async () => {
   // ACC — board accuracy of every "<piece> on <square>" claim, on the board AFTER
   // that ply (present-tense text only; a projected line is about a future board).
   const PIECE = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
-  const PROJ = /(?:it runs|the line runs|the plan runs|it goes|it continues|their idea runs|Here's how)/i;
+  // 🚨 MATCH THE LEAD-IN GENERICALLY, NOT BY LISTING HALF A UNION (2026-09-18).
+  // This used to spell out "their idea runs" and miss "their threat runs" —
+  // and `coachFeatureService` composes that phrase from a TWO-VALUED union
+  // (`isForcingProjection(line) ? 'threat' : 'idea'`), so the audit covered
+  // exactly half of it. The cost was a FALSE RED that read like the worst class
+  // of product bug: "ply 27: 'pawn on d7' but board has n". The coach was
+  // right — it said "knight on d7" about the live board every time, and
+  // "a passed pawn on d7" only inside a projected line about a FUTURE board.
+  // A red that is wrong in the most alarming way trains the next session to
+  // distrust the whole report, so the pattern now admits any "<their|your|the>
+  // <noun> runs" and a new union member cannot slip past it.
+  const PROJ = /(?:it runs|it goes|it continues|(?:their|your|the)\s+\w+\s+runs|played out from here|Here's how)/i;
   const accFails = [];
   const seatFails = [];
   const tradeFails = [];
