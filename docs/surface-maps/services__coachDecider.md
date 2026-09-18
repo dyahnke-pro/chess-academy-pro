@@ -53,7 +53,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 1 call site
-- `src/services/positionFacts.ts:362`
+- `src/services/positionFacts.ts:381`
 
 ### `CoachDecision` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -96,15 +96,15 @@
 - `src/services/coachDecider.test.ts:64`
 - `src/services/coachDecider.test.ts:69`
 - `src/services/coachDecider.test.ts:73`
-- `src/services/coachFeatureService.ts:1683`
+- `src/services/coachFeatureService.ts:1729`
 - `src/services/liveNeedGate.test.ts:46`
 - `src/services/liveNeedGate.test.ts:52`
 - `src/services/liveNeedGate.test.ts:58`
 - `src/services/liveNeedGate.test.ts:70`
-- `src/services/positionFacts.ts:509`
+- `src/services/positionFacts.ts:545`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1320`
+- `src/services/coachFeatureService.ts:1326`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -114,7 +114,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:463`
+- `src/services/positionFacts.ts:482`
 
 ### `habitForCluster` (function) — 9 call sites
 - `src/services/habitJoin.test.ts:17`

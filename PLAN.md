@@ -229,22 +229,29 @@ INSTRUMENT being believable, or reaches the STUDENT as a wrong/repeated line.
 
 ### A. The loop cannot close (highest — these are the app, not polish)
 
-1. **GREY expires after 5 games** (#65). Unknown-ness is a GLOBAL prior gated on
-   `gamesPlayed < COLD_START_GAMES`, so after game 5 a capability never asked
-   about earns no teaching — the exact ban in the ALGO rule. Needs a PER-TAG
-   prior, which needs `capabilityTags` on every `computeNeed` caller (only
-   `teachingSelector` supplies them; `positionFacts` and `coachFeatureService`
-   pass none). Do NOT just make the prior permanent — need then never vetoes.
-2. **Nothing records CORRECT play** (#25). GREEN can only be reached by
-   `capabilityEvidence`; without a press/no-press capture on critical moments a
-   fixed weakness decays by ABSENCE, never by evidence. This is the half that
-   makes the heat map three-state instead of two.
+1. ✅ **DONE (fe8e50cd3 + c4715f593) — GREY TEACHES, and it feeds the RANKER.**
+   Not the per-tag need prior this item originally described: David corrected the
+   framing ("the ranking computer decides"), and grey went into
+   `computeImportance`'s student term instead, where the `rank > 0` guard makes
+   it structurally unable to manufacture a moment on a quiet ply. RED > GREY >
+   GREEN, MAX not sum. Both lanes feed it. Gate: `studentMomentBoost.test.ts`.
+2. 🟡 **PARTLY — one writer, and the sharpest signal is still missing** (#25).
+   `capabilityEvidence` DOES record `held` rows, but from exactly ONE production
+   writer (`autoAnalyzeGame:139`, post-game analysis). The record type declares
+   four origins (play/review/learn/drill) and one fires: 19 modules record a
+   MISS, 4 record a HOLD. So a capability can go RED from anywhere and can only
+   go GREEN through analysis. The missing piece is press/no-press AT A CRITICAL
+   MOMENT — the purest strength signal there is, and the thing the
+   critical-moment build (below) creates.
 3. **The rating INPUT is still split** (`docs/STATE.md` MODEL): 39 files read
    `currentRating` off the store, 2 read the adaptive estimate, 63 inline
    `?? 1200`. The number is correct at the source now; threading it is the rest.
    Fix the INPUT before tuning any threshold.
-4. **Corpus reach is ZERO on review and endgame** (`docs/STATE.md` SAY). Review
-   is where the diagnosis happens and it cannot reach the teaching.
+4. 🟡 **REVIEW DONE (f2e609313) — ENDGAME STILL ZERO.** Review now splices an
+   exact-position corpus note in `buildReviewSegments` (the producer; the
+   component only renders it), seat-required, board-graded, register-gated,
+   once per game. Measured 14/18 plies retrieve on a real Ruy line with the FULL
+   corpus loaded. `docs/STATE.md` SAY: review 0 -> 1. Endgame remains 0.
 5. **Provenance is not on every weakness signal** (#32) — one shape, all sources,
    so any surface can say "you met this against X thirteen days ago".
 6. **No concept-level spaced retrieval** (#28). SRS is keyed to `openingId` and
