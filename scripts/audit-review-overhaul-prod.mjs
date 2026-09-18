@@ -609,15 +609,19 @@ const run = async () => {
   // student ply there is nothing to aggregate and silence is correct.
   // `flaggedLeads` is populated by the walk above.
   if (flaggedLeads.size === 0) {
-    // 🚨 NOT A PASS. This branch used to report `true` with "n/a — nothing to
-    // aggregate", which is the row DECLINING TO TEST ITSELF: it went green on
-    // every run until the walk happened to flag a ply, and then failed on its
-    // first real evaluation. The seeded Alapin carries two flagged student
-    // moves (the harness reads back "one of your two flagged moves handed over
-    // a tempo"), so zero here means the WALK stopped seeing them, which is a
-    // finding about this instrument and worth the red.
-    await add('RECAP fundamentals-aggregate', false,
-      `the walk recorded NO flagged student ply, but the seeded game has two — this row cannot evaluate itself (end reached=${reachedEnd})`);
+    // 🚨 STILL NOT A SELF-DECLARED n/a. This branch once reported `true` with
+    // "n/a — nothing to aggregate", which is the row DECLINING TO TEST ITSELF.
+    // The replacement then over-corrected into a hard red citing a CONSTANT
+    // ("the seeded Alapin carries two flagged moves") that stopped being true
+    // the day this audit started rotating a fresh game each run — it red-failed
+    // a healthy product on a GM draw with genuinely zero flagged plies.
+    // Neither the walk nor a constant may answer this: `dbFlagged` asks the
+    // ENGINE RECORD, so zero is provably the game's property, and a non-zero
+    // record with an empty walk is still the red this was built for.
+    await add('RECAP fundamentals-aggregate', dbFlagged.n === 0 && reachedEnd,
+      dbFlagged.n === 0
+        ? `nothing to aggregate — the ENGINE RECORD confirms 0 flagged student plies, so silence is the correct recap (end reached=${reachedEnd})`
+        : `the engine record carries ${dbFlagged.n} flagged student ply(s) (${dbFlagged.at.join(', ')}) and the walk recorded NONE — the walk stopped seeing them (end reached=${reachedEnd})`);
   } else {
     await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
   }
@@ -779,6 +783,27 @@ const run = async () => {
   await add('SEAT mover-never-reattributed', seatFails.length === 0, seatFails.length ? seatFails.slice(0, 3).join(' | ') : `every narrated ply keeps its seat (${plyNarr.size} plies)`);
   await add('NOTRADEWIN even-trade-not-profit', tradeFails.length === 0, tradeFails.length ? tradeFails.slice(0, 3).join(' | ') : 'no even trade narrated as material won');
 
+
+  // 🚨 ASK THE ENGINE, NEVER THE WALK. Two rows below (FUNDLEAD, RECAP) used to
+  // conclude "the engine flagged NO student ply" from `flaggedLeads` — which is
+  // populated BY THE WALK, so a walk that stopped seeing flagged plies reported
+  // itself healthy, and RECAP hardcoded "the seeded game has two" from the days
+  // this audit ran ONE fixture. It now rotates a fresh master game every run
+  // (2026-09-17), so a GM draw with genuinely zero flagged plies red-failed a
+  // working product against a constant describing a different game.
+  // The annotation record in Dexie is what the engine actually decided; read it
+  // and let both rows corroborate against it. Zero-in-db + zero-in-walk is a
+  // real property of the game; N-in-db + zero-in-walk is the walk defect the
+  // red was built for.
+  const dbFlagged = await page.evaluate(async ([gid, side]) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    const g = await new Promise((res, rej) => { const t = db.transaction('games', 'readonly'); const rq = t.objectStore('games').get(gid); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    const rows = (g?.annotations ?? []).filter((a) => a.color === side && /inaccuracy|mistake|blunder/i.test(String(a.classification ?? '')));
+    return { n: rows.length, at: rows.slice(0, 6).map((a) => `${a.moveNumber}${side === 'white' ? '.' : '...'}${a.move ?? '?'} ${a.classification}`) };
+  }, [GID, GAME.studentSide]).catch((e) => ({ n: -1, at: [], error: String(e) }));
+  log(`  [engine record] ${dbFlagged.n} flagged student ply(s)${dbFlagged.at.length ? ' — ' + dbFlagged.at.join(', ') : ''}`);
+
   // FUNDLEAD — across the walk, every flagged STUDENT ply the auto-advance
   // passed leads with a fundamentals verdict when one attached; at least one
   // must have (a game with a flagged move and no fundamental anywhere means
@@ -791,8 +816,10 @@ const run = async () => {
   // silent no-op is a failed test — the converse is that an untestable
   // precondition is NOT TESTED, never a defect).
   if (leads.length === 0) {
-    await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', true,
-      'n/a — the engine flagged NO student ply in this game, so there is nothing to lead with (not a product result)');
+    await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', dbFlagged.n === 0,
+      dbFlagged.n === 0
+        ? 'n/a — the ENGINE RECORD confirms 0 flagged student plies in this game, so there is nothing to lead with (not a product result)'
+        : `the engine record carries ${dbFlagged.n} flagged student ply(s) (${dbFlagged.at.join(', ')}) and the walk surfaced NONE — the walk stopped seeing them`);
   } else {
     await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', withFund.length > 0,
       `${withFund.length}/${leads.length} flagged student plies lead with a fundamental — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')}`);
@@ -894,7 +921,7 @@ const run = async () => {
   await page.waitForTimeout(1200);
   log(`  [heap] walk mounted: ${await heapMB()}MB`);
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
-  let blown = false;
+  let blown = null; // null = healthy; otherwise the REASON string this run tripped on
   let onFund2 = false;
   const workerList = async () => { if (!cdp) return []; const r = await Promise.race([cdp.send('Target.getTargets'), new Promise((res) => setTimeout(() => res(null), 4000))]).catch(() => null); return r ? r.targetInfos.filter((t) => t.type === 'worker').map((t) => (t.url || '?').split('/').pop()) : []; };
   for (let i = 0; i < 40 && !blown; i++) {
@@ -908,8 +935,10 @@ const run = async () => {
     // 230 MB of heap). Trip on the census, dump the profile, and get out
     // before the renderer wedges the box.
     if (h > 2500 || h === -1 || wl.length > 40) {
-      blown = true;
-      log(`  [heap] BLOW-UP at ply ${n} (${h}MB, ${wl.length} workers) — dumping profile`);
+      blown = h > 2500 ? `JS heap ${h}MB > 2500MB`
+        : h === -1 ? 'JS heap UNREADABLE (renderer wedged or evaluate timed out)'
+        : `${wl.length} live worker targets > 40 — heap was fine at ${h}MB`;
+      log(`  [heap] BLOW-UP at ply ${n} (${h}MB, ${wl.length} workers) — ${blown} — dumping profile`);
       await dumpProfile('blow-up');
       // WHO spawned them: the app's own audit events since the reopen (captured
       // off the wire, so a 500 from the stream server cannot hide them).
@@ -939,7 +968,14 @@ const run = async () => {
   // green row quoting a number it never read is the exact failure the vacuity
   // check exists to catch, and it masked the neighbouring red below.
   const heapPly = (await readWalkPly(page))?.n ?? null;
-  if (blown) { await add('HEAP reopened-walk-stays-sane', false, 'renderer heap exploded on the reopened walk'); }
+  // 🚨 NAME WHAT TRIPPED, NEVER A GENERIC "EXPLODED". This row printed
+  // "renderer heap exploded on the reopened walk" on a run whose heap sat flat
+  // at 350MB and whose ONLY trip was the worker census (2026-09-18) — sending
+  // the next reader to a heap profile that was 42% idle while the actual
+  // finding (one multi-threaded `stockfish-18-lite.js` behind 69
+  // `stockfish-18-lite.wasm,worker` pthread targets, climbing 4→34→49→70) went
+  // unnamed. The three trip causes are three different bugs; say which.
+  if (blown) { await add('HEAP reopened-walk-stays-sane', false, `tripped on: ${blown}`); }
   else { await dumpProfile('reopened-walk'); await add('HEAP reopened-walk-stays-sane', true, `heap ${await heapMB()}MB at ply ${heapPly ?? 'UNREADABLE'}`); }
   // The reopened walk must actually BE a walk before anything navigates it. A
   // null readout makes `goTo` read 0, click forward 80×, and fail — which is
