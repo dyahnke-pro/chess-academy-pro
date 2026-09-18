@@ -67,11 +67,23 @@ describe('strengthCalibrationService', () => {
   });
 
   describe('calibrateStrength', () => {
-    it('no-ops when already calibrated', async () => {
+    // 🔴 THE CONTRACT CHANGED 2026-09-18, and these tests changed with it rather
+    // than being annotated. What they used to assert — "no-ops when already
+    // calibrated" and "asks for the picker for coach-games signal too (only
+    // imports auto-calibrate)" — encoded the defect as intended behaviour: the
+    // rating froze at first boot, and a student with no imports waited forever
+    // on a picker that was deleted on 2026-09-02.
+
+    it('re-estimates even when already calibrated — the freeze is gone', async () => {
       const profile = buildUserProfile({ id: 'main', strengthCalibrated: true, currentRating: 1234 });
-      const { result } = await calibrateStrength(profile);
-      expect(result).toEqual({ calibrated: true, needsPicker: false, rating: 1234, source: 'already' });
-      expect(estimateMock).not.toHaveBeenCalled();
+      await db.profiles.put(profile);
+      setEstimate({ rating: 1400, source: 'coach-games', sampleSize: 12 });
+
+      const { result, profile: out } = await calibrateStrength(profile);
+
+      expect(estimateMock, 'gating on strengthCalibrated froze the rating at first boot').toHaveBeenCalled();
+      expect(result).toMatchObject({ calibrated: true, source: 'coach-games', rating: 1400 });
+      expect(out.currentRating).toBe(1400);
     });
 
     it('seeds BOTH ratings silently from imported games', async () => {
@@ -86,7 +98,7 @@ describe('strengthCalibrationService', () => {
 
       const { result, profile: out } = await calibrateStrength(profile);
 
-      expect(result).toMatchObject({ calibrated: true, needsPicker: false, source: 'imported-games', rating: 1550 });
+      expect(result).toMatchObject({ calibrated: true, source: 'imported-games', rating: 1550 });
       expect(out.currentRating).toBe(1550);
       expect(out.puzzleRating).toBe(1550);
       const persisted = await db.profiles.get('main');
@@ -94,25 +106,41 @@ describe('strengthCalibrationService', () => {
       expect(persisted?.strengthCalibrated).toBe(true);
     });
 
-    it('asks for the picker when the only signal is the profile/default (no imports)', async () => {
-      const profile = buildUserProfile({ id: 'main', strengthCalibrated: false });
-      await db.profiles.put(profile);
-      setEstimate({ rating: 800, source: 'profile', sampleSize: 0 });
-
-      const { result } = await calibrateStrength(profile);
-      expect(result).toEqual({ calibrated: false, needsPicker: true });
-
-      const persisted = await db.profiles.get('main');
-      expect(persisted?.strengthCalibrated).toBe(false);
-    });
-
-    it('asks for the picker for coach-games signal too (only imports auto-calibrate)', async () => {
-      const profile = buildUserProfile({ id: 'main', strengthCalibrated: false });
+    it('APPLIES a coach-games estimate — a measurement is not a guess', async () => {
+      // The running K=32 ELO over the student's own coach games was computed on
+      // every boot and thrown away, so a student who never imported played the
+      // default opponent for life while the app knew better.
+      const profile = buildUserProfile({ id: 'main', currentRating: 800, strengthCalibrated: false });
       await db.profiles.put(profile);
       setEstimate({ rating: 1100, source: 'coach-games', sampleSize: 6 });
 
-      const { result } = await calibrateStrength(profile);
-      expect(result.needsPicker).toBe(true);
+      const { result, profile: out } = await calibrateStrength(profile);
+
+      expect(result).toMatchObject({ calibrated: true, source: 'coach-games', rating: 1100 });
+      expect(out.currentRating).toBe(1100);
+      expect((await db.profiles.get('main'))?.currentRating).toBe(1100);
+    });
+
+    it('writes NOTHING when the only signal is a GUESS (profile / default)', async () => {
+      // The half of the 2026-09-02 rule that was always right and stays.
+      const profile = buildUserProfile({ id: 'main', currentRating: 800, strengthCalibrated: false });
+      await db.profiles.put(profile);
+      setEstimate({ rating: 800, source: 'profile', sampleSize: 0 });
+
+      const { result, profile: out } = await calibrateStrength(profile);
+
+      expect(result).toMatchObject({ calibrated: false, source: 'no-signal' });
+      expect(out).toBe(profile);
+      expect((await db.profiles.get('main'))?.strengthCalibrated).toBe(false);
+    });
+
+    it('does not write when the measured rating has not moved', async () => {
+      const profile = buildUserProfile({ id: 'main', currentRating: 1100, strengthCalibrated: true });
+      await db.profiles.put(profile);
+      setEstimate({ rating: 1100, source: 'coach-games', sampleSize: 9 });
+
+      const { profile: out } = await calibrateStrength(profile);
+      expect(out, 'a Dexie write per boot for an unchanged value is pure cost').toBe(profile);
     });
   });
 

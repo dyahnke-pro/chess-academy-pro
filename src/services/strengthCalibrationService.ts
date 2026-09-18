@@ -20,7 +20,7 @@
  * imports) — that is correct; they are different skills.
  */
 import { db } from '../db/schema';
-import { getPlayerRatingEstimate } from './playerRatingService';
+import { getPlayerRatingEstimate, type RatingSource } from './playerRatingService';
 import type { UserProfile } from '../types';
 
 /** Sane Elo bounds for a stored baseline. Lichess puzzles bottom out
@@ -87,16 +87,28 @@ export async function applyStrength(
   const patch = {
     currentRating: clamped,
     puzzleRating: clamped,
+    // 🔒 BRIDGED, NOT REMOVED. This flag is PERSISTED in Dexie on live devices
+    // and `DashboardPage` reads it, so it is still written — but it no longer
+    // GATES re-estimation. Gating on it froze the rating at first boot: once
+    // true, `calibrateStrength` returned early forever, so the running K=32 ELO
+    // over the student's coach games was computed and never consumed. It now
+    // means "has ever been calibrated", which is what its name says.
     strengthCalibrated: true,
   };
   await db.profiles.update(profile.id, patch);
   return { ...profile, ...patch };
 }
 
+/**
+ * 🔴 `needsPicker` IS GONE (2026-09-18). It is deleted rather than left as a
+ * false field, per the correction rule: the picker it waited for was removed on
+ * 2026-09-02, and `App.tsx` guarded on `!result.needsPicker`, so the branch did
+ * NOTHING. A student with no imported games therefore re-estimated on every
+ * boot and threw the answer away.
+ */
 export type CalibrationResult =
-  | { calibrated: true; needsPicker: false; rating: number; source: 'imported-games' }
-  | { calibrated: true; needsPicker: false; rating: number; source: 'already' }
-  | { calibrated: false; needsPicker: true };
+  | { calibrated: true; rating: number; source: RatingSource }
+  | { calibrated: false; rating: number; source: 'no-signal' };
 
 /**
  * Run at boot. If the profile is already calibrated, no-op. Otherwise try
@@ -109,22 +121,28 @@ export type CalibrationResult =
 export async function calibrateStrength(
   profile: UserProfile,
 ): Promise<{ result: CalibrationResult; profile: UserProfile }> {
-  if (profile.strengthCalibrated) {
-    return {
-      result: { calibrated: true, needsPicker: false, rating: profile.currentRating, source: 'already' },
-      profile,
-    };
-  }
-
   const estimate = await getPlayerRatingEstimate();
-  if (estimate.source === 'imported-games' && estimate.rating > 0) {
+
+  // MEASURED, NOT GUESSED — that is the whole distinction, and it is why the
+  // 2026-09-02 rule ("with no import we write NOTHING … rather than a guessed
+  // band") was right about a GUESS and wrong about a MEASUREMENT.
+  // `getPlayerRatingEstimate` ranks its own sources, so by the time one of
+  // these two arrives it is the best evidence that exists: imported games, or a
+  // running K=32 ELO over the student's real coach games. The `profile` and
+  // `default` sources are NOT evidence — they are the number we already hold
+  // and the number we made up — so they still write nothing.
+  if ((estimate.source === 'imported-games' || estimate.source === 'coach-games') && estimate.rating > 0) {
+    // Idempotent: the common boot is "nothing moved", and a Dexie write per
+    // boot for an unchanged value is pure cost.
+    if (clampRating(estimate.rating) === profile.currentRating) {
+      return { result: { calibrated: true, rating: profile.currentRating, source: estimate.source }, profile };
+    }
     const updated = await applyStrength(profile, estimate.rating);
     return {
-      result: { calibrated: true, needsPicker: false, rating: updated.currentRating, source: 'imported-games' },
+      result: { calibrated: true, rating: updated.currentRating, source: estimate.source },
       profile: updated,
     };
   }
 
-  // No real signal — the first-run picker must supply the band.
-  return { result: { calibrated: false, needsPicker: true }, profile };
+  return { result: { calibrated: false, rating: profile.currentRating, source: 'no-signal' }, profile };
 }

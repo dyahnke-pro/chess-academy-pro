@@ -345,17 +345,22 @@ export function App(): JSX.Element {
         // spend synchronously. Dormant unless the gate is live + non-Pro.
         void useFreeTierStore.getState().hydrate();
 
-        // Difficulty is FULLY ADAPTIVE — no calibration step, no forced rating
-        // seed (David 2026-09-02: "remove strength calibration → go fully
-        // adaptive"). When the player has IMPORTED games, calibrateStrength
-        // still silently applies their REAL rating (the honest signal). With no
-        // import we write NOTHING: the opponent plays the shared default
-        // (studentPlayingRating → 1200) and difficulty tunes from real signals
-        // (imports + puzzle results) rather than a guessed band. No pop-up, no
-        // picker, no seed.
+        // Difficulty is FULLY ADAPTIVE — no calibration step, no picker (David
+        // 2026-09-02: "remove strength calibration → go fully adaptive").
+        //
+        // 🔴 The sentence that used to sit here — "with no import we write
+        // NOTHING … rather than a guessed band" — is DELETED, not annotated,
+        // because it stopped being true of what we now have. It was right that
+        // a GUESSED band must never be written. But the estimate also carries a
+        // running K=32 ELO over the student's own coach games, which is a
+        // MEASUREMENT, and refusing that is what left every non-importing
+        // student on the default rating for life while re-computing the real
+        // one on every boot and discarding it (David 2026-09-18: "the coach can
+        // match in real time as they play on the board for the first time").
+        // Guesses still write nothing; measurements now land.
         try {
-          const { result, profile: calibrated } = await calibrateStrength(profile);
-          if (!result.needsPicker && calibrated !== profile) {
+          const { profile: calibrated } = await calibrateStrength(profile);
+          if (calibrated !== profile) {
             setActiveProfile(calibrated);
           }
         } catch (e) {
