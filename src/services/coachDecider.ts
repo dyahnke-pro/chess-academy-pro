@@ -58,8 +58,10 @@ export interface StudentContext {
   weaknesses: readonly WeaknessSignal[];
   /** The N2 need verdict for THIS ply, when the surface computed one. Absent
    *  means "no need data" — which is NOT the same as "no need": a cold student
-   *  must never meet a mute coach, so absent reads as speak. */
-  need?: { speak: boolean } | null;
+   *  must never meet a mute coach, so absent reads as speak.
+   *
+   *  🚨 REQUIRED, and `null` is a real answer. See `momentBoost`. */
+  need: { speak: boolean } | null;
   /** HOW MUCH THIS STUDENT'S OWN HISTORY RAISES THIS MOMENT — `boostFor(match)`
    *  for the best-matching fact here, computed by the SURFACE with the existing
    *  fine-grained join (`matchTacticPattern(conceptId) ?? matchClauseKind(kind)`).
@@ -72,8 +74,24 @@ export interface StudentContext {
    *  `Record<ImportanceTier, cluster>` lookup — a fourth, coarser join beside
    *  three existing ones, on a lossy key. See narrationImportance.)
    *
-   *  Absent or 0 = no data / a hole the lifecycle marks `fixed`. RAISE-ONLY. */
-  momentBoost?: number;
+   *  0 = no data / a hole the lifecycle marks `fixed`. RAISE-ONLY.
+   *
+   * 🚨 REQUIRED, and this is the third field in this codebase made required for
+   * the same reason. Both student terms were optional, and review simply never
+   * passed `momentBoost` — so on the surface where diagnosis happens, a
+   * student's own recorded holes could ORDER facts and could not raise a single
+   * moment. Nothing failed; the field was absent, the default was 0, and the
+   * student model was silently not consulted by the computer that decides what
+   * is worth saying.
+   *
+   * That is the same defect shape as `NeedPlyInput.clauseKind` (the live lane
+   * never passed it, killing the largest term in the need score) and
+   * `posedTags` (pre-filtered by a guard that belonged to the other consumer).
+   * Three instances, all found by hand, all invisible to every prod audit.
+   * An optional student term is a lane's licence to forget the student, so the
+   * door no longer offers one: a caller must ANSWER, even if the answer is 0.
+   */
+  momentBoost: number;
 }
 
 /** The facts a surface computed at this moment, with the geometry coupled from

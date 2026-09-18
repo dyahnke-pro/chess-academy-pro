@@ -78,3 +78,33 @@ describe('the wire reaches the ranker on both lanes', () => {
       .not.toMatch(/\}\)\.needByPly;/);
   });
 });
+
+describe('the door cannot offer a lane a way to forget the student', () => {
+  /**
+   * THREE INSTANCES OF ONE DEFECT, all found by hand in one session, all
+   * invisible to every prod audit (audits run fresh devices, where the
+   * cold-start prior masks the whole student model):
+   *   NeedPlyInput.clauseKind  — the live lane never passed it, killing the
+   *                              largest term in the need score.
+   *   StudentContext.momentBoost — review never passed it, so a student's own
+   *                              recorded holes could not raise a moment.
+   *   StudentContext.need      — review never passed it either.
+   * Every one was an OPTIONAL field silently defaulting. The type is the gate;
+   * this asserts the type stays that way.
+   */
+  it('both student terms are REQUIRED on StudentContext', () => {
+    const src = readFileSync('src/services/coachDecider.ts', 'utf8');
+    expect(src, 'need must be required — null is the answer, absence is not')
+      .toMatch(/\n {2}need: \{ speak: boolean \} \| null;/);
+    expect(src, 'momentBoost must be required — 0 is the answer, absence is not')
+      .toMatch(/\n {2}momentBoost: number;/);
+    expect(src).not.toMatch(/\n {2}need\?:/);
+    expect(src).not.toMatch(/\n {2}momentBoost\?:/);
+  });
+
+  it('clauseKind is REQUIRED on NeedPlyInput', () => {
+    const src = readFileSync('src/services/needScore.ts', 'utf8');
+    expect(src).toMatch(/\n {2}clauseKind: string \| null;/);
+    expect(src).not.toMatch(/\n {2}clauseKind\?:/);
+  });
+});

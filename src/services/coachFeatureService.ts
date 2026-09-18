@@ -1698,6 +1698,20 @@ export function buildReviewSegments(
           // by `computeImportance` under `rank > 0` so it re-weights a moment a
           // computer already produced and never manufactures one.
           momentBoost: boostByPly.get(m.ply) ?? 0,
+          // 🚨 DELIBERATELY null, and this is why the field is required.
+          //
+          // Review DOES gate on need — narrowly, at `quietOpeningPly` below:
+          // only a quiet student OPENING ply with no flag, no causal lead and
+          // no fundamental can be silenced by a low score. Handing `need` to
+          // the door instead would apply the veto to EVERY ply, because step 2
+          // is posture-blind, and that is the change that once cut a 46-ply
+          // walk to six.
+          //
+          // So this is a real disagreement with the one-door doctrine, not an
+          // oversight: the door's need step wants to be posture-aware the way
+          // its importance step already is. Until it is, review keeps the
+          // narrow gate it was tuned with and says so here.
+          need: null,
         },
         { facts: kept, squares: facetSquares, incoming: facetIncoming },
         // REVIEW IS A WALK: the student asked to be taken through the game, so a
