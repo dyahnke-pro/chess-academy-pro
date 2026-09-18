@@ -86,27 +86,68 @@ trust it. That is the cheapest check in this repo and it found three defects.
       write nothing. `needsPicker` deleted; `strengthCalibrated` bridged (still
       persisted for `DashboardPage`, no longer freezes re-estimation).
 
-## Open, ranked — what still blocks the picture
+## ROADBLOCKS — every open item in coach (2026-09-18)
 
-1. **GREY still expires after 5 games** (task #65). The only thing speaking for
-   unknown-ness is a GLOBAL prior gated on `gamesPlayed < COLD_START_GAMES`. After
-   game 5 a capability never asked about earns no teaching — the ALGO rule's exact
-   ban. Fixing it needs the prior to be PER-TAG, which needs `capabilityTags` on
-   every `computeNeed` caller (today only `teachingSelector` supplies them;
-   `positionFacts` and `coachFeatureService` pass none). Do NOT just make the prior
-   permanent — that scores every ply 100, need never vetoes, and the coach talks on
-   every student ply forever.
-2. **The rating INPUT is still split** (`docs/STATE.md` MODEL). 39 files read
-   `currentRating` off the store, 2 read the adaptive estimate, 63 inline `?? 1200`.
-   The number is now correct at the source; threading it is the remaining half.
-   CLAUDE.md: fix the INPUT before tuning any threshold.
-3. **Corpus reach is ZERO on review and endgame** (`docs/STATE.md` SAY). Review is
-   where the diagnosis happens.
-4. **Two shared positions go silent in game 2** (task #68) — n=1 evidence; WIDEN
-   THE SAMPLE before fixing.
-5. `tsconfig.app.json` excludes every test file (task #61), so test type errors are
-   invisible — this session shipped two test literals that only a runtime failure
-   would have caught.
+Three buckets. A thing is a roadblock if it stops the LOOP closing, stops an
+INSTRUMENT being believable, or reaches the STUDENT as a wrong/repeated line.
+
+### A. The loop cannot close (highest — these are the app, not polish)
+
+1. **GREY expires after 5 games** (#65). Unknown-ness is a GLOBAL prior gated on
+   `gamesPlayed < COLD_START_GAMES`, so after game 5 a capability never asked
+   about earns no teaching — the exact ban in the ALGO rule. Needs a PER-TAG
+   prior, which needs `capabilityTags` on every `computeNeed` caller (only
+   `teachingSelector` supplies them; `positionFacts` and `coachFeatureService`
+   pass none). Do NOT just make the prior permanent — need then never vetoes.
+2. **Nothing records CORRECT play** (#25). GREEN can only be reached by
+   `capabilityEvidence`; without a press/no-press capture on critical moments a
+   fixed weakness decays by ABSENCE, never by evidence. This is the half that
+   makes the heat map three-state instead of two.
+3. **The rating INPUT is still split** (`docs/STATE.md` MODEL): 39 files read
+   `currentRating` off the store, 2 read the adaptive estimate, 63 inline
+   `?? 1200`. The number is correct at the source now; threading it is the rest.
+   Fix the INPUT before tuning any threshold.
+4. **Corpus reach is ZERO on review and endgame** (`docs/STATE.md` SAY). Review
+   is where the diagnosis happens and it cannot reach the teaching.
+5. **Provenance is not on every weakness signal** (#32) — one shape, all sources,
+   so any surface can say "you met this against X thirteen days ago".
+6. **No concept-level spaced retrieval** (#28). SRS is keyed to `openingId` and
+   covers MOVES, not ideas.
+7. **A chat-ask unlocks any capability but the reveal is not recorded** (#34) —
+   asking is evidence, and it is being thrown away.
+
+### B. The instruments are not believable (a green here means nothing)
+
+8. **The review audit's verdict is not reproducible** (#70) — three runs on one
+   bundle gave three different red sets, because the background deep dive is a
+   race the harness neither waits on nor reports.
+9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
+   on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
+10. **`tsconfig.app.json` excludes every test file** (#61), so test type errors
+    are invisible until runtime.
+11. **The GothamChess pro-rep audit fails on prod** (#58) — header selector and
+    walkthrough click both miss.
+
+### C. The student hears something wrong or repeated
+
+12. **"the queen takes d5 is about as good"** (#51) — the close-call stem renders
+    a SAN as a noun phrase. Fired 3x in one 5-ply run.
+13. **Stems are ROLLED, not rotated** (#67) — `Math.random` in 5 services, so
+    variation is not resume-safe or testable. Same complaint as 12; fix together.
+14. **Curated beats re-announce the same move on consecutive plies** (#60).
+15. **The voiced corpus is in the wrong register** (#22) — 1,146 he/his, 521
+    first-person, 81 fragments.
+16. **Read-position: voice fires but the banner never appears** (#59).
+17. **The plan lane says the vague thing** while the computer beside it has the
+    concrete one (#64) — structures AND pieces.
+18. **Two shared positions go silent in game 2** (#68) — n=1; WIDEN THE SAMPLE
+    before fixing.
+19. Open questions, not yet defects: mistake-puzzle narration and Rule 3 (#23);
+    "chat input never usable" after the player-games lane (#19); caching
+    `voiceFacts` so a repeat does not bill twice (#35); the Alapin tape's
+    remaining prose defects (#36); a pinned review need-coverage baseline (#69);
+    the corpus study of his teaching structures vs what we compute (#42); the
+    running REMOVAL CANDIDATES list (#33).
 
 ## Next-session pickup
 
