@@ -13,6 +13,7 @@
 // as the second, and treated every rating the same.
 
 import { criticalityThresholds } from './criticalityScan';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 /** A position is decided when |eval| clears this (white-POV cp). */
 const DECIDED_CP = 600;
@@ -105,7 +106,7 @@ function swingPawns(s: TurningPointSegmentLike): number | null {
  */
 export function turningPointCandidates(
   segments: ReadonlyArray<TurningPointSegmentLike>,
-  rating = 1500,
+  rating = DEFAULT_STUDENT_RATING,
 ): TurningPointCandidate[] {
   const minSwing = minSwingPawns(rating);
   const costed: TurningPointCandidate[] = [];
@@ -124,7 +125,7 @@ export function turningPointCandidates(
 
 export function buildTurningPointQuestion(
   segments: ReadonlyArray<TurningPointSegmentLike>,
-  rating = 1500,
+  rating = DEFAULT_STUDENT_RATING,
 ): TurningPointQuestion | null {
   const bySwing = turningPointCandidates(segments, rating);
   if (bySwing.length < TURNING_POINT_MIN_CANDIDATES) return null;

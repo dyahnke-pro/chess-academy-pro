@@ -21,6 +21,7 @@
  */
 import type { Color } from 'chess.js';
 import type { CausalChain, CausalNode } from './causalChain';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export type CausalRegister = 'review' | 'learn';
 
@@ -186,7 +187,7 @@ function tightLine(chain: CausalChain, student: Color): string {
  */
 export function renderCausalChain(chain: CausalChain | null, opts: RenderOptions): string[] {
   if (!chain || chain.nodes.length < 2) return [];
-  const rating = opts.rating ?? 1500;
+  const rating = opts.rating ?? DEFAULT_STUDENT_RATING;
   const depth = depthFor(rating);
   const student = opts.studentColor;
 

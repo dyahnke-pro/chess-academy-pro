@@ -38,6 +38,7 @@ import { structurePlan } from './boardPlan';
 import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
 import { capabilitiesShown } from './capabilityEvidence';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface SelectorPly {
   /** 1-based ply. */
@@ -160,7 +161,7 @@ export function rankSwingCandidates<T extends { ply: number; swingPawns: number 
  */
 export function selectTeaching(input: SelectorInput): TeachingPackage {
   const { plies, kind } = input;
-  const rating = input.rating ?? 1500;
+  const rating = input.rating ?? DEFAULT_STUDENT_RATING;
   const studentWB: Color = input.studentColor === 'white' ? 'w' : 'b';
   if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind, needByPly: new Map(), planByPly: new Map() };
 

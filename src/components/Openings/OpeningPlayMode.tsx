@@ -38,6 +38,7 @@ import type { OpeningRecord, OpeningVariation, OpeningPlayResult, CoachDifficult
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 import { GameChatPanel } from '../Coach/GameChatPanel';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 interface OpeningPlayModeProps {
   opening: OpeningRecord;
@@ -51,7 +52,7 @@ type PlayPhase = 'pregame' | 'opening' | 'middlegame' | 'postgame';
 export function OpeningPlayMode({ opening, customLine, startFen, onExit }: OpeningPlayModeProps): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const { settings } = useSettings();
-  const playerRating = activeProfile?.currentRating ?? 1420;
+  const playerRating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
   // THE STUDENT MODEL (Phase 1) — loaded once per session, re-ranks the computed
   // "Why?" briefing toward the holes this student keeps falling in. Inert until
   // loaded (empty ref). Held in a ref so it never re-renders the play board.

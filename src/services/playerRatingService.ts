@@ -20,8 +20,10 @@
 import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import type { GameRecord } from '../types';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
-export const DEFAULT_RATING = 1200;
+/** Re-exported so there is ONE literal in the app — see `DEFAULT_STUDENT_RATING`. */
+export const DEFAULT_RATING = DEFAULT_STUDENT_RATING;
 const COACH_GAMES_MIN_SAMPLE = 5;
 const K_FACTOR = 32;
 

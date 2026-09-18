@@ -18,7 +18,7 @@
 
 import { Chess } from 'chess.js';
 import type { Color } from 'chess.js';
-import { coreRatingTier } from './ratingBands';
+import { coreRatingTier, DEFAULT_STUDENT_RATING } from './ratingBands';
 
 /** One engine candidate at a position — white-POV centipawns (+ = White better;
  *  mates folded into cp by the evaluate implementation). */
@@ -119,7 +119,7 @@ export async function scanCriticality(
   // Only ONE legal move → a literal only-move (no runner-up to compare against).
   const gapCp = legalCount === 1 ? Infinity : runnerUp ? best.moverCp - runnerUp.moverCp : Infinity;
 
-  const { rating = 1500 } = opts;
+  const { rating = DEFAULT_STUDENT_RATING } = opts;
   const th = criticalityThresholds(rating);
   const criticalCp = opts.criticalCp ?? th.critical;
   const onlyMoveCp = opts.onlyMoveCp ?? th.onlyMove;

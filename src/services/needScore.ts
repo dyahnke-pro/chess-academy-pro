@@ -35,6 +35,7 @@ import { bookDepartureIsCostly, type BookDepartureRow } from './bookDepartureWea
 import type { TacticPatternType } from '../types/tacticTypes';
 import type { CapabilityProfile } from './capabilityEvidence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 /** Below this many fully-analysed games the student has no data — the prior teaches. */
 export const COLD_START_GAMES = 5;
@@ -77,7 +78,7 @@ export interface StudentNeedContext {
 
 /** The empty context — a brand-new student. Every data term is zero; the
  *  cold-start prior carries the coach. */
-export function coldStudent(rating = 1500): StudentNeedContext {
+export function coldStudent(rating = DEFAULT_STUDENT_RATING): StudentNeedContext {
   return { rating, gamesPlayed: 0, signals: [], bookDepartures: [], capabilities: new Map() };
 }
 

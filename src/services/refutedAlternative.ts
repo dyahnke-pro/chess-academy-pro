@@ -25,6 +25,7 @@ import { computePvLine, type PvEngine, type PvLine } from './pvPlayback';
 import { conceptForLine, type ComputedConcept } from './conceptEngine';
 import { criticalityThresholds } from './criticalityScan';
 import { stockfishEngine } from './stockfishEngine';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface AlternativeCandidate {
   san: string;
@@ -111,7 +112,7 @@ export function renderRefutedAlternative(f: Omit<RefutedAlternative, 'text'>, ta
  * — the same scale as every other importance read; never a second bar).
  */
 export async function refutedAlternative(input: RefutedAlternativeInput): Promise<RefutedAlternative | null> {
-  const rating = input.rating ?? 1500;
+  const rating = input.rating ?? DEFAULT_STUDENT_RATING;
   const engine = input.engine ?? stockfishEngine;
   const depth = input.depth ?? 12;
   const maxPlies = input.maxPlies ?? 6;

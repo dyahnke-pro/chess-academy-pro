@@ -1229,7 +1229,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!walkNarration || moves.length === 0) return;
     if (walkPlayback.currentPly !== moves.length) return;
     turningAskedRef.current = true; // one ask per game, even when unanswerable
-    const q = buildTurningPointQuestion(walkNarration.segments, playerRating ?? 1500);
+    const q = buildTurningPointQuestion(walkNarration.segments, playerRating ?? undefined);
     if (!q) return; // clean game / single obvious moment — no question to ask
     // THE ONE SELECTOR reads the whole game (unified-coach N1). Its thesis is
     // the reveal — WITHHELD until the student commits (the honesty contract):
@@ -1237,7 +1237,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // landed there and the chain's root cause when one links the moments.
     turningThesisRef.current = '';
     try {
-      const pkg = selectTeachingForSegments(walkNarration.segments, playerColor, playerRating ?? 1500, 'review');
+      const pkg = selectTeachingForSegments(walkNarration.segments, playerColor, playerRating ?? undefined, 'review');
       if (pkg.thesis.kind === 'turned' && pkg.thesis.ply === q.answer.ply) {
         turningThesisRef.current = renderThesis(pkg.thesis, registerFor('review'));
       }

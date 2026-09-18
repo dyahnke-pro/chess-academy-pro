@@ -35,6 +35,7 @@ import { conceptForBoard } from './conceptEngine';
 import { liveMethodBeatFor, habitIsOwed } from './methodBeat';
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -261,7 +262,7 @@ function severityFromGap(gapCp: number, rating: number): Severity {
 export async function computePositionFacts(input: PositionFactsInput): Promise<PositionFactsResult> {
   const { fen, moverColor, studentColor, analysis } = input;
   const opponentColor: 'w' | 'b' = studentColor === 'w' ? 'b' : 'w';
-  const rating = input.rating ?? 1500;
+  const rating = input.rating ?? DEFAULT_STUDENT_RATING;
 
   // OPENING PHASE — PositionFacts is a MIDDLEGAME live supply. The opening is
   // owned by corpus notes + baked narration (Tiers 1–2); a perturbation "best

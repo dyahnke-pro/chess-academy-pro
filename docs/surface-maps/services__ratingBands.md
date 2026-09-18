@@ -4,21 +4,36 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**155 lines · 9 exports · 7 importers · 1 tests · 0 audits**
+**180 lines · 10 exports · 22 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3549) — names `explorerBandFor`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3717) — names `explorerBandFor`, `ratingBands`
 
 ## Who calls in
 
+- `src/components/Coach/CoachAnalysePage.tsx`
+- `src/components/Coach/ExplainPositionSessionView.tsx`
+- `src/components/Openings/OpeningPlayMode.tsx`
 - `src/services/amateurPlayCache.ts`
+- `src/services/causalChainVoice.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/coachGameEngine.ts`
+- `src/services/conceptEngine.ts`
 - `src/services/criticalityScan.ts`
 - `src/services/hintRegister.ts`
+- `src/services/narrationImportance.ts`
+- `src/services/needScore.ts`
+- `src/services/oneStudentRating.test.ts`
+- `src/services/playerRatingService.ts`
+- `src/services/positionFacts.ts`
 - `src/services/ratingBands.test.ts`
+- `src/services/refutedAlternative.ts`
+- `src/services/reviewTurningPoint.ts`
 - `src/services/slipDetector.ts`
+- `src/services/teachingSelector.ts`
 - `src/services/theoryDeparture.ts`
+- `src/services/whyBestMove.ts`
 
 ## Exports and every call site
 
@@ -38,6 +53,9 @@
 - `src/services/ratingBands.test.ts:26`
 - `src/services/ratingBands.test.ts:27`
 - `src/services/slipDetector.ts:79`
+
+### `DEFAULT_STUDENT_RATING` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ExplorerBand` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -72,6 +90,7 @@
 
 ## Tests
 
+- `src/services/oneStudentRating.test.ts`
 - `src/services/ratingBands.test.ts`
 
 ## Audits that reach it

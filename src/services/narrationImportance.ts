@@ -21,6 +21,7 @@
 // (3) the standing threat (bar flat NOW, piece hangs next move), (4) the quiet
 // lesson (plan in a calm position). The composition below catches all four.
 import { criticalityThresholds, type CriticalMoment } from './criticalityScan';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface ImportanceSignals {
   /** Prospective decision-leverage — `scanCriticality`'s read of THIS position
@@ -115,7 +116,7 @@ export function isContested(
  */
 export function computeImportance(
   s: ImportanceSignals,
-  rating = 1500,
+  rating = DEFAULT_STUDENT_RATING,
   studentBoost = 0,
 ): ImportanceVerdict {
   const contested = isContested(s.evalCpWhitePov, s.wdl);

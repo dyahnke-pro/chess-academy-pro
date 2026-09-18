@@ -53,6 +53,7 @@ import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -1142,7 +1143,7 @@ export function buildReviewSegments(
     ? (!studentNeed || studentNeed.gamesPlayed < COLD_START_GAMES)
       ? new Map(moves.slice(0, usable)
           .filter((mv) => (mv.ply % 2 === 1 ? 'white' : 'black') === playerColor)
-          .map((mv) => [mv.ply, computeNeed({ ply: mv.ply, studentMove: true }, studentNeed ?? coldStudent(rating ?? 1500))] as const))
+          .map((mv) => [mv.ply, computeNeed({ ply: mv.ply, studentMove: true }, studentNeed ?? coldStudent(rating ?? DEFAULT_STUDENT_RATING))] as const))
       : (() => {
         try {
           return selectTeaching({
@@ -1468,7 +1469,7 @@ export function buildReviewSegments(
           : '';
         if (chain && !causalChainsSeen.has(chainSig)) {
           causalChainsSeen.add(chainSig);
-          const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? 1500 });
+          const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? DEFAULT_STUDENT_RATING });
           if (lines.length) causalLead = lines.join(' ');
           // RECURRENCE RECAP (Phase 1) — when the student ERRED into this chain
           // (missed a win / allowed a shot) AND it maps to a hole they keep
@@ -1677,7 +1678,7 @@ export function buildReviewSegments(
           evalCpWhitePov: m.evaluation ?? null,
           wdl: null,
         },
-        { rating: rating ?? 1500, weaknesses: studentWeaknesses ?? [] },
+        { rating: rating ?? DEFAULT_STUDENT_RATING, weaknesses: studentWeaknesses ?? [] },
         { facts: kept, squares: facetSquares, incoming: facetIncoming },
         // REVIEW IS A WALK: the student asked to be taken through the game, so a
         // quiet moment is a shorter beat, never a skipped one. Gating review on
@@ -2778,7 +2779,7 @@ async function augmentWithProjections(
   scope: 'full' | 'mistakes' = 'full',
   /** The student's rating — scales how DEEP the spelled threat lines run
    *  (Phase 2: deeper for stronger, via pvDepthForRating). Default 1500. */
-  rating = 1500,
+  rating = DEFAULT_STUDENT_RATING,
 ): Promise<void> {
   // How many plies to spell a deep threat line — rating-scaled, capped at the
   // reliable window (Phase 2, David 2026-09-07: "spell the lines out for

@@ -3705,17 +3705,31 @@ running K=32 ELO over coach games (≥5 played) → the stored profile rating �
 1200. `calibrateStrength` runs that at boot from `App.tsx`; the SERVICE is
 alive, only the UI picker died.
 
-🚨 **AND THE TEACHING LAYER DOES NOT READ IT (measured 2026-09-17).**
-`getPlayerRating` is imported by **3** files, all of them about Stockfish
-STRENGTH. **22** files read `activeProfile.currentRating` straight off the
-store instead — including `weaknessSpine` — with three different fallbacks
-scattered across them: `?? 1200` (32 sites), `?? 1420` (4), `?? 1500` (2).
-`CoachTeachPage` alone uses five different rating expressions.
+✅ **THE THREE-DEFAULTS HALF IS FIXED (2026-09-18).** This section used to end
+"an unrated student is 1200 in Learn, 1500 in review, 1420 elsewhere — three
+different people, same student, same session", and that was true: re-measured on
+2026-09-18 it was **63 sites at 1200, 15 at 1500, 5 at 1420**, twelve of the
+1500s inside real COMPUTERS (criticality thresholds, PV depth, the causal chain,
+the teaching selector, refuted-alternative, positionFacts, whyBestMove) and one
+of the 1420s handing the model the sentence "Student rating: 1420" as a fact
+about the person.
 
-So an unrated student is **1200 in Learn, 1500 in review, 1420 elsewhere** —
-three different people, same student, same session. Every rating-scaled
-decision (criticality thresholds, PV depth, alert sensitivity, explorer bands)
-hangs off whichever number its call site happened to read.
+There is now ONE literal: `DEFAULT_STUDENT_RATING` in `ratingBands.ts`, which is
+a true leaf (zero imports) — deliberately NOT in `playerRatingService`, because
+that pulls in the db and the store and a leaf fact-computer must not import
+those to learn what "unknown" means. `playerRatingService.DEFAULT_RATING`
+derives from it. Gate: `oneStudentRating.test.ts`, which blames by STATEMENT —
+a line defaulting a GAME's `whiteElo` is a different question and is out of
+scope, and a default at master strength (`?? 2400`, the master-reach drill
+target) is a TARGET, not a claim about an unknown student.
+
+🚨 **STILL OPEN — THE SOURCE half.** `getPlayerRating` has ZERO production
+callers (its one call site is its own test), and the teaching layer still reads
+`activeProfile.currentRating` off the store rather than the adaptive estimate.
+That is now much less harmful than it was, because `calibrateStrength` was fixed
+the same night to re-estimate on every boot and write any MEASURED source into
+`currentRating` — so the store field is the adaptive number rather than a
+first-boot fossil. Threading the estimate itself is the remaining work.
 
 **THE RULE.** A surface does not pick a rating. It reads the ONE adaptive
 estimate and threads it down. One source, one default, no inline `?? 1200`.
@@ -3730,12 +3744,24 @@ first, then the thresholds.
 
 **Do NOT confuse it with the explorer BUCKET.** Lichess's explorer only accepts
 fixed rating buckets, so bucketing the adaptive number is forced by an external
-API, not a design choice — but there must be ONE bucketer. Today there are three
-(`ratingBandFor` in `amateurPlayCache` AND in `theoryDeparture` — a name
-collision with different returns — plus `explorerBandForElo`), and they
-disagree: a 1300 is shown what 1400–1600 players do, a 1900 what 1600–1800 do,
-and one returns a single bucket where the others return a pair. The band must
-CONTAIN the student's rating.
+API, not a design choice — and there IS one bucketer.
+
+🔴 **CORRECTED 2026-09-18 — the paragraph here claimed three disagreeing
+bucketers and that "a 1300 is shown what 1400–1600 players do, a 1900 what
+1600–1800 do". THAT IS NO LONGER TRUE and is deleted rather than annotated.**
+All three names now delegate to the single `ratingBands.explorerBandFor`
+(`theoryDeparture.ratingBandFor` and `coachGameEngine.explorerBandForElo` return
+its `.band`; `amateurPlayCache.ratingBandFor` IS it) — `theoryDeparture` says so
+in its own comment: "the hand-written ladder this replaced disagreed with it at
+1300 and 1900." Verified empirically: 1300 → `1200,1400`, 1900 → `1800,2000`,
+both CONTAIN the rating.
+
+The only non-containing cases are the two EDGES — a 2600 gets `2200,2500` and an
+800 gets `1000,1200` — and those are forced by Lichess's fixed bucket list, not
+defects. Do not "fix" the clamping. What survives as real rot is cosmetic but
+worth knowing: two different exports are still both named `ratingBandFor`, with
+different return types (a string vs `{band, bandLabel}`), which is an easy wrong
+import to make.
 
 ### 🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).
 

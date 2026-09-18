@@ -397,7 +397,7 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
     const studentColor: 'w' | 'b' = opts.studentSide
       ? (opts.studentSide === 'white' ? 'w' : 'b')
       : (fen.split(' ')[1] === 'w' ? 'w' : 'b'); // live board: the mover's line
-    const depth = pvDepthForRating(opts.rating ?? 1500);
+    const depth = pvDepthForRating(opts.rating ?? DEFAULT_STUDENT_RATING);
     for (const c of conceptForLine({
       fen,
       uci: line.moves.slice(0, depth),
@@ -490,7 +490,7 @@ function importanceFromSwing(input: LineInput): number | null {
   if (input.rootEvalCp == null || input.lineEvalCp == null) return null;
   const whiteSwing = input.lineEvalCp - input.rootEvalCp;
   const moverSwing = input.studentColor === 'w' ? whiteSwing : -whiteSwing;
-  const t = criticalityThresholds(input.rating ?? 1500);
+  const t = criticalityThresholds(input.rating ?? DEFAULT_STUDENT_RATING);
   if (moverSwing >= t.onlyMove) return 0.95;
   if (moverSwing >= t.critical) return 0.88;
   if (moverSwing >= t.notable) return 0.8;
@@ -641,6 +641,7 @@ export function conceptForSolution(
 
 // ─── POSITIONAL concept source (§E) ──────────────────────────────────────────
 import { boardConcepts } from './boardConcepts';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 /** Positional-tag → invariant (computed vocabulary; general + reusable). Only the
  *  board-PROVABLE tags boardConcepts emits — never intent judgements. */

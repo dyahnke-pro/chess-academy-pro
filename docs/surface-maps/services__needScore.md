@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**269 lines · 11 exports · 11 importers · 5 tests · 0 audits**
+**270 lines · 11 exports · 11 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3658) — names `COLD_START_GAMES`, `familiarity`, `needScore`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3754) — names `familiarity`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3780) — names `familiarity`
 
 ## Who calls in
 
@@ -39,21 +39,22 @@
 ### `StudentNeedContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `coldStudent` (function) — 14 call sites
+### `coldStudent` (function) — 15 call sites
 - `src/hooks/useStudentNeed.ts:35`
 - `src/services/capabilityRead.test.ts:23`
-- `src/services/coachFeatureService.ts:1145`
-- `src/services/coachFeatureService.ts:4021`
+- `src/services/coachFeatureService.ts:1146`
+- `src/services/coachFeatureService.ts:4022`
 - `src/services/needCoverage.report.test.ts:88`
 - `src/services/needScore.test.ts:22`
 - `src/services/needScore.test.ts:38`
+- `src/services/oneStudentRating.test.ts:70`
 - `src/services/openingGenerator.ts:2400`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:58`
 - `src/services/reviewNeedGate.test.ts:80`
 - `src/services/studentNeedLoader.ts:128`
-- `src/services/teachingSelector.ts:236`
+- `src/services/teachingSelector.ts:237`
 
 ### `NeedPlyInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -81,7 +82,7 @@
 - `src/services/capabilityRead.test.ts:56`
 - `src/services/capabilityRead.test.ts:58`
 - `src/services/capabilityRead.test.ts:67`
-- `src/services/coachFeatureService.ts:1145`
+- `src/services/coachFeatureService.ts:1146`
 - `src/services/needCoverage.report.test.ts:78`
 - `src/services/needScore.test.ts:22`
 - `src/services/needScore.test.ts:38`
@@ -96,8 +97,8 @@
 - `src/services/needScore.test.ts:82`
 - `src/services/needScore.test.ts:83`
 - `src/services/needScore.test.ts:88`
-- `src/services/positionFacts.ts:495`
-- `src/services/teachingSelector.ts:258`
+- `src/services/positionFacts.ts:496`
+- `src/services/teachingSelector.ts:259`
 
 ## Tests
 

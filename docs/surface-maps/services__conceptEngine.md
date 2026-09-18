@@ -4,11 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**709 lines · 19 exports · 21 importers · 7 tests · 25 audits**
+**710 lines · 19 exports · 21 importers · 7 tests · 25 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5406) — names `conceptEngine`
+- **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:5619) — names `conceptEngine`
 
 ## Who calls in
 
@@ -155,7 +156,7 @@
 - `src/services/conceptEngine.test.ts:199`
 - `src/services/conceptEngine.test.ts:217`
 - `src/services/liveTacticsContext.ts:98`
-- `src/services/positionFacts.ts:439`
+- `src/services/positionFacts.ts:440`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -169,7 +170,7 @@
 - `src/services/puzzleConceptExplanation.ts:111`
 - `src/services/puzzleConceptHint.ts:110`
 - `src/services/puzzleGenerator.ts:206`
-- `src/services/refutedAlternative.ts:144`
+- `src/services/refutedAlternative.ts:145`
 - `src/services/tacticTypeUnification.test.ts:57`
 
 ### `ConceptForSolutionOptions` (interface) — 0 call sites
@@ -190,7 +191,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7147`
+- `src/components/Coach/CoachTeachPage.tsx:7136`
 - `src/services/dnaLineNarrator.ts:175`
 - `src/services/dnaLineNarrator.ts:206`
 - `src/services/dnaLineNarrator.ts:242`

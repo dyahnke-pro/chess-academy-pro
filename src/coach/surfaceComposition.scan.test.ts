@@ -65,7 +65,26 @@ const INFRA = new Set([
   // "It computes no chess fact" is exactly the sentence a cheat would write
   // too, so it is CHECKED.
   'learnMemory',
+  // `ratingBands` is the same SHAPE as the learnMemory entry above, for the same
+  // stated reason: counting it would punish the move this gate exists to
+  // encourage. Three components each carried their own hardcoded unrated-student
+  // default (1420, 1420, 1420) and now share ONE constant — the import count rose
+  // while the coupling FELL, because three independent wrong numbers became one
+  // source of truth.
+  //
+  // Its claim is narrower and stronger than "computes no chess fact": EVERY
+  // export takes a NUMBER. `coreRatingTier`, `explorerBandFor`,
+  // `DEFAULT_STUDENT_RATING` and the `ADAPTIVE_DECIDERS` catalogue never see a
+  // board. That is checked by NUMERIC_TABLES below, not taken on trust.
+  'ratingBands',
 ]);
+
+/** INFRA entries that claim to take NUMBERS ONLY — never a board. Checked below.
+ *  NB the CHESS_WORDS scan is the wrong instrument for these: `ratingBands`
+ *  contains the word "tactic" inside a documentation STRING describing what a
+ *  decider answers. Prose about chess is not reasoning about chess — the same
+ *  correction the `standingFactMemory`/fen note records. */
+const NUMERIC_TABLES = ['ratingBands'];
 
 /** The INFRA entries that claim to be pure memory, checked below. */
 const MEMORY_HOLDERS = ['standingFactMemory', 'learnMemory'];
@@ -80,6 +99,9 @@ const MEMORY_HOLDERS = ['standingFactMemory', 'learnMemory'];
  *  what proves a computer is REASONING about pieces, eval or tactics. So the
  *  list bans that, and the zero-imports check below carries the rest of the
  *  weight (a memory holder that wanted a real fact would have to import one). */
+/** A board-shaped parameter: what a numbers-only table must never take. */
+const BOARD_SHAPED = /\b(?:fen|san|square|board|position|Chess)\b/i;
+
 const CHESS_WORDS =
   /\b(?:Chess|pawn|knight|bishop|rook|queen|king|castl|capture|checkmate|check\b|tactic|eval|centipawn|material|threat|attack|blunder)\w*/i;
 
@@ -171,6 +193,22 @@ describe('surface composition — the coach/third-coach divergence, measured', (
     for (const c of ['positionFacts', 'conceptEngine', 'moveFundamentals', 'weaknessSpine',
       'causalChain', 'lookaheadPlan', 'groundedAnswer', 'playCommentary', 'liveTacticsContext']) {
       expect(INFRA.has(c), `${c} is a fact computer and must not be in INFRA`).toBe(false);
+    }
+  });
+
+  it('the NUMERIC_TABLES infra entries take numbers, never a board', () => {
+    for (const name of NUMERIC_TABLES) {
+      const f = join(ROOT, 'services', `${name}.ts`);
+      const src = readFileSync(f, 'utf8');
+      expect(
+        (src.match(/^import /gm) ?? []).length,
+        `${name} must import nothing — a table that wanted a real fact would have to`,
+      ).toBe(0);
+      const signatures = (src.match(/^export (?:function|const|interface|type)[^\n{]*/gm) ?? []).join('\n');
+      expect(
+        BOARD_SHAPED.test(signatures),
+        `${name} exports something board-shaped, so it is a COMPUTER, not infra:\n${signatures}`,
+      ).toBe(false);
     }
   });
 });

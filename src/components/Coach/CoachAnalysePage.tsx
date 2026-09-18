@@ -20,6 +20,7 @@ import { SENTENCE_END_RE, unwrapSpineError } from '../../services/sanitizeCoachT
 import { logAppAudit } from '../../services/appAuditor';
 import type { StockfishAnalysis } from '../../types';
 import type { TacticsLiveContext } from '../../coach/types';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -95,7 +96,7 @@ export function CoachAnalysePage(): JSX.Element {
         `Top engine candidates:`,
         candidateLines,
         '',
-        `Student rating: ${activeProfile?.currentRating ?? 1420}.`,
+        `Student rating: ${activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING}.`,
         activeProfile?.badHabits.filter((h) => !h.isResolved).length
           ? `Active weaknesses: ${activeProfile.badHabits.filter((h) => !h.isResolved).map((h) => h.description).join('; ')}.`
           : 'No active weaknesses on file.',
@@ -200,7 +201,7 @@ export function CoachAnalysePage(): JSX.Element {
       `Student question: ${question}`,
       `Position FEN: ${game.fen}`,
       `Engine eval: ${evalText}.`,
-      `Student rating: ${activeProfile?.currentRating ?? 1420}.`,
+      `Student rating: ${activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING}.`,
       '',
       `Answer in 2-4 sentences. Stay grounded in the position.`,
     ].join('\n');

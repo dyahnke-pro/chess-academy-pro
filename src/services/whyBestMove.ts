@@ -16,6 +16,7 @@ import { explainBestMoveGrounded } from './groundedAnswer';
 import { computePositionFacts, clauseText } from './positionFacts';
 import { positionTeachingWhy, groundedMoveWhy } from './groundedMoveWhy';
 import type { WeaknessSignal } from './weaknessSignal';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface WhyBestMoveInput {
   fen: string;
@@ -86,7 +87,7 @@ export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<strin
       moverColor: sc,
       studentColor: sc,
       analysis,
-      rating: input.rating ?? 1500,
+      rating: input.rating ?? DEFAULT_STUDENT_RATING,
       ...(input.prevEvalCpWhitePov != null ? { prevEvalCpWhitePov: input.prevEvalCpWhitePov } : {}),
       ...(input.studentWeaknesses ? { studentWeaknesses: input.studentWeaknesses } : {}),
     });

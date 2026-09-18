@@ -39,6 +39,31 @@ export function coreRatingTier(rating: number | undefined | null): RatingTier {
 /** Lichess explorer rating buckets. A bucket labelled 1600 holds games by
  *  players rated 1600–1799, so the label is the FLOOR of the band. 2500 is the
  *  explorer's top bucket. */
+/**
+ * 🔒 ONE NUMBER FOR AN UNRATED STUDENT — the whole app, every surface.
+ *
+ * David 2026-09-17, emphatic: "An unrated student is a different person on each
+ * tab. NO!" Measured 2026-09-18, he was describing something real: the
+ * student's rating fell back to 1200 in 63 places, 1500 in twelve COMPUTERS
+ * (criticality thresholds, PV depth, the causal chain, the teaching selector,
+ * refuted-alternative, positionFacts, whyBestMove) and 1420 in five more —
+ * including a prompt that handed the model the sentence "Student rating: 1420"
+ * as though it were a fact about the person.
+ *
+ * Every rating-scaled decision hangs off whichever number its call site
+ * happened to type, so the same unrated student met a different coach on every
+ * tab. The point is NOT that 1200 is the best constant — `ratingBands` explains
+ * below that CAPACITY and SUPPORT scale in OPPOSITE directions, so no single
+ * value is "more teaching" everywhere. The point is that there is one student,
+ * so there is one number.
+ *
+ * It lives HERE because this module is a true leaf (zero imports).
+ * `playerRatingService`, which owns the adaptive estimate, pulls in the db and
+ * the store — so a leaf fact-computer must never import it just to learn what
+ * "unknown" means.
+ */
+export const DEFAULT_STUDENT_RATING = 1200;
+
 const EXPLORER_BUCKETS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const;
 
 export interface ExplorerBand {

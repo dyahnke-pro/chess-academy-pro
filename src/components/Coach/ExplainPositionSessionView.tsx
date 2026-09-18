@@ -31,6 +31,7 @@ import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import type { StockfishAnalysis } from '../../types';
 import type { TacticsLiveContext } from '../../coach/types';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 const START_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -118,7 +119,7 @@ export function ExplainPositionSessionView({
           `Top engine candidates:`,
           candidateLines,
           '',
-          `Student rating: ${activeProfile?.currentRating ?? 1420}.`,
+          `Student rating: ${activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING}.`,
           '',
           `Explain in 4-6 sentences: assessment, plans, tactics to watch for.`,
         ].join('\n');
@@ -213,7 +214,7 @@ export function ExplainPositionSessionView({
         `Student question: ${question}`,
         `Position FEN: ${targetFen}`,
         `Engine eval: ${evalText}.`,
-        `Student rating: ${activeProfile?.currentRating ?? 1420}.`,
+        `Student rating: ${activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING}.`,
         '',
         `Answer in 2-4 sentences. Stay grounded in the position.`,
       ].join('\n');
