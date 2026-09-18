@@ -84,8 +84,25 @@ ranking computer:
 - **RED** — repeated failure. Most teaching, most narration.
 - **GREEN** — PROVEN held (`capabilityEvidence`: the board POSED the question and
   the student ANSWERED it — both halves computed). The ranker may go QUIET here.
-- **GREY** — never asked. NOT the same as green; absent ≠ mastered. Still earns
-  teaching, at lower urgency than red.
+- **GREY** — never asked. NOT the same as green; absent ≠ mastered.
+
+🚨 **GREY MEANS TEACH IT — AN UNRATED PLAYER GETS THE FULL CAPABILITIES OF THE
+DETECTORS (David 2026-09-18, correcting a session that had grey as "lower
+urgency than red"): "An unrated player gets treated with the full capabilities
+of the detectors!"** From move one, the most liberal narration pattern, assuming
+the student knows nothing. Nothing is throttled, because there is nothing to
+throttle against — a rating is not evidence about what they know.
+
+**THIS REPLACES THE "COLD-START PRIOR IS THE RATING BAND" FRAMING, and DELETES
+the need for it.** A fresh install is 100% GREY, and grey teaches — so the
+liberal cold-start pattern falls out of the heat map instead of being a special
+case bolted on the front. There is no separate prior to tune and no band to pick.
+
+**The rating's real job is STRENGTH, not volume** — how hard the Stockfish
+opponent plays. It must never decide how much the coach SAYS. A session that
+finds itself feeding a rating into a narration gate has the wrong input: the
+question is always what the student's own record says, and when the record is
+empty the answer is TEACH.
 
 Green is what the app cannot say today. Once it can, silence becomes a computed
 verdict instead of a guess.
