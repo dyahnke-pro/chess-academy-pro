@@ -74,6 +74,38 @@ const prose = (l) => l.getCapturedEvents()
 const summaries = (l) => l.getCapturedEvents()
   .map((e) => `${e.kind ?? '?'} :: ${String(e.summary ?? '').slice(0, 140)}`);
 
+/**
+ * What was said, KEYED BY THE POSITION IT WAS SAID ON.
+ *
+ * 🚨 WHY NOT BY PLY (David 2026-09-18: "Sounds like it's not deterministic").
+ * The coach is a rating-matched Stockfish opponent, and it is nondeterministic
+ * ON PURPOSE — twice over: `Skill Level` injects noise into move choice, and
+ * the search is TIME-boxed (`moveTimeMs`), so the depth it reaches moves with
+ * machine load. Four runs from the identical position gave four different
+ * continuations. That is correct for an opponent and fatal for a diff.
+ *
+ * So comparing game 1 to game 2 by ply INDEX compares different boards, and
+ * "absent in game 2" collapses two unrelated meanings: the memory suppressed
+ * it, or that tactic simply was not on that board. It made this probe flip red
+ * and green across runs of one build.
+ *
+ * Keying on the FEN fixes it at the root: only positions BOTH games actually
+ * reached are compared, so the engine's freedom to play a different move stops
+ * being noise in the measurement. The forced opening plies both games share
+ * give a real sample; the divergent middlegame simply drops out.
+ */
+const saidByFen = (l, fromIndex) => {
+  const byFen = new Map();
+  for (const e of l.getCapturedEvents().slice(fromIndex)) {
+    const fen = typeof e.fen === 'string' ? e.fen : null;
+    const text = e.kind === 'coach-narration-spoken' ? (e.narrationText ?? e.summary) : null;
+    if (!fen || !text) continue;
+    if (!byFen.has(fen)) byFen.set(fen, []);
+    byFen.get(fen).push(String(text));
+  }
+  return byFen;
+};
+
 const readPlacement = (page) => page.evaluate(() => {
   const out = {};
   document.querySelectorAll('[data-square]').forEach((sq) => {
@@ -134,6 +166,7 @@ async function playInPlace(page, listener, label) {
   const sansStart = committed(listener).length;
   const proseStart = prose(listener).length;
   const evStart = summaries(listener).length;
+  const rawStart = listener.getCapturedEvents().length;
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.waitFor({ state: 'visible', timeout: 30_000 });
   await input.pressSequentially(ASK, { delay: 12 });
@@ -205,9 +238,13 @@ async function playInPlace(page, listener, label) {
   }
   const said = prose(listener).slice(proseStart);
   const events = summaries(listener).slice(evStart);
+  const byFen = saidByFen(listener, rawStart);
   console.log(`[${label}] ${chess.history().length} plies — ${chess.history().join(' ')}`);
   console.log(`[${label}] spoke ${said.length} line(s)`);
-  return { started: true, plies: chess.history().length, said, events, pgn: chess.pgn() };
+  return {
+    started: true, plies: chess.history().length, said, events, pgn: chess.pgn(),
+    byFen: Object.fromEntries(byFen),
+  };
 }
 
 async function main() {
@@ -238,8 +275,8 @@ async function main() {
   let tts = 0;
   page.on('request', (r) => { if (/\/api\/tts/.test(r.url())) tts += 1; });
 
-  let g1 = { started: false, said: [], events: [] };
-  let g2 = { started: false, said: [], events: [] };
+  let g1 = { started: false, said: [], events: [], byFen: {} };
+  let g2 = { started: false, said: [], events: [], byFen: {} };
   try {
     // ONE navigation. Everything after this is the same mount.
     await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
@@ -258,31 +295,34 @@ async function main() {
       `${g2.said.length} spoken lines in game 2 (game 1: ${g1.said.length})`,
     );
 
-    // The per-teaching probes: each rides a DIFFERENT ref that nothing reset.
+    // ── THE CONTROLLED COMPARISON: MATCHED POSITIONS ONLY ─────────────────
+    //
+    // Only boards BOTH games reached. The engine's freedom to pick a different
+    // move then costs the measurement nothing, because a position it never
+    // visited is simply not in the sample.
+    const shared = Object.keys(g1.byFen ?? {}).filter((f) => f in (g2.byFen ?? {}));
+    record(
+      'D0. the two games share enough positions to compare at all',
+      shared.length >= 3,
+      `${shared.length} positions reached by BOTH games (g1 spoke on `
+      + `${Object.keys(g1.byFen ?? {}).length}, g2 on ${Object.keys(g2.byFen ?? {}).length})`,
+    );
+
     for (const t of TEACHINGS.filter((x) => !x.split)) {
-      const in1 = g1.said.filter((l) => t.re.test(l));
-      const in2 = g2.said.filter((l) => t.re.test(l));
-      // Only meaningful where game 1 actually taught it. If it did not, the
-      // probe is INCONCLUSIVE, and says so rather than passing vacuously.
-      if (in1.length === 0) {
-        console.log(`[diag] ${t.id}: game 1 never taught it — nothing to compare`);
+      const hits = (g, f) => (g.byFen?.[f] ?? []).filter((l) => t.re.test(l)).length;
+      const taughtIn1 = shared.filter((f) => hits(g1, f) > 0);
+      if (taughtIn1.length === 0) {
+        console.log(`[diag] ${t.id}: never taught at a SHARED position — nothing to compare`);
         continue;
       }
-      // ⚠️ DIAGNOSTIC, NOT A CONTRACT — and the reason matters.
-      //
-      // These teachings fire in the MIDDLEGAME, where the coach picks its own
-      // moves, so the two games reach DIFFERENT boards (measured: `Bf4 O-O-O
-      // Qe2` in one game, `a3 O-O-O Bb5` in the other). A tactic that exists on
-      // one board and not the other is not a memory failure, and asserting on
-      // it made this probe flip red and green between runs of the SAME build —
-      // which teaches a reader to ignore the row, the worst thing an instrument
-      // can do.
-      //
-      // The opening announcement (D2/D3) IS controlled: it lands inside the
-      // forced opening plies both games share, so it is asserted.
-      console.log(
-        `[diag] ${t.id}: g1=${in1.length} g2=${in2.length}`
-        + (in2.length === 0 ? ' — absent in game 2 (boards diverge; not conclusive)' : ''),
+      const silentIn2 = taughtIn1.filter((f) => hits(g2, f) === 0);
+      record(
+        `D:${t.id}. taught at the SAME positions in game 2 (ref ${t.ref} forgets per game)`,
+        silentIn2.length === 0,
+        silentIn2.length === 0
+          ? `${taughtIn1.length}/${taughtIn1.length} shared positions still taught`
+          : `${silentIn2.length} of ${taughtIn1.length} shared positions went SILENT in game 2 — `
+            + `same board, taught once, then suppressed`,
       );
     }
 
