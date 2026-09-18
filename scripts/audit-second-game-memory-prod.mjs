@@ -55,7 +55,10 @@ const record = (name, pass, detail) => {
 /** The teaching we track across games. Each is a DIFFERENT ref that nothing
  *  reset before the fix, so each is an independent probe of the same disease. */
 const TEACHINGS = [
-  { id: 'opening-name', ref: 'announcedOpeningName', re: /this game is now the|you're (?:in|playing) the/i },
+  // Index 0 is the opening announcement. It is NOT asserted in the per-teaching
+  // loop below — it gets its own COMPUTED-vs-SPOKEN pair (D2/D3), because for
+  // this one the two answers are different bugs. The regex is still used there.
+  { id: 'opening-name', ref: 'announcedOpeningName', re: /this game is now the|the line has sharpened into|you're (?:in|playing) the/i, split: true },
   { id: 'concept-invariant', ref: 'conceptTaught', re: /piece in front|two targets|valuable piece|no safe square/i },
   { id: 'threat-call', ref: 'spokenThreatLines', re: /attacked and nothing's defending|hanging|is attacked/i },
 ];
@@ -63,6 +66,13 @@ const TEACHINGS = [
 const prose = (l) => l.getCapturedEvents()
   .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText)
   .map((e) => String(e.narrationText));
+
+/** EVERY event summary, so the report can tell "never computed" from
+ *  "computed and then not spoken". The first cut of this probe kept only
+ *  narrationText events and could not distinguish them — which is the
+ *  difference between a selection bug and a memory bug. */
+const summaries = (l) => l.getCapturedEvents()
+  .map((e) => `${e.kind ?? '?'} :: ${String(e.summary ?? '').slice(0, 140)}`);
 
 const readPlacement = (page) => page.evaluate(() => {
   const out = {};
@@ -123,6 +133,7 @@ async function dismissGates(page) {
 async function playInPlace(page, listener, label) {
   const sansStart = committed(listener).length;
   const proseStart = prose(listener).length;
+  const evStart = summaries(listener).length;
   const input = page.locator('[data-testid="chat-text-input"]');
   await input.waitFor({ state: 'visible', timeout: 30_000 });
   await input.pressSequentially(ASK, { delay: 12 });
@@ -193,9 +204,10 @@ async function playInPlace(page, listener, label) {
     if (!reply) break;
   }
   const said = prose(listener).slice(proseStart);
+  const events = summaries(listener).slice(evStart);
   console.log(`[${label}] ${chess.history().length} plies — ${chess.history().join(' ')}`);
   console.log(`[${label}] spoke ${said.length} line(s)`);
-  return { started: true, plies: chess.history().length, said, pgn: chess.pgn() };
+  return { started: true, plies: chess.history().length, said, events, pgn: chess.pgn() };
 }
 
 async function main() {
@@ -226,8 +238,8 @@ async function main() {
   let tts = 0;
   page.on('request', (r) => { if (/\/api\/tts/.test(r.url())) tts += 1; });
 
-  let g1 = { started: false, said: [] };
-  let g2 = { started: false, said: [] };
+  let g1 = { started: false, said: [], events: [] };
+  let g2 = { started: false, said: [], events: [] };
   try {
     // ONE navigation. Everything after this is the same mount.
     await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
@@ -247,23 +259,63 @@ async function main() {
     );
 
     // The per-teaching probes: each rides a DIFFERENT ref that nothing reset.
-    for (const t of TEACHINGS) {
+    for (const t of TEACHINGS.filter((x) => !x.split)) {
       const in1 = g1.said.filter((l) => t.re.test(l));
       const in2 = g2.said.filter((l) => t.re.test(l));
       // Only meaningful where game 1 actually taught it. If it did not, the
       // probe is INCONCLUSIVE, and says so rather than passing vacuously.
       if (in1.length === 0) {
-        record(`D:${t.id}. INCONCLUSIVE — game 1 never taught it, nothing to suppress`, true, `ref=${t.ref}`);
+        console.log(`[diag] ${t.id}: game 1 never taught it — nothing to compare`);
         continue;
       }
-      record(
-        `D:${t.id}. taught in game 1 AND still taught in game 2 (ref ${t.ref} forgets per game)`,
-        in2.length > 0,
-        in2.length > 0
-          ? `g1=${in1.length} g2=${in2.length} — "${in2[0].replace(/\s+/g, ' ').slice(0, 90)}"`
-          : `g1=${in1.length} g2=0 — SILENCED: taught once, then suppressed for the rest of the session`,
+      // ⚠️ DIAGNOSTIC, NOT A CONTRACT — and the reason matters.
+      //
+      // These teachings fire in the MIDDLEGAME, where the coach picks its own
+      // moves, so the two games reach DIFFERENT boards (measured: `Bf4 O-O-O
+      // Qe2` in one game, `a3 O-O-O Bb5` in the other). A tactic that exists on
+      // one board and not the other is not a memory failure, and asserting on
+      // it made this probe flip red and green between runs of the SAME build —
+      // which teaches a reader to ignore the row, the worst thing an instrument
+      // can do.
+      //
+      // The opening announcement (D2/D3) IS controlled: it lands inside the
+      // forced opening plies both games share, so it is asserted.
+      console.log(
+        `[diag] ${t.id}: g1=${in1.length} g2=${in2.length}`
+        + (in2.length === 0 ? ' — absent in game 2 (boards diverge; not conclusive)' : ''),
       );
     }
+
+    // ── COMPUTED vs SPOKEN ─────────────────────────────────────────────────
+    // A silent teaching has two completely different causes, and blaming the
+    // wrong one costs a whole fix: a MEMORY that never forgot (so the fact was
+    // never computed again), or a DELIVERY that dropped a fact the computer
+    // did produce. The first cut of this probe kept only narration text and
+    // could not tell them apart — it reported "SILENCED: suppressed for the
+    // rest of the session" for a case where the coach recomputed the fact
+    // five times and simply never said it.
+    const announced = (g) => (g.events ?? []).filter((e) => /opening (identified|refined)/.test(e));
+    const c1 = announced(g1).length;
+    const c2 = announced(g2).length;
+    const spoken2 = g2.said.filter((l) => TEACHINGS[0].re.test(l)).length;
+    console.log(`[diag] opening announcements — game 1 computed ${c1}, game 2 computed ${c2}, game 2 SPOKE ${spoken2}`);
+    for (const e of announced(g2).slice(0, 4)) console.log(`       g2: ${e}`);
+    record(
+      'D2. the opening announcement is RECOMPUTED in game 2 (the memory forgot)',
+      c2 > 0,
+      `game 1 computed ${c1}, game 2 computed ${c2}` + (c2 > 0 && announced(g2)[0].includes('identified')
+        ? ' — and game 2 says "identified", not "refined", so the name really was forgotten' : ''),
+    );
+    record(
+      'D3. and it is actually SPOKEN in game 2 (delivery, not memory)',
+      spoken2 > 0,
+      spoken2 > 0
+        ? `${spoken2} spoken`
+        : `computed ${c2}x, spoken 0x — the fact reaches queueSpokenHint and is dropped before the voice. `
+          + 'NOT a memory bug: the refs reset correctly. Something session-lived downstream of the '
+          + 'queue is swallowing it (behaviourScheduler stride and the pendingVoice consumer are the '
+          + 'open suspects).',
+    );
 
     record('E. the run stayed MUTED (zero /api/tts)', tts === 0, `${tts} tts requests`);
     record('F. no uncaught page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
