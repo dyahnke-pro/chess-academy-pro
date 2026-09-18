@@ -1,44 +1,75 @@
-> **LIVE PLAN (2026-09-15):** the unified-coach build — `docs/plans/2026-09-15-one-coach-need-selector.md` (N0–N6 built; §6b open findings; §7 pickup). The nav-capture plan below landed 2026-09-12 and is kept for its root-cause record.
+> **LIVE PLAN (2026-09-18).** Read AFTER CLAUDE.md (level I) and `docs/STATE.md`
+> (level II, generated — it carries the numbers this file only names). The
+> nav-capture plan that used to sit here landed 2026-09-12 and is archived at
+> `docs/plans/2026-09-12-nav-capture.md`; the unified-coach build is
+> `docs/plans/2026-09-15-one-coach-need-selector.md` (N0–N7 built).
 
-# PLAN — coach-teach navigation capture fix (2026-09-12)
+# PLAN — closing the loop (2026-09-18)
 
-## Disease (root cause, empirically confirmed on prod)
-`/coach/teach`'s `handleSubmit` runs a custom pre-flight that captures any short,
-non-`?`, non-conversational input as an OPENING NAME (bare-name capture,
-`CoachTeachPage.tsx` ~line 4046). It NEVER calls the navigation spine
-(`matchNavigationRoute` / `dispatchCoachTurn`). So navigation/management
-imperatives get fuzzy-matched to an opening.
+## The one disease behind everything landed tonight
 
-Prod probe (2026-09-12, muted):
-- "manage my repertoire" → teaches the Sicilian ❌
-- "take me to my repertoire" → teaches the Sicilian ❌ (nav verb present, never dispatched)
-- "edit my openings" → wrong "did you mean" picker ❌
-- "what does the tactics tab do?" → correct app-help answer ✅ (NOT a bug — stale prior hypothesis)
+**A computer wired ONE WAY ONLY, with prose describing the half that is not
+connected.** Every instance passed every gate, because no gate can check a
+comment against its code. Three found in one session:
 
-## Fix (surgical, low blast radius)
-1. `navigationRouter.ts` — extend `NAV_INTENT_RE` with `manage|edit|organi[sz]e|build`
-   so "manage/edit my repertoire/openings" count as navigation. SAFE: `matchNavigationRoute`
-   requires BOTH a nav verb AND a known route topic (`matchRouteByTopic`), so a
-   verb without a destination ("manage my time", "build an attack") still falls through.
-2. `CoachTeachPage.tsx` — add a navigation-dispatch block after the training-aid
-   block (~line 3656), before opening-name resolution: `matchNavigationRoute(text)`
-   → echo user, ack, audit, `navigate(path)`, return. Mirrors the training-aid dispatch.
-   No change to bare-name capture (downstream re-resolves; navigation now catches the class first).
+| computer | computed | consumed | why nobody noticed |
+|---|---|---|---|
+| opening announcement | 5× per game | **0×** | flag spent at QUEUE time, and the late queue was nulled on most turns |
+| `capabilityEvidence` green | every reviewed game | **0 readers** | `getCapabilityProfile` had 3 call sites, all in its own test |
+| coach-games K=32 ELO | every boot | **0** | only `imported-games` was applied; the rest waited on a picker deleted 2026-09-02 |
 
-## Blast radius
-- `NAV_INTENT_RE` is shared by `matchNavigationRoute` (dispatchCoachTurn nav on ALL surfaces).
-  Verb+topic gate keeps it from over-firing. Covered by `navigationRouter.test.ts`.
-- No change to `matchRouteByTopic` (app-help path untouched — already correct).
+When you find a doc comment describing a system, GREP FOR ITS READER before you
+trust it. That is the cheapest check in this repo and it found three defects.
 
-## Gates / verify
-- `navigationRouter.test.ts` — add the new-verb cases + a "verb w/o topic → null" guard.
-- Re-run the prod probe: all 3 nav phrasings navigate; "what does the tactics tab do?" still app-helps.
-- ship-check + push to branch.
+## Landed (2026-09-18, all on `main`, ship-check green)
 
-## Status
-- [x] root-caused on prod
-- [x] navigationRouter verbs + test (11/11 green)
-- [x] teach nav dispatch (typecheck + ship-check green)
-- [x] shipped to main (60f4e8c) + branch
-- [x] re-audit on prod — 5/5 (3 nav phrasings navigate to /openings; app-help + bare-name regression-clean)
-- [x] audit method locked into CLAUDE.md (exhaustive coach-question routing standard)
+- [x] `7cecd3d5c` — **level II of context is generated + verified.**
+      `scripts/state-of-build.mjs` derives the state from the code;
+      `--verify` runs in ship-check and fails the push when `docs/STATE.md` is
+      stale. Proven non-vacuous (mutate the file → exit 1).
+- [x] `37daa3a25` — **opening name: queueing is not saying.** Split
+      `announcedOpeningName` into `detectedOpeningName` (context, immediate) and
+      `spokenOpeningName` (written only where a voice package kept an `opening`
+      fact). `hasInstantTeaching` → `noteTaughtThisTurn` (`kind === 'note'`);
+      it had been nulling the whole late queue on any substantive fact.
+      Prod-verified: game 2 computed 5→10, **spoken 0→10**.
+- [x] `cc501a2e0` — **the heat map can lower.** `capabilityTerm` in `needScore`
+      is the first term that can reduce need. GREY (absent) and RED (any
+      `broken`) lower nothing; GREEN (held ≥ 3, zero broken) goes quiet. The
+      ply→tag join is COMPUTED by `capabilitiesShown` — the same computer that
+      writes green — so no fourth fact-to-hole mapping was authored.
+      `docs/STATE.md` moved 0 readers → 2.
+- [x] `53b5189c6` — **the adaptive rating never adapted.** `calibrateStrength`
+      re-estimates on every boot and applies any MEASURED source
+      (`imported-games` or `coach-games`); guesses (`profile`, `default`) still
+      write nothing. `needsPicker` deleted; `strengthCalibrated` bridged (still
+      persisted for `DashboardPage`, no longer freezes re-estimation).
+
+## Open, ranked — what still blocks the picture
+
+1. **GREY still expires after 5 games** (task #65). The only thing speaking for
+   unknown-ness is a GLOBAL prior gated on `gamesPlayed < COLD_START_GAMES`. After
+   game 5 a capability never asked about earns no teaching — the ALGO rule's exact
+   ban. Fixing it needs the prior to be PER-TAG, which needs `capabilityTags` on
+   every `computeNeed` caller (today only `teachingSelector` supplies them;
+   `positionFacts` and `coachFeatureService` pass none). Do NOT just make the prior
+   permanent — that scores every ply 100, need never vetoes, and the coach talks on
+   every student ply forever.
+2. **The rating INPUT is still split** (`docs/STATE.md` MODEL). 39 files read
+   `currentRating` off the store, 2 read the adaptive estimate, 63 inline `?? 1200`.
+   The number is now correct at the source; threading it is the remaining half.
+   CLAUDE.md: fix the INPUT before tuning any threshold.
+3. **Corpus reach is ZERO on review and endgame** (`docs/STATE.md` SAY). Review is
+   where the diagnosis happens.
+4. **Two shared positions go silent in game 2** (task #68) — n=1 evidence; WIDEN
+   THE SAMPLE before fixing.
+5. `tsconfig.app.json` excludes every test file (task #61), so test type errors are
+   invisible — this session shipped two test literals that only a runtime failure
+   would have caught.
+
+## Next-session pickup
+
+1. Gain all four levels (CLAUDE.md → `docs/STATE.md` → `surface-map.mjs --changed` → the code).
+2. Take open item 1 or 2 above.
+3. Audits run SEQUENTIALLY and with NOTHING beside them — no typecheck, no vitest.
+   A review run was invalidated twice this session by CPU stacked next to it.
