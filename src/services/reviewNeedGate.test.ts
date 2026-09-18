@@ -40,7 +40,7 @@ describe('review need gate (N2)', () => {
 
   it('a MASTERED line (five correct reps, warm profile, no holes) is silent on the quiet plies', () => {
     const familiar: StudentNeedContext = {
-      rating: 1400, gamesPlayed: 30, signals: [], bookDepartures: [],
+      rating: 1400, gamesPlayed: 30, signals: [], bookDepartures: [], capabilities: new Map(),
       lineReps: new Array(SANS.length).fill(FAMILIAR_REPS),
     };
     const cold = buildReviewSegments(inputs(), 'white', 'Italian Game', false, 1400, [], coldStudent(1400));
@@ -73,7 +73,7 @@ describe('review need gate (N2)', () => {
 // A gate that only covers the path nobody runs is not a gate.
 describe('review need gate (N2) — the UNCAPPED path prod actually runs', () => {
   const familiar: StudentNeedContext = {
-    rating: 1400, gamesPlayed: 40, signals: [], bookDepartures: [],
+    rating: 1400, gamesPlayed: 40, signals: [], bookDepartures: [], capabilities: new Map(),
     lineReps: new Array(SANS.length + 2).fill(FAMILIAR_REPS),
   };
   it('a mastered line goes quiet on the student\'s own book plies', () => {

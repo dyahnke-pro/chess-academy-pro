@@ -33,6 +33,8 @@ import type { WeaknessSignal } from './weaknessSignal';
 import { matchClauseKind, matchTacticPattern, boostFor, MAX_WEAKNESS_BOOST } from './weaknessSignal';
 import { bookDepartureIsCostly, type BookDepartureRow } from './bookDepartureWeakness';
 import type { TacticPatternType } from '../types/tacticTypes';
+import type { CapabilityProfile } from './capabilityEvidence';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 /** Below this many fully-analysed games the student has no data — the prior teaches. */
 export const COLD_START_GAMES = 5;
@@ -58,12 +60,25 @@ export interface StudentNeedContext {
    *  fewer than a handful of games back either number. */
   openingScore?: number | null;
   overallScore?: number | null;
+  /**
+   * THE POSITIVE HALF — what this student has PROVEN they can do.
+   *
+   * 🚨 Required, and empty is a real answer. Until 2026-09-18 this module
+   * mentioned the capability model THREE TIMES IN PROSE and read it ZERO times:
+   * `coldStartPrior`'s own comment justifies its value "under the capability
+   * model", and nothing was ever connected. A doc comment describing a system
+   * that does not exist is the same defect as a comment describing a flag that
+   * means something else — both were found the same night.
+   *
+   * ABSENT FROM THE MAP MEANS UNKNOWN — never mastery, never a hole.
+   */
+  capabilities: CapabilityProfile;
 }
 
 /** The empty context — a brand-new student. Every data term is zero; the
  *  cold-start prior carries the coach. */
 export function coldStudent(rating = 1500): StudentNeedContext {
-  return { rating, gamesPlayed: 0, signals: [], bookDepartures: [] };
+  return { rating, gamesPlayed: 0, signals: [], bookDepartures: [], capabilities: new Map() };
 }
 
 export interface NeedPlyInput {
@@ -78,6 +93,19 @@ export interface NeedPlyInput {
   clauseKind?: string | null;
   /** The ply lies on the game's causal thread (selector `onThread`). */
   onThread?: boolean;
+  /**
+   * The capabilities this ply actually DEMONSTRATES, from `capabilitiesShown` —
+   * the same computer that WRITES the green record, used in the other
+   * direction. That is the dual-use rule, and it is why no fourth
+   * fact-to-hole mapping is authored here: the join is computed from the board,
+   * not typed into a table.
+   *
+   * Empty/absent ⇒ the board did not pose a question we can name, so nothing is
+   * lowered. Note `capabilitiesShown` already returns [] for a move that cost a
+   * pawn or more, which is what makes it STRUCTURALLY impossible for green to
+   * quiet a ply the student just blundered — no guard required.
+   */
+  capabilityTags?: readonly MisconceptionTagId[];
 }
 
 export interface NeedVerdict {
@@ -150,6 +178,55 @@ function weaknessTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number
   return score > 0 ? { score, reason: `weakness: ${match.clusterId} (${match.lifecycleStatus ?? 'open'})` } : { score: 0, reason: null };
 }
 
+/** Held records needed before a capability counts as PROVEN. One clean move is
+ *  not mastery; this is a BAR (admit anything at or above it, however many) and
+ *  never a cap on what is recorded — G4.5. */
+export const HELD_FOR_PROVEN = 3;
+
+/**
+ * THE POSITIVE TERM — the only one that can LOWER need, and the first evidence
+ * of the positive the model has ever had.
+ *
+ * The heat map has three states and the app could only ever say two of them.
+ * `capabilityEvidence` has been writing `held` rows from game review, and
+ * `getCapabilityProfile` had THREE call sites, all inside its own test — so
+ * success was recorded and nothing consumed it. Every data term was therefore
+ * RAISE-ONLY: the coach could get louder about you and never quieter, and
+ * silence stayed a guess instead of a computed verdict.
+ *
+ * THE THREE STATES, and which one each branch is:
+ *  • GREY (absent from the map) → 0. Never asked is NOT mastered, so nothing is
+ *    lowered and the other terms carry the ply. This is the branch the
+ *    ALGO-BASED rule is about: a change that makes the coach quieter on MISSING
+ *    data is wrong, so absence must be inexpressible as evidence.
+ *  • RED (any `broken` row) → 0. The negative half already raises through
+ *    `weaknessTerm`; green may not argue with a recorded failure.
+ *  • GREEN (held ≥ HELD_FOR_PROVEN, zero broken) → a negative score.
+ *
+ * It cannot silence a blunder, and that is STRUCTURAL rather than guarded:
+ * `capabilityTags` comes from `capabilitiesShown`, which returns [] for a move
+ * costing a pawn or more, so a ply the student got wrong carries no tags to
+ * lower with.
+ */
+function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
+  if (!p.capabilityTags?.length || ctx.capabilities.size === 0) return { score: 0, reason: null };
+  const proven: string[] = [];
+  for (const tag of p.capabilityTags) {
+    const e = ctx.capabilities.get(tag);
+    if (!e) continue;                          // GREY — never asked, never lowered
+    if (e.broken > 0) continue;                // RED — the negative half owns this
+    if (e.held < HELD_FOR_PROVEN) continue;    // seen, not yet proven
+    proven.push(`${tag} (${e.held} held)`);
+  }
+  if (proven.length === 0) return { score: 0, reason: null };
+  // One bar's worth of quiet per proven capability, so two independent proofs
+  // about the same ply are quieter than one. Bounded by the clamp in
+  // `computeNeed`; it can reach 0 but never negative, and it never crosses over
+  // into raising.
+  const score = -Math.min(NEED_THRESHOLD, proven.length * 25);
+  return { score, reason: `proven: ${proven.join(', ')}` };
+}
+
 function unfamiliarityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
   if (!ctx.lineReps) return { score: 0, reason: null };
   const f = familiarity(ctx.lineReps[p.ply - 1]);
@@ -176,7 +253,7 @@ export function computeNeed(p: NeedPlyInput, ctx: StudentNeedContext): NeedVerdi
   if (!p.studentMove) return { score: 0, speak: false, reasons: ['opponent move'], prior: false };
   const reasons: string[] = [];
   let score = 0;
-  for (const t of [departureTerm(p.ply, ctx), weaknessTerm(p, ctx), unfamiliarityTerm(p, ctx), resultDeficitTerm(ctx)]) {
+  for (const t of [departureTerm(p.ply, ctx), weaknessTerm(p, ctx), unfamiliarityTerm(p, ctx), resultDeficitTerm(ctx), capabilityTerm(p, ctx)]) {
     score += t.score;
     if (t.reason) reasons.push(t.reason);
   }

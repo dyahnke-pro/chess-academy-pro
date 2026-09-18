@@ -17,6 +17,7 @@ import { resolvePlayerColor } from './conversionDetector';
 import { criticalityThresholds } from './criticalityScan';
 import { coldStudent, type StudentNeedContext } from './needScore';
 import type { GameRecord } from '../types';
+import { getCapabilityProfile } from './capabilityEvidence';
 
 const TTL_MS = 5 * 60 * 1000;
 let cache: { at: number; key: string; ctx: StudentNeedContext } | null = null;
@@ -104,11 +105,18 @@ export async function loadStudentNeedContext(q: StudentNeedQuery): Promise<Stude
     const bookDepartures = await getCachedBookDepartureRows(games, names, q.rating).catch(() => []);
     const sans = legalPrefix(q.sans);
     const inOpening = games.filter((g) => (q.openingId && g.openingId === q.openingId) || (q.eco && g.eco === q.eco));
+    // THE POSITIVE HALF. `getCapabilityProfile` had three call sites before
+    // 2026-09-18 and all three were in its own test, so every `held` row the
+    // review pass had ever written was unreadable to the coach. Loaded beside
+    // the weakness signals because they are two halves of ONE student model,
+    // and a surface must never be able to load one without the other.
+    const capabilities = await getCapabilityProfile().catch(() => new Map());
     const ctx: StudentNeedContext = {
       rating: q.rating,
       gamesPlayed: analysed.length,
       signals,
       bookDepartures,
+      capabilities,
       openingId: q.openingId ?? null,
       lineReps: lineRepsFromGames(analysed, sans, q.studentColor, names, q.rating),
       openingScore: scoreShare(inOpening, names),

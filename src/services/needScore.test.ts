@@ -13,7 +13,7 @@ const forkHole: WeaknessSignal = {
 };
 
 const warm = (over: Partial<StudentNeedContext> = {}): StudentNeedContext => ({
-  rating: 1500, gamesPlayed: COLD_START_GAMES + 10, signals: [], bookDepartures: [], ...over,
+  rating: 1500, gamesPlayed: COLD_START_GAMES + 10, signals: [], bookDepartures: [], capabilities: new Map(), ...over,
 });
 
 describe('needScore — cold start defaults to TEACH', () => {

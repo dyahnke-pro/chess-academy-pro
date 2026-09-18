@@ -37,6 +37,7 @@ import { buildCausalChain, type CausalChain } from './causalChain';
 import { structurePlan } from './boardPlan';
 import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
+import { capabilitiesShown } from './capabilityEvidence';
 
 export interface SelectorPly {
   /** 1-based ply. */
@@ -238,10 +239,27 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   for (const p of plies) {
     if (p.playerColor !== input.studentColor) continue;
     const tactic = tacticByPly.get(p.ply) ?? landedByPly.get(p.ply) ?? null;
+    // WHAT THIS PLY PROVED, from the same computer that RECORDS it. The dual-use
+    // rule: `capabilitiesShown` is how a held row gets written at review time,
+    // and reading it here is how the coach learns it may go quiet. No second
+    // fact-to-hole mapping is authored — the join is computed from the board.
+    //
+    // The cp loss is derived from the WHITE-POV evals the walk carries, and the
+    // sign is the trap this repo has been bitten by before, so it is spelled
+    // out: white loses when the number FALLS, black when it RISES. A wrong sign
+    // here would hand a blunder to `capabilitiesShown` as a clean move.
+    const cpLoss = (p.evalBefore == null || p.evalAfter == null)
+      ? null
+      : Math.max(0, p.playerColor === 'white' ? p.evalBefore - p.evalAfter : p.evalAfter - p.evalBefore);
+    let capabilityTags: string[] = [];
+    try {
+      capabilityTags = capabilitiesShown(p.fenBefore, p.san, p.playerColor, cpLoss).map((c) => c.tag);
+    } catch { capabilityTags = []; }
     needByPly.set(p.ply, computeNeed({
       ply: p.ply, studentMove: true,
       conceptId: tactic as import('../types/tacticTypes').TacticPatternType | null,
       onThread: onThread.has(p.ply),
+      capabilityTags: capabilityTags as readonly import('../data/misconceptionTags').MisconceptionTagId[],
     }, student));
   }
 

@@ -11,13 +11,10 @@
 ## SENSE — does the loop record what happens to the student?
 
 - **19** modules record a MISS.
-- **2** record a HOLD (`capabilityEvidence`).
-- **0** read the capability profile back.
+- **4** record a HOLD (`capabilityEvidence`).
+- **2** read the capability profile back.
 
-🚨 **GREEN IS WRITE-ONLY.** Success is recorded and nothing consumes it, so every
-data term stays RAISE-ONLY: the coach can get louder about you and never
-quieter. Until a reader exists, silence is a guess rather than a computed
-verdict, and GREY cannot be told apart from proven.
+Green has a reader — the heat map can lower as well as raise.
 
 ## MODEL — is the student model fed the adaptive rating?
 
