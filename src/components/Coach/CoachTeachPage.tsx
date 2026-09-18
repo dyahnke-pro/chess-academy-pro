@@ -307,8 +307,10 @@ const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
  *  1. THE NOTE IS PRIMARY. When a farmed corpus note (his DNA voice) teaches a
  *     turn, the whole async COMPUTED late package stands down — no register,
  *     piece-quality, structure, priority-first or callout piling on behind it.
- *     Gated on `hasInstantTeaching`, the existing "a note/teaching spoke this
- *     turn" signal.
+ *     Gated on `noteTaughtThisTurn` — true only when a `note` fact actually
+ *     survived to the voice. It was `hasInstantTeaching`, which fired on ANY
+ *     substantive fact and so stood the queue down on most turns; see its
+ *     set-site for what that cost.
  *
  *  2. THE PRE-EXISTING WORDY LANES ARE SILENCED outright, so even a NO-note
  *     turn stays terse: the look-ahead plan prose ("they're bringing pieces to
@@ -7271,9 +7273,15 @@ export function CoachTeachPage(): JSX.Element {
     // ── OPENING ANNOUNCEMENT ───────────────────────────────────────────────
     try {
       const det = detectOpening(history);
-      if (det && det.name && det.name !== learnMemRef.current.announcedOpeningName) {
-        const firstResolve = learnMemRef.current.announcedOpeningName === null;
-        learnMemRef.current.announcedOpeningName = det.name;
+      if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
+      if (det && det.name && det.name !== learnMemRef.current.spokenOpeningName) {
+        const firstResolve = learnMemRef.current.spokenOpeningName === null;
+        // NOT marked spoken here. Queueing is not saying — see the field's note
+        // in `learnMemory.ts`. The late package sets `spokenOpeningName` when
+        // the `opening` fact actually survives to the voice; until then this
+        // re-queues every turn, which is the honest behaviour for a line the
+        // student has not yet heard. The name to promote is already stored as
+        // `detectedOpeningName`, so no second variable carries it.
         // A PLACEHOLDER NAME EARNS NO KEY IDEA. David 2026-08-08, from a live
         // run: after 1.e4 e5 the coach said "This game is now the King's Pawn
         // Game. Key idea: The queen is the last piece still out of the fight…
@@ -7513,7 +7521,7 @@ export function CoachTeachPage(): JSX.Element {
       // corpus leads and the masterclass beat fills where the corpus can't.
       const beat = noteLine
         ? null
-        : curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.announcedOpeningName, playerColor, 'live');
+        : curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.detectedOpeningName, playerColor, 'live');
       if (beat) {
         learnMemRef.current.curatedBeatSeen.add(beat.id);
         curatedLine = beat.text;
@@ -7564,7 +7572,7 @@ export function CoachTeachPage(): JSX.Element {
         // five of twelve plies died that way, three of them re-picking the
         // exact note the previous ply had already rejected. The predicate makes
         // every tier keep looking instead.
-        const openingNow = learnMemRef.current.announcedOpeningName;
+        const openingNow = learnMemRef.current.detectedOpeningName;
         const src = teachingSourceForBoard(
           history,
           args.fenAfterReply,
@@ -8150,7 +8158,7 @@ export function CoachTeachPage(): JSX.Element {
           let trackABestReply: string | null = null;
           /** True when the instant utterance already carried teaching, so the
            *  late engine line stays quiet rather than repeating the turn. */
-          let hasInstantTeaching = false;
+          let noteTaughtThisTurn = false;
           // The rec move's geometry, painted GREEN the instant Track A
           // SPEAKS it (David 2026-08-07: lead-the-eye "on every mentioned
           // move, AS it's being mentioned") — the warm beat's arrow pass
@@ -9112,9 +9120,17 @@ export function CoachTeachPage(): JSX.Element {
                     // it — the name was context, never an event.
                     try {
                       const det = detectOpening(chainHistory);
-                      if (det && det.name && det.name !== learnMemRef.current.announcedOpeningName) {
-                        const firstResolve = learnMemRef.current.announcedOpeningName === null;
-                        learnMemRef.current.announcedOpeningName = det.name;
+                      if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
+                      if (det && det.name && det.name !== learnMemRef.current.spokenOpeningName) {
+                        const firstResolve = learnMemRef.current.spokenOpeningName === null;
+                        // NOT marked spoken here either. This site pushes into
+                        // `facts`, which is the MODEL's grounding list — the name
+                        // reaches the student only if the model chooses to use it,
+                        // and "the model buried the name" is the original 2026-08-07
+                        // complaint this whole lane exists to answer. A hope is not
+                        // a delivery. The voice packages spend the flag; this site
+                        // only supplies the grounding, so an unspoken name is
+                        // re-offered next turn instead of being marked done.
                         // Idea source spans ALL the speaking-note corpora
                         // (David 2026-08-07: "make sure all the notes get
                         // wired in"): primary first (house voice), then the
@@ -9148,7 +9164,7 @@ export function CoachTeachPage(): JSX.Element {
                         // NOT spoken from here any more — the announcement
                         // is voiced by the instant pass, seconds earlier.
                         // In practice this block no longer runs at all: that
-                        // pass already set `learnMem.announcedOpeningName`, so the
+                        // pass already set `learnMem.spokenOpeningName`, so the
                         // name-changed test above is false. It stays as the
                         // fallback path for any turn the instant pass could
                         // not run.
@@ -9527,6 +9543,13 @@ export function CoachTeachPage(): JSX.Element {
                   // Feed what was actually SPOKEN into the per-game novelty set so
                   // no later turn (or the late package below) repeats it.
                   for (const k of spokenSentenceKeys(instant.pkg)) learnMemRef.current.spokenKeys.add(k);
+                  // R1 OF THE ARC IS MARKED BY THE VOICE, NOT BY THE QUEUE. The
+                  // opening fact reached here only if it survived ranking and the
+                  // novelty set, so this is the first moment it is true that the
+                  // student has heard the name.
+                  if (instant.pkg.kept.some((f) => f.kind === 'opening')) {
+                    learnMemRef.current.spokenOpeningName = learnMemRef.current.detectedOpeningName;
+                  }
                   // The arrow rides only when the THREAT actually SURVIVED
                   // into the utterance — an arrow pointing at a claim the
                   // package refused is the same lie drawn instead of said.
@@ -9538,8 +9561,23 @@ export function CoachTeachPage(): JSX.Element {
                   }
                   // "We said something beyond a bare callout." The two callout
                   // kinds were one `alert` before the split, so both are named.
-                  if (instant.pkg.kept.some((f) => f.kind !== 'threat' && f.kind !== 'tactic')) {
-                    hasInstantTeaching = true;
+                  // 🚨 A NOTE, NOT "ANYTHING" (found reading the code, 2026-09-18).
+                  // This used to read `some(f => f.kind !== 'threat' && f.kind
+                  // !== 'tactic')` under the name `hasInstantTeaching`, and the
+                  // consumer's own comment described it as "a farmed corpus note
+                  // taught this turn". The name and the comment meant NOTE; the
+                  // code meant ANY substantive fact — an observation, a computed
+                  // register line, a drawback. So on most turns the whole late
+                  // queue was discarded wholesale, which is the code-side cut G4.5
+                  // bans: a branch deciding what the student loses, in place of the
+                  // ranking computer. Repetition — the thing the stand-down exists
+                  // to prevent — is already handled properly one call below, where
+                  // `buildVoicePackage` is handed `instantSpokenText` and the
+                  // per-game novelty set. David's rule is verbatim note-scoped:
+                  // "if I'm hearing a note I shouldn't be hearing the computed
+                  // narrations". So the flag now means what it is named.
+                  if (instant.pkg.kept.some((f) => f.kind === 'note')) {
+                    noteTaughtThisTurn = true;
                   }
                 }
                 if (instant.leadEyeArrows.length > 0) {
@@ -9855,12 +9893,12 @@ export function CoachTeachPage(): JSX.Element {
 
                 const pending = pendingVoiceRef.current;
                 // NOTE-PRIMARY (David 2026-08-23): if a farmed corpus note taught
-                // this turn (`hasInstantTeaching`), the whole computed late package
+                // this turn (`noteTaughtThisTurn`), the whole computed late package
                 // stands down — "if I'm hearing a note I shouldn't be hearing the
                 // computed narrations". The queue is still cleared so it can't leak
                 // onto the next turn.
-                if (NARRATE_DNA_ONLY && hasInstantTeaching) pendingVoiceRef.current = null;
-                if (pending && !(NARRATE_DNA_ONLY && hasInstantTeaching)
+                if (NARRATE_DNA_ONLY && noteTaughtThisTurn) pendingVoiceRef.current = null;
+                if (pending && !(NARRATE_DNA_ONLY && noteTaughtThisTurn)
                     && samePosition(pending.fen, fenAfterReply) && pending.lines.length > 0) {
                   pendingVoiceRef.current = null;
                   // `instantSpokenText` is everything Track A has said on this
@@ -9891,6 +9929,11 @@ export function CoachTeachPage(): JSX.Element {
                     // Record the late package's phrases too — the per-game set is
                     // what keeps the NEXT turn from repeating any of them.
                     for (const k of spokenSentenceKeys(hintPkg)) learnMemRef.current.spokenKeys.add(k);
+                  // Same promotion as the instant pass — whichever package
+                  // actually carried the name is the one that spent the flag.
+                  if (hintPkg.kept.some((f) => f.kind === 'opening')) {
+                    learnMemRef.current.spokenOpeningName = learnMemRef.current.detectedOpeningName;
+                  }
                     // AND MARK WHAT SURVIVED. The squares came in on the facts,
                     // so the board draws the ones belonging to lanes the package
                     // KEPT — a refused claim takes its marks away with it, which
@@ -9917,7 +9960,7 @@ export function CoachTeachPage(): JSX.Element {
                 }
                 // SILENCED under DNA-only (David 2026-08-23): the plain "the best
                 // move is X" recommendation is a pre-existing lane, not his DNA.
-                const teachLine = (NARRATE_DNA_ONLY || hasInstantTeaching) ? null : trackABestReply;
+                const teachLine = (NARRATE_DNA_ONLY || noteTaughtThisTurn) ? null : trackABestReply;
                 if (teachLine) {
                   speakTrackA(teachLine);
                   // Lead-the-eye AT the mention: the rec move's green arrow

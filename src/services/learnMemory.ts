@@ -84,10 +84,31 @@ export interface LearnMemory {
   readonly spokenKeys: Set<string>;
   /** Concept invariants already taught this game, by tactic type. */
   readonly conceptTaught: Set<string>;
-  /** The opening name last ANNOUNCED. Per game: a second game of the same
-   *  line must be named again, because the student is being told what they are
-   *  now playing, not being reminded of a fact they already hold. */
-  announcedOpeningName: string | null;
+  /**
+   * The opening name the student has actually HEARD. Per game: a second game of
+   * the same line must be named again, because the student is being told what
+   * they are now playing, not being reminded of a fact they already hold.
+   *
+   * 🚨 SPENT BY SPEAKING, NEVER BY QUEUEING (found reading the code, 2026-09-18).
+   * This was ONE field doing TWO jobs — "the opening we have detected" and "the
+   * opening we have said" — and the announcement marked itself done the instant
+   * it was QUEUED. It then had to survive a delivery path that could discard it,
+   * and on any turn where the instant package said something substantive it did
+   * not: `pendingVoiceRef` was nulled wholesale. The name was already marked
+   * announced, so it never retried, and the fallback site guarded on the same
+   * field so it could never fire either. Measured on prod: game 2's opening was
+   * computed FIVE times and spoken ZERO.
+   *
+   * So the two jobs are two fields. A reader asking "what opening is this" reads
+   * `detectedOpeningName`; only real delivery writes this one. An announcement
+   * that is dropped is therefore re-queued next turn, which is the honest
+   * behaviour: it keeps trying because it has not yet succeeded.
+   */
+  spokenOpeningName: string | null;
+  /** What the detector last resolved, set the moment it resolves. This is
+   *  CONTEXT — which opening the board is in — and is what the curated-beat
+   *  selector and the refrain lane want. It says nothing about what was said. */
+  detectedOpeningName: string | null;
   /**
    * Note how many plies are on the board. Forgets everything when the board
    * has gone BACKWARDS — a new or rewound game. Returns true when it forgot.
@@ -134,7 +155,8 @@ export function createLearnMemory(): LearnMemory {
     gemFen: null,
     lastComputed: '',
     thinkAloudLastPly: NEVER_FIRED,
-    announcedOpeningName: null,
+    spokenOpeningName: null,
+    detectedOpeningName: null,
     observe(plies: number): boolean {
       const forgot = plies < lastPlies;
       if (forgot) mem.newGame();
@@ -153,7 +175,8 @@ export function createLearnMemory(): LearnMemory {
       mem.gemFen = null;
       mem.lastComputed = '';
       mem.thinkAloudLastPly = NEVER_FIRED;
-      mem.announcedOpeningName = null;
+      mem.spokenOpeningName = null;
+      mem.detectedOpeningName = null;
       lastPlies = 0;
     },
   };

@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**13885 lines · 3 exports · 5 importers · 6 tests · 9 audits**
+**13928 lines · 3 exports · 5 importers · 6 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:986) — names `CoachTeachPage`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2718) — names `CoachTeachPage`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3527) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:5397) — names `CoachTeachPage`
+- **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:1172) — names `CoachTeachPage`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2904) — names `CoachTeachPage`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3713) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:5580) — names `CoachTeachPage`
 
 ## Who calls in
 

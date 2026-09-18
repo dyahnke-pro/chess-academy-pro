@@ -69,14 +69,76 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
 
   it('observe() forgets when the board goes BACKWARDS — a second game', () => {
     const mem = createLearnMemory();
-    mem.announcedOpeningName = 'Scandinavian Defense: Lasker Variation';
+    mem.spokenOpeningName = 'Scandinavian Defense: Lasker Variation';
+    mem.detectedOpeningName = 'Scandinavian Defense: Lasker Variation';
     mem.curatedBeatSeen.add('beat-1');
     expect(mem.observe(14), 'a game in progress must not forget').toBe(false);
     expect(mem.observe(16)).toBe(false);
     // A NEW game: the board is back near the start.
     expect(mem.observe(1), 'fewer plies than before = a new or rewound game').toBe(true);
-    expect(mem.announcedOpeningName).toBeNull();
+    expect(mem.spokenOpeningName).toBeNull();
+    expect(mem.detectedOpeningName).toBeNull();
     expect(mem.curatedBeatSeen.size).toBe(0);
+  });
+
+  // ── R1 OF THE ARC: QUEUEING IS NOT SAYING (2026-09-18) ──────────────────
+  //
+  // Measured on prod: game 2's opening was COMPUTED five times and SPOKEN zero.
+  // The announcement marked itself announced the instant it was queued, then had
+  // to survive a delivery path that discarded the whole queue whenever the
+  // instant package had said anything substantive. Flag spent, line dropped, and
+  // the fallback site guarded on the same flag so it could never fire either.
+  //
+  // These two tests hold the shape of the fix, not the symptom: ONE field may not
+  // mean both "what we detected" and "what we said", and only real delivery may
+  // spend the second one.
+
+  it('the announce site does NOT mark the name spoken — only delivery does', () => {
+    const src = readFileSync(PAGE, 'utf8');
+    const announce = src.slice(src.indexOf('── OPENING ANNOUNCEMENT'));
+    const body = announce.slice(0, announce.indexOf('captureEvent('));
+    expect(
+      /spokenOpeningName\s*=(?!=)/.test(body),
+      'the announcement must not spend the say-once flag before the voice has it',
+    ).toBe(false);
+    expect(
+      /detectedOpeningName\s*=\s*det\.name/.test(body),
+      'detection is still recorded immediately — it is context, not an utterance',
+    ).toBe(true);
+  });
+
+  it('spokenOpeningName is written only where an `opening` fact actually survived', () => {
+    const src = readFileSync(PAGE, 'utf8');
+    const writes = src.split('\n').filter((l) => /learnMemRef\.current\.spokenOpeningName\s*=/.test(l));
+    expect(writes.length, 'both packages can carry the name, so both promote it').toBeGreaterThanOrEqual(2);
+    for (const line of writes) {
+      const at = src.indexOf(line);
+      // The guard sits directly above the write.
+      const before = src.slice(Math.max(0, at - 400), at);
+      expect(
+        /kind === 'opening'/.test(before) || /det && det\.name/.test(before),
+        `a promotion with no proof the name was spoken: ${line.trim()}`,
+      ).toBe(true);
+    }
+  });
+
+  it('the note-primary stand-down fires on a NOTE, not on any substantive fact', () => {
+    const src = readFileSync(PAGE, 'utf8');
+    expect(
+      /noteTaughtThisTurn = true/.test(src),
+      'the flag keeps its name',
+    ).toBe(true);
+    const at = src.indexOf('noteTaughtThisTurn = true');
+    const guard = src.slice(Math.max(0, at - 300), at);
+    expect(
+      /kind === 'note'/.test(guard),
+      "David's rule is note-scoped; a broader test discards the whole late queue "
+      + 'on most turns, which is the code-side cut G4.5 bans',
+    ).toBe(true);
+    expect(
+      src.includes("f.kind !== 'threat' && f.kind !== 'tactic'"),
+      'the old any-substantive-fact test must be gone, not merely renamed',
+    ).toBe(false);
   });
 
   it('the per-ply observe is wired into the page — not just the two intent sites', () => {
