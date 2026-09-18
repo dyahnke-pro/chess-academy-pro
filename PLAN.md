@@ -6,6 +6,136 @@
 
 # PLAN — closing the loop (2026-09-18)
 
+
+## THE CRITICAL MOMENT — one computer, two registers (design, 2026-09-18)
+
+David: "I want the only question to come at the critical moment. That is where
+the teaching has most effect." → "This will also take place in review." →
+"In learn, I want coach to say, this is a critical moment only one move keeps
+equality. On review, we are more free to ask questions. No question on learn,
+question on review." → "maybe say how many moves keep equality? Algo that for
+users."
+
+### What already exists (measured, not recalled)
+
+- **The critical moment is computed on every live ply.** `severityFromGap(gap12,
+  rating)` in `positionFacts` → `'critical' | 'only-move'`, from the MultiPV fan,
+  rating-scaled. It already reaches `coachDecider` and ranks 65 / 85.
+- **Learn already announces it**, and already says different things at the two
+  severities (`positionFacts` ~886). It is gated on `studentToMove &&
+  a.slowDownOwed`, so a student whose slow-down habit is CLOSED hears nothing —
+  already algo-based. What it lacks is the STAKE.
+- **`scanCriticality` (the full scanner) has ONE production caller**
+  (`onlyMoveSequence`). The live lane derives severity itself from the top-2 gap.
+- **Review already has a question card** — pick, reveal, judge, all wired.
+
+### The defect this fixes
+
+Review's question is selected by SWING, not criticality:
+`buildTurningPointQuestion` → `turningPointCandidates(...)` → biggest single
+swing in pawns, asked once at the END of the walk.
+
+Swing is what it COST; criticality is how much the CHOICE mattered. They come
+apart exactly where teaching is best: a position where the student FOUND the
+only move has a swing of ZERO, so it can never be the question — and that is the
+most instructive moment in the game. On the So–Carlsen draw (2026-09-18 audit)
+the card never fired at all: "fewer than 2 costed moments", on a GM draw full of
+real forks. This is CLAUDE.md's own importance doctrine, failure mode #1
+(sharp-but-flat), living in the review question.
+
+### The build
+
+**ONE computer: how many moves still hold, and what they hold.**
+
+1. **The count, tailored to THIS student — not to a band** (David 2026-09-18:
+   "Must be algo specifically to the user"). Count the fan's moves scoring
+   within the student's OWN tolerance of the best.
+
+   🚨 THE TOLERANCE IS THEIR OWN TYPICAL ERROR, computed from data already on
+   the device. `criticalityThresholds(rating)` is three hand-typed rungs off a
+   rating — the hand-authored mapping beside a computed one that the rot rule
+   calls a personalisation costume, fed by the number we only half-thread (39
+   files read `currentRating` off the store, 2 read the adaptive estimate).
+
+   Every analysed game already stores, per ply, `MoveAnnotation.evaluation` and
+   `bestMoveEval` (both white-POV), so `cpLoss = (bestMoveEval - evaluation) *
+   sign` gives the student's ENTIRE error distribution. Nothing aggregates it.
+   The tolerance is a ROBUST statistic of it (median / percentile of their
+   own-side per-ply loss) — never a mean, because one 800cp blunder wrecks a
+   mean.
+
+   WHY: a move conceding less than what this student routinely concedes is
+   invisible to them. It is not a decision they can register, so calling that
+   position critical is a lie about THEIR game.
+
+   THE INVERSION THAT LOOKS WRONG AND IS NOT: a bigger tolerance means MORE
+   moves fall inside it, so FEWER positions are "only one move" — quieter for a
+   weak player, chattier for a strong one. That is correct pedagogy, and the
+   existing ladder already encodes it (beginner 200, advanced 50): a 900's real
+   forks are the big ones, an expert's are subtle. The personal version is the
+   same shape made CONTINUOUS and DERIVED instead of typed. It also moves on its
+   own — as they improve the distribution tightens, the tolerance narrows, and
+   subtler positions start counting. No band, no retuning; the rating's job
+   stays STRENGTH, never volume.
+
+   COLD START falls out of the heat map as usual: no analysed games -> no
+   distribution -> the rating band stands in -> and every capability is GREY, so
+   grey teaches. The prior fades as games arrive.
+
+   GUARD: a wild beginner has a huge tolerance, so little clears it. That is
+   fine — this gate governs only the "slow down, this is a fork" beat; swing,
+   must-defend and mate still speak on their own importance.
+2. **The honesty cap.** MultiPV is 3, so the count is 1, 2, or "3 of 3" — at the
+   cap we do NOT know whether it is three or seven. DECIDED: say "a few" at the
+   cap rather than widen MultiPV; the clause only fires when the field is narrow
+   (a wide field means a small gap, which is not critical), so 1–2 is the common
+   case. MEASURE how often the cap bites before spending an engine call on it.
+3. **The stake, computed from the eval, never templated.** "Keeps equality" is a
+   claim about the evaluation: false when they are winning (it keeps the WIN) and
+   false when they are lost (it promises a draw that is not there). Bands off the
+   best line, mover-POV: keeps the win / keeps you on top / keeps you level /
+   keeps you in it / limits the damage. Mate is its own answer, never a
+   centipawn band. Omit the clause rather than claim a stake with no line to read.
+
+**LEARN — a STATEMENT, never a question.** The student is mid-calculation; a
+blocking card takes over the decision (which is why they were removed in Aug).
+  "Critical moment — only one move keeps you level. Slow down here."
+  "Critical moment — two moves keep you on top; everything else concedes."
+
+**REVIEW — the same computer as a QUESTION**, asked AT that ply during the walk,
+not as an end-of-game afterthought. Same count, same tolerance, same stake; only
+the register differs. Retargets the existing card from swing → criticality.
+
+**PHRASING — rotate the stem, never the claim** (David 2026-09-18: "I like the
+multiple ways of saying the same thing. Keeps it less computer and more like a
+coach"). The sanctioned idiom already exists in `methodBeat`: `pick(variants, v)
+= variants[Math.abs(v) % variants.length]`, keyed on the PLY — resume-safe,
+testable, and NOT `Math.random` (that is #67, five services still rolling).
+Three or four variants per shape. The COUNT and the STAKE are facts and never
+vary; only the wrapper does.
+
+**RECORDING — DECIDED: a prompted find is GREY** (David 2026-09-18: "This is
+gray function. Once we have data it algos"). When Learn announces the moment and
+the student then finds the move, that is not evidence they can do it unaided, so
+it writes NO `held` row. `CapabilityEvidenceRecord` gains a REQUIRED `prompted`
+flag (a new writer must answer); the profile counts prompted rows as neither
+held nor broken, so the tag stays GREY -> grey raises rank -> the coach keeps
+teaching it. If they find it unaided later, that is a clean `held` and it goes
+green on its own.
+
+This is the heat map applied to its own evidence, and it is self-correcting: the
+announcement can never inflate the model. Same shape as #34 (a chat-ask reveal
+is recorded, not free).
+
+### Measure BEFORE writing any of it
+
+- critical moments per game, PERSONAL tolerance vs the rating band (teach or nag?)
+- how often the 3-of-3 MultiPV cap bites
+- what David's own cp-loss distribution actually looks like
+All three come from ONE pass over real games; the fixture already exists at
+`audit-reports/.fixtures/david-games.json`. Do not tune anything before this.
+
+
 ## 2026-09-18 — end of night: the two owed post-deploy audits
 
 Both run against the live bundle `index-7h-hez6i.js` (commit `cb2ef99b1`),
