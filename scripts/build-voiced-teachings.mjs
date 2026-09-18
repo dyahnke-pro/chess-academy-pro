@@ -26,6 +26,11 @@ const OUT = 'public/data/voiced-teachings.json';
 const BANNED = /\b(naroditsky|danya|aman|hambleton|chessbrah|in this video|in the video|the streamer|chat|subscribe|this stream|speedrun)\b/i;
 const MOVE_NUM = /\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;
 
+/** A source field that may be ONE idea or a LIST of them, rendered as one
+ *  string. Semicolons, because the items are clauses ("provoke h4 then fix it
+ *  with h3") and a comma join reads as a single run-on idea. */
+const asText = (v) => (Array.isArray(v) ? v.filter(Boolean).join('; ') : (v || ''));
+
 function phaseFor(plies) {
   if (plies <= 16) return 'opening';
   if (plies <= 40) return 'middlegame';
@@ -66,8 +71,17 @@ for (const f of files) {
       opening: null,
       phase: phaseFor(sans.length),
       explains: spoken,
-      teaches: m.teaches || '',
-      plans: m.plans || '',
+      // 🚨 COERCE TO TEXT. The source bank writes these as EITHER a string or a
+      // LIST of ideas, and this passed through whichever it found — so 691
+      // `teaches` and 26 `plans` shipped as ARRAYS against a type that says
+      // `string`. `teachingBeatText` does `(part ?? '').trim()` and threw
+      // `TypeError: .trim is not a function` on all 694, swallowed by two
+      // "the corpus is a bonus" catches: a SILENT teaching loss, the whole
+      // teaching line vanishing from the facts package whenever one was picked.
+      // Five other readers stringified the array instead, giving comma-jammed
+      // prose ("the French central tension,the d4 break").
+      teaches: asText(m.teaches),
+      plans: asText(m.plans),
       concepts: [],
       sources: [`yt:${id}`],
       positionSource: 'high',
