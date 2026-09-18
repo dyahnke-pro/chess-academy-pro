@@ -47,49 +47,49 @@ real forks. This is CLAUDE.md's own importance doctrine, failure mode #1
 
 **ONE computer: how many moves still hold, and what they hold.**
 
-1. **The count, tailored to THIS student — not to a band** (David 2026-09-18:
-   "Must be algo specifically to the user"). Count the fan's moves scoring
-   within the student's OWN tolerance of the best.
+1. **The count IS the trigger — one tolerance, not two.** Count the fan's moves
+   scoring within tolerance of the best: `>=3` nothing hinges (SILENT), `2` a
+   forgiving fork, `1` only one move holds. Measured 2026-09-18 on real games:
+   only-one-move and critical came out 5/5, 24/25, 29/30 — the trigger and the
+   count are the same question, and treating them as two was my error.
 
-   🚨 THE TOLERANCE IS THEIR OWN TYPICAL ERROR, computed from data already on
-   the device. `criticalityThresholds(rating)` is three hand-typed rungs off a
-   rating — the hand-authored mapping beside a computed one that the rot rule
-   calls a personalisation costume, fed by the number we only half-thread (39
-   files read `currentRating` off the store, 2 read the adaptive estimate).
+   🔴 **THE PERSONAL cp-LOSS TOLERANCE IS DISPROVEN — DO NOT BUILD IT.** The
+   design here previously said the tolerance should be a robust statistic of the
+   student's own per-ply cp-loss distribution ("their own typical error"),
+   derived from the `evaluation` + `bestMoveEval` already stored on every
+   annotated ply. `scripts/measure-critical-moments.mjs` measured it on 6 real
+   games at two rating bands (143 plies, depth 12) and it fails on both axes:
 
-   Every analysed game already stores, per ply, `MoveAnnotation.evaluation` and
-   `bestMoveEval` (both white-POV), so `cpLoss = (bestMoveEval - evaluation) *
-   sign` gives the student's ENTIRE error distribution. Nothing aggregates it.
-   The tolerance is a ROBUST statistic of it (median / percentile of their
-   own-side per-ply loss) — never a mean, because one 800cp blunder wrecks a
-   mean.
+   - **it does not differentiate.** amateur ~1200 vs strong ~2000 came out
+     statistically identical — p50 23 vs 23, p75 49 vs 53, p90 116 vs 106,
+     mean 41 vs 42. Differentiating students was the ONLY reason to build it.
+   - **it nags.** p50 fires 15x/game (every other move) in BOTH cohorts; p75
+     fires 8x. The rating band fires 2.5x/game for the amateur, which is the
+     right volume for "stop and think".
 
-   WHY: a move conceding less than what this student routinely concedes is
-   invisible to them. It is not a decision they can register, so calling that
-   position critical is a lie about THEIR game.
+   So it would make the coach 3-6x chattier AND treat a beginner and an expert
+   the same. The claim is deleted rather than annotated (the Lake Butler rule) so
+   no future session re-derives it from the same appealing reasoning.
 
-   THE INVERSION THAT LOOKS WRONG AND IS NOT: a bigger tolerance means MORE
-   moves fall inside it, so FEWER positions are "only one move" — quieter for a
-   weak player, chattier for a strong one. That is correct pedagogy, and the
-   existing ladder already encodes it (beginner 200, advanced 50): a 900's real
-   forks are the big ones, an expert's are subtle. The personal version is the
-   same shape made CONTINUOUS and DERIVED instead of typed. It also moves on its
-   own — as they improve the distribution tightens, the tolerance narrows, and
-   subtler positions start counting. No band, no retuning; the rating's job
-   stays STRENGTH, never volume.
+   (One thing it did settle: mean/median ratio 1.8x — a MEAN would have been the
+   wrong statistic regardless.)
 
-   COLD START falls out of the heat map as usual: no analysed games -> no
-   distribution -> the rating band stands in -> and every capability is GREY, so
-   grey teaches. The prior fades as games arrive.
+   **THE RIGHT PERSONAL NUMBER is not "how big are your errors" but "DO YOU FIND
+   THE ONLY MOVE WHEN THERE IS ONE"** — press/no-press at critical moments. That
+   signal does not exist yet, and it is exactly what this build creates. So the
+   shape is the app's standard one and David's own words ("This is gray function.
+   Once we have data it algos"): the RATING BAND is the cold-start prior, the
+   answer is recorded, and the personal number takes over once there is data. A
+   student who reliably finds only-moves earns a LOOSER tolerance (fewer
+   positions are forks for them); one who keeps missing them, a tighter one.
 
-   GUARD: a wild beginner has a huge tolerance, so little clears it. That is
-   fine — this gate governs only the "slow down, this is a fork" beat; swing,
-   must-defend and mate still speak on their own importance.
-2. **The honesty cap.** MultiPV is 3, so the count is 1, 2, or "3 of 3" — at the
-   cap we do NOT know whether it is three or seven. DECIDED: say "a few" at the
-   cap rather than widen MultiPV; the clause only fires when the field is narrow
-   (a wide field means a small gap, which is not critical), so 1–2 is the common
-   case. MEASURE how often the cap bites before spending an engine call on it.
+2. **The MultiPV cap is a NON-ISSUE — measured, fork closed.** The worry was
+   that MultiPV=3 cannot tell "three" from "seven". It cannot, and it never
+   matters: we speak ONLY when the count is 1 or 2, and a count of 1 or 2 is
+   precisely the case the fan resolved. The positions where 3 of 3 sit within
+   tolerance (79% at the amateur band, 53% at the strong one) are exactly the
+   positions where nothing hinges and the coach stays SILENT. No wider fan, no
+   second engine call, no cost. Do not reopen this.
 3. **The stake, computed from the eval, never templated.** "Keeps equality" is a
    claim about the evaluation: false when they are winning (it keeps the WIN) and
    false when they are lost (it promises a draw that is not there). Bands off the
@@ -129,11 +129,17 @@ is recorded, not free).
 
 ### Measure BEFORE writing any of it
 
-- critical moments per game, PERSONAL tolerance vs the rating band (teach or nag?)
-- how often the 3-of-3 MultiPV cap bites
-- what David's own cp-loss distribution actually looks like
-All three come from ONE pass over real games; the fixture already exists at
-`audit-reports/.fixtures/david-games.json`. Do not tune anything before this.
+✅ **DONE 2026-09-18** — `scripts/measure-critical-moments.mjs`, 6 real games at
+two rating bands through the app's explorer proxy, real Stockfish, no fixtures.
+Results above: the cap is a non-issue, the count IS the trigger, and the personal
+cp-loss tolerance is disproven.
+
+⚠️ **Sample caveat, stated rather than buried:** 6 games, 143 plies, depth 12,
+one seat, all from 1.e4 e5. The IDENTICAL distributions could be a sampling
+artifact. The result is strong enough to decide DIRECTION (don't build the
+cp-loss tolerance, don't widen MultiPV, keep the band until press/no-press data
+exists) and not strong enough to pin a threshold. Re-run with more games and a
+deeper search before tuning any number.
 
 
 ## 2026-09-18 — end of night: the two owed post-deploy audits
