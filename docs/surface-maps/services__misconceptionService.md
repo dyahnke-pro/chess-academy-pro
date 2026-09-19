@@ -47,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `logMisconception` (function) — 37 call sites
-- `src/components/Coach/CoachGameReview.tsx:2080`
+- `src/components/Coach/CoachGameReview.tsx:2190`
 - `src/components/Coach/FundamentalsPage.test.tsx:91`
 - `src/services/bucketPipelineAudit.test.ts:64`
 - `src/services/bucketPipelineAudit.test.ts:92`
