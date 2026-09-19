@@ -44,7 +44,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "He opens with d4, the Open Sicilian, and after the trades you reach the tabiya.",
+   "spoken": "They open with d4, the Open Sicilian, and after the trades you reach the tabiya.",
    "kind": "main"
   },
   {
@@ -103,7 +103,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "He chooses f3, the English Attack — the signal that he's going to castle long and storm my king with his pawns.",
+   "spoken": "They choose f3, the English Attack — the signal that they're going to castle long and storm my king with their pawns.",
    "kind": "main",
    "teaches": [
     "English Attack: f3 prepares queenside castling and a kingside pawn storm"
@@ -130,7 +130,7 @@
    "line": [
     "Nb3"
    ],
-   "spoken": "He retreats the knight to b3. What Black gets for that weak pawn and weak square is dynamic, concrete counterplay — that's exactly why the Sicilian is so sharp and theoretical.",
+   "spoken": "They retreat the knight to b3. What Black gets for that weak pawn and weak square is dynamic, concrete counterplay — that's exactly why the Sicilian is so sharp and theoretical.",
    "kind": "main"
   },
   {
@@ -140,7 +140,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "First you solve your light-squared bishop, developing it to e6 to lend cover to d5, so he can't just plant a knight there and blockade.",
+   "spoken": "First you solve your light-squared bishop, developing it to e6 to lend cover to d5, so they can't just plant a knight there and blockade.",
    "kind": "main",
    "teaches": [
     "Cover the weak square before the opponent occupies it"
@@ -153,7 +153,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "He pins with the bishop to g5 — not actually the main move; Be3 is. And that misplaced bishop is going to cost him dearly, because it sits right where his own g-pawn wants to go.",
+   "spoken": "They pin with the bishop to g5 — not actually the main move; Be3 is. And that misplaced bishop is going to cost them dearly, because it sits right where their own g-pawn wants to go.",
    "kind": "main"
   },
   {
@@ -163,7 +163,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "You simply unpin by developing the bishop to e7. Note you avoid h6: that pawn would become a hook his g-pawn could latch onto once you castle short, so you keep your kingside pawns intact.",
+   "spoken": "You simply unpin by developing the bishop to e7. Note you avoid h6: that pawn would become a hook their g-pawn could latch onto once you castle short, so you keep your kingside pawns intact.",
    "kind": "main",
    "teaches": [
     "Don\\u2019t create a pawn hook in front of your king"
@@ -198,7 +198,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "He castles queenside; you castle short. Opposite wings — now the race is on, each side storming the other's king.",
+   "spoken": "They castle queenside; you castle short. Opposite wings — now the race is on, each side storming the other's king.",
    "kind": "main",
    "teaches": [
     "Opposite-side castling means a pawn-storm race"
@@ -220,7 +220,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "He starts the storm with h4, intending g4-g5 to pry my king open. You answer on the other flank.",
+   "spoken": "They start the storm with h4, intending g4-g5 to pry my king open. You answer on the other flank.",
    "kind": "main"
   },
   {
@@ -252,7 +252,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "You push b4, hitting his knight — and watch how much time that stranded g5-bishop costs him: it blocks his g-pawn, so the storm he wanted in one move now takes several.",
+   "spoken": "You push b4, hitting their knight — and watch how much time that stranded g5-bishop costs them: it blocks their g-pawn, so the storm they wanted in one move now takes several.",
    "kind": "main",
    "teaches": [
     "A misplaced bishop that blocks your own pawn storm loses crucial tempi"
@@ -265,7 +265,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "He drops the knight into d5. You don't let it marinate on such a fine square.",
+   "spoken": "They drop the knight into d5. You don't let it marinate on such a fine square.",
    "kind": "main"
   },
   {
@@ -275,7 +275,7 @@
    "line": [
     "Bxd5"
    ],
-   "spoken": "And you take with the bishop, not the knight — because recapturing with the knight lets him take back and trap your e6-bishop, while his g5-bishop stays defended by the h-pawn.",
+   "spoken": "And you take with the bishop, not the knight — because recapturing with the knight lets them take back and trap your e6-bishop, while their g5-bishop stays defended by the h-pawn.",
    "kind": "main",
    "teaches": [
     "Choose the recapture that doesn\\u2019t leave a piece trapped"
@@ -288,7 +288,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "After he recaptures, that d5-pawn is like a dental filling: it closes the center and walls off your weak d6-pawn from the d-file, sealing the very weakness he was pressuring.",
+   "spoken": "After they recapture, that d5-pawn is like a dental filling: it closes the center and walls off your weak d6-pawn from the d-file, sealing the very weakness they were pressuring.",
    "kind": "main",
    "teaches": [
     "A closed center can neutralize your own structural weakness"
@@ -329,7 +329,7 @@
    "line": [
     "Nc1"
    ],
-   "spoken": "He tucks the king toward safety, but you're a step ahead in the race. Now you bring in the beef — pawns alone won't break through; the pieces have to join.",
+   "spoken": "They tuck the king toward safety, but you're a step ahead in the race. Now you bring in the beef — pawns alone won't break through; the pieces have to join.",
    "kind": "main",
    "teaches": [
     "A pawn storm needs pieces behind it to break through"
@@ -361,7 +361,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "Now b3 — you sacrifice a pawn to blast open the files around his king.",
+   "spoken": "Now b3 — you sacrifice a pawn to blast open the files around their king.",
    "kind": "main",
    "teaches": [
     "Sacrifice pawns to open lines toward the enemy king"
@@ -394,7 +394,7 @@
    "line": [
     "Rxa2"
    ],
-   "spoken": "The exchange sacrifice on a2 — cutting the legs out from under his knight and ripping the a-file wide open.",
+   "spoken": "The exchange sacrifice on a2 — cutting the legs out from under their knight and ripping the a-file wide open.",
    "kind": "main"
   },
   {
@@ -441,7 +441,7 @@
    "line": [
     "Qc3"
    ],
-   "spoken": "He plays Qc3 to trade queens, but that lifts the defender off his d1-rook.",
+   "spoken": "They play Qc3 to trade queens, but that lifts the defender off their d1-rook.",
    "kind": "main",
    "teaches": [
     "Beware trades that undefend a piece"
@@ -454,7 +454,7 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": "You collect on d5 — up a piece, his position collapsing. The game is over.",
+   "spoken": "You collect on d5 — up a piece, their position collapsing. The game is over.",
    "kind": "main"
   },
   {
@@ -482,7 +482,7 @@
    "t": 846.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": "With a knight loitering next to his open king, you finish with the fork. Clean game.",
+   "spoken": "With a knight loitering next to their open king, you finish with the fork. Clean game.",
    "kind": "review",
    "teaches": [
     "A knight near an exposed king is a forking weapon"

@@ -16,7 +16,7 @@
     "g6",
     "e4"
    ],
-   "spoken": "He plays the Modern with g6 — you take the whole centre.",
+   "spoken": "They play the Modern with g6 — you take the whole centre.",
    "kind": "main",
    "teaches": [
     "the Modern"
@@ -84,7 +84,7 @@
     "O-O",
     "Qd2"
    ],
-   "spoken": "The queen to d2 does two jobs: it readies queenside castling, and it sets up the bishop swinging to h6 to trade off his fianchettoed bishop.",
+   "spoken": "The queen to d2 does two jobs: it readies queenside castling, and it sets up the bishop swinging to h6 to trade off their fianchettoed bishop.",
    "kind": "plan",
    "teaches": [
     "Qd2’s dual purpose"
@@ -106,7 +106,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "Top priority is eliminating his strongest piece, the fianchetto bishop — and he correctly counters in the centre with c5.",
+   "spoken": "Top priority is eliminating their strongest piece, the fianchetto bishop — and he correctly counters in the centre with c5.",
    "kind": "main",
    "teaches": [
     "trade the fianchetto defender"
@@ -128,7 +128,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Now d5 is fine here. Normally it would be a mistake because it opens his bishop's long diagonal — but since that bishop is about to come off the board, you don't care.",
+   "spoken": "Now d5 is fine here. Normally it would be a mistake because it opens their bishop's long diagonal — but since that bishop is about to come off the board, you don't care.",
    "kind": "main",
    "teaches": [
     "a trade justifies a committal push"
@@ -150,7 +150,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "Don't take the bishop yet — squeeze more first. The attacking idea is to blast open the h-file with h4 and h5, straight at his king. You don't even bother stopping his queenside expansion; you go for the throat.",
+   "spoken": "Don't take the bishop yet — squeeze more first. The attacking idea is to blast open the h-file with h4 and h5, straight at their king. You don't even bother stopping their queenside expansion; you go for the throat.",
    "kind": "plan",
    "teaches": [
     "open the h-file to attack"
@@ -239,7 +239,7 @@
    "line": [
     "Qh6+"
    ],
-   "spoken": "The queen swings to h6 with check, and you've built a beautiful attacking battery — he's hanging by a thread.",
+   "spoken": "The queen swings to h6 with check, and you've built a beautiful attacking battery — they're hanging by a thread.",
    "kind": "main",
    "teaches": [
     "the mating battery"

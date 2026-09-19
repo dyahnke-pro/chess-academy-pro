@@ -234,7 +234,7 @@
     "Bxc3",
     "Qxc3+"
    ],
-   "spoken": "White's position collapses. He can't play a queen to d2, a common reflexive blunder here, because it drops the rook on a1 — a bit of whole-board awareness.",
+   "spoken": "White's position collapses. They can't play a queen to d2, a common reflexive blunder here, because it drops the rook on a1 — a bit of whole-board awareness.",
    "reanchor": true
   },
   {
@@ -698,7 +698,7 @@
    "t": 631.5,
    "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": "With e3 and b3 the engine still reads roughly equal, so don't think of it as terrible. You played d6 and White played a knight to c3 — I expected a knight to f3. Here's an important idea: you can play e5 here, and it looks like a flat-out blunder, but King's Indian players know it. White can hop the knight away, but a knight to d7 is more common, and the e5-push is toast — you attack it three times, White can't defend it, and can't move it because his bishop falls. This idea shows up most against a Zukertort or double-fianchetto b3 setup, where playing a King's Indian in response is completely fine.",
+   "spoken": "With e3 and b3 the engine still reads roughly equal, so don't think of it as terrible. You played d6 and White played a knight to c3 — I expected a knight to f3. Here's an important idea: you can play e5 here, and it looks like a flat-out blunder, but King's Indian players know it. White can hop the knight away, but a knight to d7 is more common, and the e5-push is toast — you attack it three times, White can't defend it, and can't move it because their bishop falls. This idea shows up most against a Zukertort or double-fianchetto b3 setup, where playing a King's Indian in response is completely fine.",
    "reanchor": true
   }
  ]

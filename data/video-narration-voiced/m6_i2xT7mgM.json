@@ -95,7 +95,7 @@
    "line": [
     "Nxb5"
    ],
-   "spoken": "When the trade comes, take the bishop, not the knight — that light-squared bishop is one of White's most important pieces, and recapturing sends his knight to an awkward square.",
+   "spoken": "When the trade comes, take the bishop, not the knight — that light-squared bishop is one of White's most important pieces, and recapturing sends their knight to an awkward square.",
    "kind": "main",
    "teaches": [
     "take the better piece"
@@ -286,7 +286,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "White pushes and you attend to the tension — take the pawn. Whether he heads for an endgame is his call; either way you're fine, with the two bishops.",
+   "spoken": "White pushes and you attend to the tension — take the pawn. Whether they head for an endgame is their call; either way you're fine, with the two bishops.",
    "kind": "main"
   },
   {
@@ -374,7 +374,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "He finds the one defence, guarding the back rank. But you switch targets: the bishop to c5 skewers the rook against the f2-pawn — and he can't recapture, because that knight is still frozen.",
+   "spoken": "They find the one defence, guarding the back rank. But you switch targets: the bishop to c5 skewers the rook against the f2-pawn — and they can't recapture, because that knight is still frozen.",
    "kind": "main",
    "teaches": [
     "switch the point of attack",
@@ -437,7 +437,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "Drop the bishop back to safety and look for a fresh attack — with every piece trained on his king, he's not safe even with the queens off.",
+   "spoken": "Drop the bishop back to safety and look for a fresh attack — with every piece trained on their king, they're not safe even with the queens off.",
    "kind": "plan",
    "teaches": [
     "keep the initiative queenless"
@@ -459,7 +459,7 @@
    "line": [
     "Ne3+"
    ],
-   "spoken": "His blunder relinquishes a key square, and the knight jumps in with check, forking his pieces.",
+   "spoken": "Their blunder relinquishes a key square, and the knight jumps in with check, forking their pieces.",
    "kind": "main",
    "teaches": [
     "punish the weakened square"

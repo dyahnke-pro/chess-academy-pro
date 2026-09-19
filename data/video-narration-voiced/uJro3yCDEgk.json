@@ -78,7 +78,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "A knight to f3. The rule of thumb is to wait for Black to develop the dark-squared bishop and only then capture on c5, to make him lose a tempo."
+   "spoken": "A knight to f3. The rule of thumb is to wait for Black to develop the dark-squared bishop and only then capture on c5, to make them lose a tempo."
   },
   {
    "ply": 10,
@@ -156,7 +156,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Black plays a bishop to e7. He's positioned the knight so that after a capture on c5 he can retake with the knight — but you still want the IQP, even without winning the tempo."
+   "spoken": "Black plays a bishop to e7. He's positioned the knight so that after a capture on c5 they can retake with the knight — but you still want the IQP, even without winning the tempo."
   },
   {
    "ply": 21,
@@ -193,7 +193,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": "Black takes with the bishop on c5 — a bad move. The three good bishop squares were e3, f4, and g5. Now there's a rook check on e1, and I suspect he's planning a knight to e4 in reply.",
+   "spoken": "Black takes with the bishop on c5 — a bad move. The three good bishop squares were e3, f4, and g5. Now there's a rook check on e1, and I suspect they're planning a knight to e4 in reply.",
    "reanchor": true
   },
   {
@@ -590,7 +590,7 @@
    "line": [
     "Rb7"
    ],
-   "spoken": "Black plays a rook to b7, defending well, but you grind him down. In these endgames you must be ready to give away a couple of pawns to promote your passer.",
+   "spoken": "Black plays a rook to b7, defending well, but you grind them down. In these endgames you must be ready to give away a couple of pawns to promote your passer.",
    "reanchor": true
   },
   {

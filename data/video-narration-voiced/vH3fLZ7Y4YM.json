@@ -107,7 +107,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "Black plays a6, which is quite inaccurate — the d6-square is very important, and it becomes hard for him to ever push d6."
+   "spoken": "Black plays a6, which is quite inaccurate — the d6-square is very important, and it becomes hard for them to ever push d6."
   },
   {
    "ply": 15,
@@ -215,7 +215,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "Black plays the queen to b6 — I don't like that move at all for him."
+   "spoken": "Black plays the queen to b6 — I don't like that move at all for them."
   },
   {
    "ply": 27,
@@ -249,7 +249,7 @@
    "t": 552,
    "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": "He made it easy for you, but the knight to g5 would have been possible — so let's check the theory of the line.",
+   "spoken": "They made it easy for you, but the knight to g5 would have been possible — so let's check the theory of the line.",
    "reanchor": true
   }
  ]

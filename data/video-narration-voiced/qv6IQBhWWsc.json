@@ -113,7 +113,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "He captures unprovoked, so you actually saved a tempo by never playing a6. The recapture opens the b-file, and don't fret the doubled pawn — one doubled pawn is nothing, and you've got the two bishops.",
+   "spoken": "They capture unprovoked, so you actually saved a tempo by never playing a6. The recapture opens the b-file, and don't fret the doubled pawn — one doubled pawn is nothing, and you've got the two bishops.",
    "kind": "main",
    "teaches": [
     "doubled pawns for the bishop pair"
@@ -135,7 +135,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "Don't trade the bishops here — that would open the f-file for HIM. Drop the bishop back to b6 instead, so that if he takes it, YOU get to open the a-file for your rook.",
+   "spoken": "Don't trade the bishops here — that would open the f-file for HIM. Drop the bishop back to b6 instead, so that if they take it, YOU get to open the a-file for your rook.",
    "kind": "plan",
    "teaches": [
     "open files for you, not him"
@@ -157,7 +157,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Now develop the bishop to its most active square, g4, setting the pin. If he shoves a pawn at it he only weakens himself, and you simply hold the pin.",
+   "spoken": "Now develop the bishop to its most active square, g4, setting the pin. If they shove a pawn at it they only weaken themselves, and you simply hold the pin.",
    "kind": "main",
    "teaches": [
     "develop actively, keep the pin"
@@ -197,7 +197,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "Keep developing and hold the pin. It's a tough position for him — the pin, your piece coordination — and because he's already given up his light-squared bishop, that pin is very hard for him to break.",
+   "spoken": "Keep developing and hold the pin. It's a tough position for them — the pin, your piece coordination — and because they're already given up their light-squared bishop, that pin is very hard for them to break.",
    "kind": "plan",
    "teaches": [
     "a pin is stronger once the defender’s bishop is gone"
@@ -219,7 +219,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "He pins you back, so chase it with h6 — because now if he pushes his bishop's pawn you can't be taken by his knight, which is itself pinned. Your pin is better than his.",
+   "spoken": "They pin you back, so chase it with h6 — because now if they push their bishop's pawn you can't be taken by their knight, which is itself pinned. Your pin is better than their.",
    "kind": "main",
    "teaches": [
     "whose pin is stronger"
@@ -241,7 +241,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "The pawn pushes to g5, excommunicating his bishop from the game.",
+   "spoken": "The pawn pushes to g5, excommunicating their bishop from the game.",
    "kind": "main",
    "teaches": [
     "shut the bishop out"
@@ -346,7 +346,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "Decide your queen's ideal square first — where it sits most harmoniously with the rook. To f6, then it can slide to g6, and you slowly bring both rooks to bear. And keep in reserve that the bishop eyes f2: not now, but the moment his defender moves or you sacrifice for it, that becomes real.",
+   "spoken": "Decide your queen's ideal square first — where it sits most harmoniously with the rook. To f6, then it can slide to g6, and you slowly bring both rooks to bear. And keep in reserve that the bishop eyes f2: not now, but the moment their defender moves or you sacrifice for it, that becomes real.",
    "kind": "plan",
    "teaches": [
     "place the queen relative to the rook",

@@ -109,7 +109,7 @@
       "line": [
         "Bg3"
       ],
-      "spoken": "The bishop to g3 is correct. What makes the Grünfeld both fun and hard is constant tactical alertness — these centralized pieces are integral to Black's central strategy, and unlike the King's Indian, where you play the long game, here you assault White's centre directly, with moves like c5 and the knight to c6. White can lose quickly if he doesn't develop precisely. So between c5 and the knight to c6, which harasses the centre more effectively?"
+      "spoken": "The bishop to g3 is correct. What makes the Grünfeld both fun and hard is constant tactical alertness — these centralized pieces are integral to Black's central strategy, and unlike the King's Indian, where you play the long game, here you assault White's centre directly, with moves like c5 and the knight to c6. White can lose quickly if they don't develop precisely. So between c5 and the knight to c6, which harasses the centre more effectively?"
     },
     {
       "ply": 12,
@@ -118,7 +118,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "It's c5 — the knight to c6 can be met by e3, forming a pawn chain, but c5 is very strong: if White simply takes with d takes c5, you play the knight takes c3, and after trading queens he loses a piece, because he can't recapture the bishop takes c3 with check between the king and rook. If instead e3, after the trade he gets an isolated queen pawn and you blockade the square in front of it — phenomenal for Black."
+      "spoken": "It's c5 — the knight to c6 can be met by e3, forming a pawn chain, but c5 is very strong: if White simply takes with d takes c5, you play the knight takes c3, and after trading queens they lose a piece, because they can't recapture the bishop takes c3 with check between the king and rook. If instead e3, after the trade they get an isolated queen pawn and you blockade the square in front of it — phenomenal for Black."
     },
     {
       "ply": 13,
@@ -127,7 +127,7 @@
       "line": [
         "dxc5"
       ],
-      "spoken": "He should probably take the knight first, then the pawn — but he takes the pawn, capturing on c5. Unless I miscalculated, you're in great shape."
+      "spoken": "They should probably take the knight first, then the pawn — but they take the pawn, capturing on c5. Unless I miscalculated, you're in great shape."
     },
     {
       "ply": 14,
@@ -146,7 +146,7 @@
         "Qxd8+",
         "Kxd8"
       ],
-      "spoken": "He miscalculated something — maybe he thought he had a check — but the queen takes d8 with check, and you simply recapture on d8. A nice introduction to the Grünfeld."
+      "spoken": "They miscalculated something — maybe they thought he had a check — but the queen takes d8 with check, and you simply recapture on d8. A nice introduction to the Grünfeld."
     },
     {
       "ply": 17,
@@ -155,7 +155,7 @@
       "line": [
         "bxc3"
       ],
-      "spoken": "He takes, capturing on c3 — making things worse, but people familiar with an opening still don't always handle it well at this level."
+      "spoken": "They take, capturing on c3 — making things worse, but people familiar with an opening still don't always handle it well at this level."
     },
     {
       "ply": 18,
@@ -228,7 +228,7 @@
       "line": [
         "Rc8"
       ],
-      "spoken": "Many good moves here. One approach is to target the c5 pawn, realizing it's a conduit toward his king — so you begin with the rook to c8. The knight to d4 is stronger once it's prepared this way."
+      "spoken": "Many good moves here. One approach is to target the c5 pawn, realizing it's a conduit toward their king — so you begin with the rook to c8. The knight to d4 is stronger once it's prepared this way."
     },
     {
       "ply": 27,
@@ -246,7 +246,7 @@
       "line": [
         "Nd4"
       ],
-      "spoken": "The knight to d4 — the bishop can come back to capture it, and note White has the rook to d1 if he wants, but then you take on c5 just in time."
+      "spoken": "The knight to d4 — the bishop can come back to capture it, and note White has the rook to d1 if they want, but then you take on c5 just in time."
     },
     {
       "ply": 29,
@@ -641,7 +641,7 @@
         "Kxd2",
         "Nc6"
       ],
-      "spoken": "After trading queens and the knight to c6, I have a beautiful bishop and White's king is weak, though White can play on — this is what he should have done to limit the damage.",
+      "spoken": "After trading queens and the knight to c6, I have a beautiful bishop and White's king is weak, though White can play on — this is what they should have done to limit the damage.",
       "reanchor": true
     },
     {
@@ -649,7 +649,7 @@
       "t": 1942,
       "fen": "rnb1k2r/pp2ppbp/6p1/2pq4/3P4/6B1/PP2PPPP/R2QKBNR w KQkq - 0 8",
       "line": [],
-      "spoken": "But after d takes c5, the knight to c3, the game is over. On the top level: Magnus has a much wider repertoire than MVL, who plays the Grünfeld and Najdorf almost exclusively; that predictability is a slight disadvantage now that preparation has grown so powerful, but he's survived for years and won tons of games — he might just need to widen his repertoire a little to stay unpredictable.",
+      "spoken": "But after d takes c5, the knight to c3, the game is over. On the top level: Magnus has a much wider repertoire than MVL, who plays the Grünfeld and Najdorf almost exclusively; that predictability is a slight disadvantage now that preparation has grown so powerful, but he's survived for years and won tons of games — they might just need to widen their repertoire a little to stay unpredictable.",
       "reanchor": true
     }
   ]

@@ -34,7 +34,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "He plays c3 — the Ponziani, a genuinely dangerous opening; White wants to build a big center."
+   "spoken": "They play c3 — the Ponziani, a genuinely dangerous opening; White wants to build a big center."
   },
   {
    "ply": 6,
@@ -70,7 +70,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "White grabs on e5. Now his queen wants to come to h5 and do damage, so I have to develop fast."
+   "spoken": "White grabs on e5. Now their queen wants to come to h5 and do damage, so I have to develop fast."
   },
   {
    "ply": 10,
@@ -106,7 +106,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "Instead he plays the bishop to b3, a bit passive."
+   "spoken": "Instead they play the bishop to b3, a bit passive."
   },
   {
    "ply": 14,
@@ -115,7 +115,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "You don't want to take the e5-knight — if you do, he recaptures and piles pressure on you. So the bishop to d6, dislodging the knight."
+   "spoken": "You don't want to take the e5-knight — if you do, they recapture and pile pressure on you. So the bishop to d6, dislodging the knight."
   },
   {
    "ply": 15,
@@ -413,7 +413,7 @@
    "line": [
     "Nxd7"
    ],
-   "spoken": "He takes on d7 — and now he has the two bishops.",
+   "spoken": "They take on d7 — and now they have the two bishops.",
    "reanchor": true
   },
   {
@@ -650,7 +650,7 @@
     "Bxg4",
     "Bxd8"
    ],
-   "spoken": "The problem is your queen is hanging — White has the license to take on g4, and if you take back he takes on d8.",
+   "spoken": "The problem is your queen is hanging — White has the license to take on g4, and if you take back they take on d8.",
    "reanchor": true
   },
   {
@@ -658,7 +658,7 @@
    "t": 1352,
    "fen": "r1bq1rk1/p1p3pp/2p5/3p2B1/3Pp1n1/1BP5/PP3PPK/RN1Q1R2 w - - 3 12",
    "line": [],
-   "spoken": "Your pieces are hanging, so you'd need to move your queen with check — but he can block it.",
+   "spoken": "Your pieces are hanging, so you'd need to move your queen with check — but they can block it.",
    "reanchor": true
   },
   {

@@ -142,7 +142,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "White plays the knight to d4, offering a trade. The default from beginner level on is to keep the tension — only trade with a good reason — and here I dislike taking, because it lets White's bishop reposition to contest yours and ease his kingside development."
+   "spoken": "White plays the knight to d4, offering a trade. The default from beginner level on is to keep the tension — only trade with a good reason — and here I dislike taking, because it lets White's bishop reposition to contest yours and ease their kingside development."
   },
   {
    "ply": 17,
@@ -468,7 +468,7 @@
    "t": 534,
    "fen": "r2q1rk1/pp3pbp/3p1np1/N3pb2/8/2Q1B3/PP2PPPP/R3KB1R b KQ - 0 14",
    "line": [],
-   "spoken": "A great drill: set this up and try to convert it against Stockfish. The mating net here is the two bishops crisscrossing on d3 and c3 to set up the rook to b1 for mate — the pawn to e4, then the bishop to c3, then the rook to b1. And if White pushes e4 himself, the bishop to h6 is unstoppable mate instead. Remember: every pawn move opens a diagonal and clears a square, so always reassess what's been opened.",
+   "spoken": "A great drill: set this up and try to convert it against Stockfish. The mating net here is the two bishops crisscrossing on d3 and c3 to set up the rook to b1 for mate — the pawn to e4, then the bishop to c3, then the rook to b1. And if White pushes e4 themselves, the bishop to h6 is unstoppable mate instead. Remember: every pawn move opens a diagonal and clears a square, so always reassess what's been opened.",
    "reanchor": true
   },
   {

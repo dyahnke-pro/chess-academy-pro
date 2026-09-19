@@ -55,7 +55,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "He plays the Gurgenidze system, a cross between the Caro-Kann and the Modern, preparing to strike with d5.",
+   "spoken": "They play the Gurgenidze system, a cross between the Caro-Kann and the Modern, preparing to strike with d5.",
    "kind": "main",
    "teaches": [
     "the Gurgenidze system"
@@ -68,7 +68,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "There are many ways to meet it, but an underestimated one is to develop the bishop to c4 immediately — the point is to take d5 away from him.",
+   "spoken": "There are many ways to meet it, but an underestimated one is to develop the bishop to c4 immediately — the point is to take d5 away from them.",
    "kind": "plan",
    "teaches": [
     "Bc4 to stop d5"
@@ -81,7 +81,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "And here's the common mistake: he props up d5 with e6, not noticing the very subtle reply that cements the weakness he's just created.",
+   "spoken": "And here's the common mistake: they prop up d5 with e6, not noticing the very subtle reply that cements the weakness he's just created.",
    "teaches": [
     "e6 creates a hole"
    ]
@@ -134,7 +134,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Look at the wreckage: his bishop is passive, he's saddled with a weakness on d6, and he's dragged the queen out early instead of developing — a badly cramped position that's hard to untangle.",
+   "spoken": "Look at the wreckage: their bishop is passive, he's saddled with a weakness on d6, and he's dragged the queen out early instead of developing — a badly cramped position that's hard to untangle.",
    "teaches": [
     "diagnosing the ruined structure"
    ]
@@ -173,7 +173,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "By jumping the knight to d5 he surrenders control of a gorgeous central square — so you slam your own knight into e4, eyeing the d6-hole.",
+   "spoken": "By jumping the knight to d5 they surrender control of a gorgeous central square — so you slam your own knight into e4, eyeing the d6-hole.",
    "kind": "main",
    "teaches": [
     "occupy the vacated square"
@@ -217,7 +217,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "He pins himself. His position is desperately passive, so you lay it on by centralising the knight on e5 — look at the disparity in piece activity.",
+   "spoken": "They pin themselves. Their position is desperately passive, so you lay it on by centralising the knight on e5 — look at the disparity in piece activity.",
    "kind": "main",
    "teaches": [
     "centralise and pile up"
@@ -230,7 +230,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Keep a running wish list, updated every move — the ideas you'd love to play if only they were possible. Here, after a rook-pawn nudge, the queen swings to f3 and his knight is simply lost.",
+   "spoken": "Keep a running wish list, updated every move — the ideas you'd love to play if only they were possible. Here, after a rook-pawn nudge, the queen swings to f3 and their knight is simply lost.",
    "kind": "plan",
    "teaches": [
     "keep a wish list"
@@ -250,7 +250,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "His whole downfall traced back to e6.",
+   "spoken": "Their whole downfall traced back to e6.",
    "kind": "review",
    "teaches": [
     "the root mistake was e6"
@@ -271,7 +271,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "This idea of cementing dark-square weaknesses with e5 recurs across a surprisingly wide range of openings. Petrosian showed exactly this against Pachman — the same e5, the same forced d6, the same trail of weaknesses, and he won very quickly. The same elements, the same harassment.",
+   "spoken": "This idea of cementing dark-square weaknesses with e5 recurs across a surprisingly wide range of openings. Petrosian showed exactly this against Pachman — the same e5, the same forced d6, the same trail of weaknesses, and they won very quickly. The same elements, the same harassment.",
    "kind": "review",
    "teaches": [
     "the Petrosian–Pachman model"
@@ -285,7 +285,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": "And if he never plays d5, you simply plant a knight on d6 — even more disastrous for him. Natural development, hit the queen, then chase the knight off d5 by retreating the bishop and advancing the pawn.",
+   "spoken": "And if they never play d5, you simply plant a knight on d6 — even more disastrous for them. Natural development, hit the queen, then chase the knight off d5 by retreating the bishop and advancing the pawn.",
    "kind": "review",
    "teaches": [
     "the d6 outpost plan"

@@ -52,7 +52,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "He chooses the fianchetto setup, and to start you complete your kingside development."
+   "spoken": "They choose the fianchetto setup, and to start you complete your kingside development."
   },
   {
    "ply": 9,
@@ -80,7 +80,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "He plays the main line, c4 — a very theoretical line, impressive to see at this level. Another major crossroads, with two main moves."
+   "spoken": "They play the main line, c4 — a very theoretical line, impressive to see at this level. Another major crossroads, with two main moves."
   },
   {
    "ply": 12,
@@ -122,7 +122,7 @@
     "dxc4",
     "Na3"
    ],
-   "spoken": "He plays the knight to a3, correctly. Now an instructive idea, hard to find without the theory: you cannot keep the extra pawn — b5 drops it, and clinging with the bishop to e6 runs into the knight to g5, when Bd5 is met by e4 and you've given up the centre without even keeping the pawn. The pawn is condemned — so use it to inflict maximum damage on White's structure."
+   "spoken": "They play the knight to a3, correctly. Now an instructive idea, hard to find without the theory: you cannot keep the extra pawn — b5 drops it, and clinging with the bishop to e6 runs into the knight to g5, when Bd5 is met by e4 and you've given up the centre without even keeping the pawn. The pawn is condemned — so use it to inflict maximum damage on White's structure."
   },
   {
    "ply": 14,
@@ -140,7 +140,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "It does solidify his centre a little — but the pawn on c3 is now backward, and he's left with an isolated a-pawn. And you mustn't fall asleep: that would let him prepare e4."
+   "spoken": "It does solidify their centre a little — but the pawn on c3 is now backward, and he's left with an isolated a-pawn. And you mustn't fall asleep: that would let them prepare e4."
   },
   {
    "ply": 16,
@@ -156,7 +156,7 @@
    "t": 350,
    "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2pP4/N4NP1/PP2PPBP/R1BQ1RK1 b - - 1 7",
    "line": [],
-   "spoken": "You can play c5 before c3 — but then be careful not to let his fianchetto bishop become too active.",
+   "spoken": "You can play c5 before c3 — but then be careful not to let their fianchetto bishop become too active.",
    "reanchor": true
   },
   {
@@ -168,7 +168,7 @@
     "bxc3",
     "c5"
    ],
-   "spoken": "A key point: it's actually good for you that his knight stays on f3, because it cancels out the fianchetto bishop. And here's the Grünfeld principle — you almost never mind giving up a pawn; activity is sacred. Against a capture you have the queen to a5, forking two of his pawns, or the knight to e4, double-attacking c3 — and you don't mind a queen trade if it hands you the d-file.",
+   "spoken": "A key point: it's actually good for you that their knight stays on f3, because it cancels out the fianchetto bishop. And here's the Grünfeld principle — you almost never mind giving up a pawn; activity is sacred. Against a capture you have the queen to a5, forking two of their pawns, or the knight to e4, double-attacking c3 — and you don't mind a queen trade if it hands you the d-file.",
    "reanchor": true
   },
   {
@@ -231,7 +231,7 @@
    "line": [
     "Bb2"
    ],
-   "spoken": "Watch his knight on a3 — the bishop to d2 would blunder it, so his best, perhaps only, move is the bishop to b2. You keep pressing the centre with the rook to d8 — and I'm starting to sense the queen to a5 might actually be an inaccuracy, which would be very instructive, given how tempting the move is."
+   "spoken": "Watch their knight on a3 — the bishop to d2 would blunder it, so their best, perhaps only, move is the bishop to b2. You keep pressing the centre with the rook to d8 — and I'm starting to sense the queen to a5 might actually be an inaccuracy, which would be very instructive, given how tempting the move is."
   },
   {
    "ply": 22,
@@ -240,7 +240,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "The queen to a5 may indeed be a mistake, because the bishop to b2 solidifies his centre and makes d4 harder to pressure. But you're in too deep — the rook to d8, played automatically. You're not afraid of the knight to c4; you'd simply drop the queen back to a6 or b5. A classic Grünfeld battle over the centre: you try to make White's centre collapse, he tries to expand it and cover every base."
+   "spoken": "The queen to a5 may indeed be a mistake, because the bishop to b2 solidifies their centre and makes d4 harder to pressure. But you're in too deep — the rook to d8, played automatically. You're not afraid of the knight to c4; you'd simply drop the queen back to a6 or b5. A classic Grünfeld battle over the centre: you try to make White's centre collapse, they try to expand it and cover every base."
   }
  ]
 }

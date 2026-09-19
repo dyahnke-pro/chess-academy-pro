@@ -50,14 +50,14 @@
       "line": [
         "d6"
       ],
-      "spoken": "a Soviet grandmaster once played c6 and d6 in a tournament game, and a friend asked why he didn't play the Caro-Kann, one step from pushing d5;"
+      "spoken": "a Soviet grandmaster once played c6 and d6 in a tournament game, and a friend asked why they didn't play the Caro-Kann, one step from pushing d5;"
     },
     {
       "ply": 3,
       "t": 1125,
       "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
       "line": [],
-      "spoken": "he joked that he didn't have the hand strength to push the pawn two squares. d6 itself isn't terrible,",
+      "spoken": "they joked that they didn't have the hand strength to push the pawn two squares. d6 itself isn't terrible,",
       "reanchor": true
     },
     {
@@ -212,7 +212,7 @@
       "line": [
         "f6"
       ],
-      "spoken": "to h2 or to d2, and Black loses the g-pawn, because the bishop on h5 is undefended. f6. Every move Black has played in the last five weakens his position; e5 is tempting, but I just spotted a beautiful tactical idea — does anybody see it?"
+      "spoken": "to h2 or to d2, and Black loses the g-pawn, because the bishop on h5 is undefended. f6. Every move Black has played in the last five weakens their position; e5 is tempting, but I just spotted a beautiful tactical idea — does anybody see it?"
     },
     {
       "ply": 21,
@@ -642,7 +642,7 @@
       "t": 1562.5,
       "fen": "r3kbnr/1pNnp3/p1pp1p1p/P7/3PP3/2N1B2P/1PP2PP1/R2b1RK1 b kq - 0 13",
       "line": [],
-      "spoken": "I have to give it up for my opponent, he defended very well. But I apologise, that was sloppy conversion on my end — I was over-explaining a bit. I",
+      "spoken": "I have to give it up for my opponent, they defended very well. But I apologise, that was sloppy conversion on my end — I was over-explaining a bit. I",
       "reanchor": true
     },
     {
@@ -679,7 +679,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "but a lot of people like to play these weird openings where you push out a bunch of pawns. The first thing you should notice is that I didn't try to punish this on move six with some crazy pawn storm or a central break. Some openings should be punished on move six — if your opponent is playing f6 and the king to f7, that's a different story — but nothing Black did was bad enough that you're somehow winning and should try to end the game in the opening. First you developed your pieces modestly — h3, the bishop to e2, the knight to d7 — you castled kingside, Black played the queen to c7, you completed your development, and then simply a4, methodically improving and preparing to drive the pawn up to a5. If Black had played a5 himself, maybe you'd start playing more in the centre with d5 — the power of d5 is that if Black pushes c5, it gives up a massive outpost for the knight, and the knight on f3 can then sink in."
+      "spoken": "but a lot of people like to play these weird openings where you push out a bunch of pawns. The first thing you should notice is that I didn't try to punish this on move six with some crazy pawn storm or a central break. Some openings should be punished on move six — if your opponent is playing f6 and the king to f7, that's a different story — but nothing Black did was bad enough that you're somehow winning and should try to end the game in the opening. First you developed your pieces modestly — h3, the bishop to e2, the knight to d7 — you castled kingside, Black played the queen to c7, you completed your development, and then simply a4, methodically improving and preparing to drive the pawn up to a5. If Black had played a5 themselves, maybe you'd start playing more in the centre with d5 — the power of d5 is that if Black pushes c5, it gives up a massive outpost for the knight, and the knight on f3 can then sink in."
     }
   ]
 }

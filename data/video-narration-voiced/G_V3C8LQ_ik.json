@@ -98,7 +98,7 @@
         "Qxd1+",
         "Kxd1"
       ],
-      "spoken": "The queen takes d1 with check, and your king recaptures on d1 — if he knows the theory, this gets sharp."
+      "spoken": "The queen takes d1 with check, and your king recaptures on d1 — if they know the theory, this gets sharp."
     },
     {
       "ply": 14,
@@ -116,7 +116,7 @@
       "line": [
         "Na3"
       ],
-      "spoken": "The bishop to b5 has limited value since Black plays e6, so I like the Alapin-esque idea of getting the knight to b5. So the knight to a3 — from b5 the knight eyes c7, and if Black pushes the e-pawn and you play the knight to b5, you can even reach d6, where after Black takes and you recapture, you get the bishop pair and dark-square control; even if Black wins the pawn back, you'd get the better endgame. A nice flexible developing move, waiting for Black to show his cards."
+      "spoken": "The bishop to b5 has limited value since Black plays e6, so I like the Alapin-esque idea of getting the knight to b5. So the knight to a3 — from b5 the knight eyes c7, and if Black pushes the e-pawn and you play the knight to b5, you can even reach d6, where after Black takes and you recapture, you get the bishop pair and dark-square control; even if Black wins the pawn back, you'd get the better endgame. A nice flexible developing move, waiting for Black to show their cards."
     },
     {
       "ply": 13,
@@ -155,7 +155,7 @@
       "line": [
         "Kd8"
       ],
-      "spoken": "It may seem like one-move-itis, but it's a serious threat: to stop the knight to c7, Black must ruin his king safety by moving the king to the d-file, or lose queenside castling by moving the rook — either way a wasted move. The king to d8.",
+      "spoken": "It may seem like one-move-itis, but it's a serious threat: to stop the knight to c7, Black must ruin their king safety by moving the king to the d-file, or lose queenside castling by moving the rook — either way a wasted move. The king to d8.",
       "reanchor": true
     },
     {
@@ -272,7 +272,7 @@
       "line": [
         "Ke2"
       ],
-      "spoken": "So instead you move the king off d1 — to the c-file or e-file, doesn't matter; I like keeping the king central in the endgame. The king to e2. Notice how your pawns restrict both black knights — d4, b4 and f4 are all covered, a major appeal of g3 over the bishop-e2 route. Now the devastating threat of the rook to d1, and Black is borderline dead lost — not just from the extra pawn, but because his position is in shambles. He can't castle, the king has moved; against the rook to d1 there's no good answer — if the king to e8, the rook to d1, and if the rook to d8 defends the knight, you play the rook takes d5, the classic trick with the knight coming to c7 to win the rook. e6 might be the only move for breathing room, but then you take on e6 and Black can resign. What's wrong with the knight to f6? A check on d1 forces the king to e8 — which is partly why you put the bishop on h3: not just to hit e6, but so that when Black played e5 you also contained the king, preventing it from reaching c8.",
+      "spoken": "So instead you move the king off d1 — to the c-file or e-file, doesn't matter; I like keeping the king central in the endgame. The king to e2. Notice how your pawns restrict both black knights — d4, b4 and f4 are all covered, a major appeal of g3 over the bishop-e2 route. Now the devastating threat of the rook to d1, and Black is borderline dead lost — not just from the extra pawn, but because their position is in shambles. They can't castle, the king has moved; against the rook to d1 there's no good answer — if the king to e8, the rook to d1, and if the rook to d8 defends the knight, you play the rook takes d5, the classic trick with the knight coming to c7 to win the rook. e6 might be the only move for breathing room, but then you take on e6 and Black can resign. What's wrong with the knight to f6? A check on d1 forces the king to e8 — which is partly why you put the bishop on h3: not just to hit e6, but so that when Black played e5 you also contained the king, preventing it from reaching c8.",
       "reanchor": true
     },
     {
@@ -288,7 +288,7 @@
       "t": 864.5,
       "fen": "r1b1kb1r/pp2pppp/2n2n2/2pq4/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
       "line": [],
-      "spoken": "Kudos to Chimp for finding e6 — you just grab the pawn, low risk. Now the knight has a big problem: if it drops to c7, you check on d1, force the king away, win the knight, and mate follows with the bishop to g5. If the knight to f6, that's the only way to stave off immediate defeat, then the bishop to g5 or the rook-d1 check. He played the knight to c7 — that loses: the rook to d1 with check, the king to e7, and you collect the knight while delivering mate with the bishop to g5.",
+      "spoken": "Kudos to Chimp for finding e6 — you just grab the pawn, low risk. Now the knight has a big problem: if it drops to c7, you check on d1, force the king away, win the knight, and mate follows with the bishop to g5. If the knight to f6, that's the only way to stave off immediate defeat, then the bishop to g5 or the rook-d1 check. They played the knight to c7 — that loses: the rook to d1 with check, the king to e7, and you collect the knight while delivering mate with the bishop to g5.",
       "reanchor": true
     },
     {
@@ -599,7 +599,7 @@
       "line": [
         "Bf4"
       ],
-      "spoken": "Black has no clear way to deploy the knight, must keep an eye on c7, and the c8-bishop is locked behind his pawns — it should be visually apparent this is a bad endgame.",
+      "spoken": "Black has no clear way to deploy the knight, must keep an eye on c7, and the c8-bishop is locked behind their pawns — it should be visually apparent this is a bad endgame.",
       "reanchor": true
     },
     {
@@ -629,7 +629,7 @@
       "line": [
         "Nd5"
       ],
-      "spoken": "In both, White got impatient and cashed his chips in for the bishop pair with the knight to d6...",
+      "spoken": "In both, White got impatient and cashed their chips in for the bishop pair with the knight to d6...",
       "reanchor": true
     },
     {
@@ -639,7 +639,7 @@
       "line": [
         "Nd6+"
       ],
-      "spoken": "...but the engine likes keeping the tension of the dark-squared bishop — it's plus two. Say the bishop to e7, Black develops; you castle queenside. If Black castles queenside, he gets mated on a7, a worthy mating construction; if kingside, you make the improving bishop to f3, then the rook to e1, and it's plus two — compare the piece placement: Black's position is miserable and hard to play, running out of useful moves. The a8-rook can't move because a7 hangs, the other rook can go to d8, you move the rook to e1, threatening the bishop takes d5, and you can tuck the king to b1.",
+      "spoken": "...but the engine likes keeping the tension of the dark-squared bishop — it's plus two. Say the bishop to e7, Black develops; you castle queenside. If Black castles queenside, they get mated on a7, a worthy mating construction; if kingside, you make the improving bishop to f3, then the rook to e1, and it's plus two — compare the piece placement: Black's position is miserable and hard to play, running out of useful moves. The a8-rook can't move because a7 hangs, the other rook can go to d8, you move the rook to e1, threatening the bishop takes d5, and you can tuck the king to b1.",
       "reanchor": true
     },
     {
@@ -647,7 +647,7 @@
       "t": 1316.5,
       "fen": "rnb1kb1r/pp3ppp/4pn2/1N1q4/3p4/2P2N2/PP3PPP/R1BQKB1R b KQkq - 1 7",
       "line": [],
-      "spoken": "A very unpleasant endgame for Black — that's why the knight to a6 is the choice of more top grandmasters, though it doesn't fully solve his problems.",
+      "spoken": "A very unpleasant endgame for Black — that's why the knight to a6 is the choice of more top grandmasters, though it doesn't fully solve their problems.",
       "reanchor": true
     },
     {

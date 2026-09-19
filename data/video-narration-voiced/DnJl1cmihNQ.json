@@ -15,7 +15,7 @@
         "e4",
         "e5"
       ],
-      "spoken": "You open e4, and your opponent answers e5 — he plays the Philidor, so this could be a themed run."
+      "spoken": "You open e4, and your opponent answers e5 — they play the Philidor, so this could be a themed run."
     },
     {
       "ply": 3,
@@ -225,7 +225,7 @@
       "line": [
         "f5"
       ],
-      "spoken": "f5 — very devious. I need to calculate: if d takes e5, he has f takes e4 and a crazy series of trades I can't evaluate; the rook to e1 feels good but risky. Maybe the bishop takes g8 first."
+      "spoken": "f5 — very devious. I need to calculate: if d takes e5, they have f takes e4 and a crazy series of trades I can't evaluate; the rook to e1 feels good but risky. Maybe the bishop takes g8 first."
     },
     {
       "ply": 19,
@@ -243,7 +243,7 @@
       "line": [
         "Kxg8"
       ],
-      "spoken": "He recaptures with the king on g8. You give up the bishop pair, but he's so poorly developed you may even get the bishop out to g5 later."
+      "spoken": "They recapture with the king on g8. You give up the bishop pair, but he's so poorly developed you may even get the bishop out to g5 later."
     },
     {
       "ply": 21,
@@ -288,7 +288,7 @@
       "line": [
         "Ng3"
       ],
-      "spoken": "The knight to g3, for two reasons: first, more king safety; second, I'm already thinking about knight sallies like the knight to h5. If you play the Ruy or Italian, you know the value of a knight on g3 — a lot of potential energy. And note the bishop takes h3 is not a move, because the knight defends it — but whenever the f-file is open like this, always watch for the bishop takes h3. Black is clearly worse; he missed the bishop takes g8 and has insufficient compensation."
+      "spoken": "The knight to g3, for two reasons: first, more king safety; second, I'm already thinking about knight sallies like the knight to h5. If you play the Ruy or Italian, you know the value of a knight on g3 — a lot of potential energy. And note the bishop takes h3 is not a move, because the knight defends it — but whenever the f-file is open like this, always watch for the bishop takes h3. Black is clearly worse; they missed the bishop takes g8 and has insufficient compensation."
     },
     {
       "ply": 26,
@@ -297,7 +297,7 @@
       "line": [
         "Bc5"
       ],
-      "spoken": "If Black plays the bishop to e6, the natural move is the knight to d4, centralizing and hitting the bishop — but that walks into c5, so it's not desirable yet. He plays the bishop to c5, setting up threats on the diagonal."
+      "spoken": "If Black plays the bishop to e6, the natural move is the knight to d4, centralizing and hitting the bishop — but that walks into c5, so it's not desirable yet. They play the bishop to c5, setting up threats on the diagonal."
     },
     {
       "ply": 27,
@@ -306,7 +306,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "You could play the bishop to e3 to trade bishops, at the cost of your structure; or a neutral c3 to prepare b4, where he'd answer a5. I don't like the bishop to g5, which walks into the queen to b6 and a battery on b2. Actually, I think the best move is the bishop to e3."
+      "spoken": "You could play the bishop to e3 to trade bishops, at the cost of your structure; or a neutral c3 to prepare b4, where they'd answer a5. I don't like the bishop to g5, which walks into the queen to b6 and a battery on b2. Actually, I think the best move is the bishop to e3."
     },
     {
       "ply": 29,
@@ -424,7 +424,7 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": "The knight takes, capturing on e4 — some weird tactics, but no need; king on h1 or h2 is nonessential. If he plays the queen takes b2, it's time to calculate."
+      "spoken": "The knight takes, capturing on e4 — some weird tactics, but no need; king on h1 or h2 is nonessential. If they play the queen takes b2, it's time to calculate."
     },
     {
       "ply": 36,
@@ -433,7 +433,7 @@
       "line": [
         "Qxb2"
       ],
-      "spoken": "The queen takes, capturing on b2 — now pure calculation. You go after his king with the e-pawn; e6 becomes possible. Candidates: the queen to d6, driving into the centre and hitting the rook, or e6, which needs concrete calculation: e6, the knight to f6, e7, the rook to e8."
+      "spoken": "The queen takes, capturing on b2 — now pure calculation. You go after their king with the e-pawn; e6 becomes possible. Candidates: the queen to d6, driving into the centre and hitting the rook, or e6, which needs concrete calculation: e6, the knight to f6, e7, the rook to e8."
     },
     {
       "ply": 37,
@@ -487,7 +487,7 @@
       "line": [
         "Bg4"
       ],
-      "spoken": "What happens after the knight takes e4? There's a clean mate: the rook to f8, rook takes f8, you take and make a queen, the king takes f8, and the queen to d8 is mate. His bishop to g4 is desperation, but an ingenious defense — the easiest is just to take the bishop, though that needs technique. What about the queen to d3, setting up threats on h7?"
+      "spoken": "What happens after the knight takes e4? There's a clean mate: the rook to f8, rook takes f8, you take and make a queen, the king takes f8, and the queen to d8 is mate. Their bishop to g4 is desperation, but an ingenious defense — the easiest is just to take the bishop, though that needs technique. What about the queen to d3, setting up threats on h7?"
     },
     {
       "ply": 43,
@@ -524,7 +524,7 @@
         "Kh8",
         "Nf7+"
       ],
-      "spoken": "The king to h8, and the knight to f7 with check — the knight to h6, the queen to g8, the knight to f7: smothered mate, and he resigns. Beautiful."
+      "spoken": "The king to h8, and the knight to f7 with check — the knight to h6, the queen to g8, the knight to f7: smothered mate, and they resign. Beautiful."
     },
     {
       "ply": 3,
@@ -542,7 +542,7 @@
         "d6",
         "Bc4"
       ],
-      "spoken": "I first learned the bishop to c4 from Kasparov, who played it early in his career. It's not a serious bid for an advantage, just a fresh, easy, more pleasant position for White.",
+      "spoken": "I first learned the bishop to c4 from Kasparov, who played it early in their career. It's not a serious bid for an advantage, just a fresh, easy, more pleasant position for White.",
       "reanchor": true
     },
     {

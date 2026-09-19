@@ -250,7 +250,7 @@
    ],
    "spoken": "Bb7 gives up control of f5, and notice Black's king is genuinely weak — every piece is clustered on the queenside, so the kingside is bare.",
    "kind": "main",
-   "teaches": "When the opponent's pieces all huddle on one wing, his king on the other is ripe for attack."
+   "teaches": "When the opponent's pieces all huddle on one wing, their king on the other is ripe for attack."
   },
   {
    "ply": 31,
@@ -308,7 +308,7 @@
    "line": [
     "Nf5"
    ],
-   "spoken": "With the king wide open, Nf5 is crushing — there's no defense to the mate, so Black has to shed his queen.",
+   "spoken": "With the king wide open, Nf5 is crushing — there's no defense to the mate, so Black has to shed their queen.",
    "kind": "main",
    "teaches": "Once the shelter is gone, a knight to f5 with the queen behind it is usually decisive."
   },

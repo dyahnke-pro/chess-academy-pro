@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "He'll play e4 for sure — he plays it nearly every game — and you respond with e5."
+   "spoken": "They'll play e4 for sure — they play it nearly every game — and you respond with e5."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "And you respond with the knight to c6. He plays the same opening every single time,"
+   "spoken": "And you respond with the knight to c6. They play the same opening every single time,"
   },
   {
    "ply": 5,
@@ -42,14 +42,14 @@
    "line": [
     "d4"
    ],
-   "spoken": "so you can actually prepare for him. He plays what's called the Scotch — the move d4."
+   "spoken": "so you can actually prepare for them. They play what's called the Scotch — the move d4."
   },
   {
    "ply": 4,
    "t": 423,
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
    "line": [],
-   "spoken": "Now in a couple of games he played the bishop to c4, the Italian, so let me show you a",
+   "spoken": "Now in a couple of games they played the bishop to c4, the Italian, so let me show you a",
    "reanchor": true
   },
   {
@@ -59,7 +59,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "few moves here just to be sure. He's threatening the f7-pawn. Well, it's"
+   "spoken": "few moves here just to be sure. They're threatening the f7-pawn. Well, it's"
   },
   {
    "ply": 6,
@@ -68,7 +68,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "actually defended by the king, so he's not really threatening it; you can just develop symmetrically with the bishop to c5. Just because he puts pressure on it doesn't mean you have to go out of your way to defend it."
+   "spoken": "actually defended by the king, so they're not really threatening it; you can just develop symmetrically with the bishop to c5. Just because they put pressure on it doesn't mean you have to go out of your way to defend it."
   },
   {
    "ply": 7,
@@ -77,7 +77,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "So you play the bishop to c5, he castles, and now you just develop"
+   "spoken": "So you play the bishop to c5, they castle, and now you just develop"
   },
   {
    "ply": 8,
@@ -86,7 +86,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "the knight to f6. In one of the games that reached this position he played d4,"
+   "spoken": "the knight to f6. In one of the games that reached this position they played d4,"
   },
   {
    "ply": 9,
@@ -95,7 +95,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "which at a low level is a good opening. He goes d4 — this looks like a blunder, but you should be seeing something: this is"
+   "spoken": "which at a low level is a good opening. They go d4 — this looks like a blunder, but you should be seeing something: this is"
   },
   {
    "ply": 10,
@@ -120,7 +120,7 @@
    "t": 506.5,
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
    "line": [],
-   "spoken": "If you take with the knight, he takes",
+   "spoken": "If you take with the knight, they take",
    "reanchor": true
   },
   {
@@ -138,7 +138,7 @@
    "t": 510,
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
    "line": [],
-   "spoken": "take with that doesn't allow him to do anything — take the pawn on d4 with the bishop, not the knight and not the queen. You take with the bishop, he takes back, you take the knight, and he cannot recapture, because that pawn is defended by your other two pieces. The line goes f4, d6, and it holds — he's not going to know it this deep.",
+   "spoken": "take with that doesn't allow them to do anything — take the pawn on d4 with the bishop, not the knight and not the queen. You take with the bishop, they take back, you take the knight, and he cannot recapture, because that pawn is defended by your other two pieces. The line goes f4, d6, and it holds — they're not going to know it this deep.",
    "reanchor": true
   }
  ]

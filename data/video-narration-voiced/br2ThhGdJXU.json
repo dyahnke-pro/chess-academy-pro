@@ -114,7 +114,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "If White recaptures with the knight, a knight to d4 wins a pawn; he takes with the pawn instead."
+   "spoken": "If White recaptures with the knight, a knight to d4 wins a pawn; they take with the pawn instead."
   },
   {
    "ply": 15,
@@ -124,7 +124,7 @@
     "Qxd1+",
     "Bxd1"
    ],
-   "spoken": "You trade queens, and now that e5 pawn becomes a huge weakness — that's the whole point of the Alekhine: White has more central control, but he'll likely lose that pawn or wreck his pieces defending it."
+   "spoken": "You trade queens, and now that e5 pawn becomes a huge weakness — that's the whole point of the Alekhine: White has more central control, but they'll likely lose that pawn or wreck their pieces defending it."
   },
   {
    "ply": 16,
@@ -159,7 +159,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Critical moment: don't just grab on f3 and e5, because it drops the b7 pawn — and even if it didn't, giving up that g4 bishop isn't clearly worth a pawn. The threat is stronger than the execution: keeping him tortured by the weak pawn beats winning it and relieving him.",
+   "spoken": "Critical moment: don't just grab on f3 and e5, because it drops the b7 pawn — and even if it didn't, giving up that g4 bishop isn't clearly worth a pawn. The threat is stronger than the execution: keeping them tortured by the weak pawn beats winning it and relieving them.",
    "reanchor": true
   },
   {
@@ -297,7 +297,7 @@
    "line": [
     "Nc5"
    ],
-   "spoken": "White found a creative solution — a knight to c5, attacking c6, so if f4 he has a knight capture on e6 counterattacking your rook. You have to calculate.",
+   "spoken": "White found a creative solution — a knight to c5, attacking c6, so if f4 they have a knight capture on e6 counterattacking your rook. You have to calculate.",
    "reanchor": true
   },
   {
@@ -317,7 +317,7 @@
    "line": [
     "Nxe6"
    ],
-   "spoken": "White captures on e6 — he's playing very well.",
+   "spoken": "White captures on e6 — they're playing very well.",
    "reanchor": true
   },
   {
@@ -398,7 +398,7 @@
    "line": [
     "Nd5+"
    ],
-   "spoken": "White made a small error bringing his king backward — you shouldn't do that in the endgame — and he trades the knights.",
+   "spoken": "White made a small error bringing their king backward — you shouldn't do that in the endgame — and they trade the knights.",
    "reanchor": true
   },
   {
@@ -448,7 +448,7 @@
    "line": [
     "Bxh2"
    ],
-   "spoken": "A bishop capture on h2 nets a free pawn — and if he relies on a rook to h5, you have a sexy idea.",
+   "spoken": "A bishop capture on h2 nets a free pawn — and if they rely on a rook to h5, you have a sexy idea.",
    "reanchor": true
   },
   {
@@ -488,7 +488,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "A bishop to h6 — the rook is trapped: the knight covers its escape, the bishop covers the h-file, and your king will walk to g8 to finish it. He can try to ram the pawn, but there's no time — that's jail.",
+   "spoken": "A bishop to h6 — the rook is trapped: the knight covers its escape, the bishop covers the h-file, and your king will walk to g8 to finish it. They can try to ram the pawn, but there's no time — that's jail.",
    "reanchor": true
   },
   {
@@ -520,7 +520,7 @@
     "Rxh6",
     "gxh6"
    ],
-   "spoken": "It's over — he has to take the bishop.",
+   "spoken": "It's over — they have to take the bishop.",
    "reanchor": true
   },
   {
@@ -588,7 +588,7 @@
    "line": [
     "Kf7"
    ],
-   "spoken": "You bring the king up, he gives you access to the pawn, and you push — had he defended, I'd just create a passer and distract his king.",
+   "spoken": "You bring the king up, they give you access to the pawn, and you push — had they defended, I'd just create a passer and distract their king.",
    "reanchor": true
   },
   {
@@ -823,7 +823,7 @@
     "Rxd1",
     "Nxe5"
    ],
-   "spoken": "So here he gives you the pawn...",
+   "spoken": "So here they give you the pawn...",
    "reanchor": true
   },
   {
@@ -990,7 +990,7 @@
    "t": 1984,
    "fen": "2kr3r/ppp1bppp/1n2p1n1/8/4N3/2N1B3/PPP2PPP/R2R2K1 b - - 5 15",
    "line": [],
-   "spoken": "That's completely winning, so he goes a bishop to e3.",
+   "spoken": "That's completely winning, so they go a bishop to e3.",
    "reanchor": true
   },
   {
@@ -1063,7 +1063,7 @@
     "Rxd8",
     "Nc5"
    ],
-   "spoken": "And that forces you to win it out. He went backward with the king, which is fine, but I probably should have gone forward. When he traded the knights he collapsed — that c3 knight should have gone to e4, which is exactly why the bishop on c5 is a sitting duck.",
+   "spoken": "And that forces you to win it out. They went backward with the king, which is fine, but I probably should have gone forward. When they traded the knights they collapsed — that c3 knight should have gone to e4, which is exactly why the bishop on c5 is a sitting duck.",
    "reanchor": true
   }
  ]

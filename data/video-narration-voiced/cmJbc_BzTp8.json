@@ -69,7 +69,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "e6 — the fact that he's playing this passively doesn't alter your plan."
+   "spoken": "e6 — the fact that they're playing this passively doesn't alter your plan."
   },
   {
    "ply": 9,
@@ -105,7 +105,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "You take — it's time, because you've virtually destroyed his pawn chain, and you could take on d4 immediately,"
+   "spoken": "You take — it's time, because you've virtually destroyed their pawn chain, and you could take on d4 immediately,"
   },
   {
    "ply": 13,
@@ -114,7 +114,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "but the classy move is to play the knight to c6, withholding the capture and letting him"
+   "spoken": "but the classy move is to play the knight to c6, withholding the capture and letting them"
   },
   {
    "ply": 14,
@@ -141,7 +141,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": "and look how your bishop has developed — his e5-pawn is still very weak, and you're going to win it."
+   "spoken": "and look how your bishop has developed — their e5-pawn is still very weak, and you're going to win it."
   },
   {
    "ply": 17,
@@ -150,7 +150,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "In fact he doesn't put up any resistance —"
+   "spoken": "In fact they don't put up any resistance —"
   },
   {
    "ply": 18,
@@ -186,7 +186,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "He wants b4, and because you're playing this very positionally,"
+   "spoken": "They want b4, and because you're playing this very positionally,"
   },
   {
    "ply": 22,
@@ -222,7 +222,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "Had he played the bishop to b2, he wouldn't be attacking your knight, and you'd have a more aggressive plan of building a battery. But in the name of positional chess, how do you increase your control of the c4-square? The rook to c8 — but before that, let me improve the queenside: this pawn sticks out like a sore thumb, and when I see this construction I immediately think of undermining."
+   "spoken": "Had they played the bishop to b2, they wouldn't be attacking your knight, and you'd have a more aggressive plan of building a battery. But in the name of positional chess, how do you increase your control of the c4-square? The rook to c8 — but before that, let me improve the queenside: this pawn sticks out like a sore thumb, and when I see this construction I immediately think of undermining."
   },
   {
    "ply": 26,
@@ -231,7 +231,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "When you undermine, you try to break down this pawn structure — it's very vulnerable because he hasn't completed his development. He's in a lose-lose spot: if he plays b5, that creates another hole on c5, and his whole position starts to crumble."
+   "spoken": "When you undermine, you try to break down this pawn structure — it's very vulnerable because they haven't completed their development. They're in a lose-lose spot: if they play b5, that creates another hole on c5, and their whole position starts to crumble."
   },
   {
    "ply": 27,
@@ -240,7 +240,7 @@
    "line": [
     "bxa5"
    ],
-   "spoken": "And if he goes c3, he pays the price for not having developed the knight — his rook is undefended, a-takes-b4, c-takes-b4, the bishop takes b4. He takes, and now you can bring the"
+   "spoken": "And if they go c3, they pay the price for not having developed the knight — their rook is undefended, a-takes-b4, c-takes-b4, the bishop takes b4. They take, and now you can bring the"
   },
   {
    "ply": 28,
@@ -268,7 +268,7 @@
     "Qc7",
     "Nc3"
    ],
-   "spoken": "I did kind of overlook the knight to c3, which aims for b5 — not an issue, but I didn't realise it comes with tempo, and I really don't want to part with this bishop, because it's the instrument that lets you attack the pawn, the glue guy. The rook to a5 isn't effective, because he still plays the knight to b5, defended by that bishop. So are you busted? No — you take the opposite perspective: instead of physically stopping the knight to b5, take the sting out of it, by moving one of these two pieces so the knight to b5 doesn't act as a soft fork —"
+   "spoken": "I did kind of overlook the knight to c3, which aims for b5 — not an issue, but I didn't realise it comes with tempo, and I really don't want to part with this bishop, because it's the instrument that lets you attack the pawn, the glue guy. The rook to a5 isn't effective, because they still play the knight to b5, defended by that bishop. So are you busted? No — you take the opposite perspective: instead of physically stopping the knight to b5, take the sting out of it, by moving one of these two pieces so the knight to b5 doesn't act as a soft fork —"
   },
   {
    "ply": 32,
@@ -296,7 +296,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "this knight is now dangling on b5, doing absolutely nothing. He supports it with a4 — and when a move like that is made, I consider its drawbacks: what squares does it no longer control?"
+   "spoken": "this knight is now dangling on b5, doing absolutely nothing. They support it with a4 — and when a move like that is made, I consider its drawbacks: what squares does it no longer control?"
   },
   {
    "ply": 36,
@@ -323,7 +323,7 @@
    "line": [
     "Bxe3"
    ],
-   "spoken": "circumstances have changed: he's offering you a much better deal — you can ruin his structure, weaken his king, create an isolated pawn, and get rid of his dark-squared bishop. I'm fine with that."
+   "spoken": "circumstances have changed: they're offering you a much better deal — you can ruin their structure, weaken their king, create an isolated pawn, and get rid of their dark-squared bishop. I'm fine with that."
   },
   {
    "ply": 39,
@@ -341,7 +341,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "can make a general improving move: the knight to c3, trading his strongest piece for your strongest — a fantastic move,"
+   "spoken": "can make a general improving move: the knight to c3, trading their strongest piece for your strongest — a fantastic move,"
   },
   {
    "ply": 42,
@@ -360,7 +360,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "Is the queen attacking the pawn? No, you're not concerned about it — again, the worst-case-scenario test: even if you allowed him to do everything he wanted, how could he possibly have enough firepower to attack this pawn?"
+   "spoken": "Is the queen attacking the pawn? No, you're not concerned about it — again, the worst-case-scenario test: even if you allowed them to do everything they wanted, how could he possibly have enough firepower to attack this pawn?"
   },
   {
    "ply": 44,
@@ -405,7 +405,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "He attacks the queen. Where should you go? You can offer a queen trade, but if you're offering one, do it actively — the queen to d2, take your queen, but you'll be making your rook incredibly active. You could also have gone the queen to c5 with check."
+   "spoken": "They attack the queen. Where should you go? You can offer a queen trade, but if you're offering one, do it actively — the queen to d2, take your queen, but you'll be making your rook incredibly active. You could also have gone the queen to c5 with check."
   },
   {
    "ply": 49,
@@ -459,7 +459,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "What is the idea of the rook to c3, where is the rook potentially going? Let's play this without giving him any chances at all — maybe to c5, and I don't want this knight to leave e5. Prophylaxis; these moves drive your opponent crazy."
+   "spoken": "What is the idea of the rook to c3, where is the rook potentially going? Let's play this without giving them any chances at all — maybe to c5, and I don't want this knight to leave e5. Prophylaxis; these moves drive your opponent crazy."
   },
   {
    "ply": 56,
@@ -469,7 +469,7 @@
     "Rc7",
     "f4"
    ],
-   "spoken": "He can go to c7, but that one rook in isolation is going to accomplish nothing —"
+   "spoken": "They can go to c7, but that one rook in isolation is going to accomplish nothing —"
   },
   {
    "ply": 57,
@@ -496,7 +496,7 @@
    "line": [
     "Rxe6"
    ],
-   "spoken": "He takes — that's a good move."
+   "spoken": "They take — that's a good move."
   },
   {
    "ply": 60,
@@ -541,7 +541,7 @@
    "line": [
     "Kf7"
    ],
-   "spoken": "And now this rook — you notice that his king is out of squares, so your mating patterns"
+   "spoken": "And now this rook — you notice that their king is out of squares, so your mating patterns"
   },
   {
    "ply": 66,
@@ -551,7 +551,7 @@
     "Bd7",
     "Nxd7"
    ],
-   "spoken": "begin to activate. He blunders and just gives you this — the rook to h5 would have been the idea."
+   "spoken": "begin to activate. They blunder and just gives you this — the rook to h5 would have been the idea."
   },
   {
    "ply": 67,
@@ -587,7 +587,7 @@
    "line": [
     "Ke6"
    ],
-   "spoken": "bringing the game closer to the centre, making sure there is no stalemate, because he's got pawn moves at his disposal."
+   "spoken": "bringing the game closer to the centre, making sure there is no stalemate, because he's got pawn moves at their disposal."
   },
   {
    "ply": 71,
@@ -612,7 +612,7 @@
    "t": 1832,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
    "line": [],
-   "spoken": "That was a good opponent, you're getting up there. e4, and all the normal Caro-Kann things — the bishop to g4, c5, the bishop to c5; the first part of the game should be very clear. Then you allow b4 — some players have the extreme of trying to prevent every single threat; sometimes you say b4 is his idea, but I'll allow it, there's no need to stop everything your opponent wants, it can do more harm than good. The bishop to d6, a5 should make sense to everybody, take, the queen to c7 dropping it back — if I'd seen it maybe the queen to b6, but it doesn't matter — the bishop to c5, getting the bishop out of the knight's range, the queen to c6.",
+   "spoken": "That was a good opponent, you're getting up there. e4, and all the normal Caro-Kann things — the bishop to g4, c5, the bishop to c5; the first part of the game should be very clear. Then you allow b4 — some players have the extreme of trying to prevent every single threat; sometimes you say b4 is their idea, but I'll allow it, there's no need to stop everything your opponent wants, it can do more harm than good. The bishop to d6, a5 should make sense to everybody, take, the queen to c7 dropping it back — if I'd seen it maybe the queen to b6, but it doesn't matter — the bishop to c5, getting the bishop out of the knight's range, the queen to c6.",
    "reanchor": true
   }
  ]

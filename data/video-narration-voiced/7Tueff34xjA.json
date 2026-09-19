@@ -72,7 +72,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "You are pressing and keeping the pin — White stands better. There is a buffet of captures, and the e5-point is not going anywhere: Black will not take on d4 himself, as it disastrously opens the e-file, so you can round that pawn up in due course, with Black's queenside wrecked and your pieces active. But careful: a mindless bishop to e3 allows ...Rb8 hitting b2, and fianchettoing with b3 weakens the dark squares."
+   "spoken": "You are pressing and keeping the pin — White stands better. There is a buffet of captures, and the e5-point is not going anywhere: Black will not take on d4 themselves, as it disastrously opens the e-file, so you can round that pawn up in due course, with Black's queenside wrecked and your pieces active. But careful: a mindless bishop to e3 allows ...Rb8 hitting b2, and fianchettoing with b3 weakens the dark squares."
   },
   {
    "ply": 12,
@@ -90,7 +90,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "You castle. If Black grabs on e4, he opens the e-file — and once his bishop lands on e4 you get a big initiative."
+   "spoken": "You castle. If Black grabs on e4, they open the e-file — and once their bishop lands on e4 you get a big initiative."
   },
   {
    "ply": 14,
@@ -138,7 +138,7 @@
     "Bf3",
     "Qxd4"
    ],
-   "spoken": "You are pressing and keeping the pin — White stands better. There is a buffet of captures, and that central point is not going anywhere: Black will not take on d4 himself, as it disastrously opens the e-file, so you can round up the pawn in due course, with Black's queenside wrecked and your pieces active. But careful: a mindless bishop to e3 allows ...Rb8 hitting b2, and fianchettoing with b3 weakens the dark squares."
+   "spoken": "You are pressing and keeping the pin — White stands better. There is a buffet of captures, and that central point is not going anywhere: Black will not take on d4 themselves, as it disastrously opens the e-file, so you can round up the pawn in due course, with Black's queenside wrecked and your pieces active. But careful: a mindless bishop to e3 allows ...Rb8 hitting b2, and fianchettoing with b3 weakens the dark squares."
   }
  ]
 }

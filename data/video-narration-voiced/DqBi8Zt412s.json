@@ -242,7 +242,7 @@
    "line": [
     "Qd5"
    ],
-   "spoken": "Black plays the queen to d5 — his queen has only three squares. Before taking, you throw in a useful move that can't hurt.",
+   "spoken": "Black plays the queen to d5 — their queen has only three squares. Before taking, you throw in a useful move that can't hurt.",
    "reanchor": true
   },
   {
@@ -396,7 +396,7 @@
     "Bxc3+",
     "bxc3"
    ],
-   "spoken": "If Black takes on c3, you tell him congratulations — he's damaged your structure, but now you have the two bishops and a nice position.",
+   "spoken": "If Black takes on c3, you tell them congratulations — he's damaged your structure, but now you have the two bishops and a nice position.",
    "reanchor": true
   },
   {
@@ -415,7 +415,7 @@
     "Qe7",
     "Qd4"
    ],
-   "spoken": "The queen to d4 and the queen to e7 — and if Black drops the knight back to defend the bishop, he drops the pawn.",
+   "spoken": "The queen to d4 and the queen to e7 — and if Black drops the knight back to defend the bishop, they drop the pawn.",
    "reanchor": true
   },
   {

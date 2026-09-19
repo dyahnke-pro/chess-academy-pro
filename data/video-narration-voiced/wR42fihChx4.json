@@ -337,7 +337,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "When White plays the queen to d2, spot the forkable squares — his queen and king now sit on a fork pattern, and your own queen is in an undefended standoff to watch. The f3-square is the target.",
+   "spoken": "When White plays the queen to d2, spot the forkable squares — their queen and king now sit on a fork pattern, and your own queen is in an undefended standoff to watch. The f3-square is the target.",
    "teaches": [
     "watch forkable squares"
    ]
@@ -371,7 +371,7 @@
    "line": [
     "Bxh3"
    ],
-   "spoken": "The bishop crashes on h3 — untouchable, because the knight jumps to f3 with check, forking king and queen and winning the queen for two minor pieces. A classic textbook deflection sacrifice: even if White declines, you've traded off the fianchetto bishop that holds his centre together.",
+   "spoken": "The bishop crashes on h3 — untouchable, because the knight jumps to f3 with check, forking king and queen and winning the queen for two minor pieces. A classic textbook deflection sacrifice: even if White declines, you've traded off the fianchetto bishop that holds their centre together.",
    "kind": "main",
    "teaches": [
     "the deflection sacrifice",

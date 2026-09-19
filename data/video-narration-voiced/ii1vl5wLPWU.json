@@ -88,7 +88,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "That battery has a bonus: the bishop can swing to h6 and forcibly trade off the fianchettoed bishop — Black's strongest piece, the one that supervises his whole defence. No need to rush the swap, though.",
+   "spoken": "That battery has a bonus: the bishop can swing to h6 and forcibly trade off the fianchettoed bishop — Black's strongest piece, the one that supervises their whole defence. No need to rush the swap, though.",
    "kind": "main",
    "teaches": [
     "trade the fianchetto defender"
@@ -110,7 +110,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "Now start the attack — h4. Take the hammer to Black's position; without ripping open files and avenues on the kingside, you never reach his king.",
+   "spoken": "Now start the attack — h4. Take the hammer to Black's position; without ripping open files and avenues on the kingside, you never reach their king.",
    "kind": "plan",
    "teaches": [
     "pawn storm the castled king"
@@ -218,7 +218,7 @@
    "line": [
     "Qxg5"
    ],
-   "spoken": "He plays g5 to keep things closed, but the queen takes on g5 and it's simply winning — it threatens mate, and his only defence of the bishop drops the queen.",
+   "spoken": "They play g5 to keep things closed, but the queen takes on g5 and it's simply winning — it threatens mate, and their only defence of the bishop drops the queen.",
    "kind": "main",
    "teaches": [
     "the crashing capture"
@@ -231,7 +231,7 @@
    "line": [
     "Nxh5"
    ],
-   "spoken": "You recapture with the queen rather than the rook. The rook would have won a second piece, but keeping the queens on lets you keep taking the hammer to him.",
+   "spoken": "You recapture with the queen rather than the rook. The rook would have won a second piece, but keeping the queens on lets you keep taking the hammer to them.",
    "teaches": [
     "keep the initiative over material"
    ]
@@ -262,7 +262,7 @@
    "line": [
     "Qxg7"
    ],
-   "spoken": "He trades the dark-squared bishops to slow the attack, but you're still up a full piece.",
+   "spoken": "They trade the dark-squared bishops to slow the attack, but you're still up a full piece.",
    "kind": "main"
   },
   {

@@ -117,7 +117,11 @@ describe('chatter cannot grow back into the shipped narration', () => {
   // Named because they are DELIBERATE KEEPS adjudicated by hand, not oversights.
   // Each trips a cut class while carrying teaching the class has no way to see.
   const KEPT_ON_PURPOSE = [
-    'he should have played a bishop to e2 to avoid the center fork trick.',
+    // Migrated he->they with the corpus (2026-09-19). The KEEP is a decision
+    // about the clause's SUBSTANCE — it is teaching, not chatter — and the
+    // pronoun was never what the ruling was about. Updated rather than dropped:
+    // dropping it would retire a real decision to make a test pass.
+    'they should have played a bishop to e2 to avoid the center fork trick.',
     "This game is really about recovery technique when you're lost, and the principles are these.",
     'This game is famous because Fischer shows, in vivid, textbook fashion —',
   ];

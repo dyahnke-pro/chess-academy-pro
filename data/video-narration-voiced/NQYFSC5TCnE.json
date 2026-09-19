@@ -16,7 +16,7 @@
         "g6",
         "e4"
       ],
-      "spoken": "You're playing a strong opponent — let's go e4 this time, and he plays the Modern."
+      "spoken": "You're playing a strong opponent — let's go e4 this time, and they play the Modern."
     },
     {
       "ply": 4,
@@ -97,7 +97,7 @@
       "line": [
         "h5"
       ],
-      "spoken": "Now, what's the drawback of h5 — he stops you from playing h5 yourself, but"
+      "spoken": "Now, what's the drawback of h5 — they stop you from playing h5 yourself, but"
     },
     {
       "ply": 13,
@@ -144,7 +144,7 @@
       "line": [
         "O-O-O"
       ],
-      "spoken": "but you need to do it very carefully, so you're actually going to castle long first, to see how he develops — that helps you understand where to put your bishop."
+      "spoken": "but you need to do it very carefully, so you're actually going to castle long first, to see how they develop — that helps you understand where to put your bishop."
     },
     {
       "ply": 20,
@@ -171,7 +171,7 @@
       "line": [
         "Rd8"
       ],
-      "spoken": "castling long, because the king is just safer there, away from the c-file. Now, what Black is preparing here is c5 — so if you put your bishop on d3 you obstruct your own control of the file and help him play c5, which I don't want. But there's a really cool idea you"
+      "spoken": "castling long, because the king is just safer there, away from the c-file. Now, what Black is preparing here is c5 — so if you put your bishop on d3 you obstruct your own control of the file and help them play c5, which I don't want. But there's a really cool idea you"
     },
     {
       "ply": 23,
@@ -189,7 +189,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "f4, which has its own dangers. He goes c5 sort of automatically, and you"
+      "spoken": "f4, which has its own dangers. They go c5 sort of automatically, and you"
     },
     {
       "ply": 25,
@@ -198,7 +198,7 @@
       "line": [
         "Nf4"
       ],
-      "spoken": "can go the knight to f4 — a very thematic and typical manoeuvre, worth remembering. He can play c-takes-d4 and e5, but I anticipated that; I don't think it actually works."
+      "spoken": "can go the knight to f4 — a very thematic and typical manoeuvre, worth remembering. They can play c-takes-d4 and e5, but I anticipated that; I don't think it actually works."
     },
     {
       "ply": 27,
@@ -218,7 +218,7 @@
         "e5",
         "Bc3"
       ],
-      "spoken": "blundered. The bishop to c3 was my idea, because he can't take — but what I blundered was the move b4. The good thing is that because of how I've played it, you can actually sacrifice the piece"
+      "spoken": "blundered. The bishop to c3 was my idea, because they can't take — but what I blundered was the move b4. The good thing is that because of how I've played it, you can actually sacrifice the piece"
     },
     {
       "ply": 30,
@@ -227,7 +227,7 @@
       "line": [
         "Nc5"
       ],
-      "spoken": "and I think you have very legitimate compensation. Let's see if he finds b4 — after the knight to d5 he'll just take on d5 and then take the bishop; he doesn't find b4. You don't actually have to move this knight, but you will."
+      "spoken": "and I think you have very legitimate compensation. Let's see if they find b4 — after the knight to d5 they'll just take on d5 and then take the bishop; they don't find b4. You don't actually have to move this knight, but you will."
     },
     {
       "ply": 31,
@@ -245,7 +245,7 @@
       "line": [
         "Qd7"
       ],
-      "spoken": "This opening is absolutely legit. He goes the queen to d7, leaving the knight here. How do you play this position? You should try to find where you can"
+      "spoken": "This opening is absolutely legit. They go the queen to d7, leaving the knight here. How do you play this position? You should try to find where you can"
     },
     {
       "ply": 33,
@@ -254,7 +254,7 @@
       "line": [
         "Ba5"
       ],
-      "spoken": "infiltrate — what are the weak avenues in his position? One thing I see is this diagonal, so you put your bishop here; the bishop has done its job on c3, it was just biting on granite."
+      "spoken": "infiltrate — what are the weak avenues in their position? One thing I see is this diagonal, so you put your bishop here; the bishop has done its job on c3, it was just biting on granite."
     },
     {
       "ply": 34,
@@ -293,7 +293,7 @@
       "line": [
         "Bf8"
       ],
-      "spoken": "pieces are in dominant positions; you can see how passive he is."
+      "spoken": "pieces are in dominant positions; you can see how passive they are."
     },
     {
       "ply": 41,
@@ -302,7 +302,7 @@
       "line": [
         "Rd1"
       ],
-      "spoken": "He attacks the rook, so you move it back, and you can circle back to d5 with your knight."
+      "spoken": "They attack the rook, so you move it back, and you can circle back to d5 with your knight."
     },
     {
       "ply": 42,
@@ -311,7 +311,7 @@
       "line": [
         "Be7"
       ],
-      "spoken": "You also need to develop the bishops and connect the rooks — he's not actually threatening to take at all, so you have several ways of playing this."
+      "spoken": "You also need to develop the bishops and connect the rooks — they're not actually threatening to take at all, so you have several ways of playing this."
     },
     {
       "ply": 43,
@@ -338,7 +338,7 @@
       "line": [
         "Bc3"
       ],
-      "spoken": "so find the move — the bishop to c3, repositioning to attack the pawn. If he plays the knight to d7"
+      "spoken": "so find the move — the bishop to c3, repositioning to attack the pawn. If they play the knight to d7"
     },
     {
       "ply": 47,
@@ -385,7 +385,7 @@
       "line": [
         "Ke6"
       ],
-      "spoken": "The funny thing: if he goes the king to e6 and tries to chase the rook away from d7, what would White do here?"
+      "spoken": "The funny thing: if they go the king to e6 and tries to chase the rook away from d7, what would White do here?"
     },
     {
       "ply": 53,
@@ -455,7 +455,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "One of the key differences between the Pirc and the Modern: the Pirc is d6, then the knight to f6, then g6 — so if you compare visually, in the Modern the knight isn't on f6 yet, and Black has all these setups that delay the knight to f6, letting the bishop have influence over the long diagonal without blocking it. That's why a6 is the more modern continuation — it's theory, not senseless, the main line. Now why didn't I play a4? The logic is simple: which side am I probably going to castle? I've expressed my desire to castle long and attack the kingside — so a move like a4 in conjunction with castling long could lead to big problems: for example, if he develops with the knight to b7 and castles long, a nasty little move becomes possible for Black."
+      "spoken": "One of the key differences between the Pirc and the Modern: the Pirc is d6, then the knight to f6, then g6 — so if you compare visually, in the Modern the knight isn't on f6 yet, and Black has all these setups that delay the knight to f6, letting the bishop have influence over the long diagonal without blocking it. That's why a6 is the more modern continuation — it's theory, not senseless, the main line. Now why didn't I play a4? The logic is simple: which side am I probably going to castle? I've expressed my desire to castle long and attack the kingside — so a move like a4 in conjunction with castling long could lead to big problems: for example, if they develop with the knight to b7 and castles long, a nasty little move becomes possible for Black."
     }
   ]
 }

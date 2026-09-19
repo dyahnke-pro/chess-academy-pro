@@ -130,7 +130,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "The knight to g5 is the key blow — a distracting sacrifice that also attacks e6, so Black can't both meet that threat and stop the queen reaching h5. And he can't castle out of it, because his own bishop blocks the king's escape.",
+   "spoken": "The knight to g5 is the key blow — a distracting sacrifice that also attacks e6, so Black can't both meet that threat and stop the queen reaching h5. And they can't castle out of it, because their own bishop blocks the king's escape.",
    "kind": "main",
    "teaches": [
     "a distraction sac to force the queen to h5"
@@ -151,7 +151,7 @@
     "Ng5",
     "Nb6"
    ],
-   "spoken": "When Black defends e6 but allows the queen to h5, don't rush the tempting knight to f7 — a queen retreat to e8 would pin it. The Russian-school choice is to drop the knight back modestly: his king is wretched, so there's no need to force a win amid the complications. Then complete development — the knight reroutes to d4 exploiting the pin and blockading his passer, the bishop to f4 sets up an x-ray at the king, and the pawn levers b4 and a4 tear open the c- and a-files, where discovered-attack and mating ideas do the rest.",
+   "spoken": "When Black defends e6 but allows the queen to h5, don't rush the tempting knight to f7 — a queen retreat to e8 would pin it. The Russian-school choice is to drop the knight back modestly: their king is wretched, so there's no need to force a win amid the complications. Then complete development — the knight reroutes to d4 exploiting the pin and blockading their passer, the bishop to f4 sets up an x-ray at the king, and the pawn levers b4 and a4 tear open the c- and a-files, where discovered-attack and mating ideas do the rest.",
    "kind": "plan",
    "teaches": [
     "don’t force it — a modest move can be best",

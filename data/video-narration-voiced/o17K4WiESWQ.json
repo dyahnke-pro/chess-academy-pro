@@ -69,7 +69,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "Black strikes with c5 — he's steering into the Benoni."
+      "spoken": "Black strikes with c5 — they're steering into the Benoni."
     },
     {
       "ply": 3,
@@ -134,7 +134,7 @@
       "line": [
         "Bd3"
       ],
-      "spoken": "The bishop to d3 is the right square, anticipating that Black will probably capture on d5 — and even if he doesn't, it's well placed there."
+      "spoken": "The bishop to d3 is the right square, anticipating that Black will probably capture on d5 — and even if they don't, it's well placed there."
     },
     {
       "ply": 12,
@@ -161,7 +161,7 @@
       "line": [
         "Ng4"
       ],
-      "spoken": "Black is cramped, and you're going to squeeze the life out of him. He tries the knight to g4."
+      "spoken": "Black is cramped, and you're going to squeeze the life out of them. They try the knight to g4."
     },
     {
       "ply": 15,
@@ -370,7 +370,7 @@
       "line": [
         "Rf7"
       ],
-      "spoken": "Black tries the rook to f7 — but you can't let him escape. How should you continue?"
+      "spoken": "Black tries the rook to f7 — but you can't let them escape. How should you continue?"
     },
     {
       "ply": 35,
@@ -379,7 +379,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "e5 is very natural here — crushing him down every file and every avenue."
+      "spoken": "e5 is very natural here — crushing them down every file and every avenue."
     }
   ]
 }

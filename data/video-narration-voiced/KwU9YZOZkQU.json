@@ -63,7 +63,7 @@
     "dxe6",
     "Bxe6"
    ],
-   "spoken": "White takes on e6 and you recapture with the bishop, reaching a type of position you've seen before — a slightly improved version for White, but still practically unpleasant for him."
+   "spoken": "White takes on e6 and you recapture with the bishop, reaching a type of position you've seen before — a slightly improved version for White, but still practically unpleasant for them."
   },
   {
    "ply": 11,
@@ -72,7 +72,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White develops the knight to f3, but the position still isn't appealing for him after a knight to c6."
+   "spoken": "White develops the knight to f3, but the position still isn't appealing for them after a knight to c6."
   },
   {
    "ply": 12,
@@ -81,7 +81,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "A knight to c6, and your grip on the central squares makes it genuinely hard for White to untangle his pieces."
+   "spoken": "A knight to c6, and your grip on the central squares makes it genuinely hard for White to untangle their pieces."
   },
   {
    "ply": 15,
@@ -241,7 +241,7 @@
     "Nc3",
     "Bf8"
    ],
-   "spoken": "Throw in a6 first, then the bishop to d6, then just run your pawns down the board and mate White on the kingside. Practically this is very bad for White even if the engine gives him a sliver.",
+   "spoken": "Throw in a6 first, then the bishop to d6, then just run your pawns down the board and mate White on the kingside. Practically this is very bad for White even if the engine gives them a sliver.",
    "reanchor": true
   },
   {
@@ -259,7 +259,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "What else can White try? He can play d4 and carry on as if nothing's the matter.",
+   "spoken": "What else can White try? They can play d4 and carry on as if nothing's the matter.",
    "reanchor": true
   },
   {
@@ -342,7 +342,7 @@
     "Qxd8+",
     "Kxd8"
    ],
-   "spoken": "You don't mind the queen trade — White is lost, he can't take the knight because a rook hangs, and it all falls apart.",
+   "spoken": "You don't mind the queen trade — White is lost, they can't take the knight because a rook hangs, and it all falls apart.",
    "reanchor": true
   },
   {
@@ -686,7 +686,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He castles, and there's b5, but I like...",
+   "spoken": "They castle, and there's b5, but I like...",
    "reanchor": true
   },
   {

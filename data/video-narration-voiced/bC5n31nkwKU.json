@@ -136,7 +136,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "The compensation is hard to see — your pawns are ruined and the a5-knight looks offside — but it's real: White's g5-knight is stranded and his pieces are undeveloped. You have to keep the pressure on before he untangles.",
+   "spoken": "The compensation is hard to see — your pawns are ruined and the a5-knight looks offside — but it's real: White's g5-knight is stranded and their pieces are undeveloped. You have to keep the pressure on before they untangle.",
    "kind": "main",
    "teaches": "Compensation for a pawn lives in the opponent's loose pieces and lost time, not in your own pretty structure."
   },
@@ -300,7 +300,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "The guiding principle: act with urgency and go after the opponent's single most vulnerable piece — his knight — before he ever completes development. If you let those pieces out, the initiative simply evaporates.",
+   "spoken": "The guiding principle: act with urgency and go after the opponent's single most vulnerable piece — their knight — before they ever completes development. If you let those pieces out, the initiative simply evaporates.",
    "kind": "main",
    "teaches": "When your edge is time, attack the opponent's weakest piece immediately; don't finish your own development first.",
    "reanchor": true

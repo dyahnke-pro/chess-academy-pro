@@ -65,7 +65,7 @@
     "Be2",
     "e5"
    ],
-   "spoken": "He plays the main line."
+   "spoken": "They play the main line."
   },
   {
    "ply": 13,
@@ -128,7 +128,7 @@
    "line": [
     "Kh1"
    ],
-   "spoken": "He plays the king to h1 — the best move, prophylaxis."
+   "spoken": "They play the king to h1 — the best move, prophylaxis."
   },
   {
    "ply": 20,
@@ -146,7 +146,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "This opens ideas like the queen to h4 — and note, his bishop is now on a square where it's undefended, and your rook on e8 x-rays it."
+   "spoken": "This opens ideas like the queen to h4 — and note, their bishop is now on a square where it's undefended, and your rook on e8 x-rays it."
   },
   {
    "ply": 22,
@@ -173,7 +173,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "Yes you can — because if he captures, you recapture, and he's forced to shed a tempo with the knight."
+   "spoken": "Yes you can — because if they capture, you recapture, and he's forced to shed a tempo with the knight."
   },
   {
    "ply": 25,
@@ -236,7 +236,7 @@
    "line": [
     "Bd4"
    ],
-   "spoken": "He defends with the bishop to d4 — a really good move."
+   "spoken": "They defend with the bishop to d4 — a really good move."
   },
   {
    "ply": 32,
@@ -263,7 +263,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "His best try here would be c5, but he doesn't find it."
+   "spoken": "Their best try here would be c5, but they don't find it."
   },
   {
    "ply": 36,
@@ -273,7 +273,7 @@
     "Bxe5",
     "dxe5"
    ],
-   "spoken": "He trades pieces, which only cements your pawn structure."
+   "spoken": "They trade pieces, which only cements your pawn structure."
   },
   {
    "ply": 37,
@@ -291,7 +291,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "The knight to d7 — and you can always smoke his queen out with the queen to e7 next."
+   "spoken": "The knight to d7 — and you can always smoke their queen out with the queen to e7 next."
   },
   {
    "ply": 39,
@@ -300,7 +300,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "He goes pawn-hunting with the queen to c7."
+   "spoken": "They go pawn-hunting with the queen to c7."
   },
   {
    "ply": 40,
@@ -345,7 +345,7 @@
    "line": [
     "Nc5"
    ],
-   "spoken": "The knight to c5 — nothing has happened to the idea from the previous game: you threaten a check on d2 that would win his knight."
+   "spoken": "The knight to c5 — nothing has happened to the idea from the previous game: you threaten a check on d2 that would win their knight."
   },
   {
    "ply": 45,
@@ -354,7 +354,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": "He doesn't seem aware he's down the exchange. You double the rooks on d8, and a5 will stop him chasing your knight away."
+   "spoken": "They don't seem aware they're down the exchange. You double the rooks on d8, and a5 will stop them chasing your knight away."
   },
   {
    "ply": 49,
@@ -513,7 +513,7 @@
    "line": [
     "Bh3"
    ],
-   "spoken": "Always look at the undefended pieces and the x-rays. The bishop to h3, textbook style, forces the pawn forward — then you win the knight and promote, or force him to give up his bishop for the pawn."
+   "spoken": "Always look at the undefended pieces and the x-rays. The bishop to h3, textbook style, forces the pawn forward — then you win the knight and promote, or force them to give up their bishop for the pawn."
   },
   {
    "ply": 69,
@@ -559,7 +559,7 @@
     "Kxf1",
     "Rxc2"
    ],
-   "spoken": "Now his knight is lost — you send your knight forward with a check, or simply promote; the game is over."
+   "spoken": "Now their knight is lost — you send your knight forward with a check, or simply promote; the game is over."
   },
   {
    "ply": 10,

@@ -74,7 +74,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The knight to f6 here is inaccurate, because it forces Black to wreck his own pawn structure at once.",
+   "spoken": "The knight to f6 here is inaccurate, because it forces Black to wreck their own pawn structure at once.",
    "kind": "main",
    "teaches": [
     "...Nf6 concedes the structure"
@@ -88,7 +88,7 @@
     "Nxf6+",
     "gxf6"
    ],
-   "spoken": "After you take with check and he recaptures with the g-pawn, Black's kingside pawns are shattered — doubled and weak.",
+   "spoken": "After you take with check and they recapture with the g-pawn, Black's kingside pawns are shattered — doubled and weak.",
    "kind": "main"
   },
   {
@@ -116,7 +116,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop comes to d3, and the plan is to root out Black's bishop — his only good piece.",
+   "spoken": "The bishop comes to d3, and the plan is to root out Black's bishop — their only good piece.",
    "kind": "plan",
    "teaches": [
     "target the opponent’s one strong piece"

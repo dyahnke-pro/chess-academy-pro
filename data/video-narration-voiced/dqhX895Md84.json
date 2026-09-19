@@ -45,7 +45,7 @@
    ],
    "spoken": "The formula against a troll opening: develop your pieces, blast open the centre, then go for mate. Don't lunge with Qh5-check or Bc4-check — they run into g6 and e6. Start with the most flexible developing move, Nc3.",
    "kind": "main",
-   "teaches": "Punish an offbeat opening by developing first; premature checks just hand the opponent the moves he wanted."
+   "teaches": "Punish an offbeat opening by developing first; premature checks just hand the opponent the moves they wanted."
   },
   {
    "ply": 7,
@@ -74,7 +74,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "d5 is really a positional threat that Black himself wants to play — so you push it first, staking the larger claim in the centre.",
+   "spoken": "d5 is really a positional threat that Black themselves wants to play — so you push it first, staking the larger claim in the centre.",
    "kind": "main",
    "teaches": "Pre-empt a break your opponent is angling for by making it yourself with more support."
   },
@@ -132,7 +132,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Castle, but keep an eye on e5 and d6 — the one thing you must never allow is Black closing the centre, because a locked centre lets him move the same piece five times without cost.",
+   "spoken": "Castle, but keep an eye on e5 and d6 — the one thing you must never allow is Black closing the centre, because a locked centre lets them move the same piece five times without cost.",
    "kind": "main",
    "teaches": "Keep the centre open against a passive setup; a closed centre erases your development lead."
   },

@@ -14,7 +14,7 @@
       "line": [
         "Qxd5"
       ],
-      "spoken": "He recaptures with the queen, and this is the whole problem with the Scandi: the queen is out early and about to become a target.",
+      "spoken": "They recapture with the queen, and this is the whole problem with the Scandi: the queen is out early and about to become a target.",
       "kind": "main",
       "teaches": [
         "Scandinavian: the early queen is exposed to tempo"
@@ -40,7 +40,7 @@
       "line": [
         "Qd8"
       ],
-      "spoken": "He retreats all the way home to d8, so you've already gained ground for nothing.",
+      "spoken": "They retreat all the way home to d8, so you've already gained ground for nothing.",
       "kind": "main"
     },
     {
@@ -81,7 +81,7 @@
       "line": [
         "b5"
       ],
-      "spoken": "He just shuffles pawns with b5, doing nothing for his development. There's no special reply needed — you simply keep bringing pieces out.",
+      "spoken": "They just shuffle pawns with b5, doing nothing for their development. There's no special reply needed — you simply keep bringing pieces out.",
       "kind": "main",
       "teaches": [
         "Answer aimless pawn moves by continuing development"
@@ -94,7 +94,7 @@
       "line": [
         "Bd3"
       ],
-      "spoken": "So the bishop goes to d3, a simple, natural post aiming at his kingside.",
+      "spoken": "So the bishop goes to d3, a simple, natural post aiming at their kingside.",
       "kind": "main"
     },
     {
@@ -131,7 +131,7 @@
       "line": [
         "Ne5"
       ],
-      "spoken": "You centralize the knight on e5, a powerful outpost right in the heart of his camp.",
+      "spoken": "You centralize the knight on e5, a powerful outpost right in the heart of their camp.",
       "kind": "main",
       "teaches": [
         "A knight on e5 is a dominant central outpost"
@@ -153,7 +153,7 @@
       "line": [
         "Bg5"
       ],
-      "spoken": "And the bishop develops to g5, pinning his knight. Nothing fancy yet — just getting every piece to a good square, fast, while he flounders.",
+      "spoken": "And the bishop develops to g5, pinning their knight. Nothing fancy yet — just getting every piece to a good square, fast, while they flounder.",
       "kind": "main"
     },
     {
@@ -163,7 +163,7 @@
       "line": [
         "Be7"
       ],
-      "spoken": "Now the queen swings to f3 to pile on the pressure. I'm deliberately leaving the d4-pawn hanging: he's so underdeveloped that if the queen grabs it, she'll be hunted down and the lost tempo will cost him far more than a pawn.",
+      "spoken": "Now the queen swings to f3 to pile on the pressure. I'm deliberately leaving the d4-pawn hanging: he's so underdeveloped that if the queen grabs it, she'll be hunted down and the lost tempo will cost them far more than a pawn.",
       "kind": "plan",
       "teaches": [
         "A development lead is worth more than a pawn"

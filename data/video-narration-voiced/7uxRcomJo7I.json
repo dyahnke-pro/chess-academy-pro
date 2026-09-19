@@ -158,7 +158,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "You can't play d5 at once, so prepare it with c6 — this is main-line theory, and if White doesn't know exactly how to handle it he's in serious trouble.",
+   "spoken": "You can't play d5 at once, so prepare it with c6 — this is main-line theory, and if White doesn't know exactly how to handle it they're in serious trouble.",
    "kind": "plan",
    "plans": "Follow up with the d5 break to blast open the centre."
   },
@@ -226,7 +226,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Keep developing with Nc6; if he takes, you recapture with the pawn and shore up your passed pawn on d5.",
+   "spoken": "Keep developing with Nc6; if they take, you recapture with the pawn and shore up your passed pawn on d5.",
    "kind": "main",
    "teaches": "Recapture toward the centre to reinforce your advanced pawn."
   },

@@ -243,7 +243,7 @@
       "line": [
         "Nxd4"
       ],
-      "spoken": "You've out-calculated him — the knight captures on d4."
+      "spoken": "You've out-calculated them — the knight captures on d4."
     },
     {
       "ply": 32,
@@ -512,7 +512,7 @@
       "line": [
         "Qg1"
       ],
-      "spoken": "If White interposes the queen on g1, you don't rush the capture — you keep him pinned and give him no air.",
+      "spoken": "If White interposes the queen on g1, you don't rush the capture — you keep them pinned and give them no air.",
       "reanchor": true
     },
     {
@@ -522,7 +522,7 @@
       "line": [
         "Qxh5+"
       ],
-      "spoken": "Your queen would grab the pawn on h5 with check first, refusing to let him breathe.",
+      "spoken": "Your queen would grab the pawn on h5 with check first, refusing to let them breathe.",
       "reanchor": true
     },
     {

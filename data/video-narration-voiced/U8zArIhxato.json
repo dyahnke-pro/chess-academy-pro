@@ -25,7 +25,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "He's playing the Sicilian; you're going to play the Open Sicilian, which I've been doing."
+   "spoken": "They're playing the Sicilian; you're going to play the Open Sicilian, which I've been doing."
   },
   {
    "ply": 5,
@@ -45,7 +45,7 @@
     "Nxd4",
     "e5"
    ],
-   "spoken": "He plays e5 — the Kalashnikov variation, a pretty common Sicilian; Black strikes in the centre immediately, but the drawbacks are pretty evident."
+   "spoken": "They play e5 — the Kalashnikov variation, a pretty common Sicilian; Black strikes in the centre immediately, but the drawbacks are pretty evident."
   },
   {
    "ply": 9,
@@ -110,7 +110,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "You want to keep this knight on d5, but what's preventing you is his knight on f6 — so you're going to develop your bishop to eliminate it."
+   "spoken": "You want to keep this knight on d5, but what's preventing you is their knight on f6 — so you're going to develop your bishop to eliminate it."
   },
   {
    "ply": 19,
@@ -175,7 +175,7 @@
    "line": [
     "bxa4"
    ],
-   "spoken": "He takes, and you'll take with the queen, and the queen ably performs the task previously fulfilled by the knight. Maybe I should have supported my knight by playing the knight to e3 — that's another way."
+   "spoken": "They take, and you'll take with the queen, and the queen ably performs the task previously fulfilled by the knight. Maybe I should have supported my knight by playing the knight to e3 — that's another way."
   },
   {
    "ply": 27,
@@ -211,7 +211,7 @@
    "line": [
     "Bxd5"
    ],
-   "spoken": "what I'm seeing is that I can later move my bishop back to b5, and that bishop will simultaneously defend the rook on a4 — so while it's something to keep an eye on, it's not something to be overly concerned about. He takes, you take; he could have taken with the rook, but I don't see a point in shying away from this tension, and even if he attacks the bishop again, you have many ways to defend it — you can defend it with your queen, dropping the queen back to lend additional support. He's good, not going down without a fight, but you can see the cracks beginning to show. Now is a great time to show why you deployed the knight to c2: there's a move I call a glue move — a move that glues together all the disparate parts of White's position; it stops the queen from attacking b2, lends further support to the bishop, and just glues everything together nicely. That's the knight to b4. Note that b2 was hanging — f2 isn't hanging, because it's protected by the king. Now you have time for simple prophylaxis: where's his knight going? To f4, obviously — how do you prevent it? By going g3. A good observation is that the d5-square is also free, but you don't want to rush a knight there, because the knight on b4 is fulfilling the crucial role of defending b2. He goes back, and now you complete your development by castling. He plays f5 — a lot of people would worry about him opening the file, but understand the drawback of pushing the f-pawn when castled: you weaken the diagonal, so this check on c4 might be very strong in a couple of moves. Let's take on f5, and if he takes back, you make a discovered check and his knight is lost. He can't recapture on f5 — well, he did, but this knight is defended by the rook, and that rook also defends the other rook, so it's overloaded, and by giving the check you expose the tension of the rooks. Boom and boom — you're up a knight and a pawn, and you're winning. The most important moment in the game was g3 — it frustrated him, he got impatient trying to create counterplay, and he fell apart very quickly. Let's capture the knight, and now, notice, the bishop and the queen can combine in a battery threatening checkmate, and his bishop on f6 is going to be lost as well, because to defend against it he has to give it up. He runs, you take; how do you keep harassing the king after it moves to f7? Notice the knight to d5 could be a fork. The bishop to c4 or the bishop to g6 are both good. Your goal is to get the king onto e7, a forkable square, so you assess all the checks you can make, including retreating moves — people often miss retreating moves, and they're the glue that makes an attack run. The bishop to g6 cuts the king off from f7; the queen to h3 forces the king onto e7, literally the only move, and that king walks right into the fork with the knight — you win the queen and the game. You didn't do anything extraordinary: you played the theoretical moves and he collapsed quite quickly.",
+   "spoken": "what I'm seeing is that I can later move my bishop back to b5, and that bishop will simultaneously defend the rook on a4 — so while it's something to keep an eye on, it's not something to be overly concerned about. They take, you take; they could have taken with the rook, but I don't see a point in shying away from this tension, and even if they attack the bishop again, you have many ways to defend it — you can defend it with your queen, dropping the queen back to lend additional support. He's good, not going down without a fight, but you can see the cracks beginning to show. Now is a great time to show why you deployed the knight to c2: there's a move I call a glue move — a move that glues together all the disparate parts of White's position; it stops the queen from attacking b2, lends further support to the bishop, and just glues everything together nicely. That's the knight to b4. Note that b2 was hanging — f2 isn't hanging, because it's protected by the king. Now you have time for simple prophylaxis: where's their knight going? To f4, obviously — how do you prevent it? By going g3. A good observation is that the d5-square is also free, but you don't want to rush a knight there, because the knight on b4 is fulfilling the crucial role of defending b2. They go back, and now you complete your development by castling. They play f5 — a lot of people would worry about them opening the file, but understand the drawback of pushing the f-pawn when castled: you weaken the diagonal, so this check on c4 might be very strong in a couple of moves. Let's take on f5, and if they take back, you make a discovered check and their knight is lost. They can't recapture on f5 — well, they did, but this knight is defended by the rook, and that rook also defends the other rook, so it's overloaded, and by giving the check you expose the tension of the rooks. Boom and boom — you're up a knight and a pawn, and you're winning. The most important moment in the game was g3 — it frustrated them, they got impatient trying to create counterplay, and he fell apart very quickly. Let's capture the knight, and now, notice, the bishop and the queen can combine in a battery threatening checkmate, and their bishop on f6 is going to be lost as well, because to defend against it they have to give it up. They run, you take; how do you keep harassing the king after it moves to f7? Notice the knight to d5 could be a fork. The bishop to c4 or the bishop to g6 are both good. Your goal is to get the king onto e7, a forkable square, so you assess all the checks you can make, including retreating moves — people often miss retreating moves, and they're the glue that makes an attack run. The bishop to g6 cuts the king off from f7; the queen to h3 forces the king onto e7, literally the only move, and that king walks right into the fork with the knight — you win the queen and the game. You didn't do anything extraordinary: you played the theoretical moves and they collapsed quite quickly.",
    "reanchor": true
   },
   {
@@ -219,7 +219,7 @@
    "t": 1137.5,
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
    "line": [],
-   "spoken": "I think you actually explained the game quite well, so no need to over-explain. The move c4 here, which some were suggesting, is also very fashionable theoretically, but the issue is that it weakens the d4-square, so it has a drawback; its strength is that you get your development out faster, because c4 comes with tempo, attacking the pawn on b5. I made a lot of knight moves in the early going — I did — but he also made a lot of concessions that allowed me to violate some of these rules; in particular, he weakened the d5-square. When you get to around 1500, you have to understand that the rules you follow in a very linear fashion as a beginner, you start to bend slowly — and one of them is that you can allow yourself to move the same piece more than once, because opening theory starts playing a role.",
+   "spoken": "I think you actually explained the game quite well, so no need to over-explain. The move c4 here, which some were suggesting, is also very fashionable theoretically, but the issue is that it weakens the d4-square, so it has a drawback; its strength is that you get your development out faster, because c4 comes with tempo, attacking the pawn on b5. I made a lot of knight moves in the early going — I did — but they also made a lot of concessions that allowed me to violate some of these rules; in particular, they weakened the d5-square. When you get to around 1500, you have to understand that the rules you follow in a very linear fashion as a beginner, you start to bend slowly — and one of them is that you can allow yourself to move the same piece more than once, because opening theory starts playing a role.",
    "reanchor": true
   }
  ]

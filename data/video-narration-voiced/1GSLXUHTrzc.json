@@ -130,7 +130,7 @@
    "line": [
     "Nge7"
    ],
-   "spoken": "You develop the knight from g8 to e7. You don't fear the capture on c6: you'd first grab the bishop on e3, threatening mate on f2 — part of why the queen sits on f6 — and after White recaptures, you take back on c6, having wrecked his structure."
+   "spoken": "You develop the knight from g8 to e7. You don't fear the capture on c6: you'd first grab the bishop on e3, threatening mate on f2 — part of why the queen sits on f6 — and after White recaptures, you take back on c6, having wrecked their structure."
   },
   {
    "ply": 13,
@@ -157,7 +157,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles. A subtlety: if White now takes on c6, you can no longer grab the e3-bishop — the knight would answer with a check on g7 — so you'd just recapture with the queen, still comfortable. The known move is the centralizing knight to e5, punishing the exposed c4-bishop. But careful: ...d6 here is a serious positional error — it severs the queen from the knight, so White takes on c6, and after you recapture, he trades on c5 and ruins your queenside pawns."
+   "spoken": "White castles. A subtlety: if White now takes on c6, you can no longer grab the e3-bishop — the knight would answer with a check on g7 — so you'd just recapture with the queen, still comfortable. The known move is the centralizing knight to e5, punishing the exposed c4-bishop. But careful: ...d6 here is a serious positional error — it severs the queen from the knight, so White takes on c6, and after you recapture, they trade on c5 and ruins your queenside pawns."
   },
   {
    "ply": 16,
@@ -175,7 +175,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "White plays f4, the main move — but it threatens little. If you fear e5: with your bishop soon on b7, that push has a real cost, opening the long diagonal for the bishop, and your queen could swing to g6 hitting g2. There's the awkward f5 in reply, so it may be wiser to route the queen to h6, where White can't play f5 because his e3-bishop would hang."
+   "spoken": "White plays f4, the main move — but it threatens little. If you fear e5: with your bishop soon on b7, that push has a real cost, opening the long diagonal for the bishop, and your queen could swing to g6 hitting g2. There's the awkward f5 in reply, so it may be wiser to route the queen to h6, where White can't play f5 because their e3-bishop would hang."
   },
   {
    "ply": 18,

@@ -241,7 +241,7 @@
    "line": [
     "hxg6"
    ],
-   "spoken": "You recapture on g6 — the pawn cube. After a bishop to c7 and a queen to d6, if White plays g3 to block the battery, a rook capture on e3 works because his f2 pawn is overloaded, guarding both g3 and the bishop.",
+   "spoken": "You recapture on g6 — the pawn cube. After a bishop to c7 and a queen to d6, if White plays g3 to block the battery, a rook capture on e3 works because their f2 pawn is overloaded, guarding both g3 and the bishop.",
    "reanchor": true
   },
   {
@@ -261,7 +261,7 @@
    "line": [
     "Bc7"
    ],
-   "spoken": "A bishop to c7 — and delaying a knight to d5 matters, because if you jump there and he retreats the bishop, you lose this tactic.",
+   "spoken": "A bishop to c7 — and delaying a knight to d5 matters, because if you jump there and they retreat the bishop, you lose this tactic.",
    "reanchor": true
   },
   {
@@ -272,7 +272,7 @@
     "c4",
     "Qd6"
    ],
-   "spoken": "White plays c4, and you play a queen to d6 — he's already basically losing.",
+   "spoken": "White plays c4, and you play a queen to d6 — they're already basically losing.",
    "reanchor": true
   },
   {
@@ -293,7 +293,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "White finds a queen to e2 — a super move, the only way to stay alive. When attacking, be flexible about converting: a stubborn rook capture on g3 lets his king drop back since h2 is no longer accessible, so you retreat the rook, aware his next move is c5 to win the piece back.",
+   "spoken": "White finds a queen to e2 — a super move, the only way to stay alive. When attacking, be flexible about converting: a stubborn rook capture on g3 lets their king drop back since h2 is no longer accessible, so you retreat the rook, aware their next move is c5 to win the piece back.",
    "reanchor": true
   },
   {
@@ -303,7 +303,7 @@
    "line": [
     "Re4"
    ],
-   "spoken": "So a rook to e4, preparing to grab as many pawns as possible if he plays c5 — then a capture on d4 leaves you two pawns up and winning even in an opposite-colored-bishop endgame.",
+   "spoken": "So a rook to e4, preparing to grab as many pawns as possible if they play c5 — then a capture on d4 leaves you two pawns up and winning even in an opposite-colored-bishop endgame.",
    "reanchor": true
   },
   {
@@ -353,7 +353,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": "White plays a rook to d1. Taking the rook is bad, because he recaptures and pins your knight.",
+   "spoken": "White plays a rook to d1. Taking the rook is bad, because they recapture and pin your knight.",
    "reanchor": true
   },
   {
@@ -363,7 +363,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "A bishop to b6 — how to trade on your terms. Assume his rook takes on d4: you want the bishop to land there, centralizing and threatening a capture on g3, then a knight to e5. No need to be fancy with a rook to h4.",
+   "spoken": "A bishop to b6 — how to trade on your terms. Assume their rook takes on d4: you want the bishop to land there, centralizing and threatening a capture on g3, then a knight to e5. No need to be fancy with a rook to h4.",
    "reanchor": true
   },
   {
@@ -373,7 +373,7 @@
    "line": [
     "Kg2"
    ],
-   "spoken": "White plays a king to g2, seeing it — again, you don't have to take his rook; let him improve your position.",
+   "spoken": "White plays a king to g2, seeing it — again, you don't have to take their rook; let them improve your position.",
    "reanchor": true
   },
   {
@@ -473,7 +473,7 @@
     "dxe4",
     "Nxe4"
    ],
-   "spoken": "The Tartakower is named after Savielly Tartakower, a GM famous for his quotes.",
+   "spoken": "The Tartakower is named after Savielly Tartakower, a GM famous for their quotes.",
    "reanchor": true
   },
   {
@@ -485,7 +485,7 @@
     "Nxf6+",
     "exf6"
    ],
-   "spoken": "It was actually first played by Horatio Caro himself, in 1898 — people really knew what they were doing. Tartakower played it a lot, Capablanca too, but it didn't catch on until the 70s and 80s, with a recent resurgence.",
+   "spoken": "It was actually first played by Horatio Caro themselves, in 1898 — people really knew what they were doing. Tartakower played it a lot, Capablanca too, but it didn't catch on until the 70s and 80s, with a recent resurgence.",
    "reanchor": true
   },
   {
@@ -678,7 +678,7 @@
    "t": 941,
    "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/2P5/PP3PPP/R1BQKBNR b KQkq - 0 6",
    "line": [],
-   "spoken": "Current theory says Black is fine, and after your opponent's setup the position is equal. Let me introduce the pawn cube. Why is that f6 pawn actually good? Think of the snake: when you push the pawn up to attack the bishop, what's left behind is a fully intact structure, so you can do it even with your king on the kingside — it assists the attack, and stops a knight to g5 or e5. With the pawn cube the same idea works with even greater effect: you can push two pawns for attacking purposes without your king becoming weak. Look how safe the king is. The one drawback is that doubled pawns can be clumsy in an endgame. So b3 weakens White; you play a bishop to c7, preparing a queen to d6. White should have tried a rook to e1 so g3 is possible and the bishop is defended — but even then f5 and a queen to h4 pile immense pressure on, and Black is better. It's more positional than tactical, but there are plenty of tactics: against a queen to f3, f5 traps the bishop, and sacrificing it opens nothing because the king is so safe. After c4, a queen to d6, and g3, a rook to e3 — and if he'd played c5, a rook capture on g3, a king to h1, and a very pretty finish, the same rook-and-discovery idea I used to win a game as a 1500 back in 2004. All hail the pawn cube.",
+   "spoken": "Current theory says Black is fine, and after your opponent's setup the position is equal. Let me introduce the pawn cube. Why is that f6 pawn actually good? Think of the snake: when you push the pawn up to attack the bishop, what's left behind is a fully intact structure, so you can do it even with your king on the kingside — it assists the attack, and stops a knight to g5 or e5. With the pawn cube the same idea works with even greater effect: you can push two pawns for attacking purposes without your king becoming weak. Look how safe the king is. The one drawback is that doubled pawns can be clumsy in an endgame. So b3 weakens White; you play a bishop to c7, preparing a queen to d6. White should have tried a rook to e1 so g3 is possible and the bishop is defended — but even then f5 and a queen to h4 pile immense pressure on, and Black is better. It's more positional than tactical, but there are plenty of tactics: against a queen to f3, f5 traps the bishop, and sacrificing it opens nothing because the king is so safe. After c4, a queen to d6, and g3, a rook to e3 — and if they'd played c5, a rook capture on g3, a king to h1, and a very pretty finish, the same rook-and-discovery idea I used to win a game as a 1500 back in 2004. All hail the pawn cube.",
    "reanchor": true
   },
   {
@@ -686,7 +686,7 @@
    "t": 1243.5,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": "At a GM level you don't get to show all these ideas, but at 1600-1700 you can definitely consider this. White doesn't have to play a knight to d2 — he can take on d5.",
+   "spoken": "At a GM level you don't get to show all these ideas, but at 1600-1700 you can definitely consider this. White doesn't have to play a knight to d2 — they can take on d5.",
    "reanchor": true
   },
   {
@@ -696,7 +696,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "You can't play a line just for one cool variation — be realistic and know all the lines. Why would White let you get the pawn cube? Many don't understand how good it is, and here his knight on h4 had no other prospect.",
+   "spoken": "You can't play a line just for one cool variation — be realistic and know all the lines. Why would White let you get the pawn cube? Many don't understand how good it is, and here their knight on h4 had no other prospect.",
    "reanchor": true
   },
   {

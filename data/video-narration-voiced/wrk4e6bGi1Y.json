@@ -38,7 +38,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "He plays e6, a very common reply at this level.",
+   "spoken": "They play e6, a very common reply at this level.",
    "kind": "main"
   },
   {
@@ -58,7 +58,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "Taking on d4 already drifts. It doesn't hand you the full center — he can still hit back with d5 — but it does give you one thing for free that he had no need to concede.",
+   "spoken": "Taking on d4 already drifts. It doesn't hand you the full center — they can still hit back with d5 — but it does give you one thing for free that they had no need to concede.",
    "kind": "main"
   },
   {
@@ -68,7 +68,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "You recapture, and now the c3-square is reserved for the knight. If he plays d5 to contest, you've essentially reached a comfortable French with an extra tempo.",
+   "spoken": "You recapture, and now the c3-square is reserved for the knight. If they play d5 to contest, you've essentially reached a comfortable French with an extra tempo.",
    "kind": "main",
    "teaches": [
     "...cxd4 cxd4 gives White a French-style center a tempo up"
@@ -81,7 +81,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "He develops the knight to f6 instead. A lot of people itch to push e5 here, Alapin-style — but there's no reason to give up the d5-square: after e5 the knight simply drops into d5 and sits on that hole for the rest of the game. So you hold the pawn back.",
+   "spoken": "They develop the knight to f6 instead. A lot of people itch to push e5 here, Alapin-style — but there's no reason to give up the d5-square: after e5 the knight simply drops into d5 and sits on that hole for the rest of the game. So you hold the pawn back.",
    "kind": "main",
    "teaches": [
     "Don\\u2019t push a pawn if it hands the enemy knight a permanent outpost"
@@ -128,7 +128,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "He develops the knight to c6. You could just take his bishop, sure — but why surrender your dark-squared bishop and spend two moves doing it? You'd rather keep developing. The knight to f3 is next; Ne2 was also perfectly reasonable.",
+   "spoken": "They develop the knight to c6. You could just take their bishop, sure — but why surrender your dark-squared bishop and spend two moves doing it? You'd rather keep developing. The knight to f3 is next; Ne2 was also perfectly reasonable.",
    "kind": "main",
    "teaches": [
     "Don\\u2019t trade off a good bishop just to break a pin"
@@ -141,7 +141,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Knight to f3 — and I'm already smelling a Greek gift on h7. That's contingent on him playing d5, castling, and tucking a knight into d7, but the picture is forming.",
+   "spoken": "Knight to f3 — and I'm already smelling a Greek gift on h7. That's contingent on them playing d5, castling, and tucking a knight into d7, but the picture is forming.",
    "kind": "plan",
    "plans": [
     "Develop toward a kingside sacrifice",
@@ -155,7 +155,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "He plays d5. Crucially, you do NOT take it: capturing lets him recapture with the knight and saddle you with an isolated queen pawn under a blockade — exactly what you don't want.",
+   "spoken": "They play d5. Crucially, you do NOT take it: capturing lets them recapture with the knight and saddle you with an isolated queen pawn under a blockade — exactly what you don't want.",
    "kind": "main",
    "teaches": [
     "Avoid a capture that leaves you an isolated, blockaded pawn"
@@ -168,7 +168,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The move is to push e5 — grab the space, shut the door, and clamp him. This should be clear to everyone.",
+   "spoken": "The move is to push e5 — grab the space, shut the door, and clamp them. This should be clear to everyone.",
    "kind": "main"
   },
   {
@@ -178,7 +178,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "He jumps the knight into e4. Now the adventurous, instructive choice: you castle and simply offer the c3-knight, prioritizing development. It's the very same idea as a main-line Italian. Retreating with Bd2 to save the knight would be wrong — I want to keep the dark-squared bishop to guard d4 with Be3 later. Qc2 is the clinical, everything-holds move; but in this house you take the tactical road.",
+   "spoken": "They jump the knight into e4. Now the adventurous, instructive choice: you castle and simply offer the c3-knight, prioritizing development. It's the very same idea as a main-line Italian. Retreating with Bd2 to save the knight would be wrong — I want to keep the dark-squared bishop to guard d4 with Be3 later. Qc2 is the clinical, everything-holds move; but in this house you take the tactical road.",
    "kind": "main",
    "teaches": [
     "Sacrifice a pawn for a lead in development when the attack is real"
@@ -204,7 +204,7 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": "He grabs on c3. If you've played the main-line Italian, this whole structure — the doubled c-pawns, the open b-file, the bishop pair — should feel like home.",
+   "spoken": "They grab on c3. If you've played the main-line Italian, this whole structure — the doubled c-pawns, the open b-file, the bishop pair — should feel like home.",
    "kind": "main"
   },
   {
@@ -224,7 +224,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": "And the bishop takes on c3. Rb1 isn't even forced here — Ba3 is a genuinely strong alternative, sacking the exchange to keep his king stuck in the middle and dominate the dark squares. But Rb1 is the trickier, more testing move.",
+   "spoken": "And the bishop takes on c3. Rb1 isn't even forced here — Ba3 is a genuinely strong alternative, sacking the exchange to keep their king stuck in the middle and dominate the dark squares. But Rb1 is the trickier, more testing move.",
    "kind": "main"
   },
   {
@@ -234,7 +234,7 @@
    "line": [
     "Rb1"
    ],
-   "spoken": "So Rb1. And here's the lesson from last game: if he tries the knight fork on d4, remember that a forking knight can just return to c6 and block the fork — the immediate queen check is the popular wrong answer for exactly that reason.",
+   "spoken": "So Rb1. And here's the lesson from last game: if they try the knight fork on d4, remember that a forking knight can just return to c6 and block the fork — the immediate queen check is the popular wrong answer for exactly that reason.",
    "kind": "main",
    "teaches": [
     "A forked knight can often retreat to block the fork"
@@ -247,7 +247,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "He does grab on d4. You take the knight first — remove the defender — and only then does the check pick up the piece cleanly.",
+   "spoken": "They do grab on d4. You take the knight first — remove the defender — and only then does the check pick up the piece cleanly.",
    "kind": "main",
    "teaches": [
     "Eliminate the defender before you cash the fork"
@@ -274,7 +274,7 @@
     "Qxd4",
     "O-O"
    ],
-   "spoken": "The point of checking on a4 first is that I get to keep this bishop rather than trade it — once he castles short, that bishop is aimed straight at his king. And with his knight gone, the Greek gift is off the table, so there's no downside.",
+   "spoken": "The point of checking on a4 first is that I get to keep this bishop rather than trade it — once they castle short, that bishop is aimed straight at their king. And with their knight gone, the Greek gift is off the table, so there's no downside.",
    "kind": "main",
    "teaches": [
     "Choose the recapture that keeps your attacking bishop"
@@ -300,7 +300,7 @@
    "line": [
     "Bc6"
    ],
-   "spoken": "He hits the rook with the bishop to c6. Now, where to retreat — and you want to squeeze the most out of a retreat, not just flop back to b1. Grabbing on a7 first is completely fine.",
+   "spoken": "They hit the rook with the bishop to c6. Now, where to retreat — and you want to squeeze the most out of a retreat, not just flop back to b1. Grabbing on a7 first is completely fine.",
    "kind": "main",
    "teaches": [
     "Squeeze value out of a forced retreat"
@@ -313,7 +313,7 @@
    "line": [
     "Rb3"
    ],
-   "spoken": "But you've had your fill of queenside pawns — time to attack. The rook lifts to b3, and once the bishop clears d3 this rook swings across to the kingside. Look how bare his king is: there's nothing around it.",
+   "spoken": "But you've had your fill of queenside pawns — time to attack. The rook lifts to b3, and once the bishop clears d3 this rook swings across to the kingside. Look how bare their king is: there's nothing around it.",
    "kind": "plan",
    "teaches": [
     "A rook lift transfers the attack to the other wing"
@@ -330,7 +330,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "He counterattacks the queen with Qa5. Fine — now you've got all manner of ideas against that stripped-bare king.",
+   "spoken": "They counterattack the queen with Qa5. Fine — now you've got all manner of ideas against that stripped-bare king.",
    "kind": "main"
   },
   {
@@ -353,7 +353,7 @@
    "line": [
     "Kxh7"
    ],
-   "spoken": "He takes the bishop.",
+   "spoken": "They take the bishop.",
    "kind": "main"
   },
   {

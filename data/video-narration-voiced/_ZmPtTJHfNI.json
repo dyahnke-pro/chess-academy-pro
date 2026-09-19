@@ -417,7 +417,7 @@
     "d6",
     "Qd4"
    ],
-   "spoken": "In the queen endgame the extra passed pawn on d6 should win, but Black is angling for a perpetual — so the task is to avoid the draw with precise checks that walk his king out of the checking net.",
+   "spoken": "In the queen endgame the extra passed pawn on d6 should win, but Black is angling for a perpetual — so the task is to avoid the draw with precise checks that walk their king out of the checking net.",
    "kind": "main",
    "teaches": "Convert a queen-and-passer ending by using checks to march the enemy king out of perpetual range."
   },

@@ -211,7 +211,7 @@
     "Rxd8",
     "bxc3"
    ],
-   "spoken": "You recapture on d8, and White recaptures the bishop. He's playing for a draw — now you devise a strategy to play for the win.",
+   "spoken": "You recapture on d8, and White recaptures the bishop. They're playing for a draw — now you devise a strategy to play for the win.",
    "reanchor": true
   },
   {
@@ -458,7 +458,7 @@
    "line": [
     "Ra3"
    ],
-   "spoken": "The rook to a3 — the Rubinstein technique of fronting a pawn and attacking it while blockading. If White plays the rook to e1, you use the pin yourself with the bishop to b3, pick off the second pawn, and push the passer home. Rubinstein's endgames, including his famous ones against Lasker, are the model for this.",
+   "spoken": "The rook to a3 — the Rubinstein technique of fronting a pawn and attacking it while blockading. If White plays the rook to e1, you use the pin yourself with the bishop to b3, pick off the second pawn, and push the passer home. Rubinstein's endgames, including their famous ones against Lasker, are the model for this.",
    "reanchor": true
   },
   {
@@ -468,7 +468,7 @@
    "line": [
     "Re2"
    ],
-   "spoken": "White plays the rook to e2 — and the bishop to d1 is the crushing skewer; if White defends, you trade into a trivially winning pawn endgame. There the technique is: find White's weakness — the isolated h3-pawn — and tie down his king by marching yours toward h4, so his king is stuck near g2 and h2. Then advance your pawns carefully, avoiding a swiss-cheese structure: don't push into an e4 or f4 fix. Start with the pawn to e5, then f5 and g5, and the king takes the route to the h-file — the rare exception to centralizing the king. A patient, winning grind.",
+   "spoken": "White plays the rook to e2 — and the bishop to d1 is the crushing skewer; if White defends, you trade into a trivially winning pawn endgame. There the technique is: find White's weakness — the isolated h3-pawn — and tie down their king by marching yours toward h4, so their king is stuck near g2 and h2. Then advance your pawns carefully, avoiding a swiss-cheese structure: don't push into an e4 or f4 fix. Start with the pawn to e5, then f5 and g5, and the king takes the route to the h-file — the rare exception to centralizing the king. A patient, winning grind.",
    "reanchor": true
   },
   {

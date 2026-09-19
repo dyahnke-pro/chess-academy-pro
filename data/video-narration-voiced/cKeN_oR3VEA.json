@@ -204,7 +204,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "The pawn to a4. Rather than the immediate knight maneuver, you provoke Black into damaging his queenside: a4 invites b4, then you route the knight toward g3, and a black pawn stuck on b4 becomes a lasting headache. If Black answers a5, that leaves a hole on b5 for your bishop and dries up his counterplay, freeing you for the kingside. You're expecting b4 — taking on a4 would just leave a6 weak."
+   "spoken": "The pawn to a4. Rather than the immediate knight maneuver, you provoke Black into damaging their queenside: a4 invites b4, then you route the knight toward g3, and a black pawn stuck on b4 becomes a lasting headache. If Black answers a5, that leaves a hole on b5 for your bishop and dries up their counterplay, freeing you for the kingside. You're expecting b4 — taking on a4 would just leave a6 weak."
   },
   {
    "ply": 22,
@@ -220,7 +220,7 @@
    "t": 456,
    "fen": "r2qk2r/1b2ppbp/p1np1np1/1p6/P2PP3/2NBBN1P/1P3PP1/R2Q1RK1 b kq - 0 11",
    "line": [],
-   "spoken": "That's bad. He didn't want to play b4 for some reason, but this just blunders a pawn.",
+   "spoken": "That's bad. They didn't want to play b4 for some reason, but this just blunders a pawn.",
    "reanchor": true
   },
   {
@@ -278,7 +278,7 @@
     "Nd7",
     "Qxb4"
    ],
-   "spoken": "So the queen to b3, Black defends with the knight to d7, and the queen captures on b4 — grabbing the pawn while attacking both queenside minor pieces at once. The queen to b8 looks like Black's only defence, and it's a disaster for him."
+   "spoken": "So the queen to b3, Black defends with the knight to d7, and the queen captures on b4 — grabbing the pawn while attacking both queenside minor pieces at once. The queen to b8 looks like Black's only defence, and it's a disaster for them."
   },
   {
    "ply": 30,
@@ -287,7 +287,7 @@
    "line": [
     "Qb8"
    ],
-   "spoken": "Black finds the queen to b8 — a disaster, but good defending; even at this level people find resourceful moves. Stopping Black from castling — keep his king in the centre and you win faster. The immediate queen to a4 walks into a discovered attack with the knight to c8; the bishop to b5 to pin the d7-knight is the right idea but wrong execution, since it gives up your valuable light-squared bishop — you want that bishop to sit and pin, not be traded."
+   "spoken": "Black finds the queen to b8 — a disaster, but good defending; even at this level people find resourceful moves. Stopping Black from castling — keep their king in the centre and you win faster. The immediate queen to a4 walks into a discovered attack with the knight to c8; the bishop to b5 to pin the d7-knight is the right idea but wrong execution, since it gives up your valuable light-squared bishop — you want that bishop to sit and pin, not be traded."
   },
   {
    "ply": 31,
@@ -325,7 +325,7 @@
     "Nxb5",
     "Bxb5"
    ],
-   "spoken": "Stopping Black from castling matters more here than preserving his weak minor pieces — his knight is now caught in the crossfire. Sometimes it's fine to violate a positional principle, like trading a good piece for a bad one, when concrete considerations demand it. As you reach 1400, 1500, that idea only grows more important — the position always matters more than a general rule.",
+   "spoken": "Stopping Black from castling matters more here than preserving their weak minor pieces — their knight is now caught in the crossfire. Sometimes it's fine to violate a positional principle, like trading a good piece for a bad one, when concrete considerations demand it. As you reach 1400, 1500, that idea only grows more important — the position always matters more than a general rule.",
    "reanchor": true
   },
   {
@@ -335,7 +335,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "The bishop to a6 is Black's best, but he plays the queen to c7 — understandable, protecting the knight and preparing to castle, but the queen is incredibly vulnerable here. You can chase it with the rook to c1, but there's a much prettier tactical sequence."
+   "spoken": "The bishop to a6 is Black's best, but they play the queen to c7 — understandable, protecting the knight and preparing to castle, but the queen is incredibly vulnerable here. You can chase it with the rook to c1, but there's a much prettier tactical sequence."
   },
   {
    "ply": 35,

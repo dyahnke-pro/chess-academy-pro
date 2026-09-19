@@ -25,7 +25,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "He picks the Alapin, the quiet c3 move. Its whole idea is to build the big center with d4 next. Your job is to preempt that — don't let him roll his pawns to d4 and e4 unchallenged.",
+   "spoken": "They pick the Alapin, the quiet c3 move. Its whole idea is to build the big center with d4 next. Your job is to preempt that — don't let them roll their pawns to d4 and e4 unchallenged.",
    "kind": "main",
    "teaches": [
     "Alapin: c3 prepares d4",
@@ -52,7 +52,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "He answers e5 anyway, still angling to follow with d4 and grab space.",
+   "spoken": "They answer e5 anyway, still angling to follow with d4 and grab space.",
    "kind": "main"
   },
   {
@@ -62,7 +62,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "So you jam the door shut with d4 of your own, wedging a pawn into his position before he can get there first.",
+   "spoken": "So you jam the door shut with d4 of your own, wedging a pawn into their position before they can get there first.",
    "kind": "main",
    "teaches": [
     "Contest the center directly with a wedge"
@@ -76,7 +76,7 @@
     "cxd4",
     "cxd4"
    ],
-   "spoken": "After the trade your pawn sits wedged deep in his half, cramping him and denying the natural central setup he wanted.",
+   "spoken": "After the trade your pawn sits wedged deep in their half, cramping them and denying the natural central setup they wanted.",
    "kind": "main"
   },
   {
@@ -300,7 +300,7 @@
    "line": [
     "Qd6"
    ],
-   "spoken": "His queen lands on d6 and it's actually trappable — Qc5 would hunt it — but there's something even cleaner.",
+   "spoken": "Their queen lands on d6 and it's actually trappable — Qc5 would hunt it — but there's something even cleaner.",
    "kind": "main"
   },
   {
@@ -440,7 +440,7 @@
     "Rxc8",
     "Rc1"
    ],
-   "spoken": "Now the textbook conversion: pick a wing, make a passed pawn, and use the extra bishop to keep dislodging his blockading rook until it has to give way — then push the pawn home. And with a winning position, watch for stalemate before you finish.",
+   "spoken": "Now the textbook conversion: pick a wing, make a passed pawn, and use the extra bishop to keep dislodging their blockading rook until it has to give way — then push the pawn home. And with a winning position, watch for stalemate before you finish.",
    "kind": "plan",
    "plans": [
     "Create a passed pawn and escort it",
@@ -488,7 +488,7 @@
     "exd5",
     "Qxd5"
    ],
-   "spoken": "On the recap: after exd5 and the queen recapture, this looks like a Scandinavian — but it's better for you. The difference is the extra c3-pawn: it blocks White's own knight from c3, so he can't develop with tempo by hitting the queen.",
+   "spoken": "On the recap: after exd5 and the queen recapture, this looks like a Scandinavian — but it's better for you. The difference is the extra c3-pawn: it blocks White's own knight from c3, so they can't develop with tempo by hitting the queen.",
    "kind": "review",
    "teaches": [
     "The c3-pawn denies White the Nc3 tempo on the queen"
@@ -536,7 +536,7 @@
    "t": 659.5,
    "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": "The through-line of the game: you wedged the pawn to d4 to stop his French-style plans, and his key slip d3 walked into the fork. And note the counter-idea — a pin cuts both ways; the bishop's own pin can be turned against it with the knight grabbing on e5.",
+   "spoken": "The through-line of the game: you wedged the pawn to d4 to stop their French-style plans, and their key slip d3 walked into the fork. And note the counter-idea — a pin cuts both ways; the bishop's own pin can be turned against it with the knight grabbing on e5.",
    "kind": "review",
    "teaches": [
     "A pin works both ways — the pinner can be exploited too"

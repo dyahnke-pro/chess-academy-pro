@@ -133,7 +133,7 @@
    "line": [],
    "spoken": "The key conceptual split in the Najdorf: category one pushes the pawn two squares with e5, category two plays it only one square to e6. Which you choose depends on what White commits to first.",
    "kind": "main",
-   "teaches": "Najdorf setups divide into e5-systems and e6-systems; keep the choice open until White shows his hand.",
+   "teaches": "Najdorf setups divide into e5-systems and e6-systems; keep the choice open until White shows their hand.",
    "reanchor": true
   },
   {
@@ -152,7 +152,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "You don't need to commit the e-pawn yet, so just develop — Nc6 — and wait for White to declare himself.",
+   "spoken": "You don't need to commit the e-pawn yet, so just develop — Nc6 — and wait for White to declare themselves.",
    "kind": "main"
   },
   {
@@ -303,9 +303,9 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "White's f4 hopes you take, so he can come out with a bishop-check and spoil things on c7. Instead you trade on your own terms: Bd6 invites White to take on e5 rather than the other way around.",
+   "spoken": "White's f4 hopes you take, so they can come out with a bishop-check and spoil things on c7. Instead you trade on your own terms: Bd6 invites White to take on e5 rather than the other way around.",
    "kind": "main",
-   "teaches": "Don't capture into your opponent's plan — set up the position so he has to make the trade you want."
+   "teaches": "Don't capture into your opponent's plan — set up the position so they have to make the trade you want."
   },
   {
    "ply": 25,
@@ -334,7 +334,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "Ne4 looks scary because Nxe4 runs into the zwischenzug Bxf7-check before White recaptures on e4. But ask the real question — does White actually threaten anything right now? He doesn't, so you just carry on developing.",
+   "spoken": "Ne4 looks scary because Nxe4 runs into the zwischenzug Bxf7-check before White recaptures on e4. But ask the real question — does White actually threaten anything right now? They don't, so you just carry on developing.",
    "kind": "main",
    "teaches": "Before reacting to a scary move, define its concrete threat; often there isn't one."
   },
@@ -765,7 +765,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "In the queen-versus-pawn finish, win by zugzwang: force White to shove the h-pawn into a lost race. Kb7 is the elegant key — it makes White dig his own grave.",
+   "spoken": "In the queen-versus-pawn finish, win by zugzwang: force White to shove the h-pawn into a lost race. Kb7 is the elegant key — it makes White dig their own grave.",
    "kind": "main",
    "teaches": "Queen-vs-pawn endings are won by zugzwang that separates the king from its pawn."
   },

@@ -213,7 +213,7 @@
    "line": [
     "Qxe6"
    ],
-   "spoken": "— making it difficult for Black to develop his kingside: he'd love to play e6 next, but he has to move the queen away first, and that costs tempi you use to develop rapid play on the queenside."
+   "spoken": "— making it difficult for Black to develop their kingside: they'd love to play e6 next, but they have to move the queen away first, and that costs tempi you use to develop rapid play on the queenside."
   },
   {
    "ply": 19,
@@ -222,7 +222,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "The idea, not d4, is to go after the knight on b6 with a4 — universally applied in many positions — shoving the pawn toward a5. It may look like a one-move threat with plenty of retreats, but the point is to push all the way to a6, creating long-term light-square weaknesses; the pawn on a7 becomes a long-term weakness once your pawn reaches a6 and fixes it. If Black plays a5, the knight loses its defender and b5 becomes a gaping weakness for your knight; at the right moment you play d4 and blast the centre. The rook to e1 is tempting, but the queen on e6 is actually a good thing — it hampers Black's development — so the rook to e1 would only help him by forcing the queen back."
+   "spoken": "The idea, not d4, is to go after the knight on b6 with a4 — universally applied in many positions — shoving the pawn toward a5. It may look like a one-move threat with plenty of retreats, but the point is to push all the way to a6, creating long-term light-square weaknesses; the pawn on a7 becomes a long-term weakness once your pawn reaches a6 and fixes it. If Black plays a5, the knight loses its defender and b5 becomes a gaping weakness for your knight; at the right moment you play d4 and blast the centre. The rook to e1 is tempting, but the queen on e6 is actually a good thing — it hampers Black's development — so the rook to e1 would only help them by forcing the queen back."
   },
   {
    "ply": 20,
@@ -231,7 +231,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "The queen to d7 — instructive how tempting moves are often bad here. He abides by the clear strategy of kingside development."
+   "spoken": "The queen to d7 — instructive how tempting moves are often bad here. They abide by the clear strategy of kingside development."
   },
   {
    "ply": 21,
@@ -249,7 +249,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The knight to d5. You need to complete the queenside picture; you do not want to allow Black to play a6 himself, because then your a5-pawn becomes a very serious liability —"
+   "spoken": "The knight to d5. You need to complete the queenside picture; you do not want to allow Black to play a6 themselves, because then your a5-pawn becomes a very serious liability —"
   },
   {
    "ply": 23,
@@ -267,7 +267,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "If Black doesn't play b6, you take on b7 and shatter his queenside; if the b-pawn takes a6, same idea, inviting your rook to a super-active square. b6 is played. You must be very accurate — if you fall asleep, Black plays e6 and the bishop to e7 — so you combine queenside play with keeping Black frozen, making it as hard as possible to develop his bishop."
+   "spoken": "If Black doesn't play b6, you take on b7 and shatter their queenside; if the b-pawn takes a6, same idea, inviting your rook to a super-active square. b6 is played. You must be very accurate — if you fall asleep, Black plays e6 and the bishop to e7 — so you combine queenside play with keeping Black frozen, making it as hard as possible to develop their bishop."
   },
   {
    "ply": 25,
@@ -285,7 +285,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "— you recapture with the knight, and if he takes again, with the queen; your queen recapturing on d4 sits centrally, supported by c3, aiming at the g7-pawn, making it hard for the bishop to come out. e6 is on the board — impressive handling. I think the move is the knight to a3... actually c4 is tempting, but it allows the knight to b4, breaking your chain. There's also e5 — I think the move is actually e5, a hard move to explain."
+   "spoken": "— you recapture with the knight, and if they take again, with the queen; your queen recapturing on d4 sits centrally, supported by c3, aiming at the g7-pawn, making it hard for the bishop to come out. e6 is on the board — impressive handling. I think the move is the knight to a3... actually c4 is tempting, but it allows the knight to b4, breaking your chain. There's also e5 — I think the move is actually e5, a hard move to explain."
   },
   {
    "ply": 27,

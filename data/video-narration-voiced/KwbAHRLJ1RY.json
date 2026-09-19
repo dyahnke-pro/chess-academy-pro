@@ -114,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He knows not to take the pawn, and he castles. Now you have to do something about the e5-pawn, which is hanging — the knight takes e5 is a threat. Many ways to defend it: directly with f6 or the bishop to d6, or indirectly with the bishop to g4, pinning the knight."
+   "spoken": "They know not to take the pawn, and they castle. Now you have to do something about the e5-pawn, which is hanging — the knight takes e5 is a threat. Many ways to defend it: directly with f6 or the bishop to d6, or indirectly with the bishop to g4, pinning the knight."
   },
   {
    "ply": 10,
@@ -222,7 +222,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "h3 — he's playing all the top theoretical moves. As a beginner there's a temptation to trade the knight on f3, but —"
+   "spoken": "h3 — they're playing all the top theoretical moves. As a beginner there's a temptation to trade the knight on f3, but —"
   },
   {
    "ply": 18,

@@ -178,7 +178,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "Resist the automatic recapture — consider the options. d5 takes c6, and now Black loses either his queen or his bishop."
+   "spoken": "Resist the automatic recapture — consider the options. d5 takes c6, and now Black loses either their queen or their bishop."
   },
   {
    "ply": 23,
@@ -197,7 +197,7 @@
    "line": [
     "Ba5"
    ],
-   "spoken": "Black retreats the bishop to a5, but he simply doesn't have the firepower to contain your passed pawn on the queenside."
+   "spoken": "Black retreats the bishop to a5, but they simply don't have the firepower to contain your passed pawn on the queenside."
   },
   {
    "ply": 25,
@@ -253,7 +253,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Black plays the knight to d7 — he has to move the rook, and then you promote the pawn."
+   "spoken": "Black plays the knight to d7 — they have to move the rook, and then you promote the pawn."
   },
   {
    "ply": 33,
@@ -316,7 +316,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "Now something cool: the bishop to b5, continuing to harass his rook."
+   "spoken": "Now something cool: the bishop to b5, continuing to harass their rook."
   },
   {
    "ply": 40,
@@ -400,7 +400,7 @@
    "t": 1190.5,
    "fen": "rnb1kbnr/pp2pppp/8/2pq4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": "Black should basically do the same thing he did.",
+   "spoken": "Black should basically do the same thing they did.",
    "reanchor": true
   },
   {

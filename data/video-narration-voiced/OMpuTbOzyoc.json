@@ -34,7 +34,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "Black hasn't moved his e-pawn, he's played the c-pawn instead,"
+   "spoken": "Black hasn't moved their e-pawn, he's played the c-pawn instead,"
   },
   {
    "ply": 7,
@@ -70,7 +70,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "c-takes-d4 — he's giving you full control of the centre"
+   "spoken": "c-takes-d4 — they're giving you full control of the centre"
   },
   {
    "ply": 8,
@@ -115,7 +115,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "b5 is a nice move — I like the way he handled this. In retrospect it might"
+   "spoken": "b5 is a nice move — I like the way they handled this. In retrospect it might"
   },
   {
    "ply": 10,
@@ -277,7 +277,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "So the knight to d5 is the tactical approach, the knight to b1 the positional one. The point of the tactical approach: you sacrifice a pawn, and in return you clearly get the e-file — and what's killing Black is that he hasn't developed his kingside, so White can literally just jump on him, and I don't think Black can carry his king out of the centre. So the logical move is the knight to g5, a classic way of attacking, then the queen to h5, converging on Black — this is crushing."
+   "spoken": "So the knight to d5 is the tactical approach, the knight to b1 the positional one. The point of the tactical approach: you sacrifice a pawn, and in return you clearly get the e-file — and what's killing Black is that they haven't developed their kingside, so White can literally just jump on them, and I don't think Black can carry their king out of the centre. So the logical move is the knight to g5, a classic way of attacking, then the queen to h5, converging on Black — this is crushing."
   },
   {
    "ply": 21,
@@ -287,7 +287,7 @@
     "e6",
     "Nd5"
    ],
-   "spoken": "Even without analysing anything, this seems totally overwhelming. So you have a positional approach and a tactical approach. As Black I probably wouldn't even take this knight — I'd either play e6 and jettison the pawn, or maybe a5 first to defend it, though that's iffy. A rook to c1, he goes e6, you go a3 to stop b4 — b4 was dangerous, and I just want to eliminate the headache of dealing with it on every move. The bishop to f4, h3, the rook to c1, the rook to e8 — all normal — and now h6; again, when you develop passively you have to be a lot more careful about making these weakening moves. As Black I'd play the rook to e8 here instead, and after that h6 becomes a lot more doable, because, for example, after a random White move like the queen to d2, Black can successfully parry the threat of the bishop takes h6."
+   "spoken": "Even without analysing anything, this seems totally overwhelming. So you have a positional approach and a tactical approach. As Black I probably wouldn't even take this knight — I'd either play e6 and jettison the pawn, or maybe a5 first to defend it, though that's iffy. A rook to c1, they go e6, you go a3 to stop b4 — b4 was dangerous, and I just want to eliminate the headache of dealing with it on every move. The bishop to f4, h3, the rook to c1, the rook to e8 — all normal — and now h6; again, when you develop passively you have to be a lot more careful about making these weakening moves. As Black I'd play the rook to e8 here instead, and after that h6 becomes a lot more doable, because, for example, after a random White move like the queen to d2, Black can successfully parry the threat of the bishop takes h6."
   }
  ]
 }

@@ -125,7 +125,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": "Black captures on c3. Had he tried the bishop to g4 instead, you'd have answered h3 to chase it back, and could even have followed with g4."
+   "spoken": "Black captures on c3. Had they tried the bishop to g4 instead, you'd have answered h3 to chase it back, and could even have followed with g4."
   },
   {
    "ply": 15,
@@ -224,7 +224,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "You meet it with g3. This is only safe because the king stands on h2 — otherwise the h3-pawn could fall to a sacrifice; with the king there, that door is shut. And why did Black go to h5 at all? He is angling for f5, but it fails tactically: after f5 you take, the bishop retakes, you take again, the rook recaptures, and g4 at the very end forks the rook and the knight. There is a hidden cost to the knight sitting on h5 too — your queen x-rays it straight through your own f3-knight, so you can lift that knight, which you wanted to do anyway to prepare f4, and chase the h5-knight back to f6, gaining a tempo on your own plan."
+   "spoken": "You meet it with g3. This is only safe because the king stands on h2 — otherwise the h3-pawn could fall to a sacrifice; with the king there, that door is shut. And why did Black go to h5 at all? They are angling for f5, but it fails tactically: after f5 you take, the bishop retakes, you take again, the rook recaptures, and g4 at the very end forks the rook and the knight. There is a hidden cost to the knight sitting on h5 too — your queen x-rays it straight through your own f3-knight, so you can lift that knight, which you wanted to do anyway to prepare f4, and chase the h5-knight back to f6, gaining a tempo on your own plan."
   },
   {
    "ply": 23,
@@ -270,7 +270,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Black plays the knight to d7 — pre-moved, so he never saw the queen-to-d7 resource. But committing to a plan doesn't mean closing your eyes: you must read how the opponent's move reshapes the position. And f4 still carries a serious flaw — after f4, the capture on f4, and g-takes-f4, Black strikes back with f5, and once the centre opens your e3-bishop falls under the queen's x-ray, so taking on f5 walks into tactics that leave your king badly exposed. Piling another defender on f4 with the knight to e2 isn't the cure; the cure is to shield the bishop first — but there's no time, because after the queen to d2 the knight swings to c5 and the break fails anyway, since capturing on f4 leaves your e4-pawn hanging."
+   "spoken": "Black plays the knight to d7 — pre-moved, so they never saw the queen-to-d7 resource. But committing to a plan doesn't mean closing your eyes: you must read how the opponent's move reshapes the position. And f4 still carries a serious flaw — after f4, the capture on f4, and g-takes-f4, Black strikes back with f5, and once the centre opens your e3-bishop falls under the queen's x-ray, so taking on f5 walks into tactics that leave your king badly exposed. Piling another defender on f4 with the knight to e2 isn't the cure; the cure is to shield the bishop first — but there's no time, because after the queen to d2 the knight swings to c5 and the break fails anyway, since capturing on f4 leaves your e4-pawn hanging."
   },
   {
    "ply": 29,

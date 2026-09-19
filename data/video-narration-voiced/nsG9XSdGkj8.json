@@ -55,7 +55,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "He's already erred — d6 here is not how you play the Sicilian; you're meant to capture on d4 first.",
+   "spoken": "They're already erred — d6 here is not how you play the Sicilian; you're meant to capture on d4 first.",
    "kind": "main",
    "teaches": [
     "capture on d4 first"
@@ -68,7 +68,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Why is d6 a mistake? It lets you expand in the centre with d5 and kick the knight, and now it has nowhere good to go — a retreat to e5 wrecks his structure this early.",
+   "spoken": "Why is d6 a mistake? It lets you expand in the centre with d5 and kick the knight, and now it has nowhere good to go — a retreat to e5 wrecks their structure this early.",
    "teaches": [
     "punish d6 with d5"
    ]
@@ -98,7 +98,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "After the trades a lot of players reach for the knight to c3, but that's a positional error once the position transforms like this. Develop with purpose: his pawn on e5 is weak, so the question is how to bring a piece to bear on it.",
+   "spoken": "After the trades a lot of players reach for the knight to c3, but that's a positional error once the position transforms like this. Develop with purpose: their pawn on e5 is weak, so the question is how to bring a piece to bear on it.",
    "kind": "plan",
    "teaches": [
     "purposeful development"
@@ -179,7 +179,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "He castles and you can grab the weak pawn — though personally I'd have castled first, for reasons I'll explain after the game.",
+   "spoken": "They castle and you can grab the weak pawn — though personally I'd have castled first, for reasons I'll explain after the game.",
    "kind": "main"
   },
   {
@@ -198,7 +198,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Rather than trade, drop the knight back. Beyond the extra pawn you have a space advantage, and with more space you want to keep pieces on — no reason to ease his defence with a trade.",
+   "spoken": "Rather than trade, drop the knight back. Beyond the extra pawn you have a space advantage, and with more space you want to keep pieces on — no reason to ease their defence with a trade.",
    "kind": "plan",
    "teaches": [
     "keep pieces on when you have space"
@@ -220,7 +220,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "That knight on f3 is excellent — it pressures the e5-pawn and ties his knight to its defence, which in turn keeps his bishop bottled up.",
+   "spoken": "That knight on f3 is excellent — it pressures the e5-pawn and ties their knight to its defence, which in turn keeps their bishop bottled up.",
    "teaches": [
     "tie down and cramp"
    ]
@@ -340,7 +340,7 @@
    "line": [
     "Qxh3"
    ],
-   "spoken": "His queen crashes in to complete the bishop sacrifice. Why not be scared? Because it's actually harmless — but to refute it cleanly you make an escape route for the king and note he has no threat beyond a check on g4.",
+   "spoken": "Their queen crashes in to complete the bishop sacrifice. Why not be scared? Because it's actually harmless — but to refute it cleanly you make an escape route for the king and note they have no threat beyond a check on g4.",
    "teaches": [
     "refuting an unsound sac"
    ]
@@ -453,7 +453,7 @@
    "line": [
     "Rh3"
    ],
-   "spoken": "The rook lands on h3 and his position begins to collapse — the queen is chased off, and once it moves the h-pawn falls, opening your own file for the attack.",
+   "spoken": "The rook lands on h3 and their position begins to collapse — the queen is chased off, and once it moves the h-pawn falls, opening your own file for the attack.",
    "kind": "main",
    "teaches": [
     "open the h-file"
@@ -487,7 +487,7 @@
     "Rf6",
     "exf5"
    ],
-   "spoken": "Now his position is weak enough that you open the board — taking on f5 lets your pieces stream in toward a decisive attack.",
+   "spoken": "Now their position is weak enough that you open the board — taking on f5 lets your pieces stream in toward a decisive attack.",
    "kind": "main",
    "teaches": [
     "open lines when he’s weakened"

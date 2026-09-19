@@ -60,7 +60,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "You play an inoffensive developing move, the knight to c3, and see how Black arranges his pieces before you commit to f4."
+      "spoken": "You play an inoffensive developing move, the knight to c3, and see how Black arranges their pieces before you commit to f4."
     },
     {
       "ply": 8,
@@ -169,7 +169,7 @@
       "line": [
         "Qe7"
       ],
-      "spoken": "Black plays the queen to e7, but he's in huge trouble: the e5-pawn cramps him and the open f-file is disastrous."
+      "spoken": "Black plays the queen to e7, but they're in huge trouble: the e5-pawn cramps them and the open f-file is disastrous."
     },
     {
       "ply": 21,
@@ -205,7 +205,7 @@
       "line": [
         "Nd4"
       ],
-      "spoken": "He finds the best defense, the knight to d4, trying to unpin himself with tempo."
+      "spoken": "They find the best defense, the knight to d4, trying to unpin themselves with tempo."
     },
     {
       "ply": 25,
@@ -384,7 +384,7 @@
       "line": [
         "Bxh8"
       ],
-      "spoken": "The bishop takes on h8, and Black is completely lost; he'll resign."
+      "spoken": "The bishop takes on h8, and Black is completely lost; they'll resign."
     }
   ]
 }

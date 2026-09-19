@@ -134,7 +134,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "Black has spent the opening shuffling pawns and only now develops a piece to b7. Against passive play the recipe is fixed: pry the center open so your better-placed pieces can infiltrate — otherwise he consolidates and escapes.",
+   "spoken": "Black has spent the opening shuffling pawns and only now develops a piece to b7. Against passive play the recipe is fixed: pry the center open so your better-placed pieces can infiltrate — otherwise they consolidate and escape.",
    "kind": "plan",
    "teaches": [
     "open the center against a passive setup"
@@ -147,7 +147,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The d5 hammer is the move — not e5, which he'd meet with d5 and slam the door. You smash the center open and, crucially, keep it open.",
+   "spoken": "The d5 hammer is the move — not e5, which they'd meet with d5 and slam the door. You smash the center open and, crucially, keep it open.",
    "kind": "main",
    "teaches": [
     "choose the lever that keeps the center open"
@@ -178,7 +178,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Black tries to shut it again with the pawn to e5. The plan now is to push f4, contest that pawn, and open the e-file — the main artery to his king.",
+   "spoken": "Black tries to shut it again with the pawn to e5. The plan now is to push f4, contest that pawn, and open the e-file — the main artery to their king.",
    "kind": "plan",
    "teaches": [
     "the e-file as the road to the king"
@@ -207,7 +207,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "Going straight to c4 would have let him kick the knight with b5 — so patience first.",
+   "spoken": "Going straight to c4 would have let them kick the knight with b5 — so patience first.",
    "teaches": [
     "anticipate the pawn kick"
    ]
@@ -252,7 +252,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "His position is riddled with holes, and f5 is the juiciest — you plant a bishop on it.",
+   "spoken": "Their position is riddled with holes, and f5 is the juiciest — you plant a bishop on it.",
    "kind": "main",
    "teaches": [
     "occupy the outpost hole"
@@ -413,7 +413,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "The knight jumps into the c6 outpost, deep in his position and impossible to dislodge.",
+   "spoken": "The knight jumps into the c6 outpost, deep in their position and impossible to dislodge.",
    "kind": "main"
   },
   {
@@ -476,7 +476,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The lesson Black ignored: he pushed pawns without controlling the center, so you got a free hand. The right plan against his e5 wall is to reroute the knight to d2, push f4-f5, and take on e6 — because the f-file leads straight at the king, and once it opens mate can follow in a couple of moves.",
+   "spoken": "The lesson Black ignored: they pushed pawns without controlling the center, so you got a free hand. The right plan against their e5 wall is to reroute the knight to d2, push f4-f5, and take on e6 — because the f-file leads straight at the king, and once it opens mate can follow in a couple of moves.",
    "teaches": [
     "open the f-file to reach the king"
    ],

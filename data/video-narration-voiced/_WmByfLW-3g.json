@@ -213,7 +213,7 @@
     "d6",
     "Bf5"
    ],
-   "spoken": "The passed pawn drives to d6, splitting Black's camp in two and freezing his pieces — the engine now sees it as good as won.",
+   "spoken": "The passed pawn drives to d6, splitting Black's camp in two and freezing their pieces — the engine now sees it as good as won.",
    "kind": "main",
    "teaches": [
     "A passed pawn on the sixth cramps and divides the defense"

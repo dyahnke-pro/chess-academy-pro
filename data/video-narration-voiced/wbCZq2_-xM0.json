@@ -144,7 +144,7 @@
     "Bg7",
     "O-O"
    ],
-   "spoken": "a4 — a very important positional idea, striking at the base of his b5-a6 pawn chain.",
+   "spoken": "a4 — a very important positional idea, striking at the base of their b5-a6 pawn chain.",
    "kind": "main",
    "teaches": [
     "a4 undermines a b5/a6 pawn duo"
@@ -157,7 +157,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "He pushes b4. Now there are several ways to handle it, but one move stands out.",
+   "spoken": "They push b4. Now there are several ways to handle it, but one move stands out.",
    "kind": "main"
   },
   {
@@ -167,7 +167,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "You play c3 — a great move here, because it stops Black from ever getting in a5 to shore up his chain.",
+   "spoken": "You play c3 — a great move here, because it stops Black from ever getting in a5 to shore up their chain.",
    "kind": "main",
    "teaches": [
     "c3 denies Black the ...a5 supporting move"
@@ -181,7 +181,7 @@
     "bxc3",
     "bxc3"
    ],
-   "spoken": "If he trades on c3, who does opening the b-file favor? White — your pieces are more active, and you get a rook to the b-file faster than he can.",
+   "spoken": "If they trade on c3, who does opening the b-file favor? White — your pieces are more active, and you get a rook to the b-file faster than they can.",
    "kind": "main",
    "teaches": [
     "An opened file favors the side with more active pieces"
@@ -228,7 +228,7 @@
     "a5",
     "c3"
    ],
-   "spoken": "His a5 only makes things worse — another weakness. He's already a pawn down in a grim position.",
+   "spoken": "Their a5 only makes things worse — another weakness. They're already a pawn down in a grim position.",
    "kind": "main"
   },
   {

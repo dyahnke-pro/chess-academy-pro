@@ -98,7 +98,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "You strike with d4. If a knight capture on d5, you take on c5 with a discovered attack, since the pawn can't be recaptured — the knight is pinned. If Black captures on d4, you recapture with the queen, shielded by the d5 pawn like an umbrella, and unless Black is precise he ends up a pawn down for nothing."
+   "spoken": "You strike with d4. If a knight capture on d5, you take on c5 with a discovered attack, since the pawn can't be recaptured — the knight is pinned. If Black captures on d4, you recapture with the queen, shielded by the d5 pawn like an umbrella, and unless Black is precise they end up a pawn down for nothing."
   },
   {
    "ply": 6,
@@ -201,7 +201,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "You push d5. It works because Black's pawn isn't on e6 yet — otherwise, after a trade, your d5 pawn would be a sitting duck. If Black plays e6, you take on e6 and ruin his structure.",
+   "spoken": "You push d5. It works because Black's pawn isn't on e6 yet — otherwise, after a trade, your d5 pawn would be a sitting duck. If Black plays e6, you take on e6 and ruin their structure.",
    "reanchor": true
   },
   {
@@ -470,7 +470,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "You recapture on e5 with the knight. I've checked for a fork on your two undefended pieces, but the queen can't hit both. Against a queen to g5, the danger is pressure on g2 and the attack on your knight — but the bishop to c6 rescues you: if Black takes the knight you take the bishop, if he takes the bishop you recapture with the knight, and a knight to f4 threatening mate is just one move, met by a queen to f3, leaving you two pawns up as Black's initiative dies out.",
+   "spoken": "You recapture on e5 with the knight. I've checked for a fork on your two undefended pieces, but the queen can't hit both. Against a queen to g5, the danger is pressure on g2 and the attack on your knight — but the bishop to c6 rescues you: if Black takes the knight you take the bishop, if they take the bishop you recapture with the knight, and a knight to f4 threatening mate is just one move, met by a queen to f3, leaving you two pawns up as Black's initiative dies out.",
    "reanchor": true
   },
   {
@@ -880,7 +880,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "For completeness, the Benko Gambit: d4, a knight to f6, c4, c5, then b5 — the Volga Gambit in Russia. Black sacrifices the pawn, plays a6, and uses the open a- and b-files to pressure White's queenside, usually with the dark-squared bishop fianchettoed. White need not capture — he can decline with b6 to keep the queenside closed. It's an incredibly complex opening, and Black had to demonstrate exactly those ideas to equalize.",
+   "spoken": "For completeness, the Benko Gambit: d4, a knight to f6, c4, c5, then b5 — the Volga Gambit in Russia. Black sacrifices the pawn, plays a6, and uses the open a- and b-files to pressure White's queenside, usually with the dark-squared bishop fianchettoed. White need not capture — they can decline with b6 to keep the queenside closed. It's an incredibly complex opening, and Black had to demonstrate exactly those ideas to equalize.",
    "reanchor": true
   }
  ]

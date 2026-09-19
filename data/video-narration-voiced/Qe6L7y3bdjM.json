@@ -157,7 +157,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": "You take on c4, and though it opens White's bishop, it leaves him with a backward pawn on d2 and an open d-file to lean on — and you get the open-center game the Sicilian wants.",
+   "spoken": "You take on c4, and though it opens White's bishop, it leaves them with a backward pawn on d2 and an open d-file to lean on — and you get the open-center game the Sicilian wants.",
    "kind": "main",
    "teaches": [
     "open the center; saddle White with a backward d-pawn"
@@ -179,7 +179,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "The bishop goes to its most active square, d6 — and it's safe, because if White tries to fix the weakness with d4, everything trades and the bishop check on b4 picks up his queen.",
+   "spoken": "The bishop goes to its most active square, d6 — and it's safe, because if White tries to fix the weakness with d4, everything trades and the bishop check on b4 picks up their queen.",
    "kind": "main",
    "teaches": [
     "Bd6 works: the Bb4+ trade-down motif"

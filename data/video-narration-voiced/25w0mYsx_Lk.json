@@ -197,7 +197,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "f4 is risky and does loosen your king, but the logic is clean: if Black takes, you push e5 and win the pinned f6-knight; if he plays g5, you take the knight with tempo on the queen. Even the Qc5-check has an answer — an interposition that hits the queen — which is exactly the resource f4 was counting on. Remember the three ways to meet a check: capture the checker, move the king, or block.",
+   "spoken": "f4 is risky and does loosen your king, but the logic is clean: if Black takes, you push e5 and win the pinned f6-knight; if they play g5, you take the knight with tempo on the queen. Even the Qc5-check has an answer — an interposition that hits the queen — which is exactly the resource f4 was counting on. Remember the three ways to meet a check: capture the checker, move the king, or block.",
    "kind": "main",
    "teaches": "The three replies to a check are capture, king-move, and interpose — the block is the one people forget."
   },

@@ -56,7 +56,7 @@
    "line": [
     "Bxh3"
    ],
-   "spoken": "Accepting is right: taking the bishop hands White weak light squares around his king that the traded bishop was supposed to guard.",
+   "spoken": "Accepting is right: taking the bishop hands White weak light squares around their king that the traded bishop was supposed to guard.",
    "kind": "main",
    "teaches": "Trade off a fianchettoed bishop and the color-complex it defended turns permanently weak."
   },
@@ -99,7 +99,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Taking on d4 would only help White centralize his bishop, so refuse the trade and develop the knight to c6, keeping the pressure and again inviting him to release the tension by taking on c5.",
+   "spoken": "Taking on d4 would only help White centralize their bishop, so refuse the trade and develop the knight to c6, keeping the pressure and again inviting them to release the tension by taking on c5.",
    "kind": "main",
    "teaches": "Don't resolve a central tension when the recapture activates your opponent's worst piece."
   },
@@ -120,7 +120,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "e5 is available to prise the centre open, but the solid choice is e6 — keep the centre closed on purpose and outplay him in the quieter structure.",
+   "spoken": "e5 is available to prise the centre open, but the solid choice is e6 — keep the centre closed on purpose and outplay them in the quieter structure.",
    "kind": "main",
    "teaches": "You don't have to open the position just because you can; choose the structure you understand best."
   },
@@ -131,7 +131,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "White takes on c5 — which was the real point of Be3, tying himself to that pawn.",
+   "spoken": "White takes on c5 — which was the real point of Be3, tying themselves to that pawn.",
    "kind": "main"
   },
   {
@@ -233,7 +233,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": "By shoving the b-pawn White only manufactures weaknesses — his own pawn is now backward, and he's developing without any coherent plan while his position starts to crack.",
+   "spoken": "By shoving the b-pawn White only manufactures weaknesses — their own pawn is now backward, and they're developing without any coherent plan while their position starts to crack.",
    "kind": "main",
    "teaches": "Wing pawn lunges without development leave backward pawns and holes behind them."
   },
@@ -263,7 +263,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": "The biggest queenside target is the pawn on c3, so rook to c8 takes the semi-open file. If he defends with a rook, that rook is nailed to the pawn — the weakness ties his pieces down, which matters more than the pawn itself, because he can't reallocate his forces while you can.",
+   "spoken": "The biggest queenside target is the pawn on c3, so rook to c8 takes the semi-open file. If they defend with a rook, that rook is nailed to the pawn — the weakness ties their pieces down, which matters more than the pawn itself, because they can't reallocate their forces while you can.",
    "kind": "plan",
    "teaches": "A weak pawn's value is often the defenders it pins in place, not the material."
   },

@@ -88,7 +88,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "White plays a bishop to d3 — the Copc system, a weird-looking move until you see the follow-up: he wants to drop the bishop back to c2 and control the center with d4. I'll choose a setup that's less theoretical, even if it's slightly worse."
+   "spoken": "White plays a bishop to d3 — the Copc system, a weird-looking move until you see the follow-up: they want to drop the bishop back to c2 and control the center with d4. I'll choose a setup that's less theoretical, even if it's slightly worse."
   },
   {
    "ply": 10,
@@ -189,7 +189,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "You recapture on d4 with the pawn — the whole zen of the setup was to take this way if he pushed d4."
+   "spoken": "You recapture on d4 with the pawn — the whole zen of the setup was to take this way if they pushed d4."
   },
   {
    "ply": 21,
@@ -228,7 +228,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "So d5. The complications peak — either the center opens and your superior bishop and White's undeveloped queenside tell, or White pushes on and you've exploited his lack of development.",
+   "spoken": "So d5. The complications peak — either the center opens and your superior bishop and White's undeveloped queenside tell, or White pushes on and you've exploited their lack of development.",
    "reanchor": true
   },
   {
@@ -394,7 +394,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "White is stuck because of the b2 pawn — nothing moves. He plays a knight to d4, trying to eliminate your g7 bishop, which anchors your whole position.",
+   "spoken": "White is stuck because of the b2 pawn — nothing moves. They play a knight to d4, trying to eliminate your g7 bishop, which anchors your whole position.",
    "reanchor": true
   },
   {
@@ -414,7 +414,7 @@
    "line": [
     "Nac2"
    ],
-   "spoken": "White plays a knight to c2. First question: what's his threat? A bishop capture on d5 is the real problem to defuse.",
+   "spoken": "White plays a knight to c2. First question: what's their threat? A bishop capture on d5 is the real problem to defuse.",
    "reanchor": true
   },
   {
@@ -561,7 +561,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": "White plays a rook to d1. A bishop to c3 comes close to trapping the queen, but he has a bishop to d2.",
+   "spoken": "White plays a rook to d1. A bishop to c3 comes close to trapping the queen, but they have a bishop to d2.",
    "reanchor": true
   },
   {

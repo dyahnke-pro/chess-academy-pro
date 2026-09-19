@@ -135,7 +135,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "Now the attacking scheme: the queen to d2, so you can bring the bishop to h6 and trade off Black's fianchetto bishop — the guardian of the dark squares around his king.",
+   "spoken": "Now the attacking scheme: the queen to d2, so you can bring the bishop to h6 and trade off Black's fianchetto bishop — the guardian of the dark squares around their king.",
    "kind": "plan",
    "teaches": [
     "Qd2 and Bh6 to trade the fianchetto bishop"
@@ -225,7 +225,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Instead of defending the e5-pawn, you push it to e6 — a shot: if Black takes, the knight recaptures with a fork on the queen and rook. And even the forced capture on f7 only helps you, tearing away a pawn shielding his king.",
+   "spoken": "Instead of defending the e5-pawn, you push it to e6 — a shot: if Black takes, the knight recaptures with a fork on the queen and rook. And even the forced capture on f7 only helps you, tearing away a pawn shielding their king.",
    "kind": "main",
    "teaches": [
     "e6 push: the fork or the shattered shelter"
@@ -247,7 +247,7 @@
    "line": [
     "exf7+"
    ],
-   "spoken": "You capture on f7 — eliminating one of the pawns that form his kingside foundation, exactly what you want before an attack.",
+   "spoken": "You capture on f7 — eliminating one of the pawns that form their kingside foundation, exactly what you want before an attack.",
    "kind": "main",
    "teaches": [
     "strip the king’s pawn cover"
@@ -488,7 +488,7 @@
    "line": [
     "Bd4"
    ],
-   "spoken": "The bishop is Black's only working piece, the gatekeeper of his king. With the queen no longer on d2 you can't play Bh6, but the bishop to d4 contests it — trade it and his king is defenseless.",
+   "spoken": "The bishop is Black's only working piece, the gatekeeper of their king. With the queen no longer on d2 you can't play Bh6, but the bishop to d4 contests it — trade it and their king is defenseless.",
    "kind": "main",
    "teaches": [
     "remove the last defender"

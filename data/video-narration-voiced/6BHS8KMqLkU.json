@@ -92,7 +92,7 @@
     "b5",
     "f3"
    ],
-   "spoken": "Black wants his bishop on b7, so you play f3 first — reinforcing e4 so that when the bishop arrives it isn't hitting a loose pawn.",
+   "spoken": "Black wants their bishop on b7, so you play f3 first — reinforcing e4 so that when the bishop arrives it isn't hitting a loose pawn.",
    "kind": "main",
    "teaches": "Pre-defend the pawn a fianchettoed bishop will target, before the bishop gets there."
   },
@@ -162,7 +162,7 @@
    ],
    "spoken": "That third idea is Bh3, leaning on e6. It isn't a move you must follow up immediately — the point is that from here on White threatens a sacrifice there, and Black has to reckon with it every move.",
    "kind": "main",
-   "teaches": "Building pressure on a point forces the defender to spend resources on it, weakening him elsewhere."
+   "teaches": "Building pressure on a point forces the defender to spend resources on it, weakening them elsewhere."
   },
   {
    "ply": 22,
@@ -209,7 +209,7 @@
    "line": [
     "Nf8"
    ],
-   "spoken": "His Nf8 is the only real defense — it guards e6, so taking there twice just trades your attackers off.",
+   "spoken": "Their Nf8 is the only real defense — it guards e6, so taking there twice just trades your attackers off.",
    "kind": "main"
   },
   {
@@ -251,7 +251,7 @@
     "Bxg5",
     "hxg5"
    ],
-   "spoken": "When he gives up his dark-squared bishop, the dark squares around his king turn permanently weak — that's the concession you'll exploit.",
+   "spoken": "When they give up their dark-squared bishop, the dark squares around their king turn permanently weak — that's the concession you'll exploit.",
    "kind": "main",
    "teaches": "Trading off the king's-side bishop leaves a dark-square hole complex behind it."
   },
@@ -282,7 +282,7 @@
    "line": [
     "Ba6"
    ],
-   "spoken": "Careful with e5 or d5 — he answers each by pushing the other pawn past. There's a third way to crack it open.",
+   "spoken": "Careful with e5 or d5 — they answer each by pushing the other pawn past. There's a third way to crack it open.",
    "kind": "main"
   },
   {
@@ -292,7 +292,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "Two clean levers: f4-f5, or c3 hitting the b4-pawn — either one opens the door without letting him seal the centre.",
+   "spoken": "Two clean levers: f4-f5, or c3 hitting the b4-pawn — either one opens the door without letting them seal the centre.",
    "kind": "main",
    "teaches": "When the natural break is neutralized, look for a flank pawn lever that opens a file instead."
   },
@@ -352,7 +352,7 @@
    "line": [
     "Rhf1"
    ],
-   "spoken": "The other rook belongs on the f-file, because once f5 lands you crash straight through his position.",
+   "spoken": "The other rook belongs on the f-file, because once f5 lands you crash straight through their position.",
    "kind": "plan",
    "plans": "Double toward the f-file to power the f5 break."
   },
@@ -410,7 +410,7 @@
     "Rxf5",
     "Nxf5"
    ],
-   "spoken": "After the exchanges, don't rush the recapture: take with the rook, sacrificing the exchange to keep the light bishop as the main attacker — his king is caught in the crossfire.",
+   "spoken": "After the exchanges, don't rush the recapture: take with the rook, sacrificing the exchange to keep the light bishop as the main attacker — their king is caught in the crossfire.",
    "kind": "main",
    "teaches": "Give up the exchange to preserve the piece that actually delivers the attack."
   },

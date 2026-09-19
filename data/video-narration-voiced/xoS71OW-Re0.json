@@ -226,7 +226,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": "The rook to d1; his pieces are scattered, the knight stranded on the rim."
+   "spoken": "The rook to d1; their pieces are scattered, the knight stranded on the rim."
   },
   {
    "ply": 30,
@@ -366,7 +366,7 @@
     "f4",
     "Bxf4"
    ],
-   "spoken": "You're up two pieces; he gives more, and you carefully collect — the bishop to g5, f4, the bishop takes on f4."
+   "spoken": "You're up two pieces; they give more, and you carefully collect — the bishop to g5, f4, the bishop takes on f4."
   },
   {
    "ply": 50,
@@ -384,7 +384,7 @@
    "line": [
     "Kg2"
    ],
-   "spoken": "You simply step the king to g2. Now you win by centralizing and going after his king."
+   "spoken": "You simply step the king to g2. Now you win by centralizing and going after their king."
   },
   {
    "ply": 53,

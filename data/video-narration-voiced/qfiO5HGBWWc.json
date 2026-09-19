@@ -228,7 +228,7 @@
    "t": 436.5,
    "fen": "r1b2rk1/ppq2pbp/2p3p1/3np3/2NN4/2P1BQ2/PP3PPP/3R1RK1 w - - 0 14",
    "line": [],
-   "spoken": "If White tries the knight to b5, you simply take it and hit his other knight.",
+   "spoken": "If White tries the knight to b5, you simply take it and hit their other knight.",
    "reanchor": true
   },
   {
@@ -394,7 +394,7 @@
    "line": [
     "Bxg7+"
    ],
-   "spoken": "White plays the bishop takes g7 with check. His best was actually to trade everything and then play the knight to e5, exploiting your weak c6-pawn — a very advanced idea.",
+   "spoken": "White plays the bishop takes g7 with check. Their best was actually to trade everything and then play the knight to e5, exploiting your weak c6-pawn — a very advanced idea.",
    "reanchor": true
   },
   {
@@ -472,7 +472,7 @@
    "line": [
     "Rg1"
    ],
-   "spoken": "White plays the rook to g1 — it stops the pincer mate but locks his own king in."
+   "spoken": "White plays the rook to g1 — it stops the pincer mate but locks their own king in."
   },
   {
    "ply": 56,

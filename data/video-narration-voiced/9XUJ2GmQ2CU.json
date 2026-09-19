@@ -88,7 +88,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "The knight to d2, without defending b2. If Black takes on b2, the rook to b1 opens the file, and with Black so undeveloped that's disaster for him — no calculation needed. So the plan is the knight to b3 and the rook to e1."
+   "spoken": "The knight to d2, without defending b2. If Black takes on b2, the rook to b1 opens the file, and with Black so undeveloped that's disaster for them — no calculation needed. So the plan is the knight to b3 and the rook to e1."
   },
   {
    "ply": 16,
@@ -106,7 +106,7 @@
    "line": [
     "Nb3"
    ],
-   "spoken": "The knight to b3. In this system it's fine to give up the light-squared bishop — not ideal, but survivable — and Black keeps neglecting his kingside, which could get costly."
+   "spoken": "The knight to b3. In this system it's fine to give up the light-squared bishop — not ideal, but survivable — and Black keeps neglecting their kingside, which could get costly."
   },
   {
    "ply": 19,

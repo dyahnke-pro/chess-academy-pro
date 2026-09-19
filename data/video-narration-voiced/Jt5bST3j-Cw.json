@@ -271,7 +271,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "You start with a move you know is good — capturing on d5. If Black doesn't recapture, the pawn marches to d6 and it's horrific for him, so he'll take back, and then a capture on f5 to wreck his structure is the idea.",
+   "spoken": "You start with a move you know is good — capturing on d5. If Black doesn't recapture, the pawn marches to d6 and it's horrific for them, so they'll take back, and then a capture on f5 to wreck their structure is the idea.",
    "reanchor": true
   },
   {
@@ -311,7 +311,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "You finish it with a capture on c5 — the center is now fully open, so you shift from luxurious positional play to hunting tactics. Black still hasn't developed his queenside, and you've invested a pawn, so you must hit the gas.",
+   "spoken": "You finish it with a capture on c5 — the center is now fully open, so you shift from luxurious positional play to hunting tactics. Black still hasn't developed their queenside, and you've invested a pawn, so you must hit the gas.",
    "reanchor": true
   },
   {
@@ -321,7 +321,7 @@
    "line": [
     "Nxc5"
    ],
-   "spoken": "Black recaptures on c5. Only a couple of moves stand between him and consolidating that extra pawn, so you accelerate — and a bishop to d4 catches my eye, x-raying the rook.",
+   "spoken": "Black recaptures on c5. Only a couple of moves stand between them and consolidating that extra pawn, so you accelerate — and a bishop to d4 catches my eye, x-raying the rook.",
    "reanchor": true
   },
   {
@@ -433,7 +433,7 @@
    "line": [
     "Qg7"
    ],
-   "spoken": "A queen to g7 — using the weakness of Black's king to go after his pieces, because a king so exposed forces the defenders onto vulnerable squares.",
+   "spoken": "A queen to g7 — using the weakness of Black's king to go after their pieces, because a king so exposed forces the defenders onto vulnerable squares.",
    "reanchor": true
   },
   {
@@ -793,7 +793,7 @@
    "t": 1718,
    "fen": "r1b1kbnr/ppqn1p1p/4p1p1/2ppP3/3P1P2/2PB1N2/PP4PP/RNBQK2R b KQkq - 1 10",
    "line": [],
-   "spoken": "You can play the capture on f5 at any moment, so rushing it is senseless, and the bishop on d3 is a fine piece. Does c4 help Black? Maybe it's even Black's best try — with the light squares shut, the position is still bad for him: the kingside dark squares are weak and you can bring the bishop to h4, and White holds the cards on the queenside anyway. A queenside pawn storm isn't dangerous without pieces to support it — c3 is well guarded, so Black threatens nothing there while you start mating on the other wing.",
+   "spoken": "You can play the capture on f5 at any moment, so rushing it is senseless, and the bishop on d3 is a fine piece. Does c4 help Black? Maybe it's even Black's best try — with the light squares shut, the position is still bad for them: the kingside dark squares are weak and you can bring the bishop to h4, and White holds the cards on the queenside anyway. A queenside pawn storm isn't dangerous without pieces to support it — c3 is well guarded, so Black threatens nothing there while you start mating on the other wing.",
    "reanchor": true
   }
  ]

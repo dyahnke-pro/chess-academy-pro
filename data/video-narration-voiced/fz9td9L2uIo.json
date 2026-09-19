@@ -35,7 +35,7 @@
         "cxd5",
         "cxd5"
       ],
-      "spoken": "The pawns trade on d5 — probably an IQP; the fact that he's thinking tells me he's maybe not too familiar with the Caro. Takes, takes, and e5."
+      "spoken": "The pawns trade on d5 — probably an IQP; the fact that they're thinking tells me he's maybe not too familiar with the Caro. Takes, takes, and e5."
     },
     {
       "ply": 7,
@@ -72,7 +72,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "The knight to c3. Black has a very comfortable position — I don't think Black is better, it's still equal, but White is the one who has to be careful his pawn chain doesn't collapse."
+      "spoken": "The knight to c3. Black has a very comfortable position — I don't think Black is better, it's still equal, but White is the one who has to be careful their pawn chain doesn't collapse."
     },
     {
       "ply": 12,
@@ -90,7 +90,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "The knight to f3 — he's a bit out of his depth, which is why the Caro or French can be effective at this level: not that they haven't seen it, just perhaps less well studied. Why not the knight to b4, threatening the knight to c2? Because the knight to b4 exposes the king to a check on b5 —"
+      "spoken": "The knight to f3 — they're a bit out of their depth, which is why the Caro or French can be effective at this level: not that they haven't seen it, just perhaps less well studied. Why not the knight to b4, threatening the knight to c2? Because the knight to b4 exposes the king to a check on b5 —"
     },
     {
       "ply": 14,
@@ -117,7 +117,7 @@
       "line": [
         "Nh6"
       ],
-      "spoken": "I like starting with either e7 or the knight to h6. With the knight to h6, you should be curious why I'm not afraid of the bishop takes h6 — I hope he takes, so I can demonstrate."
+      "spoken": "I like starting with either e7 or the knight to h6. With the knight to h6, you should be curious why I'm not afraid of the bishop takes h6 — I hope they take, so I can demonstrate."
     },
     {
       "ply": 17,
@@ -126,7 +126,7 @@
       "line": [
         "Na4"
       ],
-      "spoken": "As I showed in my own game against a Peruvian grandmaster, it's not dangerous, because his dark-squared bishop is a very important defensive piece — without it the d4-pawn is much harder to defend and his position looser. The knight to a4 — fine; you can go the queen to a5 with check, but then the bishop to d2; the bishop to b4 with check looks good, but he just plays the bishop to d2, and trading dark-squared bishops isn't good for you."
+      "spoken": "As I showed in my own game against a Peruvian grandmaster, it's not dangerous, because their dark-squared bishop is a very important defensive piece — without it the d4-pawn is much harder to defend and their position looser. The knight to a4 — fine; you can go the queen to a5 with check, but then the bishop to d2; the bishop to b4 with check looks good, but they just play the bishop to d2, and trading dark-squared bishops isn't good for you."
     },
     {
       "ply": 18,
@@ -135,7 +135,7 @@
       "line": [
         "Qc7"
       ],
-      "spoken": "It's good if he trades his dark-squared bishop for your knight, but I want to keep a bishop. No need for anything crazy — just drop the queen back to c7."
+      "spoken": "It's good if they trade their dark-squared bishop for your knight, but I want to keep a bishop. No need for anything crazy — just drop the queen back to c7."
     },
     {
       "ply": 19,
@@ -144,7 +144,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "He castles."
+      "spoken": "They castle."
     },
     {
       "ply": 20,
@@ -190,7 +190,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "— and then embark on the middlegame. I have to compliment my opponent — he's handling this very well; not better for you, but a very comfortable position. Do you take on e3? No, for two reasons: that bishop isn't going anywhere, it'll be there for you to take later —"
+      "spoken": "— and then embark on the middlegame. I have to compliment my opponent — they're handling this very well; not better for you, but a very comfortable position. Do you take on e3? No, for two reasons: that bishop isn't going anywhere, it'll be there for you to take later —"
     },
     {
       "ply": 26,
@@ -199,7 +199,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "— and why open the f-file for him, or eliminate a knight that's putting the d4-pawn under significant pressure? Instead let's begin by castling, the most flexible move. A very typical French idea follows —"
+      "spoken": "— and why open the f-file for them, or eliminate a knight that's putting the d4-pawn under significant pressure? Instead let's begin by castling, the most flexible move. A very typical French idea follows —"
     },
     {
       "ply": 27,
@@ -235,7 +235,7 @@
       "line": [
         "Qb6"
       ],
-      "spoken": "You can go to b8, that's okay, but I like dragging the queen back to b6 — it pins the knight to the pawn and reinforces the pressure on d4; after the pawns take on f6 and the bishop recaptures, look how many of your pieces will be trained on that d4-pawn, his position close to collapsing. If he doesn't take, you play a6, or remember you can still take the bishop and then the pawn — that's why you held off."
+      "spoken": "You can go to b8, that's okay, but I like dragging the queen back to b6 — it pins the knight to the pawn and reinforces the pressure on d4; after the pawns take on f6 and the bishop recaptures, look how many of your pieces will be trained on that d4-pawn, their position close to collapsing. If they don't take, you play a6, or remember you can still take the bishop and then the pawn — that's why you held off."
     },
     {
       "ply": 31,
@@ -244,14 +244,14 @@
       "line": [
         "Bd3"
       ],
-      "spoken": "So you hold that over his head. A very funny subtlety I just realized: after a6 and the knight to c3, is the knight takes b2 possible? I missed this at first — after a6, the knight to c3, taking, there's the pattern the knight to a4, and the rook to b1 blunders the knight on c3 —"
+      "spoken": "So you hold that over their head. A very funny subtlety I just realized: after a6 and the knight to c3, is the knight takes b2 possible? I missed this at first — after a6, the knight to c3, taking, there's the pattern the knight to a4, and the rook to b1 blunders the knight on c3 —"
     },
     {
       "ply": 30,
       "t": 647,
       "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
       "line": [],
-      "spoken": "— a pin, since that knight would be hanging on c3; what I mean is the knight to a4 traps the queen, a puzzle-rush theme. He plays the bishop to d3, and now it's time to collect the harvest.",
+      "spoken": "— a pin, since that knight would be hanging on c3; what I mean is the knight to a4 traps the queen, a puzzle-rush theme. They play the bishop to d3, and now it's time to collect the harvest.",
       "reanchor": true
     },
     {
@@ -261,7 +261,7 @@
       "line": [
         "Bd3"
       ],
-      "spoken": "In what order? The most obvious is to take on e5, and after the d-pawn recaptures, take the bishop, and his position collapses — the f-pawn takes e3, the queen recaptures, and you win at least a pawn, probably also a piece. But after the f-pawn takes e5, does White have the bishop takes f5? Let's calculate: the bishop takes f5, the bishop recaptures, and he takes back on e5 — is that good for White, or are you missing something? Takes, takes, takes — what happens at the end?",
+      "spoken": "In what order? The most obvious is to take on e5, and after the d-pawn recaptures, take the bishop, and their position collapses — the f-pawn takes e3, the queen recaptures, and you win at least a pawn, probably also a piece. But after the f-pawn takes e5, does White have the bishop takes f5? Let's calculate: the bishop takes f5, the bishop recaptures, and they take back on e5 — is that good for White, or are you missing something? Takes, takes, takes — what happens at the end?",
       "reanchor": true
     },
     {
@@ -271,14 +271,14 @@
       "line": [
         "fxe5"
       ],
-      "spoken": "The knight on b5 is hanging — that's why it's so important to note all the undefended pieces; forgetting a piece hangs at the end of a line is one of the most common causes of miscalculation. Doesn't that give White an attack on the queen? No — the bishop is gone, and if White takes with the d-pawn, you take his bishop on e3 and his position collapses."
+      "spoken": "The knight on b5 is hanging — that's why it's so important to note all the undefended pieces; forgetting a piece hangs at the end of a line is one of the most common causes of miscalculation. Doesn't that give White an attack on the queen? No — the bishop is gone, and if White takes with the d-pawn, you take their bishop on e3 and their position collapses."
     },
     {
       "ply": 31,
       "t": 764,
       "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
       "line": [],
-      "spoken": "So either he takes the knight to stop the knight takes c3, and his knight hangs, or he takes on e5 and allows the knight takes e3 — that's why I didn't want to play a6 first. This knight, though it may seem a bone in your throat, is actually a very big asset: it burdens White's defenders —",
+      "spoken": "So either they take the knight to stop the knight takes c3, and their knight hangs, or they take on e5 and allows the knight takes e3 — that's why I didn't want to play a6 first. This knight, though it may seem a bone in your throat, is actually a very big asset: it burdens White's defenders —",
       "reanchor": true
     },
     {

@@ -69,7 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "— and if he continues this way, you'll probably go long to exploit these shenanigans. The knight to f6 is just bad."
+   "spoken": "— and if they continue this way, you'll probably go long to exploit these shenanigans. The knight to f6 is just bad."
   },
   {
    "ply": 5,
@@ -107,7 +107,7 @@
    "line": [
     "Nh7"
    ],
-   "spoken": "The knight to h7 — this is not the way to play the Caro. Had he played the knight to d7, you'd play e6, a typical gambit. f4 is possible but you don't need it yet — you have something far better."
+   "spoken": "The knight to h7 — this is not the way to play the Caro. Had they played the knight to d7, you'd play e6, a typical gambit. f4 is possible but you don't need it yet — you have something far better."
   },
   {
    "ply": 11,
@@ -116,7 +116,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop to d3 — not f4 — stopping him from coming out to f5; now his bishop has nowhere good to go, and if you want you can follow with a4, the knight to f3, and so on."
+   "spoken": "The bishop to d3 — not f4 — stopping them from coming out to f5; now their bishop has nowhere good to go, and if you want you can follow with a4, the knight to f3, and so on."
   },
   {
    "ply": 12,
@@ -134,7 +134,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "— to figure out where the knight goes: f4 and the knight to f3 is the natural way to continue, reinforcing your centre. An amazing position — look how passive he is."
+   "spoken": "— to figure out where the knight goes: f4 and the knight to f3 is the natural way to continue, reinforcing your centre. An amazing position — look how passive they are."
   },
   {
    "ply": 14,
@@ -143,7 +143,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The h5-pawn adds to his passivity. He plays the bishop to g4 — no need to panic and drop the bishop back to e2; not every pin is dangerous, particularly this one."
+   "spoken": "The h5-pawn adds to their passivity. They play the bishop to g4 — no need to panic and drop the bishop back to e2; not every pin is dangerous, particularly this one."
   },
   {
    "ply": 15,
@@ -161,7 +161,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "He keeps making moves with the same piece and will pay the price. The queen to b6. The key question: can you play h3, or must you first defend the d4-pawn? A cool trap: after h3, the bishop takes f3, the queen takes f3, there's the queen takes d4 — painful to give up the central pawn, but see the bigger picture; your development lead gives full compensation. And there's a very cool idea here."
+   "spoken": "They keep making moves with the same piece and will pay the price. The queen to b6. The key question: can you play h3, or must you first defend the d4-pawn? A cool trap: after h3, the bishop takes f3, the queen takes f3, there's the queen takes d4 — painful to give up the central pawn, but see the bigger picture; your development lead gives full compensation. And there's a very cool idea here."
   },
   {
    "ply": 17,
@@ -179,7 +179,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "He plays e6."
+   "spoken": "They play e6."
   },
   {
    "ply": 19,
@@ -208,7 +208,7 @@
     "Qxd4",
     "Be3"
    ],
-   "spoken": "The idea is to trap the queen — he bites, the queen takes d4, and here comes the queen trap with the bishop to e3. It works like a charm."
+   "spoken": "The idea is to trap the queen — they bite, the queen takes d4, and here comes the queen trap with the bishop to e3. It works like a charm."
   },
   {
    "ply": 24,
@@ -217,7 +217,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "There's a cool application of this in the Sicilian, where I originally learned the idea. The knight to g5 — he won't go gentle into that good night. A lot of players out of happiness just grab the knight, satisfied to be up a piece — don't settle for good enough; find the best idea."
+   "spoken": "There's a cool application of this in the Sicilian, where I originally learned the idea. The knight to g5 — they won't go gentle into that good night. A lot of players out of happiness just grab the knight, satisfied to be up a piece — don't settle for good enough; find the best idea."
   },
   {
    "ply": 25,
@@ -226,7 +226,7 @@
    "line": [
     "Qe2"
    ],
-   "spoken": "Do you have to take the knight and let his queen out? Is he actually doing anything with this move? No — the queen back to e2 is simplest, and his queen is still very much trapped. Kudos to Black for the knight to g5, a nice defensive resource."
+   "spoken": "Do you have to take the knight and let their queen out? Is he actually doing anything with this move? No — the queen back to e2 is simplest, and their queen is still very much trapped. Kudos to Black for the knight to g5, a nice defensive resource."
   },
   {
    "ply": 26,
@@ -235,7 +235,7 @@
    "line": [
     "Qxe3"
    ],
-   "spoken": "He started to think, but a little too late — now he gives up the queen."
+   "spoken": "They started to think, but a little too late — now they give up the queen."
   },
   {
    "ply": 27,
@@ -272,7 +272,7 @@
     "dxe4",
     "Nxe4"
    ],
-   "spoken": "You might say he has a dark-squared bishop that defends d6 —"
+   "spoken": "You might say they have a dark-squared bishop that defends d6 —"
   },
   {
    "ply": 32,
@@ -326,7 +326,7 @@
    "line": [
     "Rd6"
    ],
-   "spoken": "— you could put a knight on d6, but you could also put a rook on d6, using the knight; I really hope he plays f5 so you can demonstrate the finale."
+   "spoken": "— you could put a knight on d6, but you could also put a rook on d6, using the knight; I really hope they play f5 so you can demonstrate the finale."
   },
   {
    "ply": 38,
@@ -344,7 +344,7 @@
    "line": [
     "Rhd1"
    ],
-   "spoken": "One idea was just doubling rooks, putting insurmountable pressure on his knight."
+   "spoken": "One idea was just doubling rooks, putting insurmountable pressure on their knight."
   },
   {
    "ply": 40,
@@ -362,7 +362,7 @@
    "line": [
     "Nc5"
    ],
-   "spoken": "— a potential mating square, so the knight to c5 stems naturally from that; and as soon as his knight leaves d7 he relinquishes control of squares, accelerating the search for mate. It's over."
+   "spoken": "— a potential mating square, so the knight to c5 stems naturally from that; and as soon as their knight leaves d7 they relinquish control of squares, accelerating the search for mate. It's over."
   },
   {
    "ply": 42,
@@ -371,7 +371,7 @@
    "line": [
     "Bxd6"
    ],
-   "spoken": "He'll probably play the rook to b8, and then he's going to lose."
+   "spoken": "They'll probably play the rook to b8, and then they're going to lose."
   },
   {
    "ply": 43,
@@ -380,7 +380,7 @@
    "line": [
     "Qxb7#"
    ],
-   "spoken": "He takes instead, and it's checkmate on b7. Let's analyze quickly and call it a night."
+   "spoken": "They take instead, and it's checkmate on b7. Let's analyze quickly and call it a night."
   },
   {
    "ply": 2,
@@ -502,7 +502,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "So had he played the knight to d7 —",
+   "spoken": "So had they played the knight to d7 —",
    "reanchor": true
   },
   {
@@ -532,7 +532,7 @@
    "line": [
     "fxe6"
    ],
-   "spoken": "One very important concept: how to follow this up. Black wants e5 to liberate his bishop, so e6 often has a follow-up just as important as the move itself —",
+   "spoken": "One very important concept: how to follow this up. Black wants e5 to liberate their bishop, so e6 often has a follow-up just as important as the move itself —",
    "reanchor": true
   },
   {

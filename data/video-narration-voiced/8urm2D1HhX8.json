@@ -78,7 +78,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "d3 — let's see if he falls into one of the traps. How should Black continue?"
+   "spoken": "d3 — let's see if they fall into one of the traps. How should Black continue?"
   },
   {
    "ply": 10,
@@ -105,7 +105,7 @@
    "line": [
     "Bxe3"
    ],
-   "spoken": "The reason it's not best is obvious: he weakens his kingside. After the bishop trade —"
+   "spoken": "The reason it's not best is obvious: they weaken their kingside. After the bishop trade —"
   },
   {
    "ply": 13,
@@ -114,7 +114,7 @@
    "line": [
     "fxe3"
    ],
-   "spoken": "— look how nasty: he creates all these weaknesses on his kingside, which you exploit through targeted play and rapid development. The key word is rapid — if he plays the bishop to e2 and castles, the flame of the Stafford initiative is extinguished."
+   "spoken": "— look how nasty: they create all these weaknesses on their kingside, which you exploit through targeted play and rapid development. The key word is rapid — if they play the bishop to e2 and castles, the flame of the Stafford initiative is extinguished."
   },
   {
    "ply": 14,
@@ -123,7 +123,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "The knight takes e4 doesn't work here — you play the knight to g4, going straight after the e3-pawn; you don't let him consolidate. How can you pile up the pressure on it?"
+   "spoken": "The knight takes e4 doesn't work here — you play the knight to g4, going straight after the e3-pawn; you don't let them consolidate. How can you pile up the pressure on it?"
   },
   {
    "ply": 16,
@@ -178,7 +178,7 @@
    "line": [
     "Rxh2"
    ],
-   "spoken": "The rook takes h2 — and he blunders the queen."
+   "spoken": "The rook takes h2 — and they blunder the queen."
   },
   {
    "ply": 20,
@@ -187,7 +187,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "I can't believe he just thought and then did that."
+   "spoken": "I can't believe they just thought and then did that."
   },
   {
    "ply": 21,
@@ -241,7 +241,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "— he actually escaped the pin, so don't forget to take the queen when the time comes."
+   "spoken": "— they actually escaped the pin, so don't forget to take the queen when the time comes."
   },
   {
    "ply": 25,
@@ -286,7 +286,7 @@
    "line": [
     "Rb1"
    ],
-   "spoken": "Assuming the rook to b1, and wanting to win efficiently, which pawn do you take? You can take c2 then a2 — could a case be made for a2 immediately? Yes, both create a passed pawn, but there's a subtle reason: if you play the queen takes c2, he walks the king to g3, opening his rook's defence and the queen x-ray."
+   "spoken": "Assuming the rook to b1, and wanting to win efficiently, which pawn do you take? You can take c2 then a2 — could a case be made for a2 immediately? Yes, both create a passed pawn, but there's a subtle reason: if you play the queen takes c2, they walk the king to g3, opening their rook's defence and the queen x-ray."
   },
   {
    "ply": 30,
@@ -295,7 +295,7 @@
    "line": [
     "Qxa2"
    ],
-   "spoken": "So when you push the a-pawn, he might get his rook into the defence. Largely irrelevant — you're totally winning — but keeping the c-pawn alive walls his rook off from its defence."
+   "spoken": "So when you push the a-pawn, they might get their rook into the defence. Largely irrelevant — you're totally winning — but keeping the c-pawn alive walls their rook off from its defence."
   },
   {
    "ply": 31,
@@ -349,7 +349,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "a3 — trying to make him give up the knight for the pawn. I hope he takes c7, because there's a very sexy winning continuation. And a big shout out to Eric Rosen, the king of the Stafford."
+   "spoken": "a3 — trying to make them give up the knight for the pawn. I hope they take c7, because there's a very sexy winning continuation. And a big shout out to Eric Rosen, the king of the Stafford."
   },
   {
    "ply": 37,
@@ -367,7 +367,7 @@
    "line": [
     "Qa1"
    ],
-   "spoken": "Be very careful — look at the whole board. Can he prevent the a-pawn queening? The rook to h1, and you'd only be up the exchange, starting over. When in doubt, go for the simplest continuation — the queen to a1 followed by a2 ends it, unless he plays the bishop to f5. Don't pre-move a2; stay vigilant of counterplay to the very end."
+   "spoken": "Be very careful — look at the whole board. Can he prevent the a-pawn queening? The rook to h1, and you'd only be up the exchange, starting over. When in doubt, go for the simplest continuation — the queen to a1 followed by a2 ends it, unless they play the bishop to f5. Don't pre-move a2; stay vigilant of counterplay to the very end."
   },
   {
    "ply": 39,
@@ -376,7 +376,7 @@
    "line": [
     "Rxc7"
    ],
-   "spoken": "He plays the rook takes c7."
+   "spoken": "They play the rook takes c7."
   },
   {
    "ply": 40,
@@ -422,7 +422,7 @@
     "Nxe5",
     "Nf6"
    ],
-   "spoken": "— his videos are expertly made and cover all sorts of traps.",
+   "spoken": "— their videos are expertly made and cover all sorts of traps.",
    "reanchor": true
   },
   {

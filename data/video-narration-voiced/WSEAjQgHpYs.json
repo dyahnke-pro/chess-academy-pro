@@ -68,7 +68,7 @@
    "t": 2355,
    "fen": "rnbqkbnr/pp2pppp/8/3p4/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": "If White isn't accurate he can end up slightly worse — let me show a little theory.",
+   "spoken": "If White isn't accurate they can end up slightly worse — let me show a little theory.",
    "reanchor": true
   },
   {
@@ -401,7 +401,7 @@
    "t": 2494,
    "fen": "r1bqkb1r/5ppp/p3p3/1p1pn3/3N1P2/2P5/PPB3PP/RNB2RK1 b kq - 0 12",
    "line": [],
-   "spoken": "The c3 pawn is White's biggest target, and whenever White pushes the f-pawn with the king on g1, tactics on the a7-g1 diagonal should light up your pattern recognition. Put them together: a knight capture on c3 deflects the bishop off the diagonal. If White recaptures with the rook, you take, he takes, and you fork — the bishop can't return to d4, that square is no longer protected; had White taken with the bishop, you have other moves like d4. Then a bishop to h7, and the classic right-triangle queen rotation wins.",
+   "spoken": "The c3 pawn is White's biggest target, and whenever White pushes the f-pawn with the king on g1, tactics on the a7-g1 diagonal should light up your pattern recognition. Put them together: a knight capture on c3 deflects the bishop off the diagonal. If White recaptures with the rook, you take, they take, and you fork — the bishop can't return to d4, that square is no longer protected; had White taken with the bishop, you have other moves like d4. Then a bishop to h7, and the classic right-triangle queen rotation wins.",
    "reanchor": true
   },
   {
@@ -765,7 +765,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Here White is slightly better if he knows fifteen moves of theory.",
+   "spoken": "Here White is slightly better if they know fifteen moves of theory.",
    "reanchor": true
   },
   {

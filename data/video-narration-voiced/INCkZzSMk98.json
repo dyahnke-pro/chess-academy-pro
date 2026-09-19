@@ -105,7 +105,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "The bishop to d6 is some weird move. He doesn't play c5, so you're fine — let's just develop the knight to f3 —"
+   "spoken": "The bishop to d6 is some weird move. They don't play c5, so you're fine — let's just develop the knight to f3 —"
   },
   {
    "ply": 13,
@@ -169,7 +169,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "People's reservation about c3 is that it's not clear where to put the knight, but the knight to d2 is a completely legitimate developing move. The queen to d7 is risky — it lets you take on f6 and ruin Black's structure, but the downside is you give up a good bishop, and Black can play the king to h8 and the rook to g8, using the pawn structure to his benefit."
+   "spoken": "People's reservation about c3 is that it's not clear where to put the knight, but the knight to d2 is a completely legitimate developing move. The queen to d7 is risky — it lets you take on f6 and ruin Black's structure, but the downside is you give up a good bishop, and Black can play the king to h8 and the rook to g8, using the pawn structure to their benefit."
   },
   {
    "ply": 21,
@@ -187,7 +187,7 @@
    "line": [
     "Rae8"
    ],
-   "spoken": "Maybe it would have been better to take immediately, who knows. Now his pieces are on pretty good squares."
+   "spoken": "Maybe it would have been better to take immediately, who knows. Now their pieces are on pretty good squares."
   },
   {
    "ply": 23,
@@ -330,7 +330,7 @@
     "Qh4",
     "Qe2"
    ],
-   "spoken": "I'm down a pawn and virtually getting mated, but I don't think there's anything forced, and if he gives me time I can get the knight into the defence with the knight to f3 or g4. So far I've played only-moves — the queen to h2, the king to f1 — and I go the knight to e4 to get the knight into the defence, with the threat of the knight to d6; the knight on e7 hangs, and if he takes I take back, saving the knight with the knight back to e4, and if f5 there's an only-move that wins. Then the queen to f3 out of the pin, and after the knight to f6, allowing a check, the queen to g3 tries to force the queen trade — more accurate, since a trade ends it. Now you're up a piece for no comp, the attack evaporated. You can play aggressively with the knight to g5, but he'd meet it with the knight to h5 and the rook to g6, so let's just take. After the rook to f6, you can take the c7-pawn — nothing to fear down the g-file — or play the rook to b1 and take b7; I'm a bit concerned about the rook to g6, the queen to d5, and f3, so you cut the queen off with c4, preventing the queen to d5 and threatening the rook to b8. The real pest is the rook on g6, since f3 would blunder mate-in-one, so I play the rook to b3 and then g3 to eliminate it. Now you convert by pushing the c-pawn, putting the rook behind it like in an endgame, and push. The queen to c3, push toward c7; when Black blockades with the queen, use the method of offering a queen trade to force it out, and when he blockades with the rook, use the light-squared bishop, the bishop to h3, to chase the rook away. The most efficient is to take on f5, since then the pawn promotes; then the queen to d3 forces g6, opening the seventh rank for a ladder mate, and the rook to f8 mates.",
+   "spoken": "I'm down a pawn and virtually getting mated, but I don't think there's anything forced, and if they give me time I can get the knight into the defence with the knight to f3 or g4. So far I've played only-moves — the queen to h2, the king to f1 — and I go the knight to e4 to get the knight into the defence, with the threat of the knight to d6; the knight on e7 hangs, and if they take I take back, saving the knight with the knight back to e4, and if f5 there's an only-move that wins. Then the queen to f3 out of the pin, and after the knight to f6, allowing a check, the queen to g3 tries to force the queen trade — more accurate, since a trade ends it. Now you're up a piece for no comp, the attack evaporated. You can play aggressively with the knight to g5, but they'd meet it with the knight to h5 and the rook to g6, so let's just take. After the rook to f6, you can take the c7-pawn — nothing to fear down the g-file — or play the rook to b1 and take b7; I'm a bit concerned about the rook to g6, the queen to d5, and f3, so you cut the queen off with c4, preventing the queen to d5 and threatening the rook to b8. The real pest is the rook on g6, since f3 would blunder mate-in-one, so I play the rook to b3 and then g3 to eliminate it. Now you convert by pushing the c-pawn, putting the rook behind it like in an endgame, and push. The queen to c3, push toward c7; when Black blockades with the queen, use the method of offering a queen trade to force it out, and when they blockade with the rook, use the light-squared bishop, the bishop to h3, to chase the rook away. The most efficient is to take on f5, since then the pawn promotes; then the queen to d3 forces g6, opening the seventh rank for a ladder mate, and the rook to f8 mates.",
    "reanchor": true
   },
   {

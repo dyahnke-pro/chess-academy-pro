@@ -141,7 +141,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The knight to f6 — he's still playing instantly, probably some obscure theory. The d-pawn taking c5 isn't stupid: not to win a pawn but to gain tempi — the queen to a5 with check is one tempo, taking on c5 another, then the bishop to e3 and complete development with the knight to f3."
+   "spoken": "The knight to f6 — they're still playing instantly, probably some obscure theory. The d-pawn taking c5 isn't stupid: not to win a pawn but to gain tempi — the queen to a5 with check is one tempo, taking on c5 another, then the bishop to e3 and complete development with the knight to f3."
   },
   {
    "ply": 13,
@@ -169,7 +169,7 @@
     "dxe6",
     "fxe6"
    ],
-   "spoken": "White has a very small but stable endgame edge, and you haven't had many endgames, so I wanted an excuse. The f-pawn recapture is bad — Black is saddled with a permanent weakness on e6, and his kingside is no longer as safe. Now you just develop in any order."
+   "spoken": "White has a very small but stable endgame edge, and you haven't had many endgames, so I wanted an excuse. The f-pawn recapture is bad — Black is saddled with a permanent weakness on e6, and their kingside is no longer as safe. Now you just develop in any order."
   },
   {
    "ply": 17,
@@ -223,14 +223,14 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He castles. Now you should think — this bishop can go to at least four spots: b3, f4, g5, or the queenside fianchetto with b3 and the bishop to e2. Black's annoying idea is to push e5 and establish a knight outpost on d4 — a risk you need to fight."
+   "spoken": "They castle. Now you should think — this bishop can go to at least four spots: b3, f4, g5, or the queenside fianchetto with b3 and the bishop to e2. Black's annoying idea is to push e5 and establish a knight outpost on d4 — a risk you need to fight."
   },
   {
    "ply": 13,
    "t": 420,
    "fen": "rn1qkb1r/pp1bpppp/5n2/2pP4/2P5/8/PP2BPPP/RNBQK1NR b KQkq - 0 7",
    "line": [],
-   "spoken": "I don't think you should allow Black an outpost on d4, because if you trade there, the knight is replaced by a very annoying pawn, much like your own advanced d-pawn, and you won't have the pieces to contest it. So I like the bishop to f4, which is prophylactic — though it steps into the rook's x-ray, and there's a positional discovery: the knight to e4, and after you take, Black eliminates the dark-squared bishop and secures d4. So maybe b3, or the bishop to e3, or the safest, the bishop to g5. Let's play the bishop to g5, the straightforward textbook move; if e5, you cross that bridge later. The knight to h5 — after the dark-bishop trade, which you're not forced into, you could drop back to g3, but that gives Black the bishop pair and lets his bishop reposition to f6, fighting for d4, so you take on e7. Black wants e5 and the knight to d4, less scary now since you meet e5 with the knight to d5, and the scarier knight to f4; g3 weakens the kingside a touch but not badly, since Black's light-squared bishop can't reach g4 or h3, and it sets up the knight to h4 hitting the forkable g6. But the knight to h4 runs into the knight to f4, a typical King's Indian tactic overloading the g3-pawn, so instead you make small, meaningful improvements: the rook to e1, though it weakens f2; the bishop to d3 into the rook's line, or the passive fianchetto to g2. The queen to c2 runs into the knight to d4 with tempo. I'm struggling because of that d4-square. So the bishop to f1 for a defensive posture, heading to g2; the queen to c1 so that if the knight to d4 you have time to react and sink your teeth into e5; the knight to e4 defends f2, and next you chase the knight with h3. He's playing incredibly fast and well — it's probably equal. Then I try the queen to d2, luring the bishop takes e4, the rook recaptures, the rook takes f2, and when the queen drops back Black faces twin threats. He goes for the exchange sac on g2; you bail out with the rook takes c3 and the queen takes e3, and White is not worse — the king is a little weaker, but Black lacks the firepower to exploit it. The queen to e2 defends b2, and there's plenty of chess left; I'll try to win without doing anything crazy.",
+   "spoken": "I don't think you should allow Black an outpost on d4, because if you trade there, the knight is replaced by a very annoying pawn, much like your own advanced d-pawn, and you won't have the pieces to contest it. So I like the bishop to f4, which is prophylactic — though it steps into the rook's x-ray, and there's a positional discovery: the knight to e4, and after you take, Black eliminates the dark-squared bishop and secures d4. So maybe b3, or the bishop to e3, or the safest, the bishop to g5. Let's play the bishop to g5, the straightforward textbook move; if e5, you cross that bridge later. The knight to h5 — after the dark-bishop trade, which you're not forced into, you could drop back to g3, but that gives Black the bishop pair and lets their bishop reposition to f6, fighting for d4, so you take on e7. Black wants e5 and the knight to d4, less scary now since you meet e5 with the knight to d5, and the scarier knight to f4; g3 weakens the kingside a touch but not badly, since Black's light-squared bishop can't reach g4 or h3, and it sets up the knight to h4 hitting the forkable g6. But the knight to h4 runs into the knight to f4, a typical King's Indian tactic overloading the g3-pawn, so instead you make small, meaningful improvements: the rook to e1, though it weakens f2; the bishop to d3 into the rook's line, or the passive fianchetto to g2. The queen to c2 runs into the knight to d4 with tempo. I'm struggling because of that d4-square. So the bishop to f1 for a defensive posture, heading to g2; the queen to c1 so that if the knight to d4 you have time to react and sink your teeth into e5; the knight to e4 defends f2, and next you chase the knight with h3. They're playing incredibly fast and well — it's probably equal. Then I try the queen to d2, luring the bishop takes e4, the rook recaptures, the rook takes f2, and when the queen drops back Black faces twin threats. They go for the exchange sac on g2; you bail out with the rook takes c3 and the queen takes e3, and White is not worse — the king is a little weaker, but Black lacks the firepower to exploit it. The queen to e2 defends b2, and there's plenty of chess left; I'll try to win without doing anything crazy.",
    "reanchor": true
   },
   {
@@ -242,7 +242,7 @@
     "dxe6",
     "fxe6"
    ],
-   "spoken": "When the f-pawn recaptured on e6 I thought this would be a smooth game, but I greatly underappreciated that move — a positional misjudgment; I didn't realize how strong the e-pawn was. He's playing for a win; I underestimated this too, you play b3 to solidify, the queen to e6 with check — just getting crushed. The queen to g4 for a draw is simply bad; the king to g2 allows e3, which I failed to see, so I'll have to go into a pawn-down rook endgame and try to hold — the only chance.",
+   "spoken": "When the f-pawn recaptured on e6 I thought this would be a smooth game, but I greatly underappreciated that move — a positional misjudgment; I didn't realize how strong the e-pawn was. They're playing for a win; I underestimated this too, you play b3 to solidify, the queen to e6 with check — just getting crushed. The queen to g4 for a draw is simply bad; the king to g2 allows e3, which I failed to see, so I'll have to go into a pawn-down rook endgame and try to hold — the only chance.",
    "reanchor": true
   }
  ]

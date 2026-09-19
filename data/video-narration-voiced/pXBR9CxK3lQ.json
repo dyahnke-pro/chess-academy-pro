@@ -79,7 +79,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "He pushes d5 himself — clearly some kind of preparation."
+      "spoken": "They push d5 themselves — clearly some kind of preparation."
     },
     {
       "ply": 12,
@@ -116,7 +116,7 @@
       "line": [
         "Bd2"
       ],
-      "spoken": "The bishop to d2 — you unpin yourself and, in doing so, keep pressure on his queen."
+      "spoken": "The bishop to d2 — you unpin yourself and, in doing so, keep pressure on their queen."
     },
     {
       "ply": 17,
@@ -217,7 +217,7 @@
       "line": [
         "Qxe1"
       ],
-      "spoken": "He takes the queen on e1."
+      "spoken": "They take the queen on e1."
     },
     {
       "ply": 29,
@@ -405,7 +405,7 @@
       "line": [
         "a5"
       ],
-      "spoken": "Black plays a5, pushing his queenside majority."
+      "spoken": "Black plays a5, pushing their queenside majority."
     },
     {
       "ply": 56,
@@ -425,7 +425,7 @@
         "exf7+",
         "Kxf7"
       ],
-      "spoken": "e takes f7 with check and Black recaptures with the king — a strong move that pries his king out."
+      "spoken": "e takes f7 with check and Black recaptures with the king — a strong move that pries their king out."
     },
     {
       "ply": 59,
@@ -784,7 +784,7 @@
         "Rxb3",
         "Kxa5"
       ],
-      "spoken": "Black grabs on b3 and you take his a-pawn with the king, capturing on a5."
+      "spoken": "Black grabs on b3 and you take their a-pawn with the king, capturing on a5."
     },
     {
       "ply": 106,
@@ -933,7 +933,7 @@
       "t": 1653.5,
       "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/3P4/2B2N2/PP3PPP/R2QKB1R b KQkq - 0 9",
       "line": [],
-      "spoken": "At least he should play e takes d4 or e4 rather than dropping the pawn.",
+      "spoken": "At least they should play e takes d4 or e4 rather than dropping the pawn.",
       "reanchor": true
     },
     {

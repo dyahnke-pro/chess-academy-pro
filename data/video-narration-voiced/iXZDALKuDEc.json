@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Instead of grabbing, he plays the knight to c6. So what do you do here?"
+   "spoken": "Instead of grabbing, they play the knight to c6. So what do you do here?"
   },
   {
    "ply": 5,
@@ -97,7 +97,7 @@
    "line": [
     "Ng8"
    ],
-   "spoken": "He has to go all the way back to g8, losing a ton of tempo, and his position already looks grim."
+   "spoken": "They have to go all the way back to g8, losing a ton of tempo, and their position already looks grim."
   },
   {
    "ply": 13,
@@ -115,7 +115,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "His best try is d6, striking at your advanced e5-pawn."
+   "spoken": "Their best try is d6, striking at your advanced e5-pawn."
   },
   {
    "ply": 15,
@@ -133,7 +133,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "A queen trade would have cost him his castling rights and left his king a sitting duck, so instead he plays the bishop to d7, breaking the pin."
+   "spoken": "A queen trade would have cost them their castling rights and left their king a sitting duck, so instead they play the bishop to d7, breaking the pin."
   },
   {
    "ply": 18,
@@ -143,7 +143,7 @@
     "O-O",
     "dxe5"
    ],
-   "spoken": "You castle — the king still has a nice pawn shell, and the fact that you advanced the f-pawn doesn't spoil it. He replies d takes e5."
+   "spoken": "You castle — the king still has a nice pawn shell, and the fact that you advanced the f-pawn doesn't spoil it. They reply d takes e5."
   },
   {
    "ply": 19,
@@ -152,7 +152,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "You recapture, f takes e5, and he's done you a big favor by opening the f-file straight at his king."
+   "spoken": "You recapture, f takes e5, and he's done you a big favor by opening the f-file straight at their king."
   },
   {
    "ply": 20,
@@ -161,7 +161,7 @@
    "line": [
     "Bc5+"
    ],
-   "spoken": "Now his king is going to be in real trouble. He gives a check with the bishop to c5."
+   "spoken": "Now their king is going to be in real trouble. They give a check with the bishop to c5."
   },
   {
    "ply": 21,
@@ -226,7 +226,7 @@
     "Qxd1",
     "Rxd1"
    ],
-   "spoken": "He offers the queen trade, queen takes on d1, and you recapture with the rook. This raises a very contentious question — is it good to trade when you're up material?"
+   "spoken": "They offer the queen trade, queen takes on d1, and you recapture with the rook. This raises a very contentious question — is it good to trade when you're up material?"
   },
   {
    "ply": 30,

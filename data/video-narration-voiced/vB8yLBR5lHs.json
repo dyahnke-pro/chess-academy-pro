@@ -38,7 +38,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "You toss the e5-pawn onto the board and hope he grabs it. Players in this range are often uneasy facing these second-tier openings, which works in your favor.",
+   "spoken": "You toss the e5-pawn onto the board and hope they grab it. Players in this range are often uneasy facing these second-tier openings, which works in your favor.",
    "kind": "main"
   },
   {
@@ -48,7 +48,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "He pushes d5 instead of taking — not a great try. It hands you exactly what you want, because advancing that pawn gives up control of the c5-square.",
+   "spoken": "They push d5 instead of taking — not a great try. It hands you exactly what you want, because advancing that pawn gives up control of the c5-square.",
    "kind": "main",
    "teaches": [
     "Advancing a pawn concedes the square beside it"
@@ -61,7 +61,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "So you make a natural developing move that also pounces on that hole: the bishop to c5, a lovely nook, with d6 to follow and later c6 to chip at his center.",
+   "spoken": "So you make a natural developing move that also pounces on that hole: the bishop to c5, a lovely nook, with d6 to follow and later c6 to chip at their center.",
    "kind": "main",
    "teaches": [
     "Occupy the square your opponent just weakened"
@@ -83,7 +83,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "You anchor the bishop with d6 and open the other bishop's diagonal. The position's equal — he's not worse, but he's posing you no problems. Note Bg5 here would be a tactical blunder to Bxf2+.",
+   "spoken": "You anchor the bishop with d6 and open the other bishop's diagonal. The position's equal — they're not worse, but they're posing you no problems. Note Bg5 here would be a tactical blunder to Bxf2+.",
    "kind": "main"
   },
   {
@@ -93,7 +93,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "He plays e4, and this is already dubious: it weakens the d4-square as a future knight outpost, fully opens the diagonal for your bishop pressuring f2, and takes away his own e3 to relieve that pressure.",
+   "spoken": "They play e4, and this is already dubious: it weakens the d4-square as a future knight outpost, fully opens the diagonal for your bishop pressuring f2, and takes away their own e3 to relieve that pressure.",
    "kind": "main",
    "teaches": [
     "e4 here weakens d4 and bares the a7-g1 diagonal"
@@ -106,7 +106,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "The move that leaps out is Ng4 — superficial-looking, but genuinely hard to meet. It piles onto f2, and his only defense is an awkward one.",
+   "spoken": "The move that leaps out is Ng4 — superficial-looking, but genuinely hard to meet. It piles onto f2, and their only defense is an awkward one.",
    "kind": "main",
    "teaches": [
     "Hunt the f2 weak point with ...Ng4"
@@ -205,7 +205,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "On the recap: his f3 could have been met by the strong positional knight to e3, forking into his camp and forcing a decision.",
+   "spoken": "On the recap: their f3 could have been met by the strong positional knight to e3, forking into their camp and forcing a decision.",
    "kind": "review"
   },
   {
@@ -215,7 +215,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": "After knight to e3 he essentially has to give up his bishop for it.",
+   "spoken": "After knight to e3 he essentially has to give up their bishop for it.",
    "kind": "review"
   },
   {
@@ -226,7 +226,7 @@
     "Bxe3",
     "Bxe3"
    ],
-   "spoken": "And now his structure is grim — your dark-squared bishop is unopposed, raking both long diagonals and dominating a fistful of key squares. A miserable position for White.",
+   "spoken": "And now their structure is grim — your dark-squared bishop is unopposed, raking both long diagonals and dominating a fistful of key squares. A miserable position for White.",
    "kind": "review",
    "teaches": [
     "An unopposed bishop that controls both diagonals is a lasting edge"
@@ -271,7 +271,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Later you chose the calm, positional path — knight to d7, connecting the rooks — and his hurried bishop grab actually dropped the exchange. Being patient with a quiet improving move often gets rewarded.",
+   "spoken": "Later you chose the calm, positional path — knight to d7, connecting the rooks — and their hurried bishop grab actually dropped the exchange. Being patient with a quiet improving move often gets rewarded.",
    "kind": "review",
    "teaches": [
     "A patient improving move often provokes the blunder"

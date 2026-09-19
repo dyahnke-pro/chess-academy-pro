@@ -35,7 +35,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "the knight grabs on e4 — you've traded your c-pawn for his e-pawn, but the real point is that White has developed nothing but his queen."
+   "spoken": "the knight grabs on e4 — you've traded your c-pawn for their e-pawn, but the real point is that White has developed nothing but their queen."
   },
   {
    "ply": 7,
@@ -44,7 +44,7 @@
    "line": [
     "Qh5"
    ],
-   "spoken": "Where White puts the queen matters — if it dropped back to e3 you'd hit it with d5. He keeps it on h5, and the knight to c6 and later b5 are your ideas."
+   "spoken": "Where White puts the queen matters — if it dropped back to e3 you'd hit it with d5. They keep it on h5, and the knight to c6 and later b5 are your ideas."
   },
   {
    "ply": 8,
@@ -135,7 +135,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "The knight to d4 — the queen drops back, you take his bishop, but then he takes your knight; what do you actually gain? Let me think it through."
+   "spoken": "The knight to d4 — the queen drops back, you take their bishop, but then they take your knight; what do you actually gain? Let me think it through."
   },
   {
    "ply": 19,
@@ -144,7 +144,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": "The knight to d4 might even be the more accurate try — I'm not certain; the queen to a5 was a perfectly legitimate alternative that worked much the same. He plays the knight to a3."
+   "spoken": "The knight to d4 might even be the more accurate try — I'm not certain; the queen to a5 was a perfectly legitimate alternative that worked much the same. They play the knight to a3."
   },
   {
    "ply": 20,
@@ -332,7 +332,7 @@
     "dxe4",
     "dxe4"
    ],
-   "spoken": "you're up a pawn with better development and the two bishops; his knight is"
+   "spoken": "you're up a pawn with better development and the two bishops; their knight is"
   },
   {
    "ply": 24,
@@ -378,7 +378,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White's kingside. He can still castle, but"
+   "spoken": "White's kingside. They can still castle, but"
   },
   {
    "ply": 24,

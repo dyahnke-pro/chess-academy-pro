@@ -43,7 +43,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "He goes b6 — an alternative to the main move c5; the idea is to get the bishop out to a6."
+   "spoken": "They go b6 — an alternative to the main move c5; the idea is to get the bishop out to a6."
   },
   {
    "ply": 7,
@@ -124,14 +124,14 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Let's castle and do all the nice things, then when you're ready go f4 and try for f5. The queen takes d3, a4 — he's expanding on the queenside without developing, so you press the gas. He could meet f4 with g6, creating kingside weaknesses you could exploit. The knight to h6 stops f5; your idea is the f5 pawn break. In a closed centre nothing happens quickly against good players — you have to be methodical. You could go the knight to g3, but he plays g6; the knight to d2 is patient, but I like a more direct idea to contest f5 — h3, reserving the option of g4."
+   "spoken": "Let's castle and do all the nice things, then when you're ready go f4 and try for f5. The queen takes d3, a4 — they're expanding on the queenside without developing, so you press the gas. They could meet f4 with g6, creating kingside weaknesses you could exploit. The knight to h6 stops f5; your idea is the f5 pawn break. In a closed centre nothing happens quickly against good players — you have to be methodical. You could go the knight to g3, but they play g6; the knight to d2 is patient, but I like a more direct idea to contest f5 — h3, reserving the option of g4."
   },
   {
    "ply": 2,
    "t": 381,
    "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": "Now that you've played g4, you can play the knight to g3 with a clean conscience, and everything is finally ready for a5 and the f5 break — though after c5, f5 comes with a lot of risk, so I make a ridiculous-looking move: the knight back to b1. The main idea is to unblock the bishop, because when Black attacks the d4-pawn I don't want it to collapse — that pawn holds your whole position together. So the bishop can go to e3 to protect it, and the knight redirects from b1 to c3, a more active square than d2, with the rook coming to c1 — retooling the queenside to defend d4 and coordinate. He goes the queen to b5, and this is a great chance to strike: don't care about the b2-pawn, just play the knight to c3, and if the queen takes b2, protect the knight with a rook and start threatening discoveries and sacrifices, since his kingside is undeveloped. The rook to c1 creates an x-ray against the knight — tactical potential everywhere, and f5 is still available. He plays g6, and now f5 — the point isn't to open a file but to create a pathway: with g6 gone, h5 is no longer controlled, so the knight goes to h5 and heads for the juicy f6 outpost; g5 forcing the knight back to g8 was also possible, and the bishop to g5 pins the knight if the king goes to d8. He plays the knight to g8 to prevent the knight to f6 — but does it? The Sam Shankland question, what if I do it anyway: the knight to f6 with check, the knight takes f6, the pawn recaptures, and that f6-pawn is almost as strong as a knight, forcing the e7-knight out and leaving the king on e8 wide open, with a sacrifice on d5 to open a file for the rook. He plays the knight to c8, and you have a discovery against the knight — the knight takes d5 is best with tempo, so first the rook to f2, getting the queen back to b4; if the queen to a3, the knight to b5 forks and wins. The queen to b4, and you break through — patience pays off. The queen to d6; you take the knight, and now, with your rook and knight both hanging, the rook to c2, the queen takes d5, the knight to b6, the queen takes b6, and the knight to e7 fulfills every task — he can't take it without losing the rook, the problem with being undeveloped. You're up a rook, the bishop takes f6 or h7, and it's over; the king to e7, and finally, after all this time, you take on f5 to open the file, e5, take, and the rest wins itself.",
+   "spoken": "Now that you've played g4, you can play the knight to g3 with a clean conscience, and everything is finally ready for a5 and the f5 break — though after c5, f5 comes with a lot of risk, so I make a ridiculous-looking move: the knight back to b1. The main idea is to unblock the bishop, because when Black attacks the d4-pawn I don't want it to collapse — that pawn holds your whole position together. So the bishop can go to e3 to protect it, and the knight redirects from b1 to c3, a more active square than d2, with the rook coming to c1 — retooling the queenside to defend d4 and coordinate. They go the queen to b5, and this is a great chance to strike: don't care about the b2-pawn, just play the knight to c3, and if the queen takes b2, protect the knight with a rook and start threatening discoveries and sacrifices, since their kingside is undeveloped. The rook to c1 creates an x-ray against the knight — tactical potential everywhere, and f5 is still available. They play g6, and now f5 — the point isn't to open a file but to create a pathway: with g6 gone, h5 is no longer controlled, so the knight goes to h5 and heads for the juicy f6 outpost; g5 forcing the knight back to g8 was also possible, and the bishop to g5 pins the knight if the king goes to d8. They play the knight to g8 to prevent the knight to f6 — but does it? The Sam Shankland question, what if I do it anyway: the knight to f6 with check, the knight takes f6, the pawn recaptures, and that f6-pawn is almost as strong as a knight, forcing the e7-knight out and leaving the king on e8 wide open, with a sacrifice on d5 to open a file for the rook. They play the knight to c8, and you have a discovery against the knight — the knight takes d5 is best with tempo, so first the rook to f2, getting the queen back to b4; if the queen to a3, the knight to b5 forks and wins. The queen to b4, and you break through — patience pays off. The queen to d6; you take the knight, and now, with your rook and knight both hanging, the rook to c2, the queen takes d5, the knight to b6, the queen takes b6, and the knight to e7 fulfills every task — they can't take it without losing the rook, the problem with being undeveloped. You're up a rook, the bishop takes f6 or h7, and it's over; the king to e7, and finally, after all this time, you take on f5 to open the file, e5, take, and the rest wins itself.",
    "reanchor": true
   },
   {
@@ -154,7 +154,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "Why did I play c3? Because he's trying to play the bishop to a6 and trade off the French bishop, which Black always wants to get rid of —",
+   "spoken": "Why did I play c3? Because they're trying to play the bishop to a6 and trade off the French bishop, which Black always wants to get rid of —",
    "reanchor": true
   },
   {

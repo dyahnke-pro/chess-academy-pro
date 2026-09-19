@@ -87,7 +87,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "If Black recaptures with the pawn and White later takes on c5, Black recaptures and has an isolated pawn on d5 — the classic isolated queen's pawn. One good thing about c3: after you take on c5 and he recaptures, that c3-pawn slows the d5-pawn and controls the square in front of it, the most important thing against the IQP — controlling the square matters more than occupying it. Taking on c5 immediately is decent but not best; ideally, as in the Queen's Gambit, you wait for Black to move the dark-squared bishop first, then take on c5 to cost him a tempo."
+   "spoken": "If Black recaptures with the pawn and White later takes on c5, Black recaptures and has an isolated pawn on d5 — the classic isolated queen's pawn. One good thing about c3: after you take on c5 and they recapture, that c3-pawn slows the d5-pawn and controls the square in front of it, the most important thing against the IQP — controlling the square matters more than occupying it. Taking on c5 immediately is decent but not best; ideally, as in the Queen's Gambit, you wait for Black to move the dark-squared bishop first, then take on c5 to cost them a tempo."
   },
   {
    "ply": 9,
@@ -132,7 +132,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Instead you develop and wait for a more opportune moment — the moment Black develops his bishop is a very good time to take on c5. The knight to f3."
+   "spoken": "Instead you develop and wait for a more opportune moment — the moment Black develops their bishop is a very good time to take on c5. The knight to f3."
   },
   {
    "ply": 12,
@@ -150,7 +150,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "Traditionally you take on c5 the moment Black develops his bishop —"
+   "spoken": "Traditionally you take on c5 the moment Black develops their bishop —"
   },
   {
    "ply": 14,
@@ -159,7 +159,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": "— the bishop takes c5, and you've earned a tempo, since Black made an extra move with his bishop."
+   "spoken": "— the bishop takes c5, and you've earned a tempo, since Black made an extra move with their bishop."
   },
   {
    "ply": 15,
@@ -168,7 +168,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Now you castle and get your king out of the centre. The next big question is where Black develops his knight — e7 or f6. Against the knight to f6, I like the bishop to g5, pinning it; but if the knight goes to e7, the bishop to g5 makes less sense."
+   "spoken": "Now you castle and get your king out of the centre. The next big question is where Black develops their knight — e7 or f6. Against the knight to f6, I like the bishop to g5, pinning it; but if the knight goes to e7, the bishop to g5 makes less sense."
   },
   {
    "ply": 16,
@@ -216,7 +216,7 @@
     "Bg5",
     "Be6"
    ],
-   "spoken": "So this seems a more harmonious way of developing. The bishop to e6 follows — I don't love it; Black delays castling, giving you options like the immediate knight to e4, pressuring his minor pieces —",
+   "spoken": "So this seems a more harmonious way of developing. The bishop to e6 follows — I don't love it; Black delays castling, giving you options like the immediate knight to e4, pressuring their minor pieces —",
    "reanchor": true
   },
   {
@@ -253,7 +253,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "— so the IQP is no longer a moving target; it'll saddle Black for as long as it sits on d5. Now you make marginal improving moves. Avoid the queen to d2, which runs into the knight to e4 and bad trades. The low-hanging fruit is a knight to d4 — controlling the square matters most, but occupying it isn't bad either; the knight to c4 is also on an ideal square, pressuring his minors."
+   "spoken": "— so the IQP is no longer a moving target; it'll saddle Black for as long as it sits on d5. Now you make marginal improving moves. Avoid the queen to d2, which runs into the knight to e4 and bad trades. The low-hanging fruit is a knight to d4 — controlling the square matters most, but occupying it isn't bad either; the knight to c4 is also on an ideal square, pressuring their minors."
   },
   {
    "ply": 27,
@@ -298,7 +298,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "So c6 is the biggest weakness, attacked directly by the knight to e5. But the knight to e5 has other threats: taking on c6, or taking on d7 and then f6 to ruin Black's kingside structure; the bishop takes f6 also works, since the queen can't recapture. Black struggles to cover everything; the bishop takes d4 gives you a huge advantage — Black is borderline lost if he gives up the dark-squared bishop. His pieces are passive; yours are all on optimal squares."
+   "spoken": "So c6 is the biggest weakness, attacked directly by the knight to e5. But the knight to e5 has other threats: taking on c6, or taking on d7 and then f6 to ruin Black's kingside structure; the bishop takes f6 also works, since the queen can't recapture. Black struggles to cover everything; the bishop takes d4 gives you a huge advantage — Black is borderline lost if they give up the dark-squared bishop. Their pieces are passive; yours are all on optimal squares."
   },
   {
    "ply": 28,
@@ -317,7 +317,7 @@
     "bxc6",
     "Ne5"
    ],
-   "spoken": "A lot of tactics hanging in the air; the fact that he's thinking this long is encouraging.",
+   "spoken": "A lot of tactics hanging in the air; the fact that they're thinking this long is encouraging.",
    "reanchor": true
   },
   {
@@ -327,7 +327,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "The queen to e8 was a smart proposal, unpinning and hitting the knight. Black plays c5, which I expected, but it fails tactically to a beautiful sequence I saw when playing the bishop takes c6. Your instinct is to move the knight from d4, but the bishop takes f6 is available — the queen still can't recapture, and the knight takes d7 comes with a fork. After the bishop takes f6, the pawn recaptures, you take the bishop on d7 and claim a small edge on Black's damaged kingside — though he could tuck the king to h8 and use the g-file. There's a specific tactical line, but I need a little more time; there's a detail I missed, which may force me off my intended path."
+   "spoken": "The queen to e8 was a smart proposal, unpinning and hitting the knight. Black plays c5, which I expected, but it fails tactically to a beautiful sequence I saw when playing the bishop takes c6. Your instinct is to move the knight from d4, but the bishop takes f6 is available — the queen still can't recapture, and the knight takes d7 comes with a fork. After the bishop takes f6, the pawn recaptures, you take the bishop on d7 and claim a small edge on Black's damaged kingside — though they could tuck the king to h8 and use the g-file. There's a specific tactical line, but I need a little more time; there's a detail I missed, which may force me off my intended path."
   },
   {
    "ply": 33,
@@ -381,7 +381,7 @@
    "line": [
     "Rfd8"
    ],
-   "spoken": "I like positions where both sides have only one minor piece — very instructive. It's not really good-knight-versus-bad-bishop, since his bishop activates with c4, but the bigger problem is all the pawn weaknesses and the flimsy king. The rook to d8 makes the king even more uncomfortable; I'd start with the queen to f3, forcing Black to contend with the threat of the queen takes f6. If Black throws in d4 anyway, after the trades I'd seriously consider not taking on f6, since it lets the d-pawn run with d3, but White's still good; the rook to d1 also works. The queen to d6 protects f6, but now the knight reaches f5 with tempo, so the knight to e3 gets even more tempting."
+   "spoken": "I like positions where both sides have only one minor piece — very instructive. It's not really good-knight-versus-bad-bishop, since their bishop activates with c4, but the bigger problem is all the pawn weaknesses and the flimsy king. The rook to d8 makes the king even more uncomfortable; I'd start with the queen to f3, forcing Black to contend with the threat of the queen takes f6. If Black throws in d4 anyway, after the trades I'd seriously consider not taking on f6, since it lets the d-pawn run with d3, but White's still good; the rook to d1 also works. The queen to d6 protects f6, but now the knight reaches f5 with tempo, so the knight to e3 gets even more tempting."
   },
   {
    "ply": 40,

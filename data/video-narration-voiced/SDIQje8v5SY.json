@@ -88,7 +88,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "He played the bishop to f5 correctly because of a specific move — not the queen to a5, because of c3, but the rook to c8; it's not actually the check that matters. The knight to f3."
+      "spoken": "They played the bishop to f5 correctly because of a specific move — not the queen to a5, because of c3, but the rook to c8; it's not actually the check that matters. The knight to f3."
     },
     {
       "ply": 12,
@@ -115,7 +115,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "it's not that Black loses the bishop, but he may have to play h6, and if the bishop is on g6 and the knight on e5, then the knight takes g6 forces f-takes-g6, which is tremendously awkward. You're spoiled for choice."
+      "spoken": "it's not that Black loses the bishop, but they may have to play h6, and if the bishop is on g6 and the knight on e5, then the knight takes g6 forces f-takes-g6, which is tremendously awkward. You're spoiled for choice."
     },
     {
       "ply": 15,
@@ -362,14 +362,14 @@
       "line": [
         "Nc7"
       ],
-      "spoken": "to get a rook to e8, and you know you should employ the least valuable piece for the task. You're making the mistake of employing the queen, but you can employ the knight — the knight to c7 — and the reason this is better than the queen to e3 is that you actually win Black's queen; involving the queen isn't good, because ultimately you'd capture with the queen and offer a queen trade, and you want to win the queen, not trade it. The queen to f5 doesn't work — close, but no. A rook immediately would be insane — he'd just take. g7 with check, and he resigns."
+      "spoken": "to get a rook to e8, and you know you should employ the least valuable piece for the task. You're making the mistake of employing the queen, but you can employ the knight — the knight to c7 — and the reason this is better than the queen to e3 is that you actually win Black's queen; involving the queen isn't good, because ultimately you'd capture with the queen and offer a queen trade, and you want to win the queen, not trade it. The queen to f5 doesn't work — close, but no. A rook immediately would be insane — they'd just take. g7 with check, and they resign."
     },
     {
       "ply": 7,
       "t": 534.5,
       "fen": "r1bqkbnr/pp2pppp/2n5/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 2 4",
       "line": [],
-      "spoken": "g7 — why is g7 so good? He takes on g6; people are overestimating it, but g7 with check and he resigns. So, you get a Jobava London — the knight to c3, the bishop to f5. First point: why is the knight to b5",
+      "spoken": "g7 — why is g7 so good? They take on g6; people are overestimating it, but g7 with check and they resign. So, you get a Jobava London — the knight to c3, the bishop to f5. First point: why is the knight to b5",
       "reanchor": true
     },
     {
@@ -704,7 +704,7 @@
       "t": 1007,
       "fen": "r2q1bnr/pp3kp1/4p1p1/3p2Pp/3n1B1P/2NB1P2/PPPQ4/R3K2R w KQ - 3 15",
       "line": [],
-      "spoken": "Black has literally just one developed piece, a knight — that's it. So the bishop to d6, you castle, again avoiding the knee-jerk reaction — the queen defends the bishop; you want him to take on f4, because then the queen enters the game, dislodges the king from the pawn, and you play the bishop takes g6. The knight to g7 brings the last piece into the game; the knight to f5, of course you take it, and whichever way Black recaptures he opens a fatal avenue: if he takes with the f-pawn, the pawn has lost its supporter — the knight takes d5 — and if g-takes-f5, you push through with g6; if the king takes g6, it's a fork, so the king has to go, and the rook takes e6. Now the queen takes f5 — I understand people think it's going to be checkmate, but remember the three ways to deal with a check; here categories two and three are available.",
+      "spoken": "Black has literally just one developed piece, a knight — that's it. So the bishop to d6, you castle, again avoiding the knee-jerk reaction — the queen defends the bishop; you want them to take on f4, because then the queen enters the game, dislodges the king from the pawn, and you play the bishop takes g6. The knight to g7 brings the last piece into the game; the knight to f5, of course you take it, and whichever way Black recaptures they open a fatal avenue: if they take with the f-pawn, the pawn has lost its supporter — the knight takes d5 — and if g-takes-f5, you push through with g6; if the king takes g6, it's a fork, so the king has to go, and the rook takes e6. Now the queen takes f5 — I understand people think it's going to be checkmate, but remember the three ways to deal with a check; here categories two and three are available.",
       "reanchor": true
     }
   ]

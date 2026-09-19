@@ -150,7 +150,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "The bishop to e6 — sacrificing again: if Black takes it, his king lands directly in the rook's line of fire. He can defend by capturing the knight, but he's still in big trouble."
+   "spoken": "The bishop to e6 — sacrificing again: if Black takes it, their king lands directly in the rook's line of fire. They can defend by capturing the knight, but they're still in big trouble."
   },
   {
    "ply": 18,
@@ -168,7 +168,7 @@
    "line": [
     "Bxg4"
    ],
-   "spoken": "You take on g4, winning a piece — and if Black recaptures, he exposes himself to a discovered check again."
+   "spoken": "You take on g4, winning a piece — and if Black recaptures, they expose themselves to a discovered check again."
   },
   {
    "ply": 20,
@@ -293,7 +293,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "The knight to d2 — developing the last piece and protecting the pawn so his knight can't take it.",
+   "spoken": "The knight to d2 — developing the last piece and protecting the pawn so their knight can't take it.",
    "reanchor": true
   },
   {
@@ -421,7 +421,7 @@
    "line": [
     "Qd6+"
    ],
-   "spoken": "The queen to d6 with check — an in-between move bringing another piece in. He can't take, since the queen is protected by the knight; the king moves back, and then you take the knight.",
+   "spoken": "The queen to d6 with check — an in-between move bringing another piece in. They can't take, since the queen is protected by the knight; the king moves back, and then you take the knight.",
    "reanchor": true
   },
   {

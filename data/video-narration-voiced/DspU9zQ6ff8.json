@@ -399,7 +399,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "White literally cannot get his king out of the centre — the king is stranded, and when you open files you'll attack it much more easily."
+      "spoken": "White literally cannot get their king out of the centre — the king is stranded, and when you open files you'll attack it much more easily."
     },
     {
       "ply": 20,
@@ -467,7 +467,7 @@
       "line": [
         "fxe3"
       ],
-      "spoken": "he takes with the pawn, and you"
+      "spoken": "they take with the pawn, and you"
     },
     {
       "ply": 24,
@@ -476,7 +476,7 @@
       "line": [
         "Bxe3"
       ],
-      "spoken": "take with the bishop; and then he goes here,"
+      "spoken": "take with the bishop; and then they go here,"
     },
     {
       "ply": 25,
@@ -744,7 +744,7 @@
       "line": [
         "Bc4"
       ],
-      "spoken": "so you do the exact same thing; he brings the bishop out and you go here,"
+      "spoken": "so you do the exact same thing; they bring the bishop out and you go here,"
     },
     {
       "ply": 16,
@@ -836,7 +836,7 @@
       "line": [
         "Rxf2"
       ],
-      "spoken": "He takes,"
+      "spoken": "They take,"
     },
     {
       "ply": 26,
@@ -852,7 +852,7 @@
       "t": 1172.5,
       "fen": "r1b1k2r/ppp2ppp/2p5/2b5/2B1P1nq/2N4P/PPPP1PP1/R1BQ1RK1 b kq - 0 12",
       "line": [],
-      "spoken": "An x-ray involves two of your pieces and one of the opponent's: a piece looking at his king through another piece. This bishop is looking at the king — so set up an x-ray; which piece should take the pawn?",
+      "spoken": "An x-ray involves two of your pieces and one of the opponent's: a piece looking at their king through another piece. This bishop is looking at the king — so set up an x-ray; which piece should take the pawn?",
       "reanchor": true
     },
     {

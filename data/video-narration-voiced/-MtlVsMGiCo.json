@@ -102,7 +102,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "He avoids the little trick, and the position is still basically equal."
+   "spoken": "They avoid the little trick, and the position is still basically equal."
   },
   {
    "ply": 20,
@@ -177,7 +177,7 @@
     "gxf3",
     "e5"
    ],
-   "spoken": "He recaptures, and now e5, striking at the centre — the risk you have to accept to win."
+   "spoken": "They recapture, and now e5, striking at the centre — the risk you have to accept to win."
   },
   {
    "ply": 29,
@@ -195,7 +195,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "He takes on e5 — that surprised me. Now the bishop to b5 and rook to c6 are strong for him, and I have to recapture with the knight. I underestimated that."
+   "spoken": "They take on e5 — that surprised me. Now the bishop to b5 and rook to c6 are strong for them, and I have to recapture with the knight. I underestimated that."
   },
   {
    "ply": 31,
@@ -222,7 +222,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": "He's eyeing a tactic here — the bishop into h7 — but it's not the end of the game."
+   "spoken": "They're eyeing a tactic here — the bishop into h7 — but it's not the end of the game."
   },
   {
    "ply": 34,
@@ -550,7 +550,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": "He can't easily move his bishop — but that doesn't help me, because I have no pieces in the game."
+   "spoken": "They can't easily move their bishop — but that doesn't help me, because I have no pieces in the game."
   },
   {
    "ply": 66,
@@ -830,7 +830,7 @@
     "Rxd1",
     "Rxd1"
    ],
-   "spoken": "Every move he found was the top move — the bishop to d5 the only clean win. A classical-level game played at blitz speed.",
+   "spoken": "Every move they found was the top move — the bishop to d5 the only clean win. A classical-level game played at blitz speed.",
    "reanchor": true
   },
   {

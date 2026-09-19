@@ -26,7 +26,7 @@
     "Nc6",
     "Nf3"
    ],
-   "spoken": "He develops, and the knight to f3 attacks your pawn on e5."
+   "spoken": "They develop, and the knight to f3 attacks your pawn on e5."
   },
   {
    "ply": 6,
@@ -44,7 +44,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "This is a well-known, fully legitimate theoretical line — and a very complex one. White's hypermodern idea is to tempt your pawns forward now so he can attack them later."
+   "spoken": "This is a well-known, fully legitimate theoretical line — and a very complex one. White's hypermodern idea is to tempt your pawns forward now so they can attack them later."
   },
   {
    "ply": 8,
@@ -62,7 +62,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": "...but because his bishop was hanging, the knight was forced to run specifically to c4."
+   "spoken": "...but because their bishop was hanging, the knight was forced to run specifically to c4."
   },
   {
    "ply": 10,
@@ -80,7 +80,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": "He's blitzing his moves out, shuffling the same knight again and again in the opening."
+   "spoken": "They're blitzing their moves out, shuffling the same knight again and again in the opening."
   },
   {
    "ply": 12,
@@ -98,7 +98,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "He plays g3. The way to punish this kind of play is precisely to follow opening principles to the letter."
+   "spoken": "They play g3. The way to punish this kind of play is precisely to follow opening principles to the letter."
   },
   {
    "ply": 14,
@@ -116,7 +116,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "He fianchettoes with the bishop to g2. Now all that remains is to bring your pieces out."
+   "spoken": "They fianchetto with the bishop to g2. Now all that remains is to bring your pieces out."
   },
   {
    "ply": 16,
@@ -134,7 +134,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He castles. This is the instructive moment: you could keep developing or castle long — but notice White has completely neglected his queenside development."
+   "spoken": "They castle. This is the instructive moment: you could keep developing or castle long — but notice White has completely neglected their queenside development."
   },
   {
    "ply": 18,
@@ -152,7 +152,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "He answers with h4, but that only softens his kingside further."
+   "spoken": "They answer with h4, but that only softens their kingside further."
   },
   {
    "ply": 20,
@@ -170,7 +170,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "He lunges with a4 — very creative, but not objectively sound."
+   "spoken": "They lunge with a4 — very creative, but not objectively sound."
   },
   {
    "ply": 22,
@@ -188,7 +188,7 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "He plays the king to h2, walking right into it. You're eyeing a knight check on g4 — though he can capture the knight."
+   "spoken": "They play the king to h2, walking right into it. You're eyeing a knight check on g4 — though they can capture the knight."
   },
   {
    "ply": 24,
@@ -197,7 +197,7 @@
    "line": [
     "Ng4+"
    ],
-   "spoken": "But that's the point: the knight checks on g4, and after he takes, you recapture with the pawn, ripping open the h-file — exactly what you wanted."
+   "spoken": "But that's the point: the knight checks on g4, and after they take, you recapture with the pawn, ripping open the h-file — exactly what you wanted."
   },
   {
    "ply": 26,
@@ -207,7 +207,7 @@
     "Nxg4",
     "hxg4"
    ],
-   "spoken": "Now you threaten to grab his pawn, and he's forced to drop the king back toward g1."
+   "spoken": "Now you threaten to grab their pawn, and he's forced to drop the king back toward g1."
   },
   {
    "ply": 27,
@@ -216,7 +216,7 @@
    "line": [
     "Ba3"
    ],
-   "spoken": "That retreat was his only serious move; instead he lets you capture on h4 with check."
+   "spoken": "That retreat was their only serious move; instead they let you capture on h4 with check."
   },
   {
    "ply": 28,
@@ -288,7 +288,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "You're threatening mate; his only way to stave it off is the rook to e1."
+   "spoken": "You're threatening mate; their only way to stave it off is the rook to e1."
   },
   {
    "ply": 36,
@@ -324,7 +324,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "If he tries e3, you can simply take the rook, winning the material back..."
+   "spoken": "If they try e3, you can simply take the rook, winning the material back..."
   },
   {
    "ply": 40,
@@ -333,7 +333,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "...or play the bishop to g4. The position is overflowing with mating ideas — completely crushing, which is why he resigned."
+   "spoken": "...or play the bishop to g4. The position is overflowing with mating ideas — completely crushing, which is why they resigned."
   },
   {
    "ply": 5,
@@ -404,7 +404,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "Here d4 would have been interesting, at least staking a claim in the centre. Instead he drifted — the knight to c4, then to e3, ignoring development when e3 or d3 was called for. Then h5 softened him up, and that pawn cost him the game; opening the h-file was a disaster. d3 was his last fighting chance — but after the king to h2, it walked straight into the pin.",
+   "spoken": "Here d4 would have been interesting, at least staking a claim in the centre. Instead they drifted — the knight to c4, then to e3, ignoring development when e3 or d3 was called for. Then h5 softened them up, and that pawn cost them the game; opening the h-file was a disaster. d3 was their last fighting chance — but after the king to h2, it walked straight into the pin.",
    "reanchor": true
   }
  ]

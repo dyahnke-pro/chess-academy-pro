@@ -107,7 +107,7 @@
    "t": 1045.5,
    "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
    "line": [],
-   "spoken": "The heavyweight tries are the Fianchetto — often the engine's top pick — the Sämisch, and the Four Pawns Attack, where the difference is simply how far White shoves his king-file pawn.",
+   "spoken": "The heavyweight tries are the Fianchetto — often the engine's top pick — the Sämisch, and the Four Pawns Attack, where the difference is simply how far White shoves their king-file pawn.",
    "kind": "branch",
    "reanchor": true
   },

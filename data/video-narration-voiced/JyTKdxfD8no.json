@@ -147,7 +147,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "Black plays g5 to defend the f4 pawn — another subtle mistake, because you're castling queenside and if his king goes short he'll pay dearly for that advanced pawn."
+   "spoken": "Black plays g5 to defend the f4 pawn — another subtle mistake, because you're castling queenside and if their king goes short they'll pay dearly for that advanced pawn."
   },
   {
    "ply": 19,
@@ -196,7 +196,7 @@
     "Nf6",
     "hxg5"
    ],
-   "spoken": "You take on g5 to make that foot collapse. I know Black wants a bishop to g4, pinning my queen to the rook, but you're ready to give the exchange to topple his kingside.",
+   "spoken": "You take on g5 to make that foot collapse. I know Black wants a bishop to g4, pinning my queen to the rook, but you're ready to give the exchange to topple their kingside.",
    "reanchor": true
   },
   {
@@ -206,7 +206,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Black plays the bishop to g4, and you'll sacrifice another exchange to make his whole kingside cave in.",
+   "spoken": "Black plays the bishop to g4, and you'll sacrifice another exchange to make their whole kingside cave in.",
    "reanchor": true
   },
   {
@@ -245,7 +245,7 @@
    "line": [
     "Bxc2"
    ],
-   "spoken": "Black plays a bishop to c2 — this still isn't better for White if he defends correctly, and he isn't defending badly.",
+   "spoken": "Black plays a bishop to c2 — this still isn't better for White if they defend correctly, and they aren't defending badly.",
    "reanchor": true
   },
   {
@@ -265,7 +265,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Now you act on your strong f6 pawn — a great anchor for your pieces. The question is what Black wants: he won't castle kingside, since you'd mate him at once, so he'll try to castle queenside via a queen to d7, and you must stop that. A bishop to g4 tempts, but it has a drawback.",
+   "spoken": "Now you act on your strong f6 pawn — a great anchor for your pieces. The question is what Black wants: they won't castle kingside, since you'd mate them at once, so they'll try to castle queenside via a queen to d7, and you must stop that. A bishop to g4 tempts, but it has a drawback.",
    "reanchor": true
   },
   {
@@ -305,7 +305,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": "Black's knight comes to g6 — but he still can't get his queen out; his pieces are stuck in molasses. He hits your queen, so you move it to a square that keeps the f6 pawn defended — that pawn is a huge bargaining chip.",
+   "spoken": "Black's knight comes to g6 — but they still can't get their queen out; their pieces are stuck in molasses. They hit your queen, so you move it to a square that keeps the f6 pawn defended — that pawn is a huge bargaining chip.",
    "reanchor": true
   },
   {
@@ -345,7 +345,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "Black replaces the pawn by capturing on e5. You can sacrifice your rook for his pawn, but never for your own — you have to make him be the one to take it.",
+   "spoken": "Black replaces the pawn by capturing on e5. You can sacrifice your rook for their pawn, but never for your own — you have to make them be the one to take it.",
    "reanchor": true
   },
   {
@@ -677,7 +677,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "I did play that genius knight blunder, of course — I revealed Fabi's high-level novelty, so I'll have to give him a call.",
+   "spoken": "I did play that genius knight blunder, of course — I revealed Fabi's high-level novelty, so I'll have to give them a call.",
    "reanchor": true
   },
   {

@@ -34,7 +34,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "He meets it with knight f6, an uncommon and not-great try that counterattacks your e4-pawn — but that knight is about to go wandering into trouble in my position.",
+   "spoken": "They meet it with knight f6, an uncommon and not-great try that counterattacks your e4-pawn — but that knight is about to go wandering into trouble in my position.",
    "kind": "main"
   },
   {
@@ -54,7 +54,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "He grabs on e4. Here's the key idea: a knight can be centralized and still deeply vulnerable if no pawns or pieces support it — that's exactly this knight. Don't be reactive: Qe2 lets it drop to c5 and boxes in your bishop, and f3 walks into the Qh4+ then Nxg3 pattern.",
+   "spoken": "They grab on e4. Here's the key idea: a knight can be centralized and still deeply vulnerable if no pawns or pieces support it — that's exactly this knight. Don't be reactive: Qe2 lets it drop to c5 and boxes in your bishop, and f3 walks into the Qh4+ then Nxg3 pattern.",
    "kind": "main",
    "teaches": [
     "A centralized knight without support is a target, not a strength",
@@ -97,7 +97,7 @@
     "Bxd5",
     "Be6"
    ],
-   "spoken": "You reposition the queen to f3, keeping the heat on f7 — a near-mate threat that deters his discoveries and buys you time. When you have a strong card, hold it and play it when it hits hardest.",
+   "spoken": "You reposition the queen to f3, keeping the heat on f7 — a near-mate threat that deters their discoveries and buys you time. When you have a strong card, hold it and play it when it hits hardest.",
    "kind": "plan",
    "teaches": [
     "Exercise restraint — play your strong move when it lands with most force"

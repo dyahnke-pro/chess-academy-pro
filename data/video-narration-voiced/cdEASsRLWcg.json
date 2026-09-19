@@ -94,7 +94,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Now the strike — c5. It looks like White is winning, but Black is already better: White has overextended, his pieces are uncoordinated, and when you hit the center you mean business.",
+   "spoken": "Now the strike — c5. It looks like White is winning, but Black is already better: White has overextended, their pieces are uncoordinated, and when you hit the center you mean business.",
    "kind": "main",
    "teaches": [
     "strike when the big center is overextended"
@@ -140,7 +140,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "...but you recapture, and now you're a pawn up, attacking two pieces at once with an open avenue straight at his king.",
+   "spoken": "...but you recapture, and now you're a pawn up, attacking two pieces at once with an open avenue straight at their king.",
    "kind": "main"
   },
   {
@@ -219,7 +219,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "The queen to e7 kills two birds — it stops him from castling AND builds pressure down the e-file toward e5.",
+   "spoken": "The queen to e7 kills two birds — it stops them from castling AND builds pressure down the e-file toward e5.",
    "kind": "main",
    "teaches": [
     "one move, two purposes"
@@ -244,7 +244,7 @@
     "O-O",
     "d3"
    ],
-   "spoken": "...the pawn crashes in to d3 and wins the bishop; castling comes too late to save him.",
+   "spoken": "...the pawn crashes in to d3 and wins the bishop; castling comes too late to save them.",
    "kind": "main",
    "teaches": [
     "pawns are full participants in the attack"

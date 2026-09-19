@@ -114,7 +114,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "He's pushing a heck of a lot of pawns."
+   "spoken": "They're pushing a heck of a lot of pawns."
   },
   {
    "ply": 12,
@@ -303,14 +303,14 @@
    "line": [
     "Bxf1"
    ],
-   "spoken": "Now you take on f1 and you're just taking everything here. That's another blunder — your opponent totally collapsing. He should have taken with the knight, but then you'd play the queen out to f5, which is obviously crushing as well, and the rook takes h2 — nothing remains of White's kingside."
+   "spoken": "Now you take on f1 and you're just taking everything here. That's another blunder — your opponent totally collapsing. They should have taken with the knight, but then you'd play the queen out to f5, which is obviously crushing as well, and the rook takes h2 — nothing remains of White's kingside."
   },
   {
    "ply": 3,
    "t": 368.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": "And he resigns — that was pretty smooth. Notice how much easier it was to attack once you completed your development at the start of the game.",
+   "spoken": "And they resign — that was pretty smooth. Notice how much easier it was to attack once you completed your development at the start of the game.",
    "reanchor": true
   },
   {
@@ -349,7 +349,7 @@
     "Nc3",
     "Nf6"
    ],
-   "spoken": "And most people end up playing the knight to f6, although the bishop to b4 is also a move here; but after the knight to f6 and g3, I think c6 is still possible — I'll look into whether it's viable and make a video with Black against the English. I've played the bishop to b4 in this position myself; it's a hard-to-analyse line with lots of sub-variations. You can see c6 threw him for a loop — e3 is just some weird Hippo where pawns have been traded and White is down a bunch of tempo, so it's just not viable at all. And of course you could have played e4, with the idea of g5, clamping down on his light squares, but after d3 I was a little concerned about that pawn.",
+   "spoken": "And most people end up playing the knight to f6, although the bishop to b4 is also a move here; but after the knight to f6 and g3, I think c6 is still possible — I'll look into whether it's viable and make a video with Black against the English. I've played the bishop to b4 in this position myself; it's a hard-to-analyse line with lots of sub-variations. You can see c6 threw them for a loop — e3 is just some weird Hippo where pawns have been traded and White is down a bunch of tempo, so it's just not viable at all. And of course you could have played e4, with the idea of g5, clamping down on their light squares, but after d3 I was a little concerned about that pawn.",
    "reanchor": true
   }
  ]

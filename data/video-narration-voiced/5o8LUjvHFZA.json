@@ -33,7 +33,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "He plays d6 — already very weird, d6 and e6. Just like in e4 openings, you handle this exactly the same way: occupy"
+      "spoken": "They play d6 — already very weird, d6 and e6. Just like in e4 openings, you handle this exactly the same way: occupy"
     },
     {
       "ply": 5,
@@ -60,7 +60,7 @@
       "line": [
         "e4"
       ],
-      "spoken": "So I'd propose e4, building a three-pawn centre — you're trying to punish him."
+      "spoken": "So I'd propose e4, building a three-pawn centre — you're trying to punish them."
     },
     {
       "ply": 8,
@@ -87,7 +87,7 @@
       "line": [
         "c6"
       ],
-      "spoken": "He keeps playing very weird moves. How to continue? Let's develop as unoriginally as possible, putting pieces on reasonable squares. I'd prefer the bishop to d3 — because I don't yet know where the dark-squared bishop belongs; if he plays the knight to f6, that bishop might want to jump to g5, so you delay it until he shows his cards. But the light-squared bishop you don't need to delay, and I prefer d3 over e2 because"
+      "spoken": "They keep playing very weird moves. How to continue? Let's develop as unoriginally as possible, putting pieces on reasonable squares. I'd prefer the bishop to d3 — because I don't yet know where the dark-squared bishop belongs; if they play the knight to f6, that bishop might want to jump to g5, so you delay it until they show their cards. But the light-squared bishop you don't need to delay, and I prefer d3 over e2 because"
     },
     {
       "ply": 11,
@@ -123,7 +123,7 @@
       "line": [
         "Qc7"
       ],
-      "spoken": "You need to be very patient against these setups. If you strike too early — some of you want d5 — d5 looks good, but after e5 it just lets him close the centre. You often get only one try to punish, so be well prepared for it; don't strike willy-nilly and prematurely."
+      "spoken": "You need to be very patient against these setups. If you strike too early — some of you want d5 — d5 looks good, but after e5 it just lets them close the centre. You often get only one try to punish, so be well prepared for it; don't strike willy-nilly and prematurely."
     },
     {
       "ply": 15,
@@ -141,7 +141,7 @@
       "line": [
         "g5"
       ],
-      "spoken": "opens up, the rook is going to be well poised. He plays g5, and now the time has come to step on the gas — he keeps abandoning his development, and if you do nothing he plays g4 and the opportunity train leaves the station. Two realistic ways to break through: d5 or e5. d5 isn't great, because he can play e5. Who can explain why e5 — provoking d5 — is a better version for White than you playing d5 and letting him play e5?"
+      "spoken": "opens up, the rook is going to be well poised. They play g5, and now the time has come to step on the gas — they keep abandoning their development, and if you do nothing they play g4 and the opportunity train leaves the station. Two realistic ways to break through: d5 or e5. d5 isn't great, because they can play e5. Who can explain why e5 — provoking d5 — is a better version for White than you playing d5 and letting them play e5?"
     },
     {
       "ply": 17,
@@ -180,7 +180,7 @@
         "cxd5",
         "cxd5"
       ],
-      "spoken": "but it should be intuitively clear. e5, d5, c-takes-d5, c-takes-d5. You have many good moves — White is positionally just completely winning, his bishop is dead, it's like a horrific French. A lot of you think about the knight to b5 — nothing wrong with it, but he drops his queen back to b8, and jumping to d6 would be premature since his bishop on e7 guards that square. In such positions it often pays to play very prophylactically, or just play simple chess — bring pieces to good squares. Two ideas: the bishop to d2 or the bishop to e3. The bishop to d2 is actually a blunder — why? Be attentive to every source of danger: his g5-pawn can push to g4, and that knight's only escape square is d2. So you might think about h3 to stop g4 first, but that's not an efficient use of resources — g4 isn't dangerous, provided",
+      "spoken": "but it should be intuitively clear. e5, d5, c-takes-d5, c-takes-d5. You have many good moves — White is positionally just completely winning, their bishop is dead, it's like a horrific French. A lot of you think about the knight to b5 — nothing wrong with it, but they drop their queen back to b8, and jumping to d6 would be premature since their bishop on e7 guards that square. In such positions it often pays to play very prophylactically, or just play simple chess — bring pieces to good squares. Two ideas: the bishop to d2 or the bishop to e3. The bishop to d2 is actually a blunder — why? Be attentive to every source of danger: their g5-pawn can push to g4, and that knight's only escape square is d2. So you might think about h3 to stop g4 first, but that's not an efficient use of resources — g4 isn't dangerous, provided",
       "reanchor": true
     },
     {
@@ -208,7 +208,7 @@
       "line": [
         "Rc1"
       ],
-      "spoken": "you're playing it to get the rook involved, with the rook to c1 — look how well coordinated your pieces are, and how paralysed he is."
+      "spoken": "you're playing it to get the rook involved, with the rook to c1 — look how well coordinated your pieces are, and how paralysed they are."
     },
     {
       "ply": 24,
@@ -217,7 +217,7 @@
       "line": [
         "Qa5"
       ],
-      "spoken": "You'll have to speed up a little. The queen to a5. I'm looking for inroads into his position — you may be tied to the queenside, so let's look at the kingside too: does he have any weak squares there? Wouldn't you love the queen to drop on h5 and attack from the other side?"
+      "spoken": "You'll have to speed up a little. The queen to a5. I'm looking for inroads into their position — you may be tied to the queenside, so let's look at the kingside too: does he have any weak squares there? Wouldn't you love the queen to drop on h5 and attack from the other side?"
     },
     {
       "ply": 25,
@@ -226,7 +226,7 @@
       "line": [
         "Nd2"
       ],
-      "spoken": "That's what my pattern recognition reveals, because I've done this before — so you play the knight to d2 of your own volition, to pave the way for the queen to h5, which is going to be devastating; the position will ultimately collapse from one side or the other, and tactics will start to manifest. The queen to h5, and if he plays b4 you have a pretty sequence. As I put the queen coming to h5 I'm already thinking about a particular tactic: the diagonal is a pin, and you could attack the f7-pawn directly. There's a very common removing-the-guard pattern — the threat of the knight taking d5, e-takes-d5, and then e6 — a very typical motif in such positions; the other pattern is to sacrifice the bishop with the bishop to g6, breaking the chain and infiltrating with the queen, which is riskier. Another benefit of the queen coming to h5, which may seem insignificant, is that it pins the h-pawn — so the g5-pawn could suffer, if you can take it with the bishop; not yet, because he takes back. He made an excellent defensive move, and you have many ways to proceed — the knight to b3 and over to c5, or, as I love, the knight back to f3, simply threatening to capture on g5 and break through, forcing his queen back to d8. His position is very hard to crack, he's defending phenomenally, but if you keep your foot on the gas you'll eventually find inroads — no need to rush, he's totally paralysed; when your opponent meets the immediate threats, you accumulate the pressure and look for tactics on every move. Then a rook to h8 — there comes the collapse, an obvious blunder. Notice I'm not taking immediately, I take a moment — no, I don't see anything better, so just take. Once the first material losses are sustained, strike while the iron is hot: the kingside is a lot more weakened now the rook is gone, so ask what can rip it open — of course, the move h4. Aren't you weakening your own king? Remember the analogy: if a tree falls in a forest and nobody's there, it makes no sound — he has literally no firepower near your king, so your king can chill on the balcony of his castle; you don't care. b4 — you could even take on g5 and sack the knight, but no need, just drop the knight back. He takes on a2, I don't care, you play h-takes-g5, and now you threaten to break through with g6 and win. He takes on b2, and then you play g6 — not h-takes-g6; g6 gives more bang for your buck, forcing the f7-pawn to collapse, which was your initial plan. So you extract both benefits of the queen coming to h5 — first attacking the g5-pawn, and now the pressure on f7. Very patient — don't grab f7 immediately, the knight defends; take the knight first, either piece, I took with the knight only because the queen and knight are the stronger attacking tandem. Then you start taking everything, the queen takes e6, and it's checkmate in a couple of moves; next move you take that knight with check. It's mate in two after he plays the king to d7 — a very pretty sequence — and if you don't see the mate you can just take on d5 and grab the last rook; but e6 with check forces the king to d6, and it's the bishop that delivers, a piece that sat dormant all game and suddenly gets all the glory.",
+      "spoken": "That's what my pattern recognition reveals, because I've done this before — so you play the knight to d2 of your own volition, to pave the way for the queen to h5, which is going to be devastating; the position will ultimately collapse from one side or the other, and tactics will start to manifest. The queen to h5, and if they play b4 you have a pretty sequence. As I put the queen coming to h5 I'm already thinking about a particular tactic: the diagonal is a pin, and you could attack the f7-pawn directly. There's a very common removing-the-guard pattern — the threat of the knight taking d5, e-takes-d5, and then e6 — a very typical motif in such positions; the other pattern is to sacrifice the bishop with the bishop to g6, breaking the chain and infiltrating with the queen, which is riskier. Another benefit of the queen coming to h5, which may seem insignificant, is that it pins the h-pawn — so the g5-pawn could suffer, if you can take it with the bishop; not yet, because they take back. They made an excellent defensive move, and you have many ways to proceed — the knight to b3 and over to c5, or, as I love, the knight back to f3, simply threatening to capture on g5 and break through, forcing their queen back to d8. Their position is very hard to crack, they're defending phenomenally, but if you keep your foot on the gas you'll eventually find inroads — no need to rush, he's totally paralysed; when your opponent meets the immediate threats, you accumulate the pressure and look for tactics on every move. Then a rook to h8 — there comes the collapse, an obvious blunder. Notice I'm not taking immediately, I take a moment — no, I don't see anything better, so just take. Once the first material losses are sustained, strike while the iron is hot: the kingside is a lot more weakened now the rook is gone, so ask what can rip it open — of course, the move h4. Aren't you weakening your own king? Remember the analogy: if a tree falls in a forest and nobody's there, it makes no sound — they have literally no firepower near your king, so your king can chill on the balcony of their castle; you don't care. b4 — you could even take on g5 and sack the knight, but no need, just drop the knight back. They take on a2, I don't care, you play h-takes-g5, and now you threaten to break through with g6 and win. They take on b2, and then you play g6 — not h-takes-g6; g6 gives more bang for your buck, forcing the f7-pawn to collapse, which was your initial plan. So you extract both benefits of the queen coming to h5 — first attacking the g5-pawn, and now the pressure on f7. Very patient — don't grab f7 immediately, the knight defends; take the knight first, either piece, I took with the knight only because the queen and knight are the stronger attacking tandem. Then you start taking everything, the queen takes e6, and it's checkmate in a couple of moves; next move you take that knight with check. It's mate in two after they play the king to d7 — a very pretty sequence — and if you don't see the mate you can just take on d5 and grab the last rook; but e6 with check forces the king to d6, and it's the bishop that delivers, a piece that sat dormant all game and suddenly gets all the glory.",
       "reanchor": true
     },
     {

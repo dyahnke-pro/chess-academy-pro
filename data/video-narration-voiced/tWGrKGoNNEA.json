@@ -130,7 +130,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "I'll play c3 — a move with a very good reputation among top GMs. It looks purely positional, reinforcing the pawn, but a big point is that a queen check on a4 is a major idea while the king sits on e8: White develops on the a4-e8 diagonal and pressures Black before he completes development."
+   "spoken": "I'll play c3 — a move with a very good reputation among top GMs. It looks purely positional, reinforcing the pawn, but a big point is that a queen check on a4 is a major idea while the king sits on e8: White develops on the a4-e8 diagonal and pressures Black before they complete development."
   },
   {
    "ply": 18,
@@ -369,7 +369,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "Black plays a bishop to d7. His bishop on f6 is a terrible piece — it only stares at a well-defended pawn — a lesson in understanding what a piece actually does.",
+   "spoken": "Black plays a bishop to d7. Their bishop on f6 is a terrible piece — it only stares at a well-defended pawn — a lesson in understanding what a piece actually does.",
    "reanchor": true
   },
   {
@@ -628,7 +628,7 @@
     "Ne4",
     "f6"
    ],
-   "spoken": "Black's only long-term counterplay is a passed pawn via f5 and g4, so freezing his kingside pawns with the knight lets me convert my majority in peace.",
+   "spoken": "Black's only long-term counterplay is a passed pawn via f5 and g4, so freezing their kingside pawns with the knight lets me convert my majority in peace.",
    "reanchor": true
   },
   {

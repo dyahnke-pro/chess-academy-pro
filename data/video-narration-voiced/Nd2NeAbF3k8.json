@@ -78,7 +78,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "But you play something explosive — f4, the Four Pawns Attack proper, considered one of the very best lines: if White knows what he's doing, he's objectively better."
+   "spoken": "But you play something explosive — f4, the Four Pawns Attack proper, considered one of the very best lines: if White knows what they're doing, he's objectively better."
   },
   {
    "ply": 10,
@@ -217,7 +217,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "After a knight to b4, you play a bishop capture on b6, then d6 — the bishop is almost trapped and that pawn becomes a monster. You can't play d6 before the trade, because then Black just takes and his queen defends the knight.",
+   "spoken": "After a knight to b4, you play a bishop capture on b6, then d6 — the bishop is almost trapped and that pawn becomes a monster. You can't play d6 before the trade, because then Black just takes and their queen defends the knight.",
    "reanchor": true
   },
   {
@@ -237,7 +237,7 @@
    "line": [
     "Bxb6"
    ],
-   "spoken": "He keeps a pair of pawns on the board, but you still capture on b6 and follow with d6; White is basically dominating.",
+   "spoken": "They keep a pair of pawns on the board, but you still capture on b6 and follow with d6; White is basically dominating.",
    "reanchor": true
   },
   {
@@ -247,7 +247,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "Black panics with a capture on d5 — he shouldn't have. You don't need to recapture with the c-pawn; you simply drop the bishop back and you're up a piece. If he takes on c4, a bishop to c4 leaves no compensation.",
+   "spoken": "Black panics with a capture on d5 — they shouldn't have. You don't need to recapture with the c-pawn; you simply drop the bishop back and you're up a piece. If they take on c4, a bishop to c4 leaves no compensation.",
    "reanchor": true
   },
   {
@@ -274,7 +274,7 @@
    "line": [
     "Bf2"
    ],
-   "spoken": "And a knight to d4 to counterattack is an unnecessary tactic, even a blunder: if he drops the bishop back, your bishop on b6 gets trapped with the knight blocking its retreat. So keep it solid with the bishop to f2.",
+   "spoken": "And a knight to d4 to counterattack is an unnecessary tactic, even a blunder: if they drop the bishop back, your bishop on b6 gets trapped with the knight blocking its retreat. So keep it solid with the bishop to f2.",
    "reanchor": true
   },
   {
@@ -771,7 +771,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "The main line is f6, a capture, and a bishop recapture on f6, reaching an interesting position — White plays a queen to d2 and doubles rooks to secure d4, Black mirrors with a queen to e7, and White is slightly better with a nice center and good coordination, though Black has his share of active play.",
+   "spoken": "The main line is f6, a capture, and a bishop recapture on f6, reaching an interesting position — White plays a queen to d2 and doubles rooks to secure d4, Black mirrors with a queen to e7, and White is slightly better with a nice center and good coordination, though Black has their share of active play.",
    "reanchor": true
   },
   {
@@ -810,7 +810,7 @@
     "Nb4",
     "Bxb6"
    ],
-   "spoken": "After d5, a knight to b4, and the bishop capture on b6, Black should recapture with the c-pawn on b6 to stay in the game, and then d6, and he can put a bishop on g5.",
+   "spoken": "After d5, a knight to b4, and the bishop capture on b6, Black should recapture with the c-pawn on b6 to stay in the game, and then d6, and they can put a bishop on g5.",
    "reanchor": true
   },
   {

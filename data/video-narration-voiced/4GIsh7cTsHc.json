@@ -52,7 +52,7 @@
     "Bf5",
     "f4"
    ],
-   "spoken": "Here's the whole reason the Caro exists: unlike the French, you get to develop this light-squared bishop OUTSIDE the pawn chain, to f5, before you ever shut it in with e6 — and that's exactly what you've done. White answers with f4, grabbing more central space, but it's not a good move: it curbs the development of White's own light bishop and it weakens his king."
+   "spoken": "Here's the whole reason the Caro exists: unlike the French, you get to develop this light-squared bishop OUTSIDE the pawn chain, to f5, before you ever shut it in with e6 — and that's exactly what you've done. White answers with f4, grabbing more central space, but it's not a good move: it curbs the development of White's own light bishop and it weakens their king."
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The proper reply is e6 — White has over-committed his pawns while lagging in development."
+   "spoken": "The proper reply is e6 — White has over-committed their pawns while lagging in development."
   },
   {
    "ply": 9,
@@ -142,7 +142,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "White plays c3, showing his intent to prop up d4."
+   "spoken": "White plays c3, showing their intent to prop up d4."
   },
   {
    "ply": 18,
@@ -151,7 +151,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "Now the clean way is to take on d4 first and then play the queen to b6, winning the pawn — and in a real game that's what I'd do. But I want to show a beautiful idea, so I play the queen to b6 first, hoping he grabs a pawn."
+   "spoken": "Now the clean way is to take on d4 first and then play the queen to b6, winning the pawn — and in a real game that's what I'd do. But I want to show a beautiful idea, so I play the queen to b6 first, hoping they grab a pawn."
   },
   {
    "ply": 19,
@@ -169,7 +169,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "He won't allow the trick, so you simply take, capturing on d4 — there's a lot to unpack in this Advance."
+   "spoken": "They won't allow the trick, so you simply take, capturing on d4 — there's a lot to unpack in this Advance."
   },
   {
    "ply": 21,
@@ -178,7 +178,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "White recaptures, capturing on d4. This is a critical pawn: it's the link that breaks up his chain, and with two of your pieces attacking it against a single defender, it's falling — and his whole position starts to crumble."
+   "spoken": "White recaptures, capturing on d4. This is a critical pawn: it's the link that breaks up their chain, and with two of your pieces attacking it against a single defender, it's falling — and their whole position starts to crumble."
   },
   {
    "ply": 22,
@@ -214,7 +214,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "White takes your knight, capturing on d4 — a mistake; now he collapses. The only question is what you recapture with."
+   "spoken": "White takes your knight, capturing on d4 — a mistake; now they collapse. The only question is what you recapture with."
   },
   {
    "ply": 26,
@@ -223,7 +223,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "You recapture with the bishop, capturing on d4 — the right choice. White's rook is now in trouble, and the game is essentially over: he's losing it."
+   "spoken": "You recapture with the bishop, capturing on d4 — the right choice. White's rook is now in trouble, and the game is essentially over: they're losing it."
   },
   {
    "ply": 27,
@@ -241,7 +241,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": "And not the knight to e3 either — White just takes it, and then your bishop, which you've assigned the vital task of winning the rook, gets distracted defending. Instead you simply drop the knight back to e7. The point isn't to activate it; you're after far greener pastures — the rook. White's best is the knight to c3, cutting his losses to just the knight."
+   "spoken": "And not the knight to e3 either — White just takes it, and then your bishop, which you've assigned the vital task of winning the rook, gets distracted defending. Instead you simply drop the knight back to e7. The point isn't to activate it; you're after far greener pastures — the rook. White's best is the knight to c3, cutting their losses to just the knight."
   },
   {
    "ply": 30,
@@ -276,7 +276,7 @@
    "t": 646,
    "fen": "r3k2r/pp3ppp/1q2p3/3pPn2/3b1PP1/1P6/P6P/RNBQ1R1K b kq - 0 14",
    "line": [],
-   "spoken": "The lesson here: not every move has to be active — no phobia of retreating. If you KNOW you're winning the rook, the knight's exact square doesn't matter; what matters is that it's SAFE, not that it's nominally more active. Get your priorities in order. Then you slide the queen to c6, and you don't need to take on b2 — that's why you pushed d4. You're not castling because your king is perfectly safe: run the worst-case test — give White five free moves and ask whether he could generate any threat against your king. He can't. So you'd castle only to bring a rook into play, never out of danger. And a general point: whenever a capture is available, spend a couple of seconds each move considering it even if you decline — a capture changes the position significantly and can open tactics, like the bishop taking on b2 setting up a fork on c1. It's not hard to see; it's about allowing yourself to consider the trade.",
+   "spoken": "The lesson here: not every move has to be active — no phobia of retreating. If you KNOW you're winning the rook, the knight's exact square doesn't matter; what matters is that it's SAFE, not that it's nominally more active. Get your priorities in order. Then you slide the queen to c6, and you don't need to take on b2 — that's why you pushed d4. You're not castling because your king is perfectly safe: run the worst-case test — give White five free moves and ask whether they could generate any threat against your king. They can't. So you'd castle only to bring a rook into play, never out of danger. And a general point: whenever a capture is available, spend a couple of seconds each move considering it even if you decline — a capture changes the position significantly and can open tactics, like the bishop taking on b2 setting up a fork on c1. It's not hard to see; it's about allowing yourself to consider the trade.",
    "reanchor": true
   },
   {
@@ -443,7 +443,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "He goes f4...",
+   "spoken": "They go f4...",
    "reanchor": true
   },
   {
@@ -464,7 +464,7 @@
     "g4",
     "Qh4+"
    ],
-   "spoken": "If White tries g4 here, he falls under a check on h4.",
+   "spoken": "If White tries g4 here, they fall under a check on h4.",
    "reanchor": true
   },
   {
@@ -472,7 +472,7 @@
    "t": 1207.5,
    "fen": "rn1qkbnr/pp3ppp/2p1p3/3pPb2/3P1PP1/8/PPP4P/RNBQKBNR b KQkq - 0 5",
    "line": [],
-   "spoken": "He plays the bishop to d3, and now the knight to h6 — trading on your own terms. One of Black's biggest problems in the Caro is these two kingside pieces; find homes for them and you're well on the way. Why h6 and not the g7 route? The knight to h6 heads for f5; the other way just blocks your bishop. The downside is the knight on the rim, but I already anticipate its passage to f5.",
+   "spoken": "They play the bishop to d3, and now the knight to h6 — trading on your own terms. One of Black's biggest problems in the Caro is these two kingside pieces; find homes for them and you're well on the way. Why h6 and not the g7 route? The knight to h6 heads for f5; the other way just blocks your bishop. The downside is the knight on the rim, but I already anticipate its passage to f5.",
    "reanchor": true
   },
   {
@@ -547,7 +547,7 @@
     "Rg1",
     "Nxf5"
    ],
-   "spoken": "There's no point shutting his position down; instead you'd just play the knight to c6.",
+   "spoken": "There's no point shutting their position down; instead you'd just play the knight to c6.",
    "reanchor": true
   },
   {
@@ -619,7 +619,7 @@
    "t": 1799.5,
    "fen": "r2qkb1r/pp3ppp/2n1p2n/2PpPB2/5P2/5N2/PPP3PP/RNBQ1K1R w kq - 1 10",
    "line": [],
-   "spoken": "Back to the game — after the queen to b6, the same thing would have happened: h5, h4, and the knight to g3. He played b3, which only made it worse; he takes, you take on d4 with the knight, and the bishop to c5, simply developing, is great.",
+   "spoken": "Back to the game — after the queen to b6, the same thing would have happened: h5, h4, and the knight to g3. They played b3, which only made it worse; they take, you take on d4 with the knight, and the bishop to c5, simply developing, is great.",
    "reanchor": true
   },
   {

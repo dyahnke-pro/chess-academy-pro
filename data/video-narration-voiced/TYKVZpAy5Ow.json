@@ -306,7 +306,7 @@
     "Re5",
     "Ne7"
    ],
-   "spoken": "A very good move is h5, stopping g4 and making it impossible for White to push f5 — a light-square blockade. It looks passive, but it freezes White's pawns; then g6 makes his kingside pawns immobile, and a capture on e6 is nothing to fear since you recapture and White loses his light-squared bishop. Your structure is watertight.",
+   "spoken": "A very good move is h5, stopping g4 and making it impossible for White to push f5 — a light-square blockade. It looks passive, but it freezes White's pawns; then g6 makes their kingside pawns immobile, and a capture on e6 is nothing to fear since you recapture and White loses their light-squared bishop. Your structure is watertight.",
    "reanchor": true
   },
   {
@@ -350,7 +350,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "You play a knight to c6. White was almost lost but survives with a rook to e4 — very fortunate for him.",
+   "spoken": "You play a knight to c6. White was almost lost but survives with a rook to e4 — very fortunate for them.",
    "reanchor": true
   },
   {
@@ -512,7 +512,7 @@
     "cxd5",
     "Bxd5"
    ],
-   "spoken": "You're playing for a win a pawn up, but White's bishops are strong and he has a lot of time — this will be a real challenge.",
+   "spoken": "You're playing for a win a pawn up, but White's bishops are strong and they have a lot of time — this will be a real challenge.",
    "reanchor": true
   },
   {
@@ -682,7 +682,7 @@
     "Kxe2",
     "Nxb6"
    ],
-   "spoken": "He plays perfectly right up to the last, then blunders a piece — but this is far from over.",
+   "spoken": "They play perfectly right up to the last, then blunders a piece — but this is far from over.",
    "reanchor": true
   },
   {

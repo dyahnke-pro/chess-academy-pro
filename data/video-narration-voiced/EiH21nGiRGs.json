@@ -296,7 +296,7 @@
    "t": 1208.5,
    "fen": "rnbqkbnr/pp2pppp/8/3p4/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
    "line": [],
-   "spoken": "In this case the knight to c6, and the bishop to c4 is a serious mistake, because after the knight to f6 I don't see how White keeps material equality. Your opponent overlooked the knight takes e5, the source of all his struggles. Even without e5, the e4-pawn is hard to defend; and the bishop takes f7 might actually be best, recovering the piece — but not via the knight, as you'd think; there's a trap, so instead you go diagonally with the queen to h5.",
+   "spoken": "In this case the knight to c6, and the bishop to c4 is a serious mistake, because after the knight to f6 I don't see how White keeps material equality. Your opponent overlooked the knight takes e5, the source of all their struggles. Even without e5, the e4-pawn is hard to defend; and the bishop takes f7 might actually be best, recovering the piece — but not via the knight, as you'd think; there's a trap, so instead you go diagonally with the queen to h5.",
    "reanchor": true
   }
  ]

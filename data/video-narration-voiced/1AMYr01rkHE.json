@@ -119,7 +119,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Now the pawn to e5 clamps the center and grabs kingside space, freezing White's structure before he can expand.",
+   "spoken": "Now the pawn to e5 clamps the center and grabs kingside space, freezing White's structure before they can expand.",
    "kind": "main",
    "teaches": [
     "central clamp with e5"
@@ -154,7 +154,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "White plays c3, but he isn't actually threatening d4 yet — a bit of simple counting shows the center holds, and even if he pushed d4 it would only open your long-diagonal bishop.",
+   "spoken": "White plays c3, but they aren't actually threatening d4 yet — a bit of simple counting shows the center holds, and even if they pushed d4 it would only open your long-diagonal bishop.",
    "teaches": [
     "count before you fear a break"
    ]
@@ -226,7 +226,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "The queen to d7 links up with a rook to d8 — piling every piece you can onto the d3 weakness. Win that pawn and his position caves.",
+   "spoken": "The queen to d7 links up with a rook to d8 — piling every piece you can onto the d3 weakness. Win that pawn and their position caves.",
    "kind": "plan"
   },
   {
@@ -362,7 +362,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "The pawn to c4 walls the knight in — his knight on a3 is now buried alive with no way out, effectively leaving you a piece up in the fight for the d-file.",
+   "spoken": "The pawn to c4 walls the knight in — their knight on a3 is now buried alive with no way out, effectively leaving you a piece up in the fight for the d-file.",
    "kind": "main",
    "teaches": [
     "bury the rim knight with c4"
@@ -406,7 +406,7 @@
     "Ng3",
     "Nd6"
    ],
-   "spoken": "You answer his regrouping in kind, rerouting your own knight to d6 — a superb square eyeing c4 and e4 and reinforcing the pressure.",
+   "spoken": "You answer their regrouping in kind, rerouting your own knight to d6 — a superb square eyeing c4 and e4 and reinforcing the pressure.",
    "kind": "main",
    "teaches": [
     "knight to d6 outpost"
@@ -537,7 +537,7 @@
     "Ndf1",
     "Rd3"
    ],
-   "spoken": "The rook drops onto d3 — a dream outpost deep in White's camp, jamming his pieces and paralyzing the position.",
+   "spoken": "The rook drops onto d3 — a dream outpost deep in White's camp, jamming their pieces and paralyzing the position.",
    "kind": "main",
    "teaches": [
     "the d3 rook outpost"

@@ -244,7 +244,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "Because the rook capture would let Black play c5, opening a massive diagonal for the bishop — no good. Instead the queen takes d4, hitting the queen: after a trade, Black's pawn structure is in shambles, so his failure to recapture correctly was a real mistake."
+   "spoken": "Because the rook capture would let Black play c5, opening a massive diagonal for the bishop — no good. Instead the queen takes d4, hitting the queen: after a trade, Black's pawn structure is in shambles, so their failure to recapture correctly was a real mistake."
   },
   {
    "ply": 24,
@@ -419,7 +419,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "The bishop to f4 — Black was fine all the way until he took on d6 the wrong way.",
+   "spoken": "The bishop to f4 — Black was fine all the way until they took on d6 the wrong way.",
    "reanchor": true
   },
   {

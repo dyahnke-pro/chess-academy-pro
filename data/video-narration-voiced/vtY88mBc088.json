@@ -140,7 +140,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "e5 fixes the pawn on e4, and with White lagging in development he could end up in serious trouble.",
+   "spoken": "e5 fixes the pawn on e4, and with White lagging in development they could end up in serious trouble.",
    "reanchor": true
   },
   {
@@ -197,7 +197,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "White plays a bishop to g5, but his king is in grave danger and you should start winning material. A capture on d4 doesn't win a piece outright, because of the classic a3 technique; but there are other ways to pile on the knight — a queen to a5, or a bishop to a6 to prevent kingside castling.",
+   "spoken": "White plays a bishop to g5, but their king is in grave danger and you should start winning material. A capture on d4 doesn't win a piece outright, because of the classic a3 technique; but there are other ways to pile on the knight — a queen to a5, or a bishop to a6 to prevent kingside castling.",
    "reanchor": true
   },
   {
@@ -217,7 +217,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "White plays a bishop capture on f6, making his defense even harder.",
+   "spoken": "White plays a bishop capture on f6, making their defense even harder.",
    "reanchor": true
   },
   {
@@ -237,7 +237,7 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "White plays a knight to e2 — he loses a piece.",
+   "spoken": "White plays a knight to e2 — they lose a piece.",
    "reanchor": true
   },
   {
@@ -1348,7 +1348,7 @@
    "t": 1251.5,
    "fen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 8",
    "line": [],
-   "spoken": "In response to a3, Black should just play a bishop to e7, not engaging — then after a knight to e2, expand in the center with c5. White is completely paralyzed: he can't develop, since a knight to h3 walks into a bishop capture. Just castle and expand on the queenside with a5 or c4, clamping down on b2 with a rook to b8 — the computer says plus three, an instructive evaluation because White's position is simply miserable. That's the theme of the whole session: keep a big lead in development, don't autopilot after winning material, and reserve flashy sacrifices for when the position actually demands them — the simple sound move is almost always enough.",
+   "spoken": "In response to a3, Black should just play a bishop to e7, not engaging — then after a knight to e2, expand in the center with c5. White is completely paralyzed: they can't develop, since a knight to h3 walks into a bishop capture. Just castle and expand on the queenside with a5 or c4, clamping down on b2 with a rook to b8 — the computer says plus three, an instructive evaluation because White's position is simply miserable. That's the theme of the whole session: keep a big lead in development, don't autopilot after winning material, and reserve flashy sacrifices for when the position actually demands them — the simple sound move is almost always enough.",
    "reanchor": true
   },
   {

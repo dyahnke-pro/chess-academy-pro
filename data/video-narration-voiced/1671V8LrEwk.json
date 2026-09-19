@@ -143,7 +143,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "But like a good Russian schoolboy, there's nothing wrong with castling; for this speedrun you play conservatively and avoid the need for calculation — you already have one pawn if he defends it."
+      "spoken": "But like a good Russian schoolboy, there's nothing wrong with castling; for this speedrun you play conservatively and avoid the need for calculation — you already have one pawn if they defend it."
     },
     {
       "ply": 19,
@@ -152,14 +152,14 @@
       "line": [
         "O-O"
       ],
-      "spoken": "He didn't defend it —"
+      "spoken": "They didn't defend it —"
     },
     {
       "ply": 18,
       "t": 219,
       "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2QK2R w KQ - 1 10",
       "line": [],
-      "spoken": "— but if he had, you'd have also had a very nasty check on e8.",
+      "spoken": "— but if they had, you'd have also had a very nasty check on e8.",
       "reanchor": true
     },
     {
@@ -330,7 +330,7 @@
       "t": 475,
       "fen": "r4rk1/ppp2ppp/2n1bq2/3p4/8/P1P2N2/5PPP/1R1QRBK1 b - - 5 16",
       "line": [],
-      "spoken": "The queen to b3 — a cool moment. A lot of you immediately think d4, but remember this knight: after d4, White plays the queen to a4 or b5 hitting the knight on c6, and you might lose the pawn on d4. A much more mature move is the knight to a5, hitting the queen from the side, landing on a defended square, and you can expand on the queenside with c5, eventually aiming at d4 to create a passer. The knight on the rim is fine here for two reasons: it's anchored by the pawn, and it's doing stuff — aiming at c4, controlling queenside squares. The queen takes c3 would allow the rook to c1, and I don't want to give White any activity on the c7 point, so I kick the queen with c6, over a6, because c6 kills two birds — it makes a little pawn chain that takes the burden off the bishop on e6, so now you can play the bishop to f5 and he can't even take on d5. Then take the rook and the pawn — no reason not to; the knight to g5 is easily parried by g6, and don't be afraid of mate-in-one threats just because they're mate-in-one threats. First you get control of the e-file, bringing the other rook to d8 to support the d5-pawn. On making luft: most people think of h6 or h3, but you should also consider g6 or g3, which is often far more efficient — when your opponent has a bishop of the same color as the luft square, h-luft can leave that square controlled, whereas g-luft is safer; here it's moot since White has no pieces. There's a great endgame example: Rosentalis versus McNab — Black is up a pawn with White's weak e4 and e5 pawns and a well-placed rook cutting off the king; the move g5 kills two birds, making luft on g7 and freezing White's kingside so the king gets a path through g6, and that wins. In your game you just push the d-pawn and it's over.",
+      "spoken": "The queen to b3 — a cool moment. A lot of you immediately think d4, but remember this knight: after d4, White plays the queen to a4 or b5 hitting the knight on c6, and you might lose the pawn on d4. A much more mature move is the knight to a5, hitting the queen from the side, landing on a defended square, and you can expand on the queenside with c5, eventually aiming at d4 to create a passer. The knight on the rim is fine here for two reasons: it's anchored by the pawn, and it's doing stuff — aiming at c4, controlling queenside squares. The queen takes c3 would allow the rook to c1, and I don't want to give White any activity on the c7 point, so I kick the queen with c6, over a6, because c6 kills two birds — it makes a little pawn chain that takes the burden off the bishop on e6, so now you can play the bishop to f5 and they can't even take on d5. Then take the rook and the pawn — no reason not to; the knight to g5 is easily parried by g6, and don't be afraid of mate-in-one threats just because they're mate-in-one threats. First you get control of the e-file, bringing the other rook to d8 to support the d5-pawn. On making luft: most people think of h6 or h3, but you should also consider g6 or g3, which is often far more efficient — when your opponent has a bishop of the same color as the luft square, h-luft can leave that square controlled, whereas g-luft is safer; here it's moot since White has no pieces. There's a great endgame example: Rosentalis versus McNab — Black is up a pawn with White's weak e4 and e5 pawns and a well-placed rook cutting off the king; the move g5 kills two birds, making luft on g7 and freezing White's kingside so the king gets a path through g6, and that wins. In your game you just push the d-pawn and it's over.",
       "reanchor": true
     },
     {
@@ -420,7 +420,7 @@
       "t": 1133,
       "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP1B1PPP/RN1QK2R b KQkq - 2 7",
       "line": [],
-      "spoken": "So that's the main line, and the knight takes e4 is a fully fledged alternative to the bishop takes d2. The way he played, giving up the second pawn, the game was pretty much over quickly.",
+      "spoken": "So that's the main line, and the knight takes e4 is a fully fledged alternative to the bishop takes d2. The way they played, giving up the second pawn, the game was pretty much over quickly.",
       "reanchor": true
     }
   ]

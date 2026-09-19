@@ -216,7 +216,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "The simplest plan: go after the fianchetto bishop. The queen to d2 prepares the bishop to h6 — trade that bishop and Black's king weakens and his grip on d4 loosens.",
+   "spoken": "The simplest plan: go after the fianchetto bishop. The queen to d2 prepares the bishop to h6 — trade that bishop and Black's king weakens and their grip on d4 loosens.",
    "kind": "plan",
    "teaches": [
     "Qd2 and Bh6 to trade the dark-squared bishop"
@@ -238,7 +238,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "When Black lunges with c5 you don't take — that would justify his whole setup. You push d5, jamming the door shut and keeping a protected passer.",
+   "spoken": "When Black lunges with c5 you don't take — that would justify their whole setup. You push d5, jamming the door shut and keeping a protected passer.",
    "kind": "main",
    "teaches": [
     "push past, don’t capture, to keep the bind"
@@ -281,7 +281,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "So the bishop to h6 makes him regret it, cutting the bishop off from its return square.",
+   "spoken": "So the bishop to h6 makes them regret it, cutting the bishop off from its return square.",
    "kind": "main"
   },
   {
@@ -319,7 +319,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": "The rook belongs on d1: if Black frees himself with e6 and the pawns come off, that rook stacks behind the queen down the d-file.",
+   "spoken": "The rook belongs on d1: if Black frees themselves with e6 and the pawns come off, that rook stacks behind the queen down the d-file.",
    "kind": "main",
    "teaches": [
     "place the rook where the file will open"

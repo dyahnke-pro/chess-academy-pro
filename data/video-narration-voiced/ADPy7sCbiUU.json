@@ -43,7 +43,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "order here to stop the knight to d4, by making a move you often make in the Caro-Kann anyway — c5. Trust me, the knight to d4 is the super-nasty idea he may have."
+   "spoken": "order here to stop the knight to d4, by making a move you often make in the Caro-Kann anyway — c5. Trust me, the knight to d4 is the super-nasty idea they may have."
   },
   {
    "ply": 7,
@@ -61,7 +61,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "There's no reason not to play the knight to c6 and develop normally. He'll probably take it — a lot of people at this level still fall in love with doubling your pawns, but I don't fear that structure."
+   "spoken": "There's no reason not to play the knight to c6 and develop normally. They'll probably take it — a lot of people at this level still fall in love with doubling your pawns, but I don't fear that structure."
   },
   {
    "ply": 9,
@@ -70,7 +70,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "You save a tempo, he's moved his bishop twice, and I like the two bishops and that his e5-pawn is weak — I'm not worried about the bishop taking c6 in the slightest. The knight to c3. In what order do you develop? e6 is fine but would block the c8-bishop, so you turn to that bishop first. The bishop to f5 is possible, but be flexible in development and always consider whether there's something better —"
+   "spoken": "You save a tempo, he's moved their bishop twice, and I like the two bishops and that their e5-pawn is weak — I'm not worried about the bishop taking c6 in the slightest. The knight to c3. In what order do you develop? e6 is fine but would block the c8-bishop, so you turn to that bishop first. The bishop to f5 is possible, but be flexible in development and always consider whether there's something better —"
   },
   {
    "ply": 10,
@@ -108,7 +108,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "He goes d4 — he's created a lot of weaknesses on his kingside, and now d4. He's not playing this badly, and he's hoping for c-takes-d4, because then he plays the knight takes d4 and piles up on your knight on c6."
+   "spoken": "They go d4 — he's created a lot of weaknesses on their kingside, and now d4. They're not playing this badly, and they're hoping for c-takes-d4, because then they play the knight takes d4 and piles up on your knight on c6."
   },
   {
    "ply": 16,
@@ -144,7 +144,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "Because you're applying pressure on the pawn and on the bishop, and there's a sense in which White is already close to collapsing. When he played g4, out of the corner of my eye I made a note to check a move: the knight on f3 no longer has a defender, and the d4-pawn is also very poorly defended — it would be nice for White to have a pawn on c3, as he usually does here. He plays the queen to d2. You might be"
+   "spoken": "Because you're applying pressure on the pawn and on the bishop, and there's a sense in which White is already close to collapsing. When they played g4, out of the corner of my eye I made a note to check a move: the knight on f3 no longer has a defender, and the d4-pawn is also very poorly defended — it would be nice for White to have a pawn on c3, as they usually do here. They play the queen to d2. You might be"
   },
   {
    "ply": 20,
@@ -153,7 +153,7 @@
    "line": [
     "Be4"
    ],
-   "spoken": "saying, wait, I have three attackers and only two defenders on d4 — why can't I just take? The complicating factor is the pin. So you play the bishop to e4, attacking the knight; if he takes the bishop, I recapture with the pawn, the knight is dislodged, and his bishop will also be"
+   "spoken": "saying, wait, I have three attackers and only two defenders on d4 — why can't I just take? The complicating factor is the pin. So you play the bishop to e4, attacking the knight; if they take the bishop, I recapture with the pawn, the knight is dislodged, and their bishop will also be"
   },
   {
    "ply": 21,
@@ -162,7 +162,7 @@
    "line": [
     "Qe3"
    ],
-   "spoken": "undefended if he takes on e4. The queen to e3 defends the knight but doesn't solve the underlying issue — and actually, looking again, you have something even better."
+   "spoken": "undefended if they take on e4. The queen to e3 defends the knight but doesn't solve the underlying issue — and actually, looking again, you have something even better."
   },
   {
    "ply": 22,
@@ -187,7 +187,7 @@
    "t": 846,
    "fen": "r3kbnr/pp3ppp/1qn1p3/1B1pP1B1/3pb1P1/2N1QN1P/PPP2P2/R3K2R w KQkq - 0 12",
    "line": [],
-   "spoken": "notion, because the point isn't that it's a fork; he can still play the knight takes d4 as before — but here there's a rook on h1 that hangs. That line is more complicated than it looks.",
+   "spoken": "notion, because the point isn't that it's a fork; they can still play the knight takes d4 as before — but here there's a rook on h1 that hangs. That line is more complicated than it looks.",
    "reanchor": true
   },
   {
@@ -206,7 +206,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "If you wanted to play the most precise way — he just resigns — you can take either knight; I'd take the knight on f3."
+   "spoken": "If you wanted to play the most precise way — they just resign — you can take either knight; I'd take the knight on f3."
   },
   {
    "ply": 23,
@@ -330,7 +330,7 @@
    "t": 957,
    "fen": "rn1qkbnr/pp2pppp/2p3b1/3pP3/3N3P/8/PPPP1PP1/RNBQKB1R b KQkq - 0 5",
    "line": [],
-   "spoken": "White wants to take on f7 and weaken Black's kingside; if you take on e6, the knight jumps to e6, then takes on f8, and Black loses castling rights. But the reason this isn't actually dangerous — computers are much better at ignoring things than humans — is that the computer's recommendation is to pretend nothing's happening and simply play the knight to f6. Very instructive: after e-takes-f7, the bishop takes f7, yes Black's kingside is damaged a little, but White has developed nothing but his knight, which is susceptible to e5 with tempo; and opening the f-file can actually be good for Black once he castles. So ignoring the apparent threat is instructive, because there is no real threat — only an illusion of one.",
+   "spoken": "White wants to take on f7 and weaken Black's kingside; if you take on e6, the knight jumps to e6, then takes on f8, and Black loses castling rights. But the reason this isn't actually dangerous — computers are much better at ignoring things than humans — is that the computer's recommendation is to pretend nothing's happening and simply play the knight to f6. Very instructive: after e-takes-f7, the bishop takes f7, yes Black's kingside is damaged a little, but White has developed nothing but their knight, which is susceptible to e5 with tempo; and opening the f-file can actually be good for Black once they castle. So ignoring the apparent threat is instructive, because there is no real threat — only an illusion of one.",
    "reanchor": true
   },
   {
@@ -346,7 +346,7 @@
    "t": 1034.5,
    "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
    "line": [],
-   "spoken": "doesn't take f7? If White just develops his bishop, I can play the queen to d6 and compel him to take on f7 anyway, in a soft",
+   "spoken": "doesn't take f7? If White just develops their bishop, I can play the queen to d6 and compel them to take on f7 anyway, in a soft",
    "reanchor": true
   },
   {
@@ -384,7 +384,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "and here I think he played fine — h3"
+   "spoken": "and here I think they played fine — h3"
   },
   {
    "ply": 12,
@@ -394,7 +394,7 @@
     "h3",
     "Bh5"
    ],
-   "spoken": "is good, the bishop to h5, g4 is good, and here he missed"
+   "spoken": "is good, the bishop to h5, g4 is good, and here they missed"
   },
   {
    "ply": 14,
@@ -413,7 +413,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "I actually allowed him to play e6 in a much better version — e6 gives White a very big initiative. Super instructive: the point of e6 is completely different here"
+   "spoken": "I actually allowed them to play e6 in a much better version — e6 gives White a very big initiative. Super instructive: the point of e6 is completely different here"
   },
   {
    "ply": 16,
@@ -431,7 +431,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "First, White's next move is super nasty; and second, look at this bishop, completely stuck — Black can't develop the rest of his kingside,"
+   "spoken": "First, White's next move is super nasty; and second, look at this bishop, completely stuck — Black can't develop the rest of their kingside,"
   },
   {
    "ply": 19,
@@ -512,7 +512,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "deteriorate for him — I think this is"
+   "spoken": "deteriorate for them — I think this is"
   },
   {
    "ply": 19,
@@ -539,7 +539,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "the bishop to e4, if he goes the knight takes e4,"
+   "spoken": "the bishop to e4, if they go the knight takes e4,"
   },
   {
    "ply": 22,
@@ -548,7 +548,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "d-takes-e4, his position collapses,"
+   "spoken": "d-takes-e4, their position collapses,"
   },
   {
    "ply": 23,
@@ -601,7 +601,7 @@
    "t": 1243,
    "fen": "r3kbnr/pp3ppp/1qB1p3/2p1P1B1/3Pp1P1/5N1P/PPPQ1P2/R3K2R b KQkq - 0 12",
    "line": [],
-   "spoken": "these kinds of tactics. So the queen to e3, c-takes-d4, he went back — at",
+   "spoken": "these kinds of tactics. So the queen to e3, c-takes-d4, they went back — at",
    "reanchor": true
   },
   {
@@ -609,7 +609,7 @@
    "t": 1244.5,
    "fen": "r3kbnr/pp3ppp/1qn1p3/1Bp1P1B1/3Pp1P1/5N1P/PPPQ1P2/R3K2R w KQkq - 0 12",
    "line": [],
-   "spoken": "this point the situation is dire. He should have tried this: if you just take the knight, thinking he can't take your pawn because it's defended — first White takes the queen, then takes the pawn and forks the rook, so Black has to be very precise to avoid getting mated; White is even threatening mate, but Black plays a6, and after the bishop to a4, b5 shuts the bishop down and Black is up the exchange. So this line was more complicated than it looked — I saw a6 in my head and relied on it, but this stuff needed to be calculated. After the queen to e2 the game is over: you just take one knight and then the other, and White loses all of his pieces.",
+   "spoken": "this point the situation is dire. They should have tried this: if you just take the knight, thinking they can't take your pawn because it's defended — first White takes the queen, then takes the pawn and forks the rook, so Black has to be very precise to avoid getting mated; White is even threatening mate, but Black plays a6, and after the bishop to a4, b5 shuts the bishop down and Black is up the exchange. So this line was more complicated than it looked — I saw a6 in my head and relied on it, but this stuff needed to be calculated. After the queen to e2 the game is over: you just take one knight and then the other, and White loses all of their pieces.",
    "reanchor": true
   }
  ]

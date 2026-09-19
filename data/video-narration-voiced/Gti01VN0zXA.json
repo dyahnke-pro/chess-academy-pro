@@ -25,7 +25,7 @@
    "line": [
     "Nxa6"
    ],
-   "spoken": "The knight takes a6 — he takes correctly. Rome wasn't built in a day; down a piece, you'll have to unbalance the position and get attacking chances, but first you develop and don't make it worse."
+   "spoken": "The knight takes a6 — they take correctly. Rome wasn't built in a day; down a piece, you'll have to unbalance the position and get attacking chances, but first you develop and don't make it worse."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The knight to f3, developing. And funnily, because you sacked the bishop, he can't play the knight to c6 — that may fluster him. d6 is fine here, a Philidor, slightly better than usual since he's up a piece."
+   "spoken": "The knight to f3, developing. And funnily, because you sacked the bishop, they can't play the knight to c6 — that may fluster them. d6 is fine here, a Philidor, slightly better than usual since they're up a piece."
   },
   {
    "ply": 6,
@@ -52,7 +52,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d6 is a bit passive — his bishop is restricted by the pawn, his knight on a6 is on the rim. Even without the bishop, d4 makes sense; you need to plan how to unbalance and create some intrigue to confuse him."
+   "spoken": "d6 is a bit passive — their bishop is restricted by the pawn, their knight on a6 is on the rim. Even without the bishop, d4 makes sense; you need to plan how to unbalance and create some intrigue to confuse them."
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The easiest formula to unbalance is to castle opposite your opponent — he'll castle kingside, so you head for queenside. And don't automatically grab free pawns when down a piece: taking on e5 and trading queens would blunder mate to the rook to d1, and even without mate, trading queens is far too steep a price for one pawn. The bishop to g4 is phenomenal — you need to keep and defend the d4-pawn, best done with another pawn."
+   "spoken": "The easiest formula to unbalance is to castle opposite your opponent — they'll castle kingside, so you head for queenside. And don't automatically grab free pawns when down a piece: taking on e5 and trading queens would blunder mate to the rook to d1, and even without mate, trading queens is far too steep a price for one pawn. The bishop to g4 is phenomenal — you need to keep and defend the d4-pawn, best done with another pawn."
   },
   {
    "ply": 9,
@@ -133,7 +133,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He castles. As I explained, the ideal plan is to move the queen and castle queenside — risky, since c3 already weakened you — but you can't afford any luxury in king safety. The queen to c2 is interesting; I still prefer the queen to e2. Not the queen to b3, which gets vulnerable and too far from a future kingside attack."
+   "spoken": "They castle. As I explained, the ideal plan is to move the queen and castle queenside — risky, since c3 already weakened you — but you can't afford any luxury in king safety. The queen to c2 is interesting; I still prefer the queen to e2. Not the queen to b3, which gets vulnerable and too far from a future kingside attack."
   },
   {
    "ply": 15,
@@ -142,7 +142,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "Escaping the pin isn't the top priority, but you want the capacity to end it — so you start with h3. If he takes and trades, that's not necessarily good for you, but it eliminates a headache bishop, activates your queen, and prepares castling."
+   "spoken": "Escaping the pin isn't the top priority, but you want the capacity to end it — so you start with h3. If they take and trade, that's not necessarily good for you, but it eliminates a headache bishop, activates your queen, and prepares castling."
   },
   {
    "ply": 16,
@@ -161,7 +161,7 @@
     "Qxf3",
     "c5"
    ],
-   "spoken": "The queen recaptures. c5 — you must be very careful; d5 is very bad, closing the centre and untying his hands for a queenside attack with b5, c4, b4, the queen to a5, far faster than you. Keeping the centre open dilutes his attack."
+   "spoken": "The queen recaptures. c5 — you must be very careful; d5 is very bad, closing the centre and untying their hands for a queenside attack with b5, c4, b4, the queen to a5, far faster than you. Keeping the centre open dilutes their attack."
   },
   {
    "ply": 19,
@@ -170,7 +170,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "Plus, c5 weakened a lot of squares — he's blunted his own bishop —"
+   "spoken": "Plus, c5 weakened a lot of squares — he's blunted their own bishop —"
   },
   {
    "ply": 20,
@@ -188,7 +188,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "The knight to c4 lets him slide the queen to d3, incredibly nasty. So I'd risk castling first — the kingside attack plan is still very much available."
+   "spoken": "The knight to c4 lets them slide the queen to d3, incredibly nasty. So I'd risk castling first — the kingside attack plan is still very much available."
   },
   {
    "ply": 22,
@@ -206,7 +206,7 @@
    "line": [
     "Kb1"
    ],
-   "spoken": "— you don't want to make any more queenside weaknesses; you've already played c3. So the king to b1 is the automatic response. If he attacks in a focused way he wins, but you bank on him hesitating or getting scared of your attack."
+   "spoken": "— you don't want to make any more queenside weaknesses; you've already played c3. So the king to b1 is the automatic response. If they attack in a focused way they win, but you bank on them hesitating or getting scared of your attack."
   },
   {
    "ply": 24,
@@ -234,7 +234,7 @@
     "b5",
     "g5"
    ],
-   "spoken": "b5 — a move that helps you, with their rooks on d8 and f8 and nothing behind the b-pawn. You've entered a point of no return; you have to continue the attack and pray you end up faster than he is."
+   "spoken": "b5 — a move that helps you, with their rooks on d8 and f8 and nothing behind the b-pawn. You've entered a point of no return; you have to continue the attack and pray you end up faster than they are."
   },
   {
    "ply": 28,
@@ -261,7 +261,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "He panics, trying to slow the progress of your pawns, but in doing so he creates a pawn hook, making it a lot worse for himself."
+   "spoken": "They panic, trying to slow the progress of your pawns, but in doing so they create a pawn hook, making it a lot worse for themselves."
   },
   {
    "ply": 31,
@@ -288,7 +288,7 @@
    "line": [
     "Qh3"
    ],
-   "spoken": "What's wrong with taking and then the queen to h3? He'd play the f-pawn takes g6 and use f7 for his rook to defend the pawn. By keeping things closed until you need to open them, you disallow defences like the rook to f7. He's busted — the h-file massacre is coming whether he likes it or not, and g6 lost him the game; he even trapped his own queen, though that's much less important. A very nice game, only seventeen moves."
+   "spoken": "What's wrong with taking and then the queen to h3? They'd play the f-pawn takes g6 and use f7 for their rook to defend the pawn. By keeping things closed until you need to open them, you disallow defences like the rook to f7. He's busted — the h-file massacre is coming whether they like it or not, and g6 lost them the game; they even trapped their own queen, though that's much less important. A very nice game, only seventeen moves."
   },
   {
    "ply": 34,
@@ -306,14 +306,14 @@
    "line": [
     "hxg6"
    ],
-   "spoken": "No — god forbid, do not take, do not pass go; ignore everything and make sure he isn't threatening checkmate."
+   "spoken": "No — god forbid, do not take, do not pass go; ignore everything and make sure they aren't threatening checkmate."
   },
   {
    "ply": 33,
    "t": 1009.5,
    "fen": "3r1rk1/p3bp1p/nn4p1/qpp1p1PP/4P3/2P1B2Q/PP1N1P2/1K1R3R b - - 2 17",
    "line": [],
-   "spoken": "If he had gone b4, then yes, you'd have had to take his knight. On the cusp of mate, one piece of advice: pay attention to what your opponent is doing —",
+   "spoken": "If they had gone b4, then yes, you'd have had to take their knight. On the cusp of mate, one piece of advice: pay attention to what your opponent is doing —",
    "reanchor": true
   },
   {
@@ -324,7 +324,7 @@
     "Nc4",
     "hxg6"
    ],
-   "spoken": "— he might make spite moves to threaten something, and if you tunnel-vision your own idea, you might miss a crazy resource at the last second.",
+   "spoken": "— they might make spite moves to threaten something, and if you tunnel-vision your own idea, you might miss a crazy resource at the last second.",
    "reanchor": true
   },
   {
@@ -417,7 +417,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "And I like his move, the bishop to g4.",
+   "spoken": "And I like their move, the bishop to g4.",
    "reanchor": true
   },
   {
@@ -425,7 +425,7 @@
    "t": 1091,
    "fen": "r1bqkbnr/ppp2ppp/n2p4/4p3/3PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
    "line": [],
-   "spoken": "He takes on d4 —",
+   "spoken": "They take on d4 —",
    "reanchor": true
   },
   {
@@ -435,7 +435,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "— he takes on d4; which piece would you have recaptured with? An interesting question to test your understanding of your plan.",
+   "spoken": "— they take on d4; which piece would you have recaptured with? An interesting question to test your understanding of your plan.",
    "reanchor": true
   },
   {
@@ -445,7 +445,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "The queen — first, because he has no knight to c6, and second, because you want to castle long as fast as possible, which needs the queen off the board; then the knight to c3, the bishop to g5, castle long, and perhaps e5 quickly if he doesn't develop.",
+   "spoken": "The queen — first, because they have no knight to c6, and second, because you want to castle long as fast as possible, which needs the queen off the board; then the knight to c3, the bishop to g5, castle long, and perhaps e5 quickly if they don't develop.",
    "reanchor": true
   },
   {

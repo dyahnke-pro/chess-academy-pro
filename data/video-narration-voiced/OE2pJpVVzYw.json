@@ -142,7 +142,7 @@
     "bxc6",
     "e5"
    ],
-   "spoken": "The b-pawn recaptures, and to the rescue comes another decoy sacrifice — e5, attacking the knight; if he doesn't take, that pawn wreaks havoc."
+   "spoken": "The b-pawn recaptures, and to the rescue comes another decoy sacrifice — e5, attacking the knight; if they don't take, that pawn wreaks havoc."
   },
   {
    "ply": 16,
@@ -151,7 +151,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "If he does take, you play the bishop takes f7, distracting the king from the queen. He didn't have to take the bishop, but his position would be ruined regardless. Black plays d5, counter-attacking the bishop. Should you take the knight —"
+   "spoken": "If they do take, you play the bishop takes f7, distracting the king from the queen. They didn't have to take the bishop, but their position would be ruined regardless. Black plays d5, counter-attacking the bishop. Should you take the knight —"
   },
   {
    "ply": 17,
@@ -160,14 +160,14 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "— actually there's a better way: the bishop to g5. Conceptually you should take the knight — it opens the position when the opponent is behind in development — but you take it with the bishop, which forks. If he takes your bishop you take his knight, or you can take his queen first —"
+   "spoken": "— actually there's a better way: the bishop to g5. Conceptually you should take the knight — it opens the position when the opponent is behind in development — but you take it with the bishop, which forks. If they take your bishop you take their knight, or you can take their queen first —"
   },
   {
    "ply": 16,
    "t": 410.5,
    "fen": "r1bqkb1r/p1p2p1p/2p2np1/3pP3/2B5/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
    "line": [],
-   "spoken": "— and then the bishop forks the rook and queen. The reason to take the knight: when your opponent is less developed — both his bishops undeveloped, not close to castling — the side furthest from castling often stands to lose when the centre opens —",
+   "spoken": "— and then the bishop forks the rook and queen. The reason to take the knight: when your opponent is less developed — both their bishops undeveloped, not close to castling — the side furthest from castling often stands to lose when the centre opens —",
    "reanchor": true
   },
   {
@@ -188,7 +188,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "You should take the knight with a pawn. If you take with the bishop, he takes your bishop then the other bishop and material is equal; if you take with the pawn, he gets at most a pawn for the bishop —",
+   "spoken": "You should take the knight with a pawn. If you take with the bishop, they take your bishop then the other bishop and material is equal; if you take with the pawn, they get at most a pawn for the bishop —",
    "reanchor": true
   },
   {
@@ -198,7 +198,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "— and if he takes the bishop, you take his bishop and remain up a piece. Now you trade —",
+   "spoken": "— and if they take the bishop, you take their bishop and remain up a piece. Now you trade —",
    "reanchor": true
   },
   {
@@ -208,7 +208,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "— the bishop takes f6, and after he recaptures with the queen you need to move your bishop off c4, since it was getting attacked —",
+   "spoken": "— the bishop takes f6, and after they recapture with the queen you need to move your bishop off c4, since it was getting attacked —",
    "reanchor": true
   },
   {
@@ -228,7 +228,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Let's just drop it to d3, in the vicinity of the king in case he castles.",
+   "spoken": "Let's just drop it to d3, in the vicinity of the king in case they castle.",
    "reanchor": true
   },
   {
@@ -270,7 +270,7 @@
     "Qf6",
     "f5"
    ],
-   "spoken": "Attacking your opponent's king is a full-fledged alternative — often quicker and more effective. You shove f5 and sacrifice it; if he takes with the pawn, he ruins the structure around his king —",
+   "spoken": "Attacking your opponent's king is a full-fledged alternative — often quicker and more effective. You shove f5 and sacrifice it; if they take with the pawn, they ruin the structure around their king —",
    "reanchor": true
   },
   {
@@ -280,7 +280,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "— if he takes with the bishop, you take his bishop and he still ends up recapturing with a pawn. He plays g5, making a weakness. Ask how the position changed: g5 opens the h5-square for your queen, a great attacking post. The bishop takes f5 is a blunder, but Black is losing anyway — you have two attackers and one defender; you take with the rook to involve it in the attack. Up two pieces, the check isn't scary — not all checks are; you tuck the king into the corner, perfectly safe, and use your extra pieces to deliver checkmate.",
+   "spoken": "— if they take with the bishop, you take their bishop and they still end up recapturing with a pawn. They play g5, making a weakness. Ask how the position changed: g5 opens the h5-square for your queen, a great attacking post. The bishop takes f5 is a blunder, but Black is losing anyway — you have two attackers and one defender; you take with the rook to involve it in the attack. Up two pieces, the check isn't scary — not all checks are; you tuck the king into the corner, perfectly safe, and use your extra pieces to deliver checkmate.",
    "reanchor": true
   }
  ]

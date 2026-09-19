@@ -151,7 +151,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "moving this knight away from f3 — playing the knight to e5 — and then putting the pawn up to f3 to prepare the idea I mentioned. Let's play the knight to e5; I assume he'll take on c5, the only sensible move."
+   "spoken": "moving this knight away from f3 — playing the knight to e5 — and then putting the pawn up to f3 to prepare the idea I mentioned. Let's play the knight to e5; I assume they'll take on c5, the only sensible move."
   },
   {
    "ply": 18,
@@ -160,7 +160,7 @@
    "line": [
     "Nxc5"
    ],
-   "spoken": "He probably has my course — c5 is definitely analysed; there are just so many lines that I often get confused."
+   "spoken": "They probably have my course — c5 is definitely analysed; there are just so many lines that I often get confused."
   },
   {
    "ply": 19,
@@ -205,7 +205,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "file, so when the h-file opens, the queen to h2 could create an unstoppable mate threat on h7. You could still play positionally with the king to b1, but let's go for it and play in the spirit of the Jobava — g4. Hopefully Black takes; he could also ignore it, which might be best. I actually would not take on g4 with Black — an advanced decision — realising Black is stable on the kingside for now: you're not threatening anything, g5 isn't really a threat, and g-takes-h5 isn't a threat because the knight recaptures."
+   "spoken": "file, so when the h-file opens, the queen to h2 could create an unstoppable mate threat on h7. You could still play positionally with the king to b1, but let's go for it and play in the spirit of the Jobava — g4. Hopefully Black takes; they could also ignore it, which might be best. I actually would not take on g4 with Black — an advanced decision — realising Black is stable on the kingside for now: you're not threatening anything, g5 isn't really a threat, and g-takes-h5 isn't a threat because the knight recaptures."
   },
   {
    "ply": 24,
@@ -232,7 +232,7 @@
    "line": [
     "Rac8"
    ],
-   "spoken": "Another recurring theme: when the queens are in a standoff on this diagonal, there's the idea of the knight takes d5, a classic discovery concept. He missed it — but it's not as simple as it seems: after the knight takes d5, Black can't take the knight or he loses the queen, so he plays the queen takes d2; you take the queen, and Black takes on d5 and is up a piece — but the rub is that after the knight takes d5, the queen takes d2, you can go and take the pawn on e7, an intermediate move, and only after the king moves do you recapture the queen — up two pawns. The knight on e7 is virtually trapped, and Black could try the rook to e8, but my intuition says you'll be able to evacuate it, maybe with g5."
+   "spoken": "Another recurring theme: when the queens are in a standoff on this diagonal, there's the idea of the knight takes d5, a classic discovery concept. They missed it — but it's not as simple as it seems: after the knight takes d5, Black can't take the knight or they lose the queen, so they play the queen takes d2; you take the queen, and Black takes on d5 and is up a piece — but the rub is that after the knight takes d5, the queen takes d2, you can go and take the pawn on e7, an intermediate move, and only after the king moves do you recapture the queen — up two pawns. The knight on e7 is virtually trapped, and Black could try the rook to e8, but my intuition says you'll be able to evacuate it, maybe with g5."
   },
   {
    "ply": 27,
@@ -241,7 +241,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "The d5-square is open for your knight; it doesn't seem Black can win the knight cleanly, but it's a little dicey — let's take the plunge; I'd be beyond impressed if he saw all this and found a way to trap the knight."
+   "spoken": "The d5-square is open for your knight; it doesn't seem Black can win the knight cleanly, but it's a little dicey — let's take the plunge; I'd be beyond impressed if they saw all this and found a way to trap the knight."
   },
   {
    "ply": 28,
@@ -286,7 +286,7 @@
    "line": [
     "Rcd8"
    ],
-   "spoken": "Don't forget that when a lot of exchanges happen, it's a very common time to blunder, because people forget to update their perception of the board — the rook on c8 is a piece that would often be blundered. The rook to d8 is the most testing move. The downside of taking on d8 is that Black then threatens checkmate on c1, forcing you to burn a tempo moving the bishop, and I don't see a great spot for it; but I have an idea — take on d8, then the bishop to h3, he attacks the knight with the rook to e8, and I go g5. I don't like the knight takes g6, because after the recapture and king move a rook hangs and you gain nothing. Let's go for my idea — you're short of time. There's also the rook to d4, a collinear move: putting a piece on an intermediate square of the same file when two pieces stare at each other."
+   "spoken": "Don't forget that when a lot of exchanges happen, it's a very common time to blunder, because people forget to update their perception of the board — the rook on c8 is a piece that would often be blundered. The rook to d8 is the most testing move. The downside of taking on d8 is that Black then threatens checkmate on c1, forcing you to burn a tempo moving the bishop, and I don't see a great spot for it; but I have an idea — take on d8, then the bishop to h3, they attack the knight with the rook to e8, and I go g5. I don't like the knight takes g6, because after the recapture and king move a rook hangs and you gain nothing. Let's go for my idea — you're short of time. There's also the rook to d4, a collinear move: putting a piece on an intermediate square of the same file when two pieces stare at each other."
   },
   {
    "ply": 33,
@@ -312,7 +312,7 @@
    "line": [
     "Rd4"
    ],
-   "spoken": "I did consider the rook to h2 to protect the rook, but didn't like it; the collinear rook to d4 keeps the option of the double-take on g6 and then the rook on f8, netting two more pawns — a grand total of four extra pawns and a rook for two pieces, a big material advantage. But Black's minor pieces are incredibly active, so removing your own minors could let him optimise his. What tactical patterns do I notice? A hidden one people forget with the queens off: the king can still be mated — if Black plays h-takes-g4, the move h5 is still very effective in the endgame, because all you need is the rook on h1, and the knight on e7, your worst piece, is doing one productive thing: taking away the escape square from the black king — I'm smelling an Anastasia's mate if the h-file opens."
+   "spoken": "I did consider the rook to h2 to protect the rook, but didn't like it; the collinear rook to d4 keeps the option of the double-take on g6 and then the rook on f8, netting two more pawns — a grand total of four extra pawns and a rook for two pieces, a big material advantage. But Black's minor pieces are incredibly active, so removing your own minors could let them optimise their. What tactical patterns do I notice? A hidden one people forget with the queens off: the king can still be mated — if Black plays h-takes-g4, the move h5 is still very effective in the endgame, because all you need is the rook on h1, and the knight on e7, your worst piece, is doing one productive thing: taking away the escape square from the black king — I'm smelling an Anastasia's mate if the h-file opens."
   },
   {
    "ply": 34,
@@ -339,7 +339,7 @@
    "line": [
     "Nxh5"
    ],
-   "spoken": "the knight takes h5, and the knight is pinned — you win it. He played this instantly, so maybe I'm missing something — let me think. f-takes-g4: as much as is going on, everything is protected for the time being, the bishop on f4 is untouchable because the knight is pinned,"
+   "spoken": "the knight takes h5, and the knight is pinned — you win it. They played this instantly, so maybe I'm missing something — let me think. f-takes-g4: as much as is going on, everything is protected for the time being, the bishop on f4 is untouchable because the knight is pinned,"
   },
   {
    "ply": 37,

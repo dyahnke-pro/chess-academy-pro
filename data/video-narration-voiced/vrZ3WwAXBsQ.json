@@ -418,7 +418,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "And now you simply castle — it may look like Black is doing all right, but his position is crumbling.",
+      "spoken": "And now you simply castle — it may look like Black is doing all right, but their position is crumbling.",
       "reanchor": true
     },
     {
@@ -2438,7 +2438,7 @@
         "Qa5",
         "e4"
       ],
-      "spoken": "White's development and central control are decisive; the queen to a5, e4 — Black can't get his pieces out.",
+      "spoken": "White's development and central control are decisive; the queen to a5, e4 — Black can't get their pieces out.",
       "reanchor": true
     },
     {
@@ -3346,7 +3346,7 @@
       "line": [
         "Nxa5"
       ],
-      "spoken": "Don't be afraid to give the exchange for Black's dark-squared bishop, ridding him of his only active piece.",
+      "spoken": "Don't be afraid to give the exchange for Black's dark-squared bishop, ridding them of their only active piece.",
       "reanchor": true
     },
     {
@@ -3946,7 +3946,7 @@
       "t": 2630.5,
       "fen": "r1b1k2r/pppp1ppp/2n2n2/4b3/8/4P3/P1PN1PPP/1R1QKB1R w Kkq - 1 17",
       "line": [],
-      "spoken": "Black can procrastinate, but he'll ultimately lose the dark-squared bishop. Let's rewind.",
+      "spoken": "Black can procrastinate, but they'll ultimately lose the dark-squared bishop. Let's rewind.",
       "reanchor": true
     },
     {
@@ -4027,7 +4027,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "Then you tuck the king away — Black loses all his pawns; b7 and e4 start falling.",
+      "spoken": "Then you tuck the king away — Black loses all their pawns; b7 and e4 start falling.",
       "reanchor": true
     },
     {

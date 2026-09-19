@@ -116,7 +116,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "This is a bad opening for White, struggling for equality. He plays a bishop to c4. You have two priorities: improve that d7 bishop toward c6, and complete your kingside development — best done with e6, making the c4 bishop bite on granite, rather than g6.",
+   "spoken": "This is a bad opening for White, struggling for equality. They play a bishop to c4. You have two priorities: improve that d7 bishop toward c6, and complete your kingside development — best done with e6, making the c4 bishop bite on granite, rather than g6.",
    "reanchor": true
   },
   {
@@ -144,7 +144,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "And now e6, completing your development. Playing the bishop to c6 first also means that if White plays d4 and you capture, he can't recapture with the queen and keep his structure intact."
+   "spoken": "And now e6, completing your development. Playing the bishop to c6 first also means that if White plays d4 and you capture, they can't recapture with the queen and keep their structure intact."
   },
   {
    "ply": 17,
@@ -182,7 +182,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "You play b5, continuing to restrict White's minor pieces — I like it a lot; look how much it cramps his pieces."
+   "spoken": "You play b5, continuing to restrict White's minor pieces — I like it a lot; look how much it cramps their pieces."
   },
   {
    "ply": 21,
@@ -231,7 +231,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White plays d4. If you sacrifice on h2 and jump to g4, White intends a king to g3, and I'm not sure you have enough firepower — for some reason it's hard to play against his moves. I keep calculating the Greek gift.",
+   "spoken": "White plays d4. If you sacrifice on h2 and jump to g4, White intends a king to g3, and I'm not sure you have enough firepower — for some reason it's hard to play against their moves. I keep calculating the Greek gift.",
    "reanchor": true
   },
   {
@@ -584,7 +584,7 @@
    "line": [
     "Rb2"
    ],
-   "spoken": "If the king goes to a1, notice a queen check on e5 picks up the f5 bishop. White plays a rook to b2, defending as best he can.",
+   "spoken": "If the king goes to a1, notice a queen check on e5 picks up the f5 bishop. White plays a rook to b2, defending as best they can.",
    "reanchor": true
   },
   {

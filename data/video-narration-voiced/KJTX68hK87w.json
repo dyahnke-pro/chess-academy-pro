@@ -133,7 +133,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "You play solidly with e6 — defending d5, since a premature capture on c4 would run into the d5 push and let White toss his knight around.",
+   "spoken": "You play solidly with e6 — defending d5, since a premature capture on c4 would run into the d5 push and let White toss their knight around.",
    "kind": "main",
    "teaches": [
     "e6 keeps the center solid"
@@ -278,7 +278,7 @@
    "line": [
     "Nxe3"
    ],
-   "spoken": "You take on e3, eliminating White's bishop pair — his only compensation — and leaving a fresh weakness on e3.",
+   "spoken": "You take on e3, eliminating White's bishop pair — their only compensation — and leaving a fresh weakness on e3.",
    "kind": "main",
    "teaches": [
     "trade off the enemy’s only trump"
@@ -605,7 +605,7 @@
    "t": 577,
    "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 4 4",
    "line": [],
-   "spoken": "The Chigorin is named for Mikhail Chigorin, the first great Russian player — a giant of nineteenth-century opening theory who founded the country's first chess journal and analyzed openings on his own. It's a dubious system against precise play, but a fine surprise weapon to keep in your back pocket.",
+   "spoken": "The Chigorin is named for Mikhail Chigorin, the first great Russian player — a giant of nineteenth-century opening theory who founded the country's first chess journal and analyzed openings on their own. It's a dubious system against precise play, but a fine surprise weapon to keep in your back pocket.",
    "teaches": [
     "the Chigorin’s origins and practical value"
    ],

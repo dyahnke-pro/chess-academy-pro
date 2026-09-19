@@ -106,7 +106,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "The idea is that the bishop collaborates with the pawn and makes it very difficult for Black to free himself in the centre with d5."
+   "spoken": "The idea is that the bishop collaborates with the pawn and makes it very difficult for Black to free themselves in the centre with d5."
   },
   {
    "ply": 14,
@@ -205,7 +205,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The knight to e5 is kind of aimless; you could play f4, but that would deprive the knight of that square, so f4 is too hasty. You'd like to develop the bishop to e3 or g5, but you can't yet, because you dropped the b2-pawn. Instead of b3, you play the harmonious queen to c2, which defends b2 and prepares to connect the rooks — it prepares the rook to d1, reinforcing your control of d5, and a rook on d1 is better than a queen there, getting the queen out of the way and freeing the bishop. The knight to c4 is pointless — it prevents your bishop, but b3 chases it whenever you want, so no rush; let's improve first with the rook to d1, then play b3, tired of that knight. Now develop the bishop — not to g5 to trade for the f6-knight and give up your dark-squared bishop, imprudent since you'd be left with a bad light-squared bishop, but the bishop to e3, x-raying the queen. The queen to c6, and a good chance to reinforce control of d5 — not just the knight to f4, but c4, using your pawns to clamp the square, and the knight gets a nicer path through c3 that doesn't interfere with the f-pawn; you're not afraid of weakening d4, since a bishop and a rook guard it. The knight to b4, you move the queen to e2, and to increase central pressure the g4 and g5 plan is interesting, but let's be Russian-school and double rooks, the rook to d2 and d1, staying flexible, no pawns pushed. Black doubles rooks and then resigns — I think he thought I'd moved the rook off a1, leaving a2 hanging.",
+   "spoken": "The knight to e5 is kind of aimless; you could play f4, but that would deprive the knight of that square, so f4 is too hasty. You'd like to develop the bishop to e3 or g5, but you can't yet, because you dropped the b2-pawn. Instead of b3, you play the harmonious queen to c2, which defends b2 and prepares to connect the rooks — it prepares the rook to d1, reinforcing your control of d5, and a rook on d1 is better than a queen there, getting the queen out of the way and freeing the bishop. The knight to c4 is pointless — it prevents your bishop, but b3 chases it whenever you want, so no rush; let's improve first with the rook to d1, then play b3, tired of that knight. Now develop the bishop — not to g5 to trade for the f6-knight and give up your dark-squared bishop, imprudent since you'd be left with a bad light-squared bishop, but the bishop to e3, x-raying the queen. The queen to c6, and a good chance to reinforce control of d5 — not just the knight to f4, but c4, using your pawns to clamp the square, and the knight gets a nicer path through c3 that doesn't interfere with the f-pawn; you're not afraid of weakening d4, since a bishop and a rook guard it. The knight to b4, you move the queen to e2, and to increase central pressure the g4 and g5 plan is interesting, but let's be Russian-school and double rooks, the rook to d2 and d1, staying flexible, no pawns pushed. Black doubles rooks and then resigns — I think they thought I'd moved the rook off a1, leaving a2 hanging.",
    "reanchor": true
   },
   {

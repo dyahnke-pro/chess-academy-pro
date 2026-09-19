@@ -461,7 +461,7 @@
       "t": 2868.5,
       "fen": "rn1q1rk1/ppp2ppp/3bpn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R w KQ - 8 9",
       "line": [],
-      "spoken": "but does not work after the knight to d7. What's the idea of g4? If Black drops the bishop back, it works like a charm: White plays h4, threatening to trap the bishop with h5 — h5, the bishop back to f3, and the bishop is fully trapped. Usually you play h6 and that's the end of it, but now White takes on g6, and by inducing h6 you force Black to completely ruin his structure with f-takes-g6; worse, you bring the queen out and immediately attack the g-pawn, so Black can't castle, the king is vulnerable, and you secure g6 as an outpost. A very bad position for Black — tons of people fall for this. After g4 there is the bishop takes e5; if you recapture the bishop it's nothing special, just down a pawn; f-takes-e5 is ugly with your own ruined structure; and after d-takes-e5 the knight takes g4 wins a pawn, and if the rook to g1 for the g-file, you lose the e5-pawn and Black castles queenside.",
+      "spoken": "but does not work after the knight to d7. What's the idea of g4? If Black drops the bishop back, it works like a charm: White plays h4, threatening to trap the bishop with h5 — h5, the bishop back to f3, and the bishop is fully trapped. Usually you play h6 and that's the end of it, but now White takes on g6, and by inducing h6 you force Black to completely ruin their structure with f-takes-g6; worse, you bring the queen out and immediately attack the g-pawn, so Black can't castle, the king is vulnerable, and you secure g6 as an outpost. A very bad position for Black — tons of people fall for this. After g4 there is the bishop takes e5; if you recapture the bishop it's nothing special, just down a pawn; f-takes-e5 is ugly with your own ruined structure; and after d-takes-e5 the knight takes g4 wins a pawn, and if the rook to g1 for the g-file, you lose the e5-pawn and Black castles queenside.",
       "reanchor": true
     },
     {
@@ -471,7 +471,7 @@
       "line": [
         "g4"
       ],
-      "spoken": "Now compare that to this position — the key difference is that Black has already committed the placement of his king."
+      "spoken": "Now compare that to this position — the key difference is that Black has already committed the placement of their king."
     },
     {
       "ply": 19,
@@ -500,7 +500,7 @@
       "line": [
         "fxg6"
       ],
-      "spoken": "f-takes-g6. Funnily, the engine doesn't even give this — it gives h5 and g5, mating; it's just a mating attack. And if the bishop takes c5, the key difference is that Black isn't attacking the e5-pawn, which lets White play f3 and chase the knight to the very awkward h6-square; second, Black has committed his king, so you can use the g-file later. The engine gives h4 here to cover the h4-"
+      "spoken": "f-takes-g6. Funnily, the engine doesn't even give this — it gives h5 and g5, mating; it's just a mating attack. And if the bishop takes c5, the key difference is that Black isn't attacking the e5-pawn, which lets White play f3 and chase the knight to the very awkward h6-square; second, Black has committed their king, so you can use the g-file later. The engine gives h4 here to cover the h4-"
     },
     {
       "ply": 16,
@@ -524,7 +524,7 @@
       "t": 3023,
       "fen": "rn1q1rk1/ppp2ppp/3bpn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R w KQ - 8 9",
       "line": [],
-      "spoken": "Your opponent played the knight to d7. The game I referenced was a slightly different move order, from 2016 — I stand corrected. There I played the traditional early f3 and g4; you can now see why the kingside pawn storm is dangerous. My opponent made a very instructive mistake: I got the knight to f4, and he allowed the knight to take g6, giving a scary-looking check on g3 — but my king is totally fine on d2, and I just kept developing; in fact his queen is the vulnerable one on g3. The queen to e2 connects the rooks and the game ends very fast — he plays g5, I trade, get the rook into the attack, and it's a crushing attack; my king simply hides on c1, then b1, and it's mate on h8. So f3 on move four is the main line, the most popular move, worth investigating. The bishop to d3 was the game continuation; your opponent traded, and it's a shame he then blundered with c6 — hilariously the engine prefers the knight taking c6 over taking f7, because after the queen to c7 there's the extra knight to b5, controlling b4 and a5, so there's no check on a5.",
+      "spoken": "Your opponent played the knight to d7. The game I referenced was a slightly different move order, from 2016 — I stand corrected. There I played the traditional early f3 and g4; you can now see why the kingside pawn storm is dangerous. My opponent made a very instructive mistake: I got the knight to f4, and they allowed the knight to take g6, giving a scary-looking check on g3 — but my king is totally fine on d2, and I just kept developing; in fact their queen is the vulnerable one on g3. The queen to e2 connects the rooks and the game ends very fast — they play g5, I trade, get the rook into the attack, and it's a crushing attack; my king simply hides on c1, then b1, and it's mate on h8. So f3 on move four is the main line, the most popular move, worth investigating. The bishop to d3 was the game continuation; your opponent traded, and it's a shame they then blundered with c6 — hilariously the engine prefers the knight taking c6 over taking f7, because after the queen to c7 there's the extra knight to b5, controlling b4 and a5, so there's no check on a5.",
       "reanchor": true
     },
     {

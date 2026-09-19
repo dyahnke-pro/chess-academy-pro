@@ -104,7 +104,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "d6 is a good move — I was really hoping he'd take on d5, which would be wrong. There are multiple ways to play this with White; don't feel White is winning, just solidly better. Now you have a positional approach and a more tactical one — you can take on e6 and keep the centre open, White is definitely better, and given your lead in development it makes sense to go after him."
+   "spoken": "d6 is a good move — I was really hoping they'd take on d5, which would be wrong. There are multiple ways to play this with White; don't feel White is winning, just solidly better. Now you have a positional approach and a more tactical one — you can take on e6 and keep the centre open, White is definitely better, and given your lead in development it makes sense to go after them."
   },
   {
    "ply": 11,
@@ -131,7 +131,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "The knight to g5 — its very specific aim is to destroy Black's pawn structure and get rid of the bishop on e6. You want to take the bishop, then get your bishop out to c4 and hit him where it hurts, on that e6-pawn; and if the bishop moves away, the bishop to c4 is totally crushing, that threat against f7 incredibly nasty. The knight to g5 might not be best — as Black here I'd simply develop with the knight to c6, not h6, since you want to take the bishop anyway, and h6 weakens the diagonal. The bishop to g4 isn't dangerous — you go f3, or the bishop to e2, trading the light-squared bishops and getting nice control of the d5-square. Black's best is the knight to c6; b5 could be considered but it's dangerous to keep not developing."
+   "spoken": "The knight to g5 — its very specific aim is to destroy Black's pawn structure and get rid of the bishop on e6. You want to take the bishop, then get your bishop out to c4 and hit them where it hurts, on that e6-pawn; and if the bishop moves away, the bishop to c4 is totally crushing, that threat against f7 incredibly nasty. The knight to g5 might not be best — as Black here I'd simply develop with the knight to c6, not h6, since you want to take the bishop anyway, and h6 weakens the diagonal. The bishop to g4 isn't dangerous — you go f3, or the bishop to e2, trading the light-squared bishops and getting nice control of the d5-square. Black's best is the knight to c6; b5 could be considered but it's dangerous to keep not developing."
   },
   {
    "ply": 14,
@@ -140,7 +140,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "I'd go the knight to c6 here, and then the knight takes c6, f-takes-c6, the bishop to c4, and White is better but the game isn't over. Instead he blunders a piece — the knight to g4"
+   "spoken": "I'd go the knight to c6 here, and then the knight takes c6, f-takes-c6, the bishop to c4, and White is better but the game isn't over. Instead they blunder a piece — the knight to g4"
   },
   {
    "ply": 15,
@@ -149,7 +149,7 @@
    "line": [
     "Nxe6"
    ],
-   "spoken": "walks right into the knight takes e6, and you win the knight; I think he had internet problems that distracted him. This type of play often works, so at this level don't be afraid"
+   "spoken": "walks right into the knight takes e6, and you win the knight; I think they had internet problems that distracted them. This type of play often works, so at this level don't be afraid"
   },
   {
    "ply": 13,
@@ -176,7 +176,7 @@
    "line": [
     "Nxf2"
    ],
-   "spoken": "queen takes g4. He plays the knight to f2. Let's try to be accurate — a lot of people would just instantly grab this. You have a choice: you can play the knight takes d8 and simplify into an endgame up a piece; the king takes f2; but there's a third move I think"
+   "spoken": "queen takes g4. They play the knight to f2. Let's try to be accurate — a lot of people would just instantly grab this. You have a choice: you can play the knight takes d8 and simplify into an endgame up a piece; the king takes f2; but there's a third move I think"
   },
   {
    "ply": 19,
@@ -215,7 +215,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "if he takes on d5 — who can tell me the proper approach here? This is a common oversight at the lower levels.",
+   "spoken": "if they take on d5 — who can tell me the proper approach here? This is a common oversight at the lower levels.",
    "reanchor": true
   },
   {

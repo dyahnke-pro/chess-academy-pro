@@ -68,7 +68,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 — Black will probably capture. He could also try the old bishop to b4, against which you'd take the knight."
+   "spoken": "d4 — Black will probably capture. They could also try the old bishop to b4, against which you'd take the knight."
   },
   {
    "ply": 8,
@@ -193,7 +193,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "It's not that Black is better — it's just equal. He trades on d4 and you head into an endgame."
+   "spoken": "It's not that Black is better — it's just equal. They trade on d4 and you head into an endgame."
   },
   {
    "ply": 21,
@@ -335,7 +335,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Castle queenside — it tucks the king away, guards b2, and lands the rook on d1, x-raying his bishop. And accept it now: this endgame won't be won quickly. Black is too solid — you improve slowly, one small move at a time, and settle in for a long grind. That's the mindset."
+   "spoken": "Castle queenside — it tucks the king away, guards b2, and lands the rook on d1, x-raying their bishop. And accept it now: this endgame won't be won quickly. Black is too solid — you improve slowly, one small move at a time, and settle in for a long grind. That's the mindset."
   },
   {
    "ply": 34,
@@ -360,7 +360,7 @@
    "t": 469,
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/P2BB3/1PP2PPP/2KR3R w k - 10 18",
    "line": [],
-   "spoken": "Between b3 and c3: b3 invites a5, then a4 fixes his pawn on a dark square — and creating long-term weaknesses is the whole endgame goal. c3 blunts his bishop; b4 is too committal."
+   "spoken": "Between b3 and c3: b3 invites a5, then a4 fixes their pawn on a dark square — and creating long-term weaknesses is the whole endgame goal. c3 blunts their bishop; b4 is too committal."
   },
   {
    "ply": 35,
@@ -420,7 +420,7 @@
     "a5",
     "b3"
    ],
-   "spoken": "a4 — fixing his pawn."
+   "spoken": "a4 — fixing their pawn."
   },
   {
    "ply": 34,
@@ -456,7 +456,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "I like the bishop to c4 and rook to d3, to smoke his bishop off c3. Not the bishop to d2 — trading dark-squared bishops would make his a5-pawn unattackable, and you never trade away the very piece that attacks a weakness."
+   "spoken": "I like the bishop to c4 and rook to d3, to smoke their bishop off c3. Not the bishop to d2 — trading dark-squared bishops would make their a5-pawn unattackable, and you never trade away the very piece that attacks a weakness."
   },
   {
    "ply": 38,
@@ -472,7 +472,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "There's a tactic behind the rook to d3: if he takes on c4, the rook to c3 skewers his bishop to the c-pawn. The plan is to tie him to the a5 weakness, then open a second front he can't defend.",
+   "spoken": "There's a tactic behind the rook to d3: if they take on c4, the rook to c3 skewers their bishop to the c-pawn. The plan is to tie them to the a5 weakness, then open a second front they can't defend.",
    "reanchor": true
   },
   {
@@ -491,7 +491,7 @@
    "line": [
     "Rd3"
    ],
-   "spoken": "The rook to d3 — offering him a tactical trap: take on c4, and the rook to c3 wins the c6-pawn."
+   "spoken": "The rook to d3 — offering them a tactical trap: take on c4, and the rook to c3 wins the c6-pawn."
   },
   {
    "ply": 42,
@@ -595,7 +595,7 @@
     "d5",
     "f3"
    ],
-   "spoken": "I kept f3 in reserve to defend the e4-pawn — that's why I didn't push earlier. His dark-squared bishop is annoying, but c3 would be a bad idea: it softens b3 and kills the bishop-to-d2 plan against a5.",
+   "spoken": "I kept f3 in reserve to defend the e4-pawn — that's why I didn't push earlier. Their dark-squared bishop is annoying, but c3 would be a bad idea: it softens b3 and kills the bishop-to-d2 plan against a5.",
    "reanchor": true
   },
   {
@@ -614,7 +614,7 @@
    "line": [
     "Rhd1"
    ],
-   "spoken": "The rook to d1, a neutral improving move, also clamping down on the d5-pawn to stop his c5 and e5 breaks. White's better — not by much, a draw with best play — but very unpleasant to defend with all those weaknesses."
+   "spoken": "The rook to d1, a neutral improving move, also clamping down on the d5-pawn to stop their c5 and e5 breaks. White's better — not by much, a draw with best play — but very unpleasant to defend with all those weaknesses."
   },
   {
    "ply": 50,
@@ -623,7 +623,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "The bishop to d2: if he trades, the rook to c3 lands on the prime c5 outpost."
+   "spoken": "The bishop to d2: if they trade, the rook to c3 lands on the prime c5 outpost."
   },
   {
    "ply": 51,
@@ -632,7 +632,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": "The drawback: he can take and swing a rook to f2 — but it works out concretely. And you keep posing him problems, brutal with his clock low."
+   "spoken": "The drawback: they can take and swing a rook to f2 — but it works out concretely. And you keep posing them problems, brutal with their clock low."
   },
   {
    "ply": 52,
@@ -668,7 +668,7 @@
    "line": [
     "Rc3"
    ],
-   "spoken": "The rook to c3 attacks c6, heading for c5, then you double. Not worried about him grabbing e4 — he has three weak pawns to your one, so you come out ahead."
+   "spoken": "The rook to c3 attacks c6, heading for c5, then you double. Not worried about them grabbing e4 — they have three weak pawns to your one, so you come out ahead."
   },
   {
    "ply": 57,
@@ -687,7 +687,7 @@
    "line": [
     "Ra6"
    ],
-   "spoken": "The rook to a6 is another slip; the rook to a8 was better. He keeps cooperating with your plan."
+   "spoken": "The rook to a6 is another slip; the rook to a8 was better. They keep cooperating with your plan."
   },
   {
    "ply": 59,
@@ -723,7 +723,7 @@
    "line": [
     "Ke6"
    ],
-   "spoken": "He's giving up a pawn, sensing the game slip away."
+   "spoken": "They're giving up a pawn, sensing the game slip away."
   },
   {
    "ply": 63,
@@ -769,7 +769,7 @@
    "line": [
     "Kxc6"
    ],
-   "spoken": "Now the plan: watch your pieces' activity. Start with the rook to e1 — not the king to c3, which would let his rook infiltrate to e2."
+   "spoken": "Now the plan: watch your pieces' activity. Start with the rook to e1 — not the king to c3, which would let their rook infiltrate to e2."
   },
   {
    "ply": 69,
@@ -787,7 +787,7 @@
    "line": [
     "Rf5"
    ],
-   "spoken": "Phase two: judiciously push the kingside pawns — to create a passer, to restrict his rook, and to soften his structure."
+   "spoken": "Phase two: judiciously push the kingside pawns — to create a passer, to restrict their rook, and to soften their structure."
   },
   {
    "ply": 71,
@@ -805,7 +805,7 @@
    "line": [
     "Kd6"
    ],
-   "spoken": "If you want b4, now is the moment — before he plays c5."
+   "spoken": "If you want b4, now is the moment — before they play c5."
   },
   {
    "ply": 73,
@@ -814,7 +814,7 @@
    "line": [
     "Kc3"
    ],
-   "spoken": "The king to c3 — and if he plays c5, the a5-pawn becomes a long-term weakness you can round up with the rook, or invade on b5 with the king. c5 only weakens him."
+   "spoken": "The king to c3 — and if they play c5, the a5-pawn becomes a long-term weakness you can round up with the rook, or invade on b5 with the king. c5 only weakens them."
   },
   {
    "ply": 74,
@@ -832,7 +832,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "Lock his pawns up with h4."
+   "spoken": "Lock their pawns up with h4."
   },
   {
    "ply": 76,
@@ -952,7 +952,7 @@
    "line": [
     "Rd4"
    ],
-   "spoken": "Cut his king off."
+   "spoken": "Cut their king off."
   },
   {
    "ply": 92,
@@ -997,7 +997,7 @@
    "line": [
     "Kb6"
    ],
-   "spoken": "Still, push f4 — very hard for him to hold."
+   "spoken": "Still, push f4 — very hard for them to hold."
   },
   {
    "ply": 97,
@@ -1026,7 +1026,7 @@
     "Ka5",
     "Re5"
    ],
-   "spoken": "This is a Lucena position — his king is cut right off, so you simply push the pawn; checks from behind don't matter. Bring the king to f8, push f7, and it's the textbook win."
+   "spoken": "This is a Lucena position — their king is cut right off, so you simply push the pawn; checks from behind don't matter. Bring the king to f8, push f7, and it's the textbook win."
   }
  ]
 }

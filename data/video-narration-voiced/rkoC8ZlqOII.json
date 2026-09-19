@@ -244,7 +244,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": "You happily take, ruining his pawn structure.",
+   "spoken": "You happily take, ruining their pawn structure.",
    "reanchor": true
   },
   {
@@ -292,7 +292,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "White plays b4. You don't take on b4, which would repair his structure — and he isn't threatening to take on a5.",
+   "spoken": "White plays b4. You don't take on b4, which would repair their structure — and they aren't threatening to take on a5.",
    "reanchor": true
   },
   {
@@ -351,7 +351,7 @@
    "line": [
     "Bxh6"
    ],
-   "spoken": "White finds a bishop capture on h6 — an unexpected counterattack, defending his rooks and counterstriking.",
+   "spoken": "White finds a bishop capture on h6 — an unexpected counterattack, defending their rooks and counterstriking.",
    "reanchor": true
   },
   {
@@ -418,7 +418,7 @@
     "Re3",
     "Rf7"
    ],
-   "spoken": "White's position collapses — he blunders another pawn.",
+   "spoken": "White's position collapses — they blunder another pawn.",
    "reanchor": true
   },
   {
@@ -440,7 +440,7 @@
     "a3",
     "Rb7"
    ],
-   "spoken": "A rook to b7 defends the pawn. His c5 pawn is isolated, so a rook to a5 or b5 attacks it.",
+   "spoken": "A rook to b7 defends the pawn. Their c5 pawn is isolated, so a rook to a5 or b5 attacks it.",
    "reanchor": true
   },
   {
@@ -518,7 +518,7 @@
    "t": 987.5,
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": "If White wants an Exchange Caro, he should start with d4.",
+   "spoken": "If White wants an Exchange Caro, they should start with d4.",
    "reanchor": true
   },
   {
@@ -829,7 +829,7 @@
    "t": 1147,
    "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/Q2P2b1/2P2N2/PP3PPP/RNB1K2R b KQkq - 4 7",
    "line": [],
-   "spoken": "But it's all an illusion. After e6, Black is not worse, at least practically. Optically White looks better — you're down a pawn, White seems active — but it's pseudo-activity: White isn't developed, the illusion comes only from the advanced queen, which you chase with a rook to c8. And there's a major static defect: White's ruined kingside pawn structure means he can never castle kingside — the king is a huge problem. Castling queenside is also subpar with his queenside pawns advanced. Your d7 knight comes to c4, you have the semi-open b-file, and all your activity is contingent only on completing development, which you'll do — a rook to c8, even sacrificing a7, then a bishop to d6, and White's king is in trouble.",
+   "spoken": "But it's all an illusion. After e6, Black is not worse, at least practically. Optically White looks better — you're down a pawn, White seems active — but it's pseudo-activity: White isn't developed, the illusion comes only from the advanced queen, which you chase with a rook to c8. And there's a major static defect: White's ruined kingside pawn structure means they can never castle kingside — the king is a huge problem. Castling queenside is also subpar with their queenside pawns advanced. Your d7 knight comes to c4, you have the semi-open b-file, and all your activity is contingent only on completing development, which you'll do — a rook to c8, even sacrificing a7, then a bishop to d6, and White's king is in trouble.",
    "reanchor": true
   },
   {
@@ -1114,7 +1114,7 @@
     "bxc6",
     "Nb3"
    ],
-   "spoken": "His idea was to occupy the c5 outpost eventually, but it's not effective — he can't shift your bishop from d6.",
+   "spoken": "Their idea was to occupy the c5 outpost eventually, but it's not effective — they can't shift your bishop from d6.",
    "reanchor": true
   },
   {
@@ -1191,7 +1191,7 @@
    "t": 1594,
    "fen": "r2q1rk1/pp3pp1/2nbpn1p/3p4/3P4/2PB1Q2/PP1N1PPP/R1B1R1K1 b - - 3 13",
    "line": [],
-   "spoken": "That's the key theme: weakness versus EXPLOITABLE weakness. A pawn or square can be a weakness yet completely unexploitable — and whether it can be attacked matters far more than the semantics. My favorite example, from Svidler–Tomashevsky 2013: White has a queenside attack and wants b5, but Tomashevsky prepared e5, which opens the e-file and makes White's backward e3 pawn accessible, with a knight coming to c4. So Svidler played the stunning f4 — anti-positional, since it gaps e4 — but the knight can never reach e4 (both entry squares are covered), taking seven moves while White is one move from crashing through with b5. He also blocks his own bishop, but activates it later via e1 and a5. The same idea appears in a Fischer game: in an Exchange Ruy, Fischer played f5, seemingly weakening e5, but after a queen to e7 he plays a bishop to f4, trades the dark-squared bishops, and nothing can hold e5 — then he breaks through on that very square. The lesson: as you get stronger, you realize a square being inaccessible is a fine reason to weaken it.",
+   "spoken": "That's the key theme: weakness versus EXPLOITABLE weakness. A pawn or square can be a weakness yet completely unexploitable — and whether it can be attacked matters far more than the semantics. My favorite example, from Svidler–Tomashevsky 2013: White has a queenside attack and wants b5, but Tomashevsky prepared e5, which opens the e-file and makes White's backward e3 pawn accessible, with a knight coming to c4. So Svidler played the stunning f4 — anti-positional, since it gaps e4 — but the knight can never reach e4 (both entry squares are covered), taking seven moves while White is one move from crashing through with b5. They also block their own bishop, but activates it later via e1 and a5. The same idea appears in a Fischer game: in an Exchange Ruy, Fischer played f5, seemingly weakening e5, but after a queen to e7 they play a bishop to f4, trades the dark-squared bishops, and nothing can hold e5 — then they break through on that very square. The lesson: as you get stronger, you realize a square being inaccessible is a fine reason to weaken it.",
    "reanchor": true
   },
   {
@@ -1199,7 +1199,7 @@
    "t": 2184,
    "fen": "r2q1rk1/pp3pp1/2nbpn1p/3p4/3P4/2PB1Q2/PP1N1PPP/R1B2RK1 w - - 2 13",
    "line": [],
-   "spoken": "Back to the game: a queen to c7 stops a bishop to f4, g3, and a5 chases the knight from b3. He could play a4, but that leaves the knight loose. He played a knight to c5, you take and land on e4, castle, and after b4 — a further mistake, since a bishop to b3 kept a reasonable position — you double on the b-file and target White's weaknesses.",
+   "spoken": "Back to the game: a queen to c7 stops a bishop to f4, g3, and a5 chases the knight from b3. They could play a4, but that leaves the knight loose. They played a knight to c5, you take and land on e4, castle, and after b4 — a further mistake, since a bishop to b3 kept a reasonable position — you double on the b-file and target White's weaknesses.",
    "reanchor": true
   }
  ]

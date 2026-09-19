@@ -211,7 +211,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "The clever b6 pawn sacrifice forces his knight offside to a8, buying you time — his knight now has to trek all the way back into the game.",
+   "spoken": "The clever b6 pawn sacrifice forces their knight offside to a8, buying you time — their knight now has to trek all the way back into the game.",
    "kind": "main",
    "teaches": "Sacrifice a pawn to shove an enemy piece to the corner; the tempi it loses are your compensation."
   },
@@ -241,7 +241,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "While his knight is exiled, you complete development and start piling onto the king, combined with pressure down the a-file.",
+   "spoken": "While their knight is exiled, you complete development and start piling onto the king, combined with pressure down the a-file.",
    "kind": "plan",
    "plans": "Finish developing, then attack the king and the a-file together."
   },
@@ -261,7 +261,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "Ne5 centralizes the knight on its best square while his own knight is still marooned on a8.",
+   "spoken": "Ne5 centralizes the knight on its best square while their own knight is still marooned on a8.",
    "kind": "main"
   },
   {
@@ -280,7 +280,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "g4 launches the attack — you have to use this window before Black reroutes his pieces to the queenside.",
+   "spoken": "g4 launches the attack — you have to use this window before Black reroutes their pieces to the queenside.",
    "kind": "main",
    "teaches": "When you're ahead in development, strike before the opponent untangles."
   },

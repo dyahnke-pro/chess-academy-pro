@@ -69,7 +69,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "Just make a developing move and don't touch his knight — let him waste time. The knight to c6."
+      "spoken": "Just make a developing move and don't touch their knight — let them waste time. The knight to c6."
     },
     {
       "ply": 9,
@@ -87,7 +87,7 @@
       "line": [
         "Bg4"
       ],
-      "spoken": "Keep developing — the bishop to g4 is very effective; if he plays f3, you take and open up his position."
+      "spoken": "Keep developing — the bishop to g4 is very effective; if they play f3, you take and open up their position."
     },
     {
       "ply": 12,
@@ -106,7 +106,7 @@
       "line": [
         "gxf3"
       ],
-      "spoken": "White recaptures with the g-pawn — look at his structure now: the bishop undeveloped, the king exposed, and you keep your extra pawn."
+      "spoken": "White recaptures with the g-pawn — look at their structure now: the bishop undeveloped, the king exposed, and you keep your extra pawn."
     },
     {
       "ply": 14,
@@ -169,7 +169,7 @@
       "line": [
         "Bc5"
       ],
-      "spoken": "The bishop to c5, stopping him from castling."
+      "spoken": "The bishop to c5, stopping them from castling."
     },
     {
       "ply": 21,
@@ -223,7 +223,7 @@
       "line": [
         "Ne3"
       ],
-      "spoken": "Think about his weak squares — his pawn on f3 leaves holes — so the knight to e3 is more aggressive than the queen to f6."
+      "spoken": "Think about their weak squares — their pawn on f3 leaves holes — so the knight to e3 is more aggressive than the queen to f6."
     },
     {
       "ply": 27,
@@ -232,7 +232,7 @@
       "line": [
         "Qd2"
       ],
-      "spoken": "White plays the queen to d2; he can't take your knight because of the fork."
+      "spoken": "White plays the queen to d2; they can't take your knight because of the fork."
     },
     {
       "ply": 28,
@@ -241,7 +241,7 @@
       "line": [
         "Nd4"
       ],
-      "spoken": "The knight to d4 — the great thing about a knight here is that it prevents him from castling either way; his king is stuck."
+      "spoken": "The knight to d4 — the great thing about a knight here is that it prevents them from castling either way; their king is stuck."
     },
     {
       "ply": 29,
@@ -360,7 +360,7 @@
       "line": [
         "dxe4"
       ],
-      "spoken": "He developed this interesting but very dubious gambit.",
+      "spoken": "They developed this interesting but very dubious gambit.",
       "reanchor": true
     },
     {
@@ -468,7 +468,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "The knight to c6 is powerful, because your opponent is almost certainly rolling his eyes.",
+      "spoken": "The knight to c6 is powerful, because your opponent is almost certainly rolling their eyes.",
       "reanchor": true
     },
     {
@@ -478,7 +478,7 @@
       "line": [
         "dxe4"
       ],
-      "spoken": "Objectively he should probably play d takes e4.",
+      "spoken": "Objectively they should probably play d takes e4.",
       "reanchor": true
     },
     {

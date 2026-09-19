@@ -125,7 +125,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "The bishop to h5. Kusha knows this line very well; let's try to take him out of theory. You can play the bishop to g5 and then the knight to d2, or the knight to d2 immediately — but that blocks the c1-bishop, so I lean toward developing the bishop first. You can also play the queen to e1 to get out of the pin."
+   "spoken": "The bishop to h5. Kusha knows this line very well; let's try to take them out of theory. You can play the bishop to g5 and then the knight to d2, or the knight to d2 immediately — but that blocks the c1-bishop, so I lean toward developing the bishop first. You can also play the queen to e1 to get out of the pin."
   },
   {
    "ply": 17,
@@ -245,7 +245,7 @@
     "Bd6",
     "Rxf3"
    ],
-   "spoken": "Too late now. I'm expecting castling kingside or the queen to b6; if h6, you just play the bishop to h4. Next is the knight to d2 to complete development, and it'd be nice to throw in the king to h1 so that if the queen to b6, the d4-pawn isn't pinned. The battle is clear: I complete development and start the kingside attack once he castles, while Kusha tries to hit me before I'm developed.",
+   "spoken": "Too late now. I'm expecting castling kingside or the queen to b6; if h6, you just play the bishop to h4. Next is the knight to d2 to complete development, and it'd be nice to throw in the king to h1 so that if the queen to b6, the d4-pawn isn't pinned. The battle is clear: I complete development and start the kingside attack once they castle, while Kusha tries to hit me before I'm developed.",
    "reanchor": true
   },
   {
@@ -255,7 +255,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "The queen to c7 — I didn't expect it, but it's reasonable; maybe he wants to castle queenside. Why not the knight to d2? You must reckon with the pawn takes d4 and the bishop takes h2 with check — but that's a worthy pawn to sacrifice, since the pawn takes d4 is a massive concession giving you a juicy centre."
+   "spoken": "The queen to c7 — I didn't expect it, but it's reasonable; maybe they want to castle queenside. Why not the knight to d2? You must reckon with the pawn takes d4 and the bishop takes h2 with check — but that's a worthy pawn to sacrifice, since the pawn takes d4 is a massive concession giving you a juicy centre."
   },
   {
    "ply": 23,
@@ -273,7 +273,7 @@
    "line": [
     "Rf8"
    ],
-   "spoken": "He's telegraphing queenside castling; the point of the rook to f8 is to defend f7. You can't prevent castling, but you can prepare. I have an idea combining tactics and positional play: the bishop from c4 to d3 — I know I said the bishop is crucial there, but circumstances have changed; f7 is no longer a weakness —"
+   "spoken": "They're telegraphing queenside castling; the point of the rook to f8 is to defend f7. You can't prevent castling, but you can prepare. I have an idea combining tactics and positional play: the bishop from c4 to d3 — I know I said the bishop is crucial there, but circumstances have changed; f7 is no longer a weakness —"
   },
   {
    "ply": 25,
@@ -282,7 +282,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "— especially since Black is going to castle queenside, so protecting the centre matters more. The knight wants the c4-square more than the bishop; the knight to c4 comes with greater effect. After he castles and puts a rook on e8, your e4-pawn is nicely protected, freeing the knight for c4, pressuring the bishop and the e5-pawn; I'll happily take that bishop for two bishops against two knights. Pawn storms are slow, cumbersome, and generally overrated."
+   "spoken": "— especially since Black is going to castle queenside, so protecting the centre matters more. The knight wants the c4-square more than the bishop; the knight to c4 comes with greater effect. After they castle and put a rook on e8, your e4-pawn is nicely protected, freeing the knight for c4, pressuring the bishop and the e5-pawn; I'll happily take that bishop for two bishops against two knights. Pawn storms are slow, cumbersome, and generally overrated."
   },
   {
    "ply": 26,
@@ -300,7 +300,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": "You can also play with your pieces — the knight from d2 to c4. You're still sacrificing the h2-pawn; if he takes d4 and the bishop takes h2, nothing has changed — you'll still have a monster centre, and Black will have logistical problems getting the bishop back out."
+   "spoken": "You can also play with your pieces — the knight from d2 to c4. You're still sacrificing the h2-pawn; if they take d4 and the bishop takes h2, nothing has changed — you'll still have a monster centre, and Black will have logistical problems getting the bishop back out."
   },
   {
    "ply": 28,

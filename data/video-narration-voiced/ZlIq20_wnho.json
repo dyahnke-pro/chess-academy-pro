@@ -63,7 +63,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Now the bishop to g4 pins your knight, and by pinning it he's exerting indirect pressure on the d4-pawn. So where should you put this bishop with an eye toward that?"
+   "spoken": "Now the bishop to g4 pins your knight, and by pinning it they're exerting indirect pressure on the d4-pawn. So where should you put this bishop with an eye toward that?"
   },
   {
    "ply": 11,
@@ -72,7 +72,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "The bishop to f7 doesn't work because of the queen takes f7 — he thinks he's cool, but you're going to show him he's not. This is why you shouldn't be afraid of"
+   "spoken": "The bishop to f7 doesn't work because of the queen takes f7 — they think he's cool, but you're going to show them they're not. This is why you shouldn't be afraid of"
   },
   {
    "ply": 12,
@@ -90,7 +90,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "Now, what would h3 and g4 mean in terms of where you castle? You basically commit to castling queenside — but that's okay, because he's developed so poorly that it's fine for you to telegraph it; he's not going to checkmate you, he doesn't have anything."
+   "spoken": "Now, what would h3 and g4 mean in terms of where you castle? You basically commit to castling queenside — but that's okay, because he's developed so poorly that it's fine for you to telegraph it; they're not going to checkmate you, they don't have anything."
   },
   {
    "ply": 14,
@@ -108,7 +108,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "And since you've decided to castle queenside, let's castle queenside — the queen to e2, castle — and then you're going to start attacking on the kingside, even though he's not castled."
+   "spoken": "And since you've decided to castle queenside, let's castle queenside — the queen to e2, castle — and then you're going to start attacking on the kingside, even though they're not castled."
   },
   {
    "ply": 16,
@@ -117,14 +117,14 @@
    "line": [
     "Bg6"
    ],
-   "spoken": "That doesn't matter — it doesn't mean you can't attack on the kingside. The queen to e2, so the rook is the star of the show on the d-file. Do you need to defend this square? I'd say no, probably not — you can just castle, and if he takes, I'll show why that's fine. You're ahead in development, so the immediate association you should make is to open up the centre — so the first step is to open it up a little more so you can better exploit your lead. Now, what should you capture here? This is not an obvious answer at all — there are actually three plausible captures, all with a compelling case. You can take f7, luring the king onto f7, sacrificing your bishop to try to mate him; you can also play e-takes-d7. Let's do it, punish him, get your hands dirty, since his whole queenside is undeveloped."
+   "spoken": "That doesn't matter — it doesn't mean you can't attack on the kingside. The queen to e2, so the rook is the star of the show on the d-file. Do you need to defend this square? I'd say no, probably not — you can just castle, and if they take, the recapture is fine for you. You're ahead in development, so the immediate association you should make is to open up the centre — so the first step is to open it up a little more so you can better exploit your lead. Now, what should you capture here? This is not an obvious answer at all — there are actually three plausible captures, all with a compelling case. You can take f7, luring the king onto f7, sacrificing your bishop to try to mate them; you can also play e-takes-d7. Let's do it, punish them, get your hands dirty, since their whole queenside is undeveloped."
   },
   {
    "ply": 4,
    "t": 329,
    "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": "This is risky, because it's a whole piece. If you consolidate, the obvious move is e-takes-d6, opening up more of the centre, but there's also a more concrete move, potentially more powerful: e6, to prepare the queen to f7, checkmate — I don't know which is better, but you'll see. The bishop to f6 is a good move, and now you need to find a way to break down his defences, at the core of which is this pawn on d6. g5 is very tempting, but he just goes the bishop to e5, and that doesn't accomplish as much as it seems, because the queen defends f7. So you play the bishop to f4 — the kind of move a lot of people struggle with at any level, because it doesn't carry the pizzazz you associate with attacks, but remember, attacks have to have these glue moves. You've opened up the d-file — and this would be checkmate were it not for the queen, which you can distract with the rook to d8 and then give the checkmate.",
+   "spoken": "This is risky, because it's a whole piece. If you consolidate, the obvious move is e-takes-d6, opening up more of the centre, but there's also a more concrete move, potentially more powerful: e6, to prepare the queen to f7, checkmate — I don't know which is better, but you'll see. The bishop to f6 is a good move, and now you need to find a way to break down their defences, at the core of which is this pawn on d6. g5 is very tempting, but they just go the bishop to e5, and that doesn't accomplish as much as it seems, because the queen defends f7. So you play the bishop to f4 — the kind of move a lot of people struggle with at any level, because it doesn't carry the pizzazz you associate with attacks, but remember, attacks have to have these glue moves. You've opened up the d-file — and this would be checkmate were it not for the queen, which you can distract with the rook to d8 and then give the checkmate.",
    "reanchor": true
   },
   {
@@ -134,7 +134,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "Let's dispel the fiction that he doesn't know what he's doing, and dispel one illusion: it's not about how much of the centre you control, it's about the quality of the pawns in the centre.",
+   "spoken": "Let's dispel the fiction that they don't know what they're doing, and dispel one illusion: it's not about how much of the centre you control, it's about the quality of the pawns in the centre.",
    "reanchor": true
   },
   {
@@ -292,7 +292,7 @@
    "t": 443,
    "fen": "rn1qkbnr/pp3ppp/2pp4/4p3/2BPP1b1/P1N2N2/1PP2PPP/R1BQK2R w KQkq - 1 7",
    "line": [],
-   "spoken": "Fast-forward to the moment of truth. The obvious move here was the queen to f3, but the reason I didn't do it is because of d5 — he closes in the bishop and gets a tempo he can use to at least castle, which doesn't make his king particularly safe but makes it a little harder to reach. The capture some people might be forgetting about is e-takes-d6 — you might look at this and think, whoa, you're allowing Black to take the queen, but look one step further: you take Black's queen, and this pawn — it's not so much that it threatens to take the knight, though that too is a big threat, you actually threaten to promote; Black has to prevent this by moving his knight away, but now you come back and take the bishop, and if you count the material you're up a pawn, which you can then defend with the bishop to f4.",
+   "spoken": "Fast-forward to the moment of truth. The obvious move here was the queen to f3, but the reason I didn't do it is because of d5 — they close in the bishop and gets a tempo they can use to at least castle, which doesn't make their king particularly safe but makes it a little harder to reach. The capture some people might be forgetting about is e-takes-d6 — you might look at this and think, whoa, you're allowing Black to take the queen, but look one step further: you take Black's queen, and this pawn — it's not so much that it threatens to take the knight, though that too is a big threat, you actually threaten to promote; Black has to prevent this by moving their knight away, but now you come back and take the bishop, and if you count the material you're up a pawn, which you can then defend with the bishop to f4.",
    "reanchor": true
   }
  ]

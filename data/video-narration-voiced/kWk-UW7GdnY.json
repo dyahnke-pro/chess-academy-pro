@@ -194,7 +194,7 @@
    "line": [
     "Ndb4"
    ],
-   "spoken": "You play the knight to b4 — no Greek gift to fear since your bishop guards g5. It attacks d4, but the real aim is White's light-squared bishop, the main tool for his kingside attack: eliminate it and there's no battery against h7, your structure stays intact, and his attack never gets off the ground. So White must choose between conceding the bishop or the pawn.",
+   "spoken": "You play the knight to b4 — no Greek gift to fear since your bishop guards g5. It attacks d4, but the real aim is White's light-squared bishop, the main tool for their kingside attack: eliminate it and there's no battery against h7, your structure stays intact, and their attack never gets off the ground. So White must choose between conceding the bishop or the pawn.",
    "reanchor": true
   },
   {
@@ -235,7 +235,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "You play f5, chasing the bishop and posing another dilemma. Yes, it weakens e6 — but if White trades on c6 he can't attack it effectively and it's nicely guarded by your bishop. Don't reason categorically that a move has a drawback and reject it; often the strengths outweigh the drawback.",
+   "spoken": "You play f5, chasing the bishop and posing another dilemma. Yes, it weakens e6 — but if White trades on c6 they can't attack it effectively and it's nicely guarded by your bishop. Don't reason categorically that a move has a drawback and reject it; often the strengths outweigh the drawback.",
    "reanchor": true
   },
   {
@@ -445,7 +445,7 @@
    "line": [
     "Rae1"
    ],
-   "spoken": "White plays a rook to e1. If he pushes h5, that's a long-term weakness you might pick off in a knight endgame.",
+   "spoken": "White plays a rook to e1. If they push h5, that's a long-term weakness you might pick off in a knight endgame.",
    "reanchor": true
   },
   {
@@ -664,7 +664,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "You take on f3, trying to flag him — I just spoiled what would have been an amazing game.",
+   "spoken": "You take on f3, trying to flag them — I just spoiled what would have been an amazing game.",
    "reanchor": true
   },
   {
@@ -763,7 +763,7 @@
     "exd5",
     "Nf6"
    ],
-   "spoken": "I'm not sure your opponent expected the queen recapture on d5, or whether d4 was his move against everything.",
+   "spoken": "I'm not sure your opponent expected the queen recapture on d5, or whether d4 was their move against everything.",
    "reanchor": true
   },
   {

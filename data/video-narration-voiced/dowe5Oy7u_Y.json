@@ -106,7 +106,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "or the knight to d2 — I'm pretty indifferent, both make sense, but I want to castle and not move the king around, so let's go the knight to d2. Actually I have a feeling the king to f1 is the theoretical move here, but I'm not playing theory, just the most natural moves. He could play d5, but g7 is hanging, so the bishop takes g7 would win the rook — so d5 isn't"
+   "spoken": "or the knight to d2 — I'm pretty indifferent, both make sense, but I want to castle and not move the king around, so let's go the knight to d2. Actually I have a feeling the king to f1 is the theoretical move here, but I'm not playing theory, just the most natural moves. They could play d5, but g7 is hanging, so the bishop takes g7 would win the rook — so d5 isn't"
   },
   {
    "ply": 14,
@@ -115,7 +115,7 @@
    "line": [
     "f6"
    ],
-   "spoken": "justified. f6 — not the greatest move; he's blunting the bishop, but look at the weaknesses he's creating on his kingside; the first thing I see is the knight on g8, targeted by the bishop —"
+   "spoken": "justified. f6 — not the greatest move; they're blunting the bishop, but look at the weaknesses they're creating on their kingside; the first thing I see is the knight on g8, targeted by the bishop —"
   },
   {
    "ply": 15,
@@ -124,7 +124,7 @@
    "line": [
     "Qb3"
    ],
-   "spoken": "a type-two undefended piece. So there's a very natural move that doesn't win a piece but creates further difficulties for him: the queen to b3, stacking the bishop and the queen. I'd have preferred this battery flipped,"
+   "spoken": "a type-two undefended piece. So there's a very natural move that doesn't win a piece but creates further difficulties for them: the queen to b3, stacking the bishop and the queen. I'd have preferred this battery flipped,"
   },
   {
    "ply": 16,
@@ -133,7 +133,7 @@
    "line": [
     "Bxd2+"
    ],
-   "spoken": "then you'd be threatening checkmate, but this is good enough — he has to take. A lot of people would grab instinctively with the knight, and you will take with the knight — but I'll point out that the king takes wouldn't be stupid either: the king in the centre isn't great, but he's got no pieces out, and there's something to be said for opening the e-file quickly and slamming e5. But something"
+   "spoken": "then you'd be threatening checkmate, but this is good enough — they have to take. A lot of people would grab instinctively with the knight, and you will take with the knight — but I'll point out that the king takes wouldn't be stupid either: the king in the centre isn't great, but he's got no pieces out, and there's something to be said for opening the e-file quickly and slamming e5. But something"
   },
   {
    "ply": 17,
@@ -142,7 +142,7 @@
    "line": [
     "Nxd2"
    ],
-   "spoken": "gives me the creeps about that move. I'll take with the knight, because you're not in a hurry to put a rook anywhere — he's not castling anytime soon; two of your pieces stop his king from castling, so this is justified"
+   "spoken": "gives me the creeps about that move. I'll take with the knight, because you're not in a hurry to put a rook anywhere — they're not castling anytime soon; two of your pieces stop their king from castling, so this is justified"
   },
   {
    "ply": 18,
@@ -160,7 +160,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He can go d5, you take on d5; he can't castle there, and you take everything on c6 — he'll play a Danish Gambit of his own, the difference being he'll lose a bunch of his pieces."
+   "spoken": "They can go d5, you take on d5; they can't castle there, and you take everything on c6 — they'll play a Danish Gambit of their own, the difference being they'll lose a bunch of their pieces."
   },
   {
    "ply": 20,
@@ -169,7 +169,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "The queen to e7. He's not threatening to castle, so ask what his idea is: I think it's to bring the knight back to f7 and then castle, so you don't have forever. A lot of you say the rook to f1, and I like it, but there's an important question to ask: do you need the rook to f1?"
+   "spoken": "The queen to e7. They're not threatening to castle, so ask what their idea is: I think it's to bring the knight back to f7 and then castle, so you don't have forever. A lot of you say the rook to f1, and I like it, but there's an important question to ask: do you need the rook to f1?"
   },
   {
    "ply": 21,
@@ -178,7 +178,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "When you're preparing a move, allocate a couple of seconds to whether you even need the preparatory move — can you eliminate the middleman? Those with sharp tactical vision see that you don't: you can play e5 straight away, f-takes-e5, take with the bishop, and if he takes that bishop, his queen gets skewered with the rook to e1."
+   "spoken": "When you're preparing a move, allocate a couple of seconds to whether you even need the preparatory move — can you eliminate the middleman? Those with sharp tactical vision see that you don't: you can play e5 straight away, f-takes-e5, take with the bishop, and if they take that bishop, their queen gets skewered with the rook to e1."
   },
   {
    "ply": 22,
@@ -196,7 +196,7 @@
    "line": [
     "Ba3"
    ],
-   "spoken": "It's a superfluous bishop now — its role was to help prepare e5, and now that e5 is played and doesn't need protection, this bishop can seek greener pastures, particularly because the bishop on a3 covers the f8-square and makes it even harder for him to castle."
+   "spoken": "It's a superfluous bishop now — its role was to help prepare e5, and now that e5 is played and doesn't need protection, this bishop can seek greener pastures, particularly because the bishop on a3 covers the f8-square and makes it even harder for them to castle."
   },
   {
    "ply": 24,
@@ -231,7 +231,7 @@
    "t": 488,
    "fen": "rnb1k2r/pp1pq1pp/7n/2p1Pp2/2B5/BQ6/P2N1PPP/R4RK1 w kq - 0 13",
    "line": [],
-   "spoken": "The bishop to d5 because there are no other good squares — I want the bishop on this diagonal to make sure he's not castled, and it also centralises the bishop.",
+   "spoken": "The bishop to d5 because there are no other good squares — I want the bishop on this diagonal to make sure they're not castled, and it also centralises the bishop.",
    "reanchor": true
   },
   {
@@ -243,7 +243,7 @@
     "Nc6",
     "Nc4"
    ],
-   "spoken": "He can't take on e5 — nothing changed, you'd just take back and then pin his queen. Look at these holes in his position. His knight coming out — he should go the knight to d4 here and attack my queen, and then you shouldn't rush with a check, you should just move your queen."
+   "spoken": "They can't take on e5 — nothing changed, you'd just take back and then pin their queen. Look at these holes in their position. Their knight coming out — they should go the knight to d4 here and attack my queen, and then you shouldn't rush with a check, you should just move your queen."
   },
   {
    "ply": 28,
@@ -284,7 +284,7 @@
    "t": 589,
    "fen": "r1bk3r/pp1pq1pp/2n4n/2pBPp2/2N5/BQ6/P4PPP/R4RK1 w - - 4 15",
    "line": [],
-   "spoken": "g6 — maybe he can then take on e5; I think he's trying to unpin himself preemptively so he can take on e5. But let's not stop calculating: if you go the knight to d6 and he plays the queen takes e5, how can you support the knight?",
+   "spoken": "g6 — maybe they can then take on e5; I think they're trying to unpin themselves preemptively so they can take on e5. But let's not stop calculating: if you go the knight to d6 and they play the queen takes e5, how can you support the knight?",
    "reanchor": true
   },
   {
@@ -303,7 +303,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "Why is that even a good thing — don't you want a pawn to support the knight? In principle yes, but the queen takes e5 works in your benefit, because it opens up the position further, and the side with more active pieces generally benefits — so you want him to take. He plays b6, very solid. I see taking the knight on c6, which doesn't lead anywhere after d-takes-c6 — but imagine a rook on d1 x-raying his king; then you could step aside with the knight and win his queen. Which rook to d1? If you put this rook on d1, it restricts the other from coming to e1; he'll probably play the king to c7."
+   "spoken": "Why is that even a good thing — don't you want a pawn to support the knight? In principle yes, but the queen takes e5 works in your benefit, because it opens up the position further, and the side with more active pieces generally benefits — so you want them to take. They play b6, very solid. I see taking the knight on c6, which doesn't lead anywhere after d-takes-c6 — but imagine a rook on d1 x-raying their king; then you could step aside with the knight and win their queen. Which rook to d1? If you put this rook on d1, it restricts the other from coming to e1; they'll probably play the king to c7."
   },
   {
    "ply": 31,
@@ -312,7 +312,7 @@
    "line": [
     "Rfd1"
    ],
-   "spoken": "You want to escape the pin, and if he does, you might want this other rook to come to c1, to once again re-pin the king — so the rook to d1, and if he takes on e5, you take his knight with a devastating discovery. The consideration is simple: when deciding which rook to put on a square, look at what the other rook will be doing."
+   "spoken": "You want to escape the pin, and if they do, you might want this other rook to come to c1, to once again re-pin the king — so the rook to d1, and if they take on e5, you take their knight with a devastating discovery. The consideration is simple: when deciding which rook to put on a square, look at what the other rook will be doing."
   },
   {
    "ply": 32,
@@ -321,7 +321,7 @@
    "line": [
     "Kc7"
    ],
-   "spoken": "That sometimes requires a prediction — I predicted he'd go the king to c7, and then you'd put the other rook on c1. He does."
+   "spoken": "That sometimes requires a prediction — I predicted they'd go the king to c7, and then you'd put the other rook on c1. They do."
   },
   {
    "ply": 33,
@@ -365,7 +365,7 @@
    "line": [
     "Nb5+"
    ],
-   "spoken": "You're going to step aside with the knight — I'm making this quickly to not lose on time — and this puts him in a very difficult situation: if he goes the king back to d8, that's why you put the rook there, and you take his"
+   "spoken": "You're going to step aside with the knight — I'm making this quickly to not lose on time — and this puts them in a very difficult situation: if they go the king back to d8, that's why you put the rook there, and you take their"
   },
   {
    "ply": 36,
@@ -374,7 +374,7 @@
    "line": [
     "Kb8"
    ],
-   "spoken": "knight, a free knight, and that's winning. If he goes the king to b8, then the queen — and this is elegant, all three of your major pieces have taken a turn x-raying the king; if this pawn were gone from b6, you'd have a devastating discovery. So what move comes to mind here?"
+   "spoken": "knight, a free knight, and that's winning. If they go the king to b8, then the queen — and this is elegant, all three of your major pieces have taken a turn x-raying the king; if this pawn were gone from b6, you'd have a devastating discovery. So what move comes to mind here?"
   },
   {
    "ply": 37,
@@ -383,7 +383,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": "This guy is definitely not an easy opponent. I like the bishop takes c5, blasting open the pathways to his king and threatening the bishop to d6. He has to take, and it's still not easy for you to win — in fact you might want to hold off on the discovered check until you get all of your pieces into the attack."
+   "spoken": "This guy is definitely not an easy opponent. I like the bishop takes c5, blasting open the pathways to their king and threatening the bishop to d6. They have to take, and it's still not easy for you to win — in fact you might want to hold off on the discovered check until you get all of your pieces into the attack."
   },
   {
    "ply": 38,
@@ -401,7 +401,7 @@
    "line": [
     "Rxc5"
    ],
-   "spoken": "Here you're just going to take, no rush — you create another x-ray against this queen, and hopefully this is the final straw that leads him to collapse."
+   "spoken": "Here you're just going to take, no rush — you create another x-ray against this queen, and hopefully this is the final straw that leads them to collapse."
   },
   {
    "ply": 40,
@@ -435,7 +435,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "The knight to d4 it is. I really wish that had worked. This is completely winning, because you're threatening a million things and overwhelming him."
+   "spoken": "The knight to d4 it is. I really wish that had worked. This is completely winning, because you're threatening a million things and overwhelming them."
   },
   {
    "ply": 42,
@@ -444,7 +444,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "The immediate threat, by the way, is the bishop takes c6, opening the attack on his queen and simultaneously threatening checkmate. That rook to e8 is a really good move."
+   "spoken": "The immediate threat, by the way, is the bishop takes c6, opening the attack on their queen and simultaneously threatening checkmate. That rook to e8 is a really good move."
   },
   {
    "ply": 43,
@@ -453,7 +453,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "Let's go h3 to stop the back-rank threats — he's definitely defending super well, but I don't see a defense; there are just too many threats. h3 was important, because he was threatening the rook takes e1, mate."
+   "spoken": "Let's go h3 to stop the back-rank threats — he's definitely defending super well, but I don't see a defense; there are just too many threats. h3 was important, because they were threatening the rook takes e1, mate."
   },
   {
    "ply": 44,
@@ -480,7 +480,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "So he's going to lose his queen — he has to take back and then he loses his queen; I don't see a defense here."
+   "spoken": "So they're going to lose their queen — they have to take back and then they lose their queen; I don't see a defense here."
   },
   {
    "ply": 47,
@@ -489,7 +489,7 @@
    "line": [
     "Rxe5"
    ],
-   "spoken": "You take his queen, and now on top of that"
+   "spoken": "You take their queen, and now on top of that"
   },
   {
    "ply": 48,
@@ -507,7 +507,7 @@
    "line": [
     "Ne6+"
    ],
-   "spoken": "g6 is what I'm thinking, but looking a little longer I see an even better move — the queen to g3, or g6, it really doesn't matter; the knight to e6 with check. He can't bring his king back because you check, so he has to give up his rook, and he ends with two pieces for the queen and his king in huge trouble — completely winning."
+   "spoken": "g6 is what I'm thinking, but looking a little longer I see an even better move — the queen to g3, or g6, it really doesn't matter; the knight to e6 with check. They can't bring their king back because you check, so they have to give up their rook, and they end with two pieces for the queen and their king in huge trouble — completely winning."
   },
   {
    "ply": 51,

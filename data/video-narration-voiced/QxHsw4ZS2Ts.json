@@ -33,7 +33,7 @@
       "line": [
         "c6"
       ],
-      "spoken": "He declines with c6 — the Slav; I don't think you've faced it, or maybe once."
+      "spoken": "They decline with c6 — the Slav; I don't think you've faced it, or maybe once."
     },
     {
       "ply": 3,
@@ -77,7 +77,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "Now you play the knight to c3. Whether you can play this line hinges on Black playing the main move, the knight to f6; if he plays the knight to c6, you have a second, also very dangerous idea."
+      "spoken": "Now you play the knight to c3. Whether you can play this line hinges on Black playing the main move, the knight to f6; if they play the knight to c6, you have a second, also very dangerous idea."
     },
     {
       "ply": 8,
@@ -201,7 +201,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "greedy here, entirely possible, but I think you should be principled and stick to e5. You're welcome to follow with an engine and laugh at me, but that violates the whole zen of this. I think he takes d5, and the bishop to c4 might have been a lot better — but I want to be principled in the centre. You considered d4; Black can also move the knight — to e4, and there I thought you also get a better endgame: after the knight to e4 you refrain from taking d5, since you've got nothing developed and Black has the nasty queen to h4 with check, but after the knight to e4 you play the knight takes e4, d-takes-e4, and again trade on d8, and Black has a serious pawn weakness on e4 that you attack with the knight to c3 or g3; White's better. What else can Black do? The knight to g4, but then you take the pawn with the queen, the queen takes d5 — so I don't, and maybe this is minus two, but I don't see off the top of my head"
+      "spoken": "greedy here, entirely possible, but I think you should be principled and stick to e5. You're welcome to follow with an engine and laugh at me, but that violates the whole zen of this. I think they take d5, and the bishop to c4 might have been a lot better — but I want to be principled in the centre. You considered d4; Black can also move the knight — to e4, and there I thought you also get a better endgame: after the knight to e4 you refrain from taking d5, since you've got nothing developed and Black has the nasty queen to h4 with check, but after the knight to e4 you play the knight takes e4, d-takes-e4, and again trade on d8, and Black has a serious pawn weakness on e4 that you attack with the knight to c3 or g3; White's better. What else can Black do? The knight to g4, but then you take the pawn with the queen, the queen takes d5 — so I don't, and maybe this is minus two, but I don't see off the top of my head"
     },
     {
       "ply": 18,
@@ -210,7 +210,7 @@
       "line": [
         "Ng4"
       ],
-      "spoken": "what's so scary about this position, beyond Black's lead in development. Maybe there's a crazy idea leaving that knight where it is and playing the bishop to c5, accelerating development. But the knight to g4 is on the board — and I'm beginning to see why you might be in trouble. What I underestimated is that after the queen takes d5, Black has the weird-looking queen to b6, and suddenly your queen is left stranded in the centre and Black threatens a devastating check on f2 — he gets his pieces out so quickly. So you need to amend your strategy: develop at all costs, accelerate before worrying about the d5-pawn. How can you supercharge development? Can you develop with tempo, attacking a piece?"
+      "spoken": "what's so scary about this position, beyond Black's lead in development. Maybe there's a crazy idea leaving that knight where it is and playing the bishop to c5, accelerating development. But the knight to g4 is on the board — and I'm beginning to see why you might be in trouble. What I underestimated is that after the queen takes d5, Black has the weird-looking queen to b6, and suddenly your queen is left stranded in the centre and Black threatens a devastating check on f2 — they get their pieces out so quickly. So you need to amend your strategy: develop at all costs, accelerate before worrying about the d5-pawn. How can you supercharge development? Can you develop with tempo, attacking a piece?"
     },
     {
       "ply": 19,
@@ -228,7 +228,7 @@
       "line": [
         "Bc5"
       ],
-      "spoken": "because he'd have to sense that the bishop takes g4 meets the queen to h4 with check, and just continue developing as if nothing's the matter. The bishop to c5 is very, very dangerous. Let me spell out why the bishop takes g4 is so unappetising: the bishop takes g4, the queen to h4 with check, g3, the queen takes g4 — the queens are off, but your king is still devastatingly weak, and Black can swing the knight into d4, too many threats, and you don't get to complete your development. So the best move here might be the queen takes d5 — the trickiest move you can play: you take a pawn, attack the bishop, and after the queen takes d5, the knight takes d5, you're also threatening a fork on c7. Black has the knight to f2, but that's bad, because you"
+      "spoken": "because they'd have to sense that the bishop takes g4 meets the queen to h4 with check, and just continue developing as if nothing's the matter. The bishop to c5 is very, very dangerous. Let me spell out why the bishop takes g4 is so unappetising: the bishop takes g4, the queen to h4 with check, g3, the queen takes g4 — the queens are off, but your king is still devastatingly weak, and Black can swing the knight into d4, too many threats, and you don't get to complete your development. So the best move here might be the queen takes d5 — the trickiest move you can play: you take a pawn, attack the bishop, and after the queen takes d5, the knight takes d5, you're also threatening a fork on c7. Black has the knight to f2, but that's bad, because you"
     },
     {
       "ply": 24,
@@ -357,7 +357,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "and e5, striking in the centre. The most similar opening to this is the Fantasy Caro-Kann — you might almost have a transposition to it; it's not exactly the same, since in the Fantasy there's a pawn on c6, but it's a very similar theme. In the Fantasy Caro-Kann, White plays the sharp move f3, and Black has a line where he goes the queen to b6, the knight to c3, and e5 — a reputable variation, though not that good for Black, because after d-takes-e5, the bishop to c5, there's the knight to a4; without that move the line would work like a charm. Notice how similar the idea is: e5 to weaken the a7-g1 diagonal. Same concept here — the queen to b6, e4, takes, takes, and e5.",
+      "spoken": "and e5, striking in the centre. The most similar opening to this is the Fantasy Caro-Kann — you might almost have a transposition to it; it's not exactly the same, since in the Fantasy there's a pawn on c6, but it's a very similar theme. In the Fantasy Caro-Kann, White plays the sharp move f3, and Black has a line where they go the queen to b6, the knight to c3, and e5 — a reputable variation, though not that good for Black, because after d-takes-e5, the bishop to c5, there's the knight to a4; without that move the line would work like a charm. Notice how similar the idea is: e5 to weaken the a7-g1 diagonal. Same concept here — the queen to b6, e4, takes, takes, and e5.",
       "reanchor": true
     }
   ]

@@ -259,7 +259,7 @@
     "g3",
     "Qh3"
    ],
-   "spoken": "White plays g3, and the queen sinks into h3. This is all theory — I'm rusty on it, and White looks out of book too. Your compensation is clear: a development lead and Swiss-cheese light squares around White's king. If his bishop could reach g2, Black would have nothing — but it can't, so those weak light squares are a lasting problem. The immediate threat is a bishop to g4, hitting the queen.",
+   "spoken": "White plays g3, and the queen sinks into h3. This is all theory — I'm rusty on it, and White looks out of book too. Your compensation is clear: a development lead and Swiss-cheese light squares around White's king. If their bishop could reach g2, Black would have nothing — but it can't, so those weak light squares are a lasting problem. The immediate threat is a bishop to g4, hitting the queen.",
    "reanchor": true
   },
   {
@@ -279,7 +279,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Now the bishop can't move, and it does nothing against a bishop to g4 — so let's play it and see where his queen goes."
+   "spoken": "Now the bishop can't move, and it does nothing against a bishop to g4 — so let's play it and see where their queen goes."
   },
   {
    "ply": 31,
@@ -315,7 +315,7 @@
    "line": [
     "Bxg3"
    ],
-   "spoken": "So a bishop capture on g3. If White grabs the light-squared bishop instead he gets mated — a queen to h2, the king to f1, a queen to f2 — so he essentially has to take, and then a queen recapture on g3 gives at least perpetual, though I believe you have more.",
+   "spoken": "So a bishop capture on g3. If White grabs the light-squared bishop instead they get mated — a queen to h2, the king to f1, a queen to f2 — so he essentially has to take, and then a queen recapture on g3 gives at least perpetual, though I believe you have more.",
    "reanchor": true
   },
   {
@@ -617,7 +617,7 @@
     "d5",
     "exd5"
    ],
-   "spoken": "Marshall was actually the second person to play it. His original idea wasn't the knight recapture on d5 — he first played it against Frere in 1917, then against Capablanca.",
+   "spoken": "Marshall was actually the second person to play it. Their original idea wasn't the knight recapture on d5 — he first played it against Frere in 1917, then against Capablanca.",
    "reanchor": true
   },
   {
@@ -627,7 +627,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "Against Capablanca, in his very first Marshall in a simul, he played a capture on e4 here — still the second-most-popular move, but modern theory says it's just not good for Black.",
+   "spoken": "Against Capablanca, in their very first Marshall in a simul, they played a capture on e4 here — still the second-most-popular move, but modern theory says it's just not good for Black.",
    "reanchor": true
   },
   {
@@ -677,7 +677,7 @@
    "t": 940.5,
    "fen": "r1bq1rk1/2p1bppp/p1n2n2/1p1P4/4p3/1BP2N2/PP1P1PPP/RNBQR1K1 w - - 0 10",
    "line": [],
-   "spoken": "Everybody up to the 1940s played a knight to f6 after the rook capture, rerouting the knight via g4 — nowadays that's not good. The move c6 was first played only in 1939 by Conel Hugh O'Donel Alexander, who also helped decrypt German communications in the war — the Imitation Game connection. After c6, d4, a bishop to d6, a rook to e1, a queen to h4, g3, a queen to h3, there are two main tries for White: a bishop to e3 and a rook to e4. A knight to d2 is just bad — in your game it's essentially a fatal mistake because of the bishop to g4. Black overwhelms White in the center and on the kingside; if a knight to f3, then a nasty pin with a queen to h5 and a rook to e8 leaves White in ruins. After f3 and the bishop to g3, if White had captured, the winning move is a knight to f4, threatening mate on g2; if he gives up the rook, a bishop capture on f3 and you're winning on material and attack. The engine says White's only try is a rook to e2 giving up the exchange, but after the bishop capture on c2 and a queen to e2, Black is much better. So the Marshall was absolutely not refuted — Marshall just didn't play accurately because the theory was undeveloped. Black is doing great in the Marshall today.",
+   "spoken": "Everybody up to the 1940s played a knight to f6 after the rook capture, rerouting the knight via g4 — nowadays that's not good. The move c6 was first played only in 1939 by Conel Hugh O'Donel Alexander, who also helped decrypt German communications in the war — the Imitation Game connection. After c6, d4, a bishop to d6, a rook to e1, a queen to h4, g3, a queen to h3, there are two main tries for White: a bishop to e3 and a rook to e4. A knight to d2 is just bad — in your game it's essentially a fatal mistake because of the bishop to g4. Black overwhelms White in the center and on the kingside; if a knight to f3, then a nasty pin with a queen to h5 and a rook to e8 leaves White in ruins. After f3 and the bishop to g3, if White had captured, the winning move is a knight to f4, threatening mate on g2; if they give up the rook, a bishop capture on f3 and you're winning on material and attack. The engine says White's only try is a rook to e2 giving up the exchange, but after the bishop capture on c2 and a queen to e2, Black is much better. So the Marshall was absolutely not refuted — Marshall just didn't play accurately because the theory was undeveloped. Black is doing great in the Marshall today.",
    "reanchor": true
   },
   {
@@ -726,7 +726,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "White plays a4 and is supposed to be better, because the c3 square is left open for his knight — that's the key difference.",
+   "spoken": "White plays a4 and is supposed to be better, because the c3 square is left open for their knight — that's the key difference.",
    "reanchor": true
   },
   {

@@ -141,7 +141,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "He plays the strong bishop to g5, pinning your knight — and the real meaning of that pin is that your d5-pawn loses one of its key defenders.",
+   "spoken": "They play the strong bishop to g5, pinning your knight — and the real meaning of that pin is that your d5-pawn loses one of its key defenders.",
    "teaches": [
     "a pin removes a defender"
    ]
@@ -184,7 +184,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "Because your bishop now guards d5, he can't recapture there with the queen — only with the knight. He does, and that's a mistake: he never stops to weigh the consequences.",
+   "spoken": "Because your bishop now guards d5, they can't recapture there with the queen — only with the knight. They do, and that's a mistake: they never stop to weigh the consequences.",
    "kind": "main",
    "teaches": [
     "forcing the worse recapture"
@@ -226,7 +226,7 @@
    "line": [
     "Nf4"
    ],
-   "spoken": "Now the theme: the queen is the worst defender of all. His queen on d1 is the only thing guarding the rook on a1, so you must drive it off that square.",
+   "spoken": "Now the theme: the queen is the worst defender of all. Their queen on d1 is the only thing guarding the rook on a1, so you must drive it off that square.",
    "teaches": [
     "the queen is the worst defender"
    ]
@@ -238,7 +238,7 @@
    "line": [
     "Bb4+"
    ],
-   "spoken": "The bishop check on b4 does it — practically mate but for the knight interposition, and after it his position is on the verge of collapse.",
+   "spoken": "The bishop check on b4 does it — practically mate but for the knight interposition, and after it their position is on the verge of collapse.",
    "kind": "main",
    "teaches": [
     "drive off the overworked queen"

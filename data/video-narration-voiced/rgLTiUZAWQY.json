@@ -150,7 +150,7 @@
    "t": 2678,
    "fen": "r2qkb1r/pppbpppp/5n2/3Pn3/2P5/5N2/PP2BPPP/RNBQK2R b KQkq - 2 8",
    "line": [],
-   "spoken": "After a trade on f3, Black can't easily free himself with e6, since b7 hangs.",
+   "spoken": "After a trade on f3, Black can't easily free themselves with e6, since b7 hangs.",
    "reanchor": true
   },
   {
@@ -1216,7 +1216,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Black is in trouble; he had to play h5.",
+   "spoken": "Black is in trouble; they had to play h5.",
    "reanchor": true
   },
   {

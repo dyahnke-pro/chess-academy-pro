@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "my main move, and the most popular chess move — the King's Pawn Game. He goes the knight to f3."
+   "spoken": "my main move, and the most popular chess move — the King's Pawn Game. They go the knight to f3."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "He plays the bishop to b5 — the Ruy Lopez opening, also called the Spanish Game — and the idea of this move is that he's indirectly putting pressure on the pawn on e5."
+   "spoken": "They play the bishop to b5 — the Ruy Lopez opening, also called the Spanish Game — and the idea of this move is that he's indirectly putting pressure on the pawn on e5."
   },
   {
    "ply": 6,
@@ -60,7 +60,7 @@
    "line": [
     "Ba4"
    ],
-   "spoken": "This might seem to merely invite my fate, because he can take on c6 and then capture my pawn — but after the game I'll talk about why that's not as effective as it might seem."
+   "spoken": "This might seem to merely invite my fate, because they can take on c6 and then capture my pawn — but after the game I'll talk about why that's not as effective as it might seem."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "He drops his bishop back correctly, and in turn I will simply develop my knight and pressure his pawn on e4. Now, once again, I'm not really attacking the pawn on e4 — the reason is that I haven't completed my development."
+   "spoken": "They drop their bishop back correctly, and in turn I will simply develop my knight and pressure their pawn on e4. Now, once again, I'm not really attacking the pawn on e4 — the reason is that I haven't completed my development."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "When you haven't completed your development, especially your kingside — I haven't developed my bishop, haven't castled — you want to be very careful about grabbing pawns. It's a moot point now, because he's brought his knight out and defended the pawn."
+   "spoken": "When you haven't completed your development, especially your kingside — I haven't developed my bishop, haven't castled — you want to be very careful about grabbing pawns. It's a moot point now, because he's brought their knight out and defended the pawn."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "I'm a little annoyed by the pressure the bishop is exerting on the knight, so I'm going to go b5 and chase his bishop away."
+   "spoken": "I'm a little annoyed by the pressure the bishop is exerting on the knight, so I'm going to go b5 and chase their bishop away."
   },
   {
    "ply": 11,
@@ -114,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "I anticipate my opponent will just continue his own development by castling — still theory, common fare. He does castle as anticipated. Now I'm looking at this bishop on c8, and where I'd really like it is g4, to pin the knight to the queen — pins are a huge asset. I could also fianchetto, placing one of my bishops on the long diagonal,"
+   "spoken": "I anticipate my opponent will just continue their own development by castling — still theory, common fare. They do castle as anticipated. Now I'm looking at this bishop on c8, and where I'd really like it is g4, to pin the knight to the queen — pins are a huge asset. I could also fianchetto, placing one of my bishops on the long diagonal,"
   },
   {
    "ply": 14,
@@ -132,7 +132,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "He plays d3."
+   "spoken": "They play d3."
   },
   {
    "ply": 16,
@@ -141,7 +141,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "And he does allow my bishop to access this very active development square. Notice how I've positioned all of my pieces on optimal squares — this bishop lining itself up on the king,"
+   "spoken": "And they do allow my bishop to access this very active development square. Notice how I've positioned all of my pieces on optimal squares — this bishop lining itself up on the king,"
   },
   {
    "ply": 17,
@@ -150,7 +150,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "this bishop pinning the queen. He chases my bishop away. Now, a lot of beginners have a tendency, when they see a capture, to go for it — here I can"
+   "spoken": "this bishop pinning the queen. They chase my bishop away. Now, a lot of beginners have a tendency, when they see a capture, to go for it — here I can"
   },
   {
    "ply": 18,
@@ -168,7 +168,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "He pins my own knight — he liked that idea. So this is a very interesting situation that's now arisen."
+   "spoken": "They pin my own knight — they liked that idea. So this is a very interesting situation that's now arisen."
   },
   {
    "ply": 20,
@@ -177,7 +177,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "I'm annoyed by the pin, and I'm sure he's annoyed by his pin too — the question is who can get rid of their pin first, and I think that's going to be me; I'll do the same thing he did and chase his bishop away,"
+   "spoken": "I'm annoyed by the pin, and I'm sure he's annoyed by their pin too — the question is who can get rid of their pin first, and I think that's going to be me; I'll do the same thing they did and chase their bishop away,"
   },
   {
    "ply": 21,
@@ -186,7 +186,7 @@
    "line": [
     "Bh4"
    ],
-   "spoken": "and tempt him into taking my knight. He drops his bishop back."
+   "spoken": "and tempt them into taking my knight. They drop their bishop back."
   },
   {
    "ply": 22,
@@ -195,7 +195,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "And here what I'm going to do is just say goodbye to that — I play the move g5, attacking the bishop, which has to drop back to g3. Now you might look at g5 and say, wait, you're pushing pawns out on your kingside, aren't you about to castle short, and won't your king be very weak? The answer to all of those is undoubtedly yes — but after the game I'll unpack why this is in fact justified in many cases; the better you become at chess, the better you become at strategically violating opening principles. He's left his bishop on h4, so I'm just going to grab it — and he hasn't gotten rid of the pin either. What have I gained with this capture? First, a bishop, a pretty big deal; but I've also gained access to the g-file — and when you're thinking about your opponent's king, you want to think about avenues to access it."
+   "spoken": "And here what I'm going to do is just say goodbye to that — I play the move g5, attacking the bishop, which has to drop back to g3. Now you might look at g5 and say, wait, you're pushing pawns out on your kingside, aren't you about to castle short, and won't your king be very weak? The answer to all of those is undoubtedly yes — but after the game I'll unpack why this is in fact justified in many cases; the better you become at chess, the better you become at strategically violating opening principles. He's left their bishop on h4, so I'm just going to grab it — and they haven't gotten rid of the pin either. What have I gained with this capture? First, a bishop, a pretty big deal; but I've also gained access to the g-file — and when you're thinking about your opponent's king, you want to think about avenues to access it."
   }
  ]
 }

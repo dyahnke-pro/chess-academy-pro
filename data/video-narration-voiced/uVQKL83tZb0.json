@@ -43,7 +43,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "He plays the knight to d4 — that's the Bird Defense."
+   "spoken": "They play the knight to d4 — that's the Bird Defense."
   },
   {
    "ply": 7,
@@ -61,7 +61,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "Black recaptures, e takes d4. The key is not to change your strategy just because he played a weird line."
+   "spoken": "Black recaptures, e takes d4. The key is not to change your strategy just because they played a weird line."
   },
   {
    "ply": 9,
@@ -106,7 +106,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "The coast is mostly clear — he's not threatening mate — so the knight to d2."
+   "spoken": "The coast is mostly clear — they're not threatening mate — so the knight to d2."
   },
   {
    "ply": 14,
@@ -181,7 +181,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "Black plays h6, thinking he's won a piece — if you move the knight he takes the bishop, but I've foreseen this; it's fine."
+   "spoken": "Black plays h6, thinking he's won a piece — if you move the knight they take the bishop, but I've foreseen this; it's fine."
   },
   {
    "ply": 25,
@@ -200,7 +200,7 @@
     "Rxg8",
     "Nf3"
    ],
-   "spoken": "Black recaptures on g8 and you play the knight to f3. This isn't hugely better for you — his pieces are active — but it's an endgame, so that activity matters less."
+   "spoken": "Black recaptures on g8 and you play the knight to f3. This isn't hugely better for you — their pieces are active — but it's an endgame, so that activity matters less."
   },
   {
    "ply": 28,
@@ -218,7 +218,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "So I move the rook to e1, out of the way — if he takes the knight he simply doesn't have enough for the piece."
+   "spoken": "So I move the rook to e1, out of the way — if they take the knight they simply don't have enough for the piece."
   },
   {
    "ply": 30,
@@ -254,7 +254,7 @@
    "line": [
     "Nb3"
    ],
-   "spoken": "In the endgame the rules are slightly different — with no queens, his 'attack' isn't scary, so you casually develop, the knight to b3."
+   "spoken": "In the endgame the rules are slightly different — with no queens, their 'attack' isn't scary, so you casually develop, the knight to b3."
   },
   {
    "ply": 35,
@@ -300,7 +300,7 @@
    "line": [
     "Bb4+"
    ],
-   "spoken": "But his king and rook are on the same diagonal — always be alert to that — and you exploit it with the bishop to b4, check."
+   "spoken": "But their king and rook are on the same diagonal — always be alert to that — and you exploit it with the bishop to b4, check."
   },
   {
    "ply": 41,
@@ -346,7 +346,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "The knight to e4 — a beautiful, unassailable square. He can trade his bishop for it, but that's good for you; you're up the exchange."
+   "spoken": "The knight to e4 — a beautiful, unassailable square. They can trade their bishop for it, but that's good for you; you're up the exchange."
   },
   {
    "ply": 47,
@@ -386,7 +386,7 @@
     "Bxe4",
     "Rxe4"
    ],
-   "spoken": "Black takes on e4 and you recapture with the rook — he's doing a lot of your work for you."
+   "spoken": "Black takes on e4 and you recapture with the rook — they're doing a lot of your work for you."
   },
   {
    "ply": 54,
@@ -433,7 +433,7 @@
    "line": [
     "Rf4"
    ],
-   "spoken": "Black offers the rook to f4 — great, he's helping you trade everything."
+   "spoken": "Black offers the rook to f4 — great, they're helping you trade everything."
   },
   {
    "ply": 61,
@@ -582,7 +582,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "b3 — placing your pawns as bumpers to stop his pawns and exhaust his moves."
+   "spoken": "b3 — placing your pawns as bumpers to stop their pawns and exhaust their moves."
   },
   {
    "ply": 82,
@@ -610,7 +610,7 @@
     "bxa4",
     "a3"
    ],
-   "spoken": "Black recaptures and you play a3 — now he's in zugzwang, where every move harms his position."
+   "spoken": "Black recaptures and you play a3 — now they're in zugzwang, where every move harms their position."
   },
   {
    "ply": 86,
@@ -619,7 +619,7 @@
    "line": [
     "Kd7"
    ],
-   "spoken": "He has no choice but to move the king back, since his only pawn move gives one up."
+   "spoken": "They have no choice but to move the king back, since their only pawn move gives one up."
   },
   {
    "ply": 87,

@@ -204,7 +204,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "— so this is the last chance to exchange the pawns before White closes. White's at a further crossroads: the bishop takes d4, or the more traditional knight takes d4. Most of the time White doesn't even have the bishop-takes-d4 option, so less-experienced players auto-recapture with the knight. Run it through the computer and White is better, but he has to show tremendous precision, as in most King's Indian lines, and in a rapid game Black has a lot of easy moves and threats — and you know what happens in a King's Indian when Black gets the initiative.",
+   "spoken": "— so this is the last chance to exchange the pawns before White closes. White's at a further crossroads: the bishop takes d4, or the more traditional knight takes d4. Most of the time White doesn't even have the bishop-takes-d4 option, so less-experienced players auto-recapture with the knight. Run it through the computer and White is better, but they have to show tremendous precision, as in most King's Indian lines, and in a rapid game Black has a lot of easy moves and threats — and you know what happens in a King's Indian when Black gets the initiative.",
    "reanchor": true
   },
   {
@@ -234,7 +234,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "— and typically you take on f3, but White recaptures with the queen and the knight on f6 is suddenly hanging — that's the power of recapturing with the bishop. So the knight to e5 walks into c5, which is why you make a more flexible move: the low-hanging rook to e8, which won't harm your position, waiting for White to show his cards. Your queen on a5 may have done its job and should drop back to c7 to make the knight to e5 possible, since you can't keep the knight on d7 forever — it blocks the bishop on c8 and cramps you. The knight to c5 is tempting to hit e4, but I prefer it on e5, since with the queen on a5 White has a3 and b4 ideas, the knight on c5 seems flimsy, and White defends e4 easily and could push e5."
+   "spoken": "— and typically you take on f3, but White recaptures with the queen and the knight on f6 is suddenly hanging — that's the power of recapturing with the bishop. So the knight to e5 walks into c5, which is why you make a more flexible move: the low-hanging rook to e8, which won't harm your position, waiting for White to show their cards. Your queen on a5 may have done its job and should drop back to c7 to make the knight to e5 possible, since you can't keep the knight on d7 forever — it blocks the bishop on c8 and cramps you. The knight to c5 is tempting to hit e4, but I prefer it on e5, since with the queen on a5 White has a3 and b4 ideas, the knight on c5 seems flimsy, and White defends e4 easily and could push e5."
   },
   {
    "ply": 23,
@@ -259,7 +259,7 @@
    "t": 566,
    "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
    "line": [],
-   "spoken": "A classic King's Indian situation. What was the idea of the queen to a5? It's harder to see because of the bishop to e3; had your opponent played the main rook to e1, you'd really understand its value — it can swing over to h5, and it aims at the knight on c3, so b3, a very useful move for White to defend the c4-pawn, isn't possible with the queen on a5; that's a very common blunder at lower levels, since after b3 the knight hangs — I've even beaten titled players that way. So when c4 is attacked from b6 or e5, it's very hard to defend it adequately without b3. The queen to c2 — your opponent continues to improve his position.",
+   "spoken": "A classic King's Indian situation. What was the idea of the queen to a5? It's harder to see because of the bishop to e3; had your opponent played the main rook to e1, you'd really understand its value — it can swing over to h5, and it aims at the knight on c3, so b3, a very useful move for White to defend the c4-pawn, isn't possible with the queen on a5; that's a very common blunder at lower levels, since after b3 the knight hangs — I've even beaten titled players that way. So when c4 is attacked from b6 or e5, it's very hard to defend it adequately without b3. The queen to c2 — your opponent continues to improve their position.",
    "reanchor": true
   }
  ]

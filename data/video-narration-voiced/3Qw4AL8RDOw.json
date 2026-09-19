@@ -42,7 +42,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "So the line my coach taught me years ago — easy to learn, cool, and demonstrating positional principles: a check on b5. It's weird that your first move is with a bishop, but it develops with tempo, and if Black plays c6 now, you play the d-pawn takes c6, and since you haven't pushed to c4, c6 makes no sense for him. Black covers the check with the knight to d7 or —"
+   "spoken": "So the line my coach taught me years ago — easy to learn, cool, and demonstrating positional principles: a check on b5. It's weird that your first move is with a bishop, but it develops with tempo, and if Black plays c6 now, you play the d-pawn takes c6, and since you haven't pushed to c4, c6 makes no sense for them. Black covers the check with the knight to d7 or —"
   },
   {
    "ply": 6,
@@ -60,7 +60,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "So not the queen to e2 or a4, which give Black a way out by letting him trade off that awkward piece on d7 — you physically move the bishop to e2 to stop the bishop to g4."
+   "spoken": "So not the queen to e2 or a4, which give Black a way out by letting them trade off that awkward piece on d7 — you physically move the bishop to e2 to stop the bishop to g4."
   },
   {
    "ply": 11,
@@ -72,7 +72,7 @@
     "Bd7",
     "Bb5"
    ],
-   "spoken": "The idea is to stop the bishop to g4, and the reason you move the bishop at all is so that after a move like a4, Black doesn't rid himself of that awkward piece by agreeing to the bishop trade —",
+   "spoken": "The idea is to stop the bishop to g4, and the reason you move the bishop at all is so that after a move like a4, Black doesn't rid themselves of that awkward piece by agreeing to the bishop trade —",
    "reanchor": true
   },
   {
@@ -146,7 +146,7 @@
     "Nc6",
     "Nc3"
    ],
-   "spoken": "The knight to c6. Now d5 makes perfect sense — a tempo move hitting the knight, and, most importantly, denying Black the time to play the bishop to d6. You can prevent the bishop to d6 with the bishop to f4, a move you want anyway, because the bishop to d6 is the only way to blockade the passer; after the bishop to f4, the bishop to e7, d6, the bishop is almost trapped, and the passer becomes a great asset. g4 blunders a pawn, since you have two attackers on d4, so Black panics and blunders. The bishop to b4 is good; I don't like d6 here, since it doesn't gain a tempo and runs into the queen to b6 forcing a queen trade that leaves the pawn unguarded with the knight to e4 — too concrete — so you just castle, not a3. Like the e4-b6 game, you don't chase the bishop; you take the sting out of the pin by castling, and you want Black to take on c3 himself, losing a tempo compared to a3, and a3 would also take the a3-square from your dark-squared bishop, which gets a nice post there after the b-pawn recaptures. Then you develop the dark-squared bishop to g5 — this pin is underrated and very dangerous with Black castled kingside, the queen pressuring the knight, and the knight to g4 a huge threat; the bishop to e7 to escape the pin fails to d5 and d6. h6 — you can trade with the bishop takes f6, but it's early to trade queens when up a pawn, unlike up a piece where a queen trade helps simplify, so you keep the tension with the bishop to h4; if g5, that's amazing to provoke, weakening the knight and the king. The bishop to b7 walks into your idea, and the passer ends up deciding the game. The tricky bishop to c6 sets up an x-ray against the queen and precludes the take on c7, so you answer with the rook to d1, which protects the queen and the pawn at once and ends it, renewing the threat and keeping the bishop trapped. The queen to c6 is the most-popular-wrong-answer — you've won a minor piece and will trade queens soon. There's an elegant combination to win a second piece: the bishop takes f6, since the queen can't recapture, forcing the g-pawn to recapture, which opens the g-file for the queen to g3 with check — but not immediately, since the king goes to h8, so first the rook to d1 x-raying the queen, and if the bishop moves, the queen to g3 wins the queen; order of operations matters, since the rook to d1 first then the bishop takes f6 lets the queen recapture. The knight to e4 is terrible, since Black takes it hitting your queen. The rook to c7 — heavy pieces are bad defenders, and the bishop on d7 is on life support, so the knight to b5 plays itself; if he takes, the queen to g3 with check wins the queen and the rook. Let's finish in style: the queen to g3 with check, a discovery against the queen, you take the queen, and then take the rook, which has lost its support.",
+   "spoken": "The knight to c6. Now d5 makes perfect sense — a tempo move hitting the knight, and, most importantly, denying Black the time to play the bishop to d6. You can prevent the bishop to d6 with the bishop to f4, a move you want anyway, because the bishop to d6 is the only way to blockade the passer; after the bishop to f4, the bishop to e7, d6, the bishop is almost trapped, and the passer becomes a great asset. g4 blunders a pawn, since you have two attackers on d4, so Black panics and blunders. The bishop to b4 is good; I don't like d6 here, since it doesn't gain a tempo and runs into the queen to b6 forcing a queen trade that leaves the pawn unguarded with the knight to e4 — too concrete — so you just castle, not a3. Like the e4-b6 game, you don't chase the bishop; you take the sting out of the pin by castling, and you want Black to take on c3 themselves, losing a tempo compared to a3, and a3 would also take the a3-square from your dark-squared bishop, which gets a nice post there after the b-pawn recaptures. Then you develop the dark-squared bishop to g5 — this pin is underrated and very dangerous with Black castled kingside, the queen pressuring the knight, and the knight to g4 a huge threat; the bishop to e7 to escape the pin fails to d5 and d6. h6 — you can trade with the bishop takes f6, but it's early to trade queens when up a pawn, unlike up a piece where a queen trade helps simplify, so you keep the tension with the bishop to h4; if g5, that's amazing to provoke, weakening the knight and the king. The bishop to b7 walks into your idea, and the passer ends up deciding the game. The tricky bishop to c6 sets up an x-ray against the queen and precludes the take on c7, so you answer with the rook to d1, which protects the queen and the pawn at once and ends it, renewing the threat and keeping the bishop trapped. The queen to c6 is the most-popular-wrong-answer — you've won a minor piece and will trade queens soon. There's an elegant combination to win a second piece: the bishop takes f6, since the queen can't recapture, forcing the g-pawn to recapture, which opens the g-file for the queen to g3 with check — but not immediately, since the king goes to h8, so first the rook to d1 x-raying the queen, and if the bishop moves, the queen to g3 wins the queen; order of operations matters, since the rook to d1 first then the bishop takes f6 lets the queen recapture. The knight to e4 is terrible, since Black takes it hitting your queen. The rook to c7 — heavy pieces are bad defenders, and the bishop on d7 is on life support, so the knight to b5 plays itself; if they take, the queen to g3 with check wins the queen and the rook. Let's finish in style: the queen to g3 with check, a discovery against the queen, you take the queen, and then take the rook, which has lost its support.",
    "reanchor": true
   },
   {
@@ -164,7 +164,7 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": "You'll separate the queen to d5 for another time. The knight to f6 is a fundamentally different line, not popular anymore — Black knows he's worse, and White has a million ways to cement the advantage. Stockfish 15 might say the bishop to b5 trick isn't the best move — I need to update my analysis from 2011 — but it won't ruin the edge. If the knight to d7, the simplest is d4, the knight takes d5, the knight to f3 — just develop your pieces; if a6, drop the bishop back to the nice active square on d3. And after the bishop to d7, you play the bishop to e2.",
+   "spoken": "You'll separate the queen to d5 for another time. The knight to f6 is a fundamentally different line, not popular anymore — Black knows they're worse, and White has a million ways to cement the advantage. Stockfish 15 might say the bishop to b5 trick isn't the best move — I need to update my analysis from 2011 — but it won't ruin the edge. If the knight to d7, the simplest is d4, the knight takes d5, the knight to f3 — just develop your pieces; if a6, drop the bishop back to the nice active square on d3. And after the bishop to d7, you play the bishop to e2.",
    "reanchor": true
   }
  ]

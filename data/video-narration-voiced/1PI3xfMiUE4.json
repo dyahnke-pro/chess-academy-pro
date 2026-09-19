@@ -306,7 +306,7 @@
     "Nxg3+",
     "Qxg3"
    ],
-   "spoken": "The knight takes on g3 with check — it was a mating threat — and you recapture with the queen. The trade actually helps you: Black has thinned his own attack, and now h3 is coming."
+   "spoken": "The knight takes on g3 with check — it was a mating threat — and you recapture with the queen. The trade actually helps you: Black has thinned their own attack, and now h3 is coming."
   },
   {
    "ply": 38,
@@ -397,7 +397,7 @@
    "line": [
     "Nh4"
    ],
-   "spoken": "But there may be a defence. The knight lands on h4 threatening ...Nf3, which works only by pulling your queen off f2 — so you sidestep the queen. And here c3 pays off: a bishop to c5 now would allow d4, so if ...Nf3 comes you take it with the rook and keep control of h2. Black has a perpetual for a draw if he wants it — I'd gladly take that; what would truly worry me is a slow strengthening move like ...Re8."
+   "spoken": "But there may be a defence. The knight lands on h4 threatening ...Nf3, which works only by pulling your queen off f2 — so you sidestep the queen. And here c3 pays off: a bishop to c5 now would allow d4, so if ...Nf3 comes you take it with the rook and keep control of h2. Black has a perpetual for a draw if they want it — I'd gladly take that; what would truly worry me is a slow strengthening move like ...Re8."
   }
  ]
 }

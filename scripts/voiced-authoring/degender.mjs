@@ -71,7 +71,13 @@ function pluralise(v) {
   if (/ed$/.test(lower)) return v;
   if (!/s$/.test(lower) || /ss$/.test(lower)) return null;   // not a -s verb: refuse
   if (/ies$/.test(lower)) return match(v, lower.slice(0, -3) + 'y');
-  if (/(ch|sh|x|z|s|o)es$/.test(lower)) return match(v, lower.slice(0, -2));
+  // 🚨 REQUIRE A GENUINE DOUBLE-S, NOT ANY s BEFORE "es". The first cut wrote
+  // `(ch|sh|x|z|s|o)es$` and turned "loses" into "los", "collapses" into
+  // "collaps", "chases" into "chas". Only a stem really ending ch/sh/x/z/ss/o
+  // takes the "-es" plural; everything else ("lose", "chase") is a silent-e
+  // stem that takes a plain "-s". Found by reading the diff — the output is
+  // still pronounceable, so nothing else would have caught it.
+  if (/(ch|sh|x|z|ss|o)es$/.test(lower)) return match(v, lower.slice(0, -2));
   return match(v, lower.slice(0, -1));
 }
 
@@ -84,7 +90,29 @@ function match(original, replacement) {
 
 const flagged = [];
 
-function transform(text, where) {
+/**
+ * Match each file's OWN formatting. The corpus is mixed — some authored files
+ * are one-space indented and some two — so a single hard-coded width reformats
+ * half of them. Sniffed from the file's second line, then proven by the
+ * round-trip guard rather than trusted.
+ */
+function indentOf(raw) {
+  const m = /\n( +)"/.exec(raw);
+  return m ? m[1].length : 2;
+}
+function serialise(doc, indent, trailingNewline, escapeUnicode) {
+  let out = JSON.stringify(doc, null, indent);
+  // One authored file writes its em-dashes as \u2014 rather than the literal
+  // character. `JSON.stringify` always emits the literal, so without this the
+  // guard would refuse that file forever and its "he" strings would never be
+  // fixed — a silent hole hiding behind a safety check.
+  if (escapeUnicode) {
+    out = out.replace(/[\u0080-\uffff]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`);
+  }
+  return out + (trailingNewline ? '\n' : '');
+}
+
+export function transform(text, where = 'inline') {
   let out = text;
 
   // 1. THE FREE ONES — no verb involved, so no agreement to get wrong.
@@ -135,8 +163,29 @@ function transform(text, where) {
     return `${they}${sp1}${pl}${rest ?? ''}`;
   });
 
+  // 3b. COMPOUND VERBS — found by READING the diff, not by a test.
+  // "he recaptures and pins your knight" came out "they recapture and PINS",
+  // because step 3 only ever pluralises the verb directly after the pronoun.
+  // Five of them in 1,239 rewrites: consolidate/escapes, castle/puts,
+  // take/trades, recapture/pins, recapture/piles. A sentence with one verb
+  // fixed and one not still scans, which is why nothing else would catch it.
+  out = out.replace(/\b(they)(\s+)([a-z']+)(\s+)(and|or|then)(\s+)([a-z']+)/gi, (whole, they, s1, v1, s2, conj, s3, v2) => {
+    // Only when the FIRST verb is already plural — i.e. this is a compound we
+    // just created. Otherwise leave it: "they tried and failed" is past tense
+    // and correct, and a blanket rule would break it.
+    if (/s$/.test(v1.toLowerCase()) && !/ss$/.test(v1.toLowerCase())) return whole;
+    const pl = pluralise(v2);
+    if (pl === null || pl === v2) return whole;
+    return `${they}${s1}${v1}${s2}${conj}${s3}${pl}`;
+  });
+
   return out;
 }
+
+// Imported for the transform alone (see `perspective.mjs`) — do not run the
+// corpus scan in that case.
+const IS_CLI = process.argv[1] && process.argv[1].endsWith('degender.mjs');
+if (!IS_CLI) { /* module use: stop before the file walk */ }
 
 // --demo: run the rules over real sentences and PRINT them. Reading the output
 // is the only thing that catches "they takes"; a green run proves nothing.
@@ -159,11 +208,31 @@ if (process.argv.includes('--demo')) {
 }
 
 let files = 0, changed = 0, strings = 0;
-for (const f of readdirSync(SRC).filter((n) => n.endsWith('.json'))) {
+for (const f of (IS_CLI ? readdirSync(SRC) : []).filter((n) => n.endsWith('.json'))) {
   const p = join(SRC, f);
   const raw = readFileSync(p, 'utf8');
   const doc = JSON.parse(raw);
   files += 1;
+
+  // 🚨 ROUND-TRIP GUARD. The authored files are ONE-space indented; a writer
+  // that re-serialises at two would reformat all 257 touched files and bury
+  // 1,242 real changes in a diff nobody can read — which destroys the entire
+  // reason for doing this offline instead of at the chokepoint. So prove the
+  // serializer reproduces the file EXACTLY before trusting it to edit one.
+  const indent = indentOf(raw);
+  // Some authored files end with a newline and some do not. Adding one is a
+  // one-byte change on every line of the diff tooling's mind — preserve it.
+  const nl = raw.endsWith('\n');
+  // DON'T GUESS THE ESCAPING CONVENTION — try both and keep the one that
+  // reproduces the file byte-for-byte. A heuristic ("does it contain a \\u
+  // escape?") got 8 files wrong where plain serialisation got 1; the
+  // round-trip IS the test, so let it decide.
+  const esc = [false, true].find((e) => serialise(JSON.parse(raw), indent, nl, e) === raw);
+  if (esc === undefined) {
+    console.error(`REFUSING: ${f} does not round-trip byte-identically — fix the serializer, do not reformat the corpus`);
+    process.exitCode = 1;
+    continue;
+  }
   let touched = false;
   const walk = (node) => {
     if (!node || typeof node !== 'object') return;
@@ -178,7 +247,7 @@ for (const f of readdirSync(SRC).filter((n) => n.endsWith('.json'))) {
   walk(doc);
   if (touched) {
     changed += 1;
-    if (WRITE) writeFileSync(p, `${JSON.stringify(doc, null, 2)}\n`);
+    if (WRITE) writeFileSync(p, serialise(doc, indent, nl, esc));
   }
 }
 

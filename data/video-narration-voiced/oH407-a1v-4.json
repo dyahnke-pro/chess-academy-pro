@@ -115,7 +115,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "And here's the typical King's Indian tactic — you play e5. He can't safely grab the pawn, as the post-game will show.",
+   "spoken": "And here's the typical King's Indian tactic — you play e5. They can't safely grab the pawn, as the post-game will show.",
    "kind": "main",
    "teaches": [
     "the e5 break is tactically sound"
@@ -144,7 +144,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "Do you open the centre with the capture? Yes — and the reason is a principle you've hit before: his king is still in the centre and yours is already tucked away. That asymmetry is the crucial observation.",
+   "spoken": "Do you open the centre with the capture? Yes — and the reason is a principle you've hit before: their king is still in the centre and yours is already tucked away. That asymmetry is the crucial observation.",
    "kind": "plan",
    "teaches": [
     "open the centre against the uncastled king"
@@ -166,7 +166,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "Because his king is stuck in the middle, opening lines lets you exploit it.",
+   "spoken": "Because their king is stuck in the middle, opening lines lets you exploit it.",
    "teaches": [
     "exploit the central king"
    ]
@@ -187,7 +187,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Now the concrete point: his e4-pawn is pinned, so it can't move — which sets up a way to win it.",
+   "spoken": "Now the concrete point: their e4-pawn is pinned, so it can't move — which sets up a way to win it.",
    "teaches": [
     "a pinned pawn is a target"
    ]
@@ -199,7 +199,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The move is d5 — and if he castles here, he simply gets forked.",
+   "spoken": "The move is d5 — and if they castle here, they simply get forked.",
    "kind": "main",
    "teaches": [
     "d5 to win the pinned pawn"
@@ -212,7 +212,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "He pushes to e5, a good practical try, but the pawn is now very weak — so how do you round it up?",
+   "spoken": "They push to e5, a good practical try, but the pawn is now very weak — so how do you round it up?",
    "kind": "main"
   },
   {
@@ -222,7 +222,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "You reposition the knight to go after it. Important distinction: the knight isn't moving because it's attacked, it's moving to win the pawn. He'll get to castle, but he's down a crucial central pawn and your bishop will be a monster.",
+   "spoken": "You reposition the knight to go after it. Important distinction: the knight isn't moving because it's attacked, it's moving to win the pawn. They'll get to castle, but they're down a crucial central pawn and your bishop will be a monster.",
    "kind": "plan",
    "teaches": [
     "move with a purpose, not in reaction"
@@ -257,7 +257,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "So you play c5 to chase the bishop onto a square where your own bishop can take it — his best is to give up a bishop himself, leaving your fianchettoed bishop uncontested, exactly what you want.",
+   "spoken": "So you play c5 to chase the bishop onto a square where your own bishop can take it — their best is to give up a bishop themselves, leaving your fianchettoed bishop uncontested, exactly what you want.",
    "kind": "main",
    "teaches": [
     "provoke a favourable trade"
@@ -279,7 +279,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "His bishop comes off and yours is now uncontested and dominant on the long diagonal — up a pawn with a great position out of the opening.",
+   "spoken": "Their bishop comes off and yours is now uncontested and dominant on the long diagonal — up a pawn with a great position out of the opening.",
    "kind": "main",
    "teaches": [
     "the uncontested long-diagonal bishop"
@@ -323,7 +323,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "Most would swing the bishop to g4 for a pin, but f5 is far better — instead of a vague pin, the bishop does something specific: it hits a weak pawn that his passive position can barely defend.",
+   "spoken": "Most would swing the bishop to g4 for a pin, but f5 is far better — instead of a vague pin, the bishop does something specific: it hits a weak pawn that their passive position can barely defend.",
    "kind": "main",
    "teaches": [
     "pieces should do specific work"
@@ -448,7 +448,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": "An immediate push would let him give up a rook for the pawn to drag things out. Instead the patient rook to c8 brings the last piece in — you're not settling for an exchange, you want the whole queen.",
+   "spoken": "An immediate push would let them give up a rook for the pawn to drag things out. Instead the patient rook to c8 brings the last piece in — you're not settling for an exchange, you want the whole queen.",
    "kind": "plan",
    "teaches": [
     "patience over a hasty push"

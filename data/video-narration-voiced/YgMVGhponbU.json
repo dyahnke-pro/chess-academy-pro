@@ -24,7 +24,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "A good old-fashioned Vienna Gambit, with the knight to c3 and f4. If he goes the knight to f6, of course."
+      "spoken": "A good old-fashioned Vienna Gambit, with the knight to c3 and f4. If they go the knight to f6, of course."
     },
     {
       "ply": 4,
@@ -69,7 +69,7 @@
       "line": [
         "h6"
       ],
-      "spoken": "He goes h6. His intentions are nakedly obvious — he wants to play g5 and build a pawn chain, not letting you win the f4-pawn back. At this level it's not enough to memorise theory; you have to be flexible and adjust to how your opponent plays. Normally you'd play d4 to win the pawn back, but here d4 walks right into his plan — d4, g5 — and I'm not sure what you gain, so you prioritise minor-piece development and punish him for not developing."
+      "spoken": "They go h6. Their intentions are nakedly obvious — they want to play g5 and build a pawn chain, not letting you win the f4-pawn back. At this level it's not enough to memorise theory; you have to be flexible and adjust to how your opponent plays. Normally you'd play d4 to win the pawn back, but here d4 walks right into their plan — d4, g5 — and I'm not sure what you gain, so you prioritise minor-piece development and punish them for not developing."
     },
     {
       "ply": 9,
@@ -78,7 +78,7 @@
       "line": [
         "Bc4"
       ],
-      "spoken": "Some propose h4, but as I'll show after the game, h4 is way too weakening — it burns all the bridges and weakens the g3-square, which is significant. Let's play the calm bishop to c4 and see how he arranges his pieces."
+      "spoken": "Some propose h4, but as I'll show after the game, h4 is way too weakening — it burns all the bridges and weakens the g3-square, which is significant. Let's play the calm bishop to c4 and see how they arrange their pieces."
     },
     {
       "ply": 10,
@@ -105,7 +105,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "And if he castles, then e5 becomes a much more effective move."
+      "spoken": "And if they castle, then e5 becomes a much more effective move."
     },
     {
       "ply": 13,
@@ -114,7 +114,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "e5. What's the difference here? If he goes d5, the difference is that you're castled — you don't have to worry about king safety anymore. The simplest for White: you don't take en passant, you take the knight, then take on g7, ruining his pawn structure permanently, and then go after the f4-pawn."
+      "spoken": "e5. What's the difference here? If they go d5, the difference is that you're castled — you don't have to worry about king safety anymore. The simplest for White: you don't take en passant, you take the knight, then take on g7, ruining their pawn structure permanently, and then go after the f4-pawn."
     },
     {
       "ply": 14,
@@ -130,7 +130,7 @@
       "t": 377,
       "fen": "rnbqk1nr/pppp1ppp/8/4p3/1b2P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
       "line": [],
-      "spoken": "Just because a move isn't good in one position doesn't mean it isn't good in another — when I said the knight to d5 isn't as good as it appears, some of you may have put a big red X over it. But the circumstances have changed: your primary goal now is to win back the f-pawn so you can attack down the f-file, and the knight to d5 is ideal, because it literally forks the bishop and the pawn. d4 would also be perfectly good and give an advantage, but the knight to d5 is more forcing and aggressive. The bishop to c5 with check, and rather than meekly dropping your king to h1, you play d4 — the best of all worlds, the Vienna at its finest, look how crushing this is, his pieces shoved to the side of the board. Now, should you take the bishop? I wouldn't — not for anything specific, but because the bishop isn't going anywhere, you can take it on demand — so let's play the most flexible move, the bishop takes f4, doing what needs to get done first. He plays d6, reasonable moves, but you'll push him off the board. You have sacrifices like the bishop takes h6, but I don't think you've got enough there yet. I want to make a Russian-school-of-chess move. What bothers me is that he's exerting this pin over your king; you can eliminate it by taking on b6, but I may want to keep this knight alive in case it participates in a combination with the knight to f6 — so the king to h1, perhaps not the best move, the engine will laugh, but it's very hard to play against, because my opponent sits there thinking this guy gives me no chances. The right balance of aggressive chess and circumspect, mature moves like the king to h1 can be totally deadly. He plays d-takes-e5. What to take with? How can you resist taking with the knight — look at these outposts on e5 and d5, too nice; d-takes-e5 is fine too, but I like the knight takes e5, a beautiful position. He's good, not going down without a fight — and in such situations you should be ready to transform your advantage several times, not getting overly attached to any one well-placed piece. The most natural sequence, the one to calculate first: begin by taking on b6, then meditate on candidates — after a-takes-b6, you could take the bishop and drop the queen to g4 with a huge attack, but I have a much better move: d5, striking in the centre and getting rid of the bishop, and the domination continues. Now you have to be ready for tactics: look how centralised your pieces are, how undeveloped he is — well-coordinated pieces aimed at his king, plus his lackluster development, is a tactically fertile situation, so look at sacrifices, captures, diagonals. He puts his bishop in harm's way — spot the x-ray — and the simplest is to take on h6. The bishop to g6. Most of you are probably thinking take and go d6 with check — but with a sequence of two moves, check both move orders, because both might be good but one might be miles more overwhelming. If you play the knight takes g6, after g6, d6 with check, he drops his king to h7 and Black is somehow still kicking. But if you start with d6, you keep the bishop and the knight alive, you threaten to take on g6, and you keep all the benefits without relinquishing anything — so clearly d6 is the better move order. You trade queens, but that doesn't diminish the dominance; then you take, you take, and you take on f7, and the game is over — a simple non-sacrificial sequence, just the way I like it. This is the tactical play you must master before the super-flashy sacrificial games. The rook takes f7, of course, not the bishop takes f7, because that's a check — the rook takes f7, setting up a devastating discovery against the king, a windmill. A common mistake is getting impatient with the discovered check — you're not forced to move the rook immediately; unless there's a clearly good discovered check, consider whether you can accumulate pressure and bring the final piece in: the rook to f1 is simple, and it coincidentally creates a mate threat he misses — mate in two. The rook to f8 with check, double check, and your rook, sitting on f1, crucially defends the one on f8; he drops his king, and rather than take the rook on a8, the much better move is the rook from f1 to f7, mate. A very satisfying game.",
+      "spoken": "Just because a move isn't good in one position doesn't mean it isn't good in another — when I said the knight to d5 isn't as good as it appears, some of you may have put a big red X over it. But the circumstances have changed: your primary goal now is to win back the f-pawn so you can attack down the f-file, and the knight to d5 is ideal, because it literally forks the bishop and the pawn. d4 would also be perfectly good and give an advantage, but the knight to d5 is more forcing and aggressive. The bishop to c5 with check, and rather than meekly dropping your king to h1, you play d4 — the best of all worlds, the Vienna at its finest, look how crushing this is, their pieces shoved to the side of the board. Now, should you take the bishop? I wouldn't — not for anything specific, but because the bishop isn't going anywhere, you can take it on demand — so let's play the most flexible move, the bishop takes f4, doing what needs to get done first. They play d6, reasonable moves, but you'll push them off the board. You have sacrifices like the bishop takes h6, but I don't think you've got enough there yet. I want to make a Russian-school-of-chess move. What bothers me is that they're exerting this pin over your king; you can eliminate it by taking on b6, but I may want to keep this knight alive in case it participates in a combination with the knight to f6 — so the king to h1, perhaps not the best move, the engine will laugh, but it's very hard to play against, because my opponent sits there thinking this guy gives me no chances. The right balance of aggressive chess and circumspect, mature moves like the king to h1 can be totally deadly. They play d-takes-e5. What to take with? How can you resist taking with the knight — look at these outposts on e5 and d5, too nice; d-takes-e5 is fine too, but I like the knight takes e5, a beautiful position. He's good, not going down without a fight — and in such situations you should be ready to transform your advantage several times, not getting overly attached to any one well-placed piece. The most natural sequence, the one to calculate first: begin by taking on b6, then meditate on candidates — after a-takes-b6, you could take the bishop and drop the queen to g4 with a huge attack, but I have a much better move: d5, striking in the centre and getting rid of the bishop, and the domination continues. Now you have to be ready for tactics: look how centralised your pieces are, how undeveloped they are — well-coordinated pieces aimed at their king, plus their lackluster development, is a tactically fertile situation, so look at sacrifices, captures, diagonals. They put their bishop in harm's way — spot the x-ray — and the simplest is to take on h6. The bishop to g6. Most of you are probably thinking take and go d6 with check — but with a sequence of two moves, check both move orders, because both might be good but one might be miles more overwhelming. If you play the knight takes g6, after g6, d6 with check, they drop their king to h7 and Black is somehow still kicking. But if you start with d6, you keep the bishop and the knight alive, you threaten to take on g6, and you keep all the benefits without relinquishing anything — so clearly d6 is the better move order. You trade queens, but that doesn't diminish the dominance; then you take, you take, and you take on f7, and the game is over — a simple non-sacrificial sequence, just the way I like it. This is the tactical play you must master before the super-flashy sacrificial games. The rook takes f7, of course, not the bishop takes f7, because that's a check — the rook takes f7, setting up a devastating discovery against the king, a windmill. A common mistake is getting impatient with the discovered check — you're not forced to move the rook immediately; unless there's a clearly good discovered check, consider whether you can accumulate pressure and bring the final piece in: the rook to f1 is simple, and it coincidentally creates a mate threat they miss — mate in two. The rook to f8 with check, double check, and your rook, sitting on f1, crucially defends the one on f8; they drop their king, and rather than take the rook on a8, the much better move is the rook from f1 to f7, mate. A very satisfying game.",
       "reanchor": true
     },
     {
@@ -180,7 +180,7 @@
       "line": [
         "Bc4"
       ],
-      "spoken": "Understanding that he wants to play g5 leads to the next logical step: what's the drawback of h6? It doesn't develop any pieces. How do you exploit your opponent's lack of development? You develop as fast as possible yourself. The bishop to c4.",
+      "spoken": "Understanding that they want to play g5 leads to the next logical step: what's the drawback of h6? It doesn't develop any pieces. How do you exploit your opponent's lack of development? You develop as fast as possible yourself. The bishop to c4.",
       "reanchor": true
     },
     {
@@ -263,7 +263,7 @@
         "O-O",
         "Rxg7"
       ],
-      "spoken": "he plays the rook takes g7 and all of a sudden he's got this g-file pressure; his king can seek shelter on f8.",
+      "spoken": "they play the rook takes g7 and all of a sudden he's got this g-file pressure; their king can seek shelter on f8.",
       "reanchor": true
     },
     {
@@ -290,7 +290,7 @@
         "O-O",
         "O-O"
       ],
-      "spoken": "So the move that carries the most ideas can often be the most dangerous one — a vague piece of advice, but hopefully helpful. He castles, and now you play f5. What's the difference?",
+      "spoken": "So the move that carries the most ideas can often be the most dangerous one — a vague piece of advice, but hopefully helpful. They castle, and now you play f5. What's the difference?",
       "reanchor": true
     },
     {
@@ -312,7 +312,7 @@
         "dxc4",
         "fxg7"
       ],
-      "spoken": "now his king is committed to the kingside, which means",
+      "spoken": "now their king is committed to the kingside, which means",
       "reanchor": true
     },
     {
@@ -352,7 +352,7 @@
       "line": [
         "Bxf4"
       ],
-      "spoken": "Look how bad his king is here — the king is permanently in trouble, and I love these kinds of positions.",
+      "spoken": "Look how bad their king is here — the king is permanently in trouble, and I love these kinds of positions.",
       "reanchor": true
     },
     {
@@ -370,7 +370,7 @@
       "t": 1246.5,
       "fen": "rnbq1rk1/pppp1pp1/5n1p/4P3/1bB2p2/2N2N2/PPPP2PP/R1BQ1RK1 b - - 2 7",
       "line": [],
-      "spoken": "And by the way, if he goes the knight to g4 here, what would you have done?",
+      "spoken": "And by the way, if they go the knight to g4 here, what would you have done?",
       "reanchor": true
     },
     {
@@ -440,7 +440,7 @@
       "line": [
         "d4"
       ],
-      "spoken": "bishop on c1 covers the e3-square, so he doesn't have this intermediate move — he loses a piece; the knight has no other square to escape to.",
+      "spoken": "bishop on c1 covers the e3-square, so they don't have this intermediate move — they lose a piece; the knight has no other square to escape to.",
       "reanchor": true
     },
     {
@@ -448,7 +448,7 @@
       "t": 1277.5,
       "fen": "rnbq1rk1/pppp1pp1/7p/4P3/1bB2pn1/2N2N1P/PPPP2P1/R1BQ1RK1 b - - 0 8",
       "line": [],
-      "spoken": "he loses a piece. The knight has no other squares to escape to.",
+      "spoken": "they lose a piece. The knight has no other squares to escape to.",
       "reanchor": true
     },
     {
@@ -508,7 +508,7 @@
       "t": 1334,
       "fen": "rnbq1rk1/ppp2pp1/5n1p/3pP3/1bB2p2/2N2N2/PPPP2PP/R1BQ1RK1 w - d6 0 8",
       "line": [],
-      "spoken": "The knight to h7, the knight to d5, attacking everything; the bishop to c5 throws oil on the fire — he should probably have gone to a5 or e7, but the position is still very rough. d4, the bishop to f4, and here the king to h1: you're basically saying I'm annoyed by this pin and want the d4-pawn free to move should it be necessary — it's almost a waiting move that tosses the ball back into his court, a kind of move a lot of players struggle to play when push comes to shove. It's probably not the best; a simpler approach would have been to take the bishop straight away, then e-takes-d6 if you wanted, or drop the bishop to d3 to target the knight — the queen to d3 is another good move.",
+      "spoken": "The knight to h7, the knight to d5, attacking everything; the bishop to c5 throws oil on the fire — they should probably have gone to a5 or e7, but the position is still very rough. d4, the bishop to f4, and here the king to h1: you're basically saying I'm annoyed by this pin and want the d4-pawn free to move should it be necessary — it's almost a waiting move that tosses the ball back into their court, a kind of move a lot of players struggle to play when push comes to shove. It's probably not the best; a simpler approach would have been to take the bishop straight away, then e-takes-d6 if you wanted, or drop the bishop to d3 to target the knight — the queen to d3 is another good move.",
       "reanchor": true
     }
   ]

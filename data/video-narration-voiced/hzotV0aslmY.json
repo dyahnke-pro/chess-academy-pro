@@ -312,7 +312,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "On the contrary, it wrecks his pawn structure, leaving him with doubled, weak pawns.",
+   "spoken": "On the contrary, it wrecks their pawn structure, leaving them with doubled, weak pawns.",
    "teaches": [
     "damage the structure in a trade"
    ]
@@ -324,7 +324,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": "Now the rook to d1, offering another rook trade — he does your bidding.",
+   "spoken": "Now the rook to d1, offering another rook trade — they do your bidding.",
    "kind": "main",
    "teaches": [
     "keep trading"
@@ -355,7 +355,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "In these positions it's worth investing a single tempo: shove the knight away and hit his pawn at the same time.",
+   "spoken": "In these positions it's worth investing a single tempo: shove the knight away and hit their pawn at the same time.",
    "kind": "plan",
    "teaches": [
     "invest a tempo with purpose"
@@ -408,7 +408,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "Here you kill every bird with one stone: the rook to d8. Play it carefully — but for the pin holding his back rank together, he'd be the one giving checkmate. One move accomplishing everything.",
+   "spoken": "Here you kill every bird with one stone: the rook to d8. Play it carefully — but for the pin holding their back rank together, they'd be the one giving checkmate. One move accomplishing everything.",
    "kind": "main",
    "teaches": [
     "maximise every move",
@@ -460,7 +460,7 @@
     "Kf1",
     "f5"
    ],
-   "spoken": "To win the pawn ending, bring the king up first, then either promote a pawn or use it to distract his king and promote elsewhere.",
+   "spoken": "To win the pawn ending, bring the king up first, then either promote a pawn or use it to distract their king and promote elsewhere.",
    "kind": "plan",
    "teaches": [
     "king first in pawn endings"
@@ -500,7 +500,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "For context: the Scandinavian's main line is the queen to a5; the retreat to d8 is a respectable book move too. The knight to c6 was the first real mistake, and the critical moment. If instead the knight had hopped to b4, the bishop to c4 defends and a3 chases it off. And here's a higher-level idea — distinguish activity from pseudo-activity: a position can look unpleasant while being a total illusion. Just defend what's attacked and sweep his pieces away.",
+   "spoken": "For context: the Scandinavian's main line is the queen to a5; the retreat to d8 is a respectable book move too. The knight to c6 was the first real mistake, and the critical moment. If instead the knight had hopped to b4, the bishop to c4 defends and a3 chases it off. And here's a higher-level idea — distinguish activity from pseudo-activity: a position can look unpleasant while being a total illusion. Just defend what's attacked and sweep their pieces away.",
    "kind": "review",
    "teaches": [
     "Scandi main lines",
