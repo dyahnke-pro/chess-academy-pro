@@ -186,6 +186,31 @@ standing is worse than no reason** (the Lake Butler rule applied to this build):
   on a product that was speaking. Both are fixed; the count now leads every
   register, and review speaks in the past tense it should always have used.
 
+**THE METHOD FAILURE, and the two ROOT causes behind it** (David 2026-09-19:
+"Stop guessing. Root fixes. Gain context first."). Four wrong diagnoses in a row
+— the card, the settings flag, the walk being frozen, then the reopen phase —
+every one made from a log TAIL instead of from the code that produces the
+symptom or the `report.json` that carries the answer. The report answered in
+seconds the moment it was opened. Two things made the guessing possible, and
+both are now fixed at the root:
+
+- **The audit collapsed two states into one number.** `readWalkPly` returns NULL
+  when the ply readout cannot be read, and the caller did `?? 0` — so "the walk
+  is at ply 0" and "I cannot see the walk" printed IDENTICALLY as
+  `[walk] ply 0/93`. A healthy 93-ply run was read as frozen and KILLED on that
+  line. Null is now carried, said, and asserted (`WALK readout-stayed-readable`).
+- **The scan was keyed on the narration OBJECT, not the game.** The background
+  deepen produces a new narration for the same game; `useReviewPlayback` gates
+  its own reset on the gameId for exactly this reason, and this effect was doing
+  what that hook refuses to do — dropping a selected moment, clearing the
+  spoken-set, restarting the scan. A deepen landing after the walk passed the
+  ply left the moment unreachable and silently unspoken.
+
+**Settled by reading, not asserting:** `readingChallengesInReview` defaults to
+TRUE (`useSettings.ts:95,140`). The "off by default" claim was wrong. The lift
+out of that branch stands for the real reason — a user who turns reading
+challenges off must not thereby silence the critical moment.
+
 **Recording.** `gameAnalysisService.recordPromptedFind` is the FIRST writer of
 `prompted: true` in the app's history — the field has been REQUIRED since the
 heat map landed and every row in the store is unaided evidence. It is a RECORD,
