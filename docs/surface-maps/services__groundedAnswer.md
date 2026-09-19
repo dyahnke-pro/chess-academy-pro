@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5995 lines · 139 exports · 50 importers · 25 tests · 8 audits**
+**5995 lines · 139 exports · 52 importers · 26 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,6 +39,8 @@
 - `src/services/engineDeltaLines.ts`
 - `src/services/forkTalk.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
+- `src/services/fundamentalsCatalog.test.ts`
+- `src/services/fundamentalsCatalog.ts`
 - `src/services/gameInsightsService.ts`
 - `src/services/gameReviewService.ts`
 - `src/services/groundedAnswer.askedPiece.test.ts`
@@ -438,9 +440,9 @@
 ### `WeakFundamental` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `assembleFundamentalsAnswer` (function) — 12 call sites
-- `src/components/Coach/FundamentalsPage.tsx:73`
-- `src/components/Coach/FundamentalsPage.tsx:159`
+### `assembleFundamentalsAnswer` (function) — 14 call sites
+- `src/components/Coach/FundamentalsPage.tsx:75`
+- `src/components/Coach/FundamentalsPage.tsx:161`
 - `src/services/coachApi.ts:4872`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:56`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:63`
@@ -449,6 +451,8 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:70`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:71`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:72`
+- `src/services/fundamentalsCatalog.test.ts:86`
+- `src/services/fundamentalsCatalog.test.ts:108`
 - `src/services/groundedAnswer.test.ts:854`
 - `src/services/groundedAnswer.test.ts:867`
 
@@ -977,6 +981,7 @@
 - `src/services/computedVoiceGrounding.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
+- `src/services/fundamentalsCatalog.test.ts`
 - `src/services/groundedAnswer.askedPiece.test.ts`
 - `src/services/groundedAnswer.dataCapture.test.ts`
 - `src/services/groundedAnswer.engineReasoning.test.ts`
