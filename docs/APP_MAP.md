@@ -134,7 +134,8 @@ Weaknesses tab / drills / Training Plan.**
   and calls `captureMisconception` once/game.
 
 ### 5b. The fundamentals computer — `src/services/principleAttribution.ts`
-- **25 `FUNDAMENTAL_IDS`** (12 opening / 10 middlegame / 3 endgame), `:32-43`.
+- **33 `FUNDAMENTAL_IDS`** (12 opening / 11 middlegame / 6 endgame / 4 eval-PV-gated),
+  measured 2026-09-19 — a hand census had read 25.
   `FUNDAMENTAL_TAG` (`:47-73`) maps each → a `MisconceptionTagId`. `CO_OCCURRENCE`
   (`:77-81`) = positional detectors that speak only when no move-verified row exists.
   `ATTRIBUTION_MAX=3`, `OPENING_PLIES=24`.
@@ -167,17 +168,29 @@ Weaknesses tab / drills / Training Plan.**
 ### 5d. Misconception tags — `misconceptionClassifier.ts` + `data/misconceptionTags.ts`
 - `classifyMisconception` is deterministic; **(0) attribution-first**: runs
   `attributePrinciples`, uses `attrs[0].tag` when any fires, else cheap board checks,
-  else `{tag:'other'}`. 21 tags across buckets opening/tactical/positional/endgame/general.
-- **Only 5 tags carry `puzzleThemes`** (drillable from `puzzles.json`): `hung-material`,
-  `missed-tactic`, `calculation-depth`, `missed-opponents-threat`, `overvalued-attack`.
-  Every other tag drills from the student's OWN flagged positions (`mistakePuzzles`).
+  else `{tag:'other'}`. 26 tags across buckets opening/tactical/positional/endgame/general.
+- **7 of 26 tags carry `puzzleThemes`** (drillable from `puzzles.json`); the other 19
+  drill ONLY from the student's own flagged positions. That is why a row missing
+  `bestSan` is a dead end — see 5e. Every declared theme is now proven to exist in
+  the corpus by `drillVocabulary.test.ts` (2026-09-19: `zwischenzug` and
+  `overloadedPiece` named themes no puzzle carried; the corpus says `intermezzo`
+  and `capturingDefender`).
 - **5 tags have NO fundamental detector** (attribution gap): `no-plan`,
   `overvalued-attack`, `calculation-depth`, `left-book-early`, `botched-conversion`.
 
 ### 5e. Weakness aggregation + drills
 - `misconceptionService` — logs `MisconceptionTagRecord` (+ PostHog `weakness_captured`),
-  SRS-spaces via `recordTagDrillResult`, `getMisconceptionProfile` → ranked aggregates,
-  `mapTagToDrills` → `TagDrillPlan {tag, kind, puzzleThemes, positions[]}`.
+  SRS-spaces via `recordTagDrillResult`, `getMisconceptionProfile` → ranked aggregates.
+  🔴 `mapTagToDrills` / `TagDrillPlan` were DELETED 2026-09-19: they had zero production
+  callers — `bucketPipelineAudit` was the only one, so the audit graded a join no
+  student reached. The student's drill path is
+  `mistakePuzzleService.getMisconceptionDrillPuzzles` (skips rows missing
+  `bestSan`/`playedSan`), and the audit now grades that.
+- **The drill CLOSES the loop (WO-3, 2026-09-19).** `MistakePuzzleBoard` — the one solve
+  door all five drill surfaces share — writes `capabilityEvidence` at the solve:
+  clean first try → `held`, wrong first answer → `broken`, [show me] first → `prompted`
+  (grey). Before this, a solved drill moved only the SRS and the heat map could never
+  turn GREEN from the surface where a student proves competence.
 - `weaknessSpine` — `UnifiedWeakness` merges the misconception + analysis pipelines;
   `themesForTactic` (snake→Lichess camelCase), `getUnifiedWeaknessProfile` (coach-caught
   rows win the position dedup). `weaknessAnalyzer` — buckets→categories, `WeaknessItem`
@@ -269,7 +282,8 @@ Weaknesses tab / drills / Training Plan.**
   Data: `endgame-principles.json`, `pawn-endings.json`, `rook-endings.json`,
   `drawn-patterns.json`, `mating-patterns.json`. `EndgameLessonPosition` has
   `fen/title/explanation/result/bestMove/solution[]`.
-- Endgame is the THINNEST layer of the fundamentals computer (3 of 25 detectors) — the
+- Endgame is the thinnest layer of the fundamentals computer (6 of 33 detectors,
+  measured 2026-09-19; it read "3 of 25" here) — the
   biggest detector gap (opposition, passed-pawn push, rook-7th, OCB draw, majorities).
 
 ## 11. Fundamentals tab (`/coach/fundamentals`)  ★
@@ -281,7 +295,7 @@ Weaknesses tab / drills / Training Plan.**
   sample-morphy-opera-1858`, only where `exampleReviewId` exists).
 - **NO puzzles, NO board practice.** Only nav entry is the Coach hub tile.
 - **Taxonomy gap:** the tab's 4 pillars are a SEPARATE, coarser taxonomy from the
-  computer's 25 `FUNDAMENTAL_IDS` — no code links a `FundamentalId` to a
+  computer's 33 `FUNDAMENTAL_IDS` — no code links a `FundamentalId` to a
   `FundamentalsTopic`. Reconciling them is net-new authoring.
 
 ## 12. Surfaces & standards ("match the rest of the app")
