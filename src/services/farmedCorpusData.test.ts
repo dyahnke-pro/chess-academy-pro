@@ -7,6 +7,21 @@ import {
 } from './farmedCorpusData';
 import { secondaryCorpora, secondaryNotesForGap } from './secondaryCorpora';
 import type { TeachingsBundle } from './secondaryCorpus';
+import registry from '../data/corpora.json';
+
+// 🔒 COUNTS AND ORDER COME FROM THE REGISTRY, never a literal (2026-09-19).
+// These were hardcoded `7`s and a hand-typed key list, so the suite broke the
+// moment the primary corpus's floating half joined the prewarm — asserting a
+// number rather than the contract. What matters is "every declared fetch
+// target is loaded, once, smallest first", and that is now expressed as such.
+const FETCH_TARGETS: Array<{ key: string; bytes: number }> = [
+  ...registry.corpora.filter((c) => c.load === 'fetch').map((c) => ({ key: c.key, bytes: c.bytes ?? 0 })),
+  ...registry.corpora
+    .filter((c) => typeof (c as { floatingPath?: string }).floatingPath === 'string')
+    .map((c) => ({ key: `${c.key}:floating`, bytes: Number.MAX_SAFE_INTEGER })),
+];
+const TARGET_COUNT = FETCH_TARGETS.length;
+const PREWARM_ORDER = [...FETCH_TARGETS].sort((a, b) => a.bytes - b.bytes).map((t) => t.key);
 
 // The farmed corpora moved OUT of the bundle (2026-08-01) because they scale
 // with a creator's back-catalogue: Hanging Pawns shipped as a 7.94 MB chunk
@@ -92,8 +107,8 @@ describe('farmedCorpusData', () => {
     expect(getFarmedCorporaSync()).toEqual([]);
 
     await flushLazy();
-    expect(getFarmedCorporaSync()).toHaveLength(7);
-    expect(fetchMock).toHaveBeenCalledTimes(7);
+    expect(getFarmedCorporaSync()).toHaveLength(TARGET_COUNT);
+    expect(fetchMock).toHaveBeenCalledTimes(TARGET_COUNT);
   });
 
   it('primeFarmedCorporaLazily is idempotent — repeated calls do not refetch', async () => {
@@ -103,7 +118,7 @@ describe('farmedCorpusData', () => {
     primeFarmedCorporaLazily();
     await flushLazy();
     primeFarmedCorporaLazily();
-    expect(fetchMock).toHaveBeenCalledTimes(7);
+    expect(fetchMock).toHaveBeenCalledTimes(TARGET_COUNT);
   });
 
   it('a teaching lookup primes the tier (self-heals within a beat)', async () => {
@@ -129,9 +144,9 @@ describe('farmedCorpusData', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const loaded = await loadFarmedCorpora();
-    expect(loaded.map((c) => c.key)).toEqual(['hangingpawns', 'saintlouis', 'gothamchess', 'hikaru', 'imrosen', 'magnuscarlsen', 'voiced']);
-    expect(fetchMock).toHaveBeenCalledTimes(7);
-    expect(getFarmedCorporaSync()).toHaveLength(7);
+    expect(loaded.map((c) => c.key).sort()).toEqual([...PREWARM_ORDER].sort());
+    expect(fetchMock).toHaveBeenCalledTimes(TARGET_COUNT);
+    expect(getFarmedCorporaSync()).toHaveLength(TARGET_COUNT);
   });
 
   it('is idempotent — a second call does not refetch', async () => {
@@ -139,14 +154,14 @@ describe('farmedCorpusData', () => {
     vi.stubGlobal('fetch', fetchMock);
     await loadFarmedCorpora();
     await loadFarmedCorpora();
-    expect(fetchMock).toHaveBeenCalledTimes(7); // seven corpora, one round
+    expect(fetchMock).toHaveBeenCalledTimes(TARGET_COUNT); // every declared target, one round
   });
 
   it('concurrent callers share one inflight round', async () => {
     const fetchMock = vi.fn(async () => ({ ok: true, json: async () => bundle('hp', GAP_A) }));
     vi.stubGlobal('fetch', fetchMock);
     await Promise.all([loadFarmedCorpora(), loadFarmedCorpora(), loadFarmedCorpora()]);
-    expect(fetchMock).toHaveBeenCalledTimes(7);
+    expect(fetchMock).toHaveBeenCalledTimes(TARGET_COUNT);
   });
 
   it('survives a missing file / network failure with an empty corpus', async () => {
@@ -175,8 +190,15 @@ describe('farmedCorpusData', () => {
     expect(farmedNotes(GAP_A).length).toBeGreaterThan(0);
   });
 
-  it('keeps chessbrah available even with no farmed corpora loaded', () => {
-    expect(secondaryCorpora().map((c) => c.key)).toContain('chessbrah');
+  it('exposes NO secondary corpus until a fetch resolves', () => {
+    // 🔴 This asserted the opposite until 2026-09-19 ("keeps chessbrah
+    // available even with no farmed corpora loaded"), because chessbrah was a
+    // static import. It is fetched now — it was 1.81 MB of boot payload whose
+    // 2,766 notes were 99% un-positioned — so there is no static tier left to
+    // fall back to. The old claim is DELETED rather than annotated: the gap
+    // tier being EMPTY before a load is the contract that makes lazy loading
+    // safe ("no gap teaching yet", never wrong teaching).
+    expect(secondaryCorpora().map((c) => c.key)).not.toContain('chessbrah');
   });
 
   it('rebuilds its index when the cache is swapped, never serving a stale one', async () => {

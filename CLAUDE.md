@@ -3902,6 +3902,59 @@ by `buildDanyaTeachingBlock` under a header that says outright they are not
 claims about the current position. Background for a lesson, never a fact about
 the move on the board.
 
+### 🔒🔒 A BUNDLED CORPUS CARRIES ONLY NOTES THE APP CAN ANCHOR — the floating half is FETCHED (David 2026-09-19: "no more non-positioned phrases at boot" … "i still want danyas corpus loaded at boot time if able. faster responses").
+
+🚨 **A `manualChunks` SPLIT DOES NOT DEFER LOADING, AND EVERY SESSION THAT
+ASSUMES IT DOES IS WRONG.** `vite.config.ts` splits the heavy JSON into
+`appdata-*` chunks, and the comments there explain it as protection against the
+Workbox precache cap — which is true and is ALL it does. `dist/index.html`
+carries a `<link rel="modulepreload">` for the entry AND for every one of those
+chunks, so the browser downloads them all before first paint. Measured
+2026-09-19: **32.8 MB of JS at boot**, not the 8.5 MB entry chunk everyone
+watches. When you need the real number, read the preloads out of
+`dist/index.html`; never infer it from the entry chunk's size.
+
+**THE RULE.** A corpus declared `load: 'static'` in `corpora.json` is 1:1 boot
+payload for every user, so it may contain ONLY notes the app can select by
+POSITION (own `lineSan`, or one `note-anchors.json` recovers from the prose).
+Its un-positioned notes go in the same entry's `floatingPath`, fetched on the
+lazy sequential prewarm. Gate: `bundledCorpusIsPositioned.test.ts`, in
+ship-check. Negative-controlled — it flags the 10,022 that were shipping.
+
+**WHY BOTH HALVES EXIST.** `danya-teachings.json` was 6.8 MB of BUNDLED notes
+with **zero** positioned (the redo's positions live in the voiced corpus, which
+was already fetched), so none of that payload could answer a position query.
+Splitting it left 122 positioned notes bundled at 113 KB — position lookups stay
+synchronous at boot, which is the speed David is protecting — and moved 10,022
+to fetch. chessbrah was the same shape, 1.81 MB and 99% un-positioned, and was
+the last secondary corpus still statically imported against its own config
+comment ("Ship a new farm to `public/data/`, never to `src/data/`"). Result:
+boot 32.8 → 24.3 MB, precache 52.8 → 44.1 MB.
+
+🚨 **MOVE THEM, NEVER ARCHIVE THEM — measured, and the first attempt was wrong.**
+"Un-positioned" does not mean useless: those notes are reached by opening NAME
+and by CONCEPT. Archiving danya's floating half cut the phase-transition ritual
+from **19 of 20 openings to 10** and LESSON BACKGROUND from 19 to 12 — Taimanov,
+French, Italian, QGD, Slav, English, KID, Nimzo, Catalan and Dutch all went
+silent. All 10,022 are reachable by a live tier (6,908 by name, 3,114 by
+concept, **zero** unreachable). Before removing corpus content, measure
+`transitionTeachingForGame` and `buildDanyaTeachingBlock` coverage across ~20
+openings both ways; the position tiers alone will tell you nothing.
+
+**WHAT ELSE IS ALREADY FETCHED, so pruning it saves NO boot bytes:** every farmed
+corpus. `seedDatabase()` does not fetch them and there is zero production call
+site of `loadFarmedCorpora()`; the only trigger is `primeFarmedCorporaLazily()`
+from four `secondaryCorpora` lookups. A session that never opens the coach pays
+nothing for them. Shrinking them is a memory/parse decision, never a boot one.
+
+**ONE REGISTRY, DERIVED NOT COPIED.** `farmedCorpusData` kept its own hand-written
+list — the "seven hand-maintained lists" failure `corpora.json` exists to end —
+and it had drifted: hangingpawns listed at 9.1 MB against 4.76 MB on disk, and
+`bytes` is what orders the prewarm, so "smallest first" was ordering by fiction.
+It and `loadFullCorpus` and `secondaryTeachings.test` now all derive from the
+registry. A test that hardcodes the creator roster CRASHES rather than fails
+when the roster changes; do not write one.
+
 ### 🔒🔒 THE CORPUS IS THE COACH'S VOICE — 90% of what gets said lives in the notes (David 2026-08-07: "This is the heart and soul of coach narrations. 90% of what needs to be said to user lives within these notes. The other 10% comes from threat and gem detection.").
 
 Read that as the ARCHITECTURE, not a compliment to the corpus. When a coach

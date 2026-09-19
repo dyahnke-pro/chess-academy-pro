@@ -10,22 +10,22 @@
 // everywhere; these corpora supply IDEAS ONLY, and only where the primary is
 // silent. Each keeps its own file and its own note-id prefix.
 //
-// TWO LOAD SHAPES, one registry (2026-08-01). chessbrah is small and stays a
-// static import. The FARMED corpora scale with a creator's back-catalogue, not
-// with the app, so they are fetched from `public/` — see `farmedCorpusData` for
-// why (Hanging Pawns alone would have sat 250 KB under the precache cap, and
-// Saint Louis could never have fitted). The public API below stays SYNCHRONOUS
-// either way; farmed corpora simply contribute nothing until the boot prewarm
-// resolves, which is safe because this is the gap tier: an unprimed cache means
-// "no gap teaching yet", never wrong teaching.
-import chessbrahData from '../data/chessbrah-teachings.json';
-import { getFarmedCorporaSync, onFarmedCorpusLoaded, primeFarmedCorporaLazily } from './farmedCorpusData';
+// ONE LOAD SHAPE (2026-09-19). Every secondary corpus is FETCHED from
+// `public/` — see `farmedCorpusData`. The public API below stays SYNCHRONOUS;
+// a corpus simply contributes nothing until its lazy load resolves, which is
+// safe because this is the gap tier: an unprimed cache means "no gap teaching
+// yet", never wrong teaching.
+//
+// 🔴 The note that stood here — "chessbrah is small and stays a static import"
+// — is DELETED rather than annotated (the Lake Butler rule), because it stopped
+// being true and nobody noticed. chessbrah was 1.81 MB in the JS bundle, and
+// `dist/index.html` modulepreloads every `appdata-*` chunk, so "static" meant
+// every user downloaded it before seeing a square. Measured the same day: all
+// 2,766 of its notes are FLOATING (zero positioned), so none of that payload
+// could ever answer a position query. It now loads like its six siblings.
+import { getFarmedCorporaSync, isFloatingHalf, onFarmedCorpusLoaded, primeFarmedCorporaLazily } from './farmedCorpusData';
 import { createSecondaryCorpus, gapNotesAcross, supportNotesAcross, type SecondaryCorpus, type TeachingsBundle } from './secondaryCorpus';
 import type { DanyaNote } from './danyaTeachingService';
-
-const STATIC_CORPORA: SecondaryCorpus[] = [
-  createSecondaryCorpus('chessbrah', chessbrahData as unknown as TeachingsBundle),
-];
 
 // Indexing a farmed corpus is O(notes) and these run tens of thousands of notes,
 // so build each one ONCE and keep it — keyed by the bundle identity so a test
@@ -35,6 +35,11 @@ const builtFarmed = new Map<string, { source: TeachingsBundle; corpus: Secondary
 function farmedCorpora(): SecondaryCorpus[] {
   const out: SecondaryCorpus[] = [];
   for (const { key, data } of getFarmedCorporaSync()) {
+    // The PRIMARY corpus's floating half rides the same prewarm but is not a
+    // secondary corpus — `danyaTeachingService` merges it into its own index.
+    // Letting it in here would double-count every note and hand the gap tier
+    // the primary's own teaching as a "gap".
+    if (isFloatingHalf(key)) continue;
     const cached = builtFarmed.get(key);
     if (cached && cached.source === data) {
       out.push(cached.corpus);
@@ -52,7 +57,7 @@ function farmedCorpora(): SecondaryCorpus[] {
  *  whatever is loaded, triggers no fetch (priming is done by the lookup
  *  entry points below, so a stats/debug read never kicks a 28 MB download). */
 export function secondaryCorpora(): SecondaryCorpus[] {
-  return [...STATIC_CORPORA, ...farmedCorpora()];
+  return farmedCorpora();
 }
 
 // Warm each farmed corpus's transposition index AS IT LANDS. `warmFenIndex` is

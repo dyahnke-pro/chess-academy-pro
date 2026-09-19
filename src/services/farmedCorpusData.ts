@@ -37,6 +37,7 @@
  */
 import type { TeachingsBundle } from './secondaryCorpus';
 import { loadSpokenBake } from './spokenNoteBake';
+import registry from '../data/corpora.json';
 
 /** Farmed corpora in canonical registry order. `bytes` is the approximate
  *  on-disk size, used ONLY to order the lazy prewarm (small first, Saint Louis
@@ -44,16 +45,44 @@ import { loadSpokenBake } from './spokenNoteBake';
  *  the round-robin tie-break in `supportNotesAcross` is unchanged. Served
  *  same-origin: Vite copies `public/` to the build root verbatim, and Capacitor
  *  bundles that same `dist/` into the native app. */
+// 🔒 DERIVED from `corpora.json`, never hand-listed (2026-09-19). That file
+// calls itself "THE single registry … adding a creator is a one-line edit HERE
+// and nowhere else", and this array was a second copy of it — the exact shape
+// of the 2026-08-14 failure its own header recounts, where six of seven lists
+// were updated and 3,585 notes shipped mute. It had already drifted: every
+// `bytes` was a stale guess (hangingpawns 9.1 MB against 4.76 MB on disk,
+// saintlouis 28.3 MB against 23.09 MB), and `bytes` is what orders the
+// sequential prewarm — so the "smallest first" guarantee was ordering by
+// fiction. Now load shape and size come from the one declaration, and a corpus
+// that is archived out of the registry disappears from here by existing.
+/** Order the floating half LAST within the prewarm regardless of its real size:
+ *  it is the widest tier (opening-name + concept) but never the most urgent —
+ *  the position tiers it supplements are already bundled and synchronous. */
+const FLOATING_PREWARM_BYTES = Number.MAX_SAFE_INTEGER;
+
 const FARMED: Array<{ key: string; url: string; bytes: number }> = [
-  { key: 'hangingpawns', url: '/data/hangingpawns-teachings.json', bytes: 9_100_000 },
-  { key: 'saintlouis', url: '/data/saintlouis-teachings.json', bytes: 28_300_000 },
-  { key: 'gothamchess', url: '/data/gothamchess-teachings.json', bytes: 1_160_000 },
-  { key: 'hikaru', url: '/data/hikaru-teachings.json', bytes: 850_000 },
-  { key: 'imrosen', url: '/data/imrosen-teachings.json', bytes: 620_000 },
-  { key: 'magnuscarlsen', url: '/data/magnuscarlsen-teachings.json', bytes: 60_000 },
-  // Voiced DNA corpus — position-keyed board-true notes; feeds free-play/review/tactics.
-  { key: 'voiced', url: '/data/voiced-teachings.json', bytes: 400_000 },
+  ...registry.corpora
+    .filter((c) => c.load === 'fetch')
+    .map((c) => ({ key: c.key, url: c.path.replace(/^public/, ''), bytes: c.bytes ?? 0 })),
+  // A corpus's un-positioned half, split out of the JS bundle so it is fetched
+  // on demand (David 2026-09-19: "no more non-positioned phrases at boot").
+  // It rides the SAME sequential prewarm as the farmed corpora — one at a time,
+  // smallest first, off the critical path — because that discipline is exactly
+  // what a 6.8 MB file needs and reinventing it would be a second answer to a
+  // solved problem. Keyed `<key>:floating` so it can never be mistaken for a
+  // secondary corpus: it belongs to the PRIMARY one, and `secondaryCorpora`
+  // filters it out while `danyaTeachingService` merges it in.
+  ...registry.corpora
+    .filter((c): c is typeof c & { floatingPath: string } => typeof c.floatingPath === 'string')
+    .map((c) => ({
+      key: `${c.key}:floating`,
+      url: c.floatingPath.replace(/^public/, ''),
+      bytes: FLOATING_PREWARM_BYTES,
+    })),
 ];
+
+/** True for a prewarm key that is a corpus's floating half rather than a corpus. */
+export const isFloatingHalf = (key: string): boolean => key.endsWith(':floating');
 
 const EMPTY: TeachingsBundle = { generatedAt: '', videosDistilled: 0, noteCount: 0, notes: [] };
 

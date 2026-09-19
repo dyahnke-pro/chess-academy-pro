@@ -15,6 +15,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
+import registry from './corpora.json';
 
 // Read from `public/data/`, not an import: a farmed corpus is fetched at
 // runtime rather than bundled (see `farmedCorpusData` — they scale with a
@@ -24,6 +25,17 @@ import { Chess } from 'chess.js';
 // URL does not resolve to a real filesystem path.
 const readCorpus = (name: string): { notes: Note[] } =>
   JSON.parse(readFileSync(resolve(process.cwd(), `public/data/${name}-teachings.json`), 'utf8'));
+
+// 🔒 WHICH corpora exist is the REGISTRY's answer, never this file's
+// (2026-09-19). The per-creator banned-word lists below are real knowledge and
+// stay; the LIST of creators is not, and hardcoding it here made this gate
+// crash outright the moment four 0%-positioned corpora were archived — a gate
+// that cannot run is worse than one that fails. A creator whose corpus is
+// archived drops out automatically and its ban list waits, intact, for a
+// re-farm that records positions.
+const DECLARED = new Set(registry.corpora.map((c) => c.key));
+const declared = <T extends { key: string }>(entries: T[]): T[] =>
+  entries.filter((e) => DECLARED.has(e.key));
 
 interface Note {
   id: string;
@@ -36,23 +48,27 @@ interface Note {
   // defensive.
   teaches?: string;
   plans?: string;
+  // The CONCEPT tier's key. Optional for the same reason as `teaches` above:
+  // this gate reads raw shipped JSON rather than a typed import, so a corpus
+  // whose distiller did not emit the field must not break the type.
+  concepts?: string[];
   sources: string[];
 }
 
 // Shared across creators: the medium itself must never surface.
 const SHARED_BAN = 'naroditsky|danya|aman|hambleton|chessbrah|in this video|in the video|the streamer|chat|subscribe|this stream|speedrun';
 
-const CORPORA: Array<{ key: string; idPrefix: string; notes: Note[]; banned: RegExp }> = [
+const CORPORA = declared<{ key: string; idPrefix: string; notesOf: () => Note[]; banned: RegExp }>([
   {
     key: 'hangingpawns',
     idPrefix: 'hp',
-    notes: readCorpus('hangingpawns').notes,
+    notesOf: () => readCorpus('hangingpawns').notes,
     banned: new RegExp(`\\b(${SHARED_BAN}|hanging pawns|stjepan|tomic|patreon)\\b`, 'i'),
   },
   {
     key: 'saintlouis',
     idPrefix: 'sl',
-    notes: readCorpus('saintlouis').notes,
+    notesOf: () => readCorpus('saintlouis').notes,
     banned: new RegExp(
       `\\b(${SHARED_BAN}|saint louis|st\\. louis|chess club|finegold|seirawan|shahade|maurice ashley|shankland|yermolinsky|khachiyan|nemcova|shabalov|nyzhnyk|novikov|mikhalevski|landa|quesada|georgiev|durarbayli|cordova|chandra|denby|lecture|lectures|audience)\\b`,
       'i',
@@ -61,34 +77,34 @@ const CORPORA: Array<{ key: string; idPrefix: string; notes: Note[]; banned: Reg
   {
     key: 'gothamchess',
     idPrefix: 'gc',
-    notes: readCorpus('gothamchess').notes,
+    notesOf: () => readCorpus('gothamchess').notes,
     banned: new RegExp(`\\b(${SHARED_BAN}|gotham|levy|rozman|gothamchess|this channel|the channel|chess\\.com)\\b`, 'i'),
   },
   {
     key: 'hikaru',
     idPrefix: 'hk',
-    notes: readCorpus('hikaru').notes,
+    notesOf: () => readCorpus('hikaru').notes,
     banned: new RegExp(`\\b(${SHARED_BAN}|hikaru|nakamura|gmhikaru|chess\\.com)\\b`, 'i'),
   },
   {
     key: 'imrosen',
     idPrefix: 'ir',
-    notes: readCorpus('imrosen').notes,
+    notesOf: () => readCorpus('imrosen').notes,
     banned: new RegExp(`\\b(${SHARED_BAN}|eric rosen|im rosen|rosen|chessmood|twitch)\\b`, 'i'),
   },
   {
     key: 'magnuscarlsen',
     idPrefix: 'mgc',
-    notes: readCorpus('magnuscarlsen').notes,
+    notesOf: () => readCorpus('magnuscarlsen').notes,
     banned: new RegExp(`\\b(${SHARED_BAN}|magnus|carlsen|play magnus|chess24)\\b`, 'i'),
   },
   {
     key: 'voiced',
     idPrefix: 'vc',
-    notes: readCorpus('voiced').notes,
+    notesOf: () => readCorpus('voiced').notes,
     banned: new RegExp(`\\b(${SHARED_BAN})\\b`, 'i'),
   },
-];
+]).map((c) => ({ ...c, notes: c.notesOf() }));
 
 const MOVE_NUMBER_PREFIX = /\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;
 

@@ -8,7 +8,17 @@
 
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import teachings from './chessbrah-teachings.json';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+// Read from `public/data/`, not an import (2026-09-19). chessbrah stopped being
+// a BUNDLED corpus: it was 1.81 MB of JS boot payload, and 2,748 of its 2,766
+// notes carried no position — so none of those bytes could ever answer a
+// position query. It is fetched like every other secondary corpus now, and this
+// gate reads the EXACT bytes the app serves rather than a build-time copy.
+const teachings = JSON.parse(
+  readFileSync(resolve(process.cwd(), 'public/data/chessbrah-teachings.json'), 'utf8'),
+) as { notes: Note[] };
 
 interface Note {
   id: string;

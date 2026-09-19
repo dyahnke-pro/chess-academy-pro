@@ -28,6 +28,7 @@ import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
 import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, noteSuitsStudentSide, noteSeatMatches } from './noteAnchorIntegrity';
 import { bakedSpoken, loadSpokenBake } from './spokenNoteBake';
+import { getFarmedCorporaSync, onFarmedCorpusLoaded, primeFarmedCorporaLazily } from './farmedCorpusData';
 import { falseConfigurationClaim } from './configurationClaims';
 import { logAppAudit } from './appAuditor';
 import { applyDerivedAnchors } from './noteAnchorOverrides';
@@ -213,7 +214,10 @@ export const isVerifiedPosition = (n: DanyaNote): boolean =>
   n.positionSource === 'high' || n.positionSource === 'medium';
 
 
-for (const n of DATA.notes) {
+/** Index ONE note into the prefix / opening / concept maps. Extracted so the
+ *  fetched floating half (below) reuses the SAME indexing rather than a second
+ *  copy that would drift — the duplicated-constant rule applied to a loop. */
+function indexNote(n: DanyaNote): void {
   if (n.lineSan.length > 0) {
     const key = n.lineSan.join(' ');
     const bucket = byPrefix.get(key) ?? [];
@@ -238,6 +242,65 @@ for (const n of DATA.notes) {
       bucket.push(n);
       byConcept.set(key, bucket);
     }
+  }
+}
+
+for (const n of DATA.notes) indexNote(n);
+
+// ── THE FLOATING HALF — fetched, not bundled (David 2026-09-19: "no more
+// non-positioned phrases at boot", "i still want danyas corpus loaded at boot
+// time if able. faster responses").
+//
+// Both halves of this corpus are real teaching; they differ only in whether a
+// note carries a POSITION. The positioned 122 stay bundled, so every
+// position-keyed lookup is synchronous at boot exactly as before — that is the
+// speed David is protecting, and it costs 113 KB instead of 6.8 MB. The other
+// 10,022 are reached by opening NAME or by CONCEPT, never by a board, so they
+// have no business on the boot critical path: `dist/index.html` modulepreloads
+// every appdata-* chunk, so bundling them meant every user downloaded 6.8 MB
+// before seeing a square.
+//
+// They are FETCHED rather than dropped, and that was measured rather than
+// assumed. Archiving them instead cut the phase-transition ritual from 19 of 20
+// openings to 10, and LESSON BACKGROUND from 19 to 12 — Taimanov, French,
+// Italian, QGD, Slav, English, KID, Nimzo, Catalan and Dutch all went silent.
+// All 10,022 are reachable by a live tier; none are dead.
+//
+// Merging cannot disturb any POSITION index: every note here has an empty
+// `lineSan`, and `ensureFenIndex` / `ensureSignatureIndex` / the `byPrefix`
+// branch all skip those. So the lazily-built maps stay correct without
+// invalidation — the only maps that grow are `byOpening` and `byConcept`.
+let floatingMerged = false;
+
+/** Merge the fetched floating half. Idempotent; safe to call from a listener. */
+function mergeFloatingHalf(notes: DanyaNote[]): void {
+  if (floatingMerged || notes.length === 0) return;
+  floatingMerged = true;
+  for (const n of notes) {
+    DATA.notes.push(n);
+    indexNote(n);
+  }
+}
+
+onFarmedCorpusLoaded((key, data) => {
+  if (key === 'naroditsky:floating') mergeFloatingHalf(data.notes as unknown as DanyaNote[]);
+});
+
+/** Start the fetch of the floating half. Called by every lookup that consults
+ *  an opening-name or concept tier — the same shape `secondaryCorpora` uses for
+ *  the farmed corpora, and for the same reason: a session that never opens a
+ *  teaching surface must pay nothing. Fire-and-forget; callers stay synchronous
+ *  and simply see the wider tier once it lands. */
+export function primeFloatingTeaching(): void {
+  primeFarmedCorporaLazily();
+  // Also merge SYNCHRONOUSLY if the half is already cached. The listener above
+  // only fires on a load COMPLETING, so a cache that was already warm — a test
+  // seeding it, or a second consumer after the first triggered the fetch —
+  // would never merge. A listener alone is a wire that fires once and then
+  // silently stops being the truth.
+  if (!floatingMerged) {
+    const cached = getFarmedCorporaSync().find((c) => c.key === 'naroditsky:floating');
+    if (cached) mergeFloatingHalf(cached.data.notes as unknown as DanyaNote[]);
   }
 }
 
@@ -756,6 +819,10 @@ export function notesForOpening(openingName: string, maxNotes = Infinity): Danya
  *  "Sicilian … Taimanov" is not covered by "Sicilian Defense". This gates the
  *  gap tier only; ordinary lookups keep their family matching. */
 export function primaryCoversOpening(openingName: string): boolean {
+  // The opening-name and concept tiers live in the FETCHED floating half, so
+  // ask for it here. Fire-and-forget: this call stays synchronous and simply
+  // sees the wider tier once it lands.
+  primeFloatingTeaching();
   const qTokens = normName(openingName)
     .split(' ')
     .filter((t) => t.length > 2 && !GENERIC_TOKENS.has(t));
@@ -818,6 +885,10 @@ export function transitionTeachingSourceForGame(args: {
    *  opponent. See `noteSuitsStudentSide`. */
   studentSide?: 'white' | 'black' | null;
 }): TransitionTeaching | null {
+  // The opening-name and concept tiers live in the FETCHED floating half, so
+  // ask for it here. Fire-and-forget: this call stays synchronous and simply
+  // sees the wider tier once it lands.
+  primeFloatingTeaching();
   // WHICH phase's teaching this transition wants. Hardcoded to 'middlegame'
   // until 2026-08-05, which was invisible while the caller only ran this on the
   // opening→middlegame boundary. The moment the endgame transition started
@@ -905,6 +976,10 @@ export function transitionTeachingForGame(args: {
   fen?: string;
   openingName?: string | null;
 }): DanyaNote | null {
+  // The opening-name and concept tiers live in the FETCHED floating half, so
+  // ask for it here. Fire-and-forget: this call stays synchronous and simply
+  // sees the wider tier once it lands.
+  primeFloatingTeaching();
   return transitionTeachingSourceForGame(args)?.note ?? null;
 }
 
@@ -1073,6 +1148,10 @@ export function spokenTacticNote(args: {
    *  exactly why stripping squares was not enough. */
   fen?: string | null;
 }): { id: string; text: string } | null {
+  // The opening-name and concept tiers live in the FETCHED floating half, so
+  // ask for it here. Fire-and-forget: this call stays synchronous and simply
+  // sees the wider tier once it lands.
+  primeFloatingTeaching();
   if (args.types.length === 0) return null;
   const concepts = Array.from(new Set(
     args.types.flatMap((t) => TACTIC_TYPE_CONCEPTS[t] ?? ['tactics', 'tactical-awareness']),
@@ -1292,6 +1371,10 @@ export function endgameNoteForLesson(args: {
   /** The study position's board — a note may not claim pieces it lacks. */
   fen?: string | null;
 }): { id: string; text: string } | null {
+  // The opening-name and concept tiers live in the FETCHED floating half, so
+  // ask for it here. Fire-and-forget: this call stays synchronous and simply
+  // sees the wider tier once it lands.
+  primeFloatingTeaching();
   const concepts = ENDGAME_LESSON_CONCEPTS[args.lessonId] ?? [];
   const words = ENDGAME_LESSON_WORDS[args.lessonId] ?? [];
   if (concepts.length === 0 || words.length === 0) return null;
@@ -1368,6 +1451,10 @@ export function buildDanyaTeachingBlock(args: {
    *  live-tactic tier overwhelmingly fires). */
   phase?: DanyaNote['phase'];
 }): string {
+  // The opening-name and concept tiers live in the FETCHED floating half, so
+  // ask for it here. Fire-and-forget: this call stays synchronous and simply
+  // sees the wider tier once it lands.
+  primeFloatingTeaching();
   const max = args.maxNotes ?? 3;
   const picked: DanyaNote[] = [];
   const seen = new Set<string>();
@@ -1779,6 +1866,10 @@ export function conceptNotesFor(args: {
    */
   accept?: (n: DanyaNote) => boolean;
 }): DanyaNote[] {
+  // The opening-name and concept tiers live in the FETCHED floating half, so
+  // ask for it here. Fire-and-forget: this call stays synchronous and simply
+  // sees the wider tier once it lands.
+  primeFloatingTeaching();
   const wanted = args.concepts.map((c) => c.toLowerCase()).filter(Boolean);
   if (wanted.length === 0) return [];
   const words = (args.words ?? []).map((w) => w.toLowerCase()).filter(Boolean);

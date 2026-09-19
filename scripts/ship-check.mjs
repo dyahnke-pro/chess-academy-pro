@@ -280,6 +280,9 @@ const GATE_TESTS = [
   'api/_lib/ttsLang.test.ts',
   'api/ota/manifest.test.ts',
   'src/services/otaObserver.test.ts',
+  'src/data/bundledCorpusIsPositioned.test.ts', // a BUNDLED corpus carries only notes the app can anchor —
+                                               // danya shipped 6.8 MB of un-positioned phrases at boot for
+                                               // weeks because nothing measured it (David 2026-09-19)
   'src/data/lessons/lessonIntegrity.test.ts',
   'src/data/lessons/narrationAccuracy.test.ts',
   'src/data/lessons/narrationGrounding.test.ts',
@@ -515,7 +518,10 @@ runStep('typecheck   ', 'npm', ['run', 'typecheck']);
 // KNOWN WEAKNESS, stated rather than hidden: a count can be held flat by adding
 // one error and fixing another. It is still strictly better than no signal, and
 // lowering the ceiling as the backlog clears is the intended direction.
-const TEST_TYPE_ERROR_CEILING = 318;
+// 318 → 317 (2026-09-19): typing `concepts` on the secondary-corpus gate's
+// `Note` cleared two, and the corpus move added one back. Ceilings only ever
+// come DOWN — lower this whenever you clear backlog, never raise it.
+const TEST_TYPE_ERROR_CEILING = 317;
 runStep('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'], {
   optional: true,
   summary: (out) => {

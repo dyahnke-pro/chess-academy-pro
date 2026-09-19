@@ -43,9 +43,19 @@ import registry from '../data/corpora.json';
  * `src/data/corpora.json` is the single declaration; a new corpus appears here
  * automatically.
  */
-const FARMED_FILES: Array<{ key: string; file: string }> = registry.corpora
-  .filter((c) => c.load === 'fetch')
-  .map((c) => ({ key: c.key, file: c.path.replace(/^public\/data\//, '') }));
+const FARMED_FILES: Array<{ key: string; file: string }> = [
+  ...registry.corpora
+    .filter((c) => c.load === 'fetch')
+    .map((c) => ({ key: c.key, file: c.path.replace(/^public\/data\//, '') })),
+  // The PRIMARY corpus's floating half (2026-09-19). It is fetched like a
+  // farmed corpus, so vitest cannot see it either — and it is 10,022 of
+  // danya's 10,144 notes. Omitting it here would make this helper understate
+  // the corpus by 99%, which is precisely the failure its own header exists to
+  // prevent, recurring one level up for the second time.
+  ...registry.corpora
+    .filter((c): c is typeof c & { floatingPath: string } => typeof c.floatingPath === 'string')
+    .map((c) => ({ key: `${c.key}:floating`, file: c.floatingPath.replace(/^public\/data\//, '') })),
+];
 
 const EMPTY: TeachingsBundle = { generatedAt: '', videosDistilled: 0, noteCount: 0, notes: [] };
 

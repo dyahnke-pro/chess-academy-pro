@@ -2,7 +2,7 @@
 // suppression: any primary hit means it stays out entirely, so it can never
 // dilute or contradict Naroditsky teaching where that exists.
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { notesForOpening, secondaryNotesForGap, secondaryNotesForPosition, chessbrahCorpusStats } from './chessbrahTeachingService';
 import {
   notesForOpening as primaryNotesForOpening,
@@ -12,6 +12,8 @@ import {
   noteAtPosition,
 } from './danyaTeachingService';
 import { Chess } from 'chess.js';
+import { loadFullCorpus } from '../test/loadFullCorpus';
+import { primeFloatingTeaching } from './danyaTeachingService';
 
 // 🔒 THE GAP CORPUS IS FLOATING-ONLY SINCE 2026-08-26, and four assertions in
 // this file outlived that change — they have been red on main ever since,
@@ -37,6 +39,24 @@ import { Chess } from 'chess.js';
 // Where the gap corpus DOES still reach the student: `secondaryNotesForGap` by
 // opening name, the phase-transition ritual, `buildDanyaTeachingBlock` as
 // LESSON BACKGROUND, and the tactics/endgame concept tiers. Each is asserted.
+
+// 🔒 PRIME FIRST (2026-09-19). chessbrah stopped being a static import — it was
+// 1.81 MB of JS boot payload and 2,748 of its 2,766 notes carry no position, so
+// none of those bytes could answer a position query. It is FETCHED now, which
+// means a vitest process sees NOTHING from it until the cache is primed from
+// disk. Without this the whole file asserted against an empty corpus and every
+// check here would have been vacuous — the failure this repo has already had
+// twice, where a measurement ran against a fraction of the data and read green.
+// `primeFloatingTeaching` does the same for the primary corpus's fetched half,
+// which the phase-transition and LESSON BACKGROUND assertions below depend on.
+beforeAll(() => {
+  // The FLOOR is the point, not the call (see loadFullCorpusIsCalled): if
+  // `public/data/*.json` were missing the loader returns empty bundles BY
+  // DESIGN, and every assertion below would pass against an empty index.
+  const total = loadFullCorpus().reduce((n, c) => n + c.notes, 0);
+  expect(total, 'corpus did not prime — every check below would be vacuous').toBeGreaterThan(20_000);
+  primeFloatingTeaching();
+}, 120_000);
 
 describe('chessbrahTeachingService — gap tier', () => {
   it('has a corpus', () => {

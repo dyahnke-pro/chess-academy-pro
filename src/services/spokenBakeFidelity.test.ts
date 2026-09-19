@@ -25,18 +25,23 @@ import { resolve } from 'node:path';
 // The gate itself, imported from the bake script — never a reimplementation.
 // A copy would drift from the thing it is meant to pin.
 import { gateSpoken, fidelityBreach } from '../../scripts/bake-spoken-notes.mjs';
+import registry from '../data/corpora.json';
 
 const ROOT = resolve(__dirname, '../..');
 const read = (rel: string) => JSON.parse(readFileSync(resolve(ROOT, rel), 'utf8'));
 
 interface Baked { spoken?: string; kind?: string; unspeakable?: string }
 
-const CORPORA = [
-  'src/data/danya-teachings.json',
-  'src/data/chessbrah-teachings.json',
-  'public/data/hangingpawns-teachings.json',
-  'public/data/saintlouis-teachings.json',
-];
+// 🔒 FROM THE REGISTRY, never a hand-typed roster (2026-09-19). This list was
+// literal, so it broke outright when chessbrah moved to `public/data/` — and
+// silently omitted four corpora before that. It must include a corpus's
+// `floatingPath` half too: the bake exists primarily to give FLOATING notes a
+// speakable form, so checking only the bundled half would inspect ~1% of what
+// the bake covers and read green.
+const CORPORA: string[] = registry.corpora.flatMap((c) => {
+  const floatingPath = (c as { floatingPath?: string }).floatingPath;
+  return floatingPath ? [c.path, floatingPath] : [c.path];
+});
 
 const sources = (): Map<string, string> => {
   const out = new Map<string, string>();

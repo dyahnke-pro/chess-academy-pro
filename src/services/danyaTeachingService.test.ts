@@ -4,7 +4,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { Chess } from 'chess.js';
 import { readFileSync } from 'node:fs';
-import { noteAtPosition, planNoteForPath, notesForOpening, noteOpeningConflicts, supportNoteForPly, buildDanyaTeachingBlock } from './danyaTeachingService';
+import { noteAtPosition, planNoteForPath, notesForOpening, noteOpeningConflicts, supportNoteForPly, buildDanyaTeachingBlock, primeFloatingTeaching } from './danyaTeachingService';
 import { __setFarmedCorporaCache } from './farmedCorpusData';
 import { secondaryNotesForFen, warmSecondaryPositionIndexSync } from './secondaryCorpora';
 
@@ -17,6 +17,34 @@ import { secondaryNotesForFen, warmSecondaryPositionIndexSync } from './secondar
 interface Note { id: string; lineSan: string[]; plans: string; opening?: string | null }
 const voiced = JSON.parse(readFileSync('public/data/voiced-teachings.json', 'utf8')) as { notes: Note[] };
 const positioned = voiced.notes.filter((n) => n.lineSan.length > 0);
+
+// 🔒 MERGE THE PRIMARY CORPUS'S FLOATING HALF ONCE, FOR THE WHOLE FILE
+// (2026-09-19). Only 122 of danya's 10,144 notes carry a position; those stay
+// BUNDLED so position lookups are synchronous at boot. The other 10,022 — every
+// opening-NAME and CONCEPT keyed note — are fetched, which in vitest means they
+// do not exist until something primes them. The name-vocabulary and
+// live-tactic-concept blocks below query exactly those tiers and were asserting
+// against an empty index.
+//
+// At FILE level on purpose: `primeFloatingTeaching` merges into the service's
+// own index rather than the farmed cache, so the merge survives the per-describe
+// `__setFarmedCorporaCache(undefined)` teardown below. Read the file directly
+// rather than through the full-corpus test helper: this file needs ONE corpus,
+// not the 40 MB the helper parses. (Naming that helper here would trip its own
+// mention-implies-call gate, which is correct — this really does not call it.)
+const danyaFloating = JSON.parse(
+  readFileSync('public/data/danya-floating.json', 'utf8'),
+) as { notes: Note[] };
+
+beforeAll(() => {
+  expect(
+    danyaFloating.notes.length,
+    'the floating half did not load — the name/concept tiers below would be vacuous',
+  ).toBeGreaterThan(1000);
+  __setFarmedCorporaCache([{ key: 'naroditsky:floating', data: danyaFloating as never }]);
+  primeFloatingTeaching();
+  __setFarmedCorporaCache(undefined);
+}, 60_000);
 
 function fenAfter(sans: string[]): string {
   const c = new Chess();
