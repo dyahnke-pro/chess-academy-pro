@@ -510,11 +510,21 @@ const run = async () => {
   // slower. Three rows then failed for a reason that had nothing to do with
   // them: the recap, the turning-point card and Show-me all need the walk to
   // REACH the end. Poll more often rather than waiting longer.
-  // 600 @1000ms = 10 min — the SAME wall clock as the original 400 @1500ms but
-  // 50% more polls. Do not raise this further without also raising the outer
-  // `timeout` on the command: 900 polls pushed a run past 3300s and it was
-  // killed mid-walk, which reads exactly like the failure it was meant to fix.
-  for (let i = 0; i < 600; i++) {
+  // 🔴 A FIXED BUDGET WAS THE BUG. 600 was tuned when this audit ran ONE
+  // hardcoded fixture; it now rotates a fresh master game every run, and an
+  // 89-ply game reached ply 80 at poll 575 and stopped NINE PLIES SHORT. Two
+  // rows then failed for a reason that had nothing to do with the product —
+  // RECAP ("end reached=false") and THESIS (the turning-point card only appears
+  // after the walk ends) — which is the same "a constant about a different
+  // game" defect already fixed once in this file's RECAP assertion.
+  //
+  // Scaled by the game's OWN length instead. ~12 polls/ply covers the observed
+  // ~6-9s per ply with headroom for a richer beat; the floor keeps short games
+  // at the previous budget and the ceiling keeps the outer timeout meaningful
+  // (the comment this replaces records a 900-poll run being killed at 3300s —
+  // the lesson was "bound it", not "freeze it").
+  const POLL_BUDGET = Math.min(1800, Math.max(600, total * 12));
+  for (let i = 0; i < POLL_BUDGET; i++) {
     await resolveCards();
     const n = (await readWalkPly(page))?.n ?? 0;
     const b = await txt(page, '[data-testid="review-classification-badge"]');
@@ -540,7 +550,7 @@ const run = async () => {
     // indistinguishable from a hang, which is the exact failure this audit
     // exists to catch in the PRODUCT — an instrument that reports nothing is
     // indistinguishable from a green one.
-    if (i > 0 && i % 25 === 0) log(`  [walk] ply ${n}/${total} after ${i}s (poll ${i}/600)`);
+    if (i > 0 && i % 25 === 0) log(`  [walk] ply ${n}/${total} after ${i}s (poll ${i}/${POLL_BUDGET})`);
     // NEVER RESUME WHILE THE TURNING-POINT CARD IS UP — resuming advances the
     // walk, which dismisses it unanswered (see the pause note in resolveCards).
     const cardBlocking = await has(page, '[data-testid="review-turning-point-card"]');
