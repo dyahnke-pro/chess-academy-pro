@@ -793,6 +793,14 @@ export interface ProviderCallOptions {
    *  `getCoachChatResponse`. Kid surfaces MUST NOT pass this.
    *  See `MasterGroundingOptions` in `src/services/coachApi.ts`. */
   grounding?: import('../services/coachApi').MasterGroundingOptions;
+  /** The language THIS TURN must answer in, computed once by `coachService`
+   *  from the student's own words (or their setting). The brain's grounded
+   *  lanes voice their facts before any model call, so they cannot read the
+   *  language instruction in the system prompt — they need the value. Without
+   *  it they re-detect it from an ask `coachService` has already translated to
+   *  English, which is why a Thai question came back in English on prod
+   *  (2026-09-19). Omitted / 'English' behaves exactly as before. */
+  studentLanguage?: string;
 }
 
 export interface Provider {

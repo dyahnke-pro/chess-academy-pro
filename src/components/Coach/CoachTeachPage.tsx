@@ -258,6 +258,8 @@ import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
+import { detectStudentLanguage } from '../../services/spokenLanguage';
+import { translateToEnglish } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
@@ -2934,6 +2936,36 @@ export function CoachTeachPage(): JSX.Element {
     // resolution probably missed what they wanted.
     const trimmedText = text.trim();
 
+    // ── EVERY MATCHER BELOW IS AN ENGLISH PATTERN ────────────────────────────
+    //
+    // 🔒 MEASURED ON PROD, 2026-09-19. Learn's whole intent pipeline — the
+    // walkthrough controls, the settings matcher, the player-game and
+    // training-aid and navigation routers, `parseCoachIntent`, the stage
+    // detectors and the opening-name resolver — ran on the student's RAW
+    // words. So "สอนฉันเปิดเกมอิตาลีให้หน่อย" (teach me the Italian) matched
+    // nothing here, fell through to the brain, and came back "The best move is
+    // e4." They asked for a lesson and were answered with a move. Thai, Greek,
+    // Hebrew, Vietnamese, Hindi, Korean and Turkish every one the same, so it
+    // was never about WHICH language — this surface only ever read English.
+    //
+    // `routeChatIntent` has translated before matching since 2026-07-10 and is
+    // the model; Learn never inherited it because it does not go through that
+    // router. Translated ONCE here, above every matcher, rather than in front
+    // of each one — that duplication is what let the settings lane translate
+    // while the lesson lane did not.
+    //
+    // MATCHING ONLY. The brain still receives the student's own words, so the
+    // reply language is untouched. And `detectStudentLanguage` records the
+    // observation, which is what makes the LESSON that starts from here speak
+    // their language instead of English.
+    //
+    // Identity for English input — same string, no call — so every use below
+    // is a strict no-op for an English speaker.
+    const askLang = detectStudentLanguage(trimmedText);
+    const englishText = askLang.nonEnglish
+      ? await translateToEnglish(trimmedText).catch(() => trimmedText)
+      : trimmedText;
+
     // ── A TAPPED TRAP CHIP TEACHES ITS GEM ─────────────────────────────────
     // David 2026-08-16: "Place them in pickers into the chat … Once one gem is
     // taught have the coach ask if they want to continue down the list. Again
@@ -3118,7 +3150,7 @@ export function CoachTeachPage(): JSX.Element {
       opts?.coachReplyPlayed === undefined &&
       walkthrough.isActive
     ) {
-      const control = classifyWalkthroughControl(trimmedText);
+      const control = classifyWalkthroughControl(englishText);
       if (control === 'new' || control === 'stop') {
         const priorOpening = walkthrough.tree?.openingName ?? null;
         const ctlTurnId = freshTurnId('walkthrough-control');
@@ -3207,7 +3239,7 @@ export function CoachTeachPage(): JSX.Element {
       opts?.coachReplyPlayed === undefined &&
       !walkthrough.isActive
     ) {
-      const idleControl = classifyWalkthroughControl(trimmedText);
+      const idleControl = classifyWalkthroughControl(englishText);
       if (idleControl !== null) {
         const idleTurnId = freshTurnId('walkthrough-control-idle');
         const ack =
@@ -3251,7 +3283,7 @@ export function CoachTeachPage(): JSX.Element {
       !walkthrough.isActive &&
       !activeDrillRef.current
     ) {
-      const report = trimmedText.match(
+      const report = englishText.match(
         /^i\s+(?:just\s+)?played\s+([a-hNBRQKO][a-hxNBRQK1-8=+#O-]*)\s*[.!]?\s*(?:your\s+(?:move|turn)\s*[.!]?)?$/i,
       );
       if (report) {
@@ -3506,7 +3538,7 @@ export function CoachTeachPage(): JSX.Element {
         // Multilingual settings on Learn (David 2026-07-10): handled INSIDE
         // applyCoachSetting since 2026-09-19 — it is the English matcher, so
         // the translation is its concern, not each caller's.
-        const settingResult = await applyCoachSetting(text);
+        const settingResult = await applyCoachSetting(englishText);
         if (settingResult) {
           setMessages((prev) => [...prev, {
             id: uid('setting'),
@@ -3537,7 +3569,7 @@ export function CoachTeachPage(): JSX.Element {
       // round-trip, no toolbelt tokens, nothing to "decide" (G0). Runs
       // BEFORE the fuzzy matcher so the hijack can't happen.
       {
-        const pgReq = parsePlayerGameRequest(text);
+        const pgReq = parsePlayerGameRequest(englishText);
         if (pgReq) {
           const fuzzy = fuzzyMatchOpening(pgReq.openingQuery);
           const openingName =
@@ -3828,7 +3860,7 @@ export function CoachTeachPage(): JSX.Element {
       // drills ("drill the Vienna") return null here and fall through to
       // the opening stage router below, unchanged.
       {
-        const aid = matchTrainingAidRoute(text);
+        const aid = matchTrainingAidRoute(englishText);
         if (aid) {
           const aidTurnId = freshTurnId('training-aid');
           // Always echo the user's request.
@@ -3902,7 +3934,7 @@ export function CoachTeachPage(): JSX.Element {
       // Runs AFTER training-aids / walkthrough-control so "go"/"stop"/
       // "take back" during a lesson keep their meaning.
       {
-        const nav = matchNavigationRoute(text);
+        const nav = matchNavigationRoute(englishText);
         if (nav) {
           const navTurnId = freshTurnId('navigate');
           setMessages((prev) => [...prev, {
@@ -3942,7 +3974,7 @@ export function CoachTeachPage(): JSX.Element {
       // runner (lead-the-eye arrows + voice-gated advance). This runs
       // BEFORE the fuzzy matcher so the garbage match can't happen.
       {
-        const intent = parseCoachIntent(text);
+        const intent = parseCoachIntent(englishText);
         if (intent.kind === 'continue-middlegame') {
           const contextOpening = walkthrough.tree?.openingName ?? null;
           // The opening the student NAMED (explicit subject) or is
@@ -4130,7 +4162,8 @@ export function CoachTeachPage(): JSX.Element {
         // the Vienna" — that is a watch ask and keeps its walkthrough.
         { regex: /\b(?:let'?s|can\s+we|could\s+we|wanna|i\s+want\s+to)\s+play\s+(?!through\b)(?:the\s+)?/i, stage: 'play-real' },
       ];
-      const trimmed = text.trim();
+      // Translated once at the top of this turn — see the note there.
+      const trimmed = englishText;
       // MULTI-INTENT FIRST-VERB ROUTING (2026-08-13 audit): "teach me the
       // najdorf and quiz me and show me a trap" must honor the FIRST verb —
       // teach the Najdorf. Left whole, the tail's stage words hijack the

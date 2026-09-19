@@ -81,6 +81,7 @@ async function callDeepSeek(
       'deepseek',
       undefined,        // skipPersonality — coach lane
       options?.grounding, // WO-COACH-MASTER-INTEGRATION
+      options?.studentLanguage, // the turn's language, for the grounded lanes
     );
     const timeout = new Promise<string>((_, reject) =>
       setTimeout(() => reject(new Error('coach-brain-deepseek-timeout')), PROVIDER_TIMEOUT_MS),

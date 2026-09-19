@@ -66,3 +66,26 @@ describe('deepseekProvider — cold-start timeout retry', () => {
     expect(getCoachChatResponse).toHaveBeenCalledTimes(2);
   });
 });
+
+describe('deepseekProvider — the turn language reaches the grounded lanes', () => {
+  beforeEach(() => {
+    getCoachChatResponse.mockReset();
+    logAppAudit.mockReset();
+  });
+
+  // 🔒 MEASURED ON PROD 2026-09-19: a Thai question came back "The best move is
+  // Nc3…". The grounded lanes inside the brain voice their facts BEFORE any
+  // model call, so the language instruction in the system prompt never reaches
+  // them — they need the value, and this is the slot it travels in.
+  it('forwards studentLanguage as the 10th argument', async () => {
+    getCoachChatResponse.mockResolvedValueOnce('ok');
+    await deepseekProvider.call(envelope, { studentLanguage: 'Thai' });
+    expect(getCoachChatResponse.mock.calls[0][9]).toBe('Thai');
+  });
+
+  it('passes nothing on an English turn, so the raw fast path is unchanged', async () => {
+    getCoachChatResponse.mockResolvedValueOnce('ok');
+    await deepseekProvider.call(envelope);
+    expect(getCoachChatResponse.mock.calls[0][9]).toBeUndefined();
+  });
+});
