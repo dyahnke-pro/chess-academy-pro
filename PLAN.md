@@ -755,11 +755,17 @@ from the entry chunk's size.
    Everything else was green, including ACC board-accuracy across 67 narrated
    plies, SEAT across 67, both THESIS rows, all three NEED rows and MUTE.
 
-1. 🔴 **POST-DEPLOY AUDIT FOR BOTH COMMITS** (G1). SW handover audit is DONE —
-   9/9 green on live prod, including the two rows that prove the mechanism
-   (`deferrals+1, asked-while-held=false`, then `SKIP_WAITING posted 1x`).
-   Learn is DONE — 8/8. Review is the one above. Still to run against LIVE prod
-   after the corpus-strip deploy:
+1. ✅ **POST-DEPLOY AUDITS ARE DONE** (G1), all against LIVE prod:
+   - `audit-sw-handover-prod` **9/9**, including the two rows that prove the
+     MECHANISM rather than the config (`deferrals+1, asked-while-held=false`,
+     then `SKIP_WAITING posted 1x`), and the deployed `sw.js` verified by hand:
+     one `self.skipWaiting()`, inside the message listener, zero `clientsClaim`.
+   - `audit-concept-gameplay-prod` **8/8** twice — once after the corpus move,
+     again after the source-meta strip (5 plies in 32 s / 27 s).
+   - `audit-review-overhaul-prod` **22/24** — the two reds are item 0 above.
+   - The stripped corpus verified ON prod: `/data/danya-floating.json` serves
+     9,928 notes with ZERO source-meta survivors.
+   The command, for the next run:
    `AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-sw-handover-prod.mjs`
    plus the standing pair (`audit-review-overhaul-prod`, then
    `audit-concept-gameplay-prod`), SEQUENTIALLY, never beside ship-check.
