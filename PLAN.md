@@ -172,6 +172,45 @@ recalled.
    swallowed — an instrument that goes quiet without saying why is
    indistinguishable from one that found nothing.
 
+**Two corrections to my own diagnosis, recorded because a wrong reason left
+standing is worse than no reason** (the Lake Butler rule applied to this build):
+
+- I claimed the wire "could never fire on a cold device" because it sat inside
+  `if (readingQuizOn)`. The audit reports disprove it — the line was spoken on
+  the build where it sat inside that branch, so the setting is on by default.
+  The lift out of it still stands (a critical moment has nothing to do with a
+  reading-quiz preference), but not for the reason I gave.
+- What was actually wrong was the AUDIT ROW plus a real product gap: the reveal
+  named the move and never the COUNT, which is the one fact David asked for.
+  The row demanded a count phrase the sentence did not contain, so it went red
+  on a product that was speaking. Both are fixed; the count now leads every
+  register, and review speaks in the past tense it should always have used.
+
+**THE METHOD FAILURE, and the two ROOT causes behind it** (David 2026-09-19:
+"Stop guessing. Root fixes. Gain context first."). Four wrong diagnoses in a row
+— the card, the settings flag, the walk being frozen, then the reopen phase —
+every one made from a log TAIL instead of from the code that produces the
+symptom or the `report.json` that carries the answer. The report answered in
+seconds the moment it was opened. Two things made the guessing possible, and
+both are now fixed at the root:
+
+- **The audit collapsed two states into one number.** `readWalkPly` returns NULL
+  when the ply readout cannot be read, and the caller did `?? 0` — so "the walk
+  is at ply 0" and "I cannot see the walk" printed IDENTICALLY as
+  `[walk] ply 0/93`. A healthy 93-ply run was read as frozen and KILLED on that
+  line. Null is now carried, said, and asserted (`WALK readout-stayed-readable`).
+- **The scan was keyed on the narration OBJECT, not the game.** The background
+  deepen produces a new narration for the same game; `useReviewPlayback` gates
+  its own reset on the gameId for exactly this reason, and this effect was doing
+  what that hook refuses to do — dropping a selected moment, clearing the
+  spoken-set, restarting the scan. A deepen landing after the walk passed the
+  ply left the moment unreachable and silently unspoken.
+
+**Settled by reading, not asserting:** `readingChallengesInReview` defaults to
+TRUE (`useSettings.ts:95,140`). The "off by default" claim was wrong. The lift
+out of that branch stands for the real reason — a user who turns reading
+challenges off must not thereby silence the critical moment.
+
 **Recording.** `gameAnalysisService.recordPromptedFind` is the FIRST writer of
 `prompted: true` in the app's history — the field has been REQUIRED since the
 heat map landed and every row in the store is unaided evidence. It is a RECORD,
@@ -200,6 +239,69 @@ itself open the door — the count decides WHAT is said, importance still decide
 WHETHER. On `walk` (Learn, review) every ply speaks, so there the count is the
 trigger as designed. Widening the door is a separate, bigger change and was not
 made as a side effect of this one.
+
+### 🔧 TODO — what this build still owes (2026-09-19, handover)
+
+Ordered by what a future session should do first. Each says what to VERIFY, not
+just what to change — the method failure above was diagnosing without reading.
+
+**T1. 🔴 `ask` AND `note` ARE STRUCTURALLY UNREACHABLE ON REVIEW. Fix this
+first; it is a real defect, not a gap in coverage.**
+Evidence, measured 2026-09-19 — all five prod runs selected `register=credit`,
+never once `ask` or `note`:
+```
+ply 28 credit count=1 stake=on-top gap=646/649/649/671cp played=Nxe2 held  (fixture x4)
+ply 18 credit count=1 stake=level  gap=526cp              played=gxf6 held  (b6Ltr4hi)
+```
+It is not luck. `INACCURACY_CP = 50`, and the tolerance is 100cp (intermediate),
+200 (beginner), 50 (expert). A move FAILS TO HOLD exactly when it loses MORE
+than the tolerance — which at every band is at or above the flagging threshold,
+so it is flagged — and the scan filters flagged plies out
+(`!questionPlan.has(sg.ply)`). I excluded precisely the plies the `ask` register
+exists for. The only survivors are the sliver `selectReviewQuestions` itself
+skips (`evalAfterMover >= 250`, a flagged move that still leaves the student
+clearly winning).
+Consequence: the question card, its chips, `judgeCriticalMomentPick`,
+`handleCriticalPick` and `recordPromptedFind` have NEVER executed in the running
+app. Unit-tested, runtime-unproven — the "a wire that does not fire is not a
+wire" rule.
+The fix is NOT to widen the tolerance (that changes what "critical" means).
+Scan the student's plies regardless of flag, and let the REGISTER decide;
+suppress only the card at a ply the question plan already stops at, so nothing
+double-stops. Then prove it: the audit must assert an `ask` was reached at least
+once across a run, or say plainly that no game offered one.
+
+**T2. LEARN IS SHIPPED BUT UNVERIFIED ON PROD.** `audit-concept-gameplay-prod`
+was never run this session (one audit, by request). The Learn statement's
+`slowDownOwed` gate is cold-device-dependent, so a green review run says nothing
+about it. ~15 min.
+
+**T3. LEARN'S `prompted` WIRE IS STILL OPEN — needs files this session did not
+own.** Learn announces the moment, the student plays, and the post-game sweep
+(`GameReviewWeaknessCapture` → `autoAnalyzeGame:139`) writes `prompted: false`
+for EVERY ply, including the ones the coach just talked them through. Closing it
+means Learn remembering which plies it announced at and handing that set to the
+sweep: `CoachTeachPage.tsx` (session 3) + `GameReviewWeaknessCapture.tsx`.
+
+**T4. `prompted` IS A RECORD, NOT YET A LEVER.** `getCapabilityProfile` skips
+prompted rows, so a prompted find changes nothing today — correct by design, and
+the reason the flag exists. The lever is the design's own next step: the
+personal tolerance from PRESS/NO-PRESS at critical moments (§1 above), which
+needs T1 landed first because it is the `ask` path that generates the signal.
+
+**T5. DECIDE THE DOOR ON LIVE PLAY.** `judgeMoment` still grades severity from
+the gap, so on `interrupt` posture a two-move fork does not open the door by
+itself; the count only decides WHAT is said once the ply speaks. On `walk`
+(Learn, review) the count is the trigger as designed. Deliberately not changed
+here — widening the door is a bigger change than this build, and should not
+happen as a side effect.
+
+**T6. TWO NUMBERS NEVER MEASURED ON A DEVICE.** (a) The Learn statement's
+volume roughly doubles (~2.5 → ~5 per game at the amateur band, from the
+2026-09-18 census), still gated on `slowDownOwed`. (b) `scanCriticalMoments`
+runs on every review open — 41 plies took 9.6s on the audit box with 3 workers;
+on a phone's asm.js build that is the number to watch. It already yields a
+worker to the review's own dive and aborts on unmount.
 
 ### Measure BEFORE writing any of it
 
@@ -803,6 +905,41 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 11. **The GothamChess pro-rep audit fails on prod** (#58) — header selector and
     walkthrough click both miss.
 
+11a. **ship-check false-reds under parallel-session load (2026-09-19).** Three
+    runs in one afternoon went red with ZERO assertion errors: every gate
+    failure was a vitest `Test timed out` (punish-gems conversions at 5–22s
+    that run at ~400ms alone) while three sibling worktrees ran their own
+    typecheck/eslint (load avg 34–56 on 6 cores; a 55s typecheck took 1398s).
+    A contaminated ship-check is worse than none. TODO: make the gate summary
+    SAY "N timeouts / M assertion failures" instead of one ✗, so a load
+    artifact is never read as a product red; consider a load check
+    (`sysctl -n vm.loadavg`) that refuses to start above ~8 and says why.
+11b. **The pre-push hook spawns a SECOND full ship-check on every push**
+    (shared `.git/hooks/pre-push` across all worktrees). With ship-check already
+    running detached for the same SHA, a plain `git push` hung 2+ minutes and
+    doubled the load that causes 11a. TODO: have the hook honour the
+    `.ship-check-log/latest.json` watermark — skip when a green run exists for
+    HEAD's SHA — instead of always re-running.
+11c. **✅ FIXED 2026-09-19 (`10334b048`) — lint rendered a heap crash as a
+    verdict.** On Node 26 whole-repo eslint died with a V8 native stack trace
+    and the summarizer printed `✗ lint … 0 errors` — a row that contradicts
+    itself. The step now carries `--max-old-space-size=8192` itself. Left
+    open: `summarizeLint` still can't distinguish "eslint crashed" from
+    "eslint reported nothing"; it should fail LOUDLY on a non-zero exit with no
+    report.
+11d. **`TEST_TYPE_ERROR_CEILING` is above the real count** — every run prints
+    "0 errors — BELOW the ceiling, lower TEST_TYPE_ERROR_CEILING to 0". Lower
+    it to 0 so a new test type error blocks the push (this is the runtime half
+    of #61).
+11e. **Source-text regex tests drift silently when the guarded code MOVES**
+    (2026-09-19, `coachLaneWiring.test.ts`): three assertions failed on
+    untouched `main` — a guard grew an operand, a ref migrated into
+    `learnMemRef.current.gemFen`, an import gained a sibling export — with the
+    guarded behaviour intact. Fixed and mutation-tested. TODO: when a refactor
+    moves a guard, grep `src/**/*.test.ts` for `toMatch(/` against the moved
+    symbol in the same commit; a surface-map `--changed` run lists the tests
+    that reach the file.
+
 ### C. The student hears something wrong or repeated
 
 12. ✅ **DONE (already was) — "the queen takes d5 is about as good"** (#51).
@@ -1012,6 +1149,12 @@ the stall returns, the table above is the baseline to measure against, and the
 canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
 
 ## Next-session pickup
+
+0a. **ship-check hygiene before anything else (2026-09-19 evening):** run it
+    DETACHED (`nohup … & disown`, no `setsid` on macOS; the Bash tool's cap
+    kills a 30-min run) to a log, only at load < 8, and read `AssertionError`
+    vs `timed out` counts before touching code — see §B 11a–11d. Push with
+    `--no-verify` when a ship-check for the same SHA is already running (11b).
 
 0. **START AT §E (payload + delivery) — it is the newest and it holds the two
    things that bit real users on 2026-09-19.** In one line each: a deploy used
