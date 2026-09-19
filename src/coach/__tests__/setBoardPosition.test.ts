@@ -32,21 +32,26 @@ describe('set_board_position tool', () => {
 
   describe('grounded `moves` path', () => {
     it('replays real SAN into the reachable FEN and echoes the moves', async () => {
-      const callback = vi.fn(() => ({ ok: true }));
+      // Declares what it RECEIVES, so `mock.calls[0][0]` is a real string
+      // rather than an index into an empty tuple.
+      const callback = vi.fn((_fen: string) => ({ ok: true }));
       const result = await setBoardPositionTool.execute(
         { moves: 'd4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Na3' },
         { onSetBoardPosition: callback },
       );
       expect(result.ok).toBe(true);
       // Knight really is on a3, pawn really captured on c4 — a real line.
-      const fen = callback.mock.calls[0][0] as string;
+      // No cast needed now the mock declares its parameter.
+      const fen = callback.mock.calls[0][0];
       const rank3 = fen.split(' ')[0].split('/')[5]; // FEN ranks are 8→1
       expect(rank3.startsWith('N')).toBe(true); // knight on a3
       expect((result.result as { moves?: string }).moves).toBe('d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Na3');
     });
 
     it('collapses a fabricated line on the first illegal move', async () => {
-      const callback = vi.fn(() => ({ ok: true }));
+      // Declares what it RECEIVES, so `mock.calls[0][0]` is a real string
+      // rather than an index into an empty tuple.
+      const callback = vi.fn((_fen: string) => ({ ok: true }));
       const result = await setBoardPositionTool.execute(
         { moves: 'd4 Nf6 c4 e6 g3 d5 Bg2 Qc4' }, // Qc4 is not legal here
         { onSetBoardPosition: callback },
@@ -101,7 +106,9 @@ describe('set_board_position tool', () => {
     });
 
     it('dispatches a deep (past-opening) raw FEN', async () => {
-      const callback = vi.fn(() => ({ ok: true }));
+      // Declares what it RECEIVES, so `mock.calls[0][0]` is a real string
+      // rather than an index into an empty tuple.
+      const callback = vi.fn((_fen: string) => ({ ok: true }));
       const result = await setBoardPositionTool.execute(
         { fen: DEEP_FEN },
         { onSetBoardPosition: callback },

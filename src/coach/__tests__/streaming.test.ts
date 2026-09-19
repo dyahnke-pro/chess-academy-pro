@@ -233,6 +233,10 @@ describe('coachService.ask — streaming', () => {
         onChunk: () => undefined,
       },
     );
-    expect(capturedEnvelope?.memory?.intendedOpening?.name).toBe('Caro-Kann Defense');
+    // Read through a typed alias: TS narrows the captured variable to `never`
+    // at this point because every assignment happens inside a callback it
+    // cannot order, and the declared type is the honest one.
+    const env: { memory?: { intendedOpening?: { name: string } | null } } | null = capturedEnvelope;
+    expect(env?.memory?.intendedOpening?.name).toBe('Caro-Kann Defense');
   });
 });

@@ -136,7 +136,7 @@ describe('coachService.ask', () => {
   // single-trip behavior. Chat surfaces opt in to 3 explicitly via the
   // CoachServiceOptions.maxToolRoundTrips field.
   it('default round-trip budget is 1 — provider is called once when no tools fire', async () => {
-    const call = vi.fn(() => Promise.resolve({ text: 'A.', toolCalls: [] }));
+    const call = vi.fn((_req: unknown, _opts?: unknown) => Promise.resolve({ text: 'A.', toolCalls: [] }));
     const provider: Provider = { name: 'deepseek', call };
     await coachService.ask(
       { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
@@ -159,7 +159,7 @@ describe('coachService.ask', () => {
       // Sentinel — should never be reached at budget=1.
       { text: 'should not reach', toolCalls: [] },
     ];
-    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const call = vi.fn((_req: unknown, _opts?: unknown) => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
     const provider: Provider = { name: 'deepseek', call };
     await coachService.ask(
       { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
@@ -185,7 +185,7 @@ describe('coachService.ask', () => {
       // Final turn — no tools, just a narrative answer.
       { text: 'turn 3: final', toolCalls: [] },
     ];
-    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const call = vi.fn((_req: unknown, _opts?: unknown) => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
     const provider: Provider = { name: 'deepseek', call };
     const answer = await coachService.ask(
       { surface: 'ping', ask: 'q', liveState: { surface: 'ping' } },
@@ -224,7 +224,7 @@ describe('coachService.ask', () => {
       },
       { text: 'He opens with e4 most often here.', toolCalls: [] },
     ];
-    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const call = vi.fn((_req: unknown, _opts?: unknown) => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
     const provider: Provider = { name: 'deepseek', call };
 
     const answer = await coachService.ask(
@@ -247,7 +247,7 @@ describe('coachService.ask', () => {
       { text: '', toolCalls: [{ id: 't1', name: 'lookup_player_opening_moves', args: { player: 'x', color: 'white', fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' } }] },
       { text: '', toolCalls: [] }, // brain converges to nothing
     ];
-    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const call = vi.fn((_req: unknown, _opts?: unknown) => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
     const answer = await coachService.ask(
       { surface: 'teach', ask: 'how does magnus play the catalan', liveState: { surface: 'teach' } },
       { providerOverride: { name: 'deepseek', call }, maxToolRoundTrips: 2 },
@@ -261,7 +261,7 @@ describe('coachService.ask', () => {
       { text: '', toolCalls: [{ id: 't1', name: 'start_walkthrough_for_opening', args: { opening: 'Catalan Opening' } }] },
       { text: '', toolCalls: [] },
     ];
-    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const call = vi.fn((_req: unknown, _opts?: unknown) => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
     const answer = await coachService.ask(
       { surface: 'teach', ask: 'teach me the catalan', liveState: { surface: 'teach' } },
       { providerOverride: { name: 'deepseek', call }, onStartWalkthroughForOpening: () => ({ ok: true }), maxToolRoundTrips: 2 },
@@ -271,7 +271,7 @@ describe('coachService.ask', () => {
   });
 
   it('#4: folds player-game SANs into grounding.gameSans so the master-play validator accepts them', async () => {
-    const call = vi.fn(() => Promise.resolve({ text: 'ok', toolCalls: [] }));
+    const call = vi.fn((_req: unknown, _opts?: unknown) => Promise.resolve({ text: 'ok', toolCalls: [] }));
     await coachService.ask(
       {
         surface: 'teach',
@@ -310,7 +310,7 @@ describe('coachService.ask', () => {
       // The brain fabricates anyway (the ~20% case the prompt can't stop):
       { text: '[VOICE: Carlsen plays e4 about 55% of his games, d4 around 30%.] He is mainly a 1.e4 player.', toolCalls: [] },
     ];
-    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const call = vi.fn((_req: unknown, _opts?: unknown) => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
     const answer = await coachService.ask(
       { surface: 'teach', ask: "Carlsen's first-move stats from his real games?", liveState: { surface: 'teach' } },
       { providerOverride: { name: 'deepseek', call }, maxToolRoundTrips: 2 },
@@ -331,7 +331,7 @@ describe('coachService.ask', () => {
       { text: 'pulling', toolCalls: [{ id: 'tc-pl', name: 'lookup_player_opening_moves', args: { player: 'Carlsen', color: 'white', fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' } }] },
       { text: 'He plays e4 in 72% of these games.', toolCalls: [] },
     ];
-    const call = vi.fn(() => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
+    const call = vi.fn((_req: unknown, _opts?: unknown) => Promise.resolve(responses.shift() ?? { text: '', toolCalls: [] }));
     const answer = await coachService.ask(
       { surface: 'teach', ask: 'his e4 rate?', liveState: { surface: 'teach' } },
       { providerOverride: { name: 'deepseek', call }, maxToolRoundTrips: 2 },

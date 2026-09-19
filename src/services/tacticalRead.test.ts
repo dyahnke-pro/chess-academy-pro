@@ -470,3 +470,72 @@ describe('candidateCompareClause (his "X, not Y, because…", 2026-08-23)', () =
     expect(candidateCompareClause('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', [{ moves: ['e2e4'], evaluation: 20 }], 'white')).toBeNull();
   });
 });
+
+// ─── GRAMMAR: A CLAUSE MUST NEVER LAND IN A NOUN SLOT ────────────────────────
+// Read off a real 5-ply prod run, three times in it:
+//
+//     "It's genuinely close — the queen takes d5 is about as good."
+//
+// `sayMoveClause` renders a capture with a FINITE VERB, which is right after
+// "but …" and wrong everywhere else. A QUIET move hid the fault — "the knight
+// to d5 is about as good" is fine — so the defect only surfaces when the move
+// happens to be a capture, which is exactly when the sentence matters most.
+//
+// This gate feeds a CAPTURE into every clause that puts a move in a subject or
+// object-of-preposition slot, because a quiet move cannot fail it.
+describe('a spoken move never reads as a clause where a noun belongs', () => {
+  // Its OWN fixture — the fixture above is scoped to its describe, and reaching
+  // for it would couple this gate to an unrelated test's shape.
+  const quietPly = (san: string, mover: 'white' | 'black'): PvPly => ({
+    san, uci: 'e5g4', moverColor: mover, fenBefore: '', fenAfter: '',
+    facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+  });
+  const base = {
+    fen: 'x', studentColor: 'black' as const, bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
+    line: [quietPly('Ng4+', 'black'), quietPly('Kh1', 'white')],
+    verdict: summarizeVerdict(439, null, 3),
+    keyTactic: null, checkPlies: [0], closeAlternative: null, tempting: null,
+  };
+
+  // "<piece> takes <square>" immediately followed by a verb/preposition that
+  // needs a NOUN in front of it. Matching the SHAPE, not a fixed sentence, so a
+  // new stem in the same slot is caught without being listed here.
+  const CLAUSE_IN_NOUN_SLOT = /\b(?:pawn|knight|bishop|rook|queen|king) takes [a-h][1-8](?:\s+(?:is|reads|over|and it)\b)/;
+  const AFTER_PREPOSITION = /\bwith the (?:pawn|knight|bishop|rook|queen|king) takes\b/;
+
+  it('the close-call hedge takes a noun phrase, not a clause', () => {
+    const out = uncertaintyClause(
+      { ...base, tempting: null, closeAlternative: { san: 'Qxd5', gapCp: 20 } } as TacticalRead,
+      { spoken: true },
+    );
+    expect(out, 'the hedge did not render').toBeTruthy();
+    expect(out).not.toMatch(CLAUSE_IN_NOUN_SLOT);
+    // The positive form: a gerund can be the subject of "is about as good".
+    expect(out).toContain('taking on d5');
+  });
+
+  it('a quiet runner-up still reads correctly (the case that HID the bug)', () => {
+    const out = uncertaintyClause(
+      { ...base, tempting: null, closeAlternative: { san: 'Nd5', gapCp: 20 } } as TacticalRead,
+      { spoken: true },
+    );
+    expect(out).toContain('the knight to d5');
+    expect(out).not.toMatch(CLAUSE_IN_NOUN_SLOT);
+  });
+
+  it('the tempting turn puts a noun after "with", and keeps the clause after "but"', () => {
+    const out = narrateTacticalRead({
+      ...base,
+      tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
+        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+      ] },
+    } as TacticalRead, { spoken: true });
+    expect(out).not.toMatch(AFTER_PREPOSITION);
+    expect(out).toContain('with the knight taking on f3');
+    // The refutation is a genuine CLAUSE slot and must keep the finite verb —
+    // this is what stops the fix over-correcting into "but the knight taking
+    // on f3 and it falls apart".
+    expect(out).toMatch(/but the knight takes f3 and it falls apart/);
+  });
+});

@@ -1,0 +1,17 @@
+{
+  // TYPECHECK THE TESTS (#61). `tsconfig.app.json` excludes every `*.test.ts*`
+  // and `src/test`, so a type error in a test file was invisible until the test
+  // RAN — and a test that never runs the offending line stayed green forever.
+  //
+  // It cost real time on 2026-09-19: a required parameter added to a hook
+  // compiled clean, and the call site that had not been updated only failed at
+  // RUNTIME, inside a test, as a `Cannot read properties of undefined`.
+  //
+  // This target is deliberately SEPARATE rather than folded into the app config:
+  // the app's own typecheck must stay a hard zero, while the tests carry a
+  // 318-error backlog that is held as a shrink-only ceiling (see ship-check).
+  // Mixing them would either hide the backlog or make the app's gate soft.
+  "extends": "./tsconfig.app.json",
+  "include": ["src"],
+  "exclude": []
+}

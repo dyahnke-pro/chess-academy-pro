@@ -2,6 +2,9 @@
 // ── stripInjectedBlocks (David 2026-07-11: "I played f4" was hijacked by the
 // training vertical + the language was misread — both from surface-injected
 // instruction blocks reaching the detectors) ────────────────────────────────
+// The vitest globals were never imported here. Invisible until now because
+// `tsconfig.app.json` excluded every test file from the typecheck (#61).
+import { describe, it, expect } from 'vitest';
 import { stripInjectedBlocks } from './coachService';
 
 describe('stripInjectedBlocks', () => {

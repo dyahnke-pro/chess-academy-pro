@@ -51,7 +51,11 @@ async function askDeadEngine(q: string, fen: string | undefined = KQVK): Promise
         currentRoute: '/coach/play',
       },
     },
-    { skipActionRouter: true, maxToolRoundTrips: 3 },
+    // `skipActionRouter` is NOT a CoachServiceOptions field — it never was, so
+    // this object has been passing an ignored key. Dropped rather than added to
+    // the type: inventing an option to make a test compile would ship a knob
+    // nothing reads.
+    { maxToolRoundTrips: 3 },
   );
   return ans.text.toLowerCase();
 }

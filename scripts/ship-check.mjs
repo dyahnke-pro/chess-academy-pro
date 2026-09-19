@@ -165,6 +165,11 @@ console.log('── ship-check ────────────────�
 console.log(FULL ? '  mode: FULL (Playwright matrix included)' : '  mode: fast');
 console.log('');
 
+// Set when the test-file typecheck goes ABOVE its ceiling — a NEW type error in
+// a test. Blocks the push even though the step itself is `optional` (the step is
+// optional so an at-ceiling backlog is not a permanent red).
+let testTypeErrorRegression = 0;
+
 // REQUIRED: typecheck + lint + load-bearing CONTENT GATES.
 //
 // We run a CURATED gate list — not `vitest run` over everything — because
@@ -493,6 +498,37 @@ runStep('context gate', 'node', ['scripts/surface-map.mjs', '--verify']);
 // hand-waved, and a state written before the change cannot survive it.
 runStep('state gate  ', 'node', ['scripts/state-of-build.mjs', '--verify']);
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);
+
+// TEST-FILE TYPECHECK — a SHRINK-ONLY CEILING, not a hard zero (#61).
+//
+// `tsconfig.app.json` excludes every test file, so a type error in a test was
+// invisible until that line RAN. It cost real time on 2026-09-19: a required
+// parameter added to a hook compiled clean and its stale call site only blew up
+// at runtime, inside a test.
+//
+// Turning it on found 318 errors across 108 files. A hard zero would mean a
+// 318-error cleanup before anything else can ship, so this uses the pattern the
+// repo already uses for the narration backlogs: the number is VISIBLE and may
+// only go DOWN. That is enough to catch what the app cares about — a NEW error,
+// which is exactly the class that bit us.
+//
+// KNOWN WEAKNESS, stated rather than hidden: a count can be held flat by adding
+// one error and fixing another. It is still strictly better than no signal, and
+// lowering the ceiling as the backlog clears is the intended direction.
+const TEST_TYPE_ERROR_CEILING = 318;
+runStep('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'], {
+  optional: true,
+  summary: (out) => {
+    const n = (out.match(/error TS/g) ?? []).length;
+    if (n > TEST_TYPE_ERROR_CEILING) {
+      testTypeErrorRegression = n;
+      return `${n} errors — ABOVE the ${TEST_TYPE_ERROR_CEILING} ceiling (a NEW test type error)`;
+    }
+    return n < TEST_TYPE_ERROR_CEILING
+      ? `${n} errors — BELOW the ceiling, lower TEST_TYPE_ERROR_CEILING to ${n}`
+      : `${n} errors (at the ceiling)`;
+  },
+});
 // PRODUCTION BUILD (2026-07-12, the corpus-bundle incident): typecheck+lint
 // can be green while `npm run build` FAILS — a data JSON inlined into the
 // entry chunk pushed index.js past the Workbox precache cap and every Vercel
@@ -637,6 +673,19 @@ if (FULL) {
 
 // ── Report ────────────────────────────────────────────────────────
 const failed = results.filter(r => !r.ok && !r.optional);
+// A NEW test type error blocks, even though its step is `optional`. The step is
+// optional so that the 318-error BACKLOG is not a permanent red; the ceiling is
+// what makes it a gate rather than a readout.
+if (testTypeErrorRegression > 0) {
+  failed.push({
+    label: 'test typecheck',
+    ok: false,
+    ms: 0,
+    optional: false,
+    summary: `${testTypeErrorRegression} > ${TEST_TYPE_ERROR_CEILING} — a NEW type error in a test file`,
+    out: 'Run: npx tsc -p tsconfig.tests.json --noEmit',
+  });
+}
 const elapsed = ((Date.now() - STARTED) / 1000).toFixed(1);
 
 console.log('');
