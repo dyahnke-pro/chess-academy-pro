@@ -4,12 +4,13 @@ import { Compass, Crosshair, Rocket, Shield, Layers, Swords, Crown, Play, Square
 import { PageHelp } from '../Layout/PageHelp';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
-import { assembleFundamentalsAnswer, type FundamentalsTopic } from '../../services/groundedAnswer';
+import { assembleFundamentalsAnswer } from '../../services/groundedAnswer';
 import { FUNDAMENTAL_LESSON } from '../../data/fundamentalLessons';
 import type { FundamentalId } from '../../services/principleAttribution';
 import {
-  FUNDAMENTAL_LABEL, fundamentalDevice, fundamentalDrill, fundamentalsBySection,
-  getFundamentalCounts, type FundamentalSectionId, type FundamentalStat,
+  FUNDAMENTAL_LABEL, FUNDAMENTAL_SECTION_IDS, SECTION_TEACHING, fundamentalDevice,
+  fundamentalDrill, fundamentalsBySection, getFundamentalCounts, pillarStanding,
+  type FundamentalSectionId, type FundamentalStat,
 } from '../../services/fundamentalsCatalog';
 import type { JSX, ReactNode } from 'react';
 
@@ -23,55 +24,55 @@ import type { JSX, ReactNode } from 'react';
  * by the specific fundamentalId), a Listen, and a Drill.
  *
  * Grounding (G0): every word of teaching is authored classical principle
- * (Capablanca / Lasker / Tarrasch, public domain) — the four legacy pillars via
- * assembleFundamentalsAnswer, the newer sections + the per-fundamental devices
- * from the catalog — never LLM-invented, never a claim about a specific board.
+ * (Capablanca / Lasker / Tarrasch, public domain) — the pillar sections via
+ * assembleFundamentalsAnswer, the rest + the per-fundamental devices from the
+ * catalog — never LLM-invented, never a claim about a specific board.
+ *
+ * WHERE THE TEACHING COMES FROM IS DECLARED, NOT GUESSED. Each section's prose
+ * source is `SECTION_TEACHING[id]` in the catalog — an exhaustive
+ * `Record<FundamentalSectionId, …>` discriminated on whether the section reads
+ * an authored PILLAR or carries its own prose. The page used to hold a
+ * `Record<string, string>` read as `SECTION_PROSE[id] ?? ''`, so a section with
+ * no entry rendered silently blank. Likewise the seven sections are now built by
+ * mapping `FUNDAMENTAL_SECTION_IDS` over an exhaustive presentation Record, so a
+ * new section fails to COMPILE rather than quietly failing to render.
  */
-
-// Prose for the sections the legacy 4-pillar `FundamentalsTopic` set does not
-// cover. Authored classical principle, house voice (you/they, never we/our), no
-// claim about any specific position.
-const SECTION_PROSE: Record<string, string> = {
-  'opening-play':
-    "Every opening is trying to do the same three things: put a piece on a good square with each move, get your king to safety by castling, and fight for the centre. Bring out a new piece every move, don't go pawn-hunting while your pieces are still at home, and don't move the same piece twice when another one hasn't moved at all. Win the race to a finished position and the middlegame is already in your favour.",
-  'pawn-structure':
-    "Pawns are the only piece that never moves backward, so every pawn move is permanent — it gives up a square forever. Keep your pawns healthy: avoid doubled and isolated pawns when you can, and try to place them on squares the opposite colour of your bishop so it stays free. A passed pawn — one no enemy pawn can stop — is a long-term asset; push it, and it forces the defender to tie down a piece just to hold it back.",
-  'tactics-threats':
-    "Almost every tactic is a double attack — one move that hits two things at once, so the defender can only save one. Before you commit, run the checklist in order, for both sides: every check, every capture, every threat. And before you trust an attack or a sacrifice, count the attackers against the defenders on the target square — if their defenders arrive first, the combination doesn't work.",
-  'endgame-technique':
-    "In the endgame your king stops hiding and becomes a fighting piece — march it toward the centre and the pawns. Rooks belong behind passed pawns and on the seventh rank, never sitting passive in front of a pawn. And when the kings face off in a pawn ending, whoever is forced to move first gives ground — that is the opposition, and it decides who queens.",
-};
 
 type DrillTarget =
   | { kind: 'themes'; themes: string[] }   // a themed Lichess-puzzle drill
   | { kind: 'mistakes' };                  // the student's own flagged positions
 
-interface Section {
-  id: FundamentalSectionId;
+/** Presentation only — the title/blurb/colour/icon and the section-level drill.
+ *  What the section TEACHES lives in the catalog's `SECTION_TEACHING`, so the
+ *  page never decides grounding. Exhaustive: a new section must answer here. */
+interface SectionChrome {
   title: string;
   blurb: string;
   icon: ReactNode;
   bgClass: string;
   borderClass: string;
   textClass: string;
-  /** Legacy pillar whose grounded prose this section reads; else SECTION_PROSE[id]. */
-  topic?: Exclude<FundamentalsTopic, 'general'>;
   drill: DrillTarget;
 }
 
-const SECTIONS: Section[] = [
-  { id: 'opening-play', title: 'Opening play', blurb: 'Develop, castle, and fight for the centre — win the race to a finished position.', icon: <Compass size={26} />, bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30', textClass: 'text-sky-400', drill: { kind: 'mistakes' } },
-  { id: 'center', title: 'The centre', blurb: "Control the four central squares — classically or hypermodern — and your pieces reach everywhere.", icon: <Crosshair size={26} />, bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30', textClass: 'text-emerald-400', topic: 'center', drill: { kind: 'mistakes' } },
-  { id: 'development', title: 'Development & activity', blurb: 'A new piece every move; put your worst piece to work before you start anything.', icon: <Rocket size={26} />, bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30', textClass: 'text-cyan-400', topic: 'development', drill: { kind: 'mistakes' } },
-  { id: 'king-safety', title: 'King safety', blurb: "Castle early, and don't push the pawns in front of your king without a reason.", icon: <Shield size={26} />, bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30', textClass: 'text-rose-400', topic: 'king-safety', drill: { kind: 'mistakes' } },
-  { id: 'pawn-structure', title: 'Pawn structure', blurb: 'Pawns never move back — keep them healthy, and push your passed pawns.', icon: <Layers size={26} />, bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30', textClass: 'text-amber-400', drill: { kind: 'themes', themes: ['passedPawn', 'advancedPawn', 'promotion'] } },
-  { id: 'tactics-threats', title: 'Tactics & threats', blurb: 'Checks, captures, threats — the double attack is behind almost every tactic.', icon: <Swords size={26} />, bgClass: 'bg-violet-500/10', borderClass: 'border-violet-500/30', textClass: 'text-violet-400', drill: { kind: 'themes', themes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'hangingPiece', 'backRankMate'] } },
-  { id: 'endgame-technique', title: 'Endgame technique', blurb: 'Active king, rook behind the passer, and the opposition in pawn endings.', icon: <Crown size={26} />, bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30', textClass: 'text-indigo-400', drill: { kind: 'themes', themes: ['endgame', 'rookEndgame', 'pawnEndgame', 'bishopEndgame', 'knightEndgame'] } },
-];
+const SECTION_CHROME: Record<FundamentalSectionId, SectionChrome> = {
+  'opening-play': { title: 'Opening play', blurb: 'Develop, castle, and fight for the centre — win the race to a finished position.', icon: <Compass size={26} />, bgClass: 'bg-sky-500/10', borderClass: 'border-sky-500/30', textClass: 'text-sky-400', drill: { kind: 'mistakes' } },
+  center: { title: 'The centre', blurb: "Control the four central squares — classically or hypermodern — and your pieces reach everywhere.", icon: <Crosshair size={26} />, bgClass: 'bg-emerald-500/10', borderClass: 'border-emerald-500/30', textClass: 'text-emerald-400', drill: { kind: 'mistakes' } },
+  development: { title: 'Development & activity', blurb: 'A new piece every move; put your worst piece to work before you start anything.', icon: <Rocket size={26} />, bgClass: 'bg-cyan-500/10', borderClass: 'border-cyan-500/30', textClass: 'text-cyan-400', drill: { kind: 'mistakes' } },
+  'king-safety': { title: 'King safety', blurb: "Castle early, and don't push the pawns in front of your king without a reason.", icon: <Shield size={26} />, bgClass: 'bg-rose-500/10', borderClass: 'border-rose-500/30', textClass: 'text-rose-400', drill: { kind: 'mistakes' } },
+  'pawn-structure': { title: 'Pawn structure', blurb: 'Pawns never move back — keep them healthy, and push your passed pawns.', icon: <Layers size={26} />, bgClass: 'bg-amber-500/10', borderClass: 'border-amber-500/30', textClass: 'text-amber-400', drill: { kind: 'themes', themes: ['passedPawn', 'advancedPawn', 'promotion'] } },
+  'tactics-threats': { title: 'Tactics & threats', blurb: 'Checks, captures, threats — the double attack is behind almost every tactic.', icon: <Swords size={26} />, bgClass: 'bg-violet-500/10', borderClass: 'border-violet-500/30', textClass: 'text-violet-400', drill: { kind: 'themes', themes: ['fork', 'pin', 'skewer', 'discoveredAttack', 'hangingPiece', 'backRankMate'] } },
+  'endgame-technique': { title: 'Endgame technique', blurb: 'Active king, rook behind the passer, and the opposition in pawn endings.', icon: <Crown size={26} />, bgClass: 'bg-indigo-500/10', borderClass: 'border-indigo-500/30', textClass: 'text-indigo-400', drill: { kind: 'themes', themes: ['endgame', 'rookEndgame', 'pawnEndgame', 'bishopEndgame', 'knightEndgame'] } },
+};
 
+interface Section extends SectionChrome { id: FundamentalSectionId }
+const SECTIONS: Section[] = FUNDAMENTAL_SECTION_IDS.map((id) => ({ id, ...SECTION_CHROME[id] }));
+
+/** A section's teaching prose. Total — the catalog declares every section's
+ *  source, so there is no `?? ''` that can render a blank card. */
 function proseFor(section: Section): string {
-  if (section.topic) return assembleFundamentalsAnswer(section.topic)?.facts ?? '';
-  return SECTION_PROSE[section.id] ?? '';
+  const t = SECTION_TEACHING[section.id];
+  return t.kind === 'pillar' ? (assembleFundamentalsAnswer(t.pillar)?.facts ?? '') : t.prose;
 }
 
 /** A ProseUnit id for a per-fundamental Listen (reads its device aloud). */
@@ -156,7 +157,12 @@ export function FundamentalsPage(): JSX.Element {
 
       <div className="flex flex-col gap-3 max-w-lg mx-auto w-full">
         {SECTIONS.map((s) => {
-          const reviewId = s.topic ? (assembleFundamentalsAnswer(s.topic)?.exampleReviewId ?? null) : null;
+          const teaching = SECTION_TEACHING[s.id];
+          const reviewId = teaching.kind === 'pillar' ? (assembleFundamentalsAnswer(teaching.pillar)?.exampleReviewId ?? null) : null;
+          // THE JOIN, FIRING: a pillar section can now say how THIS student is
+          // doing on the pillar it teaches, because every fundamental is filed
+          // under one. Grey (never asked) renders as nothing — absent ≠ mastered.
+          const standing = teaching.kind === 'pillar' ? pillarStanding(teaching.pillar, counts) : null;
           const reading = reader.currentId === s.id && reader.isPlaying;
           const fundamentals = fundamentalsBySection(s.id);
           return (
@@ -172,6 +178,15 @@ export function FundamentalsPage(): JSX.Element {
               <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text)' }}>
                 {proseFor(s)}
               </p>
+              {standing?.asked && (
+                <p
+                  className="text-xs font-semibold text-amber-400"
+                  data-testid={`fundamental-pillar-standing-${s.id}`}
+                >
+                  {`Your games have caught you on this ${standing.slips} time${standing.slips === 1 ? '' : 's'}`}
+                  {standing.worst ? ` — most often ${FUNDAMENTAL_LABEL[standing.worst].toLowerCase()}.` : '.'}
+                </p>
+              )}
               <div className="flex items-center gap-2 flex-wrap">
                 <button
                   type="button"

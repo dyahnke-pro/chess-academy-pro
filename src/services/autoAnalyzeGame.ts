@@ -235,6 +235,19 @@ export async function autoAnalyzeGameMisconceptions(
       ...(ann.bestMoveEval != null && !isMateEval(ann.bestMoveEval)
         ? { evalBefore: Math.round(ann.bestMoveEval * (ann.color === 'white' ? 1 : -1)) }
         : {}),
+      // AND THE EVAL AFTER THE MOVE (WO-4 J2, 2026-09-19). `BlunderForAnalysis`
+      // has carried `evalAfterPlayed` since the eval-gated fundamentals landed,
+      // the review path and the interactive capture both fill it, and the
+      // annotation has the number (`evaluation`) — but this builder never passed
+      // it. `botched-conversion` (#33) gates on evalBefore AND evalAfterPlayed
+      // with no PV, so on the RECORDING path — every imported and every finished
+      // coach game — a student who threw a won position away was never filed
+      // under it: measured 0 of 154 flagged moves across 47 real amateur games
+      // before this line, with the detector sitting there the whole time. Same
+      // POV flip and mate-sentinel skip as evalBefore, so the two are one unit.
+      ...(ann.evaluation != null && !isMateEval(ann.evaluation)
+        ? { evalAfterPlayed: Math.round(ann.evaluation * (ann.color === 'white' ? 1 : -1)) }
+        : {}),
     });
   }
   if (blunders.length === 0) return empty;
