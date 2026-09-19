@@ -227,6 +227,60 @@ trust it. That is the cheapest check in this repo and it found three defects.
 Three buckets. A thing is a roadblock if it stops the LOOP closing, stops an
 INSTRUMENT being believable, or reaches the STUDENT as a wrong/repeated line.
 
+### D. THE STUDENT CANNOT GET WHAT THEY ASKED FOR (WO-LIVE-DEFECTS-01)
+
+From real App Store telemetry, week of 2026-09-11 — read off the full
+`narration_text` of what two real people actually heard. This bucket is NEW and
+it outranks the rest of the WO: everything else is about the QUALITY of what
+gets said; this is about whether anything happens at all.
+
+- ✅ **D2/D3/D4 — a user asked for an Italian lesson SEVEN TIMES and never got
+  one** (2bfb4961c). `start_walkthrough_for_opening` correctly refused (home
+  chat cannot host one), the coach correctly navigated to Learn, and nothing
+  re-fired the walkthrough on arrival — twelve `coach_tool_call_error`s, zero
+  lessons. The ask is now QUEUED (`coachMemoryStore.pendingWalkthrough`) before
+  the refusal and Learn drains it on mount through `handleSubmit`, so every
+  existing lane runs once instead of a second copy of the starter.
+  `takePendingWalkthrough` reads and clears atomically. D4 (wrong opening
+  served) was downstream of D3 — RE-MEASURE before treating it as its own bug.
+
+### WO-LIVE-DEFECTS-01 — the rest of the list
+
+Shipped 2026-09-19 in 2bfb4961c + 7bc0677ab. Both standing audits green after:
+Learn 8/8, Review 28/28 MEETS STANDARD.
+
+- ✅ **D1** mate graded as a 300-point blunder — `capEval` on both terms
+  (mirroring `gameAnalysisService:1238`) plus a `#` short-circuit so a mating
+  move is never classified at all.
+- ✅ **D5** language fell back to English mid-conversation — one detected
+  non-English message is now a sticky session fact; an explicit setting wins.
+- ✅ **D6** promotion narrated as a pawn push — a `promotion` fundamental at
+  weight 90, and the passed-pawn branch is skipped on the same move.
+- ✅ **D7** `kingádas` — ROOT FOUND: the translation prompt said "translate
+  every other word", so the model translated the opening NAME. Proper names are
+  labels, not phrases, and the prompt now says so.
+- ✅ **D8/D12** the same line 4–5× in 25 seconds — a say-once ledger at the
+  voice chokepoint. The existing de-flood held ONE slot for 1500ms and the
+  observed gaps were 3–13s, so it caught none of them. 30s window, bounded,
+  audited, explicit taps exempt.
+- ✅ **D9a** `hint-revealed` mirrored to PostHog — the instrument was blind, so
+  "did they tap Hint 154 times?" could not be asked at all.
+- ✅ **D10** missing space between two spoken segments — normalizer at the
+  chokepoint, narrow (punctuation + capital only, decimals untouched).
+- ✅ **D13** half of all weakness tags `uncategorized` — the unmatched inputs
+  are now logged. Deliberately NOT a new tag: extend the tagger from the real
+  population, never from imagination.
+
+**NOT BUILT, and why — do not re-derive:**
+- ⏸ **D9b** (154 answer-reveals on Play) — blocked BY DESIGN on D9a. It needs a
+  session recorded with the instrument that just shipped. Do the ten-minute
+  local repro first (play 20 moves without touching Hint, count `speakForced`).
+- ⏸ **D11** (three generators stack into one utterance) — needs squares COUPLED
+  first. G4.5.1 forbids subsuming facts with no squares ("silence must never be
+  a guess"), and those three push free prose, so string-matching them would
+  break the exact rule the fix exists to serve.
+- ⏸ **D15** (TTS playback timeout) — root genuinely unknown; not guessed at.
+
 ### A. The loop cannot close (highest — these are the app, not polish)
 
 0. ✅ **FIXED (#77) — CLICK-TO-MOVE SILENTLY DROPPED THE STUDENT'S MOVE.**

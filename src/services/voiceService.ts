@@ -611,6 +611,27 @@ class VoiceService {
    *  skip it — those are deliberate user gestures, never a flood. */
   private lastAdmittedSpeak: { text: string; ts: number } | null = null;
 
+  /** SAY-ONCE LEDGER — every line admitted recently, not just the last one.
+   *
+   * 🔒 THE 1.5s DE-FLOOD ABOVE DOES NOT COVER THIS (prod, week of 2026-09-11).
+   * A real user heard the SAME sentence five times in 25 seconds:
+   *   15:35:03 / :09 / :12 / :25 / :28
+   *   "Watch out — if I play b6, moving from b7 to b6 reveals rook on b8…"
+   * and four more lines the same way ("Your bishop to e4 — that's the
+   * strongest move here." ×5). Every gap was 3–13s, so `DEDUP_WINDOW_MS`
+   * (1500ms) let all of them through, and `lastAdmittedSpeak` holds ONE slot
+   * so an A-B-A alternation defeats it entirely.
+   *
+   * A threat line re-fires because the threat is genuinely STILL LIVE — that
+   * is correct to re-evaluate and wrong to re-speak verbatim. Nothing new has
+   * happened, so saying the identical sentence again teaches nothing and reads
+   * as a stuck record.
+   *
+   * Keyed on the exact text. Explicit taps (`bypassVerbosity`) skip it, so a
+   * student who asks to hear something again always does. Bounded and pruned,
+   * so a long session cannot grow it without limit. */
+  private readonly spokenLedger = new Map<string, number>();
+
   /** How many lines are WAITING for their turn to speak.
    *
    *  🔒 NO RATE-LIMIT DROPS (David 2026-08-09: "Why are we still rate
@@ -649,6 +670,23 @@ class VoiceService {
    *  the remount flood fires sub-second, so it's swallowed. The 6s
    *  per-component guard still handles slower same-content re-renders. */
   private static readonly DEDUP_WINDOW_MS = 1500;
+  /** How long an IDENTICAL line stays said.
+   *
+   *  30s, and the number is a compromise between two real contracts. The
+   *  observed defect repeated the same sentence five times across 25 seconds
+   *  with a maximum gap of 13s, so anything under ~15s misses it. But the 1.5s
+   *  `DEDUP_WINDOW_MS` above was chosen deliberately so a user REPLAY (listen,
+   *  then tap replay) is never blocked, and a window of minutes would start
+   *  swallowing those. 30s covers every repeat actually seen and still lets a
+   *  line be said again when the student comes back to it.
+   *
+   *  This SUPERSEDES the narrower "may repeat after 1.5s" contract for the
+   *  non-tap paths; explicit taps (`bypassVerbosity`) still skip the ledger
+   *  entirely, which is what protects a deliberate replay. */
+  private static readonly SAY_ONCE_WINDOW_MS = 30_000;
+  /** Hard bound on the ledger so a long session cannot grow it without limit.
+   *  Pruning is by age first; this is the backstop. */
+  private static readonly SAY_ONCE_MAX_ENTRIES = 200;
   /** Minimum spacing between DISTINCT narration lines. Caps the rate so a
    *  burst of remounts / rapid tips can't stack clips faster than iOS
    *  AVAudioSession can decode them (the build-119 mic-crash root:
@@ -1010,6 +1048,7 @@ class VoiceService {
     // Reset the de-flood memory so a fresh start (or test isolation)
     // doesn't drop the first line as a "re-fire" of a stale one.
     this.lastAdmittedSpeak = null;
+    this.spokenLedger.clear();
   }
 
   /** Fire-and-forget audit log of every speak invocation so the next
@@ -1239,10 +1278,24 @@ class VoiceService {
   }
 
   private async speakInternal(
-    text: string,
+    rawText: string,
     force: boolean,
     opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean; prosodySpike?: boolean },
   ): Promise<void> {
+    // ── ONE SPACE BETWEEN TWO SENTENCES (prod, week of 2026-09-11) ──────────
+    // A user heard, as one run-on:
+    //   "…and pauses so you can pick what to explore.Material is even, and…"
+    // Two computed segments joined with no separator. It happens wherever two
+    // producers are concatenated, so it is fixed HERE, at the one point every
+    // spoken line passes through, rather than at each join — the same reason
+    // the brief cap lives here.
+    //
+    // Deliberately narrow: a space is inserted only between sentence-ending
+    // punctuation and an immediately following CAPITAL. A decimal ("3.5") is
+    // followed by a digit and is untouched; so is an ellipsis mid-clause. The
+    // normalised text is what the ledger and the cap then see, so a line that
+    // differs only by this gap is correctly treated as the same line.
+    let text = rawText.replace(/([.!?])([A-Z])/g, '$1 $2');
     // Coach Narration = "silent" is the highest-priority gate: when
     // the user has explicitly set Settings → Coach → Coach Narration
     // to Silent, NO coach-driven speech fires anywhere in the app,
@@ -1383,6 +1436,25 @@ class VoiceService {
         }).catch(() => undefined);
         return;
       }
+      // (1b) SAY-ONCE — this exact line was already spoken recently, and not
+      // by the slot above (which holds one entry for 1.5s). Nothing about the
+      // board changed enough to make the same sentence new, so repeating it
+      // verbatim is noise. AUDITED, never silent: a silent drop is what made
+      // the rate-limit bug so expensive to find (see MAX_SPEAK_WAITING).
+      const saidAt = this.spokenLedger.get(text);
+      if (saidAt !== undefined && now - saidAt < VoiceService.SAY_ONCE_WINDOW_MS) {
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'voice-speak-invoked',
+            category: 'subsystem',
+            source: 'voiceService.speakInternal.sayOnce',
+            summary: `already said this line ${Math.round((now - saidAt) / 1000)}s ago: "${text.slice(0, 40)}"`,
+            narrationText: text,
+            details: `sinceSaidMs=${now - saidAt} windowMs=${VoiceService.SAY_ONCE_WINDOW_MS}`,
+          });
+        }).catch(() => undefined);
+        return;
+      }
       // (2) NO-OVERLAP — never start a narration clip while one is still
       // playing (let the current finish rather than cut it off and stack a
       // second voice). This is NOT gated on `force`: `force` here only
@@ -1465,6 +1537,19 @@ class VoiceService {
         });
       }
       this.lastAdmittedSpeak = { text, ts: now };
+      // Record in the say-once ledger too, pruning by age and then by size.
+      this.spokenLedger.set(text, now);
+      if (this.spokenLedger.size > VoiceService.SAY_ONCE_MAX_ENTRIES) {
+        for (const [k, ts] of this.spokenLedger) {
+          if (now - ts >= VoiceService.SAY_ONCE_WINDOW_MS) this.spokenLedger.delete(k);
+        }
+        // Still over after the age sweep — drop oldest-first until inside.
+        while (this.spokenLedger.size > VoiceService.SAY_ONCE_MAX_ENTRIES) {
+          const oldest = this.spokenLedger.keys().next().value;
+          if (oldest === undefined) break;
+          this.spokenLedger.delete(oldest);
+        }
+      }
     }
 
     this.lastSpeakDiagnostic = {

@@ -31,6 +31,7 @@ export type MoveFundamentalId =
   | 'center'
   | 'open-file'
   | 'king-activity'
+  | 'promotion'
   | 'passed-pawn'
   | 'luft'
   | 'space'
@@ -85,6 +86,9 @@ export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId 
   development: 'neglected-development',
   'king-safety': 'weakened-king-safety',
   space: 'space-conceded',
+  // A promotion is a THING DONE, not a habit neglected — there is no
+  // misconception to file it under. Honest null (CLAUDE.md: empty > invented).
+  promotion: null,
   'passed-pawn': 'passed-pawn-neglected',
   'king-activity': 'passive-king-endgame',
   'open-file': 'passive-rook',
@@ -382,11 +386,40 @@ export function computeMoveFundamentals(
     }
   }
 
+  // ── PROMOTION — the most consequential thing a pawn can do (prod, 2026-09-13).
+  //
+  // A user pushed to h8 and heard the SAME sentence as the move before it:
+  //   "Your pawn to h7 — pushes your passed pawn — passed pawns must be pushed."
+  //   "Your pawn to h8 — pushes your passed pawn — passed pawns must be pushed."
+  // h8 is a PROMOTION. This file had zero promotion handling, so an 8th-rank
+  // arrival fell into the passed-pawn branch below and the coach narrated a new
+  // queen as a pawn push.
+  //
+  // Weight 90 — above every other fundamental here, because nothing a pawn does
+  // outranks becoming a queen. Emitted BEFORE passed-pawn so it leads, and the
+  // passed-pawn branch is skipped on the same move (both would be about the
+  // same pawn, and the promotion is the better statement of it).
+  const promotedTo = mv.promotion
+    ? ({ q: 'queen', r: 'rook', b: 'bishop', n: 'knight' } as const)[mv.promotion as 'q' | 'r' | 'b' | 'n']
+    : null;
+  if (promotedTo) {
+    out.push({
+      id: 'promotion',
+      weight: 90,
+      led: promotedTo === 'queen'
+        ? `promotes — your pawn is a queen now`
+        : `promotes to a ${promotedTo} — underpromotion, chosen on purpose`,
+      selfContained: `promotes on ${mv.to} — the pawn becomes a ${promotedTo}`,
+      imperative: `push it through and promote`,
+      squares: [mv.to],
+    });
+  }
+
   // ── PASSED PAWN — push a passer; passed pawns must be pushed. Only once the
   //    passer is actually ADVANCED (past its own half) — a first nudge from the
   //    2nd/3rd rank while rooks are still on isn't yet the "push the passer"
   //    moment, and calling it one is noise.
-  if (mv.piece === 'p' && relRank(mv.to, mover) >= 4 && isPassedPawn(after, mv.to, mover)) {
+  if (!promotedTo && mv.piece === 'p' && relRank(mv.to, mover) >= 4 && isPassedPawn(after, mv.to, mover)) {
     out.push({
       id: 'passed-pawn',
       weight: phase === 'endgame' ? 84 : 62,

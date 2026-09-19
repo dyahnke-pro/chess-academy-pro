@@ -18,6 +18,7 @@
 import type { Tool } from '../../types';
 import { logAppAudit } from '../../../services/appAuditor';
 import { listAvailableWalkthroughs } from '../../../data/openingWalkthroughs';
+import { useCoachMemoryStore } from '../../../stores/coachMemoryStore';
 
 export const startWalkthroughForOpeningTool: Tool = {
   name: 'start_walkthrough_for_opening',
@@ -63,18 +64,39 @@ export const startWalkthroughForOpeningTool: Tool = {
     const pgn = typeof args.pgn === 'string' && args.pgn.trim() ? args.pgn.trim() : undefined;
 
     if (!ctx?.onStartWalkthroughForOpening) {
-      // 🔒 NO FAKE SUCCESS (David 2026-09-08): don't claim a walkthrough started
-      // when no surface can run it. Return ok:false; the coach can navigate to a
-      // teaching surface first (navigate_to_route actuates from anywhere).
+      // 🔒 NO FAKE SUCCESS (David 2026-09-08) — AND NO DROPPED HAND-OFF
+      // (prod, week of 2026-09-11).
+      //
+      // Refusing here is right: this surface cannot run a walkthrough and
+      // claiming otherwise would be a lie. But refusing was ALL this did, and a
+      // real user paid for the missing half — they asked for an Italian lesson
+      // SEVEN TIMES from home chat over two days. Each time this refused, the
+      // coach navigated to Learn, and nothing ever re-fired the walkthrough on
+      // arrival. Twelve tool errors, zero lessons.
+      //
+      // So the ask is QUEUED before we refuse. `navigate_to_route` still does
+      // the moving; the Teach surface drains the queue on mount and starts the
+      // lesson the student actually asked for. The refusal text below is the
+      // COMPUTED sentence the phrasing pass must voice — it says what will
+      // happen, so the model has no room to invent a success that did not occur.
+      useCoachMemoryStore.getState().queueWalkthrough({
+        opening,
+        requestedFromSurface: null, // the tool ctx carries no surface — see the type
+        ...(variation ? { variation } : {}),
+        ...(orientation ? { orientation } : {}),
+        ...(pgn ? { pgn } : {}),
+      });
       void logAppAudit({
         kind: 'coach-brain-tool-called',
         category: 'subsystem',
         source: 'startWalkthroughForOpeningTool.execute',
-        summary: `start_walkthrough_for_opening opening=${opening} refused — no walkthrough host on this surface`,
+        summary: `start_walkthrough_for_opening opening=${opening} QUEUED — no host here, handed to Learn on arrival`,
       });
       return {
         ok: false,
-        error: `Cannot start a walkthrough here — this surface can't host one. Navigate to Learn with Coach first, then start it.`,
+        error:
+          `Not started yet — this surface cannot host a walkthrough. The ${opening} lesson is QUEUED and will start by itself the moment you reach Learn with Coach. ` +
+          `Call navigate_to_route to /coach/teach now. Tell the student you are taking them there and the lesson will begin on arrival — do NOT tell them the board is already set up, because it is not.`,
       };
     }
 

@@ -116,14 +116,14 @@
 
 ### `getUnifiedWeaknessProfile` (function) — 23 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2365`
-- `src/components/Coach/CoachTeachPage.tsx:10261`
+- `src/components/Coach/CoachTeachPage.tsx:10302`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:70`
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:149`
 - `src/services/coachApi.ts:2054`
-- `src/services/coachApi.ts:4016`
-- `src/services/coachApi.ts:4564`
+- `src/services/coachApi.ts:4033`
+- `src/services/coachApi.ts:4581`
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
 - `src/services/coachThread.ts:40`

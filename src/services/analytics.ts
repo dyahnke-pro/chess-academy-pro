@@ -122,6 +122,14 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // narration was even attempted upstream before speak.
   'voice-speak-invoked': 'voice_spoken',
   'coach-narration-spoken': 'coach_narration_spoken',
+  // 🔒 THE INSTRUMENT WAS BLIND (prod, 2026-09-13). A user's 22-minute Play
+  // session carried 154 hint answer-reveals — one every 8.5 seconds — and
+  // PostHog showed ZERO hint events, because `hint-revealed` is defined in
+  // `appAuditor` and was never listed here. An earlier pass nearly reported
+  // the zero as PROOF the student never tapped Hint; the truth was that the
+  // question could not be asked at all. Mirror it, so the next session can
+  // answer "did they ask for this, or did the app volunteer it?" from data.
+  'hint-revealed': 'hint_revealed',
   // THE BOARD IS HALF OF WHAT THE COACH SAYS, and until now none of it was
   // durable. David 2026-08-11, on his own game: "No arrows when talking about
   // future plans or piece walks" — the exact defect this event records, and it

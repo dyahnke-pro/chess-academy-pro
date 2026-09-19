@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**499 lines · 7 exports · 5 importers · 1 tests · 0 audits**
+**566 lines · 9 exports · 8 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/hooks/useHintSystem.ts`
+- `src/services/capabilityEvidence.test.ts`
+- `src/services/capabilityEvidence.ts`
+- `src/services/fundamentalVocabulary.test.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/mistakeNarration.ts`
 - `src/services/moveFundamentals.test.ts`
@@ -24,6 +27,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `MoveFundamental` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `MOVE_FUNDAMENTAL_TAG` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computeMoveFundamentals` (function) — 12 call sites
@@ -46,6 +52,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.test.ts:132`
 - `src/services/moveFundamentals.test.ts:137`
 
+### `leadingFundamentals` (function) — 3 call sites
+- `src/services/capabilityEvidence.test.ts:109`
+- `src/services/capabilityEvidence.ts:140`
+- `src/services/fundamentalVocabulary.test.ts:47`
+
 ### `strategicWhyLed` (function) — 8 call sites
 - `src/hooks/useHintSystem.ts:358`
 - `src/services/groundedAnswer.ts:2229`
@@ -64,10 +75,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.test.ts:97`
 
 ### `strategicWhyImperative` (function) — 1 call site
-- `src/services/positionFacts.ts:424`
+- `src/services/positionFacts.ts:444`
 
 ## Tests
 
+- `src/services/capabilityEvidence.test.ts`
+- `src/services/fundamentalVocabulary.test.ts`
 - `src/services/moveFundamentals.test.ts`
 
 ## Audits that reach it
