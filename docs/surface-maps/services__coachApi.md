@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6272 lines · 34 exports · 48 importers · 47 tests · 19 audits**
+**6309 lines · 34 exports · 48 importers · 47 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -237,7 +237,7 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 24 call sites
+### `voiceFacts` (function) — 23 call sites
 - `src/components/Coach/CoachGameReview.tsx:1415`
 - `src/components/Coach/CoachGameReview.tsx:1534`
 - `src/components/Coach/CoachGameReview.tsx:1721`
@@ -258,8 +258,7 @@
 - `src/services/mistakeNarrationVoice.ts:109`
 - `src/services/openingSectionNarrator.ts:84`
 - `src/services/spokenLanguage.ts:191`
-- `src/services/turnLanguage.test.ts:44`
-- `src/services/turnLanguage.test.ts:54`
+- `src/services/turnLanguage.test.ts:58`
 - `src/services/voiceFactsFidelity.test.ts:74`
 - `src/services/voiceFactsFidelity.test.ts:79`
 
