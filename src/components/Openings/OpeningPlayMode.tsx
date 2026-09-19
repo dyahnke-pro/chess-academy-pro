@@ -262,7 +262,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // After a player slip (off-book AND worse), the coach asks "why did you
   // play that?"; the answer is classified into a closed-set misconception
   // and logged to the shared weakness bucket. Enabled during live play.
-  const discussion = useDiscussionPractice(playPhase === 'opening' || playPhase === 'middlegame');
+  const discussion = useDiscussionPractice(playPhase === 'opening' || playPhase === 'middlegame', { capabilityOrigin: 'play' });
 
   // Coach tips during middlegame — detect tactics and alert about missed ones
   const coachTipMoves = useMemo(() =>

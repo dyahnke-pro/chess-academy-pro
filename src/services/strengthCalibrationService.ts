@@ -20,7 +20,7 @@
  * imports) — that is correct; they are different skills.
  */
 import { db } from '../db/schema';
-import { getPlayerRatingEstimate, type RatingSource } from './playerRatingService';
+import { DEFAULT_RATING, getPlayerRatingEstimate, type RatingSource } from './playerRatingService';
 import type { UserProfile } from '../types';
 
 /** Sane Elo bounds for a stored baseline. Lichess puzzles bottom out
@@ -82,11 +82,25 @@ export function clampRating(rating: number): number {
 export async function applyStrength(
   profile: UserProfile,
   rating: number,
+  opts: { baseline?: number } = {},
 ): Promise<UserProfile> {
   const clamped = clampRating(rating);
-  const patch = {
+  // FIRST calibration seeds BOTH ratings — that is this function's original
+  // job (a beginner who declared 600 must not keep getting 1200 puzzles).
+  // A later REFRESH must not: the puzzle SRS owns `puzzleRating` and moves it
+  // on solving, so re-seeding it from play results every boot threw away the
+  // student's puzzle progress. Derived from the profile, never a parameter, so
+  // no caller can get it wrong.
+  const firstCalibration = !profile.strengthCalibrated;
+  const patch: Partial<UserProfile> = {
     currentRating: clamped,
-    puzzleRating: clamped,
+    ...(firstCalibration ? { puzzleRating: clamped } : {}),
+    // WRITTEN ONCE. This is the anchor the adaptive estimate is computed FROM,
+    // so rewriting it from that estimate is the drift bug itself. Absent means
+    // "never anchored"; after this it never changes again.
+    ...(profile.ratingBaseline == null
+      ? { ratingBaseline: clampRating(opts.baseline ?? rating) }
+      : {}),
     // 🔒 BRIDGED, NOT REMOVED. This flag is PERSISTED in Dexie on live devices
     // and `DashboardPage` reads it, so it is still written — but it no longer
     // GATES re-estimation. Gating on it froze the rating at first boot: once
@@ -132,12 +146,22 @@ export async function calibrateStrength(
   // `default` sources are NOT evidence — they are the number we already hold
   // and the number we made up — so they still write nothing.
   if ((estimate.source === 'imported-games' || estimate.source === 'coach-games') && estimate.rating > 0) {
+    // THE ANCHOR, decided here because only this function knows which source
+    // produced the reading. An imported rating is external evidence of their
+    // level, so it anchors itself. A coach-games reading was already computed
+    // FROM `DEFAULT_RATING` (the estimate falls back to it when no baseline is
+    // stored), so storing anything else would make boot 2 disagree with boot 1
+    // — the drift, reintroduced through the back door.
+    const baseline = estimate.source === 'imported-games' ? estimate.rating : DEFAULT_RATING;
+
     // Idempotent: the common boot is "nothing moved", and a Dexie write per
-    // boot for an unchanged value is pure cost.
-    if (clampRating(estimate.rating) === profile.currentRating) {
+    // boot for an unchanged value is pure cost. An unanchored profile still
+    // writes, even when the number matches, or the anchor never lands and
+    // every later boot re-derives it from a moving `currentRating`.
+    if (clampRating(estimate.rating) === profile.currentRating && profile.ratingBaseline != null) {
       return { result: { calibrated: true, rating: profile.currentRating, source: estimate.source }, profile };
     }
-    const updated = await applyStrength(profile, estimate.rating);
+    const updated = await applyStrength(profile, estimate.rating, { baseline });
     return {
       result: { calibrated: true, rating: updated.currentRating, source: estimate.source },
       profile: updated,

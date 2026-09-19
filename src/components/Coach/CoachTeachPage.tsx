@@ -1523,6 +1523,7 @@ export function CoachTeachPage(): JSX.Element {
   // gates the CARD. Setting enabled=false here would silently stop feeding My
   // Mistakes, the Tactics drill queue and the weakness spine.
   const discussion = useDiscussionPractice(true, {
+    capabilityOrigin: 'learn',
     surface: 'coach-teach',
     interruptive: false,
     // After the student answers "why did you play that?", the picker pop-up
@@ -8079,7 +8080,17 @@ export function CoachTeachPage(): JSX.Element {
         gamePhase: classifyPhase(move.fen, (capturedMoveNumber ?? 1) * 2),
         moveNumber: capturedMoveNumber,
         openingName,
-        studentRating: activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? undefined,
+        // 🔴 WAS `puzzleRating ?? currentRating` — the PUZZLE SRS number, moved
+        // by solving, deciding how big a mistake has to be before the coach
+        // interrupts a GAME. Different skill, different field. The correct
+        // resolver already lived in this file (it configures the opponent five
+        // thousand lines down); it just was not used here.
+        studentRating: studentPlayingRating(activeProfile),
+        // THE GAME LINK. Without it every slip the coach captured live stored
+        // the student's reasoning and dropped where it happened — the biggest
+        // capability-parity hole in the weakness spine. Same id the saved
+        // GameRecord uses, so the two join with no lookup.
+        sourceGameId: learnMemRef.current.gameId,
         // The full SAN history (incl. this move) so the captured slip is
         // attributed to its FUNDAMENTAL and lands in the scorecard + drill
         // queue, not just the coarse tag (David 2026-09-07).
@@ -10490,7 +10501,10 @@ export function CoachTeachPage(): JSX.Element {
     // `currentRating ?? puzzleRating` that used to live here is exactly the
     // duplication that stamped a puzzle rating on a played game.
     const rating = studentPlayingRating(activeProfile);
-    const gameId = `teach-${Date.now()}`;
+    // ONE ID PER GAME, minted by the per-game memory when the game began —
+    // not here at save time. Minting at save meant the slips captured DURING
+    // the game could never reference the game they happened in.
+    const gameId = learnMemRef.current.gameId;
     // Use the chess.js PGN (carries the [SetUp]/[FEN] header when the game began
     // from a non-standard position the board was loadFen'd to) — NOT a headerless
     // history.join, which chess.loadPgn can't replay from move 1, so the review's

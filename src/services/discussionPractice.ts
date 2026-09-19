@@ -21,6 +21,7 @@ import {
 import { logMisconception } from './misconceptionService';
 import { addMistakePuzzleFromCapture } from './mistakePuzzleService';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
+import { recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
 
 /** Decide whether a played move warrants the "why?" prompt. Thin
  *  re-export so callers import one module. */
@@ -301,4 +302,34 @@ export async function captureMisconception(
     logged: record !== null,
     record: record ?? undefined,
   };
+}
+
+/** Where a piece of capability evidence was gathered. Re-exported here so a
+ *  SURFACE declares its origin without importing the student-model store
+ *  directly — the composition rule `surfaceComposition.scan` enforces. */
+export type CapabilityOrigin = CapabilityEvidenceRecord['origin'];
+
+/**
+ * RECORD WHAT THE MOVE DEMONSTRATED — the positive half, from the live board.
+ *
+ * This lives beside `captureMisconception` on purpose: they are the two halves
+ * of one act ("what just happened to this student"), and separating them is how
+ * the app ended up with 19 modules recording a MISS and exactly ONE recording a
+ * HOLD. A surface calls the capture service; only the capture service talks to
+ * the student model.
+ *
+ * Unconditional by design — it must see the CLEAN moves too, or the model can
+ * only ever degrade. `recordCapabilityEvidence` returns 0 rows when the board
+ * posed no fundamental worth answering, so quiet moves record nothing.
+ */
+export async function recordMoveEvidence(args: {
+  fenBefore: string;
+  playedSan: string;
+  moverColor: 'white' | 'black';
+  cpLoss: number | null;
+  origin: CapabilityOrigin;
+  prompted: boolean;
+  sourceGameId?: string;
+}): Promise<number> {
+  return recordCapabilityEvidence(args);
 }

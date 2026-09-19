@@ -71,6 +71,22 @@ export interface CapabilityEvidenceRecord {
   recordedAt: number;
   /** Which surface saw it — an honest null is better than a guess. */
   origin: 'play' | 'review' | 'learn' | 'drill';
+  /**
+   * WAS THE STUDENT TOLD? REQUIRED, so a new writer has to answer.
+   *
+   * A move found after the coach announced the moment, or after a hint was
+   * revealed, is NOT evidence the student can do it unaided — and counting it
+   * as `held` would let the coach's own teaching inflate the model it uses to
+   * decide whether to teach. The profile therefore counts a prompted row as
+   * NEITHER held nor broken: the tag stays GREY, grey raises the ranker, and
+   * the coach keeps teaching it until they do it on their own.
+   *
+   * Required rather than optional because the wrong default here is invisible
+   * and self-reinforcing: every prompted row silently reading as unaided
+   * evidence would make a capability look proven precisely because the app
+   * kept helping with it.
+   */
+  prompted: boolean;
   sourceGameId?: string;
 }
 
@@ -148,32 +164,54 @@ export function capabilitiesPosed(
 }
 
 /**
- * Record what a move demonstrated. Fire-and-forget; never throws into a caller's
- * turn — a student model that can break the board is worse than no student
- * model. Returns the number of rows written so a gate can prove it FIRED
- * ("a wire that does not fire is not a wire").
+ * Record what a move demonstrated — OR FAILED TO. Fire-and-forget; never throws
+ * into a caller's turn — a student model that can break the board is worse than
+ * no student model. Returns the number of rows written so a gate can prove it
+ * FIRED ("a wire that does not fire is not a wire").
+ *
+ * 🔒 ONE COMPUTER, BOTH DIRECTIONS (2026-09-19). This wrote `held` and nothing
+ * else, so `CapabilityOutcome` declared two members and the store only ever
+ * contained one — and BOTH readers (`needScore.capabilityTerm`,
+ * `studentMomentBoost`) guarded on `broken > 0`, which made those guards
+ * unreachable code describing a state that could not exist. The half that was
+ * missing is the same computer with the guard flipped: `capabilitiesPosed` says
+ * what the board ASKED, and `movePlayedCleanly` says whether they answered it.
+ * Clean answer → `held`. Costly answer → `broken`. Neither is inferred from the
+ * other and neither is guessed.
+ *
+ * It is deliberately NOT a second weakness spine: the negative half still owns
+ * RED and the drill queue. This records whether a capability the board actually
+ * POSED was demonstrated, which is the only thing that can turn a tag GREEN —
+ * and therefore the only thing that can turn it back.
  */
-export async function recordCapabilitiesShown(args: {
+export async function recordCapabilityEvidence(args: {
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
   cpLoss: number | null;
   origin: CapabilityEvidenceRecord['origin'];
+  /** See `CapabilityEvidenceRecord.prompted` — required, never inferred. */
+  prompted: boolean;
   sourceGameId?: string;
 }): Promise<number> {
   try {
-    const shown = capabilitiesShown(args.fenBefore, args.playedSan, args.moverColor, args.cpLoss);
-    if (shown.length === 0) return 0;
+    // ASKED, regardless of how it went — the outcome is decided once, below,
+    // so the two directions can never disagree about what the board posed.
+    const posed = capabilitiesPosed(args.fenBefore, args.playedSan, args.moverColor);
+    if (posed.length === 0) return 0;
+    const outcome: CapabilityOutcome = movePlayedCleanly(args.cpLoss) ? 'held' : 'broken';
+    const shown = posed;
     const now = Date.now();
     const rows: CapabilityEvidenceRecord[] = shown.map((s) => ({
       id: newId(),
       tag: s.tag,
-      outcome: 'held',
+      outcome,
       fen: args.fenBefore,
       playedSan: args.playedSan,
       posedImportance: s.posedImportance,
       recordedAt: now,
       origin: args.origin,
+      prompted: args.prompted,
       ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
     }));
     await db.capabilityEvidence.bulkAdd(rows);
@@ -181,8 +219,8 @@ export async function recordCapabilitiesShown(args: {
       kind: 'coach-surface-migrated',
       category: 'subsystem',
       source: 'capabilityEvidence.recordCapabilitiesShown',
-      summary: `held x${rows.length} [${rows.map((r) => r.tag).join(', ')}] from ${args.origin}`,
-      details: JSON.stringify({ origin: args.origin, tags: rows.map((r) => r.tag) }),
+      summary: `${outcome} x${rows.length} [${rows.map((r) => r.tag).join(', ')}] from ${args.origin}`,
+      details: JSON.stringify({ origin: args.origin, outcome, tags: rows.map((r) => r.tag) }),
       fen: args.fenBefore,
     });
     return rows.length;
@@ -201,6 +239,18 @@ export async function getCapabilityProfile(): Promise<CapabilityProfile> {
     const rows = await db.capabilityEvidence.toArray();
     for (const r of rows) {
       if (!isMisconceptionTagId(r.tag)) continue;
+      // A PROMPTED ROW IS NEITHER. The student answered a question the coach
+      // had already answered for them, so it proves nothing either way — and
+      // counting it would let the app's own teaching mark a capability proven
+      // and then go quiet about it. Skipped entirely rather than recorded as
+      // `broken`, because being told is not failing.
+      //
+      // Legacy rows (written before this field existed) read as unprompted,
+      // which is what they were: nothing prompted back then.
+      // Legacy rows have no `prompted` field; `undefined` is falsy and reads
+      // as unprompted, which is exactly what they were — nothing prompted
+      // before this existed.
+      if (r.prompted) continue;
       const e = profile.get(r.tag) ?? { held: 0, broken: 0 };
       if (r.outcome === 'held') e.held += 1; else e.broken += 1;
       profile.set(r.tag, e);
@@ -208,3 +258,8 @@ export async function getCapabilityProfile(): Promise<CapabilityProfile> {
   } catch { /* no store yet — an empty profile is the honest answer */ }
   return profile;
 }
+
+/** @deprecated Renamed to `recordCapabilityEvidence` — it no longer only
+ *  records what was SHOWN. Kept so the rename is a one-line change at each
+ *  call site rather than a flag day; delete once the last caller moves. */
+export const recordCapabilitiesShown = recordCapabilityEvidence;

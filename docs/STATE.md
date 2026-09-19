@@ -10,8 +10,8 @@
 
 ## SENSE — does the loop record what happens to the student?
 
-- **19** modules record a MISS.
-- **4** record a HOLD (`capabilityEvidence`).
+- **20** modules record a MISS.
+- **6** record a HOLD (`capabilityEvidence`).
 - **2** read the capability profile back.
 
 Green has a reader — the heat map can lower as well as raise.
@@ -31,11 +31,10 @@ the coach says — an unrated player gets the full detectors (CLAUDE.md).
 - **review**: 1 file(s)
 - **teach**: 1 file(s)
 - **tactics**: 1 file(s)
-- **endgame**: 0 file(s)
+- **endgame**: 1 file(s)
 - **read-position**: 1 file(s)
 
-🚨 **ZERO on: endgame.** A surface that coaches without the corpus
-coaches from nothing — and review is where the diagnosis happens.
+Every listed surface reaches the corpus.
 
 ## GROWTH — the third-coach tax
 

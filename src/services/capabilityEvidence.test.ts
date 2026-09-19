@@ -3,7 +3,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import {
   capabilitiesShown,
-  recordCapabilitiesShown,
+  recordCapabilityEvidence,
   getCapabilityProfile,
 } from './capabilityEvidence';
 import { MOVE_FUNDAMENTAL_TAG, leadingFundamentals } from './moveFundamentals';
@@ -57,9 +57,9 @@ describe('capabilitiesShown — both halves computed', () => {
 
 describe('the record FIRES — a wire that does not fire is not a wire', () => {
   it('writes a real held row and reads it back in the profile', async () => {
-    const wrote = await recordCapabilitiesShown({
+    const wrote = await recordCapabilityEvidence({
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
-      cpLoss: 0, origin: 'play',
+      cpLoss: 0, origin: 'play', prompted: false,
     });
     expect(wrote, 'nothing was written — the positive half is still dead').toBeGreaterThan(0);
 
@@ -74,9 +74,9 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
   });
 
   it('ABSENT means UNKNOWN — never held, never broken', async () => {
-    await recordCapabilitiesShown({
+    await recordCapabilityEvidence({
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
-      cpLoss: 0, origin: 'play',
+      cpLoss: 0, origin: 'play', prompted: false,
     });
     const profile = await getCapabilityProfile();
     // A capability the student has never been asked about must not appear at
@@ -85,19 +85,45 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
     expect(profile.has('botched-conversion')).toBe(false);
   });
 
-  it('a mistake writes nothing at all', async () => {
-    const wrote = await recordCapabilitiesShown({
+  // 🔴 THIS USED TO ASSERT "a mistake writes nothing at all", and that was the
+  // right contract for as long as this module recorded only the POSITIVE half.
+  // It is deleted rather than annotated (the correction rule): with only `held`
+  // ever written, `CapabilityOutcome` declared a `broken` member that could not
+  // exist, and BOTH readers guarded on `broken > 0` — unreachable code
+  // describing an impossible state. The same computer answers both directions:
+  // the board posed it, and they either answered it cleanly or they did not.
+  it('a mistake writes a BROKEN row — the negative half of the same computer', async () => {
+    const wrote = await recordCapabilityEvidence({
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
-      cpLoss: 400, origin: 'play',
+      cpLoss: 400, origin: 'play', prompted: false,
     });
-    expect(wrote).toBe(0);
-    expect(await db.capabilityEvidence.count()).toBe(0);
+    expect(wrote).toBeGreaterThan(0);
+    const rows = await db.capabilityEvidence.toArray();
+    expect(rows.every((r) => r.outcome === 'broken')).toBe(true);
+
+    const profile = await getCapabilityProfile();
+    expect([...profile.values()].some((e) => e.broken > 0)).toBe(true);
+  });
+
+  it('a PROMPTED find counts as neither — the coach cannot inflate its own model', async () => {
+    // Told-then-found is not evidence they can do it unaided. The row is still
+    // written (it happened), but the profile skips it, so the tag stays GREY
+    // and the ranker keeps teaching it.
+    const wrote = await recordCapabilityEvidence({
+      fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
+      cpLoss: 0, origin: 'learn', prompted: true,
+    });
+    expect(wrote).toBeGreaterThan(0);
+    expect(await db.capabilityEvidence.count()).toBeGreaterThan(0);
+
+    const profile = await getCapabilityProfile();
+    expect([...profile.values()].every((e) => e.held === 0 && e.broken === 0)).toBe(true);
   });
 
   it('never throws into the caller, whatever it is handed', async () => {
-    await expect(recordCapabilitiesShown({
+    await expect(recordCapabilityEvidence({
       fenBefore: 'not a fen', playedSan: '??', moverColor: 'white',
-      cpLoss: null, origin: 'review',
+      cpLoss: null, origin: 'review', prompted: false,
     })).resolves.toBe(0);
   });
 });
@@ -188,9 +214,9 @@ describe('the review capture actually feeds it — a real game, real rows', () =
 
     let wrote = 0;
     for (const ply of buildCapabilityPlies(moves, 'white')) {
-      wrote += await recordCapabilitiesShown({
+      wrote += await recordCapabilityEvidence({
         fenBefore: ply.fenBefore, playedSan: ply.playedSan,
-        moverColor: 'white', cpLoss: ply.cpLoss, origin: 'review',
+        moverColor: 'white', cpLoss: ply.cpLoss, origin: 'review', prompted: false,
       });
     }
     expect(wrote, 'a whole clean opening demonstrated NOTHING — the wire is dead').toBeGreaterThan(0);

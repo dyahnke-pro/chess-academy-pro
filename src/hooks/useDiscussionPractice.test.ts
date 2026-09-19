@@ -27,10 +27,17 @@ vi.mock('../services/discussionPractice', async (importActual) => {
       logged: true,
       record: { tag: 'missed-tactic' },
     })),
+    // The POSITIVE half. Mocked at the same seam as the negative one so this
+    // file stays Dexie-free; `capabilityEvidence.test.ts` proves the real
+    // writer. What is asserted HERE is the thing a service test cannot see:
+    // that the live surface calls it AT ALL, on every graded move, and hands
+    // it the right origin.
+    recordMoveEvidence: vi.fn(async () => 1),
   };
 });
 
 import { useDiscussionPractice } from './useDiscussionPractice';
+import { recordMoveEvidence } from '../services/discussionPractice';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { voiceService } from '../services/voiceService';
 import { captureEvent } from '../services/analytics';
@@ -54,12 +61,13 @@ beforeEach(() => {
   vi.mocked(captureEvent).mockClear();
   vi.mocked(voiceService.speakForced).mockClear();
   vi.mocked(stockfishEngine.analyzePosition).mockReset();
+  vi.mocked(recordMoveEvidence).mockClear();
 });
 
 describe('useDiscussionPractice — Play stays pure (non-interruptive)', () => {
   it('is inert without interruptive: no prompt on a blunder', async () => {
     setEvals(100, -300);
-    const { result } = renderHook(() => useDiscussionPractice(true));
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
     await act(async () => {
       await result.current.evaluatePlayerMove({
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
@@ -73,7 +81,7 @@ describe('useDiscussionPractice — Play stays pure (non-interruptive)', () => {
 });
 
 describe('useDiscussionPractice — Learn (interruptive)', () => {
-  const opts = { surface: 'coach-teach', interruptive: true } as const;
+  const opts = { surface: 'coach-teach', interruptive: true, capabilityOrigin: 'learn' } as const;
 
   it('SLIP opens the blocking picker and logs the response with its bucket', async () => {
     setEvals(100, -200); // white loses 300cp → blunder
@@ -210,5 +218,47 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
       });
     });
     expect(inter.result.current.prompt?.kind).toBe('slip');
+  });
+});
+
+// ─── THE POSITIVE HALF IS WIRED ──────────────────────────────────────────────
+// 19 modules recorded a MISS and exactly ONE recorded a HOLD — post-game
+// analysis — so a capability could go RED from anywhere and could only go GREEN
+// through a path most students never take. These assert the live surface now
+// feeds it, which is the half that was missing.
+describe('capability evidence is recorded from LIVE play', () => {
+  const opts = { surface: 'coach-teach', interruptive: true, capabilityOrigin: 'learn' } as const;
+
+  it('records on a CLEAN move — the model must see the good moves too', async () => {
+    setEvals(20, 15);   // nothing lost
+    const { result } = renderHook(() => useDiscussionPractice(true, opts));
+    await act(async () => {
+      await result.current.evaluatePlayerMove({
+        fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        playerColor: 'white', inBook: false, learned: true,
+        gamePhase: 'opening', moveNumber: 1, sourceGameId: 'teach-abc',
+      });
+    });
+    expect(recordMoveEvidence, 'a clean move recorded nothing — green is unreachable again')
+      .toHaveBeenCalledTimes(1);
+    const arg = vi.mocked(recordMoveEvidence).mock.calls[0][0];
+    expect(arg.origin).toBe('learn');
+    expect(arg.prompted).toBe(false);
+    expect(arg.sourceGameId).toBe('teach-abc');
+  });
+
+  it('records on a BLUNDER too — the same computer, the other direction', async () => {
+    setEvals(100, -200);
+    const { result } = renderHook(() => useDiscussionPractice(true, opts));
+    await act(async () => {
+      await result.current.evaluatePlayerMove({
+        fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        playerColor: 'white', inBook: false, learned: true,
+        gamePhase: 'opening', moveNumber: 1,
+      });
+    });
+    expect(recordMoveEvidence).toHaveBeenCalledTimes(1);
+    // The outcome is decided inside the recorder from this cpLoss, never here.
+    expect(vi.mocked(recordMoveEvidence).mock.calls[0][0].cpLoss).toBeGreaterThan(0);
   });
 });

@@ -9,7 +9,9 @@
  *   1. Imported games (Lichess / Chess.com) — most recent rating on the
  *      side matching the stored username.
  *   2. Coach games — if ≥5 have been played, a running K=32 ELO derived
- *      from results against each game's stored opponent rating.
+ *      from results against each game's stored opponent rating, anchored at
+ *      the profile's WRITE-ONCE `ratingBaseline` so re-running it converges
+ *      rather than drifting (see the anchor note at the call site).
  *   3. `activeProfile.currentRating` from the Zustand store.
  *   4. Hard default of 1200 (club-beginner baseline).
  *
@@ -155,9 +157,16 @@ export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
   }
 
   // 2. Coach games — running K=32 ELO once we have enough data.
+  //
+  // 🔒 THE ANCHOR IS `ratingBaseline`, NEVER `currentRating`. It used to start
+  // from `currentRating` — the field `calibrateStrength` then OVERWRITES with
+  // this function's own answer — so the estimate was its own input and the same
+  // games moved the number on every boot (800 -> 990 over ten opens; a losing
+  // player 1200 -> 888). Anchored at a baseline written once, this is a pure
+  // function of THEIR games: same games in, same rating out, forever.
   const coachGames = await db.games.where('source').equals('coach').toArray();
   if (coachGames.length >= COACH_GAMES_MIN_SAMPLE) {
-    const starting = profileRating ?? DEFAULT_RATING;
+    const starting = profile?.ratingBaseline ?? DEFAULT_RATING;
     const rating = runningEloFromCoachGames(coachGames, starting, profile?.name);
     return {
       rating,

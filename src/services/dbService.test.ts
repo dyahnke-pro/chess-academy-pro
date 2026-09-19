@@ -18,6 +18,7 @@ import {
   updateSession,
 } from './dbService';
 import { buildPuzzleRecord, buildFlashcardRecord, buildSessionRecord, buildOpeningRecord } from '../test/factories';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 describe('dbService', () => {
   beforeEach(async () => {
@@ -30,7 +31,15 @@ describe('dbService', () => {
       const profile = await getOrCreateMainProfile();
       expect(profile.id).toBe('main');
       expect(profile.name).toBe('Player');
-      expect(profile.currentRating).toBe(800);
+      // 🔴 WAS 800. The seed's own comment justified that with "only ever live
+      // until calibration runs at boot (imported games, else the first-run
+      // skill picker)" — and the picker was deleted 2026-09-02, so a student
+      // who never imported simply STAYED at 800: blunders-only teaching, a
+      // 1-ply tactic scan, and a hint ladder that answers on the first tap.
+      // It is now the app's one literal for an unknown student.
+      expect(profile.currentRating).toBe(DEFAULT_STUDENT_RATING);
+      // The puzzle SRS keeps its own cold start — a different ladder for a
+      // different skill, which is why the two fields exist.
       expect(profile.puzzleRating).toBe(800);
       expect(profile.strengthCalibrated).toBe(false);
       expect(profile.level).toBe(1);

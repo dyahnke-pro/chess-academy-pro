@@ -512,7 +512,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // weakness bucket. The same faucet OpeningPlayMode uses — wired here so
   // /coach/play feeds the bucket too. Enabled only during live play (not in
   // explore/practice modes — those are guarded by the routed handler).
-  const discussion = useDiscussionPractice(gameState.status === 'playing');
+  const discussion = useDiscussionPractice(gameState.status === 'playing', { capabilityOrigin: 'play' });
 
   // A live game must survive a deploy: hold the service-worker update reload
   // (index.html controllerchange handler) while moves are on the board. A

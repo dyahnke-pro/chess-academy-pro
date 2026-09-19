@@ -8,7 +8,7 @@ import { Chess } from 'chess.js';
 // passive path write to the SAME bucket; this just front-runs it.
 
 import { captureMisconception } from './discussionPractice';
-import { recordCapabilitiesShown } from './capabilityEvidence';
+import { recordCapabilityEvidence } from './capabilityEvidence';
 import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
@@ -136,12 +136,16 @@ export async function autoAnalyzeBlunders(
   let capabilitiesHeld = 0;
   if (opts.capabilityPlies?.length && opts.playerColor) {
     for (const ply of opts.capabilityPlies) {
-      capabilitiesHeld += await recordCapabilitiesShown({
+      capabilitiesHeld += await recordCapabilityEvidence({
         fenBefore: ply.fenBefore,
         playedSan: ply.playedSan,
         moverColor: opts.playerColor,
         cpLoss: ply.cpLoss,
         origin: 'review',
+        // The student played the whole game with nobody telling them anything.
+        // This sweep runs afterwards, over what they did unaided — the purest
+        // evidence the app has, and the reason it was the ONLY green writer.
+        prompted: false,
         ...(opts.sourceGameId ? { sourceGameId: opts.sourceGameId } : {}),
       });
     }

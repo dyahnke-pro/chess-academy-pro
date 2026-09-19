@@ -12,6 +12,11 @@ import type { RatingEstimate } from './playerRatingService';
 const estimateMock = vi.hoisted(() => vi.fn());
 vi.mock('./playerRatingService', () => ({
   getPlayerRatingEstimate: estimateMock,
+  // The service now reads DEFAULT_RATING to decide the write-once anchor for a
+  // coach-games reading. A mock that omits it throws at the call site — which
+  // is the mock being wrong, not the code: partial module mocks have to keep up
+  // with what the module under test actually imports.
+  DEFAULT_RATING: 1200,
 }));
 
 function setEstimate(e: RatingEstimate): void {
@@ -135,12 +140,41 @@ describe('strengthCalibrationService', () => {
     });
 
     it('does not write when the measured rating has not moved', async () => {
-      const profile = buildUserProfile({ id: 'main', currentRating: 1100, strengthCalibrated: true });
+      // ANCHORED profile: nothing left to establish, so an unchanged number is
+      // a no-op. (The fixture gained `ratingBaseline` — without it the profile
+      // is unanchored and the write below is REQUIRED; see the next test.)
+      const profile = buildUserProfile({
+        id: 'main', currentRating: 1100, ratingBaseline: 1200, strengthCalibrated: true,
+      });
       await db.profiles.put(profile);
       setEstimate({ rating: 1100, source: 'coach-games', sampleSize: 9 });
 
       const { profile: out } = await calibrateStrength(profile);
       expect(out, 'a Dexie write per boot for an unchanged value is pure cost').toBe(profile);
+    });
+
+    it('DOES write an unanchored profile even when the number matches', async () => {
+      // The anchor is what stops the estimate feeding on itself. If the
+      // equality short-circuit ran before it landed, a profile whose first
+      // reading happened to equal its stored rating would stay unanchored
+      // forever and every later boot would re-derive from a moving field —
+      // the drift, reintroduced through the one path that skips the write.
+      const profile = buildUserProfile({ id: 'main', currentRating: 1100, strengthCalibrated: true });
+      await db.profiles.put(profile);
+      setEstimate({ rating: 1100, source: 'coach-games', sampleSize: 9 });
+
+      const { profile: out } = await calibrateStrength(profile);
+      expect(out.ratingBaseline).toBe(1200);
+      expect(out.currentRating).toBe(1100);
+    });
+
+    it('anchors an IMPORTED reading at the imported rating, not the default', async () => {
+      const profile = buildUserProfile({ id: 'main', currentRating: 800, strengthCalibrated: false });
+      await db.profiles.put(profile);
+      setEstimate({ rating: 1750, source: 'imported-games', sampleSize: 40 });
+
+      const { profile: out } = await calibrateStrength(profile);
+      expect(out.ratingBaseline).toBe(1750);
     });
   });
 

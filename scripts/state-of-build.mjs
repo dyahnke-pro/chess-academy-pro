@@ -64,7 +64,16 @@ function measure() {
   const missWriters = filesMatching(
     /captureMisconception|recordTagDrillResult|upsertWeakSpot|openingWeakSpots|mistakePuzzles\.(add|bulkAdd|put)/,
   ).length;
-  const holdWriters = filesMatching(/recordCapabilitiesShown|capabilitiesShown/, ['services/capabilityEvidence.ts']).length;
+  // 🚨 KEYED ON THE FUNCTION NAME, SO A RENAME MOVES THE NUMBER WITHOUT THE
+  // CODE MOVING. `recordCapabilitiesShown` became `recordCapabilityEvidence`
+  // when it learned to write the negative half too, and this scan read that as
+  // the app LOSING a writer — a level-II instrument reporting a regression
+  // that was actually the fix. Both names are matched so the count is about
+  // wiring, not spelling.
+  const holdWriters = filesMatching(
+    /recordCapabilityEvidence|recordCapabilitiesShown|capabilitiesShown/,
+    ['services/capabilityEvidence.ts'],
+  ).length;
   // GREEN IS WRITE-ONLY until something READS the profile. That reader is what
   // turns silence from a guess into a computed verdict.
   const greenReaders = filesMatching(/getCapabilityProfile/, ['services/capabilityEvidence.ts']).length;
@@ -91,7 +100,15 @@ function measure() {
       ['review', 'src/components/Coach/CoachGameReview|src/services/coachFeatureService'],
       ['teach', 'src/components/Coach/CoachTeachPage'],
       ['tactics', 'src/components/Tactics'],
-      ['endgame', 'src/components/Coach/CoachEndgame'],
+      // 🚨 THE SAME RENDERER-NOT-PRODUCER MISTAKE THE COMMENT ABOVE WARNS
+      // ABOUT, MADE ONE LINE BELOW IT. This read only `CoachEndgame*` and
+      // printed a 🚨 ZERO for months — but `CoachEndgamePage` mounts
+      // `EndgameLessonTab` four times, and THAT is where the corpus is
+      // spliced (4 calls, with its own `EndgameLessonTab.corpusNote` test).
+      // Level II is the context every session reads before choosing what to
+      // build, and ship-check gates on it, so a false alarm here sends
+      // sessions to rebuild something that already works.
+      ['endgame', 'src/components/Coach/CoachEndgame|src/components/Coach/EndgameLessonTab'],
       ['read-position', 'src/hooks/usePositionNarration'],
     ].map(([name, prefixes]) => [
       name,

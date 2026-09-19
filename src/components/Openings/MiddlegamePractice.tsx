@@ -158,7 +158,7 @@ export function MiddlegamePractice({
   // bucket. Same faucet OpeningPlayMode / /coach/play use — wired here so
   // middlegame-plan practice feeds the money loop too. fenBefore is tracked
   // because ControlledChessBoard mutates `game` before onMove fires.
-  const discussion = useDiscussionPractice(true);
+  const discussion = useDiscussionPractice(true, { capabilityOrigin: 'drill' });
   const fenBeforeRef = useRef<string>(plan.criticalPositionFen);
 
   useEffect(() => {

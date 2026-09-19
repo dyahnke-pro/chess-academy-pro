@@ -1041,6 +1041,23 @@ export interface UserProfile {
   isKidMode: boolean;
   currentRating: number;
   puzzleRating: number;
+  /** THE ANCHOR FOR THE ADAPTIVE ESTIMATE — written ONCE, never rewritten by
+   *  the estimate it anchors.
+   *
+   *  The running K=32 ELO over the student's coach games used to start from
+   *  `currentRating`, which `calibrateStrength` then overwrote with the result
+   *  — so every boot re-scored the SAME games from the number the last boot
+   *  wrote. Measured: a new player drifted 800 -> 990 and a losing one
+   *  1200 -> 888 across ten app opens, on zero new games. That number sets the
+   *  teach bar, the tactic-scan depth, the explorer band, the hint tier and the
+   *  alert multiplier, so a student crossed real behaviour boundaries by
+   *  opening the app.
+   *
+   *  With a fixed anchor the estimate is a PURE FUNCTION of their games:
+   *  re-running it converges instead of drifting, and no two students share a
+   *  moving target. Absent on profiles that predate this field — read it as
+   *  `DEFAULT_STUDENT_RATING`, which is what the first calibration stores. */
+  ratingBaseline?: number;
   /** Separate Elo rating for the endgame puzzle pool (mating
    *  patterns, calc, lesson drills). Tracked independently from
    *  the general tactic puzzleRating so a flurry of easy

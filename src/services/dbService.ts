@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import { createDefaultSrsFields } from './srsEngine';
 import { DEFAULT_THEME_ID } from './themeService';
 import { OPENING_ID_ALIASES } from './openingService';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { UserProfile, PuzzleRecord, OpeningRecord, SessionRecord, FlashcardRecord } from '../types';
 
 // ─── Profile ──────────────────────────────────────────────────────────────────
@@ -11,13 +12,20 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
     id: 'main',
     name: 'Player',
     isKidMode: false,
-    // Beginner-safe defaults. These are only ever live until calibration
-    // runs at boot (imported games, else the first-run skill picker) and
-    // seeds the player's real strength. `strengthCalibrated: false` is
-    // what triggers that calibration — including retroactively for
-    // existing profiles that predate this field. See
-    // strengthCalibrationService.
-    currentRating: 800,
+    // 🔴 `currentRating` WAS 800, AND THE COMMENT JUSTIFYING IT DESCRIBED A
+    // PATH THAT NO LONGER EXISTS — "until calibration runs at boot (imported
+    // games, else the first-run skill picker)". The picker was deleted
+    // 2026-09-02, so a student who never imports and has fewer than five coach
+    // games simply STAYED at 800, and 800 buys (measured): only BLUNDERS are
+    // ever taught, a 1-ply tactic scan, and a hint ladder that hands over the
+    // answer on the first tap. That is the exact opposite of the locked rule
+    // that an unrated student gets the FULL capabilities of the detectors.
+    // It is now the one literal the app has for an unknown student.
+    //
+    // `puzzleRating` deliberately keeps its own cold start: the puzzle SRS
+    // owns that ladder and moves it on solving, and it is a different skill
+    // from playing strength (the reason the two fields exist).
+    currentRating: DEFAULT_STUDENT_RATING,
     puzzleRating: 800,
     strengthCalibrated: false,
     xp: 0,

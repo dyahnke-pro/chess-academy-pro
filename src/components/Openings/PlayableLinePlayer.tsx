@@ -201,7 +201,7 @@ export function PlayableLinePlayer({
   // Silent by contract (no panel, no voice). The eval-delta gate means a
   // good-but-off-line move doesn't capture — only real errors do. Fires at
   // most once per move index so retries don't double-count.
-  const discussion = useDiscussionPractice(mode === 'practice', { silent: true, surface: 'opening-practice' });
+  const discussion = useDiscussionPractice(mode === 'practice', { silent: true, surface: 'opening-practice', capabilityOrigin: 'drill' });
   const faucetFiredRef = useRef<Set<number>>(new Set());
 
   // Selected square + legal moves for click-to-move in memory phase

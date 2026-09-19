@@ -40,8 +40,15 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     // Filter METHODS by type, not by name: a second method (observe) was added
     // and a name-based filter flagged it as an unforgotten slot. Any new DATA
     // slot is still caught, which is the point.
+    // `gameId` is IDENTITY, not say-once memory: `newGame()` must REPLACE it,
+    // not empty it, so the "cleared to null/''" rule below is the wrong
+    // question for it. It gets a stronger assertion of its own in the next
+    // test — a new game must mint a new id — which is why excluding it here
+    // does not create a hole. Named explicitly so a future slot cannot ride
+    // out on a vague filter.
+    const IDENTITY_SLOTS = new Set<string>(['gameId']);
     const slots = (Object.keys(mem) as Array<keyof LearnMemory>)
-      .filter((k) => typeof mem[k] !== 'function');
+      .filter((k) => typeof mem[k] !== 'function' && !IDENTITY_SLOTS.has(k));
     expect(slots.length).toBeGreaterThan(5);
     for (const k of slots) {
       const v = mem[k];
@@ -65,6 +72,27 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
         : v === null || v === '' || v === NEVER_FIRED;
       expect(clean, `newGame() did not forget "${k}" — add it to newGame()`).toBe(true);
     }
+  });
+
+  it('newGame() mints a NEW gameId — game 2 cannot record against game 1', () => {
+    const mem = createLearnMemory();
+    const first = mem.gameId;
+    expect(first).toMatch(/^teach-/);
+
+    mem.newGame();
+    expect(mem.gameId).not.toBe(first);
+    expect(mem.gameId).toMatch(/^teach-/);
+  });
+
+  it('a REWIND mints a new gameId too — the board decides, not a call site', () => {
+    // `observe` is the reset that cannot be fooled by which code path reached
+    // the board. The id has to follow it, or a second game played by the path
+    // neither hand-placed reset covers files its slips under the first game.
+    const mem = createLearnMemory();
+    mem.observe(14);
+    const first = mem.gameId;
+    expect(mem.observe(2)).toBe(true);          // board went backwards
+    expect(mem.gameId).not.toBe(first);
   });
 
   it('observe() forgets when the board goes BACKWARDS — a second game', () => {

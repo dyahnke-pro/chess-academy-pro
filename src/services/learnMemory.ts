@@ -132,6 +132,34 @@ export interface LearnMemory {
   observe(plies: number): boolean;
   /** Forget everything. Every "a new game starts" site calls THIS. */
   newGame(): void;
+  /**
+   * THE GAME'S OWN ID — minted here, re-minted by `newGame()`.
+   *
+   * The comment on `observe` above says "neither surface has a game id" and
+   * treats that as a constraint to work around. It was also a DATA defect: the
+   * coach's live capture (`captureMisconception`) has a `sourceGameId` field
+   * and had nothing to put in it, so every slip the coach recorded during a
+   * Learn game — the richest signal in the app, the student's own reasoning —
+   * stored WHAT they got wrong and threw away WHERE. The weakness spine fills
+   * those rows' provenance with a bare `origin: 'game'` for exactly this
+   * reason, and no surface can say "you met this against X thirteen days ago".
+   *
+   * It lives HERE rather than in another ref because this object is already
+   * the thing that knows when a game begins, by the one mechanism that cannot
+   * be fooled — the board going backwards. A hand-placed `useRef` would be
+   * path-dependent in precisely the way `observe` exists to fix.
+   *
+   * The SAVED `GameRecord` uses this same id, so the slips captured mid-game
+   * and the game they happened in join without a lookup.
+   */
+  readonly gameId: string;
+}
+
+/** `teach-` prefixed to match the id shape the saved Learn `GameRecord` has
+ *  always used. Random suffix because two games can start inside one
+ *  millisecond (a rewind fires `newGame` synchronously). */
+function mintGameId(): string {
+  return `teach-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 export function createLearnMemory(): LearnMemory {
@@ -144,6 +172,7 @@ export function createLearnMemory(): LearnMemory {
   const conceptTaught = new Set<string>();
   let lastPlies = 0;
   const mem: LearnMemory = {
+    gameId: mintGameId(),
     curatedBeatSeen,
     saidExplainers,
     structureSaid,
@@ -178,6 +207,9 @@ export function createLearnMemory(): LearnMemory {
       mem.spokenOpeningName = null;
       mem.detectedOpeningName = null;
       lastPlies = 0;
+      // A NEW GAME IS A NEW ID. Re-minting here (rather than at a call site)
+      // is what makes it impossible to record game 2's slips against game 1.
+      (mem as { gameId: string }).gameId = mintGameId();
     },
   };
   return mem;

@@ -799,6 +799,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, []);
 
   const reviewFaucet = useDiscussionPractice(true, {
+    capabilityOrigin: 'review',
     surface: 'coach-review', interruptive: true, source: 'game-review',
     onSlipLogged: armPrincipleQuiz,
   });

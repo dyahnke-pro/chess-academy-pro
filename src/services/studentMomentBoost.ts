@@ -49,14 +49,32 @@ export interface StudentMomentInput {
   capabilities?: CapabilityProfile;
 }
 
-/** Is this posed capability GREY — no record at all? A `broken` row is RED and
- *  belongs to the weakness half; a proven `held` row is GREEN and earns nothing
- *  here (the ranker is raise-only; green lowers through the need score). */
-function isGrey(tag: MisconceptionTagId, caps: CapabilityProfile): boolean {
+/**
+ * Is this posed capability NOT YET PROVEN — so the ranker should still raise
+ * the moment? Absent (grey) and recorded-failure both qualify; only a clean
+ * `held >= HELD_FOR_PROVEN` earns silence here.
+ *
+ * 🔴 THIS USED TO READ `if (e.broken > 0) return false;` — "a broken row is RED
+ * and belongs to the weakness half". That was safe only for as long as NOTHING
+ * WROTE A BROKEN ROW, which was true until 2026-09-19. The moment the positive
+ * half started recording failures, that line would have made the coach QUIETER
+ * on a capability the student had just demonstrably failed: the tag stops being
+ * grey (boost 12) and picks up RED only if the weakness spine independently
+ * matched a hole for it — and the two halves do not match one-for-one, so a
+ * failure with no spine hole scored ZERO. A data term that can lower the
+ * coach's attention on evidence of failure is exactly backwards (the
+ * ALGO-BASED rule: data may RAISE freely and may only LOWER on evidence of the
+ * POSITIVE).
+ *
+ * `Math.max(red, grey)` downstream means a tag that IS matched by the weakness
+ * half still ranks on its real RED weight; this only stops a recorded failure
+ * from scoring less than never-having-been-asked.
+ */
+function isUnproven(tag: MisconceptionTagId, caps: CapabilityProfile): boolean {
   const e = caps.get(tag);
-  if (!e) return true;
-  if (e.broken > 0) return false;
-  return e.held < HELD_FOR_PROVEN;
+  if (!e) return true;                         // never asked
+  if (e.broken > 0) return true;               // asked and FAILED — never quieter than unasked
+  return e.held < HELD_FOR_PROVEN;             // seen, not yet proven
 }
 
 /**
@@ -71,7 +89,7 @@ export function studentMomentBoost(input: StudentMomentInput): number {
   // fresh install is 100% grey), so it takes the same branch rather than an
   // empty-map stand-in.
   const grey = input.posedTags?.length
-    ? ((!caps || input.posedTags.some((t) => isGrey(t, caps))) ? GREY_BOOST : 0)
+    ? ((!caps || input.posedTags.some((t) => isUnproven(t, caps))) ? GREY_BOOST : 0)
     : 0;
   return Math.min(MAX_WEAKNESS_BOOST, Math.max(red, grey));
 }

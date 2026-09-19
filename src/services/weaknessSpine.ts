@@ -332,7 +332,7 @@ export function aggregateMistakePuzzles(mistakes: MistakePuzzle[], excludeKeys?:
 }
 
 /** Convert a misconception aggregate into the unified shape. */
-function fromMisconception(a: MisconceptionAggregate): UnifiedWeakness {
+function fromMisconception(a: MisconceptionAggregate, gameIndex?: GameProvenanceIndex): UnifiedWeakness {
   return {
     key: `coach:${a.tag}:${a.label}`,
     tag: a.tag,
@@ -343,14 +343,31 @@ function fromMisconception(a: MisconceptionAggregate): UnifiedWeakness {
     severity: Math.min(95, a.openCount * 12 + a.total * 3),
     sources: ['coach'],
     puzzleThemes: a.def?.drill.puzzleThemes ?? [],
-    // ORIGIN IS 'game' AND THE REST IS HONESTLY UNKNOWN. The coach captures
-    // these DURING a game's review — so it is a game, we simply cannot say
-    // which: `MisconceptionTagRecord` stores the student's reasoning and drops
-    // the game link entirely (the biggest parity hole found 2026-09-16). Adding
-    // gameId/gameDate at the capture sites is the follow-up; until then these
-    // stay undefined rather than guessed.
+    // ✅ THE GAME LINK LANDED (2026-09-19). This used to read "we simply
+    // cannot say which game" and fill a bare `origin: 'game'` — the biggest
+    // capability-parity hole in the spine, because these are the COACH'S OWN
+    // captures, the richest signal in the app. The cause was not the record
+    // shape: `MisconceptionTagRecord.sourceGameId` existed and
+    // `captureMisconception` always forwarded it — the LIVE capture sites just
+    // never passed one, because Learn minted its game id at SAVE time, after
+    // every slip had already been written. The id is now minted by
+    // `learnMemory` when the game begins and both the slips and the saved
+    // GameRecord carry it.
+    //
+    // Still honest about what it does not know: a row captured before this
+    // landed, or from a surface with no game, has no `sourceGameId`, and those
+    // fields stay undefined rather than guessed.
     positions: a.examples.map((e) => ({
-      from: { origin: 'game' as const },
+      from: {
+        origin: 'game' as const,
+        ...(e.sourceGameId ? { gameId: e.sourceGameId } : {}),
+        ...(e.sourceGameId && gameIndex?.has(e.sourceGameId)
+          ? {
+              opponentName: gameIndex.get(e.sourceGameId)?.opponentName ?? null,
+              playedAt: gameIndex.get(e.sourceGameId)?.playedAt,
+            }
+          : {}),
+      },
       fen: e.fen,
       playedSan: e.playedSan,
       bestSan: e.bestSan,
@@ -693,7 +710,7 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   const opponentFor = (gameId: string): string | null => gameIndex.get(gameId)?.opponentName ?? null;
 
   const coachKeys = new Set(allMis.map((m) => posKey(m.fen, m.playedSan)));
-  const coachRows = misAgg.map(fromMisconception);
+  const coachRows = misAgg.map((a) => fromMisconception(a, gameIndex));
   const analysisRows = mergeByKey([
     ...aggregateMistakePuzzles(mistakes, coachKeys),
     ...aggregateClassifiedTactics(tactics),

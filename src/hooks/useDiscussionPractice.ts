@@ -29,7 +29,7 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, type HintDial } from '../services/hintRegister';
 import { backwardLook, type BackwardLook } from '../services/backwardLook';
-import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, findMoverTactic, withReasonLead } from '../services/discussionPractice';
+import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, findMoverTactic, recordMoveEvidence, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
@@ -84,6 +84,20 @@ export interface EvaluatePlayerMoveArgs {
   openingId?: string;
   openingName?: string;
   studentRating?: number;
+  /** THE GAME THIS SLIP HAPPENED IN. `MisconceptionTagRecord` has carried a
+   *  `sourceGameId` field the whole time and `captureMisconception` has always
+   *  forwarded it — but the LIVE capture never passed one, so the coach's own
+   *  "why did you play that?" record, the richest signal in the app, stored the
+   *  student's reasoning and dropped WHERE IT HAPPENED. That is why the
+   *  weakness spine's `coach:` rows fill `WeaknessProvenance` with a bare
+   *  `origin: 'game'` and no surface can say "you met this against X thirteen
+   *  days ago" (CLAUDE.md capability parity; `weaknessSpine` says so in a
+   *  comment ending "adding gameId at the capture sites is the follow-up").
+   *
+   *  OPTIONAL ON PURPOSE, and honestly so: a drill line (PlayableLinePlayer,
+   *  MiddlegamePractice) has no game, and `origin: 'drill'` is the right answer
+   *  there — never a fabricated game id. */
+  sourceGameId?: string;
   /** Every SAN up to AND INCLUDING the played move. When present, a captured
    *  slip is attributed to the specific FUNDAMENTAL it neglected (David
    *  2026-09-07: one coach, one memory) — so a live Learn/Play slip lands in the
@@ -167,6 +181,20 @@ export interface UseDiscussionPracticeOptions {
    *  'discussion-practice' (default); post-game REVIEW passes 'game-review'
    *  so a review-captured slip is tagged to the game it came from. */
   source?: MisconceptionSource;
+  /**
+   * WHICH SURFACE THIS EVIDENCE CAME FROM, for the POSITIVE half of the student
+   * model (`capabilityEvidence`). Required, and deliberately separate from
+   * `source`: that one names the capture PIPELINE and has three members, while
+   * this names where the student was sitting and has four. Deriving one from
+   * the other would file a drill line under 'play' — an honest null is not
+   * available here, so the caller decides (CLAUDE.md: a new caller must answer
+   * for itself rather than inherit a silent default).
+   *
+   * This is the wire that was missing: 19 modules recorded a MISS and exactly
+   * ONE recorded a HOLD (post-game analysis), so a capability could go RED from
+   * anywhere and could only go GREEN through a path most students never take.
+   */
+  capabilityOrigin: CapabilityOrigin;
   /** When set, the reveal (best move + why) is handed here after the student
    *  commits, and the picker pop-up DISAPPEARS (David 2026-07-10: "I want the
    *  pop up to disappear after a selection is pressed"). The surface routes the
@@ -238,7 +266,9 @@ const GOOD_MOVE_MIN_PLY_GAP = 8;
 
 export function useDiscussionPractice(
   enabled: boolean,
-  opts: UseDiscussionPracticeOptions = {},
+  // NO DEFAULT. `capabilityOrigin` is required, so an options-less mount would
+  // have silently inherited one surface's answer for another's evidence.
+  opts: UseDiscussionPracticeOptions,
 ): UseDiscussionPracticeResult {
   const [phase, setPhase] = useState<DiscussionPhase>('idle');
   const [prompt, setPrompt] = useState<DiscussionPrompt | null>(null);
@@ -392,6 +422,34 @@ export function useDiscussionPractice(
       //
       // `slipWarrantsInterjection` is about WHEN TO INTERRUPT, not what is
       // worth remembering. It keeps that job; it no longer gates the record.
+      // ── THE POSITIVE HALF, RECORDED LIVE ────────────────────────────────
+      // Unconditional and ahead of the slip branch on purpose: this is the one
+      // computer that answers BOTH directions, and it must see the clean moves
+      // too or the model can only ever degrade. `recordCapabilityEvidence`
+      // decides `held` vs `broken` from the same posed set + the real cpLoss,
+      // and returns 0 rows when the board never posed a fundamental worth
+      // answering — so forty quiet moves in a row record nothing, which is the
+      // honest answer ("they didn't fail" is not evidence).
+      void recordMoveEvidence({
+        fenBefore: args.fenBefore,
+        playedSan: args.playedSan,
+        moverColor: args.playerColor,
+        cpLoss,
+        origin: opts.capabilityOrigin,
+        // UNPROMPTED, and provably so at THIS point in the turn: every reveal
+        // this hook delivers (`buildGroundedReveal`, `buildSlipReveal`, the
+        // teach card) fires AFTER the move is on the board, so nothing has
+        // told the student anything about the position they just answered.
+        //
+        // 🚨 THIS BECOMES DYNAMIC the moment the coach speaks BEFORE the move —
+        // the critical-moment announcement in PLAN.md ("only one move keeps you
+        // level") is exactly that, and a find after it must record
+        // `prompted: true` or the coach's own teaching inflates the model it
+        // uses to decide whether to teach.
+        prompted: false,
+        sourceGameId: args.sourceGameId,
+      });
+
       if (slip.isSlip && bestSan) {
         void captureMisconception({
           classifyInput: {
@@ -419,6 +477,7 @@ export function useDiscussionPractice(
             moveNumber: args.moveNumber,
             openingId: args.openingId,
             openingName: args.openingName,
+            sourceGameId: args.sourceGameId,
           },
         }).catch(() => undefined);
       }
@@ -549,6 +608,7 @@ export function useDiscussionPractice(
             moveNumber: ctx.args.moveNumber,
             openingId: ctx.args.openingId,
             openingName: ctx.args.openingName,
+            sourceGameId: ctx.args.sourceGameId,
           },
         });
         loggedTag = res.record?.tag;
