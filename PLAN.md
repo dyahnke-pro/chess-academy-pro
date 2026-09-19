@@ -722,10 +722,68 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 precache cap. Read the preloads out of `dist/index.html`; never infer boot cost
 from the entry chunk's size.
 
+- ✅ **354 NOTES THAT DESCRIBED THE VIDEO, NOT THE BOARD, ARE GONE.** David,
+  reading real samples: "they were messing up the narration for our coach."
+  They were, and a filter already existed — `noteTeachesChessNotItsSource` was
+  just called in THREE places (`supportNoteForPly`, `noteAtPosition`,
+  `transitionTeachingSourceForGame`) out of eight. Every tier a FLOATING note is
+  reached by — `spokenTacticNote`, `endgameNoteForLesson`, `conceptNotesFor`,
+  `buildDanyaTeachingBlock`, `notesForOpening` — had NONE, so
+  *"The speaker expresses gratitude for community support and plans to continue
+  streaming chess education content"* could reach the endgame cards and the
+  LESSON BACKGROUND block handed to the model.
+  Fixed BOTH halves: the notes are stripped from every corpus (archived to
+  `data/archive/corpus-source-meta/`, never deleted) AND `danyaTeachingService`
+  filters at LOAD, so a new tier inherits it instead of needing a fourth
+  watcher. Gate: `corpusTeachesChess.test.ts`, negative-controlled — it rejects
+  100% of what was stripped.
+
+  🚨 **THE RULE IS A CONJUNCTION AND THAT IS THE ENTIRE DESIGN** — names the
+  medium AND carries no chess of its own. THREE cheaper rules were tried first
+  and every one deleted real teaching, which is why `sourceMeta.shared.mjs`
+  says so at length:
+  | attempt | would strip | what it killed |
+  |---|---|---|
+  | medium phrases alone | 1,415 | "In the Italian Game (e4 e5 Nf3 Nc6 Bc4), the speaker recommends …Nf6" |
+  | + format words | 23 more | "In the Vienna Gambit (e4 e5 Nc3)… at the 1500-1700 **rating level**" |
+  | "names no square or piece" | 2,712 | "apply the checks, captures, threats method"; "a piece defended only by one other piece is vulnerable" |
+  | **the conjunction (shipped)** | **354 (0.54%)** | nothing — measured below |
+  Cost, MEASURED both ways rather than assumed (the discipline the archive
+  attempt lacked): endgame cards **23/27 before and after, same four misses**;
+  transition **20/20**, LESSON BACKGROUND **20/20**. Zero from the voiced corpus
+  and zero from the bundled 122 — both were already clean.
+
 **OWED, ranked**
 
-1. 🔴 **POST-DEPLOY AUDIT FOR BOTH COMMITS** (G1). Neither has had one. Run
-   against LIVE prod once the bundle advances:
+0. 🔴 **REVIEW AUDIT: 22/24, TWO REAL FAILURES — both in the fundamentals-first
+   path** (prod, 2026-09-19, Carlsen–Grischuk Najdorf, 89 plies):
+   - `RECAP fundamentals-aggregate` — end reached, 1 flagged ply, no aggregate
+     line spoken.
+   - `FUNDLEAD flagged-student-plies-lead-with-fundamentals` — 0/1; ply 71 led
+     with "You: that was an inaccuracy, costing about 0.6 points" instead of a
+     fundamental.
+   Both contracts live in `coachFeatureService` (`:1697` fundamentals-first,
+   `:4281` the aggregate) fed by `boardConcepts` — CODE computers, not the
+   corpus touched tonight, so these are very likely pre-existing. NOT asserted
+   as unrelated: the corpus commit was already live when this ran, and one run
+   cannot exonerate it. **n=1** — that game had a single flagged ply, so widen
+   the sample before concluding anything (this is the C18 "n=1" trap).
+   Pinned reproduction, printed by the audit itself:
+   `AUDIT_GAME_ID=jMVMo1Ua AUDIT_STUDENT=white node scripts/audit-review-overhaul-prod.mjs`
+   Everything else was green, including ACC board-accuracy across 67 narrated
+   plies, SEAT across 67, both THESIS rows, all three NEED rows and MUTE.
+
+1. ✅ **POST-DEPLOY AUDITS ARE DONE** (G1), all against LIVE prod:
+   - `audit-sw-handover-prod` **9/9**, including the two rows that prove the
+     MECHANISM rather than the config (`deferrals+1, asked-while-held=false`,
+     then `SKIP_WAITING posted 1x`), and the deployed `sw.js` verified by hand:
+     one `self.skipWaiting()`, inside the message listener, zero `clientsClaim`.
+   - `audit-concept-gameplay-prod` **8/8** twice — once after the corpus move,
+     again after the source-meta strip (5 plies in 32 s / 27 s).
+   - `audit-review-overhaul-prod` **22/24** — the two reds are item 0 above.
+   - The stripped corpus verified ON prod: `/data/danya-floating.json` serves
+     9,928 notes with ZERO source-meta survivors.
+   The command, for the next run:
    `AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-sw-handover-prod.mjs`
    plus the standing pair (`audit-review-overhaul-prod`, then
    `audit-concept-gameplay-prod`), SEQUENTIALLY, never beside ship-check.
@@ -795,6 +853,28 @@ the stall returns, the table above is the baseline to measure against, and the
 canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
 
 ## Next-session pickup
+
+0. **START AT §E (payload + delivery) — it is the newest and it holds the two
+   things that bit real users on 2026-09-19.** In one line each: a deploy used
+   to swap the bundle under a running page (that is what froze David's iPhone);
+   boot was downloading 32.8 MB of JS, not the 8.2 MB everyone was watching; and
+   354 corpus notes were narrating the video instead of the board. All three are
+   fixed and audited on prod. What §E still OWES is ranked there — read item 0
+   (the two review-audit reds) and item 2 (the SW check a single deploy cannot
+   make) before anything else.
+
+   Three corrections from that night are recorded deliberately, because each one
+   was a confident claim that measurement overturned. Do not re-derive them:
+   - "archiving the un-positioned notes is safe" — it cut phase-transition
+     coverage 19/20 → 10/20. Move, never archive.
+   - "this will not fix the Learn stall" — it is gone (4 plies/136 s → 5/24 s),
+     and the likeliest cause is the OTHER session's `bbf96dd`, not anything in
+     §E. One green run attributes nothing.
+   - "the source-meta filter already blocks those notes" — it ran at 3 call
+     sites out of 8, and none of the 3 were the tiers floating notes reach.
+   The method that caught all three is the same: measure the SURFACE the change
+   touches (transition/background/endgame-card coverage across ~20 openings),
+   not the tier you happened to be thinking about.
 
 1. Gain all four levels (CLAUDE.md → `docs/STATE.md` → `surface-map.mjs --changed` → the code).
 2. **Bucket A is CLOSED (2026-09-19)** — items 2-5 and 7 landed, 4 and 6 were
