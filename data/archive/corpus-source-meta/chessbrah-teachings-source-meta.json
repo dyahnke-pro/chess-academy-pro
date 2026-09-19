@@ -1,0 +1,658 @@
+{
+ "generatedAt": "2026-08-15T02:26:23.268Z",
+ "videosDistilled": 152,
+ "v2VideoIds": [
+  "-4n6rkBsF6Y",
+  "-guvn4tkgmU",
+  "-umtfKOUYb8",
+  "0Vs0oebq73A",
+  "0aPDOllSk7k",
+  "0hlDcA0Zc9M",
+  "1l2Ide7YzCY",
+  "1oLCDDhNMXk",
+  "24Kav5pMHfo",
+  "275i0wgSWQw",
+  "2WhtInYXPio",
+  "2YEQthv33P8",
+  "33X807y7ImM",
+  "3PohHinhSHY",
+  "3V4w5jcomRU",
+  "3bULUDwHYtc",
+  "3fSV_MHYTgw",
+  "3wZxFfcK2Aw",
+  "4Wtqhf-VliQ",
+  "5KX6RigfO_E",
+  "5h4ADd34b64",
+  "5iqm-aq7sEA",
+  "6yYOQWfQwCk",
+  "72itIrWoOgk",
+  "7_uy4U5eWFg",
+  "7e38NoDsR7c",
+  "7qGM9nKaUa8",
+  "7xc8814alwM",
+  "8p6zBd3U8Tw",
+  "9VLS1Ykq1qo",
+  "9iGcLxsvFyE",
+  "Ah6OXpQBRfE",
+  "AmDns9omB7g",
+  "B1H5gl1h_8w",
+  "B8TSGSGmfxc",
+  "BAiLXnng6Lw",
+  "BgPvJwNAN4U",
+  "C0TZM5VEbMI",
+  "CoRKyhLFc8I",
+  "DSvi3ngZr0A",
+  "DYjp2MrfxkA",
+  "Dd7dylcPXP0",
+  "DuQ3IAnz4Cc",
+  "EOfNcvkpQp8",
+  "ERgKNSxjbAU",
+  "EmyP0gIXP7A",
+  "Ew6wrQsz9BQ",
+  "FFVG_LqACiU",
+  "FmlhwZT7Vcs",
+  "GNQUFFiYBRA",
+  "GxGqIrEye4w",
+  "GzQ3PCgtKlo",
+  "HewqyrsBO2c",
+  "HfDIASQbUTc",
+  "HlKbFLnm9NA",
+  "IJumW5CW5DM",
+  "IpQFpjVfzzM",
+  "JuYMrQLXCcs",
+  "JxNsdre0UyE",
+  "LOu9flRkHdE",
+  "LgyF1d9Wxnw",
+  "LrJH6AeNLCk",
+  "MHqTZWomK6A",
+  "MMmy4oKXGWA",
+  "MYtCNR42yKU",
+  "M_v0of2gduY",
+  "MrLtRMvMjmg",
+  "N2T3qPMCtBU",
+  "NCxGwEpPolc",
+  "NJQGPORLNA0",
+  "NYTGOoqx7Tk",
+  "Nng2KyLqPqA",
+  "NtcXbhKBWwI",
+  "O1NE3FRpd7U",
+  "OidsHHg6Nm0",
+  "OkXXMw6O0pw",
+  "P0iWC8SAco4",
+  "PbZmJ_58Le4",
+  "PdErCHTBOAM",
+  "PqFwbmSvm38",
+  "PtBjKCVo2so",
+  "Q56DJG4gXGk",
+  "QYmmQ-C4JKg",
+  "QhZFR728Vt0",
+  "RhCUlmxdZ8U",
+  "Roo2r_1zLP4",
+  "Rt93_cWZUUA",
+  "RwBDckHcOfw",
+  "TCHRY9buSzI",
+  "TSQTGRmxxIE",
+  "Ts7PCMkkYeI",
+  "U0ZIb6SlKd0",
+  "U70AB4Rqgw8",
+  "UB1uIbOhfeQ",
+  "UF4lIdETKLk",
+  "UFXz-bgTRn0",
+  "URb4arhOkZc",
+  "Uri85gMC5KI",
+  "V1W7Lz0MfSI",
+  "W0UmYoFigy4",
+  "W2rZeOwBm_k",
+  "XM23yxg9g7k",
+  "XeIJR91oWOw",
+  "XwemT5NgoRk",
+  "Y2aFzaC-2Fc",
+  "YKTmcGo7qgk",
+  "YKfuOYGhA7k",
+  "YWLRSQnAqo8",
+  "Yyygsh-WNEM",
+  "Z3NVtt87w2Q",
+  "ZZsdyKjumHA",
+  "ZjLDyMr1OOU",
+  "Zkcyyj9xTT8",
+  "ZrFGxdVQlo4",
+  "_97o44T1V0A",
+  "_usnXzNrTU8",
+  "a4Vi9lPHszU",
+  "a4qOTCiVejg",
+  "bB7FVjmeaqQ",
+  "bJ-a-RGsmAo",
+  "bKGPI4G7Iho",
+  "buguYn2gKYM",
+  "c_3EYiR6MZs",
+  "d80-S9zD7Go",
+  "dGIh4Ex-NCg",
+  "dwIECPkP70w",
+  "eHf7bbNM0k4",
+  "eVtZeMFaUhY",
+  "fguhIJsc8rM",
+  "fxroNY47-Cc",
+  "gRqyzIFfXSw",
+  "gaq6Kaylrrw",
+  "gkat8uMqHqU",
+  "hJQmloR86PM",
+  "hKHzFuPWByI",
+  "hSU-pC_3CgQ",
+  "hf8ihNmNojw",
+  "hy-EHsD6rrk",
+  "i-eheZ6k6ZQ",
+  "i7L9wzrGHMc",
+  "i7fxYERKqws",
+  "iKZfZ03Qhlo",
+  "iLlNoUfSsyo",
+  "iivW3TFDIi8",
+  "iyR2a6HgJeE",
+  "izNk3Dd4zZA",
+  "j2bIudetGM8",
+  "j9zBNXawRMk",
+  "jFSQ0JjufpM",
+  "jIguRC-Zt7Y",
+  "jV4Q2Qr0t_w",
+  "jmalYZ6IIHo",
+  "jzAMNO9Z6KU",
+  "klPQ8hPGCnU",
+  "l8Syvr53FIY",
+  "l8UeU6FcHlc",
+  "lWB7qf7tVgE",
+  "lWjtewG-rto",
+  "m58Whu7V7VU",
+  "m5i7Og2ZrV4",
+  "mFPon19UhT8",
+  "mQJdHU9zNHQ",
+  "mbziK5Xmx-Y",
+  "mefO7_BzJkI",
+  "ml6S_lEiQYs",
+  "n06L-lljMfg",
+  "nVimLD6wMUw",
+  "o5ICyFPmOPg",
+  "oQXLt_tMGg8",
+  "oebnuZ1toMc",
+  "oqE4jHjFpf4",
+  "oypHzyjyBz8",
+  "p0x1ktjbDO4",
+  "pBqkI3cl5rw",
+  "pRE1wc1HSnY",
+  "pTY-SmbdMGI",
+  "pkOkSGuQvh8",
+  "pm0RHc3PiB4",
+  "qC0SKDenpVg",
+  "qRjr6vortmQ",
+  "qbCa38VRPps",
+  "qeCuLmXXjK8",
+  "qiiBVVigh2A",
+  "qm5t3xAdJMk",
+  "qoiwbJC6sCM",
+  "qtkAh1jgBjw",
+  "rGEFryycmgE",
+  "rZkHLgpTRD4",
+  "rfbOu4mA-hQ",
+  "rukSx9gsb2o",
+  "rwsumP3aq_I",
+  "s6qTfdsNGrY",
+  "ssPvhn_iRNQ",
+  "t1u0Jhf4S7A",
+  "tKXDFThCqTs",
+  "vGjI37DhQTI",
+  "vtqJ1t61RsE",
+  "vuAI3TEgOEk",
+  "vyxK0vqxowo",
+  "wvUvrRBrw68",
+  "xIGCDwIiToc",
+  "xZK7sMDitiQ",
+  "xbpuz1pZFBg",
+  "yUFSsm7s3-E",
+  "yVIB7_Q7sLk",
+  "ymC5TKxI094",
+  "zRSythJ0cjU",
+  "zt2ooAe-iwk"
+ ],
+ "noteCount": 26,
+ "notes": [
+  {
+   "id": "cb-1x",
+   "lineSan": [],
+   "opening": "Queen's Pawn Game: Colle System",
+   "phase": "concept",
+   "explains": "Against strong opponents (2400+), risky or 'fun' moves are often punished. The speaker notes that such moves work against weaker players but not against sentient opponents. Solid play is preferred.",
+   "teaches": "Against strong opposition, avoid speculative sacrifices or unclear complications unless you have a concrete advantage. Stick to sound positional play and trust your technique.",
+   "plans": "Consolidate the position, avoid unnecessary risks, and aim for a long-term advantage. In even positions, patience and accuracy often win.",
+   "concepts": [
+    "risk management",
+    "opponent strength",
+    "solid play"
+   ],
+   "sources": [
+    "yt:0aPDOllSk7k"
+   ]
+  },
+  {
+   "id": "cb-3b",
+   "lineSan": [],
+   "opening": "Indian Defense: London System",
+   "phase": "concept",
+   "explains": "The speaker acknowledges that the opponent's move is annoying but not decisive, and that the winning plan is sound. They reach a rating milestone (1300), indicating progress.",
+   "teaches": "Stay calm when facing annoying moves; assess objectively and stick to your plan if it's sound.",
+   "plans": "Continue executing the plan until the win is secured.",
+   "concepts": [
+    "mental-resilience",
+    "objective-assessment"
+   ],
+   "sources": [
+    "yt:0hlDcA0Zc9M"
+   ]
+  },
+  {
+   "id": "cb-4v",
+   "lineSan": [],
+   "opening": "King's Gambit Accepted: Allgaier, Cook Variation",
+   "phase": "concept",
+   "explains": "The speaker addresses why opponents in speedruns seem to play poorly, while viewers' opponents play perfectly. The answer is that viewers themselves don't play like the speedrunner—they don't apply the same pressure or play the same aggressive, principled moves.",
+   "teaches": "If you want opponents to make mistakes, you need to play actively and create problems for them. Passive play allows opponents to play well; active play forces errors.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "active-play",
+    "forcing-mistakes"
+   ],
+   "sources": [
+    "yt:2YEQthv33P8"
+   ]
+  },
+  {
+   "id": "cb-5h",
+   "lineSan": [],
+   "opening": "Queen's Pawn Game: Colle System",
+   "phase": "concept",
+   "explains": "The speaker prefers not to win a piece cheaply because they want a longer game to showcase opening and middlegame ideas.",
+   "teaches": "Sometimes it's better to decline a quick material win to practice deeper plans and positional play.",
+   "plans": "",
+   "concepts": [
+    "long-game-mentality",
+    "purposeful-play"
+   ],
+   "sources": [
+    "yt:33X807y7ImM"
+   ]
+  },
+  {
+   "id": "cb-87",
+   "lineSan": [],
+   "opening": "King's Gambit Accepted: Allgaier, Cook Variation",
+   "phase": "concept",
+   "explains": "The speaker discusses how lower-rated players (around 600) often defend tenaciously after a poor opening, finding every possible way to prolong the game rather than losing quickly.",
+   "teaches": "Even when an opponent has a bad opening, they may switch to stubborn defense. Do not expect an early resignation; be prepared to convert a winning position patiently.",
+   "plans": "",
+   "concepts": [
+    "defensive-tenacity",
+    "conversion",
+    "lower-rated-players"
+   ],
+   "sources": [
+    "yt:3fSV_MHYTgw"
+   ]
+  },
+  {
+   "id": "cb-qb",
+   "lineSan": [],
+   "opening": "Sicilian Defense: Taimanov Variation",
+   "phase": "concept",
+   "explains": "The speaker observes that when you want to practice a specific opening with black, you often get white instead, and vice versa.",
+   "teaches": "To force practice with a particular color, pretend you are speedrunning the opposite color's opening; the pairing algorithm will often give you the color you actually want.",
+   "plans": "",
+   "concepts": [
+    "opening-repertoire",
+    "practice-tip",
+    "psychology"
+   ],
+   "sources": [
+    "yt:LOu9flRkHdE"
+   ]
+  },
+  {
+   "id": "cb-sd",
+   "lineSan": [],
+   "opening": "Indian Defense: London System",
+   "phase": "opening",
+   "explains": "In the London System, quick development is the main plan. The speaker emphasizes getting all pieces out rapidly to build pressure.",
+   "teaches": "The London System is a solid opening that prioritizes rapid piece development and central control, often leading to quick wins if the opponent is unprepared.",
+   "plans": "Continue developing pieces efficiently, aiming for a strong center and potential kingside attack.",
+   "concepts": [
+    "london-system",
+    "rapid-development",
+    "central-control"
+   ],
+   "sources": [
+    "yt:MHqTZWomK6A"
+   ]
+  },
+  {
+   "id": "cb-sm",
+   "lineSan": [],
+   "opening": "Indian Defense: London System",
+   "phase": "concept",
+   "explains": "The speaker notes that higher-rated opponents are more likely to resign when clearly lost, showing respect for the game. Resigning at the right moment is a sign of good sportsmanship.",
+   "teaches": "When your position is hopeless, resigning saves time and shows respect. In chess, it is considered a gentleman's game to concede when the outcome is certain.",
+   "plans": "",
+   "concepts": [
+    "resignation",
+    "sportsmanship",
+    "chess-etiquette"
+   ],
+   "sources": [
+    "yt:MHqTZWomK6A"
+   ]
+  },
+  {
+   "id": "cb-sq",
+   "lineSan": [],
+   "opening": "Indian Defense: London System",
+   "phase": "concept",
+   "explains": "The speaker reflects on time pressure and the trade-off between playing for entertainment versus purely winning. In this game, they chose a more creative, riskier approach rather than a dry, efficient win.",
+   "teaches": "When not in a serious competition, it's okay to prioritize instructive or entertaining play over grinding out a win. Time management is crucial, but so is enjoying the process.",
+   "plans": "",
+   "concepts": [
+    "time-management",
+    "practical-play",
+    "entertainment-vs-winning"
+   ],
+   "sources": [
+    "yt:MHqTZWomK6A"
+   ]
+  },
+  {
+   "id": "cb-v5",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "The speaker discusses the psychological aspect of winning in chess, noting that top players like Magnus Carlsen never get bored of winning, similar to other elite athletes.",
+   "teaches": "Winning consistently requires a mindset that embraces competition and success without complacency.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "winning-mindset",
+    "elite-performance"
+   ],
+   "sources": [
+    "yt:NCxGwEpPolc"
+   ]
+  },
+  {
+   "id": "cb-v6",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "The speaker mentions a hustling bet where one player had to win ten games in a row after losing or drawing one, highlighting the difficulty of such a challenge.",
+   "teaches": "In chess betting or challenges, uneven win conditions can create extreme pressure and demonstrate the importance of consistency.",
+   "plans": "",
+   "concepts": [
+    "betting",
+    "pressure",
+    "consistency"
+   ],
+   "sources": [
+    "yt:NCxGwEpPolc"
+   ]
+  },
+  {
+   "id": "cb-v7",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "The speaker references historical figures like Thomas Jefferson and Cicero, and chess legend Paul Morphy, as interesting dinner guests, emphasizing intellectual curiosity.",
+   "teaches": "Chess players often appreciate history and intellectual giants, drawing inspiration from diverse fields.",
+   "plans": "",
+   "concepts": [
+    "history",
+    "inspiration",
+    "intellectual-curiosity"
+   ],
+   "sources": [
+    "yt:NCxGwEpPolc"
+   ]
+  },
+  {
+   "id": "cb-va",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "The speaker emphasizes that studying chess should be a mental challenge focused on thinking about positions and plans, not just memorizing moves.",
+   "teaches": "Chess improvement comes from contemplating positions and plans, understanding that there are no wrong answers, only good thinking.",
+   "plans": "",
+   "concepts": [
+    "study-methods",
+    "positional-understanding",
+    "planning"
+   ],
+   "sources": [
+    "yt:NCxGwEpPolc"
+   ]
+  },
+  {
+   "id": "cb-vc",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "The speaker references Nimzowitsch's 'My System' and the idea of overprotection and prophylaxis, which involve reinforcing key squares or pieces to prevent counterplay and maintain control.",
+   "teaches": "Prophylaxis means anticipating and preventing the opponent's plans before they become threats, often by overprotecting critical points or restricting enemy piece activity.",
+   "plans": "",
+   "concepts": [
+    "overprotection",
+    "prophylaxis",
+    "nimzowitsch"
+   ],
+   "sources": [
+    "yt:NCxGwEpPolc"
+   ]
+  },
+  {
+   "id": "cb-z7",
+   "lineSan": [],
+   "opening": "Sicilian Defense: Taimanov Variation",
+   "phase": "concept",
+   "explains": "The speaker reflects that after reaching 2200, it's harder to reliably get the opening you want in speedruns, but some openings like the Stonewall (Dutch) work consistently at any level.",
+   "teaches": "Some openings are more resilient and can be played reliably even as opponents get stronger; choose openings that suit your style and are less dependent on opponent's preparation.",
+   "plans": "",
+   "concepts": [
+    "opening choice",
+    "reliability",
+    "speedrun strategy"
+   ],
+   "sources": [
+    "yt:P0iWC8SAco4"
+   ]
+  },
+  {
+   "id": "cb-15k",
+   "lineSan": [],
+   "opening": "Queen's Pawn Game: Stonewall Attack",
+   "phase": "concept",
+   "explains": "The speaker reflects on missing a good move but still playing a great one, emphasizing that the game remained winning despite the oversight.",
+   "teaches": "In chess, it's better to miss a good move and play a decent one than to miss a good move and play a bad one. Maintaining a winning position requires avoiding blunders even if you don't find the best continuation.",
+   "plans": "",
+   "concepts": [
+    "decision-making",
+    "blunder-avoidance",
+    "practical-play"
+   ],
+   "sources": [
+    "yt:UFXz-bgTRn0"
+   ]
+  },
+  {
+   "id": "cb-1mf",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "In fast time controls, when you feel your position is deteriorating, it's easy to become frustrated and lose objectivity. The speaker notes that even strong players can feel helpless when the opponent plays very well.",
+   "teaches": "In blitz games, you must accept that sometimes the opponent will outplay you. Focus on making practical moves rather than searching for a perfect plan that may not exist.",
+   "plans": "",
+   "concepts": [
+    "time-pressure",
+    "practical-play",
+    "blitz-psychology"
+   ],
+   "sources": [
+    "yt:i7L9wzrGHMc"
+   ]
+  },
+  {
+   "id": "cb-1mg",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "The speaker observes that against titled players, the game often feels more straightforward because they play principled chess, whereas lower-rated opponents might play unpredictable moves that are harder to handle.",
+   "teaches": "Playing against titled players can be easier in some ways because their moves are more logical and predictable, reducing the need to calculate wild variations.",
+   "plans": "",
+   "concepts": [
+    "opponent-type",
+    "predictability",
+    "practical-chess"
+   ],
+   "sources": [
+    "yt:i7L9wzrGHMc"
+   ]
+  },
+  {
+   "id": "cb-1mh",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "The speaker mentions that trading pieces is a good strategy against strong opponents because it reduces their attacking potential and simplifies the position.",
+   "teaches": "When facing a dangerous attacker, exchanging pieces can neutralize their threats and make the game easier to handle, especially in time trouble.",
+   "plans": "",
+   "concepts": [
+    "simplification",
+    "neutralizing-threats",
+    "time-management"
+   ],
+   "sources": [
+    "yt:i7L9wzrGHMc"
+   ]
+  },
+  {
+   "id": "cb-1mi",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "The speaker notes that in a 5-minute pool, players above 2200 are extremely strong and the games become very tense, leaving little room for instructive commentary.",
+   "teaches": "In fast online chess, the higher the rating, the more precise and error-free the play becomes, making it harder to find instructive moments for teaching purposes.",
+   "plans": "",
+   "concepts": [
+    "rating-levels",
+    "blitz-competition",
+    "teaching-limitations"
+   ],
+   "sources": [
+    "yt:i7L9wzrGHMc"
+   ]
+  },
+  {
+   "id": "cb-1rt",
+   "lineSan": [],
+   "opening": "Indian Defense: London System",
+   "phase": "concept",
+   "explains": "The speaker reflects on the importance of staying present and letting go of negative emotions during a game. They emphasize that emotional baggage from past moves or memories can cloud judgment.",
+   "teaches": "Chess requires emotional discipline: forget past mistakes and focus entirely on the current position. Let your training and intuition guide your moves.",
+   "plans": "",
+   "concepts": [
+    "emotional-control",
+    "mindfulness",
+    "focus"
+   ],
+   "sources": [
+    "yt:klPQ8hPGCnU"
+   ]
+  },
+  {
+   "id": "cb-1v8",
+   "lineSan": [],
+   "opening": "English Opening",
+   "phase": "concept",
+   "explains": "The speaker reflects on overlooking a defensive resource because they were fixated on aggressive ideas like captures. The position is not given, but the lesson is about bias in calculation.",
+   "teaches": "When calculating, actively look for the opponent's defensive resources, not just your own attacking plans. Tunnel vision on 'fun stuff' can cause you to miss simple refutations.",
+   "plans": "",
+   "concepts": [
+    "calculation-bias",
+    "defensive-resources",
+    "tunnel-vision"
+   ],
+   "sources": [
+    "yt:oebnuZ1toMc"
+   ]
+  },
+  {
+   "id": "cb-1w3",
+   "lineSan": [],
+   "opening": "Queen's Gambit",
+   "phase": "concept",
+   "explains": "The speaker reflects on the engine evaluation, noting that a move initially evaluated as good later becomes the best move after deeper analysis.",
+   "teaches": "Engine evaluations can change with more depth; trust your strategic judgment if the position is complex and the engine hasn't fully analyzed it. Human intuition can sometimes find moves that engines initially undervalue.",
+   "plans": "",
+   "concepts": [
+    "engine-evaluation",
+    "intuition",
+    "analysis"
+   ],
+   "sources": [
+    "yt:oqE4jHjFpf4"
+   ]
+  },
+  {
+   "id": "cb-1wq",
+   "lineSan": [],
+   "opening": "Queen's Pawn Game: Stonewall Attack",
+   "phase": "concept",
+   "explains": "The speaker emphasizes that the Stonewall is an attacking structure, not a positional one, and should be used for checkmating attacks.",
+   "teaches": "In the Stonewall, prioritize aggressive play and checkmating ideas over slow positional maneuvers.",
+   "plans": "",
+   "concepts": [
+    "stonewall",
+    "attack",
+    "aggressive-play"
+   ],
+   "sources": [
+    "yt:p0x1ktjbDO4"
+   ]
+  },
+  {
+   "id": "cb-25j",
+   "lineSan": [],
+   "opening": "Indian Defense: London System",
+   "phase": "middlegame",
+   "explains": "The speaker reflects on a sacrificial attack that did not yield enough compensation. After the sacrifice, there was no concrete follow-up, and the opponent defended accurately, leaving White with insufficient attacking resources.",
+   "teaches": "Before sacrificing material, ensure you have a clear and forcing continuation. A 'sacrifice first, think later' approach often leads to positions where you have no real threats and the opponent consolidates.",
+   "plans": "In similar positions, prefer to build up pressure calmly rather than forcing matters with an unclear sacrifice. If the attack stalls, consider simplifying to an endgame where you still have chances.",
+   "concepts": [
+    "sacrifice",
+    "compensation",
+    "attack",
+    "calculation"
+   ],
+   "sources": [
+    "yt:vyxK0vqxowo"
+   ]
+  },
+  {
+   "id": "cb-265",
+   "lineSan": [],
+   "opening": "Indian Defense: London System",
+   "phase": "concept",
+   "explains": "The speaker notes that the game might become 'boring and winning'—a slow, controlled grind rather than a flashy attack.",
+   "teaches": "Not every winning game needs to be spectacular; converting a solid advantage methodically is a key skill. Avoid unnecessary risks when a simple, winning plan exists.",
+   "plans": "Maintain pressure, avoid complications, and gradually improve piece activity while limiting counterplay.",
+   "concepts": [
+    "conversion",
+    "positional play",
+    "risk management"
+   ],
+   "sources": [
+    "yt:vyxK0vqxowo"
+   ]
+  }
+ ]
+}

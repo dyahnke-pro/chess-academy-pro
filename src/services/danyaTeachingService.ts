@@ -32,6 +32,7 @@ import { getFarmedCorporaSync, onFarmedCorpusLoaded, primeFarmedCorporaLazily } 
 import { falseConfigurationClaim } from './configurationClaims';
 import { logAppAudit } from './appAuditor';
 import { applyDerivedAnchors } from './noteAnchorOverrides';
+import { noteTeachesChess } from './sourceMeta.shared.mjs';
 import { openingReachesPosition } from './openingBranches';
 
 export interface DanyaNote {
@@ -89,7 +90,25 @@ const RAW_DATA = teachingsData as unknown as TeachingsBundle;
 // corrected line or the correction is invisible to selection. See
 // `noteAnchorOverrides`, and read `scripts/derive-note-anchors.mjs` before
 // touching the derivation itself.
-const DATA: TeachingsBundle = { ...RAW_DATA, notes: applyDerivedAnchors(RAW_DATA.notes ?? []) };
+// 🔒 THE SOURCE-META FILTER RUNS AT LOAD, NOT AT THE CALL SITE (2026-09-19).
+// `noteTeachesChessNotItsSource` existed and was called in exactly THREE
+// places — `supportNoteForPly`, `noteAtPosition`,
+// `transitionTeachingSourceForGame`. Every tier a FLOATING note is actually
+// reached by had none: `spokenTacticNote`, `endgameNoteForLesson`,
+// `conceptNotesFor`, `buildDanyaTeachingBlock`, `notesForOpening`. So
+// "The speaker expresses gratitude for community support and plans to continue
+// streaming chess education content" could reach the endgame cards and the
+// LESSON BACKGROUND block handed to the model. David caught it reading real
+// samples: "they were messing up the narration for our coach."
+//
+// Filtering HERE removes the choice instead of adding a fourth watcher — a new
+// tier inherits it by existing, which is the only version of this that cannot
+// rot. The three existing call-site checks stay: they are now no-ops against
+// this corpus, and they still guard notes from other sources.
+const DATA: TeachingsBundle = {
+  ...RAW_DATA,
+  notes: applyDerivedAnchors((RAW_DATA.notes ?? []).filter(noteTeachesChess)),
+};
 
 /** Position-keyed notes indexed by their SAN-prefix key ("e4 c6 d4"). */
 const byPrefix = new Map<string, DanyaNote[]>();
@@ -276,7 +295,9 @@ let floatingMerged = false;
 function mergeFloatingHalf(notes: DanyaNote[]): void {
   if (floatingMerged || notes.length === 0) return;
   floatingMerged = true;
-  for (const n of notes) {
+  // Same filter as the bundled half above — a fetched note is not a trusted
+  // note, and this is the tier the source-meta prose actually lived in.
+  for (const n of notes.filter(noteTeachesChess)) {
     DATA.notes.push(n);
     indexNote(n);
   }
