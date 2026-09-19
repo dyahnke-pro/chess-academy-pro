@@ -240,6 +240,69 @@ WHETHER. On `walk` (Learn, review) every ply speaks, so there the count is the
 trigger as designed. Widening the door is a separate, bigger change and was not
 made as a side effect of this one.
 
+### 🔧 TODO — what this build still owes (2026-09-19, handover)
+
+Ordered by what a future session should do first. Each says what to VERIFY, not
+just what to change — the method failure above was diagnosing without reading.
+
+**T1. 🔴 `ask` AND `note` ARE STRUCTURALLY UNREACHABLE ON REVIEW. Fix this
+first; it is a real defect, not a gap in coverage.**
+Evidence, measured 2026-09-19 — all five prod runs selected `register=credit`,
+never once `ask` or `note`:
+```
+ply 28 credit count=1 stake=on-top gap=646/649/649/671cp played=Nxe2 held  (fixture x4)
+ply 18 credit count=1 stake=level  gap=526cp              played=gxf6 held  (b6Ltr4hi)
+```
+It is not luck. `INACCURACY_CP = 50`, and the tolerance is 100cp (intermediate),
+200 (beginner), 50 (expert). A move FAILS TO HOLD exactly when it loses MORE
+than the tolerance — which at every band is at or above the flagging threshold,
+so it is flagged — and the scan filters flagged plies out
+(`!questionPlan.has(sg.ply)`). I excluded precisely the plies the `ask` register
+exists for. The only survivors are the sliver `selectReviewQuestions` itself
+skips (`evalAfterMover >= 250`, a flagged move that still leaves the student
+clearly winning).
+Consequence: the question card, its chips, `judgeCriticalMomentPick`,
+`handleCriticalPick` and `recordPromptedFind` have NEVER executed in the running
+app. Unit-tested, runtime-unproven — the "a wire that does not fire is not a
+wire" rule.
+The fix is NOT to widen the tolerance (that changes what "critical" means).
+Scan the student's plies regardless of flag, and let the REGISTER decide;
+suppress only the card at a ply the question plan already stops at, so nothing
+double-stops. Then prove it: the audit must assert an `ask` was reached at least
+once across a run, or say plainly that no game offered one.
+
+**T2. LEARN IS SHIPPED BUT UNVERIFIED ON PROD.** `audit-concept-gameplay-prod`
+was never run this session (one audit, by request). The Learn statement's
+`slowDownOwed` gate is cold-device-dependent, so a green review run says nothing
+about it. ~15 min.
+
+**T3. LEARN'S `prompted` WIRE IS STILL OPEN — needs files this session did not
+own.** Learn announces the moment, the student plays, and the post-game sweep
+(`GameReviewWeaknessCapture` → `autoAnalyzeGame:139`) writes `prompted: false`
+for EVERY ply, including the ones the coach just talked them through. Closing it
+means Learn remembering which plies it announced at and handing that set to the
+sweep: `CoachTeachPage.tsx` (session 3) + `GameReviewWeaknessCapture.tsx`.
+
+**T4. `prompted` IS A RECORD, NOT YET A LEVER.** `getCapabilityProfile` skips
+prompted rows, so a prompted find changes nothing today — correct by design, and
+the reason the flag exists. The lever is the design's own next step: the
+personal tolerance from PRESS/NO-PRESS at critical moments (§1 above), which
+needs T1 landed first because it is the `ask` path that generates the signal.
+
+**T5. DECIDE THE DOOR ON LIVE PLAY.** `judgeMoment` still grades severity from
+the gap, so on `interrupt` posture a two-move fork does not open the door by
+itself; the count only decides WHAT is said once the ply speaks. On `walk`
+(Learn, review) the count is the trigger as designed. Deliberately not changed
+here — widening the door is a bigger change than this build, and should not
+happen as a side effect.
+
+**T6. TWO NUMBERS NEVER MEASURED ON A DEVICE.** (a) The Learn statement's
+volume roughly doubles (~2.5 → ~5 per game at the amateur band, from the
+2026-09-18 census), still gated on `slowDownOwed`. (b) `scanCriticalMoments`
+runs on every review open — 41 plies took 9.6s on the audit box with 3 workers;
+on a phone's asm.js build that is the number to watch. It already yields a
+worker to the review's own dive and aborts on unmount.
+
 ### Measure BEFORE writing any of it
 
 ✅ **DONE 2026-09-18** — `scripts/measure-critical-moments.mjs`, 6 real games at
