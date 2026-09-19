@@ -17,7 +17,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import puzzles from '../data/puzzles.json';
-import { MISCONCEPTION_TAGS } from '../data/misconceptionTags';
+import { MISCONCEPTION_TAGS, type MisconceptionTagDef } from '../data/misconceptionTags';
 import { TACTIC_TO_PATTERN } from './tacticVocabulary';
 import { themesForTactic } from './weaknessSpine';
 import type { TacticType } from '../types';
@@ -62,7 +62,9 @@ describe('drill vocabulary is grounded in the puzzle corpus', () => {
 
   it('every `puzzleThemes` a misconception tag declares is carried by the corpus', () => {
     const dead: string[] = [];
-    for (const tag of MISCONCEPTION_TAGS) {
+    // `as const` narrows each def so `puzzleThemes` is absent from the members
+    // that don't declare it; read through the interface, which has it optional.
+    for (const tag of MISCONCEPTION_TAGS as readonly MisconceptionTagDef[]) {
       for (const theme of tag.drill.puzzleThemes ?? []) {
         if (!CORPUS_THEMES.has(theme)) dead.push(`${tag.id} -> '${theme}'`);
       }
