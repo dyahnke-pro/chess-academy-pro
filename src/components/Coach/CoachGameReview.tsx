@@ -1013,14 +1013,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (principleQuizStateRef.current) return; // device quiz (hidden) — never opens
     // ── THE CRITICAL MOMENT, at its own ply ──────────────────────────────
     //
-    // 🚨 IT LIVES OUT HERE, NOT INSIDE `if (readingQuizOn)`. The first cut put
-    // it in that branch because that is where the other mid-walk cards are
-    // built — and `readingQuizOn` is a SETTING that is OFF on a cold device, so
-    // the wire could never fire. The prod audit caught it in one run ("a moment
-    // was selected but nothing said it aloud"), which is the whole point of
-    // asserting what the student HEARD rather than that the code exists. A
-    // critical moment has nothing to do with the reading-quiz preference and
-    // must not be gated by one.
+    // 🚨 IT LIVES OUT HERE, NOT INSIDE `if (readingQuizOn)`, where the first cut
+    // put it because that is where the other mid-walk cards are built.
+    //
+    // ⚠️ THE REASON FIRST GIVEN FOR THIS MOVE WAS WRONG, and is corrected here
+    // rather than left to be believed. It claimed the wire "could never fire on
+    // a cold device" because `readingQuizOn` is off by default. The audit
+    // reports disprove that: the line was spoken on the build where it sat
+    // inside that branch, so the setting is ON by default and the branch was
+    // not swallowing anything. What was actually broken was the audit's own
+    // regex plus a reveal that never named the count.
+    //
+    // The move still stands on its own merits: a critical moment has nothing to
+    // do with a reading-quiz preference, and a default that happens to be true
+    // today is not a reason to depend on it.
     //
     // It runs BEFORE the flagged-move ladder, on plies that ladder by
     // definition never reaches: the question plan only tags FLAGGED moves, and

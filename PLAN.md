@@ -172,6 +172,20 @@ recalled.
    swallowed — an instrument that goes quiet without saying why is
    indistinguishable from one that found nothing.
 
+**Two corrections to my own diagnosis, recorded because a wrong reason left
+standing is worse than no reason** (the Lake Butler rule applied to this build):
+
+- I claimed the wire "could never fire on a cold device" because it sat inside
+  `if (readingQuizOn)`. The audit reports disprove it — the line was spoken on
+  the build where it sat inside that branch, so the setting is on by default.
+  The lift out of it still stands (a critical moment has nothing to do with a
+  reading-quiz preference), but not for the reason I gave.
+- What was actually wrong was the AUDIT ROW plus a real product gap: the reveal
+  named the move and never the COUNT, which is the one fact David asked for.
+  The row demanded a count phrase the sentence did not contain, so it went red
+  on a product that was speaking. Both are fixed; the count now leads every
+  register, and review speaks in the past tense it should always have used.
+
 **Recording.** `gameAnalysisService.recordPromptedFind` is the FIRST writer of
 `prompted: true` in the app's history — the field has been REQUIRED since the
 heat map landed and every row in the store is unaided evidence. It is a RECORD,
