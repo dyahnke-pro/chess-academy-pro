@@ -1,5 +1,6 @@
 import { db } from '../db/schema';
 import type { OpeningNarration } from '../types';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 // ─── Match Result ──────────────────────────────────────────────────────────
 
@@ -157,13 +158,21 @@ export function shouldUseClaudeFallback(match: NarrationMatch | null): boolean {
 
 /**
  * Pick one narration string from the available set.
- * Rotates through narrations to provide variety across sessions.
+ *
+ * ROTATED, NOT ROLLED — and the doc comment above has said "rotates" since the
+ * day it was written while the body rolled `Math.random`. The contract was
+ * stated and never implemented, which is the quietest kind of drift: nothing
+ * to notice in review, and a student who replays the same move in the same
+ * opening hears a different sentence every time.
+ *
+ * The key is the record's OWN `id`, which has been on `OpeningNarration` all
+ * along — no caller has to learn anything, and one entry keeps one voice while
+ * different entries still draw independently.
  */
 export function pickNarration(narration: OpeningNarration): string {
   if (narration.narrations.length === 0) return '';
   if (narration.narrations.length === 1) return narration.narrations[0];
-  const index = Math.floor(Math.random() * narration.narrations.length);
-  return narration.narrations[index];
+  return rotateStem(narration.narrations, stemKeyOf(narration.id));
 }
 
 // ─── Seed Helpers ─────────────────────────────────────────────────────────

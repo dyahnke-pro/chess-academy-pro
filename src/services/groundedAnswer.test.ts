@@ -71,9 +71,21 @@ describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)'
     expect(a!.facts).toContain('Knight on d5 forks queen on c7');
   });
   it("warns about the STUDENT's hanging piece, not the opponent's", () => {
-    const a = assembleTacticsAnswer(tactics({ hanging: [{ square: 'b4', piece: 'b', color: 'w' }, { square: 'e5', piece: 'p', color: 'b' }] }), 'white');
+    // NOW SUPPLIES A BOARD. A piece-on-square claim is board-verified before it
+    // is spoken (2026-09-19 — a real game heard "your knight on b5 is hanging"
+    // fifteen plies after b5 was captured), so a caller that hands over no
+    // position gets no claim. This test used to pass without one; it asserted a
+    // contract in which the claim was never checked.
+    const fen = '4k3/8/8/4p3/1B6/8/8/4K3 w - - 0 1'; // white bishop b4, black pawn e5
+    const a = assembleTacticsAnswer(tactics({ hanging: [{ square: 'b4', piece: 'b', color: 'w' }, { square: 'e5', piece: 'p', color: 'b' }] }), 'white', null, fen);
     expect(a!.facts).toContain('Your bishop on b4 is hanging');
     expect(a!.facts).not.toContain('e5');
+  });
+
+  it('refuses a hanging claim when the piece is not on the board it was given', () => {
+    // The other half of the same contract — see `pieceIsOn`.
+    const empty = '4k3/8/8/8/8/8/8/4K3 w - - 0 1';
+    expect(assembleTacticsAnswer(tactics({ hanging: [{ square: 'b4', piece: 'b', color: 'w' }] }), 'white', null, empty)).toBeNull();
   });
   it('falls to the top threat when nothing immediate', () => {
     const a = assembleTacticsAnswer(tactics({ threats: [{ type: 'fork', description: 'Black threatens Nxe4', depthAhead: 2, line: [] }] }), 'white');
@@ -967,6 +979,10 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     const a = assemblePositionAssessment({
       evalCp: -250, mateIn: null, studentColor: 'white',
       tactics: tactics({ hanging: [{ square: 'd5', piece: 'n', color: 'w' }] }),
+      // A BOARD THAT ACTUALLY HAS THE KNIGHT ON d5 — the claim is verified
+      // before it is spoken (2026-09-19). See the note on the tactics-answer
+      // test above.
+      fen: '4k3/8/8/3N4/8/8/8/4K3 w - - 0 1',
     });
     // -250 white-POV, student is White: the DIRECTION and the MAGNITUDE are
     // the contract; the sentence around them rotates.

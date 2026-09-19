@@ -1007,6 +1007,37 @@ const MATE_AGAINST_YOU = [
  *  guarding against a negative seed and another not. */
 const pick = (variants: readonly string[], seed: number): string => rotateStem(variants, seed);
 
+/**
+ * 🔒 IS THAT PIECE ACTUALLY THERE? — the check that was never made.
+ *
+ * A real 22-ply Learn game ended with the coach saying "Your knight on b5 is
+ * hanging." The b5 piece had been captured fifteen plies earlier (`axb5`) and
+ * the student had no knights left on the board at all.
+ *
+ * Nothing was broken in the detector. The claim comes from
+ * `TacticsLiveContext.hanging`, which is computed from a FEN — but the type
+ * carries no record of WHICH fen, so a package built for one position can be
+ * handed to another and every consumer will voice it in good faith. Two
+ * board-derived inputs that are never required to agree is the same shape as
+ * the seat and register bugs: the identifying field is missing, so nothing
+ * downstream is able to check.
+ *
+ * Until the package carries its own position, the producer verifies before it
+ * speaks. This is not a claim-stripper on prose (which G0 bans and which would
+ * be the wrong instinct here) — it is a fact-computer refusing to assert
+ * something it can read the truth of directly, with chess.js, from the board it
+ * was handed. If the piece is not there, there is no claim to make.
+ */
+function pieceIsOn(fen: string | null | undefined, square: string, pieceType: string): boolean {
+  if (!fen) return false;
+  try {
+    const at = new Chess(fen).get(square as Parameters<Chess['get']>[0]);
+    return at != null && at.type === pieceType;
+  } catch {
+    return false;
+  }
+}
+
 export function assemblePositionAssessment(opts: {
   evalCp: number | null | undefined;
   mateIn: number | null | undefined;
@@ -1055,11 +1086,23 @@ export function assemblePositionAssessment(opts: {
         if (cell.color === 'w') w += v; else b += v;
       }
       const diff = sc === 'w' ? w - b : b - w;
+      // 🔒 THE VOICE NEVER REPORTS ITS OWN PLUMBING (narration voice rule 2,
+      // which bans interface references outright). These three lines used to
+      // append "(no engine eval on this exact spot)" / "I don't have an engine
+      // read on this exact position" — the app explaining its own internals to
+      // a student who has no idea it has an engine, let alone that this branch
+      // is the one without one. A student heard it on a real 22-ply game.
+      //
+      // The material count is a COMPLETE fact on its own: it is read straight
+      // off the board with chess.js and is exactly as true here as it is on the
+      // engine path. Missing the eval changes what else can be said, never the
+      // standing of what is said — so the absence is a reason to say LESS, not
+      // a reason to narrate the absence.
       parts.push(diff === 0
-        ? `Material is even, and I don't have an engine read on this exact position — so nothing is decided yet; it's about the plans and the tactics.`
+        ? `Material is even — nothing is decided yet; it's about the plans and the tactics.`
         : diff > 0
-          ? `You're up ${diff} point${diff === 1 ? '' : 's'} of material — materially you're doing well here (no engine eval on this exact spot).`
-          : `You're down ${-diff} point${-diff === 1 ? '' : 's'} of material here (no engine eval on this exact spot).`);
+          ? `You're up ${diff} point${diff === 1 ? '' : 's'} of material — materially you're doing well here.`
+          : `You're down ${-diff} point${-diff === 1 ? '' : 's'} of material here.`);
     } catch { /* bad fen — skip the material line */ }
   }
 
@@ -1070,7 +1113,9 @@ export function assemblePositionAssessment(opts: {
     } else if (tactics.immediate[0]?.description) {
       parts.push(`${tactics.immediate[0].description}.`);
     } else {
-      const myHang = tactics.hanging.find((h) => h.color === sc);
+      // BOARD-VERIFIED before it is spoken — see `pieceIsOn`. A hanging entry
+      // whose piece is not on `opts.fen` describes some other position.
+      const myHang = tactics.hanging.find((h) => h.color === sc && pieceIsOn(opts.fen, h.square, h.piece));
       if (myHang) parts.push(`Your ${REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece} on ${myHang.square} is hanging.`);
       else if (tactics.threats[0]?.description) parts.push(`Watch out — ${tactics.threats[0].description}.`);
     }
@@ -2785,6 +2830,11 @@ export function assembleTacticsAnswer(
   tactics: TacticsLiveContext,
   studentColor: 'white' | 'black',
   ask?: string | null,
+  /** The board these tactics were computed for. Supplied so a piece-on-square
+   *  claim can be verified before it is spoken — see `pieceIsOn`. Optional only
+   *  because `TacticsLiveContext` does not yet carry its own position; when it
+   *  does, this parameter goes away and the check becomes unconditional. */
+  fen?: string | null,
 ): GroundedAnswer | null {
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const parts: string[] = [];
@@ -2839,8 +2889,10 @@ export function assembleTacticsAnswer(
   for (const t of tactics.immediate) {
     if (t.description && t.type !== spokenConceptId) parts.push(`${t.description}.`);
   }
-  // The STUDENT's pieces left hanging — warn concretely.
-  for (const h of tactics.hanging.filter((p) => p.color === sc)) {
+  // The STUDENT's pieces left hanging — warn concretely, and only about pieces
+  // that are ACTUALLY ON THE BOARD we were handed (see `pieceIsOn`). Without a
+  // FEN nothing can be verified, so nothing is claimed.
+  for (const h of tactics.hanging.filter((p) => p.color === sc && pieceIsOn(fen, p.square, p.piece))) {
     parts.push(`Your ${REVIEW_PIECE_NAME[h.piece] ?? h.piece} on ${h.square} is hanging.`);
   }
   // Nothing concrete yet → surface the top threat, then the top opportunity.

@@ -128,19 +128,47 @@ const TYPE_OF = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', ki
 const NAME_OF = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CLAIM_RE = /\b(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])\b/gi;
 
-/** Piece-on-square claims in `text` that are not true of `fen`. */
+// 🔒 A CONDITIONAL IS NOT A CLAIM ABOUT THIS BOARD. The checker flagged
+//
+//     "a4 was the move — it would create a passed pawn on b4"
+//
+// as a false claim because b4 is empty NOW. It is empty now precisely because
+// the sentence is about a future that did not happen: "would", "if", "after",
+// "was the move". Projected and hypothetical clauses are the coach's whole
+// foresight register, and grading them against the present board marks the
+// correct ones wrong — the same class as the checker's own earlier lesson that
+// "a checker that flags true statements is worse than no checker", and the same
+// class as matching "fen" inside "de-fen-se".
+//
+// So a claim is graded only when the clause it sits in is asserting something
+// about the position in front of the student. The split is by CLAUSE, not by
+// sentence: "your rook on d1 is loose, so a4 would win the pawn on b4" makes a
+// present claim and a projected one, and only the first is ours to check.
+const HYPOTHETICAL_RE = /\b(?:would|could|might|will|if|unless|once|after|before|instead|were|had|was the move|is the move|threatens? to|plans? to|going to|about to|then)\b/i;
+
+/** Split on clause boundaries, so one projected clause cannot exempt a whole
+ *  sentence and one present clause cannot condemn a projected neighbour. */
+function clausesOf(text) {
+  return String(text).split(/[,;:—–]|\.\s|\bbut\b|\band then\b|\bso\b/i);
+}
+
+/** Piece-on-square claims in `text` that are not true of `fen`.
+ *  Hypothetical/projected clauses are skipped — see `HYPOTHETICAL_RE`. */
 function falseBoardClaims(text, fen) {
   const bad = [];
   let chess;
   try { chess = new Chess(fen); } catch { return bad; }
-  CLAIM_RE.lastIndex = 0;
-  let m;
-  while ((m = CLAIM_RE.exec(text)) !== null) {
-    const claimed = TYPE_OF[m[1].toLowerCase()];
-    const square = m[2].toLowerCase();
-    const at = chess.get(square);
-    if (!at) bad.push(`${m[1]} on ${square} — square is empty`);
-    else if (at.type !== claimed) bad.push(`${m[1]} on ${square} — actually a ${NAME_OF[at.type]}`);
+  for (const clause of clausesOf(text)) {
+    if (HYPOTHETICAL_RE.test(clause)) continue;
+    CLAIM_RE.lastIndex = 0;
+    let m;
+    while ((m = CLAIM_RE.exec(clause)) !== null) {
+      const claimed = TYPE_OF[m[1].toLowerCase()];
+      const square = m[2].toLowerCase();
+      const at = chess.get(square);
+      if (!at) bad.push(`${m[1]} on ${square} — square is empty`);
+      else if (at.type !== claimed) bad.push(`${m[1]} on ${square} — actually a ${NAME_OF[at.type]}`);
+    }
   }
   return bad;
 }
@@ -211,6 +239,9 @@ async function main() {
   const committedReplies = []; // { san, fen } — the coach's own account of each reply
   const bakedPlies = [];   // which plies of the named opening the bake taught
   const rawPayloads = [];
+  /** normalised spoken text → the board it was spoken at, from any anchored
+   *  event. Lets an unanchored duplicate inherit its twin's position. */
+  const anchoredText = new Map();
   page.on('pageerror', (e) => pageErrors.push(String(e)));
   page.on('request', (req) => {
     if (!req.url().includes('/api/audit') && !req.url().includes('/audit-stream')) return;
@@ -452,11 +483,35 @@ async function main() {
     // guessed at, subtracts trust.
     //
     // An audit that cannot substantiate a claim must say so, not invent one.
-    const said = spoken.slice(spokenBefore).map((s) => ({
-      ...s,
-      boardChecked: Boolean(s.fen),
-      falseClaims: s.text && s.fen ? falseBoardClaims(s.text, s.fen) : [],
-    }));
+    //
+    // 🔒 A DUPLICATE AND AN ORPHAN ARE NOT THE SAME THING, AND THIS COULD NOT
+    // TELL THEM APART. The reasoning above is right about the `voiceService.*`
+    // events — they ARE unanchored duplicates of an app-side event that already
+    // carried the board. But the coverage number it produced ("116 of 233
+    // lines carried a position") lumped in any line whose text NEVER appeared
+    // in an anchored event, and those are a different animal: text that reached
+    // the student with no position recorded anywhere, which no board check can
+    // ever reach. The backlog read 233-116 as "117 ungraded lines, at least one
+    // of them false" and went looking for a coverage bug in the voice layer;
+    // the number was mostly duplicates, and the orphans it was really about
+    // were invisible inside it.
+    //
+    // So: match each unanchored line's text against the anchored ones. A match
+    // INHERITS that position and is board-checked properly — the position is
+    // genuinely known for that line, just recorded on its twin. A line matching
+    // nothing is an ORPHAN, counted and reported separately, because that is
+    // the only bucket where "we cannot check this" is actually true.
+    const norm = (t) => String(t ?? '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 160);
+    for (const e of spoken) if (e.fen && e.text) anchoredText.set(norm(e.text), e.fen);
+    const said = spoken.slice(spokenBefore).map((s) => {
+      const inherited = s.fen ?? (s.text ? anchoredText.get(norm(s.text)) : undefined) ?? null;
+      return {
+        ...s,
+        boardChecked: Boolean(inherited),
+        anchoredVia: s.fen ? 'own' : inherited ? 'duplicate' : 'orphan',
+        falseClaims: s.text && inherited ? falseBoardClaims(s.text, inherited) : [],
+      };
+    });
     const turnBeats = beats.slice(beatsBefore).map((b) => b.beat);
     const phase = phaseOf(chess.fen());
     transcript.push({ ply, phase, studentMove: legal.san, coachReply: replySan, fen: chess.fen(), beats: turnBeats, said });
@@ -513,6 +568,13 @@ async function main() {
   // in the instrument even when `falseClaims` stays at zero.
   const spokenAll = transcript.flatMap((t) => t.said ?? []);
   const anchored = spokenAll.filter((s) => s.boardChecked).length;
+  const byAnchor = spokenAll.reduce((acc, s) => { acc[s.anchoredVia ?? 'own'] = (acc[s.anchoredVia ?? 'own'] ?? 0) + 1; return acc; }, {});
+  // ORPHANS are the only genuine coverage gap — text that reached the student
+  // with no position recorded anywhere, so no board check can ever reach it.
+  // Duplicates are fine: their twin carried the board and they are checked
+  // against it. Reported apart because conflating them is what sent the last
+  // diagnosis after the wrong layer.
+  const orphanLines = spokenAll.filter((s) => s.anchoredVia === 'orphan' && String(s.text ?? '').trim());
   const totalSpoken = transcript.reduce((n, t) => n + (t.said?.length ?? 0), 0);
   const silentPlies = transcript.filter((t) => t.ply && !(t.said ?? []).length).length;
 
@@ -535,6 +597,8 @@ async function main() {
     // retirement — do not read a zero here as missing teaching.
     openingPliesTaught: [...new Set(bakedPlies)].sort((a, b) => a - b),
     linesSpoken: totalSpoken, silentPlies, falseClaims: allFalse, pageErrors, gameOverUi,
+    boardCheckCoverage: { anchored, total: spokenAll.length, ...byAnchor },
+    orphanLines: orphanLines.map((o) => ({ source: o.source, text: String(o.text).slice(0, 200) })),
     listenerEvents: listener.getCapturedEvents().length,
     clickTimings,
     slowestInputMs: clickTimings.reduce((m, c) => Math.max(m, c.ms), 0),
@@ -634,7 +698,11 @@ async function main() {
   console.log(`     AND properties.audit_run_id='${RUN_ID}' GROUP BY properties.fundamental`);
   report.fundamentalsNamed = namedFundamentals;
 
-  console.log(`board-checked       ${anchored}/${spokenAll.length} spoken events carried a position to check against`);
+  console.log(`board-checked       ${anchored}/${spokenAll.length} spoken events could be checked against a position`);
+  console.log(`  ├─ own FEN        ${byAnchor.own ?? 0}`);
+  console.log(`  ├─ via duplicate  ${byAnchor.duplicate ?? 0}   (voiceService echo of an anchored app event)`);
+  console.log(`  └─ ORPHAN         ${byAnchor.orphan ?? 0}   (spoken with no position recorded anywhere)`);
+  for (const o of orphanLines.slice(0, 10)) console.log(`     ⚠️  ORPHAN [${o.source}] ${String(o.text).slice(0, 120)}`);
   console.log(`FALSE board claims  ${allFalse.length}`);
   console.log(`page errors         ${pageErrors.length}`);
   console.log(`report              ${OUT}/report.json`);

@@ -6,6 +6,7 @@ import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
 import { gradeNarrationText } from './coachAnswerGates';
 import type { MistakeClassification, MistakeGamePhase, MistakeNarration } from '../types';
 import { sideToMove } from './conceptEngine';
+import { stemKeyOf } from '../utils/rotateStem';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -25,8 +26,17 @@ export interface NarrationParams {
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-function pick<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+/** ROTATED, NOT ROLLED (CLAUDE.md's phrasing tier). This was
+ *  `arr[Math.floor(Math.random() * arr.length)]`, which fails all three
+ *  properties the rule names: a student reopening the same mistake puzzle heard
+ *  a different coach each time (not resume-safe), an audit could assert only
+ *  that SOMETHING was said (not testable), and a roll repeats by chance, which
+ *  is the very complaint that opened this (a stem firing 3x in one 5-ply run).
+ *
+ *  The key is the FEN every caller here already holds: one position, one
+ *  phrasing, forever — while a different position draws independently. */
+function pick<T>(arr: T[], key: string): T {
+  return arr[stemKeyOf(key) % arr.length];
 }
 
 function cpToText(cp: number): string {
@@ -484,7 +494,7 @@ function buildOutro(params: NarrationParams, idea: MoveIdea): string {
   // regardless of the position (rules #1 and #5).
   void classification;
 
-  return outroVariants.length > 0 ? pick(outroVariants) : '';
+  return outroVariants.length > 0 ? pick(outroVariants, params.fen) : '';
 }
 
 // ─── Main Generator ─────────────────────────────────────────────────────────
@@ -514,7 +524,7 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
     // fallback below that.
     buildNoteRead(fen, params.openingName, spoilers, params.evalBefore)
       || buildPositionRead(fen, spoilers),
-    pick(INTRO_TEMPLATES[classification])
+    pick(INTRO_TEMPLATES[classification], fen)
       .replace(/\{playerMove\}/g, playerMoveSan)
       .replace(/\{bestMove\}/g, bestMoveSan)
       .replace(/\{cpText\}/g, cpText),
@@ -545,7 +555,7 @@ function buildConceptHint(
 ): string {
   const read = buildPositionRead(fen, spoilers);
   if (read && !alreadySaid.includes(read)) return read;
-  return idea.conceptHints.length > 0 ? pick(idea.conceptHints) : '';
+  return idea.conceptHints.length > 0 ? pick(idea.conceptHints, fen) : '';
 }
 
 /** One entry per STUDENT move in the solution line: what that move concretely

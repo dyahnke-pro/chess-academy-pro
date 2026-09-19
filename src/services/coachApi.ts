@@ -5534,7 +5534,7 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const answer = assembleTacticsAnswer(grounding.tactics, sc, lastUserMessage());
+          const answer = assembleTacticsAnswer(grounding.tactics, sc, lastUserMessage(), grounding.currentFen ?? null);
           if (answer) {
             const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
             if (voiced) return voiced;
