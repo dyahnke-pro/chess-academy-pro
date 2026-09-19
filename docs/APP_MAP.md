@@ -130,12 +130,17 @@ Weaknesses tab / drills / Training Plan.**
 - **PV persisted on flagged annotations:** `MoveAnnotation.pv = {afterPlayed, afterBest}`
   (UCI) — corroboration for the attributor, never its gate.
 - `autoAnalyzeGame`: extracts blunders/mistakes for the player color with
-  `historySans` + real `cpLoss`, writes `mistakePuzzles` (incl. positional back-fill)
-  and calls `captureMisconception` once/game.
+  `historySans` + real `cpLoss` + mover-POV `evalBefore`/`evalAfterPlayed`, writes
+  `mistakePuzzles` (incl. positional back-fill) and calls `captureMisconception`
+  for EVERY flagged move (`autoAnalyzeBlunders` loops them), gated once/game by
+  `hasMisconceptionsForGame`. It hardcodes `learned:false`, so every row it writes
+  is `counted:false` — see the WO-4 measurement (2026-09-19,
+  `docs/plans/2026-09-19-wo4-fundamentals-attribution.md`).
 
 ### 5b. The fundamentals computer — `src/services/principleAttribution.ts`
-- **33 `FUNDAMENTAL_IDS`** (12 opening / 11 middlegame / 6 endgame / 4 eval-PV-gated),
-  measured 2026-09-19 — a hand census had read 25.
+- **33 `FUNDAMENTAL_IDS`** (12 opening / 11 middlegame / 6 endgame / 4 eval-or-PV-gated),
+  `:32-46` — measured 2026-09-19 (a hand census had read 25); count them with
+  `FUNDAMENTAL_IDS.length`, never from this line.
   `FUNDAMENTAL_TAG` (`:47-73`) maps each → a `MisconceptionTagId`. `CO_OCCURRENCE`
   (`:77-81`) = positional detectors that speak only when no move-verified row exists.
   `ATTRIBUTION_MAX=3`, `OPENING_PLIES=24`.
@@ -175,8 +180,14 @@ Weaknesses tab / drills / Training Plan.**
   the corpus by `drillVocabulary.test.ts` (2026-09-19: `zwischenzug` and
   `overloadedPiece` named themes no puzzle carried; the corpus says `intermezzo`
   and `capturingDefender`).
-- **5 tags have NO fundamental detector** (attribution gap): `no-plan`,
-  `overvalued-attack`, `calculation-depth`, `left-book-early`, `botched-conversion`.
+- **3 tags have NO fundamental detector** (attribution gap): `no-plan`,
+  `calculation-depth`, `left-book-early` (`overvalued-attack` and `botched-conversion`
+  gained detectors #30/#33). Measured 2026-09-19 (WO-4): NONE of the three is assigned
+  by the classifier at all — `no-plan`/`left-book-early` have zero writers in `src/`,
+  `calculation-depth` one (`CoachGameReview`'s find-the-shot card). What the gap
+  actually costs is the `other` fallthrough: 35 of 154 real flagged moves (23%)
+  after the `evalAfterPlayed` repair (41 before). Ranked for section 14:
+  `calculation-depth` → `left-book-early` → `no-plan`.
 
 ### 5e. Weakness aggregation + drills
 - `misconceptionService` — logs `MisconceptionTagRecord` (+ PostHog `weakness_captured`),
@@ -294,9 +305,15 @@ Weaknesses tab / drills / Training Plan.**
   (`useProseReader`→`speakReadAloud`) + optional "Walk the Opera Game" (→ `/coach/review/
   sample-morphy-opera-1858`, only where `exampleReviewId` exists).
 - **NO puzzles, NO board practice.** Only nav entry is the Coach hub tile.
-- **Taxonomy gap:** the tab's 4 pillars are a SEPARATE, coarser taxonomy from the
-  computer's 33 `FUNDAMENTAL_IDS` — no code links a `FundamentalId` to a
-  `FundamentalsTopic`. Reconciling them is net-new authoring.
+- **Taxonomy JOINED (WO-4, 2026-09-19):** `fundamentalsCatalog.FUNDAMENTAL_PILLAR`
+  is `Record<FundamentalId, FundamentalPillar | null>` — every one of the 33
+  fundamentals names its classical pillar (`FundamentalsTopic` minus `general`) or
+  an explicit `null` (pawn structure, threat habits, endgame technique — none of the
+  four pillars). `piece-values` had ZERO fundamentals before; it now grades
+  `loose-piece` / `wrong-trade-for-material` / `poisoned-pawn`. The page renders
+  its seven sections from `FUNDAMENTAL_SECTION_IDS` × `SECTION_TEACHING` (exhaustive
+  prose source per section — no `?? ''` blank card) and shows a per-pillar standing
+  (`pillarStanding`) rolled up from the student's own record.
 
 ## 12. Surfaces & standards ("match the rest of the app")
 

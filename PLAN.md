@@ -296,6 +296,16 @@ trust it. That is the cheapest check in this repo and it found three defects.
       write nothing. `needsPicker` deleted; `strengthCalibrated` bridged (still
       persisted for `DashboardPage`, no longer freezes re-estimation).
 
+- [x] `adfac7c` (**PR #938, draft — NOT on `main` yet**) — **WO-4: the two
+  fundamentals taxonomies are joined and the wire is measured.**
+  `FUNDAMENTAL_PILLAR: Record<FundamentalId, FundamentalPillar | null>` (total,
+  explicit nulls; `piece-values` had ZERO fundamentals, now 3); the page's
+  `?? ''` blank-card fallthrough is gone; the join fires on the tab. One wire
+  repaired: the sweep builder dropped `evalAfterPlayed`, so `botched-conversion`
+  could never record on an imported/finished game — 0 → 11 on the same 47 real
+  games. Report + every number: `docs/plans/2026-09-19-wo4-fundamentals-attribution.md`.
+  Audit 19/19 muted on a localhost build (prod cannot carry a branch).
+
 ## WO-3 — LANDED (2026-09-19, `a9c9376` on `main`, prod audit 8/8 on bundle `index-BeBqQixU`)
 
 The back half of the loop — a recorded weakness becomes a drill, and the drill's
@@ -531,6 +541,22 @@ Learn 8/8, Review 28/28 MEETS STANDARD.
 - ⏸ **D15** (TTS playback timeout) — root genuinely unknown; not guessed at.
 
 ### A. The loop cannot close (highest — these are the app, not polish)
+
+🔴 **A-NEW (WO-4, measured 2026-09-19): THE MODEL CANNOT READ THE FUNDAMENTAL
+THE COMPUTER PROVED.** On 47 real amateur games through the real pipeline:
+154/154 flagged moves captured, 79 carry an attributed `fundamentalId` — and the
+weakness SPINE sees **0** of them. `autoAnalyzeGameMisconceptions` hardcodes
+`learned:false` (the ONLY entry from batch analysis, review-open and a finished
+coach game), every row lands `counted:false`, and `weaknessSpine` +
+`weaknessAnalyzer` read `getMisconceptionProfile({countedOnly:true})`.
+`fundamentalId` lives ONLY on those rows (a `MistakePuzzle` carries none), so the
+Fundamentals tab says "loose piece 19×" while the ranker that decides what the
+coach teaches next has never heard of it. **This is the loop not closing, one
+layer down from the heat map.** NOT fixed in WO-4: the gate defends against
+double-counting the TAG (true) and that is WO-3's file. The fix is not "flip
+`learned`" — it is a fundamental-aware spine reader that aggregates
+`fundamentalId` over ALL rows the way `getFundamentalCounts` already does, so the
+fundamental counts once and the tag is left alone. David's call; one file.
 
 0. ✅ **FIXED (#77) — CLICK-TO-MOVE SILENTLY DROPPED THE STUDENT'S MOVE.**
    🔴 The entry here previously read "the first coach reply of a game
@@ -944,6 +970,22 @@ from the entry chunk's size.
    fixture. Broken assertion, not a broken component; not in the curated gate
    list, which is why it survived.
 
+9. 🔴 **THE FUNDAMENTAL-AWARE SPINE READER (A-NEW above).** Until it exists,
+   every fundamental attributed from a real game is display-only. Measured: 79
+   rows the tab reads, 0 the spine reads, 47 games. Rerun the measurement half of
+   `fundamentalsPipeline.realGame.test.ts` (corpus under `data/sources/wo4-corpus/`,
+   gitignored) after the change — the before/after is free.
+10. 🟠 **SECTION-14 DETECTORS, IN THIS ORDER: `calculation-depth` →
+   `left-book-early` → `no-plan`.** The WO's other two (`overvalued-attack`,
+   `botched-conversion`) already have detectors. None of the three has a pipeline
+   writer AT ALL (`no-plan`/`left-book-early` zero writers in `src/`;
+   `calculation-depth` one, the interactive find-the-shot card) — the "cheap path
+   still tags them" premise was false. What the gap costs is the `other`
+   fallthrough: 35 of 154 real slips (23%). Ranked by evidence already computed:
+   `criticalityScan` gapCp for calculation-depth, `theoryDeparture` for
+   left-book-early, `planRace` for no-plan. Not WO-4 (repair only, David
+   2026-09-19).
+
 ✅ **THE LEARN STALL IS GONE — measured on prod 2026-09-19 17:41, and the
 prediction written here was WRONG.** This section first said "NOT FIXED BY ANY
 OF THE ABOVE", reasoning that a corpus loading identically either way cannot
@@ -1016,3 +1058,12 @@ canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
    before concluding anything about the product. Of the four reds on 2026-09-19,
    one was the product, one was the audit withholding its own input, and two
    were a poll budget tuned on a game that is no longer the one being audited.
+
+
+6. **WO-4 left one decision and one draft PR.** PR #938 (`claude/bold-galileo-0ilqaj`)
+   is green (ship-check ×2, audit 19/19) and waits on David to merge to `main` —
+   after which the G1 prod audit of `audit-fundamentals-tab-prod.mjs` is OWED
+   against the live bundle. The decision is A-NEW / OWED #9: the spine reader.
+   Do not flip `learned`; do not add detectors before the reader exists — a
+   detector that fires into rows the model cannot read is half-built by the
+   capability-parity rule.
