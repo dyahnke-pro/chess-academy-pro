@@ -27,7 +27,7 @@ const MASTERED_CEILING = 0.02;
 
 const forkHole: WeaknessSignal = {
   clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Forks', openCount: 4, severity: 70,
-  lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: ['fork'],
+  lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: ['fork'], total: 6,
 };
 const pinHole: WeaknessSignal = { ...forkHole, clusterId: 'analysis:tactic:pin', label: 'Pins', puzzleThemes: ['pin'] };
 
@@ -75,7 +75,12 @@ function coverage(profile: (n: number) => StudentNeedContext): { taught: number;
     for (const p of l.plies) {
       if (!p.student) continue;
       total += 1;
-      if (computeNeed({ ply: p.ply, studentMove: true, conceptId: p.tactic as TacticPatternType | null, onThread: p.onThread }, ctx).speak) taught += 1;
+      // clauseKind is REQUIRED. This corpus carries only a tactic, so null is
+      // the honest value — and it records that this number is measured
+      // through the conceptId arm ONLY. `computeNeed` joins
+      // `matchTacticPattern(conceptId) ?? matchClauseKind(clauseKind)`, so the
+      // clause arm is unmeasured here. Widening the corpus is a separate build.
+      if (computeNeed({ ply: p.ply, studentMove: true, conceptId: p.tactic as TacticPatternType | null, clauseKind: null, onThread: p.onThread }, ctx).speak) taught += 1;
     }
   }
   return { taught, total, share: total ? taught / total : 0 };
@@ -86,9 +91,9 @@ describe('need coverage — the number, per profile (N6)', () => {
   it('has a real corpus to measure', () => { expect(all.length).toBeGreaterThan(30); }, 300_000);
 
   const cold = coverage(() => coldStudent(1400));
-  const mastered = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [], bookDepartures: [], lineReps: new Array(n).fill(FAMILIAR_REPS) }));
-  const holes = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [forkHole, pinHole], bookDepartures: [], lineReps: new Array(n).fill(FAMILIAR_REPS) }));
-  const fresh = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [], bookDepartures: [], lineReps: new Array(n).fill(0) }));
+  const mastered = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [], bookDepartures: [], capabilities: new Map(), lineReps: new Array(n).fill(FAMILIAR_REPS) }));
+  const holes = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [forkHole, pinHole], bookDepartures: [], capabilities: new Map(), lineReps: new Array(n).fill(FAMILIAR_REPS) }));
+  const fresh = coverage((n) => ({ rating: 1400, gamesPlayed: COLD_START_GAMES + 20, signals: [], bookDepartures: [], capabilities: new Map(), lineReps: new Array(n).fill(0) }));
 
   it('writes the report', () => {
     mkdirSync('audit-reports', { recursive: true });

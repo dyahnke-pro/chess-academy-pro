@@ -20,7 +20,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { decide } from './coachDecider';
-import type { ImportanceSignals } from './coachDecider';
+import type { ImportanceSignals } from './narrationImportance';
 
 // A moment that comfortably earns voice, so the ONLY thing under test below is
 // the need gate — not importance.
@@ -43,20 +43,23 @@ const bundle = {
 
 describe('the live need gate', () => {
   it('SILENCES a ply the student demonstrably does not need', () => {
-    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: false } }, bundle, 'interrupt');
+    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: false }, momentBoost: 0 }, bundle, 'interrupt');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('need');
   });
 
   it('SPEAKS when need clears the bar', () => {
-    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: true } }, bundle, 'interrupt');
+    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: true }, momentBoost: 0 }, bundle, 'interrupt');
     expect(d.speak).toBe(true);
   });
 
   it('SPEAKS when there is no need data at all — a cold student meets a teaching coach', () => {
-    for (const need of [undefined, null]) {
-      const d = decide(LOUD, { rating: 1500, weaknesses: [], need }, bundle, 'interrupt');
-      expect(d.speak, `need=${String(need)} must not mute`).toBe(true);
+    // The TYPE now forbids `undefined` (need is required, null is the real
+    // answer) — so the cast is not a silenced mismatch, it pins the RUNTIME
+    // behaviour for an untyped caller that can still hand one over.
+    for (const need of [undefined, null] as Array<{ speak: boolean } | null>) {
+      const d = decide(LOUD, { rating: 1500, weaknesses: [], need, momentBoost: 0 }, bundle, 'interrupt');
+      expect(d.speak, `need=${JSON.stringify(need) ?? 'undefined'} must not mute`).toBe(true);
     }
   });
 
@@ -67,7 +70,7 @@ describe('the live need gate', () => {
     // book moves" (David 2026-09-15). The two must not be conflated: a walk
     // silenced by importance would be the 46-plies-to-six bug; a walk silenced
     // by NEED is the feature.
-    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: false } }, bundle, 'walk');
+    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: false }, momentBoost: 0 }, bundle, 'walk');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('need'); // names the real decider, never blames importance
   });
@@ -97,6 +100,7 @@ const PLAYED_IT_RIGHT_FIVE_TIMES: StudentNeedContext = {
   gamesPlayed: 40,
   signals: [],
   bookDepartures: [],
+  capabilities: new Map(),
   lineReps: Array.from({ length: 40 }, (_, i) => (i === 26 ? FAMILIAR_REPS : 0)),
 };
 
