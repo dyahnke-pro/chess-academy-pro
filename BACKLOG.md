@@ -103,6 +103,33 @@ First complete Learn game ever captured with a working narration wire — 22
 plies to checkmate, 233 spoken lines, 630 audit events. Report:
 `audit-reports/learn-full-game-2026-09-17T03-43-47-467Z/`.
 
+**POST-DEPLOY AUDIT, 2026-09-19 (prod, bundle `index-CWTOFc5b`).**
+`audit-concept-gameplay-prod` **8/8**. `audit-learn-full-game` drove a real
+41-ply game to checkmate, 325 lines spoken, 0 silent plies, 0 page errors.
+
+- ✅ **L1 confirmed on a live game.** The coach played `Nb5#` at ply 41, spoke
+  exactly `"Checkmate."` and nothing else — `voicePackage` empty. No "The move
+  is…", no "their king is still in the centre".
+- ⚠️ **The run flagged 2 false claims, and BOTH were a miss in the new
+  hypothetical guard, not a product defect.** `whatItAllowed` said *"That let
+  them swing pieces toward your king, win a pawn, create a passed pawn on d5 and
+  trade off the rook"* — a projection along the opponent's PV, and `d4d5` (the
+  move that creates the passer) is IN that pv. Two causes, both fixed: the
+  clause splitter did not split on a bare `and`, so the projective half could
+  not be separated from its neighbour; and a CREATION verb was not a
+  hypothetical marker, though a thing the line creates is by definition not on
+  the board yet. Re-verified against the exact sentence + FEN from the report,
+  with controls in both directions — both projections now pass, both real lies
+  ("your knight on b5 is hanging", "the rook on d5 is loose") are still caught,
+  and a true present claim still passes.
+- 📋 **84 ORPHAN lines, and the new split says what they are.** All are
+  `voiceService.*` echoes whose SPOKEN text has been TTS-sanitised — "rook takes
+  b7" where the anchored app event said "Rxb7" — so text matching cannot pair
+  them with their twin. Not unchecked *claims*: the written form was checked.
+  The real fix is threading the position through `voiceService` so an echo
+  carries its own board; deliberately not done here (shared file, two sessions
+  in flight). 195 lines carried their own FEN, 46 paired by text.
+
 **STATUS 2026-09-19: all eight are now DONE.** Two of the diagnoses written here
 turned out to be WRONG when measured, and both are deleted rather than annotated
 (items 1 and 2) — a wrong diagnosis in a backlog is worse than no entry, because

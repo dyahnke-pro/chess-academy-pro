@@ -753,8 +753,24 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const OPENING_LAST_MOVE = 7;
   useEffect(() => {
     if (!walkNarration || !playerColor) return;
-    setCriticalMoment(null);
-    criticalDoneRef.current = new Set();
+    // 🔒 SCAN PER GAME, NOT PER NARRATION OBJECT — the same rule
+    // `useReviewPlayback` already follows, and for the same reason.
+    //
+    // The review's background deepen re-runs `generateReviewNarration` for the
+    // SAME game, producing a NEW narration object. The playback hook gates its
+    // reset on the gameId precisely so a deepen does not "snap the walk back to
+    // ply 0 mid-stride" (its own note, David 2026-09-14) — and this effect,
+    // keyed on the narration object, was doing exactly what that hook refuses
+    // to do: dropping an already-selected moment, clearing the spoken-set, and
+    // restarting a 3s-delayed scan. If the deepen lands after the walk has
+    // passed the moment's ply, the recomputed moment is unreachable and is
+    // silently never spoken; if it had already spoken, clearing the set lets it
+    // speak twice on a rewind. Both are the failure this build exists to end —
+    // a computed fact that never reaches the voice.
+    //
+    // A moment already found for THIS game is kept. A game with none yet may
+    // still be rescanned when the narration improves, which is purely additive.
+    if (criticalScanGameRef.current === props.gameId) return;
     const plies = walkNarration.segments
       .filter((sg) => sg.playerColor === playerColor
         && sg.moveNumber > OPENING_LAST_MOVE && !questionPlan.has(sg.ply))
@@ -771,7 +787,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const reads = await scanCriticalMoments({ plies, rating: playerRating || DEFAULT_STUDENT_RATING, signal: ac.signal });
         if (ac.signal.aborted) return;
         const q = buildCriticalMomentQuestion(walkNarration.segments, reads, playerColor);
-        if (!q) return;
+        if (!q) return;   // none yet — a later narration rebuild may still find one
+        criticalScanGameRef.current = props.gameId;
         setCriticalMoment(q);
         void logAppAudit({
           kind: 'coach-surface-migrated',
@@ -783,7 +800,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       } catch { /* no engine, no question — the honest outcome */ }
     })();
     return () => ac.abort();
-  }, [walkNarration, playerColor, playerRating, questionPlan]);
+  }, [walkNarration, playerColor, playerRating, questionPlan, props.gameId]);
 
   const [readingGate, setReadingGate] = useState<{ ply: number; fen: string } | null>(null);
   const quizzedPliesRef = useRef<Set<number>>(new Set());
@@ -933,11 +950,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [criticalReveal, setCriticalReveal] = useState<{ correct: boolean; text: string } | null>(null);
   /** Plies this review has already spoken the moment at — one per game. */
   const criticalDoneRef = useRef<Set<number>>(new Set());
+  /** The game a moment has already been FOUND for — see the scan effect. A
+   *  ref, not the state, because the effect is declared above the state and
+   *  because reading state here would churn the dep list. */
+  const criticalScanGameRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    // Fresh game → fresh question state.
+    // Fresh game → fresh question state. THE CRITICAL MOMENT RESETS HERE, with
+    // its siblings, and nowhere else — see the scan effect above.
+    setCriticalMoment(null);
     setCriticalCard(null);
     setCriticalReveal(null);
+    criticalDoneRef.current = new Set();
+    criticalScanGameRef.current = undefined;
     setShotState(null);
     setShotReveal(null);
     shotAttemptsRef.current = 0;
@@ -1003,6 +1028,49 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return;
     }
     if (principleQuizStateRef.current) return; // device quiz (hidden) — never opens
+    // ── THE CRITICAL MOMENT, at its own ply ──────────────────────────────
+    //
+    // 🚨 IT LIVES OUT HERE, NOT INSIDE `if (readingQuizOn)`, where the first cut
+    // put it because that is where the other mid-walk cards are built.
+    //
+    // ⚠️ THE REASON FIRST GIVEN FOR THIS MOVE WAS WRONG, and is corrected here
+    // rather than left to be believed. It claimed the wire "could never fire on
+    // a cold device" because `readingQuizOn` is off by default. The audit
+    // reports disprove that: the line was spoken on the build where it sat
+    // inside that branch, so the setting is ON by default and the branch was
+    // not swallowing anything. What was actually broken was the audit's own
+    // regex plus a reveal that never named the count.
+    //
+    // The move still stands on its own merits: a critical moment has nothing to
+    // do with a reading-quiz preference, and a default that happens to be true
+    // today is not a reason to depend on it.
+    //
+    // It runs BEFORE the flagged-move ladder, on plies that ladder by
+    // definition never reaches: the question plan only tags FLAGGED moves, and
+    // the scan skipped every ply the plan already owns.
+    //
+    // 🔒 THE REGISTER FOLLOWS THE BOARD, NOT THE CARD. If their move HELD, this
+    // STATES it and the walk carries on — asking a student to find a move they
+    // played is §G4.5.2's exact defect. Only a genuine miss at a one-move
+    // position stops the walk.
+    if (criticalMoment && !criticalDoneRef.current.has(criticalMoment.ply)
+      && walkPlayback.currentPly + 1 === criticalMoment.ply) {
+      const atPly = criticalMoment.ply;
+      criticalDoneRef.current.add(atPly);
+      captureEvent('review_critical_moment', {
+        ply: atPly, register: criticalMoment.register, count: criticalMoment.count,
+        stake: criticalMoment.stake, gap_cp: criticalMoment.gapCp, held: criticalMoment.found,
+      });
+      if (criticalMoment.register === 'ask') {
+        questionPlyRef.current = atPly;
+        setCriticalCard(criticalMoment);
+        setCriticalReveal(null);
+        void reviewSay(criticalMoment.question ?? '').catch(() => undefined);
+        return;  // pause the walk; resumes when they answer
+      }
+      // credit / note — a statement. Speak it and keep walking.
+      void reviewSay(criticalMoment.reveal, criticalMoment.found ? { prosodySpike: true } : undefined).catch(() => undefined);
+    }
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
@@ -1023,31 +1091,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // (≤2 per game, the biggest moments), and use the KIND the plan chose for
       // that moment. Everything else stays narration — no overwhelm (David
       // 2026-07-20). quizzedPliesRef stops a re-fire on the same ply.
-      // ── THE CRITICAL MOMENT, at its own ply ──────────────────────────────
-      // Before the flagged-move ladder, because this fires on plies the ladder
-      // by definition never reaches (the plan only tags flagged moves, and the
-      // scan skipped every ply the plan already owns).
-      //
-      // 🔒 THE REGISTER FOLLOWS THE BOARD, NOT THE CARD. If their move HELD,
-      // this STATES it and the walk carries on — asking a student to find a
-      // move they played is §G4.5.2's exact defect. Only a genuine miss at a
-      // one-move position stops the walk.
-      if (criticalMoment && seg && nextPly === criticalMoment.ply && !criticalDoneRef.current.has(nextPly)) {
-        criticalDoneRef.current.add(nextPly);
-        captureEvent('review_critical_moment', {
-          ply: nextPly, register: criticalMoment.register, count: criticalMoment.count,
-          stake: criticalMoment.stake, gap_cp: criticalMoment.gapCp, held: criticalMoment.found,
-        });
-        if (criticalMoment.register === 'ask') {
-          questionPlyRef.current = nextPly;
-          setCriticalCard(criticalMoment);
-          setCriticalReveal(null);
-          void reviewSay(criticalMoment.question ?? '').catch(() => undefined);
-          return;  // pause the walk; resumes when they answer
-        }
-        // credit / note — a statement. Speak it and keep walking.
-        void reviewSay(criticalMoment.reveal, criticalMoment.found ? { prosodySpike: true } : undefined).catch(() => undefined);
-      }
       const planned = questionPlan.get(nextPly);
       if (seg && isStudentMistake && planned && !quizzedPliesRef.current.has(nextPly)) {
         quizzedPliesRef.current.add(nextPly);

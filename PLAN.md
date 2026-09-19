@@ -172,6 +172,45 @@ recalled.
    swallowed — an instrument that goes quiet without saying why is
    indistinguishable from one that found nothing.
 
+**Two corrections to my own diagnosis, recorded because a wrong reason left
+standing is worse than no reason** (the Lake Butler rule applied to this build):
+
+- I claimed the wire "could never fire on a cold device" because it sat inside
+  `if (readingQuizOn)`. The audit reports disprove it — the line was spoken on
+  the build where it sat inside that branch, so the setting is on by default.
+  The lift out of it still stands (a critical moment has nothing to do with a
+  reading-quiz preference), but not for the reason I gave.
+- What was actually wrong was the AUDIT ROW plus a real product gap: the reveal
+  named the move and never the COUNT, which is the one fact David asked for.
+  The row demanded a count phrase the sentence did not contain, so it went red
+  on a product that was speaking. Both are fixed; the count now leads every
+  register, and review speaks in the past tense it should always have used.
+
+**THE METHOD FAILURE, and the two ROOT causes behind it** (David 2026-09-19:
+"Stop guessing. Root fixes. Gain context first."). Four wrong diagnoses in a row
+— the card, the settings flag, the walk being frozen, then the reopen phase —
+every one made from a log TAIL instead of from the code that produces the
+symptom or the `report.json` that carries the answer. The report answered in
+seconds the moment it was opened. Two things made the guessing possible, and
+both are now fixed at the root:
+
+- **The audit collapsed two states into one number.** `readWalkPly` returns NULL
+  when the ply readout cannot be read, and the caller did `?? 0` — so "the walk
+  is at ply 0" and "I cannot see the walk" printed IDENTICALLY as
+  `[walk] ply 0/93`. A healthy 93-ply run was read as frozen and KILLED on that
+  line. Null is now carried, said, and asserted (`WALK readout-stayed-readable`).
+- **The scan was keyed on the narration OBJECT, not the game.** The background
+  deepen produces a new narration for the same game; `useReviewPlayback` gates
+  its own reset on the gameId for exactly this reason, and this effect was doing
+  what that hook refuses to do — dropping a selected moment, clearing the
+  spoken-set, restarting the scan. A deepen landing after the walk passed the
+  ply left the moment unreachable and silently unspoken.
+
+**Settled by reading, not asserting:** `readingChallengesInReview` defaults to
+TRUE (`useSettings.ts:95,140`). The "off by default" claim was wrong. The lift
+out of that branch stands for the real reason — a user who turns reading
+challenges off must not thereby silence the critical moment.
+
 **Recording.** `gameAnalysisService.recordPromptedFind` is the FIRST writer of
 `prompted: true` in the app's history — the field has been REQUIRED since the
 heat map landed and every row in the store is unaided evidence. It is a RECORD,
@@ -200,6 +239,69 @@ itself open the door — the count decides WHAT is said, importance still decide
 WHETHER. On `walk` (Learn, review) every ply speaks, so there the count is the
 trigger as designed. Widening the door is a separate, bigger change and was not
 made as a side effect of this one.
+
+### 🔧 TODO — what this build still owes (2026-09-19, handover)
+
+Ordered by what a future session should do first. Each says what to VERIFY, not
+just what to change — the method failure above was diagnosing without reading.
+
+**T1. 🔴 `ask` AND `note` ARE STRUCTURALLY UNREACHABLE ON REVIEW. Fix this
+first; it is a real defect, not a gap in coverage.**
+Evidence, measured 2026-09-19 — all five prod runs selected `register=credit`,
+never once `ask` or `note`:
+```
+ply 28 credit count=1 stake=on-top gap=646/649/649/671cp played=Nxe2 held  (fixture x4)
+ply 18 credit count=1 stake=level  gap=526cp              played=gxf6 held  (b6Ltr4hi)
+```
+It is not luck. `INACCURACY_CP = 50`, and the tolerance is 100cp (intermediate),
+200 (beginner), 50 (expert). A move FAILS TO HOLD exactly when it loses MORE
+than the tolerance — which at every band is at or above the flagging threshold,
+so it is flagged — and the scan filters flagged plies out
+(`!questionPlan.has(sg.ply)`). I excluded precisely the plies the `ask` register
+exists for. The only survivors are the sliver `selectReviewQuestions` itself
+skips (`evalAfterMover >= 250`, a flagged move that still leaves the student
+clearly winning).
+Consequence: the question card, its chips, `judgeCriticalMomentPick`,
+`handleCriticalPick` and `recordPromptedFind` have NEVER executed in the running
+app. Unit-tested, runtime-unproven — the "a wire that does not fire is not a
+wire" rule.
+The fix is NOT to widen the tolerance (that changes what "critical" means).
+Scan the student's plies regardless of flag, and let the REGISTER decide;
+suppress only the card at a ply the question plan already stops at, so nothing
+double-stops. Then prove it: the audit must assert an `ask` was reached at least
+once across a run, or say plainly that no game offered one.
+
+**T2. LEARN IS SHIPPED BUT UNVERIFIED ON PROD.** `audit-concept-gameplay-prod`
+was never run this session (one audit, by request). The Learn statement's
+`slowDownOwed` gate is cold-device-dependent, so a green review run says nothing
+about it. ~15 min.
+
+**T3. LEARN'S `prompted` WIRE IS STILL OPEN — needs files this session did not
+own.** Learn announces the moment, the student plays, and the post-game sweep
+(`GameReviewWeaknessCapture` → `autoAnalyzeGame:139`) writes `prompted: false`
+for EVERY ply, including the ones the coach just talked them through. Closing it
+means Learn remembering which plies it announced at and handing that set to the
+sweep: `CoachTeachPage.tsx` (session 3) + `GameReviewWeaknessCapture.tsx`.
+
+**T4. `prompted` IS A RECORD, NOT YET A LEVER.** `getCapabilityProfile` skips
+prompted rows, so a prompted find changes nothing today — correct by design, and
+the reason the flag exists. The lever is the design's own next step: the
+personal tolerance from PRESS/NO-PRESS at critical moments (§1 above), which
+needs T1 landed first because it is the `ask` path that generates the signal.
+
+**T5. DECIDE THE DOOR ON LIVE PLAY.** `judgeMoment` still grades severity from
+the gap, so on `interrupt` posture a two-move fork does not open the door by
+itself; the count only decides WHAT is said once the ply speaks. On `walk`
+(Learn, review) the count is the trigger as designed. Deliberately not changed
+here — widening the door is a bigger change than this build, and should not
+happen as a side effect.
+
+**T6. TWO NUMBERS NEVER MEASURED ON A DEVICE.** (a) The Learn statement's
+volume roughly doubles (~2.5 → ~5 per game at the amateur band, from the
+2026-09-18 census), still gated on `slowDownOwed`. (b) `scanCriticalMoments`
+runs on every review open — 41 plies took 9.6s on the audit box with 3 workers;
+on a phone's asm.js build that is the number to watch. It already yields a
+worker to the review's own dive and aborts on unmount.
 
 ### Measure BEFORE writing any of it
 
@@ -295,6 +397,59 @@ trust it. That is the cheapest check in this repo and it found three defects.
       (`imported-games` or `coach-games`); guesses (`profile`, `default`) still
       write nothing. `needsPicker` deleted; `strengthCalibrated` bridged (still
       persisted for `DashboardPage`, no longer freezes re-estimation).
+
+- [x] `adfac7c` (**PR #938, draft — NOT on `main` yet**) — **WO-4: the two
+  fundamentals taxonomies are joined and the wire is measured.**
+  `FUNDAMENTAL_PILLAR: Record<FundamentalId, FundamentalPillar | null>` (total,
+  explicit nulls; `piece-values` had ZERO fundamentals, now 3); the page's
+  `?? ''` blank-card fallthrough is gone; the join fires on the tab. One wire
+  repaired: the sweep builder dropped `evalAfterPlayed`, so `botched-conversion`
+  could never record on an imported/finished game — 0 → 11 on the same 47 real
+  games. Report + every number: `docs/plans/2026-09-19-wo4-fundamentals-attribution.md`.
+  Audit 19/19 muted on a localhost build (prod cannot carry a branch).
+
+## WO-3 — LANDED (2026-09-19, `a9c9376` on `main`, prod audit 8/8 on bundle `index-BeBqQixU`)
+
+The back half of the loop — a recorded weakness becomes a drill, and the drill's
+result moves the model. Three severances, every one measured before it was
+touched, all fixed at once, one audit at the end (`audit-bucket-delivery-loop`,
+live prod, muted).
+
+- ✅ **S1 — the bucket audit graded a join no student reaches.**
+  `misconceptionService.mapTagToDrills` had ZERO production callers; the audit
+  was its only caller, so `DRILL_PLAN_EMPTY` could not fire where
+  `WeaknessTagDrillPage` shows "No drillable positions yet" — the student's
+  path (`getMisconceptionDrillPuzzles`) skips rows missing `bestSan` that the
+  dead join kept. The audit now grades the shipped route; `mapTagToDrills` +
+  `TagDrillPlan` are DELETED so there is one join. The audit's own "not a
+  parallel re-implementation" header is corrected, not appended to. Gate:
+  `drillJoinDivergence.test.ts`. Prod: the new S1 row fires on the exact seeded
+  state — "audit and surface agree".
+- ✅ **S2 — two tactic types drilled to zero puzzles.** `zwischenzug` and
+  `overloadedPiece` were named; `puzzles.json` (15,000 / 72 themes) carries
+  neither. Now `intermezzo` (211) and `capturingDefender` + `deflection`
+  (133 / 719). `themesForTactic` is an exhaustive `Record<TacticType,…>`
+  (was `Partial`) — which is how a hand census of 16 members became the real
+  18 (`checkmate`, `tactical_sequence`). Dead `passedPawn` removed from
+  `passed-pawn-neglected` (siblings 996 / 389 remain). Gate:
+  `drillVocabulary.test.ts` RE-DERIVES the vocabulary from the corpus.
+- ✅ **S3 — a solved drill never turned the heat map GREEN.**
+  `recordTagDrillResult` spaced the SRS and never imported `capabilityEvidence`;
+  `origin:'drill'` existed with no writer. `MistakePuzzleBoard` now records at
+  the one solve door all five drill surfaces share: clean first try → `held`;
+  wrong first answer → `broken` at the slip's measured cost; [show me] first →
+  `prompted` (grey). STATE.md: HOLD writers 6 → 7. Gates: the spy file (4 cases)
+  + a real `held` row landing in the store on a posing position.
+  **Proven by unit gate, not by a prod drive-through** — the bucket audit is a
+  data-invariant audit and cannot play a puzzle. A Playwright drill-solve that
+  reads the `capabilityEvidence` store back is the honest next instrument.
+- ✅ The audit itself: it streamed to prod's `/api/audit-stream` (G2 violation,
+  the shared Upstash budget) — now a loopback discard, vacuity-checked.
+
+**Flagged, not changed:** `removing_the_guard → 'defensiveMove'` (914) is
+suspected to be the wrong Lichess theme — `capturingDefender` is literally
+"remove the defender"; `defensiveMove` is closer to its opposite. A
+co-occurrence check was inconclusive. Measure before touching.
 
 ## ROADBLOCKS — every open item in coach (2026-09-18)
 
@@ -488,6 +643,22 @@ Learn 8/8, Review 28/28 MEETS STANDARD.
 - ⏸ **D15** (TTS playback timeout) — root genuinely unknown; not guessed at.
 
 ### A. The loop cannot close (highest — these are the app, not polish)
+
+🔴 **A-NEW (WO-4, measured 2026-09-19): THE MODEL CANNOT READ THE FUNDAMENTAL
+THE COMPUTER PROVED.** On 47 real amateur games through the real pipeline:
+154/154 flagged moves captured, 79 carry an attributed `fundamentalId` — and the
+weakness SPINE sees **0** of them. `autoAnalyzeGameMisconceptions` hardcodes
+`learned:false` (the ONLY entry from batch analysis, review-open and a finished
+coach game), every row lands `counted:false`, and `weaknessSpine` +
+`weaknessAnalyzer` read `getMisconceptionProfile({countedOnly:true})`.
+`fundamentalId` lives ONLY on those rows (a `MistakePuzzle` carries none), so the
+Fundamentals tab says "loose piece 19×" while the ranker that decides what the
+coach teaches next has never heard of it. **This is the loop not closing, one
+layer down from the heat map.** NOT fixed in WO-4: the gate defends against
+double-counting the TAG (true) and that is WO-3's file. The fix is not "flip
+`learned`" — it is a fundamental-aware spine reader that aggregates
+`fundamentalId` over ALL rows the way `getFundamentalCounts` already does, so the
+fundamental counts once and the tag is left alone. David's call; one file.
 
 0. ✅ **FIXED (#77) — CLICK-TO-MOVE SILENTLY DROPPED THE STUDENT'S MOVE.**
    🔴 The entry here previously read "the first coach reply of a game
@@ -901,6 +1072,22 @@ from the entry chunk's size.
    fixture. Broken assertion, not a broken component; not in the curated gate
    list, which is why it survived.
 
+9. 🔴 **THE FUNDAMENTAL-AWARE SPINE READER (A-NEW above).** Until it exists,
+   every fundamental attributed from a real game is display-only. Measured: 79
+   rows the tab reads, 0 the spine reads, 47 games. Rerun the measurement half of
+   `fundamentalsPipeline.realGame.test.ts` (corpus under `data/sources/wo4-corpus/`,
+   gitignored) after the change — the before/after is free.
+10. 🟠 **SECTION-14 DETECTORS, IN THIS ORDER: `calculation-depth` →
+   `left-book-early` → `no-plan`.** The WO's other two (`overvalued-attack`,
+   `botched-conversion`) already have detectors. None of the three has a pipeline
+   writer AT ALL (`no-plan`/`left-book-early` zero writers in `src/`;
+   `calculation-depth` one, the interactive find-the-shot card) — the "cheap path
+   still tags them" premise was false. What the gap costs is the `other`
+   fallthrough: 35 of 154 real slips (23%). Ranked by evidence already computed:
+   `criticalityScan` gapCp for calculation-depth, `theoryDeparture` for
+   left-book-early, `planRace` for no-plan. Not WO-4 (repair only, David
+   2026-09-19).
+
 ✅ **THE LEARN STALL IS GONE — measured on prod 2026-09-19 17:41, and the
 prediction written here was WRONG.** This section first said "NOT FIXED BY ANY
 OF THE ABOVE", reasoning that a corpus loading identically either way cannot
@@ -973,3 +1160,12 @@ canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
    before concluding anything about the product. Of the four reds on 2026-09-19,
    one was the product, one was the audit withholding its own input, and two
    were a poll budget tuned on a game that is no longer the one being audited.
+
+
+6. **WO-4 left one decision and one draft PR.** PR #938 (`claude/bold-galileo-0ilqaj`)
+   is green (ship-check ×2, audit 19/19) and waits on David to merge to `main` —
+   after which the G1 prod audit of `audit-fundamentals-tab-prod.mjs` is OWED
+   against the live bundle. The decision is A-NEW / OWED #9: the spine reader.
+   Do not flip `learned`; do not add detectors before the reader exists — a
+   detector that fires into rows the model cannot read is half-built by the
+   capability-parity rule.

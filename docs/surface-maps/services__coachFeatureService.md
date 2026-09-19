@@ -58,7 +58,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2000`
+- `src/components/Coach/CoachGamePage.tsx:2013`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`
@@ -74,7 +74,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:475`
+- `src/components/Coach/CoachGameReview.tsx:476`
 
 ### `ReviewNarrationSegments` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -104,7 +104,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:548`
+- `src/components/Coach/CoachGameReview.tsx:549`
 - `src/services/coachFeatureService.test.ts:737`
 - `src/services/coachFeatureService.test.ts:745`
 - `src/services/coachFeatureService.test.ts:777`
@@ -118,7 +118,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 42 call sites
-- `src/components/Coach/CoachGameReview.tsx:1640`
+- `src/components/Coach/CoachGameReview.tsx:1642`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
 - `src/services/coachFeatureService.causalChain.test.ts:47`
@@ -168,7 +168,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4657`
+- `src/components/Coach/CoachGameReview.tsx:4659`
 - `src/services/coachFeatureService.test.ts:807`
 - `src/services/coachFeatureService.test.ts:810`
 - `src/services/coachFeatureService.test.ts:817`
@@ -226,7 +226,7 @@
 - `src/services/reviewRegister.test.ts:32`
 
 ### `generateReviewNarration` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:588`
+- `src/components/Coach/CoachGameReview.tsx:589`
 - `src/services/reviewBetterLineWhy.test.ts:56`
 - `src/services/reviewBetterLineWhy.test.ts:82`
 - `src/services/reviewCorpusSweep.test.ts:258`
@@ -239,7 +239,7 @@
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:4572`
+- `src/services/coachApi.ts:4663`
 - `src/services/coachFeatureService.test.ts:126`
 - `src/services/coachFeatureService.test.ts:147`
 - `src/services/coachFeatureService.test.ts:166`
