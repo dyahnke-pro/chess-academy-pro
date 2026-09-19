@@ -66,7 +66,7 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2432`
+- `src/components/Coach/CoachTeachPage.tsx:2443`
 - `src/services/coachDrillService.ts:531`
 
 ### `aggregateMistakePuzzles` (function) — 6 call sites
@@ -115,15 +115,15 @@
 - `src/services/weaknessSpine.test.ts:272`
 
 ### `getUnifiedWeaknessProfile` (function) — 23 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2365`
-- `src/components/Coach/CoachTeachPage.tsx:10302`
+- `src/components/Coach/CoachTeachPage.tsx:2376`
+- `src/components/Coach/CoachTeachPage.tsx:10343`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:70`
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:149`
-- `src/services/coachApi.ts:2054`
-- `src/services/coachApi.ts:4033`
-- `src/services/coachApi.ts:4581`
+- `src/services/coachApi.ts:2062`
+- `src/services/coachApi.ts:4107`
+- `src/services/coachApi.ts:4655`
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
 - `src/services/coachThread.ts:40`
