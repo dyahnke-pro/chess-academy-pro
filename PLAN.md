@@ -327,32 +327,30 @@ gets said; this is about whether anything happens at all.
   actually worked. An accept contract stricter than the product's real voice
   buries the true reds among false ones.
 
-- ⚠️ **OPEN (found 2026-09-19, deliberately NOT built at 6am): the lesson ACK
-  is a hardcoded English template.** A Thai student now gets the lesson, and
-  HEARS it in Thai (the voice chokepoint localises), but READS "Sure — let's
-  walk through the Italian Game." in English. Six sites in `CoachTeachPage`
-  (4680, 5074, 5445, 6186 and the `Ready —` variants) build the confirmation as
-  a code template and write it straight into the transcript, so it never passes
-  through `voiceFacts` and nothing can translate it. Same class as the defect
-  above — computed text that no one localises — just smaller, because the
-  teaching itself is in-language.
+- ✅ **THE TRANSCRIPT HAS A TRANSLATION DOOR (2026-09-19, verified on prod
+  bundle `DwL7hnpw`).** Was: a Thai student got the lesson, HEARD it in Thai
+  and READ "Sure — let's walk through the Italian Game." in English. Not a
+  design choice — an accident of shape: every spoken line funnels through
+  `voiceService.speakInternal` and that one door localises, while chat messages
+  are built at 85 `setMessages` sites and pushed straight in, so there was no
+  door at all. A census found 22 English sources feeding the transcript, not
+  the six acks — which is the argument for a door over point fixes.
 
-  🔀 **IT IS A DESIGN FORK, NOT A RISK CALL** (corrected — the first note here
-  said it was deferred for the hour, which was the weak reason). Two options
-  trade off differently enough that it is David's:
-  - **(a) route the acks through the model** (`localizeSpokenText`'s shape,
-    keyed on `chosenOrTypedLanguageName` so it follows the CHAT language rather
-    than the device locale). Covers all 36 languages, but costs a round-trip
-    BEFORE the ack renders — a non-English student watches their confirmation
-    lag about a second on every lesson start, in the exact moment just fixed.
-  - **(b) a phrase table.** These are SIX fixed templates with one variable
-    (the opening name), so they need no model at all: instant, deterministic,
-    G0-pure. The cost is coverage — six strings per language, English fallback
-    where unsupplied.
+  **The door is at the RENDER, not the push.** The transcript renders from ONE
+  map, so localising there covers every message today and every one added
+  later for a single call site; wrapping 85 pushes is a large refactor of a
+  12k-line component for no extra coverage. `useLocalizedBeats` is the same
+  pattern already here.
 
-  (b) is the better engineering answer and the one the determinism law points
-  at; (a) is the one that needs no content work. Recommended: (b), with English
-  fallback, seeded for the languages real users actually speak.
+  **Table first, model second, English floor** — the order is the determinism
+  law, not an optimisation. Fixed app strings are chrome, not computed chess
+  facts, so a table answers synchronously: no round-trip, and no
+  English-then-swap flicker in the exact moment just fixed.
+
+  Prod, same ask: `มาเรียน Italian Game กันเลยครับ` — instant, from the table,
+  with the proper name preserved. And the greeting and the no-games line came
+  back Thai too, through the model fallback, though neither is in the table.
+  That is the difference between fixing six strings and fixing the cause.
 
 - ✅ **VERIFIED ON PROD (2026-09-19, bundle `senxol9e`).** The fixes were
   re-run against the deployed build, and the two lanes that were still English

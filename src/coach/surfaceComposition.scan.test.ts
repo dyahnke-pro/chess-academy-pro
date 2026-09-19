@@ -51,6 +51,11 @@ const INFRA = new Set([
   // NOT move any ceiling, and adding a real computer here to duck one is the
   // same cheat as raising one.
   'spokenLanguage',
+  // `coachChatText` is the transcript's translation DOOR — the text-side twin
+  // of `voiceService`'s chokepoint. It computes no chess or teaching fact; it
+  // decides which language a fixed app string is shown in. Same class as
+  // `spokenLanguage` above and `narrationSegments`. It did NOT move a ceiling.
+  'coachChatText',
   // `standingFactMemory` computes NO chess fact — it is the say-once set and
   // its forget-on-rewind rule, the same class as a cache. Added here when the
   // rule was extracted from the two surfaces that each carried a copy.

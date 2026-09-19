@@ -227,6 +227,19 @@ export function detectLanguage(text: string | undefined | null): DetectedLanguag
   return EN;
 }
 
+/** The CODE for a human language name ("Spanish" → "es"), or null when the
+ *  name is unknown or is English. The inverse of `languageNameFor`, derived
+ *  from the same record rather than a second hand-written map — a reverse
+ *  lookup that drifts from its forward one is the drift this file exists to
+ *  prevent. */
+export function codeForLanguageName(name: string | undefined | null): LangCode | null {
+  if (!name) return null;
+  for (const [code, english] of Object.entries(LANG_NAME) as Array<[LangCode, string]>) {
+    if (english.toLowerCase() === name.trim().toLowerCase()) return code === 'en' ? null : code;
+  }
+  return null;
+}
+
 /** The human name a language code phrases in ("es" → "Spanish"), or null when
  *  the code is unknown or is English. The coach's translation path keys off the
  *  NAME, and the narration-language preference stores the CODE, so this is the
