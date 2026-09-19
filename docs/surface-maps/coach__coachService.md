@@ -61,9 +61,9 @@
 - `src/coach/enginePlanFreshness.test.ts:58`
 
 ### `stripInjectedBlocks` (function) — 3 call sites
-- `src/coach/coachService.askText.test.ts:10`
 - `src/coach/coachService.askText.test.ts:13`
-- `src/coach/coachService.askText.test.ts:14`
+- `src/coach/coachService.askText.test.ts:16`
+- `src/coach/coachService.askText.test.ts:17`
 
 ### `coachService` (const) — 1 call site
 - `scripts/audit-coach-review-gaps.mjs:739`
