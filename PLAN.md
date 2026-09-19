@@ -681,6 +681,84 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     the corpus study of his teaching structures vs what we compute (#42); the
     running REMOVAL CANDIDATES list (#33).
 
+### E. PAYLOAD + DELIVERY (opened 2026-09-19, the service-worker and corpus night)
+
+**LANDED**
+- ✅ **A new service worker may never take over a running page** (`2e20133`).
+  `skipWaiting` + `clientsClaim` + `cleanupOutdatedCaches` let a fresh deploy
+  activate under a live page, DELETE the precache it was executing out of, and
+  claim it — so the next lazy chunk or Web Worker fetch asked for a hashed file
+  the deploy no longer served. Froze David's iPhone mid-session; his own audit
+  trail caught it in three seconds. `__HOLD_SW_RELOAD__` made it WORSE: it
+  deferred the RELOAD while the activation went ahead. The hold now gates the
+  ASK and the reload after `controllerchange` is unconditional. Gate:
+  `swHandover.test.ts` (negative-controlled). Audit:
+  `audit-sw-handover-prod.mjs` (vacuity-checked).
+- ✅ **No un-positioned phrases in the boot payload** (`633cdd7`). Boot JS
+  32.8 → 24.3 MB, precache 52.8 → 44.1 MB. Gate:
+  `bundledCorpusIsPositioned.test.ts`, in ship-check, negative-controlled.
+
+🚨 **THE NUMBER NOBODY HAD: BOOT IS 24.3 MB OF JS, NOT THE 8.2 MB ENTRY CHUNK.**
+`dist/index.html` modulepreloads the entry AND every `appdata-*` chunk. The
+`manualChunks` split defers NOTHING — it only dodges the Workbox per-file
+precache cap. Read the preloads out of `dist/index.html`; never infer boot cost
+from the entry chunk's size.
+
+**OWED, ranked**
+
+1. 🔴 **POST-DEPLOY AUDIT FOR BOTH COMMITS** (G1). Neither has had one. Run
+   against LIVE prod once the bundle advances:
+   `AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-sw-handover-prod.mjs`
+   plus the standing pair (`audit-review-overhaul-prod`, then
+   `audit-concept-gameplay-prod`), SEQUENTIALLY, never beside ship-check.
+2. 🔴 **THE ONE SW CHECK A SINGLE DEPLOY CANNOT MAKE.** Hold a session open on
+   deploy N, land N+1, confirm the session survives with its code intact. Needs
+   two deploys; the audit says so in its own header. Until then the fix is
+   proven on the ARTIFACT (sw.js shape) and by the gate, not in flight.
+3. 🟠 **MEASURE THE 8.2 MB ENTRY CHUNK BEFORE TOUCHING IT.** David asked whether
+   it should stay bundled for faster coach replies — a fair challenge. The
+   answer is not obvious and I asserted "next target" with NO measurement, which
+   was a confident claim with nothing under it. Needed first: what is actually
+   in it (app code vs vendor vs coach), and the real parse time on an iPhone. If
+   it is 200 ms it is not worth touching. If it is seconds, the shape is a ROUTE
+   split (coach code loads on `/coach/*` navigation, which happens well before a
+   question is typed, so the reply is not slower) — never "removal".
+   NB the cache is NOT the problem: it eliminates the download, never the
+   parse/execute, which happens every cold start regardless of byte source. The
+   likelier cost is HEAP, which is what Jetsam-killed the app before.
+4. 🟠 **SHOULD THE 1,282 ARCHIVED ANCHORED DANYA NOTES COME BACK?**
+   `data/archive/corpus-anchored/naroditsky-anchored.json` — 1,282 notes, ALL
+   position-keyed, sitting unused since 2026-08-26, while the app shipped 10,022
+   un-positioned ones at boot. They are the only danya notes that could ever
+   serve a play surface. Deliberately NOT done unasked — the archiving was
+   David's call when voiced became the sole exact-position source.
+5. 🟡 **57,204 OF 65,712 CORPUS NOTES CARRY NO POSITION.** Four creators
+   (gothamchess, hikaru, imrosen, magnuscarlsen) are 0% positioned. They are
+   LAZILY FETCHED, so they cost ZERO boot — pruning them is a memory/parse
+   decision, never a boot one. Measured cost of pruning danya's share:
+   phase-transition coverage 19/20 → 10/20. **Do not prune without measuring
+   `transitionTeachingForGame` + `buildDanyaTeachingBlock` across ~20 openings
+   both ways.** The position tiers alone tell you nothing.
+6. 🟡 **A COLD FIRST TEACHING REPLY NOW DRAWS ON LESS CORPUS.** The floating half
+   is fetched on first lookup — fire-and-forget, never blocking, self-heals in a
+   second or two. Watch for it in the Learn audit before calling it fine.
+7. 🟡 **THE CORPUS GATES ARE UNEVEN.** G9.4 move-number prefixes, phase validity
+   and id-collision are asserted for chessbrah ONLY
+   (`chessbrahTeachings.test.ts`); `secondaryTeachings.test.ts` covers every
+   other creator and lacks them. One gate should cover all.
+8. 🟢 **`BuildVersionWidget.test.ts` has been red independently of any of this** —
+   its regex `^[a-z0-9]+$` rejects the hyphen in its own `test-build-id`
+   fixture. Broken assertion, not a broken component; not in the curated gate
+   list, which is why it survived.
+
+**NOT FIXED BY ANY OF THE ABOVE: the Learn/Review stalls.** The corpus loads
+identically whether the ask is typed or tapped, so it cannot explain an
+asymmetry where the canonical ask stalls at 136 s and the same game from a
+picker chip runs in 30 s. Both commits remove CONFOUNDERS (a mid-session bundle
+swap; 8.5 MB of boot payload) — which does mean the next run of both audits is
+the first clean measurement. The bisect in §"WHAT IS LEFT" above is still the
+one-step answer.
+
 ## Next-session pickup
 
 1. Gain all four levels (CLAUDE.md → `docs/STATE.md` → `surface-map.mjs --changed` → the code).
