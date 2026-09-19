@@ -28,7 +28,7 @@
 // G0 throughout: every branch is arithmetic or chess.js geometry over an engine
 // line. Nothing here asks a model anything.
 import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
-import { callInaccuracy } from './inaccuracyCall';
+import { callInaccuracy, callInaccuracyDetailed, type InaccuracyDecline } from './inaccuracyCall';
 import { whyItFailed } from './whyItFailed';
 import { INACCURACY_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
@@ -55,6 +55,22 @@ export interface BackwardLook {
  * out. Each lane below refuses on its own terms rather than reaching for
  * something to say.
  */
+/**
+ * WHY THE COACH'S OWN VERDICT LANE SAID NOTHING, from the last call.
+ *
+ * Read immediately after a `backwardLook({ side: 'coach' })` that returned
+ * null, purely so the audit line names the guard that actually refused. A
+ * module-level slot rather than a widened return type: `BackwardLook | null` is
+ * the shape three surfaces already destructure, and the reason is diagnostic —
+ * it must never become something a narration lane can branch on.
+ */
+let lastCoachDecline: InaccuracyDecline | 'threw' | 'no-concession-and-no-call' | null = null;
+
+/** The reason the last coach-side `backwardLook` declined, or null. */
+export function lastCoachVerdictDecline(): string | null {
+  return lastCoachDecline;
+}
+
 export function backwardLook(args: {
   /** Position before the student moved. */
   fenBefore: string;
@@ -115,6 +131,7 @@ export function backwardLook(args: {
   // rear-facing "what it allowed" is the STUDENT'S opportunity, and
   // `callInaccuracy` already hands that over without naming the punishment.
   if (side === 'coach') {
+    lastCoachDecline = 'no-concession-and-no-call';
     if (args.bestSan && !gained) {
       try {
         const c = findConcession({
@@ -127,7 +144,7 @@ export function backwardLook(args: {
       } catch { /* fall through */ }
     }
     try {
-      const call = callInaccuracy({
+      const verdict = callInaccuracyDetailed({
         fenBefore: args.fenBefore,
         playedSan: args.playedSan,
         bestSan: args.bestSan,
@@ -138,8 +155,14 @@ export function backwardLook(args: {
         side: 'coach',
         moverColor: mover,
       });
-      return call ? { line: call.said, square: call.square, kind: 'coachMistake' } : null;
-    } catch { return null; }
+      // THE REASON TRAVELS WITH THE REFUSAL. The caller logs why the coach said
+      // nothing, and until now it printed "under the floor" for all five
+      // reasons — see `InaccuracyVerdict`. Handing the computed reason back is
+      // what makes that log a measurement instead of an assertion.
+      if (verdict.call) return { line: verdict.call.said, square: verdict.call.square, kind: 'coachMistake' };
+      lastCoachDecline = verdict.declined;
+      return null;
+    } catch { lastCoachDecline = 'threw'; return null; }
   }
 
   // FIRST the structural read — it NAMES the thing given up ("that took your

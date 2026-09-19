@@ -4,28 +4,41 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**332 lines · 7 exports · 6 importers · 4 tests · 0 audits**
+**397 lines · 8 exports · 9 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:95) — names `curatedBeatSource`
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3274) — names `BeatRegister`, `beatRegister`, `curatedBeatAt`
+- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:281) — names `curatedBeatSource`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3515) — names `BeatRegister`, `beatRegister`, `curatedBeatAt`
 
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/beatVsCorpus.report.test.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/curatedBeatRegister.test.ts`
 - `src/services/curatedBeatSource.test.ts`
 - `src/services/dataLoader.ts`
+- `src/services/liveVoiceDefects.test.ts`
+- `src/services/reviewCorpusReach.test.ts`
 
 ## Exports and every call site
 
 ### `BeatRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `beatRegister` (function) — 9 call sites
+### `beatSubject` (function) — 7 call sites
+- `src/services/liveVoiceDefects.test.ts:204`
+- `src/services/liveVoiceDefects.test.ts:205`
+- `src/services/liveVoiceDefects.test.ts:206`
+- `src/services/liveVoiceDefects.test.ts:208`
+- `src/services/liveVoiceDefects.test.ts:210`
+- `src/services/liveVoiceDefects.test.ts:216`
+- `src/services/liveVoiceDefects.test.ts:217`
+
+### `beatRegister` (function) — 12 call sites
+- `src/services/coachFeatureService.ts:1580`
 - `src/services/curatedBeatRegister.test.ts:17`
 - `src/services/curatedBeatRegister.test.ts:21`
 - `src/services/curatedBeatRegister.test.ts:25`
@@ -35,6 +48,8 @@
 - `src/services/curatedBeatRegister.test.ts:46`
 - `src/services/curatedBeatRegister.test.ts:66`
 - `src/services/curatedBeatRegister.test.ts:107`
+- `src/services/reviewCorpusReach.test.ts:54`
+- `src/services/reviewCorpusReach.test.ts:67`
 
 ### `CuratedBeat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -49,7 +64,7 @@
 - `src/services/curatedBeatSource.test.ts:21`
 
 ### `curatedBeatAt` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7494`
+- `src/components/Coach/CoachTeachPage.tsx:7607`
 - `src/services/beatVsCorpus.report.test.ts:73`
 - `src/services/computedVoiceAudit.report.test.ts:319`
 - `src/services/computedVoiceAudit.report.test.ts:336`
@@ -83,6 +98,8 @@
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/curatedBeatRegister.test.ts`
 - `src/services/curatedBeatSource.test.ts`
+- `src/services/liveVoiceDefects.test.ts`
+- `src/services/reviewCorpusReach.test.ts`
 
 ## Audits that reach it
 

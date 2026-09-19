@@ -736,11 +736,29 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### C. The student hears something wrong or repeated
 
-12. **"the queen takes d5 is about as good"** (#51) — the close-call stem renders
-    a SAN as a noun phrase. Fired 3x in one 5-ply run.
-13. **Stems are ROLLED, not rotated** (#67) — `Math.random` in 5 services, so
-    variation is not resume-safe or testable. Same complaint as 12; fix together.
-14. **Curated beats re-announce the same move on consecutive plies** (#60).
+12. ✅ **DONE (already was) — "the queen takes d5 is about as good"** (#51).
+    Verified before spending a minute on it, and the bullet claiming it open is
+    DELETED rather than annotated: `uncertaintyClause` (tacticalRead.ts) already
+    routes BOTH move slots through `sayMoveNoun`, and its own comment records
+    the finding. Gate added so it cannot reopen (`liveVoiceDefects.test.ts`).
+13. ✅ **DONE — stems are ROTATED, not rolled** (#67). Five sites converted to
+    `rotateStem`, keyed on something stable about the moment:
+    `mistakeNarration` ×3 on the FEN, `gamesService` ×3 on the move index / the
+    opening id, `openingNarrationService` on the record's own `id` — a field
+    that had been sitting on `OpeningNarration` the whole time while the doc
+    comment claimed it "rotates" and the body rolled. `stemKeyOf` (FNV-1a) joins
+    `rotateStem` so a caller with a stable STRING needs no private hash. LEFT
+    ALONE, deliberately: the `shuffle` and the random challenge-position pick in
+    `gamesService` — those size and vary an EXERCISE, they are not stems.
+14. ✅ **DONE — curated beats re-announce the same move on consecutive plies**
+    (#60). The missing dedupe term was the beat's SUBJECT: `curatedBeatSeen`
+    keys on beat ID (different beat) and `buildVoicePackage`'s novelty set on
+    whole sentences (different words), so two lessons teaching Bc4 slipped
+    between both. `beatSubject` computes it at INDEX time beside `seat` and
+    `register`, and RECOGNISES rather than invents — the leading token of the
+    prose counts only if it is a move on the beat's own replayed line; anything
+    else is null and never subject-deduped. The guard is a `continue`, like the
+    register guard, so a position holding another beat still teaches.
 15. **The voiced corpus is in the wrong register** (#22) — 1,146 he/his, 521
     first-person, 81 fragments.
 16. **Read-position: voice fires but the banner never appears** (#59).

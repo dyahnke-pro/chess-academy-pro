@@ -205,7 +205,7 @@ export function OpeningChallenge({
 
         // Occasional coach encouragement (every 3 correct moves)
         if (currentMoveIndex > 0 && currentMoveIndex % 3 === 0) {
-          chatRef.current?.injectAssistantMessage(getCorrectMoveMessage());
+          chatRef.current?.injectAssistantMessage(getCorrectMoveMessage(currentMoveIndex));
         }
       } else {
         // Wrong move — reset board to pre-move position, coach encourages
