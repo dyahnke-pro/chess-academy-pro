@@ -98,21 +98,36 @@ function stakeFor(bestCp: number): StakeId | null {
   return 'damage';
 }
 
-/** The stake as a predicate, agreeing with its subject. TWO forms because the
- *  count is a fact that varies: "one move KEEPS you level", "two moves KEEP you
- *  level". A single form would ship the exact grammar break this repo has
- *  already shipped once. */
-const STAKE_TEXT: Record<StakeId, { one: string; many: string }> = {
-  mate: { one: 'keeps the forced mate', many: 'keep the forced mate' },
-  win: { one: 'keeps the win', many: 'keep the win' },
-  'on-top': { one: 'keeps you on top', many: 'keep you on top' },
-  level: { one: 'keeps you level', many: 'keep you level' },
-  'in-it': { one: 'keeps you in it', many: 'keep you in it' },
-  damage: { one: 'limits the damage', many: 'limit the damage' },
+/** The stake as a predicate, conjugated where it is used.
+ *
+ *  THREE forms, and each one is a bug this would otherwise ship:
+ *   • NUMBER — the count is a computed fact that varies, so "one move KEEPS you
+ *     level" and "two moves KEEP you level" must both be sayable. A single form
+ *     is the grammar break this repo has already shipped once.
+ *   • TENSE — review is RETROSPECTIVE and Learn is PRESENT (CLAUDE.md, the two
+ *     narration registers). A review line reading "e4 was the move — it keeps
+ *     you level" mixes both in one sentence.
+ *  Held as a verb plus its object so a new stake cannot be added with only some
+ *  of its forms. */
+const STAKE_TEXT: Record<StakeId, { verb: string; verbs: string; past: string; rest: string }> = {
+  mate: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the forced mate' },
+  win: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the win' },
+  'on-top': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you on top' },
+  level: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you level' },
+  'in-it': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you in it' },
+  damage: { verb: 'limit', verbs: 'limits', past: 'limited', rest: 'the damage' },
 };
 
-export function stakeText(stake: StakeId, plural: boolean): string {
-  return plural ? STAKE_TEXT[stake].many : STAKE_TEXT[stake].one;
+export function stakeText(stake: StakeId, opts: { plural?: boolean; past?: boolean } = {}): string {
+  const t = STAKE_TEXT[stake];
+  const v = opts.past ? t.past : opts.plural ? t.verb : t.verbs;
+  return `${v} ${t.rest}`;
+}
+
+/** "only one move" / "two moves" — the COUNT, which is the fact David asked for
+ *  ("maybe say how many moves keep equality?"). Every register states it. */
+function countPhrase(count: number): string {
+  return count === 1 ? 'only one move' : 'two moves';
 }
 
 /**
@@ -218,7 +233,7 @@ function pick(variants: readonly string[], v: number): string {
 export function criticalMomentStatement(read: CriticalMomentRead | null, ply: number): string | null {
   if (!criticalMomentSpeaks(read)) return null;
   const one = read.count === 1;
-  const s = stakeText(read.stake, !one);
+  const s = stakeText(read.stake, { plural: !one });
   return one
     ? pick([
       `Critical moment — only one move ${s}. Slow down here.`,
@@ -243,7 +258,7 @@ export function criticalMomentStatement(read: CriticalMomentRead | null, ply: nu
 export function criticalMomentAsk(read: CriticalMomentRead | null, ply: number): string | null {
   if (!criticalMomentSpeaks(read)) return null;
   const one = read.count === 1;
-  const s = ` ${stakeText(read.stake, !one)}`;
+  const s = ` ${stakeText(read.stake, { plural: !one, past: true })}`;
   return one
     ? pick([
       `Right here was a critical moment — exactly one move${s}. Can you find it?`,
@@ -263,10 +278,19 @@ export function criticalMomentReveal(read: CriticalMomentRead | null): string | 
   if (!criticalMomentSpeaks(read)) return null;
   const sans = read.holdingSans;
   if (sans.length === 0) return null;
+  // THE COUNT LEADS. The first cut named only the move — "Nxe2 was the move" —
+  // and dropped the one fact the whole computer exists to state. The prod audit
+  // read it back and said so ("a moment was selected but nothing said it
+  // aloud"), because nothing in the sentence named how many moves held.
+  const count = countPhrase(read.count);
+  const stake = stakeText(read.stake, { plural: read.count !== 1, past: true });
+  // Capitalised: it is a whole sentence, and every caller sets it after a full
+  // stop ("You played d4. Only one move kept…").
+  const lead = count[0].toUpperCase() + count.slice(1);
   if (read.count === 1 || sans.length === 1) {
-    return `${sans[0]} was the move — it ${stakeText(read.stake, false)}.`;
+    return `${lead} ${stake} here, and it was ${sans[0]}.`;
   }
-  return `${sans[0]} and ${sans[1]} both ${stakeText(read.stake, true)}. Everything else concedes.`;
+  return `${lead} ${stake} here — ${sans[0]} and ${sans[1]}. Everything else conceded.`;
 }
 
 /** Did the student play one of the moves that held? Coordinate-free comparison

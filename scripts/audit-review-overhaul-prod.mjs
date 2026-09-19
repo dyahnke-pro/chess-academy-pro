@@ -1083,7 +1083,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     resolved === 0 ? `no ply resolved to a 1- or 2-move count on this game (${fanSummary})` : pickSummary);
 
   // THE SIX COMPUTED STAKES — the phrasing rotates, the claim never does.
-  const STAKE_RE = /keeps? the forced mate|keeps? the win|keeps? you on top|keeps? you level|keeps? you in it|limits? the damage/i;
+  // Present for Learn, PAST for review — the two narration registers. A regex
+  // that knew only the present tense would read a correct retrospective line as
+  // silence, which is the false red this row exists to avoid.
+  const STAKE_RE = /(keeps?|kept) (the forced mate|the win|you on top|you level|you in it)|(limits?|limited) the damage/i;
   const COUNT_RE = /\b(only )?one move\b|\btwo moves\b/i;
   const critLines = spoken().map((x) => x.text).filter((t) => COUNT_RE.test(t) && (STAKE_RE.test(t) || /critical moment|fork in the road/i.test(t)));
   await add('CRIT spoken-names-count-and-stake', !pickEv || critLines.length > 0,

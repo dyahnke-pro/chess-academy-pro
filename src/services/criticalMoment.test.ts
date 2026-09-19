@@ -177,7 +177,9 @@ describe('criticalMoment — two registers, one claim', () => {
 
   it('the REVEAL names the move — the first time it is stated', () => {
     expect(one?.holdingSans).toEqual(['e4']);
-    expect(criticalMomentReveal(one)).toBe('e4 was the move — it keeps you level.');
+    // THE COUNT LEADS, and review is retrospective — past tense, not "keeps".
+    expect(criticalMomentReveal(one)).toBe('Only one move kept you level here, and it was e4.');
+    expect(criticalMomentReveal(two)).toBe('Two moves kept you level here — e4 and e4. Everything else conceded.');
   });
 
   it('grades a find by the SAN the walk recorded', () => {
@@ -192,9 +194,28 @@ describe('criticalMoment — two registers, one claim', () => {
     expect(criticalMomentReveal(noFen)).toBeNull();
   });
 
-  it('stakeText is the ONE source of both forms', () => {
-    expect(stakeText('level', false)).toBe('keeps you level');
-    expect(stakeText('level', true)).toBe('keep you level');
-    expect(stakeText('damage', true)).toBe('limit the damage');
+  it('stakeText is the ONE source of every form — number AND tense', () => {
+    expect(stakeText('level')).toBe('keeps you level');
+    expect(stakeText('level', { plural: true })).toBe('keep you level');
+    expect(stakeText('level', { past: true })).toBe('kept you level');
+    expect(stakeText('level', { plural: true, past: true })).toBe('kept you level');
+    expect(stakeText('damage', { plural: true })).toBe('limit the damage');
+    expect(stakeText('damage', { past: true })).toBe('limited the damage');
+  });
+
+  it('LEARN speaks in the present, REVIEW in the retrospective (the two registers)', () => {
+    expect(criticalMomentStatement(one, 0)).toContain('keeps you level');
+    expect(criticalMomentStatement(one, 0)).not.toContain('kept you level');
+    expect(criticalMomentAsk(one, 0)).toContain('kept you level');
+    expect(criticalMomentReveal(one)).toContain('kept you level');
+  });
+
+  it('EVERY register names the COUNT — that is the fact this computer exists for', () => {
+    for (const r of [one, two]) {
+      const n = r!.count === 1 ? /one move/i : /two moves/i;
+      expect(criticalMomentStatement(r, 3)).toMatch(n);
+      expect(criticalMomentAsk(r, 3)).toMatch(n);
+      expect(criticalMomentReveal(r)).toMatch(n);
+    }
   });
 });
