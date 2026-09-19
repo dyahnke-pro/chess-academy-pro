@@ -751,13 +751,30 @@ from the entry chunk's size.
    fixture. Broken assertion, not a broken component; not in the curated gate
    list, which is why it survived.
 
-**NOT FIXED BY ANY OF THE ABOVE: the Learn/Review stalls.** The corpus loads
-identically whether the ask is typed or tapped, so it cannot explain an
-asymmetry where the canonical ask stalls at 136 s and the same game from a
-picker chip runs in 30 s. Both commits remove CONFOUNDERS (a mid-session bundle
-swap; 8.5 MB of boot payload) — which does mean the next run of both audits is
-the first clean measurement. The bisect in §"WHAT IS LEFT" above is still the
-one-step answer.
+✅ **THE LEARN STALL IS GONE — measured on prod 2026-09-19 17:41, and the
+prediction written here was WRONG.** This section first said "NOT FIXED BY ANY
+OF THE ABOVE", reasoning that a corpus loading identically either way cannot
+explain a typed-vs-tapped asymmetry. That reasoning still holds; the conclusion
+did not. `audit-concept-gameplay-prod` on the live bundle:
+
+| bundle | canonical ask | typo ask (picker) |
+|---|---|---|
+| `index-BBopxcK2` (last green) | 5 plies, 27 s ✅ | 5 plies, 26 s ✅ |
+| `index-C7Z2So9u` (red, twice) | 4 plies, **136 s** ❌ | 5 plies, 30 s ✅ |
+| **prod after this night** | **5 plies, 24 s** ✅ | **5 plies, 28 s** ✅ |
+
+8/8 green, faster than the original baseline. **Do NOT credit the two commits in
+this section.** Three things landed between the red bundle and this one, and one
+green run attributes nothing. The likeliest cause is the OTHER session's
+`bbf96dd` "move the transcript door to the shared render chokepoint" — the reply
+path, which is exactly where the asymmetry always pointed and where
+`6f088da`'s language rewrite lived. The service-worker and corpus commits
+removed CONFOUNDERS (a mid-session bundle swap; 8.5 MB of boot payload), which
+is why this is the first clean measurement, not why it passed.
+
+**The bisect is therefore moot for Learn** — do not spend a session on it. If
+the stall returns, the table above is the baseline to measure against, and the
+canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
 
 ## Next-session pickup
 
