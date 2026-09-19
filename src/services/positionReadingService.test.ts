@@ -251,6 +251,7 @@ describe('findMistakePositions', () => {
 
 function emptyTactics(overrides: Partial<TacticsLiveContext> = {}): TacticsLiveContext {
   return {
+    fen: '4k3/8/8/8/8/8/8/4K3 w - - 0 1',
     immediate: [],
     hanging: [],
     threats: [],

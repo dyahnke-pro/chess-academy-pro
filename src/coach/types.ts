@@ -506,6 +506,38 @@ export interface CoachConcept {
 }
 
 export interface TacticsLiveContext {
+  /** THE POSITION THIS PACKAGE WAS COMPUTED FOR — its identity, not a
+   *  convenience (David 2026-09-19; the same lesson as "THE SEAT IS PART OF
+   *  THE SELECTION" in CLAUDE.md: the identifying field was missing from the
+   *  object being indexed, so no selector could read it).
+   *
+   *  Everything else in here — `hanging`, `immediate`, `threats`,
+   *  `opportunities`, `boardFacts` — is a fact ABOUT a board, and until this
+   *  field existed the package carried no record of WHICH board. Four surfaces
+   *  hold the package in a `useRef` (CoachTeachPage `fedTacticsRef`,
+   *  GameChatPanel `currentTacticsRef`, CoachAnalysePage + ExplainPosition
+   *  `tacticsRef`), so the ref holds the LAST computed package while the
+   *  surface reports the CURRENT board. On a real 22-ply Learn game that
+   *  handed a consumer a package built 15 plies earlier and the student heard
+   *  "Your knight on b5 is hanging" with no knights left on the board. Nothing
+   *  was broken: the claim was true of the board the package came from, and
+   *  nothing downstream was ABLE to check which board that was.
+   *
+   *  REQUIRED, so a new producer must answer for it instead of inheriting a
+   *  silent default — the same reason the seat parameter on
+   *  `describeThreatRecognition` is required.
+   *
+   *  Two DIFFERENT failures need two different checks, and they must not be
+   *  conflated:
+   *   - STALENESS — the package is internally consistent but describes another
+   *     board. Caught ONLY by comparing this field against the consumer's live
+   *     FEN (`tacticsAreFreshFor` in `liveTacticsContext.ts`). Checking a
+   *     claim against this package's OWN fen can never catch it: the b5 knight
+   *     really was on b5 in the position this was built from.
+   *   - INTERNAL INCONSISTENCY — a claim that is not true of even this
+   *     package's own board. Caught by verifying against this field
+   *     (`pieceIsOn` in `groundedAnswer.ts`). */
+  fen: string;
   /** Tactics on the board RIGHT NOW for the side to move
    *  (forks/pins/skewers/back-rank/etc.). */
   immediate: Array<{

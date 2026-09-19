@@ -9,7 +9,7 @@ function ctxWith(
   opportunities: TacticsLiveContext['opportunities'],
   threats: TacticsLiveContext['threats'],
 ): TacticsLiveContext {
-  return { immediate: [], hanging: [], threats, opportunities, lookaheadDepth: 4 };
+  return { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', immediate: [], hanging: [], threats, opportunities, lookaheadDepth: 4 };
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

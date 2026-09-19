@@ -67,7 +67,7 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2443`
+- `src/components/Coach/CoachTeachPage.tsx:2444`
 - `src/services/coachDrillService.ts:531`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
@@ -118,8 +118,8 @@
 - `src/services/weaknessSpine.test.ts:272`
 
 ### `getUnifiedWeaknessProfile` (function) — 23 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2376`
-- `src/components/Coach/CoachTeachPage.tsx:10380`
+- `src/components/Coach/CoachTeachPage.tsx:2377`
+- `src/components/Coach/CoachTeachPage.tsx:10388`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:70`
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`

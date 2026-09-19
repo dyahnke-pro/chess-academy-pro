@@ -54,9 +54,9 @@
 
 ### `pickNarration` (function) — 7 call sites
 - `src/services/annotationService.ts:469`
-- `src/services/liveVoiceDefects.test.ts:240`
-- `src/services/liveVoiceDefects.test.ts:241`
-- `src/services/liveVoiceDefects.test.ts:243`
+- `src/services/liveVoiceDefects.test.ts:247`
+- `src/services/liveVoiceDefects.test.ts:248`
+- `src/services/liveVoiceDefects.test.ts:250`
 - `src/services/openingNarrationService.test.ts:199`
 - `src/services/openingNarrationService.test.ts:203`
 - `src/services/openingNarrationService.test.ts:207`

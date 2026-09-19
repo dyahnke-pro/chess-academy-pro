@@ -104,7 +104,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1643`
+- `src/coach/coachService.ts:1673`
 
 ### `isNearMissToolName` (function) — 15 call sites
 - `src/services/coachApi.toolName.test.ts:14`
@@ -204,8 +204,8 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:563`
-- `src/components/Coach/CoachTeachPage.tsx:2977`
+- `src/coach/coachService.ts:564`
+- `src/components/Coach/CoachTeachPage.tsx:2978`
 - `src/services/coachSessionRouter.ts:124`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -238,9 +238,9 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 24 call sites
-- `src/components/Coach/CoachGameReview.tsx:1416`
-- `src/components/Coach/CoachGameReview.tsx:1535`
-- `src/components/Coach/CoachGameReview.tsx:1722`
+- `src/components/Coach/CoachGameReview.tsx:1526`
+- `src/components/Coach/CoachGameReview.tsx:1645`
+- `src/components/Coach/CoachGameReview.tsx:1832`
 - `src/hooks/usePhaseNarration.ts:680`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:123`
@@ -289,8 +289,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:513`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:600`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:521`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:608`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`
