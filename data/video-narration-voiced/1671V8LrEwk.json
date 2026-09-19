@@ -134,7 +134,7 @@
         "Nxd2",
         "Nxd2"
       ],
-      "spoken": "Take the bishop, clearly. He pre-moves the knight takes d2, and now another decision: castle to complete development, or take on d4 for another pawn. Much of it is intuitive — quickly look for forks; I don't see anything nasty after the knight takes d4, since White is so passive."
+      "spoken": "Take the bishop, clearly. They pre-move the knight takes d2, and now another decision: castle to complete development, or take on d4 for another pawn. Much of it is intuitive — quickly look for forks; I don't see anything nasty after the knight takes d4, since White is so passive."
     },
     {
       "ply": 18,
@@ -251,7 +251,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "He's given you the chance to go d5, so you'll play d5 and then get the bishop out with e6, maybe the queen to f6 hitting the pawn on c3."
+      "spoken": "They've given you the chance to go d5, so you'll play d5 and then get the bishop out with e6, maybe the queen to f6 hitting the pawn on c3."
     },
     {
       "ply": 27,

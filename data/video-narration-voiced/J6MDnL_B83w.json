@@ -116,7 +116,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "He's castled, simply ignoring the threats you've posed on their centre,"
+      "spoken": "They've castled, simply ignoring the threats you've posed on their centre,"
     },
     {
       "ply": 16,
@@ -125,7 +125,7 @@
       "line": [
         "Nxd4"
       ],
-      "spoken": "so you can take on d4 — because of the pin he cannot take back, and he's essentially busted;"
+      "spoken": "so you can take on d4 — because of the pin they cannot take back, and they're essentially busted;"
     },
     {
       "ply": 17,
@@ -134,7 +134,7 @@
       "line": [
         "Bxf6"
       ],
-      "spoken": "he's lost the central pawn, and now they make matters worse by taking on f6. If you were extra fancy here, what would you do? You can take back on f6 with the bishop, but what intermediate move can you also consider? A lot of you get caught here — when you play the knight takes f3, you have to calculate it,"
+      "spoken": "they've lost the central pawn, and now they make matters worse by taking on f6. If you were extra fancy here, what would you do? You can take back on f6 with the bishop, but what intermediate move can you also consider? A lot of you get caught here — when you play the knight takes f3, you have to calculate it,"
     },
     {
       "ply": 19,
@@ -218,7 +218,7 @@
         "Qxf3+",
         "Kg1"
       ],
-      "spoken": "The queen takes f3 — exactly. He's resigned. First things first: why is the bishop to e5 worse here?"
+      "spoken": "The queen takes f3 — exactly. They've resigned. First things first: why is the bishop to e5 worse here?"
     },
     {
       "ply": 25,
@@ -431,7 +431,7 @@
       "line": [
         "gxf3"
       ],
-      "spoken": "and now he's basically permanently weakened both their kingside and their centre,",
+      "spoken": "and now they're basically permanently weakened both their kingside and their centre,",
       "reanchor": true
     },
     {

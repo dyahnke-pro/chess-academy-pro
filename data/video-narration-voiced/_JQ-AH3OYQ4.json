@@ -290,7 +290,7 @@
     "a3",
     "Be7"
    ],
-   "spoken": "This is a masterclass in when a pin is deadly: the pinned knight is pawn-defended, yet the pin still crushes — because Black has no dark bishop for e7, he's castled into the pin so moving the queen is no option, and the usual h6-g5 escape is suicide against h4.",
+   "spoken": "This is a masterclass in when a pin is deadly: the pinned knight is pawn-defended, yet the pin still crushes — because Black has no dark bishop for e7, they've castled into the pin so moving the queen is no option, and the usual h6-g5 escape is suicide against h4.",
    "kind": "main",
    "teaches": "A pin is fatal when the defender can't relieve it — no bishop to interpose, king castled into it, and h6-g5 punished by h4.",
    "reanchor": true

@@ -119,7 +119,7 @@
    "line": [
     "Nh3"
    ],
-   "spoken": "He's forced into the ugly knight to h3. A rule for these d4 positions: the moment that knight leaves f6, think about pushing the f-pawn to f5 to blast open the f-file.",
+   "spoken": "They're forced into the ugly knight to h3. A rule for these d4 positions: the moment that knight leaves f6, think about pushing the f-pawn to f5 to blast open the f-file.",
    "kind": "main",
    "teaches": [
     "When the knight leaves f6, consider ...f5 to open the f-file"
@@ -215,7 +215,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": "After knight to e3 he essentially has to give up their bishop for it.",
+   "spoken": "After knight to e3 they essentially have to give up their bishop for it.",
    "kind": "review"
   },
   {

@@ -54,13 +54,13 @@ const ALL = new Set([
 const BASELINE_FIRST_PERSON = 521;
 const BASELINE_FRAGMENT = 81;
 const BASELINE_META = 0;
-// 1145 -> 106 (2026-09-19). `scripts/voiced-authoring/degender.mjs` rewrote the
+// 1145 -> 34 (2026-09-19, in two passes). `scripts/voiced-authoring/degender.mjs` rewrote the
 // AUTHORED source offline, so every change landed in a readable diff and these
 // gates ran on it. What survives is what the script REFUSED rather than
 // guessed: "he's pinned" is ambiguous — "he IS pinned" and "he HAS pinned" are
 // both real chess sentences and pluralise differently (they're / they've).
 // Those need a human, so they are still counted here. Lower this as they go.
-const BASELINE_MASCULINE_OPPONENT = 106;
+const BASELINE_MASCULINE_OPPONENT = 34;
 
 describe('voiced corpus register — shrink-only backlog', () => {
   it('the corpus is actually loaded (non-vacuous)', () => {

@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Then he almost always plays the knight to f3, so that's to be expected."
+   "spoken": "Then they almost alway plays the knight to f3, so that's to be expected."
   },
   {
    "ply": 4,
@@ -138,7 +138,7 @@
    "t": 510,
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
    "line": [],
-   "spoken": "take with that doesn't allow them to do anything — take the pawn on d4 with the bishop, not the knight and not the queen. You take with the bishop, they take back, you take the knight, and he cannot recapture, because that pawn is defended by your other two pieces. The line goes f4, d6, and it holds — they're not going to know it this deep.",
+   "spoken": "take with that doesn't allow them to do anything — take the pawn on d4 with the bishop, not the knight and not the queen. You take with the bishop, they take back, you take the knight, and they cannot recapture, because that pawn is defended by your other two pieces. The line goes f4, d6, and it holds — they're not going to know it this deep.",
    "reanchor": true
   }
  ]

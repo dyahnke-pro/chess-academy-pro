@@ -70,7 +70,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "You save a tempo, he's moved their bishop twice, and I like the two bishops and that their e5-pawn is weak — I'm not worried about the bishop taking c6 in the slightest. The knight to c3. In what order do you develop? e6 is fine but would block the c8-bishop, so you turn to that bishop first. The bishop to f5 is possible, but be flexible in development and always consider whether there's something better —"
+   "spoken": "You save a tempo, they've moved their bishop twice, and I like the two bishops and that their e5-pawn is weak — I'm not worried about the bishop taking c6 in the slightest. The knight to c3. In what order do you develop? e6 is fine but would block the c8-bishop, so you turn to that bishop first. The bishop to f5 is possible, but be flexible in development and always consider whether there's something better —"
   },
   {
    "ply": 10,
@@ -108,7 +108,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "They go d4 — he's created a lot of weaknesses on their kingside, and now d4. They're not playing this badly, and they're hoping for c-takes-d4, because then they play the knight takes d4 and piles up on your knight on c6."
+   "spoken": "They go d4 — they've created a lot of weaknesses on their kingside, and now d4. They're not playing this badly, and they're hoping for c-takes-d4, because then they play the knight takes d4 and piles up on your knight on c6."
   },
   {
    "ply": 16,
@@ -197,7 +197,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "You'll talk about it after the game. He's panicked and gone the queen to d2. Which of these two knights should you take? You can actually take either — that's the funny thing."
+   "spoken": "You'll talk about it after the game. They've panicked and gone the queen to d2. Which of these two knights should you take? You can actually take either — that's the funny thing."
   },
   {
    "ply": 24,

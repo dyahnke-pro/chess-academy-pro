@@ -1628,7 +1628,7 @@
                                                                            "node": {
                                                                             "san": "Nxe7",
                                                                             "movedBy": "black",
-                                                                            "idea": "But that's the beauty of being positionally better — you can blunder a pawn and still be fine. He's opened the d-file, so the question is how to pressure the pawn on d6.",
+                                                                            "idea": "But that's the beauty of being positionally better — you can blunder a pawn and still be fine. They've opened the d-file, so the question is how to pressure the pawn on d6.",
                                                                             "children": [
                                                                              {
                                                                               "node": {
@@ -1670,7 +1670,7 @@
                                                                                                 "node": {
                                                                                                  "san": "Nxe5",
                                                                                                  "movedBy": "white",
-                                                                                                 "idea": "He's forgotten the pawn is hanging — the knight takes on e5, and you're up a pawn. Sometimes chess is about resisting the by-the-book move and prioritising.",
+                                                                                                 "idea": "They've forgotten the pawn is hanging — the knight takes on e5, and you're up a pawn. Sometimes chess is about resisting the by-the-book move and prioritising.",
                                                                                                  "children": [
                                                                                                   {
                                                                                                    "node": {
@@ -1702,7 +1702,7 @@
                                                                                                    }
                                                                                                   }
                                                                                                  ],
-                                                                                                 "shortIdea": "He's forgotten the pawn is hanging — the knight takes on e5, and you're up a pawn."
+                                                                                                 "shortIdea": "They've forgotten the pawn is hanging — the knight takes on e5, and you're up a pawn."
                                                                                                 }
                                                                                                }
                                                                                               ],
@@ -8106,13 +8106,13 @@
                                                                         "node": {
                                                                          "san": "Qd2",
                                                                          "movedBy": "white",
-                                                                         "idea": "He's stopped f4 — so ask the Sam Shankland question: can you play it anyway?",
+                                                                         "idea": "They've stopped f4 — so ask the Sam Shankland question: can you play it anyway?",
                                                                          "children": [
                                                                           {
                                                                            "node": {
                                                                             "san": "f4",
                                                                             "movedBy": "black",
-                                                                            "idea": "Yes you can — because if they capture, you recapture, and he's forced to shed a tempo with the knight.",
+                                                                            "idea": "Yes you can — because if they capture, you recapture, and they're forced to shed a tempo with the knight.",
                                                                             "children": [
                                                                              {
                                                                               "node": {
@@ -8136,7 +8136,7 @@
                                                                                        "node": {
                                                                                         "san": "Ng3+",
                                                                                         "movedBy": "black",
-                                                                                        "idea": "It's not d5 anymore — he's clamped that down — it's the knight to g3, with check.",
+                                                                                        "idea": "It's not d5 anymore — they've clamped that down — it's the knight to g3, with check.",
                                                                                         "children": [
                                                                                          {
                                                                                           "node": {
@@ -8575,7 +8575,7 @@
                                                                                           }
                                                                                          }
                                                                                         ],
-                                                                                        "shortIdea": "It's not d5 anymore — he's clamped that down — it's the knight to g3, with check."
+                                                                                        "shortIdea": "It's not d5 anymore — they've clamped that down — it's the knight to g3, with check."
                                                                                        }
                                                                                       }
                                                                                      ],
@@ -8590,11 +8590,11 @@
                                                                               }
                                                                              }
                                                                             ],
-                                                                            "shortIdea": "Yes you can — because if they capture, you recapture, and he's forced to shed a tempo with the knight."
+                                                                            "shortIdea": "Yes you can — because if they capture, you recapture, and they're forced to shed a tempo with the knight."
                                                                            }
                                                                           }
                                                                          ],
-                                                                         "shortIdea": "He's stopped f4 — so ask the Sam Shankland question: can you play it anyway?"
+                                                                         "shortIdea": "They've stopped f4 — so ask the Sam Shankland question: can you play it anyway?"
                                                                         }
                                                                        }
                                                                       ],
@@ -9036,19 +9036,19 @@
                                                 "node": {
                                                  "san": "O-O",
                                                  "movedBy": "white",
-                                                 "idea": "He's castled, simply ignoring the threats you've posed on their centre,",
+                                                 "idea": "They've castled, simply ignoring the threats you've posed on their centre,",
                                                  "children": [
                                                   {
                                                    "node": {
                                                     "san": "Nxd4",
                                                     "movedBy": "black",
-                                                    "idea": "so you can take on d4 — because of the pin he cannot take back, and he's essentially busted;",
+                                                    "idea": "so you can take on d4 — because of the pin they cannot take back, and they're essentially busted;",
                                                     "children": [
                                                      {
                                                       "node": {
                                                        "san": "Bxf6",
                                                        "movedBy": "white",
-                                                       "idea": "he's lost the central pawn, and now they make matters worse by taking on f6. If you were extra fancy here, what would you do? You can take back on f6 with the bishop, but what intermediate move can you also consider? A lot of you get caught here — when you play the knight takes f3, you have to calculate it,",
+                                                       "idea": "they've lost the central pawn, and now they make matters worse by taking on f6. If you were extra fancy here, what would you do? You can take back on f6 with the bishop, but what intermediate move can you also consider? A lot of you get caught here — when you play the knight takes f3, you have to calculate it,",
                                                        "children": [
                                                         {
                                                          "node": {
@@ -9120,7 +9120,7 @@
                                                                                           "node": {
                                                                                            "san": "Kg1",
                                                                                            "movedBy": "white",
-                                                                                           "idea": "The queen takes f3 — exactly. He's resigned. First things first: why is the bishop to e5 worse here?",
+                                                                                           "idea": "The queen takes f3 — exactly. They've resigned. First things first: why is the bishop to e5 worse here?",
                                                                                            "children": [],
                                                                                            "shortIdea": "The queen takes f3 — exactly."
                                                                                           }
@@ -9179,15 +9179,15 @@
                                                          }
                                                         }
                                                        ],
-                                                       "shortIdea": "he's lost the central pawn, and now they make matters worse by taking on f6."
+                                                       "shortIdea": "they've lost the central pawn, and now they make matters worse by taking on f6."
                                                       }
                                                      }
                                                     ],
-                                                    "shortIdea": "so you can take on d4 — because of the pin he cannot take back, and he's essentially busted;"
+                                                    "shortIdea": "so you can take on d4 — because of the pin they cannot take back, and they're essentially busted;"
                                                    }
                                                   }
                                                  ],
-                                                 "shortIdea": "He's castled, simply ignoring the threats you've posed on their centre,"
+                                                 "shortIdea": "They've castled, simply ignoring the threats you've posed on their centre,"
                                                 }
                                                }
                                               ],
@@ -11670,7 +11670,7 @@
                                                          "node": {
                                                           "san": "Re8",
                                                           "movedBy": "black",
-                                                          "idea": "The rook to e8 is a pretty inoffensive move you can always throw in, reinforcing the threat of e4, and maybe you play e-takes-d later and open the e-file. Actually, first you should develop your bishop — I know some of you think of the bishop to g4, but then h3 chases it away; the alternate way is b6 and the bishop to b7, fianchettoing the other bishop and aiming at the e4-square. This is a pawn sacrifice — let's see if your opponent figures out how to win it. The knight to g5 is an intimidating-looking move, but is it scary? I don't see what it threatens, so you continue developing; probably the bishop to c4, but then you simply defend the pawn with the rook to e7. The knight to d5 would give up f7 potentially, so be careful — always consider what you're opening and closing when you move a knight. g4 is a mistake. Should you take the knight? Yes — you take on g5, because that exposes an attack on the other knight: after the knight takes and the queen takes g5, White has to recapture your knight with their knight, which takes the pressure off the f-pawn; and one step further, the knight takes e4 is a very natural, strong King's-Indian continuation. Am I afraid of the knight taking f7? I calculated it — if they play it, f5 chases the knight away, and then e4, or the capture on d4 pushing their pieces back. Now, your opponent is contemplating the knight takes f7 — an intermezzo that attacks the queen, and White has two attackers on your knight over on e4, so wherever your queen goes, even to h4, it appears White can capture the knight with the bishop. But I calculated — wait, maybe I miscalculated; you might have to go into an endgame I don't want. He out-calculated me. I was intending the queen to h4, and what I missed is the smothered-mate idea: after the bishop takes c4, the queen to b3 sets up an unstoppable discovered check against the king and a potential smothered mate. So the knight takes e4 was simply a mistake — I underestimated the knight to f7. So after the capture, since the bishop takes e4 is a big mistake because of the queen to b3, is there an alternative? You have to take the bishop with the queen, offering a queen trade; then they take on e5, basically everything trades, and it's essentially a dead draw — but you'll try to win that endgame. You panic and bite the bullet, because otherwise the bishop takes c4 and they find the queen to b3 and you're busted. Now I have to prove my mettle by winning an endgame nearly devoid of chances. The queen to f2, leaving your battery intact — I think this just loses. You can play e-takes-d4, but then there might be the knight to h6 with check, a nasty idea that forces a trade; then you pin the knight. You're not threatening the rook takes f7 — some of you might think you are, but then the queen takes f7 with check — what you're threatening is the bishop from b7 to d5, picking off the knight, which I don't think can be defended. I'm disappointed in my play — maybe fianchettoing the bishop was fundamentally too slow. People in the seventeen-, eighteen-hundred range make this kind of mistake often; there's a psychology name for it, like walking to the wrong floor of a building out of habit. Something even better than the bishop to d5: because after the bishop to d5, the rook to e1 gives you something to deal with — you want to attack the knight without allowing the rook to e1, so the queen to d5. That violates my rule of accomplishing tasks with the lowest-value piece, but it's an exception, because the queen is vulnerable to begin with — so you do two things at once, making the queen safer and attacking and winning the knight. This is a lesson in flexibility: players think they must keep attacking no matter what and rule out all queen trades, and they ignore what's actually going on — that I now have this battery and there's no longer any attack; that inflexibility makes you lose objectivity. Let's snag the queen and convert with discipline. What you shouldn't do is the bishop takes e5 — I don't like giving away the dark-squared bishop, because those with a keen tactical eye see that the bishop to h6 could become a problem, with White creating mate threats on f8. So two options: the rook to f8, trading one pair of rooks; and c5, undermining the knight, which is defended by the pawn — the undermining concept is so important. And after the rook to f1, ask how the position has changed and don't lose sight of the whole board: the a2-pawn is now hanging, so after the trade you can safely take on a2 and start grabbing everything on the queenside. The knight to f3 — they brought the knight back themselves, a good move. You have a fancy move available, but there are so many good moves I struggle to verbalise — g5 and then g4. The move I'd play in a classical game is c5. You might say the point was to undermine the knight, which you've done — but I want to get rid of the d-pawn so your queen gets more real estate in the centre: d-takes-c5, the queen takes e5, pinning the rook and threatening to double-capture on f3 because of the pin. That d4-pawn holds you back, so get rid of it and open files — the more files open, the easier it is to convert the extra queen. Your dark-squared bishop isn't good and won't be even after the trade, since there'll be a c3-pawn staring at it, but at least it controls the d4-square. I have a great high-level example of an international master who did exactly this against me — instructive on how chess psychology can be used against people, even to defend bad positions. The rook to e1 — time to grab; pinned. I briefly checked the rook to e8 with check, making sure there's nothing after the king to f7 — anytime you abandon the back rank, always check fast. The rook to f1 — b4 is a threat, so you kind of have to take; there's a fancy move, but let's keep it simple and take. After the rook takes f2, I really like the bishop from g7 to e5 idea. The bishop takes h2 — how did I see it? A lot of people passively notice the pin and think, can I attack the rook with the bishop to d4? No, there's a pawn on c3 — and they file it away. I don't stop there: the pin means the king is defending the rook, so it's overloaded, and going after the h2-pawn could be an overloading tactic. The queen takes f2 is also a fork, but just winning the rook is already enough — the point is that high-level players don't just see the tactical phenomenon, they understand how it can be used as a component in a combination. b4 — I saw this; you need to move the queen and defend the bishop, so the queen to e5 or d6; I like the queen to d6, because if the bishop to h6 happens, you can move your bishop back and sacrifice on f8 and keep the bishop; you can also give the queen to g3 with check and win the bishop. Actually the queen to h3 — this is just a fork.",
+                                                          "idea": "The rook to e8 is a pretty inoffensive move you can always throw in, reinforcing the threat of e4, and maybe you play e-takes-d later and open the e-file. Actually, first you should develop your bishop — I know some of you think of the bishop to g4, but then h3 chases it away; the alternate way is b6 and the bishop to b7, fianchettoing the other bishop and aiming at the e4-square. This is a pawn sacrifice — let's see if your opponent figures out how to win it. The knight to g5 is an intimidating-looking move, but is it scary? I don't see what it threatens, so you continue developing; probably the bishop to c4, but then you simply defend the pawn with the rook to e7. The knight to d5 would give up f7 potentially, so be careful — always consider what you're opening and closing when you move a knight. g4 is a mistake. Should you take the knight? Yes — you take on g5, because that exposes an attack on the other knight: after the knight takes and the queen takes g5, White has to recapture your knight with their knight, which takes the pressure off the f-pawn; and one step further, the knight takes e4 is a very natural, strong King's-Indian continuation. Am I afraid of the knight taking f7? I calculated it — if they play it, f5 chases the knight away, and then e4, or the capture on d4 pushing their pieces back. Now, your opponent is contemplating the knight takes f7 — an intermezzo that attacks the queen, and White has two attackers on your knight over on e4, so wherever your queen goes, even to h4, it appears White can capture the knight with the bishop. But I calculated — wait, maybe I miscalculated; you might have to go into an endgame I don't want. They out-calculated me. I was intending the queen to h4, and what I missed is the smothered-mate idea: after the bishop takes c4, the queen to b3 sets up an unstoppable discovered check against the king and a potential smothered mate. So the knight takes e4 was simply a mistake — I underestimated the knight to f7. So after the capture, since the bishop takes e4 is a big mistake because of the queen to b3, is there an alternative? You have to take the bishop with the queen, offering a queen trade; then they take on e5, basically everything trades, and it's essentially a dead draw — but you'll try to win that endgame. You panic and bite the bullet, because otherwise the bishop takes c4 and they find the queen to b3 and you're busted. Now I have to prove my mettle by winning an endgame nearly devoid of chances. The queen to f2, leaving your battery intact — I think this just loses. You can play e-takes-d4, but then there might be the knight to h6 with check, a nasty idea that forces a trade; then you pin the knight. You're not threatening the rook takes f7 — some of you might think you are, but then the queen takes f7 with check — what you're threatening is the bishop from b7 to d5, picking off the knight, which I don't think can be defended. I'm disappointed in my play — maybe fianchettoing the bishop was fundamentally too slow. People in the seventeen-, eighteen-hundred range make this kind of mistake often; there's a psychology name for it, like walking to the wrong floor of a building out of habit. Something even better than the bishop to d5: because after the bishop to d5, the rook to e1 gives you something to deal with — you want to attack the knight without allowing the rook to e1, so the queen to d5. That violates my rule of accomplishing tasks with the lowest-value piece, but it's an exception, because the queen is vulnerable to begin with — so you do two things at once, making the queen safer and attacking and winning the knight. This is a lesson in flexibility: players think they must keep attacking no matter what and rule out all queen trades, and they ignore what's actually going on — that I now have this battery and there's no longer any attack; that inflexibility makes you lose objectivity. Let's snag the queen and convert with discipline. What you shouldn't do is the bishop takes e5 — I don't like giving away the dark-squared bishop, because those with a keen tactical eye see that the bishop to h6 could become a problem, with White creating mate threats on f8. So two options: the rook to f8, trading one pair of rooks; and c5, undermining the knight, which is defended by the pawn — the undermining concept is so important. And after the rook to f1, ask how the position has changed and don't lose sight of the whole board: the a2-pawn is now hanging, so after the trade you can safely take on a2 and start grabbing everything on the queenside. The knight to f3 — they brought the knight back themselves, a good move. You have a fancy move available, but there are so many good moves I struggle to verbalise — g5 and then g4. The move I'd play in a classical game is c5. You might say the point was to undermine the knight, which you've done — but I want to get rid of the d-pawn so your queen gets more real estate in the centre: d-takes-c5, the queen takes e5, pinning the rook and threatening to double-capture on f3 because of the pin. That d4-pawn holds you back, so get rid of it and open files — the more files open, the easier it is to convert the extra queen. Your dark-squared bishop isn't good and won't be even after the trade, since there'll be a c3-pawn staring at it, but at least it controls the d4-square. I have a great high-level example of an international master who did exactly this against me — instructive on how chess psychology can be used against people, even to defend bad positions. The rook to e1 — time to grab; pinned. I briefly checked the rook to e8 with check, making sure there's nothing after the king to f7 — anytime you abandon the back rank, always check fast. The rook to f1 — b4 is a threat, so you kind of have to take; there's a fancy move, but let's keep it simple and take. After the rook takes f2, I really like the bishop from g7 to e5 idea. The bishop takes h2 — how did I see it? A lot of people passively notice the pin and think, can I attack the rook with the bishop to d4? No, there's a pawn on c3 — and they file it away. I don't stop there: the pin means the king is defending the rook, so it's overloaded, and going after the h2-pawn could be an overloading tactic. The queen takes f2 is also a fork, but just winning the rook is already enough — the point is that high-level players don't just see the tactical phenomenon, they understand how it can be used as a component in a combination. b4 — I saw this; you need to move the queen and defend the bishop, so the queen to e5 or d6; I like the queen to d6, because if the bishop to h6 happens, you can move your bishop back and sacrifice on f8 and keep the bishop; you can also give the queen to g3 with check and win the bishop. Actually the queen to h3 — this is just a fork.",
                                                           "children": [],
                                                           "shortIdea": "The rook to e8 is a pretty inoffensive move you can always throw in, reinforcing the threat of e4, and maybe you play e-takes-d later and open the…"
                                                          }
@@ -15040,7 +15040,7 @@
                                                                               "node": {
                                                                                "san": "Qe2",
                                                                                "movedBy": "white",
-                                                                               "idea": "Do you have to take the knight and let their queen out? Is he actually doing anything with this move? No — the queen back to e2 is simplest, and their queen is still very much trapped. Kudos to Black for the knight to g5, a nice defensive resource.",
+                                                                               "idea": "Do you have to take the knight and let their queen out? Are they actually doing anything with this move? No — the queen back to e2 is simplest, and their queen is still very much trapped. Kudos to Black for the knight to g5, a nice defensive resource.",
                                                                                "children": [
                                                                                 {
                                                                                  "node": {
@@ -16279,7 +16279,7 @@
                                                                "node": {
                                                                 "san": "h6",
                                                                 "movedBy": "black",
-                                                                "idea": "I'm annoyed by the pin, and I'm sure he's annoyed by their pin too — the question is who can get rid of their pin first, and I think that's going to be me; I'll do the same thing they did and chase their bishop away,",
+                                                                "idea": "I'm annoyed by the pin, and I'm sure they're annoyed by their pin too — the question is who can get rid of their pin first, and I think that's going to be me; I'll do the same thing they did and chase their bishop away,",
                                                                 "children": [
                                                                  {
                                                                   "node": {
@@ -16291,7 +16291,7 @@
                                                                      "node": {
                                                                       "san": "g5",
                                                                       "movedBy": "black",
-                                                                      "idea": "And here what I'm going to do is just say goodbye to that — I play the move g5, attacking the bishop, which has to drop back to g3. Now you might look at g5 and say, wait, you're pushing pawns out on your kingside, aren't you about to castle short, and won't your king be very weak? The answer to all of those is undoubtedly yes — but after the game I'll unpack why this is in fact justified in many cases; the better you become at chess, the better you become at strategically violating opening principles. He's left their bishop on h4, so I'm just going to grab it — and they haven't gotten rid of the pin either. What have I gained with this capture? First, a bishop, a pretty big deal; but I've also gained access to the g-file — and when you're thinking about your opponent's king, you want to think about avenues to access it.",
+                                                                      "idea": "And here what I'm going to do is just say goodbye to that — I play the move g5, attacking the bishop, which has to drop back to g3. Now you might look at g5 and say, wait, you're pushing pawns out on your kingside, aren't you about to castle short, and won't your king be very weak? The answer to all of those is undoubtedly yes — but after the game I'll unpack why this is in fact justified in many cases; the better you become at chess, the better you become at strategically violating opening principles. They're left their bishop on h4, so I'm just going to grab it — and they haven't gotten rid of the pin either. What have I gained with this capture? First, a bishop, a pretty big deal; but I've also gained access to the g-file — and when you're thinking about your opponent's king, you want to think about avenues to access it.",
                                                                       "children": [],
                                                                       "shortIdea": "And here what I'm going to do is just say goodbye to that — I play the move g5, attacking the bishop, which has to drop back to…"
                                                                      }
@@ -16301,7 +16301,7 @@
                                                                   }
                                                                  }
                                                                 ],
-                                                                "shortIdea": "I'm annoyed by the pin, and I'm sure he's annoyed by their pin too — the question is who can get rid of their pin first, and I…"
+                                                                "shortIdea": "I'm annoyed by the pin, and I'm sure they're annoyed by their pin too — the question is who can get rid of their pin first, and I…"
                                                                }
                                                               }
                                                              ],
@@ -17962,7 +17962,7 @@
                                                             "node": {
                                                              "san": "dxe5",
                                                              "movedBy": "white",
-                                                             "idea": "Plus, c5 weakened a lot of squares — he's blunted their own bishop —",
+                                                             "idea": "Plus, c5 weakened a lot of squares — they've blunted their own bishop —",
                                                              "children": [
                                                               {
                                                                "node": {
@@ -18046,7 +18046,7 @@
                                                                                                       "node": {
                                                                                                        "san": "Qh3",
                                                                                                        "movedBy": "white",
-                                                                                                       "idea": "What's wrong with taking and then the queen to h3? They'd play the f-pawn takes g6 and use f7 for their rook to defend the pawn. By keeping things closed until you need to open them, you disallow defences like the rook to f7. He's busted — the h-file massacre is coming whether they like it or not, and g6 lost them the game; they even trapped their own queen, though that's much less important. A very nice game, only seventeen moves.",
+                                                                                                       "idea": "What's wrong with taking and then the queen to h3? They'd play the f-pawn takes g6 and use f7 for their rook to defend the pawn. By keeping things closed until you need to open them, you disallow defences like the rook to f7. They're busted — the h-file massacre is coming whether they like it or not, and g6 lost them the game; they even trapped their own queen, though that's much less important. A very nice game, only seventeen moves.",
                                                                                                        "children": [
                                                                                                         {
                                                                                                          "node": {
@@ -18189,7 +18189,7 @@
                                                                }
                                                               }
                                                              ],
-                                                             "shortIdea": "Plus, c5 weakened a lot of squares — he's blunted their own bishop —"
+                                                             "shortIdea": "Plus, c5 weakened a lot of squares — they've blunted their own bishop —"
                                                             }
                                                            }
                                                           ],
@@ -28771,7 +28771,7 @@
                                                       "node": {
                                                        "san": "Ng5",
                                                        "movedBy": "white",
-                                                       "idea": "the knight to g5, sinking your knight into the weak square he's just created.",
+                                                       "idea": "the knight to g5, sinking your knight into the weak square they're just created.",
                                                        "children": [
                                                         {
                                                          "node": {
@@ -28975,7 +28975,7 @@
                                                                                                                                                             "node": {
                                                                                                                                                              "san": "Rxd7",
                                                                                                                                                              "movedBy": "white",
-                                                                                                                                                             "idea": "The king takes, the rook takes d7 — I'm going a little faster because he's really strong and I don't want to lose on time.",
+                                                                                                                                                             "idea": "The king takes, the rook takes d7 — I'm going a little faster because they're really strong and I don't want to lose on time.",
                                                                                                                                                              "children": [
                                                                                                                                                               {
                                                                                                                                                                "node": {
@@ -29028,7 +29028,7 @@
                                                                                                                                                                }
                                                                                                                                                               }
                                                                                                                                                              ],
-                                                                                                                                                             "shortIdea": "The king takes, the rook takes d7 — I'm going a little faster because he's really strong and I don't want to lose on time."
+                                                                                                                                                             "shortIdea": "The king takes, the rook takes d7 — I'm going a little faster because they're really strong and I don't want to lose on time."
                                                                                                                                                             }
                                                                                                                                                            }
                                                                                                                                                           ]
@@ -29157,7 +29157,7 @@
                                                          }
                                                         }
                                                        ],
-                                                       "shortIdea": "the knight to g5, sinking your knight into the weak square he's just created."
+                                                       "shortIdea": "the knight to g5, sinking your knight into the weak square they're just created."
                                                       }
                                                      }
                                                     ]
@@ -32824,7 +32824,7 @@
                            "node": {
                             "san": "d6",
                             "movedBy": "black",
-                            "idea": "If you castle and they take, there's no Stafford left — he's close to castling. So you either play the knight to c6 into a Four Knights, or d6; it doesn't much matter, so you start with d6 to defend the e5 pawn.",
+                            "idea": "If you castle and they take, there's no Stafford left — they're close to castling. So you either play the knight to c6 into a Four Knights, or d6; it doesn't much matter, so you start with d6 to defend the e5 pawn.",
                             "children": [
                              {
                               "node": {
@@ -32902,7 +32902,7 @@
                                                                   "node": {
                                                                    "san": "gxf3",
                                                                    "movedBy": "white",
-                                                                   "idea": "They recapture, capturing on f3. The weaknesses he's created are permanent, so it's worth it if you manage the open g-file. Two things: start kingside operations, moves like the knight to h5, and balance that with some prophylaxis.",
+                                                                   "idea": "They recapture, capturing on f3. The weaknesses they've created are permanent, so it's worth it if you manage the open g-file. Two things: start kingside operations, moves like the knight to h5, and balance that with some prophylaxis.",
                                                                    "children": [
                                                                     {
                                                                      "node": {
@@ -33034,7 +33034,7 @@
                                                                                                                                     "node": {
                                                                                                                                      "san": "R5g4",
                                                                                                                                      "movedBy": "white",
-                                                                                                                                     "idea": "The rook to g4 — he's blundered back; a small blunder.",
+                                                                                                                                     "idea": "The rook to g4 — they've blundered back; a small blunder.",
                                                                                                                                      "children": [
                                                                                                                                       {
                                                                                                                                        "node": {
@@ -33480,7 +33480,7 @@
                                                                                                                                        }
                                                                                                                                       }
                                                                                                                                      ],
-                                                                                                                                     "shortIdea": "The rook to g4 — he's blundered back; a small blunder.",
+                                                                                                                                     "shortIdea": "The rook to g4 — they've blundered back; a small blunder.",
                                                                                                                                      "asides": [
                                                                                                                                       {
                                                                                                                                        "idea": "A very hard endgame to win with one minute, but I'll try my best.",
@@ -33643,7 +33643,7 @@
                               }
                              }
                             ],
-                            "shortIdea": "If you castle and they take, there's no Stafford left — he's close to castling."
+                            "shortIdea": "If you castle and they take, there's no Stafford left — they're close to castling."
                            }
                           }
                          ],
@@ -35899,7 +35899,7 @@
                               "node": {
                                "san": "Nc3",
                                "movedBy": "white",
-                               "idea": "You save a tempo, he's moved their bishop twice, and I like the two bishops and that their e5-pawn is weak — I'm not worried about the bishop taking c6 in the slightest. The knight to c3. In what order do you develop? e6 is fine but would block the c8-bishop, so you turn to that bishop first. The bishop to f5 is possible, but be flexible in development and always consider whether there's something better —",
+                               "idea": "You save a tempo, they've moved their bishop twice, and I like the two bishops and that their e5-pawn is weak — I'm not worried about the bishop taking c6 in the slightest. The knight to c3. In what order do you develop? e6 is fine but would block the c8-bishop, so you turn to that bishop first. The bishop to f5 is possible, but be flexible in development and always consider whether there's something better —",
                                "children": [
                                 {
                                  "node": {
@@ -35935,7 +35935,7 @@
                                                 "node": {
                                                  "san": "d4",
                                                  "movedBy": "white",
-                                                 "idea": "They go d4 — he's created a lot of weaknesses on their kingside, and now d4. They're not playing this badly, and they're hoping for c-takes-d4, because then they play the knight takes d4 and piles up on your knight on c6.",
+                                                 "idea": "They go d4 — they've created a lot of weaknesses on their kingside, and now d4. They're not playing this badly, and they're hoping for c-takes-d4, because then they play the knight takes d4 and piles up on your knight on c6.",
                                                  "children": [
                                                   {
                                                    "node": {
@@ -36014,7 +36014,7 @@
                                                                       "shortIdea": "Let me look a bit more carefully — what can you do here?",
                                                                       "asides": [
                                                                        {
-                                                                        "idea": "You'll talk about it after the game. He's panicked and gone the queen to d2. Which of these two knights should you take? You can actually take either — that's the funny thing.",
+                                                                        "idea": "You'll talk about it after the game. They've panicked and gone the queen to d2. Which of these two knights should you take? You can actually take either — that's the funny thing.",
                                                                         "shortIdea": "You'll talk about it after the game.",
                                                                         "arrows": [
                                                                          {
@@ -36099,7 +36099,7 @@
                                                    }
                                                   }
                                                  ],
-                                                 "shortIdea": "They go d4 — he's created a lot of weaknesses on their kingside, and now d4."
+                                                 "shortIdea": "They go d4 — they've created a lot of weaknesses on their kingside, and now d4."
                                                 }
                                                }
                                               ],
@@ -36193,7 +36193,7 @@
                                  }
                                 }
                                ],
-                               "shortIdea": "You save a tempo, he's moved their bishop twice, and I like the two bishops and that their e5-pawn is weak — I'm not worried about the bishop…",
+                               "shortIdea": "You save a tempo, they've moved their bishop twice, and I like the two bishops and that their e5-pawn is weak — I'm not worried about the bishop…",
                                "asides": [
                                 {
                                  "idea": "and here I think they played fine — h3",
@@ -36474,13 +36474,13 @@
                                                                                                                                     "node": {
                                                                                                                                      "san": "e4",
                                                                                                                                      "movedBy": "white",
-                                                                                                                                     "idea": "Is the queen attacking the pawn? No, you're not concerned about it — again, the worst-case-scenario test: even if you allowed them to do everything they wanted, how could he possibly have enough firepower to attack this pawn?",
+                                                                                                                                     "idea": "Is the queen attacking the pawn? No, you're not concerned about it — again, the worst-case-scenario test: even if you allowed them to do everything they wanted, how could they possibly have enough firepower to attack this pawn?",
                                                                                                                                      "children": [
                                                                                                                                       {
                                                                                                                                        "node": {
                                                                                                                                         "san": "dxe4",
                                                                                                                                         "movedBy": "black",
-                                                                                                                                        "idea": "He's just giving you the pawn. You can go the queen to e3 and take with the pawn — but I like taking with the pawn, because it creates a far-advanced passer and opens the d-file, which you're definitely going to control.",
+                                                                                                                                        "idea": "They're just giving you the pawn. You can go the queen to e3 and take with the pawn — but I like taking with the pawn, because it creates a far-advanced passer and opens the d-file, which you're definitely going to control.",
                                                                                                                                         "children": [
                                                                                                                                          {
                                                                                                                                           "node": {
@@ -36636,7 +36636,7 @@
                                                                                                                                                                                                                      "node": {
                                                                                                                                                                                                                       "san": "Ke6",
                                                                                                                                                                                                                       "movedBy": "black",
-                                                                                                                                                                                                                      "idea": "bringing the game closer to the centre, making sure there is no stalemate, because he's got pawn moves at their disposal.",
+                                                                                                                                                                                                                      "idea": "bringing the game closer to the centre, making sure there is no stalemate, because they've got pawn moves at their disposal.",
                                                                                                                                                                                                                       "children": [
                                                                                                                                                                                                                        {
                                                                                                                                                                                                                         "node": {
@@ -36648,7 +36648,7 @@
                                                                                                                                                                                                                         }
                                                                                                                                                                                                                        }
                                                                                                                                                                                                                       ],
-                                                                                                                                                                                                                      "shortIdea": "bringing the game closer to the centre, making sure there is no stalemate, because he's got pawn moves at their disposal."
+                                                                                                                                                                                                                      "shortIdea": "bringing the game closer to the centre, making sure there is no stalemate, because they've got pawn moves at their disposal."
                                                                                                                                                                                                                      }
                                                                                                                                                                                                                     }
                                                                                                                                                                                                                    ],
@@ -36749,7 +36749,7 @@
                                                                                                                                           }
                                                                                                                                          }
                                                                                                                                         ],
-                                                                                                                                        "shortIdea": "He's just giving you the pawn."
+                                                                                                                                        "shortIdea": "They're just giving you the pawn."
                                                                                                                                        }
                                                                                                                                       }
                                                                                                                                      ],
@@ -42286,7 +42286,7 @@
                                                                                        "node": {
                                                                                         "san": "Rf4",
                                                                                         "movedBy": "black",
-                                                                                        "idea": "notice the queen defends the knight; your queen pressures it, and the rook to f4 slices off the connection — the knight is simply trapped. He's got to go h4, giving up another pawn, and White's position collapses.",
+                                                                                        "idea": "notice the queen defends the knight; your queen pressures it, and the rook to f4 slices off the connection — the knight is simply trapped. They've got to go h4, giving up another pawn, and White's position collapses.",
                                                                                         "children": [
                                                                                          {
                                                                                           "node": {
@@ -46185,7 +46185,7 @@
                                                    "node": {
                                                     "san": "Bxd2+",
                                                     "movedBy": "black",
-                                                    "idea": "then you'd be threatening checkmate, but this is good enough — they have to take. A lot of people would grab instinctively with the knight, and you will take with the knight — but I'll point out that the king takes wouldn't be stupid either: the king in the centre isn't great, but he's got no pieces out, and there's something to be said for opening the e-file quickly and slamming e5. But something",
+                                                    "idea": "then you'd be threatening checkmate, but this is good enough — they have to take. A lot of people would grab instinctively with the knight, and you will take with the knight — but I'll point out that the king takes wouldn't be stupid either: the king in the centre isn't great, but they've got no pieces out, and there's something to be said for opening the e-file quickly and slamming e5. But something",
                                                     "children": [
                                                      {
                                                       "node": {
@@ -47890,9 +47890,9 @@
                                              "node": {
                                               "san": "Nh7",
                                               "movedBy": "black",
-                                              "idea": "He's got a pretty big decision — whether to go for that or move the knight. The knight to h7 is a really passive move. How should you follow up?",
+                                              "idea": "They've got a pretty big decision — whether to go for that or move the knight. The knight to h7 is a really passive move. How should you follow up?",
                                               "children": [],
-                                              "shortIdea": "He's got a pretty big decision — whether to go for that or move the knight."
+                                              "shortIdea": "They've got a pretty big decision — whether to go for that or move the knight."
                                              }
                                             }
                                            ],
@@ -48258,7 +48258,7 @@
                                                                                     "node": {
                                                                                      "san": "Kxc2",
                                                                                      "movedBy": "white",
-                                                                                     "idea": "The king recaptures on c2. He's given the bishop for a pawn.",
+                                                                                     "idea": "The king recaptures on c2. They've given the bishop for a pawn.",
                                                                                      "children": [
                                                                                       {
                                                                                        "node": {
@@ -51979,7 +51979,7 @@
                                                                               "node": {
                                                                                "san": "Bxc3",
                                                                                "movedBy": "white",
-                                                                               "idea": "White recaptures on c3, and now he's left without a knight in this type of position.",
+                                                                               "idea": "White recaptures on c3, and now they're left without a knight in this type of position.",
                                                                                "children": [
                                                                                 {
                                                                                  "node": {
@@ -52925,7 +52925,7 @@
                                                                                  }
                                                                                 }
                                                                                ],
-                                                                               "shortIdea": "White recaptures on c3, and now he's left without a knight in this type of position."
+                                                                               "shortIdea": "White recaptures on c3, and now they're left without a knight in this type of position."
                                                                               }
                                                                              }
                                                                             ],
@@ -60347,8 +60347,8 @@
                                                                                            ],
                                                                                            "asides": [
                                                                                             {
-                                                                                             "idea": "Had he gone a bishop to g3, as I hinted...",
-                                                                                             "shortIdea": "Had he gone a bishop to g3, as I hinted...",
+                                                                                             "idea": "Had they gone a bishop to g3, as I hinted...",
+                                                                                             "shortIdea": "Had they gone a bishop to g3, as I hinted...",
                                                                                              "arrows": [
                                                                                               {
                                                                                                "from": "g6",
@@ -60740,7 +60740,7 @@
          "node": {
           "san": "c6",
           "movedBy": "black",
-          "idea": "The pawn to e4, c6 — you're facing the Caro-Kann. How dare he play something I play with Black.",
+          "idea": "The pawn to e4, c6 — you're facing the Caro-Kann. How dare they play something I play with Black.",
           "children": [
            {
             "node": {
@@ -61416,7 +61416,7 @@
                         ]
                        },
                        {
-                        "idea": "let's see when it was first played. Vasily Panov, born 1906, died 1973, was very obscure outside the Panov Caro-Kann; there was a Soviet 'black book' series annotating obscure players' best games by top grandmasters, and one was on Panov. But the opening itself was first played in 1844, long before Panov was born — as always, the person an opening is named after rarely invented it; Alekhine played it a million times. It's murky how these get named; maybe he wrote an article that went viral in the '50s.",
+                        "idea": "let's see when it was first played. Vasily Panov, born 1906, died 1973, was very obscure outside the Panov Caro-Kann; there was a Soviet 'black book' series annotating obscure players' best games by top grandmasters, and one was on Panov. But the opening itself was first played in 1844, long before Panov was born — as always, the person an opening is named after rarely invented it; Alekhine played it a million times. It's murky how these get named; maybe they wrote an article that went viral in the '50s.",
                         "shortIdea": "let's see when it was first played.",
                         "arrows": [
                          {
@@ -63955,7 +63955,7 @@
                                                                                  "node": {
                                                                                   "san": "hxg4",
                                                                                   "movedBy": "black",
-                                                                                  "idea": "Now you threaten to grab their pawn, and he's forced to drop the king back toward g1.",
+                                                                                  "idea": "Now you threaten to grab their pawn, and they're forced to drop the king back toward g1.",
                                                                                   "children": [
                                                                                    {
                                                                                     "node": {
@@ -64094,7 +64094,7 @@
                                                                                     }
                                                                                    }
                                                                                   ],
-                                                                                  "shortIdea": "Now you threaten to grab their pawn, and he's forced to drop the king back toward g1."
+                                                                                  "shortIdea": "Now you threaten to grab their pawn, and they're forced to drop the king back toward g1."
                                                                                  }
                                                                                 }
                                                                                ]
@@ -66203,7 +66203,7 @@
                                                                                  "node": {
                                                                                   "san": "Rxc8",
                                                                                   "movedBy": "black",
-                                                                                  "idea": "He's taken the bishop and gotten the bishop pair, but their f1-bishop isn't impressive, just staring at the pawn. If White could push c5, that'd be a total game-changer. The knight to b4 has merit — probably your next move if permitted; if I play c5 you take with the knight, which is partly why you put the knight on a6, to prevent c5. White's best, and it's not easy, is the bishop from g5 to e3, restricting the a6-knight and preparing c5, which opens the f1-bishop —",
+                                                                                  "idea": "They've taken the bishop and gotten the bishop pair, but their f1-bishop isn't impressive, just staring at the pawn. If White could push c5, that'd be a total game-changer. The knight to b4 has merit — probably your next move if permitted; if I play c5 you take with the knight, which is partly why you put the knight on a6, to prevent c5. White's best, and it's not easy, is the bishop from g5 to e3, restricting the a6-knight and preparing c5, which opens the f1-bishop —",
                                                                                   "children": [
                                                                                    {
                                                                                     "node": {
@@ -66297,7 +66297,7 @@
                                                                                     }
                                                                                    }
                                                                                   ],
-                                                                                  "shortIdea": "He's taken the bishop and gotten the bishop pair, but their f1-bishop isn't impressive, just staring at the pawn."
+                                                                                  "shortIdea": "They've taken the bishop and gotten the bishop pair, but their f1-bishop isn't impressive, just staring at the pawn."
                                                                                  }
                                                                                 }
                                                                                ]
@@ -67376,7 +67376,7 @@
                                                                                                                         "node": {
                                                                                                                          "san": "d5",
                                                                                                                          "movedBy": "white",
-                                                                                                                         "idea": "It also shuts their bishop out of the game. They answer d5 — he's good.",
+                                                                                                                         "idea": "It also shuts their bishop out of the game. They answer d5 — they're good.",
                                                                                                                          "children": [
                                                                                                                           {
                                                                                                                            "node": {
@@ -67673,7 +67673,7 @@
                                     "node": {
                                      "san": "Ngf3",
                                      "movedBy": "white",
-                                     "idea": "The knight to f3 — Black plays as if he were White in a King's Indian.",
+                                     "idea": "The knight to f3 — Black plays as if they were White in a King's Indian.",
                                      "children": [
                                       {
                                        "node": {
@@ -67775,7 +67775,7 @@
                                        }
                                       }
                                      ],
-                                     "shortIdea": "The knight to f3 — Black plays as if he were White in a King's Indian."
+                                     "shortIdea": "The knight to f3 — Black plays as if they were White in a King's Indian."
                                     }
                                    }
                                   ],
@@ -68542,7 +68542,7 @@
             "node": {
              "san": "Nf3",
              "movedBy": "white",
-             "idea": "Then he almost always plays the knight to f3, so that's to be expected.",
+             "idea": "Then they almost alway plays the knight to f3, so that's to be expected.",
              "children": [
               {
                "node": {
@@ -68626,7 +68626,7 @@
                                                       "node": {
                                                        "san": "Nxd2",
                                                        "movedBy": "white",
-                                                       "idea": "Take the bishop, clearly. He pre-moves the knight takes d2, and now another decision: castle to complete development, or take on d4 for another pawn. Much of it is intuitive — quickly look for forks; I don't see anything nasty after the knight takes d4, since White is so passive.",
+                                                       "idea": "Take the bishop, clearly. They pre-move the knight takes d2, and now another decision: castle to complete development, or take on d4 for another pawn. Much of it is intuitive — quickly look for forks; I don't see anything nasty after the knight takes d4, since White is so passive.",
                                                        "children": [
                                                         {
                                                          "node": {
@@ -68680,7 +68680,7 @@
                                                                                  "node": {
                                                                                   "san": "d5",
                                                                                   "movedBy": "black",
-                                                                                  "idea": "He's given you the chance to go d5, so you'll play d5 and then get the bishop out with e6, maybe the queen to f6 hitting the pawn on c3.",
+                                                                                  "idea": "They've given you the chance to go d5, so you'll play d5 and then get the bishop out with e6, maybe the queen to f6 hitting the pawn on c3.",
                                                                                   "children": [
                                                                                    {
                                                                                     "node": {
@@ -68754,7 +68754,7 @@
                                                                                     }
                                                                                    }
                                                                                   ],
-                                                                                  "shortIdea": "He's given you the chance to go d5, so you'll play d5 and then get the bishop out with e6, maybe the queen to f6 hitting the pawn…"
+                                                                                  "shortIdea": "They've given you the chance to go d5, so you'll play d5 and then get the bishop out with e6, maybe the queen to f6 hitting the pawn…"
                                                                                  }
                                                                                 }
                                                                                ],
@@ -69285,7 +69285,7 @@
                }
               }
              ],
-             "shortIdea": "Then he almost always plays the knight to f3, so that's to be expected.",
+             "shortIdea": "Then they almost alway plays the knight to f3, so that's to be expected.",
              "asides": [
               {
                "idea": "The knight to f6, and if White grabs with the knight takes e5 —",
@@ -71097,9 +71097,9 @@
                   "node": {
                    "san": "Nc3",
                    "movedBy": "white",
-                   "idea": "The setup is the same against everything: g6, Bg7, d6, castle, and let White declare which system he's chosen.",
+                   "idea": "The setup is the same against everything: g6, Bg7, d6, castle, and let White declare which system they've chosen.",
                    "children": [],
-                   "shortIdea": "The setup is the same against everything: g6, Bg7, d6, castle, and let White declare which system he's chosen."
+                   "shortIdea": "The setup is the same against everything: g6, Bg7, d6, castle, and let White declare which system they've chosen."
                   }
                  }
                 ]
@@ -73268,7 +73268,7 @@
                                                                                                    "node": {
                                                                                                     "san": "Bxg3",
                                                                                                     "movedBy": "black",
-                                                                                                    "idea": "So a bishop capture on g3. If White grabs the light-squared bishop instead they get mated — a queen to h2, the king to f1, a queen to f2 — so he essentially has to take, and then a queen recapture on g3 gives at least perpetual, though I believe you have more.",
+                                                                                                    "idea": "So a bishop capture on g3. If White grabs the light-squared bishop instead they get mated — a queen to h2, the king to f1, a queen to f2 — so they essentially have to take, and then a queen recapture on g3 gives at least perpetual, though I believe you have more.",
                                                                                                     "children": [
                                                                                                      {
                                                                                                       "node": {
@@ -73569,7 +73569,7 @@
                                                  "shortIdea": "White plays c3.",
                                                  "asides": [
                                                   {
-                                                   "idea": "Marshall was actually the second person to play it. Their original idea wasn't the knight recapture on d5 — he first played it against Frere in 1917, then against Capablanca.",
+                                                   "idea": "Marshall was actually the second person to play it. Their original idea wasn't the knight recapture on d5 — they first played it against Frere in 1917, then against Capablanca.",
                                                    "shortIdea": "Marshall was actually the second person to play it.",
                                                    "arrows": [
                                                     {
@@ -74605,7 +74605,7 @@
                                                                                                                      "node": {
                                                                                                                       "san": "Qa1",
                                                                                                                       "movedBy": "black",
-                                                                                                                      "idea": "Be very careful — look at the whole board. Can he prevent the a-pawn queening? The rook to h1, and you'd only be up the exchange, starting over. When in doubt, go for the simplest continuation — the queen to a1 followed by a2 ends it, unless they play the bishop to f5. Don't pre-move a2; stay vigilant of counterplay to the very end.",
+                                                                                                                      "idea": "Be very careful — look at the whole board. Can they prevent the a-pawn queening? The rook to h1, and you'd only be up the exchange, starting over. When in doubt, go for the simplest continuation — the queen to a1 followed by a2 ends it, unless they play the bishop to f5. Don't pre-move a2; stay vigilant of counterplay to the very end.",
                                                                                                                       "children": [
                                                                                                                        {
                                                                                                                         "node": {
@@ -83001,7 +83001,7 @@
                                                    "node": {
                                                     "san": "Kxd8",
                                                     "movedBy": "black",
-                                                    "idea": "They miscalculated something — maybe they thought he had a check — but the queen takes d8 with check, and you simply recapture on d8. A nice introduction to the Grünfeld.",
+                                                    "idea": "They miscalculated something — maybe they thought they had a check — but the queen takes d8 with check, and you simply recapture on d8. A nice introduction to the Grünfeld.",
                                                     "children": [
                                                      {
                                                       "node": {
@@ -83211,7 +83211,7 @@
                                                       }
                                                      }
                                                     ],
-                                                    "shortIdea": "They miscalculated something — maybe they thought he had a check — but the queen takes d8 with check, and you simply recapture on d8."
+                                                    "shortIdea": "They miscalculated something — maybe they thought they had a check — but the queen takes d8 with check, and you simply recapture on d8."
                                                    }
                                                   }
                                                  ]
@@ -87528,7 +87528,7 @@
                                        "node": {
                                         "san": "g6",
                                         "movedBy": "black",
-                                        "idea": "If they go e5 — think about their knight on f6; he's actually weakened themselves.",
+                                        "idea": "If they go e5 — think about their knight on f6; they're actually weakened themselves.",
                                         "children": [
                                          {
                                           "node": {
@@ -87689,8 +87689,8 @@
                                                           "shortIdea": "And look at their queen on b6 — you can attack that queen in the future, but complete your development first.",
                                                           "asides": [
                                                            {
-                                                            "idea": "Was that queen play an accident, or did he get anything out of it? Zero — they give up a queen for a pawn; I think it might have been a mis-click, one of those pre-move accidents, but other than that I honestly have no idea what went through their mind. Okay, in this next game — e3, the c-file is opening; maybe they'll play e4 and transpose. This is like a reverse French, and in a position like this, a lot of times what I do is just push e4, closing up the centre — a different type of position, and one of the next steps to improvement.",
-                                                            "shortIdea": "Was that queen play an accident, or did he get anything out of it?",
+                                                            "idea": "Was that queen play an accident, or did they get anything out of it? Zero — they give up a queen for a pawn; I think it might have been a mis-click, one of those pre-move accidents, but other than that I honestly have no idea what went through their mind. Okay, in this next game — e3, the c-file is opening; maybe they'll play e4 and transpose. This is like a reverse French, and in a position like this, a lot of times what I do is just push e4, closing up the centre — a different type of position, and one of the next steps to improvement.",
+                                                            "shortIdea": "Was that queen play an accident, or did they get anything out of it?",
                                                             "arrows": [
                                                              {
                                                               "from": "e1",
@@ -87734,7 +87734,7 @@
                                           }
                                          }
                                         ],
-                                        "shortIdea": "If they go e5 — think about their knight on f6; he's actually weakened themselves."
+                                        "shortIdea": "If they go e5 — think about their knight on f6; they're actually weakened themselves."
                                        }
                                       }
                                      ],
@@ -92581,7 +92581,7 @@
                                     "node": {
                                      "san": "Nh3",
                                      "movedBy": "white",
-                                     "idea": "He's forced into the ugly knight to h3. A rule for these d4 positions: the moment that knight leaves f6, think about pushing the f-pawn to f5 to blast open the f-file.",
+                                     "idea": "They're forced into the ugly knight to h3. A rule for these d4 positions: the moment that knight leaves f6, think about pushing the f-pawn to f5 to blast open the f-file.",
                                      "children": [
                                       {
                                        "node": {
@@ -92599,7 +92599,7 @@
                                              "node": {
                                               "san": "Ne3",
                                               "movedBy": "black",
-                                              "idea": "After knight to e3 he essentially has to give up their bishop for it.",
+                                              "idea": "After knight to e3 they essentially have to give up their bishop for it.",
                                               "children": [
                                                {
                                                 "node": {
@@ -92620,7 +92620,7 @@
                                                 }
                                                }
                                               ],
-                                              "shortIdea": "After knight to e3 he essentially has to give up their bishop for it."
+                                              "shortIdea": "After knight to e3 they essentially have to give up their bishop for it."
                                              }
                                             }
                                            ],
@@ -92632,7 +92632,7 @@
                                        }
                                       }
                                      ],
-                                     "shortIdea": "He's forced into the ugly knight to h3."
+                                     "shortIdea": "They're forced into the ugly knight to h3."
                                     }
                                    }
                                   ],
@@ -94724,7 +94724,7 @@
                                                                                     "node": {
                                                                                      "san": "Rxa4",
                                                                                      "movedBy": "white",
-                                                                                     "idea": "He's also given your bishop a very nice square — where can your bishop now go to support the knight?",
+                                                                                     "idea": "They're also given your bishop a very nice square — where can your bishop now go to support the knight?",
                                                                                      "children": [
                                                                                       {
                                                                                        "node": {
@@ -94736,19 +94736,19 @@
                                                                                           "node": {
                                                                                            "san": "Bxa6",
                                                                                            "movedBy": "white",
-                                                                                           "idea": "Now he's given up a pawn on a6 — I think you'll just snag that one; that's a free pawn in my book. There's a little pressure down the a-file to be careful of, particularly because this rook is unprotected, but",
+                                                                                           "idea": "Now they've given up a pawn on a6 — I think you'll just snag that one; that's a free pawn in my book. There's a little pressure down the a-file to be careful of, particularly because this rook is unprotected, but",
                                                                                            "children": [
                                                                                             {
                                                                                              "node": {
                                                                                               "san": "Bxd5",
                                                                                               "movedBy": "black",
-                                                                                              "idea": "what I'm seeing is that I can later move my bishop back to b5, and that bishop will simultaneously defend the rook on a4 — so while it's something to keep an eye on, it's not something to be overly concerned about. They take, you take; they could have taken with the rook, but I don't see a point in shying away from this tension, and even if they attack the bishop again, you have many ways to defend it — you can defend it with your queen, dropping the queen back to lend additional support. He's good, not going down without a fight, but you can see the cracks beginning to show. Now is a great time to show why you deployed the knight to c2: there's a move I call a glue move — a move that glues together all the disparate parts of White's position; it stops the queen from attacking b2, lends further support to the bishop, and just glues everything together nicely. That's the knight to b4. Note that b2 was hanging — f2 isn't hanging, because it's protected by the king. Now you have time for simple prophylaxis: where's their knight going? To f4, obviously — how do you prevent it? By going g3. A good observation is that the d5-square is also free, but you don't want to rush a knight there, because the knight on b4 is fulfilling the crucial role of defending b2. They go back, and now you complete your development by castling. They play f5 — a lot of people would worry about them opening the file, but understand the drawback of pushing the f-pawn when castled: you weaken the diagonal, so this check on c4 might be very strong in a couple of moves. Let's take on f5, and if they take back, you make a discovered check and their knight is lost. They can't recapture on f5 — well, they did, but this knight is defended by the rook, and that rook also defends the other rook, so it's overloaded, and by giving the check you expose the tension of the rooks. Boom and boom — you're up a knight and a pawn, and you're winning. The most important moment in the game was g3 — it frustrated them, they got impatient trying to create counterplay, and he fell apart very quickly. Let's capture the knight, and now, notice, the bishop and the queen can combine in a battery threatening checkmate, and their bishop on f6 is going to be lost as well, because to defend against it they have to give it up. They run, you take; how do you keep harassing the king after it moves to f7? Notice the knight to d5 could be a fork. The bishop to c4 or the bishop to g6 are both good. Your goal is to get the king onto e7, a forkable square, so you assess all the checks you can make, including retreating moves — people often miss retreating moves, and they're the glue that makes an attack run. The bishop to g6 cuts the king off from f7; the queen to h3 forces the king onto e7, literally the only move, and that king walks right into the fork with the knight — you win the queen and the game. You didn't do anything extraordinary: you played the theoretical moves and they collapsed quite quickly.",
+                                                                                              "idea": "what I'm seeing is that I can later move my bishop back to b5, and that bishop will simultaneously defend the rook on a4 — so while it's something to keep an eye on, it's not something to be overly concerned about. They take, you take; they could have taken with the rook, but I don't see a point in shying away from this tension, and even if they attack the bishop again, you have many ways to defend it — you can defend it with your queen, dropping the queen back to lend additional support. They're good, not going down without a fight, but you can see the cracks beginning to show. Now is a great time to show why you deployed the knight to c2: there's a move I call a glue move — a move that glues together all the disparate parts of White's position; it stops the queen from attacking b2, lends further support to the bishop, and just glues everything together nicely. That's the knight to b4. Note that b2 was hanging — f2 isn't hanging, because it's protected by the king. Now you have time for simple prophylaxis: where's their knight going? To f4, obviously — how do you prevent it? By going g3. A good observation is that the d5-square is also free, but you don't want to rush a knight there, because the knight on b4 is fulfilling the crucial role of defending b2. They go back, and now you complete your development by castling. They play f5 — a lot of people would worry about them opening the file, but understand the drawback of pushing the f-pawn when castled: you weaken the diagonal, so this check on c4 might be very strong in a couple of moves. Let's take on f5, and if they take back, you make a discovered check and their knight is lost. They can't recapture on f5 — well, they did, but this knight is defended by the rook, and that rook also defends the other rook, so it's overloaded, and by giving the check you expose the tension of the rooks. Boom and boom — you're up a knight and a pawn, and you're winning. The most important moment in the game was g3 — it frustrated them, they got impatient trying to create counterplay, and they fell apart very quickly. Let's capture the knight, and now, notice, the bishop and the queen can combine in a battery threatening checkmate, and their bishop on f6 is going to be lost as well, because to defend against it they have to give it up. They run, you take; how do you keep harassing the king after it moves to f7? Notice the knight to d5 could be a fork. The bishop to c4 or the bishop to g6 are both good. Your goal is to get the king onto e7, a forkable square, so you assess all the checks you can make, including retreating moves — people often miss retreating moves, and they're the glue that makes an attack run. The bishop to g6 cuts the king off from f7; the queen to h3 forces the king onto e7, literally the only move, and that king walks right into the fork with the knight — you win the queen and the game. You didn't do anything extraordinary: you played the theoretical moves and they collapsed quite quickly.",
                                                                                               "children": [],
                                                                                               "shortIdea": "what I'm seeing is that I can later move my bishop back to b5, and that bishop will simultaneously defend the rook on a4 — so while it's…"
                                                                                              }
                                                                                             }
                                                                                            ],
-                                                                                           "shortIdea": "Now he's given up a pawn on a6 — I think you'll just snag that one; that's a free pawn in my book."
+                                                                                           "shortIdea": "Now they've given up a pawn on a6 — I think you'll just snag that one; that's a free pawn in my book."
                                                                                           }
                                                                                          }
                                                                                         ],
@@ -94756,7 +94756,7 @@
                                                                                        }
                                                                                       }
                                                                                      ],
-                                                                                     "shortIdea": "He's also given your bishop a very nice square — where can your bishop now go to support the knight?"
+                                                                                     "shortIdea": "They're also given your bishop a very nice square — where can your bishop now go to support the knight?"
                                                                                     }
                                                                                    }
                                                                                   ],
@@ -96924,7 +96924,7 @@
                                                                 "shortIdea": "Now that your bishop won't reach g4, the time has come for the bishop to e6 — developing, unafraid of moves that hit your queen.",
                                                                 "asides": [
                                                                  {
-                                                                  "idea": "The knight goes from g6 to e5, then a rook to d8 — a general piece configuration, not a single-piece plan. There's a Capablanca game that inspired me to teach this way. Capablanca is up a pawn, an extra a-pawn, and wants to push it, but a black rook sitting back blockades it. So he reverse-engineers the win by arranging every piece ideally: reroute the knight to d4, advance the b-pawn, and bring the king in the most efficient way — the pawn to f4 grabs space and controls e5, then the king comes via f2. Where does the rook go? Not passively behind the passed pawn on a1 — that's the instructive mistake, because a bishop controls a4 and the rook would be tied down forever; instead defend from c3, where the rook multitasks, threatening a discovered check to drive the king back. Then activate the king toward the b-file, using tactics — a rook check, the knight to c3, a discovered check — and the b5 break lets the a-pawn run. The whole point: a centralized knight dominates a passive bishop. Your own arrangement is simpler, but it's the same approach.",
+                                                                  "idea": "The knight goes from g6 to e5, then a rook to d8 — a general piece configuration, not a single-piece plan. There's a Capablanca game that inspired me to teach this way. Capablanca is up a pawn, an extra a-pawn, and wants to push it, but a black rook sitting back blockades it. So they reverse-engineer the win by arranging every piece ideally: reroute the knight to d4, advance the b-pawn, and bring the king in the most efficient way — the pawn to f4 grabs space and controls e5, then the king comes via f2. Where does the rook go? Not passively behind the passed pawn on a1 — that's the instructive mistake, because a bishop controls a4 and the rook would be tied down forever; instead defend from c3, where the rook multitasks, threatening a discovered check to drive the king back. Then activate the king toward the b-file, using tactics — a rook check, the knight to c3, a discovered check — and the b5 break lets the a-pawn run. The whole point: a centralized knight dominates a passive bishop. Your own arrangement is simpler, but it's the same approach.",
                                                                   "shortIdea": "The knight goes from g6 to e5, then a rook to d8 — a general piece configuration, not a single-piece plan.",
                                                                   "arrows": [
                                                                    {
@@ -98115,7 +98115,7 @@
                                                                                                             "node": {
                                                                                                              "san": "Rd4",
                                                                                                              "movedBy": "white",
-                                                                                                             "idea": "He somehow defends everything, so the rook to d4 — I really don't think I have a choice.",
+                                                                                                             "idea": "They somehow defend everything, so the rook to d4 — I really don't think I have a choice.",
                                                                                                              "children": [
                                                                                                               {
                                                                                                                "node": {
@@ -98314,7 +98314,7 @@
                                                                                                                }
                                                                                                               }
                                                                                                              ],
-                                                                                                             "shortIdea": "He somehow defends everything, so the rook to d4 — I really don't think I have a choice."
+                                                                                                             "shortIdea": "They somehow defend everything, so the rook to d4 — I really don't think I have a choice."
                                                                                                             }
                                                                                                            }
                                                                                                           ]
@@ -107687,8 +107687,8 @@
                                                  "shortIdea": "Remember you can play d4 at some point, but I save it for a rainy day.",
                                                  "asides": [
                                                   {
-                                                   "idea": "The knight to g8 — he's clearly preparing f5, an advanced plan, but it undevelops the knight. Now Black's pieces are all on the back rank.",
-                                                   "shortIdea": "The knight to g8 — he's clearly preparing f5, an advanced plan, but it undevelops the knight.",
+                                                   "idea": "The knight to g8 — they're clearly preparing f5, an advanced plan, but it undevelops the knight. Now Black's pieces are all on the back rank.",
+                                                   "shortIdea": "The knight to g8 — they're clearly preparing f5, an advanced plan, but it undevelops the knight.",
                                                    "arrows": [
                                                     {
                                                      "from": "f6",
@@ -113030,7 +113030,7 @@
                                           "node": {
                                            "san": "Bh6",
                                            "movedBy": "white",
-                                           "idea": "Top priority is eliminating their strongest piece, the fianchetto bishop — and he correctly counters in the centre with c5.",
+                                           "idea": "Top priority is eliminating their strongest piece, the fianchetto bishop — and they correctly counter in the centre with c5.",
                                            "children": [
                                             {
                                              "node": {
@@ -113201,7 +113201,7 @@
                                              }
                                             }
                                            ],
-                                           "shortIdea": "Top priority is eliminating their strongest piece, the fianchetto bishop — and he correctly counters in the centre with c5."
+                                           "shortIdea": "Top priority is eliminating their strongest piece, the fianchetto bishop — and they correctly counter in the centre with c5."
                                           }
                                          }
                                         ]
@@ -115517,7 +115517,7 @@
                                "shortIdea": "After Bb4 comes the crux — Ne2, not a3.",
                                "asides": [
                                 {
-                                 "idea": "This is a masterclass in when a pin is deadly: the pinned knight is pawn-defended, yet the pin still crushes — because Black has no dark bishop for e7, he's castled into the pin so moving the queen is no option, and the usual h6-g5 escape is suicide against h4.",
+                                 "idea": "This is a masterclass in when a pin is deadly: the pinned knight is pawn-defended, yet the pin still crushes — because Black has no dark bishop for e7, they've castled into the pin so moving the queen is no option, and the usual h6-g5 escape is suicide against h4.",
                                  "shortIdea": "This is a masterclass in when a pin is deadly: the pinned knight is pawn-defended, yet the pin still crushes — because Black has no dark bishop for…",
                                  "arrows": [
                                   {
@@ -121020,7 +121020,7 @@
                            "node": {
                             "san": "e6",
                             "movedBy": "black",
-                            "idea": "And here's the common mistake: they prop up d5 with e6, not noticing the very subtle reply that cements the weakness he's just created.",
+                            "idea": "And here's the common mistake: they prop up d5 with e6, not noticing the very subtle reply that cements the weakness they're just created.",
                             "children": [
                              {
                               "node": {
@@ -121038,7 +121038,7 @@
                                     "node": {
                                      "san": "exd6",
                                      "movedBy": "white",
-                                     "idea": "He's forced to push d5, and you snap it off en passant.",
+                                     "idea": "They're forced to push d5, and you snap it off en passant.",
                                      "children": [
                                       {
                                        "node": {
@@ -121096,7 +121096,7 @@
                                        }
                                       }
                                      ],
-                                     "shortIdea": "He's forced to push d5, and you snap it off en passant."
+                                     "shortIdea": "They're forced to push d5, and you snap it off en passant."
                                     }
                                    }
                                   ]
@@ -121119,7 +121119,7 @@
                               }
                              }
                             ],
-                            "shortIdea": "And here's the common mistake: they prop up d5 with e6, not noticing the very subtle reply that cements the weakness he's just created.",
+                            "shortIdea": "And here's the common mistake: they prop up d5 with e6, not noticing the very subtle reply that cements the weakness they're just created.",
                             "asides": [
                              {
                               "idea": "Their whole downfall traced back to e6.",

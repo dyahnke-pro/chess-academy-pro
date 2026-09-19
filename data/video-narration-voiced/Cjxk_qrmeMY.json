@@ -86,7 +86,7 @@
       "t": 1189,
       "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
       "line": [],
-      "spoken": "The bishop to f4 is a legitimate line, but combining c takes d5 with it isn't great: White's main plan is to take and play e4, but with the bishop on f4 the bishop would hang — he's mixed up two lines.",
+      "spoken": "The bishop to f4 is a legitimate line, but combining c takes d5 with it isn't great: White's main plan is to take and play e4, but with the bishop on f4 the bishop would hang — they've mixed up two lines.",
       "reanchor": true
     },
     {
@@ -146,7 +146,7 @@
         "Qxd8+",
         "Kxd8"
       ],
-      "spoken": "They miscalculated something — maybe they thought he had a check — but the queen takes d8 with check, and you simply recapture on d8. A nice introduction to the Grünfeld."
+      "spoken": "They miscalculated something — maybe they thought they had a check — but the queen takes d8 with check, and you simply recapture on d8. A nice introduction to the Grünfeld."
     },
     {
       "ply": 17,
@@ -649,7 +649,7 @@
       "t": 1942,
       "fen": "rnb1k2r/pp2ppbp/6p1/2pq4/3P4/6B1/PP2PPPP/R2QKBNR w KQkq - 0 8",
       "line": [],
-      "spoken": "But after d takes c5, the knight to c3, the game is over. On the top level: Magnus has a much wider repertoire than MVL, who plays the Grünfeld and Najdorf almost exclusively; that predictability is a slight disadvantage now that preparation has grown so powerful, but he's survived for years and won tons of games — they might just need to widen their repertoire a little to stay unpredictable.",
+      "spoken": "But after d takes c5, the knight to c3, the game is over. On the top level: Magnus has a much wider repertoire than MVL, who plays the Grünfeld and Najdorf almost exclusively; that predictability is a slight disadvantage now that preparation has grown so powerful, but they've survived for years and won tons of games — they might just need to widen their repertoire a little to stay unpredictable.",
       "reanchor": true
     }
   ]

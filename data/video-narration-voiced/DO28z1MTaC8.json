@@ -69,7 +69,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "If you castle and they take, there's no Stafford left — he's close to castling. So you either play the knight to c6 into a Four Knights, or d6; it doesn't much matter, so you start with d6 to defend the e5 pawn."
+   "spoken": "If you castle and they take, there's no Stafford left — they're close to castling. So you either play the knight to c6 into a Four Knights, or d6; it doesn't much matter, so you start with d6 to defend the e5 pawn."
   },
   {
    "ply": 9,
@@ -186,7 +186,7 @@
    "line": [
     "gxf3"
    ],
-   "spoken": "They recapture, capturing on f3. The weaknesses he's created are permanent, so it's worth it if you manage the open g-file. Two things: start kingside operations, moves like the knight to h5, and balance that with some prophylaxis."
+   "spoken": "They recapture, capturing on f3. The weaknesses they've created are permanent, so it's worth it if you manage the open g-file. Two things: start kingside operations, moves like the knight to h5, and balance that with some prophylaxis."
   },
   {
    "ply": 22,
@@ -394,7 +394,7 @@
    "line": [
     "R5g4"
    ],
-   "spoken": "The rook to g4 — he's blundered back; a small blunder."
+   "spoken": "The rook to g4 — they've blundered back; a small blunder."
   },
   {
    "ply": 44,

@@ -49,6 +49,8 @@ const NO_CHANGE = new Set([
   'left', 'put', 'set', 'hit', 'cut', 'sent', 'spent', 'built', 'felt', 'meant',
   'slept', 'told', 'sold', 'brought', 'caught', 'taught', 'fought', 'bought',
   'began', 'chose', 'drew', 'threw', 'grew', 'blew', 'stood', 'understood',
+  'wrote', 'spoke', 'broke', 'wore', 'rose', 'fell', 'led', 'read', 'meant',
+  'beat', 'hit', 'quit', 'shut', 'split', 'bet', 'let', 'cost', 'burst',
 ]);
 
 /** An adverb may sit between the pronoun and its verb ("he simply doesn't"). */
@@ -58,6 +60,8 @@ const ADVERB = new Set([
   'really', 'finally', 'instead', 'again', 'happily', 'clearly', 'obviously',
   'basically', 'literally', 'certainly', 'definitely', 'quietly', 'calmly',
   'only', 'even', 'rarely', 'sometimes', 'eventually', 'promptly', 'duly',
+  'somehow', 'almost', 'nearly', 'barely', 'hardly', 'seemingly', 'apparently',
+  'essentially', 'first', 'later', 'often', 'suddenly', 'briefly', 'correctly',
 ]);
 
 /** 3rd-person-singular -> plural, for a regular verb. */
@@ -65,6 +69,9 @@ function pluralise(v) {
   const lower = v.toLowerCase();
   if (IRREGULAR.has(lower)) return match(v, IRREGULAR.get(lower));
   if (NO_CHANGE.has(lower)) return v;
+  // A MODAL takes a bare infinitive and never agrees: "he cannot take" ->
+  // "they cannot take", "if he were White" -> "if they were White".
+  if (MODALS.has(lower)) return v;
   // PAST TENSE NEEDS NO AGREEMENT: "he resigned" -> "they resigned". The first
   // cut flagged every one of these as an unrecognised verb, which is how a
   // refuse-rather-than-guess rule turns into a pile of false work.
@@ -87,6 +94,30 @@ function match(original, replacement) {
     ? replacement.charAt(0).toUpperCase() + replacement.slice(1)
     : replacement;
 }
+
+/** "he's X" ruled on by reading each one in its sentence (2026-09-19). */
+const ADJUDICATED = new Map(Object.entries({
+  // IS — an adjective, adverb or preposition follows.
+  forced: "they're", uncastled: "they're", good: "they're", active: "they're",
+  left: "they're", totally: "they're", too: "they're", mated: "they're",
+  really: "they're", close: "they're", clearly: "they're", so: "they're",
+  cooked: "they're", essentially: "they're", also: "they're", busted: "they're",
+  just: "they're", super: "they're", actually: "they're", basically: "they're",
+  annoyed: "they're",
+  // HAS — a direct object follows.
+  chosen: "they've", clamped: "they've", moved: "they've", created: "they've",
+  mixed: "they've", survived: "they've", blundered: "they've",
+  damaged: "they've", blunted: "they've", lost: "they've",
+  castled: "they've", forgotten: "they've", given: "they've", got: "they've",
+  opened: "they've", panicked: "they've", resigned: "they've",
+  stopped: "they've", taken: "they've",
+}));
+
+/** Modals + subjunctive `were`: no agreement, ever. */
+const MODALS = new Set([
+  'can', "can't", 'cannot', 'could', "couldn't", 'would', "wouldn't", 'should',
+  "shouldn't", 'must', 'might', 'may', 'will', "won't", 'shall', 'were', 'dare',
+]);
 
 const flagged = [];
 
@@ -134,8 +165,34 @@ export function transform(text, where = 'inline') {
     if (['a', 'an', 'the', 'not', 'fine', 'better', 'worse', 'up', 'down', 'out', 'in', 'still', 'already', 'about', 'ready'].includes(n)) {
       return match(whole, "they're") + ` ${next}`;
     }
+    // HAND ADJUDICATION. Every "he's X" in the corpus was READ IN CONTEXT and
+    // ruled on; the rule that emerged is simply whether a direct object
+    // follows ("he's created a lot of weaknesses" = HAS) or an adjective /
+    // adverb / preposition does ("he's forced to drop back" = IS). Recorded as
+    // a table rather than inferred, because the inference needs the rest of the
+    // sentence and a wrong guess reads fine while meaning something else.
+    const ruling = ADJUDICATED.get(n);
+    if (ruling) return `${match(whole, ruling)} ${next}`;
     flagged.push(`${where}: "${whole}" — is/has is ambiguous, left alone`);
     return whole;
+  });
+
+  // 2b. AN AUXILIARY BEFORE THE PRONOUN — a question or a modal. The verb after
+  // "he" is then a BARE INFINITIVE and must not be touched ("can he prevent" ->
+  // "can they prevent"), and the auxiliary itself carries the agreement
+  // ("does he have" -> "DO they have"). Run before step 3 so it never sees
+  // these and never pluralises a bare infinitive into nonsense.
+  const AUX = new Map(Object.entries({
+    does: 'do', "doesn't": "don't", is: 'are', was: 'were', has: 'have',
+    // Already agreement-free — listed so the pronoun still flips.
+    can: 'can', "can't": "can't", cannot: 'cannot', could: 'could', would: 'would',
+    should: 'should', must: 'must', might: 'might', may: 'may', will: 'will',
+    "won't": "won't", did: 'did', "didn't": "didn't", dare: 'dare', shall: 'shall',
+    had: 'had', do: 'do',
+  }));
+  out = out.replace(/\b([A-Za-z']+)(\s+)he\b/gi, (whole, aux, sp) => {
+    const to = AUX.get(aux.toLowerCase());
+    return to ? `${match(aux, to)}${sp}they` : whole;
   });
 
   // 3. he <verb> — the agreement case.
@@ -149,7 +206,7 @@ export function transform(text, where = 'inline') {
   //      like English and has lost its verb.
   // Both are silent in a diff you do not read, and both would have shipped
   // straight to a student's ear from a live transform.
-  out = out.replace(/\b(he)(\s+)([A-Za-z']+)((\s+)([A-Za-z']+))?/gi, (whole, pron, sp1, w1, rest, sp2, w2) => {
+  out = out.replace(/\b(he)(\s+)([A-Za-z'-]+)((\s+)([A-Za-z'-]+))?/gi, (whole, pron, sp1, w1, rest, sp2, w2) => {
     const they = match(pron, 'they');
     // An adverb may sit between the pronoun and its verb ("he simply doesn't").
     if (ADVERB.has(w1.toLowerCase()) && w2) {

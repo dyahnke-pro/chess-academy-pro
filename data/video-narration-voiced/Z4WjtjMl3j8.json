@@ -354,7 +354,7 @@
     "Rf1",
     "Bxd4"
    ],
-   "spoken": "Even Kf1 doesn't help — the rook x-rays its own king, so you play e5 as if nothing happened; if White takes, he's mated in the centre of the board.",
+   "spoken": "Even Kf1 doesn't help — the rook x-rays its own king, so you play e5 as if nothing happened; if White takes, they're mated in the centre of the board.",
    "kind": "branch",
    "teaches": "A rook that x-rays its own king can leave a capture illegal in effect — exploit the pin.",
    "reanchor": true

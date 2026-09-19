@@ -653,7 +653,7 @@
    "t": 794,
    "fen": "r2qk2r/1bp1np1n/3pB1p1/p5Pp/1p1PPN2/4BPP1/PPPQ4/1R1K3R b kq - 0 17",
    "line": [],
-   "spoken": "One more principle: opening the b-file toward your own king is harmless because Black has no pieces there. No pieces, no attack — he's too bogged down in weaknesses to ever assemble one.",
+   "spoken": "One more principle: opening the b-file toward your own king is harmless because Black has no pieces there. No pieces, no attack — they're too bogged down in weaknesses to ever assemble one.",
    "kind": "review",
    "teaches": "A file opened near your king is safe if the opponent has no pieces to pour down it.",
    "reanchor": true
