@@ -281,7 +281,7 @@ export function buildCriticalMomentQuestion(
     // they did before it names the chess; the ask names what they played
     // without grading a move the engine never flagged.
     reveal: found
-      ? `That was a critical moment, and you found it over the board — ${named}`
+      ? `That was a critical moment. ${named} You found it over the board.`
       : `You played ${seg.san}. ${named}`,
     playedSan: seg.san,
     found,

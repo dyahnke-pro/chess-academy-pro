@@ -153,7 +153,7 @@ describe('the critical moment, asked — review’s second register', () => {
     expect(q?.ply).toBe(21);
     expect(q?.found).toBe(true);
     expect(q?.register).toBe('credit');
-    expect(q?.reveal).toContain('you found it over the board');
+    expect(q?.reveal).toContain('You found it over the board');
   });
 
   it('NEVER asks a student to find a move they played (\u00a7G4.5.2)', () => {
@@ -168,13 +168,14 @@ describe('the critical moment, asked — review’s second register', () => {
     expect(q?.question).toContain('?');
     expect(q?.question).not.toContain('e4');
     expect(q?.reveal).toContain('e4');
+    expect(q?.reveal).toContain('Only one move kept');   // the COUNT, retrospective
   });
 
   it('names what they actually played when their move did not hold', () => {
     const q = buildCriticalMomentQuestion([seg({ san: 'd4' })], new Map([[21, readAt(1)]]), 'white');
     expect(q?.found).toBe(false);
     expect(q?.reveal).toContain('You played d4');
-    expect(q?.reveal).toContain('e4 was the move');
+    expect(q?.reveal).toContain('Only one move kept you level here, and it was e4');
   });
 
   it('selects by CRITICALITY — one-move before two-move, then the widest gap', () => {
@@ -271,7 +272,7 @@ describe('the critical moment — the three registers', () => {
     expect(q.question).toBeNull();
     expect(q.choices).toEqual([]);
     expect(q.reveal).toContain('You played Nf3');
-    expect(q.reveal).toContain('e4 and d4 both keep you level');
+    expect(q.reveal).toContain('Two moves kept you level here — e4 and d4');
   });
 
   it('the chips always include what they actually played, even off the fan', () => {
