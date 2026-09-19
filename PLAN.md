@@ -471,6 +471,43 @@ Learn 8/8, Review 28/28 MEETS STANDARD.
    4 components, zero services) and the critical-moment announcement, which is
    the first thing that will ever pass `prompted: true`.
 
+### 🔴 OPEN — THE CANONICAL LEARN ASK STALLS AFTER Qxd5 (found 2026-09-19, ~05:40)
+
+`audit-concept-gameplay-prod` row C went 8/8 -> 7/8. NOT the concept
+computer: the game never reaches the position that poses it. The coach does
+not reply after the student's 4th ply, so `Nc3` — the move that creates the
+pin the invariant describes — is never played.
+
+**Measured, twice, on one bundle:**
+
+| bundle | canonical ask | typo ask (via the picker) |
+|---|---|---|
+| `index-BBopxcK2` | 5 plies, **27s** ✅ | 5 plies, 26s ✅ |
+| `index-C7Z2So9u` | 4 plies, **136s** ❌ | 5 plies, 30s ✅ |
+| `index-C7Z2So9u` (re-run) | 4 plies, **136s** ❌ | 5 plies, 30s ✅ |
+
+So it is not a cold start (the second game in the same run is warm and fast)
+and not intermittent (identical twice). It is asymmetric: the ask typed
+CANONICALLY stalls; the same game started by TAPPING A PICKER CHIP does not.
+136s is suspiciously close to a timeout boundary.
+
+**WHOSE CHANGE — evidence, not a verdict.** Between the green bundle and the
+red one, this session landed only voiced-corpus DATA and a script that never
+enters the bundle (only a test imports it; verified by grep). The other
+session landed `6f088da` / `cda379b` / `5bbd3d1`, which rewrote **249 lines of
+`coachApi.ts`** plus `coachService.ts` and 51 lines of `CoachTeachPage.tsx` —
+the exact reply path that now stalls — to detect and carry the turn's
+language.
+
+That is circumstantial: the window, the surface, and the asymmetry all point
+one way, but NOBODY HAS BISECTED IT. Deliberately not "fixed" from here at
+05:40 while that work is in flight — a blind patch into a surface another
+session is actively editing is how two correct changes become one broken one.
+
+**To confirm in one step:** re-run `audit-concept-gameplay-prod` with the
+language path short-circuited, or bisect `6f088da`. The canonical ask is
+`"Play the Scandinavian Defense, Lasker Variation with me"`.
+
 ### A-ADJACENT, found by the post-deploy audit (2026-09-19)
 
 - ✅ **A GUESSED SEAT NARRATED THE STUDENT'S OWN MOVES AS THE OPPONENT'S**
