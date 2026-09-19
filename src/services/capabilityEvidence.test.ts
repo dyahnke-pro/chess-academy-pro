@@ -43,7 +43,11 @@ describe('capabilitiesShown — both halves computed', () => {
     // `center` and `luft` map to null on purpose: no tag names them, and filing
     // centre evidence under `space-conceded` would be a lie.
     const nulls = Object.entries(MOVE_FUNDAMENTAL_TAG).filter(([, t]) => t === null).map(([k]) => k);
-    expect(nulls.sort()).toEqual(['center', 'luft']);
+    // `promotion` joined them 2026-09-19 (a promotion is a thing DONE, not a
+    // habit neglected). Pinned as an exact list on purpose: a new fundamental
+    // quietly mapping to null means a capability the board can pose that the
+    // student model can never file, and that should cost someone a red test.
+    expect(nulls.sort()).toEqual(['center', 'luft', 'promotion']);
     for (const s of capabilitiesShown(AFTER_1E4_E5, 'Nf3', 'white', 0)) {
       expect(nulls).not.toContain(s.tag);
     }
