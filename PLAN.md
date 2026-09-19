@@ -801,3 +801,15 @@ canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
    before concluding anything about the product. Of the four reds on 2026-09-19,
    one was the product, one was the audit withholding its own input, and two
    were a poll budget tuned on a game that is no longer the one being audited.
+
+## WO-4 (2026-09-19) — attributed fundamentals: measured, joined, one wire repaired
+
+Report: `docs/plans/2026-09-19-wo4-fundamentals-attribution.md`. Short form:
+the capture→attribute wire FIRES on real games (154/154 flagged moves captured,
+51% attributed after the repair), the Fundamentals tab sees every one, and the
+weakness SPINE sees **none** — `autoAnalyzeGameMisconceptions` hardcodes
+`learned:false` and the spine reads `countedOnly`. Not flipped (WO-3's file,
+would double-count the tag); the real fix is a fundamental-aware spine reader.
+The three gap tags (`no-plan`, `calculation-depth`, `left-book-early`) have no
+pipeline writer at all — 23% of real slips still fall to `other`. Detectors are
+section 14, ranked in the report: `calculation-depth` first.
