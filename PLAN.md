@@ -1162,6 +1162,42 @@ canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
    were a poll budget tuned on a game that is no longer the one being audited.
 
 
+7. **THE STALE TACTICS PACKAGE — landed 2026-09-19 (`9a6700299` + merges).**
+   `TacticsLiveContext.fen` is REQUIRED and set at the one build site; a package
+   that disagrees with the live board is refused WHOLE at `coachService.ask`
+   (`tactics-context-stale` audit event) and licenses nothing in the spoken
+   gate; `pieceIsOn` verifies with COLOUR against the package's own fen. Two
+   `useRef` races that CREATED stale packages are closed (CoachTeachPage
+   `fedTacticsRef`, GameChatPanel `currentTacticsRef`). Gates:
+   `tacticsContextIdentity.test`, `coachService.staleTactics.integration.test`.
+   Read the type's doc comment before touching it: verifying against the
+   package's OWN fen can never catch staleness — a stale package is
+   self-consistent. Do not simplify the door away.
+
+   **OWED:**
+   - **G1 post-deploy pair on the live bundle** — `audit-concept-gameplay-prod`
+     (Learn; the ref races live there) then `audit-review-overhaul-prod`,
+     sequentially, nothing beside them. Neither has run on this change yet.
+   - **Read the `tactics-context-stale` count** off the listener after each.
+     Zero on a healthy run is the expected number; a non-zero count on a run
+     with NO ref race left means a THIRD producer of stale packages exists —
+     `CoachAnalysePage` / `ExplainPositionSessionView` `tacticsRef` are the
+     two unswept holders (both reset-then-set within one ask; verify, don't
+     assume).
+   - **`formatTacticsSubBlock` still renders the package into the prompt with no
+     fen check** — it is called at build time so today it cannot be stale, but
+     it is a convention, not a type. Thread the freshness check there or make
+     the renderer take the board fen as a required parameter.
+   - Two pre-existing reds on `main`, chips filed and running in their own
+     sessions: `computedTruth.fuzz` + `teachingSelector` (detectTactics misses
+     the c5–f2 pin) and `GameChatPanel.test` (highlight-marker strip). Neither
+     is this change; both fail identically on untouched `main`.
+   - **ship-check was reporting nothing as green** (test-typecheck + lint OOM at
+     Node 26 default heap; summaries read the crash dump as "0 errors"). Fixed
+     in `scripts/ship-check.mjs` (heap + crash named as crash). Watch for the
+     same disease in any other `runStep` summary that counts matches — a
+     crash has zero matches.
+
 6. **WO-4 left one decision and one draft PR.** PR #938 (`claude/bold-galileo-0ilqaj`)
    is green (ship-check ×2, audit 19/19) and waits on David to merge to `main` —
    after which the G1 prod audit of `audit-fundamentals-tab-prod.mjs` is OWED
