@@ -8,6 +8,12 @@ import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const ASK = process.env.PROBE_ASK ?? 'สอนฉันเปิดเกมอิตาลีให้หน่อย';
+// A WARM-UP ask reproduces the audit's shape: it asks two other questions in the
+// same context before the lesson row. The focused probe asked as the FIRST
+// message and saw the lesson start; the audit, asking third, saw nothing. Two
+// instruments disagreeing is a finding in itself — this makes the difference
+// the ONE variable.
+const WARMUP = process.env.PROBE_WARMUP ?? '';
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
@@ -23,12 +29,20 @@ for (const t of ['ai-consent-allow', 'page-help-modal-close', 'page-help-got-it'
   if (await el.isVisible().catch(() => false)) { await el.click({ force: true }).catch(() => {}); await page.waitForTimeout(300); }
 }
 
-const box = page.locator('[data-testid="chat-text-input"]:visible:not([disabled])').first();
-await box.waitFor({ timeout: 90000 });
-await box.click({ force: true });
-await box.pressSequentially(ASK, { delay: 8 });
-await box.press('Enter');
-console.log(`asked: "${ASK}"`);
+const send = async (text) => {
+  const box = page.locator('[data-testid="chat-text-input"]:visible:not([disabled])').first();
+  await box.waitFor({ timeout: 90000 });
+  await box.click({ force: true });
+  await box.pressSequentially(text, { delay: 8 });
+  await box.press('Enter');
+};
+if (WARMUP) {
+  await send(WARMUP);
+  console.log(`warm-up: "${WARMUP}"`);
+  await page.waitForTimeout(30000);
+}
+await send(ASK);
+console.log(`asked: "${ASK}"${WARMUP ? ' (as a FOLLOW-UP turn)' : ' (as the FIRST turn)'}`);
 
 const WATCH = ['teach-kickoff-progress', 'teach-generation-progress', 'teach-nav-row', 'teach-nav-status',
                'walkthrough-choose-walkthrough', 'coach-teach-playout', 'walkthrough-backtrack'];
