@@ -148,6 +148,7 @@ import type { MoveResult } from '../../hooks/useChessGame';
 import type { TacticsLiveContext } from '../../coach/types';
 import { classifyMoveFull } from '../../services/moveRating';
 import { assembleSlipNarration } from '../../services/groundedAnswer';
+import { LocalizedCoachText } from './ChatMessage';
 
 function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
   const evaluated = moves.filter((m) => m.evaluation !== null && !m.isCoachMove);
@@ -4961,7 +4962,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                   >
                     {exploreMessages.filter((m) => m.role === 'assistant').map((msg, i) => (
                       <p key={i} className="text-xs leading-relaxed px-1" style={{ color: 'var(--color-text)' }}>
-                        {msg.content}
+                        <LocalizedCoachText content={msg.content} />
                       </p>
                     ))}
                     {isExploreReacting && (

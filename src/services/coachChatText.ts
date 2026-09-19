@@ -16,10 +16,22 @@
  * a door rather than point fixes.
  *
  * THE DOOR IS AT THE RENDER, NOT THE PUSH. Wrapping 85 push sites is a large
- * refactor of a 12k-line component for no extra coverage; the transcript
- * renders from ONE map, so localising there covers every message that exists
- * today and every one added later, for a single call site. `useLocalizedBeats`
- * (narrationI18n) is the same pattern already in this codebase.
+ * refactor of a 12k-line component for no extra coverage; every coach message
+ * that renders at all renders through ONE component, so localising there
+ * covers every message that exists today and every one added later, for a
+ * single call site. `useLocalizedBeats` (narrationI18n) is the same pattern
+ * already in this codebase.
+ *
+ * 🔴 CORRECTED SAME DAY — the first cut of this door sat in `CoachTeachPage`'s
+ * own transcript map, and the sentence here said "the transcript renders from
+ * ONE map". That was true of Teach and false of the app: a full census found
+ * SIX surfaces rendering `<ChatMessage>` (Teach, `GameChatPanel`,
+ * `CoachChatPage`, `CoachGameReview`, `MasterclassCoachChat`, plus Teach's own
+ * streaming bubble), so five of them read English while the voice spoke Thai.
+ * The claim is deleted rather than annotated. `ChatMessage` already carries the
+ * docstring naming it "the single render-level chokepoint every coach surface
+ * shares" — the markup stripper found that out in 2026-06-15 and this door
+ * should have started there. Per-message, at that component, is the door.
  *
  * THE TABLE IS TRIED BEFORE THE MODEL, and that is the determinism law, not an
  * optimisation. These are FIXED app strings with one variable — chrome, not
@@ -29,7 +41,8 @@
  * so a new string is never stuck in English, and English is the floor.
  */
 import { useEffect, useState } from 'react';
-import { detectLanguage, type LangCode } from '../utils/detectLanguage';
+import { detectLanguage, codeForLanguageName, type LangCode } from '../utils/detectLanguage';
+import { chosenOrTypedLanguageName } from './spokenLanguage';
 
 /** One fixed app string: how to recognise it, and how each language says it.
  *  `$1` in a translation is the captured variable (an opening name, a player). */
@@ -219,49 +232,47 @@ async function modelPhrase(text: string, languageName: string): Promise<string |
 export interface LocalizableMessage { id: string; role: string; content: string }
 
 /**
- * The transcript, in the student's language.
+ * ONE message, in the student's language — the hook `ChatMessage` calls.
  *
- * Table hits are applied SYNCHRONOUSLY on the first render, so the strings
- * that matter never flash English first. Only a table miss waits on the model,
- * and that lands as an in-place update rather than holding the bubble back —
- * a late translation is better than a late message.
+ * Per-message rather than per-list on purpose: the list shape only reached the
+ * one surface that owned the map, and there are six. A component-level hook
+ * needs no wiring at any call site, so a seventh surface is covered the day it
+ * renders a bubble.
  *
- * Student messages are never touched: those are their own words.
+ * A table hit is applied SYNCHRONOUSLY on the first render, so the strings that
+ * matter never flash English first. Only a table miss waits on the model, and
+ * that lands as an in-place swap rather than holding the bubble back — a late
+ * translation beats a late message, and English is always the floor.
+ *
+ * Student messages are never touched: those are their own words. Neither is a
+ * bubble still STREAMING — half a sentence is not a translation unit, and the
+ * final text gets its own pass a moment later.
  */
-export function useLocalizedMessages<T extends LocalizableMessage>(
-  messages: readonly T[],
-  languageName: string | null,
-  langCode: LangCode | null,
-): readonly T[] {
-  const [extra, setExtra] = useState<Record<string, string>>({});
+export function useLocalizedContent(
+  content: string,
+  role: string,
+  opts?: { streaming?: boolean },
+): string {
+  const [done, setDone] = useState<{ key: string; text: string } | null>(null);
 
-  const applyTable = (m: T): T => {
-    if (m.role !== 'assistant' || !langCode || !needsLocalizing(m.content)) return m;
-    const swapped = extra[m.id] ?? phraseFor(m.content, langCode);
-    return swapped ? ({ ...m, content: swapped } as T) : m;
-  };
-  const shown = languageName && langCode ? messages.map(applyTable) : messages;
+  const languageName = role === 'assistant' && !opts?.streaming
+    ? chosenOrTypedLanguageName()
+    : null;
+  const langCode = languageName ? codeForLanguageName(languageName) : null;
+  const eligible = !!langCode && !!languageName && needsLocalizing(content);
+  const table = eligible && langCode ? phraseFor(content, langCode) : null;
+  const key = `${languageName ?? ''}::${content}`;
 
   useEffect(() => {
-    if (!languageName || !langCode) return;
+    if (!eligible || table || !languageName) return;
     let cancelled = false;
-    const owed = messages.filter(
-      (m) => m.role === 'assistant'
-        && needsLocalizing(m.content)
-        && !phraseFor(m.content, langCode)
-        && extra[m.id] === undefined,
-    );
-    if (owed.length === 0) return;
-    void Promise.all(owed.map(async (m) => {
-      const said = await modelPhrase(m.content, languageName);
-      return said ? [m.id, said] as const : null;
-    })).then((pairs) => {
-      if (cancelled) return;
-      const add = Object.fromEntries(pairs.filter((p): p is readonly [string, string] => p !== null));
-      if (Object.keys(add).length > 0) setExtra((prev) => ({ ...prev, ...add }));
+    void modelPhrase(content, languageName).then((said) => {
+      if (!cancelled && said) setDone({ key, text: said });
     });
     return () => { cancelled = true; };
-  }, [messages, languageName, langCode, extra]);
+  }, [eligible, table, content, languageName, key]);
 
-  return shown;
+  if (!eligible) return content;
+  if (table) return table;
+  return done && done.key === key ? done.text : content;
 }
