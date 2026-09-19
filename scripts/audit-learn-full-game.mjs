@@ -144,12 +144,27 @@ const CLAIM_RE = /\b(pawn|knight|bishop|rook|queen|king)\s+on\s+([a-h][1-8])\b/g
 // about the position in front of the student. The split is by CLAUSE, not by
 // sentence: "your rook on d1 is loose, so a4 would win the pawn on b4" makes a
 // present claim and a projected one, and only the first is ours to check.
-const HYPOTHETICAL_RE = /\b(?:would|could|might|will|if|unless|once|after|before|instead|were|had|was the move|is the move|threatens? to|plans? to|going to|about to|then)\b/i;
+// NB `creat(e|es|ing|ed)` and `let them|lets them|allow(s|ed)` are in here for a
+// reason found by RUNNING this: a real prod game flagged
+//
+//     "That let them swing pieces toward your king, win a pawn,
+//      create a passed pawn on d5 and trade off the rook."
+//
+// as a false claim ("pawn on d5 — actually a bishop"). It is not one. That is
+// `whatItAllowed`, whose entire register is a projection along the opponent's
+// PV — and `d4d5`, the move that creates the passer, is IN that pv. A thing the
+// line CREATES is by definition not on the board yet, so a creation verb can
+// never introduce a present-board claim.
+const HYPOTHETICAL_RE = /\b(?:would|could|might|will|if|unless|once|after|before|instead|were|had|was the move|is the move|threatens? to|plans? to|going to|about to|then|creat(?:e|es|ed|ing)|lets? them|allow(?:s|ed))\b/i;
 
 /** Split on clause boundaries, so one projected clause cannot exempt a whole
  *  sentence and one present clause cannot condemn a projected neighbour. */
 function clausesOf(text) {
-  return String(text).split(/[,;:—–]|\.\s|\bbut\b|\band then\b|\bso\b/i);
+  // Splits on a bare `and` too. Without it the prod run above kept "create a
+  // passed pawn on d5 AND trade off the rook" as ONE clause, so the projective
+  // half could not be separated from its neighbour — a list of verbs after
+  // "that let them" is a list of clauses, not one.
+  return String(text).split(/[,;:—–]|\.\s|\bbut\b|\band then\b|\band\b|\bso\b/i);
 }
 
 /** Piece-on-square claims in `text` that are not true of `fen`.

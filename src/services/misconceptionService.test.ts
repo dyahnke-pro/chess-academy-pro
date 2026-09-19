@@ -5,9 +5,10 @@ import {
   getMisconceptionProfile,
   getAllMisconceptions,
   recordTagDrillResult,
-  mapTagToDrills,
   isMisconceptionDue,
 } from './misconceptionService';
+import { getMisconceptionDrillPuzzles } from './mistakePuzzleService';
+import { getMisconceptionTag } from '../data/misconceptionTags';
 
 const FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
 
@@ -149,21 +150,26 @@ describe('recordTagDrillResult — SRS spacing, never graduate out', () => {
   });
 });
 
-describe('mapTagToDrills', () => {
-  it('maps a tactical tag to its puzzle themes + the user positions', async () => {
-    await logMisconception({ tag: 'missed-tactic', source: 'auto-analysis', fen: FEN, playedSan: 'h3', bestSan: 'Nxe5' });
-    const plan = await mapTagToDrills('missed-tactic');
-    expect(plan).not.toBeNull();
-    expect(plan!.kind).toBe('tactic');
-    expect(plan!.puzzleThemes).toContain('fork');
-    expect(plan!.positions[0].fen).toBe(FEN);
-    expect(plan!.positions[0].bestSan).toBe('Nxe5');
+describe('a tag drills through the path the student actually takes', () => {
+  // REPLACES the old `mapTagToDrills` suite, deleted with the function it
+  // tested: that join had zero production callers, so these assertions were
+  // green about code nobody ran. Note the old fixture asserted a bestSan of
+  // 'Nxe5', which is ILLEGAL in this position — the dead join never validated
+  // it, which is its own small proof of the problem.
+  it("builds a drill from the student's own flubbed position", async () => {
+    await logMisconception({ tag: 'missed-tactic', source: 'auto-analysis', fen: FEN, playedSan: 'h3', bestSan: 'Nf3' });
+    const puzzles = await getMisconceptionDrillPuzzles('missed-tactic');
+    expect(puzzles).toHaveLength(1);
+    expect(puzzles[0].fen).toBe(FEN);
+    expect(puzzles[0].bestMoveSan).toBe('Nf3');
   });
 
-  it("treats 'other' as a review-only holding pen (no canned drill)", async () => {
-    await logMisconception({ tag: 'other', source: 'game-review', fen: FEN, customLabel: 'odd' });
-    const plan = await mapTagToDrills('other');
-    expect(plan!.kind).toBe('review');
-    expect(plan!.puzzleThemes).toHaveLength(0);
+  it('yields nothing when the row has no best move — the surface shows the empty state', async () => {
+    await logMisconception({ tag: 'missed-tactic', source: 'auto-analysis', fen: FEN, playedSan: 'h3' });
+    expect(await getMisconceptionDrillPuzzles('missed-tactic')).toHaveLength(0);
+  });
+
+  it("treats 'other' as a review-only holding pen (no canned themes)", () => {
+    expect(getMisconceptionTag('other')?.drill.puzzleThemes ?? []).toHaveLength(0);
   });
 });
