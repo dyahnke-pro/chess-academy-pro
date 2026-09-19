@@ -7,7 +7,12 @@ const BATTERY = '[tactic] Their queen on d1 and their bishop on e2 form a batter
 const TRIVIA = '[consequence] It nudged the balance your way.';
 const SQ = new Map<string, readonly string[]>([[PIN, ['g4', 'e2', 'd1']], [BATTERY, ['d1', 'e2', 'g4']]]);
 const bundle = { facts: [PIN, BATTERY, TRIVIA], squares: SQ, incoming: new Set([BATTERY]) };
-const student = { rating: 1500, weaknesses: [] };
+// `need` AND `momentBoost` are both REQUIRED on StudentContext, and null/0
+// are real answers — the
+// type says so because making it optional is exactly how review ended up
+// never supplying it. The fixture omitted it, so this gate never once
+// exercised the absent-need path it documents (found 2026-09-19).
+const student = { rating: 1500, weaknesses: [], need: null, momentBoost: 0 };
 
 const quiet: ImportanceSignals = {
   decision: null, cpLossCp: null, threatNet: 0, teachingBeat: false,

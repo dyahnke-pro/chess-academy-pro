@@ -522,9 +522,25 @@ runStep('typecheck   ', 'npm', ['run', 'typecheck']);
 // one error and fixing another. It is still strictly better than no signal, and
 // lowering the ceiling as the backlog clears is the intended direction.
 // 318 → 317 (2026-09-19): typing `concepts` on the secondary-corpus gate's
-// `Note` cleared two, and the corpus move added one back. Ceilings only ever
-// come DOWN — lower this whenever you clear backlog, never raise it.
-const TEST_TYPE_ERROR_CEILING = 317;
+// `Note` cleared two, and the corpus move added one back.
+//
+// 317 → 296 (2026-09-19, same day, second pass): every error that sat inside a
+// LOAD-BEARING GATE. They were not cosmetic. `coachDecider.test` and
+// `liveNeedGate.test` built a StudentContext missing BOTH `need` and
+// `momentBoost` — the two terms this codebase deliberately made REQUIRED
+// because review forgot them ("an optional student term is a lane's licence to
+// forget the student"). The gate enforcing the one-door rule was itself
+// forgetting the student. `needCoverage.report.test` omitted `capabilities`,
+// the GREEN heat-map term, so the coverage number could not see the green path
+// at all — the path that shipped the night before; it also omitted `clauseKind`,
+// so the number is measured through the conceptId arm only (now stated at the
+// call site). `liveNeedGate.test` imported `ImportanceSignals` from a module
+// that does not export it, masking four further errors until corrected.
+// All five gates pass unchanged and the numbers did not move.
+//
+// ZERO gate files carry a type error. Keep it that way; drive the rest down
+// from the non-gate backlog. Ceilings only ever come DOWN.
+const TEST_TYPE_ERROR_CEILING = 296;
 runStep('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'], {
   optional: true,
   summary: (out) => {

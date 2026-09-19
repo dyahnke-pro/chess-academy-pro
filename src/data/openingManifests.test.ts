@@ -107,7 +107,10 @@ describe('opening-masterclass content manifests', () => {
   });
 
   for (const openingId of openingIds) {
-    const declared = (manifests as Record<string, ManifestEntry>)[openingId];
+    // via unknown: the JSON carries `_comment` / `_schema` meta keys that are
+    // not ManifestEntry shaped. The loop only ever reads `openingIds`, never a
+    // `_` key, so the widening is honest rather than a silenced mismatch.
+    const declared = (manifests as unknown as Record<string, ManifestEntry>)[openingId];
     describe(openingId, () => {
       const actual = countActual(openingId);
 
