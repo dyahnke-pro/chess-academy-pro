@@ -258,7 +258,9 @@ import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
-import { detectStudentLanguage } from '../../services/spokenLanguage';
+import { detectStudentLanguage, chosenOrTypedLanguageName } from '../../services/spokenLanguage';
+import { useLocalizedMessages } from '../../services/coachChatText';
+import { codeForLanguageName } from '../../utils/detectLanguage';
 import { translateToEnglish } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -1040,6 +1042,19 @@ export function CoachTeachPage(): JSX.Element {
   );
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
+
+  // ── THE TRANSCRIPT SPEAKS THE STUDENT'S LANGUAGE ────────────────────────────
+  // The coach writes 22 of its own English strings into this transcript (an
+  // ack, a "still building", an error) from 85 different push sites. Voice was
+  // always localised because every spoken line passes ONE door; chat had none,
+  // so a Thai student heard Thai and read English. The door goes HERE, at the
+  // single render, so every message — including ones added later — is covered
+  // without touching a push site. Fixed app strings come from a table
+  // synchronously (no round-trip, no English-then-swap); anything else falls
+  // back to the model; English is the floor. Their OWN messages are untouched.
+  const chatLanguageName = chosenOrTypedLanguageName();
+  const chatLangCode = chatLanguageName ? codeForLanguageName(chatLanguageName) : null;
+  const shownMessages = useLocalizedMessages(messages, chatLanguageName, chatLangCode);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   // The board is locked ONLY while the opponent is computing its reply (the
@@ -12107,7 +12122,7 @@ export function CoachTeachPage(): JSX.Element {
             </div>
           )}
 
-          {[...messages].reverse().map((msg, idxFromTop) => (
+          {[...shownMessages].reverse().map((msg, idxFromTop) => (
             // Newest finished message gets the same subtle highlight
             // as the streaming bubble. Everything older fades to
             // 70% opacity so the focus stays on the active turn.
