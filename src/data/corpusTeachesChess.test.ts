@@ -37,13 +37,13 @@ describe('shipped corpora teach chess, not their source', () => {
   it.each(paths)('%s', (rel) => {
     const path = resolve(process.cwd(), rel);
     if (!existsSync(path)) return;
-    const notes = (JSON.parse(readFileSync(path, 'utf8')) as { notes: Array<Record<string, unknown>> }).notes;
+    const notes = (JSON.parse(readFileSync(path, 'utf8')) as { notes: Array<{ explains?: string }> }).notes;
     expect(notes.length, 'an empty corpus would pass vacuously').toBeGreaterThan(0);
     const bad = notes.filter((n) => !noteTeachesChess(n));
     expect(
       bad.length,
       `${rel} ships ${bad.length} notes that describe their source rather than chess, e.g. `
-        + `"${String(bad[0]?.explains ?? '').slice(0, 120)}"`,
+        + `"${(bad[0]?.explains ?? '').slice(0, 120)}"`,
     ).toBe(0);
   });
 });
