@@ -2470,7 +2470,18 @@ async function computeLiveBoardVerdict(
  *  is still computed in code and phrased back in the original language by
  *  voiceFacts. Chess notation is preserved. Falls back to the original on any
  *  failure (degrade to English routing, never lose the turn). */
+/** Translations already paid for. A single non-English turn can ask for the
+ *  same string up to three times — the settings matcher, Learn's own intent
+ *  pipeline and the action router each need English to match against — and a
+ *  student repeats themselves when nothing happened the first time. Pure
+ *  function of the input, so the memo is always correct. */
+const translationMemo = new Map<string, string>();
+const TRANSLATION_MEMO_MAX = 200;
+
 export async function translateToEnglish(text: string, providerConfig?: ProviderConfig | null): Promise<string> {
+  const memoKey = text.trim();
+  const memoHit = translationMemo.get(memoKey);
+  if (memoHit !== undefined) return memoHit;
   const cfg = providerConfig ?? (await getProviderConfig());
   if (!cfg) return text;
   const system =
@@ -2480,7 +2491,10 @@ export async function translateToEnglish(text: string, providerConfig?: Provider
     'quotes, no explanation, nothing else.';
   try {
     const out = await callDeepSeek(cfg.apiKey, DEEPSEEK_MODEL_MAP.move_commentary, [{ role: 'system', content: system }, { role: 'user', content: text }], 120, 'translate_to_english');
-    return typeof out === 'string' && out.trim() ? out.trim() : text;
+    const english = typeof out === 'string' && out.trim() ? out.trim() : text;
+    if (translationMemo.size >= TRANSLATION_MEMO_MAX) translationMemo.clear();
+    translationMemo.set(memoKey, english);
+    return english;
   } catch { return text; }
 }
 
@@ -3271,7 +3285,30 @@ export async function getCoachChatResponse(
    *  near-instant. `getKidLlmResponse` does NOT pass this — kid lane
    *  excluded by contract. */
   grounding?: MasterGroundingOptions,
+  /**
+   * The language this TURN must answer in, computed once by the caller.
+   *
+   * 🔒 THE LANGUAGE WAS COMPUTED CORRECTLY AND THEN THROWN AWAY (measured on
+   * prod 2026-09-19). Every grounded lane below voices its facts through
+   * `voiceFacts`, which had no caller passing `targetLanguage` anywhere in the
+   * app — so all 105 of them fell back to re-detecting the language from
+   * `studentMessage`. But `coachService` TRANSLATES the ask to English before
+   * calling this, so what those detectors saw was always English. A Thai
+   * question therefore got a correct, grounded, well-written answer in a
+   * language the student does not read; the same for Greek and Hebrew.
+   *
+   * Passing it in is the fix rather than a module global, which is the known
+   * wrong answer here: a carried language leaked a prior turn's choice into
+   * later turns once already (the 2026-07-10 polyglot audit — an English
+   * question answered in Portuguese). One value, bound to one turn.
+   */
+  studentLanguage?: string,
 ): Promise<string> {
+  // Every `voiceFacts` call in this function goes through here, so the turn's
+  // language cannot be forgotten at one of a hundred call sites. An explicit
+  // `targetLanguage` on a single call still wins (it is spread after).
+  const voice: typeof voiceFacts = (facts, o) =>
+    voiceFacts(facts, { targetLanguage: studentLanguage, ...o });
   // Clear any action offer from a prior turn — only a grounded block
   // that fires THIS turn re-populates it (else the surface shows no
   // follow-up chip). See `consumeCoachActionOffer`.
@@ -3333,7 +3370,7 @@ export async function getCoachChatResponse(
       }
       return undefined;
     })();
-    const voiced = await voiceFacts(grounding.moveNarrationFacts, {
+    const voiced = await voice(grounding.moveNarrationFacts, {
       directives: grounding.moveNarrationDirectives,
       studentMessage: studentMsg,
       providerConfig: config,
@@ -3385,7 +3422,7 @@ export async function getCoachChatResponse(
     if (earlyNotationSan) {
       const explained = explainSanNotation(earlyNotationSan, grounding.currentFen ?? null);
       if (explained) {
-        const voiced = await voiceFacts(explained, { studentMessage: earlyUserMsg, providerConfig: config, intent: 'notation', preferRaw: true });
+        const voiced = await voice(explained, { studentMessage: earlyUserMsg, providerConfig: config, intent: 'notation', preferRaw: true });
         if (voiced) {
           emitGroundingCoverage('notation-help', grounding.surface ?? 'unknown', grounding.sessionId, { question: (earlyUserMsg ?? '').slice(0, 100), path: 'early' });
           if (onStream) onStream(voiced);
@@ -3549,7 +3586,7 @@ export async function getCoachChatResponse(
                   : 'the mistakes you make';
                 lastCoachActionOffer = [IMPORT_ANALYZE_OFFER];
                 const msg = uploadGamesReminder(topic, overview);
-                const voiced = await voiceFacts(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+                const voiced = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
                 return voiced ?? msg;
               }
             } catch { /* read failed — fall through to each lane's own no-data path */ }
@@ -3574,7 +3611,7 @@ export async function getCoachChatResponse(
                 // swap (French → Sicilian) falls back to the computed prose,
                 // while still allowing the model to drop "Defense"/abbreviate.
                 const familyRoot = opening.openingName.split(/\s+/)[0];
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opening', preferRaw: true, mustPreserve: familyRoot ? [familyRoot] : undefined });
+                const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opening', preferRaw: true, mustPreserve: familyRoot ? [familyRoot] : undefined });
                 // No action chip here: we only have the opening's family NAME,
                 // not a routable openingId (the /openings/:id chip needs an id).
                 if (voiced) return voiced;
@@ -3584,14 +3621,14 @@ export async function getCoachChatResponse(
             if (opponent) {
               const answer = assembleOpponentRecordAnswer(opponent);
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opponent', preferRaw: true });
+                const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs-opponent', preferRaw: true });
                 if (voiced) return voiced;
               }
             }
             // Target didn't resolve to an opening we've played OR a known
             // opponent — computed no-data line (G0), not an LLM guess.
             const noDataFact = `I don't have any of your games against "${target}" logged yet. If that's an opening, drill it and I'll start tracking your record; if it's an opponent, we haven't played them in your imported games.`;
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'record-vs', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -3633,7 +3670,7 @@ export async function getCoachChatResponse(
                 offer = { type: 'drill_opening', id: '' };
               }
             }
-            const voiced = await voiceFacts(fact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'training-request', preferRaw: true });
+            const voiced = await voice(fact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'training-request', preferRaw: true });
             if (voiced) {
               if (offer) lastCoachActionOffer = [offer];
               return voiced;
@@ -3657,7 +3694,7 @@ export async function getCoachChatResponse(
                 // content the answer hinges on — require them verbatim so a
                 // phrasing slip (d4→e4) serves the computed prose instead.
                 const mustPreserve = [rating.playedSan, rating.betterSan].filter((s): s is string => !!s);
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true, mustPreserve });
+                const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true, mustPreserve });
                 if (voiced) {
                   // Offer an "Analyse Position" chip when the move was a real
                   // error, so the student can dig into the line — opt-in.
@@ -3686,11 +3723,11 @@ export async function getCoachChatResponse(
             const ov = await getOverviewInsights();
             const answer = assembleStrengthsAnswer(ov.strengths ?? []);
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
               if (voiced) return voiced;
             }
             const noDataFact = "Import your games and I'll show you what you do well. Connect your chess.com or lichess account — once your games are in and analyzed, I'll pull out your real strengths.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
             if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }
           } catch { /* fall through */ }
         }
@@ -3710,11 +3747,11 @@ export async function getCoachChatResponse(
               avgMovesPerGame: ov.avgMovesPerGame,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
               if (voiced) return voiced;
             }
             const noDataFact = "Import your games and I'll track your rating and win rate. Connect your chess.com or lichess account and I'll keep your record for you.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
             if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }
           } catch { /* fall through */ }
         }
@@ -3771,7 +3808,7 @@ export async function getCoachChatResponse(
                 topWeakSpot: top ? { san: top.correctMoveSan, failCount: top.failCount } : null,
               });
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy', preferRaw: true });
+                const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy', preferRaw: true });
                 if (voiced) {
                   // Opt-in "Practice Opening" chip → the resolved opening's
                   // detail page, where the student drills the weak variation.
@@ -3782,7 +3819,7 @@ export async function getCoachChatResponse(
             }
             // No opening drilled / no weak-spot data — computed no-data line (G0).
             const noDataFact = "You haven't drilled an opening enough yet for me to grade your accuracy line by line. Drill one of your repertoire openings a few times and I'll pinpoint the exact variation and move to work on.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-accuracy', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
@@ -3897,7 +3934,7 @@ export async function getCoachChatResponse(
             }
             const answer = assembleOpeningTrapsAnswer({ sides, explainSystem: grounding.openingTrapsSystemAsk, named: !!ctx });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps', preferRaw: true });
               if (voiced) {
                 // Opt-in "Practice Opening" chip → the opening whose traps
                 // we just described, so the student can drill the weapons.
@@ -3922,7 +3959,7 @@ export async function getCoachChatResponse(
             }
             // No trap data yet — computed no-data line (G0).
             const noDataFact = "I don't have named traps logged for your strongest openings yet. Drill an opening's Watch and Learn rungs and I'll surface its trap weapons and the lines to watch out for.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-traps', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
@@ -3943,7 +3980,7 @@ export async function getCoachChatResponse(
               .map((e) => ({ name: nameById.get(e.openingId) ?? e.openingId, dueCards: e.dueCards }));
             const answer = assembleReviewDueAnswer({ dueCount, totalEnrolled, dueOpenings });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due', preferRaw: true });
               if (voiced) {
                 // Offer the opt-in "Start review" chip when there's
                 // actually something due — never auto-launch the trainer.
@@ -3953,7 +3990,7 @@ export async function getCoachChatResponse(
             }
             // Nothing enrolled yet — computed onboarding line (G0).
             const noDataFact = "You don't have any opening review cards yet. Finish an opening's Learn rung and I'll start scheduling spaced-repetition reps for it — then I can tell you what's due.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
@@ -3991,7 +4028,7 @@ export async function getCoachChatResponse(
                   : 'your weaknesses';
                 lastCoachActionOffer = [IMPORT_ANALYZE_OFFER];
                 const msg = uploadGamesReminder(topic, overview);
-                const voiced = await voiceFacts(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+                const voiced = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
                 return voiced ?? msg;
               }
             } catch { /* read failed — fall through to the lanes' own fallbacks */ }
@@ -4036,7 +4073,7 @@ export async function getCoachChatResponse(
                   if (others.length > 0) facts += ` Also on my radar: ${others.join(', ')}.`;
                 } catch { /* the core briefing still stands */ }
               }
-              const voiced = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'weakness-lifecycle', preferRaw: true });
+              const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'weakness-lifecycle', preferRaw: true });
               if (voiced) {
                 // "drill it" → scope to the most-pressing motif when we have one,
                 // else the general weakness queue.
@@ -4069,7 +4106,7 @@ export async function getCoachChatResponse(
               costliest: top ? { san: top.san, cpLoss: top.cpLoss, opponentName: top.opponentName, openingName: top.openingName } : null,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes', preferRaw: true });
               if (voiced) {
                 // Opt-in "Try Puzzles" chip → adaptive tactics, so the
                 // student drills the error class we just named.
@@ -4078,7 +4115,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to break down your mistakes. Analyze a few games and I'll show you exactly where you go wrong and what to drill.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'mistakes', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -4092,7 +4129,7 @@ export async function getCoachChatResponse(
             const mi = await getMistakeInsights();
             const answer = assembleErrorsBySituationAnswer(mi.errorsBySituation);
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'errors-by-situation', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'errors-by-situation', preferRaw: true });
               if (voiced) {
                 lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }];
                 return voiced;
@@ -4124,7 +4161,7 @@ export async function getCoachChatResponse(
               distinctTags: profile.length,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'misconceptions', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'misconceptions', preferRaw: true });
               if (voiced) {
                 lastCoachActionOffer = [{ type: 'route', id: '/weaknesses' }];
                 return voiced;
@@ -4153,7 +4190,7 @@ export async function getCoachChatResponse(
               brillianceShape: brill.shape,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile', preferRaw: true });
               if (voiced) {
                 // Opt-in "Try Puzzles" chip → adaptive tactics, so the
                 // student drills the motif they miss most.
@@ -4162,7 +4199,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to profile your tactics. Analyze a few games or solve some puzzles and I'll show you which motifs you miss most.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -4178,7 +4215,7 @@ export async function getCoachChatResponse(
               cpLossByPhase: miPhase.errorsByPhase.map((x) => ({ phase: x.phase, avgCpLoss: x.avgCpLoss })),
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile', preferRaw: true });
               if (voiced) {
                 // Offer training scoped to the weakest phase (all game-sourced):
                 // endgame → the endgame room; opening → drill the softest
@@ -4190,7 +4227,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to break down your play by phase. Analyze a few games and I'll show you whether your opening, middlegame, or endgame needs the most work.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'phase-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -4238,7 +4275,7 @@ export async function getCoachChatResponse(
                 styleProfile,
               });
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'counter-repertoire', preferRaw: true });
+                const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'counter-repertoire', preferRaw: true });
                 if (voiced) {
                   const pick = pickCounterRecommendation(orderedRecs, styleProfile);
                   lastCoachActionOffer = pick ? [{ type: 'drill_opening', id: pick.openingId }] : null;
@@ -4252,7 +4289,7 @@ export async function getCoachChatResponse(
               // fired: an explicit against-ask deserves the no-prep answer,
               // not "play more games" (grob probe, 2026-07-15).
               const noPrepFact = "I don't have a prepared recommendation against that opening yet. Ask me about the ones I do teach — the Sicilian, Caro-Kann, French, Pirc, King's Indian, London and more — or tell me what your opponent plays and I'll point you at the closest line I cover.";
-              const voicedNoPrep = await voiceFacts(noPrepFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'counter-repertoire', preferRaw: true });
+              const voicedNoPrep = await voice(noPrepFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'counter-repertoire', preferRaw: true });
               if (voicedNoPrep) return voicedNoPrep;
             }
           } catch { /* fall through */ }
@@ -4281,7 +4318,7 @@ export async function getCoachChatResponse(
               bestAgainst,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
               if (voiced) {
                 // Game-sourced: review the games where you left book so you
                 // see the exact positions the gap shows up in.
@@ -4290,7 +4327,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "Import your games and I'll spot the holes in your repertoire. Connect your chess.com or lichess account and I'll show you what you leave unprepared and what to learn next.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -4310,7 +4347,7 @@ export async function getCoachChatResponse(
               inaccuracies: ov.classificationCounts.inaccuracy, mistakes: ov.classificationCounts.mistake,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy', preferRaw: true });
               if (voiced) {
                 // Game-sourced calculation training — positions pulled from
                 // the student's own games sharpen the accuracy the answer just
@@ -4320,7 +4357,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to grade your accuracy. Analyze a few and I'll show you how precise your play is and where to tighten up.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'accuracy', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -4337,14 +4374,14 @@ export async function getCoachChatResponse(
               activity: { totalGames: act.totalGames, activeDays: act.activeDays },
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
               if (voiced) {
                 lastCoachActionOffer = [{ type: 'review_games', id: 'recent' }];
                 return voiced;
               }
             }
             const noDataFact = "Import your games and I'll track your form. Connect your chess.com or lichess account and I'll show you your streaks and where you're steadiest.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -4358,11 +4395,11 @@ export async function getCoachChatResponse(
             const tt = await getTimeTroubleProfile();
             const answer = assembleTimeTroubleAnswer(tt);
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'time-trouble', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'time-trouble', preferRaw: true });
               if (voiced) { lastCoachActionOffer = [{ type: 'review_games', id: 'recent' }]; return voiced; }
             }
             const noDataFact = "You haven't played any games with clock data yet, so I can't see whether time pressure is costing you. Play a few timed games and I'll show you if your blunders cluster on a low clock.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'time-trouble', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'time-trouble', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -4373,11 +4410,11 @@ export async function getCoachChatResponse(
           try {
             const answer = assembleLastGameAnswer(await getLastGameResult());
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-game', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-game', preferRaw: true });
               if (voiced) { lastCoachActionOffer = [{ type: 'review_games', id: 'last' }]; return voiced; }
             }
             const noDataFact = "I don't have any of your games on file yet. Import your games and I'll be able to tell you how your last one went.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-game', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-game', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -4392,7 +4429,7 @@ export async function getCoachChatResponse(
               quickWins: ws.quickWins, grindWins: ws.grindWins, midLengthWins: ws.midLengthWins,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting', preferRaw: true });
               if (voiced) {
                 // Converting = closing out won positions → the endgame room,
                 // which draws technique from real endings.
@@ -4401,7 +4438,7 @@ export async function getCoachChatResponse(
               }
             }
             const noDataFact = "You haven't analyzed enough games yet for me to see how you convert. Analyze a few and I'll show you whether you close out wins cleanly or let them slip.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'converting', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
         }
@@ -4415,8 +4452,8 @@ export async function getCoachChatResponse(
               accuracyWhite: ov.accuracyWhite, accuracyBlack: ov.accuracyBlack,
               inversion: cm ? { preferredColor: cm.preferredColor, otherColor: cm.otherColor, inversionPoints: cm.inversionPoints } : null,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'by-color' }]; return v; } }
-            const nd = await voiceFacts("Import your games and I'll compare your colours. Connect your chess.com or lichess account and I'll tell you which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true });
+            if (answer) { const v = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'by-color' }]; return v; } }
+            const nd = await voice("Import your games and I'll compare your colours. Connect your chess.com or lichess account and I'll tell you which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -4433,8 +4470,8 @@ export async function getCoachChatResponse(
               bestAccuracyGame: pr.bestAccuracyGame ? { accuracyPct: pr.bestAccuracyGame.accuracyPct } : null,
               nemesis: ovr.lowestLostTo ? { name: ovr.lowestLostTo.name, elo: ovr.lowestLostTo.elo } : null,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'best' }]; return v; } }
-            const nd = await voiceFacts("Import your games and I'll pull out your records. Connect your chess.com or lichess account and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true });
+            if (answer) { const v = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'best' }]; return v; } }
+            const nd = await voice("Import your games and I'll pull out your records. Connect your chess.com or lichess account and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -4449,8 +4486,8 @@ export async function getCoachChatResponse(
               overallAccuracy: ps.overallAccuracy, duePuzzles: ps.duePuzzles,
               mistakePuzzles: { mastered: miPz.puzzleProgress.mastered, solved: miPz.puzzleProgress.solved, unsolved: miPz.puzzleProgress.unsolved },
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }]; return v; } }
-            const nd = await voiceFacts("You haven't solved enough puzzles yet for me to track your puzzle rating. Solve a few and I'll show you your rating and accuracy.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true });
+            if (answer) { const v = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'puzzle_theme', id: 'adaptive' }]; return v; } }
+            const nd = await voice("You haven't solved enough puzzles yet for me to track your puzzle rating. Solve a few and I'll show you your rating and accuracy.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'puzzle-stats', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -4465,8 +4502,8 @@ export async function getCoachChatResponse(
             const answer = assembleTransferGapAnswer({
               worst: gapped ? { tacticType: gapped.tacticType, puzzleAccuracyPct: gapped.puzzleAccuracyPct as number, gameRecognitionPct: gapped.gameRecognitionPct as number, gapPoints: gapped.transferGapPoints as number } : null,
             });
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'weakness_drill', id: gapped?.tacticType ? gapped.tacticType.toLowerCase() : 'all' }]; return v; } }
-            const nd = await voiceFacts("You haven't solved and played enough tactics yet for me to compare your puzzle skill to your in-game vision. Do a few more and I'll show you the gap.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap', preferRaw: true });
+            if (answer) { const v = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'weakness_drill', id: gapped?.tacticType ? gapped.tacticType.toLowerCase() : 'all' }]; return v; } }
+            const nd = await voice("You haven't solved and played enough tactics yet for me to compare your puzzle skill to your in-game vision. Do a few more and I'll show you the gap.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'transfer-gap', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -4477,7 +4514,7 @@ export async function getCoachChatResponse(
             const profile = await db.profiles.get('main');
             const sr = profile?.skillRadar;
             const answer = sr ? assembleSkillRadarAnswer({ opening: sr.opening, tactics: sr.tactics, endgame: sr.endgame, memory: sr.memory, calculation: sr.calculation }) : null;
-            if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar', preferRaw: true }); if (v) {
+            if (answer) { const v = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar', preferRaw: true }); if (v) {
               // Offer training scoped to the weakest skill dimension (all
               // game-sourced): endgame → endgame room; else the weakness
               // overview built from real games.
@@ -4494,7 +4531,7 @@ export async function getCoachChatResponse(
               }
               return v;
             } }
-            const nd = await voiceFacts("You haven't played or drilled enough yet for me to build your skill breakdown. Play some games and solve some puzzles, and I'll rate your opening, tactics, endgame, memory, and calculation.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar', preferRaw: true });
+            const nd = await voice("You haven't played or drilled enough yet for me to build your skill breakdown. Play some games and solve some puzzles, and I'll rate your opening, tactics, endgame, memory, and calculation.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'skill-radar', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -4510,7 +4547,7 @@ export async function getCoachChatResponse(
             const matrix = await phaseStrengthOverTime();
             const answer = assembleTrendAnswer(matrix);
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'trend', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'trend', preferRaw: true });
               if (voiced) {
                 // Game-sourced follow-up: drill the phase/weakness the trend
                 // surfaced. Unscoped → the weakness overview built from real games.
@@ -4522,7 +4559,7 @@ export async function getCoachChatResponse(
             // falling through to the weakness-dump (which answers the wrong
             // question) or the ungrounded legacy path.
             const noDataFact = "I don't have enough analyzed games across different months yet to show a trend. Play and analyze a few more over the coming weeks and I'll tell you whether you're improving.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'trend', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'trend', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to progress */ }
         }
@@ -4571,7 +4608,7 @@ export async function getCoachChatResponse(
                   capturedFromSurface: grounding.surface ?? 'coach-chat',
                 });
               } catch { /* memory is best-effort — never block the answer */ }
-              const voicedRec = await voiceFacts(rec.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+              const voicedRec = await voice(rec.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
               if (voicedRec) {
                 lastCoachActionOffer = [{ type: 'play_focused_game', id: trainingArea }];
                 return voicedRec;
@@ -4589,7 +4626,7 @@ export async function getCoachChatResponse(
               answer = profile ? assembleProgressAnswer(await detectBadHabits(profile)) : null;
             }
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
               if (voiced) {
                 // The single most useful game-sourced follow-up: drill the
                 // weaknesses this answer just named. Unscoped → the weakness
@@ -4626,7 +4663,7 @@ export async function getCoachChatResponse(
                 costliest: top ? { san: top.san, cpLoss: top.cpLoss, opponentName: top.opponentName, openingName: top.openingName } : null,
               });
               if (insightAnswer) {
-                const voicedInsight = await voiceFacts(insightAnswer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+                const voicedInsight = await voice(insightAnswer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
                 if (voicedInsight) {
                   lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }];
                   return voicedInsight;
@@ -4639,7 +4676,7 @@ export async function getCoachChatResponse(
             // contract from assembleProgressAnswer's docstring: "caller takes the
             // one fallback — e.g. 'play a few games and I'll spot patterns'".
             const noDataFact = "Import your games and I'll analyze your weaknesses. Connect your chess.com or lichess account, or paste a game — once your games are in and analyzed, I'll show you the patterns in your play and drill them with you.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
             if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }
           } catch { /* fall through to legacy path */ }
         }
@@ -4711,7 +4748,7 @@ export async function getCoachChatResponse(
             }
             const answer = assembleOpeningProfileAnswer({ kind, openings });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile', preferRaw: true });
               if (voiced) {
                 if (primaryOpeningId) lastCoachActionOffer = [{ type: 'drill_opening', id: primaryOpeningId }];
                 return voiced;
@@ -4722,7 +4759,7 @@ export async function getCoachChatResponse(
             const noDataFact = kind === 'favorite'
               ? "You haven't played or drilled enough openings yet for me to see a favorite. Play a few games or drill an opening and I'll track it."
               : "You haven't drilled enough openings yet for me to rank them. Drill a few opening lines and I'll tell you your " + kind + " one.";
-            const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile', preferRaw: true });
+            const voicedNoData = await voice(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
         }
@@ -4737,7 +4774,7 @@ export async function getCoachChatResponse(
           const key = famousGameFromText(userText);
           const answer = key ? assembleFamousGameAnswer(key) : null;
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
             if (voiced) {
               // Offer to walk the game move-by-move in the grounded review.
               lastCoachActionOffer = [{ type: 'walk_game', id: answer.reviewId }];
@@ -4766,7 +4803,7 @@ export async function getCoachChatResponse(
           const fid = resolveTaughtFundamental(userText);
           const answer = fid ? assembleFundamentalLessonAnswer(fid) : null;
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
             if (voiced) {
               // Offer a drill so the lesson lands in practice — the student's own
               // ranked mistakes (top weakness first), a universally valid next
@@ -4797,7 +4834,7 @@ export async function getCoachChatResponse(
           }
           const answer = assembleFundamentalsAnswer(topic, weak);
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
             if (voiced) {
               // Hand off to the real game that illustrates the principle
               // (development/general → the Opera Game walk). Others self-hide.
@@ -4819,7 +4856,7 @@ export async function getCoachChatResponse(
             const concept = getConcept(conceptIds[0]);
             const answer = concept ? assembleConceptAnswer(concept) : null;
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
+              const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
               if (voiced) return voiced;
             }
           }
@@ -4832,7 +4869,7 @@ export async function getCoachChatResponse(
           if (passage) {
             const answer = assembleTheoryAnswer({ conceptName: passage.conceptName, conceptId: passage.conceptId, passage: passage.passage });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
+              const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
               if (voiced) return voiced;
             }
           }
@@ -4859,7 +4896,7 @@ export async function getCoachChatResponse(
           if (hit) {
             const answer = assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
+              const voiced = await voice(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
               if (voiced) return voiced;
             }
           }
@@ -4883,7 +4920,7 @@ export async function getCoachChatResponse(
             }
             const answer = assembleTeachingAnswer({ openingName: teachOpeningName, lesson });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'teaching-method', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'teaching-method', preferRaw: true });
               if (voiced) return voiced;
             }
           } catch { /* fall through */ }
@@ -4905,7 +4942,7 @@ export async function getCoachChatResponse(
                 personality: prefs.coachPersonality ?? null,
               });
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'settings', preferRaw: true });
+                const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'settings', preferRaw: true });
                 if (voiced) return voiced;
               }
             }
@@ -4953,7 +4990,7 @@ export async function getCoachChatResponse(
               : null;
             const facts = answer?.facts
               ?? "I can't name the opening yet — play a few more moves and I'll tell you exactly which line you're in.";
-            const voiced = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'name-opening', preferRaw: true });
+            const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'name-opening', preferRaw: true });
             if (voiced) return voiced;
           } catch { /* fall through */ }
         }
@@ -4965,7 +5002,7 @@ export async function getCoachChatResponse(
             if (entry) {
               const answer = assembleAppHelpAnswer({ title: entry.title, description: entry.description });
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
+                const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
                 if (voiced) return voiced;
               }
             }
@@ -4974,7 +5011,7 @@ export async function getCoachChatResponse(
             // manifest (David 2026-09-01), never a free-LLM guess about features.
             const overview = assembleCapabilitiesOverview(CAPABILITY_HEADLINES);
             if (overview) {
-              const voiced = await voiceFacts(overview.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
+              const voiced = await voice(overview.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
               if (voiced) { lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }]; return voiced; }
             }
           } catch { /* fall through */ }
@@ -5014,7 +5051,7 @@ export async function getCoachChatResponse(
             lines: grounding.alternativesLines,
           });
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'alternatives', preferRaw: true, mustPreserve: answer.bestMoveSan ? [answer.bestMoveSan] : undefined });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'alternatives', preferRaw: true, mustPreserve: answer.bestMoveSan ? [answer.bestMoveSan] : undefined });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -5039,7 +5076,7 @@ export async function getCoachChatResponse(
             const rfWhy = explainBestMoveGrounded(rf.fenBefore, rf.playedSan, rf.bestMoveUci, rfMover);
             if (rfBestSan && rfWhy) {
               const rfFacts = `The engine preferred ${rfBestSan} over ${rf.playedSan} here. ${rfWhy}`;
-              const voiced = await voiceFacts(rfFacts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true, mustPreserve: [rfBestSan] });
+              const voiced = await voice(rfFacts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true, mustPreserve: [rfBestSan] });
               if (voiced) {
                 return `${voiced} [BOARD: arrow:${rf.bestMoveUci.slice(0, 2)}-${rf.bestMoveUci.slice(2, 4)}:green]`;
               }
@@ -5083,7 +5120,7 @@ export async function getCoachChatResponse(
             }
           }
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -5108,7 +5145,7 @@ export async function getCoachChatResponse(
             studentColor: sc,
           });
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opponent-move', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opponent-move', preferRaw: true });
             if (voiced) return voiced;
           }
         }
@@ -5124,7 +5161,7 @@ export async function getCoachChatResponse(
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const answer = assembleLastMoveAnswer({ moveHistory: [...grounding.moveHistory], studentColor: sc });
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-move', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-move', preferRaw: true });
             if (voiced) return voiced;
           }
         }
@@ -5174,7 +5211,7 @@ export async function getCoachChatResponse(
             masterFreqPct,
           });
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'candidate-move', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'candidate-move', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -5232,7 +5269,7 @@ export async function getCoachChatResponse(
               summary: `aspect=${board.aspect} answered from chess.js`,
               fen: grounding.currentFen,
             });
-            const voiced = await voiceFacts(board.answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'board-question', preferRaw: true });
+            const voiced = await voice(board.answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'board-question', preferRaw: true });
             if (voiced) return voiced;
           }
         }
@@ -5263,7 +5300,7 @@ export async function getCoachChatResponse(
                 : null;
             const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, askedPiece: grounding.askedPiece ?? null });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {
                 return answer.bestMoveFromTo
                   ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -5314,7 +5351,7 @@ export async function getCoachChatResponse(
             const phaseRead = grounding.endgameQuestion === true && !boardIsAnEnding && menOnBoard > 0
               ? `We're not in an endgame yet — ${menOnBoard} pieces are still on the board. From here: `
               : '';
-            const voiced = await voiceFacts(`${phaseRead}${answer.facts}`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan', preferRaw: true });
+            const voiced = await voice(`${phaseRead}${answer.facts}`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -5346,7 +5383,7 @@ export async function getCoachChatResponse(
               : matches.length > 0
                 ? `No — there's no opening called "${q}" in my database of 3,600+ named openings. The closest real names I have: ${matches.slice(0, 3).map((m) => m.name).join('; ')}. Name one and I'll teach it into the middlegame.`
                 : `No — there's no opening called "${q}" in my database of 3,600+ named openings, and nothing close to it either.`;
-            const voicedExist = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-existence', preferRaw: true });
+            const voicedExist = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-existence', preferRaw: true });
             if (voicedExist) return voicedExist;
             return facts;
           } catch { /* DB unavailable — fall through */ }
@@ -5360,13 +5397,13 @@ export async function getCoachChatResponse(
           const w = grounding.reviewWorstMoment;
           const better = w.bestMoveSan ? ` ${w.bestMoveSan} was the better move.` : '';
           const facts = `Your biggest slip in this game was ${w.san} on move ${w.moveNumber} — a ${w.classification}.${better}`;
-          const voiced = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+          const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
           if (voiced) return voiced;
           return facts;
         }
         if (grounding.gameMistakeQuestion && !grounding.reviewWorstMoment && grounding.gameSans && grounding.gameSans.length > 0) {
           const clean = 'Nothing in this game was flagged as a mistake or blunder — a clean game by the analysis.';
-          const voicedClean = await voiceFacts(clean, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+          const voicedClean = await voice(clean, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
           if (voicedClean) return voicedClean;
           return clean;
         }
@@ -5407,12 +5444,12 @@ export async function getCoachChatResponse(
               if (recent) {
                 const answer = assembleRecentGamesMistakeAnswer(recent);
                 if (answer) {
-                  const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+                  const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
                   if (voiced) { if (recent.worst) lastCoachActionOffer = [{ type: 'weakness_drill', id: `game:${recent.worst.gameId}` }]; return voiced; }
                 }
               } else {
                 const noGames = "I don't have any of your games yet. Import from chess.com or lichess, or paste a game, and I'll pinpoint exactly where each one turned.";
-                const voicedNoGames = await voiceFacts(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+                const voicedNoGames = await voice(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
                 if (voicedNoGames) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoGames; }
               }
             } else {
@@ -5422,13 +5459,13 @@ export async function getCoachChatResponse(
               if (errs) {
                 const answer = assembleLastGameMistakeAnswer(errs);
                 if (answer) {
-                  const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+                  const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
                   if (voiced) { if (errs.worst) lastCoachActionOffer = [{ type: 'weakness_drill', id: `game:${errs.gameId}` }]; return voiced; }
                 }
               } else {
                 // No games at all → the honest import line, not a deflection.
                 const noGames = "I don't have any of your games yet. Import from chess.com or lichess, or paste a game, and I'll pinpoint exactly where each one turned.";
-                const voicedNoGames = await voiceFacts(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+                const voicedNoGames = await voice(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
                 if (voicedNoGames) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoGames; }
               }
             }
@@ -5446,7 +5483,7 @@ export async function getCoachChatResponse(
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const answer = assembleAttackAssessment(grounding.currentFen, sc);
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'attack-assessment', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'attack-assessment', preferRaw: true });
             if (voiced) return voiced;
           }
         }
@@ -5462,7 +5499,7 @@ export async function getCoachChatResponse(
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const answer = assembleTacticsAnswer(grounding.tactics, sc, lastUserMessage());
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
             if (voiced) return voiced;
           }
           // A MATE query ("can I force mate", "how many moves to mate") has an
@@ -5481,7 +5518,7 @@ export async function getCoachChatResponse(
                   (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
                 const mateAns = assembleEndgameAnswer({ result: tb, studentColor: scMate });
                 if (mateAns) {
-                  const voicedMate = await voiceFacts(mateAns.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+                  const voicedMate = await voice(mateAns.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
                   if (voicedMate) return voicedMate;
                 }
               }
@@ -5496,7 +5533,7 @@ export async function getCoachChatResponse(
           // code decided; the LLM only phrases.
           const allClear =
             'Nothing is hanging and there are no immediate tactical threats on the board right now — this is a quiet position, so the fight is positional.';
-          const voicedClear = await voiceFacts(allClear, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
+          const voicedClear = await voice(allClear, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
           if (voicedClear) return voicedClear;
           return allClear;
         }
@@ -5509,7 +5546,7 @@ export async function getCoachChatResponse(
         if (grounding.masterPlayQuestion && masterPlayContext && masterPlayContext.current.moves.length > 0) {
           const answer = assembleMasterPlayAnswer(masterPlayContext.current);
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'master-play', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'master-play', preferRaw: true });
             if (voiced) {
               return answer.bestMoveFromTo
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -5527,7 +5564,7 @@ export async function getCoachChatResponse(
         if (grounding.playerGamesQuestion && grounding.playerGames) {
           const answer = assemblePlayerGamesAnswer(grounding.playerGames);
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games', preferRaw: true });
             if (voiced) return voiced;
           }
         }
@@ -5536,7 +5573,7 @@ export async function getCoachChatResponse(
         // Nf3" — 2026-08-13 all-questions audit, run allq-mss0y9qr).
         if (grounding.playerGamesQuestion && !grounding.playerGames) {
           const askBack = "Which player do you mean? Open a pro's opening page and I can walk you through their real games in this line.";
-          const voicedAskBack = await voiceFacts(askBack, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games', preferRaw: true });
+          const voicedAskBack = await voice(askBack, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'player-games', preferRaw: true });
           if (voicedAskBack) return voicedAskBack;
           return askBack;
         }
@@ -5569,7 +5606,7 @@ export async function getCoachChatResponse(
           // 14-man position with both queens on was handed to the tablebase.
           if (!isEndgameByMaterial(grounding.currentFen)) {
             const notYet = `We're not in an endgame yet — ${pieceCount} pieces are still on the board. Ask me again when the position thins out, or ask for the best move here.`;
-            const voicedNotYet = await voiceFacts(notYet, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+            const voicedNotYet = await voice(notYet, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
             if (voicedNotYet) return voicedNotYet;
             return notYet;
           }
@@ -5581,7 +5618,7 @@ export async function getCoachChatResponse(
                 (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
               const answer = assembleEndgameAnswer({ result: tb, studentColor: sc });
               if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+                const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
                 if (voiced) return voiced;
               }
             }
@@ -5616,11 +5653,11 @@ export async function getCoachChatResponse(
               // ready, else the matching named lesson.
               if (w.ownFen) { facts += ` Let's drill it on one of your own positions.`; lastCoachActionOffer = [{ type: 'endgame_trainer', id: `custom:${w.ownFen}` }]; }
               else if (w.lessonId) { facts += ` Let's drill the technique.`; lastCoachActionOffer = [{ type: 'endgame_trainer', id: w.lessonId }]; }
-              const voiced = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+              const voiced = await voice(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
               if (voiced) return voiced;
             } else {
               const none = `I don't have enough of your endgames analyzed yet to pinpoint the type you struggle with. Play or import a few games that reach an endgame and I'll show you exactly which ending to drill.`;
-              const voiced = await voiceFacts(none, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+              const voiced = await voice(none, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
               if (voiced) return voiced;
             }
           } catch { /* fall through to the technique lane */ }
@@ -5644,7 +5681,7 @@ export async function getCoachChatResponse(
             if (isEndgamePlayRequest(endAsk) && playable) {
               lastCoachActionOffer = [{ type: 'endgame_trainer', id: lesson.id }];
               const intro = `Let's play out the ${lesson.name}. I'll walk it once, then you take over — I'll stop you if you go wrong and we'll fix it together.`;
-              const voiced = await voiceFacts(intro, { studentMessage: endAsk, providerConfig: config, intent: 'endgame', preferRaw: true });
+              const voiced = await voice(intro, { studentMessage: endAsk, providerConfig: config, intent: 'endgame', preferRaw: true });
               if (voiced) return voiced;
               return intro;
             }
@@ -5657,7 +5694,7 @@ export async function getCoachChatResponse(
               fen: playable?.fen ?? null,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: endAsk, providerConfig: config, intent: 'endgame', preferRaw: true });
+              const voiced = await voice(answer.facts, { studentMessage: endAsk, providerConfig: config, intent: 'endgame', preferRaw: true });
               if (voiced) return voiced;
             }
           }
@@ -5676,7 +5713,7 @@ export async function getCoachChatResponse(
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const answer = assemblePositionalAnswer(grounding.currentFen, sc, grounding.positionalTopic, grounding.cleanAsk ?? lastUserMessage());
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'positional-feature', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'positional-feature', preferRaw: true });
             if (voiced) return voiced;
           }
         }
@@ -5697,7 +5734,7 @@ export async function getCoachChatResponse(
             fen: grounding.currentFen,
           });
           if (answer) {
-            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'position-assessment', preferRaw: true });
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'position-assessment', preferRaw: true });
             if (voiced) return `${voiced}${keySquareHighlightTags(answer)}`;
           }
         }
@@ -5715,7 +5752,7 @@ export async function getCoachChatResponse(
         if (grounding.conceptQuestion && !grounding.positionalTopic && !matchEndgameLesson(lastUserMessage() ?? '')) {
           const userText = lastUserMessage() ?? '';
           const decline = 'I don’t have a specific lesson on that idea yet. I can teach you a named concept, though — try "what’s an outpost", "the bishop pair", "an isolated pawn", or "what’s a fork".';
-          const voiced = await voiceFacts(decline, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
+          const voiced = await voice(decline, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
           if (voiced) return voiced;
           return decline;
         }
@@ -5995,7 +6032,7 @@ export async function getCoachChatResponse(
       if (notationSan) {
         const explained = explainSanNotation(notationSan, grounding.currentFen ?? null);
         if (explained) {
-          const voiced = await voiceFacts(explained, { studentMessage: originalQuery, providerConfig: config, intent: 'notation', preferRaw: true });
+          const voiced = await voice(explained, { studentMessage: originalQuery, providerConfig: config, intent: 'notation', preferRaw: true });
           if (voiced) {
             emitGroundingCoverage('notation-help', surface, sessionId, { question: originalQuery.slice(0, 100) });
             if (onStream) onStream(voiced);
@@ -6093,7 +6130,7 @@ export async function getCoachChatResponse(
   if (grounding && fallthroughNotationSan) {
     const explained = explainSanNotation(fallthroughNotationSan, grounding.currentFen ?? null);
     if (explained) {
-      const voiced = await voiceFacts(explained, { studentMessage: originalQuery, providerConfig: config, intent: 'notation', preferRaw: true });
+      const voiced = await voice(explained, { studentMessage: originalQuery, providerConfig: config, intent: 'notation', preferRaw: true });
       if (voiced) {
         emitGroundingCoverage('notation-help', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
         if (onStream) onStream(voiced);

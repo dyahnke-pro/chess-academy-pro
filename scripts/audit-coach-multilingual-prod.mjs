@@ -65,11 +65,49 @@ const PROBES = [
 ];
 
 
+// A row that reports "(no reply)" is NOT automatically a product failure: the
+// chat input stays disabled while a turn is in flight, and a long prod run can
+// leave it busy past the wait (the standing "chat input never usable" item).
+// Read those rows as UNMEASURED, and re-run the language on its own before
+// concluding anything about it.
 const STOCK = /i can'?t verify that precisely|what are we working on today|did you mean one of these|hit a snag|i don’t have a specific lesson/i;
 // On-topic markers that survive translation (SAN + chess nouns are preserved
 // verbatim by the fidelity net; the reply names a move or a fork idea).
 const BEST_OK = /\b(e4|d4|nf3|nc3|bc4|c4|g3|best|engine)\b|[A-Z][a-h][1-8]/i;
-const CONCEPT_OK = /\b(fork|forks|horquilla|fourchette|gabel|garfo|forchetta|вилк|フォーク|شوك|two pieces|attacks two|at once)\b/i;
+// Substring, not word-boundary, on the fork stem: the coach's own house line
+// is "the knight is the born FORKER", which `\bfork\b` rejected — a correct,
+// on-topic answer failed the row. An ACCEPT contract that is stricter than the
+// product's real voice manufactures red rows and buries the true ones.
+const CONCEPT_OK = /(fork|horquilla|fourchette|gabel|garfo|forchetta|вилк|フォーク|شوك|two pieces|attacks two|at once|two targets)/i;
+
+/**
+ * 🔒 THE ROW THAT WAS MISSING FOR MONTHS (2026-09-19). Every check above asks
+ * whether the reply is ON TOPIC — it looks for chess words, which survive
+ * translation. None of them asked whether the reply was in the student's
+ * LANGUAGE. So this audit ran green while every single answer came back in
+ * English: Spanish, French and German too, not only the scripts the detector
+ * could not see. An accept contract that cannot fail on the thing the audit is
+ * named after is not a contract.
+ *
+ * Non-Latin scripts are decided by a Unicode range, which is decisive. The
+ * Latin-script languages are decided by their own diacritics and function
+ * words — weaker, so a Latin row that cannot be decided is reported UNKNOWN
+ * rather than counted either way. Better an honest gap than a false green.
+ */
+const SPEAKS = {
+  Thai: /[\u0E00-\u0E7F]/, Greek: /[\u0370-\u03FF]/, Hebrew: /[\u0590-\u05FF]/,
+  Hindi: /[\u0900-\u097F]/, Korean: /[\uAC00-\uD7AF]/, Russian: /[\u0400-\u04FF]/,
+  Japanese: /[\u3040-\u30FF\u4E00-\u9FFF]/, Arabic: /[\u0600-\u06FF]/,
+  Vietnamese: /[\u1EA0-\u1EF9\u01A1\u01B0]/,
+  Spanish: /\b(el|la|los|las|que|es|una|mejor|jugada|caballo|peón|centro)\b|[ñ¿¡]/i,
+  French: /\b(le|la|les|est|que|une|meilleur|coup|cavalier|pion|centre)\b|[àâçèêôû]/i,
+  German: /\b(der|die|das|ist|eine|beste|Zug|Springer|Bauer|Zentrum)\b|[äöüß]/i,
+  Portuguese: /\b(o|a|os|as|que|é|uma|melhor|lance|cavalo|peão|centro)\b|[ãõç]/i,
+  Italian: /\b(il|la|che|è|una|migliore|mossa|cavallo|pedone|centro)\b|[àèéìòù]/i,
+  Turkish: /\b(bir|en|iyi|hamle|at|piyon|merkez|için)\b|[ğışçö]/i,
+};
+/** English tell-tales, to separate "answered in English" from "undecidable". */
+const LOOKS_ENGLISH = /\b(the|is|best|move|knight|pawn|center|centre|white|black)\b/i;
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
@@ -114,9 +152,13 @@ for (const p of PROBES) {
     const reply = await ask(q);
     const stock = STOCK.test(reply);
     const onTopic = ok.test(reply);
-    const pass = !!reply && !stock && onTopic;
-    results.push({ lang: p.lang, kind, pass, q, reply: reply.slice(0, 120) });
-    console.log(`${pass ? '✅' : '❌'} ${p.lang} ${kind} :: "${q}" → ${reply ? `"${reply.slice(0, 90)}"` : '(no reply)'}${stock ? ' [STOCK]' : ''}${!onTopic && reply ? ' [off-topic]' : ''}`);
+    // …and in THEIR language, not ours.
+    const fingerprint = SPEAKS[p.lang];
+    const inLanguage = reply && fingerprint ? fingerprint.test(reply) : null;
+    const answeredInEnglish = inLanguage === false && LOOKS_ENGLISH.test(reply);
+    const pass = !!reply && !stock && onTopic && !answeredInEnglish;
+    results.push({ lang: p.lang, kind, pass, q, reply: reply.slice(0, 120), inLanguage });
+    console.log(`${pass ? '✅' : '❌'} ${p.lang} ${kind} :: "${q}" → ${reply ? `"${reply.slice(0, 90)}"` : '(no reply)'}${stock ? ' [STOCK]' : ''}${!onTopic && reply ? ' [off-topic]' : ''}${answeredInEnglish ? ' [ANSWERED IN ENGLISH]' : ''}`);
   }
 
   // ── THE COMMAND CONTRACT (the row the seven-times-ignored user needed) ─────
@@ -129,8 +171,18 @@ for (const p of PROBES) {
   //   · correct — and it resolved to the opening they named (D4).
   await boot();
   const ack = await ask(p.lesson);
+  await page.waitForTimeout(6000);   // the lesson kicks off asynchronously
   const url = page.url();
-  const routed = /[?&]opening=/.test(url);
+  // 🔴 THE URL IS THE WRONG CONTRACT ON THIS SURFACE, and reading it alone
+  // manufactured a red row on the first run (2026-09-19). `?opening=` is the
+  // HOME-CHAT hand-off — Learn starts its walkthrough IN PLACE, with no
+  // navigation at all. A French ask that replied "I'll walk you through it"
+  // was reported as NEVER ROUTED because the url had not moved. So the row
+  // asks what the STUDENT would see: did the lesson actually start.
+  const started = await page
+    .locator('[data-testid="teach-nav-row"], [data-testid="teach-kickoff-progress"], [data-testid="teach-generation-progress"], [data-testid="walkthrough-choose-walkthrough"]')
+    .first().isVisible().catch(() => false);
+  const routed = started || /[?&]opening=/.test(url);
   // The ack names the resolved opening ("Loading the Italian Game walkthrough…")
   // in English, because a command confirmation is emitted before any phrasing
   // pass — so one regex per row works across every language.
@@ -139,7 +191,7 @@ for (const p of PROBES) {
   const pass = routed && correct;
   results.push({ lang: p.lang, kind: 'lesson', pass, q: p.lesson, reply: ack.slice(0, 120), url });
   console.log(`${pass ? '✅' : '❌'} ${p.lang} lesson :: "${p.lesson}" → ${ack ? `"${ack.slice(0, 80)}"` : '(no reply)'}`);
-  if (!routed) console.log(`     ↳ NEVER ROUTED — url stayed ${url} (the command was not recognised at all)`);
+  if (!routed) console.log(`     ↳ NO LESSON STARTED — no walkthrough UI, url stayed ${url} (the command was not recognised at all)`);
   else if (!correct) console.log(`     ↳ WRONG OPENING — routed to ${url}, expected ${p.opening}`);
 }
 

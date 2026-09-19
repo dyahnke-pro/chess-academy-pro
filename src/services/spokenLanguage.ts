@@ -139,6 +139,20 @@ export function resetDetectedLanguage(): void {
  *  Each step is weaker evidence than the one above it and only fills the gap
  *  the one above left. */
 export function spokenLanguageName(): string | null {
+  return chosenOrTypedLanguageName() ?? deviceLanguageName();
+}
+
+/**
+ * The setting or the session observation — EXPLICIT EVIDENCE ONLY, no locale.
+ *
+ * The locale is the right prior for the VOICE, where a student can arrive with
+ * nothing typed at all. It is the wrong one for a CHAT REPLY, because there the
+ * student has just written something: answering an English question in Thai
+ * because the phone is Thai would be reading past the evidence in hand. So the
+ * two consumers ask different questions, and the difference is exactly "is
+ * there something they just typed".
+ */
+export function chosenOrTypedLanguageName(): string | null {
   try {
     const chosen = languageNameFor(useAppStore.getState().activeProfile?.preferences.narrationLanguage);
     if (chosen) return chosen;
@@ -146,7 +160,7 @@ export function spokenLanguageName(): string | null {
     // fall through to the observation — a store read failing is not a reason
     // to speak the wrong language.
   }
-  return detectedSessionLanguage ?? deviceLanguageName();
+  return detectedSessionLanguage;
 }
 
 /** `text` in the student's chosen narration language, or `text` unchanged when

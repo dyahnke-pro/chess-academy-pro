@@ -90,6 +90,9 @@ describe('detectStudentLanguage — detecting and recording are one act', () => 
       'src/services/coachSessionRouter.ts',
       'src/coach/coachService.ts',
       'src/services/coachSettingsAction.ts',
+      // Learn does not go through the action router — it has its own intent
+      // pipeline, and it asks this question at the top of every turn.
+      'src/components/Coach/CoachTeachPage.tsx',
     ];
     for (const file of STUDENT_INPUT_SITES) {
       const bare = readFileSync(file, 'utf8')

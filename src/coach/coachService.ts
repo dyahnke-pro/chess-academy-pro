@@ -43,7 +43,7 @@ import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/player
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
 import { consumeCoachActionOffer, translateToEnglish } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
-import { spokenLanguageName, detectStudentLanguage } from '../services/spokenLanguage';
+import { chosenOrTypedLanguageName, detectStudentLanguage } from '../services/spokenLanguage';
 import { deepseekProvider } from './providers/deepseek';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
 import type {
@@ -552,6 +552,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // romance language at random. G0 in language form: the app detects the
   // language deterministically (on the STUDENT's words only — injected
   // instruction blocks stripped) and the prompt is TOLD, never asked.
+  // Hoisted out of the block below: the grounded lanes inside the brain voice
+  // their facts BEFORE any model call, so the system-prompt instruction cannot
+  // reach them — they need the value itself, threaded to `provider.call`.
+  let turnLanguageName = 'English';
   {
     const studentWords = stripInjectedBlocks(input.ask);
     const askLang = detectStudentLanguage(studentWords);
@@ -573,7 +577,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // here — where the detector has already run — lets the voice chokepoint
     // reach the same answer. An explicit setting still wins; see the
     // precedence note on `spokenLanguageName`.
-    const replyLanguageName = askLang.nonEnglish ? askLang.name : (spokenLanguageName() ?? 'English');
+    // NOT `spokenLanguageName()`: that one falls back to the DEVICE LOCALE,
+    // which is the right prior for narration (a student can reach a lesson
+    // without typing) and the wrong one here (they just typed something, and
+    // answering an English question in Thai because the phone is Thai reads
+    // past the evidence in hand).
+    const replyLanguageName = askLang.nonEnglish ? askLang.name : (chosenOrTypedLanguageName() ?? 'English');
+    turnLanguageName = replyLanguageName;
     const languageLine =
       `STUDENT LANGUAGE (computed by the app): ${replyLanguageName}. Write your ENTIRE reply in ` +
       `${replyLanguageName}. Chess notation (e4, fxe5, Nf3, O-O) is notation, not a language ` +
@@ -1608,12 +1618,14 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             internalAsk: isInternalAsk || undefined,
           }
         : undefined);
+    const nonEnglishTurn = turnLanguageName !== 'English';
     const providerCallOptions =
-      options.task !== undefined || options.maxTokens !== undefined || autoGrounding
+      options.task !== undefined || options.maxTokens !== undefined || autoGrounding || nonEnglishTurn
         ? {
             task: options.task,
             maxTokens: options.maxTokens,
             grounding: autoGrounding,
+            ...(nonEnglishTurn ? { studentLanguage: turnLanguageName } : {}),
           }
         : undefined;
     lastProviderCallOptions = providerCallOptions;

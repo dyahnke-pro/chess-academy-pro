@@ -44,6 +44,13 @@ const INFRA = new Set([
   'coachNonAnswer', 'coachAnswerGates', 'linePickerPopularity',
   'trapPlayPosition', 'stageEntryValidity', 'playerGameRequest',
   'proGameReferenceService',
+  // `spokenLanguage` computes NO chess or teaching fact — it answers "which
+  // language" and translates phrasing, the same class as `voiceService` and
+  // `narrationSegments`, both already here. Added when Learn's intent pipeline
+  // had to translate a non-English ask before matching it (2026-09-19); it did
+  // NOT move any ceiling, and adding a real computer here to duck one is the
+  // same cheat as raising one.
+  'spokenLanguage',
   // `standingFactMemory` computes NO chess fact — it is the say-once set and
   // its forget-on-rewind rule, the same class as a cache. Added here when the
   // rule was extracted from the two surfaces that each carried a copy.

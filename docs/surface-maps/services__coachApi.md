@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6235 lines · 34 exports · 46 importers · 45 tests · 19 audits**
+**6272 lines · 34 exports · 48 importers · 47 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,7 +51,9 @@
 - `src/services/coachModelRouting.test.ts`
 - `src/services/coachMoveCommentary.test.ts`
 - `src/services/coachMoveCommentary.ts`
+- `src/services/coachSessionRouter.i18n.test.ts`
 - `src/services/coachSessionRouter.ts`
+- `src/services/coachSettingsAction.ts`
 - `src/services/contentGenerationService.ts`
 - `src/services/gameReviewService.ts`
 - `src/services/groundedMoveFeedback.test.ts`
@@ -102,7 +104,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1633`
+- `src/coach/coachService.ts:1643`
 
 ### `isNearMissToolName` (function) — 15 call sites
 - `src/services/coachApi.toolName.test.ts:14`
@@ -201,10 +203,11 @@
 - `src/services/groundedMoveFeedback.test.ts:26`
 - `src/services/groundedMoveFeedback.test.ts:45`
 
-### `translateToEnglish` (function) — 3 call sites
-- `src/coach/coachService.ts:560`
-- `src/components/Coach/CoachTeachPage.tsx:3511`
-- `src/services/coachSessionRouter.ts:117`
+### `translateToEnglish` (function) — 4 call sites
+- `src/coach/coachService.ts:563`
+- `src/components/Coach/CoachTeachPage.tsx:2966`
+- `src/services/coachSessionRouter.ts:124`
+- `src/services/coachSettingsAction.ts:242`
 
 ### `resolveWarmRegister` (function) — 10 call sites
 - `src/services/voiceFactsFidelity.test.ts:86`
@@ -234,7 +237,7 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 22 call sites
+### `voiceFacts` (function) — 24 call sites
 - `src/components/Coach/CoachGameReview.tsx:1415`
 - `src/components/Coach/CoachGameReview.tsx:1534`
 - `src/components/Coach/CoachGameReview.tsx:1721`
@@ -254,7 +257,9 @@
 - `src/services/kidGameCoach.ts:223`
 - `src/services/mistakeNarrationVoice.ts:109`
 - `src/services/openingSectionNarrator.ts:84`
-- `src/services/spokenLanguage.ts:115`
+- `src/services/spokenLanguage.ts:191`
+- `src/services/turnLanguage.test.ts:44`
+- `src/services/turnLanguage.test.ts:54`
 - `src/services/voiceFactsFidelity.test.ts:74`
 - `src/services/voiceFactsFidelity.test.ts:79`
 
@@ -363,6 +368,7 @@
 - `src/services/coachApi.whyReasoning.integration.test.ts`
 - `src/services/coachModelRouting.test.ts`
 - `src/services/coachMoveCommentary.test.ts`
+- `src/services/coachSessionRouter.i18n.test.ts`
 - `src/services/groundedComputedOnly.test.ts`
 - `src/services/groundedMoveFeedback.test.ts`
 - `src/services/isNearMissToolName.test.ts`
@@ -372,6 +378,7 @@
 - `src/services/positionReadingGrader.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
 - `src/services/smartSearchService.test.ts`
+- `src/services/spokenLanguage.live.test.ts`
 - `src/services/spokenLanguage.test.ts`
 - `src/services/voiceFactsFidelity.test.ts`
 - `src/services/walkthroughResolver.test.ts`
