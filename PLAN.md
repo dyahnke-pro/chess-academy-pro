@@ -327,6 +327,57 @@ gets said; this is about whether anything happens at all.
   actually worked. An accept contract stricter than the product's real voice
   buries the true reds among false ones.
 
+- ⚠️ **OPEN (found 2026-09-19, deliberately NOT built at 6am): the lesson ACK
+  is a hardcoded English template.** A Thai student now gets the lesson, and
+  HEARS it in Thai (the voice chokepoint localises), but READS "Sure — let's
+  walk through the Italian Game." in English. Six sites in `CoachTeachPage`
+  (4680, 5074, 5445, 6186 and the `Ready —` variants) build the confirmation as
+  a code template and write it straight into the transcript, so it never passes
+  through `voiceFacts` and nothing can translate it. Same class as the defect
+  above — computed text that no one localises — just smaller, because the
+  teaching itself is in-language.
+
+  🔀 **IT IS A DESIGN FORK, NOT A RISK CALL** (corrected — the first note here
+  said it was deferred for the hour, which was the weak reason). Two options
+  trade off differently enough that it is David's:
+  - **(a) route the acks through the model** (`localizeSpokenText`'s shape,
+    keyed on `chosenOrTypedLanguageName` so it follows the CHAT language rather
+    than the device locale). Covers all 36 languages, but costs a round-trip
+    BEFORE the ack renders — a non-English student watches their confirmation
+    lag about a second on every lesson start, in the exact moment just fixed.
+  - **(b) a phrase table.** These are SIX fixed templates with one variable
+    (the opening name), so they need no model at all: instant, deterministic,
+    G0-pure. The cost is coverage — six strings per language, English fallback
+    where unsupplied.
+
+  (b) is the better engineering answer and the one the determinism law points
+  at; (a) is the one that needs no content work. Recommended: (b), with English
+  fallback, seeded for the languages real users actually speak.
+
+- ✅ **VERIFIED ON PROD (2026-09-19, bundle `senxol9e`).** The fixes were
+  re-run against the deployed build, and the two lanes that were still English
+  an hour earlier are the ones that moved:
+
+  | ask | before tonight | after |
+  |---|---|---|
+  | Thai "what's the best move" | *"The best move is Nf3…"* | *"หมากที่ดีที่สุดคือ exd5 ครับ และตอนนี้ฝ่ายขาวได้เปรียบเล็กน้อย ประมาณ 0.6 แต้ม"* |
+  | Greek "what's the best move" | *"This game is now the King's Pawn Game…"* | *"Η καλύτερη κίνηση είναι Nf3. Μπαίνει στο παιχνίδι, διεκδικώντας το κέντρο στα d4 και e5"* |
+  | Hebrew "what is a fork" | *"The knight is the born forker…"* | *"מזלג הוא כלי שבו חייל אחד מאיים על שניים — כלי אחד תוקף שני אויבים בבת אחת"* |
+  | Thai "teach me the Italian" | *"The best move is e4."* | the Italian Game walkthrough starts |
+
+  Every row that produced a language-checkable reply came back in the student's
+  language, and the chess tokens (`exd5`, `Nf3`, `d4`, `e5`) survive verbatim
+  through the fidelity net in all of them.
+
+  **The lesson start is confirmed by a PAIRED PROBE, not by the audit.** The
+  audit's lesson row still reports "no walkthrough UI" while two focused probes
+  — the same Thai ask as the FIRST turn and as a FOLLOW-UP, the only variable —
+  both show `teach-nav-row` at +5s and print the running lesson. The probes
+  watch continuously and dump the transcript; the audit row checks once. So the
+  ROW is the suspect instrument, and it is left flagged rather than quietly
+  called green: `scripts/probe-thai-lesson.mjs` is the trustworthy measurement
+  until someone works out why the row disagrees.
+
 ### WO-LIVE-DEFECTS-01 — the rest of the list
 
 Shipped 2026-09-19 in 2bfb4961c + 7bc0677ab. Both standing audits green after:

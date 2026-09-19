@@ -155,10 +155,26 @@ for (const p of PROBES) {
     // …and in THEIR language, not ours.
     const fingerprint = SPEAKS[p.lang];
     const inLanguage = reply && fingerprint ? fingerprint.test(reply) : null;
-    const answeredInEnglish = inLanguage === false && LOOKS_ENGLISH.test(reply);
-    const pass = !!reply && !stock && onTopic && !answeredInEnglish;
+    // 🔴 "NOT ENGLISH" IS NOT THE CONTRACT — "IN THEIR LANGUAGE" IS. The first
+    // version only flagged English, and passed a VIETNAMESE question answered in
+    // FRENCH ("Une fourchette, c'est une seule pièce qui attaque deux ennemis à
+    // la fois"), which is the exact bug this audit exists for wearing a different
+    // language. A reply we CAN language-check must be in the right one; a reply
+    // we cannot check (no fingerprint) is reported, never assumed.
+    const wrongLanguage = inLanguage === false;
+    const answeredInEnglish = wrongLanguage && LOOKS_ENGLISH.test(reply);
+    // 🔴 THE ON-TOPIC CHECK ASSUMED CHESS WORDS SURVIVE TRANSLATION — and once
+    // the coach ACTUALLY translates, they do not. Hebrew answered "מזלג הוא כלי
+    // אחד שמאיים על שניים" — one piece threatening two, a correct definition —
+    // and the row went red because the English word "fork" was not in it. An
+    // accept contract that fails a reply for being in the right language is
+    // measuring the opposite of what this audit is for. So a substantive,
+    // non-stock reply CONFIRMED to be in the student's language is on topic;
+    // the English word list only decides replies we could not language-check.
+    const onTopicHere = onTopic || (inLanguage === true && !stock && reply.length > 60);
+    const pass = !!reply && !stock && onTopicHere && !wrongLanguage;
     results.push({ lang: p.lang, kind, pass, q, reply: reply.slice(0, 120), inLanguage });
-    console.log(`${pass ? '✅' : '❌'} ${p.lang} ${kind} :: "${q}" → ${reply ? `"${reply.slice(0, 90)}"` : '(no reply)'}${stock ? ' [STOCK]' : ''}${!onTopic && reply ? ' [off-topic]' : ''}${answeredInEnglish ? ' [ANSWERED IN ENGLISH]' : ''}`);
+    console.log(`${pass ? '✅' : '❌'} ${p.lang} ${kind} :: "${q}" → ${reply ? `"${reply.slice(0, 90)}"` : '(no reply)'}${stock ? ' [STOCK]' : ''}${!onTopicHere && reply ? ' [off-topic]' : ''}${answeredInEnglish ? ' [ANSWERED IN ENGLISH]' : wrongLanguage ? ' [WRONG LANGUAGE]' : ''}`);
   }
 
   // ── THE COMMAND CONTRACT (the row the seven-times-ignored user needed) ─────
@@ -171,7 +187,11 @@ for (const p of PROBES) {
   //   · correct — and it resolved to the opening they named (D4).
   await boot();
   const ack = await ask(p.lesson);
-  await page.waitForTimeout(6000);   // the lesson kicks off asynchronously
+  // A walkthrough GENERATES before it renders, so a short wait reads as a
+  // failure on a lesson that was merely still coming. If nothing appears in
+  // this window the coach said "let's walk through it" and then did not —
+  // which is a real defect, not a timing artifact.
+  await page.waitForTimeout(25000);
   const url = page.url();
   // 🔴 THE URL IS THE WRONG CONTRACT ON THIS SURFACE, and reading it alone
   // manufactured a red row on the first run (2026-09-19). `?opening=` is the

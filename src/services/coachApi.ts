@@ -2033,6 +2033,14 @@ async function signalReroute(
   query: string | undefined,
   grounding: { currentFen?: string | null; moveHistory?: readonly unknown[] } | null | undefined,
   config: ProviderConfig | null,
+  /** The language THIS TURN must answer in. Threaded from
+   *  `getCoachChatResponse`, which receives it from `coachService`. A lane
+   *  reached THROUGH a helper is still a lane: the turn-bound `voice()` there
+   *  covers only direct calls, so a helper that voices its own facts needs the
+   *  value passed down or it answers a Thai question in English (measured on
+   *  prod 2026-09-19, and again after the first fix — which is exactly how this
+   *  second layer was found). */
+  turnLanguage?: string,
 ): Promise<{ text: string; lane: string } | null> {
   const boardPresent = !!(grounding?.currentFen || (grounding?.moveHistory?.length ?? 0) > 0);
   const top = topCandidateLane(query ?? '', { boardPresent });
@@ -2042,18 +2050,18 @@ async function signalReroute(
     if (top.lane === 'theory') {
       const hit = searchTheoryPassage(q);
       const ans = hit ? assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage }) : null;
-      if (ans) { const v = await voiceFacts(ans.facts, { studentMessage: q, providerConfig: config, intent: 'theory', preferRaw: true }); if (v) return { text: v, lane: 'theory' }; }
+      if (ans) { const v = await voiceFacts(ans.facts, { studentMessage: q, providerConfig: config, targetLanguage: turnLanguage, intent: 'theory', preferRaw: true }); if (v) return { text: v, lane: 'theory' }; }
     } else if (top.lane === 'endgame') {
       const lesson = matchEndgameLesson(q);
       if (lesson) {
         const playable = lesson.positions.find((p) => p.fen);
         const ans = assembleEndgameTechniqueAnswer({ name: lesson.name, rule: lesson.narration.rule, why: lesson.narration.why, history: lesson.narration.history ?? null, tip: lesson.narration.tip ?? null, fen: playable?.fen ?? null });
-        if (ans) { const v = await voiceFacts(ans.facts, { studentMessage: q, providerConfig: config, intent: 'endgame', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'endgame_trainer', id: lesson.id }]; return { text: v, lane: 'endgame' }; } }
+        if (ans) { const v = await voiceFacts(ans.facts, { studentMessage: q, providerConfig: config, targetLanguage: turnLanguage, intent: 'endgame', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'endgame_trainer', id: lesson.id }]; return { text: v, lane: 'endgame' }; } }
       }
     } else if (top.lane === 'weakness') {
       const unified = await getUnifiedWeaknessProfile();
       const ans = assembleWeaknessRecommendation(unified, { topic: null });
-      if (ans) { const v = await voiceFacts(ans.facts, { studentMessage: q, providerConfig: config, intent: 'progress', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }]; return { text: v, lane: 'weakness' }; } }
+      if (ans) { const v = await voiceFacts(ans.facts, { studentMessage: q, providerConfig: config, targetLanguage: turnLanguage, intent: 'progress', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }]; return { text: v, lane: 'weakness' }; } }
     }
   } catch { return null; }
   return null;
@@ -2201,6 +2209,14 @@ async function serveGroundedPositionDefault(
    *  COMPUTED pedagogical cue line (e.g. an eval-swing "recovery") prepended to
    *  the fact bundle so the warm voice can acknowledge it truthfully. */
   voice?: { warm?: boolean; extraFacts?: string; computedOnly?: boolean },
+  /** The language THIS TURN must answer in. Threaded from
+   *  `getCoachChatResponse`, which receives it from `coachService`. A lane
+   *  reached THROUGH a helper is still a lane: the turn-bound `voice()` there
+   *  covers only direct calls, so a helper that voices its own facts needs the
+   *  value passed down or it answers a Thai question in English (measured on
+   *  prod 2026-09-19, and again after the first fix — which is exactly how this
+   *  second layer was found). */
+  turnLanguage?: string,
 ): Promise<string | null> {
   // `voice.warm` is intentionally ignored here: a deterministic readout is
   // ALWAYS spoken via preferRaw (chokepoint enforcement, David 2026-09-02).
@@ -2234,7 +2250,7 @@ async function serveGroundedPositionDefault(
       // spoken via preferRaw. `warm` no longer opens a door to the phrasing
       // model for a deterministic readout — the DNA register lives in the
       // computed prose + the general-speak prompt, not a per-answer LLM call.
-      const voiced = await voiceFacts(`${prefix}${answer.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: true });
+      const voiced = await voiceFacts(`${prefix}${answer.facts}`, { studentMessage, providerConfig: config, targetLanguage: turnLanguage, intent: 'safe-default-bestmove', preferRaw: true });
       if (voiced) {
         return answer.bestMoveFromTo
           ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -2260,14 +2276,14 @@ async function serveGroundedPositionDefault(
   if (assess) {
     const hl = keySquareHighlightTags(assess);
     if (computedOnly && assess.facts.trim()) return `${`${prefix}${assess.facts}`.trim()}${hl}`;
-    const voiced = await voiceFacts(`${prefix}${assess.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-assessment', preferRaw: true });
+    const voiced = await voiceFacts(`${prefix}${assess.facts}`, { studentMessage, providerConfig: config, targetLanguage: turnLanguage, intent: 'safe-default-assessment', preferRaw: true });
     if (voiced) return `${voiced}${hl}`;
   }
   // Nothing engine/tactic-backed, but a COMPUTED moment cue can still stand on
   // its own (e.g. a pure eval-swing recovery) — voice it warmly rather than
   // dropping the interjection.
   if (prefix.trim()) {
-    const voiced = await voiceFacts(prefix.trim(), { studentMessage, providerConfig: config, intent: 'safe-default-moment', preferRaw: true });
+    const voiced = await voiceFacts(prefix.trim(), { studentMessage, providerConfig: config, targetLanguage: turnLanguage, intent: 'safe-default-moment', preferRaw: true });
     if (voiced) return voiced;
   }
   return null;
@@ -2292,6 +2308,14 @@ async function computeLiveBoardVerdict(
   question: string,
   grounding: MasterGroundingOptions,
   config: ProviderConfig | null,
+  /** The language THIS TURN must answer in. Threaded from
+   *  `getCoachChatResponse`, which receives it from `coachService`. A lane
+   *  reached THROUGH a helper is still a lane: the turn-bound `voice()` there
+   *  covers only direct calls, so a helper that voices its own facts needs the
+   *  value passed down or it answers a Thai question in English (measured on
+   *  prod 2026-09-19, and again after the first fix — which is exactly how this
+   *  second layer was found). */
+  turnLanguage?: string,
 ): Promise<string | null> {
   const fen = grounding.currentFen;
   // TEMP DEBUG (David 2026-09-02 board-verdict prod triage) — remove after.
@@ -2319,7 +2343,7 @@ async function computeLiveBoardVerdict(
     fen ? (fen.split(' ')[1] === 'b' ? 'black' : 'white') : (grounding.whoseTurn ?? null);
   const sc: 'white' | 'black' | null = grounding.studentColor ?? stm;
   const voice = (facts: string, intent: string): Promise<string | null> =>
-    voiceFacts(facts, { studentMessage: question, providerConfig: config, intent, preferRaw: true }).then((v) => v ?? facts);
+    voiceFacts(facts, { studentMessage: question, providerConfig: config, targetLanguage: turnLanguage, intent, preferRaw: true }).then((v) => v ?? facts);
 
   if (isWhoseTurnQuestion(question) && stm) {
     const yours = sc === stm;
@@ -3153,6 +3177,11 @@ export function droppedTokens(mustPreserve: string[] | undefined, out: string): 
  * board); when no tactical reason is computable it states the move plainly.
  */
 export async function explainPuzzleMoveGrounded(opts: {
+  /** The language to answer in. Omitted, the student's own is resolved below:
+   *  this is a PUZZLE surface, not a chat turn, so there is no caller-supplied
+   *  turn language — and leaving it unset made the drill explain a puzzle in
+   *  English to someone the rest of the app was already speaking Thai to. */
+  targetLanguage?: string;
   fen: string;
   bestMoveUci: string | null;
   bestMoveSan: string;
@@ -3173,6 +3202,12 @@ export async function explainPuzzleMoveGrounded(opts: {
   // does AND walks the forced line, the richest grounded "why". Convert the UCI
   // PV to SAN from the puzzle FEN, then assemble. Falls through to the
   // single-move explanation below when there's no PV / it can't be walked.
+  // Lazy, to keep `spokenLanguage`'s store import off this module's load path —
+  // it lazily imports THIS module back, so the edge must not be static.
+  const puzzleLanguage = opts.targetLanguage
+    ?? (await import('./spokenLanguage')).chosenOrTypedLanguageName()
+    ?? undefined;
+
   if (opts.pvUci && opts.pvUci.length > 0) {
     try {
       const c = new Chess(opts.fen);
@@ -3189,6 +3224,7 @@ export async function explainPuzzleMoveGrounded(opts: {
       if (reasoning) {
         const voiced = await voiceFacts(reasoning.facts, {
           studentMessage: opts.studentMessage ?? `Why is ${opts.bestMoveSan} the best move here?`,
+          targetLanguage: puzzleLanguage,
           intent: 'best-move', preferRaw: true,
         });
         return voiced ?? reasoning.facts;
@@ -3200,6 +3236,7 @@ export async function explainPuzzleMoveGrounded(opts: {
   if (facts) {
     const voiced = await voiceFacts(facts, {
       studentMessage: opts.studentMessage ?? `Why is ${opts.bestMoveSan} the best move here?`,
+      targetLanguage: puzzleLanguage,
       intent: 'best-move', preferRaw: true,
     });
     return voiced ?? facts; // provider down → the computed facts are already true
@@ -3448,7 +3485,7 @@ export async function getCoachChatResponse(
     // the precise draw/turn/colour detectors miss and the ask fell to the LLM
     // (the KQ-vs-K collapse persisted after the first fix — prod audit).
     const boardVerdictAsk = grounding.cleanAsk ?? earlyUserMsg ?? '';
-    const boardVerdict = await computeLiveBoardVerdict(boardVerdictAsk, grounding, config);
+    const boardVerdict = await computeLiveBoardVerdict(boardVerdictAsk, grounding, config, studentLanguage);
     if (boardVerdict) {
       emitGroundingCoverage('board-verdict', grounding.surface ?? 'unknown', grounding.sessionId, { question: boardVerdictAsk.slice(0, 100), path: 'early' });
       if (onStream) onStream(boardVerdict);
@@ -6018,7 +6055,7 @@ export async function getCoachChatResponse(
       // FIRST, then fall through to the position default for the rest. G0.
       // (The early interception above catches these on most paths; this is the
       // backstop for any flow that reaches the seal.)
-      const verdict = await computeLiveBoardVerdict(sealVerdictAsk, grounding, config);
+      const verdict = await computeLiveBoardVerdict(sealVerdictAsk, grounding, config, studentLanguage);
       if (verdict) {
         emitGroundingCoverage('board-verdict', surface, sessionId, { question: sealVerdictAsk.slice(0, 100) });
         if (onStream) onStream(verdict);
@@ -6044,7 +6081,7 @@ export async function getCoachChatResponse(
       // signal-map re-route (theory / endgame / weakness) before the generic
       // position default — a confident off-phrasing the regex missed gets its
       // real lane answer instead of a board readout. Self-gating.
-      const reroute = await signalReroute(originalQuery, grounding, config);
+      const reroute = await signalReroute(originalQuery, grounding, config, studentLanguage);
       if (reroute) {
         emitGroundingCoverage(`signal-reroute:${reroute.lane}`, surface, sessionId, { question: originalQuery.slice(0, 100), path: 'chess-signal-seal' });
         if (onStream) onStream(reroute.text);
@@ -6052,7 +6089,7 @@ export async function getCoachChatResponse(
       }
       // Compute the position default when the surface threaded engine data;
       // otherwise serve the honest stock line.
-      const grounded = await serveGroundedPositionDefault(grounding, config, originalQuery || undefined);
+      const grounded = await serveGroundedPositionDefault(grounding, config, originalQuery || undefined, undefined, studentLanguage);
       if (grounded) {
         emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100), ...signalHint(originalQuery, grounding) });
         if (onStream) onStream(grounded);
@@ -6158,13 +6195,13 @@ export async function getCoachChatResponse(
     return STOCK_GROUNDING_FALLBACK;
   }
   // Batch D live flip — signal-map re-route before the generic position default.
-  const fallthroughReroute = grounding ? await signalReroute(originalQuery, grounding, config) : null;
+  const fallthroughReroute = grounding ? await signalReroute(originalQuery, grounding, config, studentLanguage) : null;
   if (fallthroughReroute) {
     emitGroundingCoverage(`signal-reroute:${fallthroughReroute.lane}`, surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
     if (onStream) onStream(fallthroughReroute.text);
     return fallthroughReroute.text;
   }
-  const grounded = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined) : null;
+  const grounded = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined, undefined, studentLanguage) : null;
   if (grounded) {
     emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough', ...signalHint(originalQuery, grounding) });
     if (onStream) onStream(grounded);
