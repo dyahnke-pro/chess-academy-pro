@@ -342,6 +342,30 @@ gets said; this is about whether anything happens at all.
   inside a 12k-line component, each needing an await, and getting it wrong
   breaks Learn for everyone. It wants a real run behind it, not a 6am edit.
 
+- ✅ **VERIFIED ON PROD (2026-09-19, bundle `senxol9e`).** The fixes were
+  re-run against the deployed build, and the two lanes that were still English
+  an hour earlier are the ones that moved:
+
+  | ask | before tonight | after |
+  |---|---|---|
+  | Thai "what's the best move" | *"The best move is Nf3…"* | *"หมากที่ดีที่สุดคือ exd5 ครับ และตอนนี้ฝ่ายขาวได้เปรียบเล็กน้อย ประมาณ 0.6 แต้ม"* |
+  | Greek "what's the best move" | *"This game is now the King's Pawn Game…"* | *"Η καλύτερη κίνηση είναι Nf3. Μπαίνει στο παιχνίδι, διεκδικώντας το κέντρο στα d4 και e5"* |
+  | Hebrew "what is a fork" | *"The knight is the born forker…"* | *"מזלג הוא כלי שבו חייל אחד מאיים על שניים — כלי אחד תוקף שני אויבים בבת אחת"* |
+  | Thai "teach me the Italian" | *"The best move is e4."* | the Italian Game walkthrough starts |
+
+  Every row that produced a language-checkable reply came back in the student's
+  language, and the chess tokens (`exd5`, `Nf3`, `d4`, `e5`) survive verbatim
+  through the fidelity net in all of them.
+
+  **The lesson start is confirmed by a PAIRED PROBE, not by the audit.** The
+  audit's lesson row still reports "no walkthrough UI" while two focused probes
+  — the same Thai ask as the FIRST turn and as a FOLLOW-UP, the only variable —
+  both show `teach-nav-row` at +5s and print the running lesson. The probes
+  watch continuously and dump the transcript; the audit row checks once. So the
+  ROW is the suspect instrument, and it is left flagged rather than quietly
+  called green: `scripts/probe-thai-lesson.mjs` is the trustworthy measurement
+  until someone works out why the row disagrees.
+
 ### WO-LIVE-DEFECTS-01 — the rest of the list
 
 Shipped 2026-09-19 in 2bfb4961c + 7bc0677ab. Both standing audits green after:
