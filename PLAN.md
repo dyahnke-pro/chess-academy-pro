@@ -830,6 +830,28 @@ canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
 
 ## Next-session pickup
 
+0. **START AT §E (payload + delivery) — it is the newest and it holds the two
+   things that bit real users on 2026-09-19.** In one line each: a deploy used
+   to swap the bundle under a running page (that is what froze David's iPhone);
+   boot was downloading 32.8 MB of JS, not the 8.2 MB everyone was watching; and
+   354 corpus notes were narrating the video instead of the board. All three are
+   fixed and audited on prod. What §E still OWES is ranked there — read item 0
+   (the two review-audit reds) and item 2 (the SW check a single deploy cannot
+   make) before anything else.
+
+   Three corrections from that night are recorded deliberately, because each one
+   was a confident claim that measurement overturned. Do not re-derive them:
+   - "archiving the un-positioned notes is safe" — it cut phase-transition
+     coverage 19/20 → 10/20. Move, never archive.
+   - "this will not fix the Learn stall" — it is gone (4 plies/136 s → 5/24 s),
+     and the likeliest cause is the OTHER session's `bbf96dd`, not anything in
+     §E. One green run attributes nothing.
+   - "the source-meta filter already blocks those notes" — it ran at 3 call
+     sites out of 8, and none of the 3 were the tiers floating notes reach.
+   The method that caught all three is the same: measure the SURFACE the change
+   touches (transition/background/endgame-card coverage across ~20 openings),
+   not the tier you happened to be thinking about.
+
 1. Gain all four levels (CLAUDE.md → `docs/STATE.md` → `surface-map.mjs --changed` → the code).
 2. **Bucket A is CLOSED (2026-09-19)** — items 2-5 and 7 landed, 4 and 6 were
    measured and found to be wrong bullets rather than defects. The one thing A
