@@ -337,10 +337,22 @@ gets said; this is about whether anything happens at all.
   above — computed text that no one localises — just smaller, because the
   teaching itself is in-language.
 
-  The fix is a text-side sibling of `localizeSpokenText` (which is voice-only
-  today) applied at those sites. Left open on purpose: it is six render paths
-  inside a 12k-line component, each needing an await, and getting it wrong
-  breaks Learn for everyone. It wants a real run behind it, not a 6am edit.
+  🔀 **IT IS A DESIGN FORK, NOT A RISK CALL** (corrected — the first note here
+  said it was deferred for the hour, which was the weak reason). Two options
+  trade off differently enough that it is David's:
+  - **(a) route the acks through the model** (`localizeSpokenText`'s shape,
+    keyed on `chosenOrTypedLanguageName` so it follows the CHAT language rather
+    than the device locale). Covers all 36 languages, but costs a round-trip
+    BEFORE the ack renders — a non-English student watches their confirmation
+    lag about a second on every lesson start, in the exact moment just fixed.
+  - **(b) a phrase table.** These are SIX fixed templates with one variable
+    (the opening name), so they need no model at all: instant, deterministic,
+    G0-pure. The cost is coverage — six strings per language, English fallback
+    where unsupplied.
+
+  (b) is the better engineering answer and the one the determinism law points
+  at; (a) is the one that needs no content work. Recommended: (b), with English
+  fallback, seeded for the languages real users actually speak.
 
 - ✅ **VERIFIED ON PROD (2026-09-19, bundle `senxol9e`).** The fixes were
   re-run against the deployed build, and the two lanes that were still English
