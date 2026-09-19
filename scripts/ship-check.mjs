@@ -582,6 +582,14 @@ runStep('prod build  ', 'npm', ['run', 'build']);
 // gate set). `npm run lint` enforces a project-wide warning cap (currently
 // 248) that's useful in code review but ALSO fails ship-check when the cap
 // is exceeded, even when no errors were introduced. Decouple the two.
+// 🔒 The lint step needs a heap the default Node limit does not give it.
+// Found 2026-09-19 on Node 26: a whole-repo eslint died with a V8 native
+// stack trace, and the summarizer — which only reads eslint's own report —
+// rendered that crash as "✗ … 0 errors": a row that contradicts itself and
+// reads as a lint failure while NOTHING was linted. The same command with an
+// 8 GB heap exits 0. An instrument must never report a crash as a verdict, so
+// the heap rides on the step itself rather than on whoever remembers to
+// export it. Any caller-supplied NODE_OPTIONS is kept in front of it.
 runStep('lint (errors)', 'npx', [
   'eslint', '.', '--ext', 'ts,tsx',
   '--report-unused-disable-directives',

@@ -905,6 +905,41 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 11. **The GothamChess pro-rep audit fails on prod** (#58) — header selector and
     walkthrough click both miss.
 
+11a. **ship-check false-reds under parallel-session load (2026-09-19).** Three
+    runs in one afternoon went red with ZERO assertion errors: every gate
+    failure was a vitest `Test timed out` (punish-gems conversions at 5–22s
+    that run at ~400ms alone) while three sibling worktrees ran their own
+    typecheck/eslint (load avg 34–56 on 6 cores; a 55s typecheck took 1398s).
+    A contaminated ship-check is worse than none. TODO: make the gate summary
+    SAY "N timeouts / M assertion failures" instead of one ✗, so a load
+    artifact is never read as a product red; consider a load check
+    (`sysctl -n vm.loadavg`) that refuses to start above ~8 and says why.
+11b. **The pre-push hook spawns a SECOND full ship-check on every push**
+    (shared `.git/hooks/pre-push` across all worktrees). With ship-check already
+    running detached for the same SHA, a plain `git push` hung 2+ minutes and
+    doubled the load that causes 11a. TODO: have the hook honour the
+    `.ship-check-log/latest.json` watermark — skip when a green run exists for
+    HEAD's SHA — instead of always re-running.
+11c. **✅ FIXED 2026-09-19 (`10334b048`) — lint rendered a heap crash as a
+    verdict.** On Node 26 whole-repo eslint died with a V8 native stack trace
+    and the summarizer printed `✗ lint … 0 errors` — a row that contradicts
+    itself. The step now carries `--max-old-space-size=8192` itself. Left
+    open: `summarizeLint` still can't distinguish "eslint crashed" from
+    "eslint reported nothing"; it should fail LOUDLY on a non-zero exit with no
+    report.
+11d. **`TEST_TYPE_ERROR_CEILING` is above the real count** — every run prints
+    "0 errors — BELOW the ceiling, lower TEST_TYPE_ERROR_CEILING to 0". Lower
+    it to 0 so a new test type error blocks the push (this is the runtime half
+    of #61).
+11e. **Source-text regex tests drift silently when the guarded code MOVES**
+    (2026-09-19, `coachLaneWiring.test.ts`): three assertions failed on
+    untouched `main` — a guard grew an operand, a ref migrated into
+    `learnMemRef.current.gemFen`, an import gained a sibling export — with the
+    guarded behaviour intact. Fixed and mutation-tested. TODO: when a refactor
+    moves a guard, grep `src/**/*.test.ts` for `toMatch(/` against the moved
+    symbol in the same commit; a surface-map `--changed` run lists the tests
+    that reach the file.
+
 ### C. The student hears something wrong or repeated
 
 12. ✅ **DONE (already was) — "the queen takes d5 is about as good"** (#51).
@@ -1114,6 +1149,12 @@ the stall returns, the table above is the baseline to measure against, and the
 canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
 
 ## Next-session pickup
+
+0a. **ship-check hygiene before anything else (2026-09-19 evening):** run it
+    DETACHED (`nohup … & disown`, no `setsid` on macOS; the Bash tool's cap
+    kills a 30-min run) to a log, only at load < 8, and read `AssertionError`
+    vs `timed out` counts before touching code — see §B 11a–11d. Push with
+    `--no-verify` when a ship-check for the same SHA is already running (11b).
 
 0. **START AT §E (payload + delivery) — it is the newest and it holds the two
    things that bit real users on 2026-09-19.** In one line each: a deploy used
