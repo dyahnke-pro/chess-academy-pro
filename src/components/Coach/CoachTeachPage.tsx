@@ -203,7 +203,7 @@ import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalRe
 import { tacticInvariant } from '../../services/conceptEngine';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
-import { backwardLook } from '../../services/backwardLook';
+import { backwardLook, lastCoachVerdictDecline } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
 import type { FundamentalId } from '../../services/principleAttribution';
 import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
@@ -7604,9 +7604,10 @@ export function CoachTeachPage(): JSX.Element {
       // corpus leads and the masterclass beat fills where the corpus can't.
       const beat = noteLine
         ? null
-        : curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.detectedOpeningName, playerColor, 'live');
+        : curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.detectedOpeningName, playerColor, 'live', learnMemRef.current.curatedBeatSubjects);
       if (beat) {
         learnMemRef.current.curatedBeatSeen.add(beat.id);
+        if (beat.subject) learnMemRef.current.curatedBeatSubjects.add(beat.subject);
         curatedLine = beat.text;
         teachingTierRef.current = 'curated';
         factLines.push(`Masterclass beat (${beat.lesson}): ${beat.text}`);
@@ -8042,6 +8043,32 @@ export function CoachTeachPage(): JSX.Element {
   ): void => {
     const text = line.trim();
     if (!text) return;
+    // 🔒 A FINISHED GAME POSES NO QUESTION — so nothing may be queued against
+    // one. David's 22-ply Learn game ended in mate and the coach carried on:
+    // "Checkmate." then "The move is Rd1", "Re1 is playable, but not as
+    // precise", "Their king is still in the centre — every line that opens
+    // toward it is worth looking at." Every clause true; every clause absurd.
+    //
+    // THE GUARD BELONGS HERE, AND THE MEASUREMENT SAYS SO RATHER THAN TASTE.
+    // The obvious fix is one guard per producer, and it is the wrong one twice
+    // over. First, the producers that name a move ALREADY refuse: on a mated
+    // board `buildDeliberation`, `tacticalReadFromLines` and
+    // `buildGuidedFindChallenge` each return null, because each must resolve a
+    // move on the board before it can speak and there are none — verified, not
+    // assumed. Second, the lanes that DID speak cannot guard themselves at all:
+    // `engineReadLines(analysis, …)` and `pieceQualityLines(values, …)` take no
+    // FEN, by design — they read an analysis and a static eval table, and a
+    // mated position still has pieces on it, so "your rook on h1 is asleep"
+    // survives checkmate with nothing in scope to notice.
+    //
+    // So the precondition can only be checked where the position is known, and
+    // that is HERE: every late-package lane in this surface funnels through
+    // this one queue and hands the FEN in as its first argument. One guard, at
+    // the only point that has the fact, covering lane fifteen and lane sixteen
+    // alike — instead of a convention each new lane must remember.
+    try {
+      if (new Chess(fen).isGameOver()) return;
+    } catch { /* unreadable FEN — the lanes' own board checks still apply */ }
     const pending = pendingVoiceRef.current?.fen === fen
       ? pendingVoiceRef.current
       : { fen, lines: [] as Array<{ kind: VoiceFactKind; text: string; squares?: readonly string[] }> };
@@ -9981,17 +10008,27 @@ export function CoachTeachPage(): JSX.Element {
                         fen: cm.fenAfter,
                       });
                     } else {
-                      // REACHED THE MODEL AND IT SAID NOTHING. The interesting
-                      // case, and the one the log could not distinguish before:
-                      // the guards all passed and the coach's move simply was
-                      // not worth a word. The centipawns go with it, so "the
-                      // coach never speaks" can be read as "it played well" or
-                      // "the floor is too high" instead of guessed at.
+                      // REACHED THE VERDICT AND IT SAID NOTHING — and this line
+                      // now names WHICH guard refused instead of asserting one.
+                      //
+                      // 🔒 IT USED TO END "under the floor, nothing to call",
+                      // unconditionally, for all five of `callInaccuracy`'s
+                      // refusal paths. A real 22-ply game logged it for a 122cp
+                      // move and a 184cp move, and the backlog read those two
+                      // lines and concluded the floor was "mis-scaled or
+                      // inverted". It is neither: `MISTAKE_CP` is 100, both
+                      // moves clear it, and both produce a full verdict when
+                      // the function is called directly. The log had named the
+                      // one guard that had passed.
+                      //
+                      // An instrument that asserts its own cause is worse than
+                      // one that stays quiet, because it answers a question
+                      // nobody thinks to re-ask.
                       void logAppAudit({
                         kind: 'coach-narration-spoken',
                         category: 'subsystem',
                         source: 'CoachTeachPage.coachVerdict.nothingToSay',
-                        summary: `coach move ${cm.playedSan} cost ${Math.round(cpLoss)}cp — under the floor, nothing to call`,
+                        summary: `coach move ${cm.playedSan} cost ${Math.round(cpLoss)}cp — declined: ${lastCoachVerdictDecline() ?? 'unknown'}`,
                         fen: cm.fenAfter,
                       });
                     }

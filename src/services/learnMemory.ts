@@ -52,6 +52,11 @@ export const NEVER_FIRED = -999;
 export interface LearnMemory {
   /** Curated masterclass beats already spoken this game (by beat key). */
   readonly curatedBeatSeen: Set<string>;
+  /** MOVES a curated beat has already taught this game — the dedupe term that
+   *  the ID set and the sentence-novelty set both miss, because two lessons
+   *  teaching the same move are a different beat AND a different sentence.
+   *  See `beatSubject` in `curatedBeatSource`. */
+  readonly curatedBeatSubjects: Set<string>;
   /** Explainer lines already given this game. */
   readonly saidExplainers: Set<string>;
   /** The last gem callout spoken — suppresses the identical callout. */
@@ -164,6 +169,7 @@ function mintGameId(): string {
 
 export function createLearnMemory(): LearnMemory {
   const curatedBeatSeen = new Set<string>();
+  const curatedBeatSubjects = new Set<string>();
   const saidExplainers = new Set<string>();
   const structureSaid = new Set<string>();
   const engineReadSaid = new Set<string>();
@@ -174,6 +180,7 @@ export function createLearnMemory(): LearnMemory {
   const mem: LearnMemory = {
     gameId: mintGameId(),
     curatedBeatSeen,
+    curatedBeatSubjects,
     saidExplainers,
     structureSaid,
     engineReadSaid,
@@ -194,6 +201,7 @@ export function createLearnMemory(): LearnMemory {
     },
     newGame(): void {
       curatedBeatSeen.clear();
+      curatedBeatSubjects.clear();
       saidExplainers.clear();
       structureSaid.clear();
       engineReadSaid.clear();

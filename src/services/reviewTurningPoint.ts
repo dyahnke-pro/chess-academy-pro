@@ -148,3 +148,151 @@ export function buildTurningPointQuestion(
 export function judgeTurningPointPick(q: TurningPointQuestion, pickedPly: number): boolean {
   return pickedPly === q.answer.ply;
 }
+
+// ─── THE CRITICAL MOMENT, ASKED ─────────────────────────────────────────────
+//
+// 🔒 REVIEW ASKS AT THE BIGGEST SWING; THE MOMENT WORTH TEACHING IS THE BIGGEST
+// CRITICALITY (David 2026-09-18: "I want the only question to come at the
+// critical moment. That is where the teaching has most effect." → "This will
+// also take place in review.").
+//
+// The question above is selected by SWING — what a move COST. Criticality is
+// how much the CHOICE mattered, and the two come apart exactly where teaching
+// is best: a student who FOUND the only move has a swing of ZERO, so the
+// swing card can never ask about the most instructive position in the game. On
+// the So–Carlsen draw (audit 2026-09-18) it fired not at all — "fewer than 2
+// costed moments" on a GM draw full of real forks. That is CLAUDE.md's own
+// importance doctrine, failure mode #1 (sharp-but-flat), living in the review
+// question.
+//
+// SAME COMPUTER, DIFFERENT REGISTER. `criticalMoment` computes the count and
+// the stake; Learn STATES them mid-decision and this ASKS them afterwards.
+// Nothing about the chess differs — only whether the student is still choosing.
+import {
+  criticalMomentSpeaks, criticalMomentAsk, criticalMomentReveal, criticalMomentHeld,
+  type CriticalMomentRead, type StakeId, type SpeakingCriticalMoment,
+} from './criticalMoment';
+
+export type { CriticalMomentRead, StakeId, SpeakingCriticalMoment };
+
+/**
+ * 🔒 NEVER ASK A STUDENT TO FIND A MOVE THEY PLAYED (CLAUDE.md §G4.5.2). The
+ * first cut of this asked "can you find it?" at every critical moment — and the
+ * whole point of selecting by CRITICALITY rather than swing is that it reaches
+ * the positions where the student FOUND the only move. Asking them to find it
+ * again is §G4.5.2's exact defect: their own success handed back as a miss they
+ * never made.
+ *
+ * So the register follows the board, not the card:
+ *  • `credit` — their move held. STATE it. This is the app's first computed
+ *    GREEN sentence at a critical moment, and it is better teaching than a
+ *    quiz whose answer they already produced.
+ *  • `ask` — their move did not hold and exactly ONE move did. Withhold and
+ *    ask; the move is named only in the reveal, and the chips are the fan's own
+ *    other lines (real engine moves from this board, never a made-up decoy).
+ *  • `note` — their move did not hold and TWO did. STATED, not asked: a
+ *    three-chip question with two right answers is not a question, and the
+ *    teaching is in the reveal either way.
+ *
+ * The MOMENT is still selected by pure criticality; only its register differs.
+ */
+export type CriticalMomentRegister = 'credit' | 'ask' | 'note';
+
+export interface CriticalMomentQuestion {
+  register: CriticalMomentRegister;
+  ply: number;
+  /** The position the student FACED — the board the card sits on. */
+  fenBefore: string;
+  /** `ask` only: withholds the move, always (the honesty contract). Null on a
+   *  `credit` / `note`, where there is nothing to ask. The card renders iff
+   *  this is non-null. */
+  question: string | null;
+  /** `ask` only: the chips, in a ply-keyed deterministic order — the answer is
+   *  never first. Empty otherwise. */
+  choices: readonly string[];
+  /** `credit`: spoken at the ply. `ask`: spoken only after they commit. */
+  reveal: string;
+  /** What they played in the real game. */
+  playedSan: string;
+  /** Did their real move hold? `register === 'credit'` iff this is true. */
+  found: boolean;
+  count: number;
+  stake: StakeId;
+  holdingSans: readonly string[];
+  /** Best minus runner-up, mover-POV — the ranking key. */
+  gapCp: number;
+}
+
+/**
+ * Pick the game's one critical moment and phrase it as a question, or null when
+ * no scanned ply resolved to a real count.
+ *
+ * SELECTION IS PURE CRITICALITY: one-move positions before two-move forks, then
+ * the widest gap, then the earliest ply. Deliberately NOT re-ranked by whether
+ * the student got it right — both outcomes teach, and preferring the misses
+ * would rebuild the swing card under a new name.
+ */
+export function buildCriticalMomentQuestion(
+  segments: ReadonlyArray<TurningPointSegmentLike>,
+  reads: ReadonlyMap<number, CriticalMomentRead>,
+  playerColor: 'white' | 'black',
+): CriticalMomentQuestion | null {
+  let best: { seg: TurningPointSegmentLike & { fenBefore: string }; read: SpeakingCriticalMoment } | null = null;
+  for (const seg of segments) {
+    if (seg.playerColor !== playerColor) continue;   // only the student's own decisions
+    if (!seg.fenBefore) continue;
+    const fenBefore = seg.fenBefore;
+    const read = reads.get(seg.ply) ?? null;
+    if (!criticalMomentSpeaks(read)) continue;
+    const here = { seg: { ...seg, fenBefore }, read };
+    if (!best) { best = here; continue; }
+    const better = read.count !== best.read.count
+      ? read.count < best.read.count
+      : read.gapCp !== best.read.gapCp
+        ? read.gapCp > best.read.gapCp
+        : seg.ply < best.seg.ply;
+    if (better) best = here;
+  }
+  if (!best) return null;
+
+  const { seg, read } = best;
+  const named = criticalMomentReveal(read);
+  if (!named) return null;   // no move to name → nothing honest to say
+  const found = criticalMomentHeld(read, seg.san);
+  const register: CriticalMomentRegister = found ? 'credit' : read.count === 1 ? 'ask' : 'note';
+  const question = register === 'ask' ? criticalMomentAsk(read, seg.ply) : null;
+  if (register === 'ask' && !question) return null;
+  // THE CHIPS ARE THE ENGINE'S OWN LINES from this very position — the holding
+  // move plus the fan's discards, and the move they actually played when the
+  // fan did not already contain it. Rotated on the ply so the answer is not
+  // always first, deterministically (never `Math.random`).
+  const pool = register === 'ask'
+    ? [...new Set([...read.holdingSans, ...read.discardedSans, seg.san])]
+    : [];
+  const shift = pool.length ? Math.abs(seg.ply) % pool.length : 0;
+  const choices = [...pool.slice(shift), ...pool.slice(0, shift)];
+  return {
+    register,
+    ply: seg.ply,
+    fenBefore: seg.fenBefore,
+    question,
+    choices,
+    // THE STUDENT IS THE SUBJECT OF THEIR OWN REVIEW. The credit names what
+    // they did before it names the chess; the ask names what they played
+    // without grading a move the engine never flagged.
+    reveal: found
+      ? `That was a critical moment, and you found it over the board — ${named}`
+      : `You played ${seg.san}. ${named}`,
+    playedSan: seg.san,
+    found,
+    count: read.count,
+    stake: read.stake,
+    holdingSans: read.holdingSans,
+    gapCp: read.gapCp,
+  };
+}
+
+/** Grade the student's pick against the moves that actually held. */
+export function judgeCriticalMomentPick(q: CriticalMomentQuestion, pickedSan: string): boolean {
+  return q.holdingSans.includes(pickedSan);
+}

@@ -1051,6 +1051,50 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // fundamentals-first narration on the same run.
   await add('FUND probe-ply-leads-with-fundamentals-after-dive', reachedFund2 && (!flagged2 || FUND_RE.test(lead2)), reachedFund2 ? `flagged=${flagged2} lead="${lead2.slice(0, 120)}"` : 'reopened walk did not reach the probe ply');
 
+  // ── THE CRITICAL MOMENT (WO-CRITICAL-MOMENT-01) ───────────────────────────
+  //
+  // Review has always selected its question by SWING. A student who FOUND the
+  // only move has a swing of ZERO, so the most instructive position in the game
+  // was the one position the card could never reach. These rows prove the
+  // criticality pass ran, that a moment was selected, and — the part no unit
+  // test can see — that what the student HEARD names the count and a COMPUTED
+  // stake rather than the templated "equality" that is false in both
+  // directions.
+  const critEvents = events().filter((e) => /criticalMoment|scanCriticalMoments/.test(String(e.source ?? '')));
+  const fanEv = critEvents.find((e) => /scanCriticalMoments/.test(String(e.source ?? '')));
+  const pickEv = critEvents.find((e) => /CoachGameReview\.criticalMoment/.test(String(e.source ?? '')));
+  const fanSummary = String(fanEv?.summary ?? '');
+  const pickSummary = String(pickEv?.summary ?? '');
+  const scanned = Number(/(\d+) plies/.exec(fanSummary)?.[1] ?? 0);
+  await add('CRIT fan-pass-ran', scanned > 0, fanSummary || 'no scanCriticalMoments event — the MultiPV pass never ran');
+  // A moment is not guaranteed on every game (a quiet game genuinely has none),
+  // so the SELECTION row is informational unless the fan actually resolved one.
+  const resolved = Number(/(\d+) speak/.exec(fanSummary)?.[1] ?? 0);
+  await add('CRIT moment-selected-when-one-resolved', resolved === 0 || !!pickEv,
+    resolved === 0 ? `no ply resolved to a 1- or 2-move count on this game (${fanSummary})` : pickSummary);
+
+  // THE SIX COMPUTED STAKES — the phrasing rotates, the claim never does.
+  const STAKE_RE = /keeps? the forced mate|keeps? the win|keeps? you on top|keeps? you level|keeps? you in it|limits? the damage/i;
+  const COUNT_RE = /\b(only )?one move\b|\btwo moves\b/i;
+  const critLines = spoken().map((x) => x.text).filter((t) => COUNT_RE.test(t) && (STAKE_RE.test(t) || /critical moment|fork in the road/i.test(t)));
+  await add('CRIT spoken-names-count-and-stake', !pickEv || critLines.length > 0,
+    critLines.length ? `${critLines.length} line(s): "${critLines[0].slice(0, 160)}"` : 'a moment was selected but nothing said it aloud');
+  // "Keeps equality" is a claim about the EVALUATION and it is false when they
+  // are winning (it keeps the WIN) and when they are lost (it promises a draw
+  // that is not there). It must never appear.
+  const templated = spoken().map((x) => x.text).filter((t) => /keeps? equality/i.test(t));
+  await add('CRIT stake-is-computed-never-templated', templated.length === 0,
+    templated.length ? `templated stake spoken: "${templated[0].slice(0, 140)}"` : 'no "keeps equality" anywhere in the run');
+  // §G4.5.2 — never ask a student to find a move they played. When the selected
+  // register is `credit` (their move HELD), no question card may render.
+  const register = /register=(\w+)/.exec(pickSummary)?.[1] ?? null;
+  const cardShown = await has(page, '[data-testid="review-critical-card"]');
+  await add('CRIT never-asks-a-move-they-played', register !== 'credit' || !cardShown,
+    register ? `register=${register} card=${cardShown}` : 'no moment selected on this game');
+  log(`\n===== CRITICAL MOMENT (${critLines.length} spoken) =====`);
+  if (critLines.length === 0) log('  (none — the fan resolved no 1- or 2-move count on this game)');
+  critLines.forEach((t, i) => log(`  [${i + 1}] ${t.slice(0, 260)}`));
+
   await add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
 
   const streamAfter = await pullAuditStream(Date.now() - 600000);

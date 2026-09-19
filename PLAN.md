@@ -127,6 +127,80 @@ This is the heat map applied to its own evidence, and it is self-correcting: the
 announcement can never inflate the model. Same shape as #34 (a chat-ask reveal
 is recorded, not free).
 
+### ✅ BUILT 2026-09-19 — WO-CRITICAL-MOMENT-01
+
+One leaf computer, `src/services/criticalMoment.ts`, read by both registers.
+`readCriticalMoment` counts the fan's moves within
+`criticalityThresholds(rating).critical` of the best, mover-POV, and bands the
+stake off the best line. Every number below was measured or derived, never
+recalled.
+
+**What it replaced, and why each was a defect not a tidy-up:**
+- `positionFacts`'s two hardcoded key-moment sentences ("Only one move really
+  holds here…" / "This is a critical moment…") said neither the COUNT nor the
+  STAKE. They now come off the same fan the door grades severity on.
+- `moverGap12` was a private 10-line COPY of the same fan scoring — same sign
+  flip, same flat ±100000 mate, same "fewer than 2 lines" rule — sitting one
+  screen from the clause that would read the other one. Deleted; it delegates.
+- `MoveAnnotation` persists one line and the review pool pins `MultiPV 1`, so
+  review had no fan to count at all. `DedicatedWorker.analyzeFan` +
+  `scanCriticalMoments` is a real new pass, MultiPV 3, over the student's own
+  plies past the book, skipping every ply the question plan already owns.
+
+**Three findings the build produced, each a correction to the design above:**
+
+1. 🔴 **THE REVIEW REGISTER IS NOT ONE QUESTION, IT IS THREE, AND THE DESIGN'S
+   "ask at the critical moment" WOULD HAVE SHIPPED §G4.5.2's EXACT DEFECT.**
+   Selecting by criticality rather than swing exists precisely to reach the
+   positions where the student FOUND the only move. Asking them to find it
+   again is their own success handed back as a miss they never made — the
+   `Nexd4` bug, rebuilt. So the register follows the BOARD:
+   `credit` (they held it → STATE it, the app's first computed green sentence
+   at a critical moment), `ask` (they missed the ONE move → a real question),
+   `note` (they missed a TWO-move fork → stated, because a three-chip question
+   with two right answers is not a question). The MOMENT is still selected by
+   pure criticality; only its register differs.
+2. **A STAKELESS SENTENCE IS UNREACHABLE, so `speaks` requires the stake.**
+   `stakeFor` returns null only when the best line is a mate AGAINST the mover
+   — and then every line is, so they all score the flat floor, the count fills
+   the fan, and the read is already unresolved. Carrying a "say the count,
+   claim no stake" branch would have been dead code pretending to be a guard.
+3. **`resolved`, not `count`, is the load-bearing field.** A 2-wide fan whose
+   both lines hold knows only "at least two"; a BOUNDED score is the search
+   saying it cut off before proving the number. Both are unresolved and both
+   stay silent, with the reason NAMED (`unresolvedReason`) rather than
+   swallowed — an instrument that goes quiet without saying why is
+   indistinguishable from one that found nothing.
+
+**Recording.** `gameAnalysisService.recordPromptedFind` is the FIRST writer of
+`prompted: true` in the app's history — the field has been REQUIRED since the
+heat map landed and every row in the store is unaided evidence. It is a RECORD,
+not yet a lever: `getCapabilityProfile` skips prompted rows, so a prompted find
+changes nothing today, which is the point (the coach's own teaching can never
+inflate the model it uses to decide whether to teach).
+
+**OWED, and it needs files this session did not own.** The LEARN half of the
+prompted wire is open. Learn announces the moment, the student plays, and the
+post-game sweep (`GameReviewWeaknessCapture` → `autoAnalyzeGame`, line 139)
+writes `prompted: false` for EVERY ply of that game — including the plies the
+coach had just talked them through. Closing it means Learn remembering which
+plies it announced at and handing that set to the sweep, which touches
+`CoachTeachPage.tsx` (session 3's) and `GameReviewWeaknessCapture.tsx`
+(unowned). Until then, a Learn-prompted find is still recorded as unaided.
+
+**Volume, stated rather than discovered later.** Adding the count-2 case roughly
+doubles the Learn statement's rate (~2.5 → ~5 per game at the amateur band,
+from the 2026-09-18 census: 79% of plies are 3-of-3 within tolerance and stay
+silent). It remains gated on `slowDownOwed`, so a student whose slow-down habit
+is closed still hears none of it.
+
+**Deliberately NOT changed: the door.** `judgeMoment` still grades severity from
+the gap, so on an `interrupt` posture (live play) a two-move fork does not by
+itself open the door — the count decides WHAT is said, importance still decides
+WHETHER. On `walk` (Learn, review) every ply speaks, so there the count is the
+trigger as designed. Widening the door is a separate, bigger change and was not
+made as a side effect of this one.
+
 ### Measure BEFORE writing any of it
 
 ✅ **DONE 2026-09-18** — `scripts/measure-critical-moments.mjs`, 6 real games at
@@ -221,6 +295,49 @@ trust it. That is the cheapest check in this repo and it found three defects.
       (`imported-games` or `coach-games`); guesses (`profile`, `default`) still
       write nothing. `needsPicker` deleted; `strengthCalibrated` bridged (still
       persisted for `DashboardPage`, no longer freezes re-estimation).
+
+## WO-3 — LANDED (2026-09-19, `a9c9376` on `main`, prod audit 8/8 on bundle `index-BeBqQixU`)
+
+The back half of the loop — a recorded weakness becomes a drill, and the drill's
+result moves the model. Three severances, every one measured before it was
+touched, all fixed at once, one audit at the end (`audit-bucket-delivery-loop`,
+live prod, muted).
+
+- ✅ **S1 — the bucket audit graded a join no student reaches.**
+  `misconceptionService.mapTagToDrills` had ZERO production callers; the audit
+  was its only caller, so `DRILL_PLAN_EMPTY` could not fire where
+  `WeaknessTagDrillPage` shows "No drillable positions yet" — the student's
+  path (`getMisconceptionDrillPuzzles`) skips rows missing `bestSan` that the
+  dead join kept. The audit now grades the shipped route; `mapTagToDrills` +
+  `TagDrillPlan` are DELETED so there is one join. The audit's own "not a
+  parallel re-implementation" header is corrected, not appended to. Gate:
+  `drillJoinDivergence.test.ts`. Prod: the new S1 row fires on the exact seeded
+  state — "audit and surface agree".
+- ✅ **S2 — two tactic types drilled to zero puzzles.** `zwischenzug` and
+  `overloadedPiece` were named; `puzzles.json` (15,000 / 72 themes) carries
+  neither. Now `intermezzo` (211) and `capturingDefender` + `deflection`
+  (133 / 719). `themesForTactic` is an exhaustive `Record<TacticType,…>`
+  (was `Partial`) — which is how a hand census of 16 members became the real
+  18 (`checkmate`, `tactical_sequence`). Dead `passedPawn` removed from
+  `passed-pawn-neglected` (siblings 996 / 389 remain). Gate:
+  `drillVocabulary.test.ts` RE-DERIVES the vocabulary from the corpus.
+- ✅ **S3 — a solved drill never turned the heat map GREEN.**
+  `recordTagDrillResult` spaced the SRS and never imported `capabilityEvidence`;
+  `origin:'drill'` existed with no writer. `MistakePuzzleBoard` now records at
+  the one solve door all five drill surfaces share: clean first try → `held`;
+  wrong first answer → `broken` at the slip's measured cost; [show me] first →
+  `prompted` (grey). STATE.md: HOLD writers 6 → 7. Gates: the spy file (4 cases)
+  + a real `held` row landing in the store on a posing position.
+  **Proven by unit gate, not by a prod drive-through** — the bucket audit is a
+  data-invariant audit and cannot play a puzzle. A Playwright drill-solve that
+  reads the `capabilityEvidence` store back is the honest next instrument.
+- ✅ The audit itself: it streamed to prod's `/api/audit-stream` (G2 violation,
+  the shared Upstash budget) — now a loopback discard, vacuity-checked.
+
+**Flagged, not changed:** `removing_the_guard → 'defensiveMove'` (914) is
+suspected to be the wrong Lichess theme — `capturingDefender` is literally
+"remove the defender"; `defensiveMove` is closer to its opposite. A
+co-occurrence check was inconclusive. Measure before touching.
 
 ## ROADBLOCKS — every open item in coach (2026-09-18)
 
@@ -662,11 +779,29 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### C. The student hears something wrong or repeated
 
-12. **"the queen takes d5 is about as good"** (#51) — the close-call stem renders
-    a SAN as a noun phrase. Fired 3x in one 5-ply run.
-13. **Stems are ROLLED, not rotated** (#67) — `Math.random` in 5 services, so
-    variation is not resume-safe or testable. Same complaint as 12; fix together.
-14. **Curated beats re-announce the same move on consecutive plies** (#60).
+12. ✅ **DONE (already was) — "the queen takes d5 is about as good"** (#51).
+    Verified before spending a minute on it, and the bullet claiming it open is
+    DELETED rather than annotated: `uncertaintyClause` (tacticalRead.ts) already
+    routes BOTH move slots through `sayMoveNoun`, and its own comment records
+    the finding. Gate added so it cannot reopen (`liveVoiceDefects.test.ts`).
+13. ✅ **DONE — stems are ROTATED, not rolled** (#67). Five sites converted to
+    `rotateStem`, keyed on something stable about the moment:
+    `mistakeNarration` ×3 on the FEN, `gamesService` ×3 on the move index / the
+    opening id, `openingNarrationService` on the record's own `id` — a field
+    that had been sitting on `OpeningNarration` the whole time while the doc
+    comment claimed it "rotates" and the body rolled. `stemKeyOf` (FNV-1a) joins
+    `rotateStem` so a caller with a stable STRING needs no private hash. LEFT
+    ALONE, deliberately: the `shuffle` and the random challenge-position pick in
+    `gamesService` — those size and vary an EXERCISE, they are not stems.
+14. ✅ **DONE — curated beats re-announce the same move on consecutive plies**
+    (#60). The missing dedupe term was the beat's SUBJECT: `curatedBeatSeen`
+    keys on beat ID (different beat) and `buildVoicePackage`'s novelty set on
+    whole sentences (different words), so two lessons teaching Bc4 slipped
+    between both. `beatSubject` computes it at INDEX time beside `seat` and
+    `register`, and RECOGNISES rather than invents — the leading token of the
+    prose counts only if it is a move on the beat's own replayed line; anything
+    else is null and never subject-deduped. The guard is a `continue`, like the
+    register guard, so a position holding another beat still teaches.
 15. **The voiced corpus is in the wrong register** (#22) — 1,146 he/his, 521
     first-person, 81 fragments.
 16. **Read-position: voice fires but the banner never appears** (#59).

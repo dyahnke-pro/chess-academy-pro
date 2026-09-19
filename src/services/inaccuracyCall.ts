@@ -111,7 +111,38 @@ function whyBetter(
  * silent when the engine offered no alternative — "you should have played
  * something else" is not teaching.
  */
-export function callInaccuracy(args: {
+/**
+ * The verdict, or the REASON there wasn't one.
+ *
+ * 🔒 A REFUSAL MUST SAY WHICH GUARD REFUSED. `callInaccuracy` returns a bare
+ * null for five different reasons, and its caller in Learn logged one of them
+ * as fact: `coach move ${san} cost ${cp}cp — under the floor, nothing to call`.
+ * That sentence is printed whether the floor refused or not.
+ *
+ * It cost a whole diagnosis. A real 22-ply game logged it for a 122cp move and
+ * a 184cp move, and the backlog concluded from those two lines that "whatever
+ * floor coachVerdict applies is mis-scaled or inverted". It is neither:
+ * `MISTAKE_CP` is 100, both moves clear it, and both produce a full verdict
+ * when called directly. The floor was never involved — the log named the one
+ * guard that had passed, and three sessions would have gone looking at it.
+ *
+ * So the reason is COMPUTED by the same pass that decides, and there is one
+ * implementation: `callInaccuracy` is a view over this. An instrument that
+ * asserts its own cause is worse than one that says nothing, because it
+ * answers a question nobody re-asks.
+ */
+export type InaccuracyDecline =
+  | 'quality-not-worth-saying'
+  | 'under-the-floor'
+  | 'no-better-move-supplied'
+  | 'played-the-best-move'
+  | 'best-move-illegal-here';
+
+export type InaccuracyVerdict =
+  | { call: InaccuracyCall; declined?: undefined }
+  | { call: null; declined: InaccuracyDecline };
+
+export function callInaccuracyDetailed(args: {
   /** Position before the move in question. */
   fenBefore: string;
   /** What was actually played, SAN. */
@@ -129,7 +160,7 @@ export function callInaccuracy(args: {
   /** Whose move it was. */
   side: 'student' | 'coach';
   moverColor: 'white' | 'black';
-}): InaccuracyCall | null {
+}): InaccuracyVerdict {
   const bare = (s: string): string => s.replace(/[+#]$/, '');
   const wasBest = Boolean(args.bestSan) && bare(args.playedSan) === bare(args.bestSan ?? '');
   const quality = classifyMove({
@@ -138,7 +169,7 @@ export function callInaccuracy(args: {
     missedMate: args.missedMate ?? null,
     allowedMate: args.allowedMate ?? null,
   });
-  if (!WORTH_SAYING.has(quality)) return null;
+  if (!WORTH_SAYING.has(quality)) return { call: null, declined: 'quality-not-worth-saying' };
   // THE BANDS ARE STOCKFISH'S; THE FLOOR IS PEDAGOGY, AND THEY ARE NOT THE SAME
   // DECISION. Sharing `classifyMove`'s thresholds with the review (2026-08-10)
   // moved the start of 'inaccuracy' from 100 centipawns down to 50, which is
@@ -148,16 +179,23 @@ export function callInaccuracy(args: {
   // exactly the same point it always did. Mate is exempt: walking into one is
   // worth saying whatever the centipawns read.
   const forcedMate = (args.missedMate ?? null) !== null || (args.allowedMate ?? null) !== null;
-  if (!forcedMate && Math.max(0, args.cpLoss) < MISTAKE_CP) return null;
-  if (!args.bestSan || wasBest) return null;
+  if (!forcedMate && Math.max(0, args.cpLoss) < MISTAKE_CP) return { call: null, declined: 'under-the-floor' };
+  if (!args.bestSan) return { call: null, declined: 'no-better-move-supplied' };
+  // SHADOWED, and kept as a precondition rather than a live path: `classifyMove`
+  // already returns 'best' when `wasBest`, so the quality guard above answers
+  // first and this never fires (measured — `liveVoiceDefects.test.ts` asserts
+  // the observed reason, not this one). It stays because everything below
+  // depends on there being a DIFFERENT move to name, and a future change to the
+  // quality bands must not silently make that assumption false.
+  if (wasBest) return { call: null, declined: 'played-the-best-move' };
 
   // A "best move" that is not legal from this board means the caller handed in
   // a mismatched pair; say nothing rather than narrate a phantom.
   try {
     const board = new Chess(args.fenBefore);
-    if (!board.moves().some((m) => bare(m) === bare(args.bestSan ?? ''))) return null;
+    if (!board.moves().some((m) => bare(m) === bare(args.bestSan ?? ''))) return { call: null, declined: 'best-move-illegal-here' };
   } catch {
-    return null;
+    return { call: null, declined: 'best-move-illegal-here' };
   }
 
   // ── WHEN THE MOVE WALKED INTO MATE, THAT IS THE WHY ─────────────────────
@@ -236,7 +274,7 @@ export function callInaccuracy(args: {
     // The punishment stays theirs to find — the same shape as every other
     // opportunity beat. An inaccuracy is too small to promise anything.
     const punish = quality === 'inaccuracy' ? '' : ' There is something here for you now — go and take it.';
-    return { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '' };
+    return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '' } };
   }
 
   // THE STUDENT'S OWN MOVE, in the retroactive register the backward look uses:
@@ -249,5 +287,12 @@ export function callInaccuracy(args: {
       ? `${args.playedSan} was a mistake.`
       : `${args.playedSan} was a little loose.`;
   const should = better ? ` ${args.bestSan} was the move — it would ${better.why}.` : ` ${args.bestSan} was the move.`;
-  return { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '' };
+  return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '' } };
+}
+
+/** The verdict alone — the shape every existing caller already expects.
+ *  One implementation (`callInaccuracyDetailed`), two views, so the reason can
+ *  never drift from the decision that produced it. */
+export function callInaccuracy(args: Parameters<typeof callInaccuracyDetailed>[0]): InaccuracyCall | null {
+  return callInaccuracyDetailed(args).call;
 }

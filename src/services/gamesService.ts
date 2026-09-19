@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import type { OpeningRecord, GameRecord } from '../types';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import {
   getRepertoireOpenings,
   getWeakestOpenings,
@@ -283,7 +284,11 @@ const WELCOME_TEMPLATES = [
 export function getWrongMoveMessage(opening: OpeningRecord, moveIndex: number): string {
   const base = WRONG_MOVE_MESSAGES[moveIndex % WRONG_MOVE_MESSAGES.length];
   if (opening.keyIdeas && opening.keyIdeas.length > 0) {
-    const idea = opening.keyIdeas[Math.floor(Math.random() * opening.keyIdeas.length)];
+    // ROTATED, NOT ROLLED. The stem beside it already rotates on `moveIndex`;
+    // this line rolled, so the same wrong move at the same point in the same
+    // line quoted a different key idea each attempt — the one place a student
+    // is repeating themselves on purpose and most needs to hear the same thing.
+    const idea = opening.keyIdeas[moveIndex % opening.keyIdeas.length];
     // Every third wrong move, reference a key idea
     if (moveIndex % 3 === 2) {
       return `Remember: ${idea}. Try again!`;
@@ -292,12 +297,18 @@ export function getWrongMoveMessage(opening: OpeningRecord, moveIndex: number): 
   return base;
 }
 
-export function getCorrectMoveMessage(): string {
-  return CORRECT_MOVE_MESSAGES[Math.floor(Math.random() * CORRECT_MOVE_MESSAGES.length)];
+/** ROTATED, NOT ROLLED — `moveIndex` is the stable key, so walking the same
+ *  line twice gives the same encouragement in the same order instead of a fresh
+ *  shuffle. The parameter is REQUIRED rather than defaulted: a default is how a
+ *  caller silently inherits a constant stem and the variety quietly dies. */
+export function getCorrectMoveMessage(moveIndex: number): string {
+  return rotateStem(CORRECT_MOVE_MESSAGES, moveIndex);
 }
 
 export function getWelcomeMessage(opening: OpeningRecord): string {
-  const template = WELCOME_TEMPLATES[Math.floor(Math.random() * WELCOME_TEMPLATES.length)];
+  // ROTATED, NOT ROLLED, keyed on the opening's own id — so each opening has
+  // its own greeting and keeps it, rather than every visit re-rolling.
+  const template = rotateStem(WELCOME_TEMPLATES, stemKeyOf(opening.id ?? opening.name));
   return template
     .replace('{name}', opening.name)
     .replace('{color}', opening.color === 'white' ? 'White' : 'Black');

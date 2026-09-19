@@ -71,7 +71,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:74`
 
 ### `namedTacticClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8802`
+- `src/components/Coach/CoachTeachPage.tsx:8843`
 - `src/services/danyaBehaviors.ts:317`
 - `src/services/danyaDeviceCoverage.test.ts:101`
 - `src/services/tacticalRead.test.ts:134`
@@ -82,7 +82,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:116`
 
 ### `tacticalReadFromLines` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8294`
+- `src/components/Coach/CoachTeachPage.tsx:8335`
 - `src/services/danyaBehaviors.ts:315`
 - `src/services/danyaDeviceCoverage.test.ts:72`
 - `src/services/tacticalRead.test.ts:339`
@@ -102,15 +102,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:527`
 
 ### `temptingTurnClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8305`
-- `src/components/Coach/CoachTeachPage.tsx:8821`
+- `src/components/Coach/CoachTeachPage.tsx:8346`
+- `src/components/Coach/CoachTeachPage.tsx:8862`
 - `src/services/danyaDeviceCoverage.test.ts:78`
 - `src/services/tacticalRead.test.ts:427`
 - `src/services/tacticalRead.test.ts:440`
 
 ### `uncertaintyClause` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8306`
-- `src/components/Coach/CoachTeachPage.tsx:8824`
+- `src/components/Coach/CoachTeachPage.tsx:8347`
+- `src/components/Coach/CoachTeachPage.tsx:8865`
 - `src/services/danyaDeviceCoverage.test.ts:83`
 - `src/services/tacticalRead.test.ts:412`
 - `src/services/tacticalRead.test.ts:433`
@@ -119,7 +119,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:518`
 
 ### `candidateCompareClause` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8311`
+- `src/components/Coach/CoachTeachPage.tsx:8352`
 - `src/services/danyaDeviceCoverage.test.ts:88`
 - `src/services/tacticalRead.test.ts:445`
 - `src/services/tacticalRead.test.ts:453`
