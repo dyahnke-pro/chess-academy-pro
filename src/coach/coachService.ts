@@ -44,7 +44,7 @@ import { loadProGameReferenceData } from '../services/proGameReferenceData';
 import { consumeCoachActionOffer, translateToEnglish } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
 import { detectLanguage } from '../utils/detectLanguage';
-import { spokenLanguageName } from '../services/spokenLanguage';
+import { spokenLanguageName, noteDetectedLanguage } from '../services/spokenLanguage';
 import { deepseekProvider } from './providers/deepseek';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
 import type {
@@ -568,6 +568,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // SPOKEN voice, which honours the same source at the voice chokepoint
     // (spokenLanguage: a reply already in the student's language is spoken
     // as-is, never re-translated to the setting).
+    // ONE DETECTED MESSAGE MAKES THE WHOLE COACH SPEAK IT (prod, 2026-09-11).
+    // Without this the student got Thai chat and English narration side by
+    // side for two days, because only chat read the detection. Recording it
+    // here — where the detector has already run — lets the voice chokepoint
+    // reach the same answer. An explicit setting still wins; see the
+    // precedence note on `spokenLanguageName`.
+    if (askLang.nonEnglish) noteDetectedLanguage(askLang.name);
     const replyLanguageName = askLang.nonEnglish ? askLang.name : (spokenLanguageName() ?? 'English');
     const languageLine =
       `STUDENT LANGUAGE (computed by the app): ${replyLanguageName}. Write your ENTIRE reply in ` +

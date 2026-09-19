@@ -431,6 +431,35 @@ function classifyMisconceptionImpl(
   // Honest fallback — a real slip we can't pin to a specific motif from the
   // board alone. Bucket it by phase (a review-only holding pen) rather than
   // assert a misconception we can't prove.
+  //
+  // 🔒 LOG WHAT WE COULD NOT NAME (prod, 2026-09-13). On one real user's game,
+  // FOUR of EIGHT captured slips came back `tag=other bucket=uncategorized` —
+  // at 350, 173, 149 and 96 centipawns. A 350cp error the app cannot name
+  // teaches nothing AND cannot be drilled, so it never re-enters the loop: the
+  // student keeps making it and the coach keeps not mentioning it.
+  //
+  // The fix is NOT to guess a new tag here — CLAUDE.md is explicit that empty
+  // beats invented, and a wrong tag teaches a wrong lesson (see the king-stuck
+  // demotion above, which was exactly that mistake). It is to make the
+  // unmatched population VISIBLE, so the tagger is extended from the real
+  // inputs rather than from imagination. This is the instrument; the tags come
+  // after, from what it shows.
+  void import('./appAuditor').then(({ logAppAudit }) => {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'misconceptionClassifier.unmatched',
+      summary: `no motif matched — phase=${phase}${input.evalSummary ? ` (${input.evalSummary})` : ''}`,
+      details: JSON.stringify({
+        fen: input.fen,
+        playedSan: input.playedSan,
+        bestSan: input.bestSan ?? null,
+        evalSummary: input.evalSummary ?? null,
+        gamePhase: phase,
+      }),
+      fen: input.fen,
+    });
+  }).catch(() => undefined);
   return { tag: 'other', customLabel: phaseLabel(phase), coachNote: '' };
 }
 

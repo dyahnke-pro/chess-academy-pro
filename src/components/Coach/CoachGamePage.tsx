@@ -40,7 +40,7 @@ import {
 import { logAppAudit } from '../../services/appAuditor';
 import { unwrapSpineError, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { createStreamingSpeaker } from '../../services/streamingSpeaker';
-import type { PhaseNarrationVerbosity } from '../../types';
+import type { PhaseNarrationVerbosity, MoveClassification } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useAppStore } from '../../stores/appStore';
@@ -125,7 +125,7 @@ import { stripSanAnnotations } from '../../data/openingWalkthroughs/validate';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
-import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
+import { calculateAccuracy, getClassificationCounts, capEval } from '../../services/accuracyService';
 import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
@@ -970,8 +970,15 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // (David 2026-07-06, locked; re-confirmed 2026-08-16). This hook predates
     // that contract and volunteers LLM commentary on "meaningful moments" —
     // run 17 caught it speaking a fragment of an eval swing mid-game. The
-    // sanctioned speakers on Play remain: move dictation, the slip flags, the
-    // blunder card, and phase transitions. Interjections like these belong in
+    // sanctioned speakers on Play remain: the slip flags, the blunder card, and
+    // phase transitions.
+    //
+    // 🔴 "move dictation" USED TO BE LISTED HERE AND IS DELETED, not annotated.
+    // It was never sanctioned: CLAUDE.md says Play "NEVER volunteers a note
+    // mid-game", and Narration Voice Rule 3 bans restating what the board
+    // already shows. A comment that names it as sanctioned reads as licence to
+    // the next session, which is how a pure-playing surface accumulates
+    // speakers. Interjections like these belong in
     // post-game review, whose wiring is designed WITH David first.
     enabled: false,
   });
@@ -3087,14 +3094,36 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // Compute classification and build the move record
     const prevMoves = gameState.moves;
     const preMoveEval = prevMoves.length > 0 ? (prevMoves[prevMoves.length - 1].evaluation ?? null) : 0;
-    let classification = analysis
+    // 🔒 A MATING MOVE IS NEVER GRADED (prod, 2026-09-13). The same user who
+    // heard "checkmate is a blunder" also heard, one clause later:
+    //   "queen to d8, check was stronger — it gives check."
+    // There IS no stronger move than mate. That line came from grading a move
+    // that ended the game and then reading the engine's best move for the
+    // position AFTER mate, which is meaningless. The game is over: the only
+    // honest classification is that they won.
+    const endedInMate = moveResult.san.includes('#');
+    let classification: MoveClassification = endedInMate
+      ? 'great'
+      : analysis
       ? classifyMoveFull({ preMoveEval, postMoveEval: analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval, fenBefore: preFen, san: moveResult.san })
       : 'good';
 
-    const evalLoss = analysis && preMoveEval !== null
+    // 🔒 CAP THE MATE SCORES BEFORE SUBTRACTING (prod, 2026-09-13).
+    //
+    // A user won by mate and heard their winning move called a blunder:
+    //   "rook to a5, checkmate is a blunder — about 300.0 points."
+    // A mate score is ±30000, so a raw subtraction produces 30000cp, which
+    // `assembleSlipNarration` renders as (cpLoss/100).toFixed(1) = "300.0".
+    //
+    // The BATCH path already solved this — `gameAnalysisService.ts` wraps both
+    // sides in `capEval()` with a comment naming this same bug (David
+    // 2026-08-28, "make sure the mistakes are accurate"). The LIVE path never
+    // got the fix. This mirrors it exactly; RAW evals still reach
+    // `classifyMoveFull` above, so mate detection for grading is unchanged.
+    const evalLoss = endedInMate ? 0 : analysis && preMoveEval !== null
       ? Math.max(0, playerColor === 'white'
-          ? preMoveEval - analysis.evaluation
-          : analysis.evaluation - preMoveEval)
+          ? capEval(preMoveEval) - capEval(analysis.evaluation)
+          : capEval(analysis.evaluation) - capEval(preMoveEval))
       : 0;
 
     // bestMove from pre-analysis = what the player SHOULD have played (convert UCI → SAN)

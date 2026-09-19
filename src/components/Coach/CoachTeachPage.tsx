@@ -2575,6 +2575,47 @@ export function CoachTeachPage(): JSX.Element {
     return () => clearTimeout(t);
   }, [searchParams, setSearchParams]);
 
+  // ── DRAIN A WALKTHROUGH ASKED FOR SOMEWHERE ELSE ──────────────────────────
+  //
+  // 🔒 STEP TWO OF THE HAND-OFF (prod, week of 2026-09-11). A real user asked
+  // for an Italian lesson SEVEN TIMES from home chat over two days and never
+  // got one: `start_walkthrough_for_opening` correctly refused (home chat can't
+  // host a walkthrough), the coach correctly navigated here — and nothing
+  // started the lesson on arrival. Twelve tool errors, zero lessons.
+  //
+  // The tool now QUEUES the ask (`coachMemoryStore.pendingWalkthrough`); this
+  // drains it. Going through `handleSubmit` rather than reaching into the
+  // walkthrough starter is deliberate: that starter is a closure inside
+  // handleSubmit, and re-implementing it here would be a second path to keep in
+  // sync — the exact rot this codebase keeps paying for. The student asked in
+  // words, so we replay the ask in words and every existing lane (resolution,
+  // generation, voicing, the free-tier meter) runs once, as it already does.
+  //
+  // `takePendingWalkthrough` reads and clears atomically, so a remount cannot
+  // start the same lesson twice.
+  const pendingWalkthroughDrainedRef = useRef(false);
+  useEffect(() => {
+    if (pendingWalkthroughDrainedRef.current) return;
+    const pending = useCoachMemoryStore.getState().takePendingWalkthrough();
+    if (!pending) return;
+    pendingWalkthroughDrainedRef.current = true;
+    const what = pending.variation
+      ? `${pending.opening}, ${pending.variation}`
+      : pending.opening;
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachTeachPage.drainPendingWalkthrough',
+      summary: `starting queued walkthrough "${what}"${pending.requestedFromSurface ? ` (asked on ${pending.requestedFromSurface})` : ''}`,
+    });
+    // Same 300ms tick the learnFundamental drain uses — handleSubmitRef must be
+    // bound and the kickoff settled before the ask lands.
+    const t = setTimeout(() => {
+      void handleSubmitRef.current?.(`Teach me the ${what}.`);
+    }, 300);
+    return () => clearTimeout(t);
+  }, []);
+
   // Fresh coaching session → clear the say-once cross-session thread ledger so
   // the "we've been working on X" callback can fire once this session (Phase 7).
   useEffect(() => { resetThreadCallbacks(); }, []);

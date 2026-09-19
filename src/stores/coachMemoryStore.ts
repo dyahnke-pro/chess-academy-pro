@@ -206,8 +206,38 @@ export interface RolodexUserOrder {
   black: string[];
 }
 
+/** A walkthrough the student ASKED FOR on a surface that cannot host one.
+ *
+ * 🔒 THE HAND-OFF IS TWO STEPS AND STEP TWO USED TO BE DROPPED (prod, week of
+ * 2026-09-11). A real user asked for an Italian lesson SEVEN TIMES across two
+ * days from home chat. `start_walkthrough_for_opening` correctly refused each
+ * time (no host on that surface), the coach correctly fired `navigate_to_route`
+ * to Learn — and then nothing re-fired the walkthrough after arriving. Twelve
+ * `coach_tool_call_error`s and not one lesson.
+ *
+ * So the intent is QUEUED here before navigating, and the Teach surface DRAINS
+ * it on mount. A zustand store is the right home: it survives in-SPA navigation
+ * (no reload), which Dexie's async round-trip would race and `localStorage` is
+ * banned for. One slot, not a list — a second ask supersedes the first, because
+ * the student asking again means they want THAT one. */
+export interface PendingWalkthrough {
+  opening: string;
+  variation?: string;
+  orientation?: 'white' | 'black';
+  pgn?: string;
+  /** Where the ask came from, for the audit trail — NULL when the caller
+   *  genuinely cannot know. `ToolExecutionContext` carries no surface (that
+   *  lives on `CoachAskInput`), so the tool omits it rather than guessing, and
+   *  the audit line's `source` says which tool queued it either way. */
+  requestedFromSurface: string | null;
+  requestedAt: number;
+}
+
 interface CoachMemoryState {
   intendedOpening: IntendedOpening | null;
+  /** A walkthrough asked for elsewhere, waiting for Learn to mount and run it.
+   *  Null whenever there is nothing owed. */
+  pendingWalkthrough: PendingWalkthrough | null;
   /** The area the student is training toward this session (see TrainingFocus).
    *  Persists until addressed or cleared, so the coach remembers the goal of a
    *  recommended game and scopes feedback to it. */
@@ -262,6 +292,12 @@ export type IntentClearReason =
   | 'intent-left-book';
 
 interface CoachMemoryActions {
+  /** Queue a walkthrough for a surface that CAN host one. Supersedes any
+   *  previous pending ask. */
+  queueWalkthrough: (next: Omit<PendingWalkthrough, 'requestedAt'> & { requestedAt?: number }) => void;
+  /** Take the pending walkthrough and clear it in ONE atomic step, so a
+   *  double-mount (StrictMode, a remount) cannot start the same lesson twice. */
+  takePendingWalkthrough: () => PendingWalkthrough | null;
   setIntendedOpening: (
     next: Omit<IntendedOpening, 'setAt'> & { setAt?: number },
   ) => void;
@@ -338,6 +374,7 @@ const CONVERSATION_HISTORY_MAX = 200;
 
 const DEFAULT_STATE: CoachMemoryState = {
   intendedOpening: null,
+  pendingWalkthrough: null,
   trainingFocus: null,
   conversationHistory: [],
   preferences: { likes: [], dislikes: [], style: null },
@@ -359,6 +396,31 @@ const META_KEY = 'coachMemory.v1';
 export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>()(
   subscribeWithSelector((set, get) => ({
     ...DEFAULT_STATE,
+
+    queueWalkthrough: (next) => {
+      const queued: PendingWalkthrough = {
+        opening: next.opening,
+        requestedFromSurface: next.requestedFromSurface ?? null,
+        requestedAt: next.requestedAt ?? Date.now(),
+        ...(next.variation ? { variation: next.variation } : {}),
+        ...(next.orientation ? { orientation: next.orientation } : {}),
+        ...(next.pgn ? { pgn: next.pgn } : {}),
+      };
+      set({ pendingWalkthrough: queued });
+      void logAppAudit({
+        kind: 'coach-memory-intent-set',
+        category: 'subsystem',
+        source: 'useCoachMemoryStore.queueWalkthrough',
+        summary: `queued walkthrough ${queued.opening}${queued.variation ? ` / ${queued.variation}` : ''}${queued.requestedFromSurface ? ` from ${queued.requestedFromSurface}` : ''}`,
+      });
+    },
+
+    takePendingWalkthrough: () => {
+      // Read and clear together — a remount must not re-run the same lesson.
+      const pending = get().pendingWalkthrough;
+      if (pending) set({ pendingWalkthrough: null });
+      return pending;
+    },
 
     setIntendedOpening: (next) => {
       const withTs: IntendedOpening = {

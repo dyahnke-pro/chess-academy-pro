@@ -41,14 +41,50 @@ const cache = new Map<string, string>();
 /** Bound the cache so a long session can't grow it without limit. */
 const MAX_CACHED = 500;
 
+/** The language the student has actually been TYPING in this session.
+ *
+ * 🔒 THE SETTING IS NOT THE ONLY EVIDENCE (prod, week of 2026-09-11). A Thai
+ * speaker chatted in Thai for two days, got Thai chat replies — and heard
+ * every COMPUTED narration in English:
+ *   "Out of the opening now — this is a middlegame where you're a shade
+ *    better…"
+ * Excellent coaching, in a language they had not used once. The two halves read
+ * different sources: chat localises off the DETECTED input (`coachService`),
+ * while narration localises off `spokenLanguageName()`, which read ONLY
+ * `preferences.narrationLanguage` — a setting this user never found.
+ *
+ * So a confidently-detected non-English message becomes a sticky session fact
+ * and the two halves finally agree. Session-scoped on purpose: it is an
+ * observation, not a preference, so it never persists over what the student
+ * explicitly chose and it is gone on the next launch. */
+let detectedSessionLanguage: string | null = null;
+
+/** Record the language the student just wrote in. Called from the chat spine
+ *  where the detection already happens — the detector is not re-run here. */
+export function noteDetectedLanguage(languageName: string | null): void {
+  if (languageName && languageName !== 'English') detectedSessionLanguage = languageName;
+}
+
+/** Test seam + a way to forget the observation (a fresh profile / sign-out). */
+export function resetDetectedLanguage(): void {
+  detectedSessionLanguage = null;
+}
+
 /** The language the coach should SPEAK in, as a human name ("Spanish"), or
- *  null for English / unset / unknown. */
+ *  null for English / unset / unknown.
+ *
+ *  PRECEDENCE: an explicit SETTING beats an observation — a student who chose
+ *  a narration language means it, even if they type in another. Only when no
+ *  setting exists does the detected session language apply. */
 export function spokenLanguageName(): string | null {
   try {
-    return languageNameFor(useAppStore.getState().activeProfile?.preferences.narrationLanguage);
+    const chosen = languageNameFor(useAppStore.getState().activeProfile?.preferences.narrationLanguage);
+    if (chosen) return chosen;
   } catch {
-    return null;
+    // fall through to the observation — a store read failing is not a reason
+    // to speak the wrong language.
   }
+  return detectedSessionLanguage;
 }
 
 /** `text` in the student's chosen narration language, or `text` unchanged when

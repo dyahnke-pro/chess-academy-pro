@@ -2724,10 +2724,27 @@ export async function voiceFacts(
     'voice the facts in one or two friendly sentences.';
   // Multilingual phrasing: same facts, target language. Chess notation + numbers
   // stay verbatim (they don't translate, and the fidelity net enforces it).
+  //
+  // 🔒 AND SO DO THE NAMES (prod, 2026-09-13). A user in a Spanish-speaking
+  // region heard:
+  //   "This is the middlegame now — the kingádas Opening has run its course…"
+  // `kingádas` is an opening name run through a translator. The instruction
+  // below used to end "translate EVERY OTHER WORD", which is exactly what the
+  // model did — an opening name is words, so it translated them, and a computed
+  // fact came out of the phrasing pass mangled.
+  //
+  // An opening's name is a NAME. "King's Indian Defence" is not a phrase to be
+  // rendered into Spanish any more than "Nf3" is; it identifies a thing, and a
+  // student who looks it up needs the name they can search. Same class as the
+  // notation carve-out one line above, and named explicitly for the same reason
+  // — the model follows what it is told, so it has to be told.
   const langInstruction = translating
     ? ` Write your ENTIRE reply in ${targetLanguage}. Keep chess moves in standard ` +
-      `algebraic notation (e4, Nf3, O-O, Qxd5) and all numbers exactly as given; ` +
-      `translate every other word into ${targetLanguage}.`
+      `algebraic notation (e4, Nf3, O-O, Qxd5) and all numbers exactly as given. ` +
+      `Keep PROPER NAMES exactly as given too — opening and variation names ` +
+      `("King's Indian Defence", "Ruy Lopez", "Najdorf"), player names, and event ` +
+      `names are labels, NOT phrases: never translate, inflect or respell them. ` +
+      `Translate the rest into ${targetLanguage}.`
     : '';
   const system = systemBase + langInstruction;
   const user =
