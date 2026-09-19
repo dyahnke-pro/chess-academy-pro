@@ -670,11 +670,20 @@ class VoiceService {
    *  the remount flood fires sub-second, so it's swallowed. The 6s
    *  per-component guard still handles slower same-content re-renders. */
   private static readonly DEDUP_WINDOW_MS = 1500;
-  /** How long an IDENTICAL line stays said. Long enough to cover the observed
-   *  defect (five repeats inside 25s) with headroom, short enough that a line
-   *  which is still true several minutes later may be said again when it has
-   *  become relevant a second time. */
-  private static readonly SAY_ONCE_WINDOW_MS = 120_000;
+  /** How long an IDENTICAL line stays said.
+   *
+   *  30s, and the number is a compromise between two real contracts. The
+   *  observed defect repeated the same sentence five times across 25 seconds
+   *  with a maximum gap of 13s, so anything under ~15s misses it. But the 1.5s
+   *  `DEDUP_WINDOW_MS` above was chosen deliberately so a user REPLAY (listen,
+   *  then tap replay) is never blocked, and a window of minutes would start
+   *  swallowing those. 30s covers every repeat actually seen and still lets a
+   *  line be said again when the student comes back to it.
+   *
+   *  This SUPERSEDES the narrower "may repeat after 1.5s" contract for the
+   *  non-tap paths; explicit taps (`bypassVerbosity`) still skip the ledger
+   *  entirely, which is what protects a deliberate replay. */
+  private static readonly SAY_ONCE_WINDOW_MS = 30_000;
   /** Hard bound on the ledger so a long session cannot grow it without limit.
    *  Pruning is by age first; this is the backstop. */
   private static readonly SAY_ONCE_MAX_ENTRIES = 200;

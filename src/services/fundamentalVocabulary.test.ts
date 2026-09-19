@@ -28,15 +28,29 @@ describe('the fundamentals vocabularies reconcile', () => {
     // A shrink-only ceiling. `center` has no "ceded the centre" tag and `luft`
     // is not the inverse of anything we track — mapping either would file
     // evidence under the wrong hole, which is worse than not filing it (G3).
+    //
+    // `promotion` joined them on 2026-09-19 for the same reason, stated
+    // positively: the weakness tags name HABITS NEGLECTED, and promoting a
+    // pawn is a thing the student DID. There is no "failed to promote"
+    // misconception to drill, so any tag here would be a lie about what the
+    // evidence shows. An id belongs in this list only when mapping it would
+    // file evidence WRONG — never when nobody got round to choosing.
     const nulls = Object.entries(MOVE_FUNDAMENTAL_TAG).filter(([, t]) => t === null).map(([k]) => k);
-    expect(nulls.sort()).toEqual(['center', 'luft']);
+    expect(nulls.sort()).toEqual(['center', 'luft', 'promotion']);
   });
 
   it('a new positive fundamental cannot be added without deciding where it files', () => {
     // The Record over the union is the real guard (it fails to COMPILE). This
     // asserts the map is not quietly widened to a plain object with holes.
+    //
+    // 10 → 11 on 2026-09-19: `promotion` was added after a user heard a pawn
+    // reaching the 8th rank narrated as "pushes your passed pawn". It files
+    // under NULL on purpose — a promotion is a thing DONE, not a habit
+    // neglected, so there is no misconception to drill it as. Moving this
+    // number is the deliberate act the gate exists to force; it should only
+    // ever change in a commit that says which way the new id files.
     const mapped = Object.keys(MOVE_FUNDAMENTAL_TAG).length;
-    expect(mapped).toBe(10);
+    expect(mapped).toBe(11);
   });
 
   it('THE STRUCTURE CROSSES THE BOUNDARY — ids reach a caller, not just prose', () => {

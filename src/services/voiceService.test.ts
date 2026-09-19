@@ -527,8 +527,13 @@ describe('voiceService', () => {
         await vi.runAllTimersAsync();
         await p1;
         const afterFirst = voiceService.currentStopGeneration;
-        // Advance past both the dedup (1.5s) and throttle (0.9s) windows.
-        vi.setSystemTime(Date.now() + 2000);
+        // Advance past the dedup (1.5s), throttle (0.9s) AND say-once (30s)
+        // windows. The say-once ledger was added 2026-09-19 for a user who
+        // heard the same sentence five times in 25 seconds; it widens "do not
+        // repeat this line" from 1.5s to 30s for app-volunteered narration.
+        // The contract this test protects is unchanged in kind — the same line
+        // IS speakable again once the window passes — only the window moved.
+        vi.setSystemTime(Date.now() + 31_000);
         const p2 = voiceService.speakForced('Repeat me later.');
         await vi.runAllTimersAsync();
         await p2;
