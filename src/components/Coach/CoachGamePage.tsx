@@ -4354,7 +4354,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       takebacksUsed: prev.takebacksUsed + 1,
     }));
 
-    const msg = getScenarioTemplate('takeback_allowed');
+    // Keyed on HOW MANY takebacks they have used: the first one always reads
+    // the same way, the second says it differently, and replaying the moment
+    // does not re-roll the sentence.
+    const msg = getScenarioTemplate('takeback_allowed', gameState.takebacksUsed + 1);
     coachSay(msg);
   }, [game, coachSay, resetHints, gameState.moves]);
 

@@ -143,7 +143,9 @@ export function TacticCreatePage(): JSX.Element {
   // When replay finishes, narrate transition then move to solving
   useEffect(() => {
     if (phase === 'replay' && replayPlaying && !replayPaused && replayStep >= replayMoves.length) {
-      const transition = createTransition();
+      // Keyed on the replayed line's LENGTH — stable for this puzzle, so
+      // replaying it says the same thing, and a different puzzle rotates.
+      const transition = createTransition(replayMoves.length);
       setSubtitle(transition);
       void voiceService.speak(transition);
       const timer = setTimeout(() => {

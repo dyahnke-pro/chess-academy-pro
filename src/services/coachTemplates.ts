@@ -1,4 +1,5 @@
 import type { MoveClassification } from '../types';
+import { rotateStem } from '../utils/rotateStem';
 
 type Scenario =
   | 'move_commentary'
@@ -136,22 +137,32 @@ const SCENARIO_TEMPLATES: Record<Scenario, string[]> = {
 
 // ─── Public API ─────────────────────────────────────────────────────────────
 
+/**
+ * @param key  STABLE rotation key — the ply, the move number, an occurrence
+ *   count. REQUIRED, because the caller is the only thing that knows what is
+ *   stable about this moment, and a default would quietly reintroduce the roll.
+ *
+ * NB this function has ZERO production callers today (measured 2026-09-19). It
+ * is not deleted — the "prove it is actually dead" rule — but it is brought to
+ * the same standard so it cannot be wired up later carrying the old defect.
+ */
 export function getMoveCommentaryTemplate(
   classification: MoveClassification,
   vars: TemplateVars,
+  key: number,
 ): string {
   const templates = MOVE_COMMENTARY[classification];
-  const template = templates[Math.floor(Math.random() * templates.length)];
-  return interpolate(template, vars);
+  return interpolate(rotateStem(templates, key), vars);
 }
 
+/** @param key  STABLE rotation key — see `getMoveCommentaryTemplate`. */
 export function getScenarioTemplate(
   scenario: Scenario,
+  key: number,
   vars: TemplateVars = {},
 ): string {
   const templates = SCENARIO_TEMPLATES[scenario];
-  const template = templates[Math.floor(Math.random() * templates.length)];
-  return interpolate(template, vars);
+  return interpolate(rotateStem(templates, key), vars);
 }
 
 export function getAllTemplates(): {

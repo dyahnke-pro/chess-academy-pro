@@ -1,5 +1,6 @@
 import { tacticTypeLabel } from './tacticalProfileService';
 import type { TacticType } from '../types';
+import { rotateStem } from '../utils/rotateStem';
 
 // ─── Piece & Move Helpers ─────────────────────────────────────────────────
 
@@ -126,17 +127,29 @@ const POSITION_SETUPS: Partial<Record<TacticType, string[]>> = {
   ],
 };
 
-export function drillTransition(tacticType: TacticType): string {
+/** @param key  STABLE rotation key (puzzle index, attempt count) — REQUIRED so
+ *   the caller decides what is stable about this moment. */
+export function drillTransition(tacticType: TacticType, key: number): string {
   const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
   const setups = POSITION_SETUPS[tacticType];
   if (setups && setups.length > 0) {
-    const setup = setups[Math.floor(Math.random() * setups.length)];
+    const setup = rotateStem(setups, key);
     return `${setup} Now find the ${tacticLabel}.`;
   }
   return `Study the position carefully. Now find the ${tacticLabel}.`;
 }
 
-export function drillCorrect(tacticType: TacticType): string {
+/**
+ * @param key  STABLE rotation key — see `drillTransition`.
+ *
+ * ⚠️ ZERO production callers (measured 2026-09-19), and that is load-bearing
+ * here: its stems are "Well spotted!", "Excellent." — per-solve ACKNOWLEDGMENT,
+ * which Narration Voice Rule 5 bans outright ("the position changing in the
+ * student's favor IS the acknowledgment"). It is left in place rather than
+ * rewritten because nothing speaks it; wiring it up means rewriting the stems
+ * first, not just passing a key.
+ */
+export function drillCorrect(tacticType: TacticType, key: number): string {
   const tacticLabel = tacticTypeLabel(tacticType).toLowerCase();
   const phrases = [
     `Well spotted! That's the ${tacticLabel}.`,
@@ -144,7 +157,7 @@ export function drillCorrect(tacticType: TacticType): string {
     `That's it — the ${tacticLabel} wins material.`,
     `Sharp eyes. The ${tacticLabel} was the key move.`,
   ];
-  return phrases[Math.floor(Math.random() * phrases.length)];
+  return rotateStem(phrases, key);
 }
 
 export function drillIncorrect(tacticType: TacticType): string {
@@ -218,14 +231,15 @@ export function createReplayNarration(
   return describeMove(san, isWhite);
 }
 
-export function createTransition(): string {
+/** @param key  STABLE rotation key — see `drillTransition`. */
+export function createTransition(key: number): string {
   const phrases = [
     'A tactic is available. Can you find it?',
     "The tactic is here. It's your move.",
     'Something tactical is hiding in this position. Find it.',
     'Now — spot the tactic.',
   ];
-  return phrases[Math.floor(Math.random() * phrases.length)];
+  return rotateStem(phrases, key);
 }
 
 export function createCorrect(tacticType: TacticType, consecutiveSolves: number): string {

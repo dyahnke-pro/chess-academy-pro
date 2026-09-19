@@ -999,9 +999,13 @@ const MATE_AGAINST_YOU = [
 ];
 
 /** Deterministic variant choice. The same position always reads the same way —
- *  consistency beats novelty, and it keeps the TTS clip cache warm. */
-const pick = (variants: readonly string[], seed: number): string =>
-  variants[Math.abs(seed) % variants.length];
+ *  consistency beats novelty, and it keeps the TTS clip cache warm.
+ *
+ *  Delegates to the ONE helper: this was the third hand-written copy of the
+ *  same three lines (`methodBeat`, here, and a fourth nearly added), and a
+ *  duplicated idiom drifts exactly like a duplicated constant — one copy
+ *  guarding against a negative seed and another not. */
+const pick = (variants: readonly string[], seed: number): string => rotateStem(variants, seed);
 
 export function assemblePositionAssessment(opts: {
   evalCp: number | null | undefined;
@@ -5132,6 +5136,7 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // centralPieceCount now live alongside the rest of this file's static reads.
 // ─────────────────────────────────────────────────────────────────────────────
 import { findPieceQuality, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
+import { rotateStem } from '../utils/rotateStem';
 
 export type PositionalTopic =
   | 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece'

@@ -20,6 +20,7 @@
 import type { StudentMoveRecord } from '../hooks/useEndgamePlayout';
 import { stockfishEngine } from './stockfishEngine';
 import { winPercent, accuracyFromWinDelta } from './accuracyService';
+import { rotateStem } from '../utils/rotateStem';
 
 /** Per-move analysis result — used internally and surfaced for tests. */
 export interface RecapMove {
@@ -121,7 +122,9 @@ function buildNarration(args: {
       `Held the technique. ${acc} percent across ${n} ${n === 1 ? 'move' : 'moves'}.`,
       `${acc} percent. Every move on the right idea.`,
     ];
-    return stems[Math.floor(Math.random() * stems.length)];
+    // ROTATED ON THE RUN'S OWN LENGTH + accuracy — stable for a given result,
+    // so replaying the same recap says the same thing.
+    return rotateStem(stems, n + acc);
   }
 
   const tag = worstMove.classification;
@@ -132,7 +135,9 @@ function buildNarration(args: {
     `${acc} percent across ${n} ${n === 1 ? 'move' : 'moves'} — the ${tagWord} on move ${idx} was the costliest.`,
     `Move ${idx} was a ${tagWord}. ${acc} percent overall.`,
   ];
-  return stems[Math.floor(Math.random() * stems.length)];
+  // Keyed on WHICH move was worst: the same run always recaps the same way,
+  // and two different runs almost never collide.
+  return rotateStem(stems, idx);
 }
 
 /** Run Stockfish on every recorded student move and assemble the
