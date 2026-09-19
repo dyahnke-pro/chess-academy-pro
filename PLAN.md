@@ -280,6 +280,53 @@ gets said; this is about whether anything happens at all.
   Those are reported as separate failures because "no lesson started" and "the
   wrong lesson started" cost different fixes.
 
+- ✅ **D-LANG — the coach answered every language in English, and Learn would
+  not start a lesson in any of them.** Both found by RUNNING
+  `audit-coach-multilingual-prod` against prod on 2026-09-19, and both larger
+  than the rows that found them.
+
+  **The reply language.** A Thai "ตาต่อไปควรเดินอะไรดี" came back "The best move
+  is Nc3. It develops into the game, fighting for the center on d5 and e4." —
+  correct, grounded, well written, unreadable to them. Greek, Hebrew, Hindi,
+  Korean and Vietnamese the same, and so were German, Italian and Portuguese,
+  which the detector has always seen. So it was never detection. `coachService`
+  computes the reply language correctly and puts it in the system prompt, but
+  the grounded lanes answer BEFORE any model call: they voice computed facts
+  through `voiceFacts`, and `targetLanguage` had NO production caller anywhere
+  in the app, so all 105 of them re-detected the language from `studentMessage`
+  — which `coachService` has already translated to English. Computed once,
+  correctly, then thrown away by the path that answers most questions. 105 of
+  the 114 calls are in ONE function, so the fix is one turn-bound `voice()`
+  helper plus the value threaded through `ProviderCallOptions`; deliberately
+  NOT a module global, which leaked a prior turn's language once already (the
+  2026-07-10 polyglot audit answered an English question in Portuguese).
+
+  **The lesson.** "สอนฉันเปิดเกมอิตาลีให้หน่อย" — teach me the Italian — was
+  answered "The best move is e4." They asked for a lesson and got a move.
+  Learn does not go through `routeChatIntent` (which has translated before
+  matching since 2026-07-10); its own pipeline — walkthrough controls,
+  settings, the player-game / training-aid / navigation routers,
+  `parseCoachIntent`, the stage detectors, name resolution — only ever read
+  English. Translated ONCE above every matcher rather than in front of each,
+  because that duplication is exactly what let the settings lane translate
+  while the lesson lane did not.
+
+  🚨 **AND IT IS A G0 FAILURE, NOT ONLY A TRANSLATION GAP.** The deterministic
+  lane missed EVERY non-English ask — but the outcome then fell to the brain,
+  which sometimes chose to start a walkthrough anyway. Portuguese got
+  "Starting the Italian Game walkthrough"; German got "The best move is e4".
+  Same defect, opposite outcomes, decided by the model. A missed deterministic
+  route does not fail loudly, it fails RANDOMLY, which is why no one noticed.
+
+  **THE INSTRUMENT IS WHY THIS LIVED FOR MONTHS, and its three bugs are fixed
+  too.** (1) It never checked the reply LANGUAGE — only that chess words
+  appeared, and those survive translation, so it could not fail on the thing it
+  is named after. (2) Its concept row rejected "the born forker", the coach's
+  own house line. (3) Its lesson row read the URL, but Learn starts the
+  walkthrough IN PLACE — that manufactured a red row on a French ask that had
+  actually worked. An accept contract stricter than the product's real voice
+  buries the true reds among false ones.
+
 ### WO-LIVE-DEFECTS-01 — the rest of the list
 
 Shipped 2026-09-19 in 2bfb4961c + 7bc0677ab. Both standing audits green after:
