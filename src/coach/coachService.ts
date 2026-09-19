@@ -43,8 +43,7 @@ import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/player
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
 import { consumeCoachActionOffer, translateToEnglish } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
-import { detectLanguage } from '../utils/detectLanguage';
-import { spokenLanguageName, noteDetectedLanguage } from '../services/spokenLanguage';
+import { spokenLanguageName, detectStudentLanguage } from '../services/spokenLanguage';
 import { deepseekProvider } from './providers/deepseek';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
 import type {
@@ -555,7 +554,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // instruction blocks stripped) and the prompt is TOLD, never asked.
   {
     const studentWords = stripInjectedBlocks(input.ask);
-    const askLang = detectLanguage(studentWords);
+    const askLang = detectStudentLanguage(studentWords);
     if (askLang.nonEnglish) {
       input = { ...input, ask: await translateToEnglish(input.ask) };
     }
@@ -574,7 +573,6 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // here — where the detector has already run — lets the voice chokepoint
     // reach the same answer. An explicit setting still wins; see the
     // precedence note on `spokenLanguageName`.
-    if (askLang.nonEnglish) noteDetectedLanguage(askLang.name);
     const replyLanguageName = askLang.nonEnglish ? askLang.name : (spokenLanguageName() ?? 'English');
     const languageLine =
       `STUDENT LANGUAGE (computed by the app): ${replyLanguageName}. Write your ENTIRE reply in ` +

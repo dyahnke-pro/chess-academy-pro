@@ -43,9 +43,14 @@
  *  "prefer a Record<Union, …> so a new enum member fails to compile"). */
 export type LangCode =
   | 'en' | 'es' | 'fr' | 'de' | 'pt' | 'it' | 'nl' | 'pl' | 'tr' | 'vi'
-  | 'ru' | 'ar' | 'hi' | 'ko' | 'ja' | 'zh'
+  | 'ru' | 'uk' | 'ar' | 'fa' | 'ur' | 'hi' | 'ko' | 'ja' | 'zh'
   | 'th' | 'lo' | 'he' | 'el' | 'bn' | 'pa' | 'gu' | 'or' | 'ta' | 'te'
-  | 'kn' | 'ml' | 'si' | 'my' | 'ka' | 'hy' | 'am' | 'km' | 'dv' | 'bo';
+  | 'kn' | 'ml' | 'si' | 'my' | 'ka' | 'hy' | 'am' | 'km' | 'dv' | 'bo'
+  // Latin-script languages the coach can SPEAK but cannot reliably DETECT from
+  // a short chess sentence. They are reached by the Settings picker and by the
+  // device locale, which is a stated fact rather than a guess — so they need a
+  // name even though no fingerprint below will ever return them.
+  | 'sv' | 'da' | 'nb' | 'fi' | 'cs' | 'hu' | 'ro' | 'id' | 'ms' | 'tl';
 
 export interface DetectedLanguage {
   code: string;
@@ -62,13 +67,16 @@ const EN: DetectedLanguage = { code: 'en', name: 'English', nonEnglish: false };
 export const LANG_NAME: Record<LangCode, string> = {
   en: 'English', es: 'Spanish', fr: 'French', de: 'German', pt: 'Portuguese',
   it: 'Italian', nl: 'Dutch', pl: 'Polish', tr: 'Turkish', vi: 'Vietnamese',
-  ru: 'Russian', ar: 'Arabic', hi: 'Hindi', ko: 'Korean', ja: 'Japanese',
-  zh: 'Chinese',
+  ru: 'Russian', uk: 'Ukrainian', ar: 'Arabic', fa: 'Persian', ur: 'Urdu',
+  hi: 'Hindi', ko: 'Korean', ja: 'Japanese', zh: 'Chinese',
   th: 'Thai', lo: 'Lao', he: 'Hebrew', el: 'Greek', bn: 'Bengali',
   pa: 'Punjabi', gu: 'Gujarati', or: 'Odia', ta: 'Tamil', te: 'Telugu',
   kn: 'Kannada', ml: 'Malayalam', si: 'Sinhala', my: 'Burmese',
   ka: 'Georgian', hy: 'Armenian', am: 'Amharic', km: 'Khmer',
   dv: 'Dhivehi', bo: 'Tibetan',
+  sv: 'Swedish', da: 'Danish', nb: 'Norwegian', fi: 'Finnish', cs: 'Czech',
+  hu: 'Hungarian', ro: 'Romanian', id: 'Indonesian', ms: 'Malay',
+  tl: 'Filipino',
 };
 
 /** The label a speaker of that language recognises, for the Settings picker.
@@ -79,7 +87,8 @@ export const LANG_NATIVE_LABEL: Record<LangCode, string> = {
   en: 'English', es: 'Español', fr: 'Français', de: 'Deutsch',
   pt: 'Português', it: 'Italiano', nl: 'Nederlands', pl: 'Polski',
   tr: 'Türkçe', vi: 'Tiếng Việt',
-  ru: 'Русский', ar: 'العربية',
+  ru: 'Русский', uk: 'Українська',
+  ar: 'العربية', fa: 'فارسی', ur: 'اردو',
   hi: 'हिन्दी', ja: '日本語',
   ko: '한국어', zh: '中文',
   th: 'ไทย', lo: 'ລາວ', he: 'עברית',
@@ -92,6 +101,9 @@ export const LANG_NATIVE_LABEL: Record<LangCode, string> = {
   ka: 'ქართული', hy: 'Հայերեն',
   am: 'አማርኛ', km: 'ខ្មែរ',
   dv: 'ދިވެހި', bo: 'བོད་ཡིག',
+  sv: 'Svenska', da: 'Dansk', nb: 'Norsk', fi: 'Suomi', cs: 'Čeština',
+  hu: 'Magyar', ro: 'Română', id: 'Bahasa Indonesia', ms: 'Bahasa Melayu',
+  tl: 'Filipino',
 };
 
 /** Non-Latin scripts — DECISIVE. One character in the block settles it, because
@@ -99,8 +111,16 @@ export const LANG_NATIVE_LABEL: Record<LangCode, string> = {
  *  Japanese sentence is not read as Chinese (kanji-only text still reads zh —
  *  a known, accepted limit of a range check). */
 export const SCRIPT_RANGES: ReadonlyArray<readonly [RegExp, LangCode]> = [
+  // Ukrainian before Cyrillic, Urdu and Persian before Arabic: each shares a
+  // script with a larger neighbour, so a range check alone told a Ukrainian
+  // student they were speaking Russian. These four letters are absent from
+  // Russian; these from Arabic. A shared-script language needs a LETTER, never
+  // a block.
+  [/[\u0456\u0457\u0454\u0491\u0406\u0407\u0404\u0490]/, 'uk'],   // і ї є ґ
   [/[\u0400-\u04FF\u0500-\u052F]/, 'ru'],         // Cyrillic (+ supplement)
   [/[\u0590-\u05FF]/, 'he'],                      // Hebrew
+  [/[\u0679\u0688\u0691\u06BA\u06D2\u06C1]/, 'ur'],   // ٹ ڈ ڑ ں ے ہ
+  [/[\u067E\u0686\u0698\u06AF]/, 'fa'],   // پ چ ژ گ
   [/[\u0600-\u06FF\u0750-\u077F]/, 'ar'],         // Arabic (+ supplement)
   [/[\u0780-\u07BF]/, 'dv'],                      // Thaana
   [/[\u0900-\u097F]/, 'hi'],                      // Devanagari

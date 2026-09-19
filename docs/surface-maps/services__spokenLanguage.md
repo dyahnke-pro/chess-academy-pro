@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**96 lines · 3 exports · 3 importers · 1 tests · 0 audits**
+**132 lines · 5 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,17 +13,29 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/coach/coachService.ts`
+- `src/services/liveDefectFixes.test.ts`
 - `src/services/spokenLanguage.test.ts`
 - `src/services/voiceService.ts`
 
 ## Exports and every call site
 
-### `spokenLanguageName` (function) — 5 call sites
-- `src/coach/coachService.ts:571`
+### `noteDetectedLanguage` (function) — 3 call sites
+- `src/coach/coachService.ts:577`
+- `src/services/liveDefectFixes.test.ts:70`
+- `src/services/liveDefectFixes.test.ts:75`
+
+### `resetDetectedLanguage` (function) — 1 call site
+- `src/services/liveDefectFixes.test.ts:61`
+
+### `spokenLanguageName` (function) — 8 call sites
+- `src/coach/coachService.ts:578`
+- `src/services/liveDefectFixes.test.ts:64`
+- `src/services/liveDefectFixes.test.ts:71`
+- `src/services/liveDefectFixes.test.ts:76`
 - `src/services/spokenLanguage.test.ts:30`
 - `src/services/spokenLanguage.test.ts:38`
 - `src/services/spokenLanguage.test.ts:68`
-- `src/services/voiceService.ts:1342`
+- `src/services/voiceService.ts:1395`
 
 ### `localizeSpokenText` (function) — 13 call sites
 - `src/services/spokenLanguage.test.ts:31`
@@ -38,7 +50,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/spokenLanguage.test.ts:75`
 - `src/services/spokenLanguage.test.ts:96`
 - `src/services/spokenLanguage.test.ts:103`
-- `src/services/voiceService.ts:1343`
+- `src/services/voiceService.ts:1396`
 
 ### `__clearSpokenLanguageCache` (function) — 4 call sites
 - `src/services/spokenLanguage.test.ts:22`
@@ -48,6 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/liveDefectFixes.test.ts`
 - `src/services/spokenLanguage.test.ts`
 
 ## Audits that reach it

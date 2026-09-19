@@ -102,17 +102,34 @@ describe('detectLanguage — the script table', () => {
     expect(detectLanguage('İtalyan açılışını öğret bana').code).toBe('tr');
   });
 
-  it('no two script ranges overlap, so their ORDER is never load-bearing', () => {
-    // Kana-before-Han is deliberate and does not overlap; anything else that
-    // overlapped would make this table silently order-dependent, which is how a
-    // future row lands in the wrong language with every test still green.
-    const collisions: string[] = [];
+  it('the only ranges that overlap are the DECLARED shared-script ones', () => {
+    // Order in this table is load-bearing in exactly three places, and nowhere
+    // else. Ukrainian sits inside Cyrillic, Urdu and Persian inside Arabic —
+    // they are distinguished by LETTERS their bigger neighbour does not have,
+    // so their rows must come first. Any OTHER overlap would make the table
+    // silently order-dependent, which is how a future row lands in the wrong
+    // language with every test still green.
+    const DECLARED = new Set(['uk|ru', 'ur|ar', 'fa|ar', 'ur|fa|ar']);
+    const undeclared: string[] = [];
     for (let cp = 0x0300; cp <= 0xffff; cp++) {
       const ch = String.fromCharCode(cp);
       const hits = SCRIPT_RANGES.filter(([re]) => re.test(ch)).map(([, c]) => c);
-      if (hits.length > 1) collisions.push(`U+${cp.toString(16)} → ${hits.join(',')}`);
+      if (hits.length > 1 && !DECLARED.has(hits.join('|'))) {
+        undeclared.push(`U+${cp.toString(16)} → ${hits.join(',')}`);
+      }
     }
-    expect(collisions).toEqual([]);
+    expect(undeclared).toEqual([]);
+  });
+
+  it('a shared script does not answer with its bigger neighbour', () => {
+    // Telling a Ukrainian they are speaking Russian is not a rounding error,
+    // and a range check alone did exactly that. Same for Persian and Urdu
+    // inside Arabic.
+    expect(detectLanguage('Яка найкраща партія тут? Навчи мене італійського дебюту').code).toBe('uk');
+    expect(detectLanguage('Какой лучший ход здесь').code).toBe('ru');
+    expect(detectLanguage('بهترین حرکت چیست؟ به من بازی ایتالیایی را یاد بده').code).toBe('fa');
+    expect(detectLanguage('بہترین چال کیا ہے؟ مجھے اطالوی اوپننگ سکھائیں').code).toBe('ur');
+    expect(detectLanguage('ما هي أفضل نقلة هنا؟ علمني الافتتاحية الإيطالية').code).toBe('ar');
   });
 
   it('every language the picker offers can also be named for the model', () => {
