@@ -212,7 +212,7 @@ const run = async () => {
   SANS = (() => { const c = new Chess(); c.loadPgn(PGN); return c.history(); })();
   // The student's own plies, 1-indexed: White = odd, Black = even.
   const studentPlies = SANS.map((_, i) => i + 1)
-    .filter((n) => (n % 2 === 1) === (GAME.studentSide === 'white'));
+    .filter(isStudentPly);
   // Land in the MIDDLEGAME, not on move 2 — a book move has nothing to teach
   // and the fundamentals lead would be legitimately empty there. The engine's
   // own flags refine this later (see FUND_PLY reassignment after the walk).
@@ -283,6 +283,25 @@ const run = async () => {
   const cardText = cardUp ? await txt(page, cardSel) : '';
   // The card names the OPPONENT, whoever the sourced game gave us — never a
   // hardcoded handle, or the row only ever passes on one game.
+/**
+ * 🚨 WHOSE PLY IS THIS — READ FROM THE GAME, NEVER ASSUMED.
+ *
+ * Three places computed this and only ONE of them was right. The other two
+ * hardcoded "the student is Black (even plies)", which was true back when this
+ * audit ran a single fixture. It now rotates a fresh master game every run, so
+ * the first student=WHITE game inverted every seat expectation and failed the
+ * PRODUCT for being correct: SEAT reported "Your opponent developed into the
+ * game" as a mis-seated student ply when it was the opponent's ply and the
+ * coach was right; FUNDLEAD and SHOW then graded opponent plies as flagged
+ * student plies.
+ *
+ * Third instance of "a constant about a different game" in this file — after
+ * RECAP's hardcoded flagged-count and the fixed walk budget. One definition.
+ */
+// A FUNCTION DECLARATION, not a const arrow: it is used above its definition
+// (the owned-ply filter) and an arrow in the temporal dead zone would throw.
+function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white'); }
+
   const OPP = GAME.studentSide === 'white' ? GAME.black : GAME.white;
   const wantBadge = GAME.result === '1/2-1/2' ? 'DRAW'
     : (GAME.result === '1-0') === (GAME.studentSide === 'white') ? 'WIN' : 'LOSS';
@@ -540,7 +559,7 @@ const run = async () => {
       const sanOnly = nt && /^[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](=[NBRQ])?[+#]?$|^O-O(-O)?[+#]?$/.test(nt.trim());
       if (nt && !sanOnly) plyNarr.set(n, { badge: b, narr: nt });
     }
-    if (n % 2 === 0 && n > 0 && /INACCUR|MISTAKE|BLUNDER/i.test(b) && !flaggedLeads.has(n)) {
+    if (isStudentPly(n) && n > 0 && /INACCUR|MISTAKE|BLUNDER/i.test(b) && !flaggedLeads.has(n)) {
       const nt = plyNarr.get(n)?.narr ?? '';
       flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
     }
@@ -799,10 +818,11 @@ const run = async () => {
       const cell = pos.get(m[2].toLowerCase());
       if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
     }
-    // SEAT — the student is Black (even plies). An opponent ply must not open
+    // SEAT — whose ply this is comes from the GAME (see `isStudentPly`), not
+    // from an assumption about the side. An opponent ply must not open
     // "You <verb>"; a student ply must not open "Your opponent" / "They".
     const head = narr.replace(/^["'“‘\s]+/, '').slice(0, 40);
-    const studentPly = n % 2 === 0;
+    const studentPly = isStudentPly(n);
     if (!studentPly && /^you\s+(?!(?:'re|'ve|'ll|'d|are|were|have|had|has|need|want|can|could|must|should|may|might|will|would|know|see|feel|get|keep|hold|sit|stand|remain|stay)\b)[a-z]/i.test(head)) seatFails.push(`ply ${n} (opponent): "${head}"`);
     if (studentPly && /^(your opponent|they )/i.test(head)) seatFails.push(`ply ${n} (you): "${head}"`);
     // NOTRADEWIN — a capture immediately recaptured on the same square at equal
