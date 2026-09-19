@@ -7,6 +7,26 @@
 // (NOT the stock/greeting fall-through). Any miss feeds a phrasing back into the
 // ONE English matrix — never a per-language regex.
 //
+// 🔒 THIS AUDIT COULD NOT HAVE CAUGHT THE BUG IT EXISTS FOR (fixed 2026-09-19).
+// A real App Store user asked for a lesson seven times in Thai and got nothing.
+// Two reasons this run was green through all of it, both now closed:
+//
+//   1. IT ONLY TESTED THE EIGHT SCRIPTS THAT ALREADY WORKED. The defect was a
+//      missing Unicode range in `detectLanguage`, so the audit's whole language
+//      set was, by construction, the set that could not fail. Twenty writing
+//      systems were invisible. The list below now leads with the ones that
+//      were broken, and a new language goes here BEFORE its range is trusted.
+//   2. IT ONLY TESTED QUESTIONS. A question falls through to the brain, which
+//      translates INSIDE itself — so questions were never at risk. What broke
+//      was a COMMAND: the deterministic action router is English regex, asks
+//      `detectLanguage` first, and silently matched nothing. The `lesson` probe
+//      below asserts the COMMAND CONTRACT instead — the student ends up on the
+//      walkthrough they asked for, which is D2/D3/D4 in one assertion.
+//
+// The lesson probe is also the only row that can see a WRONG opening being
+// served, because it checks the name that came back, not merely that something
+// happened.
+//
 // usage: AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
 //        AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
 //        node scripts/audit-coach-multilingual-prod.mjs
@@ -23,15 +43,27 @@ const RUN_ID = `ml-${Date.now().toString(36)}`;
 // reach; `expect` is a language-agnostic on-topic check (chess terms survive
 // verbatim through the fidelity net regardless of reply language).
 const PROBES = [
-  { lang: 'Spanish',    best: '¿Cuál es la mejor jugada aquí?',        concept: '¿Qué es una horquilla?' },
-  { lang: 'French',     best: 'Quel est le meilleur coup ici ?',       concept: "Qu'est-ce qu'une fourchette ?" },
-  { lang: 'German',     best: 'Was ist der beste Zug hier?',           concept: 'Was ist eine Gabel?' },
-  { lang: 'Portuguese', best: 'Qual é o melhor lance aqui?',           concept: 'O que é um garfo?' },
-  { lang: 'Italian',    best: 'Qual è la mossa migliore qui?',         concept: "Cos'è una forchetta?" },
-  { lang: 'Russian',    best: 'Какой лучший ход здесь?',               concept: 'Что такое вилка?' },
-  { lang: 'Japanese',   best: 'ここでの最善手は何ですか？',              concept: 'フォークとは何ですか？' },
-  { lang: 'Arabic',     best: 'ما هي أفضل نقلة هنا؟',                   concept: 'ما هي الشوكة؟' },
+  // ── WERE BROKEN until 2026-09-19: no Unicode range, so classified English ──
+  { lang: 'Thai',       best: 'ตาต่อไปควรเดินอะไรดี',              concept: 'ฟอร์คคืออะไร',              lesson: 'สอนฉันเปิดเกมอิตาลีให้หน่อย',        opening: /italian/i },
+  { lang: 'Greek',      best: 'Ποια είναι η καλύτερη κίνηση εδώ;', concept: 'Τι είναι το πιρούνι;',      lesson: 'Δίδαξέ μου το ιταλικό άνοιγμα',      opening: /italian/i },
+  { lang: 'Hebrew',     best: 'מה המהלך הטוב ביותר כאן?',          concept: 'מה זה מזלג?',               lesson: 'תלמד אותי את פתיחת הספרדית',          opening: /ruy|spanish|lopez/i },
+  // Worse than invisible: its tone marks tripped the FRENCH fingerprint, so a
+  // Vietnamese ask was translated — and answered — in French.
+  { lang: 'Vietnamese', best: 'Nước đi nào tốt nhất ở đây?',       concept: 'Cái nĩa là gì?',            lesson: 'Dạy tôi khai cuộc Ý',                 opening: /italian/i },
+  { lang: 'Hindi',      best: 'यहाँ सबसे अच्छी चाल क्या है?',            concept: 'फोर्क क्या है?',               lesson: 'मुझे इटैलियन ओपनिंग सिखाओ',            opening: /italian/i },
+  { lang: 'Korean',     best: '여기서 최선의 수는 무엇인가요?',        concept: '포크가 뭐예요?',              lesson: '이탈리안 오프닝을 가르쳐 주세요',          opening: /italian/i },
+  { lang: 'Turkish',    best: 'Buradaki en iyi hamle nedir?',      concept: 'Çatal nedir?',              lesson: 'Bana İtalyan açılışını öğret',        opening: /italian/i },
+  // ── ALWAYS WORKED — kept so a table edit cannot lose one ──────────────────
+  { lang: 'Spanish',    best: '¿Cuál es la mejor jugada aquí?',    concept: '¿Qué es una horquilla?',    lesson: 'Enséñame la apertura italiana',       opening: /italian/i },
+  { lang: 'French',     best: 'Quel est le meilleur coup ici ?',   concept: "Qu'est-ce qu'une fourchette ?", lesson: "Apprends-moi l'ouverture italienne", opening: /italian/i },
+  { lang: 'German',     best: 'Was ist der beste Zug hier?',       concept: 'Was ist eine Gabel?',       lesson: 'Bring mir die italienische Eröffnung bei', opening: /italian/i },
+  { lang: 'Portuguese', best: 'Qual é o melhor lance aqui?',       concept: 'O que é um garfo?',         lesson: 'Ensina-me a abertura italiana',       opening: /italian/i },
+  { lang: 'Italian',    best: 'Qual è la mossa migliore qui?',     concept: "Cos'è una forchetta?",      lesson: 'Insegnami la partita spagnola',       opening: /ruy|spanish|lopez/i },
+  { lang: 'Russian',    best: 'Какой лучший ход здесь?',           concept: 'Что такое вилка?',          lesson: 'Научи меня итальянской партии',       opening: /italian/i },
+  { lang: 'Japanese',   best: 'ここでの最善手は何ですか？',           concept: 'フォークとは何ですか？',        lesson: 'イタリアンゲームを教えてください',          opening: /italian/i },
+  { lang: 'Arabic',     best: 'ما هي أفضل نقلة هنا؟',               concept: 'ما هي الشوكة؟',              lesson: 'علمني الافتتاحية الإيطالية',           opening: /italian/i },
 ];
+
 
 const STOCK = /i can'?t verify that precisely|what are we working on today|did you mean one of these|hit a snag|i don’t have a specific lesson/i;
 // On-topic markers that survive translation (SAN + chess nouns are preserved
@@ -51,8 +83,6 @@ page.on('pageerror', (e) => errs.push(String(e).slice(0, 160)));
 async function boot() {
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.waitForTimeout(11000);
-  const bub = page.locator('[data-testid="strength-calibration-bubble"]').first();
-  if (await bub.isVisible().catch(() => false)) { await page.locator('[data-testid="skill-band-intermediate"]').first().click({ force: true }).catch(() => {});  }
   for (const t of ['ai-consent-allow', 'page-help-modal-close', 'page-help-got-it']) { const el = page.locator(`[data-testid="${t}"]`).first(); if (await el.isVisible().catch(() => false)) { await el.click({ force: true }).catch(() => {}); await page.waitForTimeout(300); } }
 }
 async function ask(q) {
@@ -88,6 +118,29 @@ for (const p of PROBES) {
     results.push({ lang: p.lang, kind, pass, q, reply: reply.slice(0, 120) });
     console.log(`${pass ? '✅' : '❌'} ${p.lang} ${kind} :: "${q}" → ${reply ? `"${reply.slice(0, 90)}"` : '(no reply)'}${stock ? ' [STOCK]' : ''}${!onTopic && reply ? ' [off-topic]' : ''}`);
   }
+
+  // ── THE COMMAND CONTRACT (the row the seven-times-ignored user needed) ─────
+  // A question can fall through to the brain and still be answered; a COMMAND
+  // has nowhere to fall. So this row does not read the prose for chess words —
+  // it asks where the student ENDED UP. Two assertions, because "a lesson
+  // started" and "it is the lesson they asked for" are different failures and
+  // blaming the wrong one costs a whole fix:
+  //   · routed  — the deterministic router fired at all (D2/D3),
+  //   · correct — and it resolved to the opening they named (D4).
+  await boot();
+  const ack = await ask(p.lesson);
+  const url = page.url();
+  const routed = /[?&]opening=/.test(url);
+  // The ack names the resolved opening ("Loading the Italian Game walkthrough…")
+  // in English, because a command confirmation is emitted before any phrasing
+  // pass — so one regex per row works across every language.
+  const named = decodeURIComponent(url) + ' ' + ack;
+  const correct = p.opening.test(named);
+  const pass = routed && correct;
+  results.push({ lang: p.lang, kind: 'lesson', pass, q: p.lesson, reply: ack.slice(0, 120), url });
+  console.log(`${pass ? '✅' : '❌'} ${p.lang} lesson :: "${p.lesson}" → ${ack ? `"${ack.slice(0, 80)}"` : '(no reply)'}`);
+  if (!routed) console.log(`     ↳ NEVER ROUTED — url stayed ${url} (the command was not recognised at all)`);
+  else if (!correct) console.log(`     ↳ WRONG OPENING — routed to ${url}, expected ${p.opening}`);
 }
 
 const passed = results.filter((r) => r.pass).length;

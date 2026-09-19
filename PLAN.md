@@ -235,14 +235,50 @@ it outranks the rest of the WO: everything else is about the QUALITY of what
 gets said; this is about whether anything happens at all.
 
 - ✅ **D2/D3/D4 — a user asked for an Italian lesson SEVEN TIMES and never got
-  one** (2bfb4961c). `start_walkthrough_for_opening` correctly refused (home
-  chat cannot host one), the coach correctly navigated to Learn, and nothing
-  re-fired the walkthrough on arrival — twelve `coach_tool_call_error`s, zero
-  lessons. The ask is now QUEUED (`coachMemoryStore.pendingWalkthrough`) before
-  the refusal and Learn drains it on mount through `handleSubmit`, so every
-  existing lane runs once instead of a second copy of the starter.
-  `takePendingWalkthrough` reads and clears atomically. D4 (wrong opening
-  served) was downstream of D3 — RE-MEASURE before treating it as its own bug.
+  one.** Two landings, and the second is the root.
+
+  `2bfb4961c` shipped the BELT: `start_walkthrough_for_opening` correctly
+  refused (home chat cannot host one), the coach correctly navigated to Learn,
+  and nothing re-fired the walkthrough on arrival — twelve
+  `coach_tool_call_error`s, zero lessons. The ask is now QUEUED
+  (`coachMemoryStore.pendingWalkthrough`) before the refusal and Learn drains it
+  on mount through `handleSubmit`, so every existing lane runs once instead of a
+  second copy of the starter. `takePendingWalkthrough` reads and clears
+  atomically.
+
+  🔴 **`170378d5e` is the ROOT, and it corrects the diagnosis above rather than
+  adding to it.** The user should never have reached the brain at all. They
+  wrote in **Thai**, and `detectLanguage` had no Thai range — so it answered
+  `{code:'en', nonEnglish:false}` and every translate branch in the app
+  correctly did nothing. Nothing downstream was broken: `routeChatIntent` has
+  translated non-English COMMANDS since 2026-07-10 and emits
+  `/coach/teach?opening=`, which the Teach surface has always auto-kicked. One
+  missing row, four symptoms — the command never routed, the ask reached the
+  brain untranslated, the reply came back in English (that is D5's Thai half),
+  and narration localisation never fired. Nineteen other writing systems were
+  invisible the same way; Vietnamese was worse, its tone marks tripping the
+  FRENCH fingerprint so the ask was answered in French. Fixed as a
+  `LangCode`-typed table (`SCRIPT_RANGES`) against two `Record<LangCode,string>`,
+  so a new script cannot ship unnamed; the Settings picker now derives its list
+  from the same record, because it had drifted the other way (Dutch, Polish and
+  Turkish were choosable but undetectable).
+
+  **D4 RE-MEASURED, and it was downstream — no separate bug.** Against the live
+  provider, the fixed translate prompt preserves the opening name through Thai:
+  "สอนฉันเปิดเกมอิตาลีให้หน่อย" → *"Teach me the Italian Opening."*,
+  "ช่วยสอนการเปิดเกมรุยโลเปซหน่อยครับ" → *"Please teach me the Ruy Lopez
+  opening."*, "สอนซิซิเลียนนัจดอร์ฟให้หน่อย" → *"Teach me the Sicilian
+  Najdorf."* So the subject the router resolves is the one they asked for.
+
+  **The instrument could not have caught any of it, and that is now fixed too.**
+  `audit-coach-multilingual-prod.mjs` tested exactly the eight scripts that
+  already worked — by construction, the set that could not fail — and tested
+  only QUESTIONS, which fall through to the brain and translate INSIDE it, so
+  they were never at risk. It now carries Thai, Greek, Hebrew, Vietnamese,
+  Hindi, Korean and Turkish, and a `lesson` row asserting the COMMAND contract:
+  did the router fire (`?opening=` in the url) AND is it the opening they named.
+  Those are reported as separate failures because "no lesson started" and "the
+  wrong lesson started" cost different fixes.
 
 ### WO-LIVE-DEFECTS-01 — the rest of the list
 
