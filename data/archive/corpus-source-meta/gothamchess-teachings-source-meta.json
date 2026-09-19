@@ -1,0 +1,136 @@
+{
+ "generatedAt": "2026-08-15T02:26:24.337Z",
+ "videosDistilled": 42,
+ "v2VideoIds": [
+  "0eUDU3hvG98",
+  "1B4fZ64d0F0",
+  "28GZJyeDvnY",
+  "2mNqZywbsSw",
+  "3tBzm-X8tyU",
+  "6ci6McWOTHk",
+  "6jttOudRDHk",
+  "8NoYT5bpGOI",
+  "8n1TKwVoGqc",
+  "8tnf_LQTySM",
+  "ALOqRjmbp4g",
+  "B6uIr5rWvH0",
+  "Es4aeJYBb_Q",
+  "F1gM7N-WXdU",
+  "FB-vLSg4ixo",
+  "ItzuPvGO2Lw",
+  "J1XhBzD0nmE",
+  "JS0A55L279w",
+  "KLX6zwJuloA",
+  "KvBzZhpbKrM",
+  "LzosA5I06SA",
+  "N6WrU6HiewU",
+  "N9FMaFAJZFA",
+  "QVTuWo4u5qo",
+  "S39gBABkAVI",
+  "V6Ya1B2aOYk",
+  "YhjjKR0vbZ0",
+  "bO8ZZH5YNpA",
+  "bPN0ss9-Q8c",
+  "dm1AUToEW7I",
+  "eEkSDdudv58",
+  "ef8a6zIYg2g",
+  "fnbMn_f5m1s",
+  "hoNl5MDiGzE",
+  "jswq-ty1LJI",
+  "kob9FrQdmV4",
+  "l-eMAqzGK2k",
+  "nOVvpW9Ws7c",
+  "subfGapXqPo",
+  "tbm3kItIGXc",
+  "wlnYU3-_QjU",
+  "xAIOQv-RNhA"
+ ],
+ "noteCount": 5,
+ "notes": [
+  {
+   "id": "gc-8i",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "The game shows that playing by general opening principles without specific knowledge can be a drawback at this level. The speaker played natural developing moves but found that it wasn't enough to gain an advantage.",
+   "teaches": "While opening principles are important, at higher levels you need concrete opening knowledge to avoid falling into passive or equal positions. Study specific lines to create imbalances.",
+   "plans": "Continue to develop pieces and aim for active play, but also prepare specific opening variations to avoid being outprepared.",
+   "concepts": [
+    "opening-principles",
+    "preparation",
+    "development"
+   ],
+   "sources": [
+    "yt:subfGapXqPo"
+   ]
+  },
+  {
+   "id": "gc-f3",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on the danger of a slow run—a plan that is too slow and allows the opponent to build a decisive attack. They acknowledge that they deliberately entered a risky position but underestimated the danger.",
+   "teaches": "Be wary of slow plans that give the opponent time to organize an attack. If you choose a risky setup, be prepared for concrete tactics and have a clear defensive plan.",
+   "plans": "",
+   "concepts": [
+    "slow-plan",
+    "risk-management",
+    "prophylaxis"
+   ],
+   "sources": [
+    "yt:28GZJyeDvnY"
+   ]
+  },
+  {
+   "id": "gc-u1",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker emphasizes the importance of considering the opponent's best responses before committing to a move, often hesitating to avoid giving them good play.",
+   "teaches": "Strong players constantly evaluate the opponent's resources and avoid moves that allow them to equalize or counterattack. This 'seeing both sides' is essential for accurate play.",
+   "plans": "Before making a move, ask what the opponent's best reply is and whether you can handle it; if not, look for a better move.",
+   "concepts": [
+    "prophylaxis",
+    "opponent's resources",
+    "calculation"
+   ],
+   "sources": [
+    "yt:J1XhBzD0nmE"
+   ]
+  },
+  {
+   "id": "gc-ve",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this game, the opponent played solidly but without a clear plan, and the speaker notes that simply following opening principles without knowing specific openings leads to equal positions without advantage.",
+   "teaches": "At higher levels, you need more than just development; you need a plan and understanding of the resulting position to create pressure.",
+   "plans": "Aim to study openings to gain a concrete advantage, not just equality.",
+   "concepts": [
+    "opening-principles",
+    "planning",
+    "advantage"
+   ],
+   "sources": [
+    "yt:subfGapXqPo"
+   ]
+  },
+  {
+   "id": "gc-10e",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Spotting the opponent's tactical threats is a key skill that separates intermediate players from advanced ones. In this game, the speaker repeatedly checks whether the opponent sees threats like hanging pieces or forks.",
+   "teaches": "Always look for your opponent's tactical resources before committing to a move. Ask 'what are they threatening?' and 'do they have a counterattack?'",
+   "plans": "",
+   "concepts": [
+    "opponent-tactics",
+    "threat-awareness",
+    "counterattack"
+   ],
+   "sources": [
+    "yt:QVTuWo4u5qo"
+   ]
+  }
+ ]
+}

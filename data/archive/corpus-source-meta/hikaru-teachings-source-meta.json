@@ -1,0 +1,277 @@
+{
+ "generatedAt": "2026-08-15T02:26:24.354Z",
+ "videosDistilled": 33,
+ "v2VideoIds": [
+  "6Qs2I6RPoFg",
+  "8CkN_9jtbm4",
+  "8_0CJplHKuk",
+  "B5DxPzUZfZI",
+  "BrP9zrrBoog",
+  "FieshHXeyE0",
+  "HLypoPQbrOg",
+  "HNhzMM9yRSU",
+  "J12Ll5cHjIo",
+  "KolIr91T5fQ",
+  "MkpUVNj2Rao",
+  "Mvcbdk88RKI",
+  "Ngcn2cGcMRg",
+  "OLQdlLkU824",
+  "UbogbzyzwdA",
+  "X-57egddiUw",
+  "XPIPhR2yOzM",
+  "aM6ost1Krj0",
+  "b-65_jEphhE",
+  "b_EgMUsg8wg",
+  "fHUPc5-7TUc",
+  "fdlHCdx6ijk",
+  "fsG6VYiphgI",
+  "hbfxYfKuVWo",
+  "iLmc6yMh84U",
+  "lhFEpg5q5RA",
+  "mn41HXNi5uc",
+  "nqB5Vip1Azk",
+  "oYxrzgSaidI",
+  "qSkggXQxLQk",
+  "rt24CQdJRCc",
+  "wsaC7JE2nHQ",
+  "ybR_XdkwwwQ"
+ ],
+ "noteCount": 14,
+ "notes": [
+  {
+   "id": "hk-8p",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The excerpt is a closing segment of a teaching series, so there is no concrete position to analyze. The speaker emphasizes a philosophy about chess for complete beginners as a key takeaway.",
+   "teaches": "A beginner's approach to chess should prioritize understanding fundamental principles and a healthy mindset over memorizing specific openings or tactics.",
+   "plans": "",
+   "concepts": [
+    "beginner-philosophy",
+    "learning-approach"
+   ],
+   "sources": [
+    "yt:8CkN_9jtbm4"
+   ]
+  },
+  {
+   "id": "hk-f6",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "When you have a material or positional advantage, it's important to convert by forcing the opponent into a losing position. The speaker notes that after a forcing move, the game is effectively over.",
+   "teaches": "In winning positions, look for forcing moves that simplify or create unavoidable threats. Convert your advantage by trading off pieces and entering a technically winning endgame.",
+   "plans": "Continue to apply pressure, trade pieces to reduce counterplay, and steer the game toward a won endgame.",
+   "concepts": [
+    "conversion",
+    "forcing-moves",
+    "simplification"
+   ],
+   "sources": [
+    "yt:FieshHXeyE0"
+   ]
+  },
+  {
+   "id": "hk-jx",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker discusses the importance of mindset in chess, contrasting his past poor mental state under pressure with his current relaxed streaming mindset.",
+   "teaches": "A calm, resilient mindset is crucial in high-pressure situations; mental collapse can be avoided by maintaining a healthy perspective and not overvaluing individual games.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "mindset",
+    "pressure"
+   ],
+   "sources": [
+    "yt:KolIr91T5fQ"
+   ]
+  },
+  {
+   "id": "hk-k4",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker talks about streaming on Kick vs Twitch and the environment, but this is not chess-related. However, the underlying idea is about adapting to different contexts.",
+   "teaches": "Chess improvement is not just about tactics; it's also about finding an environment that suits your mental state and allows you to perform consistently.",
+   "plans": "",
+   "concepts": [
+    "environment",
+    "consistency"
+   ],
+   "sources": [
+    "yt:KolIr91T5fQ"
+   ]
+  },
+  {
+   "id": "hk-k6",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects that their current mature mindset, developed through streaming, would have made them a stronger player years ago, but that mindset was impossible then because it depended on the very experiences they lacked.",
+   "teaches": "Personal growth is contextual; you cannot transplant a mindset from one stage of life to another. Accept that your past limitations were part of your journey.",
+   "plans": "Focus on applying your current mental strengths to present opportunities rather than dwelling on hypothetical pasts.",
+   "concepts": [
+    "self-reflection",
+    "growth-mindset",
+    "regret",
+    "context"
+   ],
+   "sources": [
+    "yt:KolIr91T5fQ"
+   ]
+  },
+  {
+   "id": "hk-k9",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on the early days of streaming to a small audience, emphasizing that the only thing one can control is the effort put into content.",
+   "teaches": "Success in any endeavor, including chess improvement, comes from consistent effort and focusing on what you can control rather than external outcomes.",
+   "plans": "",
+   "concepts": [
+    "consistency",
+    "effort",
+    "mindset"
+   ],
+   "sources": [
+    "yt:KolIr91T5fQ"
+   ]
+  },
+  {
+   "id": "hk-kc",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker discusses a mouse slip that cost a game, but notes that the narrative of the match shouldn't change because the result would have been the same anyway.",
+   "teaches": "In chess, as in life, focus on the objective reality of the position and results, not on excuses or narratives that don't change the outcome.",
+   "plans": "",
+   "concepts": [
+    "mindset",
+    "objectivity",
+    "resilience"
+   ],
+   "sources": [
+    "yt:KolIr91T5fQ"
+   ]
+  },
+  {
+   "id": "hk-kd",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Everyone starts at a low level and improves over time. The speaker mentions losing every game in their first tournament, emphasizing that improvement is a journey.",
+   "teaches": "Chess improvement is gradual; don't be discouraged by early losses. Focus on learning and progressing.",
+   "plans": "",
+   "concepts": [
+    "mindset",
+    "improvement",
+    "beginners"
+   ],
+   "sources": [
+    "yt:OLQdlLkU824"
+   ]
+  },
+  {
+   "id": "hk-mg",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker advises against blitzing out moves in the opening, especially at lower rating levels. Taking at least a few seconds per move helps avoid careless mistakes.",
+   "teaches": "In the opening, it's better to think about each move rather than play quickly from memory, unless you have a solid memorized line. Rushing leads to errors.",
+   "plans": "",
+   "concepts": [
+    "time-management",
+    "opening-principles",
+    "avoid-blunders"
+   ],
+   "sources": [
+    "yt:fdlHCdx6ijk"
+   ]
+  },
+  {
+   "id": "hk-qg",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The discussion about streaming delays and rules in a tournament highlights that consistency in rules is crucial for fairness. The speaker is annoyed that there are different rules for different players, which undermines the integrity of the event.",
+   "teaches": "In chess, as in any competition, rules must be applied uniformly to all participants; otherwise, the legitimacy of the event is questioned.",
+   "plans": "",
+   "concepts": [
+    "fair-play",
+    "rules",
+    "tournament-integrity"
+   ],
+   "sources": [
+    "yt:fHUPc5-7TUc"
+   ]
+  },
+  {
+   "id": "hk-sb",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker is playing a speed run, aiming to increase rating quickly, and is choosing aggressive openings like the Danish Gambit to finish games fast.",
+   "teaches": "In speed runs or blitz, choosing sharp, tactical openings can lead to quick wins against unprepared opponents, but requires precise play.",
+   "plans": "Continue selecting gambits and attacking setups to maintain momentum.",
+   "concepts": [
+    "speed-run",
+    "aggressive-opening",
+    "blitz-strategy"
+   ],
+   "sources": [
+    "yt:iLmc6yMh84U"
+   ]
+  },
+  {
+   "id": "hk-sn",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The player discusses the relative influence of chess players, mentioning that Vishy Anand has done more for chess than anyone, and that Magnus Carlsen is second, with the speaker placing themselves third.",
+   "teaches": "Influence in chess can be measured by contributions to the game's popularity and development, not just by results.",
+   "plans": "",
+   "concepts": [
+    "chess-history",
+    "influence"
+   ],
+   "sources": [
+    "yt:iLmc6yMh84U"
+   ]
+  },
+  {
+   "id": "hk-vj",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker is discussing whether to make a recap of a game that was boring and had few critical moments. They feel that forcing a recap would require inventing analysis and stretching content, which they consider dishonest.",
+   "teaches": "Not every game deserves deep analysis; it's okay to acknowledge when a game is uninteresting and move on rather than fabricate excitement.",
+   "plans": "",
+   "concepts": [
+    "content-ethics",
+    "game-evaluation"
+   ],
+   "sources": [
+    "yt:ybR_XdkwwwQ"
+   ]
+  },
+  {
+   "id": "hk-vk",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In fast time controls, the player with more time can pressure the opponent into mistakes. Here, the speaker notes that the opponent has little time and is likely to blunder under pressure.",
+   "teaches": "Keep moving quickly and maintain pressure in time trouble; good things will happen as the opponent is more likely to err.",
+   "plans": "Continue playing solid, forcing moves to increase the opponent's time pressure.",
+   "concepts": [
+    "time-pressure",
+    "blunder",
+    "fast-play"
+   ],
+   "sources": [
+    "yt:ybR_XdkwwwQ"
+   ]
+  }
+ ]
+}

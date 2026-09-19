@@ -1,0 +1,4874 @@
+{
+ "generatedAt": "2026-08-15T02:26:24.078Z",
+ "videosDistilled": 1168,
+ "v2VideoIds": [
+  "-0_s_f7DqmA",
+  "-0gN9kmuOJU",
+  "-0wWwLrINWc",
+  "-3ugH-MluZQ",
+  "-5AhdA6x7T8",
+  "-7Tc0oafIi4",
+  "-BeFTPOew9o",
+  "-FVHpUw085w",
+  "-Fw1L3gj1kE",
+  "-GOmCSMpQNI",
+  "-IFuClcDz7I",
+  "-NYN1YTTdbI",
+  "-NsJbIX1MUE",
+  "-Rr-hD5MxSc",
+  "-WEFr1dwqys",
+  "-YbAlUEyMpo",
+  "-ZFiv_zGMF8",
+  "-bBg9r8a5JU",
+  "-fbztYNE52Q",
+  "-jWbuf0ZWMw",
+  "-wREyJKttqQ",
+  "0-NAdImSsTo",
+  "03QgVj8lfdI",
+  "03eMfSV0yEk",
+  "049NnoR1LGE",
+  "04sB5OvgfhY",
+  "09JqE4jUAvU",
+  "0AiDSTCxGnw",
+  "0F3yN1I8Ghs",
+  "0GkyWrCskNY",
+  "0IikR1g_zsA",
+  "0J8iTGkRjAw",
+  "0KMCe3Jx2XU",
+  "0LGy324E1Y8",
+  "0LvL8CJ4_N8",
+  "0RUWVUBNjog",
+  "0ZTkbWuXFG4",
+  "0_AgW9rkTQ4",
+  "0_OePK8kQMA",
+  "0_Ufp2aWhRA",
+  "0a1h2gw-9T8",
+  "0aH5YvP9ioE",
+  "0bNbU0gtAzU",
+  "0c3wsCq3lho",
+  "0caREtu77xk",
+  "0fqm85Dc4EE",
+  "0nzZls29mGI",
+  "0oBK6BHsVms",
+  "0pIdVQ6U4ek",
+  "0pWqTfnKbH8",
+  "0pa2-APXkiU",
+  "0qgW-gKeOS0",
+  "0qoZTToZoRs",
+  "0qsEEBbNGB8",
+  "0saFg21rbY8",
+  "0un1OeyXxRU",
+  "0vXM1iZ6lDA",
+  "1-1I66GX2wY",
+  "10pID_r_FqQ",
+  "13Y4QR_-Upc",
+  "15nuJdAUW0s",
+  "1FV_sn8cZwg",
+  "1Ixse575p70",
+  "1KlHfiBmnBg",
+  "1LyYIF6f_p4",
+  "1Nt0HVMv3b8",
+  "1SVJJRMQB9E",
+  "1VHJ8EU2eeE",
+  "1YIcsfEzgMs",
+  "1b17sDsjAfY",
+  "1b6vPZfcEME",
+  "1bjNwYJxpS0",
+  "1dP8bHGM5LU",
+  "1drGZPL6Teg",
+  "1gC0aRFLyAc",
+  "1hxxhi3FR94",
+  "1i8SYnppXSg",
+  "1luv3WpSmwM",
+  "1mXEN2bz8pc",
+  "1n6yLPNj_Pk",
+  "1nPwb1iujkk",
+  "1oVXLOXZcp8",
+  "1pyNzeue6zk",
+  "1wtuc5jeYBM",
+  "1xC_P9JKhhY",
+  "20bcUsEPPTI",
+  "20mAEoDbSlM",
+  "22_xD2kh8-E",
+  "26n3eBWVdQ8",
+  "272uiQwbfPY",
+  "2JXJGdecvNw",
+  "2KT2NVx_1N0",
+  "2NZ-3gCGiL0",
+  "2PqmgjBGaQk",
+  "2Sf3bDGm3wc",
+  "2TNhQBcV-HE",
+  "2U_1IA432nY",
+  "2VlWSEr33MM",
+  "2WxcHxN9nQs",
+  "2ae7mw0Tjjw",
+  "2bNWpx2V54E",
+  "2bNrTJ5_7co",
+  "2bflcK6vYRs",
+  "2naxR4UzuL4",
+  "2oepWykxzVs",
+  "2tQRDnjketA",
+  "2z_-Mjnctsk",
+  "30zK694hy_M",
+  "32TVlYpq4AI",
+  "33sw2Mt8a6M",
+  "37YLHQUpWrI",
+  "3CeJsLqjDSo",
+  "3DgiEJQkExg",
+  "3E_sF_2F_2M",
+  "3HAVAcz8Jm0",
+  "3IxoWi8DYTs",
+  "3LY_UfsN_Bo",
+  "3NcIyslqy3E",
+  "3NvzqZPdEGQ",
+  "3Oyk6RRcu_0",
+  "3QERrRicf-4",
+  "3QMH5_MeCsg",
+  "3QxwOX2gKfs",
+  "3Sh8Z6CEW8E",
+  "3SzZnyyWpIA",
+  "3ThOna9XX0I",
+  "3UBFV9SfBZA",
+  "3V5rVj4KwWk",
+  "3WD82x1YBlg",
+  "3WVT4-X30j4",
+  "3_nz1RRSoYI",
+  "3eIXuNhW9HE",
+  "3fhEWK_ZQGg",
+  "3fn3ayYjyPA",
+  "3gQ68TzzTXs",
+  "3jFlhybJEW0",
+  "3vXb-5tVnnE",
+  "3wWxsZJqyJA",
+  "3xwjqqxRnj8",
+  "3ywCJjzAjuI",
+  "41MzRWuzOYU",
+  "432VtltHVaA",
+  "44J7vTQDVlQ",
+  "44WFJaBjNsY",
+  "4I2-e0EE6GQ",
+  "4INpaLppj7Q",
+  "4J-Zmdvv-YY",
+  "4JAlrd42h9I",
+  "4NXJQo0iBcs",
+  "4NnCL_zpna0",
+  "4RrCa6_77PE",
+  "4SNjAcQO-xc",
+  "4Un5D2Hr6W8",
+  "4XjBgcG-4t8",
+  "4_ighjI9cOQ",
+  "4b4V1NF3EfY",
+  "4bRyo_MnwT8",
+  "4b_8Or7m4MQ",
+  "4d4_OTQhYdI",
+  "4dH8jqK4qz4",
+  "4euAvvdSncU",
+  "4fxQL5evIfg",
+  "4gItrnnQf3A",
+  "4gyib2SeJmQ",
+  "4i6AX0gHRCw",
+  "4lLD4k3upes",
+  "4lYnVKWMtSI",
+  "4q1XpMGRjWs",
+  "4sHt10Xg1Rw",
+  "4sV9N4qTOYY",
+  "4vJ3uy_okhU",
+  "4wMg32rJ9AQ",
+  "4xjCkrIWi_g",
+  "4yEfcXRqtL4",
+  "51vnCWXXLGc",
+  "56yZ6exdfW0",
+  "57TYH2lMzak",
+  "58xxuJLkyJw",
+  "5C9cTUIVy5s",
+  "5FwKG168ZXE",
+  "5H-3lAy4IT0",
+  "5NAvU5L2H8A",
+  "5NNic8LScI8",
+  "5Nng1SWWmwk",
+  "5P8CSC0w6Is",
+  "5WRfUsB66xg",
+  "5ZK1sHoynx4",
+  "5d8OIACng4w",
+  "5eOSDHh6sfo",
+  "5go9HQeMHlo",
+  "5hYk-W-szaA",
+  "5iELWZ2_rXc",
+  "5j-P_tHGSKw",
+  "5jpVW8MWfUM",
+  "5lJ0QLAlqyE",
+  "5mXVYR4wbOU",
+  "5pWk1JZR19s",
+  "5qWHAIV2kmM",
+  "5rxBJGFh4ZQ",
+  "5usp_mKUNNg",
+  "5yPLiqlW8dg",
+  "5yZgEaBMJ5g",
+  "5z_w60TFSjA",
+  "5zkUfRUSbbw",
+  "60EA6XctVSo",
+  "634igXYzkbI",
+  "63VwMc39W2E",
+  "64uHuGHDZ-I",
+  "65NdXdGuhNA",
+  "65uTBtJGYss",
+  "688C_anO9VY",
+  "68Td9byV1ro",
+  "6Aos9rYULeA",
+  "6DRcR38FK0M",
+  "6EJ9jTI5DdM",
+  "6IBDe-f_PCc",
+  "6L4yA-mGtAI",
+  "6L9Ak-jLfPU",
+  "6M7GCtQi_YY",
+  "6QQ5sw-SgNw",
+  "6SV72R6tQFA",
+  "6SuFi9dijPI",
+  "6ZGmJklWhso",
+  "6_qqtRHkaRY",
+  "6aj8UKCoYUs",
+  "6dJD4DgqUqg",
+  "6dMtuxZ2uQk",
+  "6dh6NGk6-ck",
+  "6fnS3gu12As",
+  "6h6o8bL-D04",
+  "6hhy7bsZPG8",
+  "6iICvilI2iI",
+  "6pSZy-zz3B0",
+  "6rN7l0uFrS8",
+  "6woj5LXtGAM",
+  "6yvzdZT4-qc",
+  "71j0OYyBMsk",
+  "7DaZ-JHiLE4",
+  "7EYY0JCuAlY",
+  "7HcgSgSfzUY",
+  "7I7CjBB6Guk",
+  "7IRZDlqNbH0",
+  "7IdKVNJ-Mv0",
+  "7KFTpb66Stw",
+  "7KXgJtIDH8A",
+  "7KiTmyaJFvQ",
+  "7N_oy1KPdGg",
+  "7OGAiz5p_L4",
+  "7RnposC955A",
+  "7RyJB2y-4dk",
+  "7SAPnlZWcHA",
+  "7XoDO08Ym6I",
+  "7ZoFXDQWYzw",
+  "7cwGhL6DY18",
+  "7cxZODq129E",
+  "7hJGuzguxvQ",
+  "7kxBBdOgAkg",
+  "7mEOtVXveec",
+  "7nuDXSFEO2k",
+  "7tbQ8a4VLGc",
+  "7tualmw-pkw",
+  "7w0tfvo54Tc",
+  "7wg7ywDPMjk",
+  "7wo-9B_1dQo",
+  "7x33uscH71w",
+  "7xUZoisAt-8",
+  "7yCBeZTVG2M",
+  "7ynJj21O1tA",
+  "81QOqffxCiw",
+  "857zDiFMYJw",
+  "85R8TsTTrEg",
+  "87VHy1dHs_U",
+  "87W9Fs7nhIA",
+  "88heszoTyDc",
+  "88vgpgphGWg",
+  "89E1e7lR0VA",
+  "8BZx6uxP0Pc",
+  "8HpzpiECQPI",
+  "8KYqy42DpDY",
+  "8LTJFNvkoSw",
+  "8NVqK0GHFaY",
+  "8QUEU0ftNHw",
+  "8QeXCaSteKY",
+  "8Qt_0cVl7uw",
+  "8RX34V3EaEs",
+  "8f7wkJuyw58",
+  "8fAj6EUvIDs",
+  "8g0_qfHXZZI",
+  "8g32mujop6I",
+  "8jIak9c7Djs",
+  "8kkRNCUxNmA",
+  "8phqQEVdmog",
+  "8u8_gJfpHjU",
+  "8uMWZz5p1ro",
+  "934oWpjFV-E",
+  "9Aev-Asmq6k",
+  "9GmmG1xix_o",
+  "9HQrbrtcTJU",
+  "9Ju4jKhuhbQ",
+  "9NK77D8F4kU",
+  "9UV35OLO6yE",
+  "9UXCV2SdEnI",
+  "9Zc4eJu1sh8",
+  "9Zg5HFI3mFs",
+  "9fec-M1C8Ro",
+  "9fx499KkZto",
+  "9j3U6VG407c",
+  "9kwwlYcfBLI",
+  "9p1JKTEWInM",
+  "9pPv8BmgSbQ",
+  "9plMfZhVgXA",
+  "9qaSckqcgw8",
+  "9quJ8iZbHY8",
+  "9qwCEocx03k",
+  "9v7bIejlxwo",
+  "9wpe8-09N6E",
+  "9yuhDu27EnQ",
+  "A5X_g6OGufs",
+  "A7bcr4KBiGA",
+  "A8ppOFLpSYM",
+  "A9H8B1qs1gg",
+  "ABvzik1ivYY",
+  "AFVp0gWQ9a8",
+  "AGrjO3i48p8",
+  "AJ2d93kVdXg",
+  "AMz-ABu8I2s",
+  "AOYOZ_UafbE",
+  "APdNoozDe_g",
+  "AS-BP8YbIAo",
+  "AZAD1HgLNU4",
+  "AaHGxBes5uU",
+  "AaM-fyLB3gk",
+  "AdiwIMRwPSk",
+  "AfN02fD6Yg0",
+  "AjoQ6hsVXYo",
+  "AtItayItxb8",
+  "Aw2SUgLtxW8",
+  "AwGqNVmuYIY",
+  "AwN5vsr-4DM",
+  "BA_MugknKoo",
+  "BBrFYCIyrNY",
+  "BFGIGu6xwZo",
+  "BG-sQ_aCO20",
+  "BH6s7i_sc3I",
+  "BMDDC4LdHqw",
+  "BOKak19NRcc",
+  "BRmT4pnzD9I",
+  "BTFK0TylMn8",
+  "BXPF73Xba58",
+  "BXS5Mk96FkE",
+  "BXSfKgFtmHE",
+  "BZa_4pvvXZ0",
+  "BZuq0-XtiSo",
+  "Bgs2Vrr6OAY",
+  "BnPeGmtjkNo",
+  "BoNq6nwMiQw",
+  "Bx-lgipCa6Q",
+  "BziEbsci4F0",
+  "C1FTP_2Zd_c",
+  "C8EIvYVgY0E",
+  "C9ODOQCLWUA",
+  "CAjcKs4Ewuw",
+  "CEQg7gv4rCk",
+  "CErPCehtQ94",
+  "CFrdBAQkiig",
+  "CHgLeyOs_rE",
+  "CN1duTQST1w",
+  "CNIMS_AY5VM",
+  "CQU-AWslwZM",
+  "CYqwTXWQbvk",
+  "Cb1dUsC74JM",
+  "CbRkqqawcTo",
+  "CcEM83t4T7Q",
+  "CeJBdm5Q5rI",
+  "Cg2Bsf_Qvg0",
+  "CgiTSpP3Z_Q",
+  "Chb3y804adM",
+  "CiE7NRg3IBU",
+  "CiLvNmZoKRQ",
+  "Cp20I__qdQM",
+  "CprohVlhSSA",
+  "CtpSL2HBG4k",
+  "CxgGITlrowA",
+  "D-RJ_A-VtsA",
+  "D10Fk4T6I6I",
+  "D2Ga2_zgi_E",
+  "D2ryFrVT0WM",
+  "D6KbvakS7Lc",
+  "D94nYwMrAPY",
+  "DALHKEe4Uos",
+  "DE4qVrOkEsY",
+  "DG_qpNkor_o",
+  "DHH5Vu-9Axw",
+  "DP9uUT3Kd-w",
+  "DRMwhq0kjbE",
+  "DUySe33UNo8",
+  "DWC3FN7x_1I",
+  "DaLyNTpgpns",
+  "Dakdox0e0gU",
+  "DcGcstbcnio",
+  "DcIhhaQNcd4",
+  "DchCK1vncAE",
+  "Dd05J-4LyB8",
+  "De4GVQO2roI",
+  "Dfjp4ZUPC1c",
+  "DgOpjlaKkro",
+  "Di9Z_DJcyEw",
+  "Dk43z81T2EI",
+  "Dps9Cc28ZEs",
+  "Du05lffVnUo",
+  "DugE4TYzBIw",
+  "E5qbFtZ0C5k",
+  "E7ylfT6FZN0",
+  "E9Hc_BC0sSQ",
+  "EA1XHkfXqmk",
+  "ECi3zqLOC4g",
+  "ED2pD3PlicQ",
+  "EFUZIxxF-2M",
+  "EJXFL1nVYiY",
+  "EJmjt9GGhA8",
+  "ERzn9gy7fj0",
+  "EUJN0cE5dY8",
+  "EWozFMgz-nc",
+  "EeZU63UzidY",
+  "EevZI07HLZY",
+  "EgNI3jGvduQ",
+  "Emf40pUxN4I",
+  "Emo6aQnxbuQ",
+  "EnZRfCP_NLI",
+  "EpXtK-Erym8",
+  "Et-7l2PcCI8",
+  "EuUtHnsEHvY",
+  "EzIavqJyhcE",
+  "F-gmOjYg6sA",
+  "F01Gf0yBNgI",
+  "F2MkdD1B77E",
+  "FBKAIcqdF9U",
+  "FCR3V7yaW0A",
+  "FHMLrMssew8",
+  "FKC3a7l0uSE",
+  "FLMCtCeG0TE",
+  "FM788waxVys",
+  "FNoGIo4yjkM",
+  "FXA93vhHdIM",
+  "FXKy5OeQEnI",
+  "F_PjbuciFvY",
+  "Fb6BPbkv2Y8",
+  "Fcqfnanq-H8",
+  "FgaL26GJ3HU",
+  "FhK5hHYie4k",
+  "Fk4TjItDkxk",
+  "FodfDkW7OMo",
+  "Fs-LCMsrRUQ",
+  "FsS8LuTyfRk",
+  "Fwc0j8P_DKs",
+  "Fz1JEU81-Js",
+  "G-8_CS1Shw8",
+  "G1h_S7SEOvI",
+  "G2YyrJTC27M",
+  "G3siwjAF2iE",
+  "G8cgOXnnibo",
+  "G8e6OKxFF3k",
+  "G8yf244bHtQ",
+  "G90rbZgQh88",
+  "GAg0hrnKgPM",
+  "GAh7H_WYnLU",
+  "GBqvtTIdeYo",
+  "GCKEJpCWAn0",
+  "GFGFrJICW6k",
+  "GIQx0UFTjPA",
+  "GOgadVEuyIQ",
+  "GP7PtDsduKQ",
+  "GQ-iqd-PasM",
+  "GSad7R9XSBc",
+  "GVkK4NOLyiA",
+  "GWkAwsRQ0mk",
+  "G_8ahxWbe8I",
+  "GcGRwjlkQJ0",
+  "GeyaK9VAUI4",
+  "GhFAwBzVwMk",
+  "Ghs5zNkv4SU",
+  "GmfiVal1PaM",
+  "GnrplR_nLu4",
+  "GpVATnLEe3w",
+  "GqbJCe3E9jY",
+  "Gqc-SQav3Cw",
+  "GtXbsHnppkM",
+  "GypgXL6L-ag",
+  "H21xlPZplc8",
+  "H3JAAvdy69g",
+  "H4gvDRA4A_0",
+  "H7OVcPIR5fk",
+  "H8N9uGBCp6E",
+  "H8rRbXn49G8",
+  "H9cTQFjdhGQ",
+  "HAsviaQsia4",
+  "HBjFHwau3xA",
+  "HBr0RZz6emU",
+  "HDpADeX8UQY",
+  "HG4wJ7y5jvQ",
+  "HOhoy6_tKNo",
+  "HRUL0s7-3YA",
+  "HWhPeQIHofQ",
+  "HWisEBfGx_k",
+  "HZIlT5SiBes",
+  "H_Oc0M5iEeQ",
+  "He6h9_XNBt0",
+  "Hm1dXnPh9qw",
+  "HtabbXpzQA4",
+  "HtzVDvVYRaU",
+  "HviX715YLnc",
+  "Hzvzn49USyY",
+  "I7A_zvTwtgs",
+  "I7N78DYEIZA",
+  "IAIs7QcDjQ4",
+  "IAPz1AA5uhU",
+  "IGBUcbBvF4A",
+  "IHn9SaXEjdQ",
+  "IIwe_60O68I",
+  "ILjVkGdTyEU",
+  "IN1emf4F2-Q",
+  "IWXB242dKVk",
+  "IX4RkJgcLvw",
+  "IXUcpuE-twE",
+  "I_J6JPsC0yM",
+  "I_nv5oN2XMs",
+  "IbKs54c7gfs",
+  "IeNWAIMxR8w",
+  "IeeXKlAHhjk",
+  "IfeNyioIQFg",
+  "Ihi_Xt_pGDQ",
+  "Io42hop-GVs",
+  "IphP-LQLDFw",
+  "IsnSYnXumBg",
+  "IvZONIWnU9g",
+  "IvZaZqI-PNA",
+  "IxT3PMlU0PY",
+  "IxyYcGhgDw0",
+  "J-c-_QLCzc0",
+  "J1BUMB1nmPw",
+  "J7xkr73Yoxg",
+  "JHIcEi1eM5E",
+  "JKoq1Yoi07o",
+  "JNh0Yb8oSHU",
+  "JPhWLeb8hvU",
+  "JR8_vnUXcGk",
+  "JTlddweqUkk",
+  "JW56ZzGk10E",
+  "JXdgPzHeMVU",
+  "JYmi0mcnVQ4",
+  "J_gtorTKAjw",
+  "JacfGVSCRzQ",
+  "Jb4NukzDej4",
+  "JdgRcLtSmFk",
+  "Jf20YGtf9LA",
+  "JjT0Ske6EdI",
+  "JuLYgClRe-Q",
+  "K0BuWZabWd0",
+  "K10SiGgSNmI",
+  "K13ARmpM-uo",
+  "K8yIKde9Bm4",
+  "KBN4JsVI-wc",
+  "KCojbucWmp0",
+  "KFOWoUdwsjo",
+  "KGp0UsLCabk",
+  "KIcqwvZs4jk",
+  "KJDtllFi1r0",
+  "KLPgcFjgp00",
+  "KPpaSJRVeuQ",
+  "KQvKTzg_aIk",
+  "KTVcItwtS9Q",
+  "KVLnv_wpn4k",
+  "KVWPCzGaJK4",
+  "KVvXZzgVzkM",
+  "K_IXU6lNMdQ",
+  "K_RFQvl-qMI",
+  "KeGZ_i7lKXU",
+  "KgvncwoMyZ8",
+  "KhqslboBUug",
+  "KlbzMTpnBc4",
+  "KldnVpImotw",
+  "Kq7129BnWJs",
+  "KtMKcFLP4k8",
+  "KvrrGal0D6M",
+  "L1ikg_EYot0",
+  "L6eP5jZS81U",
+  "L7iyh5QpuGQ",
+  "L8T1TuMrpuQ",
+  "LGSYFXKm4Wk",
+  "LHvVTunPYJ8",
+  "LJ26aKp9rcE",
+  "LK40urs2vaY",
+  "LKudRIvOG7k",
+  "LPJhhXj6aQM",
+  "LSI_Z62rYE0",
+  "LWsI0zuoM7c",
+  "LZ0ZQxaM1PI",
+  "LZXqbJjQ9yM",
+  "Le4G0ikMiG8",
+  "LgRkwZxsjWA",
+  "LmbFsbFkRUU",
+  "Lol4i4fTQuo",
+  "LpH17pzPVBY",
+  "LpfP8CkeaVY",
+  "LsfL3Qm7y2o",
+  "LtkOnIxuE9o",
+  "Lvi3O2HknCQ",
+  "LzvVKh7C3gs",
+  "M08I2eq04eg",
+  "M0z2xlX6jPA",
+  "M4GmnJBM0dc",
+  "M7pm5d3_SgI",
+  "MAvj78PpEB8",
+  "MBDy11ZPzfM",
+  "MBhFtYBePW4",
+  "MCdZs61FUXs",
+  "MFFpZGOeklk",
+  "MFQDfxDySLg",
+  "MMznymhKLjc",
+  "MPCKzO1Z-F8",
+  "MTB0ZC4px2A",
+  "MVv2F95FAO0",
+  "M_GUVRd9oes",
+  "McBabXUltnY",
+  "Me6vc1ljrl0",
+  "MeWIDLk8oLI",
+  "MgtyCTKTbKI",
+  "MjIWDN3QorQ",
+  "Mp0RgxMGImM",
+  "MpO5AbkGQVU",
+  "Mw8U3Lyy6Vg",
+  "Mx20ObNFDXI",
+  "MxvMGHR0E_o",
+  "N0kbHQnrlLQ",
+  "N1XfJP63NIc",
+  "N21jS_2k-x0",
+  "N3O-gft3RAQ",
+  "N8CBPfAFkKU",
+  "NACEqIHiDqo",
+  "NBk6zJMJd-w",
+  "NCmVakxe6g8",
+  "NFxMcqUBKGI",
+  "NIIy3vZ5Dsc",
+  "NN-D0N0CdQM",
+  "NTVJE6suH-Q",
+  "N_mANk4cwNg",
+  "Na9g-RzSLuY",
+  "Nb-e9Q73Xqs",
+  "NbEn4l_r2FA",
+  "Nf6Nhce5Cyk",
+  "Ng1Wj87dWHk",
+  "Ngd_EyLFabo",
+  "NiZZbGG4QtI",
+  "Nj6Im1MVh_o",
+  "NjeDt9tvvNU",
+  "NlW3_GcS2bg",
+  "NtMLfg8q_-o",
+  "NzIcI4F3bpw",
+  "O-2bjIU6uvc",
+  "O1WQWcY4L4o",
+  "O2I4LOjFUR0",
+  "OAvPlQdt_ho",
+  "OD9kK02BEME",
+  "OERORPAMHRw",
+  "OGehkS76Q24",
+  "OHAGqxxQYZs",
+  "OHGDqTcz2EU",
+  "OHUnrrAIdGo",
+  "OIUuSdg7344",
+  "OJ1ZXPgA3-s",
+  "OKdk86qRIQA",
+  "ONeOQCOYVZg",
+  "OSzAo5QjHsI",
+  "OYl_c2mLBMw",
+  "OZ_raTf_kFs",
+  "Oc6ePHTsqn0",
+  "Oem1cw1hm_o",
+  "Oeq0KkKI-08",
+  "Ohf79-nlekc",
+  "OiTccwTPRyo",
+  "Ojj2pBEo6es",
+  "OjlDfke2YC0",
+  "Olc4yiIh5xE",
+  "OlmO9HL02to",
+  "OmtVL7NxnhM",
+  "OrVjr2AltEM",
+  "OzskUgwPCEg",
+  "P0S9DX11Ukw",
+  "P2R13HSXNVA",
+  "P70xI2UaSxo",
+  "P8aC7TqjhKM",
+  "P8xoIcha_xM",
+  "PEL9acB3ujM",
+  "PEjlg3bKNb8",
+  "PF0NqRJ6mgo",
+  "PF1wWxnpEm4",
+  "PGfM6EovBQU",
+  "PGtqOW2O_Bw",
+  "PI91yBuu-pw",
+  "PLUu9hXOpLQ",
+  "PRndzvC1UDY",
+  "PSRj5JXnNNg",
+  "PcEwecIMd6k",
+  "PiKQa7ZRq6w",
+  "PrrazR7dLLk",
+  "Pu4b77EMTj0",
+  "PyI8Jc_3OA0",
+  "PzupT0BaFQU",
+  "Pzx80oCor5o",
+  "Q1gCVw7XLR4",
+  "Q412s39Nyco",
+  "Q5q6OYuk6sA",
+  "Q6PSJE3GQfY",
+  "QCE0nw5SRBk",
+  "QCN-GXvmAIs",
+  "QEelw0SZRxY",
+  "QFIT1kRjqHE",
+  "QGUVx-Jcgvk",
+  "QHd38ToH3X4",
+  "QKFTXelxbPA",
+  "QO8ejRrH978",
+  "QPd-r5Rq53A",
+  "QSAVnq40JdY",
+  "QVPueKsJgPU",
+  "QVf-lsvkkfU",
+  "QbB_9y1pSwM",
+  "QeIiW4VYiRs",
+  "QjBuz81CE5w",
+  "QlHn6Uw4tZ8",
+  "QnxdVThWCog",
+  "Qo-8mJCseXI",
+  "Qo9gU4ZNaFg",
+  "QpmTi1uIuGI",
+  "Qu1HEwprohU",
+  "Qxsgy6dsZjE",
+  "QzPu_TEYC28",
+  "QzvKuQLcWtg",
+  "R2lVfKZ9Jkg",
+  "R3fIF32CKHg",
+  "R3sT1d_npnQ",
+  "R7CCirWtW-k",
+  "R7q8UCn2UaI",
+  "RC-UcNReVv8",
+  "RCfaOs-Iub4",
+  "RE5XutM9D7c",
+  "RHErpucdLzo",
+  "RHXrKaFRcc0",
+  "RKrvW2UEx9k",
+  "RP22IpP3jDk",
+  "RPBTZvLsGVM",
+  "RVGaiv3mnGo",
+  "RY5OFyrpCAU",
+  "Rf096-0V-Xk",
+  "RoaMzZtO86A",
+  "RsCx1074EZQ",
+  "Rvh5P-z5ER0",
+  "RyEiU4_GBOM",
+  "Rya-LkSufvM",
+  "S13wBbv6Wmg",
+  "S1n6KVlx-P0",
+  "S3JP-cUqL4I",
+  "S8fEZJuBMkI",
+  "SAwS1aKUWP4",
+  "SEbGmTJ95DU",
+  "SHOEE750YYE",
+  "SILH2MCFlmM",
+  "SIMl1imTVA4",
+  "SJ6cbF-fOD0",
+  "SJcMRn91s0Q",
+  "SJyPvBKHL0w",
+  "SK1XLkOQu8E",
+  "SKANvfaJsug",
+  "SKyKFPog91o",
+  "SPEkp49fRrw",
+  "SRvcTK6d-OY",
+  "SVDEWoSq72c",
+  "SXCMzqIhLGU",
+  "SXpXgELqqCU",
+  "SbVzlfh-Bi4",
+  "ScPUGfNmaIA",
+  "Scvaos7uRa8",
+  "Sicu7915Dfs",
+  "Sj0iTikq7Ks",
+  "SmGMYLqwkpE",
+  "SmOGPY70zac",
+  "SoOajq45Hrk",
+  "SxbAGgr4iRY",
+  "SyQt5MMK7Ag",
+  "T-8KYhQAuhM",
+  "T-vuW7DaW2M",
+  "T6_Do6bmDv0",
+  "TBAGkBnNrjg",
+  "TD5YZnbhP5Y",
+  "TFXGmIWxFJk",
+  "TG9jKsFZK1A",
+  "TJKp26M7R4g",
+  "TJ_2EJfHWGg",
+  "TQjuNuznH1o",
+  "TXvpCcxEcSA",
+  "Tbj-mBIBGNg",
+  "TeSispi-zYU",
+  "Tey0iqQYWcg",
+  "TgWCVr4x_bE",
+  "Tlm-g7C8oBI",
+  "TmXemx18kBc",
+  "Tolv6k4rjtY",
+  "Trrwo3vDOsw",
+  "Ts4lGhxR5Y8",
+  "TvIbkJFz_dg",
+  "TvipCjxqGiM",
+  "TwLLpz1ZM_c",
+  "TyBqjBu2NHw",
+  "U0I5EGQMQDE",
+  "U15QgTKHMJ8",
+  "U1ZtnzL0DQw",
+  "U34zEjldSO0",
+  "U3agGxvwFuU",
+  "U6oZY6wP6GE",
+  "U7gZLTKWlJ4",
+  "U7noYIPLTA4",
+  "U8dIK4If0Ao",
+  "U9k3zWn_wNc",
+  "UBxLCztXYcg",
+  "UFYDKwmw9Mk",
+  "UGXx_CMe2B0",
+  "UKCYquxtvUY",
+  "UOLxsSoFlBU",
+  "UOM88zZLL9A",
+  "UQpho68wL3I",
+  "UXiVD08CaJw",
+  "UZEJ0kG1G9g",
+  "Ub4T81ldd0g",
+  "Ue1NeZB9t6k",
+  "UhnB8mA94qQ",
+  "Uit7i7zByrU",
+  "Uj-7xYjMqS8",
+  "UjKCl8AqiLk",
+  "UnrMMktlpJo",
+  "UsyCJgyX6mQ",
+  "Uu46f5L3aas",
+  "UxFDzKQkfOA",
+  "UyCnYH3azrY",
+  "V-LZCj_CJMg",
+  "V1BlWKDblCc",
+  "VCX4yxuWFII",
+  "VE5au7xCQGM",
+  "VFYCuxf4dWk",
+  "VFepT8_tMXA",
+  "VGh6OBrRMpQ",
+  "VHvcD2plRMY",
+  "VIC1DAvtjhc",
+  "VQsZJqZhdn0",
+  "VREmqRr6OD8",
+  "VRqwUQIODn8",
+  "VSdGRmWMQoQ",
+  "VkzTUvHUsTM",
+  "VnHI_XTXpoo",
+  "VpMT0LBSJC0",
+  "VxIMuLPRvXU",
+  "W-1D1QU1YsQ",
+  "W-A2blo_qUI",
+  "W3xz1vkQ6x4",
+  "W4kzPQKI5tA",
+  "WCIcTR8BX_w",
+  "WElF_O3a3mc",
+  "WFmnZ0ngVis",
+  "WGmgW5D3rVk",
+  "WK6EznkZNwA",
+  "WPFcWlOUqug",
+  "WTJ72TWw4g4",
+  "WVZB-cExJ1Y",
+  "WVod3aAsEyE",
+  "WWovc0cfwsE",
+  "WemLifZqpI4",
+  "WljySK5GZ0o",
+  "WlnAtCf-Sds",
+  "WnY4GXl3g4o",
+  "Wqc7E1GaF68",
+  "WvKT4by0uYw",
+  "WwURmCNavI4",
+  "WwteAQMQ2yY",
+  "Wx5fGdVwhRg",
+  "WzHngvQ4-IU",
+  "Wzjl7JfO05k",
+  "X-1QxYxaoZ0",
+  "X-Ty623wf00",
+  "X-yG_3RsrR0",
+  "X0tARcGoRqg",
+  "X4kI9cOuc4o",
+  "X54r_xxm_FQ",
+  "X7RP0-lre_c",
+  "X7wDE4aIbMY",
+  "X8UQrAGGpxY",
+  "XCMtzkHGrmY",
+  "XE2jEz5ppOU",
+  "XEAW827IrWI",
+  "XEjw-LcprYg",
+  "XGZPO8q8FdQ",
+  "XOB8LXIbo00",
+  "XQdplZlfS0w",
+  "XQxRHd7AYSM",
+  "XRQa2PkXWAw",
+  "XRyevkAGW-0",
+  "XVVGpVTGSnI",
+  "XZtdcNEK6Sw",
+  "XdsBzcwOSVE",
+  "Xe8EaqiBjAU",
+  "XetqRa2T89M",
+  "XfUuTgzRrjk",
+  "XhEtEgaI8Q8",
+  "XhjQKqB5jpE",
+  "XjQ6BZO_A_I",
+  "Xk9rI4Ql42o",
+  "XkjED0jLNRE",
+  "XmjgHJWzlrA",
+  "XqKwv4D4Bzo",
+  "XrIZ4jIxyek",
+  "Xtty2zk3n9o",
+  "XtyLL1dTrXY",
+  "Xuc58KPP4ic",
+  "XwWHDdORAhU",
+  "XwdmxET_U58",
+  "Xy1o5f5Q5IQ",
+  "Xy55Jnmmy8I",
+  "XyjohMzvmUo",
+  "XzMt4X15ec8",
+  "Y-c3WDEIQvw",
+  "Y4B4j7wnlNY",
+  "YC3jVnRHelw",
+  "YEHmz_-JsKY",
+  "YFvDbGYILtM",
+  "YGny2YvDg-k",
+  "YI5CQL_u9Bc",
+  "YJ1tE5xMZek",
+  "YOa2cxgM_wc",
+  "YSz2Gt0yq6c",
+  "YT4M1u1c3ok",
+  "YTV7R1tgrzw",
+  "YVBxUIDoy5Q",
+  "YVCDQ4wtAGA",
+  "YVY6GtV4nsQ",
+  "YWh0XubB2aY",
+  "YWv34wMq0WE",
+  "YXNsXcmeXYY",
+  "YYSrVeQwcc4",
+  "Yg7OYgOlgL4",
+  "Yjo5shT118I",
+  "Ykzlf4bN7no",
+  "Ylsuq79GNk0",
+  "Ym8KgIfeMtE",
+  "Yp1xo2nJ7VE",
+  "YpfJB2lgvfI",
+  "YplVCLBxdM4",
+  "YqwIgI1qoLU",
+  "YrBGO8XmIWA",
+  "YsHpAxSovJ4",
+  "YvIpN_4Pr48",
+  "YxHagmH068g",
+  "YxQA1IXpad4",
+  "Z4YMiKXHbvA",
+  "Z5y7Qm_nu-o",
+  "Z7CzwC9rzH0",
+  "ZM8VZBJ5XXM",
+  "ZSDI0bjol6o",
+  "ZUGJf2Bxa1Q",
+  "ZVgCQfCgS5c",
+  "ZX20B5iYxJc",
+  "ZZuMhVuF41s",
+  "Z_4JzzdZMkQ",
+  "ZajHGsuuHDY",
+  "Zh2vaIgfCVY",
+  "Zje-iRUnohY",
+  "Znh8yshNBJU",
+  "ZpeRfZlzVVQ",
+  "ZsCt9sG6oig",
+  "ZyB6HaWIdjg",
+  "ZzjuwAHApR0",
+  "_0vhFCYsz2Y",
+  "_30U1KGe_iU",
+  "_4rvuUYE5DY",
+  "_5ETackmQKA",
+  "_5zlIKfFpgY",
+  "_B39II74Pkc",
+  "_FY_Tq7MMDI",
+  "_FnolE7vPJw",
+  "_Gn2WsqEaCY",
+  "_JO3IuUNAHA",
+  "_Ld62Ti7QMo",
+  "_NHq5MIaToU",
+  "_RqnOC6wQyY",
+  "_SE4lLEo2Rs",
+  "_SvgVk_6FNY",
+  "_TCMAq7JsRA",
+  "_YiZS8KWkv4",
+  "_dloiRSQSEg",
+  "_g1xMZhGOuc",
+  "_g_6RSNsGdA",
+  "_hLduETgkXg",
+  "_hhHXRBwZI0",
+  "_ijunCGyTmI",
+  "_qx_0hJPQfs",
+  "_sqNpCRRoCY",
+  "_uHYdvwPTn8",
+  "a-5GasBjpQU",
+  "a170Xx35uRc",
+  "a2dQlIyQg5g",
+  "a3pBDjBqOZg",
+  "a4q6yVkBRTM",
+  "a523g-UKZCA",
+  "a9EL-6gRd1I",
+  "aBBG_tnDz_o",
+  "aB_8ASgKptA",
+  "aGQR_jsDPZg",
+  "aH2BuGDZ29A",
+  "aJiSMJvf2-E",
+  "aLLzdRHqdKU",
+  "aLppVwVnna8",
+  "aMXEmdJN1co",
+  "aOSQ3qWEgFU",
+  "aP6miWUxJ1U",
+  "aPmQ1tNctjk",
+  "aRACBdwKYEY",
+  "aSJf7DggP8Q",
+  "aVNMuDS-Gag",
+  "aWKHzOy_dcA",
+  "aX4EkEmWTcs",
+  "aXEse9IIjwI",
+  "acR6TmLBE9I",
+  "aeKYpIsP04k",
+  "aejigEdBPnM",
+  "af5bd4Cr_RY",
+  "afQRe0fM_DE",
+  "ahKe1szdtR0",
+  "ahiQIz6nlHw",
+  "anEh4vdvatU",
+  "atH_S-xvfFE",
+  "awz8mqQGyf8",
+  "b-3nHGnoZBY",
+  "b3OGBEOgfVU",
+  "b3gFTkprHpc",
+  "b8bWNknC6ro",
+  "bEH0o8lkQDk",
+  "bEePcboA03g",
+  "bFNXPUPRlIo",
+  "bJtfOjqy07Y",
+  "bMcxdFGArkY",
+  "bNMm0sc4JDs",
+  "bUrhDMK3wag",
+  "bVjWO5sL0GA",
+  "bYr1lpaZ0nk",
+  "bfJwv0w98pQ",
+  "bgx2FW5ZFOU",
+  "bhBs4WsCxM4",
+  "bhyvi-FE8-U",
+  "bjOQdWxBkpE",
+  "blrLKYhIW14",
+  "bpR1W-XiKSo",
+  "bsfuJguCK4Y",
+  "bsxHQ3efdYI",
+  "c0kUI7l9y9s",
+  "c3MmPUSV0Iw",
+  "c5VNsXoELZI",
+  "c8dxKDBc4VE",
+  "cAN13GxVwks",
+  "cBguCpHj6Dg",
+  "cEkgfD5a6ck",
+  "cFzaRQ_4WsY",
+  "cMX86OpJ4CY",
+  "cP8GV5wQMZA",
+  "cPr0hNjvjNA",
+  "cQezeaUN1fE",
+  "cUBKWSiQF-s",
+  "cXt3onnBjoQ",
+  "cZo_OUqQXY8",
+  "cf4_w2mr5ck",
+  "cgNkcrOGZR0",
+  "cnqsCIFJT1Q",
+  "coAm5xiO61E",
+  "cuqN4Fkq8Pw",
+  "d1_QOGYn3pU",
+  "d1oqTZWeZtg",
+  "d2Yk42VQSME",
+  "d6lB0WhzReQ",
+  "d7FpjviFuYE",
+  "dAhxiY2qktE",
+  "dDEQnyFxGQw",
+  "dGUlc9ZIVWk",
+  "dIJvTxZ989c",
+  "dQum_ll_2Ko",
+  "dS8GFAJKUfk",
+  "dX3C3RoeS_w",
+  "dXOzgd1j-qs",
+  "dYx71LTYPlo",
+  "d_tQn0Ldxoo",
+  "da5yeTPOEag",
+  "dgMAD3FwhHQ",
+  "di4JLdhgy3k",
+  "dkmB2Wq_hK4",
+  "dovGIVF3bmE",
+  "dsvvD2eM1-k",
+  "du3PwgeKBRM",
+  "dxUuueHFfFs",
+  "dyt64bfMsJY",
+  "e13sQA7P__g",
+  "e6tdY0Hz2Jw",
+  "eAWakjdqGsc",
+  "eB7mAi69CoM",
+  "eDBQu6315xA",
+  "eDn5iVnSopA",
+  "eER6DrU68ms",
+  "eLVnWGP3KRg",
+  "eM82L0n3Q7A",
+  "eVr3zhjpAi8",
+  "eXXVNGciwso",
+  "ebyub1Czkyo",
+  "eiQM6ZB6Bl8",
+  "enR0ntHVjG8",
+  "eq7Cyw6TOj0",
+  "ez2BdhFsDnE",
+  "f-upZeumV7g",
+  "f2EydPV3oSA",
+  "f46ymbyHJS0",
+  "f7fm2CIBPng",
+  "fALMvy2pMXo",
+  "fBK6H2mWcaI",
+  "fC6tXadEW3o",
+  "fNgVUizcTb4",
+  "fQq0mxOVRWI",
+  "fSW1pjA9W-o",
+  "fT2MVoS2kus",
+  "fTLYfJafToE",
+  "fcbpd2GV7zc",
+  "ffNJO0x7zvM",
+  "fi7gEbv71wE",
+  "fnmn71UpEm0",
+  "fnwqg_csoMo",
+  "fpRG2kwX25U",
+  "fr3PtIuPlQY",
+  "fuXlfgk9XKg",
+  "fwCvJ5SSDqU",
+  "fwX36IZ6kBg",
+  "g-qbVrJr0wY",
+  "g0EHEyvuadg",
+  "g1Uh3S-pPaA",
+  "g1XtqMs4bsw",
+  "g1gWIfVajlM",
+  "g20V4EwLiSk",
+  "g4LrC27zyuY",
+  "g6vEp8IXumM",
+  "g7oevckYWDI",
+  "gIq62zvVs8c",
+  "gJpR6wMzB-A",
+  "gOMcbYRoL9Q",
+  "gP2-fxRCeDE",
+  "gQ26BYYKU-I",
+  "gQBKv3dG02U",
+  "gQo58yV3PS8",
+  "gRG7W1pXKLA",
+  "gUaee8NKnGs",
+  "gUmx_BUSjYw",
+  "gUrHkPzLGeQ",
+  "gYBZ2y4lpPQ",
+  "gZVD-sX57mM",
+  "g_QWxl9ooyc",
+  "g_e-kZpm7dE",
+  "gaRMPe_grgA",
+  "gbjOFua5fDM",
+  "gdOBBi11piI",
+  "gfKIILqArNQ",
+  "ghrPTwVf3Lg",
+  "gkLPfNlyCto",
+  "glbKIk6487Q",
+  "gqz7qhjbyJY",
+  "gsWQs2BumS0",
+  "guTIeGqf0O4",
+  "gvmMqCuySs4",
+  "h0bK-r5ew24",
+  "h16VCEPJ6t0",
+  "h4AL-rnfWJk",
+  "h5rgIprtFsE",
+  "h7AUqyfCXxo",
+  "h80Mu4N6oYI",
+  "h8MR7ugcgiY",
+  "h9JbmPTA8mg",
+  "hLjM5nXtPao",
+  "hRtgRfsBCws",
+  "hUnkpvzUkqo",
+  "hV0qvTv7GBk",
+  "hZre8jBVrFg",
+  "harh9x28svU",
+  "hbYR_RU4QBw",
+  "hf3znh3aWe4",
+  "hfnLOkWvkOM",
+  "hihzNGHzOKY",
+  "hj9UmrIvJM0",
+  "hjsPMDtaZQE",
+  "hk1iEGGUBwc",
+  "hk68OxlAeII",
+  "iCh3mnnJdbc",
+  "iDInc25Irms",
+  "iDV5G0cMIWk",
+  "iFCFwkqjDOc",
+  "iGnwFsXzqe0",
+  "iItvLDvZkqc",
+  "iOBI1bACxDo",
+  "iV1Sl9nQ4ic",
+  "iY-q40Qn5wE",
+  "iYauiAc64Nw",
+  "ibekC88wh_8",
+  "icJcMIv2q50",
+  "if1sf59ivIs",
+  "iiBW9_IWmNs",
+  "ijleBScNchw",
+  "ikBQRU03ON0",
+  "ikOei4Gl3Tw",
+  "ipR0Rn9S_-k",
+  "ixxk4kj-ZWU",
+  "izvWFTeg6sE",
+  "j-jO5-O6oik",
+  "j2g7W93b9bk",
+  "j3vh-uDFrjQ",
+  "j54PaG6dDTc",
+  "j5UCyJGJeFI",
+  "jAFs0BSkDDw",
+  "jFI0nON4QDg",
+  "jIC5sBoHklI",
+  "jND6s5Pb7H8",
+  "jOAOnAirWKI",
+  "jOlGXGY_hPE",
+  "jX-d5gZCG2Q",
+  "jdSZ82QTmJ8",
+  "jfhH9pLbf2o",
+  "jgKgV04rYpQ",
+  "jghodmI6wbQ",
+  "jhbwbntRsFQ",
+  "jkwp0GkUFrw",
+  "jox_MXoOygE",
+  "jvq5jHHa3gg",
+  "jx3BsEVixHk",
+  "jxRm4UtdsNQ",
+  "k7EPqwaoVqA",
+  "k7jTHbUHiZY",
+  "kK1K7F_7TDA",
+  "kLZngl2YnVw",
+  "kLhKF2tj0xk",
+  "kMT44vfse_s",
+  "kMwSXpkB_ss",
+  "kPeGYn_qOcE",
+  "kZx0CGLvCic",
+  "k_g5Wyb57xQ",
+  "kh-bvTN-rcA",
+  "khEg3C9DfIU",
+  "kiUov2R1Tro",
+  "kjdfKOlF69I",
+  "kmPf2mwFK2Y",
+  "kmZSqQVQePQ",
+  "kskBp5dKznc",
+  "kzL8e_7r1SM",
+  "kzUzHYh1SRI",
+  "kzmjbgEh5eQ",
+  "kzzdn2Hvly0",
+  "l-hs3FxrEBc",
+  "l0h22cbQ0Bo",
+  "l2CHth9h79s",
+  "l5eMScTxcBc",
+  "l7-J16e0TMI",
+  "lB9JHRH5Bjc",
+  "lEKwdDwnE90",
+  "lJHQsvKnNbA",
+  "lN11Xwb-bfg",
+  "lNT_GWgpCh0",
+  "lOq1Cjh_kxU",
+  "lRjqlxJw49A",
+  "lTVlPLn5RUo",
+  "lWIi2LxTcsA",
+  "lZgqC9JxXfg",
+  "laL8CPgpdFE",
+  "lc1KTNqYglU",
+  "lcH8bRjMwtg",
+  "ld_WhWfofd0",
+  "ldtUSliHbsI",
+  "le_xbXnTUf0",
+  "lfv-LcRK8Lc",
+  "lfxBtWOFpAE",
+  "lkJJLhwmXuY",
+  "lvHP5_NOjuA",
+  "lwlmhKxPd7Q",
+  "m4LIHI9hQF0",
+  "m8TjfkWamPM",
+  "m8YKj0WoHS0",
+  "mATeu-gE5mI",
+  "mAuvjrs0zgE",
+  "mBvdTAEYytY",
+  "mCRqzl7gY1A",
+  "mEp38vyptvU",
+  "mFeTcZhTW5k",
+  "mZiVF7mepVs",
+  "maJOeakXwS0",
+  "mbr61fNg0cI",
+  "mcDXST1TXpg",
+  "mcHdwajSsrU",
+  "mcjwoqiptoQ",
+  "mgjk24XFHZ0",
+  "miLFeNwQ5n4",
+  "mjqgNBa5gxQ",
+  "mjuEdY76uFg",
+  "mnML0bzHEDw",
+  "mnXTsvt5ZF0",
+  "moF1CwJzyGg",
+  "mooZ0rex4yQ",
+  "n--N8D_4BFg",
+  "n2FxpdfoNWk",
+  "n48h6DLVNn8",
+  "n6DgbEn0Qlk",
+  "n8XxkotWVkY",
+  "nC6xaxZ64c4",
+  "nCKuApJfBZs",
+  "nE8Amhz4zA4",
+  "nFVeGLEWoiY",
+  "nL9Fgrd53js",
+  "nOs2fG_Hc_A",
+  "nSDx3f8xsys",
+  "nUXLjvZo8PM",
+  "nVEgF8_BCho",
+  "nWuEUm2eAe8",
+  "nYlH2vvT8Hg",
+  "nZJWW4mTThM",
+  "n_4TP4UVh-0",
+  "n_5ZyL5CWmk",
+  "nc09LfsCRB8",
+  "neD8XIWZ-dU",
+  "ngaG1UXongA",
+  "nhgmqBMTRh4",
+  "niQ2okXzI8M",
+  "nkhPEbFY5BM",
+  "nklyRGfqHnY",
+  "nnxMczo-_vI",
+  "np7AeR8KH_8",
+  "nuEQFyZARlU",
+  "nuGUMDG4VCA",
+  "nvlROO8c6EQ",
+  "o365UnRLGEs",
+  "o7K8zEIG1go",
+  "oEUxjGuy3Rk",
+  "oJhC8aXsrqY",
+  "oJtgUqbDtkM",
+  "oNYeLCujvh0",
+  "oNufRD0fYzE",
+  "oOB6OHjkToc",
+  "oOgch8gXvDQ",
+  "oP-TREaaBnM",
+  "oPrlTiNl2Ug",
+  "oQQkBdNOROc",
+  "oROtzRSH8m4",
+  "oTgUJzUP27M",
+  "oTzQcjP8wWI",
+  "oWDPxirOPJk",
+  "oWn92QwdcwQ",
+  "oYUo7wiRJDw",
+  "oZXy5at93Ds",
+  "oa9eLSJfEZI",
+  "odl_qyWi6MQ",
+  "oeV_CDIOtpQ",
+  "ofaD3nj42rs",
+  "ojyDUaZtoJ4",
+  "olR_apq5zrQ",
+  "oneY18SStp8",
+  "opHtDVsN6Kc",
+  "otiSPKCfE1U",
+  "owpth1StiKY",
+  "oxVCLdXFvRI",
+  "oyIuysINNRk",
+  "oyWe1jNAr84",
+  "p4nPEpXldAM",
+  "p56jIPalr48",
+  "p5zbOaJ-LWI",
+  "p69y8bTajDs",
+  "p7T0igqE80I",
+  "pCN_eKP7gJM",
+  "pCrA-EfmKWA",
+  "pFLtK18AoTs",
+  "pH1G58bDRoE",
+  "pHBHoXrbXhg",
+  "pNr6xaYpvco",
+  "pOgYkbtXwYE",
+  "pPS5S5TS_rE",
+  "pSnI2YOWejE",
+  "pY0p6vNl0uw",
+  "pcCsXObTTWo",
+  "pfYZKQ69LGs",
+  "pfZNuH7VZ-E",
+  "phRA6tGF598",
+  "phZ_fAGlBVo",
+  "plPaubFo3OA",
+  "plSpV4nesNM",
+  "pniT0plAGN0",
+  "poKbh5H3-jo",
+  "pw3mvvAqI38",
+  "px0rMM4QeKU",
+  "pxFnCQocF4E",
+  "q02-l73GSlA",
+  "q26IJ7WNnxc",
+  "q2qeKok3oas",
+  "q3X1LW2FNwo",
+  "q5fS1ZU4IcA",
+  "q9Qb1G2wDWQ",
+  "qAj9LKlrAHs",
+  "qCkdHnay3I0",
+  "qE0L7427VbU",
+  "qFOJl6GuikA",
+  "qH4osIP1SDo",
+  "qJlz2MQtmMM",
+  "qMSU9dKt7Gg",
+  "qP_jVuPc3QU",
+  "qa7HqxKLGeg",
+  "qaY2nPlNtBk",
+  "qdz6F0169-8",
+  "qejc9ISNMBU",
+  "qfy86Wm1Waw",
+  "qind4CK2QnU",
+  "qj3pa8KwI6k",
+  "qjAdMKt4mts",
+  "qjZiy6FqqyE",
+  "qk4ZtBS9ge4",
+  "qnEKCgVNY2I",
+  "qoHQJnNRHHc",
+  "qqOXqUm1r9E",
+  "qsCadsZ0JLE",
+  "qujS-6E_YYU",
+  "qxE6auUH82g",
+  "qzRMrsO5eSM",
+  "qzk-xTWergM",
+  "r4dpYt-L4T8",
+  "r4oocFg3RPE",
+  "r7AmM0_AmIE",
+  "rD6Yt8aOElk",
+  "rEb9Pk_95_4",
+  "rITwfPywoWg",
+  "rJTUOD-cPaE",
+  "rMrYPQfHieA",
+  "rNdoQPTbQgI",
+  "rS-7atg3zzA",
+  "rS07V_tWYzY",
+  "rY_XisxbUxA",
+  "rb-B8WrWpuc",
+  "rgACBk-4dAs",
+  "rgUQBYOWaOE",
+  "rnm7yXtx6yw",
+  "rp953Id8JJw",
+  "rp_s6bQXGYs",
+  "ru_53S3HbyM",
+  "rwL6OaqEiDw",
+  "rwZGAprxGt4",
+  "rwzCLPwDZNA",
+  "s4H-kqifm9U",
+  "s5XvHjoNJ9U",
+  "s6bRao2oDAA",
+  "sAUyCuRlDeg",
+  "sIo7BXokiuo",
+  "sXCJ0i5JFGY",
+  "sZ0hfLsO4yU",
+  "sZyHXCSpd9U",
+  "s_9ILJERbFs",
+  "sbIJjjfn7e8",
+  "sckkhRaZ-oM",
+  "sd0bx_1tw00",
+  "sfvVkbbZubg",
+  "slD89Q5XJjQ",
+  "smTv5RZVj9w",
+  "spMs5VbXirQ",
+  "spyv1HZDS0U",
+  "sqIbPs1qIGE",
+  "ssmo6QxcAIU",
+  "stIE1fWTGLM",
+  "stPEiiPFbs4",
+  "szIJ-PuzGAM",
+  "t-gSUfH8YJ4",
+  "t0cyByLum8Y",
+  "tCwOIM3lbTQ",
+  "tGqaixsLGt8",
+  "tHGR4zh80Ac",
+  "tIyoZiM3pGw",
+  "tOFFZZWyH2k",
+  "tROEu6ic8MI",
+  "tRuo-oEulns",
+  "tVHhS7qw-D4",
+  "tVXJwANyfV8",
+  "tb2znz0PpPk",
+  "tc62U2mPyOA",
+  "tfoT-8BQp1Y",
+  "tinFcbXBiug",
+  "tjnZ6sBEGZk",
+  "tl4YNFtgfrU",
+  "tm4bLKkzYs8",
+  "tmRC9LunQFQ",
+  "tqUOuk7Cirs",
+  "tsqhaNHqvY0",
+  "tvdKgCU29Xg",
+  "txSRxZyFRi8",
+  "tyeP3nBhcWM",
+  "u1w7OrlnJLY",
+  "u4SFwemsIqY",
+  "u5r62kJIjLg",
+  "uCRIi-Y-TYQ",
+  "uJ8YrdG65Do",
+  "uM4lwGbdnd8",
+  "uMizRWy9ML8",
+  "uMuacYr1lIs",
+  "uPHkaJML-sk",
+  "uRoB_N6Q_Ag",
+  "uSxMYrADMdw",
+  "uVGKrrucJbo",
+  "u_jlX2LwwBA",
+  "ubG_mxfLU7Y",
+  "ueht7DBP5dc",
+  "uj_9tuKJcLk",
+  "ulJuHiPm_fM",
+  "uoqfI1fv7KY",
+  "uqFFtALv1gM",
+  "uuBiB_jzngQ",
+  "uv-5to1FOwY",
+  "uwJASFn98nk",
+  "v-_HCcRkXg4",
+  "v-ye3af6jpw",
+  "v3XPmRIbono",
+  "v6wBxojib3Q",
+  "v8Gu3lrb_SA",
+  "vDyk2BpUJlw",
+  "vE_VmtKgREM",
+  "vFPTgejFwPY",
+  "vHUwi7T7jaw",
+  "vIYmf-QqUlA",
+  "vItUs_pgVS8",
+  "vJbcD02eEV4",
+  "vS_yagozyy4",
+  "vYgxMqL4mcA",
+  "v_44EnyPVMw",
+  "vdcs89rEo8A",
+  "vfkVFX-ET6w",
+  "vhqhibvvosI",
+  "vj0ZYFQjCuQ",
+  "vmQ5w25pYow",
+  "vojdcsMrxYc",
+  "vsPtbjPVLr4",
+  "vt1EOZBrVXU",
+  "vvlR_kdIZ5Y",
+  "vwWBljzMe9Y",
+  "vyR7xqKxagc",
+  "vysbrt3pJoA",
+  "vzT-Z4BMGyc",
+  "w2M3lmQ37Yw",
+  "w4ZPESOD4I8",
+  "w5CYesnej_U",
+  "w7a2wGaez1g",
+  "w8H61CUj7aI",
+  "wBKAmm9LN3E",
+  "wG9eWdUNhe4",
+  "wH1rgtXkjCM",
+  "wIrBcd-LSfA",
+  "wKO46TLTWwI",
+  "wKb8pDrkqHE",
+  "wNuwCBWgJeY",
+  "wTz-sKhpzfs",
+  "wUZAyFpMQxw",
+  "wV4gL0ti6fw",
+  "wV_xG8RUZr0",
+  "wc98oAOaGoQ",
+  "wdveZn3IH-w",
+  "wfd9e5m2j3w",
+  "wlcTogMFZaY",
+  "wrXJ5huTUYs",
+  "wyWamomek4A",
+  "wyeWVmLJEh0",
+  "wzXjiyP2N1U",
+  "x-A0CPIYyEI",
+  "x5BQbcJHiqs",
+  "x6rWHMDhHmw",
+  "x83U8I_CJrs",
+  "x9pntqWLzkA",
+  "xIPFdBxFzPI",
+  "xKiSGnw_nxI",
+  "xKk3nYBlTxA",
+  "xMxXqMpRdW0",
+  "xPYqDqj0O-o",
+  "xQUY1V-OqV4",
+  "xSXXoOxmV58",
+  "xT2pDaZa9JM",
+  "xVHt5uERd0Q",
+  "xWeli0Q1lO0",
+  "xbbjALs6nDA",
+  "xe75EPT6pig",
+  "xh4sO1ICS_Q",
+  "xp4qCc9KVVg",
+  "xrdxmrUUuUw",
+  "xw-R9k0k0Ok",
+  "xxDXmwwgijw",
+  "xyfegCuepMY",
+  "y2OyurbqFrs",
+  "y2oOY5IUksM",
+  "y8wj49-JwXU",
+  "y9NxBkw69LU",
+  "yAISAu893GE",
+  "yB7BmQ92kME",
+  "yB_wLKVdFnY",
+  "yDYVvNMqh_M",
+  "yG7zRx-ZpKg",
+  "yK5wuzf1cqw",
+  "yLW_qst9veM",
+  "yQAoF1vAacE",
+  "yQmQ09Tc1A0",
+  "yUGVbWJpg-A",
+  "yUctGcqm5Ak",
+  "yWKAULgfsKw",
+  "yZ4vO9p_7GQ",
+  "yZOAVtLu2oY",
+  "yh2ipdagHd8",
+  "yjnaUMAPevI",
+  "ylylW--3jFQ",
+  "ypSQzMMarQ4",
+  "ypY_BfYA4Fo",
+  "yqHJ1Be3rwQ",
+  "yqI62vlMSMo",
+  "yrdgbB_dhg0",
+  "ysWHTIeMODY",
+  "yt70ZErBwNQ",
+  "yu3ZudAOcuo",
+  "yvz-hmEgVuY",
+  "ywW7xQPTnyM",
+  "yx2OAOxcSzw",
+  "yxz6jIxpyxg",
+  "z-7b2anNAk8",
+  "z-ntSyAXmTA",
+  "z-qG1e7K-1U",
+  "z25jZizLH-c",
+  "zBdP-mO6Dsc",
+  "zIYFWyfUdwA",
+  "zOCOTY9SW9w",
+  "zUXYompnJeg",
+  "zYjINAihoiM",
+  "zaj_gDNFyfw",
+  "zajkYfAAa38",
+  "zdP4TSYmkUo",
+  "zdrv08xfk6I",
+  "zf9vaqXrYvM",
+  "zv0jtgbtQ28",
+  "zvKabPF6TSg",
+  "zwmiWLebwTo",
+  "zxWtqODsCQs"
+ ],
+ "noteCount": 193,
+ "notes": [
+  {
+   "id": "sl-37",
+   "lineSan": [],
+   "opening": "Nimzo-Indian Defense",
+   "phase": "concept",
+   "explains": "In this game, the speaker felt that their position was better in general and believed they could find a way through the complications. This confidence comes from a solid understanding of the opening and the resulting middlegame structures.",
+   "teaches": "Having a good feel for the position and trusting your preparation can guide you through complex situations. It's important to base your decisions on concrete analysis and positional understanding rather than just following memorized lines.",
+   "plans": "Continue to play according to the demands of the position, using your understanding to navigate the complications and convert the advantage.",
+   "concepts": [
+    "confidence",
+    "positional-understanding",
+    "preparation"
+   ],
+   "sources": [
+    "yt:SJ6cbF-fOD0"
+   ]
+  },
+  {
+   "id": "sl-oh",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this position, the key is to calculate forced wins precisely rather than relying on intuition, as younger players and computers do. The speaker notes that older players may miscalculate and lose, while computers find the quickest path to victory.",
+   "teaches": "When you see a tactical opportunity, calculate the forced sequence to the end before committing. Prefer the most accurate move, even if it is not the easiest to find.",
+   "plans": "",
+   "concepts": [
+    "calculation",
+    "forced-win",
+    "precision"
+   ],
+   "sources": [
+    "yt:1Nt0HVMv3b8"
+   ]
+  },
+  {
+   "id": "sl-op",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The game could have ended with a beautiful mate, but the actual continuation was less spectacular. The lesson is that when you have a winning attack, you should look for the most forcing and elegant finish, but also be practical and take the win if it's there.",
+   "teaches": "In a winning position, always calculate the most precise continuation, but don't miss the simple win if it's available.",
+   "plans": "Black should aim for a decisive finish, either by mate or by winning material, while keeping the attack rolling.",
+   "concepts": [
+    "calculation",
+    "conversion",
+    "mating-patterns"
+   ],
+   "sources": [
+    "yt:56yZ6exdfW0"
+   ]
+  },
+  {
+   "id": "sl-q3",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that the winning player had foreseen the entire sequence before the opponent's blunder, and that the 'only move' was found because of deep calculation.",
+   "teaches": "In critical positions, take time to calculate the most forcing variations to the end. The ability to foresee the opponent's best defense is what separates good players from great ones.",
+   "plans": "",
+   "concepts": [
+    "calculation",
+    "foresight",
+    "only-move"
+   ],
+   "sources": [
+    "yt:aXEse9IIjwI"
+   ]
+  },
+  {
+   "id": "sl-q8",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The lesson emphasizes the value of considering forcing moves in calculation. Even when a forcing move doesn't work, it eliminates a candidate and saves time; when it does work, it leads to a decisive advantage.",
+   "teaches": "In your own games, always look for forcing moves first. They are the building blocks of tactics and help you calculate efficiently, saving time and mental energy.",
+   "plans": "",
+   "concepts": [
+    "calculation",
+    "forcing-moves",
+    "time-management"
+   ],
+   "sources": [
+    "yt:eDBQu6315xA"
+   ]
+  },
+  {
+   "id": "sl-qy",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker missed the opponent's best move in the game, assuming a less challenging reply.",
+   "teaches": "Do not underestimate your opponent's resources; always calculate their most aggressive and forcing options before committing to a plan.",
+   "plans": "",
+   "concepts": [
+    "calculation",
+    "opponent-resources",
+    "assumptions"
+   ],
+   "sources": [
+    "yt:y9NxBkw69LU"
+   ]
+  },
+  {
+   "id": "sl-2x3",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker shares an anecdote of being down material and undeveloped against a lower-rated player, yet still winning through active play and tricks.",
+   "teaches": "Never resign prematurely; even in dire positions, active pieces and tactical ideas can turn the game around.",
+   "plans": "In lost positions, seek out checks, captures, and threats that create chaos and give the opponent chances to err.",
+   "concepts": [
+    "resilience",
+    "tactics",
+    "never-resign"
+   ],
+   "sources": [
+    "yt:C1FTP_2Zd_c"
+   ]
+  },
+  {
+   "id": "sl-2x8",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The position is unclear, but the lesson is about not giving up even when the position looks lost. The player who was once ahead can make mistakes, and the defender can turn the tables.",
+   "teaches": "Never resign prematurely. In chess, the game is not over until it's over. Keep fighting and look for chances to counterattack.",
+   "plans": "Maintain composure and continue to play solid moves, waiting for the opponent to err.",
+   "concepts": [
+    "resilience",
+    "comeback",
+    "psychology",
+    "never-give-up"
+   ],
+   "sources": [
+    "yt:xxDXmwwgijw"
+   ]
+  },
+  {
+   "id": "sl-4re",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "White sacrificed material (the exchange) for compensation. The speaker questions why White gave up material, implying that White must have a concrete plan or compensation for the material deficit.",
+   "teaches": "When you sacrifice material, you must have clear compensation, such as attacking chances, development lead, or positional advantages. Always ask what the compensation is before giving up material.",
+   "plans": "",
+   "concepts": [
+    "sacrifice",
+    "compensation",
+    "initiative"
+   ],
+   "sources": [
+    "yt:2U_1IA432nY"
+   ]
+  },
+  {
+   "id": "sl-75n",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The game illustrates a psychological pattern where a player with a winning position fails to convert against a strong opponent. The mental block leads to hesitation and missed opportunities. The lesson is to stay objective and find the most forcing continuation.",
+   "teaches": "In winning positions, look for the most direct and forcing moves. Don't overcomplicate or allow counterplay. Convert efficiently.",
+   "plans": "When you have a winning advantage, simplify if possible, but always keep the initiative and avoid giving the opponent chances.",
+   "concepts": [
+    "conversion",
+    "psychology",
+    "forcing-moves",
+    "initiative"
+   ],
+   "sources": [
+    "yt:I_nv5oN2XMs"
+   ]
+  },
+  {
+   "id": "sl-772",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that even very strong players (with ratings like 2700-2800) blunder, and that opponents often believe them too much, assuming they haven't made a mistake.",
+   "teaches": "Don't assume your opponent's moves are always correct; always check for tactical opportunities, even against strong players.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "blunder",
+    "opponent-belief"
+   ],
+   "sources": [
+    "yt:-7Tc0oafIi4"
+   ]
+  },
+  {
+   "id": "sl-77j",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker discusses a book about how higher-rated players save worse positions and how lower-rated players can succeed. This is about practical chess psychology and decision-making.",
+   "teaches": "Understanding psychological aspects of chess, such as how to handle being worse or how to convert advantages, is crucial for improvement.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "practical-play",
+    "book"
+   ],
+   "sources": [
+    "yt:6pSZy-zz3B0"
+   ]
+  },
+  {
+   "id": "sl-77p",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "This game is a defining moment in the match; a blunder here changed the course of the match, but even without it, the stronger player would likely still have won, though the match would have been more competitive.",
+   "teaches": "A single blunder can be decisive in a match, but the stronger player often prevails over the long run. Psychological resilience is key to maintaining consistency.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "consistency",
+    "blunder-cost"
+   ],
+   "sources": [
+    "yt:BTFK0TylMn8"
+   ]
+  },
+  {
+   "id": "sl-77x",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker notes that great players often use psychological thinking without heavy calculation. They also mention that chess understanding persists even without frequent play, while calculation sharpness may fade.",
+   "teaches": "In chess, psychological considerations and strategic understanding are important and can be maintained even with limited practice. Calculation is a skill that needs regular exercise, but understanding of positions is more durable.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "understanding-vs-calculation",
+    "practice"
+   ],
+   "sources": [
+    "yt:EUJN0cE5dY8"
+   ]
+  },
+  {
+   "id": "sl-77z",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker, a lower-rated player, defeated a titled player by playing a new opening and maintaining a strong attack. The opponent, despite having a higher rating and title, made mistakes and lost.",
+   "teaches": "Do not be intimidated by higher-rated or titled opponents. They are not entitled to win; you can beat them by playing solidly and taking advantage of their mistakes.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "underdog",
+    "confidence",
+    "no-fear"
+   ],
+   "sources": [
+    "yt:FBKAIcqdF9U"
+   ]
+  },
+  {
+   "id": "sl-788",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker discusses excuses often given for losses in chess, such as illness or not playing well, and notes that both players had their own excuses for their respective losses.",
+   "teaches": "In chess, it's common to rationalize losses with external factors, but the actual strength and preparation matter most.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "excuses",
+    "sportsmanship"
+   ],
+   "sources": [
+    "yt:IeeXKlAHhjk"
+   ]
+  },
+  {
+   "id": "sl-78c",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this excerpt, the speaker shares a psychological trick: treating a strong opponent as if they were a weaker, familiar player to boost confidence. This is a mental strategy rather than a concrete chess move.",
+   "teaches": "Psychological framing can influence performance; visualizing a less intimidating opponent can reduce anxiety and improve play.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "confidence",
+    "mindset"
+   ],
+   "sources": [
+    "yt:KlbzMTpnBc4"
+   ]
+  },
+  {
+   "id": "sl-78t",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker discusses a player's tendency to draw games, especially against higher-rated opponents, and contrasts it with a tournament where the player had no draws in the first five games, showing a change in attitude.",
+   "teaches": "A player's approach to the game can change with coaching and mindset. Playing for a win, even with black, can lead to more decisive results.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "fighting-chess",
+    "tournament-strategy"
+   ],
+   "sources": [
+    "yt:WFmnZ0ngVis"
+   ]
+  },
+  {
+   "id": "sl-78u",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker chose a risky move to create imbalance because they felt they had nothing to lose against a stronger opponent, but this was not the best chess decision. Psychologically it was understandable, but chess-wise it was unsound.",
+   "teaches": "Do not let the opponent's strength or your own tournament situation dictate your moves. Always choose the objectively best move, regardless of external factors.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "objectivity",
+    "decision making"
+   ],
+   "sources": [
+    "yt:XCMtzkHGrmY"
+   ]
+  },
+  {
+   "id": "sl-79a",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that lower-rated players tend to be more dogmatic, repeating the same ideas without adapting. This is a general observation about learning and improvement in chess.",
+   "teaches": "Avoid being dogmatic. Expand your knowledge and be flexible in your thinking. Repeating the same ideas without understanding the nuances can hinder progress.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "learning",
+    "flexibility"
+   ],
+   "sources": [
+    "yt:cBguCpHj6Dg"
+   ]
+  },
+  {
+   "id": "sl-79f",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker emphasizes that dynamic chess requires psychological pressure and understanding, not just long-term maneuvering.",
+   "teaches": "Chess psychology involves putting pressure on the opponent and making them uncomfortable, using tactical and dynamic play to win.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "dynamic-play",
+    "pressure"
+   ],
+   "sources": [
+    "yt:gZVD-sX57mM"
+   ]
+  },
+  {
+   "id": "sl-79n",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "In this position, the defender is likely worse and should aim for a draw. The speaker emphasizes that it is important to set expectations based on the position, not on the opponent or personal preferences.",
+   "teaches": "Always choose the move that the position demands, not the move you wish you could play. Prioritize the objective needs of the position over psychological factors like who you are playing or how you want to win.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "objective-play",
+    "expectation-management"
+   ],
+   "sources": [
+    "yt:mjuEdY76uFg"
+   ]
+  },
+  {
+   "id": "sl-79r",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on emotional swings in tournament play: after a tough loss, overconfidence led to another loss, then a winning streak, then a collapse. This illustrates the psychological challenges of maintaining equilibrium.",
+   "teaches": "Emotional stability is key in chess; don't let one result dictate your next performance. Treat each game independently, regardless of opponent rating or recent results.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "tilt",
+    "consistency",
+    "tournament-play"
+   ],
+   "sources": [
+    "yt:rJTUOD-cPaE"
+   ]
+  },
+  {
+   "id": "sl-79w",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker discusses a psychological phenomenon where even top players like Karpov can completely miss a simple tactical idea, not just underestimate it. This is illustrated by a famous game where a player overlooked a straightforward winning move.",
+   "teaches": "In chess, you must always consider your opponent's possible replies, even if they seem unlikely. The best players are those who never assume their opponent will miss a move.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "blunder",
+    "opponent-resources",
+    "elite-play"
+   ],
+   "sources": [
+    "yt:sIo7BXokiuo"
+   ]
+  },
+  {
+   "id": "sl-79z",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The excerpt discusses the psychological tendency to settle for a draw when playing a higher-rated opponent. The speaker notes that this is a common syndrome and that players should always aim to win, drawing only if winning is impossible.",
+   "teaches": "In any position, you should play for a win, not settle for a draw prematurely. This mindset is especially important when facing stronger opponents, as it can lead to better results overall.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "playing-for-a-win",
+    "mindset"
+   ],
+   "sources": [
+    "yt:sXCJ0i5JFGY"
+   ]
+  },
+  {
+   "id": "sl-7a7",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker made a deliberate choice to allow the opponent a chance, acknowledging that giving opportunities can be part of the game, especially when facing lower-rated players.",
+   "teaches": "In chess, you should not always strive for the most accurate move; sometimes you can allow the opponent a chance, but you must be ready to punish mistakes.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "practical play",
+    "risk management"
+   ],
+   "sources": [
+    "yt:wV_xG8RUZr0"
+   ]
+  },
+  {
+   "id": "sl-7ad",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker emphasizes the importance of playing true to your own style and principles, even against strong opponents. In this game, the young player chose a complex line that suited his strengths, rather than avoiding it due to the opponent's preparation or rating.",
+   "teaches": "In your own games, trust your preparation and play the moves you believe in, not just what you think your opponent expects. Being true to your style can lead to better results and more enjoyable chess.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "style",
+    "preparation",
+    "confidence"
+   ],
+   "sources": [
+    "yt:zdrv08xfk6I"
+   ]
+  },
+  {
+   "id": "sl-7g3",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on using computer evaluation to guide understanding: seeing a high evaluation like +3 can indicate that a previous move was a mistake, even if you cannot immediately see why. This helps identify missed opportunities.",
+   "teaches": "Use engine evaluations as a signal to re-examine your play. If the evaluation jumps significantly, look for the tactical resource you missed, rather than dismissing it.",
+   "plans": "After a game, when the engine indicates a missed advantage, analyze the position to find the concrete line that would have improved your play.",
+   "concepts": [
+    "engine evaluation",
+    "self-analysis",
+    "missed tactics"
+   ],
+   "sources": [
+    "yt:-7Tc0oafIi4"
+   ]
+  },
+  {
+   "id": "sl-7v1",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker recalls a pattern of losing games but noticing gradual improvement: losses took longer and required better play from opponents. This indicates progress even in defeat.",
+   "teaches": "Improvement in chess is not measured only by wins; the length and quality of resistance in losses can show growing understanding and skill.",
+   "plans": "",
+   "concepts": [
+    "improvement",
+    "learning-from-losses",
+    "progression"
+   ],
+   "sources": [
+    "yt:rgUQBYOWaOE"
+   ]
+  },
+  {
+   "id": "sl-820",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "Both sides have developed optimally and no immediate plan is obvious. The speaker jokingly considers a draw because further progress is unclear and mistakes are likely.",
+   "teaches": "When all pieces are on their best squares, look for a way to improve the position or create a plan; if none exists, avoid forcing moves that create weaknesses.",
+   "plans": "Find a way to improve the position or create a plan; if none exists, avoid forcing moves that create weaknesses.",
+   "concepts": [
+    "planning",
+    "prophylaxis",
+    "piece-placement"
+   ],
+   "sources": [
+    "yt:ofaD3nj42rs"
+   ]
+  },
+  {
+   "id": "sl-8a1",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "When facing an opening that causes trouble, the speaker digs deep into the variations to understand the position and find a way to handle it.",
+   "teaches": "Treat difficult openings as challenges to be solved through deep analysis, not as obstacles to fear.",
+   "plans": "",
+   "concepts": [
+    "opening-preparation",
+    "analysis",
+    "challenge-mindset"
+   ],
+   "sources": [
+    "yt:-WEFr1dwqys"
+   ]
+  },
+  {
+   "id": "sl-8a2",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The Benoni is an opening that can produce exciting games, but it also has many theoretical lines. The speaker notes that even if a line is not 'killer', it can still be playable and lead to interesting positions. The example of a game where a player easily beat a strong opponent in the same line shows that practical results matter.",
+   "teaches": "In opening preparation, it's important to find lines that are not only theoretically sound but also practical and suited to your style. Even if a line is not objectively better, it can be effective if you understand the plans and your opponent does not.",
+   "plans": "",
+   "concepts": [
+    "opening-preparation",
+    "practical-chess",
+    "benoni-defense"
+   ],
+   "sources": [
+    "yt:0AiDSTCxGnw"
+   ]
+  },
+  {
+   "id": "sl-8a4",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker mentions that sometimes a player like Browne would play 20-25 moves of theory in a Najdorf, and sometimes he would play something he wanted to play on move six or seven, getting the opponent out of their game and beating them that way. This shows a flexible approach to opening preparation.",
+   "teaches": "It's valuable to have both deep theoretical knowledge and the ability to deviate early to take the opponent out of their preparation. Surprising your opponent can be a practical weapon.",
+   "plans": "If you are an aggressive player, consider mixing well-prepared lines with early deviations to keep opponents off balance.",
+   "concepts": [
+    "opening-preparation",
+    "surprise",
+    "practical-play"
+   ],
+   "sources": [
+    "yt:1drGZPL6Teg"
+   ]
+  },
+  {
+   "id": "sl-8ad",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker felt weak against the French, Caro-Kann, and Sicilian Dragon, lacking a single reliable line and needing to patch together variations. This motivated a deep study of a complete opening repertoire.",
+   "teaches": "A solid opening repertoire should give you a clear, consistent plan against each major defense, rather than a patchwork of unrelated lines.",
+   "plans": "Study a complete opening system (e.g., from a reputable series) to build a coherent repertoire against your problem openings.",
+   "concepts": [
+    "opening-preparation",
+    "repertoire-building",
+    "consistency"
+   ],
+   "sources": [
+    "yt:FBKAIcqdF9U"
+   ]
+  },
+  {
+   "id": "sl-8au",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "This game illustrates how a GM can lose in 14 moves as White due to poor opening choices and failure to address threats. The lesson is that knowing opening preparation and recognizing tactical motifs can prevent such disasters.",
+   "teaches": "Opening preparation is crucial. Understanding the typical threats and plans in your chosen lines helps you avoid falling into dangerous positions early on.",
+   "plans": "",
+   "concepts": [
+    "opening-preparation",
+    "tactics",
+    "avoid-blunders"
+   ],
+   "sources": [
+    "yt:rnm7yXtx6yw"
+   ]
+  },
+  {
+   "id": "sl-8aw",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker emphasizes the importance of deep opening preparation, especially when you know your opponent. They mention a book by a grandmaster that covers the French, Caro-Kann, and Philidor, which helped them improve their score against these openings.",
+   "teaches": "Investing time in studying specific openings in depth, using quality resources, can significantly improve your results. Even strong players can benefit from well-written opening books that explain ideas rather than just moves.",
+   "plans": "If you face the French, Caro-Kann, or Philidor, consider studying a comprehensive book on these openings to build a solid repertoire and understand typical plans.",
+   "concepts": [
+    "opening-preparation",
+    "study-resources",
+    "repertoire"
+   ],
+   "sources": [
+    "yt:vvlR_kdIZ5Y"
+   ]
+  },
+  {
+   "id": "sl-8i1",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The lesson emphasizes that in any chess position, you should constantly evaluate which pieces are defended and which are not. Taking an undefended piece is often decisive, while taking a defended piece just allows a recapture.",
+   "teaches": "Before every move, ask yourself: 'What is undefended on the board?' Target those weaknesses. This habit helps you spot tactics and create threats that the opponent cannot easily meet.",
+   "plans": "",
+   "concepts": [
+    "piece-activity",
+    "defense",
+    "tactical-awareness"
+   ],
+   "sources": [
+    "yt:4fxQL5evIfg"
+   ]
+  },
+  {
+   "id": "sl-8i3",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker emphasizes the importance of asking your pieces what they are doing: whether they are protected, what their job is, and what they think their job is. This helps understand the position deeply and find the best moves.",
+   "teaches": "A powerful self-check: for each piece, ask what it is doing, what it protects, and what its role is. This clarifies the position and reveals hidden resources.",
+   "plans": "",
+   "concepts": [
+    "piece-activity",
+    "self-improvement",
+    "positional-understanding"
+   ],
+   "sources": [
+    "yt:7ynJj21O1tA"
+   ]
+  },
+  {
+   "id": "sl-8lj",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The excerpt also touches on the idea that studying great players' games can directly influence your own play. The speaker mentions a personal game where a concept from a Karpov game was applied.",
+   "teaches": "Learning from classic games is not just about memorizing moves but about understanding the underlying strategic ideas that can be transferred to your own games.",
+   "plans": "When studying master games, focus on the key ideas and try to apply them in your own practice.",
+   "concepts": [
+    "study-master-games",
+    "transferable-ideas"
+   ],
+   "sources": [
+    "yt:sIo7BXokiuo"
+   ]
+  },
+  {
+   "id": "sl-9d8",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Playing interesting chess is difficult; when it works it's great, but when it fails it's not. The speaker admires players who take risks to create memorable games, even if they sometimes lose.",
+   "teaches": "Strive to play interesting, creative chess, but accept that it carries risk. Memorable games often come from bold choices, not safe draws.",
+   "plans": "",
+   "concepts": [
+    "creativity",
+    "risk-taking",
+    "memorable-games"
+   ],
+   "sources": [
+    "yt:1bjNwYJxpS0"
+   ]
+  },
+  {
+   "id": "sl-9zn",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "In a Sicilian Defense, Black (the speaker) has a favorite setup. The opponent is a low-rated beginner, and the game is a lesson in punishing mistakes. The key is to play soundly and exploit the opponent's lack of piece protection.",
+   "teaches": "Against weaker opponents, focus on developing pieces, controlling the center, and avoiding blunders. Your opponent will make mistakes; be ready to capitalize on them.",
+   "plans": "Play solid opening moves, develop pieces, and wait for the opponent to make an error, then punish it.",
+   "concepts": [
+    "sicilian",
+    "beginner-opponent",
+    "punish-mistakes",
+    "solid-play"
+   ],
+   "sources": [
+    "yt:O-2bjIU6uvc"
+   ]
+  },
+  {
+   "id": "sl-a64",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The 1972 Fischer–Spassky match brought chess to the front pages and inspired a generation, including the speaker, to take up the game. Fischer's subsequent 20-year absence created a vacuum in the chess world, making his return in 1992 all the more remarkable.",
+   "teaches": "Chess history and the cultural impact of top-level matches can motivate players and shape the popularity of the game.",
+   "plans": "",
+   "concepts": [
+    "chess-history",
+    "inspiration",
+    "cultural-impact"
+   ],
+   "sources": [
+    "yt:3WVT4-X30j4"
+   ]
+  },
+  {
+   "id": "sl-a66",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The excerpt discusses the cultural impact of a film about Fischer, noting that the movie took dramatic liberties with the actual game. The speaker emphasizes the importance of authenticity in chess depictions.",
+   "teaches": "Chess teachers should prioritize factual accuracy when presenting historical games, as dramatic license can mislead audiences about what actually happened.",
+   "plans": "",
+   "concepts": [
+    "chess-history",
+    "media-accuracy"
+   ],
+   "sources": [
+    "yt:BnPeGmtjkNo"
+   ]
+  },
+  {
+   "id": "sl-a6c",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker recommends the book on the Zurich 1953 Candidates Tournament, noting that it is a classic and that reading it with commentary is valuable.",
+   "teaches": "Studying classic tournaments and games with good commentary helps build a foundation in chess history and improves understanding of high-level play.",
+   "plans": "",
+   "concepts": [
+    "chess-history",
+    "classical-games",
+    "study-recommendation"
+   ],
+   "sources": [
+    "yt:qzk-xTWergM"
+   ]
+  },
+  {
+   "id": "sl-a83",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker emphasizes that strong players often see deep tactical sequences well in advance. In this game, the winning player had calculated a long forcing line before committing to the initial sacrifice.",
+   "teaches": "Tactical vision is a skill that can be developed through extensive practice. Solving tactical puzzles regularly improves your ability to spot combinations in your own games.",
+   "plans": "",
+   "concepts": [
+    "tactics",
+    "calculation",
+    "pattern-recognition"
+   ],
+   "sources": [
+    "yt:aXEse9IIjwI"
+   ]
+  },
+  {
+   "id": "sl-a8n",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker notes that a certain move was not dangerous, indicating that the opponent had resources to equalize or counter.",
+   "teaches": "Always check for tactical resources before assuming a move is strong; look for counterplay.",
+   "plans": "",
+   "concepts": [
+    "tactics",
+    "counterplay"
+   ],
+   "sources": [
+    "yt:spMs5VbXirQ"
+   ]
+  },
+  {
+   "id": "sl-a8r",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that such sacrificial attacks are often seen in tactical puzzles, but it's rare to see them in actual grandmaster games. This game was special because it happened in a real, high-level game.",
+   "teaches": "Tactical patterns from puzzles can occur in real games. Studying puzzles helps you recognize these patterns and have the courage to execute them when the opportunity arises.",
+   "plans": "Practice tactical puzzles to internalize patterns of sacrifice and mating attacks, so you can spot them in your own games.",
+   "concepts": [
+    "tactics",
+    "puzzles",
+    "pattern-recognition",
+    "courage"
+   ],
+   "sources": [
+    "yt:w7a2wGaez1g"
+   ]
+  },
+  {
+   "id": "sl-aaf",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that when a stronger player beats a weaker one, the position is often equal, and the weaker player blunders once or twice. The stronger player then capitalizes on the blunder.",
+   "teaches": "In chess, consistency and avoiding blunders are more important than trying to gain an opening advantage. When your opponent blunders, be alert and punish it.",
+   "plans": "",
+   "concepts": [
+    "blunders",
+    "consistency",
+    "punishment"
+   ],
+   "sources": [
+    "yt:-wREyJKttqQ"
+   ]
+  },
+  {
+   "id": "sl-aan",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "In unfamiliar openings, the speaker emphasizes recognizing patterns from previous games and applying similar ideas, while also making natural developing moves that fight for space and initiative.",
+   "teaches": "When facing an unknown position, try to relate it to similar positions you know and look for natural moves that develop and create threats, rather than being passive.",
+   "plans": "",
+   "concepts": [
+    "pattern-recognition",
+    "unknown-positions",
+    "natural-moves"
+   ],
+   "sources": [
+    "yt:IbKs54c7gfs"
+   ]
+  },
+  {
+   "id": "sl-aax",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker learned chess patterns by losing to them and by keeping a scrapbook of inspiring combinations, such as smothered mates and double checks. This helped manage the vast number of possible moves by focusing on recurring patterns.",
+   "teaches": "To improve, collect and study key patterns and combinations in a personal notebook, as they serve as mental shortcuts in complex positions.",
+   "plans": "When encountering a brilliant tactical idea, record it in a scrapbook and review it regularly to internalize the pattern.",
+   "concepts": [
+    "pattern-recognition",
+    "study-methods",
+    "tactics"
+   ],
+   "sources": [
+    "yt:rgUQBYOWaOE"
+   ]
+  },
+  {
+   "id": "sl-adb",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The game ended with Black resigning, a common outcome when the position is hopeless. The lesson emphasizes the importance of not trading pieces when you are ahead, as it simplifies the position and reduces the opponent's chances of counterplay.",
+   "teaches": "When you have a material advantage, avoid unnecessary trades that simplify the position and make it easier for the opponent to defend.",
+   "plans": "Maintain the advantage and convert it into a win.",
+   "concepts": [
+    "material-advantage",
+    "simplification",
+    "conversion"
+   ],
+   "sources": [
+    "yt:AS-BP8YbIAo"
+   ]
+  },
+  {
+   "id": "sl-apz",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this middlegame, the key is to anticipate the opponent's plans and find moves that prevent them, rather than just reacting. The speaker emphasizes thinking about what the opponent wants to do and stopping it.",
+   "teaches": "Always ask: what is my opponent's threat or plan, and how can I address it before it becomes critical? This proactive mindset is a core middlegame skill.",
+   "plans": "",
+   "concepts": [
+    "prophylaxis",
+    "middlegame-planning"
+   ],
+   "sources": [
+    "yt:2ae7mw0Tjjw"
+   ]
+  },
+  {
+   "id": "sl-cdq",
+   "lineSan": [],
+   "phase": "opening",
+   "explains": "This opening line, played by a top grandmaster as Black, shows that even 'second-class' openings can be viable at the highest level if they are well-prepared. The speaker notes that many players choose this line but that it requires deep preparation rather than improvisation.",
+   "teaches": "Opening preparation is crucial; you should know your lines thoroughly rather than trying to figure them out over the board. Treat it like studying for an exam where you know the topics.",
+   "plans": "",
+   "concepts": [
+    "opening-preparation",
+    "surprise-weapon",
+    "high-level-chess"
+   ],
+   "sources": [
+    "yt:iItvLDvZkqc"
+   ]
+  },
+  {
+   "id": "sl-cdr",
+   "lineSan": [],
+   "phase": "opening",
+   "explains": "Against very strong grandmasters (2700+), trying to out-prepare them in the opening is futile—they know the theory better. The speaker notes that against such players, you cannot 'bust' them in the opening, so you must rely on general chess principles.",
+   "teaches": "Do not rely on opening tricks against elite opponents; instead, aim for sound development and a playable middlegame. The opening is not the place to force an advantage against a stronger player.",
+   "plans": "",
+   "concepts": [
+    "opening-preparation",
+    "respecting-opponent",
+    "sound-development"
+   ],
+   "sources": [
+    "yt:iItvLDvZkqc"
+   ]
+  },
+  {
+   "id": "sl-cld",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker emphasizes that knowing your openings deeply is valuable, even if you don't memorize as much as they did. They compare it to being lucky on an exam because you studied the right material.",
+   "teaches": "Thorough opening preparation can lead to lucky outcomes in games, but even partial knowledge is beneficial. You should always strive to know your openings well.",
+   "plans": "Continue studying your openings, focusing on understanding the ideas behind the moves, not just memorizing sequences.",
+   "concepts": [
+    "preparation",
+    "luck",
+    "knowledge"
+   ],
+   "sources": [
+    "yt:FBKAIcqdF9U"
+   ]
+  },
+  {
+   "id": "sl-cp1",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker used a painful loss to motivate learning the same opening from the other side, which is a practical way to understand the positional ideas and typical plans.",
+   "teaches": "If you struggle to understand an opening from one side, try playing it from the other side to see how opponents handle it and what weaknesses they expose.",
+   "plans": "By playing the opening with black, the speaker gained insight into the plans and eventually found success, which helped him understand the opening better.",
+   "concepts": [
+    "opening-study",
+    "learning-method",
+    "repertoire"
+   ],
+   "sources": [
+    "yt:U15QgTKHMJ8"
+   ]
+  },
+  {
+   "id": "sl-cp2",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on how opening study was overemphasized in the computer age, and how it can be a disservice if not integrated with overall chess understanding.",
+   "teaches": "Study openings as part of a holistic chess education, not as an end in itself. Understanding principles and middlegame ideas is more important than memorizing lines.",
+   "plans": "",
+   "concepts": [
+    "opening-study",
+    "chess-education",
+    "principles-over-memorization"
+   ],
+   "sources": [
+    "yt:U15QgTKHMJ8"
+   ]
+  },
+  {
+   "id": "sl-cph",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In the match context, the first game was fine for Anand, but the third game was horrible for him, and the speaker felt the match was effectively over after that. Today's game was a miracle that he didn't lose, but he seems unlikely to win a game.",
+   "teaches": "In a match, psychological momentum and missed opportunities can be decisive. A player who fails to convert a favorable position may lose confidence and struggle to win subsequent games.",
+   "plans": "",
+   "concepts": [
+    "match-psychology",
+    "momentum",
+    "missed-opportunities"
+   ],
+   "sources": [
+    "yt:0LGy324E1Y8"
+   ]
+  },
+  {
+   "id": "sl-cpu",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on a player's chances in a match, noting that past successes in rapid tiebreaks may not apply to the current opponent, who is strong in rapid.",
+   "teaches": "In match preparation, consider your opponent's strengths in all time controls; don't rely on a tiebreak advantage if the opponent is equally or more skilled there.",
+   "plans": "If you cannot outplay the opponent in standard games, you may need to take risks earlier rather than hoping for a rapid rescue.",
+   "concepts": [
+    "match-preparation",
+    "opponent-scouting",
+    "tiebreak-awareness"
+   ],
+   "sources": [
+    "yt:0LGy324E1Y8"
+   ]
+  },
+  {
+   "id": "sl-cq3",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In the 1960 World Championship match, Tal won convincingly with a large score margin, but the rematch went the other way. The speaker notes that both players were of similar strength, and that results can swing dramatically between matches.",
+   "teaches": "Match results between top players can be lopsided even when the players are close in strength; one player's style or form can dominate in a given series.",
+   "plans": "",
+   "concepts": [
+    "match-play",
+    "psychological-factors",
+    "form"
+   ],
+   "sources": [
+    "yt:IeeXKlAHhjk"
+   ]
+  },
+  {
+   "id": "sl-d4m",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "Tal's games are full of sacrifices and complications, but modern play is more accurate and less risky. The lesson is that sometimes you must take risks and create messes to win, even if the engine doesn't approve.",
+   "teaches": "Develop a 'killer instinct' and be willing to sacrifice material for long-term compensation, even if there is no immediate mate.",
+   "plans": "",
+   "concepts": [
+    "sacrifice",
+    "risk-taking",
+    "killer-instinct"
+   ],
+   "sources": [
+    "yt:OYl_c2mLBMw"
+   ]
+  },
+  {
+   "id": "sl-d4r",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "This game is a classic example of a brilliancy where Black sacrifices material for a sustained attack, but White defends accurately by returning material and eventually wins. The lesson is that even a winning attack can be neutralized if the defender is willing to give back material.",
+   "teaches": "When facing a fierce attack, do not be greedy with material; returning some of it can defuse the attack and leave you with a technically winning position.",
+   "plans": "",
+   "concepts": [
+    "sacrifice",
+    "attack-and-defense",
+    "material-return",
+    "famous-game"
+   ],
+   "sources": [
+    "yt:aRACBdwKYEY"
+   ]
+  },
+  {
+   "id": "sl-d56",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Black sacrificed material for an attack but failed to prove compensation. The lesson from historical games is that sacrifices must be calculated accurately.",
+   "teaches": "If you sacrifice material, you must have a forced win, a lasting attack, or a way to regain the material. Otherwise, you'll simply be down material.",
+   "plans": "",
+   "concepts": [
+    "sacrifice",
+    "compensation",
+    "calculation"
+   ],
+   "sources": [
+    "yt:xWeli0Q1lO0"
+   ]
+  },
+  {
+   "id": "sl-d6c",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The lesson emphasizes that studying master games with a teacher helps you understand ideas you might miss on your own. After the game, you can review key moments to learn what worked and what didn't.",
+   "teaches": "Reviewing master games with hindsight is a powerful learning tool. Focus on the opening as theory, but in the middlegame, look for the underlying ideas and plans.",
+   "plans": "Go back through the game and identify critical decisions, asking how to apply those lessons to your own play.",
+   "concepts": [
+    "study-method",
+    "master-games",
+    "review",
+    "learning-chess"
+   ],
+   "sources": [
+    "yt:X4kI9cOuc4o"
+   ]
+  },
+  {
+   "id": "sl-d6e",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker emphasizes that studying games with a computer alone teaches little; instead, one should first analyze with one's own eyes to see what one would see during a game, then check with the computer. This helps understand how the position works and what led to mistakes.",
+   "teaches": "To learn from games, analyze them yourself first, forming your own ideas and plans, then use the computer to verify and correct. This deepens understanding of the position's dynamics.",
+   "plans": "When reviewing games, try to find the key ideas and candidate moves on your own before consulting the engine.",
+   "concepts": [
+    "study-method",
+    "analysis",
+    "learning",
+    "computer-check"
+   ],
+   "sources": [
+    "yt:nVEgF8_BCho"
+   ]
+  },
+  {
+   "id": "sl-d6p",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker discusses the value of analyzing tactical variations even if they don't work immediately. They give an example where a tactic fails, but later, due to a small change in the opponent's move, the same tactic becomes winning. This shows that time spent on analysis is not wasted.",
+   "teaches": "Always look for tactics, even if they seem to fail. The same tactical motif may reappear later with a small difference that makes it work. Analyzing variations can save time in the future.",
+   "plans": "",
+   "concepts": [
+    "tactical-awareness",
+    "calculation",
+    "time-management",
+    "pattern-recognition"
+   ],
+   "sources": [
+    "yt:le_xbXnTUf0"
+   ]
+  },
+  {
+   "id": "sl-d9g",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In a game, a player may resign when they see an unavoidable mate, but the lesson is that you should never give up prematurely. Even if the opponent thinks they have a mate, there might be a resource.",
+   "teaches": "Never resign early; always look for counterplay or a saving resource. The game is not over until it is over.",
+   "plans": "",
+   "concepts": [
+    "resignation",
+    "psychology",
+    "persistence"
+   ],
+   "sources": [
+    "yt:4NXJQo0iBcs"
+   ]
+  },
+  {
+   "id": "sl-d9i",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this excerpt, the speaker discusses a game where Black is in a very bad position and eventually resigns. The key point is that Black's position is so compromised that even a strong player like the opponent cannot save it.",
+   "teaches": "Recognize when a position is strategically lost and consider resigning to save energy, especially in high-level play.",
+   "plans": "",
+   "concepts": [
+    "resignation",
+    "strategic evaluation"
+   ],
+   "sources": [
+    "yt:9yuhDu27EnQ"
+   ]
+  },
+  {
+   "id": "sl-d9v",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The player resigned in a lost position, but the lesson emphasizes that resigning is often premature, especially for beginners. The anecdote about Gerald Ford is used to illustrate that even presidents resign, but in chess, you should fight on.",
+   "teaches": "Never resign too early in chess; you always have chances, especially against weaker opponents. Fight until the end.",
+   "plans": "",
+   "concepts": [
+    "resignation",
+    "fighting-spirit",
+    "psychology"
+   ],
+   "sources": [
+    "yt:JXdgPzHeMVU"
+   ]
+  },
+  {
+   "id": "sl-da0",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker mentions that in the old days, players did not resign and often got checkmated. This is a historical note about how the game was played.",
+   "teaches": "Resignation is a matter of style and era; in modern chess, it's common to resign in lost positions, but playing on can lead to swindles.",
+   "plans": "",
+   "concepts": [
+    "resignation",
+    "chess-history"
+   ],
+   "sources": [
+    "yt:bhyvi-FE8-U"
+   ]
+  },
+  {
+   "id": "sl-dbe",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker prefers to avoid deep calculation battles, especially when not in peak tactical sharpness, and instead rely on strategic plans and intuition.",
+   "teaches": "Choosing a strategic approach over heavy calculation can be a practical decision, especially when you are not as sharp tactically as your opponents.",
+   "plans": "",
+   "concepts": [
+    "practical-play",
+    "strategic-planning",
+    "time-management"
+   ],
+   "sources": [
+    "yt:YsHpAxSovJ4"
+   ]
+  },
+  {
+   "id": "sl-dbj",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker prefers retreating moves that keep the position safe, even if they are not the most aggressive or computer-recommended options.",
+   "teaches": "Sometimes the best practical move is a retreat that maintains a solid position, especially if you are not confident in complex tactics.",
+   "plans": "",
+   "concepts": [
+    "practical-play",
+    "retreat",
+    "safety"
+   ],
+   "sources": [
+    "yt:du3PwgeKBRM"
+   ]
+  },
+  {
+   "id": "sl-dbl",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on how a game can be won quickly after the opponent makes a mistake, even if the winning line was missed earlier. The engine might show a draw, but practical play can still yield a win.",
+   "teaches": "In practical chess, you don't always need to find the absolute best move; you just need to avoid blunders and capitalize on your opponent's errors. Even if a position is theoretically drawn, the defender can go wrong.",
+   "plans": "Keep playing solid moves and put pressure on your opponent, as they may make a mistake that turns a draw into a win.",
+   "concepts": [
+    "practical-play",
+    "opponent-mistakes",
+    "psychology"
+   ],
+   "sources": [
+    "yt:hLjM5nXtPao"
+   ]
+  },
+  {
+   "id": "sl-dir",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "The game between Nakamura and So featured a Grünfeld Defense. The speaker notes that Nakamura has historically struggled against the Grünfeld, citing losses in a previous tournament.",
+   "teaches": "Players may have specific openings that give them trouble; recognizing and preparing against them is crucial.",
+   "plans": "",
+   "concepts": [
+    "grunfeld-defense",
+    "opening-preparation",
+    "historical-patterns"
+   ],
+   "sources": [
+    "yt:tm4bLKkzYs8"
+   ]
+  },
+  {
+   "id": "sl-dx8",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The theme of the lesson is overworked pieces: a piece that has multiple defensive duties can be overloaded, and attacking it can force it to abandon one of its tasks.",
+   "teaches": "Identify pieces that defend more than one important square or piece; by attacking one of their responsibilities, you can make them overworked and unable to fulfill all duties.",
+   "plans": "Look for opportunities to create double attacks or threats that exploit an overworked defender.",
+   "concepts": [
+    "overworked-piece",
+    "double-attack",
+    "defense"
+   ],
+   "sources": [
+    "yt:lwlmhKxPd7Q"
+   ]
+  },
+  {
+   "id": "sl-ebk",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker admires the fighting attitude of top players who never agree to draws easily, even with a tiny advantage. This persistence is a key part of their success.",
+   "teaches": "In chess, attitude matters. Playing for a win from a small advantage, even if it takes many moves, can yield results. Patience and persistence are valuable traits.",
+   "plans": "",
+   "concepts": [
+    "fighting-spirit",
+    "persistence",
+    "competitive-attitude"
+   ],
+   "sources": [
+    "yt:Tbj-mBIBGNg"
+   ]
+  },
+  {
+   "id": "sl-ebo",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker contrasts the modern result-oriented approach (focusing on rating and norms) with the older generation's desire to play well and win games. Tal and Fischer played to win every game, not just to get a plus score.",
+   "teaches": "A healthy chess mindset prioritizes playing good moves and fighting for wins over rating points. This leads to more interesting games and long-term improvement.",
+   "plans": "",
+   "concepts": [
+    "mindset",
+    "ambition",
+    "sportsmanship"
+   ],
+   "sources": [
+    "yt:IeeXKlAHhjk"
+   ]
+  },
+  {
+   "id": "sl-ebq",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The lesson emphasizes that happiness in chess comes from continuous competition, learning from mistakes, and not holding grudges.",
+   "teaches": "Always play to the end, learn from your errors, and focus on improvement rather than past failures.",
+   "plans": "",
+   "concepts": [
+    "mindset",
+    "perseverance",
+    "learning"
+   ],
+   "sources": [
+    "yt:S3JP-cUqL4I"
+   ]
+  },
+  {
+   "id": "sl-een",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker discusses the stereotype that young girls are afraid to play aggressive chess, but points out that top young players, like the one in this game, are often super aggressive and enjoy out-calculating opponents.",
+   "teaches": "Do not stereotype players by age or gender; aggressive, attacking play is common among strong young players. Embrace a style that gives opponents difficult decisions.",
+   "plans": "",
+   "concepts": [
+    "aggression",
+    "psychology",
+    "stereotypes"
+   ],
+   "sources": [
+    "yt:1Nt0HVMv3b8"
+   ]
+  },
+  {
+   "id": "sl-ekz",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "These games are worth memorizing because they are short and instructive, showing brilliant play from both sides. The lesson is that even lesser-known players like Pillsbury were great, and Spassky was stronger than often credited.",
+   "teaches": "Studying classic short games helps internalize tactical patterns and strategic ideas. Appreciate the depth of historical players beyond their most famous encounters.",
+   "plans": "",
+   "concepts": [
+    "classical-games",
+    "study-method",
+    "chess-history"
+   ],
+   "sources": [
+    "yt:1bjNwYJxpS0"
+   ]
+  },
+  {
+   "id": "sl-el5",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The lesson connects this game to a classic game by Bobby Fischer, showing that Carlsen's play was inspired by that earlier game. This illustrates the importance of studying classics.",
+   "teaches": "Studying classic games can provide patterns and ideas that you can apply in your own games, even at the highest level. Knowing historical games helps you recognize motifs and plans.",
+   "plans": "",
+   "concepts": [
+    "classical-games",
+    "pattern-recognition",
+    "preparation"
+   ],
+   "sources": [
+    "yt:ZX20B5iYxJc"
+   ]
+  },
+  {
+   "id": "sl-el7",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker notes that the opening of the game was normal with no novelties, suggesting that the value of the game lies in the middlegame and endgame ideas rather than opening preparation.",
+   "teaches": "Classic games are valuable for learning typical middlegame plans and strategic ideas, not just opening theory.",
+   "plans": "",
+   "concepts": [
+    "classical-games",
+    "opening-theory",
+    "middlegame-plans"
+   ],
+   "sources": [
+    "yt:qzk-xTWergM"
+   ]
+  },
+  {
+   "id": "sl-ela",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Classical games of world champions often have rich stories behind them, which make them memorable and instructive. The speaker encourages studying these games to understand the deeper narrative and the human elements that influence the moves.",
+   "teaches": "When studying classical games, look beyond the moves to the context: the players' personalities, the stakes, and the psychological battles. This deepens your understanding and appreciation of chess.",
+   "plans": "",
+   "concepts": [
+    "classical-games",
+    "study",
+    "narrative"
+   ],
+   "sources": [
+    "yt:sIo7BXokiuo"
+   ]
+  },
+  {
+   "id": "sl-elc",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The discussion touches on the importance of understanding the history of chess and how ideas from classic games can be reused. The speaker mentions that certain tactical ideas were used in this game and later by other players, showing the timeless nature of chess patterns.",
+   "teaches": "Study classic games to absorb tactical and strategic patterns. These ideas can be applied in your own games, even in modern contexts.",
+   "plans": "Review historical games to identify recurring motifs and add them to your tactical repertoire.",
+   "concepts": [
+    "classical-games",
+    "pattern-recognition",
+    "chess-history"
+   ],
+   "sources": [
+    "yt:spMs5VbXirQ"
+   ]
+  },
+  {
+   "id": "sl-er9",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker admires a player who plays for a win regardless of rating, contrasting with others who might be content with draws. This attitude leads to more victories and respect.",
+   "teaches": "In chess, playing for a win and not fearing higher-rated opponents can lead to better results and a more enjoyable game.",
+   "plans": "",
+   "concepts": [
+    "fighting-chess",
+    "psychology",
+    "attitude"
+   ],
+   "sources": [
+    "yt:1drGZPL6Teg"
+   ]
+  },
+  {
+   "id": "sl-erb",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker discusses the importance of fighting chess and decisive results. In a tournament, players who draw many games are less exciting, while players who win and lose create interest. The example of a player who had many decisive games but missed a prize because of a minus score illustrates that fighting spirit must be balanced with results.",
+   "teaches": "Playing for a win can be valuable for entertainment and personal satisfaction, but in tournaments, a positive score is often necessary for prizes. Balance ambition with practicality.",
+   "plans": "",
+   "concepts": [
+    "fighting-chess",
+    "tournament-strategy",
+    "risk-management"
+   ],
+   "sources": [
+    "yt:tm4bLKkzYs8"
+   ]
+  },
+  {
+   "id": "sl-esb",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on a game against a strong player, noting that the opponent was better for most of the game but tried too hard to win and made a mistake. The speaker also discusses the opponent's style and his own record against him.",
+   "teaches": "When you have a better position, it's important not to overpress and risk losing the advantage. Sometimes a draw is acceptable, especially against a strong opponent. Also, playing for a win with black against a stronger player can be risky; solid play and taking chances when they come can yield results.",
+   "plans": "",
+   "concepts": [
+    "overpressing",
+    "risk-management",
+    "playing-with-black",
+    "psychological-resilience"
+   ],
+   "sources": [
+    "yt:1drGZPL6Teg"
+   ]
+  },
+  {
+   "id": "sl-evb",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker mentions that other games from the tournament were also interesting and educational, indicating a broader set of instructive endgames.",
+   "teaches": "Studying a variety of endgame positions, especially from high-level play, helps build pattern recognition and practical technique.",
+   "plans": "Review your own games and those of strong players to identify instructive endgame moments and learn from them.",
+   "concepts": [
+    "endgame-study",
+    "pattern-recognition",
+    "practical-technique"
+   ],
+   "sources": [
+    "yt:k7EPqwaoVqA"
+   ]
+  },
+  {
+   "id": "sl-f6t",
+   "lineSan": [],
+   "opening": "French Defense",
+   "phase": "concept",
+   "explains": "The speaker emphasizes checking variations with an engine, as even dubious moves may not be easily refuted. The engine can reveal hidden resources and confirm or challenge your intuition.",
+   "teaches": "Use engines to verify your analysis, especially in sharp positions. Trust but verify your calculations with objective tools.",
+   "plans": "",
+   "concepts": [
+    "engine-use",
+    "analysis",
+    "verification"
+   ],
+   "sources": [
+    "yt:UhnB8mA94qQ"
+   ]
+  },
+  {
+   "id": "sl-fge",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "The speaker notes that the player who was up material failed to simplify by trading pieces when it was advantageous, which led to complications and eventually losing chances. This is a common mistake for players who prefer complex positions.",
+   "teaches": "In endgames, simplifying by trading pieces can be the most efficient way to convert a material advantage, even if you enjoy complex play. Recognize when a trade leads to a technically winning endgame and take it.",
+   "plans": "When you have a material advantage, look for opportunities to exchange pieces, especially if the resulting endgame is theoretically winning and easier to play.",
+   "concepts": [
+    "simplification",
+    "material-advantage",
+    "endgame-conversion"
+   ],
+   "sources": [
+    "yt:G8e6OKxFF3k"
+   ]
+  },
+  {
+   "id": "sl-fma",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on how understanding strategic ideas improves with age, even if tactical sharpness declines, and mentions a game where both sides developed pieces in a Nimzo-Indian.",
+   "teaches": "Strategic understanding is crucial and can compensate for slower tactical calculation; develop pieces harmoniously and aim for sound positional play.",
+   "plans": "In the opening, focus on development and control of key squares, leading to a balanced middlegame.",
+   "concepts": [
+    "strategy",
+    "development",
+    "positional-play"
+   ],
+   "sources": [
+    "yt:w2M3lmQ37Yw"
+   ]
+  },
+  {
+   "id": "sl-fzi",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker advises against relying on engine-heavy opening preparation, especially for players below master level. Most games are not decided in the opening, and if an opponent avoids the prepared trap, you need to know how to play the resulting position.",
+   "teaches": "Focus on understanding the principles behind your opening moves rather than memorizing long engine lines. This prepares you for the middlegame and beyond.",
+   "plans": "Choose simple, sound openings that allow you to develop pieces naturally and understand the resulting plans.",
+   "concepts": [
+    "opening-principles",
+    "practical-chess",
+    "avoiding-engine-dependence"
+   ],
+   "sources": [
+    "yt:a3pBDjBqOZg"
+   ]
+  },
+  {
+   "id": "sl-g43",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The key mistake is not necessarily the move that loses the advantage, but the one that throws away a winning position. Here, the speaker argues that the real error came later, after the position was already winning.",
+   "teaches": "In analysis, identify the moment where the evaluation changes from winning to not winning. That is often more instructive than blaming an earlier imprecise move.",
+   "plans": "When you have a winning position, focus on technique: avoid unnecessary risks, trade down accurately, and keep the initiative.",
+   "concepts": [
+    "evaluation",
+    "mistake-identification",
+    "winning-technique"
+   ],
+   "sources": [
+    "yt:_FnolE7vPJw"
+   ]
+  },
+  {
+   "id": "sl-gde",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this excerpt, the speaker reflects on the historical context of the 1974 Candidates Final between Karpov and Korchnoi, emphasizing the significance of the match and the drama surrounding Fischer's forfeiture of the world title.",
+   "teaches": "Understanding the historical and psychological context of a game can deepen appreciation and insight into the players' choices and the game's importance.",
+   "plans": "",
+   "concepts": [
+    "historical-context",
+    "match-significance"
+   ],
+   "sources": [
+    "yt:3CeJsLqjDSo"
+   ]
+  },
+  {
+   "id": "sl-gdn",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that in this particular game, White played perfectly and Black made only one mistake, which was enough to lose. This underscores the idea that a single error can be decisive at the highest level.",
+   "teaches": "Chess is unforgiving: even one mistake can turn a won or drawn position into a loss, so precision is paramount.",
+   "plans": "",
+   "concepts": [
+    "precision",
+    "single-mistake",
+    "decisive-error"
+   ],
+   "sources": [
+    "yt:3CeJsLqjDSo"
+   ]
+  },
+  {
+   "id": "sl-gnd",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker contrasts 'arsonists' (players who play for immediate initiative) with 'builders' (players who improve their position gradually). This game is an example of a builder's approach.",
+   "teaches": "There are different styles: dynamic initiative vs. patient improvement. Both can be effective; understand your own style and the demands of the position.",
+   "plans": "",
+   "concepts": [
+    "style",
+    "initiative",
+    "positional-play"
+   ],
+   "sources": [
+    "yt:3QxwOX2gKfs"
+   ]
+  },
+  {
+   "id": "sl-gnj",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Some players prefer to win by grinding out endgames rather than by flashy sacrifices. The speaker notes that brilliancy prizes are not given for endgame technique, but the practical result is what matters.",
+   "teaches": "Choose the style that suits your calculation and risk tolerance. If you can win a simple endgame, that is often more reliable than a speculative attack, even if it is less glamorous.",
+   "plans": "",
+   "concepts": [
+    "style",
+    "endgame-technique",
+    "practical-play"
+   ],
+   "sources": [
+    "yt:b3gFTkprHpc"
+   ]
+  },
+  {
+   "id": "sl-gpi",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The lesson's moral is that a devastating counterattack can arise if the opponent is careless. Black's pieces were initially passive, but by seizing tactical chances, they created a lethal attack.",
+   "teaches": "Always be alert for counterattacking opportunities; even if your pieces are undeveloped, a single tactical blow can turn the game around.",
+   "plans": "",
+   "concepts": [
+    "counterattack",
+    "tactics",
+    "alertness"
+   ],
+   "sources": [
+    "yt:g7oevckYWDI"
+   ]
+  },
+  {
+   "id": "sl-guy",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker reflects on the importance of this game in a team context, noting that it was a crucial victory in a match. The game itself was memorable because of the decisive attack.",
+   "teaches": "Every game in a team match can be pivotal. Even if you are winning, maintain focus and finish efficiently to secure the team result.",
+   "plans": "",
+   "concepts": [
+    "team-chess",
+    "psychology",
+    "importance"
+   ],
+   "sources": [
+    "yt:yvz-hmEgVuY"
+   ]
+  },
+  {
+   "id": "sl-gxi",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on modern time controls, noting that they often leave no time for complex endgames, leading to poor play. This game was played under longer controls but still had time pressure.",
+   "teaches": "Time management is crucial in endgames. Even with longer controls, you must allocate time for the endgame. Practice endgame technique to play faster and more accurately.",
+   "plans": "When entering an endgame, try to have a clear plan and use your time wisely. Study common endgame patterns to reduce calculation time.",
+   "concepts": [
+    "time-management",
+    "endgame-practice",
+    "time-controls"
+   ],
+   "sources": [
+    "yt:kh-bvTN-rcA"
+   ]
+  },
+  {
+   "id": "sl-gxo",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker discusses time management, contrasting delay and increment. With increment, time can accumulate, so quick moves can build a buffer. The speaker notes the importance of recording times to analyze time usage and identify critical moments.",
+   "teaches": "Recording clock times after each move helps you review time management and spot where you spent too long or rushed. Understanding the time control (increment vs. delay) is crucial for pacing.",
+   "plans": "",
+   "concepts": [
+    "time-management",
+    "increment",
+    "time-trouble",
+    "self-analysis"
+   ],
+   "sources": [
+    "yt:rJTUOD-cPaE"
+   ]
+  },
+  {
+   "id": "sl-h0u",
+   "lineSan": [],
+   "opening": "Sicilian Defense: Kan Variation",
+   "phase": "concept",
+   "explains": "The speaker reflects that if both players play well, the game often reaches a balanced position with mutual chances. The goal of the opening is to reach a middlegame you understand better than your opponent, giving you a practical edge.",
+   "teaches": "Openings are not about memorizing moves but about steering the game into positions you are comfortable with. The more chess knowledge and skills you have, the better your chances of outplaying your opponent in the middlegame.",
+   "plans": "Continue studying various lines of the opening to build a repertoire that leads to favorable middlegame structures.",
+   "concepts": [
+    "opening-principles",
+    "middlegame-planning",
+    "practical-chess",
+    "knowledge"
+   ],
+   "sources": [
+    "yt:3fhEWK_ZQGg"
+   ]
+  },
+  {
+   "id": "sl-h4e",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker recommends studying endgame studies, particularly those by Kasparian, to improve tactical and endgame skills. These studies often feature surprising quiet moves and precise maneuvering.",
+   "teaches": "Regularly solving composed studies is an excellent way to sharpen your calculation and pattern recognition, especially for quiet moves and endgame techniques.",
+   "plans": "Incorporate a few endgame studies into your training routine, focusing on positions that require quiet moves and accurate defense.",
+   "concepts": [
+    "studies",
+    "endgame",
+    "training",
+    "calculation"
+   ],
+   "sources": [
+    "yt:lZgqC9JxXfg"
+   ]
+  },
+  {
+   "id": "sl-hhx",
+   "lineSan": [],
+   "opening": "Four Knights Game",
+   "phase": "concept",
+   "explains": "The speaker's style is to choose plans that make the opponent uncomfortable. This is a psychological approach to chess.",
+   "teaches": "When choosing a plan, consider not only objective strength but also the psychological effect on the opponent. Playing moves that are uncomfortable for them can be a practical strategy.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "practical-play",
+    "planning"
+   ],
+   "sources": [
+    "yt:4gyib2SeJmQ"
+   ]
+  },
+  {
+   "id": "sl-iec",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The game was close, and the player fought well against a strong opponent. The lesson ends with an invitation to send in games for analysis.",
+   "teaches": "Analyzing your own games, especially losses, is a valuable way to improve. Look for critical moments where you could have made better decisions.",
+   "plans": "Review the game to identify the turning point and consider alternative moves at key moments.",
+   "concepts": [
+    "game-analysis",
+    "improvement"
+   ],
+   "sources": [
+    "yt:np7AeR8KH_8"
+   ]
+  },
+  {
+   "id": "sl-ife",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this excerpt, the speaker emphasizes the importance of looking at the whole board rather than fixating on one area, especially in complex tactical positions where mating nets and threats span multiple squares.",
+   "teaches": "Always scan the entire board for tactical resources, including checks, captures, and threats, before committing to a move.",
+   "plans": "",
+   "concepts": [
+    "board-vision",
+    "tactics",
+    "mating-net"
+   ],
+   "sources": [
+    "yt:5H-3lAy4IT0"
+   ]
+  },
+  {
+   "id": "sl-img",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "In this position, the speaker emphasizes the importance of always checking tactical possibilities, even if they are not ultimately played. This habit, associated with Tal, prevents the brain from becoming lazy and keeps strategic players from flattening their own game.",
+   "teaches": "Always ask 'what if' for candidate moves, even if you don't play them. This keeps your mind sharp and opens up possibilities you might otherwise miss.",
+   "plans": "",
+   "concepts": [
+    "candidate-moves",
+    "tactical-vision",
+    "brain-training"
+   ],
+   "sources": [
+    "yt:IN1emf4F2-Q"
+   ]
+  },
+  {
+   "id": "sl-iql",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that even perfect classical opening play does not guarantee a definitive advantage; it only gives chances.",
+   "teaches": "Chess is a game of small edges; classical moves aim for a playable position, not a forced win. Avoid overestimating the value of 'perfect' development.",
+   "plans": "",
+   "concepts": [
+    "advantage",
+    "classical-play",
+    "realistic-expectations"
+   ],
+   "sources": [
+    "yt:5zkUfRUSbbw"
+   ]
+  },
+  {
+   "id": "sl-j8v",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on how some top players produce exciting, attacking games, while others play more drawish chess. The style of the players, not the game itself, determines whether a game is boring.",
+   "teaches": "Chess can be as exciting as you make it; choosing sharp, unbalanced positions leads to more dynamic play, whereas solid, symmetrical setups often lead to draws.",
+   "plans": "",
+   "concepts": [
+    "attacking-chess",
+    "playing-style",
+    "practical-play"
+   ],
+   "sources": [
+    "yt:VREmqRr6OD8"
+   ]
+  },
+  {
+   "id": "sl-j94",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this game, the speaker repeatedly violated two personal rules: never sacrifice your own pieces and never trade pieces. This led to a losing position despite being the stronger player.",
+   "teaches": "Adhering to sound principles like not sacrificing without compensation and avoiding unnecessary trades is crucial, even for strong players.",
+   "plans": "",
+   "concepts": [
+    "principles",
+    "sacrifice",
+    "trading"
+   ],
+   "sources": [
+    "yt:Uit7i7zByrU"
+   ]
+  },
+  {
+   "id": "sl-jhf",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker references a famous quote about not believing in fortresses, highlighting that fortresses are so tricky that even strong players doubt their existence in practice. However, they do exist, and recognizing them is crucial.",
+   "teaches": "Fortresses are a real drawing resource, but they are hard to set up and even harder to break. When defending, aim for a fortress if possible; when attacking, be prepared to invest time in finding a plan.",
+   "plans": "",
+   "concepts": [
+    "fortress",
+    "drawing-resource",
+    "practical-endgame"
+   ],
+   "sources": [
+    "yt:ojyDUaZtoJ4"
+   ]
+  },
+  {
+   "id": "sl-jtc",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that even players known for sharp tactical play can excel in quiet endgames. Topalov, despite his reputation for complex theory, can still play endgames well, as shown by his handling of this position.",
+   "teaches": "Do not assume a player's style limits their ability in other phases. Endgame skill is separate from tactical flair; even 'boring' endgames require precision and can be won by anyone.",
+   "plans": "",
+   "concepts": [
+    "player-style",
+    "endgame-skill",
+    "psychology"
+   ],
+   "sources": [
+    "yt:7wo-9B_1dQo"
+   ]
+  },
+  {
+   "id": "sl-jtx",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that the Chigorin Defense leads to complicated positions where both sides have winning chances, unlike many openings where White is slightly better and the game ends in a draw. Even if the computer says White is better, Black often has practical chances.",
+   "teaches": "Choosing an opening that creates imbalance and complexity can increase your chances of outplaying a less-prepared opponent. Even if the objective evaluation favors the opponent, practical chances matter.",
+   "plans": "If you play such an opening, be prepared for sharp tactical battles and aim to create threats that force your opponent to find precise moves.",
+   "concepts": [
+    "imbalance",
+    "practical-chances",
+    "opening-choice"
+   ],
+   "sources": [
+    "yt:gUrHkPzLGeQ"
+   ]
+  },
+  {
+   "id": "sl-k2m",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "Missing the winning pattern led to a draw instead of a win, which was costly in a team match. The lesson is that recognizing such patterns is crucial.",
+   "teaches": "Always review your games, especially missed opportunities, to learn from mistakes and improve pattern recognition.",
+   "plans": "",
+   "concepts": [
+    "self-improvement",
+    "pattern-recognition",
+    "learning-from-mistakes"
+   ],
+   "sources": [
+    "yt:8RX34V3EaEs"
+   ]
+  },
+  {
+   "id": "sl-k2n",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker notes that many games are lost not by a series of errors but by a single oversight of the opponent's move, often a tactical resource.",
+   "teaches": "Review your losses to see if the decisive mistake was missing the opponent's move. If you consistently see their threats, you will avoid falling for them.",
+   "plans": "In your own games, after each opponent move, ask 'What is their threat?' and 'What is their idea?' before forming your own plan.",
+   "concepts": [
+    "self-improvement",
+    "threat awareness",
+    "game review"
+   ],
+   "sources": [
+    "yt:ZX20B5iYxJc"
+   ]
+  },
+  {
+   "id": "sl-k3e",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that beating top players like Kramnik and Caruana is not trivial, but in these games, the technical execution was clean.",
+   "teaches": "Even against elite opposition, sound endgame technique and patience can convert small advantages into full points.",
+   "plans": "",
+   "concepts": [
+    "technique",
+    "elite-play",
+    "patience"
+   ],
+   "sources": [
+    "yt:L1ikg_EYot0"
+   ]
+  },
+  {
+   "id": "sl-k9k",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on a game where the opponent's play was labeled a brilliant sacrifice, but in reality the speaker was playing for a win and had many drawing opportunities.",
+   "teaches": "Annotations and media reports may not reflect the actual balance of a game. It's important to analyze objectively and not be swayed by external narratives.",
+   "plans": "When analyzing your own games, focus on the objective truth of the position, not on how the game is described by others.",
+   "concepts": [
+    "analysis",
+    "objectivity",
+    "psychology"
+   ],
+   "sources": [
+    "yt:9Zc4eJu1sh8"
+   ]
+  },
+  {
+   "id": "sl-k9n",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on the game, noting that despite the opponent's good positional play, the game ended abruptly. He emphasizes that losses are caused by mistakes, and invites the listener to find the opponent's error.",
+   "teaches": "Every loss involves a mistake; analyzing games to find the turning point is essential for improvement.",
+   "plans": "",
+   "concepts": [
+    "analysis",
+    "mistakes",
+    "learning"
+   ],
+   "sources": [
+    "yt:oEUxjGuy3Rk"
+   ]
+  },
+  {
+   "id": "sl-kh8",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker refused a draw offer in the last round, even though the opponent needed a draw for a norm. The reasoning is that giving a draw without a fight devalues the achievement and leaves doubt about whether the result was earned.",
+   "teaches": "In tournament chess, always play for a win or at least a real fight; do not hand out draws to help opponents achieve norms. This is a matter of integrity and personal pride.",
+   "plans": "",
+   "concepts": [
+    "tournament-etiquette",
+    "psychology",
+    "fighting-chess"
+   ],
+   "sources": [
+    "yt:9pPv8BmgSbQ"
+   ]
+  },
+  {
+   "id": "sl-klv",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that a player (Smyslov) had a remarkable record with White from 1945 to 1980, winning 500 games. This illustrates the importance of playing well with White and converting advantages.",
+   "teaches": "A strong score with White often comes from consistent, aggressive play and converting small advantages.",
+   "plans": "",
+   "concepts": [
+    "statistics",
+    "white advantage"
+   ],
+   "sources": [
+    "yt:9yuhDu27EnQ"
+   ]
+  },
+  {
+   "id": "sl-km2",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker discusses Morphy's strength, arguing that despite his opponents being weak, his achievements like blindfold play and simultaneous exhibitions show his skill. The statistical comparison of blunders per thousand moves between Steinitz and Lasker is used to evaluate historical players.",
+   "teaches": "Historical player strength can be assessed through objective measures like blunder rates and results against common opponents, but context matters.",
+   "plans": "",
+   "concepts": [
+    "history",
+    "player-strength",
+    "blunder-rate"
+   ],
+   "sources": [
+    "yt:CbRkqqawcTo"
+   ]
+  },
+  {
+   "id": "sl-kny",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The lesson focuses on Karpov's middlegame mastery through two classic games, chosen because they are instructive and personally influential. The first game is a Sicilian Defense, Keres Attack line from 1971, where Karpov's handling of the position is the main teaching point rather than theoretical novelties.",
+   "teaches": "Studying master games, especially those of players with a clear positional style, is a powerful way to internalize middlegame principles. The value lies in understanding the ideas behind the moves, not just memorizing variations.",
+   "plans": "Examine the chosen games move by move, focusing on Karpov's strategic decisions and how they illustrate universal middlegame concepts.",
+   "concepts": [
+    "middlegame-mastery",
+    "classical-games",
+    "positional-play"
+   ],
+   "sources": [
+    "yt:AGrjO3i48p8"
+   ]
+  },
+  {
+   "id": "sl-kw5",
+   "lineSan": [],
+   "phase": "middlegame",
+   "explains": "In the ensuing play, there are opportunities for intermediate checks and decisions about which piece to capture with. The position is very tricky, and the speaker admits they wouldn't want to calculate it, but they are considering a sequence that leads to a possible repetition or a draw.",
+   "teaches": "In complex tactical positions, be aware of intermediate checks and the possibility of forcing a draw by repetition if the position is unclear. Sometimes avoiding a risky line is better than forcing a win.",
+   "plans": "Calculate carefully, but if the position is too complex, consider simplifying or repeating moves to secure a draw.",
+   "concepts": [
+    "intermediate-check",
+    "draw",
+    "calculation"
+   ],
+   "sources": [
+    "yt:UKCYquxtvUY"
+   ]
+  },
+  {
+   "id": "sl-kwt",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on predictions and the strength of certain players, noting that some players are so solid that they don't need to take risks to win.",
+   "teaches": "In chess, sometimes the most intimidating style is one of solidity and consistency, where you don't need to make spectacular moves to be effective.",
+   "plans": "",
+   "concepts": [
+    "solid-play",
+    "consistency",
+    "psychological-pressure"
+   ],
+   "sources": [
+    "yt:iY-q40Qn5wE"
+   ]
+  },
+  {
+   "id": "sl-kzv",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker recalls analyzing the adjourned position with friends, hoping for a draw, but the position was objectively lost. This illustrates the emotional attachment and optimism that can cloud objective assessment of a difficult endgame.",
+   "teaches": "In adjournments or analysis, it's important to set aside hope and rely on concrete calculation. Even strong players can overestimate defensive resources in a lost position.",
+   "plans": "",
+   "concepts": [
+    "objective-assessment",
+    "adjournment",
+    "analysis"
+   ],
+   "sources": [
+    "yt:BnPeGmtjkNo"
+   ]
+  },
+  {
+   "id": "sl-kzx",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker recalls learning chess by sharing analysis with club members during the Fischer era, emphasizing the social and collaborative nature of chess study.",
+   "teaches": "Chess improvement is not solitary; discussing games with others deepens understanding and enjoyment.",
+   "plans": "",
+   "concepts": [
+    "chess-culture",
+    "social-learning",
+    "analysis"
+   ],
+   "sources": [
+    "yt:x5BQbcJHiqs"
+   ]
+  },
+  {
+   "id": "sl-l12",
+   "lineSan": [],
+   "opening": "Caro-Kann Defense",
+   "phase": "concept",
+   "explains": "The transcript mentions that there are many openings to cover, including French, Caro-Kann, Pirc, and Sicilian for Black, indicating a broad curriculum for both colors.",
+   "teaches": "A well-rounded opening repertoire should include both solid and sharp options, and it's important to be comfortable with both sides of the board.",
+   "plans": "Continue studying openings systematically, covering both White and Black, and prioritize understanding typical plans over memorizing variations.",
+   "concepts": [
+    "opening-repertoire",
+    "study-plan"
+   ],
+   "sources": [
+    "yt:Bx-lgipCa6Q"
+   ]
+  },
+  {
+   "id": "sl-lb5",
+   "lineSan": [],
+   "opening": "Rapport-Jobava System",
+   "phase": "concept",
+   "explains": "Modern chess often presents positions that cannot be fully calculated to a forced result, even with ample time; the speaker notes that even with 45 minutes, finding the saving move is not about solving the position but about practical decision-making.",
+   "teaches": "In complex positions, accept that perfect calculation is often impossible; instead, rely on heuristics like eliminating losing options and choosing the move that maximizes drawing or winning chances.",
+   "plans": "",
+   "concepts": [
+    "modern-chess",
+    "calculation-limits",
+    "decision-making"
+   ],
+   "sources": [
+    "yt:a523g-UKZCA"
+   ]
+  },
+  {
+   "id": "sl-lcq",
+   "lineSan": [],
+   "opening": "Dutch Defense: Stonewall Variation",
+   "phase": "concept",
+   "explains": "The speaker encourages the student to think like a future grandmaster, to have confidence and not shy away from complex positions. He emphasizes that even if a move isn't immediately refutable, you should still look for the best plan and trust your understanding.",
+   "teaches": "Chess improvement requires confidence and a willingness to engage with difficult positions. Don't be afraid to make your own assessments and back them up with concrete analysis.",
+   "plans": "",
+   "concepts": [
+    "confidence",
+    "mindset",
+    "calculation",
+    "growth"
+   ],
+   "sources": [
+    "yt:CxgGITlrowA"
+   ]
+  },
+  {
+   "id": "sl-ld6",
+   "lineSan": [],
+   "opening": "Dutch Defense: Stonewall Variation",
+   "phase": "concept",
+   "explains": "The speaker distinguishes between a true sacrifice (kamikaze) and a blunder. A real sacrifice should bring tangible benefits, like winning material or checkmating, whereas a blunder just loses material without compensation.",
+   "teaches": "Don't dress up a blunder as a sacrifice. A genuine sacrifice gives you something in return; otherwise, it's just a mistake. Be honest about the nature of your moves.",
+   "plans": "",
+   "concepts": [
+    "sacrifice vs blunder",
+    "material",
+    "honesty"
+   ],
+   "sources": [
+    "yt:CxgGITlrowA"
+   ]
+  },
+  {
+   "id": "sl-lhr",
+   "lineSan": [],
+   "opening": "Italian Game",
+   "phase": "endgame",
+   "explains": "The speaker discusses how to study endgames practically: understand what you are looking for in the endgame and then play it out. They mention a book with tactical endgame examples.",
+   "teaches": "Endgame study should be practical and goal-oriented: identify the key ideas and then practice them in real positions.",
+   "plans": "",
+   "concepts": [
+    "endgame-study",
+    "practical-training"
+   ],
+   "sources": [
+    "yt:_0vhFCYsz2Y"
+   ]
+  },
+  {
+   "id": "sl-lk5",
+   "lineSan": [],
+   "opening": "Italian Game",
+   "phase": "concept",
+   "explains": "The speaker notes that many tactical sequences cannot be calculated to a forced win; otherwise everyone would play them. Instead, players rely on typical ideas and patterns to guide their decisions.",
+   "teaches": "In complex positions, you don't need to calculate every variation to the end. Recognize typical motifs and trust your understanding of the position to choose moves that create practical pressure.",
+   "plans": "",
+   "concepts": [
+    "pattern-recognition",
+    "calculation",
+    "practical-play"
+   ],
+   "sources": [
+    "yt:p4nPEpXldAM"
+   ]
+  },
+  {
+   "id": "sl-lse",
+   "lineSan": [],
+   "opening": "Pirc Defense",
+   "phase": "concept",
+   "explains": "Even top players can have losing positions, but they manage their emotions by observing other games. The speaker notes that a strong player, seeing another great player in a lost position, can reassure himself that mistakes happen to everyone.",
+   "teaches": "In tournament play, maintaining emotional equilibrium is crucial. Watching other games can provide perspective and reduce anxiety about your own position.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "resilience",
+    "tournament practice"
+   ],
+   "sources": [
+    "yt:g1gWIfVajlM"
+   ]
+  },
+  {
+   "id": "sl-lyr",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker recounts a story from a tournament where a player declined a draw offer because he needed a win, but ended up losing. This mirrors the game's theme: refusing a repetition or draw can backfire.",
+   "teaches": "In chess, it's important to objectively evaluate the position. If a draw is available and the position is equal, taking it may be the pragmatic choice, especially if winning attempts involve risk. Overambition can turn a half-point into zero.",
+   "plans": "",
+   "concepts": [
+    "decision-making",
+    "risk-management",
+    "draw",
+    "psychology"
+   ],
+   "sources": [
+    "yt:Yp1xo2nJ7VE"
+   ]
+  },
+  {
+   "id": "sl-lz1",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that in beginner games, notation errors are common, but even with errors, the result can be inferred from who reports the win. In this case, the game score was turned in by one player, indicating the winner.",
+   "teaches": "In chess, it's important to record moves accurately, but also to understand that the result is determined by the position, not the notation. Coaches can often decipher games despite errors.",
+   "plans": "",
+   "concepts": [
+    "notation",
+    "game analysis",
+    "beginner"
+   ],
+   "sources": [
+    "yt:XQxRHd7AYSM"
+   ]
+  },
+  {
+   "id": "sl-m1h",
+   "lineSan": [],
+   "opening": "King's Indian Defense",
+   "phase": "concept",
+   "explains": "The speaker emphasizes that in the opening, a slightly better position can be improved move by move, increasing the advantage gradually until it becomes decisive.",
+   "teaches": "Chess is a game of small advantages; improve your pieces and increase pressure incrementally rather than forcing immediate wins.",
+   "plans": "Focus on piece activity and slow improvement, avoiding unnecessary risks.",
+   "concepts": [
+    "piece-play",
+    "prophylaxis",
+    "accumulation-of-advantages"
+   ],
+   "sources": [
+    "yt:EuUtHnsEHvY"
+   ]
+  },
+  {
+   "id": "sl-m6j",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that the game deteriorated not because of a single blunder but because of a series of inaccuracies. Even though the defender played badly, it wasn't enough to lose until the final mistake.",
+   "teaches": "In chess, a game can be lost not by one big mistake but by many small inaccuracies that gradually worsen the position. It's important to stay accurate throughout.",
+   "plans": "Always look for the most precise moves, even in seemingly equal positions, to avoid giving the opponent chances.",
+   "concepts": [
+    "accuracy",
+    "gradual-deterioration",
+    "psychology"
+   ],
+   "sources": [
+    "yt:U7noYIPLTA4"
+   ]
+  },
+  {
+   "id": "sl-m73",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker prepared a specific line against the Dragon, memorizing about 20 moves of theory. This preparation paid off because the opponent played exactly what was expected, making the game mostly a matter of recall.",
+   "teaches": "Deep opening preparation can turn a game into a test of memory and understanding, giving you a huge practical advantage when your opponent follows known lines.",
+   "plans": "Invest time in memorizing and understanding key variations for your main openings, especially against common defenses.",
+   "concepts": [
+    "memorization",
+    "preparation",
+    "practical-advantage"
+   ],
+   "sources": [
+    "yt:FBKAIcqdF9U"
+   ]
+  },
+  {
+   "id": "sl-mbx",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "When asked about the London System, the speaker notes it is solid and hard to beat, but also mentions it has sharp ideas. The response is balanced, acknowledging its viability.",
+   "teaches": "The London System is a reliable opening choice for players who want a solid, low-maintenance setup, but be aware of its dynamic possibilities.",
+   "plans": "If playing the London, focus on understanding typical plans and structures rather than memorizing long variations.",
+   "concepts": [
+    "london-system",
+    "solid-opening",
+    "practical-choice"
+   ],
+   "sources": [
+    "yt:a3pBDjBqOZg"
+   ]
+  },
+  {
+   "id": "sl-mk7",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker reflects that in modern chess, such sacrificial play is rare because computers punish unsound sacrifices, and players assume sacrifices are prepared. The romantic era allowed for intuitive, risky play.",
+   "teaches": "Chess has evolved; what was once acceptable in the romantic era is now often refuted by precise defense and computer analysis.",
+   "plans": "In your own games, balance intuition with objective evaluation, but don't be afraid to play ambitiously when the position calls for it.",
+   "concepts": [
+    "chess-evolution",
+    "intuition",
+    "computer-influence"
+   ],
+   "sources": [
+    "yt:GpVATnLEe3w"
+   ]
+  },
+  {
+   "id": "sl-mu4",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker emphasizes the value of interactive learning, like 'guess the move' training, where you try to predict the moves of strong players in real games. This method helps you think independently rather than relying on engine suggestions.",
+   "teaches": "To improve, actively engage with games by trying to guess the next move before seeing it. This trains your intuition and decision-making, which is more valuable than memorizing engine lines.",
+   "plans": "",
+   "concepts": [
+    "training-methods",
+    "intuition",
+    "guess-the-move"
+   ],
+   "sources": [
+    "yt:IN1emf4F2-Q"
+   ]
+  },
+  {
+   "id": "sl-mw3",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Tal was known for aggressive, attacking play and often played well even when not at his physical best. The speaker mentions that Tal remained a top player for years, tying for first at Montreal 1979 and winning a blitz event in 1988.",
+   "teaches": "A player's style and talent can sustain them over a long career, even if they are not always in peak physical condition.",
+   "plans": "",
+   "concepts": [
+    "career-longevity",
+    "attacking-style",
+    "blitz"
+   ],
+   "sources": [
+    "yt:IeeXKlAHhjk"
+   ]
+  },
+  {
+   "id": "sl-mw5",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "When facing a much younger, theory-heavy opponent, the speaker deliberately avoids sharp theoretical lines and instead steers into a closed, maneuvering position where calculation matters less and experience in piece play matters more.",
+   "teaches": "Against a young tactical player, choose solid, non-theoretical openings that lead to closed positions, forcing them out of their prepared lines and into slow maneuvering where they are less comfortable.",
+   "plans": "",
+   "concepts": [
+    "psychological-play",
+    "closed-positions",
+    "anti-theory"
+   ],
+   "sources": [
+    "yt:RE5XutM9D7c"
+   ]
+  },
+  {
+   "id": "sl-my7",
+   "lineSan": [],
+   "opening": "Sicilian Defense: Paulsen-Basman Defense",
+   "phase": "concept",
+   "explains": "The speaker found a strong sacrifice over the board without prior preparation, which is impressive because many players would not consider it due to lack of familiarity with the line.",
+   "teaches": "Trust your calculation and be willing to play dynamic moves even if you haven't studied them. Over-the-board creativity can be just as effective as book knowledge.",
+   "plans": "",
+   "concepts": [
+    "over-the-board",
+    "calculation",
+    "creativity"
+   ],
+   "sources": [
+    "yt:IvZONIWnU9g"
+   ]
+  },
+  {
+   "id": "sl-n5f",
+   "lineSan": [],
+   "opening": "Sicilian Defense: Najdorf Variation",
+   "phase": "concept",
+   "explains": "The speaker used a psychological idea: an opponent who recently won a game is less likely to have analyzed it deeply, so they may be unprepared for a prepared line.",
+   "teaches": "Psychology is part of chess. You can predict your opponent's preparation based on their recent results and habits, and use that to your advantage.",
+   "plans": "When you have a prepared line, trust it and play it confidently, especially if you have reason to believe your opponent is not well-prepared.",
+   "concepts": [
+    "psychology",
+    "preparation",
+    "opponent-reading"
+   ],
+   "sources": [
+    "yt:cQezeaUN1fE"
+   ]
+  },
+  {
+   "id": "sl-n9k",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker emphasizes the importance of knowing tournament standings and opponents' needs. In one example, a player needed a win for a norm, but the opponent offered a draw, not knowing the situation. In another, a player with a half-point lead was happy to draw and go party.",
+   "teaches": "Always be aware of the tournament situation—your own and your opponents'. This knowledge can influence your strategy, such as playing for a win when needed or accepting a draw when it suffices.",
+   "plans": "Before the final rounds, calculate what results you and your opponents need, and adjust your play accordingly.",
+   "concepts": [
+    "tournament strategy",
+    "psychology",
+    "norms"
+   ],
+   "sources": [
+    "yt:KlbzMTpnBc4"
+   ]
+  },
+  {
+   "id": "sl-nib",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker observes that one player is more diverse and likes unbalanced positions, while the other is the best technical player in history. Both are original and have deep classical knowledge, but their technical abilities differ.",
+   "teaches": "Technical skill and originality are distinct strengths; a player can be technically excellent yet less diverse, and vice versa. Understanding these differences helps in preparing for opponents.",
+   "plans": "",
+   "concepts": [
+    "technical-chess",
+    "originality",
+    "player-comparison"
+   ],
+   "sources": [
+    "yt:MVv2F95FAO0"
+   ]
+  },
+  {
+   "id": "sl-njl",
+   "lineSan": [],
+   "opening": "Ruy Lopez: Berlin Defense",
+   "phase": "opening",
+   "explains": "The Berlin Defense leads to flexible positions where all three results are possible. The speaker emphasizes that choosing this opening requires deep preparation and understanding of typical plans.",
+   "teaches": "In classical openings like the Berlin, you should be prepared for both tactical and positional battles. The flexibility of the position means that both sides must be resourceful.",
+   "plans": "Study typical middlegame plans and endgame ideas in the Berlin. Be ready to handle both sharp tactical lines and quiet maneuvering.",
+   "concepts": [
+    "berlin-defense",
+    "opening-preparation",
+    "flexibility"
+   ],
+   "sources": [
+    "yt:Mw8U3Lyy6Vg"
+   ]
+  },
+  {
+   "id": "sl-nr2",
+   "lineSan": [],
+   "opening": "King's Indian Defense: Semi-Classical Variation",
+   "phase": "concept",
+   "explains": "The speaker reflects on the evolution of opening preparation, noting that in the pre-computer era, players could rely on a narrow repertoire because opponents had limited access to games and preparation was less precise.",
+   "teaches": "Opening preparation has changed with technology; today, relying on a single line is risky because opponents can prepare deeply with computer assistance.",
+   "plans": "",
+   "concepts": [
+    "opening-preparation",
+    "computer-era",
+    "repertoire-breadth"
+   ],
+   "sources": [
+    "yt:NzIcI4F3bpw"
+   ]
+  },
+  {
+   "id": "sl-nr3",
+   "lineSan": [],
+   "opening": "King's Indian Defense: Semi-Classical Variation",
+   "phase": "concept",
+   "explains": "The speaker contrasts the old generation's narrow repertoires with modern top players who diversify, suggesting that higher competition demands broader opening knowledge.",
+   "teaches": "As you face stronger opposition, you must expand your repertoire to avoid being out-prepared.",
+   "plans": "",
+   "concepts": [
+    "repertoire-breadth",
+    "competitive-level",
+    "preparation"
+   ],
+   "sources": [
+    "yt:NzIcI4F3bpw"
+   ]
+  },
+  {
+   "id": "sl-nty",
+   "lineSan": [],
+   "opening": "King's Indian Defense: Semi-Classical Variation",
+   "phase": "concept",
+   "explains": "The speaker references specific players and games, suggesting that studying the games of top players in your opening can provide deep insights into typical plans and move orders.",
+   "teaches": "Deepen your opening knowledge by analyzing games of strong players who have played your line, noting their plans and typical maneuvers.",
+   "plans": "",
+   "concepts": [
+    "opening-preparation",
+    "model-games"
+   ],
+   "sources": [
+    "yt:rwZGAprxGt4"
+   ]
+  },
+  {
+   "id": "sl-ntz",
+   "lineSan": [],
+   "opening": "King's Indian Defense: Semi-Classical Variation",
+   "phase": "concept",
+   "explains": "The transcript is too garbled to extract a coherent position or specific moves. The only clear theme is preparation and the importance of understanding openings deeply.",
+   "teaches": "Preparation involves not just memorizing moves but understanding the ideas behind them, so you can handle deviations and unfamiliar positions.",
+   "plans": "",
+   "concepts": [
+    "preparation",
+    "understanding-over-memorization"
+   ],
+   "sources": [
+    "yt:rwZGAprxGt4"
+   ]
+  },
+  {
+   "id": "sl-nv4",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "In the game, a strong player missed a tactical resource that would have been a great find, but such puzzles are hard to spot in the heat of battle. The lesson is to actively look for non-standard moves that defy expectations.",
+   "teaches": "Always consider in-between moves, forcing checks, captures, or mate threats that can catch your opponent off guard. These can secure an edge even when a natural move seems available.",
+   "plans": "During your turn, before playing a natural move, scan for forcing moves that might improve your position or create unexpected threats.",
+   "concepts": [
+    "in-between-move",
+    "forcing-moves",
+    "tactical-awareness"
+   ],
+   "sources": [
+    "yt:OERORPAMHRw"
+   ]
+  },
+  {
+   "id": "sl-o0q",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "Blindfold simultaneous exhibitions were a way for masters to earn money and demonstrate skill. Schlechter played seven strong amateurs blindfolded in Vienna in 1898, winning four and drawing three. The speaker notes that playing even three blindfold games is difficult, and that conditions (like beer and smoking) were different then.",
+   "teaches": "Blindfold play is a demanding skill that can be used for exhibition and income; it also reflects deep board vision and memory.",
+   "plans": "",
+   "concepts": [
+    "blindfold-chess",
+    "simultaneous-exhibition",
+    "skill-demonstration"
+   ],
+   "sources": [
+    "yt:P8aC7TqjhKM"
+   ]
+  },
+  {
+   "id": "sl-o0w",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker's son won a marathon game and was ecstatic despite winning no money, while the speaker drew and was upset. The emotional outcome depends on expectations and the journey, not just the prize.",
+   "teaches": "After a tournament, focus on the positive aspects of your games—a hard-fought win, a good fight—rather than only the financial result.",
+   "plans": "",
+   "concepts": [
+    "sportsmanship",
+    "perspective"
+   ],
+   "sources": [
+    "yt:Rf096-0V-Xk"
+   ]
+  },
+  {
+   "id": "sl-o1q",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "This excerpt is a closing segment of a lesson on the Najdorf variation, wrapping up the series and transitioning to tactics practice.",
+   "teaches": "Regularly practicing tactics is essential to reinforce opening knowledge and improve overall play.",
+   "plans": "",
+   "concepts": [
+    "tactics-practice",
+    "najdorf",
+    "lesson-wrap-up"
+   ],
+   "sources": [
+    "yt:PGtqOW2O_Bw"
+   ]
+  },
+  {
+   "id": "sl-o2b",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker emphasizes that even strong players make mistakes in complicated positions, and that computer engines can make moves look obviously bad when in reality the position is very difficult to navigate.",
+   "teaches": "To improve, it's valuable to study positions without an engine first, trying to find the best moves yourself. This builds practical skill and appreciation for the difficulty of the game.",
+   "plans": "",
+   "concepts": [
+    "study-methods",
+    "guess-the-move",
+    "practical-improvement"
+   ],
+   "sources": [
+    "yt:acR6TmLBE9I"
+   ]
+  },
+  {
+   "id": "sl-o2d",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on the value of studying full classical games: they are not boring because they contain a mix of opening, middlegame, and endgame, and each viewing reveals new insights about the players' thinking.",
+   "teaches": "Instead of deep opening analysis, which can be tedious, watching complete games of great players is an enjoyable and effective way to absorb ideas and improve your understanding of chess.",
+   "plans": "",
+   "concepts": [
+    "study-methods",
+    "classical-games",
+    "enjoyment"
+   ],
+   "sources": [
+    "yt:sIo7BXokiuo"
+   ]
+  },
+  {
+   "id": "sl-o2z",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker mentions that even in a winning tablebase position, the opponent chose a losing move, and the game lasted nearly six hours. The speaker knew the drawing moves from tablebase study.",
+   "teaches": "Knowing tablebase evaluations can give you confidence in endgames, but you must still calculate and play accurately over the board.",
+   "plans": "In practical play, rely on your endgame knowledge and calculation, not on external aids.",
+   "concepts": [
+    "practical-endgame",
+    "calculation",
+    "tablebase-knowledge"
+   ],
+   "sources": [
+    "yt:du3PwgeKBRM"
+   ]
+  },
+  {
+   "id": "sl-ogg",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker won the last round because he was paired down against a lower-rated opponent. Being paired down can be an opportunity to score a win, while being paired up is tougher.",
+   "teaches": "When you are paired down, use your rating advantage to play solidly and convert; when paired up, play for chances without being reckless.",
+   "plans": "",
+   "concepts": [
+    "pairings",
+    "rating-management"
+   ],
+   "sources": [
+    "yt:Rf096-0V-Xk"
+   ]
+  },
+  {
+   "id": "sl-om5",
+   "lineSan": [],
+   "opening": "Sicilian Defense: Lasker-Pelikan Variation, Schlechter Variation",
+   "phase": "opening",
+   "explains": "The Schlechter Slav is a viable opening even today, though the speaker humorously notes they still lose with it. The opening itself is sound, but results depend on how well you handle the resulting positions.",
+   "teaches": "An opening's reputation doesn't guarantee results; you must understand its typical plans and middlegame ideas. Choose openings that suit your style and study them deeply.",
+   "plans": "If playing the Schlechter Slav, focus on solid development and typical minority attack or queenside play, while avoiding passive setups.",
+   "concepts": [
+    "slav-defense",
+    "opening-choice",
+    "practical-results"
+   ],
+   "sources": [
+    "yt:SK1XLkOQu8E"
+   ]
+  },
+  {
+   "id": "sl-oo0",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that many amateur players spend too much time on openings and not enough on endgames, tactics, and middlegame play. This is a general observation about study priorities.",
+   "teaches": "For most improving players, openings are over-studied relative to other parts of the game. Focus more on endgames, tactics, and middlegame understanding to improve overall.",
+   "plans": "Allocate study time to endgames, tactics, and middlegame principles rather than just opening preparation.",
+   "concepts": [
+    "study-priorities",
+    "endgame-study",
+    "tactics-training"
+   ],
+   "sources": [
+    "yt:SPEkp49fRrw"
+   ]
+  },
+  {
+   "id": "sl-oos",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "The game ended in a draw after mutual time trouble and excitement. The final position was evaluated by an engine as completely even (0.00), despite the rich tactical play. The commentator was impressed by the game's complexity and the fact that a draw could be so exciting.",
+   "teaches": "A draw can be a high-quality, hard-fought result. Even when the evaluation is equal, the practical chances and tactical possibilities can make the game thrilling.",
+   "plans": "In such balanced positions, players should continue to seek active play and avoid unnecessary risks, but also be alert to tactical opportunities from both sides.",
+   "concepts": [
+    "draw",
+    "engine-evaluation",
+    "practical-chances"
+   ],
+   "sources": [
+    "yt:gRG7W1pXKLA"
+   ]
+  },
+  {
+   "id": "sl-ota",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "In this excerpt, the speaker is introducing a game by Edward Lasker, highlighting that the opening moves are unusual and not typical of modern play, but the game features a beautiful attacking combination.",
+   "teaches": "When facing unfamiliar or old-fashioned openings, focus on the underlying tactical and strategic ideas rather than dismissing them as outdated.",
+   "plans": "",
+   "concepts": [
+    "old-fashioned-openings",
+    "tactical-awareness"
+   ],
+   "sources": [
+    "yt:TmXemx18kBc"
+   ]
+  },
+  {
+   "id": "sl-ov4",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker distinguishes between players who regularly play wild, sacrificial chess and those who prefer solid, positional play. The latter may lull opponents into complacency and then exploit mistakes.",
+   "teaches": "Understand your own strengths and adopt a style that fits them. Both aggressive and quiet approaches can be effective; the key is to play within your calculation abilities.",
+   "plans": "",
+   "concepts": [
+    "playing-styles",
+    "positional-play",
+    "aggressive-play"
+   ],
+   "sources": [
+    "yt:b3gFTkprHpc"
+   ]
+  },
+  {
+   "id": "sl-owr",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker references a famous quote from Kasparov: if you think he is a good player, do you really think he missed that move? This highlights the importance of respecting your opponent's strength and assuming they will find the best moves.",
+   "teaches": "When you have a tactical idea, consider whether your opponent would realistically miss it. If they are strong, they likely saw it, so you must be prepared for their best defense.",
+   "plans": "",
+   "concepts": [
+    "respect-opponent",
+    "assume-best-defense",
+    "kasparov-quote"
+   ],
+   "sources": [
+    "yt:sIo7BXokiuo"
+   ]
+  },
+  {
+   "id": "sl-oy6",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker emphasizes that showing losses is part of the learning process. Mistakes are inevitable, but learning from them makes you stronger.",
+   "teaches": "Analyze your losses to identify the moments where you went wrong. This process helps you avoid similar mistakes in the future.",
+   "plans": "",
+   "concepts": [
+    "learning-from-losses",
+    "improvement"
+   ],
+   "sources": [
+    "yt:odl_qyWi6MQ"
+   ]
+  },
+  {
+   "id": "sl-pcr",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker emphasizes the importance of understanding the essence of an endgame by analyzing how each piece interacts in the correct solution. This involves verbalizing the key ideas and seeing the role of every piece.",
+   "teaches": "To improve at endgames, don't just memorize moves; understand the underlying principles and how pieces work together. This deep understanding helps in practical play.",
+   "plans": "When studying endgames, try to explain the position in your own words and identify the critical interactions between pieces.",
+   "concepts": [
+    "endgame-understanding",
+    "piece-interaction"
+   ],
+   "sources": [
+    "yt:Xy55Jnmmy8I"
+   ]
+  },
+  {
+   "id": "sl-pgt",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "White has an opportunity to win material, but the opponent declines to sacrifice, preferring to keep pieces. The lesson is that unnecessary material sacrifices are avoided unless forced.",
+   "teaches": "Do not give up material without a concrete necessity. Keep your pieces unless a sacrifice leads to a clear win.",
+   "plans": "Maintain material and improve piece activity.",
+   "concepts": [
+    "material",
+    "no-sacrifice-without-need"
+   ],
+   "sources": [
+    "yt:rY_XisxbUxA"
+   ]
+  },
+  {
+   "id": "sl-pkm",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "In this position, the speaker chose not to enter a deep calculation battle with the opponent, recognizing that the opponent is sharper tactically. Instead, they compared the resulting positions from different candidate moves, focusing on which position was more comfortable for them and less comfortable for the opponent.",
+   "teaches": "When you are not the sharpest tactician, avoid long forcing variations where the better calculator wins. Instead, evaluate positions holistically by comparing the resulting structures and piece activity.",
+   "plans": "Choose moves that lead to positions you understand and feel comfortable in, even if they are not the absolute engine-best. Prioritize blocking the opponent's plans over calculating every variation.",
+   "concepts": [
+    "positional comparison",
+    "avoid calculation battles",
+    "practical play"
+   ],
+   "sources": [
+    "yt:YsHpAxSovJ4"
+   ]
+  },
+  {
+   "id": "sl-pye",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "Players often misjudge their own strengths, e.g., enjoying attacking games without being truly strong at them. The speaker found that becoming a GM involved deliberately choosing quiet, 'boring' positions and developing endgame skill, since these lead to complex but materially balanced endgames.",
+   "teaches": "Self-assessment is crucial: identify what you're actually good at, not just what you enjoy. Choosing solid, unassuming positions can be a path to mastery if you invest in the relevant skills.",
+   "plans": "",
+   "concepts": [
+    "self-assessment",
+    "positional play",
+    "endgame focus"
+   ],
+   "sources": [
+    "yt:xVHt5uERd0Q"
+   ]
+  },
+  {
+   "id": "sl-q39",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker emphasizes that when ordinary moves seem insufficient, extraordinary ideas are necessary. This position required a deep forcing sequence with multiple checks.",
+   "teaches": "In difficult positions, search for extraordinary tactical ideas, not just routine moves. Look for sacrifices, checks, and unusual patterns to create winning chances.",
+   "plans": "",
+   "concepts": [
+    "extraordinary-ideas",
+    "creativity",
+    "tactics"
+   ],
+   "sources": [
+    "yt:d7FpjviFuYE"
+   ]
+  },
+  {
+   "id": "sl-q9q",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker mentions a 'Eureka moment' that led to finding a winning idea. In chess, sudden insights often come from deep subconscious processing, especially when you step away from the board.",
+   "teaches": "When you are stuck in a position, taking a break can help you see a new idea. Your brain continues to work on the problem, and a fresh perspective can reveal a winning resource.",
+   "plans": "",
+   "concepts": [
+    "problem solving",
+    "intuition",
+    "break"
+   ],
+   "sources": [
+    "yt:fNgVUizcTb4"
+   ]
+  },
+  {
+   "id": "sl-qfz",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker prefers fighting positions with three results possible on the board, rather than passive solid lines, especially in open tournaments.",
+   "teaches": "Choosing openings that lead to unbalanced, fighting positions can be more effective in open tournaments where decisive results matter.",
+   "plans": "",
+   "concepts": [
+    "fighting-positions",
+    "opening-choice",
+    "tournament-strategy"
+   ],
+   "sources": [
+    "yt:gUaee8NKnGs"
+   ]
+  },
+  {
+   "id": "sl-qhi",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker reflects on the endgame study, noting that there is not much to learn from the forced line, but the process of checking with the engine confirms the drawing method.",
+   "teaches": "Endgame studies often have a single forced drawing line. Use the engine to verify your calculation, but also understand the underlying opposition and key squares so you can reproduce the method over the board.",
+   "plans": "Review the engine line to confirm the drawing method, then internalize the opposition and key-square patterns for future games.",
+   "concepts": [
+    "engine-verification",
+    "calculation",
+    "endgame-technique"
+   ],
+   "sources": [
+    "yt:glbKIk6487Q"
+   ]
+  },
+  {
+   "id": "sl-qi4",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "Blunders often stem from a flawed thinking process rather than just random chance. In this game, the player was caught up in the momentum of having a good position and sped up, leading to an oversight.",
+   "teaches": "Be brutally honest with yourself after a blunder: analyze whether you rushed, became overconfident, or failed to check your opponent's resources. The lesson is to stay diligent and ensure each move is safe, regardless of how well things are going.",
+   "plans": "In future games, consciously slow down when you feel the momentum is with you, and always verify that your intended move doesn't hang a piece or allow a tactic.",
+   "concepts": [
+    "thinking process",
+    "blunder prevention",
+    "self-evaluation",
+    "diligence"
+   ],
+   "sources": [
+    "yt:gvmMqCuySs4"
+   ]
+  },
+  {
+   "id": "sl-ql2",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker jokes about praying for a win when in a desperate position, but emphasizes that you should not rely on luck or divine intervention during a game. Instead, you should aim to avoid getting into such desperate situations.",
+   "teaches": "Do not hope for miracles in chess; focus on making the best practical moves. If you find yourself praying for a win, it is a sign that you have already made serious errors—try to prevent that by playing solidly.",
+   "plans": "",
+   "concepts": [
+    "practical-attitude",
+    "avoiding-desperation",
+    "mental-game"
+   ],
+   "sources": [
+    "yt:iItvLDvZkqc"
+   ]
+  },
+  {
+   "id": "sl-qse",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker reflects on a memorable game from a past tournament, noting that even losses can be instructive and enjoyable. The focus is on sharing lessons learned from the experience.",
+   "teaches": "Reviewing your own games, especially losses, is a valuable study method. Memorable games often contain the most instructive moments.",
+   "plans": "",
+   "concepts": [
+    "game-review",
+    "learning-from-losses"
+   ],
+   "sources": [
+    "yt:kh-bvTN-rcA"
+   ]
+  },
+  {
+   "id": "sl-qsy",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker is analyzing a game from a world championship match to illustrate a player's style: he doesn't win many games from the opening, but he grinds out slightly better positions. Even in a game that wasn't successful, he got something from nothing by not forcing tactical variations but simply aiming for small advantages.",
+   "teaches": "A practical approach in chess is to aim for slightly better positions and outplay the opponent in the middlegame and endgame, rather than seeking forcing tactical wins from the opening.",
+   "plans": "The defender must maintain a consistent defensive level to neutralize these small advantages, as computers may say the position is fine but humans find it hard to defend.",
+   "concepts": [
+    "grinding",
+    "slight advantage",
+    "practical play",
+    "defensive resilience"
+   ],
+   "sources": [
+    "yt:kiUov2R1Tro"
+   ]
+  },
+  {
+   "id": "sl-r34",
+   "lineSan": [],
+   "opening": "Benoni Defense: Czech Benoni Defense",
+   "phase": "concept",
+   "explains": "This opening repertoire is designed for players rated around 1800-2000, but it can be used by anyone, especially in blitz games where practical and fun lines are valuable.",
+   "teaches": "Choosing an opening should consider your level and time control; fun, less theoretical lines can be effective in blitz and for improving players.",
+   "plans": "Study the repertoire's main lines and be ready to play them in blitz or rapid games, but also be aware of more critical responses.",
+   "concepts": [
+    "repertoire",
+    "blitz",
+    "practical-chess"
+   ],
+   "sources": [
+    "yt:nWuEUm2eAe8"
+   ]
+  },
+  {
+   "id": "sl-r35",
+   "lineSan": [],
+   "opening": "Benoni Defense: Czech Benoni Defense",
+   "phase": "concept",
+   "explains": "The presenter prefers interesting and fun lines over overly serious ones like the Gingl Attack or the Advanced French, which are more theoretical.",
+   "teaches": "Amateur players often benefit from choosing openings that are fun and less explored, as they can lead to rich middlegame play without heavy memorization.",
+   "plans": "Focus on understanding the typical plans and tactics in these lines rather than deep theory.",
+   "concepts": [
+    "opening-choice",
+    "fun-lines",
+    "amateur-repertoire"
+   ],
+   "sources": [
+    "yt:nWuEUm2eAe8"
+   ]
+  },
+  {
+   "id": "sl-rdq",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker mentions that even top players may have the right preparation but not the feeling for the position, which can lead to mistakes. The example of the Berlin endgame shows that confidence in a specific type of position is crucial.",
+   "teaches": "Understanding and feeling comfortable in the resulting positions is as important as memorizing opening lines. Choose openings that lead to positions you enjoy and understand deeply.",
+   "plans": "Players should study typical endgames and middlegame plans from their openings to build confidence. If you don't feel comfortable in a position, consider deviating earlier or studying it more.",
+   "concepts": [
+    "confidence",
+    "opening-choice",
+    "endgame-understanding",
+    "practical-chess"
+   ],
+   "sources": [
+    "yt:zdrv08xfk6I"
+   ]
+  },
+  {
+   "id": "sl-rdr",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The position is so sharp that White must dodge many bullets; even a single inaccurate move can flip the evaluation. The speaker had analyzed this line deeply and knew that even with perfect play, White only gets a slight edge.",
+   "teaches": "Deep home analysis can turn a theoretically worse position into a practical weapon: if you know the position better than your opponent, you can steer into complex lines where their mistakes are likely.",
+   "plans": "Aim for the endgame that you have analyzed, even if it gives the opponent a theoretical edge, because you understand the nuances better.",
+   "concepts": [
+    "deep-analysis",
+    "practical-endgame",
+    "risk-management"
+   ],
+   "sources": [
+    "yt:qejc9ISNMBU"
+   ]
+  },
+  {
+   "id": "sl-rds",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker compares a chess opening novelty to a gunslinger's fast draw: it is a survival tool in competitive play, especially when facing a higher-rated opponent.",
+   "teaches": "Develop a personal opening repertoire that includes a surprise line you have prepared deeply; it can level the playing field against stronger players.",
+   "plans": "Identify a sideline in your main opening that leads to complex, less-known positions, and study it thoroughly so you can rely on it in critical games.",
+   "concepts": [
+    "repertoire",
+    "surprise",
+    "competitive-edge"
+   ],
+   "sources": [
+    "yt:qejc9ISNMBU"
+   ]
+  },
+  {
+   "id": "sl-ren",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker observes that players at lower levels often have a preference for active positions, and that dry, strategic positions can be difficult to handle if that is not your style.",
+   "teaches": "It is important to know your own playing style and choose openings that suit it, especially at lower levels where you can play to your strengths.",
+   "plans": "Study games in your preferred opening to understand typical plans and positions that fit your style.",
+   "concepts": [
+    "playing-style",
+    "opening-choice",
+    "self-awareness"
+   ],
+   "sources": [
+    "yt:qzk-xTWergM"
+   ]
+  },
+  {
+   "id": "sl-rfo",
+   "lineSan": [],
+   "opening": "Semi-Slav Defense",
+   "phase": "concept",
+   "explains": "The speaker references a classic game from 1907 that the player in the main game had studied, highlighting that older games often contain more mistakes, which can be instructive and entertaining.",
+   "teaches": "Studying classic games is valuable because the errors made by past masters are instructive; modern top-level play has fewer blunders, so amateur players can learn a lot from historical games.",
+   "plans": "",
+   "concepts": [
+    "classic-games",
+    "study",
+    "mistakes"
+   ],
+   "sources": [
+    "yt:rNdoQPTbQgI"
+   ]
+  },
+  {
+   "id": "sl-rfp",
+   "lineSan": [],
+   "opening": "Semi-Slav Defense",
+   "phase": "concept",
+   "explains": "The speaker emphasizes the importance of forcing moves, noting that amateur games often hinge on a missed forcing move or one that the opponent could have played.",
+   "teaches": "Always consider forcing moves (checks, captures, threats) in every position, as they can be decisive. Missing them or overlooking the opponent's can change the game instantly.",
+   "plans": "",
+   "concepts": [
+    "forcing-moves",
+    "tactics",
+    "calculation"
+   ],
+   "sources": [
+    "yt:rNdoQPTbQgI"
+   ]
+  },
+  {
+   "id": "sl-rfr",
+   "lineSan": [],
+   "opening": "Semi-Slav Defense",
+   "phase": "concept",
+   "explains": "The speaker emphasizes the importance of visualizing positions in your head, especially after a forcing sequence. They also note that studying classic games is valuable, but modern databases make it easier to find recent games, so one must make an effort to seek out classic ones.",
+   "teaches": "Visualization is a skill that improves with practice. Studying classic games is a timeless way to learn, but you must actively search for them in modern databases.",
+   "plans": "",
+   "concepts": [
+    "visualization",
+    "classic-games",
+    "study"
+   ],
+   "sources": [
+    "yt:rNdoQPTbQgI"
+   ]
+  },
+  {
+   "id": "sl-rh9",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The speaker notes that he has made every mistake conceivable, often twice, to confirm they are mistakes. This is a humorous but insightful observation about learning from errors.",
+   "teaches": "Mistakes are valuable learning opportunities. Repeating a mistake can help you internalize why it's wrong, but the goal is to learn from the first occurrence and avoid repeating it. Analyze your losses to understand the underlying causes.",
+   "plans": "After each game, review your mistakes and identify the decision-making flaws that led to them. Use that knowledge to improve your future play.",
+   "concepts": [
+    "learning-from-mistakes",
+    "self-analysis",
+    "growth-mindset"
+   ],
+   "sources": [
+    "yt:rgUQBYOWaOE"
+   ]
+  },
+  {
+   "id": "sl-rlg",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "The speaker mentions that the game features a Scotch Gambit line, which is a sharp opening choice that leads to open positions and tactical battles.",
+   "teaches": "The Scotch Gambit is an opening that prioritizes rapid development and central control, often leading to aggressive play.",
+   "plans": "",
+   "concepts": [
+    "scotch-gambit",
+    "opening-principles",
+    "development"
+   ],
+   "sources": [
+    "yt:spMs5VbXirQ"
+   ]
+  },
+  {
+   "id": "sl-row",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this excerpt, the speaker discusses Nakamura's results in the London Chess Classic, noting he scored well against non-Americans but lost to the two Americans. This sets up a discussion of his games, particularly against Wesley So.",
+   "teaches": "Tournament results can be analyzed by opponent strength and specific matchups, revealing patterns in a player's performance.",
+   "plans": "",
+   "concepts": [
+    "tournament-analysis",
+    "matchup-patterns"
+   ],
+   "sources": [
+    "yt:tm4bLKkzYs8"
+   ]
+  },
+  {
+   "id": "sl-rsn",
+   "lineSan": [],
+   "opening": "Philidor Defense: Exchange Variation",
+   "phase": "concept",
+   "explains": "In the Philidor, developing pieces toward the queenside can be less effective than maintaining central and kingside pressure. The speaker prefers not to over-commit to the queenside and instead keep developing and attacking.",
+   "teaches": "Piece development should aim for active, attacking prospects rather than merely occupying space. Avoid committing pieces to the queenside if it doesn't contribute to your overall plan.",
+   "plans": "Continue developing pieces harmoniously, keeping options open for central and kingside operations.",
+   "concepts": [
+    "piece-development",
+    "central-control",
+    "attacking-play"
+   ],
+   "sources": [
+    "yt:v3XPmRIbono"
+   ]
+  },
+  {
+   "id": "sl-rt6",
+   "lineSan": [],
+   "phase": "concept",
+   "explains": "When facing a familiar opponent, both players know each other's tendencies, so preparation must account for the opponent's likely responses and their own preparation style. The speaker considered that the opponent might also try to avoid being outprepared, leading to a battle of opening knowledge.",
+   "teaches": "In preparation, think about the opponent's preparation habits and how they might try to steer the game. Use your own experience in similar lines to gain an edge.",
+   "plans": "Focus on lines you know well and that offer practical chances, rather than trying to force a theoretical novelty.",
+   "concepts": [
+    "opponent-awareness",
+    "preparation-strategy",
+    "practical-chess"
+   ],
+   "sources": [
+    "yt:vHUwi7T7jaw"
+   ]
+  }
+ ]
+}

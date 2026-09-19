@@ -704,10 +704,62 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 precache cap. Read the preloads out of `dist/index.html`; never infer boot cost
 from the entry chunk's size.
 
+- ✅ **354 NOTES THAT DESCRIBED THE VIDEO, NOT THE BOARD, ARE GONE.** David,
+  reading real samples: "they were messing up the narration for our coach."
+  They were, and a filter already existed — `noteTeachesChessNotItsSource` was
+  just called in THREE places (`supportNoteForPly`, `noteAtPosition`,
+  `transitionTeachingSourceForGame`) out of eight. Every tier a FLOATING note is
+  reached by — `spokenTacticNote`, `endgameNoteForLesson`, `conceptNotesFor`,
+  `buildDanyaTeachingBlock`, `notesForOpening` — had NONE, so
+  *"The speaker expresses gratitude for community support and plans to continue
+  streaming chess education content"* could reach the endgame cards and the
+  LESSON BACKGROUND block handed to the model.
+  Fixed BOTH halves: the notes are stripped from every corpus (archived to
+  `data/archive/corpus-source-meta/`, never deleted) AND `danyaTeachingService`
+  filters at LOAD, so a new tier inherits it instead of needing a fourth
+  watcher. Gate: `corpusTeachesChess.test.ts`, negative-controlled — it rejects
+  100% of what was stripped.
+
+  🚨 **THE RULE IS A CONJUNCTION AND THAT IS THE ENTIRE DESIGN** — names the
+  medium AND carries no chess of its own. THREE cheaper rules were tried first
+  and every one deleted real teaching, which is why `sourceMeta.shared.mjs`
+  says so at length:
+  | attempt | would strip | what it killed |
+  |---|---|---|
+  | medium phrases alone | 1,415 | "In the Italian Game (e4 e5 Nf3 Nc6 Bc4), the speaker recommends …Nf6" |
+  | + format words | 23 more | "In the Vienna Gambit (e4 e5 Nc3)… at the 1500-1700 **rating level**" |
+  | "names no square or piece" | 2,712 | "apply the checks, captures, threats method"; "a piece defended only by one other piece is vulnerable" |
+  | **the conjunction (shipped)** | **354 (0.54%)** | nothing — measured below |
+  Cost, MEASURED both ways rather than assumed (the discipline the archive
+  attempt lacked): endgame cards **23/27 before and after, same four misses**;
+  transition **20/20**, LESSON BACKGROUND **20/20**. Zero from the voiced corpus
+  and zero from the bundled 122 — both were already clean.
+
 **OWED, ranked**
 
-1. 🔴 **POST-DEPLOY AUDIT FOR BOTH COMMITS** (G1). Neither has had one. Run
-   against LIVE prod once the bundle advances:
+0. 🔴 **REVIEW AUDIT: 22/24, TWO REAL FAILURES — both in the fundamentals-first
+   path** (prod, 2026-09-19, Carlsen–Grischuk Najdorf, 89 plies):
+   - `RECAP fundamentals-aggregate` — end reached, 1 flagged ply, no aggregate
+     line spoken.
+   - `FUNDLEAD flagged-student-plies-lead-with-fundamentals` — 0/1; ply 71 led
+     with "You: that was an inaccuracy, costing about 0.6 points" instead of a
+     fundamental.
+   Both contracts live in `coachFeatureService` (`:1697` fundamentals-first,
+   `:4281` the aggregate) fed by `boardConcepts` — CODE computers, not the
+   corpus touched tonight, so these are very likely pre-existing. NOT asserted
+   as unrelated: the corpus commit was already live when this ran, and one run
+   cannot exonerate it. **n=1** — that game had a single flagged ply, so widen
+   the sample before concluding anything (this is the C18 "n=1" trap).
+   Pinned reproduction, printed by the audit itself:
+   `AUDIT_GAME_ID=jMVMo1Ua AUDIT_STUDENT=white node scripts/audit-review-overhaul-prod.mjs`
+   Everything else was green, including ACC board-accuracy across 67 narrated
+   plies, SEAT across 67, both THESIS rows, all three NEED rows and MUTE.
+
+1. 🔴 **POST-DEPLOY AUDIT FOR BOTH COMMITS** (G1). SW handover audit is DONE —
+   9/9 green on live prod, including the two rows that prove the mechanism
+   (`deferrals+1, asked-while-held=false`, then `SKIP_WAITING posted 1x`).
+   Learn is DONE — 8/8. Review is the one above. Still to run against LIVE prod
+   after the corpus-strip deploy:
    `AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-sw-handover-prod.mjs`
    plus the standing pair (`audit-review-overhaul-prod`, then
    `audit-concept-gameplay-prod`), SEQUENTIALLY, never beside ship-check.
