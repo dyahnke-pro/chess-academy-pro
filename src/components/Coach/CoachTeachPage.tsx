@@ -258,8 +258,6 @@ import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
-import { detectLanguage } from '../../utils/detectLanguage';
-import { translateToEnglish } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
@@ -3505,11 +3503,10 @@ export function CoachTeachPage(): JSX.Element {
       // resolves the command, persists it (Dexie + live store), and returns the
       // confirmation; unrelated input returns null and falls through. ───
       {
-        // Multilingual settings on Learn (David 2026-07-10): applyCoachSetting is
-        // an English matcher, so translate a non-English command first.
-        const settingLang = detectLanguage(text);
-        const settingText = settingLang.nonEnglish ? await translateToEnglish(text) : text;
-        const settingResult = await applyCoachSetting(settingText);
+        // Multilingual settings on Learn (David 2026-07-10): handled INSIDE
+        // applyCoachSetting since 2026-09-19 — it is the English matcher, so
+        // the translation is its concern, not each caller's.
+        const settingResult = await applyCoachSetting(text);
         if (settingResult) {
           setMessages((prev) => [...prev, {
             id: uid('setting'),

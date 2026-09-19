@@ -20,6 +20,8 @@ import { useAppStore } from '../stores/appStore';
 import type { CoachNarration, UserProfile } from '../types';
 import { logAppAudit } from './appAuditor';
 import { THEMES, getThemeById, applyTheme } from './themeService';
+import { detectStudentLanguage } from './spokenLanguage';
+import { translateToEnglish } from './coachApi';
 
 /** Resolve a theme phrase to a real theme id from the registry. "dark"/"light"
  *  map to the premium/minimal defaults; a named theme ("midnight blue", "neon")
@@ -219,7 +221,25 @@ export function resolveSettingsCommand(text: string): ResolvedCommand | null {
  * command isn't a safe recognized settings change (caller declines). Persists to
  * Dexie + mirrors the runtime store, and audits every mutation.
  */
-export async function applyCoachSetting(text: string): Promise<SettingsCommandResult | null> {
+/**
+ * Resolve and apply a settings command, in whatever language it was written.
+ *
+ * 🔒 THE MULTILINGUAL PREAMBLE BELONGS TO THE MATCHER, NOT TO EACH CALLER
+ * (2026-09-19). `resolveSettingsCommand` is an English matcher, so both callers
+ * — `routeChatIntent` and Learn's own settings lane — had hand-rolled the same
+ * detect-then-translate block in front of it. Two copies of one concern is the
+ * shape that rots: the Learn copy was the one that did not record the student's
+ * language, so "turn off hints" in Thai worked while leaving the coach speaking
+ * English for the rest of the lesson. It lives here now, once, and both callers
+ * inherit it.
+ *
+ * It is a no-op on English input and on a caller that has already translated
+ * (the router translates at its top for its other matchers), because the
+ * detector returns English for English and no call is made.
+ */
+export async function applyCoachSetting(rawText: string): Promise<SettingsCommandResult | null> {
+  const lang = detectStudentLanguage(rawText);
+  const text = lang.nonEnglish ? await translateToEnglish(rawText).catch(() => rawText) : rawText;
   const cmd = resolveSettingsCommand(text);
   if (!cmd) return null;
   try {

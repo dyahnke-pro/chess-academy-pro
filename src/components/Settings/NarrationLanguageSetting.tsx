@@ -1,5 +1,6 @@
 import { Languages } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
+import { LANG_NATIVE_LABEL } from '../../utils/detectLanguage';
 
 /**
  * Settings control for the coach's narration language.
@@ -13,23 +14,16 @@ import { useAppStore } from '../../stores/appStore';
 // coach's spoken narration now translates at the voice chokepoint, which needs
 // no pack at all (see `spokenLanguage`). So the list is what the coach can say,
 // not what happens to be pre-translated.
-const LANGUAGES: ReadonlyArray<{ code: string; label: string }> = [
-  { code: 'en', label: 'English' },
-  { code: 'es', label: 'Español' },
-  { code: 'fr', label: 'Français' },
-  { code: 'de', label: 'Deutsch' },
-  { code: 'pt', label: 'Português' },
-  { code: 'it', label: 'Italiano' },
-  { code: 'nl', label: 'Nederlands' },
-  { code: 'pl', label: 'Polski' },
-  { code: 'tr', label: 'Türkçe' },
-  { code: 'ru', label: 'Русский' },
-  { code: 'ar', label: 'العربية' },
-  { code: 'hi', label: 'हिन्दी' },
-  { code: 'ja', label: '日本語' },
-  { code: 'ko', label: '한국어' },
-  { code: 'zh', label: '中文' },
-];
+//
+// 🔒 DERIVED, NEVER HAND-WRITTEN (2026-09-19). This was a second list beside
+// `detectLanguage`'s, and the two had drifted: the app could not DETECT Dutch,
+// Polish or Turkish although they were offered here, and a Thai speaker — a
+// real App Store user who asked for a lesson seven times — could neither be
+// detected nor pick their own language. "Detectable" and "choosable" are the
+// same question, so they now read the same record; adding a language is one row
+// in `LANG_NATIVE_LABEL` and both halves move together.
+const LANGUAGES: ReadonlyArray<{ code: string; label: string }> =
+  Object.entries(LANG_NATIVE_LABEL).map(([code, label]) => ({ code, label }));
 
 export function NarrationLanguageSetting(): JSX.Element | null {
   const activeProfile = useAppStore((s) => s.activeProfile);

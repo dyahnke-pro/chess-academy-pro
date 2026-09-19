@@ -30,7 +30,7 @@
  * teaching in English beats the coach going silent.
  */
 import { useAppStore } from '../stores/appStore';
-import { detectLanguage, languageNameFor } from '../utils/detectLanguage';
+import { detectLanguage, languageNameFor, type DetectedLanguage } from '../utils/detectLanguage';
 
 /** Translations already paid for, keyed by language + source text. Lines
  *  repeat constantly — a beat re-spoken on resume, a cue replayed on
@@ -65,6 +65,61 @@ export function noteDetectedLanguage(languageName: string | null): void {
   if (languageName && languageName !== 'English') detectedSessionLanguage = languageName;
 }
 
+/**
+ * DETECT THE STUDENT'S OWN WORDS — and record what was found, in one call.
+ *
+ * 🔒 THE OBSERVATION WAS RECORDED ON ONLY ONE OF THE TWO PATHS THROUGH THE ONE
+ * DOOR (measured 2026-09-19). `dispatchCoachTurn` routes a turn either through
+ * the deterministic ACTION router or through the brain, and only the brain
+ * called `noteDetectedLanguage`. So the better the routing got, the worse the
+ * voice got: once a Thai "teach me the Italian" finally reached the
+ * walkthrough deterministically, it did so WITHOUT the LLM ever seeing the
+ * turn — and the entire live lesson that followed was then narrated in
+ * English, to a student who had just typed Thai. The measurement was
+ * `expected null to be 'Thai'` on a turn that had routed perfectly.
+ *
+ * Recording is therefore a property of DETECTING STUDENT INPUT, not of one
+ * caller remembering to do it. Every site that asks "what language did the
+ * student write in" calls this instead of `detectLanguage`, so a new surface
+ * cannot add a path that understands them and then talks past them.
+ *
+ * NOT for text the app itself produced — `localizeSpokenText` asks about its
+ * OWN narration, and recording that would be the coach learning its language
+ * from itself.
+ */
+export function detectStudentLanguage(text: string | undefined | null): DetectedLanguage {
+  const detected = detectLanguage(text);
+  if (detected.nonEnglish) noteDetectedLanguage(detected.name);
+  return detected;
+}
+
+/**
+ * The device's own language, as a name — the COLD-START PRIOR for a student
+ * who has not typed and has not chosen.
+ *
+ * A student can reach a live lesson without writing a word: tap an opening,
+ * tap Watch, play moves. There is then nothing to detect from, and the old
+ * answer was English — which is a guess, and on a Thai phone a bad one. The
+ * locale is not a guess: it is a fact the person set about themselves.
+ *
+ * It ranks BELOW both the setting and the observation, so it only ever fills a
+ * vacuum. Unknown or English locales return null and the coach speaks English,
+ * exactly as before.
+ */
+function deviceLanguageName(): string | null {
+  try {
+    const nav = (globalThis as { navigator?: { language?: string; languages?: readonly string[] } }).navigator;
+    if (!nav) return null;
+    for (const tag of [...(nav.languages ?? []), nav.language]) {
+      const name = languageNameFor(tag);
+      if (name) return name;
+    }
+  } catch {
+    // A missing/hostile navigator is not a reason to fail a narration.
+  }
+  return null;
+}
+
 /** Test seam + a way to forget the observation (a fresh profile / sign-out). */
 export function resetDetectedLanguage(): void {
   detectedSessionLanguage = null;
@@ -73,9 +128,16 @@ export function resetDetectedLanguage(): void {
 /** The language the coach should SPEAK in, as a human name ("Spanish"), or
  *  null for English / unset / unknown.
  *
- *  PRECEDENCE: an explicit SETTING beats an observation — a student who chose
- *  a narration language means it, even if they type in another. Only when no
- *  setting exists does the detected session language apply. */
+ *  PRECEDENCE, strongest evidence first:
+ *    1. the explicit SETTING — a student who chose a narration language means
+ *       it, even if they type in another;
+ *    2. what they have actually been TYPING this session;
+ *    3. the DEVICE LOCALE — the cold-start prior, for the student who reached
+ *       a lesson without typing anything at all;
+ *    4. English.
+ *
+ *  Each step is weaker evidence than the one above it and only fills the gap
+ *  the one above left. */
 export function spokenLanguageName(): string | null {
   try {
     const chosen = languageNameFor(useAppStore.getState().activeProfile?.preferences.narrationLanguage);
@@ -84,7 +146,7 @@ export function spokenLanguageName(): string | null {
     // fall through to the observation — a store read failing is not a reason
     // to speak the wrong language.
   }
-  return detectedSessionLanguage;
+  return detectedSessionLanguage ?? deviceLanguageName();
 }
 
 /** `text` in the student's chosen narration language, or `text` unchanged when

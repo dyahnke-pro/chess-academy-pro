@@ -39,7 +39,7 @@ import { findLastMatchingGame } from './gameContextService';
 import { getWeakestOpenings } from './openingService';
 import { applyCoachSetting } from './coachSettingsAction';
 import { translateToEnglish } from './coachApi';
-import { detectLanguage } from '../utils/detectLanguage';
+import { detectStudentLanguage } from './spokenLanguage';
 import { matchNavigationRoute } from './navigationRouter';
 
 export interface RoutedChatIntent {
@@ -113,7 +113,14 @@ export async function routeChatIntent(
   // confirmation before any answer-phrasing, so the turn language is untouched
   // here; a non-command falls through to the brain, which re-detects + phrases
   // in-language. English input is a no-op (no extra call).
-  const cmdLang = detectLanguage(text);
+  //
+  // 🔒 AND RECORDING IS PART OF DETECTING (2026-09-19). This used to call the
+  // bare `detectLanguage`, so a command that routed HERE never told the voice
+  // what language the student wrote in — only `coachService` did that, and a
+  // routed command never reaches it. The result was a Thai "teach me the
+  // Italian" that started the right lesson and then narrated the whole live
+  // board in English. `detectStudentLanguage` detects and records in one call.
+  const cmdLang = detectStudentLanguage(text);
   text = cmdLang.nonEnglish ? await translateToEnglish(text) : text;
 
   // Settings-as-actions — "turn on voice", "set narration to brief", "enable

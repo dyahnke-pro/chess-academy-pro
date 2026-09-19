@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { detectLanguage } from './detectLanguage';
+import {
+  detectLanguage,
+  SCRIPT_RANGES,
+  LANG_NAME,
+  LANG_NATIVE_LABEL,
+  type LangCode,
+} from './detectLanguage';
 
 // The 2026-07-11 fidelity-trip cluster: English chess asks were misdetected
 // as Portuguese/Italian (bare articles + the lowercased "O-O" castling
@@ -35,5 +41,103 @@ describe('detectLanguage — English chess asks stay English', () => {
     expect(detectLanguage('').code).toBe('en');
     expect(detectLanguage('Nf3 Nc6 Bb5').code).toBe('en');
     expect(detectLanguage(undefined).code).toBe('en');
+  });
+});
+
+describe('detectLanguage — the script table', () => {
+  // 🔒 A MISSING ROW HERE IS FOUR BUGS ON FOUR SURFACES (2026-09-19). A real
+  // App Store user asked for a lesson seven times in Thai and never got one:
+  // nothing downstream was broken, this function simply answered "English" and
+  // every translate/route branch correctly did nothing. Nine writing systems
+  // were invisible the same way.
+  const SAMPLES: ReadonlyArray<readonly [LangCode, string, string]> = [
+    ['th', 'Thai', 'สอนฉันเปิดเกมอิตาลี'],
+    ['he', 'Hebrew', 'למד אותי'],
+    ['el', 'Greek', 'Δίδαξέ μου'],
+    ['bn', 'Bengali', 'আমাকে শেখান'],
+    ['ta', 'Tamil', 'எனக்கு கற்றுக்கொடு'],
+    ['te', 'Telugu', 'నాకు నేర్పండి'],
+    ['kn', 'Kannada', 'ನನಗೆ ಕಲಿಸಿ'],
+    ['ml', 'Malayalam', 'എന്നെ പഠിപ്പിക്കൂ'],
+    ['gu', 'Gujarati', 'મને શીખવો'],
+    ['pa', 'Punjabi', 'ਮੈਨੂੰ ਸਿਖਾਓ'],
+    ['or', 'Odia', 'ମୋତେ ଶିଖାନ୍ତୁ'],
+    ['si', 'Sinhala', 'මට උගන්වන්න'],
+    ['lo', 'Lao', 'ສອນຂ້ອຍ'],
+    ['km', 'Khmer', 'បង្រៀនខ្ញុំ'],
+    ['my', 'Burmese', 'ကျွန်တော့်ကို သင်ပေးပါ'],
+    ['ka', 'Georgian', 'მასწავლე'],
+    ['hy', 'Armenian', 'սովորեցրու ինձ'],
+    ['am', 'Amharic', 'አስተምረኝ'],
+    ['dv', 'Dhivehi', 'އަހަރެންނަށް'],
+    ['bo', 'Tibetan', 'ང་ལ་སློབ'],
+    // The six that always worked — proof the table did not lose one.
+    ['ru', 'Russian', 'какой лучший ход'],
+    ['ar', 'Arabic', 'ما هو أفضل نقلة'],
+    ['hi', 'Hindi', 'मुझे सिखाओ'],
+    ['ko', 'Korean', '가르쳐줘'],
+    ['ja', 'Japanese', 'いちばんいい手は'],
+    ['zh', 'Chinese', '最好的一步棋是什么'],
+  ];
+
+  for (const [code, name, sample] of SAMPLES) {
+    it(`${name} is detected, named and marked non-English`, () => {
+      expect(detectLanguage(sample)).toEqual({ code, name, nonEnglish: true });
+    });
+  }
+
+  it('Vietnamese is not answered as French', () => {
+    // Its tone marks live in Latin Extended Additional, which the French accent
+    // fingerprint would otherwise claim — so a Vietnamese ask used to be
+    // translated, and replied to, in French.
+    expect(detectLanguage('Dạy tôi khai cuộc Ý').code).toBe('vi');
+    expect(detectLanguage('Nước đi nào tốt nhất?').code).toBe('vi');
+  });
+
+  it('Dutch, Polish and Turkish are detectable, not just choosable', () => {
+    // All three were offered in the narration-language picker while being
+    // impossible to detect — the same drift, in the other direction.
+    expect(detectLanguage('Leer mij de beste zet voor wit').code).toBe('nl');
+    expect(detectLanguage('Naucz mnie włoskiego otwarcia').code).toBe('pl');
+    expect(detectLanguage('İtalyan açılışını öğret bana').code).toBe('tr');
+  });
+
+  it('the only ranges that overlap are the DECLARED shared-script ones', () => {
+    // Order in this table is load-bearing in exactly three places, and nowhere
+    // else. Ukrainian sits inside Cyrillic, Urdu and Persian inside Arabic —
+    // they are distinguished by LETTERS their bigger neighbour does not have,
+    // so their rows must come first. Any OTHER overlap would make the table
+    // silently order-dependent, which is how a future row lands in the wrong
+    // language with every test still green.
+    const DECLARED = new Set(['uk|ru', 'ur|ar', 'fa|ar', 'ur|fa|ar']);
+    const undeclared: string[] = [];
+    for (let cp = 0x0300; cp <= 0xffff; cp++) {
+      const ch = String.fromCharCode(cp);
+      const hits = SCRIPT_RANGES.filter(([re]) => re.test(ch)).map(([, c]) => c);
+      if (hits.length > 1 && !DECLARED.has(hits.join('|'))) {
+        undeclared.push(`U+${cp.toString(16)} → ${hits.join(',')}`);
+      }
+    }
+    expect(undeclared).toEqual([]);
+  });
+
+  it('a shared script does not answer with its bigger neighbour', () => {
+    // Telling a Ukrainian they are speaking Russian is not a rounding error,
+    // and a range check alone did exactly that. Same for Persian and Urdu
+    // inside Arabic.
+    expect(detectLanguage('Яка найкраща партія тут? Навчи мене італійського дебюту').code).toBe('uk');
+    expect(detectLanguage('Какой лучший ход здесь').code).toBe('ru');
+    expect(detectLanguage('بهترین حرکت چیست؟ به من بازی ایتالیایی را یاد بده').code).toBe('fa');
+    expect(detectLanguage('بہترین چال کیا ہے؟ مجھے اطالوی اوپننگ سکھائیں').code).toBe('ur');
+    expect(detectLanguage('ما هي أفضل نقلة هنا؟ علمني الافتتاحية الإيطالية').code).toBe('ar');
+  });
+
+  it('every language the picker offers can also be named for the model', () => {
+    // The picker reads LANG_NATIVE_LABEL; the model instruction reads
+    // LANG_NAME. Both are Record<LangCode,…>, so this asserts the join rather
+    // than the completeness TypeScript already guarantees.
+    for (const code of Object.keys(LANG_NATIVE_LABEL) as LangCode[]) {
+      expect(LANG_NAME[code], code).toBeTruthy();
+    }
   });
 });
