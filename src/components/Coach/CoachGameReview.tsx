@@ -753,7 +753,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const OPENING_LAST_MOVE = 7;
   useEffect(() => {
     if (!walkNarration || !playerColor) return;
+    // THE NARRATION REBUILT, SO THE MOMENT IS BEING RECOMPUTED — a card still
+    // on screen is about a ply the walk has already left. The review's deep
+    // dive rewrites the annotations mid-walk and playback restarts at ply 0, so
+    // this is not hypothetical: an un-cleared card sits over a board that has
+    // moved, which is the "a blocking card the user can't relate to the board
+    // is indistinguishable from a hang" failure in a new costume.
     setCriticalMoment(null);
+    setCriticalCard(null);
+    setCriticalReveal(null);
     criticalDoneRef.current = new Set();
     const plies = walkNarration.segments
       .filter((sg) => sg.playerColor === playerColor
@@ -1003,6 +1011,43 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return;
     }
     if (principleQuizStateRef.current) return; // device quiz (hidden) — never opens
+    // ── THE CRITICAL MOMENT, at its own ply ──────────────────────────────
+    //
+    // 🚨 IT LIVES OUT HERE, NOT INSIDE `if (readingQuizOn)`. The first cut put
+    // it in that branch because that is where the other mid-walk cards are
+    // built — and `readingQuizOn` is a SETTING that is OFF on a cold device, so
+    // the wire could never fire. The prod audit caught it in one run ("a moment
+    // was selected but nothing said it aloud"), which is the whole point of
+    // asserting what the student HEARD rather than that the code exists. A
+    // critical moment has nothing to do with the reading-quiz preference and
+    // must not be gated by one.
+    //
+    // It runs BEFORE the flagged-move ladder, on plies that ladder by
+    // definition never reaches: the question plan only tags FLAGGED moves, and
+    // the scan skipped every ply the plan already owns.
+    //
+    // 🔒 THE REGISTER FOLLOWS THE BOARD, NOT THE CARD. If their move HELD, this
+    // STATES it and the walk carries on — asking a student to find a move they
+    // played is §G4.5.2's exact defect. Only a genuine miss at a one-move
+    // position stops the walk.
+    if (criticalMoment && !criticalDoneRef.current.has(criticalMoment.ply)
+      && walkPlayback.currentPly + 1 === criticalMoment.ply) {
+      const atPly = criticalMoment.ply;
+      criticalDoneRef.current.add(atPly);
+      captureEvent('review_critical_moment', {
+        ply: atPly, register: criticalMoment.register, count: criticalMoment.count,
+        stake: criticalMoment.stake, gap_cp: criticalMoment.gapCp, held: criticalMoment.found,
+      });
+      if (criticalMoment.register === 'ask') {
+        questionPlyRef.current = atPly;
+        setCriticalCard(criticalMoment);
+        setCriticalReveal(null);
+        void reviewSay(criticalMoment.question ?? '').catch(() => undefined);
+        return;  // pause the walk; resumes when they answer
+      }
+      // credit / note — a statement. Speak it and keep walking.
+      void reviewSay(criticalMoment.reveal, criticalMoment.found ? { prosodySpike: true } : undefined).catch(() => undefined);
+    }
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
       const seg = walkNarration?.segments.find((s) => s.ply === nextPly) ?? null;
@@ -1023,31 +1068,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // (≤2 per game, the biggest moments), and use the KIND the plan chose for
       // that moment. Everything else stays narration — no overwhelm (David
       // 2026-07-20). quizzedPliesRef stops a re-fire on the same ply.
-      // ── THE CRITICAL MOMENT, at its own ply ──────────────────────────────
-      // Before the flagged-move ladder, because this fires on plies the ladder
-      // by definition never reaches (the plan only tags flagged moves, and the
-      // scan skipped every ply the plan already owns).
-      //
-      // 🔒 THE REGISTER FOLLOWS THE BOARD, NOT THE CARD. If their move HELD,
-      // this STATES it and the walk carries on — asking a student to find a
-      // move they played is §G4.5.2's exact defect. Only a genuine miss at a
-      // one-move position stops the walk.
-      if (criticalMoment && seg && nextPly === criticalMoment.ply && !criticalDoneRef.current.has(nextPly)) {
-        criticalDoneRef.current.add(nextPly);
-        captureEvent('review_critical_moment', {
-          ply: nextPly, register: criticalMoment.register, count: criticalMoment.count,
-          stake: criticalMoment.stake, gap_cp: criticalMoment.gapCp, held: criticalMoment.found,
-        });
-        if (criticalMoment.register === 'ask') {
-          questionPlyRef.current = nextPly;
-          setCriticalCard(criticalMoment);
-          setCriticalReveal(null);
-          void reviewSay(criticalMoment.question ?? '').catch(() => undefined);
-          return;  // pause the walk; resumes when they answer
-        }
-        // credit / note — a statement. Speak it and keep walking.
-        void reviewSay(criticalMoment.reveal, criticalMoment.found ? { prosodySpike: true } : undefined).catch(() => undefined);
-      }
       const planned = questionPlan.get(nextPly);
       if (seg && isStudentMistake && planned && !quizzedPliesRef.current.has(nextPly)) {
         quizzedPliesRef.current.add(nextPly);
