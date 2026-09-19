@@ -15,6 +15,10 @@
  *      audit flags COUNTED_NO_DRILL (the "picker fired, nothing to drill"
  *      class). Proves the tool actually catches a dropped delivery live.
  *
+ *   3. EMPTY-DRILL DETECTION (2026-09-19) — a counted row with no best move on a
+ *      tag with no puzzle themes → DRILL_PLAN_EMPTY. The audit could not see this
+ *      before: it graded a join no student reached (see bucketPipelineAudit.ts).
+ *
  * Usage:
  *   node scripts/audit-bucket-delivery-loop.mjs                 # localhost:5173
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app AUDIT_SANDBOX=1 \
@@ -28,7 +32,12 @@ import { join } from 'node:path';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
-const STREAM_URL = `${BASE_URL.replace(/\/$/, '')}/api/audit-stream`;
+// G2 (CLAUDE.md, 2026-09-11): post-deploy audits must NEVER stream to prod's
+// /api/audit-stream — it shares one Upstash budget with the spend guard, the
+// bell and referrals. `bucketAuditBridge` gates only on the key being SET, so a
+// loopback discard address activates it while nothing ever leaves the box.
+// This used to point at `${BASE_URL}/api/audit-stream` — a live prod write.
+const STREAM_URL = 'http://127.0.0.1:9/audit-discard';
 
 // A counted slip position: black to move, 'a6' legal quiet, 'd5' legal best.
 const FEN = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
@@ -126,6 +135,31 @@ async function main() {
     const dropped = await page.evaluate(() => window.__bucketAudit.auditBucketPipeline());
     const flagged = dropped.violations.some((v) => v.code === 'COUNTED_NO_DRILL');
     record('DROP DETECTION — COUNTED_NO_DRILL flagged', flagged, `dropped=${dropped.delivery.dropped}`);
+    // S1 (WO-3, 2026-09-19) — THE DEAD END THE AUDIT COULD NOT SEE. A counted
+    // row with NO best move, on a tag with NO puzzle themes, is the state where
+    // WeaknessTagDrillPage renders "No drillable positions yet". The audit used
+    // to grade this through `mapTagToDrills` (zero production callers), which
+    // kept such rows and reported DRILLABLE. It now grades the shipped path
+    // (`getMisconceptionDrillPuzzles`), so this row MUST raise DRILL_PLAN_EMPTY.
+    await page.evaluate(async (fen) => {
+      const openReq = indexedDB.open('ChessAcademyDB');
+      const db = await new Promise((res) => { openReq.onsuccess = () => res(openReq.result); });
+      const now = Date.now();
+      await new Promise((res, rej) => {
+        const tx = db.transaction('misconceptionTags', 'readwrite');
+        tx.objectStore('misconceptionTags').put({
+          id: 'aud-empty-1', tag: 'neglected-development', source: 'auto-analysis', createdAt: now,
+          fen, playedSan: 'a6', /* bestSan deliberately absent */ cpLoss: 90, gamePhase: 'opening',
+          status: 'open', masteryHits: 0, dueAt: now, counted: true,
+        });
+        tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error);
+      });
+      db.close();
+    }, FEN);
+    const emptyRun = await page.evaluate(() => window.__bucketAudit.auditBucketPipeline());
+    const emptyFlagged = emptyRun.violations.some((v) => v.code === 'DRILL_PLAN_EMPTY' && /neglected-development/.test(v.detail));
+    record('S1 — DRILL_PLAN_EMPTY fires where the student sees the empty state', emptyFlagged,
+      emptyFlagged ? 'audit and surface agree' : `codes=${[...new Set(emptyRun.violations.map((v) => v.code))].join(',')}`);
   } catch (e) {
     record('run', false, e.message);
   } finally {
