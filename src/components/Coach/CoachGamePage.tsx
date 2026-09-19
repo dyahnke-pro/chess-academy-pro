@@ -1968,6 +1968,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       pgn: game.history.join(' '),
       white: playerColor === 'white' ? playerName : 'Stockfish Bot',
       black: playerColor === 'black' ? playerName : 'Stockfish Bot',
+      // DECLARED, not left to be inferred back out of the names. The review's
+      // narration seat reads this first; a guessed seat attributes the
+      // student's own moves to the opponent.
+      studentSide: playerColor,
       result: pgnResult,
       date: new Date().toISOString().split('T')[0],
       event: `Coach Game ${tags.join(' ')}`.trim(),

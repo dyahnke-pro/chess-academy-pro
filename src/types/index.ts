@@ -662,6 +662,25 @@ export interface GameRecord {
   pgn: string;
   white: string;
   black: string;
+  /**
+   * WHICH SIDE THE STUDENT PLAYED, when the writer knows it.
+   *
+   * `ModelGame` has carried this field for years; a game the student actually
+   * PLAYED had nowhere to state it, so every reader had to INFER the seat from
+   * the names — `resolvePlayerColor` matches a stored username, or spots an
+   * engine name on a coach game. Both work until neither applies (a PGN import
+   * whose username was never stored, a game seeded by a harness), and then the
+   * resolver returns null and the caller defaults to 'white' for board
+   * orientation. That default rode into the narration seat, where a guess is
+   * worse than none: a BLACK student heard their own moves attributed to the
+   * opponent, including the one ply the engine flagged.
+   *
+   * Optional because it is honestly unknown for an old row or a bare PGN —
+   * absent means "infer it", which is the behaviour that existed before. Every
+   * writer that KNOWS (both coach-game save paths know their `playerColor`)
+   * now says so instead of leaving it to be guessed back out of a name.
+   */
+  studentSide?: 'white' | 'black';
   result: GameResult;
   date: string;
   event: string;

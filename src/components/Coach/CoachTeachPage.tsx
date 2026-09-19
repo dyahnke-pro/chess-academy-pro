@@ -10561,6 +10561,8 @@ export function CoachTeachPage(): JSX.Element {
           pgn,
           white: playerColor === 'white' ? playerName : 'Coach',
           black: playerColor === 'black' ? playerName : 'Coach',
+          // DECLARED — see the same line in CoachGamePage.
+          studentSide: playerColor,
           result: playerColor === 'white'
             ? (won ? '1-0' : game.isCheckmate ? '0-1' : '1/2-1/2')
             : (won ? '0-1' : game.isCheckmate ? '1-0' : '1/2-1/2'),

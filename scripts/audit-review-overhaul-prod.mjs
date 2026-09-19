@@ -235,7 +235,14 @@ const run = async () => {
     const db = await open();
     const put = (store, val) => new Promise((res, rej) => { const t = db.transaction(store, 'readwrite'); t.objectStore(store).put(val); t.oncomplete = () => res(true); t.onerror = () => rej(t.error); });
     const getAll = (store) => new Promise((res, rej) => { const t = db.transaction(store, 'readonly'); const rq = t.objectStore(store).getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
-    await put('games', { id: gid, pgn, white: g.white, black: g.black, result: g.result, date: '2026.09.03', event: "Let's Play!", eco: g.eco ?? 'B22', whiteElo: 1392, blackElo: 1378, source: 'chesscom', termination: 'resignation', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
+    // THE HARNESS MUST TELL THE APP WHICH SEAT IT IS AUDITING. This seeded a
+    // real master game and computed its own expectations from `studentSide`
+    // (see the owned-ply filter below) while never writing that field into the
+    // record — so the app had no way to know, fell back to 'white', and the
+    // SEAT row failed the product for a fact the harness had withheld. It is
+    // still a real product fix (a guessed seat must never reach narration),
+    // but an instrument that hides an input is not measuring the product.
+    await put('games', { id: gid, studentSide: g.studentSide, pgn, white: g.white, black: g.black, result: g.result, date: '2026.09.03', event: "Let's Play!", eco: g.eco ?? 'B22', whiteElo: 1392, blackElo: 1378, source: 'chesscom', termination: 'resignation', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
     const profs = await getAll('profiles');
     for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = g.studentSide === 'white' ? g.white : g.black; p.preferences.coachNarration = 'full';
       // STOP THE AUTO-IMPORT THE LINE ABOVE WOULD TRIGGER (2026-09-18). The

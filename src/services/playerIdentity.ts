@@ -35,6 +35,25 @@ export function isEngineName(name: string): boolean {
 }
 
 export function resolvePlayerColor(game: GameRecord, identity: PlayerIdentity): PlayerColor | null {
+  // 🔒 AN EXPLICIT DECLARATION BEATS EVERY HEURISTIC, AND IT WAS ALREADY ON THE
+  // RECORD. `GameRecord.studentSide` has existed the whole time (model games
+  // are gated on it) and no resolver read it — so a review of a game whose
+  // names match no stored username fell through every branch to `null`, and
+  // `CoachReviewSessionPage` turned that null into a DEFAULT of 'white' for
+  // board orientation. That default then rode into `buildReviewSegments` as the
+  // NARRATION SEAT, and a black student heard their own moves attributed to the
+  // opponent: "Your opponent developed into the game", "Your opponent: the move
+  // axb5 captures…", and — on the one ply the engine flagged — "Your opponent:
+  // that was a mistake, costing about 1.4 points."
+  //
+  // This is the locked seat rule exactly: a teaching claim that says "your" is
+  // seat-relative, so a GUESSED seat is worse than none, and the answer is
+  // usually already sitting on the object being indexed. The file refuses to
+  // guess one line away — the WIN/LOSS badge shows `?` rather than inherit this
+  // default — and the narration should never have been less careful than the
+  // badge.
+  if (game.studentSide === 'white' || game.studentSide === 'black') return game.studentSide;
+
   const white = game.white.trim();
   const black = game.black.trim();
   if (game.source === 'coach') {

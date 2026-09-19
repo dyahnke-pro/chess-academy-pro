@@ -2,6 +2,44 @@ import { describe, it, expect } from 'vitest';
 import { buildGameRecord } from '../test/factories';
 import { resolvePlayerColor, resolveGameOutcome, opponentName } from './playerIdentity';
 
+describe('a DECLARED side beats every heuristic', () => {
+  // The defect this pins, read off a real prod audit 2026-09-19: a review of a
+  // game whose names matched no stored username resolved to null, the caller
+  // defaulted to 'white' for board orientation, and that default became the
+  // NARRATION SEAT — so a BLACK student heard "Your opponent developed into
+  // the game" about their own move, and the one ply the engine flagged came
+  // back as "Your opponent: that was a mistake, costing about 1.4 points."
+  it('reads studentSide even when no name matches anything', () => {
+    const game = buildGameRecord({
+      white: 'So, W.', black: 'Carlsen, M.', studentSide: 'black', source: 'chesscom',
+    });
+    expect(resolvePlayerColor(game, { profileName: 'Player' })).toBe('black');
+  });
+
+  it('beats the engine-name shortcut on a coach game', () => {
+    // The heuristic would say 'white' (an engine sits on black). An explicit
+    // declaration is not a tiebreak against inference — it replaces it.
+    const game = buildGameRecord({
+      white: 'Player', black: 'Stockfish Bot', studentSide: 'black', source: 'coach',
+    });
+    expect(resolvePlayerColor(game, { profileName: 'Player' })).toBe('black');
+  });
+
+  it('still INFERS when nothing is declared — absent means "work it out"', () => {
+    const game = buildGameRecord({
+      white: 'Player', black: 'Stockfish Bot', source: 'coach',
+    });
+    expect(resolvePlayerColor(game, { profileName: 'Player' })).toBe('white');
+  });
+
+  it('returns null rather than guess when it is genuinely unknown', () => {
+    // The caller may default for ORIENTATION; what must not happen is this
+    // function inventing a seat for the narration to inherit.
+    const game = buildGameRecord({ white: 'So, W.', black: 'Carlsen, M.', source: 'chesscom' });
+    expect(resolvePlayerColor(game, { profileName: 'Player' })).toBeNull();
+  });
+});
+
 describe('resolvePlayerColor — one resolver for "which side is the student"', () => {
   it('coach games: the side named as the engine is the opponent', () => {
     const g = buildGameRecord({ source: 'coach', white: 'David', black: 'Stockfish Bot' });
