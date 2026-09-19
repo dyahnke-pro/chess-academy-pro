@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**332 lines · 12 exports · 19 importers · 10 tests · 3 audits**
+**305 lines · 10 exports · 20 importers · 11 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachApi.ts`
 - `src/services/discussionPractice.test.ts`
 - `src/services/discussionPractice.ts`
+- `src/services/drillJoinDivergence.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/misconceptionCallbacks.test.ts`
 - `src/services/misconceptionDrill.test.ts`
@@ -38,19 +39,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isMisconceptionDue` (function) — 3 call sites
-- `src/services/bucketPipelineAudit.ts:245`
-- `src/services/misconceptionService.test.ts:113`
-- `src/services/misconceptionService.test.ts:148`
+- `src/services/bucketPipelineAudit.ts:252`
+- `src/services/misconceptionService.test.ts:114`
+- `src/services/misconceptionService.test.ts:149`
 
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `logMisconception` (function) — 34 call sites
+### `logMisconception` (function) — 37 call sites
 - `src/components/Coach/CoachGameReview.tsx:2080`
 - `src/components/Coach/FundamentalsPage.test.tsx:91`
 - `src/services/bucketPipelineAudit.test.ts:64`
 - `src/services/bucketPipelineAudit.test.ts:92`
 - `src/services/discussionPractice.ts:263`
+- `src/services/drillJoinDivergence.test.ts:46`
+- `src/services/drillJoinDivergence.test.ts:55`
+- `src/services/drillJoinDivergence.test.ts:62`
 - `src/services/fundamentalsCatalog.test.ts:45`
 - `src/services/fundamentalsCatalog.test.ts:46`
 - `src/services/fundamentalsCatalog.test.ts:50`
@@ -60,35 +64,35 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionDrill.test.ts:50`
 - `src/services/misconceptionDrill.test.ts:55`
 - `src/services/misconceptionDrill.test.ts:56`
-- `src/services/misconceptionService.test.ts:20`
-- `src/services/misconceptionService.test.ts:36`
-- `src/services/misconceptionService.test.ts:46`
-- `src/services/misconceptionService.test.ts:48`
-- `src/services/misconceptionService.test.ts:62`
-- `src/services/misconceptionService.test.ts:64`
-- `src/services/misconceptionService.test.ts:73`
+- `src/services/misconceptionService.test.ts:21`
+- `src/services/misconceptionService.test.ts:37`
+- `src/services/misconceptionService.test.ts:47`
+- `src/services/misconceptionService.test.ts:49`
+- `src/services/misconceptionService.test.ts:63`
+- `src/services/misconceptionService.test.ts:65`
 - `src/services/misconceptionService.test.ts:74`
 - `src/services/misconceptionService.test.ts:75`
-- `src/services/misconceptionService.test.ts:85`
+- `src/services/misconceptionService.test.ts:76`
 - `src/services/misconceptionService.test.ts:86`
 - `src/services/misconceptionService.test.ts:87`
-- `src/services/misconceptionService.test.ts:96`
-- `src/services/misconceptionService.test.ts:104`
-- `src/services/misconceptionService.test.ts:122`
-- `src/services/misconceptionService.test.ts:138`
-- `src/services/misconceptionService.test.ts:154`
-- `src/services/misconceptionService.test.ts:164`
+- `src/services/misconceptionService.test.ts:88`
+- `src/services/misconceptionService.test.ts:97`
+- `src/services/misconceptionService.test.ts:105`
+- `src/services/misconceptionService.test.ts:123`
+- `src/services/misconceptionService.test.ts:139`
+- `src/services/misconceptionService.test.ts:160`
+- `src/services/misconceptionService.test.ts:168`
 - `src/services/weaknessSpine.test.ts:278`
 - `src/services/weaknessSpine.test.ts:328`
 
 ### `getAllMisconceptions` (function) — 7 call sites
-- `src/services/misconceptionService.test.ts:31`
-- `src/services/misconceptionService.test.ts:42`
-- `src/services/misconceptionService.test.ts:108`
-- `src/services/misconceptionService.test.ts:124`
-- `src/services/misconceptionService.test.ts:130`
-- `src/services/misconceptionService.test.ts:141`
-- `src/services/misconceptionService.test.ts:145`
+- `src/services/misconceptionService.test.ts:32`
+- `src/services/misconceptionService.test.ts:43`
+- `src/services/misconceptionService.test.ts:109`
+- `src/services/misconceptionService.test.ts:125`
+- `src/services/misconceptionService.test.ts:131`
+- `src/services/misconceptionService.test.ts:142`
+- `src/services/misconceptionService.test.ts:146`
 
 ### `hasMisconceptionsForGame` (function) — 2 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:180`
@@ -100,33 +104,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `getMisconceptionProfile` (function) — 11 call sites
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
-- `src/services/bucketPipelineAudit.ts:150`
+- `src/services/bucketPipelineAudit.ts:157`
 - `src/services/coachApi.ts:4185`
-- `src/services/misconceptionService.test.ts:66`
-- `src/services/misconceptionService.test.ts:77`
-- `src/services/misconceptionService.test.ts:89`
-- `src/services/misconceptionService.test.ts:97`
-- `src/services/misconceptionService.test.ts:115`
+- `src/services/misconceptionService.test.ts:67`
+- `src/services/misconceptionService.test.ts:78`
+- `src/services/misconceptionService.test.ts:90`
+- `src/services/misconceptionService.test.ts:98`
+- `src/services/misconceptionService.test.ts:116`
 - `src/services/weaknessAnalyzer.ts:996`
-- `src/services/weaknessSpine.ts:668`
+- `src/services/weaknessSpine.ts:691`
 
 ### `recordTagDrillResult` (function) — 8 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:245`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:329`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:64`
-- `src/services/misconceptionService.test.ts:106`
-- `src/services/misconceptionService.test.ts:123`
-- `src/services/misconceptionService.test.ts:129`
-- `src/services/misconceptionService.test.ts:139`
-- `src/services/misconceptionService.test.ts:143`
-
-### `TagDrillPlan` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `mapTagToDrills` (function) — 3 call sites
-- `src/services/bucketPipelineAudit.ts:249`
-- `src/services/misconceptionService.test.ts:155`
-- `src/services/misconceptionService.test.ts:165`
+- `src/services/misconceptionService.test.ts:107`
+- `src/services/misconceptionService.test.ts:124`
+- `src/services/misconceptionService.test.ts:130`
+- `src/services/misconceptionService.test.ts:140`
+- `src/services/misconceptionService.test.ts:144`
 
 ### `listMisconceptionTags` (function) — 1 call site
 - `src/services/misconceptionCallbacks.test.ts:9`
@@ -137,6 +133,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Puzzles/AdaptivePuzzlePage.repcap.test.tsx`
 - `src/services/bucketPipelineAudit.test.ts`
 - `src/services/discussionPractice.test.ts`
+- `src/services/drillJoinDivergence.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/misconceptionCallbacks.test.ts`
 - `src/services/misconceptionDrill.test.ts`

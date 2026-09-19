@@ -1,70 +1,67 @@
 /**
- * THE AUDIT CHECKS A FUNCTION NO STUDENT EVER REACHES.
+ * THE AUDIT AND THE STUDENT MUST AGREE ABOUT WHAT IS DRILLABLE.
  *
- * `bucketPipelineAudit` proves "a captured mistake is drillable" through
- * `misconceptionService.mapTagToDrills`. Its own header claims it reads "the
- * SAME stores + read-layer the app uses at runtime … not a parallel
- * re-implementation that can drift."
+ * WHAT WAS WRONG (2026-09-19). `bucketPipelineAudit` proved "a captured mistake
+ * is drillable" through `misconceptionService.mapTagToDrills` — a function with
+ * ZERO production callers. The audit invented its own only caller, so for the
+ * drill half it was exactly the "parallel re-implementation that can drift" its
+ * own header promised it was not.
  *
- * For the drill half that is false. `mapTagToDrills` has ZERO production
- * callers — the audit invents its only caller. The surface a student actually
- * reaches (`WeaknessTagDrillPage`) goes through
- * `mistakePuzzleService.getMisconceptionDrillPuzzles`, which SKIPS any record
- * missing `bestSan`/`playedSan`. `mapTagToDrills` keeps them.
+ * The student's real path, `mistakePuzzleService.getMisconceptionDrillPuzzles`,
+ * skips rows missing `bestSan`/`playedSan`; `mapTagToDrills` kept them. So a tag
+ * whose rows carried no best move read DRILLABLE to the audit and rendered "No
+ * drillable positions yet" on `WeaknessTagDrillPage` — `DRILL_PLAN_EMPTY` was
+ * structurally unable to fire at the exact place the dead end was.
  *
- * So a tag whose rows lack a best move reads DRILLABLE to the audit and shows
- * "No drillable positions yet" to the student — which is precisely the
- * `COUNTED_NO_DRILL` / `DRILL_PLAN_EMPTY` pair the audit exists to catch,
- * structurally unable to fire for the real surface.
+ * THE FIX: the audit now grades the shipped path, and `mapTagToDrills` is
+ * deleted so there is one join, not two. This file is the regression gate —
+ * every case asserts the AUDIT's verdict against what the STUDENT would get.
  */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { mapTagToDrills } from './misconceptionService';
+import { logMisconception } from './misconceptionService';
 import { getMisconceptionDrillPuzzles } from './mistakePuzzleService';
-import type { MisconceptionTagRecord } from '../types';
+import { auditBucketPipeline, type BucketAuditCode } from './bucketPipelineAudit';
 
-const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 4 3';
+/** After 1.e4 c5 — White to move. `Nf3` is legal here; `Nxe5` is NOT. */
+const FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
 
-function row(over: Partial<MisconceptionTagRecord>): MisconceptionTagRecord {
-  return {
-    id: `mt-${Math.random().toString(36).slice(2)}`,
-    tag: 'missed-tactic',
-    source: 'auto-analysis',
-    createdAt: Date.now(),
-    fen: FEN,
-    ...over,
-  } as MisconceptionTagRecord;
+/** No `puzzleThemes`, so the ONLY drill route is the student's own positions. */
+const OWN_POSITIONS_ONLY = 'neglected-development';
+/** Carries `puzzleThemes`, so it stays drillable with no positions at all. */
+const THEMED = 'missed-tactic';
+
+async function drillEmptyCodes(): Promise<BucketAuditCode[]> {
+  const report = await auditBucketPipeline();
+  return report.violations.filter((v) => v.code === 'DRILL_PLAN_EMPTY').map((v) => v.code);
 }
 
-describe('the drill join the audit checks is not the one the student reaches', () => {
+describe('the audit grades the drill route the student actually takes', () => {
   beforeEach(async () => {
     await db.delete();
     await db.open();
   });
 
-  it('a row with no bestSan reads DRILLABLE to the audit and EMPTY to the student', async () => {
-    await db.misconceptionTags.add(row({ playedSan: 'Nf6', bestSan: undefined }));
+  it('FIRES when the student would see the empty state (no best move, no themes)', async () => {
+    await logMisconception({ tag: OWN_POSITIONS_ONLY, source: 'auto-analysis', fen: FEN, playedSan: 'h3' });
 
-    const auditSees = await mapTagToDrills('missed-tactic');
-    const studentGets = await getMisconceptionDrillPuzzles('missed-tactic');
-
-    // What bucketPipelineAudit grades: a non-empty plan → no COUNTED_NO_DRILL.
-    expect(auditSees?.positions.length).toBe(1);
-    // What the student actually gets: the empty state.
-    expect(studentGets.length).toBe(0);
+    // What the student gets: nothing.
+    expect(await getMisconceptionDrillPuzzles(OWN_POSITIONS_ONLY)).toHaveLength(0);
+    // What the audit now says: the same thing. Before the fix this was silent.
+    expect(await drillEmptyCodes()).toContain('DRILL_PLAN_EMPTY');
   });
 
-  it('the same divergence on a missing playedSan', async () => {
-    await db.misconceptionTags.add(row({ playedSan: undefined, bestSan: 'Bc5' }));
+  it('STAYS SILENT when the row really does build a drill', async () => {
+    await logMisconception({ tag: OWN_POSITIONS_ONLY, source: 'auto-analysis', fen: FEN, playedSan: 'h3', bestSan: 'Nf3' });
 
-    expect((await mapTagToDrills('missed-tactic'))?.positions.length).toBe(1);
-    expect((await getMisconceptionDrillPuzzles('missed-tactic')).length).toBe(0);
+    expect(await getMisconceptionDrillPuzzles(OWN_POSITIONS_ONLY)).toHaveLength(1);
+    expect(await drillEmptyCodes()).not.toContain('DRILL_PLAN_EMPTY');
   });
 
-  it('a complete row agrees on both paths — so the divergence is the missing field, not the wiring', async () => {
-    await db.misconceptionTags.add(row({ playedSan: 'Nf6', bestSan: 'Bc5' }));
+  it('STAYS SILENT for a themed tag even with no own positions — the other real route', async () => {
+    await logMisconception({ tag: THEMED, source: 'auto-analysis', fen: FEN, playedSan: 'h3' });
 
-    expect((await mapTagToDrills('missed-tactic'))?.positions.length).toBe(1);
-    expect((await getMisconceptionDrillPuzzles('missed-tactic')).length).toBe(1);
+    expect(await getMisconceptionDrillPuzzles(THEMED)).toHaveLength(0);
+    expect(await drillEmptyCodes()).not.toContain('DRILL_PLAN_EMPTY');
   });
 });

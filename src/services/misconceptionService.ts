@@ -17,7 +17,6 @@ import {
   getMisconceptionTag,
   isMisconceptionTagId,
   type MisconceptionTagDef,
-  type MisconceptionDrillKind,
 } from '../data/misconceptionTags';
 
 /** SRS spacing intervals (ms) indexed by masteryHits level. A misconception
@@ -285,45 +284,19 @@ export async function recordTagDrillResult(tag: string, success: boolean): Promi
   });
 }
 
-export interface TagDrillPlan {
-  tag: string;
-  label: string;
-  kind: MisconceptionDrillKind | 'review';
-  /** puzzles.json themes to pull tactical reps from. */
-  puzzleThemes: string[];
-  /** The user's own positions where this error occurred (FENs), newest
-   *  first — "replay your loss" material. */
-  positions: { fen: string; playedSan?: string; bestSan?: string; openingId?: string }[];
-}
-
-/** Map a tag to its drill sources: the tag def's drill kind + themes,
- *  plus the user's own flubbed positions. `other` has no canned drill
- *  (it's a review-only holding pen) so its kind is 'review'. */
-export async function mapTagToDrills(tag: string): Promise<TagDrillPlan | null> {
-  const def = getMisconceptionTag(tag);
-  if (!def) return null;
-  const now = Date.now();
-  const all = await db.misconceptionTags
-    .where('tag').equals(tag)
-    .toArray();
-  // Drill the due instances first; if none are due, still surface the rest
-  // so the tag is always drillable on demand (it never graduates out).
-  const dueRecords = all.filter((r) => isMisconceptionDue(r, now));
-  const records = dueRecords.length > 0 ? dueRecords : all;
-  records.sort((a, b) => b.createdAt - a.createdAt);
-  return {
-    tag,
-    label: def.label,
-    kind: tag === 'other' ? 'review' : def.drill.kind,
-    puzzleThemes: tag === 'other' ? [] : (def.drill.puzzleThemes ?? []),
-    positions: records.map((r) => ({
-      fen: r.fen,
-      playedSan: r.playedSan,
-      bestSan: r.bestSan,
-      openingId: r.openingId,
-    })),
-  };
-}
+// DELETED 2026-09-19 — `TagDrillPlan` + `mapTagToDrills`.
+//
+// They had ZERO production callers. `bucketPipelineAudit` was the only one,
+// so the audit graded a join no student ever reached, while the student's real
+// path (`mistakePuzzleService.getMisconceptionDrillPuzzles`) SKIPS rows missing
+// `bestSan`/`playedSan` that this kept. A tag whose rows carried no best move
+// therefore read DRILLABLE to the audit and showed "No drillable positions yet"
+// on the surface — the dead end was invisible precisely where it happened.
+//
+// Removed rather than left beside the real one: two joins answering one
+// question is the drift the rot rule exists to prevent, and a dead export is
+// an invitation to wire it back. Proof of the divergence, kept as the gate:
+// `drillJoinDivergence.test.ts`.
 
 /** The closed-set tag defs, for UI rendering of the full taxonomy. */
 export function listMisconceptionTags(): readonly MisconceptionTagDef[] {

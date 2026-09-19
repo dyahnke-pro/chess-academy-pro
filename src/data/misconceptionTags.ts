@@ -234,7 +234,11 @@ export const MISCONCEPTION_TAGS = [
     bucket: 'endgame',
     blurb: "A passed pawn is a rocket — it has to be pushed.",
     coachCue: 'In an endgame, the best move advanced a passed pawn (or made/defended one) and the played move left it home to be blockaded.',
-    drill: { kind: 'endgame', puzzleThemes: ['passedPawn', 'advancedPawn', 'promotion'] },
+    // NB 'passedPawn' was declared here and is carried by ZERO puzzles in
+    // puzzles.json — dead weight that matched nothing. The corpus's words for
+    // this idea are 'advancedPawn' (996) and 'promotion' (389). Gate:
+    // drillVocabulary.test.ts.
+    drill: { kind: 'endgame', puzzleThemes: ['advancedPawn', 'promotion'] },
   },
   {
     id: 'passive-rook',
