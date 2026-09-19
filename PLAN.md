@@ -296,6 +296,49 @@ trust it. That is the cheapest check in this repo and it found three defects.
       write nothing. `needsPicker` deleted; `strengthCalibrated` bridged (still
       persisted for `DashboardPage`, no longer freezes re-estimation).
 
+## WO-3 — LANDED (2026-09-19, `a9c9376` on `main`, prod audit 8/8 on bundle `index-BeBqQixU`)
+
+The back half of the loop — a recorded weakness becomes a drill, and the drill's
+result moves the model. Three severances, every one measured before it was
+touched, all fixed at once, one audit at the end (`audit-bucket-delivery-loop`,
+live prod, muted).
+
+- ✅ **S1 — the bucket audit graded a join no student reaches.**
+  `misconceptionService.mapTagToDrills` had ZERO production callers; the audit
+  was its only caller, so `DRILL_PLAN_EMPTY` could not fire where
+  `WeaknessTagDrillPage` shows "No drillable positions yet" — the student's
+  path (`getMisconceptionDrillPuzzles`) skips rows missing `bestSan` that the
+  dead join kept. The audit now grades the shipped route; `mapTagToDrills` +
+  `TagDrillPlan` are DELETED so there is one join. The audit's own "not a
+  parallel re-implementation" header is corrected, not appended to. Gate:
+  `drillJoinDivergence.test.ts`. Prod: the new S1 row fires on the exact seeded
+  state — "audit and surface agree".
+- ✅ **S2 — two tactic types drilled to zero puzzles.** `zwischenzug` and
+  `overloadedPiece` were named; `puzzles.json` (15,000 / 72 themes) carries
+  neither. Now `intermezzo` (211) and `capturingDefender` + `deflection`
+  (133 / 719). `themesForTactic` is an exhaustive `Record<TacticType,…>`
+  (was `Partial`) — which is how a hand census of 16 members became the real
+  18 (`checkmate`, `tactical_sequence`). Dead `passedPawn` removed from
+  `passed-pawn-neglected` (siblings 996 / 389 remain). Gate:
+  `drillVocabulary.test.ts` RE-DERIVES the vocabulary from the corpus.
+- ✅ **S3 — a solved drill never turned the heat map GREEN.**
+  `recordTagDrillResult` spaced the SRS and never imported `capabilityEvidence`;
+  `origin:'drill'` existed with no writer. `MistakePuzzleBoard` now records at
+  the one solve door all five drill surfaces share: clean first try → `held`;
+  wrong first answer → `broken` at the slip's measured cost; [show me] first →
+  `prompted` (grey). STATE.md: HOLD writers 6 → 7. Gates: the spy file (4 cases)
+  + a real `held` row landing in the store on a posing position.
+  **Proven by unit gate, not by a prod drive-through** — the bucket audit is a
+  data-invariant audit and cannot play a puzzle. A Playwright drill-solve that
+  reads the `capabilityEvidence` store back is the honest next instrument.
+- ✅ The audit itself: it streamed to prod's `/api/audit-stream` (G2 violation,
+  the shared Upstash budget) — now a loopback discard, vacuity-checked.
+
+**Flagged, not changed:** `removing_the_guard → 'defensiveMove'` (914) is
+suspected to be the wrong Lichess theme — `capturingDefender` is literally
+"remove the defender"; `defensiveMove` is closer to its opposite. A
+co-occurrence check was inconclusive. Measure before touching.
+
 ## ROADBLOCKS — every open item in coach (2026-09-18)
 
 Three buckets. A thing is a roadblock if it stops the LOOP closing, stops an
