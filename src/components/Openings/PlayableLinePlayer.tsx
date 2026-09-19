@@ -134,7 +134,8 @@ export function PlayableLinePlayer({
   }, [onContinuePlaying, onExit]);
 
   // A WLPP rung in progress must survive a deploy: hold the service-worker
-  // update reload (index.html controllerchange handler) until unmount.
+  // HANDOVER until unmount. While held, the newly-deployed worker stays in
+  // `waiting` and this bundle's precache is never purged (see index.html).
   useEffect(() => acquireSwReloadHold(), []);
   const finishLine = useCallback((): void => {
     if (completedRef.current) return;

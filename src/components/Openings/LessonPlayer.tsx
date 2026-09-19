@@ -127,7 +127,8 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   useEffect(() => { voiceEnabledRef.current = voiceEnabled; }, [voiceEnabled]);
 
   // A Watch lesson in progress must survive a deploy: hold the service-worker
-  // update reload (index.html controllerchange handler) until unmount.
+  // HANDOVER until unmount. While held, the newly-deployed worker stays in
+  // `waiting` and this bundle's precache is never purged (see index.html).
   useEffect(() => acquireSwReloadHold(), []);
 
   const beatSquares = useCallback((b: LessonBeat | undefined): string[] => {

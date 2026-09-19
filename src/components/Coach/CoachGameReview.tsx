@@ -279,7 +279,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }, []);
 
   // A review walk in progress must survive a deploy: hold the service-worker
-  // update reload (index.html controllerchange handler) until unmount.
+  // HANDOVER until unmount. While held, the newly-deployed worker stays in
+  // `waiting` and this bundle's precache is never purged (see index.html).
   useEffect(() => acquireSwReloadHold(), []);
 
 

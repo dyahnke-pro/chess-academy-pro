@@ -546,6 +546,9 @@ which need the walk to reach their ply. First-open also slowed 100.6s ->
 - Not this session's corpus work. The degender landed voiced-corpus DATA and
   a script that never enters the bundle — grep-verified, only a test imports
   it.
+- NOT YET RULED OUT: the service-worker mid-session swap (third candidate
+  below). Real, independently confirmed, now fixed — but it does not account
+  for the asymmetry or the repeatability, so it is a candidate, not the answer.
 - Not the audit's seat hardcode. That was real and is fixed (`isStudentPly`);
   SEAT is green now and FUNDLEAD reads the correct seat ("You: that was a
   mistake") on the right ply.
@@ -555,6 +558,31 @@ session landed `6f088da` / `cda379b` / `5bbd3d1`, rewriting 249 lines of
 `coachApi.ts` plus `coachService.ts` and `CoachTeachPage.tsx` to detect and
 carry the turn's language. That is the reply path on Learn and it is
 circumstantial on Review.
+
+**A THIRD CANDIDATE, FOUND 2026-09-19 EVENING — AND WHAT IT DOES *NOT*
+EXPLAIN.** The PWA shipped `skipWaiting: true` + `clientsClaim: true` +
+`cleanupOutdatedCaches: true`, so a newly-deployed service worker activated
+under a page that was still running, DELETED the precache that page was
+executing out of, and claimed it. Every later lazy chunk or Web Worker fetch
+then asked for a hashed file the deploy no longer serves. `__HOLD_SW_RELOAD__`
+made it worse rather than better: it deferred the RELOAD while the activation
+went ahead, so it kept a session alive on top of code that had just been
+purged. Confirmed on David's own iPhone the same day — `stockfish-error`
+(worker load failure), `lichess-error TypeError: Load failed`, `sw-lifecycle
+installed -> activating -> controllerchange -> activated`, `pagehide
+persisted=false`, and no `app-boot` on reopen. FIXED: the worker now waits and
+the page asks for the handover only when no hold is held (vite.config.ts,
+index.html, gate `src/test/swHandover.test.ts`).
+
+That matters here because every audit run starts moments after waiting for the
+new bundle to land — i.e. precisely inside the swap window. **But do not adopt
+it as the verdict.** It fails to explain the two sharpest facts above: the
+asymmetry (the CANONICAL ask stalls, the same game started from a PICKER CHIP
+does not — a cache purge has no reason to care how the ask was typed) and the
+repeatability (136s twice, to the second, which reads like a timeout boundary,
+not like a race). Treat it as a THIRD candidate that also removes a large
+source of noise from the measurement: the next run of both audits is the first
+clean one either way, and should be taken before any bisect.
 
 **THE ONE-STEP BISECT:** build `6f088da^` locally and run
 `audit-concept-gameplay-prod` against `http://localhost:5173`. If the

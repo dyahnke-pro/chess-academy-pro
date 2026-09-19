@@ -1771,9 +1771,10 @@ export function CoachTeachPage(): JSX.Element {
   const chainHighlightsRef = useRef<BoardHighlight[]>([]);
 
 
-  // A live session must survive a deploy: hold the service-worker update
-  // reload (index.html controllerchange handler) until there is nothing on the
-  // board to lose.
+  // A live session must survive a deploy: hold the service-worker HANDOVER
+  // until there is nothing on the board to lose — while held, the newly-
+  // deployed worker stays in `waiting` and this bundle's precache is never
+  // purged (see index.html).
   //
   // 🔒 A WALKTHROUGH IS NOT THE ONLY THING WORTH HOLDING (2026-09-13 prod
   // probe). This effect used to gate on `walkthrough.isActive` alone, so the

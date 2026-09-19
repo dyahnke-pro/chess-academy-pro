@@ -1855,18 +1855,28 @@ export function installGlobalErrorHooks(): () => void {
   const swListeners: Array<() => void> = [];
   if ('serviceWorker' in navigator) {
     const onControllerChange = (): void => {
-      // `reloadHeld` mirrors the index.html handler's decision: true means an
-      // active session (walkthrough / coach game / review walk / WLPP rung)
-      // deferred the update reload instead of losing the session to it.
-      const reloadHeld = window.__HOLD_SW_RELOAD__ === true;
+      // 🔒 `holdActive` means something different now (2026-09-19) and the old
+      // reading is DELETED, not annotated: it used to be logged as "reload
+      // DEFERRED: active session hold", back when the worker claimed the page
+      // immediately and the hold only postponed the reload. That combination
+      // is what froze the app — the hold kept a session alive on top of a
+      // precache the new worker had already purged.
+      //
+      // The handover is now gated at the source (index.html): we do not ASK a
+      // waiting worker to take over while a hold is held, and the reload after
+      // controllerchange is unconditional. So a hold being active HERE is the
+      // interesting case, not the normal one — it means the handover came from
+      // outside this tab (another tab asked, or every client closed). Worth
+      // recording precisely because it should be rare.
+      const holdActive = window.__HOLD_SW_RELOAD__ === true;
       void logAppAudit({
         kind: 'sw-lifecycle',
         category: 'subsystem',
         source: 'navigator.serviceWorker.controllerchange',
-        summary: `service worker controllerchange — new bundle taking over${reloadHeld ? ' (reload DEFERRED: active session hold)' : ''}`,
+        summary: `service worker controllerchange — new bundle took over, reloading${holdActive ? ' (EXTERNAL handover: a session hold was active)' : ''}`,
         details: JSON.stringify({
           newScriptURL: navigator.serviceWorker.controller?.scriptURL ?? null,
-          reloadHeld,
+          holdActive,
         }),
       });
     };

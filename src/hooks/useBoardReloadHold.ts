@@ -4,8 +4,9 @@ import { acquireSwReloadHold } from '../utils/swReloadHold';
 // ── A BOARD WITH WORK ON IT HOLDS THE DEPLOY RELOAD — AUTOMATICALLY ─────────
 // David 2026-09-13, after the Learn play-out was found reloading mid-narration.
 //
-// The service-worker update reload (index.html `controllerchange` handler) is
-// correct on an idle dashboard and destroys a session mid-board. Surfaces used
+// The service-worker handover (index.html asks a waiting worker to take over,
+// then reloads) is correct on an idle dashboard and destroys a session
+// mid-board. Surfaces used
 // to defend against it ONE AT A TIME by calling `acquireSwReloadHold()` in
 // their own effect — and 50 board surfaces never did, because opting in is
 // something you have to remember. The ones that DID remember are the ones

@@ -21,38 +21,125 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Force SW update check on every page load
+      // ═══ SERVICE-WORKER HANDOVER — THE PAGE DECIDES WHEN, NEVER THE DEPLOY ═══
+      //
+      // sw.js ships with skipWaiting:false + clientsClaim:false (vite.config.ts,
+      // which explains why), so a new worker INSTALLS AND WAITS. It cannot purge
+      // the precache the running page is executing out of, because
+      // cleanupOutdatedCaches only runs at ITS activate — and it does not
+      // activate until we say so. The handover happens here, on our terms.
+      //
+      // Two rules, and they are opposites on purpose:
+      //   1. ASKING is gated by __HOLD_SW_RELOAD__ (src/utils/swReloadHold.ts).
+      //      A live walkthrough / coach game / review walk / WLPP rung holds,
+      //      and while it does we simply do not ask. The old worker stays in
+      //      control, its cache stays intact, the session is untouched.
+      //   2. RELOADING is NOT gated by anything. Once `controllerchange` has
+      //      fired the old bundle is already gone, so deferring the reload
+      //      leaves the page running code that no longer exists — which is
+      //      exactly what froze David's iPhone on 2026-09-19. Reload at once.
+      //
+      // The previous version had this backwards: it let the worker take over
+      // immediately and deferred only the reload. The hold protected the
+      // session from the reload and fed it to the cache purge instead.
       if ('serviceWorker' in navigator) {
+        // Retry cadence while a session holds. Long enough not to spin, short
+        // enough that an update lands within a beat of the session ending.
+        var SW_HANDOVER_RETRY_MS = 15000;
+
+        // Observable state. An instrument that reports nothing is
+        // indistinguishable from a green one, and this is a behaviour that
+        // only shows itself during a deploy — so the audit drives THIS rather
+        // than inferring from a stopwatch. See scripts/audit-sw-handover-prod.mjs.
+        window.__swHandover = { waiting: false, asked: false, deferrals: 0, controllerChanged: false };
+
+        // ── Rule 2: a new worker is in control, so this page's code is stale
+        // at best and deleted at worst. Reload immediately, once.
+        var swRefreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          window.__swHandover.controllerChanged = true;
+          if (swRefreshing) return;
+          swRefreshing = true;
+          location.reload();
+        });
+
+        // ── Rule 1: ask a WAITING worker to take over, but only when quiet.
+        function askWaitingWorker(reg) {
+          var st = window.__swHandover;
+          if (st.asked || !reg) return;
+          var waiting = reg.waiting;
+          // Nothing waiting yet — `updatefound` below will call us again.
+          if (!waiting) { return; }
+          st.waiting = true;
+          if (window.__HOLD_SW_RELOAD__) {
+            st.deferrals += 1;
+            setTimeout(function () { askWaitingWorker(reg); }, SW_HANDOVER_RETRY_MS);
+            return;
+          }
+          st.asked = true;
+          try {
+            // workbox-build emits this listener whenever skipWaiting is false
+            // (sw-template: `if (event.data.type === 'SKIP_WAITING')`).
+            waiting.postMessage({ type: 'SKIP_WAITING' });
+          } catch (e) {
+            // Retry rather than strand the user on an old bundle forever.
+            st.asked = false;
+            setTimeout(function () { askWaitingWorker(reg); }, SW_HANDOVER_RETRY_MS);
+          }
+        }
+        // Exposed so an audit can exercise the GATE without needing a real
+        // deploy: with nothing waiting the ask is a no-op, so calling it is
+        // safe, and `deferrals` proves the hold was consulted.
+        window.__swRequestHandover = function () {
+          navigator.serviceWorker.getRegistrations()
+            .then(function (regs) { regs.forEach(askWaitingWorker); })
+            .catch(function () {});
+        };
+
+        var swWatched = [];
+        function watchRegistration(reg) {
+          if (!reg || swWatched.indexOf(reg) !== -1) return;
+          swWatched.push(reg);
+          // A worker may have installed and been waiting since a previous
+          // visit — check before relying on the event.
+          askWaitingWorker(reg);
+          function watchWorker(worker) {
+            if (!worker) return;
+            worker.addEventListener('statechange', function () {
+              if (worker.state === 'installed') askWaitingWorker(reg);
+            });
+          }
+          // A worker already mid-install fired `updatefound` before we could
+          // listen, so watch it directly — otherwise a tab opened DURING an
+          // install never asks, and sits on the old bundle until a reload.
+          watchWorker(reg.installing);
+          reg.addEventListener('updatefound', function () { watchWorker(reg.installing); });
+        }
+
+        // Force an update check on every page load, then watch what it finds.
         // r.update() rejects ("Failed to update a ServiceWorker … Not found")
         // when the SW-script fetch transiently fails/races (cold headless
         // context, CDN miss, mid-deploy). It's benign — the browser retries on
         // the next load — but WITHOUT a catch it surfaces as an unhandled
         // rejection / pageerror (caught in the 2026-06-01 loop audit). Swallow it.
-        navigator.serviceWorker.getRegistrations().then(function(regs) {
-          regs.forEach(function(r) {
-            try { var p = r.update(); if (p && p.catch) p.catch(function() {}); } catch (e) { /* ignore */ }
+        navigator.serviceWorker.getRegistrations().then(function (regs) {
+          regs.forEach(function (r) {
+            watchRegistration(r);
+            try { var p = r.update(); if (p && p.catch) p.catch(function () {}); } catch (e) { /* ignore */ }
           });
-        }).catch(function() {});
-        // Reload once when a new SW activates — but NEVER mid-session. A live
-        // walkthrough / coach game / review walk acquires a hold (see
-        // src/utils/swReloadHold.ts) via window.__HOLD_SW_RELOAD__; while it's
-        // set, keep the old bundle running and retry at the next quiet moment.
-        // Caught live 2026-07-28: a deploy landing mid-lesson hard-reloaded the
-        // page between two narration beats and destroyed the session.
-        var refreshing = false;
-        navigator.serviceWorker.addEventListener('controllerchange', function() {
-          if (refreshing) return;
-          refreshing = true;
-          var attempt = function() {
-            if (window.__HOLD_SW_RELOAD__) { setTimeout(attempt, 15000); return; }
-            location.reload();
-          };
-          attempt();
-        });
-        // Recovery: if a deferred reload leaves the old page lazy-loading a
-        // chunk the new deploy no longer serves, the dynamic import fails —
-        // reload onto the fresh bundle instead of white-screening.
-        window.addEventListener('vite:preloadError', function() { location.reload(); });
+        }).catch(function () {});
+        // …and again once a registration is actually live. On a FIRST visit
+        // `registerSW.js` registers on `window.load`, i.e. after the loop
+        // above has already run and found nothing — without this, that tab
+        // would never watch for the update it is about to be offered.
+        navigator.serviceWorker.ready.then(watchRegistration).catch(function () {});
+
+        // Recovery: if a page somehow ends up lazy-loading a chunk the live
+        // deploy no longer serves, reload onto the fresh bundle instead of
+        // white-screening. With the handover above this should no longer be
+        // reachable from a deploy — it stays as the backstop for a cache left
+        // inconsistent by an older build.
+        window.addEventListener('vite:preloadError', function () { location.reload(); });
       }
     </script>
   </body>

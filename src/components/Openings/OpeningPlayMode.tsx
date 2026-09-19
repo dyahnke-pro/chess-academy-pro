@@ -303,8 +303,9 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
 
   // ─── Stockfish eval on position change ──────────────────────────────────
   // A locked-line Play game in progress must survive a deploy: hold the
-  // service-worker update reload (index.html controllerchange handler)
-  // until unmount.
+  // service-worker HANDOVER until unmount. While held, the newly-deployed
+  // worker stays in `waiting` and this bundle's precache is never purged
+  // (see index.html).
   useEffect(() => acquireSwReloadHold(), []);
 
   // Runs at priority='prefetch' so it doesn't contend with the

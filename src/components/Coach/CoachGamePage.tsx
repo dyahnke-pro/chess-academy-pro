@@ -514,9 +514,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // explore/practice modes — those are guarded by the routed handler).
   const discussion = useDiscussionPractice(gameState.status === 'playing', { capabilityOrigin: 'play' });
 
-  // A live game must survive a deploy: hold the service-worker update reload
-  // (index.html controllerchange handler) while moves are on the board. A
-  // fresh board with zero moves has nothing to lose — no hold there.
+  // A live game must survive a deploy: hold the service-worker HANDOVER while
+  // moves are on the board, so the newly-deployed worker stays in `waiting`
+  // and this bundle's precache is never purged (see index.html). A fresh board
+  // with zero moves has nothing to lose — no hold there.
   const gameInProgress =
     (gameState.status === 'playing' || gameState.status === 'blunder_pause') &&
     gameState.moves.length > 0;

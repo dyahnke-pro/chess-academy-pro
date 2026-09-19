@@ -57,10 +57,54 @@ export default defineConfig(({ mode }) => {
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // 🔒 'prompt', NOT 'autoUpdate' — and the name is load-bearing, not a
+      // preference. vite-plugin-pwa FORCES `workbox.skipWaiting = true` and
+      // `workbox.clientsClaim = true` whenever registerType is 'autoUpdate'
+      // and injectRegister is auto/unset (node_modules/vite-plugin-pwa/dist/
+      // index.js:874-876), OVERWRITING whatever this config says. So setting
+      // the two flags false below while leaving 'autoUpdate' here would read
+      // as fixed and ship as broken. The flags and the registerType are ONE
+      // decision; change them together or not at all.
+      //
+      // What the injected registration does is unchanged either way: with
+      // injectRegister unset and nothing importing `virtual:pwa-register`,
+      // the plugin emits the SIMPLE `registerSW.js` (a bare
+      // `navigator.serviceWorker.register('/sw.js')`) in both modes. Nothing
+      // client-side sends SKIP_WAITING on its own; index.html does, on our
+      // terms.
+      registerType: 'prompt',
       workbox: {
-        skipWaiting: true,
-        clientsClaim: true,
+        // 🔒🔒 A NEW SERVICE WORKER MUST NEVER TAKE OVER A RUNNING PAGE
+        // (2026-09-19, after the app froze on David's iPhone mid-session).
+        //
+        // These were both `true`. The sequence it produced: a new SW
+        // installs → `skipWaiting` activates it immediately →
+        // `cleanupOutdatedCaches` DELETES the precache the running page is
+        // still executing out of → `clientsClaim` takes control of that page
+        // → every later chunk/worker fetch asks for a hashed file the deploy
+        // no longer serves. The page is running code that has been deleted
+        // underneath it. His audit trail caught it in three seconds:
+        // `stockfish-error` (worker load failure), `lichess-error TypeError:
+        // Load failed`, `sw-lifecycle installed → activating →
+        // controllerchange → activated`, `pagehide persisted=false`, and no
+        // `app-boot` on reopen — a cache left inconsistent enough that the
+        // app could not boot from it at all.
+        //
+        // `__HOLD_SW_RELOAD__` (src/utils/swReloadHold.ts) was the previous
+        // answer and it made this WORSE, which is the whole lesson: it
+        // deferred the RELOAD while the activation went ahead, so it kept a
+        // page alive precisely when that page's code had just been purged.
+        // A watcher standing downstream of the damage. The handover is now
+        // gated at the source — see index.html: the hold decides whether we
+        // ASK the waiting worker to take over; once it HAS taken over the
+        // reload is immediate and unconditional, because by then the old
+        // bundle is already gone.
+        //
+        // Cost accepted: a new deploy lands on the next quiet moment (or the
+        // next cold open) instead of instantly. `cleanupOutdatedCaches` stays
+        // correct — it now runs at an activation we chose.
+        skipWaiting: false,
+        clientsClaim: false,
         cleanupOutdatedCaches: true,
         // Safety ceiling on precached file size. The heavy data JSON are now
         // split into `appdata-*` chunks (see manualChunks below), so no single
