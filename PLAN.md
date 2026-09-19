@@ -327,6 +327,21 @@ gets said; this is about whether anything happens at all.
   actually worked. An accept contract stricter than the product's real voice
   buries the true reds among false ones.
 
+- ⚠️ **OPEN (found 2026-09-19, deliberately NOT built at 6am): the lesson ACK
+  is a hardcoded English template.** A Thai student now gets the lesson, and
+  HEARS it in Thai (the voice chokepoint localises), but READS "Sure — let's
+  walk through the Italian Game." in English. Six sites in `CoachTeachPage`
+  (4680, 5074, 5445, 6186 and the `Ready —` variants) build the confirmation as
+  a code template and write it straight into the transcript, so it never passes
+  through `voiceFacts` and nothing can translate it. Same class as the defect
+  above — computed text that no one localises — just smaller, because the
+  teaching itself is in-language.
+
+  The fix is a text-side sibling of `localizeSpokenText` (which is voice-only
+  today) applied at those sites. Left open on purpose: it is six render paths
+  inside a 12k-line component, each needing an await, and getting it wrong
+  breaks Learn for everyone. It wants a real run behind it, not a 6am edit.
+
 ### WO-LIVE-DEFECTS-01 — the rest of the list
 
 Shipped 2026-09-19 in 2bfb4961c + 7bc0677ab. Both standing audits green after:
