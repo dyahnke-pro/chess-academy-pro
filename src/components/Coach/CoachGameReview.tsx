@@ -753,7 +753,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const OPENING_LAST_MOVE = 7;
   useEffect(() => {
     if (!walkNarration || !playerColor) return;
+    // THE NARRATION REBUILT, SO THE MOMENT IS BEING RECOMPUTED — a card still
+    // on screen is about a ply the walk has already left. The review's deep
+    // dive rewrites the annotations mid-walk and playback restarts at ply 0, so
+    // this is not hypothetical: an un-cleared card sits over a board that has
+    // moved, which is the "a blocking card the user can't relate to the board
+    // is indistinguishable from a hang" failure in a new costume.
     setCriticalMoment(null);
+    setCriticalCard(null);
+    setCriticalReveal(null);
     criticalDoneRef.current = new Set();
     const plies = walkNarration.segments
       .filter((sg) => sg.playerColor === playerColor

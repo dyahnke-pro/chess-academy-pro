@@ -367,6 +367,15 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       ['review-theory-ask', '[data-testid="review-theory-skip"]'],
       ['review-trap-card', '[data-testid="review-trap-pick-leave"]'],
       ['review-trap-reveal', '[data-testid="review-trap-done"]'],
+      // THE CRITICAL-MOMENT CARD — its chips are named after the SAN they
+      // offer (`review-critical-pick-Nf3`), because the choices are the
+      // engine's own lines from that position, not a fixed choice set. A
+      // literal testid cannot match one, so this is the one prefix selector in
+      // the table. A card this loop does not know how to resolve is a card
+      // that freezes the walk, which is why it is added with the feature and
+      // not after it (CLAUDE.md: audits are living — update before you run).
+      ['review-critical-card', '[data-testid^="review-critical-pick-"]'],
+      ['review-critical-reveal', '[data-testid="review-critical-done"]'],
       ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
       // review-turning-point-card is NOT in this table — see the block below.
       // Confirm only EXISTS once a candidate chip has been tapped, so a
