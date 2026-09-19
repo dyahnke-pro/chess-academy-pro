@@ -323,29 +323,92 @@ Learn 8/8, Review 28/28 MEETS STANDARD.
    `computeImportance`'s student term instead, where the `rank > 0` guard makes
    it structurally unable to manufacture a moment on a quiet ply. RED > GREY >
    GREEN, MAX not sum. Both lanes feed it. Gate: `studentMomentBoost.test.ts`.
-2. 🟡 **PARTLY — one writer, and the sharpest signal is still missing** (#25).
-   `capabilityEvidence` DOES record `held` rows, but from exactly ONE production
-   writer (`autoAnalyzeGame:139`, post-game analysis). The record type declares
-   four origins (play/review/learn/drill) and one fires: 19 modules record a
-   MISS, 4 record a HOLD. So a capability can go RED from anywhere and can only
-   go GREEN through analysis. The missing piece is press/no-press AT A CRITICAL
-   MOMENT — the purest strength signal there is, and the thing the
-   critical-moment build (below) creates.
-3. **The rating INPUT is still split** (`docs/STATE.md` MODEL): 39 files read
-   `currentRating` off the store, 2 read the adaptive estimate, 63 inline
-   `?? 1200`. The number is correct at the source now; threading it is the rest.
-   Fix the INPUT before tuning any threshold.
-4. 🟡 **REVIEW DONE (f2e609313) — ENDGAME STILL ZERO.** Review now splices an
-   exact-position corpus note in `buildReviewSegments` (the producer; the
-   component only renders it), seat-required, board-graded, register-gated,
-   once per game. Measured 14/18 plies retrieve on a real Ruy line with the FULL
-   corpus loaded. `docs/STATE.md` SAY: review 0 -> 1. Endgame remains 0.
-5. **Provenance is not on every weakness signal** (#32) — one shape, all sources,
-   so any surface can say "you met this against X thirteen days ago".
-6. **No concept-level spaced retrieval** (#28). SRS is keyed to `openingId` and
-   covers MOVES, not ideas.
-7. **A chat-ask unlocks any capability but the reveal is not recorded** (#34) —
-   asking is evidence, and it is being thrown away.
+2. ✅ **DONE (fcf483f) — ONE COMPUTER, BOTH DIRECTIONS** (#25). The entry here
+   read "a capability can go RED from anywhere and can only go GREEN through
+   analysis". The sharper finding was the other way round: `recordCapabilitiesShown`
+   only ever wrote `held`, so `CapabilityOutcome`'s `broken` member could not
+   exist and BOTH readers (`needScore:287`, `studentMomentBoost:58`) guarded on
+   `broken > 0` — unreachable code describing an impossible state. Now
+   `recordCapabilityEvidence`: same posed set, outcome decided from the real
+   cpLoss. Live writers added via one door (`discussionPractice.recordMoveEvidence`),
+   each surface declaring its own `capabilityOrigin` through a REQUIRED
+   parameter. HOLD writers 4 -> 5, six surfaces feeding them.
+   Found stress-testing it: `studentMomentBoost.isGrey` returned false for a
+   broken tag, harmless ONLY while nothing wrote one — the moment failures are
+   recorded it made the coach QUIETER on a capability just demonstrably failed.
+   Now `isUnproven`.
+   STILL OPEN: press/no-press AT A CRITICAL MOMENT, which the critical-moment
+   build (above) creates. `prompted` is in place and required, waiting for it.
+3. ✅ **DONE (fcf483f) — AND THE BULLET UNDERSTATED IT.** This read "the number
+   is correct at the source now; threading it is the rest". It was not correct
+   at the source: `playerRatingService:160` anchored the running K=32 ELO at
+   `currentRating`, the field `calibrateStrength:134` then WRITES, so every boot
+   re-scored the same games from the number the last boot wrote — measured
+   800 -> 990 and 1200 -> 888 across ten opens on zero new games. §4 of
+   `docs/plans/2026-09-17-computer-unification.md` reverted code for this and it
+   returned on 2026-09-18 through a change that widened the SOURCE without
+   touching the ANCHOR. Fixed with a write-once `ratingBaseline`; gate
+   `ratingIdempotence.test.ts` (negative control: reverting the anchor turns 3
+   of 5 red with the measured drift). Three more fell out: a refresh clobbered
+   `puzzleRating` (the SRS's own number), the profile seeded at 800 on a comment
+   describing the picker deleted 2026-09-02, and Learn set its slip bar from the
+   PUZZLE rating.
+   NOT DONE, deliberately: the 29 hand-rolled `?? 1200` sites already carry the
+   correct value and `oneStudentRating.test.ts` gates it — naming, not a defect.
+4. ✅ **THE ENDGAME ZERO WAS FALSE** (fcf483f). `state-of-build.mjs:94` probed
+   `components/Coach/CoachEndgame*` for corpus reach, but the corpus is spliced
+   in `EndgameLessonTab` (4 calls + its own `corpusNote` test), which
+   `CoachEndgamePage` mounts 4x — the same renderer-not-producer mistake the
+   comment one line above it warns about. STATE.md printed a red ZERO for a
+   surface that works, and ship-check gates on that file. Its HOLD scan was also
+   keyed on a function NAME and read a rename as the app losing a writer.
+5. ✅ **DONE (fcf483f)** (#32). `WeaknessProvenance` already existed with `from`
+   REQUIRED and 4 of 5 aggregators filling it; the one bare source was the
+   COACH'S OWN capture. The record shape was never the problem —
+   `MisconceptionTagRecord.sourceGameId` existed and `captureMisconception`
+   always forwarded it — the live sites never passed one, because Learn minted
+   its game id at SAVE time, after every slip was already written. The id now
+   comes from `learnMemory`, which already knows when a game begins by the one
+   mechanism that cannot be fooled (the board going backwards).
+6. 🔴 **NOT A DEFECT — THIS BULLET IS WRONG AND IS DELETED, NOT ANNOTATED.** It
+   read "No concept-level spaced retrieval. SRS is keyed to `openingId` and
+   covers MOVES, not ideas." Measured 2026-09-19: a concept-level SRS exists and
+   IS read. `misconceptionService` writes `dueAt` on capture (:114), lengthens
+   it on success (:266) and snaps it back on a miss (:274), and
+   `isMisconceptionDue` drives `openCount` in `getMisconceptionProfile` (:219),
+   which SIX production modules consume including the weakness spine and
+   `coachApi`. What is missing is a SURFACE that schedules a session around it —
+   a build, and one that needs a decision about where it lives, not a fix.
+7. ✅ **STRUCTURALLY DONE (fcf483f)** (#34). `CapabilityEvidenceRecord.prompted`
+   is REQUIRED, and the profile counts a prompted row as NEITHER held nor
+   broken, so a told-then-found move leaves the tag GREY and the coach keeps
+   teaching it — the coach's own teaching can never inflate the model it uses to
+   decide whether to teach. Every writer answers it. The remaining wire is the
+   drill surfaces' `hintRevealed` (`useEndgamePlayout:267`, React state read by
+   4 components, zero services) and the critical-moment announcement, which is
+   the first thing that will ever pass `prompted: true`.
+
+### A-ADJACENT, found by the post-deploy audit (2026-09-19)
+
+- ✅ **A GUESSED SEAT NARRATED THE STUDENT'S OWN MOVES AS THE OPPONENT'S**
+  (d9a193f). On a Slav where the student was BLACK, review said "Your opponent
+  developed into the game" about the student's move, and the ONE ply the engine
+  flagged came back "Your opponent: that was a mistake, costing about 1.4
+  points". `resolvePlayerColor` infers the seat from NAMES; neither the username
+  match nor the engine-name shortcut applies to a game imported with unfamiliar
+  names, so it returned null and `CoachReviewSessionPage` defaulted to 'white'
+  for board ORIENTATION — then threaded that guess into `buildReviewSegments` as
+  the NARRATION SEAT. The file refuses to guess one line away (the WIN/LOSS badge
+  shows `?`); the narration was less careful than the badge. Fixed with the field
+  that should have existed: `GameRecord.studentSide`, read first, declared by both
+  coach save paths, absent still means infer.
+- ✅ **THE WALK BUDGET WAS A CONSTANT ABOUT A DIFFERENT GAME** (7582d23). RECAP
+  and THESIS failed the product for the instrument's pacing: the walk reached ply
+  80 of 89 at poll 575 of 600. The recap is spoken at the end and the
+  turning-point card only appears after it. 600 was tuned when this audit ran ONE
+  fixture; it now rotates a game every run, so the budget scales with the game.
+  The audit was also withholding its own input — it computes expectations from
+  `studentSide` and never seeded that field.
 
 ### B. The instruments are not believable (a green here means nothing)
 
@@ -383,6 +446,25 @@ Learn 8/8, Review 28/28 MEETS STANDARD.
 ## Next-session pickup
 
 1. Gain all four levels (CLAUDE.md → `docs/STATE.md` → `surface-map.mjs --changed` → the code).
-2. Take open item 1 or 2 above.
-3. Audits run SEQUENTIALLY and with NOTHING beside them — no typecheck, no vitest.
+2. **Bucket A is CLOSED (2026-09-19)** — items 2-5 and 7 landed, 4 and 6 were
+   measured and found to be wrong bullets rather than defects. The one thing A
+   still owes is press/no-press at a critical moment, and that is not an A item
+   any more: it is THE CRITICAL MOMENT build at the top of this file, whose
+   `prompted` flag is already in place and required, waiting for a writer.
+   Take a whole BUCKET, not an item — David 2026-09-19: "If you pick a, you pick
+   all of a. All fixes at once. One audit at the end." Five of A's six turned
+   out to be the SAME defect (a computer wired one way with prose describing the
+   half that is not connected), so the bucket was one sweep rather than six.
+3. **Before building the critical moment, read this**: review CANNOT count how
+   many moves hold from stored data. `gameAnalysisService:602` sets MultiPV=1 on
+   every pool worker and `MoveAnnotation` persists no fan, so the review half
+   needs a NEW MultiPV>=3 pass over UNFLAGGED plies (unflagged is the point — a
+   found only-move has zero swing). The live lane already has the fan
+   (singleton, MultiPV 3), so Learn's half costs nothing. Ship the live half
+   first.
+4. Audits run SEQUENTIALLY and with NOTHING beside them — no typecheck, no vitest.
    A review run was invalidated twice this session by CPU stacked next to it.
+5. When an audit row goes red, ask whether the INSTRUMENT reached the surface
+   before concluding anything about the product. Of the four reds on 2026-09-19,
+   one was the product, one was the audit withholding its own input, and two
+   were a poll budget tuned on a game that is no longer the one being audited.
