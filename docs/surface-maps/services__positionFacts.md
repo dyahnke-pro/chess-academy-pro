@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**938 lines · 7 exports · 9 importers · 5 tests · 3 audits**
+**973 lines · 7 exports · 10 importers · 6 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,8 +13,8 @@
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:845) — names `positionFacts`
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3676) — names `ClauseKind`, `positionFacts`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3713) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5514) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:5619) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5567) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:5672) — names `positionFacts`
 
 ## Who calls in
 
@@ -24,6 +24,7 @@
 - `src/hooks/usePositionNarration.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/services/loopCloses.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/whyBestMove.ts`
@@ -53,29 +54,30 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8456`
+- `src/components/Coach/CoachTeachPage.tsx:8549`
 - `src/hooks/useLiveCoach.ts:249`
 - `src/hooks/usePhaseNarration.ts:610`
 - `src/hooks/usePositionNarration.ts:249`
 - `src/services/computerAccuracy.audit.test.ts:113`
-- `src/services/positionFacts.test.ts:213`
-- `src/services/positionFacts.test.ts:214`
-- `src/services/positionFacts.test.ts:255`
-- `src/services/positionFacts.test.ts:283`
-- `src/services/positionFacts.test.ts:284`
+- `src/services/positionFacts.test.ts:251`
+- `src/services/positionFacts.test.ts:252`
+- `src/services/positionFacts.test.ts:293`
+- `src/services/positionFacts.test.ts:321`
+- `src/services/positionFacts.test.ts:322`
 - `src/services/whyBestMove.ts:94`
 
-### `computePositionFacts` (function) — 45 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8429`
+### `computePositionFacts` (function) — 49 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8522`
 - `src/hooks/useLiveCoach.ts:232`
 - `src/hooks/usePhaseNarration.ts:597`
 - `src/hooks/usePositionNarration.ts:236`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/latentFork.test.ts:148`
-- `src/services/liveNeedGate.test.ts:117`
-- `src/services/liveNeedGate.test.ts:122`
-- `src/services/liveNeedGate.test.ts:136`
-- `src/services/liveNeedGate.test.ts:142`
+- `src/services/liveNeedGate.test.ts:121`
+- `src/services/liveNeedGate.test.ts:126`
+- `src/services/liveNeedGate.test.ts:140`
+- `src/services/liveNeedGate.test.ts:146`
+- `src/services/loopCloses.test.ts:108`
 - `src/services/positionFacts.test.ts:24`
 - `src/services/positionFacts.test.ts:37`
 - `src/services/positionFacts.test.ts:52`
@@ -93,19 +95,22 @@
 - `src/services/positionFacts.test.ts:142`
 - `src/services/positionFacts.test.ts:151`
 - `src/services/positionFacts.test.ts:161`
-- `src/services/positionFacts.test.ts:171`
-- `src/services/positionFacts.test.ts:181`
+- `src/services/positionFacts.test.ts:178`
 - `src/services/positionFacts.test.ts:190`
-- `src/services/positionFacts.test.ts:193`
-- `src/services/positionFacts.test.ts:204`
+- `src/services/positionFacts.test.ts:200`
+- `src/services/positionFacts.test.ts:206`
 - `src/services/positionFacts.test.ts:219`
-- `src/services/positionFacts.test.ts:235`
-- `src/services/positionFacts.test.ts:251`
-- `src/services/positionFacts.test.ts:261`
-- `src/services/positionFacts.test.ts:270`
-- `src/services/positionFacts.test.ts:282`
-- `src/services/positionFacts.test.ts:298`
-- `src/services/positionFacts.test.ts:306`
+- `src/services/positionFacts.test.ts:228`
+- `src/services/positionFacts.test.ts:231`
+- `src/services/positionFacts.test.ts:242`
+- `src/services/positionFacts.test.ts:257`
+- `src/services/positionFacts.test.ts:273`
+- `src/services/positionFacts.test.ts:289`
+- `src/services/positionFacts.test.ts:299`
+- `src/services/positionFacts.test.ts:308`
+- `src/services/positionFacts.test.ts:320`
+- `src/services/positionFacts.test.ts:336`
+- `src/services/positionFacts.test.ts:344`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
@@ -117,6 +122,7 @@
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/latentFork.test.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/services/loopCloses.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 

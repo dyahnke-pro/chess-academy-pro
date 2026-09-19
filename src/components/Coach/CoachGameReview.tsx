@@ -45,11 +45,12 @@ import { buildMisconceptionCallback } from '../../services/misconceptionCallback
 import { principleFor } from '../../data/principles';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
 import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLinePly } from '../../services/theoryDeparture';
-import { pauseBatchAnalysis, resumeBatchAnalysis, classifyCpLoss } from '../../services/gameAnalysisService';
+import { pauseBatchAnalysis, resumeBatchAnalysis, classifyCpLoss, scanCriticalMoments, recordPromptedFind } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
-import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
+import { buildTurningPointQuestion, judgeTurningPointPick, buildCriticalMomentQuestion, judgeCriticalMomentPick, type TurningPointQuestion, type CriticalMomentQuestion } from '../../services/reviewTurningPoint';
 import { computeTurningPointHinge } from '../../services/reviewHinge';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { selectTeachingForSegments, renderThesis } from '../../services/teachingSelector';
 import { registerFor } from '../../coach/surfaceContract';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
@@ -739,6 +740,51 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     return selectReviewQuestions(walkNarration.segments, playerColor, { budget: REVIEW_QUESTION_BUDGET });
   }, [walkNarration, playerColor]);
 
+  // ── THE CRITICAL-MOMENT FAN PASS ──────────────────────────────────────────
+  //
+  // Runs in the BACKGROUND over the student's own plies, past the book, skipping
+  // the plies the question plan already stops at (never two cards on one move).
+  // It is a genuinely new engine pass and it has to be: the stored annotation
+  // carries one eval and one best move, so there is no fan in the record to
+  // count, and the whole point is the plies the classifier did NOT flag.
+  //
+  // If the pool is busy or absent the map comes back empty and NO question is
+  // asked — silence, never a guessed count.
+  const OPENING_LAST_MOVE = 7;
+  useEffect(() => {
+    if (!walkNarration || !playerColor) return;
+    setCriticalMoment(null);
+    criticalDoneRef.current = new Set();
+    const plies = walkNarration.segments
+      .filter((sg) => sg.playerColor === playerColor
+        && sg.moveNumber > OPENING_LAST_MOVE && !questionPlan.has(sg.ply))
+      .map((sg) => ({ ply: sg.ply, fen: sg.fenBefore, moverColor: playerColor === 'white' ? 'w' as const : 'b' as const }));
+    if (plies.length === 0) return;
+    const ac = new AbortController();
+    void (async () => {
+      try {
+        // Let the walk's opening narration and the review's own deep dive get
+        // the engine first — this pass is background, and the question is not
+        // needed until the walk reaches its ply.
+        await new Promise((r) => setTimeout(r, 3_000));
+        if (ac.signal.aborted) return;
+        const reads = await scanCriticalMoments({ plies, rating: playerRating || DEFAULT_STUDENT_RATING, signal: ac.signal });
+        if (ac.signal.aborted) return;
+        const q = buildCriticalMomentQuestion(walkNarration.segments, reads, playerColor);
+        if (!q) return;
+        setCriticalMoment(q);
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachGameReview.criticalMoment',
+          summary: `critical moment @ply ${q.ply} register=${q.register} count=${q.count} stake=${q.stake} gap=${q.gapCp}cp played=${q.playedSan} held=${q.found}`,
+          fen: q.fenBefore,
+        });
+      } catch { /* no engine, no question — the honest outcome */ }
+    })();
+    return () => ac.abort();
+  }, [walkNarration, playerColor, playerRating, questionPlan]);
+
   const [readingGate, setReadingGate] = useState<{ ply: number; fen: string } | null>(null);
   const quizzedPliesRef = useRef<Set<number>>(new Set());
   useEffect(() => {
@@ -875,8 +921,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const [trapQ, setTrapQ] = useState<TrapQuestion | null>(null);
   const [trapReveal, setTrapReveal] = useState<{ correct: boolean; text: string } | null>(null);
 
+  // ── THE CRITICAL MOMENT (David 2026-09-18) ────────────────────────────────
+  // Review's other question is selected by SWING — what a move COST. This one
+  // is selected by CRITICALITY — how much the CHOICE mattered. They come apart
+  // exactly where teaching is best: a student who FOUND the only move has a
+  // swing of zero, so the swing card can never reach the most instructive
+  // position in the game. Needs its own MultiPV fan, because `MoveAnnotation`
+  // persists one line and the review pool pins MultiPV 1.
+  const [criticalMoment, setCriticalMoment] = useState<CriticalMomentQuestion | null>(null);
+  const [criticalCard, setCriticalCard] = useState<CriticalMomentQuestion | null>(null);
+  const [criticalReveal, setCriticalReveal] = useState<{ correct: boolean; text: string } | null>(null);
+  /** Plies this review has already spoken the moment at — one per game. */
+  const criticalDoneRef = useRef<Set<number>>(new Set());
+
   useEffect(() => {
     // Fresh game → fresh question state.
+    setCriticalCard(null);
+    setCriticalReveal(null);
     setShotState(null);
     setShotReveal(null);
     shotAttemptsRef.current = 0;
@@ -962,6 +1023,31 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // (≤2 per game, the biggest moments), and use the KIND the plan chose for
       // that moment. Everything else stays narration — no overwhelm (David
       // 2026-07-20). quizzedPliesRef stops a re-fire on the same ply.
+      // ── THE CRITICAL MOMENT, at its own ply ──────────────────────────────
+      // Before the flagged-move ladder, because this fires on plies the ladder
+      // by definition never reaches (the plan only tags flagged moves, and the
+      // scan skipped every ply the plan already owns).
+      //
+      // 🔒 THE REGISTER FOLLOWS THE BOARD, NOT THE CARD. If their move HELD,
+      // this STATES it and the walk carries on — asking a student to find a
+      // move they played is §G4.5.2's exact defect. Only a genuine miss at a
+      // one-move position stops the walk.
+      if (criticalMoment && seg && nextPly === criticalMoment.ply && !criticalDoneRef.current.has(nextPly)) {
+        criticalDoneRef.current.add(nextPly);
+        captureEvent('review_critical_moment', {
+          ply: nextPly, register: criticalMoment.register, count: criticalMoment.count,
+          stake: criticalMoment.stake, gap_cp: criticalMoment.gapCp, held: criticalMoment.found,
+        });
+        if (criticalMoment.register === 'ask') {
+          questionPlyRef.current = nextPly;
+          setCriticalCard(criticalMoment);
+          setCriticalReveal(null);
+          void reviewSay(criticalMoment.question ?? '').catch(() => undefined);
+          return;  // pause the walk; resumes when they answer
+        }
+        // credit / note — a statement. Speak it and keep walking.
+        void reviewSay(criticalMoment.reveal, criticalMoment.found ? { prosodySpike: true } : undefined).catch(() => undefined);
+      }
       const planned = questionPlan.get(nextPly);
       if (seg && isStudentMistake && planned && !quizzedPliesRef.current.has(nextPly)) {
         quizzedPliesRef.current.add(nextPly);
@@ -1021,7 +1107,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, rewindOffer, questionPlan, moves, moverIsStudent]);
+  }, [readingGate, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, criticalMoment, criticalCard, rewindOffer, questionPlan, moves, moverIsStudent]);
   handleWalkForwardRef.current = handleWalkForward;
   /** A user's forward tap / key: pauses auto-play (only Play restarts it),
    *  then steps through the same card ladder. */
@@ -1302,6 +1388,30 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setWalkExplorationArrows(null);
     }
   }, [turningPreviewPly, handleTurningPick]);
+
+  /** They committed an answer at the critical moment. Grade it against the
+   *  moves that actually held, then RECORD IT GREY — see `recordPromptedFind`:
+   *  the coach named the count and the stake before asking, so a right answer
+   *  here is not evidence they could have done it unaided, and counting it
+   *  would let the app's own teaching mark the capability proven. */
+  const handleCriticalPick = useCallback((san: string): void => {
+    if (!criticalCard) return;
+    const correct = judgeCriticalMomentPick(criticalCard, san);
+    const text = `${correct ? 'That\u2019s it.' : 'Not quite.'} ${criticalCard.reveal}`;
+    captureEvent('review_critical_moment_result', {
+      correct, picked: san, ply: criticalCard.ply, count: criticalCard.count, stake: criticalCard.stake,
+    });
+    setCriticalCard(null);
+    setCriticalReveal({ correct, text });
+    void recordPromptedFind({
+      fenBefore: criticalCard.fenBefore,
+      playedSan: san,
+      moverColor: playerColor ?? 'white',
+      held: correct,
+      ...(props.gameId ? { sourceGameId: props.gameId } : {}),
+    }).catch(() => undefined);
+    void reviewSay(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
+  }, [criticalCard, playerColor, props.gameId]);
 
   // ── TYPE-NOT-MOVE ask — fires once at a student position whose best move is a
   // forcing check/capture. "What KIND of move does this call for?" ───────────
@@ -2775,7 +2885,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // and the walk "froze"). Whenever any question/playback card opens,
   // scroll the first present one into view.
   const anyCardOpen = Boolean(
-    shotState || shotReveal || turningQ || trapQ || trapReveal || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
+    shotState || shotReveal || turningQ || trapQ || trapReveal || criticalCard || criticalReveal || rewindOffer || seqState || cameoState || theoryState || principleQuizState || faucetPhase !== 'idle',
   );
   useEffect(() => {
     if (!anyCardOpen) return;
@@ -2831,7 +2941,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // card follows another, `anyCardOpen` never transitions, so the second card
     // (the find-shot prompt) opened below the fold as a border-sliver (David
     // 2026-07-21, IMG_4581: "that thin purple line below the board").
-  }, [anyCardOpen, shotState, shotReveal, turningQ, trapQ, trapReveal, rewindOffer, seqState, cameoState, theoryState, principleQuizState, faucetPhase]);
+  }, [anyCardOpen, shotState, shotReveal, turningQ, trapQ, trapReveal, criticalCard, criticalReveal, rewindOffer, seqState, cameoState, theoryState, principleQuizState, faucetPhase]);
 
   // ship-4: `currentMove` removed — only the deleted analysis-phase
   // board read it. Walk render uses `walkPlayback.currentSegment` and
@@ -4303,6 +4413,34 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                     </button>
                   ))}
                 </div>
+              </div>
+            )}
+            {/* THE CRITICAL MOMENT — asked only when their move did NOT hold and
+                exactly one move did. The chips are the engine's own lines from
+                this position (holders + the fan's discards + what they played),
+                so no distractor is invented (G0). */}
+            {criticalCard && (
+              <div data-testid="review-critical-card" className="mx-3 my-1 rounded-xl border-2 border-amber-500/40 bg-amber-500/10 px-3 py-2">
+                <div className="text-sm text-amber-100">{criticalCard.question}</div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {criticalCard.choices.map((san) => (
+                    <button key={san} type="button" data-testid={`review-critical-pick-${san}`}
+                      onClick={() => handleCriticalPick(san)}
+                      className="rounded-lg border border-amber-400/50 px-2.5 py-1 text-xs font-semibold text-amber-200 hover:bg-amber-500/20">
+                      {san}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {criticalReveal && (
+              <div data-testid="review-critical-reveal"
+                className={`mx-3 my-1 rounded-xl border-2 px-3 py-2 ${criticalReveal.correct ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-amber-500/40 bg-amber-500/10'}`}>
+                <div className={`text-sm ${criticalReveal.correct ? 'text-emerald-100' : 'text-amber-100'}`}>{criticalReveal.text}</div>
+                <button type="button" data-testid="review-critical-done" onClick={() => setCriticalReveal(null)}
+                  className="mt-1.5 rounded-lg border border-slate-500/50 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-500/20">
+                  Done
+                </button>
               </div>
             )}
             {trapReveal && (

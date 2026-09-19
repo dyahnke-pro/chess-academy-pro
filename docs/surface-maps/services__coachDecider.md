@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**347 lines · 10 exports · 5 importers · 3 tests · 14 audits**
+**347 lines · 10 exports · 5 importers · 3 tests · 15 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,10 +22,10 @@
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3651) — names `decide`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3741) — names `decide`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3769) — names `decide`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4712) — names `decide`
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:4748) — names `decide`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5513) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:5620) — names `coachDecider`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4765) — names `decide`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:4801) — names `decide`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5566) — names `coachDecider`
+- **The standard post-deploy ritual** (CLAUDE.md:5673) — names `coachDecider`
 
 ## Who calls in
 
@@ -87,20 +87,20 @@
 - `src/services/accessPolicy.test.ts:108`
 - `src/services/accessPolicy.test.ts:112`
 - `src/services/accessPolicy.test.ts:121`
-- `src/services/coachDecider.test.ts:21`
-- `src/services/coachDecider.test.ts:29`
-- `src/services/coachDecider.test.ts:35`
-- `src/services/coachDecider.test.ts:41`
-- `src/services/coachDecider.test.ts:49`
-- `src/services/coachDecider.test.ts:55`
-- `src/services/coachDecider.test.ts:64`
+- `src/services/coachDecider.test.ts:26`
+- `src/services/coachDecider.test.ts:34`
+- `src/services/coachDecider.test.ts:40`
+- `src/services/coachDecider.test.ts:46`
+- `src/services/coachDecider.test.ts:54`
+- `src/services/coachDecider.test.ts:60`
 - `src/services/coachDecider.test.ts:69`
-- `src/services/coachDecider.test.ts:73`
+- `src/services/coachDecider.test.ts:74`
+- `src/services/coachDecider.test.ts:78`
 - `src/services/coachFeatureService.ts:1729`
 - `src/services/liveNeedGate.test.ts:46`
 - `src/services/liveNeedGate.test.ts:52`
-- `src/services/liveNeedGate.test.ts:58`
-- `src/services/liveNeedGate.test.ts:70`
+- `src/services/liveNeedGate.test.ts:61`
+- `src/services/liveNeedGate.test.ts:73`
 - `src/services/positionFacts.ts:545`
 
 ### `habitNeedFrom` (function) — 11 call sites
@@ -138,6 +138,7 @@
 - `scripts/audit-ai-consent-persist.mjs`
 - `scripts/audit-coach-all-questions-prod.mjs`
 - `scripts/audit-coach-full-games.mjs`
+- `scripts/audit-coach-multilingual-prod.mjs`
 - `scripts/audit-concept-gameplay-prod.mjs`
 - `scripts/audit-lib/coach-tab-graders.mjs`
 - `scripts/audit-lib/degrade.mjs`

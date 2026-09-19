@@ -38,6 +38,7 @@ import { liveMethodBeatFor, habitIsOwed } from './methodBeat';
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { readCriticalMoment, criticalMomentStatement, type CriticalMomentRead } from './criticalMoment';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -258,19 +259,21 @@ export function clauseText(items: readonly ClauseItem[], exclude: readonly Claus
   return items.filter((c) => !exclude.includes(c.kind)).map((c) => c.text);
 }
 
-/** Best-for-the-mover minus runner-up, from the analysis fan (mover-POV, so a
- *  bigger gap = more of an only-move). */
-function moverGap12(analysis: PositionFactsInput['analysis'], moverColor: 'w' | 'b'): number {
-  const sign = moverColor === 'w' ? 1 : -1;
-  const cps = [...(analysis.topLines ?? [])]
-    .sort((a, b) => a.rank - b.rank)
-    .map((l) => (l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation) * sign);
+/** Best-for-the-mover minus runner-up, mover-POV (a bigger gap = more of an
+ *  only-move) — READ OFF THE ONE FAN COMPUTER, not scored a second time here.
+ *
+ *  This used to be a private 10-line copy of `criticalMoment`'s scoring: the
+ *  same mover-POV sign flip, the same flat ±100000 mate, the same "fewer than 2
+ *  lines can't judge leverage" rule. Two copies of one calculation is the
+ *  drifting constant the rot rule bans — they agreed today and nothing made
+ *  them agree tomorrow, and the count clause below reads the OTHER one. One
+ *  computer now answers both. */
+function moverGap12(read: CriticalMomentRead | null): number {
   // Fewer than 2 lines = the MultiPV fan wasn't run wide enough to judge
   // decision-leverage. We can't tell a genuine only-move (1 legal move) from a
   // width-1 analysis without the legal-move count, so claim NO leverage rather
   // than a false only-move (scanCriticality uses legalCount for the real thing).
-  if (cps.length < 2) return 0;
-  return cps[0] - cps[1];
+  return read?.gapCp ?? 0;
 }
 
 function severityFromGap(gapCp: number, rating: number): Severity {
@@ -371,7 +374,16 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // rule is exactly what the merge exists to delete. Feeding the signals in
   // instead means the door decides and the carve-out survives as a REASON, not
   // as a bypass.
-  const gap12 = moverGap12(analysis, moverColor);
+  // THE ONE CRITICAL-MOMENT READ for this position — how many moves still hold
+  // and what they hold. Feeds BOTH the severity the door grades on and the
+  // Learn statement below, so the two can never disagree about the same fan.
+  // The ply comes off the FEN rather than from the caller: fullmove + side to
+  // move give it exactly, and a derived number cannot drift the way four call
+  // sites each passing their own would. Computed HERE (not at the need wire
+  // below) because the critical-moment stem rotates on it.
+  const plyNumber = (fullmove - 1) * 2 + (moverColor === 'b' ? 1 : 0) + 1;
+  const criticalRead = readCriticalMoment({ topLines: analysis.topLines, moverColor, rating });
+  const gap12 = moverGap12(criticalRead);
   // A pin or skewer aimed at your own king/queen, a castled king with a broken
   // shelter under real fire, a central king with the file about to open, or a
   // trade that would create one of those. Pure geometry, no engine — and, like
@@ -479,7 +491,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   } catch { methodBeat = null; }
 
   const composed = applyWeaknessBoost(
-    buildClauses({ slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
+    buildClauses({ slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
     input.studentWeaknesses ?? [],
   );
 
@@ -510,7 +522,6 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // THIS STUDENT need teaching here", which is only ever a question about their
   // own decision; on the opponent's ply it is null and importance decides.
   const studentIsMoving = input.moverColor === input.studentColor;
-  const plyNumber = (fullmove - 1) * 2 + (input.moverColor === 'b' ? 1 : 0) + 1;
   // WHAT THE BOARD ASKED of the move just played — computed HERE from the raw
   // board data the surface handed over (see `lastMove`), so no surface has to
   // compose this computer itself.
@@ -709,6 +720,11 @@ function buildClauses(a: {
    *  Computed by the caller from the weakness lifecycle (`habitNeedFrom`), not
    *  re-derived here — one door, one answer. */
   slowDownOwed: boolean;
+  /** THE ONE CRITICAL-MOMENT READ (`criticalMoment`) — how many moves still
+   *  hold and what they hold. Null when the fan carried nothing to count. */
+  criticalRead: CriticalMomentRead | null;
+  /** Keys the statement's stem rotation — resume-safe, never `Math.random`. */
+  plyNumber: number;
   importance: ImportanceVerdict;
   /** The door's verdict for this surface's posture — whether the moment speaks
    *  at all. Distinct from `importance.speak`, which is posture-blind. */
@@ -741,7 +757,7 @@ function buildClauses(a: {
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
 }): ClauseItem[] {
-  const { importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
+  const { importance, speaks, criticalRead, plyNumber, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
   // THE WHETHER-QUESTION IS THE DOOR'S. This used to be a private escape hatch
   // here — "speak anyway if a pin / king-danger / band-change was found",
   // because the importance model had no input for any of them. Those signals
@@ -882,9 +898,28 @@ function buildClauses(a: {
   // them play. An OPEN one — or no record at all — still speaks, because this
   // is the shape they have misstepped in before, and because a cold student
   // must never meet a mute coach.
-  if (studentToMove && a.slowDownOwed) {
-    if (importance.tier === 'only-move') ranked.push({ kind: 'key-moment', rank: 85, text: `Only one move really holds here — this is the moment to slow down.` });
-    else if (importance.tier === 'critical') ranked.push({ kind: 'key-moment', rank: 65, text: `This is a critical moment — the choice here is the one that decides it.` });
+  //
+  // 🔒 THE COUNT IS THE TRIGGER, AND THE STAKE IS COMPUTED (David 2026-09-18:
+  // "maybe say how many moves keep equality? Algo that for users."). This used
+  // to be two hardcoded sentences keyed on the importance TIER, and neither
+  // said the two things the student actually needs: HOW MANY moves still hold,
+  // and WHAT they hold. "Keeps equality" is a claim about the evaluation and it
+  // is false in both directions — when they are winning the move keeps the WIN,
+  // when they are lost it cannot promise a draw that is not there. Both facts
+  // now come off the SAME fan the door graded severity on, so the sentence and
+  // the ranking can never disagree.
+  //
+  // RANK still reflects how much hinges, because that is what rank is for: a
+  // genuine only-move outranks a critical moment outranks a two-move fork. The
+  // tier comes from the door (which sees cpLoss and threats too); the TEXT
+  // comes from the count.
+  const criticalStatement = criticalMomentStatement(criticalRead, plyNumber);
+  if (studentToMove && a.slowDownOwed && criticalStatement && criticalRead) {
+    ranked.push({
+      kind: 'key-moment',
+      rank: importance.tier === 'only-move' ? 85 : criticalRead.count === 1 ? 65 : 60,
+      text: criticalStatement,
+    });
   } else if (studentToMove) {
     // Owed nothing here — their record says they handle these. Silence is the
     // computed verdict, not an absence.
