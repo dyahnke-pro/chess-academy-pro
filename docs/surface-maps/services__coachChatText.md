@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**268 lines · 6 exports · 2 importers · 1 tests · 0 audits**
+**279 lines · 6 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,7 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
+- `src/components/Coach/ChatMessage.tsx`
 - `src/services/coachChatText.test.ts`
 
 ## Exports and every call site
@@ -24,22 +24,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `phraseFor` (function) — 3 call sites
-- `src/services/coachChatText.test.ts:29`
-- `src/services/coachChatText.test.ts:40`
-- `src/services/coachChatText.test.ts:46`
+- `src/services/coachChatText.test.ts:30`
+- `src/services/coachChatText.test.ts:41`
+- `src/services/coachChatText.test.ts:47`
 
 ### `needsLocalizing` (function) — 4 call sites
-- `src/services/coachChatText.test.ts:52`
-- `src/services/coachChatText.test.ts:58`
+- `src/services/coachChatText.test.ts:53`
 - `src/services/coachChatText.test.ts:59`
-- `src/services/coachChatText.test.ts:63`
+- `src/services/coachChatText.test.ts:60`
+- `src/services/coachChatText.test.ts:64`
 
 ### `LocalizableMessage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useLocalizedMessages` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1057`
-- `src/services/coachChatText.test.ts:102`
+### `useLocalizedContent` (function) — 3 call sites
+- `src/components/Coach/ChatMessage.tsx:49`
+- `src/components/Coach/ChatMessage.tsx:105`
+- `src/services/coachChatText.test.ts:105`
 
 ## Tests
 

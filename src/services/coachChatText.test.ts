@@ -8,6 +8,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { globSync } from 'node:fs';
 import { COACH_PHRASES, phraseFor, needsLocalizing } from './coachChatText';
 import { codeForLanguageName, LANG_NAME, type LangCode } from '../utils/detectLanguage';
 
@@ -95,12 +96,37 @@ describe('the table cannot drift from the language vocabulary', () => {
 });
 
 describe('the door is actually wired at the render', () => {
-  it('CoachTeachPage renders the LOCALIZED transcript, not the raw one', () => {
-    // A door nobody walks through is not a door. The whole design rests on
-    // this one call site covering all 85 push sites.
-    const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src).toContain('useLocalizedMessages(messages,');
-    expect(src, 'the transcript must map over the localized list').toContain('[...shownMessages].reverse().map(');
-    expect(src, 'the raw list must no longer be rendered').not.toContain('[...messages].reverse().map(');
+  it('ChatMessage localizes, and no longer renders the raw content', () => {
+    // A door nobody walks through is not a door. `ChatMessage` is the one
+    // component every coach bubble renders through (its own docstring has said
+    // so since the 2026-06-15 markup leak), so this one call site covers all
+    // six transcript surfaces and the seventh someone adds next month.
+    const src = readFileSync('src/components/Coach/ChatMessage.tsx', 'utf8');
+    expect(src).toContain('useLocalizedContent(message.content, message.role');
+    expect(src, 'the bubble must render the localized text').toContain('renderFormattedText(shownContent)');
+    expect(src, 'the raw content must no longer reach the bubble')
+      .not.toContain('renderFormattedText(message.content)');
+  });
+
+  it('no coach surface hand-rolls a bubble that bypasses the door', () => {
+    // The first cut of this door sat in CoachTeachPage's own map and missed
+    // five surfaces. The fix is a census, not a list: any component rendering
+    // a message's `.content` straight into JSX is a surface the door cannot
+    // reach. Kid surfaces are EXCLUDED by contract, not by oversight — a kid
+    // LLM call must route through `getKidLlmResponse`, and this door's model
+    // fallback calls `voiceFacts` directly, so wiring it there would break the
+    // kid personality wall. That is a decision for David, recorded here.
+    const files = globSync('src/components/**/*.tsx', {
+      ignore: ['**/*.test.tsx', 'src/components/Kid/**'],
+    });
+    // Blame by STATEMENT: `${m.content}` inside a template literal builds a
+    // PROMPT, not a bubble, and `content={msg.content}` is the door being
+    // called. Neither is a raw render, so neither may trip this.
+    const raw = /(?<![$=])\{\s*(?:msg|m|message)\.content\s*\}/;
+    const offenders = files.filter((f) => {
+      if (f.endsWith('Coach/ChatMessage.tsx')) return false; // the door itself
+      return raw.test(readFileSync(f, 'utf8'));
+    });
+    expect(offenders, 'these render coach text with no translation door').toEqual([]);
   });
 });

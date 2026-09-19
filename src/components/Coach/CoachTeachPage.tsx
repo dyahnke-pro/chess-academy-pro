@@ -258,9 +258,7 @@ import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
-import { detectStudentLanguage, chosenOrTypedLanguageName } from '../../services/spokenLanguage';
-import { useLocalizedMessages } from '../../services/coachChatText';
-import { codeForLanguageName } from '../../utils/detectLanguage';
+import { detectStudentLanguage } from '../../services/spokenLanguage';
 import { translateToEnglish } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
@@ -1052,9 +1050,6 @@ export function CoachTeachPage(): JSX.Element {
   // without touching a push site. Fixed app strings come from a table
   // synchronously (no round-trip, no English-then-swap); anything else falls
   // back to the model; English is the floor. Their OWN messages are untouched.
-  const chatLanguageName = chosenOrTypedLanguageName();
-  const chatLangCode = chatLanguageName ? codeForLanguageName(chatLanguageName) : null;
-  const shownMessages = useLocalizedMessages(messages, chatLanguageName, chatLangCode);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   // The board is locked ONLY while the opponent is computing its reply (the
@@ -12123,7 +12118,7 @@ export function CoachTeachPage(): JSX.Element {
             </div>
           )}
 
-          {[...shownMessages].reverse().map((msg, idxFromTop) => (
+          {[...messages].reverse().map((msg, idxFromTop) => (
             // Newest finished message gets the same subtle highlight
             // as the streaming bubble. Everything older fades to
             // 70% opacity so the focus stays on the active turn.

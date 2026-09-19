@@ -4,22 +4,26 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**296 lines · 1 exports · 6 importers · 2 tests · 5 audits**
+**312 lines · 2 exports · 7 importers · 2 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
-- **Test Data Factories** (CLAUDE.md:4462) — names `ChatMessage`
+- **Test Data Factories** (CLAUDE.md:4820) — names `ChatMessage`
 
 ## Who calls in
 
 - `src/components/Coach/ChatMessage.test.tsx`
 - `src/components/Coach/CoachChatPage.tsx`
+- `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/GameChatPanel.tsx`
 - `src/components/Openings/MasterclassCoachChat.tsx`
 
 ## Exports and every call site
+
+### `LocalizedCoachText` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ChatMessage` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

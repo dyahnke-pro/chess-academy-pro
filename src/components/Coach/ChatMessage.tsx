@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import type { ChatMessage as ChatMessageType } from '../../types';
 import { stripCoachMarkup } from '../../services/sanitizeCoachText';
+import { useLocalizedContent } from '../../services/coachChatText';
 
 /** Render basic markdown-style formatting: **bold** and *italic*.
  *  Defense-in-depth: strip any coach directive markup
@@ -38,6 +39,14 @@ function renderFormattedText(rawText: string): React.ReactNode[] {
   }
 
   return parts;
+}
+
+/** A coach line rendered OUTSIDE a chat bubble — the explore-reaction feed on
+ *  `/coach/play` renders bare `<p>`s, not `<ChatMessage>`s, so it would have
+ *  read English while the voice spoke Thai. A hook cannot be called inside a
+ *  `.map`, so the door needs a component; this is it. Text only, no chrome. */
+export function LocalizedCoachText({ content }: { content: string }): JSX.Element {
+  return <>{useLocalizedContent(content, 'assistant')}</>;
 }
 
 interface ChatMessageProps {
@@ -86,7 +95,14 @@ function ActionButton({ action, onClick }: {
   );
 }
 
+/** The transcript's translation door. A Thai student heard the lesson in Thai
+ *  and READ it in English, because chat messages are built at 85 `setMessages`
+ *  call sites and no door sat between any of them and the screen. The same
+ *  reasoning that put `stripCoachMarkup` here puts this here: it is the one
+ *  component every coach bubble renders through, so one call covers all six
+ *  surfaces and the seventh. See `services/coachChatText.ts`. */
 export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageProps): JSX.Element {
+  const shownContent = useLocalizedContent(message.content, message.role, { streaming: isStreaming });
   const navigate = useNavigate();
   const isUser = message.role === 'user';
   const actions = message.metadata?.actions ?? [];
@@ -237,7 +253,7 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
             </span>
           </div>
         ) : (
-          <p className="text-sm leading-relaxed whitespace-pre-wrap">{renderFormattedText(message.content)}</p>
+          <p className="text-sm leading-relaxed whitespace-pre-wrap">{renderFormattedText(shownContent)}</p>
         )}
 
         {isStreaming && !isVoiceAssistant && !message.content && (
