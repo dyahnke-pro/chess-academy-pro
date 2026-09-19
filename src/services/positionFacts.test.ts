@@ -165,12 +165,50 @@ describe('computePositionFacts — the composer', () => {
     expect(r.clauses.some((c) => /this is the moment to slow down/i.test(c.text))).toBe(false);
   });
 
+  const SHARP_FEN = 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14';
+  const keyMoment = (r: { clauses: Array<{ kind: string; text: string }> }): string | null =>
+    r.clauses.find((c) => c.kind === 'key-moment')?.text ?? null;
+
   it('calls a critical moment when one move stands far ahead (mover-POV)', async () => {
     // White to move in a MIDDLEGAME, best line +300 vs the field at +20/+10 → only-move.
+    // ASSERT THE CLAIM, NOT THE STEM: the wrapper rotates on the ply by design
+    // (David 2026-09-18), so a test pinned to one opener fails on a healthy
+    // build — which is exactly what it did when the rotation landed.
     const sharp = { ...flat, topLines: [line(1, 300), line(2, 20), line(3, 10)], evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 } };
-    const r = await computePositionFacts({ posture: 'walk', fen: 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: sharp });
+    const r = await computePositionFacts({ posture: 'walk', fen: SHARP_FEN, moverColor: 'w', studentColor: 'w', analysis: sharp });
     expect(r.importance.speak).toBe(true);
-    expect(r.clauses.some((c) => /critical moment|only one move/i.test(c.text))).toBe(true);
+    const text = keyMoment(r);
+    expect(text, 'no key-moment clause at a one-move position').toBeTruthy();
+    // THE COUNT and THE STAKE are the facts; both must be in the sentence.
+    expect(text).toMatch(/\bone move\b/i);
+    expect(text).toContain('keeps the win');   // +300 mover-POV — NOT "equality"
+  });
+
+  it('says TWO moves when two hold, and agrees grammatically with its own count', async () => {
+    // 0 / -40 / -900 at the default band (tol 100cp) → exactly two hold.
+    const forgiving = { ...flat, topLines: [line(1, 0), line(2, -40), line(3, -900)], evaluation: 0, wdl: { win: 330, draw: 340, loss: 330 } };
+    const r = await computePositionFacts({ posture: 'walk', fen: SHARP_FEN, moverColor: 'w', studentColor: 'w', analysis: forgiving });
+    const text = keyMoment(r);
+    expect(text, 'no key-moment clause at a two-move fork').toBeTruthy();
+    expect(text).toMatch(/\btwo moves\b/i);
+    expect(text).toContain('keep you level');
+    expect(text).not.toMatch(/two moves keeps/);
+  });
+
+  it('says NOTHING when three moves hold — nothing hinges', async () => {
+    const settled = { ...flat, topLines: [line(1, 30), line(2, 10), line(3, -20)], evaluation: 30, wdl: { win: 340, draw: 340, loss: 320 } };
+    const r = await computePositionFacts({ posture: 'walk', fen: SHARP_FEN, moverColor: 'w', studentColor: 'w', analysis: settled });
+    expect(keyMoment(r)).toBeNull();
+  });
+
+  it('NEVER claims "equality" when the mover is LOST — the stake is read off the line', async () => {
+    const losing = { ...flat, topLines: [line(1, -500), line(2, -900), line(3, -1400)], evaluation: -500, wdl: { win: 40, draw: 160, loss: 800 } };
+    const r = await computePositionFacts({ posture: 'walk', fen: SHARP_FEN, moverColor: 'w', studentColor: 'w', analysis: losing });
+    const text = keyMoment(r);
+    if (text) {
+      expect(text).toContain('limits the damage');
+      expect(text).not.toMatch(/equality|keeps you level|keeps the win/);
+    }
   });
 
   it('stays quiet of campaign/decision talk in the OPENING — only a real hanging piece speaks (David 2026-08-26 regression)', async () => {

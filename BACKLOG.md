@@ -101,34 +101,146 @@ script that dies at import produces no signal at all.
 
 First complete Learn game ever captured with a working narration wire — 22
 plies to checkmate, 233 spoken lines, 630 audit events. Report:
-`audit-reports/learn-full-game-2026-09-17T03-43-47-467Z/`. None of these are
-fixed; each needs its own root-cause pass.
+`audit-reports/learn-full-game-2026-09-17T03-43-47-467Z/`.
 
-1. **A 184cp blunder is "under the floor, nothing to call."** Two coach moves in
-   one game — `Qc7` at 122cp and `Qxc5` at 184cp — were classified as not worth
-   mentioning. The advanced rating band's own threshold is 50cp. Whatever floor
-   `coachVerdict` applies is mis-scaled or inverted.
+**POST-DEPLOY AUDIT, 2026-09-19 (prod, bundle `index-CWTOFc5b`).**
+`audit-concept-gameplay-prod` **8/8**. `audit-learn-full-game` drove a real
+41-ply game to checkmate, 325 lines spoken, 0 silent plies, 0 page errors.
 
-2. **The coach coaches after checkmate.** Ply 22 speaks "Checkmate." and then
-   continues with "The move is Rd1", "Re1 is playable, but not as precise",
-   "Their king is still in the centre — every line that opens toward it is worth
-   looking at." The terminal position must end the advice lanes.
+- ✅ **L1 confirmed on a live game.** The coach played `Nb5#` at ply 41, spoke
+  exactly `"Checkmate."` and nothing else — `voicePackage` empty. No "The move
+  is…", no "their king is still in the centre".
+- ⚠️ **The run flagged 2 false claims, and BOTH were a miss in the new
+  hypothetical guard, not a product defect.** `whatItAllowed` said *"That let
+  them swing pieces toward your king, win a pawn, create a passed pawn on d5 and
+  trade off the rook"* — a projection along the opponent's PV, and `d4d5` (the
+  move that creates the passer) is IN that pv. Two causes, both fixed: the
+  clause splitter did not split on a bare `and`, so the projective half could
+  not be separated from its neighbour; and a CREATION verb was not a
+  hypothetical marker, though a thing the line creates is by definition not on
+  the board yet. Re-verified against the exact sentence + FEN from the report,
+  with controls in both directions — both projections now pass, both real lies
+  ("your knight on b5 is hanging", "the rook on d5 is loose") are still caught,
+  and a true present claim still passes.
+- 📋 **84 ORPHAN lines, and the new split says what they are.** All are
+  `voiceService.*` echoes whose SPOKEN text has been TTS-sanitised — "rook takes
+  b7" where the anchored app event said "Rxb7" — so text matching cannot pair
+  them with their twin. Not unchecked *claims*: the written form was checked.
+  The real fix is threading the position through `voiceService` so an echo
+  carries its own board; deliberately not done here (shared file, two sessions
+  in flight). 195 lines carried their own FEN, 46 paired by text.
 
-3. **A false claim about a captured piece, UNFLAGGED.** "Your knight on b5 is
-   hanging" spoken at ply 22; b5 was captured at ply 7 (`axb5`) and the student
-   had no knights left at all. The board-checker covered 116 of 233 lines — only
-   those carrying a FEN — so 117 lines ship unchecked and at least one is false.
-   Fix the COVERAGE, not just the claim.
+**STATUS 2026-09-19: all eight are now DONE.** Two of the diagnoses written here
+turned out to be WRONG when measured, and both are deleted rather than annotated
+(items 1 and 2) — a wrong diagnosis in a backlog is worse than no entry, because
+the next session acts on it. Both were wrong the same way: they named the fix
+before measuring the producer.
 
-4. **Internal state in the voice.** "You're down 2 points of material here (no
-   engine eval on this exact spot)." The parenthetical is the app explaining its
-   own plumbing; the Narration Voice Rules ban interface references outright.
+1. **DONE (2026-09-19) — and the diagnosis here was WRONG. THE FLOOR WAS NEVER
+   INVOLVED; THE LOG LIED.**
 
-5. **Instrument, not product: the board-checker false-positives on
-   hypotheticals.** It flagged "a4 was the move — it *would* create a passed pawn
-   on b4" because b4 is empty now. Conditional and projected claims are not
-   claims about the current board and must not be graded as such — this is the
-   same class as the "fen" substring matching inside "de-fen-se".
+   🔴 The entry used to read: *"Two coach moves in one game — `Qc7` at 122cp and
+   `Qxc5` at 184cp — were classified as not worth mentioning. The advanced
+   rating band's own threshold is 50cp. Whatever floor `coachVerdict` applies is
+   mis-scaled or inverted."* That is deleted rather than annotated, because a
+   session acting on it would have gone tuning a threshold that is correct.
+
+   `MISTAKE_CP` is **100**. Both moves clear it, and `callInaccuracy` returns a
+   full verdict for both when called directly — measured, not reasoned about.
+   What actually happened is that `callInaccuracy` returns a bare `null` for
+   FIVE different reasons and its caller in Learn logged one of them as fact:
+
+       coach move Qxc5 cost 184cp — under the floor, nothing to call
+
+   printed unconditionally, whichever guard refused. The log named the one guard
+   that had PASSED, and the backlog entry above was written from reading it.
+   **An instrument that asserts its own cause is worse than one that stays
+   quiet, because it answers a question nobody thinks to re-ask.**
+
+   Fixed at the instrument: `callInaccuracyDetailed` returns `{call, declined}`
+   and `callInaccuracy` is a one-line view over it, so the reason is computed by
+   the same pass that decides and cannot drift from it. `backwardLook` publishes
+   the coach lane's reason; Learn logs that instead of a guess. The real cause of
+   the two silences is now whatever the next live game prints — most likely
+   `no-better-move-supplied`, but that is a PREDICTION and the log will say.
+
+   Found in passing: the `played-the-best-move` arm is unreachable —
+   `classifyMove({wasBest:true})` returns `'best'`, so the quality guard answers
+   first. Kept as a precondition, documented as shadowed, and the gate asserts
+   the OBSERVED reason rather than the arm's apparent one.
+
+2. **DONE (2026-09-19) — and the fix is NOT one guard per producer.** Ply 22
+   spoke "Checkmate." and then "The move is Rd1", "Re1 is playable, but not as
+   precise", "Their king is still in the centre — every line that opens toward
+   it is worth looking at."
+
+   The obvious fix is a `isGameOver` early return in each producer, and it is
+   wrong twice over — both halves MEASURED before a line was written:
+   - the producers that name a move **already refuse**. On a mated board
+     `buildDeliberation`, `tacticalReadFromLines` and `buildGuidedFindChallenge`
+     each return null, because each must resolve a move on the board first and
+     there are none. Guarding them adds dead code and a green test proving
+     nothing.
+   - the lanes that DID speak **cannot guard themselves**. `engineReadLines`
+     takes an analysis and `pieceQualityLines` an eval table — neither takes a
+     FEN, by design. A mated position still has pieces on it, so "your rook on
+     h1 is asleep" survives checkmate with nothing in scope to notice.
+
+   So the precondition can only be checked where the position is known, and that
+   is `queueSpokenHint` — the ONE queue every late lane in Learn funnels through,
+   which already takes the FEN as its first argument. One guard covers lane
+   fifteen and lane sixteen alike instead of a convention each new lane must
+   remember. (Learn's existing game-over guard sat inside `turnFacts` and covered
+   only the package it returns, which is why the queued lanes walked past it.)
+   Play was already clean: `endedInMate` + `capEval` — verified, not assumed.
+
+3. **DONE (2026-09-19) — the claim, and the number that hid it.** "Your knight
+   on b5 is hanging" at ply 22; b5 was captured at ply 7 (`axb5`).
+
+   **The claim.** It comes from `TacticsLiveContext.hanging`, and that type
+   carries **no record of which board it was computed for** — so a package built
+   for one position can be handed to another and every consumer voices it in good
+   faith. Same shape as the seat and register bugs: the identifying field is
+   missing, so nothing downstream is *able* to check. Until the package carries
+   its own position, the producers verify: `assemblePositionAssessment` and
+   `assembleTacticsAnswer` now confirm the piece is actually on the board they
+   were handed before claiming it hangs. Not a claim-stripper on prose (G0 bans
+   that) — a fact-computer reading the truth directly off the board.
+
+   **The number.** "116 of 233" conflated two different things, and that is why
+   it pointed at the wrong layer. Most of the 117 are `voiceService.*` ECHOES of
+   an app-side event that already carried the board — correctly not double
+   counted, and genuinely checkable via their twin. The ones that matter are
+   ORPHANS: text that reached the student with no position recorded anywhere.
+   The audit now matches unanchored lines to anchored ones by text, so a
+   duplicate INHERITS its twin's board and is checked properly, and orphans are
+   counted, printed and reported separately. Owed: `TacticsLiveContext` should
+   carry its own FEN so the check becomes unconditional — deliberately not done
+   here, it is a shared type and two other sessions are in flight.
+
+4. **DONE (2026-09-19) — internal state in the voice.** "You're down 2 points of
+   material here (no engine eval on this exact spot)." All three branches of that
+   material read carried a plumbing clause; all three are gone. The material
+   count is a complete fact on its own — read off the board with chess.js, and
+   exactly as true here as on the engine path. Missing the eval is a reason to
+   say LESS, never a reason to narrate the absence.
+
+   The gate covers all three branches on purpose: the first cut checked only the
+   "up" one, and the negative-control run then passed with the plumbing restored
+   on "down". A gate covering one arm of a three-way conditional is the same
+   false green this section exists to record.
+
+5. **DONE (2026-09-19) — the board-checker no longer grades hypotheticals.** It
+   flagged "a4 was the move — it *would* create a passed pawn on b4" because b4
+   is empty now. It is empty *because* the sentence is about a future that did
+   not happen. Projected and conditional clauses are the coach's whole foresight
+   register, and grading them against the present board marks the correct ones
+   wrong — the checker's own earlier lesson ("a checker that flags true
+   statements is worse than no checker") applied to itself.
+
+   The split is by CLAUSE, not by sentence: "your rook on d1 is loose, so a4
+   would win the pawn on b4" makes one present claim and one projected one, and
+   only the first is the checker's to grade.
 
 6. **FIXED (2026-09-17) — a Watch-register paragraph in a live game.**
    `curatedBeatAt` has exactly ONE caller, `CoachTeachPage`'s live game reply;
@@ -166,7 +278,7 @@ fixed; each needs its own root-cause pass.
    2,436 by loosening either guard** — the seat or the register — that doubles
    the reach of the violation instead of removing it.
 
-7. **Consecutive plies re-announce the same move from different lessons.**
+7. **DONE (2026-09-19) — consecutive plies re-announce the same move.**
    Reading the post-fix Italian walk: ply 5 "Bc4 — the Italian bishop", ply 6
    "Bc4 — the Italian bishop, pointed straight at f7", then ply 7 "c3 — modest",
    ply 8 "c3 — quiet, but loaded", ply 9 "c3 and d3 — the Giuoco Pianissimo".

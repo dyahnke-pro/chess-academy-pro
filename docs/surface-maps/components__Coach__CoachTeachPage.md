@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**14040 lines · 3 exports · 5 importers · 6 tests · 9 audits**
+**14077 lines · 3 exports · 5 importers · 6 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
 - **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:1172) — names `CoachTeachPage`
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2904) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:5606) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:5659) — names `CoachTeachPage`
 
 ## Who calls in
 

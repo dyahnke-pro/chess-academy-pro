@@ -15,10 +15,10 @@
 - **🔒🔒 `main` IS THE FREE WEB APP. IT DOES **NOT** REACH PAYING CUSTOMERS — THE APP STORE DOES (David 2026-08-15, emphatic: "Main does not reach paying customers!! That's the App Store. Lock that in tired of saying this crap.").** (CLAUDE.md:3268) — names `voiceFacts`
 - **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3606) — names `coachApi`, `voiceFacts`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3800) — names `voiceFacts`
-- **Do NOT** (CLAUDE.md:4863) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5514) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:5645) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5656) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **Do NOT** (CLAUDE.md:4916) — names `coachApi`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5567) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:5699) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5710) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -205,7 +205,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:563`
-- `src/components/Coach/CoachTeachPage.tsx:2966`
+- `src/components/Coach/CoachTeachPage.tsx:2977`
 - `src/services/coachSessionRouter.ts:124`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -237,11 +237,12 @@
 - `src/services/coachApi.speakableFacts.test.ts:52`
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
-### `voiceFacts` (function) — 23 call sites
-- `src/components/Coach/CoachGameReview.tsx:1415`
-- `src/components/Coach/CoachGameReview.tsx:1534`
-- `src/components/Coach/CoachGameReview.tsx:1721`
+### `voiceFacts` (function) — 24 call sites
+- `src/components/Coach/CoachGameReview.tsx:1416`
+- `src/components/Coach/CoachGameReview.tsx:1535`
+- `src/components/Coach/CoachGameReview.tsx:1722`
 - `src/hooks/usePhaseNarration.ts:680`
+- `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:123`
 - `src/services/coachFeatureService.ts:381`
 - `src/services/coachFeatureService.ts:467`

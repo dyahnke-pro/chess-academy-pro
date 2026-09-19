@@ -7,8 +7,15 @@
 //
 // It reads the SAME stores + read-layer the app uses at runtime
 // (misconceptionTags, mistakePuzzles, weaknessSpine.getUnifiedWeaknessProfile,
-// misconceptionService.mapTagToDrills) so a green audit means the real
-// pipeline is sound — not a parallel re-implementation that can drift.
+// mistakePuzzleService.getMisconceptionDrillPuzzles) so a green audit means the
+// real pipeline is sound — not a parallel re-implementation that can drift.
+//
+// That last name is a CORRECTION, not a detail (2026-09-19). This header used
+// to cite `misconceptionService.mapTagToDrills`, which no production code ever
+// called — the audit was its only caller, so for the drill half this file was
+// exactly the parallel re-implementation it promises not to be, and it read
+// DRILLABLE for tags the student's own surface showed as empty. The old join is
+// deleted rather than left beside the new one, so nobody can pick either.
 // Mirrors the shape of the loop-audit continuityPreflight: no browser, no
 // LLM, no network; every finding is a concrete invariant breach with the
 // offending record id.
@@ -17,10 +24,10 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import {
   getMisconceptionProfile,
-  mapTagToDrills,
   isMisconceptionDue,
   SRS_INTERVALS_MS,
 } from './misconceptionService';
+import { getMisconceptionDrillPuzzles } from './mistakePuzzleService';
 import { getUnifiedWeaknessProfile, type UnifiedWeakness } from './weaknessSpine';
 import {
   getMisconceptionTag,
@@ -246,14 +253,31 @@ export async function auditBucketPipeline(now: number = Date.now()): Promise<Buc
       .map((r) => r.tag),
   );
   for (const tag of dueTagsWithInstances) {
-    const plan = await mapTagToDrills(tag);
-    const empty = !plan || (plan.positions.length === 0 && plan.puzzleThemes.length === 0);
-    if (empty) {
+    // GRADE THE PATH THE STUDENT ACTUALLY TAKES.
+    //
+    // This used to call `misconceptionService.mapTagToDrills`, which had ZERO
+    // production callers — the audit invented its own only caller, making this
+    // check a parallel re-implementation of precisely the kind the header above
+    // promises it is not. The student reaches `getMisconceptionDrillPuzzles`,
+    // which SKIPS rows missing `bestSan`/`playedSan` while `mapTagToDrills`
+    // kept them. So a tag whose rows carry no best move read DRILLABLE here and
+    // showed "No drillable positions yet" on the surface — this invariant was
+    // structurally unable to fire exactly where the dead end is.
+    // Proof of the divergence: `drillJoinDivergence.test.ts`.
+    //
+    // Two real routes; either one is enough:
+    //   1. the student's OWN flubbed positions -> WeaknessTagDrillPage
+    //   2. the tag's puzzle themes             -> AdaptivePuzzlePage
+    // That those themes resolve to real puzzles is proven at BUILD time by
+    // `drillVocabulary.test.ts`, so a non-empty list is trustworthy here.
+    const ownPositions = await getMisconceptionDrillPuzzles(tag);
+    const themeCount = getMisconceptionTag(tag)?.drill.puzzleThemes?.length ?? 0;
+    if (ownPositions.length === 0 && themeCount === 0) {
       push({
         code: 'DRILL_PLAN_EMPTY',
         layer: 'delivery',
         severity: 'error',
-        detail: `Tag "${tag}" has due instances but mapTagToDrills yields no themes and no positions — nothing to drill.`,
+        detail: `Tag "${tag}" has due instances but the student's drill routes yield nothing — no buildable own-positions and no puzzle themes.`,
       });
     }
   }

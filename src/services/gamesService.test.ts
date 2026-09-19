@@ -87,7 +87,7 @@ describe('gamesService', () => {
 
   describe('getCorrectMoveMessage', () => {
     it('returns a non-empty string', () => {
-      const msg = getCorrectMoveMessage();
+      const msg = getCorrectMoveMessage(0);
       expect(typeof msg).toBe('string');
       expect(msg.length).toBeGreaterThan(0);
     });

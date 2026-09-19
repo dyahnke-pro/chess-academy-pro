@@ -93,6 +93,44 @@ const COLOUR = /\b(?:White|Black)\b/;
  * The register a beat is written in, given the seat its lesson teaches from.
  * Pure and exported so the gate measures the same function the runtime uses.
  */
+/**
+ * 🔒 THE MOVE THE BEAT LEADS WITH — its SUBJECT, and the dedupe term that was
+ * missing.
+ *
+ * Reading a real Italian walk, five consecutive plies taught three ideas:
+ *   ply 5  "Bc4 — the Italian bishop"
+ *   ply 6  "Bc4 — the Italian bishop, pointed straight at f7"
+ *   ply 7  "c3 — modest"
+ *   ply 8  "c3 — quiet, but loaded"
+ *   ply 9  "c3 and d3 — the Giuoco Pianissimo"
+ *
+ * Both existing guards were working exactly as written and neither could see
+ * it: `curatedBeatSeen` dedupes by beat ID, and these are different beats from
+ * different lessons; `buildVoicePackage`'s novelty set matches whole SENTENCES,
+ * and these are different sentences. Two lessons teaching the SAME MOVE in
+ * different words slip between them.
+ *
+ * So the subject is computed once, at index time, beside `seat` and `register`
+ * — the other two things that identify a beat rather than describe it.
+ *
+ * IT IS RECOGNISED, NEVER INVENTED. The leading token of the prose is accepted
+ * only if it is a move on the beat's OWN replayed line, which is already known
+ * to be legal. That keeps this on the right side of the rule against scraping
+ * claims back out of prose: nothing here derives a board fact from a sentence,
+ * it only asks which of the beat's own moves the sentence opens on. A beat that
+ * does not open on one of its moves gets `null` and is never subject-deduped —
+ * silence must not be a guess.
+ */
+const LEADING_SAN = /^\s*(O-O-O|O-O|[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?)[+#]?\b/;
+
+export function beatSubject(say: string, moves: readonly string[]): string | null {
+  const m = LEADING_SAN.exec(say);
+  if (!m) return null;
+  const lead = m[1];
+  const bare = (x: string): string => x.replace(/[+#]$/, '');
+  return moves.some((mv) => bare(mv) === lead) ? lead : null;
+}
+
 export function beatRegister(say: string, seat: 'white' | 'black'): BeatRegister {
   if (THEATRE.test(say)) return 'spectator';
   // The student's OWN side named as an actor. The beat's seat IS the student's
@@ -120,6 +158,10 @@ export interface CuratedBeat {
   id: string;
   /** The lesson this came from, for the audit trail. */
   lesson: string;
+  /** The move this beat leads with, so a caller can refuse a SECOND lesson
+   *  teaching the same move in different words — see `beatSubject`. Null when
+   *  the beat does not open on one of its own moves. */
+  subject: string | null;
 }
 
 interface IndexedBeat {
@@ -135,6 +177,9 @@ interface IndexedBeat {
   /** The register the beat is written in — computed once, at index time, from
    *  its own prose and seat. A live surface admits only 'live-safe'. */
   register: BeatRegister;
+  /** The move this beat leads with — see `beatSubject`. Null when the prose
+   *  does not open on one of the beat's own moves. */
+  subject: string | null;
   say: string;
   moves: string[];
 }
@@ -193,6 +238,7 @@ function indexSome(limit: number): boolean {
             openingId: key.split('::')[0],
             seat: lesson.orientation,
             register: beatRegister(say, lesson.orientation),
+            subject: beatSubject(say, beat.moves),
             say,
             moves: beat.moves,
           };
@@ -280,6 +326,21 @@ export function curatedBeatAt(
    * is what stops the next caller inheriting `'live'` without deciding.
    */
   surfaceRegister: 'live' | 'watch',
+  /**
+   * Subjects (leading moves) this game has ALREADY taught — see `beatSubject`.
+   * A candidate whose subject is in here is skipped and the loop falls through
+   * to the next beat at this position, exactly like the register guard, so a
+   * position that also holds a beat about something else still teaches.
+   *
+   * OPTIONAL, unlike `studentSide` and `surfaceRegister`, and the difference is
+   * deliberate rather than an oversight. A wrong default for those two produces
+   * a FALSE line — the opponent's pieces handed to the student, a spectator
+   * paragraph read to a player. A missing subject set produces at worst a
+   * REPEAT: the same move taught twice in different words. Requiring it would
+   * make every caller and every test declare a set to say "no memory", which is
+   * the honest default here.
+   */
+  excludeSubjects?: ReadonlySet<string>,
 ): CuratedBeat | null {
   try {
     // Deliberately does NOT build on demand: that is the 5s freeze. Until the
@@ -301,6 +362,10 @@ export function curatedBeatAt(
       // falls through to the next candidate at this position rather than
       // mangling the prose. See `beatRegister`.
       if (surfaceRegister === 'live' && beat.register !== 'live-safe') continue;
+      // A SECOND LESSON ON A MOVE THIS GAME HAS ALREADY TAUGHT. Not caught by
+      // the ID set (different beat) or the sentence novelty set (different
+      // words) — only the subject sees it. See `beatSubject`.
+      if (beat.subject && excludeSubjects?.has(beat.subject)) continue;
       if (noteOpeningConflicts(openingNameFor(beat.openingId), openingName)) continue;
       // A lesson written from the other side of the board addresses the
       // student as the opponent. Never speak it.
@@ -310,7 +375,7 @@ export function curatedBeatAt(
       // accuracy gate should have caught first.
       const graded = gradeNarrationText(beat.say, fen, 'curatedBeatSource')?.trim();
       if (!graded) continue;
-      return { text: graded, id: beat.id, lesson: beat.lesson };
+      return { text: graded, id: beat.id, lesson: beat.lesson, subject: beat.subject };
     }
     return null;
   } catch {

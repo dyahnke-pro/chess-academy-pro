@@ -26,3 +26,27 @@ export function rotateStem(variants: readonly string[], key: number): string {
   // otherwise index out of the array and yield undefined.
   return variants[Math.abs(Math.trunc(key)) % variants.length];
 }
+
+/**
+ * A rotation KEY from a stable STRING — a FEN, an opening id, a puzzle id.
+ *
+ * `rotateStem` needs something stable about the MOMENT, and plenty of callers
+ * have exactly one such thing and it is not a number. A FEN is the strongest
+ * key there is: the same position always draws the same stem, so reopening a
+ * puzzle or a review replays the coach word for word (resume-safe), while two
+ * different positions draw independently (varied). That is the whole contract
+ * `Math.random` fails.
+ *
+ * FNV-1a, 32-bit, `>>> 0` to stay unsigned. It lives HERE rather than beside
+ * each caller because two private `simpleHash` copies already exist in this
+ * codebase for cache keys, and a third hand-rolled one is how a duplicated
+ * idiom starts drifting (the duplicated-constant rule).
+ */
+export function stemKeyOf(s: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i += 1) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}

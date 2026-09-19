@@ -280,6 +280,9 @@ const GATE_TESTS = [
   'api/_lib/ttsLang.test.ts',
   'api/ota/manifest.test.ts',
   'src/services/otaObserver.test.ts',
+  'src/data/corpusTeachesChess.test.ts',      // a shipped note teaches CHESS, not the video it came from —
+                                               // the filter existed but ran at 3 call sites of 8, so narrator
+                                               // prose reached the endgame cards (David 2026-09-19)
   'src/data/bundledCorpusIsPositioned.test.ts', // a BUNDLED corpus carries only notes the app can anchor —
                                                // danya shipped 6.8 MB of un-positioned phrases at boot for
                                                // weeks because nothing measured it (David 2026-09-19)

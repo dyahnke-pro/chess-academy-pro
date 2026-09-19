@@ -271,17 +271,40 @@ function tacticLabel(t: TacticType): string {
 /** Map our snake_case TacticType to puzzles.json (Lichess) camelCase theme
  *  ids so the tag's drill can pull matching tactical reps. Unmapped motifs
  *  return [] (no themed pool) rather than a guessed theme. */
+/**
+ * A DETECTED TACTIC -> THE PUZZLE CORPUS'S OWN WORDS FOR IT.
+ *
+ * Exhaustive `Record`, NOT `Partial` (CLAUDE.md, the rot rule): a new
+ * `TacticType` must fail to compile until someone decides which corpus themes
+ * drill it. It was `Partial` and two entries named themes the corpus does not
+ * have, so those weaknesses drilled to ZERO puzzles while every test stayed
+ * green — the `discovery` / `discovered_attack` failure wearing a new hat: the
+ * computer TEACHES the tactic and silently cannot DRILL it.
+ *
+ * Measured against `puzzles.json` (15,000 puzzles, 72 distinct themes). NB a
+ * hand census of the union first read 16 members; the exhaustive Record found
+ * 18 — `checkmate` and `tactical_sequence` — which is the whole point of it.
+ *   - `zwischenzug` -> the corpus calls it `intermezzo` (211 puzzles).
+ *   - `overloaded_piece` -> the corpus has no `overloadedPiece`; the idea is
+ *     filed as `capturingDefender` (133) and `deflection` (719).
+ * Gate: `drillVocabulary.test.ts` re-derives the vocabulary from the corpus and
+ * fails on any theme named here that no puzzle carries, so this cannot rot back.
+ */
 export function themesForTactic(t: TacticType): string[] {
-  const map: Partial<Record<TacticType, string[]>> = {
+  const map: Record<TacticType, string[]> = {
     fork: ['fork'], pin: ['pin'], skewer: ['skewer'], hanging_piece: ['hangingPiece'],
     discovered_attack: ['discoveredAttack'], double_check: ['doubleCheck'],
     back_rank: ['backRankMate'], deflection: ['deflection'], promotion: ['promotion', 'advancedPawn'],
-    overloaded_piece: ['overloadedPiece'], trapped_piece: ['trappedPiece'],
-    clearance: ['clearance'], interference: ['interference'], zwischenzug: ['zwischenzug'],
+    overloaded_piece: ['capturingDefender', 'deflection'], trapped_piece: ['trappedPiece'],
+    clearance: ['clearance'], interference: ['interference'], zwischenzug: ['intermezzo'],
     x_ray: ['xRayAttack'], removing_the_guard: ['defensiveMove'],
     checkmate: ['mate', 'mateIn1', 'mateIn2'],
+    // A multi-move combination. Same join the `calculation-depth` tag already
+    // uses (`long` 4,382 / `veryLong` 1,297 puzzles) — reused, not invented.
+    // Was UNMAPPED under `Partial` and fell through to [] for every student.
+    tactical_sequence: ['long', 'veryLong'],
   };
-  return map[t] ?? [];
+  return map[t];
 }
 
 /** Cluster the Analyze-side mistakePuzzles into ranked aggregates in the
