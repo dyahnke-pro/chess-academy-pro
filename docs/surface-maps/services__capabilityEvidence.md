@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**176 lines · 7 exports · 7 importers · 2 tests · 0 audits**
+**266 lines · 10 exports · 11 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,7 +17,11 @@
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/capabilityEvidence.test.ts`
 - `src/services/capabilityRead.test.ts`
+- `src/services/discussionPractice.ts`
 - `src/services/needScore.ts`
+- `src/services/positionFacts.ts`
+- `src/services/studentMomentBoost.test.ts`
+- `src/services/studentMomentBoost.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/teachingSelector.ts`
 
@@ -35,32 +39,47 @@
 ### `CapabilityProfile` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `capabilitiesShown` (function) — 6 call sites
+### `capabilitiesShown` (function) — 5 call sites
 - `src/services/capabilityEvidence.test.ts:29`
 - `src/services/capabilityEvidence.test.ts:38`
 - `src/services/capabilityEvidence.test.ts:39`
-- `src/services/capabilityEvidence.test.ts:47`
-- `src/services/capabilityEvidence.test.ts:53`
-- `src/services/teachingSelector.ts:257`
+- `src/services/capabilityEvidence.test.ts:51`
+- `src/services/capabilityEvidence.test.ts:57`
 
-### `recordCapabilitiesShown` (function) — 6 call sites
+### `movePlayedCleanly` (function) — 2 call sites
+- `src/services/positionFacts.ts:523`
+- `src/services/teachingSelector.ts:294`
+
+### `capabilitiesPosed` (function) — 2 call sites
+- `src/services/positionFacts.ts:522`
+- `src/services/teachingSelector.ts:271`
+
+### `recordCapabilityEvidence` (function) — 8 call sites
 - `src/services/autoAnalyzeGame.ts:139`
-- `src/services/capabilityEvidence.test.ts:60`
-- `src/services/capabilityEvidence.test.ts:77`
-- `src/services/capabilityEvidence.test.ts:89`
-- `src/services/capabilityEvidence.test.ts:98`
-- `src/services/capabilityEvidence.test.ts:191`
-
-### `getCapabilityProfile` (function) — 4 call sites
-- `src/services/capabilityEvidence.test.ts:72`
+- `src/services/capabilityEvidence.test.ts:64`
 - `src/services/capabilityEvidence.test.ts:81`
-- `src/services/capabilityEvidence.test.ts:198`
+- `src/services/capabilityEvidence.test.ts:100`
+- `src/services/capabilityEvidence.test.ts:116`
+- `src/services/capabilityEvidence.test.ts:128`
+- `src/services/capabilityEvidence.test.ts:221`
+- `src/services/discussionPractice.ts:334`
+
+### `getCapabilityProfile` (function) — 6 call sites
+- `src/services/capabilityEvidence.test.ts:76`
+- `src/services/capabilityEvidence.test.ts:85`
+- `src/services/capabilityEvidence.test.ts:108`
+- `src/services/capabilityEvidence.test.ts:123`
+- `src/services/capabilityEvidence.test.ts:228`
 - `src/services/studentNeedLoader.ts:113`
+
+### `recordCapabilitiesShown` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
 - `src/services/capabilityEvidence.test.ts`
 - `src/services/capabilityRead.test.ts`
+- `src/services/studentMomentBoost.test.ts`
 
 ## Audits that reach it
 

@@ -10,6 +10,8 @@ import { detectBadHabitsFromGame } from './coachFeatureService';
 import { classifyTacticsFromGame } from './tacticClassifierService';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
+import { readCriticalMoment, type CriticalMomentRead } from './criticalMoment';
+import { recordCapabilityEvidence } from './capabilityEvidence';
 import type { GameRecord, MoveAnnotation, MoveClassification, StockfishAnalysis, UserProfile } from '../types';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -465,6 +467,97 @@ class DedicatedWorker {
     });
   }
 
+  /**
+   * THE MULTIPV FAN — how many moves still hold, not just which is best.
+   *
+   * The pool pins `MultiPV 1` at spawn because every consumer until now wanted
+   * one line. The critical-moment read needs THREE, and it needs them on the
+   * plies the classifier did NOT flag — a student who found the only move has a
+   * swing of zero, so nothing in the stored `MoveAnnotation` can reach it. The
+   * option is set immediately before the search and restored immediately after
+   * `bestmove`, so a released worker is byte-for-byte what the next consumer
+   * expects.
+   *
+   * Per rank it keeps the DEEPEST info line, preferring an exact score over a
+   * bounded one at the same depth: a bound is the search saying "I cut off
+   * before proving this", and a count built on one is a count that can be wrong
+   * in either direction. The bound travels on the line so the reader decides.
+   */
+  analyzeFan(
+    fen: string,
+    lines: number,
+    depth: number,
+    budgetMs: number,
+  ): Promise<Array<{ rank: number; evaluation: number; mate: number | null; bound: 'lower' | 'upper' | null; moves: string[] }>> {
+    return new Promise((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
+        cleanup();
+        reject(new Error('Fan analysis timed out'));
+      }, budgetMs + 4_000);
+
+      const blackToMove = fen.split(' ')[1] === 'b';
+      const flip = blackToMove ? -1 : 1;
+      const best = new Map<number, { depth: number; cp: number; mate: number | null; bound: 'lower' | 'upper' | null; pv: string[] }>();
+
+      const cleanup = (): void => {
+        clearTimeout(timeoutId);
+        this.worker.removeEventListener('message', handler);
+        // RESTORE THE POOL'S CONTRACT. Every other consumer of a warm worker
+        // assumes MultiPV 1; leaving it at 3 would silently change their reads.
+        try { this.worker.postMessage('setoption name MultiPV value 1'); } catch { /* dead worker */ }
+      };
+
+      const handler = (event: MessageEvent<string>): void => {
+        const data = event.data;
+        if (typeof data !== 'string') return;
+        if (data.startsWith('info ')) {
+          const mv = /\bmultipv (\d+)/.exec(data);
+          const d = /\bdepth (\d+)/.exec(data);
+          const sc = /\bscore (cp|mate) (-?\d+)/.exec(data);
+          if (!mv || !d || !sc) return;
+          const rank = Number(mv[1]);
+          const seen = Number(d[1]);
+          const bd = /\b(lowerbound|upperbound)\b/.exec(data);
+          const bound: 'lower' | 'upper' | null = bd ? (bd[1] === 'lowerbound' ? 'lower' : 'upper') : null;
+          const prev = best.get(rank);
+          // Deeper always wins; at equal depth an EXACT score replaces a bound.
+          if (prev && !(seen > prev.depth || (seen === prev.depth && prev.bound !== null && bound === null))) return;
+          const pvm = / pv (.+)$/.exec(data);
+          best.set(rank, {
+            depth: seen,
+            cp: sc[1] === 'cp' ? Number(sc[2]) : 0,
+            mate: sc[1] === 'mate' ? Number(sc[2]) : null,
+            bound,
+            pv: pvm ? pvm[1].trim().split(/\s+/).slice(0, 8) : [],
+          });
+        }
+        if (/^bestmove /.test(data)) {
+          cleanup();
+          resolve([...best.entries()]
+            .sort((a, b) => a[0] - b[0])
+            .map(([rank, v]) => ({
+              rank,
+              // White-POV, matching `AnalysisLine` everywhere else in the app.
+              evaluation: v.cp * flip,
+              mate: v.mate == null ? null : v.mate * flip,
+              bound: v.bound,
+              moves: v.pv,
+            })));
+        }
+      };
+
+      try {
+        this.worker.addEventListener('message', handler);
+        this.worker.postMessage(`setoption name MultiPV value ${Math.max(2, lines)}`);
+        this.worker.postMessage(`position fen ${fen}`);
+        this.worker.postMessage(`go depth ${depth} movetime ${budgetMs}`);
+      } catch {
+        cleanup();
+        reject(new Error('Worker is dead'));
+      }
+    });
+  }
+
   /** Liveness probe for a WARM worker: `isready` → `readyok` within `timeoutMs`.
    *  A worker iOS killed while the app sat in the background never answers. */
   ping(timeoutMs: number): Promise<boolean> {
@@ -781,6 +874,138 @@ export async function acquirePvEngines(
     engines,
     release: () => { if (!released) { released = true; releasePool(workers); } },
   };
+}
+
+/** How wide the critical-moment fan is asked. THREE is the measured answer, not
+ *  a thrift: we speak only when 1 or 2 moves hold, and a 3-wide fan resolves
+ *  exactly those two cases — a position where all three hold is the position
+ *  where nothing hinges and the coach stays silent (measured 2026-09-18: 79% of
+ *  amateur-band plies). A wider fan would buy a distinction nobody speaks. */
+const CRITICAL_FAN_LINES = 3;
+/** Shallower and far tighter than the review's own dive: this pass visits EVERY
+ *  unflagged student ply, so its per-position cost is what decides whether the
+ *  read arrives during the walk or after the student has left. */
+const CRITICAL_FAN_DEPTH = 14;
+const CRITICAL_FAN_BUDGET_MS = 1_500;
+
+/**
+ * THE REVIEW'S CRITICAL-MOMENT PASS — the half of the game the stored record
+ * cannot see.
+ *
+ * `MoveAnnotation` persists one eval and one best move, and the review pool
+ * pins `MultiPV 1`, so review has never had a fan to count. That is not a gap
+ * in coverage, it is the whole defect: review selects its question by SWING,
+ * and a student who FOUND the only move has a swing of ZERO. The most
+ * instructive moment in the game is therefore the one moment the existing card
+ * can never ask about. This pass reads those plies directly.
+ *
+ * Returns an empty map when no pool worker can be had — the caller simply asks
+ * no question, which is the honest outcome, never a guessed one.
+ */
+export async function scanCriticalMoments(args: {
+  plies: ReadonlyArray<{ ply: number; fen: string; moverColor: 'w' | 'b' }>;
+  rating: number;
+  /** Abort a background pass when the student leaves the review. */
+  signal?: AbortSignal;
+}): Promise<Map<number, CriticalMomentRead>> {
+  const out = new Map<number, CriticalMomentRead>();
+  if (args.plies.length === 0) return out;
+  // LEAVE A WORKER FOR THE REVIEW'S OWN DIVE. `acquirePool` does not queue — it
+  // splices the warm set and SPAWNS the shortfall, and a fresh asm.js worker
+  // costs ~45s and ~45MB on a phone. This pass is a background nicety; it must
+  // never be the reason the deep dive has to spawn.
+  const size = Math.max(1, Math.min(WORKER_POOL_SIZE - 1, args.plies.length));
+  let workers: DedicatedWorker[] = [];
+  try {
+    workers = await acquirePool(size);
+  } catch {
+    return out; // no engine → no question. Silence beats a fabricated count.
+  }
+  if (workers.length === 0) return out;
+
+  const started = Date.now();
+  let next = 0;
+  let failed = 0;
+  const run = async (w: DedicatedWorker): Promise<void> => {
+    w.newGame(); // one game's positions share the hash; clear it once
+    for (;;) {
+      if (args.signal?.aborted) return;
+      const i = next;
+      next += 1;
+      if (i >= args.plies.length) return;
+      const p = args.plies[i];
+      try {
+        const fan = await w.analyzeFan(p.fen, CRITICAL_FAN_LINES, CRITICAL_FAN_DEPTH, CRITICAL_FAN_BUDGET_MS);
+        const read = readCriticalMoment({
+          topLines: fan, moverColor: p.moverColor, rating: args.rating, fen: p.fen,
+        });
+        if (read) out.set(p.ply, read);
+      } catch {
+        failed += 1; // one dead position must not sink the pass
+      }
+    }
+  };
+
+  try {
+    await Promise.all(workers.map((w) => run(w)));
+  } finally {
+    releasePool(workers);
+  }
+  // NEVER RUN BLIND: an instrument that reports nothing is indistinguishable
+  // from one that found nothing. Say how many plies were asked, how many
+  // resolved to a real count, and how many the engine dropped.
+  const resolved = [...out.values()].filter((r) => r.resolved && (r.count === 1 || r.count === 2)).length;
+  void logAppAudit({
+    kind: 'coach-surface-migrated',
+    category: 'subsystem',
+    source: 'gameAnalysisService.scanCriticalMoments',
+    summary: `critical-moment fan: ${args.plies.length} plies, ${out.size} read, ${resolved} speak, ${failed} failed, ${Date.now() - started}ms`,
+  });
+  return out;
+}
+
+/**
+ * RECORD A PROMPTED FIND — THE FIRST WRITER OF `prompted: true`.
+ *
+ * David 2026-09-18: "This is gray function. Once we have data it algos."
+ *
+ * When the coach has already announced the moment — named the count, named the
+ * stake — a move the student then produces is NOT evidence they can do it
+ * unaided. `CapabilityEvidenceRecord.prompted` has been a REQUIRED field since
+ * the heat map landed and nothing has ever written `true`, so every row in the
+ * store is unaided evidence and the flag has never been exercised. This is its
+ * first writer.
+ *
+ * The profile counts a prompted row as NEITHER held nor broken, so the tag
+ * stays GREY, grey raises the ranker, and the coach keeps teaching it until
+ * they do it on their own. That is the heat map applied to its own evidence:
+ * the announcement can never inflate the model it uses to decide whether to
+ * announce.
+ *
+ * It lives here rather than in the review component for the reason the
+ * composition ceiling exists: a surface should not compose one more producer
+ * to do it (`surfaceComposition.scan`, and `CoachGameReview` is AT its ceiling).
+ */
+export async function recordPromptedFind(args: {
+  fenBefore: string;
+  playedSan: string;
+  moverColor: 'white' | 'black';
+  /** Whether the answer HELD. The record is grey either way — this only decides
+   *  which outcome the row carries, for when a later policy reads them. */
+  held: boolean;
+  sourceGameId?: string;
+}): Promise<number> {
+  return recordCapabilityEvidence({
+    fenBefore: args.fenBefore,
+    playedSan: args.playedSan,
+    moverColor: args.moverColor,
+    // `movePlayedCleanly` turns cpLoss into the outcome; a held answer costs
+    // nothing by definition, a missed one is at least a mistake.
+    cpLoss: args.held ? 0 : MISTAKE_CP,
+    origin: 'review',
+    prompted: true,
+    ...(args.sourceGameId ? { sourceGameId: args.sourceGameId } : {}),
+  });
 }
 
 /** Hand workers back to the warm set for the next run; surplus past the pool

@@ -127,6 +127,80 @@ This is the heat map applied to its own evidence, and it is self-correcting: the
 announcement can never inflate the model. Same shape as #34 (a chat-ask reveal
 is recorded, not free).
 
+### ✅ BUILT 2026-09-19 — WO-CRITICAL-MOMENT-01
+
+One leaf computer, `src/services/criticalMoment.ts`, read by both registers.
+`readCriticalMoment` counts the fan's moves within
+`criticalityThresholds(rating).critical` of the best, mover-POV, and bands the
+stake off the best line. Every number below was measured or derived, never
+recalled.
+
+**What it replaced, and why each was a defect not a tidy-up:**
+- `positionFacts`'s two hardcoded key-moment sentences ("Only one move really
+  holds here…" / "This is a critical moment…") said neither the COUNT nor the
+  STAKE. They now come off the same fan the door grades severity on.
+- `moverGap12` was a private 10-line COPY of the same fan scoring — same sign
+  flip, same flat ±100000 mate, same "fewer than 2 lines" rule — sitting one
+  screen from the clause that would read the other one. Deleted; it delegates.
+- `MoveAnnotation` persists one line and the review pool pins `MultiPV 1`, so
+  review had no fan to count at all. `DedicatedWorker.analyzeFan` +
+  `scanCriticalMoments` is a real new pass, MultiPV 3, over the student's own
+  plies past the book, skipping every ply the question plan already owns.
+
+**Three findings the build produced, each a correction to the design above:**
+
+1. 🔴 **THE REVIEW REGISTER IS NOT ONE QUESTION, IT IS THREE, AND THE DESIGN'S
+   "ask at the critical moment" WOULD HAVE SHIPPED §G4.5.2's EXACT DEFECT.**
+   Selecting by criticality rather than swing exists precisely to reach the
+   positions where the student FOUND the only move. Asking them to find it
+   again is their own success handed back as a miss they never made — the
+   `Nexd4` bug, rebuilt. So the register follows the BOARD:
+   `credit` (they held it → STATE it, the app's first computed green sentence
+   at a critical moment), `ask` (they missed the ONE move → a real question),
+   `note` (they missed a TWO-move fork → stated, because a three-chip question
+   with two right answers is not a question). The MOMENT is still selected by
+   pure criticality; only its register differs.
+2. **A STAKELESS SENTENCE IS UNREACHABLE, so `speaks` requires the stake.**
+   `stakeFor` returns null only when the best line is a mate AGAINST the mover
+   — and then every line is, so they all score the flat floor, the count fills
+   the fan, and the read is already unresolved. Carrying a "say the count,
+   claim no stake" branch would have been dead code pretending to be a guard.
+3. **`resolved`, not `count`, is the load-bearing field.** A 2-wide fan whose
+   both lines hold knows only "at least two"; a BOUNDED score is the search
+   saying it cut off before proving the number. Both are unresolved and both
+   stay silent, with the reason NAMED (`unresolvedReason`) rather than
+   swallowed — an instrument that goes quiet without saying why is
+   indistinguishable from one that found nothing.
+
+**Recording.** `gameAnalysisService.recordPromptedFind` is the FIRST writer of
+`prompted: true` in the app's history — the field has been REQUIRED since the
+heat map landed and every row in the store is unaided evidence. It is a RECORD,
+not yet a lever: `getCapabilityProfile` skips prompted rows, so a prompted find
+changes nothing today, which is the point (the coach's own teaching can never
+inflate the model it uses to decide whether to teach).
+
+**OWED, and it needs files this session did not own.** The LEARN half of the
+prompted wire is open. Learn announces the moment, the student plays, and the
+post-game sweep (`GameReviewWeaknessCapture` → `autoAnalyzeGame`, line 139)
+writes `prompted: false` for EVERY ply of that game — including the plies the
+coach had just talked them through. Closing it means Learn remembering which
+plies it announced at and handing that set to the sweep, which touches
+`CoachTeachPage.tsx` (session 3's) and `GameReviewWeaknessCapture.tsx`
+(unowned). Until then, a Learn-prompted find is still recorded as unaided.
+
+**Volume, stated rather than discovered later.** Adding the count-2 case roughly
+doubles the Learn statement's rate (~2.5 → ~5 per game at the amateur band,
+from the 2026-09-18 census: 79% of plies are 3-of-3 within tolerance and stay
+silent). It remains gated on `slowDownOwed`, so a student whose slow-down habit
+is closed still hears none of it.
+
+**Deliberately NOT changed: the door.** `judgeMoment` still grades severity from
+the gap, so on an `interrupt` posture (live play) a two-move fork does not by
+itself open the door — the count decides WHAT is said, importance still decides
+WHETHER. On `walk` (Learn, review) every ply speaks, so there the count is the
+trigger as designed. Widening the door is a separate, bigger change and was not
+made as a side effect of this one.
+
 ### Measure BEFORE writing any of it
 
 ✅ **DONE 2026-09-18** — `scripts/measure-critical-moments.mjs`, 6 real games at
