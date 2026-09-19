@@ -116,9 +116,9 @@ describe('the door is actually wired at the render', () => {
     // LLM call must route through `getKidLlmResponse`, and this door's model
     // fallback calls `voiceFacts` directly, so wiring it there would break the
     // kid personality wall. That is a decision for David, recorded here.
-    const files = globSync('src/components/**/*.tsx', {
-      ignore: ['**/*.test.tsx', 'src/components/Kid/**'],
-    });
+    const files = globSync('src/components/**/*.tsx').filter(
+      (f) => !f.includes('.test.') && !f.includes('/Kid/'),
+    );
     // Blame by STATEMENT: `${m.content}` inside a template literal builds a
     // PROMPT, not a bubble, and `content={msg.content}` is the door being
     // called. Neither is a raw render, so neither may trip this.
