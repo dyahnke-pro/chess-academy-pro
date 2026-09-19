@@ -471,7 +471,48 @@ Learn 8/8, Review 28/28 MEETS STANDARD.
    4 components, zero services) and the critical-moment announcement, which is
    the first thing that will ever pass `prompted: true`.
 
-### 🔴 OPEN — THE CANONICAL LEARN ASK STALLS AFTER Qxd5 (found 2026-09-19, ~05:40)
+### 🔴🔴 OPEN — TWO SURFACES STOP MAKING PROGRESS ON `index-C7Z2So9u` (2026-09-19, ~06:00)
+
+Two independent observations on the same bundle, both "the app advances a
+little and then stops". They may be one disease; nobody has bisected either.
+
+**LEARN** — the coach never replies after the student's 4th ply, so the game
+stalls one ply short of the position that poses the concept. Row C fails for
+want of a PLY, not for want of a concept.
+
+**REVIEW** — the walk advances to ply 2 (the `AUTO advances-by-itself` row
+PASSES, "from ply 0 -> 2") and then sits at **ply 0 of 93 for 1,100 seconds**.
+The readout is not broken: it reads correctly before (`AUTO`) and after
+(`REOPEN walk-readout-is-live`, "ply readout reads 11"). Three rows fail
+downstream of it — RECAP ("end reached=false"), FUNDLEAD and SHOW, all of
+which need the walk to reach their ply. First-open also slowed 100.6s ->
+170.6s.
+
+**WHAT IS NOT THE CAUSE**, checked rather than assumed:
+- Not a cold start. The second game in the same Learn run is warm and fast
+  (30s) while the first stalls (136s), twice.
+- Not intermittent. Identical numbers across re-runs.
+- Not this session's corpus work. The degender landed voiced-corpus DATA and
+  a script that never enters the bundle — grep-verified, only a test imports
+  it.
+- Not the audit's seat hardcode. That was real and is fixed (`isStudentPly`);
+  SEAT is green now and FUNDLEAD reads the correct seat ("You: that was a
+  mistake") on the right ply.
+
+**WHAT IS LEFT.** Between the last all-green bundle and this one the other
+session landed `6f088da` / `cda379b` / `5bbd3d1`, rewriting 249 lines of
+`coachApi.ts` plus `coachService.ts` and `CoachTeachPage.tsx` to detect and
+carry the turn's language. That is the reply path on Learn and it is
+circumstantial on Review.
+
+**THE ONE-STEP BISECT:** build `6f088da^` locally and run
+`audit-concept-gameplay-prod` against `http://localhost:5173`. If the
+canonical ask answers in ~27s there and 136s on prod, it is that commit.
+Deliberately not reverted or patched from here — that work is in flight, and
+a blind fix into a surface another session is actively editing is how two
+correct changes become one broken one.
+
+### 🔴 SUPERSEDED DETAIL — the Learn half, as first written (~05:40)
 
 `audit-concept-gameplay-prod` row C went 8/8 -> 7/8. NOT the concept
 computer: the game never reaches the position that poses it. The coach does
