@@ -99,6 +99,8 @@ async function sourcePair() {
   };
   const a = process.env.AUDIT_GAME_A ? await byId(process.env.AUDIT_GAME_A) : null;
   const b = process.env.AUDIT_GAME_B ? await byId(process.env.AUDIT_GAME_B) : null;
+  if (a) exclude.add(a.id);   // a pinned A must never come back as a B candidate (run 4 paired a game with itself)
+  if (b) exclude.add(b.id);
   if (a && b) return { a, b, pool: [] };
   // Losing games first: a student who LOST has flagged plies to record; a GM who won rarely does.
   const seeds = SEEDS.filter((s) => s.student === STUDENT).sort((a, b) => Number(b.want !== b.student) - Number(a.want !== a.student));
@@ -305,6 +307,7 @@ const run = async () => {
   const candidates = [B, ...pool];
   for (let k = 0; k < candidates.length && k < 1 + MAX_B_CANDIDATES; k++) {
     Bcur = candidates[k];
+    if (Bcur.id === Acur.id) { log(`  [loop] skipping B candidate ${k + 1}: same game as A`); continue; }
     if (k > 0) { Bcur.date = B.date; gidB1 = `loop-b${k}-${Date.now()}`; log(`  [loop] B candidate ${k + 1}: ${Bcur.white} vs ${Bcur.black} (id=${Bcur.id})`); }
     await seedGame(loop.page, gidB1, Bcur);
     cB1 = await openReview(loop.page, gidB1);

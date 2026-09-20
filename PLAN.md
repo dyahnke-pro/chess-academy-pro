@@ -146,8 +146,38 @@ Chromium at 100%, 50 min. That is the "wedge behind the storm", n=2 (their run
 + mine, game jMVMo1Ua). Not this WO's file; the standing review re-run is owed
 once it is fixed.
 
-**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ (778c872d6 + 96f49e2e6) ·
-Phase 4: RECORDED ✅ on prod · SPOKEN-differently ⏳ run 3 (amateur pair)
+**RUNS 3–4 (amateur games, 04:37 and 04:48) — the instrument found THREE more
+things, two of them product.** Run 3: amateur sourcing works (B recorded
+`loose-piece` + `ignored-threat` from its own review), but A's three flagged
+plies — two pawn pushes and a king move — attributed no fundamental (the `other`
+gap, n=4 tonight). Run 4, A pinned to the game known to record loose-piece:
+**A recorded, the pair shared `loose-piece` + `ignored-threat`, and B's beat at
+28...Nf8 carried the verdict ("Your rook on c8 hangs after this") and NO
+recurrence clause.** Reproduced offline with every hop named
+(`loopCloses.review.integration.test.ts`, real code, no mocks):
+1. INSTRUMENT — the pinned A was not excluded from the pool, so B candidate 2
+   was A's own PGN under a second id. Fixed; a game can never be paired with
+   itself.
+2. PRODUCT — the spine's game index used `conversionDetector.resolvePlayerColor`,
+   one of FOUR seat resolvers of that name, and the only one that read
+   `GameRecord.studentSide` was `playerIdentity`'s. So a review-first game with
+   no stored username had a known game and an UNKNOWN opponent — the clause
+   could never say "against X". All four read the declared seat first now; gate
+   `seatResolversReadDeclaredSeat.test.ts` blames by statement so a fifth cannot
+   skip it.
+3. PRODUCT, the one that mattered — `isReviewUncapped()` is TRUE by default, so
+   every shipped review beat is composed from FACETS (`computeMoveFacets` →
+   `[principle] <verdict>`); the capped fundamentals-first block I wired never
+   runs for a real student. The unit test passed because it passed
+   `uncapped=false`. The clause now rides on the `[principle]` facet in the
+   uncapped path — one claim, one facet, so selection sees one fact. Gate: the
+   UNCAPPED case in `coachFeatureService.recurrence.test.ts`.
+Offline, the whole chain now speaks: *"This one keeps recurring in your games —
+same piece twice, the second game now — the last one was against Rossi, Anna 2
+weeks ago. Worth drilling."* Run 5 proves it on prod.
+
+**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ ·
+Phase 4: RECORDED ✅ on prod · SPOKEN-differently: offline ✅, prod ⏳ run 5
 
 
 ## THE CRITICAL MOMENT — one computer, two registers (design, 2026-09-18)

@@ -41,6 +41,13 @@ export interface ConversionUsernames {
 /** Resolve which side the student played. Returns null when we can't be sure
  *  — we skip rather than guess a color (CLAUDE.md: "when unsure, skip"). */
 export function resolvePlayerColor(game: GameRecord, names: ConversionUsernames): 'white' | 'black' | null {
+  // THE DECLARED SEAT FIRST — the rule lives in `playerIdentity.resolvePlayerColor`
+  // and every seat resolver reads it before any name heuristic (gate:
+  // `seatResolversReadDeclaredSeat.test.ts`). Found 2026-09-20: the spine's game
+  // index used THIS resolver, which ignored `studentSide`, so a review-first game
+  // with no stored username had a known game and an unknown opponent — and the
+  // recurrence clause could never say "against X".
+  if (game.studentSide === 'white' || game.studentSide === 'black') return game.studentSide;
   if (game.source === 'coach') {
     if (game.white === 'Stockfish Bot') return 'black';
     if (game.black === 'Stockfish Bot') return 'white';

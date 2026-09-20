@@ -54,6 +54,14 @@ describe('review — the loop out loud (WO-LOOP-01)', () => {
     expect(text).not.toMatch(/keeps recurring/);
   });
 
+  it('UNCAPPED (the shipped default): the clause rides on the [principle] facet, and not without a record', () => {
+    const signals = [recurring([{ gameId: 'prior-1', opponentName: 'Rossi, Anna', playedAt: Date.now() - 9 * DAY }])];
+    const on = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1400, signals, undefined, 'this-game')[11].narration ?? '';
+    expect(on).toMatch(/keeps recurring in your games — moving the same piece twice, the second game now — the last one was against Rossi, Anna 9 days ago/);
+    const off = buildReviewSegments(inputs(), 'black', 'Sicilian Defense: Alapin Variation', true, 1400, [], undefined, 'this-game')[11].narration ?? '';
+    expect(off).not.toMatch(/keeps recurring/);
+  });
+
   it('never says "we/our/us" and stays deterministic across two builds', () => {
     const signals = [recurring([{ gameId: 'prior-1', opponentName: 'Rossi, Anna', playedAt: Date.now() - 9 * DAY }])];
     const a = buildReviewSegments(inputs(), 'black', null, false, 1400, signals, undefined, 'this-game')[11].narration;
