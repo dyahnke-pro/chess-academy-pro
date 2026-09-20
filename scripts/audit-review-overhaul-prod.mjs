@@ -42,6 +42,7 @@ import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { seedWeaknessProfile } from './audit-lib/seed-weakness-profile.mjs';
 import { exploreOnFreeBoard, readWalkPly } from './audit-lib/review-explore.mjs';
 import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
+import { wedgeTracer } from './audit-lib/wedge-tracer.mjs';
 import { SEEDS, pickRealGame, fetchGameById } from './audit-lib/source-real-game.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -179,6 +180,16 @@ const run = async () => {
   // logAppAudit event to it; `coach-narration-spoken` carries the full spoken
   // text (narrationText), which is what the contracts below read.
   const listener = await attachVoiceListener(ctx);
+  // WEDGE HUNT ONLY (#21). Beacons the enter/exit of every expensive,
+  // non-interruptible call over a size floor, with its JS call site. It is the
+  // only channel that survives the wedge: `sendBeacon` hands the payload to
+  // the BROWSER process before the call begins, so the last `enter` with no
+  // `exit` names the call that never returned. Off by default — it patches
+  // String/RegExp/JSON prototypes and must never colour a normal tape.
+  if (process.env.AUDIT_WEDGE_HUNT === '1') {
+    await ctx.addInitScript(wedgeTracer, listener.url);
+    log('  [wedge] tracer armed (AUDIT_WEDGE_HUNT=1)');
+  }
   const page = await ctx.newPage();
   // Belt AND braces (David 2026-09-07: "all audits are silent"): the mute
   // above stops synthesis in the app; this fulfils any /api/tts request
@@ -1064,6 +1075,20 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         new Promise((r) => setTimeout(() => r('HUNG >3s'), 3000)),
       ]) : 'no cdp';
       log(`  [wedge] url=${page.url()} closed=${page.isClosed()} cdp Runtime.evaluate: ${probe}`);
+      // The tracer's verdict, read off the listener (it never touched the page).
+      const tr = listener.getCapturedEvents().filter((e) => e.kind === 'wedge-trace').map((e) => ({ s: String(e.summary || ''), site: String(e.site || '') }));
+      if (tr.length) {
+        const open = new Map();
+        for (const e of tr) {
+          const m = /^(enter|exit)#(\d+) (.*)$/.exec(e.s);
+          if (!m) continue;
+          if (m[1] === 'enter') open.set(m[2], `${m[3]}  @ ${e.site}`); else open.delete(m[2]);
+        }
+        const beats = tr.filter((e) => /^alive/.test(e.s));
+        log(`  [wedge] tracer: ${tr.length} beacons, last heartbeat ${beats.length ? beats[beats.length - 1].s : '(none)'}`);
+        if (open.size === 0) log('  [wedge] tracer: every traced call RETURNED — the wedge is not in a traced entry point');
+        for (const [id, what] of open) log(`  [wedge] NEVER RETURNED #${id}: ${what}`);
+      }
       const rs = playwrightRenderers();
       log(`  [sample] playwright renderers: ${JSON.stringify(rs)}`);
       for (const smp of sampleRenderers(`audit-reports/renderer-sample-${GID}`, 5)) {
