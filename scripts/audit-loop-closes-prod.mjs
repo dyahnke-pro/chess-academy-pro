@@ -264,19 +264,34 @@ const run = async () => {
   // ── LOOP: A, then B ──────────────────────────────────────────────────────
   log('\n── LOOP — game A, then game B, one device ──');
   const loop = await newDevice();
-  const gidA = `loop-a-${Date.now()}`;
-  await seedGame(loop.page, gidA, A);
-  const cA = await openReview(loop.page, gidA);
-  log(`  [loop] A open: ${cA.ok ? `${(cA.ms / 1000).toFixed(1)}s` : cA.reason}`);
-  // THE RECORD HALF. The sweep runs after analysis; poll the store.
-  let recA = [];
-  await until(async () => { recA = await recordedFundamentals(loop.page, gidA); return recA.length > 0; }, 120000, 2000);
-  const diagA = await recordDiagnostics(loop.page, gidA, STUDENT);
-  log(`  [record A] engine flagged ${diagA.flagged?.length ?? '?'} student ply(ies): ${(diagA.flagged ?? []).join(' | ') || 'none'}; misconception rows for A: ${diagA.rows}`);
-  add('A. game A RECORDED — sweep wrote a fundamental for it', recA.length > 0,
-    recA.length ? `${recA.length} row(s): ${[...new Set(recA.map((r) => r.id))].join(', ')}`
-      : (diagA.flagged?.length ? `engine flagged ${diagA.flagged.length} student ply(ies) but the sweep wrote ${diagA.rows} row(s) — the RECORD half did not fire`
-        : 'the engine flagged NO student ply in A — nothing to record; pin a game with a real slip (AUDIT_GAME_A)'));
+  // A must RECORD A FUNDAMENTAL for the loop to have anything to say. Rows
+  // without a fundamental (a pawn push, a king move — the `other` gap) are a
+  // real record, but not one this sentence can name, so try the next A
+  // candidate (bounded) before declaring the pair unusable.
+  let Acur = A; let gidA = ''; let recA = []; let diagA = {};
+  const aCandidates = [A, ...pool];
+  let usedFromPool = 0;
+  for (let k = 0; k < aCandidates.length && k < 3; k++) {
+    Acur = aCandidates[k];
+    if (k > 0) { Acur.date = A.date; usedFromPool = k; log(`  [loop] A candidate ${k + 1}: ${Acur.white} vs ${Acur.black} (id=${Acur.id})`); }
+    gidA = `loop-a${k}-${Date.now()}`;
+    await seedGame(loop.page, gidA, Acur);
+    const cA = await openReview(loop.page, gidA);
+    log(`  [loop] A open: ${cA.ok ? `${(cA.ms / 1000).toFixed(1)}s` : cA.reason}`);
+    // THE RECORD HALF. The sweep runs after analysis; poll the store.
+    recA = [];
+    await until(async () => { recA = await recordedFundamentals(loop.page, gidA); return recA.length > 0; }, 90000, 2000);
+    diagA = await recordDiagnostics(loop.page, gidA, STUDENT);
+    log(`  [record A] engine flagged ${diagA.flagged?.length ?? '?'} student ply(ies): ${(diagA.flagged ?? []).join(' | ') || 'none'}; misconception rows: ${diagA.rows}; fundamentals: ${[...new Set(recA.map((r) => r.id))].join(', ') || 'none'}`);
+    if (recA.length > 0) break;
+  }
+  if (usedFromPool > 0) pool.splice(0, usedFromPool);
+  const oppAcur = STUDENT === 'white' ? Acur.black : Acur.white;
+  add('A. game A RECORDED — the sweep wrote a row carrying a fundamental', recA.length > 0,
+    recA.length ? `${recA.length} row(s): ${[...new Set(recA.map((r) => r.id))].join(', ')} (A=${Acur.id}, opponent ${oppAcur})`
+      : (diagA.rows > 0 ? `the sweep RECORDED ${diagA.rows} row(s) for ${diagA.flagged?.length ?? '?'} flagged ply(ies) but attributed NO fundamental (the \`other\` gap) on every A candidate tried`
+        : (diagA.flagged?.length ? `engine flagged ${diagA.flagged.length} student ply(ies) but the sweep wrote 0 rows — the RECORD half did not fire`
+          : 'the engine flagged NO student ply in A — nothing to record')));
   const idsA = new Set(recA.map((r) => r.id));
 
   // Now B on the SAME device — a full navigation, like a student coming back.
@@ -332,10 +347,10 @@ const run = async () => {
     log(`  CONTROL: ${ctl?.narration ?? '(silent)'}`);
     log(`  LOOP:    ${first.narration}`);
   }
-  const namesA = first ? new RegExp(oppA.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration) : false;
+  const namesA = first ? new RegExp(oppAcur.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration) : false;
   const namesB = first ? new RegExp(oppBcur.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration.replace(/^.*?keeps recurring/i, '')) : false;
   add("N. the clause names A's opponent, never B's", usable ? namesA && !namesB : true,
-    usable ? `expects "${oppA}"; names A=${namesA}, names B=${namesB}` : 'n/a');
+    usable ? `expects "${oppAcur}"; names A=${namesA}, names B=${namesB}` : 'n/a');
 
   // THE SPOKEN HALF — walk B until the recurrence ply is voiced.
   let spokenIt = false;
@@ -367,8 +382,8 @@ const run = async () => {
   await loop.ctx.close();
   await browser.close();
 
-  writeFileSync(`${outDir}/report.json`, JSON.stringify({ base: BASE, student: STUDENT, gameA: { id: A.id, white: A.white, black: A.black }, gameB: { id: Bcur.id, white: Bcur.white, black: Bcur.black }, recordedA: recA, recordedB: recB, shared, results, controlTape: controlTapeUsed, loopTape }, null, 2));
-  log(`[game] PAIR USED: AUDIT_GAME_A=${A.id} AUDIT_GAME_B=${Bcur.id} AUDIT_STUDENT=${STUDENT}  (B opponent ${oppBcur}${oppB !== oppBcur ? `, first B was ${oppB}` : ''})`);
+  writeFileSync(`${outDir}/report.json`, JSON.stringify({ base: BASE, student: STUDENT, gameA: { id: Acur.id, white: Acur.white, black: Acur.black }, gameB: { id: Bcur.id, white: Bcur.white, black: Bcur.black }, recordedA: recA, recordedB: recB, shared, results, controlTape: controlTapeUsed, loopTape }, null, 2));
+  log(`[game] PAIR USED: AUDIT_GAME_A=${Acur.id} AUDIT_GAME_B=${Bcur.id} AUDIT_STUDENT=${STUDENT}  (A opponent ${oppAcur}, B opponent ${oppBcur}${oppB !== oppBcur ? `, first B was ${oppB}` : ''})`);
   const pass = results.filter((r) => r.pass).length;
   const verdict = usable ? (pass === results.length ? 'THE LOOP CLOSES' : 'THE LOOP DOES NOT CLOSE') : 'PAIR UNUSABLE — pin another pair';
   log(`\n${pass}/${results.length} — ${verdict} — report at ${outDir}/report.json`);
