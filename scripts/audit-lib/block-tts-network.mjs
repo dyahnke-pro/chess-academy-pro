@@ -23,6 +23,21 @@
 // The body is a minimal silent MP3 frame rather than empty: some players throw
 // on a zero-length audio response, and a thrown decode error in an audit is
 // noise that looks like a bug.
+/** ~104 ms of DECODABLE silence: four MPEG-1 Layer III frames (128 kbps,
+ *  44.1 kHz, no CRC) with zeroed side-info + main data. The 57-byte "Info"
+ *  stub this replaced was not a decodable stream, so on every intercepted
+ *  audit the cloud tier threw "Unable to decode audio data" and fell over to
+ *  Web Speech — the audit then exercised the FALLOVER path, logged one
+ *  `voice-fallover` per sentence, fetched each clip twice (progressive +
+ *  buffered attempt), and its tape read as "every sentence spoken twice"
+ *  (2026-09-19). Verified: headless Chromium's decodeAudioData accepts this.
+ *  Built at load time rather than pasted as base64 so it cannot rot unread. */
+const SILENT_MP3 = (() => {
+  const frame = Buffer.alloc(417, 0);
+  frame[0] = 0xff; frame[1] = 0xfb; frame[2] = 0x90; frame[3] = 0x00;
+  return Buffer.concat([frame, frame, frame, frame]);
+})();
+
 export async function blockTtsNetwork(page) {
   await page.route('**/api/tts**', async (route) => {
     try {
@@ -31,7 +46,7 @@ export async function blockTtsNetwork(page) {
         contentType: 'audio/mpeg',
         // 32 bytes of MPEG silence — enough of a frame that a decoder does not
         // throw, small enough to be free.
-        body: Buffer.from('//uQZAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAABAAABIADAwMDAwMDAwMDAwMDAwMDAwMDA', 'base64'),
+        body: SILENT_MP3,
         headers: { 'x-audit-tts': 'intercepted-never-synthesised' },
       });
     } catch {

@@ -74,6 +74,28 @@ describe('audit scripts can reach prod from the sandbox', () => {
     expect(offenders, 'spread sandboxLaunchArgs() instead').toEqual([]);
   });
 
+  // 2026-09-19: the intercept served a 57-byte "Info" stub that no decoder
+  // accepts, so every intercepted audit threw "Unable to decode audio data",
+  // fell over to Web Speech, fetched each clip twice and logged the fallover
+  // under the cloud tier's name — a tape that read as "every sentence spoken
+  // twice". The clip must be a real MPEG-1 Layer III stream: sync word 0xFFFB
+  // and whole 417-byte frames (128 kbps / 44.1 kHz / no padding).
+  it('blockTtsNetwork serves a DECODABLE clip, not a stub (sync word + whole frames)', async () => {
+    const src = readFileSync(resolve(SCRIPTS, 'audit-lib', 'block-tts-network.mjs'), 'utf-8');
+    expect(src).not.toMatch(/'\/\/uQZ/); // the old base64 stub
+    const m = src.match(/Buffer\.alloc\((\d+), 0\)/);
+    expect(m, 'frame buffer').not.toBeNull();
+    expect(Number(m![1])).toBe(417);
+    expect(src).toMatch(/frame\[0\] = 0xff; frame\[1\] = 0xfb;/);
+  });
+
+  // The narration record names the TIER that spoke. Web Speech used to log as
+  // `speakCloud`, so a fallover was indistinguishable from a cloud speak.
+  it('the Web Speech tier logs its narration record under its own source', () => {
+    const src = readFileSync(resolve(SCRIPTS, '..', 'src', 'services', 'voiceService.ts'), 'utf-8');
+    expect(src).toMatch(/source: voice === 'web-speech' \? 'voiceService\.speakWebSpeech' : 'voiceService\.speakCloud'/);
+  });
+
   it('none hand-rolls the launch args instead', () => {
     // The shape that fooled the sweep: real-looking flags, no proxy, no TLS pin.
     const handRolled = driving

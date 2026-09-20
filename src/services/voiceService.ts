@@ -2032,7 +2032,13 @@ class VoiceService {
       void logAppAudit({
         kind: 'coach-narration-spoken',
         category: 'subsystem',
-        source: 'voiceService.speakCloud',
+        // Name the TIER that spoke. Every tier used to log as `speakCloud`, so
+        // a Web Speech FALLOVER read as a cloud speak — on a 2026-09-19 tape it
+        // looked like every sentence was synthesised twice. `audit-muted` keeps
+        // the cloud label on purpose: the mute IS the cloud tier's stand-in
+        // (same event, same text, zero bill — CLAUDE.md §G1) and thirty audits
+        // key on `speakCloud` under it.
+        source: voice === 'web-speech' ? 'voiceService.speakWebSpeech' : 'voiceService.speakCloud',
         summary: `voice=${voice} personality=${personality} text="${text.slice(0, 40)}"`,
         // FULL spoken line — stored in PostHog as `narration_text` so we can
         // review exactly what Ruth said (David 2026-06-06). The summary above

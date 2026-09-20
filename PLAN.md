@@ -993,6 +993,21 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### B. The instruments are not believable (a green here means nothing)
 
+7c. ✅ **DONE (2026-09-19) — THE DEAD-SELECTOR CLASS HAS A GATE.** #59 (below,
+   §C 16) was the calibration-bubble failure again under a new name: an audit
+   blocking on a testid nothing renders fails SILENTLY (timeout, `.catch`,
+   wall-clock) or, worse, files a false finding. `noDeadTestidWaits.test.ts`
+   generalises `noDeadCalibrationBubble`: an audit may not waitFor / click /
+   fill / read a LONE `data-testid` absent from `src/` (the extractor sees the
+   literal, the `xTestId=` prop forms and template prefixes; alternation lists
+   with a live fallback are not blamed). Measured: 1,695 rendered ids, 7 dead
+   blocking actions in 4 scripts (`audit-settings-behavior` ×3 on
+   `gameplay-coaching-row-modal/-close`, `audit-coach-full-interactive` on
+   `filter-all` + `coach-play-redirect`, `audit-gotham-prorep-interactive` on
+   `featured-pro-openings`, `audit-review-functions-probe` on
+   `review-full-detail-toggle`) — the shrink-only baseline. Fix the script,
+   delete the line.
+
 7a. ✅ **DONE (2026-09-19) — EVERY narration listener was DARK on this Mac, and
    every audit still printed its rows.** Two shut valves on the one pipe, found
    in series:
@@ -1015,8 +1030,10 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
    is shut". Proof: 0 → 153 listener events, 8/8 on prod. Any audit "green"
    recorded on a Mac under Chrome 148 before this fix verified nothing about
    the voice. Ask whether the instrument reached the surface FIRST.
-   READ from that run, not fixed (§C class): "This game is now the Scandinavian
-   Defense" and the …Bg4 pin line are each spoken TWICE back to back.
+   The run's prose list ALSO showed every line twice — read the raw tape before
+   calling that a §C defect: it was ONE utterance and TWO app events of kind
+   `coach-narration-spoken` (the Learn lane record `CoachTeachPage.trackA` plus
+   voiceService's own). The audit's prose filter now keeps voiceService's.
 
 7b. ✅ **DONE (2026-09-19) — an LLM-written `[BOARD: highlight:]` reached the
    board.** `GameChatPanel.test` 'strips an LLM highlight marker' was red on
@@ -1027,16 +1044,18 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
    action-offer pattern) and `coachService.ask` re-appends them AFTER the arrow
    pass strips every marker. One builder (`keySquareHighlightMarker`). Gates:
    `coachAnswerGates.test` (dated contract), `coachApi.keySquares.test`.
-   Found in passing, NOT fixed: `summarizeLint` in ship-check prints "0 errors"
-   on a Node heap crash (greps lowercase "error" only) — a crash reads as clean.
 
 8. **The review audit's verdict is not reproducible** (#70) — three runs on one
    bundle gave three different red sets, because the background deep dive is a
    race the harness neither waits on nor reports.
 9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
    on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
-10. **`tsconfig.app.json` excludes every test file** (#61), so test type errors
-    are invisible until runtime.
+10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
+    + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
+    Test type errors are no longer invisible; they are counted and capped. What
+    remains is the RUNTIME half at 11e below: drive the ceiling to 0 so a new
+    test type error blocks the push. (This entry used to say "invisible until
+    runtime" — deleted, not annotated, because it was no longer true.)
 11. **The GothamChess pro-rep audit fails on prod** (#58) — header selector and
     walkthrough click both miss.
 
@@ -1102,7 +1121,26 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     register guard, so a position holding another beat still teaches.
 15. **The voiced corpus is in the wrong register** (#22) — 1,146 he/his, 521
     first-person, 81 fragments.
-16. **Read-position: voice fires but the banner never appears** (#59).
+16. ✅ **CLOSED (2026-09-19) — #59 WAS A DEAD SELECTOR, NOT A DEFECT.**
+    `audit-read-position-prod` waited on `position-narration-banner`, which
+    nothing in `src/` has rendered since e81f758eb (2026-07-10: the read lives
+    in the chat, "no more special place"). The wait timed out every run and the
+    fleet reported "banner never appears" for two months. Rewritten to the real
+    contract (one assistant bubble that GROWS while the read streams; body read
+    without the literal "C" badge; the read found by its growth, never by index
+    — tips and move commentary land in the same newest-first list). 10/10 on
+    prod; the read itself is board-true prose ("Old Sicilian… bishop to b5 hits
+    my c6-knight"). Its tape showed every sentence with TWO `speakCloud` events
+    and TWO identical `/api/tts` fetches — RESOLVED as the HARNESS, by reading
+    the persisted kinds: one `voice-speak-invoked` per sentence, then the cloud
+    tier fetched `blockTtsNetwork`'s 57-byte stub, "Unable to decode audio
+    data", `voice-fallover`, and Web Speech logged its record under the SAME
+    `source: voiceService.speakCloud`. Two fixes, both at the root: the
+    intercept now serves four DECODABLE silent MP3 frames (so intercepted
+    audits exercise the cloud path, not the fallover), and the Web Speech
+    tier's record is labelled `voiceService.speakWebSpeech` — the muted tier
+    keeps `speakCloud` on purpose (it is the cloud tier's stand-in and the
+    audits key on it). A real device decodes real MP3; nothing billed twice.
 17. **The plan lane says the vague thing** while the computer beside it has the
     concrete one (#64) — structures AND pieces.
 18. **Two shared positions go silent in game 2** (#68) — n=1; WIDEN THE SAMPLE
