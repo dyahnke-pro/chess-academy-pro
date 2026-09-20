@@ -1275,18 +1275,29 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const voiced = listener.getCapturedEvents().filter((e) => e.kind === 'coach-narration-spoken');
   const unmuted = voiced.filter((e) => !/voice=audit-muted/.test(String(e.summary ?? '')));
   await add('MUTE audit-ran-silent', unmuted.length === 0 && ttsRequests === 0, `${voiced.length} spoken lines, ${unmuted.length} unmuted, ${ttsRequests} /api/tts requests`);
+  // 🔒 THE WEDGE GUARD (PLAN §B #21, 2026-09-20). About one reopen in several
+  // pins this browser's renderer in one non-returning JS call: the walk stops
+  // at ply 0 and every row read after it goes red — HEAP, REOPEN, RECAP,
+  // THESIS, CRIT — which reads exactly like a pile of product failures and is
+  // not one. Two runs were thrown away to that before it was recognised.
+  // PostHog says no real user has ever hit it (802 review events, 90 days, max
+  // 47s gap), so this is an INSTRUMENT failure, and the honest verdict is
+  // CONTAMINATED rather than FAILS: rows taken after a wedge are not evidence
+  // about the product. Exit 4 so a chain can retry the run instead of filing
+  // a bug that does not exist.
+  await add('WEDGE renderer-answered-through-the-reopen', !blown, blown ? `WEDGED: ${blown} — rows after the reopen are NOT a product verdict` : 'renderer answered every probe');
   log('\n===== CONTRACT GRID =====');
   let allPass = true;
   for (const r of results) { log(`  ${r.pass ? '✅ PASS' : '❌ FAIL'}  ${r.id.padEnd(40)} ${r.detail}`); if (!r.pass) allPass = false; }
-  log(`\n===== VERDICT: ${allPass ? '✅ MEETS STANDARD' : '❌ FAILS STANDARD'} =====`);
+  log(`\n===== VERDICT: ${blown ? '⚠️ CONTAMINATED (instrument wedged — rerun, do not file these reds)' : allPass ? '✅ MEETS STANDARD' : '❌ FAILS STANDARD'} =====`);
   try {
     const dir = `audit-reports/review-overhaul-${new Date().toISOString().replace(/[:.]/g, '-')}`;
     mkdirSync(dir, { recursive: true });
-    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, errors: errs }, null, 2));
+    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: blown ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: blown ?? null, results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, errors: errs }, null, 2));
     log(`report: ${dir}/report.json`);
   } catch (e) { log(`(report not written: ${String(e).slice(0, 80)})`); }
   await listener.stop();
   await browser.close();
-  process.exit(allPass ? 0 : 1);
+  process.exit(blown ? 4 : allPass ? 0 : 1);
 };
 run().catch((e) => { console.error('fatal:', e); process.exit(1); });
