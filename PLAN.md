@@ -248,6 +248,22 @@ diagnostic must stop reporting an empty line) and is negative-controlled both
 ways — with the wire removed it fails "the persisted PV never reached the
 classifier"; restored, both rows pass.
 
+✅ **POST-DEPLOY G1 CONFIRMED (2026-09-20, bundle `index-DBo6e9P6`, muted):
+`audit-loop-closes-prod` 6/6 — THE LOOP CLOSES**, same pair re-run
+(A=nHdi6Qpx / B=MxLHuel4, student black). And the section-14 tally CHANGED shape
+in exactly the way the fix predicts, which is the real evidence:
+
+| before the wire | after the wire |
+|---|---|
+| every unnamed slip: `punishing PV is 0 plies, needs 3` | one slip now: `cost 126cp is under the 150cp floor` |
+
+That second line is the detector reading REAL DATA and declining honestly — 126cp
+genuinely is under its 150cp floor — where before it could not get far enough to
+measure anything. `no-plan` likewise moved from a generic decline to "the best
+move does not serve the plan either — the plan is not what this position was
+about". The remaining `0 plies` slip is the documented bound below, not a
+regression: that ply had no persisted PV.
+
 ⚠️ **STILL OPEN, and it bounds the win honestly:** `ann.pv` is written only when
 `isReview && !opts.sweepOnly` (`gameAnalysisService.ts:1802`), so the lines exist
 only for games whose review deep dive has run. This fix makes `calculation-depth`

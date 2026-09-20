@@ -43,6 +43,7 @@ import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
 import { readWalkPly } from './audit-lib/review-explore.mjs';
+import { until as sharedUntil, boundedHas } from './audit-lib/wedge-watch.mjs';
 import { SEEDS, pickRealGame, fetchGameById, movetextOf, verifyLegal } from './audit-lib/source-real-game.mjs';
 
 const BASE = (process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app').replace(/\/$/, '');
@@ -57,8 +58,19 @@ const RATINGS = process.env.AUDIT_RATINGS || '1600,1800,2000';
 const MAX_B_CANDIDATES = Number(process.env.AUDIT_B_CANDIDATES || 5);
 const RECUR_RE = /keeps recurring in your games — .+?, the \w+ game now/i;
 const log = (s) => console.log(s);
-const until = async (fn, ms, step = 500) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await fn()) return true; await new Promise((r) => setTimeout(r, step)); } return false; };
-const has = async (p, sel) => { try { return (await p.locator(sel).count()) > 0; } catch { return false; } };
+// 🔒 BOTH OF THESE WERE UNBOUNDED, AND BOTH LOOKED BOUNDED (2026-09-20).
+// `has` called `locator.count()`, which takes NO timeout, inside a try/catch —
+// and a catch handles a THROW while a wedged renderer never throws. `until`
+// evaluated its deadline only BETWEEN iterations, so a predicate that never
+// settled meant the loop never returned to its own condition: a wall clock that
+// could not be reached by the failure it existed to bound. Composed,
+// `until(() => has(page, sel), 60000)` read as a bounded 60s poll and was
+// unbounded against exactly the failure it was watching for. Both now come from
+// the shared helper, which races every read against the REMAINING budget — so a
+// legitimately slow read (a cold analysis) still gets the time it is owed while
+// a hung one ends the wait instead of the run.
+const until = sharedUntil;
+const has = (p, sel) => boundedHas(p, sel);
 
 const results = [];
 const add = (id, pass, detail) => { results.push({ id, pass, detail }); log(`  ${pass ? '✅' : '❌'} ${id}: ${detail}`); };
