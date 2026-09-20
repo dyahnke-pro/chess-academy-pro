@@ -176,8 +176,50 @@ Offline, the whole chain now speaks: *"This one keeps recurring in your games �
 same piece twice, the second game now — the last one was against Rossi, Anna 2
 weeks ago. Worth drilling."* Run 5 proves it on prod.
 
-**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ ·
-Phase 4: RECORDED ✅ on prod · SPOKEN-differently: offline ✅, prod ⏳ run 5
+**RUN 5 (bundle `index-BggLa4Jm`, 4264db61c, 06:13) — 6/6, THE LOOP CLOSES ON PROD.**
+`AUDIT_GAME_A=MxLHuel4 AUDIT_GAME_B=yTSxn4f7 AUDIT_STUDENT=black` (report
+`audit-reports/loop-closes-2026-09-20T11-13-42-985Z/`). Game A (vs kreshtar,
+2 weeks earlier): the review's first open RECORDED `ignored-threat` +
+`loose-piece`. Game B (vs ionlyknowthelondon), a different game on the same
+device, at 15...Nd7 — the coach SAID, and the listener HEARD:
+
+> "Their threat first: your knight on h5 was already attacked, and this move
+> doesn't deal with it — Qxh5 wins it. Here's how: Their move first, always…
+> **This one keeps recurring in your games — ignoring a threat, the second game
+> now — the last one was against kreshtar 2 weeks ago. Worth drilling.** You:
+> that was a mistake, costing about 3.0 points — the stronger move was Nxg3…"
+
+The control device (same game B, no game A) never said it; the clause names
+A's opponent and not B's; muted. That sentence is the app's one-line definition
+happening to a real amateur game on the live bundle: the coach learned the
+student in game A, and what it learned changed what it said in game B.
+
+**Honest caveats, so the next reader does not over-read a green:**
+- The control's ply 30 was SILENT (not flagged in that analysis) rather than
+  "the same beat minus the clause" — time-budgeted classification drift (#70,
+  the other session's determinism seam is what makes the control comparison
+  exact). The row's contract (clause in loop, absent in control) holds either way.
+- Proven in the RED direction on the REVIEW surface. Learn carries the same
+  computer (`learnFundamentalVerdict` → present-tense clause, unit-gated), but
+  the standing Learn audit plays each game on a fresh mount, so the Learn half
+  is proven by gate, not yet by a prod tape. `audit-second-game-memory-prod`
+  (one mount, two games) is the instrument to extend for that.
+- It took five runs because the instrument kept finding real things: the
+  review path never recorded (fixed), GM games have nothing to record (amateur
+  sourcing), a game paired with itself (fixed), an unknown opponent on a known
+  game (four seat resolvers, fixed), and a wire on the path prod never runs
+  (uncapped facets, fixed). Each is gated so it cannot come back.
+
+**OWED, ranked:**
+1. The `other` attribution gap is now the loop's ceiling: n=5 tonight of a
+   flagged student ply (pawn pushes, king moves) attributed no fundamental, so
+   the coach records "a mistake" and can never say what recurs. Section-14
+   detectors (E.10) — `calculation-depth` → `left-book-early` → `no-plan`.
+2. Learn's half on a prod tape (above).
+3. GREEN: the loop can only get LOUDER tonight. `capabilityEvidence` holds the
+   held/broken rows; the ranker's quiet direction is the next build.
+
+**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · **Phase 4 ✅ — 6/6 on prod**
 
 
 ## THE CRITICAL MOMENT — one computer, two registers (design, 2026-09-18)
