@@ -457,6 +457,12 @@ export function App(): JSX.Element {
         // edge cold-start off the critical path. Deferred ~3s so it never
         // competes with first paint or the Stockfish warm; fire-and-forget.
         setTimeout(() => { void warmCoachProvider().catch(() => undefined); }, 3000);
+        // #21 (2026-09-20): free every engine's WASM heap when THIS document
+        // goes away, so the next document's engines can allocate theirs. See
+        // engineLifecycle.ts — the reopened-review pthread storm.
+        void import('./services/engineLifecycle')
+          .then((m) => m.installEngineUnloadHooks())
+          .catch(() => undefined);
 
         // Warm the OTHER two serverless proxies the FIRST coach turn hits — the
         // syzygy TABLEBASE and the masters/amateur EXPLORER (David 2026-09-02).

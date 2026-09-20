@@ -382,11 +382,26 @@ export function replayPgnToFens(pgn: string): { fens: string[]; moves: string[] 
  * A dedicated Stockfish Web Worker that processes positions sequentially.
  * Each worker owns one game at a time — multiple workers run games in parallel.
  */
+/** Every DedicatedWorker alive right now — warm OR leased (the dive, the
+ *  critical-moment fan, batch analysis). `releasePool` only ever sees the warm
+ *  ones, so until this set existed nothing could name, let alone tear down, a
+ *  worker a caller was still holding. `destroyAllAnalysisWorkers` reads it on
+ *  `pagehide` (engineLifecycle) so the next document boots against freed WASM
+ *  memory — the #21 storm was the multi engine failing to allocate its shared
+ *  heap while the previous document's engines were still resident. */
+const _liveWorkers = new Set<DedicatedWorker>();
+
 class DedicatedWorker {
   private worker: Worker;
+  /** Set by `destroy()`. A dead worker must never re-enter the warm pool —
+   *  a lease released AFTER a `pagehide` teardown would otherwise resurrect
+   *  terminated workers as "warm", and the next `warmAnalysisPool()` would
+   *  spawn nothing and hand out corpses (#21, caught by the unload test). */
+  dead = false;
 
   constructor(worker: Worker) {
     this.worker = worker;
+    _liveWorkers.add(this);
   }
 
   /** Signal a genuinely new game — sends `ucinewgame` ONCE so the hash is
@@ -584,6 +599,7 @@ class DedicatedWorker {
   }
 
   destroy(): void {
+    this.dead = true;
     try {
       this.worker.postMessage('stop');
     } catch {
@@ -594,6 +610,7 @@ class DedicatedWorker {
     } catch {
       // Already dead
     }
+    _liveWorkers.delete(this);
   }
 }
 
@@ -1013,10 +1030,31 @@ export async function recordPromptedFind(args: {
  *  untouched is freed rather than held resident for the whole session. */
 function releasePool(workers: readonly DedicatedWorker[]): void {
   for (const w of workers) {
+    if (w.dead) continue; // torn down while leased (pagehide) — nothing to hand back
     if (_warmPool.length < WORKER_POOL_SIZE && !_warmPool.includes(w)) _warmPool.push(w);
     else w.destroy();
   }
-  scheduleIdleRetire();
+  if (_warmPool.length > 0) scheduleIdleRetire();
+}
+
+/** 🔒 TEAR DOWN EVERY ANALYSIS WORKER — warm and leased — for `pagehide`
+ *  (#21, 2026-09-20). A browser terminates a document's workers on navigation
+ *  eventually; it does not free their WASM heaps before the NEXT document's
+ *  engines allocate theirs. Measured on the reopened review: the previous
+ *  document's 5 pool workers (kept warm for `POOL_IDLE_RETIRE_MS` = 60 s) plus
+ *  the 512 MB multi reservation were still resident when the new page inited
+ *  another of each, `WebAssembly.Memory()` failed, and the pthread runtime
+ *  stormed 120 Workers in 5 s. Explicit `terminate()` releases the memory now.
+ *  Returns how many were torn down so the caller can audit it. Safe to call
+ *  twice; a later `acquirePool` simply spawns fresh. */
+export function destroyAllAnalysisWorkers(): number {
+  cancelIdleRetire();
+  const n = _liveWorkers.size;
+  for (const w of [..._liveWorkers]) w.destroy();
+  _liveWorkers.clear();
+  _warmPool = [];
+  _warmPromise = null;
+  return n;
 }
 
 /** Test hook — destroy every warm worker so a test starts cold. */

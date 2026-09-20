@@ -507,6 +507,32 @@ THE SPAWNER IS NAMED.** Reports: `audit-reports/engine-worker-census-2026-09-20T
 Re-run `audit-engine-worker-census-prod.mjs` after any of these; rows C/D/E are
 the contract.
 
+**BUILT 2026-09-20 — all three at once (David: "all fixes at once, then audit all
+at end"), pending the single end audit:**
+1. `stockfishEngine.mtFloodGuard`: a MESSAGE-LESS page error (empty `filename`,
+   empty `message` — the failed pthread start's shape, 761k of them) during the
+   multi boot now trips the fast fallback like a `/stockfish/` one. Before, the
+   guard returned early on `!src.includes('/stockfish/')`, so the storm's own
+   errors were the one signal it ignored. Gate: the `#21 storm guard` case in
+   `stockfishEngine.test.ts`.
+2. `gameAnalysisService`: a `_liveWorkers` registry (every `DedicatedWorker`
+   adds itself in the constructor, removes itself in `destroy()`) and
+   `destroyAllAnalysisWorkers()` — warm AND leased, which `releasePool` could
+   never reach. `DedicatedWorker.dead` makes a torn-down worker unre-poolable:
+   the unload test caught a lease released after teardown resurrecting corpses
+   as "warm", so the next warm spawned nothing. Gate:
+   `gameAnalysisService.unload.test.ts`.
+3. `engineLifecycle.ts` (new leaf): `teardownEngines()` = singleton `destroy()`
+   + `destroyAllAnalysisWorkers()`, logged; `installEngineUnloadHooks()` registers
+   ONE `pagehide` listener (fires on iOS Safari where `unload` does not), wired
+   at boot in `App.tsx` beside `warmCoachProvider`. Gate:
+   `engineLifecycle.test.ts`.
+Census tool gained **row G**: snapshot the live worker target ids before the
+reopen navigation and assert none survives 3 s into it — the proof the pagehide
+teardown ran on the real browser, separate from row C's "the storm did not
+happen". Glue pthread cap (direction 2) deliberately NOT built: measure C/D/E/G
+first; build it only if the census is still red with the engines released.
+
 **What the tool measures** (see AUDIT_INDEX): every worker target created or
 destroyed (CDP `Target.setDiscoverTargets`, nested pthreads included) beside
 every UCI string the main thread posts to an engine worker (a `postMessage` hook

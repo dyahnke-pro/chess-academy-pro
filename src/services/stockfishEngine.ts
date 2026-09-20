@@ -852,7 +852,19 @@ class StockfishEngine {
             mtFloodGuard = (event: ErrorEvent): void => {
               if (this.workerVariant !== 'multi' || this._runtimeFallbackAttempted) return;
               const src = typeof event.filename === 'string' ? event.filename : '';
-              if (!src.includes('/stockfish/')) return;
+              // 🔒 A MESSAGE-LESS ERROR DURING MULTI BOOT IS THE PTHREAD STORM (#21,
+              // measured 2026-09-20 with audit-engine-worker-census-prod): on a
+              // reopened review the multi engine's shared memory could not be
+              // allocated, the runtime spawned ~120 pthread Workers in 5 s, and
+              // every failed start raised an ErrorEvent with NO filename and NO
+              // message — 761,548 of them, none matching '/stockfish/', so this
+              // guard never tripped and the 5 s early-failure window ran its
+              // full course while the renderer wedged. Before `uciok`, the only
+              // thing on this page that raises bare ErrorEvents by the dozen is
+              // the engine's own pthread runtime; a real app error carries a
+              // filename or a message. Trip on either shape — never on an app error.
+              const bare = !src && !(typeof event.message === 'string' && event.message.trim());
+              if (!src.includes('/stockfish/') && !bare) return;
               // Emscripten pthread sub-worker crashed uncaught during multi
               // boot (wasm load failure on a constrained host). Kill the flood
               // and switch to single-thread now — don't wait out the 5s timer

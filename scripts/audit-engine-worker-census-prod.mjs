@@ -28,6 +28,8 @@
  *   D. total engine-worker creations across the run stay under CREATE_CEILING
  *   E. zero page errors mentioning WebAssembly / memory
  *   F. the run stayed MUTED (zero /api/tts requests)
+ *   G. the previous document's engine workers are all gone 3 s into the reopen
+ *      (engineLifecycle's pagehide teardown — the #21 root cause, fixed 2026-09-20)
  * On any red, the report carries the per-spawn preceding-command histogram —
  * that histogram IS the finding.
  *
@@ -197,8 +199,17 @@ async function main() {
   }
   sample('walk-end');
   // ── reopen: where the storm was measured ─────────────────────────────────
+  // G. THE PREVIOUS DOCUMENT'S ENGINES MUST BE GONE BEFORE THE NEXT ONE BOOTS
+  // (the #21 root: they were still resident, the new multi heap could not be
+  // allocated). Snapshot the live target ids now; 3 s after the navigation
+  // starts, none of them may still be live. engineLifecycle tears them down on
+  // `pagehide`; this row is what proves that on the real browser.
+  const priorIds = new Set(live.keys());
   phase = 'reopen';
+  const navStart = Date.now();
   await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await page.waitForTimeout(Math.max(0, 3000 - (Date.now() - navStart)));
+  const survivors = [...priorIds].filter((id) => live.has(id)).length;
   await until(() => has(page, cardSel), 20000);
   await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
   await until(startable, 75000, 250);
@@ -229,6 +240,7 @@ async function main() {
   add('A. an engine worker appeared (vacuity)', engineSpawns.length > 0 && ready, `${engineSpawns.length} engine-worker creations; analysis settled=${ready}`);
   const steadyMax = Math.max(...steadyReads);
   add(`B. census holds steady after init (≤ ${CENSUS_STEADY} for 10 s)`, steadyMax <= CENSUS_STEADY, `reads=${steadyReads.join(',')}`);
+  add('G. the previous document\'s engine workers are all gone 3 s into the reopen (engineLifecycle pagehide teardown)', survivors === 0, `${survivors} of ${priorIds.size} prior worker targets still live`);
   add(`C. reopen census stays under ${CENSUS_CEILING} (the #21 storm)`, peakReopen < CENSUS_CEILING, `peak=${peakReopen}; walk peak=${peakWalk}; top preceding: ${histogram.slice(0, 3).map(([k, v]) => `${k}×${v}`).join(' | ') || 'none'}`);
   add(`D. total engine-worker creations < ${CREATE_CEILING}`, engineSpawns.length < CREATE_CEILING, `${engineSpawns.length} (${JSON.stringify(byPhase)})`);
   const wasmErrs = pageErrors.filter((e) => /WebAssembly|memory/i.test(e));

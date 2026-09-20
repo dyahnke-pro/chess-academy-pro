@@ -1885,6 +1885,43 @@ describe('runtime fallback (multi → single)', () => {
     expect(stockfishEngine.status).toBe('ready');
   });
 
+  it('#21 storm guard: a MESSAGE-LESS page error during multi boot trips the fast fallback (2026-09-20)', async () => {
+    // Measured with audit-engine-worker-census-prod on the reopened review: the
+    // multi engine could not allocate its shared heap, the pthread runtime
+    // spawned ~120 Workers in 5 s, and every failed start raised an ErrorEvent
+    // with NO filename and NO message — 761,548 of them, none matching
+    // '/stockfish/', so the guard above never tripped. Before uciok only the
+    // engine's own runtime raises bare errors by the dozen; trip on the first.
+    const { workerUrls, errorListeners } = installMultiWithWindowListeners();
+    const { stockfishEngine } = await getEngine();
+    const initPromise = stockfishEngine.initialize();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(workerUrls).toEqual(['/stockfish/stockfish-18-lite.js']);
+    expect(errorListeners.length).toBe(1);
+    const preventDefault = vi.fn();
+    const stopImmediatePropagation = vi.fn();
+    vi.useFakeTimers();
+    errorListeners[0]({ filename: '', message: '', preventDefault, stopImmediatePropagation });
+    vi.advanceTimersByTime(150);
+    vi.useRealTimers();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(preventDefault).toHaveBeenCalled();
+    expect(stopImmediatePropagation).toHaveBeenCalled();
+    expect(workerUrls).toEqual([
+      '/stockfish/stockfish-18-lite.js',
+      '/stockfish/stockfish-18-lite-single.js',
+    ]);
+    expect(errorListeners.length).toBe(0);
+    queueMicrotask(() => {
+      mockWorker.emit('uciok');
+      queueMicrotask(() => mockWorker.emit('readyok'));
+    });
+    await initPromise;
+    expect(stockfishEngine.status).toBe('ready');
+  });
+
   it('cold-boot flood guard: IGNORES non-stockfish page errors (never swallows app errors)', async () => {
     const { workerUrls, errorListeners } = installMultiWithWindowListeners();
     const { stockfishEngine } = await getEngine();
