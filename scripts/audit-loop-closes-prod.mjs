@@ -68,7 +68,8 @@ async function sourcePair() {
   const a = process.env.AUDIT_GAME_A ? await byId(process.env.AUDIT_GAME_A) : null;
   const b = process.env.AUDIT_GAME_B ? await byId(process.env.AUDIT_GAME_B) : null;
   if (a && b) return { a, b, pool: [] };
-  const seeds = SEEDS.filter((s) => s.student === STUDENT);
+  // Losing games first: a student who LOST has flagged plies to record; a GM who won rarely does.
+  const seeds = SEEDS.filter((s) => s.student === STUDENT).sort((a, b) => Number(b.want !== b.student) - Number(a.want !== a.student));
   const picked = [];
   for (const seed of seeds) {
     const g = await pickRealGame(BASE, seed, exclude).catch(() => null);
@@ -109,6 +110,24 @@ async function seedGame(page, gid, g) {
     }
     return { ok: true, profiles: profs.length };
   }, { gid, g });
+}
+
+/** What the app's engine FLAGGED for the student in this game, and how many
+ *  misconception rows of ANY kind the sweep wrote — separates "nothing to
+ *  record" from "the sweep never ran". */
+async function recordDiagnostics(page, gid, studentSide) {
+  return page.evaluate(async ({ gid, studentSide }) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    const g = await new Promise((res, rej) => { const t = db.transaction('games', 'readonly'); const rq = t.objectStore('games').get(gid); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    const flagged = (g?.annotations ?? []).filter((a) => a.color === studentSide && (a.classification === 'mistake' || a.classification === 'blunder')).map((a) => `${a.moveNumber}${a.color === 'black' ? '...' : '.'}${a.san} ${a.classification}`);
+    let rows = 0;
+    if (db.objectStoreNames.contains('misconceptionTags')) {
+      const all = await new Promise((res, rej) => { const t = db.transaction('misconceptionTags', 'readonly'); const rq = t.objectStore('misconceptionTags').getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+      rows = all.filter((r) => r.sourceGameId === gid).length;
+    }
+    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, flagged, rows };
+  }, { gid, studentSide }).catch((e) => ({ error: String(e) }));
 }
 
 /** Rows the SWEEP wrote for this game — the RECORD half of the loop. */
@@ -166,7 +185,7 @@ const run = async () => {
   B.date = dateOf(Date.now() - 1 * DAY);
   log(`[game A] ${A.white} vs ${A.black} ${A.result} (${A.plyCount} plies, id=${A.id})`);
   log(`[game B] ${B.white} vs ${B.black} ${B.result} (${B.plyCount} plies, id=${B.id})`);
-  log(`[game] REPRODUCE: AUDIT_GAME_A=${A.id} AUDIT_GAME_B=${B.id} AUDIT_STUDENT=${STUDENT} node scripts/audit-loop-closes-prod.mjs`);
+  log(`[game] REPRODUCE: AUDIT_GAME_A=${A.id} AUDIT_GAME_B=${B.id} AUDIT_STUDENT=${STUDENT} node scripts/audit-loop-closes-prod.mjs  (a swapped B candidate is printed below if used)`);
   const oppA = STUDENT === 'white' ? A.black : A.white;
   const oppB = STUDENT === 'white' ? B.black : B.white;
 
@@ -215,38 +234,69 @@ const run = async () => {
   // THE RECORD HALF. The sweep runs after analysis; poll the store.
   let recA = [];
   await until(async () => { recA = await recordedFundamentals(loop.page, gidA); return recA.length > 0; }, 120000, 2000);
+  const diagA = await recordDiagnostics(loop.page, gidA, STUDENT);
+  log(`  [record A] engine flagged ${diagA.flagged?.length ?? '?'} student ply(ies): ${(diagA.flagged ?? []).join(' | ') || 'none'}; misconception rows for A: ${diagA.rows}`);
   add('A. game A RECORDED — sweep wrote a fundamental for it', recA.length > 0,
-    recA.length ? `${recA.length} row(s): ${[...new Set(recA.map((r) => r.id))].join(', ')}` : 'no misconceptionTags row with fundamentalId + sourceGameId=A within 120s of analysis');
+    recA.length ? `${recA.length} row(s): ${[...new Set(recA.map((r) => r.id))].join(', ')}`
+      : (diagA.flagged?.length ? `engine flagged ${diagA.flagged.length} student ply(ies) but the sweep wrote ${diagA.rows} row(s) — the RECORD half did not fire`
+        : 'the engine flagged NO student ply in A — nothing to record; pin a game with a real slip (AUDIT_GAME_A)'));
   const idsA = new Set(recA.map((r) => r.id));
 
   // Now B on the SAME device — a full navigation, like a student coming back.
-  const gidB1 = `loop-b-${Date.now()}`;
-  await seedGame(loop.page, gidB1, B);
-  const cB1 = await openReview(loop.page, gidB1);
-  log(`  [loop] B open: ${cB1.ok ? `${(cB1.ms / 1000).toFixed(1)}s, ${cB1.segs?.length} segments` : cB1.reason}`);
-  let recB = [];
-  await until(async () => { recB = await recordedFundamentals(loop.page, gidB1); return recB.length > 0; }, 60000, 2000);
-  const idsB = new Set(recB.map((r) => r.id));
-  const shared = [...idsB].filter((id) => idsA.has(id));
+  // If the pinned/first B shares no fundamental with A, try the pool (bounded)
+  // — a different game, not a different instrument. The CONTROL tape belongs to
+  // the first B only; a swapped B reports D against its own fresh control below.
+  let gidB1 = `loop-b-${Date.now()}`;
+  let Bcur = B;
+  let cB1 = null; let recB = []; let idsB = new Set(); let shared = [];
+  let controlTapeCur = controlTape;
+  const candidates = [B, ...pool];
+  for (let k = 0; k < candidates.length && k < 3; k++) {
+    Bcur = candidates[k];
+    if (k > 0) { Bcur.date = B.date; gidB1 = `loop-b${k}-${Date.now()}`; log(`  [loop] B candidate ${k + 1}: ${Bcur.white} vs ${Bcur.black} (id=${Bcur.id})`); }
+    await seedGame(loop.page, gidB1, Bcur);
+    cB1 = await openReview(loop.page, gidB1);
+    log(`  [loop] B open: ${cB1.ok ? `${(cB1.ms / 1000).toFixed(1)}s, ${cB1.segs?.length} segments` : cB1.reason}`);
+    recB = [];
+    await until(async () => { recB = await recordedFundamentals(loop.page, gidB1); return recB.length > 0; }, 90000, 2000);
+    const diagB = await recordDiagnostics(loop.page, gidB1, STUDENT);
+    log(`  [record B] engine flagged ${diagB.flagged?.length ?? '?'}: ${(diagB.flagged ?? []).join(' | ') || 'none'}; rows: ${diagB.rows}; fundamentals: ${[...new Set(recB.map((r) => r.id))].join(', ') || 'none'}`);
+    idsB = new Set(recB.map((r) => r.id));
+    shared = [...idsB].filter((id) => idsA.has(id));
+    if (shared.length > 0 || idsA.size === 0) break;
+    if (k > 0 || candidates.length > 1) {
+      // a swapped B needs its own control tape
+      if (k + 1 < candidates.length && k + 1 < 3) {
+        const ctl = await newDevice();
+        const gidC = `loop-control${k + 1}-${Date.now()}`;
+        await seedGame(ctl.page, gidC, candidates[k + 1]);
+        const c = await openReview(ctl.page, gidC);
+        controlTapeCur = c.segs ?? [];
+        await ctl.listener.stop().catch(() => undefined); await ctl.ctx.close();
+      }
+    }
+  }
+  const controlTapeUsed = Bcur === B ? controlTape : controlTapeCur;
+  const oppBcur = STUDENT === 'white' ? Bcur.black : Bcur.white;
   add('P. the pair SHARES a fundamental (A ∩ B)', shared.length > 0,
     shared.length ? shared.join(', ') : `A={${[...idsA].join(',')}} B={${[...idsB].join(',')}} — no shared fundamental; this PAIR cannot show the loop. Pin another with AUDIT_GAME_A/B (pool: ${pool.map((g) => g.id).join(', ') || 'none'})`);
 
-  const loopTape = cB1.segs ?? [];
+  const loopTape = cB1?.segs ?? [];
   const recurLoop = loopTape.filter((s) => s.narration && RECUR_RE.test(s.narration));
-  const recurControl = controlTape.filter((s) => s.narration && RECUR_RE.test(s.narration));
+  const recurControl = controlTapeUsed.filter((s) => s.narration && RECUR_RE.test(s.narration));
   const usable = shared.length > 0;
   add('D. B narrates DIFFERENTLY after A — the recurrence clause is in the loop tape and not in the control tape',
     usable ? recurLoop.length > 0 && recurControl.length === 0 : recurControl.length === 0,
     usable ? `loop: ${recurLoop.length} ply(ies) carry it [${recurLoop.map((s) => s.ply).join(',')}]; control: ${recurControl.length}` : `n/a — pair shares nothing (control carries ${recurControl.length}, must be 0)`);
   const first = recurLoop[0];
   if (first) {
-    const ctl = controlTape.find((s) => s.ply === first.ply);
+    const ctl = controlTapeUsed.find((s) => s.ply === first.ply);
     log(`\n  ── ply ${first.ply} (${first.san}) ──`);
     log(`  CONTROL: ${ctl?.narration ?? '(silent)'}`);
     log(`  LOOP:    ${first.narration}`);
   }
   const namesA = first ? new RegExp(oppA.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration) : false;
-  const namesB = first ? new RegExp(oppB.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration.replace(/^.*?keeps recurring/i, '')) : false;
+  const namesB = first ? new RegExp(oppBcur.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration.replace(/^.*?keeps recurring/i, '')) : false;
   add("N. the clause names A's opponent, never B's", usable ? namesA && !namesB : true,
     usable ? `expects "${oppA}"; names A=${namesA}, names B=${namesB}` : 'n/a');
 
@@ -280,7 +330,8 @@ const run = async () => {
   await loop.ctx.close();
   await browser.close();
 
-  writeFileSync(`${outDir}/report.json`, JSON.stringify({ base: BASE, student: STUDENT, gameA: { id: A.id, white: A.white, black: A.black }, gameB: { id: B.id, white: B.white, black: B.black }, recordedA: recA, recordedB: recB, shared, results, controlTape, loopTape }, null, 2));
+  writeFileSync(`${outDir}/report.json`, JSON.stringify({ base: BASE, student: STUDENT, gameA: { id: A.id, white: A.white, black: A.black }, gameB: { id: Bcur.id, white: Bcur.white, black: Bcur.black }, recordedA: recA, recordedB: recB, shared, results, controlTape: controlTapeUsed, loopTape }, null, 2));
+  log(`[game] PAIR USED: AUDIT_GAME_A=${A.id} AUDIT_GAME_B=${Bcur.id} AUDIT_STUDENT=${STUDENT}  (B opponent ${oppBcur}${oppB !== oppBcur ? `, first B was ${oppB}` : ''})`);
   const pass = results.filter((r) => r.pass).length;
   const verdict = usable ? (pass === results.length ? 'THE LOOP CLOSES' : 'THE LOOP DOES NOT CLOSE') : 'PAIR UNUSABLE — pin another pair';
   log(`\n${pass}/${results.length} — ${verdict} — report at ${outDir}/report.json`);
