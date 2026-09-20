@@ -1372,6 +1372,18 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      "reopened walk ply=0: 104MB workers=1 {stockfish-18-lite-single.js:1}" —
      demote clean, no storm, walk never leaves ply 0. Same shape, different
      game. The wedge, not the storm, is #21's remaining defect.
+   - **n=3 (2026-09-20 ~05:00, my full-walk probe), and the wedge is READ:**
+     this reopen ran on the SINGLE build from the start (the persisted multi
+     fallback), six single-thread workers alive and EVERY one answered a CDP
+     `Runtime.evaluate` — the engines are fine. The page's MAIN thread is what
+     is stuck: `Runtime.evaluate` times out and `Debugger.pause` never lands
+     in 30 s → spinning in NATIVE code (no JS/wasm interrupt check reached),
+     Chromium at 100%. It answered 0 ms at walk+5 s after the reopen, then
+     never again. Not the engine, not the storm. Fits a catastrophic regex
+     over narration text or a structured-clone/JSON.stringify of something
+     huge on the reopened walk. NEXT: the probe now takes an OS-level
+     `sample <renderer pid> 8` at wedge time (names the native frames) and
+     races every page.evaluate (it had wedged itself for 68 min on one).
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
     + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
     Test type errors are no longer invisible; they are counted and capped. What

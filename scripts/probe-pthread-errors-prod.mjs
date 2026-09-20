@@ -105,8 +105,25 @@ async function main() {
   const page = await ctx.newPage();
   const pageErrors = []; page.on('pageerror', (e) => pageErrors.push({ t: Date.now(), phase, msg: String(e.message ?? e).slice(0, 120) }));
   const census = () => { const by = {}; for (const t of targets.values()) if (t.type === 'worker') by[t.url] = (by[t.url] ?? 0) + 1; return by; };
-  const responsive = async () => { const t = Date.now(); const ok = await Promise.race([page.evaluate(() => 1).then(() => true), new Promise((r) => setTimeout(() => r(false), 3000))]).catch(() => false); return ok ? `${Date.now() - t}ms` : 'BLOCKED>3s'; };
-  const workerErrors = async () => page.evaluate(() => window.__workerErrors ?? {}).catch(() => ({}));
+  // Every page.evaluate is RACED: on 2026-09-20 the probe wedged itself for 68
+  // minutes on an un-timed evaluate while the page's main thread was blocked
+  // in native code — the exact moment it was built to read.
+  const evalRaced = (fn, ms = 3000) => Promise.race([page.evaluate(fn).catch(() => null), new Promise((r) => setTimeout(() => r(null), ms))]);
+  const workerErrors = async () => (await evalRaced(() => window.__workerErrors ?? {})) ?? {};
+  const responsive = async () => { const t = Date.now(); const ok = (await evalRaced(() => 1, 3000)) === 1; return ok ? `${Date.now() - t}ms` : 'BLOCKED>3s'; };
+  // The renderer child at 100% CPU: an OS-level `sample` names its NATIVE
+  // frames when Debugger.pause cannot land (regex? structured clone? wasm?).
+  const sampleRenderer = async (tag) => {
+    try {
+      const { execSync } = await import('node:child_process');
+      const ps = execSync("ps -eo pid=,%cpu=,command= | grep -E 'chrom(e|ium)' | grep -v grep | sort -k2 -n -r | head -1", { encoding: 'utf8' }).trim();
+      const pid = ps.split(/\s+/)[0]; if (!pid) return;
+      const out = `${OUT}/sample-${tag}.txt`; execSync(`sample ${pid} 8 -file ${out} >/dev/null 2>&1 || true`);
+      const txt = await (await import('node:fs/promises')).readFile(out, 'utf8').catch(() => '');
+      const hot = txt.split('\n').filter((l) => /^\s+\d{3,}\s/.test(l)).slice(0, 14);
+      log(`  [sample] renderer pid ${pid} (${ps.split(/\s+/)[1]}% cpu) — hottest native frames:`); for (const l of hot) log(`     ${l.trim().slice(0, 150)}`);
+    } catch (e) { log(`  [sample] failed: ${String(e).slice(0, 120)}`); }
+  };
   const sample = async (label) => log(`  [census] ${phase}/${label}: ${JSON.stringify(census())} errors=${errors.length} pageErrors=${pageErrors.length} main=${await responsive()} workerErr=${JSON.stringify(Object.fromEntries(Object.entries(await workerErrors()).map(([k, v]) => [k, v.n])))}`);
 
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 60000 }); await page.waitForTimeout(6000); await sample('after-boot');
@@ -173,6 +190,7 @@ async function main() {
   // thread never replies, it is blocked in NATIVE code, which is its own answer.
   if (blockedSince) {
     log(`  [wedge] main thread blocked for ${Math.round((Date.now() - blockedSince) / 1000)}s — reading it`);
+    await sampleRenderer('wedge');
     const sid = pageSession();
     if (sid) {
       const pausedP = new Promise((res) => { const h = (m) => { if (m.method === 'Debugger.paused' && m.sessionId === sid) res(m); }; cdp.on(h); });
