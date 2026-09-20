@@ -137,7 +137,11 @@ export function matchClauseKind(kind: string, signals: readonly WeaknessSignal[]
       return bestMatch(signals, (s) => s.clusterId.startsWith('analysis:conversion-endgame:') || s.bucket === 'endgame');
     case 'fundamental':
     case 'structure-plan': // positional understanding
-      return bestMatch(signals, (s) => s.bucket === 'positional' || s.clusterId.startsWith('analysis:structure') || s.clusterId.startsWith('analysis:phase:'));
+      // `fundamental:<id>` rows (weaknessSpine.aggregateFundamentals, 2026-09-19)
+      // are the attributed fundamentals the batch sweep proved on the student's
+      // own games — the finest positional hole the profile carries, so they join
+      // the positional clauses beside the coarser bucket/structure rows.
+      return bestMatch(signals, (s) => s.bucket === 'positional' || s.clusterId.startsWith('fundamental:') || s.clusterId.startsWith('analysis:structure') || s.clusterId.startsWith('analysis:phase:'));
     default:
       return null; // status / deliberation / key-moment / *-leans / opponent-intent: no honest single-hole mapping
   }
@@ -157,4 +161,14 @@ export function matchTacticPattern(pattern: TacticPatternType, signals: readonly
 export function matchTag(tag: string | undefined | null, signals: readonly WeaknessSignal[]): WeaknessSignal | null {
   if (!tag) return null;
   return bestMatch(signals, (s) => s.clusterId === tag);
+}
+
+/** Match an ATTRIBUTED fundamental (the `FundamentalId` the sweep or the review
+ *  attributor proved on this ply) to the student's own record of it — the
+ *  `fundamental:<id>` rows `weaknessSpine.aggregateFundamentals` builds. Exact,
+ *  never by bucket: "you keep leaving pieces loose" must be backed by loose-piece
+ *  rows, not by any positional hole. null when no such record exists (grey). */
+export function matchFundamental(id: string | undefined | null, signals: readonly WeaknessSignal[]): WeaknessSignal | null {
+  if (!id) return null;
+  return matchTag(`fundamental:${id}`, signals);
 }

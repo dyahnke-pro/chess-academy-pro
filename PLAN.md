@@ -451,6 +451,50 @@ suspected to be the wrong Lichess theme — `capturingDefender` is literally
 "remove the defender"; `defensiveMove` is closer to its opposite. A
 co-occurrence check was inconclusive. Measure before touching.
 
+## LANDED 2026-09-19 (late) — the fundamental the computer proved reaches the ranker (A-NEW)
+
+Chosen from the outline as the most critical open item: the coach learned
+something (79 attributed fundamentals on 47 real games, shown on the tab) and it
+changed nothing about what the coach says next (the spine read 0). That is the
+app's one-line definition failing at the ranker, for 14 production consumers.
+
+**Two defects, one root — both fixed in `weaknessSpine.ts`, both gated:**
+1. **Every batch-analyzed slip vanished from the unified profile on BOTH sides.**
+   `autoAnalyzeGame` writes each blunder as a `counted:false` misconception AND
+   a `mistakePuzzle` twin at the same fen+move. The spine built its exclusion set
+   from ALL misconception rows, so the twin was dropped as "coach-owned" while
+   the row itself was dropped as "not counted" — since 2026-06-11. The exclusion
+   set is now the rows the coach half actually represents (`counted !== false`).
+   Read, then proven by the new gate (twin present once; the counted control still
+   dedupes).
+2. **`fundamentalId` had no reader on the spine.** `aggregateFundamentals` reads it
+   over ALL rows (counted or not) into rows keyed `fundamental:<id>` — label from
+   `FUNDAMENTAL_LABEL`, bucket + drill themes from the fundamental's own closed-set
+   tag (`FUNDAMENTAL_TAG`, exhaustive by type), provenance attached. The tag rows
+   are left exactly alone (the WO-3 double-count guard stands; `learned` was not
+   flipped). Ranker joins: `matchClauseKind('fundamental' | 'structure-plan')`
+   reaches them; `matchFundamental(id)` is the exact join for a caller holding an
+   attributed `FundamentalId`.
+
+**Gates:** `weaknessSpine.fundamentals.test.ts` (negative-controlled: unknown id
+invents nothing; empty store → no rows; counted coach row still owns its
+position); `fundamentalsPipeline.realGame.test.ts` WO-4 gate now asserts the
+spine carries a `fundamental:<id>` row per attributed id with the exact count,
+while `countedOnly` still totals 0. Downstream: 13 consumer suites, 120 tests,
+green. `docs/STATE.md` unchanged by regeneration.
+
+**OWED from this build:**
+- `matchFundamental` has no production caller yet. The precise wire is review's
+  `coachFeatureService` (it holds the attributed `FundamentalId` per ply,
+  `seenFundamentals` at :1177) — "this recurs for you: your Nth loose piece",
+  named from the fundamental row rather than the coarser tag. Not built here:
+  narration prose in another surface's file.
+- The Fundamentals TAB and the SPINE now agree by construction; rerun the
+  measurement half of `fundamentalsPipeline.realGame.test.ts` with the corpus
+  present to print the after-number beside the 79 → 0 before.
+- G1 on the live bundle: `audit-fundamentals-tab-prod.mjs` (never run on prod
+  since WO-4 merged) then the standing pair, sequentially.
+
 ## LANDED 2026-09-19 (late) — audits can never fill Redis (David: "i no longer want audits to fill redis")
 
 **State found:** Upstash at `500000/500000` again (`/api/messages` → `degraded`,
@@ -695,8 +739,11 @@ Learn 8/8, Review 28/28 MEETS STANDARD.
 
 ### A. The loop cannot close (highest — these are the app, not polish)
 
-🔴 **A-NEW (WO-4, measured 2026-09-19): THE MODEL CANNOT READ THE FUNDAMENTAL
-THE COMPUTER PROVED.** On 47 real amateur games through the real pipeline:
+✅ **A-NEW — LANDED 2026-09-19 (late). Was: THE MODEL CANNOT READ THE FUNDAMENTAL
+THE COMPUTER PROVED.** See the landed section below for the two defects behind it;
+the original measurement follows unchanged.
+
+🔴 (as measured before the fix) On 47 real amateur games through the real pipeline:
 154/154 flagged moves captured, 79 carry an attributed `fundamentalId` — and the
 weakness SPINE sees **0** of them. `autoAnalyzeGameMisconceptions` hardcodes
 `learned:false` (the ONLY entry from batch analysis, review-open and a finished
@@ -1195,7 +1242,7 @@ from the entry chunk's size.
    fixture. Broken assertion, not a broken component; not in the curated gate
    list, which is why it survived.
 
-9. 🔴 **THE FUNDAMENTAL-AWARE SPINE READER (A-NEW above).** Until it exists,
+9. ✅ **DONE 2026-09-19 — THE FUNDAMENTAL-AWARE SPINE READER (A-NEW above).** Was: Until it exists,
    every fundamental attributed from a real game is display-only. Measured: 79
    rows the tab reads, 0 the spine reads, 47 games. Rerun the measurement half of
    `fundamentalsPipeline.realGame.test.ts` (corpus under `data/sources/wo4-corpus/`,

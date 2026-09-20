@@ -190,3 +190,14 @@ detector" → 3, with the writer census. §11 "no code links…" → the join.
   `data/sources/wo4-corpus/` (gitignored); rerun the measurement half of
   `fundamentalsPipeline.realGame.test.ts` after any detector lands to get the
   before/after for free.
+
+## Closed 2026-09-19 (late) — the spine reader landed
+
+`weaknessSpine.aggregateFundamentals` reads `fundamentalId` over ALL rows into
+`fundamental:<id>` rows; the tag rows are untouched and `learned` was not
+flipped. Found on the way: the spine's position dedupe excluded the
+`mistakePuzzle` twin of every `counted:false` row, so batch-analyzed slips were
+lost on both sides — fixed by building the exclusion set from the counted rows
+only. Gates: `weaknessSpine.fundamentals.test.ts`; the WO-4 gate in
+`fundamentalsPipeline.realGame.test.ts` now asserts the spine sees every
+attributed fundamental. The table above's "0 / 0%" row is therefore historical.
