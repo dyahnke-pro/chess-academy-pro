@@ -4,18 +4,21 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**342 lines · 11 exports · 13 importers · 7 tests · 1 audits**
+**361 lines · 11 exports · 15 importers · 9 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3727) — names `COLD_START_GAMES`, `familiarity`, `needScore`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3849) — names `familiarity`
-- **The standard post-deploy ritual** (CLAUDE.md:5791) — names `needScore`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3808) — names `computeNeed`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3954) — names `familiarity`
+- **The standard post-deploy ritual** (CLAUDE.md:5897) — names `needScore`
 
 ## Who calls in
 
 - `src/hooks/useStudentNeed.ts`
+- `src/services/capabilityGreen.measure.test.ts`
 - `src/services/capabilityRead.test.ts`
+- `src/services/coachDecisionEmits.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
@@ -42,9 +45,14 @@
 ### `StudentNeedContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `coldStudent` (function) — 15 call sites
+### `coldStudent` (function) — 20 call sites
 - `src/hooks/useStudentNeed.ts:35`
+- `src/services/capabilityGreen.measure.test.ts:533`
 - `src/services/capabilityRead.test.ts:35`
+- `src/services/coachDecisionEmits.test.ts:108`
+- `src/services/coachDecisionEmits.test.ts:118`
+- `src/services/coachDecisionEmits.test.ts:126`
+- `src/services/coachDecisionEmits.test.ts:132`
 - `src/services/coachFeatureService.ts:1164`
 - `src/services/coachFeatureService.ts:4140`
 - `src/services/needCoverage.report.test.ts:93`
@@ -72,8 +80,10 @@
 ### `familiarity` (function) — 1 call site
 - `src/services/needScore.test.ts:51`
 
-### `computeNeed` (function) — 40 call sites
+### `computeNeed` (function) — 46 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
+- `src/services/capabilityGreen.measure.test.ts:545`
+- `src/services/capabilityGreen.measure.test.ts:546`
 - `src/services/capabilityRead.test.ts:46`
 - `src/services/capabilityRead.test.ts:47`
 - `src/services/capabilityRead.test.ts:54`
@@ -88,6 +98,10 @@
 - `src/services/capabilityRead.test.ts:95`
 - `src/services/capabilityRead.test.ts:106`
 - `src/services/capabilityRead.test.ts:107`
+- `src/services/coachDecisionEmits.test.ts:108`
+- `src/services/coachDecisionEmits.test.ts:118`
+- `src/services/coachDecisionEmits.test.ts:126`
+- `src/services/coachDecisionEmits.test.ts:132`
 - `src/services/coachFeatureService.ts:1164`
 - `src/services/needCoverage.report.test.ts:83`
 - `src/services/needScore.test.ts:25`
@@ -119,7 +133,9 @@
 
 ## Tests
 
+- `src/services/capabilityGreen.measure.test.ts`
 - `src/services/capabilityRead.test.ts`
+- `src/services/coachDecisionEmits.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/needCoverage.report.test.ts`
@@ -130,3 +146,4 @@
 ## Audits that reach it
 
 - `scripts/audit-loop-green-prod.mjs`
+- `scripts/audit-review-overhaul-prod.mjs`

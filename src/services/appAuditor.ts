@@ -27,7 +27,7 @@
  */
 import { db } from '../db/schema';
 import { mirrorAuditEvent } from './analytics';
-import { onCoachDecision } from './coachDecisionEvents';
+import { onCoachDecision, onNeedScore, type NeedScoreRow } from './coachDecisionEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 300;
@@ -233,6 +233,23 @@ export type AuditKind =
   // gate closed it and how many facts survived — so the WEIGHTING can be
   // trended by an audit instead of judged by reading prose.
   | 'coach-decision'
+  // The NEED score's per-term breakdown, AGGREGATED. One row per ply would
+  // be hundreds of Dexie writes per review (`computeNeed` runs over every
+  // move), so the subscriber buffers and emits ONE distribution per burst —
+  // which is what the row is for anyway: which term carried the plies, how
+  // often the prior stood in, what share cleared the bar.
+  | 'coach-need-scores'
+  // WHICH RUNG of the rating confidence chain answered at boot
+  // (imported-games / coach-games / profile / default) and with what
+  // sample. The rating's OUTPUT was always visible; which source
+  // produced it never was, so a chain always falling through to the
+  // default looked identical to one working.
+  | 'player-rating-estimated'
+  // The heat map's GREEN half: how many capability tags clear the proven
+  // bar, how many carry a break, and the bar's own values. The bar is a
+  // MEASURED number (the knee at posedImportance 80), so which side of it
+  // the tags fall on is the thing that has to be trendable when it moves.
+  | 'capability-heat-map'
   // Rolodex entry beat (WO-ROLODEX-PLUMBING-01 item 1). Fires once per
   // session per opening when /coach/play (or another coach surface in
   // future) is loaded with `?opening=<name>` and the captured intent
@@ -2021,6 +2038,53 @@ export function installGlobalErrorHooks(): () => void {
 // build exists to avoid — so the subscription is at module load, not behind an
 // init someone can forget to call. `appAuditor` is imported by every coach
 // surface, so the wire exists wherever a decision can happen.
+// The NEED terms, aggregated. A per-ply row here would drown the audit log
+// (review computes need for every move), and the QUESTION is distributional
+// anyway — "which term carried the ply" is not answerable one ply at a time.
+// Buffer, then flush one summary per burst.
+let needBuffer: NeedScoreRow[] = [];
+let needFlush: ReturnType<typeof setTimeout> | null = null;
+
+function flushNeedScores(): void {
+  needFlush = null;
+  const rows = needBuffer;
+  needBuffer = [];
+  if (rows.length === 0) return;
+  // Per-term TOTAL and how often each term actually fired. A term with a big
+  // total on few plies and one with a small total on every ply are different
+  // algos; a mean alone cannot tell them apart.
+  const totals: Record<string, number> = {};
+  const fired: Record<string, number> = {};
+  for (const r of rows) {
+    for (const [name, v] of Object.entries(r.terms)) {
+      totals[name] = (totals[name] ?? 0) + v;
+      if (v !== 0) fired[name] = (fired[name] ?? 0) + 1;
+    }
+  }
+  const spoke = rows.filter((r) => r.speak).length;
+  const prior = rows.filter((r) => r.prior).length;
+  void logAppAudit({
+    kind: 'coach-need-scores',
+    category: 'subsystem',
+    source: 'needScore.computeNeed',
+    summary: `${rows.length} plies scored — ${spoke} cleared the bar, ${prior} on the cold-start prior`,
+    details: JSON.stringify({ plies: rows.length, spoke, prior, totals, fired, scores: rows.map((r) => r.score) }),
+  });
+}
+
+onNeedScore((row) => {
+  needBuffer.push(row);
+  // Bounded: a pathological caller cannot grow this without limit.
+  if (needBuffer.length >= 500) { if (needFlush) clearTimeout(needFlush); flushNeedScores(); return; }
+  if (!needFlush) {
+    needFlush = setTimeout(flushNeedScores, 1500);
+    // Node only (tests, SSR): a pending flush must never hold the process
+    // open. Telemetry that can extend a teardown is telemetry that changes
+    // the thing it measures.
+    (needFlush as unknown as { unref?: () => void }).unref?.();
+  }
+});
+
 onCoachDecision((row) => {
   void logAppAudit({
     kind: 'coach-decision',

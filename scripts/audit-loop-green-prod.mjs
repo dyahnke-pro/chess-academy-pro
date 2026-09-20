@@ -163,6 +163,26 @@ async function narrationSegments(page, gid) {
   }, gid).catch(() => null);
 }
 
+/** The app's own heat-map emission (`capability-heat-map`) out of the LOCAL
+ *  Dexie audit log — the on-device source of truth, so no listener is needed.
+ *  This is the ASSERT half for the green bar: the bar's values are MEASURED
+ *  numbers, so which side of them the tags fall on has to be readable rather
+ *  than inferred from how quiet the tape got. */
+async function heatMap(page) {
+  return page.evaluate(async () => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    try {
+      const db = await open();
+      if (!db.objectStoreNames.contains('meta')) return null;
+      const rec = await new Promise((res, rej) => { const t = db.transaction('meta', 'readonly'); const rq = t.objectStore('meta').get('app-audit-log.v1'); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+      const log = JSON.parse(rec?.value ?? '[]');
+      const rows = log.filter((e) => e && e.kind === 'capability-heat-map');
+      if (rows.length === 0) return null;
+      return JSON.parse(rows[rows.length - 1].details ?? 'null');
+    } catch { return null; }
+  }).catch(() => null);
+}
+
 async function openReview(page, gid) {
   await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismiss(page);
@@ -244,11 +264,12 @@ const run = async () => {
     }
     await seedGame(dev.page, gid, game);
     const res = await openReview(dev.page, gid);
+    const heat = await heatMap(dev.page);
     const vol = volumeOf(res.segs);
     log(`  [${label}] ${res.ok ? `${(res.ms / 1000).toFixed(1)}s, ${res.segs.length} segments, ${vol.plies} narrated plies, ${vol.words} words` : res.reason}`);
     await dev.listener.stop().catch(() => undefined);
     await dev.ctx.close();
-    return { ...res, vol, gid };
+    return { ...res, vol, gid, heat };
   };
 
   // TWO UNSEEDED CONTROLS, and the second one is not redundant — it is the
@@ -287,6 +308,20 @@ const run = async () => {
     add('PROMPTED changes nothing — being told is not proving',
       Math.abs(prompted.vol.words - control.vol.words) <= noise,
       `${prompted.vol.words} words vs control ${control.vol.words} (within the ${noise}-word floor?)`);
+  }
+  // THE GREEN BAR IS OBSERVABLE (the algo-audit rule). The tape getting quieter
+  // is the EFFECT; this is the CAUSE, read off the app's own emission — how
+  // many tags the app itself counts as PROVEN, against the bar it used. A
+  // quieter tape with zero proven tags would mean the drop came from something
+  // else entirely, which is exactly the confusion run 1 fell into.
+  const gHeat = green.heat;
+  const cHeat = control.heat;
+  add('HEAT MAP emitted', !!gHeat, gHeat
+    ? `green device: ${gHeat.tags} tags with evidence, ${gHeat.proven} PROVEN, ${gHeat.red} with a break; bar=${JSON.stringify(gHeat.bar)}`
+    : 'no capability-heat-map row on the green device — the green half ran unobserved');
+  if (gHeat) {
+    add('HEAT MAP the seeded arm is the one with proven tags', gHeat.proven > 0 && (cHeat?.proven ?? 0) === 0,
+      `green proven=${gHeat.proven}, control proven=${cHeat?.proven ?? (cHeat === null ? 'no row (no evidence — correct for an unseeded device)' : 0)}`);
   }
   add('MUTED', ttsRequests === 0, `${ttsRequests} /api/tts requests`);
 

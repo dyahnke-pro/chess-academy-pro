@@ -369,10 +369,47 @@ export async function recordCapabilityEvidence(args: {
  */
 export async function getCapabilityProfile(): Promise<CapabilityProfile> {
   try {
-    return summariseEvidence(await db.capabilityEvidence.toArray());
+    const profile = summariseEvidence(await db.capabilityEvidence.toArray());
+    reportHeatMap(profile);
+    return profile;
   } catch {
     return new Map();   // no store yet — an empty profile is the honest answer
   }
+}
+
+/** THE HEAT MAP, emitted (David 2026-09-20: "I want audit tools on all algo
+ *  based builds"). GREEN is the state the app could not say at all until this
+ *  week, and the bar that produces it (`PROVEN_MIN_IMPORTANCE`, the measured
+ *  knee) is a tuned number — so how many tags sit on each side of it is
+ *  exactly what has to be trendable. GREY is not reported as a count because
+ *  it is the complement of everything ever posed, which this function cannot
+ *  see; absent is absent, and inventing a denominator here would be the same
+ *  disease as a narration claiming a fact the board never produced.
+ *
+ *  Emitted at the I/O DOOR, not inside `summariseEvidence`: that one is pure
+ *  and is swept by the calibration test hundreds of times, which would turn a
+ *  measurement into a write storm. */
+function reportHeatMap(profile: CapabilityProfile): void {
+  if (profile.size === 0) return;      // nothing recorded — not a heat map yet
+  let proven = 0;
+  let red = 0;
+  for (const [, e] of profile) {
+    if (capabilityProven(e)) proven += 1;
+    if (e.broken > 0) red += 1;
+  }
+  void logAppAudit({
+    kind: 'capability-heat-map',
+    category: 'subsystem',
+    source: 'capabilityEvidence.getCapabilityProfile',
+    summary: `${profile.size} tags with evidence — ${proven} PROVEN, ${red} with a break`,
+    details: JSON.stringify({
+      tags: profile.size,
+      proven,
+      red,
+      bar: { minStreak: HELD_FOR_PROVEN, minGames: PROVEN_MIN_GAMES, minImportance: PROVEN_MIN_IMPORTANCE },
+      byTag: [...profile].map(([tag, e]) => ({ tag, held: e.held, broken: e.broken, heldStreak: e.heldStreak, streakGames: e.streakGames, proven: capabilityProven(e) })),
+    }),
+  });
 }
 
 /** @deprecated Renamed to `recordCapabilityEvidence` — it no longer only

@@ -366,6 +366,11 @@ const GATE_TESTS = [
   'src/services/exchangeLedger.test.ts',
   'src/services/factSelector.test.ts',
   'src/services/coachDecider.test.ts',
+  // The two halves of the algo-audit rule: the door EMITS on every return
+  // path, and a named audit ASSERTS on the rows. Emission alone is
+  // decoration, so both gates ship together or neither means anything.
+  'src/services/coachDecisionEmits.test.ts',
+  'src/test/algoAuditContract.test.ts',
   'src/services/methodBeat.test.ts',
   'src/services/mapConcurrent.test.ts',
   'src/services/reviewFacetRank.test.ts',

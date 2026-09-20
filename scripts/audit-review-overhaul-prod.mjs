@@ -1324,6 +1324,80 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   log('===== SPOKEN (last 10) =====');
   const all = spoken();
   all.slice(-10).forEach((s, i) => log(`  [${String(all.length - 10 + i + 1).padStart(2)}] ${s.text.slice(0, 200)}`));
+  // ── THE DECIDING COMPUTER IS OBSERVABLE (the ASSERT half of the algo-audit
+  // rule). The door emits one row per decision; these read the WEIGHTING as a
+  // distribution instead of judging narration by eye. Review is the surface
+  // where the posture contract is load-bearing.
+  const decisions = [];
+  for (const e of listener.getCapturedEvents()) {
+    if (e.kind !== 'coach-decision') continue;
+    try {
+      const row = JSON.parse(e.details ?? '');
+      if (row && typeof row.posture === 'string' && typeof row.speak === 'boolean') decisions.push(row);
+    } catch { /* a row we cannot read is not a row */ }
+  }
+  // THE NEED TERMS as a distribution (`coach-need-scores`, aggregated by the
+  // subscriber). This is the weighted speaking itself: which term carried the
+  // plies, how often the cold-start prior stood in for data, and — the one a
+  // distribution catches that prose never could — that the only LOWERING term
+  // never raises. A sign inversion in `capabilityTerm` would make proving a
+  // capability make the coach LOUDER, and every sentence would still read fine.
+  const needAgg = [];
+  for (const e of listener.getCapturedEvents()) {
+    if (e.kind !== 'coach-need-scores') continue;
+    try { const r = JSON.parse(e.details ?? ''); if (r && r.totals) needAgg.push(r); } catch { /* not a row */ }
+  }
+  await add('NEED term-distribution-emitted', needAgg.length > 0, `${needAgg.length} aggregated need rows; ${needAgg.reduce((n, r) => n + (r.plies ?? 0), 0)} plies scored`);
+  if (needAgg.length > 0) {
+    const totals = {};
+    const fired = {};
+    let plies = 0; let spoke = 0; let prior = 0;
+    for (const r of needAgg) {
+      plies += r.plies ?? 0; spoke += r.spoke ?? 0; prior += r.prior ?? 0;
+      for (const [k, v] of Object.entries(r.totals ?? {})) totals[k] = (totals[k] ?? 0) + v;
+      for (const [k, v] of Object.entries(r.fired ?? {})) fired[k] = (fired[k] ?? 0) + v;
+    }
+    const WANT = ['departure', 'weakness', 'unfamiliarity', 'resultDeficit', 'capability', 'thread'];
+    const missing = WANT.filter((k) => !(k in totals));
+    await add('NEED every-term-reported', missing.length === 0, missing.length ? `terms missing from the emission: ${missing.join(',')}` : `terms fired: ${WANT.map((k) => `${k}=${fired[k] ?? 0}`).join(' ')}`);
+    await add('NEED capability-term-never-raises', (totals.capability ?? 0) <= 0,
+      `capability total=${totals.capability ?? 0} (the ONLY lowering term — positive means a sign inversion, and the prose would read fine either way)`);
+    await add('NEED not-every-term-is-dead', Object.values(fired).some((n) => n > 0),
+      `${plies} plies, ${spoke} cleared the bar, ${prior} on the cold-start prior; totals ${JSON.stringify(totals)}`);
+  }
+  await add('DECIDER rows-emitted', decisions.length > 0, `${decisions.length} coach-decision rows off the wire`);
+  if (decisions.length > 0) {
+    // G4.5.15: review is a WALK — the student asked for the sequence, so
+    // importance RANKS the moment and must NEVER decide whether the ply
+    // speaks. This is the exact failure that cut a 46-ply walk to SIX while
+    // every unit test stayed green; it is one number here.
+    const walk = decisions.filter((d) => d.posture === 'walk');
+    const importanceClosed = walk.filter((d) => d.speak === false && d.reason === 'importance');
+    await add('DECIDER walk-posture-never-gated-by-importance', importanceClosed.length === 0,
+      `${walk.length}/${decisions.length} rows judged as walk; ${importanceClosed.length} closed on importance (must be 0 — that is the 46-ply-to-6 bug)`);
+    const silent = decisions.filter((d) => d.speak === false);
+    const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need');
+    await add('DECIDER every-silence-names-its-gate', unattributed.length === 0,
+      `silent=${silent.length} importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unattributed=${unattributed.length}`);
+    const spoke = decisions.filter((d) => d.speak);
+    // SUBSUMPTION — the knob behind "calling out the pins and the batteries was
+    // a bit much" (David 2026-09-16). It is the mechanism the rule says to
+    // tighten instead of raising the bar, and until now the only way to know
+    // whether it was doing anything was to read the tape and count repeats.
+    const quietBy = {};
+    for (const d of decisions) for (const [k, v] of Object.entries(d.quietBy ?? {})) quietBy[k] = (quietBy[k] ?? 0) + v;
+    const pairs = decisions.flatMap((d) => d.subsumed ?? []);
+    await add('DECIDER quiet-attributed-by-mechanism', Object.keys(quietBy).length > 0 || decisions.every((d) => (d.quietCount ?? 0) === 0),
+      `${JSON.stringify(quietBy)} — subsumption and the floor are different bugs and quietCount alone cannot tell them apart`);
+    // Every subsumption names BOTH sides. A pair with no winner means a fact
+    // was silenced and the reason cannot be reconstructed, which is the
+    // silence-as-a-guess this whole pass exists to prevent.
+    const halfPairs = pairs.filter(([loser, winner]) => !loser || !winner);
+    await add('DECIDER every-subsumption-names-what-ate-it', halfPairs.length === 0,
+      `${pairs.length} collapses${pairs.length ? `; e.g. "${pairs[0][0].slice(0, 60)}" → "${pairs[0][1].slice(0, 60)}"` : ''}${halfPairs.length ? ` — ${halfPairs.length} UNATTRIBUTED` : ''}`);
+    await add('DECIDER weighting-non-degenerate', spoke.length > 0,
+      `spoke=${spoke.length} silent=${silent.length} rows-with-quieted-facts=${decisions.filter((d) => d.quietCount > 0).length} method-beats=${decisions.filter((d) => d.method).length}`);
+  }
   const voiced = listener.getCapturedEvents().filter((e) => e.kind === 'coach-narration-spoken');
   const unmuted = voiced.filter((e) => !/voice=audit-muted/.test(String(e.summary ?? '')));
   await add('MUTE audit-ran-silent', unmuted.length === 0 && ttsRequests === 0, `${voiced.length} spoken lines, ${unmuted.length} unmuted, ${ttsRequests} /api/tts requests`);
@@ -1346,7 +1420,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   try {
     const dir = `audit-reports/review-overhaul-${new Date().toISOString().replace(/[:.]/g, '-')}`;
     mkdirSync(dir, { recursive: true });
-    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: wedged ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: wedged ?? null, results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, errors: errs }, null, 2));
+    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: wedged ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: wedged ?? null, results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, coachDecisions: decisions, needScores: needAgg, errors: errs }, null, 2));
     log(`report: ${dir}/report.json`);
   } catch (e) { log(`(report not written: ${String(e).slice(0, 80)})`); }
   await listener.stop();

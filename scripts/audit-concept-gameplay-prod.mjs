@@ -46,6 +46,9 @@
  *      such as "mate_threat")
  *   E. off-canonical ask (G7): a misspelled play request still starts a game
  *   F. vacuity guard: >=3 spoken lines; instruments stayed muted; 0 page errors
+ *   G. the ONE deciding door is observable: it emitted rows, every silence
+ *      names the gate that closed it, the posture is 'interrupt', and the
+ *      weighting is non-degenerate (the ASSERT half of the algo-audit rule)
  *
  * Run (from the sandbox, against LIVE prod):
  *   AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
@@ -193,6 +196,22 @@ const samePlacement = (a, b) => {
 /** The coach's OWN account of the move it committed — read off its
  *  `coach-turn-checkpoint` event rather than reconstructed from pixels. Learn
  *  publishes it the way Play always has (CoachTeachPage:9266). */
+// The `coach-decision` rows the one deciding door emits (`coachDecisionEvents`
+// -> `appAuditor`). `details` is the row verbatim; a malformed one is DROPPED
+// rather than defaulted, so a parse bug reads as "fewer rows" and never as a
+// clean distribution the audit invented.
+function decisionRows(listener) {
+  const rows = [];
+  for (const e of listener.getCapturedEvents()) {
+    if (e.kind !== 'coach-decision') continue;
+    try {
+      const row = JSON.parse(e.details ?? '');
+      if (row && typeof row.posture === 'string' && typeof row.speak === 'boolean') rows.push(row);
+    } catch { /* a row we cannot read is not a row */ }
+  }
+  return rows;
+}
+
 function committedSans(listener) {
   return listener.getCapturedEvents()
     .filter((e) => e.kind === 'coach-turn-checkpoint')
@@ -383,6 +402,49 @@ async function main() {
     const all = spokenLines(listener);
     record('F1. vacuity guard: ≥3 spoken lines across the run', all.length >= 3, `${all.length}`);
     record('F2. the run stayed MUTED (zero /api/tts requests)', ttsRequests === 0, `${ttsRequests} tts requests`);
+    // ── G: THE DECIDING COMPUTER IS OBSERVABLE (the ASSERT half) ───────────
+    // Emitting is half of the algo-audit rule; a contract on the rows is the
+    // other half, or the emission is decoration. These rows are the WEIGHTING
+    // itself — one per call of the one deciding door — so they are asserted as
+    // DISTRIBUTIONS, never as prose.
+    const decisions = decisionRows(listener);
+    record(
+      'G1. the deciding door EMITTED (a wire that does not fire is not a wire)',
+      decisions.length > 0,
+      `${decisions.length} coach-decision rows`,
+    );
+    if (decisions.length > 0) {
+      // Every silence NAMES the gate that closed it. 'importance' (the moment
+      // was not worth anything) and 'need' (this student did not need it here)
+      // are different diagnoses, and a posture bug hides the moment they are
+      // collapsed into an un-attributed quiet.
+      const silent = decisions.filter((d) => d.speak === false);
+      const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need');
+      record(
+        'G2. every silence names WHICH gate closed it',
+        unattributed.length === 0,
+        `${silent.length}/${decisions.length} silent — importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length}${unattributed.length ? ` UNATTRIBUTED=${unattributed.length}` : ''}`,
+      );
+      // This surface is a LIVE board, so it must judge under 'interrupt'. A
+      // walk posture leaking onto a live surface would narrate every ply.
+      const postures = [...new Set(decisions.map((d) => d.posture))];
+      record(
+        'G3. a live game is judged under the INTERRUPT posture (never walk)',
+        postures.length > 0 && postures.every((x) => x === 'interrupt'),
+        `postures=${postures.join(',')}`,
+      );
+      // Non-degenerate weighting. All-silent means the coach never cleared its
+      // own gates on a real game; all-spoken with zero quiet means nothing was
+      // ever subsumed or floored, which is the selector doing nothing.
+      const spoke = decisions.filter((d) => d.speak);
+      const quieted = decisions.filter((d) => d.quietCount > 0);
+      record(
+        'G4. the weighting is non-degenerate (it both spoke and stayed quiet)',
+        spoke.length > 0,
+        `spoke=${spoke.length} silent=${decisions.length - spoke.length} rows-with-quieted-facts=${quieted.length} method-beats=${decisions.filter((d) => d.method).length}`,
+      );
+      await writeFile(`${OUT_DIR}/coach-decisions.json`, JSON.stringify(decisions, null, 1)).catch(() => {});
+    }
     record('F3. no uncaught page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
   } finally {
     await browser.close().catch(() => {});
@@ -396,7 +458,7 @@ async function main() {
   // count (2026-09-16) — so diagnosing a red row meant re-running a 6-minute
   // prod audit to see the lines it already had in memory. David's standing
   // order is to READ the narration; the report has to carry it.
-  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, surface: 'live game on /coach/teach', results, spokenLines: spokenLines(listener), spokenProse: spokenProse(listener), listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, pageErrors };
+  const report = { generatedAt: new Date().toISOString(), baseUrl: BASE_URL, ask: ASK, surface: 'live game on /coach/teach', results, spokenLines: spokenLines(listener), spokenProse: spokenProse(listener), listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.countByKind(), streamEventsThisRun: after.events.length, coachDecisions: decisionRows(listener), pageErrors };
   await writeFile(`${OUT_DIR}/report.json`, JSON.stringify(report, null, 2));
   const failed = results.filter((r) => !r.pass);
   console.log(`\n${results.length - failed.length}/${results.length} green — report at ${OUT_DIR}/report.json`);

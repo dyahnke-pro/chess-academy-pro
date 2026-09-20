@@ -19,7 +19,8 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decide } from './coachDecider';
-import { onCoachDecision, resetCoachDecisionListeners, type CoachDecisionRow } from './coachDecisionEvents';
+import { onCoachDecision, onNeedScore, resetCoachDecisionListeners, type CoachDecisionRow, type NeedScoreRow } from './coachDecisionEvents';
+import { computeNeed, coldStudent } from './needScore';
 
 const rows: CoachDecisionRow[] = [];
 let off: (() => void) | null = null;
@@ -88,5 +89,46 @@ describe('every decision path is observable', () => {
     const body = src.slice(src.indexOf('export function decide('));
     const bare = [...body.matchAll(/return \{ \.\.\.base/g)];
     expect(bare, 'a decision returned without emitting — nobody can audit that path').toHaveLength(0);
+  });
+});
+
+/**
+ * THE NEED SCORE'S PER-TERM BREAKDOWN — the second algo emission (OWED #1 of
+ * the rule's list, built 2026-09-20). `decide()` receives the need VERDICT and
+ * never the score, so the only honest place for the score is inside
+ * `computeNeed`; this proves it fires there with every term named.
+ */
+describe('computeNeed emits its per-term breakdown', () => {
+  const needRows: NeedScoreRow[] = [];
+  let offNeed: (() => void) | null = null;
+  beforeEach(() => { needRows.length = 0; resetCoachDecisionListeners(); offNeed = onNeedScore((r) => needRows.push(r)); });
+  afterEach(() => { offNeed?.(); resetCoachDecisionListeners(); });
+
+  it('names every term, including the ones that did not fire', () => {
+    computeNeed({ ply: 7, studentMove: true, clauseKind: null }, coldStudent(1500));
+    expect(needRows).toHaveLength(1);
+    // A term missing from the record is indistinguishable from a term scoring
+    // zero, and those are different facts — the first is a wiring bug.
+    for (const t of ['departure', 'weakness', 'unfamiliarity', 'resultDeficit', 'capability', 'thread']) {
+      expect(Object.keys(needRows[0].terms), `the ${t} term is not in the emission`).toContain(t);
+    }
+  });
+
+  it('the emitted score and verdict are the ones the caller got', () => {
+    const v = computeNeed({ ply: 3, studentMove: true, clauseKind: null, onThread: true }, coldStudent(1500));
+    expect(needRows[0].score).toBe(v.score);
+    expect(needRows[0].speak).toBe(v.speak);
+    expect(needRows[0].prior).toBe(v.prior);
+    expect(needRows[0].terms.thread).toBe(35);
+  });
+
+  it('an opponent ply emits nothing — need is only ever computed for the student', () => {
+    computeNeed({ ply: 4, studentMove: false, clauseKind: null }, coldStudent(1500));
+    expect(needRows).toHaveLength(0);
+  });
+
+  it('a throwing listener never reaches the caller', () => {
+    onNeedScore(() => { throw new Error('telemetry blew up'); });
+    expect(() => computeNeed({ ply: 2, studentMove: true, clauseKind: null }, coldStudent(1500))).not.toThrow();
   });
 });

@@ -36,6 +36,7 @@ import type { TacticPatternType } from '../types/tacticTypes';
 import { capabilityProven, HELD_FOR_PROVEN, type CapabilityProfile } from './capabilityEvidence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { emitNeedScore } from './coachDecisionEvents';
 
 /** Below this many fully-analysed games the student has no data — the prior teaches. */
 export const COLD_START_GAMES = 5;
@@ -326,10 +327,24 @@ export function computeNeed(p: NeedPlyInput, ctx: StudentNeedContext): NeedVerdi
   if (!p.studentMove) return { score: 0, speak: false, reasons: ['opponent move'], prior: false };
   const reasons: string[] = [];
   let score = 0;
-  for (const t of [departureTerm(p.ply, ctx), weaknessTerm(p, ctx), unfamiliarityTerm(p, ctx), resultDeficitTerm(ctx), capabilityTerm(p, ctx)]) {
+  // NAMED so the contribution can be trended per term (the algo-audit rule:
+  // a weighted sum whose terms cannot be separated can only be judged by its
+  // output, and a term contributing nothing looks the same from there as one
+  // working correctly). The names are the emission's keys — renaming one
+  // renames the series, so treat them as the wire format they are.
+  const terms: Record<string, number> = {};
+  for (const [name, t] of [
+    ['departure', departureTerm(p.ply, ctx)],
+    ['weakness', weaknessTerm(p, ctx)],
+    ['unfamiliarity', unfamiliarityTerm(p, ctx)],
+    ['resultDeficit', resultDeficitTerm(ctx)],
+    ['capability', capabilityTerm(p, ctx)],
+  ] as const) {
+    terms[name] = t.score;
     score += t.score;
     if (t.reason) reasons.push(t.reason);
   }
+  terms.thread = p.onThread ? 35 : 0;
   if (p.onThread) { score += 35; reasons.push('on the causal thread'); }
   let prior = false;
   if (ctx.gamesPlayed < COLD_START_GAMES) {
@@ -337,5 +352,9 @@ export function computeNeed(p: NeedPlyInput, ctx: StudentNeedContext): NeedVerdi
     if (pr > score) { score = pr; prior = true; reasons.push(`cold start (${ctx.gamesPlayed} games) — rating prior`); }
   }
   score = Math.max(0, Math.min(100, score));
-  return { score, speak: score >= NEED_THRESHOLD, reasons, prior };
+  const verdict: NeedVerdict = { score, speak: score >= NEED_THRESHOLD, reasons, prior };
+  // Telemetry LAST and never inside the loop: the verdict is computed first,
+  // so a listener can never change what the student hears.
+  emitNeedScore({ ply: p.ply, score, speak: verdict.speak, prior, terms });
+  return verdict;
 }

@@ -23,6 +23,7 @@ import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import type { GameRecord } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { logAppAudit } from './appAuditor';
 
 /** Re-exported so there is ONE literal in the app — see `DEFAULT_STUDENT_RATING`. */
 export const DEFAULT_RATING = DEFAULT_STUDENT_RATING;
@@ -126,6 +127,25 @@ function scoreFromResult(
  * it reads from Dexie. Safe to call on session start — result is a point
  * estimate, not cached, but each call is a single indexed query.
  */
+/** Emit WHICH RUNG OF THE CONFIDENCE CHAIN answered, and with what.
+ *
+ *  This is the algo-audit rule applied to the strength estimator: the rating
+ *  is a chain of four sources and only its OUTPUT was ever visible, so a chain
+ *  that silently always lands on `default` — the exact failure CLAUDE.md
+ *  records as still open, `getPlayerRating` having zero production callers —
+ *  looks identical to one that works. Once per boot (`calibrateStrength`), so
+ *  the volume is a row per session, not per ply. */
+function reportEstimate(e: RatingEstimate): RatingEstimate {
+  void logAppAudit({
+    kind: 'player-rating-estimated',
+    category: 'subsystem',
+    source: 'playerRatingService.getPlayerRatingEstimate',
+    summary: `${e.rating} from ${e.source} (n=${e.sampleSize})`,
+    details: JSON.stringify(e),
+  });
+  return e;
+}
+
 export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
   const profile = useAppStore.getState().activeProfile;
   const profileRating = profile?.currentRating;
@@ -147,11 +167,11 @@ export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
     for (const game of sorted) {
       const rating = ratingFromImportedGame(game, username);
       if (rating !== null && rating > 0) {
-        return {
+        return reportEstimate({
           rating,
           source: 'imported-games',
           sampleSize: importedGames.length,
-        };
+        });
       }
     }
   }
@@ -168,20 +188,20 @@ export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
   if (coachGames.length >= COACH_GAMES_MIN_SAMPLE) {
     const starting = profile?.ratingBaseline ?? DEFAULT_RATING;
     const rating = runningEloFromCoachGames(coachGames, starting, profile?.name);
-    return {
+    return reportEstimate({
       rating,
       source: 'coach-games',
       sampleSize: coachGames.length,
-    };
+    });
   }
 
   // 3. Profile.
   if (typeof profileRating === 'number' && profileRating > 0) {
-    return { rating: profileRating, source: 'profile', sampleSize: 0 };
+    return reportEstimate({ rating: profileRating, source: 'profile', sampleSize: 0 });
   }
 
   // 4. Default.
-  return { rating: DEFAULT_RATING, source: 'default', sampleSize: 0 };
+  return reportEstimate({ rating: DEFAULT_RATING, source: 'default', sampleSize: 0 });
 }
 
 /** Convenience wrapper returning only the numeric rating. */

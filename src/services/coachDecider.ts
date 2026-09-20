@@ -196,6 +196,13 @@ function emit(
     needSpeak: student.need?.speak ?? null,
     spokenCount: d.spoken.length,
     quietCount: d.quiet.length,
+    quietBy: d.quiet.reduce<Record<string, number>>((acc, q) => {
+      acc[q.why] = (acc[q.why] ?? 0) + 1;
+      return acc;
+    }, {}),
+    subsumed: d.quiet
+      .filter((q) => q.why === 'subsumed' && q.by)
+      .map((q) => [q.text.slice(0, 80), (q.by ?? '').slice(0, 80)] as [string, string]),
     method,
   });
   return d;

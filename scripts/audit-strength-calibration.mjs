@@ -97,6 +97,26 @@ async function main() {
     }));
   }
 
+  /** The app's own local audit log (Dexie `meta` / `app-audit-log.v1`). It is
+   *  the source of truth on-device regardless of whether the opt-in stream is
+   *  on, so an audit with no listener sidecar reads it directly. */
+  async function readAuditLog() {
+    return page.evaluate(() => new Promise((resolve) => {
+      const open = indexedDB.open('ChessAcademyDB');
+      open.onsuccess = () => {
+        try {
+          const tx = open.result.transaction('meta', 'readonly');
+          const get = tx.objectStore('meta').get('app-audit-log.v1');
+          get.onsuccess = () => {
+            try { resolve(JSON.parse(get.result?.value ?? '[]')); } catch { resolve([]); }
+          };
+          get.onerror = () => resolve([]);
+        } catch { resolve([]); }
+      };
+      open.onerror = () => resolve([]);
+    }));
+  }
+
   const tests = [
     {
       label: 'Fully adaptive: NO calibration bubble / skill-band picker on first run',
@@ -119,6 +139,34 @@ async function main() {
         const pr = Number(profile?.puzzleRating);
         const ok = !!profile && Number.isFinite(cr) && cr > 0 && Number.isFinite(pr) && pr > 0;
         return { ok, why: ok ? `currentRating=${cr} puzzleRating=${pr}` : `bad profile=${JSON.stringify(profile)}` };
+      },
+    },
+    {
+      // THE ALGO-AUDIT RULE applied to the estimator (David 2026-09-20: "I want
+      // audit tools on all algo based builds"). The rating is a four-rung
+      // confidence chain and only its OUTPUT was ever visible, so a chain that
+      // silently always falls through to the default looks exactly like one
+      // that works. This asserts the rung is named — and, on a FRESH boot with
+      // no games, that the named rung is one of the two that honestly apply.
+      label: 'The rating estimator NAMES which rung of the confidence chain answered',
+      run: async () => {
+        const log = await readAuditLog();
+        const rows = log.filter((e) => e && e.kind === 'player-rating-estimated');
+        if (rows.length === 0) {
+          return { ok: false, why: `no player-rating-estimated row in ${log.length} audit entries — the estimator ran unobserved, or calibrateStrength never called it` };
+        }
+        let est = null;
+        try { est = JSON.parse(rows[rows.length - 1].details ?? ''); } catch { est = null; }
+        const src = est?.source;
+        // A fresh profile has no imported and no coach games, so only 'profile'
+        // (the boot-created default) or 'default' can honestly answer here.
+        const ok = src === 'profile' || src === 'default';
+        return {
+          ok,
+          why: ok
+            ? `${rows.length} estimate(s); newest source=${src} rating=${est?.rating} n=${est?.sampleSize}`
+            : `newest source=${src} on a FRESH profile with no games — that rung cannot honestly have answered`,
+        };
       },
     },
     {

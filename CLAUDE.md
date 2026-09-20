@@ -3809,14 +3809,66 @@ the score's distribution belongs to a second emission inside `computeNeed`,
 where it is actually computed. Faking it at the wrong door is the same disease
 as a narration claiming a fact the board never produced.
 
-Gate: `coachDecisionEmits.test.ts` — every return path emits, and it blames by
-STATEMENT, so a new branch that returns a decision without emitting fails there
-rather than shipping a silent path.
+Gates, one per half, because either alone is a false green:
+- EMIT — `coachDecisionEmits.test.ts`: every return path emits, blaming by
+  STATEMENT, so a new branch that returns a decision without emitting fails
+  there rather than shipping a silent path.
+- ASSERT — `algoAuditContract.test.ts`: every declared algo emission is READ by
+  a named audit and held to a CONTRACT row, and every field the row carries is
+  read by one of them (a contract reading a field the row lost passes
+  vacuously forever — `undefined !== 'importance'` is quietly true). It cannot
+  force a NEW emitter into its table; nothing in the type system knows an
+  emitter is algo-based, so it enforces "everything declared is asserted" and
+  this rule is what asks for the declaration.
 
-**OWED, ranked** (each is an algo that decides and cannot yet be trended):
-`computeNeed`'s per-term scores · `factSelector`'s subsumption (WHICH claim ate
-which) · the strength estimator · `capabilityProven` / the green bar · the
-explorer band choice.
+**THE CONTRACTS ARE DISTRIBUTIONS, AND THE FIRST ONES ARE THESE.** The live
+Learn audit asserts the door emitted at all, that every silence NAMES its gate,
+that a live board is judged under `interrupt`, and that the weighting is
+non-degenerate. Review asserts the one that is load-bearing there: on a `walk`
+posture, ZERO rows may close on importance — that is the 46-ply-walk-to-SIX bug
+(G4.5.15) reduced to a single number an audit can read, instead of a defect
+found by a human noticing the tape got short.
+
+**BUILT, and what each answers.** `coach-decision` (one row per call of the
+door) answers "did it speak, and which gate closed it". `coach-need-scores`
+answers "which TERM carried the plies" — it is per-term and AGGREGATED by the
+subscriber, because `computeNeed` runs over every move of a review and a row
+per ply would be hundreds of Dexie writes for a question that is distributional
+anyway. Its sharpest contract is one prose can never hold: `capability` is the
+only LOWERING term, so a positive total there is a sign inversion — proving a
+capability would make the coach LOUDER, and every sentence would still read
+fine.
+
+`coach-decision` also carries SUBSUMPTION — `quietBy` (which MECHANISM
+silenced a fact: subsumed, the floor, or say-once, because a subsumption
+widening and a floor raise look identical from a bare `quietCount`) and the
+[loser, winner] pairs. That is the knob G4.5.1 says to tighten instead of
+raising the bar, and it was already computed by `factSelector` and thrown away
+at this boundary. Widening the existing row beat adding a third emitter: the
+data was in hand.
+
+**THE FULL SET, and where each contract lives:**
+
+| emission | answers | contract |
+|---|---|---|
+| `coach-decision` | did it speak, which gate closed it, what subsumption ate what | `audit-concept-gameplay-prod` (interrupt) + `audit-review-overhaul-prod` (walk) |
+| `coach-need-scores` | which TERM carried the plies | `audit-review-overhaul-prod` |
+| `player-rating-estimated` | which RUNG of the confidence chain answered | `audit-strength-calibration` |
+| `capability-heat-map` | how many tags the app itself counts as PROVEN, against the bar it used | `audit-loop-green-prod` |
+
+🚨 **THE EXPLORER BAND NEEDS NO EMISSION, AND BUILDING ONE WOULD BE THE WEAKER
+INSTRUMENT.** It was on this list; it comes off with a reason rather than
+silently. `explorerBandFor` is a TOTAL PURE FUNCTION of one number, and
+`ratingBands.test.ts` already sweeps 600–3000 asserting containment — which
+proves the property for every rating that can ever be passed, forever.
+Telemetry would only report the bands users happened to hit. Where a property
+can be proven by a test, prove it; reach for an emission when the decision
+depends on state a test cannot hold (the student's record, the board, the
+chain of sources). That is the same preference as "never settle for a watcher
+when you can remove the choice".
+
+**OWED:** nothing on the coach's deciding path. The next algo that decides
+adds its own row and its own contract, per the two halves above.
 
 ### 🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").
 
@@ -5812,7 +5864,8 @@ After every `git push origin main`:
    | `src/data/pro-game-references.json` (any pro-rep build) | `scripts/audit-coach-player-games.mjs` + `npx vitest run src/data/proGameReferences.test.ts` |
    | `public/data/*-teachings.json` (any farmed corpus) or `farmedCorpusData` / `secondaryCorpora` | `scripts/audit-farmed-corpus-prod.mjs` + `npx vitest run src/data/secondaryTeachings.test.ts src/services/farmedCorpusData.test.ts` — a farmed corpus is FETCHED, not bundled, so a green build proves nothing about whether the running app can actually reach it |
    | computed-concept engine (`conceptEngine`, `endgameTechnique`, `matePatterns`, `puzzleConceptHint`/`Explanation`, `positionFacts` concept clause, `dnaLineNarrator` invariants) | `scripts/audit-concept-engine-prod.mjs` (muted, 3-instrument: hub → Master Level, drill → computed concept explanation, listener) + `npx vitest run src/services/conceptEngine.test.ts src/services/endgameTechnique.test.ts src/services/matePatterns.test.ts` |
-   | the concept SPOKEN during live gameplay (the live composer, `coachDecider`, `factSelector`, `positionFacts`, `playCommentary`, phase transitions, `computePlyFacts.tacticLanded`, the tactic classifier `detectTacticType`) | `scripts/audit-concept-gameplay-prod.mjs` (muted, 3-instrument: asks the coach to **PLAY** "Scandinavian Defense, Lasker Variation", takes Black, pushes real moves — …Bg4 pins Nf3 to d1 — and proves the narration listener heard the engine's invariant sentence spoken mid-GAME; a mounted walkthrough FAILS the row; off-canonical ask too) + `npx vitest run src/services/tacticTypeUnification.test.ts src/hooks/usePhaseNarration.test.ts src/hooks/useLiveCoach.test.tsx src/hooks/usePositionNarration.test.ts` |
+   | the ONE deciding door (`coachDecider.decide`, `coachDecisionEvents`, the `appAuditor` forward) or ANY algo emission | the EMIT gate `npx vitest run src/services/coachDecisionEmits.test.ts` + the ASSERT gate `src/test/algoAuditContract.test.ts` (both in ship-check), then the two standing audits — the contracts live in `audit-concept-gameplay-prod.mjs` (interrupt) and `audit-review-overhaul-prod.mjs` (walk: ZERO rows may close on importance). A new algo emission is not shipped until a named audit asserts on its rows |
+   | the concept SPOKEN during live gameplay (the live composer, `coachDecider`, `factSelector`, `positionFacts`, `playCommentary`, phase transitions, `computePlyFacts.tacticLanded`, the tactic classifier `detectTacticType`) | `scripts/audit-concept-gameplay-prod.mjs` (muted, 3-instrument: asks the coach to **PLAY** "Scandinavian Defense, Lasker Variation", takes Black, pushes real moves — …Bg4 pins Nf3 to d1 — and proves the narration listener heard the engine's invariant sentence spoken mid-GAME; a mounted walkthrough FAILS the row; off-canonical ask too). It ALSO holds the algo-decision contract: the door emitted, every silence names its gate, a live board is judged `interrupt`, the weighting is non-degenerate) + `npx vitest run src/services/tacticTypeUnification.test.ts src/hooks/usePhaseNarration.test.ts src/hooks/useLiveCoach.test.tsx src/hooks/usePositionNarration.test.ts` |
    | coach surfaces (any) — tactical-awareness wiring | `scripts/audit-coach-tactical-awareness.mjs` (verifies the TacticsLiveContext block fires + rating-adaptive lookahead lands in {1,2,4,6}) |
    | unified-coach personalization (weakness spine → surfaces, custom lesson) | `scripts/audit-unified-coach-prod.mjs` (SEEDS a real weakness profile via `audit-lib/seed-weakness-profile.mjs` so the inert-until-fed functions fire, then drives the P5 custom-lesson picker → concept teaching → own-position drill; 3-instrument. Every personalization function rides the same weakness spine this exercises) |
    | `/coach/endgame` + `/coach/session/middlegame` | `scripts/audit-coach-middlegame-endgame.mjs` (mode coverage matrix: which of Teach/Drill/Quiz/Trap/Play each surface supports today) |
