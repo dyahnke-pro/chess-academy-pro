@@ -1572,6 +1572,36 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      MAIN thread stops answering right after the reopened walk speaks its
      first line. Four of the five wedges had no determinism flag, so the flag
      is not the cause. It is reproducible enough to hunt now — ~1 in 3 reopens.
+   - **n=6 (2026-09-20 10:35–11:05, product mode, no flag, no deploy under it —
+     bundle and origin verified unchanged): first attempt of the hunt WEDGED,
+     and the new OS sample fired — on the WRONG process** (the selector took
+     "the hottest process matching chrom(e|ium)" and got the Claude desktop
+     app, whose path contains the word). What that mis-sample still proved:
+     the hottest chromium-named process on the box was at **0.3 % CPU** at the
+     moment the page stopped answering — so this wedge is an IDLE-BLOCKED main
+     thread, not a spin. (n=1's "100 % for 50 min" was the pthread storm,
+     since fixed; do not conflate.) The sampler now takes every Playwright
+     renderer by executable path + `--type=renderer`, logs cpu/rss per
+     renderer, and prints the main thread's deepest frames; the audit also
+     logs any dialog and whether a raw CDP `Runtime.evaluate` HANGS or ERRORS
+     at blow-up. Also read: "0 workers" at blow-up is the pool's 60 s idle
+     retire, not a signal.
+   - 🔴 **CORRECTION, same hour: n=5 and n=6 are PROBABLY ARTIFACTS of my own
+     chain bound, not wedges.** The heap probe's race is 4 s, so a real wedge
+     is detected within seconds — yet in BOTH runs the blow-up fired at 29:53
+     and the chain's `bounded 1800` killed the browser at 30:00. A clean run
+     takes ~18 min; something made those two take 30, and the kill landed
+     mid-reopen and read as "JS heap UNREADABLE". What made them slow is
+     unknown because the audit log carried NO timestamps. Hunt 2 (three
+     bounded attempts) found nothing; attempt 3 I killed myself by removing
+     the bound the wrong way (kill the watcher SUBSHELL, never its `sleep` —
+     the sleep's exit releases the kill; memory `background-chain-guards`).
+     Now: every audit log line is stamped, `AUDIT_WEDGE_HUNT=1` makes the
+     audit exit 3 right after the blow-up diagnostics (no more 49-min hangs on
+     un-raced evaluates), and hunt 3 runs UNBOUNDED. The honest count of
+     clean-machine, deploy-free wedges is therefore n=2 and n=3 (both real:
+     49 min at 0 % node, and a main thread that never answered) — the
+     reproduction rate is unknown, not "1 in 3".
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
     + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
     Test type errors are no longer invisible; they are counted and capped. What
