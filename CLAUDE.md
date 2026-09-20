@@ -5053,6 +5053,25 @@ When you add a new lesson flow, reuse these primitives:
 - Never pass narration in a parallel array — embed it on the
   `WalkthroughStep`.
 
+## 📋 "WHERE DO WE STAND?" = PRINT `OUTLINE.md` (David 2026-09-20: "save this as the outline so its given to me like this when i ask")
+
+When David asks where the outline / the plan / the loop stands, the answer is
+`OUTLINE.md`'s SHAPE: every work order and every roadblock item, ONE LINE each,
+with a marker (✅ done · 🔴 open defect · 🟠 needs a measurement or his call ·
+🟡 low rank · ⛔ another session owns it). Not a prose summary, not the subset
+you happen to have read, and never the row count of the last audit — he asked
+for the board, so give him the whole board.
+
+`PLAN.md` stays the RECORD (the reasoning, the measurements, the corrections
+that must not be re-derived). `OUTLINE.md` is the INDEX over it. When they
+disagree, PLAN wins and the outline line is the bug.
+
+🚨 **UPDATE `OUTLINE.md` IN THE SAME COMMIT AS THE WORK.** A status board that
+lags reports finished work as open and open work as finished, which is how a
+session spends a night on something that landed yesterday. This is the same
+reason `docs/STATE.md` is generated and verified — a board nobody trusts is
+worse than no board.
+
 ## Plan docs for large fixes (standing order)
 
 **For any non-trivial multi-step fix, write a `PLAN.md`-style

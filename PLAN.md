@@ -6,6 +6,13 @@
 
 # PLAN — closing the loop (2026-09-18)
 
+> 📋 **THE ONE-PAGE BOARD IS `OUTLINE.md`.** Every work order and every roadblock
+> item, one line each, with a done/open marker — it is what David means when he
+> asks "where do we stand with the outline?", and the shape the answer comes back
+> in. THIS file is the record (reasoning, measurements, corrections); that one is
+> the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
+> session picks up something already finished.
+
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
 Everything on the open list that is code I own and needs no decision from David.

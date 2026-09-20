@@ -1,0 +1,130 @@
+# OUTLINE — closing the loop, every item, done vs not
+
+> **THIS IS THE ANSWER TO "where do we stand?"** When David asks where the
+> outline stands, PRINT THIS FILE'S SHAPE — every work order and every roadblock
+> item, one line each, with a marker. Not a prose summary, not a subset, not the
+> row count of the last audit.
+>
+> **It is the INDEX, never the record.** `PLAN.md` holds the reasoning, the
+> measurements and the corrections; this file holds one line per item so the
+> whole board is readable in thirty seconds. A line here that contradicts
+> `PLAN.md` is a bug in this file — PLAN wins, and you fix the line.
+>
+> **UPDATE IT IN THE SAME COMMIT AS THE WORK.** A status board that lags is
+> worse than none: it reports finished work as open and open work as finished,
+> and the next session picks up the wrong thing. Gate:
+> `src/test/outlineCoverage.test.ts` fails the build when a numbered roadblock
+> item or bucket in `PLAN.md` has no line here.
+
+**Legend:** ✅ done and proven · 🔴 open, a real defect · 🟠 open, needs a
+measurement or David's call · 🟡 open, low rank · ⛔ owned by another session
+
+---
+
+## 1. WO-CLOSEOUT-01 — code first, one push, one audit
+- ✅ 1. Section-14 detectors built (`calculation-depth`, `left-book-early`, `no-plan`) — gated, but see E-10: zero real-game fires
+- ✅ 2. Critical moment T1 (review scans flagged plies, the register decides) + T3 (Learn hands announced plies to the sweep, `prompted:true`)
+- ✅ 3. Learn's half on a prod tape — `audit-second-game-memory-prod` rows E0/E1
+- ✅ 4. D11 — `[delta]` squares already coupled (the PLAN entry was stale)
+- ✅ 5. Hygiene — watermark hook, timeouts-vs-assertions, lint crash named, test-type ceiling 296→236, `BuildVersionWidget` regex, `formatTacticsSubBlock(tactics, boardFen)` required, multilingual row poll
+- ✅ 6. Measurements — boot 15 files / 26.4 MB raw / 6.1 MB gzip; corpus reach 24/24 both tiers; corpus gates evened
+- 🔴 `tactics-context-stale` count read off the listener — never done
+- 🔴 47-game rerun — `data/sources/wo4-corpus/` absent on this machine
+- **Audits:** loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ · second-game 12/12 ✅
+
+## 2. WO-LOOP-01 — prove the one-line definition on prod
+- ✅ Phases 0–4, **6/6 on prod** (run 5, bundle `index-BggLa4Jm`; re-proven run 6 with an exact same-ply control)
+- ✅ The five defects the instrument found, each gated: the review path never recorded · a game paired with itself · four seat resolvers ignoring the declared seat · the uncapped-facet path · GM games have nothing to record
+- 🔴 OWED-1 the `other` attribution gap — the loop's ceiling (see E-10)
+- ✅ OWED-2 Learn's half on a prod tape
+- 🔴 OWED-3 **GREEN** — the coach going quiet when you improve. Not started; needs held evidence over days
+
+## 3. The critical moment — one computer, two registers
+- ✅ Built 2026-09-19 (`criticalMoment.ts`, both registers, the stake banded off the eval)
+- ✅ T1 `ask`/`note` reachable on review · ✅ T2 Learn verified on prod · ✅ T3 Learn's `prompted` wire
+- 🔴 T4 `prompted` is a record, not a lever — the personal tolerance from press/no-press
+- 🔴 T5 the door on live play (`interrupt` posture still grades by gap; deliberately unchanged)
+- 🔴 T6 two numbers never measured on a device — Learn statement volume; `scanCriticalMoments` on a phone
+
+## 4. Bucket D — the student cannot get what they asked for
+- ✅ All of it: D1–D13 and D-LANG (Thai plus 19 other writing systems), the transcript translation door, verified on prod
+
+## 5. Bucket A — the loop cannot close
+- ✅ CLOSED: #77 click-to-move, grey teaches and feeds the ranker, one computer both directions, the endgame zero was false, provenance, the `prompted` flag; item 6 deleted as a wrong bullet
+- ✅ A-adjacent: the guessed seat, the walk budget constant
+
+## 6. Bucket B — the instruments are not believable
+- ✅ 7c dead-testid gate
+- ✅ 8 (#70) the review audit's verdict is reproducible — determinism seam, CLOSED for the review audit
+- ⛔ 9 (#21) **the wedge behind the engine storm** — the storm is fixed; the page's main thread still pins 100% and the walk never leaves ply 0. Another session's files. Blocks the standing review re-run
+- 🟠 10 (#61) half done — the visibility half landed; the runtime half is 11e
+- ✅ 11 (#58) the GothamChess pro-rep audit — four instrument layers, none of them the product
+- ✅ 11a–11d ship-check hygiene
+- 🔴 11e drive the test-type-error ceiling 236 → 0
+
+## 7. Bucket C — the student hears something wrong or repeated
+- ✅ 11f the read-position seat · 12 queen-takes · 13 stems rotated not rolled · 14 re-announced moves · 16 (#59, a dead selector) · 17 the chat plan lane · 18 the fresh-game reset (n=4, proven on prod)
+- 🔴 15 (#22) **the voiced corpus is in the wrong register** — 1,146 he/his, 521 first-person, 81 fragments
+- 🟡 19 open questions, not yet defects: #23 mistake-puzzle narration · #19 chat input after the player-games lane · #35 caching `voiceFacts` · #36 the Alapin tape's remaining prose · #69 a pinned need-coverage baseline · #42 the corpus study · #33 removal candidates
+
+## 8. Bucket E — payload + delivery
+- ✅ A new service worker may never take over a running page
+- ✅ No un-positioned phrases in the boot payload (32.8 → 24.3 MB)
+- ✅ 354 notes that described the video, not the board, are gone
+- ✅ Post-deploy audits on live prod — SW 9/9, Learn 8/8, review 22/24
+- ✅ 9. The fundamental-aware spine reader
+- 🔴 0a. The two fundamentals reds, n=2 — measured offline: it is DETECTOR COVERAGE, not inputs (all five flagged plies return `[]`)
+- 🔴 0b. Review audit 22/24 — the same two rows
+- 🔴 2. The one SW check a single deploy cannot make — hold a session across deploy N → N+1
+- 🟠 3. Measure the 8.2 MB entry chunk on a device (parse time, heap) before touching it — **David's call after the number**
+- 🟠 4. Should the 1,282 archived anchored danya notes come back? — **David's call**
+- 🟡 5. 57,204 un-positioned notes — a memory decision, never a boot one; never prune without measuring both ways
+- 🟡 6. A cold first teaching reply draws on less corpus — watch it in the Learn audit
+- ✅ 7. The corpus gates are even · ✅ 8. `BuildVersionWidget.test`
+- ⛔ 10. **Section-14 detectors fire on nothing real** — in flight in another session. Next step is measured, not guessed: log the rejection reason per detector, run a game library, widen from the real population
+
+## 9. Carried over — the stale-tactics checklist (pickup §7)
+- ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
+- ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
+- 🔴 `npm run ship-check` has never printed READY TO PUSH on that tree
+- 🔴 Read the `tactics-context-stale` count off the listener
+- 🔴 `GameChatPanel.test` highlight-marker strip
+- 🔴 Sweep the other `runStep` summaries in ship-check for the same crash-as-green disease
+
+---
+
+## WHERE IT STANDS IN ONE LINE
+
+The loop is CLOSED and proven on prod in the RED direction, in both registers:
+the coach learned the student in game A and said something different in game B.
+What is left is the **ceiling** (the `other` attribution gap — another session),
+the **wedge** (#21 — another session), and **GREEN** (the coach going quiet when
+you improve). Green is the half of the main concept nobody owns: the mechanism
+is built and has never once been shown to fire. See below.
+
+## UNOWNED RIGHT NOW — and the ONLY one that is the main concept
+
+**GREEN — the coach going quiet when you get better.** The heat map has three
+states and the app can act on two. Measured 2026-09-20, not recalled:
+
+| half | state |
+|---|---|
+| RECORD a hold (`capabilityEvidence`, both halves computed) | ✅ built, 8 modules |
+| RECORD a miss | ✅ built, 21 modules — **the parity gap is 21 vs 8** |
+| the PROFILE (`getCapabilityProfile`, prompted rows skipped) | ✅ built |
+| a term that can LOWER need (`needScore.capabilityTerm`, held ≥ 3 + zero broken) | ✅ built, ONE production reader |
+| **does real play ever reach held ≥ 3 with zero broken?** | 🔴 **NEVER MEASURED** |
+| **has a student's Nth game ever gone quiet because of games 1..N-1?** | 🔴 **NEVER SHOWN** |
+
+That is the exact shape the RED direction was in before WO-LOOP-01: every half
+built and gated in isolation, the sentence never demonstrated end to end. The
+red half was proven by SEEDING game A and reading game B's tape; green is
+provable the same way, and the measurement comes first because if real play
+never produces a proven capability then the lowering term can never fire and
+`HELD_FOR_PROVEN` (or the posing bar) is the defect rather than the wire.
+
+Not the main concept, and explicitly deprioritised (David 2026-09-20: "the
+register doesnt get up to closing the loop"):
+- 🔴 C15 the voiced corpus register — a real defect the student hears, but polish next to the loop.
+- 🔴 11e the test-type-error ceiling 236 → 0 — hygiene, test files only.
+- 🔴 E2 the two-deploy service-worker check — rides along with whatever ships next.
