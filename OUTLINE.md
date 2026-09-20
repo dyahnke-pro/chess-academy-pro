@@ -87,8 +87,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🔴 0a. The two fundamentals reds, n=2 — measured offline: it is DETECTOR COVERAGE, not inputs (all five flagged plies return `[]`)
 - 🔴 0b. Review audit 22/24 — the same two rows
 - 🔴 2. The one SW check a single deploy cannot make — hold a session across deploy N → N+1
-- 🟠 3. Measure the 8.2 MB entry chunk on a device (parse time, heap) before touching it — **David's call after the number**
-- 🟠 4. Should the 1,282 archived anchored danya notes come back? — **David's call**
+- ✅ 3. The 8.2 MB entry chunk is a NON-ISSUE — closed by measurement 2026-09-20, no device needed. **ZERO** WASM/OOM/crash events on native in 60 days, and the zero is non-vacuous (same cut returns 14 other error types: `stockfish_variant` 873/94 devices, `ota_download_failed` 133/53, `tts_failure` 19/9). The OOM that motivated this item happened in an AUDIT browser under a mid-run deploy at 124 spawned threads, and in the memory-starved sandbox — neither is a real device, and its cause was THREAD COUNT, not bundle size. Download is irrelevant on native (`webDir:'dist'`, the bundle ships inside the app; 2.3 MB gzipped on web). Do not spend a night shrinking this. Only live engine signal: `stockfish_variant_fallback`, 3 events / 2 devices — watch, do not act
+- ✅ 4. The 1,282 archived anchored danya notes STAY ARCHIVED (2026-09-20) — and the two reasons offered for calling them garbage both FAIL on measurement: **100% carry a `lineSan`** (median 10 plies; no `fen` field, but the line IS the anchor) and **0 of 1,282 are audience/parasocial talk** (1,275 board talk, 7 general chess principles; detector proven non-vacuous against 'subscribe', 'welcome back to the speedrun', 'shout out to my patreon'). They stay out for a DIFFERENT reason: the play surfaces take exact-position narration solely from the board-truth-verified voiced corpus, and ~3.8% of farmed position-keyed notes are mis-anchored — fluent prose about a different board, which reading cannot catch. 🔴 The one number that would reopen it, never run: how many of the 1,282 survive board verification against their own line
 - 🟡 5. 57,204 un-positioned notes — a memory decision, never a boot one; never prune without measuring both ways
 - 🟡 6. A cold first teaching reply draws on less corpus — watch it in the Learn audit
 - ✅ 7. The corpus gates are even · ✅ 8. `BuildVersionWidget.test`
@@ -97,7 +97,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ## 9. Carried over — the stale-tactics checklist (pickup §7)
 - ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
 - ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
-- 🔴 `npm run ship-check` has never printed READY TO PUSH on that tree
+- ✅ `npm run ship-check` printed **READY TO PUSH (419.0s)** on 2026-09-20 — on main plus this session's three commits, which contains the whole carried-over sweep. The claim that it never had is stale and is DELETED, not annotated. (`test typecheck` is `○ 236 errors (at the ceiling)`, which is the sanctioned shrink-only ceiling, not a red — see 11e)
 - 🔴 Read the `tactics-context-stale` count off the listener
 - ✅ `GameChatPanel.test` — MEASURED 2026-09-20: 16/16 green on a synced tree. The "red on untouched main" claim was stale and is deleted, not annotated
 - ✅ Swept: ONE `crashed(out)` detector backs vitest, lint, tsc and the Playwright summarizer — the regex had already been hand-written twice, which is the drift the rot rule names

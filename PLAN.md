@@ -2608,6 +2608,58 @@ is why this is the first clean measurement, not why it passed.
 the stall returns, the table above is the baseline to measure against, and the
 canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
 
+## MEASURED 2026-09-20 (late) — the two items that were waiting on David, both closed by measurement
+
+Neither needed his call in the end; both needed a number, and the numbers said
+the opposite of what the framing assumed. Recorded here because the REASONING is
+what a future session would otherwise re-derive wrongly.
+
+**1. THE 8.2 MB ENTRY CHUNK IS A NON-ISSUE. Do not spend a night shrinking it.**
+- PostHog, native, 60 days: **ZERO** WASM / OOM / crash events. The zero is
+  NON-VACUOUS — the same cut returns 14 other error kinds with live counts
+  (`stockfish_variant` 873 / 94 devices, `ota_download_failed` 133 / 53,
+  `tts_failure` 19 / 9, `llm_error` 18 / 5). The instrument sees the engine; there
+  is simply nothing to see.
+- **The OOM that motivated the item was never a real device.**
+  `WebAssembly.Memory(): could not allocate memory` was observed in an AUDIT
+  browser under a mid-run deploy at **124 spawned pthreads**, and separately in
+  the memory-starved sandbox (see `sandbox-wasm-oom-confound`). Its cause was
+  THREAD COUNT, not bundle size. Two facts sitting next to each other in a
+  sentence are not a mechanism — this file asserted the adjacency, not the link.
+- **Download is irrelevant to the paying cohort.** `capacitor.config.ts` has
+  `webDir: 'dist'`, so on native the bundle ships INSIDE the app; there is no
+  boot download at all. On web it is 2.3 MB gzipped, which is unremarkable.
+  Raw 8.1 MB only ever costs parse/compile time and heap.
+- The only live engine-degradation signal in 60 days is
+  `stockfish_variant_fallback`, **3 events / 2 devices**. That is the shape
+  memory pressure WOULD take if it ever appeared. Watch it; do not act on it.
+- 🔴 Still genuinely unmeasured, and now optional rather than blocking: cold-start
+  time-to-interactive and peak heap on a real device (Safari → Develop → iPhone →
+  Web Inspector, Timelines + Memory).
+
+**2. THE 1,282 ARCHIVED ANCHORED DANYA NOTES STAY ARCHIVED — but not because
+they are garbage, and the garbage claim is DISPROVEN.** Two hypotheses were put
+to the data and both failed:
+- *"not tied to an actual FEN"* → **100% carry a `lineSan`**, median 10 plies
+  (min 1, max 44). There is no `fen` field, but the line IS the anchor — the app
+  replays it. The absence of a field is not the absence of a position.
+- *"him talking to his followers, not about the game"* → **0 of 1,282** are
+  audience talk. 1,275 are board talk; the 7 remaining are general chess
+  principles ("use the opponent's thinking time to develop ideas rather than
+  calculating"). The distillation had already stripped the parasocial layer.
+  Detector proven non-vacuous: it fires on "welcome back to the speedrun",
+  "smash that like button and subscribe", "shout out to my patreon", "let me
+  know in the comments", and correctly misses "the knight goes to d5".
+- **The real reason they stay out** is the one that was already locked: the play
+  surfaces take exact-position narration SOLELY from the hand-authored,
+  board-truth-verified voiced corpus, and ~3.8% of farmed position-keyed notes
+  are MIS-ANCHORED — filed at the right position, prose about a different one.
+  That defect is fluent, internally consistent, and true somewhere else, so no
+  amount of reading catches it. "Not garbage" was never the bar; board-truth is.
+- 🔴 **The one number that would reopen this, and it has never been run:** how
+  many of the 1,282 survive board verification against their own `lineSan`. That
+  is the honest decision input, and it is a measurement rather than a judgement.
+
 ## Next-session pickup
 
 0a. **ship-check hygiene before anything else (2026-09-19 evening):** run it
