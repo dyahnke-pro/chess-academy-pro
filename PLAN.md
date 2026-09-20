@@ -6,6 +6,89 @@
 
 # PLAN — closing the loop (2026-09-18)
 
+## 🎯 WO-LOOP-01 — PROVE THE ONE-LINE DEFINITION ON PROD (David 2026-09-20: "i want to get the main concept of the app working" → "full plan mapped out. then execute it. all code done first in one go, then audit following")
+
+**The concept:** the coach learns you, and what it learned changes what it says
+next. Every half of that loop is built and gated IN ISOLATION (record → spine →
+ranker → narration → drill → evidence). Nobody has ever shown a real student's
+SECOND game sounding different because of their FIRST. That demonstration is the
+main concept, and it does not exist. This WO builds the one wire that is still
+missing and the one instrument that measures the whole sentence.
+
+**Scope, stated so it cannot creep:** the RED direction only — "you keep doing X,
+so I name it and teach it harder". GREEN ("you got better, so I go quiet") needs
+repeated held evidence and is not provable in one session. Out of scope and owned
+elsewhere tonight: #21 (another session, `stockfishEngine` / `gameAnalysisService`
+/ `engineLifecycle` / the census tool — NOT touched here).
+
+**Phase 0 — this plan (committed locally first; pushed WITH the code, once, so the
+other session's running audits do not eat a mid-run deploy).**
+
+**Phase 1 — context (all four levels, before a line of code).**
+I: the foundation (the loop, capability parity, algo-based). II: this file —
+A-NEW landed the spine rows (`fundamental:<id>`, with provenance) and left
+`matchFundamental` with ZERO production callers; E.0 measured the recording
+half's coverage gap (attributePrinciples attributed none on 06wNUWaA). III:
+`surface-map.mjs --changed` on every file touched. IV: read `coachFeatureService`
+at the fundamentals-first site (~:1697), `seenFundamentals` (~:1177),
+`attributePrinciples` (~:1441), the aggregate (~:4281); `weaknessSpine`
+`aggregateFundamentals` + `WeaknessProvenance`; `weaknessSignal.matchFundamental`;
+`positionFacts:565` (Learn's spine join); `reviewFacetRank` ranks; the review
+audit's game seeding + listener helpers; `audit-fundamentals-tab-prod`'s Dexie
+seeding.
+
+**Phase 2 — code, all at once.**
+1. **ONE computer, `src/services/recurrence.ts` (leaf):** given the spine signals
+   and a `FundamentalId` (or a tactic pattern id), return
+   `{ count, games, lastMet: { opponent, daysAgo } | null, ordinal }` from the
+   `fundamental:<id>` row's count + provenance — or null when the row is absent
+   or count < 2. Null is silence; nothing is invented. Deterministic, no rating,
+   no LLM. Gate: `recurrence.test.ts`, negative-controlled (no row → null;
+   count 1 → null; unknown id → null; provenance-less row → count without
+   `lastMet`).
+2. **REVIEW consumer (the owed A-NEW wire):** at the fundamentals-first site,
+   when the ply's attributed fundamental has a recurrence, the lead sentence
+   gains it — "This recurs for you: your third loose piece across two games —
+   you last met it against Svidler, 17 days ago." Phrasing ROTATED on the ply
+   (`rotateStem`), facts fixed. Ranked through the existing door, never a new
+   branch; the retrospective register.
+3. **LEARN consumer (capability parity — name the sibling):** the live lane
+   already boosts on `matchTacticPattern` / `matchClauseKind` at
+   `positionFacts:565`. Where that join fires on a spoken fact, the same
+   computer appends the recurrence clause in the present-tense register ("you
+   have walked past this pin twice before"). Same computer, two registers, per
+   the two-register law.
+4. **THE INSTRUMENT, `scripts/audit-loop-closes-prod.mjs`** (3-instrument,
+   muted, vacuity-checked, real pipeline): CONTROL — fresh device, seed real
+   game B unanalyzed, open its review, capture every narrated line. LOOP —
+   fresh device, seed real game A (a game whose student drops a loose piece),
+   open its review and let the sweep RECORD (assert the `misconceptionTags` row
+   with `fundamentalId` landed — RECORDED is its own row, separate from
+   SPOKEN), then seed game B and open it. Rows: A recorded; the spine carries
+   the `fundamental:<id>` row; B's tape DIFFERS from control at the concept
+   ply; the recurrence sentence names a count ≥ 2 and a real game; every other
+   ply identical (the delta is the loop, not noise); muted. Prints both tapes.
+   Registered in AUDIT_INDEX + the CLAUDE.md matrix.
+5. **Gates:** unit gates above; `coachFeatureService` gate that the recurrence
+   clause appears only with a recurrence (negative control: fresh profile →
+   the old sentence, unchanged).
+
+**Phase 3 — the local gates, then ONE push.** Touched-suite vitest, `npm run
+typecheck`, lint on changed files, `surface-map --changed` + `--verify`,
+`state-of-build --verify`, `audit-vacuity-check` on the new script. Commit all,
+merge origin, push once, poll the bundle for the new script's chunk.
+
+**Phase 4 — the audit, sequential, nothing beside it, after the other session's
+audits are idle:** `audit-loop-closes-prod` (control then loop), then the
+standing pair (Learn, review). Report the TAPES, not the row count.
+
+**The fork that ends the session honestly:** if phase 4 shows game A RECORDED
+and the spine row present but B's tape does not change, the wire is not the
+sentence — it is the deciding computer's need term, and that is a second
+session. The instrument will say which world we are in; the plan does not guess.
+
+**Status:** Phase 0 ✅ · Phase 1 ⏳ · Phase 2 ☐ · Phase 3 ☐ · Phase 4 ☐
+
 
 ## THE CRITICAL MOMENT — one computer, two registers (design, 2026-09-18)
 
