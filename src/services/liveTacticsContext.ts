@@ -55,6 +55,12 @@ import { conceptForBoard } from './conceptEngine';
  *                        `getTacticLookahead`. David's call: 1-2
  *                        plies for beginners, 4 for intermediate+.
  */
+// The identity check belongs beside the builder it protects: a surface asks
+// "is this package about my board" where it asks for the package, not from a
+// second fact module. Re-exported so CoachTeachPage imports ONE module here
+// (`surfaceComposition.scan` ceiling, 2026-09-20).
+export { tacticsAreFreshFor } from './tacticsContextIdentity';
+
 export function buildTacticsLiveContext(
   fen: string,
   analysis: StockfishAnalysis | null,
