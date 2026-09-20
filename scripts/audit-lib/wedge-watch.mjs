@@ -15,8 +15,19 @@
  *     could not fire because it called `locator.count()`, which takes NO
  *     timeout, on the wedged page BEFORE its own check. Every read here is
  *     raced to a fallback.
- *  2. **Keep a wall-clock deadline.** It is the only part that survives a
- *     failure mode nobody has imagined yet.
+ *  2. **Keep a wall-clock deadline — and make sure the deadline can actually be
+ *     REACHED.** This is the deceptive half, found by the focused-noyce session
+ *     reading its own audit after mine: the common
+ *     `while (Date.now() - t0 < ms) { if (await fn()) return true; … }` poll
+ *     evaluates its deadline only BETWEEN iterations, so a predicate that never
+ *     settles means the loop never returns to its own condition. It reads as a
+ *     bounded 60-second wait and is unbounded against a wedged renderer. A
+ *     `try/catch` around the read does not save it either — a catch handles a
+ *     THROW, and a wedge never throws. Measured the same day: 18 such call
+ *     sites in the review audit, 9 in the loop audit, plus three audit-lib
+ *     helpers. Use `until` below, which races each predicate against the
+ *     REMAINING budget, and keep `overdue()` separate from `observe()` so the
+ *     caller checks the clock on every poll rather than trusting the loop.
  */
 
 /** Race a page read against a deadline so a wedged renderer cannot hang it. */
@@ -64,4 +75,25 @@ export function wedgeWatch({ unreadableLimit = 30, deadlineMs = 180_000, label =
     get reason() { return reason; },
     get consecutive() { return consecutive; },
   };
+}
+
+/**
+ * `until`, with a deadline that the failure CANNOT outlive.
+ *
+ * Same contract as the hand-rolled version every audit carries — poll `fn`
+ * every `step` ms, return true as soon as it is truthy, false at `ms` — except
+ * each call is raced against the REMAINING budget, so a predicate that hangs
+ * on a wedged page ends the wait instead of ending the run. Racing against the
+ * remaining time rather than a fixed slice matters: a legitimately slow read
+ * (a cold analysis, a 90s generation) still gets all the time it is owed.
+ */
+export async function until(fn, ms, step = 400) {
+  const t0 = Date.now();
+  for (;;) {
+    const left = ms - (Date.now() - t0);
+    if (left <= 0) return false;
+    if (await raced(Promise.resolve().then(fn), false, left)) return true;
+    if (ms - (Date.now() - t0) <= 0) return false;
+    await new Promise((r) => setTimeout(r, step));
+  }
 }

@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error — plain .mjs audit helper, no types by design
-import { raced, wedgeWatch } from '../../scripts/audit-lib/wedge-watch.mjs';
+import { raced, wedgeWatch, until } from '../../scripts/audit-lib/wedge-watch.mjs';
 
 describe('raced — a read can never hang the detector', () => {
   it('returns the fallback when the read never settles', async () => {
@@ -48,5 +48,35 @@ describe('wedgeWatch — a run of dead reads is a wedge, a single one is not', (
     const w = wedgeWatch({ deadlineMs: -1, label: 'walk' });
     w.observe(true, 'ply 1');
     expect(w.overdue()).toContain('deadline');
+  });
+});
+
+describe('until — the deadline must survive a predicate that never settles', () => {
+  it('returns false at the deadline when the predicate hangs forever', async () => {
+    // The hand-rolled `while (Date.now() - t0 < ms)` poll every audit carries
+    // checks its deadline only BETWEEN iterations, so this case hangs the run
+    // for as long as the page is wedged. 18 such call sites in one audit.
+    const t0 = Date.now();
+    const out = await until(() => new Promise(() => { /* never settles */ }), 300, 50);
+    const took = Date.now() - t0;
+    expect(out).toBe(false);
+    expect(took).toBeGreaterThanOrEqual(250);
+    expect(took).toBeLessThan(3000);
+  });
+  it('still returns true as soon as the predicate is satisfied', async () => {
+    let n = 0;
+    expect(await until(() => ++n >= 3, 5000, 10)).toBe(true);
+    expect(n).toBe(3);
+  });
+  it('gives a legitimately slow predicate the time it is owed', async () => {
+    // Raced against the REMAINING budget, not a fixed slice — a cold analysis
+    // that takes longer than one step must not be cut off.
+    const slow = () => new Promise((r) => setTimeout(() => r(true), 200));
+    expect(await until(slow, 2000, 20)).toBe(true);
+  });
+  it('returns false without calling the predicate when no budget remains', async () => {
+    let called = 0;
+    expect(await until(() => { called += 1; return true; }, 0, 10)).toBe(false);
+    expect(called).toBe(0);
   });
 });

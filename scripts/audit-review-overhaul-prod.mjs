@@ -34,7 +34,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
-import { raced as racedRead, wedgeWatch } from './audit-lib/wedge-watch.mjs';
+import { raced as racedRead, wedgeWatch, until as sharedUntil } from './audit-lib/wedge-watch.mjs';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
@@ -158,7 +158,13 @@ const has = async (p, sel) => raced(p.locator(sel).count().then((n) => n > 0), f
 // Every read is short-fused: on a starved box a default 30s innerText wait
 // inside an 80-iteration nav loop turned a slow page into a 3-hour "hang".
 const txt = async (p, sel) => { try { const l = p.locator(sel).first(); return (await l.count()) ? (await l.innerText({ timeout: 3000 })).replace(/\s+/g, ' ').trim() : ''; } catch { return ''; } };
-const until = async (fn, ms, step = 400) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await fn()) return true; await new Promise((r) => setTimeout(r, step)); } return false; };
+// 🔒 NOT the hand-rolled `while (Date.now() - t0 < ms)` poll this file used to
+// carry. That shape evaluates its deadline only BETWEEN iterations, so a
+// predicate that never settles on a wedged page means the loop never returns to
+// its own condition — it READS as a bounded wait and is unbounded in exactly
+// the failure it exists to bound. 18 call sites below depended on it. The
+// shared version races each predicate against the REMAINING budget.
+const until = sharedUntil;
 
 async function pullAuditStream(sinceMs) {
   const secret = process.env.AUDIT_STREAM_SECRET || '';
