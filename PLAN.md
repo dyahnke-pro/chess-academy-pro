@@ -126,8 +126,28 @@ WROTE (so "nothing to record" and "the sweep never ran" can never be confused
 again), iterates B candidates until one shares a fundamental with A, and sources
 LOSING games first (a GM who won has nothing to record).
 
-**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ (pushed 778c872d6) ·
-Phase 4 run 1 ✅ measured, ❌ loop not yet closed on prod · run 2 ⏳
+**RUN 2 (bundle `index-FRb8wK0Z`, 96f49e2e6, 03:45) — THE RECORD HALF FIRES ON PROD.**
+`AUDIT_GAME_A=HSJKsqHS` (Svidler–Carlsen, student Black): the engine flagged
+24...Nf4+ a blunder, and the sweep wrote **1 misconception row, `loose-piece`,
+from the review's first open** — row A ✅. Before the fix that was 0 on every
+review-first game the app has ever analysed. Then the pair: three GM games for B
+gave Black no second loose piece (0, 0, and 2 flagged king moves that attributed
+NOTHING — the E.0 `other` gap, n=3 now) → row P ❌, verdict PAIR UNUSABLE, the
+recurrence sentence still unproven on prod. The instrument named the reason: **GM
+games are the wrong population.** Run 3 sources AMATEUR games (explorer
+`source=lichess`, 1600–2000 blitz/rapid, `recentGames`, losing side first) —
+the app's actual users, whose games carry the fundamentals this measures.
+`AUDIT_SOURCE=masters` keeps the old population.
+
+Also seen twice tonight, recorded for #21's owner (the other session): the review
+audit WEDGES on the reopen after the dive with the multi engine demoted cleanly
+to single (no storm, workers=1) and the walk never leaving ply 0 — node at 0%,
+Chromium at 100%, 50 min. That is the "wedge behind the storm", n=2 (their run
++ mine, game jMVMo1Ua). Not this WO's file; the standing review re-run is owed
+once it is fixed.
+
+**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ (778c872d6 + 96f49e2e6) ·
+Phase 4: RECORDED ✅ on prod · SPOKEN-differently ⏳ run 3 (amateur pair)
 
 
 ## THE CRITICAL MOMENT — one computer, two registers (design, 2026-09-18)

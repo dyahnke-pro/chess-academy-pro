@@ -43,10 +43,18 @@ import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
 import { readWalkPly } from './audit-lib/review-explore.mjs';
-import { SEEDS, pickRealGame, fetchGameById } from './audit-lib/source-real-game.mjs';
+import { SEEDS, pickRealGame, fetchGameById, movetextOf, verifyLegal } from './audit-lib/source-real-game.mjs';
 
 const BASE = (process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app').replace(/\/$/, '');
 const STUDENT = process.env.AUDIT_STUDENT || 'black';
+// THE POPULATION IS AMATEURS (run 2, 2026-09-20). Three GM games in a row gave
+// the student no second loose piece, and the one with flagged plies attributed
+// nothing (two king moves — the known `other` gap). The app's real users are
+// 1600–2000 club players, whose games are full of exactly the fundamentals this
+// instrument needs. `AUDIT_SOURCE=masters` keeps the old population.
+const SOURCE = process.env.AUDIT_SOURCE || 'lichess';
+const RATINGS = process.env.AUDIT_RATINGS || '1600,1800,2000';
+const MAX_B_CANDIDATES = Number(process.env.AUDIT_B_CANDIDATES || 5);
 const RECUR_RE = /keeps recurring in your games — .+?, the \w+ game now/i;
 const log = (s) => console.log(s);
 const until = async (fn, ms, step = 500) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await fn()) return true; await new Promise((r) => setTimeout(r, step)); } return false; };
@@ -54,6 +62,30 @@ const has = async (p, sel) => { try { return (await p.locator(sel).count()) > 0;
 
 const results = [];
 const add = (id, pass, detail) => { results.push({ id, pass, detail }); log(`  ${pass ? '✅' : '❌'} ${id}: ${detail}`); };
+
+/** A real AMATEUR game for a seed, through the app's own explorer proxy (G3).
+ *  Prefers games the student side LOST — a losing player has slips to record.
+ *  Same legality + ply gates as the masters picker. */
+async function pickAmateurGame(base, seed, exclude, bounds = { min: 30, max: 110 }) {
+  const url = `${base}/api/lichess-explorer?source=lichess&ratings=${RATINGS}&speeds=blitz,rapid&play=${seed.play}`;
+  const r = await fetch(url); if (!r.ok) throw new Error(`${r.status} ${url}`);
+  const ex = await r.json();
+  const games = [...(ex.recentGames || []), ...(ex.topGames || [])].filter((g) => g.id && !exclude.has(g.id));
+  const lost = (g) => (g.winner === 'white' ? 'white' : g.winner === 'black' ? 'black' : 'draw') !== seed.student && g.winner;
+  const ordered = [...games.filter(lost), ...games.filter((g) => !lost(g))];
+  for (const g of ordered) {
+    try {
+      const rr = await fetch(`${base}/api/lichess-game-export?id=${g.id}`); if (!rr.ok) continue;
+      const raw = await rr.text();
+      const legal = verifyLegal(movetextOf(raw));
+      if (!legal || legal.plyCount < bounds.min || legal.plyCount > bounds.max) continue;
+      exclude.add(g.id);
+      const res = g.winner === 'white' ? '1-0' : g.winner === 'black' ? '0-1' : '1/2-1/2';
+      return { id: g.id, white: g.white?.name ?? '?', black: g.black?.name ?? '?', movetext: legal.canonical, plyCount: legal.plyCount, result: res, studentSide: seed.student, seedName: `${seed.name} (amateur ${g.white?.rating ?? '?'}/${g.black?.rating ?? '?'})` };
+    } catch { /* next */ }
+  }
+  return null;
+}
 
 // ── game sourcing (G3: real games through the app's own explorer proxy) ────
 async function sourcePair() {
@@ -71,10 +103,15 @@ async function sourcePair() {
   // Losing games first: a student who LOST has flagged plies to record; a GM who won rarely does.
   const seeds = SEEDS.filter((s) => s.student === STUDENT).sort((a, b) => Number(b.want !== b.student) - Number(a.want !== a.student));
   const picked = [];
+  const pick = SOURCE === 'masters' ? pickRealGame : pickAmateurGame;
   for (const seed of seeds) {
-    const g = await pickRealGame(BASE, seed, exclude).catch(() => null);
-    if (g) picked.push(g);
-    if (picked.length >= 4) break;
+    // amateur seeds are deep in games: take up to two per opening
+    for (let k = 0; k < (SOURCE === 'masters' ? 1 : 2); k++) {
+      const g = await pick(BASE, seed, exclude).catch(() => null);
+      if (g) picked.push(g);
+      if (picked.length >= 2 + MAX_B_CANDIDATES) break;
+    }
+    if (picked.length >= 2 + MAX_B_CANDIDATES) break;
   }
   if (picked.length < 2 && !(a && picked.length >= 1)) throw new Error('could not source two real games from the explorer');
   return { a: a ?? picked[0], b: b ?? picked[a ? 0 : 1], pool: picked.slice(a ? 1 : 2) };
@@ -177,13 +214,13 @@ const run = async () => {
   const outDir = `audit-reports/loop-closes-${stamp}`;
   mkdirSync(outDir, { recursive: true });
 
-  log(`[loop] sourcing two real games (student=${STUDENT}) through ${BASE}`);
+  log(`[loop] sourcing real ${SOURCE === 'masters' ? 'MASTER' : `AMATEUR (${RATINGS})`} games (student=${STUDENT}) through ${BASE}`);
   const { a: A, b: B, pool } = await sourcePair();
   const DAY = 24 * 60 * 60 * 1000;
   const dateOf = (ms) => { const d = new Date(ms); return `${d.getUTCFullYear()}.${String(d.getUTCMonth() + 1).padStart(2, '0')}.${String(d.getUTCDate()).padStart(2, '0')}`; };
   A.date = dateOf(Date.now() - 17 * DAY);
   B.date = dateOf(Date.now() - 1 * DAY);
-  log(`[game A] ${A.white} vs ${A.black} ${A.result} (${A.plyCount} plies, id=${A.id})`);
+  log(`[game A] ${A.white} vs ${A.black} ${A.result} (${A.plyCount} plies, id=${A.id}) ${A.seedName ?? ''}`);
   log(`[game B] ${B.white} vs ${B.black} ${B.result} (${B.plyCount} plies, id=${B.id})`);
   log(`[game] REPRODUCE: AUDIT_GAME_A=${A.id} AUDIT_GAME_B=${B.id} AUDIT_STUDENT=${STUDENT} node scripts/audit-loop-closes-prod.mjs  (a swapped B candidate is printed below if used)`);
   const oppA = STUDENT === 'white' ? A.black : A.white;
@@ -251,7 +288,7 @@ const run = async () => {
   let cB1 = null; let recB = []; let idsB = new Set(); let shared = [];
   let controlTapeCur = controlTape;
   const candidates = [B, ...pool];
-  for (let k = 0; k < candidates.length && k < 3; k++) {
+  for (let k = 0; k < candidates.length && k < 1 + MAX_B_CANDIDATES; k++) {
     Bcur = candidates[k];
     if (k > 0) { Bcur.date = B.date; gidB1 = `loop-b${k}-${Date.now()}`; log(`  [loop] B candidate ${k + 1}: ${Bcur.white} vs ${Bcur.black} (id=${Bcur.id})`); }
     await seedGame(loop.page, gidB1, Bcur);
@@ -266,7 +303,7 @@ const run = async () => {
     if (shared.length > 0 || idsA.size === 0) break;
     if (k > 0 || candidates.length > 1) {
       // a swapped B needs its own control tape
-      if (k + 1 < candidates.length && k + 1 < 3) {
+      if (k + 1 < candidates.length && k + 1 < 1 + MAX_B_CANDIDATES) {
         const ctl = await newDevice();
         const gidC = `loop-control${k + 1}-${Date.now()}`;
         await seedGame(ctl.page, gidC, candidates[k + 1]);
