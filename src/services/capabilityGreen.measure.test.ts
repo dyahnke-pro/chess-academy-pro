@@ -42,7 +42,8 @@ import {
   recordCapabilityEvidence,
   getCapabilityProfile,
 } from './capabilityEvidence';
-import { capabilityProven, HELD_FOR_PROVEN } from './capabilityEvidence';
+import { capabilityProven, summariseEvidence, HELD_FOR_PROVEN } from './capabilityEvidence';
+import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 
 /** A real amateur game, committed so the census never depends on the network.
  *  lichess MxLHuel4 — the game WO-LOOP-01 used to prove the red direction, so
@@ -358,6 +359,47 @@ describe('GREEN — can real play prove a capability?', () => {
       console.log(`[green-seq] after game ${gi + 1} (${id}): PROVEN ${proven.join(', ') || 'none'} · RED ${red.join(', ') || 'none'}`);
     }
     proc.kill();
+
+    // ── CALIBRATION ────────────────────────────────────────────────
+    // The shipped bar is two numbers, and picking them by taste is how the
+    // first version got 3-holds-in-one-game. Replay THESE rows — one real
+    // student, five real games, real engine grades — through the REAL rule at
+    // a range of thresholds, and read the two quantities that trade off
+    // against each other: how many tags ever go green (a bar nothing clears
+    // teaches nothing) and how many of those FLIP afterwards (a bar that
+    // flips told the student they were fine and then watched them fail).
+    const allRows = await db.capabilityEvidence.toArray() as CapabilityEvidenceRecord[];
+    const byGame = new Map<string, CapabilityEvidenceRecord[]>();
+    for (const r of allRows) {
+      const g = r.sourceGameId ?? 'unknown';
+      byGame.set(g, [...(byGame.get(g) ?? []), r]);
+    }
+    const order = ids.slice(0, WANT).filter((g) => byGame.has(g));
+    const sweep: { minStreak: number; minGames: number; proven: number; flips: number }[] = [];
+    for (const minStreak of [3, 4, 5, 6]) {
+      for (const minGames of [2, 3]) {
+        const provenAt = new Map<string, number>();
+        let flipCount = 0;
+        const seen: CapabilityEvidenceRecord[] = [];
+        order.forEach((g, gi) => {
+          const rowsThisGame = byGame.get(g) ?? [];
+          // a break in this game, on a tag already proven BEFORE it, is a flip
+          for (const r of rowsThisGame) {
+            if (r.outcome === 'broken' && !r.prompted
+              && provenAt.has(r.tag) && provenAt.get(r.tag)! < gi) flipCount += 1;
+          }
+          seen.push(...rowsThisGame);
+          const prof = summariseEvidence(seen);
+          for (const [tag, e] of prof) {
+            if (capabilityProven(e, { minStreak, minGames }) && !provenAt.has(tag)) provenAt.set(tag, gi);
+          }
+        });
+        sweep.push({ minStreak, minGames, proven: provenAt.size, flips: flipCount });
+      }
+    }
+    // eslint-disable-next-line no-console
+    console.log(`[green-cal] ${sweep.map((r) => `${r.minStreak}h/${r.minGames}g → ${r.proven} proven, ${r.flips} flips`).join(' | ')}`);
+
     // eslint-disable-next-line no-console
     console.log(
       `[green-seq] FLIPS (proven then broken by the same student): ${flips.length}` +
@@ -365,7 +407,7 @@ describe('GREEN — can real play prove a capability?', () => {
     );
     if (!existsSync('audit-reports')) mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/capability-green-sequence.json', JSON.stringify({
-      measuredAt: new Date().toISOString(), depth: DEPTH, heldForProven: HELD_FOR_PROVEN, seat, timeline, flips,
+      measuredAt: new Date().toISOString(), depth: DEPTH, heldForProven: HELD_FOR_PROVEN, seat, timeline, flips, sweep,
     }, null, 2));
   }, 40 * 60 * 1000);
 });

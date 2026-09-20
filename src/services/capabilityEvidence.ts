@@ -133,9 +133,52 @@ export interface CapabilityProfileEntry {
  *    Hence a RECENT STREAK rather than a lifetime count: a break resets the
  *    streak, it does not close the door.
  */
-export function capabilityProven(e: CapabilityProfileEntry | undefined): boolean {
+export function capabilityProven(
+  e: CapabilityProfileEntry | undefined,
+  /** Thresholds, defaulted to the shipped bar. Parameterised ONLY so a
+   *  calibration pass can sweep the real rule rather than re-deriving it —
+   *  a measurement that re-implements what it measures measures itself.
+   *  Production callers pass nothing. */
+  bar: { minStreak?: number; minGames?: number } = {},
+): boolean {
   if (!e) return false;                                   // GREY — never asked is never proven
-  return e.heldStreak >= HELD_FOR_PROVEN && e.streakGames >= PROVEN_MIN_GAMES;
+  return e.heldStreak >= (bar.minStreak ?? HELD_FOR_PROVEN)
+    && e.streakGames >= (bar.minGames ?? PROVEN_MIN_GAMES);
+}
+
+/**
+ * The profile as a PURE function of rows — the same walk `getCapabilityProfile`
+ * does, minus the Dexie read, so a calibration can replay real recorded
+ * evidence under different thresholds without touching the engine or the DB.
+ */
+export function summariseEvidence(all: CapabilityEvidenceRecord[]): CapabilityProfile {
+  const profile: CapabilityProfile = new Map();
+  const rows = [...all].sort((a, b) => a.recordedAt - b.recordedAt);
+  const history = new Map<MisconceptionTagId, CapabilityEvidenceRecord[]>();
+  for (const r of rows) {
+    if (r.prompted) continue;
+    if (!isMisconceptionTagId(r.tag)) continue;
+    const e = profile.get(r.tag) ?? { held: 0, broken: 0, heldStreak: 0, streakGames: 0 };
+    if (r.outcome === 'held') e.held += 1; else e.broken += 1;
+    profile.set(r.tag, e);
+    const h = history.get(r.tag) ?? [];
+    h.push(r);
+    history.set(r.tag, h);
+  }
+  for (const [tag, h] of history) {
+    const e = profile.get(tag);
+    if (!e) continue;
+    const games = new Set<string>();
+    let streak = 0;
+    for (let i = h.length - 1; i >= 0; i--) {
+      if (h[i].outcome !== 'held') break;
+      streak += 1;
+      if (h[i].sourceGameId) games.add(h[i].sourceGameId as string);
+    }
+    e.heldStreak = streak;
+    e.streakGames = games.size;
+  }
+  return profile;
 }
 export type CapabilityProfile = Map<MisconceptionTagId, CapabilityProfileEntry>;
 
@@ -275,52 +318,11 @@ export async function recordCapabilityEvidence(args: {
  * missing tag as either mastery or a hole (absent ≠ silent).
  */
 export async function getCapabilityProfile(): Promise<CapabilityProfile> {
-  const profile: CapabilityProfile = new Map();
   try {
-    const all = await db.capabilityEvidence.toArray();
-    // Oldest first, so "the streak" is a walk backwards from the newest row.
-    // `recordedAt` is stamped by the writer; rows sharing a millisecond keep
-    // their insertion order, which is the order they happened in.
-    const rows = [...all].sort((a, b) => a.recordedAt - b.recordedAt);
-    const history = new Map<MisconceptionTagId, CapabilityEvidenceRecord[]>();
-    for (const r of rows) {
-      // A PROMPTED ROW IS NEITHER. The student answered a question the coach
-      // had already answered for them, so it proves nothing either way — and
-      // counting it would let the app's own teaching mark a capability proven
-      // and then go quiet about it. Skipped entirely rather than recorded as
-      // `broken`, because being told is not failing.
-      //
-      // Legacy rows (written before this field existed) read as unprompted,
-      // which is what they were: nothing prompted back then.
-      // Legacy rows have no `prompted` field; `undefined` is falsy and reads
-      // as unprompted, which is exactly what they were — nothing prompted
-      // before this existed.
-      if (r.prompted) continue;
-      if (!isMisconceptionTagId(r.tag)) continue;
-      const e = profile.get(r.tag) ?? { held: 0, broken: 0, heldStreak: 0, streakGames: 0 };
-      if (r.outcome === 'held') e.held += 1; else e.broken += 1;
-      profile.set(r.tag, e);
-      const h = history.get(r.tag) ?? [];
-      h.push(r);
-      history.set(r.tag, h);
-    }
-    // THE RECENT STREAK. Walk each tag's history backwards while the answers
-    // are clean; count the distinct games those answers span.
-    for (const [tag, h] of history) {
-      const e = profile.get(tag);
-      if (!e) continue;
-      const games = new Set<string>();
-      let streak = 0;
-      for (let i = h.length - 1; i >= 0; i--) {
-        if (h[i].outcome !== 'held') break;
-        streak += 1;
-        if (h[i].sourceGameId) games.add(h[i].sourceGameId as string);
-      }
-      e.heldStreak = streak;
-      e.streakGames = games.size;
-    }
-  } catch { /* no store yet — an empty profile is the honest answer */ }
-  return profile;
+    return summariseEvidence(await db.capabilityEvidence.toArray());
+  } catch {
+    return new Map();   // no store yet — an empty profile is the honest answer
+  }
 }
 
 /** @deprecated Renamed to `recordCapabilityEvidence` — it no longer only
