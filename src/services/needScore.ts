@@ -288,8 +288,8 @@ function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: numb
     // RECENT clean streak spanning at least two distinct games. GREY (absent)
     // and RED (a break inside the streak) both fail it, so the three states
     // still fall out of the one call rather than out of three branches here.
-    if (!capabilityProven(e)) continue;
-    proven.push(`${tag} (${e!.heldStreak} held in a row across ${e!.streakGames} games)`);
+    if (!e || !capabilityProven(e)) continue;
+    proven.push(`${tag} (${e.heldStreak} held in a row across ${e.streakGames} games)`);
   }
   if (proven.length === 0) return { score: 0, reason: null };
   // One bar's worth of quiet per proven capability, so two independent proofs

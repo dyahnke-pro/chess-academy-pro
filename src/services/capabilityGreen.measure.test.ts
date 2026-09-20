@@ -91,7 +91,6 @@ describe('GREEN — can real play prove a capability?', () => {
       const posedPlies = plies.filter((p) => p.posed.length > 0);
       const tags = new Map<string, number>();
       for (const p of posedPlies) for (const t of p.posed) tags.set(t, (tags.get(t) ?? 0) + 1);
-      // eslint-disable-next-line no-console
       console.log(
         `[pose-census ${seat}] ${posedPlies.length}/${plies.length} student plies posed something; ` +
           `tags: ${[...tags.entries()].map(([t, n]) => `${t}x${n}`).join(', ') || 'NONE'}`,
@@ -106,7 +105,6 @@ describe('GREEN — can real play prove a capability?', () => {
     const seat = 'white' as const;
     const posed = poseCensus(sans, seat).filter((p) => p.posed.length > 0);
     if (posed.length < HELD_FOR_PROVEN) {
-      // eslint-disable-next-line no-console
       console.log(`[bar] only ${posed.length} posed plies in the fixture — cannot reach ${HELD_FOR_PROVEN}`);
       return;
     }
@@ -126,7 +124,6 @@ describe('GREEN — can real play prove a capability?', () => {
     }
     const profile = await getCapabilityProfile();
     const proven = [...profile.entries()].filter(([, e]) => capabilityProven(e));
-    // eslint-disable-next-line no-console
     console.log(
       `[bar] profile after ${HELD_FOR_PROVEN} clean answers: ` +
         `${[...profile.entries()].map(([t, e]) => `${t} ${e.held}h/${e.broken}b`).join(', ') || 'EMPTY'} ` +
@@ -143,7 +140,6 @@ describe('GREEN — can real play prove a capability?', () => {
     const npmCli = 'node_modules/stockfish/scripts/cli.js';
     const useSys = existsSync(sysBin);
     if (!useSys && !existsSync(npmCli)) {
-      // eslint-disable-next-line no-console
       console.log('[green-measure] no engine (no system binary, no npm build) — skipped honestly, NOT green');
       return;
     }
@@ -196,7 +192,6 @@ describe('GREEN — can real play prove a capability?', () => {
       for (const g of r?.recentGames ?? []) if (g.id && !ids.includes(g.id)) ids.push(g.id);
     }
     if (ids.length === 0) {
-      // eslint-disable-next-line no-console
       console.log('[green-measure] explorer unreachable — skipped honestly, NOT green');
       proc.kill();
       return;
@@ -234,7 +229,6 @@ describe('GREEN — can real play prove a capability?', () => {
         const proven = [...profile.entries()].filter(([, e]) => capabilityProven(e)).map(([tag]) => ({ tag }));
         const blockedByOneBreak = rows.filter((r) => r.held >= HELD_FOR_PROVEN && r.broken > 0);   // lifetime view, for contrast
         perGame.push({ id, seat, plies: sans.length, posedPlies, rows, proven: proven.map((r) => r.tag) });
-        // eslint-disable-next-line no-console
         console.log(
           `[green-measure] ${id} ${seat}: posed ${posedPlies} plies · ` +
             `${rows.map((r) => `${r.tag} ${r.held}h/${r.broken}b`).join(', ') || 'no rows'} · ` +
@@ -248,7 +242,6 @@ describe('GREEN — can real play prove a capability?', () => {
     writeFileSync('audit-reports/capability-green.json', JSON.stringify({
       measuredAt: new Date().toISOString(), depth: DEPTH, heldForProven: HELD_FOR_PROVEN, perGame,
     }, null, 2));
-    // eslint-disable-next-line no-console
     console.log(`[green-measure] wrote audit-reports/capability-green.json (${perGame.length} game-seats)`);
   }, 30 * 60 * 1000);
 
@@ -355,7 +348,6 @@ describe('GREEN — can real play prove a capability?', () => {
       const red = [...profile.entries()].filter(([, e]) => e.broken > 0).map(([t]) => t);
       for (const t of proven) if (!firstProvenAt.has(t)) firstProvenAt.set(t, gi);
       timeline.push({ game: id, proven, red });
-      // eslint-disable-next-line no-console
       console.log(`[green-seq] after game ${gi + 1} (${id}): PROVEN ${proven.join(', ') || 'none'} · RED ${red.join(', ') || 'none'}`);
     }
     proc.kill();
@@ -368,7 +360,7 @@ describe('GREEN — can real play prove a capability?', () => {
     // against each other: how many tags ever go green (a bar nothing clears
     // teaches nothing) and how many of those FLIP afterwards (a bar that
     // flips told the student they were fine and then watched them fail).
-    const allRows = await db.capabilityEvidence.toArray() as CapabilityEvidenceRecord[];
+    const allRows = await db.capabilityEvidence.toArray();
     // CACHE THE EVIDENCE. The engine pass above is ~10 minutes; every question
     // asked of these rows afterwards is pure computation. Writing them out is
     // what lets the bar be calibrated in seconds instead of re-graded.
@@ -403,10 +395,8 @@ describe('GREEN — can real play prove a capability?', () => {
         sweep.push({ minStreak, minGames, proven: provenAt.size, flips: flipCount });
       }
     }
-    // eslint-disable-next-line no-console
     console.log(`[green-cal] ${sweep.map((r) => `${r.minStreak}h/${r.minGames}g → ${r.proven} proven, ${r.flips} flips`).join(' | ')}`);
 
-    // eslint-disable-next-line no-console
     console.log(
       `[green-seq] FLIPS (proven then broken by the same student): ${flips.length}` +
         (flips.length ? ` — ${flips.map((f) => `${f.tag} (proven ${f.provenAfter} → broke ${f.brokenIn})`).join('; ')}` : ''),
@@ -478,7 +468,6 @@ describe('GREEN — can real play prove a capability?', () => {
       const r = run(minImp, 2, 2);
       table.push(`imp>=${minImp} → ${r.proven} proven, ${r.flippedTags} flipped (${r.flips} events)`);
     }
-    // eslint-disable-next-line no-console
     console.log(`[green-cal2] ${table.join(' | ')}`);
     // What the rows themselves look like, so a flat table can be read rather
     // than guessed at: if almost every hold sits at the floor, importance has
@@ -489,11 +478,9 @@ describe('GREEN — can real play prove a capability?', () => {
     // NO thresholds passed — so this asserts what a student actually gets,
     // not what a swept parameter would give them.
     const shipped = run(PROVEN_MIN_IMPORTANCE, HELD_FOR_PROVEN, 2);
-    // eslint-disable-next-line no-console
     console.log(`[green-shipped] ${shipped.proven} proven, ${shipped.flippedTags} flipped (${shipped.flips} events) over ${order.length} real games`);
     expect(shipped.flippedTags, 'the shipped bar declared a capability and then watched it fail').toBe(0);
 
-    // eslint-disable-next-line no-console
     console.log(`[green-cal2] held-row posedImportance: n=${imps.length} min=${imps[0]} p25=${pct(0.25)} p50=${pct(0.5)} p75=${pct(0.75)} max=${imps[imps.length - 1]}`);
   });
 });
