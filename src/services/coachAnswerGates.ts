@@ -31,7 +31,7 @@
 import { Chess } from 'chess.js';
 import { logAppAudit } from './appAuditor';
 import { validateBoardClaims, stripDisprovenSentences } from './boardClaimValidator';
-import { injectCandidateArrows, injectCandidateHighlights, type RankedCandidate } from './arrowEngine';
+import { injectCandidateArrows, injectCandidateHighlights, keySquareHighlightMarker, type RankedCandidate } from './arrowEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { stripUngroundedTacticSentences } from './tacticClaimValidator';
 import { stripDisprovenEvalSentences } from './evalClaimValidator';
@@ -420,15 +420,15 @@ export async function applyCandidateArrows(
 ): Promise<string> {
   if (!text.trim() || !fen) return text;
   try {
-    // injectCandidateArrows STRIPS every pre-existing [BOARD:] marker to
-    // re-derive the arrows fresh — which also drops any code-authored HIGHLIGHT
-    // markers the answer carried (the on-demand read's key squares, coupled from
-    // the computer per G0; David 2026-09-13 "highlights on all surfaces"). This
-    // is the arrow-DISPLAY pass, not a highlight gate, so preserve those markers
-    // across it and re-append if the pass didn't keep them. Without this the read
-    // spoke its key squares but the board never lit them on any coachService
-    // surface (chat / play / the global drawer).
-    const highlightMarkers = text.match(/\[BOARD:\s*highlight:[^\]]*\]/gi) ?? [];
+    // injectCandidateArrows STRIPS every pre-existing [BOARD:] marker —
+    // arrows AND highlights — and re-derives the arrows fresh. It must not
+    // preserve highlight markers by their text: a marker code wrote and a
+    // marker the LLM wrote are the same string, so a text-sniff cannot tell
+    // them apart (the 2026-09-13 preserve let an LLM highlight reach the
+    // board — G0). Code-authored highlights come back through a TYPED
+    // channel instead: `coachService.ask` re-appends the read's key squares
+    // from `consumeCoachKeySquares()` after this pass (see
+    // `appendKeySquareHighlights`).
     const { text: out, injected } = await injectCandidateArrows(text, fen, rankCandidatesAtFen, opts);
     if (injected.length > 0) {
       void logAppAudit({
@@ -440,13 +440,20 @@ export async function applyCandidateArrows(
         fen,
       });
     }
-    if (highlightMarkers.length > 0 && !/\[BOARD:\s*highlight:/i.test(out)) {
-      return `${out} ${highlightMarkers.join(' ')}`.trim();
-    }
     return out;
   } catch {
     return text; // never block the reply on an arrow fault
   }
+}
+
+/** Re-append the code-authored key-square highlight AFTER the arrow pass has
+ *  stripped every marker. `squares` comes from the typed record the grounded
+ *  answer set (`answer.keySquares` → `consumeCoachKeySquares`), never from
+ *  the text — that is what makes an LLM-written highlight unexpressible here.
+ *  No-op on an empty record. */
+export function appendKeySquareHighlights(text: string, squares: readonly string[] | null | undefined): string {
+  if (!squares || squares.length === 0) return text;
+  return `${text} ${keySquareHighlightMarker(squares)}`.trim();
 }
 
 /** Code-derived HIGHLIGHT markers for a coach answer — the highlight twin

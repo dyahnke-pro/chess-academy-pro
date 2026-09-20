@@ -29,6 +29,7 @@ vi.mock('../../services/voiceInputService', () => ({
 vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: (...args: unknown[]): Promise<string> => mockGetCoachChatResponse(...args) as Promise<string>,
   consumeCoachActionOffer: (): null => null,
+  consumeCoachKeySquares: (): null => null,
 }));
 
 const defaultProps = {

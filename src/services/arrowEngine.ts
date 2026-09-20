@@ -393,8 +393,13 @@ export function extractMentionedSquares(text: string): string[] {
 export function injectCandidateHighlights(text: string): { markers: string[]; squares: string[] } {
   const squares = extractMentionedSquares(text).slice(0, MAX_CANDIDATE_HIGHLIGHTS);
   if (squares.length === 0) return { markers: [], squares: [] };
-  return {
-    markers: [`[BOARD: highlight:${squares.map((s) => `${s}:yellow`).join(',')}]`],
-    squares,
-  };
+  return { markers: [keySquareHighlightMarker(squares)], squares };
+}
+
+/** THE one builder of a code-authored `[BOARD: highlight:…]` marker. Every
+ *  computed highlight (the on-demand read's key squares, the prose-named
+ *  squares above) is rendered through this so the marker grammar has a
+ *  single source; nothing else in `src/` spells the marker by hand. */
+export function keySquareHighlightMarker(squares: readonly string[]): string {
+  return `[BOARD: highlight:${squares.map((s) => `${s}:yellow`).join(',')}]`;
 }
