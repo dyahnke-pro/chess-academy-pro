@@ -1716,6 +1716,36 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### B. The instruments are not believable (a green here means nothing)
 
+0a. 📊 **WHERE THE USERS ACTUALLY STOP — measured on PostHog 2026-09-20, 62 real
+   App Store devices / 60 days (native, appstore, Cupertino + audit rows
+   excluded).** Route-level, which is the cut CLAUDE.md says to use because
+   `/coach/teach` emits no unique event of its own:
+
+   | route | users | note |
+   |---|---|---|
+   | `/` | 62 | everyone |
+   | `/openings` | 42 | but only **9** open an actual opening |
+   | `/coach/home` | 33 | |
+   | `/weaknesses` | 32 | needs their games |
+   | `/games/import` | 29 | but only **9** import |
+   | `/tactics` | 24 | |
+   | `/coach/teach` | 17 | |
+   | `/coach/play` | 13 | |
+   | `/coach/review` | 12 | only **3** produce review events |
+
+   **ONE diagnosis fits all of it: the loop needs the student's own games, and
+   only 9 of 62 ever get games in.** Weaknesses, review and the mistake drills
+   all sit behind that gate; everyone reaches the door and stops. 50 of the 62
+   used the app on exactly ONE day (avg 1.5 days active).
+   Ranked levers: (1) import completion 29→9, it gates everything; (2) openings
+   list → an actual opening 42→9; (3) review 12→3.
+   ⚠️ TWO CORRECTIONS to my own first cut, both from event lists that were too
+   narrow — do not repeat them: "44 users did nothing at all" was FALSE (18 of
+   them had the coach speaking to them), and "four devices have ever opened a
+   review" was FALSE (12 reached the route, 3 produced events). Count ROUTES
+   for surfaces, events only for actions. Caveat: 62 users, single-session
+   dominated, so this describes first impressions rather than sustained use.
+
 0. 🔴 **NEW 2026-09-20 14:05 — THE REVIEW WALK IS ~45% SLOWER AND NOW RUNS OUT
    OF BUDGET.** Two product-mode runs of `audit-review-overhaul-prod`, same
    pinned game (06wNUWaA, student=black), same machine, nothing else running:
