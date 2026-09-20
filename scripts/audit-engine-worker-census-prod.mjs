@@ -119,15 +119,27 @@ async function main() {
 
   // ── Instrument 1: the target census, event-driven, browser-wide ──────────
   const live = new Map();           // targetId → { url, t }
-  const created = [];               // { t, url, phase }
+  const created = [];               // { t, url, phase, targetId } — url is filled in when the runtime reports it
   const destroyed = [];
   let phase = 'boot';
   const cdp = await browser.newBrowserCDPSession();
+  const shortUrl = (u) => (u || '').split('/').pop().split('?')[0];
   cdp.on('Target.targetCreated', ({ targetInfo }) => {
     if (targetInfo.type !== 'worker') return;
-    const url = (targetInfo.url || '?').split('/').pop().split('?')[0];
+    const url = shortUrl(targetInfo.url);
     live.set(targetInfo.targetId, { url, t: Date.now() });
-    created.push({ t: Date.now(), url, phase });
+    created.push({ t: Date.now(), url, phase, targetId: targetInfo.targetId });
+  });
+  // A worker's URL is often EMPTY at creation and arrives on the next
+  // targetInfoChanged (measured 2026-09-19: the first census read {"":5}).
+  // Without this the engine's pthreads are unattributable and row A fails on a
+  // healthy app — the exact false-red this tool exists to prevent.
+  cdp.on('Target.targetInfoChanged', ({ targetInfo }) => {
+    if (targetInfo.type !== 'worker') return;
+    const url = shortUrl(targetInfo.url);
+    if (!url) return;
+    const l = live.get(targetInfo.targetId); if (l) l.url = url;
+    const c = created.find((x) => x.targetId === targetInfo.targetId); if (c && !c.url) c.url = url;
   });
   cdp.on('Target.targetDestroyed', ({ targetId }) => { if (live.delete(targetId)) destroyed.push({ t: Date.now(), phase }); });
   await cdp.send('Target.setDiscoverTargets', { discover: true });
@@ -200,6 +212,8 @@ async function main() {
 
   // ── the correlation: what did the app tell the engine just before each spawn? ──
   const engineSpawns = created.filter((c) => /stockfish|lite|sf16|lila|wasm/i.test(c.url));
+  const unlabeled = created.filter((c) => !c.url).length;
+  if (unlabeled) log(`  [census] ${unlabeled} worker target(s) never reported a URL — counted in the census, excluded from attribution`);
   const preceding = {};
   const perSpawn = engineSpawns.map((s) => {
     const cmds = uci.filter((u) => u.t <= s.t && s.t - u.t <= 1500).map((u) => u.cmd);
