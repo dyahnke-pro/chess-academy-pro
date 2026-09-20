@@ -1885,6 +1885,26 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      clean-machine, deploy-free wedges is therefore n=2 and n=3 (both real:
      49 min at 0 % node, and a main thread that never answered) — the
      reproduction rate is unknown, not "1 in 3".
+   - 🔴 **CORRECTION (2026-09-20 16:00): THE WEDGE IS NOT "AT THE REOPEN". IT
+     HIT THE FIRST WALK.** On a clean pinned run (index-DvZrcPfg, deterministic,
+     nothing else on the machine) the walk readout went UNREADABLE at ply
+     **68 of 69** and stayed dead for 250 consecutive polls to the budget, and
+     each poll stretched from 1s to ~4s — the page degrading mid-walk, not the
+     walk being slow. Then it wedged AGAIN at the reopen (renderer 100.2% CPU,
+     4808/4808 samples on one static chain — n=2 for the live signature). So
+     every earlier framing of "one reopen in several" understates it: two hits
+     in one run, the first nine minutes before any reopen.
+     **AND IT MANUFACTURED FOUR FALSE REDS.** RECAP (`end reached=false`),
+     THESIS ("the turning-point card was never answered"), FUNDLEAD (0/5) and
+     SHOW ("no Show-me button on FLAGGED ply 48") are ALL consequences of a
+     readout that stopped answering one ply from the end — not product
+     failures. That is precisely the class the guard exists to stop, and the
+     guard did not cover this site. Now it does: >30 consecutive unreadable
+     polls sets the same CONTAMINATED verdict and exit 4.
+     ⚠️ The peer's off-by-one hypothesis (a completion predicate that never
+     sees the last ply) is RULED OUT by the same log: the predicate is
+     `n >= total`, and a baseline run reached it. The readout died; it did not
+     miscount.
    - 🟢 **ANSWERED BY POSTHOG (2026-09-20 14:30, David: "you can log into
      posthog!!"): NO REAL USER HAS EVER HIT THIS. #21 IS AN AUDIT-INSTRUMENT
      BUG, NOT A USER BUG — STOP HUNTING IT.** Every review event on every

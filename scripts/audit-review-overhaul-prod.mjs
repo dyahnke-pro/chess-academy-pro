@@ -609,6 +609,15 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
   const total = (await readWalkPly(page))?.total ?? SANS.length;
   let reachedEnd = false;
+  // THE WEDGE CAN HIT THE FIRST WALK, NOT ONLY THE REOPEN (measured
+  // 2026-09-20). On a clean pinned run the readout died at ply 68 of 69 and
+  // stayed dead for 250 polls, while each poll stretched from 1s to ~4s — the
+  // page degrading, not the walk being slow. RECAP, THESIS and FUNDLEAD then
+  // went red for a reason that had nothing to do with the product. A readout
+  // that stops answering for this long is the instrument failing, and the run
+  // must say so rather than file those rows.
+  let wedgedReason = null;
+  const UNREADABLE_LIMIT = 30;
   const flaggedLeads = new Map(); // ply → { badge, lead }
   const plyNarr = new Map();      // ply → { badge, narr } — every ply the walk showed
   // STEP BUDGET. 400 polls at 1500ms reached ply 45 of 46 and ran out — the
@@ -642,6 +651,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // product (CLAUDE.md: an instrument that reports nothing is indistinguishable
   // from one that found nothing). Null is now carried as null and SAID.
   let unreadable = 0;
+  let lastReadPly = 0;
   for (let i = 0; i < POLL_BUDGET; i++) {
     await resolveCards();
     // ONE atomic DOM snapshot per poll. The readout, the badge and the banner
@@ -659,7 +669,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     }).catch(() => ({ read: null, badge: '', banner: '' }));
     const read = snap.read;
     const n = read?.n ?? 0;
-    if (read) unreadable = 0; else unreadable += 1;
+    if (read) { unreadable = 0; lastReadPly = read.n; } else unreadable += 1;
     const b = snap.badge;
     if (n > 0 && !plyNarr.has(n)) {
       const nt = snap.banner;
@@ -678,6 +688,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
     }
     if (n >= total) { reachedEnd = true; break; }
+    if (unreadable > UNREADABLE_LIMIT) {
+      wedgedReason = `the walk readout stopped answering for ${unreadable} consecutive polls at ply ${lastReadPly}/${total} — the page wedged mid-walk`;
+      log(`  [walk] WEDGED: ${wedgedReason}`);
+      break;
+    }
     // PROGRESS, so a 10-minute walk is not 10 minutes of silence (CLAUDE.md
     // "never run blind, never wait silent"). Without this the recap phase is
     // indistinguishable from a hang, which is the exact failure this audit
@@ -1321,19 +1336,20 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // CONTAMINATED rather than FAILS: rows taken after a wedge are not evidence
   // about the product. Exit 4 so a chain can retry the run instead of filing
   // a bug that does not exist.
-  await add('WEDGE renderer-answered-through-the-reopen', !blown, blown ? `WEDGED: ${blown} — rows after the reopen are NOT a product verdict` : 'renderer answered every probe');
+  const wedged = wedgedReason || blown;
+  await add('WEDGE renderer-answered-throughout', !wedged, wedged ? `WEDGED: ${wedged} — rows taken after it are NOT a product verdict` : 'renderer answered every probe, walk and reopen');
   log('\n===== CONTRACT GRID =====');
   let allPass = true;
   for (const r of results) { log(`  ${r.pass ? '✅ PASS' : '❌ FAIL'}  ${r.id.padEnd(40)} ${r.detail}`); if (!r.pass) allPass = false; }
-  log(`\n===== VERDICT: ${blown ? '⚠️ CONTAMINATED (instrument wedged — rerun, do not file these reds)' : allPass ? '✅ MEETS STANDARD' : '❌ FAILS STANDARD'} =====`);
+  log(`\n===== VERDICT: ${wedged ? '⚠️ CONTAMINATED (instrument wedged — rerun, do not file these reds)' : allPass ? '✅ MEETS STANDARD' : '❌ FAILS STANDARD'} =====`);
   try {
     const dir = `audit-reports/review-overhaul-${new Date().toISOString().replace(/[:.]/g, '-')}`;
     mkdirSync(dir, { recursive: true });
-    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: blown ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: blown ?? null, results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, errors: errs }, null, 2));
+    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: wedged ? 'CONTAMINATED (instrument wedged)' : allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', wedged: wedged ?? null, results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, errors: errs }, null, 2));
     log(`report: ${dir}/report.json`);
   } catch (e) { log(`(report not written: ${String(e).slice(0, 80)})`); }
   await listener.stop();
   await browser.close();
-  process.exit(blown ? 4 : allPass ? 0 : 1);
+  process.exit(wedged ? 4 : allPass ? 0 : 1);
 };
 run().catch((e) => { console.error('fatal:', e); process.exit(1); });
