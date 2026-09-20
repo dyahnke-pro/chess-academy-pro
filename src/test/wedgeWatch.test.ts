@@ -2,7 +2,6 @@
 // it is testable without a browser — which matters, because the bug it exists
 // to prevent is a detector that could not fire.
 import { describe, it, expect } from 'vitest';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error — plain .mjs audit helper, no types by design
 import { raced, wedgeWatch, until } from '../../scripts/audit-lib/wedge-watch.mjs';
 
