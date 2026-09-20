@@ -59,7 +59,16 @@ describe('analysisDeterminism — the audit-only depth-only switch (PLAN #70)', 
 
   it('every review budget site routes through reviewBudget (no bare REVIEW_POSITION_BUDGET_MS reaches an engine call)', () => {
     const src = readFileSync('src/services/gameAnalysisService.ts', 'utf8');
-    const bare = src.split('\n').filter((l) => /analyzePosition\(|analyzeWithBudget\(|budgetMs: number =|curveBudgetMs =|deepBudgetMs =/.test(l) && /REVIEW_POSITION_BUDGET_MS|BATCH_SHALLOW_BUDGET_MS/.test(l) && !/reviewBudget\(/.test(l));
+    const bare = src.split('\n').filter((l) => /analyzePosition\(|analyzeWithBudget\(|analyzeFan\(|budgetMs: number =|curveBudgetMs =|deepBudgetMs =/.test(l) && /REVIEW_POSITION_BUDGET_MS|BATCH_SHALLOW_BUDGET_MS|CRITICAL_FAN_BUDGET_MS/.test(l) && !/reviewBudget\(/.test(l));
     expect(bare, 'a review engine call with a raw budget').toEqual([]);
+  });
+
+  it('both pool sends — the single-line search AND the MultiPV fan — clear the hash under the flag before `position fen`', () => {
+    // The fan decides the critical moment; a pinned pair read "10 speak" vs
+    // "9 speak" on one bundle while every annotation matched, because only
+    // `analyzePosition` had the cold start. One guard, two senders.
+    const src = readFileSync('src/services/gameAnalysisService.ts', 'utf8');
+    const guarded = src.split('\n').filter((l) => /if \(deterministicAnalysisForAudit\(\)\) this\.worker\.postMessage\('ucinewgame'\)/.test(l));
+    expect(guarded, 'every pool sender must start cold under the audit flag').toHaveLength(2);
   });
 });

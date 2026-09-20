@@ -575,6 +575,11 @@ class DedicatedWorker {
       try {
         this.worker.addEventListener('message', handler);
         this.worker.postMessage(`setoption name MultiPV value ${Math.max(2, lines)}`);
+        // Same audit-only cold start as `analyzePosition` (PLAN #70): the fan
+        // decides the critical moment, and a pinned pair read "10 speak" vs
+        // "9 speak" on one bundle because the fan's read is time-boxed on a
+        // warm, queue-assigned table. Product code never sets the flag.
+        if (deterministicAnalysisForAudit()) this.worker.postMessage('ucinewgame');
         this.worker.postMessage(`position fen ${fen}`);
         this.worker.postMessage(`go depth ${depth} movetime ${budgetMs}`);
       } catch {
@@ -963,7 +968,7 @@ export async function scanCriticalMoments(args: {
       if (i >= args.plies.length) return;
       const p = args.plies[i];
       try {
-        const fan = await w.analyzeFan(p.fen, CRITICAL_FAN_LINES, CRITICAL_FAN_DEPTH, CRITICAL_FAN_BUDGET_MS);
+        const fan = await w.analyzeFan(p.fen, CRITICAL_FAN_LINES, CRITICAL_FAN_DEPTH, reviewBudget(CRITICAL_FAN_BUDGET_MS));
         const read = readCriticalMoment({
           topLines: fan, moverColor: p.moverColor, rating: args.rating, fen: p.fen,
         });

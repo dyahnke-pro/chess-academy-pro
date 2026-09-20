@@ -10,6 +10,7 @@ import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
 const PROD = 'https://chess-academy-pro.vercel.app';
@@ -47,6 +48,12 @@ console.log('--- (1) Playwright driving live prod ---');
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+// Kill the page-help modal (and any overlay like it) with CSS before the first
+// click (CLAUDE.md §G1 item 5). This audit never injected it: on 2026-09-20 a
+// fresh-context probe reached the Pro grid (8 player cards) the instant
+// `tab-pro` was clicked, while this script read "0 tab" on three runs — its
+// click was landing on the overlay and the failure was swallowed below.
+await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
   await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 
@@ -117,7 +124,13 @@ try {
   }
   const proTab = page.locator('[data-testid="tab-pro"]');
   if (await proTab.count() > 0) {
-    await proTab.first().click().catch(() => null);
+    // A swallowed click here IS the "0 tab" row — make it loud, then retry
+    // through whatever is on top (a human taps anyway; if the tab were truly
+    // unreachable the grid wait below still fails honestly).
+    await proTab.first().click({ timeout: 8_000 }).catch(async (e) => {
+      console.log('   tab-pro click failed:', String(e.message).slice(0, 100), '— retrying with force');
+      await proTab.first().click({ force: true, timeout: 5_000 }).catch((e2) => console.log('   forced click failed too:', String(e2.message).slice(0, 100)));
+    });
     // The featured section's getPlayerOpenings() is an async Dexie read; wait
     // for the testid to attach (up to 12s) rather than racing a fixed delay.
     // The pinned "featured" section was REVERTED to the standard player-card

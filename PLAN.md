@@ -1464,9 +1464,32 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      product = one clear per worker per game; flag = every `position fen` is
      preceded by `ucinewgame`; parity = with a pool available the review makes
      ZERO singleton calls, with the dive killed at the flagged ply so the
-     refine has to search. OWED: the pinned pair again on the next bundle —
-     the singleton fallback (no pool) stays nondeterministic and is out of
-     reach of any flag.
+     refine has to search. ✅ **VERIFIED ON PROD (2026-09-20 08:12–08:45,
+     bundle `index-D0T1cBBh`, 06wNUWaA pinned, `AUDIT_DETERMINISTIC=1`, two
+     runs back to back under the lock, nothing else running): 34/36 and 34/36,
+     IDENTICAL red sets (RECAP + FUNDLEAD — §E item 0, real), and the FUNDLEAD
+     detail byte-identical across all five plies (48 → 1.1, 50 → 0.9, 62, 64,
+     68), CRIT moment @ply 66 identical, no reopen wedge, ERR none.** The
+     residue was the hash and the singleton, not the budget; the verdict is
+     now a pure function of the game under the flag. Still true: the singleton
+     fallback (no pool worker at all) stays nondeterministic and is out of
+     reach of any flag — a device with no pool is the only place a pinned pair
+     can still differ. #70 CLOSED for the review audit.
+   - **What the full row diff of that pair still showed (read, not asserted):**
+     (a) the critical-moment FAN read "10 speak / gap 99667" vs "9 speak / gap
+     99688" — the moment matched this time, but that is the exact path that
+     flipped `CRIT spoken-names-count-and-stake` in the earlier pair: the fan
+     is time-boxed (`CRITICAL_FAN_BUDGET_MS` 1.5 s) on a warm, queue-assigned
+     table and only `analyzePosition` had the cold start. ✅ WIRED the same
+     night: `analyzeFan` starts cold under the flag and the fan's budget goes
+     through `reviewBudget`; gate extended (two guarded senders). (b) the
+     EXPLORE reply's eval (1.3 vs 1.4) — a LIVE ask on the singleton, not
+     review analysis; out of scope for the flag by design. (c) the LEDGER
+     sample strings differ — prose from the PROJECTION layer (`computePvLine`
+     through `acquirePvEngines`, `PROJ_TIMEOUT_MS` 7 s deadlines in
+     `coachFeatureService`). Under the flag those deadlines would have to be
+     lifted TOO or every projection aborts; owed, not done — it changes
+     prose, never a red row.
 9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
    on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
    - **2026-09-20, taken over from focused-noyce after 07acb13fb.** Their fix
