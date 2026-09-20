@@ -328,11 +328,26 @@ async function main() {
     console.log(`[E] fundamentals recorded this session: ${JSON.stringify(recordedFundamentals)}; game-2 recurrence lines: ${recurSpoken.length}`);
     record('E0. game 1 RECORDED a fundamental live (the loop has something to recur)', recordedFundamentals.length > 0,
       recordedFundamentals.length ? [...new Set(recordedFundamentals.map((r) => r.id))].join(', ') : 'no misconceptionTags row with a fundamentalId after game 1 — Learn\'s live capture recorded no fundamental');
-    if (recordedFundamentals.length > 0) {
-      record('E1. game 2 SPOKE the present-tense recurrence clause ("You\'ve walked into this before…")', recurSpoken.length > 0,
-        recurSpoken.length ? recurSpoken[0].slice(0, 140) : 'recorded, but game 2 never said it recurred — either game 2 never met the same fundamental (check its slips) or the Learn wire dropped it');
+    // THREE OUTCOMES, NOT TWO (2026-09-20, first run). The clause RIDES on a
+    // fundamental verdict, so it can only be owed on a ply where game 2 spoke
+    // one. The first cut asserted `recurSpoken > 0` whenever anything was
+    // recorded and went red on a run where game 2 spoke NO fundamental verdict
+    // at all — failing the product for an empty set, which is the same defect
+    // as passing on one. `fundamentalHow`'s "Here's how:" is the verdict's own
+    // signature (every full verdict carries it; nothing else in the tape does).
+    const verdictsIn2 = g2.said.filter((l) => /Here's how:/.test(l));
+    if (recordedFundamentals.length === 0) {
+      console.log('[E1] not owed — nothing recorded in game 1');
+    } else if (verdictsIn2.length === 0) {
+      record('E1. game 2 spoke a FUNDAMENTAL VERDICT for the clause to ride on', false,
+        `game 2 spoke ${g2.said.length} lines and NOT ONE named a fundamental, so no recurrence could attach. `
+        + 'This is not the recurrence wire — it is Learn\'s fundamental narration not firing in the second game. '
+        + `Recorded this session: ${[...new Set(recordedFundamentals.map((r) => r.id))].join(', ')}.`);
     } else {
-      console.log('[E1] n/a — nothing recorded in game 1, so no recurrence was owed');
+      record('E1. game 2 SPOKE the present-tense recurrence clause ("You\'ve walked into this before…")', recurSpoken.length > 0,
+        recurSpoken.length
+          ? recurSpoken[0].slice(0, 140)
+          : `game 2 spoke ${verdictsIn2.length} fundamental verdict(s) and none carried the clause — the Learn wire dropped it. First verdict: "${verdictsIn2[0].slice(0, 110)}"`);
     }
     for (const t of TEACHINGS.filter((x) => !x.split)) {
       const hits = (g, f) => (g.byFen?.[f] ?? []).filter((l) => t.re.test(l)).length;

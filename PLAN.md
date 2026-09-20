@@ -99,7 +99,39 @@ shared lock.
 - ☐ fundamentals-tab audit on prod · ☐ `tactics-context-stale` count read off
   the listener — both come from the end chain.
 
-**Status:** plan ✅ · context ✅ · code ✅ · gates ✅ · push ⏳ · audits ☐
+**PROD RUN (bundle `index-CQzqI6Vf`, 9321bbc11, 12:45) — LOOP AUDIT 6/6, and the
+cleanest comparison yet.** `AUDIT_GAME_A=nHdi6Qpx AUDIT_GAME_B=MxLHuel4
+AUDIT_STUDENT=black`, report `audit-reports/loop-closes-2026-09-20T17-45-41-666Z/`.
+Unlike run 5, the control and loop tapes are the SAME beat at the SAME ply (56,
+28...Nf8) — identical opening sentence, identical evidence — differing only by:
+
+> "…Loose pieces are what makes their tactic work, so defend it or move it before
+> it becomes their idea. **This one keeps recurring in your games — loose piece,
+> the second game now — the last one was against nescitus 2 weeks ago. Worth
+> drilling.** You: that was a blunder, costing about 4.2 points…"
+
+The A-candidate iteration also proved itself: candidate 1 recorded rows but no
+fundamental, so the instrument moved on rather than reporting a false red.
+
+🔴 **BUT SECTION 14 DID NOT FIRE ON A SINGLE REAL GAME.** Four amateur games,
+nine flagged student plies between them, and every fundamental recorded was
+`loose-piece` or `ignored-threat`. Worst case for the build: A-candidate 1's two
+flagged plies were **15...g5 (a pawn push) and 32...Kh8 (a king move)** — exactly
+the `other` population section 14 exists for — and they attributed NOTHING.
+Reading the gates against those plies: `left-book-early` cannot fire (ply 30,
+past the 24-ply opening window), and `no-plan`/`calculation-depth` each need a
+condition those boards may not meet (an earned structure plan whose squares the
+best move serves; a PV whose first forcing move is ≥3 deep). So the detectors are
+GATED CORRECTLY and are TOO NARROW IN PRACTICE — unit-proven, prod-unobserved.
+That is the same "a wire that does not fire is not a wire" rule the repo already
+holds, and it means the 23% `other` figure has NOT been measured down.
+**NEXT (not guessed — measured):** log the REJECTION REASON per detector on the
+recording path (D13 already logs unmatched inputs; extend it to say which gate
+each section-14 detector failed), run a game library through it, and widen from
+the real population rather than from imagination.
+
+**Status:** plan ✅ · context ✅ · code ✅ · gates ✅ · push ✅ (9321bbc11) ·
+audits: loop 6/6 ✅ · second-game ⏳ · Learn ⏳ · fundamentals-tab ⏳
 
 ## 🎯 WO-LOOP-01 — PROVE THE ONE-LINE DEFINITION ON PROD (David 2026-09-20: "i want to get the main concept of the app working" → "full plan mapped out. then execute it. all code done first in one go, then audit following")
 
