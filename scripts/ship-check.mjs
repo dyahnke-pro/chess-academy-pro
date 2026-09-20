@@ -566,6 +566,82 @@ const GATE_TESTS = [
   }
   process.stdout.write(`✓ 0.0s :: load ${load1.toFixed(1)} on ${cores} cores (cap ${cap}${ignore ? ', ignored' : ''})\n`);
 }
+// ── THE DOCS LANE (2026-09-20, David: "anything you can do to streamline this
+// process, especially getting things to main without cutting critical corners")
+//
+// MEASURED, not guessed: a docs-only commit was paying the FULL gate — 419 s
+// including a 53 s PRODUCTION BUILD, a 25 s typecheck and a 30 s test-typecheck
+// — to verify a change to PLAN.md. Three such commits in one evening is twenty
+// minutes spent proving that prose cannot break a compiler. Under the load this
+// repo sees with four sessions, those runs stretched to 18 minutes each.
+//
+// 🚨 THIS IS SCOPE, NOT A BYPASS, AND THE DISTINCTION IS THE WHOLE POINT. The
+// lane does not skip a gate that could fail; it skips gates that CANNOT observe
+// the change, and it still runs every gate that READS a doc. Two tests do:
+// `outlineCoverage` (PLAN.md + OUTLINE.md) and `pricingCopy`
+// (docs/store-listing-copy.md). Both run here. A docs commit that breaks the
+// board gate still fails the push, which is exactly what happened the first time
+// this gate met a wrapped continuation line.
+//
+// FAIL CLOSED, THREE WAYS — any doubt takes the full lane:
+//   1. ONE non-doc path in the diff and the lane is off entirely. Not "mostly
+//      docs": all or nothing, because the cost of a wrong skip is a broken main
+//      and the cost of a wrong full run is seven minutes.
+//   2. An EMPTY file list means git told us nothing, which is not evidence of a
+//      docs-only change — take the full lane.
+//   3. SHIP_CHECK_NO_DOCS_LANE=1 forces the full run when you want it anyway.
+//
+// It prints every file it is deciding on, so the decision is auditable in the
+// log rather than asserted. An unexplained fast pass is not a pass.
+// EXCLUSIONS, each for a measured reason rather than caution:
+//  · `..` anywhere — `docs/../src/evil.ts` matched the first draft of this
+//    allowlist and would have skipped every code gate for a source file. Git
+//    does not normally emit such a path; the lane still refuses it, because a
+//    guard that relies on its input being well-formed is not a guard.
+//  · CLAUDE.md — `surface-map.mjs` EMBEDS its locked sections into the
+//    committed surface maps, so editing it can stale them and the context gate
+//    is the thing that catches that. It is a doc that code gates can observe.
+//  · docs/surface-maps/** — those ARE the generated maps the context gate
+//    verifies. A change there is exactly what must not skip verification.
+const DOC_PATH = /^(?:[^/]*\.md|docs\/.*|\.github\/.*\.md)$/;
+const DOC_EXCLUDED = (f) =>
+  f.includes('..') || f === 'CLAUDE.md' || f.startsWith('docs/surface-maps/');
+const _docsLaneFiles = (() => {
+  try {
+    return changedFiles();
+  } catch {
+    return [];
+  }
+})();
+const DOCS_LANE =
+  process.env.SHIP_CHECK_NO_DOCS_LANE !== '1' &&
+  !FULL &&
+  _docsLaneFiles.length > 0 &&
+  _docsLaneFiles.every((f) => DOC_PATH.test(f) && !DOC_EXCLUDED(f));
+
+if (DOCS_LANE) {
+  console.log('  ── DOCS LANE ───────────────────────────────');
+  console.log('  Every changed path is documentation, so the code gates cannot');
+  console.log('  observe this change. Running only the gates that READ docs.');
+  for (const f of _docsLaneFiles) console.log(`    · ${f}`);
+  console.log('');
+  runStep('doc gates   ', 'npx', [
+    'vitest',
+    'run',
+    'src/test/outlineCoverage.test.ts',
+    'src/data/pricingCopy.test.ts',
+  ]);
+  const failed = results.filter((r) => !r.ok && !r.optional);
+  console.log('');
+  console.log('──────────────────────────────────────────────');
+  if (failed.length === 0) {
+    console.log(`  READY TO PUSH (docs lane — ${_docsLaneFiles.length} doc file(s), no code touched)`);
+    process.exit(0);
+  }
+  console.error('  ✗ docs lane FAILED — a gate that reads these docs is red.');
+  process.exit(1);
+}
+
 runStep('context gate', 'node', ['scripts/surface-map.mjs', '--verify']);
 //
 // THE SAME GATE, ONE LEVEL UP (David 2026-09-18: "You do not miss this step
