@@ -203,6 +203,24 @@ game identity the new bar counts. Gates: three hook cases +
 Reports: `audit-reports/capability-green.json`,
 `audit-reports/capability-green-sequence.json`.
 
+🔴 **PROD RUN 1 REPORTED A GREEN THAT WAS NOISE, AND ITS NEGATIVE CONTROL
+CAUGHT IT.** Three devices on one real amateur game (`PF8pYEpN`): control 2932
+words, green 2464 (−468, "quieter"), prompted 2506→2320 — but the PROMPTED arm
+must change NOTHING, since the profile skips prompted rows, and it moved more
+than green did. A failing negative control invalidates the positive result; it
+does not caveat it. Run 2 added a SECOND UNSEEDED CONTROL to measure the
+instrument against itself: noise floor **117 words within a run**, while the
+same unseeded config varied **592 words between runs**. Against that floor,
+green moved **16 words**. Verdict: RUN UNUSABLE, printed by the audit itself.
+
+🔴 **THE REASON IS THE SURFACE, NOT THE WIRE.** Review is `'walk'` posture, and
+the locked rule (G4.5.15) is that on `walk` importance must NEVER decide
+whether a ply speaks — every ply is a beat. So a term that LOWERS need cannot
+make review quieter; it can only reorder. Green's quieting is only observable
+on an `'interrupt'` posture surface (Play, live Learn), where silence is the
+default and the coach must earn the interruption. **Retarget the instrument
+there; the review arm proves nothing either way and should not be re-run.**
+
 That is the exact shape the RED direction was in before WO-LOOP-01: every half
 built and gated in isolation, the sentence never demonstrated end to end. The
 red half was proven by SEEDING game A and reading game B's tape; green is
