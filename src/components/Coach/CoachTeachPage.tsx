@@ -1635,9 +1635,12 @@ export function CoachTeachPage(): JSX.Element {
    *  This is the same disease #18 fixed for the threat refs, one door along:
    *  the list IS the debt. A slot added to `learnMemory` is reset for free; a
    *  hand ref must be added HERE, once, where both doors read it. */
-  const resetPerGameMemory = useCallback((): void => {
-    learnMemRef.current.newGame();   // forgets every slot it holds
-    announcedPliesRef.current = new Set();
+  /** The page's OWN per-game refs — the ones not yet migrated into
+   *  `learnMemory`. Never call `newGame()` from here: this runs AS the
+   *  memory's `onNewGame`, so it would recurse. The list is the debt. */
+  const forgetPageRefsRef = useRef<() => void>(() => undefined);
+  const forgetPageRefs = useCallback((): void => {
+    announcedPliesRef.current.clear();
     announcedTrapsRef.current.clear();
     teachNoteSeenIdsRef.current.clear();
     fundamentalSeenRef.current.clear();
@@ -1647,6 +1650,13 @@ export function CoachTeachPage(): JSX.Element {
     pendingForkRef.current = null;
     rejectedTemptingCountRef.current = 0;
     priorityFirstLastPlyRef.current = -999;
+  }, []);
+  /** A fresh game, from a CALLER (the student asked / the board reset handler).
+   *  Goes through the memory so the single `onNewGame` signal fires — the
+   *  board-driven path inside `observe()` reaches the same handler. */
+  forgetPageRefsRef.current = forgetPageRefs;
+  const resetPerGameMemory = useCallback((): void => {
+    learnMemRef.current.newGame();
   }, []);
   /** T3 (2026-09-20): plies where the deciding computer kept a `key-moment`
    *  clause — the coach ANNOUNCED the critical moment before the student moved.
@@ -1753,7 +1763,11 @@ export function CoachTeachPage(): JSX.Element {
    *  game — reading it as "a gem fired" would mute every coach verdict from the
    *  first gem to the final move. The question is never "has a gem ever fired",
    *  it is "did one fire about the move I am judging". */
-  const learnMemRef = useRef<LearnMemory>(createLearnMemory());
+  // THE MEMORY OWNS THE SIGNAL (2026-09-20). Every reset — a caller's, or the
+  // one `observe()` performs when the board goes backwards — forgets this
+  // page's hand refs too. Before this, `observe()` was a silent third door.
+  const learnMemRef = useRef<LearnMemory>(createLearnMemory(() => { forgetPageRefsRef.current(); }));
+  
   // The threat / tactic say-once memory (last key + every spoken line) lives in
   // `learnMemRef.current` — per game, forgotten by the board-driven reset.
   // Migrated 2026-09-19 after the second-game audit caught the hand refs.

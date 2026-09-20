@@ -189,6 +189,24 @@ gate `oneFreshGameReset.test.ts` blames by statement (exactly ONE
 `newGame()` call site, inside the reset, and every hand ref named in it), so a
 second list cannot be written. Same disease as #18, one door along.
 
+**AND A THIRD DOOR, found by grepping the class rather than the instance** (the
+other session's suggestion; the sweep-don't-spot-fix rule). `learnMemory.observe()`
+resets ITSELF when the board goes backwards — a path no caller goes through — so
+the page's hand refs could still not follow. The fix is not a fourth list: the
+MEMORY now owns the signal. `createLearnMemory(onNewGame)` fires after every
+reset from every path, the page passes its ref-forgetter, and `resetPerGameMemory`
+is just `newGame()`. One place decides "a new game started"; one handler answers.
+Gated in `oneFreshGameReset.test.ts` (exactly one `newGame()` call site, inside
+the reset; `observe` must go through `newGame`; the forgetter must never call
+`newGame` back). `learnMemory.test.ts`'s old "newGame() at EVERY fresh-game site
+(≥2)" assertion is DELETED, not annotated — it encoded the per-site lists that
+drifted in the first place. Also found by its own orphan census: my new
+`announcedPliesRef` was reset with `= new Set()`, which the census cannot see —
+now `.clear()`, like every sibling.
+- Swept the rest: `CoachGamePage.announcedHangingRef` keys on `gameId` and
+  self-invalidates (the right pattern, not a door); `OpeningPlayMode` holds no
+  per-game say-once refs. No fourth door.
+
 **Status:** plan ✅ · context ✅ · code ✅ · gates ✅ · push ✅ ·
 **audits: loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ ·
 second-game 12/12 ✅** — WO-CLOSEOUT-01 closed.
