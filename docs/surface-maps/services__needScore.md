@@ -4,12 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**339 lines · 11 exports · 13 importers · 6 tests · 0 audits**
+**342 lines · 11 exports · 13 importers · 7 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3658) — names `COLD_START_GAMES`, `familiarity`, `needScore`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3780) — names `familiarity`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3727) — names `COLD_START_GAMES`, `familiarity`, `needScore`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3849) — names `familiarity`
+- **The standard post-deploy ritual** (CLAUDE.md:5791) — names `needScore`
 
 ## Who calls in
 
@@ -17,13 +18,13 @@
 - `src/services/capabilityRead.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/services/loopCloses.test.ts`
 - `src/services/needCoverage.report.test.ts`
 - `src/services/needScore.test.ts`
 - `src/services/needWeaknessWire.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewNeedGate.test.ts`
-- `src/services/studentMomentBoost.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/teachingSelector.ts`
 
@@ -43,12 +44,12 @@
 
 ### `coldStudent` (function) — 15 call sites
 - `src/hooks/useStudentNeed.ts:35`
-- `src/services/capabilityRead.test.ts:23`
-- `src/services/coachFeatureService.ts:1160`
-- `src/services/coachFeatureService.ts:4102`
-- `src/services/needCoverage.report.test.ts:88`
-- `src/services/needScore.test.ts:22`
-- `src/services/needScore.test.ts:38`
+- `src/services/capabilityRead.test.ts:35`
+- `src/services/coachFeatureService.ts:1164`
+- `src/services/coachFeatureService.ts:4140`
+- `src/services/needCoverage.report.test.ts:93`
+- `src/services/needScore.test.ts:25`
+- `src/services/needScore.test.ts:41`
 - `src/services/oneStudentRating.test.ts:70`
 - `src/services/openingGenerator.ts:2400`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -65,42 +66,43 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coldStartPrior` (function) — 2 call sites
-- `src/services/needScore.test.ts:25`
-- `src/services/needScore.test.ts:34`
+- `src/services/needScore.test.ts:28`
+- `src/services/needScore.test.ts:37`
 
 ### `familiarity` (function) — 1 call site
-- `src/services/needScore.test.ts:48`
-
-### `HELD_FOR_PROVEN` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `computeNeed` (function) — 36 call sites
-- `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/capabilityRead.test.ts:34`
-- `src/services/capabilityRead.test.ts:35`
-- `src/services/capabilityRead.test.ts:42`
-- `src/services/capabilityRead.test.ts:47`
-- `src/services/capabilityRead.test.ts:52`
-- `src/services/capabilityRead.test.ts:57`
-- `src/services/capabilityRead.test.ts:59`
-- `src/services/capabilityRead.test.ts:64`
-- `src/services/capabilityRead.test.ts:75`
-- `src/services/capabilityRead.test.ts:76`
-- `src/services/coachFeatureService.ts:1160`
-- `src/services/needCoverage.report.test.ts:78`
-- `src/services/needScore.test.ts:22`
-- `src/services/needScore.test.ts:38`
-- `src/services/needScore.test.ts:45`
 - `src/services/needScore.test.ts:51`
+
+### `computeNeed` (function) — 40 call sites
+- `src/coach/surfaceContract.scan.test.ts:62`
+- `src/services/capabilityRead.test.ts:46`
+- `src/services/capabilityRead.test.ts:47`
+- `src/services/capabilityRead.test.ts:54`
+- `src/services/capabilityRead.test.ts:60`
+- `src/services/capabilityRead.test.ts:65`
+- `src/services/capabilityRead.test.ts:73`
+- `src/services/capabilityRead.test.ts:74`
+- `src/services/capabilityRead.test.ts:82`
+- `src/services/capabilityRead.test.ts:83`
+- `src/services/capabilityRead.test.ts:88`
+- `src/services/capabilityRead.test.ts:90`
+- `src/services/capabilityRead.test.ts:95`
+- `src/services/capabilityRead.test.ts:106`
+- `src/services/capabilityRead.test.ts:107`
+- `src/services/coachFeatureService.ts:1164`
+- `src/services/needCoverage.report.test.ts:83`
+- `src/services/needScore.test.ts:25`
+- `src/services/needScore.test.ts:41`
+- `src/services/needScore.test.ts:48`
 - `src/services/needScore.test.ts:54`
-- `src/services/needScore.test.ts:60`
-- `src/services/needScore.test.ts:66`
-- `src/services/needScore.test.ts:72`
-- `src/services/needScore.test.ts:73`
-- `src/services/needScore.test.ts:78`
-- `src/services/needScore.test.ts:82`
-- `src/services/needScore.test.ts:83`
-- `src/services/needScore.test.ts:88`
+- `src/services/needScore.test.ts:57`
+- `src/services/needScore.test.ts:63`
+- `src/services/needScore.test.ts:69`
+- `src/services/needScore.test.ts:75`
+- `src/services/needScore.test.ts:76`
+- `src/services/needScore.test.ts:81`
+- `src/services/needScore.test.ts:85`
+- `src/services/needScore.test.ts:86`
+- `src/services/needScore.test.ts:91`
 - `src/services/needWeaknessWire.test.ts:49`
 - `src/services/needWeaknessWire.test.ts:55`
 - `src/services/needWeaknessWire.test.ts:62`
@@ -109,13 +111,17 @@
 - `src/services/needWeaknessWire.test.ts:117`
 - `src/services/needWeaknessWire.test.ts:130`
 - `src/services/needWeaknessWire.test.ts:134`
-- `src/services/positionFacts.ts:529`
+- `src/services/positionFacts.ts:540`
 - `src/services/teachingSelector.ts:284`
+
+### `HELD_FOR_PROVEN` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
 - `src/services/capabilityRead.test.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/services/loopCloses.test.ts`
 - `src/services/needCoverage.report.test.ts`
 - `src/services/needScore.test.ts`
 - `src/services/needWeaknessWire.test.ts`
@@ -123,4 +129,4 @@
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+- `scripts/audit-loop-green-prod.mjs`
