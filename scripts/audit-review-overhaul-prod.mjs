@@ -382,10 +382,21 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const db = await open();
     const g = await new Promise((res, rej) => { const t = db.transaction('games', 'readonly'); const rq = t.objectStore('games').get(gid); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
     const rows = (g?.annotations ?? []).filter((a) => a.moveNumber >= 5 && a.moveNumber <= 7).map((a) => `${a.moveNumber}${a.color === 'black' ? '...' : '.'}${a.san} ${a.classification} eval=${a.evaluation} bestEval=${a.bestMoveEval} best=${a.bestMove}`);
-    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows };
+    // UNMEASURED PLIES — how many positions the engine never scored. A null
+    // eval is not cosmetic: `measuredCpLoss` returns null for it, and
+    // `autoAnalyzeGame` then substitutes a bucket midpoint (175/350), so an
+    // engine failure becomes an INVENTED centipawn cost in the student model
+    // (PLAN §B, 2026-09-20). Pool workers really do trap on this build
+    // (`RuntimeError: unreachable`, 7 in one walk), so this counts the supply.
+    const anns = g?.annotations ?? [];
+    const nullEval = anns.filter((a) => a.evaluation === null || a.evaluation === undefined).length;
+    const nullBest = anns.filter((a) => a.bestMoveEval === null || a.bestMoveEval === undefined).length;
+    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest };
   }, GID).catch((e) => ({ error: String(e) }));
   log(`  [engine] depth=${annots.depth} fullyAnalyzed=${annots.fully}`);
   (annots.rows ?? []).forEach((r) => log(`  [engine] ${r}`));
+  log(`  [engine] UNMEASURED: ${annots.nullEval}/${annots.total} plies have a null eval, ${annots.nullBest}/${annots.total} a null bestMoveEval — each one becomes an invented 175/350 cpLoss downstream`);
+  await add('MEASURED every ply carries a real eval', (annots.nullEval ?? 0) === 0, `${annots.nullEval ?? '?'}/${annots.total ?? '?'} null evals, ${annots.nullBest ?? '?'} null bestMoveEval (a null becomes a fabricated cpLoss in the student model)`);
   if (!ready) { await listener.stop(); await browser.close(); process.exit(1); }
 
   // ── AUTO (C) — Start, then the walk advances on its own ─────────────────
