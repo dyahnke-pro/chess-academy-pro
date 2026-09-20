@@ -120,7 +120,9 @@ states and the app can act on two. Measured 2026-09-20, not recalled:
 | RECORD a miss | ✅ built, 21 modules — **the parity gap is 21 vs 8** |
 | the PROFILE (`getCapabilityProfile`, prompted rows skipped) | ✅ built |
 | a term that can LOWER need (`needScore.capabilityTerm`, held ≥ 3 + zero broken) | ✅ built, ONE production reader |
-| **does real play ever reach held ≥ 3 with zero broken?** | 🔴 **NEVER MEASURED** |
+| **does real play ever reach held ≥ 3 with zero broken?** | ✅ **MEASURED 2026-09-20: YES, 6 of 6 game-seats, off ONE game each** |
+| is the bar set right, i.e. does a proven tag SURVIVE later games? | 🔴 **NO — measured: 1 flip in 5 games, on the tag that proved fastest** |
+| can a student who FIXES a weakness ever go green again? | 🔴 **NO — `broken > 0` is lifetime, so green is unrecoverable** |
 | **has a student's Nth game ever gone quiet because of games 1..N-1?** | 🔴 **NEVER SHOWN** |
 
 🔴 **The "21 vs 8 parity gap" I read off `docs/STATE.md` is a GREP RATIO, not a
@@ -128,6 +130,33 @@ hole — measured 2026-09-20, corrected here rather than left standing.** The tw
 lists overlap and count readers as writers; the hold side is wired at every live
 surface. There is no recording half left to build. What is unproven is
 everything to the RIGHT of the record.
+
+🔴 **AND THE FIRST NUMBER FLIPPED THE RISK.** The worry was that green could
+never fire. It fires easily: every game-seat measured proved at least one
+capability from a SINGLE game (`passive-king-endgame 7h/0b` — the board asked
+seven times and quiet accurate moves answered). The RED guard works correctly
+(one break holds a tag red however many holds it has, e.g. `passive-rook
+6h/3b`). So the defect risk is not a wire that cannot fire, it is a BAR SET TOO
+LOW — the coach going quiet about something the student never demonstrated,
+which is absent-≠-mastered pointing the other way. `HELD_FOR_PROVEN = 3` is the number under test, and the
+sequence measurement answered it: ONE STUDENT, FIVE GAMES IN ORDER,
+`neglected-development` proven after game 1, still proven through game 4,
+BROKEN in game 5 — so the coach would have gone quiet about it for four games
+and then watched them do it again. One flip in five games, on the tag that
+proved fastest.
+
+🔴 **AND THE OPPOSITE DEFECT, found by the same run: GREEN IS UNRECOVERABLE.**
+`getCapabilityProfile` counts LIFETIME broken and `capabilityTerm` requires
+`broken === 0`, so one break ever bars a tag from green permanently, however
+many holds follow. The heat map exists to say "you have GOTTEN BETTER" and as
+built it structurally cannot.
+
+**THE FIX, one change to the bar, both directions at once:** proven = a RECENT
+clean streak on the tag, spanning at least TWO DISTINCT GAMES (the loop's own
+unit — green's claim is "you did it again next time"), rather than three
+lifetime holds with a lifetime-zero break count.
+Reports: `audit-reports/capability-green.json`,
+`audit-reports/capability-green-sequence.json`.
 
 That is the exact shape the RED direction was in before WO-LOOP-01: every half
 built and gated in isolation, the sentence never demonstrated end to end. The

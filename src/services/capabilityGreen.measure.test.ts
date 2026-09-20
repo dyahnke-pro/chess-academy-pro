@@ -249,4 +249,122 @@ describe('GREEN — can real play prove a capability?', () => {
     // eslint-disable-next-line no-console
     console.log(`[green-measure] wrote audit-reports/capability-green.json (${perGame.length} game-seats)`);
   }, 30 * 60 * 1000);
+
+  /**
+   * THE NUMBER THAT SETS THE BAR — one student, many games, in order.
+   *
+   * Measurement 1 answered "can real play prove a capability" with a clear
+   * yes: 6 of 6 game-seats proved at least one, off a SINGLE game. That is not
+   * the reassurance it looks like. If three clean answers in one game are
+   * enough, the coach goes quiet about something the student never
+   * demonstrated — "they didn't fail in a quiet position" read as mastery,
+   * which is the absent-is-not-mastered trap wearing the opposite costume.
+   *
+   * So the honest question is not whether green fires, it is whether green
+   * SURVIVES: once a tag is proven, does the same student break it later? A
+   * bar that flips back is a bar set too low, and this counts the flips.
+   * The profile is snapshotted per GAME, which is the loop's own granularity —
+   * the coach goes quiet in the NEXT game, not the next ply.
+   */
+  it('MEASUREMENT 2: one student across games — does a proven capability break later?', async () => {
+    if (process.env.GREEN_MEASURE !== '1') return;
+    const sysBin = process.env.STOCKFISH_BIN ?? '/usr/games/stockfish';
+    const npmCli = 'node_modules/stockfish/scripts/cli.js';
+    const useSys = existsSync(sysBin);
+    if (!useSys && !existsSync(npmCli)) return;
+    const PROXY = 'https://chess-academy-pro.vercel.app/api';
+    const DEPTH = Number(process.env.DEPTH ?? 12);
+    const WANT = Number(process.env.SEQ_GAMES ?? 5);
+
+    const proc = useSys ? spawn(sysBin) : spawn('node', [npmCli]);
+    let buf = '';
+    const waiters: { re: RegExp; done: (s: string) => void }[] = [];
+    let lastScore = 0;
+    proc.stdout.on('data', (d: Buffer) => {
+      const txt = d.toString();
+      const m = [...txt.matchAll(/score (cp|mate) (-?\d+)/g)].pop();
+      if (m) lastScore = m[1] === 'mate' ? (Number(m[2]) > 0 ? 10000 : -10000) : Number(m[2]);
+      buf += txt;
+      let i: number;
+      while ((i = buf.indexOf('\n')) >= 0) {
+        const line = buf.slice(0, i).trim();
+        buf = buf.slice(i + 1);
+        for (let k = waiters.length - 1; k >= 0; k--) {
+          if (waiters[k].re.test(line)) { waiters[k].done(line); waiters.splice(k, 1); }
+        }
+      }
+    });
+    const send = (c: string) => proc.stdin.write(`${c}\n`);
+    const until = (re: RegExp) => new Promise<string>((done) => waiters.push({ re, done }));
+    send('uci'); await until(/uciok/);
+    send('isready'); await until(/readyok/);
+    const evalOf = async (fen: string) => { send(`position fen ${fen}`); send(`go depth ${DEPTH}`); await until(/^bestmove/); return lastScore; };
+
+    const ids: string[] = [];
+    const c0 = new Chess();
+    for (const san of ['d4', 'd5', 'c4', 'e6', 'Nc3']) {
+      if (ids.length >= WANT) break;
+      c0.move(san);
+      const r = await fetch(
+        `${PROXY}/lichess-explorer?source=lichess&fen=${encodeURIComponent(c0.fen())}`
+        + '&ratings=1600,1800,2000&speeds=blitz,rapid&recentGames=4',
+      ).then((x) => x.json()).catch(() => null);
+      for (const g of r?.recentGames ?? []) if (g.id && !ids.includes(g.id)) ids.push(g.id);
+    }
+    if (ids.length === 0) { proc.kill(); return; }
+
+    // ONE student, one profile, games in order — never reset between games.
+    await db.delete(); await db.open();
+    const seat = 'white' as const;
+    const timeline: { game: string; proven: string[]; red: string[] }[] = [];
+    const firstProvenAt = new Map<string, number>();
+    const flips: { tag: string; provenAfter: string; brokenIn: string }[] = [];
+
+    for (const [gi, id] of ids.slice(0, WANT).entries()) {
+      const pgn = await fetch(`${PROXY}/lichess-game-export?id=${id}`).then((x) => x.text()).catch(() => '');
+      let sans: string[] = [];
+      try { sans = sansOf(pgn); } catch { sans = []; }
+      if (sans.length < 20) continue;
+      const c = new Chess();
+      const fens = [c.fen()];
+      for (const san of sans) { c.move(san); fens.push(c.fen()); }
+      const evals: number[] = [];
+      for (const f of fens) evals.push(await evalOf(f));
+
+      const brokeThisGame = new Set<string>();
+      for (let i = 0; i < sans.length; i++) {
+        if ((i % 2 === 0 ? 'white' : 'black') !== seat) continue;
+        const cpLoss = Math.max(0, evals[i] + evals[i + 1]);
+        if (!movePlayedCleanly(cpLoss)) {
+          for (const p of capabilitiesPosed(fens[i], sans[i], seat)) brokeThisGame.add(p.tag);
+        }
+        await recordCapabilityEvidence({
+          fenBefore: fens[i], playedSan: sans[i], moverColor: seat, cpLoss, origin: 'play', prompted: false,
+        });
+      }
+      // A FLIP: a tag this student had already PROVEN, broken in a later game.
+      for (const tag of brokeThisGame) {
+        if (firstProvenAt.has(tag) && firstProvenAt.get(tag)! < gi) {
+          flips.push({ tag, provenAfter: ids[firstProvenAt.get(tag)!], brokenIn: id });
+        }
+      }
+      const profile = await getCapabilityProfile();
+      const proven = [...profile.entries()].filter(([, e]) => e.held >= HELD_FOR_PROVEN && e.broken === 0).map(([t]) => t);
+      const red = [...profile.entries()].filter(([, e]) => e.broken > 0).map(([t]) => t);
+      for (const t of proven) if (!firstProvenAt.has(t)) firstProvenAt.set(t, gi);
+      timeline.push({ game: id, proven, red });
+      // eslint-disable-next-line no-console
+      console.log(`[green-seq] after game ${gi + 1} (${id}): PROVEN ${proven.join(', ') || 'none'} · RED ${red.join(', ') || 'none'}`);
+    }
+    proc.kill();
+    // eslint-disable-next-line no-console
+    console.log(
+      `[green-seq] FLIPS (proven then broken by the same student): ${flips.length}` +
+        (flips.length ? ` — ${flips.map((f) => `${f.tag} (proven ${f.provenAfter} → broke ${f.brokenIn})`).join('; ')}` : ''),
+    );
+    if (!existsSync('audit-reports')) mkdirSync('audit-reports', { recursive: true });
+    writeFileSync('audit-reports/capability-green-sequence.json', JSON.stringify({
+      measuredAt: new Date().toISOString(), depth: DEPTH, heldForProven: HELD_FOR_PROVEN, seat, timeline, flips,
+    }, null, 2));
+  }, 40 * 60 * 1000);
 });
