@@ -177,7 +177,7 @@ describe.each(CORPORA.map((c) => [c.key, c] as const))('%s-teachings corpus gate
   });
   it('phases are valid', () => {
     for (const n of corpus.notes) {
-      expect(['opening', 'middlegame', 'endgame', 'concept'], `${n.id}: phase ${String(n.phase)}`).toContain(n.phase);
+      expect(['opening', 'middlegame', 'endgame', 'concept'], `${n.id}: phase ${n.phase}`).toContain(n.phase);
     }
   });
   it('note ids do not collide with the primary corpus (the block builder dedupes by id)', async () => {
