@@ -2792,17 +2792,63 @@ TestFlight); (2) drop Cupertino (Apple review); (3) drop `audit_run_id` + Headle
 Only what survives all five is a real user. Skipping step 5 reports testing as
 usage.
 
-**🔒 POSTHOG ACCESS = THE POSTHOG MCP SERVER, NOT THE API KEY (David
-2026-07-18: "PostHog access is granted through a different manner … don't
-use the api key").** The session has the PostHog MCP server connected
-(org "Chess Academy Pro", project 390808, us.posthog.com) — query through
-its tools (`mcp__PostHog__exec`: `read-data-schema`, `query-trends`,
-`execute-sql`, error-tracking, etc.). Verified working 2026-07-18 with no
-key. The old path — `scripts/posthog-query.mjs` + the `POSTHOG_API_KEY`
-`phx_` personal key — is DEPRECATED for sessions: the env key is stale
-(401s) and David has said not to use it. Do NOT ask him for a fresh key;
-use the MCP. (`posthog-query.mjs` remains only for non-MCP contexts like
-CI scripts, and only if the key is ever refreshed.)
+**🔒🔒 POSTHOG IS ALWAYS REACHABLE FROM A SESSION. NEVER TELL DAVID IT IS NOT
+(David 2026-09-20, emphatic: "you can log into posthog!! how many times do i
+have to say this!!" → "vercel has the token/key" → "lock into deep memory how
+to get to posthog. i dont want another session to tell me its not
+available").**
+
+🔴 **THE OLD WORDING HERE — "access = the PostHog MCP server, NOT the api key;
+the env key is stale (401s), do not use it" — IS DELETED, not annotated,
+because it is what made a session report PostHog unreachable and lose an hour
+(Lake Butler rule: remove the claim you are replacing).** The MCP server is
+simply NOT connected in every session, and when it is absent the key path is
+not a deprecated fallback — it is THE path, and the key is live.
+
+**THE ROUTE, in order. Try 1, then 2. There is no third answer.**
+1. **PostHog MCP, if this session has it** (`mcp__PostHog__exec`:
+   `read-data-schema`, `query-trends`, `execute-sql`, error-tracking). Do NOT
+   assume it exists: search the tool list first, and note that MCP servers can
+   appear under an opaque UUID rather than a readable name, so search by what
+   the tool DOES, never by the word "PostHog".
+2. **THE KEY OUT OF VERCEL — works with no PostHog MCP and no `VERCEL_TOKEN`
+   in the environment, because the VERCEL MCP is authenticated on its own.**
+   - `filter_project_envs` on project `prj_qYJMwF1apaxdp6sIZzcvZMz9BcZN`
+     (team `team_EG9m215w9cQHWilBOPnOtIFS`) lists every credential;
+   - `get_project_env` with the var's **id** returns the DECRYPTED value.
+     `POSTHOG_API_KEY` is id `rtQtYdwmANfAqfUg`.
+   - ⚠️ A var of `type: "sensitive"` (`PostHog_Read_API_KEY`, `VERCEL_TOKEN`,
+     `SENTRY_AUTH_TOKEN`) CANNOT be read back — Vercel refuses by design.
+     Only `type: "encrypted"` decrypts. Pick an encrypted one and move on.
+   - Then query directly:
+     `POST https://us.posthog.com/api/projects/390808/query/` with
+     `Authorization: Bearer <key>` and
+     `{"query":{"kind":"HogQLQuery","query":"SELECT …"}}`. HogQL takes window
+     functions (`leadInFrame(ts) OVER (PARTITION BY properties.device_id ORDER
+     BY timestamp)`), which is how you measure gaps//sessions.
+   - The SAME route reaches every other server credential (DeepSeek, the audit
+     secret, Upstash, Sentry) — this is the general answer to "the key is not
+     in my env", not a PostHog special case.
+3. **Third fallback if both fail: the browser.** Claude-in-Chrome drives
+   David's real Chrome, which is already signed in to PostHog — open the SQL
+   editor in the UI. Slower, always available.
+
+🚨 **AND VERIFY THE QUERY IS NON-VACUOUS BEFORE REPORTING A ZERO.** A filtered
+count of 0 and a broken query look identical. Return the underlying statistic
+(the gap distribution, the per-event counts) alongside the filter so the zero
+is a measurement. This is the same disease as an audit that reports green
+having verified nothing — it cost this repo three separate mistakes in one day
+(a sampler pointed at the wrong process, a tracer whose beacons were 401ing, a
+typecheck that crashed and printed zero errors).
+
+**Worked example, 2026-09-20 — three queries closed a bug a day of browser
+hunting could not.** PLAN §B #21 (the review page freezing on reopen) was
+being chased through the audit browser with OS samplers and CDP probes. One
+HogQL gap query over `event LIKE 'review%'` answered it: 802 review events
+across 90 days, maximum gap to the device's next event **47 seconds**, zero
+streams ending on a review event → **no real user has ever hit it**, so it is
+an instrument bug, not a user bug, and the hunt stopped. Ask PostHog "does
+this reach users, and how often" BEFORE spending hours reproducing anything.
 
 **Secrets — durable storage (stop re-pasting keys).** This container
 is ephemeral and re-cloned every web session, and `.env*` / `.claude/`
@@ -2826,12 +2872,14 @@ for every command, and the code already reads them:
   `profile.preferences.auditStreamSecret`, or you get 401. **It is ALREADY
   in Vercel** (project env, below) — that's the source of truth; never
   hardcode it (see the AUDIT-STREAM SECRET + WATCHER lesson below).
-- `POSTHOG_API_KEY` — **DEPRECATED for sessions (David 2026-07-18: "don't
-  use the api key"). PostHog reads go through the PostHog MCP server** (see
-  the POSTHOG ACCESS rule above). The `phx_` personal key in the env config
-  is stale (401s) — don't refresh it, don't ask for it, don't fall back to
-  `posthog-query.mjs` in a session. The script + key survive only for
-  non-MCP contexts (CI) if ever revived.
+- `POSTHOG_API_KEY` — **LIVE, and it is in VERCEL (env id `rtQtYdwmANfAqfUg`,
+  `type: encrypted`, so `get_project_env` decrypts it). Verified working
+  2026-09-20 against `https://us.posthog.com/api/projects/390808/query/`.**
+  🔴 The previous text here — "DEPRECATED for sessions … the key is stale
+  (401s) … don't ask for it" — is DELETED rather than annotated: it was wrong
+  and it made a session tell David PostHog was unreachable. Read the full
+  route in the POSTHOG IS ALWAYS REACHABLE rule above; never conclude "no
+  PostHog in this session" without having tried the Vercel step.
   NB: the app's WRITE key is separate and unaffected — the public `phc_…`
   PostHog **project** key lives in Vercel as `VITE_POSTHOG_KEY`
   (+ `VITE_POSTHOG_HOST=https://us.i.posthog.com`) and bakes into the
