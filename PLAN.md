@@ -1775,14 +1775,61 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
    20 of the 21 import-bouncers are in that group.** They are not stopped by
    import; they were leaving anyway. The real question is upstream of every
    feature — what the first session is worth — and it is the same number the
-   Dashboard-bars redesign was aimed at (32 of 39, CLAUDE.md), which has not
-   moved. n=9 completers: small, so treat all of this as direction, not proof.
+   Dashboard-bars redesign was aimed at (32 of 39, CLAUDE.md) — whether that
+   redesign moved it is UNGRADED and probably ungradeable today; see §B 0b,
+   which retracts the "has not moved" claim that used to sit on this line.
+   n=9 completers: small, so treat all of this as direction, not proof.
    ⚠️ TWO CORRECTIONS to my own first cut, both from event lists that were too
    narrow — do not repeat them: "44 users did nothing at all" was FALSE (18 of
    them had the coach speaking to them), and "four devices have ever opened a
    review" was FALSE (12 reached the route, 3 produced events). Count ROUTES
    for surfaces, events only for actions. Caveat: 62 users, single-session
    dominated, so this describes first impressions rather than sustained use.
+
+0b. ❌ **THE DASHBOARD-BARS REDESIGN CANNOT BE GRADED FROM THIS DATA — and
+   the one part that CAN be graded produced nothing (PostHog, 2026-09-20).**
+   The peer challenged my "the bars did not move the number" claim with the
+   right objection: an OTA-gated change only reaches devices that took the
+   update, and "shipped" is not "received". They were correct, and the check
+   kills my claim rather than rescuing it.
+   **Delivery, measured:** of the 18 real native users first seen AFTER the
+   bars shipped (`724bb4d47`, 2026-09-04), only **11 ever took an OTA bundle**
+   — 7 never did, so they ran the App Store binary's older web bundle and
+   never saw the bars at all. (Before-bars cohort: 25 of 44.) OTA
+   `download_failed` is NOT the culprit and is receding: 30 failures the week
+   of 08-23 against 11 the week of 09-06 and 3 the week of 09-13, while
+   completes rose — consistent with the phantom-failure fix having landed.
+   **Every cohort cut is confounded by observation window, in the direction
+   that flatters my conclusion.** Later-arriving users have had fewer calendar
+   days in which to return, so they look worse on every returning metric by
+   construction. Raw: 78% single-day after vs 82% before (n=18 vs 44), and
+   6.11 sections reached vs 7.43. Control for it — require 14+ days of
+   possible observation — and the after-bars cohort collapses to **n=5**,
+   where 1 of 5 returned against 8 of 44. **That is not a measurement.** The
+   binomial standard error at n=18 is ~10 points before the confound; at n=5
+   there is nothing to say. So my earlier "a shipped fix aimed at this exact
+   number did not move it" was NOT supported — retract it, do not soften it.
+   **The one unconfounded finding, and it is a real zero: the Kids Mode row
+   has never been opened.** The redesign's most concrete addition was a
+   home-screen entry for `/kid`, which was genuinely unreachable from a phone
+   before it (`MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5)` trims it off the nav).
+   **ZERO real native users have opened `/kid` — in either era — including
+   the 11 who demonstrably received a post-09-04 bundle.** Non-vacuity proved:
+   the same `properties.route` cut returns 25 distinct routes for this cohort
+   (`/` 62 devices, `/openings` 42, `/coach/home` 33 …), so the query would
+   have seen `/kid` had anyone gone there. This needs no observation window
+   and no cohort split: a row was added, 11 people who could see it did not
+   use it, and neither did anyone else.
+   **The honest position:** the bars are ungraded and will stay ungraded until
+   enough post-09-04 users accumulate a comparable window. Do not cite the
+   82%/78% pair as evidence in either direction. If the question matters
+   sooner, the instrument is a per-device first-session funnel on the users
+   who provably took a post-09-04 bundle — not a date-split cohort.
+   ⚠️ **THE TRAP THIS SECTION EXISTS TO RECORD:** every naive cut agreed with
+   what I already believed, because the confound and the belief point the same
+   way. Two of my three prior claims in §B 0a died the same death (the
+   post-treatment control on import, the too-narrow event list). When a result
+   confirms the prior, look for the confound FIRST.
 
 0. 🔴 **NEW 2026-09-20 14:05 — THE REVIEW WALK IS ~45% SLOWER AND NOW RUNS OUT
    OF BUDGET.** Two product-mode runs of `audit-review-overhaul-prod`, same
