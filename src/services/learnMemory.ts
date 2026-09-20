@@ -67,6 +67,20 @@ export interface LearnMemory {
   lastComputed: string;
   /** Pawn-structure families already NAMED this game. */
   readonly structureSaid: Set<string>;
+  /** The threat and tactic lanes' say-once memory — the last spoken KEY (so a
+   *  standing danger alerts once, not every ply) and EVERY sentence already
+   *  spoken this game (an alternating pair walks straight through a single
+   *  slot). These four lived as hand refs on the page, cleared inside ONE
+   *  intent branch — so a second game in the same mount reached the same
+   *  board, produced the identical threat line, and was told it had already
+   *  said it. Measured 2026-09-19 (`audit-second-game-memory-prod`, 3/3 runs):
+   *  the queen-attacked line and the pin invariant riding on it went silent
+   *  in game 2 at the one shared position. Here, the board-driven `observe`
+   *  reset forgets them like everything else. */
+  lastTacticKey: string;
+  lastThreatKey: string;
+  readonly spokenTacticLines: Set<string>;
+  readonly spokenThreatLines: Set<string>;
   /** Engine readings (WDL, sharpness) already spoken this game. */
   readonly engineReadSaid: Set<string>;
   /** Pieces already called out this game by `pieceQualityLines`. */
@@ -176,6 +190,8 @@ export function createLearnMemory(): LearnMemory {
   const pieceQualitySaid = new Set<string>();
   const spokenKeys = new Set<string>();
   const conceptTaught = new Set<string>();
+  const spokenTacticLines = new Set<string>();
+  const spokenThreatLines = new Set<string>();
   let lastPlies = 0;
   const mem: LearnMemory = {
     gameId: mintGameId(),
@@ -187,6 +203,10 @@ export function createLearnMemory(): LearnMemory {
     pieceQualitySaid,
     spokenKeys,
     conceptTaught,
+    lastTacticKey: '',
+    lastThreatKey: '',
+    spokenTacticLines,
+    spokenThreatLines,
     gemSeen: null,
     gemFen: null,
     lastComputed: '',
@@ -208,6 +228,10 @@ export function createLearnMemory(): LearnMemory {
       pieceQualitySaid.clear();
       spokenKeys.clear();
       conceptTaught.clear();
+      spokenTacticLines.clear();
+      spokenThreatLines.clear();
+      mem.lastTacticKey = '';
+      mem.lastThreatKey = '';
       mem.gemSeen = null;
       mem.gemFen = null;
       mem.lastComputed = '';
