@@ -69,13 +69,15 @@ await dismissHelp(page);
 const proTab = page.locator('[data-testid="tab-pro"]');
 if (await proTab.count() > 0) {
   await proTab.first().click().catch(() => null);
-  await page.locator('[data-testid="featured-pro-openings"]').waitFor({ state: 'attached', timeout: 12000 }).catch(() => null);
-  await page.locator('[data-testid="featured-pro-openings"] [data-testid^="opening-card-pro-gothamchess"]').first()
-    .waitFor({ state: 'attached', timeout: 12000 }).catch(() => null);
-  const featured = await page.locator('[data-testid="featured-pro-openings"]').count();
-  const cards = await page.locator('[data-testid="featured-pro-openings"] [data-testid^="opening-card-pro-gothamchess"]').count();
-  rec('Gotham repertoire pinned to top of Pro tab', featured > 0 ? 'PASS' : 'FAIL', `${featured} section`);
-  rec('featured section lists his opening cards', cards > 0 ? 'PASS' : 'FAIL', `${cards} cards`);
+  // The pinned "featured" section was REVERTED to the standard player-card grid
+  // on 2026-05-31 (21241797d); this scenario waited on its testid for four
+  // months and could only time out (PLAN §B 7c). Today's contract: the Pro tab
+  // mounts and its grid lists a GothamChess player card.
+  await page.locator('[data-testid="pro-repertoires-tab"]').waitFor({ state: 'attached', timeout: 12000 }).catch(() => null);
+  const tabUp = await page.locator('[data-testid="pro-repertoires-tab"]').count();
+  const gotham = await page.locator('[data-testid="pro-repertoires-tab"] [data-testid^="pro-player-card-"]').filter({ hasText: /gotham/i }).count();
+  rec('Pro tab mounts the standard player-card grid', tabUp > 0 ? 'PASS' : 'FAIL', `${tabUp} tab`);
+  rec('the grid lists a GothamChess player card', gotham > 0 ? 'PASS' : 'FAIL', `${gotham} card(s)`);
 } else {
   rec('Pro tab present on /openings', 'WARN', 'tab-pro not found');
 }
