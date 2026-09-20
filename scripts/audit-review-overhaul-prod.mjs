@@ -34,6 +34,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
+import { raced as racedRead, wedgeWatch } from './audit-lib/wedge-watch.mjs';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
@@ -152,11 +153,7 @@ const log = (s) => console.log(`[${new Date().toISOString().slice(11, 19)}] ${s}
 // wedge guard sat for 27 minutes on 2026-09-20 instead of reporting
 // CONTAMINATED: the detector's own detection path needed the wedged thread to
 // answer. Every read that can meet a wedged page is now bounded.
-const RACE_MS = 3000;
-const raced = async (promise, fallback, ms = RACE_MS) => Promise.race([
-  Promise.resolve(promise).catch(() => fallback),
-  new Promise((r) => setTimeout(() => r(fallback), ms)),
-]);
+const raced = racedRead;                       // scripts/audit-lib/wedge-watch.mjs
 const has = async (p, sel) => raced(p.locator(sel).count().then((n) => n > 0), false);
 // Every read is short-fused: on a starved box a default 30s innerText wait
 // inside an 80-iteration nav loop turned a slow page into a 3-hour "hang".
@@ -616,8 +613,9 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // went red for a reason that had nothing to do with the product. A readout
   // that stops answering for this long is the instrument failing, and the run
   // must say so rather than file those rows.
+  // Shared detector — the same one any browser-driving audit can import.
+  const watch = wedgeWatch({ unreadableLimit: 30, label: 'walk' });
   let wedgedReason = null;
-  const UNREADABLE_LIMIT = 30;
   const flaggedLeads = new Map(); // ply → { badge, lead }
   const plyNarr = new Map();      // ply → { badge, narr } — every ply the walk showed
   // STEP BUDGET. 400 polls at 1500ms reached ply 45 of 46 and ran out — the
@@ -688,11 +686,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
     }
     if (n >= total) { reachedEnd = true; break; }
-    if (unreadable > UNREADABLE_LIMIT) {
-      wedgedReason = `the walk readout stopped answering for ${unreadable} consecutive polls at ply ${lastReadPly}/${total} — the page wedged mid-walk`;
-      log(`  [walk] WEDGED: ${wedgedReason}`);
-      break;
-    }
+    wedgedReason = watch.observe(!!read, `ply ${lastReadPly}/${total}`);
+    if (wedgedReason) { log(`  [walk] WEDGED: ${wedgedReason}`); break; }
     // PROGRESS, so a 10-minute walk is not 10 minutes of silence (CLAUDE.md
     // "never run blind, never wait silent"). Without this the recap phase is
     // indistinguishable from a hang, which is the exact failure this audit
