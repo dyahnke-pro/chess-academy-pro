@@ -221,6 +221,14 @@ on an `'interrupt'` posture surface (Play, live Learn), where silence is the
 default and the coach must earn the interruption. **Retarget the instrument
 there; the review arm proves nothing either way and should not be re-run.**
 
+**POST-PUSH AUDITS, 2026-09-20 (bundle `index-DQWQNSty`, all four sequential, muted):**
+- ✅ **loop (red) 6/6** — recorded, paired, B narrated differently, names A's opponent, and SPOKEN off the listener. The capability-path changes cost nothing that was working.
+- ✅ **review, zero reds** — including the two fundamentals rows that were red in the last recorded run (RECAP aggregate + FUNDLEAD). NB that game had ONE flagged ply, so 1/1 is n=1, green rather than robust.
+- ✅ **Learn, exit 0** — 27 spoken lines, the computed concept invariant voiced mid-game, 13 board lines gate-clean on perspective, 57 against the vacuity floor.
+- ❌ **green — RUN UNUSABLE**, correctly refused (above).
+- ✅ **`tactics-context-stale`: ZERO across all four runs** — closes that open item; no third producer indicated.
+- Noted for the other session's #21, not acted on: `workers=60` alive on the review reopen, inside the band their census tracks.
+
 That is the exact shape the RED direction was in before WO-LOOP-01: every half
 built and gated in isolation, the sentence never demonstrated end to end. The
 red half was proven by SEEDING game A and reading game B's tape; green is
