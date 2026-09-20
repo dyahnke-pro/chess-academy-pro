@@ -41,7 +41,16 @@ export async function startAuditListener({ port = 0 } = {}) {
       // different origin (Playwright pages run on localhost:5173,
       // listener on a random port).
       res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type,x-audit-secret');
+      // Echo whatever headers the browser's preflight asks for. A fixed list
+      // rotted the moment the app added a header (2026-09-19: `x-audit-marked`
+      // was refused at preflight and every POST died — the sidecar captured
+      // nothing while every Playwright row still printed). The listener is a
+      // loopback capture, not a security boundary; the secret check below is
+      // the gate.
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        req.headers['access-control-request-headers'] || 'Content-Type,x-audit-secret',
+      );
       res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
       // Chrome Private Network Access: a page served from a PUBLIC origin
       // (the prod URL) posting to 127.0.0.1 sends a PNA preflight and

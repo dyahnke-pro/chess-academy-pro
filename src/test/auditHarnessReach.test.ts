@@ -44,6 +44,36 @@ describe('audit scripts can reach prod from the sandbox', () => {
     expect(missing, `these cannot reach prod: ${missing.join(', ')}`).toEqual([]);
   });
 
+  // 2026-09-19: Chrome 148 blocks https→loopback fetches unless Local Network
+  // Access checks are off, so the sidecar received NOTHING on every audit while
+  // every Playwright row still printed. The helper carries the flag on every
+  // path; a launcher that drops it blinds instrument 3 silently.
+  it('sandboxLaunchArgs() lets an https page reach the loopback sidecar on every path', async () => {
+    const { sandboxLaunchArgs, LOOPBACK_SIDECAR_ARGS } = await import('../../scripts/audit-lib/chromium.mjs');
+    const saved = { s: process.env.AUDIT_SANDBOX, p: process.env.AUDIT_PROXY };
+    try {
+      for (const [sandbox, proxy] of [[undefined, undefined], ['1', undefined], ['1', 'http://proxy.test:3128']] as const) {
+        if (sandbox === undefined) delete process.env.AUDIT_SANDBOX; else process.env.AUDIT_SANDBOX = sandbox;
+        if (proxy === undefined) delete process.env.AUDIT_PROXY; else process.env.AUDIT_PROXY = proxy;
+        const args = sandboxLaunchArgs() as string[];
+        for (const a of LOOPBACK_SIDECAR_ARGS as string[]) expect(args, `sandbox=${sandbox} proxy=${proxy}`).toContain(a);
+        // Chromium honours only the LAST --disable-features; a second one would silently drop this.
+        expect(args.filter((a) => a.startsWith('--disable-features=')).length, `sandbox=${sandbox} proxy=${proxy}`).toBe(1);
+      }
+    } finally {
+      if (saved.s === undefined) delete process.env.AUDIT_SANDBOX; else process.env.AUDIT_SANDBOX = saved.s;
+      if (saved.p === undefined) delete process.env.AUDIT_PROXY; else process.env.AUDIT_PROXY = saved.p;
+    }
+  });
+
+  it('no audit spells a --disable-features literal of its own (one source: chromium.mjs)', () => {
+    // A second --disable-features in a script's args overrides the helper's
+    // (Chromium keeps the LAST), which is exactly how the 2026-07-13 hand-rolled
+    // PNA flag went stale under Chrome 148 and blinded the sidecar.
+    const offenders = driving.filter((f) => /--disable-features=/.test(f.src)).map((f) => f.name);
+    expect(offenders, 'spread sandboxLaunchArgs() instead').toEqual([]);
+  });
+
   it('none hand-rolls the launch args instead', () => {
     // The shape that fooled the sweep: real-looking flags, no proxy, no TLS pin.
     const handRolled = driving

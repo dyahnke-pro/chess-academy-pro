@@ -929,6 +929,31 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### B. The instruments are not believable (a green here means nothing)
 
+7a. ✅ **DONE (2026-09-19) — EVERY narration listener was DARK on this Mac, and
+   every audit still printed its rows.** Two shut valves on the one pipe, found
+   in series:
+   - Chrome 148 (Playwright 1.58's bundle) enforces Local Network Access: an
+     https page may POST to 127.0.0.1 only with a permission grant, and headless
+     denies it. The 2026-07-13 hand-rolled PNA flag lived in TWO places under
+     names Chrome has since renamed, and a second `--disable-features` after the
+     helper overrides it (Chromium keeps the last). Now ONE source,
+     `LOOPBACK_SIDECAR_ARGS` inside `sandboxLaunchArgs()` on every path;
+     `LISTENER_LAUNCH_ARGS` re-exports it; the gems loop's literal is gone.
+     Gate: `auditHarnessReach.test.ts` fails any audit spelling
+     `--disable-features=` itself.
+   - The sidecar allowed a FIXED header list at preflight, and the app started
+     sending `x-audit-marked` (landed from another session the same night), so
+     every POST died at CORS again with the flag in place. The listener now
+     echoes `Access-Control-Request-Headers`; it is a loopback capture, and the
+     secret check is the gate.
+   The Learn gameplay audit played two 29-ply games and captured ZERO events of
+   ANY kind — which reads as "the coach is silent" when the truth is "the pipe
+   is shut". Proof: 0 → 153 listener events, 8/8 on prod. Any audit "green"
+   recorded on a Mac under Chrome 148 before this fix verified nothing about
+   the voice. Ask whether the instrument reached the surface FIRST.
+   READ from that run, not fixed (§C class): "This game is now the Scandinavian
+   Defense" and the …Bg4 pin line are each spoken TWICE back to back.
+
 7b. ✅ **DONE (2026-09-19) — an LLM-written `[BOARD: highlight:]` reached the
    board.** `GameChatPanel.test` 'strips an LLM highlight marker' was red on
    untouched main. Cause: the 2026-09-13 preserve in `applyCandidateArrows` kept

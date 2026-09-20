@@ -840,11 +840,10 @@ async function continuityPreflight() {
     executablePath: exe,
     headless: true,
     args: [
+      // The loopback-sidecar flag rides inside sandboxLaunchArgs() on every
+      // path (2026-09-19) — never add a second --disable-features here; Chromium
+      // keeps only the last one and would drop the helper's.
       ...sandboxLaunchArgs(),
-      // Allow the prod-origin page to POST narration events to the local
-      // listener sidecar (Chrome Private Network Access otherwise blocks
-      // public→127.0.0.1 and logs a CORS error every pass — 2026-07-13).
-      '--disable-features=BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessSendPreflights,PrivateNetworkAccessRespectPreflightResults',
     ],
   });
   const report = { url: URL, ts: new Date().toISOString(), passes: [] };

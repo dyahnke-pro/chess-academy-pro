@@ -58,8 +58,31 @@ export const SANDBOX_CHROMIUM_ARGS = [
  * the Coach / Tactics dashboard tiles "didn't navigate" (audit
  * 2026-05-20). With the flag set, the same clicks navigate cleanly.
  */
+/**
+ * 🔒 THE SIDECAR MUST BE REACHABLE FROM AN https PAGE (found 2026-09-19).
+ * Chrome 148 (the build Playwright 1.58 bundles) enforces Local Network
+ * Access: a page on https://chess-academy-pro.vercel.app may POST to a
+ * loopback address only with a permission grant, and headless DENIES it —
+ * "Permission was denied for this request to access the `loopback` address
+ * space". Every audit's narration listener went dark at once, on every
+ * surface, while each audit still reported its Playwright rows: the Learn
+ * gameplay audit played two 29-ply games and captured ZERO events of ANY
+ * kind. That is the auditHarnessReach class — the instrument never reached
+ * the surface — and the read is "the coach is silent" when the truth is "the
+ * pipe is shut". Applied on EVERY path (sandbox, proxied, developer machine)
+ * because the sidecar is the one instrument every audit shares. Gate:
+ * src/test/auditHarnessReach.test.ts.
+ */
+// ONE --disable-features value: Chromium keeps only the LAST such flag, so a
+// second copy anywhere in a script's args silently overrides this one. The
+// older Private Network Access names (2026-07-13, Chrome ≤147) ride along with
+// the Chrome 148 name so one build's rename never blinds the sidecar again.
+export const LOOPBACK_SIDECAR_ARGS = [
+  '--disable-features=BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessSendPreflights,PrivateNetworkAccessRespectPreflightResults,LocalNetworkAccessChecks',
+];
+
 export function sandboxLaunchArgs() {
-  if (process.env.AUDIT_SANDBOX !== '1') return [];
+  if (process.env.AUDIT_SANDBOX !== '1') return [...LOOPBACK_SIDECAR_ARGS];
   // Opt-in egress proxy (AUDIT_PROXY=$HTTPS_PROXY). In some containers the
   // agent proxy RESETS a direct Chromium connection to prod (curl works
   // because it honors HTTPS_PROXY; Chromium does not unless told). Route
@@ -86,9 +109,10 @@ export function sandboxLaunchArgs() {
       // --log-net-log: ssl_error:1 handshake reset). Only applied on the proxied
       // sandbox path; runner/localhost audits are untouched.
       '--ssl-version-max=tls1.2',
+      ...LOOPBACK_SIDECAR_ARGS,
     ];
   }
-  return SANDBOX_CHROMIUM_ARGS;
+  return [...SANDBOX_CHROMIUM_ARGS, ...LOOPBACK_SIDECAR_ARGS];
 }
 
 export function sandboxContextOptions() {
