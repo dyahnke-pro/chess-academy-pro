@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**763 lines · 19 exports · 10 importers · 5 tests · 0 audits**
+**762 lines · 19 exports · 10 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -65,7 +65,7 @@
 - `src/services/reviewTeachingPoints.test.ts:93`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:2191`
+- `src/services/coachFeatureService.ts:2226`
 - `src/services/reviewTeachingPoints.test.ts:273`
 - `src/services/reviewTeachingPoints.test.ts:276`
 - `src/services/reviewTeachingPoints.test.ts:277`
@@ -86,7 +86,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildMissedShotSignal` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1958`
+- `src/services/coachFeatureService.ts:1993`
 - `src/services/reviewTeachingPoints.test.ts:343`
 - `src/services/reviewTeachingPoints.test.ts:356`
 - `src/services/reviewTeachingPoints.test.ts:365`
@@ -95,7 +95,7 @@
 - `src/services/reviewTeachingPoints.test.ts:379`
 
 ### `explainTemptingCapture` (function) — 10 call sites
-- `src/components/Coach/CoachGameReview.tsx:1647`
+- `src/components/Coach/CoachGameReview.tsx:1648`
 - `src/services/reviewOpeningTheory.ts:328`
 - `src/services/reviewOpeningTheory.ts:364`
 - `src/services/reviewTeachingPoints.test.ts:117`
@@ -107,14 +107,14 @@
 - `src/services/reviewTeachingPoints.test.ts:235`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2524`
+- `src/services/coachFeatureService.ts:2559`
 - `src/services/reviewTeachingPoints.test.ts:166`
 - `src/services/reviewTeachingPoints.test.ts:173`
 - `src/services/reviewTeachingPoints.test.ts:187`
 - `src/services/reviewTeachingPoints.test.ts:197`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2210`
+- `src/services/coachFeatureService.ts:2245`
 - `src/services/plyFactsDialing.test.ts:62`
 - `src/services/plyFactsDialing.test.ts:68`
 - `src/services/plyFactsDialing.test.ts:69`
@@ -123,18 +123,18 @@
 - `src/services/plyFactsDialing.test.ts:78`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2219`
+- `src/services/coachFeatureService.ts:2254`
 
 ### `describeConcessions` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:1905`
-- `src/services/coachFeatureService.ts:1971`
+- `src/services/coachFeatureService.ts:1940`
+- `src/services/coachFeatureService.ts:2006`
 - `src/services/reviewTeachingPoints.test.ts:201`
 - `src/services/reviewTeachingPoints.test.ts:208`
 - `src/services/reviewTeachingPoints.test.ts:217`
 
 ### `findTrappedPiece` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:2534`
-- `src/services/coachFeatureService.ts:2535`
+- `src/services/coachFeatureService.ts:2569`
+- `src/services/coachFeatureService.ts:2570`
 - `src/services/reviewFullData.ts:458`
 - `src/services/reviewFullData.ts:460`
 - `src/services/reviewTeachingPoints.test.ts:243`

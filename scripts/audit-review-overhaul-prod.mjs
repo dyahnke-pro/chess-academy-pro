@@ -33,6 +33,7 @@
  */
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
@@ -139,7 +140,10 @@ let SANS = [];
 let FUND_PLY = 12;           // chosen from the engine's own flags, per game
 let EXPLORE_PLY = 11;        // a student-to-move ply, derived below
 
-const log = (s) => console.log(s);
+// Every line stamped: on 2026-09-20 two 'wedges' turned out to sit at 29:53 of
+// a 30-min chain bound, and without timestamps nobody could tell a slow run
+// from a blocked one (PLAN #21 n=5/n=6).
+const log = (s) => console.log(`[${new Date().toISOString().slice(11, 19)}] ${s}`);
 const has = async (p, sel) => { try { return (await p.locator(sel).count()) > 0; } catch { return false; } };
 // Every read is short-fused: on a starved box a default 30s innerText wait
 // inside an 80-iteration nav loop turned a slow page into a 3-hour "hang".
@@ -162,6 +166,14 @@ const run = async () => {
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: [...sandboxLaunchArgs(), ...LISTENER_LAUNCH_ARGS] });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
   await ctx.addInitScript(muteTtsForAudit);      // instrument = the app's own spoken events; never a synthesis bill
+  // AUDIT_DETERMINISTIC=1 → the app runs review analysis depth-only (PLAN #70):
+  // the annotations become a pure function of the game, so two runs on one
+  // game can be compared row for row. Off by default — the default run
+  // measures the product as users get it, budgets and all.
+  if (process.env.AUDIT_DETERMINISTIC === '1') {
+    await ctx.addInitScript(() => { try { window.localStorage.setItem('auditDeterministicAnalysis', '1'); } catch { /* ignore */ } });
+    log('[determinism] review analysis depth-only for this run (AUDIT_DETERMINISTIC=1)');
+  }
   await ctx.addInitScript(autoDismissCalibration);
   // Instrument 2 — the narration listener sidecar. The page streams EVERY
   // logAppAudit event to it; `coach-narration-spoken` carries the full spoken
@@ -217,6 +229,7 @@ const run = async () => {
   // Worker-target census at every phase boundary: 128 DedicatedWorker threads
   // were found in the wedged renderer (2026-09-06) — the count tells WHEN they
   // pile up, which names the spawner.
+  page.on('dialog', (d) => { log(`  [dialog] ${d.type()}: ${d.message().slice(0, 120)} — dismissed`); d.dismiss().catch(() => undefined); });
   const cdp0 = await ctx.newCDPSession(page).catch(() => null);
   const workerCount = async () => {
     if (!cdp0) return '?';
@@ -1039,6 +1052,31 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         : h === -1 ? 'JS heap UNREADABLE (renderer wedged or evaluate timed out)'
         : `${wl.length} live worker targets > 40 — heap was fine at ${h}MB`;
       log(`  [heap] BLOW-UP at ply ${n} (${h}MB, ${wl.length} workers) — ${blown} — dumping profile`);
+      // The OS sample FIRST — it is the only reader that works while the main
+      // thread is blocked (five wedges, zero profiles: `Profiler.stop` cannot
+      // land on a spinning isolate). Names the native frames (#21).
+      mkdirSync('audit-reports', { recursive: true });
+      // Is the page's execution context reachable at all? A raw CDP evaluate
+      // that HANGS means the main thread is blocked; one that ERRORS means the
+      // context/renderer is gone — different bugs.
+      const probe = cdp ? await Promise.race([
+        cdp.send('Runtime.evaluate', { expression: '1+1', returnByValue: true }).then((r) => `answered ${JSON.stringify(r.result?.value)}`, (e) => `error ${String(e.message ?? e).slice(0, 100)}`),
+        new Promise((r) => setTimeout(() => r('HUNG >3s'), 3000)),
+      ]) : 'no cdp';
+      log(`  [wedge] url=${page.url()} closed=${page.isClosed()} cdp Runtime.evaluate: ${probe}`);
+      const rs = playwrightRenderers();
+      log(`  [sample] playwright renderers: ${JSON.stringify(rs)}`);
+      for (const smp of sampleRenderers(`audit-reports/renderer-sample-${GID}`, 5)) {
+        log(`  [sample] pid ${smp.pid} cpu=${smp.cpu}% rss=${smp.rssMB}MB → ${smp.file}${smp.error ? ' ERROR ' + smp.error : ''}`);
+        for (const l of smp.main) log(`     ${l}`);
+      }
+      if (process.env.AUDIT_WEDGE_HUNT === '1') {
+        // The hunt wants the diagnostics, not the rest of the rubric — every
+        // later step evaluates against a blocked page and hangs (n=2 sat 49 min).
+        log('  [wedge] AUDIT_WEDGE_HUNT=1 — diagnostics captured, exiting 3');
+        await browser.close().catch(() => undefined);
+        process.exit(3);
+      }
       await dumpProfile('blow-up');
       // WHO spawned them: the app's own audit events since the reopen (captured
       // off the wire, so a 500 from the stream server cannot hide them).

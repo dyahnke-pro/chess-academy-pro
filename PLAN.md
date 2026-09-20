@@ -27,7 +27,7 @@ David's calls (Upstash, archived danya notes, spend-guard design), D9b/D15
 4. **D11** — couple squares on the `[delta]` facet so stacked generators subsume.
 5. **Hygiene** — pre-push hook honours the ship-check watermark; ship-check
    prints timeouts vs assertions; lint crash named as crash; test type-error
-   ceiling to 0; `BuildVersionWidget.test`; stale-tactics leftovers
+   ceiling; `BuildVersionWidget.test`; stale-tactics leftovers
    (`tactics-context-stale` count, `formatTacticsSubBlock` fen); multilingual
    lesson row vs probe.
 6. **Measure-first, numbers only** — entry chunk contents/parse, the 57k
@@ -57,7 +57,15 @@ shared lock.
   stale). Nothing changed.
 - ✅ 5. **Hygiene** — the other session had already landed 11a (timeouts vs
   assertions), 11b (hook honours the watermark) and 11c (lint crash named) by the
-  time this ran. Landed here: 11d **test type-error ceiling 0** (measured 0);
+  time this ran. Landed here: 11d — 🔴 **I MEASURED 0 AND IT WAS A CRASH.** A bare
+  `npx tsc -p tsconfig.tests.json --noEmit` dies on the default heap and prints
+  ZERO `error TS` lines, which reads exactly like a clean run; I lowered the
+  ceiling to 0 on that reading. Re-measured with
+  `NODE_OPTIONS=--max-old-space-size=8192`: **236**, the number the other
+  session had already measured and set the same night. The ceiling stays 236
+  (down from 296, their 60 fixture fixes). The trap is documented IN
+  `ship-check.mjs` directly above the constant and I walked into it anyway —
+  never read a tsc count without the heap flag. Also landed:
   `BuildVersionWidget.test` regex; `formatTacticsSubBlock(tactics, boardFen)` —
   the board fen is REQUIRED and a stale package renders nothing + audits
   (`formatTacticsSubBlock.stale.test.ts`); the multilingual lesson row polled
@@ -1528,6 +1536,70 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      ply readout and the narration banner in two separate DOM round trips, and
      the muted voice-gated walk advanced between them. The three reads are now
      one atomic snapshot.
+   - **THE SEAM LANDED AND THE PAIR STILL DIFFERED (2026-09-20, bundle
+     `index-BeoVsaKE`, 06wNUWaA pinned, `AUDIT_DETERMINISTIC=1`):** run 1 34/36,
+     run 2 33/36, `only2=['CRIT spoken-names-count-and-stake']`; FUNDLEAD ply 50
+     "MISTAKE 1.1" vs "INACCURACY 0.7". So the budget was NOT the residue. Read
+     the code end to end and found two mechanisms, neither a budget:
+     (a) `evaluateFensPooled` hands positions to the pool off a shared `next`
+     counter — WHICH worker's WARM transposition table searches ply 50 is
+     timing, and a single-thread engine at a fixed depth is only deterministic
+     given the same table; (b) the sacrifice verify and the best-move refine
+     ran on the SINGLETON — the multi-thread build (Threads ≤4, lazy SMP),
+     nondeterministic by construction — and sat on the live engine behind an
+     open review, the exact defect the dive was moved off on 2026-09-06, two
+     sites over (rot-on-sight). ✅ BUILT: under the audit flag the pool worker
+     sends `ucinewgame` before every position (single-thread build, a 16 MB
+     memset, spawns nothing — the #21 storm rule is about the multi build), so
+     a pool eval is a pure function of (fen, depth) whichever worker gets it;
+     and ONE dedicated pool worker is acquired lazily and held through the
+     annotation loop for the dive, the sacrifice verify and the best-move
+     refine (singleton only when no worker can be had). Gate:
+     `analysisDeterminism.pool.test.ts` — a fake Worker records the UCI stream:
+     product = one clear per worker per game; flag = every `position fen` is
+     preceded by `ucinewgame`; parity = with a pool available the review makes
+     ZERO singleton calls, with the dive killed at the flagged ply so the
+     refine has to search. ✅ **VERIFIED ON PROD (2026-09-20 08:12–08:45,
+     bundle `index-D0T1cBBh`, 06wNUWaA pinned, `AUDIT_DETERMINISTIC=1`, two
+     runs back to back under the lock, nothing else running): 34/36 and 34/36,
+     IDENTICAL red sets (RECAP + FUNDLEAD — §E item 0, real), and the FUNDLEAD
+     detail byte-identical across all five plies (48 → 1.1, 50 → 0.9, 62, 64,
+     68), CRIT moment @ply 66 identical, no reopen wedge, ERR none.** The
+     residue was the hash and the singleton, not the budget; the verdict is
+     now a pure function of the game under the flag. Still true: the singleton
+     fallback (no pool worker at all) stays nondeterministic and is out of
+     reach of any flag — a device with no pool is the only place a pinned pair
+     can still differ. #70 CLOSED for the review audit.
+   - **What the full row diff of that pair still showed (read, not asserted):**
+     (a) the critical-moment FAN read "10 speak / gap 99667" vs "9 speak / gap
+     99688" — the moment matched this time, but that is the exact path that
+     flipped `CRIT spoken-names-count-and-stake` in the earlier pair: the fan
+     is time-boxed (`CRITICAL_FAN_BUDGET_MS` 1.5 s) on a warm, queue-assigned
+     table and only `analyzePosition` had the cold start. First wire (cold
+     start + the fan's clock lifted to the ten-minute ceiling) was MEASURED
+     WRONG on the next pinned pair: MultiPV 3 at depth 14 from a cold hash on
+     the one worker the pool had did not finish 22 plies before the reopen
+     aborted the pass — "no scanCriticalMoments event", the question never
+     fired. Deterministic and unbounded is the wrong pair. ✅ REWIRED: under
+     the flag the fan sends `go depth 14 nodes 1200000` (a node limit is the
+     third kind of bound — deterministic on one thread with a cold table AND
+     finite), with its own 30 s watchdog; the pass keeps its real 1.5 s
+     budget. Gate: the source must carry the node-bound send and the fan must
+     never go through `reviewBudget`. VERIFIED 1 OF 2: node-bound run 1 on
+     `index-WwZIaxGS` read "22 read, 9 speak, gap 99640, 3087 ms" — same
+     wall-clock as the product's clocked fan and the same verdict as the
+     clock-lifted run before it; run 2 hit the #21 wedge at the reopen and was
+     killed, so the byte-identical PAIR on the node-bound fan is still owed
+     (the chain's diff picked the previous report and read "identical" off the
+     wrong pair — a script defect, `diff-review-pair.py`, fixed to key on the
+     run's own report path next time). (b) the
+     EXPLORE reply's eval (1.3 vs 1.4) — a LIVE ask on the singleton, not
+     review analysis; out of scope for the flag by design. (c) the LEDGER
+     sample strings differ — prose from the PROJECTION layer (`computePvLine`
+     through `acquirePvEngines`, `PROJ_TIMEOUT_MS` 7 s deadlines in
+     `coachFeatureService`). Under the flag those deadlines would have to be
+     lifted TOO or every projection aborts; owed, not done — it changes
+     prose, never a red row.
 9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
    on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
    - **2026-09-20, taken over from focused-noyce after 07acb13fb.** Their fix
@@ -1546,6 +1618,85 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      prod.mjs` now hooks every Worker's error events per URL (the flood's
      source, named), samples main-thread responsiveness per census, and has a
      PROBE_FULL_WALK=1 mode — the next run names the flooding worker.
+   - **n=2 (2026-09-20, focused-noyce, independent):** their own review run on
+     jMVMo1Ua (student=white) sat 49 min with node at 0% and the log ending
+     "reopened walk ply=0: 104MB workers=1 {stockfish-18-lite-single.js:1}" —
+     demote clean, no storm, walk never leaves ply 0. Same shape, different
+     game. The wedge, not the storm, is #21's remaining defect.
+   - **n=3 (2026-09-20 ~05:00, my full-walk probe), and the wedge is READ:**
+     this reopen ran on the SINGLE build from the start (the persisted multi
+     fallback), six single-thread workers alive and EVERY one answered a CDP
+     `Runtime.evaluate` — the engines are fine. The page's MAIN thread is what
+     is stuck: `Runtime.evaluate` times out and `Debugger.pause` never lands
+     in 30 s → spinning in NATIVE code (no JS/wasm interrupt check reached),
+     Chromium at 100%. It answered 0 ms at walk+5 s after the reopen, then
+     never again. Not the engine, not the storm. Fits a catastrophic regex
+     over narration text or a structured-clone/JSON.stringify of something
+     huge on the reopened walk. NEXT: the probe now takes an OS-level
+     `sample <renderer pid> 8` at wedge time (names the native frames) and
+     races every page.evaluate (it had wedged itself for 68 min on one).
+   - **n=4 (2026-09-20 ~07:44, full-walk probe with the OS sample armed): NO
+     WEDGE.** First walk to the recap, dive done, reopen, 60 s of reopened
+     walk — main thread 1–4 ms at every census, workers alive throughout, the
+     sample never fired. ⚠️ CONTAMINATED for its last ~5 min: my own chain's
+     wait loop deleted the probe's (ownerless) lock and the queued Gotham
+     audit started beside it at 07:40 — recorded in memory, loop fixed. So
+     this is n=4 of "no wedge under MORE load", weak in the direction that
+     matters. **What it DID name: the error flood's source.** The page-side
+     Worker hook caught `Uncaught RuntimeError: unreachable
+     @stockfish-18-lite-single.js:11` — 7 events on the first walk (all five
+     single-thread pool workers vanished from the census at walk+75 s), 3 on
+     the reopen. That is a WASM trap (an `abort()` inside the engine — the
+     shape a failed allocation takes), on the single-thread build, i.e. the
+     analysis POOL, while the multi engine sat clean. A trapped pool worker
+     never answers, so `analyzePosition` rejects after budget+4 s and the
+     ply's eval is NULL → a null pair classifies `good` — the batch path
+     documents exactly this data bug ("every move marked fine, permanently").
+     NEXT for #21: (a) count how many curve/dive positions came back null on
+     a run with traps (add it to the review audit's engine row); (b) capture
+     the worker's stderr/`abort` reason — the glue prints it before the trap;
+     (c) memory: 5 single workers × 16 MB hash + the multi engine's 64 MB +
+     4 helpers on a 4 GB tab is the first suspect.
+   - **n=5 (2026-09-20 09:59–10:29, bundle `index-WwZIaxGS`, my own pinned
+     review run, `AUDIT_DETERMINISTIC=1`, nothing else on the machine):** the
+     WEDGE, clean. Dive finished before the reopen; reopen startable in 0.3 s;
+     `review-walk-started` + ONE `review-narration-spoken` fired, then "JS heap
+     UNREADABLE (renderer wedged or evaluate timed out)" at ply 0, no ply
+     readout ever, workers=1 (`stockfish-18-lite-single.js`), pool churn {},
+     until the 30-min bound killed the browser. Same shape as n=1–3: the page's
+     MAIN thread stops answering right after the reopened walk speaks its
+     first line. Four of the five wedges had no determinism flag, so the flag
+     is not the cause. It is reproducible enough to hunt now — ~1 in 3 reopens.
+   - **n=6 (2026-09-20 10:35–11:05, product mode, no flag, no deploy under it —
+     bundle and origin verified unchanged): first attempt of the hunt WEDGED,
+     and the new OS sample fired — on the WRONG process** (the selector took
+     "the hottest process matching chrom(e|ium)" and got the Claude desktop
+     app, whose path contains the word). What that mis-sample still proved:
+     the hottest chromium-named process on the box was at **0.3 % CPU** at the
+     moment the page stopped answering — so this wedge is an IDLE-BLOCKED main
+     thread, not a spin. (n=1's "100 % for 50 min" was the pthread storm,
+     since fixed; do not conflate.) The sampler now takes every Playwright
+     renderer by executable path + `--type=renderer`, logs cpu/rss per
+     renderer, and prints the main thread's deepest frames; the audit also
+     logs any dialog and whether a raw CDP `Runtime.evaluate` HANGS or ERRORS
+     at blow-up. Also read: "0 workers" at blow-up is the pool's 60 s idle
+     retire, not a signal.
+   - 🔴 **CORRECTION, same hour: n=5 and n=6 are PROBABLY ARTIFACTS of my own
+     chain bound, not wedges.** The heap probe's race is 4 s, so a real wedge
+     is detected within seconds — yet in BOTH runs the blow-up fired at 29:53
+     and the chain's `bounded 1800` killed the browser at 30:00. A clean run
+     takes ~18 min; something made those two take 30, and the kill landed
+     mid-reopen and read as "JS heap UNREADABLE". What made them slow is
+     unknown because the audit log carried NO timestamps. Hunt 2 (three
+     bounded attempts) found nothing; attempt 3 I killed myself by removing
+     the bound the wrong way (kill the watcher SUBSHELL, never its `sleep` —
+     the sleep's exit releases the kill; memory `background-chain-guards`).
+     Now: every audit log line is stamped, `AUDIT_WEDGE_HUNT=1` makes the
+     audit exit 3 right after the blow-up diagnostics (no more 49-min hangs on
+     un-raced evaluates), and hunt 3 runs UNBOUNDED. The honest count of
+     clean-machine, deploy-free wedges is therefore n=2 and n=3 (both real:
+     49 min at 0 % node, and a main thread that never answered) — the
+     reproduction rate is unknown, not "1 in 3".
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
     + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
     Test type errors are no longer invisible; they are counted and capped. What
@@ -1554,35 +1705,74 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     runtime" — deleted, not annotated, because it was no longer true.)
 11. **The GothamChess pro-rep audit fails on prod** (#58) — header selector and
     walkthrough click both miss.
+    - ✅ **READ AND FIXED (2026-09-20), four layers, none of them the product.**
+      Two of the day's runs were CONTAMINATED (each overlapped another tape by
+      a lock mistake — memory `background-chain-guards`), so their identical
+      misses proved nothing; the first CLEAN run (08:45, 32/34) still missed
+      the Pro tab and the Watch button. A fresh-context probe
+      (`probe-openings-tab-mount.mjs`) then measured the product: tab bar at
+      +23 s direct / +55 s via the home page, the Pro grid with 8 player cards
+      the instant `tab-pro` is clicked, zero errors. So the misses were the
+      HARNESS: (1) the Watch button was counted before the detail page's
+      Dexie read rendered it → bounded wait; (2) the audit never injected
+      `autoDismissCalibration`, so its Pro-tab click landed on the page-help
+      modal, and (3) that click's error was SWALLOWED (`.catch(() => null)`)
+      into "0 tab" — the silent-no-op class; (4) the card row filtered by
+      TEXT and raced the async card render → keyed on the id-bearing testid
+      with a wait. Clean run on the fixed script: **33/34**, the last red
+      being (4); with (4) fixed: **34/34 on prod (09:39, bundle
+      `index-WwZIaxGS`), vacuity-checked. #58 CLOSED.** The two WARNs are instruments, not
+      product: "audit-stream captured 0 events" (the stream is opt-in and OFF
+      — expected since 2026-09-11) and "0 POST bodies / 42 entries on
+      listener" (the sidecar HAS the run's events; the script's own
+      `page.on('request')` intercept counted none — its wire-side counter is
+      dead while the listener works; fold the row onto the listener). The
+      content-section rows (plans / model games / pitfalls) PASSED clean, but
+      they are still "does the word appear" checks — the G9.3 meta-lesson
+      class — and owe a real assertion.
 
 11a. **ship-check false-reds under parallel-session load (2026-09-19).** Three
     runs in one afternoon went red with ZERO assertion errors: every gate
     failure was a vitest `Test timed out` (punish-gems conversions at 5–22s
     that run at ~400ms alone) while three sibling worktrees ran their own
     typecheck/eslint (load avg 34–56 on 6 cores; a 55s typecheck took 1398s).
-    A contaminated ship-check is worse than none. TODO: make the gate summary
-    SAY "N timeouts / M assertion failures" instead of one ✗, so a load
-    artifact is never read as a product red; consider a load check
+    A contaminated ship-check is worse than none. ✅ DONE 2026-09-20
+    (b393b2b74): `summarizeVitest` counts "Test timed out" against
+    AssertionError and flags an all-timeout red as suspected machine load.
+    Still worth considering: a load check before the gates run
     (`sysctl -n vm.loadavg`) that refuses to start above ~8 and says why.
 11b. **The pre-push hook spawns a SECOND full ship-check on every push**
     (shared `.git/hooks/pre-push` across all worktrees). With ship-check already
     running detached for the same SHA, a plain `git push` hung 2+ minutes and
-    doubled the load that causes 11a. TODO: have the hook honour the
-    `.ship-check-log/latest.json` watermark — skip when a green run exists for
-    HEAD's SHA — instead of always re-running.
+    doubled the load that causes 11a. ✅ DONE 2026-09-20 (b393b2b74 +
+    e0c964b4e): the hook skips when `.ship-check-log/latest.json` records a
+    green run for HEAD's SHA; and the installer now resolves the COMMON git
+    dir, because in a worktree `.git` is a file and every worktree session
+    that ran it had installed nothing (ENOTDIR).
 11c. **✅ FIXED 2026-09-19 (`10334b048`) — lint rendered a heap crash as a
     verdict.** On Node 26 whole-repo eslint died with a V8 native stack trace
     and the summarizer printed `✗ lint … 0 errors` — a row that contradicts
     itself. The step now carries `--max-old-space-size=8192` itself. Left
-    open: `summarizeLint` still can't distinguish "eslint crashed" from
-    "eslint reported nothing"; it should fail LOUDLY on a non-zero exit with no
-    report.
+    open → ✅ closed 2026-09-20 (b393b2b74): with no report line the summary
+    says so instead of "0 errors", and the row's ✓/✗ comes from the exit
+    status; every native-crash signature names a crash.
 11d. 🔴 **PREMISE CORRECTED (2026-09-20): the real count IS 296, the ceiling is
     right.** "0 errors — lower the ceiling to 0" was tsc CRASHING under load
     (a heap death prints no `error TS` line), the same disease as 11c's lint
     row; on a quiet machine the phase prints "296 errors (at the ceiling)". The
     step now names a crash instead of counting zero. The runtime half of #61
     is still owed the honest way: drive the 296 down, then lower the ceiling.
+    - ✅ **296 → 236 (2026-09-20), ceiling lowered to 236.** Sixty were one
+      class — a type GREW required fields after its fixtures were written
+      (`SidePlan` +11, `MoveAnnotation` +2, `NeedPlyInput.clauseKind`,
+      `MistakesLike`, `TablebaseLookupResult.bestMove`, the weakness cluster's
+      `total`) — fixed at the fixture with one defaults spread per file, never
+      by loosening the type; plus a JSON import whose literals widen to
+      `string` (`masters-test-db.json`), typed once through the lookup's own
+      option. Also measured: a bare `npx tsc -p tsconfig.tests.json` on the
+      default heap DIES silently and prints 0 errors — run it with
+      `NODE_OPTIONS=--max-old-space-size=8192` or the count is a lie (the 11d
+      disease, one process over). Remaining, by file: 9 services/shareableInsightsService.test.ts; 8 utils/hardRefresh.test.ts; 8 components/Kid/KingMarchGame.test.tsx; 7 services/weaknessSignal.test.ts; 7 services/tacticAlertService.test.ts; 7 services/lookaheadPlan.test.ts;
 11e. **Source-text regex tests drift silently when the guarded code MOVES**
     (2026-09-19, `coachLaneWiring.test.ts`): three assertions failed on
     untouched `main` — a guard grew an operand, a ref migrated into
@@ -1754,6 +1944,21 @@ from the entry chunk's size.
    only by the king and queen — and the king and queen are the worst defenders,
    because the moment you hit the guard the piece drops." Board-true or not, a
    rook guarded by two pieces is not a loose-guard lesson; verify the computer.
+   - **MEASURED OFFLINE (2026-09-20): it is DETECTOR COVERAGE, not inputs.**
+     Replayed 06wNUWaA and called `attributePrinciples` directly on the five
+     flagged student plies with the prod run's best moves (48 Bg5→Kb8, 50
+     Nf6→Nb6, 62 Ne4→Rd6, 64 Kc8→Nd6, 68 Ke6→Ke8), once with no evals and
+     once with evals matching the spoken cpLoss: **all five return `[]` both
+     ways.** `preMoveEval` IS populated (`CoachGameReview.tsx:1786`), so the
+     eval-gated detectors had their inputs; none of the 33 fundamentals
+     describes a knight to the wrong square, a king that blocks instead of
+     stepping, or a king that walks into mate in one. The cheapest true
+     detector is the last: after the played move the opponent has a mate in
+     one and after the best move they do not — chess.js proves it in a loop,
+     and it is exactly the forcing-scan method (`methodBeat`) the coach
+     already teaches. Then item 10's `calculation-depth` from `criticalityScan`
+     gapCp. Until a detector fires, FUNDLEAD/RECAP stay red on this class of
+     game and the red is honest.
 
 0. 🔴 **REVIEW AUDIT: 22/24, TWO REAL FAILURES — both in the fundamentals-first
    path** (prod, 2026-09-19, Carlsen–Grischuk Najdorf, 89 plies):

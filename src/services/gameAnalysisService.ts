@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+import { reviewBudget, deterministicAnalysisForAudit, DETERMINISTIC_FAN_NODES, DETERMINISTIC_FAN_WATCHDOG_MS } from './analysisDeterminism';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { stockfishEngine, resolveWorkerUrl, isIosSafari } from './stockfishEngine';
@@ -472,6 +473,16 @@ class DedicatedWorker {
         // thread — a new pthread Worker each when the runtime's idle pool is
         // empty — and the census on 2026-09-07 found 101 such workers behind
         // three engines. One `ucinewgame` per GAME (`newGame()`), never per ply.
+        //
+        // THE ONE EXCEPTION IS THE AUDIT DETERMINISM SWITCH (PLAN #70). This
+        // pool runs the SINGLE-thread build (`resolveWorkerUrl({ singleThread:
+        // true })`), so a per-position clear is a 16 MB memset and spawns
+        // nothing — and it is what makes a pool search a pure function of
+        // (fen, depth). Without it the work queue decides which worker's WARM
+        // hash searches a position, and that assignment is timing: on the same
+        // bundle at the same depth, ply 50 graded a 1.1 mistake in one run and
+        // a 0.7 inaccuracy in the next. Product code never sets the flag.
+        if (deterministicAnalysisForAudit()) this.worker.postMessage('ucinewgame');
         this.worker.postMessage(`position fen ${fen}`);
         this.worker.postMessage(budgetMs ? `go depth ${depth} movetime ${budgetMs}` : `go depth ${depth}`);
       } catch {
@@ -505,10 +516,11 @@ class DedicatedWorker {
     budgetMs: number,
   ): Promise<Array<{ rank: number; evaluation: number; mate: number | null; bound: 'lower' | 'upper' | null; moves: string[] }>> {
     return new Promise((resolve, reject) => {
+      const deterministic = deterministicAnalysisForAudit();
       const timeoutId = setTimeout(() => {
         cleanup();
         reject(new Error('Fan analysis timed out'));
-      }, budgetMs + 4_000);
+      }, deterministic ? DETERMINISTIC_FAN_WATCHDOG_MS : budgetMs + 4_000);
 
       const blackToMove = fen.split(' ')[1] === 'b';
       const flip = blackToMove ? -1 : 1;
@@ -564,8 +576,18 @@ class DedicatedWorker {
       try {
         this.worker.addEventListener('message', handler);
         this.worker.postMessage(`setoption name MultiPV value ${Math.max(2, lines)}`);
+        // Same audit-only cold start as `analyzePosition` (PLAN #70): the fan
+        // decides the critical moment, and a pinned pair read "10 speak" vs
+        // "9 speak" on one bundle because the fan's read is time-boxed on a
+        // warm, queue-assigned table. Under the flag the CLOCK goes too — a
+        // node limit is the bound that is both deterministic and finite (see
+        // DETERMINISTIC_FAN_NODES for the measurement that ruled out lifting
+        // the clock). Product code never sets the flag.
+        if (deterministic) this.worker.postMessage('ucinewgame');
         this.worker.postMessage(`position fen ${fen}`);
-        this.worker.postMessage(`go depth ${depth} movetime ${budgetMs}`);
+        this.worker.postMessage(deterministic
+          ? `go depth ${depth} nodes ${DETERMINISTIC_FAN_NODES}`
+          : `go depth ${depth} movetime ${budgetMs}`);
       } catch {
         cleanup();
         reject(new Error('Worker is dead'));
@@ -952,6 +974,9 @@ export async function scanCriticalMoments(args: {
       if (i >= args.plies.length) return;
       const p = args.plies[i];
       try {
+        // NOT `reviewBudget(...)`: the fan's determinism is a node limit inside
+        // `analyzeFan`, never a lifted clock (measured 2026-09-20: unbounded, it
+        // never finished before the reopen and the question never fired).
         const fan = await w.analyzeFan(p.fen, CRITICAL_FAN_LINES, CRITICAL_FAN_DEPTH, CRITICAL_FAN_BUDGET_MS);
         const read = readCriticalMoment({
           topLines: fan, moverColor: p.moverColor, rating: args.rating, fen: p.fen,
@@ -1327,7 +1352,7 @@ async function evaluateFensPooled(
   onPosition?: (current: number, total: number) => void,
   /** Per-position movetime for the pool workers. Review keeps the 5s default;
    *  the bulk sweep passes BATCH_POSITION_BUDGET_MS. */
-  budgetMs: number = REVIEW_POSITION_BUDGET_MS,
+  budgetMs: number = reviewBudget(REVIEW_POSITION_BUDGET_MS),
   /** Search depth for this pass. The sweep and the review's curve pass run
    *  shallow; only the review's key-moment dive runs deep. */
   depth: number = ANALYSIS_DEPTH,
@@ -1666,7 +1691,7 @@ async function analyzeGamePositions(
   // + the note in analyzeGameOnWorker). The REVIEW keeps every ply, so its
   // eval-curve graph has no opening gap.
   const skipBook = isReview ? 0 : firstNonBookPly(moves);
-  const curveBudgetMs = positionBudgetMs ?? BATCH_SHALLOW_BUDGET_MS;
+  const curveBudgetMs = reviewBudget(positionBudgetMs ?? BATCH_SHALLOW_BUDGET_MS);
 
   /** The cheap curve: one eval per ply. */
   const evals: (number | null)[] = fens.map(() => null);
@@ -1737,31 +1762,51 @@ async function analyzeGamePositions(
   // selectCriticalPlies picks BOTH ends of each swing, so a graded pair is
   // always two evals of the SAME depth — mixing a deep "before" with a shallow
   // "after" would read the depth difference itself as an inaccuracy.
+  // ── EVERY DEEP SEARCH THIS REVIEW MAKES RUNS ON ONE DEDICATED POOL WORKER —
+  // the key-moment dive, the sound-sacrifice verify and the best-move refine.
+  //
+  // The dive was moved off the SINGLETON on 2026-09-06 because it runs BEHIND
+  // an open review and the singleton is the engine every live ask uses (the
+  // explore reply, Show-me, the hint): a 24-ply × 8s dive queued in front of it
+  // made the explored move's reply wait minutes and wedged a worker restart
+  // ("Stockfish initialization timed out after 45s"). The sacrifice verify and
+  // the best-move refine run in the SAME loop behind the SAME open review and
+  // were left on the singleton — the identical defect, two sites over.
+  //
+  // It is also the other half of PLAN #70. The singleton is the MULTI-thread
+  // build (Threads up to 4, lazy SMP), whose search is nondeterministic by
+  // construction, so no audit switch can make a verdict that passed through
+  // it reproducible; the pool worker is single-thread, and under the
+  // determinism flag clears its hash per position (see `analyzePosition`).
+  //
+  // Acquired once, lazily, on the first deep search; held through the
+  // annotation loop; released in the `finally` below. The singleton remains
+  // the fallback only when no worker can be had at all.
+  let deepWorker: DedicatedWorker | null = null;
+  let deepWorkerTried = false;
+  const deepBudgetMs = reviewBudget(positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
+  const deepSearch = async (fen: string, depth: number): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> => {
+    if (!deepWorkerTried) {
+      deepWorkerTried = true;
+      try { deepWorker = (await acquirePool(1))[0] ?? null; } catch { deepWorker = null; }
+      deepWorker?.newGame();
+    }
+    if (deepWorker) return deepWorker.analyzePosition(fen, depth, deepBudgetMs);
+    const a = await stockfishEngine.analyzeWithBudget(fen, depth, deepBudgetMs);
+    return { evaluation: a.evaluation, bestMove: a.bestMove, depth: a.depth, pv: a.topLines?.[0]?.moves?.slice(0, 8) ?? [] };
+  };
+
+  const annotations: MoveAnnotation[] = [];
   let deepDiveComplete = false;
-  if (isReview && !opts.sweepOnly) {
-    const keyPlies = selectCriticalPlies(evals, skipBook, REVIEW_MAX_DEEP_PLIES);
-    // The dive runs BEHIND an open review now, so it must not sit on the
-    // SINGLETON engine — that is the engine every live ask uses (the explore
-    // reply, Show-me, the hint), and a 24-ply × 8s dive queued in front of it
-    // made the explored move's reply wait minutes and wedged a worker restart
-    // (prod audit 2026-09-06: "Stockfish initialization timed out after 45s").
-    // Take ONE dedicated pool worker; the singleton stays free. Fall back to
-    // the singleton only when no worker can be had at all.
-    let diveWorker: DedicatedWorker | null = null;
-    try { diveWorker = (await acquirePool(1))[0] ?? null; } catch { diveWorker = null; }
-    diveWorker?.newGame();
-    const search = async (fen: string): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> => {
-      if (diveWorker) return diveWorker.analyzePosition(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
-      const a = await stockfishEngine.analyzeWithBudget(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
-      return { evaluation: a.evaluation, bestMove: a.bestMove, depth: a.depth, pv: a.topLines?.[0]?.moves?.slice(0, 8) ?? [] };
-    };
-    let searched = 0;
-    try {
+  try {
+    if (isReview && !opts.sweepOnly) {
+      const keyPlies = selectCriticalPlies(evals, skipBook, REVIEW_MAX_DEEP_PLIES);
+      let searched = 0;
       for (const i of keyPlies) {
         if (deep[i] !== null) { searched++; continue; }
         onPosition?.(fens.length, fens.length);
         try {
-          const a = await search(fens[i]);
+          const a = await deepSearch(fens[i], REVIEW_DEEP_DEPTH);
           deep[i] = a.evaluation;
           deepBest[i] = a.bestMove || null;
           deepPv[i] = a.pv.length ? a.pv : (a.bestMove ? [a.bestMove] : []);
@@ -1775,133 +1820,131 @@ async function analyzeGamePositions(
           // precision on one move, never the review.
         }
       }
-    } finally {
-      if (diveWorker) releasePool([diveWorker]);
+      deepDiveComplete = searched === keyPlies.length;
     }
-    deepDiveComplete = searched === keyPlies.length;
-  }
 
-  for (let i = skipBook; i < fens.length; i++) {
-    if (evals[i] !== null && depthAt[i] > 0) achievedDepth = Math.min(achievedDepth, depthAt[i]);
-  }
+    for (let i = skipBook; i < fens.length; i++) {
+      if (evals[i] !== null && depthAt[i] > 0) achievedDepth = Math.min(achievedDepth, depthAt[i]);
+    }
 
-  // PAIR-CONSISTENT grading (see the deep-dive note above).
-  const bothDeep = (i: number): boolean => deep[i] !== null && deep[i + 1] !== null;
-  const evalBeforeAt = (i: number): number | null => (bothDeep(i) ? deep[i] : evals[i]);
-  const evalAfterAt = (i: number): number | null => (bothDeep(i) ? deep[i + 1] : evals[i + 1]);
+    // PAIR-CONSISTENT grading (see the deep-dive note above).
+    const bothDeep = (i: number): boolean => deep[i] !== null && deep[i + 1] !== null;
+    const evalBeforeAt = (i: number): number | null => (bothDeep(i) ? deep[i] : evals[i]);
+    const evalAfterAt = (i: number): number | null => (bothDeep(i) ? deep[i + 1] : evals[i + 1]);
 
-  const annotations: MoveAnnotation[] = [];
-  // BOOK-move exemption (David 2026-08-28): theory moves are never errors.
-  let stillBook = true;
-  for (let moveIdx = 0; moveIdx < moves.length; moveIdx++) {
-    const isWhiteMove = moveIdx % 2 === 0;
-    const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
-    const moveNumber = Math.floor(moveIdx / 2) + 1;
+    // BOOK-move exemption (David 2026-08-28): theory moves are never errors.
+    let stillBook = true;
+    for (let moveIdx = 0; moveIdx < moves.length; moveIdx++) {
+      const isWhiteMove = moveIdx % 2 === 0;
+      const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
+      const moveNumber = Math.floor(moveIdx / 2) + 1;
 
-    const evalBefore = evalBeforeAt(moveIdx);
-    const evalAfter = evalAfterAt(moveIdx);
+      const evalBefore = evalBeforeAt(moveIdx);
+      const evalAfter = evalAfterAt(moveIdx);
 
-    let classification: MoveClassification = 'good';
-    let bestMove: string | null = null;
-    // `refinedBestMoveEval` overrides `evalBefore` when a deeper analysis
-    // succeeds for this mistake; otherwise we fall back to the shallow
-    // pre-move eval (see annotation push below).
-    let refinedBestMoveEval: number | null = null;
+      let classification: MoveClassification = 'good';
+      let bestMove: string | null = null;
+      // `refinedBestMoveEval` overrides `evalBefore` when a deeper analysis
+      // succeeds for this mistake; otherwise we fall back to the shallow
+      // pre-move eval (see annotation push below).
+      let refinedBestMoveEval: number | null = null;
 
-    const moveIsBook = stillBook && isBookLine(moves.slice(0, moveIdx + 1));
-    if (!moveIsBook) stillBook = false;
+      const moveIsBook = stillBook && isBookLine(moves.slice(0, moveIdx + 1));
+      if (!moveIsBook) stillBook = false;
 
-    if (evalBefore !== null && evalAfter !== null) {
-      // Clamp through capEval so a mate score can't inflate stored cpLoss
-      // (see the matching note in the first annotation loop). RAW evals
-      // still drive classifyCpLoss's mate/brilliant/blunder detection.
-      const cpLoss = isWhiteMove
-        ? capEval(evalBefore) - capEval(evalAfter)
-        : capEval(evalAfter) - capEval(evalBefore);
+      if (evalBefore !== null && evalAfter !== null) {
+        // Clamp through capEval so a mate score can't inflate stored cpLoss
+        // (see the matching note in the first annotation loop). RAW evals
+        // still drive classifyCpLoss's mate/brilliant/blunder detection.
+        const cpLoss = isWhiteMove
+          ? capEval(evalBefore) - capEval(evalAfter)
+          : capEval(evalAfter) - capEval(evalBefore);
 
-      let graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
+        let graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
 
-      // SOUND-SACRIFICE RESCUE (David 2026-09-14) — a material sac the mid-depth
-      // eval read as a loss may be a brilliancy; re-search the resulting position
-      // DEEP and re-grade before it becomes a verdict (and, downstream, a false
-      // "weakness"). Gated on describeSacrifice inside the helper, so the deep
-      // search runs only on actual sacrifices.
-      if ((graded === 'inaccuracy' || graded === 'mistake' || graded === 'blunder') && evalBefore !== null) {
-        const { soundSac, deepEvalAfterWhiteCp } = await verifySacrificeDeep({
-          fenBefore: fens[moveIdx],
-          san: moves[moveIdx],
-          isWhiteMove,
-          analyzeAfterWhiteCp: async (fa) => {
-            try {
-              return (await stockfishEngine.analyzeWithBudget(fa, SAC_VERIFY_DEPTH, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS)).evaluation;
-            } catch {
-              return null;
-            }
-          },
-        });
-        if (soundSac && deepEvalAfterWhiteCp !== null) {
-          const deepCpLoss = isWhiteMove
-            ? capEval(evalBefore) - capEval(deepEvalAfterWhiteCp)
-            : capEval(deepEvalAfterWhiteCp) - capEval(evalBefore);
-          graded = classifyCpLoss(deepCpLoss, evalBefore, deepEvalAfterWhiteCp, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
-        }
-      }
-
-      // BOOK exemption — theory suppresses opening eval-noise but a genuine
-      // blunder still surfaces even in a named line (see the first loop's note).
-      if (moveIsBook && (graded === 'good' || graded === 'inaccuracy' || graded === 'mistake')) {
-        classification = 'book';
-      } else {
-        classification = graded;
-        if (cpLoss >= INACCURACY_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
-          const reused = deepBest[moveIdx];
-          if (reused) {
-            // The dive already searched this exact position deep — the move it
-            // found IS the refinement. Same engine, same depth the verdict was
-            // settled at; a second search here bought nothing but wall-clock.
-            bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], reused) ? null : reused;
-            refinedBestMoveEval = evalBefore;
-          } else try {
-            const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzeWithBudget(
-              fens[moveIdx], BEST_MOVE_DEPTH, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
-            bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
-              ? null
-              : bestAnalysis.bestMove;
-            refinedBestMoveEval = bestAnalysis.evaluation;
-            if (Number.isFinite(bestAnalysis.depth) && bestAnalysis.depth > 0) {
-              toStore.push({ fen: fens[moveIdx], evaluation: bestAnalysis.evaluation, depth: bestAnalysis.depth, bestMove: bestAnalysis.bestMove });
-            }
-          } catch {
-            // Leave bestMove null + keep the shallow bestMoveEval below
+        // SOUND-SACRIFICE RESCUE (David 2026-09-14) — a material sac the mid-depth
+        // eval read as a loss may be a brilliancy; re-search the resulting position
+        // DEEP and re-grade before it becomes a verdict (and, downstream, a false
+        // "weakness"). Gated on describeSacrifice inside the helper, so the deep
+        // search runs only on actual sacrifices.
+        if ((graded === 'inaccuracy' || graded === 'mistake' || graded === 'blunder') && evalBefore !== null) {
+          const { soundSac, deepEvalAfterWhiteCp } = await verifySacrificeDeep({
+            fenBefore: fens[moveIdx],
+            san: moves[moveIdx],
+            isWhiteMove,
+            analyzeAfterWhiteCp: async (fa) => {
+              try {
+                return (await deepSearch(fa, SAC_VERIFY_DEPTH)).evaluation;
+              } catch {
+                return null;
+              }
+            },
+          });
+          if (soundSac && deepEvalAfterWhiteCp !== null) {
+            const deepCpLoss = isWhiteMove
+              ? capEval(evalBefore) - capEval(deepEvalAfterWhiteCp)
+              : capEval(deepEvalAfterWhiteCp) - capEval(evalBefore);
+            graded = classifyCpLoss(deepCpLoss, evalBefore, deepEvalAfterWhiteCp, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
           }
         }
-      }
-    } else if (moveIsBook) {
-      classification = 'book'; // theory move, evals unavailable — still not a mistake
-    }
 
-    // Persist the engine lines at a flagged ply: the punishment after the
-    // played move (the dive at fens[moveIdx+1]) and the continuation after the
-    // best move (the dive at fens[moveIdx], minus its first move).
-    const flaggedHere = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
-    const pvAfterPlayed = deepPv[moveIdx + 1] ?? [];
-    const pvAtBefore = deepPv[moveIdx] ?? [];
-    const pvAfterBest = bestMove && pvAtBefore[0] && bestMoveEqualsUci(fens[moveIdx], bestMove, pvAtBefore[0]) ? pvAtBefore.slice(1) : [];
-    annotations.push({
-      moveNumber,
-      color,
-      san: moves[moveIdx],
-      // Centipawns, White POV — same contract as analyzeGameOnWorker.
-      evaluation: evalAfter !== null ? evalAfter : null,
-      bestMove,
-      // Deeper-depth value for refined mistakes; shallow `evalBefore`
-      // otherwise. Both are cp/White-POV — same unit as `evaluation`.
-      bestMoveEval: refinedBestMoveEval !== null ? refinedBestMoveEval
-        : (evalBefore !== null ? evalBefore : null),
-      classification,
-      comment: null,
-      ...(flaggedHere && (pvAfterPlayed.length || pvAfterBest.length) ? { pv: { afterPlayed: pvAfterPlayed, afterBest: pvAfterBest } } : {}),
-    });
+        // BOOK exemption — theory suppresses opening eval-noise but a genuine
+        // blunder still surfaces even in a named line (see the first loop's note).
+        if (moveIsBook && (graded === 'good' || graded === 'inaccuracy' || graded === 'mistake')) {
+          classification = 'book';
+        } else {
+          classification = graded;
+          if (cpLoss >= INACCURACY_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
+            const reused = deepBest[moveIdx];
+            if (reused) {
+              // The dive already searched this exact position deep — the move it
+              // found IS the refinement. Same engine, same depth the verdict was
+              // settled at; a second search here bought nothing but wall-clock.
+              bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], reused) ? null : reused;
+              refinedBestMoveEval = evalBefore;
+            } else try {
+              const bestAnalysis = await deepSearch(fens[moveIdx], BEST_MOVE_DEPTH);
+              bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
+                ? null
+                : bestAnalysis.bestMove;
+              refinedBestMoveEval = bestAnalysis.evaluation;
+              if (Number.isFinite(bestAnalysis.depth) && bestAnalysis.depth > 0) {
+                toStore.push({ fen: fens[moveIdx], evaluation: bestAnalysis.evaluation, depth: bestAnalysis.depth, bestMove: bestAnalysis.bestMove });
+              }
+            } catch {
+              // Leave bestMove null + keep the shallow bestMoveEval below
+            }
+          }
+        }
+      } else if (moveIsBook) {
+        classification = 'book'; // theory move, evals unavailable — still not a mistake
+      }
+
+      // Persist the engine lines at a flagged ply: the punishment after the
+      // played move (the dive at fens[moveIdx+1]) and the continuation after the
+      // best move (the dive at fens[moveIdx], minus its first move).
+      const flaggedHere = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
+      const pvAfterPlayed = deepPv[moveIdx + 1] ?? [];
+      const pvAtBefore = deepPv[moveIdx] ?? [];
+      const pvAfterBest = bestMove && pvAtBefore[0] && bestMoveEqualsUci(fens[moveIdx], bestMove, pvAtBefore[0]) ? pvAtBefore.slice(1) : [];
+      annotations.push({
+        moveNumber,
+        color,
+        san: moves[moveIdx],
+        // Centipawns, White POV — same contract as analyzeGameOnWorker.
+        evaluation: evalAfter !== null ? evalAfter : null,
+        bestMove,
+        // Deeper-depth value for refined mistakes; shallow `evalBefore`
+        // otherwise. Both are cp/White-POV — same unit as `evaluation`.
+        bestMoveEval: refinedBestMoveEval !== null ? refinedBestMoveEval
+          : (evalBefore !== null ? evalBefore : null),
+        classification,
+        comment: null,
+        ...(flaggedHere && (pvAfterPlayed.length || pvAfterBest.length) ? { pv: { afterPlayed: pvAfterPlayed, afterBest: pvAfterBest } } : {}),
+      });
+    }
+  } finally {
+    if (deepWorker) releasePool([deepWorker]); // stay warm for the next review
   }
 
   if (toStore.length > 0) await storePositionEvals(toStore);

@@ -47,7 +47,9 @@ describe('deepseekProvider — cold-start timeout retry', () => {
       .mockRejectedValueOnce(new Error('coach-brain-deepseek-timeout'))
       .mockResolvedValueOnce('warm answer');
 
-    await deepseekProvider.callStreaming(envelope, onChunk);
+    // `callStreaming` is optional on the provider contract; this provider
+    // always implements it, which is the point of the test.
+    await deepseekProvider.callStreaming!(envelope, onChunk);
 
     // 1st call (index 2 arg) gets the onChunk; retry (2nd call) gets undefined
     expect(getCoachChatResponse.mock.calls[0][2]).toBe(onChunk);

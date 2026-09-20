@@ -7,8 +7,10 @@
 //       to surface what THIS run emitted.
 
 import { chromium } from 'playwright';
+import { readFileSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
 const PROD = 'https://chess-academy-pro.vercel.app';
@@ -46,6 +48,12 @@ console.log('--- (1) Playwright driving live prod ---');
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+// Kill the page-help modal (and any overlay like it) with CSS before the first
+// click (CLAUDE.md §G1 item 5). This audit never injected it: on 2026-09-20 a
+// fresh-context probe reached the Pro grid (8 player cards) the instant
+// `tab-pro` was clicked, while this script read "0 tab" on three runs — its
+// click was landing on the overlay and the failure was swallowed below.
+await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
   await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 
@@ -93,7 +101,14 @@ try {
   // His repertoire is pinned to the TOP of the Pro tab (featured section,
   // White/Black), not buried behind a player-card click. Verify it renders.
   console.log('  goto /openings (Pro tab) — featured placement check');
-  await page.goto(`${PROD}/openings`, { waitUntil: 'networkidle', timeout: 20_000 }).catch(() => null);
+  // `networkidle` never settles on prod (analytics/audit beacons keep the
+  // network busy), so this goto timed out and the tab bar was read before it
+  // rendered — "tab-pro not found" on every run. Wait for the tab bar itself.
+  await page.goto(`${PROD}/openings`, { waitUntil: 'domcontentloaded', timeout: 20_000 }).catch(() => null);
+  // The explorer renders a loading state until the deferred seed lands (a cold
+  // context takes 45–60 s per CLAUDE.md §G1) and only then mounts the tab bar;
+  // 15 s read "0 tab" on a clean run. Wait the seed out.
+  await page.locator('[data-testid="tab-toggle"]').first().waitFor({ state: 'attached', timeout: 90_000 }).catch(() => null);
   await page.waitForTimeout(2000);
   // The Openings page auto-opens a page-help-modal that intercepts the Pro-tab
   // click — dismiss it first (CLAUDE.md onboarding-modal contract) or the tab
@@ -109,7 +124,13 @@ try {
   }
   const proTab = page.locator('[data-testid="tab-pro"]');
   if (await proTab.count() > 0) {
-    await proTab.first().click().catch(() => null);
+    // A swallowed click here IS the "0 tab" row — make it loud, then retry
+    // through whatever is on top (a human taps anyway; if the tab were truly
+    // unreachable the grid wait below still fails honestly).
+    await proTab.first().click({ timeout: 8_000 }).catch(async (e) => {
+      console.log('   tab-pro click failed:', String(e.message).slice(0, 100), '— retrying with force');
+      await proTab.first().click({ force: true, timeout: 5_000 }).catch((e2) => console.log('   forced click failed too:', String(e2.message).slice(0, 100)));
+    });
     // The featured section's getPlayerOpenings() is an async Dexie read; wait
     // for the testid to attach (up to 12s) rather than racing a fixed delay.
     // The pinned "featured" section was REVERTED to the standard player-card
@@ -119,7 +140,12 @@ try {
     // GothamChess player card.
     await page.locator('[data-testid="pro-repertoires-tab"]').waitFor({ state: 'attached', timeout: 15_000 }).catch(() => null);
     const tabUp = await page.locator('[data-testid="pro-repertoires-tab"]').count();
-    const gothamCards = await page.locator('[data-testid="pro-repertoires-tab"] [data-testid^="pro-player-card-"]').filter({ hasText: /gotham|levy/i }).count();
+    // The card's testid CARRIES the player id (`pro-player-card-${player.id}`),
+    // so key on it — a text filter raced the async card render and read
+    // "0 card(s)" on a grid a probe had just seen holding 8 (2026-09-20).
+    const gothamCard = page.locator('[data-testid="pro-repertoires-tab"] [data-testid="pro-player-card-gothamchess"]');
+    await gothamCard.waitFor({ state: 'attached', timeout: 15_000 }).catch(() => null);
+    const gothamCards = await gothamCard.count();
     rec('Pro tab mounts the standard player-card grid', tabUp > 0 ? 'PASS' : 'FAIL', `${tabUp} tab`);
     rec('the grid lists a GothamChess player card', gothamCards > 0 ? 'PASS' : 'FAIL', `${gothamCards} card(s)`);
   } else {
@@ -177,7 +203,15 @@ try {
   }
 
   const body = await page.textContent('body');
-  rec('GothamChess header renders', /Levy Rozman|GothamChess|Gotham/i.test(body) ? 'PASS' : 'FAIL');
+  // The app is DEPERSONALISED (the house-voice doctrine: no names, ever): the
+  // player page's <h1> prints the catalogue's display name for the player —
+  // "The Accessible Tactical Repertoire" for gothamchess — not "GothamChess".
+  // This row asserted a name the app deliberately stopped showing (#58's
+  // "header selector" half). Assert the catalogue's own name instead.
+  const catalogue = JSON.parse(readFileSync(new URL('../src/data/pro-repertoires.json', import.meta.url), 'utf8'));
+  const expectedName = catalogue.players?.find?.((pl) => pl.id === 'gothamchess')?.name ?? '';
+  const h1 = await page.locator('h1').first().innerText().catch(() => '');
+  rec('player page header prints the catalogue display name', expectedName && h1.trim() === expectedName ? 'PASS' : 'FAIL', `h1="${h1.trim().slice(0, 60)}" expected="${expectedName}"`);
   rec('Caro-Kann opening name visible', /Caro-Kann/i.test(body) ? 'PASS' : 'FAIL');
   rec('London System opening name visible', /London/i.test(body) ? 'PASS' : 'FAIL');
 
@@ -188,8 +222,19 @@ try {
 
   if (cardCount > 0) {
     console.log('\n  clicking into Caro-Kann detail');
-    await cardEl.first().click();
-    await page.waitForTimeout(6000);
+    // The page-help modal auto-opens on the player page and covered the card:
+    // the click below timed out at 30 s for as long as this audit has run on
+    // prod (#58's "walkthrough click" half). Dismiss first, then click with a
+    // bounded timeout and a forced fallback.
+    await page.keyboard.press('Escape').catch(() => null);
+    await page.locator('[data-testid="page-help-close"]').first().click({ timeout: 1500 }).catch(() => null);
+    await cardEl.first().click({ timeout: 8000 }).catch(async () => { await cardEl.first().click({ timeout: 8000, force: true }); });
+    // The card navigates on click (ProPlayerPage → /openings/pro/<player>/<id>).
+    // Wait for the URL rather than a fixed delay; if the click landed on a
+    // re-rendering card, retry through the card's own keyboard path (Enter).
+    const navigated = await page.waitForURL(/\/openings\/pro\/gothamchess\/pro-gothamchess-caro-kann/, { timeout: 10_000 }).then(() => true).catch(() => false);
+    if (!navigated) { await cardEl.first().focus().catch(() => null); await page.keyboard.press('Enter').catch(() => null); await page.waitForURL(/pro-gothamchess-caro-kann/, { timeout: 10_000 }).catch(() => null); }
+    await page.waitForTimeout(3000);
     const url = page.url();
     rec('navigated to pro-gothamchess-caro-kann detail', /pro-gothamchess-caro-kann/.test(url) ? 'PASS' : 'FAIL', url);
 
@@ -212,6 +257,12 @@ try {
       '[data-testid*="watch"]',
       'button:has-text("Listen")',
     ];
+    // The detail page reads its opening (and the WLPP ladder) out of Dexie AFTER
+    // mount, so an immediate count() races the render — two runs on 2026-09-20
+    // read "not found" on a page whose Dexie rows the previous rows had just
+    // PASSED. Wait for the first candidate to become visible (bounded), then
+    // pick as before.
+    await page.locator(watchBtnSelectors.join(', ')).first().waitFor({ state: 'visible', timeout: 30_000 }).catch(() => null);
     let watchClicked = false;
     for (const sel of watchBtnSelectors) {
       const el = page.locator(sel).first();

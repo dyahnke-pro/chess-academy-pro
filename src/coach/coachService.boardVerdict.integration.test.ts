@@ -52,7 +52,7 @@ function liveState() {
 async function ask(q: string, over: Partial<ReturnType<typeof liveState>> = {}): Promise<string> {
   const ans = await coachService.ask(
     { surface: 'game-chat', ask: q, liveState: { ...liveState(), ...over } },
-    { skipActionRouter: true, maxToolRoundTrips: 3 },
+    { maxToolRoundTrips: 3 },
   );
   return ans.text.toLowerCase();
 }

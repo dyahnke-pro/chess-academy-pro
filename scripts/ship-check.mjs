@@ -20,6 +20,7 @@
 // see exactly what broke without digging through logs.
 
 import { spawnSync } from 'node:child_process';
+import { loadavg, cpus } from 'node:os';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -511,6 +512,32 @@ const GATE_TESTS = [
 // instead of merely present: a map written before the change cannot match the
 // code after it. Runs FIRST because it is the cheapest step (<1s) and because a
 // build started without context should stop before anything else is spent on it.
+// ── THE LOAD GUARD (PLAN §B 11a, 2026-09-20) ────────────────────────────────
+//
+// Three ship-checks in one afternoon went red with ZERO assertion errors:
+// every gate failure was a vitest `Test timed out` while three sibling
+// worktrees ran their own typecheck/eslint (load avg 34–56 on 6 cores; a 55 s
+// typecheck took 1398 s). A contaminated ship-check is worse than none — it
+// costs the run AND sends the session chasing a product red that is not
+// there. So the check refuses to START above a load cap and says why, instead
+// of running blind and reporting a machine artifact as a verdict. Override
+// with SHIP_CHECK_LOAD_CAP=<n> (or SHIP_CHECK_IGNORE_LOAD=1 when you have
+// read the load yourself and accept the risk).
+{
+  const load1 = loadavg()[0];
+  const cores = cpus().length || 1;
+  const cap = Number(process.env.SHIP_CHECK_LOAD_CAP ?? 8);
+  const ignore = process.env.SHIP_CHECK_IGNORE_LOAD === '1';
+  process.stdout.write(`  • load guard  ... `);
+  if (load1 > cap && !ignore) {
+    process.stdout.write(`✗ 0.0s :: load ${load1.toFixed(1)} on ${cores} cores is above the ${cap} cap\n`);
+    console.error(`\n  ship-check refused to start: 1-minute load average ${load1.toFixed(1)} (cap ${cap}).`);
+    console.error('  Something else is burning the machine (another session\'s typecheck, an audit, a build).');
+    console.error('  Wait for it, or rerun with SHIP_CHECK_LOAD_CAP=<n> / SHIP_CHECK_IGNORE_LOAD=1 once you have read the load yourself.');
+    process.exit(1);
+  }
+  process.stdout.write(`✓ 0.0s :: load ${load1.toFixed(1)} on ${cores} cores (cap ${cap}${ignore ? ', ignored' : ''})\n`);
+}
 runStep('context gate', 'node', ['scripts/surface-map.mjs', '--verify']);
 //
 // THE SAME GATE, ONE LEVEL UP (David 2026-09-18: "You do not miss this step
@@ -560,7 +587,7 @@ runStep('typecheck   ', 'npm', ['run', 'typecheck']);
 //
 // ZERO gate files carry a type error. Keep it that way; drive the rest down
 // from the non-gate backlog. Ceilings only ever come DOWN.
-const TEST_TYPE_ERROR_CEILING = 0; // 2026-09-20: measured 0 — a NEW test type error now blocks the push (#61 runtime half)
+const TEST_TYPE_ERROR_CEILING = 236;
 // THE INSTRUMENT MUST NOT REPORT NOTHING AS GREEN (2026-09-19). Under Node's
 // default heap this tsc run DIES with "FATAL ERROR: … heap out of memory"
 // (SIGABRT, exit 134). A crash dump contains zero "error TS" lines, so the
