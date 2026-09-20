@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**578 lines · 4 exports · 20 importers · 9 tests · 4 audits**
+**581 lines · 4 exports · 22 importers · 11 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@
 
 ## Who calls in
 
+- `src/coach/coachService.staleTactics.integration.test.ts`
 - `src/coach/envelope.ts`
 - `src/components/Coach/CoachAnalysePage.tsx`
 - `src/components/Coach/CoachGamePage.tsx`
@@ -32,21 +33,23 @@
 - `src/services/kidGameCoach.ts`
 - `src/services/laneReachability.test.ts`
 - `src/services/liveTacticsContext.test.ts`
+- `src/services/tacticsContextIdentity.test.ts`
 
 ## Exports and every call site
 
-### `buildTacticsLiveContext` (function) — 41 call sites
+### `buildTacticsLiveContext` (function) — 49 call sites
+- `src/coach/coachService.staleTactics.integration.test.ts:72`
 - `src/components/Coach/CoachAnalysePage.tsx:115`
 - `src/components/Coach/CoachAnalysePage.tsx:216`
 - `src/components/Coach/CoachGamePage.tsx:1273`
 - `src/components/Coach/CoachGamePage.tsx:3906`
-- `src/components/Coach/CoachGameReview.tsx:2978`
-- `src/components/Coach/CoachTeachPage.tsx:5886`
-- `src/components/Coach/CoachTeachPage.tsx:7175`
-- `src/components/Coach/CoachTeachPage.tsx:8556`
+- `src/components/Coach/CoachGameReview.tsx:3131`
+- `src/components/Coach/CoachTeachPage.tsx:5887`
+- `src/components/Coach/CoachTeachPage.tsx:7183`
+- `src/components/Coach/CoachTeachPage.tsx:8591`
 - `src/components/Coach/ExplainPositionSessionView.tsx:134`
 - `src/components/Coach/ExplainPositionSessionView.tsx:226`
-- `src/components/Coach/GameChatPanel.tsx:746`
+- `src/components/Coach/GameChatPanel.tsx:747`
 - `src/services/coachPrompts.ts:1130`
 - `src/services/computedVoiceAudit.report.test.ts:244`
 - `src/services/laneReachability.test.ts:124`
@@ -77,12 +80,19 @@
 - `src/services/liveTacticsContext.test.ts:363`
 - `src/services/liveTacticsContext.test.ts:421`
 - `src/services/liveTacticsContext.test.ts:428`
+- `src/services/tacticsContextIdentity.test.ts:18`
+- `src/services/tacticsContextIdentity.test.ts:26`
+- `src/services/tacticsContextIdentity.test.ts:30`
+- `src/services/tacticsContextIdentity.test.ts:34`
+- `src/services/tacticsContextIdentity.test.ts:58`
+- `src/services/tacticsContextIdentity.test.ts:61`
+- `src/services/tacticsContextIdentity.test.ts:68`
 
 ### `buildFedTacticsContext` (function) — 18 call sites
 - `src/components/Coach/CoachGamePage.tsx:3503`
-- `src/components/Coach/CoachTeachPage.tsx:5888`
-- `src/components/Coach/GameChatPanel.tsx:758`
-- `src/components/Coach/ReviewReadingChallenge.test.tsx:22`
+- `src/components/Coach/CoachTeachPage.tsx:5889`
+- `src/components/Coach/GameChatPanel.tsx:759`
+- `src/components/Coach/ReviewReadingChallenge.test.tsx:25`
 - `src/components/Coach/ReviewReadingChallenge.tsx:69`
 - `src/components/Openings/MiddlegamePractice.tsx:263`
 - `src/components/Tactics/AnalysisPracticePage.tsx:77`
@@ -115,12 +125,13 @@
 - `src/coach/envelope.ts:742`
 - `src/services/coachContextEnricher.ts:412`
 - `src/services/coachPrompts.ts:1136`
-- `src/services/kidGameCoach.test.ts:245`
-- `src/services/kidGameCoach.test.ts:246`
+- `src/services/kidGameCoach.test.ts:247`
+- `src/services/kidGameCoach.test.ts:248`
 - `src/services/kidGameCoach.ts:372`
 
 ## Tests
 
+- `src/coach/coachService.staleTactics.integration.test.ts`
 - `src/components/Coach/CoachGameReview.test.tsx`
 - `src/components/Coach/ReviewReadingChallenge.test.tsx`
 - `src/components/Tactics/AnalysisPracticePage.test.tsx`
@@ -130,6 +141,7 @@
 - `src/services/kidGameCoach.test.ts`
 - `src/services/laneReachability.test.ts`
 - `src/services/liveTacticsContext.test.ts`
+- `src/services/tacticsContextIdentity.test.ts`
 
 ## Audits that reach it
 

@@ -63,9 +63,8 @@ const BLOCKING = [
 
 // SHRINK-ONLY. Measured 2026-09-19. Fix the script (or the id) and delete the line.
 const BASELINE = new Set([
-  'filter-all',
-  'featured-pro-openings',
-  'review-full-detail-toggle',
+  // One arm of a Promise.race beside the live `coach-game-page` — an honest
+  // cross-build fallback for an old redirect splash; costs nothing.
   'coach-play-redirect',
 ]);
 

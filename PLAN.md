@@ -1033,7 +1033,14 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
    `filter-all` + `coach-play-redirect`, `audit-gotham-prorep-interactive` on
    `featured-pro-openings`, `audit-review-functions-probe` on
    `review-full-detail-toggle`) — the shrink-only baseline. Fix the script,
-   delete the line.
+   delete the line. LATER THE SAME NIGHT: the extractor learned suffix
+   templates (`${testId}-modal`), which cleared the two settings ids as false
+   positives, and three of the rest were fixed to today's contracts — the
+   review probe now asserts the Deep Review Detail toggle is ABSENT (removed
+   2026-09-16; it had false-failed every run since), the Gotham audit asserts
+   the standard Pro grid lists his card (the pinned section was reverted
+   2026-05-31), the coach-full audit's `filter-all` no-op is gone. Baseline: 1
+   (a Promise.race arm beside a live id).
 
 7a. ✅ **DONE (2026-09-19) — EVERY narration listener was DARK on this Mac, and
    every audit still printed its rows.** Two shut valves on the one pipe, found
@@ -1075,6 +1082,15 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 8. **The review audit's verdict is not reproducible** (#70) — three runs on one
    bundle gave three different red sets, because the background deep dive is a
    race the harness neither waits on nor reports.
+   - ✅ **The instrument could not even PIN a game (found 2026-09-19).** A
+     reproducibility pair ran a Scandinavian and then, "pinned" to it, a Ruy
+     Lopez: `AUDIT_GAME_ID` swallowed a transient fetch throw and silently
+     rotated to a fresh pick, then printed a reproduce line for a game it never
+     played. Fixed: three fetch attempts with backoff, the reason named, exit 2
+     under a pin that cannot be honoured. Every "not reproducible" reading
+     taken before this fix may have compared two different games.
+   - The worker storm seen on the reopen (124 pthread helpers, page errors) is
+     #21, owned by the focused-noyce session tonight — not re-derived here.
 9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
    on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
@@ -1123,6 +1139,19 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### C. The student hears something wrong or repeated
 
+11f. ✅ **DONE (2026-09-19) — the read named the coach's own plan in the third
+    person.** Prod tape from the rewritten read-position audit: "my Modern
+    Defense… My bishop on f8 wants g7… Look ahead — **they're** lining up a
+    skewer in 2: Nc3, then Bg7." The read is spoken AS the opponent (I/my) and
+    `speakDeepestLookahead` was written once, in the student register (you/
+    they), then injected verbatim as a REQUIRED sentence. Two seats in one
+    utterance — the seat-is-part-of-the-selection rule. Fix: the function takes
+    a REQUIRED `LookaheadSeat` and the threat stem is a `Record` over it
+    (student: "they're lining up"; coach-is-opponent: "I'm lining up"); the
+    opportunity branch is the student's own shot in both seats and does not
+    vary. Callers declare: the read passes `coach-is-opponent`, phase narration
+    `student`. Gate: `liveTacticsContext.test.ts`.
+
 12. ✅ **DONE (already was) — "the queen takes d5 is about as good"** (#51).
     Verified before spending a minute on it, and the bullet claiming it open is
     DELETED rather than annotated: `uncertaintyClause` (tacticalRead.ts) already
@@ -1168,8 +1197,17 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     tier's record is labelled `voiceService.speakWebSpeech` — the muted tier
     keeps `speakCloud` on purpose (it is the cloud tier's stand-in and the
     audits key on it). A real device decodes real MP3; nothing billed twice.
-17. **The plan lane says the vague thing** while the computer beside it has the
-    concrete one (#64) — structures AND pieces.
+17. ✅ **DONE (2026-09-19) — the chat plan lane now speaks from the computer
+    that knows the method.** `assembleBoardPlanAnswer` ('what's my plan?')
+    assembled a headline plus four bare levers ("break with d4 or f4; put a rook
+    on the e-file") while `deriveNextPlans` — every plan the structure earns,
+    each with its HOW — sat one import away in `reviewTeachingPoints`, which
+    imports FROM `groundedAnswer`, so chat could not reach it without a cycle.
+    The computer (+ `findWorstPlacedPiece` and its helpers) moved to the leaf
+    `nextPlans.ts`, re-exported from where its eight callers import it; chat
+    prefers it and keeps the levers only as the fallback for a board that earns
+    no plan. One computer, both surfaces (capability parity). Gate:
+    `groundedAnswer.test.ts` ("speaks the plan WITH its method").
 18. **Two shared positions go silent in game 2** (#68) — n=1; WIDEN THE SAMPLE
     before fixing.
 19. Open questions, not yet defects: mistake-puzzle narration and Rule 3 (#23);

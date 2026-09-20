@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { deriveNextPlans } from './nextPlans';
 import { Chess } from 'chess.js';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
@@ -351,6 +352,15 @@ export function assembleBoardPlanAnswer(
   // in the async narration path). Order = most→least decisive: structural trump,
   // then the concrete levers (break / open file / outpost / worst piece).
   const trump = structurePlan(fen, myC); // passed pawn / IQP — the headline
+  // THE PLANS WITH THEIR METHOD (PLAN §C 17, #64 — 2026-09-19). `deriveNextPlans`
+  // is the computer review already speaks from: every plan the structure earns,
+  // each with the concrete HOW (which squares, which pieces, which breaks). Chat
+  // used to answer with the bare levers below while this sat one import away.
+  // One computer, both surfaces; the levers remain the fallback for a board
+  // that earns no structural plan.
+  // The levers below still speak AFTER the plans: a lever is a computed fact
+  // the ranker never dropped (G4.5), and the worst-piece bar is its own lesson.
+  const withMethod = deriveNextPlans(fen, myC).map((p) => cap(p));
   const levers: string[] = [];
 
   // A pawn break to open the position (findPawnBreaks reads the side to move).
@@ -385,10 +395,11 @@ export function assembleBoardPlanAnswer(
   // Every lever the board earned — no ceiling (G4.5). They are already ordered
   // most→least decisive, so a long list reads as a ranked plan, not a dump.
   const top = levers;
-  if (trump && top.length) {
-    return { facts: `${trump} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  const head = [trump, ...withMethod].filter((x): x is string => !!x).join(' ');
+  if (head && top.length) {
+    return { facts: `${head} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
-  if (trump) return { facts: trump, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (head) return { facts: head, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   if (top.length) return { facts: `No single trump yet — the plan is to ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   return null;
 }

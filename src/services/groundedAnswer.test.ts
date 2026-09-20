@@ -1592,6 +1592,15 @@ describe('the plan lane: the worst piece needs a bar, not a mention', () => {
     expect(a?.facts ?? '').not.toMatch(/improve your rook on h1/i);
   });
 
+  it('speaks the plan WITH its method when the structure earns one (PLAN §C 17, #64)', () => {
+    // A white passed pawn on d5 with the road clear: review's `deriveNextPlans`
+    // already says HOW ("clear the square in front of it…"); the chat lane must
+    // say the same thing, not the bare lever "put a rook on the e-file".
+    const a = assembleBoardPlanAnswer('r4rk1/pp3ppp/2n5/3P4/8/2N5/PP3PPP/R4RK1 w - - 0 20', 'white', 'me');
+    expect(a?.facts ?? '').toMatch(/passed pawn on d5/i);
+    expect(a?.facts ?? '').toMatch(/here's how/i);
+  });
+
   it('names it once the game has left the opening', () => {
     // Same idea, move 20: a piece that is still doing nothing there IS misplaced.
     const a = assembleBoardPlanAnswer('3rkb1r/pp3ppp/2n1pn2/3q3b/3P4/4BN1P/PP2BPP1/RN1Q1RK1 w k - 1 20', 'white', 'me');

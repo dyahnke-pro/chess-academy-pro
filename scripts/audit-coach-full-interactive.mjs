@@ -1106,9 +1106,9 @@ async function driveReviewSurface(page) {
       });
     }
 
-    // Reset to ALL so the next scenario sees the full pool.
-    await page.locator('[data-testid="filter-all"]').click().catch(() => null);
-    await page.waitForTimeout(400);
+    // NB there is no "all" filter control (`filter-all` never rendered; the
+    // click was a swallowed no-op for the life of this script — PLAN §B 7c).
+    // The next scenario re-reads the card pool as it stands.
 
     // Pick a different card index per pass so we exercise different
     // games (and different openings → different annotation files).

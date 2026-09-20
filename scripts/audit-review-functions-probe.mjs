@@ -162,34 +162,21 @@ const run = async () => {
     add('story-game-watch', stopShown, stopShown ? 'playback started (Stop shown), stopped' : 'chip clicked but playback never started');
   } else add('story-game-watch', true, 'chip not applicable to this fixture (no corpus game for the opening) — wiring unit-tested');
 
-  // ── DEEP REVIEW DETAIL toggle (Settings): flips and PERSISTS across a reload.
+  // ── DEEP REVIEW DETAIL toggle: REMOVED 2026-09-16 (SettingsPage: "a toggle
+  //    that can turn it back on is not a cut"). The contract today is its
+  //    ABSENCE — this row used to wait for the toggle and false-failed every
+  //    run since ("toggle not found"), a dead selector (PLAN §B 7c).
   try {
     await page.goto(`${BASE}/settings`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(2500);
-    // The toggle lives in Coach tab → "Gameplay Coaching" modal row.
     await page.locator('button:has-text("Coach")').first().click({ timeout: 2500 }).catch(() => {});
     await page.waitForTimeout(800);
     await page.locator('[data-testid="gameplay-coaching-row"]').first().click({ timeout: 2500 }).catch(() => {});
     await page.waitForTimeout(800);
-    const tgl = page.locator('[data-testid="review-full-detail-toggle"]').first();
-    if (await tgl.count()) {
-      await tgl.scrollIntoViewIfNeeded().catch(() => {});
-      const before = await tgl.isChecked().catch(() => null);
-      await tgl.click({ timeout: 2500 }).catch(() => {});
-      await page.waitForTimeout(1200);
-      await page.reload({ waitUntil: 'domcontentloaded' });
-      await page.waitForTimeout(2500);
-      await page.locator('button:has-text("Coach")').first().click({ timeout: 2500 }).catch(() => {});
-      await page.waitForTimeout(800);
-      await page.locator('[data-testid="gameplay-coaching-row"]').first().click({ timeout: 2500 }).catch(() => {});
-      await page.waitForTimeout(800);
-      const after = await page.locator('[data-testid="review-full-detail-toggle"]').first().isChecked().catch(() => null);
-      const flipped = before !== null && after !== null && before !== after;
-      // restore the original state so the probe is idempotent
-      if (flipped) { await page.locator('[data-testid="review-full-detail-toggle"]').first().click({ timeout: 2500 }).catch(() => {}); await page.waitForTimeout(800); }
-      add('deep-detail-toggle', flipped, flipped ? `persisted across reload (${before}→${after})` : `toggle state did not persist (${before}→${after})`);
-    } else add('deep-detail-toggle', false, 'toggle not found on /settings');
-  } catch { add('deep-detail-toggle', false, 'settings navigation failed'); }
+    const modalUp = (await page.locator('[data-testid="gameplay-coaching-row-modal"]').count()) > 0;
+    const toggles = await page.locator('[data-testid="review-full-detail-toggle"]').count();
+    add('deep-detail-toggle-absent', modalUp && toggles === 0, modalUp ? `${toggles} toggle(s) — the cut register has no switch back on` : 'gameplay-coaching modal did not open');
+  } catch { add('deep-detail-toggle-absent', false, 'settings navigation failed'); }
 
   add('no-page-errors', errs.length === 0, errs.length ? errs.slice(0, 2).join(' | ') : 'none');
   const fails = results.filter((r) => !r.p).length;
