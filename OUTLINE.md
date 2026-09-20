@@ -229,6 +229,30 @@ there; the review arm proves nothing either way and should not be re-run.**
 - ✅ **`tactics-context-stale`: ZERO across all four runs** — closes that open item; no third producer indicated.
 - Noted for the other session's #21, not acted on: `workers=60` alive on the review reopen, inside the band their census tracks.
 
+✅ **THE MECHANISM IS VERIFIED AT THE DECISION POINT, AND IT IS NARROW BY
+CONSTRUCTION (measured offline, 2026-09-20).** Rather than build a four-arm
+browser instrument for an interrupt surface and discover the effect size
+expensively, the same real recorded plies were run through the real
+`computeNeed` with and without a proven profile: **198 of 198 clean posed plies
+were LOWERED, by 25 each**, so the term fires exactly where it should. But one
+proven tag is −25 and the term is capped at `NEED_THRESHOLD`, so green can only
+ever SILENCE a ply whose need sits in **50..99** — below that the ply was
+already silent, above it it still speaks.
+
+So the prod picture is fully explained: the wire is live, review cannot show it
+(walk posture narrates every ply), and on an interrupt surface only plies inside
+that band will flip. 🔴 **A first cut of this measurement reported "0 flipped"
+and that was the FIXTURE, not the product** — the synthetic plies scored 35
+against a threshold of 50, so nothing spoke before green either. It now reports
+the effect size and the band instead of a count that could only ever be zero.
+
+**THE OPEN QUESTION IS DAVID'S, and it is a design one, not a bug:** is −25 per
+proven capability the right weight? Green currently cannot quiet a ply the rest
+of the model wants loudly (need ≥ 100), by design. Making it proportional, or
+letting multiple proven tags stack past the cap, would widen the window — and
+is exactly the kind of change that should be measured against the flip count
+first, the way the bar was.
+
 That is the exact shape the RED direction was in before WO-LOOP-01: every half
 built and gated in isolation, the sentence never demonstrated end to end. The
 red half was proven by SEEDING game A and reading game B's tape; green is

@@ -43,6 +43,7 @@ import {
   getCapabilityProfile,
 } from './capabilityEvidence';
 import { capabilityProven, summariseEvidence, HELD_FOR_PROVEN, PROVEN_MIN_IMPORTANCE } from './capabilityEvidence';
+import { computeNeed, coldStudent, NEED_THRESHOLD } from './needScore';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 
 /** A real amateur game, committed so the census never depends on the network.
@@ -482,5 +483,83 @@ describe('GREEN — can real play prove a capability?', () => {
     expect(shipped.flippedTags, 'the shipped bar declared a capability and then watched it fail').toBe(0);
 
     console.log(`[green-cal2] held-row posedImportance: n=${imps.length} min=${imps[0]} p25=${pct(0.25)} p50=${pct(0.5)} p75=${pct(0.75)} max=${imps[imps.length - 1]}`);
+  });
+});
+
+/**
+ * DOES GREEN ACTUALLY FLIP A PLY FROM SPEAK TO SILENT?
+ *
+ * The prod instrument aimed at review came back UNUSABLE, and the reason was
+ * structural: review is `'walk'` posture, where every ply is a beat by
+ * contract (G4.5.15), so a term that LOWERS need cannot quiet it. The effect
+ * belongs on an `'interrupt'` surface, where `computeNeed` crossing
+ * `NEED_THRESHOLD` is what decides whether the coach speaks at all.
+ *
+ * Before building a four-arm browser instrument for that surface, measure
+ * whether the effect EXISTS and how big it is: the same plies, the same
+ * context, with and without a proven profile. If nothing flips, a prod audit
+ * would only have discovered that expensively.
+ */
+describe('GREEN at the decision point — speak vs silent', () => {
+  it('counts the plies a proven profile turns off', () => {
+    const CACHE = 'audit-reports/capability-green-rows.json';
+    if (!existsSync(CACHE)) return;
+    const cached = JSON.parse(readFileSync(CACHE, 'utf8')) as { rows: CapabilityEvidenceRecord[] };
+
+    // Every tag the real games POSED, declared proven the way the shipped bar
+    // requires: a clean streak of HELD_FOR_PROVEN at importance >= the floor,
+    // spanning two distinct games.
+    const posedTags = [...new Set(cached.rows.map((r) => r.tag))];
+    const provenRows: CapabilityEvidenceRecord[] = [];
+    let t = 1;
+    for (const tag of posedTags) {
+      for (const [i, g] of ['g1', 'g2'].entries()) {
+        for (let k = 0; k < HELD_FOR_PROVEN; k++) {
+          provenRows.push({
+            id: `p-${tag}-${i}-${k}`, tag, outcome: 'held',
+            fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+            playedSan: 'Nf3', posedImportance: PROVEN_MIN_IMPORTANCE + 10,
+            recordedAt: t++, origin: 'play', prompted: false, sourceGameId: g,
+          } as CapabilityEvidenceRecord);
+        }
+      }
+    }
+    const provenProfile = summariseEvidence(provenRows);
+    const proven = posedTags.filter((tag) => capabilityProven(provenProfile.get(tag)));
+
+    // The plies: every recorded row is a ply the board POSED something at, and
+    // the ones the student answered cleanly are exactly where green can apply.
+    const plies = cached.rows.filter((r) => r.outcome === 'held');
+    const base = { ...coldStudent(1500), gamesPlayed: 50 };
+    // THE EFFECT SIZE, not a flip count. A first cut counted flips over plies
+    // scoring 35 against a threshold of 50 — nothing spoke before green
+    // either, so "0 flipped" measured the fixture, not the mechanism. What
+    // decides is the DELTA the capability term applies and where the ply sat.
+    const deltas: number[] = [];
+    let spokeBefore = 0;
+    for (const r of plies) {
+      const ply = {
+        ply: 9, studentMove: true, clauseKind: null, onThread: true,
+        posedTags: [r.tag], playedCleanly: true,
+      };
+      const before = computeNeed(ply, { ...base, capabilities: new Map() });
+      const after = computeNeed(ply, { ...base, capabilities: provenProfile });
+      if (before.speak) spokeBefore += 1;
+      deltas.push(after.score - before.score);
+    }
+    const lowered = deltas.filter((d) => d < 0);
+    const worst = lowered.length ? Math.min(...lowered) : 0;
+    console.log(
+      `[green-decision] ${proven.length}/${posedTags.length} tags proven · ${plies.length} clean posed plies · `
+      + `${lowered.length} plies LOWERED (max ${worst}) · spoke before green: ${spokeBefore}`,
+    );
+    // The arithmetic that bounds what any prod instrument can hope to see: the
+    // term is capped at NEED_THRESHOLD, so green can only ever silence a ply
+    // whose need sat in [threshold, threshold + cap). Outside that band it
+    // changes the ranking and nothing else.
+    console.log(
+      `[green-decision] band: green can only silence a ply scoring ${NEED_THRESHOLD}..${NEED_THRESHOLD * 2 - 1}; `
+      + 'below it the ply was already silent, above it the ply still speaks',
+    );
   });
 });
