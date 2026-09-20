@@ -1,0 +1,290 @@
+#!/usr/bin/env node
+/**
+ * audit-loop-closes-prod — THE INSTRUMENT FOR THE APP'S ONE-LINE DEFINITION.
+ *
+ *   "The coach learns you, and what it learned changes what it says next."
+ *
+ * Every half of that loop was built and gated in isolation. Nobody had ever
+ * shown a real student's SECOND game sounding different because of their FIRST
+ * (WO-LOOP-01, David 2026-09-20: "i want to get the main concept of the app
+ * working"). This measures exactly that, on two fresh prod devices:
+ *
+ *   CONTROL  fresh device → seed real game B UNANALYSED → open its review → the
+ *            app runs the genuine pipeline → read B's narration segments.
+ *   LOOP     fresh device → seed real game A → open its review → wait until the
+ *            post-analysis SWEEP has RECORDED a misconception row carrying a
+ *            `fundamentalId` for A (RECORDED is its own row — "the coach never
+ *            learned" and "it learned and never said so" are different bugs)
+ *            → seed B → open B → read B's segments → walk B to the recurrence
+ *            ply so the narration LISTENER proves the sentence was SPOKEN.
+ *
+ * Rows:
+ *   A. game A RECORDED — ≥1 misconceptionTags row with fundamentalId + sourceGameId=A
+ *   P. the pair SHARES a fundamental (B's sweep attributes an id A also has) —
+ *      when it does not, the pair is unusable and the run says so; it never
+ *      passes vacuously, and it never fails the product for the instrument's pick
+ *   D. B's LOOP tape carries the recurrence clause; B's CONTROL tape does not
+ *   N. the clause names A's opponent (the student's opponent in A), never B's
+ *   S. the clause was SPOKEN on the walk (listener), not only computed
+ *   M. muted — zero /api/tts requests
+ *
+ * Both tapes are PRINTED at the ply that differs. The row count is the harness;
+ * the prose is the product.
+ *
+ * Usage:
+ *   AUDIT_SANDBOX=1 AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-loop-closes-prod.mjs
+ *   AUDIT_GAME_A=<lichess id> AUDIT_GAME_B=<lichess id> AUDIT_STUDENT=black  → pin the pair (printed by every run)
+ */
+import { chromium } from 'playwright';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
+import { readWalkPly } from './audit-lib/review-explore.mjs';
+import { SEEDS, pickRealGame, fetchGameById } from './audit-lib/source-real-game.mjs';
+
+const BASE = (process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app').replace(/\/$/, '');
+const STUDENT = process.env.AUDIT_STUDENT || 'black';
+const RECUR_RE = /keeps recurring in your games — .+?, the \w+ game now/i;
+const log = (s) => console.log(s);
+const until = async (fn, ms, step = 500) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await fn()) return true; await new Promise((r) => setTimeout(r, step)); } return false; };
+const has = async (p, sel) => { try { return (await p.locator(sel).count()) > 0; } catch { return false; } };
+
+const results = [];
+const add = (id, pass, detail) => { results.push({ id, pass, detail }); log(`  ${pass ? '✅' : '❌'} ${id}: ${detail}`); };
+
+// ── game sourcing (G3: real games through the app's own explorer proxy) ────
+async function sourcePair() {
+  const exclude = new Set();
+  const byId = async (id) => {
+    for (let i = 0; i < 3; i++) {
+      try { const g = await fetchGameById(BASE, id); if (g) return { ...g, studentSide: STUDENT, seedName: `pinned ${id}` }; } catch { /* retry */ }
+      await new Promise((r) => setTimeout(r, 1500));
+    }
+    throw new Error(`pinned game ${id} could not be fetched`);
+  };
+  const a = process.env.AUDIT_GAME_A ? await byId(process.env.AUDIT_GAME_A) : null;
+  const b = process.env.AUDIT_GAME_B ? await byId(process.env.AUDIT_GAME_B) : null;
+  if (a && b) return { a, b, pool: [] };
+  const seeds = SEEDS.filter((s) => s.student === STUDENT);
+  const picked = [];
+  for (const seed of seeds) {
+    const g = await pickRealGame(BASE, seed, exclude).catch(() => null);
+    if (g) picked.push(g);
+    if (picked.length >= 4) break;
+  }
+  if (picked.length < 2 && !(a && picked.length >= 1)) throw new Error('could not source two real games from the explorer');
+  return { a: a ?? picked[0], b: b ?? picked[a ? 0 : 1], pool: picked.slice(a ? 1 : 2) };
+}
+
+// ── page helpers ───────────────────────────────────────────────────────────
+const dismiss = async (page) => {
+  for (let i = 0; i < 6; i++) {
+    for (const [s, c] of [
+      ['[data-testid="ai-consent-allow"]', '[data-testid="ai-consent-allow"]'],
+      ['[data-testid="page-help-modal"]', '[data-testid="page-help-modal"] button'],
+    ]) { if (await has(page, s)) { try { await page.locator(c).first().click({ timeout: 2500 }); } catch { /* */ } } }
+    await page.waitForTimeout(400);
+  }
+};
+
+async function seedGame(page, gid, g) {
+  return page.evaluate(async ({ gid, g }) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    const put = (store, val) => new Promise((res, rej) => { const t = db.transaction(store, 'readwrite'); t.objectStore(store).put(val); t.oncomplete = () => res(true); t.onerror = () => rej(t.error); });
+    const getAll = (store) => new Promise((res, rej) => { const t = db.transaction(store, 'readonly'); const rq = t.objectStore(store).getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    // Two REAL dates, a fortnight apart, so the recurrence clause has honest
+    // recency to speak ("the last one was … 17 days ago"), never "earlier today".
+    await put('games', { id: gid, studentSide: g.studentSide, pgn: g.movetext, white: g.white, black: g.black, result: g.result, date: g.date, event: "Let's Play!", eco: 'A00', whiteElo: 1392, blackElo: 1378, source: 'chesscom', termination: 'resignation', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
+    const profs = await getAll('profiles');
+    for (const p of profs) {
+      p.preferences = p.preferences || {};
+      p.preferences.chessComUsername = g.studentSide === 'white' ? g.white : g.black;
+      p.preferences.coachNarration = 'full';
+      p.preferences.lastAutoImportAt = Date.now();
+      await put('profiles', p);
+    }
+    return { ok: true, profiles: profs.length };
+  }, { gid, g });
+}
+
+/** Rows the SWEEP wrote for this game — the RECORD half of the loop. */
+async function recordedFundamentals(page, gid) {
+  return page.evaluate(async (gid) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    if (!db.objectStoreNames.contains('misconceptionTags')) return [];
+    const rows = await new Promise((res, rej) => { const t = db.transaction('misconceptionTags', 'readonly'); const rq = t.objectStore('misconceptionTags').getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    return rows.filter((r) => r.sourceGameId === gid && r.fundamentalId).map((r) => ({ id: r.fundamentalId, ply: r.moveNumber, san: r.playedSan }));
+  }, gid).catch(() => []);
+}
+
+/** The cached narration segments the app computed for this game. */
+async function narrationSegments(page, gid) {
+  return page.evaluate(async (gid) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    const g = await new Promise((res, rej) => { const t = db.transaction('games', 'readonly'); const rq = t.objectStore('games').get(gid); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    const segs = g?.reviewNarration?.narration?.segments;
+    return Array.isArray(segs) ? segs.map((s) => ({ ply: s.ply, san: s.san, narration: s.narration ?? null })) : null;
+  }, gid).catch(() => null);
+}
+
+/** Open the review for a seeded game and wait for the genuine pipeline. */
+async function openReview(page, gid) {
+  await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await dismiss(page);
+  const cardSel = `[data-testid="review-game-card-${gid}"]`;
+  const cardUp = await until(() => has(page, cardSel), 60000, 800);
+  if (!cardUp) return { ok: false, reason: 'game card never rendered' };
+  const t0 = Date.now();
+  await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
+  await page.waitForURL(/\/coach\/review\//, { timeout: 15000 }).catch(() => undefined);
+  await dismiss(page);
+  const startable = async () => { const b = page.locator('[data-testid="start-walk-btn"]').first(); return (await b.count()) > 0 && (await b.getAttribute('disabled', { timeout: 3000 }).catch(() => 'x')) === null; };
+  const ready = await until(startable, 300000, 1500);
+  // The narration is generated as the walk becomes startable; give the cache
+  // write a moment, then read it back.
+  const segs = ready ? await (async () => { let s = null; await until(async () => { s = await narrationSegments(page, gid); return Array.isArray(s) && s.length > 0; }, 60000, 1000); return s; })() : null;
+  return { ok: ready && Array.isArray(segs), ms: Date.now() - t0, segs, reason: ready ? (segs ? '' : 'no cached narration segments') : 'analysis never settled (300s)' };
+}
+
+// ── main ───────────────────────────────────────────────────────────────────
+const run = async () => {
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const outDir = `audit-reports/loop-closes-${stamp}`;
+  mkdirSync(outDir, { recursive: true });
+
+  log(`[loop] sourcing two real games (student=${STUDENT}) through ${BASE}`);
+  const { a: A, b: B, pool } = await sourcePair();
+  const DAY = 24 * 60 * 60 * 1000;
+  const dateOf = (ms) => { const d = new Date(ms); return `${d.getUTCFullYear()}.${String(d.getUTCMonth() + 1).padStart(2, '0')}.${String(d.getUTCDate()).padStart(2, '0')}`; };
+  A.date = dateOf(Date.now() - 17 * DAY);
+  B.date = dateOf(Date.now() - 1 * DAY);
+  log(`[game A] ${A.white} vs ${A.black} ${A.result} (${A.plyCount} plies, id=${A.id})`);
+  log(`[game B] ${B.white} vs ${B.black} ${B.result} (${B.plyCount} plies, id=${B.id})`);
+  log(`[game] REPRODUCE: AUDIT_GAME_A=${A.id} AUDIT_GAME_B=${B.id} AUDIT_STUDENT=${STUDENT} node scripts/audit-loop-closes-prod.mjs`);
+  const oppA = STUDENT === 'white' ? A.black : A.white;
+  const oppB = STUDENT === 'white' ? B.black : B.white;
+
+  const exe = await resolveChromiumExecutable();
+  const browser = await chromium.launch({ headless: true, executablePath: exe, args: [...sandboxLaunchArgs(), ...LISTENER_LAUNCH_ARGS] });
+  let ttsRequests = 0;
+
+  const newDevice = async () => {
+    const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
+    await ctx.addInitScript(muteTtsForAudit);
+    await ctx.addInitScript(autoDismissCalibration);
+    const listener = await attachVoiceListener(ctx);
+    const page = await ctx.newPage();
+    await blockTtsNetwork(page);
+    page.on('request', (r) => { if (/\/api\/tts/.test(r.url())) ttsRequests += 1; });
+    // Boot once so the app creates its profile + schema before we seed.
+    for (let i = 0; i < 4; i++) { try { await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 60000 }); break; } catch { await page.waitForTimeout(1500); } }
+    await dismiss(page);
+    await until(async () => (await page.evaluate(async () => {
+      const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+      try { const db = await open(); return db.objectStoreNames.contains('games') && db.objectStoreNames.contains('profiles'); } catch { return false; }
+    }).catch(() => false)), 60000, 1000);
+    return { ctx, page, listener };
+  };
+
+  // ── CONTROL: B alone ─────────────────────────────────────────────────────
+  log('\n── CONTROL — game B on a fresh device ──');
+  const control = await newDevice();
+  const gidB0 = `loop-control-${Date.now()}`;
+  await seedGame(control.page, gidB0, B);
+  const cB0 = await openReview(control.page, gidB0);
+  log(`  [control] B open: ${cB0.ok ? `${(cB0.ms / 1000).toFixed(1)}s, ${cB0.segs?.length} segments` : cB0.reason}`);
+  const controlRecorded = await recordedFundamentals(control.page, gidB0);
+  log(`  [control] B's own sweep recorded: ${JSON.stringify(controlRecorded)}`);
+  const controlTape = cB0.segs ?? [];
+  await control.listener.stop().catch(() => undefined);
+  await control.ctx.close();
+
+  // ── LOOP: A, then B ──────────────────────────────────────────────────────
+  log('\n── LOOP — game A, then game B, one device ──');
+  const loop = await newDevice();
+  const gidA = `loop-a-${Date.now()}`;
+  await seedGame(loop.page, gidA, A);
+  const cA = await openReview(loop.page, gidA);
+  log(`  [loop] A open: ${cA.ok ? `${(cA.ms / 1000).toFixed(1)}s` : cA.reason}`);
+  // THE RECORD HALF. The sweep runs after analysis; poll the store.
+  let recA = [];
+  await until(async () => { recA = await recordedFundamentals(loop.page, gidA); return recA.length > 0; }, 120000, 2000);
+  add('A. game A RECORDED — sweep wrote a fundamental for it', recA.length > 0,
+    recA.length ? `${recA.length} row(s): ${[...new Set(recA.map((r) => r.id))].join(', ')}` : 'no misconceptionTags row with fundamentalId + sourceGameId=A within 120s of analysis');
+  const idsA = new Set(recA.map((r) => r.id));
+
+  // Now B on the SAME device — a full navigation, like a student coming back.
+  const gidB1 = `loop-b-${Date.now()}`;
+  await seedGame(loop.page, gidB1, B);
+  const cB1 = await openReview(loop.page, gidB1);
+  log(`  [loop] B open: ${cB1.ok ? `${(cB1.ms / 1000).toFixed(1)}s, ${cB1.segs?.length} segments` : cB1.reason}`);
+  let recB = [];
+  await until(async () => { recB = await recordedFundamentals(loop.page, gidB1); return recB.length > 0; }, 60000, 2000);
+  const idsB = new Set(recB.map((r) => r.id));
+  const shared = [...idsB].filter((id) => idsA.has(id));
+  add('P. the pair SHARES a fundamental (A ∩ B)', shared.length > 0,
+    shared.length ? shared.join(', ') : `A={${[...idsA].join(',')}} B={${[...idsB].join(',')}} — no shared fundamental; this PAIR cannot show the loop. Pin another with AUDIT_GAME_A/B (pool: ${pool.map((g) => g.id).join(', ') || 'none'})`);
+
+  const loopTape = cB1.segs ?? [];
+  const recurLoop = loopTape.filter((s) => s.narration && RECUR_RE.test(s.narration));
+  const recurControl = controlTape.filter((s) => s.narration && RECUR_RE.test(s.narration));
+  const usable = shared.length > 0;
+  add('D. B narrates DIFFERENTLY after A — the recurrence clause is in the loop tape and not in the control tape',
+    usable ? recurLoop.length > 0 && recurControl.length === 0 : recurControl.length === 0,
+    usable ? `loop: ${recurLoop.length} ply(ies) carry it [${recurLoop.map((s) => s.ply).join(',')}]; control: ${recurControl.length}` : `n/a — pair shares nothing (control carries ${recurControl.length}, must be 0)`);
+  const first = recurLoop[0];
+  if (first) {
+    const ctl = controlTape.find((s) => s.ply === first.ply);
+    log(`\n  ── ply ${first.ply} (${first.san}) ──`);
+    log(`  CONTROL: ${ctl?.narration ?? '(silent)'}`);
+    log(`  LOOP:    ${first.narration}`);
+  }
+  const namesA = first ? new RegExp(oppA.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration) : false;
+  const namesB = first ? new RegExp(oppB.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(first.narration.replace(/^.*?keeps recurring/i, '')) : false;
+  add("N. the clause names A's opponent, never B's", usable ? namesA && !namesB : true,
+    usable ? `expects "${oppA}"; names A=${namesA}, names B=${namesB}` : 'n/a');
+
+  // THE SPOKEN HALF — walk B until the recurrence ply is voiced.
+  let spokenIt = false;
+  if (first) {
+    const spoken = () => loop.listener.getCapturedEvents()
+      .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText && String(e.source ?? '').startsWith('voiceService.'))
+      .map((e) => String(e.narrationText));
+    await loop.page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
+    await loop.page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
+    const skips = [
+      ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'], ['review-cameo-ask', '[data-testid="review-cameo-skip"]'],
+      ['review-theory-ask', '[data-testid="review-theory-skip"]'], ['review-trap-card', '[data-testid="review-trap-pick-leave"]'],
+      ['review-trap-reveal', '[data-testid="review-trap-done"]'], ['review-critical-reveal', '[data-testid="review-critical-done"]'],
+      ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
+    ];
+    const budgetMs = Math.min(15 * 60 * 1000, 12000 * (first.ply + 4));
+    spokenIt = await until(async () => {
+      for (const [card, btn] of skips) { if (await has(loop.page, `[data-testid="${card}"]`)) await loop.page.locator(btn).first().click({ timeout: 2000, force: true }).catch(() => undefined); }
+      const n = (await readWalkPly(loop.page))?.n ?? 0;
+      if (n > first.ply + 2) return true; // passed it — stop, the check below decides
+      return spoken().some((t) => RECUR_RE.test(t));
+    }, budgetMs, 1500);
+    spokenIt = spoken().some((t) => RECUR_RE.test(t));
+  }
+  add('S. the recurrence clause was SPOKEN on the walk (listener)', usable ? spokenIt : true, usable ? (spokenIt ? 'heard off the wire' : 'never voiced within budget') : 'n/a');
+  add('M. the run stayed MUTED', ttsRequests === 0, `${ttsRequests} /api/tts requests`);
+
+  await loop.listener.stop().catch(() => undefined);
+  await loop.ctx.close();
+  await browser.close();
+
+  writeFileSync(`${outDir}/report.json`, JSON.stringify({ base: BASE, student: STUDENT, gameA: { id: A.id, white: A.white, black: A.black }, gameB: { id: B.id, white: B.white, black: B.black }, recordedA: recA, recordedB: recB, shared, results, controlTape, loopTape }, null, 2));
+  const pass = results.filter((r) => r.pass).length;
+  const verdict = usable ? (pass === results.length ? 'THE LOOP CLOSES' : 'THE LOOP DOES NOT CLOSE') : 'PAIR UNUSABLE — pin another pair';
+  log(`\n${pass}/${results.length} — ${verdict} — report at ${outDir}/report.json`);
+  process.exit(pass === results.length ? 0 : 1);
+};
+
+run().catch((e) => { console.error(e); process.exit(1); });

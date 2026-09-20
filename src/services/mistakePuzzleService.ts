@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
+import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { createDefaultSrsFields, calculateNextInterval } from './srsEngine';
 import { stockfishEngine } from './stockfishEngine';
 import { generateMistakeNarration } from './mistakeNarration';
@@ -592,6 +593,7 @@ async function analyzeGameWithStockfish(
 
   if (puzzles.length > 0) {
     await db.mistakePuzzles.bulkAdd(puzzles);
+    emitWeaknessModelChanged();
   }
 
   await db.meta.put({ key: metaKey, value: 'true' });
@@ -867,6 +869,7 @@ async function generateFromAnnotations(
 
   if (puzzles.length > 0) {
     await db.mistakePuzzles.bulkAdd(puzzles);
+    emitWeaknessModelChanged();
   }
 
   await db.meta.put({ key: metaKey, value: 'true' });
@@ -1080,6 +1083,7 @@ export async function addMistakePuzzleFromCapture(
   if (existing.some((p) => capturePosKey(p.fen, p.playerMoveSan) === key)) return null;
 
   await db.mistakePuzzles.add(puzzle);
+  emitWeaknessModelChanged();
   return puzzle;
 }
 

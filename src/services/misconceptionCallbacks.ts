@@ -181,3 +181,65 @@ export function recurrenceClause(
   const when = prior?.playedAt ? ` — the last one was${who} ${recencyPhrase(prior.playedAt, now)}` : (who ? ` — the last one was${who}` : '');
   return `This one keeps recurring in your games — ${label.toLowerCase()}${times}${when}. Worth drilling.`;
 }
+
+// ── THE RECURRENCE READ — counted in GAMES, honest about THIS game ───────────
+// WO-LOOP-01 (2026-09-20). Two defects in the way the in-flow clause counted:
+// (1) `total` counts ROWS, so two loose pieces in ONE game read as "the second
+// time now — the last one was against <this game's opponent>", which is not a
+// recurrence across games at all; (2) whether the current game's own rows had
+// already been swept in depended on timing, so the count was off by one either
+// way. The unit is now the GAME: prior games are the provenance rows whose
+// gameId is not the one being narrated, and the moment being narrated is game
+// N+1. Learn passes no id (its game is live and unrecorded), so every row is
+// prior — which is exactly right.
+
+export interface RecurrenceGame {
+  gameId: string;
+  opponentName?: string | null;
+  playedAt?: number;
+}
+
+/** The minimal signal shape — structurally satisfied by `WeaknessSignal`. */
+export interface RecurrenceSource {
+  total?: number;
+  openCount?: number;
+  /** Distinct games this hole was recorded in, newest first, when the source
+   *  carries provenance. Absent on coach-only shapes that never had a game. */
+  games?: readonly RecurrenceGame[];
+}
+
+export interface RecurrenceRead {
+  /** How many games this makes, INCLUDING the one being narrated; undefined
+   *  when the source proves recurrence but cannot count games. */
+  occurrences?: number;
+  /** The most recent PRIOR game, when known. */
+  prior?: CallbackContext;
+}
+
+export function recurrenceFor(sig: RecurrenceSource, currentGameId?: string | null): RecurrenceRead | null {
+  if (sig.games) {
+    const prior = sig.games.filter((g) => g.gameId !== currentGameId);
+    if (prior.length === 0) return null;
+    return { occurrences: prior.length + 1, prior: { opponentName: prior[0].opponentName, playedAt: prior[0].playedAt } };
+  }
+  // No provenance at all (a coach-only shape): recurrence is proven only by the
+  // open-instance count, and no game can be named.
+  if ((sig.openCount ?? 0) < 2 && (sig.total ?? 0) < 2) return null;
+  return { occurrences: sig.total !== undefined && sig.total >= 2 ? sig.total : undefined };
+}
+
+export type RecurrenceRegister = 'review' | 'live';
+
+/** ONE composer, TWO registers (the two-register law). Every clause appears
+ *  only when its source knows it: no count → no ordinal; no game → no "against". */
+export function recurrenceLine(label: string, read: RecurrenceRead, register: RecurrenceRegister, now: number = Date.now()): string {
+  const times = read.occurrences && read.occurrences >= 2 ? `, the ${ordinal(read.occurrences)} game now` : '';
+  const who = read.prior?.opponentName ? ` against ${read.prior.opponentName}` : '';
+  const when = read.prior?.playedAt
+    ? ` — the last one was${who} ${recencyPhrase(read.prior.playedAt, now)}`
+    : (who ? ` — the last one was${who}` : '');
+  if (register === 'review') {
+    return `This one keeps recurring in your games — ${label.toLowerCase()}${times}${when}. Worth drilling.`;
+  }
+  return `You've walked into this before — ${label.toLowerCase()}${times}${when}.`;
+}

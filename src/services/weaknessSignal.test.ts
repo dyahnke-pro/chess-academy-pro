@@ -120,3 +120,22 @@ describe('matchTag — direct cluster/tag match', () => {
     expect(matchTag(undefined, signals)).toBeNull();
   });
 });
+
+// WO-LOOP-01 — the signal carries the DISTINCT prior games, newest first.
+describe('buildWeaknessSignals — games (the recurrence unit)', () => {
+  const base = { key: 'k', tag: 'fundamental:loose-piece', label: 'Loose pieces', bucket: 'tactical' as const, openCount: 3, total: 3, severity: 40, sources: ['analysis' as const], puzzleThemes: [], lastSeenAt: 0 };
+  it('dedupes by gameId and keeps order; skips positions with no game', () => {
+    const w = { ...base, positions: [
+      { fen: 'x', from: { origin: 'game' as const, gameId: 'g2', opponentName: 'B', playedAt: 200 } },
+      { fen: 'x', from: { origin: 'game' as const, gameId: 'g2', opponentName: 'B', playedAt: 200 } },
+      { fen: 'x', from: { origin: 'drill' as const } },
+      { fen: 'x', from: { origin: 'game' as const, gameId: 'g1', opponentName: 'A', playedAt: 100 } },
+    ] };
+    const [s] = buildWeaknessSignals([w as never], null);
+    expect(s.games).toEqual([{ gameId: 'g2', opponentName: 'B', playedAt: 200 }, { gameId: 'g1', opponentName: 'A', playedAt: 100 }]);
+  });
+  it('a source with no provenance at all → games undefined (not empty), so the count-based read survives', () => {
+    const [s] = buildWeaknessSignals([{ ...base, positions: [] } as never], null);
+    expect(s.games).toBeUndefined();
+  });
+});

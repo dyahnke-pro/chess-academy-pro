@@ -29,7 +29,8 @@ import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
 import { habitIsOwed, type MethodHabit } from './methodBeat';
-import { recurrenceClause } from './misconceptionCallbacks';
+import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
+import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
@@ -1116,6 +1117,9 @@ export function buildReviewSegments(
    *  familiarity, results). Absent = a cold student → the rating prior teaches
    *  (today's behaviour for a fresh install; never a mute coach). */
   studentNeed?: StudentNeedContext,
+  /** The game being narrated (WO-LOOP-01). The recurrence clause counts PRIOR
+   *  games, so the sweep's rows for THIS game must not be mistaken for one. */
+  currentGameId?: string | null,
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
@@ -1503,14 +1507,16 @@ export function buildReviewSegments(
               if (hit && hit.openCount >= 2 && (!recur || hit.openCount > recur.openCount)) recur = hit;
             }
             if (recur && !recurrenceLabelsSeen.has(recur.label)) {
-              recurrenceLabelsSeen.add(recur.label);
               // NAME THE GAME (David 2026-09-16: "Yes! Name the game! Date and
-              // opponent if available"). The beat could say a hole recurs but
-              // never HOW OFTEN or WHERE — the count and the provenance were
-              // computed upstream and dropped at every layer between. Each
-              // clause appears only when its source actually knows it: no
+              // opponent if available"). Counted in GAMES, and this game's own
+              // swept rows are never a "prior" (`recurrenceFor`, WO-LOOP-01).
+              // Each clause appears only when its source actually knows it: no
               // "against your opponent", no invented recency.
-              causalLead += ` ${recurrenceClause(recur.label, recur.total, recur.lastPrior)}`;
+              const read = recurrenceFor(recur, currentGameId);
+              if (read) {
+                recurrenceLabelsSeen.add(recur.label);
+                causalLead += ` ${recurrenceLine(recur.label, read, 'review')}`;
+              }
             }
           }
           if (chain.stance === 'played' || chain.stance === 'allowed') {
@@ -1900,6 +1906,16 @@ export function buildReviewSegments(
     // same board, same words, every open.
     if (fundamentalLed) {
       const verdict = renderFundamentalVerdict(fundamentals, { ply: m.ply, seen: seenFundamentals });
+      // THE LOOP, OUT LOUD (WO-LOOP-01, 2026-09-20). The fundamental this move
+      // neglected is joined to the student's own record: when their spine says
+      // they have done this in ANOTHER game, the beat says so — count and the
+      // last game named, nothing invented. `matchFundamental` had zero
+      // production callers before this line; the coach could record a hole
+      // and never tell the student it remembered.
+      const recurrence = fundamentalRecurrenceLine({
+        ids: fundamentals.map((f) => f.id), signals: studentWeaknesses ?? [],
+        currentGameId, register: 'review', seenLabels: recurrenceLabelsSeen,
+      });
       const pvEvidence = renderPvEvidence(fundamentals);
       const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor });
       const concession = describeConcessions(fenPair.fenBefore, m.san, true);
@@ -1911,7 +1927,7 @@ export function buildReviewSegments(
         : null;
       const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor) : null;
       const better = bestMoveSan ? `The move was ${bestMoveSan}.${why ? ` ${why}` : ''}` : null;
-      narration = [verdict, pvEvidence, failed?.line ?? null, concession, cost, better]
+      narration = [verdict, recurrence, pvEvidence, failed?.line ?? null, concession, cost, better]
         .filter((x): x is string => !!x && x.trim().length > 0)
         .join(' ');
     }
@@ -4030,6 +4046,9 @@ export async function generateReviewNarration(params: {
    *  (opening results, departures) to this opening (N2). */
   openingId?: string | null;
   eco?: string | null;
+  /** The game's id — lets the recurrence clause tell this game's own swept
+   *  rows from a prior game's (WO-LOOP-01). */
+  gameId?: string | null;
 }): Promise<ReviewNarration> {
   const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
 
@@ -4100,7 +4119,7 @@ export async function generateReviewNarration(params: {
     rating: playerRating, sans: moves.slice(0, usableCount).map((m) => m.san), studentColor: playerColor,
     openingId: params.openingId ?? null, eco: params.eco ?? null,
   }).catch(() => coldStudent(playerRating));
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed);
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null);
   // NEED COVERAGE (the audit's instrument for the retired R2 — CLAUDE.md
   // standard): per student ply, the computed need and whether the quiet
   // teaching beat spoke. The prod audit reads THIS, not a sentence count.

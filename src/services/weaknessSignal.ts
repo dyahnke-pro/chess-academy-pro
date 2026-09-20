@@ -50,6 +50,12 @@ export interface WeaknessSignal {
    *  2026-09-16: "Name the game! Date and opponent if available"). Absent when
    *  the source has no game (a drill) or no link yet (coach captures). */
   lastPrior?: { opponentName?: string | null; playedAt?: number };
+  /** The distinct GAMES this hole was recorded in, newest first — only the
+   *  positions whose provenance names a game. The recurrence clause counts in
+   *  games, not rows: two slips in one game are not "recurring in your games".
+   *  Absent (not empty) when the source has no provenance at all, so a
+   *  coach-only row keeps its count-based read (WO-LOOP-01, 2026-09-20). */
+  games?: { gameId: string; opponentName?: string | null; playedAt?: number }[];
 }
 
 /** Join the unified profile with the lifecycle read. Lifecycle only carries the
@@ -85,8 +91,25 @@ export function buildWeaknessSignals(
       lastPrior: w.positions[1]?.from
         ? { opponentName: w.positions[1].from.opponentName, playedAt: w.positions[1].from.playedAt }
         : undefined,
+      games: distinctGames(w.positions),
     };
   });
+}
+
+/** Distinct games among a row's positions (newest first), or undefined when
+ *  NO position carries provenance — the difference between "no games" and
+ *  "this source cannot say" matters to `recurrenceFor`. */
+function distinctGames(positions: UnifiedWeakness['positions']): WeaknessSignal['games'] {
+  if (!positions.some((p) => p.from)) return undefined;
+  const out: NonNullable<WeaknessSignal['games']> = [];
+  const seen = new Set<string>();
+  for (const p of positions) {
+    const id = p.from?.gameId;
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    out.push({ gameId: id, opponentName: p.from?.opponentName, playedAt: p.from?.playedAt });
+  }
+  return out;
 }
 
 /** The deterministic boost a matched weakness adds to a fact's rank. Keyed on

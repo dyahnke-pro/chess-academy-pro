@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**384 lines · 7 exports · 9 importers · 5 tests · 2 audits**
+**384 lines · 7 exports · 9 importers · 5 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5702) — names `autoAnalyzeGame`
+- **The standard post-deploy ritual** (CLAUDE.md:5724) — names `autoAnalyzeGame`
 
 ## Who calls in
 
@@ -46,7 +46,7 @@
 
 ### `autoAnalyzeGameMisconceptions` (function) — 12 call sites
 - `src/components/Coach/CoachGamePage.tsx:2023`
-- `src/components/Coach/CoachGameReview.tsx:314`
+- `src/components/Coach/CoachGameReview.tsx:315`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:41`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:69`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:71`
@@ -54,9 +54,9 @@
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:137`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:146`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts:153`
-- `src/services/fundamentalsPipeline.realGame.test.ts:111`
-- `src/services/fundamentalsPipeline.realGame.test.ts:298`
-- `src/services/gameAnalysisService.ts:1955`
+- `src/services/fundamentalsPipeline.realGame.test.ts:112`
+- `src/services/fundamentalsPipeline.realGame.test.ts:311`
+- `src/services/gameAnalysisService.ts:2218`
 
 ### `backfillMisconceptionsFromAnalyzedGames` (function) — 3 call sites
 - `src/components/Insights/MisconceptionsTab.tsx:84`
@@ -75,3 +75,4 @@
 
 - `scripts/audit-coach-play-full.mjs`
 - `scripts/audit-coach-review-gaps.mjs`
+- `scripts/audit-fundamentals-tab-prod.mjs`
