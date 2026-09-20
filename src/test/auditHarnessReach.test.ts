@@ -146,6 +146,23 @@ describe('audit scripts can reach prod from the sandbox', () => {
     expect(paying, `these spend real TTS money every run: ${paying.join(', ')}`).toEqual([]);
   });
 
+  it('no audit points a device at a NON-loopback stream URL (David 2026-09-19: audits must never fill Redis)', () => {
+    // The app-side gate (appAuditor.isAuditMarkedPage) refuses the remote from
+    // any audit-marked page and the server refuses anything carrying
+    // x-audit-marked — so a script that sets a prod URL would only prove the
+    // gate works. It is still a bug in the SCRIPT: the only legitimate targets
+    // are the loopback listener (`startAuditListener`) and the own-origin
+    // route-capture (`enableAuditCapture`, fulfilled locally by page.route).
+    // The one audit that VERIFIES the gate sets a prod URL on purpose and is
+    // named here; it asserts the POST count is ZERO.
+    const GATE_VERIFIER = new Set(['audit-stream-optin-prod.mjs']);
+    const literalRemote = /setItem\(\s*['"]auditStreamUrl['"]\s*,\s*['"]https?:\/\/(?!127\.0\.0\.1|localhost|\[::1\])/;
+    const offenders = driving
+      .filter((f) => !GATE_VERIFIER.has(f.name) && literalRemote.test(f.src))
+      .map((f) => f.name);
+    expect(offenders, `these point a device at a remote audit stream: ${offenders.join(', ')}`).toEqual([]);
+  });
+
   it('every one resolves the Chromium binary rather than trusting the default', () => {
     // `resolveChromiumExecutable` prefers the FULL chrome when AUDIT_PROXY is
     // set, because headless_shell ignores --ssl-version-max and resets anyway.

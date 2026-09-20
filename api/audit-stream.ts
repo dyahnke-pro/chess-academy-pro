@@ -223,6 +223,18 @@ export default async function handler(
   }
 
   if (req.method === 'POST') {
+    // 🔒 AN AUDIT CAN NEVER FILL REDIS (David 2026-09-19). The client stamps
+    // `x-audit-marked` on every stream POST from an audit-marked page
+    // (appAuditor.isAuditMarkedPage), and a headless browser names itself in
+    // its UA. Either one: acknowledge and store NOTHING — not Redis, not the
+    // memory buffer. The sidecar and the route-capture interceptors never
+    // reach this handler, so audits lose nothing; only the shared Upstash
+    // budget is protected.
+    const ua = String(req.headers['user-agent'] ?? '');
+    if (req.headers['x-audit-marked'] || /HeadlessChrome|AuditCoachPlayBot|Playwright/i.test(ua)) {
+      res.status(200).json({ ok: true, storage: 'refused', stored: 0, refused: 'audit' });
+      return;
+    }
     const entries = parseEntries(req.body);
     if (entries.length === 0) {
       res.status(400).json({ error: 'invalid entry' });

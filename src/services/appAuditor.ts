@@ -800,6 +800,12 @@ export type AuditKind =
   //   fired" from "the stream is broken" when the live-watch feed
   //   goes quiet.
   | 'audit-stream-post-failed'
+  // audit-stream-remote-refused: this page carries an AUDIT marker (the TTS
+  //   mute every audit injects, or a stamped run id) and its stream URL is
+  //   neither the loopback sidecar nor this origin — so the remote POST was
+  //   refused on the client (David 2026-09-19: "i no longer want audits to
+  //   fill redis"). Local-only; emitted once per page.
+  | 'audit-stream-remote-refused'
   // audit-stream-secret-healed: a stored per-profile secret was rejected
   //   (401/403) and the client adopted + persisted the build's baked
   //   secret instead — the self-repair for post-rotation stale devices.
@@ -1372,6 +1378,39 @@ export function isStreamSidecarUrl(url: string): boolean {
   return /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?(?:\/|$)/i.test(url);
 }
 
+/**
+ * 🔒 AN AUDIT CAN NEVER WRITE TO THE REMOTE STREAM (David 2026-09-19: "i no
+ * longer want audits to fill redis"). Every browser-driving audit marks its
+ * page — `muteTtsForAudit` sets `auditMuteTts` (gated by auditHarnessReach),
+ * `stampAuditRunId` sets `auditRunId`. The same marker decides here: a marked
+ * page may POST audit entries to the loopback sidecar, or to its own origin
+ * (the route-capture audits fulfil that locally), and to nothing else. What it
+ * does send carries `x-audit-marked`, and the server stores nothing that
+ * carries it — so a route-capture audit that forgot its interceptor still
+ * cannot reach Redis. Two gates, one marker, no per-script convention.
+ */
+export const AUDIT_MARKED_HEADER = 'x-audit-marked';
+
+export function isAuditMarkedPage(): boolean {
+  if ((globalThis as { __auditMuteTts?: unknown }).__auditMuteTts === true) return true;
+  try {
+    const ls = (globalThis as { localStorage?: Storage }).localStorage;
+    return ls?.getItem('auditMuteTts') === '1' || !!ls?.getItem('auditRunId');
+  } catch {
+    return false;
+  }
+}
+
+function isOwnOriginUrl(url: string): boolean {
+  try {
+    return typeof location !== 'undefined' && new URL(url).origin === location.origin;
+  } catch {
+    return false;
+  }
+}
+
+let remoteRefusalLogged = false;
+
 function installStreamFlushHooks(): void {
   if (streamFlushHooksInstalled || typeof window === 'undefined') return;
   streamFlushHooksInstalled = true;
@@ -1429,7 +1468,26 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
     }
     return;
   }
-  if (!isStreamSidecarUrl(cfg.url)) { enqueueForRemoteStream(entry); return; }
+  if (!isStreamSidecarUrl(cfg.url)) {
+    // The client half of the audit gate (see isAuditMarkedPage): a marked page
+    // never batches toward a URL that is neither its sidecar nor its own
+    // origin. Logged locally once so an audit reading the Dexie log can see
+    // WHY the remote stayed silent instead of guessing.
+    if (isAuditMarkedPage() && !isOwnOriginUrl(cfg.url)) {
+      if (!remoteRefusalLogged && entry.kind !== 'audit-stream-remote-refused') {
+        remoteRefusalLogged = true;
+        void logAppAudit({
+          kind: 'audit-stream-remote-refused',
+          category: 'subsystem',
+          source: 'appAuditor.streamAuditEntry',
+          summary: `audit-marked page refused to stream to ${cfg.url}`,
+        });
+      }
+      return;
+    }
+    enqueueForRemoteStream(entry);
+    return;
+  }
   await postToStream(cfg, entry);
 }
 
@@ -1454,6 +1512,10 @@ async function postToStream(cfg: AuditStreamConfig, payload: AuditEntry | readon
       headers: {
         'content-type': 'application/json',
         'x-audit-secret': cfg.secret,
+        // The server half of the audit gate: /api/audit-stream stores nothing
+        // that carries this header, so even an own-origin POST from an audit
+        // whose route interceptor is missing never reaches Redis.
+        ...(isAuditMarkedPage() ? { [AUDIT_MARKED_HEADER]: '1' } : {}),
       },
       body: JSON.stringify(payload),
       keepalive: true,

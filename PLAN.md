@@ -451,6 +451,40 @@ suspected to be the wrong Lichess theme — `capturingDefender` is literally
 "remove the defender"; `defensiveMove` is closer to its opposite. A
 co-occurrence check was inconclusive. Measure before touching.
 
+## LANDED 2026-09-19 (late) — audits can never fill Redis (David: "i no longer want audits to fill redis")
+
+**State found:** Upstash at `500000/500000` again (`/api/messages` → `degraded`,
+`audit-stream` → `storage:memory`); spend guard failing OPEN until Oct 1. The 8
+live entries that hour came from a real device with the stream ON (Tactics taps
+at 19:52 CDT), not from audits — opt-in-off already kept audits out by DEFAULT.
+David's order is stricter: the wrong configuration must be impossible.
+
+**Built (two gates, one marker):**
+- `appAuditor.isAuditMarkedPage()` — the marker every audit already sets
+  (`auditMuteTts`, gated by `auditHarnessReach`; or `auditRunId`). A marked page
+  streams only to the loopback sidecar or its own origin; anything else is
+  refused and logged once (`audit-stream-remote-refused`, local log only).
+- Every stream POST from a marked page carries `x-audit-marked`; the server
+  (`api/audit-stream.ts`) stores nothing carrying it, nor anything from a
+  headless UA — `200 stored:0 refused:'audit'`, no Redis, no memory buffer.
+- `audit-stream-optin-prod.mjs` rewritten: opt-in proven against the SIDECAR
+  (it used to post a real batch to prod every run), plus both gates asserted.
+- `auditHarnessReach`: no script may set a literal non-loopback `auditStreamUrl`.
+- Gates: `appAuditor.auditGate.test.ts`, `api/audit-stream.refuse.test.ts`.
+
+**Also tonight (same session):** `pinGeometry.canLeaveLine` — a blocker does not
+un-pin; the Italian Bc5→f2 pin is detected again (validator board-rescue test was
+red on main). Prod audits after: Learn 8/8, review 36/36 MEETS STANDARD.
+
+**Found and NOT fixed here (chips spawned / flagged):**
+- The listener sidecar receives NOTHING on David's Mac unless `AUDIT_SANDBOX=1`
+  (Chrome 145 blocks https→127.0.0.1 without `--disable-web-security`). A run
+  read "0 spoken" while PostHog held 247 narration events for the run id. Chip:
+  make the sidecar reachable without weakening web security; fail loudly on
+  `audit_stream_post_failed`. Memory: `audit-listener-needs-sandbox-flag`.
+- Upstash cap: the plan bump (~$0.20 / 100k) is David's call. Redis-backed
+  routes and their degradation are listed in CLAUDE.md §G2.
+
 ## ROADBLOCKS — every open item in coach (2026-09-18)
 
 Three buckets. A thing is a roadblock if it stops the LOOP closing, stops an

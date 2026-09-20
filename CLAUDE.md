@@ -692,6 +692,27 @@ So, when reading an empty `/api/audit-stream` pull:
 4. The **local Dexie audit log on-device is unchanged and remains the source of
    truth**; every device records regardless of whether the pipe is open.
 
+🔒🔒 **AN AUDIT CAN NEVER FILL REDIS — TWO GATES, ONE MARKER (David 2026-09-19:
+"i no longer want audits to fill redis").** Opt-in-off made the default safe;
+this makes the WRONG configuration impossible to express. Every browser-driving
+audit already marks its page (`muteTtsForAudit` → `auditMuteTts`, gated by
+`auditHarnessReach`; `stampAuditRunId` → `auditRunId`). That marker now decides:
+- **Client** — `appAuditor.isAuditMarkedPage()`: a marked page streams only to
+  the loopback sidecar or its own origin (the route-capture audits fulfil that
+  locally). Any other URL is refused and logged once as
+  `audit-stream-remote-refused` in the LOCAL log.
+- **Server** — every POST from a marked page carries `x-audit-marked`, and
+  `/api/audit-stream` stores NOTHING that carries it, nor anything from a
+  `HeadlessChrome` / `AuditCoachPlayBot` / `Playwright` UA — `200 stored:0
+  refused:'audit'`, no Redis, no memory buffer. So a route-capture audit whose
+  interceptor is missing still cannot reach Redis.
+- **Scripts** — `auditHarnessReach` fails any audit that sets a literal
+  non-loopback `auditStreamUrl`; `audit-stream-optin-prod.mjs` is the one
+  verifier (it now proves opt-in against the SIDECAR and proves BOTH gates).
+Gates: `appAuditor.auditGate.test.ts`, `api/audit-stream.refuse.test.ts`. The
+listener sidecar is unaffected — it is loopback, and it never touched Redis.
+When Upstash reads `500000/500000` again, audits are no longer a suspect.
+
 Gate: `appAuditor.test.ts` → "audit-stream is opt-in (2026-09-11)". It is
 deliberately non-vacuous — `vitest.config.ts` defines a NON-EMPTY baked secret,
 because with an empty one there is nothing for a regression to fall back to and a
