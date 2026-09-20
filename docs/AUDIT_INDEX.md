@@ -238,23 +238,4 @@ per-cell grid + JSON report to `audit-reports/coach-capability-matrix-<ts>.json`
 AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY MATRIX_SECTION=actions node scripts/audit-coach-capability-matrix.mjs
 ```
 
-- `audit-stream-optin-prod.mjs` — the 2026-09-11 opt-in contract: a fresh device must make ZERO `/api/audit-stream` POSTs, and an explicitly-enabled one must still POST (both halves, so a broken stream cannot pass as "default off").
-
-### `audit-review-reopen-probe.mjs` — the INSTANT-REOPEN contract
-
-Separates two things the overhaul audit conflated for two days:
-
-| | measured | verdict |
-|---|---|---|
-| A first open | 91.3s, `review-segments-generated` | real analysis — slow is correct |
-| B reopen, annotations unchanged | **1.7s, `review-walk-skipped`** | the contract, and it HOLDS |
-| C reopen after the deep dive | rebuild, no spinner, no second dive | the key legitimately changed |
-
-The app's own audit event decides it, not a stopwatch: `review-walk-skipped`
-means the narration cache served it, `review-segments-generated` means it was
-rebuilt. A timing alone cannot tell those apart, which is exactly why the
-overhaul audit's `REOPEN instant-no-rerun` row spent two days failing the
-product for a rebuild that was correct.
-
-Muted. Run it whenever the review narration cache, its key, or the deep-dive
-annotation rewrite changes.
+- `audit-stream-optin-prod.mjs` — the audit-stream contract on PROD, three halves: (1) a fresh device makes ZERO `/api/audit-stream` POSTs (opt-in, 2026-09-11); (2) an explicitly-enabled device still streams — proven against the LOOPBACK sidecar, so this audit writes nothing to Upstash; (3) the two 2026-09-19 gates ("i no longer want audits to fill redis"): an audit-marked page pointed at prod makes ZERO network POSTs (client, `appAuditor.isAuditMarkedPage`) and a POST carrying `x-audit-marked` is stored NOWHERE (server, `200 stored:0 refused:'audit'`). Needs `AUDIT_STREAM_SECRET` for half 3b; skips it honestly otherwise.
