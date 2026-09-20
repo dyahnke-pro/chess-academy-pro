@@ -1933,6 +1933,48 @@ async function analyzeGamePositions(
  *  full searches racing on the engine); the second caller now joins the first. */
 const _singleGameInFlight = new Map<string, Promise<MoveAnnotation[] | null>>();
 
+/**
+ * THE RECORD HALF OF THE LOOP — one door, every analysis path (WO-LOOP-01,
+ * 2026-09-20). Mistake puzzles, the misconception/fundamentals sweep, tactic
+ * classification and (on a full-depth pass) bad-habit detection, for a game
+ * whose annotations were just written.
+ *
+ * 🔒 WHY IT IS EXPORTED AND WHY `analyzeSingleGame` CALLS IT. This used to be a
+ * closure inside `analyzeAllGames`, so only the BATCH path recorded anything.
+ * The review page's first open runs `analyzeSingleGame`, which wrote the
+ * annotations, stamped `fullyAnalyzed: true` — and stopped. The batch then
+ * SKIPPED the game as already analysed. So a game a student first met in review
+ * (the most common path) was never recorded into the student model: the coach
+ * diagnosed the loose piece out loud and remembered nothing. Measured by
+ * `audit-loop-closes-prod` on 2026-09-20: two real games opened in review, ZERO
+ * `misconceptionTags` rows. Every recorder below guards its own game
+ * (`hasMisconceptionsForGame`, the puzzle/tactic `sourceGameId` checks), so the
+ * sweep-only pass and the deepening pass may both call this safely.
+ */
+export async function generateInsightsForGame(
+  gameId: string,
+  source: GameRecord['source'],
+  annotations: MoveAnnotation[],
+  opts: { habits?: boolean } = {},
+): Promise<{ misconceptionsLogged: number }> {
+  const profile = useAppStore.getState().activeProfile;
+  const chessComUsername = profile?.preferences.chessComUsername;
+  const lichessUsername = profile?.preferences.lichessUsername;
+  const username = source === 'chesscom' ? chessComUsername
+    : source === 'lichess' ? lichessUsername
+      : undefined; // coach games infer the side from "Stockfish Bot"
+  try { await generateMistakePuzzlesFromGame(gameId, username); } catch { /* continue */ }
+  // Thinking-Errors bucket — the bulk faucet (was interactive-only, so a
+  // freshly analyzed library never filled the tab). Deterministic + free now.
+  let misconceptionsLogged = 0;
+  try { misconceptionsLogged = (await autoAnalyzeGameMisconceptions(gameId, username)).logged; } catch { /* continue */ }
+  try { await classifyTacticsFromGame(gameId); } catch { /* continue */ }
+  if (opts.habits !== false && profile && annotations.length > 0) {
+    try { await detectBadHabitsFromGame(annotations, profile); } catch { /* continue */ }
+  }
+  return { misconceptionsLogged };
+}
+
 export async function analyzeSingleGame(
   gameId: string,
   onProgress?: (phase: string) => void,
@@ -1976,6 +2018,12 @@ async function analyzeSingleGameUncoalesced(
     // one. See the note in `analyzeGamePositions`.
     await db.games.update(gameId, { annotations, fullyAnalyzed: true, analysisDepth: achievedDepth });
 
+    // RECORD what this analysis found (WO-LOOP-01) — the same door the batch
+    // uses. Bad-habit detection only on the full-depth pass; the recorders
+    // themselves are idempotent per game. Never blocks the review on a failure.
+    let recorded = 0;
+    try { recorded = (await generateInsightsForGame(gameId, game.source, annotations, { habits: !opts?.sweepOnly })).misconceptionsLogged; } catch { /* the walk still opens */ }
+
     // The OTHER half of the split (see BATCH_SHALLOW_DEPTH): the review is the
     // surface with a person watching a progress bar, and it was the one measured
     // at 216s before the rework. Measure it directly rather than by feel.
@@ -1983,7 +2031,7 @@ async function analyzeSingleGameUncoalesced(
       kind: 'analysis-review-done',
       category: 'subsystem',
       source: 'gameAnalysisService.analyzeSingleGame',
-      summary: `review of ${game.white} vs ${game.black} in ${((Date.now() - reviewStartedAt) / 1000).toFixed(1)}s — ${annotations.length} moves, depth=${achievedDepth}`,
+      summary: `review of ${game.white} vs ${game.black} in ${((Date.now() - reviewStartedAt) / 1000).toFixed(1)}s — ${annotations.length} moves, depth=${achievedDepth}, recorded=${recorded} misconception(s)`,
     });
 
     return annotations;
@@ -2201,26 +2249,8 @@ export async function analyzeAllGames(
   // analyzed game contributes its mistakes immediately and survives any
   // interruption. The username is needed so the mistake generator can tell
   // which side the student played in imported games (else 0 puzzles).
-  const profile = useAppStore.getState().activeProfile;
-  const chessComUsername = profile?.preferences.chessComUsername;
-  const lichessUsername = profile?.preferences.lichessUsername;
-  const generateInsightsForGame = async (
-    gameId: string,
-    source: GameRecord['source'],
-    annotations: MoveAnnotation[],
-  ): Promise<void> => {
-    const username = source === 'chesscom' ? chessComUsername
-      : source === 'lichess' ? lichessUsername
-        : undefined; // coach games infer the side from "Stockfish Bot"
-    try { await generateMistakePuzzlesFromGame(gameId, username); } catch { /* continue */ }
-    // Thinking-Errors bucket — the bulk faucet (was interactive-only, so a
-    // freshly analyzed library never filled the tab). Deterministic + free now.
-    try { await autoAnalyzeGameMisconceptions(gameId, username); } catch { /* continue */ }
-    try { await classifyTacticsFromGame(gameId); } catch { /* continue */ }
-    if (profile && annotations.length > 0) {
-      try { await detectBadHabitsFromGame(annotations, profile); } catch { /* continue */ }
-    }
-  };
+  // ONE DOOR for the insights (WO-LOOP-01, 2026-09-20): `generateInsightsForGame`
+  // below — the review's `analyzeSingleGame` calls the same function now.
 
   try {
     if (workers.length > 0) {

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1412 lines · 23 exports · 27 importers · 15 tests · 4 audits**
+**1415 lines · 23 exports · 27 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -78,8 +78,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:6910`
-- `src/components/Coach/CoachTeachPage.tsx:6916`
+- `src/components/Coach/CoachTeachPage.tsx:6909`
+- `src/components/Coach/CoachTeachPage.tsx:6915`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -119,7 +119,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gameAnalysisService.ts:352`
 - `src/services/gameAnalysisService.ts:1388`
 - `src/services/gameAnalysisService.ts:1618`
-- `src/services/gameAnalysisService.ts:2041`
+- `src/services/gameAnalysisService.ts:2089`
 - `src/services/tacticClassifierService.ts:193`
 - `src/services/tacticClassifierService.ts:434`
 
@@ -130,7 +130,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2014`
 - `src/components/Coach/CoachGameReview.tsx:310`
-- `src/services/gameAnalysisService.ts:2215`
+- `src/services/gameAnalysisService.ts:1966`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
 - `src/services/mistakePuzzleService.test.ts:189`
@@ -218,7 +218,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2170`
+- `src/components/Coach/CoachTeachPage.tsx:2169`
 - `src/components/Puzzles/MyMistakesPage.tsx:213`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`

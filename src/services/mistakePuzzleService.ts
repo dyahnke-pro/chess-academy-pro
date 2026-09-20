@@ -246,6 +246,9 @@ export function determinePlayerColor(
   game: GameRecord,
   username?: string,
 ): 'white' | 'black' | null {
+  // THE DECLARED SEAT FIRST (`GameRecord.studentSide`, 2026-09-19) — the field
+  // that exists so no path has to guess from names. Names are the fallback.
+  if (game.studentSide === 'white' || game.studentSide === 'black') return game.studentSide;
   if (game.source === 'coach') {
     if (game.white === 'Stockfish Bot') return 'black';
     if (game.black === 'Stockfish Bot') return 'white';

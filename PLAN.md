@@ -100,8 +100,34 @@ writers (`misconceptionService`, `mistakePuzzleService`) now emit on a leaf even
 (`weaknessModelEvents`, imports nothing, so no cycle through `weaknessSpine`) and
 the loader + Learn's hook listen. Both consumers share `fundamentalRecurrence.ts`.
 
-**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ (typecheck 0, lint 0 errors, 141 tests
-across 11 suites green, vacuity OK, harness gates green, 8 maps fresh) · Phase 3 ⏳ · Phase 4 ☐
+**PHASE 4, RUN 1 (bundle `index-BucBq3e3`, 02:17–02:46) — THE INSTRUMENT FOUND THE
+ROOT.** `audit-loop-closes-prod` 4/6, verdict PAIR UNUSABLE, and it was right to
+refuse: **neither game got a single misconception row from the sweep.** Learn
+8/8 on the same bundle. Read, not guessed: the review page's first open runs
+`analyzeSingleGame`, which writes the annotations, stamps `fullyAnalyzed: true`
+and returns. The misconception/puzzle/tactic sweep (`generateInsightsForGame`)
+was a CLOSURE inside `analyzeAllGames` — the BATCH path only — and the batch
+skips a game already stamped analysed. The review's own capture component is a
+BUTTON ("Add this game's mistakes to your weaknesses"). So a game a student
+first met in review — the most common path — was never recorded into the
+student model. The coach diagnosed the loose piece out loud and remembered
+nothing. This is the one-way-wire disease at the loop's FIRST hop, and no gate
+could see it because every recorder was unit-tested through the batch door.
+(Second, smaller: `determinePlayerColor` never read `GameRecord.studentSide`.)
+
+**FIX (run 2):** `generateInsightsForGame` hoisted to ONE exported door, called by
+both batch sites and by `analyzeSingleGame` after it writes (habits only on the
+full-depth pass; every recorder guards its own game, so sweep-then-deepen does
+not double-record). `determinePlayerColor` honours the declared seat first. Gate:
+`gameAnalysisService.records.test.ts` — a real row comes OUT for a review-shaped
+game, idempotent, negative-controlled, and the review path calls the door. The
+audit now prints, for each game, what the engine FLAGGED beside what the sweep
+WROTE (so "nothing to record" and "the sweep never ran" can never be confused
+again), iterates B candidates until one shares a fundamental with A, and sources
+LOSING games first (a GM who won has nothing to record).
+
+**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ (pushed 778c872d6) ·
+Phase 4 run 1 ✅ measured, ❌ loop not yet closed on prod · run 2 ⏳
 
 
 ## THE CRITICAL MOMENT — one computer, two registers (design, 2026-09-18)
