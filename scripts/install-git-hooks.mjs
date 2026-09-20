@@ -46,6 +46,19 @@ echo ""
 echo "── pre-push: ship-check ──"
 echo ""
 
+# HONOUR THE GREEN WATERMARK (PLAN §B 11b, 2026-09-19): ship-check writes
+# .ship-check-log/latest.json with the SHA it went green on. When that SHA is
+# HEAD, a second full run here only doubles the machine load that produces
+# false timeouts — skip it and push. Anything else re-runs as before.
+if [ -f .ship-check-log/latest.json ]; then
+  head_sha=$(git rev-parse HEAD 2>/dev/null)
+  green_sha=$(node -e "try{const j=require('./.ship-check-log/latest.json');process.stdout.write(String(j.sha||j.head||''))}catch{}" 2>/dev/null)
+  if [ -n "$head_sha" ] && [ "$head_sha" = "$green_sha" ]; then
+    echo "✓ ship-check already green on $head_sha (watermark) — skipping the re-run."
+    exit 0
+  fi
+fi
+
 if ! npm run ship-check; then
   echo ""
   echo "✗ ship-check failed — push aborted."

@@ -1259,10 +1259,12 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     open: `summarizeLint` still can't distinguish "eslint crashed" from
     "eslint reported nothing"; it should fail LOUDLY on a non-zero exit with no
     report.
-11d. **`TEST_TYPE_ERROR_CEILING` is above the real count** — every run prints
-    "0 errors — BELOW the ceiling, lower TEST_TYPE_ERROR_CEILING to 0". Lower
-    it to 0 so a new test type error blocks the push (this is the runtime half
-    of #61).
+11d. 🔴 **PREMISE CORRECTED (2026-09-20): the real count IS 296, the ceiling is
+    right.** "0 errors — lower the ceiling to 0" was tsc CRASHING under load
+    (a heap death prints no `error TS` line), the same disease as 11c's lint
+    row; on a quiet machine the phase prints "296 errors (at the ceiling)". The
+    step now names a crash instead of counting zero. The runtime half of #61
+    is still owed the honest way: drive the 296 down, then lower the ceiling.
 11e. **Source-text regex tests drift silently when the guarded code MOVES**
     (2026-09-19, `coachLaneWiring.test.ts`): three assertions failed on
     untouched `main` — a guard grew an operand, a ref migrated into
