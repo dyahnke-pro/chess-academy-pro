@@ -1533,6 +1533,30 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### B. The instruments are not believable (a green here means nothing)
 
+0. 🔴 **NEW 2026-09-20 14:05 — THE REVIEW WALK IS ~45% SLOWER AND NOW RUNS OUT
+   OF BUDGET.** Two product-mode runs of `audit-review-overhaul-prod`, same
+   pinned game (06wNUWaA, student=black), same machine, nothing else running:
+   - BEFORE the afternoon pushes (11:25, bundle `WwZIaxGS`): ply 67/69 at
+     **550s** of the 828s poll budget, `end reached=true`, 34 pass / 3 fail.
+   - AFTER (13:41, bundle `BRGLhcVE`): ply 67/69 at **800s**, still 67/69 at
+     825s, `end reached=false`, 31 pass / 5 fail.
+   It was ALSO carrying fewer flagged plies (3 vs 5 — product-mode
+   nondeterminism), i.e. less work, which is why the game is unlikely to be
+   the cause. **ONE root cause, four reds:** the walk never arrives at ply 68,
+   and `register === 'ask'` only speaks and shows its card when the walk
+   REACHES that ply (`CoachGameReview.tsx:1078`), so CRIT
+   `spoken-names-count-and-stake` fails, the turning-point card is never
+   answered so THESIS fails as a DRIVER error, and RECAP fails on
+   `end reached=false`. Fix the speed and all four should go green.
+   First suspects, both from the same push: the critical fan now scans 27
+   plies instead of 22 (8746ms vs 5128ms — by design) and the section-14
+   detectors add per-ply attribution on the narration path; the fan is
+   background but competes for the same single-thread pool worker the walk's
+   narration needs. **n=1 each side, product mode — confirm with
+   `AUDIT_DETERMINISTIC=1` on both sides before chasing it.** This is
+   user-facing, not just an audit row: G4.6 is David on review latency
+   ("we need to fix that seven second lag").
+
 7c. ✅ **DONE (2026-09-19) — THE DEAD-SELECTOR CLASS HAS A GATE.** #59 (below,
    §C 16) was the calibration-bubble failure again under a new name: an audit
    blocking on a testid nothing renders fails SILENTLY (timeout, `.catch`,
