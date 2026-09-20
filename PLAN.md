@@ -476,6 +476,23 @@ David's order is stricter: the wrong configuration must be impossible.
 un-pin; the Italian Bc5→f2 pin is detected again (validator board-rescue test was
 red on main). Prod audits after: Learn 8/8, review 36/36 MEETS STANDARD.
 
+**OPEN — owed from this session, none started (2026-09-19 23:40):**
+1. **Spend guard fails OPEN while Upstash is capped** (`api/_lib/usageGuard.ts`
+   treats a Redis error as null → allow). Until Oct 1 there is no brake on
+   LLM/TTS spend. Options: fail closed above a per-instance in-memory count, or a
+   local counter fallback. Product gap, David's call to prioritise.
+2. **42 audits still GET the prod stream pre/post run** (`pullStream`/
+   `pullProdStream` inline per script, ~2 Redis commands per run). Reads count
+   against the same 500k. Make the pull opt-in (`AUDIT_PULL_PROD_STREAM=1`) in
+   one shared helper if David wants audits fully off Redis, not just off writes.
+3. **Read one Learn narration**: at move 3 (after Nc3 hits the queen) the coach
+   said "your queen on d5 is attacked … there's a pin here for you — have a look"
+   before any pin existed on the board. Likely the lookahead beat ("Watch move 5,
+   Bg4 — that is where the pin lands") bundled into the same turn; verify which
+   computer produced it and whether "here" is honest at that ply.
+4. The pre-push hook (11b) and `TEST_TYPE_ERROR_CEILING` (11d) — already listed
+   under E.
+
 **Found and NOT fixed here (chips spawned / flagged):**
 - The listener sidecar receives NOTHING on David's Mac unless `AUDIT_SANDBOX=1`
   (Chrome 145 blocks https→127.0.0.1 without `--disable-web-security`). A run
