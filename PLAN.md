@@ -223,6 +223,44 @@ now `.clear()`, like every sibling.
   self-invalidates (the right pattern, not a door); `OpeningPlayMode` holds no
   per-game say-once refs. No fourth door.
 
+**🔴 A REGRESSION I SHIPPED, FOUND BY THE OTHER SESSION'S TAPES (2026-09-20).**
+Two product-mode runs on the merged tree, same pinned game: the review walk
+reached ply 67/69 at **550s before** my pushes and at **800s after**, with
+`end reached` going TRUE → FALSE and four rows cascading red off it (CRIT,
+THESIS, RECAP — all downstream of a walk that never arrives at the ply). It did
+that with FEWER flagged plies (3 vs 5), i.e. less work, which is what rules out
+the game.
+
+**The cause was mine and it is readable without a profiler.** WO-LOOP-01 put the
+insight sweep on the review path — correct, that is the fix that made the loop
+record at all — but I **AWAITED** it inside `analyzeSingleGame`, which is the
+function `CoachReviewSessionPage` awaits before the walk becomes startable. So
+mistake-puzzle generation (which can invoke Stockfish on a game with no stored
+best move), the misconception attribution, tactic classification and a dossier
+refresh all ran IN FRONT OF THE STUDENT — and twice, since the sweep-open and
+the background deepen both land there. My own comment one line above read
+"Never blocks the review", while the code blocked it. That is the same
+comment-describes-the-half-that-is-not-connected disease this file opens with,
+written by me, the same night I wrote that section.
+
+**FIXED:** the recording is fire-and-forget. Nothing about a game's OWN
+recording changes what its walk says — `recurrenceFor` excludes the current
+gameId, so these rows are for the NEXT game. There is no ordering requirement,
+only a completion one, which a detached promise satisfies; both outcomes are
+audited (`…analyzeSingleGame.record`). Gate: `gameAnalysisService.records.test`
+now asserts `void generateInsightsForGame(` and NO `await` of it inside the
+function the walk waits on. (Found writing that gate: slicing the body to the
+first `\n}\n` lands inside a nested block and reads an EMPTY body — a gate that
+would have passed on anything.)
+
+**OWED — the measurement, not my word for it:** the other session offered a
+deterministic re-measure (`AUDIT_DETERMINISTIC=1`, their seam) on both sides.
+Take it: n=1 per side in product mode is not enough to close this, and the
+second candidate cause is still open — T1 widened the critical fan from 22 to 27
+plies (8746ms vs 5128ms, by design) and it competes for the same single-thread
+pool worker the walk's narration needs. If the detach alone does not restore
+550s, the fan's 3s delay is the next thing to look at.
+
 **Status:** plan ✅ · context ✅ · code ✅ · gates ✅ · push ✅ ·
 **audits: loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ ·
 second-game 12/12 ✅** — WO-CLOSEOUT-01 closed.
