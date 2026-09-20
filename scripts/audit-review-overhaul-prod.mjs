@@ -42,6 +42,7 @@ import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { seedWeaknessProfile } from './audit-lib/seed-weakness-profile.mjs';
 import { exploreOnFreeBoard, readWalkPly } from './audit-lib/review-explore.mjs';
 import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
+import { LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { wedgeTracer } from './audit-lib/wedge-tracer.mjs';
 import { SEEDS, pickRealGame, fetchGameById } from './audit-lib/source-real-game.mjs';
 
@@ -187,7 +188,8 @@ const run = async () => {
   // `exit` names the call that never returned. Off by default — it patches
   // String/RegExp/JSON prototypes and must never colour a normal tape.
   if (process.env.AUDIT_WEDGE_HUNT === '1') {
-    await ctx.addInitScript(wedgeTracer, listener.url);
+    // The secret rides in the URL: sendBeacon cannot set the header.
+    await ctx.addInitScript(wedgeTracer, `${listener.url}?secret=${LOCAL_LISTENER_SECRET}`);
     log('  [wedge] tracer armed (AUDIT_WEDGE_HUNT=1)');
   }
   const page = await ctx.newPage();
@@ -1075,6 +1077,21 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         new Promise((r) => setTimeout(() => r('HUNG >3s'), 3000)),
       ]) : 'no cdp';
       log(`  [wedge] url=${page.url()} closed=${page.isClosed()} cdp Runtime.evaluate: ${probe}`);
+      // INTERRUPTIBLE OR NOT — the second half of the diagnosis. V8 checks for
+      // interrupts at loop back-edges, so a plain JS loop CAN be paused and its
+      // stack read; a regex match or a recursive C++ builtin cannot. Whichever
+      // answer comes back rules out half the remaining causes.
+      if (cdp) {
+        const paused = new Promise((r) => { cdp.on('Debugger.paused', (e) => r(e)); });
+        await cdp.send('Debugger.enable').catch(() => undefined);
+        void cdp.send('Debugger.pause').catch(() => undefined);
+        const got = await Promise.race([paused, new Promise((r) => setTimeout(() => r(null), 10000))]);
+        if (!got) log('  [wedge] Debugger.pause NEVER LANDED in 10s — the call has no interrupt check (regex match, or a recursive C++ builtin)');
+        else {
+          log(`  [wedge] Debugger.pause LANDED (${got.reason}) — it IS interruptible JS; top frames:`);
+          for (const f of (got.callFrames || []).slice(0, 12)) log(`     ${f.functionName || '(anon)'} @ ${String(f.url || '').split('/').pop()}:${f.location?.lineNumber}`);
+        }
+      }
       // The tracer's verdict, read off the listener (it never touched the page).
       const tr = listener.getCapturedEvents().filter((e) => e.kind === 'wedge-trace').map((e) => ({ s: String(e.summary || ''), site: String(e.site || '') }));
       if (tr.length) {

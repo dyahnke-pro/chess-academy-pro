@@ -65,7 +65,14 @@ export async function startAuditListener({ port = 0 } = {}) {
         return;
       }
 
-      const secret = req.headers['x-audit-secret'];
+      // `navigator.sendBeacon` CANNOT set a header, and the beacon is the only
+      // channel that survives a wedged renderer (it hands the payload to the
+      // browser process before the blocking call begins). So a secret in the
+      // query string is accepted too — this listener is loopback capture, not
+      // a security boundary (see the note above). Without this every beacon
+      // came back 401 and the tracer was silent (2026-09-20).
+      const fromQuery = new URL(url, 'http://127.0.0.1').searchParams.get('secret');
+      const secret = req.headers['x-audit-secret'] ?? fromQuery;
       if (secret !== LOCAL_LISTENER_SECRET) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'bad secret' }));
