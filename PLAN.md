@@ -1355,23 +1355,26 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     failure was a vitest `Test timed out` (punish-gems conversions at 5–22s
     that run at ~400ms alone) while three sibling worktrees ran their own
     typecheck/eslint (load avg 34–56 on 6 cores; a 55s typecheck took 1398s).
-    A contaminated ship-check is worse than none. TODO: make the gate summary
-    SAY "N timeouts / M assertion failures" instead of one ✗, so a load
-    artifact is never read as a product red; consider a load check
+    A contaminated ship-check is worse than none. ✅ DONE 2026-09-20
+    (b393b2b74): `summarizeVitest` counts "Test timed out" against
+    AssertionError and flags an all-timeout red as suspected machine load.
+    Still worth considering: a load check before the gates run
     (`sysctl -n vm.loadavg`) that refuses to start above ~8 and says why.
 11b. **The pre-push hook spawns a SECOND full ship-check on every push**
     (shared `.git/hooks/pre-push` across all worktrees). With ship-check already
     running detached for the same SHA, a plain `git push` hung 2+ minutes and
-    doubled the load that causes 11a. TODO: have the hook honour the
-    `.ship-check-log/latest.json` watermark — skip when a green run exists for
-    HEAD's SHA — instead of always re-running.
+    doubled the load that causes 11a. ✅ DONE 2026-09-20 (b393b2b74 +
+    e0c964b4e): the hook skips when `.ship-check-log/latest.json` records a
+    green run for HEAD's SHA; and the installer now resolves the COMMON git
+    dir, because in a worktree `.git` is a file and every worktree session
+    that ran it had installed nothing (ENOTDIR).
 11c. **✅ FIXED 2026-09-19 (`10334b048`) — lint rendered a heap crash as a
     verdict.** On Node 26 whole-repo eslint died with a V8 native stack trace
     and the summarizer printed `✗ lint … 0 errors` — a row that contradicts
     itself. The step now carries `--max-old-space-size=8192` itself. Left
-    open: `summarizeLint` still can't distinguish "eslint crashed" from
-    "eslint reported nothing"; it should fail LOUDLY on a non-zero exit with no
-    report.
+    open → ✅ closed 2026-09-20 (b393b2b74): with no report line the summary
+    says so instead of "0 errors", and the row's ✓/✗ comes from the exit
+    status; every native-crash signature names a crash.
 11d. 🔴 **PREMISE CORRECTED (2026-09-20): the real count IS 296, the ceiling is
     right.** "0 errors — lower the ceiling to 0" was tsc CRASHING under load
     (a heap death prints no `error TS` line), the same disease as 11c's lint
