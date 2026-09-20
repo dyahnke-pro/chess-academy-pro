@@ -101,9 +101,24 @@ async function resolveGame() {
   }
   const byId = process.env.AUDIT_GAME_ID;
   if (byId) {
-    const g = await fetchGameById(BASE, byId).catch(() => null);
-    if (g) return { ...g, studentSide: process.env.AUDIT_STUDENT || 'white', how: `AUDIT_GAME_ID=${byId}` };
-    log(`[game] AUDIT_GAME_ID=${byId} could not be fetched — falling back to a fresh pick`);
+    // A PINNED run must run THAT game or say so. On 2026-09-19 a transient
+    // fetch throw was swallowed here and the run fell back to a fresh pick —
+    // then printed a "reproduce" line for a game it never played, and the
+    // reproducibility pair it was part of compared two different games. Retry
+    // the fetch (the export proxy had just served the same id seconds earlier),
+    // name the reason, and FAIL LOUDLY rather than rotate under a pin.
+    let lastErr = null;
+    for (const waitMs of [0, 2000, 5000]) {
+      if (waitMs) await new Promise((r) => setTimeout(r, waitMs));
+      try {
+        const g = await fetchGameById(BASE, byId);
+        if (g) return { ...g, studentSide: process.env.AUDIT_STUDENT || 'white', how: `AUDIT_GAME_ID=${byId}` };
+        lastErr = 'verifyLegal rejected the movetext';
+      } catch (e) { lastErr = String(e).slice(0, 160); }
+      log(`[game] AUDIT_GAME_ID=${byId} fetch failed (${lastErr}) — retrying`);
+    }
+    console.log(`\n===== VERDICT: ❌ FAILS STANDARD (pinned game ${byId} could not be fetched: ${lastErr}) =====`);
+    process.exit(2);
   }
   const idx = process.env.AUDIT_SEED_INDEX ? Number(process.env.AUDIT_SEED_INDEX) : Date.now();
   // Walk the seed list from the rotation point so one empty explorer answer
