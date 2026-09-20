@@ -98,7 +98,10 @@ try {
   // network busy), so this goto timed out and the tab bar was read before it
   // rendered — "tab-pro not found" on every run. Wait for the tab bar itself.
   await page.goto(`${PROD}/openings`, { waitUntil: 'domcontentloaded', timeout: 20_000 }).catch(() => null);
-  await page.locator('[data-testid="tab-toggle"]').first().waitFor({ state: 'attached', timeout: 15_000 }).catch(() => null);
+  // The explorer renders a loading state until the deferred seed lands (a cold
+  // context takes 45–60 s per CLAUDE.md §G1) and only then mounts the tab bar;
+  // 15 s read "0 tab" on a clean run. Wait the seed out.
+  await page.locator('[data-testid="tab-toggle"]').first().waitFor({ state: 'attached', timeout: 90_000 }).catch(() => null);
   await page.waitForTimeout(2000);
   // The Openings page auto-opens a page-help-modal that intercepts the Pro-tab
   // click — dismiss it first (CLAUDE.md onboarding-modal contract) or the tab
@@ -208,7 +211,12 @@ try {
     await page.keyboard.press('Escape').catch(() => null);
     await page.locator('[data-testid="page-help-close"]').first().click({ timeout: 1500 }).catch(() => null);
     await cardEl.first().click({ timeout: 8000 }).catch(async () => { await cardEl.first().click({ timeout: 8000, force: true }); });
-    await page.waitForTimeout(6000);
+    // The card navigates on click (ProPlayerPage → /openings/pro/<player>/<id>).
+    // Wait for the URL rather than a fixed delay; if the click landed on a
+    // re-rendering card, retry through the card's own keyboard path (Enter).
+    const navigated = await page.waitForURL(/\/openings\/pro\/gothamchess\/pro-gothamchess-caro-kann/, { timeout: 10_000 }).then(() => true).catch(() => false);
+    if (!navigated) { await cardEl.first().focus().catch(() => null); await page.keyboard.press('Enter').catch(() => null); await page.waitForURL(/pro-gothamchess-caro-kann/, { timeout: 10_000 }).catch(() => null); }
+    await page.waitForTimeout(3000);
     const url = page.url();
     rec('navigated to pro-gothamchess-caro-kann detail', /pro-gothamchess-caro-kann/.test(url) ? 'PASS' : 'FAIL', url);
 
