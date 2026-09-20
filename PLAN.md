@@ -895,6 +895,18 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### B. The instruments are not believable (a green here means nothing)
 
+7b. ✅ **DONE (2026-09-19) — an LLM-written `[BOARD: highlight:]` reached the
+   board.** `GameChatPanel.test` 'strips an LLM highlight marker' was red on
+   untouched main. Cause: the 2026-09-13 preserve in `applyCandidateArrows` kept
+   highlight markers by matching the TEXT, and a marker code wrote is the same
+   string as one the LLM wrote. Fix is structural, not a filter: the read's
+   `keySquares` ride a typed read-once channel (`consumeCoachKeySquares`, the
+   action-offer pattern) and `coachService.ask` re-appends them AFTER the arrow
+   pass strips every marker. One builder (`keySquareHighlightMarker`). Gates:
+   `coachAnswerGates.test` (dated contract), `coachApi.keySquares.test`.
+   Found in passing, NOT fixed: `summarizeLint` in ship-check prints "0 errors"
+   on a Node heap crash (greps lowercase "error" only) — a crash reads as clean.
+
 8. **The review audit's verdict is not reproducible** (#70) — three runs on one
    bundle gave three different red sets, because the background deep dive is a
    race the harness neither waits on nor reports.
