@@ -16,13 +16,23 @@
 // pass `--no-verify`. The hooks themselves never auto-disable.
 
 import { writeFileSync, mkdirSync, existsSync, chmodSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-const HOOK_PATH = join(REPO_ROOT, '.git/hooks/pre-push');
-const PRE_COMMIT_PATH = join(REPO_ROOT, '.git/hooks/pre-commit');
+// The hooks live in the COMMON git dir: in a worktree `.git` is a FILE
+// pointing there, and `join(REPO_ROOT, '.git/hooks')` died with ENOTDIR
+// (2026-09-20) — so every worktree session that ran this installed nothing.
+const GIT_COMMON_DIR = (() => {
+  const r = spawnSync('git', ['rev-parse', '--git-common-dir'], { cwd: REPO_ROOT, encoding: 'utf-8' });
+  const dir = (r.stdout ?? '').trim();
+  if (!dir) return join(REPO_ROOT, '.git');
+  return dir.startsWith('/') ? dir : join(REPO_ROOT, dir);
+})();
+const HOOK_PATH = join(GIT_COMMON_DIR, 'hooks/pre-push');
+const PRE_COMMIT_PATH = join(GIT_COMMON_DIR, 'hooks/pre-commit');
 
 if (!existsSync(join(REPO_ROOT, '.git'))) {
   console.error('No .git directory found — must run from inside the repo.');
@@ -45,6 +55,19 @@ set -e
 echo ""
 echo "── pre-push: ship-check ──"
 echo ""
+
+# HONOUR THE GREEN WATERMARK (PLAN §B 11b, 2026-09-19): ship-check writes
+# .ship-check-log/latest.json with the SHA it went green on. When that SHA is
+# HEAD, a second full run here only doubles the machine load that produces
+# false timeouts — skip it and push. Anything else re-runs as before.
+if [ -f .ship-check-log/latest.json ]; then
+  head_sha=$(git rev-parse HEAD 2>/dev/null)
+  green_sha=$(node -e "try{const j=require('./.ship-check-log/latest.json');process.stdout.write(String(j.sha||j.head||''))}catch{}" 2>/dev/null)
+  if [ -n "$head_sha" ] && [ "$head_sha" = "$green_sha" ]; then
+    echo "✓ ship-check already green on $head_sha (watermark) — skipping the re-run."
+    exit 0
+  fi
+fi
 
 if ! npm run ship-check; then
   echo ""

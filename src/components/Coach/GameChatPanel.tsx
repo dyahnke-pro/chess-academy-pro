@@ -2,8 +2,7 @@ import { useState, useCallback, useRef, useEffect, forwardRef, useImperativeHand
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
-import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
-import { tacticsAreFreshFor } from '../../services/tacticsContextIdentity';
+import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { validateTacticClaims, stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';

@@ -93,16 +93,31 @@ function runStep(label, cmd, args, opts = {}) {
 // ── Helpers to extract a one-line summary from a step's output ─────
 function summarizeVitest(out) {
   const m = out.match(/Tests\s+(\d+\s+(?:failed\s+\|\s+)?\d+\s+passed[^|]*)/);
-  return m ? m[1].trim().replace(/\s+/g, ' ') : null;
+  if (!m) return null;
+  // SAY WHAT KIND OF RED (PLAN §B 11a, 2026-09-19): under parallel-session load
+  // every gate failure was a vitest `Test timed out` while the product was
+  // fine, and one ✗ read exactly like an assertion. Count the two apart so a
+  // load artifact is never mistaken for a product red — and vice versa.
+  const timeouts = (out.match(/Test timed out/g) ?? []).length;
+  const assertions = (out.match(/AssertionError/g) ?? []).length;
+  const base = m[1].trim().replace(/\s+/g, ' ');
+  if (timeouts === 0 && assertions === 0) return base;
+  const kind = timeouts > 0 && assertions === 0 ? ' ⚠ ALL TIMEOUTS — suspect machine load, not the product' : '';
+  return `${base} — ${timeouts} timeout(s) / ${assertions} assertion failure(s)${kind}`;
 }
 function summarizeLint(out) {
   // A dead eslint prints no "✖ N problems" line and no rule errors — read as
   // "0 errors" this labelled a heap crash as a clean run (2026-09-19). Name it.
-  if (/FATAL ERROR|heap out of memory|Reached heap limit/.test(out)) {
-    return 'eslint CRASHED (heap) — error count UNKNOWN';
+  if (/FATAL ERROR|heap out of memory|Reached heap limit|Segmentation fault|Abort trap|Killed: 9/.test(out)) {
+    return 'eslint CRASHED — error count UNKNOWN';
   }
   const m = out.match(/✖\s+(\d+\s+problems\s+\(\d+\s+errors,\s+\d+\s+warnings\))/);
-  return m ? m[1] : (out.includes('error') ? 'errors found' : '0 errors');
+  if (m) return m[1];
+  // No "✖ N problems" line at all: eslint either found nothing (a clean run
+  // prints NOTHING) or never finished. The step's exit status decides which —
+  // runStep marks the row ✗ on a non-zero exit — so never print "0 errors"
+  // here as if it were a verdict (PLAN §B 11c, the leftover).
+  return out.includes('error') ? 'errors found' : 'no report line (clean if the row is ✓; a crash if ✗)';
 }
 function summarizePlaywright(out) {
   const m = out.match(/DONE\s+—\s+(\d+\/\d+)\s+checks/);
