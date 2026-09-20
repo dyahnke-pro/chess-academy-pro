@@ -6,6 +6,40 @@
 
 # PLAN — closing the loop (2026-09-18)
 
+## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
+
+Everything on the open list that is code I own and needs no decision from David.
+NOT here: #21's wedge (other session), GREEN (needs held evidence over days),
+David's calls (Upstash, archived danya notes, spend-guard design), D9b/D15
+(blocked on data / unknown root).
+
+1. **Section-14 detectors** — `calculation-depth` → `left-book-early` →
+   `no-plan` get pipeline WRITERS on the recording path, fed by the evidence
+   computers that already exist (`criticalityScan` gapCp, `theoryDeparture`,
+   `planRace`/`deriveNextPlans`), so the 23% `other` fallthrough shrinks and the
+   loop's recurrence sentence has something to name on pawn pushes and king
+   moves. Measured before/after on the 47-game corpus where present.
+2. **Critical moment T1 + T3** — review scans flagged plies too and the REGISTER
+   decides; Learn hands its announced plies to the sweep so a prompted find
+   records `prompted: true`.
+3. **Learn's half on a prod tape** — `audit-second-game-memory-prod` asserts the
+   present-tense recurrence clause (one mount, two games).
+4. **D11** — couple squares on the `[delta]` facet so stacked generators subsume.
+5. **Hygiene** — pre-push hook honours the ship-check watermark; ship-check
+   prints timeouts vs assertions; lint crash named as crash; test type-error
+   ceiling to 0; `BuildVersionWidget.test`; stale-tactics leftovers
+   (`tactics-context-stale` count, `formatTacticsSubBlock` fen); multilingual
+   lesson row vs probe.
+6. **Measure-first, numbers only** — entry chunk contents/parse, the 57k
+   no-position notes' reach, corpus gate unevenness, the 47-game rerun, the
+   fundamentals-tab audit on prod. Decisions after, David's.
+
+Order: 1 → 2 → 4 → 5 → 3 (audit) → 6 (measurements) → gates → ONE push → the
+loop audit + the standing pair + the second-game audit, sequentially, behind the
+shared lock.
+
+**Status:** plan ✅ · context ⏳ · code ☐ · gates ☐ · push ☐ · audits ☐
+
 ## 🎯 WO-LOOP-01 — PROVE THE ONE-LINE DEFINITION ON PROD (David 2026-09-20: "i want to get the main concept of the app working" → "full plan mapped out. then execute it. all code done first in one go, then audit following")
 
 **The concept:** the coach learns you, and what it learned changes what it says
