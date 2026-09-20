@@ -1271,8 +1271,16 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     prefers it and keeps the levers only as the fallback for a board that earns
     no plan. One computer, both surfaces (capability parity). Gate:
     `groundedAnswer.test.ts` ("speaks the plan WITH its method").
-18. **Two shared positions go silent in game 2** (#68) — n=1; WIDEN THE SAMPLE
-    before fixing.
+18. ✅ **DONE (2026-09-20) — widened to n=4, reproduced 3/3, fixed, proven on
+    prod.** `audit-second-game-memory-prod` ×3: at the one board both games
+    shared, game 2 never said "your queen on d5 is attacked" and never got the
+    pin invariant that rides on it, while the opening name WAS re-identified
+    (so the board-driven reset had fired). The suppressor was outside the
+    per-game memory: `spokenThreatLinesRef`, `lastThreatRef` and their tactic
+    twins were hand refs cleared inside ONE intent branch — the exact debt
+    `learnMemory.ts` documents. They are `LearnMemory` slots now, forgotten by
+    `observe()`/`newGame()`. Post-deploy: 10/10, both D rows "1/1 shared
+    positions still taught".
 19. Open questions, not yet defects: mistake-puzzle narration and Rule 3 (#23);
     "chat input never usable" after the player-games lane (#19); caching
     `voiceFacts` so a repeat does not bill twice (#35); the Alapin tape's
