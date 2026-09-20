@@ -381,10 +381,37 @@ const run = async () => {
   add('S. the recurrence clause was SPOKEN on the walk (listener)', usable ? spokenIt : true, usable ? (spokenIt ? 'heard off the wire' : 'never voiced within budget') : 'n/a');
   add('M. the run stayed MUTED', ttsRequests === 0, `${ttsRequests} /api/tts requests`);
 
+  // ── THE READING: why the app could not NAME a slip ──────────────────────
+  // Section 14's three detectors exist to shrink the `other` bucket (23% of
+  // real flagged plies). They ship gated, and "gated correctly" vs "gated too
+  // tightly" is only answerable from the real population — so the sweep emits
+  // the GATE that stopped each one, and this tallies what came back across
+  // every game this run analysed. Not a pass/fail row: it is a MEASUREMENT,
+  // and a run with nothing unnamed is a good run, not a broken instrument.
+  const unnamed = loop.listener.getCapturedEvents()
+    .filter((e) => String(e.source ?? '') === 'autoAnalyzeGame.unnamedSlip')
+    .map((e) => String(e.summary ?? ''));
+  const tally = new Map();
+  for (const line of unnamed) {
+    for (const part of (line.split('section 14 declined: ')[1] ?? '').split(' | ')) {
+      const m = /^([a-z-]+): (.*)$/.exec(part.trim());
+      if (!m) continue;
+      // Collapse the numbers out of the reason so the SHAPE tallies
+      // ("cost 50cp is under the 150cp floor" and "cost 80cp…" are one gate).
+      const shape = `${m[1]}: ${m[2].replace(/\d+/g, 'N').replace(/\b[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8][+#]?\b/g, '<san>')}`;
+      tally.set(shape, (tally.get(shape) ?? 0) + 1);
+    }
+  }
+  log(`\n  ── WHY THE APP COULD NOT NAME A SLIP (${unnamed.length} unnamed slip(s) this run) ──`);
+  if (unnamed.length === 0) log('  (none — every flagged ply this run was named)');
+  for (const [shape, n] of [...tally.entries()].sort((a, b) => b[1] - a[1])) log(`  ${String(n).padStart(3)}×  ${shape}`);
+  for (const line of unnamed.slice(0, 3)) log(`  e.g. ${line.slice(0, 200)}`);
+
   await loop.listener.stop().catch(() => undefined);
   await loop.ctx.close();
   await browser.close();
 
+  writeFileSync(`${outDir}/unnamed-slips.json`, JSON.stringify({ unnamed, tally: Object.fromEntries(tally) }, null, 2));
   writeFileSync(`${outDir}/report.json`, JSON.stringify({ base: BASE, student: STUDENT, gameA: { id: Acur.id, white: Acur.white, black: Acur.black }, gameB: { id: Bcur.id, white: Bcur.white, black: Bcur.black }, recordedA: recA, recordedB: recB, shared, results, controlTape: controlTapeUsed, loopTape }, null, 2));
   log(`[game] PAIR USED: AUDIT_GAME_A=${Acur.id} AUDIT_GAME_B=${Bcur.id} AUDIT_STUDENT=${STUDENT}  (A opponent ${oppAcur}, B opponent ${oppBcur}${oppB !== oppBcur ? `, first B was ${oppB}` : ''})`);
   const pass = results.filter((r) => r.pass).length;

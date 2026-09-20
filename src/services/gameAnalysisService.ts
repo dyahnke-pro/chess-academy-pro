@@ -2062,10 +2062,34 @@ async function analyzeSingleGameUncoalesced(
     await db.games.update(gameId, { annotations, fullyAnalyzed: true, analysisDepth: achievedDepth });
 
     // RECORD what this analysis found (WO-LOOP-01) — the same door the batch
-    // uses. Bad-habit detection only on the full-depth pass; the recorders
-    // themselves are idempotent per game. Never blocks the review on a failure.
-    let recorded = 0;
-    try { recorded = (await generateInsightsForGame(gameId, game.source, annotations, { habits: !opts?.sweepOnly })).misconceptionsLogged; } catch { /* the walk still opens */ }
+    // uses; the recorders are idempotent per game.
+    //
+    // 🔒 FIRE-AND-FORGET, AND THE `await` THAT WAS HERE WAS A REAL REGRESSION
+    // (2026-09-20). This function is what `CoachReviewSessionPage` awaits before
+    // the walk becomes startable, so awaiting the sweep put mistake-puzzle
+    // generation (which can invoke Stockfish on a game with no stored best
+    // move), the misconception attribution, tactic classification and a dossier
+    // refresh IN FRONT OF THE STUDENT — twice, since the open and the deepen
+    // both land here. The comment one line up said "never blocks the review"
+    // while the code blocked it.
+    //
+    // Nothing about this game's OWN recording changes what this walk says: the
+    // recurrence clause reads PRIOR games (`recurrenceFor` excludes the current
+    // gameId), so these rows are for the NEXT game. There is no ordering
+    // requirement, only a completion one — which a detached promise satisfies.
+    void generateInsightsForGame(gameId, game.source, annotations, { habits: !opts?.sweepOnly })
+      .then((r) => logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'gameAnalysisService.analyzeSingleGame.record',
+        summary: `recorded ${r.misconceptionsLogged} misconception(s) for ${gameId} behind the open`,
+      }))
+      .catch((err: unknown) => logAppAudit({
+        kind: 'stockfish-error',
+        category: 'subsystem',
+        source: 'gameAnalysisService.analyzeSingleGame.record',
+        summary: `insight recording failed for ${gameId}: ${err instanceof Error ? err.message : String(err)}`,
+      }));
 
     // The OTHER half of the split (see BATCH_SHALLOW_DEPTH): the review is the
     // surface with a person watching a progress bar, and it was the one measured
@@ -2074,7 +2098,7 @@ async function analyzeSingleGameUncoalesced(
       kind: 'analysis-review-done',
       category: 'subsystem',
       source: 'gameAnalysisService.analyzeSingleGame',
-      summary: `review of ${game.white} vs ${game.black} in ${((Date.now() - reviewStartedAt) / 1000).toFixed(1)}s — ${annotations.length} moves, depth=${achievedDepth}, recorded=${recorded} misconception(s)`,
+      summary: `review of ${game.white} vs ${game.black} in ${((Date.now() - reviewStartedAt) / 1000).toFixed(1)}s — ${annotations.length} moves, depth=${achievedDepth}`,
     });
 
     return annotations;

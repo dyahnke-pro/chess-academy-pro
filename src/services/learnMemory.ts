@@ -181,7 +181,16 @@ function mintGameId(): string {
   return `teach-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function createLearnMemory(): LearnMemory {
+/**
+ * @param onNewGame Fired AFTER every reset, from EVERY path — the explicit
+ *   `newGame()` call and `observe()`'s own board-went-backwards detection. The
+ *   surface passes its hand-held per-game refs' clearer here, so a fresh game
+ *   cannot forget this memory's slots while the page's refs remember (found
+ *   2026-09-20: `observe()` self-reset was a THIRD door, and the page's
+ *   `fundamentalSeenRef` never heard about it). Never call `newGame()` from
+ *   inside it — the callback forgets the CALLER's state, not this one's.
+ */
+export function createLearnMemory(onNewGame?: () => void): LearnMemory {
   const curatedBeatSeen = new Set<string>();
   const curatedBeatSubjects = new Set<string>();
   const saidExplainers = new Set<string>();
@@ -242,6 +251,10 @@ export function createLearnMemory(): LearnMemory {
       // A NEW GAME IS A NEW ID. Re-minting here (rather than at a call site)
       // is what makes it impossible to record game 2's slips against game 1.
       (mem as { gameId: string }).gameId = mintGameId();
+      // ONE SIGNAL, EVERY DOOR. Whoever decided a new game started — a caller,
+      // or `observe` reading the board going backwards — the surface's own
+      // per-game refs are forgotten in the same breath.
+      onNewGame?.();
     },
   };
   return mem;

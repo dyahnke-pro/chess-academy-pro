@@ -185,11 +185,22 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     expect(3 - mem.thinkAloudLastPly).toBeGreaterThan(20);
   });
 
-  it('the Learn page calls newGame() at EVERY fresh-game site', () => {
+  // 🔄 REWRITTEN 2026-09-20, and the old assertion is DELETED rather than
+  // annotated. It read "newGame() is called at EVERY fresh-game site
+  // (>= 2 calls)", which encoded a design where each site carried its own list
+  // of refs to forget — and those lists DRIFTED: the ask-door cleared two, the
+  // board-door eight, so a session's second game could inherit the first's
+  // fundamentals. There is ONE door now (`resetPerGameMemory`) and the memory
+  // itself owns the signal, so counting `newGame()` call sites would now demand
+  // the very duplication that caused the bug. The shape is gated in full by
+  // `src/test/oneFreshGameReset.test.ts`; this asserts the half that belongs
+  // to the memory.
+  it('the Learn page routes every fresh game through ONE reset, and the memory owns the signal', () => {
     const src = readFileSync(PAGE, 'utf8');
-    const calls = src.match(/learnMemRef\.current\.newGame\(\)/g) ?? [];
-    // Two sites today: startOpeningPlay, and the reply handler's history<=2.
-    expect(calls.length).toBeGreaterThanOrEqual(2);
+    expect(src.match(/learnMemRef\.current\.newGame\(\)/g) ?? [], 'exactly one newGame() call site').toHaveLength(1);
+    expect((src.match(/resetPerGameMemory\(\)/g) ?? []).length, 'both fresh-game doors go through it').toBeGreaterThanOrEqual(2);
+    expect(src, 'the memory fires the page-ref forgetter on EVERY reset, including observe()\'s own')
+      .toMatch(/createLearnMemory\(\(\) => \{ forgetPageRefsRef\.current\(\); \}\)/);
   });
 
   it('per-game refs outside the memory object only ever shrink', () => {

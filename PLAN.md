@@ -125,10 +125,26 @@ best move serves; a PV whose first forcing move is ≥3 deep). So the detectors 
 GATED CORRECTLY and are TOO NARROW IN PRACTICE — unit-proven, prod-unobserved.
 That is the same "a wire that does not fire is not a wire" rule the repo already
 holds, and it means the 23% `other` figure has NOT been measured down.
-**NEXT (not guessed — measured):** log the REJECTION REASON per detector on the
-recording path (D13 already logs unmatched inputs; extend it to say which gate
-each section-14 detector failed), run a game library through it, and widen from
-the real population rather than from imagination.
+**NEXT (not guessed — measured). ✅ THE INSTRUMENT IS BUILT (2026-09-20):** each
+of the three now SAYS which gate stopped it — `attributePrinciples(input, why)`
+fills a caller-supplied sink, and `MisconceptionClassification.why` carries the
+reasons out on the `other` fallthrough, so the 23% bucket is measurable instead
+of mute. Same `diag` shape `findTheoryDeparture` has carried since July; absent
+unless a caller asks, so no hot path pays. Reasons are concrete, never a bare
+"no" — "cost 50cp is under the 150cp floor", "the punishment Bxf6 is immediate
+(ply 1) — another fundamental owns it", "ply 30 is past the 24-ply opening
+window", "the structure earns NO plan here — nothing to have ignored".
+Gate: `section14Diagnosis.test.ts` (each reason named and matched, the `other`
+fallthrough carries them, and the sink changes no result).
+Found building it: declaring the sink beside the attributor put the
+unparseable-SAN `other` return inside its temporal dead zone, so that path
+THREW — caught by the classifier's existing gates, which is what they are for.
+**What remains is the reading:** run a real library through it and widen the
+gates from the population that comes back. My four-game sample already says
+where to look — a pawn push at ply 30 is past the opening window
+(`left-book-early` can never see it) and a king retreat usually earns no
+structure plan (`no-plan` declines honestly), so the likeliest first move is
+`calculation-depth`'s PV shape.
 
 **THE OTHER THREE AUDITS (same bundle):**
 - **LEARN** `audit-concept-gameplay-prod` **8/8** — the pin invariant voiced
@@ -188,6 +204,62 @@ and the next green on one build. `resetPerGameMemory()` is now the single door;
 gate `oneFreshGameReset.test.ts` blames by statement (exactly ONE
 `newGame()` call site, inside the reset, and every hand ref named in it), so a
 second list cannot be written. Same disease as #18, one door along.
+
+**AND A THIRD DOOR, found by grepping the class rather than the instance** (the
+other session's suggestion; the sweep-don't-spot-fix rule). `learnMemory.observe()`
+resets ITSELF when the board goes backwards — a path no caller goes through — so
+the page's hand refs could still not follow. The fix is not a fourth list: the
+MEMORY now owns the signal. `createLearnMemory(onNewGame)` fires after every
+reset from every path, the page passes its ref-forgetter, and `resetPerGameMemory`
+is just `newGame()`. One place decides "a new game started"; one handler answers.
+Gated in `oneFreshGameReset.test.ts` (exactly one `newGame()` call site, inside
+the reset; `observe` must go through `newGame`; the forgetter must never call
+`newGame` back). `learnMemory.test.ts`'s old "newGame() at EVERY fresh-game site
+(≥2)" assertion is DELETED, not annotated — it encoded the per-site lists that
+drifted in the first place. Also found by its own orphan census: my new
+`announcedPliesRef` was reset with `= new Set()`, which the census cannot see —
+now `.clear()`, like every sibling.
+- Swept the rest: `CoachGamePage.announcedHangingRef` keys on `gameId` and
+  self-invalidates (the right pattern, not a door); `OpeningPlayMode` holds no
+  per-game say-once refs. No fourth door.
+
+**🔴 A REGRESSION I SHIPPED, FOUND BY THE OTHER SESSION'S TAPES (2026-09-20).**
+Two product-mode runs on the merged tree, same pinned game: the review walk
+reached ply 67/69 at **550s before** my pushes and at **800s after**, with
+`end reached` going TRUE → FALSE and four rows cascading red off it (CRIT,
+THESIS, RECAP — all downstream of a walk that never arrives at the ply). It did
+that with FEWER flagged plies (3 vs 5), i.e. less work, which is what rules out
+the game.
+
+**The cause was mine and it is readable without a profiler.** WO-LOOP-01 put the
+insight sweep on the review path — correct, that is the fix that made the loop
+record at all — but I **AWAITED** it inside `analyzeSingleGame`, which is the
+function `CoachReviewSessionPage` awaits before the walk becomes startable. So
+mistake-puzzle generation (which can invoke Stockfish on a game with no stored
+best move), the misconception attribution, tactic classification and a dossier
+refresh all ran IN FRONT OF THE STUDENT — and twice, since the sweep-open and
+the background deepen both land there. My own comment one line above read
+"Never blocks the review", while the code blocked it. That is the same
+comment-describes-the-half-that-is-not-connected disease this file opens with,
+written by me, the same night I wrote that section.
+
+**FIXED:** the recording is fire-and-forget. Nothing about a game's OWN
+recording changes what its walk says — `recurrenceFor` excludes the current
+gameId, so these rows are for the NEXT game. There is no ordering requirement,
+only a completion one, which a detached promise satisfies; both outcomes are
+audited (`…analyzeSingleGame.record`). Gate: `gameAnalysisService.records.test`
+now asserts `void generateInsightsForGame(` and NO `await` of it inside the
+function the walk waits on. (Found writing that gate: slicing the body to the
+first `\n}\n` lands inside a nested block and reads an EMPTY body — a gate that
+would have passed on anything.)
+
+**OWED — the measurement, not my word for it:** the other session offered a
+deterministic re-measure (`AUDIT_DETERMINISTIC=1`, their seam) on both sides.
+Take it: n=1 per side in product mode is not enough to close this, and the
+second candidate cause is still open — T1 widened the critical fan from 22 to 27
+plies (8746ms vs 5128ms, by design) and it competes for the same single-thread
+pool worker the walk's narration needs. If the detach alone does not restore
+550s, the fan's 3s delay is the next thing to look at.
 
 **Status:** plan ✅ · context ✅ · code ✅ · gates ✅ · push ✅ ·
 **audits: loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ ·

@@ -19,7 +19,7 @@ describe('CoachTeachPage — one fresh-game reset', () => {
     const calls = SRC.match(/learnMemRef\.current\.newGame\(\)/g) ?? [];
     expect(calls.length, 'a second newGame() call site means a second list of refs to forget').toBe(1);
     const at = SRC.indexOf('learnMemRef.current.newGame()');
-    const fnStart = SRC.lastIndexOf('const resetPerGameMemory', 0 + at);
+    const fnStart = SRC.lastIndexOf('const resetPerGameMemory', at);
     expect(fnStart, 'the single newGame() must live inside resetPerGameMemory').toBeGreaterThan(-1);
     expect(at - fnStart).toBeLessThan(1500);
   });
@@ -30,8 +30,28 @@ describe('CoachTeachPage — one fresh-game reset', () => {
     expect(calls.length).toBeGreaterThanOrEqual(2);
   });
 
+  // THE THIRD DOOR (2026-09-20). `learnMemory.observe()` resets ITSELF when the
+  // board goes backwards — a path no caller goes through — so the page's hand
+  // refs only follow if the memory OWNS the signal. Blamed by statement: the
+  // memory must be created with the callback, and `newGame()` must fire it.
+  it('the memory owns the fresh-game signal, so observe()\'s own reset reaches the page refs', () => {
+    expect(SRC).toMatch(/createLearnMemory\(\(\) => \{ forgetPageRefsRef\.current\(\); \}\)/);
+    const mem = readFileSync('src/services/learnMemory.ts', 'utf8');
+    expect(mem).toMatch(/createLearnMemory\(onNewGame\?: \(\) => void\)/);
+    const ng = mem.indexOf('newGame(): void {');
+    expect(mem.slice(ng, mem.indexOf('\n    },', ng)), 'newGame must fire onNewGame').toContain('onNewGame?.()');
+    const obs = mem.indexOf('observe(plies: number): boolean {');
+    expect(mem.slice(obs, obs + 240), 'observe must go through newGame, never clear fields itself').toContain('mem.newGame()');
+  });
+
+  it('the page-ref forgetter never calls newGame (that would recurse through onNewGame)', () => {
+    const start = SRC.indexOf('const forgetPageRefs = useCallback');
+    const body = SRC.slice(start, SRC.indexOf('}, []);', start));
+    expect(body).not.toContain('newGame');
+  });
+
   it('the reset forgets every per-game ref the page holds by hand', () => {
-    const start = SRC.indexOf('const resetPerGameMemory');
+    const start = SRC.indexOf('const forgetPageRefs = useCallback');
     const body = SRC.slice(start, SRC.indexOf('}, []);', start));
     for (const ref of [
       'announcedPliesRef', 'announcedTrapsRef', 'teachNoteSeenIdsRef', 'fundamentalSeenRef',

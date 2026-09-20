@@ -129,6 +129,23 @@ export async function autoAnalyzeBlunders(
     });
     if (result.classification && result.classification.tag !== 'none') classified += 1;
     if (result.logged) logged += 1;
+    // THE 23% BUCKET, MADE READABLE (2026-09-20). A slip that lands on `other`
+    // is one the app could not name, and section 14 exists to shrink that set —
+    // but on the first four prod games after it shipped, none of its three
+    // detectors fired. `why` says which GATE stopped each one; emitting it here
+    // (once per unnamed slip, never for a named one) is what lets an audit read
+    // the real population instead of a guess. The reasons are diagnostic
+    // strings, never spoken.
+    const why = result.classification?.why ?? [];
+    if (result.classification?.tag === 'other' && why.length > 0) {
+      void logAppAudit({
+        kind: 'misconception-captured',
+        category: 'subsystem',
+        source: 'autoAnalyzeGame.unnamedSlip',
+        summary: `unnamed slip at ${b.playedSan} (move ${b.moveNumber ?? '?'}) — section 14 declined: ${why.join(' | ')}`,
+        fen: b.fen,
+      });
+    }
   }
 
   // AND THE POSITIVE HALF OF THE SAME GAME. Both halves are captured by ONE

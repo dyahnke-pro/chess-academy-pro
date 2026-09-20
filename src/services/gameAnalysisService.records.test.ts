@@ -85,6 +85,22 @@ describe('generateInsightsForGame — the record half of the loop (WO-LOOP-01)',
     expect(await db.misconceptionTags.where('sourceGameId').equals(game.id).count()).toBe(0);
   });
 
+  it('the review path records BEHIND the open — never in front of the student', () => {
+    const src = readFileSync('src/services/gameAnalysisService.ts', 'utf8');
+    const start = src.indexOf('export async function analyzeSingleGame(');
+    // Bound by the NEXT export, not the first `\n}\n` — that lands inside a
+    // nested block and silently reads an empty body.
+    const end = src.indexOf('export function gameNeedsAnalysis', start);
+    expect(end, 'the function boundary must be findable').toBeGreaterThan(start);
+    const body = src.slice(start, end);
+    // `analyzeSingleGame` is what the review page awaits before the walk is
+    // startable. Awaiting the sweep here put puzzle generation, attribution and
+    // a dossier refresh in front of the student — measured 2026-09-20 as ~250s
+    // on the walk. It must be detached.
+    expect(body, 'the recording must be fire-and-forget').toMatch(/void generateInsightsForGame\(/);
+    expect(body, 'no awaited recording in the path the walk waits on').not.toMatch(/await generateInsightsForGame\(/);
+  });
+
   it('the review path (analyzeSingleGame) calls the door — not only the batch', () => {
     const src = readFileSync('src/services/gameAnalysisService.ts', 'utf8');
     // The review path's call carries `game.source` + the sweepOnly-gated habits

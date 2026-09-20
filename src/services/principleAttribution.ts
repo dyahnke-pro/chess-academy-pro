@@ -426,9 +426,23 @@ interface Ctx {
   /** Persisted engine eval before/after the played move, MOVER POV (cp).
    *  Present on the review path only — eval-gated detectors stay silent live. */
   evalBefore?: number; evalAfterPlayed?: number;
+  /** WHY A DETECTOR DECLINED (2026-09-20). Section 14's three fire on the
+   *  REASONING errors — the `other` fallthrough measured at 23% of real slips —
+   *  and on the first four prod games after they shipped, not one fired. Gated
+   *  correctly or gated too tightly are different answers and only a measured
+   *  one is worth acting on, so each of the three says which gate stopped it.
+   *  Same shape as `findTheoryDeparture`'s `diag` — a silent null must never be
+   *  undiagnosable. Absent on every hot path; only a caller that asks pays. */
+  why?: string[];
 }
 
 type Detector = (c: Ctx) => Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> | null;
+
+/** Record why a section-14 detector declined, when the caller asked for it. */
+function no(c: Ctx, id: FundamentalId, reason: string): null {
+  c.why?.push(`${id}: ${reason}`);
+  return null;
+}
 
 function att(id: FundamentalId, weight: number, evidence: Omit<PrincipleEvidence, 'counterfactualClean'>, facts: Record<string, string | number> = {}): Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> {
   return { id, weight, evidence: { ...evidence, counterfactualClean: true }, facts };
@@ -939,11 +953,13 @@ const DETECTORS: Detector[] = [
   // missed) and subsume this one. Real cost required (eval, mover POV).
   (c) => {
     const { last, evalBefore: eb, evalAfterPlayed: ea, pvP } = c;
-    if (isForcing(last.san)) return null;
-    if (eb === undefined || ea === undefined || eb - ea < 150) return null;
-    if (!pvP || pvP.length < 3) return null;
+    if (isForcing(last.san)) return no(c, 'calculation-depth', `the played move ${last.san} is itself forcing`);
+    if (eb === undefined || ea === undefined) return no(c, 'calculation-depth', 'no persisted eval (live path)');
+    if (eb - ea < 150) return no(c, 'calculation-depth', `cost ${eb - ea}cp is under the 150cp floor`);
+    if (!pvP || pvP.length < 3) return no(c, 'calculation-depth', `punishing PV is ${pvP?.length ?? 0} plies, needs 3`);
     const firstForcing = pvP.findIndex((san) => isForcing(san));
-    if (firstForcing < 2) return null; // the punishment is immediate or absent — not a depth error
+    if (firstForcing < 0) return no(c, 'calculation-depth', `no forcing move anywhere in the PV (${pvP.slice(0, 4).join(' ')})`);
+    if (firstForcing < 2) return no(c, 'calculation-depth', `the punishment ${pvP[firstForcing]} is immediate (ply ${firstForcing + 1}) — another fundamental owns it`);
     return att('calculation-depth', 2, { squares: [last.to], moves: [pvP[firstForcing]], pvMoves: pvP.slice(0, firstForcing + 1) },
       { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1 });
   },
@@ -955,13 +971,14 @@ const DETECTORS: Detector[] = [
   // book move NAMED is the engine's best when the book has it, else the book's
   // representative line. Not before ply 4: everyone leaves "book" at 1.e4.
   (c) => {
-    if (!c.opening || c.plyIndex < 6) return null; // three moves each before "book" means anything
+    if (!c.opening) return no(c, 'left-book-early', `ply ${c.plyIndex} is past the ${OPENING_PLIES}-ply opening window`);
+    if (c.plyIndex < 6) return no(c, 'left-book-early', `ply ${c.plyIndex} is too early to be "out of book"`);
     const { last, best } = c;
     const prefix = c.history.slice(0, -1).map((m) => m.san);
     let book: Map<string, { name: string; eco: string }>;
-    try { book = findContinuationsAtPly(prefix); } catch { return null; }
-    if (book.size === 0) return null;
-    if (book.has(last.san)) return null;
+    try { book = findContinuationsAtPly(prefix); } catch { return no(c, 'left-book-early', 'the openings DB lookup threw'); }
+    if (book.size === 0) return no(c, 'left-book-early', `the position after ${prefix.slice(-2).join(' ')} is not in the openings DB — already out of book`);
+    if (book.has(last.san)) return no(c, 'left-book-early', `${last.san} IS a book move (${book.size} continuations here)`);
     const bookSan = book.has(best.san) ? best.san : [...book.keys()][0];
     const named = book.get(bookSan);
     return att('left-book-early', 2, { squares: [last.to], moves: [bookSan], pvMoves: [] },
@@ -974,17 +991,17 @@ const DETECTORS: Detector[] = [
   // sparingly by construction: any move-verified fundamental subsumes it, and a
   // board with no earned plan never files under it.
   (c) => {
-    if (c.opening) return null;
+    if (c.opening) return no(c, 'no-plan', `ply ${c.plyIndex} is still the opening — development owns it`);
     const { last, best, mover } = c;
-    if (isForcing(last.san) || last.san.startsWith('O-O')) return null;
+    if (isForcing(last.san) || last.san.startsWith('O-O')) return no(c, 'no-plan', `${last.san} is forcing or castling, never planless`);
     let plans: string[];
-    try { plans = deriveNextPlans(c.before.fen(), mover); } catch { return null; }
-    if (plans.length === 0) return null;
+    try { plans = deriveNextPlans(c.before.fen(), mover); } catch { return no(c, 'no-plan', 'deriveNextPlans threw'); }
+    if (plans.length === 0) return no(c, 'no-plan', 'the structure earns NO plan here — nothing to have ignored');
     const targets = planTargets(plans);
-    if (targets.squares.size === 0 && targets.files.size === 0) return null;
+    if (targets.squares.size === 0 && targets.files.size === 0) return no(c, 'no-plan', `${plans.length} plan(s) but none names a square or file to aim at`);
     const serves = (sq: string): boolean => targets.squares.has(sq) || targets.files.has(sq[0]);
-    if (serves(last.to) || serves(last.from)) return null;
-    if (!(isForcing(best.san) || serves(best.to))) return null;
+    if (serves(last.to) || serves(last.from)) return no(c, 'no-plan', `${last.san} DOES serve the plan (${planHeadline(plans[0])})`);
+    if (!(isForcing(best.san) || serves(best.to))) return no(c, 'no-plan', `the best move ${best.san} does not serve the plan either — the plan is not what this position was about`);
     const headline = planHeadline(plans[0]);
     return att('no-plan', 1, { squares: [best.to], moves: [best.san], pvMoves: [] }, { played: last.san, better: best.san, plan: headline });
   },
@@ -1018,7 +1035,12 @@ function isFlagged(classification: string | null): boolean {
  * Empty when the move is not flagged, the best move is unknown, or nothing
  * can be PROVED — silence over a story.
  */
-export function attributePrinciples(input: AttributionInput): PrincipleAttribution[] {
+export function attributePrinciples(
+  input: AttributionInput,
+  /** Ask the section-14 detectors to say which gate stopped them. Pass an
+   *  array; it is filled in place. Omit on every hot path. */
+  why?: string[],
+): PrincipleAttribution[] {
   if (!isFlagged(input.classification) || !input.bestSan) return [];
   if (input.historySans.length === 0) return [];
   const before = new Chess();
@@ -1059,6 +1081,7 @@ export function attributePrinciples(input: AttributionInput): PrincipleAttributi
     plyIndex: input.historySans.length, opening: input.historySans.length <= OPENING_PLIES,
     endgame: isEndgame(before), pvP: input.pvAfterPlayed, pvB: input.pvAfterBest,
     evalBefore: input.evalBefore, evalAfterPlayed: input.evalAfterPlayed,
+    ...(why ? { why } : {}),
   };
   const found: PrincipleAttribution[] = [];
   for (const d of DETECTORS) {
