@@ -1079,13 +1079,17 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     without the literal "C" badge; the read found by its growth, never by index
     — tips and move commentary land in the same newest-first list). 10/10 on
     prod; the read itself is board-true prose ("Old Sicilian… bishop to b5 hits
-    my c6-knight"). OPEN from its tape: every sentence produced TWO
-    `voiceService.speakCloud` events and TWO identical `/api/tts` fetches. The
-    hook dispatches once per sentence and `injectAssistantMessage` is silent,
-    so the second call is inside voiceService or a harness tier fallover under
-    `blockTtsNetwork`'s stub MP3 — discriminate with the persisted
-    `voice-speak-invoked` count before touching code. If it is real, every
-    tapped read bills twice.
+    my c6-knight"). Its tape showed every sentence with TWO `speakCloud` events
+    and TWO identical `/api/tts` fetches — RESOLVED as the HARNESS, by reading
+    the persisted kinds: one `voice-speak-invoked` per sentence, then the cloud
+    tier fetched `blockTtsNetwork`'s 57-byte stub, "Unable to decode audio
+    data", `voice-fallover`, and Web Speech logged its record under the SAME
+    `source: voiceService.speakCloud`. Two fixes, both at the root: the
+    intercept now serves four DECODABLE silent MP3 frames (so intercepted
+    audits exercise the cloud path, not the fallover), and the Web Speech
+    tier's record is labelled `voiceService.speakWebSpeech` — the muted tier
+    keeps `speakCloud` on purpose (it is the cloud tier's stand-in and the
+    audits key on it). A real device decodes real MP3; nothing billed twice.
 17. **The plan lane says the vague thing** while the computer beside it has the
     concrete one (#64) — structures AND pieces.
 18. **Two shared positions go silent in game 2** (#68) — n=1; WIDEN THE SAMPLE
