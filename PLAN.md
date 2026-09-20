@@ -38,7 +38,36 @@ Order: 1 → 2 → 4 → 5 → 3 (audit) → 6 (measurements) → gates → ONE 
 loop audit + the standing pair + the second-game audit, sequentially, behind the
 shared lock.
 
-**Status:** plan ✅ · context ⏳ · code ☐ · gates ☐ · push ☐ · audits ☐
+**LANDED (code, one session — every item below is gated and typechecks clean):**
+- ✅ 1. **Section 14** — `calculation-depth` (PV-gated: the blow lands on the
+  opponent's third move or later), `left-book-early` (DB-anchored, G3, not
+  before ply 6), `no-plan` (positional; yields to every concrete fundamental)
+  are FUNDAMENTALS, so they flow through the spine, `matchFundamental`, the
+  `[principle]` facet and the recurrence clause. Every `Record<FundamentalId,…>`
+  answers for them. Gate `principleAttribution.section14.test.ts`.
+- ✅ 2. **T1** — the review's critical scan covers every student ply past the
+  opening; the REGISTER decides; the only exclusion is the double-stop guard at
+  the card's mount. Gate `criticalMomentReach.test.ts`. **T3** — Learn keeps the
+  plies where the deciding computer kept a `key-moment` clause
+  (`announcedPliesRef`), saves them as `GameRecord.promptedPlies`, and the
+  review's capture marks those capability rows `prompted: true`. Gate
+  `promptedFind.wire.test.ts`.
+- ✅ 4. **D11** was already done — `computeBoardDelta` couples squares per clause
+  and `reviewFullData` re-keys them onto the `[delta]` facet (the PLAN entry was
+  stale). Nothing changed.
+- ✅ 5. **Hygiene** — the other session had already landed 11a (timeouts vs
+  assertions), 11b (hook honours the watermark) and 11c (lint crash named) by the
+  time this ran. Landed here: 11d **test type-error ceiling 0** (measured 0);
+  `BuildVersionWidget.test` regex; `formatTacticsSubBlock(tactics, boardFen)` —
+  the board fen is REQUIRED and a stale package renders nothing + audits
+  (`formatTacticsSubBlock.stale.test.ts`); the multilingual lesson row polled
+  `.first().isVisible()` on a comma-joined locator once after a fixed sleep, so a
+  hidden kickoff shell masked a visible `teach-nav-row` — it now asks each
+  selector every second for 40 s (the paired probe's method).
+- ☐ 3. Learn's half on a prod tape · ☐ 6. measurements · ☐ stale-tactics count
+  read off the listener — these are AUDIT/RUN items, after the push.
+
+**Status:** plan ✅ · context ✅ · code ✅ · gates ⏳ · push ☐ · audits ☐
 
 ## 🎯 WO-LOOP-01 — PROVE THE ONE-LINE DEFINITION ON PROD (David 2026-09-20: "i want to get the main concept of the app working" → "full plan mapped out. then execute it. all code done first in one go, then audit following")
 

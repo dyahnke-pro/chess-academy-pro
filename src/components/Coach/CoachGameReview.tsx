@@ -295,6 +295,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // re-reviewing is a cheap no-op. Best-effort + background; the review
   // UI never waits on it, and the manual capture button stays as a
   // fallback.
+  const [promptedPlies, setPromptedPlies] = useState<readonly number[]>([]);
   useEffect(() => {
     const gid = props.gameId;
     if (!gid) return;
@@ -303,6 +304,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       try {
         const game = await db.games.get(gid);
         if (cancelled || !game) return;
+        // T3: the plies Learn announced before the student moved ride the
+        // record into the capture, so a prompted find never files as unaided.
+        setPromptedPlies(game.promptedPlies ?? []);
         const prefs = useAppStore.getState().activeProfile?.preferences;
         const username = game.source === 'chesscom' ? prefs?.chessComUsername
           : game.source === 'lichess' ? prefs?.lichessUsername
@@ -772,9 +776,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // A moment already found for THIS game is kept. A game with none yet may
     // still be rescanned when the narration improves, which is purely additive.
     if (criticalScanGameRef.current === props.gameId) return;
+    // T1 (WO-CLOSEOUT-01, 2026-09-20): scan EVERY student ply past the opening,
+    // flagged or not, and let the REGISTER decide. The old filter skipped every
+    // ply the question plan owned — which is every flagged ply — so `ask` and
+    // `note` were structurally unreachable (five prod runs, register=credit
+    // every time). The double-stop guard now lives where the card MOUNTS.
     const plies = walkNarration.segments
-      .filter((sg) => sg.playerColor === playerColor
-        && sg.moveNumber > OPENING_LAST_MOVE && !questionPlan.has(sg.ply))
+      .filter((sg) => sg.playerColor === playerColor && sg.moveNumber > OPENING_LAST_MOVE)
       .map((sg) => ({ ply: sg.ply, fen: sg.fenBefore, moverColor: playerColor === 'white' ? 'w' as const : 'b' as const }));
     if (plies.length === 0) return;
     const ac = new AbortController();
@@ -1058,6 +1066,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       && walkPlayback.currentPly + 1 === criticalMoment.ply) {
       const atPly = criticalMoment.ply;
       criticalDoneRef.current.add(atPly);
+      // NEVER TWO STOPS ON ONE PLY. When the question plan already stops here
+      // (turning point / find-the-shot), that card owns the moment — speaking
+      // the critical reveal first would hand it the answer. The moment is
+      // still recorded above; only the beat yields.
+      if (questionPlan.has(atPly)) return;
       captureEvent('review_critical_moment', {
         ply: atPly, register: criticalMoment.register, count: criticalMoment.count,
         stake: criticalMoment.stake, gap_cp: criticalMoment.gapCp, held: criticalMoment.found,
@@ -4887,6 +4900,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             pgn={pgn}
             openingName={openingName}
             gameId={props.gameId}
+            promptedPlies={promptedPlies}
           />
         </div>
       </div>

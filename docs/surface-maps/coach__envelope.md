@@ -8,10 +8,10 @@
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:923) — names `envelope`
-- **STEP 11.5 — 🚨 Build + commit the GAME REFERENCES (NON-NEGOTIABLE — David 2026-06-01)** (CLAUDE.md:1707) — names `envelope`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3320) — names `envelope`
-- **The standard post-deploy ritual** (CLAUDE.md:5253) — names `envelope`
+- **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:1185) — names `envelope`
+- **STEP 11.5 — 🚨 Build + commit the GAME REFERENCES (NON-NEGOTIABLE — David 2026-06-01)** (CLAUDE.md:1969) — names `envelope`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3582) — names `envelope`
+- **The standard post-deploy ritual** (CLAUDE.md:5691) — names `envelope`
 
 ## Who calls in
 
@@ -53,7 +53,7 @@
 - `src/coach/__tests__/envelope.test.ts:434`
 - `src/coach/__tests__/envelope.test.ts:467`
 - `src/coach/__tests__/ping.integration.test.ts:124`
-- `src/coach/coachService.ts:945`
+- `src/coach/coachService.ts:961`
 
 ### `formatAnnotationContextSubBlock` (function) — 1 call site
 - `src/services/narrationGrounding.ts:130`

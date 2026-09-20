@@ -1619,6 +1619,11 @@ export function CoachTeachPage(): JSX.Element {
    *  accumulate: a repeated fundamental comes back in a short stem, never the
    *  full teach twice. */
   const fundamentalSeenRef = useRef(new Set<FundamentalId>());
+  /** T3 (2026-09-20): plies where the deciding computer kept a `key-moment`
+   *  clause — the coach ANNOUNCED the critical moment before the student moved.
+   *  Saved on the game record so the post-game sweep files a find there as
+   *  PROMPTED (grey), never as unaided evidence. Reset per game. */
+  const announcedPliesRef = useRef(new Set<number>());
 
   /** The most recent look-ahead plan, KEYED BY THE FEN IT DESCRIBES.
    *
@@ -1984,7 +1989,7 @@ export function CoachTeachPage(): JSX.Element {
     // there is reset here for free. The hand-listed refs below are the ones
     // not yet migrated into it (learnMemory.test.ts holds that count as a
     // shrink-only ceiling) — the list is the debt, not the design.
-    learnMemRef.current.newGame();
+    learnMemRef.current.newGame(); announcedPliesRef.current = new Set();
     planSaidRef.current.clear();
     positionalSaidRef.current.clear();
     gameRef.current.setOrientation(studentSide);
@@ -8562,6 +8567,8 @@ export function CoachTeachPage(): JSX.Element {
                       alreadySaid: standingRef.current.said,
                     });
                     standingRef.current.rememberAll(pf.remember);
+                    // The student is to move at `probe`; their coming move is ply history+1.
+                    if (pf.clauses.some((c) => c.kind === 'key-moment')) announcedPliesRef.current.add(probe.history().length + 1);
                     for (const c of clauseText(pf.clauses, ['must-defend'])) {
                       queueSpokenHint(probe.fen(), c, 'computed');
                     }
@@ -9220,7 +9227,7 @@ export function CoachTeachPage(): JSX.Element {
                   try {
                     const chainHistory = historyAfterReply;
                     if (chainHistory.length <= 2) {
-                      learnMemRef.current.newGame(); // fresh game — forgets every slot it holds
+                      learnMemRef.current.newGame(); announcedPliesRef.current = new Set(); // fresh game — forgets every slot it holds
                       announcedTrapsRef.current.clear();
                       // (opening name now forgotten by learnMemory.observe, from the board)
                       teachNoteSeenIdsRef.current.clear();
@@ -10643,6 +10650,7 @@ export function CoachTeachPage(): JSX.Element {
           coachAnalysis: null,
           isMasterGame: false,
           openingId,
+          promptedPlies: [...announcedPliesRef.current],
         });
       } catch {
         /* save is best-effort; the offer below still stands */

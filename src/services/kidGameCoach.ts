@@ -369,7 +369,7 @@ export async function answerKidGameQuestion(input: KidGameQuestionInput): Promis
     // + the computed-concept plan): the fed package now carries ranked
     // `concepts` for every adult surface; the kid prompt must never see them.
     // Strip before rendering so the block stays board-facts-only.
-    groundingBlock = formatTacticsSubBlock({ ...tactics, concepts: undefined });
+    groundingBlock = formatTacticsSubBlock({ ...tactics, concepts: undefined }, input.fen);
   } catch {
     groundingBlock = '';
   }

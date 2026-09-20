@@ -409,7 +409,7 @@ async function buildLiveTacticsBlock(fen: string): Promise<string | null> {
       getCachedStockfish(fen) ?? null,
       () => Promise.resolve(null),
     );
-    const block = formatTacticsSubBlock(tactics);
+    const block = formatTacticsSubBlock(tactics, fen);
     return block.length > 0 ? block : null;
   } catch {
     return null;

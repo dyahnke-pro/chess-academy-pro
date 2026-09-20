@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1012 lines · 9 exports · 23 importers · 11 tests · 0 audits**
+**1110 lines · 11 exports · 27 importers · 14 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:5725) — names `FundamentalId`
 
 ## Who calls in
 
@@ -25,21 +25,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsCatalog.ts`
+- `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/learnFundamentalNarration.test.ts`
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/misconceptionClassifier.ts`
+- `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoice.ts`
 - `src/services/reviewFullData.ts`
+- `src/services/weaknessSpine.fundamentals.test.ts`
+- `src/services/weaknessSpine.ts`
 
 ## Exports and every call site
 
-### `FUNDAMENTAL_IDS` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `FUNDAMENTAL_IDS` (const) — 1 call site
+- `src/services/fundamentalsCatalog.ts:174`
 
 ### `FundamentalId` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -59,10 +63,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ATTRIBUTION_MAX` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `attributePrinciples` (function) — 22 call sites
-- `src/services/coachFeatureService.ts:1441`
-- `src/services/learnFundamentalNarration.ts:134`
+### `planTargets` (function) — 2 call sites
+- `src/services/principleAttribution.section14.test.ts:83`
+- `src/services/principleAttribution.section14.test.ts:95`
+
+### `planHeadline` (function) — 1 call site
+- `src/services/principleAttribution.section14.test.ts:86`
+
+### `attributePrinciples` (function) — 32 call sites
+- `src/services/coachFeatureService.ts:1445`
+- `src/services/learnFundamentalNarration.ts:143`
 - `src/services/misconceptionClassifier.ts:249`
+- `src/services/principleAttribution.section14.test.ts:22`
+- `src/services/principleAttribution.section14.test.ts:30`
+- `src/services/principleAttribution.section14.test.ts:34`
+- `src/services/principleAttribution.section14.test.ts:35`
+- `src/services/principleAttribution.section14.test.ts:60`
+- `src/services/principleAttribution.section14.test.ts:71`
+- `src/services/principleAttribution.section14.test.ts:75`
+- `src/services/principleAttribution.section14.test.ts:103`
+- `src/services/principleAttribution.section14.test.ts:107`
+- `src/services/principleAttribution.section14.test.ts:116`
 - `src/services/principleAttribution.test.ts:20`
 - `src/services/principleAttribution.test.ts:39`
 - `src/services/principleAttribution.test.ts:47`
@@ -84,12 +105,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:8`
 
 ### `pvUciToSan` (function) — 7 call sites
-- `src/components/Coach/GameReviewWeaknessCapture.tsx:83`
-- `src/components/Coach/GameReviewWeaknessCapture.tsx:87`
-- `src/services/coachFeatureService.ts:1445`
-- `src/services/coachFeatureService.ts:1447`
-- `src/services/learnFundamentalNarration.ts:124`
-- `src/services/learnFundamentalNarration.ts:131`
+- `src/components/Coach/GameReviewWeaknessCapture.tsx:85`
+- `src/components/Coach/GameReviewWeaknessCapture.tsx:89`
+- `src/services/coachFeatureService.ts:1449`
+- `src/services/coachFeatureService.ts:1451`
+- `src/services/learnFundamentalNarration.ts:133`
+- `src/services/learnFundamentalNarration.ts:140`
 - `src/services/principleAttribution.test.ts:46`
 
 ## Tests
@@ -100,12 +121,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalVocabulary.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
+- `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
+- `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
+- `src/services/weaknessSpine.fundamentals.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+- `scripts/audit-fundamentals-tab-prod.mjs`

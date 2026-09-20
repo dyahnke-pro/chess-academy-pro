@@ -244,8 +244,8 @@ describe('kid coach — computed CONCEPTS never reach the kid prompt (contract)'
       immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
       concepts: [{ id: 'fork', name: 'Fork', source: 'tactic' as const, squares: ['d5'], full: 'x', short: 'y', importance: 0.9 }],
     };
-    const adult = formatTacticsSubBlock(withConcepts);
-    const kid = formatTacticsSubBlock({ ...withConcepts, concepts: undefined });
+    const adult = formatTacticsSubBlock(withConcepts, withConcepts.fen);
+    const kid = formatTacticsSubBlock({ ...withConcepts, concepts: undefined }, withConcepts.fen);
     expect(adult).toMatch(/CONCEPTS/);
     expect(kid).not.toMatch(/CONCEPTS/);
   });

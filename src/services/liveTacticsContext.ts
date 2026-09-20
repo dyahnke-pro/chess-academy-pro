@@ -1,3 +1,4 @@
+import { logAppAudit } from './appAuditor';
 import type { PerspectiveMode } from './perspectiveRule';
 /**
  * Live tactics context builder — turns the surface's Stockfish read
@@ -502,7 +503,23 @@ export function speakDeepestLookahead(
  *  import — coachPrompts.ts imports the envelope, so the renderer can't live
  *  there. The block is omitted entirely when nothing was detected so a quiet
  *  position adds zero tokens. */
-export function formatTacticsSubBlock(tactics: TacticsLiveContext): string {
+export function formatTacticsSubBlock(
+  tactics: TacticsLiveContext,
+  /** The board the prompt is ABOUT. Required (2026-09-20): a package verified
+   *  against its OWN fen can never catch staleness — a stale package is
+   *  self-consistent. The renderer is the last door before the model, so it
+   *  is where the freshness check has to live. */
+  boardFen: string,
+): string {
+  if (tactics.fen !== boardFen) {
+    void logAppAudit({
+      kind: 'tactics-context-stale',
+      category: 'subsystem',
+      source: 'liveTacticsContext.formatTacticsSubBlock',
+      summary: `refused to render a tactics package for another board (package ${tactics.fen.split(' ')[0].slice(0, 20)}… vs board ${boardFen.split(' ')[0].slice(0, 20)}…)`,
+    });
+    return '';
+  }
   const bf = tactics.boardFacts;
   const has =
     !!bf ||

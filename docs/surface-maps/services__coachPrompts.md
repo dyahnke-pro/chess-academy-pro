@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:936) — names `coachPrompts`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3375) — names `coachPrompts`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1143) — names `coachPrompts`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3582) — names `coachPrompts`
 
 ## Who calls in
 
@@ -28,7 +28,7 @@
 ## Exports and every call site
 
 ### `getVerbosityInstruction` (function) — 7 call sites
-- `src/services/coachApi.ts:836`
+- `src/services/coachApi.ts:860`
 - `src/services/coachPrompts.verbosity.test.ts:23`
 - `src/services/coachPrompts.verbosity.test.ts:24`
 - `src/services/coachPrompts.verbosity.test.ts:26`

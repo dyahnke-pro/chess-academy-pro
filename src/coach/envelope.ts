@@ -739,7 +739,7 @@ function formatLiveStateBlock(state: LiveState): string {
     parts.push(lines.join('\n'));
   }
   if (state.tactics) {
-    parts.push(formatTacticsSubBlock(state.tactics));
+    parts.push(formatTacticsSubBlock(state.tactics, state.fen ?? state.tactics.fen));
   }
   if (state.reviewNarrationContext) {
     const r = state.reviewNarrationContext;
