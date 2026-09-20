@@ -27,6 +27,7 @@
  */
 import { db } from '../db/schema';
 import { mirrorAuditEvent } from './analytics';
+import { onCoachDecision } from './coachDecisionEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 300;
@@ -227,6 +228,11 @@ export type AuditKind =
   // production logs to confirm the migrated path is the one running.
   | 'coach-surface-migrated'
   | 'review-need-coverage'
+  // Every decision the ONE deciding door makes (David 2026-09-20: "I want
+  // audit tools on all algo based builds"). One row per ply, carrying which
+  // gate closed it and how many facts survived — so the WEIGHTING can be
+  // trended by an audit instead of judged by reading prose.
+  | 'coach-decision'
   // Rolodex entry beat (WO-ROLODEX-PLUMBING-01 item 1). Fires once per
   // session per opening when /coach/play (or another coach surface in
   // future) is loaded with `?opening=<name>` and the captured intent
@@ -2005,3 +2011,22 @@ export function installGlobalErrorHooks(): () => void {
     bursts.clear();
   };
 }
+
+// ── THE DECIDING COMPUTER'S OWN TRAIL ───────────────────────────────────────
+// Subscribed HERE rather than inside `coachDecider`, because that is a pure
+// fact-computer and must not import the db to report on itself. The leaf event
+// inverts the dependency: the decider emits, this listens.
+//
+// An emitter nobody listens to is decoration, which is the failure this whole
+// build exists to avoid — so the subscription is at module load, not behind an
+// init someone can forget to call. `appAuditor` is imported by every coach
+// surface, so the wire exists wherever a decision can happen.
+onCoachDecision((row) => {
+  void logAppAudit({
+    kind: 'coach-decision',
+    category: 'subsystem',
+    source: 'coachDecider.decide',
+    summary: `${row.posture} ${row.tier} → ${row.speak ? `spoke ${row.spokenCount}` : `silent (${row.reason})`}`,
+    details: JSON.stringify(row),
+  });
+});

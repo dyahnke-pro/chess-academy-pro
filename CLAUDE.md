@@ -3765,6 +3765,59 @@ fixed weakness can only decay by absence, never by evidence. Until a positive
 record exists, every data term is RAISE-ONLY. `boostFor` already returns 0 or
 positive, so the asymmetry is structural rather than a second tunable to tune.
 
+### 🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").
+
+The sibling of the ALGO-BASED law above. That one says every decision is
+computed from the student's own data. This says **a computed decision nobody
+can inspect is not finished.**
+
+**WHY.** `coachDecider.decide()` is the ONE door everything the coach says
+passes through, and until 2026-09-20 it emitted NOTHING — no `logAppAudit`, no
+analytics, on any path. So the weighting could only be judged by READING
+narration: every real defect of that day (a bare-SAN line, a seat inversion, a
+green that was noise) was found by eye, and nothing would have noticed a term's
+contribution drifting, the floor sweeping facts that should have spoken, or one
+term carrying every ply. That is the same class as an audit that reports green
+having verified nothing.
+
+**THE RULE, and it is two halves — one without the other is theatre:**
+1. **EMIT.** Every deciding computer publishes its inputs, which term carried
+   the decision, and its verdict — through the SAME door the decision goes
+   through, never a second emitter per computer (six emitters drift; one does
+   not).
+2. **ASSERT.** An audit holds a CONTRACT on those rows. An emission nobody
+   asserts on is decoration, and the repo already has the rule for it: a wire
+   that does not fire is not a wire.
+
+**THE SHAPE.** A pure fact-computer must NOT import `appAuditor` to report on
+itself — that drags Dexie into a leaf, which the rating rule above already
+forbids for the same reason. Use a LEAF EVENT: the computer emits, a subscriber
+in `appAuditor` forwards. `coachDecisionEvents.ts` is the reference (zero
+imports), and `weaknessModelEvents.ts` is the precedent it copies.
+
+**WHAT TO EMIT — distributions, never prose.** The point is that an audit can
+trend the SHAPE of the weighting: which gate closed a ply (`importance` vs
+`need` are different diagnoses and collapsing them hides a posture bug), how
+many facts survived versus were subsumed or floored, whether the method beat
+closed it. Absent data is recorded as ABSENT, never as false — "no need data"
+and "the student did not need it" are different facts, and the cold-start rule
+turns on telling them apart.
+
+**NEVER INVENT A FIELD THE COMPUTER DOES NOT HAVE.** `decide()` receives
+`need: { speak: boolean } | null`, so it emits the VERDICT and not the score;
+the score's distribution belongs to a second emission inside `computeNeed`,
+where it is actually computed. Faking it at the wrong door is the same disease
+as a narration claiming a fact the board never produced.
+
+Gate: `coachDecisionEmits.test.ts` — every return path emits, and it blames by
+STATEMENT, so a new branch that returns a decision without emitting fails there
+rather than shipping a silent path.
+
+**OWED, ranked** (each is an algo that decides and cannot yet be trended):
+`computeNeed`'s per-term scores · `factSelector`'s subsumption (WHICH claim ate
+which) · the strength estimator · `capabilityProven` / the green bar · the
+explorer band choice.
+
 ### 🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").
 
 The strength-calibration PICKER is gone (2026-09-02, "go fully adaptive"). The

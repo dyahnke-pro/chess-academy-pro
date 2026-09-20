@@ -35,6 +35,7 @@ import { rankFacets } from './reviewFacetRank';
 import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WeaknessSignal } from './weaknessSignal';
+import { emitCoachDecision } from './coachDecisionEvents';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
  *
@@ -175,6 +176,31 @@ export interface CoachDecision {
  * @param student who is being taught
  * @param bundle  the candidate facts + their coupled geometry
  */
+/** Emit the decision so the WEIGHTING is observable, not just its prose.
+ *  Every return path of `decide()` goes through here — a path that returns
+ *  without emitting is a decision nobody can audit, which is the whole reason
+ *  this exists (David 2026-09-20: "I want audit tools on all algo based
+ *  builds"). Gate: `coachDecisionEmits.test.ts`. */
+function emit(
+  posture: SurfacePosture,
+  d: CoachDecision,
+  student: StudentContext,
+  method: boolean,
+): CoachDecision {
+  emitCoachDecision({
+    posture,
+    tier: d.tier,
+    rank: d.rank,
+    speak: d.speak,
+    reason: d.reason,
+    needSpeak: student.need?.speak ?? null,
+    spokenCount: d.spoken.length,
+    quietCount: d.quiet.length,
+    method,
+  });
+  return d;
+}
+
 export function decide(
   signals: ImportanceSignals,
   student: StudentContext,
@@ -193,12 +219,12 @@ export function decide(
   // student asked for the sequence, so an unimportant moment is a QUIETER beat,
   // never a missing one.
   if (!speaks) {
-    return { ...base, speak: false, reason: 'importance', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) };
+    return emit(posture, { ...base, speak: false, reason: 'importance', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) }, student, false);
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
   // a teaching coach, not a mute one (the cold-start rule).
   if (student.need && !student.need.speak) {
-    return { ...base, speak: false, reason: 'need', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) };
+    return emit(posture, { ...base, speak: false, reason: 'need', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) }, student, false);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor
   // sweeps trivia. The floor may never mute a ply — that was step 2's job and
@@ -218,6 +244,7 @@ export function decide(
   const spoken = order
     ? [...selection.spoken].sort((x, y) => (order.rank.get(y) ?? 0) - (order.rank.get(x) ?? 0))
     : rankFacets(selection.spoken, student.weaknesses);
+  let methodSpoke = false;
   // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
   // then the principle it broke, then the habit that finds it next time.
   if (method) {
@@ -228,9 +255,9 @@ export function decide(
       { ...method, tier: importance.tier, habitNeed: method.habitNeed ?? habitNeedFrom(student.weaknesses) },
       method.ply ?? 0,
     );
-    if (beat) spoken.push(`[method] ${beat}`);
+    if (beat) { spoken.push(`[method] ${beat}`); methodSpoke = true; }
   }
-  return { ...base, speak: true, reason: 'spoken', spoken, quiet: selection.quiet };
+  return emit(posture, { ...base, speak: true, reason: 'spoken', spoken, quiet: selection.quiet }, student, methodSpoke);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.
