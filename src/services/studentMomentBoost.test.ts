@@ -2,11 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { studentMomentBoost, GREY_BOOST } from './studentMomentBoost';
 import { computeImportance } from './narrationImportance';
-import type { CapabilityProfile } from './capabilityEvidence';
+import type { CapabilityProfile, CapabilityProfileEntry } from './capabilityEvidence';
 import type { WeaknessSignal } from './weaknessSignal';
 
 const TAG = 'ignored-opponent-threat' as never;
-const caps = (e: { held: number; broken: number } | null): CapabilityProfile =>
+const caps = (e: CapabilityProfileEntry | null): CapabilityProfile =>
   (e ? new Map([[TAG, e]]) : new Map()) as CapabilityProfile;
 
 const persistentHole = {

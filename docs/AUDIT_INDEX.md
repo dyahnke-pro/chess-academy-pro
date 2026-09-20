@@ -245,3 +245,21 @@ AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY MATRIX_SECTION=actions node scripts/aud
 - **THE WEDGE GUARD in `audit-review-overhaul-prod.mjs` (2026-09-20).** About one reopen in several pins the audit browser's renderer in a single non-returning JS call; the walk stops at ply 0 and every row read after it goes red (HEAP, REOPEN, RECAP, THESIS, CRIT), which reads exactly like a pile of product failures and is not one — two runs were thrown away to that before it was recognised. PostHog settled it: 802 review events across 90 days, max 47s gap to the device's next event, zero streams ending on a review event, so NO real user has ever hit it and this is an instrument failure. The audit now carries a `WEDGE renderer-answered-through-the-reopen` row, prints `⚠️ CONTAMINATED (instrument wedged — rerun, do not file these reds)` instead of FAILS, writes `wedged` into the report JSON, and exits **4** so a chain can retry rather than file a bug that does not exist. Diagnosis instruments stay available behind `AUDIT_WEDGE_HUNT=1` (the wedge tracer + an OS renderer sample + a `Debugger.pause` probe) and cost nothing when off.
 - `probe-openings-tab-mount.mjs` — diagnosis probe for #58 (2026-09-20): a FRESH context on `/openings`, polled every 5 s — URL, `tab-toggle` count, the first testids, the page text — then the Pro tab clicked and its grid polled. `direct` (straight to /openings) or `via-home` (35 s on `/` first, the Gotham audit's own path). Measured: tab bar at +23 s direct / +55 s via-home, the Pro grid with 8 player cards the instant `tab-pro` is clicked, zero errors — which is how the Gotham audit's "0 tab" was pinned to its own swallowed click under the page-help modal, not the product.
 - `audit-stream-optin-prod.mjs` — the audit-stream contract on PROD, three halves: (1) a fresh device makes ZERO `/api/audit-stream` POSTs (opt-in, 2026-09-11); (2) an explicitly-enabled device still streams — proven against the LOOPBACK sidecar, so this audit writes nothing to Upstash; (3) the two 2026-09-19 gates ("i no longer want audits to fill redis"): an audit-marked page pointed at a FOREIGN remote makes ZERO network POSTs (client, `appAuditor.isAuditMarkedPage`); pointed at its OWN origin it may POST but every POST carries `x-audit-marked` and prod stores none (server, `200 stored:0 refused:'audit'`, observed from the browser and by direct POST). Needs `AUDIT_STREAM_SECRET` for half 3b; skips it honestly otherwise.
+
+## `audit-loop-green-prod.mjs` — the loop in the GREEN direction
+
+Does the coach go QUIET about something the student has proven? The twin of
+`audit-loop-closes-prod` (which proves the RED half). Three devices, one real
+amateur game, so the only variable is the student's record: CONTROL (fresh),
+GREEN (proven capability evidence seeded first — holds at `posedImportance` 90
+across two distinct games, unprompted), and PROMPTED (the same rows flagged
+`prompted: true`, which the app's own rule says prove nothing, so that tape
+must match CONTROL).
+
+Rows: the game sourced and legal · CONTROL tape non-empty (a baseline that
+cannot be vacuous) · seeded rows present · GREEN is quieter in WORDS as well as
+narrated plies · PROMPTED changes nothing · muted. Vacuity-checked.
+
+    AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
+    AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
+    node scripts/audit-loop-green-prod.mjs
