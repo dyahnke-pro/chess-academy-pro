@@ -19,7 +19,11 @@
 
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
+import { getMisconceptionProfile, isMisconceptionDue, type MisconceptionAggregate } from './misconceptionService';
+import { FUNDAMENTAL_IDS, FUNDAMENTAL_TAG, type FundamentalId } from './principleAttribution';
+import { FUNDAMENTAL_LABEL } from './fundamentalsCatalog';
+import { getMisconceptionTag } from '../data/misconceptionTags';
+import type { MisconceptionTagRecord } from '../types';
 import { detectConversionFailures, resolvePlayerColor, type ConversionFailure } from './conversionDetector';
 import { classifyEndgameType, endgameTypeInfo, type EndgameType } from './endgameProfileService';
 import { computeMustDefend } from './threatOut';
@@ -349,6 +353,87 @@ export function aggregateMistakePuzzles(mistakes: MistakePuzzle[], excludeKeys?:
         },
       })),
       lastSeenAt: rows[0] ? Date.parse(rows[0].createdAt) || 0 : 0,
+    });
+  }
+  return out;
+}
+
+/** Cluster-id prefix for the per-FUNDAMENTAL rows below. A weakness signal whose
+ *  `clusterId` starts with this is a fundamental, joined by `weaknessSignal`'s
+ *  `matchFundamental` / `matchClauseKind('fundamental')`. */
+export const FUNDAMENTAL_CLUSTER_PREFIX = 'fundamental:';
+export function fundamentalClusterId(id: FundamentalId): string {
+  return `${FUNDAMENTAL_CLUSTER_PREFIX}${id}`;
+}
+const FUNDAMENTAL_ID_SET: ReadonlySet<string> = new Set<string>(FUNDAMENTAL_IDS);
+
+/**
+ * 🔒 THE FUNDAMENTAL THE COMPUTER PROVED REACHES THE RANKER (A-NEW, measured
+ * 2026-09-19 on 47 real amateur games: 154 flagged moves, 79 carrying an
+ * attributed `fundamentalId`, and the spine read ZERO of them).
+ *
+ * Why zero: batch analysis (`autoAnalyzeGameMisconceptions`) writes every row
+ * `counted: false` so the misconception TALLY does not double-count the same
+ * game's `mistakePuzzles` — a correct guard for the TAG, and WO-3's file. But
+ * `fundamentalId` lives ONLY on those rows (a `MistakePuzzle` carries none), so
+ * the one gate silenced a different dimension entirely: the Fundamentals tab
+ * said "loose piece 19×" while the ranker deciding what to teach next had never
+ * heard of it. The loop, not closing, one layer below the heat map.
+ *
+ * The fix is NOT to flip `counted` (that reopens the tag double-count). It is
+ * this reader: aggregate `fundamentalId` over ALL rows the way the scorecard's
+ * `getFundamentalCounts` already does, into its OWN rows keyed
+ * `fundamental:<id>`, so the fundamental counts once and the tag rows are left
+ * exactly as they were. Bucket and drill themes come from the fundamental's own
+ * closed-set tag (`FUNDAMENTAL_TAG`, exhaustive by type) — the same join the
+ * recording path used to file it, never a second table.
+ */
+export function aggregateFundamentals(rows: readonly MisconceptionTagRecord[], gameIndex?: GameProvenanceIndex): UnifiedWeakness[] {
+  const now = Date.now();
+  const groups = new Map<FundamentalId, MisconceptionTagRecord[]>();
+  for (const r of rows) {
+    const fid = r.fundamentalId;
+    if (!fid || !FUNDAMENTAL_ID_SET.has(fid)) continue; // stale / unknown ids never invent a row
+    const id = fid as FundamentalId;
+    const arr = groups.get(id);
+    if (arr) arr.push(r);
+    else groups.set(id, [r]);
+  }
+  const out: UnifiedWeakness[] = [];
+  for (const [id, recs] of groups) {
+    recs.sort((a, b) => b.createdAt - a.createdAt);
+    const def = getMisconceptionTag(FUNDAMENTAL_TAG[id]);
+    const openCount = recs.filter((r) => isMisconceptionDue(r, now)).length;
+    const sources: ('coach' | 'analysis')[] = [];
+    if (recs.some((r) => r.counted !== false)) sources.push('coach');
+    if (recs.some((r) => r.counted === false)) sources.push('analysis');
+    out.push({
+      key: fundamentalClusterId(id),
+      tag: fundamentalClusterId(id),
+      label: FUNDAMENTAL_LABEL[id],
+      bucket: def?.bucket ?? 'uncategorized',
+      openCount,
+      total: recs.length,
+      severity: Math.min(95, openCount * 12 + recs.length * 3),
+      sources,
+      puzzleThemes: def?.drill.puzzleThemes ?? [],
+      positions: recs.slice(0, 8).map((e) => ({
+        from: {
+          origin: 'game' as const,
+          ...(e.sourceGameId ? { gameId: e.sourceGameId } : {}),
+          ...(e.sourceGameId && gameIndex?.has(e.sourceGameId)
+            ? {
+                opponentName: gameIndex.get(e.sourceGameId)?.opponentName ?? null,
+                playedAt: gameIndex.get(e.sourceGameId)?.playedAt,
+              }
+            : {}),
+        },
+        fen: e.fen,
+        playedSan: e.playedSan,
+        bestSan: e.bestSan,
+        openingId: e.openingId,
+      })),
+      lastSeenAt: recs[0]?.createdAt ?? 0,
     });
   }
   return out;
@@ -732,8 +817,23 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   }
   const opponentFor = (gameId: string): string | null => gameIndex.get(gameId)?.opponentName ?? null;
 
-  const coachKeys = new Set(allMis.map((m) => posKey(m.fen, m.playedSan)));
+  // 🔒 THE EXCLUSION SET IS THE ROWS THE COACH HALF REPRESENTS — NOT EVERY ROW
+  // (found 2026-09-19 under A-NEW). `coachRows` is built from the counted rows
+  // only (`countedOnly: true`), but this set used to be built from ALL rows —
+  // including the `counted: false` ones batch analysis writes for every
+  // blunder it ALSO persists as a `mistakePuzzle` at the same fen + move
+  // (`autoAnalyzeGame.persistMistakePuzzlesForBlunders`). So the puzzle twin
+  // was excluded HERE as "already owned by the coach" while its misconception
+  // row was excluded THERE as "not counted": every batch-analyzed slip since
+  // 2026-06-11 vanished from the unified profile on both sides at once. The
+  // dedupe is right for a slip the coach half actually shows; a row the coach
+  // half filtered out owns nothing.
+  const coachKeys = new Set(allMis.filter((m) => m.counted !== false).map((m) => posKey(m.fen, m.playedSan)));
   const coachRows = misAgg.map((a) => fromMisconception(a, gameIndex));
+  // The per-fundamental rows read EVERY row (counted or not) — see
+  // aggregateFundamentals. They are a finer dimension beside the tag rows, keyed
+  // apart (`fundamental:<id>`), so nothing here changes a tag's count.
+  const fundamentalRows = aggregateFundamentals(allMis, gameIndex);
   const analysisRows = mergeByKey([
     ...aggregateMistakePuzzles(mistakes, coachKeys),
     ...aggregateClassifiedTactics(tactics),
@@ -745,7 +845,7 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
     ...aggregateBookDepartures(bookRows, studentRating, opponentFor),
   ]);
 
-  const merged = [...coachRows, ...analysisRows];
+  const merged = [...coachRows, ...fundamentalRows, ...analysisRows];
   merged.sort((a, b) => {
     if (b.openCount !== a.openCount) return b.openCount - a.openCount;
     if (b.severity !== a.severity) return b.severity - a.severity;

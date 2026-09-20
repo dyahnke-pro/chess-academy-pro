@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**756 lines · 16 exports · 22 importers · 9 tests · 2 audits**
+**856 lines · 19 exports · 24 importers · 11 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/customLessonPlan.test.ts`
 - `src/services/customLessonPlan.ts`
 - `src/services/drillVocabulary.test.ts`
+- `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/weaknessLifecycle.ts`
@@ -33,6 +34,7 @@
 - `src/services/weaknessSignal.test.ts`
 - `src/services/weaknessSignal.ts`
 - `src/services/weaknessSignalLoader.ts`
+- `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 
 ## Exports and every call site
@@ -80,6 +82,16 @@
 - `src/services/weaknessSpine.test.ts:178`
 - `src/services/weaknessSpine.test.ts:190`
 
+### `FUNDAMENTAL_CLUSTER_PREFIX` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `fundamentalClusterId` (function) — 2 call sites
+- `src/services/weaknessSpine.fundamentals.test.ts:78`
+- `src/services/weaknessSpine.fundamentals.test.ts:91`
+
+### `aggregateFundamentals` (function) — 1 call site
+- `src/services/weaknessSpine.fundamentals.test.ts:103`
+
 ### `aggregateOpeningWeakSpots` (function) — 4 call sites
 - `src/services/weaknessProvenance.test.ts:82`
 - `src/services/weaknessSpine.test.ts:194`
@@ -117,7 +129,7 @@
 - `src/services/weaknessSpine.test.ts:259`
 - `src/services/weaknessSpine.test.ts:272`
 
-### `getUnifiedWeaknessProfile` (function) — 23 call sites
+### `getUnifiedWeaknessProfile` (function) — 29 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2377`
 - `src/components/Coach/CoachTeachPage.tsx:10388`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:70`
@@ -130,8 +142,14 @@
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
 - `src/services/coachThread.ts:40`
+- `src/services/fundamentalsPipeline.realGame.test.ts:278`
 - `src/services/fundamentalsRecordLoop.integration.test.ts:92`
 - `src/services/weaknessSignalLoader.ts:40`
+- `src/services/weaknessSpine.fundamentals.test.ts:48`
+- `src/services/weaknessSpine.fundamentals.test.ts:62`
+- `src/services/weaknessSpine.fundamentals.test.ts:77`
+- `src/services/weaknessSpine.fundamentals.test.ts:111`
+- `src/services/weaknessSpine.fundamentals.test.ts:116`
 - `src/services/weaknessSpine.test.ts:281`
 - `src/services/weaknessSpine.test.ts:294`
 - `src/services/weaknessSpine.test.ts:298`
@@ -148,10 +166,12 @@
 - `src/services/coachThread.test.ts`
 - `src/services/customLessonPlan.test.ts`
 - `src/services/drillVocabulary.test.ts`
+- `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignal.test.ts`
+- `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 
 ## Audits that reach it

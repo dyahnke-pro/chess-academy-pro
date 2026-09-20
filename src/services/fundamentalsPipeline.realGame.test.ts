@@ -32,6 +32,7 @@ import { db } from '../db/schema';
 import { analyzeGameOnWorker } from './gameAnalysisService';
 import { autoAnalyzeGameMisconceptions } from './autoAnalyzeGame';
 import { getFundamentalCounts } from './fundamentalsCatalog';
+import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getMisconceptionProfile } from './misconceptionService';
 import { FUNDAMENTAL_TAG, FUNDAMENTAL_IDS } from './principleAttribution';
 import { MISCONCEPTION_TAGS } from '../data/misconceptionTags';
@@ -264,10 +265,22 @@ describe('WO-4 gate — a real game produces ATTRIBUTED fundamentals that land i
 
     // The measured `learned` gate, recorded here so a change to it is VISIBLE
     // (see docs/plans/2026-09-19-wo4-fundamentals-attribution.md): the
-    // recording path writes counted:false, so the formal profile sees none.
+    // recording path writes counted:false, so the TAG tally sees none — that
+    // guard against double-counting the mistakePuzzle twin is deliberately kept.
     const countedOnly = await getMisconceptionProfile({ countedOnly: true });
     expect(rows.every((r) => r.counted === false)).toBe(true);
     expect(countedOnly.reduce((n, a) => n + a.total, 0)).toBe(0);
+
+    // AND THE RANKER SEES THE FUNDAMENTALS ANYWAY (A-NEW, closed 2026-09-19):
+    // the spine reads `fundamentalId` over ALL rows into `fundamental:<id>`
+    // rows, so what the tab shows is what the coach teaches from. This is the
+    // measurement that read 79 → 0 before the reader existed.
+    const spine = await getUnifiedWeaknessProfile();
+    for (const id of new Set(attributed.map((r) => r.fundamentalId))) {
+      const row = spine.find((w) => w.key === `fundamental:${id}`);
+      expect(row, `spine has no row for ${id}: ${spine.map((w) => w.key).join(', ')}`).toBeTruthy();
+      expect(row!.total).toBe(attributed.filter((r) => r.fundamentalId === id).length);
+    }
   }, 60_000);
 
   it('NEGATIVE CONTROL — seat the OTHER player and the student\'s attributions do not appear', async () => {

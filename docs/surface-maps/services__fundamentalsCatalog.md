@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5702) — names `fundamentalsCatalog`
+- **The standard post-deploy ritual** (CLAUDE.md:5723) — names `fundamentalsCatalog`
 
 ## Who calls in
 
@@ -60,7 +60,7 @@
 
 ### `fundamentalDevice` (function) — 3 call sites
 - `src/components/Coach/FundamentalsPage.tsx:243`
-- `src/services/coachApi.ts:4867`
+- `src/services/coachApi.ts:4892`
 - `src/services/fundamentalsCatalog.test.ts:22`
 
 ### `FundamentalDrill` (type) — 0 call sites
@@ -82,7 +82,7 @@
 
 ### `getFundamentalCounts` (function) — 5 call sites
 - `src/components/Coach/FundamentalsPage.tsx:89`
-- `src/services/coachApi.ts:4865`
+- `src/services/coachApi.ts:4890`
 - `src/services/fundamentalsCatalog.test.ts:54`
 - `src/services/fundamentalsPipeline.realGame.test.ts:178`
 - `src/services/fundamentalsPipeline.realGame.test.ts:260`
