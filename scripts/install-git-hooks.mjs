@@ -16,13 +16,23 @@
 // pass `--no-verify`. The hooks themselves never auto-disable.
 
 import { writeFileSync, mkdirSync, existsSync, chmodSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, '..');
-const HOOK_PATH = join(REPO_ROOT, '.git/hooks/pre-push');
-const PRE_COMMIT_PATH = join(REPO_ROOT, '.git/hooks/pre-commit');
+// The hooks live in the COMMON git dir: in a worktree `.git` is a FILE
+// pointing there, and `join(REPO_ROOT, '.git/hooks')` died with ENOTDIR
+// (2026-09-20) — so every worktree session that ran this installed nothing.
+const GIT_COMMON_DIR = (() => {
+  const r = spawnSync('git', ['rev-parse', '--git-common-dir'], { cwd: REPO_ROOT, encoding: 'utf-8' });
+  const dir = (r.stdout ?? '').trim();
+  if (!dir) return join(REPO_ROOT, '.git');
+  return dir.startsWith('/') ? dir : join(REPO_ROOT, dir);
+})();
+const HOOK_PATH = join(GIT_COMMON_DIR, 'hooks/pre-push');
+const PRE_COMMIT_PATH = join(GIT_COMMON_DIR, 'hooks/pre-commit');
 
 if (!existsSync(join(REPO_ROOT, '.git'))) {
   console.error('No .git directory found — must run from inside the repo.');
