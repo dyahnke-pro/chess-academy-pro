@@ -8,6 +8,7 @@
 // This gate proves the reasons are REAL (they name the gate and the number),
 // not decoration, and that they cost nothing when nobody asks.
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { attributePrinciples } from './principleAttribution';
 import { classifyMisconception } from './misconceptionClassifier';
 
@@ -72,6 +73,16 @@ describe('section 14 says which gate stopped it', () => {
     for (const r of c?.why ?? []) {
       expect(r).toMatch(/^(calculation-depth|left-book-early|no-plan): .{10,}/);
     }
+  });
+
+  it('the sweep EMITS the reasons for an unnamed slip, so an audit can read the real population', () => {
+    const src = readFileSync('src/services/autoAnalyzeGame.ts', 'utf8');
+    // Emitted once per UNNAMED slip only — a named one has nothing to explain,
+    // and logging every ply would drown the stream it is read from.
+    expect(src).toMatch(/source: 'autoAnalyzeGame\.unnamedSlip'/);
+    const at = src.indexOf("autoAnalyzeGame.unnamedSlip");
+    const guard = src.slice(Math.max(0, at - 700), at);
+    expect(guard, 'guarded on tag === other AND a non-empty why').toMatch(/tag === 'other' && why\.length > 0/);
   });
 
   it('costs nothing when nobody asks — no sink, no reasons, same result', () => {
