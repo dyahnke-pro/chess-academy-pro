@@ -1490,7 +1490,14 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      third kind of bound — deterministic on one thread with a cold table AND
      finite), with its own 30 s watchdog; the pass keeps its real 1.5 s
      budget. Gate: the source must carry the node-bound send and the fan must
-     never go through `reviewBudget`. (b) the
+     never go through `reviewBudget`. VERIFIED 1 OF 2: node-bound run 1 on
+     `index-WwZIaxGS` read "22 read, 9 speak, gap 99640, 3087 ms" — same
+     wall-clock as the product's clocked fan and the same verdict as the
+     clock-lifted run before it; run 2 hit the #21 wedge at the reopen and was
+     killed, so the byte-identical PAIR on the node-bound fan is still owed
+     (the chain's diff picked the previous report and read "identical" off the
+     wrong pair — a script defect, `diff-review-pair.py`, fixed to key on the
+     run's own report path next time). (b) the
      EXPLORE reply's eval (1.3 vs 1.4) — a LIVE ask on the singleton, not
      review analysis; out of scope for the flag by design. (c) the LEDGER
      sample strings differ — prose from the PROJECTION layer (`computePvLine`
@@ -1555,6 +1562,16 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      the worker's stderr/`abort` reason — the glue prints it before the trap;
      (c) memory: 5 single workers × 16 MB hash + the multi engine's 64 MB +
      4 helpers on a 4 GB tab is the first suspect.
+   - **n=5 (2026-09-20 09:59–10:29, bundle `index-WwZIaxGS`, my own pinned
+     review run, `AUDIT_DETERMINISTIC=1`, nothing else on the machine):** the
+     WEDGE, clean. Dive finished before the reopen; reopen startable in 0.3 s;
+     `review-walk-started` + ONE `review-narration-spoken` fired, then "JS heap
+     UNREADABLE (renderer wedged or evaluate timed out)" at ply 0, no ply
+     readout ever, workers=1 (`stockfish-18-lite-single.js`), pool churn {},
+     until the 30-min bound killed the browser. Same shape as n=1–3: the page's
+     MAIN thread stops answering right after the reopened walk speaks its
+     first line. Four of the five wedges had no determinism flag, so the flag
+     is not the cause. It is reproducible enough to hunt now — ~1 in 3 reopens.
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
     + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
     Test type errors are no longer invisible; they are counted and capped. What
@@ -1578,7 +1595,8 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
       into "0 tab" — the silent-no-op class; (4) the card row filtered by
       TEXT and raced the async card render → keyed on the id-bearing testid
       with a wait. Clean run on the fixed script: **33/34**, the last red
-      being (4), fixed after that run. The two WARNs are instruments, not
+      being (4); with (4) fixed: **34/34 on prod (09:39, bundle
+      `index-WwZIaxGS`), vacuity-checked. #58 CLOSED.** The two WARNs are instruments, not
       product: "audit-stream captured 0 events" (the stream is opt-in and OFF
       — expected since 2026-09-11) and "0 POST bodies / 42 entries on
       listener" (the sidecar HAS the run's events; the script's own
