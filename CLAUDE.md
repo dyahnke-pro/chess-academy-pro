@@ -3823,8 +3823,18 @@ Gates, one per half, because either alone is a false green:
 
 **THE CONTRACTS ARE DISTRIBUTIONS, AND THE FIRST ONES ARE THESE.** The live
 Learn audit asserts the door emitted at all, that every silence NAMES its gate,
-that a live board is judged under `interrupt`, and that the weighting is
-non-degenerate. Review asserts the one that is load-bearing there: on a `walk`
+that the live commentary path judged under `interrupt`, and that the weighting
+is non-degenerate.
+
+🚨 **"EVERY ROW IS `interrupt`" WAS THE FIRST DRAFT AND IT IS WRONG** — caught
+before the run, and written down because it is the seductive version. A live
+Learn session produces BOTH postures legitimately: `useLiveCoach` and
+`usePhaseNarration` declare `interrupt` (silence is their default), while
+`usePositionNarration` ("read this position") and `whyBestMove` declare `walk`
+because the student ASKED for the sequence. That contract would have failed a
+healthy build and sent someone chasing a bug that does not exist. The contract
+that IS load-bearing holds on BOTH surfaces: a `walk` may RANK a moment and may
+never decide whether the ply speaks. Review asserts the one that is load-bearing there: on a `walk`
 posture, ZERO rows may close on importance — that is the 46-ply-walk-to-SIX bug
 (G4.5.15) reduced to a single number an audit can read, instead of a defect
 found by a human noticing the tape got short.

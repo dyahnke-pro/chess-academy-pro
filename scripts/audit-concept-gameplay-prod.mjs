@@ -47,7 +47,8 @@
  *   E. off-canonical ask (G7): a misspelled play request still starts a game
  *   F. vacuity guard: >=3 spoken lines; instruments stayed muted; 0 page errors
  *   G. the ONE deciding door is observable: it emitted rows, every silence
- *      names the gate that closed it, the posture is 'interrupt', and the
+ *      names the gate that closed it, the live path judged under 'interrupt'
+ *      while no walk row was closed by importance, and the
  *      weighting is non-degenerate (the ASSERT half of the algo-audit rule)
  *
  * Run (from the sandbox, against LIVE prod):
@@ -425,13 +426,29 @@ async function main() {
         unattributed.length === 0,
         `${silent.length}/${decisions.length} silent — importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length}${unattributed.length ? ` UNATTRIBUTED=${unattributed.length}` : ''}`,
       );
-      // This surface is a LIVE board, so it must judge under 'interrupt'. A
-      // walk posture leaking onto a live surface would narrate every ply.
+      // POSTURE. A live game legitimately produces BOTH: the running
+      // commentary (`useLiveCoach`, `usePhaseNarration`) declares 'interrupt'
+      // because silence is its default, while "read this position" and
+      // `whyBestMove` declare 'walk' because the student ASKED for the
+      // sequence. So "every row is interrupt" is the WRONG contract — it
+      // would fail a healthy build, which is the class of mistake that costs
+      // a session chasing a bug that is not there.
+      //
+      // What IS load-bearing is the half G4.5.15 states: a `walk` may RANK a
+      // moment but must never decide whether the ply speaks. Applying the
+      // live gate to a walk is what cut a 46-ply review to SIX.
       const postures = [...new Set(decisions.map((d) => d.posture))];
+      const interrupts = decisions.filter((d) => d.posture === 'interrupt');
       record(
-        'G3. a live game is judged under the INTERRUPT posture (never walk)',
-        postures.length > 0 && postures.every((x) => x === 'interrupt'),
-        `postures=${postures.join(',')}`,
+        'G3a. the live commentary path judged under INTERRUPT',
+        interrupts.length > 0,
+        `postures=${postures.join(',')} (interrupt=${interrupts.length}, walk=${decisions.length - interrupts.length} — read-position and whyBestMove are legitimately walk)`,
+      );
+      const walkClosedOnImportance = decisions.filter((d) => d.posture === 'walk' && d.speak === false && d.reason === 'importance');
+      record(
+        'G3b. no WALK row was closed by importance (the 46-ply-to-6 bug)',
+        walkClosedOnImportance.length === 0,
+        `${walkClosedOnImportance.length} walk rows closed on importance (must be 0 — importance RANKS a walk, it never gates it)`,
       );
       // Non-degenerate weighting. All-silent means the coach never cleared its
       // own gates on a real game; all-spoken with zero quiet means nothing was
