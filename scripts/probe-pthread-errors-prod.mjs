@@ -88,12 +88,28 @@ async function main() {
 
   const ctx = await browser.newContext(sandboxContextOptions());
   await ctx.addInitScript(autoDismissCalibration); await ctx.addInitScript(muteTtsForAudit);
+  // WHO FLOODS: the page-level ErrorEvents are message-less, and a worker's
+  // `error` event bubbles to window with no target URL. Wrap `new Worker` so
+  // every worker's own error events are counted per URL with the first few
+  // messages/filenames — read back with page.evaluate(() => window.__workerErrors).
+  await ctx.addInitScript(() => {
+    const W = window.Worker; const rec = (window.__workerErrors = window.__workerErrors || {});
+    window.Worker = new Proxy(W, { construct(target, args) {
+      const w = new target(...args); const u = String(args[0]).split('/').pop().split('?')[0];
+      const r = (rec[u] = rec[u] || { n: 0, first: [] });
+      w.addEventListener('error', (e) => { r.n += 1; if (r.first.length < 3) r.first.push(`${e.message ?? '(no message)'} @${(e.filename ?? '').split('/').pop()}:${e.lineno ?? '?'}`); });
+      w.addEventListener('messageerror', () => { r.n += 1; if (r.first.length < 3) r.first.push('messageerror'); });
+      return w;
+    } });
+  });
   const page = await ctx.newPage();
   const pageErrors = []; page.on('pageerror', (e) => pageErrors.push({ t: Date.now(), phase, msg: String(e.message ?? e).slice(0, 120) }));
   const census = () => { const by = {}; for (const t of targets.values()) if (t.type === 'worker') by[t.url] = (by[t.url] ?? 0) + 1; return by; };
-  const sample = (label) => log(`  [census] ${phase}/${label}: ${JSON.stringify(census())} errors=${errors.length} pageErrors=${pageErrors.length}`);
+  const responsive = async () => { const t = Date.now(); const ok = await Promise.race([page.evaluate(() => 1).then(() => true), new Promise((r) => setTimeout(() => r(false), 3000))]).catch(() => false); return ok ? `${Date.now() - t}ms` : 'BLOCKED>3s'; };
+  const workerErrors = async () => page.evaluate(() => window.__workerErrors ?? {}).catch(() => ({}));
+  const sample = async (label) => log(`  [census] ${phase}/${label}: ${JSON.stringify(census())} errors=${errors.length} pageErrors=${pageErrors.length} main=${await responsive()} workerErr=${JSON.stringify(Object.fromEntries(Object.entries(await workerErrors()).map(([k, v]) => [k, v.n])))}`);
 
-  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 60000 }); await page.waitForTimeout(6000); sample('after-boot');
+  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 60000 }); await page.waitForTimeout(6000); await sample('after-boot');
   const gid = `probe-pthread-${Date.now()}`;
   await page.evaluate(async ({ gid, pgn, g }) => {
     const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
@@ -110,30 +126,37 @@ async function main() {
   await until(() => has(page, cardSel), 20000);
   await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
   const startable = async () => { const b = page.locator('[data-testid="start-walk-btn"]').first(); return (await b.count()) > 0 && (await b.getAttribute('disabled')) === null; };
-  const ready = await until(startable, 300000, 1500); sample(`startable=${ready}`);
+  const ready = await until(startable, 300000, 1500); await sample(`startable=${ready}`);
   // PROBE_WALK_MS: walk the first review for N ms before the dive-wait and the
   // reopen. The 2026-09-20 storm was measured by the review audit, whose reopen
   // comes after a full walk + explore + show-me; a reopen straight after the
   // dive (the default) came back clean — so the walk's engine load may be the
   // missing ingredient. 0 = skip.
-  const walkMs = Number(process.env.PROBE_WALK_MS ?? 0);
+  // PROBE_FULL_WALK=1: walk the first review to its END (the recap) before the
+  // reopen — the two wedging runs (the review audit's, 2026-09-20) both did;
+  // the two clean probe runs (no walk / 180 s) did not. PROBE_WALK_MS bounds it.
+  const walkMs = Number(process.env.PROBE_WALK_MS ?? (process.env.PROBE_FULL_WALK === '1' ? 900000 : 0));
   if (walkMs > 0) {
     phase = 'first-walk';
     await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
-    const tw = Date.now(); while (Date.now() - tw < walkMs) { await page.waitForTimeout(15000); sample(`walk+${Math.round((Date.now() - tw) / 1000)}s`); }
+    const tw = Date.now();
+    while (Date.now() - tw < walkMs) {
+      await page.waitForTimeout(15000); await sample(`walk+${Math.round((Date.now() - tw) / 1000)}s`);
+      if (process.env.PROBE_FULL_WALK === '1') { const t = await page.locator('[data-testid="coach-game-review-walk"]').first().innerText({ timeout: 2000 }).catch(() => ''); const m = t.match(/Ply\s+(\d+)\s*\/\s*(\d+)/i); if (m && Number(m[1]) >= Number(m[2])) { log(`  [walk] reached the end (${m[1]}/${m[2]})`); break; } }
+    }
   }
   phase = 'dive';
-  const diveDone = await until(async () => !(await has(page, '[data-testid="review-deepening-pill"]')), 300000, 2000); sample(`dive-done=${diveDone}`);
+  const diveDone = await until(async () => !(await has(page, '[data-testid="review-deepening-pill"]')), 300000, 2000); await sample(`dive-done=${diveDone}`);
   phase = 'reopen';
   const nav = Date.now();
   await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
-  await page.waitForTimeout(Math.max(0, 3000 - (Date.now() - nav))); sample('reopen+3s');
+  await page.waitForTimeout(Math.max(0, 3000 - (Date.now() - nav))); await sample('reopen+3s');
   await until(() => has(page, cardSel), 20000);
   await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
-  await until(startable, 75000, 250); sample('reopened');
+  await until(startable, 75000, 250); await sample('reopened');
   phase = 'reopen-walk';
   await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
-  const t1 = Date.now(); while (Date.now() - t1 < 60000) { await page.waitForTimeout(5000); sample(`walk+${Math.round((Date.now() - t1) / 1000)}s`); }
+  const t1 = Date.now(); while (Date.now() - t1 < 60000) { await page.waitForTimeout(5000); await sample(`walk+${Math.round((Date.now() - t1) / 1000)}s`); }
 
   // ── the answer: errors grouped by worker url, first distinct messages ──
   const byUrl = {}; for (const e of errors) { const k = `${e.phase} | ${e.url}`; (byUrl[k] ??= { n: 0, kinds: {}, msgs: new Map() }); byUrl[k].n += 1; byUrl[k].kinds[e.kind] = (byUrl[k].kinds[e.kind] ?? 0) + 1; const key = e.text.slice(0, 120); if (!byUrl[k].msgs.has(key)) byUrl[k].msgs.set(key, { at: e.at, n: 0 }); byUrl[k].msgs.get(key).n += 1; }
@@ -143,6 +166,8 @@ async function main() {
     for (const [msg, m] of [...v.msgs.entries()].slice(0, 4)) log(`           ×${m.n} ${m.at ?? ''} ${msg}`);
   }
   log(`\npage-level ErrorEvents: ${pageErrors.length}; distinct messages: ${[...new Set(pageErrors.map((e) => e.msg))].slice(0, 3).join(' | ') || '(none)'}`);
+  const we = await workerErrors(); log('worker error events by URL (from the page-side hook):');
+  for (const [u, v] of Object.entries(we)) log(`  ${String(v.n).padStart(8)}  ${u}  ${v.first.join(' | ')}`);
   await writeFile(`${OUT}/report.json`, JSON.stringify({ base: BASE, game: game.id, targets: [...targets.values()], errors, pageErrors }, null, 2));
   log(`report: ${OUT}/report.json`);
   cdp.close(); await browser.close();
