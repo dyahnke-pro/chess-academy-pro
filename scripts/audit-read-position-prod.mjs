@@ -203,7 +203,7 @@ async function main() {
 
     await page.screenshot({ path: `${OUT_DIR}/read-position.png`, fullPage: false }).catch(() => {});
   } finally {
-    await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ base: BASE_URL, results, ttsRequests, listenerEvents: listener.getCapturedEvents().length, consoleErrors, pageErrors }, null, 2));
+    await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ base: BASE_URL, results, ttsRequests, listenerEvents: listener.getCapturedEvents().length, listenerByKind: listener.getCapturedEvents().reduce((m, e) => ({ ...m, [e.kind]: (m[e.kind] ?? 0) + 1 }), {}), voiceEvents: listener.getCapturedEvents().filter((e) => /voice|tts|polly|narration/i.test(e.kind ?? '')).map((e) => ({ kind: e.kind, source: e.source, summary: String(e.summary ?? '').slice(0, 160) })), consoleErrors, pageErrors }, null, 2));
     await browser.close();
     await listener.close?.();
   }

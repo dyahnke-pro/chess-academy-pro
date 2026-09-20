@@ -946,6 +946,21 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### B. The instruments are not believable (a green here means nothing)
 
+7c. ✅ **DONE (2026-09-19) — THE DEAD-SELECTOR CLASS HAS A GATE.** #59 (below,
+   §C 16) was the calibration-bubble failure again under a new name: an audit
+   blocking on a testid nothing renders fails SILENTLY (timeout, `.catch`,
+   wall-clock) or, worse, files a false finding. `noDeadTestidWaits.test.ts`
+   generalises `noDeadCalibrationBubble`: an audit may not waitFor / click /
+   fill / read a LONE `data-testid` absent from `src/` (the extractor sees the
+   literal, the `xTestId=` prop forms and template prefixes; alternation lists
+   with a live fallback are not blamed). Measured: 1,695 rendered ids, 7 dead
+   blocking actions in 4 scripts (`audit-settings-behavior` ×3 on
+   `gameplay-coaching-row-modal/-close`, `audit-coach-full-interactive` on
+   `filter-all` + `coach-play-redirect`, `audit-gotham-prorep-interactive` on
+   `featured-pro-openings`, `audit-review-functions-probe` on
+   `review-full-detail-toggle`) — the shrink-only baseline. Fix the script,
+   delete the line.
+
 7a. ✅ **DONE (2026-09-19) — EVERY narration listener was DARK on this Mac, and
    every audit still printed its rows.** Two shut valves on the one pipe, found
    in series:
@@ -1055,7 +1070,22 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     register guard, so a position holding another beat still teaches.
 15. **The voiced corpus is in the wrong register** (#22) — 1,146 he/his, 521
     first-person, 81 fragments.
-16. **Read-position: voice fires but the banner never appears** (#59).
+16. ✅ **CLOSED (2026-09-19) — #59 WAS A DEAD SELECTOR, NOT A DEFECT.**
+    `audit-read-position-prod` waited on `position-narration-banner`, which
+    nothing in `src/` has rendered since e81f758eb (2026-07-10: the read lives
+    in the chat, "no more special place"). The wait timed out every run and the
+    fleet reported "banner never appears" for two months. Rewritten to the real
+    contract (one assistant bubble that GROWS while the read streams; body read
+    without the literal "C" badge; the read found by its growth, never by index
+    — tips and move commentary land in the same newest-first list). 10/10 on
+    prod; the read itself is board-true prose ("Old Sicilian… bishop to b5 hits
+    my c6-knight"). OPEN from its tape: every sentence produced TWO
+    `voiceService.speakCloud` events and TWO identical `/api/tts` fetches. The
+    hook dispatches once per sentence and `injectAssistantMessage` is silent,
+    so the second call is inside voiceService or a harness tier fallover under
+    `blockTtsNetwork`'s stub MP3 — discriminate with the persisted
+    `voice-speak-invoked` count before touching code. If it is real, every
+    tapped read bills twice.
 17. **The plan lane says the vague thing** while the computer beside it has the
     concrete one (#64) — structures AND pieces.
 18. **Two shared positions go silent in game 2** (#68) — n=1; WIDEN THE SAMPLE
