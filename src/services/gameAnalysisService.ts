@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+import { reviewBudget } from './analysisDeterminism';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { stockfishEngine, resolveWorkerUrl, isIosSafari } from './stockfishEngine';
@@ -1327,7 +1328,7 @@ async function evaluateFensPooled(
   onPosition?: (current: number, total: number) => void,
   /** Per-position movetime for the pool workers. Review keeps the 5s default;
    *  the bulk sweep passes BATCH_POSITION_BUDGET_MS. */
-  budgetMs: number = REVIEW_POSITION_BUDGET_MS,
+  budgetMs: number = reviewBudget(REVIEW_POSITION_BUDGET_MS),
   /** Search depth for this pass. The sweep and the review's curve pass run
    *  shallow; only the review's key-moment dive runs deep. */
   depth: number = ANALYSIS_DEPTH,
@@ -1666,7 +1667,7 @@ async function analyzeGamePositions(
   // + the note in analyzeGameOnWorker). The REVIEW keeps every ply, so its
   // eval-curve graph has no opening gap.
   const skipBook = isReview ? 0 : firstNonBookPly(moves);
-  const curveBudgetMs = positionBudgetMs ?? BATCH_SHALLOW_BUDGET_MS;
+  const curveBudgetMs = reviewBudget(positionBudgetMs ?? BATCH_SHALLOW_BUDGET_MS);
 
   /** The cheap curve: one eval per ply. */
   const evals: (number | null)[] = fens.map(() => null);
@@ -1751,8 +1752,8 @@ async function analyzeGamePositions(
     try { diveWorker = (await acquirePool(1))[0] ?? null; } catch { diveWorker = null; }
     diveWorker?.newGame();
     const search = async (fen: string): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> => {
-      if (diveWorker) return diveWorker.analyzePosition(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
-      const a = await stockfishEngine.analyzeWithBudget(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
+      if (diveWorker) return diveWorker.analyzePosition(fen, REVIEW_DEEP_DEPTH, reviewBudget(REVIEW_POSITION_BUDGET_MS));
+      const a = await stockfishEngine.analyzeWithBudget(fen, REVIEW_DEEP_DEPTH, reviewBudget(REVIEW_POSITION_BUDGET_MS));
       return { evaluation: a.evaluation, bestMove: a.bestMove, depth: a.depth, pv: a.topLines?.[0]?.moves?.slice(0, 8) ?? [] };
     };
     let searched = 0;
@@ -1833,7 +1834,7 @@ async function analyzeGamePositions(
           isWhiteMove,
           analyzeAfterWhiteCp: async (fa) => {
             try {
-              return (await stockfishEngine.analyzeWithBudget(fa, SAC_VERIFY_DEPTH, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS)).evaluation;
+              return (await stockfishEngine.analyzeWithBudget(fa, SAC_VERIFY_DEPTH, reviewBudget(positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS))).evaluation;
             } catch {
               return null;
             }
@@ -1863,7 +1864,7 @@ async function analyzeGamePositions(
             refinedBestMoveEval = evalBefore;
           } else try {
             const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzeWithBudget(
-              fens[moveIdx], BEST_MOVE_DEPTH, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
+              fens[moveIdx], BEST_MOVE_DEPTH, reviewBudget(positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS));
             bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
               ? null
               : bestAnalysis.bestMove;

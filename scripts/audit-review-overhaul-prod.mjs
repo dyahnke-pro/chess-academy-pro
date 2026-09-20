@@ -162,6 +162,14 @@ const run = async () => {
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: [...sandboxLaunchArgs(), ...LISTENER_LAUNCH_ARGS] });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
   await ctx.addInitScript(muteTtsForAudit);      // instrument = the app's own spoken events; never a synthesis bill
+  // AUDIT_DETERMINISTIC=1 → the app runs review analysis depth-only (PLAN #70):
+  // the annotations become a pure function of the game, so two runs on one
+  // game can be compared row for row. Off by default — the default run
+  // measures the product as users get it, budgets and all.
+  if (process.env.AUDIT_DETERMINISTIC === '1') {
+    await ctx.addInitScript(() => { try { window.localStorage.setItem('auditDeterministicAnalysis', '1'); } catch { /* ignore */ } });
+    log('[determinism] review analysis depth-only for this run (AUDIT_DETERMINISTIC=1)');
+  }
   await ctx.addInitScript(autoDismissCalibration);
   // Instrument 2 — the narration listener sidecar. The page streams EVERY
   // logAppAudit event to it; `coach-narration-spoken` carries the full spoken

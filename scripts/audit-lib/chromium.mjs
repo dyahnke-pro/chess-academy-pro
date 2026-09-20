@@ -81,8 +81,18 @@ export const LOOPBACK_SIDECAR_ARGS = [
   '--disable-features=BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessSendPreflights,PrivateNetworkAccessRespectPreflightResults,LocalNetworkAccessChecks',
 ];
 
+/** Opt-in raw-CDP tap (#21, 2026-09-20). `AUDIT_CDP_PORT=9333` opens Chrome's
+ *  remote-debugging port so a SECOND process (`scripts/probe-cdp-tap.mjs`) can
+ *  auto-attach to every target — nested pthread workers included, which
+ *  Playwright cannot reach — and read the real exception text while the audit
+ *  drives the page. Off unless set; never affects the browser's behaviour. */
+function cdpTapArgs() {
+  const port = Number(process.env.AUDIT_CDP_PORT ?? 0);
+  return port > 0 ? [`--remote-debugging-port=${port}`] : [];
+}
+
 export function sandboxLaunchArgs() {
-  if (process.env.AUDIT_SANDBOX !== '1') return [...LOOPBACK_SIDECAR_ARGS];
+  if (process.env.AUDIT_SANDBOX !== '1') return [...LOOPBACK_SIDECAR_ARGS, ...cdpTapArgs()];
   // Opt-in egress proxy (AUDIT_PROXY=$HTTPS_PROXY). In some containers the
   // agent proxy RESETS a direct Chromium connection to prod (curl works
   // because it honors HTTPS_PROXY; Chromium does not unless told). Route
@@ -110,9 +120,10 @@ export function sandboxLaunchArgs() {
       // sandbox path; runner/localhost audits are untouched.
       '--ssl-version-max=tls1.2',
       ...LOOPBACK_SIDECAR_ARGS,
+      ...cdpTapArgs(),
     ];
   }
-  return [...SANDBOX_CHROMIUM_ARGS, ...LOOPBACK_SIDECAR_ARGS];
+  return [...SANDBOX_CHROMIUM_ARGS, ...LOOPBACK_SIDECAR_ARGS, ...cdpTapArgs()];
 }
 
 export function sandboxContextOptions() {
