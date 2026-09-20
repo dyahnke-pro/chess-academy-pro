@@ -140,7 +140,12 @@ try {
     // GothamChess player card.
     await page.locator('[data-testid="pro-repertoires-tab"]').waitFor({ state: 'attached', timeout: 15_000 }).catch(() => null);
     const tabUp = await page.locator('[data-testid="pro-repertoires-tab"]').count();
-    const gothamCards = await page.locator('[data-testid="pro-repertoires-tab"] [data-testid^="pro-player-card-"]').filter({ hasText: /gotham|levy/i }).count();
+    // The card's testid CARRIES the player id (`pro-player-card-${player.id}`),
+    // so key on it — a text filter raced the async card render and read
+    // "0 card(s)" on a grid a probe had just seen holding 8 (2026-09-20).
+    const gothamCard = page.locator('[data-testid="pro-repertoires-tab"] [data-testid="pro-player-card-gothamchess"]');
+    await gothamCard.waitFor({ state: 'attached', timeout: 15_000 }).catch(() => null);
+    const gothamCards = await gothamCard.count();
     rec('Pro tab mounts the standard player-card grid', tabUp > 0 ? 'PASS' : 'FAIL', `${tabUp} tab`);
     rec('the grid lists a GothamChess player card', gothamCards > 0 ? 'PASS' : 'FAIL', `${gothamCards} card(s)`);
   } else {

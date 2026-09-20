@@ -9,6 +9,12 @@ import { __resetMasterPlayPersistenceForTests } from './masterPlayPersistence';
 import { db } from '../db/schema';
 import fixture from '../test/fixtures/masters-test-db.json';
 
+/** A JSON import widens every literal (`result: '1/2-1/2'` → `string`), so the
+ *  fixture no longer satisfies the union-typed DB shape by inference. It IS
+ *  that shape — the loader's own runtime check accepts it — so it is typed
+ *  once here through the lookup's option, never per call. */
+const fixtureDb = fixture as unknown as NonNullable<Parameters<typeof lookupMasterPlay>[1]>['__testLocalDb'];
+
 const STARTING_FEN_4 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -';
 const STARTING_FEN_6 = `${STARTING_FEN_4} 0 1`;
 // Pre-3.Bc4 position — the fixture has topGames at this entry.
@@ -46,7 +52,7 @@ describe('lookupMasterPlay — local hits', () => {
   it('returns source:local when the fixture has the position', async () => {
     const r = await lookupMasterPlay(STARTING_FEN_4, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     expect(r.source).toBe('local');
     expect(r.fen).toBe(STARTING_FEN_4);
@@ -61,7 +67,7 @@ describe('lookupMasterPlay — local hits', () => {
   it('normalizes 6-field FEN to the same local entry', async () => {
     const r = await lookupMasterPlay(STARTING_FEN_6, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     expect(r.source).toBe('local');
     expect(r.totalGames).toBeGreaterThan(0);
@@ -70,7 +76,7 @@ describe('lookupMasterPlay — local hits', () => {
   it('promotes entry-level topGames into result.topGames', async () => {
     const r = await lookupMasterPlay(ITALIAN_PRE_BC4_FEN, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     expect(r.source).toBe('local');
     expect(r.topGames?.length).toBe(1);
@@ -105,7 +111,7 @@ describe('lookupMasterPlay — caching + dedup', () => {
   it('serves the second call from the cache (no second local read)', async () => {
     const r1 = await lookupMasterPlay(STARTING_FEN_4, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     const r2 = await lookupMasterPlay(STARTING_FEN_4, {
       triggeredBy: 'manual',
@@ -117,11 +123,11 @@ describe('lookupMasterPlay — caching + dedup', () => {
   it('dedupes concurrent callers asking for the same FEN', async () => {
     const p1 = lookupMasterPlay(STARTING_FEN_4, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     const p2 = lookupMasterPlay(STARTING_FEN_4, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     expect(masterPlayCache.hasInFlight(STARTING_FEN_4)).toBe(true);
     const [r1, r2] = await Promise.all([p1, p2]);
@@ -143,7 +149,7 @@ describe('lookupMasterPlay — live fallback', () => {
     });
     const r = await lookupMasterPlay(UNKNOWN_FEN, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     expect(r.source).toBe('lichess-live');
     expect(r.moves[0].san).toBe('e4');
@@ -157,7 +163,7 @@ describe('lookupMasterPlay — live fallback', () => {
       .mockImplementation(async () => new Response('{}', { status: 200 }));
     const r = await lookupMasterPlay(UNKNOWN_FEN, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
       localOnly: true,
     });
     expect(r.source).toBe('none');
@@ -169,7 +175,7 @@ describe('lookupMasterPlay — live fallback', () => {
     stubFetch({ error: 'boom' }, 500);
     const r = await lookupMasterPlay(UNKNOWN_FEN, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     expect(r.source).toBe('none');
     expect(r.moves).toEqual([]);
@@ -182,7 +188,7 @@ describe('lookupMasterPlay — live fallback', () => {
       const fetchSpy = vi.spyOn(globalThis, 'fetch');
       const r = await lookupMasterPlay(UNKNOWN_FEN, {
         triggeredBy: 'manual',
-        __testLocalDb: fixture,
+        __testLocalDb: fixtureDb,
       });
       expect(r.source).toBe('none');
       expect(fetchSpy).not.toHaveBeenCalled();
@@ -208,7 +214,7 @@ describe('lookupMasterPlay — live fallback', () => {
     });
     const r = await lookupMasterPlay(UNKNOWN_FEN, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     expect(r.topGames?.length).toBe(3);
     expect(r.topGames?.[0].result).toBe('1-0');
@@ -237,7 +243,7 @@ describe('lookupMasterPlay — empty/missing local DB', () => {
   it('uses positionFen key on the result regardless of input form', async () => {
     const r = await lookupMasterPlay(STARTING_FEN_6, {
       triggeredBy: 'manual',
-      __testLocalDb: fixture,
+      __testLocalDb: fixtureDb,
     });
     expect(r.fen).toBe(positionFen(STARTING_FEN_6));
     expect(r.fen).toBe(STARTING_FEN_4);

@@ -121,7 +121,7 @@ describe('gameInsightsService', () => {
     it('returns correct W/L/D counts and win rates', async () => {
       await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
 
-      const ann = [{ moveNumber: 1, color: 'white' as const, san: 'e4', evaluation: 0, bestMove: 'e4', classification: 'good' as const }];
+      const ann = [{ moveNumber: 1, color: 'white' as const, san: 'e4', evaluation: 0, bestMove: 'e4', classification: 'good' as const, bestMoveEval: null, comment: null }];
       // 2 wins, 1 loss, 1 draw as white (AI opponent = black means player is white)
       await db.games.bulkAdd([
         buildGameRecord({ id: 'g1', white: 'TestUser', black: 'AI Coach', result: '1-0', blackElo: 1500, eco: 'C65', annotations: ann }),
@@ -194,7 +194,7 @@ describe('gameInsightsService', () => {
           blackElo: 1500,
           eco: 'C65',
           annotations: [
-            { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0.3, bestMove: 'e4', classification: 'good' },
+            { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0.3, bestMove: 'e4', classification: 'good', bestMoveEval: null, comment: null },
           ],
         }),
       );
@@ -212,7 +212,7 @@ describe('gameInsightsService', () => {
     it('tracks highest beaten and lowest lost to', async () => {
       await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
 
-      const ann = [{ moveNumber: 1, color: 'white' as const, san: 'e4', evaluation: 0, bestMove: 'e4', classification: 'good' as const }];
+      const ann = [{ moveNumber: 1, color: 'white' as const, san: 'e4', evaluation: 0, bestMove: 'e4', classification: 'good' as const, bestMoveEval: null, comment: null }];
       await db.games.bulkAdd([
         buildGameRecord({ id: 'g1', white: 'TestUser', black: 'AI Coach', result: '1-0', blackElo: 1800, annotations: ann }),
         buildGameRecord({ id: 'g2', white: 'TestUser', black: 'AI Coach', result: '1-0', blackElo: 1600, annotations: ann }),
@@ -453,7 +453,7 @@ describe('gameInsightsService', () => {
           result: '1-0',
           eco: 'C65',
           annotations: [
-            { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0, bestMove: 'e4', classification: 'brilliant' },
+            { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0, bestMove: 'e4', classification: 'brilliant', bestMoveEval: null, comment: null },
           ],
         }),
       );
@@ -480,7 +480,7 @@ describe('gameInsightsService', () => {
           result: '0-1',
           eco: 'C65',
           annotations: [
-            { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0, bestMove: 'e4', classification: 'good' },
+            { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0, bestMove: 'e4', classification: 'good', bestMoveEval: null, comment: null },
           ],
         }),
       );

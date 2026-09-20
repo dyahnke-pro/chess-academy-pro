@@ -1480,9 +1480,17 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      99688" — the moment matched this time, but that is the exact path that
      flipped `CRIT spoken-names-count-and-stake` in the earlier pair: the fan
      is time-boxed (`CRITICAL_FAN_BUDGET_MS` 1.5 s) on a warm, queue-assigned
-     table and only `analyzePosition` had the cold start. ✅ WIRED the same
-     night: `analyzeFan` starts cold under the flag and the fan's budget goes
-     through `reviewBudget`; gate extended (two guarded senders). (b) the
+     table and only `analyzePosition` had the cold start. First wire (cold
+     start + the fan's clock lifted to the ten-minute ceiling) was MEASURED
+     WRONG on the next pinned pair: MultiPV 3 at depth 14 from a cold hash on
+     the one worker the pool had did not finish 22 plies before the reopen
+     aborted the pass — "no scanCriticalMoments event", the question never
+     fired. Deterministic and unbounded is the wrong pair. ✅ REWIRED: under
+     the flag the fan sends `go depth 14 nodes 1200000` (a node limit is the
+     third kind of bound — deterministic on one thread with a cold table AND
+     finite), with its own 30 s watchdog; the pass keeps its real 1.5 s
+     budget. Gate: the source must carry the node-bound send and the fan must
+     never go through `reviewBudget`. (b) the
      EXPLORE reply's eval (1.3 vs 1.4) — a LIVE ask on the singleton, not
      review analysis; out of scope for the flag by design. (c) the LEDGER
      sample strings differ — prose from the PROJECTION layer (`computePvLine`
@@ -1555,6 +1563,30 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     runtime" — deleted, not annotated, because it was no longer true.)
 11. **The GothamChess pro-rep audit fails on prod** (#58) — header selector and
     walkthrough click both miss.
+    - ✅ **READ AND FIXED (2026-09-20), four layers, none of them the product.**
+      Two of the day's runs were CONTAMINATED (each overlapped another tape by
+      a lock mistake — memory `background-chain-guards`), so their identical
+      misses proved nothing; the first CLEAN run (08:45, 32/34) still missed
+      the Pro tab and the Watch button. A fresh-context probe
+      (`probe-openings-tab-mount.mjs`) then measured the product: tab bar at
+      +23 s direct / +55 s via the home page, the Pro grid with 8 player cards
+      the instant `tab-pro` is clicked, zero errors. So the misses were the
+      HARNESS: (1) the Watch button was counted before the detail page's
+      Dexie read rendered it → bounded wait; (2) the audit never injected
+      `autoDismissCalibration`, so its Pro-tab click landed on the page-help
+      modal, and (3) that click's error was SWALLOWED (`.catch(() => null)`)
+      into "0 tab" — the silent-no-op class; (4) the card row filtered by
+      TEXT and raced the async card render → keyed on the id-bearing testid
+      with a wait. Clean run on the fixed script: **33/34**, the last red
+      being (4), fixed after that run. The two WARNs are instruments, not
+      product: "audit-stream captured 0 events" (the stream is opt-in and OFF
+      — expected since 2026-09-11) and "0 POST bodies / 42 entries on
+      listener" (the sidecar HAS the run's events; the script's own
+      `page.on('request')` intercept counted none — its wire-side counter is
+      dead while the listener works; fold the row onto the listener). The
+      content-section rows (plans / model games / pitfalls) PASSED clean, but
+      they are still "does the word appear" checks — the G9.3 meta-lesson
+      class — and owe a real assertion.
 
 11a. **ship-check false-reds under parallel-session load (2026-09-19).** Three
     runs in one afternoon went red with ZERO assertion errors: every gate
@@ -1587,6 +1619,17 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     row; on a quiet machine the phase prints "296 errors (at the ceiling)". The
     step now names a crash instead of counting zero. The runtime half of #61
     is still owed the honest way: drive the 296 down, then lower the ceiling.
+    - ✅ **296 → 236 (2026-09-20), ceiling lowered to 236.** Sixty were one
+      class — a type GREW required fields after its fixtures were written
+      (`SidePlan` +11, `MoveAnnotation` +2, `NeedPlyInput.clauseKind`,
+      `MistakesLike`, `TablebaseLookupResult.bestMove`, the weakness cluster's
+      `total`) — fixed at the fixture with one defaults spread per file, never
+      by loosening the type; plus a JSON import whose literals widen to
+      `string` (`masters-test-db.json`), typed once through the lookup's own
+      option. Also measured: a bare `npx tsc -p tsconfig.tests.json` on the
+      default heap DIES silently and prints 0 errors — run it with
+      `NODE_OPTIONS=--max-old-space-size=8192` or the count is a lie (the 11d
+      disease, one process over). Remaining, by file: 9 services/shareableInsightsService.test.ts; 8 utils/hardRefresh.test.ts; 8 components/Kid/KingMarchGame.test.tsx; 7 services/weaknessSignal.test.ts; 7 services/tacticAlertService.test.ts; 7 services/lookaheadPlan.test.ts;
 11e. **Source-text regex tests drift silently when the guarded code MOVES**
     (2026-09-19, `coachLaneWiring.test.ts`): three assertions failed on
     untouched `main` — a guard grew an operand, a ref migrated into

@@ -59,7 +59,7 @@ describe('analysisDeterminism — the audit-only depth-only switch (PLAN #70)', 
 
   it('every review budget site routes through reviewBudget (no bare REVIEW_POSITION_BUDGET_MS reaches an engine call)', () => {
     const src = readFileSync('src/services/gameAnalysisService.ts', 'utf8');
-    const bare = src.split('\n').filter((l) => /analyzePosition\(|analyzeWithBudget\(|analyzeFan\(|budgetMs: number =|curveBudgetMs =|deepBudgetMs =/.test(l) && /REVIEW_POSITION_BUDGET_MS|BATCH_SHALLOW_BUDGET_MS|CRITICAL_FAN_BUDGET_MS/.test(l) && !/reviewBudget\(/.test(l));
+    const bare = src.split('\n').filter((l) => /analyzePosition\(|analyzeWithBudget\(|budgetMs: number =|curveBudgetMs =|deepBudgetMs =/.test(l) && /REVIEW_POSITION_BUDGET_MS|BATCH_SHALLOW_BUDGET_MS/.test(l) && !/reviewBudget\(/.test(l));
     expect(bare, 'a review engine call with a raw budget').toEqual([]);
   });
 
@@ -68,7 +68,18 @@ describe('analysisDeterminism — the audit-only depth-only switch (PLAN #70)', 
     // "9 speak" on one bundle while every annotation matched, because only
     // `analyzePosition` had the cold start. One guard, two senders.
     const src = readFileSync('src/services/gameAnalysisService.ts', 'utf8');
-    const guarded = src.split('\n').filter((l) => /if \(deterministicAnalysisForAudit\(\)\) this\.worker\.postMessage\('ucinewgame'\)/.test(l));
+    const guarded = src.split('\n').filter((l) => /if \((deterministicAnalysisForAudit\(\)|deterministic)\) this\.worker\.postMessage\('ucinewgame'\)/.test(l));
     expect(guarded, 'every pool sender must start cold under the audit flag').toHaveLength(2);
+  });
+
+  it('the fan under the flag is NODE-bound, never a lifted clock', () => {
+    // Measured 2026-09-20: `reviewBudget(CRITICAL_FAN_BUDGET_MS)` (the
+    // ten-minute ceiling) made MultiPV 3 at depth 14 from a cold hash so slow
+    // that the pass never finished before the reopen aborted it — the
+    // critical-moment question never fired. A node count is the limit that is
+    // both deterministic and finite.
+    const src = readFileSync('src/services/gameAnalysisService.ts', 'utf8');
+    expect(src).toMatch(/go depth \$\{depth\} nodes \$\{DETERMINISTIC_FAN_NODES\}/);
+    expect(src).not.toMatch(/analyzeFan\([^)]*reviewBudget\(/);
   });
 });

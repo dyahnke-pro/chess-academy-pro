@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**57 lines · 5 exports · 2 importers · 2 tests · 0 audits**
+**73 lines · 7 exports · 2 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,13 +20,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `AUDIT_DETERMINISTIC_KEY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `DETERMINISTIC_FAN_NODES` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `DETERMINISTIC_FAN_WATCHDOG_MS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `DETERMINISTIC_BUDGET_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `deterministicAnalysisForAudit` (function) — 3 call sites
+### `deterministicAnalysisForAudit` (function) — 4 call sites
 - `src/services/analysisDeterminism.test.ts:10`
 - `src/services/analysisDeterminism.test.ts:31`
 - `src/services/gameAnalysisService.ts:485`
+- `src/services/gameAnalysisService.ts:519`
 
 ### `reviewBudget` (function) — 9 call sites
 - `src/services/analysisDeterminism.test.ts:11`
@@ -35,9 +42,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/analysisDeterminism.test.ts:32`
 - `src/services/analysisDeterminism.test.ts:33`
 - `src/services/analysisDeterminism.test.ts:60`
-- `src/services/gameAnalysisService.ts:1341`
-- `src/services/gameAnalysisService.ts:1680`
-- `src/services/gameAnalysisService.ts:1773`
+- `src/services/gameAnalysisService.ts:1355`
+- `src/services/gameAnalysisService.ts:1694`
+- `src/services/gameAnalysisService.ts:1787`
 
 ### `__resetAnalysisDeterminismForTests` (function) — 2 call sites
 - `src/services/analysisDeterminism.test.ts:7`

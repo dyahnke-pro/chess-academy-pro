@@ -1,5 +1,5 @@
 import { Capacitor } from '@capacitor/core';
-import { reviewBudget, deterministicAnalysisForAudit } from './analysisDeterminism';
+import { reviewBudget, deterministicAnalysisForAudit, DETERMINISTIC_FAN_NODES, DETERMINISTIC_FAN_WATCHDOG_MS } from './analysisDeterminism';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { stockfishEngine, resolveWorkerUrl, isIosSafari } from './stockfishEngine';
@@ -516,10 +516,11 @@ class DedicatedWorker {
     budgetMs: number,
   ): Promise<Array<{ rank: number; evaluation: number; mate: number | null; bound: 'lower' | 'upper' | null; moves: string[] }>> {
     return new Promise((resolve, reject) => {
+      const deterministic = deterministicAnalysisForAudit();
       const timeoutId = setTimeout(() => {
         cleanup();
         reject(new Error('Fan analysis timed out'));
-      }, budgetMs + 4_000);
+      }, deterministic ? DETERMINISTIC_FAN_WATCHDOG_MS : budgetMs + 4_000);
 
       const blackToMove = fen.split(' ')[1] === 'b';
       const flip = blackToMove ? -1 : 1;
@@ -578,10 +579,15 @@ class DedicatedWorker {
         // Same audit-only cold start as `analyzePosition` (PLAN #70): the fan
         // decides the critical moment, and a pinned pair read "10 speak" vs
         // "9 speak" on one bundle because the fan's read is time-boxed on a
-        // warm, queue-assigned table. Product code never sets the flag.
-        if (deterministicAnalysisForAudit()) this.worker.postMessage('ucinewgame');
+        // warm, queue-assigned table. Under the flag the CLOCK goes too — a
+        // node limit is the bound that is both deterministic and finite (see
+        // DETERMINISTIC_FAN_NODES for the measurement that ruled out lifting
+        // the clock). Product code never sets the flag.
+        if (deterministic) this.worker.postMessage('ucinewgame');
         this.worker.postMessage(`position fen ${fen}`);
-        this.worker.postMessage(`go depth ${depth} movetime ${budgetMs}`);
+        this.worker.postMessage(deterministic
+          ? `go depth ${depth} nodes ${DETERMINISTIC_FAN_NODES}`
+          : `go depth ${depth} movetime ${budgetMs}`);
       } catch {
         cleanup();
         reject(new Error('Worker is dead'));
@@ -968,7 +974,10 @@ export async function scanCriticalMoments(args: {
       if (i >= args.plies.length) return;
       const p = args.plies[i];
       try {
-        const fan = await w.analyzeFan(p.fen, CRITICAL_FAN_LINES, CRITICAL_FAN_DEPTH, reviewBudget(CRITICAL_FAN_BUDGET_MS));
+        // NOT `reviewBudget(...)`: the fan's determinism is a node limit inside
+        // `analyzeFan`, never a lifted clock (measured 2026-09-20: unbounded, it
+        // never finished before the reopen and the question never fired).
+        const fan = await w.analyzeFan(p.fen, CRITICAL_FAN_LINES, CRITICAL_FAN_DEPTH, CRITICAL_FAN_BUDGET_MS);
         const read = readCriticalMoment({
           topLines: fan, moverColor: p.moverColor, rating: args.rating, fen: p.fen,
         });

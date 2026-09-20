@@ -20,6 +20,22 @@
  */
 export const AUDIT_DETERMINISTIC_KEY = 'auditDeterministicAnalysis';
 
+/** The critical-moment fan under the flag: a NODE limit instead of a clock.
+ *  The fan is `go depth 14 movetime 1500` in the product — a clock, so the
+ *  depth reached and the MultiPV counts vary run to run (a pinned pair read
+ *  "10 speak" vs "9 speak"). Lifting the clock to the ten-minute ceiling was
+ *  measured wrong on 2026-09-20: MultiPV 3 at depth 14 from a COLD hash on one
+ *  single-thread worker did not finish 22 plies before the reopen aborted the
+ *  pass, so the question never fired at all. A node count is the third kind of
+ *  limit: deterministic on one thread with a cold table, and it completes in
+ *  about the product's budget. Sized for the WASM single-thread build at
+ *  roughly one second of search. */
+export const DETERMINISTIC_FAN_NODES = 1_200_000;
+/** Watchdog for a node-bound fan search: generous, because a slow machine
+ *  still finishes N nodes — it just takes longer — and a watchdog that fires
+ *  first turns a deterministic read into a nondeterministic "failed". */
+export const DETERMINISTIC_FAN_WATCHDOG_MS = 30_000;
+
 /** A budget the depth ceiling always beats — ten minutes per position. Not
  *  "no budget": the worker protocol's watchdogs still key off a number, and a
  *  wedged engine must still be recovered, just never before depth lands. */

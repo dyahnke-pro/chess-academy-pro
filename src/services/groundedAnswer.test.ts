@@ -269,7 +269,7 @@ describe('assembleStrengthsAnswer — grounded "what am I good at"', () => {
 });
 
 describe('assembleOpeningAccuracyAnswer — grounded "how accurate am I in my opening / weakest part to work on"', () => {
-  const base = { openingName: 'Caro-Kann Defense', color: 'black', drillAccuracy: 0.78, drillAttempts: 12 };
+  const base = { openingName: 'Caro-Kann Defense', color: 'black' as const, drillAccuracy: 0.78, drillAttempts: 12 };
   it('voices the opening-level accuracy from drill data', () => {
     const a = assembleOpeningAccuracyAnswer(base);
     expect(a).not.toBeNull();
@@ -395,7 +395,7 @@ describe('assembleMistakesAnswer — Wave 1 "where do I go wrong" (+ suggestion)
   const base = {
     totalGames: 40, blundersPerGame: 1.2, mistakesPerGame: 2.4, avgCpLoss: 55,
     worstPhase: { phase: 'middlegame', errors: 31 },
-    thrownWins: 1,
+    thrownWins: 1, missedWins: 0, lateGameCollapses: 0,
     costliest: { san: 'Qxd4', cpLoss: 640, opponentName: 'GM Smith', openingName: 'Caro-Kann' },
   };
   it('voices the rate, worst phase, and costliest slip with a suggestion', () => {
@@ -927,7 +927,7 @@ describe('assemblePlayerGamesAnswer — Phase 4 cont (voice the pro\'s real game
 
 // Phase 5 endgame: the verdict is the SYZYGY TABLEBASE — literal truth.
 function tb(over: Partial<TablebaseLookupResult> = {}): TablebaseLookupResult {
-  return { category: 'draw', whiteRelativeResult: 'draw', dtm: null, dtz: null, checkmate: false, stalemate: false, insufficientMaterial: false, ...over };
+  return { category: 'draw', whiteRelativeResult: 'draw', dtm: null, dtz: null, checkmate: false, stalemate: false, insufficientMaterial: false, bestMove: null, ...over };
 }
 describe('assembleEndgameAnswer — Phase 5 (voice the tablebase verdict)', () => {
   it('voices a WIN for the student with the mate distance', () => {
