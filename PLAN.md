@@ -529,11 +529,15 @@ red on main). Prod audits after: Learn 8/8, review 36/36 MEETS STANDARD.
    `pullProdStream` inline per script, ~2 Redis commands per run). Reads count
    against the same 500k. Make the pull opt-in (`AUDIT_PULL_PROD_STREAM=1`) in
    one shared helper if David wants audits fully off Redis, not just off writes.
-3. **Read one Learn narration**: at move 3 (after Nc3 hits the queen) the coach
-   said "your queen on d5 is attacked … there's a pin here for you — have a look"
-   before any pin existed on the board. Likely the lookahead beat ("Watch move 5,
-   Bg4 — that is where the pin lands") bundled into the same turn; verify which
-   computer produced it and whether "here" is honest at that ply.
+3. ✅ **VERIFIED HONEST (2026-09-19, late)** — "there's a pin here for you" after
+   3.Nc3. Emitter: `CoachTeachPage` tactic lane reading `tctx.immediate`, which is
+   `detectTactics(fen)` on the CURRENT board. The real detector on that position
+   returns exactly one pin: "Queen on d5 pins pawn on g2 against rook on h1" —
+   g2 pushing to g3 opens d5–h1 and drops the rook. True, if minor; the invariant
+   sentence it carried is the correct concept. Not a defect. (Noted, not churned:
+   `detectImmediateTactics` has a `.slice(0, 5)` — it bounds the model's tactic
+   ALLOWANCE and the lane speaks one tactic per turn, the `eyes`-clip class of
+   G4.5, not a narration cap.)
 4. The pre-push hook (11b) and `TEST_TYPE_ERROR_CEILING` (11d) — already listed
    under E.
 
