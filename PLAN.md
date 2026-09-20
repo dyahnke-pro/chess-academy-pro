@@ -1813,6 +1813,35 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      clean-machine, deploy-free wedges is therefore n=2 and n=3 (both real:
      49 min at 0 % node, and a main thread that never answered) — the
      reproduction rate is unknown, not "1 in 3".
+   - 🟢 **ANSWERED BY POSTHOG (2026-09-20 14:30, David: "you can log into
+     posthog!!"): NO REAL USER HAS EVER HIT THIS. #21 IS AN AUDIT-INSTRUMENT
+     BUG, NOT A USER BUG — STOP HUNTING IT.** Every review event on every
+     platform, 90 days: **802 events, max gap to the device's next event 47
+     SECONDS, zero gaps over 2 minutes, zero streams ending on a review
+     event.** A wedge is minutes-to-hours of silence or a stream that stops;
+     neither exists. Native alone: 460 events, same 47 s ceiling. The query is
+     NON-VACUOUS — it returns real gap statistics per event type (`review_
+     narration` avg 0.43 s), so the zero is a measurement, not a dead
+     instrument. Reproduce:
+     `POSTHOG_API_KEY` from Vercel env id `rtQtYdwmANfAqfUg`, then a HogQL
+     `leadInFrame(timestamp) OVER (PARTITION BY properties.device_id ORDER BY
+     timestamp)` gap query over `event LIKE 'review%'`.
+     🔑 **AND THE ACCESS NOTE THAT COST AN HOUR: PostHog IS reachable from a
+     session.** The MCP server is not connected here, but the key is in Vercel
+     and the Vercel MCP reads it (`filter_project_envs` → `get_project_env`;
+     note `type: 'sensitive'` vars such as `PostHog_Read_API_KEY` CANNOT be
+     read back, `type: 'encrypted'` ones can). CLAUDE.md's "use the PostHog
+     MCP, the key is deprecated" line made me report PostHog as unreachable;
+     it is not.
+     **Consequences:** (a) the wedge still corrupts the review audit, which IS
+     our main instrument for the review surface — so it is worth a cheap guard
+     (detect the blow-up, retry the run once, report it) but NOT more hunting;
+     (b) the instruments built today (`wedge-tracer.mjs`, `os-sample.mjs`, the
+     `Debugger.pause` probe, `AUDIT_WEDGE_HUNT=1`) stay armed and cost nothing
+     when off, so if it ever does reach a user the diagnosis is one run away.
+     **Also measured, and a product signal rather than a bug:** only FOUR
+     devices have ever opened a review, and real users started 13 reviews in 60
+     days of which 6 completed.
    - 🔬 **CAUGHT LIVE AND SAMPLED (2026-09-20 12:37). IT IS JAVASCRIPT, NOT
      NATIVE, NOT THE ENGINE.** A wedge held for 51 minutes while I sampled the
      Playwright renderer directly: **pid at 100.6 % CPU, 6534/6534 samples on
