@@ -61,6 +61,11 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 11 (#58) the GothamChess pro-rep audit — four instrument layers, none of them the product
 - ✅ 11a–11d ship-check hygiene
 - 🔴 11e drive the test-type-error ceiling 236 → 0
+- ✅ 0 the walk slowdown — 800s-and-stalled back to a 550s baseline after the detach fix
+- ✅ 0a the usage funnel measured on PostHog (62 real native users) — and two of my own claims retracted in it: the import control was post-treatment, "44 did nothing" was too narrow an event list
+- 🟠 0b **the Dashboard-bars redesign is UNGRADED and probably ungradeable today** — only 11 of 18 post-ship users ever took an OTA bundle, and requiring an equal observation window leaves n=5. The 82%-vs-78% pair is not evidence in either direction; do not cite it. The one real finding needs no window: **zero users have ever opened the Kids Mode row the redesign added**, including the 11 who provably received it (non-vacuity proved — the same route cut returns 25 other routes)
+- ✅ the cross-session audit LOCK is a real mutex now (`scripts/audit-lib/audit-lock.mjs`) — owner file, staleness by pid liveness with a `ps` check against recycling, steals only a proven-dead lock and says so, treats an ownerless dir as held, keeps the anchored pgrep guard beside it; a deadline aborts loudly and never proceeds, and a mismatched release reports CONTAMINATED
+- ✅ this board is GATED at last (`src/test/outlineCoverage.test.ts`) — the header had promised that gate since it was written and **the file did not exist**; open PLAN items and buckets now must have a line here, with a negative control so the gate is proven able to fire
 
 ## 7. Bucket C — the student hears something wrong or repeated
 - ✅ 11f the read-position seat · 12 queen-takes · 13 stems rotated not rolled · 14 re-announced moves · 16 (#59, a dead selector) · 17 the chat plan lane · 18 the fresh-game reset (n=4, proven on prod)
