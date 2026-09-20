@@ -96,6 +96,11 @@ function summarizeVitest(out) {
   return m ? m[1].trim().replace(/\s+/g, ' ') : null;
 }
 function summarizeLint(out) {
+  // A dead eslint prints no "✖ N problems" line and no rule errors — read as
+  // "0 errors" this labelled a heap crash as a clean run (2026-09-19). Name it.
+  if (/FATAL ERROR|heap out of memory|Reached heap limit/.test(out)) {
+    return 'eslint CRASHED (heap) — error count UNKNOWN';
+  }
   const m = out.match(/✖\s+(\d+\s+problems\s+\(\d+\s+errors,\s+\d+\s+warnings\))/);
   return m ? m[1] : (out.includes('error') ? 'errors found' : '0 errors');
 }
@@ -541,9 +546,20 @@ runStep('typecheck   ', 'npm', ['run', 'typecheck']);
 // ZERO gate files carry a type error. Keep it that way; drive the rest down
 // from the non-gate backlog. Ceilings only ever come DOWN.
 const TEST_TYPE_ERROR_CEILING = 296;
+// THE INSTRUMENT MUST NOT REPORT NOTHING AS GREEN (2026-09-19). Under Node's
+// default heap this tsc run DIES with "FATAL ERROR: … heap out of memory"
+// (SIGABRT, exit 134). A crash dump contains zero "error TS" lines, so the
+// count below read a dead process as "0 errors — lower the ceiling to 0". Had
+// anyone obeyed, the next healthy run would have failed 296 over a ceiling of
+// 0. Two fixes: give it the heap it needs (8 GB measures 296 in ~35s), and
+// name a crash as a crash — the count is UNKNOWN, not zero.
 runStep('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'], {
   optional: true,
+  env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
   summary: (out) => {
+    if (/FATAL ERROR|heap out of memory|Reached heap limit/.test(out)) {
+      return 'tsc CRASHED (heap) — error count UNKNOWN, ceiling NOT measured; do not lower it';
+    }
     const n = (out.match(/error TS/g) ?? []).length;
     if (n > TEST_TYPE_ERROR_CEILING) {
       testTypeErrorRegression = n;
@@ -566,11 +582,25 @@ runStep('prod build  ', 'npm', ['run', 'build']);
 // gate set). `npm run lint` enforces a project-wide warning cap (currently
 // 248) that's useful in code review but ALSO fails ship-check when the cap
 // is exceeded, even when no errors were introduced. Decouple the two.
+// 🔒 The lint step needs a heap the default Node limit does not give it.
+// Found 2026-09-19 on Node 26: a whole-repo eslint died with a V8 native
+// stack trace, and the summarizer — which only reads eslint's own report —
+// rendered that crash as "✗ … 0 errors": a row that contradicts itself and
+// reads as a lint failure while NOTHING was linted. The same command with an
+// 8 GB heap exits 0. An instrument must never report a crash as a verdict, so
+// the heap rides on the step itself rather than on whoever remembers to
+// export it. Any caller-supplied NODE_OPTIONS is kept in front of it.
 runStep('lint (errors)', 'npx', [
   'eslint', '.', '--ext', 'ts,tsx',
   '--report-unused-disable-directives',
   '--max-warnings', '99999',
-], { summary: summarizeLint });
+], {
+  summary: summarizeLint,
+  // Whole-repo eslint exceeds Node 26's default heap on an arm64 Mac and dies
+  // with SIGABRT after ~100s; see the test-typecheck note above for the same
+  // failure and the same fix.
+  env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
+});
 runStep('content gates', 'npx', ['vitest', 'run', ...GATE_TESTS], { summary: summarizeVitest });
 
 // Co-located tests for the source files changed in THIS work — catches

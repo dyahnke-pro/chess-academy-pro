@@ -367,6 +367,15 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       ['review-theory-ask', '[data-testid="review-theory-skip"]'],
       ['review-trap-card', '[data-testid="review-trap-pick-leave"]'],
       ['review-trap-reveal', '[data-testid="review-trap-done"]'],
+      // THE CRITICAL-MOMENT CARD — its chips are named after the SAN they
+      // offer (`review-critical-pick-Nf3`), because the choices are the
+      // engine's own lines from that position, not a fixed choice set. A
+      // literal testid cannot match one, so this is the one prefix selector in
+      // the table. A card this loop does not know how to resolve is a card
+      // that freezes the walk, which is why it is added with the feature and
+      // not after it (CLAUDE.md: audits are living — update before you run).
+      ['review-critical-card', '[data-testid^="review-critical-pick-"]'],
+      ['review-critical-reveal', '[data-testid="review-critical-done"]'],
       ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
       // review-turning-point-card is NOT in this table — see the block below.
       // Confirm only EXISTS once a candidate chip has been tapped, so a
@@ -543,9 +552,22 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // (the comment this replaces records a 900-poll run being killed at 3300s —
   // the lesson was "bound it", not "freeze it").
   const POLL_BUDGET = Math.min(1800, Math.max(600, total * 12));
+  // 🔴 `?? 0` COLLAPSED TWO DIFFERENT STATES INTO ONE NUMBER, and it cost a
+  // whole session. `readWalkPly` returns NULL when the "Ply N / M" readout
+  // cannot be read (element gone, innerText timed out) — the caller turned that
+  // into 0, so "the walk is at ply 0" and "I cannot see the walk" printed
+  // IDENTICALLY as `[walk] ply 0/93`. A run was read as frozen and killed on
+  // that line, then re-diagnosed wrongly a second time from the same line.
+  //
+  // This is the audit committing the exact sin it exists to catch in the
+  // product (CLAUDE.md: an instrument that reports nothing is indistinguishable
+  // from one that found nothing). Null is now carried as null and SAID.
+  let unreadable = 0;
   for (let i = 0; i < POLL_BUDGET; i++) {
     await resolveCards();
-    const n = (await readWalkPly(page))?.n ?? 0;
+    const read = await readWalkPly(page);
+    const n = read?.n ?? 0;
+    if (read) unreadable = 0; else unreadable += 1;
     const b = await txt(page, '[data-testid="review-classification-badge"]');
     if (n > 0 && !plyNarr.has(n)) {
       const nt = await txt(page, '[data-testid="review-narration-banner"]');
@@ -569,7 +591,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // indistinguishable from a hang, which is the exact failure this audit
     // exists to catch in the PRODUCT — an instrument that reports nothing is
     // indistinguishable from a green one.
-    if (i > 0 && i % 25 === 0) log(`  [walk] ply ${n}/${total} after ${i}s (poll ${i}/${POLL_BUDGET})`);
+    if (i > 0 && i % 25 === 0) {
+      log(read
+        ? `  [walk] ply ${n}/${total} after ${i}s (poll ${i}/${POLL_BUDGET})`
+        : `  [walk] READOUT UNREADABLE for ${unreadable} poll(s) after ${i}s `
+          + `(poll ${i}/${POLL_BUDGET}) — the walk element is not reporting a ply; `
+          + `this is NOT "the walk is at ply 0"`);
+    }
     // NEVER RESUME WHILE THE TURNING-POINT CARD IS UP — resuming advances the
     // walk, which dismisses it unanswered (see the pause note in resolveCards).
     const cardBlocking = await has(page, '[data-testid="review-turning-point-card"]');
@@ -1074,7 +1102,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     resolved === 0 ? `no ply resolved to a 1- or 2-move count on this game (${fanSummary})` : pickSummary);
 
   // THE SIX COMPUTED STAKES — the phrasing rotates, the claim never does.
-  const STAKE_RE = /keeps? the forced mate|keeps? the win|keeps? you on top|keeps? you level|keeps? you in it|limits? the damage/i;
+  // Present for Learn, PAST for review — the two narration registers. A regex
+  // that knew only the present tense would read a correct retrospective line as
+  // silence, which is the false red this row exists to avoid.
+  const STAKE_RE = /(keeps?|kept) (the forced mate|the win|you on top|you level|you in it)|(limits?|limited) the damage/i;
   const COUNT_RE = /\b(only )?one move\b|\btwo moves\b/i;
   const critLines = spoken().map((x) => x.text).filter((t) => COUNT_RE.test(t) && (STAKE_RE.test(t) || /critical moment|fork in the road/i.test(t)));
   await add('CRIT spoken-names-count-and-stake', !pickEv || critLines.length > 0,
@@ -1094,6 +1125,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   log(`\n===== CRITICAL MOMENT (${critLines.length} spoken) =====`);
   if (critLines.length === 0) log('  (none — the fan resolved no 1- or 2-move count on this game)');
   critLines.forEach((t, i) => log(`  [${i + 1}] ${t.slice(0, 260)}`));
+
+  await add('WALK readout-stayed-readable', unreadable === 0,
+    unreadable === 0 ? 'the ply readout answered on every poll'
+      : `the ply readout went unreadable for the last ${unreadable} poll(s) — every "ply 0" in the tail above is that, not a reset`);
 
   await add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
 

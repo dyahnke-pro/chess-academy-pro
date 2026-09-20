@@ -18,6 +18,7 @@ import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { detectTacticType } from '../../services/missedTacticService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
 import { getCoachingMessage, recordTacticOutcome, tacticTypeLabel } from '../../services/tacticAlertService';
+import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
@@ -148,6 +149,12 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const [boardKey, setBoardKey] = useState(0);
   const hasMadeMistakeRef = useRef(false);
   const wrongAttemptsRef = useRef(0);
+  // Did the student tap [show me] on THIS puzzle? A move found after the answer
+  // was revealed is not evidence of unaided skill — it is `prompted` on the
+  // capability record, which the profile counts as neither held nor broken.
+  // A ref, not hintState.level: `resetHints()` zeroes the level on the very
+  // move that solves the puzzle, so by the solve moment the level is gone.
+  const showMeUsedRef = useRef(false);
   const chessRef = useRef(new Chess(puzzle.fen));
 
   // Free-tier meter: count this puzzle against the 20-bucket once when it
@@ -295,6 +302,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setWhyLoading(false);
     hasMadeMistakeRef.current = false;
     wrongAttemptsRef.current = 0;
+    showMeUsedRef.current = false;
     setWrongAttemptCount(0);
     setReplayIndex(-1);
 
@@ -654,6 +662,30 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           wasCoached: hasMadeMistakeRef.current,
           context: skipReplayContext ? 'create' : 'drill',
         });
+        // THE HEAT MAP'S GREEN (WO-3 S3, 2026-09-19). Until this call, a drill
+        // solved correctly moved the misconception SRS (open -> improving) and
+        // wrote NO capability evidence — `recordTagDrillResult` never imported
+        // it. So the one surface where a student demonstrably proves competence
+        // could never turn a tag green, and the Foundation's "the coach cannot
+        // yet tell you that you have GOTTEN BETTER" was severed exactly here.
+        //
+        // Both halves computed, neither guessed: `capabilitiesPosed` reads what
+        // this position ASKED off the best move; the outcome comes from the
+        // FIRST answer. Clean first try -> cpLoss 0 -> held. A wrong attempt is
+        // the board posing the question and the student not answering it ->
+        // broken, at the cost the original game already measured. Tapping
+        // [show me] first -> prompted -> grey; found-after-told is not evidence.
+        // This is the ONE door every drill surface shares (five consumers), so
+        // capability parity holds by construction.
+        void recordCapabilityEvidence({
+          fenBefore: puzzle.fen,
+          playedSan: puzzle.bestMoveSan,
+          moverColor: puzzle.playerColor,
+          cpLoss: hasMadeMistakeRef.current ? puzzle.cpLoss : 0,
+          origin: 'drill',
+          prompted: showMeUsedRef.current,
+          sourceGameId: puzzle.sourceGameId || undefined,
+        });
         // Auto-speak the GROUNDED "why this was the best move" after the
         // celebration sound — the teaching moment David 2026-09-12 wanted taken:
         // "When coach is training drills/weaknesses I want the why spoken! Why
@@ -998,6 +1030,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
           <ShowMeButton
             onShow={() => {
+              showMeUsedRef.current = true;
               // Skip the hint ladder — jump straight to tier 3 (best
               // move arrow + final answer). requestHint() bumps one
               // tier; three consecutive calls reach tier 3.

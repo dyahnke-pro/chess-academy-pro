@@ -7,6 +7,7 @@ import type { TacticsLiveContext } from '../coach/types';
 vi.mock('./appAuditor', () => ({ logAppAudit: vi.fn(async () => {}) }));
 
 const CTX_NO_TACTICS: TacticsLiveContext = {
+  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
   immediate: [],
   hanging: [],
   threats: [],

@@ -16,7 +16,8 @@ vi.mock('../Search/SmartSearchBar', () => ({ SmartSearchBar: () => <div data-tes
 // seven phase sections, each with Listen (grounded read-aloud) + Drill (a themed
 // puzzle set, or the student's own mistakes). A wire that does not fire is not a
 // wire — prove the sections render, Listen/Drill exist, and Drill routes right.
-const SECTION_IDS = ['opening-play', 'center', 'development', 'king-safety', 'pawn-structure', 'tactics-threats', 'endgame-technique'];
+import { FUNDAMENTAL_SECTION_IDS } from '../../services/fundamentalsCatalog';
+const SECTION_IDS = FUNDAMENTAL_SECTION_IDS;
 
 describe('FundamentalsPage', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -107,5 +108,44 @@ describe('FundamentalsPage — the scorecard', () => {
     render(<FundamentalsPage />);
     fireEvent.click(await screen.findByTestId('fundamental-item-learn-poisoned-pawn'));
     expect(mockNavigate).toHaveBeenCalledWith('/coach/teach?learnFundamental=poisoned-pawn');
+  });
+});
+
+// J1 (WO-4): the FundamentalId → pillar join FIRES on the page. A pillar section
+// (centre / development / king safety) can now report the student's own record
+// on the pillar it teaches, rolled up from the fundamentals filed under it.
+describe('FundamentalsPage — the pillar join fires', () => {
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    const { db } = await import('../../db/schema');
+    await db.misconceptionTags.clear();
+  });
+
+  it('a pillar section reports the slips recorded under its pillar, naming the worst', async () => {
+    const { logMisconception } = await import('../../services/misconceptionService');
+    const fen = '8/8/8/8/8/8/8/K6k w - - 0 1';
+    // Two development-pillar fundamentals, filed under DIFFERENT sections
+    // (opening-play + development) — only the PILLAR join can add them up.
+    await logMisconception({ tag: 'neglected-development', fundamentalId: 'early-queen-sortie', source: 'auto-analysis', fen, counted: false });
+    await logMisconception({ tag: 'neglected-development', fundamentalId: 'early-queen-sortie', source: 'auto-analysis', fen, counted: false });
+    await logMisconception({ tag: 'misplaced-piece', fundamentalId: 'knight-to-the-rim', source: 'auto-analysis', fen, counted: false });
+    render(<FundamentalsPage />);
+    const line = await screen.findByTestId('fundamental-pillar-standing-development');
+    expect(line.textContent).toMatch(/3 times/);
+    expect(line.textContent).toMatch(/early queen sortie/i);
+  });
+
+  it('NEGATIVE CONTROL — grey stays silent: no slips under a pillar, no standing line; a null-pillar slip lights nothing', async () => {
+    const { logMisconception } = await import('../../services/misconceptionService');
+    // lost-the-opposition is an explicit NULL pillar: it must not reach any pillar card.
+    await logMisconception({ tag: 'passive-king-endgame', fundamentalId: 'lost-the-opposition', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: false });
+    render(<FundamentalsPage />);
+    // Let the Dexie read settle by waiting for a row status to appear.
+    await screen.findByTestId('fundamental-status-lost-the-opposition');
+    for (const id of ['center', 'development', 'king-safety']) {
+      expect(screen.queryByTestId(`fundamental-pillar-standing-${id}`)).not.toBeInTheDocument();
+    }
+    // Non-pillar sections never carry a standing line at all.
+    expect(screen.queryByTestId('fundamental-pillar-standing-endgame-technique')).not.toBeInTheDocument();
   });
 });

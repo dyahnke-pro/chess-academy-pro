@@ -18,7 +18,7 @@
 - **Do NOT** (CLAUDE.md:4916) — names `coachApi`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5567) — names `voiceFacts`
 - **The standard post-deploy ritual** (CLAUDE.md:5699) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5710) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5711) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -110,10 +110,10 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1648`
+- `src/coach/coachService.ts:1678`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1655`
+- `src/coach/coachService.ts:1685`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -218,8 +218,8 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:563`
-- `src/components/Coach/CoachTeachPage.tsx:2977`
+- `src/coach/coachService.ts:564`
+- `src/components/Coach/CoachTeachPage.tsx:2978`
 - `src/services/coachSessionRouter.ts:124`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -252,9 +252,9 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 24 call sites
-- `src/components/Coach/CoachGameReview.tsx:1526`
-- `src/components/Coach/CoachGameReview.tsx:1645`
-- `src/components/Coach/CoachGameReview.tsx:1832`
+- `src/components/Coach/CoachGameReview.tsx:1569`
+- `src/components/Coach/CoachGameReview.tsx:1688`
+- `src/components/Coach/CoachGameReview.tsx:1875`
 - `src/hooks/usePhaseNarration.ts:680`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:123`
@@ -303,8 +303,8 @@
 - `src/services/voiceFactsFidelity.test.ts:65`
 
 ### `explainPuzzleMoveGrounded` (function) — 2 call sites
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:513`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:600`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:521`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:608`
 
 ### `currentAskFromContent` (function) — 4 call sites
 - `src/services/coachApi.currentAsk.test.ts:31`

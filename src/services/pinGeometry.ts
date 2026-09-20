@@ -26,11 +26,26 @@
  * expose and nothing to freeze. So the invariant IS the test, and it lives
  * here once rather than being re-derived — or re-forgotten — per detector.
  *
- * The move generation is deliberately PSEUDO-LEGAL: self-check is ignored on
- * purpose. A piece pinned against its own king has no LEGAL move off the ray,
- * and asking chess.js for legal moves would therefore report every king-pin as
- * "cannot leave" — exactly backwards. What we are asking is geometric: is
- * there a square off this line that this piece, on this board, could move to.
+ * 🔒 AND A BLOCKER DOES NOT UN-PIN (found 2026-09-19, the test that guards the
+ * top inGameAsk grounding trip went red on untouched main). The first version
+ * of this test asked "does the piece have a move off the line ON THIS BOARD",
+ * respecting occupancy. Italian after 9.O-O — Bc5, pawn f2, Kg1 — White's own
+ * knight sits on f3, so the f2 pawn had no move at all this instant, and the
+ * detector said: no pin. Every coach alive calls that the Italian pin. The
+ * knight moves next turn and the pin bites; a snapshot of who is standing on
+ * f3 is not a fact about the PIN, which is a standing constraint.
+ *
+ * So the test is the piece's MOVE PATTERN against the line: a rook pinned on a
+ * diagonal, a bishop pinned on a file, a knight anywhere, a pawn pinned on a
+ * rank or diagonal — all can leave, whatever is parked in front of them today.
+ * A pawn pinned along its own FILE cannot: its pushes stay on the line, and a
+ * capture is not a move the pawn HAS until an enemy stands on the diagonal — an
+ * empty g6 is not a blocked move, it is no move. That asymmetry is deliberate;
+ * it is exactly the h7 verdict above.
+ *
+ * Self-check is ignored on purpose too. A piece pinned against its own king
+ * has no LEGAL move off the ray, and asking chess.js for legal moves would
+ * therefore report every king-pin as "cannot leave" — exactly backwards.
  */
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 
@@ -52,14 +67,15 @@ function onLine(from: Square, dir: Vec, sq: Square): boolean {
 }
 
 /**
- * Can the piece on `pinned` move to any square that is NOT on the line running
- * through it in direction `dir`?
+ * Does the piece on `pinned` have a move in its PATTERN that lands off the
+ * line running through it in direction `dir`?
  *
  * `dir` is the ray from the attacker through the pinned piece; the line it
- * defines is the pin line. Occupancy is respected (a pawn only captures where
- * there is something to capture, a rook stops at the first piece) so a pawn
- * pinned along its own file correctly reports false. Own-king exposure is NOT
- * respected — see the note above.
+ * defines is the pin line. Occupancy is NOT respected for pushes, slides,
+ * knight hops and king steps — a blocker is transient and the pin outlives
+ * it (see the note above). A pawn CAPTURE needs an enemy on the square: it is
+ * not a move the pawn possesses otherwise. Own-king exposure is not respected
+ * either.
  */
 export function canLeaveLine(chess: Chess, pinned: Square, dir: Vec): boolean {
   const piece = chess.get(pinned);
@@ -67,55 +83,35 @@ export function canLeaveLine(chess: Chess, pinned: Square, dir: Vec): boolean {
   const [f, r] = coords(pinned);
   const mine = piece.color;
 
-  const reachable = (sq: Square | null): boolean => {
-    if (!sq) return false;
-    const at = chess.get(sq);
-    return !at || at.color !== mine;
-  };
-  const escapes = (sq: Square | null): boolean => !!sq && reachable(sq) && !onLine(pinned, dir, sq);
+  const escapes = (sq: Square | null): boolean => !!sq && !onLine(pinned, dir, sq);
 
   if (piece.type === 'n') return KNIGHT.some(([df, dr]) => escapes(square(f + df, r + dr)));
   if (piece.type === 'k') return [...BISHOP, ...ROOK].some(([df, dr]) => escapes(square(f + df, r + dr)));
   if (piece.type === 'p') {
     const step = mine === 'w' ? 1 : -1;
-    const one = square(f, r + step);
-    // A push is only available onto an EMPTY square, and both pushes stay on
-    // the file — which is the whole reason the h7 pawn above was not pinned.
-    if (one && !chess.get(one) && !onLine(pinned, dir, one)) return true;
-    const start = mine === 'w' ? 1 : 6;
-    const two = square(f, r + step * 2);
-    if (r === start && one && !chess.get(one) && two && !chess.get(two) && !onLine(pinned, dir, two)) return true;
+    // The push is in the pawn's pattern whether or not something stands on the
+    // square today (the f2/Nf3 case). Both pushes share the file, so one step
+    // decides: on a file pin it stays on the line, on any other pin it leaves.
+    if (escapes(square(f, r + step))) return true;
     // Captures need something to capture. En passant is ignored: it cannot be
     // the only escape a teaching claim rests on, and reading the ep square here
     // would couple this geometry to move history for no pedagogical gain.
     return [-1, 1].some((df) => {
       const sq = square(f + df, r + step);
       const at = sq ? chess.get(sq) : null;
-      return !!sq && !!at && at.color !== mine && !onLine(pinned, dir, sq);
+      return !!at && at.color !== mine && escapes(sq);
     });
   }
 
+  // A slider's ray is either collinear with the pin line or entirely off it,
+  // so the first on-board square of each direction decides for the whole ray.
   const dirs: Vec[] = piece.type === 'b' ? BISHOP : piece.type === 'r' ? ROOK : [...BISHOP, ...ROOK];
-  for (const [df, dr] of dirs) {
-    let ff = f + df;
-    let rr = r + dr;
-    while (true) {
-      const sq = square(ff, rr);
-      if (!sq) break;
-      const at = chess.get(sq);
-      if (at && at.color === mine) break;
-      if (!onLine(pinned, dir, sq)) return true;
-      if (at) break;
-      ff += df;
-      rr += dr;
-    }
-  }
-  return false;
+  return dirs.some(([df, dr]) => escapes(square(f + df, r + dr)));
 }
 
 /**
  * The full pin test, shared by every detector: three pieces on a ray, the one
- * behind worth more, and the one in front able to leave the line.
+ * behind worth more, and the one in front with a move that would leave the line.
  */
 export function isRealPin(args: {
   chess: Chess;

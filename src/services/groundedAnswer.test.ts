@@ -57,8 +57,11 @@ describe('assembleMoveEvalAnswer', () => {
   });
 });
 
+// The package carries the board it is about (`TacticsLiveContext.fen`), and the
+// assemblers verify every piece-on-square claim against it — so a fixture that
+// claims a hanging piece must be a board that actually holds that piece there.
 function tactics(over: Partial<TacticsLiveContext> = {}): TacticsLiveContext {
-  return { immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 4, ...over } as TacticsLiveContext;
+  return { fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 4, ...over } as TacticsLiveContext;
 }
 
 describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)', () => {
@@ -71,21 +74,17 @@ describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)'
     expect(a!.facts).toContain('Knight on d5 forks queen on c7');
   });
   it("warns about the STUDENT's hanging piece, not the opponent's", () => {
-    // NOW SUPPLIES A BOARD. A piece-on-square claim is board-verified before it
-    // is spoken (2026-09-19 — a real game heard "your knight on b5 is hanging"
-    // fifteen plies after b5 was captured), so a caller that hands over no
-    // position gets no claim. This test used to pass without one; it asserted a
-    // contract in which the claim was never checked.
-    const fen = '4k3/8/8/4p3/1B6/8/8/4K3 w - - 0 1'; // white bishop b4, black pawn e5
-    const a = assembleTacticsAnswer(tactics({ hanging: [{ square: 'b4', piece: 'b', color: 'w' }, { square: 'e5', piece: 'p', color: 'b' }] }), 'white', null, fen);
+    const a = assembleTacticsAnswer(tactics({ fen: '4k3/8/8/4p3/1B6/8/8/4K3 w - - 0 1', hanging: [{ square: 'b4', piece: 'b', color: 'w' }, { square: 'e5', piece: 'p', color: 'b' }] }), 'white');
     expect(a!.facts).toContain('Your bishop on b4 is hanging');
     expect(a!.facts).not.toContain('e5');
   });
 
   it('refuses a hanging claim when the piece is not on the board it was given', () => {
     // The other half of the same contract — see `pieceIsOn`.
+    // The board is the PACKAGE's own fen now (`TacticsLiveContext.fen`) — there
+    // is no parameter a caller could forget to pass.
     const empty = '4k3/8/8/8/8/8/8/4K3 w - - 0 1';
-    expect(assembleTacticsAnswer(tactics({ hanging: [{ square: 'b4', piece: 'b', color: 'w' }] }), 'white', null, empty)).toBeNull();
+    expect(assembleTacticsAnswer(tactics({ fen: empty, hanging: [{ square: 'b4', piece: 'b', color: 'w' }] }), 'white')).toBeNull();
   });
   it('falls to the top threat when nothing immediate', () => {
     const a = assembleTacticsAnswer(tactics({ threats: [{ type: 'fork', description: 'Black threatens Nxe4', depthAhead: 2, line: [] }] }), 'white');
@@ -98,14 +97,14 @@ describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)'
   // Question-aware (David 2026-09-09 critical audit)
   it('answers an opportunity ask with the student\'s shot, not a hanging deflection', () => {
     const a = assembleTacticsAnswer(
-      tactics({ opportunities: [{ type: 'fork', description: 'Nd5 forks the queen and rook', depthAhead: 2, line: [] } as unknown as TacticsLiveContext['opportunities'][number]],
+      tactics({ fen: '4k3/8/8/4P3/8/8/8/4K3 w - - 0 1', opportunities: [{ type: 'fork', description: 'Nd5 forks the queen and rook', depthAhead: 2, line: [] } as unknown as TacticsLiveContext['opportunities'][number]],
         hanging: [{ square: 'e5', piece: 'p', color: 'w' }] }),
       'white', 'is there a fork available?');
     expect(a!.facts).toContain('Nd5 forks');
   });
   it('says "no fork" honestly when the student has no shot — and flags a standing danger', () => {
     const a = assembleTacticsAnswer(
-      tactics({ hanging: [{ square: 'e5', piece: 'p', color: 'w' }] }),
+      tactics({ fen: '4k3/8/8/4P3/8/8/8/4K3 w - - 0 1', hanging: [{ square: 'e5', piece: 'p', color: 'w' }] }),
       'white', 'is there a fork available?');
     expect(a!.facts).toMatch(/No fork for you here right now/i);
     expect(a!.facts).toMatch(/pawn on e5/i);
@@ -978,10 +977,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
   it('appends the top live-tactics fact (a hanging student piece) alongside the eval', () => {
     const a = assemblePositionAssessment({
       evalCp: -250, mateIn: null, studentColor: 'white',
-      tactics: tactics({ hanging: [{ square: 'd5', piece: 'n', color: 'w' }] }),
-      // A BOARD THAT ACTUALLY HAS THE KNIGHT ON d5 — the claim is verified
-      // before it is spoken (2026-09-19). See the note on the tactics-answer
-      // test above.
+      tactics: tactics({ fen: '4k3/8/8/3N4/8/8/8/4K3 w - - 0 1', hanging: [{ square: 'd5', piece: 'n', color: 'w' }] }),
       fen: '4k3/8/8/3N4/8/8/8/4K3 w - - 0 1',
     });
     // -250 white-POV, student is White: the DIRECTION and the MAGNITUDE are
@@ -1004,7 +1000,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
     const a = assemblePositionAssessment({
       evalCp: null, mateIn: null, studentColor: 'black', fen,
-      tactics: tactics({ hanging: [{ square: 'e5', piece: 'p', color: 'b' }] }),
+      tactics: tactics({ fen, hanging: [{ square: 'e5', piece: 'p', color: 'b' }] }),
     });
     expect(a).not.toBeNull();
     expect(a!.facts.toLowerCase()).toContain('material'); // real read, not a bare deflect
@@ -1575,6 +1571,7 @@ describe('groundedAnswer — Learn voices the computed concept, not just the bar
   it('leads with the ranked concept sentence and does not repeat the same tactic as a bare description', async () => {
     const { assembleTacticsAnswer } = await import('./groundedAnswer');
     const tactics = {
+      fen: '2k5/2q5/5r2/3N4/8/8/8/4K3 w - - 0 1',
       immediate: [{ type: 'fork', description: 'Knight on d5 forks queen on c7 and rook on f6', squares: ['d5', 'c7', 'f6'], side: 'student' as const }],
       hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
       concepts: [{ id: 'fork', name: 'Fork', source: 'tactic' as const, squares: ['d5', 'c7', 'f6'], full: 'Knight on d5 forks queen on c7 and rook on f6 — a fork hits two targets at once, and only one can escape — the other falls.', short: 'Fork — two targets, one falls.', importance: 0.9 }],

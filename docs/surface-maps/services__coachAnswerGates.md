@@ -48,14 +48,14 @@
 - `src/components/Coach/CoachGamePage.tsx:3583`
 - `src/hooks/usePhaseNarration.ts:361`
 - `src/hooks/usePositionNarration.ts:315`
-- `src/services/coachAnswerGates.test.ts:25`
-- `src/services/coachAnswerGates.test.ts:29`
-- `src/services/coachAnswerGates.test.ts:33`
+- `src/services/coachAnswerGates.test.ts:26`
+- `src/services/coachAnswerGates.test.ts:30`
+- `src/services/coachAnswerGates.test.ts:34`
 
 ### `gradeNarrationAcrossLine` (function) — 12 call sites
-- `src/services/coachAnswerGates.test.ts:62`
-- `src/services/coachAnswerGates.test.ts:72`
-- `src/services/coachAnswerGates.test.ts:78`
+- `src/services/coachAnswerGates.test.ts:63`
+- `src/services/coachAnswerGates.test.ts:73`
+- `src/services/coachAnswerGates.test.ts:79`
 - `src/services/lineScopedGate.test.ts:34`
 - `src/services/lineScopedGate.test.ts:40`
 - `src/services/lineScopedGate.test.ts:48`
@@ -67,18 +67,18 @@
 - `src/services/openingGenerator.ts:820`
 
 ### `gradeNarrationText` (function) — 41 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8382`
-- `src/components/Coach/CoachTeachPage.tsx:8402`
-- `src/components/Coach/CoachTeachPage.tsx:8417`
-- `src/components/Coach/CoachTeachPage.tsx:8995`
-- `src/components/Coach/CoachTeachPage.tsx:10876`
+- `src/components/Coach/CoachTeachPage.tsx:8390`
+- `src/components/Coach/CoachTeachPage.tsx:8410`
+- `src/components/Coach/CoachTeachPage.tsx:8425`
+- `src/components/Coach/CoachTeachPage.tsx:9003`
+- `src/components/Coach/CoachTeachPage.tsx:10884`
 - `src/hooks/usePhaseNarration.ts:473`
 - `src/services/authoredOpeningNotes.test.ts:256`
 - `src/services/borrowedTeachingBoardTruth.test.ts:63`
-- `src/services/coachAnswerGates.test.ts:106`
-- `src/services/coachAnswerGates.test.ts:116`
-- `src/services/coachAnswerGates.test.ts:122`
-- `src/services/coachAnswerGates.test.ts:128`
+- `src/services/coachAnswerGates.test.ts:107`
+- `src/services/coachAnswerGates.test.ts:117`
+- `src/services/coachAnswerGates.test.ts:123`
+- `src/services/coachAnswerGates.test.ts:129`
 - `src/services/coachFeatureService.ts:1582`
 - `src/services/coachSurfaceScorecard.report.test.ts:46`
 - `src/services/computedVoiceAudit.report.test.ts:230`
@@ -110,22 +110,22 @@
 - `src/services/walkthroughLlmNarrator.ts:158`
 
 ### `takeBorrowedProbeStats` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7705`
-- `src/services/coachAnswerGates.test.ts:148`
-- `src/services/coachAnswerGates.test.ts:151`
-- `src/services/coachAnswerGates.test.ts:163`
-- `src/services/coachAnswerGates.test.ts:166`
+- `src/components/Coach/CoachTeachPage.tsx:7713`
+- `src/services/coachAnswerGates.test.ts:149`
+- `src/services/coachAnswerGates.test.ts:152`
+- `src/services/coachAnswerGates.test.ts:164`
 - `src/services/coachAnswerGates.test.ts:167`
+- `src/services/coachAnswerGates.test.ts:168`
 
 ### `gradeBorrowedTeaching` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7703`
-- `src/components/Coach/CoachTeachPage.tsx:7716`
+- `src/components/Coach/CoachTeachPage.tsx:7711`
+- `src/components/Coach/CoachTeachPage.tsx:7724`
 - `src/services/borrowedTeachingBoardTruth.test.ts:26`
 - `src/services/borrowedTeachingBoardTruth.test.ts:64`
-- `src/services/coachAnswerGates.test.ts:149`
-- `src/services/coachAnswerGates.test.ts:157`
-- `src/services/coachAnswerGates.test.ts:164`
+- `src/services/coachAnswerGates.test.ts:150`
+- `src/services/coachAnswerGates.test.ts:158`
 - `src/services/coachAnswerGates.test.ts:165`
+- `src/services/coachAnswerGates.test.ts:166`
 - `src/services/computedVoiceAudit.report.test.ts:343`
 - `src/services/computedVoiceAudit.report.test.ts:344`
 - `src/services/computedVoiceAudit.report.test.ts:391`
@@ -138,20 +138,20 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `applyCandidateArrows` (function) — 5 call sites
-- `src/coach/coachService.ts:2060`
-- `src/components/Coach/CoachTeachPage.tsx:6612`
+- `src/coach/coachService.ts:2090`
+- `src/components/Coach/CoachTeachPage.tsx:6620`
 - `src/components/Openings/MiddlegamePractice.tsx:283`
 - `src/hooks/useLiveCoach.ts:293`
-- `src/services/coachAnswerGates.test.ts:193`
+- `src/services/coachAnswerGates.test.ts:194`
 
 ### `appendKeySquareHighlights` (function) — 4 call sites
-- `src/coach/coachService.ts:2064`
-- `src/services/coachAnswerGates.test.ts:203`
-- `src/services/coachAnswerGates.test.ts:206`
+- `src/coach/coachService.ts:2094`
+- `src/services/coachAnswerGates.test.ts:204`
 - `src/services/coachAnswerGates.test.ts:207`
+- `src/services/coachAnswerGates.test.ts:208`
 
 ### `candidateHighlightMarkers` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:6616`
+- `src/components/Coach/CoachTeachPage.tsx:6624`
 
 ## Tests
 

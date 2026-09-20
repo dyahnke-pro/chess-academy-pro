@@ -31,11 +31,29 @@ describe('canLeaveLine', () => {
     expect(canLeaveLine(c, 'c6', [1, -1])).toBe(true);
   });
 
-  it('a rook boxed in by its own pieces cannot leave', () => {
-    // Black rook a8 walled in by its own knight on b8 and pawn on a7:
-    // every move it has runs up and down the a-file.
+  it('a rook walled in by its own pieces can still leave — blockers are transient', () => {
+    // Black rook a8 behind its own knight on b8 and pawn on a7. It has no move
+    // this instant, but every move in its pattern along rank 8 leaves the
+    // a-file; the knight develops and the pin bites. Occupancy is not the test.
     const c = new Chess('rn4k1/p5pp/8/8/8/8/6PP/R5K1 w - - 0 1');
-    expect(canLeaveLine(c, 'a8', [0, 1])).toBe(false);
+    expect(canLeaveLine(c, 'a8', [0, 1])).toBe(true);
+  });
+
+  it('the Italian pin: Bc5 pins f2 to Kg1 even with the knight parked on f3 (2026-09-19)', () => {
+    // e4 e5 Nf3 Nc6 Bc4 Bc5 d3 d6 O-O — f2 cannot move at all right now, and
+    // the first version of this test called that "no pin". The push to f3 is
+    // in the pawn's pattern and leaves the c5–g1 diagonal.
+    const c = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'O-O']) c.move(m);
+    expect(c.get('f3')?.type).toBe('n');
+    expect(canLeaveLine(c, 'f2', [1, -1])).toBe(true);
+  });
+
+  it('a bishop in the corner pinned along the long diagonal cannot leave — the rule still has teeth', () => {
+    // Ba1 with the other diagonal running off the board: every move it has is
+    // on the a1–h8 line, so nothing behind it is ever exposed.
+    const c = new Chess('7k/8/8/8/8/8/8/b4K1Q w - - 0 1');
+    expect(canLeaveLine(c, 'a1', [-1, -1])).toBe(false);
   });
 });
 
@@ -50,5 +68,12 @@ describe('the detector no longer reports the file alignment', () => {
     const fen = 'rnb1kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 1';
     const pins = detectTactics(fen).tactics.filter((t) => t.type === 'pin');
     expect(pins.some((p) => /bishop on g4 pins knight on f3 against queen on d1/i.test(p.description))).toBe(true);
+  });
+
+  it('reports the Italian pin on f2 with the knight on f3 — the validator board-rescue depends on it', () => {
+    const c = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'O-O']) c.move(m);
+    const pins = detectTactics(c.fen()).tactics.filter((t) => t.type === 'pin');
+    expect(pins.some((p) => /bishop on c5 pins pawn on f2 against king on g1/i.test(p.description))).toBe(true);
   });
 });

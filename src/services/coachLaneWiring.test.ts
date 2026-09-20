@@ -200,7 +200,12 @@ describe('a question lane can REACH the branch that answers it', () => {
   it('the branch it reaches is still guarded by that field', () => {
     // If this guard is ever dropped the fix above becomes pointless; if the
     // guard moves, this test says so rather than passing silently.
-    expect(API).toMatch(/grounding\.planQuestion && grounding\.enginePlan/);
+    // 2026-09-19: an endgame question on an ending defers to the endgame lane
+    // (`!deferToEndgameLane` sits between the two operands). Both operands are
+    // asserted in ORDER on one `if`, so dropping either still fails; the middle
+    // may carry further guards but never another `||`, which would let the
+    // plan branch open without the engine plan it assembles from.
+    expect(API).toMatch(/if \(grounding\.planQuestion &&(?:(?!\|\|)[^\n])*grounding\.enginePlan && grounding\.currentFen\)/);
   });
 
   it('a best-move question builds its own grounding when the surface did not', () => {
@@ -323,7 +328,10 @@ describe('the couplings that make the wiring safe', () => {
     expect(HOOK_CODE, 'the hook re-implements the lanes instead of calling the model')
       .toMatch(/backwardLook\(\{/);
     expect(HOOK_CODE).not.toMatch(/findStudentDrawback\(\{/);
-    expect(TEACH).toMatch(/import \{ backwardLook \}/);
+    // The import may carry sibling exports (`lastCoachVerdictDecline` joined
+    // it 2026-09); what is pinned is that `backwardLook` itself is imported
+    // from the ONE model module.
+    expect(TEACH).toMatch(/import \{[^}]*\bbackwardLook\b[^}]*\} from '\.\.\/\.\.\/services\/backwardLook'/);
   });
 
   it('the pending-speak guard compares POSITION, not the whole FEN', () => {
@@ -372,14 +380,21 @@ describe('the couplings that make the wiring safe', () => {
     // from the eval seconds later. Two admissions of one move in a row, and the
     // cross-package dedupe cannot catch them — both true, no shared clause to
     // match on. So the generic lane stands down when the curated one spoke.
-    expect(TEACH).toMatch(/const gemCalledIt = gemFenRef\.current !== null/);
+    // The per-game ref migrated into `learnMemRef.current.gemFen` (the
+    // learnMemory slice), so the two callers below name that field. The
+    // coupling is unchanged: the gem lane writes `gemFen` when it speaks, and
+    // the verdict lane stands down only when the board it is judging IS that
+    // position.
+    expect(TEACH).toMatch(/const gemCalledIt = learnMemRef\.current\.gemFen !== null/);
     expect(TEACH, 'the stand-down is not tied to the move being judged')
-      .toMatch(/samePosition\(gemFenRef\.current, cm\.fenAfter\)/);
+      .toMatch(/samePosition\(learnMemRef\.current\.gemFen, cm\.fenAfter\)/);
+    expect(TEACH, 'the gem lane no longer records the position it spoke about')
+      .toMatch(/learnMemRef\.current\.gemFen = args\.fenAfterReply/);
     // 🔒 AND NOT OFF `gemSeenRef`. That holds the last callout for the WHOLE
     // GAME, so reading it as "a gem fired" would mute every coach verdict from
     // the first gem to the final move. The question is never "has a gem ever
     // fired" but "did one fire about the move I am judging".
-    expect(TEACH_CODE).not.toMatch(/gemCalledIt = gemSeenRef\.current !== null/);
+    expect(TEACH_CODE).not.toMatch(/gemCalledIt = (?:gemSeenRef\.current|learnMemRef\.current\.gemSeen) !== null/);
   });
 
   it('play stays silent about the slip it walked into', () => {

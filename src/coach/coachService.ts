@@ -28,6 +28,7 @@
  */
 import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
+import { tacticsAreFreshFor } from '../services/tacticsContextIdentity';
 import { pureBoardAspect } from '../services/boardQuestionRouter';
 import { buildEnginePlan, buildCandidateEval, buildAlternativesContext } from '../services/enginePlanContext';
 import { scanPositionForTrap } from '../services/positionTrapScan';
@@ -1372,6 +1373,35 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         candidateMateIn = cand.mateIn;
       }
     }
+    // STALE-PACKAGE REFUSAL (David 2026-09-19). `liveState.tactics` is a set of
+    // facts ABOUT a board, and `liveState.fen` is the board this turn is about.
+    // Until the package carried its own `fen` nothing could check they agree —
+    // and on a real 22-ply Learn game they did not: a consumer voiced "Your
+    // knight on b5 is hanging" from a package built fifteen plies earlier.
+    //
+    // Refused WHOLE, here, at the one place the grounding object is built, so
+    // every lane downstream (`assembleTacticsAnswer`, `assemblePositionAssessment`,
+    // the danger note, the concept lead) sees either a package about THIS board
+    // or nothing. Not filtered claim by claim: a stale package is internally
+    // consistent, so a per-claim check passes it by construction. Silence
+    // beats a true fact about the wrong board. The audit event is the tell that
+    // a producer handed us yesterday's board — it should never fire.
+    const liveTacticsFresh = tacticsAreFreshFor(input.liveState.tactics, input.liveState.fen);
+    if (input.liveState.tactics && !liveTacticsFresh) {
+      void logAppAudit({
+        kind: 'tactics-context-stale',
+        category: 'subsystem',
+        source: 'coachService.ask.grounding',
+        summary: `TacticsLiveContext refused: package fen != live fen (surface=${input.liveState.surface ?? '?'})`,
+        fen: input.liveState.fen,
+        details: JSON.stringify({
+          packageFen: input.liveState.tactics.fen,
+          liveFen: input.liveState.fen ?? null,
+          hanging: input.liveState.tactics.hanging.length,
+          immediate: input.liveState.tactics.immediate.length,
+        }),
+      });
+    }
     const autoGrounding =
       options.grounding ??
       // BOARD-VERDICT INTENTS ENGAGE GROUNDING WITHOUT A BOARD. This gate reads
@@ -1512,7 +1542,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             engineMateIn: resolvedEnginePlan?.mateIn ?? input.liveState.evalMateIn,
             // STEP D Phase 3 — the engine PV backs a PLAN answer (assemblePlanAnswer).
             enginePlan: resolvedEnginePlan,
-            tactics: input.liveState.tactics,
+            tactics: liveTacticsFresh ? input.liveState.tactics : undefined,
             // STEP B — tactics/danger (Phase 2) + student-progress (Phase 6).
             // Both assemblers exist; these flags tell the interception to
             // COMPUTE the answer (engine tactics / the student's bad-habit

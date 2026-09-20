@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1012 lines · 9 exports · 22 importers · 10 tests · 0 audits**
+**1012 lines · 9 exports · 23 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachApi.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/fundamentalHow.test.ts`
+- `src/services/fundamentalVocabulary.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsCatalog.ts`
@@ -59,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `attributePrinciples` (function) — 22 call sites
-- `src/services/coachFeatureService.ts:1421`
+- `src/services/coachFeatureService.ts:1441`
 - `src/services/learnFundamentalNarration.ts:134`
 - `src/services/misconceptionClassifier.ts:249`
 - `src/services/principleAttribution.test.ts:20`
@@ -85,8 +86,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `pvUciToSan` (function) — 7 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:83`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:87`
-- `src/services/coachFeatureService.ts:1425`
-- `src/services/coachFeatureService.ts:1427`
+- `src/services/coachFeatureService.ts:1445`
+- `src/services/coachFeatureService.ts:1447`
 - `src/services/learnFundamentalNarration.ts:124`
 - `src/services/learnFundamentalNarration.ts:131`
 - `src/services/principleAttribution.test.ts:46`
@@ -96,6 +97,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/FundamentalsPage.test.tsx`
 - `src/data/fundamentalLessons.test.ts`
 - `src/services/fundamentalHow.test.ts`
+- `src/services/fundamentalVocabulary.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
