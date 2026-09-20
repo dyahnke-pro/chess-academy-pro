@@ -1,3 +1,4 @@
+import type { PerspectiveMode } from './perspectiveRule';
 /**
  * Live tactics context builder — turns the surface's Stockfish read
  * + current FEN + the student's rating into the `TacticsLiveContext`
@@ -421,8 +422,26 @@ function pieceFullName(piece: string): string {
  * when no depth-≥2 upcoming tactic exists (empty > generic — a quiet position
  * gets no manufactured foresight).
  */
+/** The seat the sentence is SPOKEN FROM. Required — the seat is part of the
+ *  selection (CLAUDE.md, 2026-09-17): a threat line that says "they're lining
+ *  up a skewer" is the student register, and the on-demand read speaks AS THE
+ *  OPPONENT ("my bishop wants g7"), so the same sentence injected there named
+ *  the coach's own plan in the third person (prod tape, 2026-09-19). A new
+ *  caller must say which seat it speaks from; `spectator` has no "you" and is
+ *  deliberately not a member. */
+export type LookaheadSeat = Extract<PerspectiveMode, 'student' | 'coach-is-opponent'>;
+
+/** The threat-branch stem per seat — a Record so a new seat fails to compile
+ *  until someone writes its sentence. The opportunity branch is the STUDENT's
+ *  own shot in both seats ("you've got a … coming"), so it does not vary. */
+const THREAT_STEM: Record<LookaheadSeat, (pattern: string, depth: number, line: string) => string> = {
+  student: (pattern, depth, line) => `Look ahead — they're lining up a ${pattern} in ${depth}: ${line}. Spot it before it lands.`,
+  'coach-is-opponent': (pattern, depth, line) => `Look ahead — I'm lining up a ${pattern} in ${depth}: ${line}. Spot it before it lands.`,
+};
+
 export function speakDeepestLookahead(
   ctx: TacticsLiveContext,
+  seat: LookaheadSeat,
   /** The student model (Phase 1b) — when a deep tactic's MOTIF is a hole this
    *  student keeps falling in (via the tactic-vocabulary bridge), it is PREFERRED
    *  as the one to speak, and an honest tag names the recurring pattern. Optional/
@@ -464,7 +483,7 @@ export function speakDeepestLookahead(
   if (isOpportunity) {
     return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${lineProse}.${holeTag}`;
   }
-  return `Look ahead — they're lining up a ${pattern} in ${pick.depthAhead}: ${lineProse}. Spot it before it lands.${holeTag}`;
+  return `${THREAT_STEM[seat](pattern, pick.depthAhead, lineProse)}${holeTag}`;
 }
 
 /** Render a computed `TacticsLiveContext` into the grounded prompt block (BOARD
