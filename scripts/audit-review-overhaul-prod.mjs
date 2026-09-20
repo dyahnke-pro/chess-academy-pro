@@ -146,7 +146,18 @@ let EXPLORE_PLY = 11;        // a student-to-move ply, derived below
 // a 30-min chain bound, and without timestamps nobody could tell a slow run
 // from a blocked one (PLAN #21 n=5/n=6).
 const log = (s) => console.log(`[${new Date().toISOString().slice(11, 19)}] ${s}`);
-const has = async (p, sel) => { try { return (await p.locator(sel).count()) > 0; } catch { return false; } };
+// 🔒 `count()` TAKES NO TIMEOUT, so it waits FOREVER on a renderer that has
+// stopped answering — and `resolveCards` calls this first thing in the
+// reopened-walk loop, ahead of the blow-up check. That is exactly how the
+// wedge guard sat for 27 minutes on 2026-09-20 instead of reporting
+// CONTAMINATED: the detector's own detection path needed the wedged thread to
+// answer. Every read that can meet a wedged page is now bounded.
+const RACE_MS = 3000;
+const raced = async (promise, fallback, ms = RACE_MS) => Promise.race([
+  Promise.resolve(promise).catch(() => fallback),
+  new Promise((r) => setTimeout(() => r(fallback), ms)),
+]);
+const has = async (p, sel) => raced(p.locator(sel).count().then((n) => n > 0), false);
 // Every read is short-fused: on a starved box a default 30s innerText wait
 // inside an 80-iteration nav loop turned a slow page into a 3-hour "hang".
 const txt = async (p, sel) => { try { const l = p.locator(sel).first(); return (await l.count()) ? (await l.innerText({ timeout: 3000 })).replace(/\s+/g, ' ').trim() : ''; } catch { return ''; } };
@@ -1070,9 +1081,14 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   let blown = null; // null = healthy; otherwise the REASON string this run tripped on
   let onFund2 = false;
   const workerList = async () => { if (!cdp) return []; const r = await Promise.race([cdp.send('Target.getTargets'), new Promise((res) => setTimeout(() => res(null), 4000))]).catch(() => null); return r ? r.targetInfos.filter((t) => t.type === 'worker').map((t) => (t.url || '?').split('/').pop()) : []; };
+  // A DEADLINE, not just a counter. 40 iterations of ~1s is a minute of real
+  // walking; anything past this budget means a read is hanging rather than the
+  // walk being slow, and the run must say so instead of sitting (2026-09-20).
+  const walkDeadline = Date.now() + 180_000;
   for (let i = 0; i < 40 && !blown; i++) {
+    if (Date.now() > walkDeadline) { blown = 'reopened-walk loop exceeded its 180s deadline — a read is hanging, not the walk'; break; }
     await resolveCards();
-    const n = (await readWalkPly(page))?.n ?? 0;
+    const n = (await raced(readWalkPly(page), null))?.n ?? 0;
     const h = await heapMB();
     const wl = await workerList();
     const by = {}; for (const u of wl) by[u] = (by[u] ?? 0) + 1;
