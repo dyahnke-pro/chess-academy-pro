@@ -1737,8 +1737,30 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
    only 9 of 62 ever get games in.** Weaknesses, review and the mistake drills
    all sit behind that gate; everyone reaches the door and stops. 50 of the 62
    used the app on exactly ONE day (avg 1.5 days active).
-   Ranked levers: (1) import completion 29→9, it gates everything; (2) openings
+   Ranked levers, as first written: (1) import completion 29→9; (2) openings
    list → an actual opening 42→9; (3) review 12→3.
+   🔴 **(1) DOES NOT SURVIVE ITS OWN TEST — do not act on it. Corrected the
+   same hour, after the focused-noyce session attacked the claim.**
+   Two fixes to it: (a) IMPORT IS NOT THE ONLY DOOR — a finished coach game
+   persists with `source='coach'` and feeds the same spine, so the honest
+   number is **11 of 62 ever get a game in by ANY route** (9 imported, 7
+   played, 5 both, 2 play-only), not 9 by import. (b) CAUSE OR MARKER, tested:
+   among the 30 who REACHED `/games/import`, completers retain better (2.89
+   vs 1.19 days active; 4/9 vs 20/21 single-day) — but they were ALREADY
+   ~2.2× more active before they ever saw that screen (80 vs 36 events
+   pre-import). The retention gap (2.4×) is about the size of the selection
+   gap (2.2×), so **there is no evidence import ADDS retention beyond the
+   engagement it selects for.** Fixing it may move nothing.
+   ⚠️ Note the control that looks obvious and is WRONG: total events (2486 vs
+   110) is POST-treatment — importing triggers analysis, which emits the
+   events — so conditioning on it would have "proved" the case backwards. The
+   only valid control is activity BEFORE the import screen.
+   **What survives and is worth acting on: 50 of 62 leave after ONE DAY, and
+   20 of the 21 import-bouncers are in that group.** They are not stopped by
+   import; they were leaving anyway. The real question is upstream of every
+   feature — what the first session is worth — and it is the same number the
+   Dashboard-bars redesign was aimed at (32 of 39, CLAUDE.md), which has not
+   moved. n=9 completers: small, so treat all of this as direction, not proof.
    ⚠️ TWO CORRECTIONS to my own first cut, both from event lists that were too
    narrow — do not repeat them: "44 users did nothing at all" was FALSE (18 of
    them had the coach speaking to them), and "four devices have ever opened a
