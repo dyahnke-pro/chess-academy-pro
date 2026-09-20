@@ -125,10 +125,26 @@ best move serves; a PV whose first forcing move is ≥3 deep). So the detectors 
 GATED CORRECTLY and are TOO NARROW IN PRACTICE — unit-proven, prod-unobserved.
 That is the same "a wire that does not fire is not a wire" rule the repo already
 holds, and it means the 23% `other` figure has NOT been measured down.
-**NEXT (not guessed — measured):** log the REJECTION REASON per detector on the
-recording path (D13 already logs unmatched inputs; extend it to say which gate
-each section-14 detector failed), run a game library through it, and widen from
-the real population rather than from imagination.
+**NEXT (not guessed — measured). ✅ THE INSTRUMENT IS BUILT (2026-09-20):** each
+of the three now SAYS which gate stopped it — `attributePrinciples(input, why)`
+fills a caller-supplied sink, and `MisconceptionClassification.why` carries the
+reasons out on the `other` fallthrough, so the 23% bucket is measurable instead
+of mute. Same `diag` shape `findTheoryDeparture` has carried since July; absent
+unless a caller asks, so no hot path pays. Reasons are concrete, never a bare
+"no" — "cost 50cp is under the 150cp floor", "the punishment Bxf6 is immediate
+(ply 1) — another fundamental owns it", "ply 30 is past the 24-ply opening
+window", "the structure earns NO plan here — nothing to have ignored".
+Gate: `section14Diagnosis.test.ts` (each reason named and matched, the `other`
+fallthrough carries them, and the sink changes no result).
+Found building it: declaring the sink beside the attributor put the
+unparseable-SAN `other` return inside its temporal dead zone, so that path
+THREW — caught by the classifier's existing gates, which is what they are for.
+**What remains is the reading:** run a real library through it and widen the
+gates from the population that comes back. My four-game sample already says
+where to look — a pawn push at ply 30 is past the opening window
+(`left-book-early` can never see it) and a king retreat usually earns no
+structure plan (`no-plan` declines honestly), so the likeliest first move is
+`calculation-depth`'s PV shape.
 
 **THE OTHER THREE AUDITS (same bundle):**
 - **LEARN** `audit-concept-gameplay-prod` **8/8** — the pin invariant voiced

@@ -59,6 +59,13 @@ export interface MisconceptionClassification {
   fundamentalId?: string;
   /** Free-text error label — present only when tag === 'other'. */
   customLabel?: string;
+  /** WHY the section-14 reasoning detectors declined, one line each. Present
+   *  only when the classifier fell through to a board heuristic or to `other`
+   *  — i.e. exactly the 23% of real slips the app cannot name. NEVER spoken:
+   *  this is the measurement that says whether those detectors are gated
+   *  correctly or gated too tightly (2026-09-20 — the first four prod games
+   *  after they shipped produced none, and a guess about why is worth nothing). */
+  why?: string[];
   /** One-line spoken-safe teaching note: names a square, a piece, or a
    *  principle. No SAN read as letters, no digits beyond square labels, no
    *  first person, no interface references. Built from the verified board. */
@@ -219,6 +226,11 @@ function classifyMisconceptionImpl(
   input: ClassifyMisconceptionInput,
 ): MisconceptionClassification | null {
   const phase = input.gamePhase ?? 'middlegame';
+  // Declared FIRST: every `other` return below carries it, including the
+  // unparseable-SAN one that fires before the attributor ever runs. (Declaring
+  // it beside the attributor put an early return inside its temporal dead zone
+  // and that path threw — caught by the existing classifier gates, 2026-09-20.)
+  const why: string[] = [];
 
   let chess: Chess;
   try {
@@ -239,7 +251,7 @@ function classifyMisconceptionImpl(
     move = null;
   }
   if (!move) {
-    return { tag: 'other', customLabel: phaseLabel(phase), coachNote: '' };
+    return { tag: 'other', customLabel: phaseLabel(phase), coachNote: '', why };
   }
   const fenAfter = chess.fen();
 
@@ -254,7 +266,7 @@ function classifyMisconceptionImpl(
       pvAfterBest: input.pvAfterBest,
       evalBefore: input.evalBefore,
       evalAfterPlayed: input.evalAfterPlayed,
-    });
+    }, why);
     if (attrs.length > 0) {
       return {
         tag: attrs[0].tag,
@@ -460,7 +472,7 @@ function classifyMisconceptionImpl(
       fen: input.fen,
     });
   }).catch(() => undefined);
-  return { tag: 'other', customLabel: phaseLabel(phase), coachNote: '' };
+  return { tag: 'other', customLabel: phaseLabel(phase), coachNote: '', why };
 }
 
 /** Public entry point. Keeps the Promise-returning signature the three faucets
