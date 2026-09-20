@@ -1341,6 +1341,11 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      prod.mjs` now hooks every Worker's error events per URL (the flood's
      source, named), samples main-thread responsiveness per census, and has a
      PROBE_FULL_WALK=1 mode — the next run names the flooding worker.
+   - **n=2 (2026-09-20, focused-noyce, independent):** their own review run on
+     jMVMo1Ua (student=white) sat 49 min with node at 0% and the log ending
+     "reopened walk ply=0: 104MB workers=1 {stockfish-18-lite-single.js:1}" —
+     demote clean, no storm, walk never leaves ply 0. Same shape, different
+     game. The wedge, not the storm, is #21's remaining defect.
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
     + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
     Test type errors are no longer invisible; they are counted and capped. What
