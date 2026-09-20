@@ -587,12 +587,25 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   let unreadable = 0;
   for (let i = 0; i < POLL_BUDGET; i++) {
     await resolveCards();
-    const read = await readWalkPly(page);
+    // ONE atomic DOM snapshot per poll. The readout, the badge and the banner
+    // used to be three separate round trips, and the (muted, voice-gated) walk
+    // advanced between them — so a sentence was filed under the PREVIOUS ply
+    // and `ACC board-accuracy` reported "pawn on g6 but board has empty" for
+    // the …g6 sentence filed under White's Be3 (pinned pair, 2026-09-20).
+    // A false red in the one row that judges board truth is the instrument
+    // lying about the product; read the three together or not at all.
+    const snap = await page.evaluate(() => {
+      const t = (sel) => { const el = document.querySelector(sel); return el ? (el.innerText || '').replace(/\s+/g, ' ').trim() : ''; };
+      const walk = t('[data-testid="coach-game-review-walk"]');
+      const m = walk.match(/Ply\s+(\d+)\s*\/\s*(\d+)/i);
+      return { read: m ? { n: Number(m[1]), total: Number(m[2]) } : null, badge: t('[data-testid="review-classification-badge"]'), banner: t('[data-testid="review-narration-banner"]') };
+    }).catch(() => ({ read: null, badge: '', banner: '' }));
+    const read = snap.read;
     const n = read?.n ?? 0;
     if (read) unreadable = 0; else unreadable += 1;
-    const b = await txt(page, '[data-testid="review-classification-badge"]');
+    const b = snap.badge;
     if (n > 0 && !plyNarr.has(n)) {
-      const nt = await txt(page, '[data-testid="review-narration-banner"]');
+      const nt = snap.banner;
       // THE BANNER IS NOT THE VOICE. On a quiet ply the coach says nothing and
       // the banner shows the MOVE instead — a deliberate placeholder that
       // replaced "(passes silently)" printing itself all game (David

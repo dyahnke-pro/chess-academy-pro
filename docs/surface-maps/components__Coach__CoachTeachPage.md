@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**14085 lines · 3 exports · 5 importers · 6 tests · 9 audits**
+**14063 lines · 3 exports · 5 importers · 6 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:1172) — names `CoachTeachPage`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2904) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:5659) — names `CoachTeachPage`
+- **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:1193) — names `CoachTeachPage`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2925) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:5680) — names `CoachTeachPage`
 
 ## Who calls in
 
@@ -49,6 +49,7 @@
 - `scripts/audit-concept-gameplay-prod.mjs`
 - `scripts/audit-learn-comprehensive.mjs`
 - `scripts/audit-learn-full-game.mjs`
+- `scripts/audit-review-overhaul-prod.mjs`
 - `scripts/audit-second-game-memory-prod.mjs`
 - `scripts/audit-teach-forkdive-prod.mjs`
 - `scripts/audit-teach-play-picker-prod.mjs`

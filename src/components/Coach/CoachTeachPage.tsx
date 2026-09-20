@@ -1721,27 +1721,9 @@ export function CoachTeachPage(): JSX.Element {
    *  first gem to the final move. The question is never "has a gem ever fired",
    *  it is "did one fire about the move I am judging". */
   const learnMemRef = useRef<LearnMemory>(createLearnMemory());
-  /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
-   *  alerts") — a persisting danger alerts once, not every turn. */
-
-  /** Last spoken TACTIC key, so a standing opportunity does not nag every ply. */
-  const lastTacticRef = useRef('');
-  /** Last spoken THREAT key. Separate from the tactic key — one lane repeating
-   *  must not silence the other lane's fresh news. */
-  const lastThreatRef = useRef('');
-  /** EVERY threat sentence already spoken this game.
-   *
-   *  `lastThreatRef` alone remembers one ply, so an ALTERNATING pair walks
-   *  straight through it. David's 02:47-02:53 transcript: "queen on a5 pins
-   *  knight on c3 against king on e1" at 02:50, a fork callout at 02:52, then
-   *  the SAME pin sentence again, word for word, at 02:53 — the fork in the
-   *  middle cleared the guard. A standing threat stays true for many plies,
-   *  which is exactly why saying it identically over and over teaches nothing
-   *  and grates. The tactic lane already keeps a set for this reason; the
-   *  threat lane keeping only a single slot was the oversight. */
-  const spokenThreatLinesRef = useRef<Set<string>>(new Set());
-  /** Every tactic sentence already spoken this game — see the guard below. */
-  const spokenTacticLinesRef = useRef<Set<string>>(new Set());
+  // The threat / tactic say-once memory (last key + every spoken line) lives in
+  // `learnMemRef.current` — per game, forgotten by the board-driven reset.
+  // Migrated 2026-09-19 after the second-game audit caught the hand refs.
   // Which teaching tier taught the ply just narrated — read by the turnFacts
   // audit so a run reports its tier MIX instead of having it grepped out of the
   // transcript afterwards. `position` is a note authored AT this board;
@@ -7334,21 +7316,21 @@ export function CoachTeachPage(): JSX.Element {
       // finds it — which is exactly what makes two of them indistinguishable
       // out loud. Guard on the words the student hears, not on the board state
       // behind them.
-      if (tacticLine && (tacticKey === lastTacticRef.current || spokenTacticLinesRef.current.has(tacticLine))) {
+      if (tacticLine && (tacticKey === learnMemRef.current.lastTacticKey || learnMemRef.current.spokenTacticLines.has(tacticLine))) {
         tacticSquares = [];
         tacticLine = null;
       } else if (tacticLine) {
-        lastTacticRef.current = tacticKey;
-        spokenTacticLinesRef.current.add(tacticLine);
+        learnMemRef.current.lastTacticKey = tacticKey;
+        learnMemRef.current.spokenTacticLines.add(tacticLine);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
       }
-      if (threatLine && (threatKey === lastThreatRef.current || spokenThreatLinesRef.current.has(threatLine))) {
+      if (threatLine && (threatKey === learnMemRef.current.lastThreatKey || learnMemRef.current.spokenThreatLines.has(threatLine))) {
         threatLine = null;
         alertArrow = null;
         threatSquares = [];
       } else if (threatLine) {
-        lastThreatRef.current = threatKey;
-        spokenThreatLinesRef.current.add(threatLine);
+        learnMemRef.current.lastThreatKey = threatKey;
+        learnMemRef.current.spokenThreatLines.add(threatLine);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
       }
       // What the alert lane has CLAIMED this turn. The keys carry their squares
@@ -9244,10 +9226,6 @@ export function CoachTeachPage(): JSX.Element {
                       // (opening name now forgotten by learnMemory.observe, from the board)
                       teachNoteSeenIdsRef.current.clear();
                       fundamentalSeenRef.current.clear();
-                      lastTacticRef.current = '';
-                      lastThreatRef.current = '';
-                      spokenTacticLinesRef.current.clear();
-                      spokenThreatLinesRef.current.clear();
                       forkTalkCountRef.current = 0;
                       pendingForkRef.current = null;
                       rejectedTemptingCountRef.current = 0;

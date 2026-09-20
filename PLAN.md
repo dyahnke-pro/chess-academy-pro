@@ -1156,6 +1156,30 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      taken before this fix may have compared two different games.
    - The worker storm seen on the reopen (124 pthread helpers, page errors) is
      #21, owned by the focused-noyce session tonight — not re-derived here.
+   - ✅ **MEASURED, PINNED, SAME BUNDLE (2026-09-20): 4 of 5 red rows identical
+     across two runs of Firouzja–Carlsen 06wNUWaA.** Stable: RECAP aggregate,
+     FUNDLEAD (0/4 flagged plies lead with a fundamental — §E item 0), HEAP and
+     ERR (#21). The residue is two things, neither a harness race:
+     (a) **classification drift from time-budgeted analysis.** The review sends
+     `go depth N movetime B` (`gameAnalysisService`: sweep 200 ms at depth ≤12,
+     deep pass 8 s at depth 16 on ≤24 plies) and stamps the depth REACHED, so
+     under load the same ply grades differently — ply 50 was an inaccuracy
+     (0.8) in run 1 and a mistake (1.1) in run 2; ply 48 0.9 → 0.7; the
+     critical-moment stake flipped in-it → damage. The annotations are not a
+     pure function of the game, so no row that depends on WHICH plies flagged
+     can be. OWED: an audit-only determinism seam, the mute's twin —
+     `localStorage.auditDeterministicAnalysis=1` read in `gameAnalysisService`
+     makes every review `budgetMs` undefined (depth-only) at the four sites:
+     `evaluateFensPooled`'s default, the dive worker's `analyzePosition`, the
+     sacrifice verify and the best-move refine (`positionBudgetMs ??
+     REVIEW_POSITION_BUDGET_MS`), plus the shallow sweep. Gate it like
+     `auditMute`: product code may never set the flag.
+     (b) **one instrument skew, fixed.** `ACC board-accuracy` red on run 2
+     only: "Your pawn on g6 now eyes their pawn on h5" filed under ply 31
+     (White's Be3) when it is the ply-32 sentence (…g6). The audit read the
+     ply readout and the narration banner in two separate DOM round trips, and
+     the muted voice-gated walk advanced between them. The three reads are now
+     one atomic snapshot.
 9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
    on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
@@ -1273,8 +1297,16 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     prefers it and keeps the levers only as the fallback for a board that earns
     no plan. One computer, both surfaces (capability parity). Gate:
     `groundedAnswer.test.ts` ("speaks the plan WITH its method").
-18. **Two shared positions go silent in game 2** (#68) — n=1; WIDEN THE SAMPLE
-    before fixing.
+18. ✅ **DONE (2026-09-20) — widened to n=4, reproduced 3/3, fixed, proven on
+    prod.** `audit-second-game-memory-prod` ×3: at the one board both games
+    shared, game 2 never said "your queen on d5 is attacked" and never got the
+    pin invariant that rides on it, while the opening name WAS re-identified
+    (so the board-driven reset had fired). The suppressor was outside the
+    per-game memory: `spokenThreatLinesRef`, `lastThreatRef` and their tactic
+    twins were hand refs cleared inside ONE intent branch — the exact debt
+    `learnMemory.ts` documents. They are `LearnMemory` slots now, forgotten by
+    `observe()`/`newGame()`. Post-deploy: 10/10, both D rows "1/1 shared
+    positions still taught".
 19. Open questions, not yet defects: mistake-puzzle narration and Rule 3 (#23);
     "chat input never usable" after the player-games lane (#19); caching
     `voiceFacts` so a repeat does not bill twice (#35); the Alapin tape's
