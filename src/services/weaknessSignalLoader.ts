@@ -12,6 +12,7 @@
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getWeaknessLifecycle } from './weaknessLifecycle';
 import { buildWeaknessSignals, type WeaknessSignal } from './weaknessSignal';
+import { onWeaknessModelChanged } from './weaknessModelEvents';
 
 // A short-lived module memo so the several narration hooks that each want the
 // profile share ONE Dexie read per game instead of hammering it per mount/ply.
@@ -57,3 +58,8 @@ export async function loadWeaknessSignals(): Promise<WeaknessSignal[]> {
 export function invalidateWeaknessSignals(): void {
   cache = null;
 }
+
+// THE WRITERS TELL US (WO-LOOP-01, 2026-09-20). `invalidateWeaknessSignals` had
+// zero callers, so a slip the sweep recorded did not reach the next narration
+// for five minutes. The writers emit on the leaf event; this is the one reader.
+onWeaknessModelChanged(invalidateWeaknessSignals);

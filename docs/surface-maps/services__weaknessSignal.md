@@ -4,20 +4,25 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**175 lines · 8 exports · 24 importers · 11 tests · 1 audits**
+**198 lines · 8 exports · 28 importers · 13 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3697) — names `boostFor`, `matchClauseKind`
+- **The standard post-deploy ritual** (CLAUDE.md:5724) — names `weaknessSignal`
 
 ## Who calls in
 
 - `src/components/Openings/OpeningPlayMode.tsx`
 - `src/hooks/useWeaknessSignals.ts`
 - `src/services/coachDecider.ts`
+- `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/factSelector.ts`
+- `src/services/fundamentalRecurrence.test.ts`
+- `src/services/fundamentalRecurrence.ts`
 - `src/services/habitJoin.test.ts`
+- `src/services/learnFundamentalNarration.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/needCoverage.report.test.ts`
@@ -42,11 +47,13 @@
 ### `WeaknessSignal` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildWeaknessSignals` (function) — 5 call sites
+### `buildWeaknessSignals` (function) — 7 call sites
 - `src/services/weaknessSignal.test.ts:32`
 - `src/services/weaknessSignal.test.ts:42`
 - `src/services/weaknessSignal.test.ts:47`
-- `src/services/weaknessSignalLoader.ts:43`
+- `src/services/weaknessSignal.test.ts:134`
+- `src/services/weaknessSignal.test.ts:138`
+- `src/services/weaknessSignalLoader.ts:44`
 - `src/services/weaknessSpine.fundamentals.test.ts:116`
 
 ### `MAX_WEAKNESS_BOOST` (const) — 0 call sites
@@ -79,7 +86,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:120`
 
 ### `matchTacticPattern` (function) — 9 call sites
-- `src/services/liveTacticsContext.ts:440`
+- `src/services/liveTacticsContext.ts:459`
 - `src/services/needScore.ts:231`
 - `src/services/positionFacts.ts:646`
 - `src/services/teachingSelector.ts:148`
@@ -90,7 +97,7 @@
 - `src/services/weaknessSignal.test.ts:107`
 
 ### `matchTag` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1502`
+- `src/services/coachFeatureService.ts:1506`
 - `src/services/needScore.ts:221`
 - `src/services/teachingSelector.ts:278`
 - `src/services/weaknessSignal.test.ts:116`
@@ -98,12 +105,15 @@
 - `src/services/weaknessSignal.test.ts:120`
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
-### `matchFundamental` (function) — 2 call sites
+### `matchFundamental` (function) — 3 call sites
+- `src/services/fundamentalRecurrence.ts:44`
 - `src/services/weaknessSpine.fundamentals.test.ts:117`
 - `src/services/weaknessSpine.fundamentals.test.ts:118`
 
 ## Tests
 
+- `src/services/coachFeatureService.recurrence.test.ts`
+- `src/services/fundamentalRecurrence.test.ts`
 - `src/services/habitJoin.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/needCoverage.report.test.ts`

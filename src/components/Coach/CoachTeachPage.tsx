@@ -9877,7 +9877,7 @@ export function CoachTeachPage(): JSX.Element {
                       playedPvUci: mid.topLines?.[0]?.moves ?? [],
                       missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
                       allowedMate: mid.isMate ? mid.mateIn : null,
-                    }, fundamentalSeenRef.current);
+                    }, fundamentalSeenRef.current, weaknessSignalsRef.current);
                     if (look) {
                       // THE SQUARE TRAVELS WITH THE SENTENCE, and is drawn below
                       // only if the package KEPT it. Not `look.line.includes(sq)`
@@ -9885,7 +9885,11 @@ export function CoachTeachPage(): JSX.Element {
                       // substring and failing on a square the sentence names in
                       // words. The producer already knows the square; handing it
                       // over leaves nothing to re-derive and nothing to check.
-                      const line = fundamental ? `${fundamental.verdict} ${look.line}` : look.line;
+                      // The recurrence clause rides between the verdict and the
+                      // evidence, as in review — the loop's own sentence.
+                      const line = fundamental
+                        ? `${fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''} ${look.line}`
+                        : look.line;
                       queueSpokenHint(fenAfterReply, line, look.kind,
                         /^[a-h][1-8]$/.test(look.square) ? [look.square] : []);
                       captureEvent('coach_backward_look', {

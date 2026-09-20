@@ -78,3 +78,28 @@ describe('learnFundamentalVerdict', () => {
     expect(LEARN_FUNDAMENTAL_CP_FLOOR).toBeGreaterThan(0);
   });
 });
+
+// WO-LOOP-01 — Learn's half of the loop out loud, present tense.
+describe('learnFundamentalVerdict — recurrence (WO-LOOP-01)', () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const spine = [{
+    clusterId: 'fundamental:same-piece-twice', bucket: 'positional' as const, label: 'Moving the same piece twice',
+    openCount: 1, severity: 30, puzzleThemes: [] as string[], total: 1,
+    games: [{ gameId: 'prior-1', opponentName: 'Rossi, Anna', playedAt: Date.now() - 9 * DAY }],
+  }];
+  it('a recorded prior game → the present-tense clause rides with the verdict', () => {
+    const r = learnFundamentalVerdict(NB6, new Set(), spine);
+    expect(r?.id).toBe('same-piece-twice');
+    expect(r?.recurrence).toBe("You've walked into this before — moving the same piece twice, the second game now — the last one was against Rossi, Anna 9 days ago.");
+  });
+  it('negative control: a cold student hears the verdict and no recurrence', () => {
+    const r = learnFundamentalVerdict(NB6, new Set());
+    expect(r?.verdict).toBeTruthy();
+    expect(r?.recurrence).toBeNull();
+  });
+  it('a repeat within THIS game gets the short stem and no second recurrence clause', () => {
+    const seen = new Set<FundamentalId>(['same-piece-twice']);
+    const r = learnFundamentalVerdict(NB6, seen, spine);
+    expect(r?.recurrence).toBeNull();
+  });
+});

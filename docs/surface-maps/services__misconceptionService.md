@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**305 lines · 10 exports · 21 importers · 12 tests · 4 audits**
+**307 lines · 10 exports · 22 importers · 13 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:5724) — names `misconceptionService`
 
 ## Who calls in
 
@@ -31,6 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionService.test.ts`
 - `src/services/trainingPlanSelector.test.ts`
 - `src/services/weaknessAnalyzer.ts`
+- `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/weaknessSpine.ts`
 
@@ -39,16 +40,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SRS_INTERVALS_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `isMisconceptionDue` (function) — 3 call sites
+### `isMisconceptionDue` (function) — 4 call sites
 - `src/services/bucketPipelineAudit.ts:252`
 - `src/services/misconceptionService.test.ts:114`
 - `src/services/misconceptionService.test.ts:149`
+- `src/services/weaknessSpine.ts:406`
 
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `logMisconception` (function) — 41 call sites
-- `src/components/Coach/CoachGameReview.tsx:2233`
+### `logMisconception` (function) — 47 call sites
+- `src/components/Coach/CoachGameReview.tsx:2234`
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`
@@ -87,6 +89,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionService.test.ts:139`
 - `src/services/misconceptionService.test.ts:160`
 - `src/services/misconceptionService.test.ts:168`
+- `src/services/weaknessSpine.fundamentals.test.ts:45`
+- `src/services/weaknessSpine.fundamentals.test.ts:60`
+- `src/services/weaknessSpine.fundamentals.test.ts:73`
+- `src/services/weaknessSpine.fundamentals.test.ts:74`
+- `src/services/weaknessSpine.fundamentals.test.ts:75`
+- `src/services/weaknessSpine.fundamentals.test.ts:115`
 - `src/services/weaknessSpine.test.ts:278`
 - `src/services/weaknessSpine.test.ts:328`
 
@@ -111,16 +119,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:157`
 - `src/services/coachApi.ts:4210`
-- `src/services/fundamentalsPipeline.realGame.test.ts:180`
 - `src/services/fundamentalsPipeline.realGame.test.ts:181`
-- `src/services/fundamentalsPipeline.realGame.test.ts:268`
+- `src/services/fundamentalsPipeline.realGame.test.ts:182`
+- `src/services/fundamentalsPipeline.realGame.test.ts:270`
 - `src/services/misconceptionService.test.ts:67`
 - `src/services/misconceptionService.test.ts:78`
 - `src/services/misconceptionService.test.ts:90`
 - `src/services/misconceptionService.test.ts:98`
 - `src/services/misconceptionService.test.ts:116`
 - `src/services/weaknessAnalyzer.ts:996`
-- `src/services/weaknessSpine.ts:691`
+- `src/services/weaknessSpine.ts:776`
 
 ### `recordTagDrillResult` (function) — 8 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:245`
@@ -148,6 +156,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.test.ts`
 - `src/services/trainingPlanSelector.test.ts`
+- `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`
 
 ## Audits that reach it

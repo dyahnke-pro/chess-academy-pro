@@ -7,6 +7,7 @@
 
 import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
+import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { captureEvent } from './analytics';
 import type {
   MisconceptionTagRecord,
@@ -114,6 +115,7 @@ export async function logMisconception(
     counted: input.counted ?? true,
   };
   await db.misconceptionTags.add(record);
+  emitWeaknessModelChanged();
   void logAppAudit({
     kind: 'misconception-captured',
     category: 'subsystem',

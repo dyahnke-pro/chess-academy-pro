@@ -6,6 +6,7 @@
 
 import { useEffect, useRef } from 'react';
 import { loadWeaknessSignals } from '../services/weaknessSignalLoader';
+import { onWeaknessModelChanged } from '../services/weaknessModelEvents';
 import type { WeaknessSignal } from '../services/weaknessSignal';
 
 /**
@@ -18,8 +19,12 @@ export function useWeaknessSignals(): React.RefObject<readonly WeaknessSignal[]>
   const ref = useRef<readonly WeaknessSignal[]>([]);
   useEffect(() => {
     let alive = true;
-    void loadWeaknessSignals().then((s) => { if (alive) ref.current = s; });
-    return () => { alive = false; };
+    const load = (): void => { void loadWeaknessSignals().then((s) => { if (alive) ref.current = s; }); };
+    load();
+    // A slip recorded mid-session (the sweep after a game, a live capture)
+    // reaches the NEXT sentence on this mount, not the next mount.
+    const off = onWeaknessModelChanged(load);
+    return () => { alive = false; off(); };
   }, []);
   return ref;
 }

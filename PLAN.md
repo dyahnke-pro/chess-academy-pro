@@ -87,7 +87,21 @@ and the spine row present but B's tape does not change, the wire is not the
 sentence — it is the deciding computer's need term, and that is a second
 session. The instrument will say which world we are in; the plan does not guess.
 
-**Status:** Phase 0 ✅ · Phase 1 ⏳ · Phase 2 ☐ · Phase 3 ☐ · Phase 4 ☐
+**Phase 1 finding that reshaped the build:** the recurrence COMPUTER already
+existed — `misconceptionCallbacks.recurrenceClause`, wired into ONE path (the
+causal-chain lead) and no other. So the code is a wire, not a new computer, plus
+two defects the wire exposed: (a) the count was in ROWS, so two loose pieces in
+one game read as "recurring in your games", and whether this game's own swept
+rows counted depended on timing — now counted in GAMES via `WeaknessSignal.games`
+(distinct provenance, newest first) and `recurrenceFor(signal, currentGameId)`;
+(b) `weaknessSignalLoader.invalidateWeaknessSignals` had ZERO callers, so a slip
+recorded by the sweep did not reach the next narration for five minutes — the
+writers (`misconceptionService`, `mistakePuzzleService`) now emit on a leaf event
+(`weaknessModelEvents`, imports nothing, so no cycle through `weaknessSpine`) and
+the loader + Learn's hook listen. Both consumers share `fundamentalRecurrence.ts`.
+
+**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ (typecheck 0, lint 0 errors, 141 tests
+across 11 suites green, vacuity OK, harness gates green, 8 maps fresh) · Phase 3 ⏳ · Phase 4 ☐
 
 
 ## THE CRITICAL MOMENT — one computer, two registers (design, 2026-09-18)

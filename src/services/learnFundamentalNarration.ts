@@ -25,6 +25,8 @@ import {
   type FundamentalId,
 } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
+import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
+import type { WeaknessSignal } from './weaknessSignal';
 import { MATE_EVAL_THRESHOLD } from './engineConstants';
 
 export interface LearnFundamentalInput {
@@ -61,6 +63,11 @@ export interface LearnFundamental {
   /** Spoken-ready verdict — full the first time this game, a short stem after
    *  (the shared `seen` set makes the walk accumulate instead of nag). */
   verdict: string;
+  /** The loop, out loud (WO-LOOP-01): "you've walked into this before — the
+   *  third game now, the last one against X". Null on a fresh record, an
+   *  unmatched fundamental, or a repeat within this game. Present tense —
+   *  the live register, never the review's. */
+  recurrence: string | null;
 }
 
 /** A move under this mover-POV loss is not worth naming a fundamental on — a
@@ -93,6 +100,8 @@ function afterFen(fenBefore: string, san: string): string | null {
 export function learnFundamentalVerdict(
   input: LearnFundamentalInput,
   seen: Set<FundamentalId>,
+  /** The student's spine, joined — absent means a cold student (no recurrence). */
+  studentWeaknesses: readonly WeaknessSignal[] = [],
 ): LearnFundamental | null {
   if (!input.bestSan) return null;
   if (input.historySans.length === 0) return null;
@@ -142,10 +151,17 @@ export function learnFundamentalVerdict(
   });
   if (attrs.length === 0) return null;
 
+  // First appearance THIS game → the recurrence clause may follow the full
+  // verdict; a repeat within the game already got its short stem and says
+  // nothing about other games twice.
+  const firstThisGame = !seen.has(attrs[0].id);
   const verdict = renderFundamentalVerdict(attrs.slice(0, 1), {
     ply: input.historySans.length,
     seen,
   });
   if (!verdict.trim()) return null;
-  return { id: attrs[0].id, tag: attrs[0].tag, verdict };
+  const recurrence = firstThisGame
+    ? fundamentalRecurrenceLine({ ids: [attrs[0].id], signals: studentWeaknesses, register: 'live', seenLabels: new Set() })
+    : null;
+  return { id: attrs[0].id, tag: attrs[0].tag, verdict, recurrence };
 }

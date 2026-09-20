@@ -595,6 +595,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         playerRating,
         coachNarration,
         uncapped,
+        gameId: cacheGameId ?? null,
       }).then((narration) => {
         if (narration && narration.segments.length > 0 && cacheGameId) {
           void storeReviewNarration(cacheGameId, cacheKey, narration);
