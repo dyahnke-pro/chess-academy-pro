@@ -451,6 +451,68 @@ suspected to be the wrong Lichess theme — `capturingDefender` is literally
 "remove the defender"; `defensiveMove` is closer to its opposite. A
 co-occurrence check was inconclusive. Measure before touching.
 
+## LANDED 2026-09-19 (late) — the #21 INSTRUMENT: `audit-engine-worker-census-prod.mjs` (David: "add the audit tool")
+
+**Why an instrument and not a fix.** Reading could not name the spawner:
+- the census on a CLEAN bundle (pinned `06wNUWaA`, no deploy mid-run) climbed
+  5 → 41 → 76 worker targets at REOPEN, all `stockfish-18-lite.wasm,worker`
+  pthreads under ONE live multi-thread parent, then fell to 14;
+- PostHog for every headless run in the window: 12 multi inits (one per page
+  load), exactly ONE stall + ONE forced respawn + ONE demotion — all from the
+  earlier Learn run, NONE during the review reopens. So no restart loop; the
+  runtime spawns pthreads inside a single engine while the app sends it plain
+  `setoption`/`position`/`go`/`stop`;
+- ponder is not mounted on review; the pool and dive workers are single-thread;
+  no caller resizes Hash/Threads per call; `ucinewgame` is sent once at init.
+- under a mid-run deploy (4 other sessions pushed while the run walked) the same
+  climb reached 124 and `WebAssembly.Memory(): could not allocate memory`, with
+  761k message-less page errors — the storm made real.
+
+**FIRST TWO PROD RUNS (2026-09-20 ~00:00, pinned `06wNUWaA`, no deploy under either) —
+THE SPAWNER IS NAMED.** Reports: `audit-reports/engine-worker-census-2026-09-20T04-44-41-367Z`
+(census only — creation events arrive without a URL; fixed in `a48bf7d69`) and
+`…T04-54-35-934Z` (attributed). What they measured:
+- Census flat the whole first open and walk: 5 → 10 → 5 (1 multi engine + 4
+  pthreads + 5 single-thread pool workers). Then REOPEN: **127 engine-worker
+  creations, 120 of them `stockfish-18-lite.wasm,worker` pthreads of the
+  multi-thread singleton, ALL inside the first 5 seconds**; peak census 126–130;
+  `WebAssembly.Memory(): could not allocate memory`; only 30 targets destroyed.
+- The UCI clock beside it: in the reopen phase the app sent the multi engine
+  exactly TWO commands — `uci` at 0.0 s and `uci` again at 3.0 s — and never an
+  `isready`, i.e. the engine never answered `uciok`; the app's crash-retry
+  re-created it once. Meanwhile 19 `uci` went to single-thread pool workers
+  (the critical-moment scan's `go depth 14` fan + the dive), 15 of which never
+  reached `isready` either.
+- So #21 is: **on the reopened review page the multi-thread engine's
+  initialisation cannot allocate its shared memory, and the Emscripten pthread
+  runtime storms Workers (≈120 in 5 s) while the app retries the same build.**
+  First-open inits fine on the same page life; the difference at reopen is that
+  the previous page's engines (multi 512 MB SAB reservation + 5 pool workers,
+  `POOL_IDLE_RETIRE_MS` 60 s) are still resident when the new page inits
+  another multi singleton + warms another pool. The 761k message-less page
+  errors are the failed pthread starts.
+
+**Fix directions, ranked (not built — David's call; each is a different file):**
+1. `stockfishEngine`: a multi init that dies on `WebAssembly.Memory()` / never
+   reaches `uciok` must DEMOTE to single (sticky, persisted) instead of retrying
+   multi — `handleEarlyMultiFailure` covers `no uciok within 5s`, but the second
+   `uci` at 3.0 s was still multi; find why the retry did not take the demote.
+2. Bound the multi runtime's pthread pool in the glue patch
+   (`scripts/ci/patch-stockfish-memory.mjs` already caps memory; a pthread cap
+   belongs beside it) so a failing pthread start cannot storm.
+3. Release the previous page's engines on review unmount (`releasePool` keeps
+   5 warm for 60 s; the singleton is never terminated) so a reopen does not
+   double the renderer's WASM reservations. Cheapest; verify it alone first
+   with the census tool (row C + D go green if this is the whole cause).
+Re-run `audit-engine-worker-census-prod.mjs` after any of these; rows C/D/E are
+the contract.
+
+**What the tool measures** (see AUDIT_INDEX): every worker target created or
+destroyed (CDP `Target.setDiscoverTargets`, nested pthreads included) beside
+every UCI string the main thread posts to an engine worker (a `postMessage` hook
+installed before boot), and per engine spawn the commands in the 1.5 s before
+it. Vacuity-checked (fails on a blank app in 0 s). First prod run: see below.
+
 ## LANDED 2026-09-19 (late) — the fundamental the computer proved reaches the ranker (A-NEW)
 
 Chosen from the outline as the most critical open item: the coach learned
