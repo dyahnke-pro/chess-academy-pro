@@ -106,6 +106,7 @@ import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types'
 import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion } from '../coach/questionIntents';
 import { resolveTaughtFundamental } from '../data/fundamentalLessons';
 import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions';
+import { keySquareHighlightMarker } from './arrowEngine';
 import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 
@@ -122,10 +123,17 @@ import './masterPlayAuditBridge';
  *  board receives the annotation (Play, Learn, the global drawer on a boardful
  *  tab) and is stripped from display + TTS everywhere else. Empty when the
  *  answer named no square. */
-function keySquareHighlightTags(answer: { keySquares?: readonly string[] } | null): string {
+export function keySquareHighlightTags(answer: { keySquares?: readonly string[] } | null): string {
   const sq = answer?.keySquares ?? [];
   if (sq.length === 0) return '';
-  return ` ${sq.map((s) => `[BOARD: highlight:${s}:yellow]`).join(' ')}`;
+  // Record the squares OUT OF BAND too. The arrow pass in coachService.ask
+  // strips EVERY [BOARD:] marker from the answer text (it cannot tell a marker
+  // code wrote from one the LLM wrote — same grammar, same string), then
+  // re-appends the highlights from this typed record. Origin is carried by the
+  // channel, never inferred from the text (2026-09-19; the 2026-09-13
+  // text-preserve let an LLM-written highlight through — G0 hole).
+  lastCoachKeySquares = [...sq];
+  return ` ${keySquareHighlightMarker(sq)}`;
 }
 
 /**
@@ -698,6 +706,22 @@ export function consumeCoachActionOffer(): CoachActionOffer[] | null {
   const o = lastCoachActionOffer;
   lastCoachActionOffer = null;
   return o;
+}
+
+/** Key squares the last grounded answer's computed read NAMED (from
+ *  `answer.keySquares`, never scraped from prose). Same set→read-in-one-tick
+ *  scratch pattern as `lastCoachActionOffer`; reset at the top of every
+ *  `getCoachChatResponse`. `coachService.ask` reads it right after the
+ *  provider call and re-appends the highlight marker AFTER the arrow pass
+ *  has stripped every marker in the text — so a highlight reaches the board
+ *  only when code recorded it here, and an LLM-written marker never does. */
+let lastCoachKeySquares: string[] | null = null;
+
+/** Read + clear the key squares from the most recent grounded answer. */
+export function consumeCoachKeySquares(): string[] | null {
+  const s = lastCoachKeySquares;
+  lastCoachKeySquares = null;
+  return s;
 }
 
 /** DeepSeek v4 turned thinking-mode ON BY DEFAULT for BOTH tiers (regression
@@ -3350,6 +3374,7 @@ export async function getCoachChatResponse(
   // that fires THIS turn re-populates it (else the surface shows no
   // follow-up chip). See `consumeCoachActionOffer`.
   lastCoachActionOffer = null;
+  lastCoachKeySquares = null;
 
   // A forced provider with NO resolvable key (e.g. Anthropic after the
   // 2026-06-25 key removal) must not dead-end the call — fall back to the

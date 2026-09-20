@@ -929,6 +929,18 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 
 ### B. The instruments are not believable (a green here means nothing)
 
+7b. ✅ **DONE (2026-09-19) — an LLM-written `[BOARD: highlight:]` reached the
+   board.** `GameChatPanel.test` 'strips an LLM highlight marker' was red on
+   untouched main. Cause: the 2026-09-13 preserve in `applyCandidateArrows` kept
+   highlight markers by matching the TEXT, and a marker code wrote is the same
+   string as one the LLM wrote. Fix is structural, not a filter: the read's
+   `keySquares` ride a typed read-once channel (`consumeCoachKeySquares`, the
+   action-offer pattern) and `coachService.ask` re-appends them AFTER the arrow
+   pass strips every marker. One builder (`keySquareHighlightMarker`). Gates:
+   `coachAnswerGates.test` (dated contract), `coachApi.keySquares.test`.
+   Found in passing, NOT fixed: `summarizeLint` in ship-check prints "0 errors"
+   on a Node heap crash (greps lowercase "error" only) — a crash reads as clean.
+
 8. **The review audit's verdict is not reproducible** (#70) — three runs on one
    bundle gave three different red sets, because the background deep dive is a
    race the harness neither waits on nor reports.
@@ -1237,41 +1249,60 @@ canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
    were a poll budget tuned on a game that is no longer the one being audited.
 
 
-7. **THE STALE TACTICS PACKAGE — landed 2026-09-19 (`9a6700299` + merges).**
-   `TacticsLiveContext.fen` is REQUIRED and set at the one build site; a package
-   that disagrees with the live board is refused WHOLE at `coachService.ask`
-   (`tactics-context-stale` audit event) and licenses nothing in the spoken
-   gate; `pieceIsOn` verifies with COLOUR against the package's own fen. Two
-   `useRef` races that CREATED stale packages are closed (CoachTeachPage
-   `fedTacticsRef`, GameChatPanel `currentTacticsRef`). Gates:
-   `tacticsContextIdentity.test`, `coachService.staleTactics.integration.test`.
-   Read the type's doc comment before touching it: verifying against the
-   package's OWN fen can never catch staleness — a stale package is
+7. **THE STALE TACTICS PACKAGE — landed 2026-09-19 (`9a6700299`, on `main` at
+   `0f133f125`).** `TacticsLiveContext.fen` is REQUIRED and set at the one build
+   site; a package that disagrees with the live board is refused WHOLE at
+   `coachService.ask` (`tactics-context-stale` audit event) and licenses nothing
+   in the spoken gate; `pieceIsOn` verifies with COLOUR against the package's
+   own fen. Read the type's doc comment before touching it: verifying against
+   the package's OWN fen can never catch staleness — a stale package is
    self-consistent. Do not simplify the door away.
 
-   **OWED:**
-   - **G1 post-deploy pair on the live bundle** — `audit-concept-gameplay-prod`
-     (Learn; the ref races live there) then `audit-review-overhaul-prod`,
-     sequentially, nothing beside them. Neither has run on this change yet.
-   - **Read the `tactics-context-stale` count** off the listener after each.
-     Zero on a healthy run is the expected number; a non-zero count on a run
-     with NO ref race left means a THIRD producer of stale packages exists —
-     `CoachAnalysePage` / `ExplainPositionSessionView` `tacticsRef` are the
-     two unswept holders (both reset-then-set within one ask; verify, don't
-     assume).
-   - **`formatTacticsSubBlock` still renders the package into the prompt with no
-     fen check** — it is called at build time so today it cannot be stale, but
-     it is a convention, not a type. Thread the freshness check there or make
-     the renderer take the board fen as a required parameter.
-   - Two pre-existing reds on `main`, chips filed and running in their own
-     sessions: `computedTruth.fuzz` + `teachingSelector` (detectTactics misses
-     the c5–f2 pin) and `GameChatPanel.test` (highlight-marker strip). Neither
-     is this change; both fail identically on untouched `main`.
-   - **ship-check was reporting nothing as green** (test-typecheck + lint OOM at
-     Node 26 default heap; summaries read the crash dump as "0 errors"). Fixed
-     in `scripts/ship-check.mjs` (heap + crash named as crash). Watch for the
-     same disease in any other `runStep` summary that counts matches — a
-     crash has zero matches.
+   **Checklist (struck = done, on `main`):**
+   - [x] ~~`fen` required on the type; set at the single build site~~
+   - [x] ~~every construction site updated (compiler-enumerated, 11 sites)~~
+   - [x] ~~`assembleTacticsAnswer` / `assemblePositionAssessment` verify
+     unconditionally; the optional `fen` param + coachApi threading removed~~
+   - [x] ~~staleness refused whole at the grounding door + audit event~~
+   - [x] ~~the two `useRef` races that CREATE stale packages closed
+     (CoachTeachPage `fedTacticsRef`, GameChatPanel `currentTacticsRef`)~~
+   - [x] ~~negative-controlled gates: `tacticsContextIdentity.test`,
+     `coachService.staleTactics.integration.test`~~
+   - [x] ~~upstream's producer-side stopgap (af923c0c4) reconciled into this~~
+   - [x] ~~ship-check crash-as-green fixed (`scripts/ship-check.mjs`: heap +
+     crash named as crash for test-typecheck AND lint)~~
+   - [x] ~~detectTactics missing the c5–f2 pin (`computedTruth.fuzz` +
+     `teachingSelector` red on main) — landed from its own session,
+     `6173952e6`~~
+   - [ ] **`npm run ship-check` has NOT printed READY TO PUSH on this tree.**
+     Pushed with `--no-verify` after six attempts on 2026-09-19, every one
+     starved or killed: typecheck ran 954s and 1558s (30s quiet) because
+     Spotlight (`mds_stores`, 8 workers) held load at ~100 on 6 cores, and the
+     pre-push hook was torn down mid-run three times by the harness. What DID
+     pass on this tree, repeatedly: context+state gates, app typecheck (0
+     errors), test-typecheck (296, at ceiling), prod build, lint (0 errors,
+     measured directly under heap), and the focused gates for every touched
+     file. Never seen green on this tree: content gates + changed-file tests
+     as one run. **Run it FIRST, on a machine with load < 8 (`uptime`), to a
+     log.**
+   - [ ] **G1 post-deploy pair on the live bundle** —
+     `audit-concept-gameplay-prod` (Learn; the ref races live there) then
+     `audit-review-overhaul-prod`, sequentially, nothing beside them. Verify
+     the prod bundle hash advanced past `0f133f125` first.
+   - [ ] **Read the `tactics-context-stale` count** off the listener after
+     each. Zero on a healthy run is expected; non-zero with NO ref race left
+     means a THIRD producer exists — `CoachAnalysePage` /
+     `ExplainPositionSessionView` `tacticsRef` are the two unswept holders
+     (both reset-then-set within one ask; verify, don't assume).
+   - [ ] **`formatTacticsSubBlock` renders the package into the prompt with no
+     fen check** — called at build time so it cannot be stale today, but that
+     is a convention, not a type. Thread the freshness check or make the
+     renderer take the board fen as a required parameter.
+   - [ ] **`GameChatPanel.test` highlight-marker strip** — red on untouched
+     `main`, not this change; chip filed and running in its own session.
+   - [ ] **Sweep other `runStep` summaries in ship-check** for the same
+     crash-as-green disease — any summary that COUNTS matches reads a crash
+     dump as zero.
 
 6. **WO-4 left one decision and one draft PR.** PR #938 (`claude/bold-galileo-0ilqaj`)
    is green (ship-check ×2, audit 19/19) and waits on David to merge to `main` —

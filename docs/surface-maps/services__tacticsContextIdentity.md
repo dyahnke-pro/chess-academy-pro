@@ -22,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `tacticsAreFreshFor` (function) — 13 call sites
-- `src/coach/coachService.ts:1384`
+- `src/coach/coachService.ts:1389`
 - `src/components/Coach/CoachTeachPage.tsx:5896`
 - `src/components/Coach/GameChatPanel.tsx:765`
 - `src/services/tacticClaimValidator.ts:213`

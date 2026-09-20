@@ -178,24 +178,35 @@ describe('gradeBorrowedTeaching — probe calls do not pollute the audit', () =>
   });
 });
 
-describe('applyCandidateArrows preserves code-authored highlight markers (David 2026-09-13)', () => {
-  it('keeps a [BOARD: highlight:sq:yellow] across the arrow re-derive pass', async () => {
-    // injectCandidateArrows strips ALL [BOARD:] markers to re-derive arrows — which
-    // used to drop the on-demand read's key-square highlights on every coachService
-    // surface (chat/play/drawer). The wrapper must re-append them.
+// CONTRACT CHANGE 2026-09-19. The 2026-09-13 version of this block asserted
+// that applyCandidateArrows PRESERVES a `[BOARD: highlight:]` marker found in
+// the text. That preserved by TEXT, and a marker code wrote is the same string
+// as one the LLM wrote — so an LLM-authored highlight reached the board
+// (GameChatPanel.test 'strips an LLM highlight marker' caught it). Highlights
+// the computer authored now ride a TYPED channel (`consumeCoachKeySquares` →
+// `appendKeySquareHighlights`, applied in coachService.ask AFTER this pass);
+// the arrow pass itself strips every marker, whoever wrote it.
+describe('applyCandidateArrows strips every marker in the text, highlights included (2026-09-19)', () => {
+  const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+  it('drops a [BOARD: highlight:] marker that arrived in the text', async () => {
     const { applyCandidateArrows } = await import('./coachAnswerGates');
-    const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     const out = await applyCandidateArrows(
       'Their king is still stuck in the centre — worth targeting. [BOARD: highlight:e8:yellow]',
       start, 'test',
     );
-    expect(out).toContain('[BOARD: highlight:e8:yellow]');
+    expect(out).not.toMatch(/\[BOARD:\s*highlight:/i);
+    expect(out).toContain('Their king is still stuck in the centre');
   });
 
-  it('does not duplicate a highlight the pass already kept', async () => {
-    const { applyCandidateArrows } = await import('./coachAnswerGates');
-    const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-    const out = await applyCandidateArrows('A quiet read. [BOARD: highlight:d4:yellow]', start, 'test');
-    expect((out.match(/\[BOARD:\s*highlight:d4:yellow\]/gi) ?? []).length).toBe(1);
+  it('appendKeySquareHighlights puts back only the squares the typed record carries', async () => {
+    const { appendKeySquareHighlights } = await import('./coachAnswerGates');
+    expect(appendKeySquareHighlights('A quiet read.', ['e8', 'd4'])).toBe(
+      'A quiet read. [BOARD: highlight:e8:yellow,d4:yellow]',
+    );
+    expect(appendKeySquareHighlights('A quiet read.', null)).toBe('A quiet read.');
+    expect(appendKeySquareHighlights('A quiet read.', [])).toBe('A quiet read.');
   });
+  // The producer half (the read's typed record) is covered in
+  // coachApi.keySquares.test.ts — coachApi is a heavy import, kept out of here.
 });

@@ -32,7 +32,7 @@ import { tacticsAreFreshFor } from '../services/tacticsContextIdentity';
 import { pureBoardAspect } from '../services/boardQuestionRouter';
 import { buildEnginePlan, buildCandidateEval, buildAlternativesContext } from '../services/enginePlanContext';
 import { scanPositionForTrap } from '../services/positionTrapScan';
-import { applyCandidateArrows } from '../services/coachAnswerGates';
+import { applyCandidateArrows, appendKeySquareHighlights } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
 import { buildDanyaTeachingBlock } from '../services/danyaTeachingService';
@@ -42,7 +42,7 @@ import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
-import { consumeCoachActionOffer, translateToEnglish } from '../services/coachApi';
+import { consumeCoachActionOffer, consumeCoachKeySquares, translateToEnglish } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
 import { chosenOrTypedLanguageName, detectStudentLanguage } from '../services/spokenLanguage';
 import { deepseekProvider } from './providers/deepseek';
@@ -1072,6 +1072,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // after each provider.call so the set→read pair runs in one tick;
   // held to the end and attached to the returned CoachAnswer.
   let actionOffer: CoachActionOffer[] | null = null;
+  // Key squares the grounded read NAMED this turn (typed, from
+  // `answer.keySquares`). Captured beside the action offer; re-appended as
+  // the highlight marker AFTER the arrow pass strips every marker, so the
+  // only highlight that reaches the board is one code recorded.
+  let keySquares: string[] | null = null;
 
   for (let trip = 1; trip <= maxRoundTrips; trip++) {
     // Refresh liveFen between trips ONLY (trip > 1). Trip 1 uses the
@@ -1675,6 +1680,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       offeredThisTrip = null;
     }
     if (offeredThisTrip) actionOffer = offeredThisTrip;
+    let keySquaresThisTrip: string[] | null = null;
+    try {
+      keySquaresThisTrip = consumeCoachKeySquares();
+    } catch {
+      keySquaresThisTrip = null;
+    }
+    if (keySquaresThisTrip) keySquares = keySquaresThisTrip;
 
     if (lastResponse.toolCalls.length === 0) {
       // No tools emitted — terminal turn. Exit the loop.
@@ -2076,6 +2088,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // move the coach mentioned gets a code-resolved, Stockfish-rank-
   // colored arrow; the LLM no longer emits [BOARD: arrow:] markers.
   finalText = await applyCandidateArrows(finalText, boardFenForClaims, `coachService:${input.surface}`);
+  // The arrow pass stripped every [BOARD:] marker, including any highlight the
+  // LLM wrote (G0: it draws nothing). Put back ONLY the computed read's key
+  // squares, from the typed record — never from the text.
+  finalText = appendKeySquareHighlights(finalText, keySquares);
 
   // ── FAIL LOUDLY: a data source the coach relies on went down this turn ──
   // David 2026-06-15: "I want the llm to fail loudly if something is down…

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2198 lines · 65 exports · 26 importers · 27 tests · 13 audits**
+**2214 lines · 65 exports · 26 importers · 27 tests · 13 audits**
 
 ## Locked rules that govern this surface
 
@@ -172,7 +172,7 @@
 - `src/coach/questionIntents.ts:858`
 - `src/coach/questionIntents.ts:870`
 - `src/coach/questionIntents.ts:2772`
-- `src/services/coachApi.ts:5718`
+- `src/services/coachApi.ts:5743`
 
 ### `isEndgameWeaknessQuestion` (re-export) — 6 call sites
 - `src/coach/questionIntents.test.ts:584`

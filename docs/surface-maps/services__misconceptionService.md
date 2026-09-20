@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**305 lines · 10 exports · 20 importers · 11 tests · 3 audits**
+**305 lines · 10 exports · 21 importers · 12 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/discussionPractice.ts`
 - `src/services/drillJoinDivergence.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
+- `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/misconceptionCallbacks.test.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.test.ts`
@@ -46,18 +47,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `logMisconception` (function) — 37 call sites
-- `src/components/Coach/CoachGameReview.tsx:2190`
-- `src/components/Coach/FundamentalsPage.test.tsx:91`
+### `logMisconception` (function) — 41 call sites
+- `src/components/Coach/CoachGameReview.tsx:2233`
+- `src/components/Coach/FundamentalsPage.test.tsx:92`
+- `src/components/Coach/FundamentalsPage.test.tsx:129`
+- `src/components/Coach/FundamentalsPage.test.tsx:130`
+- `src/components/Coach/FundamentalsPage.test.tsx:131`
+- `src/components/Coach/FundamentalsPage.test.tsx:141`
 - `src/services/bucketPipelineAudit.test.ts:64`
 - `src/services/bucketPipelineAudit.test.ts:92`
 - `src/services/discussionPractice.ts:263`
 - `src/services/drillJoinDivergence.test.ts:46`
 - `src/services/drillJoinDivergence.test.ts:55`
 - `src/services/drillJoinDivergence.test.ts:62`
-- `src/services/fundamentalsCatalog.test.ts:45`
-- `src/services/fundamentalsCatalog.test.ts:46`
-- `src/services/fundamentalsCatalog.test.ts:50`
+- `src/services/fundamentalsCatalog.test.ts:48`
+- `src/services/fundamentalsCatalog.test.ts:49`
+- `src/services/fundamentalsCatalog.test.ts:53`
 - `src/services/misconceptionDrill.test.ts:35`
 - `src/services/misconceptionDrill.test.ts:43`
 - `src/services/misconceptionDrill.test.ts:44`
@@ -96,16 +101,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `hasMisconceptionsForGame` (function) — 2 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:180`
-- `src/services/autoAnalyzeGame.ts:258`
+- `src/services/autoAnalyzeGame.ts:271`
 
 ### `MisconceptionAggregate` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `getMisconceptionProfile` (function) — 11 call sites
+### `getMisconceptionProfile` (function) — 14 call sites
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:157`
-- `src/services/coachApi.ts:4185`
+- `src/services/coachApi.ts:4210`
+- `src/services/fundamentalsPipeline.realGame.test.ts:180`
+- `src/services/fundamentalsPipeline.realGame.test.ts:181`
+- `src/services/fundamentalsPipeline.realGame.test.ts:268`
 - `src/services/misconceptionService.test.ts:67`
 - `src/services/misconceptionService.test.ts:78`
 - `src/services/misconceptionService.test.ts:90`
@@ -135,6 +143,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/discussionPractice.test.ts`
 - `src/services/drillJoinDivergence.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
+- `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/misconceptionCallbacks.test.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.test.ts`
@@ -145,4 +154,5 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `scripts/audit-coach-play-full.mjs`
 - `scripts/audit-faucet-live.mjs`
+- `scripts/audit-fundamentals-tab-prod.mjs`
 - `scripts/audit-money-loop.mjs`

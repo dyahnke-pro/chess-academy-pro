@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6309 lines · 34 exports · 48 importers · 47 tests · 19 audits**
+**6334 lines · 36 exports · 49 importers · 48 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,6 +41,7 @@
 - `src/services/coachApi.boardVerdict.integration.test.ts`
 - `src/services/coachApi.currentAsk.test.ts`
 - `src/services/coachApi.groundingFallthrough.test.ts`
+- `src/services/coachApi.keySquares.test.ts`
 - `src/services/coachApi.master-integration.test.ts`
 - `src/services/coachApi.speakableFacts.test.ts`
 - `src/services/coachApi.strip.test.ts`
@@ -73,6 +74,11 @@
 
 ## Exports and every call site
 
+### `keySquareHighlightTags` (function) — 3 call sites
+- `src/services/coachApi.keySquares.test.ts:13`
+- `src/services/coachApi.keySquares.test.ts:20`
+- `src/services/coachApi.keySquares.test.ts:21`
+
 ### `warmCoachProvider` (function) — 1 call site
 - `src/App.tsx:459`
 
@@ -104,7 +110,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1673`
+- `src/coach/coachService.ts:1678`
+
+### `consumeCoachKeySquares` (function) — 6 call sites
+- `src/coach/coachService.ts:1685`
+- `src/services/coachApi.keySquares.test.ts:10`
+- `src/services/coachApi.keySquares.test.ts:12`
+- `src/services/coachApi.keySquares.test.ts:15`
+- `src/services/coachApi.keySquares.test.ts:16`
+- `src/services/coachApi.keySquares.test.ts:22`
 
 ### `isNearMissToolName` (function) — 15 call sites
 - `src/services/coachApi.toolName.test.ts:14`
@@ -360,6 +374,7 @@
 - `src/services/coachApi.boardVerdict.integration.test.ts`
 - `src/services/coachApi.currentAsk.test.ts`
 - `src/services/coachApi.groundingFallthrough.test.ts`
+- `src/services/coachApi.keySquares.test.ts`
 - `src/services/coachApi.master-integration.test.ts`
 - `src/services/coachApi.speakableFacts.test.ts`
 - `src/services/coachApi.strip.test.ts`

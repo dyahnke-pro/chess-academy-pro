@@ -124,9 +124,9 @@
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:156`
-- `src/services/coachApi.ts:2062`
-- `src/services/coachApi.ts:4107`
-- `src/services/coachApi.ts:4655`
+- `src/services/coachApi.ts:2086`
+- `src/services/coachApi.ts:4132`
+- `src/services/coachApi.ts:4680`
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
 - `src/services/coachThread.ts:40`
