@@ -533,6 +533,52 @@ teardown ran on the real browser, separate from row C's "the storm did not
 happen". Glue pthread cap (direction 2) deliberately NOT built: measure C/D/E/G
 first; build it only if the census is still red with the engines released.
 
+**END AUDIT 2026-09-20 (bundle `index-UHuaSXZq`) — #21 is NARROWED, NOT CLOSED.**
+- **CENSUS** `audit-engine-worker-census-prod` pinned 06wNUWaA: **7/7** (report
+  `audit-reports/engine-worker-census-2026-09-20T05-29-48-093Z/`). Reopen peak
+  **9** (was 76 clean / 124 under deploy); row G: **0 of 5** prior worker targets
+  live 3 s into the reopen — the pagehide teardown works; 0 WASM errors.
+- **LEARN** `audit-concept-gameplay-prod` **8/8** (`concept-gameplay-2026-09-20T05-37-18-794Z/`):
+  27 spoken lines, the pin invariant voiced mid-game ("Careful — your queen on d5
+  is attacked and nothing's defending it. There's a pin here for you…"), the
+  drawback beat ("That eyed the pawn on a2, but the rook on a1 holds it") is
+  board-true, 13 board lines gate-clean.
+- **REVIEW** `audit-review-overhaul-prod` **28/32** (`review-overhaul-2026-09-20T05-54-07-263Z/`,
+  Svidler B22 game). Every functional row green (fundamentals-first, thesis
+  withheld until the pick, ledger, seat, board accuracy over 38 plies, critical
+  moment "Only one move kept you level here, and it was king to h8", show-me,
+  CRIT fan 17 plies). Reds: REOPEN (documented-stale, see the reopen-probe row),
+  NEED owed-plies 9/12 (attribution gap, pre-existing), **and HEAP + ERR = #21
+  AGAIN: on the reopen made right after the background deep dive the multi init
+  failed, `stockfish-variant-fallback` fired ("Uncaught [object ErrorEvent] @
+  …/stockfish-18-lite.js"), yet 124 `stockfish-18-lite.wasm,worker` targets stayed
+  live to the end of the run and the page logged 1,549,104 message-less
+  ErrorEvents.** The walk itself kept working (heap flat at 257 MB, readout live),
+  so the renderer no longer wedges — but the storm is not stopped by the
+  fallback's `this.worker.terminate()`.
+
+**What the two runs together say.** The census reopen (after an idle walk; pool
+already idle-retired) inits multi cleanly. The review reopen (seconds after the
+deep dive, pool + leased worker just torn down on pagehide) fails it. So either
+(a) `terminate()` frees memory lazily and the new document's 512 MB shared
+reservation races it — the boot init at `App.tsx:430` fires 2.5 s in, and
+`warmAnalysisPool` at 8 s; or (b) the failure is not memory at all — the ErrorEvent
+is message-less, so nobody has read the real error yet. And separately: the
+124 pthread targets surviving the parent's `terminate()` means the pthread
+workers are not dying with the glue worker (nested-worker teardown), which is
+why the error flood continues after the fallback.
+
+**NEXT (in order, each is one small step):**
+1. Census tool: capture the real error via CDP `Runtime.exceptionThrown` /
+   `Log.entryAdded` on the pthread targets (the page-level `ErrorEvent` has no
+   message); add `AUDIT_REOPEN_AFTER_DIVE=1` that waits for `review-dive-done`
+   then reopens, to reproduce the review path on the pinned game.
+2. `handleEarlyMultiFailure`: after `terminate()`, assert the pthread targets
+   die (row: "no `stockfish-18-lite.wasm,worker` target survives the fallback
+   by 3 s"). If they do survive, the glue pthread cap (direction 2) is the fix
+   after all — a bounded pool cannot storm.
+3. Only then consider deferring the boot init on a reopen.
+
 **What the tool measures** (see AUDIT_INDEX): every worker target created or
 destroyed (CDP `Target.setDiscoverTargets`, nested pthreads included) beside
 every UCI string the main thread posts to an engine worker (a `postMessage` hook
