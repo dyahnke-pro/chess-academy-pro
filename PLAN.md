@@ -1212,6 +1212,25 @@ from the entry chunk's size.
 
 **OWED, ranked**
 
+0. 🔴 **n=2 (2026-09-19, late): the same two fundamentals reds on a SECOND game** —
+   Firouzja–Carlsen Scandinavian, student=Black, 69 plies, 5 flagged student
+   plies (48 Kb8-better, 50 Nb6, 62 Rd6, 64 Nd6, 68 Ke8), `attributePrinciples`
+   attributed NONE, so RECAP spoke no aggregate and FUNDLEAD was 0/5. Pinned:
+   `AUDIT_GAME_ID=06wNUWaA AUDIT_STUDENT=black node scripts/audit-review-overhaul-prod.mjs`.
+   READ, not asserted: the path is `coachFeatureService:1441` → `attributePrinciples`
+   per segment; the spine reader landed the same night does not sit in it. Two
+   king retreats, two knight reroutes and a rook move are exactly the
+   `other`-fallthrough population the section-14 detectors (item 10) exist for —
+   this is the coverage gap measured at 23%, on a game where it was 100%. The
+   other three reds this run were instruments: REOPEN (documented, the probe's
+   contract), and HEAP + ERR both from the #21 worker storm — 124 WASM workers on
+   reopen, `WebAssembly.Memory(): could not allocate memory` — which this time
+   produced real page errors, so #21 is a product defect, not a census quirk.
+   One narration to read from that run, ply 62: "Their rook on f1 is guarded
+   only by the king and queen — and the king and queen are the worst defenders,
+   because the moment you hit the guard the piece drops." Board-true or not, a
+   rook guarded by two pieces is not a loose-guard lesson; verify the computer.
+
 0. 🔴 **REVIEW AUDIT: 22/24, TWO REAL FAILURES — both in the fundamentals-first
    path** (prod, 2026-09-19, Carlsen–Grischuk Najdorf, 89 plies):
    - `RECAP fundamentals-aggregate` — end reached, 1 flagged ply, no aggregate
