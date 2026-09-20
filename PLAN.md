@@ -1003,8 +1003,12 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
    race the harness neither waits on nor reports.
 9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
    on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
-10. **`tsconfig.app.json` excludes every test file** (#61), so test type errors
-    are invisible until runtime.
+10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
+    + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
+    Test type errors are no longer invisible; they are counted and capped. What
+    remains is the RUNTIME half at 11e below: drive the ceiling to 0 so a new
+    test type error blocks the push. (This entry used to say "invisible until
+    runtime" — deleted, not annotated, because it was no longer true.)
 11. **The GothamChess pro-rep audit fails on prod** (#58) — header selector and
     walkthrough click both miss.
 

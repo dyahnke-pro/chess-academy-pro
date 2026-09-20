@@ -9,9 +9,9 @@
  * open for two months because `audit-read-position-prod` waited on
  * `position-narration-banner`, deleted from the app on 2026-07-10.
  *
- * Measured 2026-09-19 with this extractor: 1,695 testids rendered in src; 7
+ * Measured 2026-09-19 with this extractor: 1,695 testids rendered in src; 5
  * blocking actions (waitFor / click / fill / innerText / waitForSelector) on
- * ids nothing renders, across 4 scripts (6 ids). Those are the baseline below, and it
+ * ids nothing renders, across 3 scripts (4 ids). Those are the baseline below, and it
  * can only SHRINK. A selector in an alternation list with a live fallback is
  * NOT blamed — that is a legitimate cross-build fallback; only a lone dead id
  * that the script then acts on is.
@@ -38,16 +38,21 @@ function walk(dir: string, ext: RegExp, out: string[] = []): string[] {
 /** Every testid the app can render: literal `data-testid="x"`, the
  *  `xTestId="x"` / `testid: 'x'` prop forms, and template PREFIXES
  *  (`` `card-${id}` `` → `card-`). */
-function renderedTestids(): { ids: Set<string>; prefixes: Set<string> } {
+function renderedTestids(): { ids: Set<string>; prefixes: Set<string>; suffixes: Set<string> } {
   const ids = new Set<string>();
   const prefixes = new Set<string>();
+  // `${testId}-modal` — a SUFFIX template: the id is a known id plus this tail.
+  // Missing this made `gameplay-coaching-row-modal` (SettingsModalRow) read
+  // as dead on the first measurement (2026-09-19) — the gate lying by omission.
+  const suffixes = new Set<string>();
   for (const f of walk(join(ROOT, 'src'), /\.tsx?$/)) {
     if (/\.test\.tsx?$/.test(f)) continue;
     const s = readFileSync(f, 'utf-8');
     for (const m of s.matchAll(/(?:data-testid=\{?|[tT]estId\s*[:=]\s*\{?|testid:\s*)["'`]([^"'`{}$]+)["'`]/g)) ids.add(m[1]);
     for (const m of s.matchAll(/["'`]([a-z0-9]+(?:-[a-z0-9]+)*-)\$\{/g)) prefixes.add(m[1]);
+    for (const m of s.matchAll(/\$\{[a-zA-Z.]+\}(-[a-z0-9]+(?:-[a-z0-9]+)*)["'`]/g)) suffixes.add(m[1]);
   }
-  return { ids, prefixes };
+  return { ids, prefixes, suffixes };
 }
 
 /** A lone `[data-testid="x"]` selector the script then ACTS on. */
@@ -58,8 +63,6 @@ const BLOCKING = [
 
 // SHRINK-ONLY. Measured 2026-09-19. Fix the script (or the id) and delete the line.
 const BASELINE = new Set([
-  'gameplay-coaching-row-modal',
-  'gameplay-coaching-row-close',
   'filter-all',
   'featured-pro-openings',
   'review-full-detail-toggle',
@@ -67,15 +70,18 @@ const BASELINE = new Set([
 ]);
 
 describe('no audit blocks on a testid nothing in src renders', () => {
-  const { ids, prefixes } = renderedTestids();
+  const { ids, prefixes, suffixes } = renderedTestids();
   const audits = walk(join(ROOT, 'scripts'), /^audit-.*\.mjs$/);
-  const known = (t: string): boolean => ids.has(t) || [...prefixes].some((p) => t.startsWith(p));
+  const known = (t: string): boolean =>
+    ids.has(t)
+    || [...prefixes].some((p) => t.startsWith(p))
+    || [...suffixes].some((sf) => t.endsWith(sf) && ids.has(t.slice(0, -sf.length)));
 
   it('finds the app and the fleet at all (non-vacuous)', () => {
     expect(ids.size).toBeGreaterThan(1000);
     expect(audits.length).toBeGreaterThan(200);
     // The extractor must see the prop forms, or every LessonScaffold id reads as dead.
-    for (const t of ['lesson-title', 'lesson-back', 'line-player-back', 'read-position-btn', 'chat-message-assistant']) expect(known(t), t).toBe(true);
+    for (const t of ['lesson-title', 'lesson-back', 'line-player-back', 'read-position-btn', 'chat-message-assistant', 'gameplay-coaching-row-modal', 'gameplay-coaching-row-close']) expect(known(t), t).toBe(true);
   });
 
   it('every blocking action on a dead testid is in the shrink-only baseline', () => {
