@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:4526) — names `usePhaseNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:5407) — names `usePhaseNarration`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:4812) — names `usePhaseNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:5694) — names `usePhaseNarration`
 
 ## Who calls in
 
@@ -26,8 +26,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `usePhaseNarration` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:1757`
-- `src/components/Coach/CoachTeachPage.tsx:6917`
+- `src/components/Coach/CoachGamePage.tsx:1766`
+- `src/components/Coach/CoachTeachPage.tsx:6990`
 - `src/hooks/usePhaseNarration.test.ts:120`
 - `src/hooks/usePhaseNarration.test.ts:323`
 - `src/hooks/usePhaseNarration.test.ts:339`
