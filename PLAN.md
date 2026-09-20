@@ -1602,6 +1602,39 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      clean-machine, deploy-free wedges is therefore n=2 and n=3 (both real:
      49 min at 0 % node, and a main thread that never answered) — the
      reproduction rate is unknown, not "1 in 3".
+   - 🔬 **CAUGHT LIVE AND SAMPLED (2026-09-20 12:37). IT IS JAVASCRIPT, NOT
+     NATIVE, NOT THE ENGINE.** A wedge held for 51 minutes while I sampled the
+     Playwright renderer directly: **pid at 100.6 % CPU, 6534/6534 samples on
+     ONE chain, and the stack is STATIC** — a single call that never returns,
+     not a loop. The chain runs through ~90 JIT frames (`??? in <unknown
+     binary>` — V8 generated code, which is why every symbol `sample` prints
+     is garbage: it attributes addresses to the nearest export, hence
+     `temporal_rs_*` / `rust_png$*` in a chess app). Engines idle, workers=3
+     single-thread, pool churn {}. So: **the main thread is inside one
+     non-returning JS/V8 call.** That it is non-interruptible (`Debugger.pause`
+     never lands, n=3) narrows it to a call with no interrupt check — regex
+     backtracking, or a recursive C++ builtin (`JSON.stringify`,
+     `structuredClone`, `JSON.parse`).
+     RULED OUT so far, measured not assumed: (a) every regex in the speak path
+     (41 of them) against the run's REAL 94 narration lines and the 32.6 KB
+     joined transcript — 0 over 5 ms; (b) all 8 regexes in `src/` with a
+     backtracking-capable shape (nested quantifier or alternation under a
+     quantifier), ReDoS-probed with adversarial pumps at 200→1600 chars — none
+     superlinear. So it is input-dependent (a response we have not seen) or it
+     is not a regex at all. Note the wedged reopen DOES make a fresh
+     `coach-llm-call` + `llm-token-usage`, so an unseen response text reaches
+     the pipeline on exactly the step that wedges.
+     NEXT, BUILT AND READY: `scripts/audit-lib/wedge-tracer.mjs` +
+     `AUDIT_WEDGE_HUNT=1`. It beacons enter/exit (with the JS call site) around
+     every `JSON.stringify/parse`, `structuredClone`, `String.replace/split/
+     match/replaceAll` and `RegExp.exec/test` whose input clears 20 KB —
+     `sendBeacon` hands the payload to the BROWSER process before the call
+     starts, so the breadcrumb survives a renderer that then dies. The last
+     `enter` with no `exit` NAMES the call. Re-entrancy-guarded (a global
+     replace calls exec per match: 50 k beacons, measured) and budget-capped.
+     Run: `AUDIT_WEDGE_HUNT=1 AUDIT_GAME_ID=06wNUWaA AUDIT_STUDENT=black node
+     scripts/audit-review-overhaul-prod.mjs` — it exits 3 at the blow-up with
+     the verdict, so a hunt costs one run, not thirty minutes of grinding.
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
     + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
     Test type errors are no longer invisible; they are counted and capped. What
