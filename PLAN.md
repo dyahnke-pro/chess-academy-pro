@@ -264,13 +264,31 @@ move does not serve the plan either — the plan is not what this position was
 about". The remaining `0 plies` slip is the documented bound below, not a
 regression: that ply had no persisted PV.
 
-⚠️ **STILL OPEN, and it bounds the win honestly:** `ann.pv` is written only when
-`isReview && !opts.sweepOnly` (`gameAnalysisService.ts:1802`), so the lines exist
-only for games whose review deep dive has run. This fix makes `calculation-depth`
-reachable wherever the PV EXISTS; it does not create a PV for games never opened
-in review. Measuring what fraction of recorded games carry one is the next
-reading, and it decides whether the remaining ~29% needs the sweep to compute a
-short line of its own.
+⚠️ **STILL OPEN, and the bound is now PRECISE — sharper than the first wording,
+which said "games whose review deep dive has run" and was both vague and subtly
+wrong.** The gate is `isReview && !opts.sweepOnly` (`gameAnalysisService.ts:1802`),
+and `isReview = positionBudgetMs === undefined` (:1689). No caller passes that
+budget explicitly, so it splits cleanly by ENTRY POINT:
+
+| path | budget | deep dive | PV persisted |
+|---|---|---|---|
+| `analyzeSingleGameUncoalesced` (:2053) — a finished coach game, a game opened in review | none | YES | **yes** |
+| `analyzeRecentGames` (:2211) — the post-import batch | `BATCH_SHALLOW_BUDGET_MS` (200ms) | no | **no** |
+| `analyzeAllGames` (:2411) — the bulk sweep | `BATCH_SHALLOW_BUDGET_MS` | no | **no** |
+
+So opening a review is NOT required (a finished coach game gets one), but
+**every BULK-IMPORTED game carries no PV at all** — and those are precisely the
+games that feed the weakness model for a student who imports. `calculation-depth`
+is therefore reachable on coach-played games and unreachable on imported ones,
+which is close to the opposite of what my first note implied.
+
+That is the next decision, and it is a real fork rather than a tuning question:
+either the sweep computes a short line of its own for batch-analysed plies
+(engine cost on the bulk path, which is the path already blamed for the
+analysis stall), or `calculation-depth` is honestly scoped to games the app
+analysed singly and the ~29% is attacked from a different detector. Worth
+noting alongside the funnel work: the students who import are the ones whose
+games land on the no-PV path.
 
 
 **THE OTHER THREE AUDITS (same bundle):**
