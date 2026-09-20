@@ -316,11 +316,17 @@ reasons, now that every decline names its gate:
    134cp and 107cp were declined for being too cheap. That is a tunable with
    evidence behind it now rather than a guess — though on n=7 from one game it
    is a direction, not a number.
-2. **`left-book-early` declines because the position is NOT IN THE BOOK**, which
-   reads backwards for a detector whose job is to notice leaving book early.
-   Worth reading the gate before tuning anything: if "out of book" is its
-   decline condition, it can only ever fire while still IN book, which may be
-   the inverse of the intent.
+2. 🔴 **I FLAGGED `left-book-early` AS POSSIBLY INVERTED AND IT IS NOT — the
+   claim is deleted rather than softened, because I checked before filing it.**
+   Its documented pattern is: the position BEFORE the move IS in the openings DB
+   with named continuations, and the played move is none of them. So declining
+   with "already out of book" is CORRECT — if you were out of book before the
+   move, you did not leave book at this ply. Nothing to fix.
+   What is real is a COVERAGE CEILING rather than a defect: the detector can
+   only ever fire while the game is still inside the DB's book, and amateur
+   games leave it fast — 5 of 7 flagged plies here were already out. That bounds
+   how much of the 29% this detector could ever reach, which is worth knowing
+   before anyone spends effort widening it.
 3. The PV half is already understood and bounded above (batch path carries none).
 
 🔒 **AND THE MEASUREMENT CAUGHT A HOLE IN THE DIAGNOSTIC ITSELF, first run.** A
