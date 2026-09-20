@@ -951,8 +951,10 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
    is shut". Proof: 0 → 153 listener events, 8/8 on prod. Any audit "green"
    recorded on a Mac under Chrome 148 before this fix verified nothing about
    the voice. Ask whether the instrument reached the surface FIRST.
-   READ from that run, not fixed (§C class): "This game is now the Scandinavian
-   Defense" and the …Bg4 pin line are each spoken TWICE back to back.
+   The run's prose list ALSO showed every line twice — read the raw tape before
+   calling that a §C defect: it was ONE utterance and TWO app events of kind
+   `coach-narration-spoken` (the Learn lane record `CoachTeachPage.trackA` plus
+   voiceService's own). The audit's prose filter now keeps voiceService's.
 
 7b. ✅ **DONE (2026-09-19) — an LLM-written `[BOARD: highlight:]` reached the
    board.** `GameChatPanel.test` 'strips an LLM highlight marker' was red on
@@ -963,8 +965,6 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
    action-offer pattern) and `coachService.ask` re-appends them AFTER the arrow
    pass strips every marker. One builder (`keySquareHighlightMarker`). Gates:
    `coachAnswerGates.test` (dated contract), `coachApi.keySquares.test`.
-   Found in passing, NOT fixed: `summarizeLint` in ship-check prints "0 errors"
-   on a Node heap crash (greps lowercase "error" only) — a crash reads as clean.
 
 8. **The review audit's verdict is not reproducible** (#70) — three runs on one
    bundle gave three different red sets, because the background deep dive is a

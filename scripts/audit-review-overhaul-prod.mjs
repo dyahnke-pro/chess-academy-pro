@@ -177,7 +177,14 @@ const run = async () => {
   });
 
   const spoken = () => listener.getCapturedEvents()
-    .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText)
+    // ONE utterance, TWO app events of this kind: the Learn page's lane record
+    // (`CoachTeachPage.trackA`, "track A spoke: …") AND voiceService's own event
+    // when the line is actually voiced. Keeping both printed every spoken line
+    // twice, which read as a §C "said it twice" defect until the raw tape was
+    // read (2026-09-19). The utterance is what voiceService spoke — the muted
+    // path emits the same event with the same text, so this stays honest under
+    // muteTtsForAudit.
+    .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText && String(e.source ?? '').startsWith('voiceService.'))
     .map((e) => ({ t: Number(e.timestamp ?? 0), text: String(e.narrationText), source: String(e.source ?? '') }));
   const events = () => listener.getCapturedEvents().filter((e) => e.kind !== 'coach-narration-spoken');
 
