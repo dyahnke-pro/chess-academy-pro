@@ -142,37 +142,48 @@ async function main() {
     await move('e2', 'e4');
     await move('g1', 'f3');
 
+    // The chat renders NEWEST FIRST and every assistant bubble carries a
+    // literal "C" badge div before the body — read the BODY only, and never
+    // identify the read by index: tips and move commentary land in the same
+    // list while the read streams. The read is the bubble whose text GROWS
+    // while the button reads "Restart position narration".
     const bubbles = page.locator('[data-testid="chat-message-assistant"]');
-    const bubblesBefore = await bubbles.count();
+    const bodyTexts = () => bubbles.evaluateAll((els) => els.map((el) => {
+      const body = Array.from(el.children).find((c) => c.getAttribute('data-testid') !== 'coach-badge');
+      return (body?.textContent ?? '').trim();
+    }));
+    const before = await bodyTexts();
     const btn = page.locator('[data-testid="read-position-btn"]');
     check('read-position button present', (await btn.count()) > 0);
     if (await btn.count()) {
       await btn.first().click({ timeout: 4000 });
     }
 
-    // 1. ONE new assistant bubble appears and its text GROWS (streaming).
+    // 1. A new bubble appears and one bubble's text GROWS while narrating.
     const appeared = await page.waitForFunction(
-      (n) => document.querySelectorAll('[data-testid="chat-message-assistant"]').length > n, bubblesBefore, { timeout: 90000 },
+      (n) => document.querySelectorAll('[data-testid="chat-message-assistant"]').length > n, before.length, { timeout: 90000 },
     ).then(() => true).catch(() => false);
     check('a new assistant chat bubble appears after the tap (the banner is gone — 2026-07-10)', appeared);
     let finalText = '';
     if (appeared) {
-      const readBubble = bubbles.nth(bubblesBefore);
-      const samples = [];
+      const growth = new Map(); // first-seen text → latest text, keyed by position from the bottom (stable under newest-first)
       const t0 = Date.now();
+      let narrating = true;
       while (Date.now() - t0 < 60000) {
-        const t = (await readBubble.innerText().catch(() => '')).trim();
-        if (t && t !== samples[samples.length - 1]) samples.push(t);
-        const stillNarrating = await btn.first().getAttribute('aria-label').then((a) => /Restart/i.test(a ?? '')).catch(() => false);
-        if (t.length > 40 && !stillNarrating) break;
-        await page.waitForTimeout(500);
+        const now = await bodyTexts();
+        // key by index from the END so prepended bubbles do not shift keys
+        now.forEach((t, i) => { const k = now.length - 1 - i; if (k >= before.length) { const g = growth.get(k) ?? []; if (t && t !== g[g.length - 1]) g.push(t); growth.set(k, g); } });
+        narrating = await btn.first().getAttribute('aria-label').then((a) => /Restart/i.test(a ?? '')).catch(() => false);
+        if (!narrating && [...growth.values()].some((g) => g.length >= 1 && g[g.length - 1].length > 40)) break;
+        await page.waitForTimeout(400);
       }
-      finalText = samples[samples.length - 1] ?? '';
-      const grew = samples.length >= 2 && samples[samples.length - 1].length > samples[0].length;
-      check('the read STREAMS into that bubble (text grows while in flight)', grew, `${samples.length} growth step(s), ${finalText.length} chars`);
-      check('exactly one bubble was added by the read', (await bubbles.count()) === bubblesBefore + 1, `${bubblesBefore} → ${await bubbles.count()}`);
+      const streams = [...growth.values()].filter((g) => g.length >= 2 && g[g.length - 1].length > g[0].length);
+      const readSamples = streams.sort((a, b) => b[b.length - 1].length - a[a.length - 1].length)[0] ?? [...growth.values()].sort((a, b) => (b[b.length - 1]?.length ?? 0) - (a[a.length - 1]?.length ?? 0))[0] ?? [];
+      finalText = readSamples[readSamples.length - 1] ?? '';
+      check('the read STREAMS into its bubble (text grows while in flight)', streams.length >= 1, `${readSamples.length} growth step(s), ${finalText.length} chars; ${growth.size} new bubble(s) during the read`);
       check('the read is non-trivial', finalText.length >= 40, finalText.slice(0, 120));
-      check('the read is gate-clean (you/they — never we/our)', !/\b(we|our|us|ours)\b/i.test(finalText), finalText.match(/\b(we|our|us|ours)\b/i)?.[0] ?? '');
+      check('the read is gate-clean (you/they or coach-as-opponent I/my — never we/our)', !/\b(we|our|us|ours)\b/i.test(finalText), finalText.match(/\b(we|our|us|ours)\b/i)?.[0] ?? '');
+      results.push({ name: 'NEW BUBBLES DURING READ', pass: true, detail: JSON.stringify([...growth.values()].map((g) => g[g.length - 1]?.slice(0, 160))) });
     }
 
     // 3. Voice path engaged despite coachNarration='silent' (the 2026-06-12
@@ -185,9 +196,7 @@ async function main() {
     check('voice path engaged (/api/tts fired) on silent', ttsRequests.length > 0, `${ttsRequests.length} tts request(s)`);
     results.push({ name: 'READ TEXT', pass: true, detail: finalText });
     // The narrations are the product (David: "show me the narrations as well").
-    results.push({ name: 'SPOKEN (voiceService)', pass: true, detail: spoken.map((e) => String(e.narrationText)).join(' ‖ ') });
-    const bubbleTexts = await bubbles.evaluateAll((els) => els.map((el) => el.innerText.trim().slice(0, 200)));
-    results.push({ name: 'CHAT BUBBLES', pass: true, detail: JSON.stringify(bubbleTexts) });
+    results.push({ name: 'SPOKEN (voiceService)', pass: true, detail: spoken.map((e) => `[${e.source}] ${String(e.narrationText).slice(0, 160)}`).join(' ‖ ') });
 
     check('no console errors', consoleErrors.length === 0, consoleErrors.slice(0, 3).join(' | '));
     check('no page errors', pageErrors.length === 0, pageErrors.slice(0, 3).join(' | '));
