@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { tacticsAreFreshFor } from '../../services/tacticsContextIdentity';
 import { validateTacticClaims, stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../services/sanitizeCoachText';
@@ -756,7 +757,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // resolves first; if not, the spoken gate falls back to board-only
           // for the first sentence and the displayed text stays spine-gated.
           void buildFedTacticsContext(liveFen, gameChatStudentColor, gameChatStudentRating, undefined, undefined, gameChatTacticsSkill)
-            .then((fed) => { currentTacticsRef.current = fed; })
+            .then((fed) => {
+              // Land the fed package only if the board has not moved on since
+              // it was requested — this ref is fed-only, so a slow read from a
+              // previous position is exactly the stale package the spoken gate
+              // would then trust (see `TacticsLiveContext.fen`).
+              if (tacticsAreFreshFor(fed, getLiveFen?.() ?? liveFen)) currentTacticsRef.current = fed;
+            })
             .catch(() => { /* engine down — leave board-only */ });
           void logAppAudit({
             kind: 'coach-surface-migrated',

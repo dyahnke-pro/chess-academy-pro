@@ -6,6 +6,9 @@ import type { TacticsLiveContext } from '../../coach/types';
 
 function tacticsWithHanging(): TacticsLiveContext {
   return {
+    // The board this fixture is about — the same FEN the component renders for,
+    // and one that really holds the black queen on d5 the package claims.
+    fen: '4k3/8/5N2/3q4/8/8/8/4K3 w - - 0 1',
     immediate: [], hanging: [{ square: 'd5', piece: 'q', color: 'b' }], threats: [], opportunities: [], lookaheadDepth: 4,
     boardFacts: {
       sideToMove: 'white', whiteKing: 'e1', blackKing: 'e8', inCheck: null, mateInOne: null,

@@ -29,13 +29,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `beatSubject` (function) — 7 call sites
-- `src/services/liveVoiceDefects.test.ts:204`
-- `src/services/liveVoiceDefects.test.ts:205`
-- `src/services/liveVoiceDefects.test.ts:206`
-- `src/services/liveVoiceDefects.test.ts:208`
-- `src/services/liveVoiceDefects.test.ts:210`
-- `src/services/liveVoiceDefects.test.ts:216`
+- `src/services/liveVoiceDefects.test.ts:211`
+- `src/services/liveVoiceDefects.test.ts:212`
+- `src/services/liveVoiceDefects.test.ts:213`
+- `src/services/liveVoiceDefects.test.ts:215`
 - `src/services/liveVoiceDefects.test.ts:217`
+- `src/services/liveVoiceDefects.test.ts:223`
+- `src/services/liveVoiceDefects.test.ts:224`
 
 ### `beatRegister` (function) — 12 call sites
 - `src/services/coachFeatureService.ts:1580`
@@ -64,7 +64,7 @@
 - `src/services/curatedBeatSource.test.ts:21`
 
 ### `curatedBeatAt` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7607`
+- `src/components/Coach/CoachTeachPage.tsx:7615`
 - `src/services/beatVsCorpus.report.test.ts:73`
 - `src/services/computedVoiceAudit.report.test.ts:319`
 - `src/services/computedVoiceAudit.report.test.ts:336`

@@ -128,6 +128,7 @@ vi.mock('../../coach/coachService', () => ({
 // real tactics scanner would reject — stub it to the empty context shape.
 vi.mock('../../services/liveTacticsContext', () => ({
   buildTacticsLiveContext: vi.fn().mockReturnValue({
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
     immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
   }),
 }));

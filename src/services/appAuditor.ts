@@ -40,6 +40,14 @@ export type AuditKind =
   // the emitting commit (0746efb) shipped without widening this union, which
   // broke `typecheck` on main for every session.
   | 'board-verdict-debug'
+  // A TacticsLiveContext reached a consumer that was rendering for a DIFFERENT
+  // board than the package was computed for (`TacticsLiveContext.fen` vs the
+  // live fen). The package was REFUSED whole rather than filtered claim by
+  // claim — a stale package is internally consistent, so per-claim checks
+  // cannot see it. This should never fire: it means a ref or a closure handed
+  // a consumer yesterday's board. If it does, find the producer (David
+  // 2026-09-19, the "knight on b5" that had been captured 15 plies earlier).
+  | 'tactics-context-stale'
   // Pro Games rewatch surface (/coach/pro-games)
   | 'pro-game-rewatch-opened'
   // A student picked a walkthrough fork (Learn deep-dive) — a NORMAL action.

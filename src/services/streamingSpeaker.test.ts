@@ -97,6 +97,7 @@ describe('createStreamingDispatcher — no duplicate dispatches across chunks', 
 
 describe('createStreamingDispatcher — tactic gate on the streamed voice (David 2026-07-04)', () => {
   const CTX_NO_TACTICS = {
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
     immediate: [],
     hanging: [],
     threats: [],

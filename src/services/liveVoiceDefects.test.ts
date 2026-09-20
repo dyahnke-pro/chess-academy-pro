@@ -80,7 +80,14 @@ describe('L1 — the guard sits at the one queue every late lane funnels through
 });
 
 describe('L2 — a claim about a piece that is not there is not made', () => {
+  // The package now carries the board it is about (`TacticsLiveContext.fen`,
+  // required — landed the same day as this test). Here that board is the
+  // STARTING position: b5 is empty, so the package's own `hanging` entry is a
+  // lie about its own board — the internal-inconsistency case. (A package that
+  // is TRUE of its own board but stale for the student's is the OTHER case,
+  // refused whole at the grounding gate — `coachService.staleTactics.integration.test`.)
   const hangingKnightOnB5: TacticsLiveContext = {
+    fen: new Chess().fen(),
     immediate: [],
     hanging: [{ square: 'b5', piece: 'n', color: 'w' }],
     threats: [],
@@ -100,20 +107,20 @@ describe('L2 — a claim about a piece that is not there is not made', () => {
     expect(answer?.facts ?? '').not.toMatch(/knight on b5 is hanging/i);
   });
 
-  it('the tactics answer refuses it too, and says nothing when it has no board', () => {
-    const start = new Chess().fen();
-    expect(assembleTacticsAnswer(hangingKnightOnB5, 'white', null, start)?.facts ?? '')
-      .not.toMatch(/knight on b5 is hanging/i);
-    // No FEN at all → nothing can be verified, so nothing is claimed.
-    expect(assembleTacticsAnswer(hangingKnightOnB5, 'white', null, null)?.facts ?? '')
+  it('the tactics answer refuses it too — verified against the package\'s OWN fen, no parameter to forget', () => {
+    // NEGATIVE CONTROL: drop the `pieceIsOn(tactics.fen, …)` term from the
+    // hanging filter in `assembleTacticsAnswer` and this reads "Your knight on
+    // b5 is hanging." There is no "no board" case any more: a package cannot
+    // be built without one (`fen` is required at the single build site).
+    expect(assembleTacticsAnswer(hangingKnightOnB5, 'white', null)?.facts ?? '')
       .not.toMatch(/knight on b5 is hanging/i);
   });
 
   it('a hanging claim that IS true still speaks — the guard is not a mute', () => {
     // A real undefended knight on b5, reachable by a black pawn on a6.
     const fen = '4k3/8/p7/1N6/8/8/8/4K3 b - - 0 1';
-    const ctx: TacticsLiveContext = { ...hangingKnightOnB5, hanging: [{ square: 'b5', piece: 'n', color: 'w' }] };
-    expect(assembleTacticsAnswer(ctx, 'white', null, fen)?.facts ?? '')
+    const ctx: TacticsLiveContext = { ...hangingKnightOnB5, fen, hanging: [{ square: 'b5', piece: 'n', color: 'w' }] };
+    expect(assembleTacticsAnswer(ctx, 'white', null)?.facts ?? '')
       .toMatch(/knight on b5 is hanging/i);
   });
 });

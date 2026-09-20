@@ -14,6 +14,7 @@ vi.mock('../Chessboard/ConsistentChessboard', () => ({
 // Engine-backed answer key — return a fixed package with a hanging piece so a
 // concrete question is built (no Stockfish in tests).
 const TACTICS: TacticsLiveContext = {
+  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
   immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 4,
   boardFacts: {
     sideToMove: 'white', whiteKing: 'e1', blackKing: 'e8', inCheck: null,

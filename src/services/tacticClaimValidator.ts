@@ -19,6 +19,7 @@
  */
 import type { TacticsLiveContext } from '../coach/types';
 import { detectTactics } from './tacticsDetector';
+import { tacticsAreFreshFor } from './tacticsContextIdentity';
 
 /** Canonical tactic vocabulary the brain is allowed to name. Each
  *  entry maps response-text regex matches → the tactic-type key
@@ -198,8 +199,21 @@ export function stripUngroundedTacticSentences(
    *  context missed is KEPT when chess.js proves it on the board. Omitted →
    *  strict bounded-vocabulary behavior, unchanged. */
   fen?: string | null,
-): { clean: string; dropped: string[] } {
-  if (!context) return { clean: text, dropped: [] };
+): { clean: string; dropped: string[]; staleContext: boolean } {
+  if (!context) return { clean: text, dropped: [], staleContext: false };
+  // STALE PACKAGE (see `TacticsLiveContext.fen`): when the caller hands us the
+  // live board and the package disagrees with it, the package's vocabulary
+  // describes a position the student is no longer looking at, so it licenses
+  // NOTHING here — a "hanging" entry from fifteen plies ago must not license
+  // "your knight on b5 is hanging" today. Graded against an EMPTY vocabulary
+  // instead, so the board-rescue below (`tacticTypeVerifiedOnBoard`, chess.js
+  // on the LIVE board) is the only licence, and a claim that is true right now
+  // still survives. Deliberately not `null`: null means "no gate at all", which
+  // is exactly how a stale claim would sail through.
+  const staleContext = !!fen && !tacticsAreFreshFor(context, fen);
+  const ctx: TacticsLiveContext = staleContext
+    ? { ...context, immediate: [], hanging: [], threats: [], opportunities: [] }
+    : context;
   const dropped: string[] = [];
   const licensedLower = (licensedFacts ?? '').toLowerCase();
 
@@ -214,7 +228,7 @@ export function stripUngroundedTacticSentences(
       // Scan the PROSE only — markers (arrows/actions) never affect the
       // tactic scan, and a fabricated tactic can't be hidden behind a tag.
       const prose = protectedSentence.replace(markerToken, ' ').replace(/\s+/g, ' ').trim();
-      const { violations } = validateTacticClaims(prose, context);
+      const { violations } = validateTacticClaims(prose, ctx);
       // A violation is licensed when the computed facts speak the SAME tactic
       // type (any inflection — matched via the vocabulary patterns, not a
       // literal substring, so facts saying "forks" license prose saying
@@ -279,7 +293,7 @@ export function stripUngroundedTacticSentences(
     return clean ? `[VOICE: ${clean}]` : '';
   });
   out = stripFrom(out);
-  return { clean: out.trim(), dropped };
+  return { clean: out.trim(), dropped, staleContext };
 }
 
 export function validateTacticClaims(

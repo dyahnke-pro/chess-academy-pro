@@ -273,6 +273,7 @@ import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { tacticsAreFreshFor } from '../../services/tacticsContextIdentity';
 import { buildCausalChain, causalChainArrows, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
@@ -5886,7 +5887,14 @@ export function CoachTeachPage(): JSX.Element {
     const tacticsForAsk = buildTacticsLiveContext(fen, cachedAnalysis, studentColor, studentRating);
     fedTacticsRef.current = tacticsForAsk;
     void buildFedTacticsContext(fen, studentColor, studentRating, cachedAnalysis)
-      .then((fed) => { fedTacticsRef.current = fed; })
+      .then((fed) => {
+        // THE RACE THAT MAKES THE REF STALE (David 2026-09-19): a slow engine
+        // read from a PREVIOUS ask resolves after a newer ask has already put
+        // its own package in the ref, and overwrites it with the older board.
+        // Land the fed package only while the ref still belongs to the board
+        // it was built for; otherwise the newer sync package stands.
+        if (tacticsAreFreshFor(fed, fedTacticsRef.current?.fen)) fedTacticsRef.current = fed;
+      })
       .catch(() => { /* engine down — keep the sync context */ });
     // Position trap detection (David 2026-06-16) is CENTRALIZED in
     // coachService.ask — every surface that routes through the grounded coach

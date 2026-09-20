@@ -174,6 +174,7 @@ describe('answerKidGameQuestion', () => {
     vi.restoreAllMocks();
     // Avoid the engine in node test env — board facts compute sync from the FEN.
     vi.spyOn(liveTactics, 'buildFedTacticsContext').mockResolvedValue({
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
       boardFacts: undefined,
     });
@@ -239,6 +240,7 @@ describe('kid coach — computed CONCEPTS never reach the kid prompt (contract)'
     // Simulate what kidGameCoach does: the fed package MAY carry concepts (every
     // adult surface gets them); the kid path must strip them before rendering.
     const withConcepts = {
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
       concepts: [{ id: 'fork', name: 'Fork', source: 'tactic' as const, squares: ['d5'], full: 'x', short: 'y', importance: 0.9 }],
     };

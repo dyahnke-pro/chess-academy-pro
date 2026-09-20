@@ -104,6 +104,9 @@ export function buildTacticsLiveContext(
   } catch { concepts = undefined; }
 
   return {
+    // The package's own identity — the board every fact below is about. Set at
+    // the ONE build site so no producer can forget it (see `TacticsLiveContext.fen`).
+    fen,
     immediate,
     hanging,
     threats,

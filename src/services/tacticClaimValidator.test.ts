@@ -5,6 +5,7 @@ import { detectTactics } from './tacticsDetector';
 import type { TacticsLiveContext } from '../coach/types';
 
 const EMPTY_CTX: TacticsLiveContext = {
+  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
   immediate: [],
   hanging: [],
   threats: [],
@@ -14,6 +15,7 @@ const EMPTY_CTX: TacticsLiveContext = {
 
 function ctxWith(allowed: Array<{ type: string; description: string; squares?: string[]; depthAhead?: number; line?: string[] }>): TacticsLiveContext {
   return {
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
     immediate: allowed.map((a) => ({
       type: a.type,
       description: a.description,

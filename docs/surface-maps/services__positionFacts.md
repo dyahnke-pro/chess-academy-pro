@@ -54,7 +54,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8576`
+- `src/components/Coach/CoachTeachPage.tsx:8584`
 - `src/hooks/useLiveCoach.ts:249`
 - `src/hooks/usePhaseNarration.ts:610`
 - `src/hooks/usePositionNarration.ts:249`
@@ -67,7 +67,7 @@
 - `src/services/whyBestMove.ts:94`
 
 ### `computePositionFacts` (function) — 49 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8549`
+- `src/components/Coach/CoachTeachPage.tsx:8557`
 - `src/hooks/useLiveCoach.ts:232`
 - `src/hooks/usePhaseNarration.ts:597`
 - `src/hooks/usePositionNarration.ts:236`

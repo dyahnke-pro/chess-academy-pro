@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**846 lines · 30 exports · 879 importers · 179 tests · 38 audits**
+**878 lines · 30 exports · 884 importers · 183 tests · 38 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,11 +15,11 @@
 - **File Organization** (CLAUDE.md:3390) — names `types`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3763) — names `types`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3802) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4219) — names `types`
-- **Naming** (CLAUDE.md:4780) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:4825) — names `Provider`
-- **Shared types / services** (CLAUDE.md:4892) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:5621) — names `TacticsLiveContext`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4272) — names `types`
+- **Naming** (CLAUDE.md:4833) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:4878) — names `Provider`
+- **Shared types / services** (CLAUDE.md:4945) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:5674) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -711,6 +711,7 @@
 - `src/services/dbService.ts`
 - `src/services/deliberation.ts`
 - `src/services/discussionPractice.ts`
+- `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
 - `src/services/endgameProgressService.ts`
 - `src/services/engineDeltaLines.test.ts`
@@ -725,6 +726,7 @@
 - `src/services/flashcardService.ts`
 - `src/services/fromYourGamesService.test.ts`
 - `src/services/fromYourGamesService.ts`
+- `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameAnalysisService.ts`
@@ -757,6 +759,7 @@
 - `src/services/lichessService.ts`
 - `src/services/liveTacticsContext.test.ts`
 - `src/services/liveTacticsContext.ts`
+- `src/services/liveVoiceDefects.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/masterPlayLookup.ts`
 - `src/services/masterclassRedirect.ts`
@@ -861,6 +864,8 @@
 - `src/services/tacticVocabulary.ts`
 - `src/services/tacticalProfileService.ts`
 - `src/services/tacticalRead.test.ts`
+- `src/services/tacticsContextIdentity.test.ts`
+- `src/services/tacticsContextIdentity.ts`
 - `src/services/tacticsDetector.ts`
 - `src/services/teachingSelector.ts`
 - `src/services/themeService.test.ts`
@@ -1101,12 +1106,14 @@
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/conceptEngine.test.ts`
 - `src/services/conversionDetector.test.ts`
+- `src/services/drillVocabulary.test.ts`
 - `src/services/endgameProfileService.test.ts`
 - `src/services/engineDeltaLines.test.ts`
 - `src/services/enginePlanContext.test.ts`
 - `src/services/engineReadNarration.test.ts`
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/fromYourGamesService.test.ts`
+- `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameInsightsService.test.ts`
@@ -1121,6 +1128,7 @@
 - `src/services/laneReachability.test.ts`
 - `src/services/lichessPuzzleService.test.ts`
 - `src/services/liveTacticsContext.test.ts`
+- `src/services/liveVoiceDefects.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/masterclassWalkthroughAdapter.test.ts`
 - `src/services/miniGameEngine.test.ts`
@@ -1159,6 +1167,7 @@
 - `src/services/tacticTypeUnification.test.ts`
 - `src/services/tacticVocabulary.test.ts`
 - `src/services/tacticalRead.test.ts`
+- `src/services/tacticsContextIdentity.test.ts`
 - `src/services/themeService.test.ts`
 - `src/services/tiltSignal.test.ts`
 - `src/services/timeTroubleDetector.test.ts`

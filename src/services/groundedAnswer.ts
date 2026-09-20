@@ -37,6 +37,7 @@ import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
 import { andList, orList } from '../utils/andList';
+import { pieceIsOn } from './tacticsContextIdentity';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -1007,36 +1008,6 @@ const MATE_AGAINST_YOU = [
  *  guarding against a negative seed and another not. */
 const pick = (variants: readonly string[], seed: number): string => rotateStem(variants, seed);
 
-/**
- * 🔒 IS THAT PIECE ACTUALLY THERE? — the check that was never made.
- *
- * A real 22-ply Learn game ended with the coach saying "Your knight on b5 is
- * hanging." The b5 piece had been captured fifteen plies earlier (`axb5`) and
- * the student had no knights left on the board at all.
- *
- * Nothing was broken in the detector. The claim comes from
- * `TacticsLiveContext.hanging`, which is computed from a FEN — but the type
- * carries no record of WHICH fen, so a package built for one position can be
- * handed to another and every consumer will voice it in good faith. Two
- * board-derived inputs that are never required to agree is the same shape as
- * the seat and register bugs: the identifying field is missing, so nothing
- * downstream is able to check.
- *
- * Until the package carries its own position, the producer verifies before it
- * speaks. This is not a claim-stripper on prose (which G0 bans and which would
- * be the wrong instinct here) — it is a fact-computer refusing to assert
- * something it can read the truth of directly, with chess.js, from the board it
- * was handed. If the piece is not there, there is no claim to make.
- */
-function pieceIsOn(fen: string | null | undefined, square: string, pieceType: string): boolean {
-  if (!fen) return false;
-  try {
-    const at = new Chess(fen).get(square as Parameters<Chess['get']>[0]);
-    return at != null && at.type === pieceType;
-  } catch {
-    return false;
-  }
-}
 
 export function assemblePositionAssessment(opts: {
   evalCp: number | null | undefined;
@@ -1113,9 +1084,12 @@ export function assemblePositionAssessment(opts: {
     } else if (tactics.immediate[0]?.description) {
       parts.push(`${tactics.immediate[0].description}.`);
     } else {
-      // BOARD-VERIFIED before it is spoken — see `pieceIsOn`. A hanging entry
-      // whose piece is not on `opts.fen` describes some other position.
-      const myHang = tactics.hanging.find((h) => h.color === sc && pieceIsOn(opts.fen, h.square, h.piece));
+      // Verified against the package's OWN fen — unconditional, no parameter to
+      // forget (see `TacticsLiveContext.fen`). This catches a claim the
+      // package's own board does not bear out; STALENESS (a package about
+      // another board) is refused upstream at the grounding gate, because a
+      // stale package passes this check by construction.
+      const myHang = tactics.hanging.find((h) => h.color === sc && pieceIsOn(tactics.fen, h.square, h.piece, h.color));
       if (myHang) parts.push(`Your ${REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece} on ${myHang.square} is hanging.`);
       else if (tactics.threats[0]?.description) parts.push(`Watch out — ${tactics.threats[0].description}.`);
     }
@@ -2830,11 +2804,6 @@ export function assembleTacticsAnswer(
   tactics: TacticsLiveContext,
   studentColor: 'white' | 'black',
   ask?: string | null,
-  /** The board these tactics were computed for. Supplied so a piece-on-square
-   *  claim can be verified before it is spoken — see `pieceIsOn`. Optional only
-   *  because `TacticsLiveContext` does not yet carry its own position; when it
-   *  does, this parameter goes away and the check becomes unconditional. */
-  fen?: string | null,
 ): GroundedAnswer | null {
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const parts: string[] = [];
@@ -2865,7 +2834,9 @@ export function assembleTacticsAnswer(
     // Honest no — name the motif asked, and flag a standing danger if one
     // exists so "no shot" is never mistaken for "all clear".
     const motif = motifM ? motifM[1] : 'winning tactic';
-    const danger = tactics.hanging.find((h) => h.color === sc);
+    // Board-verified against the package's own fen (see the note in
+    // assemblePositionAssessment) — a danger we cannot see is not named.
+    const danger = tactics.hanging.find((h) => h.color === sc && pieceIsOn(tactics.fen, h.square, h.piece, h.color));
     const dangerNote = danger ? ` And watch your ${REVIEW_PIECE_NAME[danger.piece] ?? danger.piece} on ${danger.square} — it's loose.` : '';
     return {
       facts: `No ${motif} for you here right now — nothing of theirs is loose to win.${dangerNote}`,
@@ -2889,10 +2860,10 @@ export function assembleTacticsAnswer(
   for (const t of tactics.immediate) {
     if (t.description && t.type !== spokenConceptId) parts.push(`${t.description}.`);
   }
-  // The STUDENT's pieces left hanging — warn concretely, and only about pieces
-  // that are ACTUALLY ON THE BOARD we were handed (see `pieceIsOn`). Without a
-  // FEN nothing can be verified, so nothing is claimed.
-  for (const h of tactics.hanging.filter((p) => p.color === sc && pieceIsOn(fen, p.square, p.piece))) {
+  // The STUDENT's pieces left hanging — warn concretely. Every claim is
+  // verified against the package's own fen before it is made: a hanging entry
+  // whose square does not hold that piece is not spoken (David 2026-09-19).
+  for (const h of tactics.hanging.filter((p) => p.color === sc && pieceIsOn(tactics.fen, p.square, p.piece, p.color))) {
     parts.push(`Your ${REVIEW_PIECE_NAME[h.piece] ?? h.piece} on ${h.square} is hanging.`);
   }
   // Nothing concrete yet → surface the top threat, then the top opportunity.
