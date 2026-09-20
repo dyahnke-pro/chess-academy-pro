@@ -2,11 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { studentMomentBoost, GREY_BOOST } from './studentMomentBoost';
 import { computeImportance } from './narrationImportance';
-import type { CapabilityProfile } from './capabilityEvidence';
+import type { CapabilityProfile, CapabilityProfileEntry } from './capabilityEvidence';
 import type { WeaknessSignal } from './weaknessSignal';
 
 const TAG = 'ignored-opponent-threat' as never;
-const caps = (e: { held: number; broken: number } | null): CapabilityProfile =>
+const caps = (e: CapabilityProfileEntry | null): CapabilityProfile =>
   (e ? new Map([[TAG, e]]) : new Map()) as CapabilityProfile;
 
 const persistentHole = {
@@ -21,7 +21,7 @@ describe('the heat map feeds the RANKER', () => {
   });
 
   it('GREEN earns nothing here — the ranker is raise-only, green lowers through need', () => {
-    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 9, broken: 0 }) })).toBe(0);
+    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 9, broken: 0, heldStreak: 9, streakGames: 2 }) })).toBe(0);
   });
 
   it('RED outranks GREY when the hole is persistent and worsening', () => {

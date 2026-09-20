@@ -5053,6 +5053,25 @@ When you add a new lesson flow, reuse these primitives:
 - Never pass narration in a parallel array — embed it on the
   `WalkthroughStep`.
 
+## 📋 "WHERE DO WE STAND?" = PRINT `OUTLINE.md` (David 2026-09-20: "save this as the outline so its given to me like this when i ask")
+
+When David asks where the outline / the plan / the loop stands, the answer is
+`OUTLINE.md`'s SHAPE: every work order and every roadblock item, ONE LINE each,
+with a marker (✅ done · 🔴 open defect · 🟠 needs a measurement or his call ·
+🟡 low rank · ⛔ another session owns it). Not a prose summary, not the subset
+you happen to have read, and never the row count of the last audit — he asked
+for the board, so give him the whole board.
+
+`PLAN.md` stays the RECORD (the reasoning, the measurements, the corrections
+that must not be re-derived). `OUTLINE.md` is the INDEX over it. When they
+disagree, PLAN wins and the outline line is the bug.
+
+🚨 **UPDATE `OUTLINE.md` IN THE SAME COMMIT AS THE WORK.** A status board that
+lags reports finished work as open and open work as finished, which is how a
+session spends a night on something that landed yesterday. This is the same
+reason `docs/STATE.md` is generated and verified — a board nobody trusts is
+worse than no board.
+
 ## Plan docs for large fixes (standing order)
 
 **For any non-trivial multi-step fix, write a `PLAN.md`-style
@@ -5769,6 +5788,7 @@ After every `git push origin main`:
    | any COACH-ANSWER surface (routing, assemblers, `voiceFacts`, grounding) | re-run its audit with `DEGRADE=llm` (`scripts/audit-lib/degrade.mjs`). Under G0 the model only PHRASES facts computed in code, so with the provider 401ing the coach must STILL answer correctly — in the raw computed register instead of the warm one. A surface that refuses or goes silent under `DEGRADE=llm` was never inverted, it was only asking the model nicely. Verified 2026-09-02: board-verdict 7/7 with the LLM dead, and 7/7 with LLM+engine both dead. |
    | ANY new or edited `scripts/audit-*.mjs` | `node scripts/audit-vacuity-check.mjs --changed` — a negative control that points the audit at a blank app and FAILS it for still printing PASS. "The audit reported green having verified nothing" is the most expensive failure mode in this repo; this is the only instrument that measures it. |
    | coach QUESTION-ROUTING (questionIntents detectors, coachApi lane dispatch, coachService/coachSessionRouter, voiceFacts, the teach pre-flight capture) | `scripts/audit-coach-all-questions-prod.mjs` — THE EXHAUSTIVE ROUTING AUDIT (see locked standard below). Companion: `scripts/audit-coach-multilingual-prod.mjs` (the translateToEnglish seam). |
+   | **THE LOOP, GREEN DIRECTION** — anything on the capability path (`capabilityEvidence`, `summariseEvidence`, `capabilityProven`, `needScore.capabilityTerm`, `studentMomentBoost`, `useDiscussionPractice.recordGradedMove`) | `scripts/audit-loop-green-prod.mjs` — the twin of the loop audit in the other direction: three devices on ONE real game, seeded PROVEN evidence must make the tape quieter, and the same rows flagged `prompted` must change NOTHING (being told is not proving — that negative control is what stops "quieter" being an artifact of having any rows at all). The bar it asserts was measured, not chosen: `capabilityGreen.measure.test.ts` swept 15 real games and found the COUNT inert (2 flips at every threshold) and `posedImportance >= 80` the knee where flips reach zero. + `npx vitest run src/services/capabilityEvidence.test.ts src/services/capabilityRead.test.ts` |
    | **THE LOOP ITSELF** — anything on the record→spine→ranker→sentence path (`autoAnalyzeGame`, `misconceptionService`, `weaknessSpine`, `weaknessSignal`, `weaknessSignalLoader`, `fundamentalRecurrence`, `misconceptionCallbacks`, the fundamentals-first beat in `coachFeatureService`, `learnFundamentalNarration`) | `scripts/audit-loop-closes-prod.mjs` — the only instrument that measures the app's one-line definition instead of a feature: game A recorded, game B narrated DIFFERENTLY because of it, on two fresh prod devices with a control. A green here is the concept working; a red names which half (RECORDED vs SPOKEN) broke. + `npx vitest run src/services/fundamentalRecurrence.test.ts src/services/coachFeatureService.recurrence.test.ts src/services/loopCloses.test.ts` |
    | `/coach/fundamentals` (the tab, `fundamentalsCatalog`, the FundamentalId→pillar join, `autoAnalyzeGame`'s recording path) | `scripts/audit-fundamentals-tab-prod.mjs` (muted, 3-instrument: seeds real `misconceptionTags` rows via raw IndexedDB and proves the per-pillar standing renders from the student's own record; grey stays silent) + `npx vitest run src/services/fundamentalsCatalog.test.ts src/services/fundamentalsPipeline.realGame.test.ts` — the second runs a REAL amateur game through the REAL sweep (`analyzeGameOnWorker` with a replay worker carrying real Stockfish numbers) and asserts attributed fundamentals land in `misconceptionTags`; the 47-game measurement half runs only when `data/sources/wo4-corpus/` is present |
    | Cross-surface UI scaffolding | run multiple of the above |

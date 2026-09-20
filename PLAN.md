@@ -6,6 +6,13 @@
 
 # PLAN — closing the loop (2026-09-18)
 
+> 📋 **THE ONE-PAGE BOARD IS `OUTLINE.md`.** Every work order and every roadblock
+> item, one line each, with a done/open marker — it is what David means when he
+> asks "where do we stand with the outline?", and the shape the answer comes back
+> in. THIS file is the record (reasoning, measurements, corrections); that one is
+> the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
+> session picks up something already finished.
+
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
 Everything on the open list that is code I own and needs no decision from David.
@@ -139,12 +146,116 @@ fallthrough carries them, and the sink changes no result).
 Found building it: declaring the sink beside the attributor put the
 unparseable-SAN `other` return inside its temporal dead zone, so that path
 THREW — caught by the classifier's existing gates, which is what they are for.
-**What remains is the reading:** run a real library through it and widen the
-gates from the population that comes back. My four-game sample already says
-where to look — a pawn push at ply 30 is past the opening window
-(`left-book-early` can never see it) and a king retreat usually earns no
-structure plan (`no-plan` declines honestly), so the likeliest first move is
-`calculation-depth`'s PV shape.
+**THE READING — TAKEN 2026-09-20, FROM REAL USERS.** I was about to widen
+`calculation-depth`'s PV shape from a four-game sample. PostHog answered first.
+(Method, and it is the general lesson: `misconception-captured` mirrors as the
+`misconception_captured` product event carrying `tag=` in its summary, so 90
+days of real slips were already there. **Ask the data whether a thing reaches
+users before reproducing it expensively.**)
+
+🔴 **AND THE FIRST VERSION OF THIS READING WAS WRONG — the wrong numbers are
+DELETED, not annotated.** I first reported 37.7% unnamed and "52% of slips carry
+an invented cpLoss", and built a whole ordering argument on top. Both were
+artifacts of aggregating a 90-day window that STRADDLES the 2026-08-10 fix that
+replaced the `blunder ? 350 : 175` fallback with the measured delta. Weekly, the
+fallback runs ~98% before 2026-08-09 and 5.9–11.9% after: the code comment at
+`autoAnalyzeGame.ts:241` claims the fallback drains, and **it does — I aggregated
+across the drain and read the history as the present.** Checking the trend, not
+just the total, is what caught it.
+
+**THE POST-FIX POPULATION (since 2026-08-30) — this is the number that decides
+the gates.** 1,372 slips, 9 devices, audit rows excluded, every row parsing a tag.
+
+| finding | number |
+|---|---|
+| real-user slips the app cannot name (`other`) | **29.2%** (400 / 1,372) |
+| my four-game estimate | 23% — close; the sample was not badly wrong |
+| unnamed by phase: opening / middlegame / endgame | 29.3% / 32.4% / 24.1% |
+| slips still carrying the bucket fallback | 7.7% (105 / 1,372) |
+
+**What actually follows.**
+
+1. **The unnamed bucket is ~29% and roughly UNIFORM across phases.** The
+   middlegame spike (45.6%) I reported was pre-fix residue. So there is no
+   phase-shaped hint telling us which detector to widen, and the honest next
+   move is to read the reasons the sweep now emits per unnamed slip rather than
+   to infer a target from the distribution.
+2. **The bucket fallback is a real but SMALL live defect (7.7%),** not the
+   dominant one. It survives where the code says it should — mate-encoded evals
+   and annotations predating `bestMoveEval`.
+   🔴 **The "trapped WASM worker manufactures the nulls" theory is WITHDRAWN,
+   and the line asserting it is deleted rather than annotated.** It was a
+   plausible supply line (a failed search → the pooled `catch { evals[i] = null }`
+   → an invented 175/350) and the peer MEASURED it on their next deterministic
+   run: **0 of 69 null evals and 0 of 69 null bestMoveEvals.** On that evidence
+   the engine traps manufactured nothing, so the residue is most likely mate
+   sentinels and pre-fix rows. The instrument now measures it every run, which is
+   the right place to leave it. Worth noting how this one nearly stuck: two
+   sessions found the theory persuasive and neither had measured it.
+   The DOCTRINAL point survives on its own merits — a fabricated fact wearing a
+   measured number's clothes is indistinguishable downstream, and the determinism
+   law says propagate the null (`cpLoss: number | null`, or a required
+   `cpLossMeasured` flag so a new consumer must decide what unmeasured means)
+   rather than substitute a midpoint. Two consumers read it as real today
+   (`mistakePuzzleService.ts:695`, `weaknessAnalyzer.ts:1158`). **Not urgent at
+   7.7%, NOT a blocker on the gates, and NOT justified by an engine-failure
+   story** — which is the opposite of what my first version of this concluded.
+3. **The ordering claim I made is withdrawn.** "Fix the input before widening the
+   gates" rested on the input being broken for half of production. It is broken
+   for 7.7%. Widen the gates against the post-fix population, and excluding the
+   175/350 rows costs almost nothing.
+
+Caveats that survive: 175/350 is a proxy for "no measurement", not proof; and
+these slips come from 9 devices, so it is a real-user population, not a broad one.
+
+**THE TALLY ITSELF — read 2026-09-20 off the muted prod loop audit (6/6, THE LOOP
+CLOSES, fresh pair A=nHdi6Qpx / B=MxLHuel4, student black). It names a WIRE
+defect, not a tuning one, and it closes this item.**
+
+Every unnamed slip the run met printed the same first reason:
+
+```
+calculation-depth: punishing PV is 0 plies, needs 3
+left-book-early:   ply 26 is past the 24-ply opening window   <- correct decline
+no-plan:           O-O is forcing or castling, never planless  <- correct decline
+```
+
+**ZERO plies, not two.** The gate was never tight — its INPUT was absent, and no
+threshold change could have moved it. Two of the three detectors declined
+correctly, exactly as designed; the only one that could fire never saw a line.
+
+**Root cause.** The annotation carries the engine lines — `ann.pv`, persisted by
+the review's deep dive at a flagged ply (`gameAnalysisService.ts:1943`) — and
+`autoAnalyzeGameMisconceptions`'s blunder builder never passed them. So on the
+RECORDING path (every imported and every finished coach game) the PV-gated
+fundamentals could not fire at all.
+
+**This is the THIRD instance of one pattern in one function**, and the file
+already documents the other two in its own comments: `evalBefore`, then
+`evalAfterPlayed` (WO-4 J2, where `botched-conversion` measured 0 of 154 flagged
+moves across 47 real games for precisely this reason). `BlunderForAnalysis` has
+DECLARED `pvAfterPlayed`/`pvAfterBest` since 2026-09-06, with a comment saying
+they "unlock the eval/PV-gated fundamentals on the recording path". The fields
+were there; the wire never was. **The lesson worth carrying: when a builder
+assembles an input row for a computer, check it field-by-field against what the
+source record actually holds — a declared-but-unassigned field is invisible at
+every layer below it.**
+
+FIXED: both PV fields pass through, UCI->SAN via `pvUciToSan`, the same
+conversion the review path does at `coachFeatureService.ts:1449`. Typecheck 0.
+Gate `sweepPassesEngineLines.test.ts` blames by BEHAVIOUR (the attributor's own
+diagnostic must stop reporting an empty line) and is negative-controlled both
+ways — with the wire removed it fails "the persisted PV never reached the
+classifier"; restored, both rows pass.
+
+⚠️ **STILL OPEN, and it bounds the win honestly:** `ann.pv` is written only when
+`isReview && !opts.sweepOnly` (`gameAnalysisService.ts:1802`), so the lines exist
+only for games whose review deep dive has run. This fix makes `calculation-depth`
+reachable wherever the PV EXISTS; it does not create a PV for games never opened
+in review. Measuring what fraction of recorded games carry one is the next
+reading, and it decides whether the remaining ~29% needs the sweep to compute a
+short line of its own.
+
 
 **THE OTHER THREE AUDITS (same bundle):**
 - **LEARN** `audit-concept-gameplay-prod` **8/8** — the pin invariant voiced

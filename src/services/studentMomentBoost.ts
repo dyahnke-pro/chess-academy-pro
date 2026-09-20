@@ -20,7 +20,7 @@ import type { WeaknessSignal } from './weaknessSignal';
 import { boostFor, MAX_WEAKNESS_BOOST } from './weaknessSignal';
 import type { CapabilityProfile } from './capabilityEvidence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { HELD_FOR_PROVEN } from './needScore';
+import { capabilityProven } from './capabilityEvidence';
 
 /**
  * A capability the board POSED that this student has no record for.
@@ -71,10 +71,11 @@ export interface StudentMomentInput {
  * from scoring less than never-having-been-asked.
  */
 function isUnproven(tag: MisconceptionTagId, caps: CapabilityProfile): boolean {
-  const e = caps.get(tag);
-  if (!e) return true;                         // never asked
-  if (e.broken > 0) return true;               // asked and FAILED — never quieter than unasked
-  return e.held < HELD_FOR_PROVEN;             // seen, not yet proven
+  // ONE definition, shared with `needScore` (`capabilityProven`). This used to
+  // re-implement it in three branches; two readers of the same judgement are
+  // two chances for it to drift. Never-asked and asked-and-failed both come
+  // back unproven from that call, which is what this needs.
+  return !capabilityProven(caps.get(tag));
 }
 
 /**

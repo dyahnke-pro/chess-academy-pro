@@ -262,3 +262,57 @@ describe('capability evidence is recorded from LIVE play', () => {
     expect(vi.mocked(recordMoveEvidence).mock.calls[0][0].cpLoss).toBeGreaterThan(0);
   });
 });
+
+/**
+ * THE POSITIVE HALF ON A SURFACE THAT ALREADY GRADED THE MOVE.
+ *
+ * `/coach/play` stopped calling `evaluatePlayerMove` on 2026-06-04 (it ran a
+ * second Stockfish pair and a second classifier that disagreed with the
+ * blunder interceptor). `recordMoveEvidence` lived inside that call, so the
+ * positive half went with it and the main playing surface recorded ZERO holds
+ * while still declaring `capabilityOrigin: 'play'` — wired to the eye, dead in
+ * fact. `recordGradedMove` is the door that takes the caller's OWN cpLoss, so
+ * the fix cannot become a second analysis.
+ */
+describe('recordGradedMove — the door for an already-graded move', () => {
+  it('records the caller\'s grade with the mount\'s origin and the game id', () => {
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
+    act(() => {
+      result.current.recordGradedMove({
+        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+        cpLoss: 0, sourceGameId: 'game-123',
+      });
+    });
+    expect(recordMoveEvidence).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(recordMoveEvidence).mock.calls[0][0]).toMatchObject({
+      fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+      cpLoss: 0, origin: 'play', prompted: false, sourceGameId: 'game-123',
+    });
+  });
+
+  it('NEVER analyses — an ungradeable move records nothing rather than reading as clean', () => {
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
+    act(() => {
+      result.current.recordGradedMove({
+        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+        cpLoss: null, sourceGameId: 'game-123',
+      });
+    });
+    expect(recordMoveEvidence).not.toHaveBeenCalled();
+    // The whole point of the door: unknown stays unknown, and no engine is
+    // reached for it (the 2026-06-04 regression must not return).
+    expect(stockfishEngine.analyzePosition).not.toHaveBeenCalled();
+  });
+
+  it('stays inert where the surface opted out of recording', () => {
+    const { result } = renderHook(() =>
+      useDiscussionPractice(false, { capabilityOrigin: 'play' }));
+    act(() => {
+      result.current.recordGradedMove({
+        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+        cpLoss: 0, sourceGameId: 'game-123',
+      });
+    });
+    expect(recordMoveEvidence).not.toHaveBeenCalled();
+  });
+});

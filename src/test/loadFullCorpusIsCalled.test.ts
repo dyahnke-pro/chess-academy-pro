@@ -70,7 +70,21 @@ describe('loadFullCorpus is called, not merely imported', () => {
     // demanding one exact idiom of them would be churn dressed as rigour. So
     // this is a shrink-only baseline: the debt is visible, it can only go down,
     // and a NEW caller cannot be added without a floor.
-    const callers = files.filter((f) => /\bloadFullCorpus\s*\(/.test(readFileSync(f, 'utf-8')));
+    // BLAME BY STATEMENT, NOT BY PROXIMITY. Two of the files this used to
+    // count are not callers at all: `src/test/loadFullCorpus.ts` matched its
+    // OWN `export function loadFullCorpus(` — a definition is not a call —
+    // and `loadSpokenBake.ts` matched a COMMENT that merely mentions calling
+    // it. That is the same first-cut mistake the perspective gate made and
+    // recorded (four innocent files blamed for describing the rule), so the
+    // fix is the same: strip comments, and never blame the module that
+    // defines the thing.
+    const callers = files.filter((f) => {
+      if (f.endsWith(join('src', 'test', 'loadFullCorpus.ts'))) return false;
+      const code = readFileSync(f, 'utf-8')
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/^\s*\/\/.*$/gm, '');
+      return /\bloadFullCorpus\s*\(/.test(code);
+    });
     expect(callers.length).toBeGreaterThan(20); // the walk found them
     const noFloor = callers.filter((f) => !/toBeGreaterThan\(\s*(?:20_000|20000|\d{5,})/.test(readFileSync(f, 'utf-8')));
     expect(noFloor.length, noFloor.map((f) => f.replace(`${ROOT}/`, '')).join(', ')).toBeLessThanOrEqual(24);

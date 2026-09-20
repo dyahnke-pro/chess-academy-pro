@@ -20,6 +20,7 @@ import {
   buildMistakePuzzleFromCapture,
 } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
+import { pvUciToSan } from './principleAttribution';
 import { isMateEval } from './engineConstants';
 import type { MistakePuzzle, MoveAnnotation } from '../types';
 
@@ -267,6 +268,24 @@ export async function autoAnalyzeGameMisconceptions(
       // POV flip and mate-sentinel skip as evalBefore, so the two are one unit.
       ...(ann.evaluation != null && !isMateEval(ann.evaluation)
         ? { evalAfterPlayed: Math.round(ann.evaluation * (ann.color === 'white' ? 1 : -1)) }
+        : {}),
+      // AND THE ENGINE LINES (2026-09-20) — the same defect as the two blocks
+      // above, one field over, and it is what the section-14 reading actually
+      // found. `calculation-depth` (#34) needs a punishing PV of >= 3 plies and
+      // that the punishment NOT be immediate; the annotation carries the lines
+      // (`ann.pv`, persisted by the review's deep dive at a flagged ply) and
+      // this builder never passed them. So on the RECORDING path the detector
+      // saw an EMPTY pv and declined every time — the muted prod loop audit
+      // printed `calculation-depth: punishing PV is 0 plies, needs 3` on every
+      // unnamed slip it met. Zero, not two: the gate was never tight, the input
+      // was absent, and widening the threshold could not have moved it.
+      // The annotation stores UCI; the attributor reads SAN (same conversion
+      // the review path does at coachFeatureService.ts:1449).
+      ...(ann.pv?.afterPlayed.length
+        ? { pvAfterPlayed: pvUciToSan(fens[fenIndex + 1] ?? fen, ann.pv.afterPlayed) }
+        : {}),
+      ...(ann.pv?.afterBest.length
+        ? { pvAfterBest: pvUciToSan(fen, ann.pv.afterBest) }
         : {}),
     });
   }

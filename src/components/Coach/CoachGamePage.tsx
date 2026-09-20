@@ -3132,6 +3132,31 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           : capEval(analysis.evaluation) - capEval(preMoveEval))
       : 0;
 
+    // ─── THE POSITIVE HALF OF THE STUDENT MODEL ────────────────────
+    // Recorded here, off the ONE classification this surface already ran.
+    // It is not recorded anywhere else on /coach/play: the only other route
+    // to `recordMoveEvidence` is inside `evaluatePlayerMove`, which this
+    // surface deliberately stopped calling on 2026-06-04 because it ran a
+    // second Stockfish pair and a second classifier that disagreed with the
+    // blunder interceptor. The positive half was a side effect of that call
+    // and disappeared with it, while `capabilityOrigin: 'play'` above kept
+    // the surface LOOKING wired — so every clean move in every real game
+    // against the coach was dropped, and GREEN (the coach going quiet
+    // because the student has shown they can do it) had no evidence from the
+    // place students actually play.
+    //
+    // `evalLoss` is the capped cpLoss computed immediately above; passing it
+    // in is what makes this impossible to turn back into a second analysis.
+    // `gameState.gameId` is the game identity green's bar counts DISTINCT
+    // games with — rows without one can never prove a capability.
+    discussion.recordGradedMove({
+      fenBefore: preFen,
+      playedSan: moveResult.san,
+      moverColor: playerColor,
+      cpLoss: analysis ? evalLoss : null,
+      sourceGameId: gameState.gameId,
+    });
+
     // bestMove from pre-analysis = what the player SHOULD have played (convert UCI → SAN)
     const engineBestMoveUci = preAnalysis?.bestMove ?? null;
     let engineBestMoveSan = '?';

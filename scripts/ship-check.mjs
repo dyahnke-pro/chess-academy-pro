@@ -92,7 +92,31 @@ function runStep(label, cmd, args, opts = {}) {
 }
 
 // ── Helpers to extract a one-line summary from a step's output ─────
+
+/**
+ * DID THE TOOL DIE? One detector, read by every summarizer.
+ *
+ * The disease this closes (PLAN §B 11c + the pickup sweep): a summarizer that
+ * COUNTS matches in a tool's output reads a crash dump as ZERO — zero lint
+ * errors, zero type errors, zero failed tests — and prints that count as a
+ * verdict. It has now cost this repo twice: a heap-dead eslint rendered as
+ * "0 errors", and a heap-dead tsc rendered as "0 type errors", on the strength
+ * of which a ceiling was lowered to 0. A dead process knows NOTHING; the only
+ * honest summary is that the count is unknown.
+ *
+ * It lives here, once, because the regex was already written out twice in this
+ * file and two copies of a constant are a drift waiting to happen (CLAUDE.md,
+ * the fix-latent-rot rule). A new summarizer gets the check by calling this.
+ */
+const CRASH_SIGNATURES = /FATAL ERROR|heap out of memory|Reached heap limit|Segmentation fault|Abort trap|Killed: 9|SIGABRT|JavaScript heap/;
+function crashed(out) {
+  return CRASH_SIGNATURES.test(out);
+}
 function summarizeVitest(out) {
+  // A vitest that dies mid-run prints no "Tests N passed" line, so the old
+  // `return null` left the row with no detail at all — the reader then blames
+  // the product for what was a dead worker. Name it, same as lint and tsc.
+  if (crashed(out)) return 'vitest CRASHED — test results UNKNOWN, nothing was verified';
   const m = out.match(/Tests\s+(\d+\s+(?:failed\s+\|\s+)?\d+\s+passed[^|]*)/);
   if (!m) return null;
   // SAY WHAT KIND OF RED (PLAN §B 11a, 2026-09-19): under parallel-session load
@@ -109,9 +133,7 @@ function summarizeVitest(out) {
 function summarizeLint(out) {
   // A dead eslint prints no "✖ N problems" line and no rule errors — read as
   // "0 errors" this labelled a heap crash as a clean run (2026-09-19). Name it.
-  if (/FATAL ERROR|heap out of memory|Reached heap limit|Segmentation fault|Abort trap|Killed: 9/.test(out)) {
-    return 'eslint CRASHED — error count UNKNOWN';
-  }
+  if (crashed(out)) return 'eslint CRASHED — error count UNKNOWN';
   const m = out.match(/✖\s+(\d+\s+problems\s+\(\d+\s+errors,\s+\d+\s+warnings\))/);
   if (m) return m[1];
   // No "✖ N problems" line at all: eslint either found nothing (a clean run
@@ -121,6 +143,7 @@ function summarizeLint(out) {
   return out.includes('error') ? 'errors found' : 'no report line (clean if the row is ✓; a crash if ✗)';
 }
 function summarizePlaywright(out) {
+  if (crashed(out)) return 'audit CRASHED — check count UNKNOWN, the surface was not verified';
   const m = out.match(/DONE\s+—\s+(\d+\/\d+)\s+checks/);
   return m ? `${m[1]} checks passed` : null;
 }
@@ -599,7 +622,7 @@ runStep('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'
   optional: true,
   env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
   summary: (out) => {
-    if (/FATAL ERROR|heap out of memory|Reached heap limit/.test(out)) {
+    if (crashed(out)) {
       return 'tsc CRASHED (heap) — error count UNKNOWN, ceiling NOT measured; do not lower it';
     }
     const n = (out.match(/error TS/g) ?? []).length;

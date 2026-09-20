@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**772 lines · 9 exports · 9 importers · 4 tests · 0 audits**
+**824 lines · 10 exports · 9 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **The standard post-deploy ritual** (CLAUDE.md:5791) — names `useDiscussionPractice`
 
 ## Who calls in
 
@@ -45,16 +45,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `UseDiscussionPracticeResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `GradedMoveArgs` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `UseDiscussionPracticeOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useDiscussionPractice` (function) — 22 call sites
-- `src/components/Coach/CoachGamePage.tsx:515`
-- `src/components/Coach/CoachGameReview.tsx:801`
-- `src/components/Coach/CoachTeachPage.tsx:1525`
+### `useDiscussionPractice` (function) — 25 call sites
+- `src/components/Coach/CoachGamePage.tsx:516`
+- `src/components/Coach/CoachGameReview.tsx:874`
+- `src/components/Coach/CoachTeachPage.tsx:1535`
 - `src/components/Openings/MiddlegamePractice.tsx:161`
 - `src/components/Openings/OpeningPlayMode.tsx:265`
-- `src/components/Openings/PlayableLinePlayer.tsx:204`
+- `src/components/Openings/PlayableLinePlayer.tsx:205`
 - `src/hooks/hintDialTally.test.ts:66`
 - `src/hooks/hintDialTally.test.ts:90`
 - `src/hooks/hintDialTally.test.ts:109`
@@ -71,6 +74,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useDiscussionPractice.test.ts:212`
 - `src/hooks/useDiscussionPractice.test.ts:234`
 - `src/hooks/useDiscussionPractice.test.ts:252`
+- `src/hooks/useDiscussionPractice.test.ts:279`
+- `src/hooks/useDiscussionPractice.test.ts:294`
+- `src/hooks/useDiscussionPractice.test.ts:309`
 
 ## Tests
 
