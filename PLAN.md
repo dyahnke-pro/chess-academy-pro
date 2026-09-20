@@ -451,6 +451,29 @@ suspected to be the wrong Lichess theme — `capturingDefender` is literally
 "remove the defender"; `defensiveMove` is closer to its opposite. A
 co-occurrence check was inconclusive. Measure before touching.
 
+## LANDED 2026-09-19 (late) — the #21 INSTRUMENT: `audit-engine-worker-census-prod.mjs` (David: "add the audit tool")
+
+**Why an instrument and not a fix.** Reading could not name the spawner:
+- the census on a CLEAN bundle (pinned `06wNUWaA`, no deploy mid-run) climbed
+  5 → 41 → 76 worker targets at REOPEN, all `stockfish-18-lite.wasm,worker`
+  pthreads under ONE live multi-thread parent, then fell to 14;
+- PostHog for every headless run in the window: 12 multi inits (one per page
+  load), exactly ONE stall + ONE forced respawn + ONE demotion — all from the
+  earlier Learn run, NONE during the review reopens. So no restart loop; the
+  runtime spawns pthreads inside a single engine while the app sends it plain
+  `setoption`/`position`/`go`/`stop`;
+- ponder is not mounted on review; the pool and dive workers are single-thread;
+  no caller resizes Hash/Threads per call; `ucinewgame` is sent once at init.
+- under a mid-run deploy (4 other sessions pushed while the run walked) the same
+  climb reached 124 and `WebAssembly.Memory(): could not allocate memory`, with
+  761k message-less page errors — the storm made real.
+
+**What the tool measures** (see AUDIT_INDEX): every worker target created or
+destroyed (CDP `Target.setDiscoverTargets`, nested pthreads included) beside
+every UCI string the main thread posts to an engine worker (a `postMessage` hook
+installed before boot), and per engine spawn the commands in the 1.5 s before
+it. Vacuity-checked (fails on a blank app in 0 s). First prod run: see below.
+
 ## LANDED 2026-09-19 (late) — the fundamental the computer proved reaches the ranker (A-NEW)
 
 Chosen from the outline as the most critical open item: the coach learned
