@@ -90,10 +90,48 @@ export interface CapabilityEvidenceRecord {
   sourceGameId?: string;
 }
 
-/** How many clean answers in a row earn GREEN. Lives here, beside the profile
- *  that computes the streak, so the bar and the evidence cannot drift; it used
- *  to sit in `needScore`, which is only one of its two readers. */
-export const HELD_FOR_PROVEN = 3;
+/**
+ * How many qualifying clean answers in a row earn GREEN.
+ *
+ * TWO, not three, and the number is MEASURED rather than chosen: across 15
+ * real amateur games (198 held rows, real engine grades) the count dimension
+ * is INERT — a 2-in-a-row bar and a 3-in-a-row bar produce identical proven
+ * sets and identical flip counts at every difficulty floor. So the count does
+ * nothing except create false negatives, and it is set to the smallest value
+ * that still means "more than once". The work is done by
+ * `PROVEN_MIN_IMPORTANCE` below.
+ */
+export const HELD_FOR_PROVEN = 2;
+
+/**
+ * HOW HARD THE BOARD'S QUESTION HAD TO BE for answering it to count as
+ * evidence. This is the variable that decides green; everything else was
+ * noise.
+ *
+ * MEASURED, 15 games / 198 held rows / one student, sweeping the floor and
+ * counting how many capabilities the coach DECLARED and then watched fail:
+ *
+ *   floor   proven   flipped
+ *     65      4         2
+ *     74      3         1
+ *     78      3         1
+ *     80      2         0     ← the knee, and a plateau (80/82/84 identical)
+ *     86      1         0
+ *
+ * Below 80 the coach goes quiet about a capability the student then fails;
+ * above it green is merely rarer for no gain. At the shipped floor (the old
+ * rule effectively took anything, min observed 48) the same 15 games produced
+ * NINETEEN flip events across 2 tags — the coach repeatedly declaring a
+ * weakness fixed and then watching it happen again.
+ *
+ * A hold BELOW this floor is not counted and does not break the streak — it
+ * is not failure, it is simply not evidence. Only a `broken` row resets.
+ *
+ * NB `POSED_IMPORTANCE_MIN` (45) is a different question — whether the board
+ * asked AT ALL, i.e. whether to record a row. The lowest importance actually
+ * observed on a real hold was 48, so that floor never bites in practice.
+ */
+export const PROVEN_MIN_IMPORTANCE = 80;
 
 /** …and they must span at least this many DISTINCT GAMES. The loop's unit is
  *  the game: green's claim is "you did it again NEXT TIME", which a single
@@ -151,7 +189,16 @@ export function capabilityProven(
  * does, minus the Dexie read, so a calibration can replay real recorded
  * evidence under different thresholds without touching the engine or the DB.
  */
-export function summariseEvidence(all: CapabilityEvidenceRecord[]): CapabilityProfile {
+export function summariseEvidence(
+  all: CapabilityEvidenceRecord[],
+  /** The difficulty floor, defaulted to the shipped one. Parameterised for
+   *  the same reason `capabilityProven`'s bar is: a calibration must be able
+   *  to sweep BELOW the shipped value, and baking it in made the sweep report
+   *  zero flips at every floor — an instrument that cannot vary its variable
+   *  is green for free. Production callers pass nothing. */
+  bar: { minImportance?: number } = {},
+): CapabilityProfile {
+  const minImportance = bar.minImportance ?? PROVEN_MIN_IMPORTANCE;
   const profile: CapabilityProfile = new Map();
   const rows = [...all].sort((a, b) => a.recordedAt - b.recordedAt);
   const history = new Map<MisconceptionTagId, CapabilityEvidenceRecord[]>();
@@ -171,7 +218,10 @@ export function summariseEvidence(all: CapabilityEvidenceRecord[]): CapabilityPr
     const games = new Set<string>();
     let streak = 0;
     for (let i = h.length - 1; i >= 0; i--) {
-      if (h[i].outcome !== 'held') break;
+      if (h[i].outcome !== 'held') break;            // a FAILURE resets the streak
+      // …but an easy hold is not a failure and not evidence: skip it and keep
+      // walking, so a quiet game neither proves nor un-proves anything.
+      if ((h[i].posedImportance ?? 0) < minImportance) continue;
       streak += 1;
       if (h[i].sourceGameId) games.add(h[i].sourceGameId as string);
     }

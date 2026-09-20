@@ -42,7 +42,7 @@ import {
   recordCapabilityEvidence,
   getCapabilityProfile,
 } from './capabilityEvidence';
-import { capabilityProven, summariseEvidence, HELD_FOR_PROVEN } from './capabilityEvidence';
+import { capabilityProven, summariseEvidence, HELD_FOR_PROVEN, PROVEN_MIN_IMPORTANCE } from './capabilityEvidence';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 
 /** A real amateur game, committed so the census never depends on the network.
@@ -448,30 +448,35 @@ describe('GREEN — can real play prove a capability?', () => {
 
     const run = (minImp: number, minStreak: number, minGames: number) => {
       const provenAt = new Map<string, number>();
+      const flipped = new Set<string>();
       let flips = 0;
       const seen: CapabilityEvidenceRecord[] = [];
       order.forEach((g, gi) => {
         const rows = byGame.get(g) ?? [];
         for (const r of rows) {
           if (r.outcome === 'broken' && !r.prompted
-            && provenAt.has(r.tag) && provenAt.get(r.tag)! < gi) flips += 1;
+            && provenAt.has(r.tag) && provenAt.get(r.tag)! < gi) { flips += 1; flipped.add(r.tag); }
         }
         // Only a hold at a hard enough moment is EVIDENCE. Breaks are kept
         // whatever the board was asking.
-        seen.push(...rows.filter((r) => r.outcome === 'broken' || (r.posedImportance ?? 0) >= minImp));
-        for (const [tag, e] of summariseEvidence(seen)) {
+        seen.push(...rows);
+        for (const [tag, e] of summariseEvidence(seen, { minImportance: minImp })) {
           if (capabilityProven(e, { minStreak, minGames }) && !provenAt.has(tag)) provenAt.set(tag, gi);
         }
       });
-      return { proven: provenAt.size, flips };
+      // FLIPPED TAGS is the honest headline: "how many capabilities did the
+      // coach declare and then watch fail". Raw flip EVENTS double-count one
+      // bad call across several later games, which flatters a high bar.
+      return { proven: provenAt.size, flips, flippedTags: flipped.size };
     };
 
     const table: string[] = [];
-    for (const minImp of [45, 55, 65, 75, 85]) {
-      for (const [minStreak, minGames] of [[2, 2], [3, 2]] as const) {
-        const r = run(minImp, minStreak, minGames);
-        table.push(`imp>=${minImp} ${minStreak}h/${minGames}g → ${r.proven} proven, ${r.flips} flips`);
-      }
+    // The count is inert (2h/2g == 3h/2g at every level, n=198), so the sweep
+    // holds it at the smallest value that still means "more than once" and
+    // spends its resolution on the variable that MOVES.
+    for (const minImp of [65, 70, 74, 76, 78, 80, 82, 84, 86, 88]) {
+      const r = run(minImp, 2, 2);
+      table.push(`imp>=${minImp} → ${r.proven} proven, ${r.flippedTags} flipped (${r.flips} events)`);
     }
     // eslint-disable-next-line no-console
     console.log(`[green-cal2] ${table.join(' | ')}`);
@@ -480,6 +485,14 @@ describe('GREEN — can real play prove a capability?', () => {
     // no range to discriminate on and THAT is the finding.
     const imps = cached.rows.filter((r) => r.outcome === 'held').map((r) => r.posedImportance ?? 0).sort((a, b) => a - b);
     const pct = (q: number) => imps[Math.min(imps.length - 1, Math.floor(q * (imps.length - 1)))] ?? 0;
+    // THE SHIPPED BAR, on the same real rows, through `capabilityProven` with
+    // NO thresholds passed — so this asserts what a student actually gets,
+    // not what a swept parameter would give them.
+    const shipped = run(PROVEN_MIN_IMPORTANCE, HELD_FOR_PROVEN, 2);
+    // eslint-disable-next-line no-console
+    console.log(`[green-shipped] ${shipped.proven} proven, ${shipped.flippedTags} flipped (${shipped.flips} events) over ${order.length} real games`);
+    expect(shipped.flippedTags, 'the shipped bar declared a capability and then watched it fail').toBe(0);
+
     // eslint-disable-next-line no-console
     console.log(`[green-cal2] held-row posedImportance: n=${imps.length} min=${imps[0]} p25=${pct(0.25)} p50=${pct(0.5)} p75=${pct(0.75)} max=${imps[imps.length - 1]}`);
   });

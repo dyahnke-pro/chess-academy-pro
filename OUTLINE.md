@@ -151,7 +151,31 @@ proved fastest.
 many holds follow. The heat map exists to say "you have GOTTEN BETTER" and as
 built it structurally cannot.
 
-✅ **THE FIX IS BUILT (2026-09-20).** `capabilityProven` is now the ONE
+✅ **THE BAR IS NOW MEASURED, NOT CHOSEN (2026-09-20).** The first fix below
+was the right SHAPE and the wrong VARIABLE, and the numbers said so: swapping
+three lifetime holds for a 3-streak across 2 games moved flips 1 → 2, and a
+full sweep found **2 flips at every count threshold from 3 to 6 holds and 2 to
+3 games** — the count knob does not control the failure at all. What does is
+`posedImportance`, already stamped on every row by `capabilitiesPosed` and read
+by nothing. Over 15 real amateur games (198 held rows, real engine grades):
+
+| difficulty floor | capabilities proven | proven then FAILED |
+|---|---|---|
+| 65 (≈ the old effective bar) | 4 | 2 tags, 17 events |
+| 74–78 | 3 | 1 tag, 4 events |
+| **80 (shipped — the knee, and a plateau with 82/84)** | **2** | **0** |
+| 86+ | 1 | 0 |
+
+So GREEN now requires a clean streak of **2**, spanning **2 distinct games**,
+at **posedImportance ≥ 80**. The count is 2 rather than 3 because the sweep
+showed it inert — it only ever created false negatives. An easy hold is not
+evidence AND not a failure: it is skipped without resetting the streak. The
+shipped bar is asserted on the real rows (`2 proven, 0 flipped over 13 games`),
+and `summariseEvidence` / `capabilityProven` take the thresholds as optional
+parameters purely so the calibration sweeps the REAL rule — baking the floor in
+made the sweep report zero flips at every level, an instrument green for free.
+
+Earlier, and still true: `capabilityProven` is now the ONE
 definition of green, read by both consumers (it was written twice —
 `needScore.capabilityTerm` and `studentMomentBoost.isUnproven` — which is the
 duplicated-judgement the rot rule bans). Proven = a RECENT clean streak
