@@ -291,6 +291,48 @@ noting alongside the funnel work: the students who import are the ones whose
 games land on the no-PV path.
 
 
+### E-10 ANSWERED — section 14 fires on nothing real, and here is WHY, per ply (2026-09-20)
+
+`section14Coverage.measure.test.ts` walks a REAL amateur game (the committed
+WO-4 fixture) with Stockfish 18's own per-ply `bestMove` / `bestMoveEval` /
+`evaluation` at the sweep's depths — real best moves, measured costs, no
+buckets. Deliberately NO pv, because `analyzeGameOnWorker` (this path AND the
+import batch) emits none at all; that absence is the finding, not a gap.
+
+**0 of 7 engine-flagged student plies received a section-14 fundamental.** The
+reasons, now that every decline names its gate:
+
+| gate | n | reading |
+|---|---|---|
+| `no-plan`: still the opening, development owns it | 6 | correct by design |
+| `left-book-early`: position already OUT of book | 5 | ⚠️ see below |
+| `calculation-depth`: punishing PV is 0 plies | 4 | the no-PV path |
+| `calculation-depth`: cost under the 150cp floor | 2 | **134cp and 107cp — real mistakes the floor rejects** |
+| `calculation-depth`: played move is itself forcing | 1 | correct by design |
+
+**Two are actionable and one is suspicious.**
+
+1. **The 150cp floor sits ABOVE real mistakes.** Two engine-measured errors of
+   134cp and 107cp were declined for being too cheap. That is a tunable with
+   evidence behind it now rather than a guess — though on n=7 from one game it
+   is a direction, not a number.
+2. **`left-book-early` declines because the position is NOT IN THE BOOK**, which
+   reads backwards for a detector whose job is to notice leaving book early.
+   Worth reading the gate before tuning anything: if "out of book" is its
+   decline condition, it can only ever fire while still IN book, which may be
+   the inverse of the intent.
+3. The PV half is already understood and bounded above (batch path carries none).
+
+🔒 **AND THE MEASUREMENT CAUGHT A HOLE IN THE DIAGNOSTIC ITSELF, first run.** A
+real ply returned `[]` with an EMPTY `why` — the silent null the sink exists to
+abolish, hiding inside the mechanism built to prevent it. `attributePrinciples`
+had EIGHT early returns in front of the detectors and none of them said
+anything; a caller could not tell "no fundamental applies" from "we never
+reached the detectors". All eight now name themselves, including the one that
+tripped it: **the student PLAYED the engine's move**, which is a verdict worth
+stating rather than a silence. Gate: the existing section-14 diagnosis suite
+(49 attributor tests green).
+
 **THE OTHER THREE AUDITS (same bundle):**
 - **LEARN** `audit-concept-gameplay-prod` **8/8** — the pin invariant voiced
   mid-game, 58 spoken lines, muted, no page errors.
