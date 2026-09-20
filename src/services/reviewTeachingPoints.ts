@@ -35,8 +35,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { legalSeeGainOn } from './positionReadingService';
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
-import { isKnightOutpost } from './forwardTeaching';
-import { cells, isPinnedPiece, mobilityMap, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans, type Cell } from './nextPlans';
+import { cells, mobilityMap, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
 

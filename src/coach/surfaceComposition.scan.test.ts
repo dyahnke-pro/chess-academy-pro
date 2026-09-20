@@ -56,6 +56,15 @@ const INFRA = new Set([
   // decides which language a fixed app string is shown in. Same class as
   // `spokenLanguage` above and `narrationSegments`. It did NOT move a ceiling.
   'coachChatText',
+  // `weaknessModelEvents` is ONE leaf signal — "the student model just
+  // changed" — with a listener set and nothing else: it imports NOTHING and
+  // computes no chess or teaching fact, the same class as `standingFactMemory`
+  // (a cache with a rule) and `voiceService` (a chokepoint). `useWeaknessSignals`
+  // subscribes to it so a recorded slip reaches the next narration without
+  // waiting out the loader's cache (WO-LOOP-01, 2026-09-20). It did NOT move a
+  // ceiling: the import that put the scan at 255 was this one, and a signal
+  // bus is not a computer.
+  'weaknessModelEvents',
   // `standingFactMemory` computes NO chess fact — it is the say-once set and
   // its forget-on-rewind rule, the same class as a cache. Added here when the
   // rule was extracted from the two surfaces that each carried a copy.

@@ -59,7 +59,7 @@ describe('analysisDeterminism — the audit-only depth-only switch (PLAN #70)', 
 
   it('every review budget site routes through reviewBudget (no bare REVIEW_POSITION_BUDGET_MS reaches an engine call)', () => {
     const src = readFileSync('src/services/gameAnalysisService.ts', 'utf8');
-    const bare = src.split('\n').filter((l) => /analyzePosition\(|analyzeWithBudget\(|budgetMs: number =|curveBudgetMs =/.test(l) && /REVIEW_POSITION_BUDGET_MS|BATCH_SHALLOW_BUDGET_MS/.test(l) && !/reviewBudget\(/.test(l));
+    const bare = src.split('\n').filter((l) => /analyzePosition\(|analyzeWithBudget\(|budgetMs: number =|curveBudgetMs =|deepBudgetMs =/.test(l) && /REVIEW_POSITION_BUDGET_MS|BATCH_SHALLOW_BUDGET_MS/.test(l) && !/reviewBudget\(/.test(l));
     expect(bare, 'a review engine call with a raw budget').toEqual([]);
   });
 });

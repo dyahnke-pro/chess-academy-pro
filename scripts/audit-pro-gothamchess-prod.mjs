@@ -239,6 +239,12 @@ try {
       '[data-testid*="watch"]',
       'button:has-text("Listen")',
     ];
+    // The detail page reads its opening (and the WLPP ladder) out of Dexie AFTER
+    // mount, so an immediate count() races the render — two runs on 2026-09-20
+    // read "not found" on a page whose Dexie rows the previous rows had just
+    // PASSED. Wait for the first candidate to become visible (bounded), then
+    // pick as before.
+    await page.locator(watchBtnSelectors.join(', ')).first().waitFor({ state: 'visible', timeout: 30_000 }).catch(() => null);
     let watchClicked = false;
     for (const sel of watchBtnSelectors) {
       const el = page.locator(sel).first();

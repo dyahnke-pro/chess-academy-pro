@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2464 lines · 27 exports · 18 importers · 18 tests · 3 audits**
+**2561 lines · 29 exports · 21 importers · 23 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,13 +23,16 @@
 - `src/services/analysisTelemetry.test.ts`
 - `src/services/chesscomService.ts`
 - `src/services/deltaConsistency.test.ts`
+- `src/services/engineLifecycle.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
+- `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameAnalysisService.wedge.test.ts`
 - `src/services/gameAnalysisTwoPass.test.ts`
 - `src/services/gameInsightsService.ts`
 - `src/services/gameReviewService.ts`
 - `src/services/lichessService.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/moveClassification.chesscom.test.ts`
 
 ## Exports and every call site
@@ -53,12 +56,12 @@
 - `src/components/Coach/CoachGameReview.tsx:278`
 
 ### `classifyCpLoss` (function) — 14 call sites
-- `src/components/Coach/CoachGameReview.tsx:1759`
+- `src/components/Coach/CoachGameReview.tsx:1760`
 - `src/services/deltaConsistency.test.ts:16`
-- `src/services/mistakePuzzleService.ts:129`
-- `src/services/mistakePuzzleService.ts:393`
-- `src/services/mistakePuzzleService.ts:758`
-- `src/services/mistakePuzzleService.ts:1166`
+- `src/services/mistakePuzzleService.ts:130`
+- `src/services/mistakePuzzleService.ts:397`
+- `src/services/mistakePuzzleService.ts:763`
+- `src/services/mistakePuzzleService.ts:1173`
 - `src/services/moveClassification.chesscom.test.ts:30`
 - `src/services/moveClassification.chesscom.test.ts:83`
 - `src/services/moveClassification.chesscom.test.ts:85`
@@ -71,30 +74,38 @@
 ### `replayPgnToFens` (function) — 6 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
 - `src/services/autoAnalyzeGame.ts:188`
-- `src/services/mistakePuzzleService.ts:227`
-- `src/services/mistakePuzzleService.ts:295`
+- `src/services/mistakePuzzleService.ts:228`
+- `src/services/mistakePuzzleService.ts:299`
 - `src/services/tacticClassifierService.ts:193`
-- `src/services/tacticClassifierService.ts:434`
+- `src/services/tacticClassifierService.ts:437`
 
-### `warmAnalysisPool` (function) — 5 call sites
+### `warmAnalysisPool` (function) — 7 call sites
 - `src/App.tsx:449`
 - `src/services/gameAnalysisPool.test.ts:283`
 - `src/services/gameAnalysisPool.test.ts:287`
 - `src/services/gameAnalysisPool.test.ts:315`
 - `src/services/gameAnalysisPool.test.ts:331`
+- `src/services/gameAnalysisService.unload.test.ts:35`
+- `src/services/gameAnalysisService.unload.test.ts:46`
 
 ### `PooledPvEngines` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `acquirePvEngines` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2995`
-- `src/services/coachFeatureService.ts:3034`
+### `acquirePvEngines` (function) — 3 call sites
+- `src/services/coachFeatureService.ts:3030`
+- `src/services/coachFeatureService.ts:3069`
+- `src/services/gameAnalysisService.unload.test.ts:38`
 
 ### `scanCriticalMoments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:787`
+- `src/components/Coach/CoachGameReview.tsx:788`
 
 ### `recordPromptedFind` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1449`
+- `src/components/Coach/CoachGameReview.tsx:1450`
+
+### `destroyAllAnalysisWorkers` (function) — 3 call sites
+- `src/services/engineLifecycle.ts:36`
+- `src/services/gameAnalysisService.unload.test.ts:41`
+- `src/services/gameAnalysisService.unload.test.ts:53`
 
 ### `TWO_PASS_SWING_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -140,10 +151,18 @@
 - `src/services/gameAnalysisTwoPass.test.ts:211`
 - `src/services/gameAnalysisTwoPass.test.ts:216`
 
-### `analyzeSingleGame` (function) — 9 call sites
+### `generateInsightsForGame` (function) — 5 call sites
+- `src/services/gameAnalysisService.records.test.ts:52`
+- `src/services/gameAnalysisService.records.test.ts:68`
+- `src/services/gameAnalysisService.records.test.ts:70`
+- `src/services/gameAnalysisService.records.test.ts:83`
+- `src/services/loopCloses.review.integration.test.ts:68`
+
+### `analyzeSingleGame` (function) — 10 call sites
 - `src/components/Coach/CoachReviewSessionPage.nonBlocking.test.tsx:23`
 - `src/components/Coach/CoachReviewSessionPage.tsx:255`
 - `src/components/Coach/CoachReviewSessionPage.tsx:295`
+- `src/services/analysisDeterminism.pool.test.ts:139`
 - `src/services/gameAnalysisTwoPass.test.ts:230`
 - `src/services/gameAnalysisTwoPass.test.ts:267`
 - `src/services/gameAnalysisTwoPass.test.ts:279`
@@ -206,18 +225,23 @@
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts`
 - `src/components/Coach/CoachTeachPage.drillOrientation.test.tsx`
 - `src/components/Coach/CoachTeachPage.test.tsx`
+- `src/services/analysisDeterminism.pool.test.ts`
 - `src/services/analysisPoolIosEngine.test.ts`
 - `src/services/analysisTelemetry.test.ts`
 - `src/services/chesscomService.test.ts`
 - `src/services/deltaConsistency.test.ts`
+- `src/services/engineLifecycle.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/gameAnalysisPool.test.ts`
 - `src/services/gameAnalysisService.poolEngine.test.ts`
+- `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
+- `src/services/gameAnalysisService.unload.test.ts`
 - `src/services/gameAnalysisService.wedge.test.ts`
 - `src/services/gameAnalysisTwoPass.test.ts`
 - `src/services/gameReviewService.test.ts`
 - `src/services/lichessService.test.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/moveClassification.chesscom.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
 

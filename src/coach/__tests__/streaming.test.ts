@@ -236,7 +236,7 @@ describe('coachService.ask — streaming', () => {
     // Read through a typed alias: TS narrows the captured variable to `never`
     // at this point because every assignment happens inside a callback it
     // cannot order, and the declared type is the honest one.
-    const env: { memory?: { intendedOpening?: { name: string } | null } } | null = capturedEnvelope;
+    const env = capturedEnvelope as unknown as { memory?: { intendedOpening?: { name: string } | null } } | null;
     expect(env?.memory?.intendedOpening?.name).toBe('Caro-Kann Defense');
   });
 });

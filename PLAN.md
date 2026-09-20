@@ -1441,6 +1441,32 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      ply readout and the narration banner in two separate DOM round trips, and
      the muted voice-gated walk advanced between them. The three reads are now
      one atomic snapshot.
+   - **THE SEAM LANDED AND THE PAIR STILL DIFFERED (2026-09-20, bundle
+     `index-BeoVsaKE`, 06wNUWaA pinned, `AUDIT_DETERMINISTIC=1`):** run 1 34/36,
+     run 2 33/36, `only2=['CRIT spoken-names-count-and-stake']`; FUNDLEAD ply 50
+     "MISTAKE 1.1" vs "INACCURACY 0.7". So the budget was NOT the residue. Read
+     the code end to end and found two mechanisms, neither a budget:
+     (a) `evaluateFensPooled` hands positions to the pool off a shared `next`
+     counter — WHICH worker's WARM transposition table searches ply 50 is
+     timing, and a single-thread engine at a fixed depth is only deterministic
+     given the same table; (b) the sacrifice verify and the best-move refine
+     ran on the SINGLETON — the multi-thread build (Threads ≤4, lazy SMP),
+     nondeterministic by construction — and sat on the live engine behind an
+     open review, the exact defect the dive was moved off on 2026-09-06, two
+     sites over (rot-on-sight). ✅ BUILT: under the audit flag the pool worker
+     sends `ucinewgame` before every position (single-thread build, a 16 MB
+     memset, spawns nothing — the #21 storm rule is about the multi build), so
+     a pool eval is a pure function of (fen, depth) whichever worker gets it;
+     and ONE dedicated pool worker is acquired lazily and held through the
+     annotation loop for the dive, the sacrifice verify and the best-move
+     refine (singleton only when no worker can be had). Gate:
+     `analysisDeterminism.pool.test.ts` — a fake Worker records the UCI stream:
+     product = one clear per worker per game; flag = every `position fen` is
+     preceded by `ucinewgame`; parity = with a pool available the review makes
+     ZERO singleton calls, with the dive killed at the flagged ply so the
+     refine has to search. OWED: the pinned pair again on the next bundle —
+     the singleton fallback (no pool) stays nondeterministic and is out of
+     reach of any flag.
 9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
    on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
    - **2026-09-20, taken over from focused-noyce after 07acb13fb.** Their fix
@@ -1476,6 +1502,28 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      huge on the reopened walk. NEXT: the probe now takes an OS-level
      `sample <renderer pid> 8` at wedge time (names the native frames) and
      races every page.evaluate (it had wedged itself for 68 min on one).
+   - **n=4 (2026-09-20 ~07:44, full-walk probe with the OS sample armed): NO
+     WEDGE.** First walk to the recap, dive done, reopen, 60 s of reopened
+     walk — main thread 1–4 ms at every census, workers alive throughout, the
+     sample never fired. ⚠️ CONTAMINATED for its last ~5 min: my own chain's
+     wait loop deleted the probe's (ownerless) lock and the queued Gotham
+     audit started beside it at 07:40 — recorded in memory, loop fixed. So
+     this is n=4 of "no wedge under MORE load", weak in the direction that
+     matters. **What it DID name: the error flood's source.** The page-side
+     Worker hook caught `Uncaught RuntimeError: unreachable
+     @stockfish-18-lite-single.js:11` — 7 events on the first walk (all five
+     single-thread pool workers vanished from the census at walk+75 s), 3 on
+     the reopen. That is a WASM trap (an `abort()` inside the engine — the
+     shape a failed allocation takes), on the single-thread build, i.e. the
+     analysis POOL, while the multi engine sat clean. A trapped pool worker
+     never answers, so `analyzePosition` rejects after budget+4 s and the
+     ply's eval is NULL → a null pair classifies `good` — the batch path
+     documents exactly this data bug ("every move marked fine, permanently").
+     NEXT for #21: (a) count how many curve/dive positions came back null on
+     a run with traps (add it to the review audit's engine row); (b) capture
+     the worker's stderr/`abort` reason — the glue prints it before the trap;
+     (c) memory: 5 single workers × 16 MB hash + the multi engine's 64 MB +
+     4 helpers on a 4 GB tab is the first suspect.
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
     + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
     Test type errors are no longer invisible; they are counted and capped. What
@@ -1687,6 +1735,21 @@ from the entry chunk's size.
    only by the king and queen — and the king and queen are the worst defenders,
    because the moment you hit the guard the piece drops." Board-true or not, a
    rook guarded by two pieces is not a loose-guard lesson; verify the computer.
+   - **MEASURED OFFLINE (2026-09-20): it is DETECTOR COVERAGE, not inputs.**
+     Replayed 06wNUWaA and called `attributePrinciples` directly on the five
+     flagged student plies with the prod run's best moves (48 Bg5→Kb8, 50
+     Nf6→Nb6, 62 Ne4→Rd6, 64 Kc8→Nd6, 68 Ke6→Ke8), once with no evals and
+     once with evals matching the spoken cpLoss: **all five return `[]` both
+     ways.** `preMoveEval` IS populated (`CoachGameReview.tsx:1786`), so the
+     eval-gated detectors had their inputs; none of the 33 fundamentals
+     describes a knight to the wrong square, a king that blocks instead of
+     stepping, or a king that walks into mate in one. The cheapest true
+     detector is the last: after the played move the opponent has a mate in
+     one and after the best move they do not — chess.js proves it in a loop,
+     and it is exactly the forcing-scan method (`methodBeat`) the coach
+     already teaches. Then item 10's `calculation-depth` from `criticalityScan`
+     gapCp. Until a detector fires, FUNDLEAD/RECAP stay red on this class of
+     game and the red is honest.
 
 0. 🔴 **REVIEW AUDIT: 22/24, TWO REAL FAILURES — both in the fundamentals-first
    path** (prod, 2026-09-19, Carlsen–Grischuk Najdorf, 89 plies):
