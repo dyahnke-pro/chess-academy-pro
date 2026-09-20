@@ -64,10 +64,34 @@ shared lock.
   `.first().isVisible()` on a comma-joined locator once after a fixed sleep, so a
   hidden kickoff shell masked a visible `teach-nav-row` — it now asks each
   selector every second for 40 s (the paired probe's method).
-- ☐ 3. Learn's half on a prod tape · ☐ 6. measurements · ☐ stale-tactics count
-  read off the listener — these are AUDIT/RUN items, after the push.
+- ✅ 3 (instrument). `audit-second-game-memory-prod` gained rows E0/E1: game 1
+  RECORDED a fundamental live, and game 2 SPOKE "You've walked into this
+  before…" — separate rows, E1 n/a when nothing was recorded. Runs in the end chain.
+- ✅ 6. **Measurements (numbers only; the decisions are David's):**
+  - **Boot payload / entry chunk** (fresh `npm run build`, 2026-09-20): boot
+    preloads **15 files, 26.4 MB raw / 6.1 MB gzip**; the entry chunk is
+    **8.6 MB raw / 2.4 MB gzip**. The vendors are ALREADY split out (`ui-vendor`
+    518 KB, `react-vendor` 225 KB, `chess-vendor` 106 KB), so the entry is app
+    code plus bundled data. Next-largest preloads: voiced 4.3 MB, puzzles
+    4.1 MB, subline-narration 3.4 MB, plans 1.7 MB. **Parse time needs a
+    device** — it cannot be measured offline, and it is the number that decides
+    whether a `/coach/*` route split is worth anything (E.3 said measure first;
+    this is the measurement, minus the device half).
+  - **Corpus reach, FULL corpus loaded** (`corpusReach.measure.test.ts` →
+    `audit-reports/corpus-reach.json`): across 24 repertoire openings the
+    phase-transition ritual reaches **24/24** and LESSON BACKGROUND **24/24**.
+    So the 57k un-positioned notes are fully reachable by name + concept once
+    the floating half lands; pruning them is a MEMORY decision, never a reach
+    one. (E.5's "measure both ways before pruning" — this is the after-number.)
+  - **Corpus gates are even now** (E.7): G9.4 move-number prefixes, phase
+    validity and id-collision-with-primary are asserted for EVERY creator in
+    `secondaryTeachings.test.ts`; they were chessbrah-only. 72 tests green.
+  - **47-game rerun (E/A-NEW):** `data/sources/wo4-corpus/` is absent on this
+    machine, so the measurement half skips honestly. Owed where the corpus lives.
+- ☐ fundamentals-tab audit on prod · ☐ `tactics-context-stale` count read off
+  the listener — both come from the end chain.
 
-**Status:** plan ✅ · context ✅ · code ✅ · gates ⏳ · push ☐ · audits ☐
+**Status:** plan ✅ · context ✅ · code ✅ · gates ✅ · push ⏳ · audits ☐
 
 ## 🎯 WO-LOOP-01 — PROVE THE ONE-LINE DEFINITION ON PROD (David 2026-09-20: "i want to get the main concept of the app working" → "full plan mapped out. then execute it. all code done first in one go, then audit following")
 

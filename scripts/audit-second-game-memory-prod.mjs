@@ -308,6 +308,32 @@ async function main() {
       + `${Object.keys(g1.byFen ?? {}).length}, g2 on ${Object.keys(g2.byFen ?? {}).length})`,
     );
 
+    // E. THE LOOP IN LEARN (WO-CLOSEOUT-01, 2026-09-20). Game 1's slips are
+    // captured live with their fundamental; game 2 on the same mount should
+    // hear the present-tense recurrence clause when it walks into the same
+    // fundamental again. RECORDED and SPOKEN are separate rows: "game 1 never
+    // recorded a fundamental" (nothing to recur) and "it recorded and game 2
+    // never said so" are different bugs. When game 1 recorded nothing, E is
+    // n/a — an honest absence, never a vacuous green.
+    const recordedFundamentals = await page.evaluate(async () => {
+      const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+      try {
+        const db = await open();
+        if (!db.objectStoreNames.contains('misconceptionTags')) return [];
+        const rows = await new Promise((res, rej) => { const t = db.transaction('misconceptionTags', 'readonly'); const rq = t.objectStore('misconceptionTags').getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+        return rows.filter((r) => r.fundamentalId).map((r) => ({ id: r.fundamentalId, game: r.sourceGameId ?? null }));
+      } catch { return []; }
+    }).catch(() => []);
+    const recurSpoken = g2.said.filter((l) => /You've walked into this before/i.test(l));
+    console.log(`[E] fundamentals recorded this session: ${JSON.stringify(recordedFundamentals)}; game-2 recurrence lines: ${recurSpoken.length}`);
+    record('E0. game 1 RECORDED a fundamental live (the loop has something to recur)', recordedFundamentals.length > 0,
+      recordedFundamentals.length ? [...new Set(recordedFundamentals.map((r) => r.id))].join(', ') : 'no misconceptionTags row with a fundamentalId after game 1 — Learn\'s live capture recorded no fundamental');
+    if (recordedFundamentals.length > 0) {
+      record('E1. game 2 SPOKE the present-tense recurrence clause ("You\'ve walked into this before…")', recurSpoken.length > 0,
+        recurSpoken.length ? recurSpoken[0].slice(0, 140) : 'recorded, but game 2 never said it recurred — either game 2 never met the same fundamental (check its slips) or the Learn wire dropped it');
+    } else {
+      console.log('[E1] n/a — nothing recorded in game 1, so no recurrence was owed');
+    }
     for (const t of TEACHINGS.filter((x) => !x.split)) {
       const hits = (g, f) => (g.byFen?.[f] ?? []).filter((l) => t.re.test(l)).length;
       const taughtIn1 = shared.filter((f) => hits(g1, f) > 0);

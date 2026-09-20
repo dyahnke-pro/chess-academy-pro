@@ -163,6 +163,30 @@ describe.each(CORPORA.map((c) => [c.key, c] as const))('%s-teachings corpus gate
     }
   });
 
+  // ONE GATE, EVERY CORPUS (E.7, 2026-09-20). These three were asserted for
+  // chessbrah only (`chessbrahTeachings.test.ts`); every other creator shipped
+  // without them. The voice contract (G9.4), phase validity and id uniqueness
+  // are properties of the SHAPE, not of one creator.
+  it('spoken prose carries no move-number prefixes (G9.4)', () => {
+    for (const n of corpus.notes) {
+      for (const field of [n.explains, n.teaches, n.plans]) {
+        if (typeof field !== 'string') continue;
+        expect(MOVE_NUMBER_PREFIX.test(field), `${n.id}: move-number prefix in "${field.slice(0, 60)}"`).toBe(false);
+      }
+    }
+  });
+  it('phases are valid', () => {
+    for (const n of corpus.notes) {
+      expect(['opening', 'middlegame', 'endgame', 'concept'], `${n.id}: phase ${String(n.phase)}`).toContain(n.phase);
+    }
+  });
+  it('note ids do not collide with the primary corpus (the block builder dedupes by id)', async () => {
+    const primary = (await import('./danya-teachings.json')) as unknown as { notes: Array<{ id: string }> };
+    const primaryIds = new Set(primary.notes.map((n) => n.id));
+    const collisions = corpus.notes.filter((n) => primaryIds.has(n.id)).map((n) => n.id);
+    expect(collisions.slice(0, 5)).toEqual([]);
+  });
+
   it('prose is present and free of attribution / medium leaks', () => {
     for (const n of corpus.notes) {
       expect(n.explains.trim().length, `${n.id}: empty explains`).toBeGreaterThan(0);
