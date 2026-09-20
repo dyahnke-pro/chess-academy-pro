@@ -81,17 +81,24 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🟡 5. 57,204 un-positioned notes — a memory decision, never a boot one; never prune without measuring both ways
 - 🟡 6. A cold first teaching reply draws on less corpus — watch it in the Learn audit
 - ✅ 7. The corpus gates are even · ✅ 8. `BuildVersionWidget.test`
-- ⛔ 10. **Section-14 detectors fire on nothing real** — in flight in another session. Next step is measured, not guessed: log the rejection reason per detector, run a game library, widen from the real population
+- ⛔ 10. **Section-14 detectors fire on nothing real** — theirs. The instrument half landed (`2d9f151`: each detector now names WHICH GATE it failed, so the 23% bucket is measurable); still never attributed on a real game
 
 ## 9. Carried over — the stale-tactics checklist (pickup §7)
 - ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
 - ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
 - 🔴 `npm run ship-check` has never printed READY TO PUSH on that tree
 - 🔴 Read the `tactics-context-stale` count off the listener
-- 🔴 `GameChatPanel.test` highlight-marker strip
-- 🔴 Sweep the other `runStep` summaries in ship-check for the same crash-as-green disease
+- ✅ `GameChatPanel.test` — MEASURED 2026-09-20: 16/16 green on a synced tree. The "red on untouched main" claim was stale and is deleted, not annotated
+- ✅ Swept: ONE `crashed(out)` detector backs vitest, lint, tsc and the Playwright summarizer — the regex had already been hand-written twice, which is the drift the rot rule names
 
 ---
+
+## THE OTHER SESSION'S BOARD — ⛔ THEIRS, DO NOT PICK UP (their report, 2026-09-20)
+
+- ✅ All their work on `main` and live, bundle `index-BjQZ6ReX`. Nothing running or pending.
+- ⛔ **The ~250 s regression** — the new insight sweep was AWAITED inside the function the review walk waits on. Detached and gated; their re-measure against the fixed bundle is the confirmation and is still owed.
+- ⛔ **The wider critical fan**, a second slowdown candidate, unresolved until that deterministic re-measure.
+- ✅ Three real bugs fixed on the way: the review path recorded nothing into the student model · four seat resolvers where only one read the declared seat · three fresh-game doors in Learn clearing different subsets of memory.
 
 ## WHERE IT STANDS IN ONE LINE
 
@@ -115,6 +122,12 @@ states and the app can act on two. Measured 2026-09-20, not recalled:
 | a term that can LOWER need (`needScore.capabilityTerm`, held ≥ 3 + zero broken) | ✅ built, ONE production reader |
 | **does real play ever reach held ≥ 3 with zero broken?** | 🔴 **NEVER MEASURED** |
 | **has a student's Nth game ever gone quiet because of games 1..N-1?** | 🔴 **NEVER SHOWN** |
+
+🔴 **The "21 vs 8 parity gap" I read off `docs/STATE.md` is a GREP RATIO, not a
+hole — measured 2026-09-20, corrected here rather than left standing.** The two
+lists overlap and count readers as writers; the hold side is wired at every live
+surface. There is no recording half left to build. What is unproven is
+everything to the RIGHT of the record.
 
 That is the exact shape the RED direction was in before WO-LOOP-01: every half
 built and gated in isolation, the sentence never demonstrated end to end. The
