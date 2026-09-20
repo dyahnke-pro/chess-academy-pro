@@ -15,7 +15,16 @@ interface RepEntry { id: string; name: string; pgn: string }
 const OPENINGS = (repertoire as unknown as RepEntry[]).filter((r) => typeof r.pgn === 'string' && r.pgn.trim().length > 0).slice(0, 24);
 
 describe('corpus reach — transition ritual + lesson background, full corpus', () => {
-  beforeAll(async () => { await Promise.resolve(loadFullCorpus()); }, 120_000);
+  // THE NON-VACUITY FLOOR. `loadFullCorpus` returns EMPTY bundles by design
+  // when `public/data/*.json` is missing, and this whole measurement is about
+  // what the corpus reaches — so without this assertion a missing file would
+  // be reported as "reach measured" over nothing at all. Asserted on the
+  // loaded note count, not on the reach numbers, so it fails at the cause.
+  beforeAll(async () => {
+    const loaded = await Promise.resolve(loadFullCorpus());
+    const notes = loaded.reduce((n, b) => n + b.notes, 0);
+    expect(notes, `the full corpus did not load (public/data missing?) — ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+  }, 120_000);
 
   it('measures every repertoire opening (non-vacuous) and records the numbers', () => {
     const rows = OPENINGS.map((o) => {
