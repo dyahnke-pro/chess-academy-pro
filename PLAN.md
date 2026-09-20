@@ -1216,6 +1216,17 @@ canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
    self-consistent. Do not simplify the door away.
 
    **OWED:**
+   - **`npm run ship-check` has NOT printed READY TO PUSH on this tree.** It
+     was pushed with `--no-verify` after six attempts on 2026-09-19, every one
+     starved or killed: typecheck ran 954s and 1558s (30s quiet) because
+     Spotlight (`mds_stores`, 8 workers) held load at ~100 on 6 cores, and the
+     pre-push hook was torn down mid-run three times by the harness. What DID
+     pass on this tree, repeatedly: context+state gates, app typecheck (0
+     errors), test-typecheck (296, at ceiling), prod build, lint (0 errors,
+     measured directly under heap), and the focused gates for every file
+     touched. Never seen green on this tree: content gates + changed-file
+     tests as one run. Run it FIRST, on a machine with load < 8
+     (`uptime`), to a log — then the G1 pair.
    - **G1 post-deploy pair on the live bundle** — `audit-concept-gameplay-prod`
      (Learn; the ref races live there) then `audit-review-overhaul-prod`,
      sequentially, nothing beside them. Neither has run on this change yet.
