@@ -251,7 +251,21 @@ const run = async () => {
     return { ...res, vol, gid };
   };
 
+  // TWO UNSEEDED CONTROLS, and the second one is not redundant — it is the
+  // instrument measuring ITSELF. Run 1 (2026-09-20) reported GREEN quieter by
+  // 468 words AND the prompted arm, which must change nothing, quieter by 612.
+  // With one device per arm there was no way to tell a real effect from
+  // review's known run-to-run classification drift (#70), so a green row could
+  // not be believed and neither could a red one. The gap between these two
+  // tapes IS the noise floor; an effect smaller than it means the run proves
+  // nothing and must say so rather than pick a side.
   const control = await tapeOf('control', null);
+  const control2 = await tapeOf('control2', null);
+  const noise = Math.abs(control.vol.words - (control2.vol.words ?? 0));
+  add('NOISE FLOOR measured', control.ok && control2.ok,
+    control.ok && control2.ok
+      ? `two unseeded devices differ by ${noise} words (${control.vol.words} vs ${control2.vol.words})`
+      : 'could not measure the instrument\'s own variance');
   add('CONTROL tape', control.ok && control.vol.plies > 0,
     control.ok ? `${control.vol.plies} narrated plies / ${control.vol.words} words` : `no baseline: ${control.reason}`);
   if (!control.ok || control.vol.plies === 0) { await browser.close(); return finish(outDir, { control }); }
@@ -259,16 +273,26 @@ const run = async () => {
   const green = await tapeOf('green', { tags: PROVEN_TAGS, prompted: false, importance: SEED_IMPORTANCE });
   const prompted = await tapeOf('prompted', { tags: PROVEN_TAGS, prompted: true, importance: SEED_IMPORTANCE });
 
-  add('GREEN is quieter than control', green.ok && green.vol.words < control.vol.words,
-    green.ok ? `${green.vol.plies} plies / ${green.vol.words} words vs control ${control.vol.plies} / ${control.vol.words}`
-             : `green tape unusable: ${green.reason}`);
-  add('PROMPTED changes nothing — being told is not proving', prompted.ok && prompted.vol.words === control.vol.words,
-    prompted.ok ? `${prompted.vol.words} words vs control ${control.vol.words}` : `prompted tape unusable: ${prompted.reason}`);
+  // The effect has to CLEAR the instrument's own variance, or the run is
+  // unusable — that verdict is the honest one and is not a pass.
+  const drop = control.vol.words - (green.vol.words ?? 0);
+  const usable = control.ok && control2.ok && green.ok && prompted.ok && noise * 2 < drop;
+  if (!usable) {
+    add('VERDICT', false,
+      `RUN UNUSABLE — green dropped ${drop} words against a ${noise}-word noise floor; `
+      + 'the instrument cannot resolve this effect, so neither a green nor a red may be read from it');
+  } else {
+    add('GREEN is quieter than control', true,
+      `${green.vol.plies} plies / ${green.vol.words} words vs control ${control.vol.plies} / ${control.vol.words} (noise ${noise})`);
+    add('PROMPTED changes nothing — being told is not proving',
+      Math.abs(prompted.vol.words - control.vol.words) <= noise,
+      `${prompted.vol.words} words vs control ${control.vol.words} (within the ${noise}-word floor?)`);
+  }
   add('MUTED', ttsRequests === 0, `${ttsRequests} /api/tts requests`);
 
-  writeFileSync(`${outDir}/tapes.json`, JSON.stringify({ game: { id: game.id, white: game.white, black: game.black }, control: control.segs, green: green.segs, prompted: prompted.segs }, null, 2));
+  writeFileSync(`${outDir}/tapes.json`, JSON.stringify({ game: { id: game.id, white: game.white, black: game.black }, noise, control: control.segs, control2: control2.segs, green: green.segs, prompted: prompted.segs }, null, 2));
   await browser.close();
-  return finish(outDir, { control, green, prompted });
+  return finish(outDir, { control, control2, green, prompted });
 };
 
 function finish(outDir, tapes = {}) {
