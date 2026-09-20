@@ -32,7 +32,7 @@
  *    ply through the real door. Writes audit-reports/capability-green.json.
  */
 import { describe, it, expect, beforeEach } from 'vitest';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
@@ -369,6 +369,12 @@ describe('GREEN — can real play prove a capability?', () => {
     // teaches nothing) and how many of those FLIP afterwards (a bar that
     // flips told the student they were fine and then watched them fail).
     const allRows = await db.capabilityEvidence.toArray() as CapabilityEvidenceRecord[];
+    // CACHE THE EVIDENCE. The engine pass above is ~10 minutes; every question
+    // asked of these rows afterwards is pure computation. Writing them out is
+    // what lets the bar be calibrated in seconds instead of re-graded.
+    if (!existsSync('audit-reports')) mkdirSync('audit-reports', { recursive: true });
+    writeFileSync('audit-reports/capability-green-rows.json',
+      JSON.stringify({ measuredAt: new Date().toISOString(), seat, order: ids.slice(0, WANT), rows: allRows }, null, 2));
     const byGame = new Map<string, CapabilityEvidenceRecord[]>();
     for (const r of allRows) {
       const g = r.sourceGameId ?? 'unknown';
@@ -410,4 +416,71 @@ describe('GREEN — can real play prove a capability?', () => {
       measuredAt: new Date().toISOString(), depth: DEPTH, heldForProven: HELD_FOR_PROVEN, seat, timeline, flips, sweep,
     }, null, 2));
   }, 40 * 60 * 1000);
+
+  /**
+   * IS THE RIGHT VARIABLE THE COUNT, OR THE DIFFICULTY?
+   *
+   * The count sweep came back flat: 2 flips at every threshold from 3 holds
+   * to 6, across two games or three. A knob that does not move the failure is
+   * the wrong knob. Counting holds measures how much QUIET evidence piled up,
+   * not whether the student can answer a hard question — and forty clean
+   * moves in positions that barely asked anything will clear any count.
+   *
+   * `posedImportance` (0-100, floor `POSED_IMPORTANCE_MIN` = 45) is already
+   * stamped on every row by `capabilitiesPosed` and read by nothing. This asks
+   * whether a hold at a HARD moment predicts not-flipping where three easy
+   * holds do not. Breaks always count, at any importance: a break is a break.
+   *
+   * Replays the cached rows, so it costs no engine time.
+   */
+  it('CALIBRATION 2: does DIFFICULTY predict what the count could not?', () => {
+    const CACHE = 'audit-reports/capability-green-rows.json';
+    if (!existsSync(CACHE)) return;   // no cached evidence yet — skipped honestly
+    const cached = JSON.parse(readFileSync(CACHE, 'utf8')) as {
+      order: string[]; rows: CapabilityEvidenceRecord[];
+    };
+    const byGame = new Map<string, CapabilityEvidenceRecord[]>();
+    for (const r of cached.rows) {
+      const g = r.sourceGameId ?? 'unknown';
+      byGame.set(g, [...(byGame.get(g) ?? []), r]);
+    }
+    const order = cached.order.filter((g) => byGame.has(g));
+
+    const run = (minImp: number, minStreak: number, minGames: number) => {
+      const provenAt = new Map<string, number>();
+      let flips = 0;
+      const seen: CapabilityEvidenceRecord[] = [];
+      order.forEach((g, gi) => {
+        const rows = byGame.get(g) ?? [];
+        for (const r of rows) {
+          if (r.outcome === 'broken' && !r.prompted
+            && provenAt.has(r.tag) && provenAt.get(r.tag)! < gi) flips += 1;
+        }
+        // Only a hold at a hard enough moment is EVIDENCE. Breaks are kept
+        // whatever the board was asking.
+        seen.push(...rows.filter((r) => r.outcome === 'broken' || (r.posedImportance ?? 0) >= minImp));
+        for (const [tag, e] of summariseEvidence(seen)) {
+          if (capabilityProven(e, { minStreak, minGames }) && !provenAt.has(tag)) provenAt.set(tag, gi);
+        }
+      });
+      return { proven: provenAt.size, flips };
+    };
+
+    const table: string[] = [];
+    for (const minImp of [45, 55, 65, 75, 85]) {
+      for (const [minStreak, minGames] of [[2, 2], [3, 2]] as const) {
+        const r = run(minImp, minStreak, minGames);
+        table.push(`imp>=${minImp} ${minStreak}h/${minGames}g → ${r.proven} proven, ${r.flips} flips`);
+      }
+    }
+    // eslint-disable-next-line no-console
+    console.log(`[green-cal2] ${table.join(' | ')}`);
+    // What the rows themselves look like, so a flat table can be read rather
+    // than guessed at: if almost every hold sits at the floor, importance has
+    // no range to discriminate on and THAT is the finding.
+    const imps = cached.rows.filter((r) => r.outcome === 'held').map((r) => r.posedImportance ?? 0).sort((a, b) => a - b);
+    const pct = (q: number) => imps[Math.min(imps.length - 1, Math.floor(q * (imps.length - 1)))] ?? 0;
+    // eslint-disable-next-line no-console
+    console.log(`[green-cal2] held-row posedImportance: n=${imps.length} min=${imps[0]} p25=${pct(0.25)} p50=${pct(0.5)} p75=${pct(0.75)} max=${imps[imps.length - 1]}`);
+  });
 });
