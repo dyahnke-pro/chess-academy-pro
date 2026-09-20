@@ -130,8 +130,68 @@ recording path (D13 already logs unmatched inputs; extend it to say which gate
 each section-14 detector failed), run a game library through it, and widen from
 the real population rather than from imagination.
 
-**Status:** plan ✅ · context ✅ · code ✅ · gates ✅ · push ✅ (9321bbc11) ·
-audits: loop 6/6 ✅ · second-game ⏳ · Learn ⏳ · fundamentals-tab ⏳
+**THE OTHER THREE AUDITS (same bundle):**
+- **LEARN** `audit-concept-gameplay-prod` **8/8** — the pin invariant voiced
+  mid-game, 58 spoken lines, muted, no page errors.
+- **FUNDAMENTALS TAB** `audit-fundamentals-tab-prod` **18/19** — every product
+  row green (the development pillar rolls up two sections, the NULL-pillar slip
+  lights nothing, grey stays silent on a fresh device, the Listen button reached
+  the listener). The ONE red was MINE and it was the instrument: the script
+  carried `FUNDAMENTAL_COUNT = 33` and section 14 made it 36 — a constant about
+  a different build. It now DERIVES the count from `FUNDAMENTAL_IDS` and throws
+  rather than defaulting.
+- **SECOND-GAME MEMORY** `audit-second-game-memory-prod` **10/11**, and the red
+  is a real finding the row was built to separate: **E0 ✅ game 1 RECORDED
+  `tempo-handed` live; E1 ❌ game 2 never spoke the recurrence clause.** Read
+  the tape before blaming the wire: **game 2 spoke 44 lines and NOT ONE was a
+  fundamental verdict** (game 1 spoke two). So the clause had nothing to ride
+  on — this is Learn's FUNDAMENTAL NARRATION not firing in the second game, not
+  the recurrence wire dropping anything. E1 now has three outcomes (not owed /
+  the narration never fired / the wire dropped it) so it can never again fail
+  the product for an empty set.
+  **OWED, and it is the Learn half of the loop:** find why
+  `learnFundamentalVerdict` produced nothing across 17 plies of game 2 while
+  game 1 spoke two. Suspects, in order: the backward-look (`look`) is null so
+  the whole line including the verdict is skipped; the per-game
+  `fundamentalSeenRef` is NOT reset between games (it is a bare `useRef`, not a
+  `learnMemory` slot — the exact debt #18 documented for the threat refs); or
+  game 2's slips simply attributed nothing. The second is checkable by reading
+  one line and is the likeliest.
+
+**RE-RUNS, both green, both earned:**
+- **FUNDAMENTALS TAB 19/19** with the derived count (36).
+- **SECOND-GAME MEMORY 12/12 — LEARN'S HALF OF THE LOOP IS PROVEN ON PROD.**
+  Game 1 recorded `ignored-threat` + `greedy-pawn-grab` live; game 2, on the
+  SAME mount, spoke:
+
+  > "Here's how: Their move first, always. Before you look for your own idea,
+  > answer what their last move threatens… **You've walked into this before —
+  > ignoring a threat, the second game now.** That eyed the pawn on d4, but the
+  > knight on f3 holds it…"
+
+  So both registers of the recurrence computer are now demonstrated on the live
+  bundle: review (retrospective, names the prior game) and Learn (present tense,
+  mid-game). 🔴 **Say plainly what this green is NOT:** it happened WITHOUT the
+  fresh-game reset fix below, which was uncommitted at the time. The first run's
+  red was not the recurrence wire — it was game 2 speaking no fundamental
+  verdict at all — and that outcome is INTERMITTENT, which is the finding.
+
+**🔴 FOUND BY THE RED, FIXED AT THE ROOT: two fresh-game doors, two different
+lists.** A new Learn game arrives either because the student ASKS for one or
+because the BOARD returns to the start. The ask-door cleared TWO per-game refs;
+the board-door cleared EIGHT. So a session's second game could inherit game 1's
+`fundamentalSeenRef`, get every fundamental back as its SHORT repeat stem
+instead of the full teaching, and with it lose the recurrence clause (which
+rides the first-time verdict). It only shows when the ask-door runs alone — the
+board-door usually fires too and masks it — which is exactly why one run was red
+and the next green on one build. `resetPerGameMemory()` is now the single door;
+gate `oneFreshGameReset.test.ts` blames by statement (exactly ONE
+`newGame()` call site, inside the reset, and every hand ref named in it), so a
+second list cannot be written. Same disease as #18, one door along.
+
+**Status:** plan ✅ · context ✅ · code ✅ · gates ✅ · push ✅ ·
+**audits: loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ ·
+second-game 12/12 ✅** — WO-CLOSEOUT-01 closed.
 
 ## 🎯 WO-LOOP-01 — PROVE THE ONE-LINE DEFINITION ON PROD (David 2026-09-20: "i want to get the main concept of the app working" → "full plan mapped out. then execute it. all code done first in one go, then audit following")
 

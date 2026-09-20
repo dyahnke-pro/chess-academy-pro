@@ -1619,6 +1619,35 @@ export function CoachTeachPage(): JSX.Element {
    *  accumulate: a repeated fundamental comes back in a short stem, never the
    *  full teach twice. */
   const fundamentalSeenRef = useRef(new Set<FundamentalId>());
+  /** 🔒 ONE FRESH-GAME RESET, CALLED BY BOTH DOORS (2026-09-20).
+   *
+   *  A new game arrives two ways — the student ASKS for one (the play-intent
+   *  branch) or the BOARD goes back to the start (the reply handler) — and the
+   *  two sites listed DIFFERENT subsets of the per-game refs. The ask-door
+   *  cleared two of them; the board-door cleared eight. So a student who typed
+   *  "play the Scandinavian with me" a second time carried game 1's
+   *  `fundamentalSeenRef` into game 2, and every fundamental came back as its
+   *  SHORT repeat stem instead of the full teaching — measured on prod
+   *  2026-09-20: game 1 spoke two fundamental verdicts, game 2 spoke none
+   *  across 17 plies, and the recurrence clause (which rides the first-time
+   *  verdict) could never attach.
+   *
+   *  This is the same disease #18 fixed for the threat refs, one door along:
+   *  the list IS the debt. A slot added to `learnMemory` is reset for free; a
+   *  hand ref must be added HERE, once, where both doors read it. */
+  const resetPerGameMemory = useCallback((): void => {
+    learnMemRef.current.newGame();   // forgets every slot it holds
+    announcedPliesRef.current = new Set();
+    announcedTrapsRef.current.clear();
+    teachNoteSeenIdsRef.current.clear();
+    fundamentalSeenRef.current.clear();
+    planSaidRef.current.clear();
+    positionalSaidRef.current.clear();
+    forkTalkCountRef.current = 0;
+    pendingForkRef.current = null;
+    rejectedTemptingCountRef.current = 0;
+    priorityFirstLastPlyRef.current = -999;
+  }, []);
   /** T3 (2026-09-20): plies where the deciding computer kept a `key-moment`
    *  clause — the coach ANNOUNCED the critical moment before the student moved.
    *  Saved on the game record so the post-game sweep files a find there as
@@ -1989,9 +2018,7 @@ export function CoachTeachPage(): JSX.Element {
     // there is reset here for free. The hand-listed refs below are the ones
     // not yet migrated into it (learnMemory.test.ts holds that count as a
     // shrink-only ceiling) — the list is the debt, not the design.
-    learnMemRef.current.newGame(); announcedPliesRef.current = new Set();
-    planSaidRef.current.clear();
-    positionalSaidRef.current.clear();
+    resetPerGameMemory();
     gameRef.current.setOrientation(studentSide);
     setPlayerColor(studentSide);
     liveFenRef.current = gameRef.current.fen;
@@ -9227,15 +9254,7 @@ export function CoachTeachPage(): JSX.Element {
                   try {
                     const chainHistory = historyAfterReply;
                     if (chainHistory.length <= 2) {
-                      learnMemRef.current.newGame(); announcedPliesRef.current = new Set(); // fresh game — forgets every slot it holds
-                      announcedTrapsRef.current.clear();
-                      // (opening name now forgotten by learnMemory.observe, from the board)
-                      teachNoteSeenIdsRef.current.clear();
-                      fundamentalSeenRef.current.clear();
-                      forkTalkCountRef.current = 0;
-                      pendingForkRef.current = null;
-                      rejectedTemptingCountRef.current = 0;
-                      priorityFirstLastPlyRef.current = -999;
+                      resetPerGameMemory();
                     }
                     // OPENING ANNOUNCEMENT — fires when detection resolves a
                     // NEW name (first recognition or a refinement). Name from
