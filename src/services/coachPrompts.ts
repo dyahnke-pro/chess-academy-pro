@@ -1133,7 +1133,7 @@ export function buildChessContextMessage(ctx: CoachContext): string {
       stm,
       ctx.playerProfile.rating,
     );
-    const block = formatTacticsSubBlock(tactics);
+    const block = formatTacticsSubBlock(tactics, ctx.fen);
     if (block) {
       lines.push(`\n${block}`);
     } else {

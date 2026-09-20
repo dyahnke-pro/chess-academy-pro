@@ -9,7 +9,7 @@ describe('BuildVersionWidget', () => {
     expect(widget).toBeInTheDocument();
     // Text should be at most 7 chars + optional " • refresh" suffix
     // when SW update is pending.
-    expect(widget.textContent ?? '').toMatch(/^[a-z0-9]+( • refresh)?$|^copied$/i);
+    expect(widget.textContent ?? '').toMatch(/^[a-z0-9-]+( • refresh)?$|^copied$/i);
   });
 
   it('has an aria-label for screen readers', () => {

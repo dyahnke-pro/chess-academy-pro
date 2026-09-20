@@ -6,6 +6,193 @@
 
 # PLAN — closing the loop (2026-09-18)
 
+## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
+
+Everything on the open list that is code I own and needs no decision from David.
+NOT here: #21's wedge (other session), GREEN (needs held evidence over days),
+David's calls (Upstash, archived danya notes, spend-guard design), D9b/D15
+(blocked on data / unknown root).
+
+1. **Section-14 detectors** — `calculation-depth` → `left-book-early` →
+   `no-plan` get pipeline WRITERS on the recording path, fed by the evidence
+   computers that already exist (`criticalityScan` gapCp, `theoryDeparture`,
+   `planRace`/`deriveNextPlans`), so the 23% `other` fallthrough shrinks and the
+   loop's recurrence sentence has something to name on pawn pushes and king
+   moves. Measured before/after on the 47-game corpus where present.
+2. **Critical moment T1 + T3** — review scans flagged plies too and the REGISTER
+   decides; Learn hands its announced plies to the sweep so a prompted find
+   records `prompted: true`.
+3. **Learn's half on a prod tape** — `audit-second-game-memory-prod` asserts the
+   present-tense recurrence clause (one mount, two games).
+4. **D11** — couple squares on the `[delta]` facet so stacked generators subsume.
+5. **Hygiene** — pre-push hook honours the ship-check watermark; ship-check
+   prints timeouts vs assertions; lint crash named as crash; test type-error
+   ceiling; `BuildVersionWidget.test`; stale-tactics leftovers
+   (`tactics-context-stale` count, `formatTacticsSubBlock` fen); multilingual
+   lesson row vs probe.
+6. **Measure-first, numbers only** — entry chunk contents/parse, the 57k
+   no-position notes' reach, corpus gate unevenness, the 47-game rerun, the
+   fundamentals-tab audit on prod. Decisions after, David's.
+
+Order: 1 → 2 → 4 → 5 → 3 (audit) → 6 (measurements) → gates → ONE push → the
+loop audit + the standing pair + the second-game audit, sequentially, behind the
+shared lock.
+
+**LANDED (code, one session — every item below is gated and typechecks clean):**
+- ✅ 1. **Section 14** — `calculation-depth` (PV-gated: the blow lands on the
+  opponent's third move or later), `left-book-early` (DB-anchored, G3, not
+  before ply 6), `no-plan` (positional; yields to every concrete fundamental)
+  are FUNDAMENTALS, so they flow through the spine, `matchFundamental`, the
+  `[principle]` facet and the recurrence clause. Every `Record<FundamentalId,…>`
+  answers for them. Gate `principleAttribution.section14.test.ts`.
+- ✅ 2. **T1** — the review's critical scan covers every student ply past the
+  opening; the REGISTER decides; the only exclusion is the double-stop guard at
+  the card's mount. Gate `criticalMomentReach.test.ts`. **T3** — Learn keeps the
+  plies where the deciding computer kept a `key-moment` clause
+  (`announcedPliesRef`), saves them as `GameRecord.promptedPlies`, and the
+  review's capture marks those capability rows `prompted: true`. Gate
+  `promptedFind.wire.test.ts`.
+- ✅ 4. **D11** was already done — `computeBoardDelta` couples squares per clause
+  and `reviewFullData` re-keys them onto the `[delta]` facet (the PLAN entry was
+  stale). Nothing changed.
+- ✅ 5. **Hygiene** — the other session had already landed 11a (timeouts vs
+  assertions), 11b (hook honours the watermark) and 11c (lint crash named) by the
+  time this ran. Landed here: 11d — 🔴 **I MEASURED 0 AND IT WAS A CRASH.** A bare
+  `npx tsc -p tsconfig.tests.json --noEmit` dies on the default heap and prints
+  ZERO `error TS` lines, which reads exactly like a clean run; I lowered the
+  ceiling to 0 on that reading. Re-measured with
+  `NODE_OPTIONS=--max-old-space-size=8192`: **236**, the number the other
+  session had already measured and set the same night. The ceiling stays 236
+  (down from 296, their 60 fixture fixes). The trap is documented IN
+  `ship-check.mjs` directly above the constant and I walked into it anyway —
+  never read a tsc count without the heap flag. Also landed:
+  `BuildVersionWidget.test` regex; `formatTacticsSubBlock(tactics, boardFen)` —
+  the board fen is REQUIRED and a stale package renders nothing + audits
+  (`formatTacticsSubBlock.stale.test.ts`); the multilingual lesson row polled
+  `.first().isVisible()` on a comma-joined locator once after a fixed sleep, so a
+  hidden kickoff shell masked a visible `teach-nav-row` — it now asks each
+  selector every second for 40 s (the paired probe's method).
+- ✅ 3 (instrument). `audit-second-game-memory-prod` gained rows E0/E1: game 1
+  RECORDED a fundamental live, and game 2 SPOKE "You've walked into this
+  before…" — separate rows, E1 n/a when nothing was recorded. Runs in the end chain.
+- ✅ 6. **Measurements (numbers only; the decisions are David's):**
+  - **Boot payload / entry chunk** (fresh `npm run build`, 2026-09-20): boot
+    preloads **15 files, 26.4 MB raw / 6.1 MB gzip**; the entry chunk is
+    **8.6 MB raw / 2.4 MB gzip**. The vendors are ALREADY split out (`ui-vendor`
+    518 KB, `react-vendor` 225 KB, `chess-vendor` 106 KB), so the entry is app
+    code plus bundled data. Next-largest preloads: voiced 4.3 MB, puzzles
+    4.1 MB, subline-narration 3.4 MB, plans 1.7 MB. **Parse time needs a
+    device** — it cannot be measured offline, and it is the number that decides
+    whether a `/coach/*` route split is worth anything (E.3 said measure first;
+    this is the measurement, minus the device half).
+  - **Corpus reach, FULL corpus loaded** (`corpusReach.measure.test.ts` →
+    `audit-reports/corpus-reach.json`): across 24 repertoire openings the
+    phase-transition ritual reaches **24/24** and LESSON BACKGROUND **24/24**.
+    So the 57k un-positioned notes are fully reachable by name + concept once
+    the floating half lands; pruning them is a MEMORY decision, never a reach
+    one. (E.5's "measure both ways before pruning" — this is the after-number.)
+  - **Corpus gates are even now** (E.7): G9.4 move-number prefixes, phase
+    validity and id-collision-with-primary are asserted for EVERY creator in
+    `secondaryTeachings.test.ts`; they were chessbrah-only. 72 tests green.
+  - **47-game rerun (E/A-NEW):** `data/sources/wo4-corpus/` is absent on this
+    machine, so the measurement half skips honestly. Owed where the corpus lives.
+- ☐ fundamentals-tab audit on prod · ☐ `tactics-context-stale` count read off
+  the listener — both come from the end chain.
+
+**PROD RUN (bundle `index-CQzqI6Vf`, 9321bbc11, 12:45) — LOOP AUDIT 6/6, and the
+cleanest comparison yet.** `AUDIT_GAME_A=nHdi6Qpx AUDIT_GAME_B=MxLHuel4
+AUDIT_STUDENT=black`, report `audit-reports/loop-closes-2026-09-20T17-45-41-666Z/`.
+Unlike run 5, the control and loop tapes are the SAME beat at the SAME ply (56,
+28...Nf8) — identical opening sentence, identical evidence — differing only by:
+
+> "…Loose pieces are what makes their tactic work, so defend it or move it before
+> it becomes their idea. **This one keeps recurring in your games — loose piece,
+> the second game now — the last one was against nescitus 2 weeks ago. Worth
+> drilling.** You: that was a blunder, costing about 4.2 points…"
+
+The A-candidate iteration also proved itself: candidate 1 recorded rows but no
+fundamental, so the instrument moved on rather than reporting a false red.
+
+🔴 **BUT SECTION 14 DID NOT FIRE ON A SINGLE REAL GAME.** Four amateur games,
+nine flagged student plies between them, and every fundamental recorded was
+`loose-piece` or `ignored-threat`. Worst case for the build: A-candidate 1's two
+flagged plies were **15...g5 (a pawn push) and 32...Kh8 (a king move)** — exactly
+the `other` population section 14 exists for — and they attributed NOTHING.
+Reading the gates against those plies: `left-book-early` cannot fire (ply 30,
+past the 24-ply opening window), and `no-plan`/`calculation-depth` each need a
+condition those boards may not meet (an earned structure plan whose squares the
+best move serves; a PV whose first forcing move is ≥3 deep). So the detectors are
+GATED CORRECTLY and are TOO NARROW IN PRACTICE — unit-proven, prod-unobserved.
+That is the same "a wire that does not fire is not a wire" rule the repo already
+holds, and it means the 23% `other` figure has NOT been measured down.
+**NEXT (not guessed — measured):** log the REJECTION REASON per detector on the
+recording path (D13 already logs unmatched inputs; extend it to say which gate
+each section-14 detector failed), run a game library through it, and widen from
+the real population rather than from imagination.
+
+**THE OTHER THREE AUDITS (same bundle):**
+- **LEARN** `audit-concept-gameplay-prod` **8/8** — the pin invariant voiced
+  mid-game, 58 spoken lines, muted, no page errors.
+- **FUNDAMENTALS TAB** `audit-fundamentals-tab-prod` **18/19** — every product
+  row green (the development pillar rolls up two sections, the NULL-pillar slip
+  lights nothing, grey stays silent on a fresh device, the Listen button reached
+  the listener). The ONE red was MINE and it was the instrument: the script
+  carried `FUNDAMENTAL_COUNT = 33` and section 14 made it 36 — a constant about
+  a different build. It now DERIVES the count from `FUNDAMENTAL_IDS` and throws
+  rather than defaulting.
+- **SECOND-GAME MEMORY** `audit-second-game-memory-prod` **10/11**, and the red
+  is a real finding the row was built to separate: **E0 ✅ game 1 RECORDED
+  `tempo-handed` live; E1 ❌ game 2 never spoke the recurrence clause.** Read
+  the tape before blaming the wire: **game 2 spoke 44 lines and NOT ONE was a
+  fundamental verdict** (game 1 spoke two). So the clause had nothing to ride
+  on — this is Learn's FUNDAMENTAL NARRATION not firing in the second game, not
+  the recurrence wire dropping anything. E1 now has three outcomes (not owed /
+  the narration never fired / the wire dropped it) so it can never again fail
+  the product for an empty set.
+  **OWED, and it is the Learn half of the loop:** find why
+  `learnFundamentalVerdict` produced nothing across 17 plies of game 2 while
+  game 1 spoke two. Suspects, in order: the backward-look (`look`) is null so
+  the whole line including the verdict is skipped; the per-game
+  `fundamentalSeenRef` is NOT reset between games (it is a bare `useRef`, not a
+  `learnMemory` slot — the exact debt #18 documented for the threat refs); or
+  game 2's slips simply attributed nothing. The second is checkable by reading
+  one line and is the likeliest.
+
+**RE-RUNS, both green, both earned:**
+- **FUNDAMENTALS TAB 19/19** with the derived count (36).
+- **SECOND-GAME MEMORY 12/12 — LEARN'S HALF OF THE LOOP IS PROVEN ON PROD.**
+  Game 1 recorded `ignored-threat` + `greedy-pawn-grab` live; game 2, on the
+  SAME mount, spoke:
+
+  > "Here's how: Their move first, always. Before you look for your own idea,
+  > answer what their last move threatens… **You've walked into this before —
+  > ignoring a threat, the second game now.** That eyed the pawn on d4, but the
+  > knight on f3 holds it…"
+
+  So both registers of the recurrence computer are now demonstrated on the live
+  bundle: review (retrospective, names the prior game) and Learn (present tense,
+  mid-game). 🔴 **Say plainly what this green is NOT:** it happened WITHOUT the
+  fresh-game reset fix below, which was uncommitted at the time. The first run's
+  red was not the recurrence wire — it was game 2 speaking no fundamental
+  verdict at all — and that outcome is INTERMITTENT, which is the finding.
+
+**🔴 FOUND BY THE RED, FIXED AT THE ROOT: two fresh-game doors, two different
+lists.** A new Learn game arrives either because the student ASKS for one or
+because the BOARD returns to the start. The ask-door cleared TWO per-game refs;
+the board-door cleared EIGHT. So a session's second game could inherit game 1's
+`fundamentalSeenRef`, get every fundamental back as its SHORT repeat stem
+instead of the full teaching, and with it lose the recurrence clause (which
+rides the first-time verdict). It only shows when the ask-door runs alone — the
+board-door usually fires too and masks it — which is exactly why one run was red
+and the next green on one build. `resetPerGameMemory()` is now the single door;
+gate `oneFreshGameReset.test.ts` blames by statement (exactly ONE
+`newGame()` call site, inside the reset, and every hand ref named in it), so a
+second list cannot be written. Same disease as #18, one door along.
+
+**Status:** plan ✅ · context ✅ · code ✅ · gates ✅ · push ✅ ·
+**audits: loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ ·
+second-game 12/12 ✅** — WO-CLOSEOUT-01 closed.
+
 ## 🎯 WO-LOOP-01 — PROVE THE ONE-LINE DEFINITION ON PROD (David 2026-09-20: "i want to get the main concept of the app working" → "full plan mapped out. then execute it. all code done first in one go, then audit following")
 
 **The concept:** the coach learns you, and what it learned changes what it says

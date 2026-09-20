@@ -27,6 +27,8 @@ interface GameReviewWeaknessCaptureProps {
   pgn?: string;
   openingName?: string | null;
   gameId?: string;
+  /** From the game record — plies Learn announced before the student moved. */
+  promptedPlies?: readonly number[];
 }
 
 /** Build the player's blundered/mistaken moves into BlunderForAnalysis,
@@ -123,9 +125,13 @@ export function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'bl
 export function buildCapabilityPlies(
   moves: CoachGameMove[],
   playerColor: 'white' | 'black',
-): Array<{ fenBefore: string; playedSan: string; cpLoss: number | null }> {
+  /** 1-based plies where the coach announced the critical moment first (Learn).
+   *  A find there records PROMPTED — see `GameRecord.promptedPlies`. */
+  promptedPlies: readonly number[] = [],
+): Array<{ fenBefore: string; playedSan: string; cpLoss: number | null; prompted: boolean }> {
   const sign = playerColor === 'white' ? 1 : -1;
-  const out: Array<{ fenBefore: string; playedSan: string; cpLoss: number | null }> = [];
+  const prompted = new Set(promptedPlies);
+  const out: Array<{ fenBefore: string; playedSan: string; cpLoss: number | null; prompted: boolean }> = [];
   for (let i = 0; i < moves.length; i++) {
     const move = moves[i];
     const side = i % 2 === 0 ? 'white' : 'black';
@@ -139,6 +145,7 @@ export function buildCapabilityPlies(
       fenBefore: i > 0 ? moves[i - 1].fen : START_FEN,
       playedSan: move.san,
       cpLoss,
+      prompted: prompted.has(i + 1),
     });
   }
   return out;
@@ -150,6 +157,7 @@ export function GameReviewWeaknessCapture({
   pgn,
   openingName,
   gameId,
+  promptedPlies,
 }: GameReviewWeaknessCaptureProps): JSX.Element | null {
   const navigate = useNavigate();
   const openingId = openingName ? resolveOpeningIdFromName(openingName) : null;
@@ -197,12 +205,12 @@ export function GameReviewWeaknessCapture({
       learned: true,
       // BOTH HALVES, ONE PASS. The game is walked once; `buildBlunders` keeps
       // the failures and `buildCapabilityPlies` keeps what it throws away.
-      capabilityPlies: buildCapabilityPlies(moves, playerColor),
+      capabilityPlies: buildCapabilityPlies(moves, playerColor, promptedPlies ?? []),
       playerColor,
     });
     setLoggedCount(result.logged);
     setCaptureState('done');
-  }, [captureState, blunders, openingId, openingName, gameId]);
+  }, [captureState, blunders, openingId, openingName, gameId, promptedPlies]);
 
   if (!deviation && blunders.length === 0) return null;
 

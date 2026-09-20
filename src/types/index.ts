@@ -681,6 +681,10 @@ export interface GameRecord {
    * now says so instead of leaving it to be guessed back out of a name.
    */
   studentSide?: 'white' | 'black';
+  /** Plies (1-based) where the coach ANNOUNCED the critical moment before the
+   *  student moved (Learn's live statement). A find at one of these is
+   *  PROMPTED — recorded grey, never as unaided evidence (T3, 2026-09-20). */
+  promptedPlies?: number[];
   result: GameResult;
   date: string;
   event: string;

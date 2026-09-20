@@ -50,6 +50,9 @@ export interface CapabilityPly {
   fenBefore: string;
   playedSan: string;
   cpLoss: number | null;
+  /** The coach announced the moment before this move (Learn's critical-moment
+   *  statement), so a find here is not unaided evidence. Default false. */
+  prompted?: boolean;
 }
 
 export interface AutoAnalyzeOptions {
@@ -142,10 +145,10 @@ export async function autoAnalyzeBlunders(
         moverColor: opts.playerColor,
         cpLoss: ply.cpLoss,
         origin: 'review',
-        // The student played the whole game with nobody telling them anything.
-        // This sweep runs afterwards, over what they did unaided — the purest
-        // evidence the app has, and the reason it was the ONLY green writer.
-        prompted: false,
+        // Unaided by default — this sweep runs afterwards over what they did
+        // alone. EXCEPT where Learn announced the moment first (T3, 2026-09-20):
+        // the game record carries those plies, and a find there is prompted.
+        prompted: ply.prompted ?? false,
         ...(opts.sourceGameId ? { sourceGameId: opts.sourceGameId } : {}),
       });
     }

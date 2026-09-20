@@ -12,7 +12,8 @@
 // Contracts asserted (experience, not text-presence):
 //   A. All seven sections render from the ONE exhaustive list, each with real
 //      teaching prose (no blank card — the `?? ''` fallthrough is gone) and
-//      every one of the 33 fundamentals is listed with a status.
+//      every one of the app's fundamentals is listed with a status (the count
+//      is DERIVED from FUNDAMENTAL_IDS, never typed here).
 //   B. Fresh device = GREY: no pillar-standing line anywhere (absent ≠ mastered).
 //   C. After seeding real `misconceptionTags` rows (two development-pillar
 //      fundamentals filed under DIFFERENT sections, counted:false like the real
@@ -37,13 +38,27 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { readFileSync } from 'node:fs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const SECTIONS = ['opening-play', 'center', 'development', 'king-safety', 'pawn-structure', 'tactics-threats', 'endgame-technique'];
-const FUNDAMENTAL_COUNT = 33;
+// DERIVED, NEVER TYPED (2026-09-20). This was `= 33` and went red the moment
+// section 14 added three fundamentals — a constant about a DIFFERENT build,
+// the same class of false red that failed the review audit on a game it was no
+// longer auditing. The source of truth is the id list the app itself ships;
+// read it out of the TS with a regex so this stays a plain .mjs with no build
+// step, and FAIL LOUDLY if the shape ever changes rather than defaulting.
+const FUNDAMENTAL_COUNT = (() => {
+  const src = readFileSync(new URL('../src/services/principleAttribution.ts', import.meta.url), 'utf8');
+  const block = /export const FUNDAMENTAL_IDS = \[([\s\S]*?)\] as const;/.exec(src);
+  if (!block) throw new Error('FUNDAMENTAL_IDS not found — this audit counts the app\'s own list, it does not carry a number');
+  const n = (block[1].match(/'[a-z-]+'/g) ?? []).length;
+  if (n < 20) throw new Error(`parsed only ${n} fundamental ids — refusing to assert against a number I cannot trust`);
+  return n;
+})();
 
 const results = [];
 const check = (name, ok, detail) => { results.push({ name, ok: !!ok, detail }); console.log(`${ok ? '✓' : '✗'} ${name}${detail ? ' — ' + detail : ''}`); };

@@ -191,7 +191,18 @@ for (const p of PROBES) {
   // failure on a lesson that was merely still coming. If nothing appears in
   // this window the coach said "let's walk through it" and then did not —
   // which is a real defect, not a timing artifact.
-  await page.waitForTimeout(25000);
+  // POLL, and per SELECTOR (2026-09-20). This used to sleep 25 s then call
+  // `.first().isVisible()` on ONE comma-joined locator — which returns the first
+  // element in DOM order across every alternative, so a hidden kickoff shell
+  // masked a visible `teach-nav-row` and the row reported "no walkthrough UI"
+  // while the paired probe (which watches continuously) printed the running
+  // lesson. Each selector is asked on its own, every second, for 40 s.
+  const LESSON_UI = ['[data-testid="teach-nav-row"]', '[data-testid="teach-kickoff-progress"]', '[data-testid="teach-generation-progress"]', '[data-testid="walkthrough-choose-walkthrough"]', '[data-testid="walkthrough-progress"]'];
+  let startedEarly = false;
+  for (let t = 0; t < 40 && !startedEarly; t++) {
+    for (const sel of LESSON_UI) { if (await page.locator(sel).first().isVisible().catch(() => false)) { startedEarly = true; break; } }
+    if (!startedEarly) await page.waitForTimeout(1000);
+  }
   const url = page.url();
   // 🔴 THE URL IS THE WRONG CONTRACT ON THIS SURFACE, and reading it alone
   // manufactured a red row on the first run (2026-09-19). `?opening=` is the
@@ -199,9 +210,7 @@ for (const p of PROBES) {
   // navigation at all. A French ask that replied "I'll walk you through it"
   // was reported as NEVER ROUTED because the url had not moved. So the row
   // asks what the STUDENT would see: did the lesson actually start.
-  const started = await page
-    .locator('[data-testid="teach-nav-row"], [data-testid="teach-kickoff-progress"], [data-testid="teach-generation-progress"], [data-testid="walkthrough-choose-walkthrough"]')
-    .first().isVisible().catch(() => false);
+  const started = startedEarly;
   const routed = started || /[?&]opening=/.test(url);
   // The ack names the resolved opening ("Loading the Italian Game walkthrough…")
   // in English, because a command confirmation is emitted before any phrasing
