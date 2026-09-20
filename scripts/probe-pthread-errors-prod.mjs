@@ -147,6 +147,13 @@ async function main() {
   }
   phase = 'dive';
   const diveDone = await until(async () => !(await has(page, '[data-testid="review-deepening-pill"]')), 300000, 2000); await sample(`dive-done=${diveDone}`);
+  // Before the reopen: a sampling CPU profile on the page's main thread, so a
+  // wedge can be READ (what was running) rather than inferred. Started here
+  // because after the wedge the thread may answer nothing at all — in which
+  // case "Profiler.stop got no reply" is itself the finding (native block).
+  const pageSession = () => [...targets.values()].find((t) => t.type === 'page' && /coach\/review/.test(t.url) )?.sessionId ?? [...targets.values()].find((t) => t.type === 'page')?.sessionId;
+  const psid = pageSession();
+  if (psid) { await cdp.send('Profiler.enable', {}, psid).catch(() => undefined); await cdp.send('Profiler.setSamplingInterval', { interval: 2000 }, psid).catch(() => undefined); await cdp.send('Profiler.start', {}, psid).catch(() => undefined); log('  [profiler] started on the page session'); }
   phase = 'reopen';
   const nav = Date.now();
   await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
@@ -156,7 +163,33 @@ async function main() {
   await until(startable, 75000, 250); await sample('reopened');
   phase = 'reopen-walk';
   await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
-  const t1 = Date.now(); while (Date.now() - t1 < 60000) { await page.waitForTimeout(5000); await sample(`walk+${Math.round((Date.now() - t1) / 1000)}s`); }
+  const t1 = Date.now(); let blockedSince = null;
+  while (Date.now() - t1 < 60000) {
+    await page.waitForTimeout(5000); await sample(`walk+${Math.round((Date.now() - t1) / 1000)}s`);
+    const r = await responsive(); if (r.startsWith('BLOCKED')) { blockedSince ??= Date.now(); if (Date.now() - blockedSince > 15000) break; } else blockedSince = null;
+  }
+  // THE WEDGE, READ: (1) Debugger.pause with a 30 s window — a JS/wasm loop
+  // reaches an interrupt check and yields its stack; (2) Profiler.stop — if the
+  // thread never replies, it is blocked in NATIVE code, which is its own answer.
+  if (blockedSince) {
+    log(`  [wedge] main thread blocked for ${Math.round((Date.now() - blockedSince) / 1000)}s — reading it`);
+    const sid = pageSession();
+    if (sid) {
+      const pausedP = new Promise((res) => { const h = (m) => { if (m.method === 'Debugger.paused' && m.sessionId === sid) res(m); }; cdp.on(h); });
+      await cdp.send('Debugger.enable', {}, sid).catch(() => undefined);
+      void cdp.send('Debugger.pause', {}, sid);
+      const paused = await Promise.race([pausedP, new Promise((r) => setTimeout(() => r(null), 30000))]);
+      if (paused) { log('  [wedge] Debugger.paused — live stack:'); for (const f of paused.params.callFrames.slice(0, 14)) log(`     ${(f.functionName || '(anonymous)').padEnd(34)} ${f.url.split('/').pop().slice(0, 44)}:${f.location.lineNumber}`); await cdp.send('Debugger.resume', {}, sid).catch(() => undefined); }
+      else log('  [wedge] Debugger.pause never landed in 30 s — the main thread is blocked in NATIVE code (no JS/wasm interrupt check reached)');
+      const prof = await Promise.race([cdp.send('Profiler.stop', {}, sid), new Promise((r) => setTimeout(() => r(null), 15000))]);
+      if (prof?.result?.profile) {
+        const pr = prof.result.profile; const self = new Map(); const byId = new Map(pr.nodes.map((n) => [n.id, n]));
+        for (let i = 0; i < pr.samples.length; i++) { const n = byId.get(pr.samples[i]); const k = `${n.callFrame.functionName || '(anonymous)'} ${n.callFrame.url.split('/').pop().slice(0, 40)}:${n.callFrame.lineNumber}`; self.set(k, (self.get(k) ?? 0) + (pr.timeDeltas[i] ?? 0)); }
+        log('  [profile] top self-time before the wedge:'); for (const [k, v] of [...self.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12)) log(`     ${String(Math.round(v / 1000)).padStart(6)}ms  ${k}`);
+        await writeFile(`${OUT}/profile.cpuprofile`, JSON.stringify(pr));
+      } else log('  [wedge] Profiler.stop got no reply in 15 s');
+    }
+  }
 
   // ── the answer: errors grouped by worker url, first distinct messages ──
   const byUrl = {}; for (const e of errors) { const k = `${e.phase} | ${e.url}`; (byUrl[k] ??= { n: 0, kinds: {}, msgs: new Map() }); byUrl[k].n += 1; byUrl[k].kinds[e.kind] = (byUrl[k].kinds[e.kind] ?? 0) + 1; const key = e.text.slice(0, 120); if (!byUrl[k].msgs.has(key)) byUrl[k].msgs.set(key, { at: e.at, n: 0 }); byUrl[k].msgs.get(key).n += 1; }
