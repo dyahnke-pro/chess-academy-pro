@@ -406,6 +406,9 @@ export async function getTacticsByType(type: TacticType): Promise<ClassifiedTact
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function resolvePlayerColor(game: GameRecord): 'white' | 'black' | null {
+  // The declared seat first (see `playerIdentity.resolvePlayerColor`; gate
+  // `seatResolversReadDeclaredSeat.test.ts`).
+  if (game.studentSide === 'white' || game.studentSide === 'black') return game.studentSide;
   if (game.source === 'coach') {
     if (game.white === 'Stockfish Bot') return 'black';
     if (game.black === 'Stockfish Bot') return 'white';

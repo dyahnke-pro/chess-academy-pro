@@ -126,8 +126,100 @@ WROTE (so "nothing to record" and "the sweep never ran" can never be confused
 again), iterates B candidates until one shares a fundamental with A, and sources
 LOSING games first (a GM who won has nothing to record).
 
-**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ (pushed 778c872d6) ·
-Phase 4 run 1 ✅ measured, ❌ loop not yet closed on prod · run 2 ⏳
+**RUN 2 (bundle `index-FRb8wK0Z`, 96f49e2e6, 03:45) — THE RECORD HALF FIRES ON PROD.**
+`AUDIT_GAME_A=HSJKsqHS` (Svidler–Carlsen, student Black): the engine flagged
+24...Nf4+ a blunder, and the sweep wrote **1 misconception row, `loose-piece`,
+from the review's first open** — row A ✅. Before the fix that was 0 on every
+review-first game the app has ever analysed. Then the pair: three GM games for B
+gave Black no second loose piece (0, 0, and 2 flagged king moves that attributed
+NOTHING — the E.0 `other` gap, n=3 now) → row P ❌, verdict PAIR UNUSABLE, the
+recurrence sentence still unproven on prod. The instrument named the reason: **GM
+games are the wrong population.** Run 3 sources AMATEUR games (explorer
+`source=lichess`, 1600–2000 blitz/rapid, `recentGames`, losing side first) —
+the app's actual users, whose games carry the fundamentals this measures.
+`AUDIT_SOURCE=masters` keeps the old population.
+
+Also seen twice tonight, recorded for #21's owner (the other session): the review
+audit WEDGES on the reopen after the dive with the multi engine demoted cleanly
+to single (no storm, workers=1) and the walk never leaving ply 0 — node at 0%,
+Chromium at 100%, 50 min. That is the "wedge behind the storm", n=2 (their run
++ mine, game jMVMo1Ua). Not this WO's file; the standing review re-run is owed
+once it is fixed.
+
+**RUNS 3–4 (amateur games, 04:37 and 04:48) — the instrument found THREE more
+things, two of them product.** Run 3: amateur sourcing works (B recorded
+`loose-piece` + `ignored-threat` from its own review), but A's three flagged
+plies — two pawn pushes and a king move — attributed no fundamental (the `other`
+gap, n=4 tonight). Run 4, A pinned to the game known to record loose-piece:
+**A recorded, the pair shared `loose-piece` + `ignored-threat`, and B's beat at
+28...Nf8 carried the verdict ("Your rook on c8 hangs after this") and NO
+recurrence clause.** Reproduced offline with every hop named
+(`loopCloses.review.integration.test.ts`, real code, no mocks):
+1. INSTRUMENT — the pinned A was not excluded from the pool, so B candidate 2
+   was A's own PGN under a second id. Fixed; a game can never be paired with
+   itself.
+2. PRODUCT — the spine's game index used `conversionDetector.resolvePlayerColor`,
+   one of FOUR seat resolvers of that name, and the only one that read
+   `GameRecord.studentSide` was `playerIdentity`'s. So a review-first game with
+   no stored username had a known game and an UNKNOWN opponent — the clause
+   could never say "against X". All four read the declared seat first now; gate
+   `seatResolversReadDeclaredSeat.test.ts` blames by statement so a fifth cannot
+   skip it.
+3. PRODUCT, the one that mattered — `isReviewUncapped()` is TRUE by default, so
+   every shipped review beat is composed from FACETS (`computeMoveFacets` →
+   `[principle] <verdict>`); the capped fundamentals-first block I wired never
+   runs for a real student. The unit test passed because it passed
+   `uncapped=false`. The clause now rides on the `[principle]` facet in the
+   uncapped path — one claim, one facet, so selection sees one fact. Gate: the
+   UNCAPPED case in `coachFeatureService.recurrence.test.ts`.
+Offline, the whole chain now speaks: *"This one keeps recurring in your games —
+same piece twice, the second game now — the last one was against Rossi, Anna 2
+weeks ago. Worth drilling."* Run 5 proves it on prod.
+
+**RUN 5 (bundle `index-BggLa4Jm`, 4264db61c, 06:13) — 6/6, THE LOOP CLOSES ON PROD.**
+`AUDIT_GAME_A=MxLHuel4 AUDIT_GAME_B=yTSxn4f7 AUDIT_STUDENT=black` (report
+`audit-reports/loop-closes-2026-09-20T11-13-42-985Z/`). Game A (vs kreshtar,
+2 weeks earlier): the review's first open RECORDED `ignored-threat` +
+`loose-piece`. Game B (vs ionlyknowthelondon), a different game on the same
+device, at 15...Nd7 — the coach SAID, and the listener HEARD:
+
+> "Their threat first: your knight on h5 was already attacked, and this move
+> doesn't deal with it — Qxh5 wins it. Here's how: Their move first, always…
+> **This one keeps recurring in your games — ignoring a threat, the second game
+> now — the last one was against kreshtar 2 weeks ago. Worth drilling.** You:
+> that was a mistake, costing about 3.0 points — the stronger move was Nxg3…"
+
+The control device (same game B, no game A) never said it; the clause names
+A's opponent and not B's; muted. That sentence is the app's one-line definition
+happening to a real amateur game on the live bundle: the coach learned the
+student in game A, and what it learned changed what it said in game B.
+
+**Honest caveats, so the next reader does not over-read a green:**
+- The control's ply 30 was SILENT (not flagged in that analysis) rather than
+  "the same beat minus the clause" — time-budgeted classification drift (#70,
+  the other session's determinism seam is what makes the control comparison
+  exact). The row's contract (clause in loop, absent in control) holds either way.
+- Proven in the RED direction on the REVIEW surface. Learn carries the same
+  computer (`learnFundamentalVerdict` → present-tense clause, unit-gated), but
+  the standing Learn audit plays each game on a fresh mount, so the Learn half
+  is proven by gate, not yet by a prod tape. `audit-second-game-memory-prod`
+  (one mount, two games) is the instrument to extend for that.
+- It took five runs because the instrument kept finding real things: the
+  review path never recorded (fixed), GM games have nothing to record (amateur
+  sourcing), a game paired with itself (fixed), an unknown opponent on a known
+  game (four seat resolvers, fixed), and a wire on the path prod never runs
+  (uncapped facets, fixed). Each is gated so it cannot come back.
+
+**OWED, ranked:**
+1. The `other` attribution gap is now the loop's ceiling: n=5 tonight of a
+   flagged student ply (pawn pushes, king moves) attributed no fundamental, so
+   the coach records "a mistake" and can never say what recurs. Section-14
+   detectors (E.10) — `calculation-depth` → `left-book-early` → `no-plan`.
+2. Learn's half on a prod tape (above).
+3. GREEN: the loop can only get LOUDER tonight. `capabilityEvidence` holds the
+   held/broken rows; the ranker's quiet direction is the next build.
+
+**Status:** Phase 0 ✅ · Phase 1 ✅ · Phase 2 ✅ · Phase 3 ✅ · **Phase 4 ✅ — 6/6 on prod**
 
 
 ## THE CRITICAL MOMENT — one computer, two registers (design, 2026-09-18)

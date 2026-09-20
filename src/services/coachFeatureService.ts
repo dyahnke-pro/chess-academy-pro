@@ -1554,6 +1554,25 @@ export function buildReviewSegments(
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
       }, facetSquares, facetIncoming);
+      // THE LOOP, OUT LOUD — ON THE PATH PROD ACTUALLY RUNS (WO-LOOP-01, run 4).
+      // `isReviewUncapped()` is TRUE by default, so every shipped review beat is
+      // composed here from facets; the capped block below never runs for a real
+      // student. The recurrence clause rides on the `[principle]` facet — the
+      // same claim as the verdict, so the selector's subsumption and rank see
+      // one fact, not two. Found by `audit-loop-closes-prod`: A recorded, the
+      // pair shared loose-piece, B's beat led with the verdict and said nothing
+      // about the prior game.
+      if (fundamentals.length > 0) {
+        const recur = fundamentalRecurrenceLine({
+          ids: fundamentals.map((f) => f.id), signals: studentWeaknesses ?? [],
+          currentGameId, register: 'review', seenLabels: recurrenceLabelsSeen,
+        });
+        if (recur) {
+          const i = facets.findIndex((f) => f.startsWith('[principle] '));
+          if (i >= 0) facets[i] = `${facets[i]} ${recur}`;
+          else facets.push(`[principle] ${recur}`);
+        }
+      }
       // ── THE CORPUS REACHES REVIEW ───────────────────────────────────────
       //
       // "EVERY COACHING SURFACE GETS THE CORPUS ... a surface that coaches

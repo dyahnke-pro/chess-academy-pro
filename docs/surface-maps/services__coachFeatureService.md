@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4310 lines · 29 exports · 26 importers · 22 tests · 5 audits**
+**4329 lines · 29 exports · 27 importers · 23 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,6 +29,7 @@
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gameThemeClassifier.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
@@ -67,7 +68,7 @@
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2221`
+- `src/services/gameAnalysisService.ts:1973`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -119,7 +120,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 47 call sites
+### `buildReviewSegments` (function) — 50 call sites
 - `src/components/Coach/CoachGameReview.tsx:1796`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
@@ -133,7 +134,9 @@
 - `src/services/coachFeatureService.recurrence.test.ts:46`
 - `src/services/coachFeatureService.recurrence.test.ts:53`
 - `src/services/coachFeatureService.recurrence.test.ts:59`
-- `src/services/coachFeatureService.recurrence.test.ts:60`
+- `src/services/coachFeatureService.recurrence.test.ts:61`
+- `src/services/coachFeatureService.recurrence.test.ts:67`
+- `src/services/coachFeatureService.recurrence.test.ts:68`
 - `src/services/coachFeatureService.test.ts:326`
 - `src/services/coachFeatureService.test.ts:342`
 - `src/services/coachFeatureService.test.ts:366`
@@ -155,6 +158,7 @@
 - `src/services/coachFeatureService.test.ts:687`
 - `src/services/coachFeatureService.test.ts:718`
 - `src/services/coachFeatureService.test.ts:844`
+- `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
 - `src/services/reviewCorpusNote.test.ts:40`
 - `src/services/reviewForesight.test.ts:52`
@@ -264,6 +268,7 @@
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/gameThemeClassifier.test.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
 - `src/services/methodBeat.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
