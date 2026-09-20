@@ -1351,6 +1351,22 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
      one atomic snapshot.
 9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
    on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
+   - **2026-09-20, taken over from focused-noyce after 07acb13fb.** Their fix
+     holds on the storm: with a raw-CDP tap on the review audit's own browser
+     (`AUDIT_CDP_PORT` + `probe-cdp-tap.mjs`), the reopen after the dive logged
+     "Multi-thread variant failed at runtime (1 error event), falling back to
+     single-threaded" and NO storm followed — peak 5 workers, no pthread
+     helpers. What remains is a WEDGE behind it: the page's main thread then
+     answered neither `Runtime.evaluate` nor `Debugger.pause` for 6 s,
+     Chromium at 100% for 50 min, the reopened walk stuck at ply 0 with only
+     the single-thread fallback worker alive. The tap saw no worker exception,
+     so the flood is message-less `error` events on the page — consistent with
+     the FALLBACK failing to start too while the previous document's memory
+     lingers. Two probe runs that reopened without walking to the end stayed
+     clean; both wedging runs walked to the recap first. `probe-pthread-errors-
+     prod.mjs` now hooks every Worker's error events per URL (the flood's
+     source, named), samples main-thread responsiveness per census, and has a
+     PROBE_FULL_WALK=1 mode — the next run names the flooding worker.
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
     + ship-check's `test typecheck` phase, 296 errors at a shrink-only ceiling).
     Test type errors are no longer invisible; they are counted and capped. What

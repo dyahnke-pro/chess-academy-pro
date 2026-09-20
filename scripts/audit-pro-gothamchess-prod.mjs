@@ -112,24 +112,16 @@ try {
     await proTab.first().click().catch(() => null);
     // The featured section's getPlayerOpenings() is an async Dexie read; wait
     // for the testid to attach (up to 12s) rather than racing a fixed delay.
-    await page.locator('[data-testid="featured-pro-openings"]')
-      .waitFor({ state: 'attached', timeout: 12_000 }).catch(() => null);
-    const featuredEl = page.locator('[data-testid="featured-pro-openings"]');
-    const featured = await featuredEl.count();
-    rec('GothamChess repertoire pinned to top of Pro tab', featured > 0 ? 'PASS' : 'FAIL', `${featured} featured section`);
-    // The cards come from an async getPlayerOpenings() Dexie read that resolves
-    // AFTER the section header renders — wait for the first card to attach
-    // before asserting on the split/cards (proven on dev: header is instant,
-    // cards land ~1-3s later).
-    await featuredEl.locator('[data-testid^="opening-card-pro-gothamchess"]').first()
-      .waitFor({ state: 'attached', timeout: 12_000 }).catch(() => null);
-    // Scope the White/Black check to the featured section (not whole-body, which
-    // would false-positive off the player page later in the run).
-    const sectionText = featured > 0 ? await featuredEl.innerText().catch(() => '') : '';
-    const asWhiteBlack = /As White/i.test(sectionText) && /As Black/i.test(sectionText);
-    rec('featured section split As White / As Black', asWhiteBlack ? 'PASS' : 'FAIL');
-    const featuredCards = featured > 0 ? await featuredEl.locator('[data-testid^="opening-card-pro-gothamchess"]').count() : 0;
-    rec('featured section lists his Caro cards', featuredCards > 0 ? 'PASS' : 'FAIL', `${featuredCards} cards`);
+    // The pinned "featured" section was REVERTED to the standard player-card
+    // grid on 2026-05-31 (21241797d); these rows waited on its testid for four
+    // months and failed every prod run (PLAN §B #58 — the "header selector"
+    // half). Today's contract: the Pro tab mounts its grid and lists a
+    // GothamChess player card.
+    await page.locator('[data-testid="pro-repertoires-tab"]').waitFor({ state: 'attached', timeout: 15_000 }).catch(() => null);
+    const tabUp = await page.locator('[data-testid="pro-repertoires-tab"]').count();
+    const gothamCards = await page.locator('[data-testid="pro-repertoires-tab"] [data-testid^="pro-player-card-"]').filter({ hasText: /gotham|levy/i }).count();
+    rec('Pro tab mounts the standard player-card grid', tabUp > 0 ? 'PASS' : 'FAIL', `${tabUp} tab`);
+    rec('the grid lists a GothamChess player card', gothamCards > 0 ? 'PASS' : 'FAIL', `${gothamCards} card(s)`);
   } else {
     rec('Pro tab toggle present on /openings', 'WARN', 'tab-pro not found');
   }
