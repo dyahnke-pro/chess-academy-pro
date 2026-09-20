@@ -33,6 +33,7 @@
  */
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { sampleHotChromium } from './audit-lib/os-sample.mjs';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
@@ -1047,6 +1048,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         : h === -1 ? 'JS heap UNREADABLE (renderer wedged or evaluate timed out)'
         : `${wl.length} live worker targets > 40 — heap was fine at ${h}MB`;
       log(`  [heap] BLOW-UP at ply ${n} (${h}MB, ${wl.length} workers) — ${blown} — dumping profile`);
+      // The OS sample FIRST — it is the only reader that works while the main
+      // thread is blocked (five wedges, zero profiles: `Profiler.stop` cannot
+      // land on a spinning isolate). Names the native frames (#21).
+      mkdirSync('audit-reports', { recursive: true });
+      const smp = sampleHotChromium(`audit-reports/renderer-sample-${GID}.txt`, 8);
+      if (smp.pid) { log(`  [sample] renderer pid ${smp.pid} (${smp.cpu}% cpu) → ${smp.file}; hottest frames:`); for (const l of smp.hot) log(`     ${l}`); }
+      else log(`  [sample] failed: ${smp.error}`);
       await dumpProfile('blow-up');
       // WHO spawned them: the app's own audit events since the reopen (captured
       // off the wire, so a 500 from the stream server cannot hide them).
