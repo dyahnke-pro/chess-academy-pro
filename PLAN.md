@@ -1059,6 +1059,15 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
 8. **The review audit's verdict is not reproducible** (#70) — three runs on one
    bundle gave three different red sets, because the background deep dive is a
    race the harness neither waits on nor reports.
+   - ✅ **The instrument could not even PIN a game (found 2026-09-19).** A
+     reproducibility pair ran a Scandinavian and then, "pinned" to it, a Ruy
+     Lopez: `AUDIT_GAME_ID` swallowed a transient fetch throw and silently
+     rotated to a fresh pick, then printed a reproduce line for a game it never
+     played. Fixed: three fetch attempts with backoff, the reason named, exit 2
+     under a pin that cannot be honoured. Every "not reproducible" reading
+     taken before this fix may have compared two different games.
+   - The worker storm seen on the reopen (124 pthread helpers, page errors) is
+     #21, owned by the focused-noyce session tonight — not re-derived here.
 9. **The pthread census is intermittent** (#21) — 70 workers one run, 1 the next
    on the same game. Carrier is the multi-threaded SINGLETON, not the pool.
 10. ✅ **HALF DONE — the VISIBILITY half of #61 landed** (`tsconfig.tests.json`
