@@ -74,6 +74,10 @@ export const FUNDAMENTAL_SECTION: Record<FundamentalId, FundamentalSectionId> = 
   'lost-the-opposition': 'endgame-technique',
   'passive-rook-endgame': 'endgame-technique',
   'botched-conversion': 'endgame-technique',
+  // section 14 — reasoning errors
+  'calculation-depth': 'tactics-threats',
+  'left-book-early': 'opening-play',
+  'no-plan': 'pawn-structure',
 };
 
 /**
@@ -154,6 +158,11 @@ export const FUNDAMENTAL_PILLAR: Record<FundamentalId, FundamentalPillar | null>
   'lost-the-opposition': null,
   'passive-rook-endgame': null,
   'botched-conversion': null,
+  // section 14 — reasoning errors: leaving theory is a development-race error;
+  // depth and planlessness are not among the four classical pillars (an ANSWER, not a gap)
+  'calculation-depth': null,
+  'left-book-early': 'development',
+  'no-plan': null,
 };
 
 /** The classical pillar this fundamental belongs to, or null where it genuinely
@@ -244,6 +253,9 @@ export const FUNDAMENTAL_LABEL: Record<FundamentalId, string> = {
   'poisoned-pawn': 'Taking a poisoned pawn',
   'capture-toward-centre': 'Recapturing the wrong way',
   'botched-conversion': 'Rushing a won position',
+  'calculation-depth': 'Stopping the calculation early',
+  'left-book-early': 'Leaving theory early',
+  'no-plan': 'Moving without a plan',
 };
 
 /** The one-line coaching device for a fundamental (its tag's principle), or the

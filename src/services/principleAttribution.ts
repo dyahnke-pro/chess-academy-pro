@@ -28,6 +28,8 @@
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
 import { signedLegalSeeFor } from './positionReadingService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { findContinuationsAtPly } from './openingDetectionService';
+import { deriveNextPlans } from './nextPlans';
 
 export const FUNDAMENTAL_IDS = [
   // opening
@@ -44,6 +46,11 @@ export const FUNDAMENTAL_IDS = [
   'passed-pawn-neglected', 'lost-the-opposition', 'passive-rook-endgame',
   // eval/PV-gated — need the persisted review eval + PV (silent on the live path)
   'overvalued-attack', 'poisoned-pawn', 'capture-toward-centre', 'botched-conversion',
+  // section 14 — the REASONING errors (WO-CLOSEOUT-01, 2026-09-20). These are the
+  // `other` fallthrough measured at 23% of real slips: a pawn push or a king
+  // move with no board motif. Each is proven from evidence the app already
+  // computes — the persisted PV, the bundled openings DB, the structure plans.
+  'calculation-depth', 'left-book-early', 'no-plan',
 ] as const;
 export type FundamentalId = (typeof FUNDAMENTAL_IDS)[number];
 
@@ -82,6 +89,9 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'poisoned-pawn': 'poisoned-pawn',
   'capture-toward-centre': 'capture-toward-centre',
   'botched-conversion': 'botched-conversion',
+  'calculation-depth': 'calculation-depth',
+  'left-book-early': 'left-book-early',
+  'no-plan': 'no-plan',
 };
 
 /** Rows whose "punishment" is a positional cost rather than a concrete move
@@ -96,6 +106,8 @@ const CO_OCCURRENCE: ReadonlySet<FundamentalId> = new Set<FundamentalId>([
   // they speak only when nothing move-verified attached (overvalued-attack and
   // poisoned-pawn ARE move-verified via the PV, so they are NOT here).
   'capture-toward-centre', 'botched-conversion',
+  // section 14: a plan is positional — it yields to any move-verified fundamental.
+  'no-plan',
 ]);
 
 export interface PrincipleEvidence {
@@ -917,7 +929,85 @@ const DETECTORS: Detector[] = [
     const a = Math.max(-2000, ea);
     return att('botched-conversion', 2, { squares: [best.to], moves: [best.san], pvMoves: [] }, { drop: Math.round((b - a) / 100), better: best.san });
   },
+  // ── SECTION 14 — the reasoning errors (WO-CLOSEOUT-01, 2026-09-20) ────────
+  // 34. Calculation depth (eval/PV-gated). PATTERN: a QUIET move that the
+  // persisted engine line punishes only DEEP — the opponent's first two replies
+  // are quiet too, and the blow (a capture or check) lands on their third move
+  // or later. That is exactly the error a shallow calculation makes: the first
+  // moves look fine, the thread is lost further in. Immediate punishments are
+  // other fundamentals' business (loose piece, ignored threat, a forcing move
+  // missed) and subsume this one. Real cost required (eval, mover POV).
+  (c) => {
+    const { last, evalBefore: eb, evalAfterPlayed: ea, pvP } = c;
+    if (isForcing(last.san)) return null;
+    if (eb === undefined || ea === undefined || eb - ea < 150) return null;
+    if (!pvP || pvP.length < 3) return null;
+    const firstForcing = pvP.findIndex((san) => isForcing(san));
+    if (firstForcing < 2) return null; // the punishment is immediate or absent — not a depth error
+    return att('calculation-depth', 2, { squares: [last.to], moves: [pvP[firstForcing]], pvMoves: pvP.slice(0, firstForcing + 1) },
+      { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1 });
+  },
+  // 35. Left theory early (opening, DB-anchored — G3: the Lichess DB is canon).
+  // PATTERN: the position BEFORE the move is in the openings DB with named
+  // continuations, the played move is none of them, and the move was flagged
+  // (that is what "into a worse position" means — the attributor already
+  // requires a flagged move). COUNTERFACTUAL: a book continuation existed. The
+  // book move NAMED is the engine's best when the book has it, else the book's
+  // representative line. Not before ply 4: everyone leaves "book" at 1.e4.
+  (c) => {
+    if (!c.opening || c.plyIndex < 6) return null; // three moves each before "book" means anything
+    const { last, best } = c;
+    const prefix = c.history.slice(0, -1).map((m) => m.san);
+    let book: Map<string, { name: string; eco: string }>;
+    try { book = findContinuationsAtPly(prefix); } catch { return null; }
+    if (book.size === 0) return null;
+    if (book.has(last.san)) return null;
+    const bookSan = book.has(best.san) ? best.san : [...book.keys()][0];
+    const named = book.get(bookSan);
+    return att('left-book-early', 2, { squares: [last.to], moves: [bookSan], pvMoves: [] },
+      { played: last.san, book: bookSan, opening: named?.name ?? 'the book line', inBook: book.size });
+  },
+  // 36. No plan (positional, co-occurrence). PATTERN: past the opening, a QUIET
+  // move while the STRUCTURE earns a concrete plan (`deriveNextPlans` — the same
+  // computer the coach uses to state plans), the move touches none of the
+  // plan's squares or files, and the best move does (or is forcing). Used
+  // sparingly by construction: any move-verified fundamental subsumes it, and a
+  // board with no earned plan never files under it.
+  (c) => {
+    if (c.opening) return null;
+    const { last, best, mover } = c;
+    if (isForcing(last.san) || last.san.startsWith('O-O')) return null;
+    let plans: string[];
+    try { plans = deriveNextPlans(c.before.fen(), mover); } catch { return null; }
+    if (plans.length === 0) return null;
+    const targets = planTargets(plans);
+    if (targets.squares.size === 0 && targets.files.size === 0) return null;
+    const serves = (sq: string): boolean => targets.squares.has(sq) || targets.files.has(sq[0]);
+    if (serves(last.to) || serves(last.from)) return null;
+    if (!(isForcing(best.san) || serves(best.to))) return null;
+    const headline = planHeadline(plans[0]);
+    return att('no-plan', 1, { squares: [best.to], moves: [best.san], pvMoves: [] }, { played: last.san, better: best.san, plan: headline });
+  },
 ];
+
+/** The squares and files a set of structure plans NAME — coupled from the plan
+ *  prose the computer itself wrote ("win their weak pawn on d5", "seize the open
+ *  c-file"), never scraped from a model's sentence. */
+export function planTargets(plans: readonly string[]): { squares: Set<string>; files: Set<string> } {
+  const squares = new Set<string>();
+  const files = new Set<string>();
+  for (const p of plans) {
+    for (const m of p.matchAll(/\b([a-h][1-8])\b/g)) squares.add(m[1]);
+    for (const m of p.matchAll(/\b([a-h])-file\b/g)) files.add(m[1]);
+  }
+  return { squares, files };
+}
+
+/** "the plan from here is to seize the open c-file. Here's how: …" → "seize the open c-file". */
+export function planHeadline(plan: string): string {
+  const m = /the plan from here is to ([^.]+)\./.exec(plan);
+  return (m ? m[1] : plan.split('.')[0]).trim();
+}
 
 function isFlagged(classification: string | null): boolean {
   return classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder' || classification === 'miss';
@@ -990,6 +1080,14 @@ export function attributePrinciples(input: AttributionInput): PrincipleAttributi
   // the piece it hung — the eval/PV finding tells the fuller story.
   if (ids.has('poisoned-pawn')) { subsumed.add('greedy-pawn-grab'); subsumed.add('loose-piece'); }
   if (ids.has('overvalued-attack')) subsumed.add('loose-piece');
+  // Section 14: an immediate, move-verified punishment IS the story; the
+  // reasoning error behind it is the second telling. Depth needs the blow to be
+  // deep, so anything that names an immediate blow subsumes it; no-plan yields
+  // to every concrete fundamental on the same move.
+  for (const concrete of ['loose-piece', 'ignored-threat', 'passive-when-forcing-existed', 'poisoned-pawn', 'overvalued-attack'] as const) {
+    if (ids.has(concrete)) subsumed.add('calculation-depth');
+  }
+  if ([...ids].some((id) => id !== 'no-plan')) subsumed.add('no-plan');
   const kept = found.filter((f) => !subsumed.has(f.id));
   const verified = kept.filter((f) => !f.coOccurrence);
   const pool = verified.length > 0 ? verified : kept.slice(0, 1);

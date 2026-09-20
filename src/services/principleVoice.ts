@@ -116,7 +116,14 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
   'lost-the-opposition':
     'In king-and-pawn endings, count the squares between the kings before you move. Keep an odd number with them to move and the opposition — and the key squares — stay yours.',
   'botched-conversion':
-    'Winning positions are won by simplifying. Trade pieces at every chance but keep pawns on, steer for the ending where the extra material decides, and refuse every complication.',
+    'Winning positions are won by simplifying. Trade pieces at every chance but keep the pawn structure intact, steer for the ending where the extra material decides, and refuse every complication.',
+  // ── section 14: the reasoning errors ──
+  'calculation-depth':
+    'Calculate to a QUIET position, not to a good feeling. Follow every forcing reply — check, capture, threat — until nothing forces, then judge. If the line ends while they still have a capture, you have not finished.',
+  'left-book-early':
+    'Before you leave theory, ask what the new move gains that the book move does not. If you cannot say it out loud, prefer the book move — it is there because thousands of games found it works.',
+  'no-plan':
+    'Name the target before you touch a piece. Ask what the position wants — a weak pawn, an open file, a passed pawn — and let the move serve that. If a move serves no plan you can say in one sentence, it is not the move.',
 };
 
 /** The habit that prevents this fundamental next game, or null when the id is
@@ -402,6 +409,30 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       ];
       return s[v % s.length];
     }
+    case 'calculation-depth': {
+      const s = [
+        `The move looks fine for two moves — then ${f.punish} lands. The line had to be followed ${f.depth} plies deep, and the calculation stopped early.`,
+        `Nothing hangs right away, which is the trap: ${f.punish} arrives on their ${nth(Math.ceil(Number(f.depth) / 2))} move. Calculate to a quiet position, not to a good feeling.`,
+        `Shallow read: ${f.played} survives the first replies and breaks on ${f.punish}. That is a thread lost deeper in the line, not a piece left loose.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'left-book-early': {
+      const s = [
+        `That leaves the book — ${f.opening} continues ${f.book} here, and ${f.played} steps out of every known line into a worse position.`,
+        `Theory ends with ${f.played}: the book move is ${f.book} (${f.opening}), and this departure costs.`,
+        `Out of book early. ${f.book} is what the games play here; ${f.played} is on nobody's line and the engine agrees it is worse.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'no-plan': {
+      const s = [
+        `What was ${f.played} for? The position had a plan — ${f.plan} — and this move serves none of it; ${f.better} does.`,
+        `A move without a purpose: the board wanted you to ${f.plan}, and ${f.played} works on something else entirely. ${f.better} was the plan move.`,
+        `Name the target before you move. Here the target was to ${f.plan}; ${f.better} goes there, ${f.played} does not.`,
+      ];
+      return s[v % s.length];
+    }
   }
 }
 
@@ -444,6 +475,9 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'poisoned-pawn': return `Another poisoned pawn — the ${f.piece} on ${f.square} is snared.`;
     case 'capture-toward-centre': return `The recapture again — ${f.better} opens the ${f.file}-file.`;
     case 'botched-conversion': return `Rushing the win again — ${f.better} was calmer.`;
+    case 'calculation-depth': return `Stopped calculating early again — ${f.punish} was waiting deeper.`;
+    case 'left-book-early': return `Out of book early again — ${f.book} was the line.`;
+    case 'no-plan': return `Another move without a plan — ${f.better} served the position.`;
   }
 }
 
@@ -521,6 +555,9 @@ const RECAP_NOUN: Record<FundamentalId, string> = {
   'poisoned-pawn': 'took a poisoned pawn',
   'capture-toward-centre': 'recaptured the wrong way',
   'botched-conversion': 'rushed a winning position',
+  'calculation-depth': 'stopped calculating too early',
+  'left-book-early': 'left the book early',
+  'no-plan': 'played without a plan',
 };
 
 /**
