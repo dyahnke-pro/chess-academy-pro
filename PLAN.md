@@ -2194,6 +2194,27 @@ from the entry chunk's size.
    only by the king and queen — and the king and queen are the worst defenders,
    because the moment you hit the guard the piece drops." Board-true or not, a
    rook guarded by two pieces is not a loose-guard lesson; verify the computer.
+   - 🔴 **CORRECTION (2026-09-20 15:00): the measurement below UNDER-TESTED and
+     its headline was overstated. I called `attributePrinciples` with
+     `pvAfterPlayed: undefined, pvAfterBest: undefined`, so the PV-gated
+     detectors — `calculation-depth`, `overvalued-attack`, `poisoned-pawn`,
+     `botched-conversion` — COULD NOT have fired no matter what the board
+     showed. What the probe actually proves is narrower: the ~29 board-only
+     fundamentals do not fire on those five plies. "Coverage, not inputs" is
+     therefore unproven for the four that read engine lines.** The live review
+     path DOES pass them (`coachFeatureService:1445` reads `m.pv?.afterPlayed`),
+     but only for flagged plies whose dive stored a PV, and nothing has
+     measured how many carry one. The audit now counts that (see the
+     `MEASURED` row); re-run the probe WITH the real annotation's `pv` before
+     concluding anything about those four. Found by the focused-noyce session
+     hitting the identical shape on the RECORDING path: their
+     `calculation-depth` printed "punishing PV is 0 plies, needs 3" on every
+     unnamed slip because the blunder builder never passed the PV fields the
+     annotation already held — the third instance of one pattern (a builder
+     assembling a row for a computer and omitting a field the source record
+     carries; `evalBefore` and `evalAfterPlayed` were the first two, WO-4 J2).
+     **The lesson generalises and is worth more than the fix: when a computer
+     returns nothing, prove its INPUTS arrived before blaming its logic.**
    - **MEASURED OFFLINE (2026-09-20): it is DETECTOR COVERAGE, not inputs.**
      Replayed 06wNUWaA and called `attributePrinciples` directly on the five
      flagged student plies with the prod run's best moves (48 Bg5→Kb8, 50

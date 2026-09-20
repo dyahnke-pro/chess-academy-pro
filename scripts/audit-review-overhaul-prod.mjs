@@ -391,12 +391,21 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const anns = g?.annotations ?? [];
     const nullEval = anns.filter((a) => a.evaluation === null || a.evaluation === undefined).length;
     const nullBest = anns.filter((a) => a.bestMoveEval === null || a.bestMoveEval === undefined).length;
-    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest };
+    // PV PRESENCE on flagged plies. Four fundamentals read the engine lines
+    // (calculation-depth, overvalued-attack, poisoned-pawn, botched-conversion)
+    // and are structurally unable to fire without them — the focused-noyce
+    // session found the recording path never passed them at all. Counting it
+    // here stops the next session concluding "the detector has no coverage"
+    // when the truth is "its input never arrived".
+    const flagged = anns.filter((a) => /inaccuracy|mistake|blunder/i.test(String(a.classification ?? '')));
+    const flaggedWithPv = flagged.filter((a) => (a.pv?.afterPlayed?.length ?? 0) > 0 || (a.pv?.afterBest?.length ?? 0) > 0).length;
+    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows, total: anns.length, nullEval, nullBest, flagged: flagged.length, flaggedWithPv };
   }, GID).catch((e) => ({ error: String(e) }));
   log(`  [engine] depth=${annots.depth} fullyAnalyzed=${annots.fully}`);
   (annots.rows ?? []).forEach((r) => log(`  [engine] ${r}`));
   log(`  [engine] UNMEASURED: ${annots.nullEval}/${annots.total} plies have a null eval, ${annots.nullBest}/${annots.total} a null bestMoveEval — each one becomes an invented 175/350 cpLoss downstream`);
   await add('MEASURED every ply carries a real eval', (annots.nullEval ?? 0) === 0, `${annots.nullEval ?? '?'}/${annots.total ?? '?'} null evals, ${annots.nullBest ?? '?'} null bestMoveEval (a null becomes a fabricated cpLoss in the student model)`);
+  log(`  [engine] PV ON FLAGGED PLIES: ${annots.flaggedWithPv}/${annots.flagged} carry engine lines — the four PV-gated fundamentals cannot fire on the rest`);
   if (!ready) { await listener.stop(); await browser.close(); process.exit(1); }
 
   // ── AUTO (C) — Start, then the walk advances on its own ─────────────────
