@@ -162,6 +162,23 @@ export interface UseDiscussionPracticeResult {
   // and this hook stays what it is: bookkeeping for My Mistakes, the drill
   // queue and the weakness spine.
   evaluatePlayerMove: (args: EvaluatePlayerMoveArgs) => Promise<void>;
+  /**
+   * THE POSITIVE HALF, FOR A SURFACE THAT ALREADY GRADED THE MOVE.
+   *
+   * `recordMoveEvidence` used to be reachable only from inside
+   * `evaluatePlayerMove`. `/coach/play` correctly stopped calling that on
+   * 2026-06-04 — it ran a SECOND Stockfish pair and a second classifier that
+   * disagreed with the blunder interceptor — and the positive half went with
+   * it, silently: the surface still declares `capabilityOrigin: 'play'`, so it
+   * reads as wired while recording nothing. Every clean move in every real
+   * game against the coach was dropped, which is the one source of holds the
+   * heat map's GREEN state depends on.
+   *
+   * This door takes a cpLoss the CALLER already computed, so it can never
+   * reintroduce the second analysis that was removed. A surface that has no
+   * grade must keep using `evaluatePlayerMove`.
+   */
+  recordGradedMove: (args: GradedMoveArgs) => void;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
   skip: () => Promise<void>;
@@ -169,6 +186,20 @@ export interface UseDiscussionPracticeResult {
   dismissOnMove: () => void;
   dismissTeach: () => void;
   reset: () => void;
+}
+
+/** A move the calling surface has ALREADY graded. `cpLoss` is theirs; this
+ *  hook never analyses to obtain it. */
+export interface GradedMoveArgs {
+  fenBefore: string;
+  playedSan: string;
+  moverColor: 'white' | 'black';
+  /** The caller's own capped cpLoss. `null` means they could not grade it —
+   *  unknown is never read as clean, so nothing is recorded. */
+  cpLoss: number | null;
+  /** The game this move belongs to. REQUIRED: green's bar counts DISTINCT
+   *  GAMES, so a row without one can never prove a capability. */
+  sourceGameId: string;
 }
 
 export interface UseDiscussionPracticeOptions {
@@ -753,6 +784,26 @@ export function useDiscussionPractice(
 
   const dismissTeach = useCallback((): void => { reset(); }, [reset]);
 
+  // Records off a grade the surface already has — no analysis, no second
+  // classifier. Gated on `recording` exactly like the capture inside
+  // `evaluatePlayerMove`, so a surface that opts out of recording stays inert.
+  const recordGradedMove = useCallback((args: GradedMoveArgs): void => {
+    if (!recording) return;
+    if (args.cpLoss === null) return;   // unknown is not clean
+    void recordMoveEvidence({
+      fenBefore: args.fenBefore,
+      playedSan: args.playedSan,
+      moverColor: args.moverColor,
+      cpLoss: args.cpLoss,
+      origin: opts.capabilityOrigin,
+      // Unprompted: this fires on the student's own move, before any reveal
+      // this hook delivers. The critical-moment announcement is the one thing
+      // that would change that, and it does not run on this path.
+      prompted: false,
+      sourceGameId: args.sourceGameId,
+    });
+  }, [recording, opts.capabilityOrigin]);
+
   return {
     phase,
     prompt,
@@ -761,6 +812,7 @@ export function useDiscussionPractice(
     hintDial,
     lastMoveDrawback,
     evaluatePlayerMove,
+    recordGradedMove,
     raiseSlipPrompt,
     submitReason,
     skip,

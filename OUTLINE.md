@@ -151,10 +151,31 @@ proved fastest.
 many holds follow. The heat map exists to say "you have GOTTEN BETTER" and as
 built it structurally cannot.
 
-**THE FIX, one change to the bar, both directions at once:** proven = a RECENT
-clean streak on the tag, spanning at least TWO DISTINCT GAMES (the loop's own
-unit — green's claim is "you did it again next time"), rather than three
-lifetime holds with a lifetime-zero break count.
+✅ **THE FIX IS BUILT (2026-09-20).** `capabilityProven` is now the ONE
+definition of green, read by both consumers (it was written twice —
+`needScore.capabilityTerm` and `studentMomentBoost.isUnproven` — which is the
+duplicated-judgement the rot rule bans). Proven = a RECENT clean streak
+(`heldStreak`) spanning at least TWO DISTINCT GAMES (`streakGames`), instead of
+three lifetime holds with a lifetime-zero break count. A break now RESETS the
+streak rather than closing the door, so a student who fixes a weakness can be
+told so. Gates: six streak cases in `capabilityEvidence.test.ts` (one game is
+not proven however long; two games are; a break ends it; green is recoverable;
+a prompted row is neither; grey is never proven) and two new contracts in
+`capabilityRead.test.ts`.
+
+🔴 **AND THE HOLE THAT MADE THE BAR MOOT — `/coach/play` RECORDED NOTHING.**
+`recordMoveEvidence` had exactly ONE call site, inside `evaluatePlayerMove`,
+which `CoachGamePage` correctly stopped calling on 2026-06-04 (it ran a second
+Stockfish pair and a second classifier that disagreed with the blunder
+interceptor). The positive half was a side effect of that call and went with
+it — so the surface where students play whole games against the coach
+contributed ZERO holds, while mounting the hook with `capabilityOrigin:
+'play'`, which makes it read as wired. ✅ Fixed by a `recordGradedMove` door
+that takes the cpLoss the surface ALREADY computed, so the removed second
+analysis cannot come back, and passes `gameState.gameId` — which is also the
+game identity the new bar counts. Gates: three hook cases +
+`playRecordsCapability.test.ts` (blames by statement, and asserts
+`evaluatePlayerMove` stays gone).
 Reports: `audit-reports/capability-green.json`,
 `audit-reports/capability-green-sequence.json`.
 

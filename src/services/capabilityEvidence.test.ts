@@ -5,6 +5,9 @@ import {
   capabilitiesShown,
   recordCapabilityEvidence,
   getCapabilityProfile,
+  capabilityProven,
+  HELD_FOR_PROVEN,
+  PROVEN_MIN_GAMES,
 } from './capabilityEvidence';
 import { MOVE_FUNDAMENTAL_TAG, leadingFundamentals } from './moveFundamentals';
 
@@ -228,5 +231,80 @@ describe('the review capture actually feeds it — a real game, real rows', () =
     const profile = await getCapabilityProfile();
     expect(profile.size).toBeGreaterThan(0);
     for (const [, entry] of profile) expect(entry.broken).toBe(0);
+  });
+});
+
+/**
+ * THE BAR — a recent clean streak across distinct games.
+ *
+ * Both halves were measured on real games (2026-09-20) before being changed:
+ * three holds are reachable INSIDE ONE GAME (6 of 6 game-seats did it), and a
+ * tag proven that way flipped four games later; and the old lifetime
+ * `broken === 0` meant one slip ever barred green forever, so the heat map
+ * could never say the one thing it exists to say.
+ */
+describe('the green bar — recent streak, distinct games', () => {
+  const held = (game: string) => recordCapabilityEvidence({
+    fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
+    cpLoss: 0, origin: 'play', prompted: false, sourceGameId: game,
+  });
+  const broke = (game: string) => recordCapabilityEvidence({
+    fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
+    cpLoss: 400, origin: 'play', prompted: false, sourceGameId: game,
+  });
+  const tagOf = async () => {
+    const profile = await getCapabilityProfile();
+    const [first] = [...profile.values()];
+    return first;
+  };
+
+  it('a streak inside ONE game is NOT proven, however long', async () => {
+    for (let i = 0; i < HELD_FOR_PROVEN + 3; i++) await held('game-A');
+    const e = await tagOf();
+    expect(e.heldStreak).toBeGreaterThanOrEqual(HELD_FOR_PROVEN);
+    expect(e.streakGames).toBe(1);
+    expect(capabilityProven(e)).toBe(false);
+  });
+
+  it('the same streak spanning two games IS proven', async () => {
+    for (let i = 0; i < HELD_FOR_PROVEN - 1; i++) await held('game-A');
+    await held('game-B');
+    const e = await tagOf();
+    expect(e.streakGames).toBe(PROVEN_MIN_GAMES);
+    expect(capabilityProven(e)).toBe(true);
+  });
+
+  it('a break ENDS the streak — holds before it stop counting', async () => {
+    for (let i = 0; i < HELD_FOR_PROVEN; i++) await held('game-A');
+    await held('game-B');
+    await broke('game-C');
+    const e = await tagOf();
+    expect(e.held).toBeGreaterThanOrEqual(HELD_FOR_PROVEN);   // lifetime holds remain
+    expect(e.heldStreak).toBe(0);
+    expect(capabilityProven(e)).toBe(false);
+  });
+
+  it('GREEN IS RECOVERABLE — a student who fixes it can go green again', async () => {
+    await broke('game-A');
+    for (let i = 0; i < HELD_FOR_PROVEN - 1; i++) await held('game-B');
+    await held('game-C');
+    const e = await tagOf();
+    expect(e.broken).toBeGreaterThan(0);          // the slip is still on the record
+    expect(capabilityProven(e)).toBe(true);       // and it no longer bars green
+  });
+
+  it('a PROMPTED row is neither — it cannot break a streak or build one', async () => {
+    for (let i = 0; i < HELD_FOR_PROVEN - 1; i++) await held('game-A');
+    await recordCapabilityEvidence({
+      fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
+      cpLoss: 400, origin: 'learn', prompted: true, sourceGameId: 'game-B',
+    });
+    await held('game-B');
+    const e = await tagOf();
+    expect(capabilityProven(e)).toBe(true);       // the told answer did not break it
+  });
+
+  it('GREY is never proven', () => {
+    expect(capabilityProven(undefined)).toBe(false);
   });
 });

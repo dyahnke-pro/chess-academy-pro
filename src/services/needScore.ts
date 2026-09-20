@@ -33,7 +33,7 @@ import type { WeaknessSignal } from './weaknessSignal';
 import { matchClauseKind, matchTacticPattern, matchTag, boostFor, MAX_WEAKNESS_BOOST } from './weaknessSignal';
 import { bookDepartureIsCostly, type BookDepartureRow } from './bookDepartureWeakness';
 import type { TacticPatternType } from '../types/tacticTypes';
-import type { CapabilityProfile } from './capabilityEvidence';
+import { capabilityProven, HELD_FOR_PROVEN, type CapabilityProfile } from './capabilityEvidence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
@@ -237,10 +237,11 @@ function weaknessTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number
   return score > 0 ? { score, reason: `weakness: ${match.clusterId} (${match.lifecycleStatus ?? 'open'})` } : { score: 0, reason: null };
 }
 
-/** Held records needed before a capability counts as PROVEN. One clean move is
- *  not mastery; this is a BAR (admit anything at or above it, however many) and
- *  never a cap on what is recorded — G4.5. */
-export const HELD_FOR_PROVEN = 3;
+/** Re-exported so existing importers keep working. The bar itself now lives
+ *  in `capabilityEvidence`, beside the profile that computes the streak — it
+ *  has two readers (here and `studentMomentBoost`) and a constant with two
+ *  readers belongs with the thing it describes, not with one of them. */
+export { HELD_FOR_PROVEN };
 
 /**
  * THE POSITIVE TERM — the only one that can LOWER need, and the first evidence
@@ -283,10 +284,12 @@ function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: numb
   const proven: string[] = [];
   for (const tag of p.posedTags) {
     const e = ctx.capabilities.get(tag);
-    if (!e) continue;                          // GREY — never asked, never lowered
-    if (e.broken > 0) continue;                // RED — the negative half owns this
-    if (e.held < HELD_FOR_PROVEN) continue;    // seen, not yet proven
-    proven.push(`${tag} (${e.held} held)`);
+    // ONE definition of proven (`capabilityEvidence.capabilityProven`): a
+    // RECENT clean streak spanning at least two distinct games. GREY (absent)
+    // and RED (a break inside the streak) both fail it, so the three states
+    // still fall out of the one call rather than out of three branches here.
+    if (!capabilityProven(e)) continue;
+    proven.push(`${tag} (${e!.heldStreak} held in a row across ${e!.streakGames} games)`);
   }
   if (proven.length === 0) return { score: 0, reason: null };
   // One bar's worth of quiet per proven capability, so two independent proofs

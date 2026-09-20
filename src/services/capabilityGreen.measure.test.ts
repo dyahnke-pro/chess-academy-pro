@@ -42,7 +42,7 @@ import {
   recordCapabilityEvidence,
   getCapabilityProfile,
 } from './capabilityEvidence';
-import { HELD_FOR_PROVEN } from './needScore';
+import { capabilityProven, HELD_FOR_PROVEN } from './capabilityEvidence';
 
 /** A real amateur game, committed so the census never depends on the network.
  *  lichess MxLHuel4 — the game WO-LOOP-01 used to prove the red direction, so
@@ -120,10 +120,11 @@ describe('GREEN — can real play prove a capability?', () => {
         cpLoss: 0,
         origin: 'play',
         prompted: false,
+        sourceGameId: 'fixture-game',   // ONE game — the new bar needs two
       });
     }
     const profile = await getCapabilityProfile();
-    const proven = [...profile.entries()].filter(([, e]) => e.held >= HELD_FOR_PROVEN && e.broken === 0);
+    const proven = [...profile.entries()].filter(([, e]) => capabilityProven(e));
     // eslint-disable-next-line no-console
     console.log(
       `[bar] profile after ${HELD_FOR_PROVEN} clean answers: ` +
@@ -224,13 +225,13 @@ describe('GREEN — can real play prove a capability?', () => {
           if (posed.length > 0) posedPlies += 1;
           await recordCapabilityEvidence({
             fenBefore: fens[i], playedSan: sans[i], moverColor: mover,
-            cpLoss, origin: 'play', prompted: false,
+            cpLoss, origin: 'play', prompted: false, sourceGameId: id,
           });
         }
         const profile = await getCapabilityProfile();
         const rows = [...profile.entries()].map(([tag, e]) => ({ tag, held: e.held, broken: e.broken }));
-        const proven = rows.filter((r) => r.held >= HELD_FOR_PROVEN && r.broken === 0);
-        const blockedByOneBreak = rows.filter((r) => r.held >= HELD_FOR_PROVEN && r.broken > 0);
+        const proven = [...profile.entries()].filter(([, e]) => capabilityProven(e)).map(([tag]) => ({ tag }));
+        const blockedByOneBreak = rows.filter((r) => r.held >= HELD_FOR_PROVEN && r.broken > 0);   // lifetime view, for contrast
         perGame.push({ id, seat, plies: sans.length, posedPlies, rows, proven: proven.map((r) => r.tag) });
         // eslint-disable-next-line no-console
         console.log(
@@ -339,7 +340,7 @@ describe('GREEN — can real play prove a capability?', () => {
           for (const p of capabilitiesPosed(fens[i], sans[i], seat)) brokeThisGame.add(p.tag);
         }
         await recordCapabilityEvidence({
-          fenBefore: fens[i], playedSan: sans[i], moverColor: seat, cpLoss, origin: 'play', prompted: false,
+          fenBefore: fens[i], playedSan: sans[i], moverColor: seat, cpLoss, origin: 'play', prompted: false, sourceGameId: id,
         });
       }
       // A FLIP: a tag this student had already PROVEN, broken in a later game.
@@ -349,7 +350,7 @@ describe('GREEN — can real play prove a capability?', () => {
         }
       }
       const profile = await getCapabilityProfile();
-      const proven = [...profile.entries()].filter(([, e]) => e.held >= HELD_FOR_PROVEN && e.broken === 0).map(([t]) => t);
+      const proven = [...profile.entries()].filter(([, e]) => capabilityProven(e)).map(([t]) => t);
       const red = [...profile.entries()].filter(([, e]) => e.broken > 0).map(([t]) => t);
       for (const t of proven) if (!firstProvenAt.has(t)) firstProvenAt.set(t, gi);
       timeline.push({ game: id, proven, red });

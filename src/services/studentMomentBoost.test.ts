@@ -21,7 +21,7 @@ describe('the heat map feeds the RANKER', () => {
   });
 
   it('GREEN earns nothing here — the ranker is raise-only, green lowers through need', () => {
-    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 9, broken: 0 }) })).toBe(0);
+    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 9, broken: 0, heldStreak: 9, streakGames: 2 }) })).toBe(0);
   });
 
   it('RED outranks GREY when the hole is persistent and worsening', () => {

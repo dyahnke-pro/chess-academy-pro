@@ -90,11 +90,52 @@ export interface CapabilityEvidenceRecord {
   sourceGameId?: string;
 }
 
-/** `held` minus `broken` per tag, plus the raw counts. A tag absent from the map
- *  is UNKNOWN — which is NOT the same as broken and NOT the same as held. */
+/** How many clean answers in a row earn GREEN. Lives here, beside the profile
+ *  that computes the streak, so the bar and the evidence cannot drift; it used
+ *  to sit in `needScore`, which is only one of its two readers. */
+export const HELD_FOR_PROVEN = 3;
+
+/** …and they must span at least this many DISTINCT GAMES. The loop's unit is
+ *  the game: green's claim is "you did it again NEXT TIME", which a single
+ *  game cannot evidence however many times the board asked inside it. */
+export const PROVEN_MIN_GAMES = 2;
+
+/** Per tag: the lifetime counts, plus the RECENT clean streak that decides
+ *  green. A tag absent from the map is UNKNOWN — NOT broken and NOT held. */
 export interface CapabilityProfileEntry {
   held: number;
   broken: number;
+  /** Consecutive `held` rows at the END of this tag's history (newest first,
+   *  stopped by the first `broken`). Prompted rows are skipped entirely, so
+   *  being TOLD the answer neither proves nor breaks anything. */
+  heldStreak: number;
+  /** Distinct `sourceGameId`s inside that streak. Rows with no game id count
+   *  toward the streak but not toward this — honest rather than invented. */
+  streakGames: number;
+}
+
+/**
+ * IS THIS CAPABILITY PROVEN — the ONE definition, read by every consumer.
+ *
+ * It was written twice (`needScore.capabilityTerm` and
+ * `studentMomentBoost.isUnproven`), which is the duplicated-judgement the rot
+ * rule bans: two readers of the same question that can drift apart silently.
+ *
+ * MEASURED 2026-09-20, and both halves of this rule come from the numbers:
+ *  • `held >= 3` alone is satisfiable INSIDE ONE GAME — 6 of 6 real game-seats
+ *    proved a capability off a single game — and it does not hold: one
+ *    student's `neglected-development` was proven after game 1 and BROKEN in
+ *    game 5, so the coach would have gone quiet for four games and then
+ *    watched them do it again. Hence the distinct-GAMES requirement.
+ *  • the old rule also demanded a LIFETIME `broken === 0`, so a single break
+ *    ever barred a tag from green permanently — a student who FIXES a weakness
+ *    could never go green, which is the one thing the heat map exists to say.
+ *    Hence a RECENT STREAK rather than a lifetime count: a break resets the
+ *    streak, it does not close the door.
+ */
+export function capabilityProven(e: CapabilityProfileEntry | undefined): boolean {
+  if (!e) return false;                                   // GREY — never asked is never proven
+  return e.heldStreak >= HELD_FOR_PROVEN && e.streakGames >= PROVEN_MIN_GAMES;
 }
 export type CapabilityProfile = Map<MisconceptionTagId, CapabilityProfileEntry>;
 
@@ -236,9 +277,13 @@ export async function recordCapabilityEvidence(args: {
 export async function getCapabilityProfile(): Promise<CapabilityProfile> {
   const profile: CapabilityProfile = new Map();
   try {
-    const rows = await db.capabilityEvidence.toArray();
+    const all = await db.capabilityEvidence.toArray();
+    // Oldest first, so "the streak" is a walk backwards from the newest row.
+    // `recordedAt` is stamped by the writer; rows sharing a millisecond keep
+    // their insertion order, which is the order they happened in.
+    const rows = [...all].sort((a, b) => a.recordedAt - b.recordedAt);
+    const history = new Map<MisconceptionTagId, CapabilityEvidenceRecord[]>();
     for (const r of rows) {
-      if (!isMisconceptionTagId(r.tag)) continue;
       // A PROMPTED ROW IS NEITHER. The student answered a question the coach
       // had already answered for them, so it proves nothing either way — and
       // counting it would let the app's own teaching mark a capability proven
@@ -251,9 +296,28 @@ export async function getCapabilityProfile(): Promise<CapabilityProfile> {
       // as unprompted, which is exactly what they were — nothing prompted
       // before this existed.
       if (r.prompted) continue;
-      const e = profile.get(r.tag) ?? { held: 0, broken: 0 };
+      if (!isMisconceptionTagId(r.tag)) continue;
+      const e = profile.get(r.tag) ?? { held: 0, broken: 0, heldStreak: 0, streakGames: 0 };
       if (r.outcome === 'held') e.held += 1; else e.broken += 1;
       profile.set(r.tag, e);
+      const h = history.get(r.tag) ?? [];
+      h.push(r);
+      history.set(r.tag, h);
+    }
+    // THE RECENT STREAK. Walk each tag's history backwards while the answers
+    // are clean; count the distinct games those answers span.
+    for (const [tag, h] of history) {
+      const e = profile.get(tag);
+      if (!e) continue;
+      const games = new Set<string>();
+      let streak = 0;
+      for (let i = h.length - 1; i >= 0; i--) {
+        if (h[i].outcome !== 'held') break;
+        streak += 1;
+        if (h[i].sourceGameId) games.add(h[i].sourceGameId as string);
+      }
+      e.heldStreak = streak;
+      e.streakGames = games.size;
     }
   } catch { /* no store yet — an empty profile is the honest answer */ }
   return profile;
