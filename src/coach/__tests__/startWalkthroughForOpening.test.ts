@@ -19,7 +19,17 @@ describe('start_walkthrough_for_opening tool', () => {
       opening: 'Italian Game',
     })) as ToolResult;
     expect(r.ok).toBe(false);
-    expect(r.error).toMatch(/can't host one|navigate to learn/i);
+    // 🔴 WAS /can't host one|navigate to learn/i — the pre-2026-09-19 wording.
+    // `2bfb4961c` ("twelve defects read off real user sessions") rewrote the
+    // refusal to say the lesson is QUEUED and to route via navigate_to_route,
+    // so the test asserted a sentence the coach had stopped saying eleven days
+    // earlier. Corrected to the shipped text, not annotated.
+    //
+    // The INTENT is unchanged and is what these two lines pin: the refusal is
+    // honest about not having started (with ok:false above), and it POINTS the
+    // student somewhere instead of dead-ending.
+    expect(r.error, 'must admit it did not start').toMatch(/cannot host a walkthrough/i);
+    expect(r.error, 'must route the student somewhere').toMatch(/navigate_to_route|\/coach\/teach/i);
   });
 
   it('passes opening + variation + orientation to the surface', async () => {

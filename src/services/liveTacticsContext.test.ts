@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, it, expect, vi } from 'vitest';
-import { buildTacticsLiveContext, buildFedTacticsContext, speakDeepestLookahead } from './liveTacticsContext';
+import { buildTacticsLiveContext, buildFedTacticsContext, speakDeepestLookahead, formatTacticsSubBlock } from './liveTacticsContext';
 import type { StockfishAnalysis } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
 
@@ -434,5 +434,29 @@ describe('buildTacticsLiveContext — attaches computed concepts from the SAME a
     const { buildTacticsLiveContext } = await import('./liveTacticsContext');
     const ctx = buildTacticsLiveContext('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', null, 'w', 1500);
     expect(ctx.concepts).toBeUndefined();
+  });
+});
+
+describe('geometry is not a tactic — the model never decides (G0, 2026-09-21)', () => {
+  // The board that found this. Qf4+ "forks" bishop f6, queen h6 and the king,
+  // and the forked QUEEN attacks f4 — White answers Qxf4 and it wins nothing.
+  // Review refused it; the live envelope announced "FORK" and told the model to
+  // "NAME the pattern in prose", which made the MODEL the thing deciding
+  // whether a tactic was real.
+  const EMPTY_FORK = '6k1/5p2/5B1Q/1p1P4/4rq2/1p6/6PK/6R1 w - - 2 37';
+
+  it('marks a fork that wins nothing as GEOMETRY ONLY and forbids the claim', () => {
+    const block = formatTacticsSubBlock(buildTacticsLiveContext(EMPTY_FORK, null, 'b', 1500), EMPTY_FORK);
+    expect(block, 'the pattern may still be named').toMatch(/FORK/);
+    expect(block, 'but it must be marked as winning nothing').toMatch(/GEOMETRY ONLY/);
+    expect(block, 'and the model must be told not to sell it').toMatch(/do NOT say it wins material/);
+  });
+
+  it('CAN FIRE — a real tactic is not muzzled by the same rule', () => {
+    // The guard must not simply stamp everything GEOMETRY ONLY; that would
+    // "fix" the bug by silencing the coach, which is the failure mode this
+    // repo punishes. A position with no fork at all carries no such marker.
+    const QUIET = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+    expect(formatTacticsSubBlock(buildTacticsLiveContext(QUIET, null, 'b', 1500), QUIET)).not.toMatch(/GEOMETRY ONLY/);
   });
 });

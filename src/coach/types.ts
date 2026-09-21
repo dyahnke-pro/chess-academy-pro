@@ -557,6 +557,25 @@ export interface TacticsLiveContext {
      *  a consumer could not filter. Absent only for classifier-produced
      *  patterns that never carried a side. */
     side?: 'student' | 'opponent';
+    /** COMPUTED: does this tactic actually WIN material, or is it a bare
+     *  geometric alignment that wins nothing?
+     *
+     *  🔴 WHY IT EXISTS (2026-09-21). `detectTactics` reports GEOMETRY — it
+     *  says "Queen on f4 forks bishop on f6, queen on h6 and king on h2" even
+     *  when the forked QUEEN attacks f4 and simply answers Qxf4, so the fork
+     *  buys nothing. That list was rendered verbatim into the envelope under
+     *  "NAME the pattern in prose", which made the MODEL the thing deciding
+     *  whether a tactic was real — the one job G0 says it never has. Review
+     *  refused that same fork on that same board; the live coach announced it.
+     *
+     *  'live'   — the owner can execute now and win material.
+     *  'threat' — guaranteed after every legal defender reply.
+     *  'none'   — geometry only. Name the pattern if you like; never tell the
+     *             student it wins anything.
+     *  undefined — no verifier covers this pattern type yet (only FORK is
+     *             verified today), so nothing is claimed either way. Absent is
+     *             recorded as absent, never as false. */
+    wins?: 'live' | 'threat' | 'none';
   }>;
   /** Undefended attacked pieces (either color). */
   hanging: Array<{ square: string; piece: string; color: 'w' | 'b' }>;

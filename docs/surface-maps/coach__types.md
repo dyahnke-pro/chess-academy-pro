@@ -4,22 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**878 lines · 30 exports · 884 importers · 183 tests · 38 audits**
+**897 lines · 30 exports · 888 importers · 187 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:457) — names `types`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2912) — names `Provider`, `ProviderName`, `types`
-- **TypeScript** (CLAUDE.md:3369) — names `types`
-- **React** (CLAUDE.md:3379) — names `types`
-- **File Organization** (CLAUDE.md:3390) — names `types`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3763) — names `types`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3802) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4272) — names `types`
-- **Naming** (CLAUDE.md:4833) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:4878) — names `Provider`
-- **Shared types / services** (CLAUDE.md:4945) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:5674) — names `TacticsLiveContext`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3018) — names `Provider`, `ProviderName`, `types`
+- **TypeScript** (CLAUDE.md:3475) — names `types`
+- **React** (CLAUDE.md:3485) — names `types`
+- **File Organization** (CLAUDE.md:3496) — names `types`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3984) — names `types`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4023) — names `CoachSurface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4493) — names `types`
+- **Naming** (CLAUDE.md:5054) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5099) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5166) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:5916) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -382,6 +382,7 @@
 - `src/data/lessons/kingsIndianDefence.ts`
 - `src/data/lessons/kingsIndianDefenceVariations.ts`
 - `src/data/lessons/lessonDepth.test.ts`
+- `src/data/lessons/lessonTabIntegrity.test.ts`
 - `src/data/lessons/londonSystem.ts`
 - `src/data/lessons/londonSystemVariations.ts`
 - `src/data/lessons/marshallAttack.ts`
@@ -728,6 +729,7 @@
 - `src/services/fromYourGamesService.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameCalculationPuzzleService.ts`
@@ -760,6 +762,7 @@
 - `src/services/liveTacticsContext.test.ts`
 - `src/services/liveTacticsContext.ts`
 - `src/services/liveVoiceDefects.test.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/masterPlayLookup.ts`
 - `src/services/masterclassRedirect.ts`
@@ -815,6 +818,7 @@
 - `src/services/proGameReferenceService.ts`
 - `src/services/proOpeningForks.test.ts`
 - `src/services/proRepertoireService.ts`
+- `src/services/promptedFind.wire.test.ts`
 - `src/services/puzzleGenerator.test.ts`
 - `src/services/puzzleGenerator.ts`
 - `src/services/puzzleService.test.ts`
@@ -824,7 +828,6 @@
 - `src/services/pvPlayback.ts`
 - `src/services/ratingIdempotence.test.ts`
 - `src/services/refutedAlternative.test.ts`
-- `src/services/reviewOpeningTheory.test.ts`
 - `src/services/reviewSampleGames.ts`
 - `src/services/sessionGenerator.test.ts`
 - `src/services/sessionGenerator.ts`
@@ -846,6 +849,7 @@
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentStateBlock.ts`
 - `src/services/sublineLesson.ts`
+- `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
 - `src/services/syncService.ts`
 - `src/services/tacticAlertService.test.ts`
@@ -1069,6 +1073,7 @@
 - `src/data/commonMistakeNarration.test.ts`
 - `src/data/fairyTaleChapters.test.ts`
 - `src/data/lessons/lessonDepth.test.ts`
+- `src/data/lessons/lessonTabIntegrity.test.ts`
 - `src/data/lessons/narrationGrounding.test.ts`
 - `src/data/lessons/proEricRosenLessonArrows.test.ts`
 - `src/data/lessons/wlppNarration.test.ts`
@@ -1115,6 +1120,7 @@
 - `src/services/fromYourGamesService.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/gameAnalysisService.records.test.ts`
 - `src/services/gameAnalysisService.test.ts`
 - `src/services/gameInsightsService.test.ts`
 - `src/services/gameNarrationBuilder.test.ts`
@@ -1129,6 +1135,7 @@
 - `src/services/lichessPuzzleService.test.ts`
 - `src/services/liveTacticsContext.test.ts`
 - `src/services/liveVoiceDefects.test.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/masterclassWalkthroughAdapter.test.ts`
 - `src/services/miniGameEngine.test.ts`
@@ -1148,18 +1155,19 @@
 - `src/services/principleQuiz.test.ts`
 - `src/services/proForkWalkthrough.test.ts`
 - `src/services/proOpeningForks.test.ts`
+- `src/services/promptedFind.wire.test.ts`
 - `src/services/puzzleGenerator.test.ts`
 - `src/services/puzzleService.test.ts`
 - `src/services/pvPlayback.test.ts`
 - `src/services/ratingIdempotence.test.ts`
 - `src/services/refutedAlternative.test.ts`
-- `src/services/reviewOpeningTheory.test.ts`
 - `src/services/sessionGenerator.test.ts`
 - `src/services/setupTrainerService.test.ts`
 - `src/services/shareableInsightsService.test.ts`
 - `src/services/srsOpeningService.test.ts`
 - `src/services/stockfishCache.test.ts`
 - `src/services/stockfishEngine.test.ts`
+- `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
 - `src/services/tacticAlertService.test.ts`
 - `src/services/tacticClaimValidator.test.ts`
@@ -1187,6 +1195,10 @@
 - `src/utils/wlppLadder.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-calc-from-games.mjs`
 - `scripts/audit-coach-answers-questions-prod.mjs`
@@ -1221,6 +1233,7 @@
 - `scripts/audit-openings-functional-deep.mjs`
 - `scripts/audit-plan-comprehensive.mjs`
 - `scripts/audit-review-functions.mjs`
+- `scripts/audit-review-overhaul-prod.mjs`
 - `scripts/audit-tactics-drive.mjs`
 - `scripts/audit-teach-glek-corpus-spoken-prod.mjs`
 - `scripts/audit-training-aid-routing.mjs`

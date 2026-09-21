@@ -42,6 +42,7 @@ import { stockfishEngine } from './stockfishEngine';
 import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/tacticTypes';
 import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 import { conceptForBoard } from './conceptEngine';
+import { verifyForkOnBoard } from './tacticVerification';
 
 /**
  * Build the `TacticsLiveContext` block for the brain envelope.
@@ -351,7 +352,7 @@ function detectImmediateTactics(
     const result = detectTactics(fen);
     return result.tactics
       .filter((t) => t.type !== 'none')
-      .map((t) => tacticPatternToEntry(t, playerColor))
+      .map((t) => tacticPatternToEntry(t, playerColor, fen))
       .slice(0, 5);
   } catch {
     return [];
@@ -371,11 +372,32 @@ function detectHangingPieces(fen: string): TacticsLiveContext['hanging'] {
 function tacticPatternToEntry(
   t: TacticPattern,
   playerColor: 'w' | 'b',
+  fen?: string,
 ): TacticsLiveContext['immediate'][number] {
+  // 🔴 GEOMETRY IS NOT A TACTIC (2026-09-21). `detectTactics` reports the
+  // SHAPE; whether it wins anything is a separate computed question, and until
+  // now nobody asked it on this path — the raw list went into the envelope
+  // under "NAME the pattern in prose", which handed the MODEL the judgement.
+  //
+  // `verifyForkOnBoard` is the purpose-built answer (built 2026-07-23, and
+  // wired into exactly ONE surface until today). It is tempo-aware and SEE-
+  // aware: it distinguishes the owner executing NOW from a threat that must
+  // survive every defender reply, which is why it rejects forks that a
+  // "is the target undefended right now" check waves through.
+  //
+  // FORK ONLY, on purpose: no verifier covers pin/skewer here yet, so those
+  // stay `undefined` — absent recorded as absent, never as false.
+  let wins: 'live' | 'threat' | 'none' | undefined;
+  if (fen && t.type === 'fork' && t.involvedSquares.length >= 2) {
+    try {
+      wins = verifyForkOnBoard(fen, t.involvedSquares[0], t.involvedSquares.slice(1)).status;
+    } catch { wins = undefined; }
+  }
   return {
     type: t.type,
     description: t.description,
     squares: t.involvedSquares,
+    ...(wins ? { wins } : {}),
     // Carry the detector's side through (David 2026-08-07). Dropping it
     // here made every consumer side-blind: a probe of his real game showed
     // pin/fork on almost every position, all of them BLACK's, with nothing
@@ -558,7 +580,21 @@ export function formatTacticsSubBlock(
   if (tactics.immediate.length > 0) {
     lines.push(`    Immediate on the board:`);
     for (const t of tactics.immediate) {
-      lines.push(`      ${t.type.toUpperCase()} — ${t.description}`);
+      // COMPUTED VERDICT, not the model's to decide (G0). `detectTactics`
+      // reports geometry; `verifyForkOnBoard` says whether it wins anything.
+      // Same treatment HANGING PIECES already get below — bind the vocabulary
+      // to a computed set instead of handing over a list and a verb.
+      const verdict = t.wins === 'none'
+        ? ' [GEOMETRY ONLY — wins NOTHING: name the pattern if useful, but do NOT say it wins material, and do NOT tell the student to play it]'
+        : t.wins === 'threat'
+          ? ' [THREAT — wins material only if they do not defend]'
+          : t.wins === 'live'
+            ? ' [WINS MATERIAL NOW]'
+            : '';
+      lines.push(`      ${t.type.toUpperCase()} — ${t.description}${verdict}`);
+    }
+    if (tactics.immediate.some((t) => t.wins === 'none')) {
+      lines.push(`      A pattern marked GEOMETRY ONLY is a shape on the board that wins nothing — the defender answers it (often by capturing the piece that "forks"). Never present one as a winning tactic or a move to play.`);
     }
   }
   // HANGING PIECES are GROUND TRUTH (computed: a piece is hanging only when

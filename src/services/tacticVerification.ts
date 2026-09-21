@@ -18,7 +18,7 @@
 // "does this fork win material right now / next move".
 
 import { Chess } from 'chess.js';
-import type { Square, Color, PieceSymbol } from 'chess.js';
+import type { Square, Color } from 'chess.js';
 import { capturesWinMaterial, legalSeeGainFor } from './positionReadingService';
 import { CAPTURE_VALUE } from './pieceValues';
 
