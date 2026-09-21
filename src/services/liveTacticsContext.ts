@@ -584,8 +584,20 @@ export function formatTacticsSubBlock(
       // reports geometry; `verifyForkOnBoard` says whether it wins anything.
       // Same treatment HANGING PIECES already get below — bind the vocabulary
       // to a computed set instead of handing over a list and a verb.
+      // 🔴 THE LABEL MUST NOT OVER-CLAIM EITHER (corrected 2026-09-21, same
+      // day, by measuring cross-surface agreement). `verifyForkOnBoard`
+      // collapses TWO different realities into 'none': a fork the defender
+      // simply refutes (Qf4+ — Qxf4 takes the forker), and a REAL fork whose
+      // material is not GUARANTEED after best defence (Qxf2+ — the fork is
+      // genuine, the king must move, but Kh2 defends the loose knight). Saying
+      // "wins NOTHING" about the second is a false claim in the other
+      // direction, and it made the live surface disagree with review, which
+      // correctly calls Qxf2+ a fork.
+      //
+      // So the marker says what the verifier actually PROVED: material is not
+      // guaranteed. Naming the pattern stays allowed; selling it does not.
       const verdict = t.wins === 'none'
-        ? ' [GEOMETRY ONLY — wins NOTHING: name the pattern if useful, but do NOT say it wins material, and do NOT tell the student to play it]'
+        ? ' [NOT PROVEN TO WIN MATERIAL — the defender has an answer. Name the pattern if useful; do NOT say it wins material and do NOT tell the student to play it for material]'
         : t.wins === 'threat'
           ? ' [THREAT — wins material only if they do not defend]'
           : t.wins === 'live'
@@ -594,7 +606,7 @@ export function formatTacticsSubBlock(
       lines.push(`      ${t.type.toUpperCase()} — ${t.description}${verdict}`);
     }
     if (tactics.immediate.some((t) => t.wins === 'none')) {
-      lines.push(`      A pattern marked GEOMETRY ONLY is a shape on the board that wins nothing — the defender answers it (often by capturing the piece that "forks"). Never present one as a winning tactic or a move to play.`);
+      lines.push(`      A pattern marked NOT PROVEN TO WIN MATERIAL is real geometry the defender can answer — sometimes by capturing the piece that "forks", sometimes just by defending. It may still be worth naming as a pattern; it is never a promise of material.`);
     }
   }
   // HANGING PIECES are GROUND TRUTH (computed: a piece is hanging only when

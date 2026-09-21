@@ -448,7 +448,7 @@ describe('geometry is not a tactic — the model never decides (G0, 2026-09-21)'
   it('marks a fork that wins nothing as GEOMETRY ONLY and forbids the claim', () => {
     const block = formatTacticsSubBlock(buildTacticsLiveContext(EMPTY_FORK, null, 'b', 1500), EMPTY_FORK);
     expect(block, 'the pattern may still be named').toMatch(/FORK/);
-    expect(block, 'but it must be marked as winning nothing').toMatch(/GEOMETRY ONLY/);
+    expect(block, 'but it must be marked as not proven to win').toMatch(/NOT PROVEN TO WIN MATERIAL/);
     expect(block, 'and the model must be told not to sell it').toMatch(/do NOT say it wins material/);
   });
 
@@ -457,6 +457,6 @@ describe('geometry is not a tactic — the model never decides (G0, 2026-09-21)'
     // "fix" the bug by silencing the coach, which is the failure mode this
     // repo punishes. A position with no fork at all carries no such marker.
     const QUIET = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
-    expect(formatTacticsSubBlock(buildTacticsLiveContext(QUIET, null, 'b', 1500), QUIET)).not.toMatch(/GEOMETRY ONLY/);
+    expect(formatTacticsSubBlock(buildTacticsLiveContext(QUIET, null, 'b', 1500), QUIET)).not.toMatch(/NOT PROVEN TO WIN MATERIAL/);
   });
 });
