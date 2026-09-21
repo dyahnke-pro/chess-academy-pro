@@ -322,6 +322,25 @@ const run = async () => {
   if (gHeat) {
     add('HEAT MAP the seeded arm is the one with proven tags', gHeat.proven > 0 && (cHeat?.proven ?? 0) === 0,
       `green proven=${gHeat.proven}, control proven=${cHeat?.proven ?? (cHeat === null ? 'no row (no evidence — correct for an unseeded device)' : 0)}`);
+    // THE THREE HEAT-MAP STATES MUST PARTITION (2026-09-20). `proven` and
+    // `red` stopped being mutually exclusive the moment green became
+    // recoverable — a break RESETS the streak rather than closing the door —
+    // so a student who FIXED a weakness counts in both and in neither alone.
+    // `recovered` is that student, and it is the only number that answers the
+    // heat map's reason for existing ("you have GOTTEN BETTER"); the board has
+    // carried "has a student's Nth game ever gone quiet because of games
+    // 1..N-1?" as NEVER SHOWN. The assertion is an arithmetic identity, so a
+    // future change that makes the split incoherent fails here rather than
+    // producing a plausible wrong number.
+    const hasSplit = typeof gHeat.recovered === 'number' && typeof gHeat.currentlyRed === 'number';
+    add('HEAT MAP the three states partition (recovered + currentlyRed === red)',
+      hasSplit && gHeat.recovered + gHeat.currentlyRed === gHeat.red,
+      hasSplit
+        ? `red=${gHeat.red} = recovered=${gHeat.recovered} + currentlyRed=${gHeat.currentlyRed}`
+        : 'the emission carries no recovered/currentlyRed split — running against a bundle older than the split');
+    add('HEAT MAP RECOVERED is readable (the "you got better" number, reported not asserted)',
+      hasSplit,
+      hasSplit ? `${gHeat.recovered} tag(s) proven AFTER a break on the seeded device` : 'n/a');
   }
   add('MUTED', ttsRequests === 0, `${ttsRequests} /api/tts requests`);
 
