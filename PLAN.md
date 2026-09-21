@@ -3243,3 +3243,47 @@ correctly scored as teaching nothing, and the row under-reported the very fix
 being tested. Now DERIVED from the real renderers and gated
 (`fundLeadStems.test.ts`, every rotation, negative-controlled both ways). When a
 new fundamental gets a voice, that gate fails until its stem lands.
+
+---
+
+## FUNDLEAD half 1 — WHY the punishing PV is missing (diagnosed 2026-09-21, NOT fixed)
+
+Traced to file:line rather than guessed:
+
+- `coachFeatureService.ts:1455` DOES pass `pvAfterPlayed` to the attributor
+  whenever `m.pv?.afterPlayed` exists. The review path is wired correctly.
+- `gameAnalysisService.ts:1925` builds that field from `deepPv[moveIdx + 1]`.
+- `deepPv` is populated ONLY at `:1810`, inside `if (isReview && !opts.sweepOnly)`
+  — the key-moment deep dive.
+- `CoachReviewSessionPage.tsx:297` opens a cold review with `{ sweepOnly: true }`.
+
+**So on a COLD FIRST OPEN no punishing PV is persisted at any ply, and
+`calculation-depth` cannot fire — the detector needs 3 PV plies and gets 0.**
+That is 4 of the 5 declines in the 2026-09-21 FUNDWHY run (plies 48/50/64/68;
+62 declined at 0 plies too on one pass).
+
+This is not a wiring bug. It is the cold-open latency trade doing what it says:
+the sweep gets the student onto the board fast and the dive follows behind. The
+cost nobody had measured is that **the first review of a game — the one a
+student actually reads — cannot teach the reasoning fundamentals at all.**
+
+🚨 **DO NOT "FIX" THIS BY UN-SKIPPING THE DIVE.** That reinstates the cold-open
+stall the sweepOnly split exists to remove (G4.6: the lag is serialized engine
+calls). Options, cheapest first, none of them free:
+1. **Re-narrate when the background dive lands** — the PV arrives a few seconds
+   later; the question is whether the beat can be rebuilt without yanking the
+   walk out from under the student.
+2. **Persist a short PV from the SWEEP** at flagged plies only — the sweep
+   already searches those positions; whether it can keep 3 plies of line without
+   a second search needs measuring, not assuming.
+3. **Accept it and say so** — first open teaches the board fundamentals, the
+   reasoning ones arrive on reopen. Honest, and the worst of the three for the
+   loop, since the first read is the one that lands.
+
+**OWED BEFORE ANY OF THEM: does a SECOND open produce the fundamental?** If the
+dive's `REVIEW_MAX_DEEP_PLIES` budget doesn't reach these plies either, then
+reopening does not fix it and option 1 is dead on arrival. That is one
+`audit-review-reopen-probe` run and it decides between the three.
+
+Deliberately not built at 03:00: it changes engine cost on the review's
+critical path, and the rule is leave it, skip it, or ask.
