@@ -99,6 +99,29 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 7. The corpus gates are even · ✅ 8. `BuildVersionWidget.test`
 - ⛔ 10. **Section-14 detectors fire on nothing real** — theirs. The instrument half landed (`2d9f151`: each detector now names WHICH GATE it failed, so the 23% bucket is measurable); still never attributed on a real game
 
+## 8b. Move grading — one currency, chess.com's (David 2026-09-20)
+
+- ✅ **Review already matched** — `classifyCpLoss` has banded in EXPECTED POINTS
+  (5/10/20 win% = chess.com's 0.05/0.10/0.20) since the accuracy work. The rot was
+  everything DOWNSTREAM of it, which is why "match chess.com" turned out to be a
+  sweep and not a build.
+- ✅ **The drill queue** had its own `classifyCpLoss` on raw 100/300 — one move could
+  be an "inaccuracy" on screen and a "mistake" in the drill it produced.
+- ✅ **Imported games** (`gameImportUtils`) banded centipawns — the student's whole
+  record labelled in a different currency from review AND from the site it came from.
+- ✅ **Live play** (`moveRating.classifyMoveFull`) held preMoveEval/postMoveEval/
+  playerColor and dropped all three at the call boundary.
+- ✅ **`capabilityEvidence`** retyped `MISTAKE_CP = 100` locally — a second definition
+  of "mistake" no change to the first could reach.
+- ✅ Band computed ONCE in `accuracyService.bandForWinPctLost`; gated by
+  `chessComBands.test.ts` (states the published table; proves the SAME 300cp is an
+  inaccuracy at +9.00 and a blunder at +0.50).
+- 🟠 **Behaviour change to watch:** the drill queue now SKIPS a move whose win% loss is
+  under an inaccuracy. Puzzle counts can legitimately drop — that is not a regression.
+- Deliberately NOT changed: `backwardLook`, `callInaccuracy`'s speaking floor. Those
+  answer "is this worth SAYING" — pedagogy, a different decision from what a move is
+  CALLED. Conflating the two is what caused this.
+
 ## 9. Carried over — the stale-tactics checklist (pickup §7)
 - ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
 - ✅ **ship-check crash-as-green, second half** — the guard read the child's stdout, which
