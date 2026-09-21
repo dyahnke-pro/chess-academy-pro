@@ -25,13 +25,12 @@ function buildOverview(overrides?: Partial<OverviewInsights>): OverviewInsights 
     classificationCounts: {
       brilliant: 0,
       great: 0,
-      best: 0,
+      miss: 0,
       good: 0,
       book: 0,
       inaccuracy: 0,
       mistake: 0,
       blunder: 0,
-      miss: 0,
     },
     totalMoves: 2000,
     avgMovesPerGame: 40,
@@ -171,9 +170,9 @@ describe('computeShareableInsights', () => {
   it('surfaces a phase-weakness insight when phase accuracy gap is >= 10 pp', async () => {
     vi.mocked(getOverviewInsights).mockResolvedValue(buildOverview({
       phaseAccuracy: [
-        { phase: 'opening', accuracy: 82, moves: 400 },
-        { phase: 'middlegame', accuracy: 70, moves: 800 },
-        { phase: 'endgame', accuracy: 58, moves: 300 },
+        { phase: 'opening', accuracy: 82, moveCount: 400, mistakes: 0 },
+        { phase: 'middlegame', accuracy: 70, moveCount: 800, mistakes: 0 },
+        { phase: 'endgame', accuracy: 58, moveCount: 300, mistakes: 0 },
       ],
     }));
     vi.mocked(getOpeningInsights).mockResolvedValue(buildOpenings());
@@ -192,13 +191,12 @@ describe('computeShareableInsights', () => {
       classificationCounts: {
         brilliant: 3,
         great: 0,
-        best: 0,
+        miss: 0,
         good: 0,
         book: 0,
         inaccuracy: 0,
         mistake: 0,
         blunder: 0,
-        miss: 0,
       },
     }));
     vi.mocked(getOpeningInsights).mockResolvedValue(buildOpenings());
@@ -216,12 +214,12 @@ describe('computeShareableInsights', () => {
       winRateWhite: 68,
       winRateBlack: 40,
       classificationCounts: {
-        brilliant: 2, great: 0, best: 0, good: 0, book: 0,
-        inaccuracy: 0, mistake: 0, blunder: 0, miss: 0,
+        brilliant: 2, great: 0, miss: 0, good: 0, book: 0,
+        inaccuracy: 0, mistake: 0, blunder: 0,
       },
       phaseAccuracy: [
-        { phase: 'opening', accuracy: 85, moves: 200 },
-        { phase: 'endgame', accuracy: 55, moves: 200 },
+        { phase: 'opening', accuracy: 85, moveCount: 200, mistakes: 0 },
+        { phase: 'endgame', accuracy: 55, moveCount: 200, mistakes: 0 },
       ],
     }));
     vi.mocked(getOpeningInsights).mockResolvedValue(buildOpenings({
