@@ -80,6 +80,10 @@ const ASK_TYPO = process.env.AUDIT_CONCEPT_ASK_TYPO ?? 'lets play the scandinavi
 const STUDENT_LINE = ['d5', 'Qxd5', 'Qa5', 'Nf6', 'Bg4', 'Nc6', 'O-O-O', 'e6'];
 /** Plies the STUDENT pushes. Long enough to leave book and reach real play. */
 const MAX_STUDENT_PLIES = Number(process.env.AUDIT_CONCEPT_PLIES ?? 14);
+/** Keep playing after the concept is voiced — for measuring what only a
+ *  LONGER game can show (the live-commentary path needs a warm engine
+ *  cache). Off by default so the standing audit stays fast. */
+const PLAY_ON = process.env.AUDIT_CONCEPT_PLAY_ON === '1';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/concept-gameplay-${stamp}`;
 const BOOT_TIMEOUT_MS = 45_000;
@@ -351,7 +355,16 @@ async function askAndPlay(page, listener, ask, label) {
     if (!reply) { console.log(`[stall] ${label}: no coach reply after ${moves.at(-1)} — stopping at ply ${chess.history().length}`); break; }
     moves.push(reply);
     // Stop once the concept has been voiced — the game has done its job.
-    if (spokenLines(listener).slice(spokenStart).some(carriesConcept)) break;
+    //
+    // 🔒 AND THIS EARLY EXIT IS WHY THE GAME READS "5 plies" ON A 14-PLY
+    // BUDGET (2026-09-21). It is deliberate and it is NOT a product stall —
+    // a session chasing that number as a bug would find nothing. It also
+    // explains why no `interrupt` decision row ever appears here: the game
+    // ends long before the engine cache the live-commentary doors need
+    // (`useLiveCoach`, `usePhaseNarration`) could warm. Set
+    // AUDIT_CONCEPT_PLAY_ON=1 to keep playing past the concept, which is how
+    // OUTLINE 11l gets measured rather than assumed.
+    if (!PLAY_ON && spokenLines(listener).slice(spokenStart).some(carriesConcept)) break;
   }
   const secs = Math.round((Date.now() - started) / 1000);
   console.log(`[game] ${label}: ${chess.history().length} plies in ${secs}s — ${chess.history().join(' ')}`);

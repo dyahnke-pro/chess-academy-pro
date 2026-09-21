@@ -60,6 +60,8 @@ vi.mock('react-router-dom', async () => {
 });
 
 function makeMoveResult(san: string): MoveResult {
+  // Delegates to the shared factory — a local partial is the duplication the
+  // factory exists to end, and it was missing four required fields.
   return buildMoveResult({ san, from: 'a1', to: 'a2', fen: 'test-fen' });
 }
 

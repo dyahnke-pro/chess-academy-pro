@@ -1,3 +1,4 @@
+import type { MoveResult } from '../hooks/useChessGame';
 import type {
   UserProfile,
   PuzzleRecord,
@@ -23,7 +24,6 @@ import type {
   MoveAnnotation,
   AnalysisLine,
 } from '../types';
-import type { MoveResult } from '../hooks/useChessGame';
 import type { SidePlan } from '../services/lookaheadPlan';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -490,28 +490,28 @@ export function buildSetupPuzzle(overrides?: Partial<SetupPuzzle>): SetupPuzzle 
 }
 
 /**
- * A `MoveResult` as `useChessGame` actually returns it.
+ * A complete `MoveResult` — the shape `useChessGame` hands to every board
+ * `onMove`.
  *
- * WHY A FACTORY RATHER THAN 13 INLINE LITERALS. `MoveResult` grew `pgn`,
- * `history`, `moveNumber` and `turn`, and thirteen test sites across the board
- * components and the kid games were still writing the four-field shape it had
- * before. Each was a separate type error saying the same thing. A literal in a
- * test restates a type the test does not own, so it rots the moment the type
- * moves — which is the duplicated-constant rule applied to fixtures, and the
- * reason CLAUDE.md says all test data comes from this file.
- *
- * Defaults describe ONE real move, 1.e4, so a caller that only cares about
- * `from`/`to` still gets a self-consistent board rather than a shape that
- * type-checks and lies.
+ * WHY A FACTORY. Thirteen tests hand-rolled `{ from, to, san, fen }` and
+ * omitted the other four required fields, which `tsconfig.app.json` never
+ * saw because it excludes test files (11e). The partials are not "nearly
+ * right": a test that builds an incomplete MoveResult is asserting against a
+ * shape the product never produces. One factory means a NEW required field on
+ * MoveResult gets one default here instead of thirteen edits — the same
+ * reason CLAUDE.md says to use this file for all test data.
  */
-export function buildMoveResult(overrides?: Partial<MoveResult>): MoveResult {
+export function buildMoveResult(overrides: Partial<MoveResult> = {}): MoveResult {
+  const from = overrides.from ?? 'e2';
+  const to = overrides.to ?? 'e4';
+  const san = overrides.san ?? 'e4';
   return {
-    from: 'e2',
-    to: 'e4',
-    san: 'e4',
+    from,
+    to,
+    san,
     fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-    pgn: '1. e4',
-    history: ['e4'],
+    pgn: `1. ${san}`,
+    history: [san],
     moveNumber: 1,
     turn: 'b',
     ...overrides,
