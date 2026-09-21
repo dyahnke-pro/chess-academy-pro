@@ -402,6 +402,7 @@ const GATE_TESTS = [
   // so a gate that guards a file it does not sit beside runs only while its own
   // file keeps changing, and goes silent the moment it lands. All four are that
   // shape, and each guards something with a real incident behind it:
+  'src/test/latentForkOpensTheDoor.test.ts',  // T5 — a two-move fork must be able to open the door on interrupt
   'src/test/coachSurfacesAgree.test.ts',      // one coach, one answer — review and Learn must not diverge on the same board
   'src/test/onePieceValueTable.test.ts',      // 53 private piece-value tables, two semantics, no home — shrink-only
   'src/test/assetsNeverFallBackToHtml.test.ts', // guards vercel.json's assets/ exclusion — without it a stale chunk returns 200 text/html, the iPhone "Unexpected token '<'" class

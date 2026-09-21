@@ -389,7 +389,30 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // trade that would create one of those. Pure geometry, no engine — and, like
   // must-defend, NOT gated by the contested test: a standing danger is most
   // dangerous precisely where the eval looks settled.
-  const standingDanger = !!(latentDanger || tradeDanger || kingExposure || centralKingDanger);
+  // 🔴 `latentFork` WAS COMPUTED AND COULD NOT OPEN THE DOOR (T5, fixed
+  // 2026-09-21 on David's read: "the algo should decide when a tactic gets
+  // mentioned. If it cannot call a tactic two moves away we need to add that
+  // capability").
+  //
+  // It was already detected above and already spoke as a FACT (rank 70, the
+  // `latent-danger` clause below) — but it was missing from THIS disjunction,
+  // so it never reached `judgeMoment`. On `walk` that is invisible, because
+  // every ply speaks anyway. On `interrupt` it meant a fork two moves out could
+  // be computed, be true, and never make the ply speak at all: the detector
+  // decided WHAT was said once a ply had earned voice, and never WHETHER.
+  // A computed fact that cannot reach the decision is not wired.
+  //
+  // It belongs with these four rather than with the engine signals for the same
+  // reason they are here: this is board geometry the eval cannot see, and it is
+  // most dangerous exactly where the eval looks settled — so, like must-defend,
+  // it is NOT contested-gated.
+  //
+  // It does not turn the coach into a metronome: `detectLatentFork` stands down
+  // at N = 1 (the live threat lane owns that, louder and already correct), and
+  // its four gates are designed against precisely that failure — >= 2 targets
+  // worth more than the knight, a piece that can ACTUALLY deliver it, reachable
+  // in N >= 2 quiet moves, and a landing square that is safe on arrival.
+  const standingDanger = !!(latentDanger || latentFork || tradeDanger || kingExposure || centralKingDanger);
   const { importance, speaks } = judgeMoment({
     decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
     cpLossCp: input.cpLossCp ?? null,

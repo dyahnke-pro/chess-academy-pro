@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**897 lines · 30 exports · 888 importers · 187 tests · 39 audits**
+**897 lines · 30 exports · 889 importers · 188 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -76,6 +76,7 @@
 - `src/coach/tools/cerebrum/restoreSavedPosition.ts`
 - `src/coach/tools/cerebrum/saveOpeningToRepertoire.ts`
 - `src/coach/tools/cerebrum/savePosition.ts`
+- `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts`
 - `src/coach/tools/cerebrum/setBoardPosition.ts`
 - `src/coach/tools/cerebrum/setIntendedOpening.ts`
 - `src/coach/tools/cerebrum/startWalkthroughForOpening.ts`
@@ -1014,6 +1015,7 @@
 - `src/coach/sources/personalities.test.ts`
 - `src/coach/sources/playerGames.test.ts`
 - `src/coach/tools/cerebellum/lookupPlayerGames.test.ts`
+- `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts`
 - `src/components/Board/GhostPieceOverlay.test.tsx`
 - `src/components/Coach/ChatMessage.test.tsx`
 - `src/components/Coach/ClassificationBar.test.tsx`
