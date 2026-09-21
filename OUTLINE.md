@@ -99,6 +99,11 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ## 9. Carried over — the stale-tactics checklist (pickup §7)
 - ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
+- ✅ **ship-check crash-as-green, second half** — the guard read the child's stdout, which
+  only catches a death it lives long enough to narrate; an OOM-killed/timed-out process
+  prints nothing and still scored "0 errors". Now reads `spawnSync` status/signal/error
+  first, extracted to `scripts/ship-check-lib/crashed.mjs`, tested (10, mutation-checked:
+  the old logic fails 4), and gated in GATE_TESTS.
 - ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
 - ✅ `npm run ship-check` **printed READY TO PUSH** (2026-09-20, 348.6s, 11 commits on the tree): typecheck ✓, prod build ✓, lint 0 errors, content gates ✓, changed-file tests ✓. The one blocker was a redundant `String()` in a new measurement — `npm run lint` runs with `--report-unused-disable-directives`, which makes that an ERROR
 - ✅ Read the `tactics-context-stale` count off the listener — 0 of 145 captured events, prod, non-vacuity proven
