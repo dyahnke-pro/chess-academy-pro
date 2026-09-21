@@ -240,7 +240,7 @@ there; the review arm proves nothing either way and should not be re-run.**
 - ✅ **review, zero reds** — including the two fundamentals rows that were red in the last recorded run (RECAP aggregate + FUNDLEAD). NB that game had ONE flagged ply, so 1/1 is n=1, green rather than robust.
 - ✅ **Learn, exit 0** — 27 spoken lines, the computed concept invariant voiced mid-game, 13 board lines gate-clean on perspective, 57 against the vacuity floor.
 - ❌ **green — RUN UNUSABLE**, correctly refused (above).
-- ✅ **`tactics-context-stale`: ZERO across all four runs** — closes that open item; no third producer indicated.
+- 🟠 **`tactics-context-stale`: the "ZERO across all four runs" claim is WITHDRAWN** — no script in the repo captured that event until 2026-09-20 (`grep -rl tactics-context-stale scripts/` returned nothing), so a zero from those runs is absence-of-CAPTURE read as absence-of-EVENT, not a measurement. Capture now exists (audit-concept-gameplay G5a/G5b, non-vacuity row first); the real number is owed from the next run.
 - Noted for the other session's #21, not acted on: `workers=60` alive on the review reopen, inside the band their census tracks.
 
 ✅ **THE MECHANISM IS VERIFIED AT THE DECISION POINT, AND IT IS NARROW BY
