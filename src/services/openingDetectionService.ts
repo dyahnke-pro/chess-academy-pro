@@ -4,7 +4,8 @@ import repertoireData from '../data/repertoire.json';
 import type { DetectedOpening, OpeningVariation } from '../types';
 import { buildVariationTabs } from './variationTabs';
 import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
-// @ts-expect-error — plain-JS shared metric, no type decls (also run by node)
+// Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
+// suppression this replaces made every call an unsafe `any` call.
 import { reachesMiddlegame as reachesMiddlegameRaw } from '../data/variationMiddlegameDepth.shared.mjs';
 
 /** Typed view over the shared plain-JS `reachesMiddlegame` metric so

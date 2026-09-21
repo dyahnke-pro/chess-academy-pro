@@ -333,7 +333,9 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
   });
 
   it('returns null on a quiet position (nothing upcoming)', () => {
-    expect(speakDeepestLookahead(ctxWith([], []))).toBeNull();
+    // `seat` is required — a quiet position returns null from either seat, but
+    // the parameter has no default precisely so a caller must say which.
+    expect(speakDeepestLookahead(ctxWith([], []), 'student')).toBeNull();
   });
 });
 

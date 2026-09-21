@@ -333,7 +333,8 @@ describe('computed voice audit', () => {
         const avail: Record<string, boolean> = {};
         for (const [tier, text] of Object.entries({
           curated: (() => {
-            try { return curatedBeatAt(history, fenAfterReply, curatedSeen, openingName, game.student === 'black' ? 'black' : 'white')?.text ?? ''; }
+            // 'live': this audit measures a real game in progress.
+            try { return curatedBeatAt(history, fenAfterReply, curatedSeen, openingName, game.student === 'black' ? 'black' : 'white', 'live')?.text ?? ''; }
             catch { return ''; }
           })(),
           corpus: (() => {

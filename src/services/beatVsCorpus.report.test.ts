@@ -70,7 +70,11 @@ describe('beats vs corpus — which one can speak, and where', () => {
         t.plies += 1;
         byPhase[phase].plies += 1;
 
-        const beat = curatedBeatAt(history, fen, beatSeen, entry.name ?? null, entry.color === 'black' ? 'black' : 'white');
+        // 'live' — this report measures what the coach could say to a student
+        // PLAYING the line, which is the register every production caller
+        // uses. 'watch' would let spectator beats through and inflate the
+        // coverage number with prose a live board must not speak.
+        const beat = curatedBeatAt(history, fen, beatSeen, entry.name ?? null, entry.color === 'black' ? 'black' : 'white', 'live');
         const note = noteAtPosition(history, fen, entry.name ?? null, entry.color ?? null);
         // A note that cannot be spoken has not taught anything, so require
         // speakable text on both sides rather than mere existence.
