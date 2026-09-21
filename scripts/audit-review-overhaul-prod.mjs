@@ -436,11 +436,44 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // Pause first (any intervention pauses), then jump by clicking Back/Forward
   // like a human would. Cards that mount are resolved by clicking.
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
-  // The turning-point card is answered AT MOST ONCE per run. Without this the
-  // walk loop re-entered the retry block on every one of its 80 iterations while
-  // the card sat there unanswered — 3 attempts x ~13s x 80 = the run never
-  // finished, and a hung audit tells you less than a failing one (2026-09-16).
-  let turningHandled = false;
+  // The turning-point card gets a BOUNDED number of answering rounds per run.
+  // Without a bound the walk loop re-entered the retry block on every one of
+  // its 80 iterations while the card sat there unanswered — 3 attempts x ~13s
+  // x 80 = the run never finished, and a hung audit tells you less than a
+  // failing one (2026-09-16).
+  //
+  // 🔴 BUT THE FIRST BOUND WAS A LATCH SET ON ENTRY, AND IT PRODUCED FOUR REDS
+  // FROM ONE HARNESS FAILURE (found 2026-09-20 reading a clean 43/9 run).
+  // `turningHandled = true` ran BEFORE a single attempt, so when all three
+  // attempts failed the card could never be answered again for the rest of the
+  // run. Everything downstream followed, and none of it was the product:
+  //   * the walk loop refuses to resume while the card is up (correctly —
+  //     resuming dismisses it unanswered), so the walk PARKED;
+  //   * the readout stayed READABLE while parked, so `wedgeWatch` never fired
+  //     and the WEDGE row passed — which is why the existing contamination
+  //     guard did not cover this;
+  //   * RECAP failed on `end reached=false`;
+  //   * the post-walk `resolveCards()` no-op'd on the spent latch, so THESIS
+  //     reported DRIVER;
+  //   * CRIT said "a moment was selected but nothing said it aloud", because
+  //     the walk never reached that moment.
+  // One latch, four rows, three of them blaming a coach that was fine.
+  //
+  // So: latch on SUCCESS, and bound the ROUNDS separately so the storm cannot
+  // come back. Three rounds is ~39s worst case against a run measured in tens
+  // of minutes, and it leaves the post-walk wait a real chance — which is the
+  // attempt that matters, since the card is RAISED at `currentPly ===
+  // moves.length`, i.e. after the step loop has already broken out.
+  let turningBudget = 3;
+  let turningRounds = 0;
+  let turningAnswered = false;
+  /** Rounds spent, with nothing to show for them. */
+  const turningSpent = () => !turningAnswered && turningRounds >= turningBudget;
+  /** Hand the driver one more answering round (see the post-walk call site). */
+  const grantTurningRound = () => { turningBudget += 1; };
+  /** True when the card was SEEN but the driver never got a reveal out of it —
+   *  the dependent rows must then blame the DRIVER, not the coach. */
+  let turningSeenUnanswered = false;
   const resolveCards = async () => {
     for (const [c, sel] of [
       ['discussion-reason-picker', '[data-testid="discussion-reason-option"]'],
@@ -479,8 +512,23 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     }
     // THE TURNING-POINT CARD — answer it the way a human does: tap a candidate
     // to step the board to that moment, THEN commit. Two taps, in order.
-    if (!turningHandled && await has(page, '[data-testid="review-turning-point-card"]')) {
-      turningHandled = true;
+    if (!turningAnswered && await has(page, '[data-testid="review-turning-point-card"]')) {
+      if (turningRounds >= turningBudget) {
+        // SAY IT. A driver that quietly stops trying is the same disease as an
+        // audit that reports green having verified nothing: the run needs to
+        // record that the card is STILL UP and that this is the harness's
+        // failure, or the next reader blames the coach for the rows it takes
+        // down with it.
+        if (!turningSeenUnanswered) {
+          turningSeenUnanswered = true;
+          log(`  [turning] card is STILL UP after ${turningRounds} answering round(s) — `
+            + 'the DRIVER could not answer it. The walk cannot resume past this card, so RECAP, '
+            + 'THESIS and CRIT are all DRIVER failures from here on, not product failures.');
+        }
+        return;
+      }
+      turningRounds += 1;
+      turningSeenUnanswered = true;
       // PAUSE FIRST. `handleWalkForward` DISMISSES this card by design (David
       // 2026-07-19: forward must never leave a frozen board), and
       // `turningAskedRef` means a dismissed card never returns. With playback
@@ -536,7 +584,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
           }
           const spoke = await until(revealed, 8000, 250);
           log(`  [turning] attempt ${attempt}: confirm=${confirmUp} reveal=${spoke}`);
-          if (spoke) break;
+          // ANSWERED means the reveal SPOKE, never "we tapped something".
+          if (spoke) { turningAnswered = true; turningSeenUnanswered = false; break; }
         }
       }
     }
@@ -694,6 +743,17 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     if (n >= total) { reachedEnd = true; break; }
     wedgedReason = watch.observe(!!read, `ply ${lastReadPly}/${total}`);
     if (wedgedReason) { log(`  [walk] WEDGED: ${wedgedReason}`); break; }
+    // THE CARD THE DRIVER COULD NOT ANSWER PARKS THE WALK PERMANENTLY. The
+    // loop refuses to resume past it (correctly), so every remaining poll is
+    // dead time that ends in the same place — and the readout stays READABLE
+    // throughout, so the wedge watch will never call it. Stop now and let the
+    // post-walk block have its reserved round, rather than burning the budget
+    // and then reporting `end reached=false` as if the walk had been slow.
+    if (turningSpent() && await has(page, '[data-testid="review-turning-point-card"]')) {
+      log(`  [walk] STOPPING at ply ${lastReadPly}/${total}: the turning-point card is up and `
+        + 'the driver has spent its answering rounds. This is a DRIVER stop, not a slow walk.');
+      break;
+    }
     // PROGRESS, so a 10-minute walk is not 10 minutes of silence (CLAUDE.md
     // "never run blind, never wait silent"). Without this the recap phase is
     // indistinguishable from a hang, which is the exact failure this audit
@@ -735,6 +795,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // here, answer it, and let the reveal speak.
   const turnCardUp = await until(() => has(page, '[data-testid="review-turning-point-card"]'), 45000, 500);
   log(`  [turning] waited for card after walk end: present=${turnCardUp}`);
+  // THE POST-WALK ATTEMPT GETS ITS OWN ROUND, ALWAYS. The card is RAISED at
+  // `currentPly === moves.length` with playback naturally stopped, which is the
+  // condition the answering sequence was designed for — so it is the attempt
+  // most likely to work, and starving it because earlier in-walk attempts
+  // burned the budget would throw away the good shot to protect against the
+  // retry storm the budget exists for.
+  grantTurningRound();
   await resolveCards();
   const revealed = await until(() => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text)), 20000, 500);
   log(`  [turning] reveal spoken=${revealed}`);
@@ -780,6 +847,28 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   }, [GID, GAME.studentSide]).catch((e) => ({ n: -1, at: [], error: String(e) }));
   log(`  [engine record] ${dbFlagged.n} flagged student ply(s)${dbFlagged.at.length ? ' — ' + dbFlagged.at.join(', ') : ''}`);
 
+  // 🔒 THE DRIVER'S OWN FAILURES MUST NOT BE FILED AS THE COACH'S. When the
+  // turning-point card could not be answered, the walk parked before the end —
+  // so the closing was never reachable and the critical moment was never
+  // reached either. Both rows would then blame a coach that never got a turn.
+  // THESIS has said DRIVER since 2026-09-16; these two did not, which is how
+  // one latch bug produced four reds on a clean run (2026-09-20).
+  //
+  // This is deliberately NOT the wedge guard: a wedge is the READOUT dying,
+  // and here the readout answers perfectly while the walk is held by a card.
+  // The two failures look nothing alike from the instrument's side, which is
+  // exactly why one guard could not cover both.
+  //
+  // BOTH CONDITIONS, NEVER ONE. `turningSeenUnanswered` is set when a round
+  // STARTS, so on its own it would also be true for a card that was answered
+  // by some other path, or dismissed, after which the walk ran to the end
+  // perfectly well. A row that got its full chance and still failed is a REAL
+  // red, and excusing it would be this guard committing the sin it prevents —
+  // an instrument reporting a failure as not-applicable.
+  const driverStop = (!turningAnswered && turningSeenUnanswered && !reachedEnd)
+    ? 'DRIVER: the turning-point card was never answered and the walk never reached the end, '
+      + 'so this row had no chance to be true. Fix the driver, not the coach'
+    : null;
   const RECAP_RE = /The pattern:[^.]*flagged move|The pattern: you \w|carry into the next game/i;
   for (let i = 0; i < 20; i += 1) {
     if (spoken().some((x) => RECAP_RE.test(x.text))) break;
@@ -815,7 +904,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
         ? `nothing to aggregate — the ENGINE RECORD confirms 0 flagged student plies, so silence is the correct recap (end reached=${reachedEnd})`
         : `the engine record carries ${dbFlagged.n} flagged student ply(s) (${dbFlagged.at.join(', ')}) and the walk recorded NONE — the walk stopped seeing them (end reached=${reachedEnd})`);
   } else {
-    await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
+    await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"`
+      : driverStop ?? `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
   }
 
   // THESIS (unified-coach N1, 2026-09-15): THE ONE SELECTOR's game-level thesis
@@ -1276,7 +1366,8 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const COUNT_RE = /\b(only )?one move\b|\btwo moves\b/i;
   const critLines = spoken().map((x) => x.text).filter((t) => COUNT_RE.test(t) && (STAKE_RE.test(t) || /critical moment|fork in the road/i.test(t)));
   await add('CRIT spoken-names-count-and-stake', !pickEv || critLines.length > 0,
-    critLines.length ? `${critLines.length} line(s): "${critLines[0].slice(0, 160)}"` : 'a moment was selected but nothing said it aloud');
+    critLines.length ? `${critLines.length} line(s): "${critLines[0].slice(0, 160)}"`
+      : driverStop ?? 'a moment was selected but nothing said it aloud');
   // "Keeps equality" is a claim about the EVALUATION and it is false when they
   // are winning (it keeps the WIN) and when they are lost (it promises a draw
   // that is not there). It must never appear.
