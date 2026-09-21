@@ -51,7 +51,7 @@ describe('E-10 — section-14 coverage on a real game, with the reason per ply',
     const deep = (f.deep as { plies: { bestMove: string; bestMoveEval: number; evaluation: number }[] }).plies;
     const studentIsWhite = String(f.white) === String(f.us);
     const board = new Chess();
-    const rows: { ply: number; san: string; fired: string[]; why: string[] }[] = [];
+    const rows: { ply: number; san: string; fired: string[]; all: string[]; why: string[] }[] = [];
     sans.forEach((san, i) => {
       const historySans = sans.slice(0, i + 1);
       const fenBefore = board.fen();
@@ -78,13 +78,16 @@ describe('E-10 — section-14 coverage on a real game, with the reason per ply',
         { historySans, bestSan, classification: cost >= 300 ? 'blunder' : 'mistake', evalBefore, evalAfterPlayed },
         why,
       );
-      const fired = got.map((g) => g.id).filter((id) => (SECTION_14 as readonly string[]).includes(id));
-      rows.push({ ply: i + 1, san, fired, why });
+      const all = got.map((g) => g.id);
+      const fired = all.filter((id) => (SECTION_14 as readonly string[]).includes(id));
+      rows.push({ ply: i + 1, san, fired, all, why });
     });
 
     expect(rows.length, 'no student plies were flagged by the engine — measurement vacuous').toBeGreaterThan(0);
 
     const firedPlies = rows.filter((r) => r.fired.length > 0);
+    const anyPlies = rows.filter((r) => r.all.length > 0);
+    const emptyPlies = rows.filter((r) => r.all.length === 0);
     const tally = new Map<string, number>();
     for (const r of rows) for (const w of r.why) tally.set(shape(w), (tally.get(shape(w)) ?? 0) + 1);
 
@@ -100,13 +103,17 @@ describe('E-10 — section-14 coverage on a real game, with the reason per ply',
       fixture: f.id,
       studentPliesExamined: rows.length,
       pliesWithASection14Fundamental: firedPlies.length,
+      pliesWithANYFundamental: anyPlies.length,
+      pliesWithNOTHING: emptyPlies.length,
+      fundamentalsThatDidFire: [...new Set(rows.flatMap((r) => r.all))].sort(),
       reasonsByShape: Object.fromEntries([...tally.entries()].sort((a, b) => b[1] - a[1])),
       examples: rows.slice(0, 6).map((r) => ({ ply: r.ply, san: r.san, fired: r.fired, why: r.why })),
     };
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/section14-coverage.json', JSON.stringify(report, null, 2));
 
-    console.log(`[section-14 coverage] ${firedPlies.length}/${rows.length} student plies got a section-14 fundamental`);
+    console.log(`[coverage] ${anyPlies.length}/${rows.length} flagged plies got ANY fundamental; ${firedPlies.length}/${rows.length} got a SECTION-14 one; ${emptyPlies.length} got NOTHING`);
+    console.log(`[coverage] fundamentals that DID fire: ${[...new Set(rows.flatMap((r) => r.all))].sort().join(', ') || '(none)'}`);
     for (const [why, n] of [...tally.entries()].sort((a, b) => b[1] - a[1])) console.log(`   ${String(n).padStart(3)}×  ${why}`);
   });
 });

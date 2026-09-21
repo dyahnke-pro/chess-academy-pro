@@ -87,7 +87,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 354 notes that described the video, not the board, are gone
 - ✅ Post-deploy audits on live prod — SW 9/9, Learn 8/8, review 22/24
 - ✅ 9. The fundamental-aware spine reader
-- 🔴 0a. The two fundamentals reds, n=2 — measured offline: it is DETECTOR COVERAGE, not inputs (all five flagged plies return `[]`)
+- 🟠 0a. The two fundamentals reds, n=2 — the "all five flagged plies return `[]`" diagnosis does NOT reproduce off-audit: on a real game 6 of 7 flagged plies get a fundamental (PLAN). Re-measure against the review audit's own game; likely section-14-shaped (E-10), not coverage
 - 🔴 0b. Review audit 22/24 — the same two rows
 - 🔴 2. The one SW check a single deploy cannot make — hold a session across deploy N → N+1
 - 🟠 3. Measure the 8.2 MB entry chunk on a device (parse time, heap) before touching it — **David's call after the number**

@@ -291,6 +291,33 @@ noting alongside the funnel work: the students who import are the ones whose
 games land on the no-PV path.
 
 
+### 0a CHALLENGED — "all five flagged plies return `[]`" does NOT reproduce (2026-09-20)
+
+The board records the two fundamentals reds as **DETECTOR COVERAGE**, diagnosed
+offline as "all five flagged plies return `[]`". Extending the E-10 coverage
+measurement from section-14 to EVERY detector, on a real amateur game with
+Stockfish's own per-ply best moves, gives the opposite shape:
+
+| measure | result |
+|---|---|
+| flagged plies that got **ANY** fundamental | **6 of 7** |
+| flagged plies that got a **section-14** one | 0 of 7 |
+| flagged plies that got **nothing at all** | 1 of 7 |
+
+The four that fired: `early-queen-sortie`, `greedy-pawn-grab`,
+`neglected-development`, `passive-when-forcing-existed`.
+
+So general detector coverage on this game is ~86%, not zero. Either the `[]`
+finding is specific to the REVIEW AUDIT's game rather than a property of the
+detectors, or it predates a fix landed since (the PV wire and the early-return
+diagnostics both changed this path today). **Whoever owns the review audit
+should re-measure against its own game before treating "detector coverage" as
+the diagnosis** — the two reds are much more likely section-14-shaped, which is
+E-10 and is separately explained.
+
+Honest bound: ONE game, 7 flagged plies. It disproves "all five return `[]`" as
+a general claim; it does not establish a coverage rate.
+
 ### E-10 ANSWERED — section 14 fires on nothing real, and here is WHY, per ply (2026-09-20)
 
 `section14Coverage.measure.test.ts` walks a REAL amateur game (the committed
