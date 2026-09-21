@@ -217,14 +217,34 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
   // REFUSES the ambiguous "he's X" instead of guessing. 946 sentences across
   // 165 files; 243 → 9 in the registry's own view.
   //
-  // The ceiling is what SURVIVES: sentences naming a real person (Fischer,
-  // Steinitz, Réti/Capablanca, and the pro whose games a pro-rep lesson
-  // teaches), plus a few where an OPENING's name reads as a person's to the
-  // proper-noun guard. Those are conservative skips, not debt to clear
-  // blindly — read one before you "fix" it.
+  // 🔴 WHAT SURVIVES IS NOT WHAT THIS COMMENT USED TO SAY, and the old claim is
+  // DELETED rather than annotated. It read: "sentences naming a real person
+  // (Fischer, Steinitz, Réti/Capablanca, and the pro whose games a pro-rep
+  // lesson teaches) … conservative skips, not debt to clear blindly."
+  //
+  // All 36 were read by hand on 2026-09-21. ZERO named a person. They were 22
+  // pieces of PERSONIFICATION ("the queen plants herself on h3", "slide her to
+  // d3") — which the rule does not ban, since a personified queen names no
+  // side — and 14 GENUINE defects the description had been excusing:
+  //   "Black has a clear plan on the side of the board where HE's strongest"
+  //   "around Black's fianchettoed king before HE's even castled"  (a king
+  //      does not castle; the PLAYER does)
+  //   "force White to commit … before HE's finished the setup THEY want"
+  //      (both registers in one sentence)
+  // Those 14 were rewritten to they/their; 36 -> 21.
+  //
+  // The comment's one good instruction was "read one before you fix it", and it
+  // cut BOTH ways: three first-pass flags turned out to be a queen-pronoun whose
+  // antecedent sat in the PREVIOUS sentence, while two more were real defects a
+  // nearest-noun heuristic had filed as personification ("Black's up a pawn —
+  // but HE's undeveloped"; a pawn is not undeveloped).
+  //
+  // So the remainder is now ONE coherent class: the queen as "she". Whether the
+  // app should personify pieces at all is a VOICE question for David, not a
+  // defect under a rule that bans a pronoun standing for a COLOUR.
   const LESSON_DIR = join(__dirname, 'lessons');
   const BEAT_LITERAL = /\b(say|sayShort)\s*:\s*(["'])((?:\\.|(?!\2)[^\\])*)\2/g;
-  const GENDERED_BEAT_CEILING = 36;
+  const GENDERED_BEAT_CEILING = 21;
   it('lesson beats: a gendered pronoun for a COLOUR only ever SHRINKS', () => {
     const offenders: string[] = [];
     let scanned = 0;
@@ -251,6 +271,44 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
         `substitution, and never by hand-editing one sentence into "they takes". ` +
         `First offenders:\n` + offenders.slice(0, 8).map((x) => `  • ${x}`).join('\n'),
     ).toBeLessThanOrEqual(GENDERED_BEAT_CEILING);
+  });
+
+  it('lesson beats: a MASCULINE pronoun for a colour is ZERO, not a ceiling', () => {
+    // THE CEILING ABOVE CANNOT SAY THE THING THAT MATTERS. 21 is a number that
+    // shrinks; it does not distinguish "the queen plants herself on h3" from
+    // "Black's plan is a classic: storm the queenside where HE's slow". After
+    // the 2026-09-21 pass those two classes separated cleanly — every one of
+    // the 21 survivors is the QUEEN as "she", and the masculine count is ZERO.
+    //
+    // So assert the invariant directly. He/him/his standing beside a colour is
+    // always the player and always the defect the 2026-08-28 rule bans; there
+    // is no legitimate instance, which is why this is a hard zero rather than
+    // another baseline to erode. Piece personification stays under the ceiling
+    // above, where it is a voice question rather than a correctness one.
+    const MASC = /\b(he|he's|he'd|he'll|him|his|himself)\b/i;
+    const offenders: string[] = [];
+    let scanned = 0;
+    for (const file of readdirSync(LESSON_DIR).filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'))) {
+      const raw = readFileSync(join(LESSON_DIR, file), 'utf8');
+      for (const m of raw.matchAll(BEAT_LITERAL)) {
+        scanned += 1;
+        for (const sentence of m[3].split(/(?<=[.!?])\s+/)) {
+          if (MASC.test(sentence) && COLOUR_WORD.test(sentence)) {
+            offenders.push(`${file}: ${sentence.trim().slice(0, 110)}`);
+            break;
+          }
+        }
+      }
+    }
+    expect(scanned, 'no beat literals matched — the reach is broken and this gate is vacuous')
+      .toBeGreaterThan(30000);
+    expect(
+      offenders,
+      `${offenders.length} lesson beat(s) call a PLAYER "he/his". The opponent is ` +
+        `"they/their" (locked 2026-08-28). This is a hard ZERO, never a ceiling — ` +
+        `rewrite the sentence, and mind the verb: "he takes" -> "they take", not ` +
+        `"they takes".\nFirst offenders:\n` + offenders.slice(0, 8).map((x) => `  • ${x}`).join('\n'),
+    ).toEqual([]);
   });
 
   it('lesson beats (say + sayShort): no we/our/us', () => {

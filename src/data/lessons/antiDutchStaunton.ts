@@ -24,7 +24,7 @@ export const ANTI_DUTCH_STAUNTON_LESSON: LessonScript = {
   orientation: 'white',
   beats: [
     b({ id: 'sta1', moves: 'd4 f5 e4 fxe4 Nc3 Nf6 Bg5',
-      say: "The Dutch grabs kingside space with …f5 — but that pawn also loosens Black's king, and the Staunton Gambit pounces instantly: e4, offering the pawn to blow the position wide open. After fxe4 Nc3 Nf6 you play Bg5, hitting the f6-knight and threatening Bxf6 to shatter Black's kingside pawns. Sure, Black's up a pawn — but he's undeveloped, and you've got a lead in development and open lines. Fast, dangerous stuff.",
+      say: "The Dutch grabs kingside space with …f5 — but that pawn also loosens Black's king, and the Staunton Gambit pounces instantly: e4, offering the pawn to blow the position wide open. After fxe4 Nc3 Nf6 you play Bg5, hitting the f6-knight and threatening Bxf6 to shatter Black's kingside pawns. Sure, Black's up a pawn — but they're undeveloped, and you've got a lead in development and open lines. Fast, dangerous stuff.",
       sayShort: "e4 gambit, Bg5 — hit f6, open lines.",
       highlights: [H('f6', ATK), H('g5', SOFT)] }),
     b({ id: 'sta2', moves: 'd4 f5 e4 fxe4 Nc3 Nf6 Bg5 c6 f3 d5 fxe4 Nxe4 Nxe4 dxe4',

@@ -22,7 +22,7 @@ export const ANTI_ALAPIN_BLACK_LESSON: LessonScript = {
   orientation: 'black',
   beats: [
     b({ id: 'alb1', moves: 'e4 c5 c3 Nf6',
-      say: "The Alapin plays c3 to prop up a big d4-centre while dodging the Open Sicilian. The most testing reply is …Nf6, smacking the e4-pawn right away. And that's the whole idea — you force White to commit, defend e4 or push it, before he's finished the setup they actually want. From move two, YOU set the tempo.",
+      say: "The Alapin plays c3 to prop up a big d4-centre while dodging the Open Sicilian. The most testing reply is …Nf6, smacking the e4-pawn right away. And that's the whole idea — you force White to commit, defend e4 or push it, before they've finished the setup they actually want. From move two, YOU set the tempo.",
       sayShort: "…Nf6 — hit e4, force the issue.",
       highlights: [H('e4', ATK)] }),
     b({ id: 'alb2', moves: 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4',

@@ -215,7 +215,7 @@ export const TROMPOWSKY_ATTACK_VARIATION_LESSONS: Record<string, LessonScript> =
         id: 'open',
         moves: ['d4', 'Nf6', 'Bg5', 'd5', 'Bxf6', 'gxf6', 'e3', 'c5', 'dxc5', 'e6', 'c4', 'dxc4', 'Qxd8+', 'Kxd8'],
         highlights: [{ square: 'd8', color: KEY }],
-        say: "White pries the position open with e3 and c4. The queens come off with check — Qxd8+ Kxd8 — and Black has lost the right to castle, their king stranded on d8 in front of a wrecked pawn shield. This is exactly what White wanted: no queens to create kingside threats against HIM, and a long endgame where Black's broken structure is a permanent liability.",
+        say: "White pries the position open with e3 and c4. The queens come off with check — Qxd8+ Kxd8 — and Black has lost the right to castle, their king stranded on d8 in front of a wrecked pawn shield. This is exactly what White wanted: no queens to create kingside threats against them, and a long endgame where Black's broken structure is a permanent liability.",
         sayShort: 'Qxd8+ — into a favourable endgame.',
       },
       {

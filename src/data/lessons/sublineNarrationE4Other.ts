@@ -1299,7 +1299,7 @@ const N93: SublineNarration = {
     { atMove: 20, say: "Ne4 — centralise the knight on a dominant square, eyeing d6 and f6 and supporting the passed pawn.", sayShort: "Ne4 — dominant knight.", highlights: [H('e4')] },
     { atMove: 21, say: "…Ng6 — Black reroutes, hunting for counterplay.", sayShort: "…Ng6 — reroute.", highlights: [H('g6', SOFT)] },
     { atMove: 22, say: "c4 — reinforce the d5-pawn with a broad front, cementing the space bind for good.", sayShort: "c4 — cement the bind.", highlights: [H('c4'), H('d5', SOFT)] },
-    { atMove: 23, say: "…b6 — Black seeks queenside play, but he's cramped. You're clearly better: a strong protected passed pawn, a lasting space bind, and the freer, more active pieces.", sayShort: "…b6 — you're clearly better.", highlights: [H('b6', SOFT)] },
+    { atMove: 23, say: "…b6 — Black seeks queenside play, but they're cramped. You're clearly better: a strong protected passed pawn, a lasting space bind, and the freer, more active pieces.", sayShort: "…b6 — you're clearly better.", highlights: [H('b6', SOFT)] },
   ],
   sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
 };
@@ -1939,7 +1939,7 @@ const N127: SublineNarration = {
 };
 
 const N128: SublineNarration = {
-  intro: { say: "g3 — the Closed Sicilian, not the sharp f4-attack. This is the main line, and Black's plan is a classic: mirror the fianchetto, then storm the queenside where he's slow. Load the b-file with …Rb8, roll …a6 and …b5-b4 at his knight, and you're faster there than he is on the kingside. Dead level and thematic.", sayShort: "Mirror, then …Rb8 and …b5-b4" },
+  intro: { say: "g3 — the Closed Sicilian, not the sharp f4-attack. This is the main line, and Black's plan is a classic: mirror the fianchetto, then storm the queenside where they're slow. Load the b-file with …Rb8, roll …a6 and …b5-b4 at his knight, and you're faster there than he is on the kingside. Dead level and thematic.", sayShort: "Mirror, then …Rb8 and …b5-b4" },
   beats: [
     { atMove: 5, say: "…g6 — mirror his setup; your bishop is heading to the same long diagonal he wants.", sayShort: "…g6 — mirror the fianchetto.", highlights: [H('g6')] },
     { atMove: 7, say: "…Bg7 takes the long dark diagonal, x-raying his c3-knight and the queenside.", sayShort: "…Bg7 — the long diagonal.", arrows: [A('g7', 'c3')], highlights: [H('c3')] },
@@ -2434,7 +2434,7 @@ const N161: SublineNarration = {
 };
 
 const N162: SublineNarration = {
-  intro: { say: "…c5 — the principled Austrian counter, striking at the base of your d4-centre before it can roll forward. This is the moment the whole Austrian is built for: you're the better-developed side, so you don't retreat — you hit first. Meet it with Bb5+, fouling Black's development before he's coordinated, and then storm the e-pawn forward to tear open their uncastled king. Watch the lead in development turn straight into an attack.", sayShort: "…c5 — Bb5+, then storm e5-e6" },
+  intro: { say: "…c5 — the principled Austrian counter, striking at the base of your d4-centre before it can roll forward. This is the moment the whole Austrian is built for: you're the better-developed side, so you don't retreat — you hit first. Meet it with Bb5+, fouling Black's development before they're coordinated, and then storm the e-pawn forward to tear open their uncastled king. Watch the lead in development turn straight into an attack.", sayShort: "…c5 — Bb5+, then storm e5-e6" },
   beats: [
     { atMove: 9, say: "…c5 strikes at d4, the base of your big centre — the critical break. Don't recoil and don't trade tamely; this is exactly where your faster development is meant to pay off.", sayShort: "…c5 hits d4 — the critical moment", arrows: [A('c5', 'd4')], highlights: [H('d4'), H('c5')] },
     { atMove: 10, say: "Bb5+ — the punch. Before Black is castled or coordinated you check, dragging a piece to a passive blocking square and banking a tempo for the assault to come. Development lead plus initiative — that is the Austrian's whole promise.", sayShort: "Bb5+ — disrupt before he castles", arrows: [A('b5', 'e8')], highlights: [H('e8')] },
@@ -2518,7 +2518,7 @@ const N166: SublineNarration = {
 };
 
 const N167: SublineNarration = {
-  intro: { say: "…Nc6 — Black hits d4, but this blocks his c-pawn so the a5-queen loses her …c6 retreat. Pin the knight, prepare d5, and strike: the central break wins you the bishop pair, wrecks Black's kingside pawns, and hands you the e-file and a lasting target on e6. You end up clearly better.", sayShort: "…Nc6 — pin, d5 break, wreck the kingside" },
+  intro: { say: "…Nc6 — Black hits d4, but this blocks their c-pawn so the a5-queen loses her …c6 retreat. Pin the knight, prepare d5, and strike: the central break wins you the bishop pair, wrecks Black's kingside pawns, and hands you the e-file and a lasting target on e6. You end up clearly better.", sayShort: "…Nc6 — pin, d5 break, wreck the kingside" },
   beats: [
     { atMove: 10, say: "Bb5 — pin the c6-knight against the king, adding pressure to Black's queenside.", sayShort: "Bb5 — pin the knight.", arrows: [A('b5', 'c6')], highlights: [H('c6')] },
     { atMove: 11, say: "…Bd7 — Black breaks the pin.", sayShort: "…Bd7 — break the pin.", highlights: [H('d7', SOFT)] },

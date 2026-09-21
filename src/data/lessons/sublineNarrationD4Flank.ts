@@ -6164,7 +6164,7 @@ const TR_V2_GXF6: SublineNarration = {
 const TR_V2_C5_9: SublineNarration = {
   intro: { say: "Black hits the centre with …c5. Slam the door with e5, then d5 — your pawns cramp him while his queen and king get tangled, and you can even win heavy material.", sayShort: "Clamp with e5 and d5" },
   beats: [
-    { atMove: 10, say: "Push e5, locking the centre and shoving Black's queen back to d8 before he's untangled.", sayShort: "e5, gain space, chase the queen", highlights: [_H('e5')] },
+    { atMove: 10, say: "Push e5, locking the centre and shoving Black's queen back to d8 before they're untangled.", sayShort: "e5, gain space, chase the queen", highlights: [_H('e5')] },
     { atMove: 12, say: "Ram d5 too. Black's pieces are boxed in behind the pawns while yours pour out with tempo.", sayShort: "d5, the centre clamps him", highlights: [_H('d5')] },
     { atMove: 16, say: "Swing the queen to e4, hitting the a8-rook along the long diagonal and forcing weakening pawn moves.", sayShort: "Qe4, target the a8-rook", arrows: [_A('e4', 'a8')], highlights: [_H('a8')] },
     { atMove: 22, say: "Collect the rook with Qxa8. Black's king is stuck on d8 and your extra exchange decides the game.", sayShort: "Qxa8 wins the exchange", highlights: [_H('a8')] },
@@ -6236,7 +6236,7 @@ const TR_V2_G6_11: SublineNarration = {
   beats: [
     { atMove: 12, say: "Castle queenside, putting your king to safety and the rook behind the d-pawn for the coming break.", sayShort: "Castle long, rook to the d-file", highlights: [_H('d4')] },
     { atMove: 14, say: "Advance f4, gaining kingside space and readying the e5 push into Black's centre.", sayShort: "f4, gain kingside space", highlights: [_H('f4')] },
-    { atMove: 18, say: "Strike with e5, ripping open the centre against Black's uncastled king before he's organised.", sayShort: "e5, blast the centre open", highlights: [_H('e5')] },
+    { atMove: 18, say: "Strike with e5, ripping open the centre against Black's uncastled king before they're organised.", sayShort: "e5, blast the centre open", highlights: [_H('e5')] },
     { atMove: 20, say: "Follow up with d5, cracking the position fully open while your pieces are the better placed.", sayShort: "d5, open lines on his king", highlights: [_H('d5')] },
   ],
   sources: ['concept:pos-king-safety', 'concept:pos-center', 'https://lichess.org/opening/Trompowsky-Attack'],
@@ -6495,7 +6495,7 @@ const TR_V6_G6_9: SublineNarration = {
 const TR_V6_G6_11: SublineNarration = {
   intro: { say: "Black delays with …Qb6 and …g6. Grab queenside space with a4, complete the broad centre, and reroute your knight to f4 to reinforce the d5-wedge.", sayShort: "Space, centre, Nf4 reinforces d5" },
   beats: [
-    { atMove: 12, say: "Grab queenside space with a4, fixing Black's pawns before he's organised.", sayShort: "a4, queenside space", highlights: [_H('a4')] },
+    { atMove: 12, say: "Grab queenside space with a4, fixing Black's pawns before they're organised.", sayShort: "a4, queenside space", highlights: [_H('a4')] },
     { atMove: 14, say: "Complete the broad centre with e4 — your clamp leaves Black passive.", sayShort: "e4, broad centre", highlights: [_H('e4'), _H('d5')] },
     { atMove: 20, say: "Reroute the knight via e2 toward f4, supporting the d5-wedge.", sayShort: "Nge2, head for f4", highlights: [_H('d5')] },
     { atMove: 22, say: "Land the knight on f4, eyeing e6 and g6; you press with a clear space advantage.", sayShort: "Nf4, eye e6 and g6", highlights: [_H('f4')] },

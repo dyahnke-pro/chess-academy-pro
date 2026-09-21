@@ -38,7 +38,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       moves: 'e4 e5 Nc3 Nf6 f4',
       highlights: [{ square: 'f4', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "f4 — the Vienna Gambit. You hurl the f-pawn at e5, opening the f-file toward Black's king before he's anywhere near ready. This is the move that makes the Vienna dangerous: a pawn offered for a roaring initiative.",
+        "f4 — the Vienna Gambit. You hurl the f-pawn at e5, opening the f-file toward Black's king before they're anywhere near ready. This is the move that makes the Vienna dangerous: a pawn offered for a roaring initiative.",
       sayShort: 'f4 — the gambit punch.',
     }),
     b({
