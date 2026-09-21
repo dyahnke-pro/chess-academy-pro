@@ -46,7 +46,7 @@ describe('C15 — the voiced corpus, measured through the register classifier', 
       const seat = n.studentSide === 'white' || n.studentSide === 'black' ? n.studentSide : null;
       if (seat) withSeat++; else noSeat++;
       for (const f of FIELDS) {
-        const text = String(n[f] ?? '').trim();
+        const text = (n[f] ?? '').trim();
         if (!text) continue;
         proseUnits++;
         if (/\b(he|his|him)\b/i.test(text)) heHis++;
