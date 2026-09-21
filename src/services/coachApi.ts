@@ -2194,6 +2194,28 @@ export async function groundedMoveFeedback(opts: {
   const framing = [opts.extraFacts?.trim(), describeMoveMoment(opts.moment)]
     .filter((s): s is string => Boolean(s && s.trim()))
     .join(' ');
+  // 🔴 MOVE FEEDBACK WITH NOTHING TO GROUND ON IS SILENT (restored 2026-09-21,
+  // red on `main`). This function's own contract — and
+  // `serveGroundedPositionDefault`'s docstring — is "returns null when there's
+  // no board/engine data to ground on". It had stopped doing that: with no
+  // eval, no best move, no tactic and no computed moment, the shared assembler
+  // fell through to its material line and move feedback said "Material is even
+  // — nothing is decided yet; it's about the plans and the tactics."
+  //
+  // 🚨 THE SHARED ASSEMBLER IS NOT THE BUG — DO NOT "FIX" IT THERE. That
+  // material line is deliberate and correct for the board-QUESTION router,
+  // where the student ASKED and the count is a complete fact on its own ("the
+  // absence is a reason to say LESS, not a reason to narrate the absence").
+  // Two surfaces share one assembler and want different things: a question
+  // deserves whatever is true, unprompted move feedback deserves silence.
+  // Narration rule 1 (concrete over generic) and rule 4 (silence is
+  // acceptable) decide it here, at the caller, so neither surface loses.
+  const hasGround = Boolean(
+    opts.bestMoveUci || opts.evalCp !== undefined && opts.evalCp !== null
+    || opts.mateIn !== undefined && opts.mateIn !== null
+    || (opts.tactics && opts.tactics.length > 0) || framing,
+  );
+  if (!hasGround) return null;
   return serveGroundedPositionDefault(
     {
       surface: opts.surface ?? 'grounded-move-feedback',
