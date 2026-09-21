@@ -73,7 +73,44 @@ function tacticIsMeaningful(board: InstanceType<typeof Chess>, t: { type: string
     const undefended = board.attackers(sq as Parameters<typeof board.attackers>[0], p.color).length === 0;
     return (PIECE_PTS[p.type] ?? 0) > attackerVal || undefended;
   };
-  if (t.type === 'fork') return t.involvedSquares.slice(1).filter(winnable).length >= 2;
+  if (t.type === 'fork') {
+    // 🔴 THIS BRANCH USED TO READ `.filter(winnable).length >= 2` FULL STOP,
+    // and it false-failed two GENUINE royal forks (2026-09-21):
+    //   mg-lichess-8I2YuiTC#50  Qxf2+ — forks the king and the UNDEFENDED g3
+    //     knight; White's only legal replies are Kh2/Kh1.
+    //   mg-kasparov-karpov-wch85#80  Re1+ — forks the king and the UNDEFENDED
+    //     d1 knight; White's only legal replies are Nf1/Bf1.
+    // Both were verified on the board by hand before this was touched, because
+    // loosening a board-truth gate to make it pass is how a real defect ships.
+    //
+    // A king is never "winnable" (worth 0, and always covered), so a royal fork
+    // could never reach two. The check FORCES the king to move, so ONE other
+    // winnable target falls — the same rule `pvPlayback` adopted 2026-09-14
+    // when the textbook Nc7+ king-and-rook fork was being dropped.
+    const targets = t.involvedSquares.slice(1);
+    const royal = targets.some((sq) => board.get(sq as Parameters<typeof board.get>[0])?.type === 'k');
+    const winnableCount = targets.filter(winnable).length;
+    if (!(royal ? winnableCount >= 1 : winnableCount >= 2)) return false;
+    // …AND THE AGENT MUST SURVIVE. Adding the royal rule alone would have
+    // re-admitted the real defect this sweep had just caught —
+    // mg-lichess-8I2YuiTC#72 Qf4+, which "forks" bishop, queen and king while
+    // the forked QUEEN answers Qxf4. A forked piece that can take the forker
+    // was never forked. Decided by LEGALITY, not `attackers()` geometry: on the
+    // Qxf2+ position chess.js reports the white king as an attacker of f2 even
+    // though Kxf2 is illegal, so a geometric test would kill that real fork.
+    // This is deliberately an INDEPENDENT restatement of the product's rule,
+    // not an import of it — a sweep that asks the prose's own computer whether
+    // the prose is true cannot fail.
+    const agent = t.involvedSquares[0];
+    const agentColor = board.get(agent as Parameters<typeof board.get>[0])?.color;
+    const defended = agentColor
+      ? board.attackers(agent as Parameters<typeof board.attackers>[0], agentColor).length > 0
+      : false;
+    const takenForFree = board.moves({ verbose: true }).some(
+      (m) => m.to === agent && attackerVal - (defended ? (PIECE_PTS[m.piece] ?? 0) : 0) >= 0,
+    );
+    return !takenForFree;
+  }
   if (t.type === 'skewer') return winnable(t.involvedSquares[1]) || board.get(t.involvedSquares[2] as Parameters<typeof board.get>[0])?.type === 'k';
   return true; // pin — the immobilization against a more valuable piece is real
 }

@@ -300,3 +300,36 @@ describe('tacticWord — no snake_case enum ever reaches the voice (David 2026-0
     expect(tacticWord('some_new_tactic')).not.toContain('_');
   });
 });
+
+describe('a fork whose agent can simply be captured is not a fork (2026-09-21)', () => {
+  // Both positions are real plies of `mg-lichess-8I2YuiTC`, the game whose
+  // narration `reviewCorpusSweep` caught claiming "lands a fork" on a move that
+  // won nothing (red on `main`, found 2026-09-21).
+  //
+  // They are kept TOGETHER on purpose: the pair is what makes the rule
+  // board-true rather than merely stricter. One must be rejected and the other
+  // must still be accepted, and a rule written with `attackers()` geometry
+  // would fail the second while "fixing" the first.
+  it('REJECTS Qf4+ — the forked queen attacks the forking square', () => {
+    // Qf4+ forks Bf6, Qh6 and the king on h2. The royal rule accepted it on its
+    // single "winnable" target, the undefended h6 queen — but that queen
+    // ANSWERS with Qxf4, so the fork buys nothing.
+    const before = '6k1/5p2/5B1Q/1p1P1q2/4r3/1p6/6PK/6R1 b - - 1 36';
+    const after = new Chess(before);
+    after.move('Qf4+');
+    expect(after.moves(), 'the forked queen can take the forker').toContain('Qxf4');
+    expect(plyFactsForMove(before, 'Qf4+') ?? '').not.toMatch(/lands a fork/i);
+  });
+
+  it('ACCEPTS Qxf2+ — the king ATTACKS f2 but cannot legally capture it', () => {
+    // The mirror case, and the reason the rule is decided by LEGALITY. chess.js
+    // reports the white king as an attacker of f2, yet Kxf2 is ILLEGAL (the
+    // queen is defended down the b6 diagonal), so White's only replies are
+    // Kh2/Kh1 and the fork on the king plus the UNDEFENDED g3 knight is real.
+    const before = '4r1k1/3b1pB1/1b1p1Qn1/1p1P4/1p2P3/5NNP/2q2PP1/4R1K1 b - - 0 25';
+    const after = new Chess(before);
+    after.move('Qxf2+');
+    expect(after.moves().sort(), 'no legal capture of the forker').toEqual(['Kh1', 'Kh2']);
+    expect(plyFactsForMove(before, 'Qxf2+') ?? '').toMatch(/lands a fork/i);
+  });
+});

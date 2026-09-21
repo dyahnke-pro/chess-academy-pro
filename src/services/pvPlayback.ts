@@ -266,6 +266,48 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
         // (Bg5 pinning the f6 knight to the queen). Keep it.
         real = true;
       }
+      // 🔴 A TACTIC WHOSE AGENT CAN SIMPLY BE CAPTURED IS NOT LANDING (found
+      // 2026-09-21 by `reviewCorpusSweep`, red on `main`: three games narrated
+      // "lands a fork" on a move that won nothing).
+      //
+      // The reality gate above asks whether the TARGETS are winnable and never
+      // asks whether the AGENT survives. On `mg-lichess-8I2YuiTC` ply 72 the
+      // coach said Qf4+ "lands a fork" — it forks bishop f6, queen h6 and the
+      // king, and the royal rule accepted it on the one "winnable" target, the
+      // undefended h6 queen. But that queen ATTACKS f4: White answers Qxf4 and
+      // the fork wins exactly nothing. A forked piece that can take the forker
+      // was never forked.
+      //
+      // BOARD-TRUE BY LEGALITY, NOT GEOMETRY. `attackers()` reports the white
+      // king as an attacker of f2 on ply 50 of the same game, where Kxf2 is
+      // ILLEGAL because the queen is defended — so a geometric test would have
+      // killed that GENUINE royal fork (Qxf2+ forks the king and an undefended
+      // g3 knight, and White's only legal replies are Kh2/Kh1). `afterBoard` has
+      // the defender to move, so its own legal move list is the honest question.
+      //
+      // The capture only RESOLVES the tactic when it is not materially bad for
+      // them: they gain the agent, and give back the capturer only if we can
+      // recapture. Net >= 0 for them means the tactic bought nothing.
+      // SCOPED TO FORKS, DELIBERATELY. All three measured violations are forks,
+      // and the fork branch is the permissive one — the royal rule accepts a
+      // SINGLE winnable target, so an unsafe agent has nothing else holding it
+      // back. Skewer and pin share the shape (their front piece could also take
+      // the agent) but no run has produced one, and extending this there DID
+      // break a real classifier fixture: `tacticTypeUnification`'s skewer case
+      // `r6k/8/8/8/q7/8/8/1R5K` plays Ra1 into Qxa1, so the rule fired and
+      // dropped the tag. That fixture is testing CLASSIFICATION, not soundness.
+      // Left for whoever has a measurement, rather than silently overlooked.
+      if (real && landed.type === 'fork') {
+        const agentColor = afterBoard.get(agentSquare as Square)?.color;
+        const weDefendAgent = agentColor
+          ? afterBoard.attackers(agentSquare as Square, agentColor).length > 0
+          : false;
+        const answeredByCapture = afterBoard
+          .moves({ verbose: true })
+          .some((m) => m.to === agentSquare
+            && attackerVal - (weDefendAgent ? pieceVal(m.piece) : 0) >= 0);
+        if (answeredByCapture) real = false;
+      }
       tacticLanded = real ? landed.type : null;
     }
 
