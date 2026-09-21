@@ -69,6 +69,14 @@ const line = (p: PvPly[]): PvLine => ({
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
+/** A COMPLETE LineShape from the few fields a case cares about. The literals
+ *  here carried three of six fields; the rest are the neutral values the
+ *  shape detector produces when nothing of that kind happened. */
+const fullShape = (o: Partial<LineShape>): LineShape => ({
+  forcedPlies: 0, traded: 0, endsInEndgame: false,
+  repeats: false, pliesToFirstCapture: null, quietMoveIndex: null, ...o,
+} as LineShape);
+
 describe('two plans, one line', () => {
   it('attributes each side\'s moves to that side', () => {
     // The easiest thing to get backwards and the most damaging: a student told
@@ -846,19 +854,24 @@ describe('the rest of what the line has to say', () => {
 
   it('says a forced run out loud, and stays quiet when there are choices', () => {
     const said = new Set<string>();
-    expect(lineShapeLine({ forcedPlies: 3, traded: 0, endsInEndgame: false }, said))
+    expect(lineShapeLine(fullShape({ forcedPlies: 3, traded: 0, endsInEndgame: false }), said))
       .toContain('forced');
-    expect(lineShapeLine({ forcedPlies: 0, traded: 0, endsInEndgame: false })).toBe('');
+    // pliesToFirstCapture: 0 so the QUIET case is quiet for a legal reason.
+    // The old literal omitted the field, and `undefined` is not a value
+    // `number | null` can hold -- with a legal shape, null means "nothing
+    // taken for a good while" and correctly speaks its own line
+    // (lookaheadPlan.ts:1225). This assertion is about the FORCED line.
+    expect(lineShapeLine(fullShape({ forcedPlies: 0, traded: 0, endsInEndgame: false, pliesToFirstCapture: 0 }))).toBe('');
   });
 
   it('says the line trades down into an ending', () => {
-    expect(lineShapeLine({ forcedPlies: 0, traded: 12, endsInEndgame: true }))
+    expect(lineShapeLine(fullShape({ forcedPlies: 0, traded: 12, endsInEndgame: true })))
       .toMatch(/comes off.*endgame|endgame/s);
   });
 
   it('says each shape fact once a game, not once a ply', () => {
     const said = new Set<string>();
-    const shape = { forcedPlies: 3, traded: 12, endsInEndgame: true };
+    const shape = fullShape({ forcedPlies: 3, traded: 12, endsInEndgame: true });
     expect(lineShapeLine(shape, said)).not.toBe('');
     expect(lineShapeLine(shape, said), 'the shape read chanted').toBe('');
   });
@@ -870,7 +883,7 @@ describe('the rest of what the line has to say', () => {
       ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qxg2'],
     ]) {
       const p = plan(sans);
-      for (const t of [p?.white.text, p?.black.text, lineShapeLine(p?.shape ?? { forcedPlies: 0, traded: 0, endsInEndgame: false })]) {
+      for (const t of [p?.white.text, p?.black.text, lineShapeLine(p?.shape ?? fullShape({ forcedPlies: 0, traded: 0, endsInEndgame: false }))]) {
         expect(t ?? '', `a move leaked: ${t}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
       }
     }
