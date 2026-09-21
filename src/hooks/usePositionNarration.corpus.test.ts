@@ -13,7 +13,7 @@ import { Chess } from 'chess.js';
 
 const VOICED = JSON.parse(
   readFileSync('public/data/voiced-teachings.json', 'utf8'),
-) as { notes: { lineSan: string[] }[] };
+) as { notes: { lineSan: string[] ; studentSide?: 'white' | 'black' | null}[] };
 
 describe('position read corpus wiring', () => {
   // Exercise the real runtime path: inject voiced (the sole exact-position

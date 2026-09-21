@@ -61,7 +61,7 @@ describe('fetchChesscomPlayerGames', () => {
     );
     vi.stubGlobal('fetch', fetchMock);
     await fetchChesscomPlayerGames({ player: 'hikaru', opening: 'najdorf', color: 'black' });
-    const calledUrl = String(fetchMock.mock.calls[0][0]);
+    const calledUrl = String(fetchMock.mock.calls[0]![0]);
     expect(calledUrl).toContain('/api/chesscom-games');
     expect(calledUrl).toContain('username=hikaru');
     expect(calledUrl).toContain('opening=najdorf');

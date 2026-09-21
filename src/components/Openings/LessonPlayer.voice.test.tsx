@@ -69,7 +69,7 @@ describe('LessonPlayer — first-beat narration waits for the silent walk', () =
     // first beat's full text, at the arrival position.
     await act(async () => { await vi.advanceTimersByTimeAsync(1600); });
     expect(speakLecture).toHaveBeenCalled();
-    expect(speakLecture.mock.calls[0][0]).toBe(SCRIPT.beats[0].say);
+    expect(speakLecture.mock.calls[0]![0]).toBe(SCRIPT.beats[0].say);
     // The board reached the full first-beat position by the time it spoke.
     expect(fenCalls).toContain(fenAfter(SCRIPT.beats[0].moves));
   });

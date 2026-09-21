@@ -131,7 +131,7 @@ describe('billingService — stable app user id migration', () => {
     // The configure call must NOT carry the id — that is what orphans a
     // customer and loses their purchase.
     expect(configure).toHaveBeenCalledTimes(1);
-    expect(configure.mock.calls[0][0]).not.toHaveProperty('appUserID');
+    expect(configure.mock.calls[0]![0]).not.toHaveProperty('appUserID');
     expect(logIn).toHaveBeenCalledWith({ appUserID: 'device-abc' });
   });
 
