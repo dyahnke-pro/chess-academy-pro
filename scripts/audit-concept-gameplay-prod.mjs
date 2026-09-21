@@ -495,6 +495,36 @@ async function main() {
       );
       await writeFile(`${OUT_DIR}/coach-decisions.json`, JSON.stringify(decisions, null, 1)).catch(() => {});
     }
+
+    // ── `tactics-context-stale` — THE COUNT NOBODY HAS EVER READ ────────────
+    // The event has been emitted from two places since the staleness fix
+    // (`liveTacticsContext.formatTacticsSubBlock` and `coachService`) and NO
+    // audit in the repo captured it, which is exactly why the board has
+    // carried "read the count off the listener — never done" as an open red.
+    // An emission nobody asserts on is decoration (the ALGO AUDIT rule).
+    //
+    // It is a DEFECT COUNT, not a distribution: the event fires when the
+    // tactics sub-block was built for a DIFFERENT board than the one being
+    // narrated, and `formatTacticsSubBlock` then returns '' rather than
+    // handing the model facts about the wrong position. Zero is the contract.
+    const staleEvents = listener.getCapturedEvents().filter((e) => e.kind === 'tactics-context-stale');
+    const captured = listener.getCapturedEvents().length;
+    // Non-vacuity FIRST, and it is the load-bearing half: a listener that
+    // captured nothing would report zero stale events and read as a pass.
+    // "No events" and "no stale events" are different facts.
+    record(
+      'G5a. the listener captured events at all (so a zero below is a measurement)',
+      captured > 0,
+      `${captured} events captured off the sidecar`,
+    );
+    record(
+      'G5b. tactics context was never STALE (built for a different board than the one narrated)',
+      staleEvents.length === 0,
+      staleEvents.length === 0
+        ? `0 of ${captured} captured events — the count, read off the listener`
+        : `${staleEvents.length} stale: ${staleEvents.slice(0, 3).map((e) => String(e.summary ?? e.source ?? '')).join(' | ')}`,
+    );
+
     record('F3. no uncaught page errors', pageErrors.length === 0, pageErrors.slice(0, 2).join(' | '));
   } finally {
     await browser.close().catch(() => {});

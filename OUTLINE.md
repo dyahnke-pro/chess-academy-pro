@@ -28,7 +28,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 4. D11 — `[delta]` squares already coupled (the PLAN entry was stale)
 - ✅ 5. Hygiene — watermark hook, timeouts-vs-assertions, lint crash named, test-type ceiling 296→236, `BuildVersionWidget` regex, `formatTacticsSubBlock(tactics, boardFen)` required, multilingual row poll
 - ✅ 6. Measurements — boot 15 files / 26.4 MB raw / 6.1 MB gzip; corpus reach 24/24 both tiers; corpus gates evened
-- 🔴 `tactics-context-stale` count read off the listener — never done
+- 🟠 `tactics-context-stale` count read off the listener — CAPTURE BUILT (audit-concept-gameplay G5a/G5b; no audit in the repo read this event, which is why it was never done). The NUMBER is owed from the next run of that audit
 - 🔴 47-game rerun — `data/sources/wo4-corpus/` absent on this machine
 - **Audits:** loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ · second-game 12/12 ✅
 
@@ -101,7 +101,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
 - ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
 - 🔴 `npm run ship-check` has never printed READY TO PUSH on that tree
-- 🔴 Read the `tactics-context-stale` count off the listener
+- 🟠 Read the `tactics-context-stale` count off the listener — capture built (G5a/G5b); the number is owed from the next audit run
 - ✅ `GameChatPanel.test` — MEASURED 2026-09-20: 16/16 green on a synced tree. The "red on untouched main" claim was stale and is deleted, not annotated
 - ✅ Swept: ONE `crashed(out)` detector backs vitest, lint, tsc and the Playwright summarizer — the regex had already been hand-written twice, which is the drift the rot rule names
 
