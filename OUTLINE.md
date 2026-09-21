@@ -322,8 +322,11 @@ register doesnt get up to closing the loop"):
   all above INACCURACY_CP and below 150). ✅ FIXED — the gate is expected points now, and
   the recap spoke the result: "one of your four flagged moves stopped calculating too early".
   Still open, and neither is the floor:
-  - 🔴 **the punishing PV is not persisted** for the mistake/blunder plies (`pvP` 0-1 plies,
-    detector needs 3) — now the dominant cause.
+  - 🔴 **the punishing PV is not persisted on a COLD open** — `deepPv` is filled only by the
+    key-moment dive, and `CoachReviewSessionPage:297` opens with `{sweepOnly:true}`, so the
+    FIRST review of a game (the one a student reads) cannot teach the reasoning fundamentals
+    at all. Do NOT un-skip the dive (reinstates the cold-open stall, G4.6). OWED first: does a
+    SECOND open produce it? One reopen-probe run decides between the three fixes.
   - 🔴 **an unconditional deferral**: "the punishment X is immediate — another fundamental
     owns it", and none fires. A yield must be conditional on the claim LANDING. Third
     instance of this shape tonight; the two that worked were fixed by making the yield
