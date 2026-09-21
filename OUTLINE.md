@@ -89,6 +89,300 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 354 notes that described the video, not the board, are gone
 - ✅ Post-deploy audits on live prod — SW 9/9, Learn 8/8, review **48/2** (2026-09-21; supersedes the 22/24 recorded here, and the 43/9 before it)
 - ✅ **THE STANDING PAIR, both TAPE-CLEAN, 2026-09-21** — review **49/50** on `DzRuWdjs` (its one red was the SEAT row false-firing on correct prose, fixed) and Learn **15/15** on `T8DVEfgf`. Both stamped the bundle at BOTH ends; neither moved under its run. That stamping is new and it earned itself the same night: an earlier review run was silently invalidated by a docs push landing mid-walk
+- ✅ **REVIEW RUN 3: 50/50, and BOTH verifications I owed are now closed** (2026-09-21, `AUDIT_GAME_ID=jYSkjcuG AUDIT_STUDENT=white`, 6 flagged plies and 80 narrated).
+  • **`SEAT mover-never-reattributed` PASSES** — *"every narrated ply keeps its seat (80 plies)"*. The three-cut regex fix is verified against real prose at last, and on a game with far more of it than the one that false-red'd.
+  • **`CRIT spoken-names-count-and-stake` PASSES** with *"That was a critical moment. Only one move kept you level here, and it was rook to d1. You found it over the board."* ⚠️ Still the SPOKEN branch — `register=credit` here, so the CLAIMED-ELSEWHERE path remains unexercised after three runs. It needs a game where the question plan owns the selected ply, which is rarer than I assumed; **stop waiting for a rotation to land on it and construct one.**
+  • **`FUNDLEAD` 4/6** — the first time it has been genuinely gradeable, and the two misses are the known classification-label opens.
+  🟡 **THE TAPE IS CONTAMINATED BY THE LETTER AND CLEAN IN SUBSTANCE — filed as such rather than discarded or ignored.** `BUILD-AFTER` moved `7e04638` → `d271aeb` mid-run, and it was MY OWN docs push deploying under my own audit — the exact mistake a peer made earlier tonight, now mine. The guard fired correctly and I am not overriding it silently. What the evidence says: `git diff 7e046380b..d271aeb8b -- src/` (excluding tests) is **empty**, so the PRODUCT bytes under test never changed; only the build id and the chunk names did. Zero asset failures and zero page errors across the run. So the rows are believable and the run is NOT re-run — but it is recorded with the flag, because "my score was perfect so the contamination cannot matter" is precisely the reasoning that makes a guard decorative
+- ✅ 9. The fundamental-aware spine reader
+- 🟠 0a. The two fundamentals reds, n=2 — the "all five flagged plies return `[]`" diagnosis does NOT reproduce off-audit: on a real game 6 of 7 flagged plies get a fundamental (PLAN). Re-measure against the review audit's own game; likely section-14-shaped (E-10), not coverage
+- 🟠 0b. Review audit — **the driver RAISES the turning-point card and then destroys it** (diagnosed 2026-09-21; this line REPLACES a wrong one — see below). The recap phase clicks Forward up to 20 times to reach the closing. When the walk parks SHORT of the end the card has not been raised yet, so the driver's 45s wait honestly reports `present=false`; then one of those clicks lands on `moves.length`, the card raises and SPEAKS its ask, and the next click dismisses it — `handleWalkForward` dismisses by design and `turningAskedRef` stops it returning. Created and destroyed a second apart, after the driver had given up waiting. FIXED: `resolveCards()` runs every iteration of that loop, plus a reserved answering round after it, so the fix no longer depends on WHEN the card appears relative to the phases. 🔴 **DELETED, NOT ANNOTATED: the previous version of this line said "one latch produced four reds". That is wrong about this run.** The latch bug (`turningHandled` set on ENTRY rather than on success) is real on reading the code and is fixed, but the card was never raised DURING the walk on the pinned game, so the latch was never in play. A peer independently concluded "the card was never raised at all", which was also wrong — its ask was in the captured narration the whole time, one row from the failure, and the THESIS row printing the SAME sentence for "never appeared" and "never answered" is what let both readings stand for an hour. That message now distinguishes them. 🔴 **STILL OPEN and upstream of all of it: the walk parked at ply 67/69 for 350 seconds with NO card blocking it.** Not the latch, not the ordering, not FUNDLEAD — a third thing, and the one that starts the chain ✅ **AND THE PLY-67 PARK IS SOLVED — it was a PRODUCT bug, not an audit one** (2026-09-21). `handleWalkForward` returned `void`, so every early return in it was indistinguishable at the call site from "I advanced" — and the next auto-advance is only ever scheduled when the PLY CHANGES, so one silently consumed forward stopped the walk PERMANENTLY while `isAutoPlaying` stayed true and the button went on reading "playing". A real student sees a review that has died with no indication; the audit's poll never pressed play because it only presses on `data-state="paused"`. Two live paths did it: `if (questionPlan.has(atPly)) return` yielded the forward to a card that opens LATER IN THE SAME FUNCTION (so the card never opened on that step), and `if (principleQuizStateRef.current) return` sat under the comment "device quiz (hidden) — never opens", which is FALSE — `setPrincipleQuizState(quiz)` is called from `finishFaucetResume` and the card renders. A wrong comment is worse than none: it tells every reader not to look. **FIXED AT THE TYPE, not with a watcher.** `ForwardOutcome = {advanced:true} | {advanced:false; stop: ForwardStop}` plus `AUTO_ADVANCE_ON_STOP: Record<ForwardStop, 'reschedule'|'pause'>` — a new stop reason FAILS TO COMPILE until someone decides what auto-play does about it (proven: adding a synthetic reason gives TS2741, then reverted). A stop is now a real transition, so the button tells the truth. Enumerating the blocking overlays was considered FIRST and rejected as a watcher — it fixes the six we know and not the seventh. Gate: `useReviewPlayback.test.ts` "a forward that did NOT advance turns auto-play OFF", negative-controlled by reverting the pause transition and watching it fail. The audit also gained handlers for the five blocking overlays its table was missing (`review-principle-quiz`, `discussion-practice-panel`, `review-find-shot-reveal`, `review-cameo-playback`, `review-theory-playback`) — convenience now, not the load-bearing part ✅ **THE ORDERING FIX IS VERIFIED GREEN ON PROD** (2026-09-21, a peer's run on the deployed bundle): `[turning] card present; 2 candidate chip(s)` → `attempt 1: confirm=true reveal=true`, and BOTH THESIS rows went red→green (`thesis lines=1 legacy=0`, `ask@70 thesis@71`). Raised-then-destroyed is gone. Note `present=false` still prints at the walk-end wait and that is now CORRECT — the card genuinely does not exist yet at that moment; the recap stepping raises it and the loop now answers it there. RECAP `end reached=false` is still red and is correctly attributed: that is the ply-67 park, whose fix (ForwardOutcome) is still local at the time of that run ✅ **THE PLY-67 / ORDERING HALF IS CLOSED AND VERIFIED — 43/9 → 48/2 on prod** (2026-09-21, one deploy carrying BOTH sessions' fixes, proven by grepping the live chunk rather than by its hash). `RECAP fundamentals-aggregate` is GREEN — *"The pattern: one of your four flagged moves stopped calculating too early"* — so the walk reaches the end and **the ply-67 park is closed**. `DRIVER answered-the-turning-point-card` PASSES: *answered in 1 round(s); reveal spoken*. Both THESIS rows green. Two rows remain: FUNDLEAD (0/4 flagged plies lead with a fundamental — another session's thread) and `CRIT spoken-names-count-and-stake`, which was the AUDIT being wrong, not the coach — see below 🟠 **WHAT SURVIVES, so the marker stays amber: (a) FUNDLEAD, which is another session's thread, and (b) my own CRIT fix is UNVERIFIED — that run shows the OLD row text ("a moment was selected but nothing said it aloud"), so it PREDATES the fix and has never exercised it.**
+- 🟠 **CRIT spoken-names-count-and-stake — DIAGNOSIS proven, FIX RAN AND PASSED, one BRANCH still unexercised — a moment the question plan owns is SUPPOSED to be quiet in that register** (2026-09-21). `handleWalkForward` suppresses the critical beat when `questionPlan` already stops at that ply ("that card owns the moment — speaking the critical reveal first would hand it the answer"), so the row was asserting a contract the product deliberately does not hold — the same class as the retired R2 and the RECAP regex that pinned a phrasing which had stopped shipping. PROVEN on the run: the moment was selected at ply 68 with `played=Ke6`, and the turning-point reveal spoke *"The game turned at move 34, king to e6"* — the owner speaking, in its own register. **But the excuse is granted only on EVIDENCE**, because an unconditional yield to a sibling that never claims it is a real defect and the student gets nothing (measured on the same run at ply 64: *"the punishment Bd7+ is immediate — another fundamental owns it"*, and no other fundamental fired). So the row now has THREE outcomes, never two: spoken here (pass), CLAIMED elsewhere (pass, naming the line that claimed it), or SILENT (fail — the yield went nowhere). Matching is by SAN **and** by its spoken form, since the coach says "king to e6" and never spells SAN aloud 🔴 **The fix has NEVER RUN.** The 48/2 tape records the OLD row text, so it predates the change; what is proven is the DIAGNOSIS (read off that tape: the moment was selected at ply 68 `played=Ke6` and the turning-point reveal spoke "the game turned at move 34, king to e6"). Marking a fix done because its reasoning is sound is the same error as calling a number green because the row printed — it rides the next review run. ✅ **FIX NOW VERIFIED — the row PASSED on a clean tape** (2026-09-21, `AUDIT_GAME_ID=CuQmjkwk`, bundle stamped `DzRuWdjs` at BOTH ends, TAPE-CLEAN): *"That was a critical moment. Only one move kept you on top here, and it was knight takes g3. You found it over the board."* ⚠️ It passed on the SPOKEN branch, so the CLAIMED-ELSEWHERE branch — the one the whole fix was about — is still unexercised and needs a game where the question plan owns the selected ply.
+- 🟠 **`SEAT mover-never-reattributed` FALSE-RED'd a correct sentence, and it took THREE cuts to fix because two of them were silently inert** (2026-09-21, the only red in a 49/50 run). The coach said, on an OPPONENT ply: *"You both wanted the open e-file, but only their rook could take it — it was theirs first."* That is correct plan-race prose — it addresses the student, describes both sides, and attributes the file to the OPPONENT. It reattributes nothing. The guard reads the token after "You", found the QUANTIFIER "both" instead of a listed verb, and failed a coach that was right (`want` is listed; it just was not adjacent — and the coach said "wanted", which `want\b` does not match either). **Cut 1** built the regex from an interpolated string and the escaping came out as a literal backslash, so the fix did nothing. **Cut 2** used an optional group, which BACKTRACKS TO EMPTY — the lookahead rejects at "wanted", the engine retries at "both", and it fires anyway. **Cut 3** strips the hedge first, then tests: 12/12 both directions, silent on legitimate prose and still firing on real reattribution. Two inert repairs that reported themselves applied is the argument for a shape you can read over one you have to simulate. NB the guard is a HEURISTIC that errs toward FIRING on purpose — a false red costs one investigation, a false green lets the locked seat rule rot silently
+- ✅✅ **DONE — 2 / E2: the two-deploy service-worker check RAN AND PASSED 5/5 on prod** (2026-09-21, `scripts/audit-sw-two-deploy-prod.mjs`, report `audit-reports/sw-two-deploy-2026-09-21T07-24-57-069Z`). A live session was held on `index-CL9P6Cc6.js`, a real deploy landed underneath it, and: the new worker did NOT take over (`controllerChanged=false`, loads=2 against 2 driven navigations), **no hashed asset failed across two driven lazy navigations**, and the held session still worked (alive, 0 new page errors). That is the class that hit David's iPhone — `stockfish-error`, `lichess-error TypeError: Load failed`, no `app-boot` on reopen — proven survivable under a genuine deploy, which no single-deploy audit could reach. ⚠️ **RE-RUN WITH THE CORRECTED DETECTION: 4 of 5 rows reported, ALL PASS — the fifth is UNGRADED, not passed.** The run wedged after row 4 and sat 37 minutes holding the machine, so the liveness row never printed. The row that matters did: *no hashed asset failed after the deploy*, this time watching CONTENT-TYPE rather than status, so it could actually see the `200 text/html` casualty the first 5/5 was blind to. A watchdog now bounds the whole run and writes a `-WEDGED` partial report — every individual step was already bounded, which is precisely why an outer bound was needed: the hang was in the composition, where per-step timeouts cannot see it
+  🔴 **AND IT DISPROVED THE PREMISE I HAD WRITTEN TEN MINUTES EARLIER — that line is DELETED, not annotated.** I claimed the check "must ride a deploy that changes the BUNDLE" because a docs/scripts/test push would emit a byte-identical chunk. **FALSE, measured:** the deploy under test was `0863ced7c..0adb4c90a` — three commits touching only `OUTLINE.md`, `PLAN.md`, two `scripts/*.mjs` and one `.test.ts`, with `git diff --name-only | grep ^src/ | grep -v .test.` returning **NONE** — and BOTH artifacts moved anyway: entry `CL9P6Cc6` → `BGt0uyLR`, `sw.js` md5 `5d5bc0fc…` → `75c244b2…`. **So EVERY deploy offers every live session a new service worker, docs-only included.** The handover risk is far broader than bundled changes, which also means this check can ride any push at all — and that the hold gate is load-bearing on pushes nobody thinks of as risky. The page in this run shows exactly that: `waiting:true, asked:true` — a new worker WAS offered and the page asked it to take over once quiet, and still nothing broke
+- 🟡 **`readingGate` in `CoachGameReview.tsx` looks like DEAD STATE** (noticed 2026-09-21 while mapping `handleWalkForward`'s exits). `setReadingGate` is never called with a value, so the guard can never fire and `ReviewReadingChallenge` — which has its own test file — can never mount. Its own comment says "(defensive)", which is the tell. NOT deleted: the locked rule is verify-it-is-actually-dead-first and when-unsure-skip-or-ask, and I verified enough to suspect it and not enough to remove a user-facing surface. Deliberately declined as a way to manufacture a bundle change for item 2 — letting the instrument drive the product is backwards
+- ✅ 3. The 8.2 MB entry chunk is a NON-ISSUE — closed by measurement 2026-09-20, no device needed. **ZERO** WASM/OOM/crash events on native in 60 days, and the zero is non-vacuous (same cut returns 14 other error types: `stockfish_variant` 873/94 devices, `ota_download_failed` 133/53, `tts_failure` 19/9). The OOM that motivated this item happened in an AUDIT browser under a mid-run deploy at 124 spawned threads, and in the memory-starved sandbox — neither is a real device, and its cause was THREAD COUNT, not bundle size. Download is irrelevant on native (`webDir:'dist'`, the bundle ships inside the app; 2.3 MB gzipped on web). Do not spend a night shrinking this. Only live engine signal: `stockfish_variant_fallback`, 3 events / 2 devices — watch, do not act
+- ✅ 4. The 1,282 archived anchored danya notes STAY ARCHIVED (2026-09-20) — and the two reasons offered for calling them garbage both FAIL on measurement: **100% carry a `lineSan`** (median 10 plies; no `fen` field, but the line IS the anchor) and **0 of 1,282 are audience/parasocial talk** (1,275 board talk, 7 general chess principles; detector proven non-vacuous against 'subscribe', 'welcome back to the speedrun', 'shout out to my patreon'). They stay out for a DIFFERENT reason: the play surfaces take exact-position narration solely from the board-truth-verified voiced corpus, and ~3.8% of farmed position-keyed notes are mis-anchored — fluent prose about a different board, which reading cannot catch. 🔴 The one number that would reopen it, never run: how many of the 1,282 survive board verification against their own line Re-confirmed by David 2026-09-20: voiced is the sole exact-position source and coverage grows by growing the voiced corpus — not an open call, and asking again was the defect.
+- 🟡 5. 57,204 un-positioned notes — a memory decision, never a boot one; never prune without measuring both ways
+- 🟡 6. A cold first teaching reply draws on less corpus — watch it in the Learn audit
+- ✅ 7. The corpus gates are even · ✅ 8. `BuildVersionWidget.test`
+- ⛔ 10. **Section-14 detectors fire on nothing real** — theirs. The instrument half landed (`2d9f151`: each detector now names WHICH GATE it failed, so the 23% bucket is measurable); still never attributed on a real game
+
+## 8b. Move grading — one currency, chess.com's (David 2026-09-20)
+
+- ✅ **Review already matched** — `classifyCpLoss` has banded in EXPECTED POINTS
+  (5/10/20 win% = chess.com's 0.05/0.10/0.20) since the accuracy work. The rot was
+  everything DOWNSTREAM of it, which is why "match chess.com" turned out to be a
+  sweep and not a build.
+- ✅ **The drill queue** had its own `classifyCpLoss` on raw 100/300 — one move could
+  be an "inaccuracy" on screen and a "mistake" in the drill it produced.
+- ✅ **Imported games** (`gameImportUtils`) banded centipawns — the student's whole
+  record labelled in a different currency from review AND from the site it came from.
+- ✅ **Live play** (`moveRating.classifyMoveFull`) held preMoveEval/postMoveEval/
+  playerColor and dropped all three at the call boundary.
+- ✅ **`capabilityEvidence`** retyped `MISTAKE_CP = 100` locally — a second definition
+  of "mistake" no change to the first could reach.
+- ✅ Band computed ONCE in `accuracyService.bandForWinPctLost`; gated by
+  `chessComBands.test.ts` (states the published table; proves the SAME 300cp is an
+  inaccuracy at +9.00 and a blunder at +0.50).
+- 🟠 **Behaviour change to watch:** the drill queue now SKIPS a move whose win% loss is
+  under an inaccuracy. Puzzle counts can legitimately drop — that is not a regression.
+- Deliberately NOT changed: `backwardLook`, `callInaccuracy`'s speaking floor. Those
+  answer "is this worth SAYING" — pedagogy, a different decision from what a move is
+  CALLED. Conflating the two is what caused this.
+
+## 9. Carried over — the stale-tactics checklist (pickup §7)
+- ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
+- ✅ **ship-check crash-as-green, second half** — the guard read the child's stdout, which
+  only catches a death it lives long enough to narrate; an OOM-killed/timed-out process
+  prints nothing and still scored "0 errors". Now reads `spawnSync` status/signal/error
+  first, extracted to `scripts/ship-check-lib/crashed.mjs`, tested (10, mutation-checked:
+  the old logic fails 4), and gated in GATE_TESTS.
+- ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
+- ✅ `npm run ship-check` **printed READY TO PUSH** (2026-09-20, 348.6s, 11 commits on the tree): typecheck ✓, prod build ✓, lint 0 errors, content gates ✓, changed-file tests ✓. The one blocker was a redundant `String()` in a new measurement — `npm run lint` runs with `--report-unused-disable-directives`, which makes that an ERROR
+- ✅ Read the `tactics-context-stale` count off the listener — 0 of 145 captured events, prod, non-vacuity proven
+- ✅ `GameChatPanel.test` — MEASURED 2026-09-20: 16/16 green on a synced tree. The "red on untouched main" claim was stale and is deleted, not annotated
+- ✅ Swept: ONE `crashed(out)` detector backs vitest, lint, tsc and the Playwright summarizer — the regex had already been hand-written twice, which is the drift the rot rule names
+
+---
+
+## THE OTHER SESSION'S BOARD — ⛔ THEIRS, DO NOT PICK UP (their report, 2026-09-20)
+
+- ✅ All their work on `main` and live, bundle `index-BjQZ6ReX`. Nothing running or pending.
+- ⛔ **The ~250 s regression** — the new insight sweep was AWAITED inside the function the review walk waits on. Detached and gated; their re-measure against the fixed bundle is the confirmation and is still owed.
+- ⛔ **The wider critical fan**, a second slowdown candidate, unresolved until that deterministic re-measure.
+- ✅ Three real bugs fixed on the way: the review path recorded nothing into the student model · four seat resolvers where only one read the declared seat · three fresh-game doors in Learn clearing different subsets of memory.
+
+
+## ⛔ BLOCKED ON DAVID OR ON TIME — not open work, and the board should stop reading them as such (2026-09-21)
+
+Four items cannot close no matter how many sessions run. Separated out so the
+remaining list is work somebody can actually do tonight.
+
+- ⛔ **OWED-3 GREEN — needs held evidence over DAYS.** The coach going quiet when you improve requires a student improving across sessions. No amount of parallelism creates elapsed time.
+- ⛔ **T6 — two numbers that only a DEVICE can give.** Learn statement volume and `scanCriticalMoments` on a phone. Needs David's iPhone, not a worker.
+- ⛔ **0b the Dashboard bars — needs USERS, not work.** Only 11 of 18 post-ship users ever took an OTA bundle; an equal observation window leaves n=5. It becomes gradeable when more of them update, and not before.
+- ⛔ **T5 / G1's bundle-hash wording / dropping `Date.now()` from the build id — DAVID'S CALLS.** T5 is deliberately unchanged; the other two are his standing orders and his build config (the build-id change moves OTA bundle identity). Each has its measurement attached above; none should be actioned by a session.
+
+🟡 **And one that is possible but last in rank: the 47-game corpus.** Verified 2026-09-21 that the games are on NO disk here and no producer exists — so it is acquire 47 amateur games, write the producer, then two Stockfish sweeps at d12 and d18. Hours of compute for a MEASUREMENT rather than a defect. It should not displace anything a student can feel.
+
+## WHERE IT STANDS IN ONE LINE
+
+The loop is CLOSED and proven on prod in the RED direction, in both registers:
+the coach learned the student in game A and said something different in game B.
+What is left is the **ceiling** (the `other` attribution gap — another session),
+the **wedge** (#21 — another session), and **GREEN** (the coach going quiet when
+you improve). Green is the half of the main concept nobody owns: the mechanism
+is built and has never once been shown to fire. See below.
+
+## UNOWNED RIGHT NOW — and the ONLY one that is the main concept
+
+**GREEN — the coach going quiet when you get better.** The heat map has three
+states and the app can act on two. Measured 2026-09-20, not recalled:
+
+| half | state |
+|---|---|
+| RECORD a hold (`capabilityEvidence`, both halves computed) | ✅ built, 8 modules |
+| RECORD a miss | ✅ built, 21 modules — **the parity gap is 21 vs 8** |
+| the PROFILE (`getCapabilityProfile`, prompted rows skipped) | ✅ built |
+| a term that can LOWER need (`needScore.capabilityTerm`, held ≥ 3 + zero broken) | ✅ built, ONE production reader |
+| **does real play ever reach held ≥ 3 with zero broken?** | ✅ **MEASURED 2026-09-20: YES, 6 of 6 game-seats, off ONE game each** |
+| is the bar set right, i.e. does a proven tag SURVIVE later games? | ✅ **measured and re-set** — `posedImportance >= 80` is the knee (15 real games, 198 held rows): 2 proven, 0 later failed. The old effective bar of 65 gave 2 tags / 17 failure events |
+| can a student who FIXES a weakness ever go green again? | ✅ **YES — fixed and gated.** `capabilityProven` reads `heldStreak`/`streakGames`, not lifetime `broken`; a break RESETS the streak rather than closing the door. Gate: capabilityEvidence.test 'GREEN IS RECOVERABLE'. Verified 2026-09-20: no production code gates green on lifetime broken (`broken > 0` survives only to classify RED) |
+| **has a student's Nth game ever gone quiet because of games 1..N-1?** | 🔴 **NEVER SHOWN** |
+
+🔴 **The "21 vs 8 parity gap" I read off `docs/STATE.md` is a GREP RATIO, not a
+hole — measured 2026-09-20, corrected here rather than left standing.** The two
+lists overlap and count readers as writers; the hold side is wired at every live
+surface. There is no recording half left to build. What is unproven is
+everything to the RIGHT of the record.
+
+🔴 **AND THE FIRST NUMBER FLIPPED THE RISK.** The worry was that green could
+never fire. It fires easily: every game-seat measured proved at least one
+capability from a SINGLE game (`passive-king-endgame 7h/0b` — the board asked
+seven times and quiet accurate moves answered). The RED guard works correctly
+(one break holds a tag red however many holds it has, e.g. `passive-rook
+6h/3b`). So the defect risk is not a wire that cannot fire, it is a BAR SET TOO
+LOW — the coach going quiet about something the student never demonstrated,
+which is absent-≠-mastered pointing the other way. `HELD_FOR_PROVEN = 3` is the number under test, and the
+sequence measurement answered it: ONE STUDENT, FIVE GAMES IN ORDER,
+`neglected-development` proven after game 1, still proven through game 4,
+BROKEN in game 5 — so the coach would have gone quiet about it for four games
+and then watched them do it again. One flip in five games, on the tag that
+proved fastest.
+
+✅ **FIXED — the defect this paragraph describes is closed (verified 2026-09-20).**
+`capabilityProven` now reads a RECENT STREAK (`heldStreak` / `streakGames`) and
+no production code gates green on a lifetime `broken` any more; the one
+surviving `broken > 0` classifies RED, which is correct. Gate:
+`capabilityEvidence.test` → "GREEN IS RECOVERABLE — a student who fixes it can
+go green again" (33 capability tests green). The original finding, kept because
+the reasoning is why the rule has its present shape:
+
+🔴 **THE OPPOSITE DEFECT, found by the same run: GREEN WAS UNRECOVERABLE.**
+`getCapabilityProfile` counts LIFETIME broken and `capabilityTerm` requires
+`broken === 0`, so one break ever bars a tag from green permanently, however
+many holds follow. The heat map exists to say "you have GOTTEN BETTER" and as
+built it structurally cannot.
+
+✅ **THE BAR IS NOW MEASURED, NOT CHOSEN (2026-09-20).** The first fix below
+was the right SHAPE and the wrong VARIABLE, and the numbers said so: swapping
+three lifetime holds for a 3-streak across 2 games moved flips 1 → 2, and a
+full sweep found **2 flips at every count threshold from 3 to 6 holds and 2 to
+3 games** — the count knob does not control the failure at all. What does is
+`posedImportance`, already stamped on every row by `capabilitiesPosed` and read
+by nothing. Over 15 real amateur games (198 held rows, real engine grades):
+
+| difficulty floor | capabilities proven | proven then FAILED |
+|---|---|---|
+| 65 (≈ the old effective bar) | 4 | 2 tags, 17 events |
+| 74–78 | 3 | 1 tag, 4 events |
+| **80 (shipped — the knee, and a plateau with 82/84)** | **2** | **0** |
+| 86+ | 1 | 0 |
+
+So GREEN now requires a clean streak of **2**, spanning **2 distinct games**,
+at **posedImportance ≥ 80**. The count is 2 rather than 3 because the sweep
+showed it inert — it only ever created false negatives. An easy hold is not
+evidence AND not a failure: it is skipped without resetting the streak. The
+shipped bar is asserted on the real rows (`2 proven, 0 flipped over 13 games`),
+and `summariseEvidence` / `capabilityProven` take the thresholds as optional
+parameters purely so the calibration sweeps the REAL rule — baking the floor in
+made the sweep report zero flips at every level, an instrument green for free.
+
+Earlier, and still true: `capabilityProven` is now the ONE
+definition of green, read by both consumers (it was written twice —
+`needScore.capabilityTerm` and `studentMomentBoost.isUnproven` — which is the
+duplicated-judgement the rot rule bans). Proven = a RECENT clean streak
+(`heldStreak`) spanning at least TWO DISTINCT GAMES (`streakGames`), instead of
+three lifetime holds with a lifetime-zero break count. A break now RESETS the
+streak rather than closing the door, so a student who fixes a weakness can be
+told so. Gates: six streak cases in `capabilityEvidence.test.ts` (one game is
+not proven however long; two games are; a break ends it; green is recoverable;
+a prompted row is neither; grey is never proven) and two new contracts in
+`capabilityRead.test.ts`.
+
+🔴 **AND THE HOLE THAT MADE THE BAR MOOT — `/coach/play` RECORDED NOTHING.**
+`recordMoveEvidence` had exactly ONE call site, inside `evaluatePlayerMove`,
+which `CoachGamePage` correctly stopped calling on 2026-06-04 (it ran a second
+Stockfish pair and a second classifier that disagreed with the blunder
+interceptor). The positive half was a side effect of that call and went with
+it — so the surface where students play whole games against the coach
+contributed ZERO holds, while mounting the hook with `capabilityOrigin:
+'play'`, which makes it read as wired. ✅ Fixed by a `recordGradedMove` door
+that takes the cpLoss the surface ALREADY computed, so the removed second
+analysis cannot come back, and passes `gameState.gameId` — which is also the
+game identity the new bar counts. Gates: three hook cases +
+`playRecordsCapability.test.ts` (blames by statement, and asserts
+`evaluatePlayerMove` stays gone).
+Reports: `audit-reports/capability-green.json`,
+`audit-reports/capability-green-sequence.json`.
+
+🔴 **PROD RUN 1 REPORTED A GREEN THAT WAS NOISE, AND ITS NEGATIVE CONTROL
+CAUGHT IT.** Three devices on one real amateur game (`PF8pYEpN`): control 2932
+words, green 2464 (−468, "quieter"), prompted 2506→2320 — but the PROMPTED arm
+must change NOTHING, since the profile skips prompted rows, and it moved more
+than green did. A failing negative control invalidates the positive result; it
+does not caveat it. Run 2 added a SECOND UNSEEDED CONTROL to measure the
+instrument against itself: noise floor **117 words within a run**, while the
+same unseeded config varied **592 words between runs**. Against that floor,
+green moved **16 words**. Verdict: RUN UNUSABLE, printed by the audit itself.
+
+🔴 **THE REASON IS THE SURFACE, NOT THE WIRE.** Review is `'walk'` posture, and
+the locked rule (G4.5.15) is that on `walk` importance must NEVER decide
+whether a ply speaks — every ply is a beat. So a term that LOWERS need cannot
+make review quieter; it can only reorder. Green's quieting is only observable
+on an `'interrupt'` posture surface (Play, live Learn), where silence is the
+default and the coach must earn the interruption. **Retarget the instrument
+there; the review arm proves nothing either way and should not be re-run.**
+
+**POST-PUSH AUDITS, 2026-09-20 (bundle `index-DQWQNSty`, all four sequential, muted):**
+- ✅ **loop (red) 6/6** — recorded, paired, B narrated differently, names A's opponent, and SPOKEN off the listener. The capability-path changes cost nothing that was working.
+- 🟠 **review — SUPERSEDED. The "zero reds" run is no longer the last one.** It was n=1 (one flagged ply, so 1/1) and green rather than robust, as the line already said. The current recorded run is **48/2 on 2026-09-21** with four flagged plies: RECAP aggregate GREEN, FUNDLEAD red (1 of 4 once its own blind row was fixed), CRIT red and mis-specified. Kept rather than deleted because the older run's n=1 caveat is still the reason not to read either number as robust.
+- ✅ **Learn, exit 0** — 27 spoken lines, the computed concept invariant voiced mid-game, 13 board lines gate-clean on perspective, 57 against the vacuity floor.
+- ❌ **green — RUN UNUSABLE**, correctly refused (above).
+- ✅ **`tactics-context-stale`: 0 of 145 captured events**, measured on prod 2026-09-20. ⚠️ The earlier "ZERO across all four runs" line reached the RIGHT NUMBER on NO EVIDENCE — until today `grep -rl tactics-context-stale scripts/` returned nothing, so no audit captured the event and that zero was absence-of-capture. Same answer, real instrument: G5a asserts the listener captured events at all, and runs first.
+- Noted for the other session's #21, not acted on: `workers=60` alive on the review reopen, inside the band their census tracks.
+
+✅ **THE MECHANISM IS VERIFIED AT THE DECISION POINT, AND IT IS NARROW BY
+CONSTRUCTION (measured offline, 2026-09-20).** Rather than build a four-arm
+browser instrument for an interrupt surface and discover the effect size
+expensively, the same real recorded plies were run through the real
+`computeNeed` with and without a proven profile: **198 of 198 clean posed plies
+were LOWERED, by 25 each**, so the term fires exactly where it should. But one
+proven tag is −25 and the term is capped at `NEED_THRESHOLD`, so green can only
+ever SILENCE a ply whose need sits in **50..99** — below that the ply was
+already silent, above it it still speaks.
+
+So the prod picture is fully explained: the wire is live, review cannot show it
+(walk posture narrates every ply), and on an interrupt surface only plies inside
+that band will flip. 🔴 **A first cut of this measurement reported "0 flipped"
+and that was the FIXTURE, not the product** — the synthetic plies scored 35
+against a threshold of 50, so nothing spoke before green either. It now reports
+the effect size and the band instead of a count that could only ever be zero.
+
+**THE OPEN QUESTION IS DAVID'S, and it is a design one, not a bug:** is −25 per
+proven capability the right weight? Green currently cannot quiet a ply the rest
+of the model wants loudly (need ≥ 100), by design. Making it proportional, or
+letting multiple proven tags stack past the cap, would widen the window — and
+is exactly the kind of change that should be measured against the flip count
+first, the way the bar was.
+
+That is the exact shape the RED direction was in before WO-LOOP-01: every half
+built and gated in isolation, the sentence never demonstrated end to end. The
+red half was proven by SEEDING game A and reading game B's tape; green is
+provable the same way, and the measurement comes first because if real play
+never produces a proven capability then the lowering term can never fire and
+`HELD_FOR_PROVEN` (or the posing bar) is the defect rather than the wire.
+
+Not the main concept, and explicitly deprioritised (David 2026-09-20: "the
+register doesnt get up to closing the loop"):
+- 🟠 **FUNDLEAD — cause NAMED by measurement (2026-09-21), two halves left.** FUNDWHY's
+  first run named it: the 150cp floor silenced the inaccuracy band (costs 104/99/86/74/72/69,
+  all above INACCURACY_CP and below 150). ✅ FIXED — the gate is expected points now, and
+  the recap spoke the result: "one of your four flagged moves stopped calculating too early".
+  Still open, and neither is the floor:
+  - 🔴 **the punishing PV is not persisted on a COLD open** — `deepPv` is filled only by the
+    key-moment dive, and `CoachReviewSessionPage:297` opens with `{sweepOnly:true}`, so the
+    FIRST review of a game (the one a student reads) cannot teach the reasoning fundamentals
+    at all. Do NOT un-skip the dive (reinstates the cold-open stall, G4.6). OWED first: does a
+    SECOND open produce it? One reopen-probe run decides between the three fixes.
+  - 🔴 **an unconditional deferral**: "the punishment X is immediate — another fundamental
+    owns it", and none fires. A yield must be conditional on the claim LANDING. Third
+    instance of this shape tonight; the two that worked were fixed by making the yield
+    check the handoff, or making a yield naming no claimant fail to compile.
+- ✅ **FUNDLEAD's row was itself blind** — FUND_RE could not see 25 rotations across 15
+  fundamentals, so it scored correct teaching as "no fundamental". Now derived from the real
+  renderers and gated (`fundLeadStems.test.ts`), every rotation, negative-controlled.
+- 🔴 C15 the voiced corpus register — a real defect the student hears, but polish next to the loop.
+- 🔴 **C15b lesson BEATS are unscanned for gendered pronouns** — the peer's fix made the
+  beat arm live (it read a field that does not exist, so it scanned nothing, ever). GENDERED
+  never covered authored beats. Do NOT close by raising the 202 ceiling — that blesses rot;
+  scan, read a sample, degender offline, then ceiling the ambiguous remainder.
+  📌 **DON'T WRITE A NEW SCAN — the discriminator already exists and already runs** (2026-09-21). `curatedBeatSource.beatRegister` classifies a beat `spectator` when `PLAYER_PRONOUN = /\b(?:he|him|his)\b/i` appears in a SENTENCE that also names a colour — deliberately sentence-scoped so a historical aside ("Fischer and his 1972 match") is not swept up with "…and HE takes away Black's pin". That is exactly the distinction C15b needs, written and in production. A fresh grep for he/his would re-derive it worse, and would conflate the two cases the register rule keeps apart: "White develops the knight" is CORRECT for Watch, a gendered pronoun standing for a PLAYER never is.
+  📌 **AND THE LIVE BLAST RADIUS IS ALREADY ZERO.** Those beats are `spectator`, and `curatedBeatAt` takes the surface's register as a REQUIRED parameter and refuses them on live boards. So this is not rot reaching a student mid-game — it is rot in the WATCH register, where the beat is otherwise correct. That bounds the item: measure with `beatRegister`, count only the beats whose spectator verdict comes from the pronoun clause rather than from theatre or own-side, and degrade THOSE offline. Ceiling the ambiguous remainder, never the whole count
+- ✅ 11e the test-type-error ceiling 236 → **0**, now a hard gate — see §6 for the shapes and the two dead/red gates it exposed.
+- ✅ **FIXED + VERIFIED ON PROD — A STALE CHUNK NOW 404s. (Was: it returned `200 text/html`, AND THAT IS WHY THE iPHONE REPORT NAMED NO SERVER ERROR** (measured on prod 2026-09-21). Vercel serves the SPA fallback for any unmatched path, so a hashed asset from a previous deploy comes back `HTTP/2 200 · content-type: text/html` while a live one is `application/javascript`. Verified on `web-BITZqWmZ.js` (previous build → HTML) vs `web-7Ov3xJEz.js` (current → JS), and on an entry chunk two deploys old (HTML). **The user-visible form is `Unexpected token '<'` / "Load failed"** — which is exactly `lichess-error TypeError: Load failed` and `stockfish-error` from David's device, and nothing in it names a 404, which is why it took a device to find. Consequence: the precache is the ONLY thing keeping a running page's chunks alive after a deploy, so the handover gate is load-bearing rather than belt-and-braces.
+  ✅ **FIXED AT THE ROUTE (2026-09-21).** `vercel.json`'s catch-all was `/((?!api/).*)` → `/index.html`, which answered a missing hashed chunk with the app shell. It is now `/((?!api/|assets/).*)`, so a chunk the deploy no longer serves **404s honestly**. Existing assets are untouched — Vercel serves a matching static file before consulting rewrites, so this changes only what happens when the file is genuinely gone. Both are failures; only one is HONEST: a 404 is detectable by the app, by the service worker, and by an audit's ordinary `status >= 400` check, while HTML-pretending-to-be-JS is detectable by none of them — the two-deploy audit written to hunt this exact class watched `status >= 400` and was structurally blind to it. Gate: `src/test/assetsNeverFallBackToHtml.test.ts`, negative-controlled (the old pattern fails it with the reason). ⚠️ **Verification is a PROD curl after the deploy** — a bogus `/assets/x-deadbeef.js` must 404 and a deep route like `/coach/review` must still return the shell; recorded when run
+  ✅✅ **VERIFIED ON PROD (2026-09-21, build `7e04638`)** — all three cases, which is the point: narrowing a catch-all is only safe if the things it still needs to catch still match.
+```
+bogus /assets/x-deadbeef00.js   404  text/plain          (was 200 text/html)
+deep route /coach/review        200  text/html           unchanged — deep links intact
+the real current entry chunk    200  application/javascript  unchanged
+```
+  🔴 **AND IT COST A BLOCKED DEPLOY ON THE WAY — my error, recorded because the lesson is the file's own.** The first attempt documented the exclusion with a `_comment` array INSIDE the rewrite object. `JSON.parse` accepted it, the new gate accepted it, and Vercel ERRORED the build: *``rewrites[4]` should NOT have additional property `_comment``*. Prod stayed pinned on `23acc04c2` for ~20 minutes and no session could deploy. My validation had answered "is this valid JSON?" when the question was "is this valid vercel.json?" — a NEARBY question, confidently answered, committed while writing a gate about that exact disease. **The nine-second check that settles it: `npx vercel build --prod` exits 0 or names the schema error.** The gate now also asserts no rewrite carries a key outside `source|destination|has|missing|statusCode`, because the asymmetry matters: a wrong PATTERN ships and misroutes, a wrong KEY refuses to ship and blocks everyone.
+  📌 **`__BUILD_ID__` IS THE DEPLOY-IDENTITY CHECK, better than any marker string.** It is literally `<sha>+<ms>` (`vite.config.ts:21`) and is inlined into a shipped chunk, so *"is my commit live?"* is one grep: `curl -s <entry>.js | grep -oE '"[0-9a-f]{7,9}\+1[0-9]{12}"'`. That is how the blocked deploy was caught — the bundle hash had moved, which looks like a deploy, while the build id still read `23acc04`
+  🔴 **AND IT EXPOSED A HOLE IN MY OWN NEW AUDIT, twice.** `audit-sw-two-deploy-prod` watched `status >= 400`, which this can NEVER trip — so "no hashed asset failed after the deploy" passed partly because it could not see the real failure mode. Worse, the retry discriminator (built with the peer to separate a real casualty from CPU starvation) read "200 on retry = starvation" — and a stale chunk retries 200 FOREVER, so it would have called every genuine casualty starvation and moved on. Both fixed: the signature is CONTENT-TYPE, and the discriminator is now 200-AND-EXECUTABLE. **The 5/5 run stands but is weaker than it read** — it proved no 4xx and no request failure; it did not prove no HTML-for-JS. That re-runs.
+- ✅ **ANSWERED — the entry hash moves on EVERY build BY CONSTRUCTION, and the negative control CANNOT EXIST** (2026-09-21). `vite.config.ts:21` — `const ms = Date.now(); return sha ? \`${sha}+${ms}\` : …` — bakes a MILLISECOND TIMESTAMP into `__BUILD_ID__`, which `appAuditor.ts:971` reads, so it is inlined into a shipped chunk. Confirmed in the live bundle: `"ce49648+1789993608747"`. That chunk's hash therefore differs on every build, and the entry — which embeds its dependency FILENAMES in `__vite__mapDeps` (the byte-70 diff) — is renamed with it. **So 3-of-3 was not a pattern awaiting more data; it is a proof by construction.** "Assume any push swaps the bundle for every live session" is a theorem, not a working rule, and the control I was holding out for is impossible — exactly as the peer predicted when they said to look at what feeds the hash before spending four deploys hunting one.
+  🟠 **AND IT COMPOSES WITH THE 200-text/html FINDING INTO SOMETHING WORTH DAVID'S ATTENTION.** Every push renames every chunk; a renamed chunk's predecessor is served as SPA-fallback HTML rather than 404; so every push leaves every live session one lazy fetch away from `Unexpected token '<'`, with the precache as the only thing in between. Also: `+${ms}` means the SAME commit rebuilt produces a DIFFERENT bundle, so a redeploy or a retry busts every user's cache for no content change. Dropping the timestamp and keeping the sha would make builds reproducible per commit — NOT changed here: it is build config, it affects OTA identity, and it is his call rather than a 4am edit
+- ✅ **The observation that started it, kept for its evidence and DEMOTED because the line above settles it.** `0863ced7c..0adb4c90a` touched only `.md`, two `scripts/*.mjs` and one `.test.ts`, and `index-CL9P6Cc6.js` → `index-BGt0uyLR.js` with `sw.js` md5 `5d5bc0fc…` → `75c244b2…` anyway. 🔴 **Its "TO SETTLE IT: capture three or four more deploys" is DELETED, not annotated** — that plan was written before the cause was found, and it sends the next reader to spend four deploys on a control that `Date.now()` makes impossible. **THE COST QUESTION SURVIVES AND IS DAVID'S:** every push re-downloads the ~8.6 MB entry for every WEB reader and every OTA recipient, docs-only pushes included. Native App Store users are unaffected while the bundle is local (`capacitor.config.ts` `webDir: 'dist'`), and this is a DIFFERENT question from §6 item 3, which closed the MEMORY/parse concern and said nothing about transfer
+- 🟠 **G1's "verify the bundle hash advanced past your push" is weaker than it reads — FOR DAVID TO DECIDE, not to be edited into CLAUDE.md by a session.** It was written for STALENESS and it answers that correctly. But two sessions read it tonight as "my code is live" and reached opposite wrong conclusions within ten minutes, and the finding above shows the signal cannot support that reading at all. The check that does: grep the live chunk for a string only the new build contains, AND for the string it replaced. Recorded here so the decision is his
+- ✅ E2 the two-deploy service-worker check — **RAN AND PASSED 5/5 on prod 2026-09-21**; see §6 for the run and for the finding that every deploy (docs-only included) offers a live session a new worker.
+- ✅ **ONE CORPUS SOURCE — the seven farmed creators are GONE** (David 2026-09-21, emphatic: "there are only one source of corpus notes. and its the danya ones that we have tied exactly to positions. nothing else!"). Removed chessbrah, hangingpawns, saintlouis, gothamchess, hikaru, imrosen, magnuscarlsen — **47,831 notes**, their files, the `chessbrahTeachingService` binding and a vite chunk rule for a file that no longer exists. MEASURED BEFORE DELETING, not after: **zero of the 47,831 carry a position**; 16,298 are reachable by opening NAME, 47,831 by CONCEPT. What remains is danya (122 positioned + 9,928 floating) and the hand-authored VOICED corpus (7,477, every one exact-position). **Endgame teaching kept and PROVEN**, not assumed: `endgameNoteForLesson` → `conceptNotesFor` reads the PRIMARY concept index and never touched the seven, danya carries 959 endgame notes of its own, and the endgame card still renders a real corpus note. Floors lowered with the reason in each comment (a floor going DOWN is normally the bug, so it is only honest when the SOURCE shrank on purpose): tactic-lane reach 29,000 → 4,800 (measures 4,925), board-concept 30,000/18,000 → 9,000/2,900 (10,405 / 2,995), three non-vacuity floors 20,000 → 15,000. Dropped `relative-pin` from the tactic vocabulary — it lived only in the removed corpora, and a dead tag is fake coverage
+- 🟡 **COULD THE REMOVED NOTES COME BACK AS POSITION-KEYED? Measured, and the answer is no** (2026-09-21, asked because "we cant use it if we dont know where it goes"). Of the 47,831: 13,888 have an opening tag that resolves in the DB **and** name a move; **524 (1.1%) provably anchor to exactly one ply**; 1,394 are ambiguous; and **11,970 fit NO ply at all** — the moves their own prose names are not legal anywhere on the spine of the opening they are tagged with. Not un-positioned teaching about a known line: loosely associated essays whose own moves do not fit their own tag. 524 recoverable against a voiced corpus of 7,477 already exact is not worth an anchoring pass. Closed on the number, not on taste
+- 🟡 **THE GAP/SUPPORT TIER AND THE HANDWRITTEN-SPOKEN LAYER ARE DORMANT** (David's call: "dormant"). Both match by opening NAME, which only ever worked because the seven carried tags; voiced notes are `opening: null` by design, so both return honest empties. The code stays, with the failure mode named in it: a future session reads a coverage number, finds them returning nothing, and "fixes" it by registering another creator — which re-opens name-based selection, the exact subject of the 2026-08-04 determinism lock. Coverage grows by VOICING more position-keyed notes, never by loosening selection
+- ✅ **LEARN AUDIT ROW C PASSES — 15/15 on a TAPE-CLEAN run** (2026-09-21, bundle `T8DVEfgf` stamped at both ends and held). The game reached **ply 5** and the invariant spoke: *"Careful — your queen on d5 is attacked and nothing's defending it. There's a pin here for you — have a look. Remember — a pin freezes the piece in front…"* ⚠️ **NO CAUSE IS CLAIMED.** The earlier reading — two runs stalling at ply 4 on `ce49648`, recorded as REPRODUCIBLE — does not reproduce on this bundle, and I am not asserting what changed. What the symptom actually was: the driver waits 90s for a coach reply and gives up (`[stall] no coach reply after …`), so it is a reply-LATENCY question, never a concept one — the computers were green throughout. If it returns, read the stall line before touching product code
+
 - ✅ 9. The fundamental-aware spine reader
 - 🟠 0a. The two fundamentals reds, n=2 — the "all five flagged plies return `[]`" diagnosis does NOT reproduce off-audit: on a real game 6 of 7 flagged plies get a fundamental (PLAN). Re-measure against the review audit's own game; likely section-14-shaped (E-10), not coverage
 - 🟠 0b. Review audit — **the driver RAISES the turning-point card and then destroys it** (diagnosed 2026-09-21; this line REPLACES a wrong one — see below). The recap phase clicks Forward up to 20 times to reach the closing. When the walk parks SHORT of the end the card has not been raised yet, so the driver's 45s wait honestly reports `present=false`; then one of those clicks lands on `moves.length`, the card raises and SPEAKS its ask, and the next click dismisses it — `handleWalkForward` dismisses by design and `turningAskedRef` stops it returning. Created and destroyed a second apart, after the driver had given up waiting. FIXED: `resolveCards()` runs every iteration of that loop, plus a reserved answering round after it, so the fix no longer depends on WHEN the card appears relative to the phases. 🔴 **DELETED, NOT ANNOTATED: the previous version of this line said "one latch produced four reds". That is wrong about this run.** The latch bug (`turningHandled` set on ENTRY rather than on success) is real on reading the code and is fixed, but the card was never raised DURING the walk on the pinned game, so the latch was never in play. A peer independently concluded "the card was never raised at all", which was also wrong — its ask was in the captured narration the whole time, one row from the failure, and the THESIS row printing the SAME sentence for "never appeared" and "never answered" is what let both readings stand for an hour. That message now distinguishes them. 🔴 **STILL OPEN and upstream of all of it: the walk parked at ply 67/69 for 350 seconds with NO card blocking it.** Not the latch, not the ordering, not FUNDLEAD — a third thing, and the one that starts the chain ✅ **AND THE PLY-67 PARK IS SOLVED — it was a PRODUCT bug, not an audit one** (2026-09-21). `handleWalkForward` returned `void`, so every early return in it was indistinguishable at the call site from "I advanced" — and the next auto-advance is only ever scheduled when the PLY CHANGES, so one silently consumed forward stopped the walk PERMANENTLY while `isAutoPlaying` stayed true and the button went on reading "playing". A real student sees a review that has died with no indication; the audit's poll never pressed play because it only presses on `data-state="paused"`. Two live paths did it: `if (questionPlan.has(atPly)) return` yielded the forward to a card that opens LATER IN THE SAME FUNCTION (so the card never opened on that step), and `if (principleQuizStateRef.current) return` sat under the comment "device quiz (hidden) — never opens", which is FALSE — `setPrincipleQuizState(quiz)` is called from `finishFaucetResume` and the card renders. A wrong comment is worse than none: it tells every reader not to look. **FIXED AT THE TYPE, not with a watcher.** `ForwardOutcome = {advanced:true} | {advanced:false; stop: ForwardStop}` plus `AUTO_ADVANCE_ON_STOP: Record<ForwardStop, 'reschedule'|'pause'>` — a new stop reason FAILS TO COMPILE until someone decides what auto-play does about it (proven: adding a synthetic reason gives TS2741, then reverted). A stop is now a real transition, so the button tells the truth. Enumerating the blocking overlays was considered FIRST and rejected as a watcher — it fixes the six we know and not the seventh. Gate: `useReviewPlayback.test.ts` "a forward that did NOT advance turns auto-play OFF", negative-controlled by reverting the pause transition and watching it fail. The audit also gained handlers for the five blocking overlays its table was missing (`review-principle-quiz`, `discussion-practice-panel`, `review-find-shot-reveal`, `review-cameo-playback`, `review-theory-playback`) — convenience now, not the load-bearing part ✅ **THE ORDERING FIX IS VERIFIED GREEN ON PROD** (2026-09-21, a peer's run on the deployed bundle): `[turning] card present; 2 candidate chip(s)` → `attempt 1: confirm=true reveal=true`, and BOTH THESIS rows went red→green (`thesis lines=1 legacy=0`, `ask@70 thesis@71`). Raised-then-destroyed is gone. Note `present=false` still prints at the walk-end wait and that is now CORRECT — the card genuinely does not exist yet at that moment; the recap stepping raises it and the loop now answers it there. RECAP `end reached=false` is still red and is correctly attributed: that is the ply-67 park, whose fix (ForwardOutcome) is still local at the time of that run ✅ **THE PLY-67 / ORDERING HALF IS CLOSED AND VERIFIED — 43/9 → 48/2 on prod** (2026-09-21, one deploy carrying BOTH sessions' fixes, proven by grepping the live chunk rather than by its hash). `RECAP fundamentals-aggregate` is GREEN — *"The pattern: one of your four flagged moves stopped calculating too early"* — so the walk reaches the end and **the ply-67 park is closed**. `DRIVER answered-the-turning-point-card` PASSES: *answered in 1 round(s); reveal spoken*. Both THESIS rows green. Two rows remain: FUNDLEAD (0/4 flagged plies lead with a fundamental — another session's thread) and `CRIT spoken-names-count-and-stake`, which was the AUDIT being wrong, not the coach — see below 🟠 **WHAT SURVIVES, so the marker stays amber: (a) FUNDLEAD, which is another session's thread, and (b) my own CRIT fix is UNVERIFIED — that run shows the OLD row text ("a moment was selected but nothing said it aloud"), so it PREDATES the fix and has never exercised it.**
