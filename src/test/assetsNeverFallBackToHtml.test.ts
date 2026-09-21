@@ -71,6 +71,36 @@ describe('a missing /assets/ file 404s instead of returning the SPA shell', () =
     ).toEqual([]);
   });
 
+  it('no rewrite carries a key Vercel will reject', () => {
+    // 🔴 THIS COST A BLOCKED DEPLOY (2026-09-21). I documented the exclusion
+    // with a `_comment` array INSIDE the rewrite object. `JSON.parse` accepted
+    // it, this file's other assertions accepted it, and Vercel rejected the
+    // whole config:
+    //
+    //   The `vercel.json` schema validation failed with the following message:
+    //   `rewrites[4]` should NOT have additional property `_comment`
+    //
+    // The build errored, prod stayed pinned on the previous commit, and every
+    // session's deploys were blocked until it was reverted. My validation had
+    // answered "is this valid JSON?" when the question was "is this valid
+    // vercel.json?" — a NEARBY question, confidently answered, which is the
+    // same failure this repo keeps paying for in other shapes.
+    //
+    // vercel.json admits no comments anywhere, so the explanation lives HERE,
+    // in the gate, which is the better home for it anyway.
+    const ALLOWED = new Set(['source', 'destination', 'has', 'missing', 'statusCode']);
+    const bad: string[] = [];
+    for (const [i, r] of cfg.rewrites!.entries()) {
+      for (const k of Object.keys(r)) if (!ALLOWED.has(k)) bad.push(`rewrites[${i}].${k}`);
+    }
+    expect(
+      bad,
+      'Vercel validates vercel.json against a strict schema and REFUSES THE WHOLE '
+      + 'BUILD on an unknown property — the deploy errors and prod stays pinned on the '
+      + 'previous commit. Comments do not belong in this file; put them in this test.',
+    ).toEqual([]);
+  });
+
   it('CAN FIRE — the old pattern is rejected, the new one accepted', () => {
     // A negative control, because a gate nobody has watched fail is
     // indistinguishable from one that cannot fail.
