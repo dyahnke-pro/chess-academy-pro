@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T14:45:32.157Z",
+  "updatedAt": "2026-09-21T15:38:37.180Z",
   "videos": [
     {
       "id": "UQlQjco7Mc8",
@@ -2729,6 +2729,11 @@
     {
       "id": "mhskDZEIF7U",
       "title": "The Chameleon Sicilian",
+      "playlist": "complete-chess-openings"
+    },
+    {
+      "id": "1fT9aSl1cGE",
+      "title": "Sicilian McDonnell Attack (2.f4)",
       "playlist": "complete-chess-openings"
     }
   ]
