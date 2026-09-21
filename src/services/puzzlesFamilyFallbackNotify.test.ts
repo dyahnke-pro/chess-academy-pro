@@ -90,6 +90,7 @@ describe('puzzlesFamilyFallbackNotify', () => {
       vi.mocked(coachService.ask).mockResolvedValueOnce({
         text: 'No puzzles tagged the exact Two Knights variation; here are 48 in the Italian family.',
         toolCallIds: [],
+        dispatchedToolNames: [],
         provider: 'anthropic',
       });
       await requestPuzzlesFamilyFallbackVoice({
@@ -107,6 +108,7 @@ describe('puzzlesFamilyFallbackNotify', () => {
       vi.mocked(coachService.ask).mockResolvedValueOnce({
         text: '   Sicilian as Black, full family — 491 puzzles to dig into.   ',
         toolCallIds: [],
+        dispatchedToolNames: [],
         provider: 'deepseek',
       });
       const result = await requestPuzzlesFamilyFallbackVoice({
@@ -121,6 +123,7 @@ describe('puzzlesFamilyFallbackNotify', () => {
       vi.mocked(coachService.ask).mockResolvedValueOnce({
         text: '',
         toolCallIds: [],
+        dispatchedToolNames: [],
         provider: 'anthropic',
       });
       const result = await requestPuzzlesFamilyFallbackVoice({
@@ -141,6 +144,7 @@ describe('puzzlesFamilyFallbackNotify', () => {
       vi.mocked(coachService.ask).mockResolvedValueOnce({
         text: 'ok',
         toolCallIds: [],
+        dispatchedToolNames: [],
         provider: 'anthropic',
       });
       await requestPuzzlesFamilyFallbackVoice({
