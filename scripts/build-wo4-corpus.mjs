@@ -179,12 +179,23 @@ function startEngine() {
  * MATE is encoded ±(100000 − n), which is what the test's `normEval` expects.
  */
 async function read(engine, fen, depth) {
-  let lastScore = null, lastMate = null;
+  let lastScore = null, lastMate = null, lastPv = [];
   const blackToMove = fen.split(' ')[1] === 'b';
   engine.setTap((l) => {
     const m = /score (cp|mate) (-?\d+)/.exec(l);
     if (!m) return;
     if (m[1] === 'cp') { lastScore = Number(m[2]); lastMate = null; } else { lastMate = Number(m[2]); lastScore = null; }
+    // 🔒 KEEP THE LINE, NOT JUST THE SCORE (2026-09-21). The first cut stored
+    // `bestMove` and the eval and dropped the PV — the same drop this session
+    // found twice in the app itself (`evaluateFensPooled` and
+    // `analyzeGameOnWorker` both discarded `a.pv` at the boundary). It made the
+    // corpus unable to measure the PV-gated half of the attribution gap:
+    // `calculation-depth` needs >= 3 plies with the forcing blow at ply >= 2,
+    // and with no PV it declines "punishing PV is 0 plies" on every ply —
+    // which is 128 of the 433 unexplained mistakes measured on this corpus.
+    // Measuring a starvation requires storing the thing that was starved.
+    const pv = / pv ((?:[a-h][1-8][a-h][1-8][qrbn]?\s*)+)$/.exec(l);
+    if (pv) lastPv = pv[1].trim().split(/\s+/);
   });
   engine.send(`position fen ${fen}`);
   const done = engine.until((l) => l.startsWith('bestmove'));
@@ -193,8 +204,8 @@ async function read(engine, fen, depth) {
   engine.setTap(null);
   const best = line.split(/\s+/)[1] ?? null;
   let evalMover = lastMate !== null ? (lastMate > 0 ? 100000 - Math.abs(lastMate) : -(100000 - Math.abs(lastMate))) : lastScore;
-  if (evalMover === null) return { best: best === '(none)' ? null : best, evalWhite: null };
-  return { best: best === '(none)' ? null : best, evalWhite: blackToMove ? -evalMover : evalMover };
+  if (evalMover === null) return { best: best === '(none)' ? null : best, evalWhite: null, pv: lastPv };
+  return { best: best === '(none)' ? null : best, evalWhite: blackToMove ? -evalMover : evalMover, pv: lastPv };
 }
 
 async function annotatePhase(depth, limit) {
@@ -220,7 +231,7 @@ async function annotatePhase(depth, limit) {
       const fenBefore = c.fen();
       const r = await read(engine, fenBefore, depth);
       c.move(san);
-      plies.push({ fenBefore, bestMove: r.best, bestMoveEval: r.evalWhite, evaluation: null });
+      plies.push({ fenBefore, bestMove: r.best, bestMoveEval: r.evalWhite, evaluation: null, pv: r.pv });
     }
     // The FINAL position's eval — `readsByFen` reads it off the last ply.
     const finalRead = await read(engine, c.fen(), depth);
