@@ -2,11 +2,17 @@
  "note": "DERIVED anchors — each is the line the note's OWN PROSE names, verified legal and DB-real. Regenerate with: node scripts/derive-note-anchors.mjs. Never hand-edit; see the script header for why the opening TAG is not usable.",
  "derivedFrom": [
   "src/data/danya-teachings.json",
-  "src/data/chessbrah-teachings.json",
+  "public/data/danya-floating.json",
+  "public/data/chessbrah-teachings.json",
   "public/data/hangingpawns-teachings.json",
-  "public/data/saintlouis-teachings.json"
+  "public/data/saintlouis-teachings.json",
+  "public/data/gothamchess-teachings.json",
+  "public/data/hikaru-teachings.json",
+  "public/data/imrosen-teachings.json",
+  "public/data/magnuscarlsen-teachings.json",
+  "public/data/voiced-teachings.json"
  ],
- "count": 1031,
+ "count": 1118,
  "anchors": {
   "cb-106": [
    "d4",
@@ -1189,6 +1195,365 @@
    "dxc6",
    "d3",
    "Bc5"
+  ],
+  "gc-101": [
+   "d4",
+   "d5",
+   "c4",
+   "dxc4"
+  ],
+  "gc-14j": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d6"
+  ],
+  "gc-164": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nf6"
+  ],
+  "gc-16z": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "gc-8e": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Nc3"
+  ],
+  "gc-8u": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "gc-gn": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d6"
+  ],
+  "gc-pu": [
+   "e4",
+   "e5",
+   "Nc3",
+   "Nf6",
+   "f4"
+  ],
+  "gc-sj": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4"
+  ],
+  "gc-sk": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4"
+  ],
+  "gc-sn": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4"
+  ],
+  "gc-so": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4",
+   "Nf6",
+   "Ng5",
+   "Bc5"
+  ],
+  "gc-tb": [
+   "e4",
+   "c6",
+   "d4",
+   "d5",
+   "e5"
+  ],
+  "gc-ub": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4"
+  ],
+  "gc-vg": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5",
+   "Nc3"
+  ],
+  "gc-vi": [
+   "e4",
+   "d5",
+   "exd5",
+   "Nf6"
+  ],
+  "gc-vm": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "gc-vn": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "gc-vo": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "hk-1m": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4",
+   "Bc5"
+  ],
+  "hk-21": [
+   "e4",
+   "e6",
+   "d4",
+   "d5"
+  ],
+  "hk-23": [
+   "e4",
+   "e6",
+   "d4",
+   "d5",
+   "e5"
+  ],
+  "hk-4e": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6"
+  ],
+  "hk-4f": [
+   "e4",
+   "c6",
+   "d4",
+   "d5"
+  ],
+  "hk-6v": [
+   "d4",
+   "Nf6",
+   "c4",
+   "e6"
+  ],
+  "hk-98": [
+   "d4",
+   "Nf6",
+   "Bg5",
+   "d5"
+  ],
+  "hk-c1": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5",
+   "Nc3",
+   "Qa5",
+   "Nf3",
+   "Nf6"
+  ],
+  "hk-c6": [
+   "e4",
+   "e5",
+   "d4",
+   "exd4",
+   "Qxd4",
+   "Nc6",
+   "Qe3"
+  ],
+  "hk-hu": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "hk-hv": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5",
+   "Nc3"
+  ],
+  "hk-hz": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5",
+   "Nc3",
+   "Qa5"
+  ],
+  "hk-i0": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5",
+   "Nc3"
+  ],
+  "hk-i2": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5",
+   "Nc3"
+  ],
+  "hk-i3": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "hk-i8": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "hk-kg": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4",
+   "Bc5"
+  ],
+  "hk-kk": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4",
+   "Nf6",
+   "Ng5"
+  ],
+  "hk-lg": [
+   "e4",
+   "e5",
+   "Nc3",
+   "Nf6"
+  ],
+  "hk-ln": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d6",
+   "d4"
+  ],
+  "hk-lo": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d6",
+   "d4"
+  ],
+  "hk-mr": [
+   "e4",
+   "c6",
+   "d4",
+   "d5",
+   "exd5"
+  ],
+  "hk-o1": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6"
+  ],
+  "hk-pg": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bb5"
+  ],
+  "hk-ph": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bb5",
+   "Nf6"
+  ],
+  "hk-pi": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bb5",
+   "Nf6"
+  ],
+  "hk-qy": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "c3"
+  ],
+  "hk-s": [
+   "d4",
+   "Nf6",
+   "Nf3",
+   "g6",
+   "Bf4",
+   "Bg7",
+   "e3",
+   "d6",
+   "Bd3"
+  ],
+  "hk-ur": [
+   "e4",
+   "e5",
+   "f4",
+   "Bc5"
+  ],
+  "hk-uv": [
+   "d4",
+   "d5",
+   "c4",
+   "c5"
+  ],
+  "hk-ux": [
+   "e4",
+   "e5",
+   "d4",
+   "exd4",
+   "Qxd4"
+  ],
+  "hk-v0": [
+   "e4",
+   "e5",
+   "d4",
+   "exd4",
+   "Qxd4",
+   "Nc6",
+   "Qe3",
+   "Nf6",
+   "Nc3",
+   "Bb4"
   ],
   "hp-0": [
    "e4",
@@ -4762,6 +5127,284 @@
    "cxd4",
    "exd4",
    "Nc6"
+  ],
+  "ir-2o": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "c3"
+  ],
+  "ir-5z": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4"
+  ],
+  "ir-6g": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d6",
+   "d4",
+   "Nd7",
+   "Bc4"
+  ],
+  "ir-7a": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5",
+   "Nc3",
+   "Qa5"
+  ],
+  "ir-89": [
+   "e4",
+   "e6",
+   "d4",
+   "d5"
+  ],
+  "ir-8m": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d6"
+  ],
+  "ir-8x": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "d4",
+   "exd4",
+   "Bc4"
+  ],
+  "ir-8z": [
+   "d4",
+   "Nf6",
+   "c4",
+   "e5"
+  ],
+  "ir-9a": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Nc3",
+   "Nf6",
+   "d4",
+   "exd4",
+   "Nd5"
+  ],
+  "ir-9b": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "d4",
+   "exd4",
+   "Bc4"
+  ],
+  "ir-9f": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d5"
+  ],
+  "ir-9q": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "c3",
+   "Bc5"
+  ],
+  "ir-a8": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d6"
+  ],
+  "ir-a9": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d6",
+   "d4"
+  ],
+  "ir-bt": [
+   "e4",
+   "d6",
+   "d4",
+   "Nf6"
+  ],
+  "ir-ch": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d5"
+  ],
+  "ir-ci": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "d4",
+   "exd4",
+   "Nxd4"
+  ],
+  "ir-dl": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "Bc4",
+   "Nf6",
+   "Ng5",
+   "d5",
+   "exd5",
+   "Na5",
+   "Bb5+",
+   "c6",
+   "dxc6",
+   "bxc6"
+  ],
+  "ir-dm": [
+   "e4",
+   "e6",
+   "d4",
+   "d5",
+   "e5",
+   "c5",
+   "b4"
+  ],
+  "ir-dn": [
+   "e4",
+   "c5",
+   "Nf3",
+   "Nc6",
+   "b4"
+  ],
+  "ir-do": [
+   "e4",
+   "e6",
+   "d4",
+   "d5",
+   "e5",
+   "c5",
+   "b4"
+  ],
+  "ir-ff": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5",
+   "Nc3"
+  ],
+  "ir-fg": [
+   "e4",
+   "d5",
+   "exd5",
+   "Nf6"
+  ],
+  "ir-fq": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "d4",
+   "exd4",
+   "Nxd4"
+  ],
+  "ir-gi": [
+   "e4",
+   "e5",
+   "Nf3",
+   "d5"
+  ],
+  "ir-go": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "d4",
+   "exd4",
+   "Bc4",
+   "Bc5"
+  ],
+  "ir-ho": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nf6",
+   "Nxe5",
+   "Nc6",
+   "Nxc6",
+   "dxc6",
+   "d3",
+   "Bc5",
+   "Be2"
+  ],
+  "ir-i1": [
+   "d4",
+   "Nf6",
+   "c4",
+   "Nc6"
+  ],
+  "ir-ig": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nc6",
+   "c3"
+  ],
+  "ir-j5": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nf6",
+   "Nxe5",
+   "Nc6"
+  ],
+  "ir-je": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nf6"
+  ],
+  "ir-k0": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "ir-k1": [
+   "e4",
+   "d5",
+   "exd5",
+   "Qxd5"
+  ],
+  "ir-k8": [
+   "e4",
+   "e5",
+   "Nf3",
+   "Nf6",
+   "Nxe5",
+   "d6"
+  ],
+  "ir-lc": [
+   "e4",
+   "e5",
+   "Nc3",
+   "Nf6",
+   "f4"
+  ],
+  "ir-lj": [
+   "d4",
+   "d5",
+   "c4",
+   "e5"
   ],
   "sl-1t": [
    "d4",
