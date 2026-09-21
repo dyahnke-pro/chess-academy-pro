@@ -22,7 +22,7 @@ import { allDerivedAnchors, applyDerivedAnchors, derivedAnchorsWentUnmatched } f
 import { noteDescribesPosition } from './noteAnchorIntegrity';
 import { noteAtPosition } from './danyaTeachingService';
 import type { DanyaNote } from './danyaTeachingService';
-import { loadFullCorpus, allCorpusNotes } from '../test/loadFullCorpus';
+import { loadFullCorpus, primaryCorpusNotes } from '../test/loadFullCorpus';
 import dbRaw from '../data/openings-lichess.json';
 
 // 🔒 FROM THE REGISTRY (2026-09-21). The hand-list here named
@@ -30,7 +30,7 @@ import dbRaw from '../data/openings-lichess.json';
 // to `public/data/` — so this file threw ENOENT at import and all ELEVEN of its
 // tests were skipped, not passing. It also missed danya's floating half (10,022
 // of its 10,144 notes) and four creators entirely.
-const allNotes = allCorpusNotes;
+const allNotes = primaryCorpusNotes;
 
 const DB_PREFIX_PLIES = 4;
 const dbPrefixes = (() => {

@@ -79,10 +79,17 @@ const GENERIC_TOKENS = new Set([
 /** Build the lookup surface for one secondary corpus. Indexes are built once
  *  at module init (these files are static imports). */
 export function createSecondaryCorpus(key: string, bundle: TeachingsBundle): SecondaryCorpus {
-  // Derived anchors first, so EVERY index below (prefix, fen, opening, stats)
-  // is built from the corrected line. Applying it downstream of an index would
-  // leave that index keyed on the truncation — see noteAnchorOverrides.
-  const data: TeachingsBundle = { ...bundle, notes: applyDerivedAnchors(bundle.notes ?? []) };
+  // 🔒 NO ANCHORS ON A SECONDARY CORPUS (David 2026-09-21: "get fucking rid of
+  // those" — "the only ones that should be tied to coach are danya's").
+  //
+  // `applyDerivedAnchors` STAMPS a lineSan, which is what makes a note
+  // selectable at an exact board. Running it here re-opened what 2026-08-26
+  // closed — the farmed anchored notes were archived precisely so the play
+  // surfaces speak voiced-only — and it had quietly stamped 909 of them
+  // (saintlouis 513, hangingpawns 378, chessbrah 18) against danya's 122.
+  // The sidecar is primary-only now, so this call was already a no-op; it is
+  // removed so a future re-derivation cannot turn it back into one that bites.
+  const data: TeachingsBundle = { ...bundle, notes: bundle.notes ?? [] };
   const byOpening = new Map<string, DanyaNote[]>();
   const byPrefix = new Map<string, DanyaNote[]>();
 

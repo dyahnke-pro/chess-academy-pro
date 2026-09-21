@@ -121,18 +121,35 @@ export const CORPUS_FILES: Array<{ key: string; path: string }> = registry.corpo
  * Four creators were never listed at all. So the reader lives here, beside the
  * other one, and both derive from `corpora.json`.
  */
+function readNotes(rel: string): DanyaNote[] {
+  try {
+    const raw = JSON.parse(readFileSync(join(process.cwd(), rel), 'utf8')) as TeachingsBundle;
+    return Array.isArray(raw?.notes) ? raw.notes : [];
+  } catch {
+    // A missing half is a real signal; the caller's floor assertion surfaces it
+    // rather than this swallowing it into a quiet zero.
+    return [];
+  }
+}
+
 export function allCorpusNotes(): DanyaNote[] {
-  const read = (rel: string): DanyaNote[] => {
-    try {
-      const raw = JSON.parse(readFileSync(join(process.cwd(), rel), 'utf8')) as TeachingsBundle;
-      return Array.isArray(raw?.notes) ? raw.notes : [];
-    } catch {
-      // A missing half is a real signal; the caller's floor assertion surfaces
-      // it rather than this swallowing it into a quiet zero.
-      return [];
-    }
-  };
-  return CORPUS_FILES.flatMap((c) => read(c.path));
+  return CORPUS_FILES.flatMap((c) => readNotes(c.path));
+}
+
+/**
+ * The PRIMARY corpus's notes only (both halves).
+ *
+ * Anchor derivation is primary-only by rule — an anchor makes a note
+ * selectable at an exact board, and only danya's may be (David 2026-09-21).
+ * Anything measuring COVERAGE wants `allCorpusNotes`; anything about ANCHORS
+ * wants this.
+ */
+export function primaryCorpusNotes(): DanyaNote[] {
+  const primary = registry.corpora.filter((c) => c.primary === true);
+  return primary.flatMap((c) => [
+    ...readNotes(c.path),
+    ...(typeof c.floatingPath === 'string' ? readNotes(c.floatingPath) : []),
+  ]);
 }
 
 /** Drop back to the static-only view (what an unprimed browser session sees

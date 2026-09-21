@@ -1130,7 +1130,10 @@ export function notesForStructure(fen: string, maxNotes = Infinity): DanyaNote[]
  *  pattern outranks a generic `tactics` note that merely mentions one. */
 export const TACTIC_TYPE_CONCEPTS: Record<string, string[]> = {
   fork: ['fork', 'knight-fork', 'double-attack', 'tactics'],
-  pin: ['pin', 'pins', 'pinning', 'absolute-pin', 'relative-pin', 'tactics'],
+  // 'relative-pin' dropped 2026-09-21: it lived only in the seven non-danya
+  // corpora, which were removed. A tag no note carries is worse than a
+  // missing one — it looks like coverage and silently narrows the lane.
+  pin: ['pin', 'pins', 'pinning', 'absolute-pin', 'tactics'],
   skewer: ['skewer', 'x-ray', 'tactics'],
   discovery: ['discovered-attack', 'discovered-check', 'double-attack', 'tactics'],
   double_check: ['discovered-check', 'double-attack', 'king-safety', 'tactics'],

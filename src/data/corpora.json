@@ -1,6 +1,6 @@
 {
  "note": "THE single registry of farmed teaching corpora. Every consumer reads this — the app loader, the bake, the coverage report, the gates, the test harness. Adding a creator is a one-line edit HERE and nowhere else.",
- "why": "A corpus used to be registered in seven separate places. On 2026-08-14 four new farms were added to six of them and missed scripts/bake-spoken-notes.mjs, so 3,585 notes shipped wired into the app, counted in every coverage number, and unable to ever be spoken (floating notes are mute until baked). Nothing errored. One registry makes that omission impossible rather than merely unlikely.",
+ "why": "A corpus used to be registered in seven separate places. On 2026-08-14 four new farms were added to six of them and missed scripts/bake-spoken-notes.mjs, so 3,585 notes shipped wired into the app, counted in every coverage number, and unable to ever be spoken (floating notes are mute until baked). Nothing errored. One registry makes that omission impossible rather than merely unlikely. 2026-09-21 (David, emphatic: \"there are only one source of corpus notes. and its the danya ones that we have tied exactly to positions. nothing else!\"): the seven non-danya farmed creators were REMOVED — chessbrah, hangingpawns, saintlouis, gothamchess, hikaru, imrosen, magnuscarlsen. Measured before deleting: 47,831 notes, ZERO of them positioned, reachable only by opening NAME (16,298) and CONCEPT (47,831). The coach now has exactly two sources: danya's own corpus (122 positioned + 9,928 floating, 6,970 by name, 10,050 by concept) and the hand-authored VOICED corpus (7,477, all exact-position). Do not re-register another creator.",
  "fields": {
   "key": "creator id, matches scripts/danya-corpus/creator.mjs",
   "path": "repo-relative path to the corpus JSON",
@@ -19,62 +19,6 @@
    "primary": true,
    "floatingPath": "public/data/danya-floating.json",
    "bytes": 115572
-  },
-  {
-   "key": "chessbrah",
-   "path": "public/data/chessbrah-teachings.json",
-   "load": "fetch",
-   "idPrefix": "cb",
-   "primary": false,
-   "bytes": 1895584
-  },
-  {
-   "key": "hangingpawns",
-   "path": "public/data/hangingpawns-teachings.json",
-   "load": "fetch",
-   "idPrefix": "hp",
-   "primary": false,
-   "bytes": 4988785
-  },
-  {
-   "key": "saintlouis",
-   "path": "public/data/saintlouis-teachings.json",
-   "load": "fetch",
-   "idPrefix": "sl",
-   "primary": false,
-   "bytes": 24216462
-  },
-  {
-   "key": "gothamchess",
-   "path": "public/data/gothamchess-teachings.json",
-   "load": "fetch",
-   "idPrefix": "gc",
-   "primary": false,
-   "bytes": 1161455
-  },
-  {
-   "key": "hikaru",
-   "path": "public/data/hikaru-teachings.json",
-   "load": "fetch",
-   "idPrefix": "hk",
-   "primary": false,
-   "bytes": 723596
-  },
-  {
-   "key": "imrosen",
-   "path": "public/data/imrosen-teachings.json",
-   "load": "fetch",
-   "idPrefix": "ir",
-   "primary": false,
-   "bytes": 548375
-  },
-  {
-   "key": "magnuscarlsen",
-   "path": "public/data/magnuscarlsen-teachings.json",
-   "load": "fetch",
-   "idPrefix": "mgc",
-   "primary": false,
-   "bytes": 58040
   },
   {
    "key": "voiced",

@@ -48,7 +48,14 @@ describe('loadFullCorpus is called, not merely imported', () => {
     for (const f of files) {
       const src = readFileSync(f, 'utf-8');
       if (f.endsWith('loadFullCorpusIsCalled.test.ts')) continue; // this file names it in prose
-      if (!src.includes('loadFullCorpus')) continue;
+      // Match the IDENTIFIER, not the module path. `loadFullCorpus.ts` also
+      // exports `CORPUS_FILES` and `allCorpusNotes` — pure readers that prime
+      // nothing and need not — so a file importing one of those mentions the
+      // path without ever owing a `loadFullCorpus()` call. Blaming on the path
+      // made `boardConcepts.vocabulary.test.ts` an offender for importing a
+      // list of filenames.
+      const withoutPaths = src.replace(/from\s+['"][^'"]*['"]/g, '');
+      if (!/\bloadFullCorpus\b/.test(withoutPaths)) continue;
       // A bare `import '…/loadFullCorpus';` with no binding list primes nothing.
       const sideEffectOnly = /^\s*import\s+['"][^'"]*loadFullCorpus['"]\s*;/m.test(src);
       const calls = /\bloadFullCorpus\s*\(/.test(src);
@@ -86,7 +93,12 @@ describe('loadFullCorpus is called, not merely imported', () => {
       return /\bloadFullCorpus\s*\(/.test(code);
     });
     expect(callers.length).toBeGreaterThan(20); // the walk found them
-    const noFloor = callers.filter((f) => !/toBeGreaterThan\(\s*(?:20_000|20000|\d{5,})/.test(readFileSync(f, 'utf-8')));
+        // `\d[\d_]{4,}` — a five-digit literal WITH or WITHOUT underscores. The
+    // old pattern was `\d{5,}`, which does not match `15_000`, so lowering a
+    // floor to an underscored literal silently reclassified that caller as
+    // floorless and tripped this ceiling. The gate asks whether a floor
+    // EXISTS, never what its value is.
+    const noFloor = callers.filter((f) => !/toBeGreaterThan\(\s*\d[\d_]{4,}/.test(readFileSync(f, 'utf-8')));
     expect(noFloor.length, noFloor.map((f) => f.replace(`${ROOT}/`, '')).join(', ')).toBeLessThanOrEqual(24);
   });
 });

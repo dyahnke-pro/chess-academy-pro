@@ -202,10 +202,17 @@ describe('farmedCorpusData', () => {
   });
 
   it('rebuilds its index when the cache is swapped, never serving a stale one', async () => {
-    __setFarmedCorporaCache([{ key: 'hangingpawns', data: bundle('hp', GAP_A) }]);
+    // 🔒 THE STUB KEY IS DERIVED, NEVER A CREATOR NAME (2026-09-21). These tests
+    // exercise the TIER's machinery with synthetic notes, so the key only has to be
+    // one the registry knows — `getFarmedCorporaSync` iterates the registry, so an
+    // unregistered key is silently dropped and every assertion reads []. They were
+    // keyed on 'hangingpawns', which stopped being registered when the seven
+    // non-danya creators were removed.
+    const stubKey = registry.corpora.find((c) => c.primary !== true)!.key;
+    __setFarmedCorporaCache([{ key: stubKey, data: bundle('hp', GAP_A) }]);
     expect(farmedNotes(GAP_A)).toContain('hp1');
 
-    __setFarmedCorporaCache([{ key: 'hangingpawns', data: bundle('hp', GAP_B) }]);
+    __setFarmedCorporaCache([{ key: stubKey, data: bundle('hp', GAP_B) }]);
     expect(farmedNotes(GAP_A)).toEqual([]);
     expect(farmedNotes(GAP_B)).toContain('hp1');
   });

@@ -50,18 +50,22 @@ describe('tactical lane vocabulary', () => {
     expect(dead).toEqual([]);
   });
 
-  // 29,000, raised from 17,000 (2026-09-21). The old number was measured over
-  // FOUR corpora; the registry carries eight plus danya's floating half, which
-  // is 65,358 notes visible against the 58,124 that figure was taken on. The
-  // lane reaches 29,322 of them. A floor left at 17,000 against a 29,322
-  // measurement is not a floor, it is a number that can never fail.
-  it('reaches at least 29,000 notes — a floor that may only rise', () => {
+  // 4,800 (2026-09-21, second revision the same day — say why, because a floor
+  // that goes DOWN is normally the bug). It was 17,000 measured over four
+  // corpora, briefly 29,000 once the registry was read properly (eight creators,
+  // 65,358 notes), and is now 4,800 because David removed the seven non-danya
+  // creators: "there are only one source of corpus notes. and its the danya ones
+  // that we have tied exactly to positions. nothing else!" The corpus is danya
+  // (10,050) plus voiced (7,477), and the lane reaches 4,925 of them. Lowering a
+  // floor is only honest when the SOURCE shrank on purpose; it may only rise
+  // from here.
+  it('reaches at least 4,800 notes — a floor that may only rise', () => {
     const mapped = new Set(Object.values(TACTIC_TYPE_CONCEPTS).flat());
     let reach = 0;
     for (const n of everyNote()) {
       if ((n.concepts ?? []).some((c) => mapped.has(norm(c)))) reach += 1;
     }
-    expect(reach).toBeGreaterThanOrEqual(29_000);
+    expect(reach).toBeGreaterThanOrEqual(4_800);
   });
 
   it('PROOF: a real fork on a real board yields real corpus prose', () => {

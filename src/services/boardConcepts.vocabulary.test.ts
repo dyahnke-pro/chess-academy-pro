@@ -131,9 +131,13 @@ describe('the vocabulary reaches the corpus', () => {
         if ((n.concepts ?? []).some((c) => VOCAB.has(c))) reachable += 1;
       }
     }
-    expect(total).toBeGreaterThan(30_000);
-    // Floor raised 15,000 → 18,000 with the fundamentals expansion.
-    expect(reachable, `${reachable}/${total} mg/eg notes reachable — the vocabulary drifted`).toBeGreaterThanOrEqual(18_000);
+    // 9,000 (2026-09-21). Was 30,000 against eight creators; David removed the
+    // seven non-danya ones, so the mg/eg pool is danya's + voiced's 10,405.
+    // A floor that goes down is only honest when the SOURCE shrank on purpose.
+    expect(total).toBeGreaterThan(9_000);
+    // Floor 15,000 → 18,000 with the fundamentals expansion; → 2,900 on
+    // 2026-09-21 when the seven non-danya corpora were removed.
+    expect(reachable, `${reachable}/${total} mg/eg notes reachable — the vocabulary drifted`).toBeGreaterThanOrEqual(2_900);
     console.log(`[reachability] ${reachable}/${total} mg/eg notes (${((reachable / total) * 100).toFixed(1)}%) reachable via the emitted vocabulary`);
   });
 });

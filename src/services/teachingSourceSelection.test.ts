@@ -44,7 +44,7 @@ describe('the opening never borrows another position ideas', () => {
     const total = loaded.reduce((n, c) => n + c.notes, 0);
     // Non-vacuity: with the fetched corpora missing from disk every assertion
     // below would measure an empty index and this gate would be theatre.
-    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(15_000);
   }, 180_000);
 
   it.each([1, 2, 3, 4, 5, 6])('ply %i selects nothing, or a note about THIS line', (n) => {

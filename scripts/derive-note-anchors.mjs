@@ -81,11 +81,20 @@ import { Chess } from 'chess.js';
 // not run at all, and the sidecar it owns froze at whatever the last successful
 // run produced. It also never saw danya's floating half or four creators.
 // `src/data/corpora.json` is the one declaration.
+// 🔒 THE PRIMARY CORPUS ONLY (David 2026-09-21: "the only ones that should be
+// tied to coach are danya's. the ones that are tied to positions").
+//
+// An anchor STAMPS a lineSan onto a note, which makes it selectable at an exact
+// board by `noteAtPosition` — and `applyDerivedAnchors` runs on the secondary
+// corpora too (`secondaryCorpus.ts`). So a non-primary anchor re-opens exactly
+// what 2026-08-26 closed: farmed anchored notes speaking on the play surfaces,
+// where voiced is meant to be the sole exact-position source. The old hand-list
+// had been deriving 909 of them (saintlouis 513, hangingpawns 378, chessbrah 18)
+// against danya's 122.
 const REGISTRY = JSON.parse(readFileSync('src/data/corpora.json', 'utf8'));
-const CORPORA = REGISTRY.corpora.flatMap((c) => [
-  c.path,
-  ...(typeof c.floatingPath === 'string' ? [c.floatingPath] : []),
-]);
+const CORPORA = REGISTRY.corpora
+  .filter((c) => c.primary === true)
+  .flatMap((c) => [c.path, ...(typeof c.floatingPath === 'string' ? [c.floatingPath] : [])]);
 const OUT = 'src/data/note-anchors.json';
 
 /** How many opening plies must match the DB before a run counts as a real

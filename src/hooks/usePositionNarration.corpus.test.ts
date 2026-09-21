@@ -11,9 +11,12 @@ import { __setFarmedCorporaCache } from '../services/farmedCorpusData';
 import { warmSecondaryPositionIndexSync } from '../services/secondaryCorpora';
 import { Chess } from 'chess.js';
 
+// The voiced corpus stamps the SEAT its prose was authored from, and every
+// `noteAtPosition` below passes it — served to the other seat the note is
+// correctly refused, so a shape that omits it is not the shape on disk.
 const VOICED = JSON.parse(
   readFileSync('public/data/voiced-teachings.json', 'utf8'),
-) as { notes: { lineSan: string[] }[] };
+) as { notes: { lineSan: string[]; studentSide?: 'white' | 'black' }[] };
 
 describe('position read corpus wiring', () => {
   // Exercise the real runtime path: inject voiced (the sole exact-position

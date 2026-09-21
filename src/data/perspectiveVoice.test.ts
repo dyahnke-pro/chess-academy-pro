@@ -108,15 +108,27 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
 
   it('lesson beats (say + sayShort): no we/our/us', () => {
     const offenders: string[] = [];
-    for (const lesson of ALL_LESSONS) {
-      for (const beat of lesson.beats ?? []) {
+    // 🚨 `lesson.lesson.beats`, not `lesson.beats` (2026-09-21). `ALL_LESSONS`
+    // holds RegisteredLesson — {scope, key, openingId, lesson} — which has no
+    // `beats`, so `lesson.beats ?? []` was `undefined ?? []` and this gate
+    // walked NOTHING. It is the beat half of the locked perspective rule and it
+    // had been vacuously green. The `?? []` is what hid it: `beats` is required
+    // on LessonScript, so the fallback could only ever mask a wrong reach.
+    let beatsWalked = 0;
+    for (const { lesson: script, openingId } of ALL_LESSONS) {
+      for (const beat of script.beats) {
+        beatsWalked += 1;
         for (const field of [beat.say, beat.sayShort]) {
           if (typeof field === 'string' && BANNED.test(field)) {
-            offenders.push(`${lesson.openingId}: ${field.slice(0, 100)}`);
+            offenders.push(`${openingId}: ${field.slice(0, 100)}`);
           }
         }
       }
     }
+    // Non-vacuity: an empty offender list means nothing unless the walk
+    // actually reached the beats. This is the assertion the version above
+    // could never have made.
+    expect(beatsWalked).toBeGreaterThan(1_000);
     expect(
       offenders.slice(0, 20),
       `${offenders.length} lesson beat(s) use we/our/us/let's. Student="you/your", opponent="they/their".`,
