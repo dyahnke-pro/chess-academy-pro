@@ -208,7 +208,7 @@ describe('farmedCorpusData', () => {
     // unregistered key is silently dropped and every assertion reads []. They were
     // keyed on 'hangingpawns', which stopped being registered when the seven
     // non-danya creators were removed.
-    const stubKey = registry.corpora.find((c) => c.primary !== true)!.key;
+    const stubKey = registry.corpora.find((c) => !c.primary)!.key;
     __setFarmedCorporaCache([{ key: stubKey, data: bundle('hp', GAP_A) }]);
     expect(farmedNotes(GAP_A)).toContain('hp1');
 

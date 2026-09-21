@@ -17,7 +17,6 @@
 // model phrases teaching from them and decides nothing.
 import { Chess } from 'chess.js';
 import type { DanyaNote } from './danyaTeachingService';
-import { applyDerivedAnchors } from './noteAnchorOverrides';
 
 export interface TeachingsBundle {
   generatedAt: string;

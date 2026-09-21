@@ -64,7 +64,7 @@ const farmed = (notes: Array<{ id: string }>): string[] =>
 // unregistered key is silently dropped and every assertion reads []. They were
 // keyed on 'hangingpawns', which stopped being registered when the seven
 // non-danya creators were removed.
-const STUB_KEY = registry.corpora.find((c) => c.primary !== true)!.key;
+const STUB_KEY = registry.corpora.find((c) => !c.primary)!.key;
 
 beforeEach(() => {
   __setFarmedCorporaCache([

@@ -145,7 +145,7 @@ export function allCorpusNotes(): DanyaNote[] {
  * wants this.
  */
 export function primaryCorpusNotes(): DanyaNote[] {
-  const primary = registry.corpora.filter((c) => c.primary === true);
+  const primary = registry.corpora.filter((c) => c.primary);
   return primary.flatMap((c) => [
     ...readNotes(c.path),
     ...(typeof c.floatingPath === 'string' ? readNotes(c.floatingPath) : []),
