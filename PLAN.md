@@ -3206,3 +3206,40 @@ false positives, so the fix applied is that the list now STATES ITS OWN RULE
 rather than implying completeness. An under-reporting list read as complete is
 the same failure as a gate that passes without evaluating anything — which is
 the night's pattern, arriving in the one tool built to prevent it.
+
+
+---
+
+## FUNDLEAD — CAUSE NAMED, and what the fix actually bought (2026-09-21, prod-verified)
+
+**RESOLVED half.** The 150cp floor was the cause for the inaccuracy band, proven
+by FUNDWHY on a real game and fixed by making the gate expected points. The
+proof it worked is not a green row, it is a SENTENCE THE COACH SPOKE:
+
+> "The pattern: one of your four flagged moves stopped calculating too early."
+
+That is `calculation-depth` reaching the recap — the first thing tonight that
+changed what a student hears. RECAP went red→green in the same run, because the
+peer's `ForwardOutcome` fix let the walk reach its end: one fix got the walk
+there, the other gave it something to say when it arrived.
+
+**OPEN half — two causes, neither of them the floor:**
+1. **The punishing PV is not persisted.** `pvP` is 0-1 plies where the detector
+   needs 3, on every mistake/blunder ply. Now the dominant cause.
+2. **An unconditional deferral.** "the punishment Bd7+ is immediate (ply 1) —
+   another fundamental owns it", and no other fundamental fires. THIRD instance
+   of this shape in one night (`questionPlan.has(atPly)` yielding a forward to a
+   card that opens later; `handleWalkForward` returning void so a consumed
+   advance read as a completed one). The two that were fixed were fixed the same
+   way and it is the shape to reach for here: **make the yield conditional on the
+   claim LANDING** — check the sibling took it, or make a yield that names no
+   claimant fail to compile. A duplicate fundamental is visible and fixable; a
+   silent handoff to nobody is indistinguishable from "this ply had nothing to
+   teach".
+
+**AND THE ROW ITSELF WAS BLIND.** `FUND_RE` could not match 25 rotations across
+15 fundamentals — whole endgame and middlegame sections — so plies that taught
+correctly scored as teaching nothing, and the row under-reported the very fix
+being tested. Now DERIVED from the real renderers and gated
+(`fundLeadStems.test.ts`, every rotation, negative-controlled both ways). When a
+new fundamental gets a voice, that gate fails until its stem lands.

@@ -317,10 +317,20 @@ never produces a proven capability then the lowering term can never fire and
 
 Not the main concept, and explicitly deprioritised (David 2026-09-20: "the
 register doesnt get up to closing the loop"):
-- 🔴 **FUNDLEAD cause is UNNAMED** — three leads chased and all three withdrawn (ranking,
-  missing best move, flagged-vs-unflagged). The last was a vacuous pass: `!flagged ||`
-  short-circuited the assertion. FUNDWHY now prints which of the 8 bails fired — IT HAS
-  NEVER RUN, and one run of it beats any further reasoning.
+- 🟠 **FUNDLEAD — cause NAMED by measurement (2026-09-21), two halves left.** FUNDWHY's
+  first run named it: the 150cp floor silenced the inaccuracy band (costs 104/99/86/74/72/69,
+  all above INACCURACY_CP and below 150). ✅ FIXED — the gate is expected points now, and
+  the recap spoke the result: "one of your four flagged moves stopped calculating too early".
+  Still open, and neither is the floor:
+  - 🔴 **the punishing PV is not persisted** for the mistake/blunder plies (`pvP` 0-1 plies,
+    detector needs 3) — now the dominant cause.
+  - 🔴 **an unconditional deferral**: "the punishment X is immediate — another fundamental
+    owns it", and none fires. A yield must be conditional on the claim LANDING. Third
+    instance of this shape tonight; the two that worked were fixed by making the yield
+    check the handoff, or making a yield naming no claimant fail to compile.
+- ✅ **FUNDLEAD's row was itself blind** — FUND_RE could not see 25 rotations across 15
+  fundamentals, so it scored correct teaching as "no fundamental". Now derived from the real
+  renderers and gated (`fundLeadStems.test.ts`), every rotation, negative-controlled.
 - 🔴 C15 the voiced corpus register — a real defect the student hears, but polish next to the loop.
 - 🔴 **C15b lesson BEATS are unscanned for gendered pronouns** — the peer's fix made the
   beat arm live (it read a field that does not exist, so it scanned nothing, ever). GENDERED
