@@ -230,6 +230,11 @@ const GATE_TESTS = [
   // published third-party table — so they need a gate that states the table,
   // or a future tidy-up silently re-bands every move the app has ever graded.
   'src/services/chessComBands.test.ts',
+  // FUNDLEAD's stem list vs the real renderers. It is two hand-maintained sides
+  // that must agree, and when they drifted the audit under-reported the COACH —
+  // 25 rotations across 15 fundamentals were invisible to it, so a ply that
+  // taught correctly scored as teaching nothing.
+  'src/services/fundLeadStems.test.ts',
   // 🔒 THE NINE GATES CLAUDE.md DECLARES WITH THE WORD "Gate:" AND THAT NEVER
   // RAN ON A PUSH (2026-09-20). Criterion is deliberately narrow — the file
   // NAMES these as the enforcement for a LOCKED rule — because a gate list
