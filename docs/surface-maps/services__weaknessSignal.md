@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**198 lines · 8 exports · 28 importers · 13 tests · 1 audits**
+**198 lines · 8 exports · 29 importers · 14 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3697) — names `boostFor`, `matchClauseKind`
-- **The standard post-deploy ritual** (CLAUDE.md:5724) — names `weaknessSignal`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3782) — names `boostFor`, `matchClauseKind`
+- **The standard post-deploy ritual** (CLAUDE.md:5945) — names `weaknessSignal`
 
 ## Who calls in
 
@@ -24,6 +24,7 @@
 - `src/services/habitJoin.test.ts`
 - `src/services/learnFundamentalNarration.ts`
 - `src/services/liveTacticsContext.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/needCoverage.report.test.ts`
 - `src/services/needScore.test.ts`
@@ -60,13 +61,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `boostFor` (function) — 12 call sites
-- `src/services/coachDecider.ts:65`
-- `src/services/needScore.ts:223`
-- `src/services/needScore.ts:236`
+- `src/services/coachDecider.ts:66`
+- `src/services/needScore.ts:224`
+- `src/services/needScore.ts:237`
 - `src/services/positionFacts.ts:681`
 - `src/services/positionFacts.ts:703`
 - `src/services/reviewFacetRank.ts:122`
-- `src/services/studentMomentBoost.ts:86`
+- `src/services/studentMomentBoost.ts:87`
 - `src/services/teachingSelector.ts:149`
 - `src/services/weaknessSignal.test.ts:56`
 - `src/services/weaknessSignal.test.ts:57`
@@ -74,7 +75,7 @@
 - `src/services/weaknessSignal.test.ts:64`
 
 ### `matchClauseKind` (function) — 10 call sites
-- `src/services/needScore.ts:232`
+- `src/services/needScore.ts:233`
 - `src/services/positionFacts.ts:647`
 - `src/services/reviewFacetRank.ts:121`
 - `src/services/weaknessSignal.test.ts:77`
@@ -86,8 +87,8 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:120`
 
 ### `matchTacticPattern` (function) — 9 call sites
-- `src/services/liveTacticsContext.ts:459`
-- `src/services/needScore.ts:231`
+- `src/services/liveTacticsContext.ts:466`
+- `src/services/needScore.ts:232`
 - `src/services/positionFacts.ts:646`
 - `src/services/teachingSelector.ts:148`
 - `src/services/teachingSelector.ts:277`
@@ -97,16 +98,17 @@
 - `src/services/weaknessSignal.test.ts:107`
 
 ### `matchTag` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1506`
-- `src/services/needScore.ts:221`
+- `src/services/coachFeatureService.ts:1525`
+- `src/services/needScore.ts:222`
 - `src/services/teachingSelector.ts:278`
 - `src/services/weaknessSignal.test.ts:116`
 - `src/services/weaknessSignal.test.ts:119`
 - `src/services/weaknessSignal.test.ts:120`
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
-### `matchFundamental` (function) — 3 call sites
+### `matchFundamental` (function) — 4 call sites
 - `src/services/fundamentalRecurrence.ts:44`
+- `src/services/loopCloses.review.integration.test.ts:82`
 - `src/services/weaknessSpine.fundamentals.test.ts:117`
 - `src/services/weaknessSpine.fundamentals.test.ts:118`
 
@@ -115,6 +117,7 @@
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/fundamentalRecurrence.test.ts`
 - `src/services/habitJoin.test.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/needCoverage.report.test.ts`
 - `src/services/needScore.test.ts`
@@ -127,5 +130,9 @@
 - `src/services/weaknessSpine.fundamentals.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-unified-coach-prod.mjs`
