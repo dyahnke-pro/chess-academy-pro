@@ -340,13 +340,41 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
    * audit polling `data-state`.
    */
   const handleOutcome = useCallback((outcome: ForwardOutcome | undefined, atPly: number): void => {
-    // A MISSING OUTCOME MUST NOT THROW. The TYPE is what stops a real caller
-    // from omitting it; this guard is for the untyped edges (a test double, a
-    // JS consumer) — and it matters because a throw inside the advance chain
-    // would kill the walk HARDER than the silent-consumption bug this whole
-    // mechanism exists to fix, and would do it on every game rather than on
-    // the ones with an overlay.
-    if (!outcome || outcome.advanced) return;
+    // A MISSING OUTCOME PAUSES. It does not throw, and it does NOT assume the
+    // forward advanced.
+    //
+    // Not a throw, because a throw inside the advance chain would kill the walk
+    // HARDER than the silent-consumption bug this mechanism exists to fix — on
+    // every game, rather than only the ones with an overlay. Never make the
+    // failure mode worse than the thing you are fixing.
+    //
+    // But not `advanced` either, and the first cut of this guard had it that
+    // way. "Assume it advanced" IS the assumption that caused the bug, so
+    // defaulting to it re-enters the exact class at the one point the type
+    // cannot reach. The costs are not symmetric: a spurious PAUSE is visible,
+    // recoverable in one tap, and noticed the first time anyone runs it, while
+    // a spurious ADVANCE is the invisible deadlock — a forward consumed,
+    // nothing scheduled, the walk dead with the button still reading
+    // "playing". The premise of this whole mechanism is that unknown states
+    // degrade to visible-paused; the default has to honour it.
+    //
+    // It should also never fire: `handleWalkForwardRef` is typed
+    // `() => ForwardOutcome`, so the hot path cannot produce undefined. This is
+    // for genuinely untyped edges, and it is RECORDED so that it cannot become
+    // the next thing reporting green for free.
+    if (!outcome) {
+      void logAppAudit({
+        kind: 'review-playback-step',
+        category: 'subsystem',
+        source: 'useReviewPlayback.forwardOutcomeMissing',
+        summary: `forward returned no outcome at ply ${atPly} — pausing rather than assuming it advanced`,
+        details: JSON.stringify({ ply: atPly }),
+      });
+      autoRef.current = false;
+      setIsAutoPlaying(false);
+      return;
+    }
+    if (outcome.advanced) return;
     const action = AUTO_ADVANCE_ON_STOP[outcome.stop];
     void logAppAudit({
       kind: 'review-playback-step',
