@@ -1292,7 +1292,11 @@ export function groundedSegmentArrows(
   prose: string,
   move: { from: string; to: string; fen: string },
 ): {
-  arrows: NarrationSegmentType['arrows'];
+  // NonNullable, not the bare field type: the orange trail is unconditional, so
+  // this can never return undefined arrows. Declaring the segment's OPTIONAL
+  // shape here pushed a `| undefined` onto every caller, which had to guard
+  // against a case the function cannot produce.
+  arrows: NonNullable<NarrationSegmentType['arrows']>;
   source: 'note' | 'prose';
   /** Per GREEN arrow: the SAN it represents and where that move was mentioned
    *  in the source text. The offset is what lets a caller hand each arrow to
