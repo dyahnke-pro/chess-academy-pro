@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1415 lines · 23 exports · 27 importers · 15 tests · 4 audits**
+**1456 lines · 23 exports · 27 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -78,15 +78,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:6909`
-- `src/components/Coach/CoachTeachPage.tsx:6915`
+- `src/components/Coach/CoachTeachPage.tsx:6955`
+- `src/components/Coach/CoachTeachPage.tsx:6961`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
-- `src/hooks/useDiscussionPractice.ts:228`
-- `src/hooks/useDiscussionPractice.ts:350`
-- `src/services/autoAnalyzeGame.ts:206`
+- `src/hooks/useDiscussionPractice.ts:259`
+- `src/hooks/useDiscussionPractice.ts:381`
+- `src/services/autoAnalyzeGame.ts:227`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:58`
 - `src/services/deliberation.ts:118`
@@ -111,26 +111,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleQuiz.ts:124`
 - `src/services/principleQuiz.ts:146`
 - `src/services/tacticClassifierService.ts:234`
-- `src/services/tacticClassifierService.ts:451`
+- `src/services/tacticClassifierService.ts:454`
 
 ### `replayPgnToFens` (function) — 8 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
-- `src/services/autoAnalyzeGame.ts:188`
-- `src/services/gameAnalysisService.ts:352`
-- `src/services/gameAnalysisService.ts:1388`
-- `src/services/gameAnalysisService.ts:1618`
-- `src/services/gameAnalysisService.ts:2089`
+- `src/services/autoAnalyzeGame.ts:209`
+- `src/services/gameAnalysisService.ts:351`
+- `src/services/gameAnalysisService.ts:1411`
+- `src/services/gameAnalysisService.ts:1641`
+- `src/services/gameAnalysisService.ts:2154`
 - `src/services/tacticClassifierService.ts:193`
-- `src/services/tacticClassifierService.ts:434`
+- `src/services/tacticClassifierService.ts:437`
 
-### `determinePlayerColor` (function) — 2 call sites
+### `determinePlayerColor` (function) — 3 call sites
 - `src/components/Tactics/AnalysisPracticePage.tsx:99`
-- `src/services/autoAnalyzeGame.ts:186`
+- `src/services/autoAnalyzeGame.ts:207`
+- `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2014`
-- `src/components/Coach/CoachGameReview.tsx:310`
-- `src/services/gameAnalysisService.ts:1966`
+- `src/components/Coach/CoachGameReview.tsx:314`
+- `src/services/gameAnalysisService.ts:2007`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
 - `src/services/mistakePuzzleService.test.ts:189`
@@ -188,7 +189,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.sequence.test.ts:72`
 
 ### `buildMistakePuzzleFromCapture` (function) — 4 call sites
-- `src/services/autoAnalyzeGame.ts:313`
+- `src/services/autoAnalyzeGame.ts:352`
 - `src/services/misconceptionDrill.test.ts:18`
 - `src/services/misconceptionDrill.test.ts:20`
 - `src/services/misconceptionDrill.test.ts:29`
@@ -218,7 +219,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2169`
+- `src/components/Coach/CoachTeachPage.tsx:2215`
 - `src/components/Puzzles/MyMistakesPage.tsx:213`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`

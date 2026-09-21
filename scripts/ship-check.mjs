@@ -225,6 +225,11 @@ const GATE_TESTS = [
   // a verdict or an "unknown", so a regression here re-opens the false-green
   // class this whole file guards against — gate it like any other.
   'scripts/ship-check-lib/crashed.test.ts',
+  // "Match chess.com" (David 2026-09-20) for blunder/mistake/inaccuracy. The
+  // bands are EXPECTED POINTS, not centipawns, and they are a copy of a
+  // published third-party table — so they need a gate that states the table,
+  // or a future tidy-up silently re-bands every move the app has ever graded.
+  'src/services/chessComBands.test.ts',
   // 🔒 THE NINE GATES CLAUDE.md DECLARES WITH THE WORD "Gate:" AND THAT NEVER
   // RAN ON A PUSH (2026-09-20). Criterion is deliberately narrow — the file
   // NAMES these as the enforcement for a LOCKED rule — because a gate list
