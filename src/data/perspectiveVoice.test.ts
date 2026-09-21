@@ -133,10 +133,12 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
     // voiced corpus, this one owns the four files it never scanned.
     const ALREADY_GATED = new Set(['model-games.json', 'voiced-matchups.json', 'voiced-walkthroughs.json']);
     const SCOPED = JSON_FILES.filter((f) => !ALREADY_GATED.has(f));
+    let scanned = 0;
     for (const file of SCOPED) {
       const parsed = JSON.parse(readFileSync(join(DATA_DIR, file), 'utf8'));
       const strings: string[] = [];
       collectProseStrings(parsed, strings);
+      scanned += strings.length;
       for (const s of strings) {
         // A gendered pronoun is only a DEFECT when it stands for a COLOUR —
         // "White takes and he's up a point". Naming a real player and then
@@ -161,9 +163,17 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
         `clear backlog, never raise it. First offenders:\n` +
         offenders.slice(0, 8).map((s) => `  • ${s}`).join('\n'),
     ).toBeLessThanOrEqual(GENDERED_CEILING);
-    // Non-vacuous: the scan must actually be reading prose. A collector that
-    // returned nothing would satisfy the ceiling for free.
+    // NON-VACUOUS — AND IT MUST COUNT THE PROSE, NOT THE FILES (tightened
+    // 2026-09-20). This asserted `SCOPED.length > 0`, which only proves the
+    // file LIST was non-empty: had `collectProseStrings` stopped returning
+    // anything, every file would still have been "scanned" and the ceiling
+    // would have passed for free, forever. That is the exact failure found the
+    // same day in this file's other half, where a lesson-beat loop read a
+    // field that does not exist, `?? []` swallowed it, and the we/our/us ban
+    // went unchecked against a single beat while reporting green.
+    // A ceiling measured through a dead reach is not a ceiling.
     expect(SCOPED.length, 'no files scanned — the ceiling would pass for free').toBeGreaterThan(0);
+    expect(scanned, 'no prose strings collected — the ceiling would pass for free').toBeGreaterThan(1000);
   });
 
   for (const file of JSON_FILES) {
