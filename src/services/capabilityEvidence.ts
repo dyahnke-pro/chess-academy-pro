@@ -41,6 +41,7 @@
  * that drift.
  */
 import { db } from '../db/schema';
+import { MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
@@ -52,8 +53,12 @@ import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconcep
 const POSED_IMPORTANCE_MIN = 45;
 
 /** A move that cost this much or more is not a demonstration of anything, even
- *  if it happened to serve a fundamental on the way past. */
-const MISTAKE_CP = 100;
+ *  if it happened to serve a fundamental on the way past.
+ *
+ *  Imported, NOT retyped (2026-09-20): this was a local `= 100` sitting beside
+ *  the same number declared in `engineConstants`, so "mistake" had a second
+ *  definition here that no change to the first would ever reach. `engineConstants`
+ *  has zero imports, so taking it costs this module nothing. */
 
 export type CapabilityOutcome = 'held' | 'broken';
 
