@@ -30,6 +30,33 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
     const attrs = attributePrinciples({ ...base, pvAfterPlayed: ['Bxf6', 'gxf6'] });
     expect(attrs.find((a) => a.id === 'calculation-depth')).toBeUndefined();
   });
+  // 🔒 THE DEAD BAND IS CLOSED, AND IT IS GATED IN BOTH DIRECTIONS (2026-09-21).
+  //
+  // The cost gate was a hand-typed `eb - ea < 150`. Measured on a real game
+  // (06wNUWaA, via the FUNDWHY audit row), that number was the SOLE reason
+  // three flagged plies got no fundamental: costs of 104, 99, 86, 74, 72 and
+  // 69 centipawns — every one above INACCURACY_CP (50) and below 150. The
+  // student was told "that was an inaccuracy costing about 0.7 points" and
+  // never told what recurred. These two tests pin both halves of the fix, so
+  // neither the band nor the currency can quietly come back.
+  const PV = ['Nf3', 'd6', 'Bg5', 'Qd7', 'Bxf6'];   // punishment lands at ply 5
+  it('the measured 99cp ply that the 150 floor silenced now attributes', () => {
+    // ply 62 of the real game: 30 → -69, a 99cp cost near equality. That is
+    // ~9 win% — comfortably an inaccuracy — and the PATTERN (quiet move,
+    // punishment three plies deep) is no less true at 99cp than at 150.
+    const attrs = attributePrinciples({ ...base, evalBefore: 30, evalAfterPlayed: -69, pvAfterPlayed: PV });
+    expect(attrs.find((a) => a.id === 'calculation-depth'),
+      `the 150cp dead band is back: ${JSON.stringify(attrs.map((a) => a.id))}`).toBeTruthy();
+  });
+  it('negative control: 200cp given back in a WON position does not attribute', () => {
+    // +9.00 → +7.00. The old centipawn floor ADMITTED this (200 >= 150) while
+    // silencing the 99cp error above — precisely backwards. In expected points
+    // it is ~3.5 win%, under an inaccuracy, so the position barely moved and
+    // there is no calculation error to name. This is the case the currency
+    // change exists for, and it must stay silent.
+    const attrs = attributePrinciples({ ...base, evalBefore: 900, evalAfterPlayed: 700, pvAfterPlayed: PV });
+    expect(attrs.find((a) => a.id === 'calculation-depth')).toBeUndefined();
+  });
   it('negative control: no real cost → silent; no PV → silent (live path)', () => {
     expect(attributePrinciples({ ...base, evalAfterPlayed: 0, pvAfterPlayed: ['Nf3', 'd6', 'Bg5', 'Qd7', 'Bxf6'] }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
     expect(attributePrinciples({ ...base }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
