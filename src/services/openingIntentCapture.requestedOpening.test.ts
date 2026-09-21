@@ -14,7 +14,7 @@ import { useCoachMemoryStore } from '../stores/coachMemoryStore';
  */
 describe('requested-opening deterministic capture (Learn/Play chat)', () => {
   beforeEach(() => {
-    useCoachMemoryStore.getState().clearIntendedOpening('test-reset');
+    useCoachMemoryStore.getState().clearIntendedOpening('test-reset' as never);
   });
 
   const cases: Array<[string, string]> = [
@@ -40,7 +40,7 @@ describe('requested-opening deterministic capture (Learn/Play chat)', () => {
   it('the two requests resolve to DIFFERENT replies (spine plays what you ask)', () => {
     const a = tryCaptureOpeningIntent("let's play the Italian Game", 'coach-teach', 'white');
     const italReply = getOpeningMoves(a!.name)![1];
-    useCoachMemoryStore.getState().clearIntendedOpening('test');
+    useCoachMemoryStore.getState().clearIntendedOpening('test' as never);
     const b = tryCaptureOpeningIntent("let's play the Sicilian Defense", 'coach-teach', 'white');
     const sicReply = getOpeningMoves(b!.name)![1];
     expect(italReply).toBe('e5');

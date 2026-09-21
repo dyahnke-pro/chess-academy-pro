@@ -15,7 +15,7 @@ const HANGING_KNIGHT = 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQk
 
 const sig = (clusterId: string, over: Partial<WeaknessSignal> = {}): WeaknessSignal => ({
   clusterId, bucket: 'tactical' as MisconceptionBucket, label: clusterId,
-  openCount: 5, severity: 70, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: [], ...over,
+  openCount: 5, total: 5, severity: 70, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: [], ...over,
 });
 
 async function mustDefendRank(studentWeaknesses?: readonly WeaknessSignal[]): Promise<number> {

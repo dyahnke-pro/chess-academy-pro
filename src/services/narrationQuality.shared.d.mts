@@ -44,3 +44,9 @@ export declare function toClauses(text: string): string[];
 
 /** Rank a candidate note for a ply — higher speaks. Pure and deterministic. */
 export declare function scoreNarration(text: string, openingName: string | null): number;
+
+/** The clause classes `trimPassage` cuts by default — the confident ones. */
+export declare const CONFIDENT_CUT_CLASSES: readonly string[];
+
+/** Drop clauses of the given classes from a passage, keeping the rest intact. */
+export declare function trimPassage(text: string, classes?: readonly string[]): string;

@@ -48,7 +48,8 @@ describe('buildNarrationSession', () => {
         san: 'e4',
         evaluation: 25,
         bestMove: 'e4',
-        classification: 'best',
+        bestMoveEval: null,
+        classification: 'brilliant',
         comment: 'Classical center grab.',
       },
       {
@@ -57,14 +58,16 @@ describe('buildNarrationSession', () => {
         san: 'e5',
         evaluation: 0,
         bestMove: 'e5',
-        classification: 'best',
+        bestMoveEval: null,
+        classification: 'brilliant',
         comment: null,
       },
     ];
     const session = buildNarrationSession(buildGame({ pgn: 'e4 e5', annotations }));
     expect(session.steps[0].narration).toBe('Classical center grab.');
     // Falls back to the classification template when no comment.
-    expect(session.steps[1].narration).toMatch(/top engine choice/i);
+    // 'best' was never a MoveClassification — the line it keyed was unreachable.
+    expect(session.steps[1].narration).toMatch(/brilliant/i);
   });
 
   it('falls back to empty narration for unannotated moves', () => {

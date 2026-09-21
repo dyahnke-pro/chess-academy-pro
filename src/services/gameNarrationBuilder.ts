@@ -15,31 +15,34 @@
  * That keeps the narrate page instant-start and works offline.
  */
 import { buildSession } from './walkthroughAdapter';
-import type { GameRecord, MoveAnnotation, OpeningMoveAnnotation } from '../types';
+import type { GameRecord, MoveAnnotation, OpeningMoveAnnotation, MoveClassification } from '../types';
 import type { WalkthroughSession } from '../types/walkthrough';
 
 /** Short template strings keyed off move classification. Kept brief so
  *  TTS doesn't run on forever on every step. */
-const CLASSIFICATION_LINES: Record<string, string> = {
+// Record<MoveClassification, string>, NOT Record<string, string>. The loose
+// index type hid three keys the union has never had — `best`, `excellent`
+// and `forced` — so those lines could never be reached from a real
+// annotation, and a reader scanning this map would reasonably believe the
+// coach says them. Exhaustive now, so a new classification fails to compile
+// until someone writes its line, and a phantom one cannot be added at all.
+const CLASSIFICATION_LINES: Record<MoveClassification, string> = {
   brilliant: 'Brilliant — the best move in a sharp position.',
   great: 'Great move.',
-  best: 'The top engine choice.',
-  excellent: 'An excellent move.',
   good: 'A solid move.',
   book: 'Still in theory.',
   inaccuracy: 'Slightly inaccurate — there was a stronger continuation.',
   mistake: 'A mistake — this loses tempo or material.',
   blunder: 'A blunder — this drops significant advantage.',
   miss: 'A missed opportunity.',
-  forced: 'The only move.',
 };
 
 function narrationFromAnnotation(annotation: MoveAnnotation | undefined): string {
   if (!annotation) return '';
   const comment = annotation.comment?.trim();
   if (comment) return comment;
-  const cls = annotation.classification?.toLowerCase();
-  if (cls && CLASSIFICATION_LINES[cls]) return CLASSIFICATION_LINES[cls];
+  const cls = annotation.classification;
+  if (cls && cls in CLASSIFICATION_LINES) return CLASSIFICATION_LINES[cls];
   return '';
 }
 

@@ -88,7 +88,7 @@ describe('buildReviewSegments — BOTH WAYS wired into the walk', () => {
     // Cover the mistake tags a removed-defender/allowed chain can carry, each a
     // recurring hole (openCount >= 2). Exactly the coach-side weakness shape.
     const weaknesses = ['hung-material', 'misplaced-piece', 'neglected-development'].map((clusterId) => ({
-      clusterId, bucket: 'tactical' as const, label: 'Hanging pieces', openCount: 4, severity: 60, puzzleThemes: [] as string[],
+      clusterId, bucket: 'tactical' as const, label: 'Hanging pieces', openCount: 4, total: 4, severity: 60, puzzleThemes: [] as string[],
     }));
     const segs = buildReviewSegments(mk(ALLOWED), 'black', null, false, 1378, weaknesses);
     const t = segs.find((s) => s.san === 'Qxb3')?.narration ?? '';

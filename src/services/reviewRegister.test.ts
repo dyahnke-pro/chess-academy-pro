@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { spokenMoveLabel } from './reviewTurningPoint';
 import { pastTenseReviewNarration } from './coachFeatureService';
-import type { ReviewMoveSegment } from '../types/review';
+import type { ReviewMoveSegment } from './coachFeatureService';
 
 // ── THE REGISTER GATE ────────────────────────────────────────────────────────
 // Three defects found 2026-09-16 by READING the shipped review narration of

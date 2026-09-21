@@ -22,7 +22,7 @@ import { detectTactics } from './tacticsDetector';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import { loadSpokenBake } from '../test/loadSpokenBake';
 import danya from '../data/danya-teachings.json';
-import chessbrah from '../data/chessbrah-teachings.json';
+import chessbrah from '../../public/data/chessbrah-teachings.json';
 
 interface Note { concepts?: string[] }
 
