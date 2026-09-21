@@ -31,7 +31,21 @@ describe('shipped corpora teach chess, not their source', () => {
   });
 
   it('finds corpora to check (guards the guard)', () => {
-    expect(paths.filter((p) => existsSync(resolve(process.cwd(), p))).length).toBeGreaterThan(3);
+    // 🔒 EVERY REGISTERED PATH EXISTS — not a magic count (2026-09-21).
+    //
+    // This was `> 3`, which is a number that goes stale the moment the roster
+    // changes, and it did: David cut the corpus to ONE source ("the danya ones
+    // that we have tied exactly to positions. nothing else!"), leaving exactly
+    // three halves — danya's two plus voiced — so the guard failed while the
+    // thing it guards was perfectly healthy.
+    //
+    // Asserting that every path in the registry resolves is strictly stronger
+    // AND cannot rot: it still proves the `it.each` below is non-vacuous, and
+    // it additionally catches a registry entry pointing at a file nobody
+    // shipped, which the count never could.
+    const missing = paths.filter((p) => !existsSync(resolve(process.cwd(), p)));
+    expect(missing, 'corpora.json names a file that is not on disk').toEqual([]);
+    expect(paths.length).toBeGreaterThan(0);
   });
 
   it.each(paths)('%s', (rel) => {

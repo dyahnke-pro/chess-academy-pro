@@ -51,7 +51,7 @@ describe('a transition ritual stays inside the opening being played', () => {
     const total = loaded.reduce((n, c) => n + c.notes, 0);
     // Non-vacuity: with the fetched corpora missing from disk every assertion
     // below would measure an empty index and this gate would be theatre.
-    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(15_000);
   }, 180_000);
 
   it.each(GAMES)('%s picks a note that belongs to it', (name, sans, fen) => {

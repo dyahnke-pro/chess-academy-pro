@@ -5,7 +5,8 @@
 
 import type { LessonScript, OpeningVariation } from '../types';
 import { getLessonScript, getVariationLessonScript } from '../data/lessons';
-// @ts-expect-error — plain-JS shared metric, no type decls (also run by node)
+// Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
+// suppression this replaces made every call an unsafe `any` call.
 import { reachesMiddlegame as reachesMiddlegameRaw } from '../data/variationMiddlegameDepth.shared.mjs';
 
 const reachesMiddlegame = reachesMiddlegameRaw as (pgn: string) => { pass: boolean };

@@ -264,18 +264,14 @@ export default defineConfig(({ mode }) => {
             // and pushed it past the 8 MiB Workbox precache cap.
             if (id.includes('voiced-walkthroughs.json')) return 'appdata-voiced';
             if (id.includes('voiced-matchups.json')) return 'appdata-voiced';
-            // The secondary teaching corpus (gap-tier coverage) — same rule for
-            // the same reason: statically imported, MB-scale, and it re-broke
-            // the entry chunk (7.7 → 10.0 MB) the moment it was added without
-            // one. A new corpus needs a chunk rule in the same commit.
-            if (id.includes('chessbrah-teachings.json')) return 'appdata-chessbrah';
-            // The FARMED corpora (hangingpawns, saintlouis, …) need no rule:
-            // they are no longer imported at all. They live in `public/data/`
-            // and are fetched at runtime by `farmedCorpusData`, because a
-            // farmed corpus scales with a creator's back-catalogue and would
-            // otherwise walk straight through the precache cap above — Hanging
-            // Pawns landed 250 KB under it, Saint Louis is 3.7x the videos.
-            // Ship a new farm to `public/data/`, never to `src/data/`.
+            // 🔒 THERE IS ONE CORPUS SOURCE (David 2026-09-21): danya's, plus
+            // the hand-authored VOICED corpus. The seven farmed creators
+            // (chessbrah, hangingpawns, saintlouis, gothamchess, hikaru,
+            // imrosen, magnuscarlsen) were removed, and the
+            // `appdata-chessbrah` rule that stood here with them — a chunk
+            // rule for a file that no longer exists is dead weight that reads
+            // like a live constraint. Danya's floating half and voiced are
+            // FETCHED from `public/data/`, so neither needs a rule.
             if (id.includes('/lessons/sublineNarration')) return 'appdata-subline-narration';
             if (id.includes('model-games.json')) return 'appdata-modelgames';
           }

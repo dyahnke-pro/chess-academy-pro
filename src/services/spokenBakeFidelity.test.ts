@@ -24,7 +24,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 // The gate itself, imported from the bake script — never a reimplementation.
 // A copy would drift from the thing it is meant to pin.
-// @ts-expect-error — plain .mjs helper, no types by design
+// Typed via `scripts/bake-spoken-notes.d.mts` (2026-09-21).
 import { gateSpoken, fidelityBreach } from '../../scripts/bake-spoken-notes.mjs';
 import registry from '../data/corpora.json';
 
@@ -65,7 +65,12 @@ describe('the shipped bake', () => {
       if (!entry.spoken) continue;
       const source = src.get(id);
       if (!source) continue;                    // note dropped from the corpus; harmless
-      const reason = gateSpoken(source, entry.spoken, entry.kind ?? 'floating');
+      // Narrow rather than cast: the bake's inferred `kind` is a bare string,
+      // and anything not explicitly 'anchored' is treated as floating — the
+      // conservative tier, since admitting a floating note under anchored rules
+      // is what would let it speak a foreign game's squares.
+      const kind = entry.kind === 'anchored' ? 'anchored' : 'floating';
+      const reason = gateSpoken(source, entry.spoken, kind);
       if (reason) failures.push(`${id}: ${reason}`);
     }
     // Zero, not a baseline. A line that fails the gate is one the coach speaks

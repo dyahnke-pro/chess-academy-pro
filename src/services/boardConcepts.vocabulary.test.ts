@@ -9,6 +9,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { Chess } from 'chess.js';
+import { CORPUS_FILES } from '../test/loadFullCorpus';
 import { boardConcepts } from './boardConcepts';
 
 const tags = (fen: string): Set<string> => new Set(boardConcepts(fen)?.concepts ?? []);
@@ -96,7 +97,7 @@ describe('the 2026-08-06 fundamentals are board-provable', () => {
 });
 
 describe('the vocabulary reaches the corpus', () => {
-  it('holds the reachability floor across all four corpora', () => {
+  it('holds the reachability floor across every corpus half', () => {
     // Measured 2026-08-05: 15,761 of 34,101 mg/eg notes (46.2%) carry at least
     // one emitted tag — up from 4.5% before the vocabulary work. The floor is
     // set under the measurement so a re-farm can breathe; dropping below it
@@ -108,12 +109,13 @@ describe('the vocabulary reaches the corpus', () => {
       // tactics and fundamentals") — measured 18,643/34,101 (54.7%) reachable.
       'development', 'simplification', 'conversion', 'pawn-break', 'pawn-breaks', 'open-file',
     ]);
-    const files = [
-      'src/data/danya-teachings.json',
-      'src/data/chessbrah-teachings.json',
-      'public/data/hangingpawns-teachings.json',
-      'public/data/saintlouis-teachings.json',
-    ];
+    // 🔒 FROM THE REGISTRY (2026-09-21). The hand-list named
+    // `src/data/chessbrah-teachings.json`; the 2026-09-19 corpus split moved it
+    // to `public/data/`, the `existsSync` guard below skipped it in silence, and
+    // this floor went RED at 25,916 against its own 30,000 — the measurement
+    // shrank, not the corpus. It also missed danya's floating half and four
+    // creators.
+    const files = CORPUS_FILES.map((c) => c.path);
     let total = 0;
     let reachable = 0;
     for (const f of files) {
@@ -129,9 +131,13 @@ describe('the vocabulary reaches the corpus', () => {
         if ((n.concepts ?? []).some((c) => VOCAB.has(c))) reachable += 1;
       }
     }
-    expect(total).toBeGreaterThan(30_000);
-    // Floor raised 15,000 → 18,000 with the fundamentals expansion.
-    expect(reachable, `${reachable}/${total} mg/eg notes reachable — the vocabulary drifted`).toBeGreaterThanOrEqual(18_000);
+    // 9,000 (2026-09-21). Was 30,000 against eight creators; David removed the
+    // seven non-danya ones, so the mg/eg pool is danya's + voiced's 10,405.
+    // A floor that goes down is only honest when the SOURCE shrank on purpose.
+    expect(total).toBeGreaterThan(9_000);
+    // Floor 15,000 → 18,000 with the fundamentals expansion; → 2,900 on
+    // 2026-09-21 when the seven non-danya corpora were removed.
+    expect(reachable, `${reachable}/${total} mg/eg notes reachable — the vocabulary drifted`).toBeGreaterThanOrEqual(2_900);
     console.log(`[reachability] ${reachable}/${total} mg/eg notes (${((reachable / total) * 100).toFixed(1)}%) reachable via the emitted vocabulary`);
   });
 });

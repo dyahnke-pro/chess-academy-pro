@@ -72,20 +72,29 @@
 // aggregate and was wrong.
 //
 // Usage:  node scripts/derive-note-anchors.mjs [--dry]
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
-// DERIVED from the ONE registry (src/data/corpora.json), never hand-written.
-// This list had rotted: the 2026-09-19 corpus split moved chessbrah to public/
-// and gave danya a floating half, so the generator pointed at a path that no
-// longer exists and would have thrown ENOENT on its next run. corpora.json's
-// own header says a corpus used to be registered in seven places and that
-// adding one must be a one-line edit THERE and nowhere else — this script was
-// one of the copies that made the warning necessary.
-const registry = JSON.parse(readFileSync('src/data/corpora.json', 'utf8'));
-const CORPORA = registry.corpora
-  .flatMap((c) => [c.path, c.floatingPath])
-  .filter((p) => typeof p === 'string' && existsSync(p));
+// 🔒 FROM THE REGISTRY, NOT A HAND-LIST (2026-09-21). This was the FIFTH copy of
+// the corpus file list, and the 2026-09-19 split broke every one of them at
+// once: chessbrah moved to `public/data/`, so this script threw ENOENT and could
+// not run at all, and the sidecar it owns froze at whatever the last successful
+// run produced. It also never saw danya's floating half or four creators.
+// `src/data/corpora.json` is the one declaration.
+// 🔒 THE PRIMARY CORPUS ONLY (David 2026-09-21: "the only ones that should be
+// tied to coach are danya's. the ones that are tied to positions").
+//
+// An anchor STAMPS a lineSan onto a note, which makes it selectable at an exact
+// board by `noteAtPosition` — and `applyDerivedAnchors` runs on the secondary
+// corpora too (`secondaryCorpus.ts`). So a non-primary anchor re-opens exactly
+// what 2026-08-26 closed: farmed anchored notes speaking on the play surfaces,
+// where voiced is meant to be the sole exact-position source. The old hand-list
+// had been deriving 909 of them (saintlouis 513, hangingpawns 378, chessbrah 18)
+// against danya's 122.
+const REGISTRY = JSON.parse(readFileSync('src/data/corpora.json', 'utf8'));
+const CORPORA = REGISTRY.corpora
+  .filter((c) => c.primary === true)
+  .flatMap((c) => [c.path, ...(typeof c.floatingPath === 'string' ? [c.floatingPath] : [])]);
 const OUT = 'src/data/note-anchors.json';
 
 /** How many opening plies must match the DB before a run counts as a real

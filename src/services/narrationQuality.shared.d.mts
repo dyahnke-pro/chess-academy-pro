@@ -45,8 +45,16 @@ export declare function toClauses(text: string): string[];
 /** Rank a candidate note for a ply — higher speaks. Pure and deterministic. */
 export declare function scoreNarration(text: string, openingName: string | null): number;
 
-/** The clause classes `trimPassage` cuts by default — the confident ones. */
-export declare const CONFIDENT_CUT_CLASSES: readonly string[];
+// 🔒 KEEP THIS FILE IN STEP WITH THE .mjs (2026-09-21). The two below existed
+// in the implementation and were missing here, so TypeScript reported "no
+// exported member" for symbols the runtime happily provides — a hand-written
+// declaration beside a JS module drifts, and the drift reads as a broken
+// import rather than a stale type. When you add an export to the .mjs, add it
+// here in the same commit.
 
-/** Drop clauses of the given classes from a passage, keeping the rest intact. */
-export declare function trimPassage(text: string, classes?: readonly string[]): string;
+/** The clause classes `trimPassage` removes by default — the ones a read of
+ *  real output showed are safe to cut without taking teaching with them. */
+export declare const CONFIDENT_CUT_CLASSES: readonly NarrationClass[];
+
+/** Drop every clause whose class is in `classes`, keeping the rest in order. */
+export declare function trimPassage(text: string, classes?: readonly NarrationClass[]): string;

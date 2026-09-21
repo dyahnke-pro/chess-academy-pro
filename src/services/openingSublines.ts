@@ -3,7 +3,8 @@ import {
   findOpeningByPgnPrefix,
   findSiblingExtensionBranches,
 } from './openingDetectionService';
-// @ts-expect-error — plain-JS shared metric, no type decls (run by node + vite).
+// Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
+// suppression this replaces made every call an unsafe `any` call.
 // Single source of the "reaches the middlegame" rule; reused so the course
 // trims sublines with the SAME definition the variationMiddlegameDepth gate uses.
 import { reachesMiddlegame as reachesMiddlegameImpl } from '../data/variationMiddlegameDepth.shared.mjs';

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { secondarySupportNotes, secondaryNotesForGap } from './secondaryCorpora';
 import { __setFarmedCorporaCache } from './farmedCorpusData';
 import type { TeachingsBundle } from './secondaryCorpus';
+import registry from '../data/corpora.json';
 
 // THE SUPPORT TIER (David 2026-08-01): "I want the notes to be able to cover
 // gaps in any masterclass or Danya openings we teach. Splice them in anywhere
@@ -57,9 +58,17 @@ const COVERED = 'Caro-Kann Defense: Advance Variation, Tal Variation';
 const farmed = (notes: Array<{ id: string }>): string[] =>
   notes.map((n) => n.id).filter((id) => id.startsWith('hp') || id.startsWith('sl'));
 
+// 🔒 THE STUB KEY IS DERIVED, NEVER A CREATOR NAME (2026-09-21). These tests
+// exercise the TIER's machinery with synthetic notes, so the key only has to be
+// one the registry knows — `getFarmedCorporaSync` iterates the registry, so an
+// unregistered key is silently dropped and every assertion reads []. They were
+// keyed on 'hangingpawns', which stopped being registered when the seven
+// non-danya creators were removed.
+const STUB_KEY = registry.corpora.find((c) => !c.primary)!.key;
+
 beforeEach(() => {
   __setFarmedCorporaCache([
-    { key: 'hangingpawns', data: bundle([note('hp1', COVERED), note('hp2', COVERED, ['e4', 'c6', 'd4', 'd5', 'e5'])]) },
+    { key: STUB_KEY, data: bundle([note('hp1', COVERED), note('hp2', COVERED, ['e4', 'c6', 'd4', 'd5', 'e5'])]) },
   ]);
 });
 afterEach(() => { __setFarmedCorporaCache(undefined); });

@@ -14,7 +14,8 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-// @ts-expect-error — plain .mjs helper, no types by design
+// Typed via a `.d.mts` beside the module (2026-09-21) — the suppression this
+// replaces made every call an unsafe `any` call.
 import { validateHandwritten, corpusSources } from '../../scripts/merge-handwritten-spoken.mjs';
 
 const ROOT = resolve(__dirname, '../..');
@@ -28,13 +29,22 @@ describe('hand-written spoken forms', () => {
   const bake = read('public/data/corpus-spoken.json') as Record<string, Baked>;
 
   it('has some (guards the guard)', () => {
-    // Every assertion below passes vacuously on an empty file. The hand-written
-    // spoken bake was the REWORD layer for the farmed corpus; on 2026-08-26 the
-    // anchored farmed notes (and their 267 hand-authored forms) were archived to
-    // data/archive/, and voiced — the sole exact-position source now — is already
-    // in spoken form and needs no rewrite. So the file is expected minimal; the
-    // sibling assertions still hold whatever remains to the same gate + bake.
-    expect(Object.keys(hand).length).toBeGreaterThanOrEqual(1);
+    // 🔒 EMPTY BY DESIGN, AND THAT IS THE ASSERTION (2026-09-21).
+    //
+    // This was the REWORD layer for the FARMED corpus. On 2026-08-26 the
+    // anchored farmed notes and their 267 hand-authored forms were archived;
+    // on 2026-09-21 the seven farmed creators were removed outright, leaving
+    // danya + voiced — and voiced is already in spoken form, so there is
+    // nothing here to reword. Its last entry (`hp-2a8`) was a hangingpawns
+    // note and went orphan with its corpus.
+    //
+    // The old floor asked for >= 1 entry to prove non-vacuity. That is now
+    // unsatisfiable AND wrong: the honest claim is that the layer is dormant.
+    // So assert emptiness, with the reason — and note that the two sibling
+    // assertions below iterate `hand`, so they re-arm on their own the moment
+    // an entry is added. A reader must not mistake them for live coverage
+    // while this is {}.
+    expect(Object.keys(hand)).toEqual([]);
   });
 
   it('passes the same gate the machine-baked lines pass', () => {

@@ -28,6 +28,7 @@ import { join } from 'node:path';
 import { __setFarmedCorporaCache } from '../services/farmedCorpusData';
 import { warmSecondaryPositionIndexSync } from '../services/secondaryCorpora';
 import type { TeachingsBundle } from '../services/secondaryCorpus';
+import type { DanyaNote } from '../services/danyaTeachingService';
 import registry from '../data/corpora.json';
 
 /**
@@ -91,6 +92,64 @@ export function loadFullCorpus(): Array<{ key: string; notes: number }> {
   // pass or fail on whether some earlier test happened to warm the index.
   warmSecondaryPositionIndexSync();
   return primed.map((c) => ({ key: c.key, notes: c.data.notes.length }));
+}
+
+/**
+ * EVERY corpus half as `{ key, path }`, repo-relative, registry-derived.
+ *
+ * Three gates hand-listed these paths and the 2026-09-19 split broke all three
+ * at once (chessbrah moved out of `src/data/`): one crashed on import and took
+ * eleven tests with it, one silently skipped the missing file and went red on
+ * its own note-count floor, one skipped a whole corpus from its report. A list
+ * of file paths is a duplicated constant, and duplicated constants drift.
+ */
+export const CORPUS_FILES: Array<{ key: string; path: string }> = registry.corpora.flatMap((c) => [
+  { key: c.key, path: c.path },
+  ...(typeof c.floatingPath === 'string' ? [{ key: `${c.key}:floating`, path: c.floatingPath }] : []),
+]);
+
+/**
+ * EVERY note of EVERY corpus half — static, fetched, and floating — read from
+ * the registry.
+ *
+ * `loadFullCorpus` primes the production cache and reports COUNTS; a gate that
+ * needs the notes themselves used to hand-list the files, and the 2026-09-19
+ * corpus split made that list wrong in two directions at once:
+ * `src/data/chessbrah-teachings.json` moved to `public/data/` (so the import
+ * threw and took the whole file down with it), and `src/data/danya-teachings.json`
+ * became the 122 POSITIONED notes with the other 10,022 in `danya-floating.json`.
+ * Four creators were never listed at all. So the reader lives here, beside the
+ * other one, and both derive from `corpora.json`.
+ */
+function readNotes(rel: string): DanyaNote[] {
+  try {
+    const raw = JSON.parse(readFileSync(join(process.cwd(), rel), 'utf8')) as TeachingsBundle;
+    return Array.isArray(raw?.notes) ? raw.notes : [];
+  } catch {
+    // A missing half is a real signal; the caller's floor assertion surfaces it
+    // rather than this swallowing it into a quiet zero.
+    return [];
+  }
+}
+
+export function allCorpusNotes(): DanyaNote[] {
+  return CORPUS_FILES.flatMap((c) => readNotes(c.path));
+}
+
+/**
+ * The PRIMARY corpus's notes only (both halves).
+ *
+ * Anchor derivation is primary-only by rule — an anchor makes a note
+ * selectable at an exact board, and only danya's may be (David 2026-09-21).
+ * Anything measuring COVERAGE wants `allCorpusNotes`; anything about ANCHORS
+ * wants this.
+ */
+export function primaryCorpusNotes(): DanyaNote[] {
+  const primary = registry.corpora.filter((c) => c.primary);
+  return primary.flatMap((c) => [
+    ...readNotes(c.path),
+    ...(typeof c.floatingPath === 'string' ? readNotes(c.floatingPath) : []),
+  ]);
 }
 
 /** Drop back to the static-only view (what an unprimed browser session sees

@@ -51,7 +51,14 @@ describe('endgame corpus note renders on the surface', () => {
     const total = loaded.reduce((n, c) => n + c.notes, 0);
     // Non-vacuity: with the fetched corpora missing from disk every assertion
     // below would measure an empty index and this gate would be theatre.
-    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+    //
+    // 15,000, lowered from 20,000 (2026-09-21). The seven non-danya farmed
+    // creators were removed — the coach has one corpus source now — so the
+    // fetched halves are danya's floating 9,928 plus voiced's 7,477. The floor
+    // still proves the index is populated, which is all it was ever for; the
+    // endgame card is fed by `conceptNotesFor`, which reads the PRIMARY
+    // corpus's concept index and never touched the seven.
+    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(15_000);
   }, 180_000);
 
   // Sync render + assert — the retrieval is synchronous and the card is on

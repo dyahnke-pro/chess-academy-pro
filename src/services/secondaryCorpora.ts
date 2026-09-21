@@ -69,8 +69,32 @@ onFarmedCorpusLoaded(() => {
   void warmSecondaryPositionIndex().catch(() => { /* the corpus is a bonus, never a blocker */ });
 });
 
+/**
+ * 🔒 DORMANT SINCE 2026-09-21 — KEPT ON PURPOSE, DO NOT FEED IT (David's call:
+ * "dormant").
+ *
+ * Both tiers below match by opening NAME. That only ever worked because seven
+ * farmed creators carried opening tags on 16,298 notes; those creators were
+ * removed when David set the corpus to ONE source ("there are only one source
+ * of corpus notes. and its the danya ones that we have tied exactly to
+ * positions. nothing else!"). The one registered non-primary corpus now is
+ * VOICED, whose notes carry `opening: null` by design — they are selected by
+ * exact position — so neither tier can match anything and both return [].
+ *
+ * 🚨 THE FAILURE MODE THIS COMMENT EXISTS TO STOP: a future session reads a
+ * coverage number, finds these functions returning nothing, and "fixes" it by
+ * registering another creator in `corpora.json`. That is not a fix — it
+ * re-opens name-based selection, which is the 2026-08-04 determinism lock's
+ * whole subject: teaching authored at one position, handed to the model to
+ * phrase as if it described another. Coverage grows by FARMING AND VOICING more
+ * position-keyed notes, never by loosening selection.
+ *
+ * They return honest empties rather than being deleted so the shape survives
+ * for the day a second position-keyed corpus exists.
+ */
 /** THE gap-filling entry point: teaching for an opening the primary corpus does
- *  not cover. Callers pass how many notes the primary already supplied. */
+ *  not cover. Callers pass how many notes the primary already supplied.
+ *  DORMANT — see above. */
 export function secondaryNotesForGap(args: {
   historySans?: string[];
   openingName?: string | null;
@@ -85,7 +109,8 @@ export function secondaryNotesForGap(args: {
  *  primary corpus covers the opening. Callers fill from the primary corpus
  *  first and pass only the slots left over, so this supplements the house voice
  *  and never displaces it. See `supportNotesAcross` for why the gap tier's
- *  opening-level gate was too coarse. */
+ *  opening-level gate was too coarse.
+ *  DORMANT — see the block above `secondaryNotesForGap`. */
 export function secondarySupportNotes(args: {
   historySans?: string[];
   openingName?: string | null;
