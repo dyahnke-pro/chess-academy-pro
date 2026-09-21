@@ -397,6 +397,15 @@ const GATE_TESTS = [
   'src/data/modelGames.test.ts',
   'src/data/modelGames-orientation.test.ts',
   'src/data/perspectiveVoice.test.ts',         // ONE perspective: student=you/your, opponent=they/their, never we/our (David 2026-08-28)
+  // 🔴 FOUR GATES THAT WOULD HAVE BEEN ORPHANS (added 2026-09-21). The
+  // changed-file phase below is CO-LOCATED — "edit Foo.tsx → run Foo.test.tsx" —
+  // so a gate that guards a file it does not sit beside runs only while its own
+  // file keeps changing, and goes silent the moment it lands. All four are that
+  // shape, and each guards something with a real incident behind it:
+  'src/test/assetsNeverFallBackToHtml.test.ts', // guards vercel.json's assets/ exclusion — without it a stale chunk returns 200 text/html, the iPhone "Unexpected token '<'" class
+  'src/test/walkthroughPerspective.test.ts',    // the pronoun ban at ZERO on three surfaces the JSON + beat arms both miss (WalkthroughTree prose, curated narrations, code templates)
+  'src/test/seatReattribution.test.ts',         // the SEAT predicate — three cuts, two silently inert, and it guards a LOCKED seat rule
+  'src/test/criticalMomentVoice.test.ts',       // CRIT's claimed-elsewhere branch, which no prod rotation has yet produced
   'src/services/tacticTypeUnification.test.ts', // ONE tactic classifier: the weakness tag is a projection of the concept the coach teaches; legacy geometry has no product caller (David 2026-09-15 "one coach system, not 5")
   'src/services/teachingSelector.test.ts',
   'src/services/structureProse.test.ts',
