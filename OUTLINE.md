@@ -100,7 +100,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ## 9. Carried over — the stale-tactics checklist (pickup §7)
 - ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
 - ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
-- 🔴 `npm run ship-check` has never printed READY TO PUSH on that tree
+- ✅ `npm run ship-check` **printed READY TO PUSH** (2026-09-20, 348.6s, 11 commits on the tree): typecheck ✓, prod build ✓, lint 0 errors, content gates ✓, changed-file tests ✓. The one blocker was a redundant `String()` in a new measurement — `npm run lint` runs with `--report-unused-disable-directives`, which makes that an ERROR
 - ✅ Read the `tactics-context-stale` count off the listener — 0 of 145 captured events, prod, non-vacuity proven
 - ✅ `GameChatPanel.test` — MEASURED 2026-09-20: 16/16 green on a synced tree. The "red on untouched main" claim was stale and is deleted, not annotated
 - ✅ Swept: ONE `crashed(out)` detector backs vitest, lint, tsc and the Playwright summarizer — the regex had already been hand-written twice, which is the drift the rot rule names
