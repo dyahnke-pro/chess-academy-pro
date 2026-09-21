@@ -63,7 +63,7 @@ describe('the hint dial reads every evaluated move', () => {
   it('backs off for a student who keeps finding the move — with no card ever shown', async () => {
     analyze.mockImplementation(evalsShedding(0)); // best move every time
     const { useDiscussionPractice } = await import('./useDiscussionPractice');
-    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach' }));
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
 
     expect(result.current.hintDial.register).toBe('moderate');
 
@@ -87,7 +87,7 @@ describe('the hint dial reads every evaluated move', () => {
     // beginner the obvious register exists for.
     analyze.mockImplementation(evalsShedding(150));
     const { useDiscussionPractice } = await import('./useDiscussionPractice');
-    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach' }));
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
 
     for (let i = 0; i < 3; i += 1) {
       await act(async () => { await result.current.evaluatePlayerMove({ ...move(), studentRating: 800 }); });
@@ -106,7 +106,7 @@ describe('the hint dial reads every evaluated move', () => {
     // beginner's opening register.
     analyze.mockImplementation(evalsShedding(0));
     const { useDiscussionPractice } = await import('./useDiscussionPractice');
-    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach' }));
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
 
     await act(async () => { await result.current.evaluatePlayerMove({ ...move(), studentRating: 2400 }); });
     expect(result.current.hintDial.register).toBe('subtle');
@@ -117,7 +117,7 @@ describe('the hint dial reads every evaluated move', () => {
     // the student reaches the middlegame, where they need the help most.
     analyze.mockImplementation(evalsShedding(0));
     const { useDiscussionPractice } = await import('./useDiscussionPractice');
-    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach' }));
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
 
     for (let i = 0; i < 4; i += 1) {
       await act(async () => {

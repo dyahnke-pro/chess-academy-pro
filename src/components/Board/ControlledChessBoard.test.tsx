@@ -8,6 +8,7 @@ import type {
   PieceHandlerArgs,
   ChessboardOptions,
 } from 'react-chessboard';
+import { buildMoveResult } from '../../test/factories';
 
 // ─── react-chessboard mock (v5 API: single `options` prop) ─────────────────
 
@@ -221,7 +222,7 @@ describe('ControlledChessBoard', () => {
 
   describe('move making via drag and drop', () => {
     it('calls game.onDrop and onMove for a valid drop', () => {
-      const moveResult: MoveResult = { from: 'e2', to: 'e4', san: 'e4', fen: 'new-fen' };
+      const moveResult: MoveResult = buildMoveResult({ from: 'e2', to: 'e4', san: 'e4', fen: 'new-fen' });
       const game = buildMockGame({ onDrop: vi.fn().mockReturnValue(moveResult) });
       const onMove = vi.fn();
 
@@ -264,7 +265,7 @@ describe('ControlledChessBoard', () => {
     });
 
     it('calls onMove when game.onSquareClick returns a result', () => {
-      const moveResult: MoveResult = { from: 'e2', to: 'e4', san: 'e4', fen: 'new-fen' };
+      const moveResult: MoveResult = buildMoveResult({ from: 'e2', to: 'e4', san: 'e4', fen: 'new-fen' });
       const game = buildMockGame({ onSquareClick: vi.fn().mockReturnValue(moveResult) });
       const onMove = vi.fn();
 

@@ -77,7 +77,7 @@ describe('a mistake is captured with no card ever shown', () => {
     // ever raised. The mistake must still reach the weakness bucket — that is
     // the whole point of keeping capture when the pop-ups go.
     const { useDiscussionPractice } = await import('./useDiscussionPractice');
-    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach' }));
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
 
     // Awaited directly rather than through `waitFor` — the capture is
     // synchronous with the evaluate call, and waitFor's act loop hangs here
@@ -112,7 +112,7 @@ describe('a mistake is captured with no card ever shown', () => {
     // prove WHICH fundamental a slip neglected — so evaluatePlayerMove must
     // forward it into the capture's classifyInput.
     const { useDiscussionPractice } = await import('./useDiscussionPractice');
-    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach' }));
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
 
     const history = ['e4', 'e5', 'Nf3', 'Nf6'];
     await result.current.evaluatePlayerMove({ ...SLIP, studentRating: 800, historySans: history });

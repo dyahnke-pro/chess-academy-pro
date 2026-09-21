@@ -21,6 +21,7 @@ import type {
   CheckpointQuizItem,
   SetupPuzzle,
 } from '../types';
+import type { MoveResult } from '../hooks/useChessGame';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -481,6 +482,35 @@ export function buildSetupPuzzle(overrides?: Partial<SetupPuzzle>): SetupPuzzle 
     attempts: 0,
     successes: 0,
     createdAt: today(),
+    ...overrides,
+  };
+}
+
+/**
+ * A `MoveResult` as `useChessGame` actually returns it.
+ *
+ * WHY A FACTORY RATHER THAN 13 INLINE LITERALS. `MoveResult` grew `pgn`,
+ * `history`, `moveNumber` and `turn`, and thirteen test sites across the board
+ * components and the kid games were still writing the four-field shape it had
+ * before. Each was a separate type error saying the same thing. A literal in a
+ * test restates a type the test does not own, so it rots the moment the type
+ * moves — which is the duplicated-constant rule applied to fixtures, and the
+ * reason CLAUDE.md says all test data comes from this file.
+ *
+ * Defaults describe ONE real move, 1.e4, so a caller that only cares about
+ * `from`/`to` still gets a self-consistent board rather than a shape that
+ * type-checks and lies.
+ */
+export function buildMoveResult(overrides?: Partial<MoveResult>): MoveResult {
+  return {
+    from: 'e2',
+    to: 'e4',
+    san: 'e4',
+    fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+    pgn: '1. e4',
+    history: ['e4'],
+    moveNumber: 1,
+    turn: 'b',
     ...overrides,
   };
 }
