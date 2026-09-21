@@ -795,9 +795,9 @@ describe('weaknessAnalyzer', () => {
 
     it('computes cpLoss from adjacent evaluations', () => {
       const annotations: MoveAnnotation[] = [
-        { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0.3, bestMove: 'e4', classification: 'good', comment: null },
-        { moveNumber: 1, color: 'black', san: 'e5', evaluation: 0.3, bestMove: 'e5', classification: 'good', comment: null },
-        { moveNumber: 2, color: 'white', san: 'Qh5', evaluation: -1.2, bestMove: 'Nf3', classification: 'mistake', comment: null },
+        { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0.3, bestMove: 'e4', bestMoveEval: null, classification: 'good', comment: null },
+        { moveNumber: 1, color: 'black', san: 'e5', evaluation: 0.3, bestMove: 'e5', bestMoveEval: null, classification: 'good', comment: null },
+        { moveNumber: 2, color: 'white', san: 'Qh5', evaluation: -1.2, bestMove: 'Nf3', bestMoveEval: null, classification: 'mistake', comment: null },
       ];
       const game = buildGameRecord({
         pgn: '1.e4 e5 2.Qh5 1-0',

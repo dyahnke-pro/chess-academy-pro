@@ -149,8 +149,8 @@ describe('syncService', () => {
       const game = buildGameRecord({
         id: 'lichess-abc123',
         annotations: [
-          { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0.3, bestMove: null, classification: 'good', comment: null },
-          { moveNumber: 1, color: 'black', san: 'e5', evaluation: 0.2, bestMove: null, classification: 'good', comment: null },
+          { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0.3, bestMove: null, bestMoveEval: null, classification: 'good', comment: null },
+          { moveNumber: 1, color: 'black', san: 'e5', evaluation: 0.2, bestMove: null, bestMoveEval: null, classification: 'good', comment: null },
         ],
         coachAnalysis: 'Solid opening play.',
       });
@@ -242,7 +242,7 @@ describe('syncService', () => {
       const game = buildGameRecord({
         id: 'lichess-round-trip',
         annotations: [
-          { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0.3, bestMove: null, classification: 'good', comment: null },
+          { moveNumber: 1, color: 'white', san: 'e4', evaluation: 0.3, bestMove: null, bestMoveEval: null, classification: 'good', comment: null },
         ],
         coachAnalysis: 'Well played.',
       });
