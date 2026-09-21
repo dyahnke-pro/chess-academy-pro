@@ -477,6 +477,32 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const resolveCards = async () => {
     for (const [c, sel] of [
       ['discussion-reason-picker', '[data-testid="discussion-reason-option"]'],
+      // 🔴 FIVE BLOCKING OVERLAYS THIS TABLE DID NOT KNOW ABOUT (added
+      // 2026-09-21). The component keeps its OWN list of overlays that block
+      // the walk — the scroll-into-view effect — and diffing it against this
+      // table found five with no handler here. Every one of them is a silent
+      // walk-park waiting for the right game, which is exactly what this
+      // file's own comment says three entries down: "A card this loop does not
+      // know how to resolve is a card that freezes the walk."
+      //
+      // `review-principle-quiz` is the one that was already biting: it opens
+      // after any why-picker faucet, and the product's `handleWalkForward`
+      // returned silently while it was up (fixed the same day — the forward
+      // now reports a `quiz-open` stop and auto-play pauses visibly).
+      //
+      // Two hand-maintained lists in two files that must agree is a
+      // convention, and conventions rot — that list has ALREADY lost this
+      // argument once, with the turning-point testid misspelled from the day
+      // it was written. The durable fix is the outcome type in
+      // useReviewPlayback, which degrades ANY unhandled overlay (known or not)
+      // to a visible pause instead of a dead walk. These entries make the
+      // audit resolve the five we know about; the type is what covers the
+      // sixth nobody has written yet.
+      ['discussion-practice-panel', '[data-testid="discussion-skip"]'],
+      ['review-principle-quiz', '[data-testid="principle-quiz-skip"]'],
+      ['review-find-shot-reveal', '[data-testid="review-find-shot-continue"]'],
+      ['review-cameo-playback', '[data-testid="review-cameo-stop"]'],
+      ['review-theory-playback', '[data-testid="review-theory-stop"]'],
       ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
       ['review-cameo-ask', '[data-testid="review-cameo-skip"]'],
       ['review-theory-ask', '[data-testid="review-theory-skip"]'],

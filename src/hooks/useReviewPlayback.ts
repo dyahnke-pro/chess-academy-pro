@@ -42,8 +42,63 @@ export interface UseReviewPlaybackArgs {
    *  on. The parent routes it through its forward handler so every planned
    *  stop (find-the-shot, trap, turning point) still fires. When omitted the
    *  hook steps the ply itself. */
-  onAutoAdvance?: () => void;
+  onAutoAdvance?: () => ForwardOutcome;
 }
+
+/**
+ * WHY A FORWARD REPORTS AN OUTCOME (2026-09-21).
+ *
+ * `handleWalkForward` used to return `void`, so every early return in it was
+ * indistinguishable at this call site from "I advanced". The advance chain is
+ * speak-resolves → scheduleAdvance → timer → onAutoAdvance, and the NEXT
+ * advance is only ever scheduled when the ply CHANGES. So a forward that was
+ * silently consumed stopped the walk permanently — while `isAutoPlaying`
+ * stayed true and the button went on reading "playing". The user saw a review
+ * that had died with no way to tell, and a prod audit sat parked at ply 67 of
+ * 69 for 350 seconds with a perfectly readable ply counter.
+ *
+ * Two live paths did exactly that (a question-plan yield that handed the
+ * forward to a card which had not opened yet, and a principle quiz whose guard
+ * carried the comment "never opens" while a call site three hundred lines away
+ * opened it). Enumerating the overlays that can do this was the first fix
+ * considered and it is a WATCHER: the seventh overlay, written by someone who
+ * reads neither list, reopens it. The doctrine is to remove the choice.
+ *
+ * So a stop must NAME itself, and `AUTO_ADVANCE_ON_STOP` is a `Record` over the
+ * union: a new stop reason FAILS TO COMPILE until someone decides what
+ * auto-play does about it. There is no default, which is the whole point.
+ */
+export type ForwardStop =
+  /** The principle quiz owns the screen and is answered by the student. */
+  | 'quiz-open'
+  /** The critical-moment question card is up, awaiting an answer. */
+  | 'critical-ask'
+  /** A planned question card (turning point / find-the-shot) is up. */
+  | 'planned-question'
+  /** The find-the-shot card is up. */
+  | 'find-the-shot'
+  /** A legacy reading gate is open. Unreachable today — `setReadingGate` is
+   *  only ever called with null — and kept so the guard declares itself
+   *  rather than pretending to advance. */
+  | 'reading-gate';
+
+export type ForwardOutcome = { advanced: true } | { advanced: false; stop: ForwardStop };
+
+/**
+ * What auto-play does when a forward did NOT advance.
+ *
+ * `pause` is the honest answer for every card the STUDENT has to act on: the
+ * walk genuinely is not going anywhere until they do, so say so and let the
+ * button tell the truth. `reschedule` exists for stops that clear themselves;
+ * nothing uses it today, and a reason that needs it should say why here.
+ */
+const AUTO_ADVANCE_ON_STOP: Record<ForwardStop, 'reschedule' | 'pause'> = {
+  'quiz-open': 'pause',
+  'critical-ask': 'pause',
+  'planned-question': 'pause',
+  'find-the-shot': 'pause',
+  'reading-gate': 'pause',
+};
 
 export interface UseReviewPlaybackResult {
   /** 0 = starting position; N = after the Nth ply. */
@@ -275,6 +330,42 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   // `review-playback-step 6→7` paired with
   // `review-narration-spoken ply 6: d3 — solid…` — the text was
   // ply 7's d3 narration but the audit summary said ply 6.
+  /**
+   * Act on what the parent's forward actually DID.
+   *
+   * A stop is a real transition: auto-play goes OFF and the button says
+   * `paused`, because the alternative — the state this replaced — was a walk
+   * that could never advance again while the UI insisted it was playing. A
+   * user could not tell a dead review from a slow one, and neither could an
+   * audit polling `data-state`.
+   */
+  const handleOutcome = useCallback((outcome: ForwardOutcome | undefined, atPly: number): void => {
+    // A MISSING OUTCOME MUST NOT THROW. The TYPE is what stops a real caller
+    // from omitting it; this guard is for the untyped edges (a test double, a
+    // JS consumer) — and it matters because a throw inside the advance chain
+    // would kill the walk HARDER than the silent-consumption bug this whole
+    // mechanism exists to fix, and would do it on every game rather than on
+    // the ones with an overlay.
+    if (!outcome || outcome.advanced) return;
+    const action = AUTO_ADVANCE_ON_STOP[outcome.stop];
+    void logAppAudit({
+      kind: 'review-playback-step',
+      category: 'subsystem',
+      source: 'useReviewPlayback.forwardStopped',
+      summary: `forward did not advance at ply ${atPly}: ${outcome.stop} -> ${action}`,
+      details: JSON.stringify({ ply: atPly, stop: outcome.stop, action }),
+    });
+    if (action === 'pause') {
+      autoRef.current = false;
+      setIsAutoPlaying(false);
+      return;
+    }
+    // 'reschedule' — the stop clears itself; try again after a beat rather
+    // than declaring the walk over.
+    scheduleAdvanceRef.current(atPly, 1200, activeTokenRef.current);
+  }, []);
+  const scheduleAdvanceRef = useRef<(ply: number, delayMs: number, token: number) => void>(() => undefined);
+
   /** Schedule the auto-advance for `ply` once its narration is done. The
    *  timer is token-guarded: any navigation (which bumps the token) or a
    *  pause cancels it, so an advance can never fire under a user who moved. */
@@ -297,10 +388,11 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
         summary: `auto-advance from ply ${ply} after ${delayMs}ms`,
         details: JSON.stringify({ fromPly: ply, delayMs }),
       });
-      if (onAutoAdvanceRef.current) onAutoAdvanceRef.current();
+      if (onAutoAdvanceRef.current) handleOutcome(onAutoAdvanceRef.current(), ply);
       else advanceRef.current(ply + 1);
     }, delayMs);
   }, [clearAdvanceTimer, lastPly]);
+  scheduleAdvanceRef.current = scheduleAdvance;
   /** The hook's own step, used when no parent forward handler is wired. */
   const advanceRef = useRef<(ply: number) => void>(() => undefined);
 
@@ -521,7 +613,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     // just said first before advancing"). A fresh Start, or a ply interrupted
     // mid-sentence, still SPEAKS the current ply (so ply 0 / the intro shows).
     if (resuming && plyFullySpokenRef.current) {
-      if (onAutoAdvanceRef.current) onAutoAdvanceRef.current();
+      if (onAutoAdvanceRef.current) handleOutcome(onAutoAdvanceRef.current(), currentPlyRef.current);
       else advanceRef.current(currentPlyRef.current + 1);
     } else {
       speakCurrent(currentPlyRef.current, currentText);

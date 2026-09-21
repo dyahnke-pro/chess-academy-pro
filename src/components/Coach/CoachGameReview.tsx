@@ -71,7 +71,7 @@ import type {
   ReviewMoveSegment,
 } from '../../services/coachFeatureService';
 import { ReviewCitationPreviews } from './ReviewCitationPreviews';
-import { useReviewPlayback } from '../../hooks/useReviewPlayback';
+import { useReviewPlayback, type ForwardOutcome } from '../../hooks/useReviewPlayback';
 import { useReviewEngineLines } from '../../hooks/useReviewEngineLines';
 import { SkipBack, SkipForward, ChevronLeft, ChevronRight, Cpu, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -674,7 +674,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // every planned stop (find-the-shot / trap / turning point) still fires on
   // an auto tick. handleWalkForward is declared below the hook — a ref bridges
   // the order.
-  const handleWalkForwardRef = useRef<() => void>(() => undefined);
+  const handleWalkForwardRef = useRef<() => ForwardOutcome>(() => ({ advanced: true }));
   const walkPlayback = useReviewPlayback({
     narration: walkNarration,
     totalPlies: moves.length,
@@ -985,8 +985,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTrapReveal(null);
   }, [props.gameId]);
 
-  const handleWalkForward = useCallback((): void => {
-    if (readingGate) return;             // a legacy gate is open (defensive)
+  const handleWalkForward = useCallback((): ForwardOutcome => {
+    // Unreachable today: `setReadingGate` is only ever called with null. Kept
+    // because a guard that can fire must DECLARE what it does to the walk
+    // rather than look like an advance.
+    if (readingGate) return { advanced: false, stop: 'reading-gate' };
     // A forward tap always supersedes an in-flight spoken-line (delta) playout —
     // whether it advances the ply or opens a card. Bumping the token aborts the
     // async loop; the auto-clear effect tears its overlay down.
@@ -1003,19 +1006,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setWalkExplorationSan(null);
       setWalkExplorationArrows(null);
       walkPlayback.goForward();
-      return;
+      return { advanced: true };
     }
     if (turningQ) {
       setTurningQ(null);
       setTurningPreviewPly(null);
       setWalkExplorationFen(null);
       walkPlayback.goForward();
-      return;
+      return { advanced: true };
     }
     if (trapQ) {
       setTrapQ(null);
       walkPlayback.goForward();
-      return;
+      return { advanced: true };
     }
     // Forward SKIPS the find-the-shot too (David 2026-07-20: "arrow forward
     // should skip this… we talked about this"). Dismiss the card + advance.
@@ -1023,20 +1026,25 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setShotState(null);
       setShotReveal(null);
       walkPlayback.goForward();
-      return;
+      return { advanced: true };
     }
     // FORWARD IS ALWAYS AN ESCAPE HATCH — dismiss any open card + advance, never
     // freeze the board (David 2026-07-19). These cards are declared BELOW, so
     // rewind uses its in-scope setter and seq/cameo/theory go through the
     // late-bound canceller ref. (The real-game audit caught the cameo still
     // freezing forward at ply 21, 2026-07-20.)
-    if (rewindOffer) { setRewindOffer(null); walkPlayback.goForward(); return; }
+    if (rewindOffer) { setRewindOffer(null); walkPlayback.goForward(); return { advanced: true }; }
     if (seqStateRef.current || cameoStateRef.current || theoryStateRef.current) {
       dismissLateCardsRef.current?.();
       walkPlayback.goForward();
-      return;
+      return { advanced: true };
     }
-    if (principleQuizStateRef.current) return; // device quiz (hidden) — never opens
+    // 🔴 THE COMMENT HERE READ "device quiz (hidden) — never opens" AND IT WAS
+    // FALSE (2026-09-21). `finishFaucetResume` calls `setPrincipleQuizState(quiz)`
+    // and the card renders with testid `review-principle-quiz`. A wrong comment
+    // is worse than none — it tells every reader not to look here, which is how
+    // this bare return went on silently killing the walk after any why-picker.
+    if (principleQuizStateRef.current) return { advanced: false, stop: 'quiz-open' };
     // ── THE CRITICAL MOMENT, at its own ply ──────────────────────────────
     //
     // 🚨 IT LIVES OUT HERE, NOT INSIDE `if (readingQuizOn)`, where the first cut
@@ -1070,7 +1078,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // (turning point / find-the-shot), that card owns the moment — speaking
       // the critical reveal first would hand it the answer. The moment is
       // still recorded above; only the beat yields.
-      if (questionPlan.has(atPly)) return;
+      //
+      // 🔴 IT USED TO `return` HERE, AND THAT YIELDED THE FORWARD TOO (fixed
+      // 2026-09-21). The card it defers to opens LATER IN THIS SAME FUNCTION —
+      // the `readingQuizOn` block below reads `questionPlan.get(nextPly)` for
+      // the very same ply — so consuming the forward meant the card did not
+      // open on this step at all. And because the next auto-advance is only
+      // scheduled when the PLY CHANGES, the walk stopped dead: parked at ply
+      // 67 of 69 for 350 seconds in a prod audit, `isAutoPlaying` still true,
+      // the button still reading "playing". A manual forward then worked,
+      // because `criticalDoneRef` had recorded the ply and the block was
+      // skipped — which is exactly why it looked intermittent.
+      //
+      // The beat yields. The forward does not: fall through so the planned
+      // card opens on THIS step.
+      if (!questionPlan.has(atPly)) {
       captureEvent('review_critical_moment', {
         ply: atPly, register: criticalMoment.register, count: criticalMoment.count,
         stake: criticalMoment.stake, gap_cp: criticalMoment.gapCp, held: criticalMoment.found,
@@ -1080,10 +1102,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         setCriticalCard(criticalMoment);
         setCriticalReveal(null);
         void reviewSay(criticalMoment.question ?? '').catch(() => undefined);
-        return;  // pause the walk; resumes when they answer
+        return { advanced: false, stop: 'critical-ask' };  // resumes when they answer
       }
       // credit / note — a statement. Speak it and keep walking.
       void reviewSay(criticalMoment.reveal, criticalMoment.found ? { prosodySpike: true } : undefined).catch(() => undefined);
+      }
     }
     if (readingQuizOn) {
       const nextPly = walkPlayback.currentPly + 1;
@@ -1128,7 +1151,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             setTrapQ(trap);
             captureEvent('review_trap_asked', { target: trap.targetSquare, tempting: trap.temptingSan, ply: nextPly });
             void reviewSay(trap.prompt).catch(() => undefined);
-            return; // pause the walk; resumes when the student answers + dismisses
+            return { advanced: false, stop: 'planned-question' }; // resumes when they answer + dismiss
           }
           // couldn't build (edge) → fall through to the why-picker below.
         }
@@ -1150,7 +1173,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           // (Phase 1; budget-capped, never blocks the card).
           if (seg.bestMoveUci) prefetchPvForShot(nextPly, seg.fenBefore, seg.bestMoveUci);
           void reviewSay(`Hold on — right here you had something. ${shot.question}`).catch(() => undefined);
-          return; // pause the walk; resumes from the shot card
+          return { advanced: false, stop: 'find-the-shot' };
         }
         // WHY-PICKER STRIPPED (David 2026-08-28: "strip out why questions, make
         // walk best line a button"). Post-game review no longer interrupts a
@@ -1160,16 +1183,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // student taps "Show me" to walk the engine's line ON DEMAND
         // (runShowMePlayout). Just advance the walk — no interrupt.
         walkPlayback.goForward();
-        return;
+        return { advanced: true };
       }
     }
     walkPlayback.goForward();
+    return { advanced: true };
   }, [readingGate, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, criticalMoment, criticalCard, rewindOffer, questionPlan, moves, moverIsStudent]);
   handleWalkForwardRef.current = handleWalkForward;
   /** A user's forward tap / key: pauses auto-play (only Play restarts it),
    *  then steps through the same card ladder. */
   const handleWalkForwardManual = useCallback((): void => {
     walkPlayback.pause('forward-tap');
+    // A human tap does not need the outcome: it already paused auto-play, and
+    // a card that opens is the visible result. The outcome exists for the
+    // automatic chain, which has no eyes.
     handleWalkForward();
   }, [walkPlayback, handleWalkForward]);
   /** ⏭ = the next KEY MOMENT (the student's next flagged move), not the end of
