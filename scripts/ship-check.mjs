@@ -667,6 +667,10 @@ if (DOCS_LANE) {
     'run',
     'src/test/outlineCoverage.test.ts',
     'src/data/pricingCopy.test.ts',
+    // A conflict marker in a tracked file is always a defect. Added after
+    // da94024b9 committed one into OUTLINE.md and five commits carried it
+    // past three green gates, each correctly scoped and each blind to it.
+    'src/test/noConflictMarkers.test.ts',
   ]);
   const failed = results.filter((r) => !r.ok && !r.optional);
   console.log('');

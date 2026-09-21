@@ -18,8 +18,26 @@
  * served a page successfully.
  *
  * And every deploy creates the situation. `vite.config.ts` bakes `Date.now()`
- * into `__BUILD_ID__`, so every build renames every chunk — docs-only pushes
- * included, which is a proof by construction rather than a pattern.
+ * into `__BUILD_ID__`, so a build with a byte-identical tree still renames
+ * chunks — docs-only pushes included, which is a proof by construction rather
+ * than a pattern.
+ *
+ * 🔴 THIS PARAGRAPH USED TO SAY "every build renames EVERY chunk", and that is
+ * wrong by a factor of 160. Measured 2026-09-21 rather than argued: two
+ * `npx vite build` runs over an unchanged tree renamed **12 of 1,964 files**,
+ * while **1,907 asset chunks kept their names**. `sw.js` did change md5.
+ *
+ * The mechanism predicts the size, which is why the overstatement was lazy
+ * rather than merely imprecise: `__BUILD_ID__` has exactly ONE consumer
+ * (`appAuditor.ts`), so the rename cascades from that chunk to its importers
+ * and stops there. It was never going to reach a leaf data chunk.
+ *
+ * The correction does NOT weaken this gate, and that is worth stating plainly
+ * so nobody "fixes" it back: ONE stale chunk is enough to break a running page,
+ * and five of the twelve renamed files are `web-*.js` — the exact chunk class
+ * in the iPhone report (`/assets/web-BITZqWmZ.js`). The bug's mechanism is
+ * untouched; only my claim about its breadth was inflated. Corrected here
+ * rather than annotated, per the Lake Butler rule.
  *
  * WHY A 404 IS THE FIX RATHER THAN A DIFFERENT SYMPTOM. Both are failures; only
  * one is honest. A 404 is detectable by the app, by the service worker, and by
