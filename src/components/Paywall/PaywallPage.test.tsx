@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { PaywallPage } from './PaywallPage';
+import type { ComponentProps } from 'react';
 
 vi.mock('../../hooks/useEntitlement', () => ({
   useEntitlement: () => ({ isResolving: false }),
@@ -15,7 +16,7 @@ vi.mock('../../services/billingService', () => ({
   clearBillingError: () => {},
 }));
 
-function renderPaywall(feature?: Parameters<typeof PaywallPage>[0] extends { feature?: infer F } ? F : never) {
+function renderPaywall(feature?: NonNullable<ComponentProps<typeof PaywallPage>>['feature']) {
   return render(
     <MemoryRouter>
       <PaywallPage feature={feature} />

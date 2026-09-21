@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from './pieceValueRead';
+import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine, type PieceValue } from './pieceValueRead';
 
 // Real `eval` output from the shipped WASM build, after 1.e4 e5 2.Nf3 Nc6
 // 3.Bc4 Nf6 — trimmed to the board table plus the NNUE table that follows it,
@@ -213,7 +213,7 @@ describe('pieceQualityLines — worst piece only in the middlegame (David 2026-0
   // the other, and a relative ranking with no floor always names somebody.
   describe('a piece that has never moved is not doing the most work', () => {
     // Both white rooks home; a1 scores above h1, as it did on the real board.
-    const openingValues = [
+    const openingValues: PieceValue[] = [
       { square: 'a1', piece: 'R', color: 'w', value: 0.9 },
       { square: 'h1', piece: 'R', color: 'w', value: 0.1 },
       { square: 'c3', piece: 'N', color: 'w', value: 0.5 },
