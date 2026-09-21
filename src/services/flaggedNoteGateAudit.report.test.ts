@@ -23,19 +23,22 @@
 import { describe, it, beforeAll } from 'vitest';
 import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadFullCorpus, CORPUS_FILES } from '../test/loadFullCorpus';
 import { gradeNarrationText } from './coachAnswerGates';
 import type { DanyaNote } from './danyaTeachingService';
 
 interface Corpus { notes: DanyaNote[] }
 
-const CORPORA: Array<[string, string, string]> = [
-  ['naroditsky', 'src/data/danya-teachings.json', 'audit-reports/naroditsky-anchor/report.json'],
-  ['chessbrah', 'src/data/chessbrah-teachings.json', 'audit-reports/chessbrah-anchor/report.json'],
-  ['hangingpawns', 'public/data/hangingpawns-teachings.json', 'audit-reports/hangingpawns-anchor/report.json'],
-  ['saintlouis', 'public/data/saintlouis-teachings.json', 'audit-reports/saintlouis-anchor/report.json'],
-  ['hikaru', 'public/data/hikaru-teachings.json', 'audit-reports/hikaru-anchor/report.json'],
-];
+// 🔒 FROM THE REGISTRY (2026-09-21). The hand-list named
+// `src/data/chessbrah-teachings.json`, moved to `public/data/` by the
+// 2026-09-19 split, so that corpus dropped out of this report in silence; it
+// also missed danya's floating half and three creators. The report path is
+// derived from the key, which is what it always was.
+const CORPORA: Array<[string, string, string]> = CORPUS_FILES.map((c) => [
+  c.key,
+  c.path,
+  `audit-reports/${c.key.replace(':', '-')}-anchor/report.json`,
+]);
 
 /** The FEN a note is filed at, or null when its line will not replay. */
 function fenOf(lineSan: string[]): string | null {

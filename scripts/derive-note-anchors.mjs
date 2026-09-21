@@ -75,12 +75,17 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
-const CORPORA = [
-  'src/data/danya-teachings.json',
-  'src/data/chessbrah-teachings.json',
-  'public/data/hangingpawns-teachings.json',
-  'public/data/saintlouis-teachings.json',
-];
+// 🔒 FROM THE REGISTRY, NOT A HAND-LIST (2026-09-21). This was the FIFTH copy of
+// the corpus file list, and the 2026-09-19 split broke every one of them at
+// once: chessbrah moved to `public/data/`, so this script threw ENOENT and could
+// not run at all, and the sidecar it owns froze at whatever the last successful
+// run produced. It also never saw danya's floating half or four creators.
+// `src/data/corpora.json` is the one declaration.
+const REGISTRY = JSON.parse(readFileSync('src/data/corpora.json', 'utf8'));
+const CORPORA = REGISTRY.corpora.flatMap((c) => [
+  c.path,
+  ...(typeof c.floatingPath === 'string' ? [c.floatingPath] : []),
+]);
 const OUT = 'src/data/note-anchors.json';
 
 /** How many opening plies must match the DB before a run counts as a real

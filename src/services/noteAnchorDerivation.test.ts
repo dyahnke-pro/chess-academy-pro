@@ -17,29 +17,20 @@
 // are as narrow as they are; do not widen one without re-reading it.
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
-import { readFileSync } from 'node:fs';
 import { deriveAnchor, sanRuns } from '../../scripts/derive-note-anchors.mjs';
 import { allDerivedAnchors, applyDerivedAnchors, derivedAnchorsWentUnmatched } from './noteAnchorOverrides';
 import { noteDescribesPosition } from './noteAnchorIntegrity';
 import { noteAtPosition } from './danyaTeachingService';
 import type { DanyaNote } from './danyaTeachingService';
-import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadFullCorpus, allCorpusNotes } from '../test/loadFullCorpus';
 import dbRaw from '../data/openings-lichess.json';
 
-const CORPORA = [
-  'src/data/danya-teachings.json',
-  'src/data/chessbrah-teachings.json',
-  'public/data/hangingpawns-teachings.json',
-  'public/data/saintlouis-teachings.json',
-];
-
-function allNotes(): DanyaNote[] {
-  const out: DanyaNote[] = [];
-  for (const f of CORPORA) {
-    for (const n of JSON.parse(readFileSync(f, 'utf8')).notes ?? []) out.push(n);
-  }
-  return out;
-}
+// 🔒 FROM THE REGISTRY (2026-09-21). The hand-list here named
+// `src/data/chessbrah-teachings.json`, which the 2026-09-19 corpus split moved
+// to `public/data/` — so this file threw ENOENT at import and all ELEVEN of its
+// tests were skipped, not passing. It also missed danya's floating half (10,022
+// of its 10,144 notes) and four creators entirely.
+const allNotes = allCorpusNotes;
 
 const DB_PREFIX_PLIES = 4;
 const dbPrefixes = (() => {
