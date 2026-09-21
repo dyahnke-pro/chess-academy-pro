@@ -91,6 +91,8 @@ function buildOpeningData(overrides?: Partial<OpeningInsights>): OpeningInsights
       { name: 'Ruy Lopez', accuracy: 85, attempts: 10 },
     ],
     strengths: ['Ruy Lopez \u2014 63% win rate, 85% drill accuracy'],
+    bestResults: [],
+    worstResults: [],
     ...overrides,
   };
 }

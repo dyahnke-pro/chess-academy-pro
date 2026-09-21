@@ -51,6 +51,8 @@ function buildOverview(overrides?: Partial<OverviewInsights>): OverviewInsights 
 
 function buildOpenings(overrides?: Partial<OpeningInsights>): OpeningInsights {
   return {
+    bestResults: [],
+    worstResults: [],
     repertoireCoverage: { inBook: 0, offBook: 0 },
     mostPlayedWhite: [],
     mostPlayedBlack: [],

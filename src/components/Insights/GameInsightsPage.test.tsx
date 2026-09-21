@@ -40,7 +40,9 @@ function emptyClassifications(): MoveClassificationCounts {
 }
 
 const mockOverview: OverviewInsights = {
-  totalGames: 10,
+  analyzedGameCount: 0,
+    gamesNeedingAnalysis: 0,
+    totalGames: 10,
   wins: 5,
   losses: 3,
   draws: 2,
@@ -66,7 +68,9 @@ const mockOverview: OverviewInsights = {
 };
 
 const mockOpenings: OpeningInsights = {
-  repertoireCoverage: { inBook: 5, offBook: 5 },
+  bestResults: [],
+    worstResults: [],
+    repertoireCoverage: { inBook: 5, offBook: 5 },
   mostPlayedWhite: [],
   mostPlayedBlack: [],
   winRateByOpening: [],
