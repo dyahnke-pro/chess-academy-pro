@@ -24,7 +24,35 @@
       "destination": "/api/llm-proxy?provider=anthropic&path=:path*"
     },
     {
-      "source": "/((?!api/).*)",
+      "_comment": [
+        "🔴 /assets/ IS EXCLUDED FROM THE SPA FALLBACK ON PURPOSE (2026-09-21).",
+        "Without the exclusion this rewrite answered a MISSING hashed chunk with",
+        "index.html — HTTP 200, content-type text/html — so a page that lazy-loaded",
+        "a chunk from the build it started on got markup where it expected a",
+        "module. Measured on prod: /assets/web-BITZqWmZ.js (previous build) came",
+        "back 200 text/html while the current one came back application/javascript.",
+        "",
+        "That is the mechanism behind the iPhone reports this repo chased for days:",
+        "'Unexpected token <' surfacing as stockfish-error and lichess-error",
+        "TypeError: Load failed, with NOTHING anywhere naming a 404. It is also why",
+        "it took a device to find — no server log records an error, because the",
+        "server thinks it served a page successfully.",
+        "",
+        "And every deploy creates the situation: vite.config.ts bakes Date.now()",
+        "into __BUILD_ID__, so every build renames every chunk, docs-only pushes",
+        "included.",
+        "",
+        "A 404 is the honest answer and the useful one. It is detectable by the app,",
+        "by the service worker, and by an audit; HTML-pretending-to-be-JS is",
+        "detectable by none of them without a content-type check nobody thinks to",
+        "write. EXISTING assets are unaffected — Vercel serves a matching static",
+        "file before consulting rewrites, so this only changes what happens when",
+        "the file is genuinely gone.",
+        "",
+        "Do NOT 'fix' a 404 on /assets/ by restoring the fallback. The 404 IS the",
+        "fix; a chunk that is not there should say so."
+      ],
+      "source": "/((?!api/|assets/).*)",
       "destination": "/index.html"
     }
   ],
