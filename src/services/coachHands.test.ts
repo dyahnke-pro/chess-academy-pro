@@ -21,9 +21,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   actuate, actionForCommand, registerCoachHands, clearCoachHands,
-  registerCoachNavigate, clearCoachNavigate, canPerform, steppedElo,
+  registerCoachNavigate, clearCoachNavigate, canPerform, steppedElo, HAND_FALLBACK,
   HAND_PROVIDER, type CoachHand, type RoutedCommand,
 } from './coachActuator';
+import type { CoachHand } from './coachActuator';
 import { tryRouteIntent } from './coachSessionRouter';
 
 /** Drive the REAL chain the student's text box drives. */
@@ -146,7 +147,10 @@ describe('honest failure — never a silent no-op, never a fake success', () => 
   it('a hand no surface provides reports the reason', async () => {
     const r = await actuate({ hand: 'take-back', count: 1 });
     expect(r.ok).toBe(false);
-    expect(r.reason).toMatch(/no board/i);
+    // 🔴 WAS /no board/i. Six hands used to share that ONE sentence; each now
+    // answers in its own words (see HAND_FALLBACK), and take-back's is about a
+    // missing GAME, not a missing board — you cannot undo what was never played.
+    expect(r.reason).toMatch(/no game here to take a move back/i);
   });
 
   it('a handler that throws becomes {ok:false}, not a crash', async () => {
@@ -352,5 +356,69 @@ describe('a hand that REJECTS is caught, not leaked', () => {
     const r = await actuate({ hand: 'take-back', count: 1 });
     expect(r.ok).toBe(false);
     expect(r.reason).toMatch(/nothing to undo/);
+  });
+});
+
+
+/**
+ * THE INVERSION: A HAND IS THE COACH'S, NOT A SURFACE'S (2026-09-21).
+ *
+ * David: "if we have a unified coach, how can review have things that learn
+ * doesn't? Don't we just build up the coach, then all surfaces get them
+ * automatically, it's just the tools that use them differently?"
+ *
+ * These hold the answer in code. With NOTHING mounted, a hand that can route
+ * routes, and one that genuinely cannot says why in its OWN words — never the
+ * one flat sentence six different questions used to share.
+ */
+describe('every hand answers without a surface', () => {
+  beforeEach(() => { clearCoachHands(); clearCoachNavigate(); });
+
+  it('declares a fallback for EVERY hand — no hand can be added without one', () => {
+    // The Record is the forcing function; this proves it is populated rather
+    // than merely typed, and that no entry is a silent empty object.
+    const hands = Object.keys(HAND_FALLBACK) as CoachHand[];
+    expect(hands.length).toBeGreaterThanOrEqual(14);
+    for (const h of hands) {
+      const fb = HAND_FALLBACK[h];
+      expect(['global', 'service', 'route', 'none'], `${h}`).toContain(fb.kind);
+      if (fb.kind === 'none') {
+        expect(fb.because.length, `${h} refuses without saying why`).toBeGreaterThan(20);
+      }
+      if (fb.kind === 'route') expect(fb.to.startsWith('/'), `${h}`).toBe(true);
+    }
+  });
+
+  it('a ROUTING hand takes the student somewhere it works', async () => {
+    const nav = vi.fn();
+    registerCoachNavigate(nav);
+    const r = await actuate({ hand: 'start-drill', motif: null });
+    expect(r.ok, 'start-drill must not dead-end on a surface with no runner').toBe(true);
+    expect(nav).toHaveBeenCalledWith('/tactics/calculation');
+  });
+
+  it('a REFUSING hand says why in its own words, not one shared sentence', async () => {
+    const play = await actuate({ hand: 'play-move', san: 'e4' });
+    const quiz = await actuate({ hand: 'quiz-move', expectedSan: 'e4', prompt: 'x' });
+    expect(play.ok).toBe(false);
+    expect(quiz.ok).toBe(false);
+    // The bug this replaces: six hands returned the IDENTICAL string, so the
+    // student got "no board on this surface" for six different questions.
+    expect(play.reason).not.toEqual(quiz.reason);
+    expect(play.reason).toMatch(/board/i);
+    expect(quiz.reason).toMatch(/quiz/i);
+  });
+
+  it('the SURFACE still wins when one is mounted', async () => {
+    // The fallback is a floor, never an override — a surface that implements a
+    // hand must keep owning it.
+    const nav = vi.fn();
+    registerCoachNavigate(nav);
+    const startDrill = vi.fn(() => ({ ok: true }));
+    registerCoachHands({ startDrill });
+    const r = await actuate({ hand: 'start-drill', motif: 'fork' });
+    expect(r.ok).toBe(true);
+    expect(startDrill).toHaveBeenCalled();
+    expect(nav, 'a mounted surface must not be navigated away from').not.toHaveBeenCalled();
   });
 });

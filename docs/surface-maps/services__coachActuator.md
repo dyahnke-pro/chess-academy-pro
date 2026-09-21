@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**479 lines · 21 exports · 8 importers · 2 tests · 2 audits**
+**565 lines · 23 exports · 8 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,6 +32,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `HandProvider` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `HandFallback` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `HAND_FALLBACK` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `HAND_PROVIDER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -41,7 +47,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `CoachHands` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `registerCoachNavigate` (function) — 8 call sites
+### `registerCoachNavigate` (function) — 10 call sites
 - `src/App.tsx:141`
 - `src/services/coachActuator.test.ts:20`
 - `src/services/coachActuator.test.ts:27`
@@ -49,51 +55,56 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachActuator.test.ts:44`
 - `src/services/coachActuator.test.ts:49`
 - `src/services/coachActuator.test.ts:56`
-- `src/services/coachHands.test.ts:223`
+- `src/services/coachHands.test.ts:227`
+- `src/services/coachHands.test.ts:394`
+- `src/services/coachHands.test.ts:416`
 
-### `clearCoachNavigate` (function) — 4 call sites
+### `clearCoachNavigate` (function) — 5 call sites
 - `src/App.tsx:142`
 - `src/services/coachActuator.test.ts:11`
 - `src/services/coachActuator.test.ts:57`
-- `src/services/coachHands.test.ts:41`
+- `src/services/coachHands.test.ts:42`
+- `src/services/coachHands.test.ts:375`
 
-### `registerCoachHands` (function) — 31 call sites
+### `registerCoachHands` (function) — 32 call sites
 - `src/components/Coach/CoachGameReview.tsx:733`
 - `src/components/Coach/CoachTeachPage.tsx:2194`
 - `src/components/Coach/GameChatPanel.tsx:247`
-- `src/services/coachHands.test.ts:46`
-- `src/services/coachHands.test.ts:55`
-- `src/services/coachHands.test.ts:64`
-- `src/services/coachHands.test.ts:71`
-- `src/services/coachHands.test.ts:80`
-- `src/services/coachHands.test.ts:87`
-- `src/services/coachHands.test.ts:95`
-- `src/services/coachHands.test.ts:104`
-- `src/services/coachHands.test.ts:114`
-- `src/services/coachHands.test.ts:121`
-- `src/services/coachHands.test.ts:153`
-- `src/services/coachHands.test.ts:160`
-- `src/services/coachHands.test.ts:166`
-- `src/services/coachHands.test.ts:176`
-- `src/services/coachHands.test.ts:186`
-- `src/services/coachHands.test.ts:187`
-- `src/services/coachHands.test.ts:195`
-- `src/services/coachHands.test.ts:196`
-- `src/services/coachHands.test.ts:217`
-- `src/services/coachHands.test.ts:286`
-- `src/services/coachHands.test.ts:287`
-- `src/services/coachHands.test.ts:301`
-- `src/services/coachHands.test.ts:302`
-- `src/services/coachHands.test.ts:318`
-- `src/services/coachHands.test.ts:319`
-- `src/services/coachHands.test.ts:344`
-- `src/services/coachHands.test.ts:351`
+- `src/services/coachHands.test.ts:47`
+- `src/services/coachHands.test.ts:56`
+- `src/services/coachHands.test.ts:65`
+- `src/services/coachHands.test.ts:72`
+- `src/services/coachHands.test.ts:81`
+- `src/services/coachHands.test.ts:88`
+- `src/services/coachHands.test.ts:96`
+- `src/services/coachHands.test.ts:105`
+- `src/services/coachHands.test.ts:115`
+- `src/services/coachHands.test.ts:122`
+- `src/services/coachHands.test.ts:157`
+- `src/services/coachHands.test.ts:164`
+- `src/services/coachHands.test.ts:170`
+- `src/services/coachHands.test.ts:180`
+- `src/services/coachHands.test.ts:190`
+- `src/services/coachHands.test.ts:191`
+- `src/services/coachHands.test.ts:199`
+- `src/services/coachHands.test.ts:200`
+- `src/services/coachHands.test.ts:221`
+- `src/services/coachHands.test.ts:290`
+- `src/services/coachHands.test.ts:291`
+- `src/services/coachHands.test.ts:305`
+- `src/services/coachHands.test.ts:306`
+- `src/services/coachHands.test.ts:322`
+- `src/services/coachHands.test.ts:323`
+- `src/services/coachHands.test.ts:348`
+- `src/services/coachHands.test.ts:355`
+- `src/services/coachHands.test.ts:418`
 - `src/test/handsReachEverySurface.test.ts:84`
 
-### `clearCoachHands` (function) — 3 call sites
-- `src/services/coachHands.test.ts:41`
-- `src/services/coachHands.test.ts:282`
-- `src/services/coachHands.test.ts:336`
+### `clearCoachHands` (function) — 4 call sites
+- `src/services/coachHands.test.ts:42`
+- `src/services/coachHands.test.ts:286`
+- `src/services/coachHands.test.ts:340`
+- `src/services/coachHands.test.ts:375`
 
 ### `currentCoachHands` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -118,15 +129,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `canPerform` (function) — 8 call sites
 - `src/components/Board/VoiceChatMic.tsx:303`
-- `src/services/coachHands.test.ts:211`
-- `src/services/coachHands.test.ts:212`
+- `src/services/coachHands.test.ts:215`
 - `src/services/coachHands.test.ts:216`
-- `src/services/coachHands.test.ts:218`
+- `src/services/coachHands.test.ts:220`
 - `src/services/coachHands.test.ts:222`
-- `src/services/coachHands.test.ts:224`
-- `src/services/coachHands.test.ts:289`
+- `src/services/coachHands.test.ts:226`
+- `src/services/coachHands.test.ts:228`
+- `src/services/coachHands.test.ts:293`
 
-### `actuate` (function) — 22 call sites
+### `actuate` (function) — 26 call sites
 - `src/coach/coachService.ts:1020`
 - `src/coach/coachService.ts:1022`
 - `src/coach/coachService.ts:1024`
@@ -134,21 +145,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Board/VoiceChatMic.tsx:312`
 - `src/components/Coach/CoachGameReview.tsx:3133`
 - `src/components/Coach/GameChatPanel.tsx:639`
-- `src/services/coachHands.test.ts:38`
-- `src/services/coachHands.test.ts:147`
-- `src/services/coachHands.test.ts:154`
-- `src/services/coachHands.test.ts:161`
-- `src/services/coachHands.test.ts:167`
-- `src/services/coachHands.test.ts:188`
-- `src/services/coachHands.test.ts:198`
-- `src/services/coachHands.test.ts:290`
+- `src/services/coachHands.test.ts:39`
+- `src/services/coachHands.test.ts:148`
+- `src/services/coachHands.test.ts:158`
+- `src/services/coachHands.test.ts:165`
+- `src/services/coachHands.test.ts:171`
+- `src/services/coachHands.test.ts:192`
+- `src/services/coachHands.test.ts:202`
 - `src/services/coachHands.test.ts:294`
-- `src/services/coachHands.test.ts:304`
-- `src/services/coachHands.test.ts:309`
-- `src/services/coachHands.test.ts:322`
-- `src/services/coachHands.test.ts:328`
-- `src/services/coachHands.test.ts:345`
-- `src/services/coachHands.test.ts:352`
+- `src/services/coachHands.test.ts:298`
+- `src/services/coachHands.test.ts:308`
+- `src/services/coachHands.test.ts:313`
+- `src/services/coachHands.test.ts:326`
+- `src/services/coachHands.test.ts:332`
+- `src/services/coachHands.test.ts:349`
+- `src/services/coachHands.test.ts:356`
+- `src/services/coachHands.test.ts:395`
+- `src/services/coachHands.test.ts:401`
+- `src/services/coachHands.test.ts:402`
+- `src/services/coachHands.test.ts:419`
 
 ### `CommandBoardContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -157,12 +172,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `steppedElo` (function) — 6 call sites
-- `src/services/coachHands.test.ts:230`
-- `src/services/coachHands.test.ts:231`
 - `src/services/coachHands.test.ts:234`
 - `src/services/coachHands.test.ts:235`
 - `src/services/coachHands.test.ts:238`
 - `src/services/coachHands.test.ts:239`
+- `src/services/coachHands.test.ts:242`
+- `src/services/coachHands.test.ts:243`
 
 ### `RoutedCommand` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -171,11 +186,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Board/VoiceChatMic.tsx:297`
 - `src/components/Coach/CoachGameReview.tsx:3127`
 - `src/components/Coach/GameChatPanel.tsx:611`
-- `src/services/coachHands.test.ts:36`
-- `src/services/coachHands.test.ts:247`
-- `src/services/coachHands.test.ts:252`
-- `src/services/coachHands.test.ts:259`
-- `src/services/coachHands.test.ts:265`
+- `src/services/coachHands.test.ts:37`
+- `src/services/coachHands.test.ts:251`
+- `src/services/coachHands.test.ts:256`
+- `src/services/coachHands.test.ts:263`
+- `src/services/coachHands.test.ts:269`
 
 ## Tests
 

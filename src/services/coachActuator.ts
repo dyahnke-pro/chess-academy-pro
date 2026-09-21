@@ -92,6 +92,73 @@ export type CoachHand =
  */
 export type HandProvider = 'surface' | 'global' | 'hybrid' | 'service';
 
+/**
+ * 🔒 WHAT HAPPENS WHEN NO SURFACE IMPLEMENTS A HAND — declared per hand, and a
+ * new hand cannot compile without an answer (David 2026-09-21: "if we have a
+ * unified coach, how can review have things that learn doesn't? Don't we just
+ * build up the coach, then all surfaces get them automatically, it's just the
+ * tools that use them differently?").
+ *
+ * 🔴 HE IS RIGHT, AND THE FIRST CUT OF THIS FILE WAS WRONG. `HAND_PROVIDER`
+ * marked NINE of fourteen hands `'surface'`, which in practice meant OPT-IN,
+ * per surface, by hand — so a hand existed only where someone remembered to
+ * publish it. That is the same drift the registry was built to kill, moved up a
+ * layer: instead of threading props, each surface now hand-listed what it had.
+ * The measured consequence: Learn published 6 of 13 hands while Play got 11
+ * through the shared chat panel, so "drill this" failed on the surface that
+ * OWNS in-place drills, and "make it harder" worked on Play and not on Learn.
+ * That was not an oversight to patch — it is what the design predicted.
+ *
+ * The proof that the other model works was already in this file: `navigate`
+ * (global), `save-position` / `restore-position` (service) and `set-position`
+ * (hybrid — in place when a board is mounted, else the play route) need NO
+ * surface to opt in. Every surface has them, and a surface only changes HOW
+ * they render.
+ *
+ * So the default is inverted. A surface handler is an OVERRIDE, and every hand
+ * states what the coach does without one. `'none'` is a legitimate answer — a
+ * move needs a board — but it must say WHY, and that sentence is what the
+ * student is told instead of a flat "no board on this surface".
+ */
+export type HandFallback =
+  /** The actuator performs it itself, no surface needed. */
+  | { kind: 'global' }
+  /** Written to shared state; whatever is mounted picks it up. */
+  | { kind: 'service' }
+  /** Take the student to a surface that CAN do it. */
+  | { kind: 'route'; to: string }
+  /** Honestly impossible without a surface — `because` is said out loud. */
+  | { kind: 'none'; because: string };
+
+export const HAND_FALLBACK: Record<CoachHand, HandFallback> = {
+  // A move needs a board that is already mounted: routing first would land on a
+  // fresh board where the move is meaningless, which is worse than a refusal.
+  'play-move': { kind: 'none', because: 'there is no board here to move on — open a board first and I will play it' },
+  'take-back': { kind: 'none', because: 'there is no game here to take a move back from' },
+  'set-position': { kind: 'route', to: BOARD_ROUTE },
+  'reset-board': { kind: 'route', to: BOARD_ROUTE },
+  // 🔴 OWED, AND SAID OUT LOUD RATHER THAN QUIETLY LEFT. Both of these are
+  // SETTINGS, not surface actions — which side sits at the bottom, and how hard
+  // the opponent plays. They cannot be `service` yet because the app has FOUR
+  // local copies of `difficulty` (Play, Learn, OpeningPlayMode, Kid) and TWO of
+  // board orientation, with no shared field to write. Hoisting those onto one
+  // source is the next step; until it lands, this states the real reason
+  // instead of pretending the hand is surface-bound by nature.
+  'set-orientation': { kind: 'none', because: 'I can only flip a board that is on screen' },
+  'set-strength': { kind: 'none', because: 'I can only change the opponent in a game that is running' },
+  'save-position': { kind: 'service' },
+  'restore-position': { kind: 'service' },
+  navigate: { kind: 'global' },
+  'quiz-move': { kind: 'none', because: 'quizzing needs a board with a move worth asking about' },
+  'start-walkthrough': { kind: 'route', to: '/coach/teach' },
+  // The drill itself comes from `coachDrillService` — only WHERE it renders is
+  // the surface's business, so a surface without a runner sends the student to
+  // one that has it rather than refusing.
+  'start-drill': { kind: 'route', to: '/tactics/calculation' },
+  'set-view-mode': { kind: 'none', because: 'view modes belong to whichever surface is open' },
+  'show-squares': { kind: 'none', because: 'there is no board here to point at' },
+};
+
 export const HAND_PROVIDER: Record<CoachHand, HandProvider> = {
   'play-move': 'surface',
   'take-back': 'surface',
@@ -309,6 +376,25 @@ async function settle(value: unknown): Promise<ActuationResult> {
 }
 
 /**
+ * No surface implements this hand — so ask the coach what it does anyway.
+ * Replaces six identical `{ok:false,'no board on this surface'}` dead ends,
+ * each of which was the same sentence for a different question. A hand whose
+ * fallback ROUTES now takes the student somewhere it works; one that genuinely
+ * cannot says why, in its own words.
+ */
+function withoutSurface(hand: CoachHand): ActuationResult {
+  const fb = HAND_FALLBACK[hand];
+  switch (fb.kind) {
+    case 'route': return coachNavigate(fb.to);
+    case 'none': return { ok: false, reason: fb.because };
+    // `global` and `service` hands never reach here — they are answered by
+    // their own case in `actuate` before the handler is consulted.
+    default: return { ok: false, reason: `${hand} is unavailable here` };
+  }
+}
+
+
+/**
  * PERFORM THE ACTION. The single door every hand goes through, whether the
  * spine decided it or the student typed it.
  *
@@ -338,16 +424,16 @@ export async function actuate(action: CoachAction): Promise<ActuationResult> {
         if (h.startWalkthrough) return await settle(h.startWalkthrough(action));
         return coachNavigate(`/coach/teach?opening=${encodeURIComponent(action.opening)}`);
       case 'play-move':
-        if (!handler) return { ok: false, reason: 'no board on this surface' };
+        if (!handler) return withoutSurface('play-move');
         return await settle(h.playMove?.(action.san));
       case 'take-back':
-        if (!handler) return { ok: false, reason: 'no board on this surface' };
+        if (!handler) return withoutSurface('take-back');
         return await settle(h.takeBack?.(action.count));
       case 'reset-board':
-        if (!handler) return { ok: false, reason: 'no board on this surface' };
+        if (!handler) return withoutSurface('reset-board');
         return await settle(h.resetBoard?.());
       case 'set-orientation':
-        if (!handler) return { ok: false, reason: 'no board on this surface' };
+        if (!handler) return withoutSurface('set-orientation');
         return await settle(h.setOrientation?.(action.orientation));
       case 'save-position': {
         // SERVICE-level: the same coach-memory write the `save_position` tool
@@ -369,19 +455,19 @@ export async function actuate(action: CoachAction): Promise<ActuationResult> {
         return coachSetBoardPosition(fen);
       }
       case 'quiz-move':
-        if (!handler) return { ok: false, reason: 'no board on this surface' };
+        if (!handler) return withoutSurface('quiz-move');
         return await settle(h.quizMove?.(action));
       case 'start-drill':
-        if (!handler) return { ok: false, reason: 'drills are not available here' };
+        if (!handler) return withoutSurface('start-drill');
         return await settle(h.startDrill?.(action.motif ?? null));
       case 'set-view-mode':
-        if (!handler) return { ok: false, reason: 'no lesson on this surface' };
+        if (!handler) return withoutSurface('set-view-mode');
         return await settle(h.setViewMode?.(action.mode));
       case 'show-squares':
-        if (!handler) return { ok: false, reason: 'no board on this surface' };
+        if (!handler) return withoutSurface('show-squares');
         return await settle(h.showSquares?.(action.squares, action.arrows));
       case 'set-strength':
-        if (!handler) return { ok: false, reason: 'no opponent on this surface' };
+        if (!handler) return withoutSurface('set-strength');
         return await settle(h.setStrength?.(action.targetElo));
     }
   } catch (err) {
