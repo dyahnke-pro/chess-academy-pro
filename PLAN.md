@@ -2921,3 +2921,52 @@ canonical ask is `"Play the Scandinavian Defense, Lasker Variation with me"`.
    Do not flip `learned`; do not add detectors before the reader exists — a
    detector that fires into rows the model cannot read is half-built by the
    capability-parity rule.
+
+---
+
+## FUNDLEAD — two leads chased through the code and WITHDRAWN (2026-09-20)
+
+The symptom: on the rotated review audit (`AUDIT_GAME_ID=06wNUWaA
+AUDIT_STUDENT=black`, 43 pass / 9 fail), all three flagged student plies led
+with `"You: that was an inaccuracy, costing about 0.7 points — the "` instead
+of a fundamental. `WEDGE renderer-answered-throughout` PASSED on that run, so
+it is not contamination.
+
+**Already ruled out, do not re-derive:** it is not the RANKING. `principle`
+ranks 100, `quality` ranks 95, so a produced fundamental would lead. The
+fundamental is not being PRODUCED.
+
+**Lead 1 — "the flagged ply has no best move." WRONG.** `analyzeGamePositions`
+pushes to `mistakeIndices` only at `cpLoss >= BATCH_GRADE_FLOOR_CP`
+(= `MISTAKE_CP` = 100), while a ply is flagged critical from `INACCURACY_CP`
+(= 50). That really does leave the [50,100) band with no `bestMove` — but only
+on the BATCH path. `analyzeSingleGame`'s own best-move loop
+(`gameAnalysisService.ts:1896`) gates on `cpLoss >= INACCURACY_CP`, and it sits
+OUTSIDE the `if (isReview && !opts.sweepOnly)` deep-dive guard, so the review
+computes a best move for every flagged ply regardless. The two floors that
+looked mismatched belong to two different functions.
+
+**Lead 2 — "then the batch gap starves the loop's RECORD half." ALSO WRONG.**
+`autoAnalyzeGame` skips inaccuracies outright
+(`classification !== 'blunder' && !== 'mistake'` → `continue`), so it never
+reads the [50,100) band at all. Recording starts at 100 and best-move
+computation starts at 100; they agree. There is no defect here.
+
+**What this leaves.** FUNDLEAD is one of the OTHER early returns in
+`principleAttribution` — all eight are now diagnosable via the `bail()` helper
+writing to the `why` sink, and `coachFeatureService` emits
+`reviewFundamentalDeclined` once per flagged student ply that gets nothing
+(commit `ddb7df37f`). **That emission does not exist on prod until the batched
+push lands**, and the audit drives prod — so the next run NAMES the cause and
+no run before the deploy can. This is not fixed and is not being claimed as
+fixed.
+
+**The method note, because it cost two wrong turns in one thread:** both leads
+died the same way — a threshold read in isolation, without first establishing
+WHICH function produces the number the symptom is made of. Same shape as this
+session's earlier C15 error. The rule stands and earns its place: *before
+calling a number wrong, find the instrument that produced it* — and a constant
+shared by two call paths is two instruments, not one.
+
+Reproduce: `AUDIT_GAME_ID=06wNUWaA AUDIT_STUDENT=black node
+scripts/audit-review-overhaul-prod.mjs` (under the shared lock, after the push).
