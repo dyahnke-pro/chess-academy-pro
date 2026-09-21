@@ -72,7 +72,7 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
       id: 'e4-bait',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O'],
       highlights: [{ square: 'e4', color: KEY }],
-      say: "And now the mirror image. Black's knight attacks White's e4-pawn — and White just castles, leaving it hanging. Why so calm? Because if Black grabs it, that's the Open Ruy Lopez: White answers by striking the center with d4, rips the position open, and his huge lead in development more than pays for a single pawn. The e4-pawn is bait. White is happy to offer it for a roaring initiative — which is exactly why most of the time Black declines and keeps things solid.",
+      say: "And now the mirror image. Black's knight attacks White's e4-pawn — and White just castles, leaving it hanging. Why so calm? Because if Black grabs it, that's the Open Ruy Lopez: White answers by striking the center with d4, rips the position open, and their huge lead in development more than pays for a single pawn. The e4-pawn is bait. White is happy to offer it for a roaring initiative — which is exactly why most of the time Black declines and keeps things solid.",
       sayShort: "e4 hangs on purpose — that's the Open Ruy.",
     },
     {
@@ -101,7 +101,7 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
       id: 'prophylaxis',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Be7', 'Re1', 'b5', 'Bb3', 'd6', 'c3', 'O-O', 'h3'],
       highlights: [{ square: 'g4', color: KEY }],
-      say: "And then a tiny pawn move that isn't really about the pawn. It's prophylaxis. Before White commits to the big central break, he takes away Black's pin on the g4 square. The master's habit: stop your opponent's plan before you start your own.",
+      say: "And then a tiny pawn move that isn't really about the pawn. It's prophylaxis. Before White commits to the big central break, they take away Black's pin on the g4 square. The master's habit: stop your opponent's plan before you start your own.",
       sayShort: "h3 — prophylaxis; deny the …Bg4 pin first.",
     },
     {
@@ -137,7 +137,7 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
       moves: M,
       arrows: [{ from: 'g3', to: 'f5', color: INTENT }],
       highlights: [{ square: 'f5', color: KEY }],
-      say: "White's knight marches to the kingside, eyeing one square above all others: f5. Black answers with g6 and Bg7 — and now Capablanca's other half appears: the king's bishop sits on g7 with the king castled safely behind it, the great defensive strength he paired with the diagonal pressure. But that wall does more than shelter — it fights for f5. Lasker warned that in the Ruy Lopez a knight settling on f5 cannot be repelled. That is the prize the whole middlegame revolves around: White hunting the square, Black denying it.",
+      say: "White's knight marches to the kingside, eyeing one square above all others: f5. Black answers with g6 and Bg7 — and now Capablanca's other half appears: the king's bishop sits on g7 with the king castled safely behind it, the great defensive strength they paired with the diagonal pressure. But that wall does more than shelter — it fights for f5. Lasker warned that in the Ruy Lopez a knight settling on f5 cannot be repelled. That is the prize the whole middlegame revolves around: White hunting the square, Black denying it.",
       sayShort: "Bg7 fortress, …f5 outpost — the Ruy prize.",
     },
     {

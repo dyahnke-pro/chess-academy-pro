@@ -40,7 +40,7 @@ const MAIN: LessonScript = {
       moves: 'e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4',
       highlights: [{ square: 'd4', color: SOFT }],
       say:
-        "Black takes the bait: he wins the d4-pawn and his queen lands in the centre. He's a clean pawn up — but look at his position. Almost nothing developed, the queen exposed in the middle, the king stuck on e8. You traded a pawn for a massive head start.",
+        "Black takes the bait: they win the d4-pawn and their queen lands in the centre. They're a clean pawn up — but look at their position. Almost nothing developed, the queen exposed in the middle, the king stuck on e8. You traded a pawn for a massive head start.",
       sayShort: 'Qxd4 — Black grabs, but lags.',
     }),
     b({
@@ -116,7 +116,7 @@ const NH6: LessonScript = {
       arrows: [{ from: 'd3', to: 'f5', color: VIS }],
       highlights: [{ square: 'f5', color: KEY }],
       say:
-        "When the knight lands on f5, you take it — Bxf5 — and after …exf5 Black's pawn structure is wrecked: the f5-pawn is weak and fixed, and the e6-square he relied on is gone. You gave up a bishop, but you got a permanent target and a clamp on the light squares.",
+        "When the knight lands on f5, you take it — Bxf5 — and after …exf5 Black's pawn structure is wrecked: the f5-pawn is weak and fixed, and the e6-square they relied on is gone. You gave up a bishop, but you got a permanent target and a clamp on the light squares.",
       sayShort: 'Bxf5 — leave Black a weak pawn.',
     }),
     b({
@@ -125,7 +125,7 @@ const NH6: LessonScript = {
       arrows: [{ from: 'e5', to: 'd6', color: SOFT }],
       highlights: [{ square: 'f5', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "You develop Nc3 and castle; Black tries to make the best of his bishops. Here's the middlegame: the e5-pawn cramps Black, the f5-pawn is a long-term weakness, and the light squares — especially e6 and d5 — are yours to occupy with a knight. The plan is to blockade f5, pile on it, and use the central space. A clean, durable edge from meeting a sideline correctly.",
+        "You develop Nc3 and castle; Black tries to make the best of their bishops. Here's the middlegame: the e5-pawn cramps Black, the f5-pawn is a long-term weakness, and the light squares — especially e6 and d5 — are yours to occupy with a knight. The plan is to blockade f5, pile on it, and use the central space. A clean, durable edge from meeting a sideline correctly.",
       sayShort: 'blockade f5 — durable bind.',
     }),
   ],

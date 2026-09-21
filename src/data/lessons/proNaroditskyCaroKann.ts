@@ -197,7 +197,7 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6 Nb3 Bb6 Re1 Qc7 a4 a6',
       highlights: [{ square: 'a6', color: KEY }, { square: 'b5', color: SOFT }],
       say:
-        "a6 — block the pawn advance, claim b5 forever, and stabilize. The opening is OVER. This is the position the three deepest games at this exact spine reach — move 11, the moment the middlegame begins. From here the game opens into one of three patterns: queenside expansion with your own b5 push, central play with f6 hitting the e5-pawn, or kingside maneuvering with the Ng6 jumping to f4. His data shows him playing all three depending on what White does next.",
+        "a6 — block the pawn advance, claim b5 forever, and stabilize. The opening is OVER. This is the position the three deepest games at this exact spine reach — move 11, the moment the middlegame begins. From here the game opens into one of three patterns: queenside expansion with your own b5 push, central play with f6 hitting the e5-pawn, or kingside maneuvering with the Ng6 jumping to f4. Their data shows them playing all three depending on what White does next.",
       sayShort: 'a6 — block, claim b5, middlegame begins.',
     }),
     // ============ MIDDLEGAME PATTERN BEAT ============

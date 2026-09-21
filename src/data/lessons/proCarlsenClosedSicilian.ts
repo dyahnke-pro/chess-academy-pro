@@ -48,7 +48,7 @@ const BB5_NC6: LessonScript = {
   openingId: 'pro-carlsen-closed-sicilian', title: 'Bb5 vs …Nc6', minutes: 5, orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'bb5', moves: 'e4 c5 Nc3 Nc6 Bb5', arrows: [A('b5', 'c6')], highlights: [H('c6')], say: "A Rossolimo flavour inside the Closed Sicilian — Bb5, pressuring the c6-knight. White is ready to take on c6 to damage Black's structure or retreat and keep the bishop pair. A clean, low-theory way to fight for an edge.", sayShort: 'Bb5 — pressure c6.' }),
-    b({ id: 'nf3', moves: 'e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 a6 Bd3 Nf6 O-O d6', highlights: [H('d4'), H('d3')], say: "Black jumps to d4 to challenge the bishop; White develops Nf3 and drops the bishop to d3, keeping it on the attacking diagonal. White retains a small, comfortable space edge and the flexible structure he wants against the Sicilian.", sayShort: 'Nf3, Bd3 — keep the edge.' }),
+    b({ id: 'nf3', moves: 'e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 a6 Bd3 Nf6 O-O d6', highlights: [H('d4'), H('d3')], say: "Black jumps to d4 to challenge the bishop; White develops Nf3 and drops the bishop to d3, keeping it on the attacking diagonal. White retains a small, comfortable space edge and the flexible structure they want against the Sicilian.", sayShort: 'Nf3, Bd3 — keep the edge.' }),
   ],
 };
 

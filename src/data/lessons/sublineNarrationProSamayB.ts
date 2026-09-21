@@ -113,7 +113,7 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
     intro: { say: "c6 — Black solidifies d5 and shores up the queenside. Keep pieces active: Nbd2, Qc2 and the e-file with Re1, angling for a knight to f5 or an eventual b4 minority push. The position is balanced, so play for the small imbalance and the better-placed pieces.", sayShort: 'c6 — Nbd2 and Qc2, press the file.' }, sources: FR,
   },
   'pro-samayraina-french-white::1::c5@7': {
-    intro: { say: "c5 — Black strikes at d4, and after Nf3 …c4 he gains space but releases the central tension. That hands you a free hand in the middle: retreat Be2, castle, then undermine with b3 and play f3-e4, or plant a knight on e5. The over-extended c4-pawn becomes a target.", sayShort: 'c5 — Be2 and b3, hit c4.' }, sources: FR,
+    intro: { say: "c5 — Black strikes at d4, and after Nf3 …c4 they gain space but releases the central tension. That hands you a free hand in the middle: retreat Be2, castle, then undermine with b3 and play f3-e4, or plant a knight on e5. The over-extended c4-pawn becomes a target.", sayShort: 'c5 — Be2 and b3, hit c4.' }, sources: FR,
   },
   'pro-samayraina-french-white::1::Nf6@7': {
     intro: { say: "Nf6 — Black mirrors development in the Exchange. Keep it lively: O-O, Re1 and Bg5 pinning the knight, with c3 and Nbd2 to follow. The structure is symmetric but the initiative is not — grab the e-file and the better minor piece and press for the small edge.", sayShort: 'Nf6 — O-O, Re1, Bg5 pin.' }, sources: FR,
@@ -148,13 +148,13 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
     intro: { say: "Bb4 — Black pins and heads for …Bxc3, damaging your pawns. Accept the bargain: after a3 …Bxc3+ bxc3 you own a massive c3-d4-e5 centre and the two bishops, worth far more than the doubled pawns. Play f4, Nf3 and Bd3, then roll the centre and attack on the kingside.", sayShort: 'Bb4 — bxc3, big centre and bishops.' }, sources: CK,
   },
   'pro-samayraina-caro-white::0::f5@7': {
-    intro: { say: "f5 — Black locks the centre and buries his light-squared bishop behind e6. Play on the wings where you are stronger: after d4, f4 and Nf3, prepare the c5 clamp or a kingside build with g3 and Bh3, hitting the sore e6-pawn. Black's bad bishop is a lasting weakness.", sayShort: 'f5 — d4 and Nf3, target bad bishop.' }, sources: CK,
+    intro: { say: "f5 — Black locks the centre and buries their light-squared bishop behind e6. Play on the wings where you are stronger: after d4, f4 and Nf3, prepare the c5 clamp or a kingside build with g3 and Bh3, hitting the sore e6-pawn. Black's bad bishop is a lasting weakness.", sayShort: 'f5 — d4 and Nf3, target bad bishop.' }, sources: CK,
   },
   'pro-samayraina-caro-white::1::Qc7@9': {
     intro: { say: "Qc7 — Black eyes …Bg4 and central breaks in the Exchange. Sidestep the pin with Ne2, then f3 and O-O, and trade the good bishop with Bf4; add Qc2 and the slow pressure. Your extra tempo and the plan of a minority attack with b4-b5 give the classic Exchange pull.", sayShort: 'Qc7 — Ne2 and Bf4, then Qc2.' }, sources: CK,
   },
   'pro-samayraina-caro-white::1::Nf6@7': {
-    intro: { say: "Nf6 — Black develops in the Exchange. Grab the initiative with Qb3, pressuring b7 and d5, then Bf4 to trade the good bishop and Nd2-f3. The minority attack with b4-b5 looms on the queenside; Black stays tied to his weaknesses while White presses on both flanks.", sayShort: 'Nf6 — Qb3 and Bf4, press queenside.' }, sources: CK,
+    intro: { say: "Nf6 — Black develops in the Exchange. Grab the initiative with Qb3, pressuring b7 and d5, then Bf4 to trade the good bishop and Nd2-f3. The minority attack with b4-b5 looms on the queenside; Black stays tied to their weaknesses while White presses on both flanks.", sayShort: 'Nf6 — Qb3 and Bf4, press queenside.' }, sources: CK,
   },
   'pro-samayraina-caro-white::1::g6@9': {
     intro: { say: "g6 — Black fianchettoes to fight for the long diagonal. Complete calmly: Nf3, O-O and Re1, then Bf4 or Bg5, and prepare the b4-b5 minority attack against the c6-square. The Exchange edge is small but real — press the queenside and keep the better structure.", sayShort: 'g6 — Nf3, O-O, then minority attack.' }, sources: CK,
@@ -169,7 +169,7 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
     intro: { say: "Bxf3 — Black trades the light bishop for your knight. Recapture Nxf3, keeping a clean structure and the bishop pair in an open Exchange position. With Black's good bishop gone, target the light squares and d5, castle, and roll the queenside minority attack. The two bishops give a durable edge.", sayShort: 'Bxf3 — Nxf3, keep the bishop pair.' }, sources: CK,
   },
   'pro-samayraina-caro-white::1::e6@9': {
-    intro: { say: "e6 — Black locks his own light-squared bishop inside the chain. Exploit it: Bf4 to trade the good bishop and meet …Bd6 with Bxd6, then Qc2, Nd2-f3 and O-O. Black is left with the bad bishop and a passive game; press d5 and the queenside minority attack.", sayShort: 'e6 — Bf4, trade, then punish bad bishop.' }, sources: CK,
+    intro: { say: "e6 — Black locks their own light-squared bishop inside the chain. Exploit it: Bf4 to trade the good bishop and meet …Bd6 with Bxd6, then Qc2, Nd2-f3 and O-O. Black is left with the bad bishop and a passive game; press d5 and the queenside minority attack.", sayShort: 'e6 — Bf4, trade, then punish bad bishop.' }, sources: CK,
   },
   'pro-samayraina-caro-white::1::Na5@13': {
     intro: { say: "Na5 — Black hits your queen and dreams of …Nc4. Do not oblige: retreat Qc2, keeping the pressure, then play b4, kicking the knight back to the rim where it is offside. Continue Nd2 covering c4 and develop; the misplaced knight leaves White pressing comfortably on the queenside.", sayShort: 'Na5 — Qc2, then b4 kicks it.' }, sources: CK,
@@ -186,7 +186,7 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
     intro: { say: "Nf3 — White develops naturally against your …Qa5 Scandi. Follow the classic path: …Nf6, …c6, …Bf5 getting the bishop active before …e6, then …Nbd7, …e6 and …Bd6 or …Be7 with castling. Solid and harmonious — you finish development smoothly and have no weaknesses to nurse.", sayShort: 'Nf3 — …Nf6, …c6, then …Bf5.' }, sources: SC,
   },
   'pro-samayraina-scandi::0::Qe2@14': {
-    intro: { say: "Qe2 — the Mieses, White preparing long castling. Keep pace: …Nbd7, …Bd6 or …Be7, and castle, ready for an opposite-wings race. If White goes queenside, push …b5 and …a5 to open lines at his king; your queen on a5 already eyes that flank. Solid structure, active plan.", sayShort: 'Qe2 — …Nbd7 and …Bd6, then …b5.' }, sources: SC,
+    intro: { say: "Qe2 — the Mieses, White preparing long castling. Keep pace: …Nbd7, …Bd6 or …Be7, and castle, ready for an opposite-wings race. If White goes queenside, push …b5 and …a5 to open lines at their king; your queen on a5 already eyes that flank. Solid structure, active plan.", sayShort: 'Qe2 — …Nbd7 and …Bd6, then …b5.' }, sources: SC,
   },
   'pro-samayraina-scandi::0::Bd2@8': {
     intro: { say: "Bd2 — White unpins and readies queenside castling. Carry on developing: …c6, …Bf5, …e6 and …Nbd7, then …Bd6 and castle. Watch for opposite-side castling — if White goes long, meet it with …b5 and a queenside pawn push. The bishop on f5 outside the chain keeps you comfortable.", sayShort: 'Bd2 — …c6 and …Bf5, then castle.' }, sources: SC,
@@ -198,7 +198,7 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
     intro: { say: "Ne5 — White plants a knight on e5 in the Mieses. Challenge it rather than fear it: …Be6 developing, then …Nbd7 hitting the intruder, and after it moves or trades you complete with …e6 and …Bd6. Black is solid; kick the e5-knight and your comfortable structure remains.", sayShort: 'Ne5 — …Be6 and …Nbd7, challenge it.' }, sources: SC,
   },
   'pro-samayraina-scandi::0::Bd2@10': {
-    intro: { say: "Bd2 — White prepares to castle long in the Mieses. Develop with purpose: …Bf5 outside the chain, …e6, …Nbd7 and …Bd6, then castle. If White heads queenside, launch …b5 and …a5 to open lines at his king; the queen on a5 is already aimed there. Solid and flexible.", sayShort: 'Bd2 — …Bf5 and …e6, prepare …b5.' }, sources: SC,
+    intro: { say: "Bd2 — White prepares to castle long in the Mieses. Develop with purpose: …Bf5 outside the chain, …e6, …Nbd7 and …Bd6, then castle. If White heads queenside, launch …b5 and …a5 to open lines at their king; the queen on a5 is already aimed there. Solid and flexible.", sayShort: 'Bd2 — …Bf5 and …e6, prepare …b5.' }, sources: SC,
   },
   'pro-samayraina-scandi::0::Ne5@12': {
     intro: { say: "Ne5 — White jumps into e5 after your …Bf5. Stay calm and undermine: …e6, then …Nbd7 challenging the knight, and …Bd6 to complete. Trading or dislodging the e5-knight leaves you with a sound, harmonious Scandi and the well-placed bishop on f5. No need to hurry — just develop.", sayShort: 'Ne5 — …e6 and …Nbd7, undermine it.' }, sources: SC,
@@ -216,7 +216,7 @@ export const SUBLINE_NARRATION_PRO_SAMAY_B: Record<string, SublineNarration> = {
     intro: { say: "Bg5 — White pins your f6-knight. Break it calmly: …e6, then …Be7 and …Nbd7, and castle, and if the pin nags play …h6 to question the bishop. You keep the …Bg4 pin in reserve too; both sides are developed and the position is balanced and solid for Black.", sayShort: 'Bg5 — …e6 and …Be7, then castle.' }, sources: SC,
   },
   'pro-samayraina-scandi::1::gxf3@14': {
-    intro: { say: "gxf3 — after …h3 forced the trade and …Bxf3, White recaptures with the pawn, shattering his own kingside and opening the g-file. Make the wreckage tell: …e6, …Nbd7, …Bd6 and …Qc7, then castle long, away from the damage, and probe the doubled f-pawns. The ruined structure is a lasting target.", sayShort: 'gxf3 — …e6 and …Bd6, castle long.' }, sources: SC,
+    intro: { say: "gxf3 — after …h3 forced the trade and …Bxf3, White recaptures with the pawn, shattering their own kingside and opening the g-file. Make the wreckage tell: …e6, …Nbd7, …Bd6 and …Qc7, then castle long, away from the damage, and probe the doubled f-pawns. The ruined structure is a lasting target.", sayShort: 'gxf3 — …e6 and …Bd6, castle long.' }, sources: SC,
   },
   'pro-samayraina-scandi::1::h3@10': {
     intro: { say: "h3 — White prevents the …Bg4 pin before you can play it. No matter: develop the bishop actively with …Bf5, then …e6, …Nbd7 and …Bd6 or …Be7, and castle. The light bishop sits happily outside the pawn chain and your Scandi is solid and fully coordinated. Comfortable equality.", sayShort: 'h3 — …Bf5 and …e6, then castle.' }, sources: SC,

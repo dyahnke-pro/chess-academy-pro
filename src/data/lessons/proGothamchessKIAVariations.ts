@@ -44,11 +44,11 @@ const VS_SICILIAN: LessonScript = {
       sayShort: 'the system vs the Sicilian.' }),
     b({ id: 'e4', moves: 'Nf3 c5 g3 Nc6 Bg2 g6 O-O Bg7 d3 Nf6 Nbd2 d6 e4',
       arrows: [{ from: 'e2', to: 'e4', color: VIS }], highlights: [{ square: 'e4', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "e4 — you grab the centre and stake the kingside. Now the position takes on a Closed-Sicilian-with-colours-reversed feel, but You'RE the one attacking. The pawn front gives you a clear plan and a space advantage while Black sorts out his counterplay.",
+      say: "e4 — you grab the centre and stake the kingside. Now the position takes on a Closed-Sicilian-with-colours-reversed feel, but You'RE the one attacking. The pawn front gives you a clear plan and a space advantage while Black sorts out their counterplay.",
       sayShort: 'e4 — claim the centre.' }),
     b({ id: 'mg-plan', moves: 'Nf3 c5 g3 Nc6 Bg2 g6 O-O Bg7 d3 Nf6 Nbd2 d6 e4',
       arrows: [{ from: 'e4', to: 'e5', color: VIS }], highlights: [{ square: 'e5', color: KEY }, { square: 'f4', color: SOFT }],
-      say: "Here's the middlegame plan. You expand with the e5-break to gain kingside space, or play Re1 and Nf1-h2-g4 building toward Black's king, with f4-f5 to follow. Black has his own play with …b5 and …Rb8 on the queenside — but again, your attack hits the king while his hits a wing. Same setup, same plan, same kingside pressure. The KIA never lets you down.",
+      say: "Here's the middlegame plan. You expand with the e5-break to gain kingside space, or play Re1 and Nf1-h2-g4 building toward Black's king, with f4-f5 to follow. Black has their own play with …b5 and …Rb8 on the queenside — but again, your attack hits the king while their hits a wing. Same setup, same plan, same kingside pressure. The KIA never lets you down.",
       sayShort: 'e5 / f4 — build the kingside attack.' }),
   ],
 };

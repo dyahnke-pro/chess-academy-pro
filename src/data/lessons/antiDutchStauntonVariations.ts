@@ -26,7 +26,7 @@ const NC6_LESSON: LessonScript = {
       sayShort: "d5 — kick the knight, grab the initiative.",
       highlights: [H('d5', KEY), H('f6', SOFT)] }),
     b({ id: 'stv-nc6-2', moves: 'd4 f5 e4 fxe4 Nc3 Nf6 Bg5 Nc6 d5 Ne5 Qe2 Nf7 Bxf6 exf6',
-      say: "The knight is chased to e5 and back to f7, badly offside; you play Qe2, training on the e4-pawn, and Bxf6 damages Black's kingside — after exf6 the e-file is open and his pawns are fractured. You remain a pawn down on paper, but Black's structure is the real casualty.",
+      say: "The knight is chased to e5 and back to f7, badly offside; you play Qe2, training on the e4-pawn, and Bxf6 damages Black's kingside — after exf6 the e-file is open and their pawns are fractured. You remain a pawn down on paper, but Black's structure is the real casualty.",
       sayShort: "Bxf6 — fracture the kingside.",
       highlights: [H('e4', ATK), H('f6', SOFT)] }),
     b({ id: 'stv-nc6-3', moves: 'd4 f5 e4 fxe4 Nc3 Nf6 Bg5 Nc6 d5 Ne5 Qe2 Nf7 Bxf6 exf6 Nxe4 Qe7 d6 Nxd6 Nxd6+ cxd6',

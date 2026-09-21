@@ -188,6 +188,37 @@ describe('OUTLINE.md covers PLAN.md', () => {
     expect(openMissing.map((i) => i.id)).toEqual(['901']);
   });
 
+  it('carries no section heading twice', () => {
+    // 🔴 THE BOARD SILENTLY GREW A SECOND COPY OF ITSELF (found 2026-09-21).
+    // Six headings appeared twice — `## 8b`, `## 9`, the other session's
+    // board, the blocked list, and both closing sections — because two
+    // sessions edit this file and a merge kept both sides rather than
+    // reconciling them. 165 item lines, 116 distinct.
+    //
+    // That is not cosmetic. Every tool that finds a line finds the FIRST one,
+    // so an update lands in one copy and the other goes stale — which is
+    // exactly how this board ended up asserting both sides of the same
+    // question twice in one night (the hash finding, and FUNDLEAD's cause
+    // reading UNNAMED an hour after it was named).
+    //
+    // Blame by HEADING, not by content: two items may legitimately say
+    // similar things, but a section heading is an identity and appearing
+    // twice means the file has two of something.
+    const headings = outline.split('\n').filter((l) => /^##\s+\S/.test(l)).map((l) => l.trim());
+    expect(headings.length, 'no section headings parsed — this check would pass for free')
+      .toBeGreaterThan(5);
+    const seen = new Map<string, number>();
+    for (const h of headings) seen.set(h, (seen.get(h) ?? 0) + 1);
+    const dupes = [...seen.entries()].filter(([, n]) => n > 1).map(([h, n]) => `${n}x ${h.slice(0, 90)}`);
+    expect(
+      dupes,
+      `OUTLINE.md carries duplicate section heading(s):\n  ${dupes.join('\n  ')}\n` +
+        'Two sessions edit this board and a merge kept both sides. Reconcile them into ONE ' +
+        'section — every reader and every script finds the FIRST copy, so the second goes ' +
+        'stale the moment anyone updates the first, and a board that lags is worse than none.',
+    ).toEqual([]);
+  });
+
   it('cites no item the plan does not have', () => {
     const known = planIds(plan);
     const phantom = [...outlineIds(outline)].filter((id) => !known.has(id));

@@ -82,7 +82,7 @@ export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5',
       arrows: [A('h8', 'h2')],
       highlights: [{ square: 'h5', color: KEY }, { square: 'h2', color: SOFT }],
-      say: "After White develops the bishop to e2, this repertoire plays the move that defines his Stafford — h5. It looks reckless, but it is deliberate bait: it prepares Ng4 without allowing the bishop to chase the knight away, and it opens the h-file for the rook still sitting on h8. He plays it not because the engine loves it, but because it sets the trap.",
+      say: "After White develops the bishop to e2, this repertoire plays the move that defines their Stafford — h5. It looks reckless, but it is deliberate bait: it prepares Ng4 without allowing the bishop to chase the knight away, and it opens the h-file for the rook still sitting on h8. They play it not because the engine loves it, but because it sets the trap.",
       sayShort: '…h5 — open the h-file, prep Ng4.',
     }),
     b({

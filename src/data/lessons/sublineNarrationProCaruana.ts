@@ -137,7 +137,7 @@ export const SUBLINE_NARRATION_PRO_CARUANA: Record<string, SublineNarration> = {
     intro: { say: "Nd2 — White reroutes toward c4-b3 and the e4 break. Meet it with …e5 first, locking the centre, then …O-O and …Ne7-g6; your dark-square blockade holds and the doubled pawns remain fixed targets.", sayShort: 'Nd2 — …e5 locks, then …Ne7-g6.' }, sources: NIM,
   },
   'pro-caruana-nimzo-indian::0::Nd2@18': {
-    intro: { say: "Nd2 — White heads for c4 and the queenside in the locked Hübner. Play …O-O, …Ng6 and prepare …f5, storming the kingside while White's doubled c-pawns and the closed centre keep him tied down. The race favours the blockading side.", sayShort: 'Nd2 — …Ng6, prepare …f5 storm.' }, sources: NIM,
+    intro: { say: "Nd2 — White heads for c4 and the queenside in the locked Hübner. Play …O-O, …Ng6 and prepare …f5, storming the kingside while White's doubled c-pawns and the closed centre keep them tied down. The race favours the blockading side.", sayShort: 'Nd2 — …Ng6, prepare …f5 storm.' }, sources: NIM,
   },
   'pro-caruana-nimzo-indian::0::O-O@18': {
     intro: { say: "O-O — White castles in the fully locked Hübner. Now …O-O and the thematic …f5 break: your kingside majority rolls while the c3-c4 pawns are frozen weaknesses. Blockade first, then attack the king.", sayShort: 'O-O — …f5, roll the majority.' }, sources: NIM,
@@ -228,7 +228,7 @@ export const SUBLINE_NARRATION_PRO_CARUANA: Record<string, SublineNarration> = {
     intro: { say: "Bd3 — the Exchange French, symmetrical with a drawish reputation. Do not wait for the draw: mirror …Bd6 and …Ne7, then seize a file with …Re8, find the better minor piece, and manufacture the imbalance. Black outplays, not out-waits.", sayShort: 'Bd3 — mirror, then outplay actively.' }, sources: FR,
   },
   'pro-caruana-french::3::c4@6': {
-    intro: { say: "c4 — the Monte Carlo Exchange, White giving himself an isolated queen's pawn. Develop …Nf6, …Be7 and …O-O, then blockade d5 with …Nb6 or …Nbd7-b6 and press the isolated pawn; classic isolated-pawn technique in Black's favour.", sayShort: 'c4 — blockade d5, press the IQP.' }, sources: FR,
+    intro: { say: "c4 — the Monte Carlo Exchange, White giving themselves an isolated queen's pawn. Develop …Nf6, …Be7 and …O-O, then blockade d5 with …Nb6 or …Nbd7-b6 and press the isolated pawn; classic isolated-pawn technique in Black's favour.", sayShort: 'c4 — blockade d5, press the IQP.' }, sources: FR,
   },
   'pro-caruana-french::3::Qe2+@10': {
     intro: { say: "Qe2+ — a trade offer in the symmetric Exchange. Interpose …Qe7 or …Be7 and trade queens; the endgame is level, but Black's easier development and any file you grab first give the only winning chances. Play on, do not settle.", sayShort: 'Qe2+ — …Qe7, trade, then press.' }, sources: FR,

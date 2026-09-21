@@ -56,7 +56,7 @@ export const PRO_AMAN_ANTI_CARO_VARIATION_LESSONS: Record<string, LessonScript> 
         say: "After the knight trade the queen sits proudly on e4, and Bc4 develops actively, aiming at the f7-square. White's pieces are coordinated and active while Black is still untangling.",
         sayShort: 'Bc4 — active, eye f7.' }),
       b({ id: 'ne5', moves: 'e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 Nd7 Bc4 Nf6 Ne5', arrows: [A('f3', 'e5')], highlights: [H('e5')],
-        say: "White plants a knight on the strong e5-outpost, controlling key central squares and cramping Black. The pieces dominate the centre while Black struggles to free his position.",
+        say: "White plants a knight on the strong e5-outpost, controlling key central squares and cramping Black. The pieces dominate the centre while Black struggles to free their position.",
         sayShort: 'Ne5 — the central outpost.' }),
       b({ id: 'middlegame', moves: 'e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 Nd7 Bc4 Nf6 Ne5 e6 Qe2 Bd6 d4 O-O O-O', highlights: [H('d4'), H('e5')],
         say: "White builds the centre with d4, keeps the knight on e5, and castles into a dominant middlegame. White has more space, active pieces, and the cramping e5-knight — a clean positional bind. Black is solid but passive, and White presses comfortably. The Two Knights' 83% in action.",

@@ -68,7 +68,7 @@ const STANDARD: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: VIS }],
       highlights: [{ square: 'h7', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Here's the middlegame. You have the half-open h-file aimed at the king, the bishop on d3 trained on h7, central pressure on Black's hanging c5- and d5-pawns, and rooks swinging to the open files. The plan is simple and brutal: build on the kingside while Black's loose pawns tie his pieces down. This is why this repertoire's London is a winning machine, not a drawing one.",
+        "Here's the middlegame. You have the half-open h-file aimed at the king, the bishop on d3 trained on h7, central pressure on Black's hanging c5- and d5-pawns, and rooks swinging to the open files. The plan is simple and brutal: build on the kingside while Black's loose pawns tie their pieces down. This is why this repertoire's London is a winning machine, not a drawing one.",
       sayShort: 'h-file + Bd3 — attack the king.',
     }),
   ],
@@ -107,7 +107,7 @@ const VS_KID: LessonScript = {
       arrows: [{ from: 'd2', to: 'h6', color: VIS }],
       highlights: [{ square: 'h6', color: KEY }, { square: 'g7', color: SOFT }],
       say:
-        "Black takes, and your queen lands on h6 — right on the doorstep of his king. The dark squares around g7 are now permanently weak with no bishop to guard them. You've achieved the dream: queen near the king, defender removed, all before the middlegame even starts.",
+        "Black takes, and your queen lands on h6 — right on the doorstep of their king. The dark squares around g7 are now permanently weak with no bishop to guard them. You've achieved the dream: queen near the king, defender removed, all before the middlegame even starts.",
       sayShort: 'Qxh6 — queen at the king\'s door.',
     }),
     b({
@@ -155,7 +155,7 @@ const JOBAVA: LessonScript = {
       arrows: [{ from: 'c3', to: 'a4', color: VIS }],
       highlights: [{ square: 'a4', color: KEY }, { square: 'c5', color: SOFT }],
       say:
-        "Na4 — the kicker. The knight swings to the rim, but it's heading for the beautiful c5-outpost and pressuring Black's c5-pawn right now. Suddenly Black has to worry about his queenside while his queen sits awkwardly on d6. The 'boring' London is breathing fire.",
+        "Na4 — the kicker. The knight swings to the rim, but it's heading for the beautiful c5-outpost and pressuring Black's c5-pawn right now. Suddenly Black has to worry about their queenside while their queen sits awkwardly on d6. The 'boring' London is breathing fire.",
       sayShort: 'Na4 — head for the c5-outpost.',
     }),
     b({
@@ -193,7 +193,7 @@ const C6_BF4: LessonScript = {
       arrows: [{ from: 'c4', to: 'f7', color: VIS }],
       highlights: [{ square: 'c4', color: KEY }, { square: 'f5', color: SOFT }],
       say:
-        "Black mirrors you — his bishop escapes to f5 before the pawn chain closes. So you change the structure: c4 challenges d5, and when Black releases with the capture, your f1-bishop recaptures and lands on the diagonal that looks at f7. Both sides have their bishops outside the chains; yours has the better view.",
+        "Black mirrors you — their bishop escapes to f5 before the pawn chain closes. So you change the structure: c4 challenges d5, and when Black releases with the capture, your f1-bishop recaptures and lands on the diagonal that looks at f7. Both sides have their bishops outside the chains; yours has the better view.",
       sayShort: 'c4 — challenge, recapture, eye f7.',
     }),
     b({

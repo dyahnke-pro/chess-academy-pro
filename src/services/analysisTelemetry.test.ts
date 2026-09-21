@@ -13,8 +13,8 @@ vi.mock('./appAuditor', () => ({
 vi.mock('./stockfishEngine', () => ({
   stockfishEngine: {
     initialize: vi.fn(() => Promise.resolve()),
-    analyzePosition: vi.fn(() => Promise.resolve({ evaluation: 0, bestMove: 'd2d4', depth: 10 })),
-    analyzeWithBudget: vi.fn(() => Promise.resolve({ evaluation: 0, bestMove: 'd2d4', depth: 10 })),
+    analyzePosition: vi.fn(() => Promise.resolve(buildEngineAnalysis({ depth: 10 }))),
+    analyzeWithBudget: vi.fn(() => Promise.resolve(buildEngineAnalysis({ depth: 10 }))),
   },
   isIosSafari: () => false,
   resolveWorkerUrl: () => ({ url: '/stockfish/stockfish-asm.js', variant: 'asm', reason: 'test', workerType: 'classic' }),
@@ -23,7 +23,7 @@ vi.mock('./stockfishEngine', () => ({
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { analyzeGameOnWorker } from './gameAnalysisService';
-import { buildGameRecord } from '../test/factories';
+import { buildGameRecord, buildEngineAnalysis } from '../test/factories';
 
 // 🔒 A SPEED FIX YOU CANNOT MEASURE CANNOT BE VERIFIED (David 2026-09-05,
 // "add the audit tools").
@@ -52,7 +52,7 @@ const CURVE = [20, 20, 20, 20, 20, -300, -300, -300, -300];
 function worker() {
   return {
     analyzePosition: vi.fn((fen: string, depth: number) =>
-      Promise.resolve({ evaluation: CURVE[FENS.indexOf(fen)] ?? 0, bestMove: 'd2d4', depth })),
+      Promise.resolve(buildEngineAnalysis({ evaluation: CURVE[FENS.indexOf(fen)] ?? 0, depth }))),
     destroy: vi.fn(),
     newGame: vi.fn(),
   } as never;

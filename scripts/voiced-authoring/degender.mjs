@@ -119,7 +119,11 @@ const MODALS = new Set([
   "shouldn't", 'must', 'might', 'may', 'will', "won't", 'shall', 'were', 'dare',
 ]);
 
-const flagged = [];
+/** Sentences the rules REFUSED to rewrite, for the caller to report and
+ *  ceiling. Exported (2026-09-21) because a second consumer — the lesson-beat
+ *  driver for C15b — needs the refusals, and a refusal nobody can see is the
+ *  same silent null this file was written to avoid. */
+export const flagged = [];
 
 /**
  * Match each file's OWN formatting. The corpus is mixed — some authored files
@@ -308,7 +312,13 @@ for (const f of (IS_CLI ? readdirSync(SRC) : []).filter((n) => n.endsWith('.json
   }
 }
 
-console.log(`${WRITE ? 'WROTE' : 'DRY RUN'} — ${files} files scanned, ${changed} changed, ${strings} strings rewritten`);
-console.log(`flagged (left alone, need a human): ${flagged.length}`);
-for (const f of flagged.slice(0, 40)) console.log('  ' + f);
-if (flagged.length > 40) console.log(`  … and ${flagged.length - 40} more`);
+// 🔒 GUARDED 2026-09-21. These four lines ran at IMPORT time, so the moment a
+// second consumer imported `transform` the module printed a bogus "DRY RUN — 0
+// files scanned" over that tool's own output. The file walk above already had
+// an `IS_CLI` guard; the summary did not.
+if (IS_CLI) {
+  console.log(`${WRITE ? 'WROTE' : 'DRY RUN'} — ${files} files scanned, ${changed} changed, ${strings} strings rewritten`);
+  console.log(`flagged (left alone, need a human): ${flagged.length}`);
+  for (const f of flagged.slice(0, 40)) console.log('  ' + f);
+  if (flagged.length > 40) console.log(`  … and ${flagged.length - 40} more`);
+}

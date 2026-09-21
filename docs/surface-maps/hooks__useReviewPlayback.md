@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**579 lines · 7 exports · 2 importers · 1 tests · 1 audits**
+**699 lines · 9 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `UseReviewPlaybackArgs` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `ForwardStop` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `ForwardOutcome` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `UseReviewPlaybackResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -35,8 +41,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `AUTO_ADVANCE_SILENT_HOLD_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useReviewPlayback` (function) — 25 call sites
-- `src/components/Coach/CoachGameReview.tsx:673`
+### `useReviewPlayback` (function) — 26 call sites
+- `src/components/Coach/CoachGameReview.tsx:678`
 - `src/hooks/useReviewPlayback.test.ts:73`
 - `src/hooks/useReviewPlayback.test.ts:88`
 - `src/hooks/useReviewPlayback.test.ts:101`
@@ -53,19 +59,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useReviewPlayback.test.ts:287`
 - `src/hooks/useReviewPlayback.test.ts:312`
 - `src/hooks/useReviewPlayback.test.ts:349`
-- `src/hooks/useReviewPlayback.test.ts:363`
-- `src/hooks/useReviewPlayback.test.ts:384`
-- `src/hooks/useReviewPlayback.test.ts:404`
-- `src/hooks/useReviewPlayback.test.ts:417`
-- `src/hooks/useReviewPlayback.test.ts:436`
-- `src/hooks/useReviewPlayback.test.ts:451`
-- `src/hooks/useReviewPlayback.test.ts:481`
-- `src/hooks/useReviewPlayback.test.ts:512`
+- `src/hooks/useReviewPlayback.test.ts:366`
+- `src/hooks/useReviewPlayback.test.ts:401`
+- `src/hooks/useReviewPlayback.test.ts:424`
+- `src/hooks/useReviewPlayback.test.ts:447`
+- `src/hooks/useReviewPlayback.test.ts:460`
+- `src/hooks/useReviewPlayback.test.ts:482`
+- `src/hooks/useReviewPlayback.test.ts:500`
+- `src/hooks/useReviewPlayback.test.ts:533`
+- `src/hooks/useReviewPlayback.test.ts:567`
 
 ## Tests
 
 - `src/hooks/useReviewPlayback.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-review-overhaul-prod.mjs`

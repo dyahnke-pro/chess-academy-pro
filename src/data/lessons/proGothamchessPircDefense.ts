@@ -67,7 +67,7 @@ export const PRO_GOTHAMCHESS_PIRC_DEFENSE_LESSON: LessonScript = {
       arrows: [{ from: 'd7', to: 'e5', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "White lunges e5, trying to chase your knight and use his space; you slide the knight back to d7 — where it actually attacks the e5-pawn and eyes the c5- and b6-squares. Here's the middlegame: White's pawns look huge but they're overextended, and you're swarming them. The plan is …cxd4 and …dxe5, prying the centre apart so your g7-bishop roars down the long diagonal. The engine calls it dead level, and that's the Pirc's promise — give White the centre, then dismantle it and outplay him in the chaos.",
+        "White lunges e5, trying to chase your knight and use their space; you slide the knight back to d7 — where it actually attacks the e5-pawn and eyes the c5- and b6-squares. Here's the middlegame: White's pawns look huge but they're overextended, and you're swarming them. The plan is …cxd4 and …dxe5, prying the centre apart so your g7-bishop roars down the long diagonal. The engine calls it dead level, and that's the Pirc's promise — give White the centre, then dismantle it and outplay them in the chaos.",
       sayShort: '…cxd4/…dxe5 — tear it down.',
     }),
   ],

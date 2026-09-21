@@ -68,7 +68,7 @@ export const PRO_GOTHAMCHESS_STAFFORD_REFUTE_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5',
       highlights: [{ square: 'h5', color: SOFT }],
       say:
-        "Out of real ideas, Black lunges with h5 — hoping to drag the h-pawn forward and stir up a kingside attack. It looks scary if you've never seen it. It's actually a sign the gambit has failed: Black is throwing wing pawns because his pieces have no targets.",
+        "Out of real ideas, Black lunges with h5 — hoping to drag the h-pawn forward and stir up a kingside attack. It looks scary if you've never seen it. It's actually a sign the gambit has failed: Black is throwing wing pawns because their pieces have no targets.",
       sayShort: 'h5 — a desperate lunge.',
     }),
     b({

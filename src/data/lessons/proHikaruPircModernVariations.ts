@@ -28,7 +28,7 @@ const NF3: LessonScript = {
   beats: [
     b({ id: 'c6', moves: 'e4 g6 d4 Bg7 Nf3 c6', highlights: [H('c6')], say: "Against the classical Nf3, Black plays the flexible ...c6, preparing to strike the centre with ...d5 rather than letting White settle in.", sayShort: '…c6 — prepare ...d5.' }),
     b({ id: 'dxe4', moves: 'e4 g6 d4 Bg7 Nf3 c6 Nc3 d5 h3 dxe4 Nxe4 Nf6', highlights: [H('e4')], say: "Black challenges with ...d5 and trades on e4. After the recapture, ...Nf6 hits the centralised knight, forcing simplification into a comfortable structure.", sayShort: '…d5, …Nf6 — challenge the centre.' }),
-    b({ id: 'mid', moves: 'e4 g6 d4 Bg7 Nf3 c6 Nc3 d5 h3 dxe4 Nxe4 Nf6 Nxf6+ exf6 Bc4 O-O O-O Nd7 Re1 b5 Bb3 Nb6 a4 a5', arrows: [A('b7', 'b5')], highlights: [H('b5')], say: "The knights trade, both sides castle, and Black gets his queenside rolling with ...b5 and ...a5. The solid structure, the fianchettoed bishop, and the queenside space give Black an easy, comfortable game.", sayShort: '…b5, …a5 — easy, comfortable game.' }),
+    b({ id: 'mid', moves: 'e4 g6 d4 Bg7 Nf3 c6 Nc3 d5 h3 dxe4 Nxe4 Nf6 Nxf6+ exf6 Bc4 O-O O-O Nd7 Re1 b5 Bb3 Nb6 a4 a5', arrows: [A('b7', 'b5')], highlights: [H('b5')], say: "The knights trade, both sides castle, and Black gets their queenside rolling with ...b5 and ...a5. The solid structure, the fianchettoed bishop, and the queenside space give Black an easy, comfortable game.", sayShort: '…b5, …a5 — easy, comfortable game.' }),
   ],
 };
 

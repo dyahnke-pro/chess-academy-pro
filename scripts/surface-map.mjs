@@ -29,10 +29,16 @@
  *   node scripts/surface-map.mjs --changed             # map what this work changed
  *   node scripts/surface-map.mjs --verify              # ship-check gate
  */
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, relative, basename, dirname, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+// 🔒 ONE DERIVATION OF "WHAT COVERS THIS FILE" (2026-09-21). `testsFor` and its
+// two helpers used to live here and nowhere else, while ship-check answered the
+// same question by BASENAME and got a different, smaller answer — which is how
+// `section14Diagnosis.test.ts` went red on `main` unseen. Both read this module
+// now; a second matcher is the duplicated-judgement the rot rule bans.
+import { allSourceFiles, read, testsFor } from './ship-check-lib/tests-for.mjs';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
 const MAP_DIR = 'docs/surface-maps';
@@ -66,33 +72,6 @@ function git(args) {
   try { return execFileSync('git', args, { cwd: REPO, encoding: 'utf-8' }); } catch { return ''; }
 }
 
-/** Every source file in the repo, once. */
-let FILE_CACHE = null;
-function allSourceFiles() {
-  if (FILE_CACHE) return FILE_CACHE;
-  const out = [];
-  const walk = (dir) => {
-    for (const e of readdirSync(join(REPO, dir), { withFileTypes: true })) {
-      if (e.name === 'node_modules' || e.name.startsWith('.')) continue;
-      const rel = `${dir}/${e.name}`;
-      if (e.isDirectory()) walk(rel);
-      else if (/\.(ts|tsx|mjs|js)$/.test(e.name)) out.push(rel);
-    }
-  };
-  for (const root of ['src', 'scripts', 'api']) {
-    if (existsSync(join(REPO, root))) walk(root);
-  }
-  FILE_CACHE = out.sort();
-  return out;
-}
-
-const readCache = new Map();
-function read(p) {
-  if (!readCache.has(p)) {
-    try { readCache.set(p, readFileSync(join(REPO, p), 'utf-8')); } catch { readCache.set(p, ''); }
-  }
-  return readCache.get(p);
-}
 
 /** Exported symbols, in source order. */
 function exportsOf(src) {
@@ -177,12 +156,6 @@ function rulesFor(target, names) {
   return [...bySection.entries()].map(([h, v]) => ({ heading: h, line: v.line, needles: [...v.needles].sort() }));
 }
 
-function testsFor(target) {
-  const base = basename(target, extname(target));
-  const dir = dirname(target);
-  return allSourceFiles().filter((f) =>
-    /\.test\.tsx?$/.test(f) && (f.startsWith(`${dir}/${base}.`) || f.startsWith(`${dir}/${base}`) || read(f).includes(`/${base}'`) || read(f).includes(`./${base}'`)));
-}
 
 function buildMap(target) {
   const src = read(target);

@@ -49,14 +49,14 @@ export const TROMPOWSKY_ATTACK_LESSON: LessonScript = {
       id: 'center',
       moves: ['d4', 'Nf6', 'Bg5', 'Ne4', 'Bf4', 'd5', 'e3', 'c5', 'Bd3', 'Nf6', 'c3', 'Nc6'],
       highlights: [{ square: 'e3', color: SOFT }, { square: 'd5', color: SOFT }],
-      say: "Black stakes a classical centre with d5 and c5; White answers with the modest, rock-solid e3 and c3, develops the bishop to d3, and the over-extended knight is chased back to f6. This is the Trompowsky's quiet personality — no early fireworks, just a healthy structure where White's pieces flow to their best squares and Black has to prove his centre is an asset, not a target.",
+      say: "Black stakes a classical centre with d5 and c5; White answers with the modest, rock-solid e3 and c3, develops the bishop to d3, and the over-extended knight is chased back to f6. This is the Trompowsky's quiet personality — no early fireworks, just a healthy structure where White's pieces flow to their best squares and Black has to prove their centre is an asset, not a target.",
       sayShort: 'e3, c3, Bd3 — solid and easy.',
     },
     {
       id: 'develop',
       moves: ['d4', 'Nf6', 'Bg5', 'Ne4', 'Bf4', 'd5', 'e3', 'c5', 'Bd3', 'Nf6', 'c3', 'Nc6', 'Nd2', 'Bg4', 'Ngf3', 'e6', 'O-O', 'Rc8'],
       highlights: [{ square: 'd2', color: SOFT }, { square: 'f3', color: SOFT }],
-      say: "The knights come out behind the pawns — Nd2 and then Ngf3 — and White castles into safety. Black pins with Bg4 and stacks his rook on the half-open c-file, hunting for counterplay against c3 and d4. Everything is developed; the position is balanced and rich. Now White goes looking for the two things the Trompowsky structure offers him: pressure on the queenside and a knight outpost in the centre.",
+      say: "The knights come out behind the pawns — Nd2 and then Ngf3 — and White castles into safety. Black pins with Bg4 and stacks their rook on the half-open c-file, hunting for counterplay against c3 and d4. Everything is developed; the position is balanced and rich. Now White goes looking for the two things the Trompowsky structure offers them: pressure on the queenside and a knight outpost in the centre.",
       sayShort: 'Nd2, Ngf3, O-O — fully mobilised.',
     },
     {

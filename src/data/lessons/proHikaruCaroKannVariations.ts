@@ -36,7 +36,7 @@ const TWO_KNIGHTS: LessonScript = {
   openingId: 'pro-hikaru-caro-kann', title: "Caro-Kann vs Two Knights — the ...Bg4 Pin", minutes: 7, orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'bg4', moves: 'e4 c6 Nc3 d5 Nf3 Bg4', arrows: [A('c8', 'g4')], highlights: [H('g4')], say: "Against the Two Knights, Black plays ...d5 and the classical ...Bg4 — pinning the f3-knight against the queen. The light bishop gets active before anything can trap it.", sayShort: '…Bg4 — pin the knight.' }),
-    b({ id: 'e6', moves: 'e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6', highlights: [H('e6')], say: "White breaks the pin with h3; Black trades on f3, damaging nothing of his own, and plays ...e6 to build the solid structure. Black is fully comfortable.", sayShort: '…Bxf3, …e6 — solid structure.' }),
+    b({ id: 'e6', moves: 'e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6', highlights: [H('e6')], say: "White breaks the pin with h3; Black trades on f3, damaging nothing of their own, and plays ...e6 to build the solid structure. Black is fully comfortable.", sayShort: '…Bxf3, …e6 — solid structure.' }),
     b({ id: 'mid', moves: 'e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6 d3 g6 Bd2 Bg7 O-O-O Nd7 g4', arrows: [A('f8', 'g7')], highlights: [H('g7')], say: "Black fianchettoes the dark bishop to g7 and develops ...Nd7. White castles long and pushes g4, but Black's rock-solid structure and harmonious pieces hold everything together. A comfortable Caro middlegame.", sayShort: '…Bg7, …Nd7 — rock-solid Caro.' }),
   ],
 };

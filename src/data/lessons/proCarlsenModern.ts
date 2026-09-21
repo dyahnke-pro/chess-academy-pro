@@ -31,7 +31,7 @@ export const PRO_CARLSEN_MODERN_LESSON: LessonScript = {
 const CLASSICAL_NF3: LessonScript = {
   openingId: 'pro-carlsen-modern', title: 'Classical Nf3', minutes: 6, orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
-    b({ id: 'nf3', moves: 'e4 g6 d4 Bg7 Nf3 d6 Bd3 Nf6', arrows: [A('f6', 'e4')], highlights: [H('f6')], say: "Against the calm Nf3 and Bd3, Black develops …d6 and …Nf6, hitting e4 and transposing toward Pirc-style structures. Black's setup is solid and well-known; he completes development and waits for the right central break.", sayShort: 'Nf6 — hit e4, solid setup.' }),
+    b({ id: 'nf3', moves: 'e4 g6 d4 Bg7 Nf3 d6 Bd3 Nf6', arrows: [A('f6', 'e4')], highlights: [H('f6')], say: "Against the calm Nf3 and Bd3, Black develops …d6 and …Nf6, hitting e4 and transposing toward Pirc-style structures. Black's setup is solid and well-known; they complete development and waits for the right central break.", sayShort: 'Nf6 — hit e4, solid setup.' }),
     b({ id: 'c5', moves: 'e4 g6 d4 Bg7 Nf3 d6 Bd3 Nf6 O-O O-O Re1 c5', arrows: [A('c5', 'd4')], highlights: [H('c5')], say: "Both sides castle and Black strikes with …c5, hitting d4 at its base. This is the sound break in this exact set-up — the natural-looking …e5 here runs into dxe5, where White's Bd3 and Re1 are ideally placed and Black ends up clearly worse. After …c5 Black stays solid: a shade worse in space, but comfortable and fully playable, with the g7-bishop's diagonal and counterplay on both wings.", sayShort: 'c5 — the sound break, a shade worse.' }),
   ],
 };

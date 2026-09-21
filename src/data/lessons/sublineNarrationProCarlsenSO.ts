@@ -38,7 +38,7 @@ export const SUBLINE_NARRATION_PRO_CARLSEN_SO: Record<string, SublineNarration> 
     intro: { say: "Bd3 — the Exchange French, symmetric and drawish by reputation. Do not wait for the draw: mirror …Bd6 and …Ne7, castle, then contest a file with …Re8 and find the better minor piece; Black outplays, not out-waits.", sayShort: 'Bd3 — …Bd6 and …Ne7, then …Re8.' }, sources: FR,
   },
   'pro-carlsen-french::2::c4@6': {
-    intro: { say: "c4 — the Monte Carlo Exchange, White giving himself an isolated queen's pawn. Develop …Nf6, …Be7 and …O-O, then blockade d5 with …Nb6 or …Nbd7-b6 and press the isolani; classic anti-IQP technique in Black's favour.", sayShort: 'c4 — blockade d5, press the IQP.' }, sources: FR,
+    intro: { say: "c4 — the Monte Carlo Exchange, White giving themselves an isolated queen's pawn. Develop …Nf6, …Be7 and …O-O, then blockade d5 with …Nb6 or …Nbd7-b6 and press the isolani; classic anti-IQP technique in Black's favour.", sayShort: 'c4 — blockade d5, press the IQP.' }, sources: FR,
   },
   'pro-carlsen-french::2::Bd3@8': {
     intro: { say: "Bd3 — a quiet Exchange move-order, bishop to d3. Complete the symmetry with …Bd6 and …Ne7, castle, and grab the e-file with …Re8; the position is level, so play for the small imbalance and out-develop rather than settle for the draw.", sayShort: 'Bd3 — …Bd6 and …Ne7, contest e-file.' }, sources: FR,
@@ -310,7 +310,7 @@ export const SUBLINE_NARRATION_PRO_CARLSEN_SO: Record<string, SublineNarration> 
     intro: { say: "Nf6 — a flexible symmetrical setup. Castle O-O, then c4 and Nc3, keeping options between the d4 break and the queenside b4 expansion; your smooth development and the extra tempo of the reversed structure give White a small, comfortable pull to nurse.", sayShort: 'Nf6 — O-O and c4, then d4.' }, sources: RETI,
   },
   'pro-carlsen-reti::2::c5@7': {
-    intro: { say: "c5 — Black builds a broad centre. Adopt the King's Indian Attack: d3, Nbd2, e4 and Re1, then e5 clamping the kingside for a slow attack; or strike with c4 for a Catalan. White's flexible fianchetto setup steers into a comfortable plan of his choosing.", sayShort: 'c5 — d3 and Nbd2, then e4.' }, sources: RETI,
+    intro: { say: "c5 — Black builds a broad centre. Adopt the King's Indian Attack: d3, Nbd2, e4 and Re1, then e5 clamping the kingside for a slow attack; or strike with c4 for a Catalan. White's flexible fianchetto setup steers into a comfortable plan of their choosing.", sayShort: 'c5 — d3 and Nbd2, then e4.' }, sources: RETI,
   },
   'pro-carlsen-reti::2::c5@9': {
     intro: { say: "c5 — Black expands after …Be7. Continue the King's Indian Attack: Nbd2, e4 and Re1, then e5 gaining kingside space and Nf1-h2-g4 building an attack; White's classic KIA plan promises a dangerous, well-mapped kingside initiative. Play for the attack.", sayShort: 'c5 — Nbd2 and e4, then e5.' }, sources: RETI,

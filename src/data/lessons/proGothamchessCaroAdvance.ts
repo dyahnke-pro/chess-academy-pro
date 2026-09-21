@@ -43,7 +43,7 @@ export const PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON: LessonScript = {
       moves: 'e4 c6',
       highlights: [{ square: 'c6', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "You're White against the Caro-Kann — and this repertoire's weapon here is the Advance, the most aggressive try. Black plays c6, the quiet little wedge that prepares d5 with support. He plays this whole structure across 423 of the games and wins 299 of them. Your job is to take the space and never give it back.",
+        "You're White against the Caro-Kann — and this repertoire's weapon here is the Advance, the most aggressive try. Black plays c6, the quiet little wedge that prepares d5 with support. They play this whole structure across 423 of the games and wins 299 of them. Your job is to take the space and never give it back.",
       sayShort: 'c6 — the Caro wedge.',
     }),
     b({
@@ -132,7 +132,7 @@ export const PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5 Qb6 Bd3 Bxd3 Qxd3 e6 Nd2 Ne7 c4',
       highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: KEY }],
       say:
-        "And here's the break that defines the middlegame: c4. You strike at Black's d5-pawn while his pieces are still passive, prying the position open exactly where you have the edge. This is where the opening hands off — and the middlegame plan picks up from this very position.",
+        "And here's the break that defines the middlegame: c4. You strike at Black's d5-pawn while their pieces are still passive, prying the position open exactly where you have the edge. This is where the opening hands off — and the middlegame plan picks up from this very position.",
       sayShort: 'c4 — the central break.',
     }),
     b({

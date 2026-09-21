@@ -130,10 +130,36 @@ describe('buildCourse', () => {
     for (const ch of c.chapters) expect(ch.sublines).toEqual([]);
   });
 
-  it('marks Watch unlocked and later rungs locked until the prior is done', () => {
+  // 🔒 EVERY RUNG IS UNLOCKED ON OPEN — the ladder gate was REMOVED from the
+  // product, and this test was still asserting it (fixed 2026-09-21).
+  //
+  // It read "marks Watch unlocked and later rungs LOCKED until the prior is
+  // done" and asserted `learn.unlocked === false`. `isRungUnlocked` in
+  // `utils/wlppLadder.ts` returns `true` unconditionally, and says why: "the
+  // whole course (rungs, variations, weapons) is accessible on open". So the
+  // gate was failing the product for holding a contract the product had
+  // deliberately dropped. The old assertion is DELETED rather than annotated,
+  // per the Lake Butler rule — a test asserting both sides is how the next
+  // reader picks the wrong one.
+  //
+  // THIRD INSTANCE OF THIS EXACT SHAPE IN ONE NIGHT (`section14Diagnosis`'s
+  // decline string, `deltaConsistency`'s centipawn bands, and now this): a
+  // deliberate change ships, the gate that pinned the old behaviour goes red,
+  // and NOTHING SEES IT because ship-check mapped a changed source file to its
+  // tests by basename. That mapping is fixed; this is one of the reds it was
+  // concealing.
+  //
+  // What is still worth asserting is that the rung LIST is real and that the
+  // unlock flag is actually computed for each one — a course whose rungs came
+  // back empty would have passed the old assertion just as happily.
+  it('marks every rung unlocked on open — the ladder gate is gone', () => {
     const c = course();
     const rungs = c.chapters[0].rungs;
-    expect(rungs.find((r) => r.rung === 'watch')?.unlocked).toBe(true);
-    expect(rungs.find((r) => r.rung === 'learn')?.unlocked).toBe(false);
+    expect(rungs.length, 'no rungs at all — the assertion below would pass for free').toBeGreaterThan(0);
+    expect(rungs.map((r) => r.rung)).toContain('watch');
+    expect(rungs.map((r) => r.rung)).toContain('learn');
+    for (const r of rungs) {
+      expect(r.unlocked, `${r.rung} must be reachable on open`).toBe(true);
+    }
   });
 });

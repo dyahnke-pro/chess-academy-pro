@@ -65,7 +65,7 @@ const D6_LESSON: LessonScript = {
       sayShort: "c3, Bf1 — small centre, keep the bishop.",
       highlights: [H('c3', KEY), H('f1', KEY)] }),
     b({ id: 'rd6-2', moves: 'e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 Nf6 c3 a6 Bf1 Bg4 h3 Bxf3 Qxf3',
-      say: "Black pins with Bg4 and, prodded by h3, trades it off — Bxf3, and you recapture with the queen. That is a quiet triumph: Black has voluntarily given up his light-squared bishop, so you own the bishop pair in a semi-open position where it will only grow in strength.",
+      say: "Black pins with Bg4 and, prodded by h3, trades it off — Bxf3, and you recapture with the queen. That is a quiet triumph: Black has voluntarily given up their light-squared bishop, so you own the bishop pair in a semi-open position where it will only grow in strength.",
       sayShort: "Qxf3 — you own the bishop pair now.",
       highlights: [H('f3', KEY)] }),
     b({ id: 'rd6-3', moves: 'e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 Nf6 c3 a6 Bf1 Bg4 h3 Bxf3 Qxf3 g6 d3 Bg7 Be3',

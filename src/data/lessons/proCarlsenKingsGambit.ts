@@ -48,7 +48,7 @@ const DECLINED: LessonScript = {
   openingId: 'pro-carlsen-kings-gambit', title: 'Declined …Bc5', minutes: 5, orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'bc5', moves: 'e4 e5 f4 Bc5 Nf3 d6 Nc3 Nf6', highlights: [H('c5'), H('f4')], say: "The King's Gambit Declined — Black ignores the pawn and develops …Bc5, taking aim at the sensitive f2-square and keeping the centre tense. White develops naturally with Nf3 and Nc3; the f4-pawn keeps Black's …d5 break in check and White retains a space edge.", sayShort: 'Nf3, Nc3 — develop, keep f4.' }),
-    b({ id: 'na4', moves: 'e4 e5 f4 Bc5 Nf3 d6 Nc3 Nf6 Bc4 Nc6 d3', highlights: [H('c4'), H('d3')], say: "White completes development with Bc4 and d3, a solid King's-Gambit-Declined structure. White has more space and the half-open f-file after a later fxe5, with a pleasant, double-edged middlegame where his initiative on the kingside outweighs the slight loosening.", sayShort: 'Bc4, d3 — space and the f-file.' }),
+    b({ id: 'na4', moves: 'e4 e5 f4 Bc5 Nf3 d6 Nc3 Nf6 Bc4 Nc6 d3', highlights: [H('c4'), H('d3')], say: "White completes development with Bc4 and d3, a solid King's-Gambit-Declined structure. White has more space and the half-open f-file after a later fxe5, with a pleasant, double-edged middlegame where their initiative on the kingside outweighs the slight loosening.", sayShort: 'Bc4, d3 — space and the f-file.' }),
   ],
 };
 

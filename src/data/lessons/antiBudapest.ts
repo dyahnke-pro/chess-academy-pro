@@ -32,7 +32,7 @@ export const ANTI_BUDAPEST_LESSON: LessonScript = {
       sayShort: "Nbd2, e3 — develop, hold the pawn.",
       highlights: [H('e5', KEY), H('d2', SOFT)] }),
     b({ id: 'bud3', moves: 'd4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 e3 Ngxe5 Nxe5 Nxe5 a3 Bxd2+ Qxd2',
-      say: "Black finally wins the pawn back — …Ngxe5, and after Nxe5 Nxe5 material's level again. But now you strike: a3, and after …Bxd2+ Qxd2 you've pocketed the two bishops. Black gave up his dark-squared bishop, and your Bf4 is left unopposed on its diagonal. Equal material — but your minor pieces are simply better.",
+      say: "Black finally wins the pawn back — …Ngxe5, and after Nxe5 Nxe5 material's level again. But now you strike: a3, and after …Bxd2+ Qxd2 you've pocketed the two bishops. Black gave up their dark-squared bishop, and your Bf4 is left unopposed on its diagonal. Equal material — but your minor pieces are simply better.",
       sayShort: "a3 — win the bishop pair.",
       highlights: [H('f4', KEY), H('e5', SOFT)] }),
     b({ id: 'bud4', moves: 'd4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 e3 Ngxe5 Nxe5 Nxe5 a3 Bxd2+ Qxd2 d6 Be2 O-O',

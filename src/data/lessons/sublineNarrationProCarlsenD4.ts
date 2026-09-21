@@ -140,7 +140,7 @@ export const SUBLINE_NARRATION_PRO_CARLSEN_D4: Record<string, SublineNarration> 
     intro: { say: "Nf3 — the quiet Three Knights Nimzo. Answer …c5 hitting d4, or …b6 and …Bb7 to fight for e4; you develop fast and keep …Bxc3 in reserve to double the pawns whenever it helps. A flexible, comfortable game for Black.", sayShort: 'Nf3 — …c5 or …b6 and …Bb7.' }, sources: NIM,
   },
   'pro-carlsen-nimzo::0::Ne2@8': {
-    intro: { say: "Ne2 — the Reshevsky, White sidestepping doubled pawns but blocking his own bishop. Strike the centre with …d5 and …c5; the knight on e2 is clumsy, so open lines quickly with …cxd4 and …dxc4, and your freer pieces seize the initiative. Black is comfortably active.", sayShort: 'Ne2 — …d5 and …c5, open lines.' }, sources: NIM,
+    intro: { say: "Ne2 — the Reshevsky, White sidestepping doubled pawns but blocking their own bishop. Strike the centre with …d5 and …c5; the knight on e2 is clumsy, so open lines quickly with …cxd4 and …dxc4, and your freer pieces seize the initiative. Black is comfortably active.", sayShort: 'Ne2 — …d5 and …c5, open lines.' }, sources: NIM,
   },
   'pro-carlsen-nimzo::0::a3@10': {
     intro: { say: "a3 — White forces the question in the Classical Nimzo. Take …Bxc3, and after bxc3 the doubled pawns are the target: play …dxc4 and …c5, then …Qc7, …Nc6 and …e5, hammering the c4-pawn and the centre. The classic Nimzo trade favours Black.", sayShort: 'a3 — …Bxc3, then …dxc4 and …c5.' }, sources: NIM,
@@ -152,7 +152,7 @@ export const SUBLINE_NARRATION_PRO_CARLSEN_D4: Record<string, SublineNarration> 
     intro: { say: "cxd5 — White clarifies in the Classical Nimzo. Recapture …exd5, giving you a mobile centre and the half-open e-file; follow with …Re8, …Bd6 or …Bf5 developing actively, and keep …Bxc3 to wreck the queenside if White allows it. Black has a free, harmonious game.", sayShort: 'cxd5 — …exd5, then …Re8 and …Bd6.' }, sources: NIM,
   },
   'pro-carlsen-nimzo::0::Ne2@10': {
-    intro: { say: "Ne2 — White reroutes the knight in the Classical, but it blocks his bishop. Break with …c5 and …Nc6, hitting d4, and consider …dxc4 to open the position for your active pieces; the awkward e2-knight leaves White a step behind. Comfortable for Black.", sayShort: 'Ne2 — …c5 and …Nc6, hit d4.' }, sources: NIM,
+    intro: { say: "Ne2 — White reroutes the knight in the Classical, but it blocks their bishop. Break with …c5 and …Nc6, hitting d4, and consider …dxc4 to open the position for your active pieces; the awkward e2-knight leaves White a step behind. Comfortable for Black.", sayShort: 'Ne2 — …c5 and …Nc6, hit d4.' }, sources: NIM,
   },
   'pro-carlsen-nimzo::0::Nf3@8': {
     intro: { say: "Nf3 — White develops naturally in the Nimzo. Answer …d5 and …c5 for a classical central strike, or …b6 and …Bb7 to battle for e4; keep …Bxc3 in reserve to hand White the doubled pawns when it suits. Flexible and pleasant for Black.", sayShort: 'Nf3 — …d5 and …c5, strike centre.' }, sources: NIM,

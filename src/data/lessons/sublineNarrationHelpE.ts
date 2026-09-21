@@ -262,7 +262,7 @@ const QID_NXE4_14: SN = {
   },
   beats: [
     { atMove: 15, say: "…Bxe4 recaptures on the long diagonal, keeping your grip on the light squares.", highlights: [H('e4', KEY)] },
-    { atMove: 17, say: "…Bxg2 trades off White's fianchetto bishop, the key defender of his king.", highlights: [H('g2', ATK)] },
+    { atMove: 17, say: "…Bxg2 trades off White's fianchetto bishop, the key defender of their king.", highlights: [H('g2', ATK)] },
     { atMove: 23, say: "…c5 strikes at the centre, completing comfortable equality.", highlights: [H('c5', KEY)] },
   ],
   sources: ['concept:pos-development', 'concept:pos-center', QID_WIKI],

@@ -51,7 +51,7 @@ const ALB_NBD2: SN = {
   },
   beats: [
     { atMove: 11, say: "…Nge7 routes the knight to g6, eyeing the e5-pawn and the f4-square.", highlights: [H('g6', SOFT)] },
-    { atMove: 15, say: "…d3 rams the wedge deeper, splitting White's position and cramping his pieces for the whole game.", highlights: [H('d3', ATK)] },
+    { atMove: 15, say: "…d3 rams the wedge deeper, splitting White's position and cramping their pieces for the whole game.", highlights: [H('d3', ATK)] },
   ],
   sources: ['concept:pos-space', 'concept:pos-initiative', ALBIN_WIKI],
 };
@@ -74,7 +74,7 @@ const ALB_QA4: SN = {
   beats: [
     { atMove: 11, say: "…Nc6 blocks the check and develops — the queen on a4 is now offside while you attack.", highlights: [H('c6', KEY)] },
     { atMove: 13, say: "…Qh4 swings to the kingside, threatening …exf2+ and a direct assault on the exposed king.", highlights: [H('h4', ATK)] },
-    { atMove: 15, say: "…exf2+ tears open the king; White's monarch is hunted while his queen sits useless on the rim.", highlights: [H('f2', ATK)] },
+    { atMove: 15, say: "…exf2+ tears open the king; White's monarch is hunted while their queen sits useless on the rim.", highlights: [H('f2', ATK)] },
   ],
   sources: ['concept:pos-initiative', 'concept:pos-king-safety', ALBIN_WIKI],
 };
@@ -129,7 +129,7 @@ const ALB_E4: SN = {
   },
   beats: [
     { atMove: 7, say: "…Nc6 develops with pressure on the e5-pawn that White's e4 now over-stretches.", highlights: [H('c6', KEY)] },
-    { atMove: 11, say: "…d3 jams the wedge deep into White's camp, cramping his development.", highlights: [H('d3', ATK)] },
+    { atMove: 11, say: "…d3 jams the wedge deep into White's camp, cramping their development.", highlights: [H('d3', ATK)] },
   ],
   sources: ['concept:pos-space', 'concept:pos-initiative', ALBIN_WIKI],
 };
@@ -184,7 +184,7 @@ const ALB_BD3_8: SN = {
   },
   beats: [
     { atMove: 9, say: "…Nxe5 recovers the gambit pawn immediately — Bd3 failed to hold it.", highlights: [H('e5', ATK)] },
-    { atMove: 15, say: "…d3 wedges deep into White's position, cramping him for the long haul.", highlights: [H('d3', ATK)] },
+    { atMove: 15, say: "…d3 wedges deep into White's position, cramping them for the long haul.", highlights: [H('d3', ATK)] },
   ],
   sources: ['concept:pos-center', 'concept:pos-initiative', ALBIN_WIKI],
 };
@@ -351,7 +351,7 @@ const FR_H3: SN = {
     sayShort: '…h6, …c6, …Nbd7 symmetrical.',
   },
   beats: [
-    { atMove: 13, say: "…h6 keeps the symmetry, denying White's pieces the g5-square just as he denied yours.", highlights: [H('h6', SOFT)] },
+    { atMove: 13, say: "…h6 keeps the symmetry, denying White's pieces the g5-square just as they denied yours.", highlights: [H('h6', SOFT)] },
     { atMove: 21, say: "…Nh5 reroutes toward f4, seeking the only imbalance in a symmetrical position.", highlights: [H('h5', KEY)] },
   ],
   sources: ['concept:pos-development', 'concept:pos-center', FRENCH_WIKI],
@@ -360,7 +360,7 @@ const FR_H3: SN = {
 // ════ NIMZO-INDIAN (Leningrad Bg5) — student BLACK ══════════════════════════
 const NIM_BXF6: SN = {
   intro: {
-    say: "In the Leningrad Nimzo, after …h6 Bxf6 you recapture the structure White wants: …Bxc3+ doubles his pawns, and …Qxf6 keeps the bishop pair with a solid game. Then …b6 and …Bb7 develop, and …g5 with …Qg6 grabs kingside space. Black is fully equal.",
+    say: "In the Leningrad Nimzo, after …h6 Bxf6 you recapture the structure White wants: …Bxc3+ doubles their pawns, and …Qxf6 keeps the bishop pair with a solid game. Then …b6 and …Bb7 develop, and …g5 with …Qg6 grabs kingside space. Black is fully equal.",
     sayShort: '…Bxc3+, …Qxf6, bishop pair.',
   },
   beats: [
@@ -494,7 +494,7 @@ const AKS_D5_5: SN = {
   },
   beats: [
     { atMove: 16, say: "e4 erects the broad centre, the foundation of White's space advantage.", highlights: [H('e4', KEY)] },
-    { atMove: 22, say: "c6 rams a pawn deep into Black's camp, cramping his queenside development.", highlights: [H('c6', ATK)] },
+    { atMove: 22, say: "c6 rams a pawn deep into Black's camp, cramping their queenside development.", highlights: [H('c6', ATK)] },
   ],
   sources: ['concept:pos-space', 'concept:pos-center', KID_WIKI],
 };
@@ -505,7 +505,7 @@ const AKS_OO: SN = {
   },
   beats: [
     { atMove: 12, say: "d5 closes the centre on your terms, gaining space and defining the pawn structure.", highlights: [H('d5', KEY)] },
-    { atMove: 16, say: "exf5 opens lines toward Black's king before his kingside storm gathers steam.", highlights: [H('f5', KEY)] },
+    { atMove: 16, say: "exf5 opens lines toward Black's king before their kingside storm gathers steam.", highlights: [H('f5', KEY)] },
   ],
   sources: ['concept:pos-space', 'concept:pos-center', KID_WIKI],
 };

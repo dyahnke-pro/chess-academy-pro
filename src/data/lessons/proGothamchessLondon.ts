@@ -52,7 +52,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       id: 'nbd2',
       moves: 'd4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6',
       say:
-        "Nbd2 — the knight finds its home, ready to reroute to e5 or support an e-pawn push later. Black plays e6, shutting in his own light-squared bishop. Already you have the better minor pieces.",
+        "Nbd2 — the knight finds its home, ready to reroute to e5 or support an e-pawn push later. Black plays e6, shutting in their own light-squared bishop. Already you have the better minor pieces.",
       sayShort: 'Nbd2 — flexible development.',
     }),
     b({
@@ -68,7 +68,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       moves: 'd4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O',
       highlights: [{ square: 'g3', color: KEY }],
       say:
-        "Bg3 — you sidestep the trade and keep the bishop alive on the b8-h2 diagonal, still aimed at the kingside. Trading your good bishop is exactly what Black wants; you don't give him the satisfaction. Black castles.",
+        "Bg3 — you sidestep the trade and keep the bishop alive on the b8-h2 diagonal, still aimed at the kingside. Trading your good bishop is exactly what Black wants; you don't give them the satisfaction. Black castles.",
       sayShort: 'Bg3 — keep the good bishop.',
     }),
     b({
@@ -77,7 +77,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: VIS }],
       highlights: [{ square: 'h7', color: KEY }],
       say:
-        "Bd3 — the light-squared bishop slots onto the b1-h7 diagonal, training right at h7 next to Black's king. Now both bishops point kingside. Black fianchettoes with b6, trying to find activity for his bad bishop.",
+        "Bd3 — the light-squared bishop slots onto the b1-h7 diagonal, training right at h7 next to Black's king. Now both bishops point kingside. Black fianchettoes with b6, trying to find activity for their bad bishop.",
       sayShort: 'Bd3 — aim at h7.',
     }),
     b({

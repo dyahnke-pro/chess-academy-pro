@@ -61,7 +61,7 @@ const GAMBIT: LessonScript = {
       arrows: [{ from: 'f3', to: 'g3', color: VIS }],
       highlights: [{ square: 'g7', color: KEY }],
       say:
-        "Black grabs space with c5; you swing the queen to g3, eyeing g7 and supporting the e5-pawn, then develop the knight to f3. Your whole army flows toward Black's kingside while he's still sorting out his pieces.",
+        "Black grabs space with c5; you swing the queen to g3, eyeing g7 and supporting the e5-pawn, then develop the knight to f3. Your whole army flows toward Black's kingside while they're still sorting out their pieces.",
       sayShort: 'Qg3 — swing toward g7.',
     }),
     b({
@@ -137,7 +137,7 @@ const CLASSICAL_SETUP: LessonScript = {
       arrows: [{ from: 'f2', to: 'f4', color: VIS }],
       highlights: [{ square: 'f4', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "f4 — there's the Vienna's punch even here. You challenge the e5-pawn and grab kingside space. Black props his centre up with d6, declining to take, because opening the f-file would only help your attack. The tension builds.",
+        "f4 — there's the Vienna's punch even here. You challenge the e5-pawn and grab kingside space. Black props their centre up with d6, declining to take, because opening the f-file would only help your attack. The tension builds.",
       sayShort: 'f4 — challenge e5.',
     }),
     b({
@@ -166,7 +166,7 @@ const ACCEPTED: LessonScript = {
       moves: 'e4 e5 Nc3 Nf6 f4 exf4',
       highlights: [{ square: 'f4', color: KEY }],
       say:
-        "Black takes the gambit pawn — and his corpus verdict on this decision is brutal: seventeen games, sixteen wins for White. Accepting looks natural, plays like the King's Gambit lines Black half-remembers, and loses for a reason the next move makes obvious.",
+        "Black takes the gambit pawn — and their corpus verdict on this decision is brutal: seventeen games, sixteen wins for White. Accepting looks natural, plays like the King's Gambit lines Black half-remembers, and loses for a reason the next move makes obvious.",
       sayShort: 'exf4 — sixteen wins, one loss.',
     }),
     b({
@@ -175,7 +175,7 @@ const ACCEPTED: LessonScript = {
       arrows: [{ from: 'e4', to: 'e5', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'g8', color: SOFT }],
       say:
-        "There is the reason: e5 hits the f6-knight, and every square it might want is covered or poisoned — the corpus answer is all the way home to g8. One pawn push undeveloped Black's only developed piece. You bring the knight to f3, Black tries to dissolve the cramping pawn with d6, and the count already reads: your development or his pawn.",
+        "There is the reason: e5 hits the f6-knight, and every square it might want is covered or poisoned — the corpus answer is all the way home to g8. One pawn push undeveloped Black's only developed piece. You bring the knight to f3, Black tries to dissolve the cramping pawn with d6, and the count already reads: your development or their pawn.",
       sayShort: 'e5 — the knight goes home.',
     }),
     b({

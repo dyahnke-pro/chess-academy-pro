@@ -215,7 +215,7 @@ const KIA: LessonScript = {
       moves: 'e4 c6 Nf3 d5 d3 Qc7 Nc3 dxe4 dxe4 e5 Bc4 b5 Bb3 h6 a4 b4 Ne2',
       highlights: [{ square: 'b4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Endgame structure: the KIA games typically stay in middlegame territory through the conversion (Q + pieces on the board until close to the end) — he doesn't simplify into pure endgames here because the structural edge is small and trade-heavy simplification gives White equality. Instead the conversion comes from kingside maneuvering and creating weaknesses around White's mostly-dormant Bg2 + Nbd2 setup. Patience wins this opening.",
+        "Endgame structure: the KIA games typically stay in middlegame territory through the conversion (Q + pieces on the board until close to the end) — they don't simplify into pure endgames here because the structural edge is small and trade-heavy simplification gives White equality. Instead the conversion comes from kingside maneuvering and creating weaknesses around White's mostly-dormant Bg2 + Nbd2 setup. Patience wins this opening.",
       sayShort: 'Endgame: keep Q on, maneuver to convert.',
     }),
   ],
@@ -440,7 +440,7 @@ const FANTASY: LessonScript = {
       moves: 'e4 c6 d4 d5 f3',
       highlights: [{ square: 'f3', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Fantasy Variation. 189 games, 75% score — This repertoire's BEST score across any Caro variation as Black. f3 from White is the move he himself plays as White against the Caro (per the speedrun framing, it produces 'wild positions'). Today you're refuting it. Don't be intimidated. f3 is a slow move that doesn't develop, weakens the e1-h4 diagonal, and offers you the centre on a plate.",
+        "Fantasy Variation. 189 games, 75% score — This repertoire's BEST score across any Caro variation as Black. f3 from White is the move they themselve plays as White against the Caro (per the speedrun framing, it produces 'wild positions'). Today you're refuting it. Don't be intimidated. f3 is a slow move that doesn't develop, weakens the e1-h4 diagonal, and offers you the centre on a plate.",
       sayShort: 'f3 — slow, weakening, refutable.',
     }),
     b({

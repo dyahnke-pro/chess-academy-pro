@@ -51,7 +51,7 @@ export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'c3', color: VIS }],
       highlights: [{ square: 'c3', color: SOFT }],
       say:
-        "Black trades his knight for your bishop on b5; you recapture with the other knight, get kicked by a6, and retreat to c3. Yes, Black has the two bishops now — but in this closed, slow position they have nothing to bite on, and you've gained time and kept a grip on the centre.",
+        "Black trades their knight for your bishop on b5; you recapture with the other knight, get kicked by a6, and retreat to c3. Yes, Black has the two bishops now — but in this closed, slow position they have nothing to bite on, and you've gained time and kept a grip on the centre.",
       sayShort: 'Nc3 — regroup, hold the centre.',
     }),
     b({

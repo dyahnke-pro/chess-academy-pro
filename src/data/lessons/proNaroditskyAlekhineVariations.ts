@@ -58,7 +58,7 @@ const NC3_TWO_KNIGHTS: LessonScript = {
     b({
       id: 'bb5-nd4', moves: 'e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Nd4',
       highlights: [{ square: 'b5', color: SOFT }, { square: 'd4', color: KEY }],
-      say: "White pins with Bb5, the Spanish idea — and here is his actual answer, played in 103 of his 132 games at this position: Nd4, the Rubinstein. Instead of suffering the pin, the knight jumps INTO the centre and asks the bishop what it is doing. Trade on d4 and you recapture toward the middle; retreat and you have gained time. The pin never happens.",
+      say: "White pins with Bb5, the Spanish idea — and here is their actual answer, played in 103 of their 132 games at this position: Nd4, the Rubinstein. Instead of suffering the pin, the knight jumps INTO the centre and asks the bishop what it is doing. Trade on d4 and you recapture toward the middle; retreat and you have gained time. The pin never happens.",
       sayShort: 'Nd4 — the Rubinstein. His move.',
     }),
     b({

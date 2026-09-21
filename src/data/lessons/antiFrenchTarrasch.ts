@@ -36,7 +36,7 @@ export const ANTI_FRENCH_TARRASCH_LESSON: LessonScript = {
       arrows: [A('f3', 'd4')],
       highlights: [H('f3', SOFT), H('c5', KEY), H('d4', KEY)] }),
     b({ id: 'aft-3', moves: 'e4 e6 d4 d5 Nd2 c5 Ngf3 cxd4 Nxd4',
-      say: "When Black releases the tension, recapture with the KNIGHT — not the queen, not a pawn. The knight lands on a beautiful central post, and notice what Black's third move bought him: an open c-file, yes, but also a backward-leaning structure where the e6-pawn walls in his own light-squared bishop. That bishop is the French player's lifelong regret, and this whole system is designed to never let it breathe.",
+      say: "When Black releases the tension, recapture with the KNIGHT — not the queen, not a pawn. The knight lands on a beautiful central post, and notice what Black's third move bought them: an open c-file, yes, but also a backward-leaning structure where the e6-pawn walls in their own light-squared bishop. That bishop is the French player's lifelong regret, and this whole system is designed to never let it breathe.",
       sayShort: "Nxd4 — knight to the post.",
       highlights: [H('d4', SOFT), H('c8', RED), H('e6', KEY)] }),
     b({ id: 'aft-4', moves: 'e4 e6 d4 d5 Nd2 c5 Ngf3 cxd4 Nxd4 Nc6 Bb5',

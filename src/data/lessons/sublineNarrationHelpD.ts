@@ -88,13 +88,13 @@ const GR_BG5_6: SN = {
 // The Exchange ...Qb7 main: White grabs b7 for the centre; you have huge activity.
 const GR_EXCHANGE_QB7: SN = {
   intro: {
-    say: "This is the heart of the Exchange: …c5, …Bg4 and …Qa5 swarm White's centre, and after …cxd4 Nxd4 White grabs the b7-pawn. Let him — your raking g7-bishop, the …Bg4 pin and pressure all over c3 and the loose White king give you full, lasting activity for a single pawn.",
+    say: "This is the heart of the Exchange: …c5, …Bg4 and …Qa5 swarm White's centre, and after …cxd4 Nxd4 White grabs the b7-pawn. Let them — your raking g7-bishop, the …Bg4 pin and pressure all over c3 and the loose White king give you full, lasting activity for a single pawn.",
     sayShort: '…Bg4, …Qa5, …cxd4 — activity for a pawn.',
   },
   beats: [
     { atMove: 15, say: "…Bg4 pins the f3-knight, removing the key defender of d4 and stepping up the assault on the centre.", arrows: [A('g4', 'f3')], highlights: [H('f3', ATK)] },
     { atMove: 17, say: "…Qa5 piles onto the weak c3-pawn and eyes the a5-e1 diagonal — White's centre is creaking.", highlights: [H('a5', KEY), H('c3', SOFT)] },
-    { atMove: 19, say: "…cxd4 opens lines; even when White nabs b7, your pieces are everywhere and his king is stuck in the centre — easily worth the pawn.", highlights: [H('d4', ATK)] },
+    { atMove: 19, say: "…cxd4 opens lines; even when White nabs b7, your pieces are everywhere and their king is stuck in the centre — easily worth the pawn.", highlights: [H('d4', ATK)] },
   ],
   sources: ['concept:pos-initiative', 'concept:pos-center', GRUN_WIKI],
 };

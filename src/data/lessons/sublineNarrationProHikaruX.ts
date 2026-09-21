@@ -63,7 +63,7 @@ export const SUBLINE_NARRATION_PRO_HIKARU_X: Record<string, SublineNarration> = 
 
   // ===== Closed Sicilian / Grand Prix Attack (student WHITE) =====
   'pro-hikaru-closed-sicilian::0::b6@19': {
-    intro: { say: "b6 — Black readies …Bb7 to contest the long diagonal. Press on: Qe1 heading for h4, Bf4 or Ng5 hitting e6, and pile down the open f-file toward f7; your c4-bishop already stares at e6 and the a4-pawn cramps the queenside. White attacks where he is stronger.", sayShort: 'b6 — Qe1-h4 and Ng5, press e6.' }, sources: CS,
+    intro: { say: "b6 — Black readies …Bb7 to contest the long diagonal. Press on: Qe1 heading for h4, Bf4 or Ng5 hitting e6, and pile down the open f-file toward f7; your c4-bishop already stares at e6 and the a4-pawn cramps the queenside. White attacks where they are stronger.", sayShort: 'b6 — Qe1-h4 and Ng5, press e6.' }, sources: CS,
   },
   'pro-hikaru-closed-sicilian::0::Rb8@19': {
     intro: { say: "Rb8 — Black loads the b-file for …b5. Beat the clock on the other wing: Qe1-h4, Bg5 or Ng5 targeting e6, and swing a rook to f3; the open f-file and the c4-bishop bearing on e6 give White the faster attack while Black is still arranging queenside play.", sayShort: 'Rb8 — Qe1-h4 and Rf3, attack.' }, sources: CS,
@@ -81,7 +81,7 @@ export const SUBLINE_NARRATION_PRO_HIKARU_X: Record<string, SublineNarration> = 
     intro: { say: "Bd7 — Black completes development and covers the light squares. Press the attack: Qe1-h4, Bg5 or Ng5 hitting e6, and double on the f-file toward f7; your c4-bishop and the open lines from the f5-break give White the initiative. Attack the king, not the queenside.", sayShort: 'Bd7 — Qe1-h4 and Ng5, hit f7.' }, sources: CS,
   },
   'pro-hikaru-closed-sicilian::0::fxe6@13': {
-    intro: { say: "fxe6 — Black recaptures toward the centre, opening his own f-file but conceding a backward e6-pawn. Strike with d4, opening the position for your pieces, then Ng5 and Be3 to swarm the weak e6-pawn; the c4-bishop already bears on it. Play against that target.", sayShort: 'fxe6 — d4 and Ng5, target e6.' }, sources: CS,
+    intro: { say: "fxe6 — Black recaptures toward the centre, opening their own f-file but conceding a backward e6-pawn. Strike with d4, opening the position for your pieces, then Ng5 and Be3 to swarm the weak e6-pawn; the c4-bishop already bears on it. Play against that target.", sayShort: 'fxe6 — d4 and Ng5, target e6.' }, sources: CS,
   },
   'pro-hikaru-closed-sicilian::1::d6@7': {
     intro: { say: "d6 — Black sets up a compact Scheveningen-style wall. Pin with Bb5 on the c6-knight, and after …Bd7 consider Bxc6 then O-O and a d3-e5 or f5 pawn advance; the f4-pawn is your battering ram on the kingside. Build the attack behind it.", sayShort: 'd6 — Bb5, O-O, then f5 or e5.' }, sources: CS,
@@ -217,13 +217,13 @@ export const SUBLINE_NARRATION_PRO_HIKARU_X: Record<string, SublineNarration> = 
     intro: { say: "Bd3 — White eyes the kingside light squares after winning the bishop pair. The natural …c5 break is tempting but premature here — develop first: the accurate move is …Ne7, heading for f5 and finishing your setup, then …Nd7 and …c5 hits d4 with everything ready. Patience turns the lever into a real threat.", sayShort: 'Bd3 — …Ne7 first, then …c5 break.' }, sources: PIRC,
   },
   'pro-hikaru-pirc-modern::3::g4@16': {
-    intro: { say: "g4 — White grabs kingside space but bares his own king. Ignore the flank and blast the centre: …c5 hitting d4, then …Nc6 and …Ne7, opening lines while White's king has no shelter; the g4-advance is a target for …h5 later. Strike where White is weakest — the middle.", sayShort: 'g4 — …c5 and …Nc6, hit centre.' }, sources: PIRC,
+    intro: { say: "g4 — White grabs kingside space but bares their own king. Ignore the flank and blast the centre: …c5 hitting d4, then …Nc6 and …Ne7, opening lines while White's king has no shelter; the g4-advance is a target for …h5 later. Strike where White is weakest — the middle.", sayShort: 'g4 — …c5 and …Nc6, hit centre.' }, sources: PIRC,
   },
   'pro-hikaru-pirc-modern::3::O-O-O@18': {
     intro: { say: "O-O-O — White castles into your queenside pawns. Open the gates: …Nd7, then …c5 and …b5-b4, prising lines toward the king with …Qa5 to follow; your …a6 and …c6 were placed for exactly this storm. Black's attack lands first — race straight at White's king.", sayShort: 'O-O-O — …c5 and …b5, storm king.' }, sources: PIRC,
   },
   'pro-hikaru-pirc-modern::3::g4@18': {
-    intro: { say: "g4 — White lunges to open the h-file, but it wrecks his own king. Take with …hxg4, then answer hxg4 by striking the centre with …c5 and …Nc6; the open h-file and White's tattered pawns give Black the attack. Meet the flank lunge with a central counter and target the king.", sayShort: 'g4 — …hxg4, then …c5 counter.' }, sources: PIRC,
+    intro: { say: "g4 — White lunges to open the h-file, but it wrecks their own king. Take with …hxg4, then answer hxg4 by striking the centre with …c5 and …Nc6; the open h-file and White's tattered pawns give Black the attack. Meet the flank lunge with a central counter and target the king.", sayShort: 'g4 — …hxg4, then …c5 counter.' }, sources: PIRC,
   },
 
   // ===== Caro-Kann (student BLACK) =====
@@ -246,7 +246,7 @@ export const SUBLINE_NARRATION_PRO_HIKARU_X: Record<string, SublineNarration> = 
     intro: { say: "h3 — a quiet prop in the Exchange. Complete the fianchetto with …Bg7 and …O-O, then …Nf6 and …Rc8, using the half-open c-file and the long-diagonal bishop; the level structure gives Black an easy, active game to press for the small edge. Castle and pile on the c-file.", sayShort: 'h3 — …Bg7, …O-O, then …Rc8.' }, sources: CK,
   },
   'pro-hikaru-caro-kann::1::Bxf5@12': {
-    intro: { say: "Bxf5 — White doubles your f-pawns, but you gain the open g-file toward his king. Recapture …gxf5, then …e6, …Bg7 and …Qd7 or …Qb6, and aim a rook down the g-file; the doubled pawns control e4 and g4, and Black's attacking chances outweigh the structural nick. Play on the g-file.", sayShort: 'Bxf5 — …gxf5, then …Bg7 and g-file.' }, sources: CK,
+    intro: { say: "Bxf5 — White doubles your f-pawns, but you gain the open g-file toward their king. Recapture …gxf5, then …e6, …Bg7 and …Qd7 or …Qb6, and aim a rook down the g-file; the doubled pawns control e4 and g4, and Black's attacking chances outweigh the structural nick. Play on the g-file.", sayShort: 'Bxf5 — …gxf5, then …Bg7 and g-file.' }, sources: CK,
   },
   'pro-hikaru-caro-kann::1::Ne2@10': {
     intro: { say: "Ne2 — White reroutes the knight toward f4 or g3. Finish developing: …Bg7 and …Nf6, then …O-O and …Bf5 challenging the d3-bishop, with …Rc8 on the half-open file; the symmetric Exchange gives Black a comfortable, active game. Trade the light bishops and press the c-file.", sayShort: 'Ne2 — …Bg7, …Nf6, then …Bf5.' }, sources: CK,
@@ -255,7 +255,7 @@ export const SUBLINE_NARRATION_PRO_HIKARU_X: Record<string, SublineNarration> = 
     intro: { say: "Be2 — White sidesteps the bishop trade, which suits you — your bishop stays active on f5. Continue …Bg7 and …Nf6, then …e6, …O-O and …Rc8, developing smoothly with the light bishop outside the chain; the level structure and Black's harmonious pieces play for the edge. Castle and use the c-file.", sayShort: 'Be2 — …Bg7 and …Nf6, then …Rc8.' }, sources: CK,
   },
   'pro-hikaru-caro-kann::2::g4@14': {
-    intro: { say: "g4 — White grabs space but loosens his own king. Clamp the centre with …d4, gaining a queenside space chain, then …Ne7 and …Nd7, castle, and prepare …b5 or …f5; White's g4 lunge becomes a target and Black's solid structure gives the better long-term game. Fix the centre, then attack.", sayShort: 'g4 — …d4 and …Ne7, then …b5.' }, sources: CK,
+    intro: { say: "g4 — White grabs space but loosens their own king. Clamp the centre with …d4, gaining a queenside space chain, then …Ne7 and …Nd7, castle, and prepare …b5 or …f5; White's g4 lunge becomes a target and Black's solid structure gives the better long-term game. Fix the centre, then attack.", sayShort: 'g4 — …d4 and …Ne7, then …b5.' }, sources: CK,
   },
   'pro-hikaru-caro-kann::2::Be2@6': {
     intro: { say: "Be2 — White develops modestly and grabs the centre with d4. Continue …Nf6 and …dxe4, then …Nbd7, …Bd6 and …O-O, or keep the tension with …Be7; your bishop is comfortably outside on g4 and Black reaches a solid structure with easy development. Resolve the centre and castle.", sayShort: 'Be2 — …Nf6 and …dxe4, then …O-O.' }, sources: CK,

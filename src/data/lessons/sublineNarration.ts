@@ -92,11 +92,11 @@ const SLAV_SRC = ['concept:pos-development', 'concept:pos-center', 'https://en.w
 // Slav, quiet e3 (shutting in White's own bishop). d4 d5 c4 c6 Nf3 Nf6 e3 Bf5
 const SLAV_E3: SublineNarration = {
   intro: {
-    say: "e3 — the quiet Slav, and it hands you a quiet gift: with this pawn White boxes his OWN light-squared bishop in behind the chain. The Slav's whole identity is the answer — …Bf5, getting your light bishop out to an active post before you ever close the centre. One side ends up with a good bishop and one with a bad one, and it's you holding the good one.",
+    say: "e3 — the quiet Slav, and it hands you a quiet gift: with this pawn White boxes their OWN light-squared bishop in behind the chain. The Slav's whole identity is the answer — …Bf5, getting your light bishop out to an active post before you ever close the centre. One side ends up with a good bishop and one with a bad one, and it's you holding the good one.",
     sayShort: 'e3 — get …Bf5 out first.',
   },
   beats: [
-    { atMove: 7, say: "…Bf5 — there it is, the move that justifies the entire Slav. White's e3 just entombed his own bishop; yours steps outside the pawn chain onto f5, raking the b1-h7 diagonal and bearing down on c2. This is the difference between a good bishop and a bad one, decided on move four of the opening — and the comfort of the whole defence flows from it.", arrows: [A('f5', 'c2')], highlights: [H('f5', KEY), H('c2', SOFT)] },
+    { atMove: 7, say: "…Bf5 — there it is, the move that justifies the entire Slav. White's e3 just entombed their own bishop; yours steps outside the pawn chain onto f5, raking the b1-h7 diagonal and bearing down on c2. This is the difference between a good bishop and a bad one, decided on move four of the opening — and the comfort of the whole defence flows from it.", arrows: [A('f5', 'c2')], highlights: [H('f5', KEY), H('c2', SOFT)] },
   ],
   sources: SLAV_SRC,
 };
@@ -126,7 +126,7 @@ const FR_WINAWER: SublineNarration = {
     sayShort: 'Nc3 — the Winawer: …Bb4.',
   },
   beats: [
-    { atMove: 5, say: "…Bb4 — the Winawer pin. The bishop nails the c3-knight to the king; because that knight is the defender of e4, the pin turns the screw on White's centre, forcing him to resolve it on your terms rather than his.", highlights: [H('c3', KEY), H('e4', SOFT)] },
+    { atMove: 5, say: "…Bb4 — the Winawer pin. The bishop nails the c3-knight to the king; because that knight is the defender of e4, the pin turns the screw on White's centre, forcing them to resolve it on your terms rather than their.", highlights: [H('c3', KEY), H('e4', SOFT)] },
     { atMove: 9, say: "…Bxc3+ — the structural heart of the Winawer. You hand over the dark bishop, but bxc3 saddles White with crippled, doubled c-pawns: a permanent target you'll grind against all game while White hunts for kingside play.", highlights: [H('c3', KEY)] },
     { atMove: 13, say: "…O-O — castling straight into Qg4, the critical test. You're inviting Qxg7, because after …Rg8 the half-open g-file and your queenside pressure hand you a raging attack for the pawn. This is the Winawer's gambit spirit: structure and initiative over material.", highlights: [H('g7', KEY)] },
   ],
@@ -182,7 +182,7 @@ const SVESH_C3: SublineNarration = {
     sayShort: 'c3 — accept …dxc3, consolidate.',
   },
   beats: [
-    { atMove: 7, say: "…dxc3 — grab it. Declining hands White the comfortable game he wants; accepting means he has to PROVE the gambit. After he recaptures you're a clean pawn up, and your only job is to weather a few energetic moves by trading pieces and developing — once the initiative burns out, the pawn decides.", highlights: [H('c3', ATK)] },
+    { atMove: 7, say: "…dxc3 — grab it. Declining hands White the comfortable game they want; accepting means they have to PROVE the gambit. After they recapture you're a clean pawn up, and your only job is to weather a few energetic moves by trading pieces and developing — once the initiative burns out, the pawn decides.", highlights: [H('c3', ATK)] },
     { atMove: 11, say: "…a6 — the single most important move in any Morra defence. It denies b5 to White's bishop and knight, and prepares your own …b5 to kick the c4-bishop off its f7-aiming diagonal. This quiet move is what extinguishes the gambit: no targets, no sacrifices, just an extra pawn.", highlights: [H('a6', SOFT), H('b5', KEY)] },
   ],
   sources: ['concept:pos-initiative', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
@@ -205,7 +205,7 @@ const CAT_C6: SublineNarration = {
 // Modern Alekhine main line (student Black).
 const ALE_MODERN: SublineNarration = {
   intro: {
-    say: "The Modern Alekhine main line. You've baited White into the big pawn centre — now make him regret it. …Bg4 pins, …dxe5 and …Nc6 chip at the pawns, and the overextended front becomes a row of targets. That's the whole Alekhine bet: provoke the centre, then tear it down.",
+    say: "The Modern Alekhine main line. You've baited White into the big pawn centre — now make them regret it. …Bg4 pins, …dxe5 and …Nc6 chip at the pawns, and the overextended front becomes a row of targets. That's the whole Alekhine bet: provoke the centre, then tear it down.",
     sayShort: 'Undermine the big centre: …Bg4.',
   },
   beats: [
@@ -218,7 +218,7 @@ const ALE_MODERN: SublineNarration = {
 // d4 Nf6 c4 e5 d5 Bc5 Nc3 d6 a3 e4 b3 e3 f3 a6
 const BUDAPEST_D5: SublineNarration = {
   intro: {
-    say: "d5 — White declines the Budapest, pushing the pawn past rather than grabbing on e5. This is the outcome you're happy with: you keep your central pawn and, far from going quiet, you get to play the Budapest's real idea — throw the e-pawn forward to e4 and e3, cramping White's kingside before he can untangle. You sacrificed nothing and you still get the initiative.",
+    say: "d5 — White declines the Budapest, pushing the pawn past rather than grabbing on e5. This is the outcome you're happy with: you keep your central pawn and, far from going quiet, you get to play the Budapest's real idea — throw the e-pawn forward to e4 and e3, cramping White's kingside before they can untangle. You sacrificed nothing and you still get the initiative.",
     sayShort: 'd5 — declined; roll the e-pawn forward.',
   },
   beats: [
@@ -268,7 +268,7 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // e4 c6 d4 d5 Nc3 dxe4 f3 exf3 Nxf3 Nf6 Bd3 Bg4
   'caro-kann::0::f3@6': {
     intro: {
-      say: "f3 — the Rasa-Studier Gambit, a rare but tricky pawn offer. White wants to blow open the f-file and the centre for his pieces. Don't be shy: take it with …exf3. You'll be a clean pawn up, and the right plan is simply to develop everything to a natural square and let White try to prove a compensation that isn't really there.",
+      say: "f3 — the Rasa-Studier Gambit, a rare but tricky pawn offer. White wants to blow open the f-file and the centre for their pieces. Don't be shy: take it with …exf3. You'll be a clean pawn up, and the right plan is simply to develop everything to a natural square and let White try to prove a compensation that isn't really there.",
       sayShort: 'f3 — just take it, …exf3.',
     },
     beats: [
@@ -295,7 +295,7 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   // e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 c3 Nd7 Bd3 Be7 O-O Ngf6 Kh1 O-O Qc2 Qc7 Nbd2 b5
   'caro-kann::4::c3@10': {
     intro: {
-      say: "c3 — White props his centre in the Fantasy after you've struck with …e5. Resist the urge to ram …c5 and …c4: that c4-pawn has nothing behind it and simply drops to Bxc4. Instead just complete a clean, classical development — …Nd7, …Be7, …Ngf6 and castle. Your bishop is already outside the chain on g4, you have no weaknesses, and then …b5 gains queenside space at your leisure. Comfortable equality, no risk.",
+      say: "c3 — White props their centre in the Fantasy after you've struck with …e5. Resist the urge to ram …c5 and …c4: that c4-pawn has nothing behind it and simply drops to Bxc4. Instead just complete a clean, classical development — …Nd7, …Be7, …Ngf6 and castle. Your bishop is already outside the chain on g4, you have no weaknesses, and then …b5 gains queenside space at your leisure. Comfortable equality, no risk.",
       sayShort: 'c3 — develop soundly, then …b5.',
     },
     beats: [
@@ -363,7 +363,7 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
       sayShort: 'f3 — …Bb4, then …Bxc3+ before …Qh4+.',
     },
     beats: [
-      { atMove: 7, say: "…Bb4 — the pin comes first, freezing the c3-knight to the king before White can prop up his centre. This knight is the one piece that could later block a check on the e1-h4 diagonal, so you tie it down right away.", arrows: [A('b4', 'c3')], highlights: [H('c3', KEY)] },
+      { atMove: 7, say: "…Bb4 — the pin comes first, freezing the c3-knight to the king before White can prop up their centre. This knight is the one piece that could later block a check on the e1-h4 diagonal, so you tie it down right away.", arrows: [A('b4', 'c3')], highlights: [H('c3', KEY)] },
       { atMove: 9, say: "…Bxc3+ — the key, and the move most players miss. Trade the bishop for the pinned knight NOW, before the check. With that knight gone from c3 there's nothing left to interpose on the e1-h4 diagonal, and White's queenside pawns are shattered into the bargain.", arrows: [A('c3', 'e1')], highlights: [H('c3', ATK)] },
       { atMove: 13, say: "…Qxe4+ — the payoff. …Qh4+ forced the king to e2 (no knight to block anymore), and now the queen scoops the e4-pawn with check. You're two clean pawns up, White's king is marooned on f2 with no castling, and the rest is technique.", arrows: [A('e4', 'e2')], highlights: [H('e4', ATK)] },
     ],
@@ -409,7 +409,7 @@ const SUBLINE_NARRATION: Record<string, SublineNarration> = {
   },
   'kings-indian-defence::5::O-O@12': {
     intro: {
-      say: "O-O — White castles into the Classical main line, and you've already landed the key …e5 break. Now the real King's Indian begins: White plays c5 and the minority push on the queenside while you throw everything at his king — …Nd7, …f5, …f4, and the kingside avalanche. Trust the race; your attack arrives first more often than not.",
+      say: "O-O — White castles into the Classical main line, and you've already landed the key …e5 break. Now the real King's Indian begins: White plays c5 and the minority push on the queenside while you throw everything at their king — …Nd7, …f5, …f4, and the kingside avalanche. Trust the race; your attack arrives first more often than not.",
       sayShort: 'O-O — launch the …f5-f4 storm.',
     },
     sources: KID_SRC,

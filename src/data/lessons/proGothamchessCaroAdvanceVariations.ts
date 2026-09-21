@@ -41,7 +41,7 @@ const MAIN_LINE: LessonScript = {
       arrows: [{ from: 'h2', to: 'h4', color: VIS }],
       highlights: [{ square: 'h4', color: KEY }, { square: 'h5', color: SOFT }],
       say:
-        "h4 — the key gain of space. You threaten h5, trapping the bishop, so Black is forced to answer with h5 of his own. That little pawn on h5 looks harmless, but it's a permanent weakness you'll lean on for the rest of the game.",
+        "h4 — the key gain of space. You threaten h5, trapping the bishop, so Black is forced to answer with h5 of their own. That little pawn on h5 looks harmless, but it's a permanent weakness you'll lean on for the rest of the game.",
       sayShort: 'h4 — fix the h5 weakness.',
     }),
     b({
@@ -67,7 +67,7 @@ const MAIN_LINE: LessonScript = {
       moves: 'e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5 Qb6 Bd3 Bxd3 Qxd3 e6 Nd2 Ne7',
       highlights: [{ square: 'd2', color: SOFT }, { square: 'e6', color: SOFT }],
       say:
-        "Black shuts the box on his own bishop with e6 and develops the knight to e7; you bring the knight to d2, heading for the great f3- and b3-squares. Notice the contrast: every one of your pieces has a bright future, while Black's light-squared bishop is gone and his structure is locked.",
+        "Black shuts the box on their own bishop with e6 and develops the knight to e7; you bring the knight to d2, heading for the great f3- and b3-squares. Notice the contrast: every one of your pieces has a bright future, while Black's light-squared bishop is gone and their structure is locked.",
       sayShort: 'Nd2 — route to f3/b3.',
     }),
     b({
@@ -122,7 +122,7 @@ const C5_LINE: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: VIS }],
       highlights: [{ square: 'd3', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "Bd3 trains the bishop toward h7 and the kingside. Here's the middlegame: the e5-pawn is a thorn cramping Black, your pieces flow toward his king, and you castle next with a comfortable, space-based pull. Black freed his game with …c5 but handed you the long-term squeeze in return — exactly the trade this repertoire is happy to make.",
+        "Bd3 trains the bishop toward h7 and the kingside. Here's the middlegame: the e5-pawn is a thorn cramping Black, your pieces flow toward their king, and you castle next with a comfortable, space-based pull. Black freed their game with …c5 but handed you the long-term squeeze in return — exactly the trade this repertoire is happy to make.",
       sayShort: 'Bd3 — aim at the king, castle next.',
     }),
   ],

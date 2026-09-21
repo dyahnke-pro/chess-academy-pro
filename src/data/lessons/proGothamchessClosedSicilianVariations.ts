@@ -28,7 +28,7 @@ const MAIN: LessonScript = {
       sayShort: 'Nf3 — challenge the d4-knight.' }),
     b({ id: 'trade', moves: 'e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4',
       arrows: [{ from: 'd2', to: 'd4', color: VIS }], highlights: [{ square: 'd4', color: KEY }, { square: 'c5', color: SOFT }],
-      say: "Black trades his knight for your bishop; you recapture, get nudged by …a6, and retreat to c3. Black has the two bishops now — but in this slow position they have nothing to bite on. When Black plays …d6, you strike with d4, seizing space in the centre.",
+      say: "Black trades their knight for your bishop; you recapture, get nudged by …a6, and retreat to c3. Black has the two bishops now — but in this slow position they have nothing to bite on. When Black plays …d6, you strike with d4, seizing space in the centre.",
       sayShort: 'd4 — seize the centre.' }),
     b({ id: 'mg-qxd4', moves: 'e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4 cxd4 Qxd4',
       arrows: [{ from: 'd4', to: 'g7', color: VIS }], highlights: [{ square: 'd4', color: KEY }],

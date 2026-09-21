@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { ALL_LESSONS } from './lessons/registry';
 
@@ -190,6 +190,68 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
       ).toEqual([]);
     });
   }
+
+  // ── C15b — GENDERED PRONOUNS IN AUTHORED LESSON BEATS ──────────────────────
+  //
+  // The JSON arm above has scanned shipped narration files for a gendered
+  // pronoun standing for a COLOUR since 2026-09-20. The BEAT arm below has
+  // only ever scanned we/our/us — `GENDERED` was never applied to a single
+  // authored beat, so "Before White commits to the big central break, HE takes
+  // away Black's pin" passed every gate this repo has.
+  //
+  // 🔒 IT SCANS THE DIRECTORY, NOT `ALL_LESSONS`, AND THAT IS THE POINT.
+  // `registry.ts` contains ZERO pro-rep lessons — by design (CLAUDE.md §G9
+  // step 8: "Do NOT register in registry.ts OPENINGS"), so every
+  // `pro*.ts` lesson is invisible to a registry-driven gate. Measured
+  // 2026-09-21: the registry sees 3,664 beat fields; the directory holds
+  // 38,071. A gate reading the registry checks under 10% of the authored beat
+  // text in this repo and reports green on the rest.
+  //
+  // Sentence-scoped, the same shape `curatedBeatSource.beatRegister` uses, so
+  // a historical aside ("Bobby Fischer … HE wrote a famous article") is not
+  // counted as a defect alongside "…and HE takes away Black's pin".
+  //
+  // Fixed offline by `scripts/degender-lesson-beats.mjs`, which reuses
+  // `degender.mjs`'s verb-agreement transform rather than grepping for /he/ —
+  // "he takes" → "they takes" is broken English, and that script already
+  // REFUSES the ambiguous "he's X" instead of guessing. 946 sentences across
+  // 165 files; 243 → 9 in the registry's own view.
+  //
+  // The ceiling is what SURVIVES: sentences naming a real person (Fischer,
+  // Steinitz, Réti/Capablanca, and the pro whose games a pro-rep lesson
+  // teaches), plus a few where an OPENING's name reads as a person's to the
+  // proper-noun guard. Those are conservative skips, not debt to clear
+  // blindly — read one before you "fix" it.
+  const LESSON_DIR = join(__dirname, 'lessons');
+  const BEAT_LITERAL = /\b(say|sayShort)\s*:\s*(["'])((?:\\.|(?!\2)[^\\])*)\2/g;
+  const GENDERED_BEAT_CEILING = 36;
+  it('lesson beats: a gendered pronoun for a COLOUR only ever SHRINKS', () => {
+    const offenders: string[] = [];
+    let scanned = 0;
+    for (const file of readdirSync(LESSON_DIR).filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'))) {
+      const raw = readFileSync(join(LESSON_DIR, file), 'utf8');
+      for (const m of raw.matchAll(BEAT_LITERAL)) {
+        scanned += 1;
+        const text = m[3];
+        const bad = text.split(/(?<=[.!?])\s+/).some((sentence) => GENDERED.test(sentence) && COLOUR_WORD.test(sentence));
+        if (bad) offenders.push(`${file}: ${text.slice(0, 110)}`);
+      }
+    }
+    // NON-VACUOUS, counting the PROSE and not the files — the exact failure
+    // this file's other half shipped for weeks (a beat loop read a field that
+    // does not exist, `?? []` swallowed it, and the ban went unchecked while
+    // reporting green). A ceiling measured through a dead reach is not a
+    // ceiling.
+    expect(scanned, 'no beat literals matched — the reach is broken and this gate is vacuous').toBeGreaterThan(30000);
+    expect(
+      offenders.length,
+      `${offenders.length} lesson beat(s) call a player "he/his/she/her". The opponent is ` +
+        `"they/their" (locked 2026-08-28). Ceiling is ${GENDERED_BEAT_CEILING} and may only ` +
+        `SHRINK. Rewrite offline with scripts/degender-lesson-beats.mjs — never a live ` +
+        `substitution, and never by hand-editing one sentence into "they takes". ` +
+        `First offenders:\n` + offenders.slice(0, 8).map((x) => `  • ${x}`).join('\n'),
+    ).toBeLessThanOrEqual(GENDERED_BEAT_CEILING);
+  });
 
   it('lesson beats (say + sayShort): no we/our/us', () => {
     // 🚨 THIS HALF OF THE GATE WAS DEAD UNTIL 2026-09-20. It read

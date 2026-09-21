@@ -71,7 +71,7 @@ const SCHMID_LESSON: LessonScript = {
   title: 'Alekhine vs 4...Nb6 (Schmid) — space and the e4 outpost', minutes: 6,
   beats: [
     b({ id: 'alk-sch-1', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 a4 a5 Bb5+',
-      say: "The Schmid: Black retreats the knight to b6 rather than keep it fighting in the centre. You seize the chance to expand with a4, and after a5 fixes the queenside, you check with Bb5+ — developing with tempo and disrupting Black's coordination before he can finish developing.",
+      say: "The Schmid: Black retreats the knight to b6 rather than keep it fighting in the centre. You seize the chance to expand with a4, and after a5 fixes the queenside, you check with Bb5+ — developing with tempo and disrupting Black's coordination before they can finish developing.",
       sayShort: "a4, Bb5+ — space and a nagging check.",
       highlights: [H('b5', KEY), H('a4', SOFT), H('a5', SOFT)] }),
     b({ id: 'alk-sch-2', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 a4 a5 Bb5+ c6 Bd3 Bg4',
@@ -83,7 +83,7 @@ const SCHMID_LESSON: LessonScript = {
       sayShort: "exd6, O-O — ahead in development.",
       highlights: [H('d6', SOFT), H('d4', KEY)] }),
     b({ id: 'alk-sch-4', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 a4 a5 Bb5+ c6 Bd3 Bg4 exd6 Qxd6 O-O e6 Nbd2 Qc7 Ne4 N8d7',
-      say: "Black develops with e6 and Qc7; you bring the knight to the powerful e4-outpost. You hold a small but pleasant, durable edge: more space, the safer king, and the more active knights. Black is solid but passive — squeeze him patiently and the extra room will tell.",
+      say: "Black develops with e6 and Qc7; you bring the knight to the powerful e4-outpost. You hold a small but pleasant, durable edge: more space, the safer king, and the more active knights. Black is solid but passive — squeeze them patiently and the extra room will tell.",
       sayShort: "Ne4 — outpost, a durable pull.",
       highlights: [H('e4', KEY)] }),
   ],

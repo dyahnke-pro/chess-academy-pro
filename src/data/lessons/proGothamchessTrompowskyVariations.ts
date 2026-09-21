@@ -92,7 +92,7 @@ const VAGANIAN: LessonScript = {
       arrows: [{ from: 'e2', to: 'e4', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: KEY }, { square: 'b2', color: SOFT }],
       say:
-        "Black greedily snatches the b2-pawn with his queen; you don't care — you develop and build a giant d5-e4 pawn centre with the open h-file aimed at the king. The engine confirms White is clearly better here, around plus-two: the lead in development and the attack are worth far more than the pawn. Black's queen is stranded on b2 while your whole army points at his king. Pure Trompowsky chaos, and you're winning it.",
+        "Black greedily snatches the b2-pawn with their queen; you don't care — you develop and build a giant d5-e4 pawn centre with the open h-file aimed at the king. The engine confirms White is clearly better here, around plus-two: the lead in development and the attack are worth far more than the pawn. Black's queen is stranded on b2 while your whole army points at their king. Pure Trompowsky chaos, and you're winning it.",
       sayShort: 'e4 — big centre, winning attack.',
     }),
   ],
@@ -161,7 +161,7 @@ const G6_FIANCHETTO: LessonScript = {
       arrows: [{ from: 'f1', to: 'g2', color: VIS }],
       highlights: [{ square: 'g2', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "You set up your own fianchetto — g3 and Bg2 — pointing the bishop at the long light diagonal and the centre. Black has the two bishops as compensation, but his doubled f-pawns can never advance cleanly, and the light squares around them are yours to occupy.",
+        "You set up your own fianchetto — g3 and Bg2 — pointing the bishop at the long light diagonal and the centre. Black has the two bishops as compensation, but their doubled f-pawns can never advance cleanly, and the light squares around them are yours to occupy.",
       sayShort: 'Bg2 — eye the light squares.',
     }),
     b({
@@ -170,7 +170,7 @@ const G6_FIANCHETTO: LessonScript = {
       arrows: [{ from: 'g2', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'f5', color: SOFT }],
       say:
-        "Here's the middlegame. The story is structure versus bishops: you develop with Ne2 and castle, blockade the light squares with a knight on d5 or f4, and grind against Black's crippled pawns. Black will try to open the position for his bishops; you keep it controlled and play on the lasting weakness. A clean, strategic edge from move three.",
+        "Here's the middlegame. The story is structure versus bishops: you develop with Ne2 and castle, blockade the light squares with a knight on d5 or f4, and grind against Black's crippled pawns. Black will try to open the position for their bishops; you keep it controlled and play on the lasting weakness. A clean, strategic edge from move three.",
       sayShort: 'blockade d5/f4 — grind the pawns.',
     }),
   ],

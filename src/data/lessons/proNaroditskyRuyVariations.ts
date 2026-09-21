@@ -104,13 +104,13 @@ const CLOSED_D3: LessonScript = {
     b({
       id: 'd6-a3', moves: `${RUY} a6 Ba4 Nf6 O-O Be7 d3 b5 Bb3 d6 a3 O-O`,
       highlights: [{ square: 'd6', color: KEY }, { square: 'a3', color: SOFT }],
-      say: "Black completes the Closed setup with d6 — his corpus overwhelmingly rides this road: seventy-four of a hundred and four games at the b5 tabiya. You answer a3, a small move with a long memory: it takes b4 from Black's pieces forever and gives your own bishop a quiet a2 retreat if ever asked. Both sides castle and settle in.",
+      say: "Black completes the Closed setup with d6 — their corpus overwhelmingly rides this road: seventy-four of a hundred and four games at the b5 tabiya. You answer a3, a small move with a long memory: it takes b4 from Black's pieces forever and gives your own bishop a quiet a2 retreat if ever asked. Both sides castle and settle in.",
       sayShort: 'd6 — his corpus road. a3 answers.',
     }),
     b({
       id: 'nc3-nd4', moves: `${RUY} a6 Ba4 Nf6 O-O Be7 d3 b5 Bb3 d6 a3 O-O Nc3 Bg4 Be3 Nd4`,
       highlights: [{ square: 'd4', color: KEY }, { square: 'e3', color: SOFT }],
-      say: "Nc3 develops toward the square this whole system dreams about — d5. Black pins with Bg4 and plants his knight on d4, the standard bid for relief. You meet it calmly with Be3: the intruder will be traded on your terms, not chased on his.",
+      say: "Nc3 develops toward the square this whole system dreams about — d5. Black pins with Bg4 and plants their knight on d4, the standard bid for relief. You meet it calmly with Be3: the intruder will be traded on your terms, not chased on their.",
       sayShort: 'Nc3 — d5 is the dream square.',
     }),
     b({

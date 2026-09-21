@@ -12,6 +12,18 @@
  *
  * THE SHAPE, three devices on ONE real game, so the only variable is the
  * student's record:
+ * 🔴 UPDATED 2026-09-21 — THE METRIC CHANGED, AND THE OLD ONE IS WITHDRAWN.
+ * This audit measured WORD COUNT and twice reported RUN UNUSABLE: green moved
+ * 16 words against a 592-word between-run variance. The board concluded the
+ * review arm "proves nothing either way and should not be re-run". That was
+ * right about the word count and too broad as a verdict on the surface. Review
+ * is `walk` posture so a lowering term cannot SILENCE a ply here — but the
+ * term is still COMPUTED, and `coach-need-scores` already emits it per term.
+ * So the wire is now read as a SIGN, deterministically, with no noise floor:
+ * inert on control, negative on green, inert again on prompted. What still
+ * needs an `interrupt` surface is the BEHAVIOUR — a ply that would have spoken
+ * going quiet — and that is a separate measurement, not this one.
+ *
  *   CONTROL   — fresh device. Whatever the coach says here is the baseline.
  *   GREEN     — the same game, with PROVEN capability evidence seeded first
  *               (holds at `posedImportance` 90, across two distinct games,
@@ -143,6 +155,46 @@ async function seedCapabilities(page, { tags, prompted, importance }) {
   }, { tags, prompted, importance });
 }
 
+/**
+ * THE NEED TERMS, off the app's own `coach-need-scores` emission.
+ *
+ * 🔒 WHY THIS EXISTS, AND WHY THE WORD COUNT COULD NEVER HAVE WORKED
+ * (2026-09-21). Run 1 reported GREEN quieter by 468 words with a PROMPTED arm
+ * that moved 612 — a failing negative control. Run 2 measured the instrument
+ * against itself: a 117-word floor WITHIN a run, 592 words BETWEEN runs, and
+ * green moving 16. The verdict was RUN UNUSABLE, correctly, and the board
+ * concluded the review arm "proves nothing either way".
+ *
+ * That conclusion was right about the WORD COUNT and wrong as a general
+ * verdict on this surface. The reasoning: review is `walk` posture, so a term
+ * that LOWERS need cannot silence a ply there — G4.5.15 says every ply is a
+ * beat. True. But the TERM IS STILL COMPUTED, on both postures; posture only
+ * decides whether importance may gate. So the mechanism — does proving a
+ * capability actually lower this student's need, and does a PROMPTED row
+ * correctly do nothing — is fully observable here, and it is observable
+ * DETERMINISTICALLY, as a sign and a count rather than as an aggregate of
+ * prose fighting a 592-word variance.
+ *
+ * What still needs an `interrupt` surface is the BEHAVIOUR: a ply that would
+ * have spoken going quiet. That is a separate, later measurement. This one
+ * answers the question that has never once been answered on a device — does
+ * green FIRE — and it answers it without a noise floor.
+ */
+function needTerms(listener) {
+  const totals = {}; const fired = {};
+  let rows = 0; let plies = 0;
+  for (const e of listener.getCapturedEvents()) {
+    if (e.kind !== 'coach-need-scores') continue;
+    let r = null;
+    try { r = JSON.parse(e.details ?? ''); } catch { continue; }
+    if (!r || !r.totals) continue;
+    rows += 1; plies += r.plies ?? 0;
+    for (const [k, v] of Object.entries(r.totals)) totals[k] = (totals[k] ?? 0) + v;
+    for (const [k, v] of Object.entries(r.fired ?? {})) fired[k] = (fired[k] ?? 0) + v;
+  }
+  return { rows, plies, totals, fired, capability: totals.capability ?? 0, capabilityFired: fired.capability ?? 0 };
+}
+
 async function capabilityRowCount(page) {
   return page.evaluate(async () => {
     const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
@@ -266,10 +318,11 @@ const run = async () => {
     const res = await openReview(dev.page, gid);
     const heat = await heatMap(dev.page);
     const vol = volumeOf(res.segs);
-    log(`  [${label}] ${res.ok ? `${(res.ms / 1000).toFixed(1)}s, ${res.segs.length} segments, ${vol.plies} narrated plies, ${vol.words} words` : res.reason}`);
+    const need = needTerms(dev.listener);
+    log(`  [${label}] ${res.ok ? `${(res.ms / 1000).toFixed(1)}s, ${res.segs.length} segments, ${vol.plies} narrated plies, ${vol.words} words | need rows=${need.rows} plies=${need.plies} capability=${need.capability} (fired ${need.capabilityFired}x)` : res.reason}`);
     await dev.listener.stop().catch(() => undefined);
     await dev.ctx.close();
-    return { ...res, vol, gid, heat };
+    return { ...res, vol, gid, heat, need };
   };
 
   // TWO UNSEEDED CONTROLS, and the second one is not redundant — it is the
@@ -299,9 +352,17 @@ const run = async () => {
   const drop = control.vol.words - (green.vol.words ?? 0);
   const usable = control.ok && control2.ok && green.ok && prompted.ok && noise * 2 < drop;
   if (!usable) {
-    add('VERDICT', false,
-      `RUN UNUSABLE — green dropped ${drop} words against a ${noise}-word noise floor; `
-      + 'the instrument cannot resolve this effect, so neither a green nor a red may be read from it');
+    // 🔒 THIS IS NO LONGER THE RUN'S VERDICT, ONLY THIS ARM'S (2026-09-21).
+    // It used to fail the whole audit, which was right while the word count
+    // was the only evidence. It is now the WEAKER of two instruments: the
+    // mechanism rows below read the capability term's SIGN off the app's own
+    // emission and need no noise floor at all. A prose effect too small to
+    // resolve is an honest statement about PROSE — it says nothing about
+    // whether the wire fired, and must not be allowed to overrule the rows
+    // that answer that directly.
+    add('PROSE ARM unusable (not a failure of the run)', true,
+      `green dropped ${drop} words against a ${noise}-word noise floor — too small for this instrument to `
+      + 'resolve, as expected on a WALK posture where need can only reorder. The mechanism rows below are the verdict');
   } else {
     add('GREEN is quieter than control', true,
       `${green.vol.plies} plies / ${green.vol.words} words vs control ${control.vol.plies} / ${control.vol.words} (noise ${noise})`);
@@ -309,6 +370,42 @@ const run = async () => {
       Math.abs(prompted.vol.words - control.vol.words) <= noise,
       `${prompted.vol.words} words vs control ${control.vol.words} (within the ${noise}-word floor?)`);
   }
+  // ── THE MECHANISM, MEASURED AS A SIGN RATHER THAN AS PROSE ────────────────
+  //
+  // These three rows are the load-bearing ones now. They are deterministic:
+  // `capability` is the ONE term in `computeNeed` that can LOWER need, so its
+  // total over a run is a signed number that says outright whether proving a
+  // capability reached the decision. No aggregate, no variance, no floor.
+  //
+  // They also cover a case the old word-count arm could not express at all:
+  // green firing with the RIGHT SIGN. A sign inversion would make proving a
+  // capability make the coach LOUDER — and every sentence would still read
+  // perfectly, which is why prose can never catch it.
+  add('NEED rows emitted on every arm',
+    control.need.rows > 0 && green.need.rows > 0 && prompted.need.rows > 0,
+    `control=${control.need.rows} green=${green.need.rows} prompted=${prompted.need.rows} aggregated need rows`
+    + ` (${control.need.plies}/${green.need.plies}/${prompted.need.plies} plies scored)`);
+
+  // CONTROL: nothing is proven, so the term must be exactly inert. This is the
+  // non-vacuity guard — without it, a `capability` of 0 on the green arm could
+  // be read as "no effect" when it actually means "the emission never fired".
+  add('CONTROL capability term is INERT (nothing proven)',
+    control.need.rows > 0 && control.need.capability === 0 && control.need.capabilityFired === 0,
+    `capability total=${control.need.capability}, fired ${control.need.capabilityFired}x on an unseeded device`);
+
+  // GREEN: the wire. It must fire, and it must fire NEGATIVE.
+  add('GREEN capability term FIRES, and LOWERS',
+    green.need.capabilityFired > 0 && green.need.capability < 0,
+    `capability total=${green.need.capability} over ${green.need.plies} plies, fired ${green.need.capabilityFired}x`
+    + (green.need.capability > 0 ? ' — POSITIVE is a SIGN INVERSION: proving a capability would make the coach LOUDER' : ''));
+
+  // PROMPTED: the negative control, and the app's own rule — being TOLD the
+  // answer proves nothing, so `getCapabilityProfile` skips prompted rows and
+  // this term must be as inert as the control's.
+  add('PROMPTED capability term stays INERT — being told is not proving',
+    prompted.need.capability === 0 && prompted.need.capabilityFired === 0,
+    `capability total=${prompted.need.capability}, fired ${prompted.need.capabilityFired}x with the SAME rows flagged prompted`);
+
   // THE GREEN BAR IS OBSERVABLE (the algo-audit rule). The tape getting quieter
   // is the EFFECT; this is the CAUSE, read off the app's own emission — how
   // many tags the app itself counts as PROVEN, against the bar it used. A

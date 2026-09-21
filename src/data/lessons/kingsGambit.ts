@@ -45,14 +45,14 @@ export const KINGS_GAMBIT_LESSON: LessonScript = {
       id: 'the-gambit',
       moves: ['e4', 'e5', 'f4'],
       highlights: [{ square: 'f4', color: KEY }, { square: 'e5', color: KEY }],
-      say: "f4 — the King's Gambit. White offers a pawn on move two. The idea is pure and old: lure the e5-pawn away from the centre with a thrust from the side, and the moment it leaves, the f-file cracks open in front of White's own king. That open file is the whole point. White is not giving away a pawn for nothing — he is trading it for the f-file, a lead in development, and a direct road to Black's softest square, f7.",
+      say: "f4 — the King's Gambit. White offers a pawn on move two. The idea is pure and old: lure the e5-pawn away from the centre with a thrust from the side, and the moment it leaves, the f-file cracks open in front of White's own king. That open file is the whole point. White is not giving away a pawn for nothing — they are trading it for the f-file, a lead in development, and a direct road to Black's softest square, f7.",
       sayShort: 'f4 — sacrifice a pawn, rip open the f-file.',
     },
     {
       id: 'accepted',
       moves: ['e4', 'e5', 'f4', 'exf4'],
       highlights: [{ square: 'f4', color: KEY }, { square: 'f7', color: SOFT }],
-      say: "Black accepts — exf4. This is the King's Gambit Accepted, and it is the principled reply: take the pawn, make White prove the compensation. Now the f-file is half-open for White, the e5-square is vacated, and the whole game becomes a race to get at f7. White must develop fast and attack before Black returns the pawn and consolidates. The pawn sitting on f4 is Black's; White will win it back later, on his own terms, once the attack is rolling.",
+      say: "Black accepts — exf4. This is the King's Gambit Accepted, and it is the principled reply: take the pawn, make White prove the compensation. Now the f-file is half-open for White, the e5-square is vacated, and the whole game becomes a race to get at f7. White must develop fast and attack before Black returns the pawn and consolidates. The pawn sitting on f4 is Black's; White will win it back later, on their own terms, once the attack is rolling.",
       sayShort: '…exf4 — accepted; now White races to attack.',
     },
     {
@@ -67,7 +67,7 @@ export const KINGS_GAMBIT_LESSON: LessonScript = {
       id: 'the-modern',
       moves: ['e4', 'e5', 'f4', 'exf4', 'Nf3', 'd5'],
       highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: KEY }],
-      say: "Now the main-line reply this masterclass showcases: d5 — the Modern Defence, sometimes called the Abbazia. Instead of clinging to the extra pawn with …g5, Black hits back in the centre, returning the gambit pawn at once to break White's grip on e4 and free his own pieces. It is the soundest, most modern way to meet the King's Gambit — and it leads to the kind of fight White actually wants: open, central, and rich in piece play.",
+      say: "Now the main-line reply this masterclass showcases: d5 — the Modern Defence, sometimes called the Abbazia. Instead of clinging to the extra pawn with …g5, Black hits back in the centre, returning the gambit pawn at once to break White's grip on e4 and free their own pieces. It is the soundest, most modern way to meet the King's Gambit — and it leads to the kind of fight White actually wants: open, central, and rich in piece play.",
       sayShort: '…d5 — the Modern: hand the pawn back.',
     },
     {

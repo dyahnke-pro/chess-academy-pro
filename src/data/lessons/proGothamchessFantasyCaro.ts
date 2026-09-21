@@ -60,7 +60,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       arrows: [{ from: 'f3', to: 'e5', color: VIS }],
       highlights: [{ square: 'd4', color: SOFT }],
       say:
-        "You develop the knight to f3, attacking the e5-pawn. Black answers by grabbing the pawn on d4 instead of defending — and now he's a pawn up. You're going to let him keep it.",
+        "You develop the knight to f3, attacking the e5-pawn. Black answers by grabbing the pawn on d4 instead of defending — and now they're a pawn up. You're going to let them keep it.",
       sayShort: 'Nf3 — develop and pressure e5.',
     }),
     b({
@@ -77,7 +77,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O',
       highlights: [{ square: 'e4', color: SOFT }, { square: 'g1', color: SOFT }],
       say:
-        "Black develops Nf6, attacking your e4-pawn; you simply castle. Yes, e4 is loose — but if Black stops to grab it, his knight wanders off and f7 is even more exposed. King safety first, then the attack.",
+        "Black develops Nf6, attacking your e4-pawn; you simply castle. Yes, e4 is loose — but if Black stops to grab it, their knight wanders off and f7 is even more exposed. King safety first, then the attack.",
       sayShort: 'O-O — king safe, attack next.',
     }),
     b({
@@ -94,7 +94,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       arrows: [{ from: 'g5', to: 'f7', color: VIS }],
       highlights: [{ square: 'f7', color: KEY }, { square: 'g5', color: SOFT }],
       say:
-        "And the storm breaks: Ng5. The knight leaps in, and now f7 is hit twice — by the knight and by the bishop on c4 — while only Black's king defends it. The pawn Black was so pleased to win has bought him a position where he's fighting for survival from move eight.",
+        "And the storm breaks: Ng5. The knight leaps in, and now f7 is hit twice — by the knight and by the bishop on c4 — while only Black's king defends it. The pawn Black was so pleased to win has bought them a position where they're fighting for survival from move eight.",
       sayShort: 'Ng5 — pile onto f7.',
     }),
     b({

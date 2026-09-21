@@ -29,15 +29,17 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 5. Hygiene — watermark hook, timeouts-vs-assertions, lint crash named, test-type ceiling 296→236, `BuildVersionWidget` regex, `formatTacticsSubBlock(tactics, boardFen)` required, multilingual row poll
 - ✅ 6. Measurements — boot 15 files / 26.4 MB raw / 6.1 MB gzip; corpus reach 24/24 both tiers; corpus gates evened
 - ✅ `tactics-context-stale` count READ off the listener: **0 stale of 145 captured events** (prod, muted, audit-concept-gameplay G5a/G5b). The zero is now a MEASUREMENT — G5a proves 145 events were captured, so it is not absence-of-capture
-- 🔴 **47-game rerun — the corpus is not just absent, it is UNREPRODUCIBLE, and the test that needs it SKIPS silently** (diagnosed 2026-09-20). `fundamentalsPipeline.realGame.test.ts` gates its measurement half on `describe.skipIf(!existsSync('data/sources/wo4-corpus/annotated-d12.json'))`. That file is gitignored research data, it is on no machine here, and **there is no script in the repo that produces it** — grep finds zero producers for `wo4-corpus` or `annotated-d12`. So the WO-4 numbers (the `learned` gate, the attribution gap) rest on a corpus nobody can rebuild, which means they can never be re-measured or audited — and the run reports `3 passed | 1 skipped`, a line that reads as green at a glance. Same disease as every other finding tonight: an instrument that reports nothing is indistinguishable from one that found nothing. TO FIX, in order: write the producer (47 amateur games + Stockfish at d12 and d18, hours of CPU — schedule it, do not squeeze it beside other work), and make the skip LOUD so a missing corpus says so where someone reads it rather than hiding in a vitest tally
+- ✅ **47-game rerun — THE CORPUS HAS A PRODUCER AND THE SKIP IS LOUD** (2026-09-21). It was not merely absent, it was UNREPRODUCIBLE: `grep -r wo4-corpus` found the test and nothing else, so the WO-4 numbers rested on data nobody could rebuild, while the run printed `3 passed | 1 skipped` — a line that reads green at a glance. Both halves closed. **The producer:** `scripts/build-wo4-corpus.mjs`, two resumable phases (`--fetch` / `--annotate --depth N`). Games come from chess.com's public API because **Lichess's game-export endpoint 404s through this proxy while `/api/user` returns 200** — measured, so the next session does not re-derive it; `/pub/country/{iso}/players` yields thousands of ordinary club players, which is the population WO-4 is about. The engine is the app's OWN npm Stockfish 18 WASM over UCI (no native binary exists in this container — CLAUDE.md's `/usr/games/stockfish` line is stale here), which matters because the replay worker hands these numbers to the REAL sweep. Selection is SORTED and seeded, so two runs pick the same games. **One bug caught by reading the first output:** every game came from a single player, because the loop drained each archive before moving on — a corpus that is really one person's month measures their habits, not a population. `MAX_GAMES_PER_PLAYER = 3` now gives 47 games across **64 distinct players, Elo 800–1794, 32–133 plies**. **And the skip is now loud:** a test that ALWAYS runs asserts the producer exists (that is the gate — it makes "unreproducible" impossible to return to) and prints the rebuild commands when the data is absent, instead of hiding in a vitest tally
+
 - **Audits:** loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ · second-game 12/12 ✅
 
 ## 2. WO-LOOP-01 — prove the one-line definition on prod
 - ✅ Phases 0–4, **6/6 on prod** (run 5, bundle `index-BggLa4Jm`; re-proven run 6 with an exact same-ply control)
 - ✅ The five defects the instrument found, each gated: the review path never recorded · a game paired with itself · four seat resolvers ignoring the declared seat · the uncapped-facet path · GM games have nothing to record
-- 🟠 OWED-1 the `other` attribution gap — MEASURED on real users: the 150cp floor rejects **99 of 367** unnamed slips (27%) that carry a real engine eval, purely for being too cheap. Precision is carried by the PV SHAPE, not the cost, so lowering to ~100 is safer than it looks — **David's call**, recommendation: lower it (PLAN)
+- ✅ **OWED-1 — SUPERSEDED, and acting on it now would be a REGRESSION** (found 2026-09-21 while gaining context to act on it). David approved lowering the 150cp floor to 100. **That floor no longer exists.** Commit `9942d68` replaced it the day before with an EXPECTED-POINTS gate (`bandForWinPctLost`, an inaccuracy at 5 win% ≈ ~55cp at a balanced position) — i.e. it already went FURTHER than the approved number, and in chess.com's currency per §8b rather than as a raw centipawn magnitude. Re-adding a `100` would put back the exact shape that sweep removed. The two board entries were the SAME floor approached from different directions (OWED-1 from the population, FUNDLEAD from the dead band) and nobody reconciled them. What the change really left behind was a RED GATE — see §6
+
 - ✅ OWED-2 Learn's half on a prod tape
-- 🔴 OWED-3 **GREEN** — the coach going quiet when you improve. Not started; needs held evidence over days
+- 🟠 **OWED-3 GREEN — the instrument now MEASURES THE WIRE instead of the prose; the BEHAVIOUR half is still owed** (2026-09-21). The board said the review arm "proves nothing either way and should not be re-run". That was right about the WORD COUNT — green moved 16 words against a 592-word between-run variance, twice — and too broad as a verdict on the surface. Review is `walk` posture so a lowering term cannot SILENCE a ply there, but **the term is still COMPUTED on both postures**, and `coach-need-scores` already emits it per term. So `audit-loop-green-prod` now reads the capability term as a SIGN, deterministically, with no noise floor at all: **inert on control** (the non-vacuity guard — otherwise a zero on green reads as "no effect" when it means "nothing emitted"), **negative on green**, **inert again on prompted** (being told is not proving). A sign inversion would make proving a capability make the coach LOUDER, and every sentence would still read fine — which is exactly why prose could never catch it. The word-count arm is demoted from the run's verdict to one arm's, since a prose effect too small to resolve says nothing about whether the wire fired. **Still owed: the BEHAVIOUR** — a ply that would have spoken going quiet — which genuinely needs an `interrupt` surface, and which the offline measurement bounds to plies whose need sits in 50..99
 
 ## 3. The critical moment — one computer, two registers
 - ✅ Built 2026-09-19 (`criticalMoment.ts`, both registers, the stake banded off the eval)
@@ -76,6 +78,16 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 0a the usage funnel measured on PostHog (62 real native users) — and two of my own claims retracted in it: the import control was post-treatment, "44 did nothing" was too narrow an event list
 - 🟠 0b **the Dashboard-bars redesign is UNGRADED and probably ungradeable today** — only 11 of 18 post-ship users ever took an OTA bundle, and requiring an equal observation window leaves n=5. The 82%-vs-78% pair is not evidence in either direction; do not cite it. The one real finding needs no window: **zero users have ever opened the Kids Mode row the redesign added**, including the 11 who provably received it (non-vacuity proved — the same route cut returns 25 other routes)
 - ✅ the cross-session audit LOCK is a real mutex now (`scripts/audit-lib/audit-lock.mjs`) — owner file, staleness by pid liveness with a `ps` check against recycling, steals only a proven-dead lock and says so, treats an ownerless dir as held, keeps the anchored pgrep guard beside it; a deadline aborts loudly and never proceeds, and a mismatched release reports CONTAMINATED
+- ✅ **A setState-after-unmount on the LIVE import surface — found by the broadened gate, and the sweep is the whole story** (2026-09-21). Widening ship-check's test derivation turned `GameImportCard.test.tsx` red in a large batch with `ReferenceError: window is not defined`, thrown from React's `dispatchSetState`: an Unhandled Rejection landing after jsdom was torn down. The file passes **16/16 alone**, which is exactly why nobody had seen it — the unmount has to beat the promise, and only load makes that likely. In the app the same race is a user navigating away from a slow import.
+  🚨 **AND THE COMPONENT IT SURFACED IN IS ORPHANED.** `Coach/GameImportCard.tsx` is 344 lines with 16 passing tests and **zero non-test importers** — the surface map said "1 importers" and it was the test file. `Games/ImportPage.tsx` is the live import surface. So fixing only where the red appeared would have fixed the copy no user can reach and left the real one untouched: one sample of a bug class is never the class. **Both are guarded now** (`mountedRef`), and the guard is deliberately scoped — the PostHog `import_succeeded` / `import_failed` events still fire on unmount, because the import really did happen and dropping them would bias the import funnel toward successes, which is the measurement this repo reads most often. 31/31.
+  🟡 **NOT deleted, and not my call: `GameImportCard.tsx` is dead code with a live test suite.** Verified dead (zero non-test importers), which is the first half of the delete rule — but removing a 344-line component is the "when unsure, skip or ask" case, and it is not on this board. Flagged for David
+- ✅ **The two reds the basename gate concealed are FIXED, and both were §8b leftovers** (2026-09-21). Neither was mine; both were the same disease as `section14Diagnosis` — a sweep changed the currency and left a gate asserting the old one, with nothing able to see it.
+  - `deltaConsistency.test.ts` was comparing **two different currencies and calling the difference a drift between SURFACES**. It fed `classifyCpLoss` the evals (so it read in EXPECTED POINTS, §8b) and `classifyMove` none (so it kept centipawn bands — deliberate, because `callInaccuracy` genuinely has only a cpLoss). Given the SAME context the two agree on **every row from 40cp to 400cp**, measured. Fixed to compare like with like, and the boundary test now asserts the WIN% turn empirically instead of pinning `INACCURACY_CP`/`MISTAKE_CP`/`BLUNDER_CP` — which are no longer the naming boundary and must not be "restored" as one; they answer the separate question of whether something is worth SAYING. 20/20.
+  - `fundamentalLessons.test.ts`: **all three Section-14 lessons broke the locked perspective rule** — `calculation-depth`, `left-book-early` and `no-plan` lectured in the third person and never addressed the student, and one was a sentence short of the substantiality floor. Rewritten to "you/your" with every chess claim preserved (register change, not new content); the third sentence came from splitting an existing compound, not from inventing a claim. 33/33
+- ✅✅ **THE GATE THAT COULD NOT FIRE — ship-check ran ONE test file per changed source file** (found 2026-09-21, and it is the cause behind two other entries on this board). `changedSourceTests` mapped `foo.ts` → `foo.test.ts` **by basename**. `principleAttribution.ts` has **EIGHTEEN** test files; that mapping found one. So when `9942d68` rewrote the calculation-depth cost gate, `principleAttribution.test.ts` passed, ship-check printed READY TO PUSH, and `section14Diagnosis.test.ts` — which asserts the exact decline string that change rewrote — **went red on `main` and stayed there**, invisible: not in GATE_TESTS, not sharing the basename, nothing in the repo able to see it. **THE FIX IS ONE DERIVATION, NOT A BETTER MATCHER.** `surface-map.mjs` already computed the true list (by filename PREFIX *and* by IMPORT) to print each map's "## Tests"; writing a smarter matcher inside ship-check would have been two answers to one question drifting apart, with the stricter one losing silently — the duplicated-judgement the rot rule bans. Extracted to `scripts/ship-check-lib/tests-for.mjs`; both read it. Verified behaviour-preserving: the regenerated surface map is byte-identical. Gate: `tests-for.test.ts`, in GATE_TESTS, **negative-controlled against the old matcher** — each assertion re-derives what basename-only would have returned and proves it MISSES what the real derivation catches, so this file cannot pass against the logic it replaces. Blast radius is honest, not free: `coachApi.ts` now pulls 48 test files, `gameAnalysisService.ts` 23
+- 🔴 **AND IT WAS HIDING FIVE RED FILES, NOT ONE — `main` is redder than anyone knew** (2026-09-21). Three are now fixed (`section14Diagnosis`, `deltaConsistency`, `fundamentalLessons` — all §8b or perspective leftovers, see above). **THREE MORE ARE OPEN AND NOT MINE:** `forkNarration.test.ts` ("LIVE teaching still hears both sides"), `gemPunishLessons.test.ts` (gem→lesson conversion + the Defence/Defense join) and `learnDeltaAudit.test.ts` (gem crush lines + live punishment callouts).
+  **Attributed cleanly, in an isolated `git worktree` at `origin/main`** — not by stashing, after stashing mid-run briefly put ship-check on a tree that did not exist (my error; the phases either side of the window were re-checked). On clean main those files fail **5 tests**; on my tree the same files fail **3**. So they are pre-existing, and my branch is strictly less red — but **the count VARIES between runs, which is the real lead**: these are the Stockfish-driven gem audits, they were run under heavy CPU contention, and an engine-timing sensitivity would look exactly like this. Triage owes a quiet-machine re-run BEFORE anyone reads them as content defects
+- ✅ **A `--reporter=basic` full-suite run CRASHED AT STARTUP AND `pgrep` REPORTED IT RUNNING FOR 50 MINUTES** (2026-09-21, my own instrument). `basic` is not a vitest-4 reporter; the process died in seconds with "Failed to load custom Reporter", and a Monitor filtering for `FAIL|Tests ` never matched the crash text, so silence read as progress. Exactly the disease this repo keeps naming, committed by the session auditing it. Two lessons, both already written down elsewhere and both re-learned: a monitor filter must match the FAILURE signatures, and liveness must be read off the LOG, never off a process matcher
 - ✅ this board is GATED at last (`src/test/outlineCoverage.test.ts`) — the header had promised that gate since it was written and **the file did not exist**; open PLAN items and buckets now must have a line here, with a negative control so the gate is proven able to fire
 
 ## 7. Bucket C — the student hears something wrong or repeated
@@ -101,10 +113,13 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🟠 **`SEAT mover-never-reattributed` FALSE-RED'd a correct sentence, and it took THREE cuts to fix because two of them were silently inert** (2026-09-21, the only red in a 49/50 run). The coach said, on an OPPONENT ply: *"You both wanted the open e-file, but only their rook could take it — it was theirs first."* That is correct plan-race prose — it addresses the student, describes both sides, and attributes the file to the OPPONENT. It reattributes nothing. The guard reads the token after "You", found the QUANTIFIER "both" instead of a listed verb, and failed a coach that was right (`want` is listed; it just was not adjacent — and the coach said "wanted", which `want\b` does not match either). **Cut 1** built the regex from an interpolated string and the escaping came out as a literal backslash, so the fix did nothing. **Cut 2** used an optional group, which BACKTRACKS TO EMPTY — the lookahead rejects at "wanted", the engine retries at "both", and it fires anyway. **Cut 3** strips the hedge first, then tests: 12/12 both directions, silent on legitimate prose and still firing on real reattribution. Two inert repairs that reported themselves applied is the argument for a shape you can read over one you have to simulate. NB the guard is a HEURISTIC that errs toward FIRING on purpose — a false red costs one investigation, a false green lets the locked seat rule rot silently
 - ✅✅ **DONE — 2 / E2: the two-deploy service-worker check RAN AND PASSED 5/5 on prod** (2026-09-21, `scripts/audit-sw-two-deploy-prod.mjs`, report `audit-reports/sw-two-deploy-2026-09-21T07-24-57-069Z`). A live session was held on `index-CL9P6Cc6.js`, a real deploy landed underneath it, and: the new worker did NOT take over (`controllerChanged=false`, loads=2 against 2 driven navigations), **no hashed asset failed across two driven lazy navigations**, and the held session still worked (alive, 0 new page errors). That is the class that hit David's iPhone — `stockfish-error`, `lichess-error TypeError: Load failed`, no `app-boot` on reopen — proven survivable under a genuine deploy, which no single-deploy audit could reach. ⚠️ **RE-RUN WITH THE CORRECTED DETECTION: 4 of 5 rows reported, ALL PASS — the fifth is UNGRADED, not passed.** The run wedged after row 4 and sat 37 minutes holding the machine, so the liveness row never printed. The row that matters did: *no hashed asset failed after the deploy*, this time watching CONTENT-TYPE rather than status, so it could actually see the `200 text/html` casualty the first 5/5 was blind to. A watchdog now bounds the whole run and writes a `-WEDGED` partial report — every individual step was already bounded, which is precisely why an outer bound was needed: the hang was in the composition, where per-step timeouts cannot see it
   🔴 **AND IT DISPROVED THE PREMISE I HAD WRITTEN TEN MINUTES EARLIER — that line is DELETED, not annotated.** I claimed the check "must ride a deploy that changes the BUNDLE" because a docs/scripts/test push would emit a byte-identical chunk. **FALSE, measured:** the deploy under test was `0863ced7c..0adb4c90a` — three commits touching only `OUTLINE.md`, `PLAN.md`, two `scripts/*.mjs` and one `.test.ts`, with `git diff --name-only | grep ^src/ | grep -v .test.` returning **NONE** — and BOTH artifacts moved anyway: entry `CL9P6Cc6` → `BGt0uyLR`, `sw.js` md5 `5d5bc0fc…` → `75c244b2…`. **So EVERY deploy offers every live session a new service worker, docs-only included.** The handover risk is far broader than bundled changes, which also means this check can ride any push at all — and that the hold gate is load-bearing on pushes nobody thinks of as risky. The page in this run shows exactly that: `waiting:true, asked:true` — a new worker WAS offered and the page asked it to take over once quiet, and still nothing broke
-- 🟡 **`readingGate` in `CoachGameReview.tsx` looks like DEAD STATE** (noticed 2026-09-21 while mapping `handleWalkForward`'s exits). `setReadingGate` is never called with a value, so the guard can never fire and `ReviewReadingChallenge` — which has its own test file — can never mount. Its own comment says "(defensive)", which is the tell. NOT deleted: the locked rule is verify-it-is-actually-dead-first and when-unsure-skip-or-ask, and I verified enough to suspect it and not enough to remove a user-facing surface. Deliberately declined as a way to manufacture a bundle change for item 2 — letting the instrument drive the product is backwards
+- 🟡 **`readingGate` — the dead state stays; the LIE IT WAS TELLING THE USER is fixed** (2026-09-21). Verified dead: `setReadingGate` is only ever called with `null`, so `ReviewReadingChallenge` cannot mount. NOT deleted, and now for a better reason than last time — the `'reading-gate'` `ForwardStop` was deliberately KEPT yesterday, in another session's file, with a written justification ("kept so the guard declares itself rather than pretending to advance"). Deleting it would fight a decision made a day ago.
+  🔴 **But it was not inert. The Settings toggle that gates it describes a surface that cannot exist.** "Quiz Me As I Review" promised *"a vision test … the board pauses and asks you to READ the position — what's the threat, what's hanging — and grades your answer against the engine"*. What the toggle ACTUALLY gates is the why-picker faucet, whose three card kinds are `why` / `find-shot` / `trap`. A user turning it on gets none of what the copy sells. Rewritten to describe the real thing.
+  🔴 **And a second stale comment beside it:** the question-plan gate read "fire ONLY at a planned ply (≤2 per game, the biggest moments)" while `REVIEW_QUESTION_BUDGET = Infinity` — the cap went when G4.5 banned hard caps. Same class as the `principleQuizStateRef` guard three hundred lines down that carried "(hidden) — never opens" while a live call site opened it: a wrong comment is worse than none, because it tells the next reader not to look
+
 - ✅ 3. The 8.2 MB entry chunk is a NON-ISSUE — closed by measurement 2026-09-20, no device needed. **ZERO** WASM/OOM/crash events on native in 60 days, and the zero is non-vacuous (same cut returns 14 other error types: `stockfish_variant` 873/94 devices, `ota_download_failed` 133/53, `tts_failure` 19/9). The OOM that motivated this item happened in an AUDIT browser under a mid-run deploy at 124 spawned threads, and in the memory-starved sandbox — neither is a real device, and its cause was THREAD COUNT, not bundle size. Download is irrelevant on native (`webDir:'dist'`, the bundle ships inside the app; 2.3 MB gzipped on web). Do not spend a night shrinking this. Only live engine signal: `stockfish_variant_fallback`, 3 events / 2 devices — watch, do not act
 - ✅ 4. The 1,282 archived anchored danya notes STAY ARCHIVED (2026-09-20) — and the two reasons offered for calling them garbage both FAIL on measurement: **100% carry a `lineSan`** (median 10 plies; no `fen` field, but the line IS the anchor) and **0 of 1,282 are audience/parasocial talk** (1,275 board talk, 7 general chess principles; detector proven non-vacuous against 'subscribe', 'welcome back to the speedrun', 'shout out to my patreon'). They stay out for a DIFFERENT reason: the play surfaces take exact-position narration solely from the board-truth-verified voiced corpus, and ~3.8% of farmed position-keyed notes are mis-anchored — fluent prose about a different board, which reading cannot catch. 🔴 The one number that would reopen it, never run: how many of the 1,282 survive board verification against their own line Re-confirmed by David 2026-09-20: voiced is the sole exact-position source and coverage grows by growing the voiced corpus — not an open call, and asking again was the defect.
-- 🟡 5. 57,204 un-positioned notes — a memory decision, never a boot one; never prune without measuring both ways
+- 🟡 5. **CORRECTED 2026-09-21 — the number is 9,928, not 57,204.** That figure predates the corpus cut three entries down, which removed 47,831 notes; carrying it made this line report a payload five times the real one. Measured, not recalled: danya floating **9,928** un-positioned + 122 bundled (positioned via `note-anchors.json`, not via their own `lineSan`) + voiced **7,477**, every one exact-position. Still a memory decision, never a boot one; still never prune without measuring both ways
 - 🟡 6. A cold first teaching reply draws on less corpus — watch it in the Learn audit
 - ✅ 7. The corpus gates are even · ✅ 8. `BuildVersionWidget.test`
 - ⛔ 10. **Section-14 detectors fire on nothing real** — theirs. The instrument half landed (`2d9f151`: each detector now names WHICH GATE it failed, so the 23% bucket is measurable); still never attributed on a real game
@@ -337,30 +352,20 @@ never produces a proven capability then the lowering term can never fire and
 
 Not the main concept, and explicitly deprioritised (David 2026-09-20: "the
 register doesnt get up to closing the loop"):
-- 🟠 **FUNDLEAD — cause NAMED by measurement (2026-09-21), two halves left.** FUNDWHY's
-  first run named it: the 150cp floor silenced the inaccuracy band (costs 104/99/86/74/72/69,
-  all above INACCURACY_CP and below 150). ✅ FIXED — the gate is expected points now, and
-  the recap spoke the result: "one of your four flagged moves stopped calculating too early".
-  Still open, and neither is the floor:
-  - 🔴 **the punishing PV is not persisted on a COLD open** — `deepPv` is filled only by the
-    key-moment dive, and `CoachReviewSessionPage:297` opens with `{sweepOnly:true}`, so the
-    FIRST review of a game (the one a student reads) cannot teach the reasoning fundamentals
-    at all. Do NOT un-skip the dive (reinstates the cold-open stall, G4.6). OWED first: does a
-    SECOND open produce it? One reopen-probe run decides between the three fixes.
-  - 🔴 **an unconditional deferral**: "the punishment X is immediate — another fundamental
-    owns it", and none fires. A yield must be conditional on the claim LANDING. Third
-    instance of this shape tonight; the two that worked were fixed by making the yield
-    check the handoff, or making a yield naming no claimant fail to compile.
+- ✅ **FUNDLEAD — BOTH remaining halves closed** (2026-09-21).
+  - ✅ **The cold-open PV: the sweep already computed the line and threw it away.** `evaluateFensPooled` and `analyzeGameOnWorker` both call `analyzePosition`, which returns `{evaluation, bestMove, depth, pv}`, and both kept the eval and the depth and dropped the PV — the batch path declared it away **in its own `search` return type**, which is why nobody saw it. So `pvAt` (was `deepPv`) was filled ONLY by the key-moment dive, a COLD open runs `{sweepOnly:true}` which skips that dive, and the FIRST review a student reads carried no punishing line on any ply: every PV-gated reasoning fundamental declined with "punishing PV is 0 plies, needs 3". Not a tight gate — an absent input. Fixed at both sites for **zero extra engine time** (it is the line from a search already run), as a FLOOR the dive still overwrites at key plies. This also retires PLAN's recorded bound that "the batch path carries no PV at all, so `calculation-depth` cannot fire there" — never a property of the batch, just the drop, and it is the path every IMPORTED game takes. Renamed `deepPv` → `pvAt` because the old name had become the lie. Gate: `sweepCarriesPv.test.ts`, negative-controlled.
+  - ✅ **The unconditional deferral — and the judgement was written TWICE, disagreeing.** The detector stood down on the PV's SHAPE ("the blow lands on move one, so a sibling owns this"); `attributePrinciples` ALREADY subsumed `calculation-depth` on what ACTUALLY FIRED. The detector ran first, so the conditional copy never decided. Both now read one `CALC_DEPTH_CLAIMANTS`. A yield is now DATA the framework verifies: `to` is `readonly FundamentalId[]` so a claimant that does not exist fails to COMPILE, and an UNHONOURED yield reports itself into the `why` sink the 23%-bucket measurement already reads. It deliberately does NOT invent an attribution — naming calculation-depth on a one-move shot would be a fluent lie about the student's thinking — so the silence is COUNTED, not filled. 🚨 **My first draft of that reporter was wrong on its own first probe:** it printed "so this ply is unattributed" about a ply three other detectors HAD attributed. An unhonoured yield on a covered ply is a mis-stated CLAIMANT LIST; on a bare ply it is a COVERAGE hole. Different fixes, so the line now states the two facts separately. Gate: `yieldHonoured.test.ts`, both directions
+
 - ✅ **FUNDLEAD's row was itself blind** — FUND_RE could not see 25 rotations across 15
   fundamentals, so it scored correct teaching as "no fundamental". Now derived from the real
   renderers and gated (`fundLeadStems.test.ts`), every rotation, negative-controlled.
 - 🔴 C15 the voiced corpus register — a real defect the student hears, but polish next to the loop.
-- 🔴 **C15b lesson BEATS are unscanned for gendered pronouns** — the peer's fix made the
-  beat arm live (it read a field that does not exist, so it scanned nothing, ever). GENDERED
-  never covered authored beats. Do NOT close by raising the 202 ceiling — that blesses rot;
-  scan, read a sample, degender offline, then ceiling the ambiguous remainder.
-  📌 **DON'T WRITE A NEW SCAN — the discriminator already exists and already runs** (2026-09-21). `curatedBeatSource.beatRegister` classifies a beat `spectator` when `PLAYER_PRONOUN = /\b(?:he|him|his)\b/i` appears in a SENTENCE that also names a colour — deliberately sentence-scoped so a historical aside ("Fischer and his 1972 match") is not swept up with "…and HE takes away Black's pin". That is exactly the distinction C15b needs, written and in production. A fresh grep for he/his would re-derive it worse, and would conflate the two cases the register rule keeps apart: "White develops the knight" is CORRECT for Watch, a gendered pronoun standing for a PLAYER never is.
-  📌 **AND THE LIVE BLAST RADIUS IS ALREADY ZERO.** Those beats are `spectator`, and `curatedBeatAt` takes the surface's register as a REQUIRED parameter and refuses them on live boards. So this is not rot reaching a student mid-game — it is rot in the WATCH register, where the beat is otherwise correct. That bounds the item: measure with `beatRegister`, count only the beats whose spectator verdict comes from the pronoun clause rather than from theatre or own-side, and degrade THOSE offline. Ceiling the ambiguous remainder, never the whole count
+- ✅ **C15b — DONE. 946 sentences degendered across 165 lesson files, and the gate that never scanned them now does** (2026-09-21). Measured first: **243 offending sentences / 122 registered lessons**, then a bigger number once I stopped trusting the registry (below). The board's advice was right and I followed it — no new scan: `curatedBeatSource.beatRegister`'s sentence-scoped discriminator (a gendered pronoun in a sentence that also names a COLOUR) decides what is a defect, and `degender.mjs`'s verb-agreement transform does the rewriting, because "he takes" → "they takes" is broken English and that script already REFUSES the ambiguous "he's X" rather than guessing. `scripts/degender-lesson-beats.mjs` is the driver; every literal is decoded, transformed and re-encoded behind a ROUND-TRIP GUARD that proves the encoder reproduces the original byte-for-byte before it writes.
+  🚨 **THE GATE WAS BLIND TO 90% OF THE CORPUS, AND THAT IS THE REAL FIND.** The beat arm reads `ALL_LESSONS`, i.e. `registry.ts` — which contains **ZERO pro-rep lessons** by design (G9 step 8 says not to register them). Measured: the registry sees **3,664** beat fields; the lesson directory holds **38,071**. So a registry-driven gate checks under a tenth of the authored beat text and reports green on the rest. The new arm scans the DIRECTORY. Ceiling **36**, shrink-only, negative-controlled (set it to 0 and it fails with the real count).
+  🚨 **AND READING THE OUTPUT CAUGHT A DEFECT IN MY OWN FIX, exactly as the doctrine says it would.** Sentence scope is right for CLASSIFYING a beat and wrong for REWRITING one: it left **85 beats (8.8%) speaking both ways in one spoken paragraph** — *"…that's fine, let THEM. Every second it costs HIM…"* — which reads WORSE than before the fix. A second pass takes the rest of a beat once it is established, guarded by a PROPER-NOUN test so "Bobby Fischer … HE wrote a famous article" and "Réti … hand Capablanca HIS first loss" stay correct. 85 → **13**, and the survivors are those legitimate ones. Zero `they <verb>s` agreement failures across 946 rewrites.
+  ✅ **It also bought live teaching coverage:** `curatedBeatRegister` census moved **1,312 → 1,440 live-safe (38.4%)** — 128 beats that were refused on live boards for a pronoun can now speak.
+  🔴 **One measurement of mine was wrong and is withdrawn:** I briefly counted **96** we/our/us hits in the directory. Using the gate's REAL rule (`BANNED` + `stripCountry`, which correctly excludes "lets") the number is **0**. My regex had added `lets`, and "White lets Black resolve the tension" is everywhere. we/our/us is genuinely clean corpus-wide
+
 - ✅ 11e the test-type-error ceiling 236 → **0**, now a hard gate — see §6 for the shapes and the two dead/red gates it exposed.
 - ✅ **FIXED + VERIFIED ON PROD — A STALE CHUNK NOW 404s. (Was: it returned `200 text/html`, AND THAT IS WHY THE iPHONE REPORT NAMED NO SERVER ERROR** (measured on prod 2026-09-21). Vercel serves the SPA fallback for any unmatched path, so a hashed asset from a previous deploy comes back `HTTP/2 200 · content-type: text/html` while a live one is `application/javascript`. Verified on `web-BITZqWmZ.js` (previous build → HTML) vs `web-7Ov3xJEz.js` (current → JS), and on an entry chunk two deploys old (HTML). **The user-visible form is `Unexpected token '<'` / "Load failed"** — which is exactly `lichess-error TypeError: Load failed` and `stockfish-error` from David's device, and nothing in it names a 404, which is why it took a device to find. Consequence: the precache is the ONLY thing keeping a running page's chunks alive after a deploy, so the handover gate is load-bearing rather than belt-and-braces.
   ✅ **FIXED AT THE ROUTE (2026-09-21).** `vercel.json`'s catch-all was `/((?!api/).*)` → `/index.html`, which answered a missing hashed chunk with the app shell. It is now `/((?!api/|assets/).*)`, so a chunk the deploy no longer serves **404s honestly**. Existing assets are untouched — Vercel serves a matching static file before consulting rewrites, so this changes only what happens when the file is genuinely gone. Both are failures; only one is HONEST: a 404 is detectable by the app, by the service worker, and by an audit's ordinary `status >= 400` check, while HTML-pretending-to-be-JS is detectable by none of them — the two-deploy audit written to hunt this exact class watched `status >= 400` and was structurally blind to it. Gate: `src/test/assetsNeverFallBackToHtml.test.ts`, negative-controlled (the old pattern fails it with the reason). ⚠️ **Verification is a PROD curl after the deploy** — a bogus `/assets/x-deadbeef.js` must 404 and a deep route like `/coach/review` must still return the shell; recorded when run
@@ -375,6 +380,7 @@ the real current entry chunk    200  application/javascript  unchanged
   🔴 **AND IT EXPOSED A HOLE IN MY OWN NEW AUDIT, twice.** `audit-sw-two-deploy-prod` watched `status >= 400`, which this can NEVER trip — so "no hashed asset failed after the deploy" passed partly because it could not see the real failure mode. Worse, the retry discriminator (built with the peer to separate a real casualty from CPU starvation) read "200 on retry = starvation" — and a stale chunk retries 200 FOREVER, so it would have called every genuine casualty starvation and moved on. Both fixed: the signature is CONTENT-TYPE, and the discriminator is now 200-AND-EXECUTABLE. **The 5/5 run stands but is weaker than it read** — it proved no 4xx and no request failure; it did not prove no HTML-for-JS. That re-runs.
 - ✅ **ANSWERED — the entry hash moves on EVERY build BY CONSTRUCTION, and the negative control CANNOT EXIST** (2026-09-21). `vite.config.ts:21` — `const ms = Date.now(); return sha ? \`${sha}+${ms}\` : …` — bakes a MILLISECOND TIMESTAMP into `__BUILD_ID__`, which `appAuditor.ts:971` reads, so it is inlined into a shipped chunk. Confirmed in the live bundle: `"ce49648+1789993608747"`. That chunk's hash therefore differs on every build, and the entry — which embeds its dependency FILENAMES in `__vite__mapDeps` (the byte-70 diff) — is renamed with it. **So 3-of-3 was not a pattern awaiting more data; it is a proof by construction.** "Assume any push swaps the bundle for every live session" is a theorem, not a working rule, and the control I was holding out for is impossible — exactly as the peer predicted when they said to look at what feeds the hash before spending four deploys hunting one.
   🟠 **AND IT COMPOSES WITH THE 200-text/html FINDING INTO SOMETHING WORTH DAVID'S ATTENTION.** Every push renames every chunk; a renamed chunk's predecessor is served as SPA-fallback HTML rather than 404; so every push leaves every live session one lazy fetch away from `Unexpected token '<'`, with the precache as the only thing in between. Also: `+${ms}` means the SAME commit rebuilt produces a DIFFERENT bundle, so a redeploy or a retry busts every user's cache for no content change. Dropping the timestamp and keeping the sha would make builds reproducible per commit — NOT changed here: it is build config, it affects OTA identity, and it is his call rather than a 4am edit
+<<<<<<< HEAD
 - ✅ **The observation that started it, kept for its evidence and DEMOTED because the line above settles it.** `0863ced7c..0adb4c90a` touched only `.md`, two `scripts/*.mjs` and one `.test.ts`, and `index-CL9P6Cc6.js` → `index-BGt0uyLR.js` with `sw.js` md5 `5d5bc0fc…` → `75c244b2…` anyway. 🔴 **Its "TO SETTLE IT: capture three or four more deploys" is DELETED, not annotated** — that plan was written before the cause was found, and it sends the next reader to spend four deploys on a control that `Date.now()` makes impossible. **THE COST QUESTION SURVIVES AND IS DAVID'S:** every push re-downloads the ~8.6 MB entry for every WEB reader and every OTA recipient, docs-only pushes included. Native App Store users are unaffected while the bundle is local (`capacitor.config.ts` `webDir: 'dist'`), and this is a DIFFERENT question from §6 item 3, which closed the MEMORY/parse concern and said nothing about transfer
 - 🟠 **G1's "verify the bundle hash advanced past your push" is weaker than it reads — FOR DAVID TO DECIDE, not to be edited into CLAUDE.md by a session.** It was written for STALENESS and it answers that correctly. But two sessions read it tonight as "my code is live" and reached opposite wrong conclusions within ten minutes, and the finding above shows the signal cannot support that reading at all. The check that does: grep the live chunk for a string only the new build contains, AND for the string it replaced. Recorded here so the decision is his
 - ✅ E2 the two-deploy service-worker check — **RAN AND PASSED 5/5 on prod 2026-09-21**; see §6 for the run and for the finding that every deploy (docs-only included) offers a live session a new worker.
@@ -398,234 +404,10 @@ the real current entry chunk    200  application/javascript  unchanged
 - ✅ 7. The corpus gates are even · ✅ 8. `BuildVersionWidget.test`
 - ⛔ 10. **Section-14 detectors fire on nothing real** — theirs. The instrument half landed (`2d9f151`: each detector now names WHICH GATE it failed, so the 23% bucket is measurable); still never attributed on a real game
 
-## 8b. Move grading — one currency, chess.com's (David 2026-09-20)
 
-- ✅ **Review already matched** — `classifyCpLoss` has banded in EXPECTED POINTS
-  (5/10/20 win% = chess.com's 0.05/0.10/0.20) since the accuracy work. The rot was
-  everything DOWNSTREAM of it, which is why "match chess.com" turned out to be a
-  sweep and not a build.
-- ✅ **The drill queue** had its own `classifyCpLoss` on raw 100/300 — one move could
-  be an "inaccuracy" on screen and a "mistake" in the drill it produced.
-- ✅ **Imported games** (`gameImportUtils`) banded centipawns — the student's whole
-  record labelled in a different currency from review AND from the site it came from.
-- ✅ **Live play** (`moveRating.classifyMoveFull`) held preMoveEval/postMoveEval/
-  playerColor and dropped all three at the call boundary.
-- ✅ **`capabilityEvidence`** retyped `MISTAKE_CP = 100` locally — a second definition
-  of "mistake" no change to the first could reach.
-- ✅ Band computed ONCE in `accuracyService.bandForWinPctLost`; gated by
-  `chessComBands.test.ts` (states the published table; proves the SAME 300cp is an
-  inaccuracy at +9.00 and a blunder at +0.50).
-- 🟠 **Behaviour change to watch:** the drill queue now SKIPS a move whose win% loss is
-  under an inaccuracy. Puzzle counts can legitimately drop — that is not a regression.
-- Deliberately NOT changed: `backwardLook`, `callInaccuracy`'s speaking floor. Those
-  answer "is this worth SAYING" — pedagogy, a different decision from what a move is
-  CALLED. Conflating the two is what caused this.
+<!-- reconciled 2026-09-21: the board carried two copies of these sections;
+     the lines below were unique to the second copy (the other session's edits). -->
 
-## 9. Carried over — the stale-tactics checklist (pickup §7)
-- ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
-- ✅ **ship-check crash-as-green, second half** — the guard read the child's stdout, which
-  only catches a death it lives long enough to narrate; an OOM-killed/timed-out process
-  prints nothing and still scored "0 errors". Now reads `spawnSync` status/signal/error
-  first, extracted to `scripts/ship-check-lib/crashed.mjs`, tested (10, mutation-checked:
-  the old logic fails 4), and gated in GATE_TESTS.
-- ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
-- ✅ `npm run ship-check` **printed READY TO PUSH** (2026-09-20, 348.6s, 11 commits on the tree): typecheck ✓, prod build ✓, lint 0 errors, content gates ✓, changed-file tests ✓. The one blocker was a redundant `String()` in a new measurement — `npm run lint` runs with `--report-unused-disable-directives`, which makes that an ERROR
-- ✅ Read the `tactics-context-stale` count off the listener — 0 of 145 captured events, prod, non-vacuity proven
-- ✅ `GameChatPanel.test` — MEASURED 2026-09-20: 16/16 green on a synced tree. The "red on untouched main" claim was stale and is deleted, not annotated
-- ✅ Swept: ONE `crashed(out)` detector backs vitest, lint, tsc and the Playwright summarizer — the regex had already been hand-written twice, which is the drift the rot rule names
-
----
-
-## THE OTHER SESSION'S BOARD — ⛔ THEIRS, DO NOT PICK UP (their report, 2026-09-20)
-
-- ✅ All their work on `main` and live, bundle `index-BjQZ6ReX`. Nothing running or pending.
-- ⛔ **The ~250 s regression** — the new insight sweep was AWAITED inside the function the review walk waits on. Detached and gated; their re-measure against the fixed bundle is the confirmation and is still owed.
-- ⛔ **The wider critical fan**, a second slowdown candidate, unresolved until that deterministic re-measure.
-- ✅ Three real bugs fixed on the way: the review path recorded nothing into the student model · four seat resolvers where only one read the declared seat · three fresh-game doors in Learn clearing different subsets of memory.
-
-
-## ⛔ BLOCKED ON DAVID OR ON TIME — not open work, and the board should stop reading them as such (2026-09-21)
-
-Four items cannot close no matter how many sessions run. Separated out so the
-remaining list is work somebody can actually do tonight.
-
-- ⛔ **OWED-3 GREEN — needs held evidence over DAYS.** The coach going quiet when you improve requires a student improving across sessions. No amount of parallelism creates elapsed time.
-- ⛔ **T6 — two numbers that only a DEVICE can give.** Learn statement volume and `scanCriticalMoments` on a phone. Needs David's iPhone, not a worker.
-- ⛔ **0b the Dashboard bars — needs USERS, not work.** Only 11 of 18 post-ship users ever took an OTA bundle; an equal observation window leaves n=5. It becomes gradeable when more of them update, and not before.
-- ⛔ **T5 / G1's bundle-hash wording / dropping `Date.now()` from the build id — DAVID'S CALLS.** T5 is deliberately unchanged; the other two are his standing orders and his build config (the build-id change moves OTA bundle identity). Each has its measurement attached above; none should be actioned by a session.
-
-🟡 **And one that is possible but last in rank: the 47-game corpus.** Verified 2026-09-21 that the games are on NO disk here and no producer exists — so it is acquire 47 amateur games, write the producer, then two Stockfish sweeps at d12 and d18. Hours of compute for a MEASUREMENT rather than a defect. It should not displace anything a student can feel.
-
-## WHERE IT STANDS IN ONE LINE
-
-The loop is CLOSED and proven on prod in the RED direction, in both registers:
-the coach learned the student in game A and said something different in game B.
-What is left is the **ceiling** (the `other` attribution gap — another session),
-the **wedge** (#21 — another session), and **GREEN** (the coach going quiet when
-you improve). Green is the half of the main concept nobody owns: the mechanism
-is built and has never once been shown to fire. See below.
-
-## UNOWNED RIGHT NOW — and the ONLY one that is the main concept
-
-**GREEN — the coach going quiet when you get better.** The heat map has three
-states and the app can act on two. Measured 2026-09-20, not recalled:
-
-| half | state |
-|---|---|
-| RECORD a hold (`capabilityEvidence`, both halves computed) | ✅ built, 8 modules |
-| RECORD a miss | ✅ built, 21 modules — **the parity gap is 21 vs 8** |
-| the PROFILE (`getCapabilityProfile`, prompted rows skipped) | ✅ built |
-| a term that can LOWER need (`needScore.capabilityTerm`, held ≥ 3 + zero broken) | ✅ built, ONE production reader |
-| **does real play ever reach held ≥ 3 with zero broken?** | ✅ **MEASURED 2026-09-20: YES, 6 of 6 game-seats, off ONE game each** |
-| is the bar set right, i.e. does a proven tag SURVIVE later games? | ✅ **measured and re-set** — `posedImportance >= 80` is the knee (15 real games, 198 held rows): 2 proven, 0 later failed. The old effective bar of 65 gave 2 tags / 17 failure events |
-| can a student who FIXES a weakness ever go green again? | ✅ **YES — fixed and gated.** `capabilityProven` reads `heldStreak`/`streakGames`, not lifetime `broken`; a break RESETS the streak rather than closing the door. Gate: capabilityEvidence.test 'GREEN IS RECOVERABLE'. Verified 2026-09-20: no production code gates green on lifetime broken (`broken > 0` survives only to classify RED) |
-| **has a student's Nth game ever gone quiet because of games 1..N-1?** | 🔴 **NEVER SHOWN** |
-
-🔴 **The "21 vs 8 parity gap" I read off `docs/STATE.md` is a GREP RATIO, not a
-hole — measured 2026-09-20, corrected here rather than left standing.** The two
-lists overlap and count readers as writers; the hold side is wired at every live
-surface. There is no recording half left to build. What is unproven is
-everything to the RIGHT of the record.
-
-🔴 **AND THE FIRST NUMBER FLIPPED THE RISK.** The worry was that green could
-never fire. It fires easily: every game-seat measured proved at least one
-capability from a SINGLE game (`passive-king-endgame 7h/0b` — the board asked
-seven times and quiet accurate moves answered). The RED guard works correctly
-(one break holds a tag red however many holds it has, e.g. `passive-rook
-6h/3b`). So the defect risk is not a wire that cannot fire, it is a BAR SET TOO
-LOW — the coach going quiet about something the student never demonstrated,
-which is absent-≠-mastered pointing the other way. `HELD_FOR_PROVEN = 3` is the number under test, and the
-sequence measurement answered it: ONE STUDENT, FIVE GAMES IN ORDER,
-`neglected-development` proven after game 1, still proven through game 4,
-BROKEN in game 5 — so the coach would have gone quiet about it for four games
-and then watched them do it again. One flip in five games, on the tag that
-proved fastest.
-
-✅ **FIXED — the defect this paragraph describes is closed (verified 2026-09-20).**
-`capabilityProven` now reads a RECENT STREAK (`heldStreak` / `streakGames`) and
-no production code gates green on a lifetime `broken` any more; the one
-surviving `broken > 0` classifies RED, which is correct. Gate:
-`capabilityEvidence.test` → "GREEN IS RECOVERABLE — a student who fixes it can
-go green again" (33 capability tests green). The original finding, kept because
-the reasoning is why the rule has its present shape:
-
-🔴 **THE OPPOSITE DEFECT, found by the same run: GREEN WAS UNRECOVERABLE.**
-`getCapabilityProfile` counts LIFETIME broken and `capabilityTerm` requires
-`broken === 0`, so one break ever bars a tag from green permanently, however
-many holds follow. The heat map exists to say "you have GOTTEN BETTER" and as
-built it structurally cannot.
-
-✅ **THE BAR IS NOW MEASURED, NOT CHOSEN (2026-09-20).** The first fix below
-was the right SHAPE and the wrong VARIABLE, and the numbers said so: swapping
-three lifetime holds for a 3-streak across 2 games moved flips 1 → 2, and a
-full sweep found **2 flips at every count threshold from 3 to 6 holds and 2 to
-3 games** — the count knob does not control the failure at all. What does is
-`posedImportance`, already stamped on every row by `capabilitiesPosed` and read
-by nothing. Over 15 real amateur games (198 held rows, real engine grades):
-
-| difficulty floor | capabilities proven | proven then FAILED |
-|---|---|---|
-| 65 (≈ the old effective bar) | 4 | 2 tags, 17 events |
-| 74–78 | 3 | 1 tag, 4 events |
-| **80 (shipped — the knee, and a plateau with 82/84)** | **2** | **0** |
-| 86+ | 1 | 0 |
-
-So GREEN now requires a clean streak of **2**, spanning **2 distinct games**,
-at **posedImportance ≥ 80**. The count is 2 rather than 3 because the sweep
-showed it inert — it only ever created false negatives. An easy hold is not
-evidence AND not a failure: it is skipped without resetting the streak. The
-shipped bar is asserted on the real rows (`2 proven, 0 flipped over 13 games`),
-and `summariseEvidence` / `capabilityProven` take the thresholds as optional
-parameters purely so the calibration sweeps the REAL rule — baking the floor in
-made the sweep report zero flips at every level, an instrument green for free.
-
-Earlier, and still true: `capabilityProven` is now the ONE
-definition of green, read by both consumers (it was written twice —
-`needScore.capabilityTerm` and `studentMomentBoost.isUnproven` — which is the
-duplicated-judgement the rot rule bans). Proven = a RECENT clean streak
-(`heldStreak`) spanning at least TWO DISTINCT GAMES (`streakGames`), instead of
-three lifetime holds with a lifetime-zero break count. A break now RESETS the
-streak rather than closing the door, so a student who fixes a weakness can be
-told so. Gates: six streak cases in `capabilityEvidence.test.ts` (one game is
-not proven however long; two games are; a break ends it; green is recoverable;
-a prompted row is neither; grey is never proven) and two new contracts in
-`capabilityRead.test.ts`.
-
-🔴 **AND THE HOLE THAT MADE THE BAR MOOT — `/coach/play` RECORDED NOTHING.**
-`recordMoveEvidence` had exactly ONE call site, inside `evaluatePlayerMove`,
-which `CoachGamePage` correctly stopped calling on 2026-06-04 (it ran a second
-Stockfish pair and a second classifier that disagreed with the blunder
-interceptor). The positive half was a side effect of that call and went with
-it — so the surface where students play whole games against the coach
-contributed ZERO holds, while mounting the hook with `capabilityOrigin:
-'play'`, which makes it read as wired. ✅ Fixed by a `recordGradedMove` door
-that takes the cpLoss the surface ALREADY computed, so the removed second
-analysis cannot come back, and passes `gameState.gameId` — which is also the
-game identity the new bar counts. Gates: three hook cases +
-`playRecordsCapability.test.ts` (blames by statement, and asserts
-`evaluatePlayerMove` stays gone).
-Reports: `audit-reports/capability-green.json`,
-`audit-reports/capability-green-sequence.json`.
-
-🔴 **PROD RUN 1 REPORTED A GREEN THAT WAS NOISE, AND ITS NEGATIVE CONTROL
-CAUGHT IT.** Three devices on one real amateur game (`PF8pYEpN`): control 2932
-words, green 2464 (−468, "quieter"), prompted 2506→2320 — but the PROMPTED arm
-must change NOTHING, since the profile skips prompted rows, and it moved more
-than green did. A failing negative control invalidates the positive result; it
-does not caveat it. Run 2 added a SECOND UNSEEDED CONTROL to measure the
-instrument against itself: noise floor **117 words within a run**, while the
-same unseeded config varied **592 words between runs**. Against that floor,
-green moved **16 words**. Verdict: RUN UNUSABLE, printed by the audit itself.
-
-🔴 **THE REASON IS THE SURFACE, NOT THE WIRE.** Review is `'walk'` posture, and
-the locked rule (G4.5.15) is that on `walk` importance must NEVER decide
-whether a ply speaks — every ply is a beat. So a term that LOWERS need cannot
-make review quieter; it can only reorder. Green's quieting is only observable
-on an `'interrupt'` posture surface (Play, live Learn), where silence is the
-default and the coach must earn the interruption. **Retarget the instrument
-there; the review arm proves nothing either way and should not be re-run.**
-
-**POST-PUSH AUDITS, 2026-09-20 (bundle `index-DQWQNSty`, all four sequential, muted):**
-- ✅ **loop (red) 6/6** — recorded, paired, B narrated differently, names A's opponent, and SPOKEN off the listener. The capability-path changes cost nothing that was working.
-- 🟠 **review — SUPERSEDED. The "zero reds" run is no longer the last one.** It was n=1 (one flagged ply, so 1/1) and green rather than robust, as the line already said. The current recorded run is **48/2 on 2026-09-21** with four flagged plies: RECAP aggregate GREEN, FUNDLEAD red (1 of 4 once its own blind row was fixed), CRIT red and mis-specified. Kept rather than deleted because the older run's n=1 caveat is still the reason not to read either number as robust.
-- ✅ **Learn, exit 0** — 27 spoken lines, the computed concept invariant voiced mid-game, 13 board lines gate-clean on perspective, 57 against the vacuity floor.
-- ❌ **green — RUN UNUSABLE**, correctly refused (above).
-- ✅ **`tactics-context-stale`: 0 of 145 captured events**, measured on prod 2026-09-20. ⚠️ The earlier "ZERO across all four runs" line reached the RIGHT NUMBER on NO EVIDENCE — until today `grep -rl tactics-context-stale scripts/` returned nothing, so no audit captured the event and that zero was absence-of-capture. Same answer, real instrument: G5a asserts the listener captured events at all, and runs first.
-- Noted for the other session's #21, not acted on: `workers=60` alive on the review reopen, inside the band their census tracks.
-
-✅ **THE MECHANISM IS VERIFIED AT THE DECISION POINT, AND IT IS NARROW BY
-CONSTRUCTION (measured offline, 2026-09-20).** Rather than build a four-arm
-browser instrument for an interrupt surface and discover the effect size
-expensively, the same real recorded plies were run through the real
-`computeNeed` with and without a proven profile: **198 of 198 clean posed plies
-were LOWERED, by 25 each**, so the term fires exactly where it should. But one
-proven tag is −25 and the term is capped at `NEED_THRESHOLD`, so green can only
-ever SILENCE a ply whose need sits in **50..99** — below that the ply was
-already silent, above it it still speaks.
-
-So the prod picture is fully explained: the wire is live, review cannot show it
-(walk posture narrates every ply), and on an interrupt surface only plies inside
-that band will flip. 🔴 **A first cut of this measurement reported "0 flipped"
-and that was the FIXTURE, not the product** — the synthetic plies scored 35
-against a threshold of 50, so nothing spoke before green either. It now reports
-the effect size and the band instead of a count that could only ever be zero.
-
-**THE OPEN QUESTION IS DAVID'S, and it is a design one, not a bug:** is −25 per
-proven capability the right weight? Green currently cannot quiet a ply the rest
-of the model wants loudly (need ≥ 100), by design. Making it proportional, or
-letting multiple proven tags stack past the cap, would widen the window — and
-is exactly the kind of change that should be measured against the flip count
-first, the way the bar was.
-
-That is the exact shape the RED direction was in before WO-LOOP-01: every half
-built and gated in isolation, the sentence never demonstrated end to end. The
-red half was proven by SEEDING game A and reading game B's tape; green is
-provable the same way, and the measurement comes first because if real play
-never produces a proven capability then the lowering term can never fire and
-`HELD_FOR_PROVEN` (or the posing bar) is the defect rather than the wire.
-
-Not the main concept, and explicitly deprioritised (David 2026-09-20: "the
-register doesnt get up to closing the loop"):
 - 🟠 **FUNDLEAD — cause NAMED by measurement (2026-09-21), two halves left.** FUNDWHY's
   first run named it: the 150cp floor silenced the inaccuracy band (costs 104/99/86/74/72/69,
   all above INACCURACY_CP and below 150). ✅ FIXED — the gate is expected points now, and
@@ -640,34 +422,13 @@ register doesnt get up to closing the loop"):
     owns it", and none fires. A yield must be conditional on the claim LANDING. Third
     instance of this shape tonight; the two that worked were fixed by making the yield
     check the handoff, or making a yield naming no claimant fail to compile.
-- ✅ **FUNDLEAD's row was itself blind** — FUND_RE could not see 25 rotations across 15
-  fundamentals, so it scored correct teaching as "no fundamental". Now derived from the real
-  renderers and gated (`fundLeadStems.test.ts`), every rotation, negative-controlled.
-- 🔴 C15 the voiced corpus register — a real defect the student hears, but polish next to the loop.
 - 🔴 **C15b lesson BEATS are unscanned for gendered pronouns** — the peer's fix made the
   beat arm live (it read a field that does not exist, so it scanned nothing, ever). GENDERED
   never covered authored beats. Do NOT close by raising the 202 ceiling — that blesses rot;
   scan, read a sample, degender offline, then ceiling the ambiguous remainder.
   📌 **DON'T WRITE A NEW SCAN — the discriminator already exists and already runs** (2026-09-21). `curatedBeatSource.beatRegister` classifies a beat `spectator` when `PLAYER_PRONOUN = /\b(?:he|him|his)\b/i` appears in a SENTENCE that also names a colour — deliberately sentence-scoped so a historical aside ("Fischer and his 1972 match") is not swept up with "…and HE takes away Black's pin". That is exactly the distinction C15b needs, written and in production. A fresh grep for he/his would re-derive it worse, and would conflate the two cases the register rule keeps apart: "White develops the knight" is CORRECT for Watch, a gendered pronoun standing for a PLAYER never is.
   📌 **AND THE LIVE BLAST RADIUS IS ALREADY ZERO.** Those beats are `spectator`, and `curatedBeatAt` takes the surface's register as a REQUIRED parameter and refuses them on live boards. So this is not rot reaching a student mid-game — it is rot in the WATCH register, where the beat is otherwise correct. That bounds the item: measure with `beatRegister`, count only the beats whose spectator verdict comes from the pronoun clause rather than from theatre or own-side, and degrade THOSE offline. Ceiling the ambiguous remainder, never the whole count
-- ✅ 11e the test-type-error ceiling 236 → **0**, now a hard gate — see §6 for the shapes and the two dead/red gates it exposed.
-- ✅ **FIXED + VERIFIED ON PROD — A STALE CHUNK NOW 404s. (Was: it returned `200 text/html`, AND THAT IS WHY THE iPHONE REPORT NAMED NO SERVER ERROR** (measured on prod 2026-09-21). Vercel serves the SPA fallback for any unmatched path, so a hashed asset from a previous deploy comes back `HTTP/2 200 · content-type: text/html` while a live one is `application/javascript`. Verified on `web-BITZqWmZ.js` (previous build → HTML) vs `web-7Ov3xJEz.js` (current → JS), and on an entry chunk two deploys old (HTML). **The user-visible form is `Unexpected token '<'` / "Load failed"** — which is exactly `lichess-error TypeError: Load failed` and `stockfish-error` from David's device, and nothing in it names a 404, which is why it took a device to find. Consequence: the precache is the ONLY thing keeping a running page's chunks alive after a deploy, so the handover gate is load-bearing rather than belt-and-braces.
-  ✅ **FIXED AT THE ROUTE (2026-09-21).** `vercel.json`'s catch-all was `/((?!api/).*)` → `/index.html`, which answered a missing hashed chunk with the app shell. It is now `/((?!api/|assets/).*)`, so a chunk the deploy no longer serves **404s honestly**. Existing assets are untouched — Vercel serves a matching static file before consulting rewrites, so this changes only what happens when the file is genuinely gone. Both are failures; only one is HONEST: a 404 is detectable by the app, by the service worker, and by an audit's ordinary `status >= 400` check, while HTML-pretending-to-be-JS is detectable by none of them — the two-deploy audit written to hunt this exact class watched `status >= 400` and was structurally blind to it. Gate: `src/test/assetsNeverFallBackToHtml.test.ts`, negative-controlled (the old pattern fails it with the reason). ⚠️ **Verification is a PROD curl after the deploy** — a bogus `/assets/x-deadbeef.js` must 404 and a deep route like `/coach/review` must still return the shell; recorded when run
-  ✅✅ **VERIFIED ON PROD (2026-09-21, build `7e04638`)** — all three cases, which is the point: narrowing a catch-all is only safe if the things it still needs to catch still match.
-```
-bogus /assets/x-deadbeef00.js   404  text/plain          (was 200 text/html)
-deep route /coach/review        200  text/html           unchanged — deep links intact
-the real current entry chunk    200  application/javascript  unchanged
-```
-  🔴 **AND IT COST A BLOCKED DEPLOY ON THE WAY — my error, recorded because the lesson is the file's own.** The first attempt documented the exclusion with a `_comment` array INSIDE the rewrite object. `JSON.parse` accepted it, the new gate accepted it, and Vercel ERRORED the build: *``rewrites[4]` should NOT have additional property `_comment``*. Prod stayed pinned on `23acc04c2` for ~20 minutes and no session could deploy. My validation had answered "is this valid JSON?" when the question was "is this valid vercel.json?" — a NEARBY question, confidently answered, committed while writing a gate about that exact disease. **The nine-second check that settles it: `npx vercel build --prod` exits 0 or names the schema error.** The gate now also asserts no rewrite carries a key outside `source|destination|has|missing|statusCode`, because the asymmetry matters: a wrong PATTERN ships and misroutes, a wrong KEY refuses to ship and blocks everyone.
-  📌 **`__BUILD_ID__` IS THE DEPLOY-IDENTITY CHECK, better than any marker string.** It is literally `<sha>+<ms>` (`vite.config.ts:21`) and is inlined into a shipped chunk, so *"is my commit live?"* is one grep: `curl -s <entry>.js | grep -oE '"[0-9a-f]{7,9}\+1[0-9]{12}"'`. That is how the blocked deploy was caught — the bundle hash had moved, which looks like a deploy, while the build id still read `23acc04`
-  🔴 **AND IT EXPOSED A HOLE IN MY OWN NEW AUDIT, twice.** `audit-sw-two-deploy-prod` watched `status >= 400`, which this can NEVER trip — so "no hashed asset failed after the deploy" passed partly because it could not see the real failure mode. Worse, the retry discriminator (built with the peer to separate a real casualty from CPU starvation) read "200 on retry = starvation" — and a stale chunk retries 200 FOREVER, so it would have called every genuine casualty starvation and moved on. Both fixed: the signature is CONTENT-TYPE, and the discriminator is now 200-AND-EXECUTABLE. **The 5/5 run stands but is weaker than it read** — it proved no 4xx and no request failure; it did not prove no HTML-for-JS. That re-runs.
-- ✅ **ANSWERED — the entry hash moves on EVERY build BY CONSTRUCTION, and the negative control CANNOT EXIST** (2026-09-21). `vite.config.ts:21` — `const ms = Date.now(); return sha ? \`${sha}+${ms}\` : …` — bakes a MILLISECOND TIMESTAMP into `__BUILD_ID__`, which `appAuditor.ts:971` reads, so it is inlined into a shipped chunk. Confirmed in the live bundle: `"ce49648+1789993608747"`. That chunk's hash therefore differs on every build, and the entry — which embeds its dependency FILENAMES in `__vite__mapDeps` (the byte-70 diff) — is renamed with it. **So 3-of-3 was not a pattern awaiting more data; it is a proof by construction.** "Assume any push swaps the bundle for every live session" is a theorem, not a working rule, and the control I was holding out for is impossible — exactly as the peer predicted when they said to look at what feeds the hash before spending four deploys hunting one.
-  🟠 **AND IT COMPOSES WITH THE 200-text/html FINDING INTO SOMETHING WORTH DAVID'S ATTENTION.** Every push renames every chunk; a renamed chunk's predecessor is served as SPA-fallback HTML rather than 404; so every push leaves every live session one lazy fetch away from `Unexpected token '<'`, with the precache as the only thing in between. Also: `+${ms}` means the SAME commit rebuilt produces a DIFFERENT bundle, so a redeploy or a retry busts every user's cache for no content change. Dropping the timestamp and keeping the sha would make builds reproducible per commit — NOT changed here: it is build config, it affects OTA identity, and it is his call rather than a 4am edit
-- ✅ **The observation that started it, kept for its evidence and DEMOTED because the line above settles it.** `0863ced7c..0adb4c90a` touched only `.md`, two `scripts/*.mjs` and one `.test.ts`, and `index-CL9P6Cc6.js` → `index-BGt0uyLR.js` with `sw.js` md5 `5d5bc0fc…` → `75c244b2…` anyway. 🔴 **Its "TO SETTLE IT: capture three or four more deploys" is DELETED, not annotated** — that plan was written before the cause was found, and it sends the next reader to spend four deploys on a control that `Date.now()` makes impossible. **THE COST QUESTION SURVIVES AND IS DAVID'S:** every push re-downloads the ~8.6 MB entry for every WEB reader and every OTA recipient, docs-only pushes included. Native App Store users are unaffected while the bundle is local (`capacitor.config.ts` `webDir: 'dist'`), and this is a DIFFERENT question from §6 item 3, which closed the MEMORY/parse concern and said nothing about transfer
-- 🟠 **G1's "verify the bundle hash advanced past your push" is weaker than it reads — FOR DAVID TO DECIDE, not to be edited into CLAUDE.md by a session.** It was written for STALENESS and it answers that correctly. But two sessions read it tonight as "my code is live" and reached opposite wrong conclusions within ten minutes, and the finding above shows the signal cannot support that reading at all. The check that does: grep the live chunk for a string only the new build contains, AND for the string it replaced. Recorded here so the decision is his
-- ✅ E2 the two-deploy service-worker check — **RAN AND PASSED 5/5 on prod 2026-09-21**; see §6 for the run and for the finding that every deploy (docs-only included) offers a live session a new worker.
-- ✅ **ONE CORPUS SOURCE — the seven farmed creators are GONE** (David 2026-09-21, emphatic: "there are only one source of corpus notes. and its the danya ones that we have tied exactly to positions. nothing else!"). Removed chessbrah, hangingpawns, saintlouis, gothamchess, hikaru, imrosen, magnuscarlsen — **47,831 notes**, their files, the `chessbrahTeachingService` binding and a vite chunk rule for a file that no longer exists. MEASURED BEFORE DELETING, not after: **zero of the 47,831 carry a position**; 16,298 are reachable by opening NAME, 47,831 by CONCEPT. What remains is danya (122 positioned + 9,928 floating) and the hand-authored VOICED corpus (7,477, every one exact-position). **Endgame teaching kept and PROVEN**, not assumed: `endgameNoteForLesson` → `conceptNotesFor` reads the PRIMARY concept index and never touched the seven, danya carries 959 endgame notes of its own, and the endgame card still renders a real corpus note. Floors lowered with the reason in each comment (a floor going DOWN is normally the bug, so it is only honest when the SOURCE shrank on purpose): tactic-lane reach 29,000 → 4,800 (measures 4,925), board-concept 30,000/18,000 → 9,000/2,900 (10,405 / 2,995), three non-vacuity floors 20,000 → 15,000. Dropped `relative-pin` from the tactic vocabulary — it lived only in the removed corpora, and a dead tag is fake coverage
-- 🟡 **COULD THE REMOVED NOTES COME BACK AS POSITION-KEYED? Measured, and the answer is no** (2026-09-21, asked because "we cant use it if we dont know where it goes"). Of the 47,831: 13,888 have an opening tag that resolves in the DB **and** name a move; **524 (1.1%) provably anchor to exactly one ply**; 1,394 are ambiguous; and **11,970 fit NO ply at all** — the moves their own prose names are not legal anywhere on the spine of the opening they are tagged with. Not un-positioned teaching about a known line: loosely associated essays whose own moves do not fit their own tag. 524 recoverable against a voiced corpus of 7,477 already exact is not worth an anchoring pass. Closed on the number, not on taste
-- 🟡 **THE GAP/SUPPORT TIER AND THE HANDWRITTEN-SPOKEN LAYER ARE DORMANT** (David's call: "dormant"). Both match by opening NAME, which only ever worked because the seven carried tags; voiced notes are `opening: null` by design, so both return honest empties. The code stays, with the failure mode named in it: a future session reads a coverage number, finds them returning nothing, and "fixes" it by registering another creator — which re-opens name-based selection, the exact subject of the 2026-08-04 determinism lock. Coverage grows by VOICING more position-keyed notes, never by loosening selection
-- ✅ **LEARN AUDIT ROW C PASSES — 15/15 on a TAPE-CLEAN run** (2026-09-21, bundle `T8DVEfgf` stamped at both ends and held). The game reached **ply 5** and the invariant spoke: *"Careful — your queen on d5 is attacked and nothing's defending it. There's a pin here for you — have a look. Remember — a pin freezes the piece in front…"* ⚠️ **NO CAUSE IS CLAIMED.** The earlier reading — two runs stalling at ply 4 on `ce49648`, recorded as REPRODUCIBLE — does not reproduce on this bundle, and I am not asserting what changed. What the symptom actually was: the driver waits 90s for a coach reply and gives up (`[stall] no coach reply after …`), so it is a reply-LATENCY question, never a concept one — the computers were green throughout. If it returns, read the stall line before touching product code
+=======
+- 🟠 **A DEPLOY WITH ZERO BUNDLED CHANGES STILL EMITTED A NEW ENTRY HASH — so the hash is not a CONTENT detector** (measured once, 2026-09-21, n=1). `0863ced7c..0adb4c90a` touched only `.md`, two `scripts/*.mjs` and one `.test.ts`; `index-CL9P6Cc6.js` → `index-BGt0uyLR.js` and `sw.js` md5 `5d5bc0fc…` → `75c244b2…` anyway. **What that DOES prove:** identical client content does not imply an identical hash, so a changed hash carries no information about what the client will run — only that a build happened. **What it does NOT prove is "every deploy"**: one observation disproves the implication, it does not establish the general rule, and an earlier note of mine that said "EVERY deploy offers every live session a new worker" overstated exactly that — corrected here rather than left standing. TO SETTLE IT: capture entry-hash + `sw.js` md5 across the next three or four deploys, at least one of them genuinely bundle-identical. **WHY IT MATTERS, scoped honestly:** if it generalises, every push re-downloads the ~8.6 MB entry for every WEB reader and every OTA recipient, docs-only pushes included — a cost question for David, and a different question from §6 item 3 (which closed the MEMORY/parse concern, not the transfer one). Native App Store users are unaffected while the bundle is local (`capacitor.config.ts` `webDir: 'dist'`)
+- ✅ **G1's bundle-hash rule REPLACED in CLAUDE.md, on David's call (2026-09-21).** It was written for STALENESS and answers that correctly; it cannot answer "is my code live", and two sessions read it as if it could and reached opposite wrong conclusions ten minutes apart. The check that does answer it is now written in: grep the deployed chunk for a string only the NEW build contains **and** for the string it REPLACED — both halves, because finding the new one proves your code shipped and failing to find the old one proves you are not reading a copy that contains both. With a worked snippet, and the warning to pick a string that survives minification. The hash keeps its original staleness job
+>>>>>>> origin/main

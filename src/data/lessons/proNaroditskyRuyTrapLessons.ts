@@ -111,7 +111,7 @@ const D6_STEINITZ_BXC6: LessonScript = {
       say: "...d6 — Steinitz Deferred. 22 opponents played this including LudwigVanBendOver (2997). The structural conversion runs from here.",
       sayShort: '...d6 — Steinitz Deferred.' }),
     b({ id: 'ruy-d6-trade', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 Bxc6+ bxc6', highlights: [H('c6', KEY)],
-      say: "Bxc6+ ...bxc6 — White trades the bishop with check. Black is FORCED to recapture with the b-pawn (cxc6 is impossible). Now Black has doubled c-pawns AND a half-open b-file pointing toward his queenside.",
+      say: "Bxc6+ ...bxc6 — White trades the bishop with check. Black is FORCED to recapture with the b-pawn (cxc6 is impossible). Now Black has doubled c-pawns AND a half-open b-file pointing toward their queenside.",
       sayShort: 'Bxc6+ ...bxc6 — doubled b-pawns.' }),
     b({ id: 'ruy-d6-cash', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 Bxc6+ bxc6 d4 f6 O-O', highlights: [H('g1', SOFT), H('c6', KEY)],
       say: "d4 ...f6 O-O — White expands the centre, Black plays the awkward ...f6 to support e5, you castle. The structural edge converts: Black's pawns are awful, White's pieces have clean squares.",

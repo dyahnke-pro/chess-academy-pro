@@ -11,7 +11,7 @@ vi.mock('./openingDetectionService', async (importOriginal) => ({
 }));
 
 import { analyzeGameOnWorker, WorkerWedgedError } from './gameAnalysisService';
-import { buildGameRecord } from '../test/factories';
+import { buildGameRecord, buildEngineAnalysis } from '../test/factories';
 
 // R1 (David 2026-09-01) — "analysis stalls at 1/629, Stop works but the loop
 // doesn't advance." A worker iOS killed keeps timing out on every position, so a
@@ -23,12 +23,12 @@ import { buildGameRecord } from '../test/factories';
 const GAME = buildGameRecord({ pgn: '1.e4 e5 2.Nf3 Nc6 3.Bb5 a6 4.Ba4 Nf6 1-0' });
 
 /** A fake DedicatedWorker: `analyzePosition` runs the supplied per-call script. */
-function fakeWorker(script: () => Promise<{ evaluation: number; bestMove: string; depth: number }>) {
+function fakeWorker(script: () => Promise<ReturnType<typeof buildEngineAnalysis>>) {
   return { analyzePosition: vi.fn(script), destroy: vi.fn(), newGame: vi.fn() } as never;
 }
 
 const timeout = () => Promise.reject(new Error('Analysis timed out'));
-const ok = () => Promise.resolve({ evaluation: 20, bestMove: 'e2e4', depth: 16 });
+const ok = () => Promise.resolve(buildEngineAnalysis({ evaluation: 20, bestMove: 'e2e4', depth: 16 }));
 
 describe('analyzeGameOnWorker — wedged-worker guard (R1)', () => {
   it('throws WorkerWedgedError after 3 consecutive position timeouts', async () => {

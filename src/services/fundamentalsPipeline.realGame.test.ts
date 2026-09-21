@@ -124,8 +124,53 @@ beforeEach(async () => {
 // ─── THE MEASUREMENT (skips without the gitignored corpus) ───────────────────
 
 const CORPUS_DIR = 'data/sources/wo4-corpus';
+/** The script that REBUILDS the corpus. Asserted below — see the note there. */
+const PRODUCER = 'scripts/build-wo4-corpus.mjs';
 const SHALLOW = `${CORPUS_DIR}/annotated-d12.json`;
 const DEEP = `${CORPUS_DIR}/annotated-d18.json`;
+
+// 🔒 A SILENT SKIP IS A SILENT NULL (2026-09-21).
+//
+// The measurement below is gated on gitignored research data, which is right —
+// a 47-game engine-annotated corpus does not belong in git. What was wrong is
+// that its absence was INVISIBLE: the run printed `3 passed | 1 skipped`, a
+// line that reads as green at a glance, and for a while the corpus was not
+// merely absent but UNREPRODUCIBLE — `grep -r wo4-corpus` found this file and
+// nothing else, so the WO-4 numbers rested on data nobody could rebuild.
+//
+// Two things fix that, and only the second is a gate:
+//   1. `scripts/build-wo4-corpus.mjs` now PRODUCES the corpus (47 amateur
+//      games off chess.com's public API, engine-annotated at d12 and d18 with
+//      the app's own Stockfish 18 WASM build, deterministic selection).
+//   2. The test below ASSERTS THAT PRODUCER EXISTS, on every run, corpus or
+//      no corpus. A measurement whose inputs cannot be regenerated is not a
+//      measurement, and this is what stops that state coming back.
+describe('WO-4 measurement — reproducibility of the corpus', () => {
+  it('a producer exists, so the numbers can always be re-derived', () => {
+    expect(
+      existsSync(PRODUCER),
+      `${PRODUCER} is missing. The 47-game measurement below depends on gitignored `
+      + `research data; without a producer those numbers can never be re-measured or `
+      + `audited, which is how they sat unreproducible until 2026-09-21.`,
+    ).toBe(true);
+  });
+
+  it('says out loud whether the corpus is actually present', () => {
+    const present = existsSync(SHALLOW);
+    if (!present) {
+      // Printed, not failed: a contributor without the gitignored data should
+      // not get a red suite. But they must not get a silent skip either.
+      console.warn(
+        `\n  ⚠️  WO-4 MEASUREMENT SKIPPED — ${SHALLOW} is absent.\n`
+        + `      The 3 gate tests above still ran; the 47-game numbers did NOT.\n`
+        + `      Rebuild it:  node ${PRODUCER} --fetch\n`
+        + `                   node ${PRODUCER} --annotate --depth 12\n`
+        + `                   node ${PRODUCER} --annotate --depth 18\n`,
+      );
+    }
+    expect(typeof present).toBe('boolean');
+  });
+});
 
 describe.skipIf(!existsSync(SHALLOW))('WO-4 measurement — the real 47-game amateur corpus through the real pipeline', () => {
   it('measures the `learned` gate and the attribution gap, and writes the report', async () => {
@@ -186,7 +231,26 @@ describe.skipIf(!existsSync(SHALLOW))('WO-4 measurement — the real 47-game ama
     const neverFired = FUNDAMENTAL_IDS.filter((id) => !byFundamental.has(id));
     const report = {
       generatedAt: new Date().toISOString(),
-      corpus: { source: 'lichess rated blitz/rapid, both players 1000–2000, fetched 2026-09-19', games: shallow.length, deepAvailable: deepAll.length, sweepDepth: 12, bestMoveDepth: deepAll.length ? 18 : 12 },
+      // 🔒 PROVENANCE IS DERIVED FROM THE CORPUS, NOT ASSERTED ABOUT IT
+      // (2026-09-21). This line was the hardcoded string "lichess rated
+      // blitz/rapid, both players 1000–2000, fetched 2026-09-19". The corpus
+      // it now describes is chess.com, 800–1794, fetched today — so the report
+      // stated, in its own header, a provenance its data did not have, and
+      // would have gone on doing so for every future rebuild. A report that
+      // misdescribes its own inputs is worse than no report: every number
+      // under it gets attributed to the wrong population.
+      corpus: {
+        source: 'see scripts/build-wo4-corpus.mjs — measured from the rows below, never hand-written',
+        games: shallow.length,
+        players: new Set(shallow.flatMap((g) => [g.white, g.black])).size,
+        eloRange: [
+          Math.min(...shallow.flatMap((g) => [g.whiteElo, g.blackElo])),
+          Math.max(...shallow.flatMap((g) => [g.whiteElo, g.blackElo])),
+        ],
+        deepAvailable: deepAll.length,
+        sweepDepth: 12,
+        bestMoveDepth: deepAll.length ? 18 : 12,
+      },
       tally,
       learnedGate: {
         note: 'autoAnalyzeGameMisconceptions hardcodes learned:false → every row is counted:false',

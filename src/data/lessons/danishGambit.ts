@@ -29,7 +29,7 @@ export const DANISH_GAMBIT_LESSON: LessonScript = {
     b({
       id: 'd5',
       moves: 'e4 e5 d4 exd4 c3 d5',
-      say: "…d5! is the great equalizer. Instead of greedily holding the extra pawn, Black hands it straight back to blunt White's attack and free his own pieces. The whole sting of the Danish — those raking bishops — never gets going.",
+      say: "…d5! is the great equalizer. Instead of greedily holding the extra pawn, Black hands it straight back to blunt White's attack and free their own pieces. The whole sting of the Danish — those raking bishops — never gets going.",
       sayShort: '…d5 — give the pawn back, defuse.',
       highlights: [H('d5')],
     }),

@@ -27,7 +27,7 @@ const NOA_LESSON: LessonScript = {
       sayShort: "…d5, cxd5 exd5 — target the d5-pawn.",
       highlights: [H('d5', ATK), H('b4', SOFT)] }),
     b({ id: 'nim-noa-2', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 exd5 Bg5 h6 Bh4 Nc6',
-      say: "You develop Bg5, and after h6 retreat to h4 — keeping the pin on the f6-knight, a key defender of d5. Black develops Nc6. You are steadily building pressure against the d5-pawn while your pieces come out with tempo. Black must stay accurate to hold his centre together.",
+      say: "You develop Bg5, and after h6 retreat to h4 — keeping the pin on the f6-knight, a key defender of d5. Black develops Nc6. You are steadily building pressure against the d5-pawn while your pieces come out with tempo. Black must stay accurate to hold their centre together.",
       sayShort: "Bh4 — keep the pin on d5's defender.",
       highlights: [H('h4', KEY), H('d5', ATK)] }),
     b({ id: 'nim-noa-3', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 exd5 Bg5 h6 Bh4 Nc6 e3 g5',

@@ -27,7 +27,7 @@ export const ANTI_ENGLUND_LESSON: LessonScript = {
       sayShort: "Bf4 — hold the pawn, develop.",
       highlights: [H('e5', KEY), H('f4', SOFT)] }),
     b({ id: 'eng2', moves: 'd4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2',
-      say: "Black lashes out — …Qb4+ and then grabs on b2, snatching a second pawn with the queen. It looks greedy because it IS greedy: that queen's now buried deep in your camp with no plan to get out. And you're about to make Black pay dearly for sending his most valuable piece off pawn-hunting.",
+      say: "Black lashes out — …Qb4+ and then grabs on b2, snatching a second pawn with the queen. It looks greedy because it IS greedy: that queen's now buried deep in your camp with no plan to get out. And you're about to make Black pay dearly for sending their most valuable piece off pawn-hunting.",
       sayShort: "…Qxb2? — the queen overreaches.",
       highlights: [H('b2', ATK)] }),
     b({ id: 'eng3', moves: 'd4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4 Rb1',

@@ -40,7 +40,7 @@ const QID_G3: SN = {
 // e.g. …Nf3 b6 a3 Bb7 / …Nf3 b6 Nc3 Bb7 / …Nf3 b6 e3 Bb7 — all reach …Bb7@7.
 const QID_BB7: SN = {
   intro: {
-    say: "However White shuffles his pieces in the …b6 Queen's Indian, your plan is the same — the light-square fianchetto. …Bb7 trains the bishop down the long diagonal at e4, the square the whole opening is fought over. You'll follow with …Be7, …O-O and the …d5 break, contesting the light squares White also craves. Solid, flexible, richly strategic.",
+    say: "However White shuffles their pieces in the …b6 Queen's Indian, your plan is the same — the light-square fianchetto. …Bb7 trains the bishop down the long diagonal at e4, the square the whole opening is fought over. You'll follow with …Be7, …O-O and the …d5 break, contesting the light squares White also craves. Solid, flexible, richly strategic.",
     sayShort: '…Bb7 — fianchetto, fight for e4.',
   },
   beats: [
@@ -53,7 +53,7 @@ const QID_BB7: SN = {
 //    storm vs White's queenside. All 5 systems share …Bg7@5. ──
 const KID_BG7_BEAT = { atMove: 5, say: "…Bg7 — the King's Indian bishop, fianchettoed onto the long diagonal where it bears down on d4 and White's whole centre. Everything flows from here: castle, strike the centre with …e5, and storm the kingside with …Nd7, …f5, …f4 while White plays on the other wing.", highlights: [H('g7', KEY), H('d4', SOFT)] };
 const KID_G3: SN = {
-  intro: { say: "g3 — the Fianchetto King's Indian, White's most positional try: he meets your fianchetto with his own, contesting the long diagonal. Don't be passive — complete the setup, castle, and hit the centre with …e5 or the …c5 break. A rich, double-edged strategic game where Black is fully sound.", sayShort: 'g3 — fianchetto, then …e5 or …c5.' },
+  intro: { say: "g3 — the Fianchetto King's Indian, White's most positional try: they meet your fianchetto with their own, contesting the long diagonal. Don't be passive — complete the setup, castle, and hit the centre with …e5 or the …c5 break. A rich, double-edged strategic game where Black is fully sound.", sayShort: 'g3 — fianchetto, then …e5 or …c5.' },
   beats: [KID_BG7_BEAT], sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
 };
 const KID_NF3: SN = {
@@ -61,7 +61,7 @@ const KID_NF3: SN = {
   beats: [KID_BG7_BEAT], sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
 };
 const KID_BE2: SN = {
-  intro: { say: "Be2 — the Classical King's Indian, the main battleground. White builds the broad d4-e4 centre and develops solidly. Castle, play the thematic …e5, and the lines are drawn: White pushes c5 and attacks the queenside, you hurl …f5-f4 and the pieces at his king. Trust the race — your attack usually arrives first.", sayShort: 'Be2 — Classical: …e5, then …f5-f4.' },
+  intro: { say: "Be2 — the Classical King's Indian, the main battleground. White builds the broad d4-e4 centre and develops solidly. Castle, play the thematic …e5, and the lines are drawn: White pushes c5 and attacks the queenside, you hurl …f5-f4 and the pieces at their king. Trust the race — your attack usually arrives first.", sayShort: 'Be2 — Classical: …e5, then …f5-f4.' },
   beats: [KID_BG7_BEAT], sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence'],
 };
 const KID_F3: SN = {
@@ -102,9 +102,9 @@ const GR_G3: SN = {
 // ── anti-KID Sämisch (student WHITE) — big f3/e4 centre, O-O-O, kingside storm.
 //    Nearly every Black try runs through f3@8. ──
 const SAEMISCH: SN = {
-  intro: { say: "The Sämisch King's Indian — your sharpest anti-KID weapon. Whatever Black plays in the tabiya, your plan is fixed: the broad f3/e4 centre, Be3 and Qd2, castle queenside, then roll g4-h4-h5 straight at his king. He counters in the centre or on the queenside; with the f3-pawn nailing down both g4 and e4, you race on the kingside and usually get there first.", sayShort: 'Sämisch — Be3, Qd2, O-O-O, g4 storm.' },
+  intro: { say: "The Sämisch King's Indian — your sharpest anti-KID weapon. Whatever Black plays in the tabiya, your plan is fixed: the broad f3/e4 centre, Be3 and Qd2, castle queenside, then roll g4-h4-h5 straight at their king. They counter in the centre or on the queenside; with the f3-pawn nailing down both g4 and e4, you race on the kingside and usually get there first.", sayShort: 'Sämisch — Be3, Qd2, O-O-O, g4 storm.' },
   beats: [
-    { atMove: 8, say: "f3 — the foundation of the Sämisch. It braces a massive e4-centre and clears the way for Be3, Qd2 and queenside castling. With the centre nailed down, your kingside pawns — g4, h4, h5 — come crashing toward Black's king while he's still arranging his counterplay.", highlights: [H('e4', KEY), H('f3', SOFT)] },
+    { atMove: 8, say: "f3 — the foundation of the Sämisch. It braces a massive e4-centre and clears the way for Be3, Qd2 and queenside castling. With the centre nailed down, your kingside pawns — g4, h4, h5 — come crashing toward Black's king while they're still arranging their counterplay.", highlights: [H('e4', KEY), H('f3', SOFT)] },
   ],
   sources: ['concept:pos-center', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Indian_Defence,_S%C3%A4misch_Variation'],
 };

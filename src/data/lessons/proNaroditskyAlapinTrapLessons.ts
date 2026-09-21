@@ -74,7 +74,7 @@ const NC3_QUEEN_TEMPO: LessonScript = {
       id: 'nc3-retreat',
       moves: 'e4 c5 c3 Nc6 d4 cxd4 cxd4 d5 exd5 Qxd5 Nf3 e6 Nc3 Qd8',
       highlights: [H('d8')],
-      say: "…Qd8 is the only safe square. The queen is back where she started, but you have two pieces developed and the c-file is wide open for your rook. Black has spent his entire opening just shuffling the queen back home — and that's how the Nc6 line scores 86.2% for you.",
+      say: "…Qd8 is the only safe square. The queen is back where she started, but you have two pieces developed and the c-file is wide open for your rook. Black has spent their entire opening just shuffling the queen back home — and that's how the Nc6 line scores 86.2% for you.",
       sayShort: '…Qd8 — back to start, two tempi lost.',
     }),
   ],

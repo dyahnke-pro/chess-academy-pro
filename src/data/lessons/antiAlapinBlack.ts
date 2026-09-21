@@ -22,11 +22,11 @@ export const ANTI_ALAPIN_BLACK_LESSON: LessonScript = {
   orientation: 'black',
   beats: [
     b({ id: 'alb1', moves: 'e4 c5 c3 Nf6',
-      say: "The Alapin plays c3 to prop up a big d4-centre while dodging the Open Sicilian. The most testing reply is …Nf6, smacking the e4-pawn right away. And that's the whole idea — you force White to commit, defend e4 or push it, before he's finished the setup he actually wants. From move two, YOU set the tempo.",
+      say: "The Alapin plays c3 to prop up a big d4-centre while dodging the Open Sicilian. The most testing reply is …Nf6, smacking the e4-pawn right away. And that's the whole idea — you force White to commit, defend e4 or push it, before he's finished the setup they actually want. From move two, YOU set the tempo.",
       sayShort: "…Nf6 — hit e4, force the issue.",
       highlights: [H('e4', ATK)] }),
     b({ id: 'alb2', moves: 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4',
-      say: "White pushes e5 and the knight bounces to d5 — a lovely central square. You hit the base with …cxd4 and develop …Nc6, leaning on d4 again. Sure, White's got his big centre — but you're chipping at it from both sides with active pieces. Healthy, dynamic, and completely balanced.",
+      say: "White pushes e5 and the knight bounces to d5 — a lovely central square. You hit the base with …cxd4 and develop …Nc6, leaning on d4 again. Sure, White's got their big centre — but you're chipping at it from both sides with active pieces. Healthy, dynamic, and completely balanced.",
       sayShort: "…cxd4, …Nc6 — chip at the centre.",
       highlights: [H('d5', KEY), H('d4', ATK)] }),
     b({ id: 'alb3', moves: 'e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6',

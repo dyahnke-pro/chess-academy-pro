@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4938 lines · 1 exports · 2 importers · 3 tests · 6 audits**
+**4948 lines · 1 exports · 2 importers · 3 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3637) — names `CoachGameReview`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3674) — names `CoachGameReview`
 
 ## Who calls in
 
@@ -27,6 +27,10 @@
 - `src/components/Coach/CoachReviewSessionPage.nonBlocking.test.tsx`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-back-from-review.mjs`
 - `scripts/audit-coach-full-game.mjs`

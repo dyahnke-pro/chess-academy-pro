@@ -435,7 +435,40 @@ interface Ctx {
    *  Same shape as `findTheoryDeparture`'s `diag` — a silent null must never be
    *  undiagnosable. Absent on every hot path; only a caller that asks pays. */
   why?: string[];
+  /** YIELDS MADE ON THIS PLY, so the framework can check they were HONOURED.
+   *  See `yieldTo`. Filled only when `why` is, for the same reason. */
+  deferrals?: Deferral[];
 }
+
+/** One detector standing down because it believes a sibling owns the moment. */
+interface Deferral {
+  /** Who stood down. */
+  from: FundamentalId;
+  /** Who it believes owns this. TYPED, so a yield naming a fundamental that
+   *  does not exist fails to COMPILE instead of yielding into the void. */
+  to: readonly FundamentalId[];
+  /** The detector's own words, for the `why` sink. */
+  reason: string;
+}
+
+/**
+ * WHO MAY OWN A MOMENT `calculation-depth` STANDS DOWN FROM — ONE list, read
+ * by the yield AND by the subsumption below.
+ *
+ * It was written twice and the copies disagreed, which is the whole bug: the
+ * detector declined on the PV's SHAPE ("the blow lands on move one, so a
+ * sibling owns this") while `attributePrinciples` subsumed on what ACTUALLY
+ * FIRED. The detector's copy ran first, so the conditional one never got to
+ * decide, and on a real prod review at ply 64 the coach stood down with *"the
+ * punishment Bd7+ is immediate — another fundamental owns it"* and nothing
+ * else fired. The student got nothing and the tape recorded a handoff that
+ * never happened. Two answers to one question, the stricter losing silently:
+ * exactly the duplicated-judgement the rot rule bans.
+ */
+const CALC_DEPTH_CLAIMANTS = [
+  'loose-piece', 'ignored-threat', 'passive-when-forcing-existed',
+  'poisoned-pawn', 'overvalued-attack',
+] as const satisfies readonly FundamentalId[];
 
 type Detector = (c: Ctx) => Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> | null;
 
@@ -443,6 +476,30 @@ type Detector = (c: Ctx) => Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> |
 function no(c: Ctx, id: FundamentalId, reason: string): null {
   c.why?.push(`${id}: ${reason}`);
   return null;
+}
+
+/**
+ * A detector STANDING DOWN because a sibling should own this moment.
+ *
+ * 🔒 AN UNCONDITIONAL YIELD IS A HOLE, NOT A HANDOFF (2026-09-21). A yield is
+ * now DATA the framework verifies rather than a silent `return null`:
+ *   • `to` is `readonly FundamentalId[]`, so a claimant that does not exist
+ *     fails to compile — the "yield naming no claimant" guard;
+ *   • `attributePrinciples` checks every yield against what actually fired and
+ *     reports an UNHONOURED one into the same `why` sink the 23%-bucket
+ *     measurement already reads.
+ *
+ * It still returns null, and that is deliberate: when the blow lands on the
+ * opponent's first move the student did not "stop calculating too early", they
+ * missed a one-move shot, and naming `calculation-depth` there would be a
+ * fluent lie about their thinking. Empty > generic > invented. What changes is
+ * that the silence is COUNTED instead of confident — so "no fundamental covers
+ * an immediate punishment" becomes a measured hole someone can decide to fill,
+ * rather than a sentence that sounds like it was handled.
+ */
+function yieldTo(c: Ctx, from: FundamentalId, to: readonly FundamentalId[], reason: string): null {
+  c.deferrals?.push({ from, to, reason });
+  return no(c, from, reason);
 }
 
 function att(id: FundamentalId, weight: number, evidence: Omit<PrincipleEvidence, 'counterfactualClean'>, facts: Record<string, string | number> = {}): Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> {
@@ -989,7 +1046,10 @@ const DETECTORS: Detector[] = [
     if (!pvP || pvP.length < 3) return no(c, 'calculation-depth', `punishing PV is ${pvP?.length ?? 0} plies, needs 3`);
     const firstForcing = pvP.findIndex((san) => isForcing(san));
     if (firstForcing < 0) return no(c, 'calculation-depth', `no forcing move anywhere in the PV (${pvP.slice(0, 4).join(' ')})`);
-    if (firstForcing < 2) return no(c, 'calculation-depth', `the punishment ${pvP[firstForcing]} is immediate (ply ${firstForcing + 1}) — another fundamental owns it`);
+    if (firstForcing < 2) {
+      return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,
+        `the punishment ${pvP[firstForcing]} is immediate (ply ${firstForcing + 1}) — another fundamental owns it`);
+    }
     return att('calculation-depth', 2, { squares: [last.to], moves: [pvP[firstForcing]], pvMoves: pvP.slice(0, firstForcing + 1) },
       { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1 });
   },
@@ -1121,7 +1181,7 @@ export function attributePrinciples(
     plyIndex: input.historySans.length, opening: input.historySans.length <= OPENING_PLIES,
     endgame: isEndgame(before), pvP: input.pvAfterPlayed, pvB: input.pvAfterBest,
     evalBefore: input.evalBefore, evalAfterPlayed: input.evalAfterPlayed,
-    ...(why ? { why } : {}),
+    ...(why ? { why, deferrals: [] } : {}),
   };
   const found: PrincipleAttribution[] = [];
   for (const d of DETECTORS) {
@@ -1147,13 +1207,58 @@ export function attributePrinciples(
   // reasoning error behind it is the second telling. Depth needs the blow to be
   // deep, so anything that names an immediate blow subsumes it; no-plan yields
   // to every concrete fundamental on the same move.
-  for (const concrete of ['loose-piece', 'ignored-threat', 'passive-when-forcing-existed', 'poisoned-pawn', 'overvalued-attack'] as const) {
+  for (const concrete of CALC_DEPTH_CLAIMANTS) {
     if (ids.has(concrete)) subsumed.add('calculation-depth');
   }
   if ([...ids].some((id) => id !== 'no-plan')) subsumed.add('no-plan');
+  // 🔒 WAS THE YIELD HONOURED? (2026-09-21 — see `yieldTo`.)
+  //
+  // A detector that stands down "because a sibling owns this" is making a
+  // PREDICTION, and until today nothing checked it. On a real prod review at
+  // ply 64 `calculation-depth` stood down for an immediate punishment and NONE
+  // of its claimants fired, so the ply went unattributed while the diagnostic
+  // tape read like the moment had been handled by someone else.
+  //
+  // This does not invent an attribution to fill the gap — naming
+  // `calculation-depth` on a one-move shot would be a fluent lie about the
+  // student's thinking (empty > generic > invented). It makes the hole SAY ITS
+  // OWN NAME, into the sink that already rides out on the `other` fallthrough,
+  // so "no fundamental covers an immediate punishment" is a number someone can
+  // act on instead of a silence nobody can see.
   const kept = found.filter((f) => !subsumed.has(f.id));
   const verified = kept.filter((f) => !f.coOccurrence);
   const pool = verified.length > 0 ? verified : kept.slice(0, 1);
+
+  // 🔒 WAS THE YIELD HONOURED? (2026-09-21 — see `yieldTo`.)
+  //
+  // A detector that stands down "because a sibling owns this" is making a
+  // PREDICTION, and until today nothing checked it. On a real prod review at
+  // ply 64 `calculation-depth` stood down for an immediate punishment and NONE
+  // of its claimants fired, so the moment went unnamed while the diagnostic
+  // tape read like a sibling had handled it.
+  //
+  // It does NOT invent an attribution to fill the gap: naming
+  // `calculation-depth` on a one-move shot would be a fluent lie about the
+  // student's thinking (empty > generic > invented). It makes the hole say its
+  // own name, into the sink that already rides out on the `other` fallthrough.
+  //
+  // 🚨 AND IT REPORTS THE TWO FACTS SEPARATELY, because the first draft
+  // conflated them and was wrong on its own first probe: it printed "so this
+  // ply is unattributed" on a ply that `same-piece-twice`, `tempo-handed` and
+  // `space-conceded` had all attributed. A yield can be unhonoured on a ply
+  // that is perfectly well covered by detectors it never named — that is a
+  // mis-stated CLAIMANT list, not a coverage hole, and the two want different
+  // fixes. So the line says whether the named claimants fired AND, separately,
+  // what (if anything) ended up speaking. Computed after `pool`, which is the
+  // only point where the second fact is actually known.
+  if (ctx.deferrals?.length) {
+    for (const d of ctx.deferrals) {
+      if (d.to.some((claimant) => ids.has(claimant))) continue;
+      const covered = pool.length > 0 ? `the ply still spoke via [${pool.map((f) => f.id).join(', ')}]` : 'and NOTHING else fired — the moment is unnamed';
+      why?.push(`${d.from}: YIELD UNHONOURED — stood down for [${d.to.join(', ')}], none fired; ${covered} (${d.reason})`);
+    }
+  }
+
   return pool.sort((a, b) => b.weight - a.weight || FUNDAMENTAL_IDS.indexOf(a.id) - FUNDAMENTAL_IDS.indexOf(b.id)).slice(0, ATTRIBUTION_MAX);
 }
 

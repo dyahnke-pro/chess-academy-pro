@@ -63,7 +63,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       moves: 'e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4',
       highlights: [{ square: 'd4', color: SOFT }],
       say:
-        "Black takes the bait: he wins the d4-pawn, and his queen lands on d4 in the centre. He's a clean pawn up. But look at his position — almost nothing developed, the queen sitting exposed in the middle of the board, the king still in the centre. You've traded a pawn for a massive head start.",
+        "Black takes the bait: they win the d4-pawn, and their queen lands on d4 in the centre. They're a clean pawn up. But look at their position — almost nothing developed, the queen sitting exposed in the middle of the board, the king still in the centre. You've traded a pawn for a massive head start.",
       sayShort: "Qxd4 — Black grabs the pawn.",
     }),
     b({
