@@ -223,6 +223,13 @@ let testTypeErrorRegression = 0;
 // orientation). If any of these fail, the build can't ship. If a non-gate
 // test fails, that's a separate problem the gate harness shouldn't gate.
 const GATE_TESTS = [
+  // 🔒 A NEW SERVICE WORKER MAY NEVER TAKE OVER A RUNNING PAGE. This gate
+  // existed and was never in the gate list — a wire that does not fire. It now
+  // reads the BUILT `dist/sw.js`, not just `vite.config.ts`, because
+  // vite-plugin-pwa forces skipWaiting/clientsClaim back on under autoUpdate,
+  // so the config can read as fixed and ship as broken. Safe here because the
+  // prod build runs BEFORE the content gates.
+  'src/test/swHandover.test.ts',
   // Board accuracy for corpus lines rewritten by hand out of the review
   // register (David 2026-09-12: "make sure the narrations match what is
   // being shown on the board"). Same contract as narrationAccuracy, applied
