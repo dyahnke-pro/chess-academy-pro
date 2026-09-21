@@ -66,9 +66,9 @@ describe('useOpeningProgress', () => {
           id: 'italian',
           name: 'Italian Game',
           variations: [
-            { name: 'Two Knights', pgn: '', annotations: [] },
-            { name: 'Giuoco Piano', pgn: '', annotations: [] },
-            { name: 'Evans Gambit', pgn: '', annotations: [] },
+            { name: 'Two Knights', pgn: '', explanation: '' },
+            { name: 'Giuoco Piano', pgn: '', explanation: '' },
+            { name: 'Evans Gambit', pgn: '', explanation: '' },
           ],
           linesPerfected: [0, 2],
         }),
@@ -85,7 +85,7 @@ describe('useOpeningProgress', () => {
         buildOpeningRecord({
           id: 'shrank',
           name: 'Old Opening',
-          variations: [{ name: 'v1', pgn: '', annotations: [] }],
+          variations: [{ name: 'v1', pgn: '', explanation: '' }],
           linesPerfected: [0, 1, 2, 3, 4],
         }),
       );
@@ -118,8 +118,8 @@ describe('useOpeningProgress', () => {
           id: 'italian-traps',
           name: 'Italian Game',
           trapLines: [
-            { name: 'Fried Liver Bait', pgn: '', annotations: [] },
-            { name: 'Legal Trap', pgn: '', annotations: [] },
+            { name: 'Fried Liver Bait', pgn: '', explanation: '' },
+            { name: 'Legal Trap', pgn: '', explanation: '' },
           ],
         }),
       );
