@@ -21,8 +21,26 @@ describe('critical-moment scan reaches the flagged plies', () => {
   it('the card mount yields the ply to the question plan (never two stops on one ply)', () => {
     const mount = SRC.indexOf('criticalDoneRef.current.add(atPly);');
     expect(mount).toBeGreaterThan(-1);
-    const after = SRC.slice(mount, mount + 1500);
-    expect(after).toContain('if (questionPlan.has(atPly)) return;');
-    expect(after.indexOf('if (questionPlan.has(atPly)) return;')).toBeLessThan(after.indexOf("register === 'ask'"));
+    // WIDE ENOUGH TO HOLD BOTH LANDMARKS. A fixed window is a property of
+    // this test, not of the code: at 1500 the ask-register sat at offset 1509
+    // and `indexOf` returned -1, so the ORDER assertion below compared against
+    // -1 and failed for a reason that had nothing to do with ordering. Any
+    // comment added near the guard could do that again — so the window is
+    // generous, and the assertions below still pin the real contract.
+    const after = SRC.slice(mount, mount + 4000);
+    // 🔴 THE MECHANISM CHANGED, THE INTENT DID NOT (2026-09-21). This asserted
+    // `if (questionPlan.has(atPly)) return;`. That bare `return` yielded the
+    // FORWARD as well as the beat — and the card it defers to opens LATER IN
+    // THE SAME FUNCTION, so the card never opened on that step and the walk
+    // stopped dead (parked at ply 67 of 69 for 350s in a prod audit, with the
+    // button still reading "playing"). The yield is now a GUARD around the beat
+    // (`if (!questionPlan.has(atPly)) { … }`) so the ply is still handed to the
+    // card, without consuming the step.
+    //
+    // What this test is FOR is unchanged and is what the two lines below pin:
+    // the ply is yielded, and the yield is decided BEFORE the ask register runs
+    // — never two stops on one ply.
+    expect(after).toContain('if (!questionPlan.has(atPly)) {');
+    expect(after.indexOf('if (!questionPlan.has(atPly)) {')).toBeLessThan(after.indexOf("register === 'ask'"));
   });
 });

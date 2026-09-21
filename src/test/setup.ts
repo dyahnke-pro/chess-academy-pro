@@ -182,6 +182,28 @@ beforeAll(() => {
     writable: true,
   });
 
+  // 🔴 NODE 26 SHIPS NO `localStorage` (added 2026-09-21). vitest warns at
+  // startup — "localStorage is not available because --localstorage-file was
+  // not provided" — and four `stockfishEngine` crash-hygiene tests were RED on
+  // main with `TypeError: Cannot read properties of undefined (reading
+  // 'getItem')`. That is the RUNTIME missing a browser global, not the engine
+  // being wrong: the multi-thread fallback flag is device-local crash hygiene
+  // that has to survive before Dexie is up, and in a browser it is always there.
+  //
+  // Conditional, exactly like AudioContext below, so a test that stubs its own
+  // (vi.stubGlobal) still wins.
+  if (typeof globalThis.localStorage === 'undefined') {
+    const store = new Map<string, string>();
+    (globalThis as Record<string, unknown>).localStorage = {
+      getItem: (k: string): string | null => store.get(k) ?? null,
+      setItem: (k: string, v: string): void => { store.set(k, String(v)); },
+      removeItem: (k: string): void => { store.delete(k); },
+      clear: (): void => { store.clear(); },
+      key: (i: number): string | null => [...store.keys()][i] ?? null,
+      get length(): number { return store.size; },
+    };
+  }
+
   // Stub AudioContext (needed for voiceService / soundService)
   const mockAudioBuffer = {
     duration: 1.0,
