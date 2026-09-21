@@ -35,7 +35,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ## 2. WO-LOOP-01 — prove the one-line definition on prod
 - ✅ Phases 0–4, **6/6 on prod** (run 5, bundle `index-BggLa4Jm`; re-proven run 6 with an exact same-ply control)
 - ✅ The five defects the instrument found, each gated: the review path never recorded · a game paired with itself · four seat resolvers ignoring the declared seat · the uncapped-facet path · GM games have nothing to record
-- 🔴 OWED-1 the `other` attribution gap — the loop's ceiling (see E-10)
+- 🟠 OWED-1 the `other` attribution gap — MEASURED on real users: the 150cp floor rejects **99 of 367** unnamed slips (27%) that carry a real engine eval, purely for being too cheap. Precision is carried by the PV SHAPE, not the cost, so lowering to ~100 is safer than it looks — **David's call**, recommendation: lower it (PLAN)
 - ✅ OWED-2 Learn's half on a prod tape
 - 🔴 OWED-3 **GREEN** — the coach going quiet when you improve. Not started; needs held evidence over days
 

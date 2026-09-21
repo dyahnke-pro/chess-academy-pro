@@ -291,6 +291,44 @@ noting alongside the funnel work: the students who import are the ones whose
 games land on the no-PV path.
 
 
+### OWED-1 / E-10 — THE 150cp FLOOR, MEASURED ON REAL USERS (2026-09-20)
+
+My E-10 reading found `calculation-depth` declining two engine-measured
+mistakes for being under its 150cp floor, and I called that a DIRECTION on
+n=7 rather than a number. PostHog gives the number. Unnamed (`other`) slips
+since the 2026-08-10 fix, real measured evals only (the 175/350 bucket rows
+excluded), 367 slips across 7 devices:
+
+| cpLoss band | unnamed slips |
+|---|---|
+| under 100 | 49 |
+| **100–149 — rejected by the floor** | **99** |
+| 150–299 | 126 |
+| 300+ | 93 |
+
+**The floor excludes 99 of 367 — 27% of the addressable unnamed population —
+purely for being "too cheap", while they are real engine-measured errors.**
+
+**The argument for lowering it to ~100, and the reason it is safer than it
+looks:** precision on this detector is carried by the PV SHAPE, not by the
+cost. A candidate must still have a punishing line of ≥3 plies with a forcing
+move at ply ≥2 — that is what makes it a calculation-depth failure rather than
+"a mistake that cost something". The floor is only a severity filter in front
+of it, so relaxing it admits candidates that must still pass the real test.
+
+**Why I have NOT changed it, and this is a decision rather than a task.** It
+is a shipped threshold on a live detector, the 27% is a population size and
+not a precision measurement, and I have no ground truth here on whether a
+120cp slip IS a calculation-depth failure — only that the detector never gets
+to ask. Lowering it trades silence for a risk of naming the wrong fundamental,
+and "empty > generic" is the standing tie-break. **David's call**, with my
+recommendation: lower to 100, because the PV gate is the real filter and a
+quarter of the population is currently unreachable.
+
+⚠️ **And it changes nothing for imported games either way** — the batch path
+carries no PV at all (bound recorded above), so `calculation-depth` cannot
+fire there whatever the floor is.
+
 ### `tactics-context-stale` — the count, finally read (2026-09-20)
 
 **0 stale, of 145 captured events.** Prod, muted, `audit-concept-gameplay`
