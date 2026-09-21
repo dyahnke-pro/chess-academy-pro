@@ -281,6 +281,7 @@ describe('reconstructMovesFromGame', () => {
           san: 'e4',
           evaluation: 0.3,
           bestMove: 'd4',
+          bestMoveEval: null,
           classification: 'good',
           comment: 'Test',
         },

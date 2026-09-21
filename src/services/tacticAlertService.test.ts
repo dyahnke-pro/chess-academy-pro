@@ -222,8 +222,8 @@ describe('tacticAlertService', () => {
         evaluation: 50,
         depth: 10,
         topLines: [
-          { moves: ['e2e4'], evaluation: 50 },
-          { moves: ['d2d4'], evaluation: 30 },
+          { rank: 1, moves: ['e2e4'], evaluation: 50 , mate: null },
+          { rank: 1, moves: ['d2d4'], evaluation: 30 , mate: null },
         ],
         isMate: false,
         mateIn: null,
@@ -237,8 +237,8 @@ describe('tacticAlertService', () => {
         evaluation: 300,
         depth: 10,
         topLines: [
-          { moves: ['e2e4'], evaluation: 300 },
-          { moves: ['d2d4'], evaluation: 50 },
+          { rank: 1, moves: ['e2e4'], evaluation: 300 , mate: null },
+          { rank: 1, moves: ['d2d4'], evaluation: 50 , mate: null },
         ],
         isMate: false,
         mateIn: null,
@@ -253,8 +253,8 @@ describe('tacticAlertService', () => {
         evaluation: 300,
         depth: 10,
         topLines: [
-          { moves: ['e2e4'], evaluation: 300 },
-          { moves: ['d2d4'], evaluation: 50 },
+          { rank: 1, moves: ['e2e4'], evaluation: 300 , mate: null },
+          { rank: 1, moves: ['d2d4'], evaluation: 50 , mate: null },
         ],
         isMate: false,
         mateIn: null,

@@ -20,6 +20,8 @@ import type {
   CommonMistake,
   CheckpointQuizItem,
   SetupPuzzle,
+  MoveAnnotation,
+  AnalysisLine,
 } from '../types';
 import type { MoveResult } from '../hooks/useChessGame';
 
@@ -511,6 +513,49 @@ export function buildMoveResult(overrides?: Partial<MoveResult>): MoveResult {
     history: ['e4'],
     moveNumber: 1,
     turn: 'b',
+    ...overrides,
+  };
+}
+
+/**
+ * A `MoveAnnotation` as the review pipeline persists it.
+ *
+ * `bestMoveEval` is REQUIRED and nullable — "the engine did not report one"
+ * (null) and "this annotation predates the field" are different facts, and the
+ * review's accuracy and missed-opportunity surfaces read it. Six test sites
+ * were still writing the pre-`bestMoveEval` shape; a fixture that omits a
+ * required field type-errors, and one that DEFAULTS it to a number would be
+ * worse — it would make every test look like the engine had an opinion.
+ * So the default here is null: honestly absent.
+ */
+export function buildMoveAnnotation(overrides?: Partial<MoveAnnotation>): MoveAnnotation {
+  return {
+    moveNumber: 1,
+    color: 'white',
+    san: 'e4',
+    evaluation: 20,
+    bestMove: 'e2e4',
+    bestMoveEval: null,
+    classification: 'good',
+    comment: null,
+    ...overrides,
+  };
+}
+
+/**
+ * An `AnalysisLine` (one Stockfish PV) with `rank` and `mate` present.
+ *
+ * `mate` defaults to null rather than 0 — 0 would read as "mate in zero",
+ * which is a claim, where null is the absence of one. `rank` defaults to 1
+ * because a fixture with no rank is almost always standing in for the engine's
+ * best line.
+ */
+export function buildAnalysisLine(overrides?: Partial<AnalysisLine>): AnalysisLine {
+  return {
+    rank: 1,
+    evaluation: 20,
+    moves: ['e2e4'],
+    mate: null,
     ...overrides,
   };
 }
