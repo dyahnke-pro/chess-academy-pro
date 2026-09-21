@@ -139,7 +139,7 @@ describe('a fresh plan search self-limits', () => {
 
   it('uses the budgeted search, never the unbounded one', async () => {
     getCachedStockfish.mockReturnValue(undefined);
-    analyzeWithBudget.mockResolvedValue(analysis({ bestMove: 'e2e4', topLines: [{ moves: ['e2e4', 'e7e5'], evaluation: 30, mateIn: null }] }));
+    analyzeWithBudget.mockResolvedValue(analysis({ bestMove: 'e2e4', topLines: [{ rank: 1, moves: ['e2e4', 'e7e5'], evaluation: 30, mate: null }] }));
     const plan = await buildEnginePlan(START, 'white');
     expect(analyzePosition, 'the unbounded search is back').not.toHaveBeenCalled();
     expect(analyzeWithBudget).toHaveBeenCalled();
@@ -148,7 +148,7 @@ describe('a fresh plan search self-limits', () => {
 
   it('passes a real budget, so the search can stop itself', async () => {
     getCachedStockfish.mockReturnValue(undefined);
-    analyzeWithBudget.mockResolvedValue(analysis({ bestMove: 'd2d4', topLines: [{ moves: ['d2d4'], evaluation: 20, mateIn: null }] }));
+    analyzeWithBudget.mockResolvedValue(analysis({ bestMove: 'd2d4', topLines: [{ rank: 1, moves: ['d2d4'], evaluation: 20, mate: null }] }));
     await buildEnginePlan(START, 'white');
     const budget = analyzeWithBudget.mock.calls[0]?.[2];
     expect(typeof budget).toBe('number');
@@ -158,7 +158,7 @@ describe('a fresh plan search self-limits', () => {
 
   it('honours a caller-supplied budget', async () => {
     getCachedStockfish.mockReturnValue(undefined);
-    analyzeWithBudget.mockResolvedValue(analysis({ bestMove: 'd2d4', topLines: [{ moves: ['d2d4'], evaluation: 0, mateIn: null }] }));
+    analyzeWithBudget.mockResolvedValue(analysis({ bestMove: 'd2d4', topLines: [{ rank: 1, moves: ['d2d4'], evaluation: 0, mate: null }] }));
     await buildEnginePlan(START, 'white', 900);
     expect(analyzeWithBudget.mock.calls[0]?.[2]).toBe(900);
   });
@@ -171,7 +171,7 @@ describe('a fresh plan search self-limits', () => {
     // (0.5)" five moves into a game the engine scored as Black winning by 2.9
     // (2026-08-16 coach-tab audit). The stamp is what lets coachService DROP a
     // stale plan at selection instead of narrating it.
-    getCachedStockfish.mockReturnValue(analysis({ bestMove: 'g1f3', topLines: [{ moves: ['g1f3'], evaluation: 15, mateIn: null }] }));
+    getCachedStockfish.mockReturnValue(analysis({ bestMove: 'g1f3', topLines: [{ rank: 1, moves: ['g1f3'], evaluation: 15, mate: null }] }));
     const plan = await buildEnginePlan(START, 'white');
     expect(plan?.fen).toBe(START);
   });
@@ -179,7 +179,7 @@ describe('a fresh plan search self-limits', () => {
   it('still prefers the cache and searches nothing when it hits', async () => {
     // The property the "two best moves" fix turned on: a warm board must not
     // pay for a second opinion that can disagree with the eval bar.
-    getCachedStockfish.mockReturnValue(analysis({ bestMove: 'g1f3', topLines: [{ moves: ['g1f3'], evaluation: 15, mateIn: null }] }));
+    getCachedStockfish.mockReturnValue(analysis({ bestMove: 'g1f3', topLines: [{ rank: 1, moves: ['g1f3'], evaluation: 15, mate: null }] }));
     const plan = await buildEnginePlan(START, 'white');
     expect(analyzeWithBudget, 'searched despite a cache hit').not.toHaveBeenCalled();
     expect(analyzePosition).not.toHaveBeenCalled();

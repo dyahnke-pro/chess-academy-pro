@@ -14,7 +14,12 @@ import { secondaryNotesForFen, warmSecondaryPositionIndexSync } from './secondar
 // lookups (`noteAtPosition` chains primary→secondary; `secondaryNotesForFen` is
 // the secondary FEN index). `notesForFen`/`notesForPrefix` are the primary index,
 // now legitimately anchored-empty.
-interface Note { id: string; lineSan: string[]; plans: string; opening?: string | null }
+// `studentSide` mirrors the product's own `DanyaNote.studentSide` (the SEAT
+// the prose was authored from). The voiced JSON carries it, and every
+// `noteAtPosition` call below must pass the note's OWN seat — served to the
+// other seat the note is correctly refused, so omitting it made these
+// lookups fail for a reason that has nothing to do with what they assert.
+interface Note { id: string; lineSan: string[]; plans: string; opening?: string | null; studentSide?: 'white' | 'black' }
 const voiced = JSON.parse(readFileSync('public/data/voiced-teachings.json', 'utf8')) as { notes: Note[] };
 const positioned = voiced.notes.filter((n) => n.lineSan.length > 0);
 
