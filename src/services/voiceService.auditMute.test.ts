@@ -73,11 +73,14 @@ describe('the mute cannot be lost under storage pressure (2026-09-06: 60 billed 
     // a working store, not the runtime's. Rotted on a Node upgrade and stayed
     // rotted because this gate has never been in GATE_TESTS.
     const store = new Map<string, string>();
-    const realLs = (globalThis.localStorage ?? {
+    const realLs: Storage = globalThis.localStorage ?? ({
       getItem: (k: string) => store.get(k) ?? null,
-      setItem: (k: string, v: string) => { store.set(k, String(v)); },
+      // `v` is already a string — String(v) is a no-op the linter rejects as
+      // an error (npm run lint runs --report-unused-disable-directives, so
+      // this class is a HARD error, not a warning a bare `npx eslint` shows).
+      setItem: (k: string, v: string) => { store.set(k, v); },
       removeItem: (k: string) => { store.delete(k); },
-    }) as Storage;
+    } as Storage);
     // First read throws (locked-down / wedged context) …
     Object.defineProperty(globalThis, 'localStorage', { configurable: true, get() { throw new Error('storage unavailable'); } });
     const { voiceService } = await import('./voiceService');
