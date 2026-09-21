@@ -75,7 +75,7 @@
 - `src/services/principleAttribution.section14.test.ts:86`
 
 ### `attributePrinciples` (function) — 43 call sites
-- `src/services/coachFeatureService.ts:1445`
+- `src/services/coachFeatureService.ts:1451`
 - `src/services/learnFundamentalNarration.ts:143`
 - `src/services/misconceptionClassifier.ts:261`
 - `src/services/principleAttribution.section14.test.ts:22`
@@ -124,8 +124,8 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:89`
 - `src/services/autoAnalyzeGame.ts:285`
 - `src/services/autoAnalyzeGame.ts:288`
-- `src/services/coachFeatureService.ts:1449`
-- `src/services/coachFeatureService.ts:1451`
+- `src/services/coachFeatureService.ts:1455`
+- `src/services/coachFeatureService.ts:1457`
 - `src/services/learnFundamentalNarration.ts:133`
 - `src/services/learnFundamentalNarration.ts:140`
 - `src/services/principleAttribution.test.ts:46`
