@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1143 lines · 11 exports · 31 importers · 17 tests · 1 audits**
+**1173 lines · 11 exports · 31 importers · 17 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -68,26 +68,28 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planTargets` (function) — 2 call sites
-- `src/services/principleAttribution.section14.test.ts:83`
-- `src/services/principleAttribution.section14.test.ts:95`
+- `src/services/principleAttribution.section14.test.ts:110`
+- `src/services/principleAttribution.section14.test.ts:122`
 
 ### `planHeadline` (function) — 1 call site
-- `src/services/principleAttribution.section14.test.ts:86`
+- `src/services/principleAttribution.section14.test.ts:113`
 
-### `attributePrinciples` (function) — 43 call sites
+### `attributePrinciples` (function) — 45 call sites
 - `src/services/coachFeatureService.ts:1451`
 - `src/services/learnFundamentalNarration.ts:143`
 - `src/services/misconceptionClassifier.ts:261`
 - `src/services/principleAttribution.section14.test.ts:22`
 - `src/services/principleAttribution.section14.test.ts:30`
-- `src/services/principleAttribution.section14.test.ts:34`
-- `src/services/principleAttribution.section14.test.ts:35`
-- `src/services/principleAttribution.section14.test.ts:60`
-- `src/services/principleAttribution.section14.test.ts:71`
-- `src/services/principleAttribution.section14.test.ts:75`
-- `src/services/principleAttribution.section14.test.ts:103`
-- `src/services/principleAttribution.section14.test.ts:107`
-- `src/services/principleAttribution.section14.test.ts:116`
+- `src/services/principleAttribution.section14.test.ts:47`
+- `src/services/principleAttribution.section14.test.ts:57`
+- `src/services/principleAttribution.section14.test.ts:61`
+- `src/services/principleAttribution.section14.test.ts:62`
+- `src/services/principleAttribution.section14.test.ts:87`
+- `src/services/principleAttribution.section14.test.ts:98`
+- `src/services/principleAttribution.section14.test.ts:102`
+- `src/services/principleAttribution.section14.test.ts:130`
+- `src/services/principleAttribution.section14.test.ts:134`
+- `src/services/principleAttribution.section14.test.ts:143`
 - `src/services/principleAttribution.test.ts:20`
 - `src/services/principleAttribution.test.ts:39`
 - `src/services/principleAttribution.test.ts:47`
@@ -106,7 +108,7 @@
 - `src/services/principleAttributionEvalPv.test.ts:62`
 - `src/services/principleAttributionEvalPv.test.ts:76`
 - `src/services/principleAttributionEvalPv.test.ts:94`
-- `src/services/principleVoice.test.ts:8`
+- `src/services/principleVoice.test.ts:9`
 - `src/services/section14Coverage.measure.test.ts:77`
 - `src/services/section14Diagnosis.test.ts:21`
 - `src/services/section14Diagnosis.test.ts:25`
@@ -151,5 +153,9 @@
 - `src/services/weaknessSpine.fundamentals.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-fundamentals-tab-prod.mjs`

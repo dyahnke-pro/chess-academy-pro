@@ -3157,3 +3157,52 @@ instrument in this repo, and the rule generalises:
 condition under which it would have failed.** A guard that cannot fail, a count
 taken from a dead process, and a row whose assertion was short-circuited are
 all the same object wearing different clothes.
+
+---
+
+## The 150cp floor — CAUSE CONFIRMED BY MEASUREMENT, and the costs are real (2026-09-21)
+
+FUNDWHY's first run named FUNDLEAD's cause on the pinned game (06wNUWaA):
+
+```
+ply 48 inaccuracy Bg5 best=Kb8 :: calculation-depth: cost 104cp is under the 150cp floor
+ply 50 inaccuracy Nf6 best=Nb6 :: calculation-depth: cost  74cp is under the 150cp floor
+ply 62 inaccuracy Ne4 best=Rd6 :: calculation-depth: cost  99cp is under the 150cp floor
+ply 64 mistake   Kc8 best=Nd6 :: calculation-depth: punishing PV is 0 plies, needs 3
+ply 68 blunder   Ke6 best=Ke8 :: calculation-depth: punishing PV is 0 plies, needs 3
+```
+
+**The costs are MEASURED cpLoss, not the 175/350 fallback buckets** — 104, 99,
+86, 74, 72, 69 are none of them a bucket value, and the bucket share of live
+slips is ~8% since 2026-08-10. This matters because a floor tuned against
+bucketed costs would have no claim on measured ones; these numbers are the real
+thing, so moving the floor is a response to evidence rather than to an artefact.
+
+**TWO causes, not one.** The inaccuracy band (48/50/62) died on the floor —
+fixed. The mistake/blunder plies (64/68) died on `pvP` being 0-1 plies where the
+detector needs 3: **the punishing PV is not persisted for those plies.** That is
+a separate defect and it is OPEN.
+
+**A third, and it is structural:** ply 64 also declined with *"the punishment
+Bd7+ is immediate (ply 1) — another fundamental owns it"*. No other fundamental
+fired. The deferral is unconditional — it hands the ply to a sibling that never
+claims it, and the student gets nothing. A yield must be conditional on the
+claim (check that the sibling took it, or keep it), which is the same asymmetry
+as the `advanced` default in `handleWalkForward`: a duplicate fundamental is
+visible and fixable, a silent handoff to nobody is indistinguishable from "this
+ply had nothing to teach".
+
+## The surface map's audit list UNDER-REPORTS browser audits (found 2026-09-21)
+
+`auditsFor` matches audits that textually reference the file or its exports. A
+browser-driven prod audit names neither, so it never appears — concretely,
+`principleAttribution`'s map listed only `audit-fundamentals-tab-prod` while
+`audit-review-overhaul-prod` owns the FUNDLEAD and FUNDWHY rows that grade
+exactly what it produces. A reader would have concluded the review audit does
+not touch this surface.
+
+Widening the needles to domain vocabulary would catch those and also produce
+false positives, so the fix applied is that the list now STATES ITS OWN RULE
+rather than implying completeness. An under-reporting list read as complete is
+the same failure as a gate that passes without evaluating anything — which is
+the night's pattern, arriving in the one tool built to prevent it.
