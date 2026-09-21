@@ -296,6 +296,8 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
+import { actionForCommand, actuate } from '../../services/coachActuator';
+import { readSpokenSquares } from '../../services/spokenSquares';
 import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -3008,6 +3010,51 @@ export function CoachTeachPage(): JSX.Element {
         setMessages((prev) => [...prev, { id: uid('cmd-a'), role: 'assistant', content: say, timestamp: Date.now() }]);
         void voiceService.speak(say);
         return;
+      }
+
+      // 🔒 EVERY OTHER COMMAND GOES THROUGH THE ONE DOOR (2026-09-21).
+      //
+      // 🔴 FOUND BY THE LIVE PROD AUDIT, not by reading the code — and the
+      // static parity matrix had the evidence an hour earlier and it was read
+      // past. Learn's chat handled exactly TWO of the router's twelve kinds,
+      // `take_back_move` and `reset_board` (directly above). Everything else —
+      // flip the board, drill this, quiz me, make it harder, save this
+      // position, resume, show me on the board — fell straight through to the
+      // LLM on the app's FLAGSHIP TEACHING SURFACE, while the same words typed
+      // into Play were obeyed deterministically.
+      //
+      // That is the unified-coach break in its purest form, and it is the same
+      // shape as the voice mic's: a surface that grew its own narrow switch
+      // beside the shared one. The arms above stay because they do more than
+      // actuate (they speak Learn's own confirmations and interact with the
+      // walkthrough); everything they do not claim now reaches `actuate`.
+      if (routed) {
+        const action = actionForCommand(routed, {
+          fen: liveFenRef.current,
+          // The squares the coach itself last pointed at — never a guess, and
+          // never scraped back out of the prose.
+          squares: readSpokenSquares(liveFenRef.current),
+        });
+        if (action) {
+          const result = await actuate(action);
+          if (result.ok) {
+            setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);
+            return;
+          }
+          // A refusal is the coach's own sentence (HAND_FALLBACK), so the
+          // student hears WHY rather than nothing. Not `return`-ing on failure
+          // would hand the same text to the LLM and get a second, different
+          // answer to one question.
+          if (result.reason) {
+            setMessages((prev) => [
+              ...prev,
+              { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() },
+              { id: uid('cmd-a'), role: 'assistant', content: result.reason ?? '', timestamp: Date.now() },
+            ]);
+            void voiceService.speak(result.reason);
+            return;
+          }
+        }
       }
     }
 
