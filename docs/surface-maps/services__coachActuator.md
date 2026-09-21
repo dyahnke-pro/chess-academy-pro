@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**565 lines · 23 exports · 8 importers · 2 tests · 2 audits**
+**565 lines · 23 exports · 10 importers · 3 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,8 +18,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/GameChatPanel.tsx`
+- `src/hooks/useLiveCoach.ts`
 - `src/services/coachActuator.test.ts`
 - `src/services/coachHands.test.ts`
+- `src/services/spokenSquares.test.ts`
 
 ## Exports and every call site
 
@@ -66,10 +68,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:42`
 - `src/services/coachHands.test.ts:375`
 
-### `registerCoachHands` (function) — 32 call sites
+### `registerCoachHands` (function) — 33 call sites
 - `src/components/Coach/CoachGameReview.tsx:733`
 - `src/components/Coach/CoachTeachPage.tsx:2194`
-- `src/components/Coach/GameChatPanel.tsx:247`
+- `src/components/Coach/GameChatPanel.tsx:248`
 - `src/services/coachHands.test.ts:47`
 - `src/services/coachHands.test.ts:56`
 - `src/services/coachHands.test.ts:65`
@@ -98,13 +100,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:348`
 - `src/services/coachHands.test.ts:355`
 - `src/services/coachHands.test.ts:418`
+- `src/services/spokenSquares.test.ts:57`
 - `src/test/handsReachEverySurface.test.ts:84`
 
-### `clearCoachHands` (function) — 4 call sites
+### `clearCoachHands` (function) — 6 call sites
 - `src/services/coachHands.test.ts:42`
 - `src/services/coachHands.test.ts:286`
 - `src/services/coachHands.test.ts:340`
 - `src/services/coachHands.test.ts:375`
+- `src/services/spokenSquares.test.ts:23`
+- `src/services/spokenSquares.test.ts:53`
 
 ### `currentCoachHands` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -137,14 +142,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:228`
 - `src/services/coachHands.test.ts:293`
 
-### `actuate` (function) — 26 call sites
+### `actuate` (function) — 29 call sites
 - `src/coach/coachService.ts:1020`
 - `src/coach/coachService.ts:1022`
 - `src/coach/coachService.ts:1024`
 - `src/coach/coachService.ts:1026`
 - `src/components/Board/VoiceChatMic.tsx:312`
 - `src/components/Coach/CoachGameReview.tsx:3133`
-- `src/components/Coach/GameChatPanel.tsx:639`
+- `src/components/Coach/GameChatPanel.tsx:653`
+- `src/hooks/useLiveCoach.ts:271`
 - `src/services/coachHands.test.ts:39`
 - `src/services/coachHands.test.ts:148`
 - `src/services/coachHands.test.ts:158`
@@ -164,6 +170,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:401`
 - `src/services/coachHands.test.ts:402`
 - `src/services/coachHands.test.ts:419`
+- `src/services/spokenSquares.test.ts:68`
+- `src/services/spokenSquares.test.ts:87`
 
 ### `CommandBoardContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -182,20 +190,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `RoutedCommand` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `actionForCommand` (function) — 8 call sites
+### `actionForCommand` (function) — 11 call sites
 - `src/components/Board/VoiceChatMic.tsx:297`
 - `src/components/Coach/CoachGameReview.tsx:3127`
-- `src/components/Coach/GameChatPanel.tsx:611`
+- `src/components/Coach/GameChatPanel.tsx:612`
 - `src/services/coachHands.test.ts:37`
 - `src/services/coachHands.test.ts:251`
 - `src/services/coachHands.test.ts:256`
 - `src/services/coachHands.test.ts:263`
 - `src/services/coachHands.test.ts:269`
+- `src/services/spokenSquares.test.ts:65`
+- `src/services/spokenSquares.test.ts:75`
+- `src/services/spokenSquares.test.ts:83`
 
 ## Tests
 
 - `src/services/coachActuator.test.ts`
 - `src/services/coachHands.test.ts`
+- `src/services/spokenSquares.test.ts`
 
 ## Audits that reach it
 

@@ -381,11 +381,11 @@ describe('every hand answers without a surface', () => {
     expect(hands.length).toBeGreaterThanOrEqual(14);
     for (const h of hands) {
       const fb = HAND_FALLBACK[h];
-      expect(['global', 'service', 'route', 'none'], `${h}`).toContain(fb.kind);
+      expect(['global', 'service', 'route', 'none'], h).toContain(fb.kind);
       if (fb.kind === 'none') {
         expect(fb.because.length, `${h} refuses without saying why`).toBeGreaterThan(20);
       }
-      if (fb.kind === 'route') expect(fb.to.startsWith('/'), `${h}`).toBe(true);
+      if (fb.kind === 'route') expect(fb.to.startsWith('/'), h).toBe(true);
     }
   });
 

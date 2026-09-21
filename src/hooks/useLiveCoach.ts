@@ -29,6 +29,8 @@ import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { logAppAudit } from '../services/appAuditor';
 import { useAppStore } from '../stores/appStore';
 import { computePositionFacts, clauseText } from '../services/positionFacts';
+import { rememberSpokenSquares } from '../services/spokenSquares';
+import { actuate } from '../services/coachActuator';
 import { useWeaknessSignals } from './useWeaknessSignals';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { alertSensitivityMultiplier } from '../services/skillScaling';
@@ -246,8 +248,28 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
               alreadySaid: saidRef.current,
             });
             for (const t of pf.remember) saidRef.current.add(t);
-            const cl = clauseText(pf.clauses, ['must-defend', 'key-moment']);
+            // 🔒 THE SAME FILTER DECIDES THE WORDS AND THE SQUARES. `clauseText`
+            // takes an EXCLUDE list, so the spoken set is everything BUT these
+            // two kinds. Painting from `pf.clauses` directly would highlight a
+            // fact the coach did NOT say — the inverse of the lead-the-eye
+            // defect, and the reason this filters once and reads both off it.
+            const EXCLUDE = ['must-defend', 'key-moment'] as const;
+            const spokenClauses = pf.clauses.filter((c) => !EXCLUDE.includes(c.kind as typeof EXCLUDE[number]));
+            const cl = clauseText(pf.clauses, [...EXCLUDE]);
             if (cl.length) liveExtraFacts = cl.join(' ');
+            // LEAD THE EYE (David 2026-05-21: naming a square without pointing
+            // at it is a DEFECT). The squares were coupled at emission by the
+            // computer that found the fact; until now the narration spoke the
+            // text and dropped them. The LEADING spoken clause wins — one fact
+            // pointed at, not every square the position mentions.
+            const lead = spokenClauses.find((c) => c.squares && c.squares.length > 0);
+            if (lead?.squares?.length) {
+              const at = ctx.fenAfter ?? '';
+              rememberSpokenSquares(at, lead.squares);
+              // Honest {ok:false} when the surface has no highlight channel —
+              // the fallback says so rather than dead-ending (HAND_FALLBACK).
+              void actuate({ hand: 'show-squares', squares: lead.squares as never });
+            }
           }
         } catch { /* the position-facts lane is a bonus, never a blocker */ }
         const promise = groundedMoveFeedback({

@@ -28,6 +28,7 @@ import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../../types';
 import { uid } from '../../utils/uid';
 import { registerCoachHands, actuate, actionForCommand } from '../../services/coachActuator';
+import { readSpokenSquares } from '../../services/spokenSquares';
 
 /** Pull the inner items out of a `[CHOICES: A | B | C]` marker in a raw coach
  *  reply (mirrors the CoachTeachPage extractor). The marker itself is stripped
@@ -628,12 +629,25 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 // documented default rather than this panel inventing one.
                 currentElo: opponentElo,
                 fen: getLiveFen?.() ?? fen,
-                // quizSan / squares are NOT resolved here on purpose: the
-                // move and the squares are the BOARD's to produce, and an
-                // adapter that invented either would be the model's old job
-                // wearing a regex. With neither, `actionForCommand` returns
-                // null and the ask falls through to the brain — which is the
-                // honest outcome, not a silent no-op.
+                // 🔒 "SHOW ME ON THE BOARD" POINTS AT WHAT THE COACH SAID.
+                //
+                // This used to pass nothing, with a comment that was right in
+                // principle — the squares are the BOARD's to produce, and an
+                // adapter that invented them would be the model's old job
+                // wearing a regex — and wrong in outcome: NOBODY produced them,
+                // so the `show-squares` hand never fired once despite having a
+                // router entry, two registrations and a working handler.
+                //
+                // `spokenSquares` is that producer. The narration records the
+                // squares the COMPUTER coupled to the fact it spoke, keyed by
+                // position; this reads them back for the board in front of the
+                // student. Empty when the coach has said nothing here — then
+                // `actionForCommand` returns null and the ask falls through to
+                // the brain, which is still the honest outcome.
+                squares: readSpokenSquares(getLiveFen?.() ?? fen),
+                // quizSan stays unresolved: a quiz needs a teachable move, and
+                // that is an ENGINE read this panel does not have. Named here
+                // so it is a known gap, not an oversight.
               });
               if (!action) break;
               const r = await actuate(action);
