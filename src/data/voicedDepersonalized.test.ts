@@ -19,9 +19,15 @@ const BANNED: Array<[string, RegExp]> = [
   ["I've played in the", /\bI['’]ve (already )?played (it )?in\b/i],
 ];
 
-function ideasOf(node: { idea?: string; children?: Array<{ node: unknown }> }): string[] {
+/** The shape `ideasOf` actually needs — named so the two casts below can say
+ *  it instead of writing `{ root: never }`, which is what made them
+ *  non-overlapping: `never` means "no value can be here", so a JSON tree can
+ *  never be cast into it. */
+interface IdeaNode { idea?: string; children?: Array<{ node: unknown }> }
+
+function ideasOf(node: IdeaNode): string[] {
   const out: string[] = [];
-  const walk = (n: { idea?: string; children?: Array<{ node: unknown }> }): void => {
+  const walk = (n: IdeaNode): void => {
     if (n.idea) out.push(n.idea);
     for (const c of n.children ?? []) walk(c.node as typeof n);
   };
@@ -31,10 +37,10 @@ function ideasOf(node: { idea?: string; children?: Array<{ node: unknown }> }): 
 
 describe('voiced narration is depersonalized (no pro-personal references)', () => {
   const corpus: Array<{ id: string; texts: string[] }> = [];
-  for (const w of walkthroughs as Array<{ openingName: string; intro?: string; outro?: string; tree: { root: never } }>) {
+  for (const w of walkthroughs as Array<{ openingName: string; intro?: string; outro?: string; tree: { root: IdeaNode } }>) {
     corpus.push({ id: w.openingName, texts: [w.intro ?? '', w.outro ?? '', ...ideasOf(w.tree.root)] });
   }
-  for (const m of matchups as Array<{ matchupName: string; intro?: string; outro?: string; tree: { root: never } }>) {
+  for (const m of matchups as Array<{ matchupName: string; intro?: string; outro?: string; tree: { root: IdeaNode } }>) {
     corpus.push({ id: m.matchupName, texts: [m.intro ?? '', m.outro ?? '', ...ideasOf(m.tree.root)] });
   }
   // teachings ship from public/data (fetched at runtime) — scan the raw file.
