@@ -316,7 +316,7 @@ describe('computed voice audit', () => {
         // curated masterclass beat is the first ladder rung (the generic bake is
         // gone — David 2026-08-24).
         try {
-          const beat = curatedBeatAt(history, fenAfterReply, curatedSeen, openingName, game.student === 'black' ? 'black' : 'white');
+          const beat = curatedBeatAt(history, fenAfterReply, curatedSeen, openingName, game.student === 'black' ? 'black' : 'white', 'live');
           if (beat) { curatedSeen.add(beat.id); noteLine = beat.text; noteTier = 'curated'; }
         } catch { /* bonus */ }
 
