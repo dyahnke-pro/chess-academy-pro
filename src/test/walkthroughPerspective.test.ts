@@ -50,35 +50,58 @@
 import { describe, it, expect } from 'vitest';
 import { BANNED_PRONOUNS } from '../services/perspectiveRule';
 import { VIENNA_GAME } from '../data/openingWalkthroughs/vienna';
-import type { WalkthroughTree, WalkthroughTreeNode } from '../types/walkthroughTree';
 
 /**
- * 🔒 SHRINK ONLY. Never raise this to make a build pass — the whole point is
- * that the number can only go down. Lower it when you migrate prose.
+ * 🔒 IT REACHED ZERO ON THE DAY IT WAS WRITTEN, so this is a HARD GATE rather
+ * than a ratchet: any banned pronoun in walkthrough narration is a NEW one.
+ *
+ * It landed at 32 and the prose was migrated in the same pass — "our knight"
+ * to "your knight", "we recapture" to "you recapture", and one app-voice
+ * sentence ("Same trick we teach against…") rewritten rather than re-pointed,
+ * because the app teaching something is not the student doing it.
+ *
+ * Never raise this to make a build pass. A walkthrough written in the banned
+ * voice should fail immediately — that is the whole point of catching the
+ * surface at zero instead of inheriting a backlog.
  */
-const WALKTHROUGH_PRONOUN_CEILING = 32;
+const WALKTHROUGH_PRONOUN_CEILING = 0;
 
-/** Every `idea` string in the tree, including branches. */
-function ideasOf(tree: WalkthroughTree): string[] {
-  const out: string[] = [];
-  const walk = (node: WalkthroughTreeNode | undefined): void => {
-    if (!node) return;
-    if (typeof node.idea === 'string' && node.idea.trim()) out.push(node.idea);
-    for (const child of node.children ?? []) walk(child.node);
-  };
-  walk(tree.root);
-  if (typeof tree.intro === 'string' && tree.intro.trim()) out.push(tree.intro);
-  if (typeof tree.outro === 'string' && tree.outro.trim()) out.push(tree.outro);
-  return out;
+/**
+ * Every narration string anywhere in the tree.
+ *
+ * 🔴 THE FIRST VERSION WALKED `idea` ONLY, and reported zero while the same
+ * tree still carried `text:` prose two levels down — the branch and aside
+ * copy a student reads just as directly. I found it by eye in a diff, which is
+ * exactly the way a gate should NOT be checked.
+ *
+ * So this walks the object GENERICALLY and tests every string under a
+ * narration-bearing key, rather than the one field I happened to think of.
+ * The key list comes from `walkthroughTree.ts` and is asserted non-empty
+ * below — a gate that knows about one field out of ten is a gate that reports
+ * a clean surface while nine of them rot.
+ */
+const NARRATION_KEYS = new Set([
+  'idea', 'text', 'intro', 'outro', 'narration', 'prompt',
+  'explanation', 'title', 'whyBad', 'whyPunish',
+]);
+
+function narrationStrings(value: unknown, key = ''): string[] {
+  if (typeof value === 'string') return NARRATION_KEYS.has(key) && value.trim() ? [value] : [];
+  if (Array.isArray(value)) return value.flatMap((v) => narrationStrings(v, key));
+  if (value && typeof value === 'object') {
+    return Object.entries(value as Record<string, unknown>).flatMap(([k, v]) => narrationStrings(v, k));
+  }
+  return [];
 }
 
 describe('walkthrough narration and the banned pronouns', () => {
-  const ideas = ideasOf(VIENNA_GAME);
+  const ideas = narrationStrings(VIENNA_GAME);
 
   it('reads real narration — the walk is not vacuous', () => {
     // Every assertion below is meaningless if the tree walk returns nothing,
     // and it would then pass for free forever. Fail here instead.
-    expect(ideas.length, 'no idea prose found — the tree walk is broken').toBeGreaterThan(50);
+    expect(ideas.length, 'no narration found — the tree walk is broken').toBeGreaterThan(100);
+    expect(NARRATION_KEYS.size, 'the key list is empty — every string would be skipped').toBeGreaterThan(5);
     expect(ideas.join(' ').length).toBeGreaterThan(5_000);
   });
 
