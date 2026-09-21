@@ -26,7 +26,8 @@
  */
 import { Chess } from 'chess.js';
 import { parseCoachIntent } from './coachAgent';
-import type { CoachIntent, CoachDifficulty } from './coachAgent';
+import type { CoachIntent } from './coachAgent';
+import type { RequestedDifficulty } from '../types';
 import { matchTrainingAidRoute } from './trainingAidRouter';
 import type { GameRecord } from '../types';
 import { matchOpeningForSubject } from './walkthroughResolver';
@@ -681,7 +682,7 @@ export function __test__extractProposedUserSide(
   return extractProposedUserSide(message);
 }
 
-export type { CoachDifficulty };
+export type { RequestedDifficulty };
 
 // ═══════════════════════════════════════════════════════════════════════
 // BOARD-COMMAND MATCHER (relocated from the former coachIntentRouter.ts,

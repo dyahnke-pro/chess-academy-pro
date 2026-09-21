@@ -26,7 +26,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { getCoachMove, resolveConfig } from '../services/coachPlaySession';
-import type { CoachDifficulty } from '../services/coachAgent';
+import type { RequestedDifficulty } from '../types';
 
 /** Strip annotations from a SAN so comparison is robust to "+#!?"
  *  decorations or promotion suffix differences. */
@@ -54,7 +54,7 @@ export interface EndgamePlayoutOptions {
    *  used when stockfishFallback === true. Defaults to 'easy' so
    *  the student is rewarded for finding the right idea without
    *  needing engine-perfect technique. */
-  fallbackDifficulty?: CoachDifficulty;
+  fallbackDifficulty?: RequestedDifficulty;
   /** Player ELO used by resolveConfig for the fallback engine.
    *  Defaults to 1500. */
   fallbackPlayerElo?: number;

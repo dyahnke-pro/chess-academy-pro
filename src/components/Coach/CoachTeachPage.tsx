@@ -248,7 +248,7 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { useCoachFreeMeter } from '../../hooks/useCoachFreeMeter';
 import { DifficultyToggle } from './DifficultyToggle';
-import type { CoachDifficulty, MiddlegamePlan } from '../../types';
+import type { MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
@@ -1520,7 +1520,11 @@ export function CoachTeachPage(): JSX.Element {
   // moves; eval-bar / engine-lines toggles drive the board overlays.
   const { settings, updateSetting } = useSettings();
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
-  const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
+  // 🔒 ONE DIFFICULTY (2026-09-21) — see the store field. This surface used to
+  // hold its own copy defaulting to 'medium', so the opponent here ignored what
+  // the student had set anywhere else.
+  const difficulty = useAppStore((st) => st.coachDifficulty);
+  const setDifficulty = useAppStore((st) => st.setCoachDifficulty);
 
   // Discussion-Practice faucet — on a genuine slip during guided play it
   // raises the coach's "why did you play that?" question (David 2026-06-04:

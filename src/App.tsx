@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { registerCoachNavigate, clearCoachNavigate } from './services/coachActuator';
+import { registerCoachNavigate, clearCoachNavigate, registerStrengthSetter } from './services/coachActuator';
 import './services/bucketAuditBridge'; // installs window.__bucketAudit for the bucket-delivery audit (no-op for real users)
 import { useAppStore } from './stores/appStore';
+import { getTargetStrength, studentPlayingRating } from './services/coachGameEngine';
 import { getOrCreateMainProfile } from './services/dbService';
 import { calibrateStrength } from './services/strengthCalibrationService';
 import { AiConsentModal } from './components/Legal/AiConsentModal';
@@ -137,10 +138,21 @@ function NativeBackButton(): null {
  */
 function CoachActuatorBridge(): null {
   const navigate = useNavigate();
+  const setCoachDifficulty = useAppStore((st) => st.setCoachDifficulty);
   useEffect(() => {
     registerCoachNavigate((path: string) => { void navigate(path); });
     return () => clearCoachNavigate();
   }, [navigate]);
+  // THE OPPONENT'S STRENGTH IS A SETTING, so it is registered at the ROOT and
+  // works on every surface — including ones with no board. `steppedElo` gives
+  // the target; this maps it onto the one shared difficulty band, using the
+  // SAME `getTargetStrength` mapping the surfaces read it back through, so the
+  // round trip cannot drift.
+  useEffect(() => registerStrengthSetter((targetElo: number) => {
+    const base = getTargetStrength(
+      studentPlayingRating(useAppStore.getState().activeProfile), 'medium');
+    setCoachDifficulty(targetElo >= base + 100 ? 'hard' : targetElo <= base - 100 ? 'easy' : 'medium');
+  }), [setCoachDifficulty]);
   return null;
 }
 

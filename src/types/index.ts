@@ -1238,6 +1238,29 @@ export interface StockfishAnalysis {
 
 export type CoachDifficulty = 'easy' | 'medium' | 'hard';
 
+/**
+ * What the STUDENT ASKED FOR, which may be nothing at all.
+ *
+ * 🔴 TWO TYPES NAMED `CoachDifficulty` USED TO EXIST (found 2026-09-21 while
+ * hoisting difficulty onto one source): this three-member one, and a FOUR-member
+ * copy in `coachAgent.ts` that added `'auto'`. Same name, different members, no
+ * relationship declared — so which one a file got depended on which module it
+ * imported from, and nothing failed when it got the wrong one. That is the
+ * duplicated-enum rot the standing rule opens with (`discovery` vs
+ * `discovered_attack`), in a type rather than a string.
+ *
+ * They are NOT the same question, which is why the fix is a rename and not a
+ * merge. `CoachDifficulty` is a SETTING — three values a toggle can produce.
+ * `'auto'` is a PARSE OUTCOME: `parseCoachIntent` says it when the student's
+ * sentence named no difficulty at all ("play me"), and `resolveConfig` reads it
+ * as medium. A toggle can never emit it and should not be able to.
+ *
+ * Declaring the superset here, off the base, makes that relationship the type
+ * system's job: add a difficulty and both follow, and a setting can never be
+ * assigned an `'auto'` that no UI can produce.
+ */
+export type RequestedDifficulty = CoachDifficulty | 'auto';
+
 export type HintLevel = 0 | 1 | 2 | 3;
 
 // ─── Board Annotations ──────────────────────────────────────────────────────

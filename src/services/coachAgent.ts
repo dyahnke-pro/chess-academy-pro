@@ -25,7 +25,11 @@ export type CoachIntentKind =
   | 'favorite-opening'
   | 'qa';
 
-export type CoachDifficulty = 'easy' | 'medium' | 'hard' | 'auto';
+// The superset lives in `types` beside the base it derives from — see
+// `RequestedDifficulty`. Re-exported under the old name is DELIBERATELY not
+// done: a second name for one type is how the two copies drifted apart.
+import type { RequestedDifficulty } from '../types';
+export type { RequestedDifficulty };
 
 export type GameSourceFilter = 'chesscom' | 'lichess';
 
@@ -34,7 +38,7 @@ export interface CoachIntent {
   /** Opening / theme / puzzle type extracted from the query. */
   subject?: string;
   /** Difficulty hint for play-against and puzzle sessions. */
-  difficulty?: CoachDifficulty;
+  difficulty?: RequestedDifficulty;
   /** Puzzle theme, e.g. "knight fork", "back rank". */
   theme?: string;
   /** For play-against: which colour the student wants. */
@@ -58,7 +62,7 @@ export interface CoachIntent {
 const GENERIC_OPENING_REQUEST_RE =
   /^(?:please\s+)?(?:can\s+you\s+)?(?:teach|show|give)\s+me\s+(?:a|an|another|a\s+new|a\s+different|a\s+random|some)\s+(?:new\s+|different\s+|random\s+)?(?:opening|openings|opening\s+theory)\b[\s!.?]*$/i;
 
-const DIFFICULTY_WORDS: Record<string, CoachDifficulty> = {
+const DIFFICULTY_WORDS: Record<string, RequestedDifficulty> = {
   easy: 'easy',
   beginner: 'easy',
   gentle: 'easy',
@@ -71,7 +75,7 @@ const DIFFICULTY_WORDS: Record<string, CoachDifficulty> = {
   maximum: 'hard',
 };
 
-function extractDifficulty(text: string): CoachDifficulty | undefined {
+function extractDifficulty(text: string): RequestedDifficulty | undefined {
   const lower = text.toLowerCase();
   // "at my level" → medium is a natural-language shortcut that wouldn't
   // otherwise match the word map below.

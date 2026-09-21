@@ -49,6 +49,22 @@
 import type { Square } from 'chess.js';
 import { memorySetSavedPosition, memoryReadSavedPosition } from '../coach/sources/memory';
 
+/**
+ * THE SERVICE SEAM FOR A SETTING. `set-strength` is not a surface action — it
+ * is how hard the opponent plays, which since 2026-09-21 lives in ONE place
+ * every coach surface reads. The actuator stays a leaf (it must not import the
+ * store, for the same reason a fact-computer must not import Dexie), so the app
+ * root hands it a setter and the hand works on every surface, mounted board or
+ * not — which is what "the coach has it, the surface only changes how it
+ * renders" means for a setting.
+ */
+let applyStrength: ((targetElo: number) => void) | null = null;
+export function registerStrengthSetter(fn: (targetElo: number) => void): () => void {
+  applyStrength = fn;
+  return () => { if (applyStrength === fn) applyStrength = null; };
+}
+export function clearStrengthSetter(): void { applyStrength = null; }
+
 /** The play surface that renders an arbitrary coach-set position via `?fen=`. */
 const BOARD_ROUTE = '/coach/play';
 
@@ -145,7 +161,10 @@ export const HAND_FALLBACK: Record<CoachHand, HandFallback> = {
   // source is the next step; until it lands, this states the real reason
   // instead of pretending the hand is surface-bound by nature.
   'set-orientation': { kind: 'none', because: 'I can only flip a board that is on screen' },
-  'set-strength': { kind: 'none', because: 'I can only change the opponent in a game that is running' },
+  // Now a real SERVICE hand: `registerStrengthSetter` writes the one shared
+  // difficulty, so this works with no board mounted. The `none` text survives
+  // only for the case where the app root has not registered the setter at all.
+  'set-strength': { kind: 'service' },
   'save-position': { kind: 'service' },
   'restore-position': { kind: 'service' },
   navigate: { kind: 'global' },
@@ -467,8 +486,11 @@ export async function actuate(action: CoachAction): Promise<ActuationResult> {
         if (!handler) return withoutSurface('show-squares');
         return await settle(h.showSquares?.(action.squares, action.arrows));
       case 'set-strength':
-        if (!handler) return withoutSurface('set-strength');
-        return await settle(h.setStrength?.(action.targetElo));
+        // A surface with a live engine still wins — it can act in place.
+        if (handler) return await settle(h.setStrength?.(action.targetElo));
+        // Otherwise write the SETTING: whatever mounts next reads it.
+        if (applyStrength) { applyStrength(action.targetElo); return { ok: true }; }
+        return withoutSurface('set-strength');
     }
   } catch (err) {
     return { ok: false, reason: err instanceof Error ? err.message : String(err) };

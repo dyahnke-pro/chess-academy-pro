@@ -89,6 +89,19 @@ const INFRA = new Set([
   // CoachGameReview and GameChatPanel each gained it on 2026-09-21 while each
   // LOST a hand-rolled dispatch path.
   'coachActuator',
+  // `spokenSquares` is a ONE-SLOT CACHE: it holds the squares the narration
+  // just pointed at, keyed by position, so "show me on the board" can point at
+  // the same fact. Same class as `standingFactMemory` directly above — a cache
+  // with a rule — and it meets this list's own bar, which is that it must be
+  // PROVABLE it answers no question about the board:
+  //   • one import, and it is `type { Square }` — no value import at all;
+  //   • it never constructs a `Chess`, reads a piece, or evaluates a square;
+  //   • `readSpokenSquares` returns exactly what `rememberSpokenSquares` was
+  //     handed, so it cannot produce a fact, only repeat one.
+  // It slices the FEN string, but only to build a key — the same slice
+  // `positionProvenance.positionKey` makes, and for the same reason.
+  'spokenSquares',
+
 
   // `learnMemory` is the same class again: the Learn producer's per-game
   // say-once slots and one `newGame()` that forgets them. It was EXTRACTED OUT

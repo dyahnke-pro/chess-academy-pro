@@ -31,7 +31,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useLiveCoach` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:968`
+- `src/components/Coach/CoachGamePage.tsx:980`
 - `src/hooks/useLiveCoach.test.tsx:68`
 - `src/hooks/useLiveCoach.test.tsx:77`
 - `src/hooks/useLiveCoach.test.tsx:86`

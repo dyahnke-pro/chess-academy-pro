@@ -4,6 +4,7 @@ import { db } from '../db/schema';
 import type {
   UserProfile, AppTheme,
   CoachGameState, ChatMessage, WeaknessProfile,
+  CoachDifficulty,
 } from '../types';
 
 /**
@@ -104,6 +105,25 @@ interface AppState {
   coachBubbleText: string;
   coachVoiceOn: boolean;
   coachTipsOn: boolean;
+  /**
+   * HOW HARD THE OPPONENT PLAYS — one value, read by every coach surface.
+   *
+   * 🔴 THERE WERE FOUR COPIES (found 2026-09-21): Play, Learn, OpeningPlayMode
+   * and Kid each held their own `useState<CoachDifficulty>`. So "make it
+   * harder" meant something different on each tab, and the coach could only
+   * honour it where a surface happened to publish the hand — which is how Learn
+   * ended up refusing a command Play obeyed.
+   *
+   * Kid KEEPS its own, deliberately: the kid contract is that kid mode never
+   * reads or writes coach state, and its difficulty is a per-puzzle ladder
+   * rather than an opponent strength. Three coach surfaces share this one.
+   *
+   * RUNTIME, not persisted — which matches what the four copies did (each
+   * defaulted on mount). Whether a chosen difficulty should SURVIVE a restart
+   * is a real product question and is deliberately not answered here by
+   * accident.
+   */
+  coachDifficulty: CoachDifficulty;
   /** Show the named tactic above each mistake puzzle. Toggleable
    *  by the student via the eye-icon button next to the chip. */
   puzzleShowTacticName: boolean;
@@ -182,6 +202,7 @@ interface AppActions {
   setCoachVoiceOn: (on: boolean) => void;
   recordWeaponUnlockPass: (color: 'white' | 'black', openingId: string) => void;
   toggleCoachTips: () => void;
+  setCoachDifficulty: (d: CoachDifficulty) => void;
   togglePuzzleShowTacticName: () => void;
   setPuzzleShowTacticName: (on: boolean) => void;
   togglePuzzleTimer: () => void;
@@ -218,6 +239,7 @@ const DEFAULT_STATE: AppState = {
   coachBubbleText: '',
   coachVoiceOn: true,
   coachTipsOn: false,
+  coachDifficulty: 'medium',
   puzzleShowTacticName: true,
   // Default OFF: hidden background timer, logged to weakness. Visible
   // countdown is opt-in for students who want time pressure.
@@ -321,6 +343,8 @@ export const useAppStore = create<AppState & AppActions>()(
     }),
 
     toggleCoachTips: () => set((state) => ({ coachTipsOn: !state.coachTipsOn })),
+
+    setCoachDifficulty: (coachDifficulty: CoachDifficulty) => set({ coachDifficulty }),
 
     togglePuzzleShowTacticName: () => set((state) => {
       const next = !state.puzzleShowTacticName;

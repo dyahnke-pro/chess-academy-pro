@@ -22,9 +22,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   actuate, actionForCommand, registerCoachHands, clearCoachHands,
   registerCoachNavigate, clearCoachNavigate, canPerform, steppedElo, HAND_FALLBACK,
+  registerStrengthSetter, clearStrengthSetter,
   HAND_PROVIDER, type CoachHand, type RoutedCommand,
 } from './coachActuator';
-import type { CoachHand } from './coachActuator';
 import { tryRouteIntent } from './coachSessionRouter';
 
 /** Drive the REAL chain the student's text box drives. */
@@ -420,5 +420,53 @@ describe('every hand answers without a surface', () => {
     expect(r.ok).toBe(true);
     expect(startDrill).toHaveBeenCalled();
     expect(nav, 'a mounted surface must not be navigated away from').not.toHaveBeenCalled();
+  });
+});
+
+
+/**
+ * A SETTING IS THE COACH'S, NOT A BOARD'S (2026-09-21).
+ *
+ * "Make it harder" used to refuse on Learn and work on Play — the symptom that
+ * started this. The cause was FOUR local copies of `difficulty`, so there was
+ * no one thing to write. With them hoisted onto a single store field, the hand
+ * is `service`: registered once at the app root, working everywhere.
+ */
+describe('set-strength is a setting, so it works with no board', () => {
+  beforeEach(() => { clearCoachHands(); clearStrengthSetter(); });
+
+  it('writes the shared difficulty with NOTHING mounted', async () => {
+    const applied: number[] = [];
+    registerStrengthSetter((elo) => applied.push(elo));
+    const r = await actuate({ hand: 'set-strength', targetElo: 1750 });
+    expect(r.ok, 'this refused on every boardless surface before the hoist').toBe(true);
+    expect(applied).toEqual([1750]);
+  });
+
+  it('a surface with a live engine still wins', async () => {
+    // The service write is a FLOOR, not an override: a page running a game can
+    // change its opponent in place rather than via the setting.
+    const applied: number[] = [];
+    registerStrengthSetter((elo) => applied.push(elo));
+    const inPlace = vi.fn(() => ({ ok: true }));
+    registerCoachHands({ setStrength: inPlace });
+    const r = await actuate({ hand: 'set-strength', targetElo: 1750 });
+    expect(r.ok).toBe(true);
+    expect(inPlace).toHaveBeenCalledWith(1750);
+    expect(applied, 'the setting must not ALSO fire').toEqual([]);
+  });
+
+  it('refuses honestly when the root never registered a setter', async () => {
+    const r = await actuate({ hand: 'set-strength', targetElo: 1750 });
+    expect(r.ok).toBe(false);
+    expect(r.reason).toBeTruthy();
+  });
+
+  it('the typed command carries a STEPPED elo, never an invented one', () => {
+    const intent = tryRouteIntent('make it harder', { currentFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' });
+    expect(intent?.kind).toBe('set_strength');
+    const action = actionForCommand(intent!, { currentElo: 1600 });
+    // The router gives a DIRECTION only; code turns it into a value.
+    expect(action).toEqual({ hand: 'set-strength', targetElo: steppedElo(1600, 'up') });
   });
 });

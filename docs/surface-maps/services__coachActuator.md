@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**565 lines · 23 exports · 10 importers · 3 tests · 2 audits**
+**587 lines · 25 exports · 10 importers · 3 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,6 +24,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/spokenSquares.test.ts`
 
 ## Exports and every call site
+
+### `registerStrengthSetter` (function) — 3 call sites
+- `src/App.tsx:151`
+- `src/services/coachHands.test.ts:440`
+- `src/services/coachHands.test.ts:450`
+
+### `clearStrengthSetter` (function) — 1 call site
+- `src/services/coachHands.test.ts:436`
 
 ### `ActuationResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -50,7 +58,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `registerCoachNavigate` (function) — 10 call sites
-- `src/App.tsx:141`
+- `src/App.tsx:143`
 - `src/services/coachActuator.test.ts:20`
 - `src/services/coachActuator.test.ts:27`
 - `src/services/coachActuator.test.ts:33`
@@ -62,15 +70,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:416`
 
 ### `clearCoachNavigate` (function) — 5 call sites
-- `src/App.tsx:142`
+- `src/App.tsx:144`
 - `src/services/coachActuator.test.ts:11`
 - `src/services/coachActuator.test.ts:57`
 - `src/services/coachHands.test.ts:42`
 - `src/services/coachHands.test.ts:375`
 
-### `registerCoachHands` (function) — 33 call sites
+### `registerCoachHands` (function) — 34 call sites
 - `src/components/Coach/CoachGameReview.tsx:733`
-- `src/components/Coach/CoachTeachPage.tsx:2194`
+- `src/components/Coach/CoachTeachPage.tsx:2198`
 - `src/components/Coach/GameChatPanel.tsx:248`
 - `src/services/coachHands.test.ts:47`
 - `src/services/coachHands.test.ts:56`
@@ -100,14 +108,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:348`
 - `src/services/coachHands.test.ts:355`
 - `src/services/coachHands.test.ts:418`
+- `src/services/coachHands.test.ts:452`
 - `src/services/spokenSquares.test.ts:57`
 - `src/test/handsReachEverySurface.test.ts:84`
 
-### `clearCoachHands` (function) — 6 call sites
+### `clearCoachHands` (function) — 7 call sites
 - `src/services/coachHands.test.ts:42`
 - `src/services/coachHands.test.ts:286`
 - `src/services/coachHands.test.ts:340`
 - `src/services/coachHands.test.ts:375`
+- `src/services/coachHands.test.ts:436`
 - `src/services/spokenSquares.test.ts:23`
 - `src/services/spokenSquares.test.ts:53`
 
@@ -142,7 +152,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:228`
 - `src/services/coachHands.test.ts:293`
 
-### `actuate` (function) — 29 call sites
+### `actuate` (function) — 32 call sites
 - `src/coach/coachService.ts:1020`
 - `src/coach/coachService.ts:1022`
 - `src/coach/coachService.ts:1024`
@@ -170,6 +180,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:401`
 - `src/services/coachHands.test.ts:402`
 - `src/services/coachHands.test.ts:419`
+- `src/services/coachHands.test.ts:441`
+- `src/services/coachHands.test.ts:453`
+- `src/services/coachHands.test.ts:460`
 - `src/services/spokenSquares.test.ts:68`
 - `src/services/spokenSquares.test.ts:87`
 
@@ -179,18 +192,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ELO_STEP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `steppedElo` (function) — 6 call sites
+### `steppedElo` (function) — 7 call sites
 - `src/services/coachHands.test.ts:234`
 - `src/services/coachHands.test.ts:235`
 - `src/services/coachHands.test.ts:238`
 - `src/services/coachHands.test.ts:239`
 - `src/services/coachHands.test.ts:242`
 - `src/services/coachHands.test.ts:243`
+- `src/services/coachHands.test.ts:470`
 
 ### `RoutedCommand` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `actionForCommand` (function) — 11 call sites
+### `actionForCommand` (function) — 12 call sites
 - `src/components/Board/VoiceChatMic.tsx:297`
 - `src/components/Coach/CoachGameReview.tsx:3127`
 - `src/components/Coach/GameChatPanel.tsx:612`
@@ -199,6 +213,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachHands.test.ts:256`
 - `src/services/coachHands.test.ts:263`
 - `src/services/coachHands.test.ts:269`
+- `src/services/coachHands.test.ts:468`
 - `src/services/spokenSquares.test.ts:65`
 - `src/services/spokenSquares.test.ts:75`
 - `src/services/spokenSquares.test.ts:83`

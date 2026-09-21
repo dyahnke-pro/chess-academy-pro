@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1091 lines · 10 exports · 13 importers · 8 tests · 4 audits**
+**1092 lines · 10 exports · 14 importers · 9 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/coachSessionRouter.i18n.test.ts`
 - `src/services/coachSessionRouter.test.ts`
 - `src/services/spokenLanguage.live.test.ts`
+- `src/services/spokenSquares.test.ts`
 
 ## Exports and every call site
 
@@ -112,17 +113,18 @@
 ### `IntentRouterContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `tryRouteIntent` (function) — 38 call sites
+### `tryRouteIntent` (function) — 42 call sites
 - `src/components/Board/VoiceChatMic.tsx:238`
 - `src/components/Coach/CoachGameReview.tsx:3124`
-- `src/components/Coach/CoachTeachPage.tsx:2903`
-- `src/components/Coach/GameChatPanel.tsx:508`
-- `src/services/coachHands.test.ts:34`
-- `src/services/coachHands.test.ts:140`
-- `src/services/coachHands.test.ts:245`
-- `src/services/coachHands.test.ts:251`
-- `src/services/coachHands.test.ts:257`
-- `src/services/coachHands.test.ts:263`
+- `src/components/Coach/CoachTeachPage.tsx:2907`
+- `src/components/Coach/GameChatPanel.tsx:509`
+- `src/services/coachHands.test.ts:35`
+- `src/services/coachHands.test.ts:141`
+- `src/services/coachHands.test.ts:249`
+- `src/services/coachHands.test.ts:255`
+- `src/services/coachHands.test.ts:261`
+- `src/services/coachHands.test.ts:267`
+- `src/services/coachHands.test.ts:466`
 - `src/services/coachSessionRouter.boardMatch.test.ts:8`
 - `src/services/coachSessionRouter.boardMatch.test.ts:13`
 - `src/services/coachSessionRouter.boardMatch.test.ts:18`
@@ -151,6 +153,9 @@
 - `src/services/coachSessionRouter.boardMatch.test.ts:169`
 - `src/services/coachSessionRouter.boardMatch.test.ts:175`
 - `src/services/coachSessionRouter.boardMatch.test.ts:179`
+- `src/services/spokenSquares.test.ts:62`
+- `src/services/spokenSquares.test.ts:74`
+- `src/services/spokenSquares.test.ts:84`
 
 ## Tests
 
@@ -162,6 +167,7 @@
 - `src/services/coachSessionRouter.i18n.test.ts`
 - `src/services/coachSessionRouter.test.ts`
 - `src/services/spokenLanguage.live.test.ts`
+- `src/services/spokenSquares.test.ts`
 
 ## Audits that reach it
 

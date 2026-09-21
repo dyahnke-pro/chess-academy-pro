@@ -34,7 +34,7 @@ import type { NarrationArrow } from '../../types/walkthroughTree';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useMasterPlayWatcher } from '../../hooks/useMasterPlayWatcher';
 import { logAppAudit } from '../../services/appAuditor';
-import type { OpeningRecord, OpeningVariation, OpeningPlayResult, CoachDifficulty, AnalysisLine, LichessCloudEval, BoardArrow, BoardHighlight, BoardAnnotationCommand } from '../../types';
+import type { OpeningRecord, OpeningVariation, OpeningPlayResult, AnalysisLine, LichessCloudEval, BoardArrow, BoardHighlight, BoardAnnotationCommand } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MoveQuality } from '../Board/ChessBoard';
 import { GameChatPanel } from '../Coach/GameChatPanel';
@@ -62,7 +62,11 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     void loadWeaknessSignals().then((s) => { if (alive) weaknessSignalsRef.current = s; });
     return () => { alive = false; };
   }, []);
-  const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
+  // 🔒 ONE DIFFICULTY (2026-09-21) — see the store field. This surface used to
+  // hold its own copy defaulting to 'medium', so the opponent here ignored what
+  // the student had set anywhere else.
+  const difficulty = useAppStore((st) => st.coachDifficulty);
+  const setDifficulty = useAppStore((st) => st.setCoachDifficulty);
   const targetStrength = getTargetStrength(playerRating, difficulty);
   // When playing out a specific position (quiz "test yourself",
   // trap position, etc.) the player controls whichever side is to

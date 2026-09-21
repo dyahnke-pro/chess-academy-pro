@@ -25,7 +25,7 @@
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { pickBookMove, bookMoveToSquares, isBookMoveLegal } from './coachBookMove';
-import type { CoachDifficulty } from './coachAgent';
+import type { RequestedDifficulty } from '../types';
 
 export interface PlaySessionConfig {
   /** Stockfish skill level 0–20. */
@@ -108,14 +108,14 @@ export function configFromTargetElo(targetElo: number): PlaySessionConfig {
   };
 }
 
-const DIFFICULTY_OFFSET: Record<CoachDifficulty, number> = {
+const DIFFICULTY_OFFSET: Record<RequestedDifficulty, number> = {
   easy: -300,
   medium: 0,
   hard: 300,
   auto: 0,
 };
 
-const DIFFICULTY_NAME: Record<CoachDifficulty, string> = {
+const DIFFICULTY_NAME: Record<RequestedDifficulty, string> = {
   easy: 'Easy',
   medium: 'Medium',
   hard: 'Hard',
@@ -131,7 +131,7 @@ const DIFFICULTY_NAME: Record<CoachDifficulty, string> = {
  * @param playerElo  the player's effective ELO from `getPlayerRating`
  */
 export function resolveConfig(
-  difficulty: CoachDifficulty | undefined,
+  difficulty: RequestedDifficulty | undefined,
   playerElo: number,
 ): PlaySessionConfig {
   const effective = difficulty ?? 'auto';

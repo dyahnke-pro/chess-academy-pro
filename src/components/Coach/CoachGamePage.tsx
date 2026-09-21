@@ -413,7 +413,19 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       : 'medium';
   const initialSide: 'white' | 'black' = sideParam === 'black' ? 'black' : 'white';
 
-  const [difficulty, setDifficulty] = useState<CoachDifficulty>(initialDifficulty);
+  // 🔒 ONE DIFFICULTY (2026-09-21). Four surfaces each held their own copy, so
+  // "make it harder" meant something different per tab. This page still SEEDS
+  // it from its own `?difficulty=` deep link — the URL is a legitimate opener —
+  // but the value now lives in one place every coach surface reads.
+  const difficulty = useAppStore((st) => st.coachDifficulty);
+  const setDifficulty = useAppStore((st) => st.setCoachDifficulty);
+  const seededDifficultyRef = useRef(false);
+  useEffect(() => {
+    if (seededDifficultyRef.current) return;
+    seededDifficultyRef.current = true;
+    if (initialDifficulty !== difficulty) setDifficulty(initialDifficulty);
+    // Mount-only: a later store change is someone ASKING for it, not a re-seed.
+  }, [initialDifficulty, difficulty, setDifficulty]);
   const targetStrength = getTargetStrength(playerRating, difficulty);
 
   // Time control selection (disabled once the game has started). Defaults to
