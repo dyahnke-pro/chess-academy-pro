@@ -805,6 +805,24 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   await resolveCards();
   const revealed = await until(() => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text)), 20000, 500);
   log(`  [turning] reveal spoken=${revealed}`);
+  // 🔒 THE DRIVER REPORTS ITS OWN FAILURES AS ROWS, NOT AS LOG LINES. A driver
+  // that gives up quietly is the same class as every instrument bug this file
+  // documents: the reader is left to INFER the harness broke from a downstream
+  // symptom (`end reached=false`), which is precisely how one latch got read as
+  // three product failures. Say it in the results, where the verdict counts it.
+  //
+  // It is skipped, not passed, when the card never appeared: a game with fewer
+  // than two costed moments raises no card by design, and a row that reports
+  // green for an event that could not happen is the self-declared n/a this
+  // audit has had to delete twice already.
+  if (turnCardUp || turningSeenUnanswered || turningAnswered) {
+    await add('DRIVER answered-the-turning-point-card', turningAnswered,
+      turningAnswered
+        ? `answered in ${turningRounds} round(s); reveal spoken`
+        : `the card defeated the driver after ${turningRounds} round(s) — no reveal was ever spoken. `
+          + 'The walk cannot pass this card, so RECAP, THESIS and CRIT below are DRIVER failures too. '
+          + 'This is the HARNESS, not the coach.');
+  }
 
   // STEP PAST THE LAST PLY — the closing lives at lastPly + 1, so something has
   // to take that step: auto-advance if it resumes, else the forward control.
