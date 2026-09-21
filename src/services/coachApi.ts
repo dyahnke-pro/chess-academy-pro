@@ -2213,7 +2213,7 @@ export async function groundedMoveFeedback(opts: {
   const hasGround = Boolean(
     opts.bestMoveUci || opts.evalCp !== undefined && opts.evalCp !== null
     || opts.mateIn !== undefined && opts.mateIn !== null
-    || (opts.tactics && opts.tactics.length > 0) || framing,
+    || Boolean(opts.tactics) || framing,   // TacticsLiveContext is an OBJECT, not an array
   );
   if (!hasGround) return null;
   return serveGroundedPositionDefault(
