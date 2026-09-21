@@ -15,7 +15,7 @@
 /** Rotating opening lines. Each invites a question without the stale
  *  "welcome to my classroom" every time. */
 export const COACH_GREETINGS: readonly string[] = [
-  "What are we working on today? Name an opening and I'll teach it to you move by move.",
+  "What are you working on today? Name an opening and I'll teach it to you move by move.",
   "Good to see you. Want me to teach you an opening, dig into your weak spots, or look at a position?",
   "Ready when you are. Pick a line to learn — just say “teach me the Caro-Kann” — or ask about your game.",
   "Back at the board. Name any opening and I'll walk you through it, or tell me what to sharpen.",

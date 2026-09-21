@@ -51,6 +51,7 @@ import { describe, it, expect } from 'vitest';
 import { BANNED_PRONOUNS } from '../services/perspectiveRule';
 import { VIENNA_GAME } from '../data/openingWalkthroughs/vienna';
 import { CURATED_NARRATIONS } from '../data/opening-narrations';
+import * as greetings from '../data/coachGreetings';
 
 /**
  * 🔒 IT REACHED ZERO ON THE DAY IT WAS WRITTEN, so this is a HARD GATE rather
@@ -104,7 +105,16 @@ function narrationStrings(value: unknown, key = ''): string[] {
 
 describe('authored narration and the banned pronouns', () => {
   // Both shipped sources, so neither can rot behind the other.
-  const ideas = [...narrationStrings(VIENNA_GAME), ...narrationStrings({ narrations: CURATED_NARRATIONS.flatMap((n) => n.narrations ?? []) })];
+  // Every shipped authored source this gate knows about. Add one by taking
+  // its key from ITS OWN type — see the note on NARRATION_KEYS.
+  const greetingLines = Object.values(greetings as Record<string, unknown>)
+    .flatMap((v) => (Array.isArray(v) ? v : [v]))
+    .filter((v): v is string => typeof v === 'string' && /\s/.test(v) && v.trim().length > 12);
+  const ideas = [
+    ...narrationStrings(VIENNA_GAME),
+    ...narrationStrings({ narrations: CURATED_NARRATIONS.flatMap((n) => n.narrations ?? []) }),
+    ...narrationStrings({ narrations: greetingLines }),
+  ];
 
   it('reads real narration — the walk is not vacuous', () => {
     // Every assertion below is meaningless if the tree walk returns nothing,
