@@ -219,6 +219,55 @@ describe('OUTLINE.md covers PLAN.md', () => {
     ).toEqual([]);
   });
 
+  it('carries no ITEM LINE twice — the heading check is blind to a headless copy', () => {
+    // 🔴 THE HEADING CHECK ABOVE MISSED THE SAME DEFECT, TWICE (2026-09-21).
+    // After the six duplicate headings were reconciled, a 14-line copy of
+    // §6/§8's tail was still sitting in the file — stranded under a heading of
+    // its own that it did not duplicate, so the heading check had nothing to
+    // catch it by. It survived a second pass for the same reason.
+    //
+    // And it was the OLDER copy, which is the worse kind. A plain duplicate is
+    // noise you read twice; a STALE duplicate is a live contradiction — that
+    // block still said "57,204 un-positioned notes" after the line above it
+    // was corrected to 9,928, and "readingGate looks like DEAD STATE" after
+    // the correction landed. The board asserted both, and whichever a reader
+    // hits first is the one they act on. Half of them would have been sizing
+    // work against a payload five times the real one.
+    //
+    // So blame by ITEM LINE as well as by heading. A heading is an identity;
+    // an item line is a CLAIM, and the same claim twice means one of the two
+    // is going stale the moment anyone edits the other — the defect does not
+    // need a duplicated heading to happen, which is what the first two passes
+    // learned the expensive way.
+    //
+    // NARROW ON PURPOSE (a flaky gate gets muted): only marked item lines, and
+    // only substantial ones, so a short shared fragment like a table rule or a
+    // repeated "· ✅ 8." tail cannot false-fire.
+    const items = outline
+      .split('\n')
+      .map((l, i) => ({ n: i + 1, text: l.trim() }))
+      .filter(({ text }) => /^[-*]\s+(✅|🔴|🟠|🟡|⛔)/.test(text) && text.length > 60)
+      .map((x) => ({ ...x, key: x.text.replace(/\s+/g, ' ') }));
+
+    expect(items.length, 'no marked item lines parsed — this check would pass for free')
+      .toBeGreaterThan(20);
+
+    const firstSeen = new Map<string, number>();
+    const dupes: string[] = [];
+    for (const { n, key } of items) {
+      const prev = firstSeen.get(key);
+      if (prev === undefined) firstSeen.set(key, n);
+      else dupes.push(`line ${n} repeats line ${prev}: ${key.slice(0, 90)}`);
+    }
+    expect(
+      dupes,
+      `OUTLINE.md carries duplicate item line(s):\n  ${dupes.join('\n  ')}\n` +
+        'Two sessions edit this board and a merge kept both sides. Delete the STALE copy — ' +
+        'not the newer one, and check which is which before deleting: the older copy carries ' +
+        'pre-correction numbers, so leaving it makes the board assert both answers at once.',
+    ).toEqual([]);
+  });
+
   it('cites no item the plan does not have', () => {
     const known = planIds(plan);
     const phantom = [...outlineIds(outline)].filter((id) => !known.has(id));
