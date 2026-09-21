@@ -41,7 +41,6 @@ beforeEach(() => {
 
 function makeSegment(overrides: Partial<ReviewMoveSegment> & { ply: number }): ReviewMoveSegment {
   return {
-    ply: overrides.ply,
     moveNumber: Math.ceil(overrides.ply / 2),
     san: 'e4',
     playerColor: overrides.ply % 2 === 1 ? 'white' : 'black',

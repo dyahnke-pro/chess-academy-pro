@@ -18,6 +18,8 @@ interface Note {
   teaches: string;
   plans: string;
   sources: string[];
+  /** Concept tags — present in the data, read by this file. */
+  concepts?: string[];
 }
 
 const notes = (teachings as { notes: Note[] }).notes;

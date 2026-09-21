@@ -206,7 +206,7 @@ describe('tacticAlertService', () => {
   describe('detectGameplayTactic', () => {
     it('returns null when no best move', () => {
       const analysis: StockfishAnalysis = {
-        bestMove: null,
+        bestMove: null as unknown as string,
         evaluation: 0,
         depth: 10,
         topLines: [],
