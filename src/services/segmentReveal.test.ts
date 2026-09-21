@@ -80,7 +80,7 @@ describe('splitSegmentBySentence', () => {
     const grounded = groundedSegmentArrows(text, text, move);
     // A span the text never mentions — must still be carried somewhere.
     const segments = splitSegmentBySentence(
-      { text, arrows: [...grounded.arrows, { from: 'b1', to: 'c3', color: 'green' }] },
+      { text, arrows: [...(grounded.arrows ?? []), { from: 'b1', to: 'c3', color: 'green' }] },
       grounded.spans,
     );
     const all = segments.flatMap((s) => (s.arrows ?? []).map((a) => `${a.from}-${a.to}`));

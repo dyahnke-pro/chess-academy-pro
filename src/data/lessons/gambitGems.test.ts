@@ -71,7 +71,7 @@ describe('gambit punish-gems (separate lane)', () => {
         expect(line, `playable line for ${gemId(gem)}`).not.toBeNull();
         // narration arrays drive annotations/learnCues — must match move count
         expect(line!.annotations.length).toBe(line!.moves.length);
-        expect(line!.learnCues.length).toBe(line!.moves.length);
+        expect(line!.learnCues?.length ?? 0).toBe(line!.moves.length);
       }
     }
     // Every narration key maps to a surfaced gem (none keyed to a dropped /
