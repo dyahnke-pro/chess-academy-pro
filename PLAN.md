@@ -291,6 +291,28 @@ noting alongside the funnel work: the students who import are the ones whose
 games land on the no-PV path.
 
 
+### `tactics-context-stale` — the count, finally read (2026-09-20)
+
+**0 stale, of 145 captured events.** Prod, muted, `audit-concept-gameplay`
+G5a/G5b, exit 0, 15/15 rows green.
+
+The number matters less than why it was never a number before: **no script in
+the repo captured that event** — `grep -rl tactics-context-stale scripts/`
+returned nothing until today — while OUTLINE carried it in two states at once,
+twice as 🔴 "never done" and once as ✅ "ZERO across all four runs, closes the
+item".
+
+Worth being exact about the catch rather than overstating it: that ✅ reached
+the **right number on no evidence**. A zero from an instrument that cannot see
+the event is absence-of-CAPTURE, not absence-of-EVENT — the two are
+indistinguishable from the outside, which is the whole disease. It is now the
+same answer with a real instrument behind it, and G5a runs FIRST and asserts
+the listener captured events at all, so a dead sidecar can never read as a pass.
+
+Also measured on that run, reported not asserted: `interrupt=0, walk=2` on the
+posture mix — the live-commentary doors need a warm engine cache, which is
+OUTLINE 11l and is a measurement rather than a red.
+
 ### 0a CHALLENGED — "all five flagged plies return `[]`" does NOT reproduce (2026-09-20)
 
 The board records the two fundamentals reds as **DETECTOR COVERAGE**, diagnosed

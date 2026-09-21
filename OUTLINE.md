@@ -28,7 +28,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 4. D11 — `[delta]` squares already coupled (the PLAN entry was stale)
 - ✅ 5. Hygiene — watermark hook, timeouts-vs-assertions, lint crash named, test-type ceiling 296→236, `BuildVersionWidget` regex, `formatTacticsSubBlock(tactics, boardFen)` required, multilingual row poll
 - ✅ 6. Measurements — boot 15 files / 26.4 MB raw / 6.1 MB gzip; corpus reach 24/24 both tiers; corpus gates evened
-- 🟠 `tactics-context-stale` count read off the listener — CAPTURE BUILT (audit-concept-gameplay G5a/G5b; no audit in the repo read this event, which is why it was never done). The NUMBER is owed from the next run of that audit
+- ✅ `tactics-context-stale` count READ off the listener: **0 stale of 145 captured events** (prod, muted, audit-concept-gameplay G5a/G5b). The zero is now a MEASUREMENT — G5a proves 145 events were captured, so it is not absence-of-capture
 - 🔴 47-game rerun — `data/sources/wo4-corpus/` absent on this machine
 - **Audits:** loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ · second-game 12/12 ✅
 
@@ -101,7 +101,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
 - ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
 - 🔴 `npm run ship-check` has never printed READY TO PUSH on that tree
-- 🟠 Read the `tactics-context-stale` count off the listener — capture built (G5a/G5b); the number is owed from the next audit run
+- ✅ Read the `tactics-context-stale` count off the listener — 0 of 145 captured events, prod, non-vacuity proven
 - ✅ `GameChatPanel.test` — MEASURED 2026-09-20: 16/16 green on a synced tree. The "red on untouched main" claim was stale and is deleted, not annotated
 - ✅ Swept: ONE `crashed(out)` detector backs vitest, lint, tsc and the Playwright summarizer — the regex had already been hand-written twice, which is the drift the rot rule names
 
@@ -240,7 +240,7 @@ there; the review arm proves nothing either way and should not be re-run.**
 - ✅ **review, zero reds** — including the two fundamentals rows that were red in the last recorded run (RECAP aggregate + FUNDLEAD). NB that game had ONE flagged ply, so 1/1 is n=1, green rather than robust.
 - ✅ **Learn, exit 0** — 27 spoken lines, the computed concept invariant voiced mid-game, 13 board lines gate-clean on perspective, 57 against the vacuity floor.
 - ❌ **green — RUN UNUSABLE**, correctly refused (above).
-- 🟠 **`tactics-context-stale`: the "ZERO across all four runs" claim is WITHDRAWN** — no script in the repo captured that event until 2026-09-20 (`grep -rl tactics-context-stale scripts/` returned nothing), so a zero from those runs is absence-of-CAPTURE read as absence-of-EVENT, not a measurement. Capture now exists (audit-concept-gameplay G5a/G5b, non-vacuity row first); the real number is owed from the next run.
+- ✅ **`tactics-context-stale`: 0 of 145 captured events**, measured on prod 2026-09-20. ⚠️ The earlier "ZERO across all four runs" line reached the RIGHT NUMBER on NO EVIDENCE — until today `grep -rl tactics-context-stale scripts/` returned nothing, so no audit captured the event and that zero was absence-of-capture. Same answer, real instrument: G5a asserts the listener captured events at all, and runs first.
 - Noted for the other session's #21, not acted on: `workers=60` alive on the review reopen, inside the band their census tracks.
 
 ✅ **THE MECHANISM IS VERIFIED AT THE DECISION POINT, AND IT IS NARROW BY
