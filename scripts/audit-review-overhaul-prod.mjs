@@ -37,6 +37,7 @@ import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs'
 import { raced as racedRead, wedgeWatch, until as sharedUntil } from './audit-lib/wedge-watch.mjs';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { judgeCriticalVoice } from './audit-lib/critical-moment-voice.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
@@ -1539,19 +1540,6 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // test can see — that what the student HEARD names the count and a COMPUTED
   // stake rather than the templated "equality" that is false in both
   // directions.
-  /** "Ke6" -> "king to e6", because the coach SPEAKS moves and never spells
-   *  SAN aloud (the TTS sanitiser expands them). A row looking for "was this
-   *  move mentioned" has to look for the spoken form too, or it will call a
-   *  named move unnamed. */
-  const sanToWords = (san) => {
-    // Tolerate the disambiguator and the capture x — `Qxa5` and `Nbd7` are the
-    // shapes a first cut missed, and a helper that returns null on a CAPTURE
-    // would go blind on exactly the moves a critical moment tends to be about.
-    const m = /^([NBRQK])?[a-h]?[1-8]?(x?)([a-h][1-8])/.exec(san.replace(/[+#]$/, ''));
-    if (!m) return null;
-    const piece = { N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' }[m[1] ?? ''] ?? 'pawn';
-    return `${piece} ${m[2] ? 'takes' : 'to'} ${m[3]}`;
-  };
   const critEvents = events().filter((e) => /criticalMoment|scanCriticalMoments/.test(String(e.source ?? '')));
   const fanEv = critEvents.find((e) => /scanCriticalMoments/.test(String(e.source ?? '')));
   const pickEv = critEvents.find((e) => /CoachGameReview\.criticalMoment/.test(String(e.source ?? '')));
@@ -1596,18 +1584,22 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   //
   // Three outcomes, never two: SPOKEN here (pass), CLAIMED elsewhere (pass,
   // and it says by what), or SILENT (fail — the yield went nowhere).
+  // ONE DECIDER, SHARED WITH ITS TEST. This judgement lived inline here and
+  // one of its three branches had never executed after three prod runs — a
+  // rare game is not a test plan. It is now `audit-lib/critical-moment-voice`,
+  // exercised by `criticalMomentVoice.test.ts` including the
+  // CLAIMED-ELSEWHERE path prod would not produce. Keeping a second copy here
+  // is the duplicated-judgement rot this repo names everywhere else.
   const playedSan = /played=(\S+)/.exec(pickSummary)?.[1] ?? null;
-  const sanWord = playedSan ? sanToWords(playedSan) : null;
-  const claimedElsewhere = !critLines.length && !!playedSan
-    ? spoken().map((x) => x.text).find((t) => t.includes(playedSan) || (sanWord && t.toLowerCase().includes(sanWord)))
-    : null;
+  const voice = judgeCriticalVoice({
+    momentSelected: !!pickEv,
+    criticalLines: critLines,
+    playedSan,
+    spoken: spoken().map((x) => x.text),
+  });
   await add('CRIT spoken-names-count-and-stake',
-    !pickEv || critLines.length > 0 || !!claimedElsewhere,
-    critLines.length ? `${critLines.length} line(s): "${critLines[0].slice(0, 160)}"`
-      : claimedElsewhere
-        ? `quiet here BY DESIGN — the question plan owns this ply and spoke it: "${claimedElsewhere.replace(/\s+/g, ' ').slice(0, 150)}"`
-        : driverStop ?? `a moment was selected (played=${playedSan ?? '?'}) and NOTHING said it aloud — `
-          + 'not in this register and not in any other. That is a yield to a card that never claimed it');
+    voice.pass || !!driverStop,
+    voice.verdict === 'silent' && driverStop ? driverStop : `${voice.verdict}: ${voice.detail}`);
   // "Keeps equality" is a claim about the EVALUATION and it is false when they
   // are winning (it keeps the WIN) and when they are lost (it promises a draw
   // that is not there). It must never appear.
