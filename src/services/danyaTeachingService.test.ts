@@ -14,7 +14,11 @@ import { secondaryNotesForFen, warmSecondaryPositionIndexSync } from './secondar
 // lookups (`noteAtPosition` chains primary→secondary; `secondaryNotesForFen` is
 // the secondary FEN index). `notesForFen`/`notesForPrefix` are the primary index,
 // now legitimately anchored-empty.
-interface Note { id: string; lineSan: string[]; plans: string; opening?: string | null }
+// A LOCAL, PARTIAL view of the voiced note shape — it describes only what
+// this file reads. `studentSide` is in the data and is REQUIRED by
+// noteAtPosition (a note's prose is written from a seat, and both seats
+// share the FEN), so a local type that omits it makes the call untypeable.
+interface Note { id: string; lineSan: string[]; plans: string; opening?: string | null; studentSide?: 'white' | 'black' | null }
 const voiced = JSON.parse(readFileSync('public/data/voiced-teachings.json', 'utf8')) as { notes: Note[] };
 const positioned = voiced.notes.filter((n) => n.lineSan.length > 0);
 

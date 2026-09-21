@@ -4,7 +4,7 @@ import type { OpponentIntent } from './opponentIntent';
 
 // Student is White. Opponent (Black) ideal line kept it near-equal (+20 white POV);
 // their actual move left White clearly better.
-const intent: OpponentIntent = { plans: [{ opponentMove: 'a6', studentReply: 'Ba4', evalCp: 20 }] };
+const intent: OpponentIntent = { plans: [{ opponentMove: 'a6', studentReply: 'Ba4', evalCp: 20 , squares: [] }] };
 
 describe('detectOpponentGap — the take-advantage-of-the-gap', () => {
   it('flags a real gift: the opponent under-played and White is now clearly better', () => {
@@ -31,7 +31,7 @@ describe('detectOpponentGap — the take-advantage-of-the-gap', () => {
   });
 
   it('stays silent in an already-won game (not a teaching moment)', () => {
-    const wonIntent: OpponentIntent = { plans: [{ opponentMove: 'a6', studentReply: 'Ba4', evalCp: 700 }] };
+    const wonIntent: OpponentIntent = { plans: [{ opponentMove: 'a6', studentReply: 'Ba4', evalCp: 700 , squares: [] }] };
     expect(detectOpponentGap({
       opponentIntent: wonIntent,
       opponentPlayedUci: 'h7h6',
@@ -49,7 +49,7 @@ describe('detectOpponentGap — the take-advantage-of-the-gap', () => {
     // Black student; ideal kept it ~equal (-20 white POV = +20 black POV). White
     // opponent blunders → -220 white POV = +220 black POV. Gift for Black.
     const gap = detectOpponentGap({
-      opponentIntent: { plans: [{ opponentMove: 'Re1', studentReply: 'a6', evalCp: -20 }] },
+      opponentIntent: { plans: [{ opponentMove: 'Re1', studentReply: 'a6', evalCp: -20 , squares: [] }] },
       opponentPlayedUci: 'c1g5',
       analysisAfter: { evaluation: -220, bestMove: 'c6d4', isMate: false, mateIn: null },
       studentColor: 'b',

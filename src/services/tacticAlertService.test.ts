@@ -211,7 +211,7 @@ describe('tacticAlertService', () => {
         depth: 10,
         topLines: [],
         isMate: false,
-        mateIn: null,
+        mateIn: null, nodesPerSecond: 0,
       };
       expect(detectGameplayTactic('some fen', analysis, 'white')).toBeNull();
     });
@@ -226,7 +226,7 @@ describe('tacticAlertService', () => {
           { rank: 1, moves: ['d2d4'], evaluation: 30 , mate: null },
         ],
         isMate: false,
-        mateIn: null,
+        mateIn: null, nodesPerSecond: 0,
       };
       expect(detectGameplayTactic('some fen', analysis, 'white')).toBeNull();
     });
@@ -241,7 +241,7 @@ describe('tacticAlertService', () => {
           { rank: 1, moves: ['d2d4'], evaluation: 50 , mate: null },
         ],
         isMate: false,
-        mateIn: null,
+        mateIn: null, nodesPerSecond: 0,
       };
       // Our mock returns 'fork' for fen containing 'fork'
       expect(detectGameplayTactic('fork position', analysis, 'white')).toBe('fork');
@@ -257,7 +257,7 @@ describe('tacticAlertService', () => {
           { rank: 1, moves: ['d2d4'], evaluation: 50 , mate: null },
         ],
         isMate: false,
-        mateIn: null,
+        mateIn: null, nodesPerSecond: 0,
       };
       // Our mock returns 'tactical_sequence' for unknown fen
       expect(detectGameplayTactic('unknown position', analysis, 'white')).toBeNull();
