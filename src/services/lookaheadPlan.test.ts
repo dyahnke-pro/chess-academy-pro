@@ -71,11 +71,21 @@ const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 /** A COMPLETE LineShape from the few fields a case cares about. The literals
  *  here carried three of six fields; the rest are the neutral values the
- *  shape detector produces when nothing of that kind happened. */
+ *  shape detector itself starts with (lookaheadPlan.ts:936). */
 const fullShape = (o: Partial<LineShape>): LineShape => ({
-  forcedPlies: 0, traded: 0, endsInEndgame: false,
-  repeats: false, pliesToFirstCapture: null, quietMoveIndex: null, ...o,
-} as LineShape);
+  // Field by field rather than `{...base, ...o}`: spreading a Partial widens
+  // every member with `| undefined`, which a required `number | null` will not
+  // accept. A cast would silence that and also silence a genuinely missing
+  // field later, so the defaults are written out.
+  forcedPlies: o.forcedPlies ?? 0,
+  traded: o.traded ?? 0,
+  endsInEndgame: o.endsInEndgame ?? false,
+  repeats: o.repeats ?? false,
+  pliesToFirstCapture: o.pliesToFirstCapture ?? null,
+  quietMoveIndex: o.quietMoveIndex ?? null,
+  evalSwingCp: o.evalSwingCp ?? null,
+  castlingLost: o.castlingLost ?? null,
+});
 
 describe('two plans, one line', () => {
   it('attributes each side\'s moves to that side', () => {
