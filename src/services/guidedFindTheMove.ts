@@ -16,6 +16,7 @@
 import { Chess } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { describeMoveGeometry } from './groundedAnswer';
+import { landedTacticFor } from './pvPlayback';
 
 const PIECE_NAME: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -80,21 +81,34 @@ function probeBest(fen: string, bestUci: string): ProbedBest | null {
   }
 }
 
-/** The tactic THIS move lands, if any ('fork' | 'pin' | 'skewer' | …). MUST
- *  involve the moved piece's destination square — otherwise a PRE-EXISTING
- *  tactic (often the OPPONENT's) elsewhere on the board gets attributed to the
- *  student's move ("your queen can land a fork" when the fork is the opponent's
- *  knight; board-awareness sweep, 2026-07-22). Pass the moved piece's `to`
- *  square so only a tactic the moved piece participates in counts. */
-function landedTactic(fenAfter: string, toSquare?: string): string | null {
-  try {
-    const t = detectTactics(fenAfter).tactics.find((x) => x.type !== 'none'
-      && (!toSquare || x.involvedSquares.includes(toSquare)));
-    return t ? t.type : null;
-  } catch {
-    return null;
-  }
+/** The tactic THIS move lands, if any ('fork' | 'pin' | 'skewer' | …).
+ *
+ * 🔴 THIS USED TO BE A LOCAL COPY AND IT DISAGREED WITH THE REST OF THE COACH
+ * (2026-09-21). It read `detectTactics(fenAfter)` and kept any tactic whose
+ * `involvedSquares` merely CONTAINED the moved piece's destination. Measured on
+ * one real position (Qf4+ in `6k1/5p2/5B1Q/1p1P1q2/4r3/1p6/6PK/6R1 b`):
+ *
+ *     this copy -> "fork"          computePlyFacts -> no fork
+ *
+ * so Learn asked "Your queen can land a fork here — what's the square?" and
+ * sent the student hunting a fork that wins NOTHING (the forked queen just
+ * plays Qxf4), while review stayed correctly silent on the same board.
+ *
+ * Its own comment was right about one guard and blind to four others. The
+ * participation test it describes — "MUST involve the moved piece's destination
+ * square … otherwise a PRE-EXISTING tactic (often the OPPONENT's) gets
+ * attributed to the student's move" — is KEPT and strengthened by the shared
+ * path, which additionally requires the moved piece to be the tactic's AGENT,
+ * the targets to be WINNABLE, a pin to be landed by a SLIDER, and the tactic to
+ * be NEW rather than already on the board.
+ *
+ * One coach, one judgement: `landedTacticFor` reads `computePlyFacts`, the
+ * single source, so this surface can no longer drift from review.
+ */
+function landedTactic(fenBefore: string, san: string): string | null {
+  return landedTacticFor(fenBefore, san);
 }
+
 
 /**
  * Gate: is THIS a moment worth turning into a question? Deterministic —
@@ -118,7 +132,7 @@ export function shouldOfferGuidedFind(opts: {
   } catch {
     return false;
   }
-  return probed.isMate || probed.isCapture || probed.isCheck || landedTactic(probed.fenAfter, probed.to) !== null;
+  return probed.isMate || probed.isCapture || probed.isCheck || landedTactic(opts.fen, probed.san) !== null;
 }
 
 /**
@@ -130,7 +144,7 @@ export function buildGuidedFindChallenge(fen: string, bestUci: string): GuidedFi
   const p = probeBest(fen, bestUci);
   if (!p) return null;
 
-  const tactic = landedTactic(p.fenAfter, p.to);
+  const tactic = landedTactic(fen, p.san);
   let question: string;
   if (p.isMate) {
     question = `You have a checkmate on the board — your ${p.pieceName} delivers it. Where?`;

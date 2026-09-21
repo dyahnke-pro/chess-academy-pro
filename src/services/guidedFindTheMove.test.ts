@@ -120,3 +120,19 @@ describe('judgeGuidedFindAttempt — found / retry / stale', () => {
     expect(judgeGuidedFindAttempt(ch, { san: 'Ra8#', fenBefore: WINNING_FEN })).toBe('stale');
   });
 });
+
+describe('one coach, one fork judgement (parity, 2026-09-21)', () => {
+  it('does NOT ask for a fork that wins nothing — review and Learn now agree', async () => {
+    // The measured divergence. Qf4+ "forks" bishop, queen and king, but the
+    // forked QUEEN attacks f4 and simply answers Qxf4. Review (computePlyFacts)
+    // called it no fork; this surface's LOCAL copy called it a fork and asked
+    // "Your queen can land a fork here. What's the square?" — sending the
+    // student hunting a fork that wins nothing.
+    //
+    // Asserted through the PUBLIC builder, not the private helper, so it pins
+    // the STUDENT-VISIBLE behaviour rather than an implementation detail.
+    const fen = '6k1/5p2/5B1Q/1p1P1q2/4r3/1p6/6PK/6R1 b - - 1 36';
+    const ch = buildGuidedFindChallenge(fen, 'f5f4');
+    expect(ch?.question ?? '', 'must not promise a fork here').not.toMatch(/fork/i);
+  });
+});

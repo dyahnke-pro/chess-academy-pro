@@ -693,6 +693,44 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
  * unifies the quality. Null on a genuinely quiet move (no concrete fact) →
  * silence, per the Narration Voice Rules. Pure — chess.js validates the SAN.
  */
+/**
+ * THE tactic a move lands, reality-gated — the ONE judgement, for any surface
+ * that wants to NAME a tactic to the student.
+ *
+ * 🔴 WHY THIS IS EXPORTED (2026-09-21, found auditing the unified coach).
+ * `guidedFindTheMove` carried its OWN copy: `detectTactics(fenAfter)` filtered
+ * only by "the moved piece's square appears in involvedSquares". Measured on
+ * one real position (`6k1/5p2/5B1Q/1p1P1q2/4r3/1p6/6PK/6R1 b`, Qf4+):
+ *
+ *     guidedFindTheMove's copy -> "fork"     computePlyFacts -> no fork
+ *
+ * So Learn asked "Your queen can land a fork here — what's the square?" and
+ * sent the student hunting a fork that wins nothing, while review stayed
+ * correctly silent on the same board. One coach, two answers — the exact
+ * capability-parity failure the rot rule names, and the reason a judgement
+ * gets ONE home rather than a copy per surface.
+ *
+ * The local copy was missing FOUR guards this path has: the moved piece must be
+ * the tactic's AGENT (not merely a participant); the targets must be WINNABLE;
+ * a pin must be landed by a SLIDER; and the tactic must be NEW (a pre-existing
+ * tactic, often the opponent's, is not something this move landed).
+ *
+ * This adds no fifth definition — it reads `computePlyFacts`, which is already
+ * the single source, so the gate can only ever be improved in one place.
+ */
+export function landedTacticFor(fenBefore: string, san: string): string | null {
+  try {
+    const c = new Chess(fenBefore);
+    const mv = c.move(san);
+    if (!mv) return null;
+    return computePlyFacts(fenBefore, c.fen(), {
+      captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
+    }).tacticLanded;
+  } catch {
+    return null;
+  }
+}
+
 export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptureContext, moverIsStudent?: boolean): string | null {
   try {
     const c = new Chess(fenBefore);
