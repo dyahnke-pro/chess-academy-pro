@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**710 lines · 19 exports · 21 importers · 7 tests · 25 audits**
+**714 lines · 19 exports · 21 importers · 7 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:5619) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:5913) — names `conceptEngine`
 
 ## Who calls in
 
@@ -49,7 +49,7 @@
 - `src/services/conceptEngine.test.ts:13`
 - `src/services/groundedMoveWhy.ts:73`
 - `src/services/groundedMoveWhy.ts:99`
-- `src/services/mistakeNarration.ts:359`
+- `src/services/mistakeNarration.ts:369`
 - `src/services/thinkAloud.ts:123`
 
 ### `solvingSide` (function) — 2 call sites
@@ -115,7 +115,7 @@
 - `src/services/narratedContinuation.test.ts:19`
 - `src/services/narratedContinuation.ts:18`
 - `src/services/narratedContinuation.ts:94`
-- `src/services/openingGenerator.ts:1957`
+- `src/services/openingGenerator.ts:1961`
 
 ### `strongerSide` (function) — 3 call sites
 - `src/services/conceptEngine.test.ts:32`
@@ -155,8 +155,8 @@
 - `src/services/conceptEngine.test.ts:163`
 - `src/services/conceptEngine.test.ts:199`
 - `src/services/conceptEngine.test.ts:217`
-- `src/services/liveTacticsContext.ts:98`
-- `src/services/positionFacts.ts:440`
+- `src/services/liveTacticsContext.ts:106`
+- `src/services/positionFacts.ts:471`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -191,7 +191,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7136`
+- `src/components/Coach/CoachTeachPage.tsx:7254`
 - `src/services/dnaLineNarrator.ts:175`
 - `src/services/dnaLineNarrator.ts:206`
 - `src/services/dnaLineNarrator.ts:242`
@@ -212,6 +212,10 @@
 
 ## Audits that reach it
 
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
 - `scripts/audit-coach-move-grounding.mjs`
 - `scripts/audit-coach-plan.mjs`
 - `scripts/audit-coach-player-games.mjs`
@@ -219,6 +223,7 @@
 - `scripts/audit-concept-engine-prod.mjs`
 - `scripts/audit-concept-gameplay-prod.mjs`
 - `scripts/audit-endgame-results.mjs`
+- `scripts/audit-engine-worker-census-prod.mjs`
 - `scripts/audit-engine.mjs`
 - `scripts/audit-hanging-pieces.mjs`
 - `scripts/audit-kid-puzzles-static.mjs`
@@ -228,6 +233,8 @@
 - `scripts/audit-lichess-lines.mjs`
 - `scripts/audit-llm-claims.mjs`
 - `scripts/audit-lookahead-plan-prod.mjs`
+- `scripts/audit-loop-closes-prod.mjs`
+- `scripts/audit-loop-green-prod.mjs`
 - `scripts/audit-model-games-cluster.mjs`
 - `scripts/audit-openings-narration.mjs`
 - `scripts/audit-reading-upgrades-loop.mjs`

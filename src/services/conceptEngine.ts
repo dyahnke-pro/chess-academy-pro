@@ -504,7 +504,11 @@ function importanceFromSwing(input: LineInput): number | null {
  *
  * Walks the line with `computePlyFacts` — the app's existing per-ply computer,
  * whose `tacticLanded` is already reality-gated (agent = the moved piece,
- * targets winnable, sliders only for pins). Per STUDENT ply the key move is the
+ * targets winnable, sliders only for pins, and — added 2026-09-21 — the AGENT
+ * SURVIVES: a fork whose forker can simply be captured is not a fork). That
+ * last term reaches THIS function and not only the prose, because the key-move
+ * score below weights a landed tactic at 10: a move whose "fork" was fake no
+ * longer outranks a move that really wins material. Per STUDENT ply the key move is the
  * one that mates, else lands a real tactic with the most material, else wins
  * the most material. Importance = the engine's swing (shared thresholds) when the
  * line came with one, else board-true material. The technique the line REACHES
