@@ -10,7 +10,12 @@ import { methodBeatFor, type MethodSignals, type MethodHabit } from './methodBea
 // both. Need decides whether the habit is owed; SAY-ONCE stops the drumbeat.
 
 const base = (o: Partial<MethodSignals> = {}): MethodSignals => ({
-  tier: 'consequence', cpLossCp: 50, bestSan: 'Nxe5', ignoredThreat: false,
+  // 'none', not 'consequence' — the latter is a FACET band (the factSelector
+  // bar), never an ImportanceTier, so the two vocabularies were conflated.
+  // Behaviour is identical: methodBeatFor branches only on only-move /
+  // critical / blunder / swing, and 'consequence' hit none of them either, so
+  // every assertion below keeps its exact meaning.
+  tier: 'none', cpLossCp: 50, bestSan: 'Nxe5', ignoredThreat: false,
   isStudentMove: true, ...o,
 });
 
@@ -115,7 +120,7 @@ describe('a method beat needs something to correct', () => {
   it('the opponent-threat beat is unreachable on a good move by construction', () => {
     // `ignoredThreat` comes from the attributor, which is flagged-only — this
     // pins the CONTRACT so a future caller cannot start passing it on good moves.
-    expect(methodBeatFor(base({ ignoredThreat: false, cpLossCp: 0, bestSan: 'Nf3', tier: 'consequence' }))).toBeNull();
+    expect(methodBeatFor(base({ ignoredThreat: false, cpLossCp: 0, bestSan: 'Nf3', tier: 'none' }))).toBeNull();
   });
 });
 

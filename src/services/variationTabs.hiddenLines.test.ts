@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import repertoire from '../data/repertoire.json';
 import { buildVariationTabs } from './variationTabs';
 import { getLessonScript, getVariationLessonScript } from '../data/lessons';
-// @ts-expect-error — plain-JS shared metric, no type decls (also run by node)
+// Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
+// suppression this replaces made every call an unsafe `any` call.
 import { reachesMiddlegame as reachesMiddlegameRaw } from '../data/variationMiddlegameDepth.shared.mjs';
 import type { LessonScript, OpeningRecord } from '../types';
 

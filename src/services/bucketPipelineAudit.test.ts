@@ -23,7 +23,8 @@ function mkPuzzle(fen: string, playerMoveSan: string): MistakePuzzle {
     gamePhase: 'opening',
     moveNumber: 1,
     sourceGameId: 'g1',
-    sourceMode: 'coach-capture',
+    // The union is 'coach' | 'lichess' | 'chesscom'.
+    sourceMode: 'coach',
     playerColor: 'black',
     promptText: 'Find the best move.',
     narration: { intro: '', explanation: '', outro: '' } as MistakePuzzle['narration'],

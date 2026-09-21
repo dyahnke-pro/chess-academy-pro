@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import proRepertoires from './pro-repertoires.json';
 import baselineJson from './variationMiddlegameDepth.baseline.json';
-// @ts-expect-error — plain-JS shared metric, no type decls (run by node + vite)
+// Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
+// suppression this replaces made every call an unsafe `any` call.
 import { reachesMiddlegame } from './variationMiddlegameDepth.shared.mjs';
 
 // David 2026-05-29: "All openings and variations need to go to the middle

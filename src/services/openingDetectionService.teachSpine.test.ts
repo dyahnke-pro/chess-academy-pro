@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { resolveTeachSpine, resolveOpeningEntry } from './openingDetectionService';
-// @ts-expect-error — plain-JS shared metric, no type decls
+// Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
+// suppression this replaces made every call an unsafe `any` call.
 import { reachesMiddlegame } from '../data/variationMiddlegameDepth.shared.mjs';
 
 /**
