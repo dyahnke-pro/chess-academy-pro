@@ -89,7 +89,7 @@ const E5: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Nc5 Be3 Ne6 Nd2',
       highlights: [{ square: 'e5', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Black's knight shuffles to e6 and you develop the last piece with Nd2. Here's the middlegame: you're a clean pawn up, the e5-pawn cramps Black, and his pieces have been chased around with no compensation in sight. The engine confirms White is clearly better. Develop, castle, and convert the extra pawn — the Stafford simply doesn't work against this.",
+        "Black's knight shuffles to e6 and you develop the last piece with Nd2. Here's the middlegame: you're a clean pawn up, the e5-pawn cramps Black, and their pieces have been chased around with no compensation in sight. The engine confirms White is clearly better. Develop, castle, and convert the extra pawn — the Stafford simply doesn't work against this.",
       sayShort: 'Nd2 — develop, convert the pawn.',
     }),
   ],

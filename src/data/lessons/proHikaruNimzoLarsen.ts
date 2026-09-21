@@ -104,7 +104,7 @@ export const PRO_HIKARU_NIMZO_LARSEN_LESSON: LessonScript = {
       id: 'nf3',
       moves: 'b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Nc6 d4 exd4 exd4 Re8 Nf3',
       highlights: [{ square: 'f3', color: SOFT }],
-      say: "Nf3 develops the last minor piece, shoring up d4 and eyeing e5 and g5. Every white piece is now harmoniously placed, the centre is White's, and the engine confirms the pleasant edge — about half a pawn, the kind of nagging pull this repertoire converts in his sleep.",
+      say: "Nf3 develops the last minor piece, shoring up d4 and eyeing e5 and g5. Every white piece is now harmoniously placed, the centre is White's, and the engine confirms the pleasant edge — about half a pawn, the kind of nagging pull this repertoire converts in their sleep.",
       sayShort: 'Nf3 — develop, hold d4.',
     }),
     b({

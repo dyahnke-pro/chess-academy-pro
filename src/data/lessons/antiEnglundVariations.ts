@@ -28,7 +28,7 @@ const D6_LESSON: LessonScript = {
       sayShort: "…d6 — you're a clean pawn up, stay simple.",
       highlights: [H('e5', KEY)] }),
     b({ id: 'eng-d6-2', moves: 'd4 e5 dxe5 Nc6 Nf3 d6 Bg5 Qd7 exd6 Bxd6',
-      say: "You develop actively with Bg5, and at the right moment exchange on d6 — after Bxd6 you remain a clean pawn to the good with easy development. Black has a little piece activity for his missing pawn, but nowhere near enough. Keep it simple and keep the extra pawn.",
+      say: "You develop actively with Bg5, and at the right moment exchange on d6 — after Bxd6 you remain a clean pawn to the good with easy development. Black has a little piece activity for their missing pawn, but nowhere near enough. Keep it simple and keep the extra pawn.",
       sayShort: "exd6 — stay a pawn up, develop.",
       highlights: [H('g5', SOFT), H('d6', KEY)] }),
     b({ id: 'eng-d6-3', moves: 'd4 e5 dxe5 Nc6 Nf3 d6 Bg5 Qd7 exd6 Bxd6 Nc3 h6 Bh4 Nge7 Nb5 Nf5 Nxd6+ Nxd6',

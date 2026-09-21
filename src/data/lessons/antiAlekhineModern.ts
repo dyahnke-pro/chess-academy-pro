@@ -23,7 +23,7 @@ export const ANTI_ALEKHINE_MODERN_LESSON: LessonScript = {
   orientation: 'white',
   beats: [
     b({ id: 'ale1', moves: 'e4 Nf6 e5 Nd5 d4',
-      say: "The Alekhine is a dare. Black pokes his knight to f6 and INVITES you to chase it with pawns, betting your centre gets overextended and falls. So take the dare — but take it soundly. e5 kicks the knight to d5, d4 plants the broad centre. His whole plan is to nibble at that centre; yours is to prop it up, develop behind it, and slowly turn all that space into a bind he can't breathe in.",
+      say: "The Alekhine is a dare. Black pokes their knight to f6 and INVITES you to chase it with pawns, betting your centre gets overextended and falls. So take the dare — but take it soundly. e5 kicks the knight to d5, d4 plants the broad centre. Their whole plan is to nibble at that centre; yours is to prop it up, develop behind it, and slowly turn all that space into a bind they can't breathe in.",
       sayShort: "e5, d4 — grab the big centre.",
       highlights: [H('e5', KEY), H('d4', KEY), H('d5', SOFT)] }),
     b({ id: 'ale2', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2',
@@ -39,7 +39,7 @@ export const ANTI_ALEKHINE_MODERN_LESSON: LessonScript = {
       sayShort: "c4 — kick the knight, gain space.",
       arrows: [A('c4', 'd5')], highlights: [H('c4', KEY), H('d5', ATK), H('d6', SOFT)] }),
     b({ id: 'ale5', moves: 'e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 h3 Bh5 c4 Nb6 exd6 cxd6 Nc3 O-O Re1 d5',
-      say: "Nc3 and Re1 finish the job; Black lashes out with …d5 to free himself, but it's too late to change the story. Whether you clamp with c5 or trade it off, you keep more space, a lead in development, and simply the easier position to play. That's the Alekhine bargain — and it has paid off in full.",
+      say: "Nc3 and Re1 finish the job; Black lashes out with …d5 to free themselves, but it's too late to change the story. Whether you clamp with c5 or trade it off, you keep more space, a lead in development, and simply the easier position to play. That's the Alekhine bargain — and it has paid off in full.",
       sayShort: "Nc3, Re1 — space and the easier game.",
       highlights: [H('d5', SOFT), H('c4', SOFT)] }),
   ],

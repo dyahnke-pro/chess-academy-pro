@@ -50,7 +50,7 @@ const MODERN_NF6: LessonScript = {
   openingId: 'pro-carlsen-scandinavian', title: 'Modern 2…Nf6', minutes: 5, orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'nf6', moves: 'e4 d5 exd5 Nf6', arrows: [A('f6', 'd5')], highlights: [H('d5')], say: "The modern move-order — Nf6, delaying the queen. Black will regain the d5-pawn with the knight, avoiding the early …Qxd5 that lets White gain tempo. It's the most flexible, theory-light way into the Scandinavian.", sayShort: 'Nf6 — regain d5 with the knight.' }),
-    b({ id: 'nxd5', moves: 'e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6', arrows: [A('g7', 'a1')], highlights: [H('d5'), H('g6')], say: "Black recaptures on d5 with the knight and fianchettoes with …g6. The knight sits actively in the centre, the bishop heads to g7 on the long diagonal, and Black gets a comfortable, modern position — a kind of reversed-centre setup he understands deeply.", sayShort: 'Nxd5, g6 — central knight, fianchetto.' }),
+    b({ id: 'nxd5', moves: 'e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6', arrows: [A('g7', 'a1')], highlights: [H('d5'), H('g6')], say: "Black recaptures on d5 with the knight and fianchettoes with …g6. The knight sits actively in the centre, the bishop heads to g7 on the long diagonal, and Black gets a comfortable, modern position — a kind of reversed-centre setup they understand deeply.", sayShort: 'Nxd5, g6 — central knight, fianchetto.' }),
   ],
 };
 
@@ -58,7 +58,7 @@ const QD8: LessonScript = {
   openingId: 'pro-carlsen-scandinavian', title: '3…Qd8 Solid', minutes: 5, orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'qd8', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd8', highlights: [H('d8')], say: "The ultra-solid Qd8 — the queen simply returns home. Black concedes a little time but keeps a completely sound, weakness-free position, planning …Nf6, …Bg4 or …Bf5, …e6 and …c6. No targets for White to hit.", sayShort: 'Qd8 — back home, rock-solid.' }),
-    b({ id: 'bg4', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4', arrows: [A('g4', 'f3')], highlights: [H('g4')], say: "Black develops …Nf6 and pins the knight with …Bg4, the active light-squared bishop again deployed outside the chain. Black follows with …e6, …Be7 and castling, reaching a sound, slightly-cramped-but-resilient position where his solidity wears White down.", sayShort: 'Bg4 — pin, develop the good bishop.' }),
+    b({ id: 'bg4', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4', arrows: [A('g4', 'f3')], highlights: [H('g4')], say: "Black develops …Nf6 and pins the knight with …Bg4, the active light-squared bishop again deployed outside the chain. Black follows with …e6, …Be7 and castling, reaching a sound, slightly-cramped-but-resilient position where their solidity wears White down.", sayShort: 'Bg4 — pin, develop the good bishop.' }),
   ],
 };
 

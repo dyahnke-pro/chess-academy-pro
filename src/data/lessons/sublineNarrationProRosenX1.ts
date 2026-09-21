@@ -52,7 +52,7 @@ export const SUBLINE_NARRATION_PRO_ROSEN_X1: Record<string, SublineNarration> = 
 
   // ===== Accelerated London System (student WHITE) — d4 Nf6 Bf4 c5 setups =====
   'pro-ericrosen-london::2::d5@5': {
-    intro: { say: "d5 — Black meets the London with the classical …c5 and …d5 centre. Shore it up with c3, then Nd2, Ngf3 and Bd3, and jump the knight into e5; the standard London manoeuvres give you a firm centre and a kingside build while Black must still solve his own light bishop.", sayShort: 'd5 — c3, Nd2, Ngf3, then Ne5.' }, sources: LON,
+    intro: { say: "d5 — Black meets the London with the classical …c5 and …d5 centre. Shore it up with c3, then Nd2, Ngf3 and Bd3, and jump the knight into e5; the standard London manoeuvres give you a firm centre and a kingside build while Black must still solve their own light bishop.", sayShort: 'd5 — c3, Nd2, Ngf3, then Ne5.' }, sources: LON,
   },
   'pro-ericrosen-london::2::g6@5': {
     intro: { say: "g6 — Black fianchettoes against the London. Complete development smoothly: c3, Nf3, Be2, h3 and O-O, with Nbd2 to follow. Keep the centre solid and pick your moment for e4 or a queenside expansion; the harmonious setup yields an easy, weakness-free game.", sayShort: 'g6 — c3, Nf3, Be2, then O-O.' }, sources: LON,
@@ -73,7 +73,7 @@ export const SUBLINE_NARRATION_PRO_ROSEN_X1: Record<string, SublineNarration> = 
     intro: { say: "Nbd7 — Black completes development in the Na3-Nc4 line. Finish your own with Be2 and O-O, keeping the knight on c4 pressing the d6-square; with more space and smoother coordination you hold a small but genuine pull to nurse patiently.", sayShort: 'Nbd7 — Be2 and O-O, press d6.' }, sources: LON,
   },
   'pro-ericrosen-london::2::cxd4@11': {
-    intro: { say: "cxd4 — Black trades to clarify the centre. Recapture exd4, then Be2 and O-O; the d4-pawn gives you a broad centre while the c4-knight eyes d6, and your development lead lets you claim the initiative before Black finishes his fianchetto.", sayShort: 'cxd4 — exd4, Be2, then O-O.' }, sources: LON,
+    intro: { say: "cxd4 — Black trades to clarify the centre. Recapture exd4, then Be2 and O-O; the d4-pawn gives you a broad centre while the c4-knight eyes d6, and your development lead lets you claim the initiative before Black finishes their fianchetto.", sayShort: 'cxd4 — exd4, Be2, then O-O.' }, sources: LON,
   },
   'pro-ericrosen-london::2::Bg4@11': {
     intro: { say: "Bg4 — Black pins the f3-knight. Simply break it with Be2, offering a trade that leaves you the sounder structure and the bishop-pair option; follow with O-O and central play. The pin achieves nothing lasting while your space advantage endures.", sayShort: 'Bg4 — Be2 breaks the pin, then O-O.' }, sources: LON,

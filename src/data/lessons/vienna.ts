@@ -46,7 +46,7 @@ export const VIENNA_GAME_LESSON: LessonScript = {
       moves: ['e4', 'e5', 'Nc3'],
       arrows: [{ from: 'c3', to: 'e4', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "Here it is. In the Italian and the Ruy, White always plays Nf3 first — committing the king's knight to e5-pressure straight away. The Vienna refuses. White develops the queen's knight to c3, which does TWO jobs: it supports the e4-pawn so Black can never strike there without a fight, and — far more importantly — it keeps the king-knight free. The c3-square holds the entire opening's optionality. From c3 alone, White can still choose between three completely different attacking setups, depending entirely on what Black gives him.",
+      say: "Here it is. In the Italian and the Ruy, White always plays Nf3 first — committing the king's knight to e5-pressure straight away. The Vienna refuses. White develops the queen's knight to c3, which does TWO jobs: it supports the e4-pawn so Black can never strike there without a fight, and — far more importantly — it keeps the king-knight free. The c3-square holds the entire opening's optionality. From c3 alone, White can still choose between three completely different attacking setups, depending entirely on what Black gives them.",
       sayShort: 'Nc3 — queen-knight first, king-knight kept free.',
     },
     {
@@ -54,8 +54,8 @@ export const VIENNA_GAME_LESSON: LessonScript = {
       moves: ['e4', 'e5', 'Nc3', 'Nf6'],
       arrows: [{ from: 'f6', to: 'e4', color: ATK }],
       highlights: [{ square: 'e4', color: KEY }],
-      say: "Black answers the most-played move — Nf6 — staring back at the e4-pawn. Now both sides claim the centre with a knight. This is the canonical Vienna position, and Edward Lasker called this the moment of real choice for White: he must decide HOW to fight for the centre. Three setups are now in front of him, each with its own personality, and each one a different lesson in this class.",
-      sayShort: '…Nf6 — Black mirrors; White picks his weapon.',
+      say: "Black answers the most-played move — Nf6 — staring back at the e4-pawn. Now both sides claim the centre with a knight. This is the canonical Vienna position, and Edward Lasker called this the moment of real choice for White: they must decide HOW to fight for the centre. Three setups are now in front of them, each with its own personality, and each one a different lesson in this class.",
+      sayShort: '…Nf6 — Black mirrors; White picks their weapon.',
     },
     {
       id: 'the-arsenal',
@@ -77,7 +77,7 @@ export const VIENNA_GAME_LESSON: LessonScript = {
       moves: ['e4', 'e5', 'Nc3', 'Nf6', 'Bc4', 'Bc5'],
       arrows: [{ from: 'c5', to: 'f2', color: ATK }],
       highlights: [{ square: 'f2', color: KEY }, { square: 'f7', color: SOFT }],
-      say: "Black mirrors again with Bc5, aiming his own bishop at f2 — exactly as White's Bc4 stares at f7. The position is now symmetrical. Both sides are pointing at the other's f-pawn. Capablanca's rule is the law of this position: control of the centre is of great importance, and no violent attack can succeed without controlling at least two of the centre squares. So whoever cracks the symmetry FIRST in his favor wins the opening.",
+      say: "Black mirrors again with Bc5, aiming their own bishop at f2 — exactly as White's Bc4 stares at f7. The position is now symmetrical. Both sides are pointing at the other's f-pawn. Capablanca's rule is the law of this position: control of the centre is of great importance, and no violent attack can succeed without controlling at least two of the centre squares. So whoever cracks the symmetry FIRST in their favor wins the opening.",
       sayShort: '…Bc5 — symmetry; crack the centre first to lead.',
     },
     {
@@ -99,7 +99,7 @@ export const VIENNA_GAME_LESSON: LessonScript = {
       moves: ['e4', 'e5', 'Nc3', 'Nf6', 'Bc4', 'Bc5', 'd3', 'O-O', 'Nf3', 'd6', 'O-O', 'c6', 'Bb3'],
       arrows: [{ from: 'b3', to: 'f7', color: ATK }],
       highlights: [{ square: 'f7', color: KEY }],
-      say: "Black plays c6 to free his queen-bishop, which forces White's bishop off the long diagonal. But watch — White doesn't retreat to e2 or d2. He plays Bb3, keeping the bishop aimed at f7 from the SAME diagonal, one square back. This is the Vienna's signature: when Black harasses, the bishop reroutes WITHOUT losing its angle of attack. Compare this to the Ruy Lopez, where the bishop on a4-b3-c2 plays the exact same dance — the geometries rhyme.",
+      say: "Black plays c6 to free their queen-bishop, which forces White's bishop off the long diagonal. But watch — White doesn't retreat to e2 or d2. They play Bb3, keeping the bishop aimed at f7 from the SAME diagonal, one square back. This is the Vienna's signature: when Black harasses, the bishop reroutes WITHOUT losing its angle of attack. Compare this to the Ruy Lopez, where the bishop on a4-b3-c2 plays the exact same dance — the geometries rhyme.",
       sayShort: 'Bb3 — steps back, keeps the f7 diagonal.',
     },
     {
@@ -107,14 +107,14 @@ export const VIENNA_GAME_LESSON: LessonScript = {
       moves: ['e4', 'e5', 'Nc3', 'Nf6', 'Bc4', 'Bc5', 'd3', 'O-O', 'Nf3', 'd6', 'O-O', 'c6', 'Bb3', 'Nbd7', 'Ne2'],
       arrows: [{ from: 'e2', to: 'g3', color: INTENT }],
       highlights: [{ square: 'g3', color: KEY }, { square: 'f5', color: SOFT }],
-      say: "Now the move that defines the Classical Vienna: Ne2!? White retreats his own knight to start a slow trek — c3 to e2 to g3, and from g3 the knight will leap toward f5. Edward Lasker's rule from the Spanish applies word-for-word in the Vienna: a knight on f5 cannot be repelled. The whole middlegame organizes around this square. White is willing to spend three tempi to get a knight there.",
+      say: "Now the move that defines the Classical Vienna: Ne2!? White retreats their own knight to start a slow trek — c3 to e2 to g3, and from g3 the knight will leap toward f5. Edward Lasker's rule from the Spanish applies word-for-word in the Vienna: a knight on f5 cannot be repelled. The whole middlegame organizes around this square. White is willing to spend three tempi to get a knight there.",
       sayShort: 'Ne2 — bound for the f5 outpost via g3.',
     },
     {
       id: 'bishop-tour',
       moves: ['e4', 'e5', 'Nc3', 'Nf6', 'Bc4', 'Bc5', 'd3', 'O-O', 'Nf3', 'd6', 'O-O', 'c6', 'Bb3', 'Nbd7', 'Ne2', 'Bb6', 'c3', 'Nc5', 'Bc2'],
       highlights: [{ square: 'h7', color: KEY }],
-      say: "Black retreats his bishop to b6 — out of the way of …c6 and c5 ideas — and dances his knight to c5 to hit the Bb3. So White slides the bishop once more: Bc2. Now it points down a NEW diagonal, the b1-h7 diagonal — for now blocked by his own e4-pawn, but loaded for the moment the centre breaks open and clears the line. The c2-square is the Vienna's loaded gun, the same way Bc2 loads in the Ruy. Two diagonals from one piece, chosen depending on which side of the board the attack lands.",
+      say: "Black retreats their bishop to b6 — out of the way of …c6 and c5 ideas — and dances their knight to c5 to hit the Bb3. So White slides the bishop once more: Bc2. Now it points down a NEW diagonal, the b1-h7 diagonal — for now blocked by their own e4-pawn, but loaded for the moment the centre breaks open and clears the line. The c2-square is the Vienna's loaded gun, the same way Bc2 loads in the Ruy. Two diagonals from one piece, chosen depending on which side of the board the attack lands.",
       sayShort: 'Bc2 — reloads onto the b1-h7 diagonal.',
     },
     {
@@ -136,7 +136,7 @@ export const VIENNA_GAME_LESSON: LessonScript = {
       id: 'branch-gambit',
       moves: ['e4', 'e5', 'Nc3', 'Nf6', 'f4'],
       highlights: [{ square: 'f4', color: KEY }, { square: 'e5', color: SOFT }],
-      say: "Now — Black doesn't have to walk into the slow squeeze. He can avoid the Classical entirely by playing more carefully. So White has a second weapon, the one that gives the opening its violent reputation: f4. Edward Lasker wrote: 'It would seem a good plan to lure that pawn away, and this is rendered feasible by playing f4 when he already has a pawn on e4.' That is exactly the Vienna Gambit — f4 strikes at Black's e5-pawn. White doesn't wait for the centre to crack open — he RIPS it open. A completely different chapter, an entire tab of this masterclass, but it begins from the same Nc3 you've already seen.",
+      say: "Now — Black doesn't have to walk into the slow squeeze. He can avoid the Classical entirely by playing more carefully. So White has a second weapon, the one that gives the opening its violent reputation: f4. Edward Lasker wrote: 'It would seem a good plan to lure that pawn away, and this is rendered feasible by playing f4 when they already have a pawn on e4.' That is exactly the Vienna Gambit — f4 strikes at Black's e5-pawn. White doesn't wait for the centre to crack open — they Rip it open. A completely different chapter, an entire tab of this masterclass, but it begins from the same Nc3 you've already seen.",
       sayShort: 'f4 — the Gambit lure, ripping the centre open.',
     },
     {
@@ -158,7 +158,7 @@ export const VIENNA_GAME_LESSON: LessonScript = {
       id: 'close',
       moves: M,
       highlights: [{ square: 'f5', color: SOFT }, { square: 'f7', color: SOFT }],
-      say: "And that is the Vienna Game. Not one opening — a flexible launcher. The c3-knight supports e4, keeps the king-knight free, and lets White choose his weapon depending on what Black volunteers. Classical Bc4 against careful play, with the long-range plan of a knight planted on f5 and a bishop boring at f7; f4 Gambit against passive play; g3 Paulsen against complications; and against Nc6, an entire arsenal of historical sacrifices. Learn the four weapons in the four tabs that follow, and you don't just know the Vienna. You know how Steinitz thought about chess: the position dictates the plan, not the other way around.",
+      say: "And that is the Vienna Game. Not one opening — a flexible launcher. The c3-knight supports e4, keeps the king-knight free, and lets White choose their weapon depending on what Black volunteers. Classical Bc4 against careful play, with the long-range plan of a knight planted on f5 and a bishop boring at f7; f4 Gambit against passive play; g3 Paulsen against complications; and against Nc6, an entire arsenal of historical sacrifices. Learn the four weapons in the four tabs that follow, and you don't just know the Vienna. You know how Steinitz thought about chess: the position dictates the plan, not the other way around.",
       sayShort: 'One knight, four weapons — f5 prize, f7 target.',
     },
   ],

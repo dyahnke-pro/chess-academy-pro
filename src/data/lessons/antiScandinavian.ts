@@ -29,7 +29,7 @@ export const ANTI_SCANDINAVIAN_LESSON: LessonScript = {
   orientation: 'white',
   beats: [
     b({ id: 'sca1', moves: 'e4 d5 exd5 Qxd5 Nc3',
-      say: "Here's the whole story of the Scandinavian in a single move. Black snatches your e-pawn — but look what it costs him: the queen is already out on d5, and Nc3 doesn't just develop, it develops WITH tempo, hitting the queen. Every move Black now spends babysitting that queen to safety is a move you spend building. Lodge that idea in your head; the entire line runs on it.",
+      say: "Here's the whole story of the Scandinavian in a single move. Black snatches your e-pawn — but look what it costs them: the queen is already out on d5, and Nc3 doesn't just develop, it develops WITH tempo, hitting the queen. Every move Black now spends babysitting that queen to safety is a move you spend building. Lodge that idea in your head; the entire line runs on it.",
       sayShort: "Nc3 — develop and hit the queen.",
       arrows: [A('c3', 'd5')], highlights: [H('d5', ATK), H('c3', KEY)] }),
     b({ id: 'sca2', moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4',

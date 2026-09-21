@@ -83,7 +83,7 @@ export const PRO_GOTHAMCHESS_QGD_LESSON: LessonScript = {
       arrows: [{ from: 'a5', to: 'c3', color: VIS }],
       highlights: [{ square: 'a5', color: KEY }, { square: 'c3', color: SOFT }],
       say:
-        "White plays a3, making room for his pieces; you swing the queen to a5 — and because White's king is still stuck on e1, this PINS the c3-knight to the king down the diagonal. The knight is frozen, and White suddenly has to spend moves untangling.",
+        "White plays a3, making room for their pieces; you swing the queen to a5 — and because White's king is still stuck on e1, this PINS the c3-knight to the king down the diagonal. The knight is frozen, and White suddenly has to spend moves untangling.",
       sayShort: 'Qa5 — pin the c3-knight.',
     }),
     b({

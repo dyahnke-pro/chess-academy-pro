@@ -12,10 +12,27 @@ import { classifyMove } from './moveRating';
 import { classifyCpLoss } from './gameAnalysisService';
 import { INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 
-/** Non-mate, non-still-winning context so both classifiers reach their bands. */
+// 🔒 BOTH CLASSIFIERS GET THE SAME CONTEXT, OR THIS COMPARES TWO CURRENCIES
+// (fixed 2026-09-21 — it had been RED on `main` and nothing could see it).
+//
+// §8b moved move grading to chess.com's currency: EXPECTED POINTS, banded off
+// the win-percentage a move gave away. `classifyCpLoss` takes the evals and so
+// reads in that currency. `classifyMove` reads in it too — WHEN GIVEN the same
+// three inputs; without them it keeps the centipawn bands on purpose, because
+// one caller (`callInaccuracy`) genuinely has only a cpLoss and must not
+// pretend to a precision it does not have.
+//
+// This helper passed the evals to one and not the other, so it compared a
+// win-percentage verdict against a centipawn one and reported the difference
+// as a drift between SURFACES. It is not: given the same context the two agree
+// on every row from 40cp to 400cp. The drift this file exists to catch is real
+// and this now tests for it instead of for its own asymmetry.
+//
+// Non-mate, non-still-winning context so both classifiers reach their bands.
+const EVALS = (cp: number) => ({ evalBefore: 0, evalAfter: -cp, isWhiteMove: true });
 const reviewWord = (cp: number): string => classifyCpLoss(cp, 0, -cp, true, false);
 const coachWord = (cp: number): string => classifyMove({
-  wasBest: false, cpLoss: cp, missedMate: null, allowedMate: null,
+  wasBest: false, cpLoss: cp, missedMate: null, allowedMate: null, ...EVALS(cp),
 });
 
 describe('the review and the coach agree on what a delta is called', () => {
@@ -35,13 +52,43 @@ describe('the review and the coach agree on what a delta is called', () => {
 });
 
 describe('the boundaries have exactly one home', () => {
-  it('is where both classifiers turn', () => {
-    expect(reviewWord(INACCURACY_CP)).toBe('inaccuracy');
-    expect(reviewWord(INACCURACY_CP - 1)).not.toBe('inaccuracy');
-    expect(reviewWord(MISTAKE_CP)).toBe('mistake');
-    expect(reviewWord(MISTAKE_CP - 1)).toBe('inaccuracy');
-    expect(reviewWord(BLUNDER_CP)).toBe('blunder');
-    expect(reviewWord(BLUNDER_CP - 1)).toBe('mistake');
+  // 🔒 THE BOUNDARY IS A WIN-PERCENTAGE, NOT A CENTIPAWN COUNT (2026-09-21).
+  //
+  // This used to assert that `INACCURACY_CP` / `MISTAKE_CP` / `BLUNDER_CP`
+  // (50/100/300) were where the review turns. Since §8b they are not, and that
+  // is the entire point of §8b: the SAME 300cp is an inaccuracy at +9.00 and a
+  // blunder at +0.50, so a raw centipawn count cannot name a move. The review
+  // turns on `INACCURACY_WIN_PCT` / `MISTAKE_WIN_PCT` / `BLUNDER_WIN_PCT`.
+  //
+  // The cp constants are NOT dead and must not be deleted: they answer a
+  // different question — whether something is worth SAYING (`callInaccuracy`'s
+  // speaking floor) — which §8b deliberately left alone. Two constants, two
+  // questions; conflating them is what caused this in the first place.
+  //
+  // So the boundary is asserted where it now lives, in win% terms, and by
+  // BEHAVIOUR: find the turn empirically and check both sides of it.
+  const turnAt = (word: string): number => {
+    for (let cp = 1; cp <= 1200; cp += 1) if (reviewWord(cp) === word) return cp;
+    throw new Error(`the review never says "${word}" at any cpLoss — the bands are broken`);
+  };
+  it('is where both classifiers turn, in expected points', () => {
+    for (const word of ['inaccuracy', 'mistake', 'blunder'] as const) {
+      const at = turnAt(word);
+      expect(reviewWord(at), `review turns ${word} at ${at}cp`).toBe(word);
+      expect(coachWord(at), `the coach must turn ${word} at the SAME ${at}cp`).toBe(word);
+      expect(reviewWord(at - 1), `${at - 1}cp must NOT yet be ${word}`).not.toBe(word);
+      expect(coachWord(at - 1), `the coach must not be ${word} at ${at - 1}cp either`).not.toBe(word);
+    }
+  });
+
+  it('the cp constants are a SPEAKING floor, not the naming boundary', () => {
+    // Pinned so a future session does not "restore" them as the bands. If this
+    // ever passes trivially because the two coincide, the comment above still
+    // says which one owns which question.
+    expect(INACCURACY_CP).toBe(50);
+    expect(MISTAKE_CP).toBe(100);
+    expect(BLUNDER_CP).toBe(300);
+    expect(turnAt('inaccuracy'), 'the naming boundary is NOT INACCURACY_CP').not.toBe(INACCURACY_CP);
   });
 
   it('nobody redeclares them locally any more', async () => {

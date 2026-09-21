@@ -35,7 +35,7 @@ export const ANTI_TROMPOWSKY_BLACK_LESSON: LessonScript = {
       sayShort: "…Bf5 — free the good bishop, trade it.",
       highlights: [H('d3', KEY)] }),
     b({ id: 'trp4', moves: 'd4 Nf6 Bg5 Ne4 Bf4 d5 e3 c5 Nd2 Nxd2 Qxd2 Nc6 Nf3 cxd4 exd4 Bf5 Bd3 Bxd3 Qxd3 e6 O-O Bd6',
-      say: "…e6 completes a rock-solid structure, and after White castles you challenge his last active piece with …Bd6, offering to trade the dark-squared bishops. When they come off, the position's symmetrical and bone-level equal — you've met the Trompowsky's whole surprise value with pure principle, and you stand shoulder to shoulder. A calm, confident equaliser.",
+      say: "…e6 completes a rock-solid structure, and after White castles you challenge their last active piece with …Bd6, offering to trade the dark-squared bishops. When they come off, the position's symmetrical and bone-level equal — you've met the Trompowsky's whole surprise value with pure principle, and you stand shoulder to shoulder. A calm, confident equaliser.",
       sayShort: "…Bd6 — challenge the bishop, equal.",
       highlights: [H('d6', ATK), H('f4', SOFT)] }),
   ],

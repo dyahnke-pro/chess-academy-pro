@@ -65,7 +65,7 @@ const NC6_ROSSOLIMO: LessonScript = {
     b({
       id: 'nc6-d5', moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5',
       highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "…d5 — Black challenges the centre. You have a choice: exd5 trading the centre (simplifying), or e5 advancing (cramping). Either way, Black has committed his structure and your setup is complete.",
+      say: "…d5 — Black challenges the centre. You have a choice: exd5 trading the centre (simplifying), or e5 advancing (cramping). Either way, Black has committed their structure and your setup is complete.",
       sayShort: '…d5 — central challenge.',
     }),
     b({

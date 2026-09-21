@@ -988,7 +988,7 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
       />
       <ToggleRow
         label="Quiz Me As I Review"
-        tooltip="A vision test at your own mistakes. During game review, just before each move you got wrong, the board pauses and asks you to READ the position — what's the threat, what's hanging — and grades your answer against the engine before revealing the move. Inline and skippable, never a pop-up. On by default."
+        tooltip="Turns your own mistakes into questions. During game review, just before a move you got wrong, the board pauses and asks you something about it — why you played it, where the shot you missed was, or what the material you grabbed was really costing — then shows you what the position actually held. Inline and skippable, never a pop-up. On by default."
         checked={profile.preferences.readingChallengesInReview ?? true}
         onChange={(v) => void handleToggle('readingChallengesInReview', v)}
         testId="coach-reading-challenges-toggle"

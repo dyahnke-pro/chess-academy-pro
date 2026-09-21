@@ -23,7 +23,19 @@ describe('section 14 says which gate stopped it', () => {
 
     const cheap: string[] = [];
     attributePrinciples({ ...base, evalBefore: 30, evalAfterPlayed: -20 }, cheap);
-    expect(cheap.join(' | ')).toMatch(/calculation-depth: cost 50cp is under the 150cp floor/);
+    // 🔒 THIS ASSERTION WENT RED ON `main` AND NOBODY SAW IT (fixed 2026-09-21).
+    // It pinned the words "under the 150cp floor". On 2026-09-21 that raw
+    // centipawn floor became an EXPECTED-POINTS band (chess.com's currency,
+    // §8b) and the reason was rewritten — but ship-check mapped a changed
+    // source file to its tests by BASENAME, so `principleAttribution.test.ts`
+    // ran and this file never did. See `scripts/ship-check-lib/tests-for.ts`.
+    //
+    // Pinned by CURRENCY and NUMBER rather than by exact prose: the contract
+    // this file states is that a reason "names the gate and the number", so
+    // that is what is asserted. The win% value itself is left loose (it falls
+    // out of the win-probability curve), but a regression back to a raw cp
+    // floor — the thing §8b swept out — fails here.
+    expect(cheap.join(' | ')).toMatch(/calculation-depth: cost 50cp is [\d.]+ win% — under an inaccuracy/);
 
     const shallow: string[] = [];
     attributePrinciples({ ...base, evalBefore: 30, evalAfterPlayed: -200, pvAfterPlayed: ['Nf3'] }, shallow);

@@ -34,7 +34,7 @@ const CLASSICAL_MAIN: LessonScript = {
       sayShort: 'Bxd3 — trade the attacker.' }),
     b({ id: 'mg-castle', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bd2 Ngf6 O-O-O Be7',
       arrows: [{ from: 'c7', to: 'c5', color: VIS }], highlights: [{ square: 'c1', color: SOFT }, { square: 'c5', color: KEY }],
-      say: "Now …e6 walls in nothing — your bad bishop is already gone — and you finish developing. White castles long, so here's the middlegame: you castle short and roll the c- and b-pawns at his king. A flawless structure and a battering ram. You're a sliver worse on the engine, but rock-solid with a clear plan.",
+      say: "Now …e6 walls in nothing — your bad bishop is already gone — and you finish developing. White castles long, so here's the middlegame: you castle short and roll the c- and b-pawns at their king. A flawless structure and a battering ram. You're a sliver worse on the engine, but rock-solid with a clear plan.",
       sayShort: '…c5/…b5 — storm his king.' }),
   ],
 };
@@ -48,11 +48,11 @@ const CAPABLANCA: LessonScript = {
       highlights: [{ square: 'h7', color: SOFT }], say: "Same Classical recipe — bishop out to f5, retreat to h7 under the h-pawn advance, then trade off White's light bishop on d3. You've neutralised White's best attacker and kept your trademark sound structure. No weaknesses, no bad pieces.",
       sayShort: 'Bxd3 — neutralise the attacker.' }),
     b({ id: 'castle', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 h5 Bh7 Nf3 Nd7 Bd3 Bxd3 Qxd3 e6 Bf4 Ngf6 O-O-O Be7 Kb1 O-O',
-      highlights: [{ square: 'g8', color: SOFT }, { square: 'c1', color: SOFT }], say: "You develop and castle kingside; White sets up with Bf4 and Kb1 and goes long. Opposite-side castling again — which suits you perfectly. Your pawns are aimed at White's king, his at yours, and your structure is the sounder of the two.",
+      highlights: [{ square: 'g8', color: SOFT }, { square: 'c1', color: SOFT }], say: "You develop and castle kingside; White sets up with Bf4 and Kb1 and goes long. Opposite-side castling again — which suits you perfectly. Your pawns are aimed at White's king, their at yours, and your structure is the sounder of the two.",
       sayShort: 'O-O — opposite castling, you\'re ready.' }),
     b({ id: 'mg-ne5', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 h5 Bh7 Nf3 Nd7 Bd3 Bxd3 Qxd3 e6 Bf4 Ngf6 O-O-O Be7 Kb1 O-O Ne5',
       arrows: [{ from: 'd7', to: 'e5', color: VIS }], highlights: [{ square: 'e5', color: KEY }, { square: 'c5', color: SOFT }],
-      say: "White plants a knight on the e5-outpost — the most annoying piece in the position. The middlegame plan: challenge it directly with …Nxe5 to trade it off, then launch …c5 and …b5 at White's king on the queenside. Remove White's one active piece, open lines toward his king, and your solid Caro does the rest.",
+      say: "White plants a knight on the e5-outpost — the most annoying piece in the position. The middlegame plan: challenge it directly with …Nxe5 to trade it off, then launch …c5 and …b5 at White's king on the queenside. Remove White's one active piece, open lines toward their king, and your solid Caro does the rest.",
       sayShort: '…Nxe5 then …c5/…b5.' }),
   ],
 };
@@ -68,7 +68,7 @@ const TARTAKOWER: LessonScript = {
       sayShort: 'Ne4 — the active outpost.' }),
     b({ id: 'trade', moves: 'e4 c6 Nc3 d5 Nf3 Nf6 e5 Ne4 Ne2 Qb6 d4 e6 Ng3 Nxg3 hxg3',
       arrows: [{ from: 'e4', to: 'g3', color: VIS }], highlights: [{ square: 'b6', color: KEY }],
-      say: "You bring the queen to b6, pressuring b2 and d4, and when White challenges the e4-knight you trade it for the g3-knight. White recaptures with the h-pawn, damaging his own kingside structure. You've kept the position sharp and given White doubled g-pawns to worry about.",
+      say: "You bring the queen to b6, pressuring b2 and d4, and when White challenges the e4-knight you trade it for the g3-knight. White recaptures with the h-pawn, damaging their own kingside structure. You've kept the position sharp and given White doubled g-pawns to worry about.",
       sayShort: 'Qb6 + …Nxg3 — keep it sharp.' }),
     b({ id: 'mg-c5', moves: 'e4 c6 Nc3 d5 Nf3 Nf6 e5 Ne4 Ne2 Qb6 d4 e6 Ng3 Nxg3 hxg3 c5',
       arrows: [{ from: 'c6', to: 'c5', color: VIS }], highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
@@ -123,7 +123,7 @@ const ADVANCE_C5: LessonScript = {
   beats: [
     b({ id: 'c5', moves: 'e4 c6 d4 d5 e5 c5',
       arrows: [{ from: 'c6', to: 'c5', color: VIS }], highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "An aggressive alternative against the Advance: instead of …Bf5, you hit the centre immediately with …c5, challenging d4 before White is set up. You're refusing to let White enjoy his space — you strike at its foundation right away.",
+      say: "An aggressive alternative against the Advance: instead of …Bf5, you hit the centre immediately with …c5, challenging d4 before White is set up. You're refusing to let White enjoy their space — you strike at its foundation right away.",
       sayShort: 'c5 — challenge the centre now.' }),
     b({ id: 'bxc5', moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 a3 Bxc5 Nf3 Nc6 Bd3 Nge7',
       arrows: [{ from: 'f8', to: 'c5', color: VIS }], highlights: [{ square: 'c5', color: SOFT }],
@@ -162,7 +162,7 @@ const PANOV: LessonScript = {
   beats: [
     b({ id: 'open', moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 g6',
       arrows: [{ from: 'f8', to: 'a3', color: SOFT }], highlights: [{ square: 'g6', color: KEY }],
-      say: "The Panov is White's most ambitious Caro try — c4, going for an Isolated-Queen's-Pawn attack. Your cleanest answer is the Grünfeld-style …g6, fianchettoing the bishop to point straight at White's centre. You let White have his isolated pawn and aim every piece at it.",
+      say: "The Panov is White's most ambitious Caro try — c4, going for an Isolated-Queen's-Pawn attack. Your cleanest answer is the Grünfeld-style …g6, fianchettoing the bishop to point straight at White's centre. You let White have their isolated pawn and aim every piece at it.",
       sayShort: '…g6 — fianchetto against the IQP.' }),
     b({ id: 'develop', moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 g6 cxd5 Nxd5 Bc4 Nb6 Bb3 Bg7 Nf3 O-O O-O Nc6',
       arrows: [{ from: 'g7', to: 'd4', color: VIS }], highlights: [{ square: 'g7', color: KEY }, { square: 'd4', color: SOFT }],
@@ -170,7 +170,7 @@ const PANOV: LessonScript = {
       sayShort: 'Bg7 + …Nc6 — gang up on d4.' }),
     b({ id: 'mg-plan', moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 g6 cxd5 Nxd5 Bc4 Nb6 Bb3 Bg7 Nf3 O-O O-O Nc6 d5 Na5 Re1 Nxb3 axb3',
       highlights: [{ square: 'd5', color: KEY }, { square: 'b3', color: SOFT }],
-      say: "White pushes d5 to free his bishop, but you trade it off — and after axb3 White has doubled, weak b-pawns and an advanced d5-pawn that can become a target. Here's the middlegame: blockade the d5-pawn with …Nd7-blockade or …e6, pressure the doubled b-pawns, and let your beautiful g7-bishop dominate. A balanced fight where Black has clear targets. The Panov holds no terror with the …g6 setup.",
+      say: "White pushes d5 to free their bishop, but you trade it off — and after axb3 White has doubled, weak b-pawns and an advanced d5-pawn that can become a target. Here's the middlegame: blockade the d5-pawn with …Nd7-blockade or …e6, pressure the doubled b-pawns, and let your beautiful g7-bishop dominate. A balanced fight where Black has clear targets. The Panov holds no terror with the …g6 setup.",
       sayShort: 'blockade d5, target the b-pawns.' }),
   ],
 };

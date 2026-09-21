@@ -26,7 +26,7 @@ export const ANTI_KINGS_GAMBIT_BLACK_LESSON: LessonScript = {
       sayShort: "…d5 — neutralise it cleanly.",
       highlights: [H('d5', ATK), H('e4', SOFT)] }),
     b({ id: 'kgb2', moves: 'e4 e5 f4 exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5',
-      say: "After exd5, don't rush to snatch it back with the queen — develop with …Nf6 first, and only THEN recapture on d5 with the knight. Now your pieces are flying out while White's still stuck trying to justify the pawn he threw in. Quietly, move by move, the initiative is changing hands.",
+      say: "After exd5, don't rush to snatch it back with the queen — develop with …Nf6 first, and only THEN recapture on d5 with the knight. Now your pieces are flying out while White's still stuck trying to justify the pawn they threw in. Quietly, move by move, the initiative is changing hands.",
       sayShort: "…Nf6, …Nxd5 — develop, then recapture.",
       highlights: [H('d5', KEY), H('f6', SOFT)] }),
     b({ id: 'kgb3', moves: 'e4 e5 f4 exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5 O-O Be6 Qe2 Nc6 d4 Qd6',

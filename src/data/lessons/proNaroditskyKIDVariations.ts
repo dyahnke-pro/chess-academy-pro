@@ -228,7 +228,7 @@ const ANTI_KID_NF3: LessonScript = {
     b({
       id: 'akn-qa5', moves: 'd4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nbd7 Nc3 e5 e4 c6 h3 Qa5',
       highlights: [{ square: 'a5', color: KEY }],
-      say: "h3 …Qa5 — same Yugoslav queen sortie. 16% pick at ply 18. The queen on a5 activates the queenside, eyes the c3-knight, and supports the …b5 push. Black has reached his ideal Yugoslav middlegame setup regardless of White's move order.",
+      say: "h3 …Qa5 — same Yugoslav queen sortie. 16% pick at ply 18. The queen on a5 activates the queenside, eyes the c3-knight, and supports the …b5 push. Black has reached their ideal Yugoslav middlegame setup regardless of White's move order.",
       sayShort: '…Qa5 — queen activates.',
     }),
     b({
@@ -420,7 +420,7 @@ const PETROSIAN_NGE2: LessonScript = {
     b({
       id: 'pet-rook-lift', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nge2 O-O f3 c6 Be3 a6 c5 b5 cxd6 exd6 Nf4 Re8',
       highlights: [{ square: 'e8', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "Nf4 …Re8 — 16% pick. White redirects the knight to f4 (the prize square for him), you lift the rook to e8 hitting the e4-pawn with tempo. The same structural theme as the Mar del Plata: hit e4, force White to react.",
+      say: "Nf4 …Re8 — 16% pick. White redirects the knight to f4 (the prize square for them), you lift the rook to e8 hitting the e4-pawn with tempo. The same structural theme as the Mar del Plata: hit e4, force White to react.",
       sayShort: '…Re8 — hit e4.',
     }),
     b({

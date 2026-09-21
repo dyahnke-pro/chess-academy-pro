@@ -80,7 +80,7 @@ const SYM_E5: LessonScript = {
       arrows: [{ from: 'b4', to: 'c3', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }],
       say:
-        "You back the knight with Qc2; Black trades on c3, and you recapture with the queen. Here's the gift: Black gave up his dark-squared bishop, so now You hold the two bishops. The queen sits actively on c3, eyeing both the e5-pawn and the long dark diagonal. A small, permanent structural plus.",
+        "You back the knight with Qc2; Black trades on c3, and you recapture with the queen. Here's the gift: Black gave up their dark-squared bishop, so now You hold the two bishops. The queen sits actively on c3, eyeing both the e5-pawn and the long dark diagonal. A small, permanent structural plus.",
       sayShort: 'Qxc3 — White keeps both bishops.',
     }),
     b({
@@ -118,7 +118,7 @@ const ANTI_FRENCH: LessonScript = {
       arrows: [{ from: 'b2', to: 'g7', color: VIS }],
       highlights: [{ square: 'b2', color: KEY }, { square: 'b7', color: SOFT }],
       say:
-        "Both sides fianchetto their queen's bishops and castle. The two long-diagonal bishops stare at each other across the board, but yours points at Black's king while his points at your solid queenside. You've reached a rich, maneuvering middlegame with a comfortable, risk-free pull.",
+        "Both sides fianchetto their queen's bishops and castle. The two long-diagonal bishops stare at each other across the board, but yours points at Black's king while their points at your solid queenside. You've reached a rich, maneuvering middlegame with a comfortable, risk-free pull.",
       sayShort: 'Bb2 vs Bb7 — the diagonals face off.',
     }),
     b({
@@ -202,7 +202,7 @@ const C6_SLAV: LessonScript = {
       arrows: [{ from: 'f3', to: 'd4', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: KEY }, { square: 'g4', color: SOFT }],
       say:
-        "Black commits: the e-pawn marches on to e5, claiming the centre he was offered, and a6 keeps his queenside flexible. Your answers are quiet moves with teeth — the queen steps to c2, off the d-file and watching the e4-square, and h3 takes g4 away from Black's pieces before any pin lands. Now study that proud e5-pawn: the moment it pushes to e4, it stops guarding d4 — and your knight jumps straight into the hole. The middlegame plan picks up from exactly this position.",
+        "Black commits: the e-pawn marches on to e5, claiming the centre they were offered, and a6 keeps their queenside flexible. Your answers are quiet moves with teeth — the queen steps to c2, off the d-file and watching the e4-square, and h3 takes g4 away from Black's pieces before any pin lands. Now study that proud e5-pawn: the moment it pushes to e4, it stops guarding d4 — and your knight jumps straight into the hole. The middlegame plan picks up from exactly this position.",
       sayShort: 'e5 met calmly — watch the d4 hole.',
     }),
   ],

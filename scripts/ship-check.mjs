@@ -20,6 +20,7 @@
 // see exactly what broke without digging through logs.
 
 import { crashed } from './ship-check-lib/crashed.mjs';
+import { testsFor } from './ship-check-lib/tests-for.mjs';
 import { spawnSync } from 'node:child_process';
 import { loadavg, cpus } from 'node:os';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -225,6 +226,11 @@ const GATE_TESTS = [
   // a verdict or an "unknown", so a regression here re-opens the false-green
   // class this whole file guards against — gate it like any other.
   'scripts/ship-check-lib/crashed.test.ts',
+  // The derivation of "what tests cover this file". Basename-only until
+  // 2026-09-21, which is how a red `section14Diagnosis.test.ts` sat on `main`
+  // unseen — see `changedSourceTests` below. Gated because the step that
+  // catches everything else cannot catch itself.
+  'scripts/ship-check-lib/tests-for.test.ts',
   // "Match chess.com" (David 2026-09-20) for blunder/mistake/inaccuracy. The
   // bands are EXPECTED POINTS, not centipawns, and they are a copy of a
   // published third-party table — so they need a gate that states the table,
@@ -851,8 +857,24 @@ function changedFiles() {
   return [...new Set(out)];
 }
 
-// Co-located *.test.{ts,tsx} for changed source files, minus what GATE_TESTS
+// Tests covering the source files changed in THIS work, minus what GATE_TESTS
 // already runs (avoid double-running). A changed `.test` file runs directly.
+//
+// 🔒 IT WAS BASENAME-ONLY UNTIL 2026-09-21, AND THAT IS A GATE THAT CANNOT
+// FIRE. The rule used to be literally `edit Foo.tsx → run Foo.test.tsx`, which
+// finds ONE file. `principleAttribution.ts` has EIGHTEEN. So when the
+// calculation-depth cost gate was rewritten from a 150cp floor to expected
+// points, `principleAttribution.test.ts` passed, this step reported green, and
+// `section14Diagnosis.test.ts` — which asserts the very decline string that
+// change rewrote — went red on `main` and stayed there. It is not in
+// GATE_TESTS and does not share the basename, so nothing in the repo could
+// have caught it.
+//
+// `testsFor` is the derivation `surface-map.mjs` already used to print each
+// map's "## Tests" section: by filename PREFIX and by IMPORT. Writing a
+// second, smarter matcher here would have been two answers to "what covers
+// this file" drifting apart — the duplicated-judgement the rot rule bans — so
+// both read the one module.
 function changedSourceTests(changed) {
   const tests = new Set();
   for (const f of changed) {
@@ -862,8 +884,7 @@ function changedSourceTests(changed) {
     // config yields "No test files found" and falsely fails the step.
     if (f.startsWith('src/test/benchmarks/')) continue;
     if (/\.test\.(ts|tsx)$/.test(f)) { if (existsSync(f)) tests.add(f); continue; }
-    const base = f.replace(/\.(ts|tsx)$/, '');
-    for (const t of [`${base}.test.ts`, `${base}.test.tsx`]) if (existsSync(t)) tests.add(t);
+    for (const t of testsFor(f)) if (existsSync(t) && !t.startsWith('src/test/benchmarks/')) tests.add(t);
   }
   return [...tests].filter((t) => !GATE_TESTS.includes(t));
 }

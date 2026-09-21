@@ -27,7 +27,7 @@ export const SUBLINE_NARRATION_PRO_NAR_DRAGO_TAIL: Record<string, SublineNarrati
     intro: { say: "Qd2 — White prepares queenside castling in the Yugoslav. Strike first on the wing: with …b5 already in, follow with …Bb7, …Nbd7 and …b4 hitting the c3-knight. Race at White's king before the kingside storm arrives.", sayShort: 'Qd2 — race with b5, Bb7 and b4.' }, sources: DR,
   },
   'pro-naroditsky-dragodorf::0::g4@14': {
-    intro: { say: "g4 — an early kingside pawn lunge. Counter in the centre and on the queenside: …O-O, …Nc6 and …b5, racing on the flank; White's g4 weakens his own king if he castles short. Meet the storm with speed.", sayShort: 'g4 — castle, then Nc6 and b5.' }, sources: DR,
+    intro: { say: "g4 — an early kingside pawn lunge. Counter in the centre and on the queenside: …O-O, …Nc6 and …b5, racing on the flank; White's g4 weakens their own king if they castle short. Meet the storm with speed.", sayShort: 'g4 — castle, then Nc6 and b5.' }, sources: DR,
   },
   'pro-naroditsky-dragodorf::0::g4@18': {
     intro: { say: "g4 — the Yugoslav pawn storm begins after both sides commit. Race at once: …Rb8 and …b5-b4, or the thematic exchange sacrifice …Rxc3 to smash White's king. It is the sharpest race in chess, and the Dragon's queenside speed is your weapon.", sayShort: 'g4 — race b5-b4, sac on c3.' }, sources: DR,
@@ -40,7 +40,7 @@ export const SUBLINE_NARRATION_PRO_NAR_DRAGO_TAIL: Record<string, SublineNarrati
     intro: { say: "Be3 — White develops in the Classical. Continue …O-O, …Nc6 and …Bd7, then the Dragon queenside plan: …Rc8, …Ne5 or …a6-b5, pressuring down the c-file with the g7-bishop raking the centre. A rich, balanced Dragon.", sayShort: 'Be3 — castle, then Rc8 and b5.' }, sources: DR,
   },
   'pro-naroditsky-dragodorf::1::g4@12': {
-    intro: { say: "g4 — an early space-grab. Blunt it with …h6, then continue …Bg7, …O-O and the queenside expansion; White's g4 loosens his kingside, giving you a target if he castles short. Counter with …b5 and the c-file.", sayShort: 'g4 — …h6, then castle and b5.' }, sources: DR,
+    intro: { say: "g4 — an early space-grab. Blunt it with …h6, then continue …Bg7, …O-O and the queenside expansion; White's g4 loosens their kingside, giving you a target if they castle short. Counter with …b5 and the c-file.", sayShort: 'g4 — …h6, then castle and b5.' }, sources: DR,
   },
   'pro-naroditsky-dragodorf::1::Bg5@14': {
     intro: { say: "Bg5 — White pins toward the queen. Break it with …h6, and once the bishop retreats continue the Dragon plan: …Nc6, …Rc8 and …b5. The pin costs White time you spend on queenside play.", sayShort: 'Bg5 — …h6, then Rc8 and b5.' }, sources: DR,
@@ -68,7 +68,7 @@ export const SUBLINE_NARRATION_PRO_NAR_DRAGO_TAIL: Record<string, SublineNarrati
     intro: { say: "Be3 — White develops early in the h3 line. Play …O-O, …Nc6, …Bd7 and …Rc8, the Dragon c-file plan; expand with …a6-b5 and let the g7-bishop rake the long diagonal. A comfortable, balanced game.", sayShort: 'Be3 — castle, Rc8, then b5.' }, sources: DR,
   },
   'pro-naroditsky-dragodorf::2::O-O@16': {
-    intro: { say: "O-O — White castles short after the g4 space-grab, and his kingside pawns are loose. Seize the chance: …Nc6, …b5 and …b4, attacking the king that just committed. The Dragon punishes an over-extended kingside.", sayShort: 'O-O — Nc6 and b5-b4, attack.' }, sources: DR,
+    intro: { say: "O-O — White castles short after the g4 space-grab, and their kingside pawns are loose. Seize the chance: …Nc6, …b5 and …b4, attacking the king that just committed. The Dragon punishes an over-extended kingside.", sayShort: 'O-O — Nc6 and b5-b4, attack.' }, sources: DR,
   },
   'pro-naroditsky-dragodorf::2::g3@12': {
     intro: { say: "g3 — White fianchettos in the h3 line. Continue …O-O, …Nc6 and …Rc8; against the double fianchetto the game is positional, so play on the c-file and prepare the …d5 or …b5 breaks. Comfortable and near-level.", sayShort: 'g3 — castle, Rc8, prepare d5 or b5.' }, sources: DR,

@@ -34,7 +34,7 @@ const KID: LessonScript = {
   openingId: 'pro-carlsen-queens-pawn', title: "vs King's Indian g6", minutes: 7, orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'e4', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4', highlights: [H('e4'), H('d4')], say: "Against the King's Indian, this repertoire grabs the whole centre with e4. Big pawns on d4 and e4 give White a space advantage across the board; Black will hit back with ...e5, but for now White simply has more room to manoeuvre.", sayShort: 'e4 — take the full centre.' }),
-    b({ id: 'classical', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2', highlights: [H('e2')], say: "The Classical main line: Nf3 and Be2, a calm, solid development that refuses Black any cheap counterplay. White is in no hurry — he completes development and lets his space advantage do the talking. This is how this repertoire neutralises the King's Indian's famous attacks.", sayShort: 'Nf3, Be2 — solid and patient.' }),
+    b({ id: 'classical', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2', highlights: [H('e2')], say: "The Classical main line: Nf3 and Be2, a calm, solid development that refuses Black any cheap counterplay. White is in no hurry — they complete development and lets their space advantage do the talking. This is how this repertoire neutralises the King's Indian's famous attacks.", sayShort: 'Nf3, Be2 — solid and patient.' }),
     b({ id: 'oo', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O', highlights: [H('e5'), H('d5')], say: "Black strikes with e5 and White castles, keeping the central tension. From here White typically closes with d5 or trades, aiming for a queenside pawn advance while Black storms the kingside. White's flank is faster — and this repertoire defends the king better than anyone.", sayShort: 'O-O — race on opposite wings.' }),
   ],
 };
@@ -69,8 +69,8 @@ const QID: LessonScript = {
 const BOGO: LessonScript = {
   openingId: 'pro-carlsen-queens-pawn', title: "Bogo-Indian Bb4+", minutes: 6, orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
-    b({ id: 'nbd2', moves: 'd4 Nf6 c4 e6 Nf3 Bb4+ Nbd2', highlights: [H('d2')], say: "The Bogo-Indian check: Bb4+. This repertoire blocks with Nbd2 rather than the bishop, keeping his structure flexible and inviting Black to trade off the bishop that just developed. Giving up a bishop so early rarely solves Black's problems.", sayShort: 'Nbd2 — block, keep flexible.' }),
-    b({ id: 'a3', moves: 'd4 Nf6 c4 e6 Nf3 Bb4+ Nbd2 b6 a3 Bxd2+ Bxd2 Bb7 g3 O-O', arrows: [A('d2', 'a5')], highlights: [H('a3')], say: "a3 puts the question to the bishop, and after the trade White recaptures with the bishop, gaining the two bishops and a free hand in the centre. Black has surrendered his good bishop for a knight — a small concession that this repertoire will press for the rest of the game.", sayShort: 'a3 — win the bishop pair.' }),
+    b({ id: 'nbd2', moves: 'd4 Nf6 c4 e6 Nf3 Bb4+ Nbd2', highlights: [H('d2')], say: "The Bogo-Indian check: Bb4+. This repertoire blocks with Nbd2 rather than the bishop, keeping their structure flexible and inviting Black to trade off the bishop that just developed. Giving up a bishop so early rarely solves Black's problems.", sayShort: 'Nbd2 — block, keep flexible.' }),
+    b({ id: 'a3', moves: 'd4 Nf6 c4 e6 Nf3 Bb4+ Nbd2 b6 a3 Bxd2+ Bxd2 Bb7 g3 O-O', arrows: [A('d2', 'a5')], highlights: [H('a3')], say: "a3 puts the question to the bishop, and after the trade White recaptures with the bishop, gaining the two bishops and a free hand in the centre. Black has surrendered their good bishop for a knight — a small concession that this repertoire will press for the rest of the game.", sayShort: 'a3 — win the bishop pair.' }),
   ],
 };
 

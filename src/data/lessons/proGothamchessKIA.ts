@@ -59,7 +59,7 @@ export const PRO_GOTHAMCHESS_KIA_LESSON: LessonScript = {
       arrows: [{ from: 'e2', to: 'e4', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Now the system shows its teeth: e4. You confront Black's centre and stake your claim to the kingside. The fight lines up exactly the way the KIA wants — Black will expand on the queenside, and you throw everything at his king.",
+        "Now the system shows its teeth: e4. You confront Black's centre and stake your claim to the kingside. The fight lines up exactly the way the KIA wants — Black will expand on the queenside, and you throw everything at their king.",
       sayShort: 'e4 — stake the kingside.',
     }),
     b({

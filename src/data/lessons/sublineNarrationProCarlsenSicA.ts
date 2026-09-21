@@ -72,7 +72,7 @@ export const SUBLINE_NARRATION_PRO_CARLSEN_SIC_A: Record<string, SublineNarratio
     intro: { say: "e6 — Black sets up a small, solid centre. Castle and prepare the central break: O-O, Re1 and d4, using your a4-clamp to keep …b5 at bay; White's harmonious development and space give a lasting pull while Black stays cramped. Patience, then the d4 strike.", sayShort: 'e6 — O-O and Re1, then d4.' }, sources: OPEN,
   },
   'pro-carlsen-open-sicilian::2::a6@11': {
-    intro: { say: "a6 — Black hits the bishop after you clamp with a4-a5. Retreat Be2, keeping the tension; your a5-pawn cramps Black's queenside and fixes his …b7-b6 weaknesses, and after O-O and d4 White presses a durable space edge on the flank you have frozen.", sayShort: 'a6 — Be2, press the frozen queenside.' }, sources: OPEN,
+    intro: { say: "a6 — Black hits the bishop after you clamp with a4-a5. Retreat Be2, keeping the tension; your a5-pawn cramps Black's queenside and fixes their …b7-b6 weaknesses, and after O-O and d4 White presses a durable space edge on the flank you have frozen.", sayShort: 'a6 — Be2, press the frozen queenside.' }, sources: OPEN,
   },
 
   // ===== Open Sicilian (student WHITE) — Bc4 lines (Modern vs d6) =====
@@ -95,7 +95,7 @@ export const SUBLINE_NARRATION_PRO_CARLSEN_SIC_A: Record<string, SublineNarratio
     intro: { say: "Bg4 — Black pins the f3-knight. Question it at once with h3: if the bishop retreats you gain the tempo for c3 and d4, and if …Bxf3 Qxf3 you own the bishop pair with your queen eyeing f7 and b7. Either way the pin dissolves in White's favour.", sayShort: 'Bg4 — h3 questions it, then d4.' }, sources: OPEN,
   },
   'pro-carlsen-open-sicilian::3::a6@9': {
-    intro: { say: "a6 — Black prepares …b5 to chase your bishop and gain space. Pre-empt with a4, fixing the queenside, then Bb3, c3 and Re1 heading for d4; you keep the bishop's diagonal and deny Black the expansion he wants. Calm restraint, then the central break.", sayShort: 'a6 — a4 stops b5, then d4.' }, sources: OPEN,
+    intro: { say: "a6 — Black prepares …b5 to chase your bishop and gain space. Pre-empt with a4, fixing the queenside, then Bb3, c3 and Re1 heading for d4; you keep the bishop's diagonal and deny Black the expansion they want. Calm restraint, then the central break.", sayShort: 'a6 — a4 stops b5, then d4.' }, sources: OPEN,
   },
   'pro-carlsen-open-sicilian::3::d5@13': {
     intro: { say: "d5 — Black strikes the centre at last. Meet it calmly: exd5 exd5, then Re1 seizing the open e-file, or hold with Nbd2 keeping the tension; White's better-placed pieces and the bishop's aim down the a2-g8 diagonal favour the more harmonious side. Clarify, then press.", sayShort: 'd5 — exd5, then Re1 grabs e-file.' }, sources: OPEN,
@@ -106,7 +106,7 @@ export const SUBLINE_NARRATION_PRO_CARLSEN_SIC_A: Record<string, SublineNarratio
     intro: { say: "Bg7 — Black fianchettoes before recapturing. Grab the pawn: dxc5, and after …Qa5+ c3 Qxc5 develop Na3 with tempo, heading for Nc4 or Nb5; you keep the extra structure and gain time chasing the Black queen. A concrete way to punish the move order.", sayShort: 'Bg7 — dxc5, then c3 and Na3.' }, sources: OPEN,
   },
   'pro-carlsen-open-sicilian::4::Nc6@7': {
-    intro: { say: "Nc6 — Black develops in the Accelerated Dragon. Clamp with c4, the Maróczy Bind: pawns on c4 and e4 strangle the …d5 break and deny Black his thematic counterplay. Follow with Nc3, Be2 and O-O, then squeeze on space; the bind is a lasting strategic edge.", sayShort: 'Nc6 — c4 Maróczy, then Nc3 and Be2.' }, sources: OPEN,
+    intro: { say: "Nc6 — Black develops in the Accelerated Dragon. Clamp with c4, the Maróczy Bind: pawns on c4 and e4 strangle the …d5 break and deny Black their thematic counterplay. Follow with Nc3, Be2 and O-O, then squeeze on space; the bind is a lasting strategic edge.", sayShort: 'Nc6 — c4 Maróczy, then Nc3 and Be2.' }, sources: OPEN,
   },
   'pro-carlsen-open-sicilian::4::Nf6@7': {
     intro: { say: "Nf6 — Black transposes toward a Dragon proper. Develop Nc3, then Be3, f3, Qd2 and O-O-O — the Yugoslav Attack: castle long and storm with h4-h5 and g4 while Black fianchettoes. Opposite wings, and White's attack down the h-file is the faster of the two.", sayShort: 'Nf6 — Nc3 and Be3, then Yugoslav.' }, sources: OPEN,
@@ -175,13 +175,13 @@ export const SUBLINE_NARRATION_PRO_CARLSEN_SIC_A: Record<string, SublineNarratio
     intro: { say: "g6 — Black fianchettoes after …a6 forced the bishop to d3. Castle, then play Nxd4 or c3 to challenge the centralised knight, followed by Re1 and the central push; the bishop on d3 eyes the kingside, and once the d4-knight is dislodged White's space and a coming f4 or e5 give the initiative.", sayShort: 'g6 — O-O, challenge d4, then f4.' }, sources: CLOSED,
   },
   'pro-carlsen-closed-sicilian::2::e6@5': {
-    intro: { say: "e6 — Black prepares …d5. Damage the structure first: Bxc6 bxc6, doubling the c-pawns, then d3 and f4 with Nf3, clamping and preparing a kingside build; Black's …d5 gains space but his queenside pawns are permanent weaknesses. Trade, fix the pawns, then play on both wings.", sayShort: 'e6 — Bxc6 bxc6, then d3 and f4.' }, sources: CLOSED,
+    intro: { say: "e6 — Black prepares …d5. Damage the structure first: Bxc6 bxc6, doubling the c-pawns, then d3 and f4 with Nf3, clamping and preparing a kingside build; Black's …d5 gains space but their queenside pawns are permanent weaknesses. Trade, fix the pawns, then play on both wings.", sayShort: 'e6 — Bxc6 bxc6, then d3 and f4.' }, sources: CLOSED,
   },
   'pro-carlsen-closed-sicilian::2::g6@7': {
     intro: { say: "g6 — Black fianchettoes with the knight still on d4. Reposition the bishop actively to c4, eyeing f7, then O-O and c3 or Nxd4, challenging the intruder; the bishop on c4 combines with pressure on the centre while Black's kingside commits. Reroute, then contest d4.", sayShort: 'g6 — Bc4 eyes f7, then challenge d4.' }, sources: CLOSED,
   },
   'pro-carlsen-closed-sicilian::2::Nc6@9': {
-    intro: { say: "Nc6 — Black retreats the knight, having spent time to nudge your bishop to d3. Castle and use the tempo: Re1, c3 and d4, building the ideal centre while the d3-bishop aims at the kingside; Black's knight round-trip has cost him development. Punish the wasted time with a quick break.", sayShort: 'Nc6 — O-O, then c3 and d4.' }, sources: CLOSED,
+    intro: { say: "Nc6 — Black retreats the knight, having spent time to nudge your bishop to d3. Castle and use the tempo: Re1, c3 and d4, building the ideal centre while the d3-bishop aims at the kingside; Black's knight round-trip has cost them development. Punish the wasted time with a quick break.", sayShort: 'Nc6 — O-O, then c3 and d4.' }, sources: CLOSED,
   },
   'pro-carlsen-closed-sicilian::2::e6@11': {
     intro: { say: "e6 — Black completes a solid setup. Challenge the centralised knight with Nxd4 cxd4 and Ne2, then play against the d4-pawn with c3, or expand with Re1 and e5 hitting the f6-knight; the bishop on d3 and White's space aim at Black's kingside. Resolve d4, then press forward.", sayShort: 'e6 — Nxd4 and Ne2, then c3.' }, sources: CLOSED,

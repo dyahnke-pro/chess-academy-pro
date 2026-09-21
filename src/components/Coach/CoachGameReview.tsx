@@ -1124,10 +1124,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         && !nextMove.isCoachMove
         && moverIsStudent(seg.fenBefore) // color is authoritative for reviewed games
         && (seg.classification === 'inaccuracy' || seg.classification === 'mistake' || seg.classification === 'blunder');
-      // THE QUESTION PLAN gates every mid-game stop: fire ONLY at a planned ply
-      // (≤2 per game, the biggest moments), and use the KIND the plan chose for
-      // that moment. Everything else stays narration — no overwhelm (David
-      // 2026-07-20). quizzedPliesRef stops a re-fire on the same ply.
+      // THE QUESTION PLAN gates every mid-game stop: fire ONLY at a planned
+      // ply, and use the KIND the plan chose for that moment (`why` /
+      // `find-shot` / `trap`). Everything else stays narration.
+      // quizzedPliesRef stops a re-fire on the same ply.
+      //
+      // 🔒 THIS SAID "≤2 per game, the biggest moments" UNTIL 2026-09-21 AND
+      // THAT HAD STOPPED BEING TRUE. `REVIEW_QUESTION_BUDGET` is `Infinity`
+      // — the cap went when G4.5 banned hard caps on what the student hears;
+      // the plan now RANKS by stake and keeps everything that ranks. A comment
+      // asserting a cap that no longer exists is the same defect as the
+      // `principleQuizStateRef` guard three hundred lines down that carried
+      // "(hidden) — never opens" while a live call site opened it: a wrong
+      // comment is worse than none, because it tells the next reader not to
+      // look.
       const planned = questionPlan.get(nextPly);
       if (seg && isStudentMistake && planned && !quizzedPliesRef.current.has(nextPly)) {
         quizzedPliesRef.current.add(nextPly);

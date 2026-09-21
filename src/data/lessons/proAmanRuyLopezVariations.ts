@@ -56,7 +56,7 @@ export const PRO_AMAN_RUY_LOPEZ_VARIATION_LESSONS: Record<string, LessonScript> 
         say: "c3 prepares d4 and both sides castle. White's setup mirrors the Italian: a solid centre, the bishop pair option, and a slow build-up toward a central break.",
         sayShort: 'c3 — prepare d4.' }),
       b({ id: 'bxc6', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 c3 O-O O-O d6 h3 a6 Bxc6 bxc6', highlights: [H('c6')],
-        say: "h3 makes luft and Bxc6 damages Black's structure — the doubled c-pawns become a long-term target. White trades the bishop on his own terms to fix a permanent weakness.",
+        say: "h3 makes luft and Bxc6 damages Black's structure — the doubled c-pawns become a long-term target. White trades the bishop on their own terms to fix a permanent weakness.",
         sayShort: 'Bxc6 — give Black doubled pawns.' }),
       b({ id: 'middlegame', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 c3 O-O O-O d6 h3 a6 Bxc6 bxc6 Re1 Ba7 Be3 Bxe3 Rxe3', arrows: [A('c1', 'e3')], highlights: [H('e3')],
         say: "White trades the dark bishops and reaches a comfortable middlegame with the better structure: Black's doubled c-pawns are a target, White's pieces are harmonious, and the plan is to press on the queenside weaknesses. A pleasant, low-risk edge.",

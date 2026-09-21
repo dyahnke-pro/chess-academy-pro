@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2575 lines · 29 exports · 21 importers · 23 tests · 3 audits**
+**2597 lines · 29 exports · 21 importers · 23 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
 - **G4.6 THE REVIEW-PREP LAG IS SERIALIZED ENGINE CALLS, NOT THE TIMEOUT (David 2026-09-16: "we need to fix that seven second lag").** (CLAUDE.md:1089) — names `acquirePvEngines`, `gameAnalysisService`
-- **The standard post-deploy ritual** (CLAUDE.md:5683) — names `analyzeGameOnWorker`, `gameAnalysisService`, `scanCriticalMoments`
+- **The standard post-deploy ritual** (CLAUDE.md:5865) — names `analyzeGameOnWorker`, `gameAnalysisService`, `scanCriticalMoments`
 
 ## Who calls in
 
@@ -55,13 +55,9 @@
 ### `resumeBatchAnalysis` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:278`
 
-### `classifyCpLoss` (function) — 14 call sites
-- `src/components/Coach/CoachGameReview.tsx:1760`
+### `classifyCpLoss` (function) — 10 call sites
+- `src/components/Coach/CoachGameReview.tsx:1800`
 - `src/services/deltaConsistency.test.ts:16`
-- `src/services/mistakePuzzleService.ts:130`
-- `src/services/mistakePuzzleService.ts:397`
-- `src/services/mistakePuzzleService.ts:763`
-- `src/services/mistakePuzzleService.ts:1173`
 - `src/services/moveClassification.chesscom.test.ts:30`
 - `src/services/moveClassification.chesscom.test.ts:83`
 - `src/services/moveClassification.chesscom.test.ts:85`
@@ -73,9 +69,9 @@
 
 ### `replayPgnToFens` (function) — 6 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
-- `src/services/autoAnalyzeGame.ts:188`
-- `src/services/mistakePuzzleService.ts:228`
-- `src/services/mistakePuzzleService.ts:299`
+- `src/services/autoAnalyzeGame.ts:209`
+- `src/services/mistakePuzzleService.ts:246`
+- `src/services/mistakePuzzleService.ts:317`
 - `src/services/tacticClassifierService.ts:193`
 - `src/services/tacticClassifierService.ts:437`
 
@@ -92,15 +88,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `acquirePvEngines` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3030`
-- `src/services/coachFeatureService.ts:3069`
+- `src/services/coachFeatureService.ts:3049`
+- `src/services/coachFeatureService.ts:3088`
 - `src/services/gameAnalysisService.unload.test.ts:38`
 
 ### `scanCriticalMoments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:788`
+- `src/components/Coach/CoachGameReview.tsx:796`
 
 ### `recordPromptedFind` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1450`
+- `src/components/Coach/CoachGameReview.tsx:1490`
 
 ### `destroyAllAnalysisWorkers` (function) — 3 call sites
 - `src/services/engineLifecycle.ts:36`
@@ -158,11 +154,12 @@
 - `src/services/gameAnalysisService.records.test.ts:83`
 - `src/services/loopCloses.review.integration.test.ts:68`
 
-### `analyzeSingleGame` (function) — 10 call sites
+### `analyzeSingleGame` (function) — 11 call sites
 - `src/components/Coach/CoachReviewSessionPage.nonBlocking.test.tsx:23`
 - `src/components/Coach/CoachReviewSessionPage.tsx:255`
 - `src/components/Coach/CoachReviewSessionPage.tsx:295`
 - `src/services/analysisDeterminism.pool.test.ts:139`
+- `src/services/gameAnalysisService.records.test.ts:90`
 - `src/services/gameAnalysisTwoPass.test.ts:230`
 - `src/services/gameAnalysisTwoPass.test.ts:267`
 - `src/services/gameAnalysisTwoPass.test.ts:279`
@@ -246,6 +243,10 @@
 - `src/services/reviewFullGameNarration.harness.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-analysis-pool-engine-prod.mjs`
 - `scripts/audit-review-comprehensive.mjs`

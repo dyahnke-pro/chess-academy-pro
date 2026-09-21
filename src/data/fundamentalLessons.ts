@@ -256,17 +256,17 @@ export const FUNDAMENTAL_LESSON: Record<FundamentalId, FundamentalLesson> = {
   // ── section 14: the reasoning errors ──
   'calculation-depth': {
     facts:
-      "A forcing line has to be followed to a QUIET position — one where neither side has a check, a capture or a threat left — before it can be judged. Stopping while the opponent still has a capture in hand is how a move that looks safe for two moves loses a piece on the third. The habit is mechanical: at every step, list their checks, captures and threats first, answer each, and only then look at quiet moves.",
+      "Follow a forcing line to a QUIET position — one where neither side has a check, a capture or a threat left — before you judge it. If you stop while they still have a capture in hand, a move that looked safe for two moves loses a piece on the third. Your habit here is mechanical: at every step, list their checks, captures and threats first, answer each one, and only then look at quiet moves.",
     sources: ['concept:tac-double-attack', 'concept:pos-initiative'],
   },
   'left-book-early': {
     facts:
-      "The book lines exist because thousands of games tested them; a move that leaves them without a concrete reason usually spends a tempo on something the position does not need, or walks into a known idea. Leaving theory is fine when you can say what the new move gains — a target, a square, a trade — and a mistake when you cannot.",
+      "The book lines exist because thousands of games tested them. When you leave them without a concrete reason, you usually spend a tempo on something the position does not need, or walk into an idea they already know. Leaving theory is fine when you can say what your new move gains — a target, a square, a trade. It is a mistake when you cannot.",
     sources: ['concept:pos-development', 'concept:pos-tempo'],
   },
   'no-plan': {
     facts:
-      "Every middlegame position asks for something concrete — a weak pawn to besiege, an open file to take, a passed pawn to push, a badly placed piece to improve. A move that serves none of those spends a turn while the opponent's does. Name the target first; then the candidate moves are the ones that go toward it.",
+      "Every middlegame position asks you for something concrete — a weak pawn to besiege, an open file to take, a passed pawn to push, a badly placed piece to improve. A move of yours that serves none of those spends a turn while theirs does not. Name your target first; then your candidate moves are the ones that go toward it.",
     sources: ['concept:pos-open-file', 'concept:pawn-isolated', 'concept:pos-initiative'],
   },
 };

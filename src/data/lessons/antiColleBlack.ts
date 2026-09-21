@@ -22,7 +22,7 @@ export const ANTI_COLLE_BLACK_LESSON: LessonScript = {
   orientation: 'black',
   beats: [
     b({ id: 'col1', moves: 'd4 d5 Nf3 Nf6 e3 c5',
-      say: "The Colle is a lazy little setup — e3, Bd3, c3, and a hope-and-a-prayer kingside attack. You simply refuse to let it get comfortable. …c5 smacks d4 at once, BEFORE White walls in his own bishop with c3. Crack the game open early, and the Colle's slow plan never even gets off the ground.",
+      say: "The Colle is a lazy little setup — e3, Bd3, c3, and a hope-and-a-prayer kingside attack. You simply refuse to let it get comfortable. …c5 smacks d4 at once, BEFORE White walls in their own bishop with c3. Crack the game open early, and the Colle's slow plan never even gets off the ground.",
       sayShort: "…c5 — strike before the Colle settles.",
       highlights: [H('c5', ATK), H('d4', SOFT)] }),
     b({ id: 'col2', moves: 'd4 d5 Nf3 Nf6 e3 c5 c4 e6 Nc3 Nc6',

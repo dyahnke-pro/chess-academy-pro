@@ -112,7 +112,7 @@ export const SUBLINE_NARRATION_PRO_GOTHAM_X2: Record<string, SublineNarration> =
     intro: { say: "e5 — Black grabs the full centre. The fianchetto is set, so play d3 and O-O, then c3 preparing d4, or Nd2-c4 pressing e5; White treats it as a reversed Sicilian with a comfortable extra tempo. Undermine the centre and develop harmoniously — the extra move steers it your way.", sayShort: 'e5 — d3, castle, then c3-d4.' }, sources: KIA,
   },
   'pro-gothamchess-kia::1::d6@9': {
-    intro: { say: "d6 — Black sets a solid Sicilian-style wall. Expand with e4 and Nc3, then push on the queenside with Rb1, a3 and b4; the extra tempo from White's setup steers this reversed structure in his favour. Play on the wing where your pawns point and squeeze the space.", sayShort: 'd6 — e4 and Nc3, then b4.' }, sources: KIA,
+    intro: { say: "d6 — Black sets a solid Sicilian-style wall. Expand with e4 and Nc3, then push on the queenside with Rb1, a3 and b4; the extra tempo from White's setup steers this reversed structure in their favour. Play on the wing where your pawns point and squeeze the space.", sayShort: 'd6 — e4 and Nc3, then b4.' }, sources: KIA,
   },
   'pro-gothamchess-kia::1::e5@9': {
     intro: { say: "e5 — Black claims the centre behind the fianchetto. Play e4 to fix the structure, then Nc3, Nd2-c4 and f4 pressing e5; White has a comfortable reversed King's Indian with the initiative. Chip at the centre, expand, and use the extra tempo to press first.", sayShort: 'e5 — e4, then Nc3 and f4.' }, sources: KIA,

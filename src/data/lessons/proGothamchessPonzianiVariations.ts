@@ -87,7 +87,7 @@ const D5_COUNTER: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6 d3 O-O Be2 Re8 Nd2',
       highlights: [{ square: 'd3', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Now the key phase: consolidation. You play the solid d3 to anchor e4, develop the bishop to e2, and bring the knight to d2 to untangle. Black has activity for the pawn, so you don't get greedy — you just complete development, blunt his initiative, and emerge a pawn up in the middlegame. Hold the line, and the extra pawn tells in the long run.",
+        "Now the key phase: consolidation. You play the solid d3 to anchor e4, develop the bishop to e2, and bring the knight to d2 to untangle. Black has activity for the pawn, so you don't get greedy — you just complete development, blunt their initiative, and emerge a pawn up in the middlegame. Hold the line, and the extra pawn tells in the long run.",
       sayShort: 'd3, Be2, Nd2 — consolidate the pawn.',
     }),
   ],
@@ -104,7 +104,7 @@ const NXE4: LessonScript = {
       arrows: [{ from: 'd5', to: 'c6', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Black grabs the e4-pawn — the greedy try, and thirteen of his corpus games punish it the same way: d5, ignoring the knight entirely and hitting c6. The pawn cannot be saved AND the knight kept; Black must pick which piece of the position to lose.",
+        "Black grabs the e4-pawn — the greedy try, and thirteen of their corpus games punish it the same way: d5, ignoring the knight entirely and hitting c6. The pawn cannot be saved AND the knight kept; Black must pick which piece of the position to lose.",
       sayShort: 'd5 — ignore the grab, hit c6.',
     }),
     b({

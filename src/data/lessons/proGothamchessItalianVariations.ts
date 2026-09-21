@@ -177,7 +177,7 @@ const TWO_KNIGHTS: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Bc5',
       highlights: [{ square: 'g1', color: KEY }, { square: 'f6', color: SOFT }],
       say:
-        "The Two Knights order — Black develops the king's knight before the bishop, daring you into sharp theory. His corpus answer declines the dare: castle first, and let Black transpose back into Italian shapes. Seven of his games run this exact path, and the calm move keeps every option warm.",
+        "The Two Knights order — Black develops the king's knight before the bishop, daring you into sharp theory. Their corpus answer declines the dare: castle first, and let Black transpose back into Italian shapes. Seven of their games run this exact path, and the calm move keeps every option warm.",
       sayShort: 'O-O — decline the dare.',
     }),
     b({

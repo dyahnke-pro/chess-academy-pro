@@ -49,15 +49,15 @@ const C5 = lesson("Nimzo-Larsen vs 1...c5 — Reversed Sicilian", [
 
 // ── 1...b6 — symmetric, grab the centre first ──
 const B6 = lesson("Nimzo-Larsen vs 1...b6 — Grab the Centre First", [
-  b({ id: 'b6-mirror', moves: 'b3 b6 Bb2 Bb7 Nf3 Nf6 e3 e6', arrows: [A('b2', 'g7')], highlights: [H('b2')], say: "Black mirrors the fianchetto with b6 and Bb7 — but White moved first, so he's a tempo ahead in the symmetrical race. Both bishops stare down the long diagonals.", sayShort: 'Bb2 — symmetric, a tempo up.' }),
+  b({ id: 'b6-mirror', moves: 'b3 b6 Bb2 Bb7 Nf3 Nf6 e3 e6', arrows: [A('b2', 'g7')], highlights: [H('b2')], say: "Black mirrors the fianchetto with b6 and Bb7 — but White moved first, so they're a tempo ahead in the symmetrical race. Both bishops stare down the long diagonals.", sayShort: 'Bb2 — symmetric, a tempo up.' }),
   b({ id: 'b6-d4', moves: 'b3 b6 Bb2 Bb7 Nf3 Nf6 e3 e6 d4 Be7 Bd3', arrows: [A('f1', 'd3')], highlights: [H('d4'), H('d3')], say: "Using that extra tempo, this repertoire grabs the centre first with d4 and develops the bishop to the active d3-square. White is the one calling the shots.", sayShort: 'd4, Bd3 — seize the centre.' }),
   b({ id: 'b6-mid', moves: 'b3 b6 Bb2 Bb7 Nf3 Nf6 e3 e6 d4 Be7 Bd3 O-O Nbd2', highlights: [H('d4')], say: "Black castles and White completes development with Nbd2 — every piece poised behind the d4-pawn. A small but real space edge in the symmetrical structure, exactly the comfortable position this repertoire wants.", sayShort: 'Nbd2 — small, lasting edge.' }),
 ]);
 
 // ── 1...g6 — full centre vs the fianchetto ──
 const G6 = lesson("Nimzo-Larsen vs 1...g6 — Take the Full Centre", [
-  b({ id: 'g6-dev', moves: 'b3 g6 Bb2 Nf6 e3 Bg7 Nf3 O-O', arrows: [A('b2', 'g7')], highlights: [H('b2')], say: "Black fianchettoes early; White develops behind the b2-bishop. The two dark-squared bishops face off on the long diagonal, and White will use his space to keep the upper hand.", sayShort: 'Bb2 — face off on the diagonal.' }),
-  b({ id: 'g6-d4', moves: 'b3 g6 Bb2 Nf6 e3 Bg7 Nf3 O-O d4 d6 Be2', highlights: [H('d4')], say: "This repertoire takes the full centre with d4. Black's King's-Indian-style setup is solid but passive — White's extra space gives him the easier middlegame to play.", sayShort: 'd4 — full centre, more space.' }),
+  b({ id: 'g6-dev', moves: 'b3 g6 Bb2 Nf6 e3 Bg7 Nf3 O-O', arrows: [A('b2', 'g7')], highlights: [H('b2')], say: "Black fianchettoes early; White develops behind the b2-bishop. The two dark-squared bishops face off on the long diagonal, and White will use their space to keep the upper hand.", sayShort: 'Bb2 — face off on the diagonal.' }),
+  b({ id: 'g6-d4', moves: 'b3 g6 Bb2 Nf6 e3 Bg7 Nf3 O-O d4 d6 Be2', highlights: [H('d4')], say: "This repertoire takes the full centre with d4. Black's King's-Indian-style setup is solid but passive — White's extra space gives them the easier middlegame to play.", sayShort: 'd4 — full centre, more space.' }),
   b({ id: 'g6-mid', moves: 'b3 g6 Bb2 Nf6 e3 Bg7 Nf3 O-O d4 d6 Be2 Nbd7 O-O Re8 c4', arrows: [A('c2', 'c4')], highlights: [H('c4')], say: "Both sides finish; White castles and clamps with c4. The big d4-c4 centre and the open long diagonal hand White a comfortable space advantage — and these positions often simplify into a favourable rook-and-minor endgame.", sayShort: 'c4 — clamp, comfortable edge.' }),
 ]);
 

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Download, CheckCircle, AlertCircle, Loader2, TrendingUp } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
@@ -46,6 +46,32 @@ export function GameImportCard({ onImportComplete }: GameImportCardProps): JSX.E
   const [result, setResult] = useState<ImportResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * 🔒 IS THIS CARD STILL MOUNTED? (2026-09-21)
+   *
+   * `handleImport` is a long async handler — a network import, then Dexie
+   * writes, then a profile refresh — and every exit path calls `setState`
+   * (`setError`, `setImporting`, `setProgressStatus`). Nothing checked that
+   * the component was still there, so an import in flight when the card
+   * unmounts sets state on a dead tree.
+   *
+   * FOUND, not theorised: it surfaced as `ReferenceError: window is not
+   * defined` thrown from React's `dispatchSetState` during a large test batch
+   * — an Unhandled Rejection landing AFTER the jsdom environment had been torn
+   * down. The file passes 16/16 on its own, which is exactly why it had never
+   * been seen: it needs the unmount to beat the promise, and only load makes
+   * that likely. In the app the same race is a user navigating away from a
+   * slow import.
+   *
+   * A ref, not a cancellation: the import SHOULD finish (its rows are written
+   * and wanted); only the reporting of it is pointless once nobody is looking.
+   */
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
+
   // Pre-fill username from saved preferences
   useEffect(() => {
     if (activeProfile) {
@@ -57,6 +83,7 @@ export function GameImportCard({ onImportComplete }: GameImportCardProps): JSX.E
   }, [activeTab, activeProfile]);
 
   const handleProgress = useCallback((count: number, status?: string) => {
+    if (!mountedRef.current) return;
     setProgressCount(count);
     if (status) setProgressStatus(status);
   }, []);
@@ -88,7 +115,10 @@ export function GameImportCard({ onImportComplete }: GameImportCardProps): JSX.E
         // Stats fetch is best-effort; don't fail the whole import
       }
 
-      setResult({ gameCount, stats });
+      // Same guard: this lands after the network + Dexie work. `onImportComplete`
+      // is the PARENT's business and still fires — the import really did happen
+      // and whoever owns that callback may need to know, mounted or not.
+      if (mountedRef.current) setResult({ gameCount, stats });
       onImportComplete(gameCount);
 
       // Save username + update profile
@@ -119,10 +149,12 @@ export function GameImportCard({ onImportComplete }: GameImportCardProps): JSX.E
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Import failed. Check the username and try again.';
-      setError(message);
+      if (mountedRef.current) setError(message);
     } finally {
-      setImporting(false);
-      setProgressStatus('');
+      if (mountedRef.current) {
+        setImporting(false);
+        setProgressStatus('');
+      }
     }
   }, [username, importing, activeTab, activeProfile, setActiveProfile, onImportComplete, handleProgress]);
 

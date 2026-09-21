@@ -603,6 +603,28 @@ export function buildSidePlan(overrides?: Partial<SidePlan>): SidePlan {
   };
 }
 
+/**
+ * One reading of one position, as `DedicatedWorker.analyzePosition` returns it.
+ *
+ * 🔒 WHY A FACTORY AND NOT ANOTHER OBJECT LITERAL (2026-09-21). Four test files
+ * hand-rolled this shape as `{ evaluation, bestMove, depth }` behind an
+ * `as never`, each a locally-shrunken copy of a type it does not own. The real
+ * method has returned `pv: string[]` for a long time — always an array, never
+ * undefined — so the day the sweep started READING the line it already
+ * computed, every one of those stubs threw `Cannot read properties of
+ * undefined (reading 'length')` and three suites went red at once.
+ *
+ * That is the 11e shape exactly: a fixture restating a type, rotting when the
+ * type moves. Fixed the way 11e was fixed — at the TYPE, via a factory — and
+ * not with a `?.` at the read site, which would have made the production code
+ * defend against a shape only the tests can produce.
+ */
+export function buildEngineAnalysis(
+  overrides: Partial<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> = {},
+): { evaluation: number; bestMove: string; depth: number; pv: string[] } {
+  return { evaluation: 0, bestMove: 'd2d4', depth: 12, pv: [], ...overrides };
+}
+
 // ─── Reset counter (call in beforeEach if needed) ───────────────────────────
 
 export function resetFactoryCounter(): void {

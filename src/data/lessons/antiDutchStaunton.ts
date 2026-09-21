@@ -32,7 +32,7 @@ export const ANTI_DUTCH_STAUNTON_LESSON: LessonScript = {
       sayShort: "f3 — undermine the weak e4 pawn.",
       highlights: [H('e4', ATK)] }),
     b({ id: 'sta3', moves: 'd4 f5 e4 fxe4 Nc3 Nf6 Bg5 c6 f3 d5 fxe4 Nxe4 Nxe4 dxe4 Bc4 Qd6 c3',
-      say: "Bc4 swings the bishop onto the a2-g8 diagonal, raking toward Black's stranded king — the one that lost the shelter of its f-pawn. …Qd6 covers the loose squares, and you play c3 to bolster d4 and clear the road for Qd2. Every single piece you own points at Black's position, while his kingside is airy and his king can't easily castle.",
+      say: "Bc4 swings the bishop onto the a2-g8 diagonal, raking toward Black's stranded king — the one that lost the shelter of its f-pawn. …Qd6 covers the loose squares, and you play c3 to bolster d4 and clear the road for Qd2. Every single piece you own points at Black's position, while their kingside is airy and their king can't easily castle.",
       sayShort: "Bc4 — rake the diagonal at the king.",
       arrows: [A('c4', 'f7')], highlights: [H('f7', SOFT)] }),
     b({ id: 'sta4', moves: 'd4 f5 e4 fxe4 Nc3 Nf6 Bg5 c6 f3 d5 fxe4 Nxe4 Nxe4 dxe4 Bc4 Qd6 c3 Qg6 Qd2 Bf5 Ne2 Nd7',

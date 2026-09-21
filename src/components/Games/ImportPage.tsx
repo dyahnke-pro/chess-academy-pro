@@ -1,5 +1,5 @@
 import { PageHelp } from '../Layout/PageHelp';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { importLichessGames, importLichessStats } from '../../services/lichessService';
 import { importChessComGames, importChessComStats } from '../../services/chesscomService';
@@ -59,6 +59,27 @@ export function ImportPage(): JSX.Element {
   const [stats, setStats] = useState<PlatformStats | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * 🔒 IS THIS PAGE STILL MOUNTED? (2026-09-21)
+   *
+   * `handleImport` awaits a network import, then optional stats, then Dexie
+   * writes — and every exit calls `setState`. A user who starts a slow import
+   * and navigates away sets state on an unmounted tree.
+   *
+   * FOUND BY SWEEPING, not by seeing it here. The same race surfaced first in
+   * `Coach/GameImportCard.tsx` as `ReferenceError: window is not defined`
+   * thrown from React's `dispatchSetState` during a large test batch. That
+   * component turns out to be ORPHANED — 344 lines, 16 passing tests, rendered
+   * nowhere — so fixing only it would have fixed the copy no user can reach
+   * and left this one, which is the live import surface, untouched. One sample
+   * of a bug class is never the class.
+   */
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
+
   // Puzzle activity sync state (Lichess only, requires token)
   const [syncingPuzzles, setSyncingPuzzles] = useState(false);
   const [puzzleSyncResult, setPuzzleSyncResult] = useState<{
@@ -73,6 +94,8 @@ export function ImportPage(): JSX.Element {
   const hasLichessToken = Boolean(tokenEncrypted && tokenIv);
 
   const handleProgress = useCallback((count: number, status?: string) => {
+    // Progress arrives from an in-flight import; see `mountedRef` above.
+    if (!mountedRef.current) return;
     setProgressCount(count);
     if (status) setProgressStatus(status);
   }, []);
@@ -150,17 +173,19 @@ export function ImportPage(): JSX.Element {
         ? await importLichessGames(username, handleProgress)
         : await importChessComGames(username, handleProgress);
 
-      setGameResult(count);
+      if (mountedRef.current) setGameResult(count);
+      // As with `import_failed`: the games really were imported, so the event
+      // fires whether or not the page is still on screen.
       captureEvent('import_succeeded', { import_source: platform, game_count: count });
 
       // Import stats
-      setProgressStatus('Fetching player stats...');
+      if (mountedRef.current) setProgressStatus('Fetching player stats...');
       let platformStats: PlatformStats | null = null;
       try {
         platformStats = platform === 'lichess'
           ? await importLichessStats(username)
           : await importChessComStats(username);
-        setStats(platformStats);
+        if (mountedRef.current) setStats(platformStats);
       } catch {
         // Stats are best-effort
       }
@@ -189,11 +214,17 @@ export function ImportPage(): JSX.Element {
         }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Import failed');
+      if (mountedRef.current) setError(err instanceof Error ? err.message : 'Import failed');
+      // The ANALYTICS still fire either way: the import genuinely failed and
+      // that is true whether or not anyone is still looking at the page.
+      // Dropping it on unmount would silently bias the import funnel toward
+      // successes, which is the measurement this repo reads most often.
       captureEvent('import_failed', { import_source: platform, error_class: errorClass(err) });
     } finally {
-      setImporting(false);
-      setProgressStatus('');
+      if (mountedRef.current) {
+        setImporting(false);
+        setProgressStatus('');
+      }
     }
   };
 

@@ -25,7 +25,7 @@ export const SCOTCH_GAMBIT_LESSON: LessonScript = {
     b({
       id: 'open',
       moves: 'e4 e5 Nf3 Nc6 d4 exd4 Bc4',
-      say: "The Scotch Gambit. After d4 exd4, White ignores the pawn and plays 4.Bc4 — instant development, the bishop already eyeing f7. The idea is not to gambit forever: it is to lure Black into grabbing material while White builds a fast, dangerous initiative and regains the pawn on his own terms.",
+      say: "The Scotch Gambit. After d4 exd4, White ignores the pawn and plays 4.Bc4 — instant development, the bishop already eyeing f7. The idea is not to gambit forever: it is to lure Black into grabbing material while White builds a fast, dangerous initiative and regains the pawn on their own terms.",
       sayShort: 'Bc4 — develop fast, eye f7.',
       arrows: [A('c4', 'f7')],
       highlights: [H('c4'), H('f7'), H('d4')],

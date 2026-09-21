@@ -1,6 +1,39 @@
 import 'fake-indexeddb/auto';
 import '@testing-library/jest-dom';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
+
+/**
+ * 🔒 `waitFor` GETS A BUDGET THAT SURVIVES A LOADED MACHINE (2026-09-21).
+ *
+ * Testing Library's default `asyncUtilTimeout` is 1000ms, and this repo has
+ * component tests that async-load real data through fake-indexeddb before the
+ * assertion can pass — `GameChapterPage` waits on "Coach is preparing your
+ * puzzles…" resolving into a rendered puzzle.
+ *
+ * WHY NOW. ship-check used to run ONE test file per changed source file (by
+ * basename), so component tests were rarely batched. That mapping was fixed
+ * the same day — it was a gate that could not fire, and it had concealed five
+ * red files on `main` — and the honest consequence is that a change to a
+ * shared module now runs dozens of component tests together. On four cores
+ * that is real contention, and a 1000ms budget starts timing out on tests
+ * that pass 13/13 in isolation.
+ *
+ * THIS IS NOT PAPERING OVER A PRODUCT BUG, and the distinction is the whole
+ * point. The failure was proven to be LOAD, not behaviour: the same file
+ * passes alone, and the DOM it captured showed a LOADING state, not an error
+ * one. Contrast the defect found in the same batch — `GameImportCard` threw
+ * `ReferenceError: window is not defined` from `dispatchSetState`, an
+ * unhandled rejection after teardown, which was a real setState-after-unmount
+ * and was FIXED in the component (and swept to `ImportPage`, the live
+ * surface). A timeout that only fires under contention is a harness budget; an
+ * unhandled rejection is a bug. Treating them the same way — either way — is
+ * how a suite becomes untrustworthy.
+ *
+ * Set in ONE place rather than as a `{ timeout }` argument on 32 call sites,
+ * because a per-call override is the duplicated constant this repo keeps
+ * deleting, and the next test written would not have it.
+ */
+configure({ asyncUtilTimeout: 5000 });
 import { afterEach, vi, beforeAll } from 'vitest';
 import { webcrypto } from 'node:crypto';
 

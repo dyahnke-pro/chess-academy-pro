@@ -64,7 +64,7 @@ const QE2_KIA_TEMPO: LessonScript = {
       id: 'qe2-blunder',
       moves: 'e4 c6 Nf3 d5 Nc3 dxe4 Nxe4 Nf6 Qe2',
       highlights: [H('e2', ATK), H('f1', SOFT)],
-      say: "Qe2?? — White's queen defends the knight AND blocks his own f1-bishop's natural diagonal to c4 / e2 / b5. The Qe2 looks reasonable (covering e4) but commits the queen to an awkward square that costs serious tempo. Penguingm1 at 3165 fell into this exact position.",
+      say: "Qe2?? — White's queen defends the knight AND blocks their own f1-bishop's natural diagonal to c4 / e2 / b5. The Qe2 looks reasonable (covering e4) but commits the queen to an awkward square that costs serious tempo. Penguingm1 at 3165 fell into this exact position.",
       sayShort: 'Qe2 — wastes the tempo.',
     }),
     b({

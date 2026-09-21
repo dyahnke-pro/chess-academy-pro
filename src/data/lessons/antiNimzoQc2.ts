@@ -35,7 +35,7 @@ export const ANTI_NIMZO_QC2_LESSON: LessonScript = {
       sayShort: "Bg5, f3 — clamp e4, prep the centre.",
       highlights: [H('e4', KEY), H('f3', SOFT)] }),
     b({ id: 'nim4', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 b6 Bg5 Bb7 f3 h6 Bh4 d5 cxd5 exd5 e3 Re8',
-      say: "Black frees his game with …d5; you trade and finish up with e3. The position's balanced and solid — no illusions of an edge here — but you hold the bishop pair and the safer structure. And in a long game, on an open board, those two bishops are the kind of edge that quietly, patiently tells. A pleasant, riskless position to outplay from.",
+      say: "Black frees their game with …d5; you trade and finish up with e3. The position's balanced and solid — no illusions of an edge here — but you hold the bishop pair and the safer structure. And in a long game, on an open board, those two bishops are the kind of edge that quietly, patiently tells. A pleasant, riskless position to outplay from.",
       sayShort: "e3 — level and solid, bishops the edge.",
       highlights: [H('d5', SOFT)] }),
   ],

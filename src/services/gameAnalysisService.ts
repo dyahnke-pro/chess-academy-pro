@@ -1354,7 +1354,7 @@ async function evaluateFensPooled(
   /** Search depth for this pass. The sweep and the review's curve pass run
    *  shallow; only the review's key-moment dive runs deep. */
   depth: number = ANALYSIS_DEPTH,
-): Promise<{ evals: (number | null)[]; achievedDepth: number } | null> {
+): Promise<{ evals: (number | null)[]; pvs: string[][]; achievedDepth: number } | null> {
   const size = Math.max(1, Math.min(WORKER_POOL_SIZE, fens.length));
   let workers: DedicatedWorker[] = [];
   try {
@@ -1365,6 +1365,26 @@ async function evaluateFensPooled(
   }
 
   const evals: (number | null)[] = fens.map(() => null);
+  // 🔒 THE LINE WAS ALWAYS HERE AND WE THREW IT AWAY (2026-09-21).
+  //
+  // `analyzePosition` returns `{evaluation, bestMove, depth, pv}`. This loop
+  // kept the first and the third and dropped the PV on the floor — the same
+  // shape as `computeBoardDelta` losing its squares at the boundary, and
+  // `classifyMoveFull` losing preMoveEval/postMoveEval at the call site.
+  //
+  // What it cost: `deepPv` was filled ONLY by the review's key-moment dive, and
+  // a COLD open runs `{sweepOnly: true}` which skips that dive entirely. So the
+  // FIRST review of a game — the one a student actually reads — carried no
+  // punishing line on any ply, and every PV-gated reasoning fundamental
+  // declined with "punishing PV is 0 plies, needs 3". Not a tight gate: an
+  // absent input. The dive does run afterwards, behind the open review, but
+  // `CoachReviewSessionPage` deliberately holds its refresh "for next open"
+  // rather than rewriting the tape mid-walk — so open 1 could never teach it.
+  //
+  // This costs NO extra engine time: it is the line from the search already
+  // run. It is a FLOOR at sweep depth; the dive still overwrites the key plies
+  // at REVIEW_DEEP_DEPTH.
+  const pvs: string[][] = fens.map(() => []);
   let achievedDepth = Number.POSITIVE_INFINITY;
   let next = 0;
   let done = 0;
@@ -1378,6 +1398,7 @@ async function evaluateFensPooled(
       try {
         const a = await w.analyzePosition(fens[i], depth, budgetMs);
         evals[i] = a.evaluation;
+        pvs[i] = a.pv.length ? a.pv : (a.bestMove ? [a.bestMove] : []);
         if (Number.isFinite(a.depth) && a.depth > 0) achievedDepth = Math.min(achievedDepth, a.depth);
       } catch {
         evals[i] = null; // one dead position must not sink the whole review
@@ -1394,6 +1415,7 @@ async function evaluateFensPooled(
   }
   return {
     evals,
+    pvs,
     achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, depth) : 0,
   };
 }
@@ -1441,7 +1463,7 @@ export async function analyzeGameOnWorker(
     i: number,
     depth: number,
     budgetMs: number,
-  ): Promise<{ evaluation: number; bestMove: string; depth: number } | null> => {
+  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] } | null> => {
     try {
       const r = await worker.analyzePosition(fens[i], depth, budgetMs);
       consecutiveTimeouts = 0;
@@ -1472,6 +1494,20 @@ export async function analyzeGameOnWorker(
   // ── THE SWEEP'S ONE PASS. Shallow, every non-book ply, then done. There is
   // deliberately no second pass here: see BATCH_SHALLOW_DEPTH.
   const evals: (number | null)[] = fens.map(() => null);
+  /** 🔒 THE BATCH PATH DROPPED ITS LINE TOO (2026-09-21) — the SAME defect as
+   *  the review curve pass, two hundred lines apart, which is why both were
+   *  fixed together rather than one being spot-patched.
+   *
+   *  PLAN recorded as a measured bound that "the batch path carries no PV at
+   *  all, so `calculation-depth` cannot fire there whatever the floor is". That
+   *  was true and it was not a property of the batch — `analyzePosition` has
+   *  always returned the line and `search`'s own return TYPE declared it away.
+   *  This is the path every IMPORTED game takes, so it is the larger population
+   *  by far: the 367-slip PostHog measurement behind OWED-1 came from real
+   *  users, most of whose games arrive by import.
+   *
+   *  Costs no extra engine time — it is the line from the search already run. */
+  const pvs: string[][] = fens.map(() => []);
   const depthAt: number[] = fens.map(() => 0);
   for (let i = skipBook; i < fens.length; i++) {
     if (_abortAnalysis) return null;
@@ -1480,6 +1516,7 @@ export async function analyzeGameOnWorker(
     const r = await search(i, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS);
     if (!r) continue;
     evals[i] = r.evaluation;
+    pvs[i] = r.pv.length ? r.pv : (r.bestMove ? [r.bestMove] : []);
     depthAt[i] = r.depth;
     if (Number.isFinite(r.depth) && r.depth > 0) toStore.push({ fen: fens[i], evaluation: r.evaluation, depth: r.depth });
   }
@@ -1568,6 +1605,17 @@ export async function analyzeGameOnWorker(
       bestMoveEval: evalBefore !== null ? evalBefore : null,
       classification,
       comment: null,
+      // The punishing line after the played move, on flagged plies only —
+      // byte-for-byte the contract the review path persists (`pv.afterPlayed`
+      // / `pv.afterBest`), so `attributePrinciples` reads one shape whichever
+      // path recorded the game. `afterBest` stays empty here: this sweep has no
+      // refined best move yet at annotation time, and an `afterBest` that does
+      // not START with the best move is worse than none (the review path guards
+      // the same way with `bestMoveEqualsUci`).
+      ...((classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder')
+        && (pvs[moveIdx + 1]?.length ?? 0) > 0
+        ? { pv: { afterPlayed: pvs[moveIdx + 1], afterBest: [] as string[] } }
+        : {}),
     });
   }
 
@@ -1703,10 +1751,20 @@ async function analyzeGamePositions(
    *  ran the whole REVIEW_POSITION_BUDGET_MS every time (David 2026-09-05:
    *  "very long initial analysis"). */
   const deepBest: (string | null)[] = fens.map(() => null);
-  /** The engine's principal variation (UCI) at each re-searched ply — persisted
-   *  on flagged annotations so the fundamentals attributor can corroborate its
-   *  board-proved verdict with the line the engine actually plays. */
-  const deepPv: string[][] = fens.map(() => []);
+  /** The engine's principal variation (UCI) at each ply — persisted on flagged
+   *  annotations so the fundamentals attributor can corroborate its board-proved
+   *  verdict with the line the engine actually plays.
+   *
+   *  🔒 RENAMED FROM `deepPv` 2026-09-21, because the name had become a lie and
+   *  the lie was the bug. It was filled ONLY by the key-moment dive, and a cold
+   *  open skips the dive — so on the first review of a game this array was
+   *  entirely empty and every PV-gated fundamental declined for want of input.
+   *  It is now filled at SWEEP depth for every ply by `evaluateFensPooled` (the
+   *  line comes free with a search already run) and OVERWRITTEN at
+   *  REVIEW_DEEP_DEPTH on the plies the dive visits. So: a floor everywhere, a
+   *  deep line where it matters, and a name that no longer claims more than it
+   *  holds. */
+  const pvAt: string[][] = fens.map(() => []);
   const depthAt: number[] = fens.map(() => 0);
   const toStore: EvalToStore[] = [];
   let achievedDepth = Number.POSITIVE_INFINITY;
@@ -1724,12 +1782,21 @@ async function analyzeGamePositions(
   for (let i = skipBook; i < fens.length; i++) if (evals[i] === null) pendingIdx.push(i);
 
   const pooled = pendingIdx.length === 0
-    ? { evals: [] as (number | null)[], achievedDepth: BATCH_SHALLOW_DEPTH }
+    ? { evals: [] as (number | null)[], pvs: [] as string[][], achievedDepth: BATCH_SHALLOW_DEPTH }
     : await evaluateFensPooled(pendingIdx.map((i) => fens[i]), onPosition, curveBudgetMs, BATCH_SHALLOW_DEPTH);
   if (pooled) {
     pendingIdx.forEach((i, k) => {
       const e = pooled.evals[k] ?? null;
       evals[i] = e;
+      // The sweep's own line, as a FLOOR under `pvAt` — see the note in
+      // `evaluateFensPooled`. The key-moment dive overwrites these at depth;
+      // a ply the dive never visits keeps this one instead of nothing, which
+      // is what lets a COLD-opened review teach a reasoning fundamental.
+      // A ply served from the eval CACHE has no PV (the cache stores eval +
+      // depth + bestMove, not the line) and stays empty — honest, and the
+      // cold-open case this exists for is by definition uncached.
+      const pv = pooled.pvs[k];
+      if (pv && pv.length) pvAt[i] = pv;
       if (e !== null && pooled.achievedDepth > 0) {
         depthAt[i] = pooled.achievedDepth;
         toStore.push({ fen: fens[i], evaluation: e, depth: pooled.achievedDepth });
@@ -1807,7 +1874,7 @@ async function analyzeGamePositions(
           const a = await deepSearch(fens[i], REVIEW_DEEP_DEPTH);
           deep[i] = a.evaluation;
           deepBest[i] = a.bestMove || null;
-          deepPv[i] = a.pv.length ? a.pv : (a.bestMove ? [a.bestMove] : []);
+          pvAt[i] = a.pv.length ? a.pv : (a.bestMove ? [a.bestMove] : []);
           searched++;
           if (Number.isFinite(a.depth) && a.depth > 0) {
             depthAt[i] = Math.max(depthAt[i], a.depth);
@@ -1922,8 +1989,8 @@ async function analyzeGamePositions(
       // played move (the dive at fens[moveIdx+1]) and the continuation after the
       // best move (the dive at fens[moveIdx], minus its first move).
       const flaggedHere = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
-      const pvAfterPlayed = deepPv[moveIdx + 1] ?? [];
-      const pvAtBefore = deepPv[moveIdx] ?? [];
+      const pvAfterPlayed = pvAt[moveIdx + 1] ?? [];
+      const pvAtBefore = pvAt[moveIdx] ?? [];
       const pvAfterBest = bestMove && pvAtBefore[0] && bestMoveEqualsUci(fens[moveIdx], bestMove, pvAtBefore[0]) ? pvAtBefore.slice(1) : [];
       annotations.push({
         moveNumber,

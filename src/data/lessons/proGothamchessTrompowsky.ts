@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_TROMPOWSKY_LESSON: LessonScript = {
       arrows: [{ from: 'g5', to: 'f6', color: VIS }],
       highlights: [{ square: 'f6', color: KEY }],
       say:
-        "The Trompowsky — d4 Nf6 Bg5. Out comes the bishop on move two, straight at the f6-knight. This is this repertoire's anti-everything weapon: you sidestep all of Black's prepared Indian defences and make him solve fresh problems from move two.",
+        "The Trompowsky — d4 Nf6 Bg5. Out comes the bishop on move two, straight at the f6-knight. This is this repertoire's anti-everything weapon: you sidestep all of Black's prepared Indian defences and make them solve fresh problems from move two.",
       sayShort: 'Bg5 — straight at the knight.',
     }),
     b({
@@ -93,7 +93,7 @@ export const PRO_GOTHAMCHESS_TROMPOWSKY_LESSON: LessonScript = {
       arrows: [{ from: 'e2', to: 'a6', color: VIS }],
       highlights: [{ square: 'd3', color: KEY }],
       say:
-        "Black tries to trade his bad light-squared bishop with Ba6; you line up the queen on e2, defending the bishop on d3 and keeping it on the board. Why? Because that bishop is an attacker — pointed at h7 — and you're not handing it off when you're the one going for the king.",
+        "Black tries to trade their bad light-squared bishop with Ba6; you line up the queen on e2, defending the bishop on d3 and keeping it on the board. Why? Because that bishop is an attacker — pointed at h7 — and you're not handing it off when you're the one going for the king.",
       sayShort: 'Qe2 — keep the attacking bishop.',
     }),
     b({

@@ -49,7 +49,7 @@ const CLASSICAL: LessonScript = {
       sayShort: '…Nc6 — pressure the centre.' }),
     b({ id: 'mg-plan', moves: 'e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be2 O-O O-O Nc6',
       arrows: [{ from: 'e7', to: 'e5', color: VIS }], highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Here's the middlegame plan. You play …e5, striking at d4 — if White takes, …dxe5 and your pieces flood the centre; if he pushes d5, the knight reroutes to e7 or a5 and you play on the queenside with …c6 and …b5. Either way, the g7-bishop comes alive and you get active, balanced play. The Classical Pirc is easy to play and hard to crack.",
+      say: "Here's the middlegame plan. You play …e5, striking at d4 — if White takes, …dxe5 and your pieces flood the centre; if they push d5, the knight reroutes to e7 or a5 and you play on the queenside with …c6 and …b5. Either way, the g7-bishop comes alive and you get active, balanced play. The Classical Pirc is easy to play and hard to crack.",
       sayShort: '…e5 — open it for the bishop.' }),
   ],
 };
@@ -64,11 +64,11 @@ const ATTACK_150: LessonScript = {
       sayShort: '…c6 — prepare the queenside race.' }),
     b({ id: 'b5', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 c6 f3 b5',
       arrows: [{ from: 'b7', to: 'b5', color: VIS }], highlights: [{ square: 'b5', color: KEY }],
-      say: "…b5! The pawn storm is on. White will throw his h- and g-pawns at your king; you throw your b- and a-pawns at his. In opposite-side-castling races, the fastest attacker wins — and by striking early with …c6 and …b5, you make sure you're not a step behind.",
+      say: "…b5! The pawn storm is on. White will throw their h- and g-pawns at your king; you throw your b- and a-pawns at their. In opposite-side-castling races, the fastest attacker wins — and by striking early with …c6 and …b5, you make sure you're not a step behind.",
       sayShort: '…b5 — launch the counter-storm.' }),
     b({ id: 'mg-plan', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 c6 f3 b5 a3 Nbd7 g4 Bg7',
       arrows: [{ from: 'a7', to: 'a5', color: VIS }], highlights: [{ square: 'b4', color: KEY }, { square: 'g7', color: SOFT }],
-      say: "White props his queenside with a3 and begins the kingside storm with g4; you develop …Nbd7 and complete the fianchetto with …Bg7. Here's the middlegame: a full-blooded race. Your plan is …a5, …b4 and …a4 to crack open White's king before his pawns reach yours, with the g7-bishop and a rook on the b-file leading the charge. It's sharp and double-edged — exactly the fighting Pirc, and completely sound for Black.",
+      say: "White props their queenside with a3 and begins the kingside storm with g4; you develop …Nbd7 and complete the fianchetto with …Bg7. Here's the middlegame: a full-blooded race. Your plan is …a5, …b4 and …a4 to crack open White's king before their pawns reach yours, with the g7-bishop and a rook on the b-file leading the charge. It's sharp and double-edged — exactly the fighting Pirc, and completely sound for Black.",
       sayShort: '…a5/…b4 — win the pawn race.' }),
   ],
 };

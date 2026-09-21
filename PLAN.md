@@ -3287,3 +3287,88 @@ reopening does not fix it and option 1 is dead on arrival. That is one
 
 Deliberately not built at 03:00: it changes engine cost on the review's
 critical path, and the rule is leave it, skip it, or ask.
+
+---
+
+## SESSION 2026-09-21 — clearing the board, and the gate that was hiding three reds
+
+**The one finding that explains the others.** ship-check mapped a changed
+source file to its tests **by basename** (`foo.ts` → `foo.test.ts`).
+`principleAttribution.ts` has **18** test files; that found one. Three files
+were red on `main` because of it and nothing in the repo could see them:
+
+| file | why it was red | fixed |
+|---|---|---|
+| `section14Diagnosis.test.ts` | asserted `"under the 150cp floor"`; `9942d68` rewrote that gate to expected points the day before | pinned by CURRENCY + NUMBER, not exact prose |
+| `deltaConsistency.test.ts` | fed one classifier evals and the other none — compared win% against centipawns and called it a surface drift | same context to both; boundary asserted empirically in win% |
+| `fundamentalLessons.test.ts` | all three section-14 lessons lectured in the third person; one was a sentence short | rewritten to "you/your", claims preserved |
+
+Fix: `surface-map.mjs` ALREADY derived the true list (by prefix AND by import)
+to print each map's "## Tests". Extracted to `scripts/ship-check-lib/tests-for.mjs`;
+both read it. Writing a second, smarter matcher in ship-check would have been
+two answers to one question drifting apart. Gate `tests-for.test.ts` is
+negative-controlled against the old matcher, so it cannot pass against the
+logic it replaces.
+
+**🚨 DO NOT RE-ADD A CENTIPAWN FLOOR TO `calculation-depth`.** OWED-1 asked to
+lower the 150cp floor to 100 and David approved it on 2026-09-21. **That floor
+no longer exists** — `9942d68` replaced it with `bandForWinPctLost` (an
+inaccuracy at 5 win%, ≈55cp at a balanced position), which is already lower
+than 100 AND in chess.com's currency per §8b. Acting on the approval would be
+a regression. OWED-1 and FUNDLEAD's "dead band" were the same floor approached
+from two directions and nobody reconciled the entries.
+
+**The sweep computed the engine line and dropped it — at TWO sites.**
+`analyzePosition` returns `{evaluation, bestMove, depth, pv}`. Both
+`evaluateFensPooled` (review curve pass) and `analyzeGameOnWorker`
+(batch/import) kept the eval and the depth and discarded the PV; the batch path
+declared it away **in its own `search` return type**, which is why it went
+unseen. Consequence: `pvAt` (was `deepPv`) was filled only by the key-moment
+dive, a cold open runs `{sweepOnly:true}` which skips that dive, so the FIRST
+review a student reads had no punishing line on any ply and every PV-gated
+reasoning fundamental declined "punishing PV is 0 plies, needs 3" — an absent
+input, not a tight gate. Fixed at both sites at **zero extra engine cost**.
+This also retires the recorded bound "the batch path carries no PV at all": it
+was never a property of the batch.
+
+**The WO-4 corpus is reproducible.** `scripts/build-wo4-corpus.mjs`, two
+resumable phases. Facts worth not re-deriving:
+- **Lichess's game-export endpoint 404s through this proxy** while `/api/user`
+  returns 200 — it is the export route specifically. chess.com's public API
+  works, and `/pub/country/{iso}/players` is a deterministic source of ordinary
+  club players.
+- **No native Stockfish binary exists in this container.** CLAUDE.md's
+  `/usr/games/stockfish` line is stale here. The app's own npm WASM build runs
+  over UCI via `node_modules/stockfish/scripts/cli.js` — and is the right
+  engine anyway, since the replay worker hands these numbers to the real sweep.
+- d12 over 47 games takes **~2.6 minutes**; d18 about **an hour**.
+- First run produced 47 games from ONE player (the loop drained each archive).
+  `MAX_GAMES_PER_PLAYER = 3` → 64 distinct players, Elo 800–1794.
+- The measurement runs again: **207 flagged student plies, 122 attributed,
+  `attributionRate` 0.589**, `other` at 50 — consistent with the 23% bucket.
+- The report's `corpus.source` was a HARDCODED string ("lichess … 1000–2000")
+  that the rebuilt corpus contradicted. Now derived from the rows.
+
+**C15b.** 946 sentences degendered across 165 lesson files, reusing
+`beatRegister`'s discriminator and `degender.mjs`'s verb agreement rather than
+grepping for /he/. The real find: the gate's beat arm reads `ALL_LESSONS`,
+which contains **zero pro-rep lessons by design** (G9 step 8) — the registry
+sees 3,664 beat fields, the directory holds **38,071**. Reading the output
+caught a defect in the fix itself: sentence scope left 85 beats speaking both
+ways in one paragraph; a second pass guarded by a proper-noun test took that to
+13, all legitimate (Fischer, Réti/Capablanca, the pro a pro-rep lesson
+teaches). Side effect: `curatedBeatRegister` live-safe went **1,312 → 1,440**.
+
+**GREEN.** The word-count arm could never work — 16 words of effect against a
+592-word between-run variance. But review being `walk` posture only stops the
+term SILENCING a ply; the term is still COMPUTED, and `coach-need-scores`
+already emits it per term. The audit now reads the capability term as a SIGN:
+inert on control (non-vacuity), negative on green, inert on prompted. The
+BEHAVIOUR half still needs an `interrupt` surface.
+
+**My own instrument failures this session, recorded because they are the same
+disease the work is about:** a `--reporter=basic` full-suite run crashed at
+startup and `pgrep` reported it running for 50 minutes, with a Monitor filter
+that never matched the crash text; and a first cut of the unhonoured-yield
+reporter printed "this ply is unattributed" about a ply three detectors had
+attributed. Both were caught by reading output, not by a gate.

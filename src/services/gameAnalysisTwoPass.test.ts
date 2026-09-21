@@ -43,7 +43,7 @@ import {
   __testables,
 } from './gameAnalysisService';
 import { MATE_EVAL_VALUE, INACCURACY_CP } from './engineConstants';
-import { buildGameRecord } from '../test/factories';
+import { buildGameRecord, buildEngineAnalysis } from '../test/factories';
 
 // 🔒 THE SWEEP IS A DRAFT; THE REVIEW IS THE ANALYSIS (David 2026-09-05:
 // "decrease the depth for the batch and dive deeper on key moments once a single
@@ -82,7 +82,7 @@ function scriptedWorker(calls: Call[], curve: readonly number[] = CURVE) {
   return {
     analyzePosition: vi.fn((fen: string, depth: number) => {
       calls.push({ fen, depth });
-      return Promise.resolve({ evaluation: curve[FENS.indexOf(fen)] ?? 0, bestMove: 'd2d4', depth });
+      return Promise.resolve(buildEngineAnalysis({ evaluation: curve[FENS.indexOf(fen)] ?? 0, depth }));
     }),
     destroy: vi.fn(),
     newGame: vi.fn(),

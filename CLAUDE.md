@@ -529,9 +529,46 @@ the LIVE prod URL (`AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app
 AUDIT_SANDBOX=1 node scripts/audit-<surface>.mjs`) — that is the
 deploy-pipeline-verifying audit, not just a code check. A localhost
 run validates the CODE but NOT the deploy (wrong bundle aliased, env
-scoped wrong, CDN serving stale). So: ALWAYS verify the prod bundle
-hash advanced past your push first (`curl -s https://chess-academy-pro.vercel.app/?cb=$(date +%s) | grep -oE '/assets/index-[A-Za-z0-9_-]+\.js'`
-with a cache-buster), THEN run the audit against prod. localhost is the
+scoped wrong, CDN serving stale).
+
+🔴 **AND THE BUNDLE-HASH CHECK IS NOT THE ONE YOU WANT — GREP THE LIVE CHUNK
+FOR YOUR OWN STRING (David 2026-09-21).** This rule used to read "ALWAYS verify
+the prod bundle hash advanced past your push first", and that wording is
+DELETED rather than annotated, per the Lake Butler rule. It was written to
+catch STALENESS and it answers that correctly. It does NOT answer "is my code
+live", and on 2026-09-21 two sessions read it as if it did and reached opposite
+wrong conclusions within ten minutes of each other.
+
+The reason it cannot answer that was measured the same day: deploy
+`0863ced7c..0adb4c90a` touched only `.md`, two `scripts/*.mjs` and one
+`.test.ts` — `git diff --name-only | grep ^src/ | grep -v .test.` returned
+NOTHING — and the entry hash moved anyway (`index-CL9P6Cc6` →
+`index-BGt0uyLR`), as did `sw.js`. So a changed hash carries no information
+about what the client will RUN; it says only that a build happened. The
+converse is just as bad: a hash that has not moved may still be serving your
+code from a cache layer you did not check.
+
+**THE CHECK THAT ACTUALLY ANSWERS IT** — grep the deployed chunk for a string
+only the NEW build contains, AND for the string it REPLACED. Both halves
+matter: finding the new string proves your code shipped; failing to find the
+old one proves you are not reading a stale copy that happens to contain both.
+
+```bash
+URL=https://chess-academy-pro.vercel.app
+CHUNK=$(curl -s "$URL/?cb=$(date +%s)" | grep -oE '/assets/index-[A-Za-z0-9_-]+\.js' | head -1)
+curl -s "$URL$CHUNK" > /tmp/live.js
+grep -c 'A STRING ONLY THE NEW BUILD HAS' /tmp/live.js   # must be >= 1
+grep -c 'THE STRING IT REPLACED'          /tmp/live.js   # must be 0
+```
+
+Pick a string that survives minification — a user-facing sentence, an audit
+`kind`, a `data-testid` — never an identifier the minifier will rename. When
+the change is not in the entry chunk, grep the chunk that carries it.
+
+The hash check still has its original job (is this deploy newer than my push),
+so run it for staleness; just never report "my code is live" off it alone.
+
+localhost is the
 FALLBACK for when prod is genuinely unreachable/stale (e.g. the Vercel
 100-build/day cap is blocking the deploy) — say so explicitly and
 re-run against prod once it's live. Don't claim a surface shipped on

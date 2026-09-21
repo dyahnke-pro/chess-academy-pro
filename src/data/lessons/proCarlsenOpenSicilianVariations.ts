@@ -45,7 +45,7 @@ const SOZIN: LessonScript = {
   beats: [
     b({ id: 'bc4', moves: 'e4 c5 Nf3 d6 Bc4', arrows: [A('c4', 'f7')], highlights: [H('f7')], say: "The other quiet try against ...d6: Bc4, dropping the bishop onto the a2-g8 diagonal and staring at f7 — the eternal Sicilian sore spot. White keeps it positional, a Italian-style slow build rather than the d4 onslaught.", sayShort: 'Bc4 — eye the f7 weakness.' }),
     b({ id: 'build', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 O-O e6 Bb3', highlights: [H('b3')], say: "White plays a restrained d3, castles, and tucks the bishop back to b3 where it sits safe on the long light diagonal, ready to bite at f7 the instant the e6-pawn moves or the centre opens. The slow Italian-Sicilian hybrid: no pawn breaks yet, just harmonious development and a long-term plan.", sayShort: 'Bb3 — safe, latent pressure.' }),
-    b({ id: 'mid', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 O-O e6 Bb3 Be7 c3 O-O', highlights: [H('c3'), H('d4')], say: "With c3 White prepares the d3-d4 central lever at the moment of his choosing. Both sides are castled and complete; the position is balanced but pleasant for White, who dictates when and where the game opens. Patience, then the squeeze.", sayShort: 'c3 — prepare d4, then squeeze.' }),
+    b({ id: 'mid', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 O-O e6 Bb3 Be7 c3 O-O', highlights: [H('c3'), H('d4')], say: "With c3 White prepares the d3-d4 central lever at the moment of their choosing. Both sides are castled and complete; the position is balanced but pleasant for White, who dictates when and where the game opens. Patience, then the squeeze.", sayShort: 'c3 — prepare d4, then squeeze.' }),
   ],
 };
 

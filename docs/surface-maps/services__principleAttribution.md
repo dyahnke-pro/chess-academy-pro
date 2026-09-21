@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1173 lines · 11 exports · 31 importers · 17 tests · 1 audits**
+**1278 lines · 11 exports · 34 importers · 20 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5909) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:5946) — names `FundamentalId`
 
 ## Who calls in
 
@@ -21,6 +21,7 @@
 - `src/services/causalChain.ts`
 - `src/services/coachApi.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/fundamentalVocabulary.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
@@ -40,9 +41,11 @@
 - `src/services/reviewFullData.ts`
 - `src/services/section14Coverage.measure.test.ts`
 - `src/services/section14Diagnosis.test.ts`
+- `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.ts`
+- `src/services/yieldHonoured.test.ts`
 
 ## Exports and every call site
 
@@ -74,7 +77,7 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:113`
 
-### `attributePrinciples` (function) — 45 call sites
+### `attributePrinciples` (function) — 50 call sites
 - `src/services/coachFeatureService.ts:1451`
 - `src/services/learnFundamentalNarration.ts:143`
 - `src/services/misconceptionClassifier.ts:261`
@@ -112,14 +115,19 @@
 - `src/services/section14Coverage.measure.test.ts:77`
 - `src/services/section14Diagnosis.test.ts:21`
 - `src/services/section14Diagnosis.test.ts:25`
-- `src/services/section14Diagnosis.test.ts:29`
-- `src/services/section14Diagnosis.test.ts:33`
 - `src/services/section14Diagnosis.test.ts:41`
 - `src/services/section14Diagnosis.test.ts:45`
-- `src/services/section14Diagnosis.test.ts:51`
-- `src/services/section14Diagnosis.test.ts:90`
-- `src/services/section14Diagnosis.test.ts:91`
+- `src/services/section14Diagnosis.test.ts:53`
+- `src/services/section14Diagnosis.test.ts:57`
+- `src/services/section14Diagnosis.test.ts:63`
+- `src/services/section14Diagnosis.test.ts:102`
+- `src/services/section14Diagnosis.test.ts:103`
+- `src/services/sweepCarriesPv.test.ts:129`
+- `src/services/sweepCarriesPv.test.ts:143`
 - `src/services/sweepPassesEngineLines.test.ts:91`
+- `src/services/yieldHonoured.test.ts:33`
+- `src/services/yieldHonoured.test.ts:69`
+- `src/services/yieldHonoured.test.ts:70`
 
 ### `pvUciToSan` (function) — 9 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:85`
@@ -136,6 +144,7 @@
 
 - `src/components/Coach/FundamentalsPage.test.tsx`
 - `src/data/fundamentalLessons.test.ts`
+- `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/fundamentalVocabulary.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
@@ -149,8 +158,10 @@
 - `src/services/principleVoice.test.ts`
 - `src/services/section14Coverage.measure.test.ts`
 - `src/services/section14Diagnosis.test.ts`
+- `src/services/sweepCarriesPv.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
+- `src/services/yieldHonoured.test.ts`
 
 ## Audits that reach it
 

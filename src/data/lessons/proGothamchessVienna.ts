@@ -63,7 +63,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       arrows: [{ from: 'f3', to: 'e4', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'f7', color: SOFT }],
       say:
-        "Qf3 — the heart of the line. The queen hits the e4-knight and leans down the open f-file toward f7 at the same time. Black has to react, and every way he does leaves you with the initiative.",
+        "Qf3 — the heart of the line. The queen hits the e4-knight and leans down the open f-file toward f7 at the same time. Black has to react, and every way they do leaves you with the initiative.",
       sayShort: 'Qf3 — hit the knight and f7.',
     }),
     b({
@@ -80,7 +80,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       arrows: [{ from: 'g3', to: 'g7', color: VIS }],
       highlights: [{ square: 'g7', color: KEY }],
       say:
-        "Black grabs space with c5; you reroute the queen to g3, where it eyes g7 and supports the e5-pawn, then develop the knight to f3. Your whole army is swinging toward Black's kingside while he's still sorting out his pieces.",
+        "Black grabs space with c5; you reroute the queen to g3, where it eyes g7 and supports the e5-pawn, then develop the knight to f3. Your whole army is swinging toward Black's kingside while they're still sorting out their pieces.",
       sayShort: 'Qg3 — swing toward g7.',
     }),
     b({

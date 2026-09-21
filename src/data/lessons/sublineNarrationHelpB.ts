@@ -31,7 +31,7 @@ const AB_BB4: SN = {
     sayShort: '…Bb4+ — block Nd2, keep developing.',
   },
   beats: [
-    { atMove: 8, say: "Nd2 — block the check WITH a developing move. Nothing is loosened, the e5-pawn stays defended for now, and you simply get your pieces out faster than Black can untangle his gambit.", highlights: [H('e5', SOFT)] },
+    { atMove: 8, say: "Nd2 — block the check WITH a developing move. Nothing is loosened, the e5-pawn stays defended for now, and you simply get your pieces out faster than Black can untangle their gambit.", highlights: [H('e5', SOFT)] },
   ],
   sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Budapest_Gambit'],
 };
@@ -67,9 +67,9 @@ const ALBIN_TABIYA: SN = {
     sayShort: 'Hold d4, storm with …h5-h4.',
   },
   beats: [
-    { atMove: 5, say: "…d4 — the soul of the Albin. Your pawn jams deep into White's position, cramping his pieces and refusing to be dislodged. Every plan you have is built around protecting and using this wedge.", highlights: [H('d4', ATK)] },
+    { atMove: 5, say: "…d4 — the soul of the Albin. Your pawn jams deep into White's position, cramping their pieces and refusing to be dislodged. Every plan you have is built around protecting and using this wedge.", highlights: [H('d4', ATK)] },
     { atMove: 9, say: "…Bg4 — pinning the f3-knight, the very piece that most wants to chip away at your proud d4-pawn. Pin its attacker and the wedge only grows stronger.", highlights: [H('f3', KEY)] },
-    { atMove: 13, say: "…O-O-O — castling straight into the attack. Kings on opposite wings means a race, and you have the jump: hurl the h-pawn at White's king while the d4-wedge keeps him too cramped to strike back in time.", highlights: [H('d4', ATK)] },
+    { atMove: 13, say: "…O-O-O — castling straight into the attack. Kings on opposite wings means a race, and you have the jump: hurl the h-pawn at White's king while the d4-wedge keeps them too cramped to strike back in time.", highlights: [H('d4', ATK)] },
   ],
   sources: ['concept:pos-initiative', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Albin_Countergambit'],
 };
@@ -125,11 +125,11 @@ const STAUNTON_NC6: SN = {
 // Shared var-0 spine: d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3 Nxe5 e4  (Black's move 9+ varies)
 const ANTI_ENGLUND: SN = {
   intro: {
-    say: "1…e5 — the Englund Gambit, an unsound bid for cheap tricks. You grabbed the pawn with dxe5 and now just develop classically: Nf3, Nc3, and a broad e4-centre. Black scrambles to win the pawn back, but his queen is stranded on e7 and his pieces are loose — whatever he throws at you here, you come out with the centre, the development lead, and a clearly better game.",
+    say: "1…e5 — the Englund Gambit, an unsound bid for cheap tricks. You grabbed the pawn with dxe5 and now just develop classically: Nf3, Nc3, and a broad e4-centre. Black scrambles to win the pawn back, but their queen is stranded on e7 and their pieces are loose — whatever they throw at you here, you come out with the centre, the development lead, and a clearly better game.",
     sayShort: 'Englund refuted — build the e4 centre.',
   },
   beats: [
-    { atMove: 8, say: "e4 — the refutation in a single move. Black has clawed the pawn back, but you've planted a broad centre with the knight on c3 behind it and a clean lead in development, while his queen still languishes on e7. The Englund's tricks are spent; you are simply better.", highlights: [H('e4', KEY), H('e7', SOFT)] },
+    { atMove: 8, say: "e4 — the refutation in a single move. Black has clawed the pawn back, but you've planted a broad centre with the knight on c3 behind it and a clean lead in development, while their queen still languishes on e7. The Englund's tricks are spent; you are simply better.", highlights: [H('e4', KEY), H('e7', SOFT)] },
   ],
   sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Englund_Gambit'],
 };
@@ -158,7 +158,7 @@ const ANTI_QGD_X: SN = {
 
 // ── anti-Catalan (student BLACK) — Open Catalan: grab c4 and hold it. ──
 const ANTI_CATALAN: SN = {
-  intro: { say: "g3 — the Catalan, planning to rule the long light diagonal with Bg2. Take the gambit pawn with …dxc4 and don't rush to give it back: …a6 and …b5 hold it, making White prove his compensation. The Bg2 bishop's pressure is real, but with the pawn in hand and a solid setup Black is comfortably fine.", sayShort: '…dxc4 — grab it, hold with …a6/…b5.' },
+  intro: { say: "g3 — the Catalan, planning to rule the long light diagonal with Bg2. Take the gambit pawn with …dxc4 and don't rush to give it back: …a6 and …b5 hold it, making White prove their compensation. The Bg2 bishop's pressure is real, but with the pawn in hand and a solid setup Black is comfortably fine.", sayShort: '…dxc4 — grab it, hold with …a6/…b5.' },
   beats: [
     { atMove: 7, say: "…dxc4 — the Open Catalan. You grab the c4-pawn and prepare …a6 and …b5 to keep it, forcing White to demonstrate real compensation for the diagonal. No need to be generous — make him work for the pawn back.", highlights: [H('c4', ATK)] },
   ],

@@ -30,7 +30,7 @@ export const ANTI_CATALAN_BLACK_LESSON: LessonScript = {
       sayShort: "…a6, …Nc6 — hold c4, develop free.",
       highlights: [H('a6', KEY), H('c4', SOFT)] }),
     b({ id: 'cat3', moves: 'd4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 Bd6',
-      say: "You develop in harmony — …Bd7 ready to connect, …Bd6 eyeing the kingside. White plays e3 and Qe2 to round up the pawn on c4; that's fine, let him. Every second it costs him, you've spent placing a piece on a natural, active square. And that famous Catalan bishop? It's got nothing to bite on.",
+      say: "You develop in harmony — …Bd7 ready to connect, …Bd6 eyeing the kingside. White plays e3 and Qe2 to round up the pawn on c4; that's fine, let them. Every second it costs them, you've spent placing a piece on a natural, active square. And that famous Catalan bishop? It's got nothing to bite on.",
       sayShort: "…Bd7, …Bd6 — natural, active pieces.",
       highlights: [H('d6', KEY)] }),
     b({ id: 'cat4', moves: 'd4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O Nc6 e3 Bd7 Qe2 Bd6 Qxc4 O-O Rd1 Qe7 Nc3 h6',

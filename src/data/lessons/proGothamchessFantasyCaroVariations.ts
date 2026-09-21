@@ -117,7 +117,7 @@ const G6: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 dxe4 fxe4 Nf6 Nf3 O-O Bd3',
       highlights: [{ square: 'd4', color: KEY }, { square: 'e4', color: KEY }],
       say:
-        "Black trades on e4 and you recapture, leaving a commanding d4-and-e4 pawn duo. You develop Nf3 and Bd3 — the bishop supporting your centre — while Black castles behind his fianchetto. You have the space; he has the long-diagonal bishop. The battle is who breaks where.",
+        "Black trades on e4 and you recapture, leaving a commanding d4-and-e4 pawn duo. You develop Nf3 and Bd3 — the bishop supporting your centre — while Black castles behind their fianchetto. You have the space; they have the long-diagonal bishop. The battle is who breaks where.",
       sayShort: 'big centre vs the fianchetto.',
     }),
     b({
@@ -154,7 +154,7 @@ const QB6: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3',
       highlights: [{ square: 'c3', color: KEY }, { square: 'f3', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "Straight through the noise: Nc3 develops and ignores the b2 stare, you recapture on e4 with the f-pawn as always, and when Black stakes e5, the king's knight comes out to f3. Three of your pieces are working; Black's queen is still his only developed piece.",
+        "Straight through the noise: Nc3 develops and ignores the b2 stare, you recapture on e4 with the f-pawn as always, and when Black stakes e5, the king's knight comes out to f3. Three of your pieces are working; Black's queen is still their only developed piece.",
       sayShort: 'Nc3, fxe4, Nf3 — just develop.',
     }),
     b({
