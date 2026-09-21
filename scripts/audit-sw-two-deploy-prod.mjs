@@ -321,6 +321,30 @@ async function finish(browser) {
   process.exit(pass === results.length ? 0 : 1);
 }
 
+// 🔒 A WATCHDOG, BECAUSE THIS RUN WEDGED AFTER ITS FOURTH ROW (2026-09-21).
+// Four rows had reported and passed; the fifth — a one-line liveness check —
+// never printed, and the process sat for 37 minutes holding the machine while
+// the Learn audit queued behind it. A run that cannot finish is worse than one
+// that fails: it reports nothing AND blocks everything after it.
+//
+// Every individual step here is already bounded (Playwright timeouts, the
+// deploy deadline), which is exactly why the outer bound is needed — the hang
+// was in the composition, not in any one call, and per-step timeouts cannot
+// see that. Bound the WHOLE run and write whatever rows exist.
+const HARD_STOP_MS = Number(process.env.SW_HARD_STOP_MS || DEADLINE_MS + 10 * 60 * 1000);
+const watchdog = setTimeout(() => {
+  console.error(`WATCHDOG: no verdict after ${Math.round(HARD_STOP_MS / 60000)} min — writing ${results.length} row(s) and exiting.`);
+  console.error('Rows already recorded stand; anything unrecorded is UNGRADED, not passed.');
+  try {
+    const dir = `audit-reports/sw-two-deploy-${new Date().toISOString().replace(/[:.]/g, '-')}-WEDGED`;
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, wedged: true, results }, null, 2));
+    console.error(`partial report at ${dir}/report.json`);
+  } catch { /* nothing more we can do */ }
+  process.exit(1);
+}, HARD_STOP_MS);
+watchdog.unref?.();
+
 main().catch(async (e) => {
   console.error('FATAL', e);
   process.exit(1);
