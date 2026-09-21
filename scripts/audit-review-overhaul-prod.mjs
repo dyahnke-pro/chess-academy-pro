@@ -888,8 +888,31 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       + 'so this row had no chance to be true. Fix the driver, not the coach'
     : null;
   const RECAP_RE = /The pattern:[^.]*flagged move|The pattern: you \w|carry into the next game/i;
+  // 🔴 A LOOP THAT CAN ADVANCE THE WALK MUST ANSWER THE CARDS IT RAISES
+  // (found 2026-09-21, from a prod run that looked like a different bug).
+  //
+  // This loop clicks Forward up to 20 times to reach the closing. When the walk
+  // parked SHORT of the end, the turning-point card had not been raised yet —
+  // so the wait above correctly reported `present=false` — and then one of
+  // THESE clicks landed on `moves.length`, raised the card, and the NEXT click
+  // dismissed it: `handleWalkForward` dismisses by design (David 2026-07-19,
+  // forward must never leave a frozen board) and `turningAskedRef` means a
+  // dismissed card never returns. The driver created the card and destroyed it
+  // one second apart, having already given up waiting for it.
+  //
+  // It read as "the card was never raised", and it was not: the ask line
+  // ("where do you think this game turned") was in the captured narration the
+  // whole time, one row away from the failure. Two sessions believed two
+  // different wrong things about it for an hour.
+  //
+  // This is the same ORDER class as the 2026-09-17 fix below — that one moved
+  // the recap wait AFTER the turning block, which is right when the walk
+  // reaches the end and silently wrong when it parks short. Resolving cards
+  // every iteration covers both, because it no longer depends on WHEN the card
+  // appears relative to the phases.
   for (let i = 0; i < 20; i += 1) {
     if (spoken().some((x) => RECAP_RE.test(x.text))) break;
+    await resolveCards();
     const st = await page.locator('[data-testid="review-play-pause-btn"]').first()
       .getAttribute('data-state', { timeout: 2000 }).catch(() => null);
     if (st === 'paused') {
@@ -902,6 +925,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       .click({ timeout: 1500 }).catch(() => undefined);
     await page.waitForTimeout(1000);
   }
+  // One more reserved round, for the same reason the post-walk call has one:
+  // a card raised by the stepping above deserves the attempt that the loop's
+  // own budget may already have spent.
+  grantTurningRound();
+  await resolveCards();
   await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
   const recap = spoken().find((s) => RECAP_RE.test(s.text));
   // The aggregate reads "three of your five flagged moves…" — with NO flagged
@@ -963,8 +991,21 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // If no reveal line was ever spoken the card was never answered — that is
       // a DRIVER failure, and reporting it as a broken N1 wire sent a session
       // chasing a product bug that did not exist (2026-09-16).
+      // 🔒 "NEVER APPEARED" AND "NEVER ANSWERED" ARE DIFFERENT FACTS, and this
+      // row printed the same sentence for both until 2026-09-21. A reader
+      // (two of them) took "never answered" to mean the card had not rendered,
+      // spent an hour on that, and the truth — it rendered, spoke, and was
+      // dismissed unanswered — was one row away the whole time. A message that
+      // collapses two causes is how the wrong one gets picked.
+      //
+      // `askIdx !== -1` is already proof the card RENDERED: the ask is
+      // `turningQ.question`, drawn inside the same `{turningQ && …}` element
+      // the driver looks for. So this branch always means raised-then-lost;
+      // say that, and say WHERE it was lost.
       await add('THESIS spoken-once-at-reveal', false,
-        `DRIVER: the turning-point card was never answered (no reveal line spoken), so the thesis had no moment to fire — fix the driver, not the coach`);
+        'DRIVER: the card RENDERED (its ask was spoken) but no reveal line ever followed, so it was '
+        + `dismissed unanswered — ${turningAnswered ? 'after' : 'without'} a successful answering round `
+        + `(${turningRounds} attempted). The thesis had no moment to fire. Fix the driver, not the coach`);
     } else if (!kindM) {
       await add('THESIS spoken-once-at-reveal', false, `card rendered but the selector emitted NO thesis kind — the N1 wire did not run (spoken=${thesisCount})`);
     } else if (!owed) {

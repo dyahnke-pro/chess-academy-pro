@@ -732,7 +732,13 @@ describe('coachFeatureService', () => {
       }
       const repeated = [...counts.entries()].filter(([, n]) => n > 1).map(([s]) => s);
       expect(repeated).toEqual([]);
-    });
+      // Vitest's 5s default is too tight for this one: it drives the whole
+      // 33-ply Opera Game through buildReviewSegments, which is real narration
+      // work on every ply. It passes comfortably alone and times out under a
+      // parallel build — a timeout reporting load as a product failure, which
+      // is the instrument lying. 30s is well clear of the work and still short
+      // enough that a genuine hang fails fast.
+    }, 30_000);
   });
 
   describe('buildReviewCitations (Phase 1c — grounded recap/preview spine)', () => {
