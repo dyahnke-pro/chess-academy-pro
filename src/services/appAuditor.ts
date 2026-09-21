@@ -27,7 +27,7 @@
  */
 import { db } from '../db/schema';
 import { mirrorAuditEvent } from './analytics';
-import { onCoachDecision, onNeedScore, type NeedScoreRow } from './coachDecisionEvents';
+import { onCoachDecision, onNeedScore, type CoachDecisionRow, type NeedScoreRow } from './coachDecisionEvents';
 
 const APP_AUDIT_LOG_META_KEY = 'app-audit-log.v1';
 const APP_AUDIT_LOG_MAX_ENTRIES = 300;
@@ -2085,12 +2085,46 @@ onNeedScore((row) => {
   }
 });
 
-onCoachDecision((row) => {
+// 🚨 AGGREGATED, AND THE PER-ROW VERSION WAS A SHIPPED REGRESSION (measured
+// 2026-09-21, A/B on one real game across two prod bundles). One `logAppAudit`
+// per decision meant 54 extra audit entries on a single review — and with the
+// narration-listener sidecar attached, the sidecar takes ONE POST PER EVENT.
+// The same game that narrated 79 spoken lines on the previous bundle recorded
+// 12 on the per-row build, and five narration rows went red with it.
+//
+// Whether the coach truly went quieter or the sidecar dropped events under the
+// added volume, the cause is the same: a high-frequency emission on a pipe
+// sized for low-frequency ones. `coach-need-scores` was aggregated for exactly
+// this reason and the same reasoning simply was not carried across to
+// decisions — the mistake was not seeing that they are the same shape.
+//
+// Per-row FIDELITY is kept: one entry carries the whole burst in `rows`, so
+// every contract still reads posture/reason/quietBy/subsumed per decision.
+let decisionBuffer: CoachDecisionRow[] = [];
+let decisionFlush: ReturnType<typeof setTimeout> | null = null;
+
+function flushCoachDecisions(): void {
+  decisionFlush = null;
+  const rows = decisionBuffer;
+  decisionBuffer = [];
+  if (rows.length === 0) return;
+  const spoke = rows.filter((r) => r.speak).length;
+  const byReason: Record<string, number> = {};
+  for (const r of rows) if (!r.speak) byReason[r.reason] = (byReason[r.reason] ?? 0) + 1;
   void logAppAudit({
     kind: 'coach-decision',
     category: 'subsystem',
     source: 'coachDecider.decide',
-    summary: `${row.posture} ${row.tier} → ${row.speak ? `spoke ${row.spokenCount}` : `silent (${row.reason})`}`,
-    details: JSON.stringify(row),
+    summary: `${rows.length} decision(s) — ${spoke} spoke, ${rows.length - spoke} silent${Object.keys(byReason).length ? ` (${JSON.stringify(byReason)})` : ''}`,
+    details: JSON.stringify({ rows }),
   });
+}
+
+onCoachDecision((row) => {
+  decisionBuffer.push(row);
+  if (decisionBuffer.length >= 200) { if (decisionFlush) clearTimeout(decisionFlush); flushCoachDecisions(); return; }
+  if (!decisionFlush) {
+    decisionFlush = setTimeout(flushCoachDecisions, 1500);
+    (decisionFlush as unknown as { unref?: () => void }).unref?.();
+  }
 });

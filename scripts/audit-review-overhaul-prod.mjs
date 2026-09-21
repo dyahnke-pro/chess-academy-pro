@@ -1332,8 +1332,15 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   for (const e of listener.getCapturedEvents()) {
     if (e.kind !== 'coach-decision') continue;
     try {
-      const row = JSON.parse(e.details ?? '');
-      if (row && typeof row.posture === 'string' && typeof row.speak === 'boolean') decisions.push(row);
+      // AGGREGATED (2026-09-21): one entry carries the whole burst in `rows`;
+      // the older single-row shape is still accepted so a run against an older
+      // bundle reads it rather than silently counting zero. Emitting per
+      // decision put 54 POSTs on the listener sidecar and cost the coach its
+      // narration — see the note in appAuditor.
+      const p = JSON.parse(e.details ?? '');
+      for (const row of (Array.isArray(p?.rows) ? p.rows : [p])) {
+        if (row && typeof row.posture === 'string' && typeof row.speak === 'boolean') decisions.push(row);
+      }
     } catch { /* a row we cannot read is not a row */ }
   }
   // THE NEED TERMS as a distribution (`coach-need-scores`, aggregated by the

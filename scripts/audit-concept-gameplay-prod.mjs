@@ -206,8 +206,15 @@ function decisionRows(listener) {
   for (const e of listener.getCapturedEvents()) {
     if (e.kind !== 'coach-decision') continue;
     try {
-      const row = JSON.parse(e.details ?? '');
-      if (row && typeof row.posture === 'string' && typeof row.speak === 'boolean') rows.push(row);
+      // AGGREGATED (2026-09-21): one entry carries the whole burst in `rows`.
+      // A per-entry emission cost the coach its narration — see the note in
+      // appAuditor. The older single-row shape is still accepted so a run
+      // against an older bundle reads rather than silently counting zero.
+      const p = JSON.parse(e.details ?? '');
+      const burst = Array.isArray(p?.rows) ? p.rows : [p];
+      for (const row of burst) {
+        if (row && typeof row.posture === 'string' && typeof row.speak === 'boolean') rows.push(row);
+      }
     } catch { /* a row we cannot read is not a row */ }
   }
   return rows;
