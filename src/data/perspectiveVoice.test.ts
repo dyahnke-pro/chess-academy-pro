@@ -109,7 +109,7 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
   // classifies instead of rewriting.
   const COLOUR_WORD = /\b(White|Black)\b/;
   const GENDERED = /\b(he|he's|he'd|he'll|him|his|himself|she|she's|her|hers|herself)\b/i;
-  const GENDERED_CEILING = 246;
+  const GENDERED_CEILING = 202;
   it('voiced narration: gendered pronouns for the opponent only ever SHRINK', () => {
     const offenders: string[] = [];
     const perFile: Record<string, number> = {};
@@ -121,7 +121,18 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
     // unveiled his prepared gambit" are correct there. Including the file put
     // 133 legitimate strings in the backlog and would have pushed someone to
     // "fix" sentences that are right.
-    const SCOPED = JSON_FILES.filter((f) => f !== 'model-games.json');
+    // AND the two voiced files are out too, because they ALREADY HAVE A GATE:
+    // `voicedCorpusRegister.test.ts` carries a masculine-opponent baseline
+    // (34) with a NAMED_PLAYER exemption, and its history records the real
+    // work — 1145 → 34 on 2026-09-19, rewritten offline by
+    // `scripts/voiced-authoring/degender.mjs`, with what survives being what
+    // the script REFUSED rather than guessed ("he's pinned" is ambiguous
+    // between "he IS pinned" and "he HAS pinned", which pluralise
+    // differently). Two gates over one corpus is the duplicated-constant rot
+    // this repo exists to kill, so these two PARTITION: that gate owns the
+    // voiced corpus, this one owns the four files it never scanned.
+    const ALREADY_GATED = new Set(['model-games.json', 'voiced-matchups.json', 'voiced-walkthroughs.json']);
+    const SCOPED = JSON_FILES.filter((f) => !ALREADY_GATED.has(f));
     for (const file of SCOPED) {
       const parsed = JSON.parse(readFileSync(join(DATA_DIR, file), 'utf8'));
       const strings: string[] = [];

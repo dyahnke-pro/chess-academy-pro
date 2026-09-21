@@ -2474,11 +2474,25 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     first-person, 81 fragments" with no diagnosis. Measured across all three
     voiced corpora (26,737 prose units):
 
-    | the board said | measured | note |
-    |---|---|---|
-    | 1,146 he/his | **99** | long-prose units; 661 by the gate's own collector, 246 after scoping (below) |
-    | 521 first-person | **2,767** `I/my` + **2** `we/our/us` | `I/my` is LEGITIMATE in coach-is-opponent; the BANNED set is 2 |
-    | 81 fragments | **3,260** | no terminal punctuation |
+    🔴 **CORRECTION, and it is mine: "none of the three reconcile" was WRONG
+    and is deleted rather than softened.** The three numbers are the BASELINES
+    of an existing gate, `src/data/voicedCorpusRegister.test.ts`, measured with
+    ITS narrow regexes over ITS two files — not loose counts. `521` and `81`
+    are its live `BASELINE_FIRST_PERSON` and `BASELINE_FRAGMENT`. And 1,146 is
+    the PRE-FIX number: that file records **1145 → 34 on 2026-09-19**, rewritten
+    offline by `scripts/voiced-authoring/degender.mjs`, with the 34 survivors
+    being what the script REFUSED rather than guessed ("he's pinned" is
+    ambiguous between "he IS pinned" and "he HAS pinned", which pluralise
+    differently). So the board line was STALE, not wrong in kind, and the
+    offline-bake half I described as "not attempted" was in fact ALREADY BUILT
+    and already run. My broad regexes measured a different question and I
+    reported the difference as a contradiction.
+
+    | the board's number | what it actually is |
+    |---|---|
+    | 1,146 he/his | the PRE-FIX count; the live gate's baseline is **34** |
+    | 521 first-person | that gate's live `BASELINE_FIRST_PERSON`, narrow regexes |
+    | 81 fragments | that gate's live `BASELINE_FRAGMENT` |
 
     **The banned pronoun is effectively clean: 2 occurrences of `we/our/us` in
     26,737 units.** And through the classifier that actually decides whether a
@@ -2495,9 +2509,15 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     "he"** ("Black plays a6 — he's much worse", "White doesn't cling to the
     pawn — he plays for structure", and one that manages "Black hasn't moved
     their e-pawn, he's played the c-pawn instead" in a single sentence).
-    Gated shrink-only at 246; verified it fails at 245, so one new offender
-    fails the build. Per file: middlegame-plans 165, voiced-walkthroughs 23,
-    voiced-matchups 21, common-mistakes 14, pro-repertoires 14, repertoire 9.
+    Gated shrink-only at **202**; verified it fails at 201. Per file:
+    middlegame-plans 165, common-mistakes 14, pro-repertoires 14, repertoire 9.
+
+    ✅ **THE TWO GATES PARTITION — no overlap.** `voicedCorpusRegister` owns the
+    voiced corpus (baseline 34, NAMED_PLAYER exemption, its own degender
+    script); this one owns the four files that gate **never scanned**, where
+    165 of the 202 sit in `middlegame-plans.json` alone. Two gates over one
+    corpus would be exactly the duplicated-constant rot this repo exists to
+    kill, so the scopes are disjoint by construction.
 
     ⚠️ **Two scoping decisions, both by the rule rather than convenience.**
     (1) The pronoun counts only when a COLOUR is in the same sentence — the

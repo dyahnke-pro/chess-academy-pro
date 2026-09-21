@@ -78,7 +78,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ## 7. Bucket C — the student hears something wrong or repeated
 - ✅ 11f the read-position seat · 12 queen-takes · 13 stems rotated not rolled · 14 re-announced moves · 16 (#59, a dead selector) · 17 the chat plan lane · 18 the fresh-game reset (n=4, proven on prod)
-- 🟠 15 (#22) **voiced register MEASURED — the three headline numbers do not reconcile** (he/his 99 not 1,146; banned we/our/us is **2** in 26,737 units; `I/my` 2,767 is legitimate). Through `beatRegister` the corpus is **95.3% live-safe**. The REAL defect is the gendered pronoun standing for a colour: **246, now gated shrink-only** (the data gate had the same hole CLAUDE.md fixed in the prompts). Remaining half is the offline BAKE, never a regex
+- 🟠 15 (#22) **voiced register — the board's three numbers were that gate's own BASELINES, and 1,146 was the PRE-FIX count (`voicedCorpusRegister` records 1145 → 34 on 2026-09-19 via `degender.mjs`). My "they do not reconcile" was WRONG and is withdrawn.** What was genuinely ungated: the same defect in the FOUR files that gate never scanned — **202, now gated shrink-only** (middlegame-plans 165). The two gates partition; no overlap
 - 🟡 19 open questions, not yet defects: #23 mistake-puzzle narration · #19 chat input after the player-games lane · #35 caching `voiceFacts` · #36 the Alapin tape's remaining prose · #69 a pinned need-coverage baseline · #42 the corpus study · #33 removal candidates
 
 ## 8. Bucket E — payload + delivery
