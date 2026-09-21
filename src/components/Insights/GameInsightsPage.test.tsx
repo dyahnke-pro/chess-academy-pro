@@ -63,6 +63,11 @@ const mockOverview: OverviewInsights = {
   accuracyWhite: 80,
   accuracyBlack: 75,
   strengths: [],
+  // The analysis-coverage pair the page reads to say how much of the record
+  // it is actually speaking from. 10 games, all analyzed — a fixture that
+  // omits them is not a shape the service ever returns.
+  analyzedGameCount: 10,
+  gamesNeedingAnalysis: 0,
 };
 
 const mockOpenings: OpeningInsights = {
@@ -72,6 +77,10 @@ const mockOpenings: OpeningInsights = {
   winRateByOpening: [],
   drillAccuracyByOpening: [],
   strengths: [],
+  // Derived from winRateByOpening in the service (its best/worst slices), so
+  // an empty winRateByOpening means both are empty — consistent, not a stub.
+  bestResults: [],
+  worstResults: [],
 };
 
 const mockMistakes: MistakeInsights = {
