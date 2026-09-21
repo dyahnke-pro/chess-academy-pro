@@ -153,9 +153,30 @@ describe('deep threat AGAINST the student (#5c)', () => {
 
     const oppSeg = n.segments.find((s) => s.ply === 4); // ...Bc5, opponent 'good'
     expect(oppSeg).toBeTruthy();
-    // Past tense for the same reason as above — review looks back, so the
-    // authored "Watch what they're building" ships as "…they were building".
-    expect(oppSeg?.narration ?? '').toMatch(/Watch what they were building/);
+    // 🔴 THIS ASSERTION WAS STALE AND FAILED ON `main` — it demanded the
+    // PRE-FIX contract, and is corrected here rather than annotated.
+    //
+    // It used to read: "Past tense for the same reason as above — review looks
+    // back, so the authored 'Watch what they're building' ships as '…they were
+    // building'", asserting /Watch what they were building/.
+    //
+    // `ace32993c` (2026-09-16, "the register was mangling plans, contradicting
+    // itself") DELIBERATELY reversed that and names THIS EXACT STRING as the bug
+    // it fixed: `PRESCRIPTIVE` in coachFeatureService now matches
+    // `watch what they`, so the sentence is never past-tensed. The reasoning
+    // there is that a PLAN describes what to do NEXT — past-tensing a
+    // prescriptive sentence produced "don't play a single attacking move until
+    // it was fixed" — and that the old cut-at-the-first-marker rule made the
+    // SAME walk say "they're building" on one ply and "they were building" on
+    // another, purely on ordering.
+    //
+    // So the code is five weeks newer than this test and is the decision.
+    // Retrospective TENSE still applies to descriptive sentences — the segment
+    // opens "You were playing into…" — it just stops at the prescriptive clause.
+    expect(oppSeg?.narration ?? '').toMatch(/Watch what they're building/);
+    // …and the sentence BEFORE it is still past-tensed, so this is a per-sentence
+    // register split and not the past-tensing having been switched off wholesale.
+    expect(oppSeg?.narration ?? '').toMatch(/You were playing into/);
     // The line is rendered ply-by-ply (Bxf2 appears in the narrated run).
     expect(oppSeg?.narration ?? '').toMatch(/Bxf2/);
     // The DEFENSE from the stored analysis (the student's next best move).
