@@ -20,17 +20,17 @@ function quietTactics(): TacticsLiveContext {
   return { ...tacticsWithHanging(), hanging: [] };
 }
 
-const buildFedTacticsContext = vi.fn(async () => tacticsWithHanging());
+const buildFedTacticsContext = vi.fn(async (..._a: unknown[]) => tacticsWithHanging());
 vi.mock('../../services/liveTacticsContext', () => ({
   buildFedTacticsContext: (...a: unknown[]) => buildFedTacticsContext(...a),
 }));
 
-const gradeReadingAnswer = vi.fn(async () => ({ verdict: 'wrong' as const, correctAnswer: 'The queen on d5 is hanging.', note: 'Missed it.' }));
+const gradeReadingAnswer = vi.fn(async (..._a: unknown[]) => ({ verdict: 'wrong' as const, correctAnswer: 'The queen on d5 is hanging.', note: 'Missed it.' }));
 vi.mock('../../services/positionReadingGrader', () => ({
   gradeReadingAnswer: (...a: unknown[]) => gradeReadingAnswer(...a),
 }));
 
-const recordReadingResult = vi.fn(async () => undefined);
+const recordReadingResult = vi.fn(async (..._a: unknown[]) => undefined);
 vi.mock('../../services/analysisPracticeStats', () => ({
   recordReadingResult: (...a: unknown[]) => recordReadingResult(...a),
 }));

@@ -9,9 +9,9 @@ import type { PlayerMoveNotification } from './useLiveCoach';
 // re-fire the same ply's DeepSeek call. These tests prove the store-backed
 // dedup (a Zustand singleton that survives remounts) closes that.
 
-const groundedMoveFeedback = vi.fn(async () => 'A knight jumps into d5.');
+const groundedMoveFeedback = vi.fn(async (..._a: unknown[]) => 'A knight jumps into d5.');
 vi.mock('../services/coachApi', () => ({ groundedMoveFeedback: (...a: unknown[]) => groundedMoveFeedback(...a) }));
-vi.mock('../services/liveTacticsContext', () => ({ buildFedTacticsContext: vi.fn(async () => null) }));
+vi.mock('../services/liveTacticsContext', () => ({ buildFedTacticsContext: vi.fn(async (..._a: unknown[]) => null) }));
 // Fen-aware so a single test can hand the hook a REAL engine line (the
 // concept fires-for-real test below); everything else keeps the flat default.
 const cachedAnalysisByFen: Record<string, unknown> = {};
@@ -20,7 +20,7 @@ vi.mock('./stockfishFenCache', () => ({ getCachedStockfish: (fen: string) => cac
 // (it is wrapped in try/catch) instead of reaching for a Worker.
 vi.mock('../services/stockfishEngine', () => ({ stockfishEngine: { evalBoard: async () => { throw new Error('no engine in test'); } } }));
 vi.mock('../services/coachAnswerGates', () => ({ applyCandidateArrows: async (t: string) => t }));
-vi.mock('../services/voiceService', () => ({ voiceService: { stop: vi.fn(), speakForced: vi.fn(async () => undefined) } }));
+vi.mock('../services/voiceService', () => ({ voiceService: { stop: vi.fn(), speakForced: vi.fn(async (..._a: unknown[]) => undefined) } }));
 vi.mock('../services/appAuditor', () => ({ logAppAudit: vi.fn() }));
 vi.mock('../services/skillScaling', () => ({ alertSensitivityMultiplier: () => 1 }));
 vi.mock('../stores/appStore', () => ({

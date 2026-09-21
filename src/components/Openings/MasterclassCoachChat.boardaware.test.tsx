@@ -10,7 +10,7 @@ import { useAppStore } from '../../stores/appStore';
 // opening chat READS it and threads it into the grounded ask — so a question is
 // answered about the position on screen, not the opening in the abstract.
 
-const dispatchSpy = vi.fn(async () => ({ text: 'ok', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek', actionOffer: [] }));
+const dispatchSpy = vi.fn(async (..._a: unknown[]) => ({ text: 'ok', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek', actionOffer: [] }));
 vi.mock('../../coach/dispatchCoachTurn', () => ({ dispatchCoachTurn: (...a: unknown[]) => dispatchSpy(...(a as [])) }));
 // A real masterclass scope so the chat renders (buildCourseScope → non-null).
 vi.mock('../../data/lessons', () => ({

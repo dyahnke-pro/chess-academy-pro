@@ -25,7 +25,6 @@ function buildOverview(overrides?: Partial<OverviewInsights>): OverviewInsights 
     classificationCounts: {
       brilliant: 0,
       great: 0,
-      best: 0,
       good: 0,
       book: 0,
       inaccuracy: 0,
@@ -192,7 +191,6 @@ describe('computeShareableInsights', () => {
       classificationCounts: {
         brilliant: 3,
         great: 0,
-        best: 0,
         good: 0,
         book: 0,
         inaccuracy: 0,
@@ -216,7 +214,7 @@ describe('computeShareableInsights', () => {
       winRateWhite: 68,
       winRateBlack: 40,
       classificationCounts: {
-        brilliant: 2, great: 0, best: 0, good: 0, book: 0,
+        brilliant: 2, great: 0, good: 0, book: 0,
         inaccuracy: 0, mistake: 0, blunder: 0, miss: 0,
       },
       phaseAccuracy: [

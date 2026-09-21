@@ -5,7 +5,7 @@ import { NotificationBell } from './NotificationBell';
 // Stateful mock so the seen-marker actually moves and the sync event fires.
 let seenId: string | null = null;
 let seenTs = 0;
-const sendReply = vi.fn(async () => true);
+const sendReply = vi.fn(async (..._a: unknown[]) => true);
 const captureEvent = vi.fn();
 // Per-device dedup mocks: first delivery/read counts, repeats don't.
 let delivered = new Set<string>();
@@ -14,28 +14,28 @@ let read = new Set<string>();
 vi.mock('../../services/analytics', () => ({ captureEvent: (...a: unknown[]) => captureEvent(...a) }));
 
 vi.mock('../../services/announcementsService', () => ({
-  fetchInbox: vi.fn(async () => ({
+  fetchInbox: vi.fn(async (..._a: unknown[]) => ({
     broadcasts: [{ id: 'b1', title: 'Welcome', body: 'New app — be patient.', date: '2026-09-06' }],
     thread: [{ from: 'dev', body: 'Thanks for testing!', ts: 1000 }],
   })),
-  fetchAnnouncements: vi.fn(async () => []),
-  getLastSeenId: vi.fn(async () => seenId),
-  getLastSeenThreadTs: vi.fn(async () => seenTs),
+  fetchAnnouncements: vi.fn(async (..._a: unknown[]) => []),
+  getLastSeenId: vi.fn(async (..._a: unknown[]) => seenId),
+  getLastSeenThreadTs: vi.fn(async (..._a: unknown[]) => seenTs),
   markAllSeen: vi.fn(async (id: string) => { seenId = id; window.dispatchEvent(new CustomEvent('messages-seen')); }),
   markThreadSeen: vi.fn(async (ts: number) => { seenTs = ts; window.dispatchEvent(new CustomEvent('messages-seen')); }),
   hasUnread: (msgs: { id: string }[], last: string | null) => msgs.length > 0 && msgs[0].id !== last,
   hasUnreadThread: (thread: { from: string; ts: number }[], lastTs: number) => thread.some((m) => m.from === 'dev' && m.ts > lastTs),
   sendReply: (...a: unknown[]) => sendReply(...a),
-  getAdminSecret: vi.fn(async () => null),
-  setAdminSecret: vi.fn(async () => undefined),
-  verifyAdminSecret: vi.fn(async () => false),
-  sendBroadcast: vi.fn(async () => true),
-  fetchAllThreads: vi.fn(async () => []),
-  sendDevReply: vi.fn(async () => true),
-  fetchFeedback: vi.fn(async () => []),
+  getAdminSecret: vi.fn(async (..._a: unknown[]) => null),
+  setAdminSecret: vi.fn(async (..._a: unknown[]) => undefined),
+  verifyAdminSecret: vi.fn(async (..._a: unknown[]) => false),
+  sendBroadcast: vi.fn(async (..._a: unknown[]) => true),
+  fetchAllThreads: vi.fn(async (..._a: unknown[]) => []),
+  sendDevReply: vi.fn(async (..._a: unknown[]) => true),
+  fetchFeedback: vi.fn(async (..._a: unknown[]) => []),
   hasUnreadFeedback: (items: { ts: number }[], lastTs: number) => items.some((f) => f.ts > lastTs),
-  getLastSeenFeedbackTs: vi.fn(async () => 0),
-  markFeedbackSeen: vi.fn(async () => undefined),
+  getLastSeenFeedbackTs: vi.fn(async (..._a: unknown[]) => 0),
+  markFeedbackSeen: vi.fn(async (..._a: unknown[]) => undefined),
   claimUndeliveredBroadcasts: vi.fn(async (ids: string[]) => {
     const fresh = ids.filter((id) => !delivered.has(id));
     for (const id of fresh) delivered.add(id);
