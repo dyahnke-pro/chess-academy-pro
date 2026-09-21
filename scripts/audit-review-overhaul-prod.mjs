@@ -1148,7 +1148,56 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // "You <verb>"; a student ply must not open "Your opponent" / "They".
     const head = narr.replace(/^["'“‘\s]+/, '').slice(0, 40);
     const studentPly = isStudentPly(n);
-    if (!studentPly && /^you\s+(?!(?:'re|'ve|'ll|'d|are|were|have|had|has|need|want|can|could|must|should|may|might|will|would|know|see|feel|get|keep|hold|sit|stand|remain|stay)\b)[a-z]/i.test(head)) seatFails.push(`ply ${n} (opponent): "${head}"`);
+    // 🔴 THE ALLOW-LIST IS A LIST OF VERBS, SO A QUANTIFIER BEFORE THE VERB
+    // BROKE IT (false red, 2026-09-21). On an opponent ply the coach said:
+    //
+    //   "You both wanted the open e-file, but only their rook could take it
+    //    — it was theirs first."
+    //
+    // That is CORRECT prose — a plan-race clause that addresses the student,
+    // describes both sides, and attributes the file to the OPPONENT ("their",
+    // "theirs"). It reattributes nothing. But the guard reads the token right
+    // after "You", found "both" rather than a listed verb, and failed a coach
+    // that was right. `want` IS in the list; it just was not adjacent.
+    //
+    // So skip at most ONE intervening quantifier/adverb and then apply the
+    // same verb list. Deliberately ONE and deliberately short: the row exists
+    // to catch "You <verb>ed" attributing the OPPONENT'S MOVE to the student,
+    // and widening it into a general parser would trade a false red for a
+    // false green, which is the worse direction for a seat check.
+    //
+    // Note how this passed for months: it only fires on prose that opens with
+    // "You" on an opponent ply, which is rare, and this rotation was the first
+    // game to produce that shape. A guard nobody has watched fail is
+    // indistinguishable from one that cannot.
+    // A LITERAL, not `new RegExp` on an interpolated string. The first cut
+    // built it from a template and the escaping came out as `\\s` (a literal
+    // backslash) inside the JS string, so the hedge never matched and the fix
+    // silently did nothing — a repair that reports itself applied and is not.
+    // One layer of escaping, visible on the page, is worth more than a clever
+    // composition nobody can read.
+    //
+    // Two things it now tolerates, both measured on real prose rather than
+    // imagined: a QUANTIFIER before the verb ("You BOTH wanted…") and the
+    // verb's INFLECTION ("want" was listed, the coach said "wanted", and
+    // `want\b` does not match it).
+    //
+    // 🚨 THIS IS A HEURISTIC AND ITS LIST WILL NEED EXTENDING AGAIN. It errs
+    // toward FIRING, because a false red here costs one investigation (this
+    // one) while a false green on a SEAT check lets the locked seat rule rot
+    // silently. If it starts crying wolf, extend the list — do not relax the
+    // shape.
+    // 🔴 AND AN OPTIONAL GROUP BACKTRACKS TO EMPTY, which is how the second
+    // cut ALSO failed. `^you\s+(?:both|…)?\s*(?!ALLOWED)` looks like it skips
+    // the quantifier, and it does — but when the lookahead then rejects at
+    // "wanted", the engine backtracks the optional group to empty, re-tests
+    // the lookahead at "both", finds it unlisted, and fires anyway. The fix
+    // that reads correctly is the one that cannot backtrack: STRIP the hedge
+    // first, then test. Three cuts at this line, two of them silently inert,
+    // is the argument for a shape you can read over one you have to simulate.
+    const SEAT_RE = /^you\s+(?!(?:'re|'ve|'ll|'d|are|was|were|have|had|has|need|want|know|knew|see|saw|feel|felt|get|got|keep|kept|hold|held|sit|sat|stand|stood|remain|stay)(?:s|d|ed|ing)?\b)[a-z]/i;
+    const deHedged = head.replace(/^(you)\s+(?:both|also|still|already|now|never|only|again|clearly)\s+/i, '$1 ');
+    if (!studentPly && SEAT_RE.test(deHedged)) seatFails.push(`ply ${n} (opponent): "${head}"`);
     if (studentPly && /^(your opponent|they )/i.test(head)) seatFails.push(`ply ${n} (you): "${head}"`);
     // NOTRADEWIN — a capture immediately recaptured on the same square at equal
     // value is an even trade: it must not read as profit / material won.
