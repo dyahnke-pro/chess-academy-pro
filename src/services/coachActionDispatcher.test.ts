@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import {
   parseActions,
   dispatchActions,
@@ -92,7 +93,7 @@ describe('action registry', () => {
 });
 
 describe('dispatchActions', () => {
-  let navigate: ReturnType<typeof vi.fn>;
+  let navigate: Mock<(path: string) => void>;
 
   beforeEach(async () => {
     __resetCoachSessionStoreForTests();

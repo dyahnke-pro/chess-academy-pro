@@ -1,14 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import { hardRefresh } from './hardRefresh';
 
 interface MockRegistration {
-  unregister: ReturnType<typeof vi.fn>;
+  unregister: Mock<() => Promise<boolean>>;
 }
 
 describe('hardRefresh', () => {
-  let reload: ReturnType<typeof vi.fn>;
+  let reload: Mock<() => void>;
   let cacheKeys: string[];
-  let cacheDelete: ReturnType<typeof vi.fn>;
+  let cacheDelete: Mock<(key: string) => Promise<boolean>>;
   let registrations: MockRegistration[];
 
   beforeEach(() => {

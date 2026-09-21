@@ -171,9 +171,9 @@ describe('computeShareableInsights', () => {
   it('surfaces a phase-weakness insight when phase accuracy gap is >= 10 pp', async () => {
     vi.mocked(getOverviewInsights).mockResolvedValue(buildOverview({
       phaseAccuracy: [
-        { phase: 'opening', accuracy: 82, moves: 400 },
-        { phase: 'middlegame', accuracy: 70, moves: 800 },
-        { phase: 'endgame', accuracy: 58, moves: 300 },
+        { phase: 'opening', accuracy: 82, moveCount: 400, mistakes: 0 },
+        { phase: 'middlegame', accuracy: 70, moveCount: 800, mistakes: 0 },
+        { phase: 'endgame', accuracy: 58, moveCount: 300, mistakes: 0 },
       ],
     }));
     vi.mocked(getOpeningInsights).mockResolvedValue(buildOpenings());
@@ -220,8 +220,8 @@ describe('computeShareableInsights', () => {
         inaccuracy: 0, mistake: 0, blunder: 0, miss: 0,
       },
       phaseAccuracy: [
-        { phase: 'opening', accuracy: 85, moves: 200 },
-        { phase: 'endgame', accuracy: 55, moves: 200 },
+        { phase: 'opening', accuracy: 85, moveCount: 200, mistakes: 0 },
+        { phase: 'endgame', accuracy: 55, moveCount: 200, mistakes: 0 },
       ],
     }));
     vi.mocked(getOpeningInsights).mockResolvedValue(buildOpenings({
