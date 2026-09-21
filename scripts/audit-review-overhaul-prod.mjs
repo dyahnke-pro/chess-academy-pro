@@ -37,6 +37,7 @@ import { sampleRenderers, playwrightRenderers } from './audit-lib/os-sample.mjs'
 import { raced as racedRead, wedgeWatch, until as sharedUntil } from './audit-lib/wedge-watch.mjs';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { seatReattributes } from './audit-lib/seat-reattribution.mjs';
 import { judgeCriticalVoice } from './audit-lib/critical-moment-voice.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
@@ -1196,10 +1197,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // that reads correctly is the one that cannot backtrack: STRIP the hedge
     // first, then test. Three cuts at this line, two of them silently inert,
     // is the argument for a shape you can read over one you have to simulate.
-    const SEAT_RE = /^you\s+(?!(?:'re|'ve|'ll|'d|are|was|were|have|had|has|need|want|know|knew|see|saw|feel|felt|get|got|keep|kept|hold|held|sit|sat|stand|stood|remain|stay)(?:s|d|ed|ing)?\b)[a-z]/i;
-    const deHedged = head.replace(/^(you)\s+(?:both|also|still|already|now|never|only|again|clearly)\s+/i, '$1 ');
-    if (!studentPly && SEAT_RE.test(deHedged)) seatFails.push(`ply ${n} (opponent): "${head}"`);
-    if (studentPly && /^(your opponent|they )/i.test(head)) seatFails.push(`ply ${n} (you): "${head}"`);
+    // ONE DEFINITION, and it is unit-tested (`src/test/seatReattribution.test.ts`).
+    // This predicate took three cuts, two of them SILENTLY INERT, while living
+    // here where only a full prod browser run could exercise it. It is now a
+    // pure function the suite holds to its 12 cases in both directions.
+    const seat = seatReattributes(head, studentPly);
+    if (seat.fails) seatFails.push(`ply ${n} (${studentPly ? 'you' : 'opponent'}): "${head}"`);
     // NOTRADEWIN — a capture immediately recaptured on the same square at equal
     // value is an even trade: it must not read as profit / material won.
     const i = n - 1;
