@@ -28,6 +28,12 @@ describe('audit TTS mute', () => {
         const p = join(dir, entry);
         if (statSync(p).isDirectory()) { walk(p); continue; }
         if (!/\.(ts|tsx)$/.test(p)) continue;
+        // PRODUCT code only. A TEST that sets the flag is exercising the
+        // contract, not violating it — `appAuditor.auditGate.test.ts` sets it
+        // on purpose to prove a marked page refuses a remote stream. Without
+        // this the gate blamed that test for the rule it was enforcing, and
+        // nobody saw it because this gate has never been in GATE_TESTS.
+        if (/\.test\.(ts|tsx)$/.test(p)) continue;
         const src = readFileSync(p, 'utf8');
         // Code only — the service's own doc comment shows the harness usage
         // (`window.localStorage.setItem('auditMuteTts', '1')`) and must not
@@ -60,7 +66,18 @@ describe('the mute cannot be lost under storage pressure (2026-09-06: 60 billed 
     vi.resetModules();
     const g = globalThis as { __auditMuteTts?: boolean };
     delete g.__auditMuteTts;
-    const realLs = globalThis.localStorage;
+    // Node 26 does not provide `localStorage` unless started with
+    // --localstorage-file, so capturing the global gave `undefined` and the
+    // RESTORE below then threw on `.setItem`. The test's intent is "when
+    // storage recovers WITH the flag set, the answer follows it" — which needs
+    // a working store, not the runtime's. Rotted on a Node upgrade and stayed
+    // rotted because this gate has never been in GATE_TESTS.
+    const store = new Map<string, string>();
+    const realLs = (globalThis.localStorage ?? {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => { store.set(k, String(v)); },
+      removeItem: (k: string) => { store.delete(k); },
+    }) as Storage;
     // First read throws (locked-down / wedged context) …
     Object.defineProperty(globalThis, 'localStorage', { configurable: true, get() { throw new Error('storage unavailable'); } });
     const { voiceService } = await import('./voiceService');

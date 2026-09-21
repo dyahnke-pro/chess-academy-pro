@@ -230,6 +230,25 @@ const GATE_TESTS = [
   // so the config can read as fixed and ship as broken. Safe here because the
   // prod build runs BEFORE the content gates.
   'src/test/swHandover.test.ts',
+  // 🔒 THE NINE GATES CLAUDE.md DECLARES WITH THE WORD "Gate:" AND THAT NEVER
+  // RAN ON A PUSH (2026-09-20). Criterion is deliberately narrow — the file
+  // NAMES these as the enforcement for a LOCKED rule — because a gate list
+  // padded with tests that were never meant to block is a list nobody reads.
+  // 66 other contract-flavoured tests stay OUT by that same criterion.
+  //
+  // Wiring them found one RED: `voiceService.auditMute` — the gate for the
+  // $100 muted-audits rule — had rotted twice, invisibly. It blamed a TEST
+  // file for the product-code rule it enforces, and its storage case broke on
+  // a Node upgrade that removed `localStorage` by default. Both fixed.
+  'src/services/voiceService.auditMute.test.ts',
+  'src/services/appAuditor.auditGate.test.ts',
+  'api/audit-stream.refuse.test.ts',
+  'api/audit-stream.batch.test.ts',
+  'api/store-degraded.test.ts',
+  'src/hooks/learnSilentCapture.test.ts',
+  'src/services/oneStudentRating.test.ts',
+  'src/data/proGameReferences.test.ts',
+  'src/services/voicedCorpus.integration.test.ts',
   // Board accuracy for corpus lines rewritten by hand out of the review
   // register (David 2026-09-12: "make sure the narrations match what is
   // being shown on the board"). Same contract as narrationAccuracy, applied
