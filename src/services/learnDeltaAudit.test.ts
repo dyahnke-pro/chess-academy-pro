@@ -108,7 +108,19 @@ describe('AUDIT: live punishment callouts — the coach calls it out when it fir
       if (live.callout.includes(puSan)) problems.push(`${gem.openingId}: callout LEAKS the move: "${live.callout}"`);
       // The REVEAL must name the move + payoff.
       if (!live.reveal.includes(puSan)) problems.push(`${gem.openingId}: reveal omits the move: "${live.reveal}"`);
-      if (!live.reveal.includes(live.payoff)) problems.push(`${gem.openingId}: reveal omits payoff: "${live.reveal}"`);
+      // 🔴 CASE-SENSITIVE `includes` AGAINST PROSE THAT SENTENCE-CAPITALISES.
+      // `buildReveal` has a branch where the payoff stands alone as its own
+      // sentence — `${cap(payoff)}.` — so a payoff of "with a mating attack"
+      // ships as "With a mating attack." and an exact substring test misses
+      // it. The prose is right; the check was looking for a form the producer
+      // does not emit on that branch, which is why exactly one gem tripped it.
+      //
+      // The contract is unchanged: the reveal must STATE the payoff. Only the
+      // comparison is case-insensitive, so a reveal that genuinely omits it
+      // still fails.
+      if (!live.reveal.toLowerCase().includes(live.payoff.toLowerCase())) {
+        problems.push(`${gem.openingId}: reveal omits payoff: "${live.reveal}"`);
+      }
       lines.push(`[${gem.openingId}] after ${gem.inaccuracy} → CALLOUT: ${live.callout} | REVEAL: ${live.reveal}`);
     }
     console.log(`\n===== ${gems.length} LIVE PUNISHMENT CALLOUTS =====`);
