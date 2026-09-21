@@ -42,9 +42,9 @@ describe('voiceService', () => {
     vi.restoreAllMocks();
 
     // Spy on speechService methods before each test
-    vi.spyOn(speechService, 'speak').mockImplementation(() => undefined);
-    vi.spyOn(speechService, 'stop').mockImplementation(() => undefined);
-    vi.spyOn(speechService, 'setVoice').mockImplementation(() => undefined);
+    vi.spyOn(speechService, 'speak').mockImplementation(() => Promise.resolve());
+    vi.spyOn(speechService, 'stop').mockImplementation(() => Promise.resolve());
+    vi.spyOn(speechService, 'setVoice').mockImplementation(() => Promise.resolve());
 
     // Re-import to get the singleton (it persists state between tests)
     const mod = await import('./voiceService');
@@ -556,9 +556,9 @@ describe('superseded speak ≠ Polly failure (the phantom voice_fallover flood, 
     await db.delete();
     await db.open();
     vi.restoreAllMocks();
-    vi.spyOn(speechService, 'speak').mockImplementation(() => undefined);
-    vi.spyOn(speechService, 'stop').mockImplementation(() => undefined);
-    vi.spyOn(speechService, 'setVoice').mockImplementation(() => undefined);
+    vi.spyOn(speechService, 'speak').mockImplementation(() => Promise.resolve());
+    vi.spyOn(speechService, 'stop').mockImplementation(() => Promise.resolve());
+    vi.spyOn(speechService, 'setVoice').mockImplementation(() => Promise.resolve());
     const mod = await import('./voiceService');
     voiceService = mod.voiceService;
     voiceService.clearCache();
