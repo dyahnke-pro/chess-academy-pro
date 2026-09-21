@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { PaywallPage } from './PaywallPage';
+import { PaywallPage, type PaywallFeature } from './PaywallPage';
 
 vi.mock('../../hooks/useEntitlement', () => ({
   useEntitlement: () => ({ isResolving: false }),
@@ -15,7 +15,12 @@ vi.mock('../../services/billingService', () => ({
   clearBillingError: () => {},
 }));
 
-function renderPaywall(feature?: Parameters<typeof PaywallPage>[0] extends { feature?: infer F } ? F : never) {
+// Name the exported union rather than inferring it out of `Parameters<>`: the
+// component's props object has a DEFAULT, so `Parameters<typeof PaywallPage>[0]`
+// includes `undefined`, the conditional's `extends` fails on that member, and
+// the whole thing collapsed to `never` — so every call below was passing a
+// string to a parameter typed `undefined`.
+function renderPaywall(feature?: PaywallFeature) {
   return render(
     <MemoryRouter>
       <PaywallPage feature={feature} />
