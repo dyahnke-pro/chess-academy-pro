@@ -62,6 +62,127 @@ function winnableBy(board: Chess, sq: string, attackerVal: number): boolean {
   return pieceVal(p.type) > attackerVal || undefended;
 }
 
+/**
+ * 🔴 A TACTIC WHOSE AGENT CAN SIMPLY BE CAPTURED IS NOT LANDING (found
+ * 2026-09-21 by `reviewCorpusSweep`, red on `main`: three games narrated "lands
+ * a fork" on a move that won nothing).
+ *
+ * The reality gate above asks whether the TARGETS are winnable and never asks
+ * whether the AGENT survives. On `mg-lichess-8I2YuiTC` ply 72 the coach said
+ * Qf4+ "lands a fork" — it forks bishop f6, queen h6 and the king, and the
+ * royal rule accepted it on the one "winnable" target, the undefended h6 queen.
+ * But that queen ATTACKS f4: White answers Qxf4 and the fork wins exactly
+ * nothing. A forked piece that can take the forker was never forked.
+ *
+ * BOARD-TRUE BY LEGALITY, NOT GEOMETRY. `attackers()` reports the white king as
+ * an attacker of f2 on ply 50 of the same game, where Kxf2 is ILLEGAL because
+ * the queen is defended — a geometric test would have killed that GENUINE royal
+ * fork. `board` has the defender to move, so its own legal move list is the
+ * honest question.
+ *
+ * The capture only RESOLVES the tactic when it is not materially bad for them:
+ * they gain the agent, and give back the capturer only if we can recapture. Net
+ * >= 0 for them means the tactic bought nothing.
+ *
+ * SCOPED TO FORKS, DELIBERATELY. All three measured violations are forks, and
+ * the fork branch is the permissive one — the royal rule accepts a SINGLE
+ * winnable target, so an unsafe agent has nothing else holding it back. Skewer
+ * and pin share the shape but no run has produced one, and extending it there
+ * DID break a real classifier fixture: `tacticTypeUnification`'s skewer case
+ * `r6k/8/8/8/q7/8/8/1R5K` plays Ra1 into Qxa1, so the rule fired and dropped the
+ * tag. That fixture tests CLASSIFICATION, not soundness. Left for whoever has a
+ * measurement, rather than silently overlooked.
+ *
+ * 🔒 IT LIVES INSIDE THE ONE COMPUTER (merged 2026-09-21). It landed as INLINE
+ * logic in `computePlyFacts` at the same time this function was being extracted
+ * out of that very block — two sessions fixing one disease from opposite ends.
+ * Left inline it would have been invisible to `tacticWinsMaterial`'s other
+ * callers and to the corpus sweep's scanner, which is exactly the drift the
+ * extraction exists to end.
+ */
+function agentSurvives(
+  board: Chess,
+  tactic: { type: string; involvedSquares: readonly string[] },
+  agent: string,
+): boolean {
+  if (tactic.type !== 'fork') return true;
+  const attackerVal = pieceVal(board.get(agent as Square)?.type);
+  const agentColor = board.get(agent as Square)?.color;
+  const weDefendAgent = agentColor
+    ? board.attackers(agent as Square, agentColor).length > 0
+    : false;
+  const answeredByCapture = board
+    .moves({ verbose: true })
+    .some((m) => m.to === agent
+      && attackerVal - (weDefendAgent ? pieceVal(m.piece) : 0) >= 0);
+  return !answeredByCapture;
+}
+
+
+/**
+ * 🔒 DOES THIS TACTIC ACTUALLY WIN SOMETHING — ONE definition, one place.
+ *
+ * `detectTactics` reports a bare GEOMETRIC alignment even when every target is
+ * defended and of equal-or-greater value, which wins nothing. This is the
+ * reality bar on top of it, and it is EXPORTED because it had grown a second,
+ * hand-written copy: `reviewCorpusSweep.test.ts` carried its own
+ * `tacticIsMeaningful`, and the two silently drifted apart over two corrections
+ * made here and not there —
+ *
+ *   • the ROYAL FORK rule (2026-09-14): one target being the KING makes one
+ *     other winnable target enough, because the check forces the king to move
+ *     and the other piece falls. Without it the textbook Nc7+ king-and-rook
+ *     fork reads as a false alarm.
+ *   • `winnableBy`'s king rule (2026-09-15): a king is never WON, so an
+ *     uncovered king must not count as an "undefended target".
+ *
+ * The cost was exactly what the rot rule predicts: the sweep failed three REAL
+ * royal forks (Re1+, Qxf2+, Qf4+ — every one a check) as "empty tactics",
+ * blaming the product for a rule the scanner had not been told about. The
+ * scanner had even half-migrated — it copied the royal carve-out on the SKEWER
+ * branch and missed it on the fork.
+ *
+ * WHAT THE SCANNER KEEPS, and why sharing this is not a tautology: its
+ * independence lies in re-deriving the tactic from `detectTactics(fenAfter)`
+ * and checking the claimed motif against the square the mover landed on — which
+ * is where the PROSE can lie. "What counts as a winning fork" is a product
+ * judgement, and a second hand-copy of it never provided independence, only
+ * drift.
+ *
+ * `agentSquare` defaults to the detector's own agent (it puts that square
+ * FIRST). Victim-first motifs (`trapped_piece`, `overload`) name the opponent's
+ * piece first and pass the mover's landing square explicitly.
+ */
+export function tacticWinsMaterial(
+  board: Chess,
+  tactic: { type: string; involvedSquares: readonly string[] },
+  agentSquare?: string | null,
+): boolean {
+  const agent = agentSquare ?? tactic.involvedSquares[0];
+  const attackerVal = pieceVal(board.get(agent as Square)?.type);
+  const winnable = (sq: string): boolean => winnableBy(board, sq, attackerVal);
+  if (tactic.type === 'fork') {
+    // A fork wins because the defender cannot save BOTH — so it needs TWO
+    // winnable targets, unless one of them is the king (see above).
+    const targets = tactic.involvedSquares.slice(1);
+    const royal = targets.some((sq) => board.get(sq as Square)?.type === 'k');
+    const count = targets.filter(winnable).length;
+    if (!(royal ? count >= 1 : count >= 2)) return false;
+    return agentSurvives(board, tactic, agent);
+  }
+  if (tactic.type === 'skewer') {
+    // Real only if the FRONT piece can actually be won, or the piece behind is
+    // the king (then the front one has to move and the back one is exposed).
+    return winnable(tactic.involvedSquares[1])
+      || board.get(tactic.involvedSquares[2] as Square)?.type === 'k';
+  }
+  // A pin immobilizes its front piece against a more valuable one — the
+  // detector already requires back > front and filters pins-to-a-pawn, so the
+  // pressure is real even when the front cannot be won immediately (Bg5
+  // pinning the f6 knight to the queen). Keep it.
+  return true;
+}
+
 /** Context the material calc needs about the PREVIOUS ply: if the opponent just
  *  captured on the square we're now capturing on, this move is a RECAPTURE and
  *  its honest material figure is the NET of the two-ply swap, not the face value
@@ -235,79 +356,11 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     // against the king). "Winnable" = the target is worth more than the mover
     // OR is undefended (it hangs). Kills the false alarms; keeps the real ones.
     if (landed) {
+      // ONE definition of "does this actually win something" — see
+      // `tacticWinsMaterial`. It used to be written out here AND copied by
+      // hand into the corpus sweep's scanner, and the two drifted.
       const agentSquare = (landed.type === 'trapped_piece' || landed.type === 'overload') ? toSquare : landed.involvedSquares[0];
-      const attackerVal = pieceVal(afterBoard.get(agentSquare as Square)?.type);
-      const winnable = (sq: string): boolean => winnableBy(afterBoard, sq, attackerVal);
-      let real: boolean;
-      if (landed.type === 'fork') {
-        // A fork wins because the defender can't save BOTH — needs >=2 winnable
-        // targets. (Kills "Qh4 lands a fork" on two defended minors.)
-        // A ROYAL fork (one target is the king) is real with ONE other winnable
-        // target: the check forces the king to move, so the other piece falls.
-        // The king is worth 0 here and is "defended" by any friendly piece
-        // that also covers its square, so it never passed `winnable` and the
-        // textbook Nc7+ king-and-rook fork was dropped as a false alarm
-        // (found 2026-09-14 wiring the concept engine; same royal rule the
-        // skewer branch below already applies).
-        const targets = landed.involvedSquares.slice(1);
-        const royal = targets.some((sq) => afterBoard.get(sq as Square)?.type === 'k');
-        const winnableCount = targets.filter(winnable).length;
-        real = royal ? winnableCount >= 1 : winnableCount >= 2;
-      } else if (landed.type === 'skewer') {
-        // A skewer is real only if its FRONT piece can actually be won (or it's
-        // a royal skewer). (Kills "Bg7 lands a skewer" on a defended, equal-
-        // value knight with a pawn behind.)
-        const backIsKing = afterBoard.get(landed.involvedSquares[2] as Square)?.type === 'k';
-        real = winnable(landed.involvedSquares[1]) || backIsKing;
-      } else {
-        // A pin immobilizes its front piece against a more valuable one — the
-        // detector already requires back > front and filters pins-to-a-pawn, so
-        // the pressure is real even when the front can't be won immediately
-        // (Bg5 pinning the f6 knight to the queen). Keep it.
-        real = true;
-      }
-      // 🔴 A TACTIC WHOSE AGENT CAN SIMPLY BE CAPTURED IS NOT LANDING (found
-      // 2026-09-21 by `reviewCorpusSweep`, red on `main`: three games narrated
-      // "lands a fork" on a move that won nothing).
-      //
-      // The reality gate above asks whether the TARGETS are winnable and never
-      // asks whether the AGENT survives. On `mg-lichess-8I2YuiTC` ply 72 the
-      // coach said Qf4+ "lands a fork" — it forks bishop f6, queen h6 and the
-      // king, and the royal rule accepted it on the one "winnable" target, the
-      // undefended h6 queen. But that queen ATTACKS f4: White answers Qxf4 and
-      // the fork wins exactly nothing. A forked piece that can take the forker
-      // was never forked.
-      //
-      // BOARD-TRUE BY LEGALITY, NOT GEOMETRY. `attackers()` reports the white
-      // king as an attacker of f2 on ply 50 of the same game, where Kxf2 is
-      // ILLEGAL because the queen is defended — so a geometric test would have
-      // killed that GENUINE royal fork (Qxf2+ forks the king and an undefended
-      // g3 knight, and White's only legal replies are Kh2/Kh1). `afterBoard` has
-      // the defender to move, so its own legal move list is the honest question.
-      //
-      // The capture only RESOLVES the tactic when it is not materially bad for
-      // them: they gain the agent, and give back the capturer only if we can
-      // recapture. Net >= 0 for them means the tactic bought nothing.
-      // SCOPED TO FORKS, DELIBERATELY. All three measured violations are forks,
-      // and the fork branch is the permissive one — the royal rule accepts a
-      // SINGLE winnable target, so an unsafe agent has nothing else holding it
-      // back. Skewer and pin share the shape (their front piece could also take
-      // the agent) but no run has produced one, and extending this there DID
-      // break a real classifier fixture: `tacticTypeUnification`'s skewer case
-      // `r6k/8/8/8/q7/8/8/1R5K` plays Ra1 into Qxa1, so the rule fired and
-      // dropped the tag. That fixture is testing CLASSIFICATION, not soundness.
-      // Left for whoever has a measurement, rather than silently overlooked.
-      if (real && landed.type === 'fork') {
-        const agentColor = afterBoard.get(agentSquare as Square)?.color;
-        const weDefendAgent = agentColor
-          ? afterBoard.attackers(agentSquare as Square, agentColor).length > 0
-          : false;
-        const answeredByCapture = afterBoard
-          .moves({ verbose: true })
-          .some((m) => m.to === agentSquare
-            && attackerVal - (weDefendAgent ? pieceVal(m.piece) : 0) >= 0);
-        if (answeredByCapture) real = false;
-      }
+      const real = tacticWinsMaterial(afterBoard, landed, agentSquare);
       tacticLanded = real ? landed.type : null;
     }
 

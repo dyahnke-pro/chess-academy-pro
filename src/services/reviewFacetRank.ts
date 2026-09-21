@@ -109,7 +109,28 @@ export function facetTag(facet: string): FacetTag | null {
 /** A facet's importance, plus this student's need for it. An untagged facet
  *  (the causal-chain lead, which is composed prose) ranks at the top — it is
  *  the cross-move story and always leads when present. */
-export function facetRank(facet: string, signals: readonly WeaknessSignal[] = []): number {
+export function facetRank(
+  facet: string,
+  signals: readonly WeaknessSignal[] = [],
+  /** THE HOLE THE SURFACE ALREADY MATCHED for this exact fact, when it has one.
+   *
+   *  It arrives PRE-MATCHED for the same reason `coachDecider.StudentContext.
+   *  momentBoost` does: by the time a fact reaches the ranker it is PROSE, and
+   *  joining prose to a weakness would mean scraping a concept back out of a
+   *  sentence. The surface still holds the structured source, so the match
+   *  belongs there and only its RESULT travels.
+   *
+   *  This is what lets the `[principle]` facet rank on the EXACT fundamental
+   *  the attributor proved (`matchFundamental`) rather than on the coarse
+   *  bucket `clauseKindForTag` falls back to. Without it, review could speak
+   *  "you left a piece loose again" — a sentence joined exactly — and order it
+   *  by whatever unrelated positional hole happened to lead the bucket.
+   *
+   *  `undefined` = the surface has nothing to say and the tag join decides.
+   *  `null` = the surface looked and found NO hole, which is a real answer and
+   *  must not fall back to the coarse guess. */
+  matched?: WeaknessSignal | null,
+): number {
   const tag = facetTag(facet);
   if (tag === null) return 1000;
   const base = FACET_RANK[tag];
@@ -118,7 +139,9 @@ export function facetRank(facet: string, signals: readonly WeaknessSignal[] = []
   // weakness this student keeps falling into outranks an equal fact that is not
   // about them — bounded by `boostFor` (≤30) so it re-orders COMPARABLE facts
   // and never vaults a plan over a blunder.
-  const hole = signals.length > 0 ? matchClauseKind(clauseKindForTag(tag), signals) : null;
+  const hole = matched !== undefined
+    ? matched
+    : (signals.length > 0 ? matchClauseKind(clauseKindForTag(tag), signals) : null);
   return base + (hole ? boostFor(hole) : 0);
 }
 
@@ -140,9 +163,16 @@ function clauseKindForTag(tag: FacetTag): string {
 /** Order a ply's kept facets most-important-first. Stable within a rank, so the
  *  authoring order still breaks ties. Returns a NEW array; the set is
  *  unchanged — nothing is ever dropped here (G4.5). */
-export function rankFacets(facets: readonly string[], signals: readonly WeaknessSignal[] = []): string[] {
+export function rankFacets(
+  facets: readonly string[],
+  signals: readonly WeaknessSignal[] = [],
+  /** Per-fact holes the surface already matched — see `facetRank`'s `matched`.
+   *  A fact absent from the map falls through to the tag join, so a surface
+   *  that can only pre-match SOME of its facts is not forced to pre-match all. */
+  matched?: ReadonlyMap<string, WeaknessSignal | null>,
+): string[] {
   return facets
-    .map((f, i) => ({ f, i, r: facetRank(f, signals) }))
+    .map((f, i) => ({ f, i, r: facetRank(f, signals, matched?.has(f) ? matched.get(f) : undefined) }))
     .sort((a, b) => (b.r - a.r) || (a.i - b.i))
     .map((x) => x.f);
 }

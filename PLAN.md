@@ -1631,6 +1631,95 @@ Learn 8/8, Review 28/28 MEETS STANDARD.
 
 ### A. The loop cannot close (highest — these are the app, not polish)
 
+✅ **A-TIE — THE HEAT MAP AND THE DECIDER ARE ONE NUMBER (#100). Landed
+2026-09-21.** David: *"I also want the decision calculator and the heat map tied
+together so the coach knows when a why is important to state. Teaching
+narrations need to be important to the decision computer when the stated move is
+a common error for the user."* → *"Based off of weakness tab/ heat map. These two
+surfaces need to be tied together."* → and, on which term it raises: **need**.
+
+**A-NEW (above) put the fundamental INTO the spine. This is the other half: it
+was still not read by anything that DECIDES.** The sweep that found it:
+`matchFundamental` — the exact join, whose own comment says *"Exact, never by
+bucket: 'you keep leaving pieces loose' must be backed by loose-piece rows, not
+by any positional hole"* — had **exactly ONE production caller**,
+`fundamentalRecurrence`, which writes the *"again"* SENTENCE. Every computer that
+decides used the coarse `matchClauseKind`, which for kind `'fundamental'`
+resolves to `bestMatch(s => s.bucket === 'positional' || …)`.
+
+🚨 **So the coach could SAY "you left a piece loose again" — joined exactly — while
+the computer that decided whether that moment was worth saying had matched the
+leader of the whole positional bucket. One sentence, two joins, two different
+holes, and nothing anywhere said they disagreed.** That is the same disease as
+A-NEW one layer up, and the same shape as the three optional student terms this
+repo has already found: **a computer wired to the VOICE and not to the DECIDER.**
+
+**THE TWO SURFACES WERE ALREADY ONE RECORD — that had to be checked, not
+assumed.** The Fundamentals tab counts `misconceptionTags.fundamentalId`
+(`getFundamentalCounts`, raw count, no due-filter) and the spine aggregates the
+SAME field into `fundamental:<id>` rows (`weaknessSpine.aggregateFundamentals`,
+which adds `openCount` via `isMisconceptionDue` and a lifecycle severity). Same
+table, same field, same id guard — so they can differ in WEIGHT but never in
+WHICH fundamentals exist or their totals. The tie was therefore not a new table;
+it was a join nobody called.
+
+**WHAT LANDED.**
+1. `needScore.NeedPlyInput.fundamentalId` — **REQUIRED**, `null` is a real
+   answer, for the reason this file has now recorded four times: an OPTIONAL
+   student term is a lane's licence to forget the student
+   (`clauseKind`, `momentBoost`, `posedTags`, now this).
+2. **THE CHAIN IS REORDERED, PRECISE BEFORE COARSE.** It ran
+   `tacticPattern ?? clauseKind ?? posedTags`, so the only BUCKET route in the
+   set pre-empted the two EXACT routes beneath it. It is now
+   `fundamental ?? tacticPattern ?? posedTags ?? clauseKind`.
+   The coarse route is **DEMOTED, NOT DELETED** — deleting it would make the
+   coach QUIETER on a student with a real positional hole that no attributor
+   named on this ply, and the ALGO-BASED law is that data may RAISE freely and
+   may only LOWER on evidence of the POSITIVE. A coarse match is weak evidence,
+   not false evidence.
+3. **THE ATTRIBUTION MOVED AHEAD OF THE SELECTOR** (`coachFeatureService.
+   attributeGameFundamentals`). It used to run inside the segment loop, which is
+   AFTER `selectTeaching` — so both deciding computers had already run and
+   neither could ever see a fundamental. Hoisting it (rather than attributing a
+   second time inside the selector) is what keeps the sentence and the decision
+   about the SAME hole: the selector has no `bestSan`, so a second attribution
+   there would be a WEAKER one entitled to disagree. **One attribution, three
+   consumers** — need, ranker, narration. `betterMoveSan` was extracted for the
+   same reason: two hand copies of one derivation is the drifting constant the
+   rot rule bans.
+4. **THE RANKER TOO** — `facetRank`/`rankFacets` take a pre-matched hole, and
+   review fills it for the `[principle]` facet (which IS the attributed
+   fundamental) via `FactBundle.holeByFact`. It arrives pre-matched for the same
+   reason `momentBoost` does: facts are PROSE by the time they reach the door,
+   and joining prose to a weakness means scraping a concept out of a sentence.
+   `null` when the fundamental has no record — GREY is not a hole and must not
+   borrow an unrelated weakness's weight.
+
+**Gate:** `fundamentalReachesDecider.test.ts`, 5 tests, negative-controlled two
+ways: the fixture ASSERTS the exact and coarse routes disagree (so a green
+cannot come from a fixture too weak to tell), and reverting the chain order makes
+it fire — verified by doing it.
+
+🟠 **OWED — THE LIVE LANE (Learn) STILL PASSES `fundamentalId: null`, and the
+blocker is concrete rather than architectural.** `positionFacts` is the only
+consumer of the need score on Learn, and the attributor needs TWO things the
+composer does not yet have. Measured, so the next session does not re-derive it:
+the engine's best move as SAN at the PRE-move position (`CoachTeachPage` resolves
+one at **:9885**) AND the AFTER-move read that decides whether the ply is flagged
+at all (`const mid = await midTurnRead`, **:9830**) — both roughly 1,300 lines
+after the composer runs at **:8603** in the same turn. The pre-move read IS in
+scope (`preStudentRead`, :8151) and so is the student's cost (`studentCpLoss`,
+assigned :8207), but `studentBest` at the composer is the analysis of the
+position AFTER THE COACH'S REPLY — a different board, not the after-move read.
+So this is not a hoist of one line: it is moving the composer later in the turn,
+or awaiting the mid-turn read earlier. That belongs with the three-surface
+parity sweep, not to a drive-by.
+Passing `null` is deliberate: a live attribution without `bestSan` would be a
+second, weaker one entitled to disagree with the sentence Learn actually speaks
+at :9907 — the exact failure this whole wire exists to remove. **Do not "fix" it
+by attributing again.**
+
+
 ✅ **A-NEW — LANDED 2026-09-19 (late). Was: THE MODEL CANNOT READ THE FUNDAMENTAL
 THE COMPUTER PROVED.** See the landed section below for the two defects behind it;
 the original measurement follows unchanged.

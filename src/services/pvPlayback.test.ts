@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, plyFactsClause, tacticWord, pvDepthForRating, type PvEngine } from './pvPlayback';
+import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, plyFactsClause, tacticWord, tacticWinsMaterial, pvDepthForRating, type PvEngine } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
 
 /** Canned engine: maps fen → analysis. Unknown fen → throws (like a dead worker). */
@@ -331,5 +331,50 @@ describe('a fork whose agent can simply be captured is not a fork (2026-09-21)',
     after.move('Qxf2+');
     expect(after.moves().sort(), 'no legal capture of the forker').toEqual(['Kh1', 'Kh2']);
     expect(plyFactsForMove(before, 'Qxf2+') ?? '').toMatch(/lands a fork/i);
+  });
+});
+
+/**
+ * 🔒 ONE DEFINITION OF "THIS TACTIC WINS SOMETHING" — the gate that makes the
+ * 2026-09-21 drift unreopenable.
+ *
+ * `tacticWinsMaterial` was inline in `computePlyFacts` and had grown a second,
+ * hand-written copy in `reviewCorpusSweep.test.ts`. Two corrections were made
+ * in the product and never in the copy — the ROYAL FORK rule and `winnableBy`'s
+ * king rule — so the sweep failed three REAL royal forks as "empty tactics" and
+ * blamed the product. The copy is gone and both readers now call this.
+ *
+ * These cases pin the two rules that drifted. They are not a restatement of the
+ * implementation: each one is a BOARD, and the claim is what a coach would say
+ * about it.
+ */
+describe('tacticWinsMaterial — the royal carve-outs that drifted', () => {
+  it('a ROYAL fork is real with ONE other winnable target', () => {
+    // White knight on c7 forks the black king on e8 and the rook on a8. The
+    // textbook family fork: the check forces the king to move and the rook
+    // falls. The king is worth 0 and never passes `winnable`, so without the
+    // royal rule the count is 1 and this reads as a false alarm.
+    const board = new Chess('r3k3/2N5/8/8/8/8/8/4K3 b - - 0 1');
+    expect(tacticWinsMaterial(board, { type: 'fork', involvedSquares: ['c7', 'e8', 'a8'] })).toBe(true);
+  });
+
+  it('a NON-royal fork still needs TWO winnable targets', () => {
+    // Same knight, forking two DEFENDED, equal-or-greater-value targets is the
+    // case the bar exists for; here it hits one lone rook and nothing else.
+    const board = new Chess('r7/2N5/8/8/8/8/8/4K2k b - - 0 1');
+    expect(tacticWinsMaterial(board, { type: 'fork', involvedSquares: ['c7', 'a8'] })).toBe(false);
+  });
+
+  it('an uncovered KING is never counted as a winnable target on its own', () => {
+    // `winnableBy` returns false for a king, so a bare check against a lone
+    // king is not a fork. Rc8+ against a defended knight used to pass here
+    // (found 2026-09-15) — the king looked like an undefended target.
+    const board = new Chess('2R1k3/8/8/8/8/8/8/4K3 b - - 0 1');
+    expect(tacticWinsMaterial(board, { type: 'fork', involvedSquares: ['c8', 'e8'] })).toBe(false);
+  });
+
+  it('a pin is kept without a material test — the immobilization IS the point', () => {
+    const board = new Chess('rnbqkb1r/pppp1ppp/5n2/4p1B1/4P3/8/PPPP1PPP/RN1QKBNR b KQkq - 0 1');
+    expect(tacticWinsMaterial(board, { type: 'pin', involvedSquares: ['g5', 'f6', 'd8'] })).toBe(true);
   });
 });

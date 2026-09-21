@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**381 lines · 10 exports · 6 importers · 4 tests · 17 audits**
+**393 lines · 10 exports · 6 importers · 4 tests · 17 audits**
 
 ## Locked rules that govern this surface
 
@@ -105,15 +105,15 @@
 - `src/services/coachDecisionEmits.test.ts:73`
 - `src/services/coachDecisionEmits.test.ts:80`
 - `src/services/coachDecisionEmits.test.ts:89`
-- `src/services/coachFeatureService.ts:1773`
+- `src/services/coachFeatureService.ts:1855`
 - `src/services/liveNeedGate.test.ts:46`
 - `src/services/liveNeedGate.test.ts:52`
 - `src/services/liveNeedGate.test.ts:61`
 - `src/services/liveNeedGate.test.ts:73`
-- `src/services/positionFacts.ts:556`
+- `src/services/positionFacts.ts:576`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1330`
+- `src/services/coachFeatureService.ts:1434`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`

@@ -30,7 +30,7 @@
 // this same function (invariant: one computer set).
 
 import type { WeaknessSignal } from './weaknessSignal';
-import { matchClauseKind, matchTacticPattern, matchTag, boostFor, MAX_WEAKNESS_BOOST } from './weaknessSignal';
+import { matchClauseKind, matchFundamental, matchTacticPattern, matchTag, boostFor, MAX_WEAKNESS_BOOST } from './weaknessSignal';
 import { bookDepartureIsCostly, type BookDepartureRow } from './bookDepartureWeakness';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { capabilityProven, HELD_FOR_PROVEN, type CapabilityProfile } from './capabilityEvidence';
@@ -90,6 +90,31 @@ export interface NeedPlyInput {
   studentMove: boolean;
   /** The computed concept of the ply (a landed / available tactic), when any. */
   conceptId?: TacticPatternType | null;
+  /**
+   * THE FUNDAMENTAL THIS MOVE BROKE — the `FundamentalId` `attributePrinciples`
+   * proved on THIS ply, or null when nothing was attributed.
+   *
+   * 🚨 REQUIRED, and `null` is a real answer, for the same reason `clauseKind`
+   * is (below) and `momentBoost` is on the door: an OPTIONAL student term is a
+   * lane's licence to forget the student, and this repo has now found four
+   * lanes that took it.
+   *
+   * WHY IT IS ITS OWN ROUTE AND NOT A CLAUSE KIND. `matchClauseKind('fundamental')`
+   * answers with the student's most-pressing POSITIONAL hole — any row in the
+   * bucket. So the coach could say "you left a piece loose AGAIN" (the recurrence
+   * line, which joins exactly via `matchFundamental`) while the computer that
+   * decided how much that moment was worth had matched some unrelated structural
+   * note. One sentence, two joins, two different holes. This is the finest key
+   * the record carries — the same `fundamental:<id>` rows the Fundamentals tab
+   * counts (`getFundamentalCounts` / `weaknessSpine.aggregateFundamentals` read
+   * the SAME `misconceptionTags.fundamentalId`), so the heat map the student
+   * SEES and the need the decider COMPUTES are now the same number.
+   *
+   * It is a plain string, not `FundamentalId`, to keep this leaf from importing
+   * `principleAttribution` (a 1,278-line board computer) for a key it only ever
+   * compares. `matchFundamental` does the same.
+   */
+  fundamentalId: string | null;
   /**
    * The positionFacts clause kind the ply's teaching would carry
    * ('fundamental' / 'structure-plan' / 'must-defend' / 'convert' / …).
@@ -196,17 +221,34 @@ function departureTerm(ply: number, ctx: StudentNeedContext): { score: number; r
 }
 
 /**
- * THE THREE ROUTES TO A HOLE, and why all three are needed.
+ * THE FOUR ROUTES TO A HOLE, IN ORDER OF PRECISION — and the ORDER is the point.
  *
  * Each reaches a different part of the student's record, and a lane supplying
  * only one is blind to the rest:
- *  • `conceptId`   → TACTICAL holes (fork, pin, skewer …) via the vocabulary bridge.
- *  • `clauseKind`  → POSITIONAL, STRUCTURAL and ENDGAME-CONVERSION holes, which
- *                    have no tactic id and are reachable no other way.
- *  • `posedTags`   → the COACH'S OWN captures. `fromMisconception` files those
+ *  1. `fundamentalId` → THE EXACT FUNDAMENTAL this move broke, matched against
+ *                    the student's own `fundamental:<id>` rows — the same rows
+ *                    the Fundamentals tab counts. Exact, never by bucket.
+ *  2. `conceptId`   → TACTICAL holes (fork, pin, skewer …) via the vocabulary bridge.
+ *  3. `posedTags`   → the COACH'S OWN captures. `fromMisconception` files those
  *                    rows under the misconception tag itself, so a hole the
  *                    student admitted in "why did you play that?" joins here and
- *                    nowhere else.
+ *                    nowhere else. Exact, per tag.
+ *  4. `clauseKind`  → POSITIONAL, STRUCTURAL and ENDGAME-CONVERSION holes, which
+ *                    have no tactic id and are reachable no other way.
+ *
+ * 🚨 PRECISE BEFORE COARSE, AND THE COARSE ONE STAYS. Route 4 is the only
+ * BUCKET match in the set: `matchClauseKind('fundamental' | 'structure-plan')`
+ * answers with the most-pressing hole in the whole positional bucket, which on
+ * a ply where routes 1–3 have an exact answer is a worse answer to the same
+ * question. It ran SECOND until 2026-09-21, so it pre-empted the two exact
+ * routes below it and the score was computed about a different hole than the
+ * sentence was.
+ *
+ * It is DEMOTED rather than deleted, deliberately. Removing it would make the
+ * coach QUIETER on a student who has a real positional hole that no attributor
+ * named on this ply — and the ALGO-BASED law is that data may RAISE freely and
+ * may only LOWER on evidence of the POSITIVE (which is `capabilityTerm`'s job
+ * and nothing else's). A coarse match is weak evidence, not false evidence.
  *
  * The review lane supplied only `conceptId` until 2026-09-18 and was therefore
  * blind to a positional student entirely. Every matcher already existed; none
@@ -229,9 +271,10 @@ function bestPosedMatch(p: NeedPlyInput, ctx: StudentNeedContext): WeaknessSigna
 
 function weaknessTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
   if (ctx.signals.length === 0) return { score: 0, reason: null };
-  const match = (p.conceptId ? matchTacticPattern(p.conceptId, ctx.signals) : null)
-    ?? (p.clauseKind ? matchClauseKind(p.clauseKind, ctx.signals) : null)
-    ?? bestPosedMatch(p, ctx);
+  const match = matchFundamental(p.fundamentalId, ctx.signals)
+    ?? (p.conceptId ? matchTacticPattern(p.conceptId, ctx.signals) : null)
+    ?? bestPosedMatch(p, ctx)
+    ?? (p.clauseKind ? matchClauseKind(p.clauseKind, ctx.signals) : null);
   if (!match) return { score: 0, reason: null };
   // boostFor is 0–MAX_WEAKNESS_BOOST; a persistent, worsening hole alone clears the bar.
   const score = Math.round((boostFor(match) / MAX_WEAKNESS_BOOST) * 55);

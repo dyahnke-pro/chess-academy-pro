@@ -29,7 +29,7 @@
 import { Chess, type Color } from 'chess.js';
 import type { CoachSurface } from '../coach/types';
 import { computeNeed, coldStudent, type StudentNeedContext, type NeedVerdict } from './needScore';
-import { matchTacticPattern, matchTag, boostFor } from './weaknessSignal';
+import { matchFundamental, matchTacticPattern, matchTag, boostFor } from './weaknessSignal';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { turningPointCandidates, moveLabel, spokenMoveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
 import { landedTacticTeaching } from './dnaLineNarrator';
@@ -53,6 +53,13 @@ export interface SelectorPly {
   evalBefore?: number | null;
   evalAfter?: number | null;
   classification?: string | null;
+  /** THE FUNDAMENTAL THIS MOVE BROKE, when the caller's attributor named one —
+   *  the SAME `attributePrinciples` result the narration speaks, handed over
+   *  rather than recomputed here (this pass has no `bestSan`, so a second
+   *  attribution would be a WEAKER one that could disagree with the sentence).
+   *  Optional because a taught line carries no engine record and therefore no
+   *  attribution; `null`/absent is the honest answer there, not a default. */
+  fundamentalId?: string | null;
 }
 
 /** What the sequence IS: a finished game, a taught line, or a live game so far. */
@@ -274,7 +281,13 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     // red or grey raises how much this moment is worth saying, and the ranker
     // decides. Computed here because this is where the board's posed
     // capabilities are already in hand.
-    const hole = (tactic ? matchTacticPattern(tactic as import('../types/tacticTypes').TacticPatternType, student?.signals ?? []) : null)
+    // PRECISE BEFORE COARSE, same order as `needScore.weaknessTerm`: the exact
+    // fundamental this move broke outranks the tactic bridge, which outranks
+    // the board's posed tags. One chain, two consumers — the ranker below and
+    // the need score beneath it — so the number that RAISES the moment and the
+    // number that decides whether it speaks are about the same hole.
+    const hole = matchFundamental(p.fundamentalId, student?.signals ?? [])
+      ?? (tactic ? matchTacticPattern(tactic as import('../types/tacticTypes').TacticPatternType, student?.signals ?? []) : null)
       ?? posedTags.map((t) => matchTag(t, student?.signals ?? [])).find((m) => m) ?? null;
     boostByPly.set(p.ply, studentMomentBoost({
       hole,
@@ -289,6 +302,12 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
       // through `posedTags` → `matchTag`, which lands on the coach's own
       // misconception captures — a route that needed no new table.
       clauseKind: null,
+      // THE EXACT HOLE THIS MOVE PROVED — see `SelectorPly.fundamentalId`. This
+      // is the route that ties the Fundamentals tab to the decider: the tab
+      // counts `misconceptionTags.fundamentalId`, the spine aggregates the same
+      // field into `fundamental:<id>` rows, and this is where that record
+      // reaches the computer that decides whether the ply speaks.
+      fundamentalId: p.fundamentalId ?? null,
       onThread: onThread.has(p.ply),
       posedTags: posedTags as readonly import('../data/misconceptionTags').MisconceptionTagId[],
       playedCleanly: movePlayedCleanly(cpLoss),

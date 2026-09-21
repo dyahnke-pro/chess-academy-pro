@@ -120,6 +120,18 @@ export interface FactBundle {
    *  the kind of change that passes every unit test. A surface with no scale of
    *  its own omits this and gets the review ranker, unchanged. */
   order?: { rank: ReadonlyMap<string, number>; bar: number };
+  /** HOLES THE SURFACE ALREADY MATCHED, per fact — handed to the review ranker
+   *  in step 5 (`rankFacets`'s `matched`). Ignored when the surface supplies
+   *  its own `order`, because it has then already applied its own boost.
+   *
+   *  It exists so a fact whose hole the surface knows EXACTLY is not re-joined
+   *  here by its coarse tag. Review's `[principle]` facet is the case: the
+   *  attributor proved which fundamental the move broke, and the tag route
+   *  answers with the leader of the whole positional bucket instead. Same
+   *  reasoning as `StudentContext.momentBoost` — the facts are prose by the
+   *  time they arrive, so the match belongs upstream and only its result
+   *  travels. */
+  holeByFact?: ReadonlyMap<string, WeaknessSignal | null>;
 }
 
 /** What the student should have DONE differently in their head. Optional: a
@@ -250,7 +262,7 @@ export function decide(
   const order = bundle.order;
   const spoken = order
     ? [...selection.spoken].sort((x, y) => (order.rank.get(y) ?? 0) - (order.rank.get(x) ?? 0))
-    : rankFacets(selection.spoken, student.weaknesses);
+    : rankFacets(selection.spoken, student.weaknesses, bundle.holeByFact);
   let methodSpoke = false;
   // 6 — THE METHOD, last. Ranked lowest so it CLOSES the beat: the board fact,
   // then the principle it broke, then the habit that finds it next time.

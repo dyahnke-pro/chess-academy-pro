@@ -177,6 +177,24 @@ describe('deep threat AGAINST the student (#5c)', () => {
     // …and the sentence BEFORE it is still past-tensed, so this is a per-sentence
     // register split and not the past-tensing having been switched off wholesale.
     expect(oppSeg?.narration ?? '').toMatch(/You were playing into/);
+
+    // 🔴 PRESENT TENSE, AND DELIBERATELY SO — this assertion used to read
+    // `/Watch what they were building/` and had been RED since 2026-09-16,
+    // when `PRESCRIPTIVE` (coachFeatureService) stopped past-tensing plan
+    // sentences. That rule names THIS EXACT STRING in its own comment as the
+    // example of the bug it fixes: registers do not take turns inside one
+    // narration, so the decision is made per SENTENCE, and a sentence telling
+    // the student what to DO stays in the present. Past-tensing it produced
+    // "don't play a single attacking move until it was fixed".
+    //
+    // So the test was pinning a contract the product had deliberately
+    // replaced — the third stale-contract gate found this week. Corrected
+    // rather than annotated (the Lake Butler rule): the old expectation is
+    // DELETED, not left beside the new one.
+    expect(oppSeg?.narration ?? '').toMatch(/Watch what they're building/);
+    // …and the surrounding narration IS still past-tensed, so this is a
+    // per-sentence carve-out and not the register collapsing.
+    expect(oppSeg?.narration ?? '').toMatch(/\bwere\b|\bwas\b/);
     // The line is rendered ply-by-ply (Bxf2 appears in the narrated run).
     expect(oppSeg?.narration ?? '').toMatch(/Bxf2/);
     // The DEFENSE from the stored analysis (the student's next best move).

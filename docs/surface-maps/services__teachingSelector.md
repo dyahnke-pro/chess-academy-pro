@@ -4,11 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**403 lines · 17 exports · 7 importers · 2 tests · 3 audits**
+**422 lines · 17 exports · 7 importers · 2 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:1916) — names `Moment`
+- **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:1974) — names `Moment`
+- **The standard post-deploy ritual** (CLAUDE.md:5902) — names `Moment`
 
 ## Who calls in
 
@@ -54,10 +55,10 @@
 
 ### `selectTeaching` (function) — 14 call sites
 - `src/hooks/usePhaseNarration.ts:510`
-- `src/services/coachFeatureService.ts:1163`
+- `src/services/coachFeatureService.ts:1265`
 - `src/services/needCoverage.report.test.ts:60`
 - `src/services/openingGenerator.ts:516`
-- `src/services/openingGenerator.ts:2718`
+- `src/services/openingGenerator.ts:2722`
 - `src/services/teachingSelector.test.ts:39`
 - `src/services/teachingSelector.test.ts:51`
 - `src/services/teachingSelector.test.ts:66`
@@ -73,7 +74,7 @@
 
 ### `renderThesis` (function) — 7 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1244`
+- `src/components/Coach/CoachGameReview.tsx:1424`
 - `src/hooks/usePhaseNarration.ts:511`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
@@ -92,14 +93,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1242`
+- `src/components/Coach/CoachGameReview.tsx:1422`
 
 ### `TreeTeaching` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `summarizeTeaching` (function) — 3 call sites
 - `src/services/openingGenerator.ts:516`
-- `src/services/openingGenerator.ts:2719`
+- `src/services/openingGenerator.ts:2723`
 - `src/services/teachingSelector.test.ts:102`
 
 ## Tests
@@ -109,6 +110,11 @@
 
 ## Audits that reach it
 
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
 - `scripts/audit-coach-weakness-metrics-grounding.mjs`
 - `scripts/audit-model-games.mjs`
+- `scripts/audit-review-overhaul-prod.mjs`
 - `scripts/audit-teach-on-topic-prod.mjs`

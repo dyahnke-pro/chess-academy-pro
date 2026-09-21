@@ -54,6 +54,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ## 5. Bucket A — the loop cannot close
 - ✅ CLOSED: #77 click-to-move, grey teaches and feeds the ranker, one computer both directions, the endgame zero was false, provenance, the `prompted` flag; item 6 deleted as a wrong bullet
 - ✅ A-adjacent: the guessed seat, the walk budget constant
+- ✅ **A-TIE (#100) — the heat map and the decider are ONE number.** `matchFundamental` (the exact join) had ONE production caller — the *"again"* SENTENCE — so the coach could say "you left a piece loose again" while the computer deciding whether that moment was worth saying had matched the coarse positional BUCKET. Now: `fundamentalId` required on `NeedPlyInput`, chain reordered precise-before-coarse (coarse demoted, not deleted — raise-only), attribution hoisted ahead of the selector so one attribution feeds need + ranker + narration, and `FactBundle.holeByFact` lets the `[principle]` facet rank on the exact fundamental. Gate `fundamentalReachesDecider.test.ts`, negative-controlled both ways
+- 🟠 **A-TIE OWED — the LIVE lane (Learn) still passes `fundamentalId: null`.** The attributor needs the pre-move best move as SAN (:9885) AND the after-move read that decides `flagged` (`mid`, :9830) — both ~1,300 lines after the composer at :8603. `studentBest` there is the position after the COACH'S reply, a different board. So it is moving the composer later in the turn, not a one-line hoist; it belongs with the three-surface parity sweep. Never close it by attributing a second time — a live attribution without `bestSan` would disagree with the sentence Learn speaks at :9907
 
 ## 6. Bucket B — the instruments are not believable
 - ✅ 7c dead-testid gate

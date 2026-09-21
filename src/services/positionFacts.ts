@@ -544,6 +544,26 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // known hole on a familiar line is silent.
       clauseKind: needFor.clauseKind,
       conceptId: needFor.conceptId,
+      /**
+       * 🚨 HONESTLY NULL, AND THIS IS A NAMED GAP, NOT A DEFAULT (2026-09-21).
+       *
+       * Review attributes the fundamental for every student ply BEFORE its
+       * selector runs (`coachFeatureService.attributeGameFundamentals`), so on
+       * that surface the exact hole this move broke reaches the need score and
+       * the ranker. The live lane cannot do the same YET, and the blocker is
+       * concrete rather than architectural: `attributePrinciples` needs the
+       * engine's best move as SAN at the PRE-move position, and Learn does not
+       * resolve one until `CoachTeachPage.tsx:9885` — about 1,300 lines after
+       * this composer runs in the same turn. The pre-move read itself
+       * (`preStudentRead`, :8151) IS in scope here, so closing this is a matter
+       * of hoisting that resolution, not of new computation.
+       *
+       * Passing `null` rather than inventing a second, weaker attribution is
+       * the point: a live attribution without `bestSan` would disagree with the
+       * sentence Learn actually speaks at :9907, which is the exact failure
+       * this whole wire exists to remove.
+       */
+      fundamentalId: null,
       // THE HEAT MAP ON THE LIVE LANE. Tags and guard travel together — see
       // `posed` on the input.
       posedTags: posed.tags,

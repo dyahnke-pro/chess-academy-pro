@@ -53,67 +53,36 @@ vi.mock('./stockfishEngine', async () => {
 import { generateReviewNarration } from './coachFeatureService';
 import type { ReviewMoveInput } from './coachFeatureService';
 import { detectTactics } from './tacticsDetector';
+import { tacticWinsMaterial } from './pvPlayback';
 import modelGamesRaw from '../data/model-games.json';
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
-/** Tactic-MEANINGFULNESS, re-derived independently of the narration pipeline
- *  (David 2026-07-23: "how are false claims leaking?? we had that locked
- *  down!!"). detectTactics reports a bare geometric alignment; a NAMED tactic
- *  in the spoken line must actually threaten to WIN material, or it's the
- *  "Bg7 lands a skewer" over-claim. Mirrors the computePlyFacts gate so a
- *  legit pin/fork/skewer passes and a meaningless one is caught — across ALL
- *  narration paths, not just the one that was fixed. */
-function tacticIsMeaningful(board: InstanceType<typeof Chess>, t: { type: string; involvedSquares: string[] }): boolean {
-  const val = (sq: string): number => PIECE_PTS[board.get(sq as Parameters<typeof board.get>[0])?.type ?? ''] ?? 0;
-  const attackerVal = val(t.involvedSquares[0]);
-  const winnable = (sq: string): boolean => {
-    const p = board.get(sq as Parameters<typeof board.get>[0]);
-    if (!p) return false;
-    const undefended = board.attackers(sq as Parameters<typeof board.attackers>[0], p.color).length === 0;
-    return (PIECE_PTS[p.type] ?? 0) > attackerVal || undefended;
-  };
-  if (t.type === 'fork') {
-    // 🔴 THIS BRANCH USED TO READ `.filter(winnable).length >= 2` FULL STOP,
-    // and it false-failed two GENUINE royal forks (2026-09-21):
-    //   mg-lichess-8I2YuiTC#50  Qxf2+ — forks the king and the UNDEFENDED g3
-    //     knight; White's only legal replies are Kh2/Kh1.
-    //   mg-kasparov-karpov-wch85#80  Re1+ — forks the king and the UNDEFENDED
-    //     d1 knight; White's only legal replies are Nf1/Bf1.
-    // Both were verified on the board by hand before this was touched, because
-    // loosening a board-truth gate to make it pass is how a real defect ships.
-    //
-    // A king is never "winnable" (worth 0, and always covered), so a royal fork
-    // could never reach two. The check FORCES the king to move, so ONE other
-    // winnable target falls — the same rule `pvPlayback` adopted 2026-09-14
-    // when the textbook Nc7+ king-and-rook fork was being dropped.
-    const targets = t.involvedSquares.slice(1);
-    const royal = targets.some((sq) => board.get(sq as Parameters<typeof board.get>[0])?.type === 'k');
-    const winnableCount = targets.filter(winnable).length;
-    if (!(royal ? winnableCount >= 1 : winnableCount >= 2)) return false;
-    // …AND THE AGENT MUST SURVIVE. Adding the royal rule alone would have
-    // re-admitted the real defect this sweep had just caught —
-    // mg-lichess-8I2YuiTC#72 Qf4+, which "forks" bishop, queen and king while
-    // the forked QUEEN answers Qxf4. A forked piece that can take the forker
-    // was never forked. Decided by LEGALITY, not `attackers()` geometry: on the
-    // Qxf2+ position chess.js reports the white king as an attacker of f2 even
-    // though Kxf2 is illegal, so a geometric test would kill that real fork.
-    // This is deliberately an INDEPENDENT restatement of the product's rule,
-    // not an import of it — a sweep that asks the prose's own computer whether
-    // the prose is true cannot fail.
-    const agent = t.involvedSquares[0];
-    const agentColor = board.get(agent as Parameters<typeof board.get>[0])?.color;
-    const defended = agentColor
-      ? board.attackers(agent as Parameters<typeof board.attackers>[0], agentColor).length > 0
-      : false;
-    const takenForFree = board.moves({ verbose: true }).some(
-      (m) => m.to === agent && attackerVal - (defended ? (PIECE_PTS[m.piece] ?? 0) : 0) >= 0,
-    );
-    return !takenForFree;
-  }
-  if (t.type === 'skewer') return winnable(t.involvedSquares[1]) || board.get(t.involvedSquares[2] as Parameters<typeof board.get>[0])?.type === 'k';
-  return true; // pin — the immobilization against a more valuable piece is real
-}
+/**
+ * 🔴 THIS WAS A SECOND, HAND-WRITTEN COPY OF THE PRODUCT'S RULE, AND IT HAD
+ * DRIFTED (found 2026-09-21). It is DELETED, not annotated.
+ *
+ * The scanner defined its own "is this fork/skewer meaningful" and the real one
+ * lives in `pvPlayback` beside the code that emits "lands a fork". Two
+ * corrections were made there and never here — the ROYAL FORK rule (2026-09-14:
+ * one target being the KING makes one other winnable target enough) and
+ * `winnableBy`'s king rule (2026-09-15: a king is never WON) — so the sweep
+ * failed three REAL royal forks as "empty tactics" (Re1+, Qxf2+, Qf4+, every
+ * one a check) and blamed the product for a rule it had not been told about.
+ * The copy had even half-migrated: it carried the royal carve-out on the SKEWER
+ * branch and missed it on the fork.
+ *
+ * THE SCANNER'S INDEPENDENCE IS NOT LOST BY SHARING THIS. What it checks is
+ * that the PROSE matches the board: it still re-derives the tactic from
+ * `detectTactics(fenAfter)` itself and still requires the claimed motif to be
+ * made by the piece on the square the mover landed on — which is where a
+ * narration can lie. "What counts as a winning fork" is a product judgement,
+ * and a hand-copy of it never bought independence, only drift.
+ */
+const tacticIsMeaningful = (
+  board: InstanceType<typeof Chess>,
+  t: { type: string; involvedSquares: string[] },
+): boolean => tacticWinsMaterial(board, t);
 const PIECE_WORDS = 'pawn|knight|bishop|rook|queen|king';
 const WANT: Record<string, string> = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
 const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';

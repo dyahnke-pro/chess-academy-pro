@@ -52,7 +52,7 @@ import { whyItFailed } from './whyItFailed';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
-import { matchTag, type WeaknessSignal } from './weaknessSignal';
+import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
@@ -715,6 +715,93 @@ function uciToSanAt(uci: string | null, fenBefore: string): string | null {
 }
 
 /**
+ * THE "BETTER MOVE" SAN, in ONE place.
+ *
+ * Defense-in-depth for games analysed BEFORE the source fix: never name the
+ * move that was actually played as the "better" move. If the stored best move
+ * resolves to the played SAN, treat it as absent so the narration uses its
+ * no-alternative phrasing (or stays silent) instead of the incoherent
+ * "<played move> was stronger" (David 2026-06-11).
+ *
+ * Extracted 2026-09-21 because it now has TWO readers — the segment loop's
+ * prose and the attribution pre-pass below — and a derivation with two hand
+ * copies is the drifting constant the rot rule bans. The attribution and the
+ * sentence that speaks it must be about the same "better move" or the coach
+ * explains one move and names another.
+ */
+function stripMoveGlyphs(san: string): string { return san.replace(/[+#!?]+$/, ''); }
+
+function betterMoveSan(bestMove: string | null | undefined, playedSan: string, fenBefore: string): string | null {
+  const raw = uciToSanAt(bestMove ?? null, fenBefore);
+  return raw && stripMoveGlyphs(raw) !== stripMoveGlyphs(playedSan) ? raw : null;
+}
+
+/**
+ * THE FUNDAMENTAL EACH STUDENT PLY BROKE — attributed ONCE, for the whole game,
+ * before anything consumes it.
+ *
+ * 🔒 WHY A PRE-PASS AND NOT A CALL INSIDE THE SEGMENT LOOP (2026-09-21). The
+ * attribution used to live in the loop, which runs AFTER `selectTeaching` — so
+ * the two computers that decide whether a ply speaks (`computeNeed`) and how
+ * much the moment is worth (`studentMomentBoost`) had already run, and neither
+ * could ever see the fundamental. The coach could therefore say "you left a
+ * piece loose AGAIN" — `fundamentalRecurrence` joins EXACTLY, through
+ * `matchFundamental` — while the decider had matched the coarse positional
+ * bucket and ranked the moment on some unrelated structural note. One sentence,
+ * two joins, two different holes.
+ *
+ * Hoisting it (rather than attributing a second time in the selector) is what
+ * keeps that impossible: the selector has no `bestSan`, so a second attribution
+ * there would be a WEAKER one that could legitimately disagree with the
+ * sentence. One attribution, three consumers — the need score, the ranker, and
+ * the narration.
+ *
+ * Pure: chess.js + the persisted engine record. No I/O.
+ */
+function attributeGameFundamentals(
+  moves: ReviewMoveInput[],
+  fenChain: { fenBefore: string; fenAfter: string }[],
+  usable: number,
+  playerColor: 'white' | 'black' | null,
+  sansForRun: readonly string[],
+): Map<number, { fundamentals: PrincipleAttribution[]; why: string[] }> {
+  const out = new Map<number, { fundamentals: PrincipleAttribution[]; why: string[] }>();
+  for (let i = 0; i < usable; i++) {
+    const m = moves[i];
+    const fenPair = fenChain[i];
+    const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
+    const isStudent = playerColor ? moverColor === playerColor : !m.isCoachMove;
+    if (!isStudent) { out.set(m.ply, { fundamentals: [], why: [] }); continue; }
+    const bestMoveSan = betterMoveSan(m.bestMove, m.san, fenPair.fenBefore);
+    // WHY IT DECLINED (2026-09-20). A flagged student ply that led with the
+    // classification label instead of the fundamental was undiagnosable from
+    // the tape — the audit could say FUNDLEAD failed and never say why. That is
+    // the silent null the `why` sink exists to abolish.
+    const why: string[] = [];
+    let fundamentals: PrincipleAttribution[] = [];
+    try {
+      fundamentals = attributePrinciples({
+        historySans: sansForRun.slice(0, m.ply),
+        bestSan: bestMoveSan,
+        classification: m.classification,
+        pvAfterPlayed: m.pv?.afterPlayed?.length ? pvUciToSan(fenPair.fenAfter, m.pv.afterPlayed) : undefined,
+        pvAfterBest: m.pv?.afterBest?.length && bestMoveSan
+          ? pvUciToSan((() => { const c = new Chess(fenPair.fenBefore); try { c.move(bestMoveSan); } catch { return fenPair.fenBefore; } return c.fen(); })(), m.pv.afterBest)
+          : undefined,
+        // Persisted engine eval, normalised to the MOVER's POV (stored
+        // white-POV) — powers the eval/PV-gated detectors (overvalued attack,
+        // poisoned pawn, botched conversion). Absent on games analysed before
+        // the fix.
+        evalBefore: typeof m.preMoveEval === 'number' ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : undefined,
+        evalAfterPlayed: typeof m.evaluation === 'number' ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : undefined,
+      }, why);
+    } catch { fundamentals = []; }
+    out.set(m.ply, { fundamentals, why });
+  }
+  return out;
+}
+
+/**
  * buildReviewCitations — extract the student's flagged moves as a structured,
  * grounded list (G0). The recap phrases from these and the board previews
  * render from these; nothing about a cited move comes from the LLM. Returned
@@ -1137,6 +1224,14 @@ export function buildReviewSegments(
     : new Map<number, { text: string }>();
   const fenChain = buildFenChain(moves);
   const usable = fenChain.length;
+  // Hoisted above the selector (2026-09-21): the attribution pre-pass needs the
+  // run's SANs, and the selector needs the pre-pass. See
+  // `attributeGameFundamentals` for why the attribution moved ahead of the
+  // segment loop.
+  const sansForRun = moves.slice(0, usable).map((mm) => mm.san);
+  /** The fundamental each student ply broke — attributed ONCE, consumed by the
+   *  need score, the ranker and the narration. */
+  const attrByPly = attributeGameFundamentals(moves, fenChain, usable, playerColor ?? null, sansForRun);
   // THE ONE SELECTOR's student term (N2): need per student ply, computed once
   // for the game from the student's own data (cold → the rating prior). This is
   // what retires R2 ("teach every silent opening move"): a book ply speaks only
@@ -1161,7 +1256,10 @@ export function buildReviewSegments(
           // than COLD_START_GAMES games), where every data term is zero and the
           // prior decides regardless. The warm path below goes through
           // `selectTeaching`, which computes the ply's concept properly.
-          .map((mv) => [mv.ply, computeNeed({ ply: mv.ply, studentMove: true, clauseKind: null }, studentNeed ?? coldStudent(rating ?? DEFAULT_STUDENT_RATING))] as const)) }
+          // `clauseKind` and `fundamentalId` are both honestly null on THIS
+          // branch, not defaulted: it is the cold-start fast path, where every
+          // data term is zero and the prior decides regardless.
+          .map((mv) => [mv.ply, computeNeed({ ply: mv.ply, studentMove: true, clauseKind: null, fundamentalId: null }, studentNeed ?? coldStudent(rating ?? DEFAULT_STUDENT_RATING))] as const)) }
       : (() => {
         try {
           return selectTeaching({
@@ -1169,6 +1267,12 @@ export function buildReviewSegments(
               ply: mv.ply, san: mv.san, fenBefore: fenChain[i].fenBefore, fenAfter: fenChain[i].fenAfter,
               playerColor: mv.ply % 2 === 1 ? 'white' as const : 'black' as const,
               evalBefore: mv.preMoveEval, evalAfter: mv.evaluation, classification: mv.classification,
+              // THE TIE: the fundamental the attributor proved on this ply, the
+              // same one the narration will speak. `matchFundamental` joins it
+              // to the student's own `fundamental:<id>` rows — the very rows the
+              // Fundamentals tab counts — so the heat map the student SEES and
+              // the need the decider COMPUTES are one number.
+              fundamentalId: attrByPly.get(mv.ply)?.fundamentals[0]?.id ?? null,
             })),
             studentColor: playerColor, rating, kind: 'game', surface: 'review', student: studentNeed,
           });
@@ -1386,7 +1490,6 @@ export function buildReviewSegments(
   // FORCED-SEQUENCE framing (the forcing-move / "calculate to the end" concept):
   // if the game ends in a forced checking run, frame it at its first move so the
   // student learns to SEE a forced finish, then the walk plays it out. Board-true.
-  const sansForRun = moves.slice(0, usable).map((mm) => mm.san);
   const forcedRun = detectForcedMatingSequence(sansForRun);
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   // Prev-capture context so the PlyFacts material calc can tell a RECAPTURE
@@ -1429,40 +1532,19 @@ export function buildReviewSegments(
         studentColorWB: studentColorWB ?? undefined,
       });
     };
-    const rawBestSan = uciToSanAt(m.bestMove, fenPair.fenBefore);
-    // Defense-in-depth for games analysed BEFORE the source fix: never name the
-    // move that was actually played as the "better" move. If the stored best
-    // move resolves to the played SAN, treat it as absent so the narration uses
-    // its no-alternative phrasing (or stays silent) instead of the incoherent
-    // "<played move> was stronger" (David 2026-06-11).
-    const stripGlyphs = (s: string): string => s.replace(/[+#!?]+$/, '');
-    const bestMoveSan = rawBestSan && stripGlyphs(rawBestSan) !== stripGlyphs(m.san) ? rawBestSan : null;
+    const bestMoveSan = betterMoveSan(m.bestMove, m.san, fenPair.fenBefore);
     // THE FUNDAMENTAL THIS MOVE NEGLECTED (David 2026-09-05) — attributed on
     // the board, pure and deterministic, only for the STUDENT's flagged moves.
-    // Persisted engine lines corroborate the spoken evidence when present.
+    //
+    // READ, not recomputed: `attributeGameFundamentals` ran this before the
+    // selector so the need score and the ranker could see it too (2026-09-21).
+    // Attributing again here would be a second copy of the same derivation —
+    // and the whole point is that the sentence and the decision are about the
+    // SAME hole.
     const isStudentForAttr = playerColor ? moverColor === playerColor : !m.isCoachMove;
-    // WHY IT DECLINED, on the REVIEW path too (2026-09-20). The sweep already
-    // emits this; review did not, so a flagged student ply that led with the
-    // classification label instead of the fundamental was undiagnosable from
-    // the tape — the audit could say FUNDLEAD failed and never say why. That
-    // is the silent null the `why` sink exists to abolish, one surface over.
-    const attrWhy: string[] = [];
-    const fundamentals: PrincipleAttribution[] = isStudentForAttr
-      ? attributePrinciples({
-          historySans: sansForRun.slice(0, m.ply),
-          bestSan: bestMoveSan,
-          classification: m.classification,
-          pvAfterPlayed: m.pv?.afterPlayed?.length ? pvUciToSan(fenPair.fenAfter, m.pv.afterPlayed) : undefined,
-          pvAfterBest: m.pv?.afterBest?.length && bestMoveSan
-            ? pvUciToSan(new Chess(fenPair.fenBefore).move(bestMoveSan) ? (() => { const c = new Chess(fenPair.fenBefore); c.move(bestMoveSan); return c.fen(); })() : fenPair.fenBefore, m.pv.afterBest)
-            : undefined,
-          // Persisted engine eval, normalised to the MOVER's POV (stored white-POV)
-          // — powers the eval/PV-gated detectors (overvalued attack, poisoned
-          // pawn, botched conversion). Absent on games analysed before the fix.
-          evalBefore: typeof m.preMoveEval === 'number' ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : undefined,
-          evalAfterPlayed: typeof m.evaluation === 'number' ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : undefined,
-        }, attrWhy)
-      : [];
+    const attrHere = attrByPly.get(m.ply);
+    const attrWhy: string[] = attrHere?.why ?? [];
+    const fundamentals: PrincipleAttribution[] = attrHere?.fundamentals ?? [];
     const fundamentalLed = fundamentals.length > 0;
     // Emitted ONCE per flagged student ply that got NOTHING — a named ply has
     // nothing to explain, and logging every ply would drown the stream it is
@@ -1803,7 +1885,25 @@ export function buildReviewSegments(
           // narrow gate it was tuned with and says so here.
           need: null,
         },
-        { facts: kept, squares: facetSquares, incoming: facetIncoming },
+        {
+          facts: kept, squares: facetSquares, incoming: facetIncoming,
+          // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
+          // `[principle]` facet IS the attributed fundamental, so ranking it by
+          // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse
+          // bucket a question this ply already has an exact answer to. Every
+          // other facet is left to the tag join, which is the right route for
+          // it — only this one carries an id.
+          //
+          // `null` when the attributor named a fundamental the student has NO
+          // record of: that is GREY, and grey is not a hole. It must not fall
+          // back to the bucket, or "never asked" would borrow an unrelated
+          // weakness's weight.
+          holeByFact: new Map(kept
+            .filter((f) => f.startsWith('[principle] '))
+            .map((f) => [f, fundamentals[0]
+              ? matchFundamental(fundamentals[0].id, studentWeaknesses ?? [])
+              : null] as const)),
+        },
         // REVIEW IS A WALK: the student asked to be taken through the game, so a
         // quiet moment is a shorter beat, never a skipped one. Gating review on
         // the live-surface importance check cut this game to 6 narrated plies.
