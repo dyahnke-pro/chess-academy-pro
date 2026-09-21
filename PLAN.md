@@ -2738,12 +2738,22 @@ from the entry chunk's size.
    NB the cache is NOT the problem: it eliminates the download, never the
    parse/execute, which happens every cold start regardless of byte source. The
    likelier cost is HEAP, which is what Jetsam-killed the app before.
-4. 🟠 **SHOULD THE 1,282 ARCHIVED ANCHORED DANYA NOTES COME BACK?**
-   `data/archive/corpus-anchored/naroditsky-anchored.json` — 1,282 notes, ALL
-   position-keyed, sitting unused since 2026-08-26, while the app shipped 10,022
-   un-positioned ones at boot. They are the only danya notes that could ever
-   serve a play surface. Deliberately NOT done unasked — the archiving was
-   David's call when voiced became the sole exact-position source.
+4. ✅ **THE 1,282 ARCHIVED ANCHORED DANYA NOTES STAY ARCHIVED — DECIDED, NOT
+   OPEN (David 2026-09-20: "we already decided on danya").** The question that
+   stood here is DELETED rather than annotated, because asking it was the
+   defect: it re-opened a call David had already made on 2026-08-26, which
+   CLAUDE.md locks outright — floating notes are fenced to tactics + endgame,
+   and **voiced is the SOLE exact-position source on the play surfaces**.
+   `data/archive/corpus-anchored/naroditsky-anchored.json` is where those notes
+   belong. The reasoning behind the call has not changed: a farmed anchored note
+   is not board-truth-verified, and the whole point of the 2026-08-26 fence was
+   that silence beats a note about a different board.
+   **So per-ply coverage grows by growing the VOICED corpus** (the pipeline in
+   `docs/voiced-narration-pipeline.md`), never by un-archiving these. A future
+   session that rediscovers 1,282 unused position-keyed notes has rediscovered
+   the fence, not a bug — the same way two sessions "discovered" they could
+   multiply coverage via `teachingNoteForBoard`.
+
 5. 🟡 **57,204 OF 65,712 CORPUS NOTES CARRY NO POSITION.** Four creators
    (gothamchess, hikaru, imrosen, magnuscarlsen) are 0% positioned. They are
    LAZILY FETCHED, so they cost ZERO boot — pruning them is a memory/parse

@@ -91,7 +91,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🔴 0b. Review audit 22/24 — the same two rows
 - 🔴 2. The one SW check a single deploy cannot make — hold a session across deploy N → N+1
 - 🟠 3. Measure the 8.2 MB entry chunk on a device (parse time, heap) before touching it — **David's call after the number**
-- 🟠 4. Should the 1,282 archived anchored danya notes come back? — **David's call**
+- ✅ 4. The 1,282 archived anchored danya notes STAY archived — decided 2026-08-26,
+  re-confirmed by David 2026-09-20. Voiced is the sole exact-position source; coverage
+  grows by growing the voiced corpus. Not an open call — asking again was the defect.
 - 🟡 5. 57,204 un-positioned notes — a memory decision, never a boot one; never prune without measuring both ways
 - 🟡 6. A cold first teaching reply draws on less corpus — watch it in the Learn audit
 - ✅ 7. The corpus gates are even · ✅ 8. `BuildVersionWidget.test`
