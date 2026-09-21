@@ -22,7 +22,11 @@ describe('composeCallbackLine', () => {
       [{ createdAt: NOW - 2 * DAY, counted: true }, { createdAt: NOW, counted: true }],
       NOW,
     );
-    expect(line).toContain("We've seen this before");
+    // 🔴 WAS "We've seen this before" — banned by the locked 2026-08-28
+    // perspective rule (we/our/us is the whose-piece ambiguity source). The
+    // migration changed the prose and missed this test; corrected, not annotated.
+    expect(line).toContain("You've seen this before");
+    expect(line, 'we/our/us is banned').not.toMatch(/\b(we|our|us)\b/i);
     expect(line).toContain('the second time');
     expect(line).toContain('2 days ago');
   });

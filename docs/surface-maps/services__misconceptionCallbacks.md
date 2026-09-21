@@ -28,10 +28,10 @@
 - `src/services/misconceptionCallbacks.test.ts:15`
 - `src/services/misconceptionCallbacks.test.ts:16`
 - `src/services/misconceptionCallbacks.test.ts:20`
-- `src/services/misconceptionCallbacks.test.ts:31`
-- `src/services/misconceptionCallbacks.test.ts:45`
-- `src/services/misconceptionCallbacks.test.ts:55`
-- `src/services/misconceptionCallbacks.test.ts:64`
+- `src/services/misconceptionCallbacks.test.ts:35`
+- `src/services/misconceptionCallbacks.test.ts:49`
+- `src/services/misconceptionCallbacks.test.ts:59`
+- `src/services/misconceptionCallbacks.test.ts:68`
 
 ### `buildMisconceptionCallback` (function) — 2 call sites
 - `src/components/Coach/CoachGameReview.tsx:2196`
@@ -67,15 +67,15 @@
 ### `recurrenceFor` (function) — 11 call sites
 - `src/services/coachFeatureService.ts:1534`
 - `src/services/fundamentalRecurrence.ts:47`
-- `src/services/misconceptionCallbacks.test.ts:78`
-- `src/services/misconceptionCallbacks.test.ts:81`
 - `src/services/misconceptionCallbacks.test.ts:82`
 - `src/services/misconceptionCallbacks.test.ts:85`
-- `src/services/misconceptionCallbacks.test.ts:88`
+- `src/services/misconceptionCallbacks.test.ts:86`
 - `src/services/misconceptionCallbacks.test.ts:89`
-- `src/services/misconceptionCallbacks.test.ts:90`
-- `src/services/misconceptionCallbacks.test.ts:91`
+- `src/services/misconceptionCallbacks.test.ts:92`
+- `src/services/misconceptionCallbacks.test.ts:93`
 - `src/services/misconceptionCallbacks.test.ts:94`
+- `src/services/misconceptionCallbacks.test.ts:95`
+- `src/services/misconceptionCallbacks.test.ts:98`
 
 ### `RecurrenceRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -83,9 +83,9 @@
 ### `recurrenceLine` (function) — 5 call sites
 - `src/services/coachFeatureService.ts:1537`
 - `src/services/fundamentalRecurrence.ts:50`
-- `src/services/misconceptionCallbacks.test.ts:95`
-- `src/services/misconceptionCallbacks.test.ts:96`
-- `src/services/misconceptionCallbacks.test.ts:97`
+- `src/services/misconceptionCallbacks.test.ts:99`
+- `src/services/misconceptionCallbacks.test.ts:100`
+- `src/services/misconceptionCallbacks.test.ts:101`
 
 ## Tests
 
