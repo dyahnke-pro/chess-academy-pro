@@ -128,7 +128,7 @@ const SCENARIO_TEMPLATES: Record<Scenario, string[]> = {
     "Of course! Take it back. Let's think through this position together.",
   ],
   takeback_refused: [
-    "I think it's better to play on and learn from it. We'll review after the game!",
+    "I think it's better to play on and learn from it. Review it with me after the game!",
   ],
   takeback_reluctant: [
     "Okay, I'll let you take that one back. But try to commit to your moves — it builds calculation skills!",

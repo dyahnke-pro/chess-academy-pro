@@ -150,6 +150,6 @@ export function curriculumArcLine(rec: CoachCurriculumRecord | null): string {
   const active = activeCurriculumItem(rec);
   const next = nextCurriculumItem(rec);
   if (!active) return '';
-  if (!next) return `We're drilling ${active.label.toLowerCase()} until it's shut.`;
+  if (!next) return `You are drilling ${active.label.toLowerCase()} until it's shut.`;
   return `The plan: close out ${active.label.toLowerCase()}, then move to ${next.label.toLowerCase()}.`;
 }

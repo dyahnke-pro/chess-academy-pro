@@ -4,12 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**886 lines · 3 exports · 3 importers · 1 tests · 1 audits**
+**886 lines · 3 exports · 3 importers · 1 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:4812) — names `usePhaseNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:5694) — names `usePhaseNarration`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3869) — names `usePhaseNarration`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5012) — names `usePhaseNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:5915) — names `usePhaseNarration`
 
 ## Who calls in
 
@@ -27,7 +28,7 @@
 
 ### `usePhaseNarration` (function) — 5 call sites
 - `src/components/Coach/CoachGamePage.tsx:1766`
-- `src/components/Coach/CoachTeachPage.tsx:6990`
+- `src/components/Coach/CoachTeachPage.tsx:7017`
 - `src/hooks/usePhaseNarration.test.ts:120`
 - `src/hooks/usePhaseNarration.test.ts:323`
 - `src/hooks/usePhaseNarration.test.ts:339`
@@ -38,4 +39,9 @@
 
 ## Audits that reach it
 
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+- `scripts/audit-concept-gameplay-prod.mjs`
 - `scripts/audit-learn-full-game.mjs`

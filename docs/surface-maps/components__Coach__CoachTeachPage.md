@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**14074 lines · 3 exports · 5 importers · 6 tests · 10 audits**
+**14107 lines · 3 exports · 5 importers · 6 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:1193) — names `CoachTeachPage`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2925) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:5680) — names `CoachTeachPage`
+- **G6. Arrows on every step-by-step coach move. No asking.** (CLAUDE.md:1230) — names `CoachTeachPage`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3010) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:5899) — names `CoachTeachPage`
 
 ## Who calls in
 
@@ -42,6 +42,10 @@
 - `src/components/Coach/CoachTeachPage.test.tsx`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-tab-prod.mjs`
 - `scripts/audit-coach-tactical-awareness.mjs`

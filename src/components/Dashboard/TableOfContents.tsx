@@ -154,7 +154,7 @@ const SECTIONS: TocSection[] = [
       // which opens straight to the books — the master titles plus our own
       // doctrine, The Philosophy of a General, live on the same shelf.
       { label: 'The Coaches Library', route: '/coach/library', desc: "The masters' own books plus our own doctrine, read aloud with live playable boards." },
-      { label: 'The Philosophy of a General', route: '/academy', desc: 'Our board-free doctrine, read aloud as an audiobook.' },
+      { label: 'The Philosophy of a General', route: '/academy', desc: 'The academy\'s board-free doctrine, read aloud as an audiobook.' },
     ],
   },
   {

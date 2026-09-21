@@ -113,7 +113,7 @@ function composeFrom(label: string, occurrences: number, lastPriorAt: number, no
   // NAME THE GAME when we can; omit the clause entirely when we cannot. Naming
   // the wrong player is worse than naming none (empty > generic > invented).
   const who = prior?.opponentName ? ` against ${prior.opponentName}` : '';
-  return `We've seen this before — ${label.toLowerCase()}. That's the ${ordinal(occurrences)} time this pattern has come up; the last one was${who} ${recencyPhrase(lastPriorAt, now)}.`;
+  return `You have seen this before — ${label.toLowerCase()}. That's the ${ordinal(occurrences)} time this pattern has come up; the last one was${who} ${recencyPhrase(lastPriorAt, now)}.`;
 }
 
 /** Cluster ids whose label is a PLACEHOLDER, not a pattern. Calling back on

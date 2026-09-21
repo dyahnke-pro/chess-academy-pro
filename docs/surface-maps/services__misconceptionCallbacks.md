@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5724) — names `misconceptionCallbacks`
+- **The standard post-deploy ritual** (CLAUDE.md:5945) — names `misconceptionCallbacks`
 
 ## Who calls in
 
@@ -34,8 +34,8 @@
 - `src/services/misconceptionCallbacks.test.ts:64`
 
 ### `buildMisconceptionCallback` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2146`
-- `src/hooks/useDiscussionPractice.ts:620`
+- `src/components/Coach/CoachGameReview.tsx:2196`
+- `src/hooks/useDiscussionPractice.ts:651`
 
 ### `CallbackWeakness` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -65,7 +65,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recurrenceFor` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1515`
+- `src/services/coachFeatureService.ts:1534`
 - `src/services/fundamentalRecurrence.ts:47`
 - `src/services/misconceptionCallbacks.test.ts:78`
 - `src/services/misconceptionCallbacks.test.ts:81`
@@ -81,7 +81,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `recurrenceLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:1518`
+- `src/services/coachFeatureService.ts:1537`
 - `src/services/fundamentalRecurrence.ts:50`
 - `src/services/misconceptionCallbacks.test.ts:95`
 - `src/services/misconceptionCallbacks.test.ts:96`
@@ -94,4 +94,8 @@
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

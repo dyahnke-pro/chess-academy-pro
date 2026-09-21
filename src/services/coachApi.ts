@@ -5411,7 +5411,7 @@ export async function getCoachChatResponse(
           });
           if (answer) {
             const phaseRead = grounding.endgameQuestion === true && !boardIsAnEnding && menOnBoard > 0
-              ? `We're not in an endgame yet — ${menOnBoard} pieces are still on the board. From here: `
+              ? `You're not in an endgame yet — ${menOnBoard} pieces are still on the board. From here: `
               : '';
             const voiced = await voice(`${phaseRead}${answer.facts}`, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'plan', preferRaw: true });
             if (voiced) {
@@ -5667,7 +5667,7 @@ export async function getCoachChatResponse(
           // a queenless 18-man ending was told it was not an endgame, and a
           // 14-man position with both queens on was handed to the tablebase.
           if (!isEndgameByMaterial(grounding.currentFen)) {
-            const notYet = `We're not in an endgame yet — ${pieceCount} pieces are still on the board. Ask me again when the position thins out, or ask for the best move here.`;
+            const notYet = `You're not in an endgame yet — ${pieceCount} pieces are still on the board. Ask me again when the position thins out, or ask for the best move here.`;
             const voicedNotYet = await voice(notYet, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
             if (voicedNotYet) return voicedNotYet;
             return notYet;

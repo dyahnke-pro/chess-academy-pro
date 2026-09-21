@@ -649,12 +649,12 @@ function buildProposalAckMessage(
       `I'll play ${userSide === 'white' ? 'Black' : 'White'}; we'll open with the ${subject}.`,
     );
   } else if (subject) {
-    bits.push(`We'll open with the ${subject}.`);
+    bits.push(`Opening with the ${subject}.`);
   } else if (userSide) {
     bits.push(`You'll play ${userSide === 'white' ? 'White' : 'Black'}.`);
   }
   if (focus && !subject) {
-    bits.push(`We'll focus on ${focus}.`);
+    bits.push(`Focusing on ${focus}.`);
   }
   return bits.join(' ');
 }

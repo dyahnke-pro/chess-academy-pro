@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5647) — names `coachSessionRouter`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5657) — names `coachSessionRouter`
+- **The standard post-deploy ritual** (CLAUDE.md:5943) — names `coachSessionRouter`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5956) — names `coachSessionRouter`
 
 ## Who calls in
 
@@ -112,7 +112,7 @@
 
 ### `tryRouteIntent` (function) — 31 call sites
 - `src/components/Board/VoiceChatMic.tsx:211`
-- `src/components/Coach/CoachTeachPage.tsx:2823`
+- `src/components/Coach/CoachTeachPage.tsx:2864`
 - `src/components/Coach/GameChatPanel.tsx:445`
 - `src/services/coachSessionRouter.boardMatch.test.ts:8`
 - `src/services/coachSessionRouter.boardMatch.test.ts:13`
@@ -154,6 +154,10 @@
 - `src/services/spokenLanguage.live.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-chat.mjs`
 - `scripts/audit-coach-play-grounding-adversarial.mjs`

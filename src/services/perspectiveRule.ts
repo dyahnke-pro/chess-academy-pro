@@ -23,6 +23,26 @@
 // decides its answer rather than silently inheriting one.
 
 /** Which of the three sanctioned perspectives a surface speaks in. */
+/**
+ * THE BANNED PRONOUNS, as one exported constant.
+ *
+ * "we / our / us" is banned in shipped chess narration because it is the
+ * whose-piece ambiguity (CLAUDE.md, David 2026-08-28, locked). The rule was
+ * already written into five prompts in five wordings before `perspectiveRule`
+ * made it one string; this does the same for the pattern that ENFORCES it,
+ * which had been hand-written separately in each gate that checks it.
+ *
+ * 🚨 IT BELONGS IN PRODUCTION CODE, NOT IN A TEST, because more than one gate
+ * needs it and a constant that lives in one test file gets copied into the
+ * next one — which is how the code templates went unchecked while the data
+ * corpora were swept clean of 8,197 occurrences.
+ *
+ * NB "Let's" is deliberately NOT here. The ban is about whose PIECE a sentence
+ * means; "Let's replay your game" carries no board claim and no ambiguity, and
+ * sweeping it would rewrite legitimate invitations for nothing.
+ */
+export const BANNED_PRONOUNS = /\b(we|we're|we'll|we've|we'd|our|ours|us|ourselves|ourself)\b/i;
+
 export type PerspectiveMode =
   /** The ordinary case: the coach talks to a student about their own game. */
   | 'student'

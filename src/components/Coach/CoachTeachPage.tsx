@@ -2297,7 +2297,7 @@ export function CoachTeachPage(): JSX.Element {
       // discussion across TIME and surfaces"). When the weakness we're about to
       // drill is the same one the coach has been tracking, call back to it —
       // once per session (the ledger spans surfaces), never a nag.
-      let lead = `We'll start with your most common weakness — ${queue[0].label}. Get these right over a few days and they'll test out.`;
+      let lead = `Starting with your most common weakness — ${queue[0].label}. Get these right over a few days and they'll test out.`;
       try {
         const thread = await getActiveCoachingThread();
         // Gate the cross-session callback on the DRILL ACTUALLY LOADED, not the
@@ -2309,7 +2309,7 @@ export function CoachTeachPage(): JSX.Element {
         // the puzzle in front of the student.
         const loadedTag = queue[0].key;
         const callback = threadCallbackFor(thread, [loadedTag, `analysis:${loadedTag}`]);
-        if (callback) lead = `${callback} We'll drill it on the board — get these right over a few days and they'll test out.`;
+        if (callback) lead = `${callback} Drilling it on the board — get these right over a few days and they'll test out.`;
       } catch { /* the callback is a bonus */ }
       startCoachDrill(queue[0].drills[0], progress, lead);
       return true;

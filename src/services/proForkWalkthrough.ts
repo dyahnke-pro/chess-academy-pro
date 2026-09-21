@@ -135,7 +135,7 @@ export function proForkTreeToWalkthrough(fork: ProOpeningForkTree): WalkthroughT
   const intro = `Here's how ${proName} plays the ${openingName}, from ${total} of his real games. `
     + (forkN > 0
       ? `He doesn't always take the same road — at ${forkN === 1 ? 'one point' : `${forkN} points`} his games split, and you'll pick which line to follow.`
-      : `We'll walk his main line move by move.`);
+      : `The main line, move by move.`);
 
   return {
     openingName,

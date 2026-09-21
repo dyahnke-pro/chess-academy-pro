@@ -90,7 +90,7 @@ const NARRATION_SPEAK_TIMEOUT_MS = 60_000;
  *  rather than a tailored read. */
 const PHASE_FALLBACK_TEMPLATES: Record<'opening-to-middlegame' | 'middlegame-to-endgame', string> = {
   'opening-to-middlegame':
-    "* We're entering the middlegame. The opening is set, now it's about plans and piece coordination.",
+    "* You're entering the middlegame. The opening is set, now it's about plans and piece coordination.",
   'middlegame-to-endgame':
     "* Endgame territory. King activity and pawn structure decide it from here.",
 };

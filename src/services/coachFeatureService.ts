@@ -2613,7 +2613,7 @@ export function buildReviewSegments(
       if (narration) narrationSource = 'conversion';
       if (narration === null && !endgameAnnounced) {
         const phase = nameEndgamePhase(fenPair.fenAfter);
-        if (phase) { narration = `We've reached ${phase}.`; endgameAnnounced = true; narrationSource = 'endgame'; }
+        if (phase) { narration = `You've reached ${phase}.`; endgameAnnounced = true; narrationSource = 'endgame'; }
       }
       // MIDDLEGAME silence gap (David 2026-07-20: "narration was missing on a
       // lot of moves"). Past the opening, a quiet student move that isn't a
@@ -3589,7 +3589,7 @@ async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<v
   if (spoken) {
     seg.narration = source === 'book'
       ? `${seg.narration ?? ''} In this exact structure the book's scheme: ${spoken} — that's the path the master games follow here.`.trim()
-      : `${seg.narration ?? ''} We're past the master book here, so trust the engine's scheme: ${spoken}.`.trim();
+      : `${seg.narration ?? ''} You're past the master book here, so trust the engine's scheme: ${spoken}.`.trim();
   }
 }
 

@@ -10,15 +10,15 @@
 
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:257) — names `voiceFacts`
 - **G0. THE LLM DECIDES NOTHING — it voices facts computed in code (David 2026-06-10, LOCKED, supreme law).** (CLAUDE.md:314) — names `coachApi`, `getCoachChatResponse`, `voiceFacts`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2917) — names `coachApi`, `getCoachChatResponse`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3165) — names `coachApi`, `getCoachChatResponse`
-- **🔒🔒 `main` IS THE FREE WEB APP. IT DOES **NOT** REACH PAYING CUSTOMERS — THE APP STORE DOES (David 2026-08-15, emphatic: "Main does not reach paying customers!! That's the App Store. Lock that in tired of saying this crap.").** (CLAUDE.md:3268) — names `voiceFacts`
-- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3606) — names `coachApi`, `voiceFacts`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3800) — names `voiceFacts`
-- **Do NOT** (CLAUDE.md:4916) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5567) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:5699) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5711) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3023) — names `coachApi`, `getCoachChatResponse`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3271) — names `coachApi`, `getCoachChatResponse`
+- **🔒🔒 `main` IS THE FREE WEB APP. IT DOES **NOT** REACH PAYING CUSTOMERS — THE APP STORE DOES (David 2026-08-15, emphatic: "Main does not reach paying customers!! That's the App Store. Lock that in tired of saying this crap.").** (CLAUDE.md:3374) — names `voiceFacts`
+- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3712) — names `coachApi`, `voiceFacts`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4021) — names `voiceFacts`
+- **Do NOT** (CLAUDE.md:5137) — names `coachApi`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5807) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:5941) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5955) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -141,11 +141,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getCoachStructuredResponse` (function) — 5 call sites
-- `src/services/openingGenerator.ts:2078`
-- `src/services/openingGenerator.ts:2867`
-- `src/services/openingGenerator.ts:3450`
-- `src/services/openingGenerator.ts:3588`
-- `src/services/openingGenerator.ts:4161`
+- `src/services/openingGenerator.ts:2082`
+- `src/services/openingGenerator.ts:2871`
+- `src/services/openingGenerator.ts:3454`
+- `src/services/openingGenerator.ts:3592`
+- `src/services/openingGenerator.ts:4165`
 
 ### `MasterGroundingOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -219,7 +219,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:564`
-- `src/components/Coach/CoachTeachPage.tsx:2978`
+- `src/components/Coach/CoachTeachPage.tsx:3005`
 - `src/services/coachSessionRouter.ts:124`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -252,17 +252,17 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 24 call sites
-- `src/components/Coach/CoachGameReview.tsx:1569`
-- `src/components/Coach/CoachGameReview.tsx:1688`
-- `src/components/Coach/CoachGameReview.tsx:1875`
+- `src/components/Coach/CoachGameReview.tsx:1620`
+- `src/components/Coach/CoachGameReview.tsx:1739`
+- `src/components/Coach/CoachGameReview.tsx:1926`
 - `src/hooks/usePhaseNarration.ts:680`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:123`
-- `src/services/coachFeatureService.ts:381`
-- `src/services/coachFeatureService.ts:467`
+- `src/services/coachFeatureService.ts:124`
+- `src/services/coachFeatureService.ts:382`
 - `src/services/coachFeatureService.ts:468`
-- `src/services/coachFeatureService.ts:4077`
-- `src/services/coachFeatureService.ts:4247`
+- `src/services/coachFeatureService.ts:469`
+- `src/services/coachFeatureService.ts:4134`
+- `src/services/coachFeatureService.ts:4304`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:133`
@@ -333,7 +333,7 @@
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
 - `src/services/middlegamePlanner.ts:343`
-- `src/services/openingGenerator.ts:4386`
+- `src/services/openingGenerator.ts:4390`
 - `src/services/positionReadingGrader.test.ts:6`
 - `src/services/positionReadingGrader.ts:67`
 - `src/services/smartSearchService.ts:50`
@@ -399,6 +399,10 @@
 - `src/services/walkthroughResolver.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-board-verdict-triage.mjs`
 - `scripts/audit-coach-discovery-prod.mjs`

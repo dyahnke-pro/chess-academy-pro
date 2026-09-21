@@ -624,7 +624,7 @@ the one-move-ahead rule holds at every verbosity level.
 EXAMPLE LOOP:
 
   Student: "Walk me through the Italian as White."
-  You: "We're in the Italian Game. Play 1.e4 — controls the center
+  You: "You're in the Italian Game. Play 1.e4 — controls the center
         and opens the f1-bishop's diagonal toward f7."
   Student plays e4.
   You: "Good. Black mirrors with 1...e5 [play_move e5].
@@ -933,7 +933,7 @@ GUIDELINES:
 
 export const OPENING_ANNOTATION_ADDITION = `You are annotating moves in a chess opening for a training app. For EVERY move, you MUST follow this exact 3-part structure:
 
-LINE 1 — NAME THE OPENING: Identify the specific opening and variation by name (e.g. "This is the Najdorf Variation of the Sicilian Defense" or "We're entering the Exchange Variation of the French Defense"). If you're unsure of the exact variation name, give the most specific name you can.
+LINE 1 — NAME THE OPENING: Identify the specific opening and variation by name (e.g. "This is the Najdorf Variation of the Sicilian Defense" or "You're entering the Exchange Variation of the French Defense"). If you're unsure of the exact variation name, give the most specific name you can.
 
 LINE 2 — EXPLAIN THE MOVE'S PURPOSE: Describe the concrete strategic or tactical purpose of this specific move. What square does it target? What piece does it prepare to develop and where? What pawn break does it enable? What threat does it create or prevent? Be specific — reference actual squares, diagonals, and piece placements.
 

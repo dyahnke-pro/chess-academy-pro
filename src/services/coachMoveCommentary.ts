@@ -287,7 +287,7 @@ async function getGroundedCommentary(
       maxClauses,
     });
     if (purpose) {
-      const lead = subject ? `We're in the ${subject}. ` : '';
+      const lead = subject ? `You're in the ${subject}. ` : '';
       // BOARD narration is COMPUTED, spoken RAW — no LLM (David 2026-09-07).
       // assembleMovePurpose already writes speakable DNA-register prose.
       const voiced = await voiceFacts(`${lead}${purpose.facts}`, { intent: 'move-purpose', preferRaw: true });

@@ -9,9 +9,9 @@
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:57) — names `coachFeatureService`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3661) — names `buildReviewSegments`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:3981) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:5908) — names `coachFeatureService`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3698) — names `buildReviewSegments`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4018) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:5945) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -68,7 +68,7 @@
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2014`
+- `src/services/gameAnalysisService.ts:2081`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -108,11 +108,11 @@
 
 ### `buildReviewCitations` (function) — 8 call sites
 - `src/components/Coach/CoachGameReview.tsx:554`
-- `src/services/coachFeatureService.test.ts:737`
-- `src/services/coachFeatureService.test.ts:745`
-- `src/services/coachFeatureService.test.ts:777`
-- `src/services/coachFeatureService.test.ts:786`
-- `src/services/coachFeatureService.test.ts:798`
+- `src/services/coachFeatureService.test.ts:744`
+- `src/services/coachFeatureService.test.ts:752`
+- `src/services/coachFeatureService.test.ts:784`
+- `src/services/coachFeatureService.test.ts:793`
+- `src/services/coachFeatureService.test.ts:805`
 - `src/services/whyItFailed.test.ts:236`
 - `src/services/whyItFailed.test.ts:274`
 
@@ -121,7 +121,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 50 call sites
-- `src/components/Coach/CoachGameReview.tsx:1809`
+- `src/components/Coach/CoachGameReview.tsx:1846`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
 - `src/services/coachFeatureService.causalChain.test.ts:47`
@@ -154,10 +154,10 @@
 - `src/services/coachFeatureService.test.ts:581`
 - `src/services/coachFeatureService.test.ts:599`
 - `src/services/coachFeatureService.test.ts:608`
-- `src/services/coachFeatureService.test.ts:653`
-- `src/services/coachFeatureService.test.ts:687`
-- `src/services/coachFeatureService.test.ts:718`
-- `src/services/coachFeatureService.test.ts:844`
+- `src/services/coachFeatureService.test.ts:654`
+- `src/services/coachFeatureService.test.ts:688`
+- `src/services/coachFeatureService.test.ts:719`
+- `src/services/coachFeatureService.test.ts:854`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
 - `src/services/reviewCorpusNote.test.ts:40`
@@ -179,15 +179,15 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4854`
-- `src/services/coachFeatureService.test.ts:807`
-- `src/services/coachFeatureService.test.ts:810`
+- `src/components/Coach/CoachGameReview.tsx:4891`
+- `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
-- `src/services/coachFeatureService.test.ts:818`
-- `src/services/coachFeatureService.test.ts:819`
 - `src/services/coachFeatureService.test.ts:824`
 - `src/services/coachFeatureService.test.ts:825`
-- `src/services/coachFeatureService.test.ts:827`
+- `src/services/coachFeatureService.test.ts:826`
+- `src/services/coachFeatureService.test.ts:831`
+- `src/services/coachFeatureService.test.ts:832`
+- `src/services/coachFeatureService.test.ts:834`
 
 ### `narrationBoardAccurate` (function) — 13 call sites
 - `src/services/coachFeatureService.test.ts:621`
@@ -284,6 +284,10 @@
 - `src/services/whyItFailed.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-full-interactive.mjs`
 - `scripts/audit-coach-review-gaps.mjs`

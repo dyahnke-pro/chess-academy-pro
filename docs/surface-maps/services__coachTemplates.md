@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachTemplates.test.ts:94`
 
 ### `getScenarioTemplate` (function) — 9 call sites
-- `src/components/Coach/CoachGamePage.tsx:4360`
+- `src/components/Coach/CoachGamePage.tsx:4387`
 - `src/services/coachTemplates.test.ts:47`
 - `src/services/coachTemplates.test.ts:54`
 - `src/services/coachTemplates.test.ts:103`
@@ -47,4 +47,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

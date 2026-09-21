@@ -597,12 +597,21 @@ export function describePlan(
    *  and the same intention repeated three times. Caller owns the set. */
   said?: Set<string>,
 ): string {
-  // "We" for the student's own plan — Naroditsky's collaborative teaching voice
-  // ("we want to advance the queenside; they want to attack the king"), David
-  // 2026-08-23. The opponent stays "They". Interjections elsewhere (threat
-  // alerts, the recommendation) keep "you" — the plan is where the shared-journey
-  // register belongs.
-  const subject = voice === 'mine' ? 'We' : 'They';
+  // 🔴 "You" for the student, "They" for the opponent — CLAUDE.md's locked rule
+  // (David 2026-08-28), which SUPERSEDES the earlier collaborative-plan voice
+  // here (2026-08-23, "we want to advance the queenside; they want to attack
+  // the king"). Both were his; the later one is stricter and app-wide, and he
+  // confirmed it applies here on 2026-09-21.
+  //
+  // The deleted comment is not annotated because the claim itself is what
+  // rotted: it told every reader the plan was a sanctioned carve-out from a
+  // ban that has no carve-outs.
+  //
+  // HOW IT SURVIVED THE MIGRATION THAT CLEARED 8,197 OCCURRENCES:
+  // `perspectiveVoice` scans shipped narration DATA — the JSON corpora and the
+  // lesson beats — and this is a CODE TEMPLATE. The gate could not see it, so
+  // the sweep passed it by. `noBannedPronounsInCode` now covers that gap.
+  const subject = voice === 'mine' ? 'You' : 'They';
   const theirKing = voice === 'mine' ? 'their king' : 'your king';
 
   // Mate ends the sentence before it starts: nothing else in the position
@@ -729,7 +738,7 @@ export function describePlan(
     const key = `drift-${voice}-${heading.join('')}`;
     if (said?.has(key)) return '';
     said?.add(key);
-    const line = `${voice === 'mine' ? "We're" : "They're"} bringing pieces to ${squares} over the next few moves.`;
+    const line = `${voice === 'mine' ? "You're" : "They're"} bringing pieces to ${squares} over the next few moves.`;
     // THE CLAUSE, NOT THE SENTENCE. `spokenClauses[].text` is a bare verb
     // phrase by contract — `inaccuracyCall.whyBetter` splices the leader
     // straight after "it would ". Storing the finished SENTENCE here produced,
@@ -1196,7 +1205,7 @@ export function positionReadLine(
     lines.push(`There's already ${listWithArticles(freshTactics)} sitting on the board, whether or not anyone plays into it.`);
   }
   if (read.endgameType) {
-    once('endgame', `We're in a ${read.endgameType} endgame now — the pawns decide it from here.`);
+    once('endgame', `You're in a ${read.endgameType} endgame now — the pawns decide it from here.`);
   }
   if (theirs > mine) {
     once('islands', `They've got ${theirs} pawn islands to your ${mine}, and more islands means more to look after.`);
