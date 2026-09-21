@@ -596,8 +596,14 @@ export function plyFactsString(ply: PvPly): string | null {
 /** The SAME per-move facts as `plyFactsString`, but as a SUBJECT-LESS clause
  *  (no "The move X" prefix) so the caller can frame the subject — "You …" for
  *  the student, "Your opponent …" for the other side (David 2026-07-20: "always
- *  narrate both sides"). Returns e.g. "captures the knight, lands a fork, wins 3
- *  points of material", or null on a genuinely quiet move. Board-true (G0). */
+ *  narrate both sides"). Returns e.g. "captures the knight, lands a fork, wins
+ *  material", or null on a genuinely quiet move. Board-true (G0).
+ *
+ *  🔴 The example above used to end "wins 3 POINTS of material". That is the
+ *  pre-2026-07-24 wording and the emit site below has said so ever since
+ *  ("we don't need to call out how many points were gained … Sounds bad") — a
+ *  docstring that shows output the function cannot produce teaches the next
+ *  reader a contract that does not exist. */
 export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptureContext): string | null {
   try {
     const c = new Chess(fenBefore);

@@ -45,8 +45,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pvPlayback.ts:94`
 - `src/services/pvPlayback.ts:565`
 - `src/services/pvPlayback.ts:584`
-- `src/services/pvPlayback.ts:614`
-- `src/services/pvPlayback.ts:667`
+- `src/services/pvPlayback.ts:620`
+- `src/services/pvPlayback.ts:673`
 - `src/services/reviewMoveBriefing.ts:250`
 - `src/services/teachingSelector.ts:313`
 
