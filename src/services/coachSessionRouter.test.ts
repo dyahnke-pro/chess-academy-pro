@@ -65,7 +65,7 @@ describe('routeChatIntent', () => {
     expect(routed).not.toBeNull();
     expect(routed!.path.startsWith('/coach/session/explain-position')).toBe(true);
     // Round-trip the FEN through URLSearchParams to check encoding.
-    const qs = routed!.path.split('?')[1];
+    const qs = routed!.path.split('?')[1]!;
     const params = new URLSearchParams(qs);
     expect(params.get('fen')).toBe(fen);
   });

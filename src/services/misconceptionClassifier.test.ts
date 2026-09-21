@@ -27,8 +27,8 @@ describe('classifyMisconception (deterministic)', () => {
       evalAfterPlayed: -550,
       gamePhase: 'middlegame',
     });
-    expect(r.tag).toBe('poisoned-pawn');
-    expect(r.coachNote.length).toBeGreaterThan(10);
+    expect(r!.tag).toBe('poisoned-pawn');
+    expect(r!.coachNote.length).toBeGreaterThan(10);
   });
 
   it('WITHOUT PV+eval, the eval/PV fundamental does NOT fire (live-path contract)', async () => {
@@ -38,7 +38,7 @@ describe('classifyMisconception (deterministic)', () => {
     const r = await classifyMisconception({
       fen: c.fen(), playedSan: 'Qxh7', bestSan: 'c5', historySans: history, gamePhase: 'middlegame',
     });
-    expect(r.tag).not.toBe('poisoned-pawn');
+    expect(r!.tag).not.toBe('poisoned-pawn');
   });
 
   it('tags hung-material when the move leaves a piece en prise, naming the square', async () => {
