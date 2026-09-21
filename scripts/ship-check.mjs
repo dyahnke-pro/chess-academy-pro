@@ -691,7 +691,7 @@ runStep('typecheck   ', 'npm', ['run', 'typecheck']);
 //
 // ZERO gate files carry a type error. Keep it that way; drive the rest down
 // from the non-gate backlog. Ceilings only ever come DOWN.
-const TEST_TYPE_ERROR_CEILING = 153;
+const TEST_TYPE_ERROR_CEILING = 142;
 // THE INSTRUMENT MUST NOT REPORT NOTHING AS GREEN (2026-09-19). Under Node's
 // default heap this tsc run DIES with "FATAL ERROR: … heap out of memory"
 // (SIGABRT, exit 134). A crash dump contains zero "error TS" lines, so the

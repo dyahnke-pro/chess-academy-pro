@@ -13,7 +13,7 @@ vi.mock('./coachService', () => ({
 
 import { dispatchCoachTurn } from './dispatchCoachTurn';
 
-const INPUT = { surface: 'standalone-chat' as const, ask: 'x', liveState: { fen: 'startpos' } };
+const INPUT = { surface: 'standalone-chat' as const, ask: 'x', liveState: { surface: 'standalone-chat', fen: 'startpos' } };
 
 describe('dispatchCoachTurn', () => {
   beforeEach(() => {
