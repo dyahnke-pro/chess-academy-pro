@@ -6,7 +6,7 @@ import type { WeaknessSignal } from './weaknessSignal';
 
 const hangingHole: WeaknessSignal = {
   clusterId: 'analysis:tactic:hanging_piece', bucket: 'tactical', label: 'Hanging pieces',
-  openCount: 6, severity: 80, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: ['hangingPiece'],
+  openCount: 6, total: 6, severity: 80, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: ['hangingPiece'],
 };
 
 const QUALITY = '[quality] You: that was a blunder, costing about 3.1 points.';

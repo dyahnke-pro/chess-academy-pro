@@ -109,7 +109,7 @@ describe('helpers', () => {
 
 describe('N5 — the student\'s holes re-rank comparable moments', () => {
   const forkHole = {
-    clusterId: 'analysis:tactic:fork', bucket: 'tactical' as const, label: 'Forks', openCount: 4, severity: 70,
+    clusterId: 'analysis:tactic:fork', bucket: 'tactical' as const, label: 'Forks', openCount: 4, total: 4, severity: 70,
     lifecycleStatus: 'persistent' as const, trend: 'worsening' as const, puzzleThemes: ['fork'],
   };
   const swings = [{ ply: 8, label: '4… x', swingPawns: 2.0 }, { ply: 13, label: '7. y', swingPawns: 2.0 }];
