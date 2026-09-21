@@ -46,20 +46,20 @@ const experienced: StudentNeedContext = {
 
 describe('need sees the student on a familiar line', () => {
   it('is SILENT when the clause kind is withheld — the shape of the bug', () => {
-    const v = computeNeed({ ply: 11, studentMove: true, clauseKind: null }, experienced);
+    const v = computeNeed({ ply: 11, studentMove: true, clauseKind: null, fundamentalId: null }, experienced);
     expect(v.speak).toBe(false);
     expect(v.score).toBe(0);
   });
 
   it('SPEAKS for a persistent hole once the clause kind is supplied', () => {
-    const v = computeNeed({ ply: 11, studentMove: true, clauseKind: 'must-defend' }, experienced);
+    const v = computeNeed({ ply: 11, studentMove: true, clauseKind: 'must-defend', fundamentalId: null }, experienced);
     expect(v.speak).toBe(true);
     expect(v.reasons.join(' ')).toContain('analysis:tactic:hanging_piece');
   });
 
   it('still lowers nothing for a hole the student does not have', () => {
     const noHoles = { ...experienced, signals: [] };
-    expect(computeNeed({ ply: 11, studentMove: true, clauseKind: 'must-defend' }, noHoles).speak).toBe(false);
+    expect(computeNeed({ ply: 11, studentMove: true, clauseKind: 'must-defend', fundamentalId: null }, noHoles).speak).toBe(false);
   });
 
   /**
@@ -109,13 +109,13 @@ describe('the review lane reaches non-tactical holes', () => {
   const ctx = { ...experienced, signals: [coachCapturedHole] };
 
   it('is SILENT on a tactic id alone — the shape of the review-lane bug', () => {
-    const v = computeNeed({ ply: 11, studentMove: true, clauseKind: null }, ctx);
+    const v = computeNeed({ ply: 11, studentMove: true, clauseKind: null, fundamentalId: null }, ctx);
     expect(v.speak).toBe(false);
   });
 
   it('SPEAKS when the board POSED the capability the student keeps failing', () => {
     const v = computeNeed({
-      ply: 11, studentMove: true, clauseKind: null,
+      ply: 11, studentMove: true, clauseKind: null, fundamentalId: null,
       posedTags: ['ignored-opponent-threat'] as never,
       playedCleanly: false,   // they got it WRONG — the hole is most live here
     }, ctx);
@@ -128,11 +128,11 @@ describe('the review lane reaches non-tactical holes', () => {
     // arrived with NO tags and the weakness term went blind exactly where the
     // student needed teaching most. Posed tags survive a bad move.
     const wrong = computeNeed({
-      ply: 11, studentMove: true, clauseKind: null,
+      ply: 11, studentMove: true, clauseKind: null, fundamentalId: null,
       posedTags: ['ignored-opponent-threat'] as never, playedCleanly: false,
     }, ctx);
     const right = computeNeed({
-      ply: 11, studentMove: true, clauseKind: null,
+      ply: 11, studentMove: true, clauseKind: null, fundamentalId: null,
       posedTags: ['ignored-opponent-threat'] as never, playedCleanly: true,
     }, ctx);
     expect(wrong.speak).toBe(true);

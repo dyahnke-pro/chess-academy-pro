@@ -539,7 +539,7 @@ describe('GREEN at the decision point — speak vs silent', () => {
     let spokeBefore = 0;
     for (const r of plies) {
       const ply = {
-        ply: 9, studentMove: true, clauseKind: null, onThread: true,
+        ply: 9, studentMove: true, clauseKind: null, fundamentalId: null, onThread: true,
         posedTags: [r.tag], playedCleanly: true,
       };
       const before = computeNeed(ply, { ...base, capabilities: new Map() });

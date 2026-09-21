@@ -58,8 +58,8 @@
 - `src/services/coachFeatureService.ts:4259`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
-- `src/services/needScore.test.ts:25`
-- `src/services/needScore.test.ts:41`
+- `src/services/needScore.test.ts:31`
+- `src/services/needScore.test.ts:47`
 - `src/services/oneStudentRating.test.ts:70`
 - `src/services/openingGenerator.ts:2404`
 - `src/services/reviewNeedGate.test.ts:30`
@@ -76,11 +76,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coldStartPrior` (function) — 2 call sites
-- `src/services/needScore.test.ts:28`
-- `src/services/needScore.test.ts:37`
+- `src/services/needScore.test.ts:34`
+- `src/services/needScore.test.ts:43`
 
 ### `familiarity` (function) — 1 call site
-- `src/services/needScore.test.ts:51`
+- `src/services/needScore.test.ts:57`
 
 ### `computeNeed` (function) — 49 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
@@ -109,19 +109,19 @@
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`
 - `src/services/needCoverage.report.test.ts:83`
-- `src/services/needScore.test.ts:25`
-- `src/services/needScore.test.ts:41`
-- `src/services/needScore.test.ts:48`
+- `src/services/needScore.test.ts:31`
+- `src/services/needScore.test.ts:47`
 - `src/services/needScore.test.ts:54`
-- `src/services/needScore.test.ts:57`
+- `src/services/needScore.test.ts:60`
 - `src/services/needScore.test.ts:63`
 - `src/services/needScore.test.ts:69`
 - `src/services/needScore.test.ts:75`
-- `src/services/needScore.test.ts:76`
 - `src/services/needScore.test.ts:81`
-- `src/services/needScore.test.ts:85`
-- `src/services/needScore.test.ts:86`
+- `src/services/needScore.test.ts:82`
+- `src/services/needScore.test.ts:87`
 - `src/services/needScore.test.ts:91`
+- `src/services/needScore.test.ts:92`
+- `src/services/needScore.test.ts:97`
 - `src/services/needWeaknessWire.test.ts:49`
 - `src/services/needWeaknessWire.test.ts:55`
 - `src/services/needWeaknessWire.test.ts:62`

@@ -105,7 +105,7 @@ describe('computeNeed emits its per-term breakdown', () => {
   afterEach(() => { offNeed?.(); resetCoachDecisionListeners(); });
 
   it('names every term, including the ones that did not fire', () => {
-    computeNeed({ ply: 7, studentMove: true, clauseKind: null }, coldStudent(1500));
+    computeNeed({ ply: 7, studentMove: true, clauseKind: null, fundamentalId: null }, coldStudent(1500));
     expect(needRows).toHaveLength(1);
     // A term missing from the record is indistinguishable from a term scoring
     // zero, and those are different facts — the first is a wiring bug.
@@ -115,7 +115,7 @@ describe('computeNeed emits its per-term breakdown', () => {
   });
 
   it('the emitted score and verdict are the ones the caller got', () => {
-    const v = computeNeed({ ply: 3, studentMove: true, clauseKind: null, onThread: true }, coldStudent(1500));
+    const v = computeNeed({ ply: 3, studentMove: true, clauseKind: null, fundamentalId: null, onThread: true }, coldStudent(1500));
     expect(needRows[0].score).toBe(v.score);
     expect(needRows[0].speak).toBe(v.speak);
     expect(needRows[0].prior).toBe(v.prior);
@@ -123,12 +123,12 @@ describe('computeNeed emits its per-term breakdown', () => {
   });
 
   it('an opponent ply emits nothing — need is only ever computed for the student', () => {
-    computeNeed({ ply: 4, studentMove: false, clauseKind: null }, coldStudent(1500));
+    computeNeed({ ply: 4, studentMove: false, clauseKind: null, fundamentalId: null }, coldStudent(1500));
     expect(needRows).toHaveLength(0);
   });
 
   it('a throwing listener never reaches the caller', () => {
     onNeedScore(() => { throw new Error('telemetry blew up'); });
-    expect(() => computeNeed({ ply: 2, studentMove: true, clauseKind: null }, coldStudent(1500))).not.toThrow();
+    expect(() => computeNeed({ ply: 2, studentMove: true, clauseKind: null, fundamentalId: null }, coldStudent(1500))).not.toThrow();
   });
 });

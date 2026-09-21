@@ -38,7 +38,7 @@ const ctxWith = (profile: CapabilityProfile): StudentNeedContext => ({
 // score is 0 and the clamp makes the whole term unobservable — which is itself
 // correct behaviour (nothing to quiet), but it tests nothing.
 const ply = (tags: MisconceptionTagId[]) =>
-  ({ ply: 9, studentMove: true, clauseKind: null, onThread: true, posedTags: tags, playedCleanly: true });
+  ({ ply: 9, studentMove: true, clauseKind: null, fundamentalId: null, onThread: true, posedTags: tags, playedCleanly: true });
 
 describe('the capability profile is READ by the need computer', () => {
   it('GREEN — a proven capability LOWERS need', () => {

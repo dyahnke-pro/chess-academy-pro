@@ -80,7 +80,7 @@ function coverage(profile: (n: number) => StudentNeedContext): { taught: number;
       // through the conceptId arm ONLY. `computeNeed` joins
       // `matchTacticPattern(conceptId) ?? matchClauseKind(clauseKind)`, so the
       // clause arm is unmeasured here. Widening the corpus is a separate build.
-      if (computeNeed({ ply: p.ply, studentMove: true, conceptId: p.tactic as TacticPatternType | null, clauseKind: null, onThread: p.onThread }, ctx).speak) taught += 1;
+      if (computeNeed({ ply: p.ply, studentMove: true, conceptId: p.tactic as TacticPatternType | null, clauseKind: null, fundamentalId: null, onThread: p.onThread }, ctx).speak) taught += 1;
     }
   }
   return { taught, total, share: total ? taught / total : 0 };

@@ -34,12 +34,17 @@ describe('plyFactsForMove — dialed per-move walk narration (David 2026-07-23)'
     const out = plyFactsForMove(fen, 'Bxc5', undefined, true);
     expect(out).toBeTruthy();
     expect(out).toMatch(/^You /); // student subject, no "The move" prefix
-    // 🔴 WAS /win 3 points of material/ — the POINT COUNT was retired on
-    // 2026-07-24 (David: "we don't need to call out how many points were gained
-    // with each capture. Sounds bad"), and pvPlayback says so at the emit site.
-    // This assertion is about VERB AGREEMENT, which its own comment said all
-    // along — so it keeps that and drops the number it was incidentally riding on.
-    expect(out).toMatch(/\bwin material\b/); // 2nd-person agreement: "You win"
+    // 🔴 THE POINT COUNT IS GONE FROM THE PRODUCT, and this assertion outlived it.
+    // It used to read `/win 3 points of material/`; `pvPlayback` has said
+    // `// "wins material" — NEVER the point count (David 2026-07-24)` at three
+    // separate sites since then, so the test was pinning a contract the product
+    // deliberately replaced and failing a healthy build. Deleted rather than
+    // annotated (the Lake Butler rule).
+    //
+    // What this test is ACTUALLY about survives intact: 2nd-person verb
+    // agreement. "You win material" — never "You wins".
+    expect(out).toMatch(/\bwin material\b/);
+    expect(out).not.toMatch(/\bwins material\b/);
     expect(out).not.toMatch(/The move/);
   });
 
@@ -48,7 +53,9 @@ describe('plyFactsForMove — dialed per-move walk narration (David 2026-07-23)'
     const fen = at('e4 c5 Nc3 g6 f4 Bg7 Nf3 Nc6 Bb5 Nd4 O-O Nxb5 Nxb5 d6 d3 Nf6 Qe1 Bg4 Qh4 Qd7 Nc3 Bxf3 Rxf3 O-O-O e5 dxe5 fxe5 Ng4 Ne4 Bxe5 Nxc5 Bd4+ Kh1');
     const out = plyFactsForMove(fen, 'Bxc5', undefined, false);
     expect(out).toMatch(/^Your opponent /);
-    expect(out).toMatch(/\bwins material\b/); // 3rd-person agreement: "Your opponent wins"
+    // The 3rd-person half of the same contract — see above on the point count.
+    expect(out).toMatch(/\bwins material\b/);
+    expect(out).not.toMatch(/\bwin material\b/);
   });
 
   it('says "give check", never a bare "check", and keeps a REAL fork', () => {

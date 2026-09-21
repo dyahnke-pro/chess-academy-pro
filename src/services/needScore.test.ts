@@ -12,8 +12,14 @@ const forkHole: WeaknessSignal = {
   lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: ['fork'],
 };
 
-/** A ply input with the required `clauseKind` defaulted; these tests are about the STUDENT term. */
-const ply = (o: Omit<NeedPlyInput, 'clauseKind'> & { clauseKind?: string | null }): NeedPlyInput => ({ clauseKind: null, ...o });
+/** A ply input with the required `clauseKind` and `fundamentalId` defaulted;
+ *  these tests are about the STUDENT term, and a caller that cares about either
+ *  passes it explicitly. Both are REQUIRED on the real type on purpose — see
+ *  `NeedPlyInput` — so this helper is the one place the tests answer them. */
+const ply = (
+  o: Omit<NeedPlyInput, 'clauseKind' | 'fundamentalId'>
+    & { clauseKind?: string | null; fundamentalId?: string | null },
+): NeedPlyInput => ({ clauseKind: null, fundamentalId: null, ...o });
 
 const warm = (over: Partial<StudentNeedContext> = {}): StudentNeedContext => ({
   rating: 1500, gamesPlayed: COLD_START_GAMES + 10, signals: [], bookDepartures: [], capabilities: new Map(), ...over,
