@@ -2405,12 +2405,28 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     open → ✅ closed 2026-09-20 (b393b2b74): with no report line the summary
     says so instead of "0 errors", and the row's ✓/✗ comes from the exit
     status; every native-crash signature names a crash.
-11d. 🔴 **PREMISE CORRECTED (2026-09-20): the real count IS 296, the ceiling is
-    right.** "0 errors — lower the ceiling to 0" was tsc CRASHING under load
+11d. ✅ **CLOSED 2026-09-20 — 296 → 236 → 0, and the ceiling is now a HARD
+    GATE rather than a ratchet.** Any test type error is a NEW one and fails
+    the push. Verified with the 8 GB heap, exit status checked (a crashed tsc
+    prints zero errors, which is the very confusion this item was about), and
+    NEGATIVE-CONTROLLED: injecting `const x: number = "s"` took the run to exit
+    2 naming the right line, then reverted. **PREMISE CORRECTED (2026-09-20):
+    the real count WAS 296, the ceiling was right.** "0 errors — lower the ceiling to 0" was tsc CRASHING under load
     (a heap death prints no `error TS` line), the same disease as 11c's lint
     row; on a quiet machine the phase prints "296 errors (at the ceiling)". The
     step now names a crash instead of counting zero. The runtime half of #61
-    is still owed the honest way: drive the 296 down, then lower the ceiling.
+    was owed the honest way — drive the 296 down, then lower the ceiling — and
+    that is what happened: 296 → 236 → 0 over the night, every fix at the TYPE
+    (factories, typed mocks, generic parameters) and never a cast, because a
+    cast goes quiet and rots again on the next field. **#61 is CLOSED: both
+    halves, visibility and runtime.**
+    Two gates that could not fire were found on the way down and are worth more
+    than the count: the hand-rolled-voiceService-mock ceiling was RED on `main`
+    (63 declared, 65 actual), and `perspectiveVoice`'s lesson-beat arm read
+    `.beats` off a `RegisteredLesson`, which has no such field — so `?? []`
+    swallowed it, the loop ran zero times, and the we/our/us ban had never been
+    checked against a single authored beat while the file reported green. Both
+    now assert their own scan counts.
     - ✅ **296 → 236 (2026-09-20), ceiling lowered to 236.** Sixty were one
       class — a type GREW required fields after its fixtures were written
       (`SidePlan` +11, `MoveAnnotation` +2, `NeedPlyInput.clauseKind`,
