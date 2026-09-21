@@ -91,6 +91,91 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
     });
   }
 
+  // 🔒 THE SECOND BANNED PRONOUN — GENDERED (C15/#22, 2026-09-20).
+  //
+  // CLAUDE.md records this hole in the PROMPTS and fixed it there
+  // (`perspectiveRule`): "every copy banned we/our/us and NONE banned a
+  // gendered pronoun". The DATA gate had the identical hole and nobody had
+  // looked — this file scanned only for we/our/us, so 99 shipped narration
+  // strings call the OPPONENT "he" ("he's paralyzed", "he's welcome to
+  // trade", "he's completely ignored the threats") against the locked rule
+  // that the opponent is they/their. Measured, none of the 99 names a real
+  // player, so none is the legitimate "Fischer … he" case.
+  //
+  // A shrink-only CEILING rather than `toEqual([])`, matching how this repo
+  // treats a real backlog: the debt is visible, it can only go down, and a
+  // NEW offender cannot be added. The prose fix is an offline BAKE, never a
+  // substitution table — "White does" → "you does" is why `beatRegister`
+  // classifies instead of rewriting.
+  const COLOUR_WORD = /\b(White|Black)\b/;
+  const GENDERED = /\b(he|he's|he'd|he'll|him|his|himself|she|she's|her|hers|herself)\b/i;
+  const GENDERED_CEILING = 202;
+  it('voiced narration: gendered pronouns for the opponent only ever SHRINK', () => {
+    const offenders: string[] = [];
+    const perFile: Record<string, number> = {};
+    // model-games.json is OUT OF SCOPE, and by the rule rather than by
+    // convenience: CLAUDE.md sanctions the SPECTATOR register for a pure model
+    // game ("the student plays neither side — use White/Black, since neither
+    // side is 'you'"), and those overviews are third-person prose about NAMED
+    // historical players. "Fischer abandons his lifelong 1.e4" and "Marshall
+    // unveiled his prepared gambit" are correct there. Including the file put
+    // 133 legitimate strings in the backlog and would have pushed someone to
+    // "fix" sentences that are right.
+    // AND the two voiced files are out too, because they ALREADY HAVE A GATE:
+    // `voicedCorpusRegister.test.ts` carries a masculine-opponent baseline
+    // (34) with a NAMED_PLAYER exemption, and its history records the real
+    // work — 1145 → 34 on 2026-09-19, rewritten offline by
+    // `scripts/voiced-authoring/degender.mjs`, with what survives being what
+    // the script REFUSED rather than guessed ("he's pinned" is ambiguous
+    // between "he IS pinned" and "he HAS pinned", which pluralise
+    // differently). Two gates over one corpus is the duplicated-constant rot
+    // this repo exists to kill, so these two PARTITION: that gate owns the
+    // voiced corpus, this one owns the four files it never scanned.
+    const ALREADY_GATED = new Set(['model-games.json', 'voiced-matchups.json', 'voiced-walkthroughs.json']);
+    const SCOPED = JSON_FILES.filter((f) => !ALREADY_GATED.has(f));
+    let scanned = 0;
+    for (const file of SCOPED) {
+      const parsed = JSON.parse(readFileSync(join(DATA_DIR, file), 'utf8'));
+      const strings: string[] = [];
+      collectProseStrings(parsed, strings);
+      scanned += strings.length;
+      for (const s of strings) {
+        // A gendered pronoun is only a DEFECT when it stands for a COLOUR —
+        // "White takes and he's up a point". Naming a real player and then
+        // saying "his" is correct prose ("Fischer abandons his lifelong 1.e4",
+        // "Marshall unveiled his prepared gambit"), and model-games is full of
+        // it. So the test is the same shape `beatRegister` uses: the pronoun
+        // and a colour in the SAME sentence. A blanket scan would baseline 133
+        // legitimate model-game overviews as debt and push someone to "fix"
+        // sentences that are right.
+        const bad = s.split(/(?<=[.!?])\s+/).some((sentence) => GENDERED.test(sentence) && COLOUR_WORD.test(sentence));
+        if (!bad) continue;
+        offenders.push(`${file}: ${s.slice(0, 110)}`);
+        perFile[file] = (perFile[file] ?? 0) + 1;
+      }
+    }
+    const split = Object.entries(perFile).sort((a, b) => b[1] - a[1]).map(([f, n]) => `${f}=${n}`).join(' ');
+    expect(
+      offenders.length,
+      `${offenders.length} narration string(s) call a player "he/his/she/her" — the opponent is ` +
+        `"they/their" (locked). Per file: ${split}. ` +
+        `Ceiling is ${GENDERED_CEILING} and may only SHRINK; lower it when you ` +
+        `clear backlog, never raise it. First offenders:\n` +
+        offenders.slice(0, 8).map((s) => `  • ${s}`).join('\n'),
+    ).toBeLessThanOrEqual(GENDERED_CEILING);
+    // NON-VACUOUS — AND IT MUST COUNT THE PROSE, NOT THE FILES (tightened
+    // 2026-09-20). This asserted `SCOPED.length > 0`, which only proves the
+    // file LIST was non-empty: had `collectProseStrings` stopped returning
+    // anything, every file would still have been "scanned" and the ceiling
+    // would have passed for free, forever. That is the exact failure found the
+    // same day in this file's other half, where a lesson-beat loop read a
+    // field that does not exist, `?? []` swallowed it, and the we/our/us ban
+    // went unchecked against a single beat while reporting green.
+    // A ceiling measured through a dead reach is not a ceiling.
+    expect(SCOPED.length, 'no files scanned — the ceiling would pass for free').toBeGreaterThan(0);
+    expect(scanned, 'no prose strings collected — the ceiling would pass for free').toBeGreaterThan(1000);
+  });
+
   for (const file of JSON_FILES) {
     it(`${file}: no we/our/us in narration prose`, () => {
       const parsed = JSON.parse(readFileSync(join(DATA_DIR, file), 'utf8'));

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 /**
@@ -64,5 +64,55 @@ describe('service-worker handover', () => {
       handler,
       'controllerchange must NOT be gated on __HOLD_SW_RELOAD__ — by then the old bundle is gone',
     ).not.toContain('__HOLD_SW_RELOAD__');
+  });
+
+  // 🔒 THE ARTIFACT, NOT THE CONFIG (E2, 2026-09-20).
+  //
+  // Every assertion above reads `vite.config.ts` — and CLAUDE.md's own warning
+  // on this surface is that the config can read as FIXED and SHIP AS BROKEN:
+  // vite-plugin-pwa forces `skipWaiting` and `clientsClaim` back to true
+  // whenever `registerType` is 'autoUpdate' and `injectRegister` is auto/unset
+  // (dist/index.js:874-876). So a gate that only reads the source answers
+  // "does the config say false" while the question is "does the SHIPPED worker
+  // have them off" — a nearby question, returning a confident answer to the
+  // wrong one. This reads the built worker.
+  //
+  // The two-deploy half (does an old page actually survive a new deploy) stays
+  // BLOCKED — it needs two real deploys and cannot be asserted here. This is
+  // the half that can be.
+  describe('the BUILT worker (dist/sw.js), not the config that generated it', () => {
+    const swPath = resolve(process.cwd(), 'dist/sw.js');
+    const built = existsSync(swPath) ? readFileSync(swPath, 'utf8') : null;
+
+    it('a build exists to check — ship-check builds before the gates run', () => {
+      // Not skipped when absent: a gate that quietly passes on a missing
+      // artifact is the vacuity this whole file exists to prevent. Run
+      // `npm run build` (ship-check does it automatically, before this gate).
+      expect(built, `no built worker at ${swPath} — run \`npm run build\` first`).toBeTruthy();
+      expect((built ?? '').length, 'built worker is implausibly small').toBeGreaterThan(1000);
+    });
+
+    it('never calls clientsClaim() — a new worker may not seize a live page', () => {
+      expect(built ?? '').not.toMatch(/clientsClaim\s*\(/);
+    });
+
+    it('calls skipWaiting ONLY from the SKIP_WAITING message handler, never unconditionally', () => {
+      const src = built ?? '';
+      const hits = [...src.matchAll(/skipWaiting\s*\(/g)];
+      // Non-vacuous in BOTH directions: the gated handler must EXIST (a build
+      // that dropped it would otherwise pass this by having zero hits), and
+      // every hit must be that handler rather than a top-level activation.
+      expect(src, 'the SKIP_WAITING message handler is missing from the built worker')
+        .toMatch(/["']SKIP_WAITING["']/);
+      expect(hits.length, 'expected the one message-gated skipWaiting call').toBeGreaterThan(0);
+      for (const h of hits) {
+        const before = src.slice(Math.max(0, (h.index ?? 0) - 160), h.index ?? 0);
+        expect(
+          before,
+          `skipWaiting( at offset ${h.index} is not gated on a SKIP_WAITING message — ` +
+          'vite-plugin-pwa has forced autoUpdate back on, and a deploy will take over live pages',
+        ).toMatch(/SKIP_WAITING/);
+      }
+    });
   });
 });

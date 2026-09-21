@@ -19,6 +19,7 @@
 // On failure, prints the LAST N lines of failing stdout/stderr so you can
 // see exactly what broke without digging through logs.
 
+import { crashed } from './ship-check-lib/crashed.mjs';
 import { spawnSync } from 'node:child_process';
 import { loadavg, cpus } from 'node:os';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -83,7 +84,10 @@ function runStep(label, cmd, args, opts = {}) {
   const ms = Date.now() - start;
   const ok = r.status === 0;
   const out = (r.stdout ?? '') + '\n' + (r.stderr ?? '');
-  const summary = opts.summary ? opts.summary(out) : null;
+  // The summarizer needs the spawn RESULT, not just the text: a process
+  // killed from outside (OOM killer, kill -9, harness timeout) writes nothing
+  // to its own stdout, so a text-only crash check cannot see it.
+  const summary = opts.summary ? opts.summary(out, r) : null;
   results.push({ label, ok, ms, out, summary, optional: opts.optional ?? false });
   const mark = ok ? '✓' : (opts.optional ? '○' : '✗');
   const detail = summary ? `:: ${summary}` : '';
@@ -93,30 +97,17 @@ function runStep(label, cmd, args, opts = {}) {
 
 // ── Helpers to extract a one-line summary from a step's output ─────
 
-/**
- * DID THE TOOL DIE? One detector, read by every summarizer.
- *
- * The disease this closes (PLAN §B 11c + the pickup sweep): a summarizer that
- * COUNTS matches in a tool's output reads a crash dump as ZERO — zero lint
- * errors, zero type errors, zero failed tests — and prints that count as a
- * verdict. It has now cost this repo twice: a heap-dead eslint rendered as
- * "0 errors", and a heap-dead tsc rendered as "0 type errors", on the strength
- * of which a ceiling was lowered to 0. A dead process knows NOTHING; the only
- * honest summary is that the count is unknown.
- *
- * It lives here, once, because the regex was already written out twice in this
- * file and two copies of a constant are a drift waiting to happen (CLAUDE.md,
- * the fix-latent-rot rule). A new summarizer gets the check by calling this.
- */
-const CRASH_SIGNATURES = /FATAL ERROR|heap out of memory|Reached heap limit|Segmentation fault|Abort trap|Killed: 9|SIGABRT|JavaScript heap/;
-function crashed(out) {
-  return CRASH_SIGNATURES.test(out);
-}
-function summarizeVitest(out) {
+// 🔒 THE CRASH DETECTOR LIVES IN ITS OWN MODULE SO IT CAN BE TESTED
+// (scripts/ship-check-lib/crashed.mjs + crashed.test.ts). It used to be a
+// regex over the child's stdout, inline here — which only catches a death
+// the child lives long enough to NARRATE. It now reads the exit STATUS
+// first, because a process killed from outside prints nothing at all.
+
+function summarizeVitest(out, res) {
   // A vitest that dies mid-run prints no "Tests N passed" line, so the old
   // `return null` left the row with no detail at all — the reader then blames
   // the product for what was a dead worker. Name it, same as lint and tsc.
-  if (crashed(out)) return 'vitest CRASHED — test results UNKNOWN, nothing was verified';
+  if (crashed(out, res)) return 'vitest CRASHED — test results UNKNOWN, nothing was verified';
   const m = out.match(/Tests\s+(\d+\s+(?:failed\s+\|\s+)?\d+\s+passed[^|]*)/);
   if (!m) return null;
   // SAY WHAT KIND OF RED (PLAN §B 11a, 2026-09-19): under parallel-session load
@@ -130,10 +121,10 @@ function summarizeVitest(out) {
   const kind = timeouts > 0 && assertions === 0 ? ' ⚠ ALL TIMEOUTS — suspect machine load, not the product' : '';
   return `${base} — ${timeouts} timeout(s) / ${assertions} assertion failure(s)${kind}`;
 }
-function summarizeLint(out) {
+function summarizeLint(out, res) {
   // A dead eslint prints no "✖ N problems" line and no rule errors — read as
   // "0 errors" this labelled a heap crash as a clean run (2026-09-19). Name it.
-  if (crashed(out)) return 'eslint CRASHED — error count UNKNOWN';
+  if (crashed(out, res)) return 'eslint CRASHED — error count UNKNOWN';
   const m = out.match(/✖\s+(\d+\s+problems\s+\(\d+\s+errors,\s+\d+\s+warnings\))/);
   if (m) return m[1];
   // No "✖ N problems" line at all: eslint either found nothing (a clean run
@@ -142,8 +133,8 @@ function summarizeLint(out) {
   // here as if it were a verdict (PLAN §B 11c, the leftover).
   return out.includes('error') ? 'errors found' : 'no report line (clean if the row is ✓; a crash if ✗)';
 }
-function summarizePlaywright(out) {
-  if (crashed(out)) return 'audit CRASHED — check count UNKNOWN, the surface was not verified';
+function summarizePlaywright(out, res) {
+  if (crashed(out, res)) return 'audit CRASHED — check count UNKNOWN, the surface was not verified';
   const m = out.match(/DONE\s+—\s+(\d+\/\d+)\s+checks/);
   return m ? `${m[1]} checks passed` : null;
 }
@@ -223,6 +214,41 @@ let testTypeErrorRegression = 0;
 // orientation). If any of these fail, the build can't ship. If a non-gate
 // test fails, that's a separate problem the gate harness shouldn't gate.
 const GATE_TESTS = [
+  // 🔒 A NEW SERVICE WORKER MAY NEVER TAKE OVER A RUNNING PAGE. This gate
+  // existed and was never in the gate list — a wire that does not fire. It now
+  // reads the BUILT `dist/sw.js`, not just `vite.config.ts`, because
+  // vite-plugin-pwa forces skipWaiting/clientsClaim back on under autoUpdate,
+  // so the config can read as fixed and ship as broken. Safe here because the
+  // prod build runs BEFORE the content gates.
+  'src/test/swHandover.test.ts',
+  // ship-check's OWN crash detector. It decides whether a counting summary is
+  // a verdict or an "unknown", so a regression here re-opens the false-green
+  // class this whole file guards against — gate it like any other.
+  'scripts/ship-check-lib/crashed.test.ts',
+  // "Match chess.com" (David 2026-09-20) for blunder/mistake/inaccuracy. The
+  // bands are EXPECTED POINTS, not centipawns, and they are a copy of a
+  // published third-party table — so they need a gate that states the table,
+  // or a future tidy-up silently re-bands every move the app has ever graded.
+  'src/services/chessComBands.test.ts',
+  // 🔒 THE NINE GATES CLAUDE.md DECLARES WITH THE WORD "Gate:" AND THAT NEVER
+  // RAN ON A PUSH (2026-09-20). Criterion is deliberately narrow — the file
+  // NAMES these as the enforcement for a LOCKED rule — because a gate list
+  // padded with tests that were never meant to block is a list nobody reads.
+  // 66 other contract-flavoured tests stay OUT by that same criterion.
+  //
+  // Wiring them found one RED: `voiceService.auditMute` — the gate for the
+  // $100 muted-audits rule — had rotted twice, invisibly. It blamed a TEST
+  // file for the product-code rule it enforces, and its storage case broke on
+  // a Node upgrade that removed `localStorage` by default. Both fixed.
+  'src/services/voiceService.auditMute.test.ts',
+  'src/services/appAuditor.auditGate.test.ts',
+  'api/audit-stream.refuse.test.ts',
+  'api/audit-stream.batch.test.ts',
+  'api/store-degraded.test.ts',
+  'src/hooks/learnSilentCapture.test.ts',
+  'src/services/oneStudentRating.test.ts',
+  'src/data/proGameReferences.test.ts',
+  'src/services/voicedCorpus.integration.test.ts',
   // Board accuracy for corpus lines rewritten by hand out of the review
   // register (David 2026-09-12: "make sure the narrations match what is
   // being shown on the board"). Same contract as narrationAccuracy, applied
@@ -716,8 +742,8 @@ const TEST_TYPE_ERROR_CEILING = 0;
 runStep('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'], {
   optional: true,
   env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
-  summary: (out) => {
-    if (crashed(out)) {
+  summary: (out, res) => {
+    if (crashed(out, res)) {
       return 'tsc CRASHED (heap) — error count UNKNOWN, ceiling NOT measured; do not lower it';
     }
     const n = (out.match(/error TS/g) ?? []).length;

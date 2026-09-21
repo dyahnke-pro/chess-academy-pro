@@ -41,6 +41,7 @@
  * that drift.
  */
 import { db } from '../db/schema';
+import { MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
@@ -52,8 +53,12 @@ import { isMisconceptionTagId, type MisconceptionTagId } from '../data/misconcep
 const POSED_IMPORTANCE_MIN = 45;
 
 /** A move that cost this much or more is not a demonstration of anything, even
- *  if it happened to serve a fundamental on the way past. */
-const MISTAKE_CP = 100;
+ *  if it happened to serve a fundamental on the way past.
+ *
+ *  Imported, NOT retyped (2026-09-20): this was a local `= 100` sitting beside
+ *  the same number declared in `engineConstants`, so "mistake" had a second
+ *  definition here that no change to the first would ever reach. `engineConstants`
+ *  has zero imports, so taking it costs this module nothing. */
 
 export type CapabilityOutcome = 'held' | 'broken';
 
@@ -393,19 +398,35 @@ function reportHeatMap(profile: CapabilityProfile): void {
   if (profile.size === 0) return;      // nothing recorded — not a heat map yet
   let proven = 0;
   let red = 0;
+  // RECOVERED — proven NOW, and broken at some point before. This is the one
+  // number that answers the heat map's whole reason for existing ("you have
+  // GOTTEN BETTER"), and it was not being reported: `proven` and `red` are not
+  // mutually exclusive once green became recoverable (a break RESETS the
+  // streak, it does not close the door), so a student who fixed a weakness
+  // counted in BOTH and in neither one alone. `currentlyRed` is the exclusive
+  // complement, so the three heat-map states can be read off one row instead
+  // of inferred. `red` keeps its old meaning — it is labelled "with a break"
+  // and the green audit's descriptive line reads it that way.
+  let recovered = 0;
+  let currentlyRed = 0;
   for (const [, e] of profile) {
-    if (capabilityProven(e)) proven += 1;
+    const isProven = capabilityProven(e);
+    if (isProven) proven += 1;
     if (e.broken > 0) red += 1;
+    if (isProven && e.broken > 0) recovered += 1;
+    if (!isProven && e.broken > 0) currentlyRed += 1;
   }
   void logAppAudit({
     kind: 'capability-heat-map',
     category: 'subsystem',
     source: 'capabilityEvidence.getCapabilityProfile',
-    summary: `${profile.size} tags with evidence — ${proven} PROVEN, ${red} with a break`,
+    summary: `${profile.size} tags with evidence — ${proven} PROVEN (${recovered} RECOVERED after a break), ${currentlyRed} currently red`,
     details: JSON.stringify({
       tags: profile.size,
       proven,
       red,
+      recovered,
+      currentlyRed,
       bar: { minStreak: HELD_FOR_PROVEN, minGames: PROVEN_MIN_GAMES, minImportance: PROVEN_MIN_IMPORTANCE },
       byTag: [...profile].map(([tag, e]) => ({ tag, held: e.held, broken: e.broken, heldStreak: e.heldStreak, streakGames: e.streakGames, proven: capabilityProven(e) })),
     }),

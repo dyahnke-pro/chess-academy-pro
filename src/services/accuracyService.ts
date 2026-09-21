@@ -1,4 +1,5 @@
 import type { CoachGameMove, GameAccuracy, MoveClassificationCounts } from '../types';
+import { INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT } from './engineConstants';
 
 /** Threshold above which Stockfish encodes checkmate. */
 const MATE_THRESHOLD = 20000;
@@ -27,6 +28,48 @@ export function winPercent(evalCp: number): number {
   const capped = capEval(evalCp);
   return 50 + 50 * (2 / (1 + Math.exp(-0.00368208 * capped)) - 1);
 }
+
+/**
+ * 🔒 ONE BAND, ONE CURRENCY — chess.com's expected-points table, computed once.
+ *
+ * David 2026-09-20: "match chess.com" for blunders, mistakes AND inaccuracies.
+ * chess.com does NOT band on centipawns; it bands on EXPECTED POINTS LOST
+ * (0.05 / 0.10 / 0.20 → the 5 / 10 / 20 win-percentage points below), because
+ * the same centipawn loss means different things in different positions:
+ * giving back 300cp at +9 barely moves the win probability, while dropping
+ * 100cp at 0.00 moves it a lot.
+ *
+ * `classifyCpLoss` in gameAnalysisService already graded this way. The DRILL
+ * QUEUE did not — it had its own `classifyCpLoss` banding raw centipawns at
+ * 100/300, so one move could be an "inaccuracy" in review and a "mistake" in
+ * the drill it produced. Two vocabularies for one word, drifting silently with
+ * every test green — the rot rule's exact shape. The comparison lives HERE now
+ * so there is one place to be right, and a third caller cannot re-type it.
+ *
+ * Returns null when the move gave up less than an inaccuracy — that is a real
+ * verdict ("chess.com would not flag this"), never "unknown".
+ */
+export type LossBand = 'inaccuracy' | 'mistake' | 'blunder';
+
+/** Expected points lost, in win-percentage points, from the MOVER's side.
+ *  Both evals are WHITE-POV centipawns, as the engine reports them. */
+export function winPctLost(
+  evalBeforeWhiteCp: number,
+  evalAfterWhiteCp: number,
+  isWhiteMove: boolean,
+): number {
+  const sign = isWhiteMove ? 1 : -1;
+  return winPercent(evalBeforeWhiteCp * sign) - winPercent(evalAfterWhiteCp * sign);
+}
+
+/** chess.com's band for a given win-percentage loss. null = not flagged. */
+export function bandForWinPctLost(lost: number): LossBand | null {
+  if (lost >= BLUNDER_WIN_PCT) return 'blunder';
+  if (lost >= MISTAKE_WIN_PCT) return 'mistake';
+  if (lost >= INACCURACY_WIN_PCT) return 'inaccuracy';
+  return null;
+}
+
 
 /**
  * Per-move accuracy from the win-percentage drop the moving side

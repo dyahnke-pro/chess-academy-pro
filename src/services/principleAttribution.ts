@@ -1041,28 +1041,38 @@ export function attributePrinciples(
    *  array; it is filled in place. Omit on every hot path. */
   why?: string[],
 ): PrincipleAttribution[] {
-  if (!isFlagged(input.classification) || !input.bestSan) return [];
-  if (input.historySans.length === 0) return [];
+  // 🔒 EVERY EARLY RETURN SAYS SO (2026-09-20). These eight bail-outs sit in
+  // FRONT of the detectors, so a caller that got `[]` could not tell "no
+  // fundamental applies here" from "we never reached the detectors" — the
+  // precise silent null the `why` sink exists to abolish, and it was hiding
+  // inside the mechanism built to prevent it. Found by the E-10 coverage
+  // measurement on its first run: a real ply returned `[]` with an empty
+  // `why`, and the reason turned out to be the student having played the
+  // engine's move, which is a VERDICT worth stating rather than a silence.
+  const bail = (reason: string): PrincipleAttribution[] => { why?.push(`attribution: ${reason}`); return []; };
+  if (!isFlagged(input.classification)) return bail(`classification ${String(input.classification)} is not flagged`);
+  if (!input.bestSan) return bail('no best move was recorded for this ply');
+  if (input.historySans.length === 0) return bail('empty move history');
   const before = new Chess();
   const history: Move[] = [];
   try {
     for (const san of input.historySans.slice(0, -1)) {
       const m = before.move(san.replace(/[?!]+$/, ''));
-      if (!m) return [];
+      if (!m) return bail(`history did not replay at ${san}`);
       history.push(m);
     }
-  } catch { return []; }
+  } catch { return bail('history threw while replaying'); }
   const playedSan = input.historySans[input.historySans.length - 1];
   const after = applied(before, playedSan);
-  if (!after) return [];
+  if (!after) return bail(`the played move ${playedSan} is not legal here`);
   const last = tryMove(before, playedSan);
-  if (!last) return [];
+  if (!last) return bail(`the played move ${playedSan} would not parse`);
   history.push(last);
   let afterBest = applied(before, input.bestSan);
-  if (!afterBest) return [];
+  if (!afterBest) return bail(`the best move ${input.bestSan} is not legal here`);
   const best = tryMove(before, input.bestSan);
-  if (!best) return [];
-  if (best.san === last.san) return [];
+  if (!best) return bail(`the best move ${input.bestSan} would not parse`);
+  if (best.san === last.san) return bail(`the student PLAYED the engine's move (${last.san}) — nothing to attribute`);
   // The counterfactual board is the position after the best move AND the
   // opponent's natural recapture when the best move started an exchange —
   // otherwise "after 6...Nxc3, White can push d5" counts a kick White cannot

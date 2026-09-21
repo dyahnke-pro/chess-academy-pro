@@ -291,6 +291,141 @@ noting alongside the funnel work: the students who import are the ones whose
 games land on the no-PV path.
 
 
+### OWED-1 / E-10 — THE 150cp FLOOR, MEASURED ON REAL USERS (2026-09-20)
+
+My E-10 reading found `calculation-depth` declining two engine-measured
+mistakes for being under its 150cp floor, and I called that a DIRECTION on
+n=7 rather than a number. PostHog gives the number. Unnamed (`other`) slips
+since the 2026-08-10 fix, real measured evals only (the 175/350 bucket rows
+excluded), 367 slips across 7 devices:
+
+| cpLoss band | unnamed slips |
+|---|---|
+| under 100 | 49 |
+| **100–149 — rejected by the floor** | **99** |
+| 150–299 | 126 |
+| 300+ | 93 |
+
+**The floor excludes 99 of 367 — 27% of the addressable unnamed population —
+purely for being "too cheap", while they are real engine-measured errors.**
+
+**The argument for lowering it to ~100, and the reason it is safer than it
+looks:** precision on this detector is carried by the PV SHAPE, not by the
+cost. A candidate must still have a punishing line of ≥3 plies with a forcing
+move at ply ≥2 — that is what makes it a calculation-depth failure rather than
+"a mistake that cost something". The floor is only a severity filter in front
+of it, so relaxing it admits candidates that must still pass the real test.
+
+**Why I have NOT changed it, and this is a decision rather than a task.** It
+is a shipped threshold on a live detector, the 27% is a population size and
+not a precision measurement, and I have no ground truth here on whether a
+120cp slip IS a calculation-depth failure — only that the detector never gets
+to ask. Lowering it trades silence for a risk of naming the wrong fundamental,
+and "empty > generic" is the standing tie-break. **David's call**, with my
+recommendation: lower to 100, because the PV gate is the real filter and a
+quarter of the population is currently unreachable.
+
+⚠️ **And it changes nothing for imported games either way** — the batch path
+carries no PV at all (bound recorded above), so `calculation-depth` cannot
+fire there whatever the floor is.
+
+### `tactics-context-stale` — the count, finally read (2026-09-20)
+
+**0 stale, of 145 captured events.** Prod, muted, `audit-concept-gameplay`
+G5a/G5b, exit 0, 15/15 rows green.
+
+The number matters less than why it was never a number before: **no script in
+the repo captured that event** — `grep -rl tactics-context-stale scripts/`
+returned nothing until today — while OUTLINE carried it in two states at once,
+twice as 🔴 "never done" and once as ✅ "ZERO across all four runs, closes the
+item".
+
+Worth being exact about the catch rather than overstating it: that ✅ reached
+the **right number on no evidence**. A zero from an instrument that cannot see
+the event is absence-of-CAPTURE, not absence-of-EVENT — the two are
+indistinguishable from the outside, which is the whole disease. It is now the
+same answer with a real instrument behind it, and G5a runs FIRST and asserts
+the listener captured events at all, so a dead sidecar can never read as a pass.
+
+Also measured on that run, reported not asserted: `interrupt=0, walk=2` on the
+posture mix — the live-commentary doors need a warm engine cache, which is
+OUTLINE 11l and is a measurement rather than a red.
+
+### 0a CHALLENGED — "all five flagged plies return `[]`" does NOT reproduce (2026-09-20)
+
+The board records the two fundamentals reds as **DETECTOR COVERAGE**, diagnosed
+offline as "all five flagged plies return `[]`". Extending the E-10 coverage
+measurement from section-14 to EVERY detector, on a real amateur game with
+Stockfish's own per-ply best moves, gives the opposite shape:
+
+| measure | result |
+|---|---|
+| flagged plies that got **ANY** fundamental | **6 of 7** |
+| flagged plies that got a **section-14** one | 0 of 7 |
+| flagged plies that got **nothing at all** | 1 of 7 |
+
+The four that fired: `early-queen-sortie`, `greedy-pawn-grab`,
+`neglected-development`, `passive-when-forcing-existed`.
+
+So general detector coverage on this game is ~86%, not zero. Either the `[]`
+finding is specific to the REVIEW AUDIT's game rather than a property of the
+detectors, or it predates a fix landed since (the PV wire and the early-return
+diagnostics both changed this path today). **Whoever owns the review audit
+should re-measure against its own game before treating "detector coverage" as
+the diagnosis** — the two reds are much more likely section-14-shaped, which is
+E-10 and is separately explained.
+
+Honest bound: ONE game, 7 flagged plies. It disproves "all five return `[]`" as
+a general claim; it does not establish a coverage rate.
+
+### E-10 ANSWERED — section 14 fires on nothing real, and here is WHY, per ply (2026-09-20)
+
+`section14Coverage.measure.test.ts` walks a REAL amateur game (the committed
+WO-4 fixture) with Stockfish 18's own per-ply `bestMove` / `bestMoveEval` /
+`evaluation` at the sweep's depths — real best moves, measured costs, no
+buckets. Deliberately NO pv, because `analyzeGameOnWorker` (this path AND the
+import batch) emits none at all; that absence is the finding, not a gap.
+
+**0 of 7 engine-flagged student plies received a section-14 fundamental.** The
+reasons, now that every decline names its gate:
+
+| gate | n | reading |
+|---|---|---|
+| `no-plan`: still the opening, development owns it | 6 | correct by design |
+| `left-book-early`: position already OUT of book | 5 | ⚠️ see below |
+| `calculation-depth`: punishing PV is 0 plies | 4 | the no-PV path |
+| `calculation-depth`: cost under the 150cp floor | 2 | **134cp and 107cp — real mistakes the floor rejects** |
+| `calculation-depth`: played move is itself forcing | 1 | correct by design |
+
+**Two are actionable and one is suspicious.**
+
+1. **The 150cp floor sits ABOVE real mistakes.** Two engine-measured errors of
+   134cp and 107cp were declined for being too cheap. That is a tunable with
+   evidence behind it now rather than a guess — though on n=7 from one game it
+   is a direction, not a number.
+2. 🔴 **I FLAGGED `left-book-early` AS POSSIBLY INVERTED AND IT IS NOT — the
+   claim is deleted rather than softened, because I checked before filing it.**
+   Its documented pattern is: the position BEFORE the move IS in the openings DB
+   with named continuations, and the played move is none of them. So declining
+   with "already out of book" is CORRECT — if you were out of book before the
+   move, you did not leave book at this ply. Nothing to fix.
+   What is real is a COVERAGE CEILING rather than a defect: the detector can
+   only ever fire while the game is still inside the DB's book, and amateur
+   games leave it fast — 5 of 7 flagged plies here were already out. That bounds
+   how much of the 29% this detector could ever reach, which is worth knowing
+   before anyone spends effort widening it.
+3. The PV half is already understood and bounded above (batch path carries none).
+
+🔒 **AND THE MEASUREMENT CAUGHT A HOLE IN THE DIAGNOSTIC ITSELF, first run.** A
+real ply returned `[]` with an EMPTY `why` — the silent null the sink exists to
+abolish, hiding inside the mechanism built to prevent it. `attributePrinciples`
+had EIGHT early returns in front of the detectors and none of them said
+anything; a caller could not tell "no fundamental applies" from "we never
+reached the detectors". All eight now name themselves, including the one that
+tripped it: **the student PLAYED the engine's move**, which is a verdict worth
+stating rather than a silence. Gate: the existing section-14 diagnosis suite
+(49 attributor tests green).
+
 **THE OTHER THREE AUDITS (same bundle):**
 - **LEARN** `audit-concept-gameplay-prod` **8/8** — the pin invariant voiced
   mid-game, 58 spoken lines, muted, no page errors.
@@ -2334,8 +2469,69 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     prose counts only if it is a move on the beat's own replayed line; anything
     else is null and never subject-deduped. The guard is a `continue`, like the
     register guard, so a position holding another beat still teaches.
-15. **The voiced corpus is in the wrong register** (#22) — 1,146 he/his, 521
-    first-person, 81 fragments.
+15. **The voiced corpus register (#22) — MEASURED 2026-09-20, and none of the
+    three headline numbers reconcile.** The item read "1,146 he/his, 521
+    first-person, 81 fragments" with no diagnosis. Measured across all three
+    voiced corpora (26,737 prose units):
+
+    🔴 **CORRECTION, and it is mine: "none of the three reconcile" was WRONG
+    and is deleted rather than softened.** The three numbers are the BASELINES
+    of an existing gate, `src/data/voicedCorpusRegister.test.ts`, measured with
+    ITS narrow regexes over ITS two files — not loose counts. `521` and `81`
+    are its live `BASELINE_FIRST_PERSON` and `BASELINE_FRAGMENT`. And 1,146 is
+    the PRE-FIX number: that file records **1145 → 34 on 2026-09-19**, rewritten
+    offline by `scripts/voiced-authoring/degender.mjs`, with the 34 survivors
+    being what the script REFUSED rather than guessed ("he's pinned" is
+    ambiguous between "he IS pinned" and "he HAS pinned", which pluralise
+    differently). So the board line was STALE, not wrong in kind, and the
+    offline-bake half I described as "not attempted" was in fact ALREADY BUILT
+    and already run. My broad regexes measured a different question and I
+    reported the difference as a contradiction.
+
+    | the board's number | what it actually is |
+    |---|---|
+    | 1,146 he/his | the PRE-FIX count; the live gate's baseline is **34** |
+    | 521 first-person | that gate's live `BASELINE_FIRST_PERSON`, narrow regexes |
+    | 81 fragments | that gate's live `BASELINE_FRAGMENT` |
+
+    **The banned pronoun is effectively clean: 2 occurrences of `we/our/us` in
+    26,737 units.** And through the classifier that actually decides whether a
+    note may be spoken onto a live board, `beatRegister`, the voiced teachings
+    corpus is **95.3% live-safe** (8,073 of 8,473 prose units; 400 spectator).
+    So "the corpus is in the wrong register" overstates it — the play-surface
+    corpus is mostly right.
+
+    ✅ **What IS real, and is now gated: the GENDERED pronoun.** CLAUDE.md
+    records this hole in the PROMPTS and fixed it there (`perspectiveRule`):
+    "every copy banned we/our/us and NONE banned a gendered pronoun". The DATA
+    gate had the identical hole and nobody had looked — `perspectiveVoice.test`
+    scanned only for we/our/us. **246 shipped narration strings call a COLOUR
+    "he"** ("Black plays a6 — he's much worse", "White doesn't cling to the
+    pawn — he plays for structure", and one that manages "Black hasn't moved
+    their e-pawn, he's played the c-pawn instead" in a single sentence).
+    Gated shrink-only at **202**; verified it fails at 201. Per file:
+    middlegame-plans 165, common-mistakes 14, pro-repertoires 14, repertoire 9.
+
+    ✅ **THE TWO GATES PARTITION — no overlap.** `voicedCorpusRegister` owns the
+    voiced corpus (baseline 34, NAMED_PLAYER exemption, its own degender
+    script); this one owns the four files that gate **never scanned**, where
+    165 of the 202 sit in `middlegame-plans.json` alone. Two gates over one
+    corpus would be exactly the duplicated-constant rot this repo exists to
+    kill, so the scopes are disjoint by construction.
+
+    ⚠️ **Two scoping decisions, both by the rule rather than convenience.**
+    (1) The pronoun counts only when a COLOUR is in the same sentence — the
+    shape `beatRegister` already uses. A blanket scan flags "Fischer abandons
+    his lifelong 1.e4", which is correct prose. (2) `model-games.json` is out
+    of scope entirely: CLAUDE.md sanctions the SPECTATOR register for a pure
+    model game, and those overviews are third-person prose about named
+    historical players. Including it put 133 legitimate strings in the backlog.
+
+    **NOT done, and deliberately not attempted: the prose rewrite.** Turning
+    "White does" into "you does" is the obvious wrong answer (English verb
+    agreement is why `beatRegister` classifies instead of rewriting); the
+    honest fix is an offline BAKE, BACKLOG §4.6. No substitution table was
+    written.
 16. ✅ **CLOSED (2026-09-19) — #59 WAS A DEAD SELECTOR, NOT A DEFECT.**
     `audit-read-position-prod` waited on `position-narration-banner`, which
     nothing in `src/` has rendered since e81f758eb (2026-07-10: the read lives
@@ -2542,12 +2738,22 @@ from the entry chunk's size.
    NB the cache is NOT the problem: it eliminates the download, never the
    parse/execute, which happens every cold start regardless of byte source. The
    likelier cost is HEAP, which is what Jetsam-killed the app before.
-4. 🟠 **SHOULD THE 1,282 ARCHIVED ANCHORED DANYA NOTES COME BACK?**
-   `data/archive/corpus-anchored/naroditsky-anchored.json` — 1,282 notes, ALL
-   position-keyed, sitting unused since 2026-08-26, while the app shipped 10,022
-   un-positioned ones at boot. They are the only danya notes that could ever
-   serve a play surface. Deliberately NOT done unasked — the archiving was
-   David's call when voiced became the sole exact-position source.
+4. ✅ **THE 1,282 ARCHIVED ANCHORED DANYA NOTES STAY ARCHIVED — DECIDED, NOT
+   OPEN (David 2026-09-20: "we already decided on danya").** The question that
+   stood here is DELETED rather than annotated, because asking it was the
+   defect: it re-opened a call David had already made on 2026-08-26, which
+   CLAUDE.md locks outright — floating notes are fenced to tactics + endgame,
+   and **voiced is the SOLE exact-position source on the play surfaces**.
+   `data/archive/corpus-anchored/naroditsky-anchored.json` is where those notes
+   belong. The reasoning behind the call has not changed: a farmed anchored note
+   is not board-truth-verified, and the whole point of the 2026-08-26 fence was
+   that silence beats a note about a different board.
+   **So per-ply coverage grows by growing the VOICED corpus** (the pipeline in
+   `docs/voiced-narration-pipeline.md`), never by un-archiving these. A future
+   session that rediscovers 1,282 unused position-keyed notes has rediscovered
+   the fence, not a bug — the same way two sessions "discovered" they could
+   multiply coverage via `teachingNoteForBoard`.
+
 5. 🟡 **57,204 OF 65,712 CORPUS NOTES CARRY NO POSITION.** Four creators
    (gothamchess, hikaru, imrosen, magnuscarlsen) are 0% positioned. They are
    LAZILY FETCHED, so they cost ZERO boot — pruning them is a memory/parse
@@ -2777,3 +2983,97 @@ to the data and both failed:
    Do not flip `learned`; do not add detectors before the reader exists — a
    detector that fires into rows the model cannot read is half-built by the
    capability-parity rule.
+
+---
+
+## FUNDLEAD — two leads chased through the code and WITHDRAWN (2026-09-20)
+
+The symptom: on the rotated review audit (`AUDIT_GAME_ID=06wNUWaA
+AUDIT_STUDENT=black`, 43 pass / 9 fail), all three flagged student plies led
+with `"You: that was an inaccuracy, costing about 0.7 points — the "` instead
+of a fundamental. `WEDGE renderer-answered-throughout` PASSED on that run, so
+it is not contamination.
+
+**Already ruled out, do not re-derive:** it is not the RANKING. `principle`
+ranks 100, `quality` ranks 95, so a produced fundamental would lead. The
+fundamental is not being PRODUCED.
+
+**Lead 1 — "the flagged ply has no best move." WRONG.** `analyzeGamePositions`
+pushes to `mistakeIndices` only at `cpLoss >= BATCH_GRADE_FLOOR_CP`
+(= `MISTAKE_CP` = 100), while a ply is flagged critical from `INACCURACY_CP`
+(= 50). That really does leave the [50,100) band with no `bestMove` — but only
+on the BATCH path. `analyzeSingleGame`'s own best-move loop
+(`gameAnalysisService.ts:1896`) gates on `cpLoss >= INACCURACY_CP`, and it sits
+OUTSIDE the `if (isReview && !opts.sweepOnly)` deep-dive guard, so the review
+computes a best move for every flagged ply regardless. The two floors that
+looked mismatched belong to two different functions.
+
+**Lead 2 — "then the batch gap starves the loop's RECORD half." ALSO WRONG.**
+`autoAnalyzeGame` skips inaccuracies outright
+(`classification !== 'blunder' && !== 'mistake'` → `continue`), so it never
+reads the [50,100) band at all. Recording starts at 100 and best-move
+computation starts at 100; they agree. There is no defect here.
+
+**What this leaves.** FUNDLEAD is one of the OTHER early returns in
+`principleAttribution` — all eight are now diagnosable via the `bail()` helper
+writing to the `why` sink, and `coachFeatureService` emits
+`reviewFundamentalDeclined` once per flagged student ply that gets nothing
+(commit `ddb7df37f`). **That emission does not exist on prod until the batched
+push lands**, and the audit drives prod — so the next run NAMES the cause and
+no run before the deploy can. This is not fixed and is not being claimed as
+fixed.
+
+**The method note, because it cost two wrong turns in one thread:** both leads
+died the same way — a threshold read in isolation, without first establishing
+WHICH function produces the number the symptom is made of. Same shape as this
+session's earlier C15 error. The rule stands and earns its place: *before
+calling a number wrong, find the instrument that produced it* — and a constant
+shared by two call paths is two instruments, not one.
+
+Reproduce: `AUDIT_GAME_ID=06wNUWaA AUDIT_STUDENT=black node
+scripts/audit-review-overhaul-prod.mjs` (under the shared lock, after the push).
+
+---
+
+## OPEN — lesson BEATS are unscanned for gendered pronouns (filed 2026-09-20, deliberately not closed)
+
+A peer session found `perspectiveVoice.test.ts`'s lesson-beat arm had been DEAD:
+it iterated `for (const lesson of ALL_LESSONS) for (const beat of lesson.beats ?? [])`,
+but `ALL_LESSONS` is `RegisteredLesson[]` (`{scope, key, openingId, lesson}`), so
+`.beats` was `undefined` on every element, `?? []` swallowed it, and the loop ran
+ZERO times — the we/our/us ban had never been checked against a single authored
+beat while the file reported green. Fixed there; that arm now reaches 500+ beat
+strings and asserts its scan count.
+
+**C15's GENDERED scan did NOT go through that path** — it loops `JSON_FILES` and
+`collectProseStrings`, never `ALL_LESSONS` — so `GENDERED_CEILING = 202` was
+measured over real prose and stands. Verified, not assumed.
+
+**THE GAP.** Now that the beats are reachable, nothing scans them for GENDERED.
+Authored masterclass prose is precisely where "White develops the knight, and
+**he** follows with…" lives — the same defect C15 exists for, in the corpus most
+likely to contain it.
+
+🚨 **DO NOT CLOSE THIS BY RAISING `GENDERED_CEILING` TO WHATEVER THE BEATS
+RETURN.** A ceiling set over newly-visible rot BLESSES the rot: it converts an
+unmeasured defect into a sanctioned baseline, and the shrink-only rule then
+protects it forever. The order is: scan, READ A SAMPLE, fix what is fixable
+offline (`scripts/voiced-authoring/degender.mjs` is the precedent — it rewrote
+1145 → 34 and left only what it REFUSED to guess at), and only then set a ceiling
+over the genuinely ambiguous remainder.
+
+**AND THE SCAN MUST SEPARATE TWO THINGS, or its number is meaningless** (the
+peer's point, 2026-09-20, and the sharpest thing said about this item): a
+masterclass beat saying "White develops the knight" is CORRECT — the Watch
+register is third-person by design (TWO DISTINCT NARRATION REGISTERS). What is
+banned is a gendered pronoun standing for a PLAYER — "he's up a point of
+material" said to a student whose pronouns nobody knows, which is what
+`NO_GENDERED` in `perspectiveRule.ts` actually forbids. A scan that cannot tell
+those apart returns a number that is partly the design, and a ceiling set over
+it blesses the wrong half. C15's existing COLOUR_WORD same-sentence rule is the
+shape to reuse, not a blanket match. Read before you count.
+
+Why it is filed rather than done: the push in flight is already ~48 commits
+across two sessions, and this needs its own measurement pass plus a judgement
+call on each survivor. It is a real defect the student can hear, ranked beside
+C15 itself — not hygiene.

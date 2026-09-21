@@ -28,14 +28,14 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 4. D11 — `[delta]` squares already coupled (the PLAN entry was stale)
 - ✅ 5. Hygiene — watermark hook, timeouts-vs-assertions, lint crash named, test-type ceiling 296→236, `BuildVersionWidget` regex, `formatTacticsSubBlock(tactics, boardFen)` required, multilingual row poll
 - ✅ 6. Measurements — boot 15 files / 26.4 MB raw / 6.1 MB gzip; corpus reach 24/24 both tiers; corpus gates evened
-- 🔴 `tactics-context-stale` count read off the listener — never done
+- ✅ `tactics-context-stale` count READ off the listener: **0 stale of 145 captured events** (prod, muted, audit-concept-gameplay G5a/G5b). The zero is now a MEASUREMENT — G5a proves 145 events were captured, so it is not absence-of-capture
 - 🔴 47-game rerun — `data/sources/wo4-corpus/` absent on this machine
 - **Audits:** loop 6/6 ✅ · Learn 8/8 ✅ · fundamentals-tab 19/19 ✅ · second-game 12/12 ✅
 
 ## 2. WO-LOOP-01 — prove the one-line definition on prod
 - ✅ Phases 0–4, **6/6 on prod** (run 5, bundle `index-BggLa4Jm`; re-proven run 6 with an exact same-ply control)
 - ✅ The five defects the instrument found, each gated: the review path never recorded · a game paired with itself · four seat resolvers ignoring the declared seat · the uncapped-facet path · GM games have nothing to record
-- 🔴 OWED-1 the `other` attribution gap — the loop's ceiling (see E-10)
+- 🟠 OWED-1 the `other` attribution gap — MEASURED on real users: the 150cp floor rejects **99 of 367** unnamed slips (27%) that carry a real engine eval, purely for being too cheap. Precision is carried by the PV SHAPE, not the cost, so lowering to ~100 is safer than it looks — **David's call**, recommendation: lower it (PLAN)
 - ✅ OWED-2 Learn's half on a prod tape
 - 🔴 OWED-3 **GREEN** — the coach going quiet when you improve. Not started; needs held evidence over days
 
@@ -80,7 +80,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ## 7. Bucket C — the student hears something wrong or repeated
 - ✅ 11f the read-position seat · 12 queen-takes · 13 stems rotated not rolled · 14 re-announced moves · 16 (#59, a dead selector) · 17 the chat plan lane · 18 the fresh-game reset (n=4, proven on prod)
-- 🔴 15 (#22) **the voiced corpus is in the wrong register** — 1,146 he/his, 521 first-person, 81 fragments
+- 🟠 15 (#22) **voiced register — the board's three numbers were that gate's own BASELINES, and 1,146 was the PRE-FIX count (`voicedCorpusRegister` records 1145 → 34 on 2026-09-19 via `degender.mjs`). My "they do not reconcile" was WRONG and is withdrawn.** What was genuinely ungated: the same defect in the FOUR files that gate never scanned — **202, now gated shrink-only** (middlegame-plans 165). The two gates partition; no overlap
 - 🟡 19 open questions, not yet defects: #23 mistake-puzzle narration · #19 chat input after the player-games lane · #35 caching `voiceFacts` · #36 the Alapin tape's remaining prose · #69 a pinned need-coverage baseline · #42 the corpus study · #33 removal candidates
 
 ## 8. Bucket E — payload + delivery
@@ -89,21 +89,49 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ 354 notes that described the video, not the board, are gone
 - ✅ Post-deploy audits on live prod — SW 9/9, Learn 8/8, review 22/24
 - ✅ 9. The fundamental-aware spine reader
-- 🔴 0a. The two fundamentals reds, n=2 — measured offline: it is DETECTOR COVERAGE, not inputs (all five flagged plies return `[]`)
+- 🟠 0a. The two fundamentals reds, n=2 — the "all five flagged plies return `[]`" diagnosis does NOT reproduce off-audit: on a real game 6 of 7 flagged plies get a fundamental (PLAN). Re-measure against the review audit's own game; likely section-14-shaped (E-10), not coverage
 - 🟠 0b. Review audit — **one latch produced four reds, and three of them blamed a coach that never got a turn** (diagnosed 2026-09-20 from a peer's clean 43/9 run on `AUDIT_GAME_ID=06wNUWaA`). `resolveCards` set `turningHandled = true` on ENTRY, not on success, so when its three answering attempts failed the card could never be answered again. The walk loop then correctly refuses to resume past an unanswered turning-point card, so the walk PARKED — and because the ply readout stays perfectly READABLE while parked, `wedgeWatch` never fired and the WEDGE row PASSED, which is why the existing contamination guard did not cover this. Downstream: RECAP `end reached=false`, THESIS `DRIVER`, CRIT "a moment was selected but nothing said it aloud". FIXED: latch on SUCCESS (the reveal actually speaking) with a bounded round count so the 2026-09-16 retry storm cannot return; a reserved round for the post-walk attempt, which is the one most likely to work since the card is RAISED at `currentPly === moves.length`; an early stop that says DRIVER instead of burning the poll budget; and RECAP + CRIT now report DRIVER — gated on BOTH `turningSeenUnanswered` AND `!reachedEnd`, so a row that got its full chance and still failed stays a real red. **Not yet re-run** — the next review audit is the verification, and FUNDLEAD (theirs, with a new `why` sink) should be the only independent red left
 - 🔴 2. The one SW check a single deploy cannot make — hold a session across deploy N → N+1
 - ✅ 3. The 8.2 MB entry chunk is a NON-ISSUE — closed by measurement 2026-09-20, no device needed. **ZERO** WASM/OOM/crash events on native in 60 days, and the zero is non-vacuous (same cut returns 14 other error types: `stockfish_variant` 873/94 devices, `ota_download_failed` 133/53, `tts_failure` 19/9). The OOM that motivated this item happened in an AUDIT browser under a mid-run deploy at 124 spawned threads, and in the memory-starved sandbox — neither is a real device, and its cause was THREAD COUNT, not bundle size. Download is irrelevant on native (`webDir:'dist'`, the bundle ships inside the app; 2.3 MB gzipped on web). Do not spend a night shrinking this. Only live engine signal: `stockfish_variant_fallback`, 3 events / 2 devices — watch, do not act
-- ✅ 4. The 1,282 archived anchored danya notes STAY ARCHIVED (2026-09-20) — and the two reasons offered for calling them garbage both FAIL on measurement: **100% carry a `lineSan`** (median 10 plies; no `fen` field, but the line IS the anchor) and **0 of 1,282 are audience/parasocial talk** (1,275 board talk, 7 general chess principles; detector proven non-vacuous against 'subscribe', 'welcome back to the speedrun', 'shout out to my patreon'). They stay out for a DIFFERENT reason: the play surfaces take exact-position narration solely from the board-truth-verified voiced corpus, and ~3.8% of farmed position-keyed notes are mis-anchored — fluent prose about a different board, which reading cannot catch. 🔴 The one number that would reopen it, never run: how many of the 1,282 survive board verification against their own line
+- ✅ 4. The 1,282 archived anchored danya notes STAY ARCHIVED (2026-09-20) — and the two reasons offered for calling them garbage both FAIL on measurement: **100% carry a `lineSan`** (median 10 plies; no `fen` field, but the line IS the anchor) and **0 of 1,282 are audience/parasocial talk** (1,275 board talk, 7 general chess principles; detector proven non-vacuous against 'subscribe', 'welcome back to the speedrun', 'shout out to my patreon'). They stay out for a DIFFERENT reason: the play surfaces take exact-position narration solely from the board-truth-verified voiced corpus, and ~3.8% of farmed position-keyed notes are mis-anchored — fluent prose about a different board, which reading cannot catch. 🔴 The one number that would reopen it, never run: how many of the 1,282 survive board verification against their own line Re-confirmed by David 2026-09-20: voiced is the sole exact-position source and coverage grows by growing the voiced corpus — not an open call, and asking again was the defect.
 - 🟡 5. 57,204 un-positioned notes — a memory decision, never a boot one; never prune without measuring both ways
 - 🟡 6. A cold first teaching reply draws on less corpus — watch it in the Learn audit
 - ✅ 7. The corpus gates are even · ✅ 8. `BuildVersionWidget.test`
 - ⛔ 10. **Section-14 detectors fire on nothing real** — theirs. The instrument half landed (`2d9f151`: each detector now names WHICH GATE it failed, so the 23% bucket is measurable); still never attributed on a real game
 
+## 8b. Move grading — one currency, chess.com's (David 2026-09-20)
+
+- ✅ **Review already matched** — `classifyCpLoss` has banded in EXPECTED POINTS
+  (5/10/20 win% = chess.com's 0.05/0.10/0.20) since the accuracy work. The rot was
+  everything DOWNSTREAM of it, which is why "match chess.com" turned out to be a
+  sweep and not a build.
+- ✅ **The drill queue** had its own `classifyCpLoss` on raw 100/300 — one move could
+  be an "inaccuracy" on screen and a "mistake" in the drill it produced.
+- ✅ **Imported games** (`gameImportUtils`) banded centipawns — the student's whole
+  record labelled in a different currency from review AND from the site it came from.
+- ✅ **Live play** (`moveRating.classifyMoveFull`) held preMoveEval/postMoveEval/
+  playerColor and dropped all three at the call boundary.
+- ✅ **`capabilityEvidence`** retyped `MISTAKE_CP = 100` locally — a second definition
+  of "mistake" no change to the first could reach.
+- ✅ Band computed ONCE in `accuracyService.bandForWinPctLost`; gated by
+  `chessComBands.test.ts` (states the published table; proves the SAME 300cp is an
+  inaccuracy at +9.00 and a blunder at +0.50).
+- 🟠 **Behaviour change to watch:** the drill queue now SKIPS a move whose win% loss is
+  under an inaccuracy. Puzzle counts can legitimately drop — that is not a regression.
+- Deliberately NOT changed: `backwardLook`, `callInaccuracy`'s speaking floor. Those
+  answer "is this worth SAYING" — pedagogy, a different decision from what a move is
+  CALLED. Conflating the two is what caused this.
+
 ## 9. Carried over — the stale-tactics checklist (pickup §7)
 - ✅ The whole `fen`-required sweep, both ref races, the gates, ship-check crash-as-green
+- ✅ **ship-check crash-as-green, second half** — the guard read the child's stdout, which
+  only catches a death it lives long enough to narrate; an OOM-killed/timed-out process
+  prints nothing and still scored "0 errors". Now reads `spawnSync` status/signal/error
+  first, extracted to `scripts/ship-check-lib/crashed.mjs`, tested (10, mutation-checked:
+  the old logic fails 4), and gated in GATE_TESTS.
 - ✅ `formatTacticsSubBlock` now takes the board fen as a required parameter
-- ✅ `npm run ship-check` printed **READY TO PUSH (419.0s)** on 2026-09-20 — on main plus this session's three commits, which contains the whole carried-over sweep. The claim that it never had is stale and is DELETED, not annotated. (`test typecheck` is `○ 236 errors (at the ceiling)`, which is the sanctioned shrink-only ceiling, not a red — see 11e)
-- 🔴 Read the `tactics-context-stale` count off the listener
+- ✅ `npm run ship-check` **printed READY TO PUSH** (2026-09-20, 348.6s, 11 commits on the tree): typecheck ✓, prod build ✓, lint 0 errors, content gates ✓, changed-file tests ✓. The one blocker was a redundant `String()` in a new measurement — `npm run lint` runs with `--report-unused-disable-directives`, which makes that an ERROR
+- ✅ Read the `tactics-context-stale` count off the listener — 0 of 145 captured events, prod, non-vacuity proven
 - ✅ `GameChatPanel.test` — MEASURED 2026-09-20: 16/16 green on a synced tree. The "red on untouched main" claim was stale and is deleted, not annotated
 - ✅ Swept: ONE `crashed(out)` detector backs vitest, lint, tsc and the Playwright summarizer — the regex had already been hand-written twice, which is the drift the rot rule names
 
@@ -137,8 +165,8 @@ states and the app can act on two. Measured 2026-09-20, not recalled:
 | the PROFILE (`getCapabilityProfile`, prompted rows skipped) | ✅ built |
 | a term that can LOWER need (`needScore.capabilityTerm`, held ≥ 3 + zero broken) | ✅ built, ONE production reader |
 | **does real play ever reach held ≥ 3 with zero broken?** | ✅ **MEASURED 2026-09-20: YES, 6 of 6 game-seats, off ONE game each** |
-| is the bar set right, i.e. does a proven tag SURVIVE later games? | 🔴 **NO — measured: 1 flip in 5 games, on the tag that proved fastest** |
-| can a student who FIXES a weakness ever go green again? | 🔴 **NO — `broken > 0` is lifetime, so green is unrecoverable** |
+| is the bar set right, i.e. does a proven tag SURVIVE later games? | ✅ **measured and re-set** — `posedImportance >= 80` is the knee (15 real games, 198 held rows): 2 proven, 0 later failed. The old effective bar of 65 gave 2 tags / 17 failure events |
+| can a student who FIXES a weakness ever go green again? | ✅ **YES — fixed and gated.** `capabilityProven` reads `heldStreak`/`streakGames`, not lifetime `broken`; a break RESETS the streak rather than closing the door. Gate: capabilityEvidence.test 'GREEN IS RECOVERABLE'. Verified 2026-09-20: no production code gates green on lifetime broken (`broken > 0` survives only to classify RED) |
 | **has a student's Nth game ever gone quiet because of games 1..N-1?** | 🔴 **NEVER SHOWN** |
 
 🔴 **The "21 vs 8 parity gap" I read off `docs/STATE.md` is a GREP RATIO, not a
@@ -161,7 +189,15 @@ BROKEN in game 5 — so the coach would have gone quiet about it for four games
 and then watched them do it again. One flip in five games, on the tag that
 proved fastest.
 
-🔴 **AND THE OPPOSITE DEFECT, found by the same run: GREEN IS UNRECOVERABLE.**
+✅ **FIXED — the defect this paragraph describes is closed (verified 2026-09-20).**
+`capabilityProven` now reads a RECENT STREAK (`heldStreak` / `streakGames`) and
+no production code gates green on a lifetime `broken` any more; the one
+surviving `broken > 0` classifies RED, which is correct. Gate:
+`capabilityEvidence.test` → "GREEN IS RECOVERABLE — a student who fixes it can
+go green again" (33 capability tests green). The original finding, kept because
+the reasoning is why the rule has its present shape:
+
+🔴 **THE OPPOSITE DEFECT, found by the same run: GREEN WAS UNRECOVERABLE.**
 `getCapabilityProfile` counts LIFETIME broken and `capabilityTerm` requires
 `broken === 0`, so one break ever bars a tag from green permanently, however
 many holds follow. The heat map exists to say "you have GOTTEN BETTER" and as
@@ -242,7 +278,7 @@ there; the review arm proves nothing either way and should not be re-run.**
 - ✅ **review, zero reds** — including the two fundamentals rows that were red in the last recorded run (RECAP aggregate + FUNDLEAD). NB that game had ONE flagged ply, so 1/1 is n=1, green rather than robust.
 - ✅ **Learn, exit 0** — 27 spoken lines, the computed concept invariant voiced mid-game, 13 board lines gate-clean on perspective, 57 against the vacuity floor.
 - ❌ **green — RUN UNUSABLE**, correctly refused (above).
-- ✅ **`tactics-context-stale`: ZERO across all four runs** — closes that open item; no third producer indicated.
+- ✅ **`tactics-context-stale`: 0 of 145 captured events**, measured on prod 2026-09-20. ⚠️ The earlier "ZERO across all four runs" line reached the RIGHT NUMBER on NO EVIDENCE — until today `grep -rl tactics-context-stale scripts/` returned nothing, so no audit captured the event and that zero was absence-of-capture. Same answer, real instrument: G5a asserts the listener captured events at all, and runs first.
 - Noted for the other session's #21, not acted on: `workers=60` alive on the review reopen, inside the band their census tracks.
 
 ✅ **THE MECHANISM IS VERIFIED AT THE DECISION POINT, AND IT IS NARROW BY
@@ -279,5 +315,9 @@ never produces a proven capability then the lowering term can never fire and
 Not the main concept, and explicitly deprioritised (David 2026-09-20: "the
 register doesnt get up to closing the loop"):
 - 🔴 C15 the voiced corpus register — a real defect the student hears, but polish next to the loop.
+- 🔴 **C15b lesson BEATS are unscanned for gendered pronouns** — the peer's fix made the
+  beat arm live (it read a field that does not exist, so it scanned nothing, ever). GENDERED
+  never covered authored beats. Do NOT close by raising the 202 ceiling — that blesses rot;
+  scan, read a sample, degender offline, then ceiling the ambiguous remainder.
 - ✅ 11e the test-type-error ceiling 236 → **0**, now a hard gate — see §6 for the shapes and the two dead/red gates it exposed.
 - 🔴 E2 the two-deploy service-worker check — rides along with whatever ships next.
