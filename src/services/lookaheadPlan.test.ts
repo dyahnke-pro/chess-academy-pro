@@ -318,7 +318,9 @@ describe('the read sees the whole line, not just where pieces land', () => {
     const base = {
       ...SIDE_DEFAULTS, color: 'white' as const, headingFor: [], opening: [], trading: [], outposts: [],
       passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
-      nearEnemyKing: 0, text: '',
+      nearEnemyKing: 0,
+      kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+      tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null, aside: '', text: '',
     };
     expect(describePlan({ ...base, mates: true }, 'mine')).toContain("if you can find it");
     expect(describePlan({ ...base, mates: true, mateDelivered: true }, 'mine')).toContain('game over');
@@ -432,6 +434,8 @@ describe('hallucination is impossible by construction, not by gate', () => {
         tactic: pick(TACTICS, i),
         mates: i % 97 === 0,
         nearEnemyKing: i % 6,
+        kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+        tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null, aside: '',
         text: '',
       };
       const said = describePlan(plan, i % 2 ? 'mine' : 'theirs');
@@ -479,6 +483,8 @@ describe('hallucination is impossible by construction, not by gate', () => {
         tactic: pick(TACTICS, i),
         mates: i % 53 === 0,
         nearEnemyKing: i % 5,
+        kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+        tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null, aside: '',
         text: '',
       }, i % 2 ? 'mine' : 'theirs');
       expect(said, `case ${i} handed over a move: "${said}"`)
