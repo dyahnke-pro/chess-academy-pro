@@ -292,5 +292,9 @@ never produces a proven capability then the lowering term can never fire and
 Not the main concept, and explicitly deprioritised (David 2026-09-20: "the
 register doesnt get up to closing the loop"):
 - 🔴 C15 the voiced corpus register — a real defect the student hears, but polish next to the loop.
+- 🔴 **C15b lesson BEATS are unscanned for gendered pronouns** — the peer's fix made the
+  beat arm live (it read a field that does not exist, so it scanned nothing, ever). GENDERED
+  never covered authored beats. Do NOT close by raising the 202 ceiling — that blesses rot;
+  scan, read a sample, degender offline, then ceiling the ambiguous remainder.
 - 🔴 11e the test-type-error ceiling 236 → 0 — hygiene, test files only.
 - 🔴 E2 the two-deploy service-worker check — rides along with whatever ships next.

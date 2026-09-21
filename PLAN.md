@@ -2980,3 +2980,48 @@ shared by two call paths is two instruments, not one.
 
 Reproduce: `AUDIT_GAME_ID=06wNUWaA AUDIT_STUDENT=black node
 scripts/audit-review-overhaul-prod.mjs` (under the shared lock, after the push).
+
+---
+
+## OPEN — lesson BEATS are unscanned for gendered pronouns (filed 2026-09-20, deliberately not closed)
+
+A peer session found `perspectiveVoice.test.ts`'s lesson-beat arm had been DEAD:
+it iterated `for (const lesson of ALL_LESSONS) for (const beat of lesson.beats ?? [])`,
+but `ALL_LESSONS` is `RegisteredLesson[]` (`{scope, key, openingId, lesson}`), so
+`.beats` was `undefined` on every element, `?? []` swallowed it, and the loop ran
+ZERO times — the we/our/us ban had never been checked against a single authored
+beat while the file reported green. Fixed there; that arm now reaches 500+ beat
+strings and asserts its scan count.
+
+**C15's GENDERED scan did NOT go through that path** — it loops `JSON_FILES` and
+`collectProseStrings`, never `ALL_LESSONS` — so `GENDERED_CEILING = 202` was
+measured over real prose and stands. Verified, not assumed.
+
+**THE GAP.** Now that the beats are reachable, nothing scans them for GENDERED.
+Authored masterclass prose is precisely where "White develops the knight, and
+**he** follows with…" lives — the same defect C15 exists for, in the corpus most
+likely to contain it.
+
+🚨 **DO NOT CLOSE THIS BY RAISING `GENDERED_CEILING` TO WHATEVER THE BEATS
+RETURN.** A ceiling set over newly-visible rot BLESSES the rot: it converts an
+unmeasured defect into a sanctioned baseline, and the shrink-only rule then
+protects it forever. The order is: scan, READ A SAMPLE, fix what is fixable
+offline (`scripts/voiced-authoring/degender.mjs` is the precedent — it rewrote
+1145 → 34 and left only what it REFUSED to guess at), and only then set a ceiling
+over the genuinely ambiguous remainder.
+
+**AND THE SCAN MUST SEPARATE TWO THINGS, or its number is meaningless** (the
+peer's point, 2026-09-20, and the sharpest thing said about this item): a
+masterclass beat saying "White develops the knight" is CORRECT — the Watch
+register is third-person by design (TWO DISTINCT NARRATION REGISTERS). What is
+banned is a gendered pronoun standing for a PLAYER — "he's up a point of
+material" said to a student whose pronouns nobody knows, which is what
+`NO_GENDERED` in `perspectiveRule.ts` actually forbids. A scan that cannot tell
+those apart returns a number that is partly the design, and a ceiling set over
+it blesses the wrong half. C15's existing COLOUR_WORD same-sentence rule is the
+shape to reuse, not a blanket match. Read before you count.
+
+Why it is filed rather than done: the push in flight is already ~48 commits
+across two sessions, and this needs its own measurement pass plus a judgement
+call on each survivor. It is a real defect the student can hear, ranked beside
+C15 itself — not hygiene.
