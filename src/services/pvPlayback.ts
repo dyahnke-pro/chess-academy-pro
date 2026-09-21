@@ -24,9 +24,13 @@ import { classifyPosition } from './tacticClassifier';
 import { describeStructure } from './boardStructure';
 import { legalSeeGain } from './positionReadingService';
 import type { StockfishAnalysis } from '../types';
+import { MATERIAL_VALUE } from './pieceValues';
 
 /** Face values for the recapture-net calc (mirrors positionReadingService). */
-const PIECE_POINTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+// MATERIAL semantics (k: 0 — a king is never won). One home: `pieceValues.ts`.
+// This was one of 53 private copies measured 2026-09-21; the CAPTURE table
+// (k: 100) answers a different question and lives beside it there.
+const PIECE_POINTS = MATERIAL_VALUE;
 
 function pieceVal(t?: string): number {
   return t ? (PIECE_POINTS[t] ?? 0) : 0;

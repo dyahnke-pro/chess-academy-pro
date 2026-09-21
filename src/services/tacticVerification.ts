@@ -20,8 +20,13 @@
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import { capturesWinMaterial, legalSeeGainFor } from './positionReadingService';
+import { CAPTURE_VALUE } from './pieceValues';
 
-const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+// CAPTURE/SEE semantics (k: 100 — a king must never be capturable in an
+// exchange search). One home: `pieceValues.ts`. The MATERIAL table (k: 0)
+// answers a different question; conflating them is why this verifier and
+// computePlyFacts once disagreed about whether a royal fork was real.
+const PIECE_VALUE = CAPTURE_VALUE;
 
 export type ForkStatus = 'live' | 'threat' | 'none';
 

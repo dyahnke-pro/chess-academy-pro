@@ -14,7 +14,6 @@
 // question — never the answer — so it cannot leak what it does not know.
 
 import { Chess } from 'chess.js';
-import { detectTactics } from './tacticsDetector';
 import { describeMoveGeometry } from './groundedAnswer';
 import { landedTacticFor } from './pvPlayback';
 
