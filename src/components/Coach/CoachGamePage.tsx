@@ -438,6 +438,23 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   // Player color selection (disabled once game has started)
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>(initialSide);
+  /**
+   * 🔴 FLIPPING THE BOARD IS A VIEW, NOT A SIDE SWAP (fixed 2026-09-21).
+   *
+   * `handleChatSetOrientation` used to call `setPlayerColor`, and `playerColor`
+   * is not a view flag — it decides whose move it is (`isStudentTurn`), how the
+   * GAME RESULT is attributed, and which name goes on which side of the saved
+   * PGN. So "flip the board" mid-game swapped the student to the other colour,
+   * handed them the opponent's position, and mis-recorded who won.
+   *
+   * Two different asks were conflated: "flip the board" is about the VIEW;
+   * "I want to play black" is about the SIDE and means a new game. This flag
+   * carries the first and touches none of the game logic.
+   */
+  const [boardFlipped, setBoardFlipped] = useState(false);
+  const boardOrientation: 'white' | 'black' = boardFlipped
+    ? (playerColor === 'white' ? 'black' : 'white')
+    : playerColor;
   // Capture the fen param once on mount so navigation or param-clearing
   // later in the session doesn't re-seed the game. fenParam is null for
   // normal "start-from-scratch" games.
@@ -4285,10 +4302,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
    */
   const handleChatSetOrientation = useCallback(
     (orientation: 'white' | 'black'): { ok: boolean; reason?: string } => {
-      setPlayerColor(orientation);
+      // "Put white at the bottom" = flip iff the student is not already white.
+      // Never `setPlayerColor` — see `boardFlipped` for what that would cost.
+      setBoardFlipped(orientation !== playerColor);
       return { ok: true };
     },
-    [],
+    [playerColor],
   );
 
   /**
@@ -4617,7 +4636,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             <div className="w-full md:max-w-[420px] relative">
               <ChessBoard
                 initialFen={game.fen}
-                orientation={playerColor}
+                orientation={boardOrientation}
                 interactive={false}
                 showEvalBar={showEvalBarEffective}
                 evaluation={latestEval}
@@ -5124,7 +5143,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             <ChessBoard
               key={`${gameState.gameId}-${playerColor}-${practicePosition?.fen ?? ''}-${practiceAttempts}-${exploreFen ?? ''}`}
               initialFen={displayFen}
-              orientation={playerColor}
+              orientation={boardOrientation}
               // Mirror Learn (CoachTeachPage): the board is locked ONLY while
               // the coach is computing its move (isCoachThinking) — NOT while it
               // narrates afterward. The student can play the instant the

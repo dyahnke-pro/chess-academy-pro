@@ -1522,6 +1522,18 @@ export function CoachTeachPage(): JSX.Element {
   // moves; eval-bar / engine-lines toggles drive the board overlays.
   const { settings, updateSetting } = useSettings();
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
+  /**
+   * 🔴 FLIPPING THE BOARD IS A VIEW, NOT A SIDE SWAP (fixed 2026-09-21, same
+   * defect as CoachGamePage's). The `setOrientation` hand used to call
+   * `setPlayerColor`, and `playerColor` has 80 references here — it decides
+   * which side the student is being taught, which moves are theirs, and how the
+   * lesson addresses them. "Flip the board" is about the VIEW; "I want to play
+   * black" is about the SIDE and means starting over.
+   */
+  const [boardFlipped, setBoardFlipped] = useState(false);
+  const boardOrientation: 'white' | 'black' = boardFlipped
+    ? (playerColor === 'white' ? 'black' : 'white')
+    : playerColor;
   // 🔒 ONE DIFFICULTY (2026-09-21) — see the store field. This surface used to
   // hold its own copy defaulting to 'medium', so the opponent here ignored what
   // the student had set anywhere else.
@@ -2203,8 +2215,12 @@ export function CoachTeachPage(): JSX.Element {
     setPosition: handleSetBoardPosition,
     resetBoard: handleResetBoard,
     setOrientation: (o: 'white' | 'black') => {
+      // The VIEW only. `setPlayerColor` here re-taught the lesson from the
+      // other seat — and the seat is part of what identifies a teaching claim
+      // (the locked seat rule), so it would have handed the student the
+      // opponent's lesson mid-line.
       gameRef.current.setOrientation(o);
-      setPlayerColor(o);
+      setBoardFlipped(o !== playerColor);
     },
     showSquares: (squares: readonly Square[]) => {
       setHighlights(squares.map((sq) => ({ square: sq, color: 'yellow' as const })));
@@ -11415,7 +11431,7 @@ export function CoachTeachPage(): JSX.Element {
                   <ChessBoard
                     key={`drill-board-${walkthrough.drillFen}`}
                     initialFen={walkthrough.drillFen}
-                    orientation={playerColor}
+                    orientation={boardOrientation}
                     interactive={true}
                     showFlipButton={false}
                     showUndoButton={false}
@@ -11452,7 +11468,7 @@ export function CoachTeachPage(): JSX.Element {
                       <ChessBoard
                         key={`walkthrough-board-${fenToShow}`}
                         initialFen={fenToShow}
-                        orientation={playerColor}
+                        orientation={boardOrientation}
                         interactive={isFindMoveQuiz}
                         showFlipButton={false}
                         showUndoButton={false}
