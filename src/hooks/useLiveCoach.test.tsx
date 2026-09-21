@@ -9,7 +9,11 @@ import type { PlayerMoveNotification } from './useLiveCoach';
 // re-fire the same ply's DeepSeek call. These tests prove the store-backed
 // dedup (a Zustand singleton that survives remounts) closes that.
 
-const groundedMoveFeedback = vi.fn(async () => 'A knight jumps into d5.');
+// The inner `vi.fn` takes a REST parameter because the lazy-reference wrapper
+// below spreads the real call's arguments into it. A zero-arg mock cannot be
+// spread into, which is what TypeScript was objecting to — and the mock does
+// receive those arguments, so the rest param is the honest signature.
+const groundedMoveFeedback = vi.fn(async (..._a: unknown[]) => 'A knight jumps into d5.');
 vi.mock('../services/coachApi', () => ({ groundedMoveFeedback: (...a: unknown[]) => groundedMoveFeedback(...a) }));
 vi.mock('../services/liveTacticsContext', () => ({ buildFedTacticsContext: vi.fn(async () => null) }));
 // Fen-aware so a single test can hand the hook a REAL engine line (the

@@ -5,7 +5,11 @@ import { NotificationBell } from './NotificationBell';
 // Stateful mock so the seen-marker actually moves and the sync event fires.
 let seenId: string | null = null;
 let seenTs = 0;
-const sendReply = vi.fn(async () => true);
+// The inner `vi.fn` takes a REST parameter because the lazy-reference wrapper
+// below spreads the real call's arguments into it. A zero-arg mock cannot be
+// spread into, which is what TypeScript was objecting to — and the mock does
+// receive those arguments, so the rest param is the honest signature.
+const sendReply = vi.fn(async (..._a: unknown[]) => true);
 const captureEvent = vi.fn();
 // Per-device dedup mocks: first delivery/read counts, repeats don't.
 let delivered = new Set<string>();
