@@ -2431,8 +2431,49 @@ language path short-circuited, or bisect `6f088da`. The canonical ask is
     prose counts only if it is a move on the beat's own replayed line; anything
     else is null and never subject-deduped. The guard is a `continue`, like the
     register guard, so a position holding another beat still teaches.
-15. **The voiced corpus is in the wrong register** (#22) — 1,146 he/his, 521
-    first-person, 81 fragments.
+15. **The voiced corpus register (#22) — MEASURED 2026-09-20, and none of the
+    three headline numbers reconcile.** The item read "1,146 he/his, 521
+    first-person, 81 fragments" with no diagnosis. Measured across all three
+    voiced corpora (26,737 prose units):
+
+    | the board said | measured | note |
+    |---|---|---|
+    | 1,146 he/his | **99** | long-prose units; 661 by the gate's own collector, 246 after scoping (below) |
+    | 521 first-person | **2,767** `I/my` + **2** `we/our/us` | `I/my` is LEGITIMATE in coach-is-opponent; the BANNED set is 2 |
+    | 81 fragments | **3,260** | no terminal punctuation |
+
+    **The banned pronoun is effectively clean: 2 occurrences of `we/our/us` in
+    26,737 units.** And through the classifier that actually decides whether a
+    note may be spoken onto a live board, `beatRegister`, the voiced teachings
+    corpus is **95.3% live-safe** (8,073 of 8,473 prose units; 400 spectator).
+    So "the corpus is in the wrong register" overstates it — the play-surface
+    corpus is mostly right.
+
+    ✅ **What IS real, and is now gated: the GENDERED pronoun.** CLAUDE.md
+    records this hole in the PROMPTS and fixed it there (`perspectiveRule`):
+    "every copy banned we/our/us and NONE banned a gendered pronoun". The DATA
+    gate had the identical hole and nobody had looked — `perspectiveVoice.test`
+    scanned only for we/our/us. **246 shipped narration strings call a COLOUR
+    "he"** ("Black plays a6 — he's much worse", "White doesn't cling to the
+    pawn — he plays for structure", and one that manages "Black hasn't moved
+    their e-pawn, he's played the c-pawn instead" in a single sentence).
+    Gated shrink-only at 246; verified it fails at 245, so one new offender
+    fails the build. Per file: middlegame-plans 165, voiced-walkthroughs 23,
+    voiced-matchups 21, common-mistakes 14, pro-repertoires 14, repertoire 9.
+
+    ⚠️ **Two scoping decisions, both by the rule rather than convenience.**
+    (1) The pronoun counts only when a COLOUR is in the same sentence — the
+    shape `beatRegister` already uses. A blanket scan flags "Fischer abandons
+    his lifelong 1.e4", which is correct prose. (2) `model-games.json` is out
+    of scope entirely: CLAUDE.md sanctions the SPECTATOR register for a pure
+    model game, and those overviews are third-person prose about named
+    historical players. Including it put 133 legitimate strings in the backlog.
+
+    **NOT done, and deliberately not attempted: the prose rewrite.** Turning
+    "White does" into "you does" is the obvious wrong answer (English verb
+    agreement is why `beatRegister` classifies instead of rewriting); the
+    honest fix is an offline BAKE, BACKLOG §4.6. No substitution table was
+    written.
 16. ✅ **CLOSED (2026-09-19) — #59 WAS A DEAD SELECTOR, NOT A DEFECT.**
     `audit-read-position-prod` waited on `position-narration-banner`, which
     nothing in `src/` has rendered since e81f758eb (2026-07-10: the read lives
