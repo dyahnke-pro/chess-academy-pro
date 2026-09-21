@@ -16,22 +16,18 @@
 // Reads the WHOLE corpus via loadFullCorpus — two of the four are fetched at
 // runtime, so a measurement without it sees 19.6% of the data.
 import { describe, it, expect, beforeAll } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { TACTIC_TYPE_CONCEPTS, spokenTacticNote } from './danyaTeachingService';
 import { detectTactics } from './tacticsDetector';
-import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadFullCorpus, allCorpusNotes } from '../test/loadFullCorpus';
 import { loadSpokenBake } from '../test/loadSpokenBake';
-import danya from '../data/danya-teachings.json';
-import chessbrah from '../../public/data/chessbrah-teachings.json';
 
-interface Note { concepts?: string[] }
-
-const everyNote = (): Note[] => [
-  ...(danya as unknown as { notes: Note[] }).notes,
-  ...(chessbrah as unknown as { notes: Note[] }).notes,
-  ...(JSON.parse(readFileSync('public/data/hangingpawns-teachings.json', 'utf8')) as { notes: Note[] }).notes,
-  ...(JSON.parse(readFileSync('public/data/saintlouis-teachings.json', 'utf8')) as { notes: Note[] }).notes,
-];
+// 🔒 FROM THE REGISTRY, NOT A HAND-LIST (2026-09-21). The seven non-danya
+// farmed creators were removed — one corpus source, danya's, position-tied
+// (David). A hand-list here names files that no longer exist, so the static
+// import throws and the whole file collapses to "no tests", which is how
+// this gate died once already. `allCorpusNotes` reads every half of every
+// registered corpus off `corpora.json`.
+const everyNote = allCorpusNotes;
 
 const norm = (c: string): string => c.toLowerCase().trim();
 
@@ -52,13 +48,17 @@ describe('tactical lane vocabulary', () => {
     expect(dead).toEqual([]);
   });
 
-  it('reaches at least 17,000 notes — a floor that may only rise', () => {
+    // 4,800, lowered 2026-09-21 — and a floor going DOWN is normally the bug, so
+  // say why: David cut the corpus to ONE source ("the danya ones that we have
+  // tied exactly to positions. nothing else!"). The pool is danya (10,050) plus
+  // voiced (7,477); the lane reaches 4,925. It may only rise from here.
+  it('reaches at least 4,800 notes — a floor that may only rise', () => {
     const mapped = new Set(Object.values(TACTIC_TYPE_CONCEPTS).flat());
     let reach = 0;
     for (const n of everyNote()) {
       if ((n.concepts ?? []).some((c) => mapped.has(norm(c)))) reach += 1;
     }
-    expect(reach).toBeGreaterThanOrEqual(17_000);
+    expect(reach).toBeGreaterThanOrEqual(4_800);
   });
 
   it('PROOF: a real fork on a real board yields real corpus prose', () => {

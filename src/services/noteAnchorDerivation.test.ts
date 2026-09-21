@@ -20,7 +20,8 @@ import { Chess } from 'chess.js';
 import corporaRegistry from '../data/corpora.json';
 import anchorSidecar from '../data/note-anchors.json';
 import { readFileSync, existsSync } from 'node:fs';
-// @ts-expect-error — plain .mjs helper, no types by design
+// Typed via a `.d.mts` beside the module (2026-09-21) — the suppression this
+// replaces made every call an unsafe `any` call.
 import { deriveAnchor, sanRuns } from '../../scripts/derive-note-anchors.mjs';
 import { allDerivedAnchors, applyDerivedAnchors, derivedAnchorsWentUnmatched } from './noteAnchorOverrides';
 import { noteDescribesPosition } from './noteAnchorIntegrity';

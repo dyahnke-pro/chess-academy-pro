@@ -26,7 +26,8 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import proRepertoires from './pro-repertoires.json' assert { type: 'json' };
 import { getLessonScript, getVariationLessonScript } from './lessons';
-// @ts-expect-error — plain .mjs helper, no types by design
+// Typed via a `.d.mts` beside the module (2026-09-21) — the suppression this
+// replaces made every call an unsafe `any` call.
 import { reachesMiddlegame } from './variationMiddlegameDepth.shared.mjs';
 import type { LessonScript } from '../types';
 

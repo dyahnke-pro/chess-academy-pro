@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Chess } from 'chess.js';
-// @ts-expect-error — plain .mjs helper, no types by design
+// Typed via a `.d.mts` beside the module (2026-09-21) — the suppression this
+// replaces made every call an unsafe `any` call.
 import { rewritePerspective } from '../../scripts/corpus-sweep/perspective.mjs';
 
 // ── BOARD ACCURACY FOR HAND-REWRITTEN CORPUS LINES ──────────────────────────
