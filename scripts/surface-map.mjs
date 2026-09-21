@@ -231,7 +231,26 @@ function buildMap(target) {
   L.push('');
   L.push('## Audits that reach it');
   L.push('');
-  if (!audits.length) L.push('_No audit script names this file or its exports. Runtime behaviour here is unproven._');
+  // 🚨 SAY WHAT THIS LIST MEASURED (2026-09-21). `auditsFor` matches audits
+  // that TEXTUALLY reference this file's name or one of its exports. A
+  // browser-driven prod audit exercises a surface through the UI and names
+  // neither — so it does not appear here, however directly it grades this
+  // code. Found concretely: `audit-review-overhaul-prod.mjs` owns the
+  // FUNDLEAD and FUNDWHY rows, which grade exactly what
+  // `principleAttribution` produces, and that surface's map listed only
+  // `audit-fundamentals-tab-prod`. A reader would have concluded the review
+  // audit does not touch it.
+  //
+  // Widening the needles to domain vocabulary (tag literals, emission source
+  // strings) would catch those and would also produce false positives, so the
+  // honest fix is that the list states its own rule rather than implying a
+  // completeness it does not have. An under-reporting list read as complete
+  // is the same failure as a gate that passes without evaluating anything.
+  L.push('_Matched by NAME: audits that textually reference this file or its exports.');
+  L.push('A browser-driven prod audit that exercises this surface through the UI will NOT');
+  L.push('appear here — check the post-deploy matrix in CLAUDE.md for those._');
+  L.push('');
+  if (!audits.length) L.push('_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._');
   for (const a of audits) L.push(`- \`${a}\``);
   L.push('');
   return L.join('\n');

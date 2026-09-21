@@ -2,7 +2,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import type { MoveAnnotation, MoveClassification } from '../types';
 import { isBookLine } from './openingDetectionService';
-import { INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { winPctLost, bandForWinPctLost } from './accuracyService';
 
 // ─── Opening Detection ──────────────────────────────────────────────────────
 
@@ -130,11 +130,6 @@ export function detectBlunders(pgn: string): MoveAnnotation[] | null {
  *  CoachReviewSessionPage) while the curve itself stays server-grade. */
 export const EVAL_COMMENT_ANALYSIS_DEPTH = 12;
 
-/** Clamp a comment eval so a mate score (±10000) can't blow up cpLoss. */
-function clampCp(cp: number): number {
-  return Math.max(-1000, Math.min(1000, cp));
-}
-
 /**
  * FULL per-ply annotations from a PGN's `[%eval]` comments — the whole eval
  * curve, not just the blunders (`detectBlunders`). Lichess writes one eval
@@ -164,17 +159,18 @@ export function annotationsFromEvalComments(pgn: string): MoveAnnotation[] | nul
     // evals[i] is the eval AFTER move i; the start position has no comment.
     const evalBefore = i === 0 ? 0 : (evals[i - 1].cp as number);
     const evalAfter = evals[i].cp as number;
-    const cpLoss = isWhiteMove
-      ? clampCp(evalBefore) - clampCp(evalAfter)
-      : clampCp(evalAfter) - clampCp(evalBefore);
-
     const moveIsBook = stillBook && isBookLine(moves.slice(0, i + 1));
     if (!moveIsBook) stillBook = false;
 
+    // 🔒 BAND IN EXPECTED POINTS, LIKE CHESS.COM (David 2026-09-20: "match
+    // chess.com"). These three lines banded raw centipawns, so an IMPORTED
+    // game — the bulk of a student's record — was labelled in a different
+    // currency from the same game viewed in review, and from the site it was
+    // imported FROM. Both evals are already in hand and White-POV, which is
+    // exactly what winPctLost expects.
     let classification: MoveClassification = 'good';
-    if (cpLoss >= BLUNDER_CP) classification = 'blunder';
-    else if (cpLoss >= MISTAKE_CP) classification = 'mistake';
-    else if (cpLoss >= INACCURACY_CP) classification = 'inaccuracy';
+    const band = bandForWinPctLost(winPctLost(evalBefore, evalAfter, isWhiteMove));
+    if (band) classification = band;
     if (moveIsBook && classification !== 'blunder') classification = 'book';
 
     annotations.push({

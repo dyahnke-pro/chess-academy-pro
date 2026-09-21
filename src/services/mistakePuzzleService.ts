@@ -17,6 +17,8 @@ import { getOpeningNameByEco, isBookLine } from './openingDetectionService';
 import { capEval } from './accuracyService';
 import { verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { useAppStore } from '../stores/appStore';
+import { MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { winPctLost, bandForWinPctLost } from './accuracyService';
 import type {
   MistakePuzzle,
   MistakeClassification,
@@ -75,7 +77,9 @@ const CP_LOSS_THRESHOLD = 150;
 // A book move drops below this and it's opening eval-noise (skip); at or above
 // it's a genuine blunder that surfaces even in a named line (2.Qh5). Matches
 // the local classifyCpLoss blunder band.
-const BOOK_BLUNDER_CP = 300;
+// Same number, same source of truth — a book move is exempt unless it is an
+// outright blunder, and "blunder" is defined once (engineConstants).
+const BOOK_BLUNDER_CP = BLUNDER_CP;
 const MASTERY_REPETITIONS = 3;
 const PV_EXTENSION_DEPTH = 14;
 const BATCH_GAME_LIMIT = 100;
@@ -127,9 +131,23 @@ const PROMPT_TEXT: Record<MistakeClassification, string> = {
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-function classifyCpLoss(cpLoss: number): MistakeClassification {
-  if (cpLoss >= 300) return 'blunder';
-  if (cpLoss >= 100) return 'mistake';
+// ⚠️ FALLBACK ONLY — centipawns are NOT the currency chess.com bands in, and
+// neither do we (see `bandForWinPctLost`). This is reached only where the two
+// evals are genuinely unavailable, so a partial record is still LABELLED
+// rather than blank. Where the evals exist, the win% band decides.
+//
+// 🔒 ONE VOCABULARY FOR "MISTAKE" — the thresholds come from engineConstants,
+// they are NOT retyped here (2026-09-20). This function is a SECOND
+// `classifyCpLoss`: the rich, eval-aware one lives in `gameAnalysisService`,
+// and this bare cpLoss one feeds the DRILL QUEUE. It carried its own literal
+// 300/100, so the word "mistake" was defined twice — and a change to what the
+// app calls a mistake would have moved review while leaving the drill queue on
+// the old meaning, silently, with every test green. That is the duplicated-
+// constant rot the fix-on-sight rule exists for, and it is the same shape as
+// the `discovery`/`discovered_attack` enum split.
+function classifyByCentipawnsFallback(cpLoss: number): MistakeClassification {
+  if (cpLoss >= BLUNDER_CP) return 'blunder';
+  if (cpLoss >= MISTAKE_CP) return 'mistake';
   return 'inaccuracy';
 }
 
@@ -394,7 +412,19 @@ async function analyzeGameWithStockfish(
     if (cpLoss < BOOK_BLUNDER_CP && isBookLine(moves.slice(0, moveIdx + 1))) continue;
 
     const moveNumber = Math.floor(moveIdx / 2) + 1;
-    const classification = classifyCpLoss(cpLoss);
+    // 🔒 BAND IN EXPECTED POINTS, LIKE CHESS.COM AND LIKE REVIEW (2026-09-20).
+    // This read `classifyCpLoss(cpLoss)` — raw centipawns — so the SAME move
+    // could be an "inaccuracy" on the review screen and a "mistake" in the
+    // drill it generated. Both evals are already in hand here (cpLoss was
+    // computed from them three lines up), so there is nothing to thread.
+    //
+    // A null band is a VERDICT, not a gap: the move gave up less than an
+    // inaccuracy in win-probability terms — 300cp handed back at +9 — and
+    // chess.com would not flag it, so neither do we. Don't build a drill that
+    // teaches a student they erred when the position says they didn't.
+    const band = bandForWinPctLost(winPctLost(evalBefore, evalAfter, isWhiteMove));
+    if (!band) continue;
+    const classification: MistakeClassification = band;
     // Bounds check: truncated PGNs produce fewer FENs than moves.
     if (fenBeforeIdx >= fens.length) continue;
     const fen = fens[fenBeforeIdx];
@@ -760,7 +790,18 @@ async function generateFromAnnotations(
 
     const movesUci = pvMoves.join(' ');
     const bestMoveSan = uciToSan(fen, bestMove);
-    const classification: MistakeClassification = annotation.classification === 'miss' ? 'miss' : classifyCpLoss(cpLoss);
+    // 🔒 REUSE THE BAND THE ANNOTATION ALREADY CARRIES — do not re-derive it.
+    // The annotation's `classification` was produced by `classifyCpLoss` in
+    // gameAnalysisService, which bands in EXPECTED POINTS. Re-deriving it here
+    // from raw centipawns computed a SECOND, disagreeing verdict for the same
+    // move — the drill could call "mistake" what the review screen the student
+    // just read called "inaccuracy". The annotation is the source of truth;
+    // centipawns are only the fallback when it carries no band at all.
+    const carried = annotation.classification;
+    const classification: MistakeClassification =
+      carried === 'miss' ? 'miss'
+        : (carried === 'inaccuracy' || carried === 'mistake' || carried === 'blunder') ? carried
+          : classifyByCentipawnsFallback(cpLoss);
     const gamePhase = classifyGamePhase(fen, annotation.moveNumber);
 
     // Determine player's move in UCI + SAN format from annotation
@@ -1170,7 +1211,7 @@ export function buildMistakePuzzleFromCapture(
   }
 
   const cpLoss = input.cpLoss && input.cpLoss > 0 ? Math.round(input.cpLoss) : 150;
-  const classification = classifyCpLoss(cpLoss);
+  const classification = classifyByCentipawnsFallback(cpLoss);
   const gamePhase = input.gamePhase ?? classifyGamePhase(fen, input.moveNumber ?? 20);
   const tacticType = detectTacticType(fen, bestMove);
   const srsDefaults = createDefaultSrsFields();

@@ -45,6 +45,8 @@ function buildOverviewData(overrides?: Partial<OverviewInsights>): OverviewInsig
     accuracyWhite: 75,
     accuracyBlack: 69,
     strengths: ['Strong opening preparation (85% accuracy)'],
+    analyzedGameCount: 20,
+    gamesNeedingAnalysis: 0,
     ...overrides,
   };
 }

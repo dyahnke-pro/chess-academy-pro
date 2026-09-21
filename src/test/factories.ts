@@ -21,7 +21,10 @@ import type {
   CommonMistake,
   CheckpointQuizItem,
   SetupPuzzle,
+  MoveAnnotation,
+  AnalysisLine,
 } from '../types';
+import type { SidePlan } from '../services/lookaheadPlan';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -511,6 +514,91 @@ export function buildMoveResult(overrides: Partial<MoveResult> = {}): MoveResult
     history: [san],
     moveNumber: 1,
     turn: 'b',
+    ...overrides,
+  };
+}
+
+/**
+ * A `MoveAnnotation` as the review pipeline persists it.
+ *
+ * `bestMoveEval` is REQUIRED and nullable — "the engine did not report one"
+ * (null) and "this annotation predates the field" are different facts, and the
+ * review's accuracy and missed-opportunity surfaces read it. Six test sites
+ * were still writing the pre-`bestMoveEval` shape; a fixture that omits a
+ * required field type-errors, and one that DEFAULTS it to a number would be
+ * worse — it would make every test look like the engine had an opinion.
+ * So the default here is null: honestly absent.
+ */
+export function buildMoveAnnotation(overrides?: Partial<MoveAnnotation>): MoveAnnotation {
+  return {
+    moveNumber: 1,
+    color: 'white',
+    san: 'e4',
+    evaluation: 20,
+    bestMove: 'e2e4',
+    bestMoveEval: null,
+    classification: 'good',
+    comment: null,
+    ...overrides,
+  };
+}
+
+/**
+ * An `AnalysisLine` (one Stockfish PV) with `rank` and `mate` present.
+ *
+ * `mate` defaults to null rather than 0 — 0 would read as "mate in zero",
+ * which is a claim, where null is the absence of one. `rank` defaults to 1
+ * because a fixture with no rank is almost always standing in for the engine's
+ * best line.
+ */
+export function buildAnalysisLine(overrides?: Partial<AnalysisLine>): AnalysisLine {
+  return {
+    rank: 1,
+    evaluation: 20,
+    moves: ['e2e4'],
+    mate: null,
+    ...overrides,
+  };
+}
+
+/**
+ * A `SidePlan` — the computed want-list for one side of a projected line.
+ *
+ * FACTORY, NOT A LITERAL, because `SidePlan` has grown eleven fields since the
+ * first fixtures were written (`kingAttackSquares`, `maneuver`, `spokenClauses`
+ * …) and every hand-rolled copy restated a type it does not own, so each one
+ * rotted separately. Two files were carrying their own partial copy and both
+ * broke on the same day.
+ *
+ * Every default is the HONEST empty: no squares, no tactic, no maneuver, no
+ * speech. A fixture that wants the plan to SAY something passes `text` and
+ * `spokenClauses` in, so a test never accidentally asserts against a sentence
+ * the factory invented.
+ */
+export function buildSidePlan(overrides?: Partial<SidePlan>): SidePlan {
+  return {
+    color: 'white',
+    headingFor: [],
+    opening: [],
+    trading: [],
+    outposts: [],
+    passedPawns: [],
+    materialSwing: 0,
+    shieldStripped: 0,
+    tactic: null,
+    mates: false,
+    nearEnemyKing: 0,
+    kingAttackSquares: [],
+    materialSquares: [],
+    tradeSquares: [],
+    tacticSquare: null,
+    idlePieces: [],
+    maneuver: null,
+    checks: 0,
+    promotes: null,
+    text: '',
+    aside: '',
+    spokenClauses: [],
     ...overrides,
   };
 }

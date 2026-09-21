@@ -206,13 +206,12 @@ describe('tacticAlertService', () => {
   describe('detectGameplayTactic', () => {
     it('returns null when no best move', () => {
       const analysis: StockfishAnalysis = {
-        bestMove: '',
+        bestMove: null as unknown as string,
         evaluation: 0,
         depth: 10,
-        nodesPerSecond: 0,
         topLines: [],
         isMate: false,
-        mateIn: null,
+        mateIn: null, nodesPerSecond: 0,
       };
       expect(detectGameplayTactic('some fen', analysis, 'white')).toBeNull();
     });
@@ -222,13 +221,12 @@ describe('tacticAlertService', () => {
         bestMove: 'e2e4',
         evaluation: 50,
         depth: 10,
-        nodesPerSecond: 0,
         topLines: [
-          { rank: 1, moves: ['e2e4'], evaluation: 50, mate: null },
-          { rank: 2, moves: ['d2d4'], evaluation: 30, mate: null },
+          { rank: 1, moves: ['e2e4'], evaluation: 50 , mate: null },
+          { rank: 1, moves: ['d2d4'], evaluation: 30 , mate: null },
         ],
         isMate: false,
-        mateIn: null,
+        mateIn: null, nodesPerSecond: 0,
       };
       expect(detectGameplayTactic('some fen', analysis, 'white')).toBeNull();
     });
@@ -238,13 +236,12 @@ describe('tacticAlertService', () => {
         bestMove: 'e2e4',
         evaluation: 300,
         depth: 10,
-        nodesPerSecond: 0,
         topLines: [
-          { rank: 1, moves: ['e2e4'], evaluation: 300, mate: null },
-          { rank: 2, moves: ['d2d4'], evaluation: 50, mate: null },
+          { rank: 1, moves: ['e2e4'], evaluation: 300 , mate: null },
+          { rank: 1, moves: ['d2d4'], evaluation: 50 , mate: null },
         ],
         isMate: false,
-        mateIn: null,
+        mateIn: null, nodesPerSecond: 0,
       };
       // Our mock returns 'fork' for fen containing 'fork'
       expect(detectGameplayTactic('fork position', analysis, 'white')).toBe('fork');
@@ -255,13 +252,12 @@ describe('tacticAlertService', () => {
         bestMove: 'e2e4',
         evaluation: 300,
         depth: 10,
-        nodesPerSecond: 0,
         topLines: [
-          { rank: 1, moves: ['e2e4'], evaluation: 300, mate: null },
-          { rank: 2, moves: ['d2d4'], evaluation: 50, mate: null },
+          { rank: 1, moves: ['e2e4'], evaluation: 300 , mate: null },
+          { rank: 1, moves: ['d2d4'], evaluation: 50 , mate: null },
         ],
         isMate: false,
-        mateIn: null,
+        mateIn: null, nodesPerSecond: 0,
       };
       // Our mock returns 'tactical_sequence' for unknown fen
       expect(detectGameplayTactic('unknown position', analysis, 'white')).toBeNull();

@@ -25,12 +25,12 @@ function buildOverview(overrides?: Partial<OverviewInsights>): OverviewInsights 
     classificationCounts: {
       brilliant: 0,
       great: 0,
-      miss: 0,
       good: 0,
       book: 0,
       inaccuracy: 0,
       mistake: 0,
       blunder: 0,
+      miss: 0,
     },
     totalMoves: 2000,
     avgMovesPerGame: 40,
@@ -51,6 +51,8 @@ function buildOverview(overrides?: Partial<OverviewInsights>): OverviewInsights 
 
 function buildOpenings(overrides?: Partial<OpeningInsights>): OpeningInsights {
   return {
+    bestResults: [],
+    worstResults: [],
     repertoireCoverage: { inBook: 0, offBook: 0 },
     mostPlayedWhite: [],
     mostPlayedBlack: [],
@@ -191,12 +193,12 @@ describe('computeShareableInsights', () => {
       classificationCounts: {
         brilliant: 3,
         great: 0,
-        miss: 0,
         good: 0,
         book: 0,
         inaccuracy: 0,
         mistake: 0,
         blunder: 0,
+        miss: 0,
       },
     }));
     vi.mocked(getOpeningInsights).mockResolvedValue(buildOpenings());
@@ -214,8 +216,8 @@ describe('computeShareableInsights', () => {
       winRateWhite: 68,
       winRateBlack: 40,
       classificationCounts: {
-        brilliant: 2, great: 0, miss: 0, good: 0, book: 0,
-        inaccuracy: 0, mistake: 0, blunder: 0,
+        brilliant: 2, great: 0, good: 0, book: 0,
+        inaccuracy: 0, mistake: 0, blunder: 0, miss: 0,
       },
       phaseAccuracy: [
         { phase: 'opening', accuracy: 85, moveCount: 200, mistakes: 0 },

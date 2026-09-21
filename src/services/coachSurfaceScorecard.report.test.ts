@@ -15,6 +15,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadSpokenBake } from '../test/loadSpokenBake';
 import { teachingSourceForBoard, spokenBeatText, generalizedTeaching, transitionTeachingForGame, tacticNoteForPuzzleThemes } from './danyaTeachingService';
 import { buildPlayCommentary } from './playCommentary';
 import { formatReadingFacts } from './positionReadingService';
@@ -22,8 +23,6 @@ import { gradeNarrationText } from './coachAnswerGates';
 import { falseConfigurationClaim } from './configurationClaims';
 import { buildVoicePackage } from './voicePackage';
 import { findLivePunishment } from './gemCrushLines';
-import { __setSpokenBakeCache } from './spokenNoteBake';
-import { readFileSync } from 'node:fs';
 
 /** Real games, chosen to span the phases each surface actually runs in. */
 const GAMES: Array<{ name: string; sans: string[]; student: 'white' | 'black' }> = [
@@ -84,8 +83,7 @@ describe('coach surface scorecard', () => {
     // to another game), so without this every tactic note returns '' and the
     // scorecard reports a dead wire that is actually a working rule. The app
     // fetches this at boot; the harness has to do it explicitly.
-    const raw = JSON.parse(readFileSync('public/data/corpus-spoken.json', 'utf8')) as Record<string, { spoken?: string; kind?: string; unspeakable?: string }>;
-    __setSpokenBakeCache(new Map(Object.entries(raw)));
+    loadSpokenBake();
   }, 180_000);
 
   it('scores narration quality, speed and accuracy across every surface', () => {

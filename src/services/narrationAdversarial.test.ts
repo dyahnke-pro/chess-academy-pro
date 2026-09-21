@@ -20,6 +20,7 @@ import { Chess } from 'chess.js';
 import { planFromUci, keySquareLine, positionReadLine, describePlan } from './lookaheadPlan';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { readPosition, buildPositionalRead } from './positionalRead';
+import { buildSidePlan } from '../test/factories';
 
 /** Deterministic walk: at every position, take the Nth legal move. Different
  *  seeds give genuinely different games without Math.random (banned). */
@@ -148,7 +149,19 @@ describe('ADVERSARIAL: 60 machine-played games through every computed lane', () 
     // the margin below the measured 83,981 is deliberately narrow.
     expect(chars, 'the narration got thinner, not just fewer-sentenced').toBeGreaterThan(75_000);
     expect(concessions, 'the concession beat never fired across 400 games').toBeGreaterThan(0);
-  }, 240000);
+  // 🔒 THE DEADLINE MUST NOT BE THE THING THAT FAILS. Measured solo on a quiet
+  // machine this test takes ~193s — against a 240s cap, a 1.24x margin. Any
+  // concurrent work at all (a sibling session's typecheck, ship-check's own
+  // earlier steps still releasing memory) pushes it over, and it then reports
+  // a TIMEOUT where the product is fine. It false-red'd two pushes on
+  // 2026-09-20/21 and has cost more time than it has ever caught.
+  //
+  // A timeout exists to stop a HANG, not to police a slow-but-working test, so
+  // it is set where a hang is unambiguous rather than where the measurement
+  // happens to land: 600s is >3x the measured run, so anything that trips it
+  // is genuinely stuck. Lowering it again to "keep it tight" would be
+  // reintroducing a flake to protect a number nobody reads.
+  }, 600_000);
 });
 
 describe('ADVERSARIAL: malformed and hostile input', () => {
@@ -174,11 +187,7 @@ describe('ADVERSARIAL: malformed and hostile input', () => {
   });
 
   it('never produces a sentence fragment from a half-empty plan', () => {
-    const base = {
-      color: 'white' as const, headingFor: [], opening: [], trading: [], outposts: [],
-      passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
-      mates: false, nearEnemyKing: 0, text: '',
-    };
+    const base = buildSidePlan({ color: 'white' });
     // Every single-field plan, on its own.
     const singles = [
       { headingFor: ['e4'] }, { opening: ['d'] }, { trading: ['knight'] },

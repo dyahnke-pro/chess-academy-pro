@@ -23,9 +23,7 @@
 // asserts on spoken text.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { __setSpokenBakeCache } from '../services/spokenNoteBake';
-
-interface BakedEntry { spoken?: string; kind?: string; unspeakable?: string }
+import { __setSpokenBakeCache, type BakedNote } from '../services/spokenNoteBake';
 
 let loaded = false;
 
@@ -33,7 +31,7 @@ let loaded = false;
 export function loadSpokenBake(): void {
   if (loaded) return;
   const path = join(process.cwd(), 'public/data/corpus-spoken.json');
-  const raw = JSON.parse(readFileSync(path, 'utf8')) as Record<string, BakedEntry>;
+  const raw = JSON.parse(readFileSync(path, 'utf8')) as Record<string, BakedNote>;
   __setSpokenBakeCache(new Map(Object.entries(raw)));
   loaded = true;
 }

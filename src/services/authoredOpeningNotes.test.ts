@@ -16,6 +16,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { gradeNarrationText } from './coachAnswerGates';
 import { authoredNoteAt, authoredEntryFor, divergencePly, sansOf } from './authoredOpeningNotes';
+import type { AuthoredEntry } from './authoredOpeningNotes';
 import repertoire from '../data/repertoire.json';
 import openingsDb from '../data/openings-lichess.json';
 
@@ -100,7 +101,7 @@ describe('an authored explanation speaks where its line begins', () => {
 });
 
 describe('against the real repertoire', () => {
-  const entries = (repertoire as unknown as { pgn?: string; name: string; variations?: unknown[] }[]);
+  const entries = repertoire as unknown as AuthoredEntry[];
 
   it('every variation carries prose for this tier to speak', () => {
     // If this ever drops, the tier silently thins and the model takes back the

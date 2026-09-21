@@ -94,7 +94,7 @@ describe('computePunishFacts is board-true', () => {
 
   it('every piece-on-square claim across 150 real puzzles is TRUE of its board', { timeout: 120_000 }, () => {
     const puzzles: Puzzle[] = JSON.parse(readFileSync('src/data/puzzles.json', 'utf8'));
-    const sample = puzzles.filter((p, i) => i % 100 === 0); // 150 spread
+    const sample = puzzles.filter((_p, i) => i % 100 === 0); // 150 spread
     let claims = 0;
     const lies: string[] = [];
     for (const p of sample) {

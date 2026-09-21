@@ -9,13 +9,9 @@ import type { PlayerMoveNotification } from './useLiveCoach';
 // re-fire the same ply's DeepSeek call. These tests prove the store-backed
 // dedup (a Zustand singleton that survives remounts) closes that.
 
-// The inner `vi.fn` takes a REST parameter because the lazy-reference wrapper
-// below spreads the real call's arguments into it. A zero-arg mock cannot be
-// spread into, which is what TypeScript was objecting to — and the mock does
-// receive those arguments, so the rest param is the honest signature.
 const groundedMoveFeedback = vi.fn(async (..._a: unknown[]) => 'A knight jumps into d5.');
 vi.mock('../services/coachApi', () => ({ groundedMoveFeedback: (...a: unknown[]) => groundedMoveFeedback(...a) }));
-vi.mock('../services/liveTacticsContext', () => ({ buildFedTacticsContext: vi.fn(async () => null) }));
+vi.mock('../services/liveTacticsContext', () => ({ buildFedTacticsContext: vi.fn(async (..._a: unknown[]) => null) }));
 // Fen-aware so a single test can hand the hook a REAL engine line (the
 // concept fires-for-real test below); everything else keeps the flat default.
 const cachedAnalysisByFen: Record<string, unknown> = {};
@@ -24,7 +20,7 @@ vi.mock('./stockfishFenCache', () => ({ getCachedStockfish: (fen: string) => cac
 // (it is wrapped in try/catch) instead of reaching for a Worker.
 vi.mock('../services/stockfishEngine', () => ({ stockfishEngine: { evalBoard: async () => { throw new Error('no engine in test'); } } }));
 vi.mock('../services/coachAnswerGates', () => ({ applyCandidateArrows: async (t: string) => t }));
-vi.mock('../services/voiceService', () => ({ voiceService: { stop: vi.fn(), speakForced: vi.fn(async () => undefined) } }));
+vi.mock('../services/voiceService', () => ({ voiceService: { stop: vi.fn(), speakForced: vi.fn(async (..._a: unknown[]) => undefined) } }));
 vi.mock('../services/appAuditor', () => ({ logAppAudit: vi.fn() }));
 vi.mock('../services/skillScaling', () => ({ alertSensitivityMultiplier: () => 1 }));
 vi.mock('../stores/appStore', () => ({
@@ -111,7 +107,7 @@ describe('the COMPUTED CONCEPT reaches the Learn live coach (P4c — a wire that
     const { result } = renderHook(() => useLiveCoach({ gameId: 'g-concept', playerColor: 'black' }));
     result.current.notifyPlayerMove({ ...move(11), san: 'Kg8', fenAfter: FEN_AFTER });
     await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1), { timeout: 4000 });
-    const call = (groundedMoveFeedback.mock.calls[0] as unknown[])[0] as { extraFacts?: string };
+    const call = groundedMoveFeedback.mock.calls[0]?.[0] as { extraFacts?: string };
     expect(call.extraFacts ?? '', 'the concept clause never reached the chokepoint').toMatch(/a fork hits two targets at once/);
     // Play/Learn commentary stays descriptive: never "you must defend" here.
     expect(call.extraFacts ?? '').not.toMatch(/\b(we|our|us)\b/i);

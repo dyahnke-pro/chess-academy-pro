@@ -30,15 +30,6 @@ function censusOrphans(): string[] {
     .filter((r) => !reset.has(r));
 }
 
-// The ONE unavoidable escape in this file, named and explained rather than
-// repeated inline. The point of the test is to dirty EVERY slot generically, so
-// the write cannot be typed per-slot; `LearnMemory` and `Record<string, unknown>`
-// do not overlap structurally, which is TypeScript being right — this is a
-// deliberate poke, not an assignment the product ever makes.
-function poke(target: LearnMemory, key: keyof LearnMemory, value: unknown): void {
-  (target as unknown as Record<string, unknown>)[key as string] = value;
-}
-
 describe('learnMemory — one per-game memory, one newGame()', () => {
   it('newGame() forgets EVERY slot the object holds', () => {
     const mem = createLearnMemory();
@@ -62,7 +53,8 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     for (const k of slots) {
       const v = mem[k];
       if (v instanceof Set) v.add('x');
-      else poke(mem, k, typeof v === 'number' ? 42 : 'x');
+      else if (typeof v === 'number') (mem as unknown as Record<string, unknown>)[k] = 42;
+      else (mem as unknown as Record<string, unknown>)[k] = 'x';
     }
     // Every slot is now dirty.
     for (const k of slots) {

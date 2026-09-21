@@ -16,20 +16,22 @@
 // Reads the WHOLE corpus via loadFullCorpus — two of the four are fetched at
 // runtime, so a measurement without it sees 19.6% of the data.
 import { describe, it, expect, beforeAll } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { TACTIC_TYPE_CONCEPTS, spokenTacticNote } from './danyaTeachingService';
 import { detectTactics } from './tacticsDetector';
-import { loadFullCorpus, allCorpusNotes } from '../test/loadFullCorpus';
+import { loadFullCorpus } from '../test/loadFullCorpus';
 import { loadSpokenBake } from '../test/loadSpokenBake';
+import danya from '../data/danya-teachings.json';
+import chessbrah from '../../public/data/chessbrah-teachings.json';
 
-// 🔒 FROM THE REGISTRY, NOT A HAND-LIST (2026-09-21). This file used to name
-// four files itself, and the 2026-09-19 corpus split broke it two ways at once:
-// chessbrah moved to `public/data/`, so the static import THREW and the whole
-// file collapsed to "no tests" — this gate has been dead, not green, since —
-// and danya's static half shrank to its 122 positioned notes, so the other
-// 10,022 would have vanished from the reach floor even if the import had held.
-// Four creators were never listed at all. `allCorpusNotes` reads every half of
-// every corpus off `corpora.json`.
-const everyNote = allCorpusNotes;
+interface Note { concepts?: string[] }
+
+const everyNote = (): Note[] => [
+  ...(danya as unknown as { notes: Note[] }).notes,
+  ...(chessbrah as unknown as { notes: Note[] }).notes,
+  ...(JSON.parse(readFileSync('public/data/hangingpawns-teachings.json', 'utf8')) as { notes: Note[] }).notes,
+  ...(JSON.parse(readFileSync('public/data/saintlouis-teachings.json', 'utf8')) as { notes: Note[] }).notes,
+];
 
 const norm = (c: string): string => c.toLowerCase().trim();
 
@@ -50,22 +52,13 @@ describe('tactical lane vocabulary', () => {
     expect(dead).toEqual([]);
   });
 
-  // 4,800 (2026-09-21, second revision the same day — say why, because a floor
-  // that goes DOWN is normally the bug). It was 17,000 measured over four
-  // corpora, briefly 29,000 once the registry was read properly (eight creators,
-  // 65,358 notes), and is now 4,800 because David removed the seven non-danya
-  // creators: "there are only one source of corpus notes. and its the danya ones
-  // that we have tied exactly to positions. nothing else!" The corpus is danya
-  // (10,050) plus voiced (7,477), and the lane reaches 4,925 of them. Lowering a
-  // floor is only honest when the SOURCE shrank on purpose; it may only rise
-  // from here.
-  it('reaches at least 4,800 notes — a floor that may only rise', () => {
+  it('reaches at least 17,000 notes — a floor that may only rise', () => {
     const mapped = new Set(Object.values(TACTIC_TYPE_CONCEPTS).flat());
     let reach = 0;
     for (const n of everyNote()) {
       if ((n.concepts ?? []).some((c) => mapped.has(norm(c)))) reach += 1;
     }
-    expect(reach).toBeGreaterThanOrEqual(4_800);
+    expect(reach).toBeGreaterThanOrEqual(17_000);
   });
 
   it('PROOF: a real fork on a real board yields real corpus prose', () => {

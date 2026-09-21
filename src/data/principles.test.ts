@@ -14,10 +14,6 @@ describe('principles — the device per misconception tag (Phase 3)', () => {
   });
 
   it('no device names a tag outside the closed set', () => {
-    // Set<string>, deliberately: the question is whether an ARBITRARY key
-    // is in the closed set, and a Set<MisconceptionTagId> cannot be asked
-    // about a string that is not already one — which is the only case
-    // this test exists to catch.
     const ids = new Set<string>(MISCONCEPTION_TAGS.map((t) => t.id));
     for (const key of Object.keys(PRINCIPLE_DEVICES)) {
       expect(ids.has(key), `unknown tag ${key}`).toBe(true);

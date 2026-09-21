@@ -99,7 +99,7 @@ describe('billingService — extractPurchaseErrorDetail', () => {
 // different customer and silently strands an existing purchase. It must
 // configure anonymously and then ALIAS via logIn.
 describe('billingService — stable app user id migration', () => {
-  const configure = vi.fn(async () => undefined);
+  const configure = vi.fn(async (..._a: unknown[]) => undefined);
   const logIn = vi.fn(async () => ({ customerInfo: { entitlements: { active: {} } } }));
 
   beforeEach(() => {
@@ -131,7 +131,7 @@ describe('billingService — stable app user id migration', () => {
     // The configure call must NOT carry the id — that is what orphans a
     // customer and loses their purchase.
     expect(configure).toHaveBeenCalledTimes(1);
-    expect(configure.mock.calls[0][0]).not.toHaveProperty('appUserID');
+    expect(configure.mock.calls[0]?.[0]).not.toHaveProperty('appUserID');
     expect(logIn).toHaveBeenCalledWith({ appUserID: 'device-abc' });
   });
 

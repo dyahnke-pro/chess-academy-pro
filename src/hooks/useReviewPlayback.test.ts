@@ -30,6 +30,7 @@ vi.mock('../services/appAuditor', () => ({
 
 import { useReviewPlayback } from './useReviewPlayback';
 import type { ReviewNarration, ReviewMoveSegment } from '../services/coachFeatureService';
+import type { ForwardOutcome } from './useReviewPlayback';
 
 beforeEach(() => {
   speakRecords.length = 0;
@@ -41,7 +42,6 @@ beforeEach(() => {
 
 function makeSegment(overrides: Partial<ReviewMoveSegment> & { ply: number }): ReviewMoveSegment {
   return {
-    ply: overrides.ply,
     moveNumber: Math.ceil(overrides.ply / 2),
     san: 'e4',
     playerColor: overrides.ply % 2 === 1 ? 'white' : 'black',
@@ -358,7 +358,10 @@ describe('useReviewPlayback — auto-advance', () => {
   it('after play(): narration resolves → 0.5s pause → the parent forward handler fires', async () => {
     vi.useFakeTimers();
     try {
-      const onAutoAdvance = vi.fn();
+      // Honour the contract it stands in for: a forward REPORTS whether it
+      // advanced, and a mock that returns undefined is a stub of the old
+      // void-returning shape the outcome type replaced.
+      const onAutoAdvance = vi.fn((): ForwardOutcome => ({ advanced: true }));
       const n = narr();
       const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
       // Intro is still speaking on mount → play() sets auto and lets the in-flight
@@ -376,10 +379,47 @@ describe('useReviewPlayback — auto-advance', () => {
     } finally { vi.useRealTimers(); }
   });
 
+  it('a forward that did NOT advance turns auto-play OFF — the button stops lying', async () => {
+    // 🔒 THE BUG THIS EXISTS FOR (2026-09-21). `handleWalkForward` returned
+    // void, so a forward the parent silently CONSUMED — a question-plan yield,
+    // an open principle quiz — was indistinguishable here from one that
+    // advanced. The next advance is only ever scheduled when the PLY CHANGES,
+    // so one consumed forward stopped the walk permanently while
+    // `isAutoPlaying` stayed TRUE and the control went on reporting "playing".
+    //
+    // A prod review audit sat parked at ply 67 of 69 for 350 SECONDS with a
+    // perfectly readable ply counter and no visible card, and its poll loop
+    // never pressed play because it only presses on `data-state="paused"`. A
+    // real student sees a review that has died and no indication that it has.
+    //
+    // The outcome type makes the state expressible; this asserts the app
+    // actually ENTERS it. A stop is a real transition, not a silence.
+    vi.useFakeTimers();
+    try {
+      const onAutoAdvance = vi.fn((): ForwardOutcome => ({ advanced: false, stop: 'quiz-open' }));
+      const n = narr();
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
+      await act(async () => { result.current.play(); });
+      expect(result.current.isAutoPlaying).toBe(true);
+      const intro = speakRecords[speakRecords.length - 1];
+      await act(async () => { intro.resolve(); });
+      await act(async () => { vi.advanceTimersByTime(1200); });
+      expect(onAutoAdvance, 'the parent forward must still be ASKED').toHaveBeenCalledTimes(1);
+      expect(
+        result.current.isAutoPlaying,
+        'the forward reported it did not advance, so auto-play must be OFF — leaving it true is '
+        + 'the walk claiming to play while nothing can ever schedule the next step',
+      ).toBe(false);
+    } finally { vi.useRealTimers(); }
+  });
+
   it('RESUME after a pause, on a finished ply, advances instead of restating it (David 2026-09-14)', async () => {
     vi.useFakeTimers();
     try {
-      const onAutoAdvance = vi.fn();
+      // Honour the contract it stands in for: a forward REPORTS whether it
+      // advanced, and a mock that returns undefined is a stub of the old
+      // void-returning shape the outcome type replaced.
+      const onAutoAdvance = vi.fn((): ForwardOutcome => ({ advanced: true }));
       const n = narr();
       const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
       // Start playing; the current ply finishes narrating (advance now pending)…
@@ -399,7 +439,10 @@ describe('useReviewPlayback — auto-advance', () => {
   it('the INITIAL Start speaks the current ply (does not skip ply 0 / the intro)', async () => {
     vi.useFakeTimers();
     try {
-      const onAutoAdvance = vi.fn();
+      // Honour the contract it stands in for: a forward REPORTS whether it
+      // advanced, and a mock that returns undefined is a stub of the old
+      // void-returning shape the outcome type replaced.
+      const onAutoAdvance = vi.fn((): ForwardOutcome => ({ advanced: true }));
       const n = narr();
       const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
       // Intro finished on the summary screen; the FIRST play() is a Start, not a
@@ -431,7 +474,10 @@ describe('useReviewPlayback — auto-advance', () => {
   it('resume MID-sentence re-speaks the interrupted ply (never skips it)', async () => {
     vi.useFakeTimers();
     try {
-      const onAutoAdvance = vi.fn();
+      // Honour the contract it stands in for: a forward REPORTS whether it
+      // advanced, and a mock that returns undefined is a stub of the old
+      // void-returning shape the outcome type replaced.
+      const onAutoAdvance = vi.fn((): ForwardOutcome => ({ advanced: true }));
       const n = narr();
       const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
       // Intro is still speaking → pause mid-sentence, then play.
@@ -446,7 +492,10 @@ describe('useReviewPlayback — auto-advance', () => {
   it('holds 1.5s after a FLAGGED ply so the arrow is seen, 0.8s on a silent ply', async () => {
     vi.useFakeTimers();
     try {
-      const onAutoAdvance = vi.fn();
+      // Honour the contract it stands in for: a forward REPORTS whether it
+      // advanced, and a mock that returns undefined is a stub of the old
+      // void-returning shape the outcome type replaced.
+      const onAutoAdvance = vi.fn((): ForwardOutcome => ({ advanced: true }));
       const n = narr();
       const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
       await act(async () => { speakRecords[0].resolve(); });
@@ -476,7 +525,10 @@ describe('useReviewPlayback — auto-advance', () => {
   it('a user intervention PAUSES it, and only play() restarts it', async () => {
     vi.useFakeTimers();
     try {
-      const onAutoAdvance = vi.fn();
+      // Honour the contract it stands in for: a forward REPORTS whether it
+      // advanced, and a mock that returns undefined is a stub of the old
+      // void-returning shape the outcome type replaced.
+      const onAutoAdvance = vi.fn((): ForwardOutcome => ({ advanced: true }));
       const n = narr();
       const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
       // play() while the intro is still speaking (auto on, no immediate advance).
@@ -507,7 +559,10 @@ describe('useReviewPlayback — auto-advance', () => {
   it('stops at the end of the game — never advances past the closing', async () => {
     vi.useFakeTimers();
     try {
-      const onAutoAdvance = vi.fn();
+      // Honour the contract it stands in for: a forward REPORTS whether it
+      // advanced, and a mock that returns undefined is a stub of the old
+      // void-returning shape the outcome type replaced.
+      const onAutoAdvance = vi.fn((): ForwardOutcome => ({ advanced: true }));
       const n = makeNarration({ segments: [makeSegment({ ply: 1, narration: 'Only.' })], closing: 'Done.' });
       const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 1, onAutoAdvance }));
       await act(async () => { speakRecords[0].resolve(); });

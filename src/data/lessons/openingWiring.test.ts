@@ -39,7 +39,7 @@ describe('opening wiring-readiness — registered openings produce variation tab
       for (const t of tabs) {
         expect(t.label.trim().length, `${oid} has an empty tab label`).toBeGreaterThan(0);
         expect(t.index, `${oid} tab index out of range`).toBeGreaterThanOrEqual(0);
-        expect(t.index).toBeLessThan(variations.length);
+        expect(t.index).toBeLessThan(variations?.length ?? 0);
       }
     });
   }

@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import {
   parseActions,
   dispatchActions,
@@ -145,9 +146,7 @@ describe('dispatchActions', () => {
       { navigate },
     );
     expect(navigate).toHaveBeenCalledTimes(1);
-    // No `as string`: typing the mock as Mock<(path: string) => void> means
-    // the call tuple already knows its argument types.
-    const url = navigate.mock.calls[0][0];
+    const url = navigate.mock.calls[0]?.[0] ?? '';
     expect(url).toContain('/coach/session/play-against');
     expect(url).toContain('opening=King%27s+Indian+Attack');
     expect(url).toContain('openingPgn=Nf3+Nf6+g3+d5');

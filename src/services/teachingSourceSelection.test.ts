@@ -77,7 +77,8 @@ describe('selection keeps looking until the caller can use the note', () => {
       history,
       fen,
       'Vienna Game: Vienna Gambit',
-      (note) => note.id !== first?.note.id,
+      'white',
+      (note: { id: string }) => note.id !== first?.note.id,
     );
     // Either a genuinely different note, or nothing left to say — never the
     // rejected one handed back.

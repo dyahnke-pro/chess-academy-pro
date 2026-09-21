@@ -17,20 +17,43 @@
 // are as narrow as they are; do not widen one without re-reading it.
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
+import corporaRegistry from '../data/corpora.json';
+import anchorSidecar from '../data/note-anchors.json';
+import { readFileSync, existsSync } from 'node:fs';
+// @ts-expect-error — plain .mjs helper, no types by design
 import { deriveAnchor, sanRuns } from '../../scripts/derive-note-anchors.mjs';
 import { allDerivedAnchors, applyDerivedAnchors, derivedAnchorsWentUnmatched } from './noteAnchorOverrides';
 import { noteDescribesPosition } from './noteAnchorIntegrity';
 import { noteAtPosition } from './danyaTeachingService';
 import type { DanyaNote } from './danyaTeachingService';
-import { loadFullCorpus, primaryCorpusNotes } from '../test/loadFullCorpus';
+import { loadFullCorpus } from '../test/loadFullCorpus';
 import dbRaw from '../data/openings-lichess.json';
 
-// 🔒 FROM THE REGISTRY (2026-09-21). The hand-list here named
-// `src/data/chessbrah-teachings.json`, which the 2026-09-19 corpus split moved
-// to `public/data/` — so this file threw ENOENT at import and all ELEVEN of its
-// tests were skipped, not passing. It also missed danya's floating half (10,022
-// of its 10,144 notes) and four creators entirely.
-const allNotes = primaryCorpusNotes;
+// The sidecar RECORDS what it was derived from, so resolve THAT rather than
+// keeping a third hand-written copy of the corpus list (the generator has one,
+// this file had one, and corpora.json exists precisely to stop that).
+//
+// Resolved by CORPUS, not by filename: the 2026-09-19 split moved chessbrah
+// from src/data to public/data, and a literal path match died on ENOENT —
+// which killed the whole suite before a single assertion ran. A gate that
+// cannot run is worse than one that fails, because nothing reports it.
+const registryByBasename = new Map(
+  (corporaRegistry.corpora as Array<{ path: string; floatingPath?: string }>)
+    .flatMap((c) => [c.path, c.floatingPath])
+    .filter((p): p is string => typeof p === 'string')
+    .map((p) => [p.split('/').pop() as string, p] as const),
+);
+const CORPORA: string[] = ((anchorSidecar as { derivedFrom?: string[] }).derivedFrom ?? [])
+  .map((p) => (existsSync(p) ? p : registryByBasename.get(p.split('/').pop() as string)))
+  .filter((p): p is string => typeof p === 'string' && existsSync(p));
+
+function allNotes(): DanyaNote[] {
+  const out: DanyaNote[] = [];
+  for (const f of CORPORA) {
+    for (const n of JSON.parse(readFileSync(f, 'utf8')).notes ?? []) out.push(n);
+  }
+  return out;
+}
 
 const DB_PREFIX_PLIES = 4;
 const dbPrefixes = (() => {

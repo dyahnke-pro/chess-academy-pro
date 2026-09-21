@@ -22,12 +22,29 @@ import type { SidePlan, LookaheadPlan, LineShape, TerminalRead, PositionRead } f
  *  material / trade squares, the idle list, maneuver, checks, promotion, the
  *  aside, the spoken clauses) at its empty value — each fixture keeps saying
  *  only what it is about. Spread FIRST so a fixture's own field wins. */
-const SIDE_DEFAULTS = {
-  mates: false, kingAttackSquares: [] as string[], materialSquares: [] as string[], tradeSquares: [] as string[],
-  tacticSquare: null as string | null, idlePieces: [] as string[], maneuver: null as SidePlan['maneuver'],
-  checks: 0, promotes: null as string | null, text: '', aside: '', spokenClauses: [] as SidePlan['spokenClauses'],
-};
 import type { PvLine, PvPly, PlyFacts } from './pvPlayback';
+import { buildSidePlan } from '../test/factories';
+
+/**
+ * A `LineShape` with the fields this test does not care about filled in
+ * HONESTLY — null rather than 0, because "no capture happened" and "the first
+ * capture was at ply 0" are different facts and a 0 would make every shape
+ * look like it had measured something it never looked at.
+ */
+function lineShape(over: Partial<LineShape>): LineShape {
+  return {
+    forcedPlies: 0,
+    traded: 0,
+    endsInEndgame: false,
+    repeats: false,
+    pliesToFirstCapture: null,
+    quietMoveIndex: null,
+    evalSwingCp: null,
+    castlingLost: null,
+    ...over,
+  };
+}
+
 
 const EMPTY: PlyFacts = {
   captured: null, isCheck: false, isMate: false, promotion: null,
@@ -68,24 +85,6 @@ const line = (p: PvPly[]): PvLine => ({
 });
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-
-/** A COMPLETE LineShape from the few fields a case cares about. The literals
- *  here carried three of six fields; the rest are the neutral values the
- *  shape detector itself starts with (lookaheadPlan.ts:936). */
-const fullShape = (o: Partial<LineShape>): LineShape => ({
-  // Field by field rather than `{...base, ...o}`: spreading a Partial widens
-  // every member with `| undefined`, which a required `number | null` will not
-  // accept. A cast would silence that and also silence a genuinely missing
-  // field later, so the defaults are written out.
-  forcedPlies: o.forcedPlies ?? 0,
-  traded: o.traded ?? 0,
-  endsInEndgame: o.endsInEndgame ?? false,
-  repeats: o.repeats ?? false,
-  pliesToFirstCapture: o.pliesToFirstCapture ?? null,
-  quietMoveIndex: o.quietMoveIndex ?? null,
-  evalSwingCp: o.evalSwingCp ?? null,
-  castlingLost: o.castlingLost ?? null,
-});
 
 describe('two plans, one line', () => {
   it('attributes each side\'s moves to that side', () => {
@@ -313,9 +312,11 @@ describe('the read sees the whole line, not just where pieces land', () => {
 
   it('still speaks the future tense for a mate the line is HEADING toward', () => {
     const base = {
-      ...SIDE_DEFAULTS, color: 'white' as const, headingFor: [], opening: [], trading: [], outposts: [],
+      ...buildSidePlan(), color: 'white' as const, headingFor: [], opening: [], trading: [], outposts: [],
       passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
-      nearEnemyKing: 0, text: '',
+      nearEnemyKing: 0,
+      kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+      tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null, aside: '', text: '',
     };
     expect(describePlan({ ...base, mates: true }, 'mine')).toContain("if you can find it");
     expect(describePlan({ ...base, mates: true, mateDelivered: true }, 'mine')).toContain('game over');
@@ -326,7 +327,7 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
   // Drives the REAL scorer. An earlier draft of this block reimplemented the
   // weights inside the test, which would have passed against any code at all.
   const base: SidePlan = {
-    ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+    ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
     passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
     mates: false, nearEnemyKing: 0, text: '',
   };
@@ -418,7 +419,7 @@ describe('hallucination is impossible by construction, not by gate', () => {
   it('never names a square that was not in the computed input', () => {
     for (let i = 0; i < 2000; i += 1) {
       const plan: SidePlan = {
-        ...SIDE_DEFAULTS, color: i % 2 ? 'white' : 'black',
+        ...buildSidePlan(), color: i % 2 ? 'white' : 'black',
         headingFor: i % 3 === 0 ? [pick(SQUARES, i), pick(SQUARES, i + 1)] : [],
         opening: i % 4 === 0 ? [pick(['a', 'c', 'e', 'h'], i)] : [],
         trading: i % 5 === 0 ? [pick(['pawn', 'knight', 'rook'], i)] : [],
@@ -429,6 +430,8 @@ describe('hallucination is impossible by construction, not by gate', () => {
         tactic: pick(TACTICS, i),
         mates: i % 97 === 0,
         nearEnemyKing: i % 6,
+        kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+        tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null, aside: '',
         text: '',
       };
       const said = describePlan(plan, i % 2 ? 'mine' : 'theirs');
@@ -449,14 +452,14 @@ describe('hallucination is impossible by construction, not by gate', () => {
     // spoken as its identifier.
     for (const tactic of TACTICS) {
       const said = describePlan({
-        ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+        ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
         passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic,
         mates: false, nearEnemyKing: 0, text: '',
       }, 'mine');
       expect(said, `a raw identifier reached the voice: "${said}"`).not.toMatch(/_/);
     }
     expect(describePlan({
-      ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+      ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
       passedPawns: [], materialSwing: 0, shieldStripped: 0,
       tactic: 'some_future_detector', mates: false, nearEnemyKing: 0, text: '',
     }, 'mine'), 'an unrecognised tactic was spoken instead of dropped').toBe('');
@@ -464,7 +467,7 @@ describe('hallucination is impossible by construction, not by gate', () => {
 
   it('never emits a move, at any combination of facts', () => {
     for (let i = 0; i < 2000; i += 1) {
-      const said = describePlan({
+      const said = describePlan(buildSidePlan({
         color: i % 2 ? 'white' : 'black',
         headingFor: [pick(SQUARES, i)],
         opening: [pick(['a', 'd', 'f'], i)],
@@ -476,8 +479,7 @@ describe('hallucination is impossible by construction, not by gate', () => {
         tactic: pick(TACTICS, i),
         mates: i % 53 === 0,
         nearEnemyKing: i % 5,
-        text: '',
-      }, i % 2 ? 'mine' : 'theirs');
+      }), i % 2 ? 'mine' : 'theirs');
       expect(said, `case ${i} handed over a move: "${said}"`)
         .not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
     }
@@ -488,7 +490,7 @@ describe('hallucination is impossible by construction, not by gate', () => {
     // run to run is both a re-synthesis bill and a sign something nondeterministic
     // crept in.
     const plan: SidePlan = {
-      ...SIDE_DEFAULTS, color: 'white', headingFor: ['e4'], opening: ['c'], trading: ['knight'],
+      ...buildSidePlan(), color: 'white', headingFor: ['e4'], opening: ['c'], trading: ['knight'],
       outposts: ['d5'], passedPawns: ['a7'], materialSwing: 3, shieldStripped: 1,
       tactic: 'fork', mates: false, nearEnemyKing: 3, text: '',
     };
@@ -676,7 +678,7 @@ describe('the plan does not repeat itself', () => {
   // on a five-narration sample from a real game: "There is already a pin on the
   // board" four plies running, and the same intention three times.
   const P: SidePlan = {
-    ...SIDE_DEFAULTS, color: 'white', headingFor: ['e4', 'f3'], opening: ['d'], trading: ['knight'],
+    ...buildSidePlan(), color: 'white', headingFor: ['e4', 'f3'], opening: ['d'], trading: ['knight'],
     outposts: ['e5'], passedPawns: [], materialSwing: 1, shieldStripped: 0,
     tactic: 'pin', tacticSquare: 'e4', mates: false, nearEnemyKing: 0,
     kingAttackSquares: [], materialSquares: ['e4'], tradeSquares: ['e5'],
@@ -798,7 +800,7 @@ describe('the drift line does not repeat itself', () => {
   // returned early and skipped the check entirely, so the one line most likely
   // to hold across a quiet stretch was the one line free to chant.
   const drift = (): SidePlan => ({
-    ...SIDE_DEFAULTS, color: 'white', headingFor: ['d4', 'c3'], opening: [], trading: [], outposts: [],
+    ...buildSidePlan(), color: 'white', headingFor: ['d4', 'c3'], opening: [], trading: [], outposts: [],
     passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
     tacticSquare: null, mates: false, nearEnemyKing: 0,
     kingAttackSquares: [], materialSquares: [], tradeSquares: [],
@@ -864,24 +866,23 @@ describe('the rest of what the line has to say', () => {
 
   it('says a forced run out loud, and stays quiet when there are choices', () => {
     const said = new Set<string>();
-    expect(lineShapeLine(fullShape({ forcedPlies: 3, traded: 0, endsInEndgame: false }), said))
+    expect(lineShapeLine(lineShape({ forcedPlies: 3, traded: 0, endsInEndgame: false  }), said))
       .toContain('forced');
-    // pliesToFirstCapture: 0 so the QUIET case is quiet for a legal reason.
-    // The old literal omitted the field, and `undefined` is not a value
-    // `number | null` can hold -- with a legal shape, null means "nothing
-    // taken for a good while" and correctly speaks its own line
-    // (lookaheadPlan.ts:1225). This assertion is about the FORCED line.
-    expect(lineShapeLine(fullShape({ forcedPlies: 0, traded: 0, endsInEndgame: false, pliesToFirstCapture: 0 }))).toBe('');
+    // `pliesToFirstCapture: 1` isolates the FORCING claim. Left null, the shape
+    // means 'nothing is ever captured', which legitimately earns its own
+    // manoeuvring-line sentence — a different fact from 'there were choices'.
+    expect(lineShapeLine(lineShape({ forcedPlies: 0, traded: 0, endsInEndgame: false, pliesToFirstCapture: 1 })))
+      .not.toContain('forced');
   });
 
   it('says the line trades down into an ending', () => {
-    expect(lineShapeLine(fullShape({ forcedPlies: 0, traded: 12, endsInEndgame: true })))
+    expect(lineShapeLine(lineShape({ forcedPlies: 0, traded: 12, endsInEndgame: true  })))
       .toMatch(/comes off.*endgame|endgame/s);
   });
 
   it('says each shape fact once a game, not once a ply', () => {
     const said = new Set<string>();
-    const shape = fullShape({ forcedPlies: 3, traded: 12, endsInEndgame: true });
+    const shape = lineShape({ forcedPlies: 3, traded: 12, endsInEndgame: true  });
     expect(lineShapeLine(shape, said)).not.toBe('');
     expect(lineShapeLine(shape, said), 'the shape read chanted').toBe('');
   });
@@ -893,7 +894,7 @@ describe('the rest of what the line has to say', () => {
       ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qxg2'],
     ]) {
       const p = plan(sans);
-      for (const t of [p?.white.text, p?.black.text, lineShapeLine(p?.shape ?? fullShape({ forcedPlies: 0, traded: 0, endsInEndgame: false }))]) {
+      for (const t of [p?.white.text, p?.black.text, lineShapeLine(p?.shape ?? lineShape({ forcedPlies: 0, traded: 0, endsInEndgame: false  }))]) {
         expect(t ?? '', `a move leaked: ${t}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
       }
     }
@@ -1023,7 +1024,7 @@ describe('the rest of the inventory — everything the line leaves behind', () =
     // callout it became "Na5 was the move, to … leave a1, d1, f1 exactly where
     // they are." Empty beats wrong.
     const P: SidePlan = {
-      ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: ['d5'],
+      ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: ['d5'],
       passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
       tacticSquare: null, idlePieces: ['a1', 'd1', 'f1'], maneuver: null,
       checks: 0, promotes: null, mates: false, nearEnemyKing: 0,
@@ -1039,7 +1040,7 @@ describe('the rest of the inventory — everything the line leaves behind', () =
     // "Your queenside sleeps through this line" — a plan is as much about what
     // it leaves out as what it includes.
     const P: SidePlan = {
-      ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+      ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
       passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
       tacticSquare: null, idlePieces: ['a1', 'b1', 'c1'], maneuver: null,
       checks: 0, promotes: null, mates: false, nearEnemyKing: 0,
@@ -1060,7 +1061,7 @@ describe('what the plan leaves out gets its OWN sentence', () => {
   // want-list grammar turned a caveat into an intention — nobody plans to leave
   // their rooks at home. It is still worth saying, so it says itself.
   const planWithIdle = (idle: string[]): SidePlan => ({
-    ...SIDE_DEFAULTS, color: 'white', headingFor: ['d5'], opening: [], trading: [], outposts: ['d5'],
+    ...buildSidePlan(), color: 'white', headingFor: ['d5'], opening: [], trading: [], outposts: ['d5'],
     materialSwing: 0, passedPawns: [], shieldStripped: 0, tactic: null, mates: false,
     nearEnemyKing: 0, kingAttackSquares: [], materialSquares: [], tradeSquares: [],
     tacticSquare: null, idlePieces: idle, maneuver: null, checks: 0, promotes: null,
@@ -1129,7 +1130,7 @@ describe('what the plan leaves out gets its OWN sentence', () => {
 // once the values were substituted in.
 describe('sentences that were true and still wrong', () => {
   const planWith = (over: Partial<SidePlan>): SidePlan => ({
-    ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+    ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
     materialSwing: 0, passedPawns: [], shieldStripped: 0, tactic: null, mates: false,
     nearEnemyKing: 0, kingAttackSquares: [], materialSquares: [], tradeSquares: [],
     tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null,

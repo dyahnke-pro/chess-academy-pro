@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { attributePrinciples, type FundamentalId } from './principleAttribution';
+import type { PrincipleAttribution } from './principleAttribution';
 import { renderFundamentalVerdict, renderFundamentalsRecap, renderPvEvidence } from './principleVoice';
 
 const ALAPIN = '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6';

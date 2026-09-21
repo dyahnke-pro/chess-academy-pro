@@ -17,7 +17,10 @@ function res(fen: string, moves: Array<[string, number]>): MasterPlayResult {
   return {
     fen,
     totalGames: moves.reduce((a, [, g]) => a + g, 0),
-    moves: moves.map(([san, games]) => ({ san, games, white: games, draws: 0, black: 0 })),
+    moves: moves.map(([san, games]) => ({
+      san, games, white: games, draws: 0, black: 0,
+      whitePct: 100, drawPct: 0, blackPct: 0,
+    })),
     source: 'local',
   };
 }

@@ -16,16 +16,10 @@ import { MistakePuzzleBoard } from './MistakePuzzleBoard';
 import { buildMistakePuzzle, resetFactoryCounter } from '../../test/factories';
 import type { MoveResult } from '../../hooks/useChessGame';
 
-vi.mock('../../services/voiceService', () => ({
-  voiceService: {
-    speak: vi.fn().mockResolvedValue(undefined),
-    speakGrounded: vi.fn().mockResolvedValue(undefined),
-    stop: vi.fn(),
-    warmup: vi.fn().mockResolvedValue(undefined),
-    clearCache: vi.fn(),
-    isPlaying: vi.fn().mockReturnValue(false),
-  },
-}));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 vi.mock('../../hooks/usePieceSound', () => ({
   usePieceSound: () => ({ playMoveSound: vi.fn(), playCelebration: vi.fn(), playEncouragement: vi.fn() }),
 }));

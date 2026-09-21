@@ -12,7 +12,8 @@
  */
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
-import { isMateEval, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { isMateEval, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP, EXCELLENT_WIN_PCT } from './engineConstants';
+import { winPctLost, bandForWinPctLost } from './accuracyService';
 import { detectBrilliancy, describeBrilliancy, type Brilliancy } from './brilliancy';
 import type { MoveClassification } from '../types';
 
@@ -51,8 +52,30 @@ export function classifyMove(r: {
   cpLoss: number;
   missedMate: number | null;
   allowedMate: number | null;
+  /** WHITE-POV evals either side of the move, plus whose move it was. When all
+   *  three are present the bands are computed in EXPECTED POINTS — chess.com's
+   *  currency and the review's — instead of centipawns. Optional because one
+   *  caller (`callInaccuracy`) genuinely has only a cpLoss; that path keeps the
+   *  centipawn bands rather than pretending to a precision it does not have. */
+  evalBefore?: number | null;
+  evalAfter?: number | null;
+  isWhiteMove?: boolean;
 }): MoveQuality {
   if (r.allowedMate !== null || r.missedMate !== null) return 'blunder';
+
+  // 🔒 MATCH CHESS.COM WHERE WE CAN (David 2026-09-20). The centipawn ladder
+  // below is a rung short of the truth: it cannot tell 300cp given back at
+  // +9.00 (an inaccuracy — the game is no less won) from 300cp thrown away at
+  // +0.50 (a blunder — the game is gone). Expected points can, so when the
+  // evals are in hand they decide.
+  if (r.evalBefore != null && r.evalAfter != null && r.isWhiteMove !== undefined) {
+    const lost = winPctLost(r.evalBefore, r.evalAfter, r.isWhiteMove);
+    const band = bandForWinPctLost(lost);
+    if (band) return band;
+    if (r.wasBest) return 'best';
+    return lost < EXCELLENT_WIN_PCT ? 'best' : 'excellent';
+  }
+
   // 🔒 STOCKFISH MEASURES MISTAKE VS INACCURACY, AND IT MEASURES IT ONCE
   // (David 2026-08-10). These bands were 20 / 50 / 100 / 200 / 400 here and
   // 50 / 100 / 300 in the review's `classifyCpLoss`, so one engine delta got two
@@ -150,7 +173,17 @@ export function classifyMoveFull(r: {
 
   // …and everything else is the shared bands, mapped into the richer vocabulary
   // the play surface renders.
-  switch (classifyMove({ wasBest: r.isEngineBestMove, cpLoss, missedMate: null, allowedMate: null })) {
+  // Hand over the evals this function already holds — they were being dropped
+  // at this boundary, which is what made the coarse cp ladder the only input.
+  switch (classifyMove({
+    wasBest: r.isEngineBestMove,
+    cpLoss,
+    missedMate: null,
+    allowedMate: null,
+    evalBefore: r.preMoveEval,
+    evalAfter: r.postMoveEval,
+    isWhiteMove: r.playerColor === 'white',
+  })) {
     case 'best': return 'great';
     case 'excellent': return 'good';
     case 'good': return 'good';

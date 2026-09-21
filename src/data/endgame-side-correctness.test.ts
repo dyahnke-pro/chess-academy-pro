@@ -16,17 +16,12 @@ import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesso
 //
 // This test guards every lesson source file. If a curation edit
 // reintroduces the bug, CI fails before it reaches David.
-// A JSON import's INFERRED type is not the schema type — it is whatever literal
-// shape the file happens to have — so the hop through `unknown` is honest rather
-// than lazy: this gate is itself what proves the data matches `EndgameLesson`.
-const asLessons = (raw: unknown): EndgameLesson[] => raw as EndgameLesson[];
-
 const SOURCES: { name: string; data: EndgameLesson[] }[] = [
-  { name: 'drawn-patterns', data: asLessons(drawnPatterns) },
-  { name: 'endgame-principles', data: asLessons(endgamePrinciples) },
-  { name: 'mating-patterns', data: asLessons(matingPatterns) },
-  { name: 'pawn-endings', data: asLessons(pawnEndings) },
-  { name: 'rook-endings', data: asLessons(rookEndings) },
+  { name: 'drawn-patterns', data: drawnPatterns as EndgameLesson[] },
+  { name: 'endgame-principles', data: endgamePrinciples as EndgameLesson[] },
+  { name: 'mating-patterns', data: matingPatterns as unknown as EndgameLesson[] },
+  { name: 'pawn-endings', data: pawnEndings as EndgameLesson[] },
+  { name: 'rook-endings', data: rookEndings as EndgameLesson[] },
 ];
 
 function sideToMove(fen: string): 'w' | 'b' {

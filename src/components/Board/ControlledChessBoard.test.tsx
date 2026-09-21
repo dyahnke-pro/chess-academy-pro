@@ -87,6 +87,7 @@ function buildMockGame(overrides: Partial<UseChessGameReturn> = {}): UseChessGam
   return {
     fen: START_FEN,
     position: START_FEN,
+    pgn: '',
     turn: 'w',
     inCheck: false,
     isCheck: false,
@@ -112,6 +113,8 @@ function buildMockGame(overrides: Partial<UseChessGameReturn> = {}): UseChessGam
     getPiece: vi.fn().mockReturnValue(null),
     reset: vi.fn(),
     loadFen: vi.fn().mockReturnValue(true),
+    getFen: vi.fn().mockReturnValue(START_FEN),
+    loadHistory: vi.fn().mockReturnValue(true),
     ...overrides,
   };
 }

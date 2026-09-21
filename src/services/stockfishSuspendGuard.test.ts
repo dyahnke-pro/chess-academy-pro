@@ -18,9 +18,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 //   stockfish-analysis-stalled   resetting worker             (no bestmove 30s)
 //   stockfish-variant-fallback   ios-native → demoted to asm.js for the session
 
-const audits: { kind: string; summary: string }[] = [];
+const audits: { kind: string; summary: string; source?: string }[] = [];
 vi.mock('./appAuditor', () => ({
-  logAppAudit: (e: { kind: string; summary: string }) => { audits.push(e); return Promise.resolve(); },
+  logAppAudit: (e: { kind: string; summary: string; source?: string }) => { audits.push(e); return Promise.resolve(); },
 }));
 
 vi.mock('@capacitor/core', () => ({

@@ -1441,6 +1441,12 @@ export function buildReviewSegments(
     // the board, pure and deterministic, only for the STUDENT's flagged moves.
     // Persisted engine lines corroborate the spoken evidence when present.
     const isStudentForAttr = playerColor ? moverColor === playerColor : !m.isCoachMove;
+    // WHY IT DECLINED, on the REVIEW path too (2026-09-20). The sweep already
+    // emits this; review did not, so a flagged student ply that led with the
+    // classification label instead of the fundamental was undiagnosable from
+    // the tape — the audit could say FUNDLEAD failed and never say why. That
+    // is the silent null the `why` sink exists to abolish, one surface over.
+    const attrWhy: string[] = [];
     const fundamentals: PrincipleAttribution[] = isStudentForAttr
       ? attributePrinciples({
           historySans: sansForRun.slice(0, m.ply),
@@ -1455,9 +1461,22 @@ export function buildReviewSegments(
           // pawn, botched conversion). Absent on games analysed before the fix.
           evalBefore: typeof m.preMoveEval === 'number' ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : undefined,
           evalAfterPlayed: typeof m.evaluation === 'number' ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : undefined,
-        })
+        }, attrWhy)
       : [];
     const fundamentalLed = fundamentals.length > 0;
+    // Emitted ONCE per flagged student ply that got NOTHING — a named ply has
+    // nothing to explain, and logging every ply would drown the stream it is
+    // read from. Guarded the same way the sweep's is.
+    if (isStudentForAttr && !fundamentalLed && attrWhy.length > 0
+      && (m.classification === 'inaccuracy' || m.classification === 'mistake' || m.classification === 'blunder')) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachFeatureService.reviewFundamentalDeclined',
+        summary: `ply ${m.ply} ${m.classification} ${m.san}: no fundamental — ${attrWhy[0]}`,
+        details: JSON.stringify({ ply: m.ply, san: m.san, classification: m.classification, bestSan: bestMoveSan, why: attrWhy }),
+      });
+    }
     // 🔗 THE CROSS-MOVE CAUSAL CHAIN (David 2026-09-07: "fact A caused fact B
     // caused fact C. THIS IS CHESS! Moves do not exist in isolation."). When THIS
     // move is a tactic that collected a loose enemy piece whose looseness traces

@@ -13,7 +13,7 @@ import { noteAtPosition, teachingSourceForBoard } from './danyaTeachingService';
  */
 const bundle = JSON.parse(
   readFileSync(resolve(process.cwd(), 'public/data/voiced-teachings.json'), 'utf8'),
-) as { notes: { id: string; lineSan: string[]; explains: string; studentSide?: 'white' | 'black' }[] };
+) as { notes: { id: string; lineSan: string[]; explains: string; studentSide?: 'white' | 'black' | null }[] };
 
 function fenFor(lineSan: string[]): string {
   const g = new Chess();

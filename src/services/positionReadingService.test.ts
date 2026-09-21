@@ -752,7 +752,7 @@ describe('Danya positional detectors (2026-08-23 — pressure / passer / preserv
 
   it('pressuredTargets ranks the winnable target first', () => {
     const fen = '4r1k1/8/8/8/8/8/4R3/6K1 b - - 0 1';
-    const t = pressuredTargets(fen, 'black');
+    const t = pressuredTargets(fen, 'b');
     expect(t[0].square).toBe('e2');
     expect(t[0].verdict).toBe('winnable');
   });

@@ -148,7 +148,7 @@ describe('endgameDrillService', () => {
     let checked = 0;
     for (const lesson of lessons) {
       for (const d of getDrillPositionsForLesson(lesson, { limit: 3, seed: 1 })) {
-        const id = /#(\S+)/.exec(d.source)?.[1];
+        const id = /#(\S+)/.exec(d.source ?? '')?.[1] ?? '';
         const raw = id ? byId.get(id) : undefined;
         expect(raw, `drill ${d.source} does not resolve to a puzzle`).toBeDefined();
         if (!raw) continue;

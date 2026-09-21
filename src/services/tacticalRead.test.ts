@@ -402,7 +402,7 @@ describe('tacticalReadFacts inGame register', () => {
       [{ moves: ['g1f3', 'b8c6'], evaluation: 20 }, { moves: ['d1d5', 'f6d5'], evaluation: -600 }],
       'white', { requireForcing: true, dropThresholdCp: 150 },
     );
-    const facts = tacticalReadFacts(read, { inGame: true });
+    const facts = tacticalReadFacts(read!, { inGame: true });
     expect(facts).toMatch(/You'd love to play Qxd5/);
     expect(facts).toContain('Nxd5');
     expect(facts.toLowerCase()).not.toContain('the student');

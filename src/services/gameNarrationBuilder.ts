@@ -15,21 +15,17 @@
  * That keeps the narrate page instant-start and works offline.
  */
 import { buildSession } from './walkthroughAdapter';
-import type { GameRecord, MoveAnnotation, MoveClassification, OpeningMoveAnnotation } from '../types';
+import type { GameRecord, MoveAnnotation, OpeningMoveAnnotation, MoveClassification } from '../types';
 import type { WalkthroughSession } from '../types/walkthrough';
 
 /** Short template strings keyed off move classification. Kept brief so
- *  TTS doesn't run on forever on every step.
- *
- *  🔒 `Record<MoveClassification, string>`, NOT `Record<string, string>`
- *  (2026-09-21). The loose index type let three keys sit here that no
- *  annotation can ever carry — `best`, `excellent` and `forced` are not
- *  MoveClassifications — so they were narration the coach could never speak,
- *  and a test was asserting one of them ("The top engine choice."), passing on
- *  a value the product cannot produce. Keyed on the union, a new
- *  classification fails to compile until someone writes its line, and a dead
- *  one cannot be added back. Playing the engine's best move classifies as
- *  `good` (G4.5.2), which is what `best` was reaching for. */
+ *  TTS doesn't run on forever on every step. */
+// Record<MoveClassification, string>, NOT Record<string, string>. The loose
+// index type hid three keys the union has never had — `best`, `excellent`
+// and `forced` — so those lines could never be reached from a real
+// annotation, and a reader scanning this map would reasonably believe the
+// coach says them. Exhaustive now, so a new classification fails to compile
+// until someone writes its line, and a phantom one cannot be added at all.
 const CLASSIFICATION_LINES: Record<MoveClassification, string> = {
   brilliant: 'Brilliant — the best move in a sharp position.',
   great: 'Great move.',
@@ -41,19 +37,12 @@ const CLASSIFICATION_LINES: Record<MoveClassification, string> = {
   miss: 'A missed opportunity.',
 };
 
-const isClassification = (v: string): v is MoveClassification =>
-  Object.prototype.hasOwnProperty.call(CLASSIFICATION_LINES, v);
-
 function narrationFromAnnotation(annotation: MoveAnnotation | undefined): string {
   if (!annotation) return '';
   const comment = annotation.comment?.trim();
   if (comment) return comment;
-  // The lowercase is defensive — an annotation persisted by an older build
-  // could carry a capitalised label — so narrow back onto the union with a real
-  // type guard rather than a cast. An unrecognised label then falls through to
-  // silence instead of being typed as a string that is undefined at runtime.
-  const cls = annotation.classification?.toLowerCase();
-  if (cls && isClassification(cls)) return CLASSIFICATION_LINES[cls];
+  const cls = annotation.classification;
+  if (cls && cls in CLASSIFICATION_LINES) return CLASSIFICATION_LINES[cls];
   return '';
 }
 

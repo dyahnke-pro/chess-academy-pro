@@ -10,12 +10,8 @@ import { useAppStore } from '../../stores/appStore';
 // opening chat READS it and threads it into the grounded ask — so a question is
 // answered about the position on screen, not the opening in the abstract.
 
-// The rest parameter is what lets the wrapper below pass the REAL arguments
-// through. It used to be zero-arg with `dispatchSpy(...(a as []))`, which threw
-// the arguments away at the type level and forced every read of
-// `mock.calls[0]` to cast them back from an empty tuple.
 const dispatchSpy = vi.fn(async (..._a: unknown[]) => ({ text: 'ok', toolCallIds: [], dispatchedToolNames: [], provider: 'deepseek', actionOffer: [] }));
-vi.mock('../../coach/dispatchCoachTurn', () => ({ dispatchCoachTurn: (...a: unknown[]) => dispatchSpy(...a) }));
+vi.mock('../../coach/dispatchCoachTurn', () => ({ dispatchCoachTurn: (...a: unknown[]) => dispatchSpy(...(a as [])) }));
 // A real masterclass scope so the chat renders (buildCourseScope → non-null).
 vi.mock('../../data/lessons', () => ({
   buildCourseScope: () => ({ label: 'Caro-Kann', greeting: 'Welcome', systemAddition: 'scope' }),

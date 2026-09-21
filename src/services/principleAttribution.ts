@@ -30,6 +30,7 @@ import { signedLegalSeeFor } from './positionReadingService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlans } from './nextPlans';
+import { winPercent, bandForWinPctLost } from './accuracyService';
 
 export const FUNDAMENTAL_IDS = [
   // opening
@@ -955,7 +956,36 @@ const DETECTORS: Detector[] = [
     const { last, evalBefore: eb, evalAfterPlayed: ea, pvP } = c;
     if (isForcing(last.san)) return no(c, 'calculation-depth', `the played move ${last.san} is itself forcing`);
     if (eb === undefined || ea === undefined) return no(c, 'calculation-depth', 'no persisted eval (live path)');
-    if (eb - ea < 150) return no(c, 'calculation-depth', `cost ${eb - ea}cp is under the 150cp floor`);
+    // 🔒 THE COST GATE IS IN EXPECTED POINTS, NOT CENTIPAWNS (2026-09-21).
+    //
+    // This read `eb - ea < 150`. That hand-typed 150 was, on a real game
+    // (06wNUWaA, measured via FUNDWHY), the SOLE reason three flagged plies
+    // got no fundamental: costs of 104, 99, 86, 74, 72 and 69 centipawns —
+    // every one of them ABOVE `INACCURACY_CP` (50) and below 150. The coach
+    // flagged the move, told the student "that was an inaccuracy, costing
+    // about 0.7 points", and was structurally forbidden from saying WHAT
+    // recurred. A dead band between the threshold that flags and the
+    // threshold that names.
+    //
+    // Two things were wrong with it, and the second is the real one:
+    //   1. It was a raw centipawn magnitude, so it could not tell 150cp given
+    //      back at +9.00 (nothing) from 150cp at 0.00 (the game). Everything
+    //      else in the app now bands in expected points, chess.com's currency.
+    //   2. It was a NARRATION-WORTHINESS judgement living inside a DIAGNOSIS
+    //      computer. Whether an error is worth SAYING is the ranker's decision
+    //      at narration time (G4.5 / G4.5.1); what the error IS is this
+    //      function's. A magnitude floor here silently deletes the diagnosis
+    //      before the ranker ever sees it.
+    //
+    // What remains is a real gate, not a nominal one: the move must have cost
+    // at least an INACCURACY in win-probability terms. The PATTERN is what
+    // makes this calculation-depth — a quiet move whose punishment lands three
+    // plies deep — and that pattern is no less true at 99cp than at 150.
+    const lostWinPct = winPercent(eb) - winPercent(ea);
+    if (!bandForWinPctLost(lostWinPct)) {
+      return no(c, 'calculation-depth',
+        `cost ${eb - ea}cp is ${lostWinPct.toFixed(1)} win% — under an inaccuracy, so the position barely moved`);
+    }
     if (!pvP || pvP.length < 3) return no(c, 'calculation-depth', `punishing PV is ${pvP?.length ?? 0} plies, needs 3`);
     const firstForcing = pvP.findIndex((san) => isForcing(san));
     if (firstForcing < 0) return no(c, 'calculation-depth', `no forcing move anywhere in the PV (${pvP.slice(0, 4).join(' ')})`);
@@ -1041,28 +1071,38 @@ export function attributePrinciples(
    *  array; it is filled in place. Omit on every hot path. */
   why?: string[],
 ): PrincipleAttribution[] {
-  if (!isFlagged(input.classification) || !input.bestSan) return [];
-  if (input.historySans.length === 0) return [];
+  // 🔒 EVERY EARLY RETURN SAYS SO (2026-09-20). These eight bail-outs sit in
+  // FRONT of the detectors, so a caller that got `[]` could not tell "no
+  // fundamental applies here" from "we never reached the detectors" — the
+  // precise silent null the `why` sink exists to abolish, and it was hiding
+  // inside the mechanism built to prevent it. Found by the E-10 coverage
+  // measurement on its first run: a real ply returned `[]` with an empty
+  // `why`, and the reason turned out to be the student having played the
+  // engine's move, which is a VERDICT worth stating rather than a silence.
+  const bail = (reason: string): PrincipleAttribution[] => { why?.push(`attribution: ${reason}`); return []; };
+  if (!isFlagged(input.classification)) return bail(`classification ${String(input.classification)} is not flagged`);
+  if (!input.bestSan) return bail('no best move was recorded for this ply');
+  if (input.historySans.length === 0) return bail('empty move history');
   const before = new Chess();
   const history: Move[] = [];
   try {
     for (const san of input.historySans.slice(0, -1)) {
       const m = before.move(san.replace(/[?!]+$/, ''));
-      if (!m) return [];
+      if (!m) return bail(`history did not replay at ${san}`);
       history.push(m);
     }
-  } catch { return []; }
+  } catch { return bail('history threw while replaying'); }
   const playedSan = input.historySans[input.historySans.length - 1];
   const after = applied(before, playedSan);
-  if (!after) return [];
+  if (!after) return bail(`the played move ${playedSan} is not legal here`);
   const last = tryMove(before, playedSan);
-  if (!last) return [];
+  if (!last) return bail(`the played move ${playedSan} would not parse`);
   history.push(last);
   let afterBest = applied(before, input.bestSan);
-  if (!afterBest) return [];
+  if (!afterBest) return bail(`the best move ${input.bestSan} is not legal here`);
   const best = tryMove(before, input.bestSan);
-  if (!best) return [];
-  if (best.san === last.san) return [];
+  if (!best) return bail(`the best move ${input.bestSan} would not parse`);
+  if (best.san === last.san) return bail(`the student PLAYED the engine's move (${last.san}) — nothing to attribute`);
   // The counterfactual board is the position after the best move AND the
   // opponent's natural recapture when the best move started an exchange —
   // otherwise "after 6...Nxc3, White can push d5" counts a kick White cannot

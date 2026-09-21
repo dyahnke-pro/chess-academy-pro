@@ -26,6 +26,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import proRepertoires from './pro-repertoires.json' assert { type: 'json' };
 import { getLessonScript, getVariationLessonScript } from './lessons';
+// @ts-expect-error — plain .mjs helper, no types by design
 import { reachesMiddlegame } from './variationMiddlegameDepth.shared.mjs';
 import type { LessonScript } from '../types';
 

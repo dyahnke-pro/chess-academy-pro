@@ -192,9 +192,9 @@ async function waitWhilePaused(): Promise<void> {
 // subsystems share the same value. Local alias kept for readability.
 import {
   MATE_EVAL_THRESHOLD, MATE_EVAL_VALUE, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
-  INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
+  BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
 } from './engineConstants';
-import { winPercent, capEval } from './accuracyService';
+import { capEval, winPctLost, bandForWinPctLost } from './accuracyService';
 import type { PvEngine } from './pvPlayback';
 import { detectBrilliancy, verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type EvalToStore } from './positionEvalCache';
@@ -325,14 +325,12 @@ export function classifyCpLoss(
     && evalAfter !== undefined && evalAfter !== null
   ) {
     // Win% from the MOVER's side, so a drop is always "what this move gave up".
-    const sign = isPlayerWhiteMove ? 1 : -1;
-    const before = winPercent(evalBefore * sign);
-    const after = winPercent(evalAfter * sign);
-    const lost = before - after;
+    // The band itself is computed in ONE place (accuracyService) so the drill
+    // queue and this screen cannot drift apart on what "mistake" means.
+    const lost = winPctLost(evalBefore, evalAfter, !!isPlayerWhiteMove);
 
-    if (lost >= BLUNDER_WIN_PCT) return 'blunder';
-    if (lost >= MISTAKE_WIN_PCT) return 'mistake';
-    if (lost >= INACCURACY_WIN_PCT) return 'inaccuracy';
+    const band = bandForWinPctLost(lost);
+    if (band) return band;
     // Gains. A move that IMPROVES the position beyond noise is the student
     // finding something — but chess.com only calls it BRILLIANT when it's a
     // sacrifice; otherwise it's a great move.

@@ -20,7 +20,7 @@ vi.mock('./LessonScaffold', () => ({
 // Resolve speakLecture immediately so that, once it's CALLED, auto-advance can
 // proceed — we assert on WHEN it's first called, not on audio. vi.hoisted so
 // the spy exists before the hoisted vi.mock factory runs.
-const { speakLecture } = vi.hoisted(() => ({ speakLecture: vi.fn(() => Promise.resolve()) }));
+const { speakLecture } = vi.hoisted(() => ({ speakLecture: vi.fn((..._a: unknown[]) => Promise.resolve()) }));
 vi.mock('../../services/voiceService', () => ({
   voiceService: { speakLecture, speak: vi.fn(() => Promise.resolve()), stop: vi.fn() },
 }));
@@ -69,7 +69,7 @@ describe('LessonPlayer — first-beat narration waits for the silent walk', () =
     // first beat's full text, at the arrival position.
     await act(async () => { await vi.advanceTimersByTimeAsync(1600); });
     expect(speakLecture).toHaveBeenCalled();
-    expect(speakLecture.mock.calls[0][0]).toBe(SCRIPT.beats[0].say);
+    expect(speakLecture.mock.calls[0]?.[0]).toBe(SCRIPT.beats[0].say);
     // The board reached the full first-beat position by the time it spoke.
     expect(fenCalls).toContain(fenAfter(SCRIPT.beats[0].moves));
   });

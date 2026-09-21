@@ -13,15 +13,7 @@ vi.mock('./coachService', () => ({
 
 import { dispatchCoachTurn } from './dispatchCoachTurn';
 
-// `LiveState.surface` is REQUIRED, and it carries the same seat/surface the
-// input declares — the wrapper reads `input.liveState.fen`, but everything
-// downstream of it reads the surface off the live state, so a fixture that
-// omits it is not the shape any caller ever passes.
-const INPUT = {
-  surface: 'standalone-chat' as const,
-  ask: 'x',
-  liveState: { surface: 'standalone-chat' as const, fen: 'startpos' },
-};
+const INPUT = { surface: 'standalone-chat' as const, ask: 'x', liveState: { surface: 'standalone-chat' as const, fen: 'startpos' } };
 
 describe('dispatchCoachTurn', () => {
   beforeEach(() => {

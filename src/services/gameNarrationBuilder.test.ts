@@ -48,9 +48,8 @@ describe('buildNarrationSession', () => {
         san: 'e4',
         evaluation: 25,
         bestMove: 'e4',
-        // 'good' — playing the engine's best move classifies as `good`
-        // (CLAUDE.md G4.5.2). 'best' is not a MoveClassification.
-        classification: 'good',
+        bestMoveEval: null,
+        classification: 'brilliant',
         comment: 'Classical center grab.',
       },
       {
@@ -59,17 +58,16 @@ describe('buildNarrationSession', () => {
         san: 'e5',
         evaluation: 0,
         bestMove: 'e5',
-        classification: 'good',
+        bestMoveEval: null,
+        classification: 'brilliant',
         comment: null,
       },
     ];
     const session = buildNarrationSession(buildGame({ pgn: 'e4 e5', annotations }));
     expect(session.steps[0].narration).toBe('Classical center grab.');
-    // Falls back to the classification template when no comment. `good` is
-    // what playing the best move classifies as (G4.5.2); the old assertion
-    // wanted /top engine choice/, which was a template keyed on `best` — not a
-    // MoveClassification, so unreachable from any real annotation.
-    expect(session.steps[1].narration).toMatch(/solid move/i);
+    // Falls back to the classification template when no comment.
+    // 'best' was never a MoveClassification — the line it keyed was unreachable.
+    expect(session.steps[1].narration).toMatch(/brilliant/i);
   });
 
   it('falls back to empty narration for unannotated moves', () => {

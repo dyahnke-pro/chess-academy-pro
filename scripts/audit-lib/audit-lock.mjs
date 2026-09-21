@@ -55,8 +55,37 @@
  *   ... run the audit ...
  *   node scripts/audit-lib/audit-lock.mjs release --pid $$
  *
- *   # and always release even if the audit dies:
+ *   # release even if the audit dies — BUT READ THE ZSH TRAP WARNING BELOW:
+ *   setopt POSIX_TRAPS
  *   trap 'node scripts/audit-lib/audit-lock.mjs release --pid $$' EXIT
+ *
+ * 🚨 **ZSH: AN `EXIT` TRAP SET INSIDE A FUNCTION FIRES WHEN THE FUNCTION
+ * RETURNS, NOT WHEN THE SHELL EXITS.** At top level the trap line above is
+ * correct. Wrap it in the obvious helper — which is exactly what happens once
+ * two chains need it —
+ *
+ *     take_lock() { audit-lock.mjs acquire …; trap '… release …' EXIT; }
+ *
+ * and zsh releases the lock the moment `take_lock` RETURNS. The chain then runs
+ * the entire audit with NO mutual exclusion while every outward sign says it
+ * holds one, which is worse than holding no lock at all. Verified 2026-09-20:
+ * default zsh fires the trap before the caller's next line; `setopt POSIX_TRAPS`
+ * restores fire-on-shell-exit. Set that option, or set the trap at top level.
+ * This is the same shape as the other instrument bugs of that day — the trap
+ * answers "has this function returned" while the reader believes it answers
+ * "has this shell exited".
+ *
+ * 🚨 **AND THE TRAP IS A COURTESY, NOT THE GUARANTEE — THE OWNER FILE IS THE
+ * RECOVERY MECHANISM.** SIGKILL can never run a trap, and zsh will not reliably
+ * run a TERM trap while blocked in a child, so a killed holder ALWAYS strands
+ * the lock dir (measured, not assumed). What gets it back is the staleness
+ * check: the next contender reads `owner`, sees the pid is gone, steals it and
+ * says so. The trap only makes recovery FAST; the owner file makes it POSSIBLE.
+ * Which is why an OWNERLESS dir — a bare `mkdir` with nothing written into it —
+ * is not merely refused here but is UNRECOVERABLE BY CONSTRUCTION: nothing can
+ * ever prove it dead, so it blocks every session until a human removes it. That
+ * is still the right failure direction (waiting is visible; two overlapping runs
+ * are not), but the cost is total rather than "someone waits a while".
  *
  * `acquire` blocks until it holds the lock AND no peer audit process is running,
  * then exits 0.
@@ -409,7 +438,16 @@ if (isMain) {
     log(peers.length ? `peer audit processes:\n  ${peers.map((p) => `${p.pid} ${p.command}`).join('\n  ')}` : 'peer audit processes: none');
     process.exit(0);
   } else {
-    console.error('usage: audit-lock.mjs acquire|release|status [--pid N] [--label S] [--timeout SECONDS]');
+    console.error(
+      'usage: audit-lock.mjs acquire|release|status [--pid N] [--label S] [--deadline SECONDS]\n' +
+        '\n' +
+        '  setopt POSIX_TRAPS   # zsh: an EXIT trap set INSIDE A FUNCTION fires on the\n' +
+        '                       # function RETURN, releasing the lock while the audit runs\n' +
+        '  node scripts/audit-lib/audit-lock.mjs acquire --pid $$ --label "my chain"\n' +
+        "  trap 'node scripts/audit-lib/audit-lock.mjs release --pid $$' EXIT\n" +
+        '\n' +
+        '  exit 0 held · 2 deadline reached (nothing run) · 3 release owner mismatch (CONTAMINATED)',
+    );
     process.exit(64);
   }
 }

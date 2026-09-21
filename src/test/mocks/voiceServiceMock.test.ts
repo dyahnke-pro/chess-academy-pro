@@ -32,7 +32,7 @@ describe('the shared voiceService mock', () => {
     for (const name of MOCKED_VOICE_METHODS) {
       expect(typeof m[name], `${name} is not a function`).toBe('function');
     }
-    await expect(m.speakForced('x')).resolves.toBeUndefined();
+    await expect((m.speakForced as (s: string) => Promise<void>)('x')).resolves.toBeUndefined();
     expect(m.speakForced).toHaveBeenCalledWith('x');
   });
 

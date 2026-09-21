@@ -15,7 +15,7 @@
 // the gate will still catch the sentence — and that is exactly the state this
 // test exists to make visible instead of silent.
 import { describe, it, expect, beforeAll } from 'vitest';
-import { Chess } from 'chess.js';
+import { Chess, type PieceSymbol } from 'chess.js';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import { loadSpokenBake } from '../test/loadSpokenBake';
 import {
@@ -40,7 +40,7 @@ const BOARDS = [
 
 const missingTypes = (fen: string): string[] => {
   const present = new Set(new Chess(fen).board().flat().filter(Boolean).map((p) => p!.type));
-  return ['q', 'r', 'b', 'n', 'p'].filter((t) => !present.has(t));
+  return (['q', 'r', 'b', 'n', 'p'] as PieceSymbol[]).filter((t) => !present.has(t));
 };
 
 describe('note selection is piece-true before the gate ever sees it', () => {
@@ -65,7 +65,7 @@ describe('note selection is piece-true before the gate ever sees it', () => {
   });
 
   it.each(BOARDS)('the transition ritual is held to it too on %s', (fen) => {
-    const src = transitionTeachingSourceForGame({ historySans: [], fen, phase: 'endgame' });
+    const src = transitionTeachingSourceForGame({ historySans: [], fen });
     if (!src) return;
     expect(
       namedPiecesExistOnBoard(spokenBeatText(src.note), fen),

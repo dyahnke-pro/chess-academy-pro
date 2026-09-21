@@ -213,9 +213,6 @@ describe('pieceQualityLines — worst piece only in the middlegame (David 2026-0
   // the other, and a relative ranking with no floor always names somebody.
   describe('a piece that has never moved is not doing the most work', () => {
     // Both white rooks home; a1 scores above h1, as it did on the real board.
-    // Typed, so `color` stays the `'w' | 'b'` union instead of widening to
-    // string — which is also what would catch a typo'd colour in a fixture
-    // whose whole point is which SIDE owns the piece.
     const openingValues: PieceValue[] = [
       { square: 'a1', piece: 'R', color: 'w', value: 0.9 },
       { square: 'h1', piece: 'R', color: 'w', value: 0.1 },
