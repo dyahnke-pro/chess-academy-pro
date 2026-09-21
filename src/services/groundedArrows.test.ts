@@ -27,10 +27,10 @@ const play = (sans: string[]): { from: string; to: string; fen: string } => {
 };
 
 const green = (r: ReturnType<typeof groundedSegmentArrows>): string[] =>
-  r.arrows!.filter((a) => a.color === 'green').map((a) => `${a.from}-${a.to}`);
+  r.arrows.filter((a) => a.color === 'green').map((a) => `${a.from}-${a.to}`);
 
 const orange = (r: ReturnType<typeof groundedSegmentArrows>): string[] =>
-  r.arrows!.filter((a) => a.color === 'orange').map((a) => `${a.from}-${a.to}`);
+  r.arrows.filter((a) => a.color === 'orange').map((a) => `${a.from}-${a.to}`);
 
 describe('groundedSegmentArrows — the note decides, not the model', () => {
   // After 1.e4 e5 2.Nf3 Nc6 3.Bb5 it is Black to move. The note talks about
