@@ -314,6 +314,10 @@ never produces a proven capability then the lowering term can never fire and
 
 Not the main concept, and explicitly deprioritised (David 2026-09-20: "the
 register doesnt get up to closing the loop"):
+- 🔴 **FUNDLEAD cause is UNNAMED** — three leads chased and all three withdrawn (ranking,
+  missing best move, flagged-vs-unflagged). The last was a vacuous pass: `!flagged ||`
+  short-circuited the assertion. FUNDWHY now prints which of the 8 bails fired — IT HAS
+  NEVER RUN, and one run of it beats any further reasoning.
 - 🔴 C15 the voiced corpus register — a real defect the student hears, but polish next to the loop.
 - 🔴 **C15b lesson BEATS are unscanned for gendered pronouns** — the peer's fix made the
   beat arm live (it read a field that does not exist, so it scanned nothing, ever). GENDERED

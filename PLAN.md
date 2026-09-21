@@ -3093,3 +3093,67 @@ Why it is filed rather than done: the push in flight is already ~48 commits
 across two sessions, and this needs its own measurement pass plus a judgement
 call on each survivor. It is a real defect the student can hear, ranked beside
 C15 itself — not hygiene.
+
+---
+
+## FUNDLEAD — a third withdrawn lead, and the pattern behind all of them (2026-09-21)
+
+**WITHDRAWN: "unflagged plies get a fundamental, flagged plies don't."** I read
+this off the 2026-09-21 prod run, where ply 12 (unflagged) passed
+`FUND probe-ply-leads-with-fundamentals` with the lead *"Your pawn on c6 now
+fights for d5."* while plies 48/50/62/64 (all flagged) led with the
+classification label. It is not a finding. The row is:
+
+```js
+await add('FUND probe-ply-leads-with-fundamentals',
+  onFund && (!flagged || FUND_RE.test(lead)), …);
+```
+
+`!flagged ||` SHORT-CIRCUITS, and the run's own line says `flagged=false` for
+ply 12 — so `FUND_RE` was never evaluated against that string. The unflagged
+side of the "contrast" was never measured at all. A green row, asserting
+nothing, read as evidence.
+
+**WHAT IS STILL RULED OUT (verified, keep these — they are the only durable
+output of three wrong leads):**
+- NOT the ranking. `principle` ranks 100, `quality` 95, so a produced
+  fundamental would lead. It is not being produced.
+- NOT a missing best move on the review path. `analyzeSingleGame`'s best-move
+  loop gates on `cpLoss >= INACCURACY_CP` and sits OUTSIDE the `sweepOnly`
+  guard (`gameAnalysisService.ts:1896`). The 100cp floor is the BATCH path.
+- NOT the record half being starved — `autoAnalyzeGame` never reads the
+  [50,100) band anyway.
+
+**THE CAUSE IS UNNAMED and no current evidence points anywhere.** The only
+instrument that can answer it is FUNDWHY (`audit-review-overhaul-prod.mjs`,
+2026-09-21), which prints `[fundwhy] ply N … :: <reason>` — which of the eight
+`principleAttribution` bails fired on each flagged ply. **It has never run.**
+One run of it is worth more than any further reasoning about this.
+
+### 🚨 THE NIGHT'S PATTERN, stated once: A PASS IS NOT EVIDENCE UNTIL YOU KNOW WHAT IT EVALUATED.
+
+Five instances in one session, four of them mine:
+1. `npx tsc` bare → OOM at the 2 GB default, printed a heap dump, `grep -c
+   "error TS"` = **0**. Under a ceiling of 0 that renders as "at the ceiling".
+2. `npx eslint --quiet` → **0 errors** because `--quiet` skips warn-severity
+   rules. The real count was 2, found only via `-f json` + `severity === 2`.
+3. `perspectiveVoice`'s non-vacuity guard asserted `SCOPED.length > 0` — that
+   the FILE LIST was non-empty, not that any prose was collected.
+4. Grepping the CONSOLE LOG for the turning-point card, finding none, and
+   concluding it never rendered — the spoken lines live in the listener's
+   captured set and only reach `report.json`. The card had rendered; the ask
+   was in the artifact all along.
+5. This one: a `||` short-circuit making a row pass without evaluating its
+   assertion.
+
+Every one answered a NEARBY question and reported green for free. This is the
+same disease as the day's earlier six (unbounded `count()`, between-iteration
+deadlines, bare eslint vs gate flags, a declared-but-unassigned type field,
+`ps` vs cwd for process ownership, absence-of-capture read as absence-of-event)
+— so it is not a run of bad luck, it is the default failure mode of every
+instrument in this repo, and the rule generalises:
+
+**Before believing a number, name the instrument that produced it AND the
+condition under which it would have failed.** A guard that cannot fail, a count
+taken from a dead process, and a row whose assertion was short-circuited are
+all the same object wearing different clothes.
