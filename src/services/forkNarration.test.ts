@@ -257,9 +257,28 @@ describe('review points at the USER\'s lines, not the opponent\'s', () => {
     const hist = ['e4', 'c5'];
     const live = forkOfferAt(hist, fenOf(hist), 'black');
     expect(live).not.toBeNull();
-    const anyOpponentClause = live!.roads.some((r) => /^They /.test(r.preview));
-    const anyStudentClause = live!.roads.some((r) => /^You /.test(r.preview));
-    expect(anyStudentClause || anyOpponentClause).toBe(true);
+    // 🔴 `/^They /` WANTED A LITERAL SPACE AND THE COACH SAYS "They're", so
+    // this could only ever have passed against prose the producer does not
+    // emit. `\b` is what it meant. (Found 2026-09-21 alongside the real
+    // defect below — a pattern one character off from the thing it checks,
+    // the same shape as the SEAT row false-firing on "You both wanted".)
+    //
+    // 🔴 AND IT WAS FAILING FOR A SECOND, REAL REASON. `mergeTwinDrift` — the
+    // fix for the stutter David heard on his iPhone — had been DEAD since the
+    // student's subject word became "We're", because its `DRIFT` regex only
+    // matched `(You|They)`. With the merge dead, no road carried both halves
+    // at all; the previews were three separate student-side sentences. So
+    // this row was correctly reporting that LIVE teaching had stopped hearing
+    // both sides, and the fix was in `lookaheadPlan`, not here.
+    //
+    // What a road now says: "They're going for c3 and d4, and we're going for
+    // c6 and d4." Both halves, one sentence.
+    const anyOpponentClause = live!.roads.some((r) => /^They\b/.test(r.preview));
+    const anyStudentClause = live!.roads.some((r) => /^(You|We)\b/.test(r.preview));
+    expect(
+      anyStudentClause || anyOpponentClause,
+      `no road named either side: ${JSON.stringify(live!.roads.map((r) => r.preview))}`,
+    ).toBe(true);
   });
 });
 

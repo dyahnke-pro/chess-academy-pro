@@ -14,8 +14,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
   buildLookaheadPlan, keySquaresOf, keySquareLine, describePlan, planFromUci,
-  positionReadLine, lineShapeLine, terminalReadLine, PLAN_HORIZON,
-} from './lookaheadPlan';
+  positionReadLine, lineShapeLine, terminalReadLine, PLAN_HORIZON, mergeTwinDriftForTest } from './lookaheadPlan';
 import type { SidePlan, LookaheadPlan, LineShape, TerminalRead, PositionRead } from './lookaheadPlan';
 
 /** Every field `SidePlan` grew AFTER these fixtures were written (attack /
@@ -1198,5 +1197,53 @@ describe('sentences that were true and still wrong', () => {
     expect(first).toMatch(/a fork sitting/);
     expect(second).toMatch(/a pin sitting/);
     expect(second, 'the fork was already said').not.toMatch(/fork/);
+  });
+});
+
+describe('mergeTwinDrift — the double-sentence fix must actually RUN', () => {
+  // 🔴 IT HAD NEVER RUN (found 2026-09-21). `DRIFT` matched `(You|They)` while
+  // `describePlan` emits `We're` for the student, so `DRIFT.exec(mine.text)`
+  // was always null and `mergeTwinDrift` returned on its first line — every
+  // time, on every game, since the subject word changed.
+  //
+  // The merge is not decoration. It exists because David heard the stutter on
+  // his iPhone (2026-08-10, 02:47:57): both sides speaking the identical drift
+  // sentence back to back, differing only in pronouns and squares. Neither
+  // sentence is wrong, which is what makes it insidious, and it fires on the
+  // quiet positions where the drift clause is the ONLY thing either side has
+  // to say — which is most of them.
+  //
+  // There was NO test over this function at all. That is why it could die
+  // silently: a wire nobody watches fire is indistinguishable from one that
+  // cannot.
+  const twin = (voice: 'we' | 'you'): SidePlan => buildSidePlan({
+    text: `${voice === 'we' ? "We're" : "You're"} bringing pieces to d4 and c3 over the next few moves.`,
+    spokenClauses: [{ text: 'bring pieces to d4 and c3 over the next few moves', squares: ['d4', 'c3'] }],
+  });
+  const theirTwin = (): SidePlan => buildSidePlan({
+    color: 'black',
+    text: "They're bringing pieces to c6 and d7 over the next few moves.",
+    spokenClauses: [{ text: 'bring pieces to c6 and d7 over the next few moves', squares: ['c6', 'd7'] }],
+  });
+
+  it.each(['we', 'you'] as const)('merges the twin sentences when the student says "%s"', (voice) => {
+    // Drive the real exported path rather than the private helper, so the test
+    // breaks if the WIRING changes and not merely if the helper does.
+    const mine = twin(voice);
+    const theirs = theirTwin();
+    mergeTwinDriftForTest(mine, theirs);
+    expect(theirs.text, 'the two sentences must become one').toMatch(/going for/);
+    expect(mine.text, "the student's half is folded into the merged sentence").toBe('');
+    expect(theirs.text).toContain('d4 and c3');
+    expect(theirs.text).toContain('c6 and d7');
+  });
+
+  it('leaves NON-twin sentences alone', () => {
+    const mine = buildSidePlan({ text: 'You want to win a rook.' });
+    const theirs = theirTwin();
+    const before = theirs.text;
+    mergeTwinDriftForTest(mine, theirs);
+    expect(theirs.text, 'only a genuine twin may be merged').toBe(before);
+    expect(mine.text).toBe('You want to win a rook.');
   });
 });

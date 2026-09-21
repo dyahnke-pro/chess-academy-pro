@@ -842,8 +842,26 @@ export function buildLookaheadPlan(
   };
 }
 
-/** The drift sentence, in either voice. */
-const DRIFT = /^(You|They)'re bringing pieces to (.+) over the next few moves\.$/;
+/** The drift sentence, in either voice.
+ *
+ * 🔴 IT SAID `(You|They)` AND THE PRODUCER EMITS `We're` FOR THE STUDENT —
+ * so `mergeTwinDrift` below has NEVER RUN (found 2026-09-21). Its first line is
+ * `DRIFT.exec(mine.text)`, which was always null, so the function returned
+ * early every single time.
+ *
+ * What that means is not academic: the whole merge exists because David heard
+ * the stutter on his iPhone (2026-08-10, transcript 02:47:57) — the two sides
+ * speaking the identical drift sentence back to back, differing only in
+ * pronouns and squares. That fix has been dead code since the student's
+ * subject word became "We're", and the stutter it was built to stop can still
+ * reach a student today.
+ *
+ * `We` is deliberate (see `describePlan`'s subject, David 2026-08-23), so the
+ * consumer is what moves — and it now accepts ALL THREE subjects rather than
+ * the two it happened to be written against, so the merge keeps working if the
+ * plan voice changes again. A consumer that only matches what the producer
+ * emitted on the day it was written is a wire waiting to come loose. */
+const DRIFT = /^(We|You|They)'re bringing pieces to (.+) over the next few moves\.$/;
 
 /**
  * ONE SENTENCE, NOT THE SAME SENTENCE TWICE.
@@ -862,11 +880,29 @@ const DRIFT = /^(You|They)'re bringing pieces to (.+) over the next few moves\.$
  *
  * Both halves survive; they just share a sentence.
  */
+/** Exported ONLY so a test can prove this fires. It went dead for months
+ *  precisely because nothing could reach it. */
+export function mergeTwinDriftForTest(mine: SidePlan, theirs: SidePlan): void {
+  mergeTwinDrift(mine, theirs);
+}
+
 function mergeTwinDrift(mine: SidePlan, theirs: SidePlan): void {
   const m = DRIFT.exec(mine.text);
   const t = DRIFT.exec(theirs.text);
   if (!m || !t) return;
-  theirs.text = `They're going for ${t[2]}, and you're going for ${m[2]}.`;
+  // 🔒 THE MERGE ECHOES THE PRODUCER'S SUBJECT — it must not change the voice.
+  // This line hard-coded "you're" while `describePlan` emits "We're" for the
+  // student (David 2026-08-23, the collaborative plan register), so the moment
+  // the merge was revived it silently switched register mid-feature: the
+  // unmerged plan said "We're", the merged one said "you're". Nobody saw it
+  // because the merge had never run.
+  //
+  // `m[1]` IS the subject the producer actually used, so echoing it keeps the
+  // two halves in one voice and keeps working if that voice changes again —
+  // which is the whole lesson of the regex above, applied to the output
+  // instead of the input.
+  const mySubject = m[1].toLowerCase();
+  theirs.text = `They're going for ${t[2]}, and ${mySubject}'re going for ${m[2]}.`;
   mine.text = '';
   // The squares keep their owners, so the board still marks each half in its
   // own colour — the merge is a sentence change, never a fact change.
