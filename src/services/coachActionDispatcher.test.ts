@@ -146,7 +146,7 @@ describe('dispatchActions', () => {
       { navigate },
     );
     expect(navigate).toHaveBeenCalledTimes(1);
-    const url = navigate.mock.calls[0][0] as string;
+    const url = navigate.mock.calls[0]?.[0] ?? '';
     expect(url).toContain('/coach/session/play-against');
     expect(url).toContain('opening=King%27s+Indian+Attack');
     expect(url).toContain('openingPgn=Nf3+Nf6+g3+d5');

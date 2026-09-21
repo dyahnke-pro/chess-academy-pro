@@ -107,7 +107,7 @@ describe('the COMPUTED CONCEPT reaches the Learn live coach (P4c — a wire that
     const { result } = renderHook(() => useLiveCoach({ gameId: 'g-concept', playerColor: 'black' }));
     result.current.notifyPlayerMove({ ...move(11), san: 'Kg8', fenAfter: FEN_AFTER });
     await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1), { timeout: 4000 });
-    const call = (groundedMoveFeedback.mock.calls[0] as unknown[])[0] as { extraFacts?: string };
+    const call = groundedMoveFeedback.mock.calls[0]?.[0] as { extraFacts?: string };
     expect(call.extraFacts ?? '', 'the concept clause never reached the chokepoint').toMatch(/a fork hits two targets at once/);
     // Play/Learn commentary stays descriptive: never "you must defend" here.
     expect(call.extraFacts ?? '').not.toMatch(/\b(we|our|us)\b/i);

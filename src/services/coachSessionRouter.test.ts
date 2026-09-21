@@ -63,9 +63,9 @@ describe('routeChatIntent', () => {
       currentFen: fen,
     });
     expect(routed).not.toBeNull();
-    expect(routed!.path!.startsWith('/coach/session/explain-position')).toBe(true);
+    expect((routed?.path ?? '').startsWith('/coach/session/explain-position')).toBe(true);
     // Round-trip the FEN through URLSearchParams to check encoding.
-    const qs = routed!.path!.split('?')[1]!;
+    const qs = (routed?.path ?? '').split('?')[1];
     const params = new URLSearchParams(qs);
     expect(params.get('fen')).toBe(fen);
   });
@@ -274,7 +274,7 @@ describe('affirmation-after-game-proposal', () => {
     const path = routed!.path;
     expect(path).toContain('focus=');
     // URLSearchParams encodes spaces as `+`; parse properly to compare.
-    const params = new URLSearchParams(path.split('?')[1]);
+    const params = new URLSearchParams((path ?? '').split('?')[1]);
     const focus = params.get('focus') ?? '';
     expect(focus.toLowerCase()).toContain('hanging pieces');
   });
