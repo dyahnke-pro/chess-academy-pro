@@ -1147,6 +1147,52 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       `${withFund.length}/${leads.length} flagged student plies lead with a fundamental — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')}`);
   }
 
+  // ── FUNDWHY — THE ASSERT HALF OF THE DIAGNOSIS (2026-09-21) ─────────────
+  //
+  // 🔒 An emission nobody asserts on is decoration (CLAUDE.md, the algo-audit
+  // rule: EMIT and ASSERT, both halves or it is not shipped). `attrWhy` +
+  // `coachFeatureService.reviewFundamentalDeclined` landed as emit-only, and
+  // the 2026-09-21 run proved exactly what that costs: FUNDLEAD reproduced
+  // perfectly, 0/4 flagged plies leading with a fundamental, and the run could
+  // not say WHY — the reason was computed on prod, posted to this very
+  // listener, and thrown away because no row read it. A whole audit cycle for
+  // a symptom we already had.
+  //
+  // This reads the rows back. It is deliberately NOT a pass/fail on the
+  // product: whether a ply gets a fundamental is FUNDLEAD's job. This asserts
+  // the INSTRUMENT — that when a flagged ply leads without one, the app said
+  // why. A blind diagnosis is the failure being reported here.
+  {
+    const declined = events()
+      .filter((e) => String(e.source ?? '') === 'coachFeatureService.reviewFundamentalDeclined')
+      .map((e) => {
+        let d = {};
+        try { d = JSON.parse(String(e.details ?? '{}')); } catch { d = {}; }
+        return { ply: d.ply, san: d.san, classification: d.classification, bestSan: d.bestSan, why: Array.isArray(d.why) ? d.why : [] };
+      });
+    const missing = leads.filter(([, v]) => !FUND_RE.test(v.lead)).map(([p]) => Number(p));
+    const named = declined.filter((d) => missing.includes(Number(d.ply)));
+    // Only meaningful when a flagged ply actually went without a fundamental.
+    // No misses = nothing to diagnose, and a row reporting green for an event
+    // that could not happen is the self-declared n/a this file has deleted
+    // twice (see the turning-card row).
+    if (missing.length === 0) {
+      await add('FUNDWHY declined-rows-name-the-cause', true,
+        'n/a — every flagged student ply led with a fundamental, so there was nothing to decline (not a product result)');
+    } else {
+      const reasons = named.map((d) => `ply ${d.ply} ${d.classification} ${d.san} (best=${d.bestSan ?? 'null'}): ${d.why[0] ?? '(empty why)'}`);
+      await add('FUNDWHY declined-rows-name-the-cause', named.length > 0 && named.every((d) => d.why.length > 0),
+        named.length === 0
+          ? `BLIND — ${missing.length} flagged ply(s) (${missing.join(', ')}) led without a fundamental and the app emitted NO reviewFundamentalDeclined row for any of them. Either the emission is not reaching the listener, or the attributor bailed on a path that does not emit. The cause is still unnamed.`
+          : `${named.length}/${missing.length} named — ${reasons.join(' | ')}`);
+      // Print every reason, including plies outside `missing`, so a run that
+      // diagnoses more than it fails still hands over the whole picture.
+      for (const d of declined) {
+        log(`  [fundwhy] ply ${d.ply} ${d.classification} ${d.san} best=${d.bestSan ?? 'null'} :: ${d.why.join(' | ')}`);
+      }
+    }
+  }
+
   // ── SHOW (B) — button-only, narrated, leaves the walk paused ────────────
   // Show-me mounts only on a FLAGGED ply with a better move — use the first
   // flagged student ply the walk found (the fixture ply when the engine
