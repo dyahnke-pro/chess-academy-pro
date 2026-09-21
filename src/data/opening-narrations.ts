@@ -18,7 +18,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
     narrations: [
       'This is the starting move of the Italian Game. The e4 pawn claims the center and opens diagonals for both the queen and the f1 bishop. Look to follow up with Nf3 to attack the e5 square and develop toward Bc4.',
-      'We\'re beginning the Italian Game with e4, seizing central space and freeing the light-squared bishop on f1. This pawn controls d5 and f5, limiting Black\'s options. Plan to play Nf3 next, targeting e5 while developing your kingside.',
+      'You\'re beginning the Italian Game with e4, seizing central space and freeing the light-squared bishop on f1. This pawn controls d5 and f5, limiting Black\'s options. Plan to play Nf3 next, targeting e5 while developing your kingside.',
     ],
     approved: true,
   },
@@ -66,7 +66,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3',
     narrations: [
       'This is the defining move of the Italian Game. Bc4 places the bishop on its most aggressive diagonal, targeting f7 — the weakest point near Black\'s king. From here, White can prepare c3 and d4 to build a strong pawn center, or castle first for king safety.',
-      'We\'re now in the Italian Game proper. The bishop on c4 bears down on f7, creating latent tactical threats. White\'s plan is to castle quickly, then push c3 and d4 to claim the center with tempo against Black\'s pieces.',
+      'You\'re now in the Italian Game proper. The bishop on c4 bears down on f7, creating latent tactical threats. White\'s plan is to castle quickly, then push c3 and d4 to claim the center with tempo against Black\'s pieces.',
     ],
     approved: true,
   },
@@ -80,7 +80,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
     narrations: [
       'This is the Sicilian Defense. Black plays c5 to fight for the d4 square without mirroring White\'s center — creating an asymmetrical, combative position from move one. White should play Nf3 followed by d4 to open the center and try to exploit the lead in development.',
-      'We\'re entering the Sicilian Defense with c5, Black\'s sharpest reply to e4. Instead of contesting e4 directly, Black attacks d4 from the flank, guaranteeing an unbalanced game. White\'s main plan is Nf3 and d4, opening lines while ahead in development.',
+      'You\'re entering the Sicilian Defense with c5, Black\'s sharpest reply to e4. Instead of contesting e4 directly, Black attacks d4 from the flank, guaranteeing an unbalanced game. White\'s main plan is Nf3 and d4, opening lines while ahead in development.',
     ],
     approved: true,
   },
@@ -104,7 +104,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5',
     narrations: [
       'This is the Najdorf Sicilian. Nf6 attacks the e4 pawn directly, forcing White to decide how to defend it — usually with Nc3. The knight on f6 is perfectly placed, controlling d5 and preparing ...a6 to enter the main Najdorf. Look for Nc3 from White, then play ...a6.',
-      'We\'re in the Sicilian Najdorf — Nf6 puts pressure on e4 and is the most active developing choice. White typically responds Nc3 to protect e4, after which Black plays the signature ...a6 to prepare queenside expansion with ...b5 and ...Bb7.',
+      'You\'re in the Sicilian Najdorf — Nf6 puts pressure on e4 and is the most active developing choice. White typically responds Nc3 to protect e4, after which Black plays the signature ...a6 to prepare queenside expansion with ...b5 and ...Bb7.',
     ],
     approved: true,
   },
@@ -116,7 +116,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6',
     narrations: [
       'This is the defining move of the Najdorf Variation. The pawn on a6 prevents Nb5 and Bb5, while preparing a future ...b5 queenside expansion. From here, Black will develop with ...e5 or ...e6 depending on White\'s setup, aiming for a complex middlegame with chances on both flanks.',
-      'We\'ve reached the tabiya of the Sicilian Najdorf — a6 is the signature move that gives the variation its name. It stops Bb5 pins and Nb5 jumps while setting up ...b5 to grab space on the queenside. Black will choose between ...e5 (sharp) and ...e6 (solid) based on White\'s next move.',
+      'You\'ve reached the tabiya of the Sicilian Najdorf — a6 is the signature move that gives the variation its name. It stops Bb5 pins and Nb5 jumps while setting up ...b5 to grab space on the queenside. Black will choose between ...e5 (sharp) and ...e6 (solid) based on White\'s next move.',
     ],
     approved: true,
   },
@@ -130,7 +130,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3',
     narrations: [
       'This is the Ruy Lopez, one of the oldest and deepest openings in chess. Bb5 pins the c6 knight to the king, indirectly pressuring the e5 pawn. White\'s long-term plan is to build a pawn center with c3 and d4 after castling, slowly squeezing Black\'s position.',
-      'We\'re entering the Ruy Lopez with Bb5, targeting the knight that defends e5. While White doesn\'t capture on c6 immediately, the threat creates long-term pressure. Plan to castle, then play c3 and d4 to build an ideal pawn center.',
+      'You\'re entering the Ruy Lopez with Bb5, targeting the knight that defends e5. While White doesn\'t capture on c6 immediately, the threat creates long-term pressure. Plan to castle, then play c3 and d4 to build an ideal pawn center.',
     ],
     approved: true,
   },
@@ -142,7 +142,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4',
     narrations: [
       'This is the Morphy Defense in the Ruy Lopez. Black plays a6 to ask the bishop an important question — retreat to a4 or exchange on c6? The bishop usually goes to a4, maintaining tension. Black\'s idea is to later play ...b5 and ...Bb7, developing the queenside.',
-      'We\'re in the Morphy Defense of the Ruy Lopez — a6 challenges White\'s bishop immediately. After Ba4, Black has gained the option of ...b5 to chase the bishop further. This is the most popular line in the Ruy Lopez and leads to rich strategic play.',
+      'You\'re in the Morphy Defense of the Ruy Lopez — a6 challenges White\'s bishop immediately. After Ba4, Black has gained the option of ...b5 to chase the bishop further. This is the most popular line in the Ruy Lopez and leads to rich strategic play.',
     ],
     approved: true,
   },
@@ -168,7 +168,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
     narrations: [
       'This is the French Defence. Black plays e6 to prepare ...d5, challenging White\'s e4 pawn with a solid pawn chain. The trade-off: the light-squared bishop on c8 gets hemmed in behind the e6 pawn. White should play d4 to claim the center before Black strikes with ...d5.',
-      'We\'re entering the French Defence with e6, a solid but ambitious response to e4. Black intends ...d5 next, creating tension in the center. The price is the c8 bishop gets blocked — solving this "French bishop problem" is Black\'s key strategic challenge.',
+      'You\'re entering the French Defence with e6, a solid but ambitious response to e4. Black intends ...d5 next, creating tension in the center. The price is the c8 bishop gets blocked — solving this "French bishop problem" is Black\'s key strategic challenge.',
     ],
     approved: true,
   },
@@ -180,7 +180,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3',
     narrations: [
       'This is the critical moment in the French Defence — d5 directly challenges White\'s e4 pawn, creating central tension. White must choose: push e5 (Advance), capture exd5 (Exchange), or defend with Nc3 (Classical/Winawer). Each choice leads to a fundamentally different type of game.',
-      'We\'ve reached the heart of the French Defence. The d5 pawn attacks e4, and White\'s response defines the entire game. After Nc3, Black can play ...Nf6 (Classical) or ...Bb4 (Winawer), each with distinct strategic themes.',
+      'You\'ve reached the heart of the French Defence. The d5 pawn attacks e4, and White\'s response defines the entire game. After Nc3, Black can play ...Nf6 (Classical) or ...Bb4 (Winawer), each with distinct strategic themes.',
     ],
     approved: true,
   },
@@ -194,7 +194,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
     narrations: [
       'This is the Caro-Kann Defence. Black plays c6 to prepare ...d5 next move, challenging e4 from a position where the light-squared bishop stays free (unlike the French). White should play d4 to establish a classical center before Black strikes.',
-      'We\'re entering the Caro-Kann with c6, preparing ...d5 to attack e4 while keeping the c8 bishop unblocked. Compared to the French Defence\'s ...e6, this is a more solid approach. White responds with d4, and after ...d5, the central battle begins.',
+      'You\'re entering the Caro-Kann with c6, preparing ...d5 to attack e4 while keeping the c8 bishop unblocked. Compared to the French Defence\'s ...e6, this is a more solid approach. White responds with d4, and after ...d5, the central battle begins.',
     ],
     approved: true,
   },
@@ -220,7 +220,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1',
     narrations: [
       'This is the start of the Queen\'s Gambit. White plays d4 to claim central space and prepare c4, offering a pawn to lure Black\'s d5 pawn away from the center. The d4 pawn controls e5 and c5, laying the foundation for White\'s queenside strategy.',
-      'We\'re opening with d4, the first step toward the Queen\'s Gambit. This pawn grabs central territory and prepares c4 on the next move. Unlike e4 openings, d4 games tend to be more strategic with slower piece development.',
+      'You\'re opening with d4, the first step toward the Queen\'s Gambit. This pawn grabs central territory and prepares c4 on the next move. Unlike e4 openings, d4 games tend to be more strategic with slower piece development.',
     ],
     approved: true,
   },
@@ -232,7 +232,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2',
     narrations: [
       'This is the Queen\'s Gambit — c4 attacks Black\'s d5 pawn, offering to trade a flank pawn for a center pawn. It\'s not a true sacrifice because Black can\'t hold the c4 pawn long-term. Black must choose: accept with ...dxc4, decline with ...e6, or play the Slav with ...c6.',
-      'We\'ve reached the Queen\'s Gambit. The c4 pawn challenges d5, and White is happy if Black captures — trading a c-pawn for a d-pawn gives White a strong central majority. Black\'s most popular responses are ...e6 (QGD) to hold d5 solidly, or ...c6 (Slav) to support d5 with a pawn.',
+      'You\'ve reached the Queen\'s Gambit. The c4 pawn challenges d5, and White is happy if Black captures — trading a c-pawn for a d-pawn gives White a strong central majority. Black\'s most popular responses are ...e6 (QGD) to hold d5 solidly, or ...c6 (Slav) to support d5 with a pawn.',
     ],
     approved: true,
   },
@@ -246,7 +246,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqkb1r/pppppp1p/5np1/8/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 3 3',
     narrations: [
       'This is the London System. Bf4 develops the dark-squared bishop outside the pawn chain before playing e3, which is the hallmark of the London. The bishop on f4 controls the e5 square and supports a future e3-c3-Bd3 setup. Plan to play e3, Bd3, and castle kingside for a solid, easy-to-play position.',
-      'We\'re in the London System — Bf4 is the signature move, placing the bishop on its ideal diagonal before locking it in with e3. From here, White builds a fortress with e3, Bd3, Nbd2, and O-O. The position is solid and hard to crack, with long-term pressure on the dark squares.',
+      'You\'re in the London System — Bf4 is the signature move, placing the bishop on its ideal diagonal before locking it in with e3. From here, White builds a fortress with e3, Bd3, Nbd2, and O-O. The position is solid and hard to crack, with long-term pressure on the dark squares.',
     ],
     approved: true,
   },
@@ -260,7 +260,7 @@ export const CURATED_NARRATIONS: OpeningNarration[] = [
     fen: 'rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 1 4',
     narrations: [
       'This is the King\'s Indian Defence. Bg7 fianchettoes the bishop, aiming it at the center along the long a1-h8 diagonal. Black concedes space in the center but builds a springboard for a kingside attack with ...e5 and ...f5. Plan to play ...d6 next, then ...O-O and ...e5 to strike at White\'s center.',
-      'We\'re developing the King\'s Indian Defence — Bg7 puts the bishop on its most powerful diagonal, where it pressures d4 and controls the long diagonal. Black\'s strategy is to let White build a big center, then blow it up with ...e5 or ...c5 later.',
+      'You\'re developing the King\'s Indian Defence — Bg7 puts the bishop on its most powerful diagonal, where it pressures d4 and controls the long diagonal. Black\'s strategy is to let White build a big center, then blow it up with ...e5 or ...c5 later.',
     ],
     approved: true,
   },

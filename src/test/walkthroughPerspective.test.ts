@@ -50,6 +50,7 @@
 import { describe, it, expect } from 'vitest';
 import { BANNED_PRONOUNS } from '../services/perspectiveRule';
 import { VIENNA_GAME } from '../data/openingWalkthroughs/vienna';
+import { CURATED_NARRATIONS } from '../data/opening-narrations';
 
 /**
  * 🔒 IT REACHED ZERO ON THE DAY IT WAS WRITTEN, so this is a HARD GATE rather
@@ -83,6 +84,13 @@ const WALKTHROUGH_PRONOUN_CEILING = 0;
 const NARRATION_KEYS = new Set([
   'idea', 'text', 'intro', 'outro', 'narration', 'prompt',
   'explanation', 'title', 'whyBad', 'whyPunish',
+  // 🔴 `narrations` (plural) was missing and cost a second discovery: the
+  // curated opening narrations hang off a DIFFERENT key from the walkthrough
+  // tree, so a walker built from one type reported ZERO FIELDS on the other
+  // file while 14 of its 42 strings spoke the banned voice. A key list taken
+  // from one type is a watcher for every other shape — when you add a source
+  // here, take its key from ITS type and assert the field count is non-zero.
+  'narrations',
 ]);
 
 function narrationStrings(value: unknown, key = ''): string[] {
@@ -94,8 +102,9 @@ function narrationStrings(value: unknown, key = ''): string[] {
   return [];
 }
 
-describe('walkthrough narration and the banned pronouns', () => {
-  const ideas = narrationStrings(VIENNA_GAME);
+describe('authored narration and the banned pronouns', () => {
+  // Both shipped sources, so neither can rot behind the other.
+  const ideas = [...narrationStrings(VIENNA_GAME), ...narrationStrings({ narrations: CURATED_NARRATIONS.flatMap((n) => n.narrations ?? []) })];
 
   it('reads real narration — the walk is not vacuous', () => {
     // Every assertion below is meaningless if the tree walk returns nothing,
