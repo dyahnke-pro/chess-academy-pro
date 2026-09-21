@@ -1,3 +1,4 @@
+import type { MoveResult } from '../hooks/useChessGame';
 import type {
   UserProfile,
   PuzzleRecord,
@@ -481,6 +482,35 @@ export function buildSetupPuzzle(overrides?: Partial<SetupPuzzle>): SetupPuzzle 
     attempts: 0,
     successes: 0,
     createdAt: today(),
+    ...overrides,
+  };
+}
+
+/**
+ * A complete `MoveResult` — the shape `useChessGame` hands to every board
+ * `onMove`.
+ *
+ * WHY A FACTORY. Thirteen tests hand-rolled `{ from, to, san, fen }` and
+ * omitted the other four required fields, which `tsconfig.app.json` never
+ * saw because it excludes test files (11e). The partials are not "nearly
+ * right": a test that builds an incomplete MoveResult is asserting against a
+ * shape the product never produces. One factory means a NEW required field on
+ * MoveResult gets one default here instead of thirteen edits — the same
+ * reason CLAUDE.md says to use this file for all test data.
+ */
+export function buildMoveResult(overrides: Partial<MoveResult> = {}): MoveResult {
+  const from = overrides.from ?? 'e2';
+  const to = overrides.to ?? 'e4';
+  const san = overrides.san ?? 'e4';
+  return {
+    from,
+    to,
+    san,
+    fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+    pgn: `1. ${san}`,
+    history: [san],
+    moveNumber: 1,
+    turn: 'b',
     ...overrides,
   };
 }

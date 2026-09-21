@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '../../test/utils';
 import { KingMarchGame } from './KingMarchGame';
 import type { MoveResult } from '../../hooks/useChessGame';
+import { buildMoveResult } from '../../test/factories';
 
 let capturedOnMove: ((move: MoveResult) => void) | undefined;
 
@@ -104,12 +105,12 @@ describe('KingMarchGame', () => {
 
     // Move king from e1 to e2 (valid, not a capture)
     act(() => {
-      capturedOnMove?.({
+      capturedOnMove?.(buildMoveResult({
         from: 'e1',
         to: 'e2',
         san: 'Ke2',
         fen: 'k7/8/8/6b1/8/1b6/4K3/8 b - - 1 1',
-      });
+      }));
     });
 
     expect(screen.getByText('Moves: 1')).toBeInTheDocument();
@@ -125,12 +126,12 @@ describe('KingMarchGame', () => {
 
     // Simulate king reaching e8
     act(() => {
-      capturedOnMove?.({
+      capturedOnMove?.(buildMoveResult({
         from: 'd7',
         to: 'e8',
         san: 'Ke8',
         fen: 'k3K3/8/8/6b1/8/1b6/8/8 b - - 7 4',
-      });
+      }));
     });
 
     await waitFor(() => {
@@ -152,12 +153,12 @@ describe('KingMarchGame', () => {
 
     // The level 1 FEN has bishop on b3. King tries to capture it:
     act(() => {
-      capturedOnMove?.({
+      capturedOnMove?.(buildMoveResult({
         from: 'c2',
         to: 'b3',
         san: 'Kxb3',
         fen: 'k7/8/8/6b1/8/1K6/8/8 b - - 0 1',
-      });
+      }));
     });
 
     expect(screen.getByTestId('march-feedback')).toBeInTheDocument();
@@ -175,12 +176,12 @@ describe('KingMarchGame', () => {
     });
 
     act(() => {
-      capturedOnMove?.({
+      capturedOnMove?.(buildMoveResult({
         from: 'd7',
         to: 'e8',
         san: 'Ke8',
         fen: 'k3K3/8/8/6b1/8/1b6/8/8 b - - 7 4',
-      });
+      }));
     });
 
     await waitFor(() => {
@@ -203,7 +204,7 @@ describe('KingMarchGame', () => {
     });
 
     // Level 1
-    act(() => { capturedOnMove?.({ from: 'd7', to: 'e8', san: 'Ke8', fen: '' }); });
+    act(() => { capturedOnMove?.(buildMoveResult({ from: 'd7', to: 'e8', san: 'Ke8', fen: '' })); });
     await waitFor(() => { expect(screen.getByTestId('march-success')).toBeInTheDocument(); });
     fireEvent.click(screen.getByTestId('march-next-btn'));
 
@@ -212,7 +213,7 @@ describe('KingMarchGame', () => {
     });
 
     // Level 2
-    act(() => { capturedOnMove?.({ from: 'f8', to: 'e8', san: 'Ke8', fen: '' }); });
+    act(() => { capturedOnMove?.(buildMoveResult({ from: 'f8', to: 'e8', san: 'Ke8', fen: '' })); });
     await waitFor(() => { expect(screen.getByTestId('march-success')).toBeInTheDocument(); });
     fireEvent.click(screen.getByTestId('march-next-btn'));
 
@@ -221,7 +222,7 @@ describe('KingMarchGame', () => {
     });
 
     // Level 3
-    act(() => { capturedOnMove?.({ from: 'f8', to: 'e8', san: 'Ke8', fen: '' }); });
+    act(() => { capturedOnMove?.(buildMoveResult({ from: 'f8', to: 'e8', san: 'Ke8', fen: '' })); });
     await waitFor(() => { expect(screen.getByTestId('march-success')).toBeInTheDocument(); });
     fireEvent.click(screen.getByTestId('march-next-btn'));
 
@@ -250,12 +251,12 @@ describe('KingMarchGame', () => {
 
     // Make a move
     act(() => {
-      capturedOnMove?.({
+      capturedOnMove?.(buildMoveResult({
         from: 'e1',
         to: 'e2',
         san: 'Ke2',
         fen: 'k7/8/8/6b1/8/1b6/4K3/8 b - - 1 1',
-      });
+      }));
     });
 
     expect(screen.getByText('Moves: 1')).toBeInTheDocument();

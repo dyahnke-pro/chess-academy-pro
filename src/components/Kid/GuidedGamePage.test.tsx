@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { GuidedGamePage } from './GuidedGamePage';
 import type { MoveResult } from '../../hooks/useChessGame';
+import { buildMoveResult } from '../../test/factories';
 
 // Track onMove callbacks so we can simulate player moves
 let capturedOnMove: ((move: MoveResult) => void) | undefined;
@@ -59,12 +60,9 @@ vi.mock('react-router-dom', async () => {
 });
 
 function makeMoveResult(san: string): MoveResult {
-  return {
-    san,
-    from: 'a1',
-    to: 'a2',
-    fen: 'test-fen',
-  };
+  // Delegates to the shared factory — a local partial is the duplication the
+  // factory exists to end, and it was missing four required fields.
+  return buildMoveResult({ san, from: 'a1', to: 'a2', fen: 'test-fen' });
 }
 
 describe('GuidedGamePage', () => {

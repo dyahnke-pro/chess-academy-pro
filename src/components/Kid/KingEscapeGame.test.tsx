@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor, act } from '../../test/utils';
 import { KingEscapeGame } from './KingEscapeGame';
 import type { MoveResult } from '../../hooks/useChessGame';
+import { buildMoveResult } from '../../test/factories';
 
 // Capture the onMove callback
 let capturedOnMove: ((move: MoveResult) => void) | undefined;
@@ -95,12 +96,12 @@ describe('KingEscapeGame', () => {
     });
 
     act(() => {
-      capturedOnMove?.({
+      capturedOnMove?.(buildMoveResult({
         from: 'e1',
         to: 'd1',
         san: 'Kd1',
         fen: '7k/8/8/8/4r3/8/8/3K4 b - - 1 1',
-      });
+      }));
     });
 
     await waitFor(() => {
@@ -118,12 +119,12 @@ describe('KingEscapeGame', () => {
     });
 
     act(() => {
-      capturedOnMove?.({
+      capturedOnMove?.(buildMoveResult({
         from: 'e1',
         to: 'd1',
         san: 'Kd1',
         fen: '7k/8/8/8/4r3/8/8/3K4 b - - 1 1',
-      });
+      }));
     });
 
     await waitFor(() => {
@@ -146,7 +147,7 @@ describe('KingEscapeGame', () => {
     });
 
     // Level 1
-    act(() => { capturedOnMove?.({ from: 'e1', to: 'd1', san: 'Kd1', fen: '' }); });
+    act(() => { capturedOnMove?.(buildMoveResult({ from: 'e1', to: 'd1', san: 'Kd1', fen: '' })); });
     await waitFor(() => { expect(screen.getByTestId('escape-success')).toBeInTheDocument(); });
     fireEvent.click(screen.getByTestId('escape-next-btn'));
 
@@ -155,7 +156,7 @@ describe('KingEscapeGame', () => {
     });
 
     // Level 2
-    act(() => { capturedOnMove?.({ from: 'e1', to: 'f2', san: 'Kf2', fen: '' }); });
+    act(() => { capturedOnMove?.(buildMoveResult({ from: 'e1', to: 'f2', san: 'Kf2', fen: '' })); });
     await waitFor(() => { expect(screen.getByTestId('escape-success')).toBeInTheDocument(); });
     fireEvent.click(screen.getByTestId('escape-next-btn'));
 
@@ -164,7 +165,7 @@ describe('KingEscapeGame', () => {
     });
 
     // Level 3
-    act(() => { capturedOnMove?.({ from: 'e1', to: 'f2', san: 'Kf2', fen: '' }); });
+    act(() => { capturedOnMove?.(buildMoveResult({ from: 'e1', to: 'f2', san: 'Kf2', fen: '' })); });
     await waitFor(() => { expect(screen.getByTestId('escape-success')).toBeInTheDocument(); });
     fireEvent.click(screen.getByTestId('escape-next-btn'));
 
