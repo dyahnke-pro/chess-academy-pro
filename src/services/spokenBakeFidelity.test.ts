@@ -24,6 +24,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 // The gate itself, imported from the bake script — never a reimplementation.
 // A copy would drift from the thing it is meant to pin.
+// @ts-expect-error — plain .mjs helper, no types by design
 import { gateSpoken, fidelityBreach } from '../../scripts/bake-spoken-notes.mjs';
 import registry from '../data/corpora.json';
 

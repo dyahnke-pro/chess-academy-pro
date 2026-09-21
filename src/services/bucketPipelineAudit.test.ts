@@ -26,7 +26,7 @@ function mkPuzzle(fen: string, playerMoveSan: string): MistakePuzzle {
     sourceMode: 'coach-capture',
     playerColor: 'black',
     promptText: 'Find the best move.',
-    narration: { intro: '', explanation: '', outro: '' } as MistakePuzzle['narration'],
+    narration: { intro: '', explanation: '', outro: '' } as unknown as MistakePuzzle['narration'],
     createdAt: new Date().toISOString(),
     opponentName: null,
     gameDate: null,

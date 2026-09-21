@@ -53,8 +53,8 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     for (const k of slots) {
       const v = mem[k];
       if (v instanceof Set) v.add('x');
-      else if (typeof v === 'number') (mem as Record<string, unknown>)[k] = 42;
-      else (mem as Record<string, unknown>)[k] = 'x';
+      else if (typeof v === 'number') (mem as unknown as Record<string, unknown>)[k] = 42;
+      else (mem as unknown as Record<string, unknown>)[k] = 'x';
     }
     // Every slot is now dirty.
     for (const k of slots) {

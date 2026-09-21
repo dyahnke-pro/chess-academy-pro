@@ -49,6 +49,7 @@ describe('audit scripts can reach prod from the sandbox', () => {
   // every Playwright row still printed. The helper carries the flag on every
   // path; a launcher that drops it blinds instrument 3 silently.
   it('sandboxLaunchArgs() lets an https page reach the loopback sidecar on every path', async () => {
+// @ts-expect-error — plain .mjs helper, no types by design
     const { sandboxLaunchArgs, LOOPBACK_SIDECAR_ARGS } = await import('../../scripts/audit-lib/chromium.mjs');
     const saved = { s: process.env.AUDIT_SANDBOX, p: process.env.AUDIT_PROXY };
     try {

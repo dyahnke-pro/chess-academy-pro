@@ -31,10 +31,10 @@ function ideasOf(node: { idea?: string; children?: Array<{ node: unknown }> }): 
 
 describe('voiced narration is depersonalized (no pro-personal references)', () => {
   const corpus: Array<{ id: string; texts: string[] }> = [];
-  for (const w of walkthroughs as Array<{ openingName: string; intro?: string; outro?: string; tree: { root: never } }>) {
+  for (const w of walkthroughs as unknown as Array<{ openingName: string; intro?: string; outro?: string; tree: { root: never } }>) {
     corpus.push({ id: w.openingName, texts: [w.intro ?? '', w.outro ?? '', ...ideasOf(w.tree.root)] });
   }
-  for (const m of matchups as Array<{ matchupName: string; intro?: string; outro?: string; tree: { root: never } }>) {
+  for (const m of matchups as unknown as Array<{ matchupName: string; intro?: string; outro?: string; tree: { root: never } }>) {
     corpus.push({ id: m.matchupName, texts: [m.intro ?? '', m.outro ?? '', ...ideasOf(m.tree.root)] });
   }
   // teachings ship from public/data (fetched at runtime) — scan the raw file.

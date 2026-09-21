@@ -72,15 +72,20 @@
 // aggregate and was wrong.
 //
 // Usage:  node scripts/derive-note-anchors.mjs [--dry]
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
-const CORPORA = [
-  'src/data/danya-teachings.json',
-  'src/data/chessbrah-teachings.json',
-  'public/data/hangingpawns-teachings.json',
-  'public/data/saintlouis-teachings.json',
-];
+// DERIVED from the ONE registry (src/data/corpora.json), never hand-written.
+// This list had rotted: the 2026-09-19 corpus split moved chessbrah to public/
+// and gave danya a floating half, so the generator pointed at a path that no
+// longer exists and would have thrown ENOENT on its next run. corpora.json's
+// own header says a corpus used to be registered in seven places and that
+// adding one must be a one-line edit THERE and nowhere else — this script was
+// one of the copies that made the warning necessary.
+const registry = JSON.parse(readFileSync('src/data/corpora.json', 'utf8'));
+const CORPORA = registry.corpora
+  .flatMap((c) => [c.path, c.floatingPath])
+  .filter((p) => typeof p === 'string' && existsSync(p));
 const OUT = 'src/data/note-anchors.json';
 
 /** How many opening plies must match the DB before a run counts as a real

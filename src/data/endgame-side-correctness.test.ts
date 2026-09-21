@@ -19,7 +19,7 @@ import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesso
 const SOURCES: { name: string; data: EndgameLesson[] }[] = [
   { name: 'drawn-patterns', data: drawnPatterns as EndgameLesson[] },
   { name: 'endgame-principles', data: endgamePrinciples as EndgameLesson[] },
-  { name: 'mating-patterns', data: matingPatterns as EndgameLesson[] },
+  { name: 'mating-patterns', data: matingPatterns as unknown as EndgameLesson[] },
   { name: 'pawn-endings', data: pawnEndings as EndgameLesson[] },
   { name: 'rook-endings', data: rookEndings as EndgameLesson[] },
 ];

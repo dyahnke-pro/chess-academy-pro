@@ -17,7 +17,10 @@
 // are as narrow as they are; do not widen one without re-reading it.
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
-import { readFileSync } from 'node:fs';
+import corporaRegistry from '../data/corpora.json';
+import anchorSidecar from '../data/note-anchors.json';
+import { readFileSync, existsSync } from 'node:fs';
+// @ts-expect-error — plain .mjs helper, no types by design
 import { deriveAnchor, sanRuns } from '../../scripts/derive-note-anchors.mjs';
 import { allDerivedAnchors, applyDerivedAnchors, derivedAnchorsWentUnmatched } from './noteAnchorOverrides';
 import { noteDescribesPosition } from './noteAnchorIntegrity';
@@ -26,12 +29,23 @@ import type { DanyaNote } from './danyaTeachingService';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import dbRaw from '../data/openings-lichess.json';
 
-const CORPORA = [
-  'src/data/danya-teachings.json',
-  'src/data/chessbrah-teachings.json',
-  'public/data/hangingpawns-teachings.json',
-  'public/data/saintlouis-teachings.json',
-];
+// The sidecar RECORDS what it was derived from, so resolve THAT rather than
+// keeping a third hand-written copy of the corpus list (the generator has one,
+// this file had one, and corpora.json exists precisely to stop that).
+//
+// Resolved by CORPUS, not by filename: the 2026-09-19 split moved chessbrah
+// from src/data to public/data, and a literal path match died on ENOENT —
+// which killed the whole suite before a single assertion ran. A gate that
+// cannot run is worse than one that fails, because nothing reports it.
+const registryByBasename = new Map(
+  (corporaRegistry.corpora as Array<{ path: string; floatingPath?: string }>)
+    .flatMap((c) => [c.path, c.floatingPath])
+    .filter((p): p is string => typeof p === 'string')
+    .map((p) => [p.split('/').pop() as string, p] as const),
+);
+const CORPORA: string[] = ((anchorSidecar as { derivedFrom?: string[] }).derivedFrom ?? [])
+  .map((p) => (existsSync(p) ? p : registryByBasename.get(p.split('/').pop() as string)))
+  .filter((p): p is string => typeof p === 'string' && existsSync(p));
 
 function allNotes(): DanyaNote[] {
   const out: DanyaNote[] = [];
