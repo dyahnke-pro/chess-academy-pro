@@ -81,7 +81,12 @@ describe('the voice package', () => {
     const board = new Chess(PIRC_3);
     expect(board.turn()).toBe('w');
     const pkg = buildVoicePackage([
-      fact('gem', 'One.'), fact('alert', 'Two.'), fact('opening', 'Three.'),
+      // 'mistake', not 'alert' — `alert` is not a VoiceFactKind, so RANK had no
+      // entry for it and its position in the expected array below was an
+      // artifact of sort stability rather than of rank. With a real kind the
+      // order is the doctrine's own: gem 15, note 14, mistake 13, then the
+      // computed lanes.
+      fact('gem', 'One.'), fact('mistake', 'Two.'), fact('opening', 'Three.'),
       fact('computed', 'Four.'), fact('note', 'Five.'), fact('observation', 'Six.'),
     ]);
     expect(pkg.kept).toHaveLength(6);
@@ -89,7 +94,7 @@ describe('the voice package', () => {
     // Rank still orders it, which is what makes an uncapped utterance safe: a
     // student who moves again mid-sentence only ever loses the tail.
     expect(pkg.kept.map((f) => f.kind))
-      .toEqual(['gem', 'alert', 'note', 'opening', 'computed', 'observation']);
+      .toEqual(['gem', 'note', 'mistake', 'opening', 'computed', 'observation']);
   });
 });
 
@@ -148,7 +153,8 @@ describe('the corpus note is always first', () => {
   // and invisible once made — everything still gets spoken, so nothing looks
   // broken; the student just hears the computed line where the taught one
   // should have led.
-  const at = (kind, text) => ({ kind, text, fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' });
+  const at = (kind: VoiceFact['kind'], text: string): VoiceFact =>
+    ({ kind, text, fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' });
 
   it('leads with the note against every computed lane at once', () => {
     const pkg = buildVoicePackage([

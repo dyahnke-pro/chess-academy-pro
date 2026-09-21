@@ -62,10 +62,14 @@ describe('routeChatIntent', () => {
     const routed = await routeChatIntent('explain this position', {
       currentFen: fen,
     });
-    expect(routed).not.toBeNull();
-    expect(routed!.path.startsWith('/coach/session/explain-position')).toBe(true);
+    // `path` is OPTIONAL on the result — a reply-only action (a settings
+    // toggle) legitimately has none. Narrow with a throw rather than a second
+    // `!`, so a NAV intent that stops carrying a path fails here by name
+    // instead of as a TypeError three lines down.
+    if (!routed?.path) throw new Error('a NAV intent must carry a path');
+    expect(routed.path.startsWith('/coach/session/explain-position')).toBe(true);
     // Round-trip the FEN through URLSearchParams to check encoding.
-    const qs = routed!.path.split('?')[1];
+    const qs = routed.path.split('?')[1];
     const params = new URLSearchParams(qs);
     expect(params.get('fen')).toBe(fen);
   });
@@ -270,8 +274,8 @@ describe('affirmation-after-game-proposal', () => {
 
   it('forwards the assistant\u2019s focus phrase as a `focus` query param', async () => {
     const routed = await routeChatIntent('yes', { lastAssistantMessage: PROPOSAL });
-    expect(routed).not.toBeNull();
-    const path = routed!.path;
+    if (!routed?.path) throw new Error('a NAV intent must carry a path');
+    const path = routed.path;
     expect(path).toContain('focus=');
     // URLSearchParams encodes spaces as `+`; parse properly to compare.
     const params = new URLSearchParams(path.split('?')[1]);

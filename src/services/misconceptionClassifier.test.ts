@@ -27,6 +27,9 @@ describe('classifyMisconception (deterministic)', () => {
       evalAfterPlayed: -550,
       gamePhase: 'middlegame',
     });
+    // classifyMisconception returns null when nothing is attributable; these
+    // cases assert a SPECIFIC tag, so a null is a failure of the case itself.
+    if (!r) throw new Error('expected a classification');
     expect(r.tag).toBe('poisoned-pawn');
     expect(r.coachNote.length).toBeGreaterThan(10);
   });
@@ -38,6 +41,7 @@ describe('classifyMisconception (deterministic)', () => {
     const r = await classifyMisconception({
       fen: c.fen(), playedSan: 'Qxh7', bestSan: 'c5', historySans: history, gamePhase: 'middlegame',
     });
+    if (!r) throw new Error('expected a classification');
     expect(r.tag).not.toBe('poisoned-pawn');
   });
 
