@@ -24,7 +24,7 @@
       "destination": "/api/llm-proxy?provider=anthropic&path=:path*"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|assets/).*)",
       "destination": "/index.html"
     }
   ],

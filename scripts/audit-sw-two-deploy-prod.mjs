@@ -122,12 +122,35 @@ async function main() {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 }).catch(() => undefined);
   };
   page.on('pageerror', (e) => pageErrors.push(String(e)));
-  // A 404 on a HASHED asset is the signature — an unhashed miss is ordinary.
+  // 🔴 A STALE CHUNK DOES NOT 404 — IT RETURNS 200 WITH HTML (measured on prod,
+  // 2026-09-21). Vercel serves the SPA fallback for any unmatched path, so a
+  // hashed asset from a previous deploy comes back:
+  //
+  //     HTTP/2 200 · content-type: text/html; charset=utf-8
+  //
+  // …while a live one is `application/javascript`. Verified on
+  // `web-BITZqWmZ.js` (previous build, HTML) against `web-7Ov3xJEz.js`
+  // (current, JS), and on an entry chunk two deploys old (HTML).
+  //
+  // The first cut of this listener watched `status >= 400`, which this can
+  // never trip — so the row would have reported "no hashed asset failed"
+  // while the page was being handed markup where it expected a module. That
+  // is this file hunting a failure it could not see, in the script written to
+  // hunt it. The USER-VISIBLE form is `Unexpected token '<'` / "Load failed",
+  // which is exactly the shape of the iPhone report this whole class came
+  // from — and nothing in it names a 404, which is why it took a device to
+  // find.
+  //
+  // So the signature is CONTENT-TYPE, not status. Status is still recorded,
+  // because a genuine 4xx is also a casualty.
+  const HASHED = /\/assets\/[^/]+-[A-Za-z0-9_-]{8,}\.(js|css|wasm)/;
   page.on('response', (r) => {
     const u = r.url();
-    if (r.status() >= 400 && /\/assets\/[^/]+-[A-Za-z0-9_-]{8,}\.(js|css|wasm)/.test(u)) {
-      failedAssets.push(`${r.status()} ${u.split('/').pop()}`);
-    }
+    if (!HASHED.test(u)) return;
+    const ct = (r.headers()['content-type'] ?? '').toLowerCase();
+    const isJs = /javascript|ecmascript|text\/css|application\/wasm/.test(ct);
+    if (r.status() >= 400) failedAssets.push(`${r.status()} ${u.split('/').pop()}`);
+    else if (!isJs) failedAssets.push(`200-but-${ct.split(';')[0] || 'no-type'} ${u.split('/').pop()}`);
   });
   page.on('requestfailed', (r) => {
     const u = r.url();
@@ -250,13 +273,21 @@ async function main() {
   // nobody can read. The discriminator costs one request: a genuine casualty
   // is a file the deploy NO LONGER SERVES and stays 4xx; a starved fetch comes
   // back 200 on a retry.
+  // 🔴 AND THE RETRY DISCRIMINATOR HAD THE SAME HOLE. It read "200 on retry =
+  // starvation", which is wrong for the commonest casualty of all: a stale
+  // chunk retries 200 FOREVER, because the SPA fallback always answers. The
+  // discriminator has to be 200-AND-EXECUTABLE, never 200 alone — otherwise
+  // the one check meant to separate a real casualty from CPU starvation
+  // would have called every real casualty starvation and moved on.
   const confirmed = [];
   for (const entry of newFailed.slice(0, 8)) {
     const name = entry.split(' ').pop();
     const res = await page.request.get(`${BASE}/assets/${name}`, { timeout: 30000 }).catch(() => null);
     const status = res ? res.status() : 0;
-    if (status !== 200) confirmed.push(`${entry} (retry ${status || 'no response'})`);
-    else log(`  ${name} failed once but retries 200 — starvation, not a casualty`);
+    const ct = res ? (res.headers()['content-type'] ?? '').toLowerCase() : '';
+    const servable = status === 200 && /javascript|ecmascript|text\/css|application\/wasm/.test(ct);
+    if (!servable) confirmed.push(`${entry} (retry ${status || 'no response'} ${ct.split(';')[0] || ''})`.trim());
+    else log(`  ${name} failed once but retries 200 as ${ct.split(';')[0]} — starvation, not a casualty`);
   }
   record(
     'no hashed asset failed after the deploy',
@@ -289,6 +320,30 @@ async function finish(browser) {
   await browser.close();
   process.exit(pass === results.length ? 0 : 1);
 }
+
+// 🔒 A WATCHDOG, BECAUSE THIS RUN WEDGED AFTER ITS FOURTH ROW (2026-09-21).
+// Four rows had reported and passed; the fifth — a one-line liveness check —
+// never printed, and the process sat for 37 minutes holding the machine while
+// the Learn audit queued behind it. A run that cannot finish is worse than one
+// that fails: it reports nothing AND blocks everything after it.
+//
+// Every individual step here is already bounded (Playwright timeouts, the
+// deploy deadline), which is exactly why the outer bound is needed — the hang
+// was in the composition, not in any one call, and per-step timeouts cannot
+// see that. Bound the WHOLE run and write whatever rows exist.
+const HARD_STOP_MS = Number(process.env.SW_HARD_STOP_MS || DEADLINE_MS + 10 * 60 * 1000);
+const watchdog = setTimeout(() => {
+  console.error(`WATCHDOG: no verdict after ${Math.round(HARD_STOP_MS / 60000)} min — writing ${results.length} row(s) and exiting.`);
+  console.error('Rows already recorded stand; anything unrecorded is UNGRADED, not passed.');
+  try {
+    const dir = `audit-reports/sw-two-deploy-${new Date().toISOString().replace(/[:.]/g, '-')}-WEDGED`;
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, wedged: true, results }, null, 2));
+    console.error(`partial report at ${dir}/report.json`);
+  } catch { /* nothing more we can do */ }
+  process.exit(1);
+}, HARD_STOP_MS);
+watchdog.unref?.();
 
 main().catch(async (e) => {
   console.error('FATAL', e);
