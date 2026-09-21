@@ -266,7 +266,7 @@ describe('useTeachWalkthrough', () => {
           },
         ],
       },
-    } as const;
+    } satisfies Partial<WalkthroughTree> as WalkthroughTree;
 
     // Resolve speakForced manually so we control segment-boundary timing.
     let resolveFirst: (() => void) | null = null;
@@ -572,15 +572,18 @@ describe('gem-crush aside (Watch plays like his videos)', () => {
     // Caro-Kann gem: after 1.e4 c6 2.d4 d5 3.Nc3 dxe4, White's natural 4.f3 loses
     // to 4…exf3. The walkthrough should trace that crush with arrows + voice it,
     // WITHOUT advancing the board — detected here via the gemCrushAside audit.
-    const leaf = { san: 'dxe4', movedBy: 'black' as const, idea: 'black recaptures', children: [] };
-    const chain = ['Nc3', 'd5', 'd4', 'c6', 'e4'].reduce(
+    type ChainNode = { san: string; movedBy: 'white' | 'black'; idea: string; children: { node: unknown }[] };
+    const leaf: ChainNode = { san: 'dxe4', movedBy: 'black', idea: 'black recaptures', children: [] };
+    // The explicit accumulator type is what keeps `movedBy` a union rather than
+    // widening to string — no cast needed once reduce knows what it is building.
+    const chain = ['Nc3', 'd5', 'd4', 'c6', 'e4'].reduce<ChainNode>(
       (child, san) => ({
         san,
         movedBy: san === 'e4' || san === 'd4' || san === 'Nc3' ? 'white' : 'black',
         idea: san,
         children: [{ node: child }],
       }),
-      leaf as unknown as { san: string; movedBy: 'white' | 'black'; idea: string; children: { node: unknown }[] },
+      leaf,
     );
     const tree: WalkthroughTree = {
       openingName: 'Caro-Kann',

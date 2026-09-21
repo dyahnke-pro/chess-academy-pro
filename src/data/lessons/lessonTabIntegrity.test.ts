@@ -3,6 +3,7 @@ import repertoireData from '../repertoire.json';
 import { buildVariationTabs } from '../../services/variationTabs';
 import { getLessonScript, getVariationLessonScript } from './index';
 import { FIRST_CLASS_OPENING_IDS } from './registry';
+import type { OpeningVariation } from '../../types';
 
 // DUP-LINE GATE (David 2026-05-24): "We need a gate to prevent the dup lines
 // in future builds." A masterclass variation TAB resolves its lesson by the
@@ -18,7 +19,7 @@ import { FIRST_CLASS_OPENING_IDS } from './registry';
 // (audit-punish-gems-loop) catches it at runtime too; this catches it before
 // it ever ships.
 
-interface RepOpening { id: string; variations?: Array<{ name: string }> }
+interface RepOpening { id: string; variations?: OpeningVariation[] }
 // repertoire.json is an array of opening records.
 const OPENINGS = repertoireData as unknown as RepOpening[];
 

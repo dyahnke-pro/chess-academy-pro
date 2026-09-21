@@ -20,6 +20,7 @@ import { Chess } from 'chess.js';
 import { planFromUci, keySquareLine, positionReadLine, describePlan } from './lookaheadPlan';
 import { findConcession, findStudentDrawback } from './concessionBeat';
 import { readPosition, buildPositionalRead } from './positionalRead';
+import { buildSidePlan } from '../test/factories';
 
 /** Deterministic walk: at every position, take the Nth legal move. Different
  *  seeds give genuinely different games without Math.random (banned). */
@@ -174,11 +175,7 @@ describe('ADVERSARIAL: malformed and hostile input', () => {
   });
 
   it('never produces a sentence fragment from a half-empty plan', () => {
-    const base = {
-      color: 'white' as const, headingFor: [], opening: [], trading: [], outposts: [],
-      passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
-      mates: false, nearEnemyKing: 0, text: '',
-    };
+    const base = buildSidePlan({ color: 'white' });
     // Every single-field plan, on its own.
     const singles = [
       { headingFor: ['e4'] }, { opening: ['d'] }, { trading: ['knight'] },

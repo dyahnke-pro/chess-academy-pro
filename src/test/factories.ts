@@ -24,6 +24,7 @@ import type {
   AnalysisLine,
 } from '../types';
 import type { MoveResult } from '../hooks/useChessGame';
+import type { SidePlan } from '../services/lookaheadPlan';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -556,6 +557,48 @@ export function buildAnalysisLine(overrides?: Partial<AnalysisLine>): AnalysisLi
     evaluation: 20,
     moves: ['e2e4'],
     mate: null,
+    ...overrides,
+  };
+}
+
+/**
+ * A `SidePlan` — the computed want-list for one side of a projected line.
+ *
+ * FACTORY, NOT A LITERAL, because `SidePlan` has grown eleven fields since the
+ * first fixtures were written (`kingAttackSquares`, `maneuver`, `spokenClauses`
+ * …) and every hand-rolled copy restated a type it does not own, so each one
+ * rotted separately. Two files were carrying their own partial copy and both
+ * broke on the same day.
+ *
+ * Every default is the HONEST empty: no squares, no tactic, no maneuver, no
+ * speech. A fixture that wants the plan to SAY something passes `text` and
+ * `spokenClauses` in, so a test never accidentally asserts against a sentence
+ * the factory invented.
+ */
+export function buildSidePlan(overrides?: Partial<SidePlan>): SidePlan {
+  return {
+    color: 'white',
+    headingFor: [],
+    opening: [],
+    trading: [],
+    outposts: [],
+    passedPawns: [],
+    materialSwing: 0,
+    shieldStripped: 0,
+    tactic: null,
+    mates: false,
+    nearEnemyKing: 0,
+    kingAttackSquares: [],
+    materialSquares: [],
+    tradeSquares: [],
+    tacticSquare: null,
+    idlePieces: [],
+    maneuver: null,
+    checks: 0,
+    promotes: null,
+    text: '',
+    aside: '',
+    spokenClauses: [],
     ...overrides,
   };
 }

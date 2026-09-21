@@ -107,16 +107,27 @@ describe('perspective voice — no first-person-plural in shipped narration', ()
   }
 
   it('lesson beats (say + sayShort): no we/our/us', () => {
+    // 🚨 THIS HALF OF THE GATE WAS DEAD UNTIL 2026-09-20. It read
+    // `lesson.beats` off a RegisteredLesson, which has no `beats` — the script
+    // is one level down, on `.lesson`. So `?? []` swallowed it and the loop ran
+    // zero times: the beats have never been scanned, while the file reported
+    // green and the banned-pronoun rule read as enforced everywhere. A gate
+    // that cannot fire is worse than one that fails, which is why `scanned`
+    // below is asserted: a future refactor that breaks the reach fails HERE
+    // rather than going quietly green again.
     const offenders: string[] = [];
-    for (const lesson of ALL_LESSONS) {
-      for (const beat of lesson.beats ?? []) {
+    let scanned = 0;
+    for (const entry of ALL_LESSONS) {
+      for (const beat of entry.lesson.beats ?? []) {
         for (const field of [beat.say, beat.sayShort]) {
-          if (typeof field === 'string' && BANNED.test(field)) {
-            offenders.push(`${lesson.openingId}: ${field.slice(0, 100)}`);
-          }
+          if (typeof field !== 'string') continue;
+          scanned += 1;
+          if (BANNED.test(field)) offenders.push(`${entry.key}: ${field.slice(0, 100)}`);
         }
       }
     }
+    expect(scanned, 'scanned no beat text — the reach is broken and this gate is vacuous')
+      .toBeGreaterThan(500);
     expect(
       offenders.slice(0, 20),
       `${offenders.length} lesson beat(s) use we/our/us/let's. Student="you/your", opponent="they/their".`,

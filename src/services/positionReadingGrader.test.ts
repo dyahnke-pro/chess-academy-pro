@@ -9,7 +9,7 @@ vi.mock('./coachApi', () => ({
 import { gradeReadingAnswer } from './positionReadingGrader';
 
 const Q: ReadingQuestion = {
-  id: 'hanging', type: 'hanging',
+  id: 'hanging', type: 'hanging', bucket: 'tactics',
   prompt: 'Is anything hanging?',
   answer: 'Yes — the queen on d5 is hanging.',
   acceptTokens: ['d5', 'queen', 'hanging', 'yes'],

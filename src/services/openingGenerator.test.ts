@@ -438,7 +438,15 @@ describe('repairPunishStage', () => {
 });
 
 describe('assertTreeShape', () => {
-  function makeShell(rootChildren: unknown): unknown {
+  // The whole point is to feed assertTreeShape DELIBERATELY malformed input,
+  // so the parameter stays `unknown` and the cast is where the lie is made.
+  type ShellChild = { node: { children?: unknown[] } };
+  type Shell = {
+    openingName: string; eco: string; studentSide: string; intro: string; outro: string;
+    leafOutros: Record<string, string>;
+    root: { san: null; movedBy: null; idea: string; children: ShellChild[] };
+  };
+  function makeShell(rootChildren: unknown): Shell {
     return {
       openingName: 'X',
       eco: 'A00',
@@ -450,7 +458,7 @@ describe('assertTreeShape', () => {
         san: null,
         movedBy: null,
         idea: '',
-        children: rootChildren,
+        children: rootChildren as ShellChild[],
       },
     };
   }

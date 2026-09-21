@@ -15,7 +15,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { CoachTeachPage } from './CoachTeachPage';
 import { useAppStore } from '../../stores/appStore';
-import { buildUserProfile } from '../../test/factories';
+import { buildMistakePuzzle, buildUserProfile } from '../../test/factories';
 import { db } from '../../db/schema';
 import type { MistakePuzzle } from '../../types';
 
@@ -71,26 +71,22 @@ vi.mock('react-router-dom', async () => {
 });
 
 function makeBlackToMoveMistake(): MistakePuzzle {
-  return {
+  // The factory owns MistakePuzzle's shape. The literal this replaced had
+  // drifted off it in two places the compiler never saw, because the whole
+  // object was cast: a `sourceMode: 'review'` that is not in the union, and a
+  // narration `{ intro, success, failure }` where the real type has
+  // `moveNarrations`, `outro` and `conceptHint`. Only the orientation matters
+  // here, so only the board is stated.
+  return buildMistakePuzzle({
     id: 'drill-orient-black-1',
     // Black to move; best move ...Nc6.
     fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
     playerMove: 'd7d5', playerMoveSan: 'd5',
     bestMove: 'b8c6', bestMoveSan: 'Nc6',
     moves: 'b8c6',
-    cpLoss: 300,
-    classification: 'mistake', gamePhase: 'opening', moveNumber: 1,
-    sourceGameId: 'g1', sourceMode: 'review',
     playerColor: 'black',
-    promptText: 'Find the best move.',
-    narration: { intro: '', success: '', failure: '' },
-    createdAt: new Date().toISOString(),
-    opponentName: null, gameDate: null, openingName: null, evalBefore: null,
-    srsInterval: 0, srsEaseFactor: 2.5, srsRepetitions: 0,
-    srsDueDate: '2020-01-01', srsLastReview: null,
-    status: 'learning', attempts: 0, successes: 0,
-    tacticType: 'fork', positionalMotif: null,
-  } as MistakePuzzle;
+    srsDueDate: '2020-01-01',
+  });
 }
 
 function renderAt(path: string): void {

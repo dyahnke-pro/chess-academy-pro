@@ -22,12 +22,8 @@ import type { SidePlan, LookaheadPlan, LineShape, TerminalRead, PositionRead } f
  *  material / trade squares, the idle list, maneuver, checks, promotion, the
  *  aside, the spoken clauses) at its empty value — each fixture keeps saying
  *  only what it is about. Spread FIRST so a fixture's own field wins. */
-const SIDE_DEFAULTS = {
-  mates: false, kingAttackSquares: [] as string[], materialSquares: [] as string[], tradeSquares: [] as string[],
-  tacticSquare: null as string | null, idlePieces: [] as string[], maneuver: null as SidePlan['maneuver'],
-  checks: 0, promotes: null as string | null, text: '', aside: '', spokenClauses: [] as SidePlan['spokenClauses'],
-};
 import type { PvLine, PvPly, PlyFacts } from './pvPlayback';
+import { buildSidePlan } from '../test/factories';
 
 /**
  * A `LineShape` with the fields this test does not care about filled in
@@ -316,7 +312,7 @@ describe('the read sees the whole line, not just where pieces land', () => {
 
   it('still speaks the future tense for a mate the line is HEADING toward', () => {
     const base = {
-      ...SIDE_DEFAULTS, color: 'white' as const, headingFor: [], opening: [], trading: [], outposts: [],
+      ...buildSidePlan(), color: 'white' as const, headingFor: [], opening: [], trading: [], outposts: [],
       passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
       nearEnemyKing: 0,
       kingAttackSquares: [], materialSquares: [], tradeSquares: [],
@@ -331,7 +327,7 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
   // Drives the REAL scorer. An earlier draft of this block reimplemented the
   // weights inside the test, which would have passed against any code at all.
   const base: SidePlan = {
-    ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+    ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
     passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
     mates: false, nearEnemyKing: 0, text: '',
   };
@@ -423,7 +419,7 @@ describe('hallucination is impossible by construction, not by gate', () => {
   it('never names a square that was not in the computed input', () => {
     for (let i = 0; i < 2000; i += 1) {
       const plan: SidePlan = {
-        ...SIDE_DEFAULTS, color: i % 2 ? 'white' : 'black',
+        ...buildSidePlan(), color: i % 2 ? 'white' : 'black',
         headingFor: i % 3 === 0 ? [pick(SQUARES, i), pick(SQUARES, i + 1)] : [],
         opening: i % 4 === 0 ? [pick(['a', 'c', 'e', 'h'], i)] : [],
         trading: i % 5 === 0 ? [pick(['pawn', 'knight', 'rook'], i)] : [],
@@ -456,14 +452,14 @@ describe('hallucination is impossible by construction, not by gate', () => {
     // spoken as its identifier.
     for (const tactic of TACTICS) {
       const said = describePlan({
-        ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+        ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
         passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic,
         mates: false, nearEnemyKing: 0, text: '',
       }, 'mine');
       expect(said, `a raw identifier reached the voice: "${said}"`).not.toMatch(/_/);
     }
     expect(describePlan({
-      ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+      ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
       passedPawns: [], materialSwing: 0, shieldStripped: 0,
       tactic: 'some_future_detector', mates: false, nearEnemyKing: 0, text: '',
     }, 'mine'), 'an unrecognised tactic was spoken instead of dropped').toBe('');
@@ -471,7 +467,7 @@ describe('hallucination is impossible by construction, not by gate', () => {
 
   it('never emits a move, at any combination of facts', () => {
     for (let i = 0; i < 2000; i += 1) {
-      const said = describePlan({
+      const said = describePlan(buildSidePlan({
         color: i % 2 ? 'white' : 'black',
         headingFor: [pick(SQUARES, i)],
         opening: [pick(['a', 'd', 'f'], i)],
@@ -483,10 +479,7 @@ describe('hallucination is impossible by construction, not by gate', () => {
         tactic: pick(TACTICS, i),
         mates: i % 53 === 0,
         nearEnemyKing: i % 5,
-        kingAttackSquares: [], materialSquares: [], tradeSquares: [],
-        tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null, aside: '',
-        text: '',
-      }, i % 2 ? 'mine' : 'theirs');
+      }), i % 2 ? 'mine' : 'theirs');
       expect(said, `case ${i} handed over a move: "${said}"`)
         .not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
     }
@@ -497,7 +490,7 @@ describe('hallucination is impossible by construction, not by gate', () => {
     // run to run is both a re-synthesis bill and a sign something nondeterministic
     // crept in.
     const plan: SidePlan = {
-      ...SIDE_DEFAULTS, color: 'white', headingFor: ['e4'], opening: ['c'], trading: ['knight'],
+      ...buildSidePlan(), color: 'white', headingFor: ['e4'], opening: ['c'], trading: ['knight'],
       outposts: ['d5'], passedPawns: ['a7'], materialSwing: 3, shieldStripped: 1,
       tactic: 'fork', mates: false, nearEnemyKing: 3, text: '',
     };
@@ -685,7 +678,7 @@ describe('the plan does not repeat itself', () => {
   // on a five-narration sample from a real game: "There is already a pin on the
   // board" four plies running, and the same intention three times.
   const P: SidePlan = {
-    ...SIDE_DEFAULTS, color: 'white', headingFor: ['e4', 'f3'], opening: ['d'], trading: ['knight'],
+    ...buildSidePlan(), color: 'white', headingFor: ['e4', 'f3'], opening: ['d'], trading: ['knight'],
     outposts: ['e5'], passedPawns: [], materialSwing: 1, shieldStripped: 0,
     tactic: 'pin', tacticSquare: 'e4', mates: false, nearEnemyKing: 0,
     kingAttackSquares: [], materialSquares: ['e4'], tradeSquares: ['e5'],
@@ -807,7 +800,7 @@ describe('the drift line does not repeat itself', () => {
   // returned early and skipped the check entirely, so the one line most likely
   // to hold across a quiet stretch was the one line free to chant.
   const drift = (): SidePlan => ({
-    ...SIDE_DEFAULTS, color: 'white', headingFor: ['d4', 'c3'], opening: [], trading: [], outposts: [],
+    ...buildSidePlan(), color: 'white', headingFor: ['d4', 'c3'], opening: [], trading: [], outposts: [],
     passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
     tacticSquare: null, mates: false, nearEnemyKing: 0,
     kingAttackSquares: [], materialSquares: [], tradeSquares: [],
@@ -1031,7 +1024,7 @@ describe('the rest of the inventory — everything the line leaves behind', () =
     // callout it became "Na5 was the move, to … leave a1, d1, f1 exactly where
     // they are." Empty beats wrong.
     const P: SidePlan = {
-      ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: ['d5'],
+      ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: ['d5'],
       passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
       tacticSquare: null, idlePieces: ['a1', 'd1', 'f1'], maneuver: null,
       checks: 0, promotes: null, mates: false, nearEnemyKing: 0,
@@ -1047,7 +1040,7 @@ describe('the rest of the inventory — everything the line leaves behind', () =
     // "Your queenside sleeps through this line" — a plan is as much about what
     // it leaves out as what it includes.
     const P: SidePlan = {
-      ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+      ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
       passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
       tacticSquare: null, idlePieces: ['a1', 'b1', 'c1'], maneuver: null,
       checks: 0, promotes: null, mates: false, nearEnemyKing: 0,
@@ -1068,7 +1061,7 @@ describe('what the plan leaves out gets its OWN sentence', () => {
   // want-list grammar turned a caveat into an intention — nobody plans to leave
   // their rooks at home. It is still worth saying, so it says itself.
   const planWithIdle = (idle: string[]): SidePlan => ({
-    ...SIDE_DEFAULTS, color: 'white', headingFor: ['d5'], opening: [], trading: [], outposts: ['d5'],
+    ...buildSidePlan(), color: 'white', headingFor: ['d5'], opening: [], trading: [], outposts: ['d5'],
     materialSwing: 0, passedPawns: [], shieldStripped: 0, tactic: null, mates: false,
     nearEnemyKing: 0, kingAttackSquares: [], materialSquares: [], tradeSquares: [],
     tacticSquare: null, idlePieces: idle, maneuver: null, checks: 0, promotes: null,
@@ -1137,7 +1130,7 @@ describe('what the plan leaves out gets its OWN sentence', () => {
 // once the values were substituted in.
 describe('sentences that were true and still wrong', () => {
   const planWith = (over: Partial<SidePlan>): SidePlan => ({
-    ...SIDE_DEFAULTS, color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
+    ...buildSidePlan(), color: 'white', headingFor: [], opening: [], trading: [], outposts: [],
     materialSwing: 0, passedPawns: [], shieldStripped: 0, tactic: null, mates: false,
     nearEnemyKing: 0, kingAttackSquares: [], materialSquares: [], tradeSquares: [],
     tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null,

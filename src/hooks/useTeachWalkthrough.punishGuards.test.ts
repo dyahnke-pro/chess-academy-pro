@@ -131,8 +131,8 @@ describe('sibling stage validity gates', () => {
     path: ['e4', 'e5', 'Nf3'],
     prompt: 'Best move?',
     candidates: [
-      { label: 'Nxe5', correct: true, explanation: 'Wins a pawn.' },
-      { label: 'Bc4', correct: false, explanation: 'Too slow.' },
+      { san: 'Nxe5', label: 'Nxe5', correct: true, explanation: 'Wins a pawn.' },
+      { san: 'Bc4', label: 'Bc4', correct: false, explanation: 'Too slow.' },
     ],
   };
   const goodDrill: DrillLine = { name: 'Main line', moves: ['e4', 'e5', 'Nf3', 'Nc6'] };

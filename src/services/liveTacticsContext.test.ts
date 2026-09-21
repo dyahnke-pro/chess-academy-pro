@@ -333,7 +333,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
   });
 
   it('returns null on a quiet position (nothing upcoming)', () => {
-    expect(speakDeepestLookahead(ctxWith([], []))).toBeNull();
+    expect(speakDeepestLookahead(ctxWith([], []), 'student')).toBeNull();
   });
 });
 

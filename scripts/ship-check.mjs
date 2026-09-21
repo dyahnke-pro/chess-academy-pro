@@ -691,7 +691,21 @@ runStep('typecheck   ', 'npm', ['run', 'typecheck']);
 //
 // ZERO gate files carry a type error. Keep it that way; drive the rest down
 // from the non-gate backlog. Ceilings only ever come DOWN.
-const TEST_TYPE_ERROR_CEILING = 22;
+//
+// 🔒 IT REACHED ZERO (2026-09-20). 236 -> 0. The backlog is gone, so this is no
+// longer a ratchet over a pile of known rot — it is a HARD GATE: any test type
+// error at all is now a NEW one, and the push fails. Do not raise it to park a
+// broken fixture; fix the fixture, or fix the type it is lying about.
+//
+// What the 236 actually were, because the shape matters more than the count:
+// almost none were "the test is wrong". They were fixtures restating a type
+// they do not own and then rotting when the type moved — phantom union members
+// (`sourceMode: 'review'`, a status of `'learning'`), locally shrunken copies
+// of a real interface (`{ spoken?: string; kind?: string }` beside the real
+// `BakedNote`), and hand-rolled literals for types that have since grown ten
+// fields. The durable fix in each case was a FACTORY or the real type, never a
+// cast: a cast would have gone quiet and rotted again on the next field.
+const TEST_TYPE_ERROR_CEILING = 0;
 // THE INSTRUMENT MUST NOT REPORT NOTHING AS GREEN (2026-09-19). Under Node's
 // default heap this tsc run DIES with "FATAL ERROR: … heap out of memory"
 // (SIGABRT, exit 134). A crash dump contains zero "error TS" lines, so the

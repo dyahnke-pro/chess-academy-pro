@@ -14,7 +14,7 @@ describe('principles — the device per misconception tag (Phase 3)', () => {
   });
 
   it('no device names a tag outside the closed set', () => {
-    const ids = new Set(MISCONCEPTION_TAGS.map((t) => t.id));
+    const ids = new Set<string>(MISCONCEPTION_TAGS.map((t) => t.id));
     for (const key of Object.keys(PRINCIPLE_DEVICES)) {
       expect(ids.has(key), `unknown tag ${key}`).toBe(true);
     }

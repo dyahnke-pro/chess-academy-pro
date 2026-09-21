@@ -649,7 +649,8 @@ describe('coachFeatureService', () => {
 
     it('teaches the Opera Game showcase moves — sac named, mate named, no windfall (David 2026-07-20)', () => {
       const OPERA = ['e4','e5','Nf3','d6','d4','Bg4','dxe5','Bxf3','Qxf3','dxe5','Bc4','Nf6','Qb3','Qe7','Nc3','c6','Bg5','b5','Nxb5','cxb5','Bxb5+','Nbd7','O-O-O','Rd8','Rxd7','Rxd7','Rd1','Qe6','Bxd7+','Nxd7','Qb8+','Nxb8','Rd8#'];
-      const cls = (ply: number): string => (ply === 31 ? 'brilliant' : ply === 19 ? 'great' : 'good');
+      const cls = (ply: number): ReviewMoveInput['classification'] =>
+        ply === 31 ? 'brilliant' : ply === 19 ? 'great' : 'good';
       const segments = buildReviewSegments(
         OPERA.map((san, i) => move({ ply: i + 1, san, classification: cls(i + 1) })),
         'white', 'Philidor Defense',
@@ -840,7 +841,10 @@ describe('buildReviewSegments — gem crush wiring (P2, David: "crush lines duri
     const studentColor: 'white' | 'black' = c.turn() === 'w' ? 'black' : 'white';
     const sans = [...spine, gem.inaccuracy, gem.punish];
     // ply is 1-indexed (odd = White) — the review derives moverColor from it.
-    const moves = sans.map((san, ix) => ({ classification: 'good' as const, san, ply: ix + 1 }));
+    const moves: ReviewMoveInput[] = sans.map((san, ix) => ({
+      classification: 'good', san, ply: ix + 1,
+      isCoachMove: false, evaluation: 0, preMoveEval: 0, bestMove: null, fenAfter: '',
+    }));
     const segs = buildReviewSegments(moves, studentColor, 'Caro-Kann Defense', false);
     const joined = segs.map((seg) => seg.narration ?? '').join(' \n ');
     const esc = (x: string): string => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
