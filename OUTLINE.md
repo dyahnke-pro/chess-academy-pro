@@ -135,8 +135,8 @@ states and the app can act on two. Measured 2026-09-20, not recalled:
 | the PROFILE (`getCapabilityProfile`, prompted rows skipped) | ✅ built |
 | a term that can LOWER need (`needScore.capabilityTerm`, held ≥ 3 + zero broken) | ✅ built, ONE production reader |
 | **does real play ever reach held ≥ 3 with zero broken?** | ✅ **MEASURED 2026-09-20: YES, 6 of 6 game-seats, off ONE game each** |
-| is the bar set right, i.e. does a proven tag SURVIVE later games? | 🔴 **NO — measured: 1 flip in 5 games, on the tag that proved fastest** |
-| can a student who FIXES a weakness ever go green again? | 🔴 **NO — `broken > 0` is lifetime, so green is unrecoverable** |
+| is the bar set right, i.e. does a proven tag SURVIVE later games? | ✅ **measured and re-set** — `posedImportance >= 80` is the knee (15 real games, 198 held rows): 2 proven, 0 later failed. The old effective bar of 65 gave 2 tags / 17 failure events |
+| can a student who FIXES a weakness ever go green again? | ✅ **YES — fixed and gated.** `capabilityProven` reads `heldStreak`/`streakGames`, not lifetime `broken`; a break RESETS the streak rather than closing the door. Gate: capabilityEvidence.test 'GREEN IS RECOVERABLE'. Verified 2026-09-20: no production code gates green on lifetime broken (`broken > 0` survives only to classify RED) |
 | **has a student's Nth game ever gone quiet because of games 1..N-1?** | 🔴 **NEVER SHOWN** |
 
 🔴 **The "21 vs 8 parity gap" I read off `docs/STATE.md` is a GREP RATIO, not a
@@ -159,7 +159,15 @@ BROKEN in game 5 — so the coach would have gone quiet about it for four games
 and then watched them do it again. One flip in five games, on the tag that
 proved fastest.
 
-🔴 **AND THE OPPOSITE DEFECT, found by the same run: GREEN IS UNRECOVERABLE.**
+✅ **FIXED — the defect this paragraph describes is closed (verified 2026-09-20).**
+`capabilityProven` now reads a RECENT STREAK (`heldStreak` / `streakGames`) and
+no production code gates green on a lifetime `broken` any more; the one
+surviving `broken > 0` classifies RED, which is correct. Gate:
+`capabilityEvidence.test` → "GREEN IS RECOVERABLE — a student who fixes it can
+go green again" (33 capability tests green). The original finding, kept because
+the reasoning is why the rule has its present shape:
+
+🔴 **THE OPPOSITE DEFECT, found by the same run: GREEN WAS UNRECOVERABLE.**
 `getCapabilityProfile` counts LIFETIME broken and `capabilityTerm` requires
 `broken === 0`, so one break ever bars a tag from green permanently, however
 many holds follow. The heat map exists to say "you have GOTTEN BETTER" and as
