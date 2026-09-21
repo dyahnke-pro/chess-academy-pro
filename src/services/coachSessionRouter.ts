@@ -699,7 +699,24 @@ export type RoutedIntent =
   | { kind: 'take_back_move'; count: number }
   | { kind: 'reset_board' }
   | { kind: 'set_board_position'; fen: string }
-  | { kind: 'navigate_to_route'; route: string };
+  | { kind: 'navigate_to_route'; route: string }
+  // ─── 2026-09-21: the rest of the HANDS (David: "The hands need to be
+  // controllable by the user through the text box"). Before this the router
+  // knew five commands and the coach had fifteen hands, so everything else —
+  // flip the board, make it harder, quiz me, let me practise that — had only
+  // one path: hand the sentence to the model and let it pick a tool. That is
+  // how the LLM ended up owning thirteen actuators (the G0 break; see
+  // `coachActuator`). Extending THIS union rather than writing a second parser
+  // beside it is the point: one router home, as the header above already says.
+  | { kind: 'set_orientation'; orientation: 'white' | 'black' }
+  | { kind: 'save_position' }
+  | { kind: 'restore_position' }
+  /** DIRECTION only. The router does not know the opponent's current Elo, so
+   *  it never invents a target — the adapter steps it from the live value. */
+  | { kind: 'set_strength'; direction: 'up' | 'down' }
+  | { kind: 'quiz_me' }
+  | { kind: 'start_drill' }
+  | { kind: 'show_squares' };
 
 export interface IntentRouterContext {
   /** Current FEN of the live board, used for SAN validation when
@@ -767,6 +784,20 @@ function formatIntentSummary(intent: RoutedIntent | null): string {
       return `matched=set_board_position fen=${intent.fen.slice(0, 40)}`;
     case 'navigate_to_route':
       return `matched=navigate_to_route route=${intent.route}`;
+    case 'set_orientation':
+      return `matched=set_orientation orientation=${intent.orientation}`;
+    case 'save_position':
+      return 'matched=save_position';
+    case 'restore_position':
+      return 'matched=restore_position';
+    case 'set_strength':
+      return `matched=set_strength direction=${intent.direction}`;
+    case 'quiz_me':
+      return 'matched=quiz_me';
+    case 'start_drill':
+      return 'matched=start_drill';
+    case 'show_squares':
+      return 'matched=show_squares';
   }
 }
 
@@ -778,6 +809,59 @@ function computeRoutedIntent(
 ): RoutedIntent | null {
   const lowered = text.trim().toLowerCase();
   if (!lowered) return null;
+
+  // ─── the rest of the hands (2026-09-21) ─────────────────────────
+  // ORDER IS LOAD-BEARING and it is not alphabetical. Each of these is
+  // checked BEFORE take_back_move because the take-back pattern already
+  // claims a bare "go back", which would otherwise swallow "go back to where
+  // we were" (a RESTORE, not an undo).
+  //
+  // 🚨 DELIBERATELY NARROW. A phrase that is ALSO a plausible question must
+  // NOT be claimed here: a missed command still reaches the brain and gets
+  // answered, while a false command fires a hand the student never asked for.
+  // So "show me" alone is NOT a command (it opens half the questions in the
+  // app) and bare "harder" is not either — both need a verb that makes them
+  // an instruction.
+
+  // restore — before take_back (see above).
+  if (/\b(resume(?! the game)|go back to where we were|back to (my|the) saved (position|spot)|restore (the |my )?(position|spot)|pick up where we left)\b/i.test(text)) {
+    return { kind: 'restore_position' };
+  }
+
+  // save this spot
+  if (/\b(save (this|the|my) (position|spot|place)|bookmark (this|it|the position)|remember (this|the) (position|spot))\b/i.test(text)) {
+    return { kind: 'save_position' };
+  }
+
+  // flip / sides. An explicitly named colour wins; otherwise it is a flip.
+  if (/\b(flip (the )?board|switch sides|turn the board (a)?round|other side of the board)\b/i.test(text)
+      || /\b(let me play|i want to play|i'?ll play|put me) (as )?(white|black)\b/i.test(text)) {
+    const named = /\b(white|black)\b/i.exec(text);
+    return {
+      kind: 'set_orientation',
+      orientation: named ? (named[1].toLowerCase() as 'white' | 'black') : 'black',
+    };
+  }
+
+  // strength. "too easy" means make it HARDER — checked first so the easier
+  // pattern cannot claim it on the shared word.
+  if (/\b(too easy|make it harder|play (stronger|harder|better)|step it up|tougher opponent|stronger opponent)\b/i.test(text)) {
+    return { kind: 'set_strength', direction: 'up' };
+  }
+  if (/\b(too hard|make it easier|play (weaker|easier)|ease up|go easy on me|weaker opponent)\b/i.test(text)) {
+    return { kind: 'set_strength', direction: 'down' };
+  }
+
+  // quiz / drill / eyes — each needs an imperative, never a bare noun.
+  if (/\b(quiz me|test me|challenge me|make me find (it|the move)|let me find (it|the move))\b/i.test(text)) {
+    return { kind: 'quiz_me' };
+  }
+  if (/\b(drill (this|that|it)|let me practi[cs]e|practi[cs]e (this|that|it)|give me (a )?(drill|some reps)|work on this)\b/i.test(text)) {
+    return { kind: 'start_drill' };
+  }
+  if (/\b(point (it|that|them) out|highlight (it|that|them|the squares?)|draw (it|that|them)|show me (on )?the board)\b/i.test(text)) {
+    return { kind: 'show_squares' };
+  }
 
   // ─── take_back_move ─────────────────────────────────────────────
   // Checked BEFORE play_move so "take it back" / "take that move back"
@@ -809,6 +893,30 @@ function computeRoutedIntent(
     const targetOpponent = /\b(your (last\s+)?move|the (coach|opponent)'?s?\s+move|opponent'?s?\s+move|coach'?s?\s+move)\b/i.test(text);
     if (targetMine && ctx.lastMoveBy === 'coach') return { kind: 'take_back_move', count: 2 };
     if (targetOpponent && ctx.lastMoveBy === 'user') return { kind: 'take_back_move', count: 2 };
+    // 🔴 AN UNTARGETED TAKEBACK AFTER THE COACH HAS REPLIED IS THE EXCHANGE,
+    // NOT ONE PLY (found 2026-09-21 by driving the real chain end to end).
+    //
+    // "take that back" / "undo" / "let me try that again" carry no target, so
+    // they fell to the legacy 1 — which removes only the COACH'S reply and
+    // leaves it the coach's turn. The student cannot then try anything again,
+    // which is the literal thing they asked for. The targeted branch directly
+    // above already encodes the right arithmetic for exactly this board
+    // ("target = mine, lastMoveBy = coach → 2"); an untargeted ask on the same
+    // board means the same thing, so it gets the same answer.
+    //
+    // Still 1 when we do not KNOW the board (no `lastMoveBy`, e.g. a chat-only
+    // surface) — a conservative undo is recoverable, over-undoing is not.
+    //
+    // 🚨 BOTH TARGET FLAGS MUST BE FALSE. The first cut of this rule tested
+    // only `lastMoveBy` and swallowed a TARGETED ask: "take back your move"
+    // with the coach having just moved sets `targetOpponent`, matches neither
+    // early return above (that pair only encodes the count-2 cases), and fell
+    // through to here — answering 2 for a request that names exactly one ply.
+    // Caught by `coachSessionRouter.boardMatch.test.ts`, which had the contract
+    // written down already.
+    if (!targetMine && !targetOpponent && ctx.lastMoveBy === 'coach') {
+      return { kind: 'take_back_move', count: 2 };
+    }
     return { kind: 'take_back_move', count: 1 };
   }
 

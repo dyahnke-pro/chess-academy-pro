@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**983 lines · 10 exports · 11 importers · 7 tests · 4 audits**
+**1091 lines · 10 exports · 13 importers · 8 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,9 +17,11 @@
 - `src/coach/questionMatrix.audit.test.ts`
 - `src/components/Board/VoiceChatMic.tsx`
 - `src/components/Coach/CoachChatPage.test.tsx`
+- `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/GameChatPanel.tsx`
 - `src/components/Insights/GameInsightsPage.tsx`
+- `src/services/coachHands.test.ts`
 - `src/services/coachSessionRouter.boardMatch.test.ts`
 - `src/services/coachSessionRouter.i18n.test.ts`
 - `src/services/coachSessionRouter.test.ts`
@@ -110,10 +112,17 @@
 ### `IntentRouterContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `tryRouteIntent` (function) — 31 call sites
-- `src/components/Board/VoiceChatMic.tsx:211`
-- `src/components/Coach/CoachTeachPage.tsx:2864`
-- `src/components/Coach/GameChatPanel.tsx:445`
+### `tryRouteIntent` (function) — 38 call sites
+- `src/components/Board/VoiceChatMic.tsx:238`
+- `src/components/Coach/CoachGameReview.tsx:3124`
+- `src/components/Coach/CoachTeachPage.tsx:2903`
+- `src/components/Coach/GameChatPanel.tsx:508`
+- `src/services/coachHands.test.ts:34`
+- `src/services/coachHands.test.ts:140`
+- `src/services/coachHands.test.ts:245`
+- `src/services/coachHands.test.ts:251`
+- `src/services/coachHands.test.ts:257`
+- `src/services/coachHands.test.ts:263`
 - `src/services/coachSessionRouter.boardMatch.test.ts:8`
 - `src/services/coachSessionRouter.boardMatch.test.ts:13`
 - `src/services/coachSessionRouter.boardMatch.test.ts:18`
@@ -148,6 +157,7 @@
 - `src/coach/dispatchCoachTurn.test.ts`
 - `src/coach/questionMatrix.audit.test.ts`
 - `src/components/Coach/CoachChatPage.test.tsx`
+- `src/services/coachHands.test.ts`
 - `src/services/coachSessionRouter.boardMatch.test.ts`
 - `src/services/coachSessionRouter.i18n.test.ts`
 - `src/services/coachSessionRouter.test.ts`

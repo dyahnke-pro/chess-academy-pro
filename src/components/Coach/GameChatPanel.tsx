@@ -27,6 +27,7 @@ import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../../types';
 import { uid } from '../../utils/uid';
+import { registerCoachHands, actuate, actionForCommand } from '../../services/coachActuator';
 
 /** Pull the inner items out of a `[CHOICES: A | B | C]` marker in a raw coach
  *  reply (mirrors the CoachTeachPage extractor). The marker itself is stripped
@@ -123,6 +124,30 @@ interface GameChatPanelProps {
   /** Called when the brain emits `start_walkthrough_for_opening`. The
    *  parent navigates to the WalkthroughMode UI seeded with the named
    *  opening / variation / orientation. WO-COACH-LICHESS-OPENINGS. */
+  // ─── the rest of the HANDS (2026-09-21) ───────────────────────────────
+  // Optional, and a surface answers only for what it genuinely has: the
+  // actuator reports "no board on this surface" honestly rather than faking
+  // success, which is the bug `coachActuator` was written to kill. Passing
+  // one of these is ALL a surface has to do — the registration effect below
+  // publishes it to the spine, so the coach can use the hand on its own
+  // initiative and the student can drive it from the text box, from the same
+  // one line of wiring.
+  /** Flip which way the board faces. */
+  onSetOrientation?: (orientation: 'white' | 'black') => unknown;
+  /** THE EYES — light up the squares a computed fact is about. */
+  onShowSquares?: (squares: readonly import('chess.js').Square[]) => unknown;
+  /** How hard the opponent plays. The Elo is computed, never typed. */
+  onSetStrength?: (targetElo: number) => unknown;
+  /** The OPPONENT's current strength, so "make it harder" steps from what the
+   *  student is actually facing. Only the host surface knows it (on Play it is
+   *  `getTargetStrength(playerRating, difficulty)`), and a panel that guessed it
+   *  from the student's own rating would step the wrong direction on hard — see
+   *  the note at the `currentElo` call site. */
+  opponentElo?: number;
+  /** Start a drill on the student's own flubbed positions. */
+  onStartDrill?: (motif?: string | null) => unknown;
+  /** Switch the WLPP rung. */
+  onSetViewMode?: (mode: string) => unknown;
   onStartWalkthroughForOpening?: (args: {
     opening: string;
     variation?: string;
@@ -184,6 +209,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       onSetBoardPosition,
       onResetBoard,
       onQuizUserForMove,
+      onSetOrientation,
+      onShowSquares,
+      onSetStrength,
+      opponentElo,
+      onStartDrill,
+      onSetViewMode,
       onStartWalkthroughForOpening,
       initialPrompt,
       onInitialPromptSent,
@@ -196,6 +227,38 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const activeProfile = useAppStore((s) => s.activeProfile);
     const navigate = useNavigate();
     const location = useLocation();
+
+    // 🔒 THE HANDS REACH THE SPINE FROM HERE (2026-09-21, David: "A. Not even a
+    // question" + "this is a unified coach, so all changes get made to all
+    // surfaces").
+    //
+    // The hands used to be PROPS threaded down to the tool loop, which is why
+    // only the LLM could reach them: nothing in `src/services/` can read a
+    // React prop. Publishing them to the global `coachActuator` registry makes
+    // them reachable by the DECIDER — and because this panel is the text box
+    // mounted on twelve surfaces (Learn, Play, Review, OpeningPlayMode, the
+    // board pages, the global drawer…), ONE registration wires all of them at
+    // once. That is the unified coach as a structural fact rather than twelve
+    // parallel edits that drift.
+    //
+    // Re-registers whenever a handler identity changes, so a surface that
+    // rebuilds its callbacks never leaves a stale hand behind; the unregister
+    // only clears if this panel is still the owner (see registerCoachHands).
+    useEffect(() => registerCoachHands({
+      playMove: onPlayMove,
+      takeBack: onTakeBackMove,
+      setPosition: onSetBoardPosition,
+      resetBoard: onResetBoard,
+      quizMove: onQuizUserForMove,
+      startWalkthrough: onStartWalkthroughForOpening,
+      setOrientation: onSetOrientation,
+      showSquares: onShowSquares,
+      setStrength: onSetStrength,
+      startDrill: onStartDrill,
+      setViewMode: onSetViewMode,
+    }), [onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove,
+      onStartWalkthroughForOpening, onSetOrientation, onShowSquares, onSetStrength,
+      onStartDrill, onSetViewMode]);
 
     const [messages, setMessagesInternal] = useState<ChatMessageType[]>(initialMessages ?? []);
     const [isStreaming, setIsStreaming] = useState(false);
@@ -533,6 +596,57 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
                 ackText = 'On it.';
               } catch (err) {
                 dispatchError = err instanceof Error ? err.message : String(err);
+              }
+              break;
+            }
+            // ─── the rest of the hands (2026-09-21) ────────────────
+            // The five cases above call their props directly and are
+            // covered by existing tests, so they are left exactly as they
+            // are. Everything else goes through `actuate`, the one door the
+            // SPINE also uses — and the two cannot drift, because the
+            // registry `actuate` reads is fed from these very props by the
+            // effect at the top of this component. Collapsing the five onto
+            // `actuate` is a follow-up once their tests point at it.
+            default: {
+              const action = actionForCommand(routedIntent, {
+                // 🔴 THIS USED TO PASS `activeProfile.currentRating` AND THAT WAS
+                // TWO MISTAKES IN ONE LINE (caught by the state gate, 2026-09-21).
+                //
+                // WRONG VALUE: `currentElo` is documented as the OPPONENT's
+                // strength, so "make it harder" steps from what the opponent is
+                // playing at — not from what the STUDENT is rated. On Play those
+                // differ by the whole difficulty band (`getTargetStrength`), so a
+                // student on hard asking for harder would have been stepped DOWN.
+                //
+                // WRONG SOURCE: reading `currentRating` off the store is what the
+                // locked rating rule bans — "a surface does not pick a rating" —
+                // and it made this the 40th such reader on a list that may only
+                // shrink.
+                //
+                // The host surface knows its opponent's strength and nothing else
+                // does, so it supplies it. Absent, `steppedElo` uses its own
+                // documented default rather than this panel inventing one.
+                currentElo: opponentElo,
+                fen: getLiveFen?.() ?? fen,
+                // quizSan / squares are NOT resolved here on purpose: the
+                // move and the squares are the BOARD's to produce, and an
+                // adapter that invented either would be the model's old job
+                // wearing a regex. With neither, `actionForCommand` returns
+                // null and the ask falls through to the brain — which is the
+                // honest outcome, not a silent no-op.
+              });
+              if (!action) break;
+              const r = await actuate(action);
+              dispatchOk = r.ok;
+              dispatchError = r.reason;
+              if (dispatchOk) {
+                ackText =
+                  routedIntent.kind === 'set_orientation' ? `Flipped — you're on ${routedIntent.orientation}.`
+                  : routedIntent.kind === 'save_position' ? 'Saved — say "resume" and we pick up here.'
+                  : routedIntent.kind === 'restore_position' ? 'Back where we were.'
+                  : routedIntent.kind === 'set_strength' ? (routedIntent.direction === 'up' ? 'Stepping it up.' : 'Easing off.')
+                  : routedIntent.kind === 'start_drill' ? 'Drilling that one.'
+                  : 'Done.';
               }
               break;
             }
@@ -1421,7 +1535,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
         setStreamingContent('');
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps -- 'queueSpeak' is intentionally omitted to avoid recreating the callback every render; tracked for dedicated audit.
-    }, [activeProfile, isStreaming, fen, getLiveFen, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove, onStartWalkthroughForOpening, setMessages, navigate, location, playerColor]);
+    }, [activeProfile, isStreaming, fen, getLiveFen, history, lastMoveBy, isGameOver, flushSpeechBuffer, onBoardAnnotation, onRestartGame, onPlayOpening, onPlayMove, onTakeBackMove, onSetBoardPosition, onResetBoard, onQuizUserForMove, onStartWalkthroughForOpening, setMessages, navigate, location, playerColor, opponentElo]);
 
     // Keep the imperative `ask` routed to the live handleSend.
     useEffect(() => { handleSendRef.current = handleSend; }, [handleSend]);

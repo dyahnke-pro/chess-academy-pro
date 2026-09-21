@@ -4265,6 +4265,52 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     [game],
   );
 
+  /**
+   * THE BOARD FLIPS WHEN THE STUDENT SAYS SO (2026-09-21, David: "Always
+   * obey"). `playerColor` drives which way the board faces AND which seat the
+   * student is in, so this is the honest one-line answer to "flip the board" /
+   * "let me play black" on the play surface.
+   */
+  const handleChatSetOrientation = useCallback(
+    (orientation: 'white' | 'black'): { ok: boolean; reason?: string } => {
+      setPlayerColor(orientation);
+      return { ok: true };
+    },
+    [],
+  );
+
+  /**
+   * HOW HARD THE OPPONENT PLAYS — the hand the coach never had.
+   *
+   * The FOUNDATION says strength is matched in real time off the board, from
+   * the same measurement that drives teaching; nothing could act on that
+   * before, because `difficulty` was a settings control and no computer could
+   * reach it. The target Elo is COMPUTED (stepped from the live value by
+   * `steppedElo`, or later by the capability read) and mapped onto the play
+   * config's three bands here — the one place that mapping belongs, next to
+   * the state it sets.
+   *
+   * Bands are the student's own rating ± a step, not absolute skill levels, so
+   * "make it harder" means harder THAN THEM rather than harder in the abstract.
+   */
+  const handleChatSetStrength = useCallback(
+    (targetElo: number): { ok: boolean; reason?: string } => {
+      const base = playerRating || 1200;
+      const next: CoachDifficulty = targetElo >= base + 100 ? 'hard'
+        : targetElo <= base - 100 ? 'easy'
+        : 'medium';
+      setDifficulty(next);
+      void logAppAudit({
+        kind: 'coach-brain-tool-called',
+        category: 'subsystem',
+        source: 'CoachGamePage.handleChatSetStrength',
+        summary: `targetElo=${targetElo} base=${base} difficulty=${next}`,
+      });
+      return { ok: true };
+    },
+    [playerRating],
+  );
+
   const handleChatResetBoard = useCallback(
     (): { ok: boolean; reason?: string } => {
       const finish = (result: { ok: boolean; reason?: string }): { ok: boolean; reason?: string } => {
@@ -5309,6 +5355,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
             {/* Row 2: Ask (voice) button */}
             <div className="flex justify-center">
+              {/* onPlayMove / onTakeBackMove / onResetBoard removed 2026-09-21:
+                  the voice path goes through `coachActuator` now, and this page
+                  already publishes those same three handlers to the registry via
+                  GameChatPanel. Threading them here too was the ONE mount path of
+                  four that happened to be wired — ChessBoard's relay props had no
+                  supplier, ControlledChessBoard and BoardVoiceOverlay passed none
+                  — so voice board commands were dead on Learn, lessons, drills and
+                  the openings boards while the typed words were obeyed. */}
               <VoiceChatMic
                 fen={game.fen}
                 pgn={game.history.join(' ')}
@@ -5319,9 +5373,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 playerColor={playerColor}
                 onListeningChange={setVoiceActive}
                 onArrows={handleVoiceArrows}
-                onPlayMove={handleChatPlayMove}
-                onTakeBackMove={handleChatTakeBackMove}
-                onResetBoard={handleChatResetBoard}
                 getMoveCount={() => game.history.length}
                 getCurrentFen={() => game.fen}
               />
@@ -5396,6 +5447,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               onResetBoard={handleChatResetBoard}
               onQuizUserForMove={handleQuizUserForMove}
               onStartWalkthroughForOpening={handleStartWalkthroughForOpening}
+              onSetOrientation={handleChatSetOrientation}
+              onSetStrength={handleChatSetStrength}
+              opponentElo={targetStrength}
               onPlayVariation={handlePlayVariation}
               onReturnToGame={handleReturnToGame}
               initialPrompt={pendingChatPrompt}

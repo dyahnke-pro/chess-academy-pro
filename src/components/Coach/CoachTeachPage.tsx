@@ -16,6 +16,8 @@ import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
+import type { Square } from 'chess.js';
+import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard } from './TeachGameOverCard';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -2165,6 +2167,43 @@ export function CoachTeachPage(): JSX.Element {
     liveFenRef.current = STARTING_FEN;
     return { ok: true };
   }, []);
+
+  /**
+   * 🔒 LEARN PUBLISHES ITS HANDS (2026-09-21, David: "A. Not even a question"
+   * + "this is a unified coach, so all changes get made to all surfaces").
+   *
+   * Learn does NOT render the shared GameChatPanel — it owns its chat inline —
+   * so the registration that panel performs for its six host surfaces
+   * (BoardPageLayout, CoachGamePage, GlobalCoachDrawer, LessonScaffold,
+   * MiddlegamePractice, OpeningPlayMode) does not reach here. Any surface with
+   * its own chat registers for itself, which is what makes "all surfaces" a
+   * fact you can grep rather than a hope.
+   *
+   * 🚨 AND THE MEASUREMENT ITSELF HAS A TRAP, paid for once: a first pass at
+   * this comment quoted the JSX open tag literally, so the very grep used to
+   * find the render sites matched THIS PROSE and reported Learn as a host —
+   * which read as a double registration fighting the panel's. Never write a
+   * searchable token into a comment about searching for it.
+   *
+   * THE EYES LAND HERE FIRST. `setArrows`/`setHighlights` are called inline in
+   * 36 places across the app and nothing could ever invoke them — the spine
+   * computes the squares a fact is about (`ClauseItem.squares`, coupled at
+   * emission) and then could not point at them. This is the hand that closes
+   * that, and Learn is where it matters most.
+   */
+  useEffect(() => registerCoachHands({
+    playMove: handlePlayMove,
+    takeBack: handleTakeBack,
+    setPosition: handleSetBoardPosition,
+    resetBoard: handleResetBoard,
+    setOrientation: (o: 'white' | 'black') => {
+      gameRef.current.setOrientation(o);
+      setPlayerColor(o);
+    },
+    showSquares: (squares: readonly Square[]) => {
+      setHighlights(squares.map((sq) => ({ square: sq, color: 'yellow' as const })));
+    },
+  }), [handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard]);
 
   // ─── In-place drills (coach sets a REAL puzzle up on the board) ──────
   // David 2026-07-03: "the coach sets them up on the board under learn

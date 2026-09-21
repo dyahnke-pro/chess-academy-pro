@@ -90,6 +90,8 @@ import { db } from '../../db/schema';
 import { reviewNarrationCacheKey, getCachedReviewNarration, storeReviewNarration } from '../../services/reviewNarrationCache';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
+import { registerCoachHands, actionForCommand, actuate } from '../../services/coachActuator';
+import { tryRouteIntent } from '../../services/coachSessionRouter';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType, MoveClassification, StockfishAnalysis } from '../../types';
 
 /** THE REGISTER IS BACK ON, AND THE COMPUTER CUTS IT (David 2026-09-16:
@@ -171,6 +173,31 @@ const THEORY_DEPARTURE_CARD_ENABLED: boolean = false;
 // + CLASSIFICATION_BORDER_COLORS removed alongside the analysis-phase
 // board they served. The walk-phase board derives its own arrow/badge
 // styling inline from the segment classification.
+
+
+/**
+ * WHY REVIEW REFUSES THE BOARD HANDS, AND WHY IT MUST SAY SO OUT LOUD.
+ *
+ * Review's board is a REPLAY: the timeline is the source of truth, so playing,
+ * taking back, jumping or resetting would be the coach overwriting the record
+ * of what the student actually did. These four are therefore honest `{ok:false}`
+ * with a reason naming what to do instead — never a silent no-op (the actuator's
+ * whole contract is that "the coach said done while nothing happened" is a bug).
+ *
+ * 🔒 ONE DERIVATION, TWO READERS (2026-09-21). These strings answer the LLM's
+ * tool calls AND the student's typed command. They used to exist only on the
+ * tool-callback path, which meant review never claimed the global hand registry
+ * — so a command typed into review's chat fell through to whatever surface had
+ * registered LAST, and could move a Play board the student was not looking at.
+ * Registering the refusals is what closes that: the registry is claimed while
+ * review is mounted, and the answer is the same sentence in both directions.
+ */
+const REVIEW_LOCKED: Record<'play' | 'takeBack' | 'setPosition' | 'reset', string> = {
+  play: 'play_move is locked on the review surface — the timeline is the source of truth. Use a [BOARD: arrow:from-to:green] marker to show the move, and the student can tap the suggested piece to explore.',
+  takeBack: 'take_back_move is locked on the review surface — the student drives navigation with the forward/back buttons.',
+  setPosition: 'set_board_position is locked on the review surface — the timeline is the source of truth.',
+  reset: 'reset_board is locked on the review surface — the student can use the Jump-to-Start nav button to rewind.',
+};
 
 export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const {
@@ -689,6 +716,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       ? initialMoveIndex + 1
       : undefined,
   });
+
+  // 🔒 REVIEW PUBLISHES ITS HANDS — the honest partial set (2026-09-21).
+  //
+  // "This is a unified coach, so all changes get made to all surfaces"
+  // (David). Review's partial set is: the four board hands REFUSE with a
+  // reason (above). `navigate`, `save-position` and `restore-position` need no
+  // surface handler at all — they are global / service-level — so they ride for
+  // free, and `handleAskSend` feeds save-position the ply the student is
+  // actually looking at.
+  //
+  // The load-bearing half is the CLAIM, not the refusals: without it a command
+  // typed into review's chat fell through to the last surface that registered,
+  // which could be a Play board in another tab's history. A refusal the student
+  // can read beats a board they cannot see moving.
+  useEffect(() => registerCoachHands({
+    playMove: () => ({ ok: false, reason: REVIEW_LOCKED.play }),
+    takeBack: () => ({ ok: false, reason: REVIEW_LOCKED.takeBack }),
+    setPosition: () => ({ ok: false, reason: REVIEW_LOCKED.setPosition }),
+    resetBoard: () => ({ ok: false, reason: REVIEW_LOCKED.reset }),
+  }), []);
 
   // Warm the TTS clip cache for the whole walk the moment the narration
   // bundle lands, so each ply's voice fires the instant the move plays instead
@@ -3064,6 +3111,37 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const handleAskSend = useCallback((question: string) => {
     if (isAskStreaming) return;
 
+    // 🔒 A COMMAND IS EXECUTED, NOT DISCUSSED (2026-09-21). Review's chat had
+    // NO deterministic command parse — every typed "flip the board" / "save
+    // this position" went to the LLM, which is the same G0 hole the Learn and
+    // voice surfaces had. "Always obey" (David): an explicit command from the
+    // student runs, and a refusal is a reason the student can read.
+    //
+    // The refusals are the point here, not a limitation. Review's board is a
+    // replay, so "take that back" must answer with what the buttons do instead
+    // — and it now answers in the SAME sentence the brain's tool call gets,
+    // because both read REVIEW_LOCKED.
+    const command = tryRouteIntent(question);
+    if (command) {
+      const seg = walkPlayback.currentSegment;
+      const action = actionForCommand(command, {
+        fen: walkExplorationFen ?? seg?.fenAfter ?? undefined,
+      });
+      if (action) {
+        const at = Date.now();
+        setAskMessages((prev) => [...prev, { id: `ask-u-${at}`, role: 'user', content: question, timestamp: at }]);
+        void actuate(action).then((result) => {
+          setAskMessages((prev) => [...prev, {
+            id: `ask-a-${at}`,
+            role: 'assistant',
+            content: result.ok ? 'Done.' : (result.reason ?? "Can't do that here."),
+            timestamp: Date.now(),
+          }]);
+        });
+        return;
+      }
+    }
+
     // Coach STOPS what it's doing the instant the student asks (David
     // 2026-09-07: "during review coach did not stop narrating to answer my
     // question" — make it consistent across every playing surface). Cut the
@@ -3330,23 +3408,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           // regresses), the surface itself enforces the rule. The
           // refusal reasons name [BOARD: arrow:...] so the brain
           // learns to use the marker mandate instead.
-          onPlayMove: (): { ok: false; reason: string } => ({
-            ok: false,
-            reason:
-              'play_move is locked on the review surface — the timeline is the source of truth. Use a [BOARD: arrow:from-to:green] marker to show the move, and the student can tap the suggested piece to explore.',
-          }),
-          onTakeBackMove: (): { ok: false; reason: string } => ({
-            ok: false,
-            reason: 'take_back_move is locked on the review surface — the student drives navigation with the forward/back buttons.',
-          }),
-          onSetBoardPosition: (): { ok: false; reason: string } => ({
-            ok: false,
-            reason: 'set_board_position is locked on the review surface — the timeline is the source of truth.',
-          }),
-          onResetBoard: (): { ok: false; reason: string } => ({
-            ok: false,
-            reason: 'reset_board is locked on the review surface — the student can use the Jump-to-Start nav button to rewind.',
-          }),
+          onPlayMove: (): { ok: false; reason: string } => ({ ok: false, reason: REVIEW_LOCKED.play }),
+          onTakeBackMove: (): { ok: false; reason: string } => ({ ok: false, reason: REVIEW_LOCKED.takeBack }),
+          onSetBoardPosition: (): { ok: false; reason: string } => ({ ok: false, reason: REVIEW_LOCKED.setPosition }),
+          onResetBoard: (): { ok: false; reason: string } => ({ ok: false, reason: REVIEW_LOCKED.reset }),
         },
       )
       .then((answer) => {
@@ -3395,7 +3460,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           setIsAskStreaming(false);
         }
       });
-  }, [isAskStreaming, walkPlayback.currentPly, walkNarration, moves, navigate]);
+    // `walkExplorationFen` is load-bearing since the command parse landed here:
+    // a student who explores the board and then types "save this position" must
+    // save what they are LOOKING at, not the ply they arrived on. `walkPlayback`
+    // stays keyed on `.currentPly` rather than the whole object — the object is
+    // re-captured whenever the ply changes, which is the only time
+    // `.currentSegment` can differ, and depending on it churns this callback on
+    // every playback tick.
+  }, [isAskStreaming, walkPlayback.currentPly, walkExplorationFen, walkNarration, moves, navigate]);
 
   // The transcript persists across ply navigation like Learn/Play's chat —
   // each message stays anchored to the question it answered. An in-flight

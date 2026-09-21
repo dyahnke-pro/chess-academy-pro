@@ -78,15 +78,16 @@ export interface ChessBoardProps {
   onVoiceActiveChange?: (active: boolean) => void;
   /** Called when the voice chat LLM response includes arrow annotations. */
   onVoiceArrows?: (arrows: Array<{ startSquare: string; endSquare: string; color: string }>) => void;
-  // WO-DEEP-DIAGNOSTICS — voice-side intent dispatch surface callbacks.
-  // Without these the voice path can't actually execute commands.
-  onVoicePlayMove?: (san: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
-  onVoiceTakeBackMove?: (count: number) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
-  onVoiceResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
-  /** Live getter for game-state-after audit. */
-  getVoiceMoveCount?: () => number;
-  /** Live getter for game-state-after audit. */
-  getVoiceCurrentFen?: () => string;
+  // 🔴 DELETED 2026-09-21 — `onVoicePlayMove` / `onVoiceTakeBackMove` /
+  // `onVoiceResetBoard`. They were declared "without these the voice path can't
+  // actually execute commands", and NO surface in `src/` ever supplied one
+  // (measured: zero call sites), so every spoken command answered "no
+  // onPlayMove callback" on every surface. The voice path now goes through
+  // `coachActuator` — the same door the text box uses — so the hands arrive
+  // from whichever surface REGISTERED them rather than down a prop chain that
+  // can silently go dead. Deleted rather than annotated, per the Lake Butler
+  // rule: a relay that cannot be filled is not an escape hatch, it is a lie
+  // about where the hands come from.
 }
 
 const FLASH_COLORS: Record<string, string> = {
@@ -126,11 +127,6 @@ export function ChessBoard({
   voicePlayerColor,
   onVoiceActiveChange,
   onVoiceArrows,
-  onVoicePlayMove,
-  onVoiceTakeBackMove,
-  onVoiceResetBoard,
-  getVoiceMoveCount,
-  getVoiceCurrentFen,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
   // This board owns its own game, so it also owns holding the deploy reload
@@ -474,11 +470,8 @@ export function ChessBoard({
               playerColor={voicePlayerColor}
               onListeningChange={onVoiceActiveChange}
               onArrows={onVoiceArrows}
-              onPlayMove={onVoicePlayMove}
-              onTakeBackMove={onVoiceTakeBackMove}
-              onResetBoard={onVoiceResetBoard}
-              getMoveCount={getVoiceMoveCount}
-              getCurrentFen={getVoiceCurrentFen}
+              getMoveCount={(): number => game.history.length}
+              getCurrentFen={(): string => game.fen}
             />
           )}
         </div>

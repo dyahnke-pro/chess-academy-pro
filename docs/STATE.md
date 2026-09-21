@@ -19,7 +19,7 @@ Green has a reader — the heat map can lower as well as raise.
 ## MODEL — is the student model fed the adaptive rating?
 
 - **2** files read `getPlayerRating` (the adaptive estimate).
-- **39** read `currentRating` off the store directly.
+- **40** read `currentRating` off the store directly.
 - **63** inline `?? 1200` fallbacks.
 
 The locked rule is that a surface does not PICK a rating; it reads the one
@@ -44,9 +44,9 @@ fact-computer count (which excludes infrastructure) lives in
 `surfaceComposition.scan.test.ts`, and duplicating its INFRA list here would be
 exactly the drifting-constant the rot rule bans.
 
-- **CoachTeachPage.tsx**: 100
+- **CoachTeachPage.tsx**: 101
 - **CoachGamePage.tsx**: 45
-- **CoachGameReview.tsx**: 40
+- **CoachGameReview.tsx**: 42
 
 Each surface composing its own producer is the tax on the ONE mechanism the app
 grows by. Shrink-only; `surfaceComposition.scan.test.ts` holds the ceiling.

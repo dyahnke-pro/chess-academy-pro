@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1548 lines · 2 exports · 9 importers · 5 tests · 5 audits**
+**1661 lines · 2 exports · 9 importers · 5 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,8 +40,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Audits that reach it
 
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
 - `scripts/audit-board-verdict-triage.mjs`
 - `scripts/audit-coach-answers-questions-prod.mjs`
 - `scripts/audit-coach-play.mjs`
 - `scripts/audit-coach-response-loop.mjs`
 - `scripts/audit-coach-settings-qa-loop.mjs`
+- `scripts/audit-read-position-prod.mjs`

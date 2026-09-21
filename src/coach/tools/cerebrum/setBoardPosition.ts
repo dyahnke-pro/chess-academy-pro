@@ -1,41 +1,51 @@
 /**
  * set_board_position — REAL (WO-COACH-OPERATOR-FOUNDATION-01).
  *
- * Jumps the board to a position via the surface-supplied
- * `onSetBoardPosition` callback.
+ * Jumps the board to a position via the surface-supplied `onSetBoardPosition`
+ * callback (which now defaults to the global hand registry, so any mounted
+ * surface is reachable).
  *
- * 🔒 GROUNDING TEETH (2026-06-02 — "board reset / hallucinated position"
- * incident). The brain used to be able to type ANY legal FEN here from
- * training memory — and it did: asked "show me his setup with the knight
- * on a3", it hand-built a fantasy Catalan FEN (queen already on c4, knight
- * teleported to a3) that no real game ever reaches, then narrated an
- * invented idea over it. That fabricated board then matched no opening in
- * the DB, so the grounding pipeline injected nothing (openingName="?"),
- * and the brain free-associated further. The whole loop started with one
- * memory-recalled FEN.
+ * 🔒 HOW A POSITION MAY BE NAMED — three grounded routes, and no fourth.
  *
- * The fix: an OPENING-PHASE position MUST be expressed as the real SAN
- * line (`moves`), which chess.js replays from the start — a fantasy can't
- * survive legal-move replay, so the board is always a real, reachable
- * position that the DB can recognise and ground. A raw `fen` is accepted
- * ONLY for deep / middlegame positions (past the opening phase) that come
- * from a tool result or the user's actual game — never a recalled opening.
+ *   `moves`  — a real SAN line, replayed by chess.js from the start. A
+ *              fabricated line names a move that is not legal in the real
+ *              position, so the lie collapses on replay.
+ *   `named`  — a position the APP ships (a mating pattern, an endgame lesson).
+ *              The model supplies the NAME, `resolveNamedPosition` supplies the
+ *              board. Language work for the model, chess work for the code.
+ *   `fen`    — accepted only when THIS APP produced that position: the live
+ *              board, a ply of the student's real game, a tool result, or a
+ *              line code replayed. `positionProvenance` answers that.
+ *
+ * 🔴 WHAT WAS DELETED HERE, AND WHY IT IS DELETED RATHER THAN ANNOTATED
+ * (2026-09-21, the Lake Butler rule). The raw-FEN path used to be policed by
+ * two things, and G0 names both as the disease rather than the cure — "if you
+ * are adding a validator … or a prompt that says 'don't hallucinate' — STOP":
+ *
+ *   1. A PROMPT: "Do NOT hand-write an opening FEN from memory … never one you
+ *      recalled." Unenforceable. Nothing checked, or could check, whether a FEN
+ *      "came from a tool result" — it was a request, and the model's compliance
+ *      with it was unobservable.
+ *   2. A VALIDATOR: reject any FEN whose fullmove number is ≤ 12. It measured a
+ *      property of the STRING, not of its ORIGIN, so it was wrong in both
+ *      directions: a hallucinated endgame ending `w - - 0 47` passed, and a
+ *      REAL position on move 9 was refused. The Catalan-Na3 fantasy it was
+ *      written for was an opening-phase case; the identical fabrication past
+ *      move 12 was simply unguarded for the whole life of the rule.
+ *
+ * Neither is replaced by a better gate. The question was made ANSWERABLE
+ * instead: code records the positions it produced, and a FEN the app never
+ * computed is not in the set — not judged fake, simply absent. That is the
+ * difference G0 draws between watching for a wrong answer and making it
+ * impossible to express.
  */
 import { Chess } from 'chess.js';
 import type { Tool, ToolExecutionContext, ToolExecutionResult } from '../../types';
 import { logAppAudit } from '../../../services/appAuditor';
+import { provenanceOf, rememberComputedPosition, rememberedCount } from '../../../services/positionProvenance';
+import { resolveNamedPosition, namedPositionNames } from '../../../services/namedPosition';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-
-/** A position with fullmove number ≤ this is "opening phase" and must be
- *  built from real `moves`, not a raw FEN. The Catalan-Na3 hallucination
- *  was at fullmove 7-10; 12 covers the opening into early middlegame. */
-const OPENING_PHASE_MAX_FULLMOVE = 12;
-
-function fullmoveOf(fen: string): number {
-  const n = Number(fen.trim().split(/\s+/)[5]);
-  return Number.isFinite(n) ? n : 1;
-}
 
 function tokenizeMoves(moves: unknown): string[] {
   if (Array.isArray(moves)) return moves.map((m) => String(m).trim()).filter(Boolean);
@@ -87,9 +97,9 @@ export const setBoardPositionTool: Tool = {
   kind: 'write',
   description:
     "Jump the board to a position. REQUIRED whenever you say you'll set up a position; saying it without calling this means the position did not change. " +
-    "To show an OPENING or a line/maneuver, pass `moves` — the real SAN sequence from the start (e.g. \"d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Na3\"); the board is built by replaying those moves, so it is guaranteed to be a real, reachable position. " +
-    "Do NOT hand-write an opening FEN from memory — opening-phase raw FENs are rejected. " +
-    "Pass a raw `fen` ONLY for a deep middlegame/endgame position that came from a tool result or the user's actual game, never one you recalled.",
+    "Pass `moves` — the real SAN sequence (e.g. \"d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Na3\") — for an opening, a line or a maneuver. " +
+    "Pass `named` — e.g. \"Lucena\", \"back-rank mate\" — for a standard position the app teaches; the app supplies the board. " +
+    "Pass `fen` only to return to a position already on screen in this conversation.",
   parameters: {
     type: 'object',
     properties: {
@@ -101,9 +111,13 @@ export const setBoardPositionTool: Tool = {
         type: 'string',
         description: 'Optional base FEN to replay `moves` from. Defaults to the standard starting position.',
       },
+      named: {
+        type: 'string',
+        description: 'Name of a standard position the app teaches (e.g. "Lucena", "Philidor", "back-rank mate", "wrong rook pawn"). The app resolves the name to the real board.',
+      },
       fen: {
         type: 'string',
-        description: 'Raw target FEN. Allowed ONLY for deep (past-opening) positions from a tool/game. An opening-phase raw FEN is rejected — use `moves` instead.',
+        description: 'A FEN this conversation already produced — the live board, a ply of the student\'s game, or a tool result. Not for a position recalled from elsewhere; use `moves` or `named`.',
       },
     },
     // No single param is required (moves OR fen); the execute body
@@ -136,26 +150,62 @@ export const setBoardPositionTool: Tool = {
           };
         }
       }
+      // A replayed line is a position CODE built — record it, so a later
+      // "put that back up" can pass the fen and be recognised.
+      rememberComputedPosition(game.fen(), 'replayed-line');
       return dispatch(game.fen(), ctx, { moves: played.join(' ') });
     }
 
-    // ── Raw-FEN path: deep positions only. ──
+    // ── Named path: the app's own corpora supply the board. ──
+    const named = typeof args.named === 'string' ? args.named.trim() : '';
+    if (named) {
+      const hit = resolveNamedPosition(named);
+      if (!hit) {
+        // Honest null over a plausible near-miss: setting the WRONG standard
+        // position and narrating it confidently is the failure this replaces.
+        return {
+          ok: false,
+          error: `no position named "${named}" ships with the app — do not substitute one from memory. `
+            + `Either give the real SAN line via \`moves\`, or pick from: ${namedPositionNames().join(', ')}.`,
+        };
+      }
+      rememberComputedPosition(hit.fen, 'app-data');
+      return dispatch(hit.fen, ctx, { named: hit.name, id: hit.id, note: hit.note });
+    }
+
+    // ── Raw-FEN path: ONLY a position this app produced. ──
     const fen = typeof args.fen === 'string' ? args.fen.trim() : '';
-    if (!fen) return { ok: false, error: 'provide `moves` (the real SAN line) for an opening position, or a deep-position `fen`' };
+    if (!fen) {
+      return { ok: false, error: 'provide `moves` (the real SAN line), `named` (a position the app teaches), or a `fen` already seen in this conversation' };
+    }
     try {
       new Chess(fen); // chess.js validates FEN on construction.
     } catch (err) {
       return { ok: false, error: `invalid FEN: ${err instanceof Error ? err.message : String(err)}` };
     }
-    if (fullmoveOf(fen) <= OPENING_PHASE_MAX_FULLMOVE) {
+    const origin = provenanceOf(fen);
+    if (!origin) {
+      // 🔒 NOT A HALLUCINATION JUDGEMENT — an absence. The app has no record of
+      // ever computing this board, so there is nothing to put up. The refusal
+      // names the two grounded routes AND says whether the record is simply
+      // empty, because "no positions yet this turn" and "that one is not among
+      // them" are different situations and blaming the wrong one wastes a turn.
+      void logAppAudit({
+        kind: 'coach-brain-tool-called',
+        category: 'subsystem',
+        source: 'setBoardPositionTool.execute',
+        summary: `set_board_position REFUSED (no provenance) remembered=${rememberedCount()}`,
+        fen,
+      });
       return {
         ok: false,
-        error:
-          'opening-phase positions must be set via `moves` (the real SAN line from the start), not a raw FEN — ' +
-          'pass moves:"d4 Nf6 c4 …" so the board is a real, reachable position. ' +
-          'Raw fen is only for deep middlegame/endgame positions from a tool result or the user\'s game.',
+        error: rememberedCount() === 0
+          ? 'this app has not produced any position yet in this conversation, so that FEN cannot be one of them. '
+            + 'Use `moves` (the real SAN line) or `named` (a position the app teaches).'
+          : 'that position did not come from this app — it is not the live board, a ply of the student\'s game, '
+            + 'a tool result, or a line replayed here. Use `moves` (the real SAN line) or `named` (a position the app teaches).',
       };
     }
-    return dispatch(fen, ctx);
+    return dispatch(fen, ctx, { origin });
   },
 };

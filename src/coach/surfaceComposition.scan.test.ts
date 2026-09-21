@@ -75,6 +75,21 @@ const INFRA = new Set([
   // they are NOT here. If you add something to this list, it must be provable
   // that it answers no question about the board.
   'standingFactMemory',
+  // `coachActuator` is the HANDS registry and its one `actuate` door. It
+  // answers NO question about the board — that is its written contract: "the
+  // model NEVER supplies a chess value — code fills every argument from the
+  // board, the DB or the record", and the actuator is the thing being handed
+  // those arguments, never the thing computing them. Its only arithmetic is
+  // `steppedElo`, which adds a constant to a number the caller passed.
+  //
+  // Same class as `coachSessionRouter` (already here — the router that PARSES
+  // the command) and `voiceService` (a chokepoint). A surface imports it to
+  // PUBLISH its hands at mount, which is the opposite of composing a producer:
+  // it is how a surface stops owning its own dispatch. CoachTeachPage,
+  // CoachGameReview and GameChatPanel each gained it on 2026-09-21 while each
+  // LOST a hand-rolled dispatch path.
+  'coachActuator',
+
   // `learnMemory` is the same class again: the Learn producer's per-game
   // say-once slots and one `newGame()` that forgets them. It was EXTRACTED OUT
   // of CoachTeachPage, so the import count rose by one while the coupling FELL

@@ -59,7 +59,8 @@ import type {
   ProviderResponse,
   ToolExecutionContext,
 } from './types';
-import { coachNavigate, coachSetBoardPosition } from '../services/coachActuator';
+import { actuate, coachNavigate } from '../services/coachActuator';
+import { rememberComputedPosition, rememberComputedPositions } from '../services/positionProvenance';
 
 /** Surfaces whose `ask` text is authored IN CODE (a composed instruction to
  *  the LLM), never typed or spoken by the user. The ~35 user-intent
@@ -993,20 +994,45 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   const providerName = options.provider ?? resolveProviderName();
   const provider = options.providerOverride ?? pickProvider(providerName);
 
+  // FULL CONTROL (David 2026-09-08): default every board hand to the global
+  // coach actuator so the coach can open any tab / set up any position / move
+  // any board from ANY surface — including the home mic/chat, which wires
+  // nothing. A surface that passes its own callback keeps its in-place
+  // behaviour; everyone else reaches the hands the mounted surface REGISTERED.
+  //
+  // 🔴 THE ASYMMETRY THIS FIXES (2026-09-21). Two of the five were defaulted
+  // here on 2026-09-08 and three were not, so `set_board_position` and
+  // `navigate_to_route` worked from anywhere while `play_move`, `take_back_move`
+  // and `reset_board` answered "there is no board on this surface" — on
+  // surfaces that were showing a board. Nothing marked the three as different;
+  // they were simply missed, and a missed line in a defaults block is invisible
+  // forever. Defaulting all five closes it, and `Record`-free as it is, the
+  // honest guard is the audit below: a hand that lands on the actuator with no
+  // registered surface returns {ok:false} WITH A REASON, never fake success.
+  //
+  // `set-position` also changes meaning for the better: it now goes through
+  // `actuate`, which prefers a REGISTERED in-place handler and only falls back
+  // to the /coach/play route. The old default jumped straight to the route, so
+  // a surface with a live board got navigated away from it.
+  const viaActuator = async (r: Promise<{ ok: boolean; reason?: string }>): Promise<{ ok: boolean; reason?: string }> => r;
   const ctx: ToolExecutionContext = {
-    onPlayMove: options.onPlayMove,
-    onTakeBackMove: options.onTakeBackMove,
-    // FULL CONTROL (David 2026-09-08): default navigate + board-setup to the
-    // global coach actuator so the coach can open any tab / set up any position
-    // from ANY surface — including the home mic/chat, which wires neither. A
-    // surface WITH its own board (CoachTeachPage/CoachGamePage) passes its own
-    // callbacks and keeps in-place behavior; everyone else falls back to the
-    // actuator (navigate; set-up-position → /coach/play?fen=). onNavigate throws
-    // when the actuator can't navigate, so navigate_to_route reports {ok:false}
-    // instead of the old synthetic success — the coach never fake-says "done".
-    onSetBoardPosition: options.onSetBoardPosition ?? ((fen: string) => coachSetBoardPosition(fen)),
-    onResetBoard: options.onResetBoard,
+    onPlayMove: options.onPlayMove
+      ?? ((san: string) => viaActuator(actuate({ hand: 'play-move', san }))),
+    onTakeBackMove: options.onTakeBackMove
+      ?? ((count: number) => viaActuator(actuate({ hand: 'take-back', count }))),
+    onSetBoardPosition: options.onSetBoardPosition
+      ?? ((fen: string) => viaActuator(actuate({ hand: 'set-position', fen }))),
+    onResetBoard: options.onResetBoard
+      ?? (() => viaActuator(actuate({ hand: 'reset-board' }))),
     onNavigate: options.onNavigate ?? ((path: string) => {
+      // 🚨 SYNCHRONOUS ON PURPOSE. `navigate_to_route` reads a THROW as
+      // "unavailable" and reports {ok:false}, so the coach never fake-says
+      // "done" (David 2026-09-08). Routing this through the async `actuate`
+      // and throwing inside a `.then` would make the throw an unhandled
+      // rejection the tool's try/catch cannot see — the tool would return
+      // ok:true having navigated nowhere, which is the exact synthetic success
+      // the rule exists to kill. `coachNavigate` is the global provider
+      // `actuate` delegates to anyway, so calling it directly loses nothing.
       const r = coachNavigate(path);
       if (!r.ok) throw new Error(r.reason ?? 'navigation unavailable');
     }),
@@ -1015,6 +1041,36 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     liveFen: input.liveState.fen,
     traceId: options.traceId,
   };
+
+  // 🔒 RECORD WHAT THE APP ITSELF KNOWS ABOUT THE BOARD (2026-09-21).
+  //
+  // `set_board_position`'s raw-FEN path accepts only positions THIS APP
+  // produced — see `positionProvenance` for why a prompt and a fullmove check
+  // could never answer that question. This is where the two biggest sources
+  // enter: the live board, and every ply of the student's real game.
+  //
+  // Doing it HERE rather than per-surface is the point. `liveState` is the one
+  // shape every surface already fills, so review, Play, Learn, the drawer and
+  // every future surface are covered by one registration — the same reason the
+  // hands live in a registry rather than in props. A per-surface version would
+  // rot exactly the way the voice mic's prop chain did.
+  //
+  // The history is SAN, so the plies are REPLAYED to get their FENs; a replay
+  // that throws is simply not recorded. Nothing here trusts a model-supplied
+  // value — that would launder the very thing being excluded.
+  if (input.liveState.fen) rememberComputedPosition(input.liveState.fen, 'live-board');
+  const sans = input.liveState.moveHistory;
+  if (sans && sans.length > 0) {
+    try {
+      const replay = new Chess();
+      const fens: string[] = [];
+      for (const san of sans) { replay.move(san); fens.push(replay.fen()); }
+      rememberComputedPositions(fens, 'game-timeline');
+    } catch {
+      // A history that does not replay is not a position source. Silence is
+      // correct: the live FEN above still stands on its own.
+    }
+  }
 
   // WO-FOUNDATION-02 diagnostic: log the typeof every callback at
   // ctx-build time so we can verify the surface plumbing reached the

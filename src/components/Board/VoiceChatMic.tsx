@@ -10,6 +10,8 @@ import { useAppStore } from '../../stores/appStore';
 import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 import { isSpokenSentenceGrounded } from '../../services/coachAnswerGates';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
+import { actionForCommand, actuate, canPerform } from '../../services/coachActuator';
+import type { RoutedCommand } from '../../services/coachActuator';
 import { logAppAudit } from '../../services/appAuditor';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { extractAndRememberNotes } from '../../services/coachMemoryService';
@@ -81,9 +83,6 @@ interface VoiceChatMicProps {
   // way GameChatPanel.handleSend does, and the voice-flow audit kinds
   // surface every step so a "voice take-back didn't take back"
   // report has a complete causal chain.
-  onPlayMove?: (san: string) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
-  onTakeBackMove?: (count: number) => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
-  onResetBoard?: () => boolean | { ok: boolean; reason?: string } | Promise<boolean | { ok: boolean; reason?: string }>;
   /** Optional: live `game.history.length` getter so the
    *  voice-game-state-after audit can prove the take-back actually
    *  shrank the move list. */
@@ -154,7 +153,35 @@ function detectOpeningRequest(text: string): string | null {
   return nameMap[raw] ?? raw;
 }
 
-export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen }: VoiceChatMicProps): JSX.Element {
+/**
+ * The spoken acknowledgement for a hand that fired. It is a CONFIRMATION, not
+ * teaching — the board already showed what happened, so per Narration Voice
+ * Rule 3 this never restates it at length. `Record` over the union so a new
+ * command kind fails to compile until someone decides what the coach says.
+ */
+function ackFor(intent: RoutedCommand): string {
+  switch (intent.kind) {
+    case 'play_move': return `${intent.san}.`;
+    case 'take_back_move': return intent.count > 1 ? 'Took both back.' : 'Took it back.';
+    case 'reset_board': return 'Reset.';
+    case 'set_board_position': return 'Set.';
+    case 'navigate_to_route': return 'On it.';
+    case 'set_orientation': return `${intent.orientation === 'white' ? 'White' : 'Black'} at the bottom.`;
+    case 'save_position': return 'Saved.';
+    case 'restore_position': return 'Back to it.';
+    case 'set_strength': return intent.direction === 'up' ? 'Turning it up.' : 'Easing off.';
+    case 'quiz_me': return 'Your move.';
+    case 'start_drill': return 'Drill up.';
+    case 'show_squares': return 'There.';
+    default: {
+      // Exhaustive: a new kind lands here as `never` and fails the build.
+      const _never: never = intent;
+      return 'Done.';
+    }
+  }
+}
+
+export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningRequest, engineSnapshot, lastMoveContext, onListeningChange, onArrows, getMoveCount, getCurrentFen }: VoiceChatMicProps): JSX.Element {
   const navigate = useNavigate();
   const [listening, setListening] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -243,73 +270,49 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
       };
       setMessages([...messagesRef.current, userMsg]);
       recordMemory('user', text);
-      const beforeMoveCount = getMoveCount?.() ?? -1;
       const beforeFen = getCurrentFen?.() ?? fen;
+      const beforeMoveCount = getMoveCount?.() ?? -1;
 
-      // Stage 3 — surface callback dispatch.
+      // 🔒 THE VOICE GOES THROUGH THE SAME DOOR AS THE TEXT BOX (2026-09-21).
+      //
+      // This used to be a hand-rolled switch over THREE kinds, whose own audit
+      // line said `'unsupported-in-voice'` for everything else and whose
+      // default arm answered "intent <kind> not wired in voice path". So the
+      // student could type "flip the board" and be obeyed, say the same words
+      // and be refused — one coach, two answers, which is the unified-coach
+      // break this build exists to close.
+      //
+      // And the three that WERE wired reached ONE of the four mount paths.
+      // Measured: `CoachGamePage` (Play) passed `onPlayMove` straight to this
+      // component, so Play worked — but `ChessBoard` relayed them through
+      // `onVoicePlayMove` &c. which NO surface ever supplied, `ControlledChess-
+      // Board` passed no board props at all, and `BoardVoiceOverlay` passes
+      // none either. So on Learn, on lessons, on drills and on the openings
+      // boards every spoken move answered `'no onPlayMove callback'`, while the
+      // same words typed into the box were obeyed.
+      //
+      // That is the shape a prop chain always rots into — one host remembers to
+      // thread it and the rest silently do not. The registry cannot: a surface
+      // publishes its hands once at mount and EVERY input reaches them.
+      const action = actionForCommand(routedIntent, { fen: beforeFen });
       void logAppAudit({
         kind: 'voice-callback-invoked',
         category: 'subsystem',
         source: 'VoiceChatMic.handleUserMessage',
-        summary: `kind=${routedIntent.kind} hasCallback=${
-          routedIntent.kind === 'play_move'
-            ? typeof onPlayMove === 'function'
-            : routedIntent.kind === 'take_back_move'
-              ? typeof onTakeBackMove === 'function'
-              : routedIntent.kind === 'reset_board'
-                ? typeof onResetBoard === 'function'
-                : 'unsupported-in-voice'
-        }`,
+        summary: `kind=${routedIntent.kind} hand=${action?.hand ?? 'none'} available=${
+          action ? canPerform(action.hand) : false}`,
       });
 
       let ackText = 'Done.';
       let ok = false;
       let reason: string | undefined;
-      try {
-        switch (routedIntent.kind) {
-          case 'play_move': {
-            if (!onPlayMove) { reason = 'no onPlayMove callback'; break; }
-            const r = await Promise.resolve(onPlayMove(routedIntent.san));
-            ok = typeof r === 'boolean' ? r : r.ok;
-            if (ok) ackText = `${routedIntent.san}.`;
-            else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
-            break;
-          }
-          case 'take_back_move': {
-            if (!onTakeBackMove) { reason = 'no onTakeBackMove callback'; break; }
-            const r = await Promise.resolve(onTakeBackMove(routedIntent.count));
-            ok = typeof r === 'boolean' ? r : r.ok;
-            if (ok) ackText = routedIntent.count > 1 ? 'Took both back.' : 'Took it back.';
-            else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
-            break;
-          }
-          case 'reset_board': {
-            if (!onResetBoard) { reason = 'no onResetBoard callback'; break; }
-            const r = await Promise.resolve(onResetBoard());
-            ok = typeof r === 'boolean' ? r : r.ok;
-            if (ok) ackText = 'Reset.';
-            else reason = typeof r === 'object' && 'reason' in r ? r.reason : 'rejected';
-            break;
-          }
-          case 'navigate_to_route': {
-            // Deterministic drill routing (e.g. "drill calculation" →
-            // /coach/endgame?tab=calculation). Navigating away is the
-            // correct response to an explicit drill request — far better
-            // than the brain inventing a fake drill (G0).
-            try {
-              void navigate(routedIntent.route);
-              ok = true;
-              ackText = 'On it.';
-            } catch (err) {
-              reason = err instanceof Error ? err.message : String(err);
-            }
-            break;
-          }
-          default:
-            reason = `intent ${routedIntent.kind} not wired in voice path`;
-        }
-      } catch (err) {
-        reason = err instanceof Error ? err.message : String(err);
+      if (!action) {
+        reason = `no hand for ${routedIntent.kind}`;
+      } else {
+        const result = await actuate(action);
+        ok = result.ok;
+        reason = result.reason;
+        if (ok) ackText = ackFor(routedIntent);
       }
 
       // Stage 4 — callback result.
@@ -322,13 +325,20 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
 
       // Stage 5 — game state after dispatch. Proves the take-back
       // actually shrank the move list (or didn't).
-      const afterMoveCount = getMoveCount?.() ?? -1;
+      // 🔒 THIS INSTRUMENT IS NON-VACUOUS FOR THE FIRST TIME (2026-09-21). It
+      // was written to "prove the take-back actually shrank the move list", but
+      // `getMoveCount` had no supplier on any ChessBoard-hosted surface, so it
+      // read `-1→-1` forever — a check that cannot fail, which this repo counts
+      // as worse than no check. ChessBoard now fills both getters from the game
+      // it already owns, so the numbers are real.
       const afterFen = getCurrentFen?.() ?? fen;
+      const afterMoveCount = getMoveCount?.() ?? -1;
       void logAppAudit({
         kind: 'voice-game-state-after',
         category: 'subsystem',
         source: 'VoiceChatMic.handleUserMessage',
-        summary: `moveCount ${beforeMoveCount}→${afterMoveCount} fenChanged=${beforeFen !== afterFen}`,
+        summary: `kind=${routedIntent.kind} moveCount ${beforeMoveCount}→${afterMoveCount} `
+          + `fenChanged=${beforeFen !== afterFen}`,
         fen: afterFen,
       });
 
@@ -529,7 +539,7 @@ export function VoiceChatMic({ fen, turn, playerColor = 'white', onOpeningReques
     setMessages((prev) => [...prev, assistantMsg]);
     recordMemory('coach', response);
     setIsStreaming(false);
-  }, [fen, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows, onPlayMove, onTakeBackMove, onResetBoard, getMoveCount, getCurrentFen, navigate]);
+  }, [fen, turn, playerColor, engineSnapshot, lastMoveContext, onOpeningRequest, onArrows, getMoveCount, getCurrentFen, navigate]);
 
   // Keep a ref to handleUserMessage so the onResult callback always uses the latest
   const handleUserMessageRef = useRef(handleUserMessage);
