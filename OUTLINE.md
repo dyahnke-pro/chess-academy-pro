@@ -44,9 +44,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ## 3. The critical moment — one computer, two registers
 - ✅ Built 2026-09-19 (`criticalMoment.ts`, both registers, the stake banded off the eval)
 - ✅ T1 `ask`/`note` reachable on review · ✅ T2 Learn verified on prod · ✅ T3 Learn's `prompted` wire
-- 🔴 T4 `prompted` is a record, not a lever — the personal tolerance from press/no-press
-- 🔴 T5 the door on live play (`interrupt` posture still grades by gap; deliberately unchanged)
-- 🔴 T6 two numbers never measured on a device — Learn statement volume; `scanCriticalMoments` on a phone
+- 🟡 T4 `prompted` is a record, not a lever — and PLAN says that is **correct by design**, which is the reason the flag exists. Not a defect: the lever is the design's next step (the personal tolerance from PRESS/NO-PRESS at critical moments) and it needs T1's `ask` path landed first to generate the signal. Marked 🔴 here while PLAN called it intended — PLAN wins
+- ⛔ T5 the door on live play — **a DECISION, not open work.** PLAN: "deliberately not changed here — widening the door is a bigger change than this build, and should not happen as a side effect." On `walk` the count is the trigger as designed; on `interrupt` the gap still grades severity. Reopening it is David's call
+- ⛔ T6 two numbers never measured on a device — Learn statement volume (~2.5 → ~5 per game) and `scanCriticalMoments` on a phone (41 plies took 9.6s on the audit box with 3 workers). Needs David's iPhone; see the BLOCKED section, where it is also listed
 
 ## 4. Bucket D — the student cannot get what they asked for
 - ✅ All of it: D1–D13 and D-LANG (Thai plus 19 other writing systems), the transcript translation door, verified on prod
