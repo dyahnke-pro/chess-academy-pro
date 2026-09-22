@@ -207,19 +207,22 @@ export function deriveMissedTacticsForGame(
     if (cls !== 'mistake' && cls !== 'blunder') continue;
     if (!ann.bestMove) continue;
 
-    // Compute cpLoss from eval deltas: evaluation is stored as centipawns/100
-    // Compare this move's eval with the previous move's eval
+    // Compute cpLoss from eval deltas. `MoveAnnotation.evaluation` is
+    // CENTIPAWNS (types/index.ts: "Stockfish evaluation in centipawns";
+    // gameAnalysisService writes the engine's cp score straight in). This
+    // block used to multiply by 100 on the belief that evals were stored in
+    // pawns — so every classified tactic carried a cost 100× too large, the
+    // 80cp floor admitted every 1cp wobble, and the coach told a student a
+    // missed hanging piece "cost 365.5 points" (WO-STANDARD-01 D-17, prod
+    // tape 2026-09-22). One unit, the one the type declares.
     const evalAfter = ann.evaluation;
     const prevAnn = i > 0 ? annotations[i - 1] : null;
     const evalBefore = prevAnn?.evaluation ?? null;
 
     let cpLoss = 0;
     if (evalBefore !== null && evalAfter !== null) {
-      // Evals are stored in pawns (centipawns / 100), convert back to centipawns
-      const cpBefore = evalBefore * 100;
-      const cpAfter = evalAfter * 100;
       cpLoss = Math.abs(
-        playerColor === 'white' ? cpBefore - cpAfter : cpAfter - cpBefore,
+        playerColor === 'white' ? evalBefore - evalAfter : evalAfter - evalBefore,
       );
     }
     if (cpLoss < MIN_CP_LOSS) continue;

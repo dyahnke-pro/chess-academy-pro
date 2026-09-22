@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**491 lines · 13 exports · 4 importers · 2 tests · 0 audits**
+**494 lines · 13 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameInsightsService.ts`
+- `src/services/tacticClassifierService.test.ts`
 - `src/services/tacticalProfileService.ts`
 
 ## Exports and every call site
@@ -35,10 +36,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Puzzles/PuzzleBoard.tsx:135`
 
 ### `classifyTacticsFromGame` (function) — 1 call site
-- `src/services/gameAnalysisService.ts:1971`
+- `src/services/gameAnalysisService.ts:2079`
 
-### `deriveMissedTacticsForGame` (function) — 1 call site
+### `deriveMissedTacticsForGame` (function) — 3 call sites
 - `src/services/gameInsightsService.ts:778`
+- `src/services/tacticClassifierService.test.ts:37`
+- `src/services/tacticClassifierService.test.ts:45`
 
 ### `backfillClassifiedTactics` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -62,7 +65,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/services/gameInsightsService.tacticsMissed.test.ts`
+- `src/services/tacticClassifierService.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

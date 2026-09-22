@@ -63,6 +63,39 @@ export const PATTERN_TO_TACTIC: Record<TacticPatternType, TacticType | null> = {
  * `zwischenzug`/`x_ray`/`checkmate`/`tactical_sequence` have no live
  * `TacticPatternType`.
  */
+/**
+ * The SPOKEN word for an analysis motif — what a sentence says where the enum
+ * used to leak ("Drill hanging_piece puzzles", WO-STANDARD-01 D-17, prod tape
+ * 2026-09-22). A `Record` over the union so a new motif fails to compile until
+ * someone writes its word; lowercase, mid-sentence noun phrase.
+ */
+export const TACTIC_WORD: Record<TacticType, string> = {
+  fork: 'fork',
+  pin: 'pin',
+  skewer: 'skewer',
+  discovered_attack: 'discovered attack',
+  back_rank: 'back-rank tactic',
+  hanging_piece: 'hanging piece',
+  promotion: 'promotion',
+  deflection: 'deflection',
+  overloaded_piece: 'overloaded piece',
+  trapped_piece: 'trapped piece',
+  clearance: 'clearance',
+  interference: 'interference',
+  zwischenzug: 'zwischenzug',
+  x_ray: 'x-ray',
+  double_check: 'double check',
+  removing_the_guard: 'removal of the guard',
+  checkmate: 'checkmate',
+  tactical_sequence: 'combination',
+};
+
+/** The spoken word for any motif string a record may carry — an unknown or
+ *  legacy value is read as prose (underscores to spaces), never echoed raw. */
+export function tacticWord(type: string): string {
+  return (TACTIC_WORD as Record<string, string>)[type] ?? type.replace(/_/g, ' ');
+}
+
 export const TACTIC_TO_PATTERN: Record<TacticType, TacticPatternType | null> = {
   fork: 'fork',
   pin: 'pin',

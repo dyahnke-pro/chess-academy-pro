@@ -15,6 +15,7 @@
 import { deriveNextPlans } from './nextPlans';
 import { Chess } from 'chess.js';
 import { isRealPin } from './pinGeometry';
+import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
@@ -4309,7 +4310,7 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
 
   const lead = `Your tactical awareness is ${t.awarenessRate}% — you spot ${t.found} tactic${t.found === 1 ? '' : 's'} and miss ${t.missed}.`;
   const byType = top
-    ? ` The motif you miss most is the ${top.type} (${top.count} time${top.count === 1 ? '' : 's'}).`
+    ? ` The motif you miss most is the ${tacticWord(top.type)} (${top.count} time${top.count === 1 ? '' : 's'}).`
     : '';
   const cost = top && typeof t.topMissAvgCost === 'number' && t.topMissAvgCost > 0
     ? ` Those cost about ${pawns(t.topMissAvgCost)} points each.`
@@ -4321,7 +4322,7 @@ export function assembleTacticsProfileAnswer(t: TacticsProfileLike): GroundedAns
     ? ` Your costliest miss was ${t.worstMiss.san}${t.worstMiss.opponentName ? ` against ${t.worstMiss.opponentName}` : ''}.`
     : '';
   const suggest = top
-    ? ` Drill ${top.type} puzzles to close that gap.`
+    ? ` Drill ${tacticWord(top.type)} puzzles to close that gap.`
     : ' Keep drilling mixed tactics to lift your awareness rate.';
   return { facts: lead + byType + cost + phase + worst + best + breadth + brill + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
@@ -4906,7 +4907,7 @@ export function assembleTransferGapAnswer(t: TransferGapLike): GroundedAnswer | 
   const w = t.worst;
   if (!w || w.gapPoints < 10) return null;
   return {
-    facts: `Your pattern knowledge is ahead of your board vision: you solve ${w.tacticType} puzzles at ${w.puzzleAccuracyPct}% but only spot them in your own games ${w.gameRecognitionPct}% of the time — a ${w.gapPoints}-point gap. Slow down and scan for ${w.tacticType}s in real games; the knowledge is there, the recognition isn't yet.`,
+    facts: `Your pattern knowledge is ahead of your board vision: you solve ${tacticWord(w.tacticType)} puzzles at ${w.puzzleAccuracyPct}% but only spot them in your own games ${w.gameRecognitionPct}% of the time — a ${w.gapPoints}-point gap. Slow down and scan for ${tacticWord(w.tacticType)}s in real games; the knowledge is there, the recognition isn't yet.`,
     bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
   };
 }

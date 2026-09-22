@@ -1607,3 +1607,22 @@ describe('the plan lane: the worst piece needs a bar, not a mention', () => {
     expect(a?.facts ?? '').toMatch(/improve your/i);
   });
 });
+
+describe('tactics-profile answers speak the motif WORD, never the enum (WO-STANDARD-01 D-17, 2026-09-22)', () => {
+  it('"Drill hanging piece puzzles", not "Drill hanging_piece puzzles"', () => {
+    const a = assembleTacticsProfileAnswer({
+      totalGames: 40, awarenessRate: 62, found: 18, missed: 11,
+      missedByType: [{ type: 'hanging_piece', count: 6 }, { type: 'discovered_attack', count: 3 }],
+      worstPhase: { phase: 'middlegame', count: 7 },
+    })!;
+    expect(a.facts).toMatch(/motif you miss most is the hanging piece \(6 times\)/);
+    expect(a.facts).toMatch(/Drill hanging piece puzzles/);
+    expect(a.facts).not.toMatch(/_/);
+  });
+  it('the transfer-gap answer too', () => {
+    const a = assembleTransferGapAnswer({ worst: { tacticType: 'discovered_attack', puzzleAccuracyPct: 82, gameRecognitionPct: 55, gapPoints: 27 } })!;
+    expect(a.facts).toMatch(/solve discovered attack puzzles/);
+    expect(a.facts).toMatch(/scan for discovered attacks/);
+    expect(a.facts).not.toMatch(/_/);
+  });
+});
