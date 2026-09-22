@@ -156,6 +156,14 @@ export function matchClauseKind(kind: string, signals: readonly WeaknessSignal[]
       return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:hanging_piece' || s.clusterId === 'analysis:missed-threat');
     case 'latent-danger': // walking your own king/queen into a pin or skewer
       return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:pin' || s.clusterId === 'analysis:tactic:skewer');
+    // A tactic the student can SET UP — the dual-use rule at its sharpest: the
+    // computer that shows you a fork two moves out is the one that catches you
+    // missing them, so it joins the FORK hole. Until 2026-09-21 this clause was
+    // emitted as `latent-danger` for both seats, so a fork the student could
+    // PLAY was matched against a "you get pinned" hole — the right computer
+    // joined to the wrong weakness, silently, for every student who had one.
+    case 'latent-chance':
+      return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:fork');
     case 'convert': // failing to convert a won position
       return bestMatch(signals, (s) => s.clusterId.startsWith('analysis:conversion-endgame:') || s.bucket === 'endgame');
     case 'fundamental':

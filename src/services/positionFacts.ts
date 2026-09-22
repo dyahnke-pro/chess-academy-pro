@@ -184,7 +184,7 @@ export interface PositionFactsResult {
   remember: string[];
 }
 
-export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method';
+export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-chance' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -332,8 +332,24 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // Nb5–c7 IS an opening idea — and on either side's move, because a fork you
   // can see coming is worth naming whoever is about to move.
   const studentSeat = studentColor === 'w' ? 'white' as const : 'black' as const;
-  const latentFork = detectLatentFork(fen, studentSeat)
-    ?? detectLatentFork(fen, studentSeat === 'white' ? 'black' : 'white');
+  // 🔒 THE TWO SEATS ARE TWO DIFFERENT FACTS AND MUST BE HELD APART (2026-09-21).
+  // A fork the STUDENT can set up is an opportunity; the same geometry pointing
+  // the other way is a danger. They are computed by one detector and they are
+  // NOT one signal — folding them together is the seat-blindness the locked
+  // "THE SEAT IS PART OF THE SELECTION" rule exists to stop, and it cost three
+  // separate wrong answers downstream before this split landed (the must-defend
+  // tier, the `incoming` tie-break, and the weakness join). Measured over 3,678
+  // plies of real games: the student's own fork fires on 15.1% of plies and the
+  // opponent's on 2.6%, so a merged signal is 83% opportunity wearing a threat's
+  // label — the error is the COMMON case, not the corner one.
+  const latentForkMine = detectLatentFork(fen, studentSeat);
+  const latentForkTheirs = latentForkMine
+    ? null
+    : detectLatentFork(fen, studentSeat === 'white' ? 'black' : 'white');
+  // The student's own first — a plan you can execute beats a plan you must
+  // prevent — kept as ONE field because every renderer downstream already asks
+  // `latentForkClause` for the seat-correct prose.
+  const latentFork = latentForkMine ?? latentForkTheirs;
 
   // §9 king-safety — a castled king with a broken shelter AND real attackers on
   // it. Both conditions, so it never fires on a harmlessly-nicked shield.
@@ -412,7 +428,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // its four gates are designed against precisely that failure — >= 2 targets
   // worth more than the knight, a piece that can ACTUALLY deliver it, reachable
   // in N >= 2 quiet moves, and a landing square that is safe on arrival.
-  const standingDanger = !!(latentDanger || latentFork || tradeDanger || kingExposure || centralKingDanger);
+  // DANGER is what is coming AT the student — every member here is computed for
+  // the student's own colour, and `latentForkTheirs` is the only half of the
+  // fork detector that belongs in that company.
+  const standingDanger = !!(latentDanger || latentForkTheirs || tradeDanger || kingExposure || centralKingDanger);
+  // CHANCE is its mirror: the fork the student can set up. It opens the door on
+  // its own — that is the capability T5 was asked for, "the algo decides when a
+  // tactic gets mentioned, including one two moves away" — but it opens it in
+  // the TEACHING register, contested-gated, never as a defensive obligation.
+  const standingChance = !!latentForkMine;
   // WHAT THE BOARD ASKED of the move just played — computed HERE from the raw
   // board data the surface handed over (see `lastMove`), so no surface has to
   // compose this computer itself.
@@ -462,6 +486,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // (contested-gated to the convert beat in a decided game).
     teachingBeat: !!input.teachingBeat || statusText.length > 0,
     standingDanger,
+    standingChance,
     evalCpWhitePov,
     // WdlRead {win,draw,loss} → the [w,d,l] tuple the importance model reads.
     // (Passing the object directly makes wdl[0]/wdl[2] undefined → every
@@ -876,7 +901,14 @@ function buildClauses(a: {
   // and a separate one — not to be changed as a side effect of this build.)
   if (latentFork) {
     ranked.push({
-      kind: 'latent-danger', rank: 70, text: latentForkClause(latentFork, studentSeat),
+      // 🔒 THE SEAT DECIDES THE KIND. `latentForkClause` has always rendered the
+      // two seats differently; the KIND did not, and three consumers read it:
+      // the `incoming` tie-break above (which says in its own comment "your own
+      // assets are not" questions you must answer, and then received them),
+      // `matchClauseKind` (which joined a fork the student can PLAY to a "you
+      // get pinned" hole), and the importance signal. One root, one fix.
+      kind: latentFork.forker === studentSeat ? 'latent-chance' : 'latent-danger',
+      rank: 70, text: latentForkClause(latentFork, studentSeat),
       // The destination and both targets ARE the claim — so a tactic clause
       // about the same geometry subsumes this one rather than stacking on it.
       squares: [latentFork.square, ...latentFork.targets.map((t) => t.square)],

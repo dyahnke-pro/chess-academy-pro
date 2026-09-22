@@ -163,7 +163,10 @@ describe('it reaches the LIVE composer', () => {
     // ABOVE must-defend (75), so copying a sibling's number would have put a
     // fork two moves out over a piece hanging right now.
     const src = await import('node:fs').then((fs) => fs.readFileSync('src/services/positionFacts.ts', 'utf8'));
-    const forkRank = /kind: 'latent-danger', rank: (\d+), text: latentForkClause/.exec(src);
+    // The kind is now chosen by the SEAT (2026-09-21), so it spans two lines and
+    // is a ternary — anchor on `latentForkClause`, which is the clause'sidentity,
+    // rather than on a kind literal that legitimately varies.
+    const forkRank = /rank: (\d+), text: latentForkClause/.exec(src);
     const mustDefend = /kind: 'must-defend',\s*\n\s*rank: (\d+),/.exec(src);
     expect(forkRank).not.toBeNull();
     expect(mustDefend).not.toBeNull();

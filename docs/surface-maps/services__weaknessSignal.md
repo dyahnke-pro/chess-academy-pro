@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**198 lines · 8 exports · 29 importers · 14 tests · 1 audits**
+**206 lines · 8 exports · 30 importers · 15 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/factSelector.ts`
+- `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalRecurrence.test.ts`
 - `src/services/fundamentalRecurrence.ts`
 - `src/services/habitJoin.test.ts`
@@ -48,7 +49,10 @@
 ### `WeaknessSignal` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildWeaknessSignals` (function) — 7 call sites
+### `buildWeaknessSignals` (function) — 10 call sites
+- `src/services/fundamentalReachesDecider.test.ts:81`
+- `src/services/fundamentalReachesDecider.test.ts:97`
+- `src/services/fundamentalReachesDecider.test.ts:123`
 - `src/services/weaknessSignal.test.ts:32`
 - `src/services/weaknessSignal.test.ts:42`
 - `src/services/weaknessSignal.test.ts:47`
@@ -60,24 +64,28 @@
 ### `MAX_WEAKNESS_BOOST` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `boostFor` (function) — 12 call sites
+### `boostFor` (function) — 14 call sites
 - `src/services/coachDecider.ts:66`
-- `src/services/needScore.ts:224`
-- `src/services/needScore.ts:237`
-- `src/services/positionFacts.ts:681`
-- `src/services/positionFacts.ts:703`
-- `src/services/reviewFacetRank.ts:122`
+- `src/services/fundamentalReachesDecider.test.ts:136`
+- `src/services/fundamentalReachesDecider.test.ts:137`
+- `src/services/needScore.ts:266`
+- `src/services/needScore.ts:280`
+- `src/services/positionFacts.ts:776`
+- `src/services/positionFacts.ts:798`
+- `src/services/reviewFacetRank.ts:145`
 - `src/services/studentMomentBoost.ts:87`
-- `src/services/teachingSelector.ts:149`
+- `src/services/teachingSelector.ts:156`
 - `src/services/weaknessSignal.test.ts:56`
 - `src/services/weaknessSignal.test.ts:57`
 - `src/services/weaknessSignal.test.ts:58`
 - `src/services/weaknessSignal.test.ts:64`
 
-### `matchClauseKind` (function) — 10 call sites
-- `src/services/needScore.ts:233`
-- `src/services/positionFacts.ts:647`
-- `src/services/reviewFacetRank.ts:121`
+### `matchClauseKind` (function) — 12 call sites
+- `src/services/fundamentalReachesDecider.test.ts:130`
+- `src/services/fundamentalReachesDecider.test.ts:157`
+- `src/services/needScore.ts:277`
+- `src/services/positionFacts.ts:742`
+- `src/services/reviewFacetRank.ts:144`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`
@@ -87,34 +95,41 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:120`
 
 ### `matchTacticPattern` (function) — 9 call sites
-- `src/services/liveTacticsContext.ts:466`
-- `src/services/needScore.ts:232`
-- `src/services/positionFacts.ts:646`
-- `src/services/teachingSelector.ts:148`
-- `src/services/teachingSelector.ts:277`
+- `src/services/liveTacticsContext.ts:488`
+- `src/services/needScore.ts:275`
+- `src/services/positionFacts.ts:741`
+- `src/services/teachingSelector.ts:155`
+- `src/services/teachingSelector.ts:290`
 - `src/services/weaknessSignal.test.ts:100`
 - `src/services/weaknessSignal.test.ts:103`
 - `src/services/weaknessSignal.test.ts:104`
 - `src/services/weaknessSignal.test.ts:107`
 
 ### `matchTag` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1525`
-- `src/services/needScore.ts:222`
-- `src/services/teachingSelector.ts:278`
+- `src/services/coachFeatureService.ts:1607`
+- `src/services/needScore.ts:264`
+- `src/services/teachingSelector.ts:291`
 - `src/services/weaknessSignal.test.ts:116`
 - `src/services/weaknessSignal.test.ts:119`
 - `src/services/weaknessSignal.test.ts:120`
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
-### `matchFundamental` (function) — 4 call sites
+### `matchFundamental` (function) — 10 call sites
+- `src/services/coachFeatureService.ts:1904`
+- `src/services/fundamentalReachesDecider.test.ts:88`
+- `src/services/fundamentalReachesDecider.test.ts:99`
+- `src/services/fundamentalReachesDecider.test.ts:129`
 - `src/services/fundamentalRecurrence.ts:44`
 - `src/services/loopCloses.review.integration.test.ts:82`
+- `src/services/needScore.ts:274`
+- `src/services/teachingSelector.ts:289`
 - `src/services/weaknessSpine.fundamentals.test.ts:117`
 - `src/services/weaknessSpine.fundamentals.test.ts:118`
 
 ## Tests
 
 - `src/services/coachFeatureService.recurrence.test.ts`
+- `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalRecurrence.test.ts`
 - `src/services/habitJoin.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`

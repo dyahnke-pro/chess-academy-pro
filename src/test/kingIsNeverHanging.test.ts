@@ -50,8 +50,8 @@ describe('findHangingBySee never reports a king', () => {
   it('agrees with its sibling on what is NOT a king', () => {
     // The two detectors are a superset pair; after the fix, every square the
     // classifier flags must still appear in the SEE list.
-    const classifier = findHangingPieces(new Chess(KING_IN_CHECK)).map((h) => String(h.square));
-    const see = new Set(findHangingBySee(KING_IN_CHECK).map((h) => String(h.square)));
+    const classifier = findHangingPieces(new Chess(KING_IN_CHECK)).map((h) => h.square);
+    const see = new Set(findHangingBySee(KING_IN_CHECK).map((h) => h.square));
     for (const sq of classifier) expect(see, `${sq} lost from the SEE list`).toContain(sq);
   });
 });

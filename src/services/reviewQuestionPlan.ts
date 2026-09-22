@@ -21,9 +21,13 @@
 import { Chess } from 'chess.js';
 import { legalSeeGain } from './positionReadingService';
 
-/** Centipawn-free piece values for the signed material net (king ~ ∞). */
-const CAPTURE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 import { GUIDED_FIND_MIN_EVAL_CP } from './guidedFindTheMove';
+// The CAPTURE table (king ~ ∞), not the MATERIAL one: this net is about what a
+// capture is WORTH in a swap, where a king must never be offered up as a cheap
+// target. A private copy lived here under this exact name until 2026-09-21 —
+// the same-name shadow being the worst kind, since every reader assumes the
+// import. Semantically identical, so the swap is a pure de-duplication.
+import { CAPTURE_VALUE } from './pieceValues';
 
 export type ReviewQuestionKind = 'find-shot' | 'trap' | 'why';
 

@@ -1043,12 +1043,72 @@ the reason the flag exists. The lever is the design's own next step: the
 personal tolerance from PRESS/NO-PRESS at critical moments (§1 above), which
 needs T1 landed first because it is the `ask` path that generates the signal.
 
-**T5. DECIDE THE DOOR ON LIVE PLAY.** `judgeMoment` still grades severity from
-the gap, so on `interrupt` posture a two-move fork does not open the door by
-itself; the count only decides WHAT is said once the ply speaks. On `walk`
-(Learn, review) the count is the trigger as designed. Deliberately not changed
-here — widening the door is a bigger change than this build, and should not
-happen as a side effect.
+**T5. DECIDE THE DOOR ON LIVE PLAY — ✅ DONE 2026-09-21, then CORRECTED the same
+night.** 🔴 The paragraph that stood here said "deliberately not changed —
+widening the door is a bigger change than this build". David rejected that
+framing outright: *"the algo should decide when a tactic gets mentioned. If it
+cannot call a tactic two moves away we need to add that capability."* He was
+right, and the old text is DELETED rather than annotated so the record does not
+assert both.
+
+`detectLatentFork` was already computed on every position and already SPOKE as a
+clause at rank 70, but was absent from the disjunction feeding `judgeMoment` — so
+it decided WHAT was said once a ply had earned voice and never WHETHER. Invisible
+on `walk` (every ply speaks), fatal on `interrupt` (silence is the default).
+
+🔴 **THE FIRST FIX WAS SEAT-BLIND, AND THE MEASUREMENT IS THE POINT.** It folded
+the detector into `standingDanger`, whose other four members are all computed for
+the STUDENT'S OWN colour. `detectLatentFork` answers BOTH seats — the student's
+first, by design ("a plan you can execute beats a plan you must prevent") — so a
+fork the STUDENT could play was bumped to rank 74, tier `must-defend`, reason
+"a standing danger on the board". Measured over 3,678 plies of real games:
+
+    latentFork fires:  student-side 15.1%   opponent-side 2.6%
+    of the plies the change newly opened: 83.4% were the student's OWN
+    opportunity filed as a threat
+
+So the error was the COMMON case. Do not re-derive this: a both-seats detector
+folded into a single-seat signal is wrong by the ratio of the two seats, and here
+that ratio is 6:1 the wrong way.
+
+ONE root — the clause emitted `kind: 'latent-danger'` for both seats — had leaked
+into THREE consumers, two of them predating this build:
+  1. the importance tier (`must-defend`, this build);
+  2. the `incoming` tie-break in `factSelector`, whose own comment reads "your own
+     assets are not" questions you have to answer, and which was receiving them;
+  3. `matchClauseKind`, which joined a fork the student could PLAY to a
+     "you get pinned" hole (`analysis:tactic:pin|skewer`).
+
+Fixed at the root: the SEAT decides the kind. Opponent's fork → `latent-danger` →
+`standingDanger` (rank 74, must-defend, NOT contested-gated). Student's fork →
+`latent-chance` → `standingChance` (rank 45, `teaching`, CONTESTED-GATED), joined
+to `analysis:tactic:fork`. The asymmetry in the contested gate is deliberate and
+is the reason these are two signals: a danger in a decided game still loses you
+the piece; a fork you could set up in a game already won is not worth an
+interruption.
+
+🔴 **AND THE VOLUME CLAIM WAS UNMEASURED.** This build first reported "it does not
+turn the coach into a metronome", reasoning from the detector's four gates rather
+than from data. Measured on the same corpus:
+
+    door opens on `interrupt`   BEFORE: 23.2% of plies
+                                AFTER : 35.8%
+      via CHANCE (teaching, 45, contested-gated): 10.5pp
+      via DANGER (must-defend, 74):                2.1pp
+
+Caveat kept honest: the corpus is `model-games.json` (master games), which is
+likely more tactically dense than a student's own game, so the live rate should
+be read as an upper bound.
+
+Gates: `latentForkOpensTheDoor` — a CONTROL (a quiet position stays silent on
+interrupt), the TIER assertion that would have caught the seat bug, the
+decided-game asymmetry, and a per-seat statement check with both a required and a
+forbidden token. Negative-controlled against the true pre-fix code: 2 rows go
+red, 7/7 restore green. 🚨 The gate this REPLACES asserted only that the
+`standingDanger` line contained the substring `latentFork` — which the buggy AND
+the fixed version both satisfy, so it could never have failed on the defect it
+was written for. A statement check needs a forbidden side, not just a required
+one.
 
 **T6. TWO NUMBERS NEVER MEASURED ON A DEVICE.** (a) The Learn statement's
 volume roughly doubles (~2.5 → ~5 per game at the amateur band, from the

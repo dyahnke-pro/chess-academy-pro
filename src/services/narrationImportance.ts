@@ -44,6 +44,18 @@ export interface ImportanceSignals {
    *  NOT gated by the contested test. Optional: a surface that runs no such
    *  probe simply omits it. */
   standingDanger?: boolean;
+  /** A chess.js-computed STANDING CHANCE: a tactic the STUDENT can set up in two
+   *  or more quiet moves — today, a knight fork with the landing square safe on
+   *  arrival. The mirror of `standingDanger`, and deliberately NOT folded into
+   *  it: the same detector answers both seats, but a plan you can execute and a
+   *  plan you must prevent are different facts, ranked differently and voiced
+   *  differently. Folding them made 83% of the signal's plies (measured, 3,678
+   *  plies of real games) an opportunity labelled "a standing danger".
+   *
+   *  Unlike its sibling this IS contested-gated, and that asymmetry is the
+   *  point: a danger in a decided game can still lose you the win, while a fork
+   *  you could set up in a game already decided is not worth an interruption. */
+  standingChance?: boolean;
   /** White-POV cp at this position — for the contested gate + the mate override. */
   evalCpWhitePov: number | null;
   /** Stockfish WDL (per-mille) at this position — the practical contested read. */
@@ -168,6 +180,14 @@ export function computeImportance(
   // settled, which is what the contested gate would otherwise silence. Ranked
   // just under must-defend: a live hang is now, this is next move.
   if (s.standingDanger) bump(74, 'must-defend', 'a standing danger on the board');
+
+  // THE OTHER SEAT — a tactic the student can SET UP, not one they must answer.
+  // It earns voice on its own (T5: the algo, not the model, decides when a
+  // tactic two moves out gets mentioned) in the TEACHING register, ranked just
+  // above a declared teaching beat because a concrete forcing idea on this board
+  // outranks generic lesson framing — and far below the decision signals,
+  // because foresight is valuable and it is not urgent.
+  if (s.standingChance && contested) bump(45, 'teaching', 'a tactic you can set up');
 
   // A forced mate outranks everything, contested-gate or not.
   if (s.evalCpWhitePov != null && Math.abs(s.evalCpWhitePov) >= MATE_CP) {

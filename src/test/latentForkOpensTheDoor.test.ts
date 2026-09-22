@@ -56,14 +56,53 @@ describe('T5 — the two-move fork reaches the decision', () => {
     expect(judgeMoment({ ...QUIET, standingDanger: true }, 1500, 'walk').speaks).toBe(true);
   });
 
-  it('positionFacts routes latentFork INTO that channel', () => {
-    // The wire itself, asserted by statement rather than by behaviour: the
-    // disjunction that feeds judgeMoment must name latentFork. A behavioural
-    // test here would need a real position whose fork survives all four gates,
-    // which pins the DETECTOR's tuning rather than the wiring this is about.
+  it('the STUDENT\'s own fork opens the door too — but never as must-defend', () => {
+    // T5's capability, in the register it belongs to. Both halves matter: the
+    // first proves the algo (not the model) can raise a tactic two moves out;
+    // the second is the correction of my own first attempt, which routed this
+    // through `standingDanger` and so told the student a fork THEY could play
+    // was "a standing danger on the board" at tier must-defend.
+    const v = judgeMoment({ ...QUIET, standingChance: true }, 1500, 'interrupt');
+    expect(v.speaks, 'a fork the student can set up must be able to earn voice').toBe(true);
+    expect(v.importance.tier, 'an opportunity is a teaching beat, never a defensive obligation')
+      .toBe('teaching');
+    expect(v.importance.reasons.join(' ')).not.toContain('standing danger');
+  });
+
+  it('a chance in a DECIDED game stays quiet; a danger does not', () => {
+    // The asymmetry is deliberate and is the reason these are two signals.
+    // A fork you could set up in a game already won is not worth stopping for;
+    // a pin in waiting still loses you the piece.
+    const DECIDED: ImportanceSignals = { ...QUIET, evalCpWhitePov: 900, wdl: [980, 15, 5] };
+    expect(judgeMoment({ ...DECIDED, standingChance: true }, 1500, 'interrupt').speaks).toBe(false);
+    expect(judgeMoment({ ...DECIDED, standingDanger: true }, 1500, 'interrupt').speaks).toBe(true);
+  });
+
+  it('positionFacts routes EACH SEAT to its own channel', () => {
+    // 🔴 THE GATE THIS REPLACES asserted only that `standingDanger` mentioned
+    // `latentFork` — which the seat-blind version satisfied, and which the
+    // corrected version ALSO satisfies by substring (`latentForkTheirs`). It
+    // would have passed on both, so it could never have caught the bug it was
+    // written for. Measured before the fix: 83.4% of the plies the signal
+    // opened were the student's own opportunity filed as a threat.
     const src = readFileSync(resolve(__dirname, '../services/positionFacts.ts'), 'utf8');
-    const line = src.split('\n').find((l) => l.includes('const standingDanger =')) ?? '';
-    expect(line, 'standingDanger no longer parsed — this gate is vacuous').toContain('latentDanger');
-    expect(line, 'latentFork cannot reach judgeMoment').toContain('latentFork');
+    const lines = src.split('\n');
+    const danger = lines.find((l) => l.includes('const standingDanger =')) ?? '';
+    const chance = lines.find((l) => l.includes('const standingChance =')) ?? '';
+    expect(danger, 'standingDanger no longer parsed — this gate is vacuous').toContain('latentDanger');
+    expect(danger, 'the OPPONENT\'s fork is a danger and must reach that channel')
+      .toContain('latentForkTheirs');
+    expect(danger, 'the student\'s OWN fork must never be a must-defend danger')
+      .not.toContain('latentForkMine');
+    expect(chance, 'the student\'s own fork must reach the chance channel')
+      .toContain('latentForkMine');
+  });
+
+  it('the clause KIND follows the seat, so the tie-break and the weakness join agree', () => {
+    // Three consumers read this kind: the `incoming` tie-break, matchClauseKind,
+    // and any audit grouping by kind. One root, so one assertion.
+    const src = readFileSync(resolve(__dirname, '../services/positionFacts.ts'), 'utf8');
+    expect(src, 'the fork clause must pick its kind from the seat')
+      .toMatch(/latentFork\.forker === studentSeat \? 'latent-chance' : 'latent-danger'/);
   });
 });

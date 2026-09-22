@@ -4,15 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**191 lines · 5 exports · 7 importers · 3 tests · 0 audits**
+**211 lines · 5 exports · 11 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:139) — names `computeImportance`
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:287) — names `computeImportance`
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:878) — names `computeImportance`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:946) — names `computeImportance`, `narrationImportance`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3671) — names `ImportanceTier`, `computeImportance`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:936) — names `computeImportance`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1004) — names `computeImportance`, `narrationImportance`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3777) — names `ImportanceTier`, `computeImportance`
 
 ## Who calls in
 
@@ -20,9 +20,13 @@
 - `src/services/coachDecider.ts`
 - `src/services/factSelector.ts`
 - `src/services/importanceStudentTerm.test.ts`
+- `src/services/liveNeedGate.test.ts`
 - `src/services/methodBeat.ts`
 - `src/services/narrationImportance.test.ts`
 - `src/services/positionFacts.ts`
+- `src/services/studentMomentBoost.test.ts`
+- `src/test/latentForkOpensTheDoor.test.ts`
+- `src/test/preGateSeesTheStudent.test.ts`
 
 ## Exports and every call site
 
@@ -43,8 +47,8 @@
 - `src/services/narrationImportance.test.ts:108`
 - `src/services/narrationImportance.test.ts:111`
 
-### `computeImportance` (function) — 35 call sites
-- `src/services/coachDecider.ts:135`
+### `computeImportance` (function) — 38 call sites
+- `src/services/coachDecider.ts:166`
 - `src/services/importanceStudentTerm.test.ts:17`
 - `src/services/importanceStudentTerm.test.ts:18`
 - `src/services/importanceStudentTerm.test.ts:29`
@@ -79,13 +83,24 @@
 - `src/services/narrationImportance.test.ts:138`
 - `src/services/narrationImportance.test.ts:144`
 - `src/services/narrationImportance.test.ts:145`
+- `src/services/studentMomentBoost.test.ts:52`
+- `src/services/studentMomentBoost.test.ts:59`
+- `src/services/studentMomentBoost.test.ts:60`
 
 ## Tests
 
 - `src/services/coachDecider.test.ts`
 - `src/services/importanceStudentTerm.test.ts`
+- `src/services/liveNeedGate.test.ts`
 - `src/services/narrationImportance.test.ts`
+- `src/services/studentMomentBoost.test.ts`
+- `src/test/latentForkOpensTheDoor.test.ts`
+- `src/test/preGateSeesTheStudent.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

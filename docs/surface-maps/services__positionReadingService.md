@@ -76,7 +76,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:5792`
 - `src/services/pvPlayback.ts:406`
 - `src/services/pvPlayback.ts:443`
-- `src/services/reviewQuestionPlan.ts:63`
+- `src/services/reviewQuestionPlan.ts:67`
 - `src/services/reviewTrapQuestion.ts:98`
 
 ### `legalSeeGainOn` (function) — 6 call sites

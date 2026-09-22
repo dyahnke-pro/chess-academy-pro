@@ -25,9 +25,25 @@ import { judgeMoment } from '../services/coachDecider';
 import { studentMomentBoost } from '../services/studentMomentBoost';
 import type { ImportanceSignals } from '../services/narrationImportance';
 
-/** A middling position — not obviously loud, not obviously silent. */
+/**
+ * A position that ALREADY earns voice — which is the only kind the student term
+ * can act on, since the boost is applied `if (studentBoost > 0 && rank > 0)`.
+ *
+ * 🔴 THIS SAID `severity: 'medium'` AND THAT IS NOT A `Severity` (2026-09-21).
+ * The union is `'none' | 'notable' | 'critical' | 'only-move'`, so `'medium'`
+ * matched no bump, rank stayed 0, `base.speaks` was false — and the whole body
+ * below is guarded by `if (base.speaks)`. Both assertions passed for free:
+ * the guarded one never executed and the other compared `0 >= 0`. The gate ran
+ * green having verified NOTHING, for exactly the reason vitest transpiles
+ * without typechecking, which is the same hole that let `'white'` through a
+ * `'w' | 'b'` parameter earlier the same night.
+ *
+ * `'critical'` bumps to rank 65 on a contested board, so the term now has a
+ * real moment to raise — and the non-vacuity assertion below makes the empty
+ * version fail instead of pass.
+ */
 const SIGNALS: ImportanceSignals = {
-  decision: { severity: 'medium', gapCp: 60 },
+  decision: { severity: 'critical', gapCp: 60 },
   cpLossCp: null,
   threatNet: 0,
   teachingBeat: false,
@@ -36,6 +52,19 @@ const SIGNALS: ImportanceSignals = {
 };
 
 describe('the student term reaches the pre-gate', () => {
+  it('NON-VACUITY — the fixture actually earns voice, or nothing below is tested', () => {
+    // Every assertion in this file is conditioned on a moment existing. If the
+    // fixture goes quiet again (a threshold moves, a literal rots), the tests
+    // below stop asserting and stay green. This is the canary for that.
+    const base = judgeMoment(SIGNALS, 1500, 'interrupt', 0);
+    expect(base.speaks, 'the fixture no longer opens the door — the tests below are now vacuous')
+      .toBe(true);
+    expect(base.importance.rank, 'rank 0 means no moment to raise').toBeGreaterThan(0);
+    const raised = judgeMoment(SIGNALS, 1500, 'interrupt', 20);
+    expect(raised.importance.rank, 'the boost did not reach computeImportance at all')
+      .toBeGreaterThan(base.importance.rank);
+  });
+
   it('raising the boost NEVER closes a door that was open', () => {
     for (const boost of [0, 5, 10, 20, 40]) {
       const base = judgeMoment(SIGNALS, 1500, 'interrupt', 0);

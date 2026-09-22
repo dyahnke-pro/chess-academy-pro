@@ -43,7 +43,7 @@ function walk(dir: string, out: string[] = []): string[] {
   return out;
 }
 
-const CEILING = 51; // 53 measured, minus pvPlayback and tacticVerification (converted)
+const CEILING = 50; // 53 measured, minus pvPlayback, tacticVerification, reviewQuestionPlan (converted)
 
 describe('piece-value tables converge on one home', () => {
   it('the home exists and names BOTH semantics', () => {
