@@ -88,50 +88,12 @@ function retagClassifiedTactic(row: ClassifiedTactic, r: TacticTypeBackfillResul
  * Re-tag every persisted tactic row that is behind `TACTIC_TYPE_REV`. Safe to
  * call on every boot: rows already at the rev cost one read and no write.
  */
-/** How the backfill is SCHEDULED. Every knob exists because of one device:
- *  David's iPhone on 2026-09-22, the first launch of the bundle that carried
- *  this backfill. `detectTacticType` costs ~260 ms per row on a desktop
- *  (`conceptForLine` walks the line); the phone held ~700 weakness rows from
- *  the previous month plus every classified tactic of 932 analysed games, and
- *  the first cut re-tagged ALL of them in one synchronous loop at boot, with
- *  nothing persisted until the end. The main thread pegged within seconds of
- *  every launch, the phone heated, taps died, and a force-quit threw the work
- *  away so the next launch started from zero — a freeze that could never end.
- *  Three rules, each a separate defect of that loop:
- *   1. YIELD between rows, so a tap, a paint, or the OTA launch-install can run.
- *   2. PERSIST every `batch` rows, so a killed app keeps its progress.
- *   3. START LATE — the first paint and the launch-install go first. */
-export interface TacticTypeBackfillSchedule {
-  /** Milliseconds to wait before touching the database. */
-  startDelayMs: number;
-  /** Rows re-tagged between persists. */
-  batch: number;
-  /** Awaited between every two rows — hands the thread back. */
-  yieldBetweenRows: () => Promise<void>;
-}
-
-const sleep = (ms: number): Promise<void> => new Promise((resolve) => { setTimeout(resolve, ms); });
-
-/** Idle-callback yield with a timer fallback: at least 40 ms of breathing room
- *  per row on a phone, longer when the browser says the thread is busy. */
-function idleYield(): Promise<void> {
-  const ric = (globalThis as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => void }).requestIdleCallback;
-  if (typeof ric === 'function') return new Promise((resolve) => { ric(() => resolve(), { timeout: 250 }); });
-  return sleep(40);
-}
-
-export const PRODUCTION_BACKFILL_SCHEDULE: TacticTypeBackfillSchedule = {
-  startDelayMs: 8_000,
-  batch: 10,
-  yieldBetweenRows: idleYield,
-};
-
-/** Tests and one-shot callers: no delay, no yield — the same rows, at once. */
-export const IMMEDIATE_BACKFILL_SCHEDULE: TacticTypeBackfillSchedule = {
-  startDelayMs: 0,
-  batch: 10,
-  yieldBetweenRows: () => Promise.resolve(),
-};
+// The schedule lives in `backfillSchedule.ts` (one home for the rule — the
+// opening-key re-mint shares it). Re-exported so the gate and callers keep
+// their names.
+import { PRODUCTION_BACKFILL_SCHEDULE, IMMEDIATE_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
+export { PRODUCTION_BACKFILL_SCHEDULE, IMMEDIATE_BACKFILL_SCHEDULE };
+export type TacticTypeBackfillSchedule = BackfillSchedule;
 
 export async function reconcileTacticTypes(
   schedule: TacticTypeBackfillSchedule = PRODUCTION_BACKFILL_SCHEDULE,

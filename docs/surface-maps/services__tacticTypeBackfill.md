@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**188 lines · 6 exports · 2 importers · 1 tests · 1 audits**
+**150 lines · 6 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5940) — names `tacticTypeBackfill`
+- **The standard post-deploy ritual** (CLAUDE.md:5979) — names `tacticTypeBackfill`
 
 ## Who calls in
 
@@ -23,17 +23,11 @@
 ### `TacticTypeBackfillResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `TacticTypeBackfillSchedule` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `PRODUCTION_BACKFILL_SCHEDULE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `IMMEDIATE_BACKFILL_SCHEDULE` (const) — 0 call sites
+### `TacticTypeBackfillSchedule` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reconcileTacticTypes` (function) — 13 call sites
-- `src/services/dataLoader.ts:950`
+- `src/services/dataLoader.ts:943`
 - `src/services/tacticTypeBackfill.test.ts:88`
 - `src/services/tacticTypeBackfill.test.ts:103`
 - `src/services/tacticTypeBackfill.test.ts:104`
@@ -46,6 +40,12 @@
 - `src/services/tacticTypeBackfill.test.ts:158`
 - `src/services/tacticTypeBackfill.test.ts:165`
 - `src/services/tacticTypeBackfill.test.ts:178`
+
+### `PRODUCTION_BACKFILL_SCHEDULE` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `IMMEDIATE_BACKFILL_SCHEDULE` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 

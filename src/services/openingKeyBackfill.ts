@@ -22,6 +22,7 @@ import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import { openingKeyFromPgn } from './openingKey';
 import type { GameRecord } from '../types';
+import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
 
 /** Bump when the minting changes in a way that should reach persisted rows. */
 export const OPENING_KEY_REV = '2026-09-22-one-opening-key';
@@ -49,17 +50,36 @@ export function remintGameRow(row: GameRecord, r: OpeningKeyBackfillResult): Gam
  * Re-mint every persisted game row behind `OPENING_KEY_REV`. Safe on every
  * boot: rows at the rev cost one read and no write.
  */
-export async function reconcileOpeningKeys(): Promise<OpeningKeyBackfillResult> {
+/** Re-mint every game's opening key on an already-seeded device. Scheduled
+ *  like every boot backfill (`backfillSchedule`): starts late, yields between
+ *  rows, persists per batch — 932 imported games replayed through chess.js in
+ *  one synchronous pass is the freeze this rule exists to stop. */
+export async function reconcileOpeningKeys(
+  schedule: BackfillSchedule = PRODUCTION_BACKFILL_SCHEDULE,
+): Promise<OpeningKeyBackfillResult> {
   const r: OpeningKeyBackfillResult = { scanned: 0, recomputed: 0, changed: 0, unkeyed: 0 };
+  if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
   const rows = await db.games.toArray();
   r.scanned = rows.length;
-  const writes: GameRecord[] = [];
-  for (const row of rows) {
+  const stale = rows.filter((row) => row.openingKeyRev !== OPENING_KEY_REV);
+  if (stale.length === 0) return r;
+  const batch = Math.max(1, schedule.batch);
+  let writes: GameRecord[] = [];
+  const flush = async (): Promise<void> => {
+    if (writes.length === 0) return;
+    const w = writes; writes = [];
+    await db.games.bulkPut(w);
+  };
+  let first = true;
+  for (const row of stale) {
+    if (!first) await schedule.yieldBetweenRows();
+    first = false;
     const next = remintGameRow(row, r);
     if (next) writes.push(next);
+    if (writes.length >= batch) await flush();
   }
-  if (writes.length > 0) {
-    await db.games.bulkPut(writes);
+  await flush();
+  if (r.recomputed > 0) {
     void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',

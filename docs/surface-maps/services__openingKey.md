@@ -113,9 +113,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKey.test.ts:25`
 - `src/services/openingKey.test.ts:35`
 - `src/services/openingKey.test.ts:36`
-- `src/services/openingKeyBackfill.test.ts:20`
-- `src/services/openingKeyBackfill.test.ts:21`
-- `src/services/openingKeyBackfill.ts:42`
+- `src/services/openingKeyBackfill.test.ts:22`
+- `src/services/openingKeyBackfill.test.ts:23`
+- `src/services/openingKeyBackfill.ts:43`
 - `src/services/reviewSampleGames.ts:462`
 
 ### `openingFamily` (function) — 9 call sites
@@ -137,7 +137,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKey.test.ts:45`
 - `src/services/openingKey.test.ts:46`
 - `src/services/openingKey.test.ts:65`
-- `src/services/openingKeyBackfill.test.ts:39`
+- `src/services/openingKeyBackfill.test.ts:41`
 - `src/services/syncService.ts:205`
 
 ### `ecoOfKey` (function) — 3 call sites

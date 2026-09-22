@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**72 lines · 4 exports · 2 importers · 1 tests · 1 audits**
+**92 lines · 4 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,13 +24,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `remintGameRow` (function) — 1 call site
-- `src/services/openingKeyBackfill.test.ts:53`
+- `src/services/openingKeyBackfill.test.ts:55`
 
-### `reconcileOpeningKeys` (function) — 4 call sites
+### `reconcileOpeningKeys` (function) — 6 call sites
 - `src/services/dataLoader.ts:954`
-- `src/services/openingKeyBackfill.test.ts:29`
-- `src/services/openingKeyBackfill.test.ts:45`
-- `src/services/openingKeyBackfill.test.ts:46`
+- `src/services/openingKeyBackfill.test.ts:31`
+- `src/services/openingKeyBackfill.test.ts:47`
+- `src/services/openingKeyBackfill.test.ts:48`
+- `src/services/openingKeyBackfill.test.ts:66`
+- `src/services/openingKeyBackfill.test.ts:73`
 
 ## Tests
 
