@@ -6117,6 +6117,12 @@ export function CoachTeachPage(): JSX.Element {
       currentRoute: '/coach/teach',
       fen,
       moveHistory: groundingMoveHistory,
+      // THE SEAT (PLAN §E1, 2026-09-22). Learn threaded the history but never
+      // the student's colour, so a "why was Ke2 bad?" mid-game could not tell
+      // the student's ply from the coach's reply and graded whatever was
+      // played last. The retrospective lane resolves "my last move" / "your
+      // move" and names whose move a ply was from this.
+      studentColor: playerColor,
       userJustDid: text,
       // Tell the brain explicitly whose turn it is. Without this the
       // LLM was confusing sides — emitting `play_move {"san":"e5"}`

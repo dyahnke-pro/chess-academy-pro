@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6356 lines · 36 exports · 49 importers · 48 tests · 19 audits**
+**6547 lines · 36 exports · 49 importers · 48 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,7 +18,7 @@
 - **Do NOT** (CLAUDE.md:5137) — names `coachApi`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5807) — names `voiceFacts`
 - **The standard post-deploy ritual** (CLAUDE.md:5941) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5955) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5956) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -80,7 +80,7 @@
 - `src/services/coachApi.keySquares.test.ts:21`
 
 ### `warmCoachProvider` (function) — 1 call site
-- `src/App.tsx:459`
+- `src/App.tsx:471`
 
 ### `__resetProviderCooldownsForTests` (function) — 3 call sites
 - `src/services/coachApi.boardVerdict.integration.test.ts:65`
@@ -110,10 +110,10 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `consumeCoachActionOffer` (function) — 1 call site
-- `src/coach/coachService.ts:1678`
+- `src/coach/coachService.ts:1754`
 
 ### `consumeCoachKeySquares` (function) — 6 call sites
-- `src/coach/coachService.ts:1685`
+- `src/coach/coachService.ts:1761`
 - `src/services/coachApi.keySquares.test.ts:10`
 - `src/services/coachApi.keySquares.test.ts:12`
 - `src/services/coachApi.keySquares.test.ts:15`
@@ -141,11 +141,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getCoachStructuredResponse` (function) — 5 call sites
-- `src/services/openingGenerator.ts:2082`
-- `src/services/openingGenerator.ts:2871`
-- `src/services/openingGenerator.ts:3454`
-- `src/services/openingGenerator.ts:3592`
-- `src/services/openingGenerator.ts:4165`
+- `src/services/openingGenerator.ts:2083`
+- `src/services/openingGenerator.ts:2872`
+- `src/services/openingGenerator.ts:3455`
+- `src/services/openingGenerator.ts:3593`
+- `src/services/openingGenerator.ts:4166`
 
 ### `MasterGroundingOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -208,7 +208,7 @@
 ### `groundedMoveFeedback` (function) — 10 call sites
 - `src/components/Openings/MiddlegamePractice.tsx:268`
 - `src/hooks/useLiveCoach.test.tsx:13`
-- `src/hooks/useLiveCoach.ts:253`
+- `src/hooks/useLiveCoach.ts:275`
 - `src/hooks/usePhaseNarration.test.ts:68`
 - `src/hooks/usePhaseNarration.ts:693`
 - `src/services/coachMoveCommentary.ts:303`
@@ -218,9 +218,9 @@
 - `src/services/groundedMoveFeedback.test.ts:45`
 
 ### `translateToEnglish` (function) — 4 call sites
-- `src/coach/coachService.ts:564`
-- `src/components/Coach/CoachTeachPage.tsx:3005`
-- `src/services/coachSessionRouter.ts:124`
+- `src/coach/coachService.ts:566`
+- `src/components/Coach/CoachTeachPage.tsx:3189`
+- `src/services/coachSessionRouter.ts:125`
 - `src/services/coachSettingsAction.ts:242`
 
 ### `resolveWarmRegister` (function) — 10 call sites
@@ -252,17 +252,17 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 24 call sites
-- `src/components/Coach/CoachGameReview.tsx:1620`
-- `src/components/Coach/CoachGameReview.tsx:1739`
-- `src/components/Coach/CoachGameReview.tsx:1926`
+- `src/components/Coach/CoachGameReview.tsx:1673`
+- `src/components/Coach/CoachGameReview.tsx:1792`
+- `src/components/Coach/CoachGameReview.tsx:1979`
 - `src/hooks/usePhaseNarration.ts:680`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:124`
 - `src/services/coachFeatureService.ts:382`
 - `src/services/coachFeatureService.ts:468`
 - `src/services/coachFeatureService.ts:469`
-- `src/services/coachFeatureService.ts:4134`
-- `src/services/coachFeatureService.ts:4304`
+- `src/services/coachFeatureService.ts:4234`
+- `src/services/coachFeatureService.ts:4404`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:133`
@@ -333,7 +333,7 @@
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
 - `src/services/middlegamePlanner.ts:343`
-- `src/services/openingGenerator.ts:4390`
+- `src/services/openingGenerator.ts:4391`
 - `src/services/positionReadingGrader.test.ts:6`
 - `src/services/positionReadingGrader.ts:67`
 - `src/services/smartSearchService.ts:50`

@@ -29,6 +29,17 @@ export const HOME_OPENING_MIN_GAMES = 10;
 /** …and this share of the colour's keyed games. */
 export const HOME_OPENING_MIN_SHARE = 0.05;
 
+/** THE ONE VOLUME FLOOR — for the home pick AND for every "which opening"
+ *  verdict the chat lanes speak (`openingVolumeFloor` delegates here; two
+ *  floors drifted the day they were both written). Both arms: at least
+ *  HOME_OPENING_MIN_GAMES games AND at least HOME_OPENING_MIN_SHARE of the
+ *  colour's games. AND, not OR: a share arm on its own lets a 5-game line
+ *  lead a win-rate verdict on a 100-game account, and five games is noise. */
+export function clearsHomeFloor(games: number, colourGames: number): boolean {
+  if (games < HOME_OPENING_MIN_GAMES) return false;
+  return colourGames <= 0 || games / colourGames >= HOME_OPENING_MIN_SHARE;
+}
+
 export interface HomeOpeningVariation {
   key: OpeningKey;
   name: string;
@@ -130,7 +141,7 @@ export function rankHomeOpeningCandidates(
       share,
       key: variations[0].key,
       variations,
-      clearsFloor: fam.games >= HOME_OPENING_MIN_GAMES && share >= HOME_OPENING_MIN_SHARE,
+      clearsFloor: clearsHomeFloor(fam.games, keyed),
     };
   }).sort((a, b) => b.games - a.games || a.family.localeCompare(b.family));
   return { colour, totalGames, unkeyed, candidates };

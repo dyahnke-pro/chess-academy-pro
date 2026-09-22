@@ -77,6 +77,17 @@ const COMMON_TYPOS: Record<string, string> = {
   blundr: 'blunder', blunderr: 'blunder', blnder: 'blunder',
   strenght: 'strength', strentgh: 'strength', strenghts: 'strengths',
   positon: 'position', posistion: 'position', poisiton: 'position',
+  // Piece names + the question words in front of them (PLAN §E5, prod
+  // 2026-09-22: "whats teh best plan for my bishp on f1" lost the PIECE, so the
+  // board router saw a generic plan ask). A dropped-letter piece is still one
+  // piece and nothing else in chess.
+  bishp: 'bishop', bisop: 'bishop', bishpo: 'bishop', bihsop: 'bishop', biship: 'bishop',
+  knigt: 'knight', knihgt: 'knight', kngiht: 'knight', kinght: 'knight', knite: 'knight', knght: 'knight',
+  quen: 'queen', qeen: 'queen', queeen: 'queen', queee: 'queen',
+  rok: 'rook', rooke: 'rook', roook: 'rook',
+  kign: 'king', knig: 'king',
+  pwan: 'pawn', pawm: 'pawn', pwn: 'pawn',
+  teh: 'the', hte: 'the', wat: 'what', waht: 'what', shoud: 'should', shuold: 'should', sould: 'should',
 };
 const TYPO_RE = new RegExp(`\\b(${Object.keys(COMMON_TYPOS).join('|')})\\b`, 'gi');
 
@@ -134,6 +145,10 @@ const PLAN_QUESTION_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:goal|objective|aim)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:my|the)\s+(?:setup|structure|formation|pawn\s+structure)\b`,
   String.raw`\bwhere\s+(?:do|does|should)\s+(?:my\s+)?(?:pieces?|knights?|bishops?|rooks?|queen|king)\s+(?:go|goes|belong|belongs|head)\b`,
+  // "what should my knight be doing" — a PIECE-scoped plan (PLAN §E5). On the
+  // spine the board router's `piece-plan` aspect answers it about THAT piece;
+  // here it engages the plan lane so no builder lets it fall to the stock line.
+  String.raw`\bwhat\s+should\s+my\s+(?:pawn|knight|bishop|rook|queen)s?\s+(?:be\s+)?(?:doing|do)\b`,
   String.raw`\bhow\s+do\s+i\s+(?:make\s+progress|build\s+up|improve\s+my\s+position|attack|defend|press|convert\s+my\s+edge)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:right|correct|best)\s+(?:plan|setup|approach|way\s+to\s+play)\b`,
   String.raw`\bwhat\s+am\s+i\s+(?:supposed|meant)\s+to\s+do\b`,
@@ -1333,6 +1348,14 @@ export function isProgressQuestion(ask: string | undefined): boolean {
   // to speak to my fundamentals"). assembleFundamentalsAnswer always answers
   // (the core four) with no game data, so the fundamentals lane must win.
   if (isFundamentalsQuestion(ask)) return false;
+  // An OPENING-PROFILE ask ("what is my weakest opening?") names WHICH opening
+  // and has its own computed lane. It ALSO reads as a weakness ask here, and
+  // the progress lane dispatches FIRST — where `trainingAreaFromText` saw the
+  // word "opening" and served the play-a-focused-game pitch ("The fastest way
+  // to sharpen your opening play is to play a full game against me…") while
+  // the Openings tab held the real answer (David's 932 games, prod 2026-09-22,
+  // PLAN §E2). The specific lane wins; this one keeps the theme asks.
+  if (isOpeningProfileQuestion(ask)) return false;
   // "what's the Weaknesses TAB for?" is an app-help ask about a surface, not
   // a request for the habit profile — same guard the concept lane carries
   // (varied sweep, run allq-mss55zxn: the tab question got the patterns
@@ -1428,7 +1451,7 @@ export function isOpeningProfileQuestion(ask: string | undefined): boolean {
 /** Which slice of the opening profile the question asks for. */
 export function openingProfileKind(ask: string | undefined): 'strongest' | 'favorite' | 'weakest' {
   const a = (ask ?? '').toLowerCase();
-  if (/\b(?:weakest|worst|stop\s+playing|drop|ditch|abandon|give\s+up|quit|letting\s+me\s+down|underperforming|failing\s+me)\b/.test(a)) return 'weakest';
+  if (/\b(?:weakest|worst|stop\s+playing|drop|ditch|abandon|give\s+up|quit|letting\s+me\s+down|underperforming|failing\s+me|botch|butcher|mess\s+up|screw\s+up|struggle\s+with|dragging\s+me\s+down|hurting\s+me)\b/.test(a)) return 'weakest';
   if (/\b(?:favou?rite|go[\s-]?to|most[\s-]?played|most[\s-]?used|play\s+(?:the\s+)?most)\b/.test(a)) return 'favorite';
   return 'strongest';
 }
@@ -2252,6 +2275,118 @@ export function isMoveRatingQuestion(ask: string | undefined): boolean {
   return MOVE_RATING_RE.test(ask);
 }
 
+// ═══ RETROSPECTIVE MOVE — "why was X good/bad", "what did you have in mind with
+// X", "what was wrong with X" (PLAN §E1, prod 2026-09-22). ═══
+//
+// 🔒 A QUESTION ABOUT A MOVE THAT WAS PLAYED IS NOT A QUESTION ABOUT THE BEST
+// MOVE NOW. Three real asks mid-game on Learn, both bundles:
+//   "why was taking on e5 good?"        → the engine-reasoning walk (best move NOW)
+//   "what did you have in mind with Bc5?" → nothing fired → best move NOW
+//   "why was Ke2 bad?"                   → the move-rating lane, which grades the
+//                                          LAST move — the OPPONENT's Nxe4 —
+//                                          "within a whisker of best"
+// Each was a correct, grounded answer to a question nobody asked. The move the
+// student named never appeared, or the wrong player's move was graded.
+//
+// The detector RESOLVES WHICH MOVE IS MEANT and hands the lane a reference:
+// a SAN / spoken piece ("night c3"), a capture on a square ("taking on e5"),
+// castling, or a pointer ("my last move", "your move", "that"). The LANE then
+// finds that move in the game's history BY COORDINATES (never SAN string —
+// Nxd4 vs Nexd4), rates THAT ply, and says whose move it was. Past tense or a
+// "with/behind <move>" object is what makes it retrospective; a present-tense
+// "why is Nf3 good" stays a candidate ask.
+export type RetrospectiveMoveRef =
+  | { kind: 'san'; san: string }
+  | { kind: 'capture-on'; square: string }
+  | { kind: 'my-last' }
+  | { kind: 'coach-last' };
+
+const RETRO_VERDICT = String.raw`(?:so\s+|such\s+|really\s+|that\s+)?(?:good|bad|strong|weak|wrong|right|correct|necessary|forced|important|clever|smart|dumb|terrible|awful|great|brilliant|the\s+right\s+(?:move|call|idea)|a\s+(?:good|bad|strong|weak|great)\s+(?:move|idea|choice)|(?:a|an)\s+(?:mistake|blunder|inaccuracy|error|slip)|not\s+(?:good|best|right))`;
+// A move object: SAN, a spoken piece+square, a capture on a square, castling,
+// or a pointer to a move already on the tape.
+// A NAMED move object: SAN, a spoken piece+square, a capture on a square, or
+// castling. A SEAT pointer ("my last move", "your move") counts too — it names
+// whose ply. A bare "that" / "it" does NOT: "was that a good move?" is the
+// move-rating lane's own question (its contract is tested there), and "what
+// did it do" is the move-PURPOSE lane's — neither names a move on the tape.
+const RETRO_NAMED = String.raw`(?:O-O(?:-O)?|0-0(?:-0)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|(?:knight|night|bishop|rook|queen|king|pawn)\s*(?:to\s+|takes?\s+(?:on\s+)?|captures?\s+(?:on\s+)?|x\s*|on\s+)?[a-h]\s*[1-8]|(?:taking|capturing|the\s+capture|the\s+exchange|trading|the\s+trade|exchanging)\s+on\s+[a-h][1-8]|castl(?:e|ing)(?:\s+(?:long|short|queenside|kingside))?)`;
+const RETRO_POINTER = String.raw`(?:(?:my|your)\s+(?:last\s+|previous\s+)?move)`;
+const RETRO_OBJ = String.raw`(?:${RETRO_NAMED}|${RETRO_POINTER})`;
+const RETROSPECTIVE_RE = anyOf([
+  // "why was <obj> (so) good / bad / a mistake / the right call"
+  String.raw`\bwhy\s+was\s+${RETRO_OBJ}\s+${RETRO_VERDICT}\b`,
+  // "why was it good to take on e5" / "why was it bad to play Ke2"
+  String.raw`\bwhy\s+was\s+it\s+${RETRO_VERDICT}\s+to\s+(?:play|take|capture|castle|push|trade|go)\b`,
+  // "what did you/I have in mind with <named>" / "what were you thinking with <named>"
+  String.raw`\bwhat\s+(?:did|were)\s+(?:you|i)\s+(?:have\s+in\s+mind|think(?:ing)?|going\s+for|aiming\s+for|planning|intend(?:ing)?)\s+(?:with|by|behind|on|when\s+(?:you|i)\s+played)\s+${RETRO_OBJ}`,
+  // "what was wrong with <named>" / "what was the problem with <named>" / "what was the idea/point behind <named>"
+  String.raw`\bwhat\s+was\s+(?:wrong|the\s+(?:problem|matter|issue|idea|point|purpose|plan|thinking|reason))\s+(?:with|behind|of|for)\s+${RETRO_OBJ}`,
+  // "what was <named> for" / "what was <named> about" / "what did <named> do / achieve"
+  String.raw`\bwhat\s+was\s+${RETRO_NAMED}\s+(?:for|about|doing|meant\s+to\s+do)\b`,
+  String.raw`\bwhat\s+did\s+${RETRO_NAMED}\s+(?:do|achieve|accomplish|threaten|win|lose|cost)\b`,
+  // "why did you/I play <named>" — a WHY about a move on the tape.
+  String.raw`\bwhy\s+did\s+(?:you|i)\s+(?:play|go|choose|pick|castle|take|push|trade)\s+${RETRO_NAMED}`,
+  // "was <obj> necessary / forced / a mistake / the right call"
+  String.raw`\bwas\s+${RETRO_OBJ}\s+${RETRO_VERDICT}\b`,
+  // "how bad was <obj>" / "how good was <obj>"
+  String.raw`\bhow\s+(?:good|bad|strong|weak|costly)\s+was\s+${RETRO_OBJ}`,
+]);
+
+/** The move a retrospective question refers to, or null when the ask is not
+ *  retrospective. Resolved to a SAN / a capture square / castling / a pointer;
+ *  the LANE turns it into a ply by replaying the game (coordinates, never
+ *  string). */
+export function retrospectiveMoveRef(ask: string | undefined): RetrospectiveMoveRef | null {
+  if (!ask) return null;
+  if (!RETROSPECTIVE_RE.test(ask)) return null;
+  const t = ask.toLowerCase();
+  // Pointers first — "my last move" / "your move" / "that".
+  if (/\b(?:my|the)\s+(?:last|previous)\s+move\b|\bmy\s+move\b/.test(t)) return { kind: 'my-last' };
+  if (/\byour\s+(?:last\s+|previous\s+)?move\b/.test(t)) return { kind: 'coach-last' };
+  // A capture named by its square — "taking on e5", "the exchange on d4".
+  const cap = /\b(?:taking|capturing|the\s+capture|the\s+exchange|trading|the\s+trade|exchanging|take|capture|trade)\s+on\s+([a-h][1-8])\b/.exec(t);
+  if (cap) return { kind: 'capture-on', square: cap[1] };
+  const san = extractCandidateSan(ask);
+  if (san) return { kind: 'san', san };
+  return null;
+}
+
+export function isRetrospectiveMoveQuestion(ask: string | undefined): boolean {
+  return retrospectiveMoveRef(ask) !== null;
+}
+
+// ═══ METHOD — "what should I be thinking about", "how do I approach this",
+// "what's the process here", "how should I think" (PLAN §E1b). ═══
+//
+// 🔒 HOW TO THINK IS NOT WHAT TO PLAY. "What should I be thinking about in this
+// position?" fired NO lane and fell to the model, which answered with the best
+// move now (prod 2026-09-22) — the exact thing the student was asking how to
+// FIND for themselves. The answer is the computed METHOD for this moment: the
+// habit the moment earns (`methodBeat`) plus the concrete checklist on THIS
+// board — what they are threatening, which forcing moves exist, which of your
+// pieces is loose — never the best move (G4.5.16: "Calling out pins and forks
+// isn't teaching. Future moves, how to think, threat identification, that is
+// teaching").
+const METHOD_QUESTION_RE = anyOf([
+  String.raw`\bwhat\s+should\s+i\s+(?:be\s+)?(?:think(?:ing)?|consider(?:ing)?|look(?:ing)?\s+(?:for|at)|focus(?:ing)?\s+on|ask(?:ing)?\s+myself|weigh(?:ing)?)\b`,
+  String.raw`\bwhat\s+(?:do|should|would|can)\s+i\s+(?:think\s+about|look\s+for|consider|weigh|ask\s+myself)\b`,
+  String.raw`\bhow\s+(?:do|should|would|can|could)\s+i\s+(?:approach|think\s+(?:about|through|here)|reason\s+(?:about|through)|analy[sz]e|assess|evaluate|read|break\s+down|go\s+about|tackle|work\s+(?:out|through))\s+(?:this|it|a\s+position|positions?\s+like\s+this|the\s+position|here)\b`,
+  String.raw`\bhow\s+(?:should|do)\s+i\s+(?:be\s+)?think(?:ing)?\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:process|thought\s+process|thinking\s+process|method|routine|checklist|procedure|approach)\s+(?:here|for\s+this|in\s+this|now|for\s+positions\s+like\s+this)?\b`,
+  String.raw`\bwalk\s+me\s+through\s+(?:your|the|a)\s+(?:thought|thinking)\s+process\b`,
+  String.raw`\bhow\s+(?:do|should|would)\s+(?:i|you)\s+decide\s+(?:what|which)\s+(?:move\s+)?to\s+play\b`,
+  String.raw`\bwhat\s+questions?\s+(?:should|do)\s+i\s+ask\b`,
+  String.raw`\bhow\s+(?:do|should)\s+i\s+(?:find|pick|choose|come\s+up\s+with)\s+(?:a\s+|the\s+|my\s+)?(?:move|moves|candidates?|candidate\s+moves|plan)\b`,
+  String.raw`\bwhat\s+am\s+i\s+(?:supposed\s+to\s+be\s+)?(?:thinking|looking\s+for|considering)\b`,
+]);
+export function isMethodQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // "how do you teach X" is the teaching-method lane; "what should I think of
+  // the Sicilian" names an opening — neither is a how-to-think ask.
+  if (/\bteach\b/i.test(ask)) return false;
+  return METHOD_QUESTION_RE.test(ask);
+}
+
 /** "set up calculation training / train my tactics / drill my endgames" — a
  *  DIRECT request to START a training mode (not a question). Returns which
  *  training the student asked for so the interception can voice a confirm +
@@ -2673,6 +2808,14 @@ export function buildQuestionGrounding(
   // de-padded question ("hey so um whos winning" → "whos winning"). Matrix
   // pass 4, 2026-07-10.
   const a = stripQuestionFiller(ask);
+  // THE TWO LANES THAT WERE FALLING INTO BEST-MOVE-NOW (PLAN §E1, 2026-09-22).
+  // Retrospective ("why was Ke2 bad") is about a move ON THE TAPE; method
+  // ("what should I be thinking about") is about HOW TO THINK. Both are
+  // computed first and SUPPRESS the present-tense move lanes they used to
+  // fall into — a specific ask beats the generic one, decided here once.
+  const retroRef = retrospectiveMoveRef(a);
+  const retrospective = retroRef !== null;
+  const method = isMethodQuestion(a);
   return {
     currentFen: liveState.fen,
     moveHistory: liveState.moveHistory,
@@ -2683,22 +2826,28 @@ export function buildQuestionGrounding(
     studentColor: liveState.studentColor,
     openingId: liveState.openingId,
     surface: coachSurfaceToRoute(surface),
+    retrospectiveMoveQuestion: retrospective,
+    retrospectiveMoveRef: retroRef ?? undefined,
+    methodQuestion: method,
+    // "give me a hint" — the piece + the goal, the square withheld. Set here
+    // too so the light surfaces get the same lane the spine surfaces have.
+    hintQuestion: isHintRequest(a),
     // An ENDGAME ask ("how do I hold a rook endgame") reads as a plan question
     // too, and the plan lane dispatches before the (phase-gated) endgame lane —
     // so it answered with a middlegame plan on a non-endgame board (broken-map
     // #5). The endgame lane owns it; suppress plan when endgame fires.
-    planQuestion: isPlanQuestion(a) && !isEndgameQuestion(a),
+    planQuestion: isPlanQuestion(a) && !isEndgameQuestion(a) && !method,
     // A NAMED-candidate ask ("is Qf3 ok") must EVALUATE that move, not deflect
     // to the best move — so it takes precedence over best-move / move-rating
     // (David 2026-07-10). whyBestMove still wins for "why is X best".
-    candidateMoveQuestion: isCandidateMoveQuestion(a),
+    candidateMoveQuestion: isCandidateMoveQuestion(a) && !retrospective,
     candidateMoveSan: extractCandidateSan(a) ?? undefined,
     // A counter-repertoire ask ("what should I play against the Pirc") is a
     // RECOMMENDATION question — it must never be hijacked into a best-move
     // position eval (David 2026-07-15, live screenshot: "e4, +0.6").
     counterRepertoireQuestion: isCounterRepertoireQuestion(a) && !isStructuralConceptTarget(a),
-    bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a) && !isCounterRepertoireQuestion(a),
-    whyBestMoveQuestion: isWhyBestMoveQuestion(a),
+    bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a) && !isCounterRepertoireQuestion(a) && !method && !retrospective,
+    whyBestMoveQuestion: isWhyBestMoveQuestion(a) && !retrospective,
     openingExistenceName: openingExistenceQuery(a) ?? undefined,
     tacticsQuestion: isTacticsQuestion(a),
     progressQuestion: isProgressQuestion(a),
@@ -2742,7 +2891,9 @@ export function buildQuestionGrounding(
     // A "why is that the BEST move" ask reads as move-rating too, but it wants
     // the engine-reasoning WALK, not a played-move grade — the why-form wins
     // (David 2026-07-10, live audit: move-rating was hijacking the why turn).
-    moveRatingQuestion: isMoveRatingQuestion(a) && !isWhyBestMoveQuestion(a) && !isCandidateMoveQuestion(a),
+    // A retrospective ask names WHICH move; the last-move rating lane must not
+    // grade whatever happened to be played last instead (the Ke2 → Nxe4 miss).
+    moveRatingQuestion: isMoveRatingQuestion(a) && !isWhyBestMoveQuestion(a) && !isCandidateMoveQuestion(a) && !retrospective,
     trainingRequestKind: trainingRequestKind(a) ?? undefined,
     puzzleStatsQuestion: isPuzzleStatsQuestion(a),
     transferGapQuestion: isTransferGapQuestion(a),
@@ -2752,7 +2903,9 @@ export function buildQuestionGrounding(
     playerGamesQuestion: isPlayerGamesQuestion(a),
     endgameQuestion: isEndgameQuestion(a),
     positionAssessmentQuestion: isPositionAssessmentQuestion(a),
-    teachingMethodQuestion: isTeachingMethodQuestion(a),
+    // "how do I approach this?" reads as a teaching-method ask too; the METHOD
+    // lane (how to think HERE, computed on this board) is the specific one.
+    teachingMethodQuestion: isTeachingMethodQuestion(a) && !method,
     settingsQuestion: isSettingsQuestion(a),
     appHelpQuestion: isAppHelpQuestion(a),
     timeTroubleQuestion: isTimeTroubleQuestion(a),
@@ -2773,7 +2926,7 @@ export function buildQuestionGrounding(
     // General strategy/how-to ("how do I play against an IQP") → corpus theory
     // search. Suppressed when the concept or fundamentals lanes already own it,
     // so it's the fallback theory net, not a competitor (P-II.1).
-    theoryQuestion: isTheoryQuestion(a) && !isConceptQuestion(a) && !isFundamentalsQuestion(a),
+    theoryQuestion: isTheoryQuestion(a) && !isConceptQuestion(a) && !isFundamentalsQuestion(a) && !method,
     // Weakness LIFECYCLE / BRIEFING (Part III) — the archive-timeline read.
     // Take precedence over the generic mistakes/misconceptions/strengths lanes
     // (handled by suppressing those below).

@@ -71,6 +71,19 @@ const ACCEPT = {
   // say something untrue about the position (2026-09-16).
   'endgame-tablebase': /endgame|tablebase|king|pawn|not (?:in )?an endgame|pieces are still on the board|too many pieces|balanced|draw|drawn|winning|losing|convert/i,
   'move-rating': /good|fine|solid|book|inaccuracy|mistake|blunder|best|reasonable|top move|gave up nothing|engine'?s (top|best)|no move|haven'?t (played|made)/i,
+  // PLAN §E (2026-09-22). The retrospective verdict names the MOVE and its PLY
+  // ("Your Nf3 on move 2 …") or, when the named move is not on the tape, names
+  // what IS ("I can't find … the last moves on the board were …"). Both are the
+  // lane; the stock line is not.
+  'retrospective-move': /on move \d+|engine'?s top move|engine preferred|my skill-level move|can'?t find .* in this game|no game on the board|don'?t have an engine read/i,
+  // The method answer is the ROUTINE — their idea, the forcing scan, candidates —
+  // and must never be a bare best move.
+  method: /routine for this position|first, their idea|forcing moves|candidates|checks and captures|their threat first|list the checks/i,
+  // The piece-scoped plan names THAT piece and its square.
+  'piece-plan': /your (pawn|knight|bishop|rook|queen) on [a-h][1-8]|don'?t have a (pawn|knight|bishop|rook|queen)/i,
+  // A hint names the piece and withholds the square, or gives the CONCRETE
+  // reason it cannot (never "I can't verify that precisely").
+  hint: /here'?s your hint|look at your|where does it want to go|no position on the board|engine read on this position/i,
   weakness: /weak|work on|struggl|mistake|haven'?t (played|analyzed) enough|play a few more|analyze a few/i,
   progress: /improv|pattern|haven'?t played enough|play a few more/i,
   trend: /trend|rating|improving|declining|steady|not enough|haven'?t played/i,

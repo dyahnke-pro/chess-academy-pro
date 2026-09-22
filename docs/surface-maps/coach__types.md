@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**897 lines · 30 exports · 892 importers · 188 tests · 39 audits**
+**911 lines · 30 exports · 908 importers · 195 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -643,6 +643,7 @@
 - `src/hooks/useSettings.ts`
 - `src/hooks/useSmartSearch.ts`
 - `src/hooks/useStruggleDetection.ts`
+- `src/hooks/useStudentNeed.ts`
 - `src/services/accuracyService.test.ts`
 - `src/services/accuracyService.ts`
 - `src/services/adaptivePuzzleService.test.ts`
@@ -658,6 +659,7 @@
 - `src/services/boardAnnotationService.ts`
 - `src/services/boardUtils.ts`
 - `src/services/bookDeparturePrecompute.ts`
+- `src/services/bookDepartureWeakness.ts`
 - `src/services/bucketPipelineAudit.test.ts`
 - `src/services/bucketPipelineAudit.ts`
 - `src/services/calculationSkillMatch.ts`
@@ -728,6 +730,7 @@
 - `src/services/explorerTeachLine.test.ts`
 - `src/services/explorerTeachLine.ts`
 - `src/services/findSquareService.ts`
+- `src/services/fixtureGames.test.tsx`
 - `src/services/flashcardService.ts`
 - `src/services/fromYourGamesService.test.ts`
 - `src/services/fromYourGamesService.ts`
@@ -753,12 +756,17 @@
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
 - `src/services/groundedAnswer.ts`
+- `src/services/homeOpening.test.ts`
+- `src/services/homeOpening.ts`
+- `src/services/homeOpeningService.test.ts`
+- `src/services/homeOpeningService.ts`
 - `src/services/journeyService.test.ts`
 - `src/services/journeyService.ts`
 - `src/services/kidPuzzleService.test.ts`
 - `src/services/kidPuzzleService.ts`
 - `src/services/kidRatingService.ts`
 - `src/services/laneReachability.test.ts`
+- `src/services/learnGameRecord.ts`
 - `src/services/lichessExplorerService.ts`
 - `src/services/lichessPuzzleService.test.ts`
 - `src/services/lichessPuzzleService.ts`
@@ -787,19 +795,27 @@
 - `src/services/mistakeNarration.test.ts`
 - `src/services/mistakeNarration.ts`
 - `src/services/mistakeNarrationVoice.ts`
+- `src/services/mistakeProvenance.test.ts`
 - `src/services/mistakePuzzleService.test.ts`
 - `src/services/mistakePuzzleService.ts`
 - `src/services/modelGameService.ts`
 - `src/services/moveRating.ts`
 - `src/services/narrationI18n.test.ts`
 - `src/services/narrationI18n.ts`
+- `src/services/needScore.ts`
+- `src/services/oneOpeningKey.test.ts`
 - `src/services/openingCourse.ts`
 - `src/services/openingDetectionService.ts`
+- `src/services/openingKey.ts`
+- `src/services/openingKeyBackfill.test.ts`
+- `src/services/openingKeyBackfill.ts`
 - `src/services/openingNarrationService.test.ts`
 - `src/services/openingNarrationService.ts`
 - `src/services/openingService.ts`
 - `src/services/openingTrapDetector.test.ts`
 - `src/services/openingTrapDetector.ts`
+- `src/services/openingVolumeFloor.test.ts`
+- `src/services/openingVolumeFloor.ts`
 - `src/services/opponentGap.ts`
 - `src/services/opponentIntent.ts`
 - `src/services/phaseScopedReview.test.ts`
@@ -1122,6 +1138,7 @@
 - `src/services/enginePlanContext.test.ts`
 - `src/services/engineReadNarration.test.ts`
 - `src/services/explorerTeachLine.test.ts`
+- `src/services/fixtureGames.test.tsx`
 - `src/services/fromYourGamesService.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
@@ -1134,6 +1151,8 @@
 - `src/services/groundedAnswer.engineReasoning.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
+- `src/services/homeOpening.test.ts`
+- `src/services/homeOpeningService.test.ts`
 - `src/services/journeyService.test.ts`
 - `src/services/kidPuzzleService.test.ts`
 - `src/services/laneReachability.test.ts`
@@ -1148,10 +1167,14 @@
 - `src/services/missedTacticService.test.ts`
 - `src/services/mistakeNarration.boardTruth.test.ts`
 - `src/services/mistakeNarration.test.ts`
+- `src/services/mistakeProvenance.test.ts`
 - `src/services/mistakePuzzleService.test.ts`
 - `src/services/narrationI18n.test.ts`
+- `src/services/oneOpeningKey.test.ts`
+- `src/services/openingKeyBackfill.test.ts`
 - `src/services/openingNarrationService.test.ts`
 - `src/services/openingTrapDetector.test.ts`
+- `src/services/openingVolumeFloor.test.ts`
 - `src/services/phaseScopedReview.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`

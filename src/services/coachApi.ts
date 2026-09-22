@@ -83,8 +83,10 @@ import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getLastGameErrors, getRecentGamesErrors, getPlayerStyleProfile } from './gameInsightsService';
 import { matchOpponentOpening } from './counterRepertoireService';
 import { getMisconceptionProfile } from './misconceptionService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
-import { computeLastMoveRating } from './moveRating';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer, assembleRetrospectiveAnswer, assembleMethodAnswer, assembleHintAnswer, hintUnavailableReason, assemblePiecePlanAnswer } from './groundedAnswer';
+import { computeLastMoveRating, computeMoveRatingAt } from './moveRating';
+import { homeOpeningRow, rankOpeningsByVolume } from './openingVolumeFloor';
+import { getHomeOpenings } from './homeOpeningService';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime, activityHeatmap, tacticTypeBreadth, brilliantConcentration } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
@@ -103,7 +105,8 @@ import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punis
 import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion } from '../coach/questionIntents';
+import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion, type RetrospectiveMoveRef } from '../coach/questionIntents';
+import { pureBoardAspect } from './boardQuestionRouter';
 import { resolveTaughtFundamental } from '../data/fundamentalLessons';
 import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions';
 import { keySquareHighlightMarker } from './arrowEngine';
@@ -1315,6 +1318,23 @@ export interface MasterGroundingOptions {
    *  position (moveRating.computeLastMoveRating → assembleMoveRatingAnswer).
    *  Needs `moveHistory`; falls through when absent. */
   moveRatingQuestion?: boolean;
+  /** RETROSPECTIVE MOVE (PLAN §E1, 2026-09-22) — "why was Ke2 bad?", "what did
+   *  you have in mind with Bc5?", "why was taking on e5 good?". The lane
+   *  resolves `retrospectiveMoveRef` to a PLY of `moveHistory` by coordinates,
+   *  rates THAT ply (stored `moveAnnotations` first, else `computeMoveRatingAt`)
+   *  and says whose move it was. Dispatched BEFORE the last-move rating lane,
+   *  which used to grade the opponent's reply instead. */
+  retrospectiveMoveQuestion?: boolean;
+  retrospectiveMoveRef?: RetrospectiveMoveRef;
+  /** The game's stored per-ply engine read, parallel to `moveHistory` (review
+   *  threads it). See `LiveState.moveAnnotations`. */
+  moveAnnotations?: ReadonlyArray<{ san: string; fenBefore: string; bestMoveUci: string | null; classification: string | null; isCoachMove: boolean }>;
+  /** METHOD (PLAN §E1b) — "what should I be thinking about?", "how do I
+   *  approach this?", "what's the process here?". Answered by
+   *  `assembleMethodAnswer`: the routine run on THIS board (their idea, the
+   *  forcing scan, the candidates, the habit) — never the best move. Suppresses
+   *  plan / best-move / teaching-method / theory upstream. */
+  methodQuestion?: boolean;
   /** A DIRECT request to start a training mode ("set up calculation training").
    *  The interception voices a short confirm + offers the matching game-sourced
    *  action chip (calc/tactics/endgame/mistakes/weakness/opening/review). */
@@ -3583,6 +3603,8 @@ export async function getCoachChatResponse(
       grounding.recordsQuestion === true ||
       (grounding.recordVsTarget !== undefined && grounding.recordVsTarget.length > 0) ||
       grounding.moveRatingQuestion === true ||
+      grounding.retrospectiveMoveQuestion === true ||
+      grounding.methodQuestion === true ||
       grounding.trainingRequestKind !== undefined ||
       grounding.puzzleStatsQuestion === true ||
       grounding.transferGapQuestion === true ||
@@ -3758,6 +3780,142 @@ export async function getCoachChatResponse(
             if (voiced) {
               if (offer) lastCoachActionOffer = [offer];
               return voiced;
+            }
+          } catch { /* fall through */ }
+        }
+
+        // ── RETROSPECTIVE MOVE (PLAN §E1, 2026-09-22) — "why was Ke2 bad?",
+        // "what did you have in mind with Bc5?", "why was taking on e5 good?".
+        // Resolve the referenced move to a PLY of the history BY COORDINATES
+        // (parse the named SAN at each ply and compare from/to — never a string
+        // compare, Nxd4 vs Nexd4), read the engine's verdict on THAT ply (the
+        // stored annotation when review threaded it, else a fresh search), and
+        // say whose move it was. Runs BEFORE the last-move rating lane, which
+        // used to grade the opponent's reply instead. Never the stock line:
+        // a move not on the tape is answered by naming what IS on the tape.
+        if (grounding.retrospectiveMoveQuestion && grounding.retrospectiveMoveRef) {
+          try {
+            const history = grounding.moveHistory ?? [];
+            const ref = grounding.retrospectiveMoveRef;
+            const seat: 'white' | 'black' | null = grounding.studentColor ?? null;
+            if (history.length === 0) {
+              const msg = "There's no game on the board yet to look back on — play or load one and ask me about a move in it.";
+              const voicedNoGame = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true });
+              return voicedNoGame ?? msg;
+            }
+            // Replay once; keep each ply's pre-FEN + coordinates.
+            const plies: Array<{ san: string; fenBefore: string; from: string; to: string; promotion: string; captured: boolean; color: 'white' | 'black' }> = [];
+            {
+              const c = new Chess();
+              for (const san of history) {
+                const fenBefore = c.fen();
+                const mv = c.move(san);
+                if (!mv) break;
+                plies.push({ san: mv.san, fenBefore, from: mv.from, to: mv.to, promotion: mv.promotion ?? '', captured: !!mv.captured, color: mv.color === 'w' ? 'white' : 'black' });
+              }
+            }
+            const lastIdxOf = (pred: (p: typeof plies[number]) => boolean): number => {
+              for (let i = plies.length - 1; i >= 0; i -= 1) if (pred(plies[i])) return i;
+              return -1;
+            };
+            let idx = -1;
+            if (ref.kind === 'san') {
+              idx = lastIdxOf((p) => {
+                try {
+                  const c = new Chess(p.fenBefore);
+                  const named = c.move(ref.san);
+                  return !!named && named.from === p.from && named.to === p.to && (named.promotion ?? '') === p.promotion;
+                } catch { return false; }
+              });
+            } else if (ref.kind === 'capture-on') {
+              idx = lastIdxOf((p) => p.captured && p.to === ref.square);
+            } else if (ref.kind === 'my-last') {
+              idx = seat ? lastIdxOf((p) => p.color === seat) : plies.length - 1;
+            } else {
+              idx = seat ? lastIdxOf((p) => p.color !== seat) : plies.length - 1;
+            }
+            if (idx < 0) {
+              const named = ref.kind === 'san' ? ref.san : ref.kind === 'capture-on' ? `a capture on ${ref.square}` : 'that move';
+              const tail = plies.slice(-6).map((p) => p.san);
+              const msg = `I can't find ${named} in this game — the last moves on the board were ${tail.join(', ')}. Name one of those and I'll grade it.`;
+              const voicedMiss = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true });
+              return voicedMiss ?? msg;
+            }
+            const ply = plies[idx];
+            // THE SEAT. A live board (Learn/Play) has no stored annotations and
+            // the other side IS the coach; review threads annotations whose
+            // `isCoachMove` says whether the other side was the coach or a human
+            // opponent. "My skill-level move" is said only about the coach's own.
+            const stored = grounding.moveAnnotations?.[idx];
+            const mover: 'student' | 'coach' | 'opponent' = !seat || ply.color === seat
+              ? 'student'
+              : (grounding.moveAnnotations ? (stored?.isCoachMove ? 'coach' : 'opponent') : 'coach');
+            // The engine's read of THAT ply: stored annotation first (review),
+            // else a fresh two-position search (the same cost as the rating lane).
+            let bestMoveUci: string | null = stored?.bestMoveUci ?? null;
+            let cpLoss: number | null = null;
+            let quality: 'best' | 'excellent' | 'good' | 'inaccuracy' | 'mistake' | 'blunder' | null = null;
+            let missedMate: number | null = null;
+            let allowedMate: number | null = null;
+            if (stored && stored.classification) {
+              // The stored read carries the CLASS, not the centipawns — the
+              // verdict speaks the class and no figure (G0: never a number
+              // nobody computed).
+              const cls = stored.classification;
+              quality = cls === 'blunder' ? 'blunder' : cls === 'mistake' ? 'mistake' : cls === 'inaccuracy' ? 'inaccuracy'
+                : cls === 'good' || cls === 'book' ? 'good' : 'best';
+              cpLoss = null;
+            } else {
+              const rating = await computeMoveRatingAt(history, idx);
+              if (rating) {
+                bestMoveUci = rating.betterFromTo ? `${rating.betterFromTo.from}${rating.betterFromTo.to}` : (rating.wasBest ? `${ply.from}${ply.to}${ply.promotion}` : bestMoveUci);
+                cpLoss = rating.cpLoss;
+                quality = rating.quality;
+                missedMate = rating.missedMate;
+                allowedMate = rating.allowedMate;
+              }
+            }
+            const answer = assembleRetrospectiveAnswer({
+              playedSan: ply.san,
+              fenBefore: ply.fenBefore,
+              moveNumber: Math.floor(idx / 2) + 1,
+              moverColor: ply.color,
+              mover,
+              bestMoveUci,
+              cpLoss,
+              quality,
+              missedMate,
+              allowedMate,
+            });
+            const mustPreserve = [ply.san, answer.bestMoveSan].filter((s): s is string => !!s);
+            const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true, mustPreserve });
+            if (voiced) return voiced;
+            return answer.facts;
+          } catch { /* fall through */ }
+        }
+
+        // ── METHOD (PLAN §E1b) — "what should I be thinking about?", "how do I
+        // approach this?", "what's the process here?". The routine run on THIS
+        // board, computed; never the best move (the student asked how to find
+        // it). Runs before plan / best-move / teaching-method, which each used
+        // to answer a question about HOW with a WHAT.
+        if (grounding.methodQuestion && grounding.currentFen) {
+          try {
+            const sc: 'white' | 'black' = grounding.studentColor
+              ?? ((grounding.currentFen.split(' ')[1] === 'b') ? 'black' : 'white');
+            let bestSan: string | null = null;
+            if (grounding.engineBestMoveUci && grounding.engineBestMoveUci.length >= 4) {
+              try {
+                const c = new Chess(grounding.currentFen);
+                const u = grounding.engineBestMoveUci;
+                bestSan = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined })?.san ?? null;
+              } catch { bestSan = null; }
+            }
+            const answer = assembleMethodAnswer({ fen: grounding.currentFen, studentColor: sc, engineBestSan: bestSan });
+            if (answer) {
+              const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'method', preferRaw: true });
+              if (voiced) return voiced;
+              return answer.facts;
             }
           } catch { /* fall through */ }
         }
@@ -4394,12 +4552,33 @@ export async function getCoachChatResponse(
             const bestAgainst = oi.bestResults
               .filter((o) => o.name && o.games > 0)
               .map((o) => ({ name: o.name, winRate: o.winRate, games: o.games }));
+            // 'learn-next' answers from the HOME opening (PLAN §E3): the
+            // student's own openings per colour through the volume floor,
+            // weakest-inside-most-played first. `worstAgainst` stays the
+            // matchup read, now floor-checked by the assembler.
+            // THE HOME OPENING READS FIRST (A3, 2026-09-22): "what should I
+            // learn next" is answered from inside the persisted home opening per
+            // colour; the volume ranking is the fallback for a colour with no
+            // home yet.
+            const homeChoices = await getHomeOpenings().catch(() => ({ white: null, black: null }));
+            const homeCandidates = (['white', 'black'] as const).flatMap((color) => {
+              const homeRow = homeOpeningRow(color, homeChoices[color]);
+              if (homeRow) return [{ name: homeRow.name, color, games: homeRow.games, winRate: homeRow.winRate, thin: false }];
+              const seen = new Set<string>();
+              const src = [...(color === 'white' ? oi.mostPlayedWhite : oi.mostPlayedBlack), ...oi.winRateByOpening.filter((o) => o.color === color)];
+              const rows = src.filter((o) => o.name && o.games > 0 && !seen.has(o.name) && seen.add(o.name))
+                .map((o) => ({ name: o.name, color, games: o.games, winRate: o.winRate, openingId: o.openingId }));
+              const top = rankOpeningsByVolume(rows, 'weakest', oi.gamesByColor[color])[0];
+              return top ? [{ name: top.name, color, games: top.games, winRate: top.winRate, thin: top.thin }] : [];
+            }).sort((a, z) => (z.games * (50 - z.winRate)) - (a.games * (50 - a.winRate)));
             const answer = assembleRepertoireGapAnswer({
               kind: grounding.repertoireGapKind ?? 'hole',
               offBookPct,
               totalGames: totalBook,
               worstAgainst,
               bestAgainst,
+              homeCandidates,
+              gamesByColor: oi.gamesByColor,
             });
             if (answer) {
               const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
@@ -4787,29 +4966,37 @@ export async function getCoachChatResponse(
             // strongest/weakest by real win rate + favorite by real game count,
             // with canonical names from getOpeningInsights. Fall back to drill
             // data only when no line has enough games.
-            type GS = { name: string; games: number; winRate: number; openingId: string | null };
-            const gStat = (o: GS, color: 'white' | 'black'): OpeningStat =>
-              ({ name: o.name, color, games: o.games, winRate: o.winRate });
             try {
               const oi = await getOpeningInsights();
-              if (kind === 'favorite') {
-                const w = oi.mostPlayedWhite[0] as GS | undefined;
-                const b = oi.mostPlayedBlack[0] as GS | undefined;
-                if (w) openings.push(gStat(w, 'white'));
-                if (b) openings.push(gStat(b, 'black'));
-                primaryOpeningId = w?.openingId ?? b?.openingId ?? null;
-              } else {
-                const pick = (list: GS[]): GS | undefined =>
-                  list.filter((o) => o.games >= 3)
-                    .sort((a, z) => (kind === 'weakest' ? a.winRate - z.winRate : z.winRate - a.winRate))[0];
-                const w = pick(oi.mostPlayedWhite as GS[]);
-                const b = pick(oi.mostPlayedBlack as GS[]);
-                if (w) openings.push(gStat(w, 'white'));
-                if (b) openings.push(gStat(b, 'black'));
-                const both = [w, b].filter((x): x is GS => !!x)
-                  .sort((a, z) => (kind === 'weakest' ? a.winRate - z.winRate : z.winRate - a.winRate));
-                primaryOpeningId = both[0]?.openingId ?? null;
+              // THE VOLUME FLOOR (PLAN §E2, 2026-09-22): the verdict ranks the
+              // student's own openings per colour by volume × score deficit
+              // through `rankOpeningsByVolume` — a line leads only at ≥10 games
+              // or ≥5% of that colour's games. Below the floor the row is
+              // `thin` and the assembler MUST say "only N games". This is what
+              // stops a 3-game 0% Elephant Gambit being called the weakest
+              // opening over a 63-game 49% Pirc. The HOME opening (A3) reads
+              // FIRST for "weakest" and "favorite": the home is by definition
+              // what they play most, and "weakest" means the hole INSIDE it
+              // (David: "improve the weaknesses within that"). "Strongest"
+              // stays a ranking — the home is not necessarily their best.
+              const homeChoices = kind === 'strongest' ? { white: null, black: null } : await getHomeOpenings().catch(() => ({ white: null, black: null }));
+              const rowsFor = (color: 'white' | 'black') => {
+                const seen = new Set<string>();
+                const src = [...(color === 'white' ? oi.mostPlayedWhite : oi.mostPlayedBlack), ...oi.winRateByOpening.filter((o) => o.color === color)];
+                return src.filter((o) => o.name && o.games > 0 && !seen.has(o.name) && seen.add(o.name))
+                  .map((o) => ({ name: o.name, color, games: o.games, winRate: o.winRate, openingId: o.openingId }));
+              };
+              const ranked = (['white', 'black'] as const).map((color) => ({
+                color,
+                top: homeOpeningRow(color, homeChoices[color]) ?? rankOpeningsByVolume(rowsFor(color), kind, oi.gamesByColor[color])[0] ?? null,
+              }));
+              for (const r of ranked) {
+                if (r.top) openings.push({ name: r.top.name, color: r.color, games: r.top.games, winRate: r.top.winRate, thin: r.top.thin });
               }
+              const solid = ranked.map((r) => r.top).filter((t): t is NonNullable<typeof t> => !!t && !t.thin);
+              const lead = (solid.length > 0 ? solid : ranked.map((r) => r.top).filter((t): t is NonNullable<typeof t> => !!t))
+                .sort((a, z) => (kind === 'weakest' ? z.deficit - a.deficit : kind === 'strongest' ? a.deficit - z.deficit : z.games - a.games))[0];
+              primaryOpeningId = lead?.openingId ?? null;
             } catch { openings = []; }
             // DRILL fallback — fresh account, or no line with ≥3 games.
             if (openings.length === 0) {
@@ -5309,30 +5496,25 @@ export async function getCoachChatResponse(
         // it is a computed board fact; the destination stays the student's to
         // find. Falls through when no engine/master move is in hand.
         if (grounding.hintQuestion) {
+          // THE MOVE THE HINT IS ABOUT, in order of trust: the live engine read,
+          // the review's stored read for this ply, the master-play top move.
+          // A hint must resolve to a COMPUTED line or say the concrete reason
+          // it cannot — never fall through to the stock refusal (PostHog 30d:
+          // 47% of hint asks were "I can't verify that precisely"; PLAN §E4).
           const hintUci = grounding.engineBestMoveUci
+            ?? grounding.reviewFlaggedMove?.bestMoveUci
             ?? (masterPlayContext && masterPlayContext.current.moves.length > 0
               ? masterPlayContext.current.moves[0].uci ?? null
               : null);
-          const hintFen = grounding.currentFen ?? masterPlayContext?.current.fen ?? null;
+          const hintFen = grounding.currentFen ?? grounding.reviewFlaggedMove?.fenBefore ?? masterPlayContext?.current.fen ?? null;
           if (hintUci && hintUci.length >= 4 && hintFen) {
-            try {
-              const { Chess } = await import('chess.js');
-              const hintBoard = new Chess(hintFen);
-              const from = hintUci.slice(0, 2);
-              const piece = hintBoard.get(from as Parameters<Chess['get']>[0]);
-              const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-              if (piece) {
-                const mv = hintBoard.move({ from, to: hintUci.slice(2, 4), promotion: 'q' });
-                const flavor = mv?.captured
-                  ? 'there is something it can win'
-                  : mv?.san === 'O-O' || mv?.san === 'O-O-O'
-                    ? 'think about king safety'
-                    : 'it has a better square waiting';
-                const hint = `Here's your hint: look at your ${PIECE_NAME[piece.type] ?? 'piece'}${mv?.san?.startsWith('O-O') ? '' : ` on ${from}`} — ${flavor}. Where does it want to go?`;
-                return hint;
-              }
-            } catch { /* malformed uci/fen — fall through to the normal lanes */ }
+            const moverColor: 'white' | 'black' = hintFen.split(' ')[1] === 'b' ? 'black' : 'white';
+            const answer = assembleHintAnswer({ fen: hintFen, bestMoveUci: hintUci, moverColor });
+            if (answer) return answer.facts;
           }
+          const reason = hintUnavailableReason({ hasFen: !!hintFen, hasEngineMove: !!(hintUci && hintUci.length >= 4) });
+          const voicedReason = await voice(reason, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'hint', preferRaw: true });
+          return voicedReason ?? reason;
         }
 
         // ── GROUNDED BOARD QUESTION — sorted by what it POINTS AT, answered from
@@ -5344,7 +5526,16 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const board = answerBoardQuestion(grounding.currentFen, grounding.cleanAsk ?? lastUserMessage(), sc);
+          // A PIECE-SCOPED plan (PLAN §E5) gets the engine's move when the
+          // surface threaded one, so "the square the engine puts it on" is the
+          // engine's, not the board heuristic's — the generic dispatcher has no
+          // engine, so the hand-off lives here.
+          const pieceScoped = grounding.engineBestMoveUci
+            ? assemblePiecePlanAnswer(grounding.currentFen, grounding.cleanAsk ?? lastUserMessage(), sc, grounding.engineBestMoveUci)
+            : null;
+          const board = pieceScoped && pureBoardAspect(grounding.cleanAsk ?? lastUserMessage()) === 'piece-plan'
+            ? { answer: pieceScoped, aspect: 'piece-plan' as const }
+            : answerBoardQuestion(grounding.currentFen, grounding.cleanAsk ?? lastUserMessage(), sc);
           if (board) {
             void logAppAudit({
               kind: 'coach-grounded-answer',

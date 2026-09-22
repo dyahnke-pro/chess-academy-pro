@@ -72,7 +72,7 @@
 - `src/services/masterclassRedirect.ts:106`
 
 ### `detectOpening` (function) — 29 call sites
-- `src/coach/coachService.ts:897`
+- `src/coach/coachService.ts:898`
 - `src/coach/sources/annotationContext.ts:79`
 - `src/coach/sources/middlegamePlan.ts:51`
 - `src/coach/sources/modelGames.ts:57`
@@ -80,9 +80,9 @@
 - `src/components/Coach/CoachGamePage.tsx:1771`
 - `src/components/Coach/CoachGamePage.tsx:3257`
 - `src/components/Coach/CoachGamePage.tsx:3345`
-- `src/components/Coach/CoachTeachPage.tsx:7576`
-- `src/components/Coach/CoachTeachPage.tsx:8370`
-- `src/components/Coach/CoachTeachPage.tsx:9477`
+- `src/components/Coach/CoachTeachPage.tsx:7582`
+- `src/components/Coach/CoachTeachPage.tsx:8376`
+- `src/components/Coach/CoachTeachPage.tsx:9483`
 - `src/hooks/usePhaseNarration.ts:428`
 - `src/services/coachFeatureService.ts:2172`
 - `src/services/coachFeatureService.ts:2583`
@@ -104,7 +104,7 @@
 
 ### `detectOpeningTranspositional` (function) — 4 call sites
 - `src/components/Coach/CoachReviewSessionPage.tsx:154`
-- `src/services/coachApi.ts:5071`
+- `src/services/coachApi.ts:5258`
 - `src/services/reviewOpeningTheory.ts:270`
 - `src/services/reviewOpeningTheory.ts:271`
 
@@ -222,7 +222,7 @@
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:37`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:43`
 - `src/components/Coach/CoachTeachPage.tsx:5509`
-- `src/components/Coach/CoachTeachPage.tsx:7096`
+- `src/components/Coach/CoachTeachPage.tsx:7102`
 - `src/services/coachLaneWiring.test.ts:366`
 - `src/services/inGameChatIntent.ts:163`
 - `src/services/inGameChatIntent.ts:174`
@@ -244,10 +244,10 @@
 - `src/services/analyticsService.ts:1523`
 - `src/services/gameInsightsService.ts:430`
 - `src/services/gameInsightsService.ts:476`
-- `src/services/gameInsightsService.ts:757`
-- `src/services/gameInsightsService.ts:908`
-- `src/services/gameInsightsService.ts:945`
-- `src/services/gameInsightsService.ts:994`
+- `src/services/gameInsightsService.ts:761`
+- `src/services/gameInsightsService.ts:912`
+- `src/services/gameInsightsService.ts:949`
+- `src/services/gameInsightsService.ts:998`
 - `src/services/mistakePuzzleService.ts:62`
 
 ### `findContinuationsAtPly` (function) — 8 call sites
@@ -359,8 +359,8 @@
 
 ### `studentSideForPlay` (function) — 13 call sites
 - `src/components/Coach/CoachTeachPage.tsx:5106`
-- `src/components/Coach/CoachTeachPage.tsx:12205`
-- `src/components/Coach/CoachTeachPage.tsx:12255`
+- `src/components/Coach/CoachTeachPage.tsx:12211`
+- `src/components/Coach/CoachTeachPage.tsx:12261`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:59`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:60`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:64`

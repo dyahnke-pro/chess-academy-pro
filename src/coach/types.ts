@@ -152,6 +152,20 @@ export interface LiveState {
     }[];
   };
   moveHistory?: string[];
+  /** THE GAME'S STORED PER-PLY ANALYSIS, parallel to `moveHistory` (review
+   *  threads it; a live board has none). The RETROSPECTIVE lane ("why was Ke2
+   *  bad?", PLAN §E1) reads the referenced ply's stored engine read from here
+   *  first and only searches on-device when it is absent — the same reason
+   *  `reviewFlaggedMove` exists (David 2026-07-21: the on-device engine stalled
+   *  12s+ on iOS and left the Ask silent). `isCoachMove` is the seat: a move by
+   *  the coach is answered honestly as the coach's own skill-level move. */
+  moveAnnotations?: ReadonlyArray<{
+    san: string;
+    fenBefore: string;
+    bestMoveUci: string | null;
+    classification: string | null;
+    isCoachMove: boolean;
+  }>;
   /** Free text describing what triggered this call. */
   userJustDid?: string;
   currentRoute?: string;

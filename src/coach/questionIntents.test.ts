@@ -166,10 +166,17 @@ describe('isProgressQuestion (weakness / improvement — the thesaurus bug)', ()
     "I'm terrible at endgames",
     "i'm no good at calculation",
     'i stink at the endgame',
+  ])('matches (theorist surface): %s', (q) => expect(isProgressQuestion(q)).toBe(true));
+
+  // WHICH-OPENING asks DEFER to the opening-profile lane (PLAN §E2, 2026-09-22).
+  // They used to fire here too, and the progress lane dispatches first — where
+  // `trainingAreaFromText` read "opening" and served the play-a-focused-game
+  // pitch instead of the Openings-tab data. The specific lane wins.
+  it.each([
     "what's my worst opening",
     'what is my weakest opening',
     'whats my worst defense',
-  ])('matches (theorist surface): %s', (q) => expect(isProgressQuestion(q)).toBe(true));
+  ])('defers to opening-profile (E2): %s', (q) => expect(isProgressQuestion(q)).toBe(false));
 
   // NEGATIVES — near-misses that must NOT fire the weakness recommendation.
   // (opening-profile has its own describe block below.)

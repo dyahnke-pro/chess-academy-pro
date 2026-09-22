@@ -94,8 +94,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7139`
 - `src/components/Coach/CoachTeachPage.tsx:7145`
+- `src/components/Coach/CoachTeachPage.tsx:7151`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -254,7 +254,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `getMistakePuzzleStats` (function) — 4 call sites
 - `src/components/Puzzles/MyMistakesPage.tsx:139`
-- `src/services/gameInsightsService.ts:680`
+- `src/services/gameInsightsService.ts:684`
 - `src/services/mistakePuzzleService.test.ts:571`
 - `src/services/mistakePuzzleService.test.ts:584`
 

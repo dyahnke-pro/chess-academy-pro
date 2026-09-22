@@ -3280,6 +3280,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       surface: 'review',
       fen: fenForQ,
       moveHistory: moves.slice(0, Math.max(0, moveIdx + 1)).map((m) => m.san),
+      // THE SEAT — the review always knew the student's colour and never told
+      // the chat layer, so a retrospective ask ("why was Ke2 bad?", PLAN §E1)
+      // could not say whose move a ply was. `reviewStudentColor` below is the
+      // side to move at the asked ply, which is a different fact.
+      studentColor: playerColor,
       // Full game move list — ground truth for the master-play claim
       // validator so the coach can discuss the student's OWN game
       // (including moves past the current review ply, and after the game
@@ -3305,6 +3310,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       currentRoute: '/coach/play',
       tactics: reviewTactics,
       reviewFlaggedMove,
+      // The whole game's stored per-ply engine read, so "why was Ke2 bad?"
+      // (the RETROSPECTIVE lane, PLAN §E1) answers the NAMED ply from the
+      // analysis already on file — no fresh on-device search, the same
+      // reason `reviewFlaggedMove` is threaded for the current ply.
+      moveAnnotations: moves.map((m, i) => ({
+        san: m.san,
+        fenBefore: i > 0 ? moves[i - 1].fen : STARTING_FEN,
+        bestMoveUci: m.bestMove && m.bestMove.length >= 4 ? m.bestMove : null,
+        classification: m.classification ?? null,
+        isCoachMove: m.isCoachMove,
+      })),
       reviewNarrationContext,
       reviewWorstMoment,
     };

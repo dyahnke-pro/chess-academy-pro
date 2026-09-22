@@ -127,7 +127,7 @@
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:157`
-- `src/services/coachApi.ts:4232`
+- `src/services/coachApi.ts:4390`
 - `src/services/fixtureGames.test.tsx:113`
 - `src/services/fixtureGames.test.tsx:122`
 - `src/services/fundamentalsPipeline.realGame.test.ts:226`
