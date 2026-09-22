@@ -13,6 +13,158 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🎯 WO-HOME-OPENING-01 — a personal coach: one home opening per colour, everything reads it (David 2026-09-22)
+
+**Where this came from.** A full hand-driven evaluation on prod with David's own
+932 chess.com games (`knight_mare_01`) imported through the app's Import page.
+The memory is real and right: Weaknesses reads him cold (Vienna 46 games at
+70%, Pirc 63 at 49%, repertoire coverage 51%), the Learn greeting names the
+pattern costing him most, "how are my tactics?" answers with his own numbers.
+The memory reaches almost nothing that teaches:
+
+- The Training Plan was EMPTY with 932 games in ("Favorite an opening to
+  begin") — it is favourites-driven, not weakness-driven.
+- "What is my weakest opening?" answered "play a game against me" while the
+  answer sat one tab away; "what should I learn next?" recommended the Elephant
+  Gambit — 0% over THREE games — an opening he will never play. David: "it
+  should take what I play the most and improve the weaknesses within that …
+  some of the best players started with one opening for each color and learned
+  everything they could about it and their knowledge branched from there."
+- Only 6 of 932 games are analysed (the ones chess.com shipped with `%eval`).
+  Every weakness, every drill and the "10 games running" claim come from those
+  six, under a header that says "932 games analysed".
+- The custom lesson serves his real positions (right shape) but a wrong answer
+  gets "not the strongest, try again" with no reason, Hint draws a silent
+  arrow, the right answer gets "Good." and the next position — a drill called
+  "missed tactical sequences" never shows the sequence. "Build my full lesson"
+  taught the idea as one fragment and re-served the position just solved.
+- Review of his real Scandinavian loss never used his record in it (40 games,
+  73%) and said "knight takes d5 wins their queen — 1 attacker to 0 defenders,
+  so it falls" about a queen that steps away.
+- My Mistakes labels his chess.com slips source "Coach", opponent "Unknown",
+  date = import date: the provenance the spine was built to carry is dropped at
+  the import boundary.
+- The question router sends "why was X bad", "what should I think about here"
+  and "weakest opening" to best-move-now (3 of 3, same on the previous OTA
+  bundle). David: "and the question router. awful."
+- Play never picks what to play against him from his record; the bot opened
+  1.e4 c5 into a Bowdler both times while his Pirc sat at 49% over 63 games.
+
+**The principle (David).** One HOME OPENING per colour, chosen from what he
+plays most, and the coach improves the weaknesses INSIDE it before branching.
+Not a random thin-sample opening.
+
+**Stress-tested before building — where the naive version breaks:**
+1. "Most played" is not one thing. His Vienna is 46 games at 70% in C28 and 42
+   at 43% in C25. The unit is the VARIATION / the departure position, not the
+   name — `theoryDeparture` already computes that per game. Same computer.
+2. "Weakest" needs a floor or the Elephant Gambit wins again: candidates come
+   only from the top openings by volume per colour; inside that set rank by
+   games × score deficit; under ~10 games or ~5% of games never leads.
+3. "Weaknesses within it" is EMPTY until the games in it are analysed. Batch
+   analysis picks "50 most recent"; it must pick the home openings' games
+   first — all 63 Pirc games before anything else — or the coach recommends
+   the Pirc and has nothing to say about it. (David: "beautiful idea".)
+4. THE JOIN IS BROKEN. Imports store the DB opening id, Play stores the name,
+   Learn stores the tree name, review resolves a book-corpus id
+   (`gameImportUtils.ts:13`, `CoachGamePage.tsx:2020`, `CoachTeachPage.tsx:10837`,
+   `CoachGameReview.tsx:2339`). Until that is ONE key, "your mistakes in the
+   Pirc" cannot be computed even after the games are analysed. This comes
+   first or everything below is decoration.
+
+**Decisions — filled with recommendations, David may flip any (2026-09-22):**
+- Home opening is a LOCK with a one-tap "change my home opening", not a
+  weighted focus. The coach spends no lesson outside it until told.
+- Play STEERS into it: with the student as Black and the Pirc as home, the bot
+  opens 1.e4 and follows the lines the student actually faces (from his own
+  games' most-faced continuations), at his strength.
+- Home-opening games ANALYSE AUTOMATICALLY on import, on device, ordered by
+  home opening first; the rest wait for a tap.
+
+**The build, in order (each item ships with its gate; nothing is "wired" until
+a sentence or a row comes OUT of the surface on prod — "a wire that does not
+fire is not a wire"):**
+
+1. **ONE OPENING KEY.** A single `openingKey` normaliser used by import, Play,
+   Learn, review, the departure precompute and `studentNeedLoader`; a
+   `Record`/required-parameter shape so a new writer fails to compile until it
+   answers. Gate: a test that writes one game through each of the four paths
+   and reads it back through `loadStudentNeedContext` with the departure and
+   result terms non-zero.
+2. **ANALYSIS PRIORITY + HONEST HEADER.** `gameAnalysisService` batch order =
+   home openings' games first (both colours), then recency; auto-run for the
+   home openings on import. The Weaknesses header stops saying "932 analysed"
+   over "926 not analysed". Gate: order test + the header derives from ONE
+   count.
+3. **THE HOME-OPENING COMPUTER.** `homeOpening(colour)` from volume with the
+   floor above, at variation/departure-position granularity, persisted on the
+   profile, confirmed by the student, one-tap change. Emits
+   `home-opening-chosen` (inputs: candidates, games, scores, floor). Gate:
+   Elephant-Gambit-at-3-games can never be chosen; a negative control plants a
+   3-game 0% line and asserts it loses to a 40-game 73% line.
+4. **THE TRAINING PLAN READS IT.** `/coach/plan` is built from the home
+   openings and the recorded weaknesses inside them (departure ply, recurring
+   fundamentals, worst variation, the middlegame plan for its structure), not
+   from favourites. Empty only when there are genuinely no games. Gate: with
+   the knight_mare_01 fixture the plan is non-empty and names the Pirc.
+5. **DRILLS THAT TEACH.** Custom lesson + My Mistakes draw from slips in the
+   home opening first; every reveal names the IDEA and plays the SEQUENCE
+   (wrong answer: the reason it fails; right answer: the line, not "Good.");
+   never re-serve a position just solved; "Part 1 of 3" teaches the concept
+   (the concept engine's invariant), not one fragment. Provenance flows through
+   (source = chess.com, opponent, date — fix the "Coach / Unknown / today"
+   labels). Gate: `commonMistakeNarration`-style two-register check on every
+   drill reveal; provenance round-trip test from import to My Mistakes.
+6. **THE ROUTER.** Retrospective ("why was X bad", "what did you mean by"),
+   method ("what should I be thinking about", "how do I approach this") and
+   profile ("weakest opening", "what should I learn") lanes computed and never
+   falling into best-move-now; "what should I learn" answers from the home
+   opening. Every phrasing added to the ONE English matrix and run through
+   `audit-coach-all-questions-prod.mjs` exhaustively.
+7. **PLAY STEERS.** The opponent's opening moves come from the home
+   repertoire's most-faced continuations while in book, Stockfish after.
+   Gate: with the Pirc as home and the student Black, the bot's first move is
+   e4 on 10 of 10 games; a control with no home opening keeps today's
+   behaviour.
+8. **REVIEW OPENS WITH THE RECORD.** A game in the home opening opens with the
+   student's own numbers in it and the departure ply ("your 63rd Pirc, 49%,
+   you left book at move 7 again") — the recurrence sentence already exists
+   for fundamentals; extend it to the opening record via the ONE key.
+9. **EVERY COMPONENT WIRED, BOTH WAYS (David 2026-09-22: "make sure that each
+   component of the coach is wired and working").** The sweep the evaluation
+   found: `positionFacts` pre-gate (:480) gets `standingChance` and `decide()`
+   (:651) does not; the student boost adds only when rank > 0 so it can never
+   flip a verdict; Play / phase / read-position / whyBestMove pass neither
+   `lastMove` nor `studentNeedContext` to the door; review's say-once ledgers
+   burn BEFORE `decide()`; review's `learned:true` capture is dead behind the
+   auto-sweep; Learn passes `fundamentalId: null`; `quietBy` labels importance
+   and need closes both `below-bar`. Each gets a gate whose proof is OUTPUT
+   (a row, a sentence), never an import.
+10. **THE WRONG COMPUTERS.** `positionReadingService` bad-bishop on mobility ≤3
+    with an invented reason; a bishop "pinning a pawn to a knight" (value check
+    on the back piece); "1 attacker to 0 defenders, so it falls" on a piece
+    that can move away; "compensation holds up" on a losing sacrifice; the
+    pawn-move method beat on a king move; the mate score rendered as "-300.0";
+    the raw third-person recap card; "10 games running" counting occurrences
+    as games; standing refrains repeated at one ply. Each fixed at the computer
+    with a board-truth test, then swept for siblings.
+11. **THE AUDIT.** `audit-home-opening-prod.mjs`, hand-driven, 3-instrument,
+    muted: import `knight_mare_01` through the real Import page → home opening
+    chosen and named → plan non-empty → a drill from the home opening with the
+    idea spoken on the reveal → a Play game where the bot steers into it → a
+    review that opens with the record. Report the NARRATIONS, not the row
+    count.
+
+**Sequencing logic.** 1 before everything (no join, no personalisation).
+2 and 3 next (nothing to say about the home opening until its games are
+analysed). 4–8 are the student-visible payoff and can land in one push.
+9 and 10 run alongside as the wiring/truth sweep; 11 closes it.
+
+**Next-session pickup.** Start at item 1 with `node scripts/surface-map.mjs
+--changed` on `gameImportUtils`, `CoachGamePage`, `CoachTeachPage`,
+`CoachGameReview`, `studentNeedLoader`, `bookDeparturePrecompute`. Read the
+four key-space sites cited above before choosing the key.
+
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
 Everything on the open list that is code I own and needs no decision from David.

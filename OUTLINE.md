@@ -21,6 +21,20 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 0. WO-HOME-OPENING-01 — a personal coach: one home opening per colour (David 2026-09-22)
+- 🔴 1. ONE opening key across import / Play / Learn / review — four key spaces today, the departure and result terms never join
+- 🔴 2. Batch analysis orders the home openings' games first; the "932 analysed / 926 not analysed" header derives from one count
+- 🔴 3. `homeOpening(colour)` computer — volume + floor, variation granularity, persisted, confirmed, one-tap change; a 3-game 0% line can never win
+- 🔴 4. Training Plan built from the home openings and their recorded weaknesses, not favourites (empty with 932 games in)
+- 🔴 5. Drills teach: reveal names the idea and plays the sequence, no re-serving solved positions, provenance survives import ("Coach / Unknown / today")
+- 🔴 6. Router: retrospective, method and profile questions never fall into best-move-now; "what should I learn" answers from the home opening
+- 🔴 7. Play steers into the home repertoire's most-faced lines while in book
+- 🔴 8. Review of a home-opening game opens with the student's record and departure ply
+- 🔴 9. Every component wired both ways — pre-gate vs `decide()` signals, boost that cannot flip a verdict, four surfaces passing no student, ledgers before the door, dead review capture, Learn `fundamentalId: null`, `quietBy` collapsing two gates
+- 🔴 10. The wrong computers — bad-bishop reason, pawn-to-knight "pin", "so it falls" on a mobile piece, "compensation holds up" on a losing sac, pawn method on a king move, "-300.0" mate, raw recap card, "10 games running", repeated refrains
+- 🔴 11. `audit-home-opening-prod.mjs` — import → home opening → plan → drill → steered Play → review, narrations reported
+- 🟠 Decisions filled by recommendation, David may flip: LOCK with one-tap change · Play steers · auto-analyse home-opening games on import
+
 ## 1. WO-CLOSEOUT-01 — code first, one push, one audit
 - ✅ 1. Section-14 detectors built (`calculation-depth`, `left-book-early`, `no-plan`) — gated, but see E-10: zero real-game fires
 - ✅ 2. Critical moment T1 (review scans flagged plies, the register decides) + T3 (Learn hands announced plies to the sweep, `prompted:true`)
