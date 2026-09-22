@@ -1374,7 +1374,11 @@ export function buildReviewSegments(
   // pawn) still speaks; the unchanged ones fall silent — so the [structure]
   // line always ADDS something instead of re-listing the whole pawn skeleton.
   const structAtomsSeen = new Set<string>();
-  const freshStructureFacet = (facet: string, outpostSquaresAlreadySaid?: ReadonlySet<string>): string | null => {
+  // PURE since B4 (2026-09-22): it reports which atoms it would CLAIM and the
+  // caller writes `structAtomsSeen` only once the facet has actually spoken.
+  // `claimedThisPly` keeps the within-ply dedupe the ledger used to give.
+  const freshStructureFacet = (facet: string, outpostSquaresAlreadySaid: ReadonlySet<string> | undefined, claimedThisPly: Set<string>): { text: string; atoms: string[] } | null => {
+    const claimed: string[] = [];
     const inner = facet.replace(/^\[structure\]\s*/, '').replace(/\.\s*$/, '');
     const atoms: string[] = [];
     for (const seg of inner.split(' · ')) {
@@ -1389,12 +1393,13 @@ export function buildReviewSegments(
     }
     const fresh = atoms.filter((a) => {
       const k = a.toLowerCase();
-      if (structAtomsSeen.has(k)) return false;
+      if (structAtomsSeen.has(k) || claimedThisPly.has(k)) return false;
       if (/outpost/i.test(a) && outpostSquaresAlreadySaid) {
         const sq = a.match(/\b[a-h][1-8]\b/)?.[0];
-        if (sq && outpostSquaresAlreadySaid.has(sq)) { structAtomsSeen.add(k); return false; }
+        if (sq && outpostSquaresAlreadySaid.has(sq)) { claimedThisPly.add(k); claimed.push(k); return false; }
       }
-      structAtomsSeen.add(k);
+      claimedThisPly.add(k);
+      claimed.push(k);
       return true;
     });
     // Spoken as ENGLISH from the student's seat, never as the machine
@@ -1402,7 +1407,7 @@ export function buildReviewSegments(
     // structureProse.ts. The dedupe key stays the RAW atom so the
     // once-per-game contract is unaffected by the phrasing.
     return fresh.length
-      ? `[structure] ${renderStructureAtoms(fresh, playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null)}`
+      ? { text: `[structure] ${renderStructureAtoms(fresh, playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null)}`, atoms: claimed }
       : null;
   };
   // TEACHING REFRAINS speak ONCE per review (David 2026-07-22: "Once a line
@@ -1437,14 +1442,18 @@ export function buildReviewSegments(
   // it is a property of the student, not of the ply, so computing it per move
   // would be the same answer N times.
   const reviewHabitNeed = habitNeedFrom(studentWeaknesses ?? []);
-  const applyRefrainOnce = (text: string): string => {
+  // PURE since B4: the first fact on a ply to carry a refrain KEEPS it and
+  // reports the claim; a second fact on the same ply has it stripped, exactly
+  // as before. The claim reaches `spokenRefrains` only when that fact speaks.
+  const refrainOnce = (text: string, claimedThisPly: Set<number>): { text: string; claims: number[] } => {
     let out = text;
+    const claims: number[] = [];
     REFRAINS.forEach((r, idx) => {
       if (!r.re.test(out)) return;
-      if (spokenRefrains.has(idx)) out = out.replace(r.re, r.sub);
-      else spokenRefrains.add(idx);
+      if (spokenRefrains.has(idx) || claimedThisPly.has(idx)) out = out.replace(r.re, r.sub);
+      else { claimedThisPly.add(idx); claims.push(idx); }
     });
-    return out;
+    return { text: out, claims };
   };
   // DEVELOPMENT NAGS fire once per review, period — "the user knows it needs
   // developing after the first mention". One-shot by TAG, not by string (the
@@ -1668,10 +1677,13 @@ export function buildReviewSegments(
       // one fact, not two. Found by `audit-loop-closes-prod`: A recorded, the
       // pair shared loose-piece, B's beat led with the verdict and said nothing
       // about the prior game.
+      // Every say-once ledger on this path is written AFTER the door, and only
+      // for a fact the door let through (B4) — this one via a scratch copy.
+      const recurScratch = new Set(recurrenceLabelsSeen);
       if (fundamentals.length > 0) {
         const recur = fundamentalRecurrenceLine({
           ids: fundamentals.map((f) => f.id), signals: studentWeaknesses ?? [],
-          currentGameId, register: 'review', seenLabels: recurrenceLabelsSeen,
+          currentGameId, register: 'review', seenLabels: recurScratch,
         });
         if (recur) {
           const i = facets.findIndex((f) => f.startsWith('[principle] '));
@@ -1712,11 +1724,9 @@ export function buildReviewSegments(
         if (noteText && register === 'live-safe') {
           const graded = gradeNarrationText(noteText, fenPair.fenAfter, 'buildReviewSegments.note')?.trim();
           // Say each note ONCE per game — a standing idea re-earns its place on
-          // every ply and would otherwise repeat verbatim.
-          if (graded && !notesSaidThisGame.has(graded)) {
-            notesSaidThisGame.add(graded);
-            facets.push(`[note] ${graded}`);
-          }
+          // every ply and would otherwise repeat verbatim. The ledger is written
+          // below, once the note has actually SPOKEN (B4).
+          if (graded && !notesSaidThisGame.has(graded)) facets.push(`[note] ${graded}`);
         }
       } catch { /* the corpus is a bonus on this lane, never a blocker */ }
       // Drop an identical STATIC state facet already spoken on an earlier ply
@@ -1724,23 +1734,40 @@ export function buildReviewSegments(
       // per-move fact.
       // Build the kept list; some facets are REWRITTEN (structure → only its new
       // sub-claims) so this is a loop, not a pure filter.
+      // 🔒 THE LEDGERS ARE WRITTEN AFTER THE DOOR, FOR SPOKEN FACTS ONLY (B4,
+      // 2026-09-22). Every say-once set below used to be mutated HERE, while
+      // building the candidate list — before `decide()` collapsed, floored or
+      // (on a familiar opening ply) silenced the whole beat. So a fact the
+      // student never heard was ledgered as said, and its next appearance was
+      // dropped as a repeat: the development plan consumed on a need-silenced
+      // ply 1 was never spoken in the whole review. Now each branch CLAIMS
+      // (dedupe within the ply, as before) and registers a COMMIT; the commits
+      // run after the door and the quiet-ply gate, for the facts that spoke.
       const keptRaw: string[] = [];
+      const claimedThisPly = new Set<string>();
+      const commitByRaw = new Map<string, () => void>();
+      const claim = (key: string): boolean => { if (claimedThisPly.has(key)) return false; claimedThisPly.add(key); return true; };
+      const keep = (raw: string, commit?: () => void): void => { keptRaw.push(raw); if (commit) commitByRaw.set(raw, commit); };
+      let verdictWordThisPly: string | null = null;
       for (const f of facets) {
         // Positional VERDICT — atom-diffed. Speak the verdict WORD when it
         // changes, and only the REASONS not yet stated, so a growing edge adds
         // the new asset instead of re-reciting the pile every ply.
         if (/^\[verdict\]/.test(f)) {
           const vm = /^\[verdict\]\s*You're\s+([^:.]+?)(?::\s*(.*?))?\.?\s*$/.exec(f);
-          if (!vm) { keptRaw.push(f); continue; }
+          if (!vm) { keep(f); continue; }
           const word = vm[1].trim();
           const reasons = vm[2] ? vm[2].split(/;\s*/).map((r) => r.trim()).filter(Boolean) : [];
-          const freshReasons = reasons.filter((r) => !verdictReasonsSeen.has(r.toLowerCase()));
-          const wordChanged = word.toLowerCase() !== lastVerdictWord;
+          const freshReasons = reasons.filter((r) => !verdictReasonsSeen.has(r.toLowerCase()) && !claimedThisPly.has(`verdict-reason:${r.toLowerCase()}`));
+          const wordChanged = word.toLowerCase() !== (verdictWordThisPly ?? lastVerdictWord);
           if (!wordChanged && freshReasons.length === 0) continue; // nothing new
-          freshReasons.forEach((r) => verdictReasonsSeen.add(r.toLowerCase()));
-          lastVerdictWord = word.toLowerCase();
+          freshReasons.forEach((r) => claimedThisPly.add(`verdict-reason:${r.toLowerCase()}`));
+          verdictWordThisPly = word.toLowerCase();
           const why = freshReasons.length ? `: ${freshReasons.join('; ')}` : '';
-          keptRaw.push(`[verdict] You're ${word}${why}.`);
+          keep(`[verdict] You're ${word}${why}.`, () => {
+            freshReasons.forEach((r) => verdictReasonsSeen.add(r.toLowerCase()));
+            lastVerdictWord = word.toLowerCase();
+          });
           continue;
         }
         // Plans — the full "here's how" recipe ONCE per distinct goal.
@@ -1749,26 +1776,23 @@ export function buildReviewSegments(
           const goalKey = gm
             ? gm[1].toLowerCase().replace(/\b[a-h][1-8]\b/g, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim()
             : f;
-          if (planGoalsSeen.has(goalKey)) continue;
-          planGoalsSeen.add(goalKey);
-          keptRaw.push(f);
+          if (planGoalsSeen.has(goalKey) || !claim(`plan:${goalKey}`)) continue;
+          keep(f, () => planGoalsSeen.add(goalKey));
           continue;
         }
         // The RACE — once, then only when the verdict FLIPS (see lastRaceVerdict).
         if (/^\[plan-race\]/.test(f)) {
           const verdict = /they get there first|they got there first/i.test(f) ? 'them' : 'you';
-          if (lastRaceVerdict === verdict) continue;
-          lastRaceVerdict = verdict;
-          keptRaw.push(f);
+          if (lastRaceVerdict === verdict || !claim(`race:${verdict}`)) continue;
+          keep(f, () => { lastRaceVerdict = verdict; });
           continue;
         }
         // STANDING teaching read (live tactic / undefended piece / count /
         // royal-fork target / rook-on-7th) — taught ONCE per game by signature.
         if (STANDING_STATE_RE.test(f)) {
           const sig = standingSig(f);
-          if (standingSpoken.has(sig)) continue;
-          standingSpoken.add(sig);
-          keptRaw.push(f);
+          if (standingSpoken.has(sig) || !claim(`standing:${sig}`)) continue;
+          keep(f, () => standingSpoken.add(sig));
           continue;
         }
         // Structure: speak only the sub-claims not yet taught this game — and
@@ -1780,16 +1804,15 @@ export function buildReviewSegments(
           const outpostSquaresAlreadySaid = new Set(
             keptRaw.filter((k) => /outpost/i.test(k)).flatMap((k) => k.match(/\b[a-h][1-8]\b/g) ?? []),
           );
-          const fresh = freshStructureFacet(f, outpostSquaresAlreadySaid);
-          if (fresh) keptRaw.push(fresh);
+          const fresh = freshStructureFacet(f, outpostSquaresAlreadySaid, claimedThisPly);
+          if (fresh) keep(fresh.text, () => { for (const a of fresh.atoms) structAtomsSeen.add(a); });
           continue;
         }
         // "Their king is stuck in the centre" is taught at most ONCE per game —
         // it's a standing observation, robotic to repeat every ply it holds.
         if (/^\[king\]/.test(f)) {
-          if (kingCenterTaught) continue;
-          kingCenterTaught = true;
-          keptRaw.push(f);
+          if (kingCenterTaught || !claim('king')) continue;
+          keep(f, () => { kingCenterTaught = true; });
           continue;
         }
         // A sacrifice's COMPENSATION profile is shared across a combination —
@@ -1797,32 +1820,42 @@ export function buildReviewSegments(
         // their own [sac-why] mechanism facet, which is dynamic per move.
         if (/^\[sac\]/.test(f)) {
           const sig = standingSig(f);
-          if (sacSpoken.has(sig)) continue;
-          sacSpoken.add(sig);
-          keptRaw.push(f);
+          if (sacSpoken.has(sig) || !claim(`sac:${sig}`)) continue;
+          keep(f, () => sacSpoken.add(sig));
           continue;
         }
         // Development nags: once per review by TAG (David 2026-07-22).
         const oneShot = /^\[(plan-opening|opp-dev)\]/.exec(f);
         if (oneShot) {
-          if (oneShotTags.has(oneShot[1])) continue;
-          oneShotTags.add(oneShot[1]);
-          keptRaw.push(f);
+          const tag = oneShot[1];
+          if (oneShotTags.has(tag) || !claim(`oneshot:${tag}`)) continue;
+          keep(f, () => oneShotTags.add(tag));
           continue;
         }
         if (/^\[(opening|plan-middlegame|passer|badbishop|worst|trapped|minority|complex)\]/.test(f)) {
-          if (emittedStaticFacets.has(f)) continue;
-          emittedStaticFacets.add(f);
-          keptRaw.push(f);
+          if (emittedStaticFacets.has(f) || !claim(`static:${f}`)) continue;
+          keep(f, () => emittedStaticFacets.add(f));
           continue;
         }
-        keptRaw.push(f);
+        // The corpus note — once per game, ledgered when it speaks.
+        if (/^\[note\]/.test(f)) {
+          keep(f, () => notesSaidThisGame.add(f.replace(/^\[note\]\s*/, '')));
+          continue;
+        }
+        // The [principle] facet carries the recurrence label, if one was named.
+        if (/^\[principle\]/.test(f)) {
+          keep(f, () => { for (const l of recurScratch) recurrenceLabelsSeen.add(l); });
+          continue;
+        }
+        keep(f);
       }
-      const kept = keptRaw.map(applyRefrainOnce);
+      const claimedRefrains = new Set<number>();
+      const refrained = keptRaw.map((raw) => refrainOnce(raw, claimedRefrains));
+      const kept = refrained.map((r) => r.text);
       // KEY-SQUARE HIGHLIGHTS (David 2026-09-13): every square a KEPT facet
       // named, from the computer's own squares (facetSquares), so the review
       // board leads the eye in yellow exactly where the narration points —
-      // matched to the RAW facet strings (the map keys), before applyRefrainOnce
+      // matched to the RAW facet strings (the map keys), before refrainOnce
       // rewrites them, so a highlight only rides a facet actually spoken.
       const segKeySquares = [...new Set(keptRaw.flatMap((f) => facetSquares.get(f) ?? []))];
       // FUNDAMENTALS-FIRST on a flagged student ply (David 2026-09-05 overhaul:
@@ -1871,6 +1904,7 @@ export function buildReviewSegments(
       // Importance, this student's need, subsumption, the floor and the order
       // are a SINGLE call now — review does not compose them itself, so it
       // cannot drift from the surface that adopts the decider next.
+      const habitScratch = new Set(spokenHabits);
       const decision = decide(
         {
           decision: null,          // no per-ply criticality scan in the review pass
@@ -1937,7 +1971,9 @@ export function buildReviewSegments(
           ignoredThreat: fundamentals.some((f) => f.id === 'ignored-threat'),
           isStudentMove: playerColor !== undefined && moverColor === playerColor,
           ply: m.ply,
-          saidHabits: spokenHabits,
+          // A SCRATCH copy (B4): the beat claims its habit here, and the
+          // claim reaches the game ledger only if the ply actually speaks.
+          saidHabits: habitScratch,
         },
       );
       // SILENCE IS A COMPUTED VERDICT, so it has to be explainable — emit what
@@ -1999,6 +2035,19 @@ export function buildReviewSegments(
           prevCap = { square: null, capturedValue: 0 };
         }
         continue;
+      }
+      // THE COMMIT (B4): only now — past the door and past the quiet-ply gate
+      // — do the say-once ledgers learn what was said, and only for the facts
+      // in `decision.spoken`. A fact the door collapsed or floored, and every
+      // fact on a ply the need gate silenced, stays unsaid and may speak later.
+      {
+        const spokenSet = new Set(decision.spoken);
+        keptRaw.forEach((raw, i) => {
+          if (!spokenSet.has(kept[i])) return;
+          commitByRaw.get(raw)?.();
+          for (const c of refrained[i].claims) spokenRefrains.add(c);
+        });
+        if (decision.spoken.some((f) => f.startsWith('[method] '))) for (const h of habitScratch) spokenHabits.add(h);
       }
       segments.push({
         ply: m.ply,
