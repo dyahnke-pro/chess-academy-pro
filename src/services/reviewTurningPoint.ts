@@ -64,9 +64,16 @@ export interface TurningPointQuestion {
 export function minSwingPawns(): number {
   return criticalityThresholds().critical / 100;
 }
-/** The question needs a real choice — at least this many candidates. */
+/** The question needs a real choice — at least this many candidates. This is
+ *  the QUESTION's shape (a one-chip question is not a question), not a cap. */
 export const TURNING_POINT_MIN_CANDIDATES = 2;
-const MAX_CANDIDATES = 4;
+/** A candidate CHIP is any costed moment worth at least this share of the
+ *  biggest swing (B10, 2026-09-22). `MAX_CANDIDATES = 4` used to keep the four
+ *  biggest regardless of worth — a game with five real turning moments lost
+ *  its fifth chip, and a game with one real moment and three noise ones showed
+ *  the noise. A bar relative to the answer admits every candidate that could
+ *  honestly be mistaken for it, however many, and sweeps the tail. */
+export const CANDIDATE_SHARE_OF_ANSWER = 0.25;
 
 export function moveLabel(s: TurningPointSegmentLike): string {
   return `${s.moveNumber}${s.playerColor === 'black' ? '…' : '.'} ${s.san}`;
@@ -129,7 +136,12 @@ export function buildTurningPointQuestion(
   if (bySwing.length < TURNING_POINT_MIN_CANDIDATES) return null;
 
   const answer = bySwing[0];
-  const candidates = bySwing.slice(0, MAX_CANDIDATES).sort((a, b) => a.ply - b.ply);
+  const bar = answer.swingPawns * CANDIDATE_SHARE_OF_ANSWER;
+  const cleared = bySwing.filter((c) => c.swingPawns >= bar);
+  // The question's shape: if the bar leaves fewer than a real choice, the
+  // runner-up joins so the student still has something to weigh.
+  const chosen = cleared.length >= TURNING_POINT_MIN_CANDIDATES ? cleared : bySwing.slice(0, TURNING_POINT_MIN_CANDIDATES);
+  const candidates = [...chosen].sort((a, b) => a.ply - b.ply);
 
   return {
     question: 'One more thing — where do you think this game turned?',

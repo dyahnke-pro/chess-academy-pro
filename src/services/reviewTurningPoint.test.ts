@@ -4,6 +4,7 @@ import {
   judgeTurningPointPick,
   minSwingPawns,
   turningPointCandidates,
+  CANDIDATE_SHARE_OF_ANSWER,
   buildCriticalMomentQuestion,
   judgeCriticalMomentPick,
   type TurningPointSegmentLike,
@@ -74,15 +75,23 @@ describe('buildTurningPointQuestion', () => {
     expect(buildTurningPointQuestion(segments)).toBeNull();
   });
 
-  it('caps candidates at 4, keeping the biggest swings, in game order', () => {
+  // B10 (2026-09-22): the chips are a BAR relative to the answer, never a
+  // count. Negative control: restore `bySwing.slice(0, 4)` → the six-chip
+  // assertion fails.
+  it('admits every candidate within a quarter of the biggest swing, in game order — and sweeps the tail', () => {
     const segments = [1, 2, 3, 4, 5].map((i) =>
       seg({ ply: i * 2 - 1, san: `Q${i}`, playerColor: 'white', evalBefore: 0, evalAfter: -100 * i }),
     );
     const q = buildTurningPointQuestion(segments)!;
-    expect(q.candidates).toHaveLength(4);
-    // The smallest swing (ply 1, 1.0 pawns) was dropped; order is by ply.
+    // answer 5.0 pawns → bar 1.25: the 1.0-pawn ply 1 is swept, the rest stay.
     expect(q.candidates.map((c) => c.ply)).toEqual([3, 5, 7, 9]);
     expect(q.answer.ply).toBe(9);
+    // Six real turning moments → six chips. A count of four would have hidden two.
+    const six = [1, 2, 3, 4, 5, 6].map((i) =>
+      seg({ ply: i * 2 - 1, san: `Q${i}`, playerColor: 'white', evalBefore: 0, evalAfter: -200 - 10 * i }),
+    );
+    expect(buildTurningPointQuestion(six)!.candidates).toHaveLength(6);
+    expect(CANDIDATE_SHARE_OF_ANSWER).toBeLessThan(1);
   });
 });
 

@@ -1221,7 +1221,7 @@ export function buildReviewSegments(
   // §1 piece-route itineraries — the student's REAL reroutes in this game
   // ("f3–d2–c4"), keyed by the ply the maneuver completes (G3, from the moves).
   const pieceItineraries = playerColor
-    ? detectPieceItineraries(moves.map((m) => m.san), playerColor, { budget: 2 })
+    ? detectPieceItineraries(moves.map((m) => m.san), playerColor)
     : new Map<number, { text: string }>();
   const fenChain = buildFenChain(moves);
   const usable = fenChain.length;
