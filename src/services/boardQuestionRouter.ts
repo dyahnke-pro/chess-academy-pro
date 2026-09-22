@@ -64,6 +64,12 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   const check = /\b(check(?:s|ing)?)\b/.test(t) && !/checkmate/.test(t);
   const kingSafety = /\bking\b/.test(t) && /\b(safe|safety|exposed|attack|danger|weak|open|shelter|shield)\b/.test(t);
   const planW = /\b(plan|planning|idea|strategy|aim\s+for|continue|next\s+few\s+moves|what\s+should\s+i\s+be\s+doing)\b/.test(t);
+  // PIECE-SCOPED plan words — "what should my knight be doing", "where does my
+  // rook belong / go", "where should I put my bishop" (PLAN §E5).
+  const piecePlanW = planW
+    || /\bwhat\s+should\s+my\s+\w+\s+(?:be\s+)?(?:doing|do)\b/.test(t)
+    || /\bwhere\s+(?:does|should|do)\s+my\s+\w+\s+(?:go|belong|head|sit)\b/.test(t)
+    || /\bwhere\s+(?:should|do)\s+i\s+(?:put|place|develop|bring|move)\s+(?:my|the)\s+\w+\b/.test(t);
   const bestW = /\b(best\s+(?:move|continuation|option|play|idea)|what\s+should\s+i\s+play|strongest\s+move|what\s+(?:do|should)\s+i\s+do\b)\b/.test(t);
   const evalW = /\b(winning|who'?s\s+(?:better|winning|worse)|how\s+do\s+i\s+stand|evaluation|advantage|am\s+i\s+(?:better|worse|winning|losing)|who\s+is\s+(?:better|winning))\b/.test(t);
   // "can I win/grab/take material / free material / win a piece" is a scan for
@@ -113,8 +119,14 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   // ── PIECE activity (worst-placed / least active) — before purpose so a
   //    "worst-placed piece" doesn't get read as a purpose question. ──
   if (activityW) add('piece-activity');
+  // ── PIECE-SCOPED PLAN — "plan for my bishop on f1", "what should my knight be
+  //    doing", "where does my rook belong". Before purpose: "be doing" is a
+  //    purpose verb too, but the student asked what the piece should DO NEXT,
+  //    not what it hits now (PLAN §E5, prod 2026-09-22). ──
+  const piecePlan = piecePlanW && nonKingPiece && side !== 'opponent' && !activityW && !safety;
+  if (piecePlan) add('piece-plan');
   // ── PIECE purpose ──
-  if (nonKingPiece && purpose && !safety && !activityW) add('piece-purpose');
+  if (nonKingPiece && purpose && !safety && !activityW && !piecePlan) add('piece-purpose');
   // ── SQUARE control ──
   if (squares.length >= 1 && moves.length === 0) {
     if (control) add('square-control');
@@ -154,7 +166,7 @@ export function classifyBoardQuestion(ask: string | null | undefined): QuestionA
  *  (best-move / eval / plan / why-best / master-play / endgame / move-eval /
  *  move-comparison) keep their existing coachApi lanes. */
 export const PURE_BOARD_ASPECTS: ReadonlySet<QuestionAspect> = new Set<QuestionAspect>([
-  'piece-purpose', 'piece-activity', 'square-control', 'square-safety', 'square-occupant',
+  'piece-purpose', 'piece-activity', 'piece-plan', 'square-control', 'square-safety', 'square-occupant',
   'piece-safety', 'hanging', 'loose', 'opponent-threats', 'my-threats',
   'king-safety-mine', 'king-safety-theirs', 'king-lines', 'material', 'move-purpose',
   'checks', 'my-plan', 'opponent-plan',

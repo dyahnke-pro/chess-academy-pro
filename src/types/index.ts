@@ -1727,6 +1727,10 @@ export interface OpeningInsights {
   worstResults: OpeningAggregateStats[];
   drillAccuracyByOpening: { name: string; accuracy: number; attempts: number }[];
   strengths: string[];
+  /** Games the player had with each colour — the denominator for the volume
+   *  floor (openingVolumeFloor): a line leads a "weakest/strongest" verdict only
+   *  at ≥10 games or ≥5% of THIS colour's games, never a 3-game 0% (PLAN §E2). */
+  gamesByColor: { white: number; black: number };
 }
 
 export interface CostlyMistake {

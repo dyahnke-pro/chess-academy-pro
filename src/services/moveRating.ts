@@ -197,12 +197,24 @@ export function classifyMoveFull(r: {
  *  Returns null on any failure so the caller can fall through. */
 export async function computeLastMoveRating(moveHistory: readonly string[]): Promise<MoveRating | null> {
   if (moveHistory.length === 0) return null;
-  const playedSan = moveHistory[moveHistory.length - 1];
+  return computeMoveRatingAt(moveHistory, moveHistory.length - 1);
+}
+
+/** Rate the move at `plyIndex` (0-based) of `moveHistory` against the engine's
+ *  best at the position BEFORE it. This is the RETROSPECTIVE computer (PLAN
+ *  §E1, 2026-09-22): "why was Ke2 bad?" used to be answered by rating whatever
+ *  move happened to be LAST — the opponent's — because only the last-move form
+ *  existed. Now the lane resolves the named move to its ply and rates THAT ply.
+ *  `studentColor` on the result is the MOVER's colour at that ply (the caller
+ *  compares it to the seat to know whose move it was). Null on any failure. */
+export async function computeMoveRatingAt(moveHistory: readonly string[], plyIndex: number): Promise<MoveRating | null> {
+  if (plyIndex < 0 || plyIndex >= moveHistory.length) return null;
+  const playedSan = moveHistory[plyIndex];
 
   // Replay from the standard start to reconstruct the pre-move position.
   const chess = new Chess();
   try {
-    for (const san of moveHistory.slice(0, -1)) chess.move(san);
+    for (const san of moveHistory.slice(0, plyIndex)) chess.move(san);
   } catch {
     return null; // history doesn't replay from the start (custom FEN game, etc.)
   }

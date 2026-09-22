@@ -42,6 +42,11 @@ const INTENT_KEYS: ReadonlyArray<keyof MasterGroundingOptions> = [
   // 2026-08-08 that both are FALSE on gibberish and on off-topic asks, so
   // adding them cannot make a probe pass trivially.
   'candidateMoveQuestion', 'counterRepertoireQuestion', 'openingExistenceName',
+  // PLAN §E (2026-09-22): the retrospective / method / hint lanes — each a
+  // computed lane a probe may legitimately land on. Verified FALSE on gibberish
+  // and off-topic asks (questionIntents.routerE.test.ts), so a probe cannot pass
+  // trivially through them.
+  'retrospectiveMoveQuestion', 'methodQuestion', 'hintQuestion',
 ];
 
 function firedIntent(g: MasterGroundingOptions): boolean {

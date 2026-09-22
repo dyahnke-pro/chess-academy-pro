@@ -3299,6 +3299,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       currentRoute: '/coach/play',
       tactics: reviewTactics,
       reviewFlaggedMove,
+      // The whole game's stored per-ply engine read, so "why was Ke2 bad?"
+      // (the RETROSPECTIVE lane, PLAN §E1) answers the NAMED ply from the
+      // analysis already on file — no fresh on-device search, the same
+      // reason `reviewFlaggedMove` is threaded for the current ply.
+      moveAnnotations: moves.map((m, i) => ({
+        san: m.san,
+        fenBefore: i > 0 ? moves[i - 1].fen : STARTING_FEN,
+        bestMoveUci: m.bestMove && m.bestMove.length >= 4 ? m.bestMove : null,
+        classification: m.classification ?? null,
+        isCoachMove: m.isCoachMove,
+      })),
       reviewNarrationContext,
       reviewWorstMoment,
     };

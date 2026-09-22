@@ -211,6 +211,7 @@ import {
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
+  retrospectiveMoveRef, isMethodQuestion, stripQuestionFiller,
   isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
 } from './questionIntents';
 import { isAnyBoardQuestion } from './boardQuestions';
@@ -1205,7 +1206,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const isInternalAsk = INTERNAL_ASK_SURFACES.has(input.liveState.surface);
     // Detectors see the STUDENT's words only — never surface-injected
     // instruction blocks (the "I played f4" → training-pitch hijack).
-    let askForIntents = isInternalAsk ? undefined : stripInjectedBlocks(input.ask);
+    // NORMALIZE ONCE, HERE — the same `stripQuestionFiller` the light surfaces'
+    // `buildQuestionGrounding` runs (filler off, common typos mapped). This
+    // spine path never ran it, so the typo map only ever reached the light
+    // surfaces: on Learn "whats teh best plan for my bishp on f1" reached the
+    // board router with no PIECE in it and got the side-wide plan (PLAN §E5,
+    // prod 2026-09-22). Content words, squares and opening names are untouched.
+    let askForIntents = isInternalAsk ? undefined : stripQuestionFiller(stripInjectedBlocks(input.ask));
     // KEYBOARD-MASH GUARD (2026-08-13 audit): "asdfghjkl" got a confident
     // best-move readout. A single token that is literally a keyboard-row run
     // (or one character repeated) is noise, not a question — answer with a
@@ -1349,7 +1356,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // already falls back to `enginePlan.bestMoveUci`. So the whole repair is
     // letting this build run for a best-move ask too: one condition, six
     // surfaces, and no new engine call on the two that already thread it.
-    const bestMoveQuestionEngage = isBestMoveQuestion(askForIntents);
+    // THE TWO LANES THAT FELL INTO BEST-MOVE-NOW (PLAN §E1, 2026-09-22): a
+    // question about a move ON THE TAPE, and a question about HOW TO THINK.
+    // Both are computed first and suppress the present-tense move lanes below.
+    const retrospectiveRefEngage = retrospectiveMoveRef(askForIntents);
+    const retrospectiveEngage = retrospectiveRefEngage !== null;
+    const methodQuestionEngage = isMethodQuestion(askForIntents);
+    const bestMoveQuestionEngage = isBestMoveQuestion(askForIntents) && !methodQuestionEngage && !retrospectiveEngage;
     const hintRequestEngage = isHintRequest(askForIntents);
     // GROUNDED BOARD QUESTION — sort the ask by what it POINTS AT (piece / square
     // / move / side / aspect) and answer from chess.js facts, not the best-move
@@ -1473,7 +1486,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       // coachApi. Whose-turn and colour are then answerable from `whoseTurn` /
       // `studentColor` alone; draw and mate still need the board, but they now
       // decline honestly through the computed lane instead of being improvised.
-      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null
+      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null || retrospectiveEngage || methodQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // The side to move, as the surface already knows it. Threaded so
@@ -1509,7 +1522,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // names forward moves several plies ahead, not "masters play
             // X"). Detected from the user's ask. The stat / count / player /
             // comparative guards still apply. (Response-loop audit 2026-06-05.)
-            planQuestion: planQuestionEngage,
+            planQuestion: planQuestionEngage && !methodQuestionEngage,
             // BEST-MOVE / SOUNDNESS questions exempt the bare-SAN gate too:
             // the honest answer names the engine's best move + the short
             // line that proves it (forward moves not legal now). The
@@ -1541,7 +1554,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // lastUserMessage() on wrapped surfaces sees the envelope.
             cleanAsk: askForIntents,
             askedPiece: restrictedPieceInAsk(askForIntents),
-            whyBestMoveQuestion: whyBestMoveEngage,
+            whyBestMoveQuestion: whyBestMoveEngage && !retrospectiveEngage,
             reviewFlaggedMove: input.liveState.reviewFlaggedMove,
             // Game-scoped mistake ask + the reviewed game's computed worst
             // moment (2026-08-13 — the review ask was answered from the habit
@@ -1552,7 +1565,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // alternatives comparison wins over the generic reasoning walk.
             alternativesQuestion: alternativesEngage,
             alternativesLines: alternativesLines ?? undefined,
-            candidateMoveQuestion: candidateMoveEngage,
+            candidateMoveQuestion: candidateMoveEngage && !retrospectiveEngage,
             candidateMoveSan,
             candidateEvalCp,
             candidateMateIn,
@@ -1643,7 +1656,14 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // "was that a good move?" — board-dependent; rides the fen gate.
             // A "why is that the BEST move" ask wants the reasoning walk, not a
             // played-move grade — the why-form wins (live audit 2026-07-10).
-            moveRatingQuestion: isMoveRatingQuestion(askForIntents) && !isWhyBestMoveQuestion(askForIntents),
+            moveRatingQuestion: isMoveRatingQuestion(askForIntents) && !isWhyBestMoveQuestion(askForIntents) && !retrospectiveEngage,
+            // RETROSPECTIVE + METHOD (PLAN §E1): the move ON THE TAPE the student
+            // named, and the routine for THIS board. Dispatched ahead of the
+            // last-move rating / why-best / plan lanes they used to fall into.
+            retrospectiveMoveQuestion: retrospectiveEngage,
+            retrospectiveMoveRef: retrospectiveRefEngage ?? undefined,
+            moveAnnotations: input.liveState.moveAnnotations,
+            methodQuestion: methodQuestionEngage,
             // "set up calculation training" — direct request to start a mode.
             trainingRequestKind: trainingRequestEngage ?? undefined,
             puzzleStatsQuestion: puzzleStatsQuestionEngage,
@@ -1692,7 +1712,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // too fast?" the stock line, "did I win my last game?" silence.
             // The same lane-reaches-nobody class as the plan/best-move fixes.
             openingExistenceName: openingExistenceName ?? undefined,
-            teachingMethodQuestion: teachingMethodQuestionEngage,
+            teachingMethodQuestion: teachingMethodQuestionEngage && !methodQuestionEngage,
             settingsQuestion: settingsQuestionEngage,
             appHelpQuestion: appHelpQuestionEngage,
             timeTroubleQuestion: timeTroubleQuestionEngage,
@@ -1701,7 +1721,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             nameOpeningQuestion: nameOpeningQuestionEngage,
             lastMoveQuestion: lastMoveQuestionEngage,
             opponentMoveQuestion: opponentMoveQuestionEngage,
-            theoryQuestion: theoryQuestionEngage,
+            theoryQuestion: theoryQuestionEngage && !methodQuestionEngage,
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
             // Composed-prompt surfaces: coachApi skips the grounded-intent

@@ -21,12 +21,13 @@ import {
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
-  bishopPair, computeSpace, findPassedPawns,
+  bishopPair, computeSpace, findPassedPawns, findForcingCandidates, findHangingBySee,
 } from './positionReadingService';
 import type { PressureCount } from './positionReadingService';
 import { readPosition } from './positionalRead';
 import { structurePlan } from './boardPlan';
-import { strategicWhyLed } from './moveFundamentals';
+import { strategicWhyLed, strategicWhySelfContained, strategicWhyImperative } from './moveFundamentals';
+import { liveMethodBeatFor } from './methodBeat';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
 import type { QuestionAspect } from '../data/boardQuestionBuckets';
@@ -39,6 +40,7 @@ import type { FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
 import { andList, orList } from '../utils/andList';
 import { pieceIsOn } from './tacticsContextIdentity';
+import { clearsVolumeFloor } from './openingVolumeFloor';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -191,6 +193,7 @@ function dispatchPureAspect(
   switch (aspect) {
     case 'piece-purpose': return assemblePiecePurposeAnswer(fen, ask, studentColor);
     case 'piece-activity': return assemblePieceActivityAnswer(fen, ask, studentColor);
+    case 'piece-plan': return assemblePiecePlanAnswer(fen, ask, studentColor, null);
     case 'square-control':
     case 'square-safety':
     case 'square-occupant': return assembleSquareControlAnswer(fen, ask, studentColor);
@@ -871,6 +874,166 @@ export function assemblePiecePurposeAnswer(
     facts: `Your ${pieceName} on ${s.sq} ${body}.`,
     bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
   };
+}
+
+// ═══ PIECE-SCOPED PLAN — "plan for my bishop on f1", "what should my knight be
+// doing", "where does my rook belong" (PLAN §E5, prod 2026-09-22). ═══
+
+/** The piece (+ optional square) a piece-scoped plan ask names, or null. */
+function parsePiecePlan(ask: string | null | undefined): { piece: PieceSymbol; square: Square | null } | null {
+  if (!ask) return null;
+  const t = ask.toLowerCase();
+  const pm = /\b(pawn|knight|bishop|rook|queen)\b/.exec(t);
+  if (!pm) return null;
+  const sqM =
+    /\b(?:on|at|from)\s+([a-h][1-8])\b/.exec(t) ??
+    new RegExp(`${pm[1]}\\s+(?:is\\s+)?(?:on\\s+|at\\s+)?([a-h][1-8])\\b`).exec(t);
+  return { piece: PIECE_WORD_TO_SYM[pm[1]], square: sqM ? (sqM[1] as Square) : null };
+}
+
+/** Walk one ray from `sq`: open squares until the first blocker, and what
+ *  blocks it. chess.js has no ray API, so this is the geometry by hand. */
+function rayFrom(chess: Chess, sq: Square, df: number, dr: number): { open: Square[]; blocker: { sq: Square; type: PieceSymbol; color: 'w' | 'b' } | null } {
+  const open: Square[] = [];
+  let f = FILES.indexOf(sq[0]) + df;
+  let r = RANKS.indexOf(sq[1]) + dr;
+  while (f >= 0 && f < 8 && r >= 0 && r < 8) {
+    const t = `${FILES[f]}${RANKS[r]}` as Square;
+    const p = chess.get(t);
+    if (p) return { open, blocker: { sq: t, type: p.type, color: p.color } };
+    open.push(t);
+    f += df; r += dr;
+  }
+  return { open, blocker: null };
+}
+
+/**
+ * assemblePiecePlanAnswer — the plan for ONE NAMED PIECE, board-true (G0/G3):
+ * the lines it sits on right now and how far it sees, what BLOCKS them (your
+ * own pawn on e2 vs their knight), and the developing square — the engine's
+ * move for it when the engine's line moves this piece, else the destination
+ * the board ranks best (most scope, not walking into a pawn). Before this the
+ * ask fell into the side-wide plan and the bishop was never mentioned.
+ *
+ * `engineBestUci` is the engine's current best move when the caller has one;
+ * it is used ONLY if it moves this piece. Returns null when the ask names no
+ * piece (so the generic plan lane keeps it) — never for a piece that isn't
+ * there (that is answered honestly).
+ */
+export function assemblePiecePlanAnswer(
+  fen: string,
+  ask: string | null | undefined,
+  studentColor: 'white' | 'black',
+  engineBestUci: string | null,
+): GroundedAnswer | null {
+  const parsed = parsePiecePlan(ask);
+  if (!parsed) return null;
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const name = REVIEW_PIECE_NAME[parsed.piece];
+  const src = ['board:chess.js'];
+
+  const candidates: Square[] = [];
+  if (parsed.square) {
+    const p = chess.get(parsed.square);
+    if (p && p.type === parsed.piece && p.color === me) candidates.push(parsed.square);
+  } else {
+    for (const row of chess.board()) for (const cell of row) if (cell && cell.type === parsed.piece && cell.color === me) candidates.push(cell.square);
+  }
+  if (candidates.length === 0) {
+    const where = parsed.square ? ` on ${parsed.square}` : '';
+    return { facts: `You don't have a ${name}${where} in this position.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  // The piece to talk about: the named one; else the one the engine's move
+  // actually moves (that IS the plan for it); else the least active (the one a
+  // "plan for my bishop" is really asking about).
+  const scopeCount = (sq: Square): number => squaresAttackedBy(chess, sq, me).length;
+  const engineFrom = engineBestUci && engineBestUci.length >= 4 ? (engineBestUci.slice(0, 2) as Square) : null;
+  const sq = parsed.square
+    ?? (engineFrom && candidates.includes(engineFrom) ? engineFrom : null)
+    ?? [...candidates].sort((a, b) => scopeCount(a) - scopeCount(b))[0];
+
+  // ── THE LINES IT SITS ON, and what blocks them ────────────────────────────
+  const lines: string[] = [];
+  const blockers: string[] = [];
+  const isSlider = parsed.piece === 'b' || parsed.piece === 'r' || parsed.piece === 'q';
+  if (isSlider) {
+    const dirs = parsed.piece === 'b' ? BISHOP_DIRS : parsed.piece === 'r' ? ROOK_DIRS : [...BISHOP_DIRS, ...ROOK_DIRS];
+    let openTotal = 0;
+    for (const [df, dr] of dirs) {
+      const ray = rayFrom(chess, sq, df, dr);
+      openTotal += ray.open.length;
+      if (ray.blocker && ray.open.length <= 1) {
+        const owner = ray.blocker.color === me ? 'your own' : 'their';
+        blockers.push(`${owner} ${REVIEW_PIECE_NAME[ray.blocker.type]} on ${ray.blocker.sq}`);
+      }
+    }
+    lines.push(openTotal === 0
+      ? `it can't move at all right now`
+      : `it sees ${openTotal} square${openTotal === 1 ? '' : 's'} from ${sq}`);
+  } else {
+    const reach = squaresAttackedBy(chess, sq, me);
+    lines.push(reach.length === 0 ? `it has no squares from ${sq}` : `it reaches ${reach.length} square${reach.length === 1 ? '' : 's'} from ${sq}`);
+  }
+  const blockedClause = blockers.length > 0 ? `; ${andList(blockers)} ${blockers.length > 1 ? 'shut' : 'shuts'} its ${isSlider ? 'line' : 'path'}` : '';
+
+  // ── THE DEVELOPING SQUARE ────────────────────────────────────────────────
+  // The piece is read on a board where it is ITS side to move (flip the
+  // side-to-move field when it is not the student's turn) so both the engine's
+  // move and the ranked destinations parse — a piece has a plan whoever is
+  // on move.
+  const parts = fen.split(' ');
+  if (parts.length >= 6 && parts[1] !== me) { parts[1] = me; parts[3] = '-'; }
+  const moverFen = parts.join(' ');
+  let dest: { to: Square; san: string; why: string; fromEngine: boolean } | null = null;
+  // Engine first, only when its move IS this piece's move.
+  if (engineBestUci && engineBestUci.length >= 4 && engineBestUci.slice(0, 2) === sq) {
+    try {
+      const c = new Chess(moverFen);
+      const mv = c.move({ from: sq, to: engineBestUci.slice(2, 4), promotion: engineBestUci.length > 4 ? engineBestUci[4] : undefined });
+      if (mv) {
+        const why = strategicWhyImperative(moverFen, mv.san, studentColor) ?? describeMoveGeometry(moverFen, mv.san, studentColor);
+        dest = { to: mv.to, san: mv.san, why: why ?? '', fromEngine: true };
+      }
+    } catch { dest = null; }
+  }
+  if (!dest) {
+    // Board-ranked: every legal destination, scored by the scope it gains
+    // there, minus a pawn walking into it or losing the piece to SEE.
+    let mover: Chess;
+    try { mover = new Chess(moverFen); } catch { mover = chess; }
+    const opts = mover.moves({ square: sq, verbose: true });
+    let best: { to: Square; san: string; score: number } | null = null;
+    for (const mv of opts) {
+      const after = new Chess(moverFen);
+      try { after.move(mv.san); } catch { continue; }
+      const gained = squaresAttackedBy(after, mv.to, me).length;
+      const pawnHit = after.attackers(mv.to, them).some((a) => after.get(a)?.type === 'p');
+      const loses = legalSeeGainFor(after.fen(), mv.to, them) > 0;
+      const score = gained - (pawnHit ? 6 : 0) - (loses ? 8 : 0) + (mv.captured ? 3 : 0);
+      if (!best || score > best.score) best = { to: mv.to, san: mv.san, score };
+    }
+    if (best && best.score > 0) {
+      const why = strategicWhyImperative(moverFen, best.san, studentColor) ?? describeMoveGeometry(moverFen, best.san, studentColor);
+      dest = { to: best.to, san: best.san, why: why ?? '', fromEngine: false };
+    }
+  }
+
+  const head = `Your ${name} on ${sq}: ${lines.join(', ')}${blockedClause}.`;
+  if (!dest) {
+    const unblock = blockers.length > 0 && blockers.some((b) => b.startsWith('your own'))
+      ? ` The plan for it starts with moving what's in its way — clear the line first, then it has squares.`
+      : ` There's no square that improves it yet — improve the others and come back to it.`;
+    return { facts: head + unblock, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+  const whyClause = dest.why ? ` — ${dest.why.replace(/[.!?]+$/, '')}` : '';
+  const plan = dest.fromEngine
+    ? ` The engine's line puts it on ${dest.to} right now${whyClause}.`
+    : ` The square that opens it up is ${dest.to}${whyClause}.`;
+  return { facts: head + plan, bestMoveSan: dest.san, bestMoveFromTo: { from: sq, to: dest.to }, sources: [...src, ...(dest.fromEngine ? ['engine:stockfish'] : [])] };
 }
 
 /**
@@ -2802,6 +2965,141 @@ export function assemblePlanAnswer(opts: {
   };
 }
 
+// ═══ METHOD — "what should I be thinking about?", "how do I approach this?",
+// "what's the process here?" (PLAN §E1b, prod 2026-09-22). ═══
+
+/**
+ * assembleMethodAnswer — HOW TO THINK in this position, computed, and NEVER the
+ * best move. The student asked for the routine, so the answer is the routine
+ * run on THIS board, every clause a computed fact (G0/G3):
+ *   1. THEIR IDEA — is anything of yours loose right now (`findHangingBySee`)?
+ *   2. THE FORCING SCAN — the checks and captures that actually exist here
+ *      (`findForcingCandidates`), listed in CCT order as a scan, not an answer;
+ *   3. CANDIDATES — the levers to compare (a pawn break, the worst piece);
+ *   4. THE HABIT — the one `methodBeat` earns for this moment, closing the
+ *      answer the way it closes a review beat (G4.5.16).
+ * `engineBestSan` steers ONLY the habit choice (is the move that is there a
+ * forcing one?) — it is never spoken. The student asked how to find the move;
+ * handing it over would answer a different question.
+ *
+ * `tier: 'critical'` is DECLARED, not measured: the student asked for the
+ * routine, so the candidate-discipline habit is owed here whatever the
+ * importance computer would say about the moment. That is the one place a
+ * caller may assert the tier — it is the student's own request, not a bar.
+ */
+export function assembleMethodAnswer(opts: {
+  fen: string;
+  studentColor: 'white' | 'black';
+  engineBestSan: string | null;
+  plyForVariety?: number;
+}): GroundedAnswer | null {
+  let chess: Chess;
+  try { chess = new Chess(opts.fen); } catch { return null; }
+  const me: 'w' | 'b' = opts.studentColor === 'white' ? 'w' : 'b';
+  const studentToMove = chess.turn() === me;
+  const steps: string[] = [];
+
+  // 1 — THEIR IDEA.
+  const loose = findHangingBySee(opts.fen).filter((h) => h.color === me);
+  if (loose.length > 0) {
+    steps.push(`First, their idea: ${andList(loose.map((h) => `your ${REVIEW_PIECE_NAME[h.piece]} on ${h.square}`))} ${loose.length > 1 ? 'are' : 'is'} loose right now — that has to be answered before anything else.`);
+  } else {
+    steps.push(`First, their idea: nothing of yours is hanging right now, so their last move was about position, not material — ask what it prepares.`);
+  }
+
+  // 2 — THE FORCING SCAN (only meaningful on the student's move).
+  if (studentToMove) {
+    const forcing = findForcingCandidates(opts.fen, 64);
+    const checks = forcing.filter((f) => f.kind === 'check').map((f) => f.san);
+    const caps = forcing.filter((f) => f.kind === 'capture').map((f) => f.san);
+    if (checks.length === 0 && caps.length === 0) {
+      steps.push(`Then the forcing moves: there are no checks or captures on the board, so this is a quiet decision — nothing forces, so the plan decides.`);
+    } else {
+      const bits: string[] = [];
+      if (checks.length) bits.push(`checks ${andList(checks)}`);
+      if (caps.length) bits.push(`captures ${andList(caps)}`);
+      steps.push(`Then the forcing moves, in order: ${bits.join('; ')}. Look at each of those before any quiet move.`);
+    }
+  } else {
+    steps.push(`It's their move — while they think, list the checks and captures they'll have next, so nothing lands as a surprise.`);
+  }
+
+  // 3 — CANDIDATES: the levers to compare.
+  const levers: string[] = [];
+  if (studentToMove) {
+    let breaks: string[] = [];
+    try { breaks = findPawnBreaks(opts.fen); } catch { breaks = []; }
+    if (breaks.length) levers.push(`the pawn break${breaks.length > 1 ? 's' : ''} ${orList(breaks)}`);
+  }
+  const sw = strongestWeakestPiece(opts.fen, me);
+  const homeRank = me === 'w' ? '1' : '8';
+  const pastOpening = (Number.parseInt(opts.fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
+  if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
+    levers.push(`improving your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
+  }
+  steps.push(levers.length > 0
+    ? `Then candidates: name two or three and compare them — ${andList(levers)} ${levers.length > 1 ? 'are' : 'is'} where to start.`
+    : `Then candidates: name two or three before you calculate any one of them.`);
+
+  // 4 — THE HABIT this moment earns (the same computer the live briefing uses).
+  const habit = liveMethodBeatFor({
+    bestSan: opts.engineBestSan,
+    threatStanding: loose.length > 0,
+    isStudentMove: true,
+    realChoice: true,
+    tier: 'critical',
+  }, opts.plyForVariety ?? (Number.parseInt(opts.fen.split(' ')[5] ?? '0', 10) || 0));
+  if (habit) steps.push(habit);
+
+  return {
+    facts: `Here's the routine for this position. ${steps.join(' ')}`,
+    bestMoveSan: null, bestMoveFromTo: null,
+    sources: ['board:chess.js'],
+  };
+}
+
+// ═══ HINT — "give me a hint" (PLAN §E4). ═══
+
+/**
+ * assembleHintAnswer — the piece + the goal, the SQUARE WITHHELD (the honesty
+ * contract, 2026-08-13), plus the computed WHY in its imperative form
+ * (`strategicWhyImperative` never names the SAN, so it teaches the idea without
+ * handing over the move). Null only when the engine move does not parse on
+ * this board — the caller then speaks `hintUnavailableReason`, never the stock
+ * refusal (PostHog 30d: 47% of hint asks were answered "I can't verify that
+ * precisely").
+ */
+export function assembleHintAnswer(opts: { fen: string; bestMoveUci: string; moverColor: 'white' | 'black' }): GroundedAnswer | null {
+  let board: Chess;
+  try { board = new Chess(opts.fen); } catch { return null; }
+  const from = opts.bestMoveUci.slice(0, 2) as Square;
+  const piece = board.get(from);
+  if (!piece) return null;
+  let mv;
+  try { mv = board.move({ from, to: opts.bestMoveUci.slice(2, 4), promotion: 'q' }); } catch { mv = null; }
+  if (!mv) return null;
+  const castles = mv.san === 'O-O' || mv.san === 'O-O-O';
+  const flavor = mv.captured
+    ? 'there is something it can win'
+    : castles ? 'think about king safety' : 'it has a better square waiting';
+  // The WHY is spoken only when it keeps the secret: a fundamental that names
+  // the destination square ("push to e4") would hand over the move.
+  const to = opts.bestMoveUci.slice(2, 4);
+  const whyRaw = strategicWhyImperative(opts.fen, mv.san, opts.moverColor);
+  const why = whyRaw && !new RegExp(`\\b${to}\\b`, 'i').test(whyRaw) ? whyRaw : null;
+  const whyClause = why ? ` The idea: ${why.replace(/[.!?]+$/, '')}.` : '';
+  const facts = `Here's your hint: look at your ${REVIEW_PIECE_NAME[piece.type] ?? 'piece'}${castles ? '' : ` on ${from}`} — ${flavor}.${whyClause} Where does it want to go?`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'] };
+}
+
+/** The CONCRETE reason a hint cannot be given — computed from what is missing,
+ *  never the generic refusal. */
+export function hintUnavailableReason(opts: { hasFen: boolean; hasEngineMove: boolean }): string {
+  if (!opts.hasFen) return "There's no position on the board for me to hint at — start a game or set one up and ask again.";
+  if (!opts.hasEngineMove) return "I don't have an engine read on this position yet — give me a moment and ask again, or ask me for the plan and I'll compute it.";
+  return "I couldn't line the engine's move up with this board — make a move or ask again and I'll re-read it.";
+}
+
 /**
  * assembleTacticsAnswer — Phase 2 of the grounding inversion: tactics / danger
  * questions ("is anything hanging?", "what's the threat?", "is there a fork?").
@@ -3583,6 +3881,11 @@ export interface OpeningStat {
   /** 0-100 win rate over real games — the game-based strength signal for
    *  strongest/weakest when the student has analyzed games (David 2026-09-09). */
   winRate?: number;
+  /** TRUE when the row did NOT clear the volume floor (openingVolumeFloor:
+   *  ≥10 games or ≥5% of the colour's games). The phrasing MUST then say the
+   *  sample size — a 3-game 0% is never called "worst" without "only 3 games"
+   *  (PLAN §E2, the Elephant Gambit). */
+  thin?: boolean;
 }
 
 /**
@@ -3615,7 +3918,12 @@ export function assembleOpeningProfileAnswer(opts: {
     // games in the line; fall back to drill accuracy (David 2026-09-09: "best
     // opening" said "drill more" while 930 analyzed games sat unused).
     if (typeof o.winRate === 'number' && o.games && o.games > 0) {
-      return `${o.name} (${o.winRate}% win over ${o.games} game${o.games === 1 ? '' : 's'})`;
+      const n = `${o.games} game${o.games === 1 ? '' : 's'}`;
+      // A thin row ALWAYS carries its sample size as a caveat, never as a
+      // bare verdict (openingVolumeFloor).
+      return o.thin
+        ? `${o.name} (${o.winRate}% over only ${n} — too few to be sure)`
+        : `${o.name} (${o.winRate}% win over ${n})`;
     }
     const acc = pct(o.drillAccuracy);
     if (acc && o.drillAttempts) return `${o.name} (${acc} over ${o.drillAttempts} drill${o.drillAttempts === 1 ? '' : 's'})`;
@@ -4437,6 +4745,15 @@ export interface RepertoireGapLike {
   worstAgainst: ReadonlyArray<{ name: string; winRate: number; games: number }>;
   /** Openings the student scores BEST against (getOpeningInsights.bestResults). */
   bestAgainst?: ReadonlyArray<{ name: string; winRate: number; games: number }>;
+  /** THE HOME-OPENING READ for 'learn-next' (PLAN §E3 / §A3): the student's
+   *  own openings ranked by VOLUME × SCORE DEFICIT through the volume floor
+   *  (`rankOpeningsByVolume`, weakest first, per colour). "What should I learn
+   *  next" is answered from what they PLAY MOST — the worst line inside it —
+   *  never from a 3-game 0% matchup. Absent when the caller has no per-colour
+   *  game data (then the matchup read below still speaks, floor-checked). */
+  homeCandidates?: ReadonlyArray<{ name: string; color: 'white' | 'black'; games: number; winRate: number; thin: boolean }>;
+  /** Games per colour — the floor's denominator for `worstAgainst`. */
+  gamesByColor?: { white: number; black: number };
 }
 
 /**
@@ -4471,11 +4788,45 @@ export function assembleRepertoireGapAnswer(g: RepertoireGapLike): GroundedAnswe
   }
 
   if (g.kind === 'learn-next') {
+    // HOME-OPENING FIRST (PLAN §E3): the line to learn next is the weakest
+    // line INSIDE what the student plays most — the ranking already applied
+    // the volume floor, so a floor-clearing row is a real verdict and a thin
+    // row speaks only with its sample size.
+    const home = (g.homeCandidates ?? []).filter((h) => h.name && h.games > 0);
+    const solid = home.filter((h) => !h.thin);
+    if (solid.length > 0) {
+      const lead = solid[0];
+      const second = solid.find((h) => h.color !== lead.color);
+      const facts =
+        `The thing to learn next is inside what you already play: your ${lead.name} as ${lead.color} scores ${lead.winRate}% over ${lead.games} games — ` +
+        `that's the biggest hole in your own repertoire, so deepen that line before adding a new opening` +
+        (second ? `. As ${second.color} the same read is your ${second.name} (${second.winRate}% over ${second.games} games)` : '') +
+        `. Want me to teach you the line, or drill the positions you keep going wrong in?`;
+      return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    }
+    // Nothing clears the floor — say the thin read WITH its size, and the
+    // matchup read only if IT clears the floor. Never a bare 3-game 0%.
+    const thinHome = home[0] ?? null;
+    const floorTop = worst.find((w) => {
+      const colourGames = g.gamesByColor ? Math.max(g.gamesByColor.white, g.gamesByColor.black) : 0;
+      return clearsVolumeFloor(w.games, colourGames);
+    }) ?? null;
+    if (floorTop) {
+      const facts =
+        `The opening to learn next is a real answer to ${floorTop.name} — it's your worst matchup at ${floorTop.winRate}% over ${floorTop.games} games. Want me to teach you a line against it?`;
+      return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    }
+    if (thinHome) {
+      const facts =
+        `I don't have enough games in any one opening to call a weakest line yet — your most-played so far is the ${thinHome.name} as ${thinHome.color}, ` +
+        `${thinHome.winRate}% over only ${thinHome.games} game${thinHome.games === 1 ? '' : 's'}. Play or import more games in it and I'll point at the exact hole. ` +
+        `Want me to teach that line now?`;
+      return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    }
     if (!top) return null;
     const facts =
-      `The opening to learn next is a real answer to ${top.name} — it's your worst matchup at ${top.winRate}% over ${top.games} games` +
-      (worst[1] ? `, with ${worst[1].name} (${worst[1].winRate}%) close behind` : '') +
-      `. Want me to teach you a line against it?`;
+      `Your worst matchup so far is ${top.name} at ${top.winRate}% — but that's only ${top.games} game${top.games === 1 ? '' : 's'}, too few to build a repertoire decision on. ` +
+      `Play or import a few more and I'll tell you what to learn next from real numbers.`;
     return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
   }
 
@@ -4795,6 +5146,114 @@ export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | nu
   }
 
   return { facts: verdict, ...arrow, sources: ['engine:stockfish'] };
+}
+
+// ═══ RETROSPECTIVE MOVE — "why was Ke2 bad?", "what did you have in mind with
+// Bc5?", "why was taking on e5 good?" (PLAN §E1, 2026-09-22). ═══
+
+/** Everything the retrospective verdict needs, resolved by the lane: the ply
+ *  it found BY COORDINATES, whose move it was, and the engine's read of that
+ *  position (stored annotation or a fresh search — the assembler cannot tell
+ *  and does not care). `cpLoss`/`quality` null = no engine read in hand. */
+export interface RetrospectiveMoveLike {
+  playedSan: string;
+  fenBefore: string;
+  /** 1-based move number of the ply ("move 7"). */
+  moveNumber: number;
+  moverColor: 'white' | 'black';
+  /** Whose move it was — the STUDENT's, or the COACH's own reply (Learn/Play). */
+  mover: 'student' | 'coach';
+  bestMoveUci: string | null;
+  cpLoss: number | null;
+  quality: MoveRatingLike['quality'] | null;
+  missedMate: number | null;
+  allowedMate: number | null;
+}
+
+/**
+ * assembleRetrospectiveAnswer — the grounded verdict on a move ALREADY ON THE
+ * TAPE. G0/G3: what the move did is chess.js geometry (`describeMoveGeometry`
+ * / the fundamental it served), the verdict is the engine's cp swing at THAT
+ * ply, and the better move + its reason are `explainBestMoveGrounded` — the
+ * same computers the move-rating and slip lanes speak from, aimed at the ply
+ * the student named instead of whatever was played last.
+ *
+ * THE SEAT IS PART OF THE ANSWER. A coach's own move is answered as such —
+ * "that was my move; the engine preferred X" — never graded as if the student
+ * had played it (prod 2026-09-22: "why was Ke2 bad?" graded the OPPONENT's
+ * Nxe4 as "within a whisker of best"). Never null: with no engine read it
+ * still names the move, its ply and what it did, and says the grade is missing.
+ */
+export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedAnswer {
+  const who = r.mover === 'coach' ? 'my' : 'your';
+  const lead = `${who === 'my' ? 'My' : 'Your'} ${r.playedSan} on move ${r.moveNumber}`;
+  // What the move itself DID — the concrete geometry first, else the
+  // fundamental it served. Board-computed, never invented.
+  const did = describeMoveGeometry(r.fenBefore, r.playedSan, r.moverColor)
+    ?? strategicWhySelfContained(r.fenBefore, r.playedSan, r.moverColor);
+  const didClause = did ? ` — it ${did.replace(/[.!?]+$/, '')}` : '';
+
+  // The engine's better move, by COORDINATES — the same move renders Nxd4 or
+  // Nexd4 depending on the position, so a string compare fails open exactly
+  // when it matters (G4.5.2).
+  let bestSan: string | null = null;
+  let wasBest = false;
+  if (r.bestMoveUci && r.bestMoveUci.length >= 4) {
+    try {
+      const c = new Chess(r.fenBefore);
+      const played = c.move(r.playedSan);
+      const c2 = new Chess(r.fenBefore);
+      const best = c2.move({ from: r.bestMoveUci.slice(0, 2), to: r.bestMoveUci.slice(2, 4), promotion: r.bestMoveUci.length > 4 ? r.bestMoveUci[4] : undefined });
+      bestSan = best?.san ?? null;
+      wasBest = !!played && !!best && played.from === best.from && played.to === best.to && (played.promotion ?? '') === (best.promotion ?? '');
+    } catch { bestSan = null; }
+  }
+
+  if (wasBest) {
+    const agree = r.mover === 'coach' ? ' That was my move, and the engine agrees with it.' : '';
+    return {
+      facts: `${lead} was the engine's top move${didClause}.${agree}`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'],
+    };
+  }
+
+  const noRead = r.quality === null;
+  const why = r.bestMoveUci ? explainBestMoveGrounded(r.fenBefore, r.playedSan, r.bestMoveUci, r.moverColor) : null;
+  const better = bestSan
+    ? ` The engine preferred ${bestSan}${why ? `: ${why.replace(/[.!?]+$/, '')}` : ''}.`
+    : '';
+
+  if (noRead && !bestSan) {
+    return {
+      facts: `${lead}${didClause}. I don't have an engine read on that position yet, so I can't grade it — ask me again in a moment and I'll have the number.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'],
+    };
+  }
+
+  // The verdict ladder — the SAME bands the move-rating lane speaks. The
+  // centipawn figure is spoken ONLY when it was computed (a stored review
+  // annotation carries the class, not the number — G0, never invent one).
+  const pawns = r.cpLoss === null ? null : (r.cpLoss / 100).toFixed(1);
+  const cost = (phrase: string): string => (pawns === null ? '' : phrase);
+  let verdict: string;
+  if (r.allowedMate !== null) verdict = `walked into a forced mate in ${r.allowedMate}`;
+  else if (r.missedMate !== null) verdict = `missed a forced mate in ${r.missedMate}`;
+  else if (r.quality === 'excellent') verdict = `was within a whisker of best${cost(` — about ${pawns} points`)}`;
+  else if (r.quality === 'good') verdict = `was fine${cost(`; it cost only about ${pawns} points`)}`;
+  else if (r.quality === 'inaccuracy') verdict = `was a slight inaccuracy${cost(` — it let about ${pawns} points slip`)}`;
+  else if (r.quality === 'mistake') verdict = `was a mistake${cost(`: it cost about ${pawns} points`)}`;
+  else if (r.quality === 'blunder') verdict = `was a blunder${cost(` — it dropped about ${pawns} points`)}`;
+  else verdict = `wasn't the engine's choice`;
+
+  const seat = r.mover === 'coach'
+    ? ' That was my skill-level move, not the engine\'s — I play at your strength on purpose.'
+    : '';
+  return {
+    facts: `${lead}${didClause}${didClause ? ', and it' : ''} ${verdict}.${better}${seat}`,
+    bestMoveSan: bestSan,
+    bestMoveFromTo: r.bestMoveUci && bestSan ? { from: r.bestMoveUci.slice(0, 2), to: r.bestMoveUci.slice(2, 4) } : null,
+    sources: ['engine:stockfish', 'board:chess.js'],
+  };
 }
 
 /**

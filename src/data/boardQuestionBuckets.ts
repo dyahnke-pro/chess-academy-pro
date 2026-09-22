@@ -31,7 +31,7 @@ export type QuestionAspect =
   // square
   | 'square-control' | 'square-safety' | 'square-weakness' | 'square-occupant'
   // piece
-  | 'piece-purpose' | 'piece-safety' | 'piece-activity' | 'piece-role'
+  | 'piece-purpose' | 'piece-safety' | 'piece-activity' | 'piece-role' | 'piece-plan'
   // move
   | 'best-move' | 'move-eval' | 'move-purpose' | 'move-consequence' | 'why-best' | 'why-failed' | 'legal-moves' | 'move-comparison'
   // pawns
@@ -82,6 +82,7 @@ export const BOARD_QUESTION_BUCKETS: readonly BucketDef[] = [
   { aspect: 'piece-safety', component: 'piece', theme: 'board-vision', needsEngine: false, computer: 'assemblePieceSafetyAnswer' },
   { aspect: 'piece-activity', component: 'piece', theme: 'piece-activity', needsEngine: false, computer: null },
   { aspect: 'piece-role', component: 'piece', theme: 'piece-activity', needsEngine: false, computer: null },
+  { aspect: 'piece-plan', component: 'piece', theme: 'planning', needsEngine: false, computer: 'assemblePiecePlanAnswer' },
   // ── move ──
   { aspect: 'best-move', component: 'move', theme: 'calculation', needsEngine: true, computer: 'assembleMoveEvalAnswer' },
   { aspect: 'move-eval', component: 'move', theme: 'calculation', needsEngine: true, computer: 'assembleCandidateMoveAnswer' },

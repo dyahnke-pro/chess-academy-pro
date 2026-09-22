@@ -573,6 +573,10 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
     worstResults,
     drillAccuracyByOpening: drillAccuracyByOpening.slice(0, 10),
     strengths,
+    gamesByColor: {
+      white: playerGames.filter((g) => g.playerColor === 'white').length,
+      black: playerGames.filter((g) => g.playerColor === 'black').length,
+    },
   };
 }
 
