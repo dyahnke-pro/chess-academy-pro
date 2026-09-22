@@ -10,51 +10,32 @@
 // fundamental flaw stated first and then the other computer narration
 // following it as supporting evidence").
 //
-// PURE. No engine, no model, no I/O — G0 by construction. The caller (the Learn
-// narration turn in CoachTeachPage) already holds the two Stockfish reads this
-// needs (the position before the move and after it), so this recomputes
-// nothing; it normalises those reads to the attributor's contract (mover-POV cp
-// + SAN PVs) and delegates. The attributor self-gates on pattern + available
-// punishment + counterfactual, so a clean move attributes nothing and this
-// stays silent.
+// PURE. No engine, no model, no I/O — G0 by construction. The ATTRIBUTION is
+// `liveFundamental.attributeLiveFundamental` (C4) — the one live computer,
+// shared with `positionFacts`, so the id the decision weighs and the id this
+// sentence names can never disagree. This module owns only the VOICE: the
+// rendered verdict and the recurrence clause.
 
-import { Chess } from 'chess.js';
-import {
-  attributePrinciples,
-  pvUciToSan,
-  type FundamentalId,
-} from './principleAttribution';
+import { type FundamentalId } from './principleAttribution';
+import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamentalReads } from './liveFundamental';
 import { renderFundamentalVerdict } from './principleVoice';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import type { WeaknessSignal } from './weaknessSignal';
-import { MATE_EVAL_THRESHOLD } from './engineConstants';
 
-export interface LearnFundamentalInput {
-  /** Position BEFORE the played move (FEN). */
-  fenBefore: string;
-  /** Every SAN of the game up to AND INCLUDING the played move. */
-  historySans: readonly string[];
-  /** The move the student played (SAN). */
-  playedSan: string;
-  /** The engine's best move at fenBefore (SAN), or null when none/equal. */
-  bestSan: string | null;
-  /** Which side the student is — the mover here. */
-  studentColor: 'white' | 'black';
-  /** Engine eval at fenBefore, WHITE POV in cp (mate encoded as the sentinel).
-   *  Undefined when the read is unavailable. */
-  evalBeforeWhiteCp?: number;
-  /** Engine eval at the position after the played move, WHITE POV in cp. */
-  evalAfterWhiteCp?: number;
-  /** The engine's PV from fenBefore (its best line), UCI. Corroborates the
-   *  best-move counterfactual for the eval/PV-gated detectors. */
-  bestPvUci?: readonly string[];
-  /** The engine's PV from the position AFTER the played move, UCI — the
-   *  opponent's punishing line. */
-  playedPvUci?: readonly string[];
-  /** A mate the best move offered that the played move let go (plies), or null. */
-  missedMate?: number | null;
-  /** A mate the played move now allows the opponent (plies), or null. */
-  allowedMate?: number | null;
+export { LEARN_FUNDAMENTAL_CP_FLOOR };
+
+export interface LearnFundamentalInput extends LiveFundamentalReads {
+  /**
+   * THE GAME BEING PLAYED, so its own rows are never counted as a prior game
+   * (C4). Learn's live capture writes `misconceptionTags` rows mid-game with
+   * this id, and `useWeaknessSignals` reloads the spine on
+   * `weaknessModelChanged` — so by the second slip of one game the spine
+   * already carried THIS game, and "you've walked into this before" was
+   * spoken on a first occurrence. REQUIRED, `null` only when the surface
+   * genuinely has no game id: a new caller must answer, not inherit the
+   * self-count.
+   */
+  currentGameId: string | null;
 }
 
 export interface LearnFundamental {
@@ -65,29 +46,10 @@ export interface LearnFundamental {
   verdict: string;
   /** The loop, out loud (WO-LOOP-01): "you've walked into this before — the
    *  third game now, the last one against X". Null on a fresh record, an
-   *  unmatched fundamental, or a repeat within this game. Present tense —
-   *  the live register, never the review's. */
+   *  unmatched fundamental, a repeat within this game, or a fundamental whose
+   *  only recorded games are THIS one. Present tense — the live register,
+   *  never the review's. */
   recurrence: string | null;
-}
-
-/** A move under this mover-POV loss is not worth naming a fundamental on — a
- *  near-best move that still technically drops a few centipawns is not a
- *  "flagged" move. Matches the inaccuracy floor the rest of the coach uses. */
-export const LEARN_FUNDAMENTAL_CP_FLOOR = 60;
-
-/** Real centipawns only — a mate sentinel makes the subtraction meaningless. */
-function isRealCp(cp: number | undefined): cp is number {
-  return typeof cp === 'number' && Math.abs(cp) < MATE_EVAL_THRESHOLD;
-}
-
-function afterFen(fenBefore: string, san: string): string | null {
-  try {
-    const c = new Chess(fenBefore);
-    if (!c.move(san)) return null;
-    return c.fen();
-  } catch {
-    return null;
-  }
 }
 
 /**
@@ -103,52 +65,7 @@ export function learnFundamentalVerdict(
   /** The student's spine, joined — absent means a cold student (no recurrence). */
   studentWeaknesses: readonly WeaknessSignal[] = [],
 ): LearnFundamental | null {
-  if (!input.bestSan) return null;
-  if (input.historySans.length === 0) return null;
-
-  const moverIsWhite = input.studentColor === 'white';
-  const evalBeforeMover = isRealCp(input.evalBeforeWhiteCp)
-    ? (moverIsWhite ? input.evalBeforeWhiteCp : -input.evalBeforeWhiteCp)
-    : undefined;
-  const evalAfterMover = isRealCp(input.evalAfterWhiteCp)
-    ? (moverIsWhite ? input.evalAfterWhiteCp : -input.evalAfterWhiteCp)
-    : undefined;
-
-  // FLAGGED? A real mover-POV loss over the floor, OR a mate swing either way.
-  // Mate cases skip the centipawn arithmetic (sentinels don't subtract) but are
-  // always worth naming.
-  const mateSwing = (input.missedMate ?? null) !== null || (input.allowedMate ?? null) !== null;
-  const cpLoss = evalBeforeMover !== undefined && evalAfterMover !== undefined
-    ? evalBeforeMover - evalAfterMover
-    : 0;
-  const flagged = mateSwing || cpLoss >= LEARN_FUNDAMENTAL_CP_FLOOR;
-  if (!flagged) return null;
-
-  // Normalise the persisted lines to the attributor's contract (SAN, from the
-  // right positions). Eval is passed MOVER POV and only when it is real cp —
-  // the eval/PV-gated detectors (overvalued-attack, poisoned-pawn, botched-
-  // conversion) then light up live too; on a mate swing they stay dark, which
-  // is correct (a thrown mate is a tactic, not a conversion-tempo lesson).
-  const pvAfterPlayed = input.playedPvUci && input.playedPvUci.length > 0
-    ? pvUciToSan(afterFen(input.fenBefore, input.playedSan) ?? input.fenBefore, input.playedPvUci)
-    : undefined;
-  // `bestPvUci` is the engine's line FROM fenBefore, so its first move IS the
-  // best move — the attributor wants the line AFTER it, replayed from the
-  // post-best position (mirrors the review path). Drop move 1.
-  const bestAfter = afterFen(input.fenBefore, input.bestSan);
-  const pvAfterBest = input.bestPvUci && input.bestPvUci.length > 1 && bestAfter
-    ? pvUciToSan(bestAfter, input.bestPvUci.slice(1))
-    : undefined;
-
-  const attrs = attributePrinciples({
-    historySans: input.historySans,
-    bestSan: input.bestSan,
-    classification: 'mistake', // flagged is proven above; the module names WHY
-    pvAfterPlayed,
-    pvAfterBest,
-    evalBefore: evalBeforeMover,
-    evalAfterPlayed: evalAfterMover,
-  });
+  const attrs = attributeLiveFundamental(input);
   if (attrs.length === 0) return null;
 
   // First appearance THIS game → the recurrence clause may follow the full
@@ -161,7 +78,13 @@ export function learnFundamentalVerdict(
   });
   if (!verdict.trim()) return null;
   const recurrence = firstThisGame
-    ? fundamentalRecurrenceLine({ ids: [attrs[0].id], signals: studentWeaknesses, register: 'live', seenLabels: new Set() })
+    ? fundamentalRecurrenceLine({
+      ids: [attrs[0].id],
+      signals: studentWeaknesses,
+      register: 'live',
+      seenLabels: new Set(),
+      currentGameId: input.currentGameId,
+    })
     : null;
   return { id: attrs[0].id, tag: attrs[0].tag, verdict, recurrence };
 }

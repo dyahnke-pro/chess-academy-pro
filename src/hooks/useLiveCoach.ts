@@ -28,7 +28,7 @@ import { voiceService } from '../services/voiceService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { logAppAudit } from '../services/appAuditor';
 import { useAppStore } from '../stores/appStore';
-import { computePositionFacts, clauseText } from '../services/positionFacts';
+import { computePositionFacts, clauseText, type LastMoveInput } from '../services/positionFacts';
 import { rememberSpokenSquares } from '../services/spokenSquares';
 import { actuate } from '../services/coachActuator';
 import { useWeaknessSignals } from './useWeaknessSignals';
@@ -95,6 +95,15 @@ export interface PlayerMoveNotification {
    *  suppress eval-swing-wrong (POLISH-02 blunder alert covers that
    *  case with dedicated prose). */
   hasHangingPiece: boolean;
+  /** THE RAW READS the composer attributes the neglected FUNDAMENTAL from
+   *  (C4): every SAN up to and including this move, the engine's best move
+   *  at `fenBefore` (UCI) with its line, and the reply line from `fenAfter`.
+   *  REQUIRED — `null` / `[]` when a read never landed — so a caller cannot
+   *  hand over a graded move without the lines it was graded on. */
+  historySans: readonly string[];
+  bestMoveUci: string | null;
+  bestPvUci: readonly string[];
+  replyPvUci: readonly string[];
 }
 
 export interface OpponentMoveNotification {
@@ -178,7 +187,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         last3Moves?: string[];
         /** The student's move just played, or null when the trigger was the
          *  OPPONENT's move — never their move filed under the student. */
-        lastMove: { fenBefore: string; san: string; cpLoss: number | null } | null;
+        lastMove: LastMoveInput | null;
       },
     ): Promise<void> => {
       if (inFlightRef.current) return;
@@ -423,6 +432,21 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
           fenBefore: n.fenBefore,
           san: n.san,
           cpLoss: Math.max(0, (studentBestEval ?? studentEvalBefore) - studentEvalAfter),
+          // THE RAW READS, forwarded whole (C4) — the composer attributes the
+          // fundamental; this hook composes no fact-computer for it. The
+          // notification's evals are WHITE-POV cp, a mate as the sentinel, which
+          // the attributor drops on its own. Play does not read mates as plies
+          // here, so the two mate fields are honestly null.
+          reads: {
+            historySans: n.historySans,
+            bestMoveUci: n.bestMoveUci,
+            bestPvUci: n.bestPvUci,
+            playedPvUci: n.replyPvUci,
+            evalBeforeWhiteCp: n.evalBefore,
+            evalAfterWhiteCp: n.evalAfter,
+            missedMate: null,
+            allowedMate: null,
+          },
         },
       });
     },

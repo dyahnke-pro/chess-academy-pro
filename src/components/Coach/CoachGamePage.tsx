@@ -3913,6 +3913,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         isBestMove: isEngineBestMove || engineBestMoveSan === moveResult.san,
         bestMoveWasTactical,
         hasHangingPiece,
+        // THE RAW READS for the neglected-fundamental attribution (C4) — the
+        // same pre-move fan + post-move read the classifier above graded on.
+        historySans: moveResult.history,
+        bestMoveUci: engineBestMoveUci,
+        bestPvUci: preAnalysis?.topLines?.[0]?.moves ?? [],
+        replyPvUci: analysis.topLines?.[0]?.moves ?? [],
       });
     }
 

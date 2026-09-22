@@ -3,7 +3,7 @@ import { createStandingFactMemory, fullmoveOf } from '../services/standingFactMe
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
-import { computePositionFacts, clauseText } from '../services/positionFacts';
+import { computePositionFacts, clauseText, type LastMoveInput } from '../services/positionFacts';
 import { useWeaknessSignals } from './useWeaknessSignals';
 import { useStudentNeed } from './useStudentNeed';
 import { lastMoveIfStudent, sansOfPgn } from '../services/lastMoveOfLine';
@@ -619,7 +619,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             // student's move, so the last move of the line is theirs when the
             // PGN really produces `event.fen`; otherwise absent. `cpLoss: null`
             // — this surface never graded the move.
-            ...((): { lastMove?: { fenBefore: string; san: string; cpLoss: number | null } } => {
+            ...((): { lastMove?: LastMoveInput } => {
               const lm = lastMoveIfStudent(sansOfPgn(argsRef.current.getPgn() ?? ''), event.playerColor, event.fen);
               return lm ? { lastMove: lm } : {};
             })(),

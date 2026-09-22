@@ -8,7 +8,7 @@ import { buildVoicePackage } from '../services/voicePackage';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { formatReadingFacts } from '../services/positionReadingService';
-import { computePositionFacts, clauseText } from '../services/positionFacts';
+import { computePositionFacts, clauseText, type LastMoveInput } from '../services/positionFacts';
 import { useWeaknessSignals } from './useWeaknessSignals';
 import { useStudentNeed } from './useStudentNeed';
 import { lastMoveIfStudent, sansOfPgn } from '../services/lastMoveOfLine';
@@ -255,7 +255,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
             // THE HEAT MAP + THE NEED TERM (B3): the student's last move when
             // the PGN produces this board and the last mover is them; absent
             // otherwise. Never graded here → `cpLoss: null`.
-            ...((): { lastMove?: { fenBefore: string; san: string; cpLoss: number | null } } => {
+            ...((): { lastMove?: LastMoveInput } => {
               const lm = lastMoveIfStudent(sansOfPgn(args.pgn), args.playerColor, args.fen);
               return lm ? { lastMove: lm } : {};
             })(),

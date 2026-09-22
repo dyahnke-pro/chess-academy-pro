@@ -8823,6 +8823,10 @@ export function CoachTeachPage(): JSX.Element {
                   // can trace, so the doubt resolves toward forgetting.
                   standingRef.current.observe(fullmoveOf(probe.fen()));
                   if (studentBest?.topLines?.length) {
+                    // The post-move read was queued behind the warm probe this
+                    // lane already awaited, so this resolves in order — no
+                    // second search, no new engine time (C4).
+                    const midReadForFacts = await midTurnRead;
                     const pf = await computePositionFacts({
                       // The student asked for this lesson — every taught position
                       // is a beat, so importance ranks it and never mutes it.
@@ -8842,7 +8846,25 @@ export function CoachTeachPage(): JSX.Element {
                       // opponent's posed capabilities under the student.
                       // `cpLoss: null` means this ply could not be graded, so
                       // green withholds while grey still teaches.
-                      lastMove: { fenBefore, san: move.san, cpLoss: studentCpLoss },
+                      // THE RAW READS ride along (C4): the pre-move fan the grade
+                      // came from and the post-move read (queue-ordered behind the
+                      // warm probe, already in flight) — so the composer attributes
+                      // the neglected FUNDAMENTAL and need weighs THIS student's
+                      // record of it. `reads: null` when no pre-move read landed:
+                      // absent, never a guess.
+                      lastMove: {
+                        fenBefore, san: move.san, cpLoss: studentCpLoss,
+                        reads: preStudentRead ? {
+                          historySans: move.history,
+                          bestMoveUci: preStudentRead.bestMove || null,
+                          bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
+                          playedPvUci: midReadForFacts?.topLines?.[0]?.moves ?? [],
+                          evalBeforeWhiteCp: preStudentRead.isMate ? undefined : preStudentRead.evaluation,
+                          evalAfterWhiteCp: midReadForFacts && !midReadForFacts.isMate ? midReadForFacts.evaluation : undefined,
+                          missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
+                          allowedMate: midReadForFacts?.isMate ? midReadForFacts.mateIn : null,
+                        } : null,
+                      },
                       // The CONTEXT — the composer derives the ply from the FEN
                       // and owns the mover guard, so this surface decides none
                       // of it (§G4.5.15, and `surfaceContract.scan` enforces it).
@@ -10156,6 +10178,9 @@ export function CoachTeachPage(): JSX.Element {
                     // fundamental, the backward-look speaks alone, unchanged.
                     const fundamental = learnFundamentalVerdict({
                       fenBefore,
+                      // THIS game's id, so its own live-captured rows are never
+                      // counted as a prior game (C4) — the spine reloads mid-game.
+                      currentGameId: learnMemRef.current.gameId,
                       historySans: move.history,
                       playedSan: move.san,
                       bestSan: studentBestSan ?? null,
