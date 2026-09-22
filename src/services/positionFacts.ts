@@ -594,9 +594,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // ── THE DOOR, STEPS 3-6 ────────────────────────────────────────────────────
   // SUBSUME, then FLOOR, then ORDER. This is what these four surfaces were
   // missing: the clauses were each individually gated and ranked, but nothing
-  // ever noticed that two of them could be ONE CLAIM about ONE geometry. A pin
-  // aimed at your king and a must-defend on the piece in front of it name the
-  // same three squares; before this they both spoke.
+  // ever noticed that two of them could be ONE CLAIM about ONE geometry — two
+  // readings of the same fork, or the same pin found by two probes. (Since B12
+  // the collapse also requires the same claim FAMILY, so a must-defend and a
+  // latent-danger over one geometry — the hang now and the pin that causes it
+  // — are two claims and both speak.)
   //
   // The scale is OURS, not the review ranker's — hence `order`. The bar is 0 on
   // purpose and that is not a loophole: every clause here is emitted by a
@@ -686,6 +688,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // questions you have to answer; your own assets are not.
       incoming: new Set(composed.filter((c) => c.kind === 'must-defend' || c.kind === 'opponent-intent' || c.kind === 'opponent-leans' || c.kind === 'latent-danger').map((c) => c.text)),
       order: { rank: new Map(composed.map((c) => [c.text, c.rank] as const)), bar: 0 },
+      // THE CLAIM FAMILY — the clause's own kind, coupled at emission (B12).
+      // Two clauses over one geometry collapse only when the same computer
+      // produced them; a must-defend and a pin-in-waiting on the same three
+      // squares are two claims (now / next move) and both speak.
+      family: new Map(composed.map((c) => [c.text, c.kind] as const)),
       alreadySaid: input.alreadySaid,
     },
     input.posture,

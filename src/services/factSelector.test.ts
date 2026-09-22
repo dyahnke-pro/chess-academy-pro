@@ -93,6 +93,30 @@ describe('factSelector — a BAR, not a cap (G4.5)', () => {
     expect(r.spoken.length + r.quiet.length).toBe(all.length);
   });
 
+  // B12 (2026-09-22). Negative control: drop the family test in `sameClaim`
+  // (return true whenever Jaccard clears) → the first two `it`s fail.
+  it('a two-square fact is NOT eaten by a three-square superset of a DIFFERENT claim family', () => {
+    const PIN3 = '[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.';
+    const LOOSE2 = '[loose] Their bishop on e2 is attacked by your bishop on g4 and guarded only by the queen.';
+    const sq = new Map<string, readonly string[]>([[PIN3, ['g4', 'e2', 'd1']], [LOOSE2, ['e2', 'g4']]]);
+    const r = selectFacts([PIN3, LOOSE2], sq, 'blunder');
+    expect(r.spoken).toEqual(expect.arrayContaining([PIN3, LOOSE2]));
+    expect(r.quiet).toHaveLength(0);
+  });
+
+  it('the live lane supplies the family as the clause KIND — same squares, different kinds, both speak', () => {
+    const HANG = 'Your knight on e2 is hanging to the bishop on g4.';
+    const PINNED = 'Your knight on e2 is pinned to your king on d1 by the bishop on g4.';
+    const sq = new Map<string, readonly string[]>([[HANG, ['e2', 'g4', 'd1']], [PINNED, ['g4', 'e2', 'd1']]]);
+    const order = { rank: new Map([[HANG, 75], [PINNED, 70]]), bar: 0 };
+    const r = selectFacts([HANG, PINNED], sq, 'must-defend', [], { order, family: new Map([[HANG, 'must-defend'], [PINNED, 'latent-danger']]) });
+    expect(r.spoken).toEqual(expect.arrayContaining([HANG, PINNED]));
+    // …and with ONE family they are one claim and the higher rank wins.
+    const one = selectFacts([HANG, PINNED], sq, 'must-defend', [], { order, family: new Map([[HANG, 'must-defend'], [PINNED, 'must-defend']]) });
+    expect(one.spoken).toEqual([HANG]);
+    expect(one.quiet[0]).toMatchObject({ text: PINNED, why: 'subsumed', by: HANG });
+  });
+
   it('the same-claim threshold is Jaccard, so containment alone never collapses', () => {
     expect(SAME_CLAIM_JACCARD).toBeGreaterThan(0.5);
     // {e2} ⊂ {g4,e2,d1} — containment is 1.0, Jaccard is 0.33. Must NOT collapse.

@@ -132,6 +132,10 @@ export interface FactBundle {
    *  time they arrive, so the match belongs upstream and only its result
    *  travels. */
   holeByFact?: ReadonlyMap<string, WeaknessSignal | null>;
+  /** THE CLAIM FAMILY per fact — see `FactSelectOptions.family`. The live
+   *  composer passes each clause's `kind`; review's facets carry theirs in the
+   *  `[tag]` prefix and may omit this. */
+  family?: ReadonlyMap<string, string>;
 }
 
 /** What the student should have DONE differently in their head. Optional: a
@@ -285,7 +289,7 @@ export function decide(
     bundle.squares,
     importance.tier,
     student.weaknesses,
-    { incoming: bundle.incoming, alreadySaid: bundle.alreadySaid, order: bundle.order },
+    { incoming: bundle.incoming, alreadySaid: bundle.alreadySaid, order: bundle.order, family: bundle.family },
   );
   // 5 — THE ORDER. The surface's own ranks when it supplied them, else the
   // review ranker. Either way the student's holes are raised: `rankFacets` does
