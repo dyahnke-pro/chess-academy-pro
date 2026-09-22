@@ -147,6 +147,22 @@ async function main() {
       !/you are now playing|switched you to/i.test(flip.transcript ?? ''),
       'no side-swap language in the transcript');
 
+    // "QUIZ ME" — the hand that had a router entry, a registration slot and a
+    // handler contract and NEVER FIRED, because `ctx.quizSan` had no supplier.
+    // It needs a FRESH engine read for the exact position, so the page is given
+    // time to settle its eval before asking; a null quizSan is a legitimate
+    // outcome (no quiz) and is reported rather than failed silently.
+    await page.goto(`${BASE_URL}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+    await dismissGates(page);
+    await page.waitForTimeout(12_000); // let the eval bar land on this FEN
+    const quiz = await command(page, listener, 'quiz me');
+    const quizEvents = routerDirect(quiz.events);
+    record('LEARN: "quiz me" reaches the door (needs a fresh engine read)',
+      quizEvents.length > 0,
+      quizEvents.length > 0
+        ? `${quizEvents[0].summary}`
+        : 'no router-direct event — either no fresh eval for this FEN (honest null) or the producer is still dead');
+
     // ── the instruments themselves ───────────────────────────────────────
     const all = listener.getCapturedEvents();
     record('INSTRUMENT: the listener captured events at all', all.length > 0, `${all.length} events`);

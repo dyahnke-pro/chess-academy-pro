@@ -253,6 +253,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
+import { uciMoveToSan } from '../../utils/uciToSan';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
@@ -1531,6 +1532,10 @@ export function CoachTeachPage(): JSX.Element {
    * black" is about the SIDE and means starting over.
    */
   const [boardFlipped, setBoardFlipped] = useState(false);
+  /** `startCoachDrill` is declared BELOW the hands registration, so the quiz
+   *  hand reaches it through a ref rather than forcing a reorder of a
+   *  14,000-line component. Filled by the effect beside its declaration. */
+  const startCoachDrillRef = useRef<((drill: CoachDrill) => void) | null>(null);
   const boardOrientation: 'white' | 'black' = boardFlipped
     ? (playerColor === 'white' ? 'black' : 'white')
     : playerColor;
@@ -2222,10 +2227,44 @@ export function CoachTeachPage(): JSX.Element {
       gameRef.current.setOrientation(o);
       setBoardFlipped(o !== playerColor);
     },
+    /**
+     * "QUIZ ME" — the hand that had a router entry, a registration slot and a
+     * handler contract, and NEVER FIRED, because `ctx.quizSan` had zero
+     * production suppliers anywhere in `src/`.
+     *
+     * 🔒 A QUIZ IS A ONE-MOVE DRILL, so this reuses `startCoachDrill` rather
+     * than growing a parallel quiz flow beside it — `CoachDrill` already
+     * carries exactly what a quiz needs (setupFen, the side to move, the
+     * solution, the spoken prompt) and the surface already knows how to grade
+     * one. A second mechanism for one idea is the rot this file keeps paying
+     * for.
+     *
+     * The MOVE is the engine's, never the model's (G0): `handleSubmit` reads
+     * it off `latestEvalRef` and only when that analysis is for THIS exact
+     * FEN. With no fresh eval there is no quiz — `actionForCommand` returns
+     * null and the ask goes to the brain, which is the honest outcome.
+     */
+    quizMove: (args: { expectedSan: string; prompt: string }) => {
+      const fen = liveFenRef.current;
+      if (!fen) return { ok: false, reason: 'no position to quiz on' };
+      startCoachDrillRef.current?.({
+        aid: 'live-quiz',
+        label: 'Find the move',
+        setupFen: fen,
+        playerColor,
+        solutionSan: [args.expectedSan],
+        prompt: args.prompt,
+        // HONEST NULLS: there is no source puzzle behind a live-position quiz,
+        // and no rating to claim for it. Naming that beats inventing one.
+        puzzleId: 'live-position',
+        rating: 0,
+      });
+      return { ok: true };
+    },
     showSquares: (squares: readonly Square[]) => {
       setHighlights(squares.map((sq) => ({ square: sq, color: 'yellow' as const })));
     },
-  }), [handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard]);
+  }), [handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, playerColor]);
 
   // ─── In-place drills (coach sets a REAL puzzle up on the board) ──────
   // David 2026-07-03: "the coach sets them up on the board under learn
@@ -2315,6 +2354,8 @@ export function CoachTeachPage(): JSX.Element {
     });
     void voiceService.speak(intro);
   }, [walkthrough, loadDrillOntoBoard]);
+  // Fill the ref the quiz hand reads (declared above the hands registration).
+  useEffect(() => { startCoachDrillRef.current = startCoachDrill; }, [startCoachDrill]);
 
   /** Quiz a MASTER-level puzzle in the classroom (David 2026-09-14: "tie coach
    *  into master puzzles so it can quiz them in the classroom"). Lazily seeds
@@ -3047,6 +3088,20 @@ export function CoachTeachPage(): JSX.Element {
       if (routed) {
         const action = actionForCommand(routed, {
           fen: liveFenRef.current,
+          // THE TEACHABLE MOVE, FROM THE ENGINE. Gated on the cached analysis
+          // being for THIS exact FEN — a stale best move would quiz the student
+          // on a position that is no longer in front of them, which is worse
+          // than not quizzing. Null here means "no quiz", not "any move".
+          quizSan: (() => {
+            const cached = latestEvalRef.current;
+            if (!cached || cached.fen !== liveFenRef.current) return null;
+            const uci = cached.analysis?.bestMove;
+            // The SHARED converter — `CoachTeachPage` already carries a local
+            // `uciSanAt` arrow 7,000 lines below, inside another callback. A
+            // third copy of one conversion is the duplicated-helper rot; this
+            // is the one every other surface uses.
+            return uci ? (uciMoveToSan(uci, liveFenRef.current) || null) : null;
+          })(),
           // The squares the coach itself last pointed at — never a guess, and
           // never scraped back out of the prose.
           squares: readSpokenSquares(liveFenRef.current),
