@@ -579,3 +579,37 @@ describe('useReviewPlayback — auto-advance', () => {
     } finally { vi.useRealTimers(); }
   });
 });
+
+describe('useReviewPlayback — the turning-point card (WO-STANDARD-01 D-13, 2026-09-22)', () => {
+  const narr = () => makeNarration({
+    intro: 'Intro.',
+    segments: [
+      makeSegment({ ply: 1, narration: 'First move, fine.' }),
+      makeSegment({ ply: 2, narration: 'A slip here.', classification: 'mistake' }),
+      makeSegment({ ply: 3, narration: null }),
+      makeSegment({ ply: 4, narration: 'Last.' }),
+    ],
+  });
+  it('an auto-advance that hits the turning-point card PAUSES — it never dismisses the question it just asked', async () => {
+    // Prod: "One more thing — where do you think this game turned?" was spoken,
+    // the card appeared, and the 0.5s auto-advance tick closed it. The parent
+    // now answers the AUTO forward with a `turning-point` stop; the hook must
+    // treat that as a pause (auto-play OFF), not a reschedule that keeps
+    // knocking on the card.
+    vi.useFakeTimers();
+    try {
+      const onAutoAdvance = vi.fn((): ForwardOutcome => ({ advanced: false, stop: 'turning-point' }));
+      const n = narr();
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
+      await act(async () => { result.current.play(); });
+      const intro = speakRecords[speakRecords.length - 1];
+      await act(async () => { intro.resolve(); });
+      await act(async () => { vi.advanceTimersByTime(1200); });
+      expect(onAutoAdvance).toHaveBeenCalledTimes(1);
+      expect(result.current.isAutoPlaying).toBe(false);
+      // NEGATIVE CONTROL: no second knock — a 'reschedule' stop would call again.
+      await act(async () => { vi.advanceTimersByTime(5000); });
+      expect(onAutoAdvance).toHaveBeenCalledTimes(1);
+    } finally { vi.useRealTimers(); }
+  });
+});
