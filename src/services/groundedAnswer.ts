@@ -14,6 +14,7 @@
  */
 import { deriveNextPlans } from './nextPlans';
 import { Chess } from 'chess.js';
+import { isRealPin } from './pinGeometry';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
@@ -2052,8 +2053,18 @@ function findPinFrom(
         if (!first) {
           first = { sq, piece: pc.type };
         } else {
-          // Second enemy piece behind the first — a pin if it's worth more.
-          if ((REVIEW_PIECE_VALUE[pc.type] ?? 0) > (REVIEW_PIECE_VALUE[first.piece] ?? 0)) {
+          // Second enemy piece behind the first — a pin only by the ONE shared
+          // test (escape + value + bite, `pinGeometry`). This was the fourth
+          // copy of geometry-and-value alone (D-2 sweep, 2026-09-22).
+          if (isRealPin({
+            chess: c,
+            dir: [df, dr],
+            attacker: from,
+            pinned: first.sq,
+            behind: sq,
+            frontValue: REVIEW_PIECE_VALUE[first.piece] ?? 0,
+            behindValue: REVIEW_PIECE_VALUE[pc.type] ?? 0,
+          })) {
             return { pinned: first.sq, pinnedPiece: first.piece, rear: sq, rearPiece: pc.type };
           }
           break;
