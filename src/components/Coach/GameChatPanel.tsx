@@ -16,6 +16,7 @@ import { tryCaptureForgetIntent, tryCaptureOpeningIntent } from '../../services/
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { parseActions } from '../../services/coachActionDispatcher';
 import { isPlanQuestion } from '../../coach/coachService';
+import { coachSurfaceForRoute } from '../../coach/questionIntents';
 import { buildEnginePlan } from '../../services/enginePlanContext';
 import { getCachedStockfish } from '../../hooks/stockfishFenCache';
 import { withTimeout } from '../../coach/withTimeout';
@@ -1287,6 +1288,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // me to X" intents); FEN / move history are passed only when
       // they're meaningful (post-game review has them, home dashboard
       // typically doesn't).
+      //
+      // 🔒 THE SURFACE IS DERIVED FROM THE ROUTE, NEVER A CONSTANT (WO-STANDARD-01
+      // H2). This branch used to hard-code `surface: 'home-chat'`, so the global
+      // drawer stayed "home chat" after the coach had navigated the student to
+      // Learn — and the walkthrough tool refused a lesson on `/coach/teach`, the
+      // one route that hosts them (a real native user, ten tool errors, no
+      // lesson). `coachSurfaceForRoute` reads the pathname at ask time.
+      const drawerSurface = coachSurfaceForRoute(location.pathname);
       onBoardAnnotation?.([{ type: 'clear' }]);
       setIsStreaming(true);
       setStreamingContent('');
@@ -1297,7 +1306,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       let drawerSafeBuf = '';
       try {
         const drawerLiveState: LiveState = {
-          surface: 'home-chat',
+          surface: drawerSurface,
           fen: fen || undefined,
           moveHistory: history && history.length > 0 ? history : undefined,
           userJustDid: text,
@@ -1307,9 +1316,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           kind: 'coach-surface-migrated',
           category: 'subsystem',
           source: 'GameChatPanel.handleSend',
-          summary: 'surface=home-chat viaSpine=true',
+          summary: `surface=${drawerSurface} viaSpine=true`,
           details: JSON.stringify({
-            surface: 'home-chat',
+            surface: drawerSurface,
             viaSpine: true,
             timestamp: Date.now(),
             fenIfPresent: fen || null,
@@ -1327,7 +1336,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           .find((m) => m.role === 'assistant')?.content;
         const drawerAskResult = await withTimeout(
           dispatchCoachTurn(
-          { surface: 'home-chat', ask: text, liveState: drawerLiveState },
+          { surface: drawerSurface, ask: text, liveState: drawerLiveState },
           {
             // Full dispatch (action router ON): settings toggles, "take me to
             // X", session starts route deterministically here — replacing the

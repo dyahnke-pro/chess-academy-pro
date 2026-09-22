@@ -24,6 +24,43 @@ import type {
   IntendedOpening,
 } from '../../stores/coachMemoryStore';
 
+/**
+ * QUEUE A WALKTHROUGH FOR LEARN TO START ON ARRIVAL — the one hand-off.
+ *
+ * Two callers used to own this sentence: the `start_walkthrough_for_opening`
+ * tool (when its ctx carried no host) and, separately, the actuator's
+ * `start-walkthrough` fallback, which navigated to `/coach/teach?opening=` — a
+ * route Learn answers with a GREETING, not a lesson. One queue, one drain
+ * (`CoachTeachPage` on mount), one computed sentence the phrasing pass must
+ * voice. `navigated` says whether the caller has ALREADY moved the student, so
+ * the model is never told to call `navigate_to_route` for a trip in progress —
+ * and never told the board is set up, because it is not.
+ */
+export function memoryQueueWalkthrough(input: {
+  opening: string;
+  variation?: string;
+  orientation?: 'white' | 'black';
+  pgn?: string;
+  requestedFromSurface?: string | null;
+  navigated: boolean;
+}): { queued: true; sentence: string } {
+  useCoachMemoryStore.getState().queueWalkthrough({
+    opening: input.opening,
+    requestedFromSurface: input.requestedFromSurface ?? null,
+    ...(input.variation ? { variation: input.variation } : {}),
+    ...(input.orientation ? { orientation: input.orientation } : {}),
+    ...(input.pgn ? { pgn: input.pgn } : {}),
+  });
+  const what = input.variation ? `${input.opening}, ${input.variation}` : input.opening;
+  const sentence =
+    `Not started yet — this surface cannot host a walkthrough. The ${what} lesson is QUEUED and will start by itself the moment you reach Learn with Coach. `
+    + (input.navigated
+      ? 'You are being taken there now — do NOT call navigate_to_route again. '
+      : 'Call navigate_to_route to /coach/teach now. ')
+    + 'Tell the student the lesson will begin on arrival — do NOT tell them the board is already set up, because it is not.';
+  return { queued: true, sentence };
+}
+
 /** Read a frozen snapshot of coach memory. The envelope assembler
  *  embeds this directly. */
 export function readMemorySnapshot(): CoachMemorySnapshot {

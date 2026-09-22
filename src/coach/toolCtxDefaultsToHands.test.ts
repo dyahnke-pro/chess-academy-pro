@@ -42,6 +42,10 @@ const BOARD_CALLBACKS: Record<string, string> = {
   onSetBoardPosition: "'set-position'",
   onResetBoard: "'reset-board'",
   onNavigate: 'coachNavigate',
+  // The SIXTH, missed by the sweep that wrote this gate (WO-STANDARD-01 H2): a
+  // walkthrough asked for through the drawer on Learn never reached Learn's
+  // registered host, so the tool refused a lesson on the surface that hosts them.
+  onStartWalkthroughForOpening: "'start-walkthrough'",
 };
 
 describe('the tool context defaults every board hand to the actuator', () => {

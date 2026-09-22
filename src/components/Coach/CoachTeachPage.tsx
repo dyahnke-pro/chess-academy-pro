@@ -976,6 +976,10 @@ export function CoachTeachPage(): JSX.Element {
   // navigate-to-/coach/session/walkthrough flow that lost the chat
   // panel. See `useTeachWalkthrough` + `data/openingWalkthroughs/`.
   const walkthrough = useTeachWalkthrough();
+  // Latest hook value for hands registered once (the actuator registry holds
+  // the callback across renders; a stale closure would resume a dead lesson).
+  const walkthroughRef = useRef(walkthrough);
+  walkthroughRef.current = walkthrough;
   // Free-tier coach budget (David 2026-08-06): 7 lesson starts + 50 chat
   // turns, lifetime, no trial-clock start. `consumeLesson` fires on a
   // genuinely new walkthrough start (below, onStartWalkthroughForOpening);
@@ -2276,6 +2280,30 @@ export function CoachTeachPage(): JSX.Element {
     },
     showSquares: (squares: readonly Square[]) => {
       setHighlights(squares.map((sq) => ({ square: sq, color: 'yellow' as const })));
+    },
+    /**
+     * THE HOST FOR A WALKTHROUGH ASKED FOR THROUGH ANOTHER CHAT (WO-STANDARD-01
+     * H2). Learn registered every board hand except this one, so a lesson asked
+     * for through the global drawer while ON `/coach/teach` found no host, was
+     * queued "until you reach Learn" — and never drained, because the drain
+     * runs on mount and Learn was already mounted. Ten tool errors, no lesson.
+     *
+     * Replays the ask IN WORDS through `handleSubmit`, exactly as the mount
+     * drain does — the walkthrough starter is a closure inside handleSubmit and
+     * a second starter here would be a second path to keep in sync. A running
+     * walkthrough is resumed, never restarted (the build-e6c3c7b regression).
+     */
+    startWalkthrough: (args: { opening: string; variation?: string }) => {
+      const wt = walkthroughRef.current;
+      if (wt.isActive) {
+        if (wt.phase === 'paused') wt.resume();
+        return { ok: true };
+      }
+      const what = args.variation ? `${args.opening}, ${args.variation}` : args.opening;
+      const submit = handleSubmitRef.current;
+      if (!submit) return { ok: false, reason: 'Learn is still mounting — ask again in a moment' };
+      void submit(`Teach me the ${what}.`);
+      return { ok: true };
     },
   }), [handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, playerColor]);
 

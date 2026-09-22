@@ -10,6 +10,7 @@
 // The only import: a PURE data resolver (fundamentalLessons imports nothing but a
 // type), so the "no heavy imports" contract holds — regex intent detection only.
 import { resolveTaughtFundamental } from '../data/fundamentalLessons';
+import type { CoachSurface } from './types';
 
 /** Map the spine's `CoachSurface` enum to a route path the audit
  *  stream + claim-validator audits can attribute against. Used by
@@ -29,6 +30,31 @@ export function coachSurfaceToRoute(surface: string): string {
     case 'smart-search':    return '/';
     default:                return `/coach/${surface}`;
   }
+}
+
+/**
+ * The INVERSE — which coach surface a chat mounted on this route IS.
+ *
+ * 🔴 THE BUG THIS EXISTS FOR (prod, native, Thai user, 10× — WO-STANDARD-01 H2).
+ * The global drawer tagged every ask `surface: 'home-chat'` as a CONSTANT. So a
+ * student who asked for a lesson from home, was correctly taken to Learn, and
+ * asked AGAIN through the same drawer on `/coach/teach`, was still filed as
+ * "home chat" — and `start_walkthrough_for_opening` refused a walkthrough on
+ * the one surface that hosts them. Ten `coach_tool_call_error`s, no lesson.
+ *
+ * A surface is a property of the ROUTE the chat is mounted on, derived at ask
+ * time, never a field a component writes once and forgets. Only routes that a
+ * chat can be mounted on top of are named; everything else is home chat.
+ * Prefix-matched because `/coach/review/:id` and `/coach/teach?opening=` are
+ * the same surface as their base.
+ */
+export function coachSurfaceForRoute(pathname: string): CoachSurface {
+  const p = (pathname ?? '').split('?')[0].split('#')[0];
+  if (p === '/coach/teach' || p.startsWith('/coach/teach/')) return 'teach';
+  if (p === '/coach/review' || p.startsWith('/coach/review/')) return 'review';
+  if (p === '/coach/play' || p.startsWith('/coach/play/')) return 'game-chat';
+  if (p === '/coach/chat' || p.startsWith('/coach/chat/')) return 'standalone-chat';
+  return 'home-chat';
 }
 
 // this problem for ALL questions"). Each grounded-answer router below is built

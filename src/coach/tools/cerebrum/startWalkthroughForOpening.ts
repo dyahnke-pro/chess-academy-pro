@@ -18,7 +18,7 @@
 import type { Tool } from '../../types';
 import { logAppAudit } from '../../../services/appAuditor';
 import { listAvailableWalkthroughs } from '../../../data/openingWalkthroughs';
-import { useCoachMemoryStore } from '../../../stores/coachMemoryStore';
+import { memoryQueueWalkthrough } from '../../sources/memory';
 
 export const startWalkthroughForOpeningTool: Tool = {
   name: 'start_walkthrough_for_opening',
@@ -79,12 +79,15 @@ export const startWalkthroughForOpeningTool: Tool = {
       // lesson the student actually asked for. The refusal text below is the
       // COMPUTED sentence the phrasing pass must voice — it says what will
       // happen, so the model has no room to invent a success that did not occur.
-      useCoachMemoryStore.getState().queueWalkthrough({
+      // One queue, one sentence — shared with the actuator's no-host fallback
+      // (`memoryQueueWalkthrough`), so the two hand-off paths cannot drift.
+      const { sentence } = memoryQueueWalkthrough({
         opening,
+        variation,
+        orientation,
+        pgn,
         requestedFromSurface: null, // the tool ctx carries no surface — see the type
-        ...(variation ? { variation } : {}),
-        ...(orientation ? { orientation } : {}),
-        ...(pgn ? { pgn } : {}),
+        navigated: false,
       });
       void logAppAudit({
         kind: 'coach-brain-tool-called',
@@ -92,12 +95,7 @@ export const startWalkthroughForOpeningTool: Tool = {
         source: 'startWalkthroughForOpeningTool.execute',
         summary: `start_walkthrough_for_opening opening=${opening} QUEUED — no host here, handed to Learn on arrival`,
       });
-      return {
-        ok: false,
-        error:
-          `Not started yet — this surface cannot host a walkthrough. The ${opening} lesson is QUEUED and will start by itself the moment you reach Learn with Coach. ` +
-          `Call navigate_to_route to /coach/teach now. Tell the student you are taking them there and the lesson will begin on arrival — do NOT tell them the board is already set up, because it is not.`,
-      };
+      return { ok: false, error: sentence };
     }
 
     try {

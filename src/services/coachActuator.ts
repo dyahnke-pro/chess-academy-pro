@@ -47,7 +47,7 @@
 // does on its OWN initiative; it is not a veto over what the student asked for.
 
 import type { Square } from 'chess.js';
-import { memorySetSavedPosition, memoryReadSavedPosition } from '../coach/sources/memory';
+import { memorySetSavedPosition, memoryReadSavedPosition, memoryQueueWalkthrough } from '../coach/sources/memory';
 
 /**
  * THE SERVICE SEAM FOR A SETTING. `set-strength` is not a surface action — it
@@ -439,9 +439,24 @@ export async function actuate(action: CoachAction): Promise<ActuationResult> {
         if (h.setPosition) return await settle(h.setPosition(f));
         return coachSetBoardPosition(f);
       }
-      case 'start-walkthrough':
+      case 'start-walkthrough': {
         if (h.startWalkthrough) return await settle(h.startWalkthrough(action));
-        return coachNavigate(`/coach/teach?opening=${encodeURIComponent(action.opening)}`);
+        // No host mounted: QUEUE the ask, then move the student to Learn, which
+        // drains the queue on mount. This used to navigate to `?opening=`,
+        // which Learn answers with "Ready to start…?" — a greeting, not the
+        // lesson the student asked for. The result is honestly ok:false: the
+        // walkthrough has NOT started; the reason is the computed sentence.
+        const nav = coachNavigate('/coach/teach');
+        if (!nav.ok) return nav;
+        const { sentence } = memoryQueueWalkthrough({
+          opening: action.opening,
+          variation: action.variation,
+          orientation: action.orientation,
+          pgn: action.pgn,
+          navigated: true,
+        });
+        return { ok: false, reason: sentence };
+      }
       case 'play-move':
         if (!handler) return withoutSurface('play-move');
         return await settle(h.playMove?.(action.san));

@@ -1038,7 +1038,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       if (!r.ok) throw new Error(r.reason ?? 'navigation unavailable');
     }),
     onQuizUserForMove: options.onQuizUserForMove,
-    onStartWalkthroughForOpening: options.onStartWalkthroughForOpening,
+    // The SIXTH hand, missed by the 2026-09-21 sweep of five (WO-STANDARD-01
+    // H2): a walkthrough asked for through the global drawer ON `/coach/teach`
+    // never reached Learn's registered host, so the tool refused a lesson on
+    // the one surface that hosts them. Through the actuator: in place when a
+    // host registered `startWalkthrough`, else queued + routed to Learn.
+    onStartWalkthroughForOpening: options.onStartWalkthroughForOpening
+      ?? ((args) => viaActuator(actuate({ hand: 'start-walkthrough', ...args }))),
     liveFen: input.liveState.fen,
     traceId: options.traceId,
   };
