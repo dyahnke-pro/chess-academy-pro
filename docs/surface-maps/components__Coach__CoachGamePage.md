@@ -4,15 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5496 lines · 2 exports · 2 importers · 1 tests · 9 audits**
+**5517 lines · 3 exports · 3 importers · 2 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6023) — names `BLUNDER_CARD_ENABLED`
 
 ## Who calls in
 
 - `src/App.tsx`
+- `src/components/Coach/CoachGamePage.blunderCard.test.ts`
 - `src/components/Coach/CoachGamePage.test.tsx`
 
 ## Exports and every call site
@@ -20,11 +21,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `CoachGamePageProps` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `BLUNDER_CARD_ENABLED` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `CoachGamePage` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
+- `src/components/Coach/CoachGamePage.blunderCard.test.ts`
 - `src/components/Coach/CoachGamePage.test.tsx`
 
 ## Audits that reach it

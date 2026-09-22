@@ -6020,6 +6020,9 @@ The contract, per run:
    `coach-opening-auto-detected` names — not on the plan labels.
 3. **REAL MID-GAME FLOWS ANSWERED, not dodged**: the slip-detector's blocking
    "Blunder Detected" card (testid `blunder-interception`) pauses the coach
+   — ⚠️ **OFF since 2026-09-22** (`BLUNDER_CARD_ENABLED = false`, David: "i want the
+   blunder card removed for now"; it was modal, no timeout, and re-raised every
+   move while the piece stayed hung — the audit clicks it only if present) —
    until answered — the audit clicks Continue and COUNTS the interceptions
    (proof the detector fires E2E). Any new blocking card added to the play
    surface MUST be handled + counted here the same way.

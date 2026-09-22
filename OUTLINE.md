@@ -51,6 +51,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ## 4. Bucket D — the student cannot get what they asked for
 - ✅ All of it: D1–D13 and D-LANG (Thai plus 19 other writing systems), the transcript translation door, verified on prod
 
+- ✅ **The Play blunder card is OFF (David 2026-09-22, driven by hand on the OTA'd `5cb79d1`).** `blunder-interception` was modal with no timeout and re-raised on every move while the hung piece stayed hung. `BLUNDER_CARD_ENABLED = false` in `CoachGamePage`: the blunder is still classified, spoken, mirrored to chat and filed by `raiseWhyForSlip`; only the pause is gone. Gate `CoachGamePage.blunderCard.test.ts`, negative-controlled (flipping the switch fails it)
+
 ## 5. Bucket A — the loop cannot close
 - ✅ CLOSED: #77 click-to-move, grey teaches and feeds the ranker, one computer both directions, the endgame zero was false, provenance, the `prompted` flag; item 6 deleted as a wrong bullet
 - ✅ A-adjacent: the guessed seat, the walk budget constant

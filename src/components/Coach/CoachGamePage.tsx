@@ -242,6 +242,23 @@ function enforceMateFloor(rating: number): boolean {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CoachGamePageProps {}
 
+/** THE BLUNDER CARD IS OFF (David 2026-09-22: "i want the blunder card removed
+ *  for now"). Driven by hand on prod the same day: the "Blunder Detected"
+ *  overlay is modal with no timeout, and it re-raised on EVERY following move
+ *  while the hung piece stayed hung, so a student who pressed Continue was
+ *  stopped again a move later. Play is a pure playing surface (CLAUDE.md,
+ *  2026-07-06): nothing on it may block the board.
+ *
+ *  What stays when the card is off, deliberately: the blunder is still
+ *  classified, its explanation is still SPOKEN and mirrored into the chat,
+ *  `raiseWhyForSlip` still files the record — the RECORD is never deleted
+ *  with the UI (CLAUDE.md "THE RECORD IS NOT THE UI"). Only the pause goes:
+ *  the move lands as `playing`, so the coach replies at once.
+ *
+ *  One switch, so bringing the card back is one line and a decision, not a
+ *  rebuild. Gate: `CoachGamePage.blunderCard.test.ts`. */
+export const BLUNDER_CARD_ENABLED = false;
+
 export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -4023,17 +4040,21 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       }
       }
 
-      setBlunderPause({
-        explanation,
-        bestMoveSan: engineBestMoveSan,
-        bestMoveUci: engineBestMoveUci,
-        preFen,
-        playerMoveSan: moveResult.san,
-      });
+      if (BLUNDER_CARD_ENABLED) {
+        setBlunderPause({
+          explanation,
+          bestMoveSan: engineBestMoveSan,
+          bestMoveUci: engineBestMoveUci,
+          preFen,
+          playerMoveSan: moveResult.san,
+        });
+      }
 
       setGameState((prev) => ({
         ...prev,
-        status: 'blunder_pause',
+        // Card off → the move lands as a normal turn and the coach-move effect
+        // answers it. Card on → the board waits for Continue / Take Back / Try.
+        status: BLUNDER_CARD_ENABLED ? 'blunder_pause' : 'playing',
         moves: [...prev.moves, playerMove],
         currentHintLevel: 0,
       }));
