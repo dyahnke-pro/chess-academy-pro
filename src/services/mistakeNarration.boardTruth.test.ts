@@ -15,6 +15,17 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { generateMistakeNarration, type NarrationParams } from './mistakeNarration';
+import type { MistakeNarration } from '../types';
+
+// Narrate each case ONCE. Three walks over 1,000 cases each re-ran the
+// narrator (~130 s for one walk alone on this corpus), which is what timed the
+// last walk out at 120 s under ship-check. Same assertions, one computation.
+const NARRATED = new Map<NarrationParams, MistakeNarration>();
+function narrated(params: NarrationParams): MistakeNarration {
+  let n = NARRATED.get(params);
+  if (!n) { n = generateMistakeNarration(params); NARRATED.set(params, n); }
+  return n;
+}
 import puzzlesRaw from '../data/puzzles.json';
 import type { MistakeClassification, MistakeGamePhase } from '../types';
 
@@ -128,7 +139,7 @@ describe('mistake narration is true of the board', () => {
     };
 
     for (const { p, params } of cases) {
-      const n = generateMistakeNarration(params);
+      const n = narrated(params);
       const fens = fensForLines(p, n.moveNarrations.length);
       // Pre-attempt lines describe the starting position.
       check(fens.intro, n.intro, p.id, 'intro');
@@ -163,7 +174,7 @@ describe('mistake narration is true of the board', () => {
     const violations: string[] = [];
 
     for (const { p, params } of cases) {
-      const n = generateMistakeNarration(params);
+      const n = narrated(params);
       for (const line of [n.intro, ...n.moveNarrations, n.outro, n.conceptHint]) {
         if (!line?.trim()) continue;
         for (const pool of POOLS) {
@@ -180,7 +191,7 @@ describe('mistake narration is true of the board', () => {
     // Proof the empty-beats-generic rule is live: across a corpus this wide,
     // some positions must genuinely produce no outro. If EVERY case has one,
     // a fallback pool has crept back in.
-    const emptyOutros = cases.filter(({ params }) => !generateMistakeNarration(params).outro.trim());
+    const emptyOutros = cases.filter(({ params }) => !narrated(params).outro.trim());
     expect(emptyOutros.length).toBeGreaterThan(0);
   }, 120_000);
 });

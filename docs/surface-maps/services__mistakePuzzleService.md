@@ -94,8 +94,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7202`
-- `src/components/Coach/CoachTeachPage.tsx:7208`
+- `src/components/Coach/CoachTeachPage.tsx:7198`
+- `src/components/Coach/CoachTeachPage.tsx:7204`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -115,10 +115,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/endgameService.ts:259`
 - `src/services/mistakeNarration.ts:113`
 - `src/services/mistakeNarration.ts:584`
-- `src/services/openingGenerator.ts:3455`
-- `src/services/openingGenerator.ts:3654`
-- `src/services/openingGenerator.ts:3658`
-- `src/services/openingGenerator.ts:3663`
+- `src/services/openingGenerator.ts:3456`
+- `src/services/openingGenerator.ts:3655`
+- `src/services/openingGenerator.ts:3659`
+- `src/services/openingGenerator.ts:3664`
 - `src/services/opponentIntent.ts:39`
 - `src/services/opponentIntent.ts:70`
 - `src/services/opponentIntent.ts:77`
@@ -145,8 +145,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2069`
-- `src/components/Coach/CoachGameReview.tsx:341`
+- `src/components/Coach/CoachGamePage.tsx:2067`
+- `src/components/Coach/CoachGameReview.tsx:345`
 - `src/services/gameAnalysisService.ts:2076`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
@@ -236,7 +236,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2356`
+- `src/components/Coach/CoachTeachPage.tsx:2353`
 - `src/components/Puzzles/MyMistakesPage.tsx:227`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`

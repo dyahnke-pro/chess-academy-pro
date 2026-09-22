@@ -111,8 +111,8 @@
 - `src/services/principleAttribution.test.ts:103`
 - `src/services/principleAttribution.test.ts:121`
 - `src/services/principleAttribution.test.ts:134`
-- `src/services/principleAttributionEndgame.test.ts:37`
-- `src/services/principleAttributionEndgame.test.ts:51`
+- `src/services/principleAttributionEndgame.test.ts:43`
+- `src/services/principleAttributionEndgame.test.ts:57`
 - `src/services/principleAttributionEvalPv.test.ts:62`
 - `src/services/principleAttributionEvalPv.test.ts:76`
 - `src/services/principleAttributionEvalPv.test.ts:94`

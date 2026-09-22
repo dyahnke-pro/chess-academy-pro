@@ -32,7 +32,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `parseCoachIntent` (function) — 82 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4254`
+- `src/components/Coach/CoachTeachPage.tsx:4250`
 - `src/components/Search/SmartSearchBar.tsx:91`
 - `src/components/Search/SmartSearchBar.tsx:195`
 - `src/services/coachAgent.test.ts:13`

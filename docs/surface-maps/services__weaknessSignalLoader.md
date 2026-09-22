@@ -24,7 +24,7 @@
 ### `loadWeaknessSignals` (function) — 6 call sites
 - `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/hooks/useWeaknessSignals.ts:22`
-- `src/services/coachFeatureService.ts:4401`
+- `src/services/coachFeatureService.ts:4410`
 - `src/services/loopCloses.review.integration.test.ts:81`
 - `src/services/studentNeedLoader.ts:191`
 - `src/services/weaknessSignalLoader.green.test.ts:39`

@@ -141,9 +141,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getCoachStructuredResponse` (function) — 3 call sites
-- `src/services/openingGenerator.ts:3118`
-- `src/services/openingGenerator.ts:3256`
-- `src/services/openingGenerator.ts:3829`
+- `src/services/openingGenerator.ts:3119`
+- `src/services/openingGenerator.ts:3257`
+- `src/services/openingGenerator.ts:3830`
 
 ### `MasterGroundingOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -218,7 +218,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:566`
-- `src/components/Coach/CoachTeachPage.tsx:3243`
+- `src/components/Coach/CoachTeachPage.tsx:3239`
 - `src/services/coachSessionRouter.ts:125`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -243,8 +243,8 @@
 - `src/services/coachApi.strip.test.ts:58`
 
 ### `speakableFacts` (function) — 8 call sites
-- `src/hooks/usePositionNarration.ts:336`
-- `src/hooks/usePositionNarration.ts:350`
+- `src/hooks/usePositionNarration.ts:245`
+- `src/hooks/usePositionNarration.ts:259`
 - `src/services/coachApi.speakableFacts.test.ts:16`
 - `src/services/coachApi.speakableFacts.test.ts:19`
 - `src/services/coachApi.speakableFacts.test.ts:30`
@@ -253,19 +253,19 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 33 call sites
-- `src/components/Coach/CoachGameReview.tsx:1684`
-- `src/components/Coach/CoachGameReview.tsx:1803`
-- `src/components/Coach/CoachGameReview.tsx:1990`
+- `src/components/Coach/CoachGameReview.tsx:1685`
+- `src/components/Coach/CoachGameReview.tsx:1804`
+- `src/components/Coach/CoachGameReview.tsx:1991`
 - `src/hooks/usePhaseNarration.ts:701`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
-- `src/hooks/usePositionNarration.ts:328`
+- `src/hooks/usePositionNarration.ts:237`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:128`
 - `src/services/coachFeatureService.ts:399`
 - `src/services/coachFeatureService.ts:521`
 - `src/services/coachFeatureService.ts:522`
-- `src/services/coachFeatureService.ts:4382`
-- `src/services/coachFeatureService.ts:4546`
+- `src/services/coachFeatureService.ts:4391`
+- `src/services/coachFeatureService.ts:4555`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:133`
@@ -274,7 +274,7 @@
 - `src/services/gameReviewService.ts:57`
 - `src/services/kidGameCoach.ts:223`
 - `src/services/mistakeNarrationVoice.ts:109`
-- `src/services/openingGenerator.ts:2358`
+- `src/services/openingGenerator.ts:2359`
 - `src/services/openingSectionNarrator.ts:84`
 - `src/services/spokenLanguage.ts:191`
 - `src/services/turnLanguage.test.ts:58`
@@ -341,7 +341,7 @@
 - `src/services/coachApi.master-integration.test.ts:375`
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
-- `src/services/openingGenerator.ts:4054`
+- `src/services/openingGenerator.ts:4055`
 - `src/services/positionReadingGrader.test.ts:6`
 - `src/services/positionReadingGrader.ts:67`
 - `src/services/smartSearchService.ts:50`

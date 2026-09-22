@@ -24,6 +24,8 @@
  *   - `prompt`       — a concrete, code-authored challenge line.
  */
 import { Chess } from 'chess.js';
+import { hintBeat, solvedLineBeat, wrongMoveReason } from './drillReasons';
+import { sayMoveClause } from './spokenMove';
 import { getHomeGameIds } from './homeOpeningService';
 import { isFixtureGame } from './fixtureGames';
 import puzzlesData from '../data/puzzles.json';
@@ -674,4 +676,34 @@ function hash(seed: number, id: string): number {
     s = Math.imul(s ^ (s >>> 15), s | 1);
   }
   return ((s ^ (s >>> 14)) >>> 0) / 4294967296;
+}
+
+// ── THE DRILL'S SPOKEN BEATS (A5, composed HERE — 2026-09-22). The page used
+//    to compose these from three computers; the drill service is the drill's
+//    composer, so the reason, the solved sequence, the hint and the
+//    keep-going line are assembled once, here, and the page only speaks them.
+
+/** What the wrong move costs, read off the board, joined to the nudge the
+ *  page chose. The reason is null when the board shows nothing concrete, and
+ *  then the nudge stands alone — never a guessed reason. */
+export function drillWrongMoveBeat(args: { fenBefore: string; wrongSan: string; expectedSan: string; nudge: string; keepNudge: boolean }): string {
+  const reason = wrongMoveReason(args.fenBefore, args.wrongSan, args.expectedSan);
+  if (!reason) return args.nudge;
+  return args.keepNudge ? `${reason} ${args.nudge}` : reason;
+}
+
+/** The solved sequence spoken, with the idea named when one is known. */
+export function drillSolvedBeat(solutionSan: readonly string[], idea: string | null): string {
+  return solvedLineBeat(solutionSan, idea);
+}
+
+/** The hint: names the piece, withholds the square. Null when the drill's
+ *  own solution gives nothing to name. */
+export function drillHintBeat(fen: string, expectedSan: string): string | null {
+  return hintBeat(fen, expectedSan);
+}
+
+/** The opponent's reply inside a multi-move drill, then the prompt on. */
+export function drillContinueBeat(oppReplySan: string): string {
+  return `${sayMoveClause(oppReplySan).replace(/^./, (c) => c.toUpperCase())} — keep going, find the next move.`;
 }

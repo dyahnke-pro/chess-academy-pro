@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `movesToAnnotations` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:2018`
+- `src/components/Coach/CoachGamePage.tsx:2016`
 - `src/services/coachGameAnnotations.test.ts:21`
 - `src/services/coachGameAnnotations.test.ts:27`
 - `src/services/coachGameAnnotations.test.ts:34`

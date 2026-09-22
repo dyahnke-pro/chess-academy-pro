@@ -52,9 +52,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useDiscussionPractice` (function) — 28 call sites
-- `src/components/Coach/CoachGamePage.tsx:567`
-- `src/components/Coach/CoachGameReview.tsx:931`
-- `src/components/Coach/CoachTeachPage.tsx:1570`
+- `src/components/Coach/CoachGamePage.tsx:565`
+- `src/components/Coach/CoachGameReview.tsx:932`
+- `src/components/Coach/CoachTeachPage.tsx:1567`
 - `src/components/Openings/MiddlegamePractice.tsx:162`
 - `src/components/Openings/OpeningPlayMode.tsx:274`
 - `src/components/Openings/PlayableLinePlayer.tsx:205`

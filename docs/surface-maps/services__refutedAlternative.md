@@ -38,14 +38,14 @@
 
 ### `refutedAlternative` (function) — 6 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/openingGenerator.ts:2156`
+- `src/services/openingGenerator.ts:2157`
 - `src/services/refutedAlternative.test.ts:62`
 - `src/services/refutedAlternative.test.ts:85`
 - `src/services/refutedAlternative.test.ts:102`
 - `src/services/refutedAlternative.test.ts:111`
 
 ### `candidatesFromMasters` (function) — 6 call sites
-- `src/services/openingGenerator.ts:2153`
+- `src/services/openingGenerator.ts:2154`
 - `src/services/refutedAlternative.test.ts:39`
 - `src/services/refutedAlternative.test.ts:47`
 - `src/services/refutedAlternative.test.ts:62`

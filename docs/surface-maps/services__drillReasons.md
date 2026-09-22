@@ -12,26 +12,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/coachDrillService.ts`
 - `src/services/drillReasons.test.ts`
 
 ## Exports and every call site
 
 ### `wrongMoveReason` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2683`
+- `src/services/coachDrillService.ts:690`
 - `src/services/drillReasons.test.ts:11`
 - `src/services/drillReasons.test.ts:17`
 - `src/services/drillReasons.test.ts:23`
 - `src/services/drillReasons.test.ts:26`
 
 ### `solvedLineBeat` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2587`
+- `src/services/coachDrillService.ts:697`
 - `src/services/drillReasons.test.ts:32`
 - `src/services/drillReasons.test.ts:36`
 - `src/services/drillReasons.test.ts:37`
 
 ### `hintBeat` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11069`
+- `src/services/coachDrillService.ts:703`
 - `src/services/drillReasons.test.ts:44`
 - `src/services/drillReasons.test.ts:45`
 - `src/services/drillReasons.test.ts:46`

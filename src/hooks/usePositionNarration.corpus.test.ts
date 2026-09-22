@@ -59,9 +59,14 @@ describe('position read corpus wiring', () => {
   it('the hook puts the note FIRST in the computed facts the phraser receives (source pin)', () => {
     // G0 (WO-STANDARD-01 F2): the read is a computed fact bundle handed to
     // voiceFacts, and the corpus note is its opening entry — the note LEADS.
+    // The composition lives in ONE service since 2026-09-22 (the hook was a
+    // third coach — surfaceComposition.scan); the hook hands the composed facts
+    // to the one phrasing chokepoint.
+    const composer = readFileSync('src/services/positionReadComposer.ts', 'utf8');
+    expect(composer).toContain('teachingSourceForBoard(sans, i.fen, i.openingName, i.playerColor)');
+    expect(composer).toMatch(/return \[noteLine, phaseLine, positionFactsBlock/);
     const src = readFileSync('src/hooks/usePositionNarration.ts', 'utf8');
-    expect(src).toContain('teachingSourceForBoard(historySans, args.fen, args.openingName ?? null, args.playerColor)');
-    expect(src).toMatch(/const facts = \[noteLine, phaseLine, positionFactsBlock/);
+    expect(src).toMatch(/const facts = await composePositionRead\(\{/);
     expect(src).toMatch(/voiceFacts\(facts, \{/);
   });
 });

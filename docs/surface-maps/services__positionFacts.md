@@ -21,13 +21,13 @@
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.ts`
-- `src/hooks/usePositionNarration.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
+- `src/services/positionReadComposer.ts`
 - `src/services/whyBestMove.ts`
 
 ## Exports and every call site
@@ -61,24 +61,23 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8905`
+- `src/components/Coach/CoachTeachPage.tsx:8898`
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:631`
-- `src/hooks/usePositionNarration.ts:284`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:251`
 - `src/services/positionFacts.test.ts:252`
 - `src/services/positionFacts.test.ts:293`
 - `src/services/positionFacts.test.ts:351`
 - `src/services/positionFacts.test.ts:352`
+- `src/services/positionReadComposer.ts:107`
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 55 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8858`
+- `src/components/Coach/CoachTeachPage.tsx:8851`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:609`
-- `src/hooks/usePositionNarration.ts:263`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/latentFork.test.ts:148`
 - `src/services/liveNeedGate.test.ts:127`
@@ -127,6 +126,7 @@
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
+- `src/services/positionReadComposer.ts:89`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:89`
 

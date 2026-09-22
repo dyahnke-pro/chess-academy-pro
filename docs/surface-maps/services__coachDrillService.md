@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**678 lines · 16 exports · 5 importers · 3 tests · 1 audits**
+**710 lines · 20 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,8 +24,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isDrillableAid` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2740`
-- `src/components/Coach/CoachTeachPage.tsx:4154`
+- `src/components/Coach/CoachTeachPage.tsx:2736`
+- `src/components/Coach/CoachTeachPage.tsx:4150`
 - `src/services/coachDrillService.test.ts:72`
 - `src/services/coachDrillService.test.ts:75`
 - `src/services/coachDrillService.test.ts:109`
@@ -34,9 +34,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickCoachDrill` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2634`
-- `src/components/Coach/CoachTeachPage.tsx:2751`
-- `src/components/Coach/CoachTeachPage.tsx:4170`
+- `src/components/Coach/CoachTeachPage.tsx:2631`
+- `src/components/Coach/CoachTeachPage.tsx:2747`
+- `src/components/Coach/CoachTeachPage.tsx:4166`
 - `src/services/coachDrillService.test.ts:12`
 - `src/services/coachDrillService.test.ts:52`
 - `src/services/coachDrillService.test.ts:60`
@@ -46,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachDrillService.test.ts:81`
 
 ### `pickMasterDrill` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2412`
+- `src/components/Coach/CoachTeachPage.tsx:2409`
 - `src/services/coachDrillService.test.ts:114`
 - `src/services/coachDrillService.test.ts:125`
 
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `drillKeyOf` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2583`
+- `src/components/Coach/CoachTeachPage.tsx:2580`
 - `src/services/coachDrillService.mistakes.test.ts:74`
 
 ### `mistakePuzzleToDrill` (function) — 5 call sites
@@ -65,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachDrillService.test.ts:40`
 
 ### `hasImportedGames` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2465`
+- `src/components/Coach/CoachTeachPage.tsx:2462`
 - `src/services/coachDrillService.mistakes.test.ts:205`
 - `src/services/coachDrillService.mistakes.test.ts:213`
 - `src/services/coachDrillService.mistakes.test.ts:221`
@@ -82,8 +82,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachDrillService.mistakes.test.ts:192`
 
 ### `buildMistakeDrillQueue` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2428`
-- `src/components/Coach/CoachTeachPage.tsx:2512`
+- `src/components/Coach/CoachTeachPage.tsx:2425`
+- `src/components/Coach/CoachTeachPage.tsx:2509`
 - `src/services/coachDrillService.mistakes.test.ts:58`
 - `src/services/coachDrillService.mistakes.test.ts:66`
 - `src/services/coachDrillService.mistakes.test.ts:72`
@@ -106,11 +106,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `advanceMistakeDrill` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2604`
+- `src/components/Coach/CoachTeachPage.tsx:2601`
 - `src/services/coachDrillAdvance.test.ts:18`
 - `src/services/coachDrillAdvance.test.ts:28`
 - `src/services/coachDrillAdvance.test.ts:39`
 - `src/services/coachDrillAdvance.test.ts:50`
+
+### `drillWrongMoveBeat` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:2686`
+
+### `drillSolvedBeat` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:2584`
+
+### `drillHintBeat` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:11060`
+
+### `drillContinueBeat` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:2711`
 
 ## Tests
 

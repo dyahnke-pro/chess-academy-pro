@@ -15,6 +15,7 @@ import type { StudentNeedContext } from '../services/needScore';
 import { useAppStore } from '../stores/appStore';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import type { OpeningKey } from '../types';
+import { ecoOfKey, openingKeyFromSans } from '../services/openingKey';
 
 export interface UseStudentNeedArgs {
   /** Defaults to the ONE adaptive estimate the store carries
@@ -47,7 +48,15 @@ export interface UseStudentNeedArgs {
 // `sans` says at the moment a narration callback reads it.
 
 export function useStudentNeed(args: UseStudentNeedArgs): React.RefObject<StudentNeedContext> {
-  const { studentColor, openingId, eco } = args;
+  const { studentColor } = args;
+  // THE ONE KEY (A1), minted HERE from the line — not by every surface. A
+  // caller that already holds the game's key passes it; every other surface
+  // hands over its history and the hook resolves the opening the departure +
+  // result terms scope to. Null until the line reaches a named entry — cold
+  // reads as SPEAK.
+  const sansNow = typeof args.sans === 'function' ? args.sans() : args.sans;
+  const openingId = args.openingId !== undefined ? args.openingId : openingKeyFromSans(sansNow);
+  const eco = args.eco !== undefined ? args.eco : (openingId ? ecoOfKey(openingId) : null);
   const rating = args.rating ?? useAppStore.getState().activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
   const baseRef = useRef<StudentNeedBase | null>(null);
   const baseGenRef = useRef(0);

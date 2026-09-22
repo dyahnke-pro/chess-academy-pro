@@ -126,7 +126,45 @@ const INFRA = new Set([
   // `DEFAULT_STUDENT_RATING` and the `ADAPTIVE_DECIDERS` catalogue never see a
   // board. That is checked by NUMERIC_TABLES below, not taken on trust.
   'ratingBands',
+  // ── 2026-09-22, WO-STANDARD-01 — three classes added after the helper
+  //    branches put the scan at 271. None of these answers a question about
+  //    the board; each is held to a proof below, so the list cannot widen by
+  //    assertion alone. What DID answer a board question (openingKey, the
+  //    read-position composition, the drill beats, the home steer) was ROUTED
+  //    through a composer instead — the count came down by routing, not by
+  //    reclassifying.
+  // RECORD HELPERS — bookkeeping over a stored row: is this row a seeded
+  // fixture (`fixtureGames`); which side of a stored score is the student's
+  // (`studentResult`). Zero imports, no chess vocabulary — proven by
+  // PURE_RECORD_HELPERS below, the same check the memory holders pass.
+  'fixtureGames', 'studentResult',
+  // REPLAY HELPERS — a PGN or SAN list played back into positions with
+  // chess.js legality only: the same class as `walkthroughAdapter` (already
+  // here). `lastMoveOfLine` hands a live surface the move just played and the
+  // boards around it; `gamePgnReplay` repairs a stored game's PGN to its legal
+  // prefix and names the game when it cannot. Neither judges a piece, an
+  // eval or a tactic — proven by REPLAY_HELPERS below.
+  'lastMoveOfLine', 'gamePgnReplay',
+  // PHRASER — a SAN rendered as prose ("the queen takes d5"), the zero-import
+  // twin of `spokenSquares` above. It decides nothing about the board; it
+  // says a move the board already decided. Proven by PHRASERS below.
+  'spokenMove',
+  // CACHE — the cross-user Supabase mirror of generated lesson trees. The
+  // gate's own definition lists caches as legitimate for a surface to touch
+  // (with `db`, `storage`, `masterPlayCache`, `amateurPlayCache`). It stores
+  // and returns trees; it computes none.
+  'sharedOpeningCache',
 ]);
+
+/** Record helpers: zero imports, no chess vocabulary in code. */
+const PURE_RECORD_HELPERS = ['fixtureGames', 'studentResult'];
+/** Replay helpers: chess.js is the only import; no JUDGEMENT vocabulary. */
+const REPLAY_HELPERS = ['lastMoveOfLine', 'gamePgnReplay'];
+/** Phrasers: zero imports. */
+const PHRASERS = ['spokenMove', 'spokenSquares'];
+/** The vocabulary of a chess JUDGEMENT proper — what a replay helper must
+ *  never reason about (it may name pieces: it moves them). */
+const JUDGEMENT_WORDS = /\b(?:tactic|eval|centipawn|material|threat|attack|blunder|checkmate|hang|fork|pin\b|skewer|sacrific)\w*/i;
 
 /** INFRA entries that claim to take NUMBERS ONLY — never a board. Checked below.
  *  NB the CHESS_WORDS scan is the wrong instrument for these: `ratingBands`
@@ -232,6 +270,34 @@ describe('surface composition — the coach/third-coach divergence, measured', (
         `${mod} names "${chess?.[0]}" — it answers a question about the board, ` +
         'so it is a fact computer and does not belong in INFRA',
       ).toBeNull();
+    }
+  });
+
+  it('every INFRA record helper and phraser imports nothing and names no chess judgement', () => {
+    for (const mod of [...PURE_RECORD_HELPERS, ...PHRASERS]) {
+      const src = readFileSync(join(ROOT, 'services', `${mod}.ts`), 'utf8');
+      const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+      // A `type` import is erased at compile time and can compute nothing;
+      // `spokenSquares` names chess.js's Square type and stays a phraser.
+      expect(
+        [...code.matchAll(/^import .*$/gm)].map((m) => m[0]).filter((l) => !/^import type /.test(l)),
+        `${mod} imports something — a helper that wanted a fact would have to`,
+      ).toEqual([]);
+      if (PURE_RECORD_HELPERS.includes(mod)) {
+        const chess = code.match(CHESS_WORDS);
+        expect(chess?.[0] ?? null, `${mod} names "${chess?.[0]}" — it reasons about the board`).toBeNull();
+      }
+    }
+  });
+
+  it('every INFRA replay helper imports only chess.js and reasons about no judgement', () => {
+    for (const mod of REPLAY_HELPERS) {
+      const src = readFileSync(join(ROOT, 'services', `${mod}.ts`), 'utf8');
+      const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+      const imports = [...code.matchAll(/^import .*$/gm)].map((m) => m[0]);
+      for (const line of imports) expect(line, `${mod} imports beyond chess.js`).toMatch(/from 'chess\.js'/);
+      const judged = code.match(JUDGEMENT_WORDS);
+      expect(judged?.[0] ?? null, `${mod} names "${judged?.[0]}" — a replay helper judges nothing`).toBeNull();
     }
   });
 

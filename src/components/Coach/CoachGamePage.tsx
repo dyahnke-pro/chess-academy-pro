@@ -50,8 +50,7 @@ import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
-import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTaughtSlip, studentPlayingRating } from '../../services/coachGameEngine';
-import { pickHomeSteerMove } from '../../services/homeOpeningSteer';
+import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTeachingReply, studentPlayingRating } from '../../services/coachGameEngine';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById, type ClockState } from '../../services/chessClock';
@@ -124,7 +123,6 @@ import { limitStrengthElo } from '../../services/engineConstants';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
 import { detectOpening, getOpeningMoves, resolveOpeningEntry } from '../../services/openingDetectionService';
-import { openingEntryForKey } from '../../services/openingKey';
 import { stripSanAnnotations } from '../../data/openingWalkthroughs/validate';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
@@ -1018,7 +1016,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // when one of the five triggers fires.
   // THE NEED HALF of the student model for this page's "Why?" (B3). Honest
   // nulls for the opening — Play identifies it by NAME after the fact.
-  const studentNeedRef = useStudentNeed({ rating: playerRating, studentColor: playerColor, openingId: null, eco: null, sans: () => game.history });
+  const studentNeedRef = useStudentNeed({ rating: playerRating, studentColor: playerColor, sans: () => game.history });
   const liveCoach = useLiveCoach({
     gameId: gameState.gameId,
     playerColor,
@@ -2416,45 +2414,22 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // the line they asked to practise.
         if (!brainPickSan) {
           try {
-            const slip = await pickTaughtSlip(
+            // ONE DOOR: the taught slip, then the home-opening steer (A7),
+            // in the engine's own order — `pickTeachingReply` — so this page
+            // and `getAdaptiveMove` can never disagree about precedence.
+            const teaching = await pickTeachingReply(
               game.fen,
               targetStrength,
-              { studentElo: playerRating, difficulty },
+              { studentElo: playerRating, difficulty, steerHomeFor: playerColor },
               'CoachGamePage.coachTurn',
             );
-            if (slip) {
+            if (teaching) {
               const probe = new Chess(game.fen);
-              const played = probe.move(slip.san);
+              const played = probe.move(teaching.san);
               if (played) brainPickSan = played.san;
             }
           } catch {
             /* a missed teaching moment is never worth a broken move */
-          }
-        }
-        // STEER INTO THE HOME OPENING (A7) — the same precedence as in
-        // `getAdaptiveMove` (below the slip, above the engine), for the same
-        // reason the slip sits here: this page reaches `getAdaptiveMove` only
-        // when the engine fails, so a steer wired only there would read as
-        // connected and fire approximately never.
-        if (!brainPickSan) {
-          try {
-            const steer = await withTimeout(pickHomeSteerMove(game.fen, playerColor), 1_500, 'home-steer');
-            if (steer.ok && steer.value) {
-              const probe = new Chess(game.fen);
-              const played = probe.move(steer.value.san);
-              if (played) {
-                brainPickSan = played.san;
-                void logAppAudit({
-                  kind: 'coach-opponent-move-source',
-                  category: 'subsystem',
-                  source: 'CoachGamePage.coachTurn',
-                  summary: `source=home-steer san=${steer.value.san} family=${steer.value.family} faced=${steer.value.games}/${steer.value.total}`,
-                  fen: game.fen,
-                });
-              }
-            }
-          } catch {
-            /* a missed steer is never worth a stalled move */
           }
         }
         if (!brainPickSan) {
@@ -4674,7 +4649,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           keyMoments={[]}
           playerColor={reviewPlayerColor}
           result={reviewGame.result}
-          openingName={reviewGame.openingId ? openingEntryForKey(reviewGame.openingId)?.name ?? null : null}
+          openingId={reviewGame.openingId}
           playerName={reviewPlayerName}
           playerRating={reviewPlayerRating}
           opponentRating={reviewOpponentRating}

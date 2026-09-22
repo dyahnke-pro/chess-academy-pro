@@ -20,9 +20,15 @@ const FIXTURES: { id: FundamentalId; best: string; hist: string[] }[] = [
     hist: ['e3', 'h5', 'Qxh5', 'Rxh5', 'Ne2', 'Rc5', 'Rg1', 'Rxc2', 'b3', 'b5', 'Nf4', 'Rc4', 'bxc4', 'bxc4', 'Nh5', 'd6', 'Nxg7+', 'Kd7', 'Bxc4', 'Bxg7', 'Bxf7', 'Bxa1', 'h3', 'c5', 'Kd1', 'a5', 'Bxg8', 'Qxg8', 'Bb2', 'Qxa2', 'Na3', 'Qxa3', 'Bxa1', 'Qxa1+', 'Ke2', 'Qxg1', 'Kd3', 'Qxg2', 'h4', 'Qg7', 'f3', 'e6', 'e4', 'Qe7', 'Kc3', 'Qxh4', 'e5', 'Qf2', 'exd6', 'Qg1', 'Kb2', 'Kxd6', 'Ka3', 'Ke5', 'd3', 'Qg3', 'd4+', 'cxd4', 'Kb2', 'Qxf3', 'Kb1', 'Ra6', 'Ka2', 'Qf7', 'Kb1', 'Qf6', 'Kb2', 'Qf3', 'Ka1', 'Qh5', 'Ka2', 'Qg5', 'Kb1', 'Qg7', 'Ka1', 'a4', 'Kb1', 'Ra7', 'Ka1', 'Kf4', 'Kb1', 'Ke5', 'Ka2', 'a3', 'Kb3', 'Nc6', 'Ka2', 'Ra4', 'Kb3', 'Qd7', 'Kxa4', 'a2', 'Kb3', 'a1=R', 'Kc4', 'Qf7', 'Kb3', 'Re1', 'Ka4', 'Rf1', 'Kb5', 'Rc1', 'Ka4', 'Qa7+', 'Kb5', 'Ra1', 'Kxc6', 'Qb6+', 'Kxb6', 'Bd7'],
   },
   {
+    // Re-found 2026-09-22 (capture-biased legal-playout search, seed 2) after
+    // D-1 redefined a bad bishop as one whose FORWARD RAYS are blocked by its
+    // own pawns, not one with low mobility. The old fixture's f8 bishop had an
+    // open g7 diagonal — a bishop to develop, not a bad bishop kept. Here the
+    // f1 bishop sits behind its own pawns on both forward rays with four pawns
+    // on its colour; Bg2 was the move to free it and White played Qd3 instead.
     id: 'kept-bad-bishop',
-    best: 'Bg7',
-    hist: ['b3', 'Na6', 'h4', 'b6', 'e3', 'g6', 'd3', 'Nb4', 'e4', 'Nd5', 'Ke2', 'Nb4', 'Bd2', 'd6', 'Bxb4', 'f5', 'Bxd6', 'exd6', 'exf5', 'Qxh4', 'f3', 'gxf5', 'g3', 'Qxh1', 'Ke3', 'Rb8'],
+    best: 'Bg2',
+    hist: ['c3', 'c5', 'b3', 'f5', 'Na3', 'Qc7', 'b4', 'cxb4', 'Rb1', 'bxc3', 'h3', 'cxd2+', 'Kxd2', 'Qxc1+', 'Rxc1', 'a5', 'Rxc8+', 'Kf7', 'Rxf8+', 'Kxf8', 'Ke1', 'Ke8', 'Qc1', 'b6', 'g4', 'h5', 'Qf4', 'g6', 'Qf3', 'h4', 'Nb1', 'Ra7', 'Qd3'],
   },
   {
     id: 'lost-the-opposition',

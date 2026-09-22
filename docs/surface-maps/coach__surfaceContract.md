@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**62 lines · 8 exports · 4 importers · 2 tests · 0 audits**
+**62 lines · 8 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,6 +16,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/surfaceContract.scan.test.ts`
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/hooks/usePhaseNarration.ts`
+- `src/services/openingGenerator.ts`
 
 ## Exports and every call site
 
@@ -40,9 +41,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `contractFor` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `registerFor` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1488`
+### `registerFor` (function) — 3 call sites
+- `src/components/Coach/CoachGameReview.tsx:1489`
 - `src/hooks/usePhaseNarration.ts:523`
+- `src/services/openingGenerator.ts:2466`
 
 ## Tests
 

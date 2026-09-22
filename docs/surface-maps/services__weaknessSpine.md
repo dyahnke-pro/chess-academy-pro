@@ -74,7 +74,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `bucketForMistake` (function) — 7 call sites
-- `src/services/coachDrillService.ts:348`
+- `src/services/coachDrillService.ts:350`
 - `src/services/tacticTypeBackfill.test.ts:94`
 - `src/services/tacticTypeBackfill.test.ts:115`
 - `src/services/weaknessLifecycle.ts:108`
@@ -83,8 +83,8 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2631`
-- `src/services/coachDrillService.ts:560`
+- `src/components/Coach/CoachTeachPage.tsx:2628`
+- `src/services/coachDrillService.ts:562`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
 
@@ -144,8 +144,8 @@
 - `src/services/weaknessSpine.test.ts:272`
 
 ### `getUnifiedWeaknessProfile` (function) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2555`
-- `src/components/Coach/CoachTeachPage.tsx:10712`
+- `src/components/Coach/CoachTeachPage.tsx:2552`
+- `src/components/Coach/CoachTeachPage.tsx:10705`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:71`
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
@@ -163,7 +163,7 @@
 - `src/services/fundamentalReachesDecider.test.ts:123`
 - `src/services/fundamentalsPipeline.realGame.test.ts:342`
 - `src/services/fundamentalsRecordLoop.integration.test.ts:92`
-- `src/services/homeOpeningPlan.ts:176`
+- `src/services/homeOpeningPlan.ts:177`
 - `src/services/loopCloses.review.integration.test.ts:74`
 - `src/services/weaknessSignalLoader.ts:58`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`

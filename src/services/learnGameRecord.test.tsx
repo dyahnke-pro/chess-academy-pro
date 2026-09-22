@@ -16,11 +16,12 @@
 // against the OLD value (`annotations: null`); the source gate fails if the
 // handler goes back to a bare `navigate('/coach/home')`.
 import { describe, it, expect, beforeEach } from 'vitest';
-import { openingKeyFor } from './openingKey';
+import { openingKeyFromSans } from './openingKey';
 import { coversEveryStudentPly } from './learnGameRecord';
 
-// The ONE opening key (A1): a name is not a key.
-const ITALIAN = openingKeyFor('C50', 'Italian Game');
+const SANS = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5', 'd5'] as const;
+// The ONE opening key (A1): minted from the moves, never a name.
+const KEY = openingKeyFromSans(SANS);
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Chess } from 'chess.js';
@@ -40,7 +41,7 @@ vi.mock('../hooks/useSettings', () => ({
  *  and a blunder) — the shape `liveGradesRef` holds when End Lesson is pressed. */
 function eightPlyGame(): { pgn: string; plies: number; grades: LearnLiveGrade[] } {
   const c = new Chess();
-  for (const san of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5', 'd5']) c.move(san);
+  for (const san of SANS) c.move(san);
   return {
     pgn: c.pgn(),
     plies: c.history().length,
@@ -65,16 +66,17 @@ describe('C7 — an ended Learn game is a saved game', () => {
       playerColor: 'white',
       playerName: 'David',
       rating: 1340,
-      openingId: ITALIAN,
+      sans: SANS,
       ending: { kind: 'ended' },
       liveGrades: g.grades,
       promptedPlies: [6],
       date: '2026-09-22',
     });
     expect(record).not.toBeNull();
+    expect(KEY).not.toBeNull(); // the fixture line is a named opening — the key is real, not a vacuous null match
     expect(record).toMatchObject({
       id: 'learn-abc', source: 'coach', result: '*', white: 'David', black: 'Coach', studentSide: 'white',
-      whiteElo: 1340, blackElo: null, openingId: ITALIAN, promptedPlies: [6],
+      whiteElo: 1340, blackElo: null, openingId: KEY, promptedPlies: [6],
       event: 'Learn with Coach (lesson ended)',
     });
     // The live evaluations ride along — the OLD record carried null here.
@@ -97,19 +99,19 @@ describe('C7 — an ended Learn game is a saved game', () => {
     const g = eightPlyGame();
     const short = buildLearnGameRecord({
       gameId: 'learn-short', pgn: g.pgn, plyCount: MIN_PERSIST_PLIES - 2, playerColor: 'white', playerName: 'David',
-      rating: 1340, openingId: null, ending: { kind: 'ended' }, liveGrades: [], promptedPlies: [],
+      rating: 1340, sans: [], ending: { kind: 'ended' }, liveGrades: [], promptedPlies: [],
     });
     expect(short).toBeNull();
     const atFloor = buildLearnGameRecord({
       gameId: 'learn-floor', pgn: g.pgn, plyCount: MIN_PERSIST_PLIES, playerColor: 'black', playerName: 'David',
-      rating: 1340, openingId: null, ending: { kind: 'ended' }, liveGrades: [], promptedPlies: [],
+      rating: 1340, sans: [], ending: { kind: 'ended' }, liveGrades: [], promptedPlies: [],
     });
     expect(atFloor).toMatchObject({ result: '*', white: 'Coach', black: 'David', blackElo: 1340, annotations: null });
   });
 
   it('the game-over endings still map to a real result — the same builder, one shape', () => {
     const g = eightPlyGame();
-    const base = { gameId: 'x', pgn: g.pgn, plyCount: g.plies, playerColor: 'black' as const, playerName: 'D', rating: 1200, openingId: null, liveGrades: [], promptedPlies: [] };
+    const base = { gameId: 'x', pgn: g.pgn, plyCount: g.plies, playerColor: 'black' as const, playerName: 'D', rating: 1200, sans: [], liveGrades: [], promptedPlies: [] };
     expect(buildLearnGameRecord({ ...base, ending: { kind: 'checkmate', winner: 'black' } })).toMatchObject({ result: '0-1', event: 'Learn with Coach' });
     expect(buildLearnGameRecord({ ...base, ending: { kind: 'checkmate', winner: 'white' } })).toMatchObject({ result: '1-0' });
     expect(buildLearnGameRecord({ ...base, ending: { kind: 'draw' } })).toMatchObject({ result: '1/2-1/2' });
@@ -178,7 +180,7 @@ describe('C3 — a live grade\'s engine lines reach the annotation the sweep rea
   it('the saved Learn record carries the lines end to end', () => {
     const g = eightPlyGame();
     const record = buildLearnGameRecord({
-      gameId: 'learn-pv', pgn: g.pgn, plyCount: g.plies, playerColor: 'white', playerName: 'D', rating: 1300, openingId: null,
+      gameId: 'learn-pv', pgn: g.pgn, plyCount: g.plies, playerColor: 'white', playerName: 'D', rating: 1300, sans: [],
       ending: { kind: 'ended' }, promptedPlies: [],
       liveGrades: [{ ply: 6, san: 'Ng5', color: 'white', bestMoveUci: 'b1c3', bestMoveEvalCp: 30, cpLossCp: 260, pv: { afterPlayed: ['d7d5', 'e4d5', 'f6d5'], afterBest: [] } }],
     });

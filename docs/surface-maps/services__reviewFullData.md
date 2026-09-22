@@ -53,7 +53,7 @@
 - `src/services/reviewFullData.test.ts:312`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4579`
+- `src/services/coachFeatureService.ts:4588`
 - `src/services/reviewFullData.test.ts:203`
 - `src/services/reviewFullData.test.ts:206`
 - `src/services/reviewFullData.test.ts:214`

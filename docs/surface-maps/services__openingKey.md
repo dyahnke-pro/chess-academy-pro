@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**106 lines · 9 exports · 36 importers · 18 tests · 1 audits**
+**106 lines · 9 exports · 34 importers · 18 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,12 +12,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachGamePage.tsx`
-- `src/components/Coach/CoachGameReview.tsx`
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Games/GameDatabasePage.tsx`
 - `src/components/Insights/HomeOpeningCard.test.tsx`
-- `src/hooks/usePositionNarration.ts`
+- `src/hooks/useStudentNeed.ts`
 - `src/services/analysisBatchOrder.test.ts`
 - `src/services/bookDeparturePrecompute.test.ts`
 - `src/services/bookDepartureWeakness.test.ts`
@@ -32,6 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/homeOpeningService.test.ts`
 - `src/services/homeOpeningSteer.test.ts`
 - `src/services/learnGameRecord.test.tsx`
+- `src/services/learnGameRecord.ts`
 - `src/services/lichessService.ts`
 - `src/services/needScore.test.ts`
 - `src/services/needScore.ts`
@@ -54,7 +52,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `slugifyOpening` (function) — 1 call site
 - `src/services/openingKey.test.ts:18`
 
-### `openingKeyFor` (function) — 32 call sites
+### `openingKeyFor` (function) — 31 call sites
 - `src/components/Insights/HomeOpeningCard.test.tsx:17`
 - `src/components/Insights/HomeOpeningCard.test.tsx:18`
 - `src/services/analysisBatchOrder.test.ts:16`
@@ -76,7 +74,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/homeOpeningService.test.ts:20`
 - `src/services/homeOpeningService.test.ts:21`
 - `src/services/homeOpeningSteer.test.ts:20`
-- `src/services/learnGameRecord.test.tsx:23`
 - `src/services/needScore.test.ts:12`
 - `src/services/needScore.test.ts:13`
 - `src/services/needWeaknessWire.test.ts:42`
@@ -88,12 +85,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessProvenance.test.ts:68`
 - `src/services/weaknessProvenance.test.ts:79`
 
-### `openingKeyFromSans` (function) — 19 call sites
-- `src/components/Coach/CoachGameReview.tsx:626`
-- `src/components/Coach/CoachTeachPage.tsx:7230`
-- `src/components/Coach/CoachTeachPage.tsx:10968`
-- `src/components/Coach/CoachTeachPage.tsx:12130`
-- `src/hooks/usePositionNarration.ts:136`
+### `openingKeyFromSans` (function) — 18 call sites
+- `src/hooks/useStudentNeed.ts:58`
+- `src/services/coachFeatureService.ts:4380`
+- `src/services/learnGameRecord.test.tsx:24`
+- `src/services/learnGameRecord.ts:160`
 - `src/services/oneOpeningKey.test.ts:44`
 - `src/services/oneOpeningKey.test.ts:59`
 - `src/services/oneOpeningKey.test.ts:60`
@@ -102,7 +98,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/oneOpeningKey.test.ts:116`
 - `src/services/oneOpeningKey.test.ts:123`
 - `src/services/oneOpeningKey.test.ts:127`
-- `src/services/openingGenerator.ts:2146`
+- `src/services/openingGenerator.ts:2147`
 - `src/services/openingKey.test.ts:22`
 - `src/services/openingKey.test.ts:51`
 - `src/services/openingKey.test.ts:52`
@@ -144,10 +140,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKeyBackfill.test.ts:39`
 - `src/services/syncService.ts:205`
 
-### `ecoOfKey` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:634`
-- `src/components/Coach/CoachTeachPage.tsx:7238`
-- `src/hooks/usePositionNarration.ts:138`
+### `ecoOfKey` (function) — 3 call sites
+- `src/hooks/useStudentNeed.ts:59`
+- `src/services/coachFeatureService.ts:4383`
 - `src/services/openingKey.test.ts:31`
 
 ### `sameOpeningFamily` (function) — 10 call sites
@@ -163,10 +158,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/studentNeedLoader.ts:198`
 
 ### `openingEntryForKey` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:4677`
+- `src/services/coachFeatureService.ts:4306`
 - `src/services/homeOpening.ts:112`
 - `src/services/homeOpening.ts:193`
-- `src/services/homeOpeningPlan.ts:163`
+- `src/services/homeOpeningPlan.ts:164`
 - `src/services/openingKey.test.ts:30`
 - `src/services/openingKey.test.ts:67`
 - `src/services/studentNeedLoader.ts:163`

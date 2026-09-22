@@ -68,6 +68,7 @@ import { coldStudent } from './needScore';
 import { getPlayerRating } from './playerRatingService';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { selectTeaching, summarizeTeaching, renderThesis, pliesFromSans, type SelectorPly } from './teachingSelector';
+import { registerFor } from '../coach/surfaceContract';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
 import type {

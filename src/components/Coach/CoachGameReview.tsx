@@ -1,5 +1,4 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { ecoOfKey, openingKeyFromSans } from '../../services/openingKey';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Target, Crosshair, Play, Pause } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
@@ -65,7 +64,8 @@ import {
   buildReviewCitations,
   buildReviewSegments,
   frameOpeningForStudent,
-} from '../../services/coachFeatureService';
+  openingNameForKey } from '../../services/coachFeatureService';
+import type { OpeningKey } from '../../types';
 import type {
   NarrativeMoveData,
   ReviewNarration,
@@ -135,7 +135,10 @@ interface CoachGameReviewProps {
   keyMoments: KeyMoment[];
   playerColor: 'white' | 'black';
   result: string;
-  openingName: string | null;
+  /** The opening's display name, when the caller holds one … */
+  openingName?: string | null;
+  /** … or its ONE key (A1), from which the review resolves the name itself. */
+  openingId?: OpeningKey | null;
   playerName: string;
   playerRating: number;
   opponentRating: number;
@@ -203,11 +206,12 @@ const REVIEW_LOCKED: Record<'play' | 'takeBack' | 'setPosition' | 'reset', strin
 
 export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const {
-    moves, playerColor, result, openingName,
+    moves, playerColor, result,
     playerRating,
     onPlayAgain, onBackToCoach, onPracticeInChat,
     pgn,
   } = props;
+  const openingName: string | null = props.openingName ?? openingNameForKey(props.openingId);
   // THE STUDENT MODEL (Phase 1) — feeds the free-board exploration recap so a
   // chain the student keeps erring into is named as a recurring hole. The main
   // walk narration loads this itself inside generateReviewNarration.
@@ -623,15 +627,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         });
         return hit;
       }
-      const reviewOpeningKey = openingKeyFromSans(reviewMoveInputs.map((m) => m.san));
+      // THE ONE KEY (A1) is minted inside generateReviewNarration from these
+      // very moves — the need context's departure + result terms scope to it.
       return generateReviewNarration({
         moves: reviewMoveInputs,
         playerColor,
         openingName,
-        // THE ONE KEY (A1): the need context's departure + result terms scope
-        // to it; review never passed one, so both terms were inert here.
-        openingId: reviewOpeningKey,
-        eco: reviewOpeningKey ? ecoOfKey(reviewOpeningKey) : null,
         result,
         playerRating,
         coachNarration,

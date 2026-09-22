@@ -1,15 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { voiceFacts, speakableFacts } from '../services/coachApi';
-import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { voiceService } from '../services/voiceService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { buildVoicePackage } from '../services/voicePackage';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
-import { readPosition } from '../services/positionalRead';
-import { detectPhase } from '../services/narratedContinuation';
-import { computePositionFacts, clauseText, type LastMoveInput } from '../services/positionFacts';
 import { useWeaknessSignals } from './useWeaknessSignals';
-import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../services/danyaTeachingService';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
 import {
@@ -20,8 +15,7 @@ import {
 import type { StockfishAnalysis } from '../types';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { useStudentNeed } from './useStudentNeed';
-import { lastMoveIfStudent, sansOfPgn } from '../services/lastMoveOfLine';
-import { ecoOfKey, openingKeyFromSans } from '../services/openingKey';
+import { composePositionRead } from '../services/positionReadComposer';
 
 export interface UsePositionNarrationArgs {
   fen: string;
@@ -69,13 +63,6 @@ const NARRATION_API_TIMEOUT_MS = 120_000;
  *  unlimited for any narration we'd actually produce. The timeout
  *  remains a safety net for a frozen audio pipeline, not a truncator. */
 const NARRATION_SPEAK_TIMEOUT_MS = 600_000;
-/** The phase, as the coach names it opening a read — computed, one line each.
- *  A Record over the union so a fourth phase cannot ship without a sentence. */
-const PHASE_LINE: Record<ReturnType<typeof detectPhase>, string> = {
-  opening: 'Still in the opening.',
-  middlegame: 'This is the middlegame now.',
-  endgame: 'This is the endgame now.',
-};
 
 /** Race a promise against a timeout. Rejects with an Error whose
  *  message ends in "-timeout" so the caller can cheaply distinguish
@@ -133,10 +120,9 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
   const weaknessRef = useWeaknessSignals(); // student model → re-ranks the read (Phase 1)
   // …AND THE NEED TERM (B3) — the line is the PGN the surface hands in; the
   // ONE opening key (A1) scopes its departure + result terms.
-  const readKey = openingKeyFromSans(sansOfPgn(args.pgn));
   const studentNeedRef = useStudentNeed({
-    studentColor: args.playerColor, openingId: readKey, eco: readKey ? ecoOfKey(readKey) : null,
-    sans: () => sansOfPgn(args.pgn),
+    studentColor: args.playerColor,
+    sans: () => args.pgn.split(/\s+/).map((t) => t.replace(/^\d+\.+/, '')).filter((t) => t && !/^(?:1-0|0-1|1\/2-1\/2|\*)$/.test(t)),
   });
   const [isNarrating, setIsNarrating] = useState(false);
   const [currentText, setCurrentText] = useState('');
@@ -216,101 +202,24 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       const profile = await db.profiles.get('main');
       const rating = profile?.currentRating ?? DEFAULT_STUDENT_RATING;
 
-      // The bounded tactics context — the engine's deepest look-ahead is read
-      // off it below. Reuses the stockfishAnalysis already computed above (no
-      // extra engine read); falls back to a FEN-only scan if that analysis is
-      // thin.
-      const posStudentCC = args.playerColor === 'white' ? 'w' : 'b';
-      const posTactics = (await buildFedTacticsContext(
-        args.fen,
-        posStudentCC,
+      // ── THE FACTS, IN CODE — composed in ONE place (positionReadComposer):
+      //    the note, the phase, the position facts, the positional read and
+      //    the deepest look-ahead, most-important-first. This hook owns the
+      //    engine read above and the voice below; it composes nothing.
+      const facts = await composePositionRead({
+        fen: args.fen,
+        pgn: args.pgn,
+        playerColor: args.playerColor,
+        openingName: args.openingName ?? null,
         rating,
-        stockfishAnalysis,
-        () => Promise.resolve(null), // latency-safe: reuse the cached analysis, no extra engine read
-        profile?.skillRadar?.tactics,
-      ).catch(() => undefined)) ?? null;
+        analysis: stockfishAnalysis,
+        tacticsSkill: profile?.skillRadar?.tactics,
+        studentWeaknesses: weaknessRef.current,
+        studentNeedContext: studentNeedRef.current,
+        evalBoard: (f) => stockfishEngine.evalBoard(f),
+        isCancelled: () => token !== activeTokenRef.current,
+      });
       if (token !== activeTokenRef.current) return;
-
-      // ── THE FACTS, IN CODE. Every sentence below is computed; the model
-      //    only phrases them. Ordered most-important-first for the voice.
-
-      // 1. THE CORPUS LEADS (David 2026-08-13: "narrations follow the corpus,
-      //    hand written, computed note format"). A read of the board starts
-      //    from a farmed teaching note about THIS position or structure when
-      //    one exists — board-gated at retrieval (teachingSourceForBoard),
-      //    framed honestly by origin (generalizedTeaching). No note = the
-      //    computed facts carry the read alone.
-      let noteLine = '';
-      try {
-        const historySans = args.pgn.split(/\s+/).map((t) => t.replace(/^\d+\.+/, '')).filter((t) => t && !/^(?:1-0|0-1|1\/2-1\/2|\*)$/.test(t));
-        const src = teachingSourceForBoard(historySans, args.fen, args.openingName ?? null, args.playerColor);
-        if (src) noteLine = generalizedTeaching(src.origin, spokenBeatText(src.note)).trim();
-      } catch { /* corpus unavailable — the computed read stands alone */ }
-
-      // 2. THE PHASE — the old prompt asked the model to "open by naming the
-      //    phase"; it is a two-line computation.
-      const plyCount = args.pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t)).length;
-      const phaseLine = PHASE_LINE[detectPhase(args.fen, plyCount)];
-
-      // 3. POSITION FACTS — the computed board-truth supply (importance-gated,
-      //    DNA): the decision/intent read, the must-defend, the why-probe.
-      //    `must-defend` is INCLUDED now — it used to be excluded because the
-      //    prompt block `formatReadingFacts` listed the material at risk, and
-      //    that block was model input, never something a student could hear.
-      let positionFactsBlock = '';
-      try {
-        if (stockfishAnalysis?.topLines?.length) {
-          const pf = await computePositionFacts({
-            // The student TAPPED "read this position". Silence would be a dead
-            // button — the same reasoning that exempts this surface from the
-            // verbosity gate (CLAUDE.md §G5, third sanctioned exemption).
-            posture: 'walk',
-            fen: args.fen,
-            moverColor: args.fen.split(' ')[1] === 'b' ? 'b' : 'w',
-            studentColor: posStudentCC,
-            rating,
-            analysis: stockfishAnalysis,
-            evalBoard: (f) => stockfishEngine.evalBoard(f),
-            studentWeaknesses: weaknessRef.current,
-            // THE HEAT MAP + THE NEED TERM (B3): the student's last move when
-            // the PGN produces this board and the last mover is them; absent
-            // otherwise. Never graded here → `cpLoss: null`.
-            ...((): { lastMove?: LastMoveInput } => {
-              const lm = lastMoveIfStudent(sansOfPgn(args.pgn), args.playerColor, args.fen);
-              return lm ? { lastMove: lm } : {};
-            })(),
-            studentNeedContext: studentNeedRef.current,
-          });
-          positionFactsBlock = clauseText(pf.clauses).join(' ');
-        }
-      } catch { positionFactsBlock = ''; }
-      if (token !== activeTokenRef.current) return;
-
-      // 4. THE POSITIONAL READ — every ranked observation on both sides of the
-      //    board (`readPosition`: king safety, development, weak pawns,
-      //    outposts, levers, passers, files), most useful first. NO cap
-      //    (G4.5): the ranker orders, the student hears what it ranked. An
-      //    observation whose square the facts above already named is skipped
-      //    — say a thing once.
-      const readLines: string[] = [];
-      try {
-        const already = `${noteLine} ${positionFactsBlock}`.toLowerCase();
-        for (const o of readPosition(args.fen, args.playerColor)) {
-          const naming = o.text.toLowerCase().match(/[a-h][1-8]/)?.[0];
-          if (naming && already.includes(naming)) continue;
-          readLines.push(o.text);
-        }
-      } catch { /* the read is a bonus, never a blocker */ }
-
-      // 5. THE DEEPEST LOOK-AHEAD — the PV scan in posTactics, pre-composed as
-      //    the exact spoken line in code (speakDeepestLookahead — G0: the
-      //    engine decided, the voice only phrases). Null on a quiet board.
-      const lookaheadLine = posTactics ? speakDeepestLookahead(posTactics, 'coach-is-opponent', posStudentCC, weaknessRef.current) : null;
-
-      const facts = [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '']
-        .map((t) => t.trim())
-        .filter(Boolean)
-        .join(' ');
       if (!facts) {
         setCurrentText('');
         return;

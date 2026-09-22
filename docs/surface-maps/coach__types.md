@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**924 lines · 32 exports · 919 importers · 203 tests · 39 audits**
+**924 lines · 32 exports · 920 importers · 203 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -834,6 +834,7 @@
 - `src/services/playerIdentity.ts`
 - `src/services/playerRatingService.ts`
 - `src/services/positionFacts.ts`
+- `src/services/positionReadComposer.ts`
 - `src/services/positionReadingService.test.ts`
 - `src/services/positionReadingService.ts`
 - `src/services/positionTrapScan.test.ts`

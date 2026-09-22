@@ -58,7 +58,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachingSelector.ts:207`
 
 ### `buildTurningPointQuestion` (function) — 14 call sites
-- `src/components/Coach/CoachGameReview.tsx:1478`
+- `src/components/Coach/CoachGameReview.tsx:1479`
 - `src/services/reviewTurningPoint.test.ts:41`
 - `src/services/reviewTurningPoint.test.ts:57`
 - `src/services/reviewTurningPoint.test.ts:64`
@@ -74,7 +74,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachingSelector.test.ts:58`
 
 ### `judgeTurningPointPick` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1522`
+- `src/components/Coach/CoachGameReview.tsx:1523`
 - `src/services/reviewTurningPoint.test.ts:138`
 - `src/services/reviewTurningPoint.test.ts:139`
 
@@ -85,7 +85,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildCriticalMomentQuestion` (function) — 17 call sites
-- `src/components/Coach/CoachGameReview.tsx:855`
+- `src/components/Coach/CoachGameReview.tsx:856`
 - `src/services/reviewTurningPoint.test.ts:160`
 - `src/services/reviewTurningPoint.test.ts:168`
 - `src/services/reviewTurningPoint.test.ts:174`
@@ -104,7 +104,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTurningPoint.test.ts:287`
 
 ### `judgeCriticalMomentPick` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:1557`
+- `src/components/Coach/CoachGameReview.tsx:1558`
 - `src/services/reviewTurningPoint.test.ts:211`
 - `src/services/reviewTurningPoint.test.ts:212`
 - `src/services/reviewTurningPoint.test.ts:266`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**477 lines · 13 exports · 24 importers · 15 tests · 2 audits**
+**477 lines · 13 exports · 25 importers · 15 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,6 +33,7 @@
 - `src/services/openingRecordBeat.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.ts`
+- `src/services/positionReadComposer.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/studentNeedLoader.ts`
@@ -63,7 +64,7 @@
 - `src/services/coachDecisionEmits.test.ts:132`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:36`
 - `src/services/coachFeatureService.ts:1319`
-- `src/services/coachFeatureService.ts:4375`
+- `src/services/coachFeatureService.ts:4384`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -71,7 +72,7 @@
 - `src/services/needScore.test.ts:69`
 - `src/services/needScore.test.ts:79`
 - `src/services/oneStudentRating.test.ts:84`
-- `src/services/openingGenerator.ts:2147`
+- `src/services/openingGenerator.ts:2148`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:58`

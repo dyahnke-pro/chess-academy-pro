@@ -153,7 +153,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
   // …AND THE OTHER HALF (N2) — does THIS student need teaching here. Honest
   // nulls for the opening: Play identifies it by name after the fact, and a
   // fabricated id would scope the departures to the wrong opening.
-  const studentNeedRef = useStudentNeed({ studentColor: playerColor, openingId: null, eco: null, sans: args.getHistory });
+  const studentNeedRef = useStudentNeed({ studentColor: playerColor, sans: args.getHistory });
   // SAY-ONCE. A standing fact — the pawn structure, a pin in waiting, which
   // piece is doing the work — is true until the board changes, and it is
   // re-derived every ply, so without this the student hears the same sentence

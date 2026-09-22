@@ -86,7 +86,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // THE NEED HALF of the student model for "Why?" (B3). Honest nulls for the
   // opening: game records carry no id in this vocabulary, and a fabricated one
   // would scope the departures to nothing.
-  const studentNeedRef = useStudentNeed({ rating: playerRating, studentColor: playerColor, openingId: null, eco: null, sans: () => game.history });
+  const studentNeedRef = useStudentNeed({ rating: playerRating, studentColor: playerColor, sans: () => game.history });
 
   // Publish board context for global coach drawer
   const playTurn = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';

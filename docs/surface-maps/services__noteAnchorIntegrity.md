@@ -78,7 +78,7 @@
 - `src/services/noteFilterFunnel.report.test.ts:167`
 
 ### `noteStaysInScope` (function) — 21 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7961`
+- `src/components/Coach/CoachTeachPage.tsx:7954`
 - `src/services/computedVoiceAudit.report.test.ts:342`
 - `src/services/computedVoiceAudit.report.test.ts:390`
 - `src/services/danyaTeachingService.ts:456`
@@ -101,7 +101,7 @@
 - `src/services/viennaNarrationExample.report.test.ts:99`
 
 ### `noteAdvisesSide` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8007`
+- `src/components/Coach/CoachTeachPage.tsx:8000`
 - `src/services/coachSideAwareness.test.ts:31`
 - `src/services/coachSideAwareness.test.ts:32`
 - `src/services/coachSideAwareness.test.ts:33`
@@ -109,7 +109,7 @@
 - `src/services/coachSideAwareness.test.ts:103`
 
 ### `noteSuitsStudentSide` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7974`
+- `src/components/Coach/CoachTeachPage.tsx:7967`
 - `src/services/coachSideAwareness.test.ts:45`
 - `src/services/coachSideAwareness.test.ts:46`
 - `src/services/coachSideAwareness.test.ts:51`

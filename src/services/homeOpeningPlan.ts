@@ -19,6 +19,7 @@
 import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import type { BookDepartureRow } from './bookDepartureWeakness';
+export type { PlayerColor } from './playerIdentity';
 import { getCachedBookDepartureRows } from './bookDeparturePrecompute';
 import { gameNeedsAnalysis } from './gameAnalysisService';
 import { isFixtureGame } from './fixtureGames';

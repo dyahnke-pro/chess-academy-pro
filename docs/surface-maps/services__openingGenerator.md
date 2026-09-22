@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4364 lines · 38 exports · 18 importers · 16 tests · 10 audits**
+**4365 lines · 38 exports · 18 importers · 16 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -70,8 +70,8 @@
 - `src/services/sharedOpeningCache.ts:175`
 
 ### `getCachedOpening` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5489`
-- `src/components/Coach/CoachTeachPage.tsx:6405`
+- `src/components/Coach/CoachTeachPage.tsx:5485`
+- `src/components/Coach/CoachTeachPage.tsx:6401`
 - `src/hooks/useTeachWalkthrough.ts:2252`
 - `src/services/lessonCacheKey.test.ts:59`
 - `src/services/lessonCacheKey.test.ts:66`
@@ -80,13 +80,13 @@
 - `src/services/openingGenerator.test.ts:980`
 
 ### `cacheOpening` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4860`
-- `src/components/Coach/CoachTeachPage.tsx:5378`
-- `src/components/Coach/CoachTeachPage.tsx:5604`
-- `src/components/Coach/CoachTeachPage.tsx:5643`
-- `src/components/Coach/CoachTeachPage.tsx:5717`
-- `src/components/Coach/CoachTeachPage.tsx:6474`
-- `src/components/Coach/CoachTeachPage.tsx:10620`
+- `src/components/Coach/CoachTeachPage.tsx:4856`
+- `src/components/Coach/CoachTeachPage.tsx:5374`
+- `src/components/Coach/CoachTeachPage.tsx:5600`
+- `src/components/Coach/CoachTeachPage.tsx:5639`
+- `src/components/Coach/CoachTeachPage.tsx:5713`
+- `src/components/Coach/CoachTeachPage.tsx:6470`
+- `src/components/Coach/CoachTeachPage.tsx:10613`
 - `src/services/lessonCacheKey.test.ts:58`
 - `src/services/lessonCacheKey.test.ts:63`
 - `src/services/lessonCacheKey.test.ts:72`
@@ -150,8 +150,8 @@
 - `src/services/puzzleConceptExplanation.ts:168`
 
 ### `noteArrowSourceAt` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7725`
-- `src/components/Coach/CoachTeachPage.tsx:9737`
+- `src/components/Coach/CoachTeachPage.tsx:7718`
+- `src/components/Coach/CoachTeachPage.tsx:9730`
 - `src/services/noteSelectionDeterminism.test.ts:124`
 - `src/services/teachingCoverage.report.test.ts:164`
 
@@ -159,8 +159,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `groundedSegmentArrows` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7730`
-- `src/components/Coach/CoachTeachPage.tsx:9742`
+- `src/components/Coach/CoachTeachPage.tsx:7723`
+- `src/components/Coach/CoachTeachPage.tsx:9735`
 - `src/services/groundedArrows.test.ts:41`
 - `src/services/groundedArrows.test.ts:53`
 - `src/services/groundedArrows.test.ts:62`
@@ -241,11 +241,11 @@
 ### `generateOpening` (function) — 10 call sites
 - `scripts/audit-coach-teach-gaps.mjs:384`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:57`
-- `src/components/Coach/CoachTeachPage.tsx:4854`
-- `src/components/Coach/CoachTeachPage.tsx:5598`
-- `src/components/Coach/CoachTeachPage.tsx:5711`
-- `src/components/Coach/CoachTeachPage.tsx:6469`
-- `src/components/Coach/CoachTeachPage.tsx:10614`
+- `src/components/Coach/CoachTeachPage.tsx:4850`
+- `src/components/Coach/CoachTeachPage.tsx:5594`
+- `src/components/Coach/CoachTeachPage.tsx:5707`
+- `src/components/Coach/CoachTeachPage.tsx:6465`
+- `src/components/Coach/CoachTeachPage.tsx:10607`
 - `src/services/openingGenerator.computedBeats.test.ts:59`
 - `src/services/openingGenerator.test.ts:933`
 - `src/services/openingGenerator.test.ts:936`
@@ -278,11 +278,11 @@
 - `src/services/stageEntryValidity.test.ts:87`
 
 ### `generateMissingStagesInBackground` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5397`
-- `src/components/Coach/CoachTeachPage.tsx:5543`
-- `src/components/Coach/CoachTeachPage.tsx:5670`
-- `src/components/Coach/CoachTeachPage.tsx:5753`
-- `src/components/Coach/CoachTeachPage.tsx:6492`
+- `src/components/Coach/CoachTeachPage.tsx:5393`
+- `src/components/Coach/CoachTeachPage.tsx:5539`
+- `src/components/Coach/CoachTeachPage.tsx:5666`
+- `src/components/Coach/CoachTeachPage.tsx:5749`
+- `src/components/Coach/CoachTeachPage.tsx:6488`
 
 ## Tests
 

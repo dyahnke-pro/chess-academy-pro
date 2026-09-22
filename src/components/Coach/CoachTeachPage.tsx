@@ -88,7 +88,6 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
-import { ecoOfKey, openingKeyFromSans } from '../../services/openingKey';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
@@ -156,11 +155,9 @@ import {
   hasImportedGames,
   type CoachDrill,
   type DrillProgress,
-} from '../../services/coachDrillService';
+  drillContinueBeat, drillHintBeat, drillSolvedBeat, drillWrongMoveBeat } from '../../services/coachDrillService';
 import { seedMasterPuzzles } from '../../services/puzzleService';
 import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
-import { hintBeat, solvedLineBeat, wrongMoveReason } from '../../services/drillReasons';
-import { sayMoveClause } from '../../services/spokenMove';
 import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
@@ -2584,7 +2581,7 @@ export function CoachTeachPage(): JSX.Element {
     // THE SEQUENCE, SPOKEN, WITH THE IDEA NAMED (A5): a drill called "missed
     // tactical sequences" shows the sequence. Computed (G0).
     const solvedConcept = explainDrillConcept({ setupFen: solved.drill.setupFen, solutionSan: solved.drill.solutionSan, themes: solved.drill.themes });
-    const solvedBeat = solvedLineBeat(solved.drill.solutionSan, solvedConcept?.idea ?? null);
+    const solvedBeat = drillSolvedBeat(solved.drill.solutionSan, solvedConcept?.idea ?? null);
     if (!solved.progress) {
       activeDrillRef.current = null;
       // TEACH THE CONCEPT behind the solution (David 2026-09-14: "not just a
@@ -2680,14 +2677,13 @@ export function CoachTeachPage(): JSX.Element {
       // wrong move leaves — a piece it drops, a mate or a winning capture it
       // walks into. Computed; null when the board shows nothing concrete, and
       // then the nudge stands alone rather than a guessed reason.
-      const reason = wrongMoveReason(gameRef.current.fen, move.san, expected);
       const nudge =
         easeUp
           ? "This one's a stubborn rep — happens to everyone. Tap Hint to see the idea, or say “next” to move on and we'll bring it back later."
           : cur.wrongCount === 2
             ? 'Still not it — no rush. Look for the most forcing move first: checks, captures, then threats.'
             : "That's not the strongest here — take another look and try again.";
-      coachDrillSay(reason ? (easeUp ? `${reason} ${nudge}` : reason) : nudge);
+      coachDrillSay(drillWrongMoveBeat({ fenBefore: gameRef.current.fen, wrongSan: move.san, expectedSan: expected, nudge, keepNudge: easeUp }));
       return true;
     }
     liveFenRef.current = move.fen;
@@ -2712,7 +2708,7 @@ export function CoachTeachPage(): JSX.Element {
         completeDrill(cur);
       } else {
         activeDrillRef.current = { ...cur, step: afterOppStep };
-        coachDrillSay(`${sayMoveClause(oppReply).replace(/^./, (c) => c.toUpperCase())} — keep going, find the next move.`);
+        coachDrillSay(drillContinueBeat(oppReply));
       }
     }, 650);
     return true;
@@ -7227,15 +7223,12 @@ export function CoachTeachPage(): JSX.Element {
   // their results. Review has computed it since N2; Learn never did, so the
   // coach said the same thing on a line the student has played right five times.
   // Cold / still loading reads as SPEAK — a fresh install meets a teaching coach.
-  const liveOpeningKey = openingKeyFromSans(game.history);
   const studentNeedRef = useStudentNeed({
     rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     studentColor: playerColor,
-    // THE ONE KEY (A1): minted from the board, so the departure + opening-score
-    // terms scope to the same opening the import and Play records carry. Null
-    // until the line reaches a named entry — cold reads as SPEAK.
-    openingId: liveOpeningKey,
-    eco: liveOpeningKey ? ecoOfKey(liveOpeningKey) : null,
+    // THE ONE KEY (A1) is minted by the hook from this line, so the departure +
+    // opening-score terms scope to the same opening the import and Play
+    // records carry. Null until the line reaches a named entry — cold reads as SPEAK.
     // A GETTER, read at fire time (B3): the array form captured the mount-time
     // history and measured every ply's familiarity against an empty line.
     sans: () => gameRef.current.history,
@@ -10964,8 +10957,6 @@ export function CoachTeachPage(): JSX.Element {
     // adaptGameRecord returned null and showed "could not replay this game"
     // (PostHog 2026-09-03, Port Harcourt ×2).
     const pgn = game.pgn;
-    // THE ONE KEY (A1): minted from the board, never the tree's name.
-    const openingId = openingKeyFromSans(game.history);
     // ONE record shape for a Learn game, whichever way it ended — End Lesson
     // builds through the same function (C7). The live per-move grades ride
     // along as annotations, where they exist.
@@ -10976,7 +10967,7 @@ export function CoachTeachPage(): JSX.Element {
       playerColor,
       playerName,
       rating,
-      openingId,
+      sans: game.history, // the ONE key (A1) is minted by the builder
       ending: game.isCheckmate
         ? { kind: 'checkmate', winner: won ? playerColor : (playerColor === 'white' ? 'black' : 'white') }
         : { kind: 'draw' },
@@ -11066,7 +11057,7 @@ export function CoachTeachPage(): JSX.Element {
       // THE HINT SAYS THE PIECE AND WITHHOLDS THE SQUARE (A5): the arrow used
       // to be silent. Computed from the drill's own solution.
       const cur = activeDrillRef.current;
-      const beat = hintBeat(fen, cur.drill.solutionSan[cur.step] ?? '');
+      const beat = drillHintBeat(fen, cur.drill.solutionSan[cur.step] ?? '');
       if (beat) coachDrillSay(beat);
     }
     setHintBusy(true);
@@ -12127,7 +12118,7 @@ export function CoachTeachPage(): JSX.Element {
                     playerColor,
                     playerName: activeProfile?.name ?? 'Player',
                     rating: studentPlayingRating(activeProfile),
-                    openingId: openingKeyFromSans(game.history), // the ONE key (A1)
+                    sans: game.history, // the ONE key (A1) is minted by the builder
                     ending: { kind: 'ended' },
                     liveGrades: [...liveGradesRef.current.values()],
                     promptedPlies: [...announcedPliesRef.current],

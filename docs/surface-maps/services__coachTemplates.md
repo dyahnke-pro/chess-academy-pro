@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachTemplates.test.ts:94`
 
 ### `getScenarioTemplate` (function) — 9 call sites
-- `src/components/Coach/CoachGamePage.tsx:4549`
+- `src/components/Coach/CoachGamePage.tsx:4524`
 - `src/services/coachTemplates.test.ts:47`
 - `src/services/coachTemplates.test.ts:54`
 - `src/services/coachTemplates.test.ts:103`

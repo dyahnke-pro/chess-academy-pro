@@ -267,7 +267,7 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8621`
+- `src/components/Coach/CoachTeachPage.tsx:8614`
 - `src/services/coachApi.ts:3319`
 - `src/services/coachApi.ts:5365`
 - `src/services/coachFeatureService.test.ts:40`
@@ -858,8 +858,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:56`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3812`
-- `src/components/Coach/CoachGamePage.tsx:3970`
+- `src/components/Coach/CoachGamePage.tsx:3787`
+- `src/components/Coach/CoachGamePage.tsx:3945`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 
@@ -961,7 +961,7 @@
 - `src/services/coachApi.ts:4530`
 
 ### `seatPieceReferences` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:4504`
+- `src/services/coachFeatureService.ts:4513`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
 - `src/services/reviewBoardAwareness.test.ts:78`

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
-import { buildHomeOpeningPlan, type HomePlanSection } from '../../services/homeOpeningPlan';
+import { buildHomeOpeningPlan, type HomePlanSection, type PlayerColor } from '../../services/homeOpeningPlan';
 import { logAppAudit } from '../../services/appAuditor';
-import type { PlayerColor } from '../../services/playerIdentity';
 
 // THE PLAN'S FIRST SECTION (WO-HOME-OPENING-01 A4): one block per colour with a
 // home opening, listing the reps computed INSIDE it — analyse its games, its

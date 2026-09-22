@@ -41,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/kingIsNeverHanging.test.ts:53`
 
 ### `classifyPosition` (function) — 29 call sites
-- `src/components/Coach/CoachGamePage.tsx:3318`
+- `src/components/Coach/CoachGamePage.tsx:3293`
 - `src/services/missedTacticService.ts:755`
 - `src/services/pvPlayback.ts:384`
 - `src/services/tacticClassifier.test.ts:32`
@@ -72,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticClassifier.test.ts:323`
 
 ### `scanUpcomingTactics` (function) — 2 call sites
-- `src/components/Coach/CoachGamePage.tsx:2866`
+- `src/components/Coach/CoachGamePage.tsx:2841`
 - `src/services/liveTacticsContext.ts:84`
 
 ## Tests

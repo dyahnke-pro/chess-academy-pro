@@ -59,7 +59,7 @@ import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } f
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey } from '../types';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
-import { openingFamily } from './openingKey';
+import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { describeEvalCp } from './engineConstants';
 
@@ -4300,6 +4300,12 @@ function varyRepeatedStems(segments: ReviewMoveSegment[]): void {
   }
 }
 
+/** The display name behind the ONE opening key — for a surface that holds a
+ *  stored game's key and needs to say the opening. */
+export function openingNameForKey(key: OpeningKey | null | undefined): string | null {
+  return key ? openingEntryForKey(key)?.name ?? null : null;
+}
+
 export async function generateReviewNarration(params: {
   moves: ReviewMoveInput[];
   playerColor: 'white' | 'black';
@@ -4369,9 +4375,12 @@ export async function generateReviewNarration(params: {
   // intro, because the intro now carries the student's RECORD in this opening
   // (A8) — the family count and score off the ONE key, the departure history
   // joined by position — and those live on this context.
+  // THE ONE KEY (A1): minted HERE from the game's own moves when the caller
+  // holds none — a surface never mints a key of its own.
+  const reviewKey = params.openingId !== undefined ? params.openingId : openingKeyFromSans(moves.map((m) => m.san));
   const studentNeed = await loadStudentNeedContext({
     rating: playerRating, sans: moves.slice(0, usableCount).map((m) => m.san), studentColor: playerColor,
-    openingId: params.openingId ?? null, eco: params.eco ?? null,
+    openingId: reviewKey, eco: params.eco ?? (reviewKey ? ecoOfKey(reviewKey) : null),
   }).catch(() => coldStudent(playerRating));
   const record = reviewOpeningRecord({ openingName, playerColor, studentNeed, gameId: params.gameId ?? null });
   const groundedIntro = defaultIntroText({ playerColor, result, openingName, mistakeCount, record });

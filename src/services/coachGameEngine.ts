@@ -480,6 +480,50 @@ export async function pickTaughtSlip(
   }
 }
 
+export type TeachingReplySource = 'taught-slip' | 'home-steer';
+
+/**
+ * THE ONE TEACHING-REPLY DOOR (2026-09-22). Two surfaces composed the same
+ * precedence — the once-per-game taught slip, then the home-opening steer
+ * (A7), then whatever plays the move — `getAdaptiveMove` here and
+ * `CoachGamePage.coachTurn` above its Stockfish fast path (which reaches
+ * `getAdaptiveMove` only when the engine fails, so a steer wired there alone
+ * would read as connected and fire approximately never). Two copies of one
+ * order drift; this is the only copy now, and both callers pass through it.
+ *
+ * Below the taught slip (a lesson keeps its turn), above the amateur band:
+ * while in the opening, the opponent plays what the student's OWN opponents
+ * played at this position in their home games — so a Black student whose home
+ * is the Pirc meets 1.e4 and the lines they actually face. Null past the
+ * trie; the layers below run exactly as before. Opt-in per surface
+ * (`steerHomeFor`): a locked taught line is never steered off it.
+ */
+export async function pickTeachingReply(
+  fen: string,
+  targetElo: number,
+  opts: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; steerHomeFor?: 'white' | 'black' } | undefined,
+  source: string,
+): Promise<{ uci: string; san: string; source: TeachingReplySource } | null> {
+  const taught = await pickTaughtSlip(fen, targetElo, opts, source);
+  if (taught) return { uci: taught.uci, san: taught.san, source: 'taught-slip' };
+  if (opts?.steerHomeFor) {
+    try {
+      const steer = await withBudget(pickHomeSteerMove(fen, opts.steerHomeFor), BAND_BUDGET_MS);
+      if (steer) {
+        void logAppAudit({
+          kind: 'coach-opponent-move-source',
+          category: 'subsystem',
+          source,
+          summary: `source=home-steer san=${steer.san} uci=${steer.uci} family=${steer.family} faced=${steer.games}/${steer.total} elo=${targetElo}`,
+          fen,
+        });
+        return { uci: steer.uci, san: steer.san, source: 'home-steer' };
+      }
+    } catch { /* a missed steer is never worth a stalled move */ }
+  }
+  return null;
+}
+
 export async function getAdaptiveMove(
   fen: string,
   targetElo: number,
@@ -553,39 +597,17 @@ export async function getAdaptiveMove(
   // game; a hard opponent walking into a known amateur trap is not a teaching
   // moment, it is a broken difficulty setting. Easy and medium is where a
   // deliberate slip belongs, which is also where the gems came from.
-  const taught = await pickTaughtSlip(fen, targetElo, opts, 'getAdaptiveMove');
-  if (taught) {
+  const teaching = await pickTeachingReply(fen, targetElo, opts, 'getAdaptiveMove');
+  if (teaching) {
     return {
-      move: taught.uci,
-      analysis: { ...FALLBACK_ANALYSIS, bestMove: taught.uci },
-      source: 'taught-slip',
+      move: teaching.uci,
+      analysis: { ...FALLBACK_ANALYSIS, bestMove: teaching.uci },
+      source: teaching.source,
     };
   }
 
-  // ── LAYER 0.07 — STEER INTO THE STUDENT'S HOME OPENING (A7) ─────────────
-  //
-  // Below the taught slip (a once-per-game lesson keeps its turn), above the
-  // amateur band: while in the opening, the opponent plays what the student's
-  // OWN opponents played at this position in their home games — so a Black
-  // student whose home is the Pirc meets 1.e4 and the lines they actually
-  // face, at their strength. Null past the trie, and the layers below run
-  // exactly as before. Opt-in per surface: a locked taught line is never
-  // steered off it.
-  if (opts?.steerHomeFor) {
-    try {
-      const steer = await withBudget(pickHomeSteerMove(fen, opts.steerHomeFor), BAND_BUDGET_MS);
-      if (steer) {
-        void logAppAudit({
-          kind: 'coach-opponent-move-source',
-          category: 'subsystem',
-          source: 'coachGameEngine.getAdaptiveMove',
-          summary: `source=home-steer san=${steer.san} uci=${steer.uci} family=${steer.family} faced=${steer.games}/${steer.total} elo=${targetElo}`,
-          fen,
-        });
-        return { move: steer.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: steer.uci }, source: 'home-steer' };
-      }
-    } catch { /* a missed steer is never worth a stalled move */ }
-  }
+  // (LAYER 0.07 — the home-opening steer — runs INSIDE pickTeachingReply,
+  //  below the slip, above the amateur band. One door, one precedence.)
 
   // ── LAYER 0.1 — WHAT PLAYERS AT THIS LEVEL ACTUALLY PLAY ────────────────
   //

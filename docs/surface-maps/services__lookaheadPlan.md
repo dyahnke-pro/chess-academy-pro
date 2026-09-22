@@ -29,8 +29,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7533`
-- `src/components/Coach/CoachTeachPage.tsx:7563`
+- `src/components/Coach/CoachTeachPage.tsx:7526`
+- `src/components/Coach/CoachTeachPage.tsx:7556`
 - `src/services/computedVoiceAudit.report.test.ts:260`
 - `src/services/dnaLineNarrator.ts:120`
 - `src/services/dnaLineNarrator.ts:208`
@@ -153,7 +153,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.test.ts:1258`
 
 ### `positionReadLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9280`
+- `src/components/Coach/CoachTeachPage.tsx:9273`
 - `src/services/coachLaneWiring.test.ts:38`
 - `src/services/computedVoiceAudit.report.test.ts:223`
 - `src/services/lookaheadPlan.test.ts:541`
@@ -172,7 +172,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/narrationAdversarial.test.ts:67`
 
 ### `lineShapeLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9284`
+- `src/components/Coach/CoachTeachPage.tsx:9277`
 - `src/services/coachLaneWiring.test.ts:39`
 - `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/lookaheadPlan.test.ts:881`
@@ -191,7 +191,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.test.ts:1015`
 
 ### `terminalReadLine` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9287`
+- `src/components/Coach/CoachTeachPage.tsx:9280`
 - `src/services/coachLaneWiring.test.ts:40`
 - `src/services/computedVoiceAudit.report.test.ts:228`
 - `src/services/lookaheadPlan.test.ts:988`
@@ -205,7 +205,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.test.ts:1016`
 
 ### `keySquareLine` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9275`
+- `src/components/Coach/CoachTeachPage.tsx:9268`
 - `src/services/coachLaneWiring.test.ts:37`
 - `src/services/computedVoiceAudit.report.test.ts:222`
 - `src/services/forkNarration.ts:108`
@@ -225,7 +225,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planMarks.test.ts:37`
 
 ### `planFromUci` (function) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9272`
+- `src/components/Coach/CoachTeachPage.tsx:9265`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:218`
 - `src/services/concessionBeat.ts:381`

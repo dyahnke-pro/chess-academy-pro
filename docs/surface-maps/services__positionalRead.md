@@ -13,9 +13,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
-- `src/hooks/usePositionNarration.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/narrationAdversarial.test.ts`
+- `src/services/positionReadComposer.ts`
 - `src/services/positionalRead.test.ts`
 
 ## Exports and every call site
@@ -27,13 +27,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `readPosition` (function) — 27 call sites
-- `src/hooks/usePositionNarration.ts:298`
 - `src/services/groundedAnswer.ts:1290`
 - `src/services/lookaheadPlan.ts:881`
 - `src/services/lookaheadPlan.ts:1150`
 - `src/services/lookaheadPlan.ts:1504`
 - `src/services/narrationAdversarial.test.ts:87`
 - `src/services/narrationAdversarial.test.ts:173`
+- `src/services/positionReadComposer.ts:119`
 - `src/services/positionalRead.test.ts:26`
 - `src/services/positionalRead.test.ts:37`
 - `src/services/positionalRead.test.ts:38`
@@ -56,7 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:268`
 
 ### `buildPositionalRead` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8126`
+- `src/components/Coach/CoachTeachPage.tsx:8119`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
 - `src/services/positionalRead.test.ts:159`

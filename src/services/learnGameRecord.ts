@@ -21,7 +21,8 @@
 import { shouldPersistFinishedGame } from '../utils/coachGamePersistence';
 import { winPctLost, bandForWinPctLost } from './accuracyService';
 import { LIVE_ANALYSIS_DEPTH } from './coachGameAnnotations';
-import type { GameRecord, GameResult, MoveAnnotation, MoveClassification, OpeningKey } from '../types';
+import type { GameRecord, GameResult, MoveAnnotation, MoveClassification } from '../types';
+import { openingKeyFromSans } from './openingKey';
 
 /** What Learn knows about one STUDENT ply it graded live: the engine's read of
  *  the position before the move (best move + its eval, White POV) and what the
@@ -93,7 +94,8 @@ export interface LearnGameInput {
   playerName: string;
   rating: number;
   /** The ONE opening key (A1), minted from the board by the caller. */
-  openingId: OpeningKey | null;
+  /** The game's SANs from the start — the ONE opening key (A1) is minted here, never by the page. */
+  sans: readonly string[];
   ending: LearnGameEnding;
   liveGrades: readonly LearnLiveGrade[];
   promptedPlies: readonly number[];
@@ -155,7 +157,7 @@ export function buildLearnGameRecord(input: LearnGameInput): GameRecord | null {
     ...(coversEveryStudentPly(input) ? { fullyAnalyzed: true, analysisDepth: LIVE_ANALYSIS_DEPTH } : {}),
     coachAnalysis: null,
     isMasterGame: false,
-    openingId: input.openingId,
+    openingId: openingKeyFromSans(input.sans),
     promptedPlies: [...input.promptedPlies],
   };
 }
