@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { getCoachChatResponse } from '../services/coachApi';
-import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
+import { voiceFacts, speakableFacts } from '../services/coachApi';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { voiceService } from '../services/voiceService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { buildVoicePackage } from '../services/voicePackage';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
-import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
-import { formatReadingFacts } from '../services/positionReadingService';
+import { readPosition } from '../services/positionalRead';
+import { detectPhase } from '../services/narratedContinuation';
 import { computePositionFacts, clauseText } from '../services/positionFacts';
 import { useWeaknessSignals } from './useWeaknessSignals';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../services/danyaTeachingService';
@@ -18,7 +17,7 @@ import {
   setCachedStockfish,
   __resetStockfishFenCacheForTests,
 } from './stockfishFenCache';
-import type { CoachContext, StockfishAnalysis } from '../types';
+import type { StockfishAnalysis } from '../types';
 
 export interface UsePositionNarrationArgs {
   fen: string;
@@ -43,11 +42,10 @@ export interface UsePositionNarrationResult {
 }
 
 /** Stockfish analysis depth for tap-time narration. WO-POLISH-03
- *  dropped 16 → 12; WO-PHASE-PROSE-01 drops 12 → 10. Deterministic
- *  tactics detection runs on every FEN regardless in
- *  buildChessContextMessage, so the engine is only contributing an
- *  eval direction + top lines — not something that needs tournament
- *  depth. Shaves another few hundred ms per tap on slow positions. */
+ *  dropped 16 → 12; WO-PHASE-PROSE-01 drops 12 → 10. The board computers
+ *  (positionFacts, readPosition, the tactics scan) run on every FEN
+ *  regardless, so the engine is only contributing an eval direction + top
+ *  lines — not something that needs tournament depth. */
 const STOCKFISH_DEPTH = 10;
 /** Per-FEN Stockfish cache is now shared across narration hooks via
  *  `stockfishFenCache.ts`. Extracted by WO-PHASE-LAG-02 so phase
@@ -56,10 +54,9 @@ const STOCKFISH_DEPTH = 10;
 /** Test-only: clear the shared Stockfish cache between test cases.
  *  Re-exported for existing tests that import from this module. */
 export const __resetStockfishCacheForTests = __resetStockfishFenCacheForTests;
-/** Total budget for the coach LLM round-trip (network + stream). Raised
- *  30s→120s by WO-POLISH-02. A long-form narration at realistic stream
- *  rates can take well past 30s; the original cap was truncating valid
- *  responses mid-stream and leaving `fullText` short of a period. */
+/** Total budget for the phrasing round-trip. On expiry the COMPUTED facts
+ *  are spoken raw — the read exists before the model is asked, so a slow
+ *  phraser costs the house voice, never the answer. */
 const NARRATION_API_TIMEOUT_MS = 120_000;
 /** Speech playback budget. Raised 60s→600s by WO-POLISH-02 — the
  *  previous 60s cap was the primary `narration-speak-timeout` source
@@ -68,6 +65,13 @@ const NARRATION_API_TIMEOUT_MS = 120_000;
  *  unlimited for any narration we'd actually produce. The timeout
  *  remains a safety net for a frozen audio pipeline, not a truncator. */
 const NARRATION_SPEAK_TIMEOUT_MS = 600_000;
+/** The phase, as the coach names it opening a read — computed, one line each.
+ *  A Record over the union so a fourth phase cannot ship without a sentence. */
+const PHASE_LINE: Record<ReturnType<typeof detectPhase>, string> = {
+  opening: 'Still in the opening.',
+  middlegame: 'This is the middlegame now.',
+  endgame: 'This is the endgame now.',
+};
 
 /** Race a promise against a timeout. Rejects with an Error whose
  *  message ends in "-timeout" so the caller can cheaply distinguish
@@ -90,10 +94,23 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
 /**
  * Drives the "Read this position" button on the coach play screen.
  *
- * Calls the coach LLM with POSITION_NARRATION_ADDITION, streams tokens
- * into `currentText` for a live subtitle banner, then hands each sentence
- * to voiceService.speakReadAloud() for TTS. Cancellation uses a token
- * counter so an in-flight run is superseded instead of racing.
+ * G0 — INVERTED (WO-STANDARD-01 F2, 2026-09-22). This used to hand the model
+ * a grounding-allowance prompt (POSITION_NARRATION_ADDITION: "every piece
+ * location MUST match the FEN… every tactic MUST appear in the block…") and
+ * let it AUTHOR the read, streaming each sentence through a per-sentence
+ * validator (`isSpokenSentenceGrounded`) on its way to TTS. That is the
+ * disease G0 names: a validator exists only because the model was still
+ * deciding. Now the read is COMPUTED in code — the corpus note leads
+ * (`teachingSourceForBoard`), then the phase, the position facts, the ranked
+ * positional read (`readPosition`) and the engine's deepest look-ahead — and
+ * the model only PHRASES that bundle through the one chokepoint, `voiceFacts`,
+ * from the coach-is-opponent seat. With the provider dead the same facts are
+ * spoken in the raw computed register, so the button can never go silent
+ * over a phrasing hiccup. There is nothing left to validate per sentence.
+ *
+ * The phrased read lands in `currentText` for the chat bubble, then each
+ * sentence goes to voiceService.speakReadAloud() for TTS. Cancellation uses a
+ * token counter so an in-flight run is superseded instead of racing.
  *
  * speakReadAloud (NOT speakForced) because "Read this position" is an
  * EXPLICIT, user-tapped read-aloud affordance — the user just asked to
@@ -149,14 +166,6 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
     // dispatch can log tap-to-first-word latency in the audit trail.
     const tapTs = Date.now();
 
-    // Accumulated streamed text. Lives outside the API try/catch so a
-    // truncated / aborted / timed-out stream still produces voice for
-    // whatever the coach already generated. Rule: if the coach
-    // generated words, Dave hears them.
-    let fullText = '';
-    let apiResponse = '';
-    let apiTimedOut = false;
-
     try {
       // WO-PHASE-PROSE-01: per-FEN cache check before firing the
       // engine. Repeat taps on the same position (common when the
@@ -180,8 +189,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         // eval. `analyzeWithBudget` searches for the budget then `stop()`s and
         // returns the BEST line reached so far — desktop resolves early on
         // depth, asm returns its shallow-but-real eval. We take what it found in
-        // the time; code-counted material (buildChessContextMessage) covers a
-        // dead engine (G0).
+        // the time; the code-computed read below covers a dead engine (G0).
         const engineIsAsm = resolveWorkerUrl().variant === 'asm';
         const budgetMs = engineIsAsm ? 5000 : 1200;
         stockfishAnalysis = await stockfishEngine
@@ -197,12 +205,10 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       const profile = await db.profiles.get('main');
       const rating = profile?.currentRating ?? 1200;
 
-      // Build the bounded tactics context so the per-sentence spoken gate below
-      // can drop an out-of-vocab fork/pin too, not just a board-false fact — a
-      // "read this position" narration naming a tactic that isn't there was the
-      // one remaining tactic-ungated read-aloud (David 2026-07-04 sweep).
-      // Reuses the stockfishAnalysis already computed above — no extra engine
-      // read; falls back to a FEN-only scan if that analysis is thin.
+      // The bounded tactics context — the engine's deepest look-ahead is read
+      // off it below. Reuses the stockfishAnalysis already computed above (no
+      // extra engine read); falls back to a FEN-only scan if that analysis is
+      // thin.
       const posStudentCC = args.playerColor === 'white' ? 'w' : 'b';
       const posTactics = (await buildFedTacticsContext(
         args.fen,
@@ -214,22 +220,32 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       ).catch(() => undefined)) ?? null;
       if (token !== activeTokenRef.current) return;
 
-      // G0 — compute the extra reading facts (SEE-accurate material at risk,
-      // pawn breaks, good/bad piece quality) in code and hand them to the coach
-      // so its spoken read is grounded, not eyeballed. Complements the tactics
-      // sub-block buildChessContextMessage already injects. Wrapped defensively:
-      // a bad FEN returns '' and the narration falls back to the base facts.
-      let readingFacts = '';
-      try {
-        readingFacts = formatReadingFacts(args.fen, args.playerColor);
-      } catch {
-        readingFacts = '';
-      }
+      // ── THE FACTS, IN CODE. Every sentence below is computed; the model
+      //    only phrases them. Ordered most-important-first for the voice.
 
-      // POSITION FACTS — the computed board-truth supply (importance-gated, DNA).
-      // A read of the board earns the decision/intent read + the leans-on
-      // why-probe. `must-defend` is excluded — readingFacts above already lists
-      // the material at risk (no walk-over). Reuses the analysis already in hand.
+      // 1. THE CORPUS LEADS (David 2026-08-13: "narrations follow the corpus,
+      //    hand written, computed note format"). A read of the board starts
+      //    from a farmed teaching note about THIS position or structure when
+      //    one exists — board-gated at retrieval (teachingSourceForBoard),
+      //    framed honestly by origin (generalizedTeaching). No note = the
+      //    computed facts carry the read alone.
+      let noteLine = '';
+      try {
+        const historySans = args.pgn.split(/\s+/).map((t) => t.replace(/^\d+\.+/, '')).filter((t) => t && !/^(?:1-0|0-1|1\/2-1\/2|\*)$/.test(t));
+        const src = teachingSourceForBoard(historySans, args.fen, args.openingName ?? null, args.playerColor);
+        if (src) noteLine = generalizedTeaching(src.origin, spokenBeatText(src.note)).trim();
+      } catch { /* corpus unavailable — the computed read stands alone */ }
+
+      // 2. THE PHASE — the old prompt asked the model to "open by naming the
+      //    phase"; it is a two-line computation.
+      const plyCount = args.pgn.split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t)).length;
+      const phaseLine = PHASE_LINE[detectPhase(args.fen, plyCount)];
+
+      // 3. POSITION FACTS — the computed board-truth supply (importance-gated,
+      //    DNA): the decision/intent read, the must-defend, the why-probe.
+      //    `must-defend` is INCLUDED now — it used to be excluded because the
+      //    prompt block `formatReadingFacts` listed the material at risk, and
+      //    that block was model input, never something a student could hear.
       let positionFactsBlock = '';
       try {
         if (stockfishAnalysis?.topLines?.length) {
@@ -246,73 +262,90 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
             evalBoard: (f) => stockfishEngine.evalBoard(f),
             studentWeaknesses: weaknessRef.current,
           });
-          positionFactsBlock = clauseText(pf.clauses, ['must-defend']).join(' ');
+          positionFactsBlock = clauseText(pf.clauses).join(' ');
         }
       } catch { positionFactsBlock = ''; }
       if (token !== activeTokenRef.current) return;
 
-      // P5 — GUARANTEED deep look-ahead (David 2026-07-26: "add it to the package
-      // gen to the llm — it will have no choice but to speak the words"). The
-      // app's DEEPEST foresight is the PV scan in posTactics; feeding it to the
-      // prompt as CONTEXT let the LLM skip it (diluted). Instead PRE-COMPOSE the
-      // exact spoken line in code (speakDeepestLookahead — G0: the engine decided,
-      // the voice only phrases) and inject it as a REQUIRED utterance, so the
-      // model must voice the computed foresight verbatim. Null on a quiet board.
-      const lookaheadLine = posTactics ? speakDeepestLookahead(posTactics, 'coach-is-opponent', weaknessRef.current) : null;
-      const requiredLookahead = lookaheadLine
-        ? ` REQUIRED: the engine has computed the deepest look-ahead for this position. You MUST include this exact sentence, verbatim, as part of your narration (do not paraphrase, do not omit it): "${lookaheadLine}"`
-        : '';
-
-      // THE CORPUS LEADS (David 2026-08-13: "narrations follow the corpus,
-      // hand written, computed note format"). A read of the board starts from
-      // a farmed teaching note about THIS position or structure when one
-      // exists — board-gated at retrieval (teachingSourceForBoard), framed
-      // honestly by origin (generalizedTeaching), and injected as a REQUIRED
-      // verbatim lead exactly like the computed look-ahead, so the model
-      // phrases around it instead of freestyling past it. No note = the
-      // computed facts carry the read alone, as before.
-      let requiredNote = '';
+      // 4. THE POSITIONAL READ — every ranked observation on both sides of the
+      //    board (`readPosition`: king safety, development, weak pawns,
+      //    outposts, levers, passers, files), most useful first. NO cap
+      //    (G4.5): the ranker orders, the student hears what it ranked. An
+      //    observation whose square the facts above already named is skipped
+      //    — say a thing once.
+      const readLines: string[] = [];
       try {
-        const historySans = args.pgn.split(/\s+/).map((t) => t.replace(/^\d+\.+/, '')).filter((t) => t && !/^(?:1-0|0-1|1\/2-1\/2|\*)$/.test(t));
-        const src = teachingSourceForBoard(historySans, args.fen, args.openingName ?? null, args.playerColor);
-        if (src) {
-          const noteLine = generalizedTeaching(src.origin, spokenBeatText(src.note));
-          if (noteLine.trim().length > 0) {
-            requiredNote = ` LEAD WITH THIS VERIFIED TEACHING NOTE, verbatim, as your opening sentence(s): "${noteLine}"`;
-          }
+        const already = `${noteLine} ${positionFactsBlock}`.toLowerCase();
+        for (const o of readPosition(args.fen, args.playerColor)) {
+          const naming = o.text.toLowerCase().match(/[a-h][1-8]/)?.[0];
+          if (naming && already.includes(naming)) continue;
+          readLines.push(o.text);
         }
-      } catch { /* corpus unavailable — the computed read stands alone */ }
+      } catch { /* the read is a bonus, never a blocker */ }
 
-      const context: CoachContext = {
-        fen: args.fen,
-        lastMoveSan: null,
-        moveNumber: args.moveNumber,
-        pgn: args.pgn,
-        openingName: args.openingName ?? null,
-        stockfishAnalysis,
-        playerMove: null,
-        moveClassification: null,
-        playerProfile: { rating, weaknesses: [] },
-        additionalContext: `${positionFactsBlock ? `${positionFactsBlock}\n\n` : ''}${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.${requiredNote}${requiredLookahead}`,
-      };
+      // 5. THE DEEPEST LOOK-AHEAD — the PV scan in posTactics, pre-composed as
+      //    the exact spoken line in code (speakDeepestLookahead — G0: the
+      //    engine decided, the voice only phrases). Null on a quiet board.
+      const lookaheadLine = posTactics ? speakDeepestLookahead(posTactics, 'coach-is-opponent', weaknessRef.current) : null;
 
-      const userMessage = buildChessContextMessage(context);
+      const facts = [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '']
+        .map((t) => t.trim())
+        .filter(Boolean)
+        .join(' ');
+      if (!facts) {
+        setCurrentText('');
+        return;
+      }
 
-      // Sentence-buffered streaming TTS. Every sentence chains through
-      // speakForced via a Promise chain so each Polly call awaits the
-      // previous one's audio. Single engine (Polly) means no
-      // Polly+Web-Speech overlap, no dropped sentences from the dead
-      // speakQueuedForced path.
-      let sentenceBuffer = '';
+      // ── THE PHRASING — one call through the one chokepoint. The coach on
+      //    this surface IS the opponent (Play, Learn guided play), so it speaks
+      //    as "I / my" for its own pieces and "you / your" for the student's.
+      //    A timeout or a dead provider serves the computed facts raw
+      //    (speakableFacts) — the correct read exists before the model is
+      //    asked, so nothing can race it away (David 2026-07-04).
+      let spoken: string;
+      try {
+        spoken = (await withTimeout(
+          voiceFacts(facts, {
+            warm: true,
+            intent: 'position-read',
+            perspective: { mode: 'coach-is-opponent' },
+            directives: 'The student tapped "read this position" and is listening to you live. Speak every fact given, most important first; the first sentence must stand alone. Do not suggest a move. Do not recap the last move.',
+          }),
+          NARRATION_API_TIMEOUT_MS,
+          'narration-api',
+        )) ?? speakableFacts(facts);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(msg);
+        if (msg.endsWith('-timeout')) {
+          void logAppAudit({
+            kind: 'llm-error',
+            category: 'subsystem',
+            source: 'usePositionNarration',
+            summary: 'narration phrasing timed out — speaking the computed facts raw',
+            details: msg,
+            fen: args.fen,
+          });
+        }
+        spoken = speakableFacts(facts);
+      }
+      if (token !== activeTokenRef.current) return;
+      spoken = spoken.trim();
+      if (!spoken) return;
+      setCurrentText(spoken);
+
+      // ── THE VOICE. Sentence by sentence through the package (truth) and
+      //    speakReadAloud (the G5 read-aloud carve-out — the student TAPPED to
+      //    hear it, so it bypasses the verbosity gate; routing it through
+      //    speakPackage would silently re-apply the gate and make the button
+      //    dead on Silent/Brief again). Packaging governs TRUTH; the carve-out
+      //    governs WHETHER a tapped read is allowed to speak at all.
+      const { sentences, rest } = splitSpeakableSentences(spoken);
+      const utterances = [...sentences, rest].map((t) => t.trim()).filter(Boolean);
       let speechChain: Promise<void> = Promise.resolve();
       let sentenceCount = 0;
-      const dispatchSentence = (sentence: string): void => {
-        const trimmed = sentence.trim();
-        if (!trimmed) return;
-        // Per-sentence spoken gate. This surface streams each sentence
-        // straight to TTS as it arrives (no final-text chokepoint), so the
-        // gate must run HERE — never speak a provably-false board fact.
-        if (!isSpokenSentenceGrounded(trimmed, args.fen, 'usePositionNarration', posTactics)) return;
+      for (const sentence of utterances) {
         sentenceCount += 1;
         if (sentenceCount === 1) {
           const firstDispatchMs = Date.now() - tapTs;
@@ -323,137 +356,29 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
             summary: `tap-to-first-dispatch ${firstDispatchMs}ms`,
             details: JSON.stringify({
               tapToFirstDispatchMs: firstDispatchMs,
-              firstSentenceChars: trimmed.length,
+              firstSentenceChars: sentence.length,
               stockfishResolved: stockfishAnalysis !== null,
             }),
             fen: args.fen,
           });
         }
-        // PACKAGED. Read-this-position speaks per sentence straight to TTS as
-        // the stream arrives, so there is no final chokepoint downstream — the
-        // check has to be here or it is nowhere. `args.fen` is the board the
-        // student asked to have read, which is the board every sentence in the
-        // read is about.
         speechChain = speechChain
           .then(() => {
-            const pkg = buildVoicePackage([{ kind: 'computed', text: trimmed, fen: args.fen }]);
-            // speakReadAloud, not speakPackage: this is the G5 read-aloud
-            // carve-out — the student TAPPED to hear it, so it bypasses the
-            // verbosity gate. Packaging governs TRUTH; the carve-out governs
-            // WHETHER a tapped read is allowed to speak at all. Routing it
-            // through speakPackage would silently re-apply the gate and make
-            // the button dead on Silent/Brief again.
+            const pkg = buildVoicePackage([{ kind: 'computed', text: sentence, fen: args.fen }]);
             return pkg.spoken ? voiceService.speakReadAloud(pkg.spoken) : undefined;
           })
           .catch(() => undefined);
-      };
-      // splitSpeakableSentences, not the old global regex. That regex is the
-      // documented decimal bug (sentenceSplit.ts, 2026-08-09): the match dies
-      // at "3.7", restarts mid-number, and dispatches "7 points)." as its own
-      // spoken sentence — with the front half silently dropped. This hook is
-      // an explicit read-aloud, so a fragment here reads a NUMBER to the
-      // student as if it were the position.
-      const flushCompletedSentences = (): void => {
-        const { sentences, rest } = splitSpeakableSentences(sentenceBuffer);
-        // STREAMING CAVEAT: end-of-buffer is not end-of-text. A sentence that
-        // ends exactly at the buffer's edge may be a decimal or abbreviation
-        // split across chunks — "held at +0." with "4 in their favor." still
-        // in flight. Hold it; the next chunk completes it, and the final
-        // flush below speaks whatever legitimately ends the narration.
-        let complete = sentences;
-        let keep = rest;
-        if (rest === '' && sentences.length > 0 && !/\s$/.test(sentenceBuffer)) {
-          keep = sentences[sentences.length - 1];
-          complete = sentences.slice(0, -1);
-        }
-        for (const sent of complete) dispatchSentence(sent);
-        sentenceBuffer = keep;
-      };
-
-      try {
-        apiResponse = await withTimeout(
-          getCoachChatResponse(
-            [{ role: 'user', content: userMessage }],
-            POSITION_NARRATION_ADDITION,
-            (chunk: string) => {
-              if (token !== activeTokenRef.current) return;
-              fullText += chunk;
-              setCurrentText(fullText);
-              sentenceBuffer += chunk;
-              flushCompletedSentences();
-            },
-            'position_analysis_chat',
-            // Raised 2000→4000 by WO-POLISH-02. Effectively unlimited
-            // for a narration; the cap is never the reason a sentence
-            // gets cut off.
-            4000,
-            // Override verbosity — narration length is constrained by the
-            // prompt, not by the student's global verbosity setting.
-            'medium',
-          ),
-          NARRATION_API_TIMEOUT_MS,
-          'narration-api',
-        );
-      } catch (err: unknown) {
-        // Stream errored or timed out — DON'T bail. Tokens already
-        // streamed are speakable. Record the error and fall through.
-        const msg = err instanceof Error ? err.message : String(err);
-        setError(msg);
-        if (msg.endsWith('-timeout')) {
-          apiTimedOut = true;
-          void logAppAudit({
-            kind: 'llm-error',
-            category: 'subsystem',
-            source: 'usePositionNarration',
-            summary: 'narration API call timed out',
-            details: msg,
-            fen: args.fen,
-          });
-        }
-      }
-
-      // Only suppress speech on explicit user cancel / re-tap (token
-      // supersession). Stream errors / truncation still speak whatever
-      // arrived before the failure.
-      if (token !== activeTokenRef.current) return;
-
-      // Flush any tail text that didn't end with a sentence terminator
-      // (e.g. stream truncated mid-sentence — still speakable).
-      if (sentenceBuffer.trim()) {
-        dispatchSentence(sentenceBuffer);
-        sentenceBuffer = '';
-      }
-
-      // Fallback path: if nothing streamed and nothing dispatched, but
-      // the API returned a usable response (non-streaming provider,
-      // rare), dispatch that as a single speak.
-      if (sentenceCount === 0) {
-        const apiTrimmed = apiResponse.trim();
-        if (apiTrimmed && !apiTrimmed.startsWith('⚠️')) {
-          setCurrentText(apiTrimmed);
-          dispatchSentence(apiTrimmed);
-        } else if (apiTimedOut) {
-          // Nothing to say and the call timed out — surface retry hint.
-          setCurrentText('Narration timed out — tap again to retry.');
-          return;
-        } else {
-          return;
-        }
       }
 
       // Mirror the finished read into the CHAT transcript below the board
       // (David 2026-07-06) — same treatment as phase-transition narration.
       // The banner is the live subtitle; the chat is the durable copy the
       // student can scroll back and reread.
-      const finalReadText = fullText.trim() || apiResponse.trim();
-      if (finalReadText && !finalReadText.startsWith('⚠️')) {
-        args.onReport?.(finalReadText);
-      }
+      args.onReport?.(spoken);
 
       // Block isNarrating true until the speech chain drains — preserves
       // the "board frozen while main voice speaks" invariant from
-      // WO-COACH-NARRATION-05. Single-engine Polly chain means the
-      // entire narration plays under this gate, no Web Speech tail.
+      // WO-COACH-NARRATION-05.
       try {
         await withTimeout(speechChain, NARRATION_SPEAK_TIMEOUT_MS, 'narration-speak');
       } catch (err: unknown) {

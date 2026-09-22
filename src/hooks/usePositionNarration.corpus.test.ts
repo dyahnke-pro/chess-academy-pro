@@ -56,11 +56,12 @@ describe('position read corpus wiring', () => {
     expect(spoken, 'no voiced position produced a speakable note — the read has no corpus to lead with').toBeTruthy();
   });
 
-  it('the hook injects the note as a REQUIRED verbatim lead (source pin)', () => {
+  it('the hook puts the note FIRST in the computed facts the phraser receives (source pin)', () => {
+    // G0 (WO-STANDARD-01 F2): the read is a computed fact bundle handed to
+    // voiceFacts, and the corpus note is its opening entry — the note LEADS.
     const src = readFileSync('src/hooks/usePositionNarration.ts', 'utf8');
     expect(src).toContain('teachingSourceForBoard(historySans, args.fen, args.openingName ?? null, args.playerColor)');
-    expect(src).toContain('LEAD WITH THIS VERIFIED TEACHING NOTE');
-    // …and it rides the SAME additionalContext the model actually receives.
-    expect(src).toMatch(/\$\{requiredNote\}\$\{requiredLookahead\}/);
+    expect(src).toMatch(/const facts = \[noteLine, phaseLine, positionFactsBlock/);
+    expect(src).toMatch(/voiceFacts\(facts, \{/);
   });
 });
