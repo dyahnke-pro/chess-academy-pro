@@ -9,6 +9,7 @@ import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { captureEvent } from './analytics';
+import { isFixtureDerived } from './fixtureGames';
 import type {
   MisconceptionTagRecord,
   MisconceptionSource,
@@ -173,6 +174,11 @@ export interface MisconceptionAggregate {
   lastSeenAt: number;
   /** A few representative records (most recent first), for the UI. */
   examples: MisconceptionTagRecord[];
+  /** DISTINCT games the instances came from, over EVERY record — not the
+   *  capped `examples` (C10). Empty when no record carries a game id. */
+  gameIds: string[];
+  /** ms of the latest drill on any instance; null = never drilled. */
+  lastDrilledAt: number | null;
 }
 
 /** Map a game phase to the weakness bucket an unclassifiable slip in that
@@ -198,7 +204,10 @@ export async function getMisconceptionProfile(
   opts?: { countedOnly?: boolean },
 ): Promise<MisconceptionAggregate[]> {
   const now = Date.now();
-  const raw = await db.misconceptionTags.toArray();
+  // 🔒 FIXTURES ARE NOT THE STUDENT (D5, 2026-09-22): a slip captured while
+  // reviewing a seeded `sample-*` game is a slip in a DEMO, so it never enters
+  // the student's misconception profile — display or weakness analysis alike.
+  const raw = (await db.misconceptionTags.toArray()).filter((r) => !isFixtureDerived(r));
   // The Thinking-Errors display reads everything; the weakness analysis passes
   // countedOnly so display-only (un-learned) slips don't inflate the formal
   // weakness profile. Legacy rows have no `counted` field → treated as counted.
@@ -236,6 +245,11 @@ export async function getMisconceptionProfile(
       openCount,
       lastSeenAt: head.createdAt,
       examples: records.slice(0, 5),
+      gameIds: [...new Set(records.map((r) => r.sourceGameId).filter((id): id is string => !!id))],
+      lastDrilledAt: records.reduce<number | null>(
+        (m, r) => (typeof r.lastDrilledAt === 'number' && (m === null || r.lastDrilledAt > m) ? r.lastDrilledAt : m),
+        null,
+      ),
     });
   }
 

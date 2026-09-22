@@ -67,7 +67,7 @@
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:58`
 - `src/services/reviewNeedGate.test.ts:80`
-- `src/services/studentNeedLoader.ts:148`
+- `src/services/studentNeedLoader.ts:154`
 - `src/services/teachingSelector.ts:252`
 
 ### `NeedPlyInput` (interface) — 0 call sites
@@ -103,8 +103,8 @@
 - `src/services/openingWalkthroughService.ts:123`
 - `src/services/openingWalkthroughService.ts:124`
 - `src/services/openingWalkthroughService.ts:136`
-- `src/services/studentNeedLoader.ts:91`
-- `src/services/studentNeedLoader.ts:94`
+- `src/services/studentNeedLoader.ts:92`
+- `src/services/studentNeedLoader.ts:95`
 
 ### `computeNeed` (function) — 53 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`

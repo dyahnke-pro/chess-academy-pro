@@ -46,7 +46,11 @@ export interface PuzzleRecord {
 
 export type MistakeClassification = 'inaccuracy' | 'mistake' | 'blunder' | 'miss';
 export type MistakePuzzleStatus = 'unsolved' | 'solved' | 'mastered';
-export type MistakePuzzleSourceMode = 'coach' | 'lichess' | 'chesscom';
+/** WHERE the game a slip came from was played. Mirrors `GameSource` minus
+ *  `'master'` (a master game is never the student's, so it never writes a
+ *  puzzle). `'import'` = a pasted PGN (2026-09-22, C9): it used to be
+ *  unexpressible here, so every pasted game's slips were labelled "Coach". */
+export type MistakePuzzleSourceMode = 'coach' | 'lichess' | 'chesscom' | 'import';
 export type MistakeGamePhase = 'opening' | 'middlegame' | 'endgame';
 
 export interface MistakeNarration {
@@ -681,6 +685,11 @@ export interface GameRecord {
    * now says so instead of leaving it to be guessed back out of a name.
    */
   studentSide?: 'white' | 'black';
+  /** A seeded DEMO game, never the student's (WO-STANDARD-01 D5). Written by
+   *  `reviewSampleGames.buildGameRecord`; read through `isFixtureGame`, which
+   *  also honours the `sample-` id prefix for rows seeded before this field
+   *  existed. Absent on every real game — the student's games never set it. */
+  fixture?: true;
   /** Plies (1-based) where the coach ANNOUNCED the critical moment before the
    *  student moved (Learn's live statement). A find at one of these is
    *  PROMPTED — recorded grey, never as unaided evidence (T3, 2026-09-20). */

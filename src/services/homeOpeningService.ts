@@ -6,6 +6,7 @@
 // decision to its contract (CLAUDE.md: every algo build ships with an audit
 // tool — inputs, the term that carried it, the verdict).
 import { db } from '../db/schema';
+import { isFixtureGame } from './fixtureGames';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
 import type { PlayerColor, PlayerIdentity } from './playerIdentity';
@@ -36,7 +37,8 @@ function identityOf(p: UserProfile | null): PlayerIdentity {
 
 /** Both colours' rankings, memoized for five minutes on the game count. */
 export async function getHomeOpeningRankings(opts: { force?: boolean } = {}): Promise<Record<PlayerColor, HomeOpeningRanking>> {
-  const games = await db.games.filter((g) => !g.isMasterGame).toArray();
+  // Fixtures are not the student (D5): a seeded demo never votes for a home opening.
+  const games = await db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).toArray();
   if (!opts.force && cache && cache.gameCount === games.length && Date.now() - cache.at < TTL_MS) return cache.rankings;
   const identity = identityOf(await loadProfile());
   const rankings = {

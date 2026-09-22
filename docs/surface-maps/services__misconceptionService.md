@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**307 lines · 10 exports · 22 importers · 13 tests · 4 audits**
+**321 lines · 10 exports · 24 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5724) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:5945) — names `misconceptionService`
 
 ## Who calls in
 
@@ -24,6 +24,8 @@
 - `src/services/discussionPractice.test.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/drillJoinDivergence.test.ts`
+- `src/services/fixtureGames.test.tsx`
+- `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/misconceptionCallbacks.test.ts`
@@ -44,13 +46,13 @@
 - `src/services/bucketPipelineAudit.ts:252`
 - `src/services/misconceptionService.test.ts:114`
 - `src/services/misconceptionService.test.ts:149`
-- `src/services/weaknessSpine.ts:406`
+- `src/services/weaknessSpine.ts:444`
 
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `logMisconception` (function) — 47 call sites
-- `src/components/Coach/CoachGameReview.tsx:2234`
+### `logMisconception` (function) — 54 call sites
+- `src/components/Coach/CoachGameReview.tsx:2337`
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`
@@ -62,15 +64,22 @@
 - `src/services/drillJoinDivergence.test.ts:46`
 - `src/services/drillJoinDivergence.test.ts:55`
 - `src/services/drillJoinDivergence.test.ts:62`
+- `src/services/fixtureGames.test.tsx:112`
+- `src/services/fixtureGames.test.tsx:121`
+- `src/services/fundamentalReachesDecider.test.ts:76`
+- `src/services/fundamentalReachesDecider.test.ts:77`
+- `src/services/fundamentalReachesDecider.test.ts:78`
+- `src/services/fundamentalReachesDecider.test.ts:114`
+- `src/services/fundamentalReachesDecider.test.ts:117`
 - `src/services/fundamentalsCatalog.test.ts:48`
 - `src/services/fundamentalsCatalog.test.ts:49`
 - `src/services/fundamentalsCatalog.test.ts:53`
-- `src/services/misconceptionDrill.test.ts:35`
-- `src/services/misconceptionDrill.test.ts:43`
-- `src/services/misconceptionDrill.test.ts:44`
-- `src/services/misconceptionDrill.test.ts:50`
-- `src/services/misconceptionDrill.test.ts:55`
-- `src/services/misconceptionDrill.test.ts:56`
+- `src/services/misconceptionDrill.test.ts:38`
+- `src/services/misconceptionDrill.test.ts:46`
+- `src/services/misconceptionDrill.test.ts:47`
+- `src/services/misconceptionDrill.test.ts:53`
+- `src/services/misconceptionDrill.test.ts:58`
+- `src/services/misconceptionDrill.test.ts:59`
 - `src/services/misconceptionService.test.ts:21`
 - `src/services/misconceptionService.test.ts:37`
 - `src/services/misconceptionService.test.ts:47`
@@ -108,27 +117,29 @@
 - `src/services/misconceptionService.test.ts:146`
 
 ### `hasMisconceptionsForGame` (function) — 2 call sites
-- `src/components/Coach/GameReviewWeaknessCapture.tsx:180`
-- `src/services/autoAnalyzeGame.ts:271`
+- `src/components/Coach/GameReviewWeaknessCapture.tsx:188`
+- `src/services/autoAnalyzeGame.ts:324`
 
 ### `MisconceptionAggregate` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `getMisconceptionProfile` (function) — 14 call sites
+### `getMisconceptionProfile` (function) — 16 call sites
 - `src/components/Insights/MisconceptionsTab.tsx:77`
 - `src/components/Insights/MisconceptionsTab.tsx:87`
 - `src/services/bucketPipelineAudit.ts:157`
-- `src/services/coachApi.ts:4210`
-- `src/services/fundamentalsPipeline.realGame.test.ts:181`
-- `src/services/fundamentalsPipeline.realGame.test.ts:182`
-- `src/services/fundamentalsPipeline.realGame.test.ts:270`
+- `src/services/coachApi.ts:4232`
+- `src/services/fixtureGames.test.tsx:113`
+- `src/services/fixtureGames.test.tsx:122`
+- `src/services/fundamentalsPipeline.realGame.test.ts:226`
+- `src/services/fundamentalsPipeline.realGame.test.ts:227`
+- `src/services/fundamentalsPipeline.realGame.test.ts:334`
 - `src/services/misconceptionService.test.ts:67`
 - `src/services/misconceptionService.test.ts:78`
 - `src/services/misconceptionService.test.ts:90`
 - `src/services/misconceptionService.test.ts:98`
 - `src/services/misconceptionService.test.ts:116`
-- `src/services/weaknessAnalyzer.ts:996`
-- `src/services/weaknessSpine.ts:776`
+- `src/services/weaknessAnalyzer.ts:997`
+- `src/services/weaknessSpine.ts:842`
 
 ### `recordTagDrillResult` (function) — 8 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:245`
@@ -150,6 +161,8 @@
 - `src/services/bucketPipelineAudit.test.ts`
 - `src/services/discussionPractice.test.ts`
 - `src/services/drillJoinDivergence.test.ts`
+- `src/services/fixtureGames.test.tsx`
+- `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/misconceptionCallbacks.test.ts`
@@ -160,6 +173,10 @@
 - `src/services/weaknessSpine.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-play-full.mjs`
 - `scripts/audit-faucet-live.mjs`

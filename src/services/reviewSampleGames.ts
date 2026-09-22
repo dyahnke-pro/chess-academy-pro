@@ -455,6 +455,10 @@ function buildGameRecord(s: SampleGame): GameRecord {
     isMasterGame: s.source === 'master',
     openingId: openingKeyFromPgn(s.pgn),
     fullyAnalyzed: true,
+    // A DEMO, never the student's game (D5). The readers that model the
+    // student — rating, cold start, the weakness spine — exclude it through
+    // `isFixtureGame`; the review list still shows it, labelled.
+    fixture: true,
   };
 }
 

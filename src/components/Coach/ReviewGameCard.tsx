@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Trophy, Skull, Equal, Globe, Bot, Calendar, HelpCircle } from 'lucide-react';
 import type { GameRecord } from '../../types';
 import { classifyGameStyle, summarizeMoveQuality } from '../../services/gameStyleClassifier';
+import { isFixtureGame } from '../../services/fixtureGames';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import { useSettings } from '../../hooks/useSettings';
 import {
@@ -179,6 +180,17 @@ export function ReviewGameCard({ game, onClick, identity }: ReviewGameCardProps)
               {sourceIcon(game.source)}
               {sourceLabel(game.source)}
             </span>
+            {/* A seeded DEMO stays in the list so a fresh install has something
+                to open, but it is LABELLED as one — it never counts as the
+                student's game (D5, 2026-09-22). */}
+            {isFixtureGame(game) && (
+              <span
+                className="px-1.5 py-0.5 rounded bg-theme-surface border border-theme-border text-[10px] font-semibold uppercase tracking-wide"
+                data-testid="review-game-fixture-label"
+              >
+                Demo
+              </span>
+            )}
             <span>{formatRelativeDate(game.date)}</span>
             {quality && (quality.blunders > 0 || quality.mistakes > 0) && (
               <span>

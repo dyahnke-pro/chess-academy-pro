@@ -14,6 +14,8 @@ import {
   type TransformationResult,
 } from './positionTransformation';
 import { getOpeningNameByEco, isBookLine } from './openingDetectionService';
+import { isFixtureGame } from './fixtureGames';
+import { playedAtMs, type WeaknessProvenance } from './weaknessSpine';
 import { capEval } from './accuracyService';
 import { verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { useAppStore } from '../stores/appStore';
@@ -27,6 +29,7 @@ import type {
   MistakePuzzleStatus,
   SrsGrade,
   GameRecord,
+  GameSource,
   MoveAnnotation,
 } from '../types';
 
@@ -151,11 +154,87 @@ function classifyByCentipawnsFallback(cpLoss: number): MistakeClassification {
   return 'inaccuracy';
 }
 
-function sourceFromGameSource(source: string): MistakePuzzleSourceMode | null {
-  if (source === 'coach') return 'coach';
-  if (source === 'lichess') return 'lichess';
-  if (source === 'chesscom') return 'chesscom';
-  return null;
+/** `GameSource` → the puzzle's source mode. Null ONLY for `'master'` — a
+ *  master game is never the student's, so nothing about it is a slip of
+ *  theirs. Held as a `Record` so a new `GameSource` member fails to compile
+ *  here until someone answers for it. */
+const PUZZLE_SOURCE_FOR_GAME: Record<GameSource, MistakePuzzleSourceMode | null> = {
+  coach: 'coach',
+  lichess: 'lichess',
+  chesscom: 'chesscom',
+  import: 'import',
+  master: null,
+};
+
+function sourceFromGameSource(source: GameSource): MistakePuzzleSourceMode | null {
+  return PUZZLE_SOURCE_FOR_GAME[source] ?? null;
+}
+
+// ─── Provenance (C9, 2026-09-22) ─────────────────────────────────────────────
+
+/** WHERE a captured slip came from — the `WeaknessProvenance` shape the spine
+ *  reads (origin / gameId / opponentName), plus the two fields a persisted
+ *  `MistakePuzzle` needs verbatim: the game's SOURCE and its DATE string.
+ *
+ *  WHY IT IS REQUIRED. `buildMistakePuzzleFromCapture` used to hard-code
+ *  `sourceMode: 'coach'`, `opponentName: null`, `gameDate: null` — and
+ *  `autoAnalyzeGameMisconceptions` builds EVERY analysed import's positional
+ *  slips through it. So My Mistakes read source "Coach", opponent "Unknown"
+ *  and date = the import day for slips from a student's chess.com archive,
+ *  and Weaknesses printed "vs Unknown · 2026-09-22" under a 2024 game. The
+ *  writer's `from` is now a required parameter: a new writer fails to compile
+ *  until it says where its slip came from. */
+export interface MistakePuzzleProvenance extends WeaknessProvenance {
+  origin: 'game';
+  gameId: string;
+  source: MistakePuzzleSourceMode;
+  opponentName: string | null;
+  /** The game's own date string (`GameRecord.date`), never the capture clock. */
+  gameDate: string | null;
+}
+
+/** Provenance read off a game record. Null for a master game — it is nobody's
+ *  slip, so no puzzle is built from it. */
+export function mistakeProvenanceFromGame(
+  game: GameRecord,
+  playerColor: 'white' | 'black',
+): MistakePuzzleProvenance | null {
+  const source = sourceFromGameSource(game.source);
+  if (!source) return null;
+  const opponentName = playerColor === 'white' ? game.black : game.white;
+  return {
+    origin: 'game',
+    gameId: game.id,
+    source,
+    opponentName: opponentName || null,
+    gameDate: game.date || null,
+    playedAt: playedAtMs(game.date),
+  };
+}
+
+/** Provenance for a slip captured by game id (the live coach surfaces and the
+ *  review capture know only the id). Reads the record when it exists; when it
+ *  does not — a LIVE coach game is saved at its end, after every slip in it
+ *  was captured — the answer is the honest one: a coach game, opponent and
+ *  date unknown, never a guess. `playerColor` is used only when the record
+ *  does not declare its own seat. */
+export async function provenanceForGameId(
+  gameId: string | undefined,
+  playerColor?: 'white' | 'black',
+): Promise<MistakePuzzleProvenance> {
+  const unknownCoachGame: MistakePuzzleProvenance = {
+    origin: 'game',
+    gameId: gameId ?? '',
+    source: 'coach',
+    opponentName: null,
+    gameDate: null,
+  };
+  if (!gameId) return unknownCoachGame;
+  const game = await db.games.get(gameId).catch(() => undefined);
+  if (!game) return unknownCoachGame;
+  const seat = determinePlayerColor(game) ?? playerColor;
+  if (!seat) return { ...unknownCoachGame, source: sourceFromGameSource(game.source) ?? 'coach', gameDate: game.date || null };
+  return mistakeProvenanceFromGame(game, seat) ?? unknownCoachGame;
 }
 
 export function uciToSan(fen: string, uci: string): string {
@@ -307,6 +386,8 @@ export async function generateMistakePuzzlesFromGame(
 
   const game = await db.games.get(gameId);
   if (!game) return 0;
+  // A DEMO game never writes into the student's record (D5, 2026-09-22).
+  if (isFixtureGame(game)) return 0;
 
   const sourceMode = sourceFromGameSource(game.source);
   if (!sourceMode) return 0;
@@ -1098,7 +1179,9 @@ export interface CapturePuzzleInput {
   gamePhase?: MistakeGamePhase;
   moveNumber?: number;
   openingName?: string;
-  sourceGameId?: string;
+  /** REQUIRED — where the slip came from (see `MistakePuzzleProvenance`). A
+   *  caller that does not know resolves it with `provenanceForGameId`. */
+  from: MistakePuzzleProvenance;
   /** Pre-move eval, PLAYER POV, CENTIPAWNS — fills the "Errors by Situation"
    *  panel (getMistakeInsights thresholds at ±100cp). Null/omitted when the
    *  capture had no eval (a live slip with no engine read); the panel then
@@ -1238,14 +1321,17 @@ export function buildMistakePuzzleFromCapture(
     classification,
     gamePhase,
     moveNumber: input.moveNumber ?? 0,
-    sourceGameId: input.sourceGameId ?? '',
-    sourceMode: 'coach',
+    // PROVENANCE, from the required `from` — never hard-coded (C9). The
+    // game's source, its opponent and its own date string; `createdAt`
+    // below is the capture clock and is NOT the game's date.
+    sourceGameId: input.from.gameId,
+    sourceMode: input.from.source,
     playerColor,
     promptText: `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`,
     narration,
     createdAt: new Date().toISOString(),
-    opponentName: null,
-    gameDate: null,
+    opponentName: input.from.opponentName,
+    gameDate: input.from.gameDate,
     openingName: input.openingName ?? null,
     // Player-POV centipawns when the caller supplied it (autoAnalyzeGame passes
     // the pre-move eval); null for a live slip with no engine read.
@@ -1284,8 +1370,13 @@ export async function getMisconceptionDrillPuzzles(
 
   const puzzles: MistakePuzzle[] = [];
   const seen = new Set<string>();
+  // One provenance read per game id — a tag's positions cluster on a few games.
+  const provenance = new Map<string, MistakePuzzleProvenance>();
   for (const r of ordered) {
     if (!r.bestSan || !r.playedSan) continue;
+    const gameKey = r.sourceGameId ?? '';
+    let from = provenance.get(gameKey);
+    if (!from) { from = await provenanceForGameId(r.sourceGameId); provenance.set(gameKey, from); }
     const puzzle = buildMistakePuzzleFromCapture({
       fen: r.fen,
       playedSan: r.playedSan,
@@ -1294,7 +1385,7 @@ export async function getMisconceptionDrillPuzzles(
       gamePhase: r.gamePhase,
       moveNumber: r.moveNumber,
       openingName: r.openingName,
-      sourceGameId: r.sourceGameId,
+      from,
     });
     if (!puzzle) continue;
     const key = `${puzzle.fen}|${puzzle.playerMoveSan}`;

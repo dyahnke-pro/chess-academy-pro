@@ -19,7 +19,7 @@ import {
   type MisconceptionClassification,
 } from './misconceptionClassifier';
 import { logMisconception } from './misconceptionService';
-import { addMistakePuzzleFromCapture } from './mistakePuzzleService';
+import { addMistakePuzzleFromCapture, provenanceForGameId } from './mistakePuzzleService';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
 import { recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
 
@@ -284,16 +284,23 @@ export async function captureMisconception(
   // mistakes surface in My Mistakes + Tactics, not just as a tally. Deduped
   // by position inside the helper; fire-and-forget so capture never blocks.
   if (record && args.shouldCount && args.context.bestSan) {
-    void addMistakePuzzleFromCapture({
-      fen: args.context.fen,
-      playedSan: args.context.playedSan ?? '',
-      bestSan: args.context.bestSan,
-      cpLoss: args.context.cpLoss,
-      gamePhase: args.context.gamePhase,
-      moveNumber: args.context.moveNumber,
-      openingName: args.context.openingName,
-      sourceGameId: args.context.sourceGameId,
-    }).catch(() => undefined);
+    // The puzzle carries the GAME's provenance (source / opponent / date),
+    // read off its record by id (C9). A live coach game is saved at its end,
+    // after every slip in it was captured, so its rows honestly say coach /
+    // unknown opponent / unknown date rather than guess.
+    const ctx = args.context;
+    void provenanceForGameId(ctx.sourceGameId)
+      .then((from) => addMistakePuzzleFromCapture({
+        fen: ctx.fen,
+        playedSan: ctx.playedSan ?? '',
+        bestSan: ctx.bestSan ?? '',
+        cpLoss: ctx.cpLoss,
+        gamePhase: ctx.gamePhase,
+        moveNumber: ctx.moveNumber,
+        openingName: ctx.openingName,
+        from,
+      }))
+      .catch(() => undefined);
   }
 
   return {
