@@ -24,7 +24,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ## 00. WO-STANDARD-01 — THE FULL BOARD (David 2026-09-22: "get my app up to standard")
 - 🔴 A. The personal coach — WO-HOME-OPENING-01 (section 0 below, A1–A11)
 - 🔴 B. The deciding path (one line per item; ✅ carries its proof)
-  - 🔴 B1 pre-gate vs decide() signals
+  - ✅ B1 pre-gate vs decide() signals — one `momentSignals: ImportanceSignals` const feeds both `judgeMoment` and `decide` (positionFacts); gate `positionFacts.test.ts` 'B1 —' (a fork-in-two speaks through the door on interrupt; statement-blame on the shared identifier; negative-controlled)
   - 🔴 B2 boost cannot flip a verdict
   - 🔴 B3 four live surfaces pass no student
   - 🔴 B4 ledgers before the door

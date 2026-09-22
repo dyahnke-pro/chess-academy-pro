@@ -315,6 +315,36 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
   });
 });
 
+describe('B1 — the pre-gate and the door judge ONE signals object (2026-09-22)', () => {
+  // The Italian-shaped middlegame where the student can set up a knight fork
+  // in two quiet moves: `standingChance` opens the pre-gate (teaching, rank 45)
+  // on an INTERRUPT surface. Until B1 the door built its own signals literal
+  // WITHOUT standingChance, so the same ply was then closed as an 'importance'
+  // silence — the T5 fork two moves out was dead on every live surface and the
+  // emission called it a legitimate close. Negative control: hand the door a
+  // literal without `standingChance` again → `decision.speak` reads false.
+  const FORK_IN_TWO = 'r1bqkb1r/pp3ppp/2np1n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 14';
+
+  it('a fork the student can set up SPEAKS through the door on an interrupt surface', async () => {
+    const r = await computePositionFacts({ posture: 'interrupt', fen: FORK_IN_TWO, moverColor: 'w', studentColor: 'w', analysis: flat });
+    expect(r.latentFork).not.toBeNull();
+    expect(r.importance.tier).toBe('teaching');
+    expect(r.clauses.some((c) => c.kind === 'latent-chance')).toBe(true);
+    expect(r.quiet.filter((q) => q.why === 'importance')).toHaveLength(0);
+  });
+
+  it('BLAMES BY STATEMENT: judgeMoment and decide take the same identifier, never two literals', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync('src/services/positionFacts.ts', 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/^\s*\/\/.*$/gm, '');
+    expect(src).toMatch(/judgeMoment\(momentSignals,/);
+    expect(src).toMatch(/decide\(\s*momentSignals,/);
+    // One construction site for the moment's signals.
+    expect((src.match(/const momentSignals: ImportanceSignals = \{/g) ?? []).length).toBe(1);
+  });
+});
+
 describe('clauseText', () => {
   it('drops kinds a surface already covers (no walk-over)', async () => {
     const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });

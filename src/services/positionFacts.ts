@@ -17,7 +17,7 @@ import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
 import { strategicWhyImperative } from './moveFundamentals';
-import { type ImportanceVerdict } from './narrationImportance';
+import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
 import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
@@ -477,7 +477,14 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     posedTags: posed.tags,
     capabilities: input.studentNeedContext?.capabilities,
   });
-  const { importance, speaks } = judgeMoment({
+  // 🔒 ONE SIGNALS OBJECT, BUILT ONCE, HANDED TO BOTH STEPS (B1, 2026-09-22).
+  // The pre-gate (`judgeMoment`, here) and the door (`decide`, below) used to
+  // each build their own literal — and the door's copy had no `standingChance`,
+  // so the fork-two-moves-out that opened the pre-gate on an interrupt surface
+  // was then closed by the door as a legitimate 'importance' silence, with the
+  // emission calling it correct. Two literals for one moment is the drift the
+  // one-door rule exists to delete; a shared const cannot disagree with itself.
+  const momentSignals: ImportanceSignals = {
     decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
     cpLossCp: input.cpLossCp ?? null,
     threatNet: mustDefend.net,
@@ -492,7 +499,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // (Passing the object directly makes wdl[0]/wdl[2] undefined → every
     // position falsely reads "decided" and goes silent.)
     wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
-  }, rating, input.posture, preGateBoost);
+  };
+  const { importance, speaks } = judgeMoment(momentSignals, rating, input.posture, preGateBoost);
 
   // Perturbation is expensive → only when the moment earns it AND a probe fn was
   // supplied AND we're out of the opening. Probe BOTH sides: the student's
@@ -649,15 +657,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const clauseByText = new Map<string, ClauseItem>();
   for (const c of composed) if (!clauseByText.has(c.text)) clauseByText.set(c.text, c);
   const decision = decide(
-    {
-      decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
-      cpLossCp: input.cpLossCp ?? null,
-      threatNet: mustDefend.net,
-      teachingBeat: !!input.teachingBeat || statusText.length > 0,
-      standingDanger,
-      evalCpWhitePov,
-      wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
-    },
+    momentSignals,
     {
       rating,
       weaknesses: input.studentWeaknesses ?? [],
