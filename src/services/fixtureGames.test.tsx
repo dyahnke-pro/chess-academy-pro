@@ -109,7 +109,7 @@ describe('fixtureGames — the readers (D5)', () => {
   it('SPINE: rows derived from a sample game never reach the weakness profile', async () => {
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
     await db.mistakePuzzles.add(buildMistakePuzzle({ id: 'mp-fixture', sourceGameId: 'sample-vienna-amateur-1', fen, playerMoveSan: 'Qh5', bestMoveSan: 'Nf3' }));
-    await logMisconception({ tag: 'hung-material', source: 'review', fen, playedSan: 'Qh5', bestSan: 'Nf3', sourceGameId: 'sample-vienna-amateur-1' });
+    await logMisconception({ tag: 'hung-material', source: 'game-review', fen, playedSan: 'Qh5', bestSan: 'Nf3', sourceGameId: 'sample-vienna-amateur-1' });
     expect(await getMisconceptionProfile()).toEqual([]);
     const profile = await getUnifiedWeaknessProfile();
     expect(profile.filter((w) => w.positions.some((p) => p.from.gameId?.startsWith('sample-')))).toEqual([]);
@@ -118,7 +118,7 @@ describe('fixtureGames — the readers (D5)', () => {
     // Control: the same two rows on a real game id DO reach it.
     await Promise.all([db.mistakePuzzles.clear(), db.misconceptionTags.clear()]);
     await db.mistakePuzzles.add(buildMistakePuzzle({ id: 'mp-real', sourceGameId: 'real-1', fen, playerMoveSan: 'Qh5', bestMoveSan: 'Nf3' }));
-    await logMisconception({ tag: 'hung-material', source: 'review', fen, playedSan: 'Qh5', bestSan: 'Nf3', sourceGameId: 'real-1' });
+    await logMisconception({ tag: 'hung-material', source: 'game-review', fen, playedSan: 'Qh5', bestSan: 'Nf3', sourceGameId: 'real-1' });
     expect((await getMisconceptionProfile()).map((r) => r.tag)).toContain('hung-material');
     expect((await getUnifiedWeaknessProfile()).length).toBeGreaterThan(0);
   });
@@ -133,7 +133,7 @@ describe('fixtureGames — the readers (D5)', () => {
     const vienna = await db.games.get('sample-vienna-amateur-1');
     expect(vienna?.annotations?.some((a) => a.color === 'white' && (a.classification === 'blunder' || a.classification === 'mistake'))).toBe(true);
     const r = await autoAnalyzeGameMisconceptions('sample-vienna-amateur-1');
-    expect(r).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0 });
+    expect(r).toMatchObject({ classified: 0, logged: 0, capabilitiesHeld: 0 }); // C1/C2 added counters; the fixture still writes NOTHING
     expect(await db.mistakePuzzles.count()).toBe(0);
     expect(await db.misconceptionTags.count()).toBe(0);
 

@@ -84,7 +84,7 @@ describe('learnFundamentalVerdict', () => {
 describe('learnFundamentalVerdict — recurrence (WO-LOOP-01)', () => {
   const DAY = 24 * 60 * 60 * 1000;
   const spine = [{
-    clusterId: 'fundamental:same-piece-twice', bucket: 'positional' as const, label: 'Moving the same piece twice',
+    clusterId: 'fundamental:same-piece-twice', capabilityTag: null, proven: false, bucket: 'positional' as const, label: 'Moving the same piece twice',
     openCount: 1, severity: 30, puzzleThemes: [] as string[], total: 1,
     games: [{ gameId: 'prior-1', opponentName: 'Rossi, Anna', playedAt: Date.now() - 9 * DAY }],
   }];
@@ -113,7 +113,7 @@ describe('learnFundamentalVerdict — recurrence (WO-LOOP-01)', () => {
 describe('learnFundamentalVerdict — recurrence excludes the game being played (C4)', () => {
   const DAY = 24 * 60 * 60 * 1000;
   const row = (gameId: string) => ({
-    clusterId: 'fundamental:same-piece-twice', bucket: 'positional' as const, label: 'Moving the same piece twice',
+    clusterId: 'fundamental:same-piece-twice', capabilityTag: null, proven: false, bucket: 'positional' as const, label: 'Moving the same piece twice',
     openCount: 1, severity: 30, puzzleThemes: [] as string[], total: 1,
     games: [{ gameId, opponentName: 'Coach', playedAt: Date.now() - DAY }],
   });

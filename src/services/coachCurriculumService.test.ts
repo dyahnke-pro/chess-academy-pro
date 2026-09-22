@@ -14,6 +14,7 @@ function w(tag: string, openCount: number, severity: number, label = tag): Unifi
   return {
     tag, label, openCount, key: tag, bucket: 'tactical', total: openCount + 2,
     severity, sources: ['analysis'], puzzleThemes: [tag], positions: [], lastSeenAt: NOW,
+    gameIds: [], lastDrilledAt: null, capabilityTag: null,
   };
 }
 

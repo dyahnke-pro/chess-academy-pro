@@ -583,6 +583,7 @@ export function buildSidePlan(overrides?: Partial<SidePlan>): SidePlan {
     trading: [],
     outposts: [],
     passedPawns: [],
+    tradeIntended: [],
     materialSwing: 0,
     shieldStripped: 0,
     tactic: null,

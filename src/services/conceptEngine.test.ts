@@ -223,7 +223,7 @@ describe('conceptEngine — ONE computational system (consumes the fed analysis)
     // swing (critical tier at 1500 = >=100cp → 0.88), not a static table.
     const withSwing = conceptForLine({
       fen: '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', uci: pv, studentColor: 'w',
-      rootEvalCp: 0, lineEvalCp: 150, rating: 1500,
+      rootEvalCp: 0, lineEvalCp: 150,
     });
     const noSwing = conceptForLine({ fen: '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', uci: pv, studentColor: 'w' });
     // Both walks reach the same technique; the engine-fed one carries a concept

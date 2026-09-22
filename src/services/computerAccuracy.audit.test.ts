@@ -107,9 +107,9 @@ describe.skipIf(!HAS_SF)('COMPUTER ACCURACY + QUALITY AUDIT (end of opening / mi
       const oracleBestSan = uciToSan(fen, analysis.bestMove);
       const evalPawns = analysis.mateIn != null ? (analysis.mateIn > 0 ? 999 : -999) : analysis.evaluation / 100;
 
-      const why = await computeWhyBestMove({ fen, studentColor, analysis, rating: 1500 });
+      const why = await computeWhyBestMove({ fen, studentColor, analysis, studentNeedContext: null });
       const grounded = explainBestMoveGrounded(fen, null, analysis.bestMove, studentColor);
-      const pf = await computePositionFacts({ posture: 'walk', fen, moverColor: sc, studentColor: sc, analysis, rating: 1500, evalBoard: sfEvalBoard });
+      const pf = await computePositionFacts({ posture: 'walk', fen, moverColor: sc, studentColor: sc, analysis, evalBoard: sfEvalBoard });
       const briefing = clauseText(pf.clauses, []).join(' ');
       const pvSan = pvToSan(fen, analysis.topLines?.[0]?.moves ?? []);
       const reasoningObj = pvSan.length ? assembleEngineReasoning({ fenBefore: fen, pvSan, moverColor: sc === 'w' ? 'white' : 'black', evalCp: analysis.evaluation, mateIn: analysis.mateIn, studentSide: studentColor }) : null;

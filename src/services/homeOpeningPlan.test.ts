@@ -37,7 +37,7 @@ function pirc(key: OpeningKey, n: number, winRate: number, tag: string, analysed
 }
 const weakness = (over: Partial<UnifiedWeakness>): UnifiedWeakness => ({
   key: 'analysis:tactic:fork', tag: 'analysis:tactic:fork', label: 'Missed forks', bucket: 'tactical', openCount: 3, total: 3, severity: 60,
-  sources: ['analysis'], puzzleThemes: ['fork'], positions: [], lastSeenAt: 1, gameIds: [], lastDrilledAt: null, ...over,
+  sources: ['analysis'], puzzleThemes: ['fork'], positions: [], lastSeenAt: 1, gameIds: [], lastDrilledAt: null, capabilityTag: null, ...over,
 });
 
 describe('homePlanFor — the reps inside the home opening', () => {

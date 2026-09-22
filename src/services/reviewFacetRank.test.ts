@@ -5,7 +5,7 @@ import { rankFacets, facetTag, facetRank, FACET_RANK } from './reviewFacetRank';
 import type { WeaknessSignal } from './weaknessSignal';
 
 const hangingHole: WeaknessSignal = {
-  clusterId: 'analysis:tactic:hanging_piece', bucket: 'tactical', label: 'Hanging pieces',
+  clusterId: 'analysis:tactic:hanging_piece', capabilityTag: null, proven: false, bucket: 'tactical', label: 'Hanging pieces',
   openCount: 6, total: 6, severity: 80, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: ['hangingPiece'],
 };
 

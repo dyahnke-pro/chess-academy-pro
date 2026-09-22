@@ -13,7 +13,7 @@ const ITALIAN = openingKeyFor('C50', 'Italian Game');
 const SICILIAN = openingKeyFor('B20', 'Sicilian Defense');
 
 const forkHole: WeaknessSignal = {
-  clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Forks', openCount: 4, total: 4, severity: 70,
+  clusterId: 'analysis:tactic:fork', capabilityTag: null, proven: false, bucket: 'tactical', label: 'Forks', openCount: 4, total: 4, severity: 70,
   lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: ['fork'],
 };
 

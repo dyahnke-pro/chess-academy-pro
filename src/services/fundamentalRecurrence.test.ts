@@ -11,7 +11,7 @@ const NOW = Date.UTC(2026, 8, 20, 12, 0, 0);
 function sig(over: Partial<WeaknessSignal> = {}): WeaknessSignal {
   return {
     clusterId: 'fundamental:loose-piece',
-    bucket: 'tactical',
+    capabilityTag: null, proven: false, bucket: 'tactical',
     label: 'Loose pieces',
     openCount: 2,
     severity: 40,
@@ -62,7 +62,7 @@ describe('fundamentalRecurrenceLine — the loop, out loud', () => {
   });
 
   it('takes the FIRST attributed fundamental that recurs, in attribution order', () => {
-    const tempo = sig({ clusterId: 'fundamental:tempo-handed', label: 'Handing over tempi' });
+    const tempo = sig({ clusterId: 'fundamental:tempo-handed', capabilityTag: null, proven: false, label: 'Handing over tempi' });
     const line = fundamentalRecurrenceLine({
       ids: ['same-piece-twice', 'tempo-handed', 'loose-piece'], signals: [tempo, sig()], currentGameId: 'game-B', register: 'review', seenLabels: new Set(), now: NOW,
     });

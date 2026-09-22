@@ -7,7 +7,7 @@ function theme(key: string, label: string, n: number): MistakeDrillTheme {
     aid: `mistake:${key}`, label, setupFen: 'x', playerColor: 'white' as const,
     solutionSan: ['a'], prompt: 'p', puzzleId: `${key}-${i}`, rating: 1200,
   }));
-  return { key, label, count: n, drills };
+  return { key, label, count: n, homeCount: 0, drills };
 }
 
 const QUEUE = [theme('tactic:fork', 'Forks', 3), theme('phase:endgame', 'Endgame', 2)];

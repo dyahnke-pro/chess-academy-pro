@@ -15,7 +15,7 @@ function uw(tag: string, over: Partial<UnifiedWeakness> = {}): UnifiedWeakness {
   return {
     tag, key: tag, label: tag, bucket: 'tactical' as MisconceptionBucket,
     openCount: 3, total: 5, severity: 50, sources: ['analysis'],
-    puzzleThemes: [], positions: [], lastSeenAt: Date.now(), ...over,
+    puzzleThemes: [], positions: [], lastSeenAt: Date.now(), gameIds: [], lastDrilledAt: null, capabilityTag: null, ...over,
   };
 }
 function lifeEntry(clusterId: string, status: LifecycleStatus, trend: LifecycleTrend): WeaknessLifecycleEntry {
@@ -51,7 +51,7 @@ describe('buildWeaknessSignals — joins profile with lifecycle', () => {
 });
 
 describe('boostFor — lifecycle-keyed, capped', () => {
-  const sig = (over: Partial<WeaknessSignal>): WeaknessSignal => ({ clusterId: 'x', bucket: 'tactical' as MisconceptionBucket, label: 'x', openCount: 3, total: 3, severity: 50, puzzleThemes: [], ...over });
+  const sig = (over: Partial<WeaknessSignal>): WeaknessSignal => ({ clusterId: 'x', capabilityTag: null, proven: false, bucket: 'tactical' as MisconceptionBucket, label: 'x', openCount: 3, total: 3, severity: 50, puzzleThemes: [], ...over });
   it('persistent + worsening earns the most; fixed earns nothing', () => {
     const persistentWorsening = boostFor(sig({ lifecycleStatus: 'persistent', trend: 'worsening' }));
     const emerging = boostFor(sig({ lifecycleStatus: 'emerging', trend: 'flat' }));
@@ -68,10 +68,10 @@ describe('boostFor — lifecycle-keyed, capped', () => {
 
 describe('matchClauseKind — only honest links', () => {
   const signals: WeaknessSignal[] = [
-    { clusterId: 'analysis:tactic:hanging_piece', bucket: 'tactical' as MisconceptionBucket, label: 'hangs pieces', openCount: 5, total: 5, severity: 70, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: [] },
-    { clusterId: 'analysis:tactic:pin', bucket: 'tactical' as MisconceptionBucket, label: 'walks into pins', openCount: 2, total: 2, severity: 40, lifecycleStatus: 'emerging', trend: 'flat', puzzleThemes: [] },
-    { clusterId: 'analysis:conversion-endgame:rook', bucket: 'endgame' as MisconceptionBucket, label: 'botches conversions', openCount: 3, total: 3, severity: 60, lifecycleStatus: 'persistent', trend: 'flat', puzzleThemes: [] },
-    { clusterId: 'analysis:structure-damage', bucket: 'positional' as MisconceptionBucket, label: 'wrecks own structure', openCount: 2, total: 2, severity: 45, puzzleThemes: [] },
+    { clusterId: 'analysis:tactic:hanging_piece', capabilityTag: null, proven: false, bucket: 'tactical' as MisconceptionBucket, label: 'hangs pieces', openCount: 5, total: 5, severity: 70, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: [] },
+    { clusterId: 'analysis:tactic:pin', capabilityTag: null, proven: false, bucket: 'tactical' as MisconceptionBucket, label: 'walks into pins', openCount: 2, total: 2, severity: 40, lifecycleStatus: 'emerging', trend: 'flat', puzzleThemes: [] },
+    { clusterId: 'analysis:conversion-endgame:rook', capabilityTag: null, proven: false, bucket: 'endgame' as MisconceptionBucket, label: 'botches conversions', openCount: 3, total: 3, severity: 60, lifecycleStatus: 'persistent', trend: 'flat', puzzleThemes: [] },
+    { clusterId: 'analysis:structure-damage', capabilityTag: null, proven: false, bucket: 'positional' as MisconceptionBucket, label: 'wrecks own structure', openCount: 2, total: 2, severity: 45, puzzleThemes: [] },
   ];
   it('must-defend ↔ hanging piece', () => {
     expect(matchClauseKind('must-defend', signals)?.clusterId).toBe('analysis:tactic:hanging_piece');
@@ -94,7 +94,7 @@ describe('matchClauseKind — only honest links', () => {
 
 describe('matchTacticPattern — via the vocabulary bridge', () => {
   const signals: WeaknessSignal[] = [
-    { clusterId: 'analysis:tactic:discovered_attack', bucket: 'tactical' as MisconceptionBucket, label: 'misses discoveries', openCount: 4, total: 4, severity: 65, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: [] },
+    { clusterId: 'analysis:tactic:discovered_attack', capabilityTag: null, proven: false, bucket: 'tactical' as MisconceptionBucket, label: 'misses discoveries', openCount: 4, total: 4, severity: 65, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: [] },
   ];
   it('a live "discovery" fact matches the "discovered_attack" weakness (the silent-mismatch bug, now fixed)', () => {
     expect(matchTacticPattern('discovery', signals)?.clusterId).toBe('analysis:tactic:discovered_attack');
@@ -110,7 +110,7 @@ describe('matchTacticPattern — via the vocabulary bridge', () => {
 
 describe('matchTag — direct cluster/tag match', () => {
   const signals: WeaknessSignal[] = [
-    { clusterId: 'coach:hangs-when-attacked', bucket: 'tactical' as MisconceptionBucket, label: 'x', openCount: 2, total: 2, severity: 40, puzzleThemes: [] },
+    { clusterId: 'coach:hangs-when-attacked', capabilityTag: null, proven: false, bucket: 'tactical' as MisconceptionBucket, label: 'x', openCount: 2, total: 2, severity: 40, puzzleThemes: [] },
   ];
   it('matches a raw carried tag', () => {
     expect(matchTag('coach:hangs-when-attacked', signals)?.clusterId).toBe('coach:hangs-when-attacked');
@@ -123,7 +123,7 @@ describe('matchTag — direct cluster/tag match', () => {
 
 // WO-LOOP-01 — the signal carries the DISTINCT prior games, newest first.
 describe('buildWeaknessSignals — games (the recurrence unit)', () => {
-  const base = { key: 'k', tag: 'fundamental:loose-piece', label: 'Loose pieces', bucket: 'tactical' as const, openCount: 3, total: 3, severity: 40, sources: ['analysis' as const], puzzleThemes: [], lastSeenAt: 0 };
+  const base = { key: 'k', gameIds: [], lastDrilledAt: null, capabilityTag: null, tag: 'fundamental:loose-piece', label: 'Loose pieces', bucket: 'tactical' as const, openCount: 3, total: 3, severity: 40, sources: ['analysis' as const], puzzleThemes: [], lastSeenAt: 0 };
   it('dedupes by gameId and keeps order; skips positions with no game', () => {
     const w = { ...base, positions: [
       { fen: 'x', from: { origin: 'game' as const, gameId: 'g2', opponentName: 'B', playedAt: 200 } },

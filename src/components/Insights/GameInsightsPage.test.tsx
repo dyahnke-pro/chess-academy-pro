@@ -71,6 +71,7 @@ const mockOverview: OverviewInsights = {
 };
 
 const mockOpenings: OpeningInsights = {
+  gamesByColor: { white: 5, black: 5 },
   repertoireCoverage: { inBook: 5, offBook: 5 },
   mostPlayedWhite: [],
   mostPlayedBlack: [],

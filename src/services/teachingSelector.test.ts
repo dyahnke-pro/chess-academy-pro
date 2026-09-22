@@ -72,7 +72,7 @@ describe('teachingSelector — the ONE game-level read (unified-coach N1)', () =
   // landed half directly.
   it('landed tactics are moments by BAR: any for a cold student, only the recorded hole for a warm one', () => {
     expect(landedTacticIsMoment('pin', [])).toBe(true);
-    const forkHole = { clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Forks', openCount: 3, total: 3, severity: 60, puzzleThemes: [] } as never;
+    const forkHole = { clusterId: 'analysis:tactic:fork', capabilityTag: null, proven: false, bucket: 'tactical', label: 'Forks', openCount: 3, total: 3, severity: 60, puzzleThemes: [] } as never;
     expect(landedTacticIsMoment('fork', [forkHole])).toBe(true);
     expect(landedTacticIsMoment('pin', [forkHole])).toBe(false);
   });
@@ -125,7 +125,7 @@ describe('helpers', () => {
 
 describe('N5 — the student\'s holes re-rank comparable moments', () => {
   const forkHole = {
-    clusterId: 'analysis:tactic:fork', bucket: 'tactical' as const, label: 'Forks', openCount: 4, total: 4, severity: 70,
+    clusterId: 'analysis:tactic:fork', capabilityTag: null, proven: false, bucket: 'tactical' as const, label: 'Forks', openCount: 4, total: 4, severity: 70,
     lifecycleStatus: 'persistent' as const, trend: 'worsening' as const, puzzleThemes: ['fork'],
   };
   const swings = [{ ply: 8, label: '4… x', swingPawns: 2.0 }, { ply: 13, label: '7. y', swingPawns: 2.0 }];

@@ -14,7 +14,7 @@ const flat = { topLines: [line(1, 20), line(2, 15), line(3, 10)], evaluation: 20
 const HANGING_KNIGHT = 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5';
 
 const sig = (clusterId: string, over: Partial<WeaknessSignal> = {}): WeaknessSignal => ({
-  clusterId, bucket: 'tactical' as MisconceptionBucket, label: clusterId,
+  clusterId, capabilityTag: null, proven: false, bucket: 'tactical' as MisconceptionBucket, label: clusterId,
   openCount: 5, total: 5, severity: 70, lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: [], ...over,
 });
 

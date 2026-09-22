@@ -144,8 +144,8 @@ describe('criticalMoment — the stake is computed, never templated', () => {
 });
 
 describe('criticalMoment — two registers, one claim', () => {
-  const one = readCriticalMoment({ topLines: fan(0, -300, -900), moverColor: 'w', rating: 1500, fen: START });
-  const two = readCriticalMoment({ topLines: fan(0, -40, -900), moverColor: 'w', rating: 1500, fen: START });
+  const one = readCriticalMoment({ topLines: fan(0, -300, -900), moverColor: 'w', fen: START });
+  const two = readCriticalMoment({ topLines: fan(0, -40, -900), moverColor: 'w', fen: START });
 
   it('LEARN states, and never asks', () => {
     for (let ply = 1; ply <= 12; ply += 1) {

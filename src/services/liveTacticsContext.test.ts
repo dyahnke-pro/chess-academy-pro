@@ -333,7 +333,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       [],
     );
     const holeSignals = [{
-      clusterId: 'analysis:tactic:discovered_attack', bucket: 'tactical' as const,
+      clusterId: 'analysis:tactic:discovered_attack', capabilityTag: null, proven: false, bucket: 'tactical' as const,
       label: 'Misses discoveries', openCount: 5, total: 5, severity: 70,
       lifecycleStatus: 'persistent' as const, trend: 'worsening' as const, puzzleThemes: [] as string[],
     }];
@@ -353,7 +353,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       [{ type: 'pin', description: 'p', depthAhead: 3, line: ['Bg5', 'h6', 'Bxf6'] }],
     );
     const holeSignals = [{
-      clusterId: 'analysis:tactic:pin', bucket: 'tactical' as const, label: 'Walks into pins',
+      clusterId: 'analysis:tactic:pin', capabilityTag: null, proven: false, bucket: 'tactical' as const, label: 'Walks into pins',
       openCount: 4, total: 4, severity: 60, lifecycleStatus: 'persistent' as const, trend: 'flat' as const, puzzleThemes: [] as string[],
     }];
     expect(speakDeepestLookahead(ctx, 'student', 'w', holeSignals)!).toMatch(/keeps catching you/i);

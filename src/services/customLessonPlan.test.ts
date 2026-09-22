@@ -25,6 +25,7 @@ function w(tag: string, label: string, over: Partial<UnifiedWeakness> = {}): Uni
     puzzleThemes: [],
     positions: [],
     lastSeenAt: Date.now(),
+    gameIds: [], lastDrilledAt: null, capabilityTag: null,
     ...over,
   };
 }

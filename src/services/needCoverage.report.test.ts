@@ -26,7 +26,7 @@ const COLD_FLOOR = 0.99;
 const MASTERED_CEILING = 0.02;
 
 const forkHole: WeaknessSignal = {
-  clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Forks', openCount: 4, severity: 70,
+  clusterId: 'analysis:tactic:fork', capabilityTag: null, proven: false, bucket: 'tactical', label: 'Forks', openCount: 4, severity: 70,
   lifecycleStatus: 'persistent', trend: 'worsening', puzzleThemes: ['fork'], total: 6,
 };
 const pinHole: WeaknessSignal = { ...forkHole, clusterId: 'analysis:tactic:pin', label: 'Pins', puzzleThemes: ['pin'] };

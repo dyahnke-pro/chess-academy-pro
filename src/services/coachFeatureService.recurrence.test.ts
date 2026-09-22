@@ -26,7 +26,7 @@ function inputs(): ReviewMoveInput[] {
 
 function recurring(games: NonNullable<WeaknessSignal['games']>): WeaknessSignal {
   return {
-    clusterId: 'fundamental:same-piece-twice', bucket: 'positional', label: 'Moving the same piece twice',
+    clusterId: 'fundamental:same-piece-twice', capabilityTag: null, proven: false, bucket: 'positional', label: 'Moving the same piece twice',
     openCount: games.length, severity: 30, puzzleThemes: [], total: games.length, games,
   };
 }

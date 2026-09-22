@@ -38,7 +38,7 @@ function inputs(): ReviewMoveInput[] {
 
 const forkHole = (status: WeaknessSignal['lifecycleStatus']): WeaknessSignal[] => [{
   clusterId: 'analysis:tactic:fork',
-  bucket: 'tactical',
+  capabilityTag: null, proven: false, bucket: 'tactical',
   label: 'Missed forks',
   openCount: status === 'fixed' ? 0 : 4,
   total: status === 'fixed' ? 4 : 4,

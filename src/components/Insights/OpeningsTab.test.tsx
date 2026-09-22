@@ -32,6 +32,7 @@ vi.mock('../../services/accuracyService', () => ({
 
 function buildOpeningData(overrides?: Partial<OpeningInsights>): OpeningInsights {
   return {
+    gamesByColor: { white: 10, black: 10 },
     repertoireCoverage: { inBook: 15, offBook: 5 },
     mostPlayedWhite: [
       {

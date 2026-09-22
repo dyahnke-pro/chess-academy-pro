@@ -5,16 +5,26 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { buildCapabilityPlies } from '../components/Coach/GameReviewWeaknessCapture';
-import { autoAnalyzeBlunders } from './autoAnalyzeGame';
+import { autoAnalyzeBlunders, capabilityPliesFromAnnotations } from './autoAnalyzeGame';
+import { movesToAnnotations } from './coachGameAnnotations';
 import type { CoachGameMove } from '../types';
+
+// C1 (2026-09-22) deleted the review card's `buildCapabilityPlies` — the ONE
+// mirror is the sweep's `capabilityPliesFromAnnotations`; this adapts the
+// fixture through the same annotation shape the record carries.
+function buildCapabilityPlies(ms: CoachGameMove[], colour: 'white' | 'black', prompted: number[] = []) {
+  const c = new Chess();
+  const fens = [c.fen(), ...ms.map((m) => m.fen)];
+  return capabilityPliesFromAnnotations(movesToAnnotations(ms, colour) ?? [], colour, fens, prompted);
+}
 
 const SANS = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5'];
 function moves(): CoachGameMove[] {
   const c = new Chess();
   return SANS.map((san, i) => {
     c.move(san);
-    return { san, fen: c.fen(), classification: 'good', preMoveEval: 10, evaluation: 10, isCoachMove: i % 2 === 1 } as unknown as CoachGameMove;
+    // `moveNumber` is the 1-based PLY on a CoachGameMove (the annotation adapter halves it).
+    return { san, fen: c.fen(), moveNumber: i + 1, classification: 'good', preMoveEval: 10, evaluation: 10, isCoachMove: i % 2 === 1 } as unknown as CoachGameMove;
   });
 }
 

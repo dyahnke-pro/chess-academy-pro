@@ -152,7 +152,7 @@ describe('the critical moment, asked — review’s second register', () => {
     return cps.map((evaluation, i) => ({ rank: i + 1, evaluation, mate: null, bound: null, moves: ['e2e4'] }));
   };
   const readAt = (count: 1 | 2 | 3, gap = 400): CriticalMomentRead =>
-    readCriticalMoment({ topLines: fanFor(count, gap), moverColor: 'w', rating: 1500, fen: START })!;
+    readCriticalMoment({ topLines: fanFor(count, gap), moverColor: 'w', fen: START })!;
 
   it('asks at a ply the SWING card can never reach — a found only-move costs nothing', () => {
     const segments = [seg()];                     // evalBefore === evalAfter → zero swing
@@ -237,10 +237,10 @@ describe('the critical moment — the three registers', () => {
     evalBefore: 0, evalAfter: 0, classification: 'good', fenBefore: START,
   });
   const readOne = readCriticalMoment({
-    topLines: mk([0, -400, -900], ['e2e4', 'd2d4', 'g1f3']), moverColor: 'w', rating: 1500, fen: START,
+    topLines: mk([0, -400, -900], ['e2e4', 'd2d4', 'g1f3']), moverColor: 'w', fen: START,
   })!;
   const readTwo = readCriticalMoment({
-    topLines: mk([0, -10, -900], ['e2e4', 'd2d4', 'g1f3']), moverColor: 'w', rating: 1500, fen: START,
+    topLines: mk([0, -10, -900], ['e2e4', 'd2d4', 'g1f3']), moverColor: 'w', fen: START,
   })!;
 
   it('the discards are real engine lines, kept apart from the holders', () => {
