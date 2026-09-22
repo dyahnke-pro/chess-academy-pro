@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { addMistakePuzzleFromCapture } from './mistakePuzzleService';
+import { addMistakePuzzleFromCapture, type MistakePuzzleProvenance } from './mistakePuzzleService';
+
+// Provenance is REQUIRED on every capture (C9) — a live coach slip, honestly unknown.
+const FROM: MistakePuzzleProvenance = { origin: 'game', gameId: 'g-live', source: 'coach', opponentName: null, gameDate: null };
 
 // Option B (David 2026-05-25): a coach-caught slip becomes a drillable
 // mistakePuzzle. These pin the load-bearing parts — UCI derivation from SAN,
@@ -16,7 +19,7 @@ const FEN = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
 describe('addMistakePuzzleFromCapture', () => {
   it('writes a drillable puzzle with UCI derived from SAN', async () => {
     const p = await addMistakePuzzleFromCapture({
-      fen: FEN, playedSan: 'Nc6', bestSan: 'Nf6', cpLoss: 120, gamePhase: 'opening',
+      fen: FEN, playedSan: 'Nc6', bestSan: 'Nf6', cpLoss: 120, gamePhase: 'opening', from: FROM,
     });
     expect(p).not.toBeNull();
     expect(p?.playerMove).toBe('b8c6');
@@ -28,20 +31,20 @@ describe('addMistakePuzzleFromCapture', () => {
   });
 
   it('dedups by position+move — no duplicate for the same slip', async () => {
-    await addMistakePuzzleFromCapture({ fen: FEN, playedSan: 'Nc6', bestSan: 'Nf6' });
-    const second = await addMistakePuzzleFromCapture({ fen: FEN, playedSan: 'Nc6', bestSan: 'Nf6' });
+    await addMistakePuzzleFromCapture({ fen: FEN, playedSan: 'Nc6', bestSan: 'Nf6', from: FROM });
+    const second = await addMistakePuzzleFromCapture({ fen: FEN, playedSan: 'Nc6', bestSan: 'Nf6', from: FROM });
     expect(second).toBeNull();
     expect(await db.mistakePuzzles.count()).toBe(1);
   });
 
   it('returns null (writes nothing) on an illegal SAN for the position', async () => {
-    const p = await addMistakePuzzleFromCapture({ fen: FEN, playedSan: 'Qxh7', bestSan: 'Nf6' });
+    const p = await addMistakePuzzleFromCapture({ fen: FEN, playedSan: 'Qxh7', bestSan: 'Nf6', from: FROM });
     expect(p).toBeNull();
     expect(await db.mistakePuzzles.count()).toBe(0);
   });
 
   it('requires fen + playedSan + bestSan', async () => {
-    expect(await addMistakePuzzleFromCapture({ fen: FEN, playedSan: '', bestSan: 'Nf6' })).toBeNull();
-    expect(await addMistakePuzzleFromCapture({ fen: '', playedSan: 'Nc6', bestSan: 'Nf6' })).toBeNull();
+    expect(await addMistakePuzzleFromCapture({ fen: FEN, playedSan: '', bestSan: 'Nf6', from: FROM })).toBeNull();
+    expect(await addMistakePuzzleFromCapture({ fen: '', playedSan: 'Nc6', bestSan: 'Nf6', from: FROM })).toBeNull();
   });
 });

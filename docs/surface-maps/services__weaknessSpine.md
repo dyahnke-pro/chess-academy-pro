@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**868 lines · 19 exports · 27 importers · 14 tests · 2 audits**
+**868 lines · 19 exports · 28 importers · 14 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,6 +32,7 @@
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
+- `src/services/mistakePuzzleService.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/weaknessLifecycle.ts`
 - `src/services/weaknessProvenance.test.ts`
@@ -52,7 +53,8 @@
 ### `WeaknessPosition` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `playedAtMs` (function) — 3 call sites
+### `playedAtMs` (function) — 4 call sites
+- `src/services/mistakePuzzleService.ts:211`
 - `src/services/weaknessProvenance.test.ts:107`
 - `src/services/weaknessProvenance.test.ts:108`
 - `src/services/weaknessProvenance.test.ts:109`

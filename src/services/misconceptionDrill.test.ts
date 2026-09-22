@@ -1,7 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
 import { logMisconception } from './misconceptionService';
-import { getMisconceptionDrillPuzzles, buildMistakePuzzleFromCapture } from './mistakePuzzleService';
+import { getMisconceptionDrillPuzzles, buildMistakePuzzleFromCapture, type MistakePuzzleProvenance } from './mistakePuzzleService';
+
+// Provenance is REQUIRED on every capture (C9) — a live coach slip, honestly unknown.
+const FROM: MistakePuzzleProvenance = { origin: 'game', gameId: 'g-live', source: 'coach', opponentName: null, gameDate: null };
 
 // The Thinking-Errors row → puzzle queue (David 2026-06-11): each misconception
 // tag's stored positions become MistakePuzzles in the SAME shape My Mistakes /
@@ -17,7 +20,7 @@ beforeEach(async () => {
 
 describe('buildMistakePuzzleFromCapture (pure)', () => {
   it('builds a solvable puzzle from fen + playedSan + bestSan, no persistence', () => {
-    const p = buildMistakePuzzleFromCapture({ fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3' });
+    const p = buildMistakePuzzleFromCapture({ fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3', from: FROM });
     expect(p).not.toBeNull();
     expect(p!.fen).toBe(HANG);
     expect(p!.playerMoveSan).toBe('Qxe5+');
@@ -26,7 +29,7 @@ describe('buildMistakePuzzleFromCapture (pure)', () => {
   });
 
   it('returns null on an illegal/ambiguous best move', () => {
-    expect(buildMistakePuzzleFromCapture({ fen: HANG, playedSan: 'Qxe5+', bestSan: 'Zz9' })).toBeNull();
+    expect(buildMistakePuzzleFromCapture({ fen: HANG, playedSan: 'Qxe5+', bestSan: 'Zz9', from: FROM })).toBeNull();
   });
 });
 

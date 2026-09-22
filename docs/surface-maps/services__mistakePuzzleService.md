@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1459 lines · 23 exports · 27 importers · 15 tests · 4 audits**
+**1547 lines · 26 exports · 28 importers · 16 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,6 +34,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lichessService.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.test.ts`
+- `src/services/mistakeProvenance.test.ts`
 - `src/services/mistakePuzzleCapture.test.ts`
 - `src/services/mistakePuzzleService.bands.test.ts`
 - `src/services/mistakePuzzleService.test.ts`
@@ -66,6 +67,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.bands.test.ts:66`
 - `src/services/ratingBands.test.ts:84`
 
+### `MistakePuzzleProvenance` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `mistakeProvenanceFromGame` (function) — 3 call sites
+- `src/services/autoAnalyzeGame.ts:312`
+- `src/services/mistakeProvenance.test.ts:80`
+- `src/services/mistakeProvenance.test.ts:87`
+
+### `provenanceForGameId` (function) — 5 call sites
+- `src/services/discussionPractice.ts:292`
+- `src/services/mistakeProvenance.test.ts:97`
+- `src/services/mistakeProvenance.test.ts:103`
+- `src/services/mistakeProvenance.test.ts:106`
+- `src/services/mistakeProvenance.test.ts:111`
+
 ### `uciToSan` (function) — 45 call sites
 - `scripts/find-line-reanchor.mjs:20`
 - `scripts/find-line-reanchor.mjs:38`
@@ -86,7 +102,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useAcceptableMoves.ts:88`
 - `src/hooks/useDiscussionPractice.ts:259`
 - `src/hooks/useDiscussionPractice.ts:381`
-- `src/services/autoAnalyzeGame.ts:232`
+- `src/services/autoAnalyzeGame.ts:234`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:58`
 - `src/services/deliberation.ts:118`
@@ -115,7 +131,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `replayPgnToFens` (function) — 8 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
-- `src/services/autoAnalyzeGame.ts:214`
+- `src/services/autoAnalyzeGame.ts:216`
 - `src/services/gameAnalysisService.ts:351`
 - `src/services/gameAnalysisService.ts:1433`
 - `src/services/gameAnalysisService.ts:1689`
@@ -125,7 +141,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `determinePlayerColor` (function) — 3 call sites
 - `src/components/Tactics/AnalysisPracticePage.tsx:99`
-- `src/services/autoAnalyzeGame.ts:212`
+- `src/services/autoAnalyzeGame.ts:214`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
@@ -154,7 +170,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reanalyzeImportedGames` (function) — 1 call site
-- `src/components/Puzzles/MyMistakesPage.tsx:224`
+- `src/components/Puzzles/MyMistakesPage.tsx:228`
 
 ### `getMistakePuzzlesDue` (function) — 3 call sites
 - `src/services/mistakePuzzleService.test.ts:445`
@@ -170,14 +186,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `CapturePuzzleInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `addMistakePuzzleFromCapture` (function) — 7 call sites
-- `src/services/discussionPractice.ts:287`
-- `src/services/mistakePuzzleCapture.test.ts:18`
-- `src/services/mistakePuzzleCapture.test.ts:31`
-- `src/services/mistakePuzzleCapture.test.ts:32`
-- `src/services/mistakePuzzleCapture.test.ts:38`
-- `src/services/mistakePuzzleCapture.test.ts:44`
-- `src/services/mistakePuzzleCapture.test.ts:45`
+### `addMistakePuzzleFromCapture` (function) — 8 call sites
+- `src/services/discussionPractice.ts:293`
+- `src/services/mistakeProvenance.test.ts:116`
+- `src/services/mistakePuzzleCapture.test.ts:21`
+- `src/services/mistakePuzzleCapture.test.ts:34`
+- `src/services/mistakePuzzleCapture.test.ts:35`
+- `src/services/mistakePuzzleCapture.test.ts:41`
+- `src/services/mistakePuzzleCapture.test.ts:47`
+- `src/services/mistakePuzzleCapture.test.ts:48`
 
 ### `ensureSequenceSolution` (function) — 7 call sites
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:105`
@@ -189,10 +206,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.sequence.test.ts:72`
 
 ### `buildMistakePuzzleFromCapture` (function) — 4 call sites
-- `src/services/autoAnalyzeGame.ts:357`
-- `src/services/misconceptionDrill.test.ts:18`
-- `src/services/misconceptionDrill.test.ts:20`
-- `src/services/misconceptionDrill.test.ts:29`
+- `src/services/autoAnalyzeGame.ts:369`
+- `src/services/misconceptionDrill.test.ts:21`
+- `src/services/misconceptionDrill.test.ts:23`
+- `src/services/misconceptionDrill.test.ts:32`
 
 ### `getMisconceptionDrillPuzzles` (function) — 12 call sites
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:44`
@@ -200,17 +217,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/drillJoinDivergence.test.ts:49`
 - `src/services/drillJoinDivergence.test.ts:57`
 - `src/services/drillJoinDivergence.test.ts:64`
-- `src/services/misconceptionDrill.test.ts:36`
-- `src/services/misconceptionDrill.test.ts:45`
-- `src/services/misconceptionDrill.test.ts:51`
-- `src/services/misconceptionDrill.test.ts:58`
-- `src/services/misconceptionDrill.test.ts:62`
+- `src/services/misconceptionDrill.test.ts:39`
+- `src/services/misconceptionDrill.test.ts:48`
+- `src/services/misconceptionDrill.test.ts:54`
+- `src/services/misconceptionDrill.test.ts:61`
+- `src/services/misconceptionDrill.test.ts:65`
 - `src/services/misconceptionService.test.ts:161`
 - `src/services/misconceptionService.test.ts:169`
 
 ### `getAllMistakePuzzles` (function) — 5 call sites
 - `src/components/Insights/OpeningDrilldown.tsx:152`
-- `src/components/Puzzles/MyMistakesPage.tsx:134`
+- `src/components/Puzzles/MyMistakesPage.tsx:138`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:66`
 - `src/services/gameCalculationPuzzleService.ts:117`
 - `src/services/mistakePuzzleService.test.ts:597`
@@ -220,7 +237,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2315`
-- `src/components/Puzzles/MyMistakesPage.tsx:213`
+- `src/components/Puzzles/MyMistakesPage.tsx:217`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`
 - `src/services/mistakePuzzleService.test.ts:495`
@@ -229,14 +246,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.test.ts:545`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:206`
+- `src/components/Puzzles/MyMistakesPage.tsx:210`
 - `src/services/mistakePuzzleService.test.ts:554`
 
 ### `MistakePuzzleStats` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getMistakePuzzleStats` (function) — 4 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:135`
+- `src/components/Puzzles/MyMistakesPage.tsx:139`
 - `src/services/gameInsightsService.ts:680`
 - `src/services/mistakePuzzleService.test.ts:571`
 - `src/services/mistakePuzzleService.test.ts:584`
@@ -253,6 +270,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lichessService.test.ts`
 - `src/services/misconceptionDrill.test.ts`
 - `src/services/misconceptionService.test.ts`
+- `src/services/mistakeProvenance.test.ts`
 - `src/services/mistakePuzzleCapture.test.ts`
 - `src/services/mistakePuzzleService.bands.test.ts`
 - `src/services/mistakePuzzleService.sequence.test.ts`

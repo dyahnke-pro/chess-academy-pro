@@ -74,12 +74,12 @@
 - `src/services/fundamentalsCatalog.test.ts:48`
 - `src/services/fundamentalsCatalog.test.ts:49`
 - `src/services/fundamentalsCatalog.test.ts:53`
-- `src/services/misconceptionDrill.test.ts:35`
-- `src/services/misconceptionDrill.test.ts:43`
-- `src/services/misconceptionDrill.test.ts:44`
-- `src/services/misconceptionDrill.test.ts:50`
-- `src/services/misconceptionDrill.test.ts:55`
-- `src/services/misconceptionDrill.test.ts:56`
+- `src/services/misconceptionDrill.test.ts:38`
+- `src/services/misconceptionDrill.test.ts:46`
+- `src/services/misconceptionDrill.test.ts:47`
+- `src/services/misconceptionDrill.test.ts:53`
+- `src/services/misconceptionDrill.test.ts:58`
+- `src/services/misconceptionDrill.test.ts:59`
 - `src/services/misconceptionService.test.ts:21`
 - `src/services/misconceptionService.test.ts:37`
 - `src/services/misconceptionService.test.ts:47`
@@ -118,7 +118,7 @@
 
 ### `hasMisconceptionsForGame` (function) — 2 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:188`
-- `src/services/autoAnalyzeGame.ts:315`
+- `src/services/autoAnalyzeGame.ts:324`
 
 ### `MisconceptionAggregate` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -18,6 +18,8 @@ import {
   determinePlayerColor,
   uciToSan,
   buildMistakePuzzleFromCapture,
+  mistakeProvenanceFromGame,
+  type MistakePuzzleProvenance,
 } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
 import { pvUciToSan } from './principleAttribution';
@@ -301,7 +303,14 @@ export async function autoAnalyzeGameMisconceptions(
   // existing puzzles (the tactical ones the analyze pipeline already made). One
   // indexed query + one bulkAdd; idempotent, so it runs every call and catches
   // up already-tagged games.
-  await persistMistakePuzzlesForBlunders(gameId, blunders);
+  //
+  // WITH THE GAME'S OWN PROVENANCE (C9, 2026-09-22). This used to hand the
+  // builder only the id, and the builder filled in 'coach' / null / null — so
+  // every analysed chess.com import's slips read source "Coach", opponent
+  // "Unknown", date = the import day. A master game resolves to null and
+  // writes nothing: it is nobody's slip.
+  const from = mistakeProvenanceFromGame(game, playerColor);
+  if (from) await persistMistakePuzzlesForBlunders(gameId, blunders, from);
 
   // The dossier "builds on each game" (P7, David 2026-09-08): a freshly analyzed
   // game changed the weakness picture, so recompute the persistent snapshot.
@@ -345,6 +354,9 @@ function measuredCpLoss(ann: MoveAnnotation): number | null {
 async function persistMistakePuzzlesForBlunders(
   gameId: string,
   blunders: BlunderForAnalysis[],
+  /** REQUIRED: the game's provenance (source / opponent / date), so the
+   *  rows carry the game's facts and never the builder's defaults. */
+  from: MistakePuzzleProvenance,
 ): Promise<void> {
   const existing = await db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray();
   const seen = new Set(existing.map((p) => `${p.fen}|${p.playerMoveSan}`));
@@ -361,7 +373,7 @@ async function persistMistakePuzzlesForBlunders(
       cpLoss: b.cpLoss,
       gamePhase: b.gamePhase,
       moveNumber: b.moveNumber,
-      sourceGameId: gameId,
+      from,
       evalBefore: b.evalBefore ?? null,
     });
     if (puzzle) fresh.push(puzzle);

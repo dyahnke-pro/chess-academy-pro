@@ -35,10 +35,14 @@ const CLASSIFICATION_SYMBOLS: Record<MistakeClassification, string> = {
   miss: '✕',
 };
 
+// A `Record` over the union, and the source-filter options are DERIVED from
+// it below — so a new source mode fails to compile here until it is named,
+// and can never be missing from the filter (C9, 2026-09-22).
 const SOURCE_LABELS: Record<MistakePuzzleSourceMode, string> = {
   coach: 'Coach',
   lichess: 'Lichess',
   chesscom: 'Chess.com',
+  import: 'Imported PGN',
 };
 
 interface PhaseTabConfig {
@@ -474,9 +478,9 @@ export function MyMistakesPage(): JSX.Element {
           data-testid="source-filter"
         >
           <option value="all">All Sources</option>
-          <option value="coach">Coach</option>
-          <option value="lichess">Lichess</option>
-          <option value="chesscom">Chess.com</option>
+          {(Object.keys(SOURCE_LABELS) as MistakePuzzleSourceMode[]).map((mode) => (
+            <option key={mode} value={mode}>{SOURCE_LABELS[mode]}</option>
+          ))}
         </select>
 
         <select
