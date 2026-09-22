@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**911 lines · 30 exports · 915 importers · 200 tests · 39 audits**
+**911 lines · 30 exports · 918 importers · 203 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -651,6 +651,7 @@
 - `src/services/adaptivePuzzleService.ts`
 - `src/services/analyticsService.ts`
 - `src/services/annotationService.ts`
+- `src/services/autoAnalyzeGame.livePv.test.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
 - `src/services/autoImportScheduler.ts`
@@ -854,6 +855,7 @@
 - `src/services/ratingIdempotence.test.ts`
 - `src/services/refutedAlternative.test.ts`
 - `src/services/reviewSampleGames.ts`
+- `src/services/section14RecordPath.test.ts`
 - `src/services/sessionGenerator.test.ts`
 - `src/services/sessionGenerator.ts`
 - `src/services/setupTrainerService.test.ts`
@@ -920,6 +922,7 @@
 - `src/services/weaknessLifecycle.test.ts`
 - `src/services/weaknessLifecycle.ts`
 - `src/services/weaknessProvenance.test.ts`
+- `src/services/weaknessSignalLoader.green.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.test.ts`
@@ -1119,6 +1122,7 @@
 - `src/hooks/useStudentNeed.test.tsx`
 - `src/services/accuracyService.test.ts`
 - `src/services/adaptivePuzzleService.test.ts`
+- `src/services/autoAnalyzeGame.livePv.test.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
 - `src/services/bestReplyRanking.test.ts`
 - `src/services/bucketPipelineAudit.test.ts`
@@ -1199,6 +1203,7 @@
 - `src/services/pvPlayback.test.ts`
 - `src/services/ratingIdempotence.test.ts`
 - `src/services/refutedAlternative.test.ts`
+- `src/services/section14RecordPath.test.ts`
 - `src/services/sessionGenerator.test.ts`
 - `src/services/setupTrainerService.test.ts`
 - `src/services/shareableInsightsService.test.ts`
@@ -1225,6 +1230,7 @@
 - `src/services/weaknessAnalyzer.test.ts`
 - `src/services/weaknessLifecycle.test.ts`
 - `src/services/weaknessProvenance.test.ts`
+- `src/services/weaknessSignalLoader.green.test.ts`
 - `src/services/weaknessSpine.test.ts`
 - `src/services/whyBestMove.test.ts`
 - `src/stores/coachSessionStore.test.ts`

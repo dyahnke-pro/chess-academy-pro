@@ -156,7 +156,7 @@
 - `src/services/conceptEngine.test.ts:199`
 - `src/services/conceptEngine.test.ts:217`
 - `src/services/liveTacticsContext.ts:108`
-- `src/services/positionFacts.ts:567`
+- `src/services/positionFacts.ts:616`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -191,7 +191,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7476`
+- `src/components/Coach/CoachTeachPage.tsx:7475`
 - `src/services/dnaLineNarrator.ts:175`
 - `src/services/dnaLineNarrator.ts:206`
 - `src/services/dnaLineNarrator.ts:242`

@@ -32,7 +32,7 @@
 
 ### `usePositionNarration` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:1782`
-- `src/components/Coach/CoachTeachPage.tsx:7223`
+- `src/components/Coach/CoachTeachPage.tsx:7222`
 - `src/hooks/usePositionNarration.test.ts:123`
 - `src/hooks/usePositionNarration.test.ts:130`
 - `src/hooks/usePositionNarration.test.ts:143`

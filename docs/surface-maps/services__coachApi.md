@@ -209,7 +209,7 @@
 - `src/components/Openings/MiddlegamePractice.tsx:268`
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
-- `src/hooks/useLiveCoach.ts:302`
+- `src/hooks/useLiveCoach.ts:311`
 - `src/hooks/usePhaseNarration.test.ts:68`
 - `src/hooks/usePhaseNarration.ts:713`
 - `src/services/coachMoveCommentary.ts:303`
@@ -220,7 +220,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:566`
-- `src/components/Coach/CoachTeachPage.tsx:3216`
+- `src/components/Coach/CoachTeachPage.tsx:3215`
 - `src/services/coachSessionRouter.ts:125`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -253,9 +253,9 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 24 call sites
-- `src/components/Coach/CoachGameReview.tsx:1681`
-- `src/components/Coach/CoachGameReview.tsx:1800`
-- `src/components/Coach/CoachGameReview.tsx:1987`
+- `src/components/Coach/CoachGameReview.tsx:1684`
+- `src/components/Coach/CoachGameReview.tsx:1803`
+- `src/components/Coach/CoachGameReview.tsx:1990`
 - `src/hooks/usePhaseNarration.ts:700`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:128`

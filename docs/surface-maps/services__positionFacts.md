@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1082 lines · 7 exports · 10 importers · 8 tests · 3 audits**
+**1121 lines · 9 exports · 11 importers · 9 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,11 +25,18 @@
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
+- `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/whyBestMove.ts`
 
 ## Exports and every call site
+
+### `LiveMoveReads` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `LastMoveInput` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `PositionFactsInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -54,8 +61,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8849`
-- `src/hooks/useLiveCoach.ts:285`
+- `src/components/Coach/CoachTeachPage.tsx:8877`
+- `src/hooks/useLiveCoach.ts:294`
 - `src/hooks/usePhaseNarration.ts:630`
 - `src/hooks/usePositionNarration.ts:264`
 - `src/services/computerAccuracy.audit.test.ts:113`
@@ -66,10 +73,10 @@
 - `src/services/positionFacts.test.ts:352`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 54 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8820`
+### `computePositionFacts` (function) — 55 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8830`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
-- `src/hooks/useLiveCoach.ts:254`
+- `src/hooks/useLiveCoach.ts:263`
 - `src/hooks/usePhaseNarration.ts:608`
 - `src/hooks/usePositionNarration.ts:243`
 - `src/services/computerAccuracy.audit.test.ts:112`
@@ -80,7 +87,8 @@
 - `src/services/liveNeedGate.test.ts:152`
 - `src/services/liveNeedWire.test.ts:22`
 - `src/services/liveNeedWire.test.ts:31`
-- `src/services/loopCloses.test.ts:108`
+- `src/services/loopCloses.test.ts:112`
+- `src/services/positionFacts.liveFundamental.test.ts:52`
 - `src/services/positionFacts.test.ts:24`
 - `src/services/positionFacts.test.ts:37`
 - `src/services/positionFacts.test.ts:52`
@@ -129,6 +137,7 @@
 - `src/services/latentFork.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
+- `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`

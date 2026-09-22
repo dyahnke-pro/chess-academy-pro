@@ -24,8 +24,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isDrillableAid` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2713`
-- `src/components/Coach/CoachTeachPage.tsx:4127`
+- `src/components/Coach/CoachTeachPage.tsx:2712`
+- `src/components/Coach/CoachTeachPage.tsx:4126`
 - `src/services/coachDrillService.test.ts:72`
 - `src/services/coachDrillService.test.ts:75`
 - `src/services/coachDrillService.test.ts:109`
@@ -34,9 +34,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pickCoachDrill` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2607`
-- `src/components/Coach/CoachTeachPage.tsx:2724`
-- `src/components/Coach/CoachTeachPage.tsx:4143`
+- `src/components/Coach/CoachTeachPage.tsx:2606`
+- `src/components/Coach/CoachTeachPage.tsx:2723`
+- `src/components/Coach/CoachTeachPage.tsx:4142`
 - `src/services/coachDrillService.test.ts:12`
 - `src/services/coachDrillService.test.ts:52`
 - `src/services/coachDrillService.test.ts:60`
@@ -46,7 +46,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachDrillService.test.ts:81`
 
 ### `pickMasterDrill` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2385`
+- `src/components/Coach/CoachTeachPage.tsx:2384`
 - `src/services/coachDrillService.test.ts:114`
 - `src/services/coachDrillService.test.ts:125`
 
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `drillKeyOf` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2556`
+- `src/components/Coach/CoachTeachPage.tsx:2555`
 - `src/services/coachDrillService.mistakes.test.ts:74`
 
 ### `mistakePuzzleToDrill` (function) — 5 call sites
@@ -65,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachDrillService.test.ts:40`
 
 ### `hasImportedGames` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2438`
+- `src/components/Coach/CoachTeachPage.tsx:2437`
 - `src/services/coachDrillService.mistakes.test.ts:205`
 - `src/services/coachDrillService.mistakes.test.ts:213`
 - `src/services/coachDrillService.mistakes.test.ts:221`
@@ -82,8 +82,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachDrillService.mistakes.test.ts:192`
 
 ### `buildMistakeDrillQueue` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2401`
-- `src/components/Coach/CoachTeachPage.tsx:2485`
+- `src/components/Coach/CoachTeachPage.tsx:2400`
+- `src/components/Coach/CoachTeachPage.tsx:2484`
 - `src/services/coachDrillService.mistakes.test.ts:58`
 - `src/services/coachDrillService.mistakes.test.ts:66`
 - `src/services/coachDrillService.mistakes.test.ts:72`
@@ -106,7 +106,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `advanceMistakeDrill` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2577`
+- `src/components/Coach/CoachTeachPage.tsx:2576`
 - `src/services/coachDrillAdvance.test.ts:18`
 - `src/services/coachDrillAdvance.test.ts:28`
 - `src/services/coachDrillAdvance.test.ts:39`

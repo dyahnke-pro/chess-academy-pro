@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**934 lines · 21 exports · 30 importers · 15 tests · 2 audits**
+**960 lines · 21 exports · 30 importers · 15 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -83,7 +83,7 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2604`
+- `src/components/Coach/CoachTeachPage.tsx:2603`
 - `src/services/coachDrillService.ts:559`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
@@ -144,8 +144,8 @@
 - `src/services/weaknessSpine.test.ts:272`
 
 ### `getUnifiedWeaknessProfile` (function) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2528`
-- `src/components/Coach/CoachTeachPage.tsx:10645`
+- `src/components/Coach/CoachTeachPage.tsx:2527`
+- `src/components/Coach/CoachTeachPage.tsx:10684`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:71`
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
@@ -165,7 +165,7 @@
 - `src/services/fundamentalsRecordLoop.integration.test.ts:92`
 - `src/services/homeOpeningPlan.ts:176`
 - `src/services/loopCloses.review.integration.test.ts:74`
-- `src/services/weaknessSignalLoader.ts:41`
+- `src/services/weaknessSignalLoader.ts:58`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
 - `src/services/weaknessSpine.fundamentals.test.ts:62`
 - `src/services/weaknessSpine.fundamentals.test.ts:77`

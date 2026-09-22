@@ -4,34 +4,46 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**66 lines · 2 exports · 4 importers · 0 tests · 0 audits**
+**84 lines · 2 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5724) — names `weaknessSignalLoader`
+- **The standard post-deploy ritual** (CLAUDE.md:5945) — names `weaknessSignalLoader`
 
 ## Who calls in
 
 - `src/components/Openings/OpeningPlayMode.tsx`
 - `src/hooks/useWeaknessSignals.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/studentNeedLoader.ts`
+- `src/services/weaknessSignalLoader.green.test.ts`
 
 ## Exports and every call site
 
-### `loadWeaknessSignals` (function) — 4 call sites
-- `src/components/Openings/OpeningPlayMode.tsx:62`
+### `loadWeaknessSignals` (function) — 6 call sites
+- `src/components/Openings/OpeningPlayMode.tsx:63`
 - `src/hooks/useWeaknessSignals.ts:22`
-- `src/services/coachFeatureService.ts:4115`
-- `src/services/studentNeedLoader.ts:102`
+- `src/services/coachFeatureService.ts:4401`
+- `src/services/loopCloses.review.integration.test.ts:81`
+- `src/services/studentNeedLoader.ts:191`
+- `src/services/weaknessSignalLoader.green.test.ts:39`
 
-### `invalidateWeaknessSignals` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `invalidateWeaknessSignals` (function) — 3 call sites
+- `src/services/loopCloses.review.integration.test.ts:61`
+- `src/services/weaknessSignalLoader.green.test.ts:38`
+- `src/services/weaknessSignalLoader.green.test.ts:49`
 
 ## Tests
 
-_No test file references this module. A change here is unguarded._
+- `src/services/loopCloses.review.integration.test.ts`
+- `src/services/oneOpeningKey.test.ts`
+- `src/services/weaknessSignalLoader.green.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

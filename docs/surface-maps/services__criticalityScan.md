@@ -52,7 +52,7 @@
 - `src/services/criticalMoment.ts:149`
 - `src/services/criticalityScan.test.ts:20`
 - `src/services/narrationImportance.ts:139`
-- `src/services/positionFacts.ts:280`
+- `src/services/positionFacts.ts:305`
 - `src/services/refutedAlternative.ts:134`
 - `src/services/reviewTurningPoint.ts:65`
 - `src/services/skillScaling.test.ts:98`

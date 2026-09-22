@@ -59,9 +59,9 @@
 - `src/services/conceptEngine.ts:417`
 - `src/services/conceptEngine.ts:585`
 - `src/services/danyaBehaviors.ts:271`
-- `src/services/discussionPractice.ts:54`
-- `src/services/discussionPractice.ts:99`
-- `src/services/discussionPractice.ts:142`
+- `src/services/discussionPractice.ts:55`
+- `src/services/discussionPractice.ts:100`
+- `src/services/discussionPractice.ts:143`
 - `src/services/liveNoteTruth.test.ts:54`
 - `src/services/liveTacticsContext.ts:353`
 - `src/services/lookaheadPlan.ts:1092`

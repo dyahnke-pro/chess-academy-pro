@@ -76,7 +76,7 @@
 
 ### `renderThesis` (function) — 7 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1485`
+- `src/components/Coach/CoachGameReview.tsx:1488`
 - `src/hooks/usePhaseNarration.ts:522`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
@@ -95,7 +95,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1483`
+- `src/components/Coach/CoachGameReview.tsx:1486`
 
 ### `TreeTeaching` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
