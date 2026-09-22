@@ -61,7 +61,17 @@ export function sanToWords(san) {
  */
 export function judgeCriticalVoice({ momentSelected, criticalLines, playedSan, spoken }) {
   if (!momentSelected) {
-    return { pass: true, verdict: 'not-applicable', detail: 'no moment selected on this game' };
+    // 🔴 NOT A PASS (WO-STANDARD-01 I4). This used to return pass:true
+    // "not-applicable", and the audit's three CRIT rows all went green on a
+    // rotation where no moment was selected — a check that can pass on an
+    // empty set is worse than no check. A row that asserts nothing about the
+    // product says so in red: pin a game with a resolved moment.
+    return {
+      pass: false,
+      verdict: 'no-moment',
+      detail: 'no critical moment was selected on this game, so nothing here was verified — '
+        + 'pin a game that resolves one (AUDIT_GAME_ID=<id>, or AUDIT_GAME=fixture) rather than reading this as green',
+    };
   }
   if (criticalLines.length > 0) {
     return {

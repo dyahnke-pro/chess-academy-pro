@@ -1550,11 +1550,16 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   const pickSummary = String(pickEv?.summary ?? '');
   const scanned = Number(/(\d+) plies/.exec(fanSummary)?.[1] ?? 0);
   await add('CRIT fan-pass-ran', scanned > 0, fanSummary || 'no scanCriticalMoments event — the MultiPV pass never ran');
-  // A moment is not guaranteed on every game (a quiet game genuinely has none),
-  // so the SELECTION row is informational unless the fan actually resolved one.
+  // 🔴 A MOMENT MUST BE SELECTED OR THE ROW IS RED (WO-STANDARD-01 I4). This
+  // row used to pass on "no ply resolved" — and with it the two CRIT rows below,
+  // which then asserted nothing. A quiet rotation is not a pass; it is a run
+  // that verified nothing about the critical-moment computer. Pin a game that
+  // resolves one (AUDIT_GAME_ID=<id> from a prior run, or AUDIT_GAME=fixture).
   const resolved = Number(/(\d+) speak/.exec(fanSummary)?.[1] ?? 0);
-  await add('CRIT moment-selected-when-one-resolved', resolved === 0 || !!pickEv,
-    resolved === 0 ? `no ply resolved to a 1- or 2-move count on this game (${fanSummary})` : pickSummary);
+  await add('CRIT moment-selected', !!pickEv,
+    pickEv ? pickSummary
+      : `NO moment selected — ${resolved === 0 ? 'no ply resolved to a 1- or 2-move count' : `${resolved} resolved but none picked`} (${fanSummary}). `
+        + 'Nothing below this line was verified; pin a game with a resolved moment.');
 
   // THE SIX COMPUTED STAKES — the phrasing rotates, the claim never does.
   // Present for Learn, PAST for review — the two narration registers. A regex
@@ -1613,8 +1618,10 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // register is `credit` (their move HELD), no question card may render.
   const register = /register=(\w+)/.exec(pickSummary)?.[1] ?? null;
   const cardShown = await has(page, '[data-testid="review-critical-card"]');
-  await add('CRIT never-asks-a-move-they-played', register !== 'credit' || !cardShown,
-    register ? `register=${register} card=${cardShown}` : 'no moment selected on this game');
+  // Asserts on a SELECTED moment or fails (I4): with no register there is no
+  // move to have played, and "no moment selected" was a green that meant nothing.
+  await add('CRIT never-asks-a-move-they-played', !!register && (register !== 'credit' || !cardShown),
+    register ? `register=${register} card=${cardShown}` : 'no moment selected on this game — nothing verified; pin a game with a resolved moment');
   log(`\n===== CRITICAL MOMENT (${critLines.length} spoken) =====`);
   if (critLines.length === 0) log('  (none — the fan resolved no 1- or 2-move count on this game)');
   critLines.forEach((t, i) => log(`  [${i + 1}] ${t.slice(0, 260)}`));

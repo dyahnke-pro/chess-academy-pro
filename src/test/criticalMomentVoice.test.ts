@@ -49,10 +49,13 @@ describe('sanToWords — the coach speaks moves, it never spells SAN', () => {
 });
 
 describe('judgeCriticalVoice — three outcomes, never two', () => {
-  it('n/a when no moment was selected', () => {
+  it('NO MOMENT is a RED, never "not applicable" — a row that verified nothing must say so (I4)', () => {
+    // Three CRIT rows once went green on a rotation where nothing was
+    // selected. A check that passes on an empty set is worse than no check.
     const r = judgeCriticalVoice({ momentSelected: false, criticalLines: [], playedSan: null, spoken: [] });
-    expect(r.verdict).toBe('not-applicable');
-    expect(r.pass).toBe(true);
+    expect(r.verdict).toBe('no-moment');
+    expect(r.pass).toBe(false);
+    expect(r.detail).toMatch(/pin a game/);
   });
 
   it('SPOKEN-HERE — the critical register said it (the branch prod keeps producing)', () => {
