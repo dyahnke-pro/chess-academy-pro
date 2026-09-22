@@ -4917,9 +4917,13 @@ tab!!! That is a pure playing surface").**
   picker lives HERE. Learn is a teaching surface; a blocking probe belongs.
 - **Play (`/coach/play`, `OpeningPlayMode` play phase) — PURE PLAYING
   SURFACE. NO blocking interruptions, EVER.** During a Play game the coach
-  may only speak **phase-transition narration** (opening→middlegame→endgame)
-  — non-blocking, and it may mention a couple of the mistakes made with the
-  positional analysis, but it NEVER stops the game with a picker.
+  speaks exactly two things, both NON-BLOCKING: **phase-transition
+  narration** (opening→middlegame→endgame) and the **spoken blunder
+  verdict** — the slip detector's computed sentence, voiced as the move lands
+  (D4, 2026-09-22; the "Blunder Detected" CARD that used to pause the board
+  is OFF, `BLUNDER_CARD_ENABLED = false`, and stays off until David flips
+  it). The board never waits: it NEVER stops the game with a picker or a
+  card.
 - **The full diagnostic for a Play game happens in POST-GAME REVIEW**, not
   live. Wiring the "why did you play that?" into review is a SEPARATE step
   to be **designed with David first** ("we will wire it into that after we
@@ -4998,8 +5002,9 @@ the prompt.
 
 **COORDINATION:** on the LEARN surface, a picker moment SUPPRESSES narration
 (the clean probe replaces any comment, so nothing leaks); ordinary moments
-narrate freely. On PLAY, there is no picker to coordinate with — only
-phase-transition narration.
+narrate freely. On PLAY, there is no picker to coordinate with — only the
+non-blocking voice: phase-transition narration and the spoken blunder verdict
+(D4).
 
 **QUALITY IS THE ONLY METRIC — COST IS NEVER A FACTOR (David 2026-07-06:
 "I don't care about cost, I care about quality and providing value and
@@ -6030,14 +6035,17 @@ The contract, per run:
    defenses: Sicilian / Caro-Kann / French / Modern / Scandinavian, via
    `/coach/play?side=black`). Distinctness is asserted on the app's own
    `coach-opening-auto-detected` names — not on the plan labels.
-3. **REAL MID-GAME FLOWS ANSWERED, not dodged**: the slip-detector's blocking
-   "Blunder Detected" card (testid `blunder-interception`) pauses the coach
-   — ⚠️ **OFF since 2026-09-22** (`BLUNDER_CARD_ENABLED = false`, David: "i want the
-   blunder card removed for now"; it was modal, no timeout, and re-raised every
-   move while the piece stayed hung — the audit clicks it only if present) —
-   until answered — the audit clicks Continue and COUNTS the interceptions
-   (proof the detector fires E2E). Any new blocking card added to the play
-   surface MUST be handled + counted here the same way.
+3. **REAL MID-GAME FLOWS ANSWERED, not dodged**: the slip detector reaches
+   the student on Play as a SPOKEN, non-blocking verdict (D4, 2026-09-22) —
+   the blocking "Blunder Detected" card (testid `blunder-interception`) is
+   OFF (`BLUNDER_CARD_ENABLED = false`, David: "i want the blunder card
+   removed for now"; it was modal, no timeout, and re-raised every move while
+   the piece stayed hung), so the board never waits. The audit clicks the
+   card only if it is present (today it never is) and does NOT yet count the
+   spoken verdicts — that count is OWED as the E2E proof the detector fires.
+   If David flips the card back on, the audit must click Continue and count
+   the interceptions again; any new blocking card added to the play surface
+   MUST be handled + counted the same way.
 4. **POST-GAME REVIEW DRIVEN FOR EVERY GAME**: game-over overlay →
    `skip-to-review-btn` → `coach-game-review-walk` stepped ply-by-ply,
    answering every diagnostic card that surfaces — find-the-shot (hint →

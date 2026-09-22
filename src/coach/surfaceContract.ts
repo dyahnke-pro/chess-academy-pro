@@ -16,7 +16,9 @@ import type { ThesisRegister } from '../services/teachingSelector';
 export type SurfaceRegister = ThesisRegister;
 export type Withholding = 'thesis-until-answer' | 'none';
 /** When the surface may volunteer narration at all. Play is a pure playing
- *  surface: it speaks only at phase transitions (CLAUDE.md, locked). */
+ *  surface: this narrator speaks only at phase transitions (CLAUDE.md, locked);
+ *  the one other voice on Play — the slip detector's spoken blunder verdict
+ *  (D4, 2026-09-22) — is non-blocking and rides its own path, never a card. */
 export type SpeakPolicy = 'always' | 'transitions-only' | 'on-request';
 
 export interface SurfaceContract {
