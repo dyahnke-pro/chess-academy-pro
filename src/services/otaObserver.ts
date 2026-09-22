@@ -349,17 +349,34 @@ export async function installStagedBundleOnLaunch(
       // 🔒 NEVER-AGAIN TELEMETRY (David 2026-09-09). The strand was found by luck
       // in one device log; the audit-stream is ephemeral, so a recurrence could
       // hide the same way. Emit a DURABLE PostHog event whenever staged bundles
-      // are held back — the more that pile up (advertised empty ⇒ the manifest
-      // fetch never succeeded even with retries), the louder. This is the signal
-      // to alert on: a device accumulating pending bundles is stuck on old code.
+      // are held back — the more that pile up, the louder. This is the signal to
+      // alert on: a device accumulating pending bundles is stuck on old code.
+      // (The old wording here — "advertised empty ⇒ the manifest fetch never
+      // succeeded" — is the false premise the fields below encoded; an
+      // authoritative `up_to_date` also leaves `advertised` empty.)
       if (isAnalyticsEnabled()) {
         captureEvent('ota_install_held_back', {
           running: currentVersion || 'unknown',
           builtin: builtinVersion || 'unknown',
           stagedCount: pending.length,
           staged: pending.map((b) => b.version).join(','),
-          manifestReached: advertised !== '' ? true : false,
-          reason: advertised ? 'advertised-not-staged' : 'manifest-unreachable',
+          // 🚨 READ `manifestAuthoritative`, NOT `advertised` (2026-09-22).
+          // These two fields were derived from `advertised` alone, which
+          // COLLAPSES two opposite outcomes: a manifest that was never reached,
+          // and a manifest that WAS reached and authoritatively answered
+          // `up_to_date` (which `break`s with `advertised` still ''). The second
+          // case reported `manifestReached: false` + `manifest-unreachable` —
+          // i.e. a healthy server round-trip rendered as a network failure.
+          // Every held-back row in PostHog (26 events, 2 devices) says
+          // `manifest-unreachable`, and the endpoint returns HTTP 200 with a
+          // valid body when curled, so the label was sending anyone who read it
+          // to debug a network that is fine. Three outcomes, three names.
+          manifestReached: manifestAuthoritative,
+          reason: !manifestAuthoritative
+            ? 'manifest-unreachable'
+            : advertised
+              ? 'advertised-not-staged'
+              : 'server-says-up-to-date',
         });
       }
       return false;
