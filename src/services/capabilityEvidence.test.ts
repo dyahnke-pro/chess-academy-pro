@@ -12,6 +12,7 @@ import {
 } from './capabilityEvidence';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { MOVE_FUNDAMENTAL_TAG, leadingFundamentals } from './moveFundamentals';
+import { capabilityPliesFromAnnotations } from './autoAnalyzeGame';
 
 vi.mock('./appAuditor', () => ({ logAppAudit: vi.fn(() => Promise.resolve()) }));
 
@@ -154,54 +155,56 @@ describe('the positive and negative halves share ONE vocabulary', () => {
 // calls it. This drives the REAL selector out of the review capture over a REAL
 // game and asserts held rows land in the store.
 describe('the review capture actually feeds it — a real game, real rows', () => {
-  // 20s: this is the first import of a React component file from a service
-  // test, and it drags the component tree in cold. `buildCapabilityPlies`
-  // deliberately lives beside `buildBlunders` — it is the MIRROR of that
-  // function's filter, and separating them is how the pair drifts — so the
-  // import cost is paid here rather than moved somewhere less obvious.
-  it('buildCapabilityPlies keeps the good moves buildBlunders throws away', async () => {
-    const { buildCapabilityPlies } = await import('../components/Coach/GameReviewWeaknessCapture');
+  // The ONE builder for the positive half lives beside the sweep it feeds
+  // (`autoAnalyzeGame.capabilityPliesFromAnnotations`, C1 2026-09-22) — the
+  // component-shaped copy is gone, because two mirrors of one filter drift.
+  // It reads the game's ANNOTATIONS, the shape the record path actually has.
+  const annotated = (sans: string[], flaggedPly: number | null) => {
     const c = new Chess();
-    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6'];
-    const moves = sans.map((san, i) => {
-      const before = c.fen();
+    const fens = [c.fen()];
+    const annotations = sans.map((san, i) => {
       c.move(san);
+      fens.push(c.fen());
       return {
-        san, fen: c.fen(), moveNumber: Math.floor(i / 2) + 1,
-        classification: i === 6 ? 'blunder' : 'good',
-        evaluation: 20, preMoveEval: 20, bestMove: null, pv: null,
-        _before: before,
+        moveNumber: Math.floor(i / 2) + 1, color: i % 2 === 0 ? 'white' : 'black', san,
+        classification: i === flaggedPly ? 'blunder' : 'good',
+        evaluation: i === flaggedPly ? -250 : 20, bestMove: null, bestMoveEval: 20, comment: null,
       };
-    }) as unknown as Parameters<typeof buildCapabilityPlies>[0];
+    });
+    return { fens, annotations: annotations as unknown as Parameters<typeof capabilityPliesFromAnnotations>[0] };
+  };
 
-    const plies = buildCapabilityPlies(moves, 'white');
-    // White played 4 moves; one was flagged a blunder, so 3 survive.
+  it('capabilityPliesFromAnnotations keeps the good moves the blunder builder throws away', () => {
+    const { fens, annotations } = annotated(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6'], 6);
+    const plies = capabilityPliesFromAnnotations(annotations, 'white', fens);
+    // White played 4 moves; one was flagged a blunder, so 3 survive — each
+    // with the board it was played ON and Stockfish's own cost.
     expect(plies.map((p) => p.playedSan)).toEqual(['e4', 'Nf3', 'Bc4']);
-  }, 20_000);
+    expect(plies[0].fenBefore).toBe(fens[0]);
+    expect(plies[1].fenBefore).toBe(fens[2]);
+    expect(plies.every((p) => p.cpLoss === 0 && p.prompted === false)).toBe(true);
+  });
 
-  // THE REAL PATH, after the ceiling fix: the component hands BOTH sets to ONE
-  // `autoAnalyzeBlunders` call, so the positive half rides the service the
-  // negative half already used. Asserting through the recorder alone would no
-  // longer prove the production wire.
+  it('a prompted ply (the coach announced the moment first) is filed PROMPTED, by 1-based ply', () => {
+    const { fens, annotations } = annotated(['e4', 'e5', 'Nf3', 'Nc6'], null);
+    const plies = capabilityPliesFromAnnotations(annotations, 'white', fens, [3]);
+    expect(plies.map((p) => [p.playedSan, p.prompted])).toEqual([['e4', false], ['Nf3', true]]);
+  });
+
+  // THE REAL PATH: the sweep hands BOTH sets to ONE `autoAnalyzeBlunders`
+  // call, so the positive half rides the service the negative half already
+  // used. Asserting through the recorder alone would not prove the wire.
   it('autoAnalyzeBlunders records the positive half from the same call', async () => {
     vi.resetModules();
     vi.doMock('./discussionPractice', () => ({
       captureMisconception: vi.fn(() => Promise.resolve({ logged: false, classification: null })),
     }));
-    const { autoAnalyzeBlunders } = await import('./autoAnalyzeGame');
-    const { buildCapabilityPlies } = await import('../components/Coach/GameReviewWeaknessCapture');
-
-    const c = new Chess();
-    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'];
-    const moves = sans.map((san) => {
-      c.move(san);
-      return { san, fen: c.fen(), moveNumber: 1, classification: 'good',
-               evaluation: 20, preMoveEval: 20, bestMove: null, pv: null };
-    }) as unknown as Parameters<typeof buildCapabilityPlies>[0];
+    const { autoAnalyzeBlunders, capabilityPliesFromAnnotations: build } = await import('./autoAnalyzeGame');
+    const { fens, annotations } = annotated(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'], null);
 
     const res = await autoAnalyzeBlunders([], {
       learned: true,
-      capabilityPlies: buildCapabilityPlies(moves, 'white'),
+      capabilityPlies: build(annotations, 'white', fens),
       playerColor: 'white',
     });
     expect(res.capabilitiesHeld, 'the one-call path recorded NOTHING').toBeGreaterThan(0);
@@ -210,19 +213,10 @@ describe('the review capture actually feeds it — a real game, real rows', () =
   }, 20_000);
 
   it('driving those plies through the recorder writes real held rows', async () => {
-    const { buildCapabilityPlies } = await import('../components/Coach/GameReviewWeaknessCapture');
-    const c = new Chess();
-    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'];
-    const moves = sans.map((san) => {
-      c.move(san);
-      return {
-        san, fen: c.fen(), moveNumber: 1, classification: 'good',
-        evaluation: 20, preMoveEval: 20, bestMove: null, pv: null,
-      };
-    }) as unknown as Parameters<typeof buildCapabilityPlies>[0];
+    const { fens, annotations } = annotated(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'], null);
 
     let wrote = 0;
-    for (const ply of buildCapabilityPlies(moves, 'white')) {
+    for (const ply of capabilityPliesFromAnnotations(annotations, 'white', fens)) {
       wrote += await recordCapabilityEvidence({
         fenBefore: ply.fenBefore, playedSan: ply.playedSan,
         moverColor: 'white', cpLoss: ply.cpLoss, origin: 'review', prompted: false,

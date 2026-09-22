@@ -2,9 +2,14 @@
 //  1. "Where you left the book" marker — replays the game vs the masters
 //     explorer, shows the FIRST off-book move + what masters play (plain
 //     English), and deep-links back to that opening's masterclass.
-//  2. "Add this game's mistakes to your weaknesses" — classifies the
-//     game's blundered player-moves into closed-set tags and logs them to
-//     the shared bucket (guarded against double-logging the same game).
+//  2. "Add this game's mistakes to your weaknesses" — the STATUS of the ONE
+//     writer (`autoAnalyzeGameMisconceptions`, reviewed mode) and a way to
+//     re-run it. This component used to run its own `learned: true` +
+//     capability capture, which the review page's mount sweep always
+//     pre-empted (`hasMisconceptionsForGame` read "already" off the sweep's
+//     `counted: false` rows), so the capture was dead and no import-and-review
+//     student ever wrote a counted or a held row (WO-STANDARD-01 C1). The
+//     sweep owns the record now; the button reports it.
 // Self-contained; mounts with one line in CoachGameReview.
 
 import { useState, useEffect, useCallback } from 'react';
@@ -12,10 +17,10 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, Target, Check, Loader2 } from 'lucide-react';
 import { scanTheoryDeviation, type TheoryDeviation } from '../../services/theoryDeviationScan';
 import { Chess } from 'chess.js';
-import { autoAnalyzeBlunders, type BlunderForAnalysis } from '../../services/autoAnalyzeGame';
+import { autoAnalyzeGameMisconceptions, type BlunderForAnalysis } from '../../services/autoAnalyzeGame';
 import { pvUciToSan } from '../../services/principleAttribution';
 import { classifyPhase } from '../../services/gamePhaseService';
-import { hasMisconceptionsForGame } from '../../services/misconceptionService';
+import { hasCountedMisconceptionsForGame } from '../../services/misconceptionService';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import type { CoachGameMove } from '../../types';
 
@@ -27,8 +32,6 @@ interface GameReviewWeaknessCaptureProps {
   pgn?: string;
   openingName?: string | null;
   gameId?: string;
-  /** From the game record — plies Learn announced before the student moved. */
-  promptedPlies?: readonly number[];
 }
 
 /** Build the player's blundered/mistaken moves into BlunderForAnalysis,
@@ -107,49 +110,9 @@ export function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'bl
   return out;
 }
 
-/**
- * THE MIRROR OF `buildBlunders` — the moves it throws away.
- *
- * `buildBlunders` walks the whole game with `fenBefore`, `playedSan` and
- * `cpLoss` all in hand, and on line one of its filter discards every move that
- * was not a blunder or mistake. That single `continue` is where the POSITIVE
- * half of the student model was being lost: the one function that sees the
- * student's whole game kept only the failures.
- *
- * Same walk, same inputs, opposite filter. What comes out is handed to
- * `capabilitiesShown`, which decides whether anything was actually demonstrated
- * — the board has to have POSED the question (`MoveFundamental.weight`) and the
- * move has to have ANSWERED it. "They didn't blunder" is not evidence, so most
- * moves yield nothing and that is correct.
- */
-export function buildCapabilityPlies(
-  moves: CoachGameMove[],
-  playerColor: 'white' | 'black',
-  /** 1-based plies where the coach announced the critical moment first (Learn).
-   *  A find there records PROMPTED — see `GameRecord.promptedPlies`. */
-  promptedPlies: readonly number[] = [],
-): Array<{ fenBefore: string; playedSan: string; cpLoss: number | null; prompted: boolean }> {
-  const sign = playerColor === 'white' ? 1 : -1;
-  const prompted = new Set(promptedPlies);
-  const out: Array<{ fenBefore: string; playedSan: string; cpLoss: number | null; prompted: boolean }> = [];
-  for (let i = 0; i < moves.length; i++) {
-    const move = moves[i];
-    const side = i % 2 === 0 ? 'white' : 'black';
-    if (side !== playerColor) continue;
-    if (move.classification === 'blunder' || move.classification === 'mistake') continue;
-    const cpLoss =
-      move.preMoveEval !== null && move.evaluation !== null
-        ? (move.preMoveEval - move.evaluation) * sign
-        : null;
-    out.push({
-      fenBefore: i > 0 ? moves[i - 1].fen : START_FEN,
-      playedSan: move.san,
-      cpLoss,
-      prompted: prompted.has(i + 1),
-    });
-  }
-  return out;
-}
+// The positive half's builder lives beside the sweep now
+// (`autoAnalyzeGame.capabilityPliesFromAnnotations`) — one mirror of one
+// filter, on the shape the record path actually reads.
 
 export function GameReviewWeaknessCapture({
   moves,
@@ -157,7 +120,6 @@ export function GameReviewWeaknessCapture({
   pgn,
   openingName,
   gameId,
-  promptedPlies,
 }: GameReviewWeaknessCaptureProps): JSX.Element | null {
   const navigate = useNavigate();
   const openingId = openingName ? resolveOpeningIdFromName(openingName) : null;
@@ -180,12 +142,14 @@ export function GameReviewWeaknessCapture({
     return () => { cancelled = true; };
   }, [pgn, moves, playerColor]);
 
-  // Already-captured check so the button reads "Captured" on revisit.
+  // Already-captured check so the button reads "Captured" on revisit — a claim
+  // about COUNTED rows: a batch sweep's display-only rows are not "in your
+  // weaknesses" until the review's sweep upgrades them.
   useEffect(() => {
     if (!gameId) return;
     let cancelled = false;
     void (async () => {
-      const already = await hasMisconceptionsForGame(gameId);
+      const already = await hasCountedMisconceptionsForGame(gameId);
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!cancelled && already) setCaptureState('already');
     })();
@@ -194,23 +158,16 @@ export function GameReviewWeaknessCapture({
 
   const blunders = buildBlunders(moves, playerColor);
 
+  // The ONE writer, in reviewed mode — the same call the review page makes on
+  // mount, so the button can never race it. Idempotent: rows are written once,
+  // then only upgraded / re-attributed.
   const capture = useCallback(async (): Promise<void> => {
-    if (captureState !== 'idle') return;
+    if (captureState !== 'idle' || !gameId) return;
     setCaptureState('running');
-    const result = await autoAnalyzeBlunders(blunders, {
-      openingId: openingId ?? undefined,
-      openingName: openingName ?? undefined,
-      sourceGameId: gameId,
-      // Deliberate user capture of their own game → it counts.
-      learned: true,
-      // BOTH HALVES, ONE PASS. The game is walked once; `buildBlunders` keeps
-      // the failures and `buildCapabilityPlies` keeps what it throws away.
-      capabilityPlies: buildCapabilityPlies(moves, playerColor, promptedPlies ?? []),
-      playerColor,
-    });
-    setLoggedCount(result.logged);
+    const result = await autoAnalyzeGameMisconceptions(gameId, undefined, { reviewed: true });
+    setLoggedCount(result.logged + result.countedUpgraded);
     setCaptureState('done');
-  }, [captureState, blunders, openingId, openingName, gameId, promptedPlies]);
+  }, [captureState, gameId]);
 
   if (!deviation && blunders.length === 0) return null;
 

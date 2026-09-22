@@ -211,6 +211,10 @@ export interface CaptureMisconceptionArgs {
   /** The slip's learned/count-against gate. When false we still teach
    *  (return the coachNote) but do NOT log to the weakness bucket. */
   shouldCount: boolean;
+  /** The caller had NO best move for this ply (a `%eval` import before its deep
+   *  dive), so the tag is provisional and the sweep re-attributes it later —
+   *  see `MisconceptionTagRecord.attributionPending` (C2). */
+  attributionPending?: boolean;
   /** Position + move context to persist with the tag. */
   context: {
     fen: string;
@@ -277,6 +281,7 @@ export async function captureMisconception(
     coachNote,
     sourceGameId: args.context.sourceGameId,
     counted: args.shouldCount,
+    attributionPending: args.attributionPending,
   });
 
   // Option B (David 2026-05-25): a logged tactical/concrete slip with a

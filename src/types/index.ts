@@ -1608,6 +1608,13 @@ export interface MisconceptionTagRecord {
    *  ignores it (an un-learned / first-exposure line). Absent on legacy rows =
    *  treated as counted. */
   counted?: boolean;
+  /** THE TAG WAS COMPUTED WITHOUT THE ENGINE'S BEST MOVE (C2, 2026-09-22): a
+   *  `%eval` import carries the eval curve and no best move, so the classifier
+   *  could only read the board after the move and the fundamentals attributor
+   *  never ran. Such a row is NOT a verdict — it is re-attributed by the next
+   *  sweep once the deep dive lands a best move, and this clears. Absent on a
+   *  row whose classification had the full input. */
+  attributionPending?: boolean;
 }
 
 
