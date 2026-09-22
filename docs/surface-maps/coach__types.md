@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**897 lines · 30 exports · 889 importers · 188 tests · 39 audits**
+**897 lines · 30 exports · 892 importers · 188 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -632,6 +632,7 @@
 - `src/hooks/useCoachTips.test.ts`
 - `src/hooks/useCoachTips.ts`
 - `src/hooks/useDiscussionPractice.ts`
+- `src/hooks/useEndgamePlayout.ts`
 - `src/hooks/useHintSystem.ts`
 - `src/hooks/useLiveCoach.ts`
 - `src/hooks/usePhaseNarration.ts`
@@ -663,6 +664,7 @@
 - `src/services/chesscomService.ts`
 - `src/services/classroomOpener.ts`
 - `src/services/coachActionDispatcher.ts`
+- `src/services/coachAgent.ts`
 - `src/services/coachAgentRunner.ts`
 - `src/services/coachAnswerGates.test.ts`
 - `src/services/coachAnswerGates.ts`
@@ -690,6 +692,7 @@
 - `src/services/coachMoveExtractor.ts`
 - `src/services/coachPlayPersistence.test.ts`
 - `src/services/coachPlayPersistence.ts`
+- `src/services/coachPlaySession.ts`
 - `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
