@@ -43,7 +43,7 @@ export function wrongMoveReason(fenBefore: string, wrongSan: string, expectedSan
   }
   // 3. A capture that wins material outright for them (their best one-ply grab).
   const grab = after.moves({ verbose: true }).filter((m) => m.captured && m.captured !== 'k')
-    .map((m) => ({ m, net: pieceValue(m.captured as string) - (isRecapturable(after.fen(), m.to as Square) ? pieceValue(m.piece) : 0) }))
+    .map((m) => ({ m, net: pieceValue(m.captured as string) - (isRecapturable(after.fen(), m.to) ? pieceValue(m.piece) : 0) }))
     .filter((x) => x.net >= 2).sort((a, b) => b.net - a.net)[0];
   if (grab) return `${cap(you)} lets them play ${grab.m.san} and come out ahead. ${cap(sayMoveClause(expectedSan))} is the move to find.`;
   return null;
