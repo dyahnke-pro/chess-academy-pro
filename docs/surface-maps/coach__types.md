@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**911 lines · 30 exports · 908 importers · 195 tests · 39 audits**
+**911 lines · 30 exports · 910 importers · 196 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -758,6 +758,8 @@
 - `src/services/groundedAnswer.ts`
 - `src/services/homeOpening.test.ts`
 - `src/services/homeOpening.ts`
+- `src/services/homeOpeningPlan.test.ts`
+- `src/services/homeOpeningPlan.ts`
 - `src/services/homeOpeningService.test.ts`
 - `src/services/homeOpeningService.ts`
 - `src/services/journeyService.test.ts`
@@ -1152,6 +1154,7 @@
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
 - `src/services/homeOpening.test.ts`
+- `src/services/homeOpeningPlan.test.ts`
 - `src/services/homeOpeningService.test.ts`
 - `src/services/journeyService.test.ts`
 - `src/services/kidPuzzleService.test.ts`

@@ -365,11 +365,27 @@ fire is not a wire"):**
    `algoAuditContract.test.ts` for both emissions). Decision still David's:
    the LOCK semantics (the coach spends no lesson outside the home opening)
    land with A4/A5 where lessons are chosen.
-4. **THE TRAINING PLAN READS IT.** `/coach/plan` is built from the home
-   openings and the recorded weaknesses inside them (departure ply, recurring
-   fundamentals, worst variation, the middlegame plan for its structure), not
-   from favourites. Empty only when there are genuinely no games. Gate: with
-   the knight_mare_01 fixture the plan is non-empty and names the Pirc.
+4. ✅ **THE TRAINING PLAN READS IT** (2026-09-22). `src/services/homeOpeningPlan.ts`:
+   `homePlanFor` (pure) builds, per colour with a home opening, the reps
+   INSIDE it in order — ANALYSE (home games not yet analysed, with the
+   count), THE WEAKEST LINE (`weakestVariation` → `/openings/<key>`), THE
+   DEPARTURE (the precomputed rows for the home games grouped by last-in-book
+   POSITION, ≥2 games), THE RECURRING FUNDAMENTALS (the spine's rows whose
+   `gameIds` — C10's honest denominator — intersect the home games; routed by
+   `resolveRepRoute`), THE MIDDLEGAME PLAN (`findPlanForOpening` on the key,
+   then the family slug). `buildHomeOpeningPlan` assembles those inputs from
+   the same computers every surface reads. `HomeOpeningPlanSection` leads
+   `/coach/plan` (per colour: family, games, score, analysed share, the
+   reps as taps); the page's hard stop now fires only with NEITHER a home
+   opening NOR a favourite — the rolodex stays the favourites' shelf below.
+   Emits `home-opening-plan-built`. Gates: `homeOpeningPlan.test.ts` (rep
+   order + the joins, with negative rows: a weakness in other games, a
+   closed one, a departure in another game are all excluded; a
+   knight_mare-shaped record names the Pirc and is non-empty),
+   `TrainingPlanRolodexPage.test.tsx` (zero favourites + a home → NOT
+   locked). Not done here: Today's reps still ranks the whole bucket; the
+   home section above it is the ordering David asked for, and A5 decides
+   whether the daily feed itself is filtered to the home games.
 5. **DRILLS THAT TEACH.** Custom lesson + My Mistakes draw from slips in the
    home opening first; every reveal names the IDEA and plays the SEQUENCE
    (wrong answer: the reason it fails; right answer: the line, not "Good.");

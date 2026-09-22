@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**933 lines · 21 exports · 28 importers · 14 tests · 2 audits**
+**933 lines · 21 exports · 30 importers · 15 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,6 +31,8 @@
 - `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/homeOpeningPlan.test.ts`
+- `src/services/homeOpeningPlan.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mistakePuzzleService.ts`
 - `src/services/tacticTypeBackfill.test.ts`
@@ -141,10 +143,10 @@
 - `src/services/weaknessSpine.test.ts:259`
 - `src/services/weaknessSpine.test.ts:272`
 
-### `getUnifiedWeaknessProfile` (function) — 35 call sites
+### `getUnifiedWeaknessProfile` (function) — 36 call sites
 - `src/components/Coach/CoachTeachPage.tsx:2515`
 - `src/components/Coach/CoachTeachPage.tsx:10611`
-- `src/components/Coach/TrainingPlanRolodexPage.tsx:70`
+- `src/components/Coach/TrainingPlanRolodexPage.tsx:71`
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:156`
@@ -161,6 +163,7 @@
 - `src/services/fundamentalReachesDecider.test.ts:123`
 - `src/services/fundamentalsPipeline.realGame.test.ts:342`
 - `src/services/fundamentalsRecordLoop.integration.test.ts:92`
+- `src/services/homeOpeningPlan.ts:176`
 - `src/services/loopCloses.review.integration.test.ts:74`
 - `src/services/weaknessSignalLoader.ts:41`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
@@ -188,6 +191,7 @@
 - `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/homeOpeningPlan.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/weaknessProvenance.test.ts`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**106 lines · 9 exports · 30 importers · 15 tests · 1 audits**
+**106 lines · 9 exports · 32 importers · 16 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dataLoader.ts`
 - `src/services/homeOpening.test.ts`
 - `src/services/homeOpening.ts`
+- `src/services/homeOpeningPlan.test.ts`
+- `src/services/homeOpeningPlan.ts`
 - `src/services/homeOpeningService.test.ts`
 - `src/services/learnGameRecord.test.tsx`
 - `src/services/lichessService.ts`
@@ -48,7 +50,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `slugifyOpening` (function) — 1 call site
 - `src/services/openingKey.test.ts:18`
 
-### `openingKeyFor` (function) — 28 call sites
+### `openingKeyFor` (function) — 30 call sites
 - `src/components/Insights/HomeOpeningCard.test.tsx:17`
 - `src/components/Insights/HomeOpeningCard.test.tsx:18`
 - `src/services/analysisBatchOrder.test.ts:16`
@@ -64,6 +66,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/homeOpening.test.ts:15`
 - `src/services/homeOpening.test.ts:16`
 - `src/services/homeOpening.test.ts:17`
+- `src/services/homeOpeningPlan.test.ts:28`
+- `src/services/homeOpeningPlan.test.ts:29`
 - `src/services/homeOpeningService.test.ts:19`
 - `src/services/homeOpeningService.test.ts:20`
 - `src/services/homeOpeningService.test.ts:21`
@@ -148,10 +152,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKey.test.ts:69`
 - `src/services/studentNeedLoader.ts:132`
 
-### `openingEntryForKey` (function) — 5 call sites
+### `openingEntryForKey` (function) — 6 call sites
 - `src/components/Coach/CoachGamePage.tsx:4614`
 - `src/services/homeOpening.ts:112`
 - `src/services/homeOpening.ts:193`
+- `src/services/homeOpeningPlan.ts:163`
 - `src/services/openingKey.test.ts:30`
 - `src/services/openingKey.test.ts:67`
 
@@ -163,6 +168,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/bookDepartureWeakness.test.ts`
 - `src/services/conversionDetector.test.ts`
 - `src/services/homeOpening.test.ts`
+- `src/services/homeOpeningPlan.test.ts`
 - `src/services/homeOpeningService.test.ts`
 - `src/services/learnGameRecord.test.tsx`
 - `src/services/needScore.test.ts`

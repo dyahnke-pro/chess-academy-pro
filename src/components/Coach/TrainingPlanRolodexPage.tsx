@@ -45,6 +45,7 @@ import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanS
 import { resolveRepRoute } from '../../services/repRouting';
 import { logAppAudit } from '../../services/appAuditor';
 import { RolodexCardStack } from './RolodexCardStack';
+import { HomeOpeningPlanSection } from './HomeOpeningPlanSection';
 import { PageHelp } from '../Layout/PageHelp';
 import type { OpeningRecord } from '../../types';
 
@@ -230,6 +231,10 @@ export function TrainingPlanRolodexPage(): JSX.Element {
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState<OpeningRecord[]>([]);
   const [loaded, setLoaded] = useState(false);
+  // THE HOME OPENINGS (A4): the plan is built on them first; favourites are
+  // the rolodex below. null = still reading.
+  const [hasHome, setHasHome] = useState<boolean | null>(null);
+  const onHomeLoaded = useCallback((v: boolean) => setHasHome(v), []);
 
   const persisted = useCoachMemoryStore((s) => s.activeOpeningCardId);
   const lastActiveColor = useCoachMemoryStore((s) => s.lastActiveRolodexColor);
@@ -402,11 +407,13 @@ export function TrainingPlanRolodexPage(): JSX.Element {
     return `${base} bg-theme-surface/40 border-transparent text-theme-text-muted hover:text-theme-text`;
   };
 
-  // HARD STOP — the one narrow path (David 2026-05-21): the Training Plan is
-  // built on your FAVOURITED openings. With none favourited, gray everything
-  // out and send the user to Openings to pick a line. No Today's reps, no
-  // rolodex until they've favourited at least one opening.
-  if (loaded && favorites.length === 0) {
+  // HARD STOP — narrowed 2026-09-22 (A4). It used to fire on "no favourites"
+  // alone, so a student with 932 games imported and a home opening computed
+  // from them saw a locked plan telling them to favourite something. The plan
+  // is built on the HOME openings first (David: "improve the weaknesses within
+  // what I play most"); favourites are the rolodex. Lock only when there is
+  // neither — genuinely nothing to draw from.
+  if (loaded && favorites.length === 0 && hasHome === false) {
     return (
       <div
         className="flex flex-col p-4 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-6xl mx-auto w-full"
@@ -418,16 +425,17 @@ export function TrainingPlanRolodexPage(): JSX.Element {
             helpId="training-plan"
             title="How the Training Plan works"
             steps={[
-              { label: 'What this is', body: 'Your daily to-do list, built from the openings you favorite and the weaknesses found in your games. It tells you what to work on today.' },
-              { label: 'Feed it first', body: 'Favorite an opening (the heart on any Masterclass) and import your games — the plan is empty until it has something to draw from.' },
+              { label: 'What this is', body: 'Your daily to-do list, built from your home openings — the lines you play most — and the weaknesses found inside them, then the openings you favorite. It tells you what to work on today.' },
+              { label: 'Feed it first', body: 'Import your games — ten in one line makes it your home opening — or favorite an opening (the heart on any Masterclass). The plan is empty until it has something to draw from.' },
               { label: "Today's reps", body: 'Each card is a short session — a line to Learn, a weakness to drill, a position to review. Tap in, do the rep, come back.' },
               { label: 'Where it fits', body: 'This is the hub that pulls Openings, Tactics, and Weaknesses together into one path. When in doubt, start your session here.' },
             ]}
           />
         </div>
         <p className="text-sm text-theme-text-muted mt-1">
-          Your favorited openings, side-by-side.
+          Built on your home openings first; your favorited openings below.
         </p>
+        <HomeOpeningPlanSection onLoaded={onHomeLoaded} />
         <div
           className="mt-8 rounded-2xl border-2 border-theme-border bg-theme-surface/40 p-8 text-center opacity-80"
           data-testid="training-plan-locked"
@@ -461,8 +469,13 @@ export function TrainingPlanRolodexPage(): JSX.Element {
     >
       <h1 className="text-2xl font-bold text-theme-text">Training Plan</h1>
       <p className="text-sm text-theme-text-muted mt-1">
-        Your favorited openings, side-by-side.
+        Built on your home openings first; your favorited openings below.
       </p>
+
+      {/* THE HOME OPENINGS FIRST (A4): the reps computed inside what the
+          student plays most — analyse, weakest line, departure, the
+          recurring fundamentals, the middlegame plan. */}
+      <HomeOpeningPlanSection onLoaded={onHomeLoaded} />
 
       {/* Today's reps — prioritised drills over the weakness bucket */}
       <TodaysReps />

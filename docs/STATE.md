@@ -19,7 +19,7 @@ Green has a reader — the heat map can lower as well as raise.
 ## MODEL — is the student model fed the adaptive rating?
 
 - **2** files read `getPlayerRating` (the adaptive estimate).
-- **40** read `currentRating` off the store directly.
+- **41** read `currentRating` off the store directly.
 - **63** inline `?? 1200` fallbacks.
 
 The locked rule is that a surface does not PICK a rating; it reads the one

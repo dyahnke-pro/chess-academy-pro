@@ -9,6 +9,11 @@ vi.mock('../../services/appAuditor', () => ({
 }));
 
 const mockGetFavoriteOpenings = vi.fn();
+// THE HOME OPENINGS (A4): the plan reads them first. Default = none.
+const mockBuildHomeOpeningPlan = vi.fn();
+vi.mock('../../services/homeOpeningPlan', () => ({
+  buildHomeOpeningPlan: () => mockBuildHomeOpeningPlan(),
+}));
 vi.mock('../../services/openingService', () => ({
   getFavoriteOpenings: () => mockGetFavoriteOpenings(),
   // TodaysReps reads un-learned favorite lines for its "new line" reps.
@@ -72,6 +77,8 @@ beforeEach(() => {
   auditCalls.length = 0;
   __resetCoachMemoryStoreForTests();
   mockGetFavoriteOpenings.mockReset();
+  mockBuildHomeOpeningPlan.mockReset();
+  mockBuildHomeOpeningPlan.mockResolvedValue({ white: null, black: null });
 });
 
 // JSDOM renders both the mobile (`md:hidden`) and desktop
@@ -101,6 +108,36 @@ describe('TrainingPlanRolodexPage — cold load with zero favorites', () => {
     // The rolodex columns + Today's reps must NOT render in the hard-stop.
     expect(screen.queryByTestId('rolodex-folder-tabs')).not.toBeInTheDocument();
     expect(screen.queryByTestId('todays-reps')).not.toBeInTheDocument();
+  });
+
+  it('a HOME OPENING with zero favourites is NOT locked: the plan is built from it (A4)', async () => {
+    // David 2026-09-22: with 932 games imported the plan said "Favorite an
+    // opening to begin". The home opening is what they play most; the plan
+    // reads it first and the rolodex below stays empty until they favourite.
+    mockGetFavoriteOpenings.mockResolvedValueOnce([]);
+    mockBuildHomeOpeningPlan.mockResolvedValueOnce({
+      white: null,
+      black: {
+        colour: 'black',
+        choice: { family: 'Pirc Defense', key: 'b07-pirc-defense', games: 63, score: 0.49, source: 'computed', chosenAt: 1 },
+        games: 63, analysed: 6,
+        reps: [
+          { kind: 'analyse', key: 'home:black:analyse', label: 'Analyse your Pirc Defense games', subtitle: '57 of your 63 Pirc Defense games aren\'t analysed yet', route: { path: '/weaknesses' } },
+          { kind: 'weakest-line', key: 'home:black:line', label: 'Your weakest line inside the Pirc Defense', subtitle: 'Pirc Defense: Austrian Attack: 40% over 23 games.', route: { path: '/openings/b09-pirc-defense-austrian-attack' } },
+        ],
+      },
+    });
+    render(<TrainingPlanRolodexPage />);
+    await waitFor(() => {
+      expect(screen.getByTestId('home-opening-plan')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('training-plan-locked')).not.toBeInTheDocument();
+    expect(screen.getByTestId('home-opening-plan-black-family').textContent).toBe('Pirc Defense');
+    expect(screen.getByTestId('home-plan-rep-black-analyse')).toBeInTheDocument();
+    expect(screen.getByTestId('home-plan-rep-black-weakest-line').textContent).toContain('Austrian Attack');
+    expect(screen.getByTestId('home-opening-plan-white-none')).toBeInTheDocument();
+    // The rolodex renders its per-colour empty states — no lock.
+    expect(screen.getByTestId('rolodex-folder-tabs')).toBeInTheDocument();
   });
 
   it('does NOT fire setActiveOpeningCard with no favorites', async () => {

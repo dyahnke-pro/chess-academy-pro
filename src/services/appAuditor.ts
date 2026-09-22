@@ -253,6 +253,9 @@ export type AuditKind =
   // home openings' games first, then newest — so an audit can prove the
   // priority instead of reading a progress label.
   | 'analysis-batch-ordered'
+  // The Training Plan's home-opening sections as built (A4): per colour the
+  // family, its analysed share and which rep kinds the record earned.
+  | 'home-opening-plan-built'
   // The heat map's GREEN half: how many capability tags clear the proven
   // bar, how many carry a break, and the bar's own values. The bar is a
   // MEASURED number (the knee at posedImportance 80), so which side of it
