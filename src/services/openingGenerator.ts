@@ -2462,7 +2462,7 @@ async function generateOpeningFromDbNarration(
     }));
     const pkg = selectTeaching({ plies: selectorPlies, studentColor: studentSide, kind: 'line', surface: 'teach' });
     teaching = { ...summarizeTeaching(pkg), refuted: refutedFacts };
-    thesisLine = renderThesis(pkg.thesis, 'present').trim();
+    thesisLine = renderThesis(pkg.thesis, registerFor('teach')).trim();
     void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',
