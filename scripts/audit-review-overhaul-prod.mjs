@@ -1722,6 +1722,14 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const pairs = decisions.flatMap((d) => d.subsumed ?? []);
     await add('DECIDER quiet-attributed-by-mechanism', Object.keys(quietBy).length > 0 || decisions.every((d) => (d.quietCount ?? 0) === 0),
       `${JSON.stringify(quietBy)} — subsumption and the floor are different bugs and quietCount alone cannot tell them apart`);
+    // B9 (2026-09-22): a row the DOOR closed files every one of its facts under
+    // the gate that closed it — `quietBy.importance` or `quietBy.need`, the same
+    // name `reason` carries — never under 'below-bar', which is the FLOOR's
+    // name and a different diagnosis. A silent row whose facts are filed
+    // elsewhere is the collapse this emission exists to prevent.
+    const misfiled = silent.filter((d) => (d.quietCount ?? 0) > 0 && (d.quietBy?.[d.reason] ?? 0) !== d.quietCount);
+    await add('DECIDER door-closed-rows-file-facts-under-their-gate', misfiled.length === 0,
+      `${silent.length} silent rows; ${misfiled.length} file facts under a mechanism other than their own gate${misfiled[0] ? ` (e.g. reason=${misfiled[0].reason} quietBy=${JSON.stringify(misfiled[0].quietBy)})` : ''}`);
     // Every subsumption names BOTH sides. A pair with no winner means a fact
     // was silenced and the reason cannot be reconstructed, which is the
     // silence-as-a-guess this whole pass exists to prevent.

@@ -37,8 +37,16 @@ import { facetRank } from './reviewFacetRank';
 import type { WeaknessSignal } from './weaknessSignal';
 
 /** Why a fact did not speak. Kept for the audit trail — silence is a computed
- *  verdict, so it has to be explainable, never just absent. */
-export type QuietReason = 'subsumed' | 'below-bar' | 'said-already';
+ *  verdict, so it has to be explainable, never just absent.
+ *
+ *  The first three are THIS selector's (steps 3–4 of the door). The last two
+ *  are the DOOR's own gates, named here so one vocabulary covers every quiet
+ *  fact: `'importance'` — the moment was not worth anything on this surface;
+ *  `'need'` — this student did not need it here. Until 2026-09-22 both were
+ *  emitted as `'below-bar'`, so the `quietBy` distribution the audits read could
+ *  not tell a posture bug (importance closing a walk) from a need bug — the
+ *  exact two diagnoses the emission exists to separate. */
+export type QuietReason = 'subsumed' | 'below-bar' | 'said-already' | 'importance' | 'need';
 
 export interface QuietFact {
   text: string;

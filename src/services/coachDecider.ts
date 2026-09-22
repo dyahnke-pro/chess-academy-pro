@@ -220,6 +220,24 @@ function emit(
   return d;
 }
 
+/** The tiers the student's need may NOT veto — see step 2 of `decide`. A
+ *  `Record` over the whole union, so a new tier fails to compile until someone
+ *  decides whether it is a lesson (need-gated) or the board (not). */
+const NEED_MAY_VETO: Record<ImportanceTier, boolean> = {
+  mate: false,
+  'only-move': false,
+  blunder: false,
+  'must-defend': false,
+  critical: true,
+  swing: true,
+  teaching: true,
+  convert: true,
+  none: true,
+};
+const SPEAKS_ON_IMPORTANCE: ReadonlySet<ImportanceTier> = new Set(
+  (Object.keys(NEED_MAY_VETO) as ImportanceTier[]).filter((t) => !NEED_MAY_VETO[t]),
+);
+
 export function decide(
   signals: ImportanceSignals,
   student: StudentContext,
@@ -237,13 +255,27 @@ export function decide(
   // 1 — THE MOMENT, but ONLY where silence is the default. On a 'walk' the
   // student asked for the sequence, so an unimportant moment is a QUIETER beat,
   // never a missing one.
+  // Every fact goes quiet under the GATE's own name (B9, 2026-09-22): the
+  // emitted `quietBy` used to file both closes as `'below-bar'`, so the row
+  // could name the gate in `reason` and then contradict itself per fact.
   if (!speaks) {
-    return emit(posture, { ...base, speak: false, reason: 'importance', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) }, student, false);
+    return emit(posture, { ...base, speak: false, reason: 'importance', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'importance' as const })) }, student, false);
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
   // a teaching coach, not a mute one (the cold-start rule).
-  if (student.need && !student.need.speak) {
-    return emit(posture, { ...base, speak: false, reason: 'need', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) }, student, false);
+  //
+  // 🚨 THE VETO IS TIER-AWARE (B5, 2026-09-22). `needScore`'s own contract has
+  // said since N2 that need "gates the quiet per-ply teaching beat only; a
+  // swing / must-defend / mate speaks on its own importance regardless of
+  // need" — and this door never honoured it: a hanging piece on a line the
+  // student had played right five times was silenced by their familiarity
+  // with the LINE, which says nothing about the PIECE. Need answers "does this
+  // student need the lesson here"; a forced mate, an only-move, a blunder and
+  // a live hang are not lessons, they are the board — they speak on the
+  // moment. The teaching / critical / swing / convert / none tiers stay
+  // need-gated, which is where a familiar line SHOULD go quiet.
+  if (student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
+    return emit(posture, { ...base, speak: false, reason: 'need', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'need' as const })) }, student, false);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor
   // sweeps trivia. The floor may never mute a ply — that was step 2's job and

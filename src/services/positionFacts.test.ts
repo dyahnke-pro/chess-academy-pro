@@ -61,7 +61,7 @@ describe('computePositionFacts — the composer', () => {
   it('returns the quiet trail — silence is a verdict you can read back', async () => {
     const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
     expect(Array.isArray(r.quiet)).toBe(true);
-    for (const q of r.quiet) expect(['subsumed', 'below-bar']).toContain(q.why);
+    for (const q of r.quiet) expect(['subsumed', 'below-bar', 'importance', 'need']).toContain(q.why);
   });
 
   it('the METHOD beat is never subsumed — it carries no squares, and it is not a restatement of a fact', async () => {
