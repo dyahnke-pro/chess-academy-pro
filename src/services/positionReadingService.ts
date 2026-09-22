@@ -1175,6 +1175,12 @@ export interface OpponentIntent {
   kind: 'capture' | 'fork';
   /** The square the threatened/forking piece lands on. */
   target: Square;
+  /** For a capture, the STUDENT's piece that would be taken on `target` —
+   *  read off the board, so a consumer names "your knight on e4" and never
+   *  "the piece on e4" (WO-STANDARD-01 D-7: prod said "it would win the
+   *  piece on e4" about a pawn). Null for a fork (the landing square holds
+   *  nothing of the student's). */
+  targetPiece: PieceSymbol | null;
 }
 
 /** OPPONENT-INTENT read — "what does the opponent WANT to do next?" — the
@@ -1210,7 +1216,7 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
     // Name it with the least-valuable attacker's capture (the move actually played).
     const caps = chess.moves({ verbose: true }).filter((m) => m.to === mv.to && m.captured);
     caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
-    consider({ san: caps[0].san, gain, kind: 'capture', target: mv.to });
+    consider({ san: caps[0].san, gain, kind: 'capture', target: mv.to, targetPiece: mv.captured ?? null });
   }
   for (const mv of chess.moves({ verbose: true })) {
     // Fork: after the move the moved piece attacks ≥2 student pieces worth ≥3.
@@ -1237,7 +1243,7 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
         if (defended && PIECE_VALUE[cell.type] <= forkerVal) continue;
         if (probe.attackers(cell.square, opp).includes(mv.to)) valuableHits += 1;
       }
-      if (valuableHits >= 2) consider({ san: mv.san, gain: 0, kind: 'fork', target: mv.to });
+      if (valuableHits >= 2) consider({ san: mv.san, gain: 0, kind: 'fork', target: mv.to, targetPiece: null });
     }
   }
   return best;

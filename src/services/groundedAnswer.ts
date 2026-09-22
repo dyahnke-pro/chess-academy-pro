@@ -319,7 +319,7 @@ export function assembleBoardPlanAnswer(
       return {
         facts: intent.kind === 'fork'
           ? `They're angling for ${intent.san} — a fork landing on ${intent.target}. Cover it before they get there.`
-          : `Their plan starts with ${intent.san} on ${intent.target}${gain}. Deal with that first.`,
+          : `Their plan starts with ${intent.san}, taking your ${intent.targetPiece ? (REVIEW_PIECE_NAME[intent.targetPiece] ?? 'piece') : 'piece'} on ${intent.target}${gain}. Deal with that first.`,
         bestMoveSan: null, bestMoveFromTo: null, sources: src,
       };
     }

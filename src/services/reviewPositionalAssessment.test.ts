@@ -48,3 +48,35 @@ describe('assessPositionalEdge (David 2026-07-20 — the enumerated positional v
     }
   });
 });
+
+describe('the reasons explain the verdict — D-16 (WO-STANDARD-01, prod tape 2026-09-22)', () => {
+  // White: Kg1, Bc4, Bb2, pawns; Black: Kg8, Nf6, one bishop. White holds the
+  // bishop pair. Read from BLACK's seat at -250 the verdict is "in trouble"
+  // and the reason must be THEIR pair — never one of Black's own assets.
+  const PAIR = '5nk1/5ppp/8/8/2B5/8/1B3PPP/6K1 w - - 0 1';
+
+  it("a negative verdict lists the OPPONENT's assets, from the student's seat", () => {
+    const a = assessPositionalEdge(PAIR, 'b', -250);
+    expect(a.verdict).toBe('in trouble');
+    expect(a.reasons.some((r) => /they have the bishop pair/.test(r))).toBe(true);
+    for (const r of a.reasons) expect(r).not.toMatch(/^you /);
+  });
+
+  it("the same board from the favoured seat still names the student's own assets", () => {
+    const a = assessPositionalEdge(PAIR, 'w', 250);
+    expect(a.verdict).toBe('clearly better');
+    expect(a.reasons).toContain('you have the bishop pair');
+  });
+
+  it('never says "in trouble" and then lists a development lead of yours (the exact tape)', () => {
+    // White two minors out, Black none: White is "further developed". From
+    // WHITE's seat at -300 the old reason list produced "in trouble: you're
+    // two pieces further developed". Negative control: at +300 it still does.
+    const DEV = 'r1bqkbnr/pppppppp/8/8/8/2N2N2/PPPPPPPP/R1BQKB1R w KQkq - 0 1';
+    const worse = assessPositionalEdge(DEV, 'w', -300);
+    expect(worse.verdict).toBe('in trouble');
+    expect(worse.reasons.some((r) => /you're .* further developed/.test(r))).toBe(false);
+    const better = assessPositionalEdge(DEV, 'w', 300);
+    expect(better.reasons.some((r) => /you're two pieces further developed/.test(r))).toBe(true);
+  });
+});

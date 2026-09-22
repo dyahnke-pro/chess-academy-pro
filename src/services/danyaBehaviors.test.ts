@@ -188,3 +188,19 @@ describe('danyaBehaviors — knight-maneuver + x-ray fire on REAL cases, silent 
     expect(hits.find((h) => h.id === 'knight-maneuver')).toBeUndefined();
   });
 })
+
+describe('the threatened piece is NAMED from the board — D-7 (WO-STANDARD-01, prod tape 2026-09-22)', () => {
+  it('"it would win your pawn on e4" — never "the piece on e4" about a pawn', () => {
+    // Student White, pawn on e4 attacked by a black knight on f6 and undefended.
+    const hits = detectBehaviors({ fen: '4k3/8/5n2/8/4P3/8/8/4K3 w - - 0 1', studentColor: 'white' });
+    const proph = hits.find((h) => h.id === 'prophylaxis');
+    expect(proph).toBeDefined();
+    expect(proph!.fact).toMatch(/win your pawn on e4/);
+    expect(proph!.fact).not.toMatch(/the piece on/);
+  });
+  it('…and a knight is a knight (the existing f3 case)', () => {
+    const hits = detectBehaviors({ fen: 'r3k3/8/8/8/6b1/5N2/8/4K3 w - - 0 1', studentColor: 'white' });
+    const proph = hits.find((h) => h.id === 'prophylaxis');
+    expect(proph!.fact).toMatch(/win your knight on f3/);
+  });
+});

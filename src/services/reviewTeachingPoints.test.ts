@@ -5,6 +5,7 @@ import {
   badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlan, deriveNextPlans,
   buildReviewDeepestLookahead,
   buildMissedShotSignal,
+  pieceHasSafeEscape,
 } from './reviewTeachingPoints';
 
 function fenAfter(sans: string[]): string {
@@ -386,5 +387,37 @@ describe('buildMissedShotSignal — here was the signal', () => {
       expect(missed).toContain(sq);
       expect(found).toContain(sq);
     }
+  });
+});
+
+describe('a piece that can step away does not "fall" — D-3 (WO-STANDARD-01, prod tape 2026-09-22)', () => {
+  it('Scandinavian 3.Nc3: the queen on d5 is attacked, not falling', () => {
+    // 1.e4 d5 2.exd5 Qxd5 3.Nc3 — Black to move; the queen has a dozen safe squares.
+    const t = attackerDefenderCount(fenAfter(['e4', 'd5', 'exd5', 'Qxd5', 'Nc3']), 'w');
+    expect(t).not.toBeNull();
+    expect(t).toMatch(/queen on d5/);
+    expect(t).toMatch(/has to move/);
+    expect(t).not.toMatch(/so it falls/);
+  });
+  it('negative control: with the student to move the capture is real and it falls (Bxf3 case)', () => {
+    const t = attackerDefenderCount(fenAfter(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3']), 'w');
+    expect(t).toMatch(/so it falls/);
+  });
+  it('pieceHasSafeEscape reads the board, not the count', () => {
+    const c = new Chess(fenAfter(['e4', 'd5', 'exd5', 'Qxd5', 'Nc3']));
+    expect(pieceHasSafeEscape(c, 'd5', 'w')).toBe(true);
+    // A queen walled in by its own pieces has no move at all — no escape.
+    const boxed = new Chess('qn2k3/pp6/8/8/8/8/8/4K3 b - - 0 1');
+    expect(pieceHasSafeEscape(boxed, 'a8', 'w')).toBe(false);
+    // And one whose only squares are all covered: queen a1, white king c2 and
+    // rook b3 cover a2/b2/b1; the pawn wall a2... build it: Qa1, own pawns
+    // a2? no — every reachable square attacked by a white piece.
+    const covered = new Chess('4k3/8/8/8/8/1R6/2K5/q7 b - - 0 1');
+    // Qa1 can go to b1 (attacked by Kc2, Rb3), b2 (Kc2, Rb3), a2 (Rb3? no —
+    // a2 is attacked by nothing... so it escapes). Assert the READ, not a
+    // guess: chess.js says which squares are safe.
+    const escapesTo = covered.moves({ square: 'a1', verbose: true })
+      .filter((m) => { const a = new Chess(covered.fen()); a.move(m); return a.attackers(m.to, 'w').length === 0; });
+    expect(pieceHasSafeEscape(covered, 'a1', 'w')).toBe(escapesTo.length > 0);
   });
 });

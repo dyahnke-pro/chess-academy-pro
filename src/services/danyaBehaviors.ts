@@ -205,7 +205,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const intent = opponentIntentRead(fen, studentWord);
       if (!intent) return null;
       if (intent.kind === 'capture') {
-        return { fact: `The opponent is eyeing ${intent.san} — it would win the piece on ${intent.target}. Deal with that first.`, squares: [intent.target] };
+        // The piece is NAMED from the board, never "the piece" — a pawn on e4
+        // is a pawn (D-7, prod tape 2026-09-22).
+        const what = intent.targetPiece ? `your ${PIECE_NAME[intent.targetPiece]} on ${intent.target}` : `what sits on ${intent.target}`;
+        return { fact: `The opponent is eyeing ${intent.san} — it would win ${what}. Deal with that first.`, squares: [intent.target] };
       }
       return { fact: `The opponent wants ${intent.san}, forking on ${intent.target} — take the square away from them.`, squares: [intent.target] };
     },

@@ -120,6 +120,56 @@ export const STANDING_REFRAINS: StandingRefrain[] = [
     keyOf: () => 'pair',
     refrain: () => 'you still have the bishop pair',
   },
+  // ── THE MIRROR — the same facts read from the OPPONENT's side (D-16). The
+  // verdict's reasons come from whichever side the eval favours, so every
+  // student-seat refrain above has a sibling here; a fact the composer can
+  // phrase both ways needs a refrain both ways or one of them repeats.
+  {
+    id: 'my-isolated-pawn',
+    re: /your pawn on ([a-h][1-8]) is isolated — a target they can pile on/g,
+    keyOf: (m) => m[1],
+    fact: (m) => `your pawn on ${m[1]} is isolated`,
+    refrain: (m) => `still your isolated ${m[1]}-pawn`,
+  },
+  {
+    id: 'my-doubled-pawns',
+    re: /your doubled pawns on the ([a-h])-file are a structural weakness they can work against/g,
+    keyOf: (m) => m[1],
+    fact: (m) => `your pawns on the ${m[1]}-file are doubled`,
+    refrain: (m) => `still your doubled ${m[1]}-pawns`,
+  },
+  {
+    id: 'their-outpost',
+    re: /their (knight|bishop) sits on a protected outpost on ([a-h][1-8]) where no pawn of yours attacks the square/g,
+    keyOf: (m) => `${m[1]}${m[2]}`,
+    fact: (m) => `their ${m[1]} sits on a protected outpost on ${m[2]}`,
+    refrain: (m) => `their ${m[1]} still holds the ${m[2]} outpost`,
+  },
+  {
+    id: 'their-open-file',
+    re: /they own the open ([a-h])-file/g,
+    keyOf: (m) => m[1],
+    refrain: (m) => `they still own the ${m[1]}-file`,
+  },
+  {
+    id: 'their-passed-pawn',
+    re: /their passed pawn on ([a-h][1-8]) is a long-term trump/g,
+    keyOf: (m) => m[1],
+    fact: (m) => `they have a passed pawn on ${m[1]}`,
+    refrain: (m) => `their ${m[1]}-passer is still the trump`,
+  },
+  {
+    id: 'their-bishop-pair',
+    re: /they have the bishop pair/g,
+    keyOf: () => 'pair',
+    refrain: () => 'they still have the bishop pair',
+  },
+  {
+    id: 'their-development-lead',
+    re: /they're (two pieces|three pieces|\d+ pieces) further developed/g,
+    keyOf: (m) => m[1],
+    refrain: (m) => `still ${m[1]} further developed for them`,
+  },
   {
     id: 'my-development-lead',
     // The COUNT is the instance: going from two pieces ahead to four is a
