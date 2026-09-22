@@ -405,10 +405,21 @@ fire is not a wire"):**
    Gate: with the Pirc as home and the student Black, the bot's first move is
    e4 on 10 of 10 games; a control with no home opening keeps today's
    behaviour.
-8. **REVIEW OPENS WITH THE RECORD.** A game in the home opening opens with the
-   student's own numbers in it and the departure ply ("your 63rd Pirc, 49%,
-   you left book at move 7 again") — the recurrence sentence already exists
-   for fundamentals; extend it to the opening record via the ONE key.
+8. ✅ **REVIEW OPENS WITH THE RECORD** (2026-09-22). `openingRecordBeat.ts`
+   (pure): `openingRecordClause` — "your 63rd Pirc Defense, 49% so far — your
+   home opening" (silent under 2 games; the score only when ≥4 decided games
+   back it); `departureRecordSentence` — this game's own departure row joined
+   by POSITION to the line, counted against every prior departure at the SAME
+   board: "You left book at move 6 again — …Na6 instead of …Nc6, the 3rd time
+   here." `StudentNeedContext` gained `openingGames` (decided games in the
+   family) and `homeOpening` (the profile's home for the student's colour);
+   the loader fills both. `generateReviewNarration` now loads the need
+   context BEFORE the intro and `defaultIntroText` speaks the record as its
+   second sentence (`reviewOpeningRecord`, owned openings only — a student
+   facing the Pirc has no Pirc record). Rot fixed on sight: a private
+   `openingFamily` copy in coachFeatureService replaced by the one import.
+   Gates: `openingRecordBeat.test.ts`, `oneOpeningKey.test.ts` (count + home
+   flag out of the loader, colour-scoped).
 9. **EVERY COMPONENT WIRED, BOTH WAYS (David 2026-09-22: "make sure that each
    component of the coach is wired and working").** The sweep the evaluation
    found: `positionFacts` pre-gate (:480) gets `standingChance` and `decide()`

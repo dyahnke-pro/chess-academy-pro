@@ -57,6 +57,8 @@ import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey } from '../types';
+import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
+import { openingFamily } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
@@ -1474,7 +1476,6 @@ export function buildReviewSegments(
   // hand audit). Name the family ONCE; the rich plan/threat beats carry the
   // specific sub-variation.
   const announcedOpeningFamilies = new Set<string>();
-  const openingFamily = (n: string): string => n.split(':')[0].trim();
   let lastAnnouncedOpeningName: string | null = null;
   // §6 story-as-evidence — a cited illustrative game from the VERIFIED corpus,
   // spoken once per game (never invented). Null when the opening has no model game.
@@ -2873,11 +2874,36 @@ export function buildReviewSegments(
 
 /** Fallback intro used if the LLM intro call fails. Still grounded in
  *  result + opening name. */
+/** THE RECORD IN THIS OPENING (A8): the intro's second sentence, computed off
+ *  the need context — "your 63rd Pirc Defense, 49% so far — your home opening.
+ *  You left book at move 7 again — …a6 instead of …Nf6, the third time here."
+ *  Null when the record has nothing to say (a first game in the line). Uses
+ *  the FAMILY the intro frames (a student facing the Pirc is not playing it). */
+export function reviewOpeningRecord(params: {
+  openingName: string | null;
+  playerColor: 'white' | 'black';
+  studentNeed: StudentNeedContext;
+  gameId: string | null;
+}): string | null {
+  if (!params.openingName) return null;
+  const framed = frameOpeningForStudent(params.openingName, params.playerColor);
+  if (!framed.owned) return null; // their opening, not the student's record
+  const family = openingFamily(params.openingName);
+  const clause = openingRecordClause({ family, ctx: params.studentNeed, gameId: params.gameId });
+  const departure = departureRecordSentence({ family, ctx: params.studentNeed, gameId: params.gameId });
+  const parts: string[] = [];
+  if (clause) parts.push(`That's ${clause}.`);
+  if (departure) parts.push(departure);
+  return parts.length > 0 ? parts.join(' ') : null;
+}
+
 function defaultIntroText(params: {
   playerColor: 'white' | 'black';
   result: string;
   openingName: string | null;
   mistakeCount: number;
+  /** The student's record in this opening (A8), spoken after the outcome. */
+  record?: string | null;
 }): string {
   const colorWord = params.playerColor === 'white' ? 'White' : 'Black';
   // Derive the student-relative outcome from the raw score + colour. `result`
@@ -2899,7 +2925,8 @@ function defaultIntroText(params: {
   const momentBit = params.mistakeCount > 0
     ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — here's each one.`
     : ` Clean play throughout — here's what worked.`;
-  return `Here's your game${openingBit} — you had ${colorWord} and it ended in ${resultPhrase}.${momentBit}`;
+  const recordBit = params.record ? ` ${params.record}` : '';
+  return `Here's your game${openingBit} — you had ${colorWord} and it ended in ${resultPhrase}.${recordBit}${momentBit}`;
 }
 
 /**
@@ -4226,7 +4253,17 @@ export async function generateReviewNarration(params: {
   // review intro) and would also stall the walk on a cold-prod brain. Silent
   // verbosity skips the warming pass (playback is silenced anyway); on any
   // voiceFacts miss we speak the deterministic default verbatim.
-  const groundedIntro = defaultIntroText({ playerColor, result, openingName, mistakeCount });
+  // THE STUDENT'S NEED CONTEXT (unified-coach N2) — loaded once per game; cold
+  // on any failure (the coach teaches, never mutes). Loaded HERE, before the
+  // intro, because the intro now carries the student's RECORD in this opening
+  // (A8) — the family count and score off the ONE key, the departure history
+  // joined by position — and those live on this context.
+  const studentNeed = await loadStudentNeedContext({
+    rating: playerRating, sans: moves.slice(0, usableCount).map((m) => m.san), studentColor: playerColor,
+    openingId: params.openingId ?? null, eco: params.eco ?? null,
+  }).catch(() => coldStudent(playerRating));
+  const record = reviewOpeningRecord({ openingName, playerColor, studentNeed, gameId: params.gameId ?? null });
+  const groundedIntro = defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
   const skipIntroLlm = coachNarration === 'silent';
   const introRaw = skipIntroLlm
     ? ''
@@ -4241,7 +4278,7 @@ export async function generateReviewNarration(params: {
   const introTrimmed = introRaw.trim();
   const intro = introTrimmed && !introTrimmed.startsWith('⚠️')
     ? introTrimmed
-    : defaultIntroText({ playerColor, result, openingName, mistakeCount });
+    : defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
 
   // Warm the opening-plan grounding sources before the sync segment build:
   // the his-play DB (primary) + the masters DB (backup). Concurrent; each
@@ -4251,12 +4288,6 @@ export async function generateReviewNarration(params: {
   // the "this recurs for you, drill it" recap. Memoized once-per-game; degrades
   // to [] (inert) on any failure.
   const studentWeaknesses = await loadWeaknessSignals().catch(() => []);
-  // THE STUDENT'S NEED CONTEXT (unified-coach N2) — loaded once per game; cold
-  // on any failure (the coach teaches, never mutes).
-  const studentNeed = await loadStudentNeedContext({
-    rating: playerRating, sans: moves.slice(0, usableCount).map((m) => m.san), studentColor: playerColor,
-    openingId: params.openingId ?? null, eco: params.eco ?? null,
-  }).catch(() => coldStudent(playerRating));
   const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null);
   // NEED COVERAGE (the audit's instrument for the retired R2 — CLAUDE.md
   // standard): per student ply, the computed need and whether the quiet

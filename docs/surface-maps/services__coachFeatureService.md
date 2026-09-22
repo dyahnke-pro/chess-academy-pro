@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4448 lines · 29 exports · 27 importers · 23 tests · 5 audits**
+**4479 lines · 30 exports · 27 importers · 23 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -171,6 +171,9 @@
 - `src/services/reviewNeedGate.test.ts:81`
 - `src/services/reviewNeedGate.test.ts:88`
 - `src/services/reviewNeedGate.test.ts:94`
+
+### `reviewOpeningRecord` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mapConcurrent` (function) — 4 call sites
 - `src/services/mapConcurrent.test.ts:9`

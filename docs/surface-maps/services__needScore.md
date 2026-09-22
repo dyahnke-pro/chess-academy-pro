@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**426 lines · 12 exports · 17 importers · 11 tests · 2 audits**
+**432 lines · 12 exports · 18 importers · 11 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -28,6 +28,7 @@
 - `src/services/needWeaknessWire.test.ts`
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/openingGenerator.ts`
+- `src/services/openingRecordBeat.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/studentNeedLoader.ts`
@@ -55,8 +56,8 @@
 - `src/services/coachDecisionEmits.test.ts:118`
 - `src/services/coachDecisionEmits.test.ts:126`
 - `src/services/coachDecisionEmits.test.ts:132`
-- `src/services/coachFeatureService.ts:1262`
-- `src/services/coachFeatureService.ts:4259`
+- `src/services/coachFeatureService.ts:1264`
+- `src/services/coachFeatureService.ts:4264`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -67,7 +68,7 @@
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:58`
 - `src/services/reviewNeedGate.test.ts:80`
-- `src/services/studentNeedLoader.ts:154`
+- `src/services/studentNeedLoader.ts:174`
 - `src/services/teachingSelector.ts:252`
 
 ### `NeedPlyInput` (interface) — 0 call sites
@@ -83,7 +84,7 @@
 ### `familiarity` (function) — 1 call site
 - `src/services/needScore.test.ts:62`
 
-### `fenKey` (function) — 21 call sites
+### `fenKey` (function) — 23 call sites
 - `scripts/build-danya-play-db.mjs:37`
 - `scripts/build-danya-play-db.mjs:91`
 - `scripts/catalog-sweep/gatec-reconnect.mjs:20`
@@ -93,7 +94,9 @@
 - `scripts/catalog-sweep/sweep-matrix.test.ts:42`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:43`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:112`
-- `src/services/oneOpeningKey.test.ts:112`
+- `src/services/oneOpeningKey.test.ts:124`
+- `src/services/openingRecordBeat.ts:48`
+- `src/services/openingRecordBeat.ts:49`
 - `src/services/openingWalkthroughService.test.ts:32`
 - `src/services/openingWalkthroughService.test.ts:79`
 - `src/services/openingWalkthroughService.ts:59`
@@ -128,7 +131,7 @@
 - `src/services/coachDecisionEmits.test.ts:118`
 - `src/services/coachDecisionEmits.test.ts:126`
 - `src/services/coachDecisionEmits.test.ts:132`
-- `src/services/coachFeatureService.ts:1262`
+- `src/services/coachFeatureService.ts:1264`
 - `src/services/fundamentalReachesDecider.test.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`
@@ -154,10 +157,10 @@
 - `src/services/needWeaknessWire.test.ts:118`
 - `src/services/needWeaknessWire.test.ts:131`
 - `src/services/needWeaknessWire.test.ts:135`
-- `src/services/oneOpeningKey.test.ts:105`
-- `src/services/oneOpeningKey.test.ts:116`
-- `src/services/oneOpeningKey.test.ts:121`
-- `src/services/oneOpeningKey.test.ts:123`
+- `src/services/oneOpeningKey.test.ts:117`
+- `src/services/oneOpeningKey.test.ts:128`
+- `src/services/oneOpeningKey.test.ts:133`
+- `src/services/oneOpeningKey.test.ts:135`
 - `src/services/positionFacts.ts:615`
 - `src/services/teachingSelector.ts:297`
 

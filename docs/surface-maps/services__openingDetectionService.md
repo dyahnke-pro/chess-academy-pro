@@ -84,11 +84,11 @@
 - `src/components/Coach/CoachTeachPage.tsx:8376`
 - `src/components/Coach/CoachTeachPage.tsx:9483`
 - `src/hooks/usePhaseNarration.ts:428`
-- `src/services/coachFeatureService.ts:2172`
-- `src/services/coachFeatureService.ts:2583`
+- `src/services/coachFeatureService.ts:2173`
+- `src/services/coachFeatureService.ts:2584`
 - `src/services/computedVoiceAudit.report.test.ts:306`
 - `src/services/forkTalk.ts:85`
-- `src/services/oneOpeningKey.test.ts:42`
+- `src/services/oneOpeningKey.test.ts:43`
 - `src/services/openingDetectionService.test.ts:12`
 - `src/services/openingDetectionService.test.ts:16`
 - `src/services/openingDetectionService.test.ts:25`

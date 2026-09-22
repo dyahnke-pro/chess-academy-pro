@@ -42,7 +42,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🔴 5. Drills teach: reveal names the idea and plays the sequence, no re-serving solved positions, provenance survives import ("Coach / Unknown / today")
 - 🔴 6. Router: retrospective, method and profile questions never fall into best-move-now; "what should I learn" answers from the home opening
 - 🔴 7. Play steers into the home repertoire's most-faced lines while in book
-- 🔴 8. Review of a home-opening game opens with the student's record and departure ply
+- ✅ 8. Review opens with the record: `openingRecordBeat.ts` — "That's your 63rd Pirc Defense, 49% so far — your home opening. You left book at move 7 again — …a6 instead of …Nf6, the 3rd time here." in the intro, off the need context (family count/score via the one key, departures joined by position)
 - 🔴 9. Every component wired both ways — pre-gate vs `decide()` signals, boost that cannot flip a verdict, four surfaces passing no student, ledgers before the door, dead review capture, Learn `fundamentalId: null`, `quietBy` collapsing two gates
 - 🔴 10. The wrong computers — bad-bishop reason, pawn-to-knight "pin", "so it falls" on a mobile piece, "compensation holds up" on a losing sac, pawn method on a king move, "-300.0" mate, raw recap card, "10 games running", repeated refrains
 - 🔴 11. `audit-home-opening-prod.mjs` — import → home opening → plan → drill → steered Play → review, narrations reported

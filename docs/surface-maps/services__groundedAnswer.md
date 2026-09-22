@@ -276,8 +276,8 @@
 - `src/services/coachFeatureService.test.ts:66`
 - `src/services/coachFeatureService.test.ts:80`
 - `src/services/coachFeatureService.test.ts:87`
-- `src/services/coachFeatureService.ts:2066`
-- `src/services/coachFeatureService.ts:2077`
+- `src/services/coachFeatureService.ts:2067`
+- `src/services/coachFeatureService.ts:2078`
 - `src/services/coachMoveCommentary.ts:222`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/groundedAnswer.test.ts:1043`
@@ -318,8 +318,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeMoveMerit` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:985`
-- `src/services/coachFeatureService.ts:3961`
+- `src/services/coachFeatureService.ts:987`
+- `src/services/coachFeatureService.ts:3988`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -329,7 +329,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:96`
 - `src/services/coachFeatureService.test.ts:102`
-- `src/services/coachFeatureService.ts:985`
+- `src/services/coachFeatureService.ts:987`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -362,7 +362,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:855`
+- `src/services/coachFeatureService.ts:857`
 - `src/services/groundedAnswer.test.ts:1064`
 - `src/services/groundedAnswer.test.ts:1072`
 - `src/services/groundedAnswer.test.ts:1079`
@@ -959,7 +959,7 @@
 - `src/services/coachApi.ts:4512`
 
 ### `seatPieceReferences` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:4362`
+- `src/services/coachFeatureService.ts:4393`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
 - `src/services/reviewBoardAwareness.test.ts:78`
@@ -981,7 +981,7 @@
 ### `detectNewThreat` (function) — 11 call sites
 - `src/data/patternRegistry.ts:43`
 - `src/data/patternRegistry.ts:123`
-- `src/services/coachFeatureService.ts:2392`
+- `src/services/coachFeatureService.ts:2393`
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/reviewMoveBriefing.ts:237`
@@ -992,7 +992,7 @@
 - `src/services/reviewTeachingPoints.ts:302`
 
 ### `describeStudentThreat` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2314`
+- `src/services/coachFeatureService.ts:2315`
 - `src/services/reviewFullData.ts:408`
 - `src/services/reviewNarrationFidelity.test.ts:184`
 - `src/services/reviewNarrationFidelity.test.ts:196`
@@ -1009,7 +1009,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2412`
+- `src/services/coachFeatureService.ts:2413`
 - `src/services/reviewNarrationFidelity.test.ts:254`
 
 ## Tests

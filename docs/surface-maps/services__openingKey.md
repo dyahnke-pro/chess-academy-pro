@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**106 lines · 9 exports · 32 importers · 16 tests · 1 audits**
+**106 lines · 9 exports · 34 importers · 17 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/bookDeparturePrecompute.test.ts`
 - `src/services/bookDepartureWeakness.test.ts`
 - `src/services/chesscomService.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/conversionDetector.test.ts`
 - `src/services/dataLoader.ts`
 - `src/services/homeOpening.test.ts`
@@ -39,6 +40,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKey.test.ts`
 - `src/services/openingKeyBackfill.test.ts`
 - `src/services/openingKeyBackfill.ts`
+- `src/services/openingRecordBeat.test.ts`
 - `src/services/openingService.mostPlayed.test.ts`
 - `src/services/reviewSampleGames.ts`
 - `src/services/studentNeedLoader.ts`
@@ -50,7 +52,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `slugifyOpening` (function) — 1 call site
 - `src/services/openingKey.test.ts:18`
 
-### `openingKeyFor` (function) — 30 call sites
+### `openingKeyFor` (function) — 31 call sites
 - `src/components/Insights/HomeOpeningCard.test.tsx:17`
 - `src/components/Insights/HomeOpeningCard.test.tsx:18`
 - `src/services/analysisBatchOrder.test.ts:16`
@@ -78,6 +80,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingDetectionService.ts:188`
 - `src/services/openingDetectionService.ts:258`
 - `src/services/openingKey.test.ts:17`
+- `src/services/openingRecordBeat.test.ts:11`
 - `src/services/openingService.mostPlayed.test.ts:5`
 - `src/services/weaknessProvenance.test.ts:68`
 - `src/services/weaknessProvenance.test.ts:79`
@@ -87,14 +90,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx:7173`
 - `src/components/Coach/CoachTeachPage.tsx:10865`
 - `src/components/Coach/CoachTeachPage.tsx:12020`
-- `src/services/oneOpeningKey.test.ts:43`
-- `src/services/oneOpeningKey.test.ts:58`
+- `src/services/oneOpeningKey.test.ts:44`
 - `src/services/oneOpeningKey.test.ts:59`
 - `src/services/oneOpeningKey.test.ts:60`
-- `src/services/oneOpeningKey.test.ts:100`
-- `src/services/oneOpeningKey.test.ts:104`
-- `src/services/oneOpeningKey.test.ts:111`
-- `src/services/oneOpeningKey.test.ts:115`
+- `src/services/oneOpeningKey.test.ts:61`
+- `src/services/oneOpeningKey.test.ts:112`
+- `src/services/oneOpeningKey.test.ts:116`
+- `src/services/oneOpeningKey.test.ts:123`
+- `src/services/oneOpeningKey.test.ts:127`
 - `src/services/openingGenerator.ts:2404`
 - `src/services/openingKey.test.ts:22`
 - `src/services/openingKey.test.ts:51`
@@ -106,7 +109,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Games/GameDatabasePage.tsx:222`
 - `src/services/chesscomService.ts:171`
 - `src/services/lichessService.ts:132`
-- `src/services/oneOpeningKey.test.ts:41`
+- `src/services/oneOpeningKey.test.ts:42`
 - `src/services/openingKey.test.ts:25`
 - `src/services/openingKey.test.ts:35`
 - `src/services/openingKey.test.ts:36`
@@ -115,14 +118,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKeyBackfill.ts:42`
 - `src/services/reviewSampleGames.ts:456`
 
-### `openingFamily` (function) — 7 call sites
+### `openingFamily` (function) — 9 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:918`
-- `src/services/coachFeatureService.ts:2584`
+- `src/services/coachFeatureService.ts:2585`
+- `src/services/coachFeatureService.ts:2891`
 - `src/services/homeOpening.ts:114`
 - `src/services/homeOpening.ts:194`
 - `src/services/openingBlunderService.ts:83`
 - `src/services/openingBlunderService.ts:180`
 - `src/services/openingKey.test.ts:50`
+- `src/services/studentNeedLoader.ts:115`
 
 ### `asOpeningKey` (function) — 9 call sites
 - `src/services/openingKey.test.ts:40`
@@ -141,7 +146,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKey.test.ts:31`
 
 ### `sameOpeningFamily` (function) — 10 call sites
-- `src/services/needScore.ts:234`
+- `src/services/needScore.ts:240`
 - `src/services/openingKey.test.ts:55`
 - `src/services/openingKey.test.ts:56`
 - `src/services/openingKey.test.ts:57`
@@ -150,15 +155,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKey.test.ts:61`
 - `src/services/openingKey.test.ts:68`
 - `src/services/openingKey.test.ts:69`
-- `src/services/studentNeedLoader.ts:132`
+- `src/services/studentNeedLoader.ts:150`
 
-### `openingEntryForKey` (function) — 6 call sites
+### `openingEntryForKey` (function) — 7 call sites
 - `src/components/Coach/CoachGamePage.tsx:4614`
 - `src/services/homeOpening.ts:112`
 - `src/services/homeOpening.ts:193`
 - `src/services/homeOpeningPlan.ts:163`
 - `src/services/openingKey.test.ts:30`
 - `src/services/openingKey.test.ts:67`
+- `src/services/studentNeedLoader.ts:114`
 
 ## Tests
 
@@ -176,6 +182,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/openingKey.test.ts`
 - `src/services/openingKeyBackfill.test.ts`
+- `src/services/openingRecordBeat.test.ts`
 - `src/services/openingService.mostPlayed.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 

@@ -51,6 +51,12 @@ export interface StudentNeedContext {
   rating: number;
   /** Fully-analysed games on record (cold start below COLD_START_GAMES). */
   gamesPlayed: number;
+  /** Decided games in this opening's FAMILY (the ONE key, A1) — the record the
+   *  review opens with (A8). Absent on a cold context. */
+  openingGames?: number;
+  /** This opening's family is the student's persisted HOME opening for their
+   *  colour (A3). Absent = unknown, never assumed. */
+  homeOpening?: boolean;
   /** The student's weakness signals (empty = no known holes). */
   signals: readonly WeaknessSignal[];
   /** The student's book departures (all openings; matched by opening here). */

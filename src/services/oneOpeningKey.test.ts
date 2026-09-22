@@ -17,8 +17,9 @@ import { computeNeed, fenKey, COLD_START_GAMES, FAMILIAR_REPS, type StudentNeedC
 import type { BookDepartureRow } from './bookDepartureWeakness';
 import type { OpeningKey } from '../types';
 
+const prefs: { chessComUsername: string; homeOpenings?: Record<string, { family: string } | null> } = { chessComUsername: 'student' };
 vi.mock('../stores/appStore', () => ({
-  useAppStore: { getState: () => ({ activeProfile: { preferences: { chessComUsername: 'student' } } }) },
+  useAppStore: { getState: () => ({ activeProfile: { preferences: prefs } }) },
 }));
 vi.mock('./weaknessSignalLoader', () => ({ loadWeaknessSignals: async () => [] }));
 vi.mock('./capabilityEvidence', () => ({ getCapabilityProfile: async () => new Map() }));
@@ -72,6 +73,17 @@ describe('one opening key — the reader joins on it', () => {
     expect(ctx.openingScore).toBe(0.5);
     expect(ctx.overallScore).toBeCloseTo(4 / 6);
     expect(ctx.lineFenKeys).toEqual(lineFenKeys(NAJDORF));
+    // A8: the record the review opens with — the family COUNT, and whether it
+    // is the home opening (the mocked profile has none).
+    expect(ctx.openingGames).toBe(4);
+    expect(ctx.homeOpening).toBe(false);
+    // …and TRUE when the profile's home opening for the student's colour is this family.
+    prefs.homeOpenings = { black: { family: 'Sicilian Defense' } };
+    const home = await loadStudentNeedContext({ rating: 1500, sans: DRAGON, studentColor: 'black', openingId: dra, eco: null });
+    expect(home.homeOpening).toBe(true);
+    const white = await loadStudentNeedContext({ rating: 1500, sans: ITALIAN, studentColor: 'white', openingId: ita, eco: null });
+    expect(white.homeOpening).toBe(false); // the home is for BLACK
+    delete prefs.homeOpenings;
   });
 
   it('with no key, ECO is the fallback — and without either the term is honestly null', async () => {

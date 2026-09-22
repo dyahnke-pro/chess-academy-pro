@@ -18,9 +18,9 @@ import { criticalityThresholds } from './criticalityScan';
 import { coldStudent, type StudentNeedContext } from './needScore';
 import type { GameRecord } from '../types';
 import { getCapabilityProfile } from './capabilityEvidence';
-import { sameOpeningFamily } from './openingKey';
+import { openingEntryForKey, openingFamily, sameOpeningFamily } from './openingKey';
 import { fenKey } from './needScore';
-import type { OpeningKey } from '../types';
+import type { OpeningKey, UserPreferences } from '../types';
 import { isFixtureGame } from './fixtureGames';
 
 const TTL_MS = 5 * 60 * 1000;
@@ -97,6 +97,24 @@ export function lineFenKeys(sans: readonly string[]): string[] {
   return out;
 }
 
+/** Decided (non-master, finished) games in a set. */
+function decidedCount(games: readonly GameRecord[]): number {
+  return games.filter((g) => !g.isMasterGame && g.result !== '*').length;
+}
+
+/** Is this key's family the persisted home opening for the student's colour? */
+function isHomeFamily(
+  key: OpeningKey | null,
+  colour: 'white' | 'black',
+  home: UserPreferences['homeOpenings'] | undefined,
+): boolean {
+  if (!key) return false;
+  const choice = home?.[colour];
+  if (!choice) return false;
+  const entry = openingEntryForKey(key);
+  return entry !== null && openingFamily(entry.name) === choice.family;
+}
+
 /** Sanity-replay the SANs so a corrupt sequence never poisons the reps. */
 function legalPrefix(sans: readonly string[]): string[] {
   const c = new Chess();
@@ -143,6 +161,8 @@ export async function loadStudentNeedContext(q: StudentNeedQuery): Promise<Stude
       bookDepartures,
       capabilities,
       openingId: q.openingId ?? null,
+      openingGames: decidedCount(inOpening),
+      homeOpening: isHomeFamily(q.openingId ?? null, q.studentColor, prefs?.homeOpenings),
       lineFenKeys: lineFenKeys(sans),
       lineReps: lineRepsFromGames(analysed, sans, q.studentColor, names, q.rating),
       openingScore: scoreShare(inOpening, names),
