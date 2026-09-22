@@ -38,6 +38,8 @@ export function QuickFeedbackButton(): JSX.Element {
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
   const activeProfile = useAppStore((s) => s.activeProfile);
   const panelRef = useRef<HTMLDivElement>(null);
+  /** The note last captured to the record — the idempotency key (H4). */
+  const capturedKeyRef = useRef<string | null>(null);
 
   const openPanel = useCallback(() => setOpen(true), []);
 
@@ -73,14 +75,25 @@ export function QuickFeedbackButton(): JSX.Element {
     // PostHog) regardless of whether the mail/share step below succeeds. The
     // mailto/share that follows is a convenience for users who want a reply
     // thread, not the load-bearing delivery.
-    void submitFeedback({
-      message: message.trim(),
-      category: 'quick',
-      source: 'QuickFeedbackButton',
-      contactEmail: email,
-      route,
-      profileName: displayName,
-    });
+    //
+    // ONCE PER NOTE (WO-STANDARD-01 H4). PostHog held the same quick-feedback
+    // note twice, 7 seconds apart, from one native session: the share sheet
+    // was dismissed (AbortError → 'idle'), the student tapped Send again, and
+    // the capture ran again. The share/mail step may re-run freely — it is the
+    // student's convenience — but the RECORD is keyed on the note's content
+    // and written once. A changed note is a new note and captures again.
+    const captureKey = `quick|${message.trim()}|${email.trim()}`;
+    if (capturedKeyRef.current !== captureKey) {
+      capturedKeyRef.current = captureKey;
+      void submitFeedback({
+        message: message.trim(),
+        category: 'quick',
+        source: 'QuickFeedbackButton',
+        contactEmail: email,
+        route,
+        profileName: displayName,
+      });
+    }
 
     const subject = 'Quick feedback — Chess Academy Pro';
     const bodyLines = [

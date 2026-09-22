@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { MessageSquare, X, Check } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { submitFeedback } from '../../services/feedback';
@@ -37,6 +37,8 @@ export function FeedbackForm({ onClose }: FeedbackFormProps): JSX.Element {
   const [message, setMessage] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  /** The note last captured to the record — the idempotency key (H4). */
+  const capturedKeyRef = useRef<string | null>(null);
 
   const handleSubmit = useCallback((): void => {
     const appVersion = (typeof window !== 'undefined'
@@ -47,14 +49,20 @@ export function FeedbackForm({ onClose }: FeedbackFormProps): JSX.Element {
 
     // Capture FIRST on the reliable rail (audit-stream + PostHog) so the note
     // reaches us regardless of whether the mail draft below is actually sent.
-    void submitFeedback({
-      message,
-      category,
-      source: 'FeedbackForm',
-      rating,
-      contactEmail,
-      profileName: displayName,
-    });
+    // ONCE PER NOTE (WO-STANDARD-01 H4) — same idempotency key as the quick
+    // panel: the mail draft may reopen, the record is written once per note.
+    const captureKey = `${category}|${message.trim()}|${contactEmail.trim()}|${rating ?? ''}`;
+    if (capturedKeyRef.current !== captureKey) {
+      capturedKeyRef.current = captureKey;
+      void submitFeedback({
+        message,
+        category,
+        source: 'FeedbackForm',
+        rating,
+        contactEmail,
+        profileName: displayName,
+      });
+    }
 
     const subjectMap: Record<FeedbackCategory, string> = {
       bug: 'Bug report',
