@@ -8,9 +8,10 @@
 
 ## Locked rules that govern this surface
 
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1126) — names `usePositionNarration`
-- **🔒🔒 EVERY COACHING SURFACE GETS THE CORPUS — review, play, learn, tactics, all of it (David 2026-08-07, emphatic).** (CLAUDE.md:4024) — names `usePositionNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:5694) — names `usePositionNarration`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1163) — names `usePositionNarration`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3870) — names `usePositionNarration`
+- **🔒🔒 EVERY COACHING SURFACE GETS THE CORPUS — review, play, learn, tactics, all of it (David 2026-08-07, emphatic).** (CLAUDE.md:4224) — names `usePositionNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:5915) — names `usePositionNarration`
 
 ## Who calls in
 
@@ -30,8 +31,8 @@
 - `src/hooks/usePositionNarration.test.ts:114`
 
 ### `usePositionNarration` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:1729`
-- `src/components/Coach/CoachTeachPage.tsx:6975`
+- `src/components/Coach/CoachGamePage.tsx:1775`
+- `src/components/Coach/CoachTeachPage.tsx:7177`
 - `src/hooks/usePositionNarration.test.ts:123`
 - `src/hooks/usePositionNarration.test.ts:130`
 - `src/hooks/usePositionNarration.test.ts:143`
@@ -52,5 +53,9 @@
 - `src/hooks/usePositionNarration.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-read-position-prod.mjs`

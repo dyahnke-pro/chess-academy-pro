@@ -75,6 +75,18 @@ export interface ColdStart { line: string; chips: string[]; }
  *  Coach-played games don't count — the prompt is specifically about UPLOADING
  *  games to review. Chips route through the coach: "Import my games" → the nav
  *  router's /games/import, the teach/play chips → the teach/play intents. */
+/**
+ * A GAME IN PROGRESS IS NOT A COLD START (WO-STANDARD-01 D-11, prod tape
+ * 2026-09-22: "I don't have any of your games yet — upload and review…"
+ * spoken after the student's FIRST MOVE on Learn). The profile reads resolve
+ * late; if a move has been played by then the student is playing, not asking
+ * about their record. The upload prompt belongs to a profile question only.
+ * Decided here, once, so no surface re-derives the rule inline.
+ */
+export function coldStartApplies(input: { historyLength: number; userInteracted: boolean }): boolean {
+  return !input.userInteracted && input.historyLength === 0;
+}
+
 export async function coldStartGuidance(): Promise<ColdStart | null> {
   try {
     const imported = await db.games

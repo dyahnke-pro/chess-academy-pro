@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations, narrationBoardAccurate, frameTeachingForOpponent } from './coachFeatureService';
+import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations, narrationBoardAccurate, frameTeachingForOpponent, recapSecondPerson } from './coachFeatureService';
 import { explainBestMoveGrounded, describeSacrifice } from './groundedAnswer';
 import { __setLocalDbForTests, __resetLocalDbForTests } from './masterPlayLookup';
 import type { ReviewMoveInput } from './coachFeatureService';
@@ -720,7 +720,7 @@ describe('coachFeatureService', () => {
 
       // Any sentence carrying a STANDING-STATE marker must appear on at most
       // ONE ply — "drop repeats, make every one add something new".
-      const STANDING = /stuck in the centre|Undefended right now|open files?|passed pawns?|isolated pawns?|doubled pawns?|outpost/i;
+      const STANDING = /stuck in the centre|Newly undefended|open files?|passed pawns?|isolated pawns?|doubled pawns?|outpost/i;
       const counts = new Map<string, number>();
       for (const seg of segments) {
         if (!seg.narration) continue;
@@ -858,5 +858,35 @@ describe('buildReviewSegments — gem crush wiring (P2, David: "crush lines duri
     expect(joined).toMatch(/known mistake/i);
     expect(joined).toMatch(new RegExp(esc(gem.punish)));
     expect(joined).toMatch(/well spotted/i); // the student played the crush
+  });
+});
+
+describe('recapSecondPerson — the card never shows the fact package (WO-STANDARD-01 D-12, 2026-09-22)', () => {
+  // Prod rendered "Post-game recap … The student made 1 blunder(s)" when the
+  // phrasing model was unavailable: the third-person package meant for the
+  // MODEL reached the student raw. The fallback is the same numbers in the
+  // student's own register.
+  const base = {
+    outcome: '0-1', playerColor: 'black', openingClause: 'with the Caro-Kann',
+    blunderCount: 1, mistakeCount: 2, inaccuracyCount: 1,
+    keyMoments: ['On move 12, Nb6 was a mistake; the engine preferred e6 (the evaluation moved from -7.5 to a forced mate for Black).'],
+    totalErrors: 4,
+  };
+  it('speaks TO the student — "you", never "the student", and reads the moment as theirs', () => {
+    const s = recapSecondPerson(base);
+    expect(s).toMatch(/^You won with the Caro-Kann\./);
+    expect(s).toMatch(/You made 1 blunder, 2 mistakes, 1 inaccuracy\./);
+    expect(s).toMatch(/On move 12 your Nb6 was a mistake/);
+    expect(s).not.toMatch(/the student/i);
+    expect(s).not.toMatch(/blunder\(s\)/);
+  });
+  it('reads the outcome from the seat: the same 0-1 is a loss for White', () => {
+    expect(recapSecondPerson({ ...base, playerColor: 'white' })).toMatch(/^You lost with the Caro-Kann\./);
+    expect(recapSecondPerson({ ...base, outcome: '1/2-1/2' })).toMatch(/^You drew/);
+  });
+  it('a clean game is praised as clean, with no empty error list', () => {
+    const s = recapSecondPerson({ ...base, blunderCount: 0, mistakeCount: 0, inaccuracyCount: 0, keyMoments: [], totalErrors: 0 });
+    expect(s).toMatch(/played cleanly/);
+    expect(s).not.toMatch(/You made/);
   });
 });

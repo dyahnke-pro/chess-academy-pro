@@ -539,3 +539,27 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
     expect(out).toMatch(/but the knight takes f3 and it falls apart/);
   });
 });
+
+describe('uncertaintyClause rotates its stem on a stable key (WO-STANDARD-01 D-8, 2026-09-22)', () => {
+  // "It's genuinely close — X is about as good, so don't agonise" fired four
+  // times in seven moves on prod. The caller passes the ply; the same ply
+  // always gets the same stem — never Math.random.
+  const read = {
+    fen: '8/8/8/8/8/8/8/8 w - - 0 1', studentColor: 'white', bestMoveSan: 'Nf3', bestMoveUci: 'g1f3',
+    line: [], checkPlies: [], keyTactic: null, tempting: null,
+    verdict: { kind: 'edge', mateIn: null, studentCp: 60, text: 'a pleasant edge' },
+    closeAlternative: { san: 'Bc4', gapCp: 20 },
+  } as unknown as TacticalRead;
+  it('four consecutive plies get four different sentences, all naming the alternative', () => {
+    const out = [0, 1, 2, 3].map((rotation) => uncertaintyClause(read, { rotation })!);
+    expect(new Set(out).size).toBe(4);
+    for (const s of out) expect(s).toContain('Bc4');
+    // A sentence-initial spelled move is capitalised in the spoken register.
+    expect(uncertaintyClause(read, { rotation: 1, spoken: true })).toMatch(/^The bishop to c4 is a fine alternative/);
+  });
+  it('is keyed, not rolled: the same ply repeats its stem, rotation 4 wraps to 0, no rotation means stem 0', () => {
+    expect(uncertaintyClause(read, { rotation: 2 })).toBe(uncertaintyClause(read, { rotation: 2 }));
+    expect(uncertaintyClause(read, { rotation: 4 })).toBe(uncertaintyClause(read, { rotation: 0 }));
+    expect(uncertaintyClause(read)).toBe(uncertaintyClause(read, { rotation: 0 }));
+  });
+});

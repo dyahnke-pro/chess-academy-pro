@@ -60,8 +60,17 @@ describe('detectOpponentGap — the take-advantage-of-the-gap', () => {
 
   it('the nudge names no move (guide-don\'t-tell)', () => {
     const gap = detectOpponentGap({ opponentIntent: intent, opponentPlayedUci: 'h7h6', analysisAfter: { evaluation: 200, bestMove: 'f3e5', isMate: false, mateIn: null }, studentColor: 'w' })!;
-    const clause = opponentGapClause(gap);
+    const clause = opponentGapClause(gap, 'coach-is-opponent');
     expect(clause).toMatch(/let you off/);
     expect(clause).not.toMatch(/[NBRQK]x?[a-h][1-8]|x[a-h][1-8]|e5/);
+  });
+
+  it('speaks from its seat — "I" when the coach is the opponent, "they" otherwise, never "he" (D-9)', () => {
+    const gap = detectOpponentGap({ opponentIntent: intent, opponentPlayedUci: 'h7h6', analysisAfter: { evaluation: 200, bestMove: 'f3e5', isMate: false, mateIn: null }, studentColor: 'w' })!;
+    expect(opponentGapClause(gap, 'coach-is-opponent')).toMatch(/^I let you off/);
+    expect(opponentGapClause(gap, 'student')).toMatch(/^they let you off/);
+    for (const seat of ['coach-is-opponent', 'student'] as const) {
+      expect(opponentGapClause(gap, seat)).not.toMatch(/\b(he|she|his|her)\b/i);
+    }
   });
 });

@@ -253,11 +253,14 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       [{ type: 'fork', description: 'knight fork', depthAhead: 2, line: ['Nd5', 'Bd6', 'Nxe7'] }],
       [],
     );
-    const say = speakDeepestLookahead(ctx, 'student');
+    const say = speakDeepestLookahead(ctx, 'student', 'w');
     expect(say).toBeTruthy();
     expect(say!.toLowerCase()).toContain('fork');
-    expect(say).toContain('Nd5');
-    expect(say).toContain('Nxe7');
+    // D-10 (2026-09-22): every ply is SPELLED. A bare "Nd5" next to the TTS
+    // sanitizer's own expansion of it spoke every move twice on prod.
+    expect(say).toContain('the knight to d5');
+    expect(say).toContain('the knight taking on e7');
+    expect(say).not.toMatch(/\b[NBRQK]x?[a-h][1-8]\b/); // no piece-letter SAN token survives
     expect(say).toMatch(/you've got/i); // student-seat (opportunity)
   });
 
@@ -266,7 +269,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       [{ type: 'fork', description: 'f', depthAhead: 2, line: ['Nd5', 'a6', 'Nxe7'] }],
       [{ type: 'pin', description: 'p', depthAhead: 3, line: ['Bg5', 'h6', 'Bxf6'] }],
     );
-    expect(speakDeepestLookahead(ctx, 'student')!).toMatch(/you've got/i);
+    expect(speakDeepestLookahead(ctx, 'student', 'w')!).toMatch(/you've got/i);
   });
 
   it('warns on an opponent threat (heads-up seat) when no opportunity exists', () => {
@@ -274,17 +277,41 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       [],
       [{ type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }],
     );
-    const say = speakDeepestLookahead(ctx, 'student');
+    // The fixture is WHITE to move. With the student as BLACK the whole line is
+    // the opponent's: "they're lining up".
+    const say = speakDeepestLookahead(ctx, 'student', 'b');
     expect(say).toMatch(/they're lining up/i);
     // The seat is part of the sentence (2026-09-19): spoken AS the opponent, the
     // same threat is "I'm lining up", never "they're" — the coach cannot name its
     // own plan in the third person mid-read.
-    const asOpponent = speakDeepestLookahead(ctx, 'coach-is-opponent')!;
+    const asOpponent = speakDeepestLookahead(ctx, 'coach-is-opponent', 'b')!;
     expect(asOpponent).toMatch(/I'm lining up/);
     expect(asOpponent).not.toMatch(/they're/i);
     expect(asOpponent.replace(/^Look ahead — I'm/, "Look ahead — they're")).toBe(say);
     expect(say!.toLowerCase()).toContain('skewer');
-    expect(say).toContain('Re1');
+    expect(say).toContain('the rook to e1');
+  });
+
+  it('D-9 (2026-09-22): when the STUDENT\'s own move opens the line, it is "if you play …, they have …" — never "they\'re lining up" their own move', () => {
+    // Prod said "Look ahead — they're lining up a pin in 2: Bg5, then Bg4" where
+    // Bg5 was the student's move. The fixture is white to move; the student IS
+    // white, so ply 0 (Re1) is theirs and the threat is the reply.
+    const ctx = ctxWith(
+      [],
+      [{ type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }],
+    );
+    const say = speakDeepestLookahead(ctx, 'student', 'w')!;
+    expect(say).toMatch(/if you play the rook to e1, they have the queen to d7, then the rook taking on e8/);
+    expect(say).not.toMatch(/lining up/i);
+    expect(say.toLowerCase()).toContain('skewer in 3');
+    // Coach seat: the reply is the coach's own — "I have", never "they have".
+    const asOpponent = speakDeepestLookahead(ctx, 'coach-is-opponent', 'w')!;
+    expect(asOpponent).toMatch(/if you play the rook to e1, I have the queen to d7/);
+    expect(asOpponent).not.toMatch(/they/i);
+    expect(asOpponent.replace(', I have', ', they have')).toBe(say);
+    // NEGATIVE CONTROL: flip the student's colour and the same line becomes the
+    // opponent's plan again — the branch is keyed on side-to-move, not on seat.
+    expect(speakDeepestLookahead(ctx, 'student', 'b')).toMatch(/they're lining up/);
   });
 
   it('is the DEEP scan only — ignores depth-1 (shallow) upcoming tactics', () => {
@@ -292,7 +319,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       [{ type: 'fork', description: 'f', depthAhead: 1, line: ['Nd5'] }],
       [],
     );
-    expect(speakDeepestLookahead(ctx, 'student')).toBeNull();
+    expect(speakDeepestLookahead(ctx, 'student', 'w')).toBeNull();
   });
 
   it('Phase 1b: PREFERS a deep tactic whose motif is a hole the student keeps falling in, and tags it', () => {
@@ -310,12 +337,12 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       label: 'Misses discoveries', openCount: 5, total: 5, severity: 70,
       lifecycleStatus: 'persistent' as const, trend: 'worsening' as const, puzzleThemes: [] as string[],
     }];
-    const say = speakDeepestLookahead(ctx, 'student', holeSignals)!;
+    const say = speakDeepestLookahead(ctx, 'student', 'w', holeSignals)!;
     expect(say.toLowerCase()).toContain('discovery');   // the hole motif won the pick
-    expect(say).toContain('Ne4');
+    expect(say).toContain('the knight to e4');
     expect(say).toMatch(/tend to miss/i);               // honest recurring-hole tag
     // With NO profile, the FIRST deep tactic (fork) is picked — prior behavior, no tag.
-    const plain = speakDeepestLookahead(ctx, 'student')!;
+    const plain = speakDeepestLookahead(ctx, 'student', 'w')!;
     expect(plain.toLowerCase()).toContain('fork');
     expect(plain).not.toMatch(/tend to miss/i);
   });
@@ -329,11 +356,11 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
       clusterId: 'analysis:tactic:pin', bucket: 'tactical' as const, label: 'Walks into pins',
       openCount: 4, total: 4, severity: 60, lifecycleStatus: 'persistent' as const, trend: 'flat' as const, puzzleThemes: [] as string[],
     }];
-    expect(speakDeepestLookahead(ctx, 'student', holeSignals)!).toMatch(/keeps catching you/i);
+    expect(speakDeepestLookahead(ctx, 'student', 'w', holeSignals)!).toMatch(/keeps catching you/i);
   });
 
   it('returns null on a quiet position (nothing upcoming)', () => {
-    expect(speakDeepestLookahead(ctxWith([], []), 'student')).toBeNull();
+    expect(speakDeepestLookahead(ctxWith([], []), 'student', 'w')).toBeNull();
   });
 });
 

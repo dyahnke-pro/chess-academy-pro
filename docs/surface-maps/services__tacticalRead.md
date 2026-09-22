@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**805 lines · 25 exports · 4 importers · 2 tests · 0 audits**
+**763 lines · 25 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/danyaBehaviors.ts`
 - `src/services/danyaDeviceCoverage.test.ts`
+- `src/services/liveVoiceDefects.test.ts`
 - `src/services/tacticalRead.test.ts`
 
 ## Exports and every call site
@@ -71,8 +72,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:74`
 
 ### `namedTacticClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8843`
-- `src/services/danyaBehaviors.ts:317`
+- `src/components/Coach/CoachTeachPage.tsx:9083`
+- `src/services/danyaBehaviors.ts:320`
 - `src/services/danyaDeviceCoverage.test.ts:101`
 - `src/services/tacticalRead.test.ts:134`
 - `src/services/tacticalRead.test.ts:143`
@@ -81,10 +82,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:113`
 - `src/services/tacticalRead.test.ts:116`
 
-### `tacticalReadFromLines` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8335`
-- `src/services/danyaBehaviors.ts:315`
+### `tacticalReadFromLines` (function) — 12 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8572`
+- `src/services/danyaBehaviors.ts:318`
 - `src/services/danyaDeviceCoverage.test.ts:72`
+- `src/services/liveVoiceDefects.test.ts:46`
 - `src/services/tacticalRead.test.ts:339`
 - `src/services/tacticalRead.test.ts:353`
 - `src/services/tacticalRead.test.ts:367`
@@ -102,24 +104,30 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:527`
 
 ### `temptingTurnClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8346`
-- `src/components/Coach/CoachTeachPage.tsx:8862`
+- `src/components/Coach/CoachTeachPage.tsx:8583`
+- `src/components/Coach/CoachTeachPage.tsx:9102`
 - `src/services/danyaDeviceCoverage.test.ts:78`
 - `src/services/tacticalRead.test.ts:427`
 - `src/services/tacticalRead.test.ts:440`
 
-### `uncertaintyClause` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8347`
-- `src/components/Coach/CoachTeachPage.tsx:8865`
+### `uncertaintyClause` (function) — 14 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8584`
+- `src/components/Coach/CoachTeachPage.tsx:9105`
 - `src/services/danyaDeviceCoverage.test.ts:83`
+- `src/services/liveVoiceDefects.test.ts:281`
 - `src/services/tacticalRead.test.ts:412`
 - `src/services/tacticalRead.test.ts:433`
 - `src/services/tacticalRead.test.ts:441`
 - `src/services/tacticalRead.test.ts:507`
 - `src/services/tacticalRead.test.ts:518`
+- `src/services/tacticalRead.test.ts:554`
+- `src/services/tacticalRead.test.ts:558`
+- `src/services/tacticalRead.test.ts:561`
+- `src/services/tacticalRead.test.ts:562`
+- `src/services/tacticalRead.test.ts:563`
 
 ### `candidateCompareClause` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8352`
+- `src/components/Coach/CoachTeachPage.tsx:8589`
 - `src/services/danyaDeviceCoverage.test.ts:88`
 - `src/services/tacticalRead.test.ts:445`
 - `src/services/tacticalRead.test.ts:453`
@@ -173,8 +181,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/danyaDeviceCoverage.test.ts`
+- `src/services/liveVoiceDefects.test.ts`
 - `src/services/tacticalRead.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

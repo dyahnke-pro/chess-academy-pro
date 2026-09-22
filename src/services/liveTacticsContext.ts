@@ -42,6 +42,7 @@ import { stockfishEngine } from './stockfishEngine';
 import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/tacticTypes';
 import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 import { conceptForBoard } from './conceptEngine';
+import { sayMoveNoun } from './spokenMove';
 import { verifyForkOnBoard } from './tacticVerification';
 
 /**
@@ -471,6 +472,13 @@ const THREAT_STEM: Record<LookaheadSeat, (pattern: string, depth: number, line: 
 export function speakDeepestLookahead(
   ctx: TacticsLiveContext,
   seat: LookaheadSeat,
+  /** The STUDENT's colour — required, because the line starts at the current
+   *  position and its first ply belongs to whoever is to move, which may be the
+   *  student. Prod (2026-09-22, WO-STANDARD-01 D-9) said "Look ahead — they're
+   *  lining up a pin in 2: Bg5, then Bg4" where Bg5 was the STUDENT's move: the
+   *  renderer attributed the whole line to the opponent. Each ply is now
+   *  attributed to its seat off `ctx.fen`'s side to move. */
+  studentColor: 'w' | 'b',
   /** The student model (Phase 1b) — when a deep tactic's MOTIF is a hole this
    *  student keeps falling in (via the tactic-vocabulary bridge), it is PREFERRED
    *  as the one to speak, and an honest tag names the recurring pattern. Optional/
@@ -496,14 +504,16 @@ export function speakDeepestLookahead(
   if (!pick) return null;
   const isOpportunity = pick === opportunity;
   const pattern = pick.type.replace(/[-_]/g, ' ');
-  // Walk the first few plies of the PV in prose — "after X, then Y, then Z".
-  // The SANs come straight from the engine line (chess.js-legal), so naming
-  // them is grounded, not invented.
+  // Walk the first few plies of the PV in prose. The SANs come straight from
+  // the engine line (chess.js-legal), so naming them is grounded, not invented
+  // — and they are SPELLED (D-10): a bare "Bg5" beside the TTS sanitizer's own
+  // expansion of it spoke every move twice.
   const walk = pick.line.slice(0, 4);
+  const spoken = walk.map(sayMoveNoun);
   const lineProse =
-    walk.length === 1
-      ? walk[0]
-      : `${walk[0]}, then ${walk.slice(1).join(', ')}`;
+    spoken.length === 1
+      ? spoken[0]
+      : `${spoken[0]}, then ${spoken.slice(1).join(', ')}`;
   // Honest recurring-hole tag ONLY when this motif is one of the student's holes
   // (profile-proven) AND the tactic is real (board-proven) — never invented.
   const holeTag = isHole(pick)
@@ -512,8 +522,26 @@ export function speakDeepestLookahead(
   if (isOpportunity) {
     return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${lineProse}.${holeTag}`;
   }
+  // WHOSE MOVE OPENS THE LINE. The PV starts at `ctx.fen`, so ply 0 belongs to
+  // the side to move there. When that is the STUDENT, the threat is what the
+  // opponent gets IF the student plays that move — "they're lining up" would
+  // hand the student's own move to the other seat.
+  const toMove = (ctx.fen.split(' ')[1] ?? 'w') as 'w' | 'b';
+  const studentOpens = toMove === studentColor;
+  if (studentOpens && spoken.length >= 2) {
+    const reply = spoken.slice(1);
+    const replyProse = reply.length === 1 ? reply[0] : `${reply[0]}, then ${reply.slice(1).join(', ')}`;
+    return `${CONDITIONAL_THREAT_STEM[seat](pattern, pick.depthAhead, spoken[0], replyProse)}${holeTag}`;
+  }
   return `${THREAT_STEM[seat](pattern, pick.depthAhead, lineProse)}${holeTag}`;
 }
+
+/** The threat when the STUDENT's own move opens the line: their move is the
+ *  "if", the opponent's reply is the threat. Per seat, like `THREAT_STEM`. */
+const CONDITIONAL_THREAT_STEM: Record<LookaheadSeat, (pattern: string, depth: number, yours: string, theirs: string) => string> = {
+  student: (pattern, depth, yours, theirs) => `Look ahead — if you play ${yours}, they have ${theirs}: a ${pattern} in ${depth}. Spot it before it lands.`,
+  'coach-is-opponent': (pattern, depth, yours, theirs) => `Look ahead — if you play ${yours}, I have ${theirs}: a ${pattern} in ${depth}. Spot it before it lands.`,
+};
 
 /** Render a computed `TacticsLiveContext` into the grounded prompt block (BOARD
  *  FACTS + immediate tactics + hanging + attack map + lookahead threats). Lives

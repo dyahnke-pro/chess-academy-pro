@@ -58,6 +58,7 @@ import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } f
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { describeEvalCp } from './engineConstants';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -325,8 +326,10 @@ export async function generateNarrativeSummary(
     else if (isStudent && m.classification === 'inaccuracy') inaccuracyCount++;
     if (isStudent && (m.classification === 'blunder' || m.classification === 'mistake')) {
       const fullMove = Math.ceil(m.moveNumber / 2);
+      // Mate-aware (D-12): a sentinel eval reads "a forced mate for Black",
+      // never "-300.0".
       const swing = prevEvalCp !== null && m.evaluation !== null
-        ? ` (the evaluation moved from ${(prevEvalCp / 100).toFixed(1)} to ${(m.evaluation / 100).toFixed(1)})`
+        ? ` (the evaluation moved from ${describeEvalCp(prevEvalCp)} to ${describeEvalCp(m.evaluation)})`
         : '';
       // Convert the engine's best-move UCI → clean SAN (never speak raw UCI).
       const bestSan = m.bestMove ? (uciToSanAt(m.bestMove, fenBefore[i] ?? '') ?? m.bestMove) : null;
@@ -379,9 +382,56 @@ export async function generateNarrativeSummary(
         ];
   const facts = factParts.filter(Boolean).join(' ');
 
-  const voiced = (await voiceFacts(facts, { intent: `review-recap:${verbosity}`, warm: true })) ?? facts;
+  // THE CARD NEVER SHOWS THE FACT PACKAGE (WO-STANDARD-01 D-12, prod tape
+  // 2026-09-22: "Post-game recap … The student made 1 blunder(s)" rendered
+  // raw when the phrasing model was unavailable). The package is written in
+  // the third person for the MODEL; when the model does not answer, the
+  // student gets the same numbers in a second-person computed template —
+  // same facts, one voice (G0: the fallback is the computed register, not a
+  // debug string).
+  const spokenFallback = recapSecondPerson({
+    outcome: result, playerColor, openingClause,
+    blunderCount, mistakeCount, inaccuracyCount, keyMoments: keyMoments.slice(0, momentBudget), totalErrors,
+  });
+  const voiced = (await voiceFacts(facts, { intent: `review-recap:${verbosity}`, warm: true })) ?? spokenFallback;
   onStream?.(voiced);
   return voiced;
+}
+
+/** The recap in the STUDENT's register, from the same computed numbers the
+ *  model is handed. Exported so the gate can prove it never says "the
+ *  student" and never renders a mate sentinel as a number. */
+export function recapSecondPerson(r: {
+  outcome: string;
+  playerColor: string;
+  openingClause: string;
+  blunderCount: number;
+  mistakeCount: number;
+  inaccuracyCount: number;
+  keyMoments: readonly string[];
+  totalErrors: number;
+}): string {
+  const won = (r.outcome === '1-0') === (r.playerColor === 'white');
+  const outcome = r.outcome === '1-0' || r.outcome === '0-1'
+    ? (won ? `You won ${r.openingClause}.` : `You lost ${r.openingClause}.`)
+    : r.outcome === '1/2-1/2' || r.outcome === '½-½'
+      ? `You drew ${r.openingClause}.`
+      : `The game ended ${r.outcome}.`;
+  const n = (count: number, word: string): string => `${count} ${word}${count === 1 ? '' : (word === 'inaccuracy' ? '' : 's')}`;
+  const errors = r.totalErrors === 0
+    ? 'The engine flagged nothing — you played cleanly.'
+    : `You made ${[
+        r.blunderCount > 0 ? n(r.blunderCount, 'blunder') : null,
+        r.mistakeCount > 0 ? n(r.mistakeCount, 'mistake') : null,
+        r.inaccuracyCount > 0 ? (r.inaccuracyCount === 1 ? '1 inaccuracy' : `${r.inaccuracyCount} inaccuracies`) : null,
+      ].filter(Boolean).join(', ')}.`;
+  // The key moments are third-person for the model ("the engine preferred");
+  // in the student's voice the move is theirs.
+  const moments = r.keyMoments.map((k) => k.replace(/^On move (\d+), (\S+) was a (\w+)/, 'On move $1 your $2 was a $3'));
+  const tip = r.totalErrors === 0
+    ? 'Keep that accuracy and pick one sharper idea to try next game.'
+    : 'The one thing to carry into the next game: slow down at the flagged moments.';
+  return [outcome, errors, ...moments, tip].join(' ');
 }
 
 // ─── Review Narration Segments ─────────────────────────────────────────────
