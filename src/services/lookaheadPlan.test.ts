@@ -149,8 +149,12 @@ describe('two plans, one line', () => {
   });
 
   it('DOES call a piece trade a plan', () => {
+    // The line starts at the position Black is to move in (a PV starts at the
+    // current board, D-6): Black's first move Nc6 attacks e5, and Black takes
+    // the knight back there two plies later.
+    const afterNf3 = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) afterNf3.move(s);
     const plan = buildLookaheadPlan(
-      line(plies(START, ['e4', 'e5', 'Nf3', 'Nc6', 'Nxe5', 'Nxe5'])),
+      line(plies(afterNf3.fen(), ['Nc6', 'Nxe5', 'Nxe5', 'd4'])),
       'white',
     );
     // White's Nxe5 takes a PAWN; it is Black who takes the knight back — so
@@ -1254,5 +1258,30 @@ describe('mergeTwinDrift — the double-sentence fix must actually RUN', () => {
     mergeTwinDriftForTest(mine, theirs);
     expect(theirs.text, 'only a genuine twin may be merged').toBe(before);
     expect(mine.text).toBe('You want to win a rook.');
+  });
+});
+
+describe('the trade clause belongs to the move that sets it up (WO-STANDARD-01 D-6, 2026-09-22)', () => {
+  it('a piece captured later, by a different piece, on a square the first move never looked at is NOT this move\'s WHY', () => {
+    // Prod: "Nc6 was the move, to trade off the knight" — nothing to trade.
+    // Here Black's first move is Nc6; the bishop comes off three plies later
+    // when the d-pawn recaptures on c6 — a square the knight on c6 does not
+    // attack. The trade is real (it stays in `trading`); it is not Nc6's reason.
+    const afterNf3 = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) afterNf3.move(s);
+    const plan = buildLookaheadPlan(
+      line(plies(afterNf3.fen(), ['Nc6', 'Bb5', 'a6', 'Bxc6', 'dxc6'])),
+      'white',
+    );
+    expect(plan?.black.trading).toContain('bishop');
+    expect(plan?.black.tradeIntended).toEqual([]);
+    expect(plan?.black.text).not.toContain('trade off the bishop');
+  });
+  it('NEGATIVE CONTROL: a first move that attacks the square the capture lands on keeps its trade WHY', () => {
+    // Nc6 attacks e5; Black's next own move is Nxe5. The existing "DOES call a
+    // piece trade a plan" case, asserted on the new field.
+    const afterNf3 = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) afterNf3.move(s);
+    const plan = buildLookaheadPlan(line(plies(afterNf3.fen(), ['Nc6', 'Nxe5', 'Nxe5', 'd4'])), 'white');
+    expect(plan?.black.tradeIntended).toEqual(['knight']);
+    expect(plan?.black.text).toContain('trade off the knight');
   });
 });

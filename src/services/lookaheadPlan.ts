@@ -18,7 +18,7 @@
 // EVERY claim here is arithmetic over moves the engine actually played (G0/G3).
 // Nothing is inferred about intentions: "heading for e5" means a piece of that
 // colour lands on e5 inside the line, not that the model believes it wants to.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { computePlyFacts } from './pvPlayback';
 import { describeStructure } from './boardStructure';
 import { detectTactics } from './tacticsDetector';
@@ -160,6 +160,11 @@ export interface SidePlan {
   materialSquares: string[];
   /** Where a PIECE (never a pawn) gets traded off. */
   tradeSquares: string[];
+  /** The piece trades this side's FIRST move actually sets up — the capture
+   *  is that move, or the first move lands where it attacks the square the
+   *  capture happens on. Only these may be spoken as the move's WHY
+   *  (WO-STANDARD-01 D-6). */
+  tradeIntended: string[];
   /** Where the tactic lands, when one does. */
   tacticSquare: string | null;
   /** This side's pieces that never move in the whole line, by square — "your
@@ -429,6 +434,7 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
   const kingAttackSquares: string[] = [];
   const materialSquares: string[] = [];
   const tradeSquares: string[] = [];
+  const tradeIntended: string[] = [];
   let checks = 0;
   let promotes: string | null = null;
   /** Where each of this side's pieces has travelled so far, keyed by the square
@@ -456,7 +462,16 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     const taken = capturedPiece(ply.facts.captured);
     if (taken) {
       trading.push(taken);
-      if (taken !== 'pawn') tradeSquares.push(to);
+      if (taken !== 'pawn') {
+        tradeSquares.push(to);
+        // THE WHY MUST BELONG TO THE MOVE (WO-STANDARD-01 D-6, prod tape
+        // 2026-09-22: "Nc6 was the move, to trade off the knight" — the
+        // knight came off five plies later, by a different piece, on a
+        // square Nc6 never looked at). A trade is this move's intention only
+        // when the move IS the capture, or lands where it attacks the square
+        // the capture happens on — read off the board after the first move.
+        if (tradeSetUpByFirstMove(mine[0], to, color)) tradeIntended.push(taken);
+      }
     }
     if (ply.facts.outpostGained) outposts.push(ply.facts.outpostGained);
     // VERIFY THE PAWN IS ACTUALLY THIS SIDE'S, ON THE BOARD, BEFORE CLAIMING
@@ -564,10 +579,25 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     kingAttackSquares,
     materialSquares,
     tradeSquares,
+    tradeIntended,
     text: '',
     aside: '',
     spokenClauses: [],
   };
+}
+
+/** Does this side's first move of the line set up a capture on `captureSq`?
+ *  True when the first move IS that capture, or when the piece it moved
+ *  attacks `captureSq` from where it landed. Board-read; never inferred from
+ *  the SAN. */
+function tradeSetUpByFirstMove(first: PvPly | undefined, captureSq: string, color: 'white' | 'black'): boolean {
+  if (!first) return false;
+  const { to } = squaresOf(first);
+  if (to === captureSq && first.facts.captured) return true;
+  try {
+    const c = new Chess(first.fenAfter);
+    return c.attackers(captureSq as Square, color === 'white' ? 'w' : 'b').includes(to as Square);
+  } catch { return false; }
 }
 
 /**
@@ -715,7 +745,9 @@ export function describePlan(
     // A PAWN TRADE IS NOT A PLAN. "They want to trade off the pawn" was in the
     // five-narration sample and says nothing — pawns come off in almost every
     // line. Trading a PIECE is a real intention; trading a pawn is weather.
-    const unique = [...new Set(plan.trading)].filter((p) => p !== 'pawn');
+    // AND THE FIRST MOVE MUST SET IT UP (D-6): a capture somewhere down the
+    // line is the line's weather, not this move's reason.
+    const unique = [...new Set(plan.tradeIntended)].filter((p) => p !== 'pawn');
     if (unique.length > 0) {
       add(20, `trade off ${unique.length > 1 ? 'pieces' : `the ${unique[0]}`}`, plan.tradeSquares);
     }
@@ -1433,7 +1465,7 @@ function shortLineRead(
     passedPawns: [], materialSwing: 0, shieldStripped: 0, tactic: null,
     tacticSquare: null, idlePieces: [], maneuver: null, checks: 0, promotes: null,
     mates: false, nearEnemyKing: 0,
-    kingAttackSquares: [], materialSquares: [], tradeSquares: [],
+    kingAttackSquares: [], materialSquares: [], tradeSquares: [], tradeIntended: [],
     text: '', aside: '', spokenClauses: [],
   });
   // A mate ON THE BOARD is the one intention a zero-ply line still has.
