@@ -5,6 +5,8 @@ import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
 import { computePositionFacts, clauseText } from '../services/positionFacts';
 import { useWeaknessSignals } from './useWeaknessSignals';
+import { useStudentNeed } from './useStudentNeed';
+import { lastMoveIfStudent, sansOfPgn } from '../services/lastMoveOfLine';
 import { logAppAudit } from '../services/appAuditor';
 
 import { db } from '../db/schema';
@@ -23,6 +25,10 @@ import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
 export interface UsePhaseNarrationArgs {
   /** Full PGN at narration time — fed into the grounding block. */
   getPgn: () => string;
+  /** The student's seat. REQUIRED (B3): the need context is loaded for one
+   *  colour at mount, and a transition event names its `playerColor` only when
+   *  it fires — too late to load for, and a default would be a guessed seat. */
+  playerColor: 'white' | 'black';
   /** Opening name as detected by the coach game screen. */
   getOpeningName: () => string | null;
   /**
@@ -124,6 +130,11 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
  */
 export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarrationResult {
   const weaknessRef = useWeaknessSignals(); // student model → re-ranks phase narration (Phase 1)
+  // …AND THE NEED TERM (B3) — the line is read from the PGN at fire time.
+  const studentNeedRef = useStudentNeed({
+    studentColor: args.playerColor, openingId: null, eco: null,
+    sans: () => sansOfPgn(argsRef.current.getPgn() ?? ''),
+  });
   // SAY-ONCE across the game — see useLiveCoach for the reasoning. Phase
   // transitions are rarer, but the structure line is exactly the kind of
   // standing fact that would open every one of them identically.
@@ -604,6 +615,15 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             analysis: stockfishAnalysis,
             evalBoard: (f) => stockfishEngine.evalBoard(f),
             studentWeaknesses: weaknessRef.current,
+            // THE HEAT MAP + THE NEED TERM (B3). The transition fires on the
+            // student's move, so the last move of the line is theirs when the
+            // PGN really produces `event.fen`; otherwise absent. `cpLoss: null`
+            // — this surface never graded the move.
+            ...((): { lastMove?: { fenBefore: string; san: string; cpLoss: number | null } } => {
+              const lm = lastMoveIfStudent(sansOfPgn(argsRef.current.getPgn() ?? ''), event.playerColor, event.fen);
+              return lm ? { lastMove: lm } : {};
+            })(),
+            studentNeedContext: studentNeedRef.current,
             alreadySaid: standingRef.current.said,
           });
           for (const t of pf.remember) standingRef.current.said.add(t);

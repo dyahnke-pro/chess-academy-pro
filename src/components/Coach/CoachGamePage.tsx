@@ -28,6 +28,7 @@ import { MoveListPanel } from './MoveListPanel';
 import { ResignButton } from './ResignButton';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
+import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { useNarration } from '../../hooks/useNarration';
 import { buildPlayEntryNarration } from '../../services/playEntryNarration';
@@ -1011,9 +1012,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // analysis from this component's existing Stockfish pipeline (we do
   // NOT re-run the engine inside the hook) and dispatches LLM speech
   // when one of the five triggers fires.
+  // THE NEED HALF of the student model for this page's "Why?" (B3). Honest
+  // nulls for the opening — Play identifies it by NAME after the fact.
+  const studentNeedRef = useStudentNeed({ rating: playerRating, studentColor: playerColor, openingId: null, eco: null, sans: () => game.history });
   const liveCoach = useLiveCoach({
     gameId: gameState.gameId,
     playerColor,
+    getHistory: () => game.history,
     // OFF — Play is a pure playing surface and stays silent until asked
     // (David 2026-07-06, locked; re-confirmed 2026-08-16). This hook predates
     // that contract and volunteers LLM commentary on "meaningful moments" —
@@ -1811,6 +1816,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
+    playerColor,
     getOpeningName: () => detectedOpening?.name ?? null,
     getLiveFen: () => game.fen,
     // Persist the phase-transition report in the chat messages under the board
@@ -3852,6 +3858,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       liveCoach.notifyPlayerMove({
         ply: moveCountRef.current,
         san: moveResult.san,
+        fenBefore: preFen,
         fenAfter: moveResult.fen,
         evalBefore: preMoveEval ?? 0,
         evalAfter: analysis.evaluation,
@@ -4445,7 +4452,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     const fen = game.fen;
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
-      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current });
+      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
       const answer = why || 'No single best move stands out here — the position is roughly balanced.';
       gameChatRef.current?.injectAssistantMessage(answer);
       void voiceService.speakReadAloud(answer);

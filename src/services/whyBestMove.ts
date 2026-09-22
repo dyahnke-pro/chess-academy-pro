@@ -16,6 +16,7 @@ import { explainBestMoveGrounded } from './groundedAnswer';
 import { computePositionFacts, clauseText } from './positionFacts';
 import { positionTeachingWhy, groundedMoveWhy } from './groundedMoveWhy';
 import type { WeaknessSignal } from './weaknessSignal';
+import type { StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface WhyBestMoveInput {
@@ -30,6 +31,13 @@ export interface WhyBestMoveInput {
   /** The student model — re-ranks the briefing toward the holes THIS student
    *  keeps falling in (Phase 1). Optional/inert when absent. */
   studentWeaknesses?: readonly WeaknessSignal[];
+  /** The OTHER half of the student model (N2): does this student need teaching
+   *  here. REQUIRED, `null` allowed (B3): a caller must say whether it loaded
+   *  the context, so a new "Why?" surface cannot silently ship without the
+   *  need term the way the first three live surfaces did. No `lastMove` here
+   *  — the student is to move, so the last move is the opponent's and nothing
+   *  was posed to the student by it. */
+  studentNeedContext: StudentNeedContext | null;
 }
 
 function bestSan(fen: string, uci: string | null): string | null {
@@ -90,6 +98,7 @@ export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<strin
       rating: input.rating ?? DEFAULT_STUDENT_RATING,
       ...(input.prevEvalCpWhitePov != null ? { prevEvalCpWhitePov: input.prevEvalCpWhitePov } : {}),
       ...(input.studentWeaknesses ? { studentWeaknesses: input.studentWeaknesses } : {}),
+      studentNeedContext: input.studentNeedContext,
     });
     const briefing = clauseText(pf.clauses, ['key-moment', 'convert']);
     for (const line of briefing) if (line && !parts.some((p) => p.includes(line))) parts.push(line);

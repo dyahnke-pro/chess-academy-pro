@@ -74,6 +74,7 @@ import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import {
   createPhaseTransitionState,
@@ -7163,7 +7164,7 @@ export function CoachTeachPage(): JSX.Element {
   // coach said the same thing on a line the student has played right five times.
   // Cold / still loading reads as SPEAK — a fresh install meets a teaching coach.
   const studentNeedRef = useStudentNeed({
-    rating: activeProfile?.currentRating ?? 1200,
+    rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     studentColor: playerColor,
     // Honest nulls: Learn tracks the opening by NAME, not by id/eco. Without
     // them the departure + opening-score terms simply do not fire; familiarity
@@ -7172,7 +7173,9 @@ export function CoachTeachPage(): JSX.Element {
     // which is worse than a term that stays silent.
     openingId: null,
     eco: null,
-    sans: gameRef.current.history,
+    // A GETTER, read at fire time (B3): the array form captured the mount-time
+    // history and measured every ply's familiarity against an empty line.
+    sans: () => gameRef.current.history,
   });
   // SAY-ONCE across the lesson. A standing fact (the pawn structure, a pin in
   // waiting, which piece is doing the work) is re-derived at every taught
@@ -7198,6 +7201,7 @@ export function CoachTeachPage(): JSX.Element {
   const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
+    playerColor,
     getOpeningName: () => walkthrough.tree?.openingName
       ?? useCoachMemoryStore.getState().intendedOpening?.name
       ?? null,

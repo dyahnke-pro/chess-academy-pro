@@ -33,6 +33,7 @@ import { computeThreatDelta, detectEnginePunish, type DeltaAside } from '../../s
 import type { NarrationArrow } from '../../types/walkthroughTree';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useMasterPlayWatcher } from '../../hooks/useMasterPlayWatcher';
+import { useStudentNeed } from '../../hooks/useStudentNeed';
 import { logAppAudit } from '../../services/appAuditor';
 import type { OpeningRecord, OpeningVariation, OpeningPlayResult, AnalysisLine, LichessCloudEval, BoardArrow, BoardHighlight, BoardAnnotationCommand } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -82,6 +83,10 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const displayName = customLine ? `${opening.name}: ${customLine.name}` : opening.name;
 
   const game = useChessGame(startFen, playerColor);
+  // THE NEED HALF of the student model for "Why?" (B3). Honest nulls for the
+  // opening: game records carry no id in this vocabulary, and a fabricated one
+  // would scope the departures to nothing.
+  const studentNeedRef = useStudentNeed({ rating: playerRating, studentColor: playerColor, openingId: null, eco: null, sans: () => game.history });
 
   // Publish board context for global coach drawer
   const playTurn = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
@@ -129,7 +134,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     const fen = game.fen;
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
-      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current });
+      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
       // Lead the eye to the move we NAME but don't play out (G6).
       const uci = analysis.bestMove;
       if (why && uci && uci.length >= 4) {

@@ -19,7 +19,7 @@ describe('computeWhyBestMove — computed, board-true, no LLM', () => {
   it('leads with the strongest move in SAN and names its concrete point', async () => {
     // White knight b5 → Nc7+ forks the king on e8 and the rook on a8.
     const fen = 'r3k3/8/8/1N6/8/8/8/6K1 w - - 0 1';
-    const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('b5c7', 300) });
+    const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('b5c7', 300), studentNeedContext: null });
     expect(why).toMatch(/strongest move is Nc7/);
     // The concrete point is present — a fork/check, not a generic "it's good".
     expect(why.length).toBeGreaterThan('The strongest move is Nc7.'.length);
@@ -29,7 +29,7 @@ describe('computeWhyBestMove — computed, board-true, no LLM', () => {
   it('names what a winning capture takes', async () => {
     // White Nxe5 grabs an undefended pawn (nothing recaptures on e5).
     const fen = '6k1/8/8/4p3/8/5N2/8/6K1 w - - 0 1';
-    const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('f3e5', 120) });
+    const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('f3e5', 120), studentNeedContext: null });
     expect(why).toMatch(/strongest move is Nxe5/);
   });
 
@@ -38,14 +38,14 @@ describe('computeWhyBestMove — computed, board-true, no LLM', () => {
     // is null. The why-chain floor must still name a concrete reason so the
     // "Why?" button never answers with a bare "The strongest move is e4.".
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-    const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('e2e4', 30) });
+    const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('e2e4', 30), studentNeedContext: null });
     expect(why).toMatch(/strongest move is e4 —/);
     expect(why).not.toMatch(/strongest move is e4\.\s*$/); // never bare
   });
 
   it('returns empty when there is no best move (silence over a guess)', async () => {
     const fen = '6k1/8/8/8/8/8/8/6K1 w - - 0 1';
-    const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('', 0) });
+    const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('', 0), studentNeedContext: null });
     expect(why).toBe('');
   });
 });
