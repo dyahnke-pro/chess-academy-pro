@@ -242,7 +242,7 @@ const PAWN_SAN_START = /^\s*[a-h](?:x[a-h])?[1-8](?:=[NBRQ])?(?:[+#])?(?:-[a-h][
  *  at LOAD, beside `noteTeachesChess`, so every tier inherits it. */
 export function noteIsWholeSentence(note: { explains?: string | null }): boolean {
   try {
-    const text = (note.explains ?? '').replace(/^["'“‘(\[]+/, '');
+    const text = (note.explains ?? '').replace(/^["'“‘([]+/, '');
     if (!text.trim()) return true;
     if (PAWN_SAN_START.test(text)) return true;
     return !FRAGMENT_START.test(text);

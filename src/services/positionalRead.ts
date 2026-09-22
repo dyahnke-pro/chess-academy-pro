@@ -25,7 +25,7 @@
 // It is the LOWEST-priority lane by design. It should never displace a tactic,
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
-import { Chess, type Square, type Color } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import {
   kingSafetyRead,
   developmentRead,
@@ -332,7 +332,7 @@ function joinsFor(
   const blockersOf = new Map<string, Set<string>>();
   for (const b of badBefore) {
     if (b.piece !== 'b') continue;
-    blockersOf.set(b.square, new Set(bishopBlockingPawns(probe, b.square as Square, color)));
+    blockersOf.set(b.square, new Set(bishopBlockingPawns(probe, b.square, color)));
   }
   const fixed = new Set<string>();
   for (const mv of probe.moves({ verbose: true })) {

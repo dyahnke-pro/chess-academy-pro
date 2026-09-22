@@ -131,7 +131,7 @@ export function pieceHasSafeEscape(chess: Chess, sq: Square, studentColorWB: Col
       after.move(m);
       // The student is to move on `after` already (the opponent just moved).
       if (after.turn() !== studentColorWB) continue;
-      if (legalSeeGainOn(after, m.to as Square) <= 0) return true;
+      if (legalSeeGainOn(after, m.to) <= 0) return true;
     } catch { /* an illegal probe is not an escape */ }
   }
   return false;
