@@ -65,7 +65,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.bands.test.ts:60`
 - `src/services/mistakePuzzleService.bands.test.ts:61`
 - `src/services/mistakePuzzleService.bands.test.ts:66`
-- `src/services/ratingBands.test.ts:84`
+- `src/services/ratingBands.test.ts:82`
 
 ### `MistakePuzzleProvenance` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -94,8 +94,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7173`
-- `src/components/Coach/CoachTeachPage.tsx:7179`
+- `src/components/Coach/CoachTeachPage.tsx:7175`
+- `src/components/Coach/CoachTeachPage.tsx:7181`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -115,10 +115,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/endgameService.ts:259`
 - `src/services/mistakeNarration.ts:113`
 - `src/services/mistakeNarration.ts:584`
-- `src/services/openingGenerator.ts:3792`
-- `src/services/openingGenerator.ts:3991`
-- `src/services/openingGenerator.ts:3995`
-- `src/services/openingGenerator.ts:4000`
+- `src/services/openingGenerator.ts:3800`
+- `src/services/openingGenerator.ts:3999`
+- `src/services/openingGenerator.ts:4003`
+- `src/services/openingGenerator.ts:4008`
 - `src/services/opponentIntent.ts:39`
 - `src/services/opponentIntent.ts:70`
 - `src/services/opponentIntent.ts:77`
@@ -145,7 +145,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2062`
+- `src/components/Coach/CoachGamePage.tsx:2068`
 - `src/components/Coach/CoachGameReview.tsx:343`
 - `src/services/gameAnalysisService.ts:2076`
 - `src/services/mistakePuzzleService.test.ts:109`
@@ -236,7 +236,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2327`
+- `src/components/Coach/CoachTeachPage.tsx:2329`
 - `src/components/Puzzles/MyMistakesPage.tsx:227`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`

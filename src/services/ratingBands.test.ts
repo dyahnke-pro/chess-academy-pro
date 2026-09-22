@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import {
   coreRatingTier, explorerBandFor, ADAPTIVE_DECIDERS, type AdaptiveDeciderId,
 } from './ratingBands';
-import { criticalityThresholds } from './criticalityScan';
 import { pvBandForRating } from './mistakePuzzleService';
 import { getTacticLookahead } from './tacticAlertService';
 import { alertSensitivityMultiplier, hintStartTier, wrongTriesBeforeHint } from './skillScaling';
@@ -80,7 +79,6 @@ describe('ADAPTIVE_DECIDERS — two kinds, and the code must match the declarati
   const DEPTH_RANK: Record<string, number> = { tight: 1, medium: 2, full: 3 };
 
   const probes: Record<AdaptiveDeciderId, (r: number) => number> = {
-    criticalityThresholds: (r) => criticalityThresholds(r).critical,
     pvBandForRating: (r) => pvBandForRating(r).max,
     getTacticLookahead: (r) => getTacticLookahead(r),
     alertSensitivityMultiplier: (r) => alertSensitivityMultiplier(r),
@@ -104,7 +102,11 @@ describe('ADAPTIVE_DECIDERS — two kinds, and the code must match the declarati
 
   it('has an entry for every decider — the registry cannot go stale silently', () => {
     expect(Object.keys(ADAPTIVE_DECIDERS).sort()).toEqual(Object.keys(probes).sort());
-    expect(Object.keys(ADAPTIVE_DECIDERS).length).toBeGreaterThanOrEqual(7);
+    // Six since B6 (2026-09-22): `criticalityThresholds` left the registry
+    // because it is band-free now — a bar the rating scaled was the rating
+    // deciding volume, which the FOUNDATION forbids.
+    expect(Object.keys(ADAPTIVE_DECIDERS).length).toBeGreaterThanOrEqual(6);
+    expect(Object.keys(ADAPTIVE_DECIDERS)).not.toContain('criticalityThresholds');
   });
 
   it('the two kinds genuinely disagree — this is not a distinction without a difference', () => {

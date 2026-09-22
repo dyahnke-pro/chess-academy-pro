@@ -25,6 +25,7 @@
  */
 import { Chess } from 'chess.js';
 import { getHomeGameIds } from './homeOpeningService';
+import { isFixtureGame } from './fixtureGames';
 import puzzlesData from '../data/puzzles.json';
 import { db } from '../db/schema';
 import type { MistakePuzzle, TacticType } from '../types';
@@ -424,7 +425,7 @@ export async function hasImportedGames(): Promise<boolean> {
     return games.some(
       (g) =>
         (g.source === 'lichess' || g.source === 'chesscom' || g.source === 'import') &&
-        !g.id.startsWith('sample-'),
+        !isFixtureGame(g),
     );
   } catch {
     return false;

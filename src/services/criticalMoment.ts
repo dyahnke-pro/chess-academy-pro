@@ -18,14 +18,13 @@
 //    fires 15x/game in both). The right personal number is press/no-press at a
 //    critical moment — which this computer creates the signal for.
 //
-// RECONCILED, not duplicated: the tolerance is `criticalityThresholds(rating)
-// .critical`, the same rating-scaled ladder `scanCriticality` and
+// RECONCILED, not duplicated: the tolerance is `criticalityThresholds()
+// .critical`, the same band-free bar (B6) `scanCriticality` and
 // `positionFacts` already use, so count===1 and severity>='critical' can never
 // disagree. G0 throughout — the facts are the engine's; the phrasing pass only
 // wraps them.
 import { Chess } from 'chess.js';
 import { criticalityThresholds } from './criticalityScan';
-import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 /** A mate is scored flat, for BOTH sides, on purpose: three moves that all mate
  *  are three moves that all win, so nothing hinges and the coach stays silent.
@@ -141,14 +140,13 @@ function countPhrase(count: number): string {
 export function readCriticalMoment(input: {
   topLines: readonly CriticalFanLine[] | undefined;
   moverColor: 'w' | 'b';
-  rating?: number;
   /** Supply to fill `holdingSans` (the review reveal needs to name the move;
    *  Learn deliberately does not). */
   fen?: string;
 }): CriticalMomentRead | null {
   const raw = [...(input.topLines ?? [])];
   if (raw.length === 0) return null;
-  const tolerance = criticalityThresholds(input.rating ?? DEFAULT_STUDENT_RATING).critical;
+  const tolerance = criticalityThresholds().critical;
   // ORDER BY THE SCORE WE COMPUTED, never by the reported rank. The engine's
   // MultiPV rank is its own ordering of its own numbers, and this function
   // flattens every mate to one value — so a fan carrying two different mate

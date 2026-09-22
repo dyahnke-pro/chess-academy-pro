@@ -13,9 +13,9 @@ function fan(...cps: number[]): CriticalFanLine[] {
 }
 
 describe('criticalMoment — the count IS the trigger', () => {
-  it('counts the moves within the rating-scaled tolerance of the best', () => {
-    // intermediate (1500) tolerance = 100cp.
-    const r = readCriticalMoment({ topLines: fan(300, 120, 10), moverColor: 'w', rating: 1500 });
+  it('counts the moves within the band-free tolerance of the best', () => {
+    // the band-free tolerance = MISTAKE_CP (100cp).
+    const r = readCriticalMoment({ topLines: fan(300, 120, 10), moverColor: 'w' });
     expect(r?.toleranceCp).toBe(100);
     expect(r?.count).toBe(1);        // only 300 is within 100 of 300
     expect(r?.gapCp).toBe(180);
@@ -23,13 +23,13 @@ describe('criticalMoment — the count IS the trigger', () => {
   });
 
   it('two moves within tolerance is a forgiving fork, and it SPEAKS', () => {
-    const r = readCriticalMoment({ topLines: fan(50, -20, -400), moverColor: 'w', rating: 1500 });
+    const r = readCriticalMoment({ topLines: fan(50, -20, -400), moverColor: 'w' });
     expect(r?.count).toBe(2);
     expect(criticalMomentSpeaks(r)).toBe(true);
   });
 
   it('three within tolerance means nothing hinges — SILENT, and honestly unresolved', () => {
-    const r = readCriticalMoment({ topLines: fan(30, 10, -20), moverColor: 'w', rating: 1500 });
+    const r = readCriticalMoment({ topLines: fan(30, 10, -20), moverColor: 'w' });
     expect(r?.count).toBe(3);
     expect(r?.resolved).toBe(false);
     expect(r?.unresolvedReason).toBe('count-fills-fan');
@@ -40,7 +40,7 @@ describe('criticalMoment — the count IS the trigger', () => {
   it('NEGATIVE CONTROL — a 2-wide fan whose both lines hold never claims "two"', () => {
     // The dangerous case: the engine was only ASKED for two lines, so "2" here
     // means "at least 2" and a third holding move may exist unseen.
-    const r = readCriticalMoment({ topLines: fan(0, -10), moverColor: 'w', rating: 1500 });
+    const r = readCriticalMoment({ topLines: fan(0, -10), moverColor: 'w' });
     expect(r?.count).toBe(2);
     expect(r?.resolved).toBe(false);
     expect(criticalMomentSpeaks(r)).toBe(false);
@@ -49,7 +49,7 @@ describe('criticalMoment — the count IS the trigger', () => {
   it('NEGATIVE CONTROL — a BOUNDED score proves nothing and never speaks', () => {
     const lines = fan(300, 120, 10);
     lines[1] = { ...lines[1], bound: 'upper' };
-    const r = readCriticalMoment({ topLines: lines, moverColor: 'w', rating: 1500 });
+    const r = readCriticalMoment({ topLines: lines, moverColor: 'w' });
     expect(r?.unresolvedReason).toBe('bounded-score');
     expect(criticalMomentSpeaks(r)).toBe(false);
   });
@@ -59,15 +59,20 @@ describe('criticalMoment — the count IS the trigger', () => {
     expect(readCriticalMoment({ topLines: undefined, moverColor: 'w' })).toBeNull();
   });
 
-  it('is rating-scaled — the same fan is a fork for a beginner and settled for an expert', () => {
+  it('is BAND-FREE (B6) — the same fan is the same read for every student', () => {
+    // This used to assert the opposite: "a fork for a beginner (tol 200) and
+    // settled for an expert (tol 50)" — the rating deciding how many moves
+    // "hold", and so how often the coach said "only one move holds". The
+    // tolerance is the one mistake bar now, and the input takes no rating.
     const lines = fan(0, -150, -900);
-    expect(readCriticalMoment({ topLines: lines, moverColor: 'w', rating: 800 })?.count).toBe(2);  // tol 200
-    expect(readCriticalMoment({ topLines: lines, moverColor: 'w', rating: 2200 })?.count).toBe(1); // tol 50
+    const r = readCriticalMoment({ topLines: lines, moverColor: 'w' });
+    expect(r?.toleranceCp).toBe(100);
+    expect(r?.count).toBe(1);
   });
 
   it('reads the fan from the MOVER’s seat, not White’s', () => {
     // White-POV: -300 is best for BLACK. Black to move → mover-POV +300.
-    const r = readCriticalMoment({ topLines: fan(-300, -120, -10), moverColor: 'b', rating: 1500 });
+    const r = readCriticalMoment({ topLines: fan(-300, -120, -10), moverColor: 'b' });
     expect(r?.count).toBe(1);
     expect(r?.bestCp).toBe(300);
     expect(r?.stake).toBe('win');
@@ -76,7 +81,7 @@ describe('criticalMoment — the count IS the trigger', () => {
 
 describe('criticalMoment — the stake is computed, never templated', () => {
   const at = (cp: number): string | null =>
-    readCriticalMoment({ topLines: fan(cp, cp - 400, cp - 900), moverColor: 'w', rating: 1500 })?.stake ?? null;
+    readCriticalMoment({ topLines: fan(cp, cp - 400, cp - 900), moverColor: 'w' })?.stake ?? null;
 
   it('bands off the best line, mover-POV', () => {
     expect(at(600)).toBe('win');
@@ -88,10 +93,10 @@ describe('criticalMoment — the stake is computed, never templated', () => {
 
   it('"keeps equality" is FALSE when they are winning and when they are lost', () => {
     expect(criticalMomentStatement(
-      readCriticalMoment({ topLines: fan(600, 100, -200), moverColor: 'w', rating: 1500 }), 4,
+      readCriticalMoment({ topLines: fan(600, 100, -200), moverColor: 'w' }), 4,
     )).toContain('keeps the win');
     expect(criticalMomentStatement(
-      readCriticalMoment({ topLines: fan(-500, -900, -1400), moverColor: 'w', rating: 1500 }), 4,
+      readCriticalMoment({ topLines: fan(-500, -900, -1400), moverColor: 'w' }), 4,
     )).toContain('limits the damage');
   });
 
@@ -101,7 +106,7 @@ describe('criticalMoment — the stake is computed, never templated', () => {
       { rank: 2, evaluation: 200, mate: null, bound: null, moves: ['d2d4'] },
       { rank: 3, evaluation: 10, mate: null, bound: null, moves: ['g1f3'] },
     ];
-    const r = readCriticalMoment({ topLines: lines, moverColor: 'w', rating: 1500 });
+    const r = readCriticalMoment({ topLines: lines, moverColor: 'w' });
     expect(r?.count).toBe(1);
     expect(r?.stake).toBe('mate');
     expect(criticalMomentStatement(r, 2)).toContain('keeps the forced mate');
@@ -109,14 +114,14 @@ describe('criticalMoment — the stake is computed, never templated', () => {
 
   it('several mating moves = nothing hinges (flat mate scoring), so it stays silent', () => {
     const lines: CriticalFanLine[] = [1, 2, 4].map((mate, i) => ({ rank: i + 1, evaluation: 0, mate, bound: null, moves: ['e2e4'] }));
-    const r = readCriticalMoment({ topLines: lines, moverColor: 'w', rating: 1500 });
+    const r = readCriticalMoment({ topLines: lines, moverColor: 'w' });
     expect(r?.count).toBe(3);
     expect(criticalMomentSpeaks(r)).toBe(false);
   });
 
   it('being MATED in every line has no stake to keep — SILENT, never a stakeless claim', () => {
     const lines: CriticalFanLine[] = [-2, -1, -4].map((mate, i) => ({ rank: i + 1, evaluation: 0, mate, bound: null, moves: ['e1e2'] }));
-    const r = readCriticalMoment({ topLines: lines, moverColor: 'w', rating: 1500 });
+    const r = readCriticalMoment({ topLines: lines, moverColor: 'w' });
     expect(r?.stake).toBeNull();
     expect(criticalMomentSpeaks(r)).toBe(false);
     expect(criticalMomentStatement(r, 3)).toBeNull();
@@ -131,7 +136,7 @@ describe('criticalMoment — the stake is computed, never templated', () => {
       { rank: 2, evaluation: 0, mate: -1, bound: null, moves: ['e1d1'] },
       { rank: 3, evaluation: -900, mate: null, bound: null, moves: ['d2d4'] },
     ];
-    const r = readCriticalMoment({ topLines: lines, moverColor: 'w', rating: 1500 });
+    const r = readCriticalMoment({ topLines: lines, moverColor: 'w' });
     expect(r?.bestCp).toBe(-900);
     expect(r?.count).toBe(1);
     expect(r?.stake).toBe('damage');
@@ -189,7 +194,7 @@ describe('criticalMoment — two registers, one claim', () => {
   });
 
   it('withholds SANs unless a fen was supplied (Learn must not name the move)', () => {
-    const noFen = readCriticalMoment({ topLines: fan(0, -300, -900), moverColor: 'w', rating: 1500 });
+    const noFen = readCriticalMoment({ topLines: fan(0, -300, -900), moverColor: 'w' });
     expect(noFen?.holdingSans).toEqual([]);
     expect(criticalMomentReveal(noFen)).toBeNull();
   });

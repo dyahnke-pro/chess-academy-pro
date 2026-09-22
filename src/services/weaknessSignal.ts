@@ -145,6 +145,30 @@ function bestMatch(signals: readonly WeaknessSignal[], pred: (s: WeaknessSignal)
   return best;
 }
 
+/** WHICH BUCKET a positionFacts clause KIND teaches into — the same knowledge
+ *  `matchClauseKind` below applies, stated once so the GREEN term
+ *  (`needScore.capabilityTerm`, B8) can scope a proven tag to the ply's own
+ *  claim instead of subtracting green-for-X from a ply about Y. `null` means
+ *  the kind carries no honest bucket (status / deliberation / key-moment /
+ *  *-leans / opponent-intent), and a null key must never be read as "matches
+ *  everything". */
+export function clauseKindBucket(kind: string | null | undefined): MisconceptionBucket | null {
+  switch (kind) {
+    case 'must-defend':
+    case 'latent-danger':
+    case 'latent-chance':
+    case 'concept':
+      return 'tactical';
+    case 'convert':
+      return 'endgame';
+    case 'fundamental':
+    case 'structure-plan':
+      return 'positional';
+    default:
+      return null;
+  }
+}
+
 /** Match a positionFacts clause KIND to the student's holes it teaches to. Only
  *  the clear semantic links are mapped — never a forced match (G3): a clause
  *  whose kind has no honest weakness counterpart returns null. `kind` is a

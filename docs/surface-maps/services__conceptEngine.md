@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**714 lines · 19 exports · 21 importers · 7 tests · 28 audits**
+**712 lines · 19 exports · 21 importers · 7 tests · 28 audits**
 
 ## Locked rules that govern this surface
 
@@ -115,7 +115,7 @@
 - `src/services/narratedContinuation.test.ts:19`
 - `src/services/narratedContinuation.ts:18`
 - `src/services/narratedContinuation.ts:94`
-- `src/services/openingGenerator.ts:1961`
+- `src/services/openingGenerator.ts:1964`
 
 ### `strongerSide` (function) — 3 call sites
 - `src/services/conceptEngine.test.ts:32`
@@ -155,8 +155,8 @@
 - `src/services/conceptEngine.test.ts:163`
 - `src/services/conceptEngine.test.ts:199`
 - `src/services/conceptEngine.test.ts:217`
-- `src/services/liveTacticsContext.ts:106`
-- `src/services/positionFacts.ts:471`
+- `src/services/liveTacticsContext.ts:108`
+- `src/services/positionFacts.ts:567`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -166,11 +166,11 @@
 - `src/services/conceptEngine.test.ts:228`
 - `src/services/conceptEngine.test.ts:237`
 - `src/services/endgameDrillService.test.ts:160`
-- `src/services/missedTacticService.ts:776`
+- `src/services/missedTacticService.ts:787`
 - `src/services/puzzleConceptExplanation.ts:111`
 - `src/services/puzzleConceptHint.ts:110`
 - `src/services/puzzleGenerator.ts:206`
-- `src/services/refutedAlternative.ts:145`
+- `src/services/refutedAlternative.ts:143`
 - `src/services/tacticTypeUnification.test.ts:57`
 
 ### `ConceptForSolutionOptions` (interface) — 0 call sites
@@ -191,7 +191,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7254`
+- `src/components/Coach/CoachTeachPage.tsx:7476`
 - `src/services/dnaLineNarrator.ts:175`
 - `src/services/dnaLineNarrator.ts:206`
 - `src/services/dnaLineNarrator.ts:242`

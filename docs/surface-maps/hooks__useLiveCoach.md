@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**430 lines · 5 exports · 2 importers · 1 tests · 1 audits**
+**467 lines · 5 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 ## Who calls in
 
 - `src/components/Coach/CoachGamePage.tsx`
+- `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
 
 ## Exports and every call site
@@ -30,15 +31,18 @@
 ### `UseLiveCoachResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useLiveCoach` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:980`
-- `src/hooks/useLiveCoach.test.tsx:68`
-- `src/hooks/useLiveCoach.test.tsx:77`
-- `src/hooks/useLiveCoach.test.tsx:86`
-- `src/hooks/useLiveCoach.test.tsx:107`
+### `useLiveCoach` (function) — 7 call sites
+- `src/components/Coach/CoachGamePage.tsx:1020`
+- `src/hooks/useLiveCoach.needWire.test.tsx:64`
+- `src/hooks/useLiveCoach.needWire.test.tsx:77`
+- `src/hooks/useLiveCoach.test.tsx:69`
+- `src/hooks/useLiveCoach.test.tsx:78`
+- `src/hooks/useLiveCoach.test.tsx:87`
+- `src/hooks/useLiveCoach.test.tsx:108`
 
 ## Tests
 
+- `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
 
 ## Audits that reach it

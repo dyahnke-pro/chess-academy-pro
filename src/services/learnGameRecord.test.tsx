@@ -17,6 +17,7 @@
 // handler goes back to a bare `navigate('/coach/home')`.
 import { describe, it, expect, beforeEach } from 'vitest';
 import { openingKeyFor } from './openingKey';
+import { coversEveryStudentPly } from './learnGameRecord';
 
 // The ONE opening key (A1): a name is not a key.
 const ITALIAN = openingKeyFor('C50', 'Italian Game');
@@ -139,5 +140,16 @@ describe('C7 — the page\'s End Lesson handler is held to the builder (by state
     expect(handler.indexOf('buildLearnGameRecord({')).toBeLessThan(handler.lastIndexOf("navigate('/coach/home')"));
     // And the game-over effect builds through the SAME function (one shape).
     expect((src.match(/buildLearnGameRecord\(\{/g) ?? []).length).toBe(2);
+  });
+});
+
+
+describe('coversEveryStudentPly — B7(c) folded into the one builder', () => {
+  const grade = (ply: number) => ({ ply, san: 'e4', color: 'white' as const, bestMoveUci: null, bestMoveEvalCp: 0, cpLossCp: 0 });
+  it('true only when EVERY student ply was graded; a missing ply leaves the game un-flagged', () => {
+    expect(coversEveryStudentPly({ plyCount: 8, playerColor: 'white', liveGrades: [0, 2, 4, 6].map(grade) })).toBe(true);
+    expect(coversEveryStudentPly({ plyCount: 8, playerColor: 'white', liveGrades: [0, 2, 6].map(grade) })).toBe(false);
+    expect(coversEveryStudentPly({ plyCount: 8, playerColor: 'black', liveGrades: [1, 3, 5, 7].map(grade) })).toBe(true);
+    expect(coversEveryStudentPly({ plyCount: 0, playerColor: 'white', liveGrades: [] })).toBe(false);
   });
 });

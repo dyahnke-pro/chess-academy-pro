@@ -3,19 +3,36 @@
 // reasoning is proven without a real Stockfish (G0).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
+import { readFileSync } from 'node:fs';
 import { scanCriticality, criticalityThresholds } from './criticalityScan';
+import { INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 import type { EvaluateMulti, RawCandidate } from './criticalityScan';
 
 const START = new Chess().fen();
 const mock = (cands: RawCandidate[]): EvaluateMulti => async () => cands;
 
-describe('criticalityThresholds — scale with rating', () => {
-  it('a beginner cares about blunders, an expert about subtleties', () => {
-    expect(criticalityThresholds(800).critical).toBe(200);
-    expect(criticalityThresholds(1500).critical).toBe(100);
-    expect(criticalityThresholds(2400).critical).toBe(50);
-    // only-move floor holds across levels
-    expect(criticalityThresholds(2400).onlyMove).toBe(250);
+describe('criticalityThresholds — BAND-FREE (B6, 2026-09-22)', () => {
+  // The rating's job is strength, never volume (CLAUDE.md THE FOUNDATION).
+  // The bars used to run 200 / 100 / 50 by band, which made the same swing a
+  // moment for one student and silence for another. Negative control: put the
+  // band ladder back → the first `it` fails.
+  it('is the app\'s ONE move-quality vocabulary and takes no rating', () => {
+    const th = criticalityThresholds();
+    expect(th).toEqual({ notable: INACCURACY_CP, critical: MISTAKE_CP, onlyMove: 250, blunder: BLUNDER_CP });
+    expect(criticalityThresholds.length, 'a rating parameter crept back in').toBe(0);
+    // A defaulted parameter does not count toward `.length`, so also PROVE the
+    // property: a rating smuggled in must change nothing.
+    const smuggle = criticalityThresholds as unknown as (r: number) => ReturnType<typeof criticalityThresholds>;
+    expect(smuggle(800)).toEqual(th);
+    expect(smuggle(2400)).toEqual(th);
+  });
+
+  it('BLAMES BY STATEMENT: no rating band reaches the bars', () => {
+    const src = readFileSync('src/services/criticalityScan.ts', 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/^\s*\/\/.*$/gm, '');
+    expect(src).not.toMatch(/coreRatingTier\(/);
+    expect(src).not.toMatch(/criticalityThresholds\(rating/);
   });
 });
 
@@ -24,7 +41,7 @@ describe('scanCriticality', () => {
     // three near-equal white moves → nothing hinges
     const cmp = await scanCriticality(START, mock([
       { uci: 'e2e4', cp: 25 }, { uci: 'd2d4', cp: 22 }, { uci: 'g1f3', cp: 18 },
-    ]), { rating: 1500 });
+    ]));
     expect(cmp!.severity).toBe('none');
     expect(cmp!.isCritical).toBe(false);
     expect(cmp!.isOnlyMove).toBe(false);
@@ -35,7 +52,7 @@ describe('scanCriticality', () => {
     // best +0.3, rest -0.9 → 1.2 gap ≥ 1.0 critical bar at 1500 → critical
     const cmp = await scanCriticality(START, mock([
       { uci: 'e2e4', cp: 30 }, { uci: 'd2d4', cp: -90 }, { uci: 'a2a3', cp: -120 },
-    ]), { rating: 1500 });
+    ]));
     expect(cmp!.severity).toBe('critical');
     expect(cmp!.isCritical).toBe(true);
     expect(cmp!.isOnlyMove).toBe(false);
@@ -46,16 +63,15 @@ describe('scanCriticality', () => {
     // best +0.1, everything else drops ≥ 3 pawns → only-move
     const cmp = await scanCriticality(START, mock([
       { uci: 'e2e4', cp: 10 }, { uci: 'd2d4', cp: -300 }, { uci: 'g1f3', cp: -350 },
-    ]), { rating: 1500 });
+    ]));
     expect(cmp!.severity).toBe('only-move');
     expect(cmp!.isOnlyMove).toBe(true);
     expect(cmp!.gapCp).toBe(310);
   });
 
-  it('rating calibration: a 1.2-pawn gap is CRITICAL at 1500 but below the beginner bar', async () => {
+  it('a 1.2-pawn gap is CRITICAL — and there is no rating to make it not so', async () => {
     const cands: RawCandidate[] = [{ uci: 'e2e4', cp: 30 }, { uci: 'd2d4', cp: -90 }]; // 120 gap
-    expect((await scanCriticality(START, mock(cands), { rating: 1500 }))!.severity).toBe('critical'); // ≥100
-    expect((await scanCriticality(START, mock(cands), { rating: 800 }))!.isCritical).toBe(false);       // <200
+    expect((await scanCriticality(START, mock(cands)))!.severity).toBe('critical'); // ≥ MISTAKE_CP
   });
 
   it('treats a position with ONE legal move as a literal only-move (gap Infinity)', async () => {

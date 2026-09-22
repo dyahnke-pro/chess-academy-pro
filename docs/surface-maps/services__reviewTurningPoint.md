@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**299 lines · 14 exports · 5 importers · 3 tests · 1 audits**
+**309 lines · 15 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,16 +29,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `TurningPointQuestion` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `minSwingPawns` (function) — 3 call sites
-- `src/services/reviewTurningPoint.test.ts:69`
-- `src/services/reviewTurningPoint.test.ts:95`
-- `src/services/reviewTurningPoint.test.ts:96`
+### `minSwingPawns` (function) — 2 call sites
+- `src/services/reviewTurningPoint.test.ts:70`
+- `src/services/reviewTurningPoint.test.ts:104`
 
 ### `TURNING_POINT_MIN_CANDIDATES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `CANDIDATE_SHARE_OF_ANSWER` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `moveLabel` (function) — 1 call site
-- `src/services/teachingSelector.ts:214`
+- `src/services/teachingSelector.ts:236`
 
 ### `spokenMoveLabel` (function) — 6 call sites
 - `src/services/reviewRegister.test.ts:14`
@@ -46,34 +48,35 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewRegister.test.ts:18`
 - `src/services/reviewRegister.test.ts:21`
 - `src/services/reviewRegister.test.ts:25`
-- `src/services/teachingSelector.ts:315`
+- `src/services/teachingSelector.ts:349`
 
-### `turningPointCandidates` (function) — 4 call sites
+### `turningPointCandidates` (function) — 5 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/reviewTurningPoint.test.ts:151`
-- `src/services/reviewTurningPoint.test.ts:215`
-- `src/services/teachingSelector.ts:186`
+- `src/services/reviewTurningPoint.test.ts:159`
+- `src/services/reviewTurningPoint.test.ts:223`
+- `src/services/teachingSelector.test.ts:55`
+- `src/services/teachingSelector.ts:207`
 
 ### `buildTurningPointQuestion` (function) — 14 call sites
-- `src/components/Coach/CoachGameReview.tsx:1363`
-- `src/services/reviewTurningPoint.test.ts:40`
-- `src/services/reviewTurningPoint.test.ts:56`
-- `src/services/reviewTurningPoint.test.ts:63`
+- `src/components/Coach/CoachGameReview.tsx:1475`
+- `src/services/reviewTurningPoint.test.ts:41`
+- `src/services/reviewTurningPoint.test.ts:57`
 - `src/services/reviewTurningPoint.test.ts:64`
-- `src/services/reviewTurningPoint.test.ts:74`
-- `src/services/reviewTurningPoint.test.ts:81`
-- `src/services/reviewTurningPoint.test.ts:97`
-- `src/services/reviewTurningPoint.test.ts:98`
-- `src/services/reviewTurningPoint.test.ts:108`
-- `src/services/reviewTurningPoint.test.ts:118`
+- `src/services/reviewTurningPoint.test.ts:65`
+- `src/services/reviewTurningPoint.test.ts:75`
+- `src/services/reviewTurningPoint.test.ts:85`
+- `src/services/reviewTurningPoint.test.ts:93`
+- `src/services/reviewTurningPoint.test.ts:106`
+- `src/services/reviewTurningPoint.test.ts:116`
 - `src/services/reviewTurningPoint.test.ts:126`
-- `src/services/reviewTurningPoint.test.ts:219`
-- `src/services/teachingSelector.test.ts:55`
+- `src/services/reviewTurningPoint.test.ts:134`
+- `src/services/reviewTurningPoint.test.ts:227`
+- `src/services/teachingSelector.test.ts:58`
 
 ### `judgeTurningPointPick` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1407`
-- `src/services/reviewTurningPoint.test.ts:130`
-- `src/services/reviewTurningPoint.test.ts:131`
+- `src/components/Coach/CoachGameReview.tsx:1519`
+- `src/services/reviewTurningPoint.test.ts:138`
+- `src/services/reviewTurningPoint.test.ts:139`
 
 ### `CriticalMomentRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -82,29 +85,29 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildCriticalMomentQuestion` (function) — 17 call sites
-- `src/components/Coach/CoachGameReview.tsx:789`
-- `src/services/reviewTurningPoint.test.ts:152`
+- `src/components/Coach/CoachGameReview.tsx:852`
 - `src/services/reviewTurningPoint.test.ts:160`
-- `src/services/reviewTurningPoint.test.ts:166`
-- `src/services/reviewTurningPoint.test.ts:175`
-- `src/services/reviewTurningPoint.test.ts:184`
-- `src/services/reviewTurningPoint.test.ts:187`
-- `src/services/reviewTurningPoint.test.ts:191`
-- `src/services/reviewTurningPoint.test.ts:196`
-- `src/services/reviewTurningPoint.test.ts:197`
-- `src/services/reviewTurningPoint.test.ts:198`
-- `src/services/reviewTurningPoint.test.ts:202`
-- `src/services/reviewTurningPoint.test.ts:246`
-- `src/services/reviewTurningPoint.test.ts:253`
-- `src/services/reviewTurningPoint.test.ts:263`
-- `src/services/reviewTurningPoint.test.ts:270`
-- `src/services/reviewTurningPoint.test.ts:279`
+- `src/services/reviewTurningPoint.test.ts:168`
+- `src/services/reviewTurningPoint.test.ts:174`
+- `src/services/reviewTurningPoint.test.ts:183`
+- `src/services/reviewTurningPoint.test.ts:192`
+- `src/services/reviewTurningPoint.test.ts:195`
+- `src/services/reviewTurningPoint.test.ts:199`
+- `src/services/reviewTurningPoint.test.ts:204`
+- `src/services/reviewTurningPoint.test.ts:205`
+- `src/services/reviewTurningPoint.test.ts:206`
+- `src/services/reviewTurningPoint.test.ts:210`
+- `src/services/reviewTurningPoint.test.ts:254`
+- `src/services/reviewTurningPoint.test.ts:261`
+- `src/services/reviewTurningPoint.test.ts:271`
+- `src/services/reviewTurningPoint.test.ts:278`
+- `src/services/reviewTurningPoint.test.ts:287`
 
 ### `judgeCriticalMomentPick` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:1442`
-- `src/services/reviewTurningPoint.test.ts:203`
-- `src/services/reviewTurningPoint.test.ts:204`
-- `src/services/reviewTurningPoint.test.ts:258`
+- `src/components/Coach/CoachGameReview.tsx:1554`
+- `src/services/reviewTurningPoint.test.ts:211`
+- `src/services/reviewTurningPoint.test.ts:212`
+- `src/services/reviewTurningPoint.test.ts:266`
 
 ## Tests
 
@@ -113,5 +116,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachingSelector.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-openings-interactive-loop.mjs`

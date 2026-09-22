@@ -44,16 +44,16 @@ describe('T5 — the two-move fork reaches the decision', () => {
   it('a quiet position stays SILENT on interrupt (the control)', () => {
     // Without this, the test below would prove nothing: if everything spoke on
     // interrupt, "it speaks" would not be evidence that the signal arrived.
-    expect(judgeMoment(QUIET, 1500, 'interrupt').speaks).toBe(false);
+    expect(judgeMoment(QUIET, 'interrupt').speaks).toBe(false);
   });
 
   it('the SAME position with a standing danger DOES open the door', () => {
-    expect(judgeMoment({ ...QUIET, standingDanger: true }, 1500, 'interrupt').speaks).toBe(true);
+    expect(judgeMoment({ ...QUIET, standingDanger: true }, 'interrupt').speaks).toBe(true);
   });
 
   it('walk speaks either way — the posture, not the signal, decides there', () => {
-    expect(judgeMoment(QUIET, 1500, 'walk').speaks).toBe(true);
-    expect(judgeMoment({ ...QUIET, standingDanger: true }, 1500, 'walk').speaks).toBe(true);
+    expect(judgeMoment(QUIET, 'walk').speaks).toBe(true);
+    expect(judgeMoment({ ...QUIET, standingDanger: true }, 'walk').speaks).toBe(true);
   });
 
   it('the STUDENT\'s own fork opens the door too — but never as must-defend', () => {
@@ -62,7 +62,7 @@ describe('T5 — the two-move fork reaches the decision', () => {
     // the second is the correction of my own first attempt, which routed this
     // through `standingDanger` and so told the student a fork THEY could play
     // was "a standing danger on the board" at tier must-defend.
-    const v = judgeMoment({ ...QUIET, standingChance: true }, 1500, 'interrupt');
+    const v = judgeMoment({ ...QUIET, standingChance: true }, 'interrupt');
     expect(v.speaks, 'a fork the student can set up must be able to earn voice').toBe(true);
     expect(v.importance.tier, 'an opportunity is a teaching beat, never a defensive obligation')
       .toBe('teaching');
@@ -74,8 +74,8 @@ describe('T5 — the two-move fork reaches the decision', () => {
     // A fork you could set up in a game already won is not worth stopping for;
     // a pin in waiting still loses you the piece.
     const DECIDED: ImportanceSignals = { ...QUIET, evalCpWhitePov: 900, wdl: [980, 15, 5] };
-    expect(judgeMoment({ ...DECIDED, standingChance: true }, 1500, 'interrupt').speaks).toBe(false);
-    expect(judgeMoment({ ...DECIDED, standingDanger: true }, 1500, 'interrupt').speaks).toBe(true);
+    expect(judgeMoment({ ...DECIDED, standingChance: true }, 'interrupt').speaks).toBe(false);
+    expect(judgeMoment({ ...DECIDED, standingDanger: true }, 'interrupt').speaks).toBe(true);
   });
 
   it('positionFacts routes EACH SEAT to its own channel', () => {

@@ -8,9 +8,17 @@
 //   • cliff (best ≫≫ field)    → an ONLY move.
 //   • a TURNING POINT is just a critical moment where the user went wrong.
 //
-// The "critical" bar SCALES WITH RATING (a 2-pawn swing is a must-find for a
-// 1200; a 0.5 subtlety is for a 2200), so we flag the student's OWN critical
-// moments — many, but never spam.
+// 🔒 THE BARS ARE BAND-FREE (B6, 2026-09-22; CLAUDE.md THE FOUNDATION: "the
+// rating's real job is STRENGTH, not volume — it must never decide how much the
+// coach SAYS"). They used to scale with the rating band (200 / 100 / 50 for
+// beginner / intermediate / advanced), which was the rating deciding VOLUME
+// through the back door: a 1.2-pawn swing was a moment for a 1500 and silence
+// for a 900, with the same board in front of both. What decides WHETHER a
+// moment is worth anything is the REAL centipawn cost against the engine and
+// the student's own record (need, the heat map); the rating may scale DEPTH
+// (how far a line is walked, `pvDepthForRating`) and never the bar. The
+// numbers are the app's ONE move-quality vocabulary (`engineConstants`), so a
+// "mistake" here is a mistake in the review's labels and in the coach's mouth.
 //
 // 100% engine. The MultiPV evaluate is dependency-injected so the core is pure
 // and unit-testable (G0); production wires it to stockfishEngine (MultiPV), the
@@ -18,7 +26,7 @@
 
 import { Chess } from 'chess.js';
 import type { Color } from 'chess.js';
-import { coreRatingTier, DEFAULT_STUDENT_RATING } from './ratingBands';
+import { INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 
 /** One engine candidate at a position — white-POV centipawns (+ = White better;
  *  mates folded into cp by the evaluate implementation). */
@@ -58,26 +66,23 @@ export interface CriticalMoment {
 }
 
 export interface CriticalityOpts {
-  /** Student rating — scales the thresholds. Default 1500 (intermediate). */
-  rating?: number;
   /** How many engine lines to request. Default 3. */
   multiPV?: number;
-  /** Explicit overrides (cp). Otherwise derived from rating. */
+  /** Explicit overrides (cp). Otherwise the band-free bars below. */
   criticalCp?: number;
   onlyMoveCp?: number;
 }
 
-/** Rating-scaled gap thresholds (cp). Mirrors the slip-detector doctrine:
- *  beginner cares about blunders, advanced about subtleties. */
-export function criticalityThresholds(rating: number): { notable: number; critical: number; onlyMove: number } {
-  const tier = coreRatingTier(rating);
-  const critical = tier === 'beginner' ? 200 : tier === 'intermediate' ? 100 : 50;
-  const notable = Math.round(critical * 0.6);
-  // An only-move is an only-move regardless of level — the field has to truly
-  // fall off a cliff — but never below a rating-scaled floor.
-  const onlyMove = Math.max(250, critical * 2);
-  return { notable, critical, onlyMove };
+/** The gap / swing bars (cp), the same for every student — see the header.
+ *  `notable` / `critical` / `blunder` ARE the inaccuracy / mistake / blunder
+ *  bands, so one Stockfish number means one word everywhere; `onlyMove` is
+ *  the cliff where the field measurably loses. */
+export function criticalityThresholds(): { notable: number; critical: number; onlyMove: number; blunder: number } {
+  return { notable: INACCURACY_CP, critical: MISTAKE_CP, onlyMove: ONLY_MOVE_CP, blunder: BLUNDER_CP };
 }
+/** An only-move is an only-move for everyone — the field has to truly fall off
+ *  a cliff. */
+export const ONLY_MOVE_CP = 250;
 
 function toSan(fen: string, uci: string): string {
   try {
@@ -119,8 +124,7 @@ export async function scanCriticality(
   // Only ONE legal move → a literal only-move (no runner-up to compare against).
   const gapCp = legalCount === 1 ? Infinity : runnerUp ? best.moverCp - runnerUp.moverCp : Infinity;
 
-  const { rating = DEFAULT_STUDENT_RATING } = opts;
-  const th = criticalityThresholds(rating);
+  const th = criticalityThresholds();
   const criticalCp = opts.criticalCp ?? th.critical;
   const onlyMoveCp = opts.onlyMoveCp ?? th.onlyMove;
 

@@ -16,6 +16,7 @@
  * Stockfish-grounded, [VOICE: ...]-marker pedagogy automatically.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { isFixtureGame } from '../../services/fixtureGames';
 import { useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { Chess } from 'chess.js';
@@ -218,7 +219,7 @@ export function CoachReviewSessionPage(): JSX.Element {
         // Deep link to a sample game (e.g. the Opera Game "Walk it" chip from
         // the fundamentals lane) can arrive before the review LIST seeded the
         // samples — seed the one we need on demand, then re-read.
-        if (!rec && gameId.startsWith('sample-')) {
+        if (!rec && isFixtureGame({ id: gameId })) {
           await ensureSampleGameSeeded(gameId);
           if (cancelled) return;
           rec = await db.games.get(gameId);

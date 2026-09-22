@@ -32,6 +32,7 @@ import { computePositionFacts, clauseText } from '../services/positionFacts';
 import { rememberSpokenSquares } from '../services/spokenSquares';
 import { actuate } from '../services/coachActuator';
 import { useWeaknessSignals } from './useWeaknessSignals';
+import { useStudentNeed } from './useStudentNeed';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { alertSensitivityMultiplier } from '../services/skillScaling';
 import {
@@ -54,11 +55,23 @@ export interface UseLiveCoachArgs {
    *  legitimately interject (or a future opt-in setting). Off = the notify
    *  functions are inert: no triggers, no LLM call, no speech, no spend. */
   enabled?: boolean;
+  /** The game's SANs from move one, read at FIRE time. Familiarity ("has this
+   *  student played this line right five times") is measured against the
+   *  whole prefix, so the hook takes a getter, never a snapshot (B3). REQUIRED:
+   *  a surface that cannot say what line it is on cannot claim the need term
+   *  is wired, and a default of `() => []` would be exactly the empty-history
+   *  bug Learn shipped with. */
+  getHistory: () => readonly string[];
 }
 
 export interface PlayerMoveNotification {
   ply: number;
   san: string;
+  /** The board the student played `san` ON — with `san`, the raw data the
+   *  composer needs to compute what the board POSED (the heat map's grey/green
+   *  reads). REQUIRED, so a caller cannot hand over a move without the board
+   *  it was made on. */
+  fenBefore: string;
   fenAfter: string;
   /** White-perspective centipawn eval before the move. */
   evalBefore: number;
@@ -127,6 +140,10 @@ function speakStreamed(text: string): void {
 export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
   const { gameId, playerColor } = args;
   const weaknessRef = useWeaknessSignals(); // student model → re-ranks live interjections (Phase 1)
+  // …AND THE OTHER HALF (N2) — does THIS student need teaching here. Honest
+  // nulls for the opening: Play identifies it by name after the fact, and a
+  // fabricated id would scope the departures to the wrong opening.
+  const studentNeedRef = useStudentNeed({ studentColor: playerColor, openingId: null, eco: null, sans: args.getHistory });
   // SAY-ONCE. A standing fact — the pawn structure, a pin in waiting, which
   // piece is doing the work — is true until the board changes, and it is
   // re-derived every ply, so without this the student hears the same sentence
@@ -159,6 +176,9 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         studentEvalAfter: number;
         worstEval?: number;
         last3Moves?: string[];
+        /** The student's move just played, or null when the trigger was the
+         *  OPPONENT's move — never their move filed under the student. */
+        lastMove: { fenBefore: string; san: string; cpLoss: number | null } | null;
       },
     ): Promise<void> => {
       if (inFlightRef.current) return;
@@ -245,6 +265,13 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
               // descriptive commentary, which Play allows (Phase 1 slice).
               prevEvalCpWhitePov: playerColor === 'white' ? ctx.studentEvalBefore : -ctx.studentEvalBefore,
               studentWeaknesses: weaknessRef.current,
+              // THE HEAT MAP + THE NEED TERM ON THE LIVE LANE (B3): raw board
+              // data for what the board posed, and the loaded context so the
+              // composer can compute need on the student's own ply. Absent
+              // data stays absent — a null lastMove on an opponent trigger
+              // and a cold context both read as TEACH, never as silence.
+              ...(ctx.lastMove ? { lastMove: ctx.lastMove } : {}),
+              studentNeedContext: studentNeedRef.current,
               alreadySaid: saidRef.current,
             });
             for (const t of pf.remember) saidRef.current.add(t);
@@ -389,6 +416,14 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         studentEvalAfter,
         worstEval: worstRecent,
         last3Moves: undefined,
+        // The REAL cost of the move, mover-POV, against the engine's best
+        // where the caller graded one — else against the pre-move eval. Never
+        // a bucket keyed off a classification label.
+        lastMove: {
+          fenBefore: n.fenBefore,
+          san: n.san,
+          cpLoss: Math.max(0, (studentBestEval ?? studentEvalBefore) - studentEvalAfter),
+        },
       });
     },
     [handleTrigger, playerColor, args.enabled],
@@ -420,6 +455,8 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         bestMoveSan: null,
         studentEvalBefore,
         studentEvalAfter,
+        // Their move, not the student's: nothing was posed TO the student.
+        lastMove: null,
       });
     },
     [handleTrigger, playerColor, args.enabled],

@@ -191,8 +191,8 @@ export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
   // games moved the number on every boot (800 -> 990 over ten opens; a losing
   // player 1200 -> 888). Anchored at a baseline written once, this is a pure
   // function of THEIR games: same games in, same rating out, forever.
-  // Same exclusion: `sample-vienna-amateur-1` is a source 'coach' fixture and
-  // would otherwise ride this rung as one of the student's coach games.
+  // D5 (C8/B7a): the review fixtures are seeded with `source: 'coach'` —
+  // Morphy's opera game must not move the student's rating.
   const coachGames = (await db.games.where('source').equals('coach').toArray())
     .filter((g) => !isFixtureGame(g));
   if (coachGames.length >= COACH_GAMES_MIN_SAMPLE) {

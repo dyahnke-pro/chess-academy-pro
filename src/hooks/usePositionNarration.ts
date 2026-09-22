@@ -10,6 +10,8 @@ import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../servic
 import { formatReadingFacts } from '../services/positionReadingService';
 import { computePositionFacts, clauseText } from '../services/positionFacts';
 import { useWeaknessSignals } from './useWeaknessSignals';
+import { useStudentNeed } from './useStudentNeed';
+import { lastMoveIfStudent, sansOfPgn } from '../services/lastMoveOfLine';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../services/danyaTeachingService';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
@@ -110,6 +112,11 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
  */
 export function usePositionNarration(args: UsePositionNarrationArgs): UsePositionNarrationResult {
   const weaknessRef = useWeaknessSignals(); // student model → re-ranks the read (Phase 1)
+  // …AND THE NEED TERM (B3) — the line is the PGN the surface hands in.
+  const studentNeedRef = useStudentNeed({
+    studentColor: args.playerColor, openingId: null, eco: null,
+    sans: () => sansOfPgn(args.pgn),
+  });
   const [isNarrating, setIsNarrating] = useState(false);
   const [currentText, setCurrentText] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -245,6 +252,14 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
             analysis: stockfishAnalysis,
             evalBoard: (f) => stockfishEngine.evalBoard(f),
             studentWeaknesses: weaknessRef.current,
+            // THE HEAT MAP + THE NEED TERM (B3): the student's last move when
+            // the PGN produces this board and the last mover is them; absent
+            // otherwise. Never graded here → `cpLoss: null`.
+            ...((): { lastMove?: { fenBefore: string; san: string; cpLoss: number | null } } => {
+              const lm = lastMoveIfStudent(sansOfPgn(args.pgn), args.playerColor, args.fen);
+              return lm ? { lastMove: lm } : {};
+            })(),
+            studentNeedContext: studentNeedRef.current,
           });
           positionFactsBlock = clauseText(pf.clauses, ['must-defend']).join(' ');
         }

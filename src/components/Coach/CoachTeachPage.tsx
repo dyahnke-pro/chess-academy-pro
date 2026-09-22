@@ -74,6 +74,7 @@ import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
 import { useStudentNeed } from '../../hooks/useStudentNeed';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import {
   createPhaseTransitionState,
@@ -277,6 +278,7 @@ import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseText } from '../../services/positionFacts';
+import { LIVE_ANALYSIS_DEPTH } from '../../services/coachGameAnnotations';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
@@ -7200,14 +7202,16 @@ export function CoachTeachPage(): JSX.Element {
   // Cold / still loading reads as SPEAK — a fresh install meets a teaching coach.
   const liveOpeningKey = openingKeyFromSans(game.history);
   const studentNeedRef = useStudentNeed({
-    rating: activeProfile?.currentRating ?? 1200,
+    rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     studentColor: playerColor,
     // THE ONE KEY (A1): minted from the board, so the departure + opening-score
     // terms scope to the same opening the import and Play records carry. Null
     // until the line reaches a named entry — cold reads as SPEAK.
     openingId: liveOpeningKey,
     eco: liveOpeningKey ? ecoOfKey(liveOpeningKey) : null,
-    sans: gameRef.current.history,
+    // A GETTER, read at fire time (B3): the array form captured the mount-time
+    // history and measured every ply's familiarity against an empty line.
+    sans: () => gameRef.current.history,
   });
   // SAY-ONCE across the lesson. A standing fact (the pawn structure, a pin in
   // waiting, which piece is doing the work) is re-derived at every taught
@@ -7233,6 +7237,7 @@ export function CoachTeachPage(): JSX.Element {
   const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
+    playerColor,
     getOpeningName: () => walkthrough.tree?.openingName
       ?? useCoachMemoryStore.getState().intendedOpening?.name
       ?? null,

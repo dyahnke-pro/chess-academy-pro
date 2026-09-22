@@ -115,9 +115,17 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
     return text;
   };
 
+  // EVERY HABIT HONOURS THE STUDENT'S OWN STANDING (B11, 2026-09-22). A habit
+  // the lifecycle marks `closed` (they stopped erring) or `fading` (they mostly
+  // find it now) is not re-taught on this register: the record says they have
+  // it, and a correction they have already earned their way out of is nagging.
+  // UNKNOWN stays owed — a cold student never meets a mute coach. Until B11
+  // only the slow-down beat read the standing, and only on a move played well;
+  // the opponent-threat and forcing-scan beats fired on a closed habit exactly
+  // as on an open one.
   // 1 — OPPONENT INTENT. They had something going and it was played past. This
   // is the single most common habit gap, and the most teachable.
-  if (s.ignoredThreat) {
+  if (s.ignoredThreat && habitIsOwed(need, 'opponent-threat')) {
     return claim('opponent-threat', pick([
       'The habit that catches this: before your own idea, ask what THEY want — their threat comes first, every move.',
       'Make this the routine — their threat before your plan. Ask what they are trying to do before you ask what you want.',
@@ -130,7 +138,7 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   // An OPEN forcing-scan habit drops the bar to any graded slip; a closed or
   // fading one leaves the ordinary bar in place.
   const forcingBar = need['forcing-scan'] === 'open' ? FORCING_CP_WHEN_NEEDED : FORCING_CP;
-  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && s.cpLossCp !== null && s.cpLossCp >= forcingBar) {
+  if (habitIsOwed(need, 'forcing-scan') && s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && s.cpLossCp !== null && s.cpLossCp >= forcingBar) {
     return claim('forcing-scan', pick([
       'The move you wanted was a forcing one, so start there: list the checks and the captures before anything quiet.',
       'When something is available it is usually forcing — run the checks and captures first, then look at quiet moves.',
@@ -140,7 +148,7 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
 
   // 3 — SLOW DOWN. The position had real decision leverage: the right move
   // mattered here more than it does on an ordinary move. The app has always
-  // KNOWN this (`criticalityScan` is rating-scaled) and never said it.
+  // KNOWN this (`criticalityScan` computes it) and never said it.
   // A METHOD BEAT IS A CORRECTION, SO IT NEEDS SOMETHING TO CORRECT (David
   // 2026-09-16: "If they make the correct move this phrase shouldn't fire").
   // He said it of the opponent-threat beat, which is already safe — the
@@ -176,7 +184,7 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
   // helper, a brand-new user with no weakness data at all would be told "this
   // was the moment to slow down" on the critical move they just found, which is
   // precisely the correction David said they had not earned.
-  if (s.tier === 'only-move') {
+  if (s.tier === 'only-move' && habitIsOwed(need, 'slow-down')) {
     // FOUND IT → name the moment, never scold. Telling someone who solved it
     // that they should have spent longer is the wrong sentence for the same
     // computed fact; what they need is to recognise the shape next time.
@@ -192,7 +200,7 @@ export function methodBeatFor(s: MethodSignals, plyForVariety = 0): string | nul
         'Worth noticing for next time: this position was a fork in the road, and those deserve real thinking time.',
       ], plyForVariety));
   }
-  const slowTier = (!foundIt || need['slow-down'] === 'open') && (s.tier === 'critical'
+  const slowTier = habitIsOwed(need, 'slow-down') && (!foundIt || need['slow-down'] === 'open') && (s.tier === 'critical'
     || (need['slow-down'] === 'open' && (s.tier === 'blunder' || s.tier === 'swing')));
   if (slowTier) {
     return claim('slow-down', pick([

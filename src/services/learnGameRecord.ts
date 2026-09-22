@@ -20,6 +20,7 @@
 // the page writes without rendering twelve thousand lines of page.
 import { shouldPersistFinishedGame } from '../utils/coachGamePersistence';
 import { winPctLost, bandForWinPctLost } from './accuracyService';
+import { LIVE_ANALYSIS_DEPTH } from './coachGameAnnotations';
 import type { GameRecord, GameResult, MoveAnnotation, MoveClassification, OpeningKey } from '../types';
 
 /** What Learn knows about one STUDENT ply it graded live: the engine's read of
@@ -97,6 +98,19 @@ function resultFor(ending: LearnGameEnding): GameResult {
   }
 }
 
+/** Did the live grader score EVERY one of the student's plies? */
+export function coversEveryStudentPly(input: Pick<LearnGameInput, 'plyCount' | 'playerColor' | 'liveGrades'>): boolean {
+  const graded = new Set(input.liveGrades.map((g) => g.ply));
+  let any = false;
+  for (let ply = 0; ply < input.plyCount; ply += 1) {
+    const isWhitePly = ply % 2 === 0;
+    if ((input.playerColor === 'white') !== isWhitePly) continue;
+    any = true;
+    if (!graded.has(ply)) return false;
+  }
+  return any;
+}
+
 /** The record Learn writes — or null when the game is below the persistence
  *  floor (`MIN_PERSIST_PLIES`, the same floor Play applies to every ending),
  *  so a two-move abandon never litters the library. */
@@ -119,11 +133,15 @@ export function buildLearnGameRecord(input: LearnGameInput): GameRecord | null {
     whiteElo: input.playerColor === 'white' ? input.rating : null,
     blackElo: input.playerColor === 'black' ? input.rating : null,
     source: 'coach',
-    // The live per-move evaluations, where they exist. Only the student's
-    // graded plies — so this is SPARSE, and `fullyAnalyzed` stays unset: the
-    // sweep deepens it exactly as it deepens an import with sparse
-    // detectBlunders annotations. An honest null when nothing was graded.
+    // The live per-move evaluations, where they exist — only the student's
+    // graded plies. An honest null when nothing was graded.
     annotations: annotations.length > 0 ? annotations : null,
+    // B7(c): the live grades ARE the analysis, so a game where EVERY student
+    // ply was graded is stamped `fullyAnalyzed` (the sweep leaves it alone and
+    // it feeds the cold-start count + line familiarity). A ply the engine never
+    // read leaves the flag unset — sparse is deepened by the sweep, never
+    // half-flagged.
+    ...(coversEveryStudentPly(input) ? { fullyAnalyzed: true, analysisDepth: LIVE_ANALYSIS_DEPTH } : {}),
     coachAnalysis: null,
     isMasterGame: false,
     openingId: input.openingId,

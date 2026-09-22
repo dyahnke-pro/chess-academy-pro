@@ -119,6 +119,7 @@ const ANALYSIS = {
 
 const setup = (getLiveFen?: () => string) => renderHook(() => usePhaseNarration({
   getPgn: () => 'e4 e6 d4 d5 Nc3 Nf6',
+  playerColor: 'black',
   getOpeningName: () => 'French Defense',
   getLiveFen,
 }));
@@ -323,6 +324,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
     const { result } = renderHook(() => usePhaseNarration({
       // The Scandinavian Lasker: …Bg4 (ply 10) pins the f3-knight to the queen.
       getPgn: () => 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4',
+      playerColor: 'black',
       getOpeningName: () => 'Scandinavian Defense: Lasker Variation',
       getLiveFen: () => FEN,
     }));
@@ -338,6 +340,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
     noteText = '';
     const { result } = renderHook(() => usePhaseNarration({
       getPgn: () => 'e4 e6 d4 d5 Nc3 Nf6',
+      playerColor: 'black',
       getOpeningName: () => 'French Defense',
       getLiveFen: () => FEN,
     }));

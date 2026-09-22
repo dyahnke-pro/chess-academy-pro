@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**517 lines · 3 exports · 4 importers · 2 tests · 2 audits**
+**523 lines · 3 exports · 4 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ensureSampleGameSeeded` (function) — 4 call sites
-- `src/components/Coach/CoachReviewSessionPage.tsx:222`
+- `src/components/Coach/CoachReviewSessionPage.tsx:223`
 - `src/services/reviewSampleGames.test.ts:55`
 - `src/services/reviewSampleGames.test.ts:62`
 - `src/services/reviewSampleGames.test.ts:67`

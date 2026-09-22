@@ -4,12 +4,18 @@
 // David 2026-09-18: "The ranking computer decides. It should answer which
 // teachings are important enough to say."
 //
-// 🚨 IT RAISES A MOMENT, IT NEVER MAKES ONE. `computeImportance` applies this
-// under `studentBoost > 0 && rank > 0`, so it can only re-weight a moment where
-// a computer ALREADY produced a teaching. That guard is what stops "grey
-// teaches" from turning into "the coach talks on every ply": a quiet book move
-// computes nothing, ranks 0, and stays silent by HAVING NOTHING — not by a gate
-// and not by a ply budget.
+// 🚨 IT RAISES A MOMENT; IT MAKES ONE ONLY ON A RECURRING RED HOLE (B2,
+// decision recorded 2026-09-22). `computeImportance` adds `rank` under
+// `rank > 0`, so grey and green can only re-weight a moment a computer ALREADY
+// produced — that guard is what stops "grey teaches" from turning into "the
+// coach talks on every ply": a quiet book move computes nothing, ranks 0, and
+// stays silent by HAVING NOTHING. Until B2 that guard also meant the
+// student's own RECORD could never flip a verdict: a hole they had fallen in
+// twice, live on this very ply, still could not earn an interruption if the
+// engine signals happened to be flat. `opens` is the bounded exception — a RED
+// hole that has recurred (≥ 2 instances) may open a quiet, CONTESTED moment at
+// its own rank (≤ MAX_WEAKNESS_BOOST, so below every engine tier); grey and
+// green never manufacture one.
 //
 // This is also why the heat map feeds the RANKER and not the need score. On a
 // `'walk'` posture (review, Watch) `speaks` is unconditional and need is the
@@ -78,12 +84,38 @@ function isUnproven(tag: MisconceptionTagId, caps: CapabilityProfile): boolean {
   return !capabilityProven(caps.get(tag));
 }
 
+/** THE STUDENT TERM the ranker consumes. `rank` re-weights a moment that
+ *  already fired; `opens` says whether this term may also OPEN a quiet one —
+ *  true only for a recurring RED hole (see the header). Both travel together
+ *  so a lane cannot pass the number and forget the answer. */
+export interface StudentBoost {
+  rank: number;
+  opens: boolean;
+}
+
+/** No data, or a hole the lifecycle marks fixed. */
+export const NO_BOOST: StudentBoost = { rank: 0, opens: false };
+
+/** A hole has RECURRED when the record holds at least this many instances. */
+export const RECURRENCE_OPENS_AT = 2;
+
+/** A RED hole that may open a quiet moment: still open, not fixed, and seen
+ *  at least `RECURRENCE_OPENS_AT` times. `total` is every instance ever
+ *  logged and `openCount` what is still due; a coach-only row can carry one
+ *  without the other, so the larger of the two is the honest count. */
+export function holeOpensMoment(hole: WeaknessSignal | null | undefined): boolean {
+  if (!hole) return false;
+  if (hole.lifecycleStatus === 'fixed') return false;
+  if (hole.openCount <= 0) return false;
+  return Math.max(hole.total ?? 0, hole.openCount) >= RECURRENCE_OPENS_AT;
+}
+
 /**
  * The MAX of the two terms, never the sum. They are two readings of the same
  * question ("how much does this student need this?") and stacking them would
  * let one moment outrank a forced mate.
  */
-export function studentMomentBoost(input: StudentMomentInput): number {
+export function studentMomentBoost(input: StudentMomentInput): StudentBoost {
   const red = input.hole ? boostFor(input.hole) : 0;
   const caps = input.capabilities;
   // No profile at all is not a special case — it is the maximal grey state (a
@@ -92,5 +124,10 @@ export function studentMomentBoost(input: StudentMomentInput): number {
   const grey = input.posedTags?.length
     ? ((!caps || input.posedTags.some((t) => isUnproven(t, caps))) ? GREY_BOOST : 0)
     : 0;
-  return Math.min(MAX_WEAKNESS_BOOST, Math.max(red, grey));
+  const rank = Math.min(MAX_WEAKNESS_BOOST, Math.max(red, grey));
+  // Only RED opens — and only when red is what the rank is made of. A grey
+  // reading that happens to outrank a mild red hole must not borrow red's
+  // licence to interrupt.
+  const opens = red > 0 && red >= grey && holeOpensMoment(input.hole);
+  return { rank, opens };
 }

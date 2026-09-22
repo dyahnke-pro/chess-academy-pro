@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { selectTeaching, renderThesis, pliesFromSans, summarizeTeaching, MAX_MOMENTS, type SelectorPly } from './teachingSelector';
-import { buildTurningPointQuestion } from './reviewTurningPoint';
+import { selectTeaching, renderThesis, pliesFromSans, summarizeTeaching, landedTacticIsMoment, type SelectorPly } from './teachingSelector';
+import { buildTurningPointQuestion, turningPointCandidates } from './reviewTurningPoint';
 
 function pliesFrom(sans: readonly string[], evals?: readonly (number | null)[]): SelectorPly[] {
   const c = new Chess();
@@ -46,19 +46,35 @@ describe('teachingSelector — the ONE game-level read (unified-coach N1)', () =
     expect(renderThesis(pkg.thesis, 'retrospective')).toMatch(/Bg4.*pin/);
   });
 
-  it('a finished game with an eval record: moments are the review card\'s own candidates, biggest first, ≤ MAX_MOMENTS', () => {
+  it('a finished game with an eval record: moments are the review card\'s own candidates, biggest first — EVERY one that clears the bar', () => {
     const plies = pliesFrom(GAME, EVALS);
     const pkg = selectTeaching({ plies, studentColor: 'white', rating: 1500, kind: 'game' });
     expect(pkg.thesis.kind).toBe('turned');
-    expect(pkg.moments.length).toBeLessThanOrEqual(MAX_MOMENTS);
+    // B10 (2026-09-22): no MAX_MOMENTS. Every swing the turning-point bar
+    // admitted is a moment; a count could not know what it was deleting.
+    const q0 = turningPointCandidates(plies.map((p) => ({ ...p, moveNumber: Math.ceil(p.ply / 2), evalBefore: p.evalBefore ?? null, evalAfter: p.evalAfter ?? null, classification: null })));
+    for (const c of q0) expect(pkg.moments.map((m) => m.ply), `swing at ply ${c.ply} must be a moment`).toContain(c.ply);
     // Same candidates the review card asks about — computed once, shared.
-    const q = buildTurningPointQuestion(plies.map((p) => ({ ...p, moveNumber: Math.ceil(p.ply / 2), evalBefore: p.evalBefore ?? null, evalAfter: p.evalAfter ?? null, classification: null })), 1500);
+    const q = buildTurningPointQuestion(plies.map((p) => ({ ...p, moveNumber: Math.ceil(p.ply / 2), evalBefore: p.evalBefore ?? null, evalAfter: p.evalAfter ?? null, classification: null })));
     expect(q).not.toBeNull();
     expect(pkg.thesis.ply).toBe(q!.answer.ply);
     // The +900 → +650 blowout never "turned" (contested gate).
     expect(pkg.moments.map((m) => m.ply)).not.toContain(19);
     expect(pkg.moments.map((m) => m.ply)).toEqual(expect.arrayContaining([8, 13]));
     expect(renderThesis(pkg.thesis, 'retrospective')).toMatch(/^The game turned at .* points/);
+  });
+
+  // B10: a landed tactic is a moment on a BAR — a hole this student keeps
+  // falling in, or no record at all (grey teaches) — never a slot count.
+  // Negative control: restore `if (moments.length >= 3) break` → the cold
+  // Lasker line below still passes (one landed tactic) but the six-swing game
+  // in reviewTurningPoint.test is what catches the swing half; this pins the
+  // landed half directly.
+  it('landed tactics are moments by BAR: any for a cold student, only the recorded hole for a warm one', () => {
+    expect(landedTacticIsMoment('pin', [])).toBe(true);
+    const forkHole = { clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Forks', openCount: 3, total: 3, severity: 60, puzzleThemes: [] } as never;
+    expect(landedTacticIsMoment('fork', [forkHole])).toBe(true);
+    expect(landedTacticIsMoment('pin', [forkHole])).toBe(false);
   });
 
   it('is SURFACE-BLIND — the same input yields a deep-equal package whichever surface asks (invariant 1)', () => {

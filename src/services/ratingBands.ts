@@ -123,9 +123,18 @@ export type DeciderKind = 'capacity' | 'support';
 
 /** Direction the decider's own RETURN VALUE moves as rating rises. Stated
  *  separately from the kind because a capacity decider can express itself as
- *  an inverse (`criticalityThresholds` returns a BAR, so more capacity = a
- *  lower number). The gate runs each probe and proves this matches the code,
- *  so the two fields cannot silently disagree. */
+ *  an inverse (a decider that returns a BAR: more capacity = a lower number).
+ *  The gate runs each probe and proves this matches the code, so the two
+ *  fields cannot silently disagree.
+ *
+ *  🔴 `criticalityThresholds` WAS LISTED HERE AND IS REMOVED (B6, 2026-09-22),
+ *  not annotated. It was declared a 'capacity' decider that "falls" with
+ *  rating — and that declaration was the rating deciding VOLUME through the
+ *  back door, which THE FOUNDATION forbids ("it must never decide how much the
+ *  coach SAYS"). The bars are band-free now; the student enters the decision
+ *  only through their own record. A decider in this registry scales what the
+ *  coach can DO for a student (depth, look-ahead, hints), never how much of
+ *  the board it is allowed to mention. */
 export type DeciderSlope = 'rises' | 'falls';
 
 export interface AdaptiveDecider {
@@ -139,7 +148,6 @@ export interface AdaptiveDecider {
  *  NEW decider fails to compile until someone decides which kind it is — the
  *  question this whole section exists to force. */
 export type AdaptiveDeciderId =
-  | 'criticalityThresholds'
   | 'pvBandForRating'
   | 'getTacticLookahead'
   | 'alertSensitivityMultiplier'
@@ -148,10 +156,6 @@ export type AdaptiveDeciderId =
   | 'wrongTriesBeforeHint';
 
 export const ADAPTIVE_DECIDERS: Record<AdaptiveDeciderId, AdaptiveDecider> = {
-  criticalityThresholds: {
-    kind: 'capacity', slope: 'falls',
-    answers: 'how big must a mistake be before it is worth TEACHING about',
-  },
   pvBandForRating: {
     kind: 'capacity', slope: 'rises',
     answers: 'how many player-moves of the engine line a mistake puzzle asks for',

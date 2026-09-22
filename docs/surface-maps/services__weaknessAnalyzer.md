@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1533 lines · 7 exports · 11 importers · 7 tests · 0 audits**
+**1534 lines · 7 exports · 11 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `computeWeaknessProfile` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2066`
+- `src/components/Coach/CoachGamePage.tsx:2072`
 - `src/components/Stats/StatsPage.tsx:50`
 - `src/services/analyticsService.ts:463`
 - `src/services/gameAnalysisService.ts:2581`
@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessAnalyzer.test.ts:544`
 
 ### `getStoredWeaknessProfile` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10666`
+- `src/components/Coach/CoachTeachPage.tsx:10671`
 - `src/components/Stats/StatsPage.tsx:68`
 - `src/services/coachChatService.ts:188`
 - `src/services/coachContextSnapshot.ts:85`

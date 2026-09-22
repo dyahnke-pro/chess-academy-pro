@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `sacrificeCompensation` (function) — 11 call sites
 - `src/data/patternRegistry.ts:133`
-- `src/services/coachFeatureService.ts:2285`
+- `src/services/coachFeatureService.ts:2346`
 - `src/services/reviewFullData.ts:558`
 - `src/services/reviewSacrifice.test.ts:14`
 - `src/services/reviewSacrifice.test.ts:18`
@@ -35,15 +35,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewSacrifice.test.ts:44`
 
 ### `enemyKingStuckInCenter` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2567`
-- `src/services/coachFeatureService.ts:2593`
-- `src/services/coachFeatureService.ts:2617`
+- `src/services/coachFeatureService.ts:2628`
+- `src/services/coachFeatureService.ts:2654`
+- `src/services/coachFeatureService.ts:2678`
 - `src/services/reviewFullData.ts:480`
 - `src/services/reviewFullData.ts:580`
 - `src/services/reviewFullData.ts:644`
 
 ### `describeSacBreaksKingShield` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2312`
+- `src/services/coachFeatureService.ts:2373`
 - `src/services/reviewFullData.ts:562`
 - `src/services/reviewSacrifice.test.ts:53`
 - `src/services/reviewSacrifice.test.ts:58`

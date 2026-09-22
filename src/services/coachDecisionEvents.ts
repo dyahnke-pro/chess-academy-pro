@@ -53,7 +53,9 @@ export interface CoachDecisionRow {
   quietCount: number;
   /** WHICH MECHANISM silenced them, counted. 'subsumed' (collapsed as one
    *  claim about one geometry), 'below-bar' (the floor), 'said-already' (the
-   *  say-once pass). A spike in one of these is a different bug from a spike
+   *  say-once pass), and — when the DOOR closed before any fact was weighed —
+   *  'importance' (the moment) or 'need' (this student), the same two names
+   *  `reason` carries. A spike in one of these is a different bug from a spike
    *  in another, and `quietCount` alone cannot tell them apart — which is how
    *  a subsumption widening and a floor raise look identical from outside. */
   quietBy: Record<string, number>;

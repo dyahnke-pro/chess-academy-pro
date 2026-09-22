@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4701 lines · 39 exports · 17 importers · 15 tests · 10 audits**
+**4709 lines · 39 exports · 17 importers · 15 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -68,8 +68,8 @@
 - `src/services/sharedOpeningCache.ts:175`
 
 ### `getCachedOpening` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5460`
-- `src/components/Coach/CoachTeachPage.tsx:6376`
+- `src/components/Coach/CoachTeachPage.tsx:5462`
+- `src/components/Coach/CoachTeachPage.tsx:6378`
 - `src/hooks/useTeachWalkthrough.ts:2252`
 - `src/services/lessonCacheKey.test.ts:59`
 - `src/services/lessonCacheKey.test.ts:66`
@@ -78,13 +78,13 @@
 - `src/services/openingGenerator.test.ts:981`
 
 ### `cacheOpening` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4831`
-- `src/components/Coach/CoachTeachPage.tsx:5349`
-- `src/components/Coach/CoachTeachPage.tsx:5575`
-- `src/components/Coach/CoachTeachPage.tsx:5614`
-- `src/components/Coach/CoachTeachPage.tsx:5688`
-- `src/components/Coach/CoachTeachPage.tsx:6445`
-- `src/components/Coach/CoachTeachPage.tsx:10548`
+- `src/components/Coach/CoachTeachPage.tsx:4833`
+- `src/components/Coach/CoachTeachPage.tsx:5351`
+- `src/components/Coach/CoachTeachPage.tsx:5577`
+- `src/components/Coach/CoachTeachPage.tsx:5616`
+- `src/components/Coach/CoachTeachPage.tsx:5690`
+- `src/components/Coach/CoachTeachPage.tsx:6447`
+- `src/components/Coach/CoachTeachPage.tsx:10553`
 - `src/services/lessonCacheKey.test.ts:58`
 - `src/services/lessonCacheKey.test.ts:63`
 - `src/services/lessonCacheKey.test.ts:72`
@@ -148,8 +148,8 @@
 - `src/services/puzzleConceptExplanation.ts:168`
 
 ### `noteArrowSourceAt` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7693`
-- `src/components/Coach/CoachTeachPage.tsx:9676`
+- `src/components/Coach/CoachTeachPage.tsx:7698`
+- `src/components/Coach/CoachTeachPage.tsx:9681`
 - `src/services/noteSelectionDeterminism.test.ts:124`
 - `src/services/teachingCoverage.report.test.ts:164`
 
@@ -157,8 +157,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `groundedSegmentArrows` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7698`
-- `src/components/Coach/CoachTeachPage.tsx:9681`
+- `src/components/Coach/CoachTeachPage.tsx:7703`
+- `src/components/Coach/CoachTeachPage.tsx:9686`
 - `src/services/groundedArrows.test.ts:41`
 - `src/services/groundedArrows.test.ts:53`
 - `src/services/groundedArrows.test.ts:62`
@@ -251,11 +251,11 @@
 ### `generateOpening` (function) — 9 call sites
 - `scripts/audit-coach-teach-gaps.mjs:384`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:57`
-- `src/components/Coach/CoachTeachPage.tsx:4825`
-- `src/components/Coach/CoachTeachPage.tsx:5569`
-- `src/components/Coach/CoachTeachPage.tsx:5682`
-- `src/components/Coach/CoachTeachPage.tsx:6440`
-- `src/components/Coach/CoachTeachPage.tsx:10542`
+- `src/components/Coach/CoachTeachPage.tsx:4827`
+- `src/components/Coach/CoachTeachPage.tsx:5571`
+- `src/components/Coach/CoachTeachPage.tsx:5684`
+- `src/components/Coach/CoachTeachPage.tsx:6442`
+- `src/components/Coach/CoachTeachPage.tsx:10547`
 - `src/services/openingGenerator.test.ts:934`
 - `src/services/openingGenerator.test.ts:937`
 
@@ -287,11 +287,11 @@
 - `src/services/stageEntryValidity.test.ts:87`
 
 ### `generateMissingStagesInBackground` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5368`
-- `src/components/Coach/CoachTeachPage.tsx:5514`
-- `src/components/Coach/CoachTeachPage.tsx:5641`
-- `src/components/Coach/CoachTeachPage.tsx:5724`
-- `src/components/Coach/CoachTeachPage.tsx:6463`
+- `src/components/Coach/CoachTeachPage.tsx:5370`
+- `src/components/Coach/CoachTeachPage.tsx:5516`
+- `src/components/Coach/CoachTeachPage.tsx:5643`
+- `src/components/Coach/CoachTeachPage.tsx:5726`
+- `src/components/Coach/CoachTeachPage.tsx:6465`
 
 ## Tests
 

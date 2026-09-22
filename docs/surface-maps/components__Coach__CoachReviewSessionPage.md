@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**462 lines · 2 exports · 3 importers · 2 tests · 3 audits**
+**463 lines · 2 exports · 3 importers · 2 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,6 +32,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-back-from-review.mjs`
 - `scripts/audit-coach-review-gaps.mjs`

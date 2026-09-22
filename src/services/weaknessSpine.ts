@@ -844,7 +844,8 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
           db.mistakePuzzles.toArray(),
           db.openingWeakSpots.toArray(),
           db.classifiedTactics.toArray(),
-          db.games.toArray(),
+          // D5 (B7a): a fixture's conversion failures are not the student's.
+          db.games.filter((g) => !isFixtureGame(g)).toArray(),
         ]);
         // 🔒 FIXTURES ARE NOT THE STUDENT (D5, 2026-09-22). Reviewing the
         // seeded Vienna sample wrote its slips into these stores under the

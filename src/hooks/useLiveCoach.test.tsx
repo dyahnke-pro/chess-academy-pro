@@ -48,6 +48,7 @@ const { useLiveCoach } = await import('./useLiveCoach');
 const move = (ply: number): PlayerMoveNotification => ({
   ply,
   san: 'Nf3',
+  fenBefore: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
   fenAfter: 'rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1',
   evalBefore: 20,
   evalAfter: 120,
@@ -65,7 +66,7 @@ describe('useLiveCoach — DeepSeek re-fire guard', () => {
   });
 
   it('fires the grounded_voice call once for a fresh ply', async () => {
-    const { result } = renderHook(() => useLiveCoach({ gameId: 'g1', playerColor: 'white' }));
+    const { result } = renderHook(() => useLiveCoach({ gameId: 'g1', playerColor: 'white', getHistory: () => [] }));
     result.current.notifyPlayerMove(move(7));
     await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1));
   });
@@ -74,7 +75,7 @@ describe('useLiveCoach — DeepSeek re-fire guard', () => {
     // Simulate: the coach already spoke on gameId g1, ply 7 (persisted in the
     // Zustand singleton) — then CoachGamePage remounts (fresh hook, empty refs).
     history = [{ surface: 'live-coach', gameId: 'g1', ply: 7 }];
-    const { result } = renderHook(() => useLiveCoach({ gameId: 'g1', playerColor: 'white' }));
+    const { result } = renderHook(() => useLiveCoach({ gameId: 'g1', playerColor: 'white', getHistory: () => [] }));
     result.current.notifyPlayerMove(move(7));
     // Give any async work a chance to run, then assert no call was made.
     await new Promise((r) => setTimeout(r, 20));
@@ -83,7 +84,7 @@ describe('useLiveCoach — DeepSeek re-fire guard', () => {
 
   it('a different gameId at the same ply is NOT deduped (new game speaks)', async () => {
     history = [{ surface: 'live-coach', gameId: 'OTHER', ply: 7 }];
-    const { result } = renderHook(() => useLiveCoach({ gameId: 'g1', playerColor: 'white' }));
+    const { result } = renderHook(() => useLiveCoach({ gameId: 'g1', playerColor: 'white', getHistory: () => [] }));
     result.current.notifyPlayerMove(move(7));
     await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1));
   });
@@ -104,7 +105,7 @@ describe('the COMPUTED CONCEPT reaches the Learn live coach (P4c — a wire that
       bestMove: 'h2h3', evaluation: -250, isMate: false, mateIn: null, depth: 12, nodesPerSecond: 1,
       topLines: [{ rank: 1, evaluation: -250, moves: ['h2h3', 'd6e4'], mate: null }],
     };
-    const { result } = renderHook(() => useLiveCoach({ gameId: 'g-concept', playerColor: 'black' }));
+    const { result } = renderHook(() => useLiveCoach({ gameId: 'g-concept', playerColor: 'black', getHistory: () => [] }));
     result.current.notifyPlayerMove({ ...move(11), san: 'Kg8', fenAfter: FEN_AFTER });
     await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1), { timeout: 4000 });
     const call = groundedMoveFeedback.mock.calls[0]?.[0] as { extraFacts?: string };

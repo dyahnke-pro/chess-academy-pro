@@ -477,6 +477,14 @@ async function main() {
         decisions.length > 0,
         `postures=${postures.join(',')} — interrupt=${interrupts.length}, walk=${decisions.length - interrupts.length}`,
       );
+      // B9 (2026-09-22): a door-closed row files every fact under its own gate
+      // (`quietBy.importance` / `quietBy.need`), never under the floor's name.
+      const misfiled = silent.filter((d) => (d.quietCount ?? 0) > 0 && (d.quietBy?.[d.reason] ?? 0) !== d.quietCount);
+      record(
+        'G2b. every door-closed row files its facts under the gate that closed it',
+        misfiled.length === 0,
+        `${silent.length} silent rows; ${misfiled.length} misfiled${misfiled[0] ? ` (reason=${misfiled[0].reason} quietBy=${JSON.stringify(misfiled[0].quietBy)})` : ''}`,
+      );
       const walkClosedOnImportance = decisions.filter((d) => d.posture === 'walk' && d.speak === false && d.reason === 'importance');
       record(
         'G3b. no WALK row was closed by importance (the 46-ply-to-6 bug)',

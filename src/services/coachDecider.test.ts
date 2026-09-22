@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { decide } from './coachDecider';
 import type { ImportanceSignals } from './narrationImportance';
+import { NO_BOOST } from './studentMomentBoost';
 
 const PIN = '[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.';
 const BATTERY = '[tactic] Their queen on d1 and their bishop on e2 form a battery on the diagonal, bearing down on your bishop on g4.';
@@ -12,13 +13,15 @@ const bundle = { facts: [PIN, BATTERY, TRIVIA], squares: SQ, incoming: new Set([
 // type says so because making it optional is exactly how review ended up
 // never supplying it. The fixture omitted it, so this gate never once
 // exercised the absent-need path it documents (found 2026-09-19).
-const student = { rating: 1500, weaknesses: [], need: null, momentBoost: 0 };
+const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST };
 
 const quiet: ImportanceSignals = {
   decision: null, cpLossCp: null, threatNet: 0, teachingBeat: false,
   evalCpWhitePov: 20, wdl: null,
 };
 const blunder: ImportanceSignals = { ...quiet, cpLossCp: 300 };
+/** A real but ordinary swing — the tier NEED is allowed to veto. */
+const swing: ImportanceSignals = { ...quiet, cpLossCp: 120 };
 const decided: ImportanceSignals = { ...blunder, evalCpWhitePov: 2000 };
 
 describe('coachDecider — one door for the whole decision', () => {
@@ -37,9 +40,43 @@ describe('coachDecider — one door for the whole decision', () => {
   });
 
   it("this student's need can silence a moment the board thinks is fine", () => {
-    const d = decide(blunder, { ...student, need: { speak: false } }, bundle, 'interrupt');
+    const d = decide(swing, { ...student, need: { speak: false } }, bundle, 'interrupt');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('need');
+  });
+
+  // B5 (2026-09-22): the veto is TIER-AWARE. `needScore`'s own contract has
+  // always said a swing/must-defend/mate speaks on its own importance
+  // regardless of need; the door was silencing a hanging piece because the
+  // student knew the LINE. Negative control: with the tier guard removed, the
+  // first two assertions fail (speak=false, reason='need').
+  it('NEED cannot veto a blunder, a must-defend, an only-move or a mate — those are the board, not a lesson', () => {
+    const hang: ImportanceSignals = { ...quiet, threatNet: 3 };
+    const onlyMove: ImportanceSignals = { ...quiet, decision: { severity: 'only-move', gapCp: 400 } };
+    const mate: ImportanceSignals = { ...quiet, evalCpWhitePov: 100000 };
+    for (const sig of [blunder, hang, onlyMove, mate]) {
+      const d = decide(sig, { ...student, need: { speak: false } }, bundle, 'interrupt');
+      expect(d.speak, `tier ${d.tier} must speak on importance`).toBe(true);
+      expect(d.reason).toBe('spoken');
+    }
+    // …and the lesson tiers are still the student's to decline.
+    const critical: ImportanceSignals = { ...quiet, decision: { severity: 'critical', gapCp: 150 } };
+    const teaching: ImportanceSignals = { ...quiet, teachingBeat: true };
+    for (const sig of [swing, critical, teaching]) {
+      const d = decide(sig, { ...student, need: { speak: false } }, bundle, 'interrupt');
+      expect(d.speak, `tier ${d.tier} is need-gated`).toBe(false);
+      expect(d.reason).toBe('need');
+    }
+  });
+
+  // B9 (2026-09-22): every quiet fact names the GATE that closed it, so the
+  // emitted `quietBy` can tell importance from need. Negative control: with
+  // both closes labelled 'below-bar' again, both assertions fail.
+  it('a door-closed ply files every fact under the gate that closed it', () => {
+    const byImportance = decide(decided, student, bundle, 'interrupt');
+    expect(byImportance.quiet.map((q) => q.why)).toEqual(bundle.facts.map(() => 'importance'));
+    const byNeed = decide(swing, { ...student, need: { speak: false } }, bundle, 'interrupt');
+    expect(byNeed.quiet.map((q) => q.why)).toEqual(bundle.facts.map(() => 'need'));
   });
 
   it('ABSENT need data is not silence — a cold student meets a teaching coach', () => {
@@ -49,7 +86,7 @@ describe('coachDecider — one door for the whole decision', () => {
 
   it('every fact is accounted for on every path — silence always has a reason', () => {
     for (const [sig, st] of [
-      [blunder, student], [decided, student], [blunder, { ...student, need: { speak: false } }],
+      [blunder, student], [decided, student], [swing, { ...student, need: { speak: false } }],
     ] as const) {
       const d = decide(sig, st, bundle, 'interrupt');
       expect(d.spoken.length + d.quiet.length).toBe(bundle.facts.length);
@@ -75,7 +112,7 @@ describe('posture — what silence MEANS on this surface', () => {
   });
 
   it("the student's own need still silences a walk — that gate is theirs, not the board's", () => {
-    const d = decide(blunder, { ...student, need: { speak: false } }, bundle, 'walk');
+    const d = decide(swing, { ...student, need: { speak: false } }, bundle, 'walk');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('need');
   });

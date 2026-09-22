@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**911 lines · 30 exports · 913 importers · 198 tests · 39 audits**
+**911 lines · 30 exports · 915 importers · 200 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -643,6 +643,7 @@
 - `src/hooks/useSettings.ts`
 - `src/hooks/useSmartSearch.ts`
 - `src/hooks/useStruggleDetection.ts`
+- `src/hooks/useStudentNeed.test.tsx`
 - `src/hooks/useStudentNeed.ts`
 - `src/services/accuracyService.test.ts`
 - `src/services/accuracyService.ts`
@@ -870,6 +871,7 @@
 - `src/services/stockfishEngine.ts`
 - `src/services/streamingSpeaker.ts`
 - `src/services/strengthCalibrationService.ts`
+- `src/services/studentNeedLoader.test.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/studentStateBlock.ts`
 - `src/services/sublineLesson.ts`
@@ -1114,6 +1116,7 @@
 - `src/db/profiles.test.ts`
 - `src/hooks/useCoachTips.test.ts`
 - `src/hooks/useReviewEngineLines.test.ts`
+- `src/hooks/useStudentNeed.test.tsx`
 - `src/services/accuracyService.test.ts`
 - `src/services/adaptivePuzzleService.test.ts`
 - `src/services/autoAnalyzeGameMisconceptions.test.ts`
@@ -1202,6 +1205,7 @@
 - `src/services/srsOpeningService.test.ts`
 - `src/services/stockfishCache.test.ts`
 - `src/services/stockfishEngine.test.ts`
+- `src/services/studentNeedLoader.test.ts`
 - `src/services/sweepPassesEngineLines.test.ts`
 - `src/services/syncService.test.ts`
 - `src/services/tacticAlertService.test.ts`

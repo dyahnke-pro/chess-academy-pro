@@ -66,6 +66,8 @@ import { refutedAlternative, candidatesFromMasters } from './refutedAlternative'
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { coldStudent } from './needScore';
+import { getPlayerRating } from './playerRatingService';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { selectTeaching, summarizeTeaching, pliesFromSans, type SelectorPly } from './teachingSelector';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
@@ -2393,25 +2395,31 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // instead of the taught one, what it costs (engine, quiet-end graded), the
   // punishing line and the concept it lands — ONE composed fact, baked at
   // generation time. Gated by the student's NEED (N2): a ply they have mastered
-  // is not re-taught; a cold student hears every one. Bounded to the first 12
-  // plies so the added engine time stays modest on a one-time generation.
+  // is not re-taught; a cold student hears every one. NOT bounded by ply (B10,
+  // 2026-09-22): `REFUTED_PLY_CAP = 12` was a latency cap on teaching — past
+  // move 6 the student's own opening plies carried no refuted alternative
+  // however much they needed one. The need gate is the only gate; a one-time
+  // cached generation may spend the engine time.
   const refutedByPly: Record<number, string> = {};
   const refutedFacts: NonNullable<WalkthroughTree['teaching']>['refuted'] = [];
-  const REFUTED_PLY_CAP = 12;
   try {
     await ensureMastersDbLoaded().catch(() => undefined);
     const spineSans = positions.map((q) => q.san);
-    const student = await loadStudentNeedContext({ rating: 1500, sans: spineSans, studentColor: studentSide, openingId: openingKeyFromSans(spineSans), eco: entry.eco ?? null })
-      .catch(() => coldStudent(1500));
+    // THE ONE ADAPTIVE ESTIMATE, never a literal (B10): `rating: 1500` here
+    // handed the need loader — and so the departure-cost term — a number that
+    // was nobody's. The ONE opening key (A1) scopes the departure + result terms.
+    const rating = await getPlayerRating().catch(() => DEFAULT_STUDENT_RATING);
+    const student = await loadStudentNeedContext({ rating, sans: spineSans, studentColor: studentSide, openingId: openingKeyFromSans(spineSans), eco: entry.eco ?? null })
+      .catch(() => coldStudent(rating));
     const needPlies = new Set(teachingForLine(spineSans, studentSide, student)?.needPlies ?? []);
-    for (let i = 0; i < positions.length && i < REFUTED_PLY_CAP; i += 1) {
+    for (let i = 0; i < positions.length; i += 1) {
       if (positions[i].movedBy !== studentSide) continue;
       if (!needPlies.has(i + 1)) continue;
       const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
       const candidates = candidatesFromMasters(mastersMovesSync(preFen));
       if (candidates.length < 2) continue;
       try {
-        const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, rating: student.rating, depth: 12, maxPlies: 6 });
+        const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, depth: 12, maxPlies: 6 });
         if (r) {
           refutedByPly[i] = r.text;
           refutedFacts.push({ ply: i + 1, alt: r.alt, pct: r.pct, costCp: r.costCp, concept: r.concept?.id ?? null });

@@ -37,8 +37,16 @@ import { facetRank } from './reviewFacetRank';
 import type { WeaknessSignal } from './weaknessSignal';
 
 /** Why a fact did not speak. Kept for the audit trail — silence is a computed
- *  verdict, so it has to be explainable, never just absent. */
-export type QuietReason = 'subsumed' | 'below-bar' | 'said-already';
+ *  verdict, so it has to be explainable, never just absent.
+ *
+ *  The first three are THIS selector's (steps 3–4 of the door). The last two
+ *  are the DOOR's own gates, named here so one vocabulary covers every quiet
+ *  fact: `'importance'` — the moment was not worth anything on this surface;
+ *  `'need'` — this student did not need it here. Until 2026-09-22 both were
+ *  emitted as `'below-bar'`, so the `quietBy` distribution the audits read could
+ *  not tell a posture bug (importance closing a walk) from a need bug — the
+ *  exact two diagnoses the emission exists to separate. */
+export type QuietReason = 'subsumed' | 'below-bar' | 'said-already' | 'importance' | 'need';
 
 export interface QuietFact {
   text: string;
@@ -149,6 +157,43 @@ export interface FactSelectOptions {
    *  splitting them is how they end up disagreeing. Omitted → facts are ranked
    *  by their `[tag]` and swept by `barForTier`. */
   order?: { rank: ReadonlyMap<string, number>; bar: number };
+  /** THE CLAIM FAMILY of each fact — the KIND of computer that produced it
+   *  (`ClauseKind` on the live lane), coupled at emission. Two facts are ONE
+   *  claim only when their squares coincide AND they are the same kind of
+   *  claim: a pin and a battery over one diagonal are both `[tactic]`, so the
+   *  battery eats the pin; the loose piece on that diagonal is `[loose]`, a
+   *  different teaching, and it keeps its voice even though its two squares
+   *  are a subset of the pin's three (Jaccard 0.67 — see B12 below). Review's
+   *  facets carry their family in the `[tag]` prefix, so a surface that omits
+   *  this map still gets it; a fact with no family in either place is never
+   *  collapsed against a fact of a known family. */
+  family?: ReadonlyMap<string, string>;
+}
+
+/** The family a fact declares in its own text — review's `[tag]` prefix. */
+const FAMILY_PREFIX = /^\[([a-z0-9-]+)\]/i;
+function declaredFamily(text: string): string | null {
+  const m = FAMILY_PREFIX.exec(text);
+  return m ? m[1].toLowerCase() : null;
+}
+
+/** ONE CLAIM = same geometry AND same claim family (B12, 2026-09-22).
+ *
+ *  Jaccard alone ate a two-square fact whenever a three-square fact of a
+ *  DIFFERENT kind happened to contain it (2/3 = 0.67 ≥ 0.6): the loose piece on
+ *  e2 vanished under the pin through e2, and the student lost a teaching that
+ *  was not a duplicate. Silence must never be a guess, so a fact whose family
+ *  is unknown on BOTH sides still collapses on geometry alone (today's
+ *  behaviour for a caller that supplies neither a map nor a prefix), while a
+ *  fact with a known family collapses only into its own. */
+export function sameClaim(
+  a: { sq: readonly string[]; family: string | null },
+  b: { sq: readonly string[]; family: string | null },
+): boolean {
+  if (a.sq.length === 0 || b.sq.length === 0) return false;
+  if (jaccard(a.sq, b.sq) < SAME_CLAIM_JACCARD) return false;
+  if (a.family === null && b.family === null) return true;
+  return a.family === b.family;
 }
 
 export function selectFacts(
@@ -158,11 +203,12 @@ export function selectFacts(
   signals: readonly WeaknessSignal[] = [],
   opts: FactSelectOptions = {},
 ): FactSelection {
-  const { incoming = new Set<string>(), alreadySaid, order } = opts;
+  const { incoming = new Set<string>(), alreadySaid, order, family } = opts;
   const said = alreadySaid ?? new Set<string>();
   const bar = order ? order.bar : barForTier(tier);
   const rankOf = (text: string): number => (order ? (order.rank.get(text) ?? 0) : facetRank(text, signals));
-  const scored = facets.map((text, i) => ({ text, i, rank: rankOf(text), sq: squares.get(text) ?? [] }));
+  const familyOf = (text: string): string | null => family?.get(text) ?? declaredFamily(text);
+  const scored = facets.map((text, i) => ({ text, i, rank: rankOf(text), sq: squares.get(text) ?? [], family: familyOf(text) }));
   // Highest rank first; authoring order breaks ties so the result is stable.
   const byRank = [...scored].sort((a, b) => (b.rank - a.rank) || (a.i - b.i));
 
@@ -179,7 +225,7 @@ export function selectFacts(
     // coupled squares is never collapsed — we cannot prove it is the same claim,
     // and silence must never be a guess.
     const g = cand.sq.length > 0
-      ? groups.find((grp) => grp[0].sq.length > 0 && jaccard(grp[0].sq, cand.sq) >= SAME_CLAIM_JACCARD)
+      ? groups.find((grp) => sameClaim(grp[0], cand))
       : undefined;
     if (g) g.push(cand); else groups.push([cand]);
   }

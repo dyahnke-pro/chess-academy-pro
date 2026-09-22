@@ -13,7 +13,6 @@
 // as the second, and treated every rating the same.
 
 import { criticalityThresholds } from './criticalityScan';
-import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 /** A position is decided when |eval| clears this (white-POV cp). */
 const DECIDED_CP = 600;
@@ -58,15 +57,23 @@ export interface TurningPointQuestion {
   reveal: string;
 }
 
-/** Rating-scaled min mover-POV cost (pawns) for a turning-point candidate.
- *  Intermediate (1500) → 1.0 (the old flat bar); beginner (900) → 2.0 (only
- *  real blunders); expert (2200) → 0.5 (subtleties turn their games). */
-export function minSwingPawns(rating: number): number {
-  return criticalityThresholds(rating).critical / 100;
+/** Min mover-POV cost (pawns) for a turning-point candidate — the band-free
+ *  "critical" bar (B6): a game turns where a mistake was made, whoever made
+ *  it. This used to be rating-scaled (2.0 for a beginner, 0.5 for an expert),
+ *  which was the rating deciding how many moments a student got to hear. */
+export function minSwingPawns(): number {
+  return criticalityThresholds().critical / 100;
 }
-/** The question needs a real choice — at least this many candidates. */
+/** The question needs a real choice — at least this many candidates. This is
+ *  the QUESTION's shape (a one-chip question is not a question), not a cap. */
 export const TURNING_POINT_MIN_CANDIDATES = 2;
-const MAX_CANDIDATES = 4;
+/** A candidate CHIP is any costed moment worth at least this share of the
+ *  biggest swing (B10, 2026-09-22). `MAX_CANDIDATES = 4` used to keep the four
+ *  biggest regardless of worth — a game with five real turning moments lost
+ *  its fifth chip, and a game with one real moment and three noise ones showed
+ *  the noise. A bar relative to the answer admits every candidate that could
+ *  honestly be mistaken for it, however many, and sweeps the tail. */
+export const CANDIDATE_SHARE_OF_ANSWER = 0.25;
 
 export function moveLabel(s: TurningPointSegmentLike): string {
   return `${s.moveNumber}${s.playerColor === 'black' ? '…' : '.'} ${s.san}`;
@@ -102,13 +109,12 @@ function swingPawns(s: TurningPointSegmentLike): number | null {
  * The costed, contested-gated moments of a sequence, BIGGEST SWING FIRST. The
  * one computation the review's turning-point card and the game-level selector
  * (`teachingSelector`, unified-coach N1) share — a moment is a moment on every
- * surface, computed once here. Rating-scaled via `minSwingPawns`.
+ * surface, computed once here. Band-free via `minSwingPawns`.
  */
 export function turningPointCandidates(
   segments: ReadonlyArray<TurningPointSegmentLike>,
-  rating = DEFAULT_STUDENT_RATING,
 ): TurningPointCandidate[] {
-  const minSwing = minSwingPawns(rating);
+  const minSwing = minSwingPawns();
   const costed: TurningPointCandidate[] = [];
   for (const s of segments) {
     const swing = swingPawns(s);
@@ -125,13 +131,17 @@ export function turningPointCandidates(
 
 export function buildTurningPointQuestion(
   segments: ReadonlyArray<TurningPointSegmentLike>,
-  rating = DEFAULT_STUDENT_RATING,
 ): TurningPointQuestion | null {
-  const bySwing = turningPointCandidates(segments, rating);
+  const bySwing = turningPointCandidates(segments);
   if (bySwing.length < TURNING_POINT_MIN_CANDIDATES) return null;
 
   const answer = bySwing[0];
-  const candidates = bySwing.slice(0, MAX_CANDIDATES).sort((a, b) => a.ply - b.ply);
+  const bar = answer.swingPawns * CANDIDATE_SHARE_OF_ANSWER;
+  const cleared = bySwing.filter((c) => c.swingPawns >= bar);
+  // The question's shape: if the bar leaves fewer than a real choice, the
+  // runner-up joins so the student still has something to weigh.
+  const chosen = cleared.length >= TURNING_POINT_MIN_CANDIDATES ? cleared : bySwing.slice(0, TURNING_POINT_MIN_CANDIDATES);
+  const candidates = [...chosen].sort((a, b) => a.ply - b.ply);
 
   return {
     question: 'One more thing — where do you think this game turned?',

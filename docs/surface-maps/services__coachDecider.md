@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**393 lines · 10 exports · 6 importers · 4 tests · 17 audits**
+**436 lines · 10 exports · 8 importers · 6 tests · 18 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,6 +37,8 @@
 - `src/services/habitJoin.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/positionFacts.ts`
+- `src/test/latentForkOpensTheDoor.test.ts`
+- `src/test/preGateSeesTheStudent.test.ts`
 
 ## Exports and every call site
 
@@ -55,13 +57,24 @@
 ### `MomentVerdict` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `judgeMoment` (function) — 1 call site
-- `src/services/positionFacts.ts:393`
+### `judgeMoment` (function) — 12 call sites
+- `src/services/positionFacts.ts:503`
+- `src/test/latentForkOpensTheDoor.test.ts:47`
+- `src/test/latentForkOpensTheDoor.test.ts:51`
+- `src/test/latentForkOpensTheDoor.test.ts:55`
+- `src/test/latentForkOpensTheDoor.test.ts:56`
+- `src/test/latentForkOpensTheDoor.test.ts:65`
+- `src/test/latentForkOpensTheDoor.test.ts:77`
+- `src/test/latentForkOpensTheDoor.test.ts:78`
+- `src/test/preGateSeesTheStudent.test.ts:59`
+- `src/test/preGateSeesTheStudent.test.ts:63`
+- `src/test/preGateSeesTheStudent.test.ts:70`
+- `src/test/preGateSeesTheStudent.test.ts:71`
 
 ### `CoachDecision` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `decide` (function) — 49 call sites
+### `decide` (function) — 54 call sites
 - `scripts/triage-traps.mjs:36`
 - `scripts/triage-traps.mjs:48`
 - `src/components/Legal/AiConsentModal.tsx:89`
@@ -90,30 +103,35 @@
 - `src/services/accessPolicy.test.ts:108`
 - `src/services/accessPolicy.test.ts:112`
 - `src/services/accessPolicy.test.ts:121`
-- `src/services/coachDecider.test.ts:26`
-- `src/services/coachDecider.test.ts:34`
-- `src/services/coachDecider.test.ts:40`
-- `src/services/coachDecider.test.ts:46`
-- `src/services/coachDecider.test.ts:54`
-- `src/services/coachDecider.test.ts:60`
-- `src/services/coachDecider.test.ts:69`
-- `src/services/coachDecider.test.ts:74`
+- `src/services/coachDecider.test.ts:29`
+- `src/services/coachDecider.test.ts:37`
+- `src/services/coachDecider.test.ts:43`
+- `src/services/coachDecider.test.ts:58`
+- `src/services/coachDecider.test.ts:66`
+- `src/services/coachDecider.test.ts:76`
 - `src/services/coachDecider.test.ts:78`
+- `src/services/coachDecider.test.ts:83`
+- `src/services/coachDecider.test.ts:91`
+- `src/services/coachDecider.test.ts:97`
+- `src/services/coachDecider.test.ts:106`
+- `src/services/coachDecider.test.ts:111`
+- `src/services/coachDecider.test.ts:115`
 - `src/services/coachDecisionEmits.test.ts:46`
 - `src/services/coachDecisionEmits.test.ts:53`
 - `src/services/coachDecisionEmits.test.ts:63`
 - `src/services/coachDecisionEmits.test.ts:73`
 - `src/services/coachDecisionEmits.test.ts:80`
 - `src/services/coachDecisionEmits.test.ts:89`
-- `src/services/coachFeatureService.ts:1855`
-- `src/services/liveNeedGate.test.ts:46`
-- `src/services/liveNeedGate.test.ts:52`
-- `src/services/liveNeedGate.test.ts:61`
-- `src/services/liveNeedGate.test.ts:73`
-- `src/services/positionFacts.ts:576`
+- `src/services/coachFeatureService.cpLossSign.test.ts:57`
+- `src/services/coachFeatureService.ts:1959`
+- `src/services/liveNeedGate.test.ts:49`
+- `src/services/liveNeedGate.test.ts:55`
+- `src/services/liveNeedGate.test.ts:64`
+- `src/services/liveNeedGate.test.ts:76`
+- `src/services/positionFacts.ts:661`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1434`
+- `src/services/coachFeatureService.ts:1496`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -123,7 +141,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:494`
+- `src/services/positionFacts.ts:590`
 
 ### `habitForCluster` (function) — 9 call sites
 - `src/services/habitJoin.test.ts:17`
@@ -142,6 +160,8 @@
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/habitJoin.test.ts`
 - `src/services/liveNeedGate.test.ts`
+- `src/test/latentForkOpensTheDoor.test.ts`
+- `src/test/preGateSeesTheStudent.test.ts`
 
 ## Audits that reach it
 
@@ -154,6 +174,7 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-coach-full-games.mjs`
 - `scripts/audit-coach-multilingual-prod.mjs`
 - `scripts/audit-concept-gameplay-prod.mjs`
+- `scripts/audit-lib/coach-question-matrix.mjs`
 - `scripts/audit-lib/coach-tab-graders.mjs`
 - `scripts/audit-lib/degrade.mjs`
 - `scripts/audit-lib/hand-step.mjs`

@@ -29,8 +29,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7501`
-- `src/components/Coach/CoachTeachPage.tsx:7531`
+- `src/components/Coach/CoachTeachPage.tsx:7506`
+- `src/components/Coach/CoachTeachPage.tsx:7536`
 - `src/services/computedVoiceAudit.report.test.ts:260`
 - `src/services/dnaLineNarrator.ts:120`
 - `src/services/dnaLineNarrator.ts:208`
@@ -53,7 +53,7 @@
 - `src/services/pvPlayback.ts:677`
 - `src/services/pvPlayback.ts:768`
 - `src/services/reviewMoveBriefing.ts:250`
-- `src/services/teachingSelector.ts:332`
+- `src/services/teachingSelector.ts:347`
 
 ### `TACTIC_TO_PATTERN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -90,7 +90,7 @@
 - `src/services/tacticVocabulary.test.ts:73`
 - `src/services/tacticVocabulary.test.ts:86`
 - `src/services/tacticVocabulary.test.ts:87`
-- `src/services/weaknessSignal.ts:185`
+- `src/services/weaknessSignal.ts:209`
 
 ### `weaknessClusterForTactic` (function) — 1 call site
 - `src/services/tacticVocabulary.test.ts:88`

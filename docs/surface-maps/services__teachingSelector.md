@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**422 lines · 17 exports · 7 importers · 2 tests · 4 audits**
+**437 lines · 17 exports · 7 importers · 2 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,67 +41,69 @@
 ### `TeachingPackage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `MAX_MOMENTS` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `landedTacticIsMoment` (function) — 3 call sites
+- `src/services/teachingSelector.test.ts:74`
+- `src/services/teachingSelector.test.ts:76`
+- `src/services/teachingSelector.test.ts:77`
 
 ### `weaknessBoostCp` (function) — 2 call sites
-- `src/services/teachingSelector.test.ts:119`
-- `src/services/teachingSelector.test.ts:120`
+- `src/services/teachingSelector.test.ts:135`
+- `src/services/teachingSelector.test.ts:136`
 
 ### `rankSwingCandidates` (function) — 3 call sites
-- `src/services/teachingSelector.test.ts:121`
-- `src/services/teachingSelector.test.ts:125`
-- `src/services/teachingSelector.test.ts:130`
+- `src/services/teachingSelector.test.ts:137`
+- `src/services/teachingSelector.test.ts:141`
+- `src/services/teachingSelector.test.ts:146`
 
 ### `selectTeaching` (function) — 14 call sites
-- `src/hooks/usePhaseNarration.ts:510`
-- `src/services/coachFeatureService.ts:1265`
+- `src/hooks/usePhaseNarration.ts:521`
+- `src/services/coachFeatureService.ts:1322`
 - `src/services/needCoverage.report.test.ts:60`
-- `src/services/openingGenerator.ts:516`
-- `src/services/openingGenerator.ts:2722`
+- `src/services/openingGenerator.ts:519`
+- `src/services/openingGenerator.ts:2731`
 - `src/services/teachingSelector.test.ts:39`
 - `src/services/teachingSelector.test.ts:51`
-- `src/services/teachingSelector.test.ts:66`
-- `src/services/teachingSelector.test.ts:67`
-- `src/services/teachingSelector.test.ts:68`
-- `src/services/teachingSelector.test.ts:74`
 - `src/services/teachingSelector.test.ts:82`
-- `src/services/teachingSelector.test.ts:88`
-- `src/services/teachingSelector.test.ts:101`
+- `src/services/teachingSelector.test.ts:83`
+- `src/services/teachingSelector.test.ts:84`
+- `src/services/teachingSelector.test.ts:90`
+- `src/services/teachingSelector.test.ts:98`
+- `src/services/teachingSelector.test.ts:104`
+- `src/services/teachingSelector.test.ts:117`
 
 ### `ThesisRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderThesis` (function) — 7 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
-- `src/components/Coach/CoachGameReview.tsx:1471`
-- `src/hooks/usePhaseNarration.ts:511`
+- `src/components/Coach/CoachGameReview.tsx:1485`
+- `src/hooks/usePhaseNarration.ts:522`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
-- `src/services/teachingSelector.test.ts:61`
-- `src/services/teachingSelector.test.ts:76`
+- `src/services/teachingSelector.test.ts:64`
+- `src/services/teachingSelector.test.ts:92`
 
 ### `pliesFromSans` (function) — 6 call sites
-- `src/hooks/usePhaseNarration.ts:510`
+- `src/hooks/usePhaseNarration.ts:521`
 - `src/services/needCoverage.report.test.ts:59`
-- `src/services/openingGenerator.ts:514`
-- `src/services/teachingSelector.test.ts:97`
-- `src/services/teachingSelector.test.ts:98`
-- `src/services/teachingSelector.test.ts:101`
+- `src/services/openingGenerator.ts:517`
+- `src/services/teachingSelector.test.ts:113`
+- `src/services/teachingSelector.test.ts:114`
+- `src/services/teachingSelector.test.ts:117`
 
 ### `SegmentLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectTeachingForSegments` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:1469`
+- `src/components/Coach/CoachGameReview.tsx:1483`
 
 ### `TreeTeaching` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `summarizeTeaching` (function) — 3 call sites
-- `src/services/openingGenerator.ts:516`
-- `src/services/openingGenerator.ts:2723`
-- `src/services/teachingSelector.test.ts:102`
+- `src/services/openingGenerator.ts:519`
+- `src/services/openingGenerator.ts:2732`
+- `src/services/teachingSelector.test.ts:118`
 
 ## Tests
 

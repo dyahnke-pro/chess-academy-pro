@@ -20,7 +20,7 @@
 // composition, and so a change to the decision reaches every surface at once.
 //
 // THE ORDER OF THE DECISION, and why it is this order:
-//   1. IMPORTANCE — is this moment worth anything at all? (rating-scaled,
+//   1. IMPORTANCE — is this moment worth anything at all? (band-free bars,
 //      contested-gated; a swing inside a decided game is not a moment.)
 //   2. NEED — does this student need it? A line they have played correctly five
 //      times is silent even when the position is interesting.
@@ -36,6 +36,7 @@ import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, 
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision } from './coachDecisionEvents';
+import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
  *
@@ -54,6 +55,9 @@ export type SurfacePosture = 'walk' | 'interrupt';
 
 /** What this student brings to the board. */
 export interface StudentContext {
+  /** STRENGTH, never volume (B6): the door does not read this for WHETHER a
+   *  moment speaks — the bars are band-free. Carried for the depth-scaled
+   *  computers a surface composes around the decision. */
   rating: number;
   /** The weakness spine — raises facts about the holes they keep falling in. */
   weaknesses: readonly WeaknessSignal[];
@@ -75,7 +79,9 @@ export interface StudentContext {
    *  `Record<ImportanceTier, cluster>` lookup — a fourth, coarser join beside
    *  three existing ones, on a lossy key. See narrationImportance.)
    *
-   *  0 = no data / a hole the lifecycle marks `fixed`. RAISE-ONLY.
+   *  `NO_BOOST` = no data / a hole the lifecycle marks `fixed`. `rank` is
+   *  RAISE-ONLY; `opens` (a recurring RED hole) may open a quiet contested
+   *  moment — see `studentMomentBoost` (B2).
    *
    * 🚨 REQUIRED, and this is the third field in this codebase made required for
    * the same reason. Both student terms were optional, and review simply never
@@ -90,9 +96,10 @@ export interface StudentContext {
    * `posedTags` (pre-filtered by a guard that belonged to the other consumer).
    * Three instances, all found by hand, all invisible to every prod audit.
    * An optional student term is a lane's licence to forget the student, so the
-   * door no longer offers one: a caller must ANSWER, even if the answer is 0.
+   * door no longer offers one: a caller must ANSWER, even if the answer is
+   * `NO_BOOST`.
    */
-  momentBoost: number;
+  momentBoost: StudentBoost;
 }
 
 /** The facts a surface computed at this moment, with the geometry coupled from
@@ -132,6 +139,10 @@ export interface FactBundle {
    *  time they arrive, so the match belongs upstream and only its result
    *  travels. */
   holeByFact?: ReadonlyMap<string, WeaknessSignal | null>;
+  /** THE CLAIM FAMILY per fact — see `FactSelectOptions.family`. The live
+   *  composer passes each clause's `kind`; review's facets carry theirs in the
+   *  `[tag]` prefix and may omit this. */
+  family?: ReadonlyMap<string, string>;
 }
 
 /** What the student should have DONE differently in their head. Optional: a
@@ -158,12 +169,12 @@ export interface MomentVerdict {
 
 export function judgeMoment(
   signals: ImportanceSignals,
-  rating: number,
   posture: SurfacePosture,
-  /** The student term — see `StudentContext.momentBoost`. Raise-only. */
-  momentBoost = 0,
+  /** The student term — see `StudentContext.momentBoost`. A bare number is the
+   *  raise-only form, for the leaf tests; a surface hands a `StudentBoost`. */
+  momentBoost: number | StudentBoost = NO_BOOST,
 ): MomentVerdict {
-  const importance = computeImportance(signals, rating, momentBoost);
+  const importance = computeImportance(signals, momentBoost);
   return { importance, speaks: posture === 'walk' || importance.speak };
 }
 
@@ -220,6 +231,24 @@ function emit(
   return d;
 }
 
+/** The tiers the student's need may NOT veto — see step 2 of `decide`. A
+ *  `Record` over the whole union, so a new tier fails to compile until someone
+ *  decides whether it is a lesson (need-gated) or the board (not). */
+const NEED_MAY_VETO: Record<ImportanceTier, boolean> = {
+  mate: false,
+  'only-move': false,
+  blunder: false,
+  'must-defend': false,
+  critical: true,
+  swing: true,
+  teaching: true,
+  convert: true,
+  none: true,
+};
+const SPEAKS_ON_IMPORTANCE: ReadonlySet<ImportanceTier> = new Set(
+  (Object.keys(NEED_MAY_VETO) as ImportanceTier[]).filter((t) => !NEED_MAY_VETO[t]),
+);
+
 export function decide(
   signals: ImportanceSignals,
   student: StudentContext,
@@ -231,19 +260,33 @@ export function decide(
    *  this function computes (David 2026-09-16: how to think IS the teaching). */
   method?: MethodContext,
 ): CoachDecision {
-  const { importance, speaks } = judgeMoment(signals, student.rating, posture, student.momentBoost ?? 0);
+  const { importance, speaks } = judgeMoment(signals, posture, student.momentBoost ?? NO_BOOST);
   const base = { tier: importance.tier, rank: importance.rank };
 
   // 1 — THE MOMENT, but ONLY where silence is the default. On a 'walk' the
   // student asked for the sequence, so an unimportant moment is a QUIETER beat,
   // never a missing one.
+  // Every fact goes quiet under the GATE's own name (B9, 2026-09-22): the
+  // emitted `quietBy` used to file both closes as `'below-bar'`, so the row
+  // could name the gate in `reason` and then contradict itself per fact.
   if (!speaks) {
-    return emit(posture, { ...base, speak: false, reason: 'importance', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) }, student, false);
+    return emit(posture, { ...base, speak: false, reason: 'importance', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'importance' as const })) }, student, false);
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
   // a teaching coach, not a mute one (the cold-start rule).
-  if (student.need && !student.need.speak) {
-    return emit(posture, { ...base, speak: false, reason: 'need', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'below-bar' as const })) }, student, false);
+  //
+  // 🚨 THE VETO IS TIER-AWARE (B5, 2026-09-22). `needScore`'s own contract has
+  // said since N2 that need "gates the quiet per-ply teaching beat only; a
+  // swing / must-defend / mate speaks on its own importance regardless of
+  // need" — and this door never honoured it: a hanging piece on a line the
+  // student had played right five times was silenced by their familiarity
+  // with the LINE, which says nothing about the PIECE. Need answers "does this
+  // student need the lesson here"; a forced mate, an only-move, a blunder and
+  // a live hang are not lessons, they are the board — they speak on the
+  // moment. The teaching / critical / swing / convert / none tiers stay
+  // need-gated, which is where a familiar line SHOULD go quiet.
+  if (student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
+    return emit(posture, { ...base, speak: false, reason: 'need', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'need' as const })) }, student, false);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor
   // sweeps trivia. The floor may never mute a ply — that was step 2's job and
@@ -253,7 +296,7 @@ export function decide(
     bundle.squares,
     importance.tier,
     student.weaknesses,
-    { incoming: bundle.incoming, alreadySaid: bundle.alreadySaid, order: bundle.order },
+    { incoming: bundle.incoming, alreadySaid: bundle.alreadySaid, order: bundle.order, family: bundle.family },
   );
   // 5 — THE ORDER. The surface's own ranks when it supplied them, else the
   // review ranker. Either way the student's holes are raised: `rankFacets` does

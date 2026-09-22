@@ -9,7 +9,7 @@
 //  • It takes the surface's EXISTING StockfishAnalysis (the warm eval-bar read) —
 //    no second MultiPV scan.
 //  • The decision-leverage bar reuses `criticalityThresholds` (scanCriticality's
-//    rating-scaled doctrine), so the two never disagree.
+//    band-free bars, B6), so the two never disagree.
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
@@ -17,7 +17,7 @@ import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
 import { strategicWhyImperative } from './moveFundamentals';
-import { type ImportanceVerdict } from './narrationImportance';
+import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
 import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
@@ -276,8 +276,8 @@ function moverGap12(read: CriticalMomentRead | null): number {
   return read?.gapCp ?? 0;
 }
 
-function severityFromGap(gapCp: number, rating: number): Severity {
-  const th = criticalityThresholds(rating);
+function severityFromGap(gapCp: number): Severity {
+  const th = criticalityThresholds();
   return gapCp >= th.onlyMove ? 'only-move' : gapCp >= th.critical ? 'critical' : gapCp >= th.notable ? 'notable' : 'none';
 }
 
@@ -398,7 +398,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // sites each passing their own would. Computed HERE (not at the need wire
   // below) because the critical-moment stem rotates on it.
   const plyNumber = (fullmove - 1) * 2 + (moverColor === 'b' ? 1 : 0) + 1;
-  const criticalRead = readCriticalMoment({ topLines: analysis.topLines, moverColor, rating });
+  const criticalRead = readCriticalMoment({ topLines: analysis.topLines, moverColor });
   const gap12 = moverGap12(criticalRead);
   // A pin or skewer aimed at your own king/queen, a castled king with a broken
   // shelter under real fire, a central king with the file about to open, or a
@@ -477,8 +477,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     posedTags: posed.tags,
     capabilities: input.studentNeedContext?.capabilities,
   });
-  const { importance, speaks } = judgeMoment({
-    decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
+  // 🔒 ONE SIGNALS OBJECT, BUILT ONCE, HANDED TO BOTH STEPS (B1, 2026-09-22).
+  // The pre-gate (`judgeMoment`, here) and the door (`decide`, below) used to
+  // each build their own literal — and the door's copy had no `standingChance`,
+  // so the fork-two-moves-out that opened the pre-gate on an interrupt surface
+  // was then closed by the door as a legitimate 'importance' silence, with the
+  // emission calling it correct. Two literals for one moment is the drift the
+  // one-door rule exists to delete; a shared const cannot disagree with itself.
+  const momentSignals: ImportanceSignals = {
+    decision: { severity: severityFromGap(gap12), gapCp: gap12 },
     cpLossCp: input.cpLossCp ?? null,
     threatNet: mustDefend.net,
     // A band change IS a declared beat — "you've taken the better side" is the
@@ -492,7 +499,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // (Passing the object directly makes wdl[0]/wdl[2] undefined → every
     // position falsely reads "decided" and goes silent.)
     wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
-  }, rating, input.posture, preGateBoost);
+  };
+  const { importance, speaks } = judgeMoment(momentSignals, input.posture, preGateBoost);
 
   // Perturbation is expensive → only when the moment earns it AND a probe fn was
   // supplied AND we're out of the opening. Probe BOTH sides: the student's
@@ -586,9 +594,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // ── THE DOOR, STEPS 3-6 ────────────────────────────────────────────────────
   // SUBSUME, then FLOOR, then ORDER. This is what these four surfaces were
   // missing: the clauses were each individually gated and ranked, but nothing
-  // ever noticed that two of them could be ONE CLAIM about ONE geometry. A pin
-  // aimed at your king and a must-defend on the piece in front of it name the
-  // same three squares; before this they both spoke.
+  // ever noticed that two of them could be ONE CLAIM about ONE geometry — two
+  // readings of the same fork, or the same pin found by two probes. (Since B12
+  // the collapse also requires the same claim FAMILY, so a must-defend and a
+  // latent-danger over one geometry — the hang now and the pin that causes it
+  // — are two claims and both speak.)
   //
   // The scale is OURS, not the review ranker's — hence `order`. The bar is 0 on
   // purpose and that is not a loophole: every clause here is emitted by a
@@ -649,15 +659,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const clauseByText = new Map<string, ClauseItem>();
   for (const c of composed) if (!clauseByText.has(c.text)) clauseByText.set(c.text, c);
   const decision = decide(
-    {
-      decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
-      cpLossCp: input.cpLossCp ?? null,
-      threatNet: mustDefend.net,
-      teachingBeat: !!input.teachingBeat || statusText.length > 0,
-      standingDanger,
-      evalCpWhitePov,
-      wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
-    },
+    momentSignals,
     {
       rating,
       weaknesses: input.studentWeaknesses ?? [],
@@ -686,6 +688,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // questions you have to answer; your own assets are not.
       incoming: new Set(composed.filter((c) => c.kind === 'must-defend' || c.kind === 'opponent-intent' || c.kind === 'opponent-leans' || c.kind === 'latent-danger').map((c) => c.text)),
       order: { rank: new Map(composed.map((c) => [c.text, c.rank] as const)), bar: 0 },
+      // THE CLAIM FAMILY — the clause's own kind, coupled at emission (B12).
+      // Two clauses over one geometry collapse only when the same computer
+      // produced them; a must-defend and a pin-in-waiting on the same three
+      // squares are two claims (now / next move) and both speak.
+      family: new Map(composed.map((c) => [c.text, c.kind] as const)),
       alreadySaid: input.alreadySaid,
     },
     input.posture,

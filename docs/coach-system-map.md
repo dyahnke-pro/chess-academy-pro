@@ -110,7 +110,7 @@ coach's fingertips.")
   **+ `studentWeaknesses`** (the P1 weakness→selector wire: `applyWeaknessBoost`
   re-ranks clauses by the student's holes; fed by teach, play, phase narration,
   live coach, position read and opening play — verified 2026-09-15).
-- `criticalityScan.ts` — `criticalityThresholds(rating)` rating bands
+- `criticalityScan.ts` — `criticalityThresholds()` band-free bars (= the engineConstants inaccuracy/mistake/blunder bands; rating never decides volume, B6)
   (<1000 / 1000–2000 / >2000); gapCp/severity = decision leverage.
 - `narrationImportance.ts` — `computeImportance(...)` → the importance verdict
   that gates whether a fact speaks. Position + rating only today.

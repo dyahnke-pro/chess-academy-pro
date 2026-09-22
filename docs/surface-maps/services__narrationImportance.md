@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**211 lines · 5 exports · 11 importers · 7 tests · 0 audits**
+**228 lines · 5 exports · 11 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,26 +40,25 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isContested` (function) — 6 call sites
-- `src/services/narrationImportance.test.ts:100`
-- `src/services/narrationImportance.test.ts:101`
-- `src/services/narrationImportance.test.ts:104`
-- `src/services/narrationImportance.test.ts:107`
-- `src/services/narrationImportance.test.ts:108`
-- `src/services/narrationImportance.test.ts:111`
+- `src/services/narrationImportance.test.ts:109`
+- `src/services/narrationImportance.test.ts:110`
+- `src/services/narrationImportance.test.ts:113`
+- `src/services/narrationImportance.test.ts:116`
+- `src/services/narrationImportance.test.ts:117`
+- `src/services/narrationImportance.test.ts:120`
 
-### `computeImportance` (function) — 38 call sites
-- `src/services/coachDecider.ts:166`
+### `computeImportance` (function) — 40 call sites
+- `src/services/coachDecider.ts:177`
 - `src/services/importanceStudentTerm.test.ts:17`
 - `src/services/importanceStudentTerm.test.ts:18`
-- `src/services/importanceStudentTerm.test.ts:29`
-- `src/services/importanceStudentTerm.test.ts:30`
-- `src/services/importanceStudentTerm.test.ts:31`
-- `src/services/importanceStudentTerm.test.ts:39`
-- `src/services/importanceStudentTerm.test.ts:41`
-- `src/services/importanceStudentTerm.test.ts:49`
-- `src/services/importanceStudentTerm.test.ts:55`
-- `src/services/importanceStudentTerm.test.ts:56`
-- `src/services/importanceStudentTerm.test.ts:61`
+- `src/services/importanceStudentTerm.test.ts:32`
+- `src/services/importanceStudentTerm.test.ts:33`
+- `src/services/importanceStudentTerm.test.ts:34`
+- `src/services/importanceStudentTerm.test.ts:42`
+- `src/services/importanceStudentTerm.test.ts:44`
+- `src/services/importanceStudentTerm.test.ts:52`
+- `src/services/importanceStudentTerm.test.ts:58`
+- `src/services/importanceStudentTerm.test.ts:63`
 - `src/services/narrationImportance.test.ts:11`
 - `src/services/narrationImportance.test.ts:17`
 - `src/services/narrationImportance.test.ts:23`
@@ -67,25 +66,28 @@
 - `src/services/narrationImportance.test.ts:41`
 - `src/services/narrationImportance.test.ts:46`
 - `src/services/narrationImportance.test.ts:52`
-- `src/services/narrationImportance.test.ts:61`
-- `src/services/narrationImportance.test.ts:62`
-- `src/services/narrationImportance.test.ts:67`
-- `src/services/narrationImportance.test.ts:68`
+- `src/services/narrationImportance.test.ts:65`
 - `src/services/narrationImportance.test.ts:74`
-- `src/services/narrationImportance.test.ts:81`
-- `src/services/narrationImportance.test.ts:87`
-- `src/services/narrationImportance.test.ts:93`
-- `src/services/narrationImportance.test.ts:122`
-- `src/services/narrationImportance.test.ts:123`
+- `src/services/narrationImportance.test.ts:75`
+- `src/services/narrationImportance.test.ts:76`
+- `src/services/narrationImportance.test.ts:77`
+- `src/services/narrationImportance.test.ts:83`
+- `src/services/narrationImportance.test.ts:90`
+- `src/services/narrationImportance.test.ts:96`
+- `src/services/narrationImportance.test.ts:102`
+- `src/services/narrationImportance.test.ts:131`
 - `src/services/narrationImportance.test.ts:132`
-- `src/services/narrationImportance.test.ts:133`
-- `src/services/narrationImportance.test.ts:137`
-- `src/services/narrationImportance.test.ts:138`
-- `src/services/narrationImportance.test.ts:144`
-- `src/services/narrationImportance.test.ts:145`
+- `src/services/narrationImportance.test.ts:141`
+- `src/services/narrationImportance.test.ts:142`
+- `src/services/narrationImportance.test.ts:146`
+- `src/services/narrationImportance.test.ts:147`
+- `src/services/narrationImportance.test.ts:153`
+- `src/services/narrationImportance.test.ts:154`
 - `src/services/studentMomentBoost.test.ts:52`
-- `src/services/studentMomentBoost.test.ts:59`
-- `src/services/studentMomentBoost.test.ts:60`
+- `src/services/studentMomentBoost.test.ts:67`
+- `src/services/studentMomentBoost.test.ts:73`
+- `src/services/studentMomentBoost.test.ts:89`
+- `src/services/studentMomentBoost.test.ts:90`
 
 ## Tests
 

@@ -81,7 +81,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTrapQuestion.ts:98`
 
 ### `legalSeeGainOn` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2263`
+- `src/services/coachFeatureService.ts:2324`
 - `src/services/reviewFullData.ts:552`
 - `src/services/reviewTeachingPoints.ts:98`
 - `src/services/reviewTeachingPoints.ts:134`
@@ -284,7 +284,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8680`
+- `src/components/Coach/CoachTeachPage.tsx:8685`
 - `src/services/danyaDeviceCoverage.test.ts:106`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/groundedAnswer.ts:5895`
@@ -471,7 +471,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/thinkAloud.ts:78`
 
 ### `formatReadingFacts` (function) — 8 call sites
-- `src/hooks/usePositionNarration.ts:224`
+- `src/hooks/usePositionNarration.ts:231`
 - `src/services/coachSurfaceScorecard.report.test.ts:148`
 - `src/services/positionReadingService.test.ts:341`
 - `src/services/positionReadingService.test.ts:344`

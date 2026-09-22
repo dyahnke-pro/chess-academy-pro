@@ -267,7 +267,7 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8582`
+- `src/components/Coach/CoachTeachPage.tsx:8587`
 - `src/services/coachApi.ts:3301`
 - `src/services/coachApi.ts:5347`
 - `src/services/coachFeatureService.test.ts:40`
@@ -276,8 +276,8 @@
 - `src/services/coachFeatureService.test.ts:66`
 - `src/services/coachFeatureService.test.ts:80`
 - `src/services/coachFeatureService.test.ts:87`
-- `src/services/coachFeatureService.ts:2117`
-- `src/services/coachFeatureService.ts:2128`
+- `src/services/coachFeatureService.ts:2178`
+- `src/services/coachFeatureService.ts:2189`
 - `src/services/coachMoveCommentary.ts:222`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/groundedAnswer.test.ts:1043`
@@ -286,7 +286,7 @@
 - `src/services/mistakeNarration.ts:610`
 - `src/services/reviewNarrationFidelity.test.ts:167`
 - `src/services/reviewNarrationFidelity.test.ts:173`
-- `src/services/whyBestMove.ts:67`
+- `src/services/whyBestMove.ts:75`
 
 ### `captureHasCounterTactic` (function) — 1 call site
 - `src/services/reviewTeachingPoints.ts:100`
@@ -318,8 +318,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeMoveMerit` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:1037`
-- `src/services/coachFeatureService.ts:4038`
+- `src/services/coachFeatureService.ts:1038`
+- `src/services/coachFeatureService.ts:4099`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -329,7 +329,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:96`
 - `src/services/coachFeatureService.test.ts:102`
-- `src/services/coachFeatureService.ts:1037`
+- `src/services/coachFeatureService.ts:1038`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -362,7 +362,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:907`
+- `src/services/coachFeatureService.ts:908`
 - `src/services/groundedAnswer.test.ts:1064`
 - `src/services/groundedAnswer.test.ts:1072`
 - `src/services/groundedAnswer.test.ts:1079`
@@ -858,8 +858,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:56`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3805`
-- `src/components/Coach/CoachGamePage.tsx:3939`
+- `src/components/Coach/CoachGamePage.tsx:3811`
+- `src/components/Coach/CoachGamePage.tsx:3946`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 
@@ -961,7 +961,7 @@
 - `src/services/coachApi.ts:4512`
 
 ### `seatPieceReferences` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:4443`
+- `src/services/coachFeatureService.ts:4504`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
 - `src/services/reviewBoardAwareness.test.ts:78`
@@ -983,7 +983,7 @@
 ### `detectNewThreat` (function) — 11 call sites
 - `src/data/patternRegistry.ts:43`
 - `src/data/patternRegistry.ts:123`
-- `src/services/coachFeatureService.ts:2443`
+- `src/services/coachFeatureService.ts:2504`
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/reviewMoveBriefing.ts:237`
@@ -994,7 +994,7 @@
 - `src/services/reviewTeachingPoints.ts:332`
 
 ### `describeStudentThreat` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2365`
+- `src/services/coachFeatureService.ts:2426`
 - `src/services/reviewFullData.ts:438`
 - `src/services/reviewNarrationFidelity.test.ts:184`
 - `src/services/reviewNarrationFidelity.test.ts:196`
@@ -1011,7 +1011,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2463`
+- `src/services/coachFeatureService.ts:2524`
 - `src/services/reviewNarrationFidelity.test.ts:254`
 
 ## Tests

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4529 lines · 31 exports · 27 importers · 23 tests · 5 audits**
+**4590 lines · 31 exports · 29 importers · 25 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,6 +24,8 @@
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/hooks/useReviewPlayback.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
+- `src/services/coachFeatureService.cpLossSign.test.ts`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/gameAnalysisService.ts`
@@ -61,7 +63,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2061`
+- `src/components/Coach/CoachGamePage.tsx:2067`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`
@@ -126,7 +128,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 50 call sites
+### `buildReviewSegments` (function) — 53 call sites
 - `src/components/Coach/CoachGameReview.tsx:1907`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
@@ -136,6 +138,9 @@
 - `src/services/coachFeatureService.causalChain.test.ts:78`
 - `src/services/coachFeatureService.causalChain.test.ts:93`
 - `src/services/coachFeatureService.causalChain.test.ts:97`
+- `src/services/coachFeatureService.cpLossSign.test.ts:40`
+- `src/services/coachFeatureService.cpLossSign.test.ts:47`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts:37`
 - `src/services/coachFeatureService.recurrence.test.ts:37`
 - `src/services/coachFeatureService.recurrence.test.ts:46`
 - `src/services/coachFeatureService.recurrence.test.ts:53`
@@ -274,6 +279,8 @@
 - `src/components/Stats/StatsPage.test.tsx`
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/services/coachFeatureService.causalChain.test.ts`
+- `src/services/coachFeatureService.cpLossSign.test.ts`
+- `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.test.ts`
 - `src/services/gameThemeClassifier.test.ts`

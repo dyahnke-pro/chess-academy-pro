@@ -56,8 +56,8 @@
 - `src/services/coachPrompts.ts:1140`
 - `src/services/coachPrompts.ts:1146`
 - `src/services/computerAccuracy.audit.test.ts:117`
-- `src/services/conceptEngine.ts:418`
-- `src/services/conceptEngine.ts:587`
+- `src/services/conceptEngine.ts:417`
+- `src/services/conceptEngine.ts:585`
 - `src/services/danyaBehaviors.ts:271`
 - `src/services/discussionPractice.ts:54`
 - `src/services/discussionPractice.ts:99`
@@ -69,7 +69,7 @@
 - `src/services/misconceptionClassifier.ts:123`
 - `src/services/misconceptionClassifier.ts:279`
 - `src/services/mistakeNarration.ts:391`
-- `src/services/openingGenerator.ts:3878`
+- `src/services/openingGenerator.ts:3886`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
 - `src/services/pinGeometry.test.ts:87`
@@ -136,10 +136,10 @@
 - `src/services/tacticsDetector.test.ts:362`
 - `src/services/tacticsDetector.test.ts:372`
 - `src/services/tacticsDetector.test.ts:380`
-- `src/services/weaknessAnalyzer.ts:1184`
-- `src/services/weaknessAnalyzer.ts:1282`
-- `src/services/weaknessAnalyzer.ts:1443`
-- `src/services/weaknessAnalyzer.ts:1449`
+- `src/services/weaknessAnalyzer.ts:1185`
+- `src/services/weaknessAnalyzer.ts:1283`
+- `src/services/weaknessAnalyzer.ts:1444`
+- `src/services/weaknessAnalyzer.ts:1450`
 
 ## Tests
 

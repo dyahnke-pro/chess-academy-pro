@@ -5,7 +5,7 @@
 //
 // Reads a whole sequence ONCE — a finished game, a taught line, a live game so
 // far — and emits one package: the THESIS (what the sequence is about), the
-// MOMENTS it turned on (≤ MAX_MOMENTS, rating-scaled, contested-gated), the
+// MOMENTS it turned on (every one that clears the bar, contested-gated), the
 // CAUSAL CHAIN linking them, and the set of plies ON THAT THREAD. It does not
 // know which surface called it (invariant 1 of
 // docs/plans/2026-09-15-one-coach-need-selector.md §3.0): `surface` is accepted
@@ -38,7 +38,7 @@ import { structurePlan } from './boardPlan';
 import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
-import { studentMomentBoost } from './studentMomentBoost';
+import { studentMomentBoost, type StudentBoost } from './studentMomentBoost';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface SelectorPly {
@@ -106,7 +106,8 @@ export interface Thesis {
 
 export interface TeachingPackage {
   thesis: Thesis;
-  /** Biggest first; ≤ MAX_MOMENTS. */
+  /** Biggest first. Every swing that clears the turning-point bar, plus every
+   *  landed tactic that clears `landedTacticIsMoment` — never a count (G4.5). */
   moments: Moment[];
   chain: CausalChain | null;
   /** Plies that are links in the thread: every moment + every chain node ply.
@@ -128,10 +129,23 @@ export interface TeachingPackage {
    *  a computer already produced and never manufactures one. Red (a recorded
    *  hole) or grey (a posed capability with no record) — see
    *  `studentMomentBoost`. */
-  boostByPly: ReadonlyMap<number, number>;
+  boostByPly: ReadonlyMap<number, StudentBoost>;
 }
 
-export const MAX_MOMENTS = 3;
+/** WHETHER A LANDED TACTIC IS A MOMENT of the game — a BAR, not a slot count
+ *  (B10, 2026-09-22; G4.5: a cap cannot know what it is deleting).
+ *  `MAX_MOMENTS = 3` used to fill "the remaining slots" with landed tactics
+ *  after the swings, so a tactical game's fourth landed fork was never a moment
+ *  — and never on the thread, so its ply lost the +35 need term — regardless of
+ *  whether it was the student's own recorded hole. Now: a landed tactic is a
+ *  moment when it matches a hole this student keeps falling in (RED), or when
+ *  the student has no record at all (GREY teaches — a fresh install gets the
+ *  full capabilities of the detectors). A student with a record and no hole
+ *  for this tactic has it filed by the need score instead. */
+export function landedTacticIsMoment(tactic: string, signals: readonly import('./weaknessSignal').WeaknessSignal[]): boolean {
+  if (signals.length === 0) return true;
+  return weaknessBoostCp(tactic, signals) > 0;
+}
 
 const NONE: Thesis = { kind: 'none', ply: null, label: null, swingPawns: null, tactic: null, plan: null, chainRoot: null };
 
@@ -190,7 +204,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   }
 
   // 2. Swing moments — the review card's own candidates, biggest first…
-  const swingsRaw = turningPointCandidates(plies.map(toSegment), rating);
+  const swingsRaw = turningPointCandidates(plies.map(toSegment));
   // …RE-RANKED BY THE STUDENT'S HOLES (unified-coach N5): a moment whose landed
   // tactic is a hole this student keeps falling in outranks a moment of EQUAL
   // criticality that is not. The boost is `boostFor` (0–30, lifecycle-keyed,
@@ -204,20 +218,21 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   const byPly = new Map(plies.map((p) => [p.ply, p] as const));
   const moments: Moment[] = [];
   const seen = new Set<number>();
+  // EVERY swing that cleared the turning-point bar is a moment — the bar
+  // already decided worth; a count here would delete what it cannot see.
   for (const c of swings) {
-    if (moments.length >= MAX_MOMENTS) break;
     const p = byPly.get(c.ply);
     if (!p) continue;
     moments.push({ ply: c.ply, label: c.label, kind: 'swing', swingPawns: c.swingPawns, tactic: landedByPly.get(c.ply) ?? null, fenBefore: p.fenBefore, san: p.san });
     seen.add(c.ply);
   }
-  // 3. Landed tactics fill the remaining slots — the student's holes first
-  //    (N5), then game order.
+  // 3. Landed tactics that clear the bar — the student's holes first (N5),
+  //    then game order.
   const landedOrder = [...plies].sort((a, b) => weaknessCp(b.ply) - weaknessCp(a.ply) || a.ply - b.ply);
   for (const p of landedOrder) {
-    if (moments.length >= MAX_MOMENTS) break;
     const t = landedByPly.get(p.ply);
     if (!t || seen.has(p.ply)) continue;
+    if (!landedTacticIsMoment(t, signals)) continue;
     moments.push({ ply: p.ply, label: moveLabel(toSegment(p)), kind: 'landed-tactic', swingPawns: null, tactic: t, fenBefore: p.fenBefore, san: p.san });
     seen.add(p.ply);
   }
@@ -252,7 +267,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   const student = input.student ?? coldStudent(rating);
   const tacticByPly = new Map<number, string | null>(moments.map((m) => [m.ply, m.tactic] as const));
   const needByPly = new Map<number, NeedVerdict>();
-  const boostByPly = new Map<number, number>();
+  const boostByPly = new Map<number, StudentBoost>();
   for (const p of plies) {
     if (p.playerColor !== input.studentColor) continue;
     const tactic = tacticByPly.get(p.ply) ?? landedByPly.get(p.ply) ?? null;

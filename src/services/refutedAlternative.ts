@@ -25,7 +25,6 @@ import { computePvLine, type PvEngine, type PvLine } from './pvPlayback';
 import { conceptForLine, type ComputedConcept } from './conceptEngine';
 import { criticalityThresholds } from './criticalityScan';
 import { stockfishEngine } from './stockfishEngine';
-import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface AlternativeCandidate {
   san: string;
@@ -58,7 +57,6 @@ export interface RefutedAlternativeInput {
    *  supplies them from the masters DB / the openings DB — never from memory). */
   candidates: readonly AlternativeCandidate[];
   studentColor: 'white' | 'black';
-  rating?: number;
   engine?: PvEngine;
   /** Engine depth for the two reads (taught / alternative). */
   depth?: number;
@@ -108,11 +106,11 @@ export function renderRefutedAlternative(f: Omit<RefutedAlternative, 'text'>, ta
 /**
  * Compute the refuted alternative for a taught move, or null when there is no
  * real alternative, the engine cannot read the position, or the alternative
- * does not cost enough to clear the rating band (`criticalityThresholds.notable`
- * — the same scale as every other importance read; never a second bar).
+ * does not cost enough to clear the band-free `criticalityThresholds().notable`
+ * bar — the same scale as every other importance read; never a second bar,
+ * and (B6) never a rating.
  */
 export async function refutedAlternative(input: RefutedAlternativeInput): Promise<RefutedAlternative | null> {
-  const rating = input.rating ?? DEFAULT_STUDENT_RATING;
   const engine = input.engine ?? stockfishEngine;
   const depth = input.depth ?? 12;
   const maxPlies = input.maxPlies ?? 6;
@@ -133,7 +131,7 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
   } catch { return null; }
   if (!taughtLine || !altLine) return null;
   const costCp = Math.round(moverEval(taughtLine, moverIsWhite) - moverEval(altLine, moverIsWhite));
-  if (costCp < criticalityThresholds(rating).notable) return null;
+  if (costCp < criticalityThresholds().notable) return null;
 
   // The concept the PUNISHMENT lands — the opponent's line after the alt, read
   // from the opponent's seat (they are the one landing the tactic).
@@ -148,7 +146,6 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
         studentColor: opponent,
         rootEvalCp: altLine.rootEvalCp,
         lineEvalCp: altLine.terminalEvalCp ?? altLine.rootEvalCp,
-        rating,
         max: 1,
         sources: ['tactic', 'mate'],
       })[0];

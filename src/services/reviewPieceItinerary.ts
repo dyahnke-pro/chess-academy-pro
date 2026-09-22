@@ -38,16 +38,16 @@ function isAdvanced(square: string, color: 'w' | 'b'): boolean {
 
 /**
  * Detect the student's real piece reroutes and return an itinerary beat for
- * each, keyed by the ply it completes. `budget` caps how many surface (a game
- * with many shuffles shouldn't narrate them all). Minor pieces only by default
- * — a knight/bishop journey is the classic teaching maneuver.
+ * each, keyed by the ply it completes. Minor pieces only — a knight/bishop
+ * journey is the classic teaching maneuver. The BAR is the detector's own
+ * (minor piece, ≥ 2 hops, landing advanced, one route per piece+origin); a
+ * `budget` used to keep only the first two (B10, 2026-09-22) — a count that
+ * could not know whether the third reroute was the game's best lesson.
  */
 export function detectPieceItineraries(
   sans: string[],
   playerColor: 'white' | 'black',
-  opts?: { budget?: number },
 ): Map<number, PieceItinerary> {
-  const budget = opts?.budget ?? 2;
   const studentWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
   const chess = new Chess();
   // Active routes keyed by the square the piece currently sits on.
@@ -108,7 +108,7 @@ export function detectPieceItineraries(
     }
   }
 
-  // Keep the earliest `budget` maneuvers (chronological — you learn as you go).
+  // Chronological — you learn as you go.
   found.sort((a, b) => a.ply - b.ply);
-  return new Map(found.slice(0, budget).map((it) => [it.ply, it]));
+  return new Map(found.map((it) => [it.ply, it]));
 }

@@ -36,17 +36,44 @@ describe('needScore — cold start defaults to TEACH', () => {
       const v = computeNeed(ply({ ply: 3, studentMove: true }), coldStudent(rating));
       expect(v.speak, `rating ${rating}`).toBe(true);
       expect(v.prior).toBe(true);
-      expect(coldStartPrior()).toBeGreaterThanOrEqual(NEED_THRESHOLD);
+      expect(coldStartPrior(0)).toBeGreaterThanOrEqual(NEED_THRESHOLD);
     }
   });
-  it('weaker bands get a higher prior than stronger ones (their teaching leads a tie-break)', () => {
+  it('the prior is a ceiling at zero games and takes NO rating', () => {
     // NO LONGER A RATING LADDER (2026-09-17). It took a rating, which is the
     // axis the capability model rejects — and for any student who never
     // imported games that rating is the profile default of 800 for life, so the
     // band measured nothing. A cold student has no evidence, every capability
-    // is UNKNOWN, and unknown means teach it: one ceiling, no parameter.
-    expect(coldStartPrior()).toBe(100);
-    expect(coldStartPrior.length, 'the prior must take NO rating').toBe(0);
+    // is UNKNOWN, and unknown means teach it: one ceiling, no parameter but the
+    // count of their own analysed games.
+    expect(coldStartPrior(0)).toBe(100);
+    expect(coldStartPrior.length, 'the prior takes the GAME COUNT, never a rating').toBe(1);
+  });
+
+  // B7(b) (2026-09-22): the prior FADES with games — it used to be a switch
+  // that replaced the whole score with 100 for four games and dropped it on
+  // the fifth. Negative control: restore `if (games < COLD) score = 100` → the
+  // fade test fails at 2 games and the blend test fails at 3.
+  it('FADES linearly with each analysed game and is gone at COLD_START_GAMES', () => {
+    expect(coldStartPrior(0)).toBe(100);
+    expect(coldStartPrior(2)).toBe(60);
+    expect(coldStartPrior(COLD_START_GAMES - 1)).toBeLessThan(NEED_THRESHOLD);
+    expect(coldStartPrior(COLD_START_GAMES)).toBe(0);
+    expect(coldStartPrior(COLD_START_GAMES + 10)).toBe(0);
+    const twoGames = computeNeed(ply({ ply: 3, studentMove: true }), { ...coldStudent(1200), gamesPlayed: 2 });
+    expect(twoGames.score).toBe(60);
+    expect(twoGames.prior).toBe(true);
+  });
+
+  it('is ADDED to the data, never swapped for it — three games plus an unseen line speaks, a familiar line does not', () => {
+    const three = (lineReps: number[]): StudentNeedContext => ({ ...coldStudent(1200), gamesPlayed: 3, lineReps });
+    const unseen = computeNeed(ply({ ply: 3, studentMove: true }), three([0, 0, 0]));
+    expect(unseen.score).toBe(40 + NEED_THRESHOLD); // prior 40 + unfamiliarity 50
+    expect(unseen.speak).toBe(true);
+    expect(unseen.prior).toBe(false); // the data alone cleared the bar
+    const familiar = computeNeed(ply({ ply: 3, studentMove: true }), three([0, 0, FAMILIAR_REPS]));
+    expect(familiar.score).toBe(40);
+    expect(familiar.speak).toBe(false);
   });
   it('the opponent\'s move never has need', () => {
     expect(computeNeed(ply({ ply: 4, studentMove: false }), coldStudent(900)).speak).toBe(false);

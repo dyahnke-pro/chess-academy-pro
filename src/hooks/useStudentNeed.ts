@@ -10,18 +10,23 @@
 // loaded ([] / cold reads as SPEAK, never as silence).
 
 import { useEffect, useRef } from 'react';
-import { loadStudentNeedContext } from '../services/studentNeedLoader';
-import { coldStudent, type StudentNeedContext } from '../services/needScore';
+import { contextForLine, loadStudentNeedBase, type StudentNeedBase } from '../services/studentNeedLoader';
+import type { StudentNeedContext } from '../services/needScore';
+import { useAppStore } from '../stores/appStore';
+import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import type { OpeningKey } from '../types';
 
 export interface UseStudentNeedArgs {
-  rating: number;
+  /** Defaults to the ONE adaptive estimate the store carries
+   *  (`calibrateStrength` writes it at boot) — a surface never picks a rating. */
+  rating?: number;
   studentColor: 'white' | 'black';
   openingId?: OpeningKey | null;
   eco?: string | null;
-  /** The line so far. Familiarity is measured against the WHOLE prefix, so this
-   *  is re-read on each reload; pass the game's SANs from the start. */
-  sans: readonly string[];
+  /** The line so far, or a getter for it. Familiarity is measured against the
+   *  WHOLE prefix AT FIRE TIME — see the note below. A getter is the honest
+   *  shape for a hook whose callers hold the history in a ref or a closure. */
+  sans: readonly string[] | (() => readonly string[]);
 }
 
 // 🔒 THIS HOOK DOES NOT DECIDE ANYTHING. Its first draft exposed a `needAt()`
@@ -30,26 +35,57 @@ export interface UseStudentNeedArgs {
 // voice (§G4.5.15). The hook does the one thing only it can — the Dexie read —
 // and hands the CONTEXT to `computePositionFacts`, which owns the verdict, the
 // ply derivation and the mover guard.
+//
+// 🔴 THE LINE IS READ WHEN THE CONTEXT IS READ, NOT WHEN THE EFFECT RAN (B3,
+// 2026-09-22). The first version captured `sans` into the loader call at effect
+// time, keyed on rating/colour/opening — so Learn's familiarity was measured
+// against the MOUNT-time history (empty), `lineReps` was `[]`, and every ply of
+// every game scored unfamiliarity 50. The term that silences a line played
+// right five times never once fired on the surface it was built for, with the
+// comment above it promising the opposite. Now the ref's `current` is a
+// GETTER: the Dexie base loads once, and the line half is derived from whatever
+// `sans` says at the moment a narration callback reads it.
 
 export function useStudentNeed(args: UseStudentNeedArgs): React.RefObject<StudentNeedContext> {
-  const { rating, studentColor, openingId, eco } = args;
-  const ref = useRef<StudentNeedContext>(coldStudent(rating));
-  // The line is read at FIRE time, not captured, so a mid-game reload does not
-  // re-key the effect on every move.
-  const sansRef = useRef<readonly string[]>(args.sans);
+  const { studentColor, openingId, eco } = args;
+  const rating = args.rating ?? useAppStore.getState().activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
+  const baseRef = useRef<StudentNeedBase | null>(null);
+  const baseGenRef = useRef(0);
+  const ratingRef = useRef(rating);
+  ratingRef.current = rating;
+  const sansRef = useRef<UseStudentNeedArgs['sans']>(args.sans);
   sansRef.current = args.sans;
+  const memoRef = useRef<{ key: string; ctx: StudentNeedContext } | null>(null);
+  const handleRef = useRef<React.RefObject<StudentNeedContext> | null>(null);
+  if (!handleRef.current) {
+    handleRef.current = {
+      get current(): StudentNeedContext {
+        const src = sansRef.current;
+        const sans = typeof src === 'function' ? src() : src;
+        const key = `${baseGenRef.current}:${ratingRef.current}:${sans.join(' ')}`;
+        if (memoRef.current?.key === key) return memoRef.current.ctx;
+        const ctx = contextForLine(baseRef.current, sans, ratingRef.current);
+        memoRef.current = { key, ctx };
+        return ctx;
+      },
+    };
+  }
 
   useEffect(() => {
     let alive = true;
-    void loadStudentNeedContext({ rating, sans: sansRef.current, studentColor, openingId, eco })
-      .then((ctx) => { if (alive) ref.current = ctx; })
+    void loadStudentNeedBase({ rating, studentColor, openingId, eco })
+      .then((base) => {
+        if (!alive) return;
+        baseRef.current = base;
+        baseGenRef.current += 1;
+      })
       // A failed load leaves the cold context in place — which SPEAKS. Silence
       // is never the failure mode of the student model.
       .catch(() => undefined);
     return () => { alive = false; };
     // Re-load when the opening is identified (departures + score are scoped to
-    // it) — not on every ply.
+    // it) — not on every ply; the line half is derived on read.
   }, [rating, studentColor, openingId, eco]);
 
-  return ref;
+  return handleRef.current;
 }

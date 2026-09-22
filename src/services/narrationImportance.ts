@@ -9,11 +9,13 @@
 // rank; the LLM then voices everything, most-important-first).
 //
 // It does NOT re-run the engine and it does NOT add a second criticality. It
-// COMPOSES the existing grounded primitives — `scanCriticality` (rating-scaled
-// decision-leverage), the played move's cpLoss (realized swing), the null-move
-// threat probe (must-defend), a declared teaching beat, and the WDL/eval
-// contested gate. Importance is rating-relative: the same board matters
-// differently to a 1200 and a 2200.
+// COMPOSES the existing grounded primitives — `scanCriticality` (decision
+// leverage), the played move's cpLoss (realized swing), the null-move threat
+// probe (must-defend), a declared teaching beat, and the WDL/eval contested
+// gate. Importance is BAND-FREE (B6, 2026-09-22): the same board is the same
+// moment for a 1200 and a 2200. What differs between them is the student's own
+// record (`studentBoost`, need), never a bar keyed off their rating — the
+// rating's job is strength, not volume (CLAUDE.md THE FOUNDATION).
 //
 // Why not "did the eval bar move": that is too blunt and fails four ways —
 // (1) the sharp-but-flat position (only move found, bar flat, yet critical),
@@ -21,7 +23,7 @@
 // (3) the standing threat (bar flat NOW, piece hangs next move), (4) the quiet
 // lesson (plan in a calm position). The composition below catches all four.
 import { criticalityThresholds, type CriticalMoment } from './criticalityScan';
-import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 
 export interface ImportanceSignals {
   /** Prospective decision-leverage — `scanCriticality`'s read of THIS position
@@ -98,10 +100,10 @@ export function isContested(
 /**
  * The importance verdict.
  *
- * `rating` scales the swing/decision bars (a 2-pawn swing is a must-know for a
- * 1200; a 0.5 subtlety is for a 2200 — the slip-detector doctrine, shared with
- * `criticalityThresholds`). Per the ALGO-BASED supreme law, the rating is the
- * COLD-START PRIOR: it stands in where we have no data on this student.
+ * There is no rating parameter, on purpose (B6). The swing / decision bars are
+ * `criticalityThresholds()` — band-free, the app's one move-quality
+ * vocabulary — so the verdict cannot be made quieter for a weaker player. The
+ * student enters only through their own record.
  *
  * `studentBoost` is the DATA term — how much THIS student's own recorded
  * mistakes raise this moment. It is `boostFor(match)` computed by the CALLER
@@ -128,11 +130,13 @@ export function isContested(
  */
 export function computeImportance(
   s: ImportanceSignals,
-  rating = DEFAULT_STUDENT_RATING,
-  studentBoost = 0,
+  /** A bare number is the raise-only form (`opens: false`) — kept for the leaf's
+   *  own tests; the door always hands a full `StudentBoost`. */
+  studentBoost: number | StudentBoost = NO_BOOST,
 ): ImportanceVerdict {
+  const boost: StudentBoost = typeof studentBoost === 'number' ? { rank: studentBoost, opens: false } : studentBoost;
   const contested = isContested(s.evalCpWhitePov, s.wdl);
-  const th = criticalityThresholds(rating);
+  const th = criticalityThresholds();
   const reasons: string[] = [];
   let rank = 0;
   let tier: ImportanceTier = 'none';
@@ -152,8 +156,10 @@ export function computeImportance(
   // inside a decided game (+8→+5) is the "eval-bar moved" false positive the
   // contested gate exists to kill (doctrine failure #2).
   if (contested) {
+    // The BLUNDER tier is the app's own blunder band (300cp), not "twice the
+    // critical bar": one Stockfish number, one word, in the labels and here.
     if (s.cpLossCp != null && s.cpLossCp >= th.critical) {
-      const big = s.cpLossCp >= th.critical * 2;
+      const big = s.cpLossCp >= th.blunder;
       bump(big ? 90 : 70, big ? 'blunder' : 'swing', `realized swing ${(s.cpLossCp / 100).toFixed(1)}p`);
     }
     if (s.decision) {
@@ -195,15 +201,26 @@ export function computeImportance(
   }
 
   // ── THE STUDENT TERM (algo-based supreme law) ────────────────────────────
-  // Their own recorded mistakes raise this moment. RAISE-ONLY and only on a
-  // moment that ALREADY fired: a weakness makes a real moment more worth
-  // stopping for, it never MANUFACTURES one out of a quiet ply. Without that
-  // guard a persistent hole would make every position important and the coach
-  // would interrupt constantly — the "things don't get stated" failure inverted
-  // into "nothing can be heard over the noise".
-  if (studentBoost > 0 && rank > 0) {
-    rank += studentBoost;
-    reasons.push(`this student's own recorded weakness (+${studentBoost})`);
+  // Their own recorded mistakes raise this moment. RAISE-ONLY: a weakness makes
+  // a real moment more worth stopping for. On a moment that ALREADY fired the
+  // term simply adds. On a QUIET ply it may open the moment only when the term
+  // says so (`opens` — a RED hole that has recurred; grey and green never
+  // manufacture one) and only while the game is CONTESTED (a recurring hole in
+  // a decided game is not worth an interruption, the same gate `standingChance`
+  // sits behind). The opened moment ranks at the boost itself, which is capped
+  // at MAX_WEAKNESS_BOOST (30) — under every engine-driven tier and under a
+  // declared teaching beat (40) — so it can never vault a real moment, and the
+  // floor for its tier is the `teaching` bar. Without the `opens` bound a
+  // persistent hole would make every position important and the coach would
+  // interrupt constantly — the "things don't get stated" failure inverted into
+  // "nothing can be heard over the noise" (B2, 2026-09-22).
+  if (boost.rank > 0) {
+    if (rank > 0) {
+      rank += boost.rank;
+      reasons.push(`this student's own recorded weakness (+${boost.rank})`);
+    } else if (boost.opens && contested) {
+      bump(boost.rank, 'teaching', `this student's own RECURRING weakness opens a quiet moment (+${boost.rank})`);
+    }
   }
 
   return { speak: rank > 0, rank, tier, reasons, contested };

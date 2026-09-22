@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6547 lines · 36 exports · 49 importers · 48 tests · 19 audits**
+**6547 lines · 36 exports · 49 importers · 49 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -141,11 +141,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getCoachStructuredResponse` (function) — 5 call sites
-- `src/services/openingGenerator.ts:2083`
-- `src/services/openingGenerator.ts:2872`
-- `src/services/openingGenerator.ts:3455`
-- `src/services/openingGenerator.ts:3593`
-- `src/services/openingGenerator.ts:4166`
+- `src/services/openingGenerator.ts:2085`
+- `src/services/openingGenerator.ts:2880`
+- `src/services/openingGenerator.ts:3463`
+- `src/services/openingGenerator.ts:3601`
+- `src/services/openingGenerator.ts:4174`
 
 ### `MasterGroundingOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -205,12 +205,13 @@
 ### `MoveMoment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `groundedMoveFeedback` (function) — 10 call sites
+### `groundedMoveFeedback` (function) — 11 call sites
 - `src/components/Openings/MiddlegamePractice.tsx:268`
+- `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
-- `src/hooks/useLiveCoach.ts:275`
+- `src/hooks/useLiveCoach.ts:302`
 - `src/hooks/usePhaseNarration.test.ts:68`
-- `src/hooks/usePhaseNarration.ts:693`
+- `src/hooks/usePhaseNarration.ts:713`
 - `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`
 - `src/services/groundedMoveFeedback.test.ts:14`
@@ -219,7 +220,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:566`
-- `src/components/Coach/CoachTeachPage.tsx:3214`
+- `src/components/Coach/CoachTeachPage.tsx:3216`
 - `src/services/coachSessionRouter.ts:125`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -255,14 +256,14 @@
 - `src/components/Coach/CoachGameReview.tsx:1681`
 - `src/components/Coach/CoachGameReview.tsx:1800`
 - `src/components/Coach/CoachGameReview.tsx:1987`
-- `src/hooks/usePhaseNarration.ts:680`
+- `src/hooks/usePhaseNarration.ts:700`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:127`
-- `src/services/coachFeatureService.ts:398`
-- `src/services/coachFeatureService.ts:520`
+- `src/services/coachFeatureService.ts:128`
+- `src/services/coachFeatureService.ts:399`
 - `src/services/coachFeatureService.ts:521`
-- `src/services/coachFeatureService.ts:4321`
-- `src/services/coachFeatureService.ts:4485`
+- `src/services/coachFeatureService.ts:522`
+- `src/services/coachFeatureService.ts:4382`
+- `src/services/coachFeatureService.ts:4546`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:133`
@@ -318,7 +319,7 @@
 - `scripts/audit-coach-master-integration.mjs:436`
 - `src/coach/providers/deepseek.test.ts:7`
 - `src/coach/providers/deepseek.ts:74`
-- `src/hooks/usePositionNarration.ts:375`
+- `src/hooks/usePositionNarration.ts:390`
 - `src/services/coachAgentRunner.ts:246`
 - `src/services/coachApi.boardVerdict.integration.test.ts:69`
 - `src/services/coachApi.master-integration.test.ts:140`
@@ -333,7 +334,7 @@
 - `src/services/coachApi.whyReasoning.integration.test.ts:60`
 - `src/services/coachApi.whyReasoning.integration.test.ts:80`
 - `src/services/middlegamePlanner.ts:343`
-- `src/services/openingGenerator.ts:4391`
+- `src/services/openingGenerator.ts:4399`
 - `src/services/positionReadingGrader.test.ts:6`
 - `src/services/positionReadingGrader.ts:67`
 - `src/services/smartSearchService.ts:50`
@@ -367,6 +368,7 @@
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Search/SmartSearchBar.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
+- `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
 - `src/hooks/usePhaseNarration.test.ts`
 - `src/hooks/usePositionNarration.test.ts`

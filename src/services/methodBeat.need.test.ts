@@ -38,6 +38,39 @@ describe('method beat — need-scaled bar', () => {
   });
 });
 
+// ── EVERY HABIT HONOURS THE STUDENT'S STANDING (B11, 2026-09-22) ─────────
+// The slow-down beat read `closed` on a move played well; the opponent-threat
+// and forcing-scan beats read nothing — a student whose record said they had
+// STOPPED playing past threats still heard "ask what THEY want" on every
+// ignored threat. Negative control: drop the `habitIsOwed` gates in
+// `methodBeatFor` → the first three `it`s fail.
+describe('method beat — a CLOSED or FADING habit is not re-taught', () => {
+  it('a closed opponent-threat habit stays quiet on an ignored threat', () => {
+    expect(methodBeatFor(base({ ignoredThreat: true, habitNeed: { 'opponent-threat': 'closed' } }))).toBeNull();
+    expect(methodBeatFor(base({ ignoredThreat: true, habitNeed: { 'opponent-threat': 'fading' } }))).toBeNull();
+  });
+
+  it('a closed forcing-scan habit stays quiet on a big slip with a forcing move available', () => {
+    expect(methodBeatFor(base({ cpLossCp: 250, habitNeed: { 'forcing-scan': 'closed' } }))).toBeNull();
+    expect(methodBeatFor(base({ cpLossCp: 250, habitNeed: { 'forcing-scan': 'fading' } }))).toBeNull();
+  });
+
+  it('a closed slow-down habit stays quiet even on an only-move', () => {
+    expect(methodBeatFor(base({ tier: 'only-move', cpLossCp: 220, bestSan: 'Nf3', habitNeed: { 'slow-down': 'closed' } }))).toBeNull();
+  });
+
+  it('UNKNOWN is still owed — a cold student meets a teaching coach', () => {
+    expect(methodBeatFor(base({ ignoredThreat: true, habitNeed: {} }))).toBeTruthy();
+    expect(methodBeatFor(base({ cpLossCp: 250, habitNeed: {} }))).toBeTruthy();
+    expect(methodBeatFor(base({ tier: 'only-move', cpLossCp: 220, bestSan: 'Nf3', habitNeed: {} }))).toBeTruthy();
+  });
+
+  it('closing ONE habit does not silence the others', () => {
+    const beat = methodBeatFor(base({ ignoredThreat: true, cpLossCp: 250, habitNeed: { 'opponent-threat': 'closed' } }));
+    expect(beat).toMatch(/check|captur|forcing/i);
+  });
+});
+
 describe('method beat — SAY-ONCE is what stops the drumbeat', () => {
   it('teaches a habit once per game, not once per slip', () => {
     const said = new Set<MethodHabit>();

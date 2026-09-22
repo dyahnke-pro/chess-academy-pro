@@ -21,7 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getActiveCoachingThread` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2416`
+- `src/components/Coach/CoachTeachPage.tsx:2418`
 - `src/services/coachThread.test.ts:109`
 - `src/services/coachThread.test.ts:116`
 - `src/services/coachThread.test.ts:139`
@@ -33,7 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachThread.test.ts:95`
 
 ### `resetThreadCallbacks` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2797`
+- `src/components/Coach/CoachTeachPage.tsx:2799`
 - `src/services/coachThread.test.ts:39`
 - `src/services/coachThread.test.ts:64`
 - `src/services/coachThread.test.ts:76`
@@ -48,7 +48,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachThread.test.ts:34`
 
 ### `threadCallbackFor` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2425`
+- `src/components/Coach/CoachTeachPage.tsx:2427`
 - `src/services/coachThread.test.ts:42`
 - `src/services/coachThread.test.ts:47`
 - `src/services/coachThread.test.ts:50`

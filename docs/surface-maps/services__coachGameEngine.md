@@ -61,16 +61,16 @@
 - `src/services/coachGameEngine.test.ts:351`
 - `src/services/coachGameEngine.test.ts:352`
 - `src/services/linePickerPopularity.ts:135`
-- `src/services/ratingBands.test.ts:63`
+- `src/services/ratingBands.test.ts:62`
 
 ### `getRandomLegalMove` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:2681`
-- `src/components/Coach/CoachGamePage.tsx:2696`
-- `src/components/Coach/CoachGamePage.tsx:2975`
-- `src/components/Coach/CoachGamePage.tsx:3013`
-- `src/components/Coach/CoachTeachPage.tsx:7178`
-- `src/components/Openings/OpeningPlayMode.tsx:690`
-- `src/components/Openings/OpeningPlayMode.tsx:715`
+- `src/components/Coach/CoachGamePage.tsx:2687`
+- `src/components/Coach/CoachGamePage.tsx:2702`
+- `src/components/Coach/CoachGamePage.tsx:2981`
+- `src/components/Coach/CoachGamePage.tsx:3019`
+- `src/components/Coach/CoachTeachPage.tsx:7180`
+- `src/components/Openings/OpeningPlayMode.tsx:695`
+- `src/components/Openings/OpeningPlayMode.tsx:720`
 
 ### `tryOpeningBookMove` (function) — 6 call sites
 - `src/services/coachGameEngine.test.ts:231`
@@ -81,7 +81,7 @@
 - `src/services/coachGameEngine.test.ts:261`
 
 ### `pickTaughtSlip` (function) — 13 call sites
-- `src/components/Coach/CoachGamePage.tsx:2412`
+- `src/components/Coach/CoachGamePage.tsx:2418`
 - `src/services/coachGameEngine.test.ts:525`
 - `src/services/coachGameEngine.test.ts:531`
 - `src/services/coachGameEngine.test.ts:540`
@@ -96,9 +96,9 @@
 - `src/services/coachLaneWiring.test.ts:364`
 
 ### `getAdaptiveMove` (function) — 28 call sites
-- `src/components/Coach/CoachGamePage.tsx:2499`
-- `src/components/Coach/CoachTeachPage.tsx:7163`
-- `src/components/Openings/OpeningPlayMode.tsx:681`
+- `src/components/Coach/CoachGamePage.tsx:2505`
+- `src/components/Coach/CoachTeachPage.tsx:7165`
+- `src/components/Openings/OpeningPlayMode.tsx:686`
 - `src/services/coachGameEngine.test.ts:70`
 - `src/services/coachGameEngine.test.ts:84`
 - `src/services/coachGameEngine.test.ts:94`
@@ -127,12 +127,12 @@
 
 ### `studentPlayingRating` (function) — 16 call sites
 - `src/App.tsx:153`
-- `src/components/Coach/CoachGamePage.tsx:403`
-- `src/components/Coach/CoachTeachPage.tsx:7157`
-- `src/components/Coach/CoachTeachPage.tsx:7166`
-- `src/components/Coach/CoachTeachPage.tsx:8462`
-- `src/components/Coach/CoachTeachPage.tsx:10884`
-- `src/components/Coach/CoachTeachPage.tsx:12057`
+- `src/components/Coach/CoachGamePage.tsx:404`
+- `src/components/Coach/CoachTeachPage.tsx:7159`
+- `src/components/Coach/CoachTeachPage.tsx:7168`
+- `src/components/Coach/CoachTeachPage.tsx:8467`
+- `src/components/Coach/CoachTeachPage.tsx:10889`
+- `src/components/Coach/CoachTeachPage.tsx:12062`
 - `src/services/coachGameEngine.test.ts:586`
 - `src/services/coachGameEngine.test.ts:592`
 - `src/services/coachGameEngine.test.ts:593`
@@ -145,9 +145,9 @@
 
 ### `getTargetStrength` (function) — 11 call sites
 - `src/App.tsx:152`
-- `src/components/Coach/CoachGamePage.tsx:448`
-- `src/components/Coach/CoachTeachPage.tsx:7157`
-- `src/components/Openings/OpeningPlayMode.tsx:70`
+- `src/components/Coach/CoachGamePage.tsx:449`
+- `src/components/Coach/CoachTeachPage.tsx:7159`
+- `src/components/Openings/OpeningPlayMode.tsx:71`
 - `src/services/coachGameEngine.test.ts:183`
 - `src/services/coachGameEngine.test.ts:187`
 - `src/services/coachGameEngine.test.ts:191`

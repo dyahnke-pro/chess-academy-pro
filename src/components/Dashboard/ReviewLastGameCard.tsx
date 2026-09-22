@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { isFixtureGame } from '../../services/fixtureGames';
 import type { JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, X, ChevronRight } from 'lucide-react';
@@ -32,7 +33,7 @@ const ACTIONED_CAP = 50;
 /** The seeded demo games are not the user's games — offering one as "your last
  *  game" would be a lie, and the whole point of the card is that it is THEIRS. */
 function isOwnGame(game: GameRecord): boolean {
-  return !game.isMasterGame && !game.id.startsWith('sample-');
+  return !game.isMasterGame && !isFixtureGame(game);
 }
 
 async function readActioned(): Promise<string[]> {

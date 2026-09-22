@@ -4,23 +4,24 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**133 lines · 8 exports · 11 importers · 4 tests · 0 audits**
+**137 lines · 9 exports · 11 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:26) — names `criticalityScan`
 - **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:138) — names `criticalityScan`
-- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3630) — names `criticalityScan`, `scanCriticality`
+- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3736) — names `criticalityScan`, `scanCriticality`
+- **The standard post-deploy ritual** (CLAUDE.md:5902) — names `CriticalMoment`
 
 ## Who calls in
 
 - `src/services/conceptEngine.ts`
+- `src/services/criticalMoment.ts`
 - `src/services/criticalityScan.test.ts`
 - `src/services/narrationImportance.ts`
 - `src/services/onlyMoveSequence.test.ts`
 - `src/services/onlyMoveSequence.ts`
 - `src/services/positionFacts.ts`
-- `src/services/ratingBands.test.ts`
 - `src/services/refutedAlternative.ts`
 - `src/services/reviewTurningPoint.ts`
 - `src/services/skillScaling.test.ts`
@@ -46,37 +47,39 @@
 ### `CriticalityOpts` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `criticalityThresholds` (function) — 12 call sites
-- `src/services/conceptEngine.ts:493`
-- `src/services/criticalityScan.test.ts:14`
-- `src/services/criticalityScan.test.ts:15`
-- `src/services/criticalityScan.test.ts:16`
-- `src/services/criticalityScan.test.ts:18`
-- `src/services/narrationImportance.ts:123`
-- `src/services/positionFacts.ts:258`
-- `src/services/ratingBands.test.ts:83`
-- `src/services/refutedAlternative.ts:136`
+### `criticalityThresholds` (function) — 9 call sites
+- `src/services/conceptEngine.ts:491`
+- `src/services/criticalMoment.ts:149`
+- `src/services/criticalityScan.test.ts:20`
+- `src/services/narrationImportance.ts:139`
+- `src/services/positionFacts.ts:280`
+- `src/services/refutedAlternative.ts:134`
 - `src/services/reviewTurningPoint.ts:65`
-- `src/services/skillScaling.test.ts:94`
-- `src/services/studentNeedLoader.ts:63`
+- `src/services/skillScaling.test.ts:98`
+- `src/services/studentNeedLoader.ts:111`
 
-### `scanCriticality` (function) — 8 call sites
-- `src/services/criticalityScan.test.ts:25`
-- `src/services/criticalityScan.test.ts:36`
-- `src/services/criticalityScan.test.ts:47`
-- `src/services/criticalityScan.test.ts:57`
-- `src/services/criticalityScan.test.ts:58`
-- `src/services/criticalityScan.test.ts:66`
+### `ONLY_MOVE_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `scanCriticality` (function) — 7 call sites
+- `src/services/criticalityScan.test.ts:42`
+- `src/services/criticalityScan.test.ts:53`
+- `src/services/criticalityScan.test.ts:64`
 - `src/services/criticalityScan.test.ts:74`
+- `src/services/criticalityScan.test.ts:82`
+- `src/services/criticalityScan.test.ts:90`
 - `src/services/onlyMoveSequence.ts:72`
 
 ## Tests
 
 - `src/services/criticalityScan.test.ts`
 - `src/services/onlyMoveSequence.test.ts`
-- `src/services/ratingBands.test.ts`
 - `src/services/skillScaling.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+- `scripts/audit-review-overhaul-prod.mjs`
