@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**219 lines · 2 exports · 3 importers · 2 tests · 1 audits**
+**219 lines · 2 exports · 2 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,7 +14,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
-- `src/services/promptedFind.wire.test.ts`
 
 ## Exports and every call site
 
@@ -27,7 +26,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
-- `src/services/promptedFind.wire.test.ts`
 
 ## Audits that reach it
 
