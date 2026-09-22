@@ -128,9 +128,44 @@ export interface UnifiedWeakness extends WeaknessRepInput {
   /** The student's own flubbed positions (newest first) — replay material. */
   positions: WeaknessPosition[];
   lastSeenAt: number;
+  /** DISTINCT games the instances came from (C10, 2026-09-22). `total` is
+   *  OCCURRENCES — ten slips in six games is `total: 10`, and the custom
+   *  lesson read that as "10 games running now" five minutes after an import.
+   *  This is the honest denominator. REQUIRED, and `[]` where a source has no
+   *  game at all (a repertoire drill, board vision), so a new aggregator must
+   *  answer for it rather than inherit a count that is not one. */
+  gameIds: readonly string[];
+  /** ms of the most recent DRILL on any instance; null = never drilled. "We've
+   *  been working on this" is a claim about sessions that happened, and it is
+   *  only true when this is non-null. REQUIRED for the same reason. */
+  lastDrilledAt: number | null;
   /** A single position to drill (conversion: the winning peak FEN). Lets the
    *  rep deep-link into "play out this position" without carrying positions. */
   fen?: string;
+}
+
+/** Distinct, non-empty game ids in first-seen order. */
+export function distinctGameIds(ids: Iterable<string | null | undefined>): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const id of ids) {
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    out.push(id);
+  }
+  return out;
+}
+
+/** Latest of a set of timestamps (ms numbers or date strings); null when none
+ *  is present or parseable — never a fabricated "now". */
+export function latestDrillMs(values: Iterable<number | string | null | undefined>): number | null {
+  let best: number | null = null;
+  for (const v of values) {
+    const t = typeof v === 'number' ? v : typeof v === 'string' ? Date.parse(v) : NaN;
+    if (!Number.isFinite(t)) continue;
+    if (best === null || t > best) best = t;
+  }
+  return best;
 }
 
 /** Position identity for dedup: piece placement + side + castling + ep
@@ -354,6 +389,8 @@ export function aggregateMistakePuzzles(mistakes: MistakePuzzle[], excludeKeys?:
         },
       })),
       lastSeenAt: rows[0] ? Date.parse(rows[0].createdAt) || 0 : 0,
+      gameIds: distinctGameIds(rows.map((r) => r.sourceGameId)),
+      lastDrilledAt: latestDrillMs(rows.map((r) => r.srsLastReview)),
     });
   }
   return out;
@@ -435,6 +472,8 @@ export function aggregateFundamentals(rows: readonly MisconceptionTagRecord[], g
         openingId: e.openingId,
       })),
       lastSeenAt: recs[0]?.createdAt ?? 0,
+      gameIds: distinctGameIds(recs.map((r) => r.sourceGameId)),
+      lastDrilledAt: latestDrillMs(recs.map((r) => r.lastDrilledAt)),
     });
   }
   return out;
@@ -483,6 +522,10 @@ function fromMisconception(a: MisconceptionAggregate, gameIndex?: GameProvenance
       openingId: e.openingId,
     })),
     lastSeenAt: a.lastSeenAt,
+    // Computed over EVERY record by getMisconceptionProfile, not the capped
+    // `examples` — the whole point of the field is a count the cap cannot bend.
+    gameIds: a.gameIds,
+    lastDrilledAt: a.lastDrilledAt,
   };
 }
 
@@ -517,6 +560,10 @@ export function aggregateOpeningWeakSpots(spots: OpeningWeakSpot[], now: number 
       // A repertoire drill, not a game — 'drill' is the answer, not a gap.
       positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, bestSan: r.correctMoveSan, openingId: r.openingId, from: { origin: 'drill' as const, playedAt: playedAtMs(r.lastFailedAt) } })),
       lastSeenAt,
+      // A repertoire drill has no game — and the record IS a drill, so its
+      // last failure is the last time this was worked on.
+      gameIds: [],
+      lastDrilledAt: lastSeenAt > 0 ? lastSeenAt : null,
     });
   }
   return out;
@@ -551,6 +598,9 @@ export function aggregateClassifiedTactics(tactics: ClassifiedTactic[]): Unified
       puzzleThemes: themesForTactic(type),
       positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, playedSan: r.playerMoveSan, bestSan: r.bestMoveSan, openingId: r.openingName ?? undefined, from: { origin: 'game' as const, opponentName: r.opponentName, playedAt: playedAtMs(r.gameDate) } })),
       lastSeenAt,
+      gameIds: distinctGameIds(rows.map((r) => r.sourceGameId)),
+      // A classified tactic carries no drill record of its own.
+      lastDrilledAt: null,
     });
   }
   return out;
@@ -580,6 +630,9 @@ export function aggregateConversionFailures(failures: ConversionFailure[], games
         },
       })),
       lastSeenAt,
+      gameIds: distinctGameIds(rows.map((f) => f.gameId)),
+      // A blown win is detected from the game curve; nothing records drilling it.
+      lastDrilledAt: null,
       fen: rows[0]?.fen, // the most-recent blown win — drill this one
     };
   };
@@ -657,6 +710,8 @@ export function aggregateStrongerOpponentErrors(
     puzzleThemes: [],
     positions: vsStronger.slice(0, 8).map((p) => ({ fen: p.fen, playedSan: p.playerMoveSan, bestSan: p.bestMoveSan, openingId: p.openingName ?? undefined, from: { origin: 'game' as const, gameId: p.sourceGameId, opponentName: p.opponentName, playedAt: playedAtMs(p.gameDate) } })),
     lastSeenAt,
+    gameIds: distinctGameIds(vsStronger.map((p) => p.sourceGameId)),
+    lastDrilledAt: latestDrillMs(vsStronger.map((p) => p.srsLastReview)),
   }];
 }
 
@@ -685,6 +740,8 @@ export function aggregateTimeTrouble(hits: TimeTroubleHit[], gameIndex?: GamePro
       },
     })),
     lastSeenAt: Date.now(),
+    gameIds: distinctGameIds(hits.map((h) => h.gameId)),
+    lastDrilledAt: null,
   }];
 }
 
@@ -714,6 +771,10 @@ export function aggregateBoardVision(heatmap: SquareHeatmapEntry[]): UnifiedWeak
     puzzleThemes: [],
     positions: [],
     lastSeenAt: Date.now(),
+    // Board vision is measured on the find-the-square drill — no game, and
+    // every attempt IS a drill.
+    gameIds: [],
+    lastDrilledAt: Date.now(),
   }];
 }
 
@@ -725,13 +786,17 @@ function mergeByKey(rows: UnifiedWeakness[]): UnifiedWeakness[] {
   for (const r of rows) {
     const existing = byKey.get(r.key);
     if (!existing) {
-      byKey.set(r.key, { ...r, positions: [...r.positions], sources: [...r.sources] });
+      byKey.set(r.key, { ...r, positions: [...r.positions], sources: [...r.sources], gameIds: [...r.gameIds] });
       continue;
     }
     existing.openCount += r.openCount;
     existing.total += r.total;
     existing.severity = Math.max(existing.severity, r.severity);
     existing.lastSeenAt = Math.max(existing.lastSeenAt, r.lastSeenAt);
+    // Games UNION (never add — the same game seen by two passes is one game);
+    // the latest drill wins.
+    existing.gameIds = distinctGameIds([...existing.gameIds, ...r.gameIds]);
+    existing.lastDrilledAt = latestDrillMs([existing.lastDrilledAt, r.lastDrilledAt]);
     for (const s of r.sources) if (!existing.sources.includes(s)) existing.sources.push(s);
     if (existing.puzzleThemes.length === 0 && r.puzzleThemes.length > 0) existing.puzzleThemes = r.puzzleThemes;
     const seen = new Set(existing.positions.map((p) => posKey(p.fen, p.playedSan)));

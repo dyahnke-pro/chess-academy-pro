@@ -140,7 +140,7 @@ describe('fixtureGames — the readers (D5)', () => {
     await seedUnmarkedTwins();
     await autoAnalyzeGameMisconceptions('real-vienna-amateur-1');
     expect(await db.mistakePuzzles.count()).toBeGreaterThan(0);
-  });
+  }, 30_000); // the control half runs the real classifier over the twin's blunders — ~1s alone, more under a parallel file load
 
   it('LIST: a sample still renders in the review list, labelled Demo; a real game is not', () => {
     const sample = buildGameRecord({ id: 'sample-london-amateur-3', fixture: true, source: 'chesscom', white: 'You', black: 'chesscom_opp', result: '1-0' });

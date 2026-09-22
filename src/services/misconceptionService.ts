@@ -174,6 +174,11 @@ export interface MisconceptionAggregate {
   lastSeenAt: number;
   /** A few representative records (most recent first), for the UI. */
   examples: MisconceptionTagRecord[];
+  /** DISTINCT games the instances came from, over EVERY record — not the
+   *  capped `examples` (C10). Empty when no record carries a game id. */
+  gameIds: string[];
+  /** ms of the latest drill on any instance; null = never drilled. */
+  lastDrilledAt: number | null;
 }
 
 /** Map a game phase to the weakness bucket an unclassifiable slip in that
@@ -240,6 +245,11 @@ export async function getMisconceptionProfile(
       openCount,
       lastSeenAt: head.createdAt,
       examples: records.slice(0, 5),
+      gameIds: [...new Set(records.map((r) => r.sourceGameId).filter((id): id is string => !!id))],
+      lastDrilledAt: records.reduce<number | null>(
+        (m, r) => (typeof r.lastDrilledAt === 'number' && (m === null || r.lastDrilledAt > m) ? r.lastDrilledAt : m),
+        null,
+      ),
     });
   }
 

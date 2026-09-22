@@ -145,6 +145,10 @@ export function aggregateBookDepartures(
           from: { origin: 'game' as const, gameId: g.gameId, opponentName: opponentFor?.(g.gameId) ?? null, playedAt: g.playedAt },
         })),
       lastSeenAt,
+      // Distinct games over the WHOLE group (the positions above are capped).
+      gameIds: [...new Set(group.map((g) => g.gameId).filter((id) => !!id))],
+      // A departure is detected from the game; nothing records drilling it.
+      lastDrilledAt: null,
       fen: group[0].bookFen,
     });
   }

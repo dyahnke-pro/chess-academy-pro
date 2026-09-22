@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**868 lines · 19 exports · 28 importers · 14 tests · 2 audits**
+**933 lines · 21 exports · 28 importers · 14 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -63,6 +63,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `UnifiedWeakness` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `distinctGameIds` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `latestDrillMs` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `bucketForMistake` (function) — 7 call sites
@@ -147,7 +153,7 @@
 - `src/services/coachApi.ts:4702`
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
-- `src/services/coachThread.ts:40`
+- `src/services/coachThread.ts:49`
 - `src/services/fixtureGames.test.tsx:114`
 - `src/services/fixtureGames.test.tsx:123`
 - `src/services/fundamentalReachesDecider.test.ts:81`

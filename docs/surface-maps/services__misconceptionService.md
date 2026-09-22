@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**311 lines · 10 exports · 24 importers · 15 tests · 4 audits**
+**321 lines · 10 exports · 24 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,7 +46,7 @@
 - `src/services/bucketPipelineAudit.ts:252`
 - `src/services/misconceptionService.test.ts:114`
 - `src/services/misconceptionService.test.ts:149`
-- `src/services/weaknessSpine.ts:407`
+- `src/services/weaknessSpine.ts:444`
 
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -139,7 +139,7 @@
 - `src/services/misconceptionService.test.ts:98`
 - `src/services/misconceptionService.test.ts:116`
 - `src/services/weaknessAnalyzer.ts:997`
-- `src/services/weaknessSpine.ts:777`
+- `src/services/weaknessSpine.ts:842`
 
 ### `recordTagDrillResult` (function) — 8 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:245`
