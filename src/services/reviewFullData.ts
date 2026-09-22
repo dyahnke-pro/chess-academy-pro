@@ -521,7 +521,11 @@ export function computeMoveFacets(
       const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
       const oppWins = legalSeeGainOn(sb, smv.to); // pin-aware: opponent's legal recapture
       if (oppWins - capVal >= 1 && studentColorWB) {
-        const comp = sacrificeCompensation(fenAfter, moverWB, studentPovCp);
+        // MOVER's POV, not the student's — the function judges the SAC from
+        // the side that made it. Handing it the student's number flipped the
+        // sign on every opponent sacrifice (D-4, 2026-09-22).
+        const moverPovCp = studentPovCp === null ? null : (moverWB === studentColorWB ? studentPovCp : -studentPovCp);
+        const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp);
         if (comp.length) facets.push(`[sac] It's a sacrifice — compensation: ${comp.join('; ')}.`);
         const mech = isStudent ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
         if (mech) facets.push(`[sac-why] ${cap(mech)}.`);

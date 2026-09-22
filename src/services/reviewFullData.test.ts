@@ -247,3 +247,31 @@ describe('the empty opening verdict (David 2026-09-16, reading ply 1)', () => {
     if (verdict) expect(verdict).toMatch(/:/);
   });
 });
+
+describe('[sac] is judged from the MOVER\'s seat — D-4 (WO-STANDARD-01, 2026-09-22)', () => {
+  // Opera: 10.Nxb5 is WHITE's sacrifice. Reviewed from BLACK's seat the eval is
+  // +470 for Black (the sac lost), and the old caller handed that +470 to the
+  // compensation computer as if it were White's — "the position holds up
+  // completely" on a losing sac. Negative control: from White's seat with a
+  // genuinely sound sac (+60) the facet still speaks.
+  const OPERA = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5'];
+  const facetsFor = (studentColorWB: 'w' | 'b', evaluation: number): string[] => {
+    const fens = fensAfter(OPERA);
+    return computeMoveFacets({
+      fenBefore: fens[OPERA.length - 2], fenAfter: fens[OPERA.length - 1], san: 'Nxb5', ply: OPERA.length,
+      moverColor: 'white', playerColor: studentColorWB === 'w' ? 'white' : 'black', studentColorWB,
+      evaluation, preMoveEval: 0, classification: studentColorWB === 'w' ? 'good' : 'blunder', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: OPERA, forcedRunStartPly: null,
+    });
+  };
+  it('the opponent\'s LOSING sac never gets a compensation facet from the student\'s eval', () => {
+    // White-POV -470 → the student (Black) is +470; the mover (White) is -470.
+    const sac = facetsFor('b', -470).filter((f) => f.startsWith('[sac]'));
+    expect(sac).toEqual([]);
+  });
+  it('a sound sac still gets its compensation named from the mover\'s seat', () => {
+    const sac = facetsFor('w', 60).filter((f) => f.startsWith('[sac]'));
+    expect(sac.length).toBe(1);
+    expect(sac[0]).toMatch(/compensation/);
+  });
+});
