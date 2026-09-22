@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**466 lines · 4 exports · 6 importers · 2 tests · 2 audits**
+**474 lines · 4 exports · 6 importers · 2 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **Shared types / services** (CLAUDE.md:5179) — names `coachAgent`
-- **Routing** (CLAUDE.md:5196) — names `CoachIntent`
+- **Shared types / services** (CLAUDE.md:5218) — names `coachAgent`
+- **Routing** (CLAUDE.md:5235) — names `CoachIntent`
 
 ## Who calls in
 
@@ -31,8 +31,8 @@
 ### `CoachIntent` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `parseCoachIntent` (function) — 78 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4059`
+### `parseCoachIntent` (function) — 82 call sites
+- `src/components/Coach/CoachTeachPage.tsx:4254`
 - `src/components/Search/SmartSearchBar.tsx:91`
 - `src/components/Search/SmartSearchBar.tsx:195`
 - `src/services/coachAgent.test.ts:13`
@@ -54,59 +54,63 @@
 - `src/services/coachAgent.test.ts:129`
 - `src/services/coachAgent.test.ts:132`
 - `src/services/coachAgent.test.ts:164`
-- `src/services/coachAgent.test.ts:170`
-- `src/services/coachAgent.test.ts:176`
-- `src/services/coachAgent.test.ts:185`
+- `src/services/coachAgent.test.ts:173`
+- `src/services/coachAgent.test.ts:178`
+- `src/services/coachAgent.test.ts:181`
+- `src/services/coachAgent.test.ts:186`
 - `src/services/coachAgent.test.ts:192`
 - `src/services/coachAgent.test.ts:198`
-- `src/services/coachAgent.test.ts:206`
-- `src/services/coachAgent.test.ts:212`
-- `src/services/coachAgent.test.ts:218`
-- `src/services/coachAgent.test.ts:223`
+- `src/services/coachAgent.test.ts:207`
+- `src/services/coachAgent.test.ts:214`
+- `src/services/coachAgent.test.ts:220`
 - `src/services/coachAgent.test.ts:228`
-- `src/services/coachAgent.test.ts:233`
+- `src/services/coachAgent.test.ts:234`
 - `src/services/coachAgent.test.ts:240`
-- `src/services/coachAgent.test.ts:246`
-- `src/services/coachAgent.test.ts:252`
-- `src/services/coachAgent.test.ts:259`
-- `src/services/coachAgent.test.ts:265`
-- `src/services/coachAgent.test.ts:271`
-- `src/services/coachAgent.test.ts:277`
-- `src/services/coachAgent.test.ts:282`
-- `src/services/coachAgent.test.ts:298`
-- `src/services/coachAgent.test.ts:303`
-- `src/services/coachAgent.test.ts:309`
-- `src/services/coachAgent.test.ts:316`
-- `src/services/coachAgent.test.ts:322`
-- `src/services/coachAgent.test.ts:336`
-- `src/services/coachAgent.test.ts:343`
-- `src/services/coachAgent.test.ts:349`
-- `src/services/coachAgent.test.ts:355`
-- `src/services/coachAgent.test.ts:361`
-- `src/services/coachAgent.test.ts:369`
-- `src/services/coachAgent.test.ts:375`
+- `src/services/coachAgent.test.ts:245`
+- `src/services/coachAgent.test.ts:250`
+- `src/services/coachAgent.test.ts:255`
+- `src/services/coachAgent.test.ts:262`
+- `src/services/coachAgent.test.ts:268`
+- `src/services/coachAgent.test.ts:274`
+- `src/services/coachAgent.test.ts:281`
+- `src/services/coachAgent.test.ts:287`
+- `src/services/coachAgent.test.ts:293`
+- `src/services/coachAgent.test.ts:299`
+- `src/services/coachAgent.test.ts:304`
+- `src/services/coachAgent.test.ts:320`
+- `src/services/coachAgent.test.ts:325`
+- `src/services/coachAgent.test.ts:331`
+- `src/services/coachAgent.test.ts:338`
+- `src/services/coachAgent.test.ts:344`
+- `src/services/coachAgent.test.ts:358`
+- `src/services/coachAgent.test.ts:365`
+- `src/services/coachAgent.test.ts:371`
+- `src/services/coachAgent.test.ts:377`
 - `src/services/coachAgent.test.ts:383`
-- `src/services/coachAgent.test.ts:389`
-- `src/services/coachAgent.test.ts:395`
-- `src/services/coachAgent.test.ts:401`
-- `src/services/coachAgent.test.ts:415`
-- `src/services/coachAgent.test.ts:421`
-- `src/services/coachAgent.test.ts:427`
-- `src/services/coachAgent.test.ts:433`
-- `src/services/coachAgent.test.ts:439`
-- `src/services/coachAgent.test.ts:444`
+- `src/services/coachAgent.test.ts:391`
+- `src/services/coachAgent.test.ts:397`
+- `src/services/coachAgent.test.ts:405`
+- `src/services/coachAgent.test.ts:411`
+- `src/services/coachAgent.test.ts:417`
+- `src/services/coachAgent.test.ts:423`
+- `src/services/coachAgent.test.ts:437`
+- `src/services/coachAgent.test.ts:443`
 - `src/services/coachAgent.test.ts:449`
-- `src/services/coachAgent.test.ts:454`
+- `src/services/coachAgent.test.ts:455`
 - `src/services/coachAgent.test.ts:461`
-- `src/services/coachAgent.test.ts:467`
-- `src/services/coachAgent.test.ts:473`
-- `src/services/coachAgent.test.ts:479`
-- `src/services/coachAgent.test.ts:486`
-- `src/services/coachAgent.test.ts:493`
-- `src/services/coachAgent.test.ts:498`
-- `src/services/coachAgent.test.ts:503`
+- `src/services/coachAgent.test.ts:466`
+- `src/services/coachAgent.test.ts:471`
+- `src/services/coachAgent.test.ts:476`
+- `src/services/coachAgent.test.ts:483`
+- `src/services/coachAgent.test.ts:489`
+- `src/services/coachAgent.test.ts:495`
+- `src/services/coachAgent.test.ts:501`
 - `src/services/coachAgent.test.ts:508`
 - `src/services/coachAgent.test.ts:515`
+- `src/services/coachAgent.test.ts:520`
+- `src/services/coachAgent.test.ts:525`
+- `src/services/coachAgent.test.ts:530`
+- `src/services/coachAgent.test.ts:537`
 - `src/services/coachSessionRouter.ts:210`
 - `src/services/inGameChatIntent.ts:157`
 - `src/services/openingIntentCapture.ts:58`

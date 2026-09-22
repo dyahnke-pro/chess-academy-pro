@@ -166,6 +166,28 @@ describe('parseCoachIntent — play-against', () => {
       });
     }
 
+    // Found by the 2026-09-22 hand walk, typed into the home-screen drawer:
+    // "me" was captured as the opening and "i'm white" as another. The
+    // student is never a subject, and a seat stated as a fact is a seat.
+    it('"start a game with me, I\'ll take black" → play-against, no subject, side black', () => {
+      const intent = parseCoachIntent("start a game with me, I'll take black");
+      expect(intent).toMatchObject({ kind: 'play-against', side: 'black' });
+      expect(intent.subject).toBeUndefined();
+    });
+    it('"let\'s play, I\'m white" / "play against me, I am black" → the stated seat, no subject', () => {
+      const a = parseCoachIntent("let's play, I'm white");
+      expect(a).toMatchObject({ kind: 'play-against', side: 'white' });
+      expect(a.subject).toBeUndefined();
+      const b = parseCoachIntent('play against me, I am black');
+      expect(b).toMatchObject({ kind: 'play-against', side: 'black' });
+      expect(b.subject).toBeUndefined();
+    });
+    it('"start a game with me with the Pirc, I\'ll go black" keeps the opening and the seat', () => {
+      const intent = parseCoachIntent("start a game with me with the Pirc, I'll go black");
+      expect(intent).toMatchObject({ kind: 'play-against', side: 'black' });
+      expect(intent.subject?.toLowerCase()).toContain('pirc');
+    });
+
     it('still extracts subject from "I want to play the Sicilian"', () => {
       const intent = parseCoachIntent('I want to play the Sicilian');
       expect(intent.kind).toBe('play-against');

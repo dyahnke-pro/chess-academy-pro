@@ -94,9 +94,14 @@ function extractSide(text: string): 'white' | 'black' | undefined {
   if (asMatch) return asMatch[1] as 'white' | 'black';
   // "I'll take/play black" or "I want black"
   const takeMatch = lower.match(
-    /\bi\s*(?:'|wi)?ll\s+(?:take|play|be)\s+(black|white)\b/,
+    /\bi\s*(?:'|wi)?ll\s+(?:take|play|be|go|have)\s+(black|white)\b/,
   );
   if (takeMatch) return takeMatch[1] as 'white' | 'black';
+  // "I'm white" / "I am black" — the seat stated as a fact (found by the
+  // 2026-09-22 hand walk: "let's play, I'm white" parsed as a play request
+  // for an opening called "i'm white").
+  const amMatch = lower.match(/\bi\s*(?:'m|am)\s+(black|white)\b/);
+  if (amMatch) return amMatch[1] as 'white' | 'black';
   const wantMatch = lower.match(/\bi\s+want\s+(?:to\s+play\s+)?(black|white)\b/);
   if (wantMatch) return wantMatch[1] as 'white' | 'black';
   const takeShort = lower.match(/\bi\s+take\s+(black|white)\b/);
@@ -451,9 +456,12 @@ function cleanSubject(subject: string): string {
 function stripSideAndDifficulty(subject: string): string {
   let out = subject.toLowerCase();
   out = out.replace(
-    /\bas\s+(black|white)\b|\bi\s*(?:'|wi)?ll\s+(?:take|play|be)\s+(?:black|white)\b|\bi\s+want\s+(?:to\s+play\s+)?(?:black|white)\b/gi,
+    /\bas\s+(black|white)\b|\bi\s*(?:'|wi)?ll\s+(?:take|play|be|go|have)\s+(?:black|white)\b|\bi\s*(?:'m|am)\s+(?:black|white)\b|\bi\s+want\s+(?:to\s+play\s+)?(?:black|white)\b|\bi\s+take\s+(?:black|white)\b/gi,
     '',
   );
+  // "start a game with me" / "play against me" — "me" is the student, never an
+  // opening. A subject that is only the student is no subject at all.
+  out = out.replace(/\b(?:with|against)\s+me\b|\bme\b/gi, '');
   for (const word of Object.keys(DIFFICULTY_WORDS)) {
     out = out.replace(new RegExp(`\\b${word}\\b`, 'gi'), '');
   }
