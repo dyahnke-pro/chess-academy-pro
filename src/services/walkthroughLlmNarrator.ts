@@ -66,11 +66,16 @@ const STANDARD_START_FEN =
 
 /**
  * Compute teaching-quality per-move narration for an opening walkthrough.
- * Async only so the four call sites keep their `await`/`.catch` shape.
+ * Synchronous now (F3: no model call) — wrapped in a resolved promise so the
+ * four call sites keep their `await`/`.catch` shape.
  */
-export async function generateWalkthroughNarrations(
+export function generateWalkthroughNarrations(
   input: WalkthroughNarrationInput,
 ): Promise<WalkthroughNarrationResult> {
+  return Promise.resolve(computeWalkthroughNarrations(input));
+}
+
+function computeWalkthroughNarrations(input: WalkthroughNarrationInput): WalkthroughNarrationResult {
   const startFen = input.startFen ?? STANDARD_START_FEN;
   const moves = input.pgn.trim().split(/\s+/).filter(Boolean);
   if (moves.length === 0) {
