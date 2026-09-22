@@ -23,6 +23,32 @@ export function cells(chess: Chess): Cell[] {
 }
 
 /**
+ * Does EITHER side have a checkmate in one from this board? The side to move
+ * is read off the real position; the other side off a null-move flip (which
+ * can be illegal when that side is already in check — then only the real side
+ * is judged). Board-true, chess.js only.
+ */
+export function mateInOneExists(chess: Chess): boolean {
+  const probes: Chess[] = [chess];
+  try {
+    const parts = chess.fen().split(' ');
+    parts[1] = parts[1] === 'w' ? 'b' : 'w';
+    parts[3] = '-';
+    probes.push(new Chess(parts.join(' ')));
+  } catch { /* the flipped board is illegal — judge the real one only */ }
+  for (const p of probes) {
+    try {
+      for (const m of p.moves()) {
+        const after = new Chess(p.fen());
+        after.move(m);
+        if (after.isCheckmate()) return true;
+      }
+    } catch { /* an unreadable probe proves nothing */ }
+  }
+  return false;
+}
+
+/**
  * THE ONE worst-placed-piece finder (David 2026-09-15). Two copies of this
  * selection loop existed — M12's facet and `deriveNextPlans`' rescue plan — and
  * only one carried the gates, so the review said "your knight sits on an
@@ -104,6 +130,13 @@ export function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {
 export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
+  // A MATE ON THE BOARD OUTRANKS EVERY PLAN (WO-STANDARD-01 D-15, prod tape
+  // 2026-09-22: with Qxf7# available the coach said "win their weak pawn on
+  // h7 — plant your knight on h6"). Rank: mate threat > material > plan. When
+  // either side has a mate in one from this position, there IS no plan to
+  // state — the mate is the whole story, and the tactic facets already name
+  // it. Computed here, in the plan computer, so no surface can rank around it.
+  if (mateInOneExists(chess)) return [];
   const struct = describeStructure(fen);
   if (!struct) return [];
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';

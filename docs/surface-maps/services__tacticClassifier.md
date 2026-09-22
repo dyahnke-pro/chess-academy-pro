@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**791 lines · 3 exports · 12 importers · 1 tests · 0 audits**
+**793 lines · 3 exports · 13 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,24 +24,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticsDetector.ts`
 - `src/services/threatCheck.ts`
 - `src/services/threatOut.ts`
+- `src/test/kingIsNeverHanging.test.ts`
 
 ## Exports and every call site
 
-### `findHangingPieces` (function) — 9 call sites
+### `findHangingPieces` (function) — 10 call sites
 - `src/data/patternRegistry.ts:113`
-- `src/services/coachGameEngine.ts:303`
+- `src/services/coachGameEngine.ts:294`
 - `src/services/deliberation.ts:78`
-- `src/services/liveTacticsContext.ts:353`
+- `src/services/liveTacticsContext.ts:366`
 - `src/services/moveReason.ts:112`
 - `src/services/playedMoveGrade.ts:90`
-- `src/services/tacticsDetector.ts:708`
+- `src/services/tacticsDetector.ts:710`
 - `src/services/threatCheck.ts:55`
 - `src/services/threatOut.ts:78`
+- `src/test/kingIsNeverHanging.test.ts:53`
 
 ### `classifyPosition` (function) — 29 call sites
-- `src/components/Coach/CoachGamePage.tsx:3176`
-- `src/services/missedTacticService.ts:744`
-- `src/services/pvPlayback.ts:285`
+- `src/components/Coach/CoachGamePage.tsx:3283`
+- `src/services/missedTacticService.ts:755`
+- `src/services/pvPlayback.ts:384`
 - `src/services/tacticClassifier.test.ts:32`
 - `src/services/tacticClassifier.test.ts:40`
 - `src/services/tacticClassifier.test.ts:47`
@@ -70,13 +72,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticClassifier.test.ts:323`
 
 ### `scanUpcomingTactics` (function) — 2 call sites
-- `src/components/Coach/CoachGamePage.tsx:2772`
-- `src/services/liveTacticsContext.ts:74`
+- `src/components/Coach/CoachGamePage.tsx:2831`
+- `src/services/liveTacticsContext.ts:84`
 
 ## Tests
 
 - `src/services/tacticClassifier.test.ts`
+- `src/services/tacticClassifierService.test.ts`
+- `src/test/kingIsNeverHanging.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

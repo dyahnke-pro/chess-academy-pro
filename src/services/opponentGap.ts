@@ -73,8 +73,22 @@ export function detectOpponentGap(input: {
   };
 }
 
+/** The seat the nudge is SPOKEN FROM — required, because the sentence names
+ *  the opponent and the opponent is a different word in each seat (CLAUDE.md,
+ *  "ONE PERSPECTIVE": the coach playing you says "I", a human opponent is
+ *  "they", and a gendered "he" is never right). Prod tape 2026-09-22 heard
+ *  "That was a blunder from me … He let you off" in ONE utterance
+ *  (WO-STANDARD-01 D-9): the verdict spoke as the coach and the nudge spoke
+ *  about a third person. */
+export type GapSeat = 'student' | 'coach-is-opponent';
+
+const GAP_STEM: Record<GapSeat, string> = {
+  'coach-is-opponent': 'I let you off there',
+  student: 'they let you off there',
+};
+
 /** The subtle nudge — guide-don't-tell: names NO move, leads the eye with the
  *  arrow the caller draws from `toSquare`. */
-export function opponentGapClause(_gap: OpponentGap): string {
-  return `he let you off there — there's a chance right here if you can spot it.`;
+export function opponentGapClause(_gap: OpponentGap, seat: GapSeat): string {
+  return `${GAP_STEM[seat]} — there's a chance right here if you can spot it.`;
 }

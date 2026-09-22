@@ -95,7 +95,7 @@ import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
-import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance } from '../../services/classroomOpener';
+import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies } from '../../services/classroomOpener';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
 import { getStudentDossier, dossierOpeningLine } from '../../services/studentDossier';
@@ -8611,7 +8611,7 @@ export function CoachTeachPage(): JSX.Element {
                     // inferior move / a genuine close call (G0).
                     if (turnRead) {
                       const butTurn = temptingTurnClause(turnRead, { spoken: true });
-                      const hedge = uncertaintyClause(turnRead, { spoken: true });
+                      const hedge = uncertaintyClause(turnRead, { spoken: true, rotation: gameRef.current.history.length });
                       // His "X, not Y, because…" — only when there is NO but-turn
                       // (a seductive blunder outranks a fine-margin preference) and
                       // NO hedge (a genuine coin-flip is the hedge, not a compare).
@@ -8639,7 +8639,8 @@ export function CoachTeachPage(): JSX.Element {
                           studentColor: playerColor === 'white' ? 'w' : 'b',
                         });
                         if (gap) {
-                          const nudge = gradeNarrationText(opponentGapClause(gap), probe.fen(), 'CoachTeachPage.opponentGap')?.trim();
+                          // Learn: the coach IS the opponent, so the nudge says "I".
+                          const nudge = gradeNarrationText(opponentGapClause(gap, 'coach-is-opponent'), probe.fen(), 'CoachTeachPage.opponentGap')?.trim();
                           if (nudge) queueSpokenHint(probe.fen(), nudge, 'computed', [gap.toSquare]);
                           captureEvent('opponent_gap_nudged', { surface: 'coach-teach', gain_cp: Math.round(gap.gainCp) });
                         }
@@ -9131,7 +9132,7 @@ export function CoachTeachPage(): JSX.Element {
                                   ? temptingTurnClause(calcRead)
                                   : null;
                                 if (butTurn) recLine = `${butTurn} Instead, ${recLine.charAt(0).toLowerCase()}${recLine.slice(1)}`;
-                                const hedge = uncertaintyClause(calcRead);
+                                const hedge = uncertaintyClause(calcRead, { rotation: gameRef.current.history.length });
                                 if (hedge) recLine = `${recLine} ${hedge}`;
                               }
                             } catch { /* the calc is a bonus, never a blocker */ }
@@ -10651,7 +10652,9 @@ export function CoachTeachPage(): JSX.Element {
             // my games → the nav router; teach/play → those intents).
             if (!topLabel) {
               const cold = await coldStartGuidance().catch(() => null);
-              if (cold && !userInteractedRef.current) {
+              // A game in progress is not a cold start (D-11) — the rule lives
+              // in `coldStartApplies`, not here.
+              if (cold && coldStartApplies({ historyLength: gameRef.current.history.length, userInteracted: userInteractedRef.current })) {
                 setMessages((prev) => [...prev, { id: uid('cold-start'), role: 'assistant', content: cold.line, timestamp: Date.now() }]);
                 setCoachChoices(cold.chips.slice(0, 3));
                 speechChainRef.current = speechChainRef.current

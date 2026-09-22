@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**709 lines · 5 exports · 4 importers · 4 tests · 0 audits**
+**743 lines · 6 exports · 4 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — the ONLY cap is the student's own short/brief verbosity setting (David 2026-09-16, emphatic: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!! That's how things don't get stated or teachings left out" → "The only cap should be the short verbosity coach setting").** (CLAUDE.md:650) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:911) — names `reviewFullData`
 
 ## Who calls in
 
@@ -20,7 +20,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:841`
+- `src/services/coachFeatureService.ts:983`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -29,10 +29,13 @@
 ### `MoveFactContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 15 call sites
+### `EVAL_FACET_MIN_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `computeMoveFacets` (function) — 18 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:53`
-- `src/services/coachFeatureService.ts:1514`
+- `src/services/coachFeatureService.ts:1691`
 - `src/services/reviewFullData.test.ts:15`
 - `src/services/reviewFullData.test.ts:19`
 - `src/services/reviewFullData.test.ts:53`
@@ -45,9 +48,12 @@
 - `src/services/reviewFullData.test.ts:184`
 - `src/services/reviewFullData.test.ts:225`
 - `src/services/reviewFullData.test.ts:239`
+- `src/services/reviewFullData.test.ts:260`
+- `src/services/reviewFullData.test.ts:284`
+- `src/services/reviewFullData.test.ts:312`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4199`
+- `src/services/coachFeatureService.ts:4487`
 - `src/services/reviewFullData.test.ts:203`
 - `src/services/reviewFullData.test.ts:206`
 - `src/services/reviewFullData.test.ts:214`
@@ -66,4 +72,8 @@
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

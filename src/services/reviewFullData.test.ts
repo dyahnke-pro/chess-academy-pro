@@ -247,3 +247,81 @@ describe('the empty opening verdict (David 2026-09-16, reading ply 1)', () => {
     if (verdict) expect(verdict).toMatch(/:/);
   });
 });
+
+describe('[sac] is judged from the MOVER\'s seat — D-4 (WO-STANDARD-01, 2026-09-22)', () => {
+  // Opera: 10.Nxb5 is WHITE's sacrifice. Reviewed from BLACK's seat the eval is
+  // +470 for Black (the sac lost), and the old caller handed that +470 to the
+  // compensation computer as if it were White's — "the position holds up
+  // completely" on a losing sac. Negative control: from White's seat with a
+  // genuinely sound sac (+60) the facet still speaks.
+  const OPERA = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5'];
+  const facetsFor = (studentColorWB: 'w' | 'b', evaluation: number): string[] => {
+    const fens = fensAfter(OPERA);
+    return computeMoveFacets({
+      fenBefore: fens[OPERA.length - 2], fenAfter: fens[OPERA.length - 1], san: 'Nxb5', ply: OPERA.length,
+      moverColor: 'white', playerColor: studentColorWB === 'w' ? 'white' : 'black', studentColorWB,
+      evaluation, preMoveEval: 0, classification: studentColorWB === 'w' ? 'good' : 'blunder', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: OPERA, forcedRunStartPly: null,
+    });
+  };
+  it('the opponent\'s LOSING sac never gets a compensation facet from the student\'s eval', () => {
+    // White-POV -470 → the student (Black) is +470; the mover (White) is -470.
+    const sac = facetsFor('b', -470).filter((f) => f.startsWith('[sac]'));
+    expect(sac).toEqual([]);
+  });
+  it('a sound sac still gets its compensation named from the mover\'s seat', () => {
+    const sac = facetsFor('w', 60).filter((f) => f.startsWith('[sac]'));
+    expect(sac.length).toBe(1);
+    expect(sac[0]).toMatch(/compensation/);
+  });
+});
+
+describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shift, and the [loose] facet speaks only the delta', () => {
+  const evalFacetsAt = (ply: number, evaluation: number): string[] => {
+    const fens = fensAfter(SICILIAN_IQP);
+    // Bg5 (ply 17): the bishop eyes f6 — a [does] facet, so the eval shift
+    // has a concrete positional reason to attach to.
+    return computeMoveFacets({
+      fenBefore: fens[15], fenAfter: fens[16], san: 'Bg5', ply,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation, preMoveEval: 15, classification: 'good', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null,
+    }).filter((f) => f.startsWith('[eval]'));
+  };
+  it('a 0.4-pawn wobble on a quiet ply is engine noise, not a sentence ("ticks 0.4 your way" every ply)', () => {
+    expect(evalFacetsAt(17, 55)).toEqual([]);
+  });
+  it('a real positional shift still speaks — and its stem ROTATES on the ply, never rolls', () => {
+    const a = evalFacetsAt(17, 150);
+    const b = evalFacetsAt(19, 150);
+    expect(a.length).toBe(1);
+    expect(b.length).toBe(1);
+    expect(a[0]).not.toBe(b[0]);
+    // Same ply, same sentence — resume-safe.
+    expect(evalFacetsAt(17, 150)[0]).toBe(a[0]);
+    expect(evalFacetsAt(20, 150)[0]).toBe(a[0]); // 20 ≡ 17 (mod 3)
+  });
+
+  // A knight on e5 that nobody attacks; d2-d4 attacks it and nothing defends
+  // it. Then Black shuffles the king: the knight is STILL loose, and that is
+  // standing state the student already heard.
+  const A = '4k3/8/8/4n3/8/8/3P4/4K3 w - - 0 1';
+  const cA = new Chess(A); cA.move('d4'); const B = cA.fen();
+  const cB = new Chess(B); cB.move('Kd8'); const C = cB.fen();
+  const loose = (fenBefore: string, fenAfter: string, san: string, ply: number, moverColor: 'white' | 'black'): string[] =>
+    computeMoveFacets({
+      fenBefore, fenAfter, san, ply, moverColor, playerColor: 'white', studentColorWB: 'w',
+      evaluation: 0, preMoveEval: 0, classification: null, bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['d4', 'Kd8'], forcedRunStartPly: null,
+    }).filter((f) => f.startsWith('[loose]'));
+  it('names a piece the move LEFT undefended', () => {
+    const f = loose(A, B, 'd4', 1, 'white');
+    expect(f.length).toBe(1);
+    expect(f[0]).toMatch(/Newly undefended/);
+    expect(f[0]).toMatch(/knight on e5/);
+  });
+  it('NEGATIVE CONTROL: the same loose knight one ply later is standing state — silent', () => {
+    // The old facet ("Undefended right now: …") fired here too, every ply.
+    expect(loose(B, C, 'Kd8', 2, 'black')).toEqual([]);
+  });
+});

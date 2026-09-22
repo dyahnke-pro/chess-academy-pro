@@ -171,6 +171,11 @@ function matingSideIsStudent(sans: string[], studentColorWB: Color | null): bool
  *  span where "balanced" is a definition rather than a finding. */
 const OPENING_VERDICT_SILENT_PLY = 10;
 
+/** The positional eval shift worth a sentence (D-8). Below this the bar's
+ *  movement is engine wobble between depths, and narrating it every ply was
+ *  the "ticks 0.4 your way" drumbeat. */
+export const EVAL_FACET_MIN_CP = 80;
+
 export function computeMoveFacets(
   ctx: MoveFactContext,
   outSquares?: Map<string, readonly string[]>,
@@ -347,8 +352,22 @@ export function computeMoveFacets(
         // single tactical event") named nothing — pure filler. Silence teaches
         // better than filler (Narration Voice Rules; G3 — don't voice a reason we
         // don't have). David 2026-07-23 narration dial-in.
-        if (fired.length) {
-          facets.push(`[eval] The eval bar ${d > 0 ? 'ticks' : 'dips'} ${mag} ${dir} with no material story: the shift is positional — ${fired.join(', and ')}.`);
+        // A BAR, AND A ROTATED STEM (WO-STANDARD-01 D-8, prod tape 2026-09-22:
+        // "The eval bar ticks 0.4 your way with no material story: the shift
+        // is positional" on nearly every review ply). A 0.3-pawn wobble on a
+        // quiet ply is engine noise, not a fact worth a sentence; the facet
+        // now needs a real positional shift (EVAL_FACET_MIN_CP) and its stem
+        // rotates on the ply so the sentence that does earn its place is not
+        // the same sentence every time. Still G0: the number and the reasons
+        // are computed; only the wording rotates.
+        if (fired.length && Math.abs(d) >= EVAL_FACET_MIN_CP) {
+          const verb = d > 0 ? 'ticks' : 'dips';
+          const stems = [
+            `The eval bar ${verb} ${mag} ${dir} with no material story: the shift is positional — ${fired.join(', and ')}.`,
+            `No material changed hands, yet the eval ${verb} ${mag} ${dir} — that is ${fired.join(', and ')} being priced in.`,
+            `A positional swing of ${mag} ${dir}: nothing was captured, so the difference is ${fired.join(', and ')}.`,
+          ];
+          facets.push(`[eval] ${stems[ctx.ply % stems.length]}`);
         }
       }
     }
@@ -394,10 +413,21 @@ export function computeMoveFacets(
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
       }
     }
+    // ONLY THE DELTA SPEAKS (WO-STANDARD-01 D-8, prod tape 2026-09-22:
+    // "Undefended right now: …" on nearly every ply). A piece that was loose
+    // before this move and is still loose is standing state the student has
+    // already heard; the sentence carries a new fact only for a piece this
+    // move LEFT undefended. Computed against the previous board — the same
+    // detector, one ply earlier — never a said-set on prose.
     if (t.hangingPieces.length > 0) {
-      const desc = t.hangingPieces.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
-      const f = `[loose] Undefended right now: ${seat(desc)}.`;
-      facets.push(f); recSquares(f, t.hangingPieces.map((h) => h.square));
+      let before = new Set<string>();
+      try { before = new Set(detectTactics(fenBefore).hangingPieces.map((h) => `${h.piece}${h.square}`)); } catch { before = new Set(); }
+      const fresh = t.hangingPieces.filter((h) => !before.has(`${h.piece}${h.square}`));
+      if (fresh.length > 0) {
+        const desc = fresh.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
+        const f = `[loose] Newly undefended: ${seat(desc)}.`;
+        facets.push(f); recSquares(f, fresh.map((h) => h.square));
+      }
     }
   } catch { /* ignore */ }
 
@@ -521,7 +551,11 @@ export function computeMoveFacets(
       const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
       const oppWins = legalSeeGainOn(sb, smv.to); // pin-aware: opponent's legal recapture
       if (oppWins - capVal >= 1 && studentColorWB) {
-        const comp = sacrificeCompensation(fenAfter, moverWB, studentPovCp);
+        // MOVER's POV, not the student's — the function judges the SAC from
+        // the side that made it. Handing it the student's number flipped the
+        // sign on every opponent sacrifice (D-4, 2026-09-22).
+        const moverPovCp = studentPovCp === null ? null : (moverWB === studentColorWB ? studentPovCp : -studentPovCp);
+        const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp);
         if (comp.length) facets.push(`[sac] It's a sacrifice — compensation: ${comp.join('; ')}.`);
         const mech = isStudent ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
         if (mech) facets.push(`[sac-why] ${cap(mech)}.`);

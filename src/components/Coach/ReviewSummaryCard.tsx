@@ -5,6 +5,7 @@ import { ClassificationPills } from './ClassificationPills';
 import { PhaseGrades } from './PhaseGrades';
 import { EvalGraph } from './EvalGraph';
 import type { CoachGameMove, GameAccuracy, MoveClassificationCounts, PhaseAccuracy } from '../../types';
+import { relativeResult, RESULT_LABEL } from '../../services/studentResult';
 
 interface ReviewSummaryCardProps {
   result: string;
@@ -59,13 +60,8 @@ export function ReviewSummaryCard({
   // the raw score + the student's color so a WIN never renders as "Draw"
   // (David 2026-07-19: "Draw · 30 moves" on a 16-move win — the card checked
   // `=== 'win'` while it was fed the raw '1-0').
-  const relResult: 'win' | 'loss' | 'draw' =
-    result === 'win' || result === 'loss' || result === 'draw'
-      ? result
-      : result === '1-0' || result === '0-1'
-        ? ((result === '1-0') === (playerColor === 'white') ? 'win' : 'loss')
-        : 'draw';
-  const resultLabel = relResult === 'win' ? 'Victory' : relResult === 'loss' ? 'Defeat' : 'Draw';
+  const relResult = relativeResult(result, playerColor);
+  const resultLabel = RESULT_LABEL[relResult];
   const resultColor =
     relResult === 'win'
       ? 'var(--color-success)'

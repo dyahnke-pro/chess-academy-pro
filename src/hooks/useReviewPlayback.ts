@@ -77,6 +77,9 @@ export type ForwardStop =
   | 'planned-question'
   /** The find-the-shot card is up. */
   | 'find-the-shot'
+  /** The end-of-walk turning-point card is up. Auto-play must not dismiss it
+   *  (D-13): the question was just spoken and the card is the answer slot. */
+  | 'turning-point'
   /** A legacy reading gate is open. Unreachable today — `setReadingGate` is
    *  only ever called with null — and kept so the guard declares itself
    *  rather than pretending to advance. */
@@ -97,6 +100,7 @@ const AUTO_ADVANCE_ON_STOP: Record<ForwardStop, 'reschedule' | 'pause'> = {
   'critical-ask': 'pause',
   'planned-question': 'pause',
   'find-the-shot': 'pause',
+  'turning-point': 'pause',
   'reading-gate': 'pause',
 };
 

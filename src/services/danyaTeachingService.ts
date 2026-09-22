@@ -26,7 +26,7 @@ import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
-import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, noteSuitsStudentSide, noteSeatMatches } from './noteAnchorIntegrity';
+import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, noteSuitsStudentSide, noteSeatMatches, noteIsWholeSentence } from './noteAnchorIntegrity';
 import { bakedSpoken, loadSpokenBake } from './spokenNoteBake';
 import { getFarmedCorporaSync, onFarmedCorpusLoaded, primeFarmedCorporaLazily } from './farmedCorpusData';
 import { falseConfigurationClaim } from './configurationClaims';
@@ -107,7 +107,9 @@ const RAW_DATA = teachingsData as unknown as TeachingsBundle;
 // this corpus, and they still guard notes from other sources.
 const DATA: TeachingsBundle = {
   ...RAW_DATA,
-  notes: applyDerivedAnchors((RAW_DATA.notes ?? []).filter(noteTeachesChess)),
+  // …and the same door refuses a FRAGMENT (D-14) — a note that begins
+  // mid-sentence is not a sentence the coach can say.
+  notes: applyDerivedAnchors((RAW_DATA.notes ?? []).filter((n) => noteTeachesChess(n) && noteIsWholeSentence(n))),
 };
 
 /** Position-keyed notes indexed by their SAN-prefix key ("e4 c6 d4"). */
@@ -297,7 +299,7 @@ function mergeFloatingHalf(notes: DanyaNote[]): void {
   floatingMerged = true;
   // Same filter as the bundled half above — a fetched note is not a trusted
   // note, and this is the tier the source-meta prose actually lived in.
-  for (const n of notes.filter(noteTeachesChess)) {
+  for (const n of notes.filter((n) => noteTeachesChess(n) && noteIsWholeSentence(n))) {
     DATA.notes.push(n);
     indexNote(n);
   }

@@ -31,6 +31,21 @@ export function isMateEval(evaluation: number | null | undefined): boolean {
   return Math.abs(evaluation) >= MATE_EVAL_THRESHOLD;
 }
 
+/**
+ * A WHITE-POV centipawn eval as SPOKEN text. A mate-encoded eval is never a
+ * number — "-300.0" is `MATE_EVAL_VALUE / 100` read aloud, and a student heard
+ * "the evaluation moved from -7.5 to -300.0" (WO-STANDARD-01 D-12, prod tape
+ * 2026-09-22). The stored sentinel carries no depth, so the honest rendering
+ * is "a forced mate for <side>"; a plain number renders in pawns, one decimal,
+ * signed from White's side ("+1.2", "-0.4").
+ */
+export function describeEvalCp(evaluation: number): string {
+  if (isMateEval(evaluation)) return `a forced mate for ${evaluation > 0 ? 'White' : 'Black'}`;
+  const pawns = evaluation / 100;
+  const fixed = pawns.toFixed(1);
+  return fixed.startsWith('-') || fixed === '0.0' ? fixed : `+${fixed}`;
+}
+
 // ─── MOVE-QUALITY BANDS ──────────────────────────────────────────────────────
 //
 // 🔒 STOCKFISH MEASURES THE DIFFERENCE BETWEEN A MISTAKE AND AN INACCURACY

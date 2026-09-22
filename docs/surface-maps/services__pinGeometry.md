@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**128 lines · 2 exports · 3 importers · 1 tests · 0 audits**
+**174 lines · 3 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,13 +12,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/groundedAnswer.ts`
+- `src/services/missedTacticService.ts`
 - `src/services/pinGeometry.test.ts`
 - `src/services/tacticClassifier.ts`
 - `src/services/tacticsDetector.ts`
 
 ## Exports and every call site
 
-### `canLeaveLine` (function) — 7 call sites
+### `canLeaveLine` (function) — 8 call sites
 - `src/services/pinGeometry.test.ts:13`
 - `src/services/pinGeometry.test.ts:18`
 - `src/services/pinGeometry.test.ts:24`
@@ -26,10 +28,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pinGeometry.test.ts:39`
 - `src/services/pinGeometry.test.ts:49`
 - `src/services/pinGeometry.test.ts:56`
+- `src/services/pinGeometry.test.ts:101`
 
-### `isRealPin` (function) — 2 call sites
+### `isRealPin` (function) — 4 call sites
+- `src/services/groundedAnswer.ts:2060`
+- `src/services/missedTacticService.ts:228`
 - `src/services/tacticClassifier.ts:234`
 - `src/services/tacticsDetector.ts:220`
+
+### `pinBites` (function) — 3 call sites
+- `src/services/pinGeometry.test.ts:86`
+- `src/services/pinGeometry.test.ts:93`
+- `src/services/pinGeometry.test.ts:102`
 
 ## Tests
 
@@ -37,4 +47,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

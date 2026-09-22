@@ -27,6 +27,7 @@
  */
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { phaseOfFen } from './boardConcepts';
 import { hisGroundedPlanSync, lookupHisPlaySync, HIS_PLAN_MIN_GAMES } from './hisPlayLookup';
 import { mastersMovesSync, type LocalDbMove } from './masterPlayLookup';
 
@@ -541,6 +542,12 @@ export function buildMiddlegameOrientation(
 ): PlanBeat | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
+  // A MIDDLEGAME orientation needs a middlegame. At move 7 the pawns are still
+  // being traded and no wing has a majority worth a plan — yet prod said "Your
+  // plan is to advance your kingside majority; your opponent's plan is to push
+  // on the queenside" there (WO-STANDARD-01 D-15, tape 2026-09-22). The board
+  // decides the phase (boardConcepts), not the caller's ply floor.
+  if (phaseOfFen(fen) === 'opening') return null;
   const struct = describeStructure(fen);
   if (!struct) return null;
   const all = pieces(chess);

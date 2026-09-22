@@ -1,4 +1,5 @@
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
+import { isRealPin } from './pinGeometry';
 import type { CoachGameMove, MissedTactic, TacticType } from '../types';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { capEval } from './accuracyService';
@@ -218,11 +219,21 @@ function detectPin(chess: Chess, to: Square, movingColor: Color): boolean {
     const first = piecesOnRay[0];
     const second = piecesOnRay[1];
 
-    // Pin: first piece is enemy, second piece is also enemy and more valuable
+    // Pin: first piece is enemy, second piece is also enemy — and the ONE
+    // shared test decides (escape + value + bite, `pinGeometry`). This
+    // detector was the third copy of geometry-and-value only (D-2 sweep).
     if (
       first.color === oppositeColor(movingColor) &&
       second.color === oppositeColor(movingColor) &&
-      pieceValue(second.type) > pieceValue(first.type)
+      isRealPin({
+        chess,
+        dir,
+        attacker: to,
+        pinned: first.square,
+        behind: second.square,
+        frontValue: pieceValue(first.type),
+        behindValue: pieceValue(second.type),
+      })
     ) {
       return true;
     }

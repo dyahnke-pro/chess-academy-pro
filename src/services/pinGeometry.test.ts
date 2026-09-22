@@ -2,7 +2,7 @@
 // the first one is the position prod narrated wrongly on 2026-09-17.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { canLeaveLine } from './pinGeometry';
+import { canLeaveLine, pinBites } from './pinGeometry';
 import { detectTactics } from './tacticsDetector';
 
 describe('canLeaveLine', () => {
@@ -54,6 +54,52 @@ describe('canLeaveLine', () => {
     // on the a1–h8 line, so nothing behind it is ever exposed.
     const c = new Chess('7k/8/8/8/8/8/8/b4K1Q w - - 0 1');
     expect(canLeaveLine(c, 'a1', [-1, -1])).toBe(false);
+  });
+});
+
+describe('a pin that wins nothing is not a pin (WO-STANDARD-01 D-2, prod tape 2026-09-22)', () => {
+  // Italian shape: Bc4 stares at f7 with the knight still on g8. Prod said
+  // "your bishop on c4 pins their pawn on f7 against their knight on g8" —
+  // but if f7 moved, Bxg8 would be a bishop for a defended knight. Nothing
+  // is threatened, so nothing is frozen.
+  const ITALIAN_G8 = 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
+  // A queen on d5 down the long diagonal at g2 with the rook still on h1 and
+  // the king on g1 — "pins your pawn on g2 against your rook on h1". Qxh1 is
+  // a queen for a defended rook.
+  const QUEEN_D5 = 'rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQ1RK1 w kq - 0 1';
+
+  it('a pawn "pinned" to a defended piece worth no more than the attacker is silence', () => {
+    const pins = detectTactics(ITALIAN_G8).tactics.filter((t) => t.type === 'pin');
+    expect(pins.map((p) => p.description).filter((d) => /f7/.test(d))).toEqual([]);
+    const pins2 = detectTactics(QUEEN_D5).tactics.filter((t) => t.type === 'pin');
+    expect(pins2.map((p) => p.description).filter((d) => /g2/.test(d))).toEqual([]);
+  });
+
+  it('the same geometry BITES once the piece behind is undefended', () => {
+    // Strip every defender of g8 (king, rook, and the queen looking down the
+    // emptied back rank) — now Bxg8 collects a knight for free.
+    const c = new Chess(ITALIAN_G8);
+    c.remove('h8');
+    c.remove('e8');
+    c.remove('d8');
+    c.put({ type: 'k', color: 'b' }, 'a8');
+    expect(pinBites(c, 'c4', 'f7', 'g8')).toBe(true);
+    const pins = detectTactics(c.fen()).tactics.filter((t) => t.type === 'pin');
+    expect(pins.some((p) => /bishop on c4 pins pawn on f7 against knight on g8/i.test(p.description))).toBe(true);
+  });
+
+  it('a piece behind worth more than the attacker bites even when defended (Bg4 vs Nf3/Qd1)', () => {
+    const c = new Chess('rnb1kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 1');
+    expect(pinBites(c, 'g4', 'f3', 'd1')).toBe(true);
+  });
+
+  it('the negative control: without the bite clause the f7 "pin" comes back', () => {
+    // The old rule was geometry + value + escape. Assert each of those STILL
+    // passes on the Italian board, so the only thing keeping it quiet is the
+    // bite — flip `pinBites` to return true and this describe fails.
+    const c = new Chess(ITALIAN_G8);
+    expect(canLeaveLine(c, 'f7', [1, 1])).toBe(true);
+    expect(pinBites(c, 'c4', 'f7', 'g8')).toBe(false);
   });
 });
 

@@ -11,7 +11,7 @@ const hangingHole: WeaknessSignal = {
 
 const QUALITY = '[quality] You: that was a blunder, costing about 3.1 points.';
 const PLAN = '[plan-now] The plan from here is to seize the open d-file.';
-const LOOSE = '[loose] Undefended right now: your knight on e2.';
+const LOOSE = '[loose] Newly undefended: your knight on e2.';
 const STRUCT = '[structure] Their a3-pawn is isolated.';
 
 describe('reviewFacetRank — importance order', () => {

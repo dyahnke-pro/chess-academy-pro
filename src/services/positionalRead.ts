@@ -25,7 +25,7 @@
 // It is the LOWEST-priority lane by design. It should never displace a tactic,
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
-import { Chess, type Color } from 'chess.js';
+import { Chess, type Square, type Color } from 'chess.js';
 import {
   kingSafetyRead,
   developmentRead,
@@ -36,6 +36,7 @@ import {
   findMinorityAttack,
   findPassedPawns,
   findOpenFiles,
+  bishopBlockingPawns,
 } from './positionReadingService';
 
 const NAME: Record<string, string> = {
@@ -322,6 +323,18 @@ function joinsFor(
   const homeRank = color === 'w' ? '1' : '8';
   const atHome = new Set(badBefore.filter((b) => b.square[1] === homeRank).map((b) => b.square as string));
 
+  // ONLY A PAWN ON THE BLOCKED RAY CAN FIX IT, AND ONE JOIN PER BISHOP
+  // (WO-STANDARD-01 D-1, prod tape 2026-09-22: "a pawn to a6 would fix it"
+  // spoken FOUR times at one ply — every pawn move that happened to drop the
+  // colour count "fixed" the bishop, and each one was its own observation).
+  // The blocking pawns are the bishop computer's own answer; a move by any
+  // other pawn is not a fix, whatever it does to a count.
+  const blockersOf = new Map<string, Set<string>>();
+  for (const b of badBefore) {
+    if (b.piece !== 'b') continue;
+    blockersOf.set(b.square, new Set(bishopBlockingPawns(probe, b.square as Square, color)));
+  }
+  const fixed = new Set<string>();
   for (const mv of probe.moves({ verbose: true })) {
     if (mv.piece !== 'p') continue;
     let after: Chess;
@@ -336,9 +349,13 @@ function joinsFor(
     );
     for (const b of badBefore) {
       if (atHome.has(b.square)) continue; // see `atHome`
+      if (fixed.has(b.square)) continue; // one join per problem piece (D-1)
+      const blockers = blockersOf.get(b.square);
+      if (blockers && !blockers.has(mv.from)) continue; // not the blocking pawn (D-1)
       // The piece must not merely have MOVED out of the list — it has to still
       // be on its square and no longer be bad.
       if (stillBad.has(b.square)) continue;
+      fixed.add(b.square);
       const piece = after.get(b.square);
       if (!piece || piece.type !== b.piece || piece.color !== color) continue;
       out.push({

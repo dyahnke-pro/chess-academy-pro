@@ -103,3 +103,25 @@ describe('buildOpeningDevelopmentPlan (opening developing plan + arrows)', () =>
     expect(true).toBe(true);
   });
 });
+
+describe('buildMiddlegameOrientation — a middlegame orientation needs a middlegame (WO-STANDARD-01 D-15, 2026-09-22)', () => {
+  it('is silent in the OPENING even when the pawn count is asymmetric', () => {
+    // Ruy Lopez Exchange after 6.Nxd4: White already has a 4v3 kingside
+    // majority and Black doubled c-pawns — the structure prod narrated as
+    // "Your plan is to advance your kingside majority; your opponent's plan
+    // is to push on the queenside" at move 7 — with one minor piece developed
+    // between them. `phaseOfFen` reads this as the opening.
+    const fen = 'r1bqkbnr/1pp2ppp/p1p5/8/3NP3/8/PPP2PPP/RNBQK2R b KQkq - 0 6';
+    expect(buildMiddlegameOrientation(fen, 'w')).toBeNull();
+    expect(buildMiddlegameOrientation(fen, 'b')).toBeNull();
+  });
+  it('NEGATIVE CONTROL: the SAME structure once the phase is past the opening still gets its plan', () => {
+    // Queens traded (7.Qxd8+ Kxd8 in the same line): the board computer
+    // calls a major-piece trade a middlegame, so the majority plan speaks —
+    // proving the gate is the phase, not the structure.
+    const traded = 'r1b1kbnr/1pp2ppp/p1p5/8/3NP3/8/PPP2PPP/RNB1K2R b KQkq - 0 7';
+    expect(buildMiddlegameOrientation(traded, 'w')).not.toBeNull();
+    const ending = '4k3/p4ppp/8/8/8/8/PPP2PP1/4K3 w - - 0 1';
+    expect(buildMiddlegameOrientation(ending, 'w')).not.toBeNull();
+  });
+});

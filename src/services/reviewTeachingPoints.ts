@@ -33,9 +33,9 @@
  */
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { legalSeeGainOn } from './positionReadingService';
+import { legalSeeGainOn, bishopHemmedByOwnPawns } from './positionReadingService';
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
-import { cells, mobilityMap, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
+import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
 
@@ -98,14 +98,44 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): strin
     const net = legalSeeGainOn(flipped, sq); // pin-aware: legal swap for the side to move
     if (net <= 0) continue; // the exchange sequence does not actually win material
     if (captureHasCounterTactic(flipped.fen(), cap.san, enemy, net)) continue; // refuted one move later
+    // A PIECE THAT CAN STEP AWAY DOES NOT "FALL" (WO-STANDARD-01 D-3, prod
+    // tape 2026-09-22: "1 attacker to 0 defenders — so it falls" on a queen
+    // that simply moved). When it is the OPPONENT's move on the real board,
+    // the count is a tempo they get to answer: only a piece with no safe
+    // square falls; one with an escape is attacked and has to move.
+    const theirMove = (fen.split(' ')[1] ?? '') !== studentColorWB;
+    const escapes = theirMove && pieceHasSafeEscape(chess, sq, studentColorWB);
+    const count = `count the attackers and defenders on their ${PIECE_NOUN[c.type]} on ${sq}: ${plural(atk, 'attacker')} to ${plural(def, 'defender')}`;
     const cand = { value: PIECE_VAL[c.type] ?? 0,
-      text: `count the attackers and defenders on their ${PIECE_NOUN[c.type]} on ${sq}: ${plural(atk, 'attacker')} to ${plural(def, 'defender')} — more attackers than defenders, so it falls` };
+      text: escapes
+        ? `${count} — it's outnumbered, so it has to move, and that costs them the tempo`
+        : `${count} — more attackers than defenders, so it falls` };
     if (!best || cand.value > best.value) best = cand;
   }
   return best ? best.text : null;
 }
 
 function plural(n: number, noun: string): string { return `${n} ${noun}${n === 1 ? '' : 's'}`; }
+
+/**
+ * Can the piece on `sq` (its owner to move on `chess`) step to a square where
+ * the student cannot win it back? Pin-aware SEE on the landing square with the
+ * student to move there. Board-true; false when the piece has no legal move.
+ */
+export function pieceHasSafeEscape(chess: Chess, sq: Square, studentColorWB: Color): boolean {
+  let moves: ReturnType<Chess['moves']>;
+  try { moves = chess.moves({ square: sq, verbose: true }); } catch { return false; }
+  for (const m of moves) {
+    try {
+      const after = new Chess(chess.fen());
+      after.move(m);
+      // The student is to move on `after` already (the opponent just moved).
+      if (after.turn() !== studentColorWB) continue;
+      if (legalSeeGainOn(after, m.to as Square) <= 0) return true;
+    } catch { /* an illegal probe is not an escape */ }
+  }
+  return false;
+}
 
 /**
  * M6 — the King and Queen are the WORST defenders: a piece leaning ONLY on the
@@ -160,7 +190,6 @@ export function badEnemyBishop(fen: string, studentColorWB: Color): string | nul
   if (fullmove < 12) return null;
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
   const all = cells(chess);
-  const enemyMob = mobilityMap(chess, enemy); // ONE moves() enumeration
   for (const c of all) {
     if (c.type !== 'b' || c.color !== enemy) continue;
     // A bishop still on its home square is undeveloped, not bad.
@@ -168,7 +197,8 @@ export function badEnemyBishop(fen: string, studentColorWB: Color): string | nul
     const light = isLight(c.square);
     const ownPawnsSameColour = all.filter((p) => p.type === 'p' && p.color === enemy && isLight(p.square) === light).length;
     if (ownPawnsSameColour < 4) continue;
-    if ((enemyMob.get(c.square) ?? 0) > 2) continue;
+    // The forward rays, not the mobility count (D-1 — one bad-bishop computer).
+    if (!bishopHemmedByOwnPawns(chess, c.square as Square, enemy)) continue;
     return `their bishop on ${c.square} is a bad piece — hemmed in behind its own pawns on the same colour, with almost nowhere to go`;
   }
   return null;

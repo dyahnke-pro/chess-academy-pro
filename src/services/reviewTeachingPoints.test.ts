@@ -1,10 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
+import { mateInOneExists } from './nextPlans';
 import {
   attackerDefenderCount, royalDefenderTarget, rookOnSeventh,
   badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlan, deriveNextPlans,
   buildReviewDeepestLookahead,
   buildMissedShotSignal,
+  pieceHasSafeEscape,
 } from './reviewTeachingPoints';
 
 function fenAfter(sans: string[]): string {
@@ -386,5 +388,68 @@ describe('buildMissedShotSignal — here was the signal', () => {
       expect(missed).toContain(sq);
       expect(found).toContain(sq);
     }
+  });
+});
+
+describe('a piece that can step away does not "fall" — D-3 (WO-STANDARD-01, prod tape 2026-09-22)', () => {
+  it('Scandinavian 3.Nc3: the queen on d5 is attacked, not falling', () => {
+    // 1.e4 d5 2.exd5 Qxd5 3.Nc3 — Black to move; the queen has a dozen safe squares.
+    const t = attackerDefenderCount(fenAfter(['e4', 'd5', 'exd5', 'Qxd5', 'Nc3']), 'w');
+    expect(t).not.toBeNull();
+    expect(t).toMatch(/queen on d5/);
+    expect(t).toMatch(/has to move/);
+    expect(t).not.toMatch(/so it falls/);
+  });
+  it('negative control: with the student to move the capture is real and it falls (Bxf3 case)', () => {
+    const t = attackerDefenderCount(fenAfter(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3']), 'w');
+    expect(t).toMatch(/so it falls/);
+  });
+  it('pieceHasSafeEscape reads the board, not the count', () => {
+    const c = new Chess(fenAfter(['e4', 'd5', 'exd5', 'Qxd5', 'Nc3']));
+    expect(pieceHasSafeEscape(c, 'd5', 'w')).toBe(true);
+    // A queen walled in by its own pieces has no move at all — no escape.
+    const boxed = new Chess('qn2k3/pp6/8/8/8/8/8/4K3 b - - 0 1');
+    expect(pieceHasSafeEscape(boxed, 'a8', 'w')).toBe(false);
+    // And one whose only squares are all covered: queen a1, white king c2 and
+    // rook b3 cover a2/b2/b1; the pawn wall a2... build it: Qa1, own pawns
+    // a2? no — every reachable square attacked by a white piece.
+    const covered = new Chess('4k3/8/8/8/8/1R6/2K5/q7 b - - 0 1');
+    // Qa1 can go to b1 (attacked by Kc2, Rb3), b2 (Kc2, Rb3), a2 (Rb3? no —
+    // a2 is attacked by nothing... so it escapes). Assert the READ, not a
+    // guess: chess.js says which squares are safe.
+    const escapesTo = covered.moves({ square: 'a1', verbose: true })
+      .filter((m) => { const a = new Chess(covered.fen()); a.move(m); return a.attackers(m.to, 'w').length === 0; });
+    expect(pieceHasSafeEscape(covered, 'a1', 'w')).toBe(escapesTo.length > 0);
+  });
+});
+
+describe('deriveNextPlans — a mate on the board outranks every plan (WO-STANDARD-01 D-15, 2026-09-22)', () => {
+  // 1.e4 e5 2.Bc4 Nc6 3.Qh5 Nf6?? — Qxf7# is on the board. Prod said "win
+  // their weak pawn on h7 — plant your knight on h6" here.
+  const MATE = ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'Nf6'];
+  const SAFE = ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'g6'];
+  it('sees the mate in one for the side to move, and for the other side via the null-move flip', () => {
+    expect(mateInOneExists(new Chess(fenAfter(MATE)))).toBe(true);
+    // Black to move with White's Qxf7# hanging over the board: still true.
+    const c = new Chess(fenAfter(MATE)); c.move('Qxf7#');
+    expect(c.isCheckmate()).toBe(true);
+    expect(mateInOneExists(new Chess(fenAfter(SAFE)))).toBe(false);
+  });
+  it('returns NO plan when a mate in one exists — the mate is the whole story', () => {
+    expect(deriveNextPlans(fenAfter(MATE), 'w')).toEqual([]);
+    expect(deriveNextPlans(fenAfter(MATE), 'b')).toEqual([]);
+  });
+  // The Opera-game plans above are the negative control: with no mate on the
+  // board the same computer still returns multiple plans.
+});
+
+describe('badEnemyBishop reads the forward rays, not a mobility count (WO-STANDARD-01 D-1, 2026-09-22)', () => {
+  it('an active bishop with three forward squares is not bad', () => {
+    // Black Bb6 on the open a7–g1 diagonal, four black pawns on its colour.
+    expect(badEnemyBishop('r3k3/p1p5/1b1p2p1/8/3P4/8/8/4K3 w - - 0 12', 'w')).toBeNull();
+  });
+  it('a bishop whose own pawns stop both forward rays is bad', () => {
+    // Black Bd7 behind c6 and e6, with a6/g6 making four pawns on its colour.
+    expect(badEnemyBishop('r3k3/3b4/p1p1p1p1/8/8/8/8/4K3 w - - 0 12', 'w')).toMatch(/bishop on d7 is a bad piece/);
   });
 });

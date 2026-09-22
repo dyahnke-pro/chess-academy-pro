@@ -113,3 +113,27 @@ describe('attributePrinciples — the other fundamentals, on synthetic boards', 
     expect(ATTRIBUTION_MAX).toBe(3);
   });
 });
+
+describe('the king walk is the lesson, not the bishop it happened to block (WO-STANDARD-01 D-5, 2026-09-22)', () => {
+  it('Ke2 with castling rights in hand attributes king-left-in-centre FIRST, with the walk named', () => {
+    // Prod: 4.Ke2?? was recorded as "buried your own bishop" (the king stands in
+    // front of Bf1) and the method beat talked about pawn moves.
+    const out = attributePrinciples({
+      historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'Ke2'], bestSan: 'c3', classification: 'mistake',
+    });
+    expect(out[0]?.id).toBe('king-left-in-centre');
+    expect(out[0]?.facts.walked).toBe('e2');
+    expect(out[0]?.facts.better).toBe('c3');
+    const buried = out.find((a) => a.id === 'buried-own-bishop');
+    if (buried) {
+      expect(buried.weight).toBeLessThan(out[0].weight);
+      expect(buried.facts.blockerPiece).toBe('king');
+    }
+  });
+  it('NEGATIVE CONTROL: a king move with the rights ALREADY gone is not charged with losing castling', () => {
+    const out = attributePrinciples({
+      historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'Kf1', 'd6', 'Ke2'], bestSan: 'd3', classification: 'mistake',
+    });
+    expect(out.find((a) => a.id === 'king-left-in-centre' && a.facts.walked)).toBeUndefined();
+  });
+});

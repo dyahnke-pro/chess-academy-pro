@@ -22,12 +22,27 @@ import { describeStructure } from './boardStructure';
 
 /** The mover's-perspective clauses explaining what the sacrifice BUYS. Ordered
  *  most-telling first; empty when no board-true compensation can be named. */
+/**
+ * A SACRIFICE THAT LOSES IS A BLUNDER, AND A BLUNDER HAS NO COMPENSATION TO
+ * NAME (WO-STANDARD-01 D-4, prod tape 2026-09-22). The Vienna sample review
+ * spoke "It was a sacrifice — compensation: the position holds up completely"
+ * on Nxe4??, a 4.7-point blunder. Two things let it through: the review caller
+ * handed this function the STUDENT's eval where it expects the MOVER's (so the
+ * opponent's losing sac read as +4.7), and nothing here asked whether the
+ * material given was ever coming back. Now: when the mover's eval after the
+ * sac is worse than two pawns down, there is no compensation — the verdict
+ * facet already says what it cost, and this returns nothing rather than a
+ * board-true clause ("you're ahead in development") dressed up as a reason.
+ */
+export const NO_COMPENSATION_BELOW_CP = -150;
+
 export function sacrificeCompensation(
   fenAfter: string,
   moverColorWB: 'w' | 'b',
   moverPovEvalCp: number | null,
 ): string[] {
   const clauses: string[] = [];
+  if (moverPovEvalCp !== null && moverPovEvalCp < NO_COMPENSATION_BELOW_CP) return clauses;
   let board: Chess;
   try { board = new Chess(fenAfter); } catch { return clauses; }
   const enemy: 'w' | 'b' = moverColorWB === 'w' ? 'b' : 'w';

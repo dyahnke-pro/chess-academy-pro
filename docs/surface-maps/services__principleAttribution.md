@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1278 lines · 11 exports · 34 importers · 20 tests · 1 audits**
+**1296 lines · 11 exports · 35 importers · 21 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,7 @@
 - `src/services/coachFeatureService.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
+- `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalVocabulary.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`
@@ -77,8 +78,8 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:113`
 
-### `attributePrinciples` (function) — 50 call sites
-- `src/services/coachFeatureService.ts:1451`
+### `attributePrinciples` (function) — 52 call sites
+- `src/services/coachFeatureService.ts:833`
 - `src/services/learnFundamentalNarration.ts:143`
 - `src/services/misconceptionClassifier.ts:261`
 - `src/services/principleAttribution.section14.test.ts:22`
@@ -106,6 +107,8 @@
 - `src/services/principleAttribution.test.ts:91`
 - `src/services/principleAttribution.test.ts:96`
 - `src/services/principleAttribution.test.ts:103`
+- `src/services/principleAttribution.test.ts:121`
+- `src/services/principleAttribution.test.ts:134`
 - `src/services/principleAttributionEndgame.test.ts:37`
 - `src/services/principleAttributionEndgame.test.ts:51`
 - `src/services/principleAttributionEvalPv.test.ts:62`
@@ -134,8 +137,8 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:89`
 - `src/services/autoAnalyzeGame.ts:285`
 - `src/services/autoAnalyzeGame.ts:288`
-- `src/services/coachFeatureService.ts:1455`
-- `src/services/coachFeatureService.ts:1457`
+- `src/services/coachFeatureService.ts:837`
+- `src/services/coachFeatureService.ts:839`
 - `src/services/learnFundamentalNarration.ts:133`
 - `src/services/learnFundamentalNarration.ts:140`
 - `src/services/principleAttribution.test.ts:46`
@@ -146,6 +149,7 @@
 - `src/data/fundamentalLessons.test.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
+- `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalVocabulary.test.ts`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts`
 - `src/services/fundamentalsCatalog.test.ts`

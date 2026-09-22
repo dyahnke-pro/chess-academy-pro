@@ -42,6 +42,28 @@ const SAN_TOKEN = /\b(?:O-O(?:-O)?|[NBRQK][a-h1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8]
 
 const HYPOTHETICAL_OPENER = /^(?:After|Once|In the line (?:after|with)|If)\s+([^,.]{2,60})/i;
 
+/** A move SPELLED the way the corpus speaks it — "the knight to f6", "knight
+ *  takes on d5", "the bishop to c4". Reduced to piece letter + destination so
+ *  it can be judged against the board like a SAN token (WO-STANDARD-01 D-14:
+ *  "If they go the knight to f6, of course" passed as naming no move at all). */
+const SPELLED_MOVE = /\b(?:the\s+)?(king|queen|rook|bishop|knight|pawn)\s+(?:to|takes(?:\s+on)?|on|captures(?:\s+on)?)\s+([a-h][1-8])\b/gi;
+const PIECE_LETTER: Record<string, string> = { king: 'K', queen: 'Q', rook: 'R', bishop: 'B', knight: 'N', pawn: '' };
+
+/** Every (piece letter + destination) legal for EITHER side here — the
+ *  spelled-move twin of `movesReachableFrom`. */
+function pieceDestsReachableFrom(fen: string): Set<string> {
+  const out = new Set<string>();
+  for (const flip of [false, true]) {
+    try {
+      const parts = fen.split(' ');
+      if (flip) { parts[1] = parts[1] === 'w' ? 'b' : 'w'; parts[3] = '-'; }
+      const c = new Chess(parts.join(' '));
+      for (const m of c.moves({ verbose: true })) out.add(`${m.piece === 'p' ? '' : m.piece.toUpperCase()}${m.to}`);
+    } catch { /* an illegal flipped board contributes nothing */ }
+  }
+  return out;
+}
+
 /** Every move legal for EITHER side here. Both, because a note at a
  *  Black-to-move position saying "if White plays d4" is talking about the reply
  *  — legitimate teaching, and judging it against Black's move list alone would
@@ -77,7 +99,15 @@ export function noteDescribesPosition(note: DanyaNote, fen: string | undefined):
     if (!opener) return true;
 
     const named = (opener[1].match(SAN_TOKEN) ?? []).map((san) => san.replace(/[+#]/g, ''));
-    if (named.length === 0) return true;
+    const spelled: string[] = [];
+    for (const m of opener[1].matchAll(SPELLED_MOVE)) spelled.push(`${PIECE_LETTER[m[1].toLowerCase()]}${m[2].toLowerCase()}`);
+    if (named.length === 0 && spelled.length === 0) return true;
+    if (named.length === 0) {
+      // Only spelled moves: judge them by piece + destination.
+      const dests = pieceDestsReachableFrom(fen);
+      if (dests.size === 0) return true;
+      return spelled.some((pd) => dests.has(pd));
+    }
 
     // A move the note's own line already played is a RECAP of how the student
     // got here, not a jump elsewhere — "After …Bc5" in a note anchored two plies
@@ -185,6 +215,37 @@ const SOURCE_META = /\b(?:the|this)\s+(?:transcript|video|clip|course|lesson|rep
 export function noteTeachesChessNotItsSource(note: DanyaNote): boolean {
   try {
     return !SOURCE_META.test(`${note.explains} ${note.teaches} ${note.plans}`);
+  } catch {
+    return true;
+  }
+}
+
+// ── A note must be a WHOLE sentence, not a slice of the video ───────────────
+//
+// WO-STANDARD-01 D-14 (prod tape 2026-09-22): "with the knight to c3 and f4.
+// If they go the knight to f6, of course" and "but the second component of
+// this setup…" — distillation carved a sentence out of the middle of the
+// transcript and the coach read the fragment onto the board. A fragment is
+// recognisable from its first token: a note that begins on a dash, an
+// ellipsis, or a lowercase WORD began mid-sentence. A lowercase PAWN MOVE is
+// not a word — measured over the corpus (2026-09-22) 795 notes start lowercase
+// and most of them are "c3 shores up the centre…", "h5 is the accurate reply…":
+// SAN-led sentences that are whole. Capitalised conjunctions ("But the point
+// is…", "So the idea…") are ordinary distilled prose and are NOT judged — the
+// asymmetry is deliberate, the same one `noteTeachesChess` keeps: a false
+// positive deletes teaching nobody can get back.
+const FRAGMENT_START = /^\s*(?:[-–—…]|\.{3}|[a-z])/;
+/** "e5", "exd5", "a8=Q", "h5-h4" — a sentence may open on a pawn move. */
+const PAWN_SAN_START = /^\s*[a-h](?:x[a-h])?[1-8](?:=[NBRQ])?(?:[+#])?(?:-[a-h][1-8])?\b/;
+
+/** True when the note's `explains` opens like a sentence of its own. Applied
+ *  at LOAD, beside `noteTeachesChess`, so every tier inherits it. */
+export function noteIsWholeSentence(note: { explains?: string | null }): boolean {
+  try {
+    const text = (note.explains ?? '').replace(/^["'“‘(\[]+/, '');
+    if (!text.trim()) return true;
+    if (PAWN_SAN_START.test(text)) return true;
+    return !FRAGMENT_START.test(text);
   } catch {
     return true;
   }

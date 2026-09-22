@@ -85,18 +85,55 @@ export function assessPositionalEdge(
   // ── Verdict word from the eval (the future, encoded) ──
   const verdict: PositionalAssessment['verdict'] = verdictBand(studentPovEvalCp);
 
+  // 🔒 THE REASONS EXPLAIN THE VERDICT, SO THEY COME FROM THE SIDE THE VERDICT
+  // FAVOURS (WO-STANDARD-01 D-16, prod tape 2026-09-22). A student heard
+  // "You're in trouble: you're two pieces further developed" — a negative
+  // verdict followed by the student's own ASSETS, because the reason list was
+  // always computed from the student's seat. An asset list cannot explain
+  // "worse". When the eval says the OPPONENT stands better, the itemised
+  // reasons are THEIR assets, phrased from the student's seat ("they have the
+  // bishop pair"). Balanced / unknown keeps the student's own reading.
+  const worse = verdict === 'a bit worse' || verdict === 'in trouble';
+  const reasons = worse
+    ? assetsFor(chess, struct, all, enemy, me, 'theirs')
+    : assetsFor(chess, struct, all, me, enemy, 'yours');
+
+  return { verdict, reasons };
+}
+
+/**
+ * The itemised, board-true asset list of `side`, phrased from the STUDENT's
+ * seat: `who === 'yours'` when `side` is the student, `'theirs'` when it is the
+ * opponent. One computer, two renderings — the mirror is a parameter, never a
+ * second copy of the detectors.
+ */
+function assetsFor(
+  chess: Chess,
+  struct: NonNullable<ReturnType<typeof describeStructure>>,
+  all: Located[],
+  side: Color,
+  other: Color,
+  who: 'yours' | 'theirs',
+): string[] {
   const reasons: string[] = [];
+  const own = who === 'yours';
+  const you = own ? 'you' : 'they';
+  const your = own ? 'your' : 'their';
+  const their = own ? 'their' : 'your';
+  const youre = own ? "you're" : "they're";
 
   // 1. Bishop pair — two bishops vs one-or-none, on a reasonably open board.
-  const myB = all.filter((p) => p.type === 'b' && p.color === me).length;
-  const enemyB = all.filter((p) => p.type === 'b' && p.color === enemy).length;
-  if (myB >= 2 && enemyB <= 1) reasons.push('you have the bishop pair');
+  const myB = all.filter((p) => p.type === 'b' && p.color === side).length;
+  const enemyB = all.filter((p) => p.type === 'b' && p.color === other).length;
+  if (myB >= 2 && enemyB <= 1) reasons.push(`${you} have the bishop pair`);
 
   // 2. An outpost — a knight/bishop on a square no enemy pawn can chase.
-  const myOutpost = struct.outposts.find((o) => o.color === me);
+  const myOutpost = struct.outposts.find((o) => o.color === side);
   if (myOutpost) {
     const name = myOutpost.piece === 'n' ? 'knight' : 'bishop';
-    reasons.push(`your ${name} sits on a protected outpost on ${myOutpost.square} where no enemy pawn attacks the square`);
+    reasons.push(own
+      ? `your ${name} sits on a protected outpost on ${myOutpost.square} where no enemy pawn attacks the square`
+      : `their ${name} sits on a protected outpost on ${myOutpost.square} where no pawn of yours attacks the square`);
   }
 
   // 3. Control of an open file — a rook or queen on a fully open file the
@@ -104,11 +141,11 @@ export function assessPositionalEdge(
   // e-file" with an enemy rook staring back down it is a false claim — a
   // contested file is a fight, not an asset (board-awareness sweep,
   // 2026-07-22), so it is skipped rather than overclaimed.
-  const myHeavyOnOpen = all.find((p) => (p.type === 'r' || p.type === 'q') && p.color === me
+  const myHeavyOnOpen = all.find((p) => (p.type === 'r' || p.type === 'q') && p.color === side
     && struct.pawns.openFiles.includes(p.square[0])
-    && !all.some((q) => (q.type === 'r' || q.type === 'q') && q.color === enemy && q.square[0] === p.square[0]));
+    && !all.some((q) => (q.type === 'r' || q.type === 'q') && q.color === other && q.square[0] === p.square[0]));
   if (myHeavyOnOpen) {
-    reasons.push(`you own the open ${myHeavyOnOpen.square[0]}-file`);
+    reasons.push(`${you} own the open ${myHeavyOnOpen.square[0]}-file`);
   }
 
   // 4. An enemy weak pawn to target. DURABILITY HONESTY (board-awareness
@@ -117,24 +154,24 @@ export function assessPositionalEdge(
   // "a lasting weakness" one ply before the recapture undoubled them. A
   // doubled pawn that is currently CAPTURABLE is a tactical object, not a
   // structural read — skip it; and speak present tense, never "lasting".
-  const enemyIso = struct.pawns.isolatedPawns[enemy][0];
-  const enemyDoubledFile = struct.pawns.doubledFiles[enemy][0];
-  if (enemyIso) reasons.push(`their pawn on ${enemyIso} is isolated — a target you can pile on`);
+  const enemyIso = struct.pawns.isolatedPawns[other][0];
+  const enemyDoubledFile = struct.pawns.doubledFiles[other][0];
+  if (enemyIso) reasons.push(`${their} pawn on ${enemyIso} is isolated — a target ${you} can pile on`);
   else if (enemyDoubledFile) {
-    const doubledStable = !all.some((p) => p.type === 'p' && p.color === enemy
+    const doubledStable = !all.some((p) => p.type === 'p' && p.color === other
       && p.square[0] === enemyDoubledFile
-      && chess.attackers(p.square as Parameters<typeof chess.attackers>[0], me).length
-        > chess.attackers(p.square as Parameters<typeof chess.attackers>[0], enemy).length);
-    if (doubledStable) reasons.push(`their doubled pawns on the ${enemyDoubledFile}-file are a structural weakness to work against`);
+      && chess.attackers(p.square as Parameters<typeof chess.attackers>[0], side).length
+        > chess.attackers(p.square as Parameters<typeof chess.attackers>[0], other).length);
+    if (doubledStable) reasons.push(`${their} doubled pawns on the ${enemyDoubledFile}-file are a structural weakness ${own ? 'to work against' : 'they can work against'}`);
   }
 
   // 5. A passed pawn of your own.
-  const myPassed = struct.pawns.passedPawns[me][0];
-  if (myPassed) reasons.push(`your passed pawn on ${myPassed} is a long-term trump`);
+  const myPassed = struct.pawns.passedPawns[side][0];
+  if (myPassed) reasons.push(`${your} passed pawn on ${myPassed} is a long-term trump`);
 
   // 6. A development lead (only meaningful in the opening/early middlegame).
-  const lead = developedCount(all, me) - developedCount(all, enemy);
-  if (lead >= 2) reasons.push(`you're ${lead === 2 ? 'two pieces' : `${lead} pieces`} further developed`);
+  const lead = developedCount(all, side) - developedCount(all, other);
+  if (lead >= 2) reasons.push(`${youre} ${lead === 2 ? 'two pieces' : `${lead} pieces`} further developed`);
 
-  return { verdict, reasons };
+  return reasons;
 }

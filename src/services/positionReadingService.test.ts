@@ -6,6 +6,8 @@ import {
   findHangingBySee,
   findPawnBreaks,
   findPieceQuality,
+  bishopBlockingPawns,
+  bishopHemmedByOwnPawns,
   samplePositionsFromGame,
   findMistakePositions,
   buildReadingQuestions,
@@ -852,5 +854,28 @@ describe('namedPawnStructure (his "catalogue the structures", 2026-08-23)', () =
   });
   it('returns null on a normal symmetric structure', () => {
     expect(namedPawnStructure('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')).toBeNull();
+  });
+});
+
+describe('the bad bishop is a bishop whose own pawns stop its FORWARD rays (WO-STANDARD-01 D-1, 2026-09-22)', () => {
+  const after = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
+  it('the Italian …Bb6 with the a7–g1 diagonal open is NOT bad, whatever its mobility count says', () => {
+    // Prod: "hemmed in behind its own pawns … a pawn to a6 would fix it" — the
+    // bishop had three squares and every one of them was forward.
+    const fen = after(['e4', 'e5', 'Nf3', 'Bc5', 'Nxe5', 'd6', 'Nf3', 'Nf6', 'd4', 'Bb6']);
+    expect(findPieceQuality(fen).find((n) => n.square === 'b6' && n.quality === 'bad')).toBeUndefined();
+    expect(bishopBlockingPawns(new Chess(fen), 'b6', 'b')).toEqual([]);
+  });
+  it('names the blocking pawns, one per forward ray, on a genuinely buried bishop', () => {
+    // Bd2 behind c3 and e3 (the existing fixture): both forward rays stopped.
+    const c = new Chess('4k3/8/8/8/8/2P1P3/1P1B1P2/4K3 w - - 0 1');
+    expect(bishopBlockingPawns(c, 'd2', 'w').sort()).toEqual(['c3', 'e3']);
+    expect(bishopHemmedByOwnPawns(c, 'd2', 'w')).toBe(true);
+  });
+  it('NEGATIVE CONTROL: one open forward ray and the bishop is free — the count of pawns on its colour is not the test', () => {
+    // Same as the fixture but e3 has gone to e4: the d2–h6 ray is open.
+    const c = new Chess('4k3/8/8/8/4P3/2P5/1P1B1P2/4K3 w - - 0 1');
+    expect(bishopBlockingPawns(c, 'd2', 'w')).toEqual([]);
+    expect(findPieceQuality(c.fen()).find((n) => n.square === 'd2' && n.quality === 'bad')).toBeUndefined();
   });
 });

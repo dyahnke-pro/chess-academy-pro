@@ -2950,9 +2950,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 fen: result.fen,
                 trigger: null,
               });
-              // Mirror the spoken alert into the VISIBLE chat transcript
-              // (David 2026-07-06) — the stores above are brain memory only.
-              gameChatRef.current?.injectAssistantMessage(warning);
+              // The visible transcript already has it — ONE injection, at the
+              // top of this block, voice on or off. A second one here put every
+              // "Watch out — if I play Qxg2…" in the chat TWICE (WO-STANDARD-01
+              // D-17, prod tape 2026-09-22). One utterance per event.
               // WO-VOICE-LAYER-01 (b): use the personality's secondary
               // voice so the alert cuts through with a different timbre
               // than the main narration.

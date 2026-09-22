@@ -20,6 +20,7 @@ import { Chess } from 'chess.js';
 import { computePvLine, computePlyFacts, type PvEngine, type PvLine, type PvPly } from './pvPlayback';
 import { detectTactics } from './tacticsDetector';
 import { getMaterialAdvantage } from './boardUtils';
+import { sayMoveClause, sayMoveNoun } from './spokenMove';
 import type { TacticPattern } from '../types/tacticTypes';
 
 export type VerdictKind = 'mate' | 'winning' | 'edge' | 'equal';
@@ -400,60 +401,6 @@ const APPEAL_AFFIRM: Record<string, string> = {
 };
 
 /**
- * SAN spelled for the voice, as a PREDICATE CLAUSE: "Nd5" → "the knight to d5",
- * "Nxe3" → "the knight takes e3", "O-O" → "castle short".
- *
- * 🚨 THIS IS A CLAUSE, NOT A NOUN PHRASE, AND THE DIFFERENCE IS A REAL BUG.
- * A capture renders with a FINITE VERB ("the queen takes d5"), which reads
- * correctly after "but …" and nowhere else. Dropped into a subject slot it
- * produced, on a real 5-ply prod run and three times in it:
- *
- *     "It's genuinely close — the queen takes d5 is about as good."
- *
- * A quiet move hid the fault, because "the knight to d5 is about as good" is
- * fine — so the defect only appears when the runner-up happens to be a capture,
- * which is exactly when the sentence matters most. Use `sayMoveNoun` in any
- * SUBJECT or OBJECT-OF-PREPOSITION slot; this one only where a clause belongs.
- */
-function sayMoveClause(san: string): string {
-  const clean = san.replace(/[+#]/g, '');
-  if (clean === 'O-O') return 'castle short';
-  if (clean === 'O-O-O') return 'castle long';
-  const P: Record<string, string> = { N: 'the knight', B: 'the bishop', R: 'the rook', Q: 'the queen', K: 'the king' };
-  const m = clean.match(/^([NBRQK])?([a-h]?[1-8]?)?(x)?([a-h][1-8])(=([NBRQ]))?$/);
-  if (!m) return clean;
-  const piece = m[1] ? P[m[1]] : 'the pawn';
-  const takes = m[3] ? ' takes ' : ' to ';
-  const dest = m[4];
-  const promo = m[6] ? `, promoting to ${({ N: 'a knight', B: 'a bishop', R: 'a rook', Q: 'a queen' } as Record<string, string>)[m[6]]}` : '';
-  return `${piece}${takes}${dest}${promo}`;
-}
-
-/**
- * The same move as a NOUN PHRASE, for a subject or an object of a preposition:
- * "Nxd5" → "the queen taking on d5", "Nd5" → "the knight to d5", "O-O" →
- * "castling short". A gerund, so it can be the thing a sentence talks ABOUT
- * rather than something a sentence says HAPPENS.
- *
- * Deliberately a second function rather than a flag: the grammatical role is
- * the caller's to know, and a boolean at the call site reads as a rendering
- * preference instead of a correctness requirement.
- */
-function sayMoveNoun(san: string): string {
-  const clean = san.replace(/[+#]/g, '');
-  if (clean === 'O-O') return 'castling short';
-  if (clean === 'O-O-O') return 'castling long';
-  const P: Record<string, string> = { N: 'the knight', B: 'the bishop', R: 'the rook', Q: 'the queen', K: 'the king' };
-  const m = clean.match(/^([NBRQK])?([a-h]?[1-8]?)?(x)?([a-h][1-8])(=([NBRQ]))?$/);
-  if (!m) return clean;
-  const piece = m[1] ? P[m[1]] : 'the pawn';
-  const dest = m[4];
-  const promo = m[6] ? `, promoting to ${({ N: 'a knight', B: 'a bishop', R: 'a rook', Q: 'a queen' } as Record<string, string>)[m[6]]}` : '';
-  // "taking on d5" rather than "taking d5": the pawn/piece is taken ON a square.
-  return m[3] ? `${piece} taking on ${dest}${promo}` : `${piece} to ${dest}${promo}`;
-}
-
-/**
  * THE COMPUTED VOICE — turn a TacticalRead fact package into a coach line in the
  * Danya register, composed ENTIRELY from the computed facts (G0: nothing here
  * decides chess, it only phrases what the engine + chess.js already found).
@@ -522,12 +469,23 @@ export function temptingTurnClause(read: TacticalRead, opts: { spoken?: boolean 
  * within a whisker of best, say so rather than feign certainty. Null when the
  * best move is clear. `gapCp` is the student-POV centipawn gap to the runner-up.
  */
-export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean } = {}): string | null {
+export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean; rotation?: number } = {}): string | null {
   if (!read.closeAlternative) return null;
   // Every move slot in this clause is a NOUN slot, so the clause renderer is
   // genuinely unused here — which is the whole finding.
   const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
-  return `It’s genuinely close — ${sayN(read.closeAlternative.san)} is about as good, so don’t agonise.`;
+  // STEMS ROTATE ON A STABLE KEY (WO-STANDARD-01 D-8: "It's genuinely close —
+  // X is about as good, so don't agonise" fired four times in seven moves).
+  // The caller passes the ply; the same ply always gets the same stem
+  // (resume-safe, testable — never Math.random).
+  const alt = sayN(read.closeAlternative.san);
+  const stems = [
+    `It’s genuinely close — ${alt} is about as good, so don’t agonise.`,
+    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative here; the two are within a whisker.`,
+    `Nothing to lose sleep over — ${alt} does the same job.`,
+    `Either works: ${alt} is right there with it.`,
+  ];
+  return stems[Math.abs(opts.rotation ?? 0) % stems.length];
 }
 
 /**

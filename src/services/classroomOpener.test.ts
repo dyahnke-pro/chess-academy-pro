@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
 import { buildUserProfile, buildGameRecord } from '../test/factories';
-import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance } from './classroomOpener';
+import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies } from './classroomOpener';
 
 // Integration: seed real games / feature stores into fake-indexeddb and verify
 // the two computed opener signals. The student is "hero" (white in every seeded
@@ -107,5 +107,17 @@ describe('classroomOpener — computed opener signals (David 2026-09-13)', () =>
       ]);
       expect(await untriedFeatureNudge('tactics')).toBeNull();
     });
+  });
+});
+
+describe('coldStartApplies — a game in progress is not a cold start (WO-STANDARD-01 D-11, 2026-09-22)', () => {
+  it('a fresh, untouched board is a cold start', () => {
+    expect(coldStartApplies({ historyLength: 0, userInteracted: false })).toBe(true);
+  });
+  it('one move on the board and the upload prompt is withheld (the prod tape: spoken after the FIRST move)', () => {
+    expect(coldStartApplies({ historyLength: 1, userInteracted: false })).toBe(false);
+  });
+  it('NEGATIVE CONTROL: a student who has interacted is never cold-started, board or no board', () => {
+    expect(coldStartApplies({ historyLength: 0, userInteracted: true })).toBe(false);
   });
 });

@@ -17,6 +17,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { MoveListPanel } from './MoveListPanel';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
+import { relativeResult, RESULT_LABEL } from '../../services/studentResult';
 import { GameReviewWeaknessCapture } from './GameReviewWeaknessCapture';
 import { KeyMomentNav } from './KeyMomentNav';
 import { ChatInput } from './ChatInput';
@@ -707,11 +708,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // every planned stop (find-the-shot / trap / turning point) still fires on
   // an auto tick. handleWalkForward is declared below the hook — a ref bridges
   // the order.
-  const handleWalkForwardRef = useRef<() => ForwardOutcome>(() => ({ advanced: true }));
+  const handleWalkForwardRef = useRef<(source?: 'manual' | 'auto') => ForwardOutcome>(() => ({ advanced: true }));
   const walkPlayback = useReviewPlayback({
     narration: walkNarration,
     totalPlies: moves.length,
-    onAutoAdvance: () => handleWalkForwardRef.current(),
+    onAutoAdvance: () => handleWalkForwardRef.current('auto'),
     // ship-5: scope hint callouts to this specific game.
     gameId: props.gameId,
     // Deep-link: /coach/review/:id?move=N → the page hands us a
@@ -1038,7 +1039,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTrapReveal(null);
   }, [props.gameId]);
 
-  const handleWalkForward = useCallback((): ForwardOutcome => {
+  const handleWalkForward = useCallback((source: 'manual' | 'auto' = 'manual'): ForwardOutcome => {
     // Unreachable today: `setReadingGate` is only ever called with null. Kept
     // because a guard that can fire must DECLARE what it does to the walk
     // rather than look like an advance.
@@ -1062,6 +1063,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return { advanced: true };
     }
     if (turningQ) {
+      // A HUMAN tap dismisses the card (the escape hatch above). The
+      // AUTO-ADVANCE tick must NOT: the card was raised at the last ply and
+      // the question spoken, and the 0.5s tick then closed it before the
+      // student could read it — "One more thing — where do you think this
+      // game turned?" with no card on screen (WO-STANDARD-01 D-13, prod tape
+      // 2026-09-22). Auto-play stops here and waits for the pick.
+      if (source === 'auto') return { advanced: false, stop: 'turning-point' };
       setTurningQ(null);
       setTurningPreviewPly(null);
       setWalkExplorationFen(null);
@@ -3697,10 +3705,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         seg.classification === 'blunder'
       );
       const hasArrow = showBest && !!seg && !!seg.bestMoveUci && seg.bestMoveUci.length >= 4;
+      // At the CLOSING beat (currentPly = moves.length + 1) the board stays on
+      // the final position — `moves[currentPly - 1]` is undefined there and
+      // used to fall through to the START position under the closing words
+      // (WO-STANDARD-01 D-13, prod tape 2026-09-22).
       const displayFen = seg
         ? seg.fenAfter
         : walkPlayback.currentPly > 0
-          ? moves[walkPlayback.currentPly - 1]?.fen ?? STARTING_FEN
+          ? moves[Math.min(walkPlayback.currentPly, moves.length) - 1]?.fen ?? STARTING_FEN
           : STARTING_FEN;
       const walkArrows = (() => {
         // NEVER paint the better-move arrow while a find-the-shot question is
@@ -3902,7 +3914,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 Game Review
               </h2>
               <div className="ml-auto text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                Ply {walkPlayback.currentPly}/{lastPly}
+                {/* The closing beat lives at lastPly+1 in the hook; the header
+                    never counts past the game ("Ply 28/27", D-13). */}
+                Ply {Math.min(walkPlayback.currentPly, lastPly)}/{lastPly}
               </div>
             </div>
 
@@ -4328,6 +4342,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   {theoryCaption ?? walkPlayback.currentText ?? walkPlayback.currentSegment?.san ?? ''}
                 </p>
               </div>
+              {/* THE CLOSING BEAT SHOWS THE RESULT (WO-STANDARD-01 D-13, prod
+                  tape 2026-09-22: the walk ended on "Ply 28/27" over the
+                  STARTING position with nothing saying who won). The board is
+                  clamped to the last move; the outcome is the one fact the
+                  closing beat owes the student, from the same computer the
+                  summary card reads. */}
+              {walkPlayback.currentPly > lastPly && (() => {
+                const rel = relativeResult(result, playerColor);
+                const tone = rel === 'win' ? 'var(--color-success)' : rel === 'loss' ? 'var(--color-error)' : 'var(--color-warning)';
+                return (
+                  <div
+                    data-testid="review-result-card"
+                    data-result={rel}
+                    className="mt-1.5 rounded-lg border px-3 py-1.5 text-center text-sm font-bold"
+                    style={{ borderColor: tone, color: tone }}
+                  >
+                    {RESULT_LABEL[rel]} · {Math.ceil(lastPly / 2)} moves
+                  </div>
+                );
+              })()}
               {/* WATCH-THE-GAME chip — appears on the story-as-evidence ply so
                   the cited master game is one tap away (David 2026-07-21,
                   IMG_4576: "where is the tag to watch that game??"). */}

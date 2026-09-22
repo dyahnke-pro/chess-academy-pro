@@ -253,3 +253,20 @@ describe('a piece that has not moved is not a problem piece', () => {
     expect(obs.length, 'the guard silenced the whole read').toBeGreaterThan(0);
   });
 });
+
+describe('a problem piece is joined to the pawn that BLOCKS it, once (WO-STANDARD-01 D-1, 2026-09-22)', () => {
+  it('the Italian …Bb6 is never a problem piece, so nothing "would fix it"', () => {
+    const c = new Chess(); for (const s of ['e4', 'e5', 'Nf3', 'Bc5', 'Nxe5', 'd6', 'Nf3', 'Nf6', 'd4', 'Bb6']) c.move(s);
+    const obs = [...readPosition(c.fen(), 'black'), ...readPosition(c.fen(), 'white')];
+    expect(obs.filter((o) => /problem piece/.test(o.text) && /b6/.test(o.text))).toEqual([]);
+    expect(obs.filter((o) => /would fix it/.test(o.text) && /b6/.test(o.text))).toEqual([]);
+  });
+  it('a genuinely buried bishop gets ONE join, and the fixing pawn is one of its blockers', () => {
+    // White Bd2 behind c3/e3, past the opening. The only pawns that can free
+    // it are c3 and e3; a3/h3 "fixes" (the count trick) are gone.
+    const fen = '4k3/pppppppp/8/8/8/2P1P3/PP1B1PPP/4K3 w - - 0 20';
+    const joins = readPosition(fen, 'white').filter((o) => /would fix it/.test(o.text) && /d2/.test(o.text));
+    expect(joins.length).toBeLessThanOrEqual(1);
+    for (const j of joins) expect(j.text).toMatch(/pawn to (c4|e4)/);
+  });
+});

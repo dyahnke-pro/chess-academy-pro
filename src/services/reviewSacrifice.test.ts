@@ -29,6 +29,17 @@ describe('sacrificeCompensation (David 2026-07-20 — teach the sac, don\'t asse
     expect(clauses.some((c) => /ahead in development/i.test(c))).toBe(false);
   });
 
+  it('a sac that LOSES has no compensation to name — D-4, the Vienna Nxe4?? tape (2026-09-22)', () => {
+    // The Opera board has every board-true clause available (king stuck, dev
+    // lead). With the mover 4.7 pawns down after the sac, NONE of them is a
+    // reason — the verdict facet says what it cost. Negative control: the
+    // same board at -60 still names the compensation, so the gate is the eval,
+    // not the board.
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470)).toEqual([]);
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -60).length).toBeGreaterThan(0);
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470).some((c) => /holds up/i.test(c))).toBe(false);
+  });
+
   it('every clause is a plain string with no move/piece/square invented (G0 shape)', () => {
     const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60);
     // The clauses never mention a specific SAN or "engine" (voice rules).
