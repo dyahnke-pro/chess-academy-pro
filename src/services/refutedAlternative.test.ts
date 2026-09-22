@@ -59,7 +59,7 @@ describe('refutedAlternative', () => {
         ],
       },
     });
-    const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: candidatesFromMasters(MASTERS), studentColor: 'black', rating: 1500, engine });
+    const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: candidatesFromMasters(MASTERS), studentColor: 'black', engine });
     expect(r).not.toBeNull();
     expect(r!.alt).toBe('Nf6');
     expect(r!.pct).toBe(38);
@@ -82,7 +82,7 @@ describe('refutedAlternative', () => {
       [after(FEN, ['g7g6', 'h5f3'])]: { evaluation: 30 },
       [after(FEN, ['g8f6', 'h5f3'])]: { evaluation: 50 },
     });
-    const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: candidatesFromMasters(MASTERS), studentColor: 'black', rating: 1500, engine });
+    const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: candidatesFromMasters(MASTERS), studentColor: 'black', engine });
     expect(r).toBeNull();
   });
 
@@ -99,7 +99,7 @@ describe('refutedAlternative', () => {
       [after(FEN, ['d8e7', 'h5f3'])]: { evaluation: 130 },
     });
     const cands: AlternativeCandidate[] = [{ san: 'g6', games: 400, pct: 80 }, { san: 'Qe7', games: 100, pct: 20 }];
-    const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: cands, studentColor: 'black', rating: 1500, engine });
+    const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: cands, studentColor: 'black', engine });
     expect(r).not.toBeNull();
     expect(r!.concept).toBeNull();
     expect(r!.text).toMatch(/costs about 1\.0 points/);

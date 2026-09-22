@@ -49,7 +49,7 @@ describe('the heat map feeds the RANKER', () => {
    */
   it('GREY cannot manufacture a moment out of a quiet ply', () => {
     const quiet = { decision: null, cpLossCp: null, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
-    const withGrey = computeImportance(quiet, 1400, studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) }));
+    const withGrey = computeImportance(quiet, studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) }));
     expect(withGrey.rank).toBe(0);
     expect(withGrey.speak).toBe(false);
   });
@@ -64,13 +64,13 @@ describe('the heat map feeds the RANKER', () => {
     const quiet = { decision: null, cpLossCp: null, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
     const red = studentMomentBoost({ hole: persistentHole });
     expect(red.opens).toBe(true);
-    const opened = computeImportance(quiet, 1400, red);
+    const opened = computeImportance(quiet, red);
     expect(opened.speak).toBe(true);
     expect(opened.tier).toBe('teaching');
     expect(opened.rank).toBe(red.rank);
     expect(opened.rank).toBeLessThan(40); // under a declared teaching beat, under every engine tier
     // …but never in a decided game — the contested gate holds here too.
-    expect(computeImportance({ ...quiet, evalCpWhitePov: 900, wdl: [960, 30, 10] }, 1400, red).speak).toBe(false);
+    expect(computeImportance({ ...quiet, evalCpWhitePov: 900, wdl: [960, 30, 10] }, red).speak).toBe(false);
   });
 
   it('a first-time hole, grey and green never open a quiet moment', () => {
@@ -86,8 +86,8 @@ describe('the heat map feeds the RANKER', () => {
 
   it('but it DOES raise a moment that already fired', () => {
     const real = { decision: null, cpLossCp: null, threatNet: 0, teachingBeat: true, evalCpWhitePov: 20, wdl: null };
-    const plain = computeImportance(real, 1400, NO_BOOST);
-    const boosted = computeImportance(real, 1400, studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) }));
+    const plain = computeImportance(real, NO_BOOST);
+    const boosted = computeImportance(real, studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) }));
     expect(plain.rank).toBeGreaterThan(0);
     expect(boosted.rank).toBe(plain.rank + GREY_BOOST);
   });

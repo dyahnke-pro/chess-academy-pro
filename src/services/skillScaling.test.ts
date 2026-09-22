@@ -90,13 +90,15 @@ describe('wrongTriesBeforeHint', () => {
 // subtleties, warn rarely. Merging these inverts the pedagogy on both axes at
 // once and nothing downstream would go red — so this is the gate.
 describe('the diagnosis bar and the help bar are DIFFERENT computers', () => {
-  it('run in OPPOSITE directions across the rating range', () => {
-    const diagnosis = [600, 1500, 2400].map((r) => criticalityThresholds(r).critical);
+  it('the diagnosis bar is FLAT across ratings (B6); the help bar still rises', () => {
+    // Until 2026-09-22 this asserted the diagnosis bar FALLS with rating
+    // (200 → 100 → 50). That was the rating deciding how much the coach says,
+    // which THE FOUNDATION forbids; the bar is band-free now and takes no
+    // rating at all. The help bar (a WARNING, not a teaching) still scales.
+    const diagnosis = criticalityThresholds().critical;
+    expect(diagnosis).toBe(100);
+    expect(criticalityThresholds.length, 'the diagnosis bar must not read a rating').toBe(0);
     const help = [600, 1500, 2400].map((r) => alertSensitivityMultiplier(r));
-    // diagnosis falls...
-    expect(diagnosis[0], 'the teaching bar must FALL as the student improves').toBeGreaterThan(diagnosis[2]);
-    // ...help rises. If a "unification" ever makes these agree, one of the two
-    // pedagogies has been inverted.
     expect(help[0], 'the warning bar must RISE as the student improves').toBeLessThan(help[2]);
   });
 

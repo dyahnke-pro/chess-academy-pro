@@ -405,7 +405,6 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
       rootEvalCp: opts.analysis?.evaluation ?? null,
       lineEvalCp: line.evaluation,
       lineMate: line.mate ?? null,
-      rating: opts.rating,
     })) {
       if (seen.has(c.id)) continue;
       out.push(c);
@@ -469,7 +468,6 @@ export interface LineInput {
   lineEvalCp?: number | null;
   /** Forced mate reported for the line (null/undefined = none). */
   lineMate?: number | null;
-  rating?: number;
   max?: number;
   /** Restrict the walk to these concept sources. A caller that only needs the
    *  line's TACTIC (the tactic classifier, P4b) skips the endgame + positional
@@ -479,7 +477,7 @@ export interface LineInput {
 }
 
 /**
- * Importance from the ENGINE'S swing, bucketed against the SHARED rating-scaled
+ * Importance from the ENGINE'S swing, bucketed against the SHARED band-free
  * `criticalityThresholds` — the same scale `scanCriticality` uses, so there is
  * ONE criticality in the app (CLAUDE.md: never a second parallel one). Mover-POV:
  * a line that is good for the student scores high. Returns null when no engine
@@ -490,7 +488,7 @@ function importanceFromSwing(input: LineInput): number | null {
   if (input.rootEvalCp == null || input.lineEvalCp == null) return null;
   const whiteSwing = input.lineEvalCp - input.rootEvalCp;
   const moverSwing = input.studentColor === 'w' ? whiteSwing : -whiteSwing;
-  const t = criticalityThresholds(input.rating ?? DEFAULT_STUDENT_RATING);
+  const t = criticalityThresholds();
   if (moverSwing >= t.onlyMove) return 0.95;
   if (moverSwing >= t.critical) return 0.88;
   if (moverSwing >= t.notable) return 0.8;

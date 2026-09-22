@@ -19,8 +19,8 @@
 // reuses criticalityThresholds"): that bar is in CENTIPAWNS and grows for
 // weaker players (200 at <1000), which would make a beginner need MORE evidence
 // to hear teaching — backwards. Need lives on its own 0–100 scale with a fixed
-// bar; the rating enters through the cold-start prior and the terms' own
-// rating-scaled computers (`bookDepartureIsCostly`). This is still the student
+// bar; the rating enters only through the terms' own computers
+// (`bookDepartureIsCostly`). This is still the student
 // term of ONE importance filter, not a second criticality: it gates the quiet
 // per-ply teaching beat only; a swing / must-defend / mate speaks on its own
 // importance regardless of need.

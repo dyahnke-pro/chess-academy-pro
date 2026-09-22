@@ -20,7 +20,7 @@
 // composition, and so a change to the decision reaches every surface at once.
 //
 // THE ORDER OF THE DECISION, and why it is this order:
-//   1. IMPORTANCE — is this moment worth anything at all? (rating-scaled,
+//   1. IMPORTANCE — is this moment worth anything at all? (band-free bars,
 //      contested-gated; a swing inside a decided game is not a moment.)
 //   2. NEED — does this student need it? A line they have played correctly five
 //      times is silent even when the position is interesting.
@@ -55,6 +55,9 @@ export type SurfacePosture = 'walk' | 'interrupt';
 
 /** What this student brings to the board. */
 export interface StudentContext {
+  /** STRENGTH, never volume (B6): the door does not read this for WHETHER a
+   *  moment speaks — the bars are band-free. Carried for the depth-scaled
+   *  computers a surface composes around the decision. */
   rating: number;
   /** The weakness spine — raises facts about the holes they keep falling in. */
   weaknesses: readonly WeaknessSignal[];
@@ -166,13 +169,12 @@ export interface MomentVerdict {
 
 export function judgeMoment(
   signals: ImportanceSignals,
-  rating: number,
   posture: SurfacePosture,
   /** The student term — see `StudentContext.momentBoost`. A bare number is the
    *  raise-only form, for the leaf tests; a surface hands a `StudentBoost`. */
   momentBoost: number | StudentBoost = NO_BOOST,
 ): MomentVerdict {
-  const importance = computeImportance(signals, rating, momentBoost);
+  const importance = computeImportance(signals, momentBoost);
   return { importance, speaks: posture === 'walk' || importance.speak };
 }
 
@@ -258,7 +260,7 @@ export function decide(
    *  this function computes (David 2026-09-16: how to think IS the teaching). */
   method?: MethodContext,
 ): CoachDecision {
-  const { importance, speaks } = judgeMoment(signals, student.rating, posture, student.momentBoost ?? NO_BOOST);
+  const { importance, speaks } = judgeMoment(signals, posture, student.momentBoost ?? NO_BOOST);
   const base = { tier: importance.tier, rank: importance.rank };
 
   // 1 — THE MOMENT, but ONLY where silence is the default. On a 'walk' the

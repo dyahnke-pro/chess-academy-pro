@@ -2410,7 +2410,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const candidates = candidatesFromMasters(mastersMovesSync(preFen));
       if (candidates.length < 2) continue;
       try {
-        const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, rating: student.rating, depth: 12, maxPlies: 6 });
+        const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, depth: 12, maxPlies: 6 });
         if (r) {
           refutedByPly[i] = r.text;
           refutedFacts.push({ ply: i + 1, alt: r.alt, pct: r.pct, costCp: r.costCp, concept: r.concept?.id ?? null });

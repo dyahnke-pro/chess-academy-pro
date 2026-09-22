@@ -1849,6 +1849,20 @@ export function buildReviewSegments(
       // standing asset at equal rank), and it drops what is below the moment's
       // value BAR. A bar is not a cap: on a critical moment every computed fact
       // still clears it (G4.5).
+      // THE REAL COST of the move to the side that PLAYED it — mover-POV, from
+      // Stockfish's own numbers, computed ONCE and handed to both the door and
+      // the method beat (B6 + B11, 2026-09-22). Two things it is not:
+      //  • not a bucket keyed off the classification label (300/150/60 made
+      //    every inaccuracy read 0.6 pawns and a 250cp mistake read 1.5);
+      //  • not `Math.abs(evaluation - preMoveEval)`, which turned a GAIN into a
+      //    cost — the student wins a piece, the eval jumps two pawns their
+      //    way, and the method beat read it as a 200cp slip and said "this was
+      //    the moment to slow down" on the best move of the game.
+      // White loses when the white-POV number FALLS, Black when it RISES; a
+      // move that gained is a cost of 0, never a negative "loss".
+      const realCpLossCp: number | null = m.evaluation != null && m.preMoveEval != null
+        ? Math.max(0, moverColor === 'white' ? m.preMoveEval - m.evaluation : m.evaluation - m.preMoveEval)
+        : null;
       // ONE DOOR (David 2026-09-16: "I want one unified deciding computer").
       // Importance, this student's need, subsumption, the floor and the order
       // are a SINGLE call now — review does not compose them itself, so it
@@ -1856,9 +1870,7 @@ export function buildReviewSegments(
       const decision = decide(
         {
           decision: null,          // no per-ply criticality scan in the review pass
-          cpLossCp: m.classification === 'blunder' ? 300
-            : m.classification === 'mistake' ? 150
-              : m.classification === 'inaccuracy' ? 60 : null,
+          cpLossCp: realCpLossCp,
           threatNet: 0,
           teachingBeat: fundamentalLed || !!causalLead,
           evalCpWhitePov: m.evaluation ?? null,
@@ -1914,14 +1926,9 @@ export function buildReviewSegments(
         // `ignored-threat` finding, the cost, the move that was there — so the
         // habit is earned by a computed condition, never generic advice.
         {
-          // THE REAL COST, not a bucket keyed off the classification label. The
-          // buckets (60/150/300) made every inaccuracy look like 0.6 pawns, so a
-          // 1.2-pawn inaccuracy never cleared the forcing-scan bar. Same formula
-          // the spoken "costing about X points" uses, so the habit and the
-          // number can never disagree.
-          cpLossCp: m.evaluation != null && m.preMoveEval != null
-            ? Math.abs(m.evaluation - m.preMoveEval)
-            : null,
+          // THE REAL COST — see `realCpLossCp` above: the same number the door
+          // judged on, so the habit and the moment can never disagree.
+          cpLossCp: realCpLossCp,
           bestSan: bestMoveSan ?? null,
           ignoredThreat: fundamentals.some((f) => f.id === 'ignored-threat'),
           isStudentMove: playerColor !== undefined && moverColor === playerColor,

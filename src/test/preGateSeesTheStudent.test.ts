@@ -56,19 +56,19 @@ describe('the student term reaches the pre-gate', () => {
     // Every assertion in this file is conditioned on a moment existing. If the
     // fixture goes quiet again (a threshold moves, a literal rots), the tests
     // below stop asserting and stay green. This is the canary for that.
-    const base = judgeMoment(SIGNALS, 1500, 'interrupt', 0);
+    const base = judgeMoment(SIGNALS, 'interrupt', 0);
     expect(base.speaks, 'the fixture no longer opens the door — the tests below are now vacuous')
       .toBe(true);
     expect(base.importance.rank, 'rank 0 means no moment to raise').toBeGreaterThan(0);
-    const raised = judgeMoment(SIGNALS, 1500, 'interrupt', 20);
+    const raised = judgeMoment(SIGNALS, 'interrupt', 20);
     expect(raised.importance.rank, 'the boost did not reach computeImportance at all')
       .toBeGreaterThan(base.importance.rank);
   });
 
   it('raising the boost NEVER closes a door that was open', () => {
     for (const boost of [0, 5, 10, 20, 40]) {
-      const base = judgeMoment(SIGNALS, 1500, 'interrupt', 0);
-      const raised = judgeMoment(SIGNALS, 1500, 'interrupt', boost);
+      const base = judgeMoment(SIGNALS, 'interrupt', 0);
+      const raised = judgeMoment(SIGNALS, 'interrupt', boost);
       if (base.speaks) {
         expect(raised.speaks, `boost ${boost} CLOSED a door that was open`).toBe(true);
       }
@@ -90,6 +90,6 @@ describe('the student term reaches the pre-gate', () => {
     // boost's tuning rather than the wiring this is about.
     const src = readFileSync(resolve(__dirname, '../services/positionFacts.ts'), 'utf8');
     expect(src, 'the early judgeMoment lost its student term')
-      .toMatch(/judgeMoment\(momentSignals, rating, input\.posture, preGateBoost\);/);
+      .toMatch(/judgeMoment\(momentSignals, input\.posture, preGateBoost\);/);
   });
 });

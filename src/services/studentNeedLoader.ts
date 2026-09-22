@@ -50,17 +50,16 @@ function scoreShare(games: readonly GameRecord[], names: Parameters<typeof resol
 }
 
 /** Per ply of `sans`: how many prior games by this student followed the same
- *  prefix AND played that ply correctly (cpLoss within the rating's "notable"
+ *  prefix AND played that ply correctly (cpLoss within the band-free "notable"
  *  bar). Only the student's own plies count; the opponent's are 0. */
 export function lineRepsFromGames(
   games: readonly GameRecord[],
   sans: readonly string[],
   studentColor: 'white' | 'black',
   names: Parameters<typeof resolvePlayerColor>[1],
-  rating: number,
 ): number[] {
   const reps = new Array<number>(sans.length).fill(0);
-  const notable = criticalityThresholds(rating).notable;
+  const notable = criticalityThresholds().notable;
   for (const g of games) {
     if (g.isMasterGame || !g.annotations || g.annotations.length === 0) continue;
     const color = resolvePlayerColor(g, names);
@@ -118,7 +117,7 @@ export async function loadStudentNeedContext(q: StudentNeedQuery): Promise<Stude
       bookDepartures,
       capabilities,
       openingId: q.openingId ?? null,
-      lineReps: lineRepsFromGames(analysed, sans, q.studentColor, names, q.rating),
+      lineReps: lineRepsFromGames(analysed, sans, q.studentColor, names),
       openingScore: scoreShare(inOpening, names),
       overallScore: scoreShare(games, names),
     };

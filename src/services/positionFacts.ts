@@ -9,7 +9,7 @@
 //  • It takes the surface's EXISTING StockfishAnalysis (the warm eval-bar read) —
 //    no second MultiPV scan.
 //  • The decision-leverage bar reuses `criticalityThresholds` (scanCriticality's
-//    rating-scaled doctrine), so the two never disagree.
+//    band-free bars, B6), so the two never disagree.
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
@@ -276,8 +276,8 @@ function moverGap12(read: CriticalMomentRead | null): number {
   return read?.gapCp ?? 0;
 }
 
-function severityFromGap(gapCp: number, rating: number): Severity {
-  const th = criticalityThresholds(rating);
+function severityFromGap(gapCp: number): Severity {
+  const th = criticalityThresholds();
   return gapCp >= th.onlyMove ? 'only-move' : gapCp >= th.critical ? 'critical' : gapCp >= th.notable ? 'notable' : 'none';
 }
 
@@ -398,7 +398,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // sites each passing their own would. Computed HERE (not at the need wire
   // below) because the critical-moment stem rotates on it.
   const plyNumber = (fullmove - 1) * 2 + (moverColor === 'b' ? 1 : 0) + 1;
-  const criticalRead = readCriticalMoment({ topLines: analysis.topLines, moverColor, rating });
+  const criticalRead = readCriticalMoment({ topLines: analysis.topLines, moverColor });
   const gap12 = moverGap12(criticalRead);
   // A pin or skewer aimed at your own king/queen, a castled king with a broken
   // shelter under real fire, a central king with the file about to open, or a
@@ -485,7 +485,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // emission calling it correct. Two literals for one moment is the drift the
   // one-door rule exists to delete; a shared const cannot disagree with itself.
   const momentSignals: ImportanceSignals = {
-    decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
+    decision: { severity: severityFromGap(gap12), gapCp: gap12 },
     cpLossCp: input.cpLossCp ?? null,
     threatNet: mustDefend.net,
     // A band change IS a declared beat — "you've taken the better side" is the
@@ -500,7 +500,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // position falsely reads "decided" and goes silent.)
     wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
   };
-  const { importance, speaks } = judgeMoment(momentSignals, rating, input.posture, preGateBoost);
+  const { importance, speaks } = judgeMoment(momentSignals, input.posture, preGateBoost);
 
   // Perturbation is expensive → only when the moment earns it AND a probe fn was
   // supplied AND we're out of the opening. Probe BOTH sides: the student's

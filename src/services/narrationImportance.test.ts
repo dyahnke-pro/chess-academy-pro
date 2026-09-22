@@ -55,17 +55,26 @@ describe('computeImportance — the four failure modes of "eval-bar movement"', 
   });
 });
 
-describe('computeImportance — importance is rating-RELATIVE', () => {
-  it('a 1.2-pawn swing fires for an intermediate but not a beginner', () => {
+describe('computeImportance — importance is BAND-FREE (B6, 2026-09-22)', () => {
+  // These two used to assert the opposite ("a 1.2-pawn swing fires for an
+  // intermediate but not a beginner"). That was the rating deciding volume;
+  // the FOUNDATION says it never may. Negative control: hand the bars a rating
+  // band again → the first `it` fails at 900.
+  it('the same swing is the same moment whoever the student is — there is no rating input', () => {
     const sig: ImportanceSignals = { ...quiet, cpLossCp: 120 };
-    expect(computeImportance(sig, 1500).speak).toBe(true);   // critical bar 100
-    expect(computeImportance(sig, 900).speak).toBe(false);   // beginner bar 200 — only blunders
+    const v = computeImportance(sig);
+    expect(v.speak).toBe(true);
+    expect(v.tier).toBe('swing');
+    // The function has no rating parameter to feed; the door's `rating` field
+    // never reaches it.
+    expect(computeImportance.length).toBeLessThanOrEqual(1);
   });
 
-  it('a 0.6-pawn subtlety fires for an expert', () => {
-    const sig: ImportanceSignals = { ...quiet, cpLossCp: 60 };
-    expect(computeImportance(sig, 2200).speak).toBe(true);   // expert bar 50
-    expect(computeImportance(sig, 1500).speak).toBe(false);  // intermediate bar 100
+  it('the tiers are the app\'s own bands: inaccuracy is quiet, a mistake swings, a blunder is a blunder', () => {
+    expect(computeImportance({ ...quiet, cpLossCp: 60 }).speak).toBe(false);      // < MISTAKE_CP
+    expect(computeImportance({ ...quiet, cpLossCp: 150 }).tier).toBe('swing');    // ≥ MISTAKE_CP
+    expect(computeImportance({ ...quiet, cpLossCp: 250 }).tier).toBe('swing');    // < BLUNDER_CP
+    expect(computeImportance({ ...quiet, cpLossCp: 300 }).tier).toBe('blunder');  // ≥ BLUNDER_CP
   });
 });
 

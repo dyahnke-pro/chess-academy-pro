@@ -190,7 +190,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   }
 
   // 2. Swing moments — the review card's own candidates, biggest first…
-  const swingsRaw = turningPointCandidates(plies.map(toSegment), rating);
+  const swingsRaw = turningPointCandidates(plies.map(toSegment));
   // …RE-RANKED BY THE STUDENT'S HOLES (unified-coach N5): a moment whose landed
   // tactic is a hole this student keeps falling in outranks a moment of EQUAL
   // criticality that is not. The boost is `boostFor` (0–30, lifecycle-keyed,

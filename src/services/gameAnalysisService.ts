@@ -977,7 +977,7 @@ export async function scanCriticalMoments(args: {
         // never finished before the reopen and the question never fired).
         const fan = await w.analyzeFan(p.fen, CRITICAL_FAN_LINES, CRITICAL_FAN_DEPTH, CRITICAL_FAN_BUDGET_MS);
         const read = readCriticalMoment({
-          topLines: fan, moverColor: p.moverColor, rating: args.rating, fen: p.fen,
+          topLines: fan, moverColor: p.moverColor, fen: p.fen,
         });
         if (read) out.set(p.ply, read);
       } catch {
