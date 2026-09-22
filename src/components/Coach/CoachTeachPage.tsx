@@ -150,6 +150,7 @@ import {
   pickMasterDrill,
   isDrillableAid,
   buildMistakeDrillQueue,
+  drillKeyOf,
   advanceMistakeDrill,
   hasImportedGames,
   type CoachDrill,
@@ -157,6 +158,8 @@ import {
 } from '../../services/coachDrillService';
 import { seedMasterPuzzles } from '../../services/puzzleService';
 import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
+import { hintBeat, solvedLineBeat, wrongMoveReason } from '../../services/drillReasons';
+import { sayMoveClause } from '../../services/spokenMove';
 import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
@@ -2393,7 +2396,7 @@ export function CoachTeachPage(): JSX.Element {
     // the queue to ONE game's mistakes (David 2026-09-01: the coach named that
     // game's critical error → set up its drill). A `motif` scopes it to ONE
     // weakness pattern (P-III.3 — "drill it" on a named weakness cluster).
-    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? 1200, gameId, motif });
+    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? 1200, gameId, motif, exclude: solvedDrillKeysRef.current });
     if (queue.length === 0 && gameId) {
       coachDrillSay("That game had no blunders or mistakes to drill — a clean one by the analysis.");
       return true;
@@ -2465,19 +2468,27 @@ export function CoachTeachPage(): JSX.Element {
     if (part.concept) {
       try {
         const hit = searchTheoryPassage(part.concept.conceptQuery);
-        if (hit) passage = hit.passage.text.length > 320 ? `${hit.passage.text.slice(0, 320).replace(/\s+\S*$/, '')}…` : hit.passage.text;
+        // The WHOLE passage (G4.5: a clip at 320 characters deleted the clause
+        // that made it a definition — "the defender can save only one").
+        if (hit) passage = hit.passage.text;
       } catch { /* no passage — the behavior line still teaches the idea */ }
     }
-    const teachLine = [transition, behavior, passage].filter(Boolean).join(' ').trim();
-    if (teachLine) coachDrillSay(teachLine);
-    captureEvent('custom_lesson_part_advanced', { surface: 'coach-teach', idx, tag: part.tag });
-
-    // 2. Drill the student's OWN positions for this hole.
+    // 2. The student's OWN positions for this hole — built first, because the
+    //    teaching names the CONCEPT the first position turns on (the concept
+    //    engine's invariant: the idea, never the move), so "Part 1 of 3" teaches
+    //    the pattern, not one fragment (A5).
     const rating = activeProfile?.currentRating ?? 1200;
     let queue: DrillProgress['queue'] = [];
     try {
-      queue = await buildMistakeDrillQueue({ cementReps: 1, rating, motif: part.tag });
+      queue = await buildMistakeDrillQueue({ cementReps: 1, rating, motif: part.tag, exclude: solvedDrillKeysRef.current });
     } catch { queue = []; }
+    const firstDrill = queue[0]?.drills[0];
+    const invariant = firstDrill
+      ? explainDrillConcept({ setupFen: firstDrill.setupFen, solutionSan: firstDrill.solutionSan, themes: firstDrill.themes })?.idea ?? ''
+      : '';
+    const teachLine = [transition, behavior, invariant, passage].filter(Boolean).join(' ').trim();
+    if (teachLine) coachDrillSay(teachLine);
+    captureEvent('custom_lesson_part_advanced', { surface: 'coach-teach', idx, tag: part.tag });
     if (queue.length > 0) {
       const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
       startCoachDrill(queue[0].drills[0], progress, "Now let's drill it on your own positions.");
@@ -2535,7 +2546,16 @@ export function CoachTeachPage(): JSX.Element {
    *  Single drill → offer another. Mistake-queue → advance to the next due
    *  mistake / next weakness. The SRS grade (real "test out") is applied
    *  by the caller before this runs. */
+  /** Positions solved this session — never re-served (A5). */
+  const solvedDrillKeysRef = useRef<Set<string>>(new Set());
+
   const completeDrill = useCallback((solved: { drill: CoachDrill; step: number; progress?: DrillProgress }): void => {
+    // NEVER RE-SERVE A POSITION JUST SOLVED (A5): the next queue build excludes it.
+    solvedDrillKeysRef.current.add(drillKeyOf(solved.drill.setupFen, solved.drill.solutionSan[0] ?? ''));
+    // THE SEQUENCE, SPOKEN, WITH THE IDEA NAMED (A5): a drill called "missed
+    // tactical sequences" shows the sequence. Computed (G0).
+    const solvedConcept = explainDrillConcept({ setupFen: solved.drill.setupFen, solutionSan: solved.drill.solutionSan, themes: solved.drill.themes });
+    const solvedBeat = solvedLineBeat(solved.drill.solutionSan, solvedConcept?.idea ?? null);
     if (!solved.progress) {
       activeDrillRef.current = null;
       // TEACH THE CONCEPT behind the solution (David 2026-09-14: "not just a
@@ -2559,7 +2579,7 @@ export function CoachTeachPage(): JSX.Element {
       // next part (teach + drill), or close the lesson. advanceCustomLesson owns
       // the arc sync + the closing beat, so return before the generic ending.
       if (customLessonRef.current) {
-        if (adv.completedLabel) coachDrillSay(`That's ${adv.completedLabel} drilled shut for today.`);
+        coachDrillSay(adv.completedLabel ? `${solvedBeat} That's ${adv.completedLabel} drilled shut for today.` : solvedBeat);
         advanceCustomLessonRef.current?.();
         return;
       }
@@ -2570,9 +2590,9 @@ export function CoachTeachPage(): JSX.Element {
       // "Drilled shut" — the loop's closing bookend (David 2026-08-26 slogan:
       // LEARN · PLAY · IDENTIFY WEAKNESSES · DRILL THEM SHUT). "For today"
       // because SRS brings the reps back until they genuinely test out.
-      const shutMsg = adv.completedLabel
+      const shutMsg = `${solvedBeat} ${adv.completedLabel
         ? `That's ${adv.completedLabel} drilled shut for today — and every weakness due.`
-        : "That's every mistake due today, drilled shut.";
+        : "That's every mistake due today, drilled shut."}`;
       // FRESH REPS (Phase 3): the queue is finished, so cement the top pattern
       // with ONE fresh tactical rep from puzzles.json — the tested pickCoachDrill
       // path (no SRS surgery) — so you drill the PATTERN, not just your own
@@ -2595,8 +2615,8 @@ export function CoachTeachPage(): JSX.Element {
     loadDrillOntoBoard(adv.next.drill, adv.next.progress);
     coachDrillSay(
       adv.themeCompleted
-        ? `Nice — ${adv.completedLabel} drilled shut for today. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
-        : `Good. ${adv.next.drill.prompt}`,
+        ? `${solvedBeat} ${adv.completedLabel} drilled shut for today. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
+        : `${solvedBeat} ${adv.next.drill.prompt}`,
     );
   }, [coachDrillSay, loadDrillOntoBoard]);
 
@@ -2627,13 +2647,18 @@ export function CoachTeachPage(): JSX.Element {
       // A student who already leaned on Hint AND is still missing is more
       // frustrated → reach the "ease up + offer the way out" register sooner.
       const easeUp = cur.wrongCount >= 3 || (cur.hintUsed && cur.wrongCount >= 2);
+      // THE REASON IT FAILS (A5, David 2026-09-22): read off the board the
+      // wrong move leaves — a piece it drops, a mate or a winning capture it
+      // walks into. Computed; null when the board shows nothing concrete, and
+      // then the nudge stands alone rather than a guessed reason.
+      const reason = wrongMoveReason(gameRef.current.fen, move.san, expected);
       const nudge =
         easeUp
           ? "This one's a stubborn rep — happens to everyone. Tap Hint to see the idea, or say “next” to move on and we'll bring it back later."
           : cur.wrongCount === 2
             ? 'Still not it — no rush. Look for the most forcing move first: checks, captures, then threats.'
             : "That's not the strongest here — take another look and try again.";
-      coachDrillSay(nudge);
+      coachDrillSay(reason ? (easeUp ? `${reason} ${nudge}` : reason) : nudge);
       return true;
     }
     liveFenRef.current = move.fen;
@@ -2658,7 +2683,7 @@ export function CoachTeachPage(): JSX.Element {
         completeDrill(cur);
       } else {
         activeDrillRef.current = { ...cur, step: afterOppStep };
-        coachDrillSay('Good. Keep going — find the next move.');
+        coachDrillSay(`${sayMoveClause(oppReply).replace(/^./, (c) => c.toUpperCase())} — keep going, find the next move.`);
       }
     }, 650);
     return true;
@@ -10964,7 +10989,14 @@ export function CoachTeachPage(): JSX.Element {
     const fen = liveFenRef.current;
     // Hint-reliance signal (Phase 6): note that the student leaned on Hint for
     // the active drill, so the wrong-answer feedback eases sooner.
-    if (activeDrillRef.current) activeDrillRef.current.hintUsed = true;
+    if (activeDrillRef.current) {
+      activeDrillRef.current.hintUsed = true;
+      // THE HINT SAYS THE PIECE AND WITHHOLDS THE SQUARE (A5): the arrow used
+      // to be silent. Computed from the drill's own solution.
+      const cur = activeDrillRef.current;
+      const beat = hintBeat(fen, cur.drill.solutionSan[cur.step] ?? '');
+      if (beat) coachDrillSay(beat);
+    }
     setHintBusy(true);
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 15);
@@ -10980,7 +11012,7 @@ export function CoachTeachPage(): JSX.Element {
     } finally {
       setHintBusy(false);
     }
-  }, [hintBusy]);
+  }, [hintBusy, coachDrillSay]);
 
   // NARRATED CONTINUATION (David 2026-07-18): after a lesson, the coach can
   // play out both sides with Stockfish from where the opening ended and

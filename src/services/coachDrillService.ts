@@ -24,6 +24,7 @@
  *   - `prompt`       — a concrete, code-authored challenge line.
  */
 import { Chess } from 'chess.js';
+import { getHomeGameIds } from './homeOpeningService';
 import puzzlesData from '../data/puzzles.json';
 import { db } from '../db/schema';
 import type { MistakePuzzle, TacticType } from '../types';
@@ -329,7 +330,9 @@ export interface MistakeDrillTheme {
   label: string;
   /** How many mistakes fed this theme (drives the most→least ordering). */
   count: number;
-  /** The drills for this theme, worst mistake (highest cp loss) first. */
+  /** How many of those slips are from the student's HOME-opening games (A5). */
+  homeCount: number;
+  /** The drills for this theme, home-opening slips first, then worst (highest cp loss). */
   drills: CoachDrill[];
 }
 
@@ -349,6 +352,13 @@ function bucketOf(mp: MistakePuzzle): { key: string; label: string } {
  *  the student's-turn position and `mp.moves` is the correct line from
  *  it. Every move is chess.js-validated; a malformed record returns
  *  null. Falls back to the single best move when the line won't replay. */
+/** The identity of a drill position for never-re-serve: the board + the
+ *  first solving move (a puzzle id is not enough — two rows can share one
+ *  position). */
+export function drillKeyOf(setupFen: string, firstSan: string): string {
+  return `${setupFen.split(' ').slice(0, 4).join(' ')}|${firstSan.replace(/[+#]/g, '')}`;
+}
+
 export function mistakePuzzleToDrill(mp: MistakePuzzle): CoachDrill | null {
   const { key, label } = bucketOf(mp);
   // Invalid FEN → not a drill.
@@ -472,7 +482,15 @@ export function summarizeWeaknesses(mistakes: MistakePuzzle[]): WeaknessSummaryR
 }
 
 export async function buildMistakeDrillQueue(
-  options: { today?: string; cementReps?: number; rating?: number; gameId?: string; motif?: string } = {},
+  options: {
+    today?: string; cementReps?: number; rating?: number; gameId?: string; motif?: string;
+    /** Positions solved THIS session (`drillKey`) — never re-served (A5). */
+    exclude?: ReadonlySet<string>;
+    /** Game ids in the student's HOME openings — their slips lead every theme
+     *  and the themes with the most home slips lead the queue (A5). Absent =
+     *  read from the home-opening service. */
+    homeGameIds?: ReadonlySet<string>;
+  } = {},
 ): Promise<MistakeDrillTheme[]> {
   const today = options.today ?? new Date().toISOString().split('T')[0];
   const cementReps = Math.max(0, options.cementReps ?? 0);
@@ -501,7 +519,15 @@ export async function buildMistakeDrillQueue(
     // SRS gate: skip mastered ("tested out") and not-yet-due mistakes.
     mistakes = mistakes.filter((mp) => mp.status !== 'mastered' && mp.srsDueDate <= today);
   }
+  if (options.exclude && options.exclude.size > 0) {
+    mistakes = mistakes.filter((mp) => !options.exclude?.has(drillKeyOf(mp.fen, mp.bestMoveSan)));
+  }
   if (mistakes.length === 0) return [];
+  let homeIds: ReadonlySet<string> = options.homeGameIds ?? new Set();
+  if (!options.homeGameIds) {
+    try { homeIds = await getHomeGameIds(); } catch { homeIds = new Set(); }
+  }
+  const isHome = (mp: MistakePuzzle): boolean => homeIds.has(mp.sourceGameId);
 
   const buckets = new Map<string, { label: string; items: MistakePuzzle[] }>();
   for (const mp of mistakes) {
@@ -513,7 +539,8 @@ export async function buildMistakeDrillQueue(
 
   const themes: MistakeDrillTheme[] = [];
   for (const [key, b] of buckets) {
-    const ordered = [...b.items].sort((a, z) => z.cpLoss - a.cpLoss);
+    // HOME OPENING FIRST (A5), then the worst slip.
+    const ordered = [...b.items].sort((a, z) => (Number(isHome(z)) - Number(isHome(a))) || (z.cpLoss - a.cpLoss));
     const drills = ordered
       .map(mistakePuzzleToDrill)
       .filter((d): d is CoachDrill => d !== null);
@@ -543,11 +570,12 @@ export async function buildMistakeDrillQueue(
         }
       }
     }
-    themes.push({ key, label: b.label, count: ownCount, drills });
+    themes.push({ key, label: b.label, count: ownCount, homeCount: b.items.filter(isHome).length, drills });
   }
-  // Most common weakness first; stable tie-break by label so the order is
-  // deterministic across reloads.
-  themes.sort((a, z) => (z.count - a.count) || a.label.localeCompare(z.label));
+  // The theme with the most HOME-opening slips first (A5), then the most
+  // common weakness; stable tie-break by label so the order is deterministic
+  // across reloads.
+  themes.sort((a, z) => (z.homeCount - a.homeCount) || (z.count - a.count) || a.label.localeCompare(z.label));
   return themes;
 }
 

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5518 lines · 3 exports · 3 importers · 2 tests · 9 audits**
+**5546 lines · 3 exports · 3 importers · 2 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6023) — names `BLUNDER_CARD_ENABLED`
+- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6024) — names `BLUNDER_CARD_ENABLED`
 
 ## Who calls in
 

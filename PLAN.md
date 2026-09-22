@@ -386,14 +386,32 @@ fire is not a wire"):**
    locked). Not done here: Today's reps still ranks the whole bucket; the
    home section above it is the ordering David asked for, and A5 decides
    whether the daily feed itself is filtered to the home games.
-5. **DRILLS THAT TEACH.** Custom lesson + My Mistakes draw from slips in the
-   home opening first; every reveal names the IDEA and plays the SEQUENCE
-   (wrong answer: the reason it fails; right answer: the line, not "Good.");
-   never re-serve a position just solved; "Part 1 of 3" teaches the concept
-   (the concept engine's invariant), not one fragment. Provenance flows through
-   (source = chess.com, opponent, date — fix the "Coach / Unknown / today"
-   labels). Gate: `commonMistakeNarration`-style two-register check on every
-   drill reveal; provenance round-trip test from import to My Mistakes.
+5. ✅ **DRILLS THAT TEACH** (2026-09-22). `drillReasons.ts` (pure, board-only,
+   G0): `wrongMoveReason` reads the position the wrong move LEAVES — a mate in
+   one it walks into, a piece it leaves loose (SEE, pin-aware), a capture
+   that wins material — and returns null when the board shows nothing
+   concrete (the nudge then stands alone; never a guessed reason);
+   `solvedLineBeat` speaks the whole solving line with the concept engine's
+   idea appended ("That's it — the knight takes d5; then the queen takes d5,
+   the bishop takes f7. The fork: …") — "Good." is gone from every solve and
+   the mid-line beat names the opponent's reply; `hintBeat` names the PIECE
+   and its from-square and withholds the destination (the honesty contract).
+   Learn: `solvedDrillKeysRef` + `drillKeyOf` (board + first move) → both
+   queue builds pass `exclude`, so a position just solved is never re-served
+   in the session; the custom-lesson part teaches the WHOLE corpus passage
+   (the 320-char clip was a G4.5 sentence cap) plus the concept engine's
+   invariant for the part's first position (the idea, never the move) — so
+   "Part 1 of 3" teaches the pattern, not one fragment. HOME FIRST:
+   `buildMistakeDrillQueue` orders the theme with the most home-opening
+   slips first and, inside a theme, home slips before the worst
+   (`homeGameIds` from `getHomeGameIds`); My Mistakes lists home slips
+   first. Provenance: C9 (merged) — `MistakePuzzleProvenance` required on
+   every writer; "Coach / Unknown / today" fixed at the import boundary.
+   Gates: `drillReasons.test.ts`, `coachDrillService.mistakes.test.ts`
+   (home-first with the no-home control; never re-serve), C9's
+   `mistakeProvenance.test.ts`. Not automated: the Learn click→spoken-beat
+   leg (the page test's board mock cannot push a solve) — owed to the prod
+   audit pair.
 6. **THE ROUTER.** Retrospective ("why was X bad", "what did you mean by"),
    method ("what should I be thinking about", "how do I approach this") and
    profile ("weakest opening", "what should I learn") lanes computed and never

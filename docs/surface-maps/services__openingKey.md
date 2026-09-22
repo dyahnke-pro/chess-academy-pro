@@ -88,10 +88,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessProvenance.test.ts:79`
 
 ### `openingKeyFromSans` (function) — 18 call sites
-- `src/components/Coach/CoachGameReview.tsx:622`
-- `src/components/Coach/CoachTeachPage.tsx:7176`
-- `src/components/Coach/CoachTeachPage.tsx:10868`
-- `src/components/Coach/CoachTeachPage.tsx:12023`
+- `src/components/Coach/CoachGameReview.tsx:623`
+- `src/components/Coach/CoachTeachPage.tsx:7201`
+- `src/components/Coach/CoachTeachPage.tsx:10896`
+- `src/components/Coach/CoachTeachPage.tsx:12058`
 - `src/services/oneOpeningKey.test.ts:44`
 - `src/services/oneOpeningKey.test.ts:59`
 - `src/services/oneOpeningKey.test.ts:60`
@@ -122,8 +122,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingFamily` (function) — 9 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:918`
-- `src/services/coachFeatureService.ts:2585`
-- `src/services/coachFeatureService.ts:2891`
+- `src/services/coachFeatureService.ts:2635`
+- `src/services/coachFeatureService.ts:2941`
 - `src/services/homeOpening.ts:114`
 - `src/services/homeOpening.ts:194`
 - `src/services/openingBlunderService.ts:83`
@@ -143,8 +143,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/syncService.ts:205`
 
 ### `ecoOfKey` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:630`
-- `src/components/Coach/CoachTeachPage.tsx:7184`
+- `src/components/Coach/CoachGameReview.tsx:631`
+- `src/components/Coach/CoachTeachPage.tsx:7209`
 - `src/services/openingKey.test.ts:31`
 
 ### `sameOpeningFamily` (function) — 10 call sites
@@ -160,7 +160,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/studentNeedLoader.ts:150`
 
 ### `openingEntryForKey` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:4641`
+- `src/components/Coach/CoachGamePage.tsx:4642`
 - `src/services/homeOpening.ts:112`
 - `src/services/homeOpening.ts:193`
 - `src/services/homeOpeningPlan.ts:163`

@@ -26,7 +26,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `readPosition` (function) — 26 call sites
-- `src/services/groundedAnswer.ts:1127`
+- `src/services/groundedAnswer.ts:1290`
 - `src/services/lookaheadPlan.ts:881`
 - `src/services/lookaheadPlan.ts:1150`
 - `src/services/lookaheadPlan.ts:1504`
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:268`
 
 ### `buildPositionalRead` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8052`
+- `src/components/Coach/CoachTeachPage.tsx:8094`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
 - `src/services/positionalRead.test.ts:159`

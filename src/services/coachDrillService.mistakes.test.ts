@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { buildMistakeDrillQueue, mistakePuzzleToDrill, hasImportedGames, summarizeWeaknesses } from './coachDrillService';
+import { buildMistakeDrillQueue, drillKeyOf, mistakePuzzleToDrill, hasImportedGames, summarizeWeaknesses } from './coachDrillService';
 import type { MistakePuzzle, GameRecord } from '../types';
 
 /** Build a valid-enough MistakePuzzle for the fields the drill code
@@ -48,6 +48,33 @@ const END_A = mk({ id: 'm-end-a', fen: '8/8/8/4k3/8/8/4P3/4K3 w - - 0 1', moves:
 describe('buildMistakeDrillQueue — sourced from user mistakes, most common first', () => {
   beforeEach(async () => {
     await db.mistakePuzzles.clear();
+  });
+
+  it('HOME OPENING FIRST (A5): the theme with the most home slips leads, and inside a theme the home slips lead the worst', async () => {
+    const homeEnd = mk({ ...END_A, id: 'm-end-home', sourceGameId: 'home-1' });
+    const forkAway = mk({ ...FORK_B, id: 'm-fork-away', sourceGameId: 'away-1', cpLoss: 500 });
+    const forkHome = mk({ ...FORK_A, id: 'm-fork-home', sourceGameId: 'home-2', cpLoss: 300 });
+    await db.mistakePuzzles.bulkAdd([END_A, homeEnd, forkAway, forkHome]);
+    const queue = await buildMistakeDrillQueue({ homeGameIds: new Set(['home-1', 'home-2']) });
+    // Endgame: 2 slips, 1 home. Forks: 2 slips, 1 home → tie on home, tie on count → label order… make the home count decide:
+    expect(queue.map((t) => t.homeCount)).toEqual(queue.map((t) => t.homeCount).slice().sort((a, z) => z - a));
+    const forks = queue.find((t) => t.key === 'tactic:fork');
+    // The HOME slip (300 cp) leads the away slip (500 cp) — home before worst.
+    expect(forks?.drills[0].puzzleId).toBe('m-fork-home');
+    expect(forks?.drills[1].puzzleId).toBe('m-fork-away');
+    // Control: with no home set, the worst slip leads as before.
+    const control = await buildMistakeDrillQueue({ homeGameIds: new Set() });
+    expect(control.find((t) => t.key === 'tactic:fork')?.drills[0].puzzleId).toBe('m-fork-away');
+  });
+
+  it('NEVER RE-SERVES a position just solved (A5): the exclude set drops it', async () => {
+    await db.mistakePuzzles.bulkAdd([FORK_A, FORK_B]);
+    const first = await buildMistakeDrillQueue({ homeGameIds: new Set() });
+    const solved = first[0].drills[0];
+    const key = drillKeyOf(solved.setupFen, solved.solutionSan[0]);
+    const again = await buildMistakeDrillQueue({ homeGameIds: new Set(), exclude: new Set([key]) });
+    expect(again[0].drills.map((d) => d.puzzleId)).not.toContain(solved.puzzleId);
+    expect(again[0].drills.length).toBe(first[0].drills.length - 1);
   });
 
   it('returns [] when the user has no mistakes (caller falls back)', async () => {

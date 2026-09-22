@@ -24,14 +24,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `verdictBand` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:1000`
-- `src/services/coachFeatureService.ts:3094`
+- `src/services/coachFeatureService.ts:1002`
+- `src/services/coachFeatureService.ts:3121`
 - `src/services/exchangeLedger.test.ts:118`
 - `src/services/exchangeLedger.test.ts:120`
 
 ### `assessPositionalEdge` (function) — 26 call sites
-- `src/services/coachFeatureService.ts:2595`
-- `src/services/coachFeatureService.ts:3089`
+- `src/services/coachFeatureService.ts:2596`
+- `src/services/coachFeatureService.ts:3116`
 - `src/services/exchangeLedger.test.ts:87`
 - `src/services/exchangeLedger.test.ts:88`
 - `src/services/exchangeLedger.test.ts:95`

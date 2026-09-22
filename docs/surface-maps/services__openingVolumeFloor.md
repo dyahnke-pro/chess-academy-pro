@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clearsVolumeFloor` (function) — 8 call sites
-- `src/services/groundedAnswer.ts:4812`
+- `src/services/groundedAnswer.ts:4824`
 - `src/services/openingVolumeFloor.test.ts:22`
 - `src/services/openingVolumeFloor.test.ts:23`
 - `src/services/openingVolumeFloor.test.ts:24`

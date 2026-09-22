@@ -11,7 +11,7 @@ import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
 import type { PlayerColor, PlayerIdentity } from './playerIdentity';
 import {
-  chooseHomeOpening, rankHomeOpeningCandidates, toChoice,
+  chooseHomeOpening, isHomeOpeningGame, rankHomeOpeningCandidates, toChoice,
   HOME_OPENING_MIN_GAMES, HOME_OPENING_MIN_SHARE,
   type HomeOpeningChoice, type HomeOpeningRanking,
 } from './homeOpening';
@@ -136,4 +136,15 @@ export async function clearHomeOpening(colour: PlayerColor): Promise<HomeOpening
     await persist(profile, { white: stored.white ?? null, black: stored.black ?? null, [colour]: null });
   }
   return getHomeOpenings();
+}
+
+/** The ids of every game in the student's home openings (both colours) — the
+ *  set the drill queues put FIRST (A5: "improve the weaknesses within it"). */
+export async function getHomeGameIds(): Promise<ReadonlySet<string>> {
+  const home = await getHomeOpenings();
+  if (!home.white && !home.black) return new Set();
+  const profile = await loadProfile();
+  const identity = identityOf(profile);
+  const games = await db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).toArray();
+  return new Set(games.filter((g) => isHomeOpeningGame(g, identity, home)).map((g) => g.id));
 }

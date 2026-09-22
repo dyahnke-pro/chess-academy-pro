@@ -36,10 +36,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Puzzles/PuzzleBoard.tsx:135`
 
 ### `classifyTacticsFromGame` (function) — 1 call site
-- `src/services/gameAnalysisService.ts:2079`
+- `src/services/gameAnalysisService.ts:2081`
 
 ### `deriveMissedTacticsForGame` (function) — 3 call sites
-- `src/services/gameInsightsService.ts:778`
+- `src/services/gameInsightsService.ts:782`
 - `src/services/tacticClassifierService.test.ts:37`
 - `src/services/tacticClassifierService.test.ts:45`
 

@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderFundamentalVerdict` (function) — 19 call sites
-- `src/services/coachFeatureService.ts:2096`
+- `src/services/coachFeatureService.ts:2097`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
@@ -60,12 +60,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewFullData.ts:305`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2107`
+- `src/services/coachFeatureService.ts:2108`
 - `src/services/principleVoice.test.ts:38`
 - `src/services/principleVoice.test.ts:40`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:4493`
+- `src/services/coachFeatureService.ts:4524`
 - `src/services/principleVoice.test.ts:48`
 - `src/services/principleVoice.test.ts:53`
 - `src/services/principleVoice.test.ts:57`

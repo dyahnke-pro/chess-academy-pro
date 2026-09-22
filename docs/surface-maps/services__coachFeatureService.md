@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4498 lines · 30 exports · 27 importers · 23 tests · 5 audits**
+**4529 lines · 31 exports · 27 importers · 23 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -61,14 +61,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2059`
+- `src/components/Coach/CoachGamePage.tsx:2061`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`
 - `src/services/coachFeatureService.test.ts:257`
 - `src/services/coachFeatureService.test.ts:277`
 - `src/services/coachFeatureService.test.ts:289`
-- `src/services/gameAnalysisService.ts:2081`
+- `src/services/gameAnalysisService.ts:2083`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -77,7 +77,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:509`
+- `src/components/Coach/CoachGameReview.tsx:510`
 
 ### `recapSecondPerson` (function) — 4 call sites
 - `src/services/coachFeatureService.test.ts:876`
@@ -113,7 +113,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:582`
+- `src/components/Coach/CoachGameReview.tsx:583`
 - `src/services/coachFeatureService.test.ts:744`
 - `src/services/coachFeatureService.test.ts:752`
 - `src/services/coachFeatureService.test.ts:784`
@@ -127,7 +127,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 50 call sites
-- `src/components/Coach/CoachGameReview.tsx:1901`
+- `src/components/Coach/CoachGameReview.tsx:1907`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
 - `src/services/coachFeatureService.causalChain.test.ts:47`
@@ -178,6 +178,9 @@
 - `src/services/reviewNeedGate.test.ts:88`
 - `src/services/reviewNeedGate.test.ts:94`
 
+### `reviewOpeningRecord` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `mapConcurrent` (function) — 4 call sites
 - `src/services/mapConcurrent.test.ts:9`
 - `src/services/mapConcurrent.test.ts:18`
@@ -185,7 +188,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4997`
+- `src/components/Coach/CoachGameReview.tsx:5019`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -243,7 +246,7 @@
 - `src/services/reviewRegister.test.ts:32`
 
 ### `generateReviewNarration` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:622`
+- `src/components/Coach/CoachGameReview.tsx:624`
 - `src/services/reviewBetterLineWhy.test.ts:56`
 - `src/services/reviewBetterLineWhy.test.ts:82`
 - `src/services/reviewCorpusSweep.test.ts:264`
@@ -256,7 +259,7 @@
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:4710`
+- `src/services/coachApi.ts:4889`
 - `src/services/coachFeatureService.test.ts:126`
 - `src/services/coachFeatureService.test.ts:147`
 - `src/services/coachFeatureService.test.ts:166`

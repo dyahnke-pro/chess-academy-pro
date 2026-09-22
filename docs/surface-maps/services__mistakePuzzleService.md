@@ -94,8 +94,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7148`
-- `src/components/Coach/CoachTeachPage.tsx:7154`
+- `src/components/Coach/CoachTeachPage.tsx:7173`
+- `src/components/Coach/CoachTeachPage.tsx:7179`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -126,8 +126,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleQuiz.ts:69`
 - `src/services/principleQuiz.ts:124`
 - `src/services/principleQuiz.ts:146`
-- `src/services/tacticClassifierService.ts:234`
-- `src/services/tacticClassifierService.ts:454`
+- `src/services/tacticClassifierService.ts:237`
+- `src/services/tacticClassifierService.ts:457`
 
 ### `replayPgnToFens` (function) — 8 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
@@ -137,7 +137,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/gameAnalysisService.ts:1691`
 - `src/services/gameAnalysisService.ts:2223`
 - `src/services/tacticClassifierService.ts:193`
-- `src/services/tacticClassifierService.ts:437`
+- `src/services/tacticClassifierService.ts:440`
 
 ### `determinePlayerColor` (function) — 3 call sites
 - `src/components/Tactics/AnalysisPracticePage.tsx:99`
@@ -146,7 +146,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2062`
-- `src/components/Coach/CoachGameReview.tsx:342`
+- `src/components/Coach/CoachGameReview.tsx:343`
 - `src/services/gameAnalysisService.ts:2076`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
@@ -170,7 +170,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reanalyzeImportedGames` (function) — 1 call site
-- `src/components/Puzzles/MyMistakesPage.tsx:228`
+- `src/components/Puzzles/MyMistakesPage.tsx:238`
 
 ### `getMistakePuzzlesDue` (function) — 3 call sites
 - `src/services/mistakePuzzleService.test.ts:445`
@@ -227,7 +227,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `getAllMistakePuzzles` (function) — 5 call sites
 - `src/components/Insights/OpeningDrilldown.tsx:152`
-- `src/components/Puzzles/MyMistakesPage.tsx:138`
+- `src/components/Puzzles/MyMistakesPage.tsx:141`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:66`
 - `src/services/gameCalculationPuzzleService.ts:117`
 - `src/services/mistakePuzzleService.test.ts:597`
@@ -236,8 +236,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2324`
-- `src/components/Puzzles/MyMistakesPage.tsx:217`
+- `src/components/Coach/CoachTeachPage.tsx:2327`
+- `src/components/Puzzles/MyMistakesPage.tsx:227`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`
 - `src/services/mistakePuzzleService.test.ts:495`
@@ -246,14 +246,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.test.ts:545`
 
 ### `deleteMistakePuzzle` (function) — 2 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:210`
+- `src/components/Puzzles/MyMistakesPage.tsx:220`
 - `src/services/mistakePuzzleService.test.ts:554`
 
 ### `MistakePuzzleStats` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getMistakePuzzleStats` (function) — 4 call sites
-- `src/components/Puzzles/MyMistakesPage.tsx:139`
+- `src/components/Puzzles/MyMistakesPage.tsx:142`
 - `src/services/gameInsightsService.ts:684`
 - `src/services/mistakePuzzleService.test.ts:571`
 - `src/services/mistakePuzzleService.test.ts:584`

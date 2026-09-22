@@ -74,7 +74,7 @@
 - `src/services/reviewTeachingPoints.test.ts:95`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:2395`
+- `src/services/coachFeatureService.ts:2396`
 - `src/services/reviewTeachingPoints.test.ts:275`
 - `src/services/reviewTeachingPoints.test.ts:278`
 - `src/services/reviewTeachingPoints.test.ts:279`
@@ -95,7 +95,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildMissedShotSignal` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2162`
+- `src/services/coachFeatureService.ts:2163`
 - `src/services/reviewTeachingPoints.test.ts:345`
 - `src/services/reviewTeachingPoints.test.ts:358`
 - `src/services/reviewTeachingPoints.test.ts:367`
@@ -104,7 +104,7 @@
 - `src/services/reviewTeachingPoints.test.ts:381`
 
 ### `explainTemptingCapture` (function) — 10 call sites
-- `src/components/Coach/CoachGameReview.tsx:1753`
+- `src/components/Coach/CoachGameReview.tsx:1759`
 - `src/services/reviewOpeningTheory.ts:328`
 - `src/services/reviewOpeningTheory.ts:364`
 - `src/services/reviewTeachingPoints.test.ts:119`
@@ -116,14 +116,14 @@
 - `src/services/reviewTeachingPoints.test.ts:237`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2728`
+- `src/services/coachFeatureService.ts:2729`
 - `src/services/reviewTeachingPoints.test.ts:168`
 - `src/services/reviewTeachingPoints.test.ts:175`
 - `src/services/reviewTeachingPoints.test.ts:189`
 - `src/services/reviewTeachingPoints.test.ts:199`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2414`
+- `src/services/coachFeatureService.ts:2415`
 - `src/services/plyFactsDialing.test.ts:74`
 - `src/services/plyFactsDialing.test.ts:80`
 - `src/services/plyFactsDialing.test.ts:81`
@@ -132,18 +132,18 @@
 - `src/services/plyFactsDialing.test.ts:90`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2423`
+- `src/services/coachFeatureService.ts:2424`
 
 ### `describeConcessions` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2109`
-- `src/services/coachFeatureService.ts:2175`
+- `src/services/coachFeatureService.ts:2110`
+- `src/services/coachFeatureService.ts:2176`
 - `src/services/reviewTeachingPoints.test.ts:203`
 - `src/services/reviewTeachingPoints.test.ts:210`
 - `src/services/reviewTeachingPoints.test.ts:219`
 
 ### `findTrappedPiece` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:2738`
 - `src/services/coachFeatureService.ts:2739`
+- `src/services/coachFeatureService.ts:2740`
 - `src/services/reviewFullData.ts:488`
 - `src/services/reviewFullData.ts:490`
 - `src/services/reviewTeachingPoints.test.ts:245`
@@ -160,7 +160,7 @@
 - `src/services/reviewNarrationDefects.test.ts:50`
 
 ### `deriveNextPlans` (re-export) — 17 call sites
-- `src/services/groundedAnswer.ts:365`
+- `src/services/groundedAnswer.ts:368`
 - `src/services/learnMoveTeaching.ts:145`
 - `src/services/nextPlans.ts:130`
 - `src/services/planPrescriptions.test.ts:93`

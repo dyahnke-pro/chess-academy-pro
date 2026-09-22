@@ -52,7 +52,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `logMisconception` (function) — 54 call sites
-- `src/components/Coach/CoachGameReview.tsx:2337`
+- `src/components/Coach/CoachGameReview.tsx:2345`
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`

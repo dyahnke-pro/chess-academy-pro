@@ -79,7 +79,7 @@
 - `src/services/principleAttribution.section14.test.ts:113`
 
 ### `attributePrinciples` (function) — 52 call sites
-- `src/services/coachFeatureService.ts:833`
+- `src/services/coachFeatureService.ts:835`
 - `src/services/learnFundamentalNarration.ts:143`
 - `src/services/misconceptionClassifier.ts:261`
 - `src/services/principleAttribution.section14.test.ts:22`
@@ -135,10 +135,10 @@
 ### `pvUciToSan` (function) — 9 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:85`
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:89`
-- `src/services/autoAnalyzeGame.ts:285`
-- `src/services/autoAnalyzeGame.ts:288`
-- `src/services/coachFeatureService.ts:837`
+- `src/services/autoAnalyzeGame.ts:292`
+- `src/services/autoAnalyzeGame.ts:295`
 - `src/services/coachFeatureService.ts:839`
+- `src/services/coachFeatureService.ts:841`
 - `src/services/learnFundamentalNarration.ts:133`
 - `src/services/learnFundamentalNarration.ts:140`
 - `src/services/principleAttribution.test.ts:46`

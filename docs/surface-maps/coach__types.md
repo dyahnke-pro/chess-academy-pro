@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**911 lines · 30 exports · 912 importers · 197 tests · 39 audits**
+**911 lines · 30 exports · 913 importers · 198 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -880,6 +880,7 @@
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticClaimValidator.test.ts`
 - `src/services/tacticClaimValidator.ts`
+- `src/services/tacticClassifierService.test.ts`
 - `src/services/tacticClassifierService.ts`
 - `src/services/tacticCreateService.ts`
 - `src/services/tacticDrillService.ts`
@@ -1205,6 +1206,7 @@
 - `src/services/syncService.test.ts`
 - `src/services/tacticAlertService.test.ts`
 - `src/services/tacticClaimValidator.test.ts`
+- `src/services/tacticClassifierService.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/services/tacticVocabulary.test.ts`

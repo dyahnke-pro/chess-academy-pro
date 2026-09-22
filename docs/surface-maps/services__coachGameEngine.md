@@ -66,9 +66,9 @@
 ### `getRandomLegalMove` (function) — 7 call sites
 - `src/components/Coach/CoachGamePage.tsx:2681`
 - `src/components/Coach/CoachGamePage.tsx:2696`
-- `src/components/Coach/CoachGamePage.tsx:2974`
-- `src/components/Coach/CoachGamePage.tsx:3012`
-- `src/components/Coach/CoachTeachPage.tsx:7153`
+- `src/components/Coach/CoachGamePage.tsx:2975`
+- `src/components/Coach/CoachGamePage.tsx:3013`
+- `src/components/Coach/CoachTeachPage.tsx:7178`
 - `src/components/Openings/OpeningPlayMode.tsx:690`
 - `src/components/Openings/OpeningPlayMode.tsx:715`
 
@@ -97,7 +97,7 @@
 
 ### `getAdaptiveMove` (function) — 28 call sites
 - `src/components/Coach/CoachGamePage.tsx:2499`
-- `src/components/Coach/CoachTeachPage.tsx:7138`
+- `src/components/Coach/CoachTeachPage.tsx:7163`
 - `src/components/Openings/OpeningPlayMode.tsx:681`
 - `src/services/coachGameEngine.test.ts:70`
 - `src/services/coachGameEngine.test.ts:84`
@@ -128,11 +128,11 @@
 ### `studentPlayingRating` (function) — 16 call sites
 - `src/App.tsx:153`
 - `src/components/Coach/CoachGamePage.tsx:403`
-- `src/components/Coach/CoachTeachPage.tsx:7132`
-- `src/components/Coach/CoachTeachPage.tsx:7141`
-- `src/components/Coach/CoachTeachPage.tsx:8437`
-- `src/components/Coach/CoachTeachPage.tsx:10856`
-- `src/components/Coach/CoachTeachPage.tsx:12022`
+- `src/components/Coach/CoachTeachPage.tsx:7157`
+- `src/components/Coach/CoachTeachPage.tsx:7166`
+- `src/components/Coach/CoachTeachPage.tsx:8462`
+- `src/components/Coach/CoachTeachPage.tsx:10884`
+- `src/components/Coach/CoachTeachPage.tsx:12057`
 - `src/services/coachGameEngine.test.ts:586`
 - `src/services/coachGameEngine.test.ts:592`
 - `src/services/coachGameEngine.test.ts:593`
@@ -146,7 +146,7 @@
 ### `getTargetStrength` (function) — 11 call sites
 - `src/App.tsx:152`
 - `src/components/Coach/CoachGamePage.tsx:448`
-- `src/components/Coach/CoachTeachPage.tsx:7132`
+- `src/components/Coach/CoachTeachPage.tsx:7157`
 - `src/components/Openings/OpeningPlayMode.tsx:70`
 - `src/services/coachGameEngine.test.ts:183`
 - `src/services/coachGameEngine.test.ts:187`

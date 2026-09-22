@@ -69,7 +69,7 @@
 - `src/services/misconceptionClassifier.ts:123`
 - `src/services/misconceptionClassifier.ts:279`
 - `src/services/mistakeNarration.ts:391`
-- `src/services/openingGenerator.ts:3877`
+- `src/services/openingGenerator.ts:3878`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
 - `src/services/pinGeometry.test.ts:87`
@@ -136,10 +136,10 @@
 - `src/services/tacticsDetector.test.ts:362`
 - `src/services/tacticsDetector.test.ts:372`
 - `src/services/tacticsDetector.test.ts:380`
-- `src/services/weaknessAnalyzer.ts:1177`
-- `src/services/weaknessAnalyzer.ts:1275`
-- `src/services/weaknessAnalyzer.ts:1435`
-- `src/services/weaknessAnalyzer.ts:1441`
+- `src/services/weaknessAnalyzer.ts:1184`
+- `src/services/weaknessAnalyzer.ts:1282`
+- `src/services/weaknessAnalyzer.ts:1443`
+- `src/services/weaknessAnalyzer.ts:1449`
 
 ## Tests
 

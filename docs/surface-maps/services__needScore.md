@@ -57,8 +57,8 @@
 - `src/services/coachDecisionEmits.test.ts:118`
 - `src/services/coachDecisionEmits.test.ts:126`
 - `src/services/coachDecisionEmits.test.ts:132`
-- `src/services/coachFeatureService.ts:1264`
-- `src/services/coachFeatureService.ts:4264`
+- `src/services/coachFeatureService.ts:1314`
+- `src/services/coachFeatureService.ts:4314`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
 - `src/services/needScore.test.ts:36`
@@ -135,7 +135,7 @@
 - `src/services/coachDecisionEmits.test.ts:118`
 - `src/services/coachDecisionEmits.test.ts:126`
 - `src/services/coachDecisionEmits.test.ts:132`
-- `src/services/coachFeatureService.ts:1264`
+- `src/services/coachFeatureService.ts:1314`
 - `src/services/fundamentalReachesDecider.test.ts:140`
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`

@@ -12,6 +12,7 @@ import {
 } from '../../services/mistakePuzzleService';
 import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown, Search, X, Film } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
+import { getHomeGameIds } from '../../services/homeOpeningService';
 import { tacticTypeLabel } from '../../services/tacticAlertService';
 import { PageHelp } from '../Layout/PageHelp';
 import { summarizeWeaknesses, mistakeWeaknessKey } from '../../services/coachDrillService';
@@ -133,13 +134,17 @@ export function MyMistakesPage(): JSX.Element {
     });
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
+  // The student's home-opening games (A5): their slips lead the list.
+  const [homeGameIds, setHomeGameIds] = useState<ReadonlySet<string>>(() => new Set());
   const loadData = useCallback(async () => {
-    const [allPuzzles, puzzleStats] = await Promise.all([
+    const [allPuzzles, puzzleStats, homeIds] = await Promise.all([
       getAllMistakePuzzles(),
       getMistakePuzzleStats(),
+      getHomeGameIds().catch(() => new Set<string>() as ReadonlySet<string>),
     ]);
     setPuzzles(allPuzzles);
     setStats(puzzleStats);
+    setHomeGameIds(homeIds);
     setLoading(false);
   }, []);
 
@@ -195,6 +200,11 @@ export function MyMistakesPage(): JSX.Element {
     }
     return true;
   }).sort((a, b) => {
+    // HOME OPENING FIRST (A5): the slips from the student's home-opening games
+    // lead the list — "improve the weaknesses within it" — then newest first.
+    const homeA = homeGameIds.has(a.sourceGameId);
+    const homeB = homeGameIds.has(b.sourceGameId);
+    if (homeA !== homeB) return homeA ? -1 : 1;
     // Newest games first; games older than 1 year sink to the bottom
     const now = Date.now();
     const oneYear = 365 * 24 * 60 * 60 * 1000;

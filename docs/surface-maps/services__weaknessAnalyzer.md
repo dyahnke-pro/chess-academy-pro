@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessAnalyzer.test.ts:544`
 
 ### `getStoredWeaknessProfile` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10640`
+- `src/components/Coach/CoachTeachPage.tsx:10666`
 - `src/components/Stats/StatsPage.tsx:68`
 - `src/services/coachChatService.ts:188`
 - `src/services/coachContextSnapshot.ts:85`

@@ -21,7 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingRecordClause` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2892`
+- `src/services/coachFeatureService.ts:2942`
 - `src/services/openingRecordBeat.test.ts:20`
 - `src/services/openingRecordBeat.test.ts:22`
 - `src/services/openingRecordBeat.test.ts:24`
@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingRecordBeat.test.ts:29`
 
 ### `departureRecordSentence` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2893`
+- `src/services/coachFeatureService.ts:2943`
 - `src/services/openingRecordBeat.test.ts:37`
 - `src/services/openingRecordBeat.test.ts:42`
 - `src/services/openingRecordBeat.test.ts:46`

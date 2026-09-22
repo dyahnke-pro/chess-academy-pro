@@ -31,8 +31,8 @@
 - `src/hooks/usePositionNarration.test.ts:114`
 
 ### `usePositionNarration` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:1775`
-- `src/components/Coach/CoachTeachPage.tsx:7177`
+- `src/components/Coach/CoachGamePage.tsx:1777`
+- `src/components/Coach/CoachTeachPage.tsx:7219`
 - `src/hooks/usePositionNarration.test.ts:123`
 - `src/hooks/usePositionNarration.test.ts:130`
 - `src/hooks/usePositionNarration.test.ts:143`
