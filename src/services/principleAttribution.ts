@@ -26,7 +26,7 @@
  * deep dive.
  */
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
-import { signedLegalSeeFor } from './positionReadingService';
+import { signedLegalSeeFor, bishopHemmedByOwnPawns } from './positionReadingService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlans } from './nextPlans';
@@ -183,6 +183,7 @@ function homeMinors(chess: Chess, color: Color): number {
 function kingSquare(chess: Chess, color: Color): Square | null {
   return pieces(chess, color, 'k')[0]?.square ?? null;
 }
+const PIECE_WORD_OF: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 function kingOnHome(chess: Chess, color: Color): boolean {
   return kingSquare(chess, color) === (color === 'w' ? 'e1' : 'e8');
 }
@@ -617,6 +618,21 @@ const DETECTORS: Detector[] = [
     const { last, best, mover, opp } = c;
     if (last.san.startsWith('O-O')) return null;
     if (!kingOnHome(c.before, mover)) return null;
+    // THE KING WALK (WO-STANDARD-01 D-5, prod tape 2026-09-22): Ke2 off the
+    // home square with castling rights still in hand throws castling away for
+    // good, and the record said "buried your own bishop" because the king
+    // happened to stand in front of the f1 bishop. The real lesson outranks
+    // the incidental one: weight 2 to the bishop's 1. Rights are read off the
+    // FEN, so a king that stepped out with the rights already gone is not
+    // charged twice (the second Ke2 in a game is a different mistake).
+    if (last.piece === 'k') {
+      const rights = c.before.fen().split(' ')[2] ?? '-';
+      const hadRights = mover === 'w' ? /[KQ]/.test(rights) : /[kq]/.test(rights);
+      if (!hadRights || best.piece === 'k') return null;
+      return att('king-left-in-centre', 2, {
+        squares: [last.to], moves: [best.san], pvMoves: [],
+      }, { walked: last.to, better: best.san });
+    }
     const couldCastle = c.before.moves().some((m) => m.startsWith('O-O'));
     if (!couldCastle || !best.san.startsWith('O-O')) return null;
     const punish = legalMovesFor(c.after, opp).find((m) => (m.san.includes('+') && landsSafely(c.after, m))
@@ -678,7 +694,9 @@ const DETECTORS: Detector[] = [
       const afterMob = pieceMobility(c.after, b.square, mover);
       const bestMob = pieceMobility(c.afterBest, b.square, mover);
       if (beforeMob >= 2 && afterMob <= 1 && bestMob >= 2) {
-        return att('buried-own-bishop', 1, { squares: [b.square, last.to], moves: [], pvMoves: [] }, { bishop: b.square, blocker: last.to });
+        // The HOW must know WHAT blocked it (WO-STANDARD-01 D-5): the pawn
+        // remedy on a king move was the prod tape.
+        return att('buried-own-bishop', 1, { squares: [b.square, last.to], moves: [], pvMoves: [] }, { bishop: b.square, blocker: last.to, blockerPiece: PIECE_WORD_OF[last.piece] ?? 'piece' });
       }
     }
     return null;
@@ -931,7 +949,7 @@ const DETECTORS: Detector[] = [
       if (best.from !== b.square || last.from === b.square) continue;
       const onColour = pieces(c.before, mover, 'p').filter((p) => squareColor(p.square) === squareColor(b.square)).length;
       if (onColour < 4) continue;                            // ≥4 own pawns on the bishop's colour = a bad bishop
-      if (pieceMobility(c.before, b.square, mover) > 3) continue;
+      if (!bishopHemmedByOwnPawns(c.before, b.square, mover)) continue; // forward rays, not mobility (D-1)
       return att('kept-bad-bishop', 1, { squares: [b.square, best.to], moves: [best.san], pvMoves: [] }, { bishop: b.square, pawns: onColour, better: best.san });
     }
     return null;

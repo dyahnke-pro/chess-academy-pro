@@ -38,7 +38,7 @@
 - `src/services/groundedAnswer.ts:4325`
 - `src/services/groundedAnswer.ts:4910`
 - `src/services/lookaheadPlan.ts:87`
-- `src/services/lookaheadPlan.ts:650`
+- `src/services/lookaheadPlan.ts:680`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`
 - `src/services/pvPlayback.test.ts:293`

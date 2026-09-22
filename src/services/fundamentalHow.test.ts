@@ -61,3 +61,22 @@ describe('fundamentalHow — no diagnosis without a remedy', () => {
     expect(banned, `we/our in: ${banned.join(', ')}`).toEqual([]);
   });
 });
+
+describe('the remedy follows the fact (WO-STANDARD-01 D-5, 2026-09-22)', () => {
+  it('a bishop buried by the student\'s own KING gets a piece remedy, not the pawn one', () => {
+    const how = fundamentalHow('buried-own-bishop', { bishop: 'f1', blocker: 'e2', blockerPiece: 'king' })!;
+    expect(how).toMatch(/park a king in front of your own bishop/);
+    expect(how).not.toMatch(/pawn move/);
+  });
+  it('NEGATIVE CONTROL: buried by a pawn, the pawn remedy stands', () => {
+    expect(fundamentalHow('buried-own-bishop', { bishop: 'c1', blocker: 'd2', blockerPiece: 'pawn' })).toMatch(/Before a pawn move/);
+    expect(fundamentalHow('buried-own-bishop')).toMatch(/Before a pawn move/);
+  });
+  it('the king-walk verdict names castling as the loss', () => {
+    const a = { id: 'king-left-in-centre', facts: { walked: 'e2', better: 'c3' }, evidence: { moves: ['c3'], pvMoves: [] } } as never as PrincipleAttribution;
+    const out = renderFundamentalVerdict([a], { ply: 8, seen: new Set() });
+    expect(out).toMatch(/castl/i);
+    expect(out).toMatch(/e2/);
+    expect(out).not.toMatch(/undefined/);
+  });
+});

@@ -442,3 +442,14 @@ describe('deriveNextPlans — a mate on the board outranks every plan (WO-STANDA
   // The Opera-game plans above are the negative control: with no mate on the
   // board the same computer still returns multiple plans.
 });
+
+describe('badEnemyBishop reads the forward rays, not a mobility count (WO-STANDARD-01 D-1, 2026-09-22)', () => {
+  it('an active bishop with three forward squares is not bad', () => {
+    // Black Bb6 on the open a7–g1 diagonal, four black pawns on its colour.
+    expect(badEnemyBishop('r3k3/p1p5/1b1p2p1/8/3P4/8/8/4K3 w - - 0 12', 'w')).toBeNull();
+  });
+  it('a bishop whose own pawns stop both forward rays is bad', () => {
+    // Black Bd7 behind c6 and e6, with a6/g6 making four pawns on its colour.
+    expect(badEnemyBishop('r3k3/3b4/p1p1p1p1/8/8/8/8/4K3 w - - 0 12', 'w')).toMatch(/bishop on d7 is a bad piece/);
+  });
+});

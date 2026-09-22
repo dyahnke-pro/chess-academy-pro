@@ -33,9 +33,9 @@
  */
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { legalSeeGainOn } from './positionReadingService';
+import { legalSeeGainOn, bishopHemmedByOwnPawns } from './positionReadingService';
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
-import { cells, mobilityMap, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
+import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
 
@@ -190,7 +190,6 @@ export function badEnemyBishop(fen: string, studentColorWB: Color): string | nul
   if (fullmove < 12) return null;
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
   const all = cells(chess);
-  const enemyMob = mobilityMap(chess, enemy); // ONE moves() enumeration
   for (const c of all) {
     if (c.type !== 'b' || c.color !== enemy) continue;
     // A bishop still on its home square is undeveloped, not bad.
@@ -198,7 +197,8 @@ export function badEnemyBishop(fen: string, studentColorWB: Color): string | nul
     const light = isLight(c.square);
     const ownPawnsSameColour = all.filter((p) => p.type === 'p' && p.color === enemy && isLight(p.square) === light).length;
     if (ownPawnsSameColour < 4) continue;
-    if ((enemyMob.get(c.square) ?? 0) > 2) continue;
+    // The forward rays, not the mobility count (D-1 — one bad-bishop computer).
+    if (!bishopHemmedByOwnPawns(chess, c.square as Square, enemy)) continue;
     return `their bishop on ${c.square} is a bad piece — hemmed in behind its own pawns on the same colour, with almost nowhere to go`;
   }
   return null;

@@ -128,7 +128,12 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
 
 /** The habit that prevents this fundamental next game, or null when the id is
  *  unknown (a caller holding a stale id gets silence, never a guess). */
-export function fundamentalHow(id: FundamentalId): string | null {
+export function fundamentalHow(id: FundamentalId, facts: Record<string, string | number> = {}): string | null {
+  // The remedy follows the FACT (WO-STANDARD-01 D-5): a bishop buried by the
+  // student's own KING (Ke2 in front of Bf1) is not fixed by pawn discipline.
+  if (id === 'buried-own-bishop' && facts.blockerPiece && facts.blockerPiece !== 'pawn') {
+    return `Before you park a ${facts.blockerPiece} in front of your own bishop, ask which diagonal it shuts. Develop the bishop first, or put the ${facts.blockerPiece} where the bishop still sees past it.`;
+  }
   return FUNDAMENTAL_HOW[id] ?? null;
 }
 
@@ -179,6 +184,15 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'king-left-in-centre': {
+      if (f.walked) {
+        // The king WALKED (D-5): the loss is castling itself, not a punish.
+        const w = [
+          `Stepping the king to ${f.walked} throws castling away for good — ${f.better} keeps him home and the option open.`,
+          `The king on ${f.walked} can never castle now; ${f.better} was the move, and the king stays put until the rook comes across.`,
+          `A king walk to ${f.walked} costs the one move that tucks him away — play ${f.better} and castle when it's time.`,
+        ];
+        return w[v % w.length];
+      }
       const s = [
         `The king is still in the centre and castling was there — now ${f.punish} lands while he's exposed.`,
         `Castle first: leaving the king in the middle lets ${f.punish} come with the king still on its file.`,
@@ -447,7 +461,7 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'space-conceded': return `Space given up again — ${f.push} takes ${f.square}.`;
     case 'neglected-development': return `Development again — ${f.homeMinors} pieces still at home.`;
     case 'early-queen-sortie': return `The early queen again — ${f.kick} hits her.`;
-    case 'king-left-in-centre': return `The king still isn't castled, and ${f.punish} is on.`;
+    case 'king-left-in-centre': return f.walked ? `The king walked again, to ${f.walked} — castling is gone.` : `The king still isn't castled, and ${f.punish} is on.`;
     case 'greedy-pawn-grab': return `Another pawn grab — ${f.punish} is the price.`;
     case 'early-edge-pawns': return `Another edge pawn while the centre waits.`;
     case 'knights-before-bishops': return `The bishop again before the knights — ${f.kick} kicks it.`;
@@ -507,7 +521,7 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     // Not capped to one per ply: if two NEW fundamentals were both proved here,
     // the board earned both and the student hears both (G4.5). They spread
     // themselves out across the game because each can only fire once.
-    const how = fundamentalHow(a.id);
+    const how = fundamentalHow(a.id, a.facts);
     parts.push(how ? `${fullVerdict(a, opts.ply + i)} Here's how: ${how}` : fullVerdict(a, opts.ply + i));
   });
   return parts.join(' ');

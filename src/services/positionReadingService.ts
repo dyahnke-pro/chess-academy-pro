@@ -357,6 +357,48 @@ function squareColor(sq: Square): 'light' | 'dark' {
  *  - rook on an OPEN / SEMI-OPEN file (good).
  * Returns at most a handful, good ones first.
  */
+/**
+ * THE bad-bishop computer (WO-STANDARD-01 D-1, 2026-09-22). A bishop is bad
+ * when its own pawns stop its FORWARD diagonals — the two rays toward the
+ * enemy — within two squares. Mobility was the old test, and it called the
+ * Italian's …Bb6 "hemmed in behind its own pawns" with the a7–g1 diagonal wide
+ * open: after 1.e4 e5 2.Nf3 Bc5 3.Nxe5 d6 4.Nf3 Nf6 5.d4 Bb6 the bishop has
+ * three squares (a5, c5, d4) and all of them are forward. Low mobility is a
+ * symptom several things share; own pawns on the forward rays is the cause.
+ *
+ * Returns the squares of the blocking pawns — one per blocked forward ray —
+ * so a caller can say which PAWN would free it (and only that pawn). Empty
+ * when either forward ray is open. Shared by review, the positional read and
+ * the fundamentals attributor: one computer, one vocabulary.
+ */
+export function bishopBlockingPawns(chess: Chess, square: Square, color: Color): Square[] {
+  const file = square.charCodeAt(0) - 97;
+  const rank = Number(square[1]);
+  const dr = color === 'w' ? 1 : -1;
+  const blockers: Square[] = [];
+  for (const df of [-1, 1]) {
+    let blocked: Square | null = null;
+    for (let step = 1; step <= 2; step += 1) {
+      const f = file + df * step;
+      const r = rank + dr * step;
+      if (f < 0 || f > 7 || r < 1 || r > 8) break;
+      const sq = `${String.fromCharCode(97 + f)}${r}` as Square;
+      const occ = chess.get(sq);
+      if (!occ) continue;
+      if (occ.type === 'p' && occ.color === color) blocked = sq;
+      break; // any other piece ends the ray, and that is not the bishop's own pawn
+    }
+    if (!blocked) return []; // one open forward ray and the bishop is not bad
+    blockers.push(blocked);
+  }
+  return blockers;
+}
+
+/** True when both forward diagonals are stopped by the bishop's own pawns. */
+export function bishopHemmedByOwnPawns(chess: Chess, square: Square, color: Color): boolean {
+  return bishopBlockingPawns(chess, square, color).length === 2;
+}
+
 export function findPieceQuality(fen: string): PieceQualityNote[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
@@ -400,7 +442,9 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
         // bishop developed OUTSIDE the chain (the Caro's Bf5/Bg4 — the GOOD
         // bishop Naroditsky praises) as bad, and flagged the undeveloped home
         // bishop on move 1. Require all three: developed (off its home square),
-        // ≥4 own pawns on its colour, AND genuinely hemmed now (low mobility).
+        // ≥4 own pawns on its colour, AND its forward diagonals stopped by its
+        // own pawns (`bishopHemmedByOwnPawns` — mobility was the old third
+        // test and it branded the Italian's active …Bb6, WO-STANDARD-01 D-1).
         const home = color === 'w' ? (square === 'c1' || square === 'f1') : (square === 'c8' || square === 'f8');
         if (home) continue;
         const bishopColor = squareColor(square);
@@ -411,10 +455,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
           }
         }
         if (ownPawnsOnColor < 4) continue;
-        let mobility = 0;
-        const fp = chess.fen().split(' '); fp[1] = color; fp[3] = '-';
-        try { mobility = new Chess(fp.join(' ')).moves({ square, verbose: true }).length; } catch { mobility = 99; }
-        if (mobility <= 3) notes.push({ square, piece: 'b', color, quality: 'bad', reason: 'bad bishop (hemmed in behind its own pawns)' });
+        if (bishopHemmedByOwnPawns(chess, square, color)) notes.push({ square, piece: 'b', color, quality: 'bad', reason: 'bad bishop (hemmed in behind its own pawns)' });
       }
 
       if (type === 'r') {

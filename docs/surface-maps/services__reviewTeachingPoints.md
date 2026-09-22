@@ -49,10 +49,12 @@
 - `src/services/reviewFullData.ts:500`
 - `src/services/reviewTeachingPoints.test.ts:47`
 
-### `badEnemyBishop` (function) — 3 call sites
+### `badEnemyBishop` (function) — 5 call sites
 - `src/services/reviewFullData.ts:502`
 - `src/services/reviewTeachingPoints.test.ts:52`
 - `src/services/reviewTeachingPoints.test.ts:53`
+- `src/services/reviewTeachingPoints.test.ts:449`
+- `src/services/reviewTeachingPoints.test.ts:453`
 
 ### `worstPlacedFriendlyPiece` (function) — 4 call sites
 - `src/services/reviewFullData.ts:504`
@@ -166,7 +168,7 @@
 - `src/services/planPrescriptions.test.ts:111`
 - `src/services/planPrescriptions.test.ts:119`
 - `src/services/principleAttribution.section14.test.ts:121`
-- `src/services/principleAttribution.ts:1088`
+- `src/services/principleAttribution.ts:1106`
 - `src/services/reviewFullData.ts:533`
 - `src/services/reviewNarrationDefects.test.ts:35`
 - `src/services/reviewNarrationDefects.test.ts:45`
