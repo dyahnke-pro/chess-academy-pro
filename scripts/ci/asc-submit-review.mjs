@@ -144,7 +144,16 @@ async function main() {
       // flipped submitted=true on a submission containing NOTHING. That ships
       // an empty review to Apple and burns a review cycle (1-3 days) on an app
       // with live paying customers. Never assume; verify below.
+      // 🚨 PRINT APPLE'S REASON, NOT JUST THE STATUS (2026-09-22). `__body`
+      // has been captured by `api()` since it was written and thrown away
+      // here, so nine minutes of release pipeline reported "add item → 409"
+      // and nothing else. A bare status code cannot distinguish "already in
+      // this submission" (benign) from "version not eligible" or "another
+      // submission holds it" — which are three different fixes. The guard
+      // below correctly refuses to submit an empty shell either way; this is
+      // what tells a reader WHY it had to.
       console.log(`add item → ${add.__error} (will verify the submission actually carries ${VERSION})`);
+      if (add.__body) console.log(`  apple says: ${String(add.__body).slice(0, 600)}`);
     } else {
       console.log(`added version ${VERSION} as a reviewSubmissionItem`);
     }
