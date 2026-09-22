@@ -20,7 +20,7 @@ import { coachSurfaceForRoute } from '../../coach/questionIntents';
 import { buildEnginePlan } from '../../services/enginePlanContext';
 import { getCachedStockfish } from '../../hooks/stockfishFenCache';
 import { withTimeout } from '../../coach/withTimeout';
-import type { LiveState, TacticsLiveContext } from '../../coach/types';
+import type { LiveState, TacticsLiveContext, AskOrigin } from '../../coach/types';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
@@ -189,8 +189,10 @@ export interface GameChatPanelHandle {
   streamAssistantMessage: () => { update: (text: string) => void };
   /** Send a user message through the grounded coach pipeline, as if typed —
    *  triggers a real (grounded) coach response. Used by the "Why?" button so
-   *  every Why explanation routes through the same grounded coach. */
-  ask: (text: string) => void;
+   *  every Why explanation routes through the same grounded coach. A caller
+   *  sending a CANNED sentence declares `origin` so the ask is never counted
+   *  as a question the student typed (WO-STANDARD-01 H6). */
+  ask: (text: string, opts?: { origin?: AskOrigin }) => void;
 }
 
 export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>(
@@ -382,10 +384,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     // Expose method for parent to inject assistant messages (hints, takeback msgs)
     // Kept current with handleSend (defined below) so the imperative `ask`
     // routes through the same grounded send path the textarea uses.
-    const handleSendRef = useRef<((text: string) => Promise<void>) | null>(null);
+    const handleSendRef = useRef<((text: string, opts?: { origin?: AskOrigin }) => Promise<void>) | null>(null);
     useImperativeHandle(ref, () => ({
-      ask(text: string) {
-        void handleSendRef.current?.(text);
+      ask(text: string, opts?: { origin?: AskOrigin }) {
+        void handleSendRef.current?.(text, opts);
       },
       injectAssistantMessage(text: string) {
         const msg: ChatMessageType = {
@@ -426,8 +428,11 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       speechBufferRef.current = '';
     }, [queueSpeak]);
 
-    const handleSend = useCallback(async (text: string) => {
+    const handleSend = useCallback(async (text: string, opts?: { origin?: AskOrigin }) => {
       if (!activeProfile || isStreaming) return;
+      // Threaded onto both dispatch inputs below (H6): a canned sentence sent
+      // through this box declares itself; a typed one carries nothing.
+      const askOrigin = opts?.origin ? { origin: opts.origin } : {};
 
       // Coach STOPS what it's doing the instant the student asks — consistent
       // with every playing surface (David 2026-09-07). Cut any in-flight
@@ -969,7 +974,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // error to the user instead of a forever-spinning indicator.
           const askResult = await withTimeout(
             dispatchCoachTurn(
-            { surface: 'game-chat', ask: text, liveState },
+            { surface: 'game-chat', ask: text, liveState, ...askOrigin },
             {
               // Mid-game: run the SAME spine + the deterministic action router
               // (David 2026-07-09, live prod: "take me to tactics" / "play the
@@ -1336,7 +1341,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           .find((m) => m.role === 'assistant')?.content;
         const drawerAskResult = await withTimeout(
           dispatchCoachTurn(
-          { surface: drawerSurface, ask: text, liveState: drawerLiveState },
+          { surface: drawerSurface, ask: text, liveState: drawerLiveState, ...askOrigin },
           {
             // Full dispatch (action router ON): settings toggles, "take me to
             // X", session starts route deterministically here — replacing the

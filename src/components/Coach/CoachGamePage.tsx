@@ -36,6 +36,7 @@ import {
   createPhaseTransitionState,
   detectPhaseTransition,
   phaseTransitionDiagnostic,
+  planPhaseNoFireAudit,
   type PhaseTransitionState,
 } from '../../services/phaseTransitionDetector';
 import { logAppAudit } from '../../services/appAuditor';
@@ -1601,6 +1602,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // Reset the phase-transition ledger so the new game can fire its
     // transitions fresh (WO-PHASE-NARRATION-01).
     phaseStateRef.current = createPhaseTransitionState();
+    phaseNoFireSigRef.current = null;
     // Reset the introduced-openings tracker so the next opening gets
     // its long teaching intro again.
     openingIntroSpokenRef.current = false;
@@ -1816,6 +1818,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // The detector ledger resets when a new game starts (see handleRestart
   // / play-again paths). Using a ref so mutations don't trigger renders.
   const phaseStateRef = useRef<PhaseTransitionState>(createPhaseTransitionState());
+  /** Signature of the last no-fire diagnostic WRITTEN — the once-per-signature
+   *  gate on `phase-transition-suppressed` (WO-STANDARD-01 H5). Reset with the
+   *  phase ledger so a new game writes its first row again. */
+  const phaseNoFireSigRef = useRef<string | null>(null);
   const phaseNarration = usePhaseNarration({
     getPgn: () => game.history.join(' '),
     playerColor,
@@ -1847,26 +1853,20 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     if (!lastMove) {
       return;
     }
-    if (lastMove.isCoachMove) {
-      // Full-trail audit (WO-PHASE-FIX-02): every time the effect fires
-      // we record what it saw, so a silent-detector regression never
-      // vanishes into a gap. Coach moves get a lightweight entry.
-      void logAppAudit({
-        kind: 'phase-transition-suppressed',
-        category: 'subsystem',
-        source: 'CoachGamePage.phaseTransition',
-        summary: `skipped: coach move (ply ${lastMove.moveNumber})`,
-        details: JSON.stringify({ reason: 'coach-move', san: lastMove.san }),
-      });
-      return;
-    }
+    // A coach move is declined by the detector's own contract — not a
+    // suppression, so no row (WO-STANDARD-01 H5: 512 of 941 rows were these).
+    if (lastMove.isCoachMove) return;
 
     const diag = phaseTransitionDiagnostic(lastMove, phaseStateRef.current, playerColor);
     const event = detectPhaseTransition(lastMove, phaseStateRef.current, playerColor);
 
     if (!event) {
-      // WO-PHASE-FIX-03: summary now shows which of the 4 rules are
-      // close to firing so a silent game is diagnosable at a glance.
+      // WO-PHASE-FIX-03: the summary shows which of the 4 rules are close to
+      // firing so a silent game is diagnosable at a glance — written ONCE per
+      // signature of those inputs, not once per ply (`planPhaseNoFireAudit`).
+      const plan = planPhaseNoFireAudit(lastMove, diag, phaseNoFireSigRef.current);
+      if (!plan.write) return;
+      phaseNoFireSigRef.current = plan.signature;
       void logAppAudit({
         kind: 'phase-transition-suppressed',
         category: 'subsystem',
@@ -4486,7 +4486,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       gameChatRef.current?.injectAssistantMessage(answer);
       void voiceService.speakReadAloud(answer);
     } catch {
-      gameChatRef.current?.ask("What's the strongest move for me in this exact position, and why is it the best? Explain the key idea and why the natural alternatives are worse.");
+      // A CANNED sentence, not the student's words — declared so the analytics
+      // recipe never counts it as a question they asked (WO-STANDARD-01 H6:
+      // 173 of 317 native `coach_question_asked` rows in 30 days were this line,
+      // all from ONE device whose computed WHY kept throwing above).
+      gameChatRef.current?.ask("What's the strongest move for me in this exact position, and why is it the best? Explain the key idea and why the natural alternatives are worse.", { origin: 'canned-best-move' });
     } finally {
       whyLoadingRef.current = false;
     }
@@ -4779,6 +4783,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             // Reset phase-transition ledger for the fresh game
             // (WO-PHASE-NARRATION-01).
             phaseStateRef.current = createPhaseTransitionState();
+    phaseNoFireSigRef.current = null;
             openingIntroSpokenRef.current = false;
             setGameState({
               gameId: `game-${Date.now()}`,

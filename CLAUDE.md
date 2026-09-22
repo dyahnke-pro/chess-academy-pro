@@ -2703,6 +2703,17 @@ property (`/coach/teach`, `/coach/play`, `/coach/review`, …), not by event —
 `/coach/teach` has no unique event of its own and vanishes into the voice/coach
 buckets otherwise.
 
+🔒 **`coach_question_asked` COUNTS ONLY `properties.ask_source = 'typed'`
+(WO-STANDARD-01 H6, measured 2026-09-22).** The raw event was 10× inflated on
+native: of 317 rows in 30 days, 173 were the canned best-move button on Play
+(`ask_source='canned-best-move'`, ONE device), 115 were the hint prompt
+(`'hint'`), ~28 were questions a person typed. The rows are never deleted —
+they are distinguished, so every producer of the event carries `ask_source`
+(`typed` | `hint` | `canned-best-move` | `internal`). Rows older than this build
+have no property: count those as typed ONLY when `properties.summary` does not
+start with `surface=hint` / `surface=phase-narration` / `surface=ping` /
+`surface=move-selector`, and know they still hold the canned button's taps.
+
 **🔒🔒 THE FIVE CONTAMINATION TRAPS — verified 2026-09-02, do NOT re-learn them
 the hard way (David, after a full paranoia pass).** Every one of these bit this
 session; the recipe above already excludes them, but know WHY:

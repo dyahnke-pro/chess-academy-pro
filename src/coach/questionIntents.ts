@@ -10,7 +10,27 @@
 // The only import: a PURE data resolver (fundamentalLessons imports nothing but a
 // type), so the "no heavy imports" contract holds — regex intent detection only.
 import { resolveTaughtFundamental } from '../data/fundamentalLessons';
-import type { CoachSurface } from './types';
+import type { CoachSurface, AskOrigin, AskSource } from './types';
+
+/** Surfaces whose ask text is a CODE-AUTHORED prompt, not the student's words
+ *  (a hint tap, the phase narrator, a ping, the move selector). The audit
+ *  labels their text and the analytics recipe leaves them out of "questions
+ *  asked". Lives in this leaf so the classifier is testable without the spine. */
+export const INTERNAL_ASK_SURFACES: ReadonlySet<CoachSurface> = new Set<CoachSurface>([
+  'hint',
+  'phase-narration',
+  'ping',
+  'move-selector',
+]);
+
+/** THE ONE CLASSIFIER for `coach_question_asked.ask_source` (WO-STANDARD-01 H6).
+ *  Surface first — a composed prompt is internal whatever the caller says —
+ *  then the producer's declared origin, then the honest default: typed. */
+export function askSourceFor(surface: CoachSurface, origin: AskOrigin | undefined): AskSource {
+  if (surface === 'hint') return 'hint';
+  if (INTERNAL_ASK_SURFACES.has(surface)) return 'internal';
+  return origin ?? 'typed';
+}
 
 /** Map the spine's `CoachSurface` enum to a route path the audit
  *  stream + claim-validator audits can attribute against. Used by

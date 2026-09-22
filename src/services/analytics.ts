@@ -263,6 +263,10 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
   // answer can run long but never near this.
   if (entry.askText) props.ask_text = entry.askText.slice(0, 4000);
   if (entry.answerText) props.answer_text = entry.answerText.slice(0, 4000);
+  // WHO PRODUCED THE ASK (WO-STANDARD-01 H6). `coach_question_asked` counted a
+  // hint tap and the canned best-move button as questions — 288 of 317 native
+  // rows in 30 days. The rows stay; this property tells them apart.
+  if (entry.askSource) props.ask_source = entry.askSource;
   // GATE-TRIP DIAGNOSTICS (2026-09-02 audit). A grounding-gate trip writes WHAT
   // was ungrounded into `details` — the invented squares/concepts — and that is
   // the whole diagnostic value of the event. `details` is deliberately dropped

@@ -883,10 +883,23 @@ export interface Provider {
 
 // ─── Service entry point ────────────────────────────────────────────────────
 
+/** WHO PRODUCED THE ASK TEXT (WO-STANDARD-01 H6). `coach_question_asked` was
+ *  10× inflated: 317 rows in 30 days on native were 173 taps of the canned
+ *  best-move button (one device), 115 hint prompts, and ~28 questions a person
+ *  typed. Every producer must say what it is — the events are never deleted,
+ *  they are DISTINGUISHED. A surface that composes its own prompt
+ *  (`INTERNAL_ASK_SURFACES`) is classified by surface; a button that sends a
+ *  canned sentence THROUGH the chat declares `origin`. Absent = typed. */
+export type AskOrigin = 'typed' | 'canned-best-move';
+export type AskSource = AskOrigin | 'hint' | 'internal';
+
 export interface CoachAskInput {
   surface: CoachSurface;
   ask: string;
   liveState: LiveState;
+  /** How the ask text came to exist. Omitted means the student typed or
+   *  spoke it. */
+  origin?: AskOrigin;
 }
 
 export interface CoachAnswer {

@@ -960,6 +960,10 @@ export interface AuditEntry {
    *  `ask_text` / `answer_text`. */
   askText?: string;
   answerText?: string;
+  /** Who produced the ask text — `typed` | `hint` | `canned-best-move` |
+   *  `internal` (WO-STANDARD-01 H6). Forwarded as `ask_source` so the usage
+   *  recipe counts questions a person asked, never a button's sentence. */
+  askSource?: 'typed' | 'hint' | 'canned-best-move' | 'internal';
   /** In-app feedback reply-to + rating (QuickFeedbackButton / FeedbackForm).
    *  The user OPTIONALLY typed their email asking for a reply. Before this was
    *  forwarded, the address lived ONLY in the ephemeral audit-stream (wiped on

@@ -349,6 +349,56 @@ export function debugPhaseDiagnostics(fen: string, moveNumber: number): {
   };
 }
 
+/**
+ * WHEN THE NO-FIRE DIAGNOSTIC MAY BE WRITTEN (WO-STANDARD-01 H5).
+ *
+ * PostHog, native, 30d: `phase_transition_suppressed` fired 941 times on four
+ * devices — 512 "skipped: coach move (ply N)" rows and 428 "no-fire" rows, one
+ * PER PLY, against ONE genuine suppression. A noise audit event is a lying
+ * instrument: the row that meant something was invisible among the rows that
+ * meant nothing.
+ *
+ * Two changes, decided here so the page cannot re-derive them:
+ *  - a COACH move is not a suppression. The detector declines it by contract
+ *    ("only the student's moves trigger narration"), so there is nothing to
+ *    report and it is never written.
+ *  - a NO-FIRE row is written once per SIGNATURE — the tuple of inputs the
+ *    four rules read (phase, development, castling, rook connection, the
+ *    major-capture flag). A run of plies where none of those changed is one
+ *    fact, not forty rows. The diagnostic value WO-PHASE-FIX-03 wanted ("which
+ *    rules are close to firing") survives: the row is written the moment any
+ *    input moves.
+ */
+export function phaseDiagnosticSignature(d: PhaseTransitionDiagnostic): string {
+  return [
+    d.phase,
+    `dev=${d.developedMinors.white}/${d.developedMinors.black}`,
+    `castled=${d.studentCastled}`,
+    `rooks=${d.studentRooksOnBackRank}`,
+    `major=${d.majorPieceCaptured}`,
+    `o2m=${d.openingToMiddlegameFired}`,
+    `m2e=${d.middlegameToEndgameFired}`,
+  ].join('|');
+}
+
+export type PhaseAuditPlan =
+  | { write: false; why: 'coach-move' | 'unchanged'; signature: string | null }
+  | { write: true; signature: string };
+
+/** Decide whether the no-fire diagnostic for this ply is worth a row.
+ *  `lastSignature` is the signature of the last row WRITTEN (null before the
+ *  first). Pure — the page keeps the ref, this keeps the rule. */
+export function planPhaseNoFireAudit(
+  lastMove: Pick<LastMoveSnapshot, 'isCoachMove'>,
+  diag: PhaseTransitionDiagnostic,
+  lastSignature: string | null,
+): PhaseAuditPlan {
+  if (lastMove.isCoachMove) return { write: false, why: 'coach-move', signature: lastSignature };
+  const signature = phaseDiagnosticSignature(diag);
+  if (signature === lastSignature) return { write: false, why: 'unchanged', signature };
+  return { write: true, signature };
+}
+
 export interface PhaseTransitionDiagnostic {
   moveNumber: number;
   san: string;

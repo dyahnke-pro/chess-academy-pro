@@ -69,12 +69,8 @@ import { rememberComputedPosition, rememberComputedPositions } from '../services
  *  2026-07-10: every hint tap matched TRAINING_REQUEST_RE inside
  *  HINT_TIER_3_ADDITION and served the weakness-drill upsell). Claim
  *  validation and each surface's own runtime gates still apply. */
-const INTERNAL_ASK_SURFACES: ReadonlySet<CoachAskInput['liveState']['surface']> = new Set([
-  'hint',
-  'phase-narration',
-  'ping',
-  'move-selector',
-] as const);
+// INTERNAL_ASK_SURFACES + askSourceFor moved to the pure leaf ./questionIntents
+// (WO-STANDARD-01 H6) so the ask-source classifier is testable without the spine.
 
 /** Read provider name from `import.meta.env.COACH_PROVIDER`, falling
  *  back to `process.env.COACH_PROVIDER` (Node test envs), default
@@ -201,6 +197,7 @@ function pickProvider(_name: ProviderName): Provider {
 // here and re-exported for back-compat with existing callers.
 import {
   coachSurfaceToRoute,
+  INTERNAL_ASK_SURFACES, askSourceFor,
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFundamentalLessonQuestion, isFamousGameQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
@@ -526,6 +523,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // `coach_question_asked` in PostHog carries the whole question, not the
     // 60-char summary preview — for USER-authored surfaces only.
     askText: askTextForAudit,
+    // WHO PRODUCED THE TEXT (WO-STANDARD-01 H6): typed / hint / canned button /
+    // internal — so the analytics recipe can count QUESTIONS, not taps.
+    askSource: askSourceFor(input.liveState.surface, input.origin),
     details: JSON.stringify({
       surface: input.surface,
       askLen: input.ask.length,
