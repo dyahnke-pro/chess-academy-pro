@@ -413,6 +413,46 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // worth more than the knight, a piece that can ACTUALLY deliver it, reachable
   // in N >= 2 quiet moves, and a landing square that is safe on arrival.
   const standingDanger = !!(latentDanger || latentFork || tradeDanger || kingExposure || centralKingDanger);
+  // WHAT THE BOARD ASKED of the move just played — computed HERE from the raw
+  // board data the surface handed over (see `lastMove`), so no surface has to
+  // compose this computer itself.
+  const posed: { tags: readonly import('../data/misconceptionTags').MisconceptionTagId[]; playedCleanly: boolean | undefined } = (() => {
+    const lm = input.lastMove;
+    if (!lm) return { tags: [], playedCleanly: undefined };
+    try {
+      return {
+        tags: capabilitiesPosed(lm.fenBefore, lm.san, input.studentColor === 'w' ? 'white' : 'black').map((c) => c.tag),
+        playedCleanly: lm.cpLoss == null ? undefined : movePlayedCleanly(lm.cpLoss),
+      };
+    } catch { return { tags: [], playedCleanly: undefined }; }
+  })();
+
+  // 🔴 THE PRE-GATE WAS BLIND TO THE STUDENT (fixed 2026-09-21; David: "the
+  // algo/heatmap/decision computer all come together to decide when something
+  // is spoken"). This `judgeMoment` used to be called with THREE arguments —
+  // no student term — and its `importance.speak` is what gates the EXPENSIVE
+  // facts below (`computeLeansOn`, `structurePlan`). So a moment this student's
+  // own record would have raised never got those facts COMPUTED, and the real
+  // door (`decide()`, which DOES get the boost) can only rank facts that exist.
+  // The heat map was excluded from the gate deciding what the heat map would
+  // later choose between.
+  //
+  // 🚨 IT IS THE GREY HALF ONLY, AND THAT IS HONEST RATHER THAN LAZY. The boost
+  // is `max(red, grey)`. RED needs `needFor.hole`, which is the clause->hole
+  // join and cannot exist before the clauses do — computing a second, cheaper
+  // hole join here is exactly the duplicated-judgement the rot rule bans. GREY
+  // needs only what the board POSED plus the capability profile, both available
+  // from `input`. So this passes a LOWER BOUND of the true boost: the pre-gate
+  // can only ever become less strict, never raise a moment the real door would
+  // not have raised.
+  //
+  // Grey is also the half that matters most here — "GREY MEANS TEACH IT": a
+  // fresh install is 100% grey, and that is precisely the student who was
+  // losing the expensive facts.
+  const preGateBoost = studentMomentBoost({
+    posedTags: posed.tags,
+    capabilities: input.studentNeedContext?.capabilities,
+  });
   const { importance, speaks } = judgeMoment({
     decision: { severity: severityFromGap(gap12, rating), gapCp: gap12 },
     cpLossCp: input.cpLossCp ?? null,
@@ -427,7 +467,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // (Passing the object directly makes wdl[0]/wdl[2] undefined → every
     // position falsely reads "decided" and goes silent.)
     wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
-  }, rating, input.posture);
+  }, rating, input.posture, preGateBoost);
 
   // Perturbation is expensive → only when the moment earns it AND a probe fn was
   // supplied AND we're out of the opening. Probe BOTH sides: the student's
@@ -545,19 +585,6 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // THIS STUDENT need teaching here", which is only ever a question about their
   // own decision; on the opponent's ply it is null and importance decides.
   const studentIsMoving = input.moverColor === input.studentColor;
-  // WHAT THE BOARD ASKED of the move just played — computed HERE from the raw
-  // board data the surface handed over (see `lastMove`), so no surface has to
-  // compose this computer itself.
-  const posed: { tags: readonly import('../data/misconceptionTags').MisconceptionTagId[]; playedCleanly: boolean | undefined } = (() => {
-    const lm = input.lastMove;
-    if (!lm) return { tags: [], playedCleanly: undefined };
-    try {
-      return {
-        tags: capabilitiesPosed(lm.fenBefore, lm.san, input.studentColor === 'w' ? 'white' : 'black').map((c) => c.tag),
-        playedCleanly: lm.cpLoss == null ? undefined : movePlayedCleanly(lm.cpLoss),
-      };
-    } catch { return { tags: [], playedCleanly: undefined }; }
-  })();
   const needFor = needClauseFor(composed, input.studentWeaknesses ?? []);
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({

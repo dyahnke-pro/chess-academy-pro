@@ -402,6 +402,7 @@ const GATE_TESTS = [
   // so a gate that guards a file it does not sit beside runs only while its own
   // file keeps changing, and goes silent the moment it lands. All four are that
   // shape, and each guards something with a real incident behind it:
+  'src/test/preGateSeesTheStudent.test.ts',   // the cheap pre-gate must never be stricter than the real door
   'src/test/kingIsNeverHanging.test.ts',      // a king is never hanging — that is check (the k:100 capture-table leak)
   'src/test/latentForkOpensTheDoor.test.ts',  // T5 — a two-move fork must be able to open the door on interrupt
   'src/test/coachSurfacesAgree.test.ts',      // one coach, one answer — review and Learn must not diverge on the same board
