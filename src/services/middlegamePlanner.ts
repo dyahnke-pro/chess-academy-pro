@@ -20,8 +20,7 @@ import { Chess } from 'chess.js';
 import middlegamePlans from '../data/middlegame-plans.json';
 import { buildSession } from './walkthroughAdapter';
 import { stockfishEngine } from './stockfishEngine';
-import { getCoachChatResponse } from './coachApi';
-import { gradeNarrationText } from './coachAnswerGates';
+import { narrateContinuationMove } from './continuationMoveNarration';
 import type { WalkthroughSession } from '../types/walkthrough';
 import type { OpeningMoveAnnotation } from '../types';
 
@@ -231,8 +230,10 @@ export async function resolveMiddlegameSessionWithFallback(
 /**
  * Stockfish-derived fallback: analyse the FEN, take the principal
  * variation, convert each UCI move to SAN so chess.js is the truth
- * for notation, and ask the coach for a one-sentence idea per move
- * in a single batched LLM call.
+ * for notation, and COMPUTE the why behind each move of the line
+ * (narrateContinuationMove — G0, WO-STANDARD-01 F3; this used to be one
+ * batched chat call asking the model to "explain the idea" of each engine
+ * move, board-graded on the way back).
  */
 async function buildStockfishFallbackSession(
   options: ResolveMiddlegameOptions,
@@ -278,14 +279,17 @@ async function buildStockfishFallbackSession(
 
   if (sanMoves.length === 0) return null;
 
-  // Batched LLM narration: one round-trip for the entire line.
-  const narrations = await narratePvLine(startFen, sanMoves, options.subject);
+  // The why behind every move of the engine's line, computed from the board
+  // as the line is replayed — the in-game register, every clause true of
+  // THIS move on THIS board (David 2026-07-19: "the lines come from
+  // stockfish best moves… we need the why stated behind the best moves").
+  const narrations = narratePvLine(startFen, sanMoves);
 
-  // Build annotations array keyed to each move; falls back to the
-  // san-only string if the LLM call returned fewer sentences than moves.
+  // Build annotations array keyed to each move; a ply the computer had
+  // nothing to say about keeps the bare SAN rather than filler.
   const annotations: OpeningMoveAnnotation[] = sanMoves.map((san, i) => ({
     san,
-    annotation: narrations[i] ?? `${san}.`,
+    annotation: narrations[i] || `${san}.`,
   }));
 
   const subtitle = options.subject
@@ -307,97 +311,35 @@ async function buildStockfishFallbackSession(
 }
 
 /**
- * One batched LLM call that returns one short idea per move. Returns a
- * string[] the same length as `sanMoves` (missing entries are filled
- * with empty strings so callers can fall back to a default).
+ * One computed sentence per move of the PV, replayed from `fen` so each
+ * sentence describes the board it is spoken on. Same length as `sanMoves`;
+ * an entry is '' only when the replay breaks at that ply.
  */
-async function narratePvLine(
-  fen: string,
-  sanMoves: string[],
-  subject: string | undefined,
-): Promise<string[]> {
-  const moveList = sanMoves
-    .map((san, i) => `${i + 1}. ${san}`)
-    .join('\n');
-  const subjectLine = subject
-    ? `Context: the student asked about "${subject}".\n`
-    : '';
-
-  const systemAdditions = [
-    'You are explaining a chess engine\'s recommended continuation.',
-    'For EACH move listed, give ONE concise sentence (max 18 words) explaining the idea.',
-    'Return a JSON array of strings in the same order as the moves — nothing else.',
-    'Do not wrap the JSON in markdown fences. Do not add commentary before or after.',
-  ].join(' ');
-
-  const userMessage = [
-    `${subjectLine}Starting FEN: ${fen}`,
-    '',
-    `Principal variation (${sanMoves.length} moves):`,
-    moveList,
-    '',
-    `Return a JSON array of exactly ${sanMoves.length} sentences, one per move.`,
-  ].join('\n');
-
+export function narratePvLine(fen: string, sanMoves: string[]): string[] {
+  const out: string[] = [];
+  let replay: Chess;
   try {
-    const raw = await getCoachChatResponse(
-      [{ role: 'user', content: userMessage }],
-      systemAdditions,
-      undefined,
-      'chat_response',
-      600,
-    );
-    const parsed = extractJsonArray(raw);
-    if (Array.isArray(parsed)) {
-      // Per-move FENs (replay the PV from the start) so each sentence is
-      // board-claim-gated against the position it describes — a
-      // provably-false board fact is blanked before it reaches the UI.
-      const fensAfter: (string | null)[] = [];
-      try {
-        const replay = new Chess(fen);
-        for (const san of sanMoves) {
-          try { replay.move(san); fensAfter.push(replay.fen()); }
-          catch { fensAfter.push(null); }
-        }
-      } catch { /* bad start fen — skip board gating */ }
-      return sanMoves.map((_, i) => {
-        const entry = parsed[i];
-        const text = typeof entry === 'string' && entry.trim() ? entry.trim() : '';
-        // Shared narration gate (same primitive as the spine + every generator).
-        return gradeNarrationText(text, fensAfter[i], 'middlegamePlanner') ?? text;
-      });
+    replay = new Chess(fen);
+  } catch {
+    return sanMoves.map(() => '');
+  }
+  for (const san of sanMoves) {
+    const fenBefore = replay.fen();
+    let mv;
+    try {
+      mv = replay.move(san);
+    } catch {
+      mv = null;
     }
-  } catch (err: unknown) {
-    console.warn('[middlegamePlanner] PV narration LLM call failed:', err);
+    if (!mv) {
+      out.push('');
+      continue;
+    }
+    try {
+      out.push(narrateContinuationMove(fenBefore, replay.fen(), mv.san, mv.from, mv.to).say);
+    } catch {
+      out.push('');
+    }
   }
-  return sanMoves.map(() => '');
-}
-
-/**
- * Best-effort JSON array extraction from an LLM response. Strips
- * common stray wrappers (``` fences, explanatory prose) so a few
- * chars of cruft don't cost us the whole narration set.
- */
-function extractJsonArray(raw: string): unknown[] | null {
-  if (!raw) return null;
-  const trimmed = raw.trim();
-  // Try direct parse first.
-  try {
-    const direct: unknown = JSON.parse(trimmed);
-    if (Array.isArray(direct)) return direct as unknown[];
-  } catch {
-    /* fall through */
-  }
-  // Find the first `[` and the last `]` and retry.
-  const start = trimmed.indexOf('[');
-  const end = trimmed.lastIndexOf(']');
-  if (start === -1 || end === -1 || end <= start) return null;
-  try {
-    const candidate = trimmed.slice(start, end + 1);
-    const parsed: unknown = JSON.parse(candidate);
-    if (Array.isArray(parsed)) return parsed as unknown[];
-  } catch {
-    /* fall through */
-  }
-  return null;
+  return out;
 }
