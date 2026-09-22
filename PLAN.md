@@ -201,7 +201,7 @@ everything; A2–A3 next; A4–A8 are the visible payoff; A11 is the audit.
   header says "932 analysed" over "926 not analysed".
 
 ### J. AUDITS THAT PROVE IT
-- J1. `audit-home-opening-prod.mjs` (A11).
+- ✅ J1. `audit-home-opening-prod.mjs` — built with A2/A3 (2026-09-22): seeds a record through raw IndexedDB with the ONE key, holds both algo emissions to their contracts, vacuity-checked. Runs on prod after the push.
 - J2. The standing pair after every batch, sequentially, narrations read.
 - J3. `audit-second-game-memory-prod` after C7; `audit-loop-closes-prod` after
   C1–C4; `audit-coach-all-questions-prod` exhaustive after E.
@@ -479,10 +479,11 @@ fire is not a wire"):**
 analysed). 4–8 are the student-visible payoff and can land in one push.
 9 and 10 run alongside as the wiring/truth sweep; 11 closes it.
 
-**Next-session pickup.** Start at item 1 with `node scripts/surface-map.mjs
---changed` on `gameImportUtils`, `CoachGamePage`, `CoachTeachPage`,
-`CoachGameReview`, `studentNeedLoader`, `bookDeparturePrecompute`. Read the
-four key-space sites cited above before choosing the key.
+**Next-session pickup.** Items 1–8 are ✅ above (2026-09-22). What remains
+of this WO is item 9 (every component wired both ways — Bucket B carries the
+deciding-path half, C1–C6 the record half) and the prod audits after the
+push. David's decisions (lock semantics, steer, auto-analyse on import) are
+built as recommended and each is one flag away from flipping.
 
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 

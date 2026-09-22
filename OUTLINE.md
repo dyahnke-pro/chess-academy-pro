@@ -31,7 +31,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🟠 G. Play — G1 card off (shipped 0813e7f) · G2 steer; D4 decision recorded (spoken verdict stays until David flips)
 - 🔴 H. Real-user plumbing — H1 926/932 unanalysed · H2 verify walkthrough refusal on home-chat · H3 Learn game unparseable in review · H4 feedback double-submit · H5 OTA fails / cloud voice fallover / analysis stalls / suppressed-transition noise · H6 analytics inflation
 - 🔴 I. Docs and gates that lie — I1 G6 stale · I2 63 inline 1200 · I3 Play contract contradiction · I4 vacuous CRIT rows + header
-- 🔴 J. Audits — J1 home-opening audit · J2 standing pair per batch · J3 memory/loop/routing audits after their batches
+- 🟠 J. Audits — ✅ J1 `audit-home-opening-prod.mjs` (holds `home-opening-chosen` + `analysis-batch-ordered`; vacuity-checked) · 🔴 J2 standing pair after the push, sequentially, narrations read · 🔴 J3 `audit-second-game-memory-prod` (C7) · `audit-loop-closes-prod` (C1–C4) · `audit-coach-all-questions-prod` exhaustive (E) — all after the push
 - 🟡 K. Not now — Kids Mode opens, 47-game corpus, boot payload, dashboard grading
 
 ## 0. WO-HOME-OPENING-01 — a personal coach: one home opening per colour (David 2026-09-22)
