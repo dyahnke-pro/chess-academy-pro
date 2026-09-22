@@ -29,7 +29,7 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { detectSlip, slipWarrantsInterjection, isNearBest, slipSeverityLabel, type SlipSeverity } from '../services/slipDetector';
 import { startDial, recordAttempt, type HintDial } from '../services/hintRegister';
 import { backwardLook, type BackwardLook } from '../services/backwardLook';
-import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, findMoverTactic, recordMoveEvidence, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
+import { buildWhyPrompt, buildGroundedReveal, buildSlipReveal, captureMisconception, engineLinesForCapture, findMoverTactic, recordMoveEvidence, withReasonLead, type CapabilityOrigin } from '../services/discussionPractice';
 import { buildMisconceptionCallback } from '../services/misconceptionCallbacks';
 import { buildMoveReasonOptions } from '../services/moveReasonOptions';
 import { voiceService } from '../services/voiceService';
@@ -348,6 +348,9 @@ export function useDiscussionPractice(
       let bestPvUci: string[] | undefined;
       let bestLineEvalW: number | undefined;
       let bestLineMate: number | null | undefined;
+      /** The post-move read was a mate score — its eval is a sentinel, not a
+       *  number the attributor may subtract (C3). */
+      let afterIsMate = false;
       /** The OPPONENT's best line from the position after the student moved —
        *  the rear-facing PV. Already computed for the eval; it was being
        *  discarded. See `whatItAllowed`. */
@@ -368,6 +371,7 @@ export function useDiscussionPractice(
         bestPvUci = before.topLines?.[0]?.moves ?? (before.bestMove ? [before.bestMove] : []);
         bestLineEvalW = before.isMate ? undefined : before.evaluation;
         bestLineMate = before.isMate ? before.mateIn : null;
+        afterIsMate = !!after.isMate;
         replyPvUci = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
       } catch {
         return; // engine down → never guess (G0/G3)
@@ -493,9 +497,27 @@ export function useDiscussionPractice(
             // history the classifier proves WHICH fundamental this slip
             // neglected and records it — so live Learn/Play play, not just
             // post-game review, feeds the per-fundamental scorecard + drill
-            // queue. The eval/PV-gated detectors still stay review-only (no
-            // persisted lines live), which is correct.
+            // queue.
             historySans: args.historySans,
+            // AND THE ENGINE LINES + EVALS (C3, 2026-09-22). The comment that
+            // used to sit here said the eval/PV-gated detectors "stay
+            // review-only (no persisted lines live), which is correct" — while
+            // `bestPvUci`, `replyPvUci`, `evalBeforeMover` and `evalAfterMover`
+            // were all in hand twenty lines up. So `calculation-depth`,
+            // `poisoned-pawn`, `overvalued-attack` and `botched-conversion`
+            // declined every live slip on a missing input the surface already
+            // had. Capability parity: the live capture carries the shape the
+            // sweep writes. Converted service-side; this hook imports no
+            // fact-computer for it.
+            ...engineLinesForCapture({
+              fenBefore: args.fenBefore,
+              fenAfter: args.fenAfter,
+              bestUci,
+              bestPvUci: bestPvUci ?? [],
+              replyPvUci,
+              evalBeforeMover: bestLineMate === null ? evalBeforeMover : undefined,
+              evalAfterMover: afterIsMate ? undefined : evalAfterMover,
+            }),
           },
           source: opts.source ?? 'discussion-practice',
           shouldCount: slip.shouldCount,

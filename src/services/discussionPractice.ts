@@ -20,6 +20,7 @@ import {
 } from './misconceptionClassifier';
 import { logMisconception } from './misconceptionService';
 import { addMistakePuzzleFromCapture, provenanceForGameId } from './mistakePuzzleService';
+import { pvUciToSan } from './principleAttribution';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
 import { recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
 
@@ -320,6 +321,52 @@ export async function captureMisconception(
  *  SURFACE declares its origin without importing the student-model store
  *  directly — the composition rule `surfaceComposition.scan` enforces. */
 export type CapabilityOrigin = CapabilityEvidenceRecord['origin'];
+
+/**
+ * THE ENGINE LINES A LIVE CAPTURE HANDS THE CLASSIFIER (C3, 2026-09-22), in
+ * the attributor's contract: SAN, `pvAfterPlayed` replayed from the board
+ * AFTER the move, `pvAfterBest` from the board after the BEST move — and only
+ * when the pre-move line actually starts with that best move (a line that does
+ * not is worse than none; the sweep guards the same way). Evals go through as
+ * MOVER-POV centipawns and only when real (a mate sentinel is not a number to
+ * subtract).
+ *
+ * Lives here, beside `captureMisconception`, so a HOOK converts nothing and
+ * imports no fact-computer for it: the one UCI→SAN converter is
+ * `pvUciToSan`, reached through the service the hook already calls.
+ */
+export function engineLinesForCapture(args: {
+  fenBefore: string;
+  fenAfter: string;
+  /** Engine best move at `fenBefore`, UCI, when one was read. */
+  bestUci?: string;
+  /** The engine's line FROM `fenBefore` (starts with its best move), UCI. */
+  bestPvUci: readonly string[];
+  /** The opponent's line FROM `fenAfter`, UCI — the punishment. */
+  replyPvUci: readonly string[];
+  /** Mover-POV centipawns; omit (undefined) when the read was a mate. */
+  evalBeforeMover?: number;
+  evalAfterMover?: number;
+}): Pick<ClassifyMisconceptionInput, 'pvAfterPlayed' | 'pvAfterBest' | 'evalBefore' | 'evalAfterPlayed'> {
+  const out: Pick<ClassifyMisconceptionInput, 'pvAfterPlayed' | 'pvAfterBest' | 'evalBefore' | 'evalAfterPlayed'> = {};
+  if (args.replyPvUci.length > 0) {
+    const san = pvUciToSan(args.fenAfter, [...args.replyPvUci]);
+    if (san.length > 0) out.pvAfterPlayed = san;
+  }
+  if (args.bestUci && args.bestPvUci[0] === args.bestUci && args.bestPvUci.length > 1) {
+    try {
+      const c = new Chess(args.fenBefore);
+      const m = c.move({ from: args.bestUci.slice(0, 2), to: args.bestUci.slice(2, 4), promotion: args.bestUci.slice(4, 5) || undefined });
+      if (m) {
+        const san = pvUciToSan(c.fen(), args.bestPvUci.slice(1));
+        if (san.length > 0) out.pvAfterBest = san;
+      }
+    } catch { /* an illegal best move (stale read) — no afterBest line */ }
+  }
+  if (args.evalBeforeMover !== undefined) out.evalBefore = Math.round(args.evalBeforeMover) || 0; // `|| 0` folds -0 (a POV flip of 0)
+  if (args.evalAfterMover !== undefined) out.evalAfterPlayed = Math.round(args.evalAfterMover) || 0;
+  return out;
+}
 
 /**
  * RECORD WHAT THE MOVE DEMONSTRATED — the positive half, from the live board.

@@ -55,6 +55,13 @@ export function movesToAnnotations(moves: CoachGameMove[], playerColor: 'white' 
       bestMoveEval: m.bestMoveEval,
       classification: m.classification,
       comment: m.commentary || null,
+      // THE ENGINE LINES RIDE ALONG (C3, 2026-09-22) — byte-for-byte the shape
+      // the sweep persists (`pv.afterPlayed` / `pv.afterBest`), so the record
+      // path attributes a Play game the way it attributes an import. Without
+      // them `calculation-depth` declined every Play slip with "punishing PV
+      // is 0 plies" — the live classifier had the lines in hand and dropped
+      // them at this boundary.
+      ...(m.pv ? { pv: m.pv } : {}),
     });
   }
   return out;

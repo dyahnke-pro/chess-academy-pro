@@ -3862,6 +3862,22 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // still available for classification decisions above.
     void evalLoss;
 
+    // THE ENGINE LINES ON THE LIVE MOVE (C3, 2026-09-22). Both reads are in
+    // hand — the pre-move fan (`preAnalysis`) and the post-move read
+    // (`analysis`) — and were thrown away at this literal, so a Play game's
+    // saved annotations carried no `pv` and the record path's PV-gated
+    // fundamental (`calculation-depth`) could never land on a Play slip. Same
+    // contract as the sweep: flagged plies only; `afterBest` only when the
+    // pre-move line really STARTS with the best move (a line that does not is
+    // worse than none), minus that first move.
+    const flaggedHere = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
+    const afterPlayedPv = analysis?.topLines?.[0]?.moves ?? [];
+    const bestLinePv = preAnalysis?.topLines?.[0]?.moves ?? [];
+    const afterBestPv = engineBestMoveUci && bestLinePv[0] === engineBestMoveUci ? bestLinePv.slice(1) : [];
+    const livePv = flaggedHere && (afterPlayedPv.length > 0 || afterBestPv.length > 0)
+      ? { afterPlayed: afterPlayedPv, afterBest: afterBestPv }
+      : undefined;
+
     const playerMove: CoachGameMove = {
       moveNumber: moveCountRef.current,
       san: moveResult.san,
@@ -3874,6 +3890,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       bestMove: engineBestMoveUci,
       bestMoveEval: bestMoveEval,
       preMoveEval,
+      ...(livePv ? { pv: livePv } : {}),
     };
 
     // WO-LIVE-COACH-01: hand the per-move analysis to the live-coach

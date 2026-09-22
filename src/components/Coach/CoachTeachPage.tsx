@@ -8430,6 +8430,12 @@ export function CoachTeachPage(): JSX.Element {
         // engine read is White-POV centipawns; `move.history` includes this
         // move, so its index is the ply.
         if (grade) {
+          // The pre-move fan's own line, minus its first move, is the
+          // continuation after the BEST move — filed only when the line really
+          // starts with that move (C3). The punishing line after the PLAYED
+          // move arrives with the mid-turn read and is patched in there.
+          const bestLine = preStudentRead.topLines?.[0]?.moves ?? [];
+          const afterBest = preStudentRead.bestMove && bestLine[0] === preStudentRead.bestMove ? bestLine.slice(1) : [];
           liveGradesRef.current.set(move.history.length - 1, {
             ply: move.history.length - 1,
             san: move.san,
@@ -8437,6 +8443,7 @@ export function CoachTeachPage(): JSX.Element {
             bestMoveUci: preStudentRead.bestMove || null,
             bestMoveEvalCp: preStudentRead.evaluation,
             cpLossCp: grade.cpLossCp,
+            pv: { afterPlayed: [], afterBest },
           });
         }
         if (grade?.worthSpeaking && grade.clause) {
@@ -10063,6 +10070,14 @@ export function CoachTeachPage(): JSX.Element {
                 // and the coach then moved from. `uciSanAt` turns either side's
                 // best move into something speakable.
                 const mid = await midTurnRead;
+                // THE PUNISHING LINE lands on the live grade now that the
+                // post-move read is in (C3): the saved Learn game then carries
+                // the same `pv` shape the sweep persists, and the record path
+                // can attribute the PV-gated fundamentals on it.
+                if (mid?.topLines?.[0]?.moves?.length) {
+                  const g = liveGradesRef.current.get(move.history.length - 1);
+                  if (g && g.san === move.san) g.pv = { afterPlayed: [...mid.topLines[0].moves], afterBest: g.pv?.afterBest ?? [] };
+                }
                 const uciSanAt = (fen: string, uci: string | null | undefined): string | null => {
                   if (!uci || uci.length < 4) return null;
                   try {

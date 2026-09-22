@@ -39,6 +39,12 @@ export interface LearnLiveGrade {
   bestMoveEvalCp: number;
   /** What the played move cost, mover POV, centipawns (≥ 0). */
   cpLossCp: number;
+  /** The engine lines around the move, UCI — the punishment after the played
+   *  move (the mid-turn read) and the continuation after the best move (the
+   *  pre-move read minus its first move). Same shape the sweep persists, so a
+   *  Learn game is attributed like an import (C3). Absent when a read never
+   *  arrived; an honest gap, never an empty guess. */
+  pv?: { afterPlayed: string[]; afterBest: string[] };
 }
 
 /** A live grade → the review's annotation shape. `evaluation` (after the
@@ -52,6 +58,10 @@ export function annotationFromLiveGrade(g: LearnLiveGrade): MoveAnnotation {
   const evaluation = g.bestMoveEvalCp - (isWhite ? cost : -cost);
   const band = bandForWinPctLost(winPctLost(g.bestMoveEvalCp, evaluation, isWhite));
   const classification: MoveClassification = band ?? 'good';
+  // Lines persist on FLAGGED plies only — the sweep's own contract — and only
+  // when at least one side of the pair exists.
+  const flagged = band != null;
+  const pv = flagged && g.pv && (g.pv.afterPlayed.length > 0 || g.pv.afterBest.length > 0) ? g.pv : undefined;
   return {
     moveNumber: Math.floor(g.ply / 2) + 1,
     color: g.color,
@@ -61,6 +71,7 @@ export function annotationFromLiveGrade(g: LearnLiveGrade): MoveAnnotation {
     bestMoveEval: g.bestMoveEvalCp,
     classification,
     comment: null,
+    ...(pv ? { pv } : {}),
   };
 }
 

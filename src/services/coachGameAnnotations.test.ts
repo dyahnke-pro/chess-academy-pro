@@ -39,3 +39,25 @@ describe('movesToAnnotations — the live game IS the analysis', () => {
     expect(LIVE_ANALYSIS_DEPTH).toBeLessThan(16);
   });
 });
+
+describe('C3 — the live engine lines ride into the saved annotation (capability parity with the sweep)', () => {
+  const pv = { afterPlayed: ['a8b8', 'd4b5', 'a7f2'], afterBest: ['d7d6', 'b1c3'] };
+
+  it('a flagged student ply that carries pv files it byte-for-byte on the annotation', () => {
+    const anns = movesToAnnotations([
+      mv({ moveNumber: 27, san: 'Nd4', isCoachMove: false, classification: 'mistake', evaluation: -140, bestMove: 'f3g5', bestMoveEval: 20, pv }),
+    ], 'white');
+    expect(anns).toHaveLength(1);
+    expect(anns[0].pv).toEqual(pv);
+  });
+
+  it('NEGATIVE CONTROL: a ply without pv files no pv key — never an empty guess', () => {
+    const anns = movesToAnnotations([
+      mv({ moveNumber: 27, san: 'Nd4', isCoachMove: false, classification: 'mistake', evaluation: -140, bestMove: 'f3g5', bestMoveEval: 20 }),
+      mv({ moveNumber: 28, san: 'Rb8', isCoachMove: true, evaluation: -140 }),
+    ], 'white');
+    expect(anns).toHaveLength(2);
+    expect('pv' in anns[0]).toBe(false);
+    expect('pv' in anns[1]).toBe(false);
+  });
+});

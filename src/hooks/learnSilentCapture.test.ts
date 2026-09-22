@@ -177,3 +177,58 @@ describe('a mistake is captured with no card ever shown', () => {
     expect(slipWarrantsInterjection(150, 1500), 'intermediate: 150cp interrupts').toBe(true);
   });
 });
+
+describe('C3 — the live capture carries the engine lines + evals the sweep writes', () => {
+  type Lines = { pvAfterPlayed?: string[]; pvAfterBest?: string[]; evalBefore?: number; evalAfterPlayed?: number };
+  const captured = (): Lines => {
+    const [[args]] = captureMisconception.mock.calls as unknown as [[{ classifyInput: Lines }]];
+    return args.classifyInput;
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    analyze.mockImplementation(async (fen: string) => (fen === SLIP.fenBefore
+      ? { evaluation: 0, bestMove: 'b8c6', isMate: false, topLines: [{ moves: ['b8c6', 'f1c4', 'g8f6'] }] }
+      : { evaluation: 150, bestMove: 'f3e5', isMate: false, topLines: [{ moves: ['f3e5', 'd7d6', 'e5f3'] }] }));
+  });
+
+  it('BEHAVIOURAL: the punishing line (SAN, from the board after the move), the best line minus its first move, and MOVER-POV evals all reach the classifier', async () => {
+    const { useDiscussionPractice } = await import('./useDiscussionPractice');
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
+    await result.current.evaluatePlayerMove({ ...SLIP, studentRating: 800, historySans: ['e4', 'e5', 'Nf3', 'Nf6'] });
+    expect(captureMisconception).toHaveBeenCalledTimes(1);
+    const c = captured();
+    // The OLD capture carried none of these four — the comment beside it said
+    // the PV-gated detectors "stay review-only", with the reads in hand.
+    expect(c.pvAfterPlayed, 'the reply PV, replayed from fenAfter').toEqual(['Nxe5', 'd6', 'Nf3']);
+    expect(c.pvAfterBest, 'the best line from fenBefore, minus the best move itself').toEqual(['Bc4', 'Nf6']);
+    expect(c.evalBefore, 'Black to move at White +0 → mover 0').toBe(0);
+    expect(c.evalAfterPlayed, 'White +150 after the move → mover -150').toBe(-150);
+  }, 20_000);
+
+  it('NEGATIVE CONTROL: a mate read is a sentinel, never a number handed to the attributor', async () => {
+    analyze.mockImplementation(async (fen: string) => (fen === SLIP.fenBefore
+      ? { evaluation: 0, bestMove: 'b8c6', isMate: false, topLines: [{ moves: ['b8c6', 'f1c4', 'g8f6'] }] }
+      : { evaluation: 10000, bestMove: 'f3e5', isMate: true, mateIn: 5, topLines: [{ moves: ['f3e5'] }] }));
+    const { useDiscussionPractice } = await import('./useDiscussionPractice');
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
+    await result.current.evaluatePlayerMove({ ...SLIP, studentRating: 800, historySans: ['e4', 'e5', 'Nf3', 'Nf6'] });
+    expect(captureMisconception).toHaveBeenCalledTimes(1);
+    const c = captured();
+    expect(c.evalAfterPlayed).toBeUndefined();
+    expect(c.evalBefore).toBe(0);
+    expect(c.pvAfterPlayed).toEqual(['Nxe5']);
+  }, 20_000);
+
+  it('NEGATIVE CONTROL: a pre-move line that does not start with the best move yields NO afterBest line', async () => {
+    analyze.mockImplementation(async (fen: string) => (fen === SLIP.fenBefore
+      ? { evaluation: 0, bestMove: 'b8c6', isMate: false, topLines: [{ moves: ['d7d6', 'f1c4'] }] }
+      : { evaluation: 150, bestMove: 'f3e5', isMate: false, topLines: [{ moves: ['f3e5', 'd7d6', 'e5f3'] }] }));
+    const { useDiscussionPractice } = await import('./useDiscussionPractice');
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
+    await result.current.evaluatePlayerMove({ ...SLIP, studentRating: 800, historySans: ['e4', 'e5', 'Nf3', 'Nf6'] });
+    expect(captureMisconception).toHaveBeenCalledTimes(1);
+    expect(captured().pvAfterBest).toBeUndefined();
+    expect(captured().pvAfterPlayed).toEqual(['Nxe5', 'd6', 'Nf3']);
+  }, 20_000);
+});
