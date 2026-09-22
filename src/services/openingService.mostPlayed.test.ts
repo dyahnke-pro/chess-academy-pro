@@ -1,4 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { openingKeyFor } from './openingKey';
+
+// The one opening key IS the Dexie openings id (A1), so the join is exact.
+const VIENNA = openingKeyFor('C25', 'Vienna Game');
 import { db } from '../db/schema';
 import { getMostPlayedOpenings } from './openingService';
 import { buildOpeningRecord, buildGameRecord } from '../test/factories';
@@ -47,13 +51,13 @@ describe('getMostPlayedOpenings — imported games count via ECO', () => {
 
   it('still prefers openingId when present', async () => {
     await db.openings.bulkPut([
-      buildOpeningRecord({ id: 'vienna', eco: 'C25', color: 'white', isRepertoire: true }),
+      buildOpeningRecord({ id: VIENNA, eco: 'C25', color: 'white', isRepertoire: true }),
     ]);
     await db.games.bulkPut([
-      buildGameRecord({ id: 'g1', openingId: 'vienna', eco: 'C25', source: 'coach' }),
+      buildGameRecord({ id: 'g1', openingId: VIENNA, eco: 'C25', source: 'coach' }),
     ]);
     const top = await getMostPlayedOpenings(3);
-    expect(top[0].opening.id).toBe('vienna');
+    expect(top[0].opening.id).toBe(VIENNA);
     expect(top[0].games).toBe(1);
   });
 });

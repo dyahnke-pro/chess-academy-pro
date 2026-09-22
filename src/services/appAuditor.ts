@@ -245,6 +245,14 @@ export type AuditKind =
   // produced it never was, so a chain always falling through to the
   // default looked identical to one working.
   | 'player-rating-estimated'
+  // The home-opening computer's pick per colour (WO-HOME-OPENING-01 A3):
+  // candidates, floor, the chosen family and why — so an audit can prove a
+  // 3-game line never wins and a student override sticks.
+  | 'home-opening-chosen'
+  // Which games a batch analysis run picked and in what order (A2): the
+  // home openings' games first, then newest — so an audit can prove the
+  // priority instead of reading a progress label.
+  | 'analysis-batch-ordered'
   // The heat map's GREEN half: how many capability tags clear the proven
   // bar, how many carry a break, and the bar's own values. The bar is a
   // MEASURED number (the knee at posedImportance 80), so which side of it

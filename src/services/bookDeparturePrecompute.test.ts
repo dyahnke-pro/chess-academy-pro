@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { openingKeyFor } from './openingKey';
 import { db } from '../db/schema';
 import { getCachedBookDepartureRows } from './bookDeparturePrecompute';
 import type { BookDepartureRow } from './bookDepartureWeakness';
@@ -6,7 +7,7 @@ import type { BookDepartureRow } from './bookDepartureWeakness';
 const META_KEY = 'book-departure-rows.v1';
 
 const sampleRows: BookDepartureRow[] = [
-  { gameId: 'g1', departurePly: 5, departedSan: 'a6', mainSan: 'Nf3', bookFen: 'fen', evalCostCp: 150, openingId: 'caro-kann', openingName: 'Caro-Kann', playedAt: 1000 },
+  { gameId: 'g1', departurePly: 5, departedSan: 'a6', mainSan: 'Nf3', bookFen: 'fen', evalCostCp: 150, openingId: openingKeyFor('B10', 'Caro-Kann Defense'), openingName: 'Caro-Kann', playedAt: 1000 },
 ];
 
 describe('getCachedBookDepartureRows — the hot-path cache read (Phase 3)', () => {

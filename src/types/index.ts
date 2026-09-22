@@ -998,6 +998,11 @@ export interface UserPreferences {
    *  persisted it remain valid — do not re-wire it, and do not add a new
    *  preference that turns the inventory register back on. */
   reviewFullDetail?: boolean;
+  /** THE HOME OPENINGS, one per colour (WO-HOME-OPENING-01 A3). Written only
+   *  by `homeOpeningService`: the computer's volume pick (`source:'computed'`,
+   *  re-derived as the record moves) or the student's one-tap override
+   *  (`source:'student'`, never overwritten by a recompute). */
+  homeOpenings?: Partial<Record<'white' | 'black', HomeOpeningChoiceRecord | null>>;
   /** How much the coach says PER TURN when it does talk. Wired through
    *  to the brain's TEACH_MODE_ADDITION + OPERATOR_BASE_BODY teaching
    *  block to clamp response length. (Distinct from the older
@@ -1991,6 +1996,17 @@ export interface JourneyProgress {
  *  four writers used four key spaces and the departure + result terms never
  *  joined. A new writer now fails to compile until it mints a real key. */
 export type OpeningKey = string & { readonly __openingKey: true };
+
+/** Persisted shape of a home-opening choice (mirrors `HomeOpeningChoice` in
+ *  `homeOpening.ts`; declared here so the profile type stays a leaf). */
+export interface HomeOpeningChoiceRecord {
+  family: string;
+  key: OpeningKey;
+  games: number;
+  score: number;
+  source: 'computed' | 'student';
+  chosenAt: number;
+}
 
 export interface DetectedOpening {
   eco: string;

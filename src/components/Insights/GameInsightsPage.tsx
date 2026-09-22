@@ -18,6 +18,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { OverviewTab } from './OverviewTab';
 import { ShareableInsightsStrip } from './ShareableInsightsStrip';
 import { RecentGamesStrip } from './RecentGamesStrip';
+import { HomeOpeningCard } from './HomeOpeningCard';
 import { OpeningsTab } from './OpeningsTab';
 import { MistakesTab } from './MistakesTab';
 import { TacticsTab } from './TacticsTab';
@@ -189,6 +190,10 @@ export function GameInsightsPage(): JSX.Element {
   // "Analysing your games…").
   const gameDataTab = tab === 'overview' || tab === 'openings' || tab === 'mistakes' || tab === 'tactics';
   const totalGames = overview?.totalGames ?? 0;
+  // ONE count (A2): the header and the Overview's "not analysed" card read the
+  // same `analyzedGameCount` / `gamesNeedingAnalysis` pair, so they can never
+  // say "932 analysed" over "926 not analysed" again.
+  const analysedGames = overview?.analyzedGameCount ?? 0;
 
   return (
     <motion.div
@@ -229,8 +234,8 @@ export function GameInsightsPage(): JSX.Element {
             </button>
             <div>
               <h2 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Game Insights</h2>
-              <span className="text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
-                {totalGames} game{totalGames !== 1 ? 's' : ''} analysed
+              <span className="text-[11px]" style={{ color: 'var(--color-text-muted)' }} data-testid="insights-analysed-count">
+                {analysedGames} of {totalGames} game{totalGames !== 1 ? 's' : ''} analysed
               </span>
             </div>
           </div>
@@ -382,6 +387,10 @@ export function GameInsightsPage(): JSX.Element {
                 visible!"). Re-reads when the library or the analysis state
                 changes so accuracy fills in as the sweep lands. */}
             <RecentGamesStrip refreshKey={`${totalGames}-${String(bgAnalysisRunning)}`} />
+            {/* The home openings (WO-HOME-OPENING-01 A3): the two families the
+                coach works inside first, read off the record with a one-tap
+                change. Re-reads as the library / analysis state moves. */}
+            <HomeOpeningCard refreshKey={`${totalGames}-${String(bgAnalysisRunning)}`} />
             <ShareableInsightsStrip />
             <OverviewTab
               data={overview}

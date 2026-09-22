@@ -36,8 +36,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ## 0. WO-HOME-OPENING-01 — a personal coach: one home opening per colour (David 2026-09-22)
 - ✅ 1. ONE opening key across import / Play / Learn / review — `openingKey.ts` mints it from the board, branded type, boot backfill re-mints persisted rows; loader joins by family (results) and position (departures)
-- 🔴 2. Batch analysis orders the home openings' games first; the "932 analysed / 926 not analysed" header derives from one count
-- 🔴 3. `homeOpening(colour)` computer — volume + floor, variation granularity, persisted, confirmed, one-tap change; a 3-game 0% line can never win
+- ✅ 2. Batch analysis runs ALL home-opening games first, past the package cap (`pickAnalysisBatch`, emits `analysis-batch-ordered`); the Weaknesses header reads `analyzedGameCount` — "6 of 932 analysed", one count
+- ✅ 3. `homeOpening(colour)` computer — `homeOpening.ts` ranks families by volume with a 10-game / 5% floor, carries the sub-lines + `weakestVariation`; `homeOpeningService` persists on the profile, a student's one-tap pick is never overwritten; `HomeOpeningCard` on /weaknesses; emits `home-opening-chosen`; audit `audit-home-opening-prod.mjs`
 - 🔴 4. Training Plan built from the home openings and their recorded weaknesses, not favourites (empty with 932 games in)
 - 🔴 5. Drills teach: reveal names the idea and plays the sequence, no re-serving solved positions, provenance survives import ("Coach / Unknown / today")
 - 🔴 6. Router: retrospective, method and profile questions never fall into best-move-now; "what should I learn" answers from the home opening

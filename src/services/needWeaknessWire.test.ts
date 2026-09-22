@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { openingKeyFor } from './openingKey';
 import { readFileSync } from 'node:fs';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -38,7 +39,7 @@ const experienced: StudentNeedContext = {
   signals: [persistentHole],
   bookDepartures: [],
   capabilities: new Map(),
-  openingId: 'caro-kann',
+  openingId: openingKeyFor('B10', 'Caro-Kann Defense'),
   lineReps: Array(40).fill(5),
   openingScore: 0.5,
   overallScore: 0.5,

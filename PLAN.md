@@ -324,17 +324,47 @@ fire is not a wire"):**
    book-corpus id from `resolveOpeningIdFromName` on the review capture) — a
    persisted second key space, bridged not merged; A3's home-opening computer
    reads `games.openingId` and does not need them.
-2. **ANALYSIS PRIORITY + HONEST HEADER.** `gameAnalysisService` batch order =
-   home openings' games first (both colours), then recency; auto-run for the
-   home openings on import. The Weaknesses header stops saying "932 analysed"
-   over "926 not analysed". Gate: order test + the header derives from ONE
-   count.
-3. **THE HOME-OPENING COMPUTER.** `homeOpening(colour)` from volume with the
-   floor above, at variation/departure-position granularity, persisted on the
-   profile, confirmed by the student, one-tap change. Emits
-   `home-opening-chosen` (inputs: candidates, games, scores, floor). Gate:
-   Elephant-Gambit-at-3-games can never be chosen; a negative control plants a
-   3-game 0% line and asserts it loses to a 40-game 73% line.
+2. ✅ **ANALYSIS PRIORITY + HONEST HEADER** (2026-09-22).
+   `gameAnalysisService.pickAnalysisBatch` — both batch pickers route through
+   it: EVERY unanalysed home-opening game (both colours, resolved through the
+   student's seat and the ONE key's family) leads, and the package cap does
+   NOT bind them (52 home games run in a 50-package; the newest of the rest
+   fill what is left). Emits `analysis-batch-ordered` (total, batch,
+   homeCount, families, cap). Auto-run on import was already wired
+   (`chesscomService` → `runBackgroundAnalysis`); what was missing was the
+   ORDER. The Weaknesses header now reads `overview.analyzedGameCount` —
+   "6 of 932 games analysed" — the same pair the Overview card prints; gate
+   `honestAnalysedHeader.test.ts` fails if the library total ever stands in
+   for "analysed" again. Order gate: `analysisBatchOrder.test.ts`,
+   `homeOpening.test.ts` (orderGamesForAnalysis: a Pirc the student FACED is
+   not their Pirc). Open on this item: why 926 of David's games stayed
+   unanalysed after import (H1) — the kickoff exists; the run is 50 a tap and
+   aborts when iOS backgrounds the app. The order fix makes the first 50 the
+   right 50; the volume question is H1's.
+3. ✅ **THE HOME-OPENING COMPUTER** (2026-09-22). `src/services/homeOpening.ts`
+   (pure): `rankHomeOpeningCandidates(games, identity, colour)` groups the
+   student's decided, non-master games by FAMILY of the one key (so the Vienna
+   in C25 and C29 is one candidate, its sub-lines carried as `variations`
+   with their own games/score), scores (wins+½draws)/decided, and marks
+   `clearsFloor` at ≥10 games AND ≥5% of the colour's keyed games.
+   `chooseHomeOpening` = most-played family that clears the floor, else null
+   (a cold record has no home yet — the card says so in numbers).
+   `weakestVariation` = games × score deficit among sub-lines with ≥5 games
+   (the line-level "weakness within it"; the per-ply holes stay the spine's).
+   `homeOpeningService`: persists `preferences.homeOpenings` per colour
+   (`source:'computed'` re-derived as the record moves; `source:'student'`
+   from a one-tap pick, never overwritten — `clearHomeOpening` hands it back),
+   emits `home-opening-chosen` with candidates/floor/chosen/reason.
+   `HomeOpeningCard` on /weaknesses under the recent-games strip: the two
+   families with games + score, "Change" lists the ranked candidates (thin
+   ones labelled), "Use my most played" resets. Gates: `homeOpening.test.ts`
+   (the Elephant-at-3-games negative control, both alone and beside a 40-game
+   73% line; volume beats score; the exact floors; the seat rule),
+   `homeOpeningService.test.ts`, `HomeOpeningCard.test.tsx`; the algo
+   contract lives in `scripts/audit-home-opening-prod.mjs` (registered in
+   `algoAuditContract.test.ts` for both emissions). Decision still David's:
+   the LOCK semantics (the coach spends no lesson outside the home opening)
+   land with A4/A5 where lessons are chosen.
 4. **THE TRAINING PLAN READS IT.** `/coach/plan` is built from the home
    openings and the recorded weaknesses inside them (departure ply, recurring
    fundamentals, worst variation, the middlegame plan for its structure), not

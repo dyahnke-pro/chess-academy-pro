@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**106 lines · 9 exports · 18 importers · 4 tests · 0 audits**
+**106 lines · 9 exports · 29 importers · 14 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,33 +16,65 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Games/GameDatabasePage.tsx`
+- `src/components/Insights/HomeOpeningCard.test.tsx`
+- `src/services/analysisBatchOrder.test.ts`
+- `src/services/bookDeparturePrecompute.test.ts`
+- `src/services/bookDepartureWeakness.test.ts`
 - `src/services/chesscomService.ts`
+- `src/services/conversionDetector.test.ts`
 - `src/services/dataLoader.ts`
+- `src/services/homeOpening.test.ts`
+- `src/services/homeOpening.ts`
+- `src/services/homeOpeningService.test.ts`
 - `src/services/lichessService.ts`
 - `src/services/needScore.test.ts`
 - `src/services/needScore.ts`
+- `src/services/needWeaknessWire.test.ts`
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/openingDetectionService.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/openingKey.test.ts`
 - `src/services/openingKeyBackfill.test.ts`
 - `src/services/openingKeyBackfill.ts`
+- `src/services/openingService.mostPlayed.test.ts`
 - `src/services/reviewSampleGames.ts`
 - `src/services/studentNeedLoader.ts`
 - `src/services/syncService.ts`
+- `src/services/weaknessProvenance.test.ts`
 
 ## Exports and every call site
 
 ### `slugifyOpening` (function) — 1 call site
 - `src/services/openingKey.test.ts:18`
 
-### `openingKeyFor` (function) — 6 call sites
+### `openingKeyFor` (function) — 27 call sites
+- `src/components/Insights/HomeOpeningCard.test.tsx:17`
+- `src/components/Insights/HomeOpeningCard.test.tsx:18`
+- `src/services/analysisBatchOrder.test.ts:16`
+- `src/services/analysisBatchOrder.test.ts:17`
+- `src/services/bookDeparturePrecompute.test.ts:10`
+- `src/services/bookDepartureWeakness.test.ts:16`
+- `src/services/bookDepartureWeakness.test.ts:56`
+- `src/services/bookDepartureWeakness.test.ts:84`
+- `src/services/conversionDetector.test.ts:46`
 - `src/services/dataLoader.ts:238`
+- `src/services/homeOpening.test.ts:13`
+- `src/services/homeOpening.test.ts:14`
+- `src/services/homeOpening.test.ts:15`
+- `src/services/homeOpening.test.ts:16`
+- `src/services/homeOpening.test.ts:17`
+- `src/services/homeOpeningService.test.ts:19`
+- `src/services/homeOpeningService.test.ts:20`
+- `src/services/homeOpeningService.test.ts:21`
 - `src/services/needScore.test.ts:12`
 - `src/services/needScore.test.ts:13`
+- `src/services/needWeaknessWire.test.ts:42`
 - `src/services/openingDetectionService.ts:188`
 - `src/services/openingDetectionService.ts:258`
 - `src/services/openingKey.test.ts:17`
+- `src/services/openingService.mostPlayed.test.ts:5`
+- `src/services/weaknessProvenance.test.ts:68`
+- `src/services/weaknessProvenance.test.ts:79`
 
 ### `openingKeyFromSans` (function) — 17 call sites
 - `src/components/Coach/CoachGameReview.tsx:622`
@@ -76,9 +108,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKeyBackfill.ts:42`
 - `src/services/reviewSampleGames.ts:456`
 
-### `openingFamily` (function) — 5 call sites
+### `openingFamily` (function) — 7 call sites
 - `src/components/Debug/OpeningBlundersPage.tsx:918`
 - `src/services/coachFeatureService.ts:2584`
+- `src/services/homeOpening.ts:103`
+- `src/services/homeOpening.ts:183`
 - `src/services/openingBlunderService.ts:83`
 - `src/services/openingBlunderService.ts:180`
 - `src/services/openingKey.test.ts:50`
@@ -111,17 +145,29 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKey.test.ts:69`
 - `src/services/studentNeedLoader.ts:126`
 
-### `openingEntryForKey` (function) — 3 call sites
+### `openingEntryForKey` (function) — 5 call sites
 - `src/components/Coach/CoachGamePage.tsx:4614`
+- `src/services/homeOpening.ts:101`
+- `src/services/homeOpening.ts:182`
 - `src/services/openingKey.test.ts:30`
 - `src/services/openingKey.test.ts:67`
 
 ## Tests
 
+- `src/components/Insights/HomeOpeningCard.test.tsx`
+- `src/services/analysisBatchOrder.test.ts`
+- `src/services/bookDeparturePrecompute.test.ts`
+- `src/services/bookDepartureWeakness.test.ts`
+- `src/services/conversionDetector.test.ts`
+- `src/services/homeOpening.test.ts`
+- `src/services/homeOpeningService.test.ts`
 - `src/services/needScore.test.ts`
+- `src/services/needWeaknessWire.test.ts`
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/openingKey.test.ts`
 - `src/services/openingKeyBackfill.test.ts`
+- `src/services/openingService.mostPlayed.test.ts`
+- `src/services/weaknessProvenance.test.ts`
 
 ## Audits that reach it
 
@@ -129,4 +175,4 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
+- `scripts/audit-home-opening-prod.mjs`

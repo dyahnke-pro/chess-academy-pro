@@ -13,6 +13,8 @@ import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
 import { readCriticalMoment, type CriticalMomentRead } from './criticalMoment';
 import { recordCapabilityEvidence } from './capabilityEvidence';
+import { getHomeOpenings } from './homeOpeningService';
+import { orderGamesForAnalysis } from './homeOpening';
 import type { GameRecord, MoveAnnotation, MoveClassification, StockfishAnalysis, UserProfile } from '../types';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -2257,12 +2259,8 @@ export async function analyzeRecentGames(
     return 0;
   }
 
-  const sorted = allGames.sort((a, b) => {
-    const dateA = a.date ? new Date(a.date).getTime() : 0;
-    const dateB = b.date ? new Date(b.date).getTime() : 0;
-    return dateB - dateA;
-  });
-  const batch = sorted.slice(0, Math.max(0, n));
+  // Home openings first (A2), then newest — see `pickAnalysisBatch`.
+  const batch = (await pickAnalysisBatch(allGames, Math.max(0, n))).batch;
   let analyzed = 0;
 
   for (let i = 0; i < batch.length; i++) {
@@ -2309,6 +2307,35 @@ export const ANALYSIS_PACKAGE_SIZE = 50;
  * After the package is analyzed, recomputes the weakness profile. Returns the
  * number of games actually analyzed in this package (≤ ANALYSIS_PACKAGE_SIZE).
  */
+/**
+ * Which games a batch runs, in what order (WO-HOME-OPENING-01 A2, David
+ * 2026-09-22: "beautiful idea"). EVERY unanalysed game in the student's home
+ * openings comes first — the package cap does not bind them, because "improve
+ * the weaknesses within it" is empty until those games are analysed — then the
+ * newest of the rest fill the package. Degrades to newest-first when the home
+ * openings cannot be read (no profile, a cold record).
+ */
+export async function pickAnalysisBatch<T extends GameRecord>(
+  candidates: readonly T[],
+  packageSize: number,
+): Promise<{ batch: T[]; homeCount: number; homeFamilies: string[] }> {
+  let home: Awaited<ReturnType<typeof getHomeOpenings>> = { white: null, black: null };
+  try { home = await getHomeOpenings(); } catch { /* cold: newest-first */ }
+  const profile = useAppStore.getState().activeProfile ?? (await db.profiles.toCollection().first().catch(() => undefined)) ?? null;
+  const identity = {
+    profileName: profile?.name ?? null,
+    chessComUsername: profile?.preferences.chessComUsername ?? null,
+    lichessUsername: profile?.preferences.lichessUsername ?? null,
+  };
+  const ordered = orderGamesForAnalysis(candidates, identity, home);
+  const fill = Math.max(0, packageSize - ordered.home.length);
+  return {
+    batch: [...ordered.home, ...ordered.rest.slice(0, fill)],
+    homeCount: ordered.home.length,
+    homeFamilies: [home.white?.family, home.black?.family].filter((f): f is string => typeof f === 'string'),
+  };
+}
+
 export async function analyzeAllGames(
   onProgress?: (progress: BatchAnalysisProgress) => void,
 ): Promise<number> {
@@ -2316,13 +2343,18 @@ export async function analyzeAllGames(
     .filter((g) => gameNeedsAnalysis(g, { depthUpgrade: false }))
     .toArray();
 
-  // Newest games first (reverse chronological), then cap to one package. The
-  // remainder is left un-annotated and picked up by the next invocation.
-  const games = allGames.sort((a, b) => {
-    const dateA = a.date ? new Date(a.date).getTime() : 0;
-    const dateB = b.date ? new Date(b.date).getTime() : 0;
-    return dateB - dateA;
-  }).slice(0, ANALYSIS_PACKAGE_SIZE);
+  // THE HOME OPENINGS' GAMES FIRST — all of them — then newest, capped to one
+  // package (A2). The remainder is left un-annotated and picked up by the next
+  // invocation.
+  const picked = await pickAnalysisBatch(allGames, ANALYSIS_PACKAGE_SIZE);
+  const games = picked.batch;
+  void logAppAudit({
+    kind: 'analysis-batch-ordered',
+    category: 'subsystem',
+    source: 'gameAnalysisService.analyzeAllGames',
+    summary: `batch of ${games.length}: ${picked.homeCount} home-opening game(s) first (${picked.homeFamilies.join(' / ') || 'no home opening yet'}), then ${games.length - picked.homeCount} newest; ${allGames.length - games.length} left for the next run`,
+    details: JSON.stringify({ total: allGames.length, batch: games.length, homeCount: picked.homeCount, homeFamilies: picked.homeFamilies, packageSize: ANALYSIS_PACKAGE_SIZE }),
+  });
 
   if (games.length === 0) {
     await recomputeWeaknessFromGames();

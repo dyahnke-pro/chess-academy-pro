@@ -31,7 +31,9 @@ type AlgoEmissionKind =
   | 'coach-need-scores'
   | 'capability-heat-map'
   | 'player-rating-estimated'
-  | 'review-need-coverage';
+  | 'review-need-coverage'
+  | 'home-opening-chosen'
+  | 'analysis-batch-ordered';
 
 interface Contract {
   /** The audit that holds the contract. */
@@ -68,6 +70,16 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-review-overhaul-prod.mjs',
     contractMarker: 'NEED coverage-rows-captured',
     emittedBy: 'coachFeatureService (the N2 need selector)',
+  },
+  'home-opening-chosen': {
+    script: 'scripts/audit-home-opening-prod.mjs',
+    contractMarker: 'HOME OPENING chosen-by-volume-over-floor',
+    emittedBy: 'src/services/homeOpeningService.ts (getHomeOpenings / setHomeOpening)',
+  },
+  'analysis-batch-ordered': {
+    script: 'scripts/audit-home-opening-prod.mjs',
+    contractMarker: 'ANALYSIS ORDER home-games-first-past-the-cap',
+    emittedBy: 'src/services/gameAnalysisService.ts (analyzeAllGames via pickAnalysisBatch)',
   },
 };
 

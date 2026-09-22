@@ -199,9 +199,9 @@
 - `src/services/openingSublines.ts:100`
 
 ### `isBookLine` (function) — 10 call sites
-- `src/services/gameAnalysisService.ts:1287`
-- `src/services/gameAnalysisService.ts:1552`
-- `src/services/gameAnalysisService.ts:1917`
+- `src/services/gameAnalysisService.ts:1289`
+- `src/services/gameAnalysisService.ts:1554`
+- `src/services/gameAnalysisService.ts:1919`
 - `src/services/gameImportUtils.ts:124`
 - `src/services/isBookLine.test.ts:11`
 - `src/services/isBookLine.test.ts:14`

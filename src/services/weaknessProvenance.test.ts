@@ -6,6 +6,7 @@
 // tests prove a REAL value comes OUT of each aggregator, per CLAUDE.md's "a wire
 // that does not fire is not a wire" — the shape existing is not the point.
 import { describe, it, expect } from 'vitest';
+import { openingKeyFor } from './openingKey';
 import {
   aggregateMistakePuzzles, aggregateClassifiedTactics, aggregateOpeningWeakSpots,
   aggregateConversionFailures, aggregateTimeTrouble, playedAtMs,
@@ -64,7 +65,7 @@ describe('provenance — the sources that had a gameId but no names', () => {
     const row: BookDepartureRow = {
       gameId: 'game_1', departurePly: 5, departedSan: 'Nb6', mainSan: 'e6',
       bookFen: 'r1bqkb1r/pp2pppp/2n5/3n4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7',
-      evalCostCp: 200, openingId: 'alapin', openingName: 'Alapin', playedAt: Date.parse('2024-03-02'),
+      evalCostCp: 200, openingId: openingKeyFor('B22', 'Sicilian Defense: Alapin Variation'), openingName: 'Alapin', playedAt: Date.parse('2024-03-02'),
     };
     const rows = aggregateBookDepartures([row, { ...row, gameId: 'game_1' }], 1400, (id) => INDEX.get(id)?.opponentName ?? null);
     expect(rows[0].positions[0].from.opponentName).toBe('KaiserlicheHoheit');
@@ -75,7 +76,7 @@ describe('provenance — the sources that had a gameId but no names', () => {
 describe('provenance — honest answers, never guesses', () => {
   it('a repertoire DRILL says drill, and names no opponent', () => {
     const spot = {
-      id: 'w1', openingId: 'alapin', openingName: 'Alapin',
+      id: 'w1', openingId: openingKeyFor('B22', 'Sicilian Defense: Alapin Variation'), openingName: 'Alapin',
       fen: 'r1bqkb1r/pp2pppp/2n5/3n4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7',
       correctMoveSan: 'e6', failCount: 3, lastFailedAt: '2026-02-02', lastDrilledAt: null,
     } as unknown as OpeningWeakSpot;

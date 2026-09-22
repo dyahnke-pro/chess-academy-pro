@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { openingKeyFor } from './openingKey';
 import { detectConversionFailure, detectConversionFailures, resolvePlayerColor } from './conversionDetector';
 import type { GameRecord, MoveAnnotation, MoveClassification } from '../types';
 
@@ -42,7 +43,7 @@ function game(overrides: Partial<GameRecord>, evals: (number | null)[]): GameRec
     annotations,
     coachAnalysis: null,
     isMasterGame: false,
-    openingId: 'Ruy Lopez',
+    openingId: openingKeyFor('C60', 'Ruy Lopez'),
     fullyAnalyzed: true,
     ...overrides,
   };

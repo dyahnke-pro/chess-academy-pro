@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { openingKeyFor } from './openingKey';
 import {
   expectedBookDepthPlies,
   bookDepartureCostThresholdCp,
@@ -12,7 +13,7 @@ import { conceptForCluster } from './weaknessConceptMap';
 function row(over: Partial<BookDepartureRow> = {}): BookDepartureRow {
   return {
     gameId: 'g1', departurePly: 5, departedSan: 'a6', mainSan: 'Nf3', bookFen: 'fen',
-    evalCostCp: 150, openingId: 'caro-kann', openingName: 'Caro-Kann', playedAt: 1000, ...over,
+    evalCostCp: 150, openingId: openingKeyFor('B10', 'Caro-Kann Defense'), openingName: 'Caro-Kann', playedAt: 1000, ...over,
   };
 }
 
@@ -52,7 +53,7 @@ describe('aggregateBookDepartures — recurrence + shape', () => {
     ];
     const out = aggregateBookDepartures(rows, 1400);
     expect(out).toHaveLength(1);
-    expect(out[0].tag).toBe(bookDepartureCluster('caro-kann'));
+    expect(out[0].tag).toBe(bookDepartureCluster(openingKeyFor('B10', 'Caro-Kann Defense')));
     expect(out[0].bucket).toBe('opening');
     expect(out[0].openCount).toBe(2);
     expect(out[0].label).toMatch(/Caro-Kann/);
@@ -80,7 +81,7 @@ describe('aggregateBookDepartures — recurrence + shape', () => {
 
 describe('conceptForCluster — book-departure teaches opening theory', () => {
   it('maps the cluster to the opening-theory concept (not the generic fallback)', () => {
-    const c = conceptForCluster(bookDepartureCluster('caro-kann'), 'opening');
+    const c = conceptForCluster(bookDepartureCluster(openingKeyFor('B10', 'Caro-Kann Defense')), 'opening');
     expect(c?.conceptName).toMatch(/opening theory/i);
     expect(c?.behavior).toMatch(/leave opening theory early/i);
     // the bare (no-opening) cluster resolves too
