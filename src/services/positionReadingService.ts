@@ -272,6 +272,20 @@ export function findHangingBySee(fen: string): HangingPiece[] {
   for (const row of chess.board()) {
     for (const cell of row) {
       if (!cell) continue;
+      // 🔴 A KING IS NEVER HANGING — THAT IS CHECK (found 2026-09-21, measured).
+      // `legalSeeGainFor` scores with the CAPTURE table, where a king is 100 so
+      // an exchange search never trades into it. Read as "what can be won" that
+      // is nonsense, and it leaked: on `4r1k1/3b1pB1/1b1p1Qn1/…/4R1K1 w` this
+      // returned `g1 piece=k gain=100` — the White KING, listed as hanging
+      // material. Worse, the list is sorted by gain DESC, so the king sorts
+      // FIRST and four consumers take `hanging[0]`:
+      //   · findAttackTargets  — the king enters "loose enemy material"
+      //   · formatReadingFacts — it gets narrated as hanging
+      //   · the hanging DRILL  — "Is any piece hanging?" answered with the king
+      //   · seeSequence        — a capture sequence computed on the king square
+      // `findHangingPieces` (tacticClassifier) has always skipped kings; this
+      // sibling never did, and the two are otherwise a strict superset pair.
+      if (cell.type === 'k') continue;
       // Pin/legality-aware: a piece hangs only if its OWNER's enemy can win it
       // with a REAL, legal capture. Geometric `seeGain` counted pinned attackers
       // (false hang) and pinned defenders (masked a real hang) — 2026-09-13 sweep.
