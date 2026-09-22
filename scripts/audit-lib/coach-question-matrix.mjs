@@ -85,6 +85,40 @@ export const LIVE_BOARD = [
     qs2: ['did I just blunder?', 'was my last move a mistake?', 'how bad was that move I played?'],
     qs3: ['was that ok?', 'did I mess up?', 'rate that move'],
   },
+  // PLAN §E1 (2026-09-22) — a question about a move ON THE TAPE. Observed on
+  // prod answered with the best move NOW, or with a grade of the OPPONENT's
+  // last move ("why was Ke2 bad?" → "knight takes e4 is within a whisker of
+  // best"). The lane resolves the named move by coordinates and rates THAT ply.
+  {
+    id: 'retrospective-move', lane: 'assembleRetrospectiveAnswer', needsData: 'moveHistory+eval',
+    qs: ['why was Nf3 good?', 'what was wrong with Bc4?', 'what did you have in mind with Nc3?'],
+    qs2: ['why was taking on e5 good?', 'why was my last move bad?', 'was Bc5 a mistake?'],
+    qs3: ['why was night c3 good', 'how bad was Nf3', 'what was the idea behind Bc4'],
+  },
+  // PLAN §E1b — HOW TO THINK here, never WHAT to play. "what should I be
+  // thinking about in this position?" fired no lane and fell to best-move-now.
+  {
+    id: 'method', lane: 'assembleMethodAnswer', needsData: 'fen',
+    qs: ['what should I be thinking about in this position?', 'how do I approach this?', "what's the process here?"],
+    qs2: ['how should I think here?', 'what should I be looking for', 'walk me through your thought process'],
+    qs3: ['how do i decide what to play', 'what questions should i ask myself here', 'how do i find candidate moves here'],
+  },
+  // PLAN §E5 — the plan for ONE NAMED PIECE, typo-tolerant. "whats teh best
+  // plan for my bishp on f1" got the generic side plan with no bishop in it.
+  {
+    id: 'piece-plan', lane: 'assemblePiecePlanAnswer', needsData: 'fen',
+    qs: ["what's the plan for my bishop on f1?", 'what should my knight be doing?', 'where does my rook belong?'],
+    qs2: ['whats teh best plan for my bishp on f1', 'what should my knigt be doing', 'plan for my queen?'],
+    qs3: ['where should i put my bishop', 'plan for my bishop', 'where should my knight go'],
+  },
+  // PLAN §E4 — a hint resolves to a computed line or names the concrete reason
+  // it cannot (PostHog 30d: 47% of hint asks were the stock refusal).
+  {
+    id: 'hint', lane: 'assembleHintAnswer', needsData: 'fen+engineBestMove',
+    qs: ['give me a hint', 'hint?', 'a nudge please'],
+    qs2: ['point me in the right direction', 'help me without telling me the move', 'nudge me'],
+    qs3: ['hint', 'just a hint', 'can i get a hint'],
+  },
 ];
 
 // ── B. SELF-KNOWLEDGE Q&A (need the student's game/puzzle history in Dexie) ───
@@ -123,7 +157,10 @@ export const SELF_KNOWLEDGE = [
     id: 'opening-profile', lane: 'assembleOpeningProfileAnswer', needsData: 'openingProfile',
     qs: ["what's my best opening?", 'my strongest opening', "what's my weakest opening?"],
     qs2: ['which opening do I score best with?', 'what opening should I stop playing?', 'which of my openings is letting me down?'],
-    qs3: ['my best opening?', 'my go-to opening?', 'my weakest opening?'],
+    // "what is my weakest opening?" — David's exact prod ask (2026-09-22, PLAN
+    // §E2): it was served the progress lane's play-a-game pitch while the
+    // Openings tab held the answer. Now the opening-profile lane, floor-checked.
+    qs3: ['my best opening?', 'my go-to opening?', 'my weakest opening?', 'what is my weakest opening?'],
   },
   {
     id: 'opening-accuracy', lane: 'assembleOpeningAccuracyAnswer', needsData: 'openingProfile',
@@ -177,7 +214,10 @@ export const SELF_KNOWLEDGE = [
     id: 'repertoire-gap', lane: 'assembleRepertoireGapAnswer', needsData: 'repertoire+games',
     qs: ['where are the gaps in my repertoire?', 'what should I add to my repertoire?', 'what am I missing in my openings?'],
     qs2: ['what lines do I need to learn?', 'where is my repertoire thin?', 'what openings should I prepare next?'],
-    qs3: ['gaps in my repertoire?', 'what to learn next?', 'where am I unprepared?'],
+    // "what should I learn next?" — David's exact prod ask (2026-09-22, PLAN
+    // §E3): answered with a 3-game 0% Elephant Gambit. Now the HOME opening
+    // through the volume floor, thin rows spoken with their sample size.
+    qs3: ['gaps in my repertoire?', 'what to learn next?', 'where am I unprepared?', 'what should I learn next?'],
   },
   {
     id: 'accuracy', lane: 'assembleAccuracyAnswer', needsData: 'games',
@@ -533,6 +573,18 @@ export const STRUCTURAL_PROBES = [
   { id: 'opening-profile', cat: 'self-knowledge', q: 'should i keep playing the caro' },
   { id: 'move-rating', cat: 'live-board', q: 'why did i play that', notKey: 'playerGamesQuestion' },
   { id: 'move-rating', cat: 'live-board', q: 'was e4 the right call' },
+  // PLAN §E (2026-09-22) — the hijack guards. Each `notKey` is the lane the
+  // phrasing was OBSERVED falling into on prod; a regression in precedence
+  // fails here before it reaches a student.
+  { id: 'retrospective-move', cat: 'live-board', q: 'why was Ke2 bad?', notKey: 'moveRatingQuestion' },
+  { id: 'retrospective-move', cat: 'live-board', q: 'why was taking on e5 good?', notKey: 'whyBestMoveQuestion' },
+  { id: 'retrospective-move', cat: 'live-board', q: 'what did you have in mind with Bc5?', notKey: 'bestMoveQuestion' },
+  { id: 'method', cat: 'live-board', q: 'what should I be thinking about in this position?', notKey: 'bestMoveQuestion' },
+  { id: 'method', cat: 'live-board', q: 'how do I approach this?', notKey: 'planQuestion' },
+  { id: 'method', cat: 'live-board', q: "what's the process here?", notKey: 'teachingMethodQuestion' },
+  { id: 'opening-profile', cat: 'self-knowledge', q: 'what is my weakest opening?', notKey: 'progressQuestion' },
+  { id: 'repertoire-gap', cat: 'self-knowledge', q: 'what should I learn next?' },
+  { id: 'hint', cat: 'live-board', q: 'give me a hint', notKey: 'bestMoveQuestion' },
   { id: 'master-play', cat: 'live-board', q: 'how do 1500s play this' },
   { id: 'tactics-live', cat: 'live-board', q: 'is this a perpetual' },
   // Pass 13 — soundness / coach-meta / repertoire-vs / compensation / goal-time.
