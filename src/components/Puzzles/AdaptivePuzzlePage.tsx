@@ -35,6 +35,7 @@ import { AdaptiveSessionPanel } from './AdaptiveSessionPanel';
 import { AdaptiveSessionSummary } from './AdaptiveSessionSummary';
 import { db } from '../../db/schema';
 import { recordPositiveMoment } from '../../services/reviewPromptService';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 type Phase = 'select' | 'loading' | 'solving' | 'checkpoint' | 'rep-complete' | 'summary';
 
@@ -89,10 +90,10 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
   const [currentPuzzle, setCurrentPuzzle] = useState<PuzzleRecord | null>(null);
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [stats, setStats] = useState<PuzzleStats | null>(null);
-  const [playerRating, setPlayerRating] = useState<number>(activeProfile?.puzzleRating ?? 1200);
+  const [playerRating, setPlayerRating] = useState<number>(activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING);
   const seenIdsRef = useRef<Set<string>>(new Set());
 
-  const userRating = activeProfile?.puzzleRating ?? 1200;
+  const userRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
 
   // ── Adaptive Reach Ladder (docs/plans/2026-09-14-adaptive-reach-ladder.md) ──
   // ONE persisted difficulty controller drives selection + the felt cues. The
@@ -109,7 +110,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
     : activeProfile?.preferences?.reachState;
   const [reachRating, setReachRating] = useState<number>(
     persistedReach?.rating
-      ?? (activeProfile?.puzzleRating ?? 1200) + (master ? 0 : 200),
+      ?? (activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING) + (master ? 0 : 200),
   );
   const [reachDelta, setReachDelta] = useState<number | null>(null);
   const [cue, setCue] = useState<ReachCue | null>(null);
@@ -121,7 +122,7 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
 
   // Keep playerRating synced with profile
   useEffect(() => {
-    setPlayerRating(activeProfile?.puzzleRating ?? 1200);
+    setPlayerRating(activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING);
   }, [activeProfile?.puzzleRating]);
 
   /** Persist the reach ladder to profile.preferences (non-indexed — no schema

@@ -130,7 +130,7 @@ export function ExplainPositionSessionView({
         // exactly tactical articulation, so this is high-value wiring.
         const explainStudentColor = targetFen.split(' ')[1] === 'b' ? 'b' : 'w';
         const explainStudentRating =
-          useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+          useAppStore.getState().activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
         const explainTactics = buildTacticsLiveContext(
           targetFen,
           sf,
@@ -222,7 +222,7 @@ export function ExplainPositionSessionView({
       // Tactical context for the follow-up question.
       const askStudentColor = targetFen.split(' ')[1] === 'b' ? 'b' : 'w';
       const askStudentRating =
-        useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+        useAppStore.getState().activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
       const askTactics = buildTacticsLiveContext(
         targetFen,
         analysis,

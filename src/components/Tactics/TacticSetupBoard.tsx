@@ -15,6 +15,7 @@ import { describeMoveGeometry } from '../../services/groundedAnswer';
 import { recordTacticOutcome } from '../../services/tacticAlertService';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { SetupPuzzle } from '../../types';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 type BoardState = 'thinking' | 'incorrect' | 'solved';
 
@@ -96,7 +97,7 @@ export function TacticSetupBoard({ puzzle, onComplete }: TacticSetupBoardProps):
 
   const { reset: resetStruggle } = useStruggleDetection({
     tacticType: puzzle.tacticType,
-    playerRating: activeProfile?.currentRating ?? 1200,
+    playerRating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     active: boardState === 'thinking' && isPlayerTurn,
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,

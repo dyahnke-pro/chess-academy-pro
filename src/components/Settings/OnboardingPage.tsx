@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { encryptApiKey } from '../../services/cryptoService';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 type OnboardingStep = 1 | 2 | 3;
 
@@ -13,7 +14,7 @@ export function OnboardingPage(): JSX.Element {
   const [step, setStep] = useState<OnboardingStep>(1);
   const [apiKey, setApiKey] = useState('');
   const [name, setName] = useState(activeProfile?.name ?? 'Player');
-  const [elo, setElo] = useState(activeProfile?.currentRating ?? 1200);
+  const [elo, setElo] = useState(activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING);
   const [status, setStatus] = useState<string | null>(null);
 
   // Anthropic removed 2026-07-31 — DeepSeek is the only provider.

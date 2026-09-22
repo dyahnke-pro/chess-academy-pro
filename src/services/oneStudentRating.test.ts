@@ -28,52 +28,70 @@ function walk(dir: string, out: string[] = []): string[] {
   return out;
 }
 
+/**
+ * THE STATEMENT THIS GATE BLAMES — any inline NUMERIC default on a rating line.
+ *
+ * 🔴 TIGHTENED 2026-09-22 (WO-STANDARD-01 I2). The first cut only failed a
+ * literal that DIFFERED from the constant, so 63 inline `?? 1200`s passed —
+ * drift was merely unlikely, not impossible: the day the constant moves, every
+ * one of those sites silently becomes a second student. Now ANY literal fails,
+ * whatever its value; the only spelling that passes is the constant's name.
+ * Three syntaxes, one bug: `?? N`, `|| N`, and the parameter-default `rating = N`.
+ * Comment lines are skipped — prose about a default is not a default.
+ */
+function inlineRatingLiteral(line: string): number | null {
+  const s = line.trim();
+  if (s.startsWith('//') || s.startsWith('*') || s.startsWith('/*')) return null;
+  if (/elo/i.test(line)) return null;                      // a GAME header, not this student
+  if (!/rating/i.test(line)) return null;                  // not a rating statement at all
+  const m = /(?:\?\?|\|\|)\s*(\d{3,4})\b/.exec(line)
+    ?? /\brating[A-Za-z]*\s*=\s*(\d{3,4})\b/.exec(line);
+  if (!m) return null;
+  const n = Number(m[1]);
+  // A default at master strength is not a claim about an UNKNOWN STUDENT, it
+  // is a TARGET. Two real sites were considered and deliberately left out of
+  // scope: `masterReachState?.rating ?? 2400` (CoachTeachPage) and
+  // `options.rating ?? 2400` (pickMasterDrill) both set how strong the
+  // master-level drill should be. Nobody defaults an unrated beginner to 2400,
+  // so the plausible-unrated ceiling is where this gate stops blaming.
+  return n < 2000 ? n : null;
+}
+
 describe('the unrated student resolves to ONE number', () => {
-  it('no file defaults a student rating to anything but DEFAULT_STUDENT_RATING', () => {
+  it('no file defaults a student rating with an inline literal — the constant is the only spelling', () => {
     const offenders: string[] = [];
     for (const f of walk('src')) {
       if (f.endsWith('ratingBands.ts')) continue;   // the definer
       const src = readFileSync(f, 'utf8');
       src.split('\n').forEach((line, i) => {
-        if (/elo/i.test(line)) return;                      // a GAME header, not this student
-        if (!/rating/i.test(line)) return;                  // not a rating statement at all
-        // TWO SYNTAXES, ONE BUG. The first cut of this gate scanned only `??`
-        // and was blind to the PARAMETER-DEFAULT form (`rating = 1500`), which
-        // hid five more sites — including `narrationImportance`, the
-        // rating-scaled criticality computer, and `coldStudent` itself. A gate
-        // that checks one spelling of a defect reports green on the other.
-        const m = /\?\?\s*(\d{3,4})\b/.exec(line)
-          ?? /\brating[A-Za-z]*\s*=\s*(\d{3,4})\b/.exec(line);
-        // A default at master strength is not a claim about an UNKNOWN STUDENT,
-        // it is a TARGET. Two real sites were considered and deliberately left
-        // in scope-free: `masterReachState?.rating ?? 2400` (CoachTeachPage) and
-        // `options.rating ?? 2400` (pickMasterDrill) both set how strong the
-        // master-level drill should be. Nobody defaults an unrated beginner to
-        // 2400, so the plausible-unrated ceiling is where this gate stops
-        // blaming — narrow enough to stay honest, strict everywhere it matters.
-        if (m && Number(m[1]) < 2000 && Number(m[1]) !== DEFAULT_STUDENT_RATING) {
+        if (inlineRatingLiteral(line) !== null) {
           offenders.push(`${f}:${i + 1}  ${line.trim().slice(0, 100)}`);
         }
       });
     }
     expect(
       offenders,
-      'a second default makes the same unrated student a different person on that tab — '
+      'an inline rating literal is a second default waiting to drift — '
       + `import DEFAULT_STUDENT_RATING instead:\n${offenders.join('\n')}`,
     ).toEqual([]);
   });
 
-  it('is non-vacuous — the scan really does find a planted second default', () => {
-    // Without this, a regex that matched nothing would pass forever.
+  it('is non-vacuous — the scan really does find a planted default, INCLUDING one equal to the constant', () => {
+    // Without this, a regex that matched nothing would pass forever. The last
+    // two plants are the ones the first cut of this gate waved through.
     for (const planted of [
       'const rating = profile?.currentRating ?? 1500;',   // the `??` form
       'export function coldStudent(rating = 1500) {',      // the PARAMETER form
+      `const rating = profile?.currentRating ?? ${DEFAULT_STUDENT_RATING};`, // SAME value, still a literal
+      `const base = playerRating || ${DEFAULT_STUDENT_RATING};`,             // the `||` form
     ]) {
-      const m = /\?\?\s*(\d{3,4})\b/.exec(planted)
-        ?? /\brating[A-Za-z]*\s*=\s*(\d{3,4})\b/.exec(planted);
-      expect(/rating/i.test(planted) && !/elo/i.test(planted), planted).toBe(true);
-      expect(m && Number(m[1]) !== DEFAULT_STUDENT_RATING, planted).toBe(true);
+      expect(inlineRatingLiteral(planted), planted).not.toBeNull();
     }
+  });
+
+  it('leaves comments and the constant\'s own name alone', () => {
+    expect(inlineRatingLiteral(' *   - Session rating starts at `UserProfile.endgameRating ?? 1200`.')).toBeNull();
+    expect(inlineRatingLiteral('const rating = profile?.currentRating ?? DEFAULT_STUDENT_RATING;')).toBeNull();
   });
 
   it('leaves a GAME Elo header default alone — it is a different question', () => {

@@ -22,6 +22,7 @@ import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { PuzzleRecord } from '../../types';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 type PuzzleState = 'loading' | 'playing' | 'correct' | 'incorrect';
 
@@ -143,7 +144,7 @@ export function PuzzleBoard({
 
   const { reset: resetStruggle } = useStruggleDetection({
     tacticType,
-    playerRating: activeProfile?.currentRating ?? 1200,
+    playerRating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     active: state === 'playing',
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,

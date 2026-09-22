@@ -10,7 +10,7 @@
  * solves don't shift the puzzleRating shown in the tactics tab.
  *
  * Algorithm:
- *   - Session rating starts at `UserProfile.endgameRating ?? 1200`.
+ *   - Session rating starts at `UserProfile.endgameRating ?? DEFAULT_STUDENT_RATING`.
  *   - Each correct attempt: sessionRating += STEP_CORRECT.
  *   - Each wrong attempt: sessionRating -= STEP_WRONG (with extra
  *     penalty per consecutive miss).

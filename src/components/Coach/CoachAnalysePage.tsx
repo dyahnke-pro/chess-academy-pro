@@ -111,7 +111,7 @@ export function CoachAnalysePage(): JSX.Element {
       // surface's primary job — name the tactics in the position.
       const analyseStudentColor = fen.split(' ')[1] === 'b' ? 'b' : 'w';
       const analyseStudentRating =
-        useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+        useAppStore.getState().activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
       const analyseTactics = buildTacticsLiveContext(
         fen,
         sfAnalysis,
@@ -212,7 +212,7 @@ export function CoachAnalysePage(): JSX.Element {
     // PV scan.
     const followStudentColor = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
     const followStudentRating =
-      useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+      useAppStore.getState().activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
     const followTactics = buildTacticsLiveContext(
       game.fen,
       analysis ?? null,

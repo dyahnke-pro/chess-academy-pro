@@ -17,6 +17,7 @@ import { db } from '../../db/schema';
 import { TacticSetupBoard } from './TacticSetupBoard';
 import { logAppAudit } from '../../services/appAuditor';
 import type { SetupPuzzleDifficulty } from '../../types';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 type Phase = 'select' | 'loading' | 'solving' | 'summary';
 
@@ -35,7 +36,7 @@ export function TacticSetupPage(): JSX.Element {
 
   const [phase, setPhase] = useState<Phase>('select');
   const [item, setItem] = useState<SetupTrainerItem | null>(null);
-  const [displayRating, setDisplayRating] = useState<number>(activeProfile?.puzzleRating ?? 1200);
+  const [displayRating, setDisplayRating] = useState<number>(activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING);
   const sessionRef = useRef<SetupAdaptiveSession | null>(null);
   const completedRef = useRef(false);
 
@@ -51,7 +52,7 @@ export function TacticSetupPage(): JSX.Element {
     // The corpus must be in Dexie before we can band-select.
     await seedPuzzles();
 
-    const baseRating = activeProfile?.puzzleRating ?? 1200;
+    const baseRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
     const session = createSetupSession(d, baseRating);
     sessionRef.current = session;
     setDisplayRating(session.targetRating);
@@ -74,7 +75,7 @@ export function TacticSetupPage(): JSX.Element {
     if (completedRef.current) return; // guard double-fire
     completedRef.current = true;
 
-    const playerRating = activeProfile?.puzzleRating ?? 1200;
+    const playerRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
     const { session: nextSession, newPlayerRating } = recordSetupResult(
       session,
       current.puzzle.id,

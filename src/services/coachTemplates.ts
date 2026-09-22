@@ -1,5 +1,6 @@
 import type { MoveClassification } from '../types';
 import { rotateStem } from '../utils/rotateStem';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 type Scenario =
   | 'move_commentary'
@@ -37,7 +38,7 @@ function interpolate(template: string, vars: TemplateVars): string {
     .replace(/\{phase\}/g, vars.phase ?? 'middlegame')
     .replace(/\{playerName\}/g, vars.playerName ?? 'friend')
     .replace(/\{opening\}/g, vars.opening ?? 'this opening')
-    .replace(/\{rating\}/g, String(vars.rating ?? 1200));
+    .replace(/\{rating\}/g, String(vars.rating ?? DEFAULT_STUDENT_RATING));
 }
 
 // ─── Move Commentary Templates by Classification ────────────────────────────

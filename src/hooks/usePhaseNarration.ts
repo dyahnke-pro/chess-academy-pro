@@ -21,6 +21,7 @@ import { detectOpening } from '../services/openingDetectionService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
+import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 
 export interface UsePhaseNarrationArgs {
   /** Full PGN at narration time — fed into the grounding block. */
@@ -578,7 +579,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       if (token !== activeTokenRef.current) return;
 
       const profile = await db.profiles.get('main');
-      const rating = profile?.currentRating ?? 1200;
+      const rating = profile?.currentRating ?? DEFAULT_STUDENT_RATING;
 
       // GROUNDING INVERSION (G0): hand the brain the REAL, code-computed tactics
       // for this position so it can only VOICE them — instead of free-reasoning

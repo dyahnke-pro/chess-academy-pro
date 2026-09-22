@@ -18,6 +18,7 @@ import type { PuzzleRecord } from '../../types';
 import { db } from '../../db/schema';
 import { logAppAudit } from '../../services/appAuditor';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, tacticNoteForPuzzleThemes } from '../../services/danyaTeachingService';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 type Phase = 'loading' | 'solving' | 'summary';
 
@@ -79,7 +80,7 @@ export function TacticDrillPage(): JSX.Element {
   const [sessionRating, setSessionRating] = useState(
     () => resolveReachState(
       activeProfile?.preferences?.reachState,
-      activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200,
+      activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     ).rating,
   );
   const [ratingDelta, setRatingDelta] = useState<number | null>(null);
@@ -135,7 +136,7 @@ export function TacticDrillPage(): JSX.Element {
     setPhase('loading');
     const startRating = resolveReachState(
       activeProfile?.preferences?.reachState,
-      activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200,
+      activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     ).rating;
     setSessionRating(startRating);
     seenIdsRef.current = new Set();
@@ -221,7 +222,7 @@ export function TacticDrillPage(): JSX.Element {
 
     // Apply Elo with time bonus to the player's persistent puzzle rating
     const eloDelta = calculateRatingDelta(
-      activeProfile?.puzzleRating ?? 1200,
+      activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING,
       puzzle.rating,
       outcome.correct,
     );
@@ -231,7 +232,7 @@ export function TacticDrillPage(): JSX.Element {
     setRatingDelta(adjustedDelta);
 
     if (activeProfile) {
-      const newPuzzleRating = Math.max(100, (activeProfile.puzzleRating ?? 1200) + adjustedDelta);
+      const newPuzzleRating = Math.max(100, (activeProfile.puzzleRating ?? DEFAULT_STUDENT_RATING) + adjustedDelta);
       const updated = { ...activeProfile, puzzleRating: newPuzzleRating };
       setActiveProfile(updated);
       void db.profiles.update(activeProfile.id, { puzzleRating: newPuzzleRating });

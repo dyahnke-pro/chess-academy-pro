@@ -23,6 +23,7 @@ import type { OpeningRecord, BoardArrow, BoardAnnotationCommand } from '../../ty
 import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { GameChatPanelHandle } from '../Coach/GameChatPanel';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 export interface OpeningChallengeProps {
   opening: OpeningRecord;
@@ -221,7 +222,7 @@ export function OpeningChallenge({
         // 2026-07-03: all training aids adaptive). Was frozen at 2 for everyone.
         const ocProfile = useAppStore.getState().activeProfile;
         const wrongBeforeHint = wrongTriesBeforeHint(
-          ocProfile?.currentRating ?? 1200,
+          ocProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
           ocProfile?.skillRadar?.opening,
         );
         if (wrongMoveCountRef.current >= wrongBeforeHint && hintState.level < 1) {

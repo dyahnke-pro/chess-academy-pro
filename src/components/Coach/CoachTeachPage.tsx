@@ -1177,7 +1177,7 @@ export function CoachTeachPage(): JSX.Element {
     const { options, canonicalPgn } = linePicker;
     // The same rating the coach's own move strength is derived from, so the
     // tiles and the opponent are describing one level rather than two.
-    void rankByPopularity(options, canonicalPgn, activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200)
+    void rankByPopularity(options, canonicalPgn, activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING)
       .then((ranked) => {
         // The picker may have closed or moved on while the request was out.
         if (!live) return;
@@ -2425,7 +2425,7 @@ export function CoachTeachPage(): JSX.Element {
     // the queue to ONE game's mistakes (David 2026-09-01: the coach named that
     // game's critical error → set up its drill). A `motif` scopes it to ONE
     // weakness pattern (P-III.3 — "drill it" on a named weakness cluster).
-    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? 1200, gameId, motif, exclude: solvedDrillKeysRef.current });
+    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING, gameId, motif, exclude: solvedDrillKeysRef.current });
     if (queue.length === 0 && gameId) {
       coachDrillSay("That game had no blunders or mistakes to drill — a clean one by the analysis.");
       return true;
@@ -2506,7 +2506,7 @@ export function CoachTeachPage(): JSX.Element {
     //    teaching names the CONCEPT the first position turns on (the concept
     //    engine's invariant: the idea, never the move), so "Part 1 of 3" teaches
     //    the pattern, not one fragment (A5).
-    const rating = activeProfile?.currentRating ?? 1200;
+    const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     let queue: DrillProgress['queue'] = [];
     try {
       queue = await buildMistakeDrillQueue({ cementReps: 1, rating, motif: part.tag, exclude: solvedDrillKeysRef.current });
@@ -2630,7 +2630,7 @@ export function CoachTeachPage(): JSX.Element {
       const theme = topKey.startsWith('tactic:')
         ? themesForTactic(topKey.slice('tactic:'.length) as Parameters<typeof themesForTactic>[0])[0]
         : undefined;
-      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
       const freshRep = theme ? pickCoachDrill(`puzzle:${theme}`, { rating }) : null;
       if (freshRep) {
         coachDrillSay(`${shutMsg} Let's cement it with a fresh one.`);
@@ -2747,7 +2747,7 @@ export function CoachTeachPage(): JSX.Element {
       // scopes the queue to that one game's mistakes; a `theme` param scopes it
       // to one weakness motif (P-III.3).
       if (await startMistakeDrills(drillGameId, drillMotif)) return;
-      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
       const drill = pickCoachDrill(drillAid, { rating });
       if (drill) startCoachDrill(drill);
     })();
@@ -4166,7 +4166,7 @@ export function CoachTeachPage(): JSX.Element {
             // No mistakes on file yet → a single DB-sourced drill of the
             // requested type so a new user still gets a real drill.
             const rating =
-              activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+              activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
             const drill = pickCoachDrill(aid.aid, { rating });
             if (drill) {
               startCoachDrill(drill);
@@ -6140,7 +6140,7 @@ export function CoachTeachPage(): JSX.Element {
     // Rating proxy = puzzleRating (1200 fresh, drifts up/down with
     // adaptive puzzles). Drives lookahead depth via
     // `getTacticLookahead` — 4 plies once the student crosses 1400.
-    const studentRating = activeProfile?.puzzleRating ?? 1200;
+    const studentRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
     // Tactics context for the prompt — SYNC, no engine await (David 2026-06-17:
     // trim the ~2.5s the blocking fed-read added to every turn's pre-flight).
     // A warm engine already makes this RICH via cachedAnalysis; the spine's
@@ -7422,7 +7422,7 @@ export function CoachTeachPage(): JSX.Element {
     // lesson player drives its own beats.
     const coachIsOpponent = Boolean(args.studentColor);
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
-    const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+    const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     const history = args.historyAfterReply;
     // 🔒 A NEW GAME IS DETECTED FROM THE BOARD, NOT FROM A CODE PATH.
     // This runs on every ply, so it is the one place that cannot be bypassed
@@ -8620,7 +8620,7 @@ export function CoachTeachPage(): JSX.Element {
                 //    to move) — the true fork/pin/threat, so the coach narrates the
                 //    ACTUAL tactic instead of inventing one (the validators were
                 //    stripping invented "fork/discovery" all session).
-                const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+                const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
                 const studentCC: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
                 // THE WATCHER FEEDS THE PROMPT (David 2026-08-07: "WIRE THAT
                 // SHIT IN!!"). The engine read runs FIRST — pre-warmed during
@@ -9668,7 +9668,7 @@ export function CoachTeachPage(): JSX.Element {
                   try {
                     const chain = buildCausalChain({ historySans: historyAfterReply });
                     if (chain) {
-                      const chainRating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+                      const chainRating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
                       const chainLines = renderCausalChain(chain, {
                         register: 'learn',
                         studentColor: playerColor === 'white' ? 'w' : 'b',

@@ -21,6 +21,7 @@ import {
   __resetStockfishFenCacheForTests,
 } from './stockfishFenCache';
 import type { CoachContext, StockfishAnalysis } from '../types';
+import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 
 export interface UsePositionNarrationArgs {
   fen: string;
@@ -202,7 +203,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       if (token !== activeTokenRef.current) return;
 
       const profile = await db.profiles.get('main');
-      const rating = profile?.currentRating ?? 1200;
+      const rating = profile?.currentRating ?? DEFAULT_STUDENT_RATING;
 
       // Build the bounded tactics context so the per-sentence spoken gate below
       // can drop an out-of-vocab fork/pin too, not just a board-false fact — a

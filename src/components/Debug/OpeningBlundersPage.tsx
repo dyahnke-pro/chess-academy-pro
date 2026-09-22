@@ -35,6 +35,7 @@ import {
   type OpeningBlunderPuzzle,
   type OpeningBlunderFamily,
 } from '../../services/openingBlunderService';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 /** Difficulty band around the user's puzzle rating. Puzzles inside this
  *  band surface first; the rest are still reachable below the fold. */
@@ -275,7 +276,7 @@ function applyPhaseFilter(
 export function OpeningBlundersPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
-  const userRating = activeProfile?.puzzleRating ?? 1200;
+  const userRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
 
   // Mount audit — closes the F1 coverage gap on the 12th tactics
   // surface (/tactics/opening-traps). Mirrors the pattern wired

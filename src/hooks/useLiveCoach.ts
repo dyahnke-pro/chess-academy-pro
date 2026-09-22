@@ -43,6 +43,7 @@ import {
   type TriggerResult,
 } from '../services/liveCoachTriggers';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
+import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 
 export interface UseLiveCoachArgs {
   gameId: string;
@@ -214,7 +215,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         tactics = (await buildFedTacticsContext(
           ctx.fenAfter,
           playerColor === 'white' ? 'w' : 'b',
-          lcProfile?.currentRating ?? 1200,
+          lcProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
           getCachedStockfish(ctx.fenAfter) ?? null,
           () => Promise.resolve(null),
           lcProfile?.skillRadar?.tactics,
@@ -257,7 +258,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
               fen: ctx.fenAfter,
               moverColor: ctx.fenAfter.split(' ')[1] === 'b' ? 'b' : 'w',
               studentColor: playerColor === 'white' ? 'w' : 'b',
-              rating: useAppStore.getState().activeProfile?.currentRating ?? 1200,
+              rating: useAppStore.getState().activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
               analysis: cached,
               evalBoard: (f) => stockfishEngine.evalBoard(f),
               // Prior eval (student-POV cp → white-POV) so the STATUS band-change
@@ -389,7 +390,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
       // attentive for weaker ones (David 2026-07-03: all training aids adaptive).
       const lcTrigProfile = useAppStore.getState().activeProfile;
       const lcSensitivity = alertSensitivityMultiplier(
-        lcTrigProfile?.currentRating ?? 1200,
+        lcTrigProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
         lcTrigProfile?.skillRadar?.tactics,
       );
       const { winner, suppressed } = evaluatePlayerMoveTriggers(signal, lcSensitivity);
@@ -442,7 +443,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
       };
       const oppProfile = useAppStore.getState().activeProfile;
       const oppSensitivity = alertSensitivityMultiplier(
-        oppProfile?.currentRating ?? 1200,
+        oppProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
         oppProfile?.skillRadar?.tactics,
       );
       const { winner } = evaluateOpponentMoveTriggers(signal, oppSensitivity);

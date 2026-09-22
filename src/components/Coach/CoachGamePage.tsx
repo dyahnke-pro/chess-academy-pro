@@ -153,6 +153,7 @@ import type { TacticsLiveContext } from '../../coach/types';
 import { classifyMoveFull } from '../../services/moveRating';
 import { assembleSlipNarration } from '../../services/groundedAnswer';
 import { LocalizedCoachText } from './ChatMessage';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
   const evaluated = moves.filter((m) => m.evaluation !== null && !m.isCoachMove);
@@ -1323,7 +1324,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // what it volunteers. That distinction is the whole rule: awareness is
       // identical, only the trigger differs.
       const exploreStudentColor = playerColor === 'white' ? 'w' : 'b';
-      const exploreRating = activeProfile?.puzzleRating ?? 1200;
+      const exploreRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
       const exploreTactics = buildTacticsLiveContext(
         newFen,
         stockfishCache.get(newFen, COACH_TURN_DEPTH) ?? null,
@@ -1451,7 +1452,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     isPlayerTurn: isPlayersTurn,
     enabled: coachTipsOn && !voiceActive && gameState.status === 'playing' && !game.isGameOver,
     moves: gameState.moves,
-    playerRating: activeProfile?.currentRating ?? 1200,
+    playerRating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     onTip: handleCoachTip,
     onMissedTactic: difficulty === 'hard' || !settings.coachMissedTacticTakeback ? undefined : handleMissedTactic,
     blunderAlerts: settings.coachBlunderAlerts,
@@ -3609,7 +3610,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           moveTactics = await buildFedTacticsContext(
             probe.fen(),
             playerColor === 'white' ? 'w' : 'b',
-            useAppStore.getState().activeProfile?.puzzleRating ?? 1200,
+            useAppStore.getState().activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING,
           );
         } catch { moveTactics = null; }
         const llm = await generateMoveCommentary({
@@ -4009,7 +4010,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // alongside the prose ask, so it can articulate WHY the move
         // was a blunder by tactic name. analysis is already in scope.
         const blunderStudentColor = playerColor === 'white' ? 'w' : 'b';
-        const blunderStudentRating = activeProfile?.puzzleRating ?? 1200;
+        const blunderStudentRating = activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
         const blunderTactics = buildTacticsLiveContext(
           moveResult.fen,
           analysis ?? null,
@@ -4383,7 +4384,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
    */
   const handleChatSetStrength = useCallback(
     (targetElo: number): { ok: boolean; reason?: string } => {
-      const base = playerRating || 1200;
+      const base = playerRating || DEFAULT_STUDENT_RATING;
       const next: CoachDifficulty = targetElo >= base + 100 ? 'hard'
         : targetElo <= base - 100 ? 'easy'
         : 'medium';

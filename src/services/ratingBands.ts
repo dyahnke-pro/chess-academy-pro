@@ -18,7 +18,7 @@ export type RatingTier = 'beginner' | 'intermediate' | 'advanced';
 /** The coarse teaching tier for a rating. Boundaries: beginner < 1000,
  *  intermediate 1000–2000 (inclusive), advanced > 2000. */
 export function coreRatingTier(rating: number | undefined | null): RatingTier {
-  const r = rating ?? 1200;
+  const r = rating ?? DEFAULT_STUDENT_RATING;
   if (r < 1000) return 'beginner';
   if (r <= 2000) return 'intermediate';
   return 'advanced';

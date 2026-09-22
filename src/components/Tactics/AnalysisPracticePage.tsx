@@ -25,6 +25,7 @@ import { captureEvent } from '../../services/analytics';
 import { logAppAudit } from '../../services/appAuditor';
 import { hintStartTier } from '../../services/skillScaling';
 import type { GameRecord } from '../../types';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
@@ -132,7 +133,7 @@ const VERDICT_STYLE = {
 export function AnalysisPracticePage(): JSX.Element {
   const navigate = useNavigate();
   const activeProfile = useAppStore((s) => s.activeProfile);
-  const rating = activeProfile?.currentRating ?? 1200;
+  const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
   const setCoachDrawerOpen = useAppStore((s) => s.setCoachDrawerOpen);
   const setCoachDrawerAutoListen = useAppStore((s) => s.setCoachDrawerAutoListen);
   const setGlobalBoardContext = useAppStore((s) => s.setGlobalBoardContext);

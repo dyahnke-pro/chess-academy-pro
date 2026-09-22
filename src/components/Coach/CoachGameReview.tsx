@@ -340,7 +340,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         const username = game.source === 'chesscom' ? prefs?.chessComUsername
           : game.source === 'lichess' ? prefs?.lichessUsername
           : undefined;
-        const made = await generateMistakePuzzlesFromGame(gid, username, playerRating ?? 1200);
+        const made = await generateMistakePuzzlesFromGame(gid, username, playerRating ?? DEFAULT_STUDENT_RATING);
         // Also fill the Thinking-Errors bucket from this game's annotations
         // (deterministic, idempotent per game) — the tactical-only puzzle gate
         // drops positional slips, but those ARE thinking errors.
@@ -2281,7 +2281,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // ask as many unaided moves as the reach ladder warrants (+1 stretch, a step
     // beyond level), capped at the line's real length — the tail then auto-plays.
     const prof = useAppStore.getState().activeProfile;
-    const reach = resolveReachState(prof?.preferences?.reachState, prof?.puzzleRating ?? 1200);
+    const reach = resolveReachState(prof?.preferences?.reachState, prof?.puzzleRating ?? DEFAULT_STUDENT_RATING);
     const totalAsk = Math.min(fullAsk, reachAskDepth(reach.rating));
     if (totalAsk === 0) return false;
     const voice = (line as PvLine & { __voice?: (string | null)[] }).__voice
@@ -3270,7 +3270,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // the existing eval-context prose for upcoming threats.
     const reviewStudentColor = fenForQ.split(' ')[1] === 'b' ? 'b' : 'w';
     const reviewStudentRating =
-      useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+      useAppStore.getState().activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
     const reviewTactics = buildTacticsLiveContext(
       fenForQ,
       null,
@@ -4395,7 +4395,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 key={readingGate.ply}
                 fen={readingGate.fen}
                 studentColor={studentColorWB}
-                rating={playerRating ?? 1200}
+                rating={playerRating ?? DEFAULT_STUDENT_RATING}
                 onProceed={resolveReadingGate}
               />
             )}

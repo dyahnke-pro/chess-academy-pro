@@ -37,6 +37,7 @@ import { useAppStore } from '../stores/appStore';
 import { isFixtureDerived, isFixtureGame } from './fixtureGames';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType, GameRecord } from '../types';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 /** A weak spot not re-drilled within this window is "open" again. */
 const WEAKSPOT_STALE_MS = 3 * 24 * 60 * 60 * 1000;
@@ -876,7 +877,7 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   // the "too early / costly" gate. Async findTheoryDeparture never runs on this
   // hot path — only the cache read does.
   const studentRating = useAppStore.getState().activeProfile?.currentRating
-    ?? useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+    ?? useAppStore.getState().activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
   const bookRows = await getCachedBookDepartureRows(games, names, studentRating);
 
   // THE GAME INDEX (capability parity, David 2026-09-16). Resolved ONCE, here,

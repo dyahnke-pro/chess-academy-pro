@@ -30,6 +30,7 @@ import type { ChatMessage as ChatMessageType, BoardAnnotationCommand } from '../
 import { uid } from '../../utils/uid';
 import { registerCoachHands, actuate, actionForCommand } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 /** Pull the inner items out of a `[CHOICES: A | B | C]` marker in a raw coach
  *  reply (mirrors the CoachTeachPage extractor). The marker itself is stripped
@@ -870,7 +871,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           // can answer by tactic name instead of citing eval alone.
           const gameChatStudentColor = liveFen.split(' ')[1] === 'b' ? 'b' : 'w';
           const gameChatProfile = useAppStore.getState().activeProfile;
-          const gameChatStudentRating = gameChatProfile?.puzzleRating ?? 1200;
+          const gameChatStudentRating = gameChatProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING;
           // Adaptive tactical horizon — a player strong/improving at tactics
           // gets a deeper PV scan (David 2026-07-03).
           const gameChatTacticsSkill = gameChatProfile?.skillRadar?.tactics;

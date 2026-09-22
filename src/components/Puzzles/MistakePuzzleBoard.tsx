@@ -22,6 +22,7 @@ import { recordCapabilityEvidence } from '../../services/capabilityEvidence';
 import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
@@ -235,7 +236,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
 
   const { reset: resetStruggle } = useStruggleDetection({
     tacticType,
-    playerRating: activeProfile?.currentRating ?? 1200,
+    playerRating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
     active: state === 'playing',
     wrongAttempts: wrongAttemptCount,
     onCoach: handleStruggleCoach,
@@ -516,7 +517,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const speakBestMoveWhy = useCallback(async (): Promise<void> => {
     setWhyLoading(true);
     setSubtitle('Analyzing why this was the best move...');
-    const rating = activeProfile?.currentRating ?? 1200;
+    const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     try {
       const response = await explainPuzzleMoveGrounded({
         fen: puzzle.fen,
@@ -552,7 +553,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
         setSubtitle(hint);
         void voiceService.speak(hint);
       } else {
-        const rating = activeProfile?.currentRating ?? 1200;
+        const rating = activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
         const coaching = getCoachingMessage(tacticType, 'teach', rating);
         const message = coaching ?? 'Take your time. Look for checks, captures, and threats.';
         setSubtitle(message);
@@ -799,7 +800,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     if (chessRef.current.isGameOver()) return;
     setFreeplayThinking(true);
     try {
-      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
       const reply = await getCoachMove(chessRef.current.fen(), resolveConfig('medium', rating));
       if (reply?.from && reply.to) {
         try {

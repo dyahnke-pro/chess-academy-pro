@@ -3,7 +3,7 @@
  *
  * The disease this guards against (caught in prod 2026-07-01, real beta
  * testers): a NaN rating gets durably written into the profile (JS `??`
- * does NOT catch NaN — `NaN ?? 1200` is NaN — and `puzzleRating` isn't an
+ * does NOT catch NaN — `NaN ?? <default>` is NaN — and `puzzleRating` isn't an
  * indexed field, so the bad write silently succeeds). On the next boot every
  * rating range read does `.between(NaN - bw, NaN + bw)` → Dexie builds
  * `IDBKeyRange.bound(NaN, NaN)` → throws "The parameter is not a valid key",

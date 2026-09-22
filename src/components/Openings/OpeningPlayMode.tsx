@@ -684,7 +684,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           // Student strength + chosen difficulty, kept apart: the taught-slip
           // matrix needs both and `targetStrength` has already merged them.
           const adaptive = await getAdaptiveMove(game.fen, targetStrength, {
-            studentElo: activeProfile?.puzzleRating ?? 1200,
+            studentElo: activeProfile?.puzzleRating ?? DEFAULT_STUDENT_RATING,
             difficulty,
           });
           if (isCancelled()) return;

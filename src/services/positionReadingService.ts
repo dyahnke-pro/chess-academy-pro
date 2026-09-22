@@ -19,6 +19,7 @@ import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import type { TacticsLiveContext } from '../coach/types';
 import type { WeaknessCategory } from '../types';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -1933,7 +1934,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     if (opts.pvSan && opts.pvSan.length >= 2) calcSeq = forcingPrefix(fen, opts.pvSan);
     if (calcSeq.length < 2 && enemyWins.length > 0) calcSeq = seeSequence(fen, enemyWins[0].square);
     // Adaptive depth floor: weak ~3 plies, intermediate ~4, advanced 6+.
-    const r = opts.rating ?? 1200;
+    const r = opts.rating ?? DEFAULT_STUDENT_RATING;
     const minLen = r < 1400 ? 3 : r < 1900 ? 4 : 6;
     if (calcSeq.length >= minLen) {
       const first = calcSeq[0];

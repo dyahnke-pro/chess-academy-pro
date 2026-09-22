@@ -26,6 +26,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getPuzzleAtRating } from '../services/endgameDrillService';
 import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesson';
+import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 
 const CLAMP_MIN = 600;
 const CLAMP_MAX = 2400;
@@ -62,7 +63,7 @@ export function useAdaptiveDrillSession(
   lesson: EndgameLesson,
   options: { initialRating?: number; seed?: number } = {},
 ): AdaptiveDrillSession {
-  const initialRating = clamp(options.initialRating ?? 1200);
+  const initialRating = clamp(options.initialRating ?? DEFAULT_STUDENT_RATING);
   const [targetRating, setTargetRating] = useState<number>(initialRating);
   const [playedIds, setPlayedIds] = useState<Set<string>>(new Set());
   const [completedCount, setCompletedCount] = useState<number>(0);

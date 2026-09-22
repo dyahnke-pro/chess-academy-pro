@@ -30,6 +30,7 @@ import puzzlesData from '../data/puzzles.json';
 import { db } from '../db/schema';
 import type { MistakePuzzle, TacticType } from '../types';
 import { themesForTactic, bucketForMistake } from './weaknessSpine';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 interface RawPuzzle {
   id: string;
@@ -181,7 +182,7 @@ export interface PickDrillOptions {
  * the pools are thousands deep).
  */
 export function pickCoachDrill(aid: string, options: PickDrillOptions = {}): CoachDrill | null {
-  const targetRating = options.rating ?? 1200;
+  const targetRating = options.rating ?? DEFAULT_STUDENT_RATING;
   const seed = options.seed ?? 1;
 
   // `puzzle:<theme>` deep-links a specific tactical theme.
@@ -407,7 +408,7 @@ export function mistakePuzzleToDrill(mp: MistakePuzzle): CoachDrill | null {
     solutionSan,
     prompt,
     puzzleId: mp.id,
-    rating: Math.max(400, Math.round(mp.cpLoss)) || 1200,
+    rating: Math.max(400, Math.round(mp.cpLoss)) || DEFAULT_STUDENT_RATING,
   };
 }
 
@@ -495,7 +496,7 @@ export async function buildMistakeDrillQueue(
 ): Promise<MistakeDrillTheme[]> {
   const today = options.today ?? new Date().toISOString().split('T')[0];
   const cementReps = Math.max(0, options.cementReps ?? 0);
-  const cementRating = options.rating ?? 1200;
+  const cementRating = options.rating ?? DEFAULT_STUDENT_RATING;
   let mistakes: MistakePuzzle[] = [];
   try {
     mistakes = await db.mistakePuzzles.toArray();

@@ -23,6 +23,7 @@ import type {
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { GameChatPanel } from '../Coach/GameChatPanel';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 
 interface MiddlegamePracticeProps {
   plan: MiddlegamePlan;
@@ -261,7 +262,7 @@ export function MiddlegamePractice({
       // 1200 (David 2026-07-03: all training aids adaptive).
       const mgProfile = useAppStore.getState().activeProfile;
       const mgTactics = (await buildFedTacticsContext(
-        fen, studentCC, mgProfile?.currentRating ?? 1200, analysis,
+        fen, studentCC, mgProfile?.currentRating ?? DEFAULT_STUDENT_RATING, analysis,
         () => Promise.resolve(null), mgProfile?.skillRadar?.tactics,
       ).catch(() => undefined)) ?? null;
 
