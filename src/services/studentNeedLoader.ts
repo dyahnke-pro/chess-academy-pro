@@ -18,6 +18,7 @@ import { criticalityThresholds } from './criticalityScan';
 import { coldStudent, type StudentNeedContext } from './needScore';
 import type { GameRecord } from '../types';
 import { getCapabilityProfile } from './capabilityEvidence';
+import { isFixtureGame } from './fixtureGames';
 
 const TTL_MS = 5 * 60 * 1000;
 let cache: { at: number; key: string; ctx: StudentNeedContext } | null = null;
@@ -97,8 +98,13 @@ export async function loadStudentNeedContext(q: StudentNeedQuery): Promise<Stude
   try {
     const prefs = useAppStore.getState().activeProfile?.preferences;
     const names = { lichessUsername: prefs?.lichessUsername, chessComUsername: prefs?.chessComUsername };
+    // 🔒 FIXTURES ARE NOT THE STUDENT (D5, 2026-09-22). The three amateur
+    // samples the review page seeds carry `fullyAnalyzed: true`, so a fresh
+    // install read as three analysed games and the cold-start prior FADED on a
+    // student who had played nothing. Excluded at the read so every number
+    // below — gamesPlayed, lineReps, the scores — is computed from their games.
     const [games, signals] = await Promise.all([
-      db.games.filter((g) => !g.isMasterGame).toArray(),
+      db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).toArray(),
       loadWeaknessSignals().catch(() => []),
     ]);
     const analysed = games.filter((g) => g.fullyAnalyzed);

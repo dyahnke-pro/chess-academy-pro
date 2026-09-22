@@ -9,6 +9,7 @@ import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { captureEvent } from './analytics';
+import { isFixtureDerived } from './fixtureGames';
 import type {
   MisconceptionTagRecord,
   MisconceptionSource,
@@ -198,7 +199,10 @@ export async function getMisconceptionProfile(
   opts?: { countedOnly?: boolean },
 ): Promise<MisconceptionAggregate[]> {
   const now = Date.now();
-  const raw = await db.misconceptionTags.toArray();
+  // 🔒 FIXTURES ARE NOT THE STUDENT (D5, 2026-09-22): a slip captured while
+  // reviewing a seeded `sample-*` game is a slip in a DEMO, so it never enters
+  // the student's misconception profile — display or weakness analysis alike.
+  const raw = (await db.misconceptionTags.toArray()).filter((r) => !isFixtureDerived(r));
   // The Thinking-Errors display reads everything; the weakness analysis passes
   // countedOnly so display-only (un-learned) slips don't inflate the formal
   // weakness profile. Legacy rows have no `counted` field → treated as counted.

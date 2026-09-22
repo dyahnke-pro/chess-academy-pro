@@ -22,6 +22,7 @@ import {
 import { classifyPhase } from './gamePhaseService';
 import { pvUciToSan } from './principleAttribution';
 import { isMateEval } from './engineConstants';
+import { isFixtureGame } from './fixtureGames';
 import type { MistakePuzzle, MoveAnnotation } from '../types';
 
 export interface BlunderForAnalysis {
@@ -202,6 +203,10 @@ export async function autoAnalyzeGameMisconceptions(
 
   const game = await db.games.get(gameId);
   if (!game) return empty;
+  // 🔒 A DEMO GAME NEVER WRITES INTO THE STUDENT'S RECORD (D5, 2026-09-22).
+  // The readers exclude `sample-*` rows too, but the honest fix is that they
+  // are never written: a seeded fixture has nothing to say about this student.
+  if (isFixtureGame(game)) return empty;
   const annotations = game.annotations ?? [];
   if (annotations.length === 0) return empty;
   const playerColor = determinePlayerColor(game, username);

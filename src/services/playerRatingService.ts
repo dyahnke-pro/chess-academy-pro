@@ -24,6 +24,7 @@ import { useAppStore } from '../stores/appStore';
 import type { GameRecord } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { logAppAudit } from './appAuditor';
+import { isFixtureGame } from './fixtureGames';
 
 /** Re-exported so there is ONE literal in the app — see `DEFAULT_STUDENT_RATING`. */
 export const DEFAULT_RATING = DEFAULT_STUDENT_RATING;
@@ -155,10 +156,16 @@ export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
 
   // 1. Imported games — highest confidence. Take most recent game where
   //    we can identify the player's side.
-  const importedGames = await db.games
+  // 🔒 FIXTURES ARE NOT THE STUDENT (D5, 2026-09-22). The review page seeds a
+  // `sample-london-amateur-3` with source 'chesscom' and whiteElo 1500 — with
+  // no username stored, `ratingFromImportedGame` fell back to "whichever side
+  // has a rating" and this rung answered 1500 for a device that had never
+  // played a move. Filtered here, at the reader, so the chain can only ever see
+  // games the student played.
+  const importedGames = (await db.games
     .where('source')
     .anyOf('lichess', 'chesscom')
-    .toArray();
+    .toArray()).filter((g) => !isFixtureGame(g));
 
   if (importedGames.length > 0) {
     const sorted = importedGames
@@ -184,7 +191,10 @@ export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
   // games moved the number on every boot (800 -> 990 over ten opens; a losing
   // player 1200 -> 888). Anchored at a baseline written once, this is a pure
   // function of THEIR games: same games in, same rating out, forever.
-  const coachGames = await db.games.where('source').equals('coach').toArray();
+  // Same exclusion: `sample-vienna-amateur-1` is a source 'coach' fixture and
+  // would otherwise ride this rung as one of the student's coach games.
+  const coachGames = (await db.games.where('source').equals('coach').toArray())
+    .filter((g) => !isFixtureGame(g));
   if (coachGames.length >= COACH_GAMES_MIN_SAMPLE) {
     const starting = profile?.ratingBaseline ?? DEFAULT_RATING;
     const rating = runningEloFromCoachGames(coachGames, starting, profile?.name);

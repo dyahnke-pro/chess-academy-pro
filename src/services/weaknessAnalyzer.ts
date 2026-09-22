@@ -5,6 +5,7 @@ import { getRepertoireOpenings } from './openingService';
 import { detectTactics } from './tacticsDetector';
 import { classifyPhase } from './gamePhaseService';
 import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
+import { isFixtureDerived, isFixtureGame } from './fixtureGames';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type {
   WeaknessProfile,
@@ -1006,7 +1007,13 @@ export async function computeWeaknessProfile(
       };
     },
   );
-  const { recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots } = direct;
+  // 🔒 FIXTURES ARE NOT THE STUDENT (D5, 2026-09-22). The seeded `sample-*`
+  // games are `fullyAnalyzed` amateur games written as the student's; without
+  // this, `analyzeGames` counted their blunders as the student's and the
+  // mistake puzzles a sample review wrote ranked as the student's own.
+  const recentGames = direct.recentGames.filter((g) => !isFixtureGame(g));
+  const mistakePuzzles = direct.mistakePuzzles.filter((p) => !isFixtureDerived(p));
+  const { recentSessions, flashcards, weakSpots } = direct;
 
   // Run each analyzer
   const tactics = analyzeTactics(themeSkills);
@@ -1374,7 +1381,8 @@ export async function generatePersonalizedDrill(
   themeFilter?: string,
   maxItems: number = 20,
 ): Promise<WeaknessDrillSession> {
-  const allMistakes = await db.mistakePuzzles.toArray();
+  // A drill is built from the STUDENT's slips — never a demo game's (D5).
+  const allMistakes = (await db.mistakePuzzles.toArray()).filter((p) => !isFixtureDerived(p));
   const nonMastered = allMistakes.filter((mp) => mp.status !== 'mastered');
 
   // Detect themes from all mistakes

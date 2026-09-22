@@ -4,11 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**856 lines · 19 exports · 24 importers · 11 tests · 2 audits**
+**868 lines · 19 exports · 27 importers · 14 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:236) — names `WeaknessProvenance`
+- **The standard post-deploy ritual** (CLAUDE.md:5945) — names `weaknessSpine`
 
 ## Who calls in
 
@@ -26,8 +27,11 @@
 - `src/services/customLessonPlan.test.ts`
 - `src/services/customLessonPlan.ts`
 - `src/services/drillVocabulary.test.ts`
+- `src/services/fixtureGames.test.tsx`
+- `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/weaknessLifecycle.ts`
 - `src/services/weaknessProvenance.test.ts`
@@ -69,7 +73,7 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2444`
+- `src/components/Coach/CoachTeachPage.tsx:2573`
 - `src/services/coachDrillService.ts:531`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
@@ -129,22 +133,28 @@
 - `src/services/weaknessSpine.test.ts:259`
 - `src/services/weaknessSpine.test.ts:272`
 
-### `getUnifiedWeaknessProfile` (function) — 29 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2377`
-- `src/components/Coach/CoachTeachPage.tsx:10388`
+### `getUnifiedWeaknessProfile` (function) — 35 call sites
+- `src/components/Coach/CoachTeachPage.tsx:2506`
+- `src/components/Coach/CoachTeachPage.tsx:10584`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:70`
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:156`
 - `src/services/coachApi.ts:2086`
-- `src/services/coachApi.ts:4132`
-- `src/services/coachApi.ts:4680`
+- `src/services/coachApi.ts:4154`
+- `src/services/coachApi.ts:4702`
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
 - `src/services/coachThread.ts:40`
-- `src/services/fundamentalsPipeline.realGame.test.ts:278`
+- `src/services/fixtureGames.test.tsx:114`
+- `src/services/fixtureGames.test.tsx:123`
+- `src/services/fundamentalReachesDecider.test.ts:81`
+- `src/services/fundamentalReachesDecider.test.ts:97`
+- `src/services/fundamentalReachesDecider.test.ts:123`
+- `src/services/fundamentalsPipeline.realGame.test.ts:342`
 - `src/services/fundamentalsRecordLoop.integration.test.ts:92`
-- `src/services/weaknessSignalLoader.ts:40`
+- `src/services/loopCloses.review.integration.test.ts:74`
+- `src/services/weaknessSignalLoader.ts:41`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
 - `src/services/weaknessSpine.fundamentals.test.ts:62`
 - `src/services/weaknessSpine.fundamentals.test.ts:77`
@@ -166,8 +176,11 @@
 - `src/services/coachThread.test.ts`
 - `src/services/customLessonPlan.test.ts`
 - `src/services/drillVocabulary.test.ts`
+- `src/services/fixtureGames.test.tsx`
+- `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/loopCloses.review.integration.test.ts`
 - `src/services/tacticTypeBackfill.test.ts`
 - `src/services/weaknessProvenance.test.ts`
 - `src/services/weaknessSignal.test.ts`
@@ -175,6 +188,10 @@
 - `src/services/weaknessSpine.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-training-recommendation.mjs`
 - `scripts/audit-lib/seed-weakness-profile.mjs`

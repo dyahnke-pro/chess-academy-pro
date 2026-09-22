@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1456 lines · 23 exports · 27 importers · 15 tests · 4 audits**
+**1459 lines · 23 exports · 27 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -78,15 +78,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:6955`
-- `src/components/Coach/CoachTeachPage.tsx:6961`
+- `src/components/Coach/CoachTeachPage.tsx:7130`
+- `src/components/Coach/CoachTeachPage.tsx:7136`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
 - `src/hooks/useDiscussionPractice.ts:259`
 - `src/hooks/useDiscussionPractice.ts:381`
-- `src/services/autoAnalyzeGame.ts:227`
+- `src/services/autoAnalyzeGame.ts:232`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:58`
 - `src/services/deliberation.ts:118`
@@ -99,10 +99,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/endgameService.ts:259`
 - `src/services/mistakeNarration.ts:113`
 - `src/services/mistakeNarration.ts:584`
-- `src/services/openingGenerator.ts:3787`
-- `src/services/openingGenerator.ts:3986`
+- `src/services/openingGenerator.ts:3791`
 - `src/services/openingGenerator.ts:3990`
-- `src/services/openingGenerator.ts:3995`
+- `src/services/openingGenerator.ts:3994`
+- `src/services/openingGenerator.ts:3999`
 - `src/services/opponentIntent.ts:39`
 - `src/services/opponentIntent.ts:70`
 - `src/services/opponentIntent.ts:77`
@@ -115,23 +115,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `replayPgnToFens` (function) — 8 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
-- `src/services/autoAnalyzeGame.ts:209`
+- `src/services/autoAnalyzeGame.ts:214`
 - `src/services/gameAnalysisService.ts:351`
-- `src/services/gameAnalysisService.ts:1411`
-- `src/services/gameAnalysisService.ts:1641`
-- `src/services/gameAnalysisService.ts:2154`
+- `src/services/gameAnalysisService.ts:1433`
+- `src/services/gameAnalysisService.ts:1689`
+- `src/services/gameAnalysisService.ts:2221`
 - `src/services/tacticClassifierService.ts:193`
 - `src/services/tacticClassifierService.ts:437`
 
 ### `determinePlayerColor` (function) — 3 call sites
 - `src/components/Tactics/AnalysisPracticePage.tsx:99`
-- `src/services/autoAnalyzeGame.ts:207`
+- `src/services/autoAnalyzeGame.ts:212`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2014`
-- `src/components/Coach/CoachGameReview.tsx:314`
-- `src/services/gameAnalysisService.ts:2007`
+- `src/components/Coach/CoachGamePage.tsx:2060`
+- `src/components/Coach/CoachGameReview.tsx:341`
+- `src/services/gameAnalysisService.ts:2074`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
 - `src/services/mistakePuzzleService.test.ts:189`
@@ -189,7 +189,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.sequence.test.ts:72`
 
 ### `buildMistakePuzzleFromCapture` (function) — 4 call sites
-- `src/services/autoAnalyzeGame.ts:352`
+- `src/services/autoAnalyzeGame.ts:357`
 - `src/services/misconceptionDrill.test.ts:18`
 - `src/services/misconceptionDrill.test.ts:20`
 - `src/services/misconceptionDrill.test.ts:29`
@@ -219,7 +219,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2215`
+- `src/components/Coach/CoachTeachPage.tsx:2315`
 - `src/components/Puzzles/MyMistakesPage.tsx:213`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`
@@ -260,6 +260,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/ratingBands.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-bucket-delivery-loop.mjs`
 - `scripts/audit-coach-play-full.mjs`

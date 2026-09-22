@@ -34,6 +34,7 @@ import { getSquareHeatmap, type SquareHeatmapEntry } from './findSquareService';
 import { aggregateBookDepartures } from './bookDepartureWeakness';
 import { getCachedBookDepartureRows } from './bookDeparturePrecompute';
 import { useAppStore } from '../stores/appStore';
+import { isFixtureDerived, isFixtureGame } from './fixtureGames';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType, GameRecord } from '../types';
 
@@ -772,7 +773,7 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
       'r',
       [db.misconceptionTags, db.mistakePuzzles, db.openingWeakSpots, db.classifiedTactics, db.games],
       async () => {
-        const [misAgg, allMis, mistakes, weakSpots, tactics, games] = await Promise.all([
+        const [misAgg, rawMis, rawMistakes, weakSpots, rawTactics, rawGames] = await Promise.all([
           getMisconceptionProfile({ countedOnly: true }),
           db.misconceptionTags.toArray(),
           db.mistakePuzzles.toArray(),
@@ -780,6 +781,17 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
           db.classifiedTactics.toArray(),
           db.games.toArray(),
         ]);
+        // 🔒 FIXTURES ARE NOT THE STUDENT (D5, 2026-09-22). Reviewing the
+        // seeded Vienna sample wrote its slips into these stores under the
+        // student's name, and every aggregator below then ranked a demo
+        // game's mistakes as the student's own. The game rows are excluded by
+        // `isFixtureGame`; the derived rows by their `sourceGameId`, which is
+        // the same `sample-*` id. `getMisconceptionProfile` applies the same
+        // predicate inside, so `misAgg` arrives clean.
+        const allMis = rawMis.filter((r) => !isFixtureDerived(r));
+        const mistakes = rawMistakes.filter((r) => !isFixtureDerived(r));
+        const tactics = rawTactics.filter((r) => !isFixtureDerived(r));
+        const games = rawGames.filter((g) => !isFixtureGame(g));
         return { misAgg, allMis, mistakes, weakSpots, tactics, games };
       },
     ),

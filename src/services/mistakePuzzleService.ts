@@ -14,6 +14,7 @@ import {
   type TransformationResult,
 } from './positionTransformation';
 import { getOpeningNameByEco, isBookLine } from './openingDetectionService';
+import { isFixtureGame } from './fixtureGames';
 import { capEval } from './accuracyService';
 import { verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { useAppStore } from '../stores/appStore';
@@ -307,6 +308,8 @@ export async function generateMistakePuzzlesFromGame(
 
   const game = await db.games.get(gameId);
   if (!game) return 0;
+  // A DEMO game never writes into the student's record (D5, 2026-09-22).
+  if (isFixtureGame(game)) return 0;
 
   const sourceMode = sourceFromGameSource(game.source);
   if (!sourceMode) return 0;
