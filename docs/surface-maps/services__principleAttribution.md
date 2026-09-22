@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5962) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:5985) — names `FundamentalId`
 
 ## Who calls in
 

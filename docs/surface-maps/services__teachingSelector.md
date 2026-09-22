@@ -8,8 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:1974) — names `Moment`
-- **The standard post-deploy ritual** (CLAUDE.md:5918) — names `Moment`
+- **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:1988) — names `Moment`
+- **⏰ Standing notes** (CLAUDE.md:2517) — names `Thesis`
+- **The standard post-deploy ritual** (CLAUDE.md:5941) — names `Moment`
 
 ## Who calls in
 
@@ -59,8 +60,8 @@
 - `src/hooks/usePhaseNarration.ts:522`
 - `src/services/coachFeatureService.ts:1322`
 - `src/services/needCoverage.report.test.ts:60`
-- `src/services/openingGenerator.ts:519`
-- `src/services/openingGenerator.ts:2731`
+- `src/services/openingGenerator.ts:518`
+- `src/services/openingGenerator.ts:2463`
 - `src/services/teachingSelector.test.ts:39`
 - `src/services/teachingSelector.test.ts:51`
 - `src/services/teachingSelector.test.ts:82`
@@ -74,10 +75,11 @@
 ### `ThesisRegister` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderThesis` (function) — 7 call sites
+### `renderThesis` (function) — 8 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
 - `src/components/Coach/CoachGameReview.tsx:1485`
 - `src/hooks/usePhaseNarration.ts:523`
+- `src/services/openingGenerator.ts:2465`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
 - `src/services/teachingSelector.test.ts:64`
@@ -86,7 +88,7 @@
 ### `pliesFromSans` (function) — 6 call sites
 - `src/hooks/usePhaseNarration.ts:522`
 - `src/services/needCoverage.report.test.ts:59`
-- `src/services/openingGenerator.ts:517`
+- `src/services/openingGenerator.ts:516`
 - `src/services/teachingSelector.test.ts:113`
 - `src/services/teachingSelector.test.ts:114`
 - `src/services/teachingSelector.test.ts:117`
@@ -101,8 +103,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `summarizeTeaching` (function) — 3 call sites
-- `src/services/openingGenerator.ts:519`
-- `src/services/openingGenerator.ts:2732`
+- `src/services/openingGenerator.ts:518`
+- `src/services/openingGenerator.ts:2464`
 - `src/services/teachingSelector.test.ts:118`
 
 ## Tests

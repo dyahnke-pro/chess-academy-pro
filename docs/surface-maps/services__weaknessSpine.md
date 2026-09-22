@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:236) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:5961) — names `weaknessSpine`
+- **The standard post-deploy ritual** (CLAUDE.md:5984) — names `weaknessSpine`
 
 ## Who calls in
 
@@ -150,9 +150,9 @@
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`
 - `src/services/bucketPipelineAudit.ts:156`
-- `src/services/coachApi.ts:2106`
-- `src/services/coachApi.ts:4312`
-- `src/services/coachApi.ts:4881`
+- `src/services/coachApi.ts:2107`
+- `src/services/coachApi.ts:4330`
+- `src/services/coachApi.ts:4899`
 - `src/services/coachCurriculumService.ts:124`
 - `src/services/coachCurriculumService.ts:137`
 - `src/services/coachThread.ts:49`

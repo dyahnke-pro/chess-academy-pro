@@ -8,8 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3879) — names `useLiveCoach`
-- **The standard post-deploy ritual** (CLAUDE.md:5931) — names `useLiveCoach`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1237) — names `useLiveCoach`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3902) — names `useLiveCoach`
+- **The standard post-deploy ritual** (CLAUDE.md:5954) — names `useLiveCoach`
 
 ## Who calls in
 

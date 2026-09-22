@@ -4,19 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**503 lines · 4 exports · 3 importers · 2 tests · 1 audits**
+**431 lines · 4 exports · 4 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1163) — names `usePositionNarration`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3881) — names `usePositionNarration`
-- **🔒🔒 EVERY COACHING SURFACE GETS THE CORPUS — review, play, learn, tactics, all of it (David 2026-08-07, emphatic).** (CLAUDE.md:4235) — names `usePositionNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:5931) — names `usePositionNarration`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3904) — names `usePositionNarration`
+- **🔒🔒 EVERY COACHING SURFACE GETS THE CORPUS — review, play, learn, tactics, all of it (David 2026-08-07, emphatic).** (CLAUDE.md:4258) — names `usePositionNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:5954) — names `usePositionNarration`
 
 ## Who calls in
 
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`
 
 ## Exports and every call site
@@ -27,29 +28,30 @@
 ### `UsePositionNarrationResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `__resetStockfishCacheForTests` (const) — 1 call site
-- `src/hooks/usePositionNarration.test.ts:114`
+### `__resetStockfishCacheForTests` (const) — 2 call sites
+- `src/hooks/usePositionNarration.degrade.test.ts:78`
+- `src/hooks/usePositionNarration.test.ts:115`
 
-### `usePositionNarration` (function) — 15 call sites
+### `usePositionNarration` (function) — 14 call sites
 - `src/components/Coach/CoachGamePage.tsx:1785`
 - `src/components/Coach/CoachTeachPage.tsx:7250`
-- `src/hooks/usePositionNarration.test.ts:123`
-- `src/hooks/usePositionNarration.test.ts:130`
-- `src/hooks/usePositionNarration.test.ts:143`
-- `src/hooks/usePositionNarration.test.ts:167`
-- `src/hooks/usePositionNarration.test.ts:191`
-- `src/hooks/usePositionNarration.test.ts:215`
-- `src/hooks/usePositionNarration.test.ts:236`
-- `src/hooks/usePositionNarration.test.ts:261`
-- `src/hooks/usePositionNarration.test.ts:284`
-- `src/hooks/usePositionNarration.test.ts:303`
-- `src/hooks/usePositionNarration.test.ts:338`
-- `src/hooks/usePositionNarration.test.ts:371`
-- `src/hooks/usePositionNarration.test.ts:411`
+- `src/hooks/usePositionNarration.degrade.test.ts:85`
+- `src/hooks/usePositionNarration.test.ts:124`
+- `src/hooks/usePositionNarration.test.ts:131`
+- `src/hooks/usePositionNarration.test.ts:151`
+- `src/hooks/usePositionNarration.test.ts:179`
+- `src/hooks/usePositionNarration.test.ts:200`
+- `src/hooks/usePositionNarration.test.ts:224`
+- `src/hooks/usePositionNarration.test.ts:241`
+- `src/hooks/usePositionNarration.test.ts:263`
+- `src/hooks/usePositionNarration.test.ts:302`
+- `src/hooks/usePositionNarration.test.ts:335`
+- `src/hooks/usePositionNarration.test.ts:375`
 
 ## Tests
 
 - `src/hooks/usePositionNarration.corpus.test.ts`
+- `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`
 
 ## Audits that reach it

@@ -8,6 +8,7 @@ import {
   containmentAudit,
   squaresIn,
   conceptsIn,
+  introducedSquares,
 } from './voiceContainment';
 
 describe('voiceContainment — the "nothing added" net (Phase 0a)', () => {
@@ -223,5 +224,43 @@ describe('sentenceCount — periods that are not sentence ends', () => {
     const facts = 'You are winning.';
     const ramble = Array.from({ length: 12 }, (_, i) => `Point number ${i} about the position.`).join(' ');
     expect(sentenceBudgetExceeded(facts, ramble)).toBe(true);
+  });
+});
+
+/**
+ * THE TRANSLATED PATH (WO-STANDARD-01 F4). voiceFacts used to skip containment
+ * entirely when phrasing in another language, because the concept lexicon is
+ * English and a Spanish reply shares none of it with the English facts. The
+ * squares half of the net is language-agnostic, so it runs there.
+ */
+describe('lexicon: squares — the translated path keeps its board net', () => {
+  const facts = 'Your knight on f3 eyes e5. Their bishop on c4 pins nothing.';
+
+  it('a translated reply that introduces a square the facts never gave is refused', () => {
+    const out = 'Tu caballo en f3 mira e5, y su alfil en c4 no clava nada. Cuidado con el peón en d5.';
+    const verdict = containmentCheck(facts, out, '', { lexicon: 'squares' });
+    expect(verdict.text).toBeNull();
+    expect(verdict.violations).toEqual(['d5']);
+  });
+
+  it('a faithful translation passes even though it shares no English concept words', () => {
+    const out = 'Tu caballo en f3 mira e5 — una horquilla posible. Su alfil en c4 no hace ninguna clavada.';
+    expect(containmentCheck(facts, out, '', { lexicon: 'squares' }).text).toBe(out);
+  });
+
+  it('the squares lexicon does NOT read the English concept lexicon (the two nets are different)', () => {
+    const out = 'Your knight on f3 eyes e5 — that is a fork in the making.';
+    expect(containmentCheck(facts, out).text).toBeNull();
+    expect(containmentCheck(facts, out, '', { lexicon: 'squares' }).text).toBe(out);
+  });
+
+  it('introducedSquares is the language-agnostic half of introducedChessTerms', () => {
+    expect(introducedSquares('Nf3 eyes e5', 'the knight to f3 hits e5 and d4')).toEqual(['d4']);
+    expect(introducedSquares('Nf3 eyes e5', 'el caballo a f3 ataca e5')).toEqual([]);
+  });
+
+  it('the sentence budget still applies under the squares lexicon', () => {
+    const out = Array.from({ length: 8 }, (_, i) => `Frase de relleno número ${i + 1} que no dice nada.`).join(' ');
+    expect(containmentCheck('Un hecho.', out, '', { lexicon: 'squares' }).text).toBeNull();
   });
 });

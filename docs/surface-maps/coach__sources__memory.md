@@ -12,14 +12,14 @@
 - **G2. Audit-stream pull on EVERY runtime-touching change.** (CLAUDE.md:727) — names `memory`
 - **G3. No chess content invented from memory.** (CLAUDE.md:769) — names `memory`
 - **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:803) — names `memory`
-- **G9.2 The PRO-REP BUILD PROCEDURE — step-by-step (locked David 2026-05-28).** (CLAUDE.md:1576) — names `memory`
-- **⏰ Standing notes** (CLAUDE.md:2537) — names `memory`
-- **🔴🔴 THE APP IS LIVE ON THE APP STORE WITH PAYING CUSTOMERS (David 2026-08-03, LOCKED: "Lock into your memory where I stand with the App Store. It's live, have 21 downloads, and 2 paying members").** (CLAUDE.md:3403) — names `memory`
-- **🔒🔒 A BUNDLED CORPUS CARRIES ONLY NOTES THE APP CAN ANCHOR — the floating half is FETCHED (David 2026-09-19: "no more non-positioned phrases at boot" … "i still want danyas corpus loaded at boot time if able. faster responses").** (CLAUDE.md:4180) — names `memory`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4364) — names `memory`
-- **Deployment Policy** (CLAUDE.md:5355) — names `memory`
-- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:5513) — names `memory`
-- **The standard post-deploy ritual** (CLAUDE.md:5902) — names `memory`
+- **G9.2 The PRO-REP BUILD PROCEDURE — step-by-step (locked David 2026-05-28).** (CLAUDE.md:1590) — names `memory`
+- **⏰ Standing notes** (CLAUDE.md:2558) — names `memory`
+- **🔴🔴 THE APP IS LIVE ON THE APP STORE WITH PAYING CUSTOMERS (David 2026-08-03, LOCKED: "Lock into your memory where I stand with the App Store. It's live, have 21 downloads, and 2 paying members").** (CLAUDE.md:3426) — names `memory`
+- **🔒🔒 A BUNDLED CORPUS CARRIES ONLY NOTES THE APP CAN ANCHOR — the floating half is FETCHED (David 2026-09-19: "no more non-positioned phrases at boot" … "i still want danyas corpus loaded at boot time if able. faster responses").** (CLAUDE.md:4203) — names `memory`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4387) — names `memory`
+- **Deployment Policy** (CLAUDE.md:5378) — names `memory`
+- **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:5536) — names `memory`
+- **The standard post-deploy ritual** (CLAUDE.md:5925) — names `memory`
 
 ## Who calls in
 

@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3033) — names `coachService`
-- **The standard post-deploy ritual** (CLAUDE.md:5959) — names `coachService`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5973) — names `coachService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3056) — names `coachService`
+- **The standard post-deploy ritual** (CLAUDE.md:5982) — names `coachService`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5996) — names `coachService`
 
 ## Who calls in
 
@@ -172,7 +172,7 @@
 - `src/coach/questionIntents.ts:919`
 - `src/coach/questionIntents.ts:931`
 - `src/coach/questionIntents.ts:2971`
-- `src/services/coachApi.ts:5956`
+- `src/services/coachApi.ts:5974`
 
 ### `isEndgameWeaknessQuestion` (re-export) — 6 call sites
 - `src/coach/questionIntents.test.ts:591`

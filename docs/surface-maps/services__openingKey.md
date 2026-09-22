@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**106 lines · 9 exports · 35 importers · 18 tests · 1 audits**
+**106 lines · 9 exports · 36 importers · 18 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Games/GameDatabasePage.tsx`
 - `src/components/Insights/HomeOpeningCard.test.tsx`
+- `src/hooks/usePositionNarration.ts`
 - `src/services/analysisBatchOrder.test.ts`
 - `src/services/bookDeparturePrecompute.test.ts`
 - `src/services/bookDepartureWeakness.test.ts`
@@ -87,11 +88,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessProvenance.test.ts:68`
 - `src/services/weaknessProvenance.test.ts:79`
 
-### `openingKeyFromSans` (function) — 18 call sites
+### `openingKeyFromSans` (function) — 19 call sites
 - `src/components/Coach/CoachGameReview.tsx:623`
 - `src/components/Coach/CoachTeachPage.tsx:7230`
 - `src/components/Coach/CoachTeachPage.tsx:10928`
 - `src/components/Coach/CoachTeachPage.tsx:12090`
+- `src/hooks/usePositionNarration.ts:136`
 - `src/services/oneOpeningKey.test.ts:44`
 - `src/services/oneOpeningKey.test.ts:59`
 - `src/services/oneOpeningKey.test.ts:60`
@@ -100,7 +102,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/oneOpeningKey.test.ts:116`
 - `src/services/oneOpeningKey.test.ts:123`
 - `src/services/oneOpeningKey.test.ts:127`
-- `src/services/openingGenerator.ts:2412`
+- `src/services/openingGenerator.ts:2146`
 - `src/services/openingKey.test.ts:22`
 - `src/services/openingKey.test.ts:51`
 - `src/services/openingKey.test.ts:52`
@@ -142,9 +144,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingKeyBackfill.test.ts:39`
 - `src/services/syncService.ts:205`
 
-### `ecoOfKey` (function) — 3 call sites
+### `ecoOfKey` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:631`
 - `src/components/Coach/CoachTeachPage.tsx:7238`
+- `src/hooks/usePositionNarration.ts:138`
 - `src/services/openingKey.test.ts:31`
 
 ### `sameOpeningFamily` (function) — 10 call sites

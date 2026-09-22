@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3078) — names `detectOpening`, `findContinuationsAtPly`, `findOpeningByPgnPrefix`, `findSiblingExtensionBranches`, `isTeachable`, `openingDetectionService`, `resolveOpeningEntry`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3101) — names `detectOpening`, `findContinuationsAtPly`, `findOpeningByPgnPrefix`, `findSiblingExtensionBranches`, `isTeachable`, `openingDetectionService`, `resolveOpeningEntry`
 
 ## Who calls in
 
@@ -104,7 +104,7 @@
 
 ### `detectOpeningTranspositional` (function) — 4 call sites
 - `src/components/Coach/CoachReviewSessionPage.tsx:191`
-- `src/services/coachApi.ts:5258`
+- `src/services/coachApi.ts:5276`
 - `src/services/reviewOpeningTheory.ts:270`
 - `src/services/reviewOpeningTheory.ts:271`
 
@@ -121,9 +121,9 @@
 - `src/services/openingDetectionService.test.ts:593`
 - `src/services/openingDetectionService.test.ts:607`
 - `src/services/openingDetectionService.test.ts:637`
-- `src/services/openingGenerator.ts:3058`
-- `src/services/openingGenerator.ts:3422`
-- `src/services/openingGenerator.ts:3512`
+- `src/services/openingGenerator.ts:2713`
+- `src/services/openingGenerator.ts:3077`
+- `src/services/openingGenerator.ts:3167`
 
 ### `findLongestPgnExtending` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -162,18 +162,18 @@
 - `src/services/openingFuzzyMatcher.ts:354`
 - `src/services/openingFuzzyMatcher.ts:355`
 - `src/services/openingFuzzyMatcher.ts:375`
-- `src/services/openingGenerator.ts:118`
-- `src/services/openingGenerator.ts:286`
-- `src/services/openingGenerator.ts:1832`
-- `src/services/openingGenerator.ts:2787`
-- `src/services/openingGenerator.ts:3055`
-- `src/services/openingGenerator.ts:3192`
-- `src/services/openingGenerator.ts:3204`
-- `src/services/openingGenerator.ts:3227`
-- `src/services/openingGenerator.ts:3420`
-- `src/services/openingGenerator.ts:3510`
-- `src/services/openingGenerator.ts:4045`
-- `src/services/openingGenerator.ts:4484`
+- `src/services/openingGenerator.ts:117`
+- `src/services/openingGenerator.ts:285`
+- `src/services/openingGenerator.ts:1783`
+- `src/services/openingGenerator.ts:2518`
+- `src/services/openingGenerator.ts:2710`
+- `src/services/openingGenerator.ts:2847`
+- `src/services/openingGenerator.ts:2859`
+- `src/services/openingGenerator.ts:2882`
+- `src/services/openingGenerator.ts:3075`
+- `src/services/openingGenerator.ts:3165`
+- `src/services/openingGenerator.ts:3700`
+- `src/services/openingGenerator.ts:4139`
 - `src/services/openingMatchup.ts:100`
 - `src/services/openingNameClaimValidator.ts:99`
 - `src/services/openingNameResolution.test.ts:37`
@@ -256,7 +256,7 @@
 - `src/services/openingDetectionService.test.ts:357`
 - `src/services/openingDetectionService.test.ts:371`
 - `src/services/openingFactChains.ts:141`
-- `src/services/openingGenerator.ts:3532`
+- `src/services/openingGenerator.ts:3187`
 - `src/services/principleAttribution.section14.test.ts:73`
 - `src/services/principleAttribution.ts:1087`
 
@@ -268,8 +268,8 @@
 - `src/services/openingDetectionService.test.ts:595`
 - `src/services/openingDetectionService.test.ts:609`
 - `src/services/openingDetectionService.test.ts:639`
-- `src/services/openingGenerator.ts:3060`
-- `src/services/openingGenerator.ts:3424`
+- `src/services/openingGenerator.ts:2715`
+- `src/services/openingGenerator.ts:3079`
 - `src/services/openingSublines.ts:104`
 
 ### `resolveTeachSpine` (function) — 5 call sites
@@ -277,7 +277,7 @@
 - `src/services/openingDetectionService.teachSpine.test.ts:53`
 - `src/services/openingDetectionService.teachSpine.test.ts:60`
 - `src/services/openingDetectionService.teachSpine.test.ts:70`
-- `src/services/openingGenerator.ts:1848`
+- `src/services/openingGenerator.ts:1799`
 
 ### `findRelatedDbEntries` (function) — 7 call sites
 - `src/services/openingDbGrounding.ts:210`
@@ -286,7 +286,7 @@
 - `src/services/openingDetectionService.test.ts:232`
 - `src/services/openingDetectionService.test.ts:237`
 - `src/services/openingDetectionService.test.ts:242`
-- `src/services/openingGenerator.ts:145`
+- `src/services/openingGenerator.ts:144`
 
 ### `LinePickerOption` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -299,8 +299,8 @@
 - `src/services/openingDetectionService.test.ts:571`
 - `src/services/openingDetectionService.test.ts:572`
 - `src/services/openingDetectionService.test.ts:582`
-- `src/services/openingGenerator.ts:1832`
-- `src/services/openingGenerator.ts:2787`
+- `src/services/openingGenerator.ts:1783`
+- `src/services/openingGenerator.ts:2518`
 
 ### `classifyVariationStyle` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -349,11 +349,11 @@
 - `src/components/Coach/CoachTeachPage.tsx:5255`
 - `src/components/Coach/CoachTeachPage.tsx:5291`
 - `src/components/Coach/teachPlaySublinePicker.test.ts:91`
-- `src/services/openingGenerator.ts:1952`
-- `src/services/openingGenerator.ts:2802`
-- `src/services/openingGenerator.ts:3429`
-- `src/services/openingGenerator.ts:3516`
-- `src/services/openingGenerator.ts:4085`
+- `src/services/openingGenerator.ts:1901`
+- `src/services/openingGenerator.ts:2533`
+- `src/services/openingGenerator.ts:3084`
+- `src/services/openingGenerator.ts:3171`
+- `src/services/openingGenerator.ts:3740`
 - `src/services/punishStageSeat.test.ts:35`
 - `src/services/punishStageSeat.test.ts:87`
 

@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4941) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4964) — names `detectTactics`
 
 ## Who calls in
 
@@ -53,8 +53,8 @@
 ### `detectTactics` (function) — 89 call sites
 - `src/components/Board/BoardPageLayout.tsx:124`
 - `src/services/boardConcepts.ts:303`
-- `src/services/coachPrompts.ts:1140`
-- `src/services/coachPrompts.ts:1146`
+- `src/services/coachPrompts.ts:1097`
+- `src/services/coachPrompts.ts:1103`
 - `src/services/computerAccuracy.audit.test.ts:117`
 - `src/services/conceptEngine.ts:417`
 - `src/services/conceptEngine.ts:585`
@@ -69,7 +69,7 @@
 - `src/services/misconceptionClassifier.ts:123`
 - `src/services/misconceptionClassifier.ts:279`
 - `src/services/mistakeNarration.ts:391`
-- `src/services/openingGenerator.ts:3886`
+- `src/services/openingGenerator.ts:3541`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
 - `src/services/pinGeometry.test.ts:87`

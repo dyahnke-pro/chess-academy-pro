@@ -1206,40 +1206,54 @@ This is David's directive verbatim (2026-05-18):
 now mine is set on short. There is also a full narration setting
 and none."* And: *"Both narration fixes are MUSTS."*
 
-### G6. Arrows on every step-by-step coach move. No asking.
+### G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.
 
 When the student is walking through a line move-by-move (typing
 "I played e4. Your move." / "I played Nc6. Your move." etc.),
-EVERY coach response MUST include arrows. Two specific obligations
-on every step:
+EVERY coach response carries arrows. Two obligations on every step:
 
-1. **Arrow on the move the coach just played.** If the brain called
-   `play_move {"san":"e5"}`, it must emit `[BOARD: arrow:e7-e5:green]`
-   in the same response. The animation is gone in 200ms; the arrow
-   lingers.
-2. **Arrow on every SAN mentioned in prose.** Threats, candidates,
-   what-ifs. The full rule is in
-   `src/coach/envelope.ts:TEACH_MODE_ADDITION` under
-   `═══ STEP-BY-STEP WALKTHROUGHS — ARROW ON EVERY COACH MOVE ═══`.
+1. **Arrow on the move the coach just played** — the animation is gone in
+   200ms; the arrow lingers.
+2. **Arrow on every move the coach NAMES in prose.** Threats, candidates,
+   what-ifs.
 
-`validateArrowClaims` in `src/services/arrowClaimValidator.ts` is
-the programmatic check — scans the response for SAN-shaped tokens
-without matching `[BOARD: arrow:from-to:color]` markers and emits
-a `claim-validator-trip` audit with `source=arrowClaimValidator`.
-Wired at the response-finalization site in
-`CoachTeachPage.handleSubmit`. Audit-only for now; future iteration
-may add a regen step when violations fire.
+🔴 **CORRECTED 2026-09-22 (WO-STANDARD-01 §F5). This section used to say a
+`validateArrowClaims` scanner in `src/services/arrowClaimValidator.ts` was
+"wired at the response-finalization site in `CoachTeachPage.handleSubmit`" and
+told every new surface to wire it too. THAT FILE IS DELETED and the claim is
+removed rather than annotated (the Lake Butler rule).** A validator was the
+wrong shape from the start: it detected a missing arrow AFTER the model had
+decided what to point at, which is the model deciding board content (G0). The
+arrows are now guaranteed BY CONSTRUCTION, and there is nothing left to validate:
 
-When you add a NEW brain-call surface that does step-by-step
-coaching, wire the arrow validator into its response-finalization
-the same way (one import, one call to `validateArrowClaims(finalText)`,
-emit the audit on violations). Do not skip this — David's audit
-caught the rule being ignored even with the NON-NEGOTIABLE label;
-the programmatic validator is what catches the relapse.
+- **The model NEVER emits `[BOARD: arrow:…]` markup.** The envelope says so
+  (`src/coach/envelope.ts` — "ARROWS ARE DRAWN BY CODE — JUST NAME THE MOVE
+  (G0)"): its ONE obligation is to name a move in SAN; code does the rest.
+- **Chat / live surfaces:** `applyCandidateArrows(text, fen, source)` in
+  `coachAnswerGates.ts` is the SOLE board source. It strips any model markup,
+  resolves every named move's geometry in code (`arrowEngine.extractMentionedSans`
+  → `resolveSanToArrow`), colours by Stockfish rank, excludes the just-played
+  move, and never points at a bad move. Call sites: `CoachTeachPage.tsx`
+  (response finalization), `useLiveCoach.ts`, `MiddlegamePractice.tsx`.
+- **Lesson beats / walkthroughs:** the NOTE is the arrow source
+  (`openingGenerator.groundedSegmentArrows` → `deriveNarrationArrows`;
+  `mentionedMoveArrows` for LessonPlayer / PlayableLinePlayer). The corpus note
+  the beat is grounded in decides what the eye is led to, computed before the
+  model phrases a word — and the phrasing pass receives those arrows as a
+  `mustPreserve` requirement, so a reword that drops one is refused in favour
+  of the computed prose.
+
+When you add a NEW step-by-step coaching surface, route its finalized text
+through `applyCandidateArrows` (one import, one call) — do NOT write a
+scanner. `coachInversion.gate.test.ts` bans `validateArrowClaims(` and every
+other validator signature on the coach path; adding one fails the build.
 
 This is David's directive verbatim (2026-05-18):
 *"add the arrows for step by step walk throughs so I don't have to
-ask each time."*
+ask each time."* — and the 2026-08-01 correction that made it computed:
+*"the arrows are hallucinating! BAD MOVES!!"* → *"it shouldn't decide. the
+narrations are grounded in the notes. whatever the notes say about squares
+are what get arrows."*
 
 ### G7. Playwright audits MUST be INTERACTIVE. No exceptions.
 
@@ -2493,10 +2507,17 @@ and structure. The LLM should NEVER be asked to invent or validate
 chess structure when the DB already has it. Concretely:
 
 - Walkthroughs: spine + branch moves come from the DB. chess.js
-  computes FENs deterministically. The LLM is called ONCE per
-  opening to write narration text per move (intro, outro, ideas,
-  branch-extension ideas) — that's it. See
-  `generateOpeningFromDbNarration` in `src/services/openingGenerator.ts`.
+  computes FENs deterministically. 🔴 **CORRECTED 2026-09-22 (WO-STANDARD-01
+  F1): this bullet used to say "the LLM is called ONCE per opening to write
+  narration text per move (intro, outro, ideas, branch-extension ideas)".
+  That call is DELETED, not annotated.** The per-ply beat, the branch
+  teaser, the extension beats and the Brief cue are COMPUTED from the board
+  (`computedPlyBeat` → `buildReviewMoveBriefing` in the teach register,
+  `narrateContinuationMove` for the cue); the intro is the selector's
+  computed thesis (`renderThesis`); the corpus note still LEADS each beat.
+  The only phrasing seam is `voiceFacts` (`preferRaw` today, so the lesson
+  is identical with the provider dead — `openingGenerator.computedBeats.test`).
+  See `generateOpeningFromDbNarration` in `src/services/openingGenerator.ts`.
 - This pattern was hard-won (build a48b721, 2026-05-08): the prior
   approach asked the LLM to emit the entire WalkthroughTree as
   free-form JSON and we spent hours patching parse errors / illegal
@@ -3024,7 +3045,9 @@ spine; don't reinvent it.
 **Architecture spine:**
 - **DB-narration is the only generation path** for walkthroughs.
   `generateOpeningFromDbNarration` is the entry point. The LLM never
-  emits move sequences, FENs, or schema structure — only prose.
+  emits move sequences, FENs, or schema structure — and since 2026-09-22
+  it authors no prose there either: every beat is computed
+  (`computedPlyBeat`) and only phrased through `voiceFacts`.
   `chess.js` computes FENs from DB-sourced SANs deterministically.
 - **Provider routing: DeepSeek-first, Anthropic fallback.** Flipped
   to DeepSeek-primary 2026-05-19 (David's call: "switch to deepseek

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2378 lines · 74 exports · 35 importers · 10 tests · 2 audits**
+**2378 lines · 74 exports · 34 importers · 10 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,7 +15,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/ReviewReadingChallenge.tsx`
 - `src/components/Tactics/AnalysisPracticePage.tsx`
-- `src/hooks/usePositionNarration.ts`
 - `src/services/analysisPracticeStats.ts`
 - `src/services/causalChain.ts`
 - `src/services/coachFeatureService.ts`
@@ -470,8 +469,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:155`
 - `src/services/thinkAloud.ts:78`
 
-### `formatReadingFacts` (function) — 8 call sites
-- `src/hooks/usePositionNarration.ts:232`
+### `formatReadingFacts` (function) — 7 call sites
 - `src/services/coachSurfaceScorecard.report.test.ts:148`
 - `src/services/positionReadingService.test.ts:341`
 - `src/services/positionReadingService.test.ts:344`

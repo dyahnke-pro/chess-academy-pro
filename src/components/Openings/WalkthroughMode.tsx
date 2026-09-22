@@ -376,29 +376,19 @@ export function WalkthroughMode({
     const guard: { cancelled: boolean } = { cancelled: false };
     void voiceService.warmup();
 
-    // Kick off the LLM narration call IMMEDIATELY in parallel with the
-    // annotation file load. The LLM call takes ~7s while loadSubLine
-    // returns within a few ms; running them in parallel saves the
-    // sequential tail. Combined with the pre-warm fired by
-    // OpeningDetailPage when the variation card is selected, the LLM
-    // result usually lands by the time the user hits Play, so we skip
-    // the bare-SAN stub window entirely on first visit.
-    // Pass curator context (opening overview + key ideas + variation
-    // explanation) to the LLM narrator. Without these, the LLM
-    // hallucinates per-move text that often contradicts the actual
-    // variation's strategic point — e.g. the 2026-05-17 audit caught
-    // a Fantasy Caro walkthrough recommending Nxe4 recapture (a
-    // Classical Caro move) because the LLM had no idea which Caro
-    // variation it was narrating. With curator context, the LLM sees
-    // the curator's framing ("the whole point is fxe4 opening the
-    // f-file") and aligns its per-move text accordingly.
+    // The per-move fill for un-curated / filler plies is COMPUTED from the
+    // board (G0, WO-STANDARD-01 F3): buildReviewMoveBriefing in the teach
+    // register, seat-stamped to the opening's colour. It used to be a ~7s
+    // chat call fed the curator's overview so the model would not
+    // contradict the variation (the 2026-05-17 Fantasy-Caro audit); a
+    // board computation cannot contradict the board, and the curator's own
+    // annotations still win wherever they exist. Kept as a promise so the
+    // annotation-load race below reads as it always did.
     const llmPromise = generateWalkthroughNarrations({
       openingName: opening.name,
       variationName: variation?.name,
       pgn: activePgn,
-      openingOverview: opening.overview ?? undefined,
-      openingKeyIdeas: opening.keyIdeas ?? undefined,
-      variationExplanation: variation?.explanation,
+      studentSide: opening.color,
     }).catch(() => null as null | { narrations: string[]; fromCache: boolean });
 
     void (async () => {

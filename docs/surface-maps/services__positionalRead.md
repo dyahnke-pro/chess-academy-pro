@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**441 lines · 4 exports · 4 importers · 2 tests · 1 audits**
+**441 lines · 4 exports · 5 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/hooks/usePositionNarration.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionalRead.test.ts`
@@ -25,7 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PositionalObservation` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `readPosition` (function) — 26 call sites
+### `readPosition` (function) — 27 call sites
+- `src/hooks/usePositionNarration.ts:298`
 - `src/services/groundedAnswer.ts:1290`
 - `src/services/lookaheadPlan.ts:881`
 - `src/services/lookaheadPlan.ts:1150`

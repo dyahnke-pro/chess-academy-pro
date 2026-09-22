@@ -35,8 +35,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingVolumeFloor.test.ts:28`
 
 ### `rankOpeningsByVolume` (function) — 7 call sites
-- `src/services/coachApi.ts:4571`
-- `src/services/coachApi.ts:4991`
+- `src/services/coachApi.ts:4589`
+- `src/services/coachApi.ts:5009`
 - `src/services/openingVolumeFloor.test.ts:34`
 - `src/services/openingVolumeFloor.test.ts:40`
 - `src/services/openingVolumeFloor.test.ts:44`
@@ -44,8 +44,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingVolumeFloor.test.ts:57`
 
 ### `homeOpeningRow` (function) — 5 call sites
-- `src/services/coachApi.ts:4565`
-- `src/services/coachApi.ts:4991`
+- `src/services/coachApi.ts:4583`
+- `src/services/coachApi.ts:5009`
 - `src/services/openingVolumeFloor.test.ts:63`
 - `src/services/openingVolumeFloor.test.ts:64`
 - `src/services/openingVolumeFloor.test.ts:66`

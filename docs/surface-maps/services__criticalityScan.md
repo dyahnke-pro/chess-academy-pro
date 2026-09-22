@@ -10,8 +10,8 @@
 
 - **The tools are COMPUTERS** (CLAUDE.md:26) — names `criticalityScan`
 - **STRENGTH IS MATCHED IN REAL TIME, FROM MOVE ONE (David 2026-09-18: "The coach can match in real time as they play on the board for the first time.")** (CLAUDE.md:138) — names `criticalityScan`
-- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3747) — names `criticalityScan`, `scanCriticality`
-- **The standard post-deploy ritual** (CLAUDE.md:5918) — names `CriticalMoment`
+- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3770) — names `criticalityScan`, `scanCriticality`
+- **The standard post-deploy ritual** (CLAUDE.md:5941) — names `CriticalMoment`
 
 ## Who calls in
 

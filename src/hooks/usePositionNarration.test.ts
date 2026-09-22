@@ -43,8 +43,9 @@ vi.mock('../services/stockfishEngine', () => ({
       topLines: [],
       nodesPerSecond: 0,
     }),
+    evalBoard: vi.fn().mockResolvedValue(null),
   },
-  // The hook now reads the active engine variant to size the Stockfish budget
+  // The hook reads the active engine variant to size the Stockfish budget
   // (iOS asm.js needs a bigger budget than desktop WASM). Default to the fast
   // non-asm path in tests.
   resolveWorkerUrl: vi.fn(() => ({ url: '', variant: 'single', reason: 'test', workerType: 'classic' })),
@@ -66,30 +67,30 @@ vi.mock('../services/appAuditor', () => ({
   }),
 }));
 
-type StreamCb = (chunk: string) => void;
-const chatCalls: { addition: string; task: string; onStream?: StreamCb; messages: unknown }[] = [];
-let chatResolver: ((text: string) => void) | null = null;
-let chatRejecter: ((err: Error) => void) | null = null;
+// THE ONE CHOKEPOINT. G0 (WO-STANDARD-01 F2): the hook no longer asks a chat
+// model to AUTHOR the read; it computes the facts and hands them to voiceFacts
+// to PHRASE. The mock records what was handed over and lets each test decide
+// what comes back — the real voiceFacts is proven separately.
+type VoiceCall = { facts: string; opts: Record<string, unknown> };
+const voiceCalls: VoiceCall[] = [];
+let voiceResolver: ((text: string | null) => void) | null = null;
+let voiceRejecter: ((err: Error) => void) | null = null;
 
 vi.mock('../services/coachApi', () => ({
-  getCoachChatResponse: vi.fn(
-    (
-      _messages: unknown,
-      systemPromptAddition: string,
-      onStream?: StreamCb,
-      task: string = 'chat_response',
-    ) => {
-      chatCalls.push({ addition: systemPromptAddition, task, onStream, messages: _messages });
-      return new Promise<string>((resolve, reject) => {
-        chatResolver = resolve;
-        chatRejecter = reject;
-      });
-    },
-  ),
+  voiceFacts: vi.fn((facts: string, opts: Record<string, unknown>) => {
+    voiceCalls.push({ facts, opts });
+    return new Promise<string | null>((resolve, reject) => {
+      voiceResolver = resolve;
+      voiceRejecter = reject;
+    });
+  }),
+  // The raw register: what a dead phraser falls back to. Mirrors the real
+  // helper's contract closely enough for the hook (strip labels, collapse
+  // whitespace).
+  speakableFacts: (facts: string) => facts.replace(/\s{2,}/g, ' ').trim(),
 }));
 
 import { usePositionNarration, __resetStockfishCacheForTests } from './usePositionNarration';
-import { POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { stockfishEngine } from '../services/stockfishEngine';
 
 // ── Helpers ───────────────────────────────────────────────────────────────
@@ -107,9 +108,9 @@ function defaultArgs(): Parameters<typeof usePositionNarration>[0] {
 beforeEach(() => {
   speakRecords.length = 0;
   stopCount = 0;
-  chatCalls.length = 0;
-  chatResolver = null;
-  chatRejecter = null;
+  voiceCalls.length = 0;
+  voiceResolver = null;
+  voiceRejecter = null;
   auditCalls.length = 0;
   __resetStockfishCacheForTests();
   vi.mocked(stockfishEngine.analyzePosition).mockClear();
@@ -126,65 +127,73 @@ describe('usePositionNarration', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('calls the coach API with POSITION_NARRATION_ADDITION and position_analysis_chat task', async () => {
+  it('hands COMPUTED facts to voiceFacts from the coach-is-opponent seat (G0)', async () => {
     const { result } = renderHook(() => usePositionNarration(defaultArgs()));
 
     act(() => {
       void result.current.narrate();
     });
 
-    await waitFor(() => expect(chatCalls.length).toBe(1));
-    expect(chatCalls[0].addition).toBe(POSITION_NARRATION_ADDITION);
-    expect(chatCalls[0].task).toBe('position_analysis_chat');
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    const call = voiceCalls[0];
+    // The phase is a computed sentence, present on every read.
+    expect(call.facts).toMatch(/Still in the opening\./);
+    // The positional read (readPosition) is computed on the board, both sides.
+    expect(call.facts.length).toBeGreaterThan('Still in the opening.'.length);
+    expect(call.opts.perspective).toEqual({ mode: 'coach-is-opponent' });
+    expect(call.opts.intent).toBe('position-read');
+    expect(call.opts.warm).toBe(true);
     expect(result.current.isNarrating).toBe(true);
   });
 
-  it('streams chunks into currentText as they arrive', async () => {
-    const { result } = renderHook(() => usePositionNarration(defaultArgs()));
+  it('speaks the phrased read sentence by sentence via speakReadAloud, and reports the whole text', async () => {
+    const reports: string[] = [];
+    const { result } = renderHook(() => usePositionNarration({ ...defaultArgs(), onReport: (t) => reports.push(t) }));
 
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
 
-    const onStream = chatCalls[0].onStream;
-    expect(onStream).toBeDefined();
-
+    const phrased = 'Okay, still in the opening. Your bishop pair is your asset.';
     act(() => {
-      onStream?.('Okay, we are out of book.');
-    });
-    expect(result.current.currentText).toBe('Okay, we are out of book.');
-
-    act(() => {
-      onStream?.(' I have pressure on the c-file.');
-    });
-    expect(result.current.currentText).toBe(
-      'Okay, we are out of book. I have pressure on the c-file.',
-    );
-  });
-
-  it('speaks the full response via voiceService.speakReadAloud when the stream completes', async () => {
-    const { result } = renderHook(() => usePositionNarration(defaultArgs()));
-
-    act(() => {
-      void result.current.narrate();
-    });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
-
-    const fullText = 'Okay, we are out of book. Tension on c-file.';
-    act(() => {
-      chatResolver?.(fullText);
+      voiceResolver?.(phrased);
     });
 
+    await waitFor(() => expect(result.current.currentText).toBe(phrased));
+    // Two sentences → two utterances, chained (the second waits on the first).
     await waitFor(() => expect(speakRecords.length).toBe(1));
-    expect(speakRecords[0].text).toBe(fullText);
+    expect(speakRecords[0].text).toBe('Okay, still in the opening.');
+    expect(reports).toEqual([phrased]);
     // Still narrating until speech resolves
     expect(result.current.isNarrating).toBe(true);
 
-    act(() => {
-      speakRecords[0].resolve();
-    });
+    act(() => { speakRecords[0].resolve(); });
+    await waitFor(() => expect(speakRecords.length).toBe(2));
+    expect(speakRecords[1].text).toBe('Your bishop pair is your asset.');
+    act(() => { speakRecords[1].resolve(); });
     await waitFor(() => expect(result.current.isNarrating).toBe(false));
+  });
+
+  it('a dead phraser still reads the position — the COMPUTED facts are spoken raw', async () => {
+    const { result } = renderHook(() => usePositionNarration(defaultArgs()));
+
+    act(() => {
+      void result.current.narrate();
+    });
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
+
+    // voiceFacts itself serves the raw facts on a provider failure; the hook
+    // must ALSO survive the promise rejecting outright (a thrown error above
+    // the chokepoint) without going silent.
+    act(() => {
+      voiceRejecter?.(new Error('provider exploded'));
+    });
+
+    await waitFor(() => expect(speakRecords.length).toBe(1));
+    expect(speakRecords[0].text).toMatch(/Still in the opening\./);
+    expect(result.current.currentText).toMatch(/Still in the opening\./);
+    expect(result.current.error).toContain('provider exploded');
   });
 
   it('calling narrate() again mid-flight stops prior speech and starts a fresh turn', async () => {
@@ -193,10 +202,10 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
 
     act(() => {
-      chatResolver?.('First narration text.');
+      voiceResolver?.('First narration text.');
     });
     await waitFor(() => expect(speakRecords.length).toBe(1));
 
@@ -206,7 +215,7 @@ describe('usePositionNarration', () => {
     });
 
     expect(stopCount).toBeGreaterThanOrEqual(2); // once at start, once on restart
-    await waitFor(() => expect(chatCalls.length).toBe(2));
+    await waitFor(() => expect(voiceCalls.length).toBe(2));
     // Stale text cleared by the restart.
     expect(result.current.currentText).toBe('');
   });
@@ -217,11 +226,7 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
-    act(() => {
-      chatCalls[0].onStream?.('Partial text.');
-    });
-    expect(result.current.currentText).toBe('Partial text.');
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
 
     act(() => {
       result.current.cancel();
@@ -232,72 +237,27 @@ describe('usePositionNarration', () => {
     expect(result.current.currentText).toBe('');
   });
 
-  it('still speaks accumulated tokens when the stream errors mid-flight', async () => {
+  it('does not speak when the user cancels before the phrasing lands', async () => {
     const { result } = renderHook(() => usePositionNarration(defaultArgs()));
 
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
 
-    // Stream a partial sentence...
-    act(() => {
-      chatCalls[0].onStream?.('Right now,');
-    });
-    expect(result.current.currentText).toBe('Right now,');
-
-    // ...then the stream blows up before completing.
-    act(() => {
-      chatRejecter?.(new Error('stream aborted'));
-    });
-
-    // Voice MUST fire on the partial text — that's what the user saw.
-    await waitFor(() => expect(speakRecords.length).toBe(1));
-    expect(speakRecords[0].text).toBe('Right now,');
-    expect(result.current.error).toContain('stream aborted');
-  });
-
-  it('does not speak when the user cancels mid-stream', async () => {
-    const { result } = renderHook(() => usePositionNarration(defaultArgs()));
-
-    act(() => {
-      void result.current.narrate();
-    });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
-
-    act(() => {
-      chatCalls[0].onStream?.('Partial...');
-    });
     act(() => {
       result.current.cancel();
     });
 
-    // Now resolve the (cancelled) stream — speak must NOT fire.
+    // Now resolve the (cancelled) phrasing — speak must NOT fire.
     await act(async () => {
-      chatResolver?.('Partial finished sentence.');
+      voiceResolver?.('Late phrasing.');
       await Promise.resolve();
     });
     expect(speakRecords.length).toBe(0);
   });
 
-  it('does not speak the inline error placeholder when nothing streamed', async () => {
-    const { result } = renderHook(() => usePositionNarration(defaultArgs()));
-
-    act(() => {
-      void result.current.narrate();
-    });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
-
-    // No tokens streamed; API "succeeded" with the error-placeholder string.
-    await act(async () => {
-      chatResolver?.('⚠️ Coach error: no API key configured.');
-      await Promise.resolve();
-    });
-    expect(speakRecords.length).toBe(0);
-    await waitFor(() => expect(result.current.isNarrating).toBe(false));
-  });
-
-  it('recovers from a hung API call — resets isNarrating after the timeout fires', async () => {
+  it('recovers from a hung phrasing call — speaks the computed facts raw after the timeout', async () => {
     vi.useFakeTimers();
     try {
       const { result } = renderHook(() => usePositionNarration(defaultArgs()));
@@ -307,25 +267,29 @@ describe('usePositionNarration', () => {
       });
       // The hook awaits stockfish first — drain that microtask.
       await vi.advanceTimersByTimeAsync(0);
-      await vi.waitFor(() => expect(chatCalls.length).toBe(1));
+      await vi.waitFor(() => expect(voiceCalls.length).toBe(1));
       expect(result.current.isNarrating).toBe(true);
 
-      // Do NOT resolve or reject the chat promise. Advance fake clock
-      // past the 120s narration-api timeout (raised from 30s by
-      // WO-POLISH-02) and drain microtasks so the timeout rejection,
-      // the catch block, and the finally all run.
+      // Do NOT resolve the phrasing promise. Advance past the 120s ceiling and
+      // drain microtasks so the timeout rejection, the catch and the raw
+      // fallback all run.
       await act(async () => {
         await vi.advanceTimersByTimeAsync(121_000);
       });
 
-      // Board-unfreeze invariant: isNarrating must be false after timeout.
-      expect(result.current.isNarrating).toBe(false);
-      // User-visible recovery message.
-      expect(result.current.currentText).toMatch(/timed out/i);
-      // Audit log fired so silent hangs are observable post-ship.
+      // Board-unfreeze invariant is unchanged — but the button is NOT dead: the
+      // computed read is spoken in the raw register instead of "timed out".
+      expect(result.current.currentText).toMatch(/Still in the opening\./);
+      expect(speakRecords.length).toBe(1);
       expect(auditCalls.some((c) => c.kind === 'llm-error' && /timed out/i.test(c.summary))).toBe(true);
-      // No speech attempted — nothing streamed before the timeout.
-      expect(speakRecords.length).toBe(0);
+      // The raw read is several sentences; each utterance waits on the last.
+      // Drain the chain one resolve at a time until the hook goes idle.
+      for (let i = 0; i < 20 && result.current.isNarrating; i += 1) {
+        const pending = speakRecords[speakRecords.length - 1];
+        act(() => { pending.resolve(); });
+        await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+      }
+      expect(result.current.isNarrating).toBe(false);
     } finally {
       vi.useRealTimers();
     }
@@ -341,8 +305,8 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
-    chatResolver?.('Opening look.');
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    voiceResolver?.('Opening look.');
     await waitFor(() => expect(speakRecords.length).toBe(1));
     const firstCallCount = vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length;
     expect(firstCallCount).toBe(1);
@@ -351,14 +315,14 @@ describe('usePositionNarration', () => {
     speakRecords[0].resolve();
     await waitFor(() => expect(result.current.isNarrating).toBe(false));
 
-    chatResolver = null;
-    chatCalls.length = 0;
+    voiceResolver = null;
+    voiceCalls.length = 0;
 
     // Second tap on the same FEN.
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
 
     // Stockfish NOT called again — cache hit.
     expect(vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length).toBe(firstCallCount);
@@ -375,21 +339,21 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
-    chatResolver?.('one.');
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    voiceResolver?.('one.');
     await waitFor(() => expect(speakRecords.length).toBe(1));
     speakRecords[0].resolve();
     await waitFor(() => expect(result.current.isNarrating).toBe(false));
 
     const firstCallCount = vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length;
-    chatResolver = null;
-    chatCalls.length = 0;
+    voiceResolver = null;
+    voiceCalls.length = 0;
 
     rerender({ ...firstArgs, fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2' });
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(chatCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1));
 
     // New FEN → engine runs again, no cache-hit audit for THIS call.
     expect(vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length).toBe(firstCallCount + 1);
@@ -397,12 +361,12 @@ describe('usePositionNarration', () => {
 });
 
 describe('the COMPUTED CONCEPT reaches "Read this position" (P4c — a wire that fires)', () => {
-  it('hands the fork the engine line lands to the brain as a computed board fact', async () => {
+  it('hands the fork the engine line lands to the phraser as a computed board fact', async () => {
     // White to move, student white; the engine's line is Ne5+ — a royal fork
     // on Kd7 and the winnable Rc6. Probed through conceptForBoard with this
-    // exact analysis before it was pinned. The read is the LLM's phrasing of
+    // exact analysis before it was pinned. The read is the model's phrasing of
     // the computed facts (G0), so the proof is that the concept clause is IN
-    // the facts handed over — not that the mocked brain echoed it.
+    // the facts handed over — not that a mocked brain echoed it.
     const FORK_FEN = '8/3k4/2r5/8/8/3N4/8/6K1 w - - 0 40';
     vi.mocked(stockfishEngine.analyzeWithBudget).mockResolvedValueOnce({
       bestMove: 'd3e5', evaluation: 350, isMate: false, mateIn: null, depth: 12, nodesPerSecond: 1,
@@ -410,8 +374,7 @@ describe('the COMPUTED CONCEPT reaches "Read this position" (P4c — a wire that
     } as unknown as Awaited<ReturnType<typeof stockfishEngine.analyzeWithBudget>>);
     const { result } = renderHook(() => usePositionNarration({ ...defaultArgs(), fen: FORK_FEN, pgn: '', moveNumber: 40, playerColor: 'white' }));
     act(() => { void result.current.narrate(); });
-    await waitFor(() => expect(chatCalls.length).toBe(1), { timeout: 4000 });
-    const handed = JSON.stringify(chatCalls[0].messages);
-    expect(handed, 'the concept clause never reached the brain call').toMatch(/a fork hits two targets at once/);
+    await waitFor(() => expect(voiceCalls.length).toBe(1), { timeout: 4000 });
+    expect(voiceCalls[0].facts, 'the concept clause never reached the phraser').toMatch(/a fork hits two targets at once/);
   });
 });

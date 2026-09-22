@@ -9,17 +9,17 @@
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:457) — names `types`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3029) — names `Provider`, `ProviderName`, `types`
-- **TypeScript** (CLAUDE.md:3486) — names `types`
-- **React** (CLAUDE.md:3496) — names `types`
-- **File Organization** (CLAUDE.md:3507) — names `types`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3995) — names `types`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4034) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4504) — names `types`
-- **Naming** (CLAUDE.md:5070) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5115) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5182) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:5932) — names `TacticsLiveContext`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3052) — names `Provider`, `ProviderName`, `types`
+- **TypeScript** (CLAUDE.md:3509) — names `types`
+- **React** (CLAUDE.md:3519) — names `types`
+- **File Organization** (CLAUDE.md:3530) — names `types`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4018) — names `types`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4057) — names `CoachSurface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4527) — names `types`
+- **Naming** (CLAUDE.md:5093) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5138) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5205) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:5955) — names `TacticsLiveContext`
 
 ## Who calls in
 

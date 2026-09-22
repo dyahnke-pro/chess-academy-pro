@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:5929) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:5952) — names `conceptEngine`
 
 ## Who calls in
 
@@ -62,7 +62,7 @@
 ### `ComputedConcept` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `materialBalance` (function) — 53 call sites
+### `materialBalance` (function) — 52 call sites
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
@@ -115,7 +115,6 @@
 - `src/services/narratedContinuation.test.ts:19`
 - `src/services/narratedContinuation.ts:18`
 - `src/services/narratedContinuation.ts:94`
-- `src/services/openingGenerator.ts:1964`
 
 ### `strongerSide` (function) — 3 call sites
 - `src/services/conceptEngine.test.ts:32`
