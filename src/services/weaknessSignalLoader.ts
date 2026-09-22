@@ -13,6 +13,21 @@ import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { getWeaknessLifecycle } from './weaknessLifecycle';
 import { buildWeaknessSignals, type WeaknessSignal } from './weaknessSignal';
 import { onWeaknessModelChanged } from './weaknessModelEvents';
+import { capabilityProven, getCapabilityProfile } from './capabilityEvidence';
+
+/** The tags the positive record has PROVEN — the ONE definition
+ *  (`capabilityProven`), read here so the pure leaf never touches Dexie.
+ *  A failed read is an empty set: nothing green, nothing lowered. */
+async function provenTagSet(): Promise<Set<string>> {
+  try {
+    const profile = await getCapabilityProfile();
+    const out = new Set<string>();
+    for (const [tag, entry] of profile) if (capabilityProven(entry)) out.add(tag);
+    return out;
+  } catch {
+    return new Set();
+  }
+}
 
 // A short-lived module memo so the several narration hooks that each want the
 // profile share ONE Dexie read per game instead of hammering it per mount/ply.
@@ -37,11 +52,14 @@ export async function loadWeaknessSignals(): Promise<WeaknessSignal[]> {
   if (inflight) return inflight;
   inflight = (async () => {
     try {
-      const [profile, lifecycle] = await Promise.all([
+      // The negative half and the positive half are loaded TOGETHER — the
+      // green join (C6) happens where both are in hand, never in the leaf.
+      const [profile, lifecycle, proven] = await Promise.all([
         getUnifiedWeaknessProfile(),
         getWeaknessLifecycle().catch(() => null),
+        provenTagSet(),
       ]);
-      const sigs = buildWeaknessSignals(profile, lifecycle);
+      const sigs = buildWeaknessSignals(profile, lifecycle, proven);
       cache = { at: Date.now(), sigs };
       return sigs;
     } catch {

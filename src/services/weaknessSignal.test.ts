@@ -139,3 +139,62 @@ describe('buildWeaknessSignals — games (the recurrence unit)', () => {
     expect(s.games).toBeUndefined();
   });
 });
+
+// C6 (WO-STANDARD-01, 2026-09-22) — DECAY ON POSITIVE EVIDENCE, NEVER ON ABSENCE.
+//
+// A one-off slip used to raise the ranker for good: `boostFor` was RAISE-ONLY
+// and the only ways down were a drill spacing the instance out or the
+// lifecycle's archive window. The heat map's rule is that data may LOWER a
+// decision only on evidence of the POSITIVE, and the app now records that
+// evidence (`capabilityEvidence`). So a PROVEN capability for the SAME tag
+// lowers the signal to green; a gap in the record — however long — does not.
+describe('boostFor — GREEN lowers, absence never does (C6)', () => {
+  const red = (over: Partial<WeaknessSignal> = {}): WeaknessSignal => ({
+    clusterId: 'neglected-development', bucket: 'positional' as MisconceptionBucket, label: 'Neglected development',
+    openCount: 2, severity: 40, puzzleThemes: [], total: 2,
+    capabilityTag: 'neglected-development', proven: false, ...over,
+  } as WeaknessSignal);
+
+  it('a held row that PROVES the same capability lowers the boost to 0', () => {
+    expect(boostFor(red())).toBeGreaterThan(0);          // the slip raised it
+    expect(boostFor(red({ proven: true }))).toBe(0);      // green quiets it
+  });
+
+  it('NEGATIVE CONTROL — a mere gap changes nothing: no green, no lowering', () => {
+    // Same signal, no positive record. Nothing about elapsed time or missing
+    // rows reaches this function, and that is the point: absent ≠ mastered.
+    expect(boostFor(red({ proven: false }))).toBe(boostFor(red()));
+  });
+
+  it('a DRILLED-SHUT row lowers — every instance spaced out is a smaller boost than two open', () => {
+    // Drilling is the OTHER positive act (the student answered the question in
+    // a drill); it already lowered through the volume term, and still does.
+    expect(boostFor(red({ openCount: 0 }))).toBeLessThan(boostFor(red({ openCount: 2 })));
+    expect(boostFor(red({ openCount: 0 }))).toBeGreaterThan(0); // …but only green reaches zero
+  });
+
+  it('the JOIN IS EXACT — green for another tag lowers nothing', () => {
+    const uwRow = (capabilityTag: 'neglected-development' | 'space-conceded' | null): UnifiedWeakness =>
+      ({ ...uw('coach-row', { bucket: 'positional' as MisconceptionBucket }), capabilityTag } as UnifiedWeakness);
+    const provenElsewhere = new Set(['space-conceded']);
+    const [other] = buildWeaknessSignals([uwRow('neglected-development')], null, provenElsewhere);
+    expect(other.proven).toBe(false);
+    expect(boostFor(other)).toBeGreaterThan(0);
+    const [same] = buildWeaknessSignals([uwRow('neglected-development')], null, new Set(['neglected-development']));
+    expect(same.proven).toBe(true);
+    expect(boostFor(same)).toBe(0);
+  });
+
+  it('a row with NO capability tag can never be green, whatever is proven — null is not a wildcard', () => {
+    const w = { ...uw('analysis:tactic:fork'), capabilityTag: null } as UnifiedWeakness;
+    const [s] = buildWeaknessSignals([w], null, new Set(['neglected-development', 'space-conceded']));
+    expect(s.capabilityTag).toBeNull();
+    expect(s.proven).toBe(false);
+  });
+
+  it('a row from before the field existed is honestly un-joined (no proven), never a crash', () => {
+    const [s] = buildWeaknessSignals([uw('legacy-row')], null, new Set(['legacy-row']));
+    expect(s.capabilityTag).toBeNull();
+    expect(s.proven).toBe(false);
+  });
+});

@@ -65,23 +65,27 @@ const base = (signals: readonly WeaknessSignal[]): StudentNeedContext => ({
  * The hole must MATCH what the board actually computes here, through the join
  * the PRODUCTION code uses — not the one that reads naturally.
  *
- * This position produces one fact: a latent knight fork on e6. It is emitted
- * with `kind: 'latent-danger'`, and `matchClauseKind('latent-danger')` reaches
- * `analysis:tactic:pin` / `:skewer`. So a PIN-blind student is the one this
- * clause can currently speak to. (A fork-blind student gets nothing from a
- * fork clause — filed separately; it is a vocabulary mismatch, not this gate's
- * business, and papering over it here would hide it.)
+ * This position produces one fact: a latent knight fork on e6 that the STUDENT
+ * can set up. Since T5 (2026-09-21) the seat decides the kind: the student's
+ * own fork is emitted as `latent-chance`, and `matchClauseKind('latent-chance')`
+ * reaches `analysis:tactic:fork`. So a FORK-blind student is the one this
+ * clause speaks to — the vocabulary mismatch the previous fixture named (a pin
+ * hole matched to a fork clause) was the T5 bug, and this gate went red the
+ * night it was fixed because the fixture still seeded the pin. Found 2026-09-22
+ * (WO-STANDARD-01 §C): the hole now names what the board computes.
  */
 const matchingHole = {
-  clusterId: 'analysis:tactic:pin',
-  bucket: 'tactics',
-  label: 'Pins',
+  clusterId: 'analysis:tactic:fork',
+  bucket: 'tactical',
+  label: 'Forks',
   openCount: 6,
   severity: 80,
   lifecycleStatus: 'persistent',
   trend: 'worsening',
-  puzzleThemes: ['pin'],
+  puzzleThemes: ['fork'],
   total: 14,
+  capabilityTag: null,
+  proven: false,
 } as unknown as WeaknessSignal;
 
 /**

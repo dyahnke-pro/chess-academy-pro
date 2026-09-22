@@ -15,7 +15,7 @@
 
 import type { UnifiedWeakness } from './weaknessSpine';
 import type { WeaknessLifecycle, LifecycleStatus, LifecycleTrend } from './weaknessLifecycle';
-import type { MisconceptionBucket } from '../data/misconceptionTags';
+import type { MisconceptionBucket, MisconceptionTagId } from '../data/misconceptionTags';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { weaknessClusterForPattern } from './tacticVocabulary';
 
@@ -56,16 +56,37 @@ export interface WeaknessSignal {
    *  Absent (not empty) when the source has no provenance at all, so a
    *  coach-only row keeps its count-based read (WO-LOOP-01, 2026-09-20). */
   games?: { gameId: string; opponentName?: string | null; playedAt?: number }[];
+  /** The tag the POSITIVE half records this hole under (`UnifiedWeakness.
+   *  capabilityTag`), or null when no capability computer answers it. The join
+   *  to green — exact, per tag, never by bucket. */
+  capabilityTag: MisconceptionTagId | null;
+  /**
+   * GREEN (C6, 2026-09-22): the capability record PROVES this hole answered —
+   * `capabilityEvidence.capabilityProven`, a clean streak spanning two games
+   * since the student's LAST failure at it. The ONLY input that LOWERS a boost.
+   *
+   * Before this a weakness could be raised by evidence and lowered only by
+   * absence (a drill spacing it out, the lifecycle's archive window): one slip
+   * in one game raised the ranker for good. The heat-map rule is that data may
+   * RAISE freely and may LOWER only on positive evidence — so a gap in the
+   * record leaves this false, and false changes nothing.
+   */
+  proven: boolean;
 }
 
 /** Join the unified profile with the lifecycle read. Lifecycle only carries the
  *  ANALYSIS clusters (it is built from mistakePuzzles), so coach-only rows get
  *  no status/trend — correct: "keeps falling in over time" is an analysis
  *  signal. When the lifecycle sample floor isn't met we drop status/trend
- *  entirely (never guess a trend — weaknessLifecycle's own rule). */
+ *  entirely (never guess a trend — weaknessLifecycle's own rule).
+ *
+ *  `provenTags` is the set of misconception tags the capability profile has
+ *  PROVEN (the loader computes it with `capabilityProven`, the one definition).
+ *  Absent = a cold positive record, so nothing is green and nothing lowers. */
 export function buildWeaknessSignals(
   profile: readonly UnifiedWeakness[],
   lifecycle: WeaknessLifecycle | null,
+  provenTags: ReadonlySet<string> = new Set(),
 ): WeaknessSignal[] {
   const byCluster = new Map<string, { status: LifecycleStatus; trend: LifecycleTrend }>();
   if (lifecycle && lifecycle.sampleFloorMet) {
@@ -75,6 +96,9 @@ export function buildWeaknessSignals(
   }
   return profile.map((w) => {
     const life = byCluster.get(w.tag);
+    // `?? null`: a row from before the field existed (or a bare test fixture)
+    // is honestly un-joined, never a wildcard.
+    const capabilityTag = w.capabilityTag ?? null;
     return {
       clusterId: w.tag,
       bucket: w.bucket,
@@ -85,6 +109,8 @@ export function buildWeaknessSignals(
       trend: life?.trend,
       puzzleThemes: w.puzzleThemes,
       total: w.total,
+      capabilityTag,
+      proven: capabilityTag !== null && provenTags.has(capabilityTag),
       // positions are newest-first, so [1] is the occurrence BEFORE this one —
       // the one a callback refers to. Undefined when there is no prior or the
       // source cannot name a game; never guessed.
@@ -122,6 +148,12 @@ export const MAX_WEAKNESS_BOOST = 30;
 
 export function boostFor(s: WeaknessSignal): number {
   if (s.lifecycleStatus === 'fixed') return 0;
+  // GREEN — the positive record proves this hole answered since their last
+  // failure at it, so the ranker may go quiet here (the heat map's one
+  // computed "you have gotten better"). This is the only LOWERING input: a
+  // signal with no green stays exactly where evidence put it, however long
+  // ago — absence is not mastery.
+  if (s.proven) return 0;
   let b: number;
   if (s.lifecycleStatus === 'persistent') b = 16;
   else if (s.lifecycleStatus === 'emerging') b = 10;
