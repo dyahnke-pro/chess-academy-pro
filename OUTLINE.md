@@ -30,7 +30,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
   - 🔴 B4 ledgers before the door
   - ✅ B5 tier-blind need veto — `NEED_MAY_VETO: Record<ImportanceTier, boolean>`; mate/only-move/blunder/must-defend speak on importance; gate `coachDecider.test.ts` "NEED cannot veto…" (negative-controlled)
   - ✅ B6 rating decides volume via tiers/buckets — `criticalityThresholds()` is band-free (= engineConstants inaccuracy/mistake/blunder bands; rating removed from computeImportance/judgeMoment/minSwingPawns/criticalMoment; dropped from ADAPTIVE_DECIDERS); review hands the door `realCpLossCp` (mover-POV, never a label bucket); gates `criticalityScan.test.ts` 'BAND-FREE' (smuggled-rating probe + statement blame), `narrationImportance.test.ts` 'BAND-FREE', `coachFeatureService.cpLossSign.test.ts` (negative-controlled)
-  - 🔴 B7 cold start counts samples, Learn never, constant 100
+  - ✅ B7 cold start counts samples, Learn never, constant 100 — (a) `isSampleGame` leaf, applied in the need loader / rating ELO / weakness spine / analyzer + the 3 hand-rolled sites (D5); (b) `coldStartPrior(games)` FADES 100→0 over COLD_START_GAMES and is ADDED to the data (`terms.prior`), review's cold fast-path only at 0 games; (c) Learn saves `learnGameAnalysis` — live grades → annotations, `fullyAnalyzed` only on full coverage; gates `sampleGames.test.ts`, `needScore.test.ts` 'FADES…' + 'is ADDED…', `learnLiveAnalysis.test.ts` (negative-controlled)
   - 🔴 B8 green for X mutes Y
   - ✅ B9 quietBy collapses two gates — door-closed facts file under `'importance'` / `'need'`; gate `coachDecider.test.ts` "files every fact under the gate" + audit rows `DECIDER door-closed-rows-file-facts-under-their-gate` / `G2b` (negative-controlled)
   - 🔴 B10 hidden caps

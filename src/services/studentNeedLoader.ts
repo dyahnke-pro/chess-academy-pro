@@ -18,6 +18,7 @@ import { criticalityThresholds } from './criticalityScan';
 import { coldStudent, type StudentNeedContext } from './needScore';
 import type { GameRecord } from '../types';
 import { getCapabilityProfile } from './capabilityEvidence';
+import { isSampleGame } from './sampleGames';
 
 const TTL_MS = 5 * 60 * 1000;
 let cache: { at: number; key: string; ctx: StudentNeedContext } | null = null;
@@ -96,8 +97,11 @@ export async function loadStudentNeedContext(q: StudentNeedQuery): Promise<Stude
   try {
     const prefs = useAppStore.getState().activeProfile?.preferences;
     const names = { lichessUsername: prefs?.lichessUsername, chessComUsername: prefs?.chessComUsername };
+    // D5: a review FIXTURE is never the student's game. The samples ship
+    // `fullyAnalyzed: true`, so without this a fresh install counted as five
+    // analysed games and lost its cold-start prior on day one (B7a).
     const [games, signals] = await Promise.all([
-      db.games.filter((g) => !g.isMasterGame).toArray(),
+      db.games.filter((g) => !g.isMasterGame && !isSampleGame(g)).toArray(),
       loadWeaknessSignals().catch(() => []),
     ]);
     const analysed = games.filter((g) => g.fullyAnalyzed);

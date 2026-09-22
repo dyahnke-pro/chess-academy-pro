@@ -18,6 +18,12 @@
  */
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
+import { SAMPLE_GAME_ID_PREFIX } from './sampleGames';
+
+// Every fixture id starts with `SAMPLE_GAME_ID_PREFIX` — that prefix is how
+// every reader in the app (`isSampleGame`) keeps a fixture out of the
+// student's record (D5). `reviewSampleGames.test.ts` proves it for each id.
+void SAMPLE_GAME_ID_PREFIX;
 import type { GameRecord, MoveAnnotation, MoveClassification } from '../types';
 import { logAppAudit } from './appAuditor';
 

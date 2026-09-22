@@ -24,6 +24,7 @@
  *   - `prompt`       — a concrete, code-authored challenge line.
  */
 import { Chess } from 'chess.js';
+import { isSampleGame } from './sampleGames';
 import puzzlesData from '../data/puzzles.json';
 import { db } from '../db/schema';
 import type { MistakePuzzle, TacticType } from '../types';
@@ -414,7 +415,7 @@ export async function hasImportedGames(): Promise<boolean> {
     return games.some(
       (g) =>
         (g.source === 'lichess' || g.source === 'chesscom' || g.source === 'import') &&
-        !g.id.startsWith('sample-'),
+        !isSampleGame(g),
     );
   } catch {
     return false;

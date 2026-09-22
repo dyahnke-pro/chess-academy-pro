@@ -1249,7 +1249,11 @@ export function buildReviewSegments(
   // not raise a single moment: the weaknesses were loaded, used to ORDER facts,
   // and ignored by the computer that decides how much a moment is worth saying.
   const selectorPkg: { needByPly: ReadonlyMap<number, NeedVerdict>; boostByPly: ReadonlyMap<number, StudentBoost> } = playerColor
-    ? (!studentNeed || studentNeed.gamesPlayed < COLD_START_GAMES)
+    // ZERO games only (B7b): the prior FADES now, so from the first analysed
+    // game the data terms and the prior must be summed by the selector — a
+    // fast path that stamped the prior for anyone under COLD_START_GAMES
+    // would silence a two-game student whose data plus prior clears the bar.
+    ? (!studentNeed || studentNeed.gamesPlayed === 0)
       ? { boostByPly: new Map(), needByPly: new Map(moves.slice(0, usable)
           .filter((mv) => (mv.ply % 2 === 1 ? 'white' : 'black') === playerColor)
           // `clauseKind: null` is the honest answer on THIS branch, not a

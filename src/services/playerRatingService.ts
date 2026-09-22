@@ -20,6 +20,7 @@
  * easy/medium/hard offsets.
  */
 import { db } from '../db/schema';
+import { isSampleGame } from './sampleGames';
 import { useAppStore } from '../stores/appStore';
 import type { GameRecord } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -184,7 +185,9 @@ export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
   // games moved the number on every boot (800 -> 990 over ten opens; a losing
   // player 1200 -> 888). Anchored at a baseline written once, this is a pure
   // function of THEIR games: same games in, same rating out, forever.
-  const coachGames = await db.games.where('source').equals('coach').toArray();
+  // D5 (B7a): the review fixtures are seeded with `source: 'coach'` — Morphy's
+  // opera game must not move the student's rating.
+  const coachGames = (await db.games.where('source').equals('coach').toArray()).filter((g) => !isSampleGame(g));
   if (coachGames.length >= COACH_GAMES_MIN_SAMPLE) {
     const starting = profile?.ratingBaseline ?? DEFAULT_RATING;
     const rating = runningEloFromCoachGames(coachGames, starting, profile?.name);

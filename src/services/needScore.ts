@@ -11,9 +11,12 @@
 //   need = bookDepartureHere (35/55) + weaknessMatch (≤55) + unfamiliarity (≤50)
 //        + openingResultDeficit (≤40) + onCausalThread (35)     — bar: 50
 //
-// Cold start (< COLD_START_GAMES fully-analysed games): the data terms are all
-// zero, so a PRIOR keyed on the rating band stands in and the coach TEACHES —
-// a fresh install never meets a mute coach. The prior fades as games arrive.
+// Cold start: with no analysed games the data terms are all zero, so a PRIOR
+// stands in and the coach TEACHES — a fresh install never meets a mute coach.
+// The prior FADES as games arrive (B7b): 100 at zero games, down linearly to 0
+// at COLD_START_GAMES, ADDED to the data terms — never a switch that holds the
+// score at a constant 100 for four games and then drops to the data on the
+// fifth.
 //
 // One deliberate deviation from the plan's first draft (§3.2 said "threshold
 // reuses criticalityThresholds"): that bar is in CENTIPAWNS and grows for
@@ -184,8 +187,11 @@ export interface NeedVerdict {
  *
  * Under the capability model a cold student has NO evidence: every capability is
  * UNKNOWN, which is not mastery and not a hole. The honest response to unknown
- * is to teach it, so the prior is the ceiling for everyone, with no parameter to
- * get wrong.
+ * is to teach it, so the prior is the ceiling at ZERO games, with no parameter
+ * to get wrong — and it FADES with each analysed game (B7b, 2026-09-22): the
+ * prior is a stand-in for missing data, so as data arrives it must give way to
+ * it, not sit at 100 for four games and vanish on the fifth. The only input is
+ * the COUNT of the student's own analysed games; never a rating.
  *
  * WHY THIS CANNOT FLOOD THE STUDENT, and it is structural rather than lucky:
  *  • NEED IS A VETO, NEVER A PROMOTER. `coachDecider.decide` gates on importance
@@ -200,8 +206,9 @@ export interface NeedVerdict {
  *    clause kinds are one-per-ply by construction.
  *  • ACROSS PLIES, `alreadySaid` carries the say-once set forward.
  */
-export function coldStartPrior(): number {
-  return 100;
+export function coldStartPrior(gamesPlayed: number): number {
+  const seen = Math.max(0, Math.min(COLD_START_GAMES, gamesPlayed));
+  return Math.round(100 * (1 - seen / COLD_START_GAMES));
 }
 
 /** 0–1: how much of this line the student has already played correctly. */
@@ -389,11 +396,14 @@ export function computeNeed(p: NeedPlyInput, ctx: StudentNeedContext): NeedVerdi
   }
   terms.thread = p.onThread ? 35 : 0;
   if (p.onThread) { score += 35; reasons.push('on the causal thread'); }
-  let prior = false;
-  if (ctx.gamesPlayed < COLD_START_GAMES) {
-    const pr = coldStartPrior();
-    if (pr > score) { score = pr; prior = true; reasons.push(`cold start (${ctx.gamesPlayed} games) — rating prior`); }
-  }
+  // THE FADING PRIOR (B7b) — a TERM, added to the data, never a replacement
+  // for it. `prior` is true when the prior is what carried the verdict over
+  // the bar: the data alone did not, the data plus the prior did.
+  const dataScore = score;
+  const pr = coldStartPrior(ctx.gamesPlayed);
+  terms.prior = pr;
+  if (pr > 0) { score += pr; reasons.push(`cold start (${ctx.gamesPlayed} of ${COLD_START_GAMES} games) — prior +${pr}`); }
+  const prior = pr > 0 && dataScore < NEED_THRESHOLD && score >= NEED_THRESHOLD;
   score = Math.max(0, Math.min(100, score));
   const verdict: NeedVerdict = { score, speak: score >= NEED_THRESHOLD, reasons, prior };
   // Telemetry LAST and never inside the loop: the verdict is computed first,

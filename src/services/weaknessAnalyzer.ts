@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
+import { isSampleGame } from './sampleGames';
 import { getThemeSkills } from './puzzleService';
 import { getRepertoireOpenings } from './openingService';
 import { detectTactics } from './tacticsDetector';
@@ -994,7 +995,8 @@ export async function computeWeaknessProfile(
         getThemeSkills(),
         getRepertoireOpenings(),
         getMisconceptionProfile({ countedOnly: true }),
-        db.games.orderBy('date').reverse().limit(RECENT_GAMES_LIMIT).toArray(),
+        // D5 (B7a): the review fixtures are not the student's recent games.
+        db.games.orderBy('date').reverse().filter((g) => !isSampleGame(g)).limit(RECENT_GAMES_LIMIT).toArray(),
         db.sessions.orderBy('date').reverse().limit(RECENT_SESSIONS_LIMIT).toArray(),
         db.flashcards.toArray(),
         db.mistakePuzzles.toArray(),

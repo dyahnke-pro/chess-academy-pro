@@ -272,6 +272,8 @@ import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseText } from '../../services/positionFacts';
+import { learnGameAnalysis, type LiveStudentGrade } from '../../services/learnLiveAnalysis';
+import { LIVE_ANALYSIS_DEPTH } from '../../services/coachGameAnnotations';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
@@ -1666,6 +1668,7 @@ export function CoachTeachPage(): JSX.Element {
   const forgetPageRefsRef = useRef<() => void>(() => undefined);
   const forgetPageRefs = useCallback((): void => {
     announcedPliesRef.current.clear();
+    liveGradesRef.current.clear();
     announcedTrapsRef.current.clear();
     teachNoteSeenIdsRef.current.clear();
     fundamentalSeenRef.current.clear();
@@ -1688,6 +1691,10 @@ export function CoachTeachPage(): JSX.Element {
    *  Saved on the game record so the post-game sweep files a find there as
    *  PROMPTED (grey), never as unaided evidence. Reset per game. */
   const announcedPliesRef = useRef(new Set<number>());
+  /** B7(c): every student ply the live grader scored, so the finished game is
+   *  saved ANALYSED (`learnGameAnalysis`) instead of `annotations: null` — the
+   *  evaluation happened; it used to be thrown away at save. Reset per game. */
+  const liveGradesRef = useRef(new Map<number, LiveStudentGrade>());
 
   /** The most recent look-ahead plan, KEYED BY THE FEN IT DESCRIBES.
    *
@@ -8379,7 +8386,14 @@ export function CoachTeachPage(): JSX.Element {
           analysisBefore: preStudentRead,
           studentColor: playerColor === 'white' ? 'w' : 'b',
         });
-        if (grade) studentCpLoss = grade.cpLossCp;
+        if (grade) {
+          studentCpLoss = grade.cpLossCp;
+          // The record, not the UI: kept whether or not the grade is spoken.
+          liveGradesRef.current.set(move.history.length, {
+            ply: move.history.length, san: move.san, fenAfter: move.fen,
+            preEvalCpWhitePov: preStudentRead.evaluation, cpLossCp: grade.cpLossCp,
+          });
+        }
         if (grade?.worthSpeaking && grade.clause) {
           setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: grade.clause, timestamp: Date.now() }]);
           void voiceService.speak(grade.clause);
@@ -10835,6 +10849,9 @@ export function CoachTeachPage(): JSX.Element {
     // (PostHog 2026-09-03, Port Harcourt ×2).
     const pgn = game.pgn;
     const openingId = walkthrough.tree?.openingName ?? null;
+    // B7(c): the live grades ARE the analysis. `fullyAnalyzed` only when every
+    // student ply was graded — honest coverage, never a half-flag.
+    const live = learnGameAnalysis(liveGradesRef.current, game.history, playerColor);
     void (async () => {
       try {
         const { db } = await import('../../db/schema');
@@ -10854,7 +10871,8 @@ export function CoachTeachPage(): JSX.Element {
           whiteElo: playerColor === 'white' ? rating : null,
           blackElo: playerColor === 'black' ? rating : null,
           source: 'coach',
-          annotations: null,
+          annotations: live.annotations,
+          ...(live.fullyAnalyzed ? { fullyAnalyzed: true, analysisDepth: LIVE_ANALYSIS_DEPTH } : {}),
           coachAnalysis: null,
           isMasterGame: false,
           openingId,

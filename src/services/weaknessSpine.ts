@@ -19,6 +19,7 @@
 
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
+import { isSampleGame } from './sampleGames';
 import { getMisconceptionProfile, isMisconceptionDue, type MisconceptionAggregate } from './misconceptionService';
 import { FUNDAMENTAL_IDS, FUNDAMENTAL_TAG, type FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LABEL } from './fundamentalsCatalog';
@@ -778,7 +779,8 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
           db.mistakePuzzles.toArray(),
           db.openingWeakSpots.toArray(),
           db.classifiedTactics.toArray(),
-          db.games.toArray(),
+          // D5 (B7a): a fixture's conversion failures are not the student's.
+          db.games.filter((g) => !isSampleGame(g)).toArray(),
         ]);
         return { misAgg, allMis, mistakes, weakSpots, tactics, games };
       },
