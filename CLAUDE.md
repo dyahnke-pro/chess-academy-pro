@@ -2467,6 +2467,8 @@ sailed through the bare check, and at runtime the board computer compared
 narration beat was SILENT with a green typecheck behind it. Only reading the
 output caught it. Never verify a change with bare `tsc`.
 
+**🔒🔒 A BOOT-TIME BACKFILL IS SCHEDULED, NEVER LOOPED — it reads `backfillSchedule.ts` (David's phone, 2026-09-22).** `reconcileTacticTypes` re-tagged every stale mistake row through a ~263 ms computer in ONE synchronous loop at boot, persisting nothing until the end. On David's iPhone that pegged the main thread within seconds of every launch (the screen scrolled, taps died, the phone heated), and each force-quit threw the work away so the next launch began from zero — a freeze that could never finish, and the updater could not roll it back because `notifyAppReady` fires before any of it runs. Any reconciler that grows with the STUDENT'S data (games, mistakes, tactics) reads the one schedule: **start late** (8 s, so the first paint and the OTA launch-install go first), **yield per row**, **persist per batch**. A JSON-mirror reconciler bounded by the file it mirrors is a different shape and is exempt. The proof each carries: a simulated force-quit keeps exactly the finished batches. Full account: PLAN.md §"THE FREEZE".
+
 **🔒🔒 CHECK FOR A MESSAGE FROM DAVID WHENEVER YOU'RE WAITING — ALL SESSIONS
 (David 2026-09-06, LOCKED: "If you're sitting and waiting for something, at
 least check to see if I have sent you a message. Lock that in for ALL

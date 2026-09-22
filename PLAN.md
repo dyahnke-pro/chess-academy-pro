@@ -539,6 +539,77 @@ deciding-path half, C1–C6 the record half) and the prod audits after the
 push. David's decisions (lock semantics, steer, auto-analyse on import) are
 built as recommended and each is one flag away from flipping.
 
+## 🔴 2026-09-22 (night) — THE FREEZE: a boot backfill pegged David's phone; the rule it left behind
+
+**What happened.** OTA bundle `5cb79d17` (dispatched 13:57 UTC, the held-back-reason
+fix) carried the tactic-tag backfill `reconcileTacticTypes` (N0, 2026-09-15). On
+David's iPhone the first launch of that bundle (20:48 UTC) pegged the main thread
+within seconds: the screen still scrolled (native), every tap died, the phone
+heated, and the new bundle never got a single PostHog event out. Cause, measured:
+`detectTacticType` costs **~263 ms per row on a desktop** (`conceptForLine` walks
+the line); the backfill loaded EVERY stale mistake puzzle + classified tactic
+(~700 weakness rows in the last month alone, plus every classified tactic of 932
+analysed games) and re-tagged them in ONE synchronous loop with NOTHING persisted
+until the end — so a force-quit kept none of it and the next launch started from
+zero. A freeze that could never finish. The updater's rollback never applied
+because `notifyAppReady` fires right after mount, before any of that runs.
+
+**What it was NOT.** Not the Redis cap (Upstash is at 500,000/500,000 tonight —
+the bell and referrals answer `degraded`; the OTA pointer and manifest are
+Blob-mirrored and unaffected). Not his import (1 new game; the 932 were already
+there). Not a bad zip (every chunk the bundle's index references is inside it).
+Not CPU starvation on the web (the same import on prod web left event-loop lag at
+0–6 ms; desktop is fast and a fresh device has no rows to re-tag).
+
+**The fix, on `main` as `d6e756bcf` and OTA `d6e756bc` (run 72, published
+22:53 UTC).** Three rules, one per defect, and now ONE home for them —
+`backfillSchedule.ts`, a zero-import leaf both backfills read: **START LATE**
+(8 s after boot, so the first paint and the OTA launch-install go first), **YIELD
+per row** (idle callback, 40 ms floor), **PERSIST per batch** (10 rows, so a killed
+app keeps its progress). The A1 opening-key re-mint (`reconcileOpeningKeys`, 932
+PGNs replayed) had the SAME shape on this branch and is scheduled the same way
+before it ships. Gates: a simulated force-quit keeps exactly the finished batches
+and the next run walks only the rest (`tacticTypeBackfill.test`,
+`openingKeyBackfill.test`).
+
+**The rescue on the phone.** Launch → ~20 s → force-quit → launch: the plugin
+downloads natively even while JS is pegged; `installStagedBundleOnLaunch` runs
+right after mount, before the App effects that start the loop, so the staged
+bundle installs at the next launch and wins the race within a few tries. David
+must never delete the app (that wipes the record).
+
+**The class, so it is swept, not spot-fixed.** Any `reconcile*` that walks a
+per-row revision over a whole table at boot is this defect unless it reads
+`backfillSchedule`. The JSON-mirror reconcilers (`reconcileProRepertoires`,
+`reconcileBaseRepertoire`) are bounded by the JSON they mirror and keyed by one
+revision, not per row — a different shape. `dataLoader.ts:220`'s generic mirror
+helper is the same. Everything that grows with the STUDENT'S data goes through
+the schedule.
+
+**Also tonight — the composition ceiling.** The helper branches put
+`surfaceComposition.scan` at 271 direct computer imports (ceiling 254;
+CoachTeachPage 66/62). It came down by ROUTING (never a raised ceiling): the ONE
+key minted in `useStudentNeed` / `learnGameRecord` / `generateReviewNarration`
+instead of by four surfaces; slip→steer as one engine door (`pickTeachingReply`,
+called by `getAdaptiveMove` and the Play page — two copies of one precedence
+drift); the read of a position composed in `positionReadComposer`; the drill
+beats assembled in `coachDrillService`. Six helpers that answer nothing about the
+board were reclassified as infra WITH proof checks (record helpers: zero imports
++ no chess vocabulary; replay helpers: chess.js only + no judgement vocabulary;
+phrasers: zero imports; the Supabase tree cache per the gate's own definition).
+The kept-bad-bishop fixture was re-found as a real game whose bishop is hemmed
+under D-1's forward-ray definition (the old fixture's bishop had an open
+diagonal — a bishop to develop, not a bad bishop kept).
+
+**Found in passing, fixed:** "start a game with me, I'll take black" typed into
+the home-screen drawer parsed the word "me" as an opening name, and "let's play,
+I'm white" parsed "i'm white" as the opening with no seat (`coachAgent`, gated).
+
+**Owed after this push:** the hand walk (David: "the walk will be the audit" —
+new questions beside the old, different moves, a game started from the home
+screen); then a native iOS build AND an OTA carrying the full body (David
+2026-09-22: "Then we update iOS native and send an ota").
+
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
 Everything on the open list that is code I own and needs no decision from David.
