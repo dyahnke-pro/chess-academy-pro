@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**477 lines · 13 exports · 23 importers · 14 tests · 2 audits**
+**477 lines · 13 exports · 24 importers · 15 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,6 +31,7 @@
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/openingRecordBeat.ts`
+- `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/studentNeedLoader.test.ts`
@@ -129,7 +130,7 @@
 ### `plyClaimBucket` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeNeed` (function) — 60 call sites
+### `computeNeed` (function) — 61 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
 - `src/services/capabilityGreen.measure.test.ts:545`
 - `src/services/capabilityGreen.measure.test.ts:546`
@@ -188,7 +189,8 @@
 - `src/services/oneOpeningKey.test.ts:128`
 - `src/services/oneOpeningKey.test.ts:133`
 - `src/services/oneOpeningKey.test.ts:135`
-- `src/services/positionFacts.ts:625`
+- `src/services/positionFacts.liveFundamental.test.ts:80`
+- `src/services/positionFacts.ts:674`
 - `src/services/teachingSelector.ts:312`
 
 ### `HELD_FOR_PROVEN` (re-export) — 0 call sites
@@ -207,6 +209,7 @@
 - `src/services/needScore.test.ts`
 - `src/services/needWeaknessWire.test.ts`
 - `src/services/oneOpeningKey.test.ts`
+- `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/studentNeedLoader.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`

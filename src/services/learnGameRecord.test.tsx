@@ -153,3 +153,35 @@ describe('coversEveryStudentPly — B7(c) folded into the one builder', () => {
     expect(coversEveryStudentPly({ plyCount: 0, playerColor: 'white', liveGrades: [] })).toBe(false);
   });
 });
+
+describe('C3 — a live grade\'s engine lines reach the annotation the sweep reads', () => {
+  const pv = { afterPlayed: ['a8b8', 'd4b5', 'a7f2'], afterBest: ['d7d6', 'b1c3'] };
+  const base: LearnLiveGrade = { ply: 26, san: 'Nd4', color: 'white', bestMoveUci: 'f3g5', bestMoveEvalCp: 20, cpLossCp: 160 };
+
+  it('a FLAGGED grade with pv → annotation.pv, the sweep\'s exact shape', () => {
+    const a = annotationFromLiveGrade({ ...base, pv });
+    expect(a.classification).not.toBe('good');
+    expect(a.pv).toEqual(pv);
+  });
+
+  it('NEGATIVE CONTROL: an unflagged grade never files pv (the sweep persists lines on flagged plies only)', () => {
+    const a = annotationFromLiveGrade({ ...base, cpLossCp: 0, pv });
+    expect(a.classification).toBe('good');
+    expect('pv' in a).toBe(false);
+  });
+
+  it('NEGATIVE CONTROL: a flagged grade whose reads never arrived files no pv key — an honest gap, not an empty line', () => {
+    expect('pv' in annotationFromLiveGrade(base)).toBe(false);
+    expect('pv' in annotationFromLiveGrade({ ...base, pv: { afterPlayed: [], afterBest: [] } })).toBe(false);
+  });
+
+  it('the saved Learn record carries the lines end to end', () => {
+    const g = eightPlyGame();
+    const record = buildLearnGameRecord({
+      gameId: 'learn-pv', pgn: g.pgn, plyCount: g.plies, playerColor: 'white', playerName: 'D', rating: 1300, openingId: null,
+      ending: { kind: 'ended' }, promptedPlies: [],
+      liveGrades: [{ ply: 6, san: 'Ng5', color: 'white', bestMoveUci: 'b1c3', bestMoveEvalCp: 30, cpLossCp: 260, pv: { afterPlayed: ['d7d5', 'e4d5', 'f6d5'], afterBest: [] } }],
+    });
+    expect(record!.annotations![0].pv).toEqual({ afterPlayed: ['d7d5', 'e4d5', 'f6d5'], afterBest: [] });
+  });
+});

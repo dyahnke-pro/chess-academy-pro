@@ -57,6 +57,10 @@ const move = (ply: number): PlayerMoveNotification => ({
   isBestMove: true,
   bestMoveWasTactical: true,
   hasHangingPiece: false,
+  historySans: ['Nf3'],
+  bestMoveUci: 'g1f3',
+  bestPvUci: ['g1f3'],
+  replyPvUci: [],
 });
 
 describe('useLiveCoach — DeepSeek re-fire guard', () => {

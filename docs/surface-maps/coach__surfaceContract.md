@@ -41,7 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `registerFor` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1485`
+- `src/components/Coach/CoachGameReview.tsx:1488`
 - `src/hooks/usePhaseNarration.ts:523`
 
 ## Tests

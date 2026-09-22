@@ -59,7 +59,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:503`
+- `src/services/positionFacts.ts:552`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -129,7 +129,7 @@
 - `src/services/liveNeedGate.test.ts:55`
 - `src/services/liveNeedGate.test.ts:64`
 - `src/services/liveNeedGate.test.ts:76`
-- `src/services/positionFacts.ts:661`
+- `src/services/positionFacts.ts:700`
 
 ### `habitNeedFrom` (function) — 11 call sites
 - `src/services/coachFeatureService.ts:1496`
@@ -142,7 +142,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:590`
+- `src/services/positionFacts.ts:639`
 
 ### `habitForCluster` (function) — 9 call sites
 - `src/services/habitJoin.test.ts:17`

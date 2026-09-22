@@ -19,6 +19,7 @@ const fenBefore = (ply: number): string => { const c = new Chess(); for (const s
 // Ply 12 = 6...Nb6 (Black's flagged move). Black slightly better before, worse
 // after → a flagged mover-POV loss (white-POV: −30 → +90).
 const NB6: LearnFundamentalInput = {
+  currentGameId: 'live-now',
   fenBefore: fenBefore(12),
   historySans: upTo(12),
   playedSan: SANS[11],       // 'Nb6'
@@ -101,5 +102,37 @@ describe('learnFundamentalVerdict — recurrence (WO-LOOP-01)', () => {
     const seen = new Set<FundamentalId>(['same-piece-twice']);
     const r = learnFundamentalVerdict(NB6, seen, spine);
     expect(r?.recurrence).toBeNull();
+  });
+});
+
+// C4 — the CURRENT game is never its own prior. Learn's live capture writes
+// rows mid-game under `learnMemRef.current.gameId`, and the spine reloads on
+// `weaknessModelChanged`, so by the second slip the spine already carries THIS
+// game; without the id the first occurrence heard "you've walked into this
+// before".
+describe('learnFundamentalVerdict — recurrence excludes the game being played (C4)', () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const row = (gameId: string) => ({
+    clusterId: 'fundamental:same-piece-twice', bucket: 'positional' as const, label: 'Moving the same piece twice',
+    openCount: 1, severity: 30, puzzleThemes: [] as string[], total: 1,
+    games: [{ gameId, opponentName: 'Coach', playedAt: Date.now() - DAY }],
+  });
+
+  it('NEGATIVE CONTROL: a spine whose only recorded game IS this game → no "again"', () => {
+    const r = learnFundamentalVerdict(NB6, new Set(), [row('live-now')]);
+    expect(r?.id).toBe('same-piece-twice');
+    expect(r?.recurrence).toBeNull();
+  });
+
+  it('the same row under ANOTHER game id → the clause speaks', () => {
+    const r = learnFundamentalVerdict(NB6, new Set(), [row('prior-1')]);
+    expect(r?.recurrence).toMatch(/^You've walked into this before/);
+  });
+
+  it('the page hands its own game id over (by statement)', async () => {
+    const src = await import('node:fs').then((fs) => fs.readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8'));
+    const at = src.indexOf('learnFundamentalVerdict({');
+    expect(at).toBeGreaterThan(0);
+    expect(src.slice(at, at + 400)).toMatch(/currentGameId: learnMemRef\.current\.gameId,/);
   });
 });

@@ -207,7 +207,7 @@
 - `src/components/Openings/MiddlegamePractice.tsx:269`
 - `src/hooks/useLiveCoach.needWire.test.tsx:15`
 - `src/hooks/useLiveCoach.test.tsx:13`
-- `src/hooks/useLiveCoach.ts:303`
+- `src/hooks/useLiveCoach.ts:312`
 - `src/hooks/usePhaseNarration.test.ts:68`
 - `src/hooks/usePhaseNarration.ts:714`
 - `src/services/coachMoveCommentary.ts:303`
@@ -253,9 +253,9 @@
 - `src/services/coachApi.speakableFacts.test.ts:53`
 
 ### `voiceFacts` (function) — 33 call sites
-- `src/components/Coach/CoachGameReview.tsx:1681`
-- `src/components/Coach/CoachGameReview.tsx:1800`
-- `src/components/Coach/CoachGameReview.tsx:1987`
+- `src/components/Coach/CoachGameReview.tsx:1684`
+- `src/components/Coach/CoachGameReview.tsx:1803`
+- `src/components/Coach/CoachGameReview.tsx:1990`
 - `src/hooks/usePhaseNarration.ts:701`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:328`

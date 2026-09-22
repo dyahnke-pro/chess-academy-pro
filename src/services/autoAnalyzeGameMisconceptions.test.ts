@@ -72,7 +72,7 @@ describe('autoAnalyzeGameMisconceptions', () => {
     const after2 = await db.misconceptionTags.where('sourceGameId').equals('g-idem').count();
 
     expect(after1).toBeGreaterThan(0);
-    expect(second).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0 });
+    expect(second).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0, reattributed: 0, countedUpgraded: 0 });
     expect(after2).toBe(after1);
   });
 
@@ -97,7 +97,7 @@ describe('autoAnalyzeGameMisconceptions', () => {
 
     // Second call short-circuits on the meta flag — no new work.
     const second = await backfillMisconceptionsFromAnalyzedGames();
-    expect(second).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0 });
+    expect(second).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0, reattributed: 0, countedUpgraded: 0 });
   });
 
   it('no-ops on a game with no annotations', async () => {
@@ -110,7 +110,7 @@ describe('autoAnalyzeGameMisconceptions', () => {
       annotations: null,
     });
     await db.games.put(game);
-    expect(await autoAnalyzeGameMisconceptions('g-bare')).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0 });
+    expect(await autoAnalyzeGameMisconceptions('g-bare')).toEqual({ classified: 0, logged: 0, capabilitiesHeld: 0, reattributed: 0, countedUpgraded: 0 });
   });
 });
 
@@ -153,5 +153,143 @@ describe('autoAnalyzeGameMisconceptions — passes evalAfterPlayed so eval-gated
     await autoAnalyzeGameMisconceptions('g-botched-stillwinning', 'IcanonlybeatUbytime');
     const rows = await db.misconceptionTags.where('sourceGameId').equals('g-botched-stillwinning').toArray();
     expect(rows.map((x) => x.fundamentalId)).not.toContain('botched-conversion');
+  });
+});
+
+// ─── C1 (WO-STANDARD-01, 2026-09-22) — ONE WRITER, and a REVIEWED game COUNTS ──
+//
+// The review page's mount sweep wrote `counted: false` rows with no positive
+// half and then `hasMisconceptionsForGame` read "already" for the capture
+// button, so an import-and-review student never wrote a counted row or a held
+// row: green was unreachable for the bulk of the userbase. The sweep is now the
+// one writer and REVIEWED is a mode of it. Proof is ROWS, not calls.
+describe('C1 — the one writer: a reviewed imported game writes COUNTED rows and HELD rows', () => {
+  // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.Nxe5?? — White (the student) drops the
+  // knight; the three clean developing moves before it are the positive half.
+  const PGN_IMPORT = '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. Nxe5 Nxe5';
+  const importedGame = (id: string) => buildGameRecord({
+    id, source: 'chesscom', white: 'knight_mare_01', black: 'someone', pgn: PGN_IMPORT,
+    annotations: [
+      { moveNumber: 1, color: 'white', san: 'e4', evaluation: 25, bestMove: 'e2e4', bestMoveEval: 25, classification: 'good', comment: null },
+      { moveNumber: 2, color: 'white', san: 'Nf3', evaluation: 30, bestMove: 'g1f3', bestMoveEval: 30, classification: 'good', comment: null },
+      { moveNumber: 3, color: 'white', san: 'Bc4', evaluation: 20, bestMove: 'f1c4', bestMoveEval: 25, classification: 'good', comment: null },
+      { moveNumber: 4, color: 'white', san: 'Nxe5', evaluation: -250, bestMove: 'c2c3', bestMoveEval: 20, classification: 'blunder', comment: null },
+    ] as MoveAnnotation[],
+  });
+  const rowsFor = (id: string) => db.misconceptionTags.where('sourceGameId').equals(id).toArray();
+  const heldFor = (id: string) => db.capabilityEvidence.filter((r) => r.sourceGameId === id).toArray();
+
+  beforeEach(async () => { await db.capabilityEvidence.clear(); });
+
+  it('REVIEWED: the slip rows COUNT and the clean plies land as capability evidence', async () => {
+    await db.games.put(importedGame('g-c1-reviewed'));
+    const r = await autoAnalyzeGameMisconceptions('g-c1-reviewed', 'knight_mare_01', { reviewed: true });
+    const rows = await rowsFor('g-c1-reviewed');
+    expect(rows.length, 'the slip was not recorded').toBeGreaterThan(0);
+    expect(rows.every((x) => x.counted !== false), 'a reviewed game must COUNT toward the profile').toBe(true);
+    const held = await heldFor('g-c1-reviewed');
+    expect(held.length, 'the positive half never reached capabilityEvidence').toBeGreaterThan(0);
+    expect(held.every((h) => h.origin === 'review' && !h.prompted)).toBe(true);
+    expect(r.capabilitiesHeld).toBe(held.length);
+  });
+
+  it('NEGATIVE CONTROL — the batch path (not reviewed) writes display-only rows and NO capability evidence', async () => {
+    await db.games.put(importedGame('g-c1-batch'));
+    const r = await autoAnalyzeGameMisconceptions('g-c1-batch', 'knight_mare_01');
+    const rows = await rowsFor('g-c1-batch');
+    expect(rows.length).toBeGreaterThan(0);
+    expect(rows.every((x) => x.counted === false), 'a library import is not a decision about lines the student knows').toBe(true);
+    expect(await heldFor('g-c1-batch')).toEqual([]);
+    expect(r.capabilitiesHeld).toBe(0);
+  });
+
+  it('THE OLD RACE, CLOSED — batch first, then the review: rows are UPGRADED to counted and the held rows land, once', async () => {
+    await db.games.put(importedGame('g-c1-race'));
+    await autoAnalyzeGameMisconceptions('g-c1-race', 'knight_mare_01');           // the batch sweep, before any review
+    expect((await rowsFor('g-c1-race')).every((x) => x.counted === false)).toBe(true);
+
+    const review = await autoAnalyzeGameMisconceptions('g-c1-race', 'knight_mare_01', { reviewed: true });
+    expect(review.countedUpgraded, 'the batch rows were not upgraded').toBeGreaterThan(0);
+    expect(review.logged, 'a second tally must never be written').toBe(0);
+    expect((await rowsFor('g-c1-race')).every((x) => x.counted !== false)).toBe(true);
+    const heldOnce = await heldFor('g-c1-race');
+    expect(heldOnce.length).toBeGreaterThan(0);
+
+    // A second review mount owes nothing — no duplicate held rows, no re-upgrade.
+    const again = await autoAnalyzeGameMisconceptions('g-c1-race', 'knight_mare_01', { reviewed: true });
+    expect(again.countedUpgraded).toBe(0);
+    expect(again.capabilitiesHeld).toBe(0);
+    expect((await heldFor('g-c1-race')).length).toBe(heldOnce.length);
+  });
+
+  it('the review page hands the sweep its reviewed flag, and the capture button routes to the same writer (by statement)', async () => {
+    const fs = await import('node:fs');
+    const review = fs.readFileSync('src/components/Coach/CoachGameReview.tsx', 'utf8');
+    expect(review).toMatch(/autoAnalyzeGameMisconceptions\(gid, username, \{ reviewed: true \}\)/);
+    const button = fs.readFileSync('src/components/Coach/GameReviewWeaknessCapture.tsx', 'utf8');
+    expect(button).toMatch(/autoAnalyzeGameMisconceptions\(gameId, undefined, \{ reviewed: true \}\)/);
+    expect(button, 'the component must not run a second capture beside the sweep').not.toMatch(/autoAnalyzeBlunders\(/);
+  });
+});
+
+// ─── C2 (WO-STANDARD-01, 2026-09-22) — A TAG WITHOUT A BEST MOVE IS PROVISIONAL ──
+//
+// A `%eval` import carries the eval curve and NO best move, so the sweep
+// classified each slip off the board alone (the attributor needs `bestSan`),
+// and then the once-per-game latch made that tag permanent: the deep dive
+// landed the engine's move and nothing ever looked again.
+describe('C2 — an eval-comment import is re-attributed when the deep dive lands the best move', () => {
+  // The review's Alapin fixture: Black (the student) plays 6...Nb6, a flagged
+  // move that the attributor files as `same-piece-twice` — but only WITH the
+  // best move (e6) in hand.
+  const PGN = '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6 7. Nf3 d6';
+  const evalImport = (id: string, bestMove: string | null) => buildGameRecord({
+    id, source: 'lichess', white: 'someone', black: 'knight_mare_01', pgn: PGN,
+    fullyAnalyzed: true, analysisDepth: 12,
+    annotations: [
+      { moveNumber: 6, color: 'black', san: 'Nb6', evaluation: 90, bestMove, bestMoveEval: -30, classification: 'mistake', comment: null },
+    ] as MoveAnnotation[],
+  });
+  const rowsFor = (id: string) => db.misconceptionTags.where('sourceGameId').equals(id).toArray();
+
+  it('no best move → the row is written PENDING, never latched; the deep dive lands it → the real fundamental', async () => {
+    await db.games.put(evalImport('g-c2', null));
+    await autoAnalyzeGameMisconceptions('g-c2', 'knight_mare_01');
+    let rows = await rowsFor('g-c2');
+    expect(rows.length, 'the eval-curve slip was not recorded at all').toBe(1);
+    expect(rows[0].attributionPending, 'a tag computed without a best move must say so').toBe(true);
+    expect(rows[0].fundamentalId).toBeUndefined();
+
+    // THE DEEP DIVE LANDS: the annotation now carries the engine's move.
+    await db.games.update('g-c2', { annotations: evalImport('g-c2', 'e7e6').annotations, analysisDepth: 16 });
+    const r = await autoAnalyzeGameMisconceptions('g-c2', 'knight_mare_01');
+    expect(r.reattributed).toBe(1);
+    rows = await rowsFor('g-c2');
+    expect(rows.length, 'a second row would be the latch in a new costume').toBe(1);
+    expect(rows[0].fundamentalId).toBe('same-piece-twice');
+    expect(rows[0].tag).toBe('neglected-development');
+    expect(rows[0].bestSan).toBe('e6');
+    expect(rows[0].attributionPending).toBeUndefined();
+  });
+
+  it('NEGATIVE CONTROL — no deepening → the row stays pending and nothing is re-attributed', async () => {
+    await db.games.put(evalImport('g-c2-nodeepen', null));
+    await autoAnalyzeGameMisconceptions('g-c2-nodeepen', 'knight_mare_01');
+    const r = await autoAnalyzeGameMisconceptions('g-c2-nodeepen', 'knight_mare_01');
+    expect(r.reattributed).toBe(0);
+    const rows = await rowsFor('g-c2-nodeepen');
+    expect(rows.length).toBe(1);
+    expect(rows[0].attributionPending).toBe(true);
+  });
+
+  it('NEGATIVE CONTROL — a row classified WITH the best move is never pending and a later pass leaves it alone', async () => {
+    await db.games.put(evalImport('g-c2-full', 'e7e6'));
+    await autoAnalyzeGameMisconceptions('g-c2-full', 'knight_mare_01');
+    const first = await rowsFor('g-c2-full');
+    expect(first[0].attributionPending).toBeUndefined();
+    expect(first[0].fundamentalId).toBe('same-piece-twice');
+    const r = await autoAnalyzeGameMisconceptions('g-c2-full', 'knight_mare_01');
+    expect(r.reattributed).toBe(0);
+    expect(await rowsFor('g-c2-full')).toEqual(first);
   });
 });

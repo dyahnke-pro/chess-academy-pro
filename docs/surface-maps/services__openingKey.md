@@ -89,10 +89,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessProvenance.test.ts:79`
 
 ### `openingKeyFromSans` (function) — 19 call sites
-- `src/components/Coach/CoachGameReview.tsx:623`
+- `src/components/Coach/CoachGameReview.tsx:626`
 - `src/components/Coach/CoachTeachPage.tsx:7230`
-- `src/components/Coach/CoachTeachPage.tsx:10928`
-- `src/components/Coach/CoachTeachPage.tsx:12090`
+- `src/components/Coach/CoachTeachPage.tsx:10968`
+- `src/components/Coach/CoachTeachPage.tsx:12130`
 - `src/hooks/usePositionNarration.ts:136`
 - `src/services/oneOpeningKey.test.ts:44`
 - `src/services/oneOpeningKey.test.ts:59`
@@ -145,7 +145,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/syncService.ts:205`
 
 ### `ecoOfKey` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:631`
+- `src/components/Coach/CoachGameReview.tsx:634`
 - `src/components/Coach/CoachTeachPage.tsx:7238`
 - `src/hooks/usePositionNarration.ts:138`
 - `src/services/openingKey.test.ts:31`
@@ -163,7 +163,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/studentNeedLoader.ts:198`
 
 ### `openingEntryForKey` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:4654`
+- `src/components/Coach/CoachGamePage.tsx:4677`
 - `src/services/homeOpening.ts:112`
 - `src/services/homeOpening.ts:193`
 - `src/services/homeOpeningPlan.ts:163`

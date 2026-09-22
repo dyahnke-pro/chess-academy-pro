@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**468 lines · 5 exports · 3 importers · 2 tests · 1 audits**
+**492 lines · 5 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,14 +32,15 @@
 ### `UseLiveCoachResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useLiveCoach` (function) — 7 call sites
+### `useLiveCoach` (function) — 8 call sites
 - `src/components/Coach/CoachGamePage.tsx:1022`
-- `src/hooks/useLiveCoach.needWire.test.tsx:64`
-- `src/hooks/useLiveCoach.needWire.test.tsx:77`
-- `src/hooks/useLiveCoach.test.tsx:69`
-- `src/hooks/useLiveCoach.test.tsx:78`
-- `src/hooks/useLiveCoach.test.tsx:87`
-- `src/hooks/useLiveCoach.test.tsx:108`
+- `src/hooks/useLiveCoach.needWire.test.tsx:68`
+- `src/hooks/useLiveCoach.needWire.test.tsx:81`
+- `src/hooks/useLiveCoach.needWire.test.tsx:93`
+- `src/hooks/useLiveCoach.test.tsx:73`
+- `src/hooks/useLiveCoach.test.tsx:82`
+- `src/hooks/useLiveCoach.test.tsx:91`
+- `src/hooks/useLiveCoach.test.tsx:112`
 
 ## Tests
 

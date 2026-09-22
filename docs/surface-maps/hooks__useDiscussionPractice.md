@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**824 lines · 10 exports · 9 importers · 4 tests · 0 audits**
+**846 lines · 10 exports · 9 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5791) — names `useDiscussionPractice`
+- **The standard post-deploy ritual** (CLAUDE.md:5983) — names `useDiscussionPractice`
 
 ## Who calls in
 
@@ -51,12 +51,12 @@
 ### `UseDiscussionPracticeOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useDiscussionPractice` (function) — 25 call sites
-- `src/components/Coach/CoachGamePage.tsx:516`
-- `src/components/Coach/CoachGameReview.tsx:874`
-- `src/components/Coach/CoachTeachPage.tsx:1535`
-- `src/components/Openings/MiddlegamePractice.tsx:161`
-- `src/components/Openings/OpeningPlayMode.tsx:265`
+### `useDiscussionPractice` (function) — 28 call sites
+- `src/components/Coach/CoachGamePage.tsx:567`
+- `src/components/Coach/CoachGameReview.tsx:931`
+- `src/components/Coach/CoachTeachPage.tsx:1570`
+- `src/components/Openings/MiddlegamePractice.tsx:162`
+- `src/components/Openings/OpeningPlayMode.tsx:274`
 - `src/components/Openings/PlayableLinePlayer.tsx:205`
 - `src/hooks/hintDialTally.test.ts:66`
 - `src/hooks/hintDialTally.test.ts:90`
@@ -64,6 +64,9 @@
 - `src/hooks/hintDialTally.test.ts:120`
 - `src/hooks/learnSilentCapture.test.ts:80`
 - `src/hooks/learnSilentCapture.test.ts:115`
+- `src/hooks/learnSilentCapture.test.ts:197`
+- `src/hooks/learnSilentCapture.test.ts:214`
+- `src/hooks/learnSilentCapture.test.ts:228`
 - `src/hooks/useDiscussionPractice.test.ts:70`
 - `src/hooks/useDiscussionPractice.test.ts:88`
 - `src/hooks/useDiscussionPractice.test.ts:124`
@@ -87,4 +90,8 @@
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

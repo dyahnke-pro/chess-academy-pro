@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1296 lines · 11 exports · 35 importers · 21 tests · 1 audits**
+**1296 lines · 11 exports · 37 importers · 21 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@
 - `src/services/causalChain.ts`
 - `src/services/coachApi.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/discussionPractice.ts`
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
 - `src/services/fundamentalReachesDecider.test.ts`
@@ -32,6 +33,7 @@
 - `src/services/groundedAnswer.ts`
 - `src/services/learnFundamentalNarration.test.ts`
 - `src/services/learnFundamentalNarration.ts`
+- `src/services/liveFundamental.ts`
 - `src/services/misconceptionClassifier.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
@@ -80,7 +82,7 @@
 
 ### `attributePrinciples` (function) — 52 call sites
 - `src/services/coachFeatureService.ts:836`
-- `src/services/learnFundamentalNarration.ts:143`
+- `src/services/liveFundamental.ts:132`
 - `src/services/misconceptionClassifier.ts:261`
 - `src/services/principleAttribution.section14.test.ts:22`
 - `src/services/principleAttribution.section14.test.ts:30`
@@ -132,15 +134,17 @@
 - `src/services/yieldHonoured.test.ts:69`
 - `src/services/yieldHonoured.test.ts:70`
 
-### `pvUciToSan` (function) — 9 call sites
-- `src/components/Coach/GameReviewWeaknessCapture.tsx:85`
-- `src/components/Coach/GameReviewWeaknessCapture.tsx:89`
-- `src/services/autoAnalyzeGame.ts:292`
-- `src/services/autoAnalyzeGame.ts:295`
+### `pvUciToSan` (function) — 11 call sites
+- `src/components/Coach/GameReviewWeaknessCapture.tsx:88`
+- `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
+- `src/services/autoAnalyzeGame.ts:373`
+- `src/services/autoAnalyzeGame.ts:376`
 - `src/services/coachFeatureService.ts:840`
 - `src/services/coachFeatureService.ts:842`
-- `src/services/learnFundamentalNarration.ts:133`
-- `src/services/learnFundamentalNarration.ts:140`
+- `src/services/discussionPractice.ts:353`
+- `src/services/discussionPractice.ts:361`
+- `src/services/liveFundamental.ts:122`
+- `src/services/liveFundamental.ts:129`
 - `src/services/principleAttribution.test.ts:46`
 
 ## Tests

@@ -22,7 +22,7 @@ import { db } from '../db/schema';
 import { getMisconceptionProfile, isMisconceptionDue, type MisconceptionAggregate } from './misconceptionService';
 import { FUNDAMENTAL_IDS, FUNDAMENTAL_TAG, type FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LABEL } from './fundamentalsCatalog';
-import { getMisconceptionTag } from '../data/misconceptionTags';
+import { getMisconceptionTag, isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
 import type { MisconceptionTagRecord } from '../types';
 import { detectConversionFailures, resolvePlayerColor, type ConversionFailure } from './conversionDetector';
 import { classifyEndgameType, endgameTypeInfo, type EndgameType } from './endgameProfileService';
@@ -140,6 +140,18 @@ export interface UnifiedWeakness extends WeaknessRepInput {
    *  been working on this" is a claim about sessions that happened, and it is
    *  only true when this is non-null. REQUIRED for the same reason. */
   lastDrilledAt: number | null;
+  /**
+   * THE TAG THE POSITIVE HALF RECORDS THIS HOLE UNDER, or null (C6, 2026-09-22).
+   *
+   * `capabilityEvidence` files `held` / `broken` rows in the closed misconception
+   * vocabulary. A weakness row can only be LOWERED by a green record for the
+   * SAME question, so each aggregator says which tag that is — or answers null,
+   * honestly, when no positive computer records this kind of hole yet (an
+   * analysis tactic cluster, a repertoire weak spot, time trouble). REQUIRED so
+   * a new aggregator decides rather than inheriting "never green"; null is a
+   * real answer and must never be read as "matches everything".
+   */
+  capabilityTag: MisconceptionTagId | null;
   /** A single position to drill (conversion: the winning peak FEN). Lets the
    *  rep deep-link into "play out this position" without carrying positions. */
   fen?: string;
@@ -376,6 +388,9 @@ export function aggregateMistakePuzzles(mistakes: MistakePuzzle[], excludeKeys?:
       total: rows.length,
       severity: Math.min(95, rows.length * 6 + blunders * 8 + Math.round(avgCpLoss / 30)),
       sources: ['analysis'],
+      // An analysis cluster (tactic / transform / phase) has no positive
+      // computer recording it yet — honest null, never a guessed tag.
+      capabilityTag: null,
       puzzleThemes: meta.themes,
       positions: rows.slice(0, 8).map((r) => ({
         fen: r.fen,
@@ -455,6 +470,9 @@ export function aggregateFundamentals(rows: readonly MisconceptionTagRecord[], g
       total: recs.length,
       severity: Math.min(95, openCount * 12 + recs.length * 3),
       sources,
+      // The same `Record<FundamentalId, MisconceptionTagId>` the negative half
+      // files under — so a `held` row for this tag is about THIS hole.
+      capabilityTag: FUNDAMENTAL_TAG[id],
       puzzleThemes: def?.drill.puzzleThemes ?? [],
       positions: recs.slice(0, 8).map((e) => ({
         from: {
@@ -491,6 +509,9 @@ function fromMisconception(a: MisconceptionAggregate, gameIndex?: GameProvenance
     total: a.total,
     severity: Math.min(95, a.openCount * 12 + a.total * 3),
     sources: ['coach'],
+    // A coach capture IS filed in the closed vocabulary; `other` is the
+    // catch-all the app could not name, and green can never be about it.
+    capabilityTag: isMisconceptionTagId(a.tag) && a.tag !== 'other' ? a.tag : null,
     puzzleThemes: a.def?.drill.puzzleThemes ?? [],
     // ✅ THE GAME LINK LANDED (2026-09-19). This used to read "we simply
     // cannot say which game" and fill a bare `origin: 'game'` — the biggest
@@ -557,6 +578,7 @@ export function aggregateOpeningWeakSpots(spots: OpeningWeakSpot[], now: number 
       total: rows.length,
       severity: Math.min(95, totalFails * 8 + rows.length * 4),
       sources: ['analysis'],
+      capabilityTag: null, // a repertoire drill records no capability
       puzzleThemes: [],
       // A repertoire drill, not a game — 'drill' is the answer, not a gap.
       positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, bestSan: r.correctMoveSan, openingId: r.openingId, from: { origin: 'drill' as const, playedAt: playedAtMs(r.lastFailedAt) } })),
@@ -596,6 +618,7 @@ export function aggregateClassifiedTactics(tactics: ClassifiedTactic[]): Unified
       total: rows.length,
       severity: Math.min(95, rows.length * 6),
       sources: ['analysis'],
+      capabilityTag: null, // no positive computer records a TACTIC yet (MOVE_FUNDAMENTAL_TAG is positional)
       puzzleThemes: themesForTactic(type),
       positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, playedSan: r.playerMoveSan, bestSan: r.bestMoveSan, openingId: r.openingName ?? undefined, from: { origin: 'game' as const, opponentName: r.opponentName, playedAt: playedAtMs(r.gameDate) } })),
       lastSeenAt,
@@ -619,7 +642,7 @@ export function aggregateConversionFailures(failures: ConversionFailure[], games
       key, tag: key, label, bucket: 'general',
       openCount: rows.length, total: rows.length,
       severity: Math.min(95, rows.length * 12 + Math.round(avgPeak / 60)),
-      sources: ['analysis'], puzzleThemes: [],
+      sources: ['analysis'], puzzleThemes: [], capabilityTag: null,
       positions: rows.slice(0, 8).map((f) => ({
         fen: f.fen,
         openingId: f.openingName ?? undefined,
@@ -708,6 +731,7 @@ export function aggregateStrongerOpponentErrors(
     total: vsStronger.length,
     severity: Math.min(90, vsStronger.length * 6 + Math.round(worstCp / 30)),
     sources: ['analysis'],
+    capabilityTag: null,
     puzzleThemes: [],
     positions: vsStronger.slice(0, 8).map((p) => ({ fen: p.fen, playedSan: p.playerMoveSan, bestSan: p.bestMoveSan, openingId: p.openingName ?? undefined, from: { origin: 'game' as const, gameId: p.sourceGameId, opponentName: p.opponentName, playedAt: playedAtMs(p.gameDate) } })),
     lastSeenAt,
@@ -729,6 +753,7 @@ export function aggregateTimeTrouble(hits: TimeTroubleHit[], gameIndex?: GamePro
     total: hits.length,
     severity: Math.min(95, hits.length * 10),
     sources: ['analysis'],
+    capabilityTag: null,
     puzzleThemes: [],
     positions: hits.slice(0, 8).map((h) => ({
       fen: h.fen,
@@ -769,6 +794,7 @@ export function aggregateBoardVision(heatmap: SquareHeatmapEntry[]): UnifiedWeak
     total: weak.length,
     severity: Math.min(95, weak.length * 6 + Math.round(avgError * 40)),
     sources: ['analysis'],
+    capabilityTag: null,
     puzzleThemes: [],
     positions: [],
     lastSeenAt: Date.now(),

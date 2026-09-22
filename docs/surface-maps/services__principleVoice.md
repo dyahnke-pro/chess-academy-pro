@@ -45,7 +45,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
 - `src/services/fundamentalHow.test.ts:77`
-- `src/services/learnFundamentalNarration.ts:158`
+- `src/services/learnFundamentalNarration.ts:75`
 - `src/services/misconceptionClassifier.ts:274`
 - `src/services/principleAttribution.section14.test.ts:162`
 - `src/services/principleAttribution.section14.test.ts:165`

@@ -324,7 +324,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // re-reviewing is a cheap no-op. Best-effort + background; the review
   // UI never waits on it, and the manual capture button stays as a
   // fallback.
-  const [promptedPlies, setPromptedPlies] = useState<readonly number[]>([]);
   useEffect(() => {
     const gid = props.gameId;
     if (!gid) return;
@@ -333,9 +332,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       try {
         const game = await db.games.get(gid);
         if (cancelled || !game) return;
-        // T3: the plies Learn announced before the student moved ride the
-        // record into the capture, so a prompted find never files as unaided.
-        setPromptedPlies(game.promptedPlies ?? []);
+        // T3's prompted plies ride the GAME RECORD into the sweep below, which
+        // reads `game.promptedPlies` itself — no state hop to the button.
         const prefs = useAppStore.getState().activeProfile?.preferences;
         const username = game.source === 'chesscom' ? prefs?.chessComUsername
           : game.source === 'lichess' ? prefs?.lichessUsername
@@ -344,8 +342,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // Also fill the Thinking-Errors bucket from this game's annotations
         // (deterministic, idempotent per game) — the tactical-only puzzle gate
         // drops positional slips, but those ARE thinking errors.
+        //
+        // REVIEWED (C1, 2026-09-22): the student opened THIS game, so the ONE
+        // writer files its slips as COUNTED and records the positive half —
+        // the `learned: true` + capability capture the button below used to own
+        // and this sweep always pre-empted. Idempotent on a later mount.
         if (!cancelled) {
-          try { await autoAnalyzeGameMisconceptions(gid, username); } catch { /* best-effort */ }
+          try { await autoAnalyzeGameMisconceptions(gid, username, { reviewed: true }); } catch { /* best-effort */ }
         }
         if (!cancelled && made > 0) {
           void logAppAudit({
@@ -5065,7 +5068,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             pgn={pgn}
             openingName={openingName}
             gameId={props.gameId}
-            promptedPlies={promptedPlies}
           />
         </div>
       </div>

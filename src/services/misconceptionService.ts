@@ -80,6 +80,9 @@ export interface LogMisconceptionInput {
    *  Pass false to log a display-only slip (un-learned line) that shows in
    *  Thinking Errors but doesn't inflate the weakness analysis. */
   counted?: boolean;
+  /** See `MisconceptionTagRecord.attributionPending` — the classifier ran
+   *  without a best move, so the tag must be re-attributed when one lands. */
+  attributionPending?: boolean;
 }
 
 /** Persist one tagged misconception. Rejects a tag outside the closed
@@ -114,6 +117,9 @@ export async function logMisconception(
     masteryHits: 0,
     dueAt: Date.now(), // due immediately on first capture
     counted: input.counted ?? true,
+    // Only ever TRUE on the record — a false would read as "attributed" to a
+    // reader that checks presence, and absent already means that.
+    ...(input.attributionPending ? { attributionPending: true } : {}),
   };
   await db.misconceptionTags.add(record);
   emitWeaknessModelChanged();
@@ -157,6 +163,15 @@ export async function getAllMisconceptions(): Promise<MisconceptionTagRecord[]> 
 export async function hasMisconceptionsForGame(gameId: string): Promise<boolean> {
   const n = await db.misconceptionTags.where('sourceGameId').equals(gameId).count();
   return n > 0;
+}
+
+/** True when this game's slips COUNT toward the weakness profile — i.e. the
+ *  student has reviewed it (C1). A batch sweep writes `counted: false`; the
+ *  review's sweep upgrades those, so "already in your weaknesses" is a claim
+ *  about counted rows, not about any row. */
+export async function hasCountedMisconceptionsForGame(gameId: string): Promise<boolean> {
+  const rows = await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
+  return rows.some((r) => r.counted !== false);
 }
 
 export interface MisconceptionAggregate {

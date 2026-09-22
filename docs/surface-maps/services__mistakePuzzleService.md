@@ -71,12 +71,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `mistakeProvenanceFromGame` (function) — 3 call sites
-- `src/services/autoAnalyzeGame.ts:312`
+- `src/services/autoAnalyzeGame.ts:399`
 - `src/services/mistakeProvenance.test.ts:80`
 - `src/services/mistakeProvenance.test.ts:87`
 
 ### `provenanceForGameId` (function) — 5 call sites
-- `src/services/discussionPractice.ts:292`
+- `src/services/discussionPractice.ts:298`
 - `src/services/mistakeProvenance.test.ts:97`
 - `src/services/mistakeProvenance.test.ts:103`
 - `src/services/mistakeProvenance.test.ts:106`
@@ -101,8 +101,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
 - `src/hooks/useDiscussionPractice.ts:259`
-- `src/hooks/useDiscussionPractice.ts:381`
-- `src/services/autoAnalyzeGame.ts:234`
+- `src/hooks/useDiscussionPractice.ts:385`
+- `src/services/autoAnalyzeGame.ts:315`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:58`
 - `src/services/deliberation.ts:118`
@@ -131,7 +131,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `replayPgnToFens` (function) — 8 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
-- `src/services/autoAnalyzeGame.ts:216`
+- `src/services/autoAnalyzeGame.ts:297`
 - `src/services/gameAnalysisService.ts:353`
 - `src/services/gameAnalysisService.ts:1435`
 - `src/services/gameAnalysisService.ts:1691`
@@ -141,12 +141,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `determinePlayerColor` (function) — 3 call sites
 - `src/components/Tactics/AnalysisPracticePage.tsx:100`
-- `src/services/autoAnalyzeGame.ts:214`
+- `src/services/autoAnalyzeGame.ts:295`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
 - `src/components/Coach/CoachGamePage.tsx:2069`
-- `src/components/Coach/CoachGameReview.tsx:343`
+- `src/components/Coach/CoachGameReview.tsx:341`
 - `src/services/gameAnalysisService.ts:2076`
 - `src/services/mistakePuzzleService.test.ts:109`
 - `src/services/mistakePuzzleService.test.ts:163`
@@ -187,7 +187,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `addMistakePuzzleFromCapture` (function) — 8 call sites
-- `src/services/discussionPractice.ts:293`
+- `src/services/discussionPractice.ts:299`
 - `src/services/mistakeProvenance.test.ts:116`
 - `src/services/mistakePuzzleCapture.test.ts:21`
 - `src/services/mistakePuzzleCapture.test.ts:34`
@@ -206,7 +206,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakePuzzleService.sequence.test.ts:72`
 
 ### `buildMistakePuzzleFromCapture` (function) — 4 call sites
-- `src/services/autoAnalyzeGame.ts:369`
+- `src/services/autoAnalyzeGame.ts:567`
 - `src/services/misconceptionDrill.test.ts:21`
 - `src/services/misconceptionDrill.test.ts:23`
 - `src/services/misconceptionDrill.test.ts:32`

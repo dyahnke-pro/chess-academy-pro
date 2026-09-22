@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**321 lines · 10 exports · 24 importers · 15 tests · 4 audits**
+**336 lines · 11 exports · 23 importers · 15 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,7 +17,6 @@
 - `src/components/Insights/MisconceptionsTab.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx`
-- `src/services/autoAnalyzeGame.ts`
 - `src/services/bucketPipelineAudit.test.ts`
 - `src/services/bucketPipelineAudit.ts`
 - `src/services/coachApi.ts`
@@ -46,13 +45,13 @@
 - `src/services/bucketPipelineAudit.ts:252`
 - `src/services/misconceptionService.test.ts:114`
 - `src/services/misconceptionService.test.ts:149`
-- `src/services/weaknessSpine.ts:445`
+- `src/services/weaknessSpine.ts:460`
 
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `logMisconception` (function) — 54 call sites
-- `src/components/Coach/CoachGameReview.tsx:2345`
+- `src/components/Coach/CoachGameReview.tsx:2348`
 - `src/components/Coach/FundamentalsPage.test.tsx:92`
 - `src/components/Coach/FundamentalsPage.test.tsx:129`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`
@@ -60,7 +59,7 @@
 - `src/components/Coach/FundamentalsPage.test.tsx:141`
 - `src/services/bucketPipelineAudit.test.ts:64`
 - `src/services/bucketPipelineAudit.test.ts:92`
-- `src/services/discussionPractice.ts:263`
+- `src/services/discussionPractice.ts:268`
 - `src/services/drillJoinDivergence.test.ts:46`
 - `src/services/drillJoinDivergence.test.ts:55`
 - `src/services/drillJoinDivergence.test.ts:62`
@@ -116,9 +115,11 @@
 - `src/services/misconceptionService.test.ts:142`
 - `src/services/misconceptionService.test.ts:146`
 
-### `hasMisconceptionsForGame` (function) — 2 call sites
-- `src/components/Coach/GameReviewWeaknessCapture.tsx:188`
-- `src/services/autoAnalyzeGame.ts:324`
+### `hasMisconceptionsForGame` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `hasCountedMisconceptionsForGame` (function) — 1 call site
+- `src/components/Coach/GameReviewWeaknessCapture.tsx:152`
 
 ### `MisconceptionAggregate` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -139,7 +140,7 @@
 - `src/services/misconceptionService.test.ts:98`
 - `src/services/misconceptionService.test.ts:116`
 - `src/services/weaknessAnalyzer.ts:997`
-- `src/services/weaknessSpine.ts:843`
+- `src/services/weaknessSpine.ts:869`
 
 ### `recordTagDrillResult` (function) — 8 call sites
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx:246`

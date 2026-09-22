@@ -32,6 +32,31 @@ import { structurePlan } from './boardPlan';
 import { matchClauseKind, matchTacticPattern, boostFor, type WeaknessSignal } from './weaknessSignal';
 import { studentMomentBoost } from './studentMomentBoost';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
+import { attributeLiveFundamental, uciToSanAt, type LiveFundamentalReads } from './liveFundamental';
+
+/**
+ * THE ENGINE READS AROUND THE STUDENT'S LAST MOVE, raw (C4). White-POV
+ * centipawns and UCI lines exactly as the surface holds them; the composer
+ * attributes the neglected FUNDAMENTAL from them (`attributeLiveFundamental`)
+ * and hands the id to need — the same id Learn speaks, computed once.
+ */
+export interface LiveMoveReads extends Pick<LiveFundamentalReads, 'historySans' | 'bestPvUci' | 'playedPvUci' | 'evalBeforeWhiteCp' | 'evalAfterWhiteCp' | 'missedMate' | 'allowedMate'> {
+  /** The engine's best move at `fenBefore`, UCI, or null when no read landed. */
+  bestMoveUci: string | null;
+}
+
+/**
+ * The move just played and the board it was played on — plus the reads. `reads`
+ * is REQUIRED: `null` is the honest answer for a surface that never graded the
+ * move (a phase transition, "read this position"), and a new surface must say
+ * so rather than inherit a silent gap the way the live lane did until C4.
+ */
+export interface LastMoveInput {
+  fenBefore: string;
+  san: string;
+  cpLoss: number | null;
+  reads: LiveMoveReads | null;
+}
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard } from './conceptEngine';
 import { liveMethodBeatFor, habitIsOwed } from './methodBeat';
@@ -113,7 +138,7 @@ export interface PositionFactsInput {
    * withholds (unknown is not clean) while GREY still teaches, because grey
    * asks only whether the question was posed.
    */
-  lastMove?: { fenBefore: string; san: string; cpLoss: number | null };
+  lastMove?: LastMoveInput;
   /** THE STUDENT'S NEED AT THIS PLY (N2) — the second half of the student model,
    *  and the half the live surfaces never had.
    *
@@ -450,6 +475,30 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       };
     } catch { return { tags: [], playedCleanly: undefined }; }
   })();
+  // THE FUNDAMENTAL THE LAST MOVE NEGLECTED — computed HERE from the raw reads
+  // (C4), by the same computer Learn speaks from, so the id need weighs and
+  // the id the coach names are one id. `null` when the surface handed over no
+  // reads, no best move, or the move was clean — absent, never guessed.
+  const liveFundamentalId: string | null = (() => {
+    const lm = input.lastMove;
+    if (!lm?.reads) return null;
+    try {
+      const attrs = attributeLiveFundamental({
+        fenBefore: lm.fenBefore,
+        playedSan: lm.san,
+        studentColor: input.studentColor === 'w' ? 'white' : 'black',
+        bestSan: uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci),
+        historySans: lm.reads.historySans,
+        bestPvUci: lm.reads.bestPvUci,
+        playedPvUci: lm.reads.playedPvUci,
+        evalBeforeWhiteCp: lm.reads.evalBeforeWhiteCp,
+        evalAfterWhiteCp: lm.reads.evalAfterWhiteCp,
+        missedMate: lm.reads.missedMate,
+        allowedMate: lm.reads.allowedMate,
+      });
+      return attrs[0]?.id ?? null;
+    } catch { return null; }
+  })();
 
   // 🔴 THE PRE-GATE WAS BLIND TO THE STUDENT (fixed 2026-09-21; David: "the
   // algo/heatmap/decision computer all come together to decide when something
@@ -630,25 +679,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       clauseKind: needFor.clauseKind,
       conceptId: needFor.conceptId,
       /**
-       * 🚨 HONESTLY NULL, AND THIS IS A NAMED GAP, NOT A DEFAULT (2026-09-21).
-       *
-       * Review attributes the fundamental for every student ply BEFORE its
-       * selector runs (`coachFeatureService.attributeGameFundamentals`), so on
-       * that surface the exact hole this move broke reaches the need score and
-       * the ranker. The live lane cannot do the same YET, and the blocker is
-       * concrete rather than architectural: `attributePrinciples` needs the
-       * engine's best move as SAN at the PRE-move position, and Learn does not
-       * resolve one until `CoachTeachPage.tsx:9885` — about 1,300 lines after
-       * this composer runs in the same turn. The pre-move read itself
-       * (`preStudentRead`, :8151) IS in scope here, so closing this is a matter
-       * of hoisting that resolution, not of new computation.
-       *
-       * Passing `null` rather than inventing a second, weaker attribution is
-       * the point: a live attribution without `bestSan` would disagree with the
-       * sentence Learn actually speaks at :9907, which is the exact failure
-       * this whole wire exists to remove.
+       * THE EXACT FUNDAMENTAL THIS MOVE BROKE — attributed above from the raw
+       * reads the surface handed over (C4, 2026-09-22), by the ONE live
+       * computer Learn also speaks from, so the id the need score weighs and
+       * the sentence the coach says can never disagree. Review has done the
+       * same since `attributeGameFundamentals`; this is the live lane's half.
+       * `null` when the surface passed no reads (a phase transition, "read this
+       * position") — absent data reads as TEACH, never as silence.
        */
-      fundamentalId: null,
+      fundamentalId: liveFundamentalId,
       // THE HEAT MAP ON THE LIVE LANE. Tags and guard travel together — see
       // `posed` on the input.
       posedTags: posed.tags,

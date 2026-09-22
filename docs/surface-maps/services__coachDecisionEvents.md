@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**144 lines · 7 exports · 4 importers · 1 tests · 1 audits**
+**144 lines · 7 exports · 5 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@
 - `src/services/coachDecider.ts`
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/needScore.ts`
+- `src/services/positionFacts.liveFundamental.test.ts`
 
 ## Exports and every call site
 
@@ -34,10 +35,11 @@
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onNeedScore` (function) — 3 call sites
+### `onNeedScore` (function) — 4 call sites
 - `src/services/appAuditor.ts:2090`
 - `src/services/coachDecisionEmits.test.ts:104`
 - `src/services/coachDecisionEmits.test.ts:131`
+- `src/services/positionFacts.liveFundamental.test.ts:50`
 
 ### `emitNeedScore` (function) — 1 call site
 - `src/services/needScore.ts:474`
@@ -52,6 +54,7 @@
 ## Tests
 
 - `src/services/coachDecisionEmits.test.ts`
+- `src/services/positionFacts.liveFundamental.test.ts`
 
 ## Audits that reach it
 

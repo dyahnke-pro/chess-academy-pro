@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**230 lines · 9 exports · 30 importers · 15 tests · 1 audits**
+**262 lines · 9 exports · 32 importers · 17 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,6 +31,7 @@
 - `src/services/needScore.test.ts`
 - `src/services/needScore.ts`
 - `src/services/needWeaknessWire.test.ts`
+- `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/reviewFacetRank.test.ts`
@@ -40,6 +41,7 @@
 - `src/services/studentMomentBoost.ts`
 - `src/services/teachingSelector.ts`
 - `src/services/weaknessSignal.test.ts`
+- `src/services/weaknessSignalLoader.green.test.ts`
 - `src/services/weaknessSignalLoader.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/whyBestMove.ts`
@@ -49,7 +51,7 @@
 ### `WeaknessSignal` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildWeaknessSignals` (function) — 10 call sites
+### `buildWeaknessSignals` (function) — 14 call sites
 - `src/services/fundamentalReachesDecider.test.ts:81`
 - `src/services/fundamentalReachesDecider.test.ts:97`
 - `src/services/fundamentalReachesDecider.test.ts:123`
@@ -58,20 +60,24 @@
 - `src/services/weaknessSignal.test.ts:47`
 - `src/services/weaknessSignal.test.ts:134`
 - `src/services/weaknessSignal.test.ts:138`
-- `src/services/weaknessSignalLoader.ts:44`
+- `src/services/weaknessSignal.test.ts:180`
+- `src/services/weaknessSignal.test.ts:183`
+- `src/services/weaknessSignal.test.ts:190`
+- `src/services/weaknessSignal.test.ts:196`
+- `src/services/weaknessSignalLoader.ts:62`
 - `src/services/weaknessSpine.fundamentals.test.ts:116`
 
 ### `MAX_WEAKNESS_BOOST` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `boostFor` (function) — 14 call sites
+### `boostFor` (function) — 25 call sites
 - `src/services/coachDecider.ts:70`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/needScore.ts:301`
 - `src/services/needScore.ts:315`
-- `src/services/positionFacts.ts:783`
-- `src/services/positionFacts.ts:805`
+- `src/services/positionFacts.ts:822`
+- `src/services/positionFacts.ts:844`
 - `src/services/reviewFacetRank.ts:145`
 - `src/services/studentMomentBoost.ts:119`
 - `src/services/teachingSelector.ts:170`
@@ -79,6 +85,17 @@
 - `src/services/weaknessSignal.test.ts:57`
 - `src/services/weaknessSignal.test.ts:58`
 - `src/services/weaknessSignal.test.ts:64`
+- `src/services/weaknessSignal.test.ts:159`
+- `src/services/weaknessSignal.test.ts:160`
+- `src/services/weaknessSignal.test.ts:166`
+- `src/services/weaknessSignal.test.ts:172`
+- `src/services/weaknessSignal.test.ts:173`
+- `src/services/weaknessSignal.test.ts:182`
+- `src/services/weaknessSignal.test.ts:185`
+- `src/services/weaknessSignalLoader.green.test.ts:58`
+- `src/services/weaknessSignalLoader.green.test.ts:64`
+- `src/services/weaknessSignalLoader.green.test.ts:71`
+- `src/services/weaknessSignalLoader.green.test.ts:81`
 
 ### `clauseKindBucket` (function) — 1 call site
 - `src/services/needScore.ts:358`
@@ -87,7 +104,7 @@
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
 - `src/services/needScore.ts:312`
-- `src/services/positionFacts.ts:749`
+- `src/services/positionFacts.ts:788`
 - `src/services/reviewFacetRank.ts:144`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
@@ -100,7 +117,7 @@
 ### `matchTacticPattern` (function) — 9 call sites
 - `src/services/liveTacticsContext.ts:496`
 - `src/services/needScore.ts:310`
-- `src/services/positionFacts.ts:748`
+- `src/services/positionFacts.ts:787`
 - `src/services/teachingSelector.ts:169`
 - `src/services/teachingSelector.ts:305`
 - `src/services/weaknessSignal.test.ts:100`
@@ -140,11 +157,13 @@
 - `src/services/needCoverage.report.test.ts`
 - `src/services/needScore.test.ts`
 - `src/services/needWeaknessWire.test.ts`
+- `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/reviewForesight.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/weaknessSignal.test.ts`
+- `src/services/weaknessSignalLoader.green.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 
 ## Audits that reach it

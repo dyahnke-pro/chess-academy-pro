@@ -90,7 +90,7 @@
 - `src/services/tacticVocabulary.test.ts:73`
 - `src/services/tacticVocabulary.test.ts:86`
 - `src/services/tacticVocabulary.test.ts:87`
-- `src/services/weaknessSignal.ts:209`
+- `src/services/weaknessSignal.ts:241`
 
 ### `weaknessClusterForTactic` (function) — 1 call site
 - `src/services/tacticVocabulary.test.ts:88`

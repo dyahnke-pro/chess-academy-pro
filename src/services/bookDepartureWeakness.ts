@@ -150,6 +150,8 @@ export function aggregateBookDepartures(
       gameIds: [...new Set(group.map((g) => g.gameId).filter((id) => !!id))],
       // A departure is detected from the game; nothing records drilling it.
       lastDrilledAt: null,
+      // Leaving book is a KNOWLEDGE signal; no capability computer answers it.
+      capabilityTag: null,
       fen: group[0].bookFen,
     });
   }

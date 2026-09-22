@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/drillReasons.test.ts:37`
 
 ### `hintBeat` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11029`
+- `src/components/Coach/CoachTeachPage.tsx:11069`
 - `src/services/drillReasons.test.ts:44`
 - `src/services/drillReasons.test.ts:45`
 - `src/services/drillReasons.test.ts:46`

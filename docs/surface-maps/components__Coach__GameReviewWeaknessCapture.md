@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**262 lines · 3 exports · 3 importers · 3 tests · 1 audits**
+**219 lines · 2 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,23 +21,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `buildBlunders` (function) — 1 call site
 - `src/services/fundamentalsRecordLoop.integration.test.ts:69`
 
-### `buildCapabilityPlies` (function) — 6 call sites
-- `src/services/capabilityEvidence.test.ts:172`
-- `src/services/capabilityEvidence.test.ts:199`
-- `src/services/capabilityEvidence.test.ts:220`
-- `src/services/promptedFind.wire.test.ts:25`
-- `src/services/promptedFind.wire.test.ts:32`
-- `src/services/promptedFind.wire.test.ts:36`
-
 ### `GameReviewWeaknessCapture` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
-- `src/services/capabilityEvidence.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
 - `src/services/promptedFind.wire.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-play-full.mjs`

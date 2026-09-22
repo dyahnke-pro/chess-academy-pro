@@ -130,9 +130,9 @@
 - `src/components/Coach/CoachGamePage.tsx:406`
 - `src/components/Coach/CoachTeachPage.tsx:7186`
 - `src/components/Coach/CoachTeachPage.tsx:7195`
-- `src/components/Coach/CoachTeachPage.tsx:8494`
-- `src/components/Coach/CoachTeachPage.tsx:10916`
-- `src/components/Coach/CoachTeachPage.tsx:12089`
+- `src/components/Coach/CoachTeachPage.tsx:8501`
+- `src/components/Coach/CoachTeachPage.tsx:10956`
+- `src/components/Coach/CoachTeachPage.tsx:12129`
 - `src/services/coachGameEngine.test.ts:586`
 - `src/services/coachGameEngine.test.ts:592`
 - `src/services/coachGameEngine.test.ts:593`

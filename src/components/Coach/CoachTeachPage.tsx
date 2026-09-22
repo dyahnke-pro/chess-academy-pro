@@ -8458,6 +8458,12 @@ export function CoachTeachPage(): JSX.Element {
         // engine read is White-POV centipawns; `move.history` includes this
         // move, so its index is the ply.
         if (grade) {
+          // The pre-move fan's own line, minus its first move, is the
+          // continuation after the BEST move — filed only when the line really
+          // starts with that move (C3). The punishing line after the PLAYED
+          // move arrives with the mid-turn read and is patched in there.
+          const bestLine = preStudentRead.topLines?.[0]?.moves ?? [];
+          const afterBest = preStudentRead.bestMove && bestLine[0] === preStudentRead.bestMove ? bestLine.slice(1) : [];
           liveGradesRef.current.set(move.history.length - 1, {
             ply: move.history.length - 1,
             san: move.san,
@@ -8465,6 +8471,7 @@ export function CoachTeachPage(): JSX.Element {
             bestMoveUci: preStudentRead.bestMove || null,
             bestMoveEvalCp: preStudentRead.evaluation,
             cpLossCp: grade.cpLossCp,
+            pv: { afterPlayed: [], afterBest },
           });
         }
         if (grade?.worthSpeaking && grade.clause) {
@@ -8844,6 +8851,10 @@ export function CoachTeachPage(): JSX.Element {
                   // can trace, so the doubt resolves toward forgetting.
                   standingRef.current.observe(fullmoveOf(probe.fen()));
                   if (studentBest?.topLines?.length) {
+                    // The post-move read was queued behind the warm probe this
+                    // lane already awaited, so this resolves in order — no
+                    // second search, no new engine time (C4).
+                    const midReadForFacts = await midTurnRead;
                     const pf = await computePositionFacts({
                       // The student asked for this lesson — every taught position
                       // is a beat, so importance ranks it and never mutes it.
@@ -8863,7 +8874,25 @@ export function CoachTeachPage(): JSX.Element {
                       // opponent's posed capabilities under the student.
                       // `cpLoss: null` means this ply could not be graded, so
                       // green withholds while grey still teaches.
-                      lastMove: { fenBefore, san: move.san, cpLoss: studentCpLoss },
+                      // THE RAW READS ride along (C4): the pre-move fan the grade
+                      // came from and the post-move read (queue-ordered behind the
+                      // warm probe, already in flight) — so the composer attributes
+                      // the neglected FUNDAMENTAL and need weighs THIS student's
+                      // record of it. `reads: null` when no pre-move read landed:
+                      // absent, never a guess.
+                      lastMove: {
+                        fenBefore, san: move.san, cpLoss: studentCpLoss,
+                        reads: preStudentRead ? {
+                          historySans: move.history,
+                          bestMoveUci: preStudentRead.bestMove || null,
+                          bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
+                          playedPvUci: midReadForFacts?.topLines?.[0]?.moves ?? [],
+                          evalBeforeWhiteCp: preStudentRead.isMate ? undefined : preStudentRead.evaluation,
+                          evalAfterWhiteCp: midReadForFacts && !midReadForFacts.isMate ? midReadForFacts.evaluation : undefined,
+                          missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
+                          allowedMate: midReadForFacts?.isMate ? midReadForFacts.mateIn : null,
+                        } : null,
+                      },
                       // The CONTEXT — the composer derives the ply from the FEN
                       // and owns the mover guard, so this surface decides none
                       // of it (§G4.5.15, and `surfaceContract.scan` enforces it).
@@ -10091,6 +10120,14 @@ export function CoachTeachPage(): JSX.Element {
                 // and the coach then moved from. `uciSanAt` turns either side's
                 // best move into something speakable.
                 const mid = await midTurnRead;
+                // THE PUNISHING LINE lands on the live grade now that the
+                // post-move read is in (C3): the saved Learn game then carries
+                // the same `pv` shape the sweep persists, and the record path
+                // can attribute the PV-gated fundamentals on it.
+                if (mid?.topLines?.[0]?.moves?.length) {
+                  const g = liveGradesRef.current.get(move.history.length - 1);
+                  if (g && g.san === move.san) g.pv = { afterPlayed: [...mid.topLines[0].moves], afterBest: g.pv?.afterBest ?? [] };
+                }
                 const uciSanAt = (fen: string, uci: string | null | undefined): string | null => {
                   if (!uci || uci.length < 4) return null;
                   try {
@@ -10169,6 +10206,9 @@ export function CoachTeachPage(): JSX.Element {
                     // fundamental, the backward-look speaks alone, unchanged.
                     const fundamental = learnFundamentalVerdict({
                       fenBefore,
+                      // THIS game's id, so its own live-captured rows are never
+                      // counted as a prior game (C4) — the spine reloads mid-game.
+                      currentGameId: learnMemRef.current.gameId,
                       historySans: move.history,
                       playedSan: move.san,
                       bestSan: studentBestSan ?? null,

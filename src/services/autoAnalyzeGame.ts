@@ -12,7 +12,8 @@ import { recordCapabilityEvidence } from './capabilityEvidence';
 import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
-import { hasMisconceptionsForGame } from './misconceptionService';
+import { classifyMisconception } from './misconceptionClassifier';
+import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import {
   replayPgnToFens,
   determinePlayerColor,
@@ -25,7 +26,8 @@ import { classifyPhase } from './gamePhaseService';
 import { pvUciToSan } from './principleAttribution';
 import { isMateEval } from './engineConstants';
 import { isFixtureGame } from './fixtureGames';
-import type { MistakePuzzle, MoveAnnotation } from '../types';
+import { isMisconceptionTagId } from '../data/misconceptionTags';
+import type { GameRecord, MisconceptionTagRecord, MistakePuzzle, MoveAnnotation } from '../types';
 
 export interface BlunderForAnalysis {
   /** Position BEFORE the move (FEN). */
@@ -81,7 +83,15 @@ export interface AutoAnalyzeResult {
   /** Capabilities RECORDED as held from the same game. Reported so a caller —
    *  or a gate — can prove the positive half fired rather than assume it. */
   capabilitiesHeld: number;
+  /** Rows written without a best move that a later pass RE-ATTRIBUTED once
+   *  the deep dive landed one (C2). 0 on a first pass. */
+  reattributed: number;
+  /** Batch-written (`counted: false`) rows this pass UPGRADED to counted
+   *  because the student reviewed the game (C1). 0 outside review. */
+  countedUpgraded: number;
 }
+
+const NO_RESULT: AutoAnalyzeResult = { classified: 0, logged: 0, capabilitiesHeld: 0, reattributed: 0, countedUpgraded: 0 };
 
 function cpToWords(cpLoss?: number): string | undefined {
   if (cpLoss === undefined) return undefined;
@@ -119,6 +129,12 @@ export async function autoAnalyzeBlunders(
       },
       source: 'auto-analysis',
       shouldCount: opts.learned,
+      // NO BEST MOVE → NOT A VERDICT (C2). Without `bestSan` the attributor
+      // never runs and the classifier can only read the board after the move,
+      // so the tag is the best it could do and is marked for re-attribution
+      // when the deep dive lands the engine's move. A `%eval` import is exactly
+      // this shape; it used to latch `other` for good.
+      attributionPending: b.bestSan === undefined,
       context: {
         fen: b.fen,
         playedSan: b.playedSan,
@@ -174,7 +190,7 @@ export async function autoAnalyzeBlunders(
       });
     }
   }
-  return { classified, logged, capabilitiesHeld };
+  return { classified, logged, capabilitiesHeld, reattributed: 0, countedUpgraded: 0 };
 }
 
 /** Populate the Thinking-Errors bucket from a game's ALREADY-COMPUTED
@@ -195,13 +211,78 @@ export async function autoAnalyzeBlunders(
  *  error lands in the same weakness-puzzle pool My Mistakes / My Weaknesses
  *  drill (David 2026-06-11: "all of these need to go into the my weaknesses
  *  puzzles"). The puzzle persistence is idempotent by position (so it runs every
- *  time and back-fills already-tagged games); only the misconception LOGGING is
- *  once-per-game via `hasMisconceptionsForGame`. */
+ *  time and back-fills already-tagged games); the misconception LOGGING is
+ *  once-per-game, and a later pass owes the game only what a first pass could
+ *  not do (see `SweepOptions`).
+ *
+ *  🔒 THE ONE WRITER (C1, C2 — WO-STANDARD-01, 2026-09-22). This sweep is the
+ *  only thing that writes a game's record; the review page's capture button
+ *  routes here too. It used to race the component's `learned: true` +
+ *  `capabilityPlies` capture and always won, so a reviewed imported game got
+ *  `counted: false` rows, no held rows, and the button read "already" — green
+ *  was unreachable for every import-and-review student. And once it had
+ *  written, `hasMisconceptionsForGame` returned early forever, so a `%eval`
+ *  import tagged before its deep dive (no best move → `other`) was never
+ *  re-attributed when the best move landed. */
+export interface SweepOptions {
+  /** The STUDENT IS REVIEWING this game (the review page's mount and its
+   *  capture button). Rows COUNT toward the weakness profile, batch-written
+   *  `counted: false` rows are upgraded, and the positive half — every clean
+   *  ply the board posed a question on — is recorded as capability evidence
+   *  (once per game). The batch sweep never passes this: a library import is
+   *  not a decision about which lines the student knows. */
+  reviewed?: boolean;
+}
+
+/** Which username identifies the student in this game's headers — the
+ *  profile's, per source; coach games infer the seat from "Stockfish Bot". */
+function usernameForGame(game: GameRecord): string | undefined {
+  const prefs = useAppStore.getState().activeProfile?.preferences;
+  return game.source === 'chesscom' ? prefs?.chessComUsername
+    : game.source === 'lichess' ? prefs?.lichessUsername
+    : undefined;
+}
+
+/**
+ * THE MIRROR OF THE BLUNDER BUILDER — the plies it throws away, from a game's
+ * ANNOTATIONS. The one builder for the positive half on the record path (the
+ * component-shaped copy in `GameReviewWeaknessCapture` is gone; two mirrors of
+ * one filter drift). A ply that was not a mistake is handed to
+ * `capabilitiesShown`, which decides whether anything was DEMONSTRATED — the
+ * board must have posed the question and the move must have answered it —
+ * so most plies yield nothing and that is correct. `cpLoss` is Stockfish's
+ * own number or null (an unmeasurable ply is never read as clean).
+ */
+export function capabilityPliesFromAnnotations(
+  annotations: readonly MoveAnnotation[],
+  playerColor: 'white' | 'black',
+  fens: readonly string[],
+  /** 1-based plies the coach announced first (`GameRecord.promptedPlies`). */
+  promptedPlies: readonly number[] = [],
+): CapabilityPly[] {
+  const prompted = new Set(promptedPlies);
+  const out: CapabilityPly[] = [];
+  for (const ann of annotations) {
+    if (ann.color !== playerColor) continue;
+    if (ann.classification === 'blunder' || ann.classification === 'mistake') continue;
+    const fenIndex = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
+    if (fenIndex < 0 || fenIndex >= fens.length) continue;
+    out.push({
+      fenBefore: fens[fenIndex],
+      playedSan: ann.san,
+      cpLoss: measuredCpLoss(ann),
+      prompted: prompted.has(fenIndex + 1),
+    });
+  }
+  return out;
+}
+
 export async function autoAnalyzeGameMisconceptions(
   gameId: string,
   username?: string,
+  opts: SweepOptions = {},
 ): Promise<AutoAnalyzeResult> {
-  const empty: AutoAnalyzeResult = { classified: 0, logged: 0, capabilitiesHeld: 0 };
+  const empty = NO_RESULT;
 
   const game = await db.games.get(gameId);
   if (!game) return empty;
@@ -211,7 +292,7 @@ export async function autoAnalyzeGameMisconceptions(
   if (isFixtureGame(game)) return empty;
   const annotations = game.annotations ?? [];
   if (annotations.length === 0) return empty;
-  const playerColor = determinePlayerColor(game, username);
+  const playerColor = determinePlayerColor(game, username ?? usernameForGame(game));
   if (!playerColor) return empty;
   const fens = replayPgnToFens(game.pgn);
   if (fens.length < 2) return empty;
@@ -296,7 +377,13 @@ export async function autoAnalyzeGameMisconceptions(
         : {}),
     });
   }
-  if (blunders.length === 0) return empty;
+  if (blunders.length === 0) {
+    // Nothing to file — but a REVIEWED clean game still owes its positive half:
+    // forty clean plies answer forty questions, and "they didn't blunder" only
+    // becomes evidence once `capabilitiesShown` says the board asked.
+    if (!opts.reviewed) return empty;
+    return { ...empty, capabilitiesHeld: await recordPositiveHalf(game, playerColor, fens) };
+  }
 
   // Persist a drillable mistakePuzzle for each blunder — incl. the positional
   // ones the tactical gate drops — deduped by position against this game's
@@ -320,13 +407,124 @@ export async function autoAnalyzeGameMisconceptions(
   // delayed snapshot is fine.
   void import('./studentDossier').then((m) => m.refreshStudentDossierThrottled()).catch(() => undefined);
 
-  // Log the misconception TALLY once per game (bulk / review-walk / live).
-  if (await hasMisconceptionsForGame(gameId)) return empty;
-  return autoAnalyzeBlunders(blunders, {
-    openingId: game.openingId ?? undefined,
-    sourceGameId: gameId,
-    learned: false,
-  });
+  const existing = await db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
+  if (existing.length === 0) {
+    // FIRST PASS over this game: the tally, and — when the student is
+    // reviewing it — the positive half through the SAME recorder loop. Live
+    // play may already have recorded that half under this game id; then it
+    // is not recorded twice.
+    const positive = opts.reviewed && !(await hasCapabilityEvidenceForGame(gameId))
+      ? capabilityPliesFromAnnotations(annotations, playerColor, fens, game.promptedPlies ?? [])
+      : undefined;
+    return autoAnalyzeBlunders(blunders, {
+      openingId: game.openingId ?? undefined,
+      sourceGameId: gameId,
+      learned: !!opts.reviewed,
+      ...(positive ? { capabilityPlies: positive, playerColor } : {}),
+    });
+  }
+
+  // A LATER PASS. The tally exists and is never written twice; what this pass
+  // may still owe the game is exactly what the first pass could not do:
+  //  • rows tagged with no best move, now that the deep dive landed one (C2);
+  //  • the count-against upgrade and the positive half, now that the student
+  //    has reviewed the game (C1).
+  const reattributed = await reattributePending(existing, blunders, gameId);
+  let countedUpgraded = 0;
+  let capabilitiesHeld = 0;
+  if (opts.reviewed) {
+    countedUpgraded = await upgradeToCounted(existing);
+    capabilitiesHeld = await recordPositiveHalf(game, playerColor, fens);
+  }
+  if (reattributed > 0 || countedUpgraded > 0) emitWeaknessModelChanged();
+  return { ...empty, reattributed, countedUpgraded, capabilitiesHeld };
+}
+
+async function hasCapabilityEvidenceForGame(gameId: string): Promise<boolean> {
+  return (await db.capabilityEvidence.filter((r) => r.sourceGameId === gameId).count()) > 0;
+}
+
+/** The positive half of a reviewed game, ONCE per game, through the one
+ *  recorder loop in `autoAnalyzeBlunders` (no slips are passed, only plies). */
+async function recordPositiveHalf(game: GameRecord, playerColor: 'white' | 'black', fens: readonly string[]): Promise<number> {
+  if (await hasCapabilityEvidenceForGame(game.id)) return 0;
+  const plies = capabilityPliesFromAnnotations(game.annotations ?? [], playerColor, fens, game.promptedPlies ?? []);
+  if (plies.length === 0) return 0;
+  const r = await autoAnalyzeBlunders([], { sourceGameId: game.id, learned: true, capabilityPlies: plies, playerColor });
+  return r.capabilitiesHeld;
+}
+
+/** Batch-written display-only rows become COUNTED when the student reviews
+ *  the game — the review IS the "I know this line" the count-against gate
+ *  asks for, exactly as the old capture button claimed for itself. */
+async function upgradeToCounted(rows: readonly MisconceptionTagRecord[]): Promise<number> {
+  let n = 0;
+  for (const row of rows) {
+    if (row.counted !== false) continue;
+    await db.misconceptionTags.update(row.id, { counted: true });
+    n += 1;
+  }
+  return n;
+}
+
+/**
+ * RE-ATTRIBUTE the rows that were tagged without a best move, now that the
+ * annotation carries one (C2). The classifier is run again with the FULL
+ * input — best move, history, engine lines, evals — and its verdict replaces
+ * the provisional tag; the row keeps its id, status, spacing and provenance.
+ * A row whose annotation still has no best move stays pending. The flag is
+ * removed (not set false) so "attributed" stays one shape: absent.
+ */
+async function reattributePending(
+  rows: readonly MisconceptionTagRecord[],
+  blunders: readonly BlunderForAnalysis[],
+  gameId: string,
+): Promise<number> {
+  const changes: Array<{ id: string; from: string; to: string; fundamentalId?: string }> = [];
+  for (const row of rows) {
+    if (row.attributionPending !== true) continue;
+    const b = blunders.find((x) => x.fen === row.fen && x.playedSan === row.playedSan);
+    if (!b?.bestSan) continue;
+    const cls = await classifyMisconception({
+      fen: b.fen,
+      playedSan: b.playedSan,
+      bestSan: b.bestSan,
+      evalSummary: cpToWords(b.cpLoss),
+      gamePhase: b.gamePhase,
+      ...(b.historySans ? { historySans: b.historySans } : {}),
+      ...(b.pvAfterPlayed ? { pvAfterPlayed: b.pvAfterPlayed } : {}),
+      ...(b.pvAfterBest ? { pvAfterBest: b.pvAfterBest } : {}),
+      ...(b.evalBefore !== undefined ? { evalBefore: b.evalBefore } : {}),
+      ...(b.evalAfterPlayed !== undefined ? { evalAfterPlayed: b.evalAfterPlayed } : {}),
+    });
+    // The full input was available, so whatever came out IS the verdict: the
+    // flag clears either way. The tag moves only when the classifier named
+    // something real.
+    const named = cls && cls.tag !== 'none' && isMisconceptionTagId(cls.tag);
+    await db.misconceptionTags.update(row.id, {
+      attributionPending: undefined,
+      bestSan: b.bestSan,
+      ...(named ? {
+        tag: cls.tag,
+        fundamentalId: cls.fundamentalId,
+        customLabel: cls.tag === 'other' ? cls.customLabel?.trim() : undefined,
+        coachNote: cls.coachNote?.trim() || undefined,
+      } : {}),
+    });
+    if (named) changes.push({ id: row.id, from: row.tag, to: cls.tag, fundamentalId: cls.fundamentalId });
+  }
+  if (changes.length > 0) {
+    // The decision is observable, not only its effect: an audit can read which
+    // provisional tags moved where once the engine's move arrived.
+    void logAppAudit({
+      kind: 'misconception-captured',
+      category: 'subsystem',
+      source: 'autoAnalyzeGame.reattributePending',
+      summary: `re-attributed ${changes.length} row(s) for ${gameId} once the best move landed: ${changes.map((c) => `${c.from}→${c.to}`).join(', ')}`,
+      details: JSON.stringify({ gameId, changes }),
+    });
+  }
+  return changes.length;
 }
 
 /** What the move actually cost, in centipawns, from the MOVER's perspective —
@@ -400,7 +598,7 @@ export async function backfillMisconceptionsFromAnalyzedGames(
   const flagKey = 'misconceptions_backfill_v2';
   if (!opts?.force) {
     const done = await db.meta.get(flagKey);
-    if (done?.value === 'true') return { classified: 0, logged: 0, capabilitiesHeld: 0 };
+    if (done?.value === 'true') return NO_RESULT;
   }
 
   const prefs = useAppStore.getState().activeProfile?.preferences;
@@ -435,5 +633,5 @@ export async function backfillMisconceptionsFromAnalyzedGames(
     source: 'autoAnalyzeGame.backfillMisconceptionsFromAnalyzedGames',
     summary: `backfill swept ${games.length} games — classified=${classified} logged=${logged}`,
   });
-  return { classified, logged, capabilitiesHeld: 0 };
+  return { ...NO_RESULT, classified, logged };
 }
