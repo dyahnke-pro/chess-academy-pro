@@ -23,13 +23,15 @@ import { decide } from './coachDecider';
 import type { ImportanceSignals } from './narrationImportance';
 
 // A moment that comfortably earns voice, so the ONLY thing under test below is
-// the need gate — not importance.
+// the need gate — not importance. It is a CRITICAL decision plus a teaching
+// beat, deliberately NOT a blunder / hang / mate: those tiers are the board,
+// not a lesson, and since B5 (2026-09-22) need may not veto them at all
+// (`coachDecider.test.ts` pins that half; this file pins the gated half).
 const LOUD: ImportanceSignals = {
   decision: { severity: 'critical', gapCp: 300 },
-  cpLossCp: 220,
-  threatNet: 3,
+  cpLossCp: null,
+  threatNet: 0,
   teachingBeat: true,
-  standingDanger: true,
   evalCpWhitePov: 20,
   wdl: null,
 };
@@ -105,11 +107,14 @@ const PLAYED_IT_RIGHT_FIVE_TIMES: StudentNeedContext = {
 };
 
 const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [], mate: null });
-// A position where the coach demonstrably HAS something to say — the same
-// middlegame fixture the composer's own suite uses to prove the method beat
-// fires. If this ever falls silent for an unrelated reason the "need silenced
-// it" assertions below would pass vacuously, so the first test pins that.
-const LOUD_FEN = 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14';
+// A position where the coach demonstrably HAS something to say on a NEED-GATED
+// tier: a knight fork the student can set up in two quiet moves (`teaching`,
+// rank 45). It used to be the knight-hangs-on-e5 fixture, which is a
+// `must-defend` — and since B5 (2026-09-22) need may not veto a live hang, so
+// that fixture could no longer test the gate. If this ever falls silent for an
+// unrelated reason the "need silenced it" assertions below would pass
+// vacuously, so the first test pins that.
+const LOUD_FEN = 'r1bqkb1r/pp3ppp/2np1n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 14';
 const flat = {
   topLines: [line(1, 20), line(2, 15), line(3, 10)],
   evaluation: 20, isMate: false, mateIn: null, seldepth: 20, depth: 18,
