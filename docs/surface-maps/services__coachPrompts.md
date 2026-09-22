@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1275 lines · 29 exports · 11 importers · 6 tests · 1 audits**
+**1232 lines · 28 exports · 9 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1180) — names `coachPrompts`
-- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3667) — names `coachPrompts`
+- **🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").** (CLAUDE.md:3690) — names `coachPrompts`
 
 ## Who calls in
 
@@ -17,8 +17,6 @@
 - `src/coach/envelope.ts`
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/hooks/useHintSystem.test.ts`
-- `src/hooks/usePositionNarration.test.ts`
-- `src/hooks/usePositionNarration.ts`
 - `src/services/coachAgentRunner.ts`
 - `src/services/coachApi.ts`
 - `src/services/coachChatService.ts`
@@ -28,7 +26,7 @@
 ## Exports and every call site
 
 ### `getVerbosityInstruction` (function) — 7 call sites
-- `src/services/coachApi.ts:860`
+- `src/services/coachApi.ts:861`
 - `src/services/coachPrompts.verbosity.test.ts:23`
 - `src/services/coachPrompts.verbosity.test.ts:24`
 - `src/services/coachPrompts.verbosity.test.ts:26`
@@ -55,9 +53,6 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `POSITION_ANALYSIS_ADDITION` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `POSITION_NARRATION_ADDITION` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `BLUNDER_ALERT_ADDITION` (const) — 0 call sites
@@ -98,8 +93,7 @@
 - `src/services/coachPrompts.test.ts:190`
 - `src/services/coachPrompts.test.ts:193`
 
-### `buildChessContextMessage` (function) — 11 call sites
-- `src/hooks/usePositionNarration.ts:299`
+### `buildChessContextMessage` (function) — 10 call sites
 - `src/services/coachPrompts.test.ts:210`
 - `src/services/coachPrompts.test.ts:225`
 - `src/services/coachPrompts.test.ts:242`
@@ -143,7 +137,6 @@
 - `src/components/Coach/CoachGamePage.test.tsx`
 - `src/components/Coach/CoachGameReview.test.tsx`
 - `src/hooks/useHintSystem.test.ts`
-- `src/hooks/usePositionNarration.test.ts`
 - `src/services/coachPrompts.test.ts`
 - `src/services/coachPrompts.verbosity.test.ts`
 

@@ -2507,10 +2507,17 @@ and structure. The LLM should NEVER be asked to invent or validate
 chess structure when the DB already has it. Concretely:
 
 - Walkthroughs: spine + branch moves come from the DB. chess.js
-  computes FENs deterministically. The LLM is called ONCE per
-  opening to write narration text per move (intro, outro, ideas,
-  branch-extension ideas) — that's it. See
-  `generateOpeningFromDbNarration` in `src/services/openingGenerator.ts`.
+  computes FENs deterministically. 🔴 **CORRECTED 2026-09-22 (WO-STANDARD-01
+  F1): this bullet used to say "the LLM is called ONCE per opening to write
+  narration text per move (intro, outro, ideas, branch-extension ideas)".
+  That call is DELETED, not annotated.** The per-ply beat, the branch
+  teaser, the extension beats and the Brief cue are COMPUTED from the board
+  (`computedPlyBeat` → `buildReviewMoveBriefing` in the teach register,
+  `narrateContinuationMove` for the cue); the intro is the selector's
+  computed thesis (`renderThesis`); the corpus note still LEADS each beat.
+  The only phrasing seam is `voiceFacts` (`preferRaw` today, so the lesson
+  is identical with the provider dead — `openingGenerator.computedBeats.test`).
+  See `generateOpeningFromDbNarration` in `src/services/openingGenerator.ts`.
 - This pattern was hard-won (build a48b721, 2026-05-08): the prior
   approach asked the LLM to emit the entire WalkthroughTree as
   free-form JSON and we spent hours patching parse errors / illegal
@@ -3027,7 +3034,9 @@ spine; don't reinvent it.
 **Architecture spine:**
 - **DB-narration is the only generation path** for walkthroughs.
   `generateOpeningFromDbNarration` is the entry point. The LLM never
-  emits move sequences, FENs, or schema structure — only prose.
+  emits move sequences, FENs, or schema structure — and since 2026-09-22
+  it authors no prose there either: every beat is computed
+  (`computedPlyBeat`) and only phrased through `voiceFacts`.
   `chess.js` computes FENs from DB-sourced SANs deterministically.
 - **Provider routing: DeepSeek-first, Anthropic fallback.** Flipped
   to DeepSeek-primary 2026-05-19 (David's call: "switch to deepseek

@@ -27,7 +27,7 @@ import { perspectiveRule } from './perspectiveRule';
 import { buildExplorerTeachLine } from './explorerTeachLine';
 import puzzleData from '../data/puzzles.json';
 import { extractMentionedSquares, MAX_CANDIDATE_HIGHLIGHTS, type LineMove } from './arrowEngine';
-import { getCoachChatResponse, getCoachStructuredResponse } from './coachApi';
+import { getCoachChatResponse, getCoachStructuredResponse, voiceFacts } from './coachApi';
 import {
   validateMoveLegality,
   validateTreeMoveLegality,
@@ -47,7 +47,6 @@ import {
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates';
-import { materialBalance } from './materialClaimValidator';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
@@ -65,7 +64,7 @@ import { refutedAlternative, candidatesFromMasters } from './refutedAlternative'
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { coldStudent } from './needScore';
-import { selectTeaching, summarizeTeaching, pliesFromSans, type SelectorPly } from './teachingSelector';
+import { selectTeaching, summarizeTeaching, renderThesis, pliesFromSans, type SelectorPly } from './teachingSelector';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
 import type {
@@ -394,7 +393,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // and no arrows on spoken-form moves forever. ONE bump for both changes — a
 // gen-rev bump regenerates every lesson's prose into new strings, which miss the
 // /api/tts clip cache and re-synthesise, so they are batched per deploy.
-const WALKTHROUGH_GEN_REV = '2026-09-15-refuted-alternative-need-selector';
+const WALKTHROUGH_GEN_REV = '2026-09-22-computed-beats-g0';
 
 export async function getCachedOpening(
   name: string,
@@ -1664,95 +1663,47 @@ export interface TeachEntryOverride {
   moves: string[];
 }
 
-/** Schema for the narration-only LLM call. Inverts the gen
- *  architecture: code provides the move sequence (legal by DB
- *  construction) and the FENs (correct by chess.js replay); the LLM
- *  only writes one short sentence per move plus intro/outro.
+/** THE COMPUTED BEAT for one ply — G0 (WO-STANDARD-01 F1, 2026-09-22).
  *
- *  v2 extension: when the canonical opening has sibling DB entries
- *  that extend its PGN (e.g. Najdorf has English Attack, Adams
- *  Attack, Bg5 Main Line, Opocensky etc), code surfaces them as
- *  fork branches at the end of the spine and asks the LLM for a
- *  one-sentence teaser idea per branch. */
-const NARRATION_SCHEMA: Record<string, unknown> = {
-  type: 'object',
-  required: ['intro', 'outro', 'ideas'],
-  properties: {
-    intro: { type: 'string' },
-    shortIntro: { type: 'string' },
-    outro: { type: 'string' },
-    ideas: {
-      type: 'array',
-      items: {
-        type: 'object',
-        required: ['text'],
-        properties: {
-          text: { type: 'string' },
-          shortText: { type: 'string' },
-          // No `arrows` field — lead-the-eye arrows are computed in
-          // code (computeLeadEyeArrows), never decided by the LLM.
-        },
-      },
-    },
-    branchIdeas: { type: 'array', items: { type: 'string' } },
-    shortBranchIdeas: { type: 'array', items: { type: 'string' } },
-    // For each fork branch, ideas for the EXTENSION moves that walk
-    // the line into middlegame. Outer index matches branches[]; inner
-    // index matches branches[i].extensionMoves[]. User: "ALL lines
-    // extend to here [middlegame]." Without this every branch was
-    // just the one divergent move, dropping the student off at the
-    // moment the variation gets named with no idea what to play next.
-    branchExtensionIdeas: {
-      type: 'array',
-      items: {
-        type: 'array',
-        items: {
-          type: 'object',
-          required: ['text'],
-          properties: {
-            text: { type: 'string' },
-            shortText: { type: 'string' },
-            // No `arrows` — computed in code (computeLeadEyeArrows).
-          },
-        },
-      },
-    },
-  },
-};
-
-interface NarrationIdea {
-  text: string;
-  shortText?: string;
+ *  Until this date the per-ply idea, the intro, the branch teasers and the
+ *  extension ideas were AUTHORED by the model: one structured call
+ *  (`emit_walkthrough_narration`, 65k tokens, retried at 131k when the
+ *  payload was cut short), fed a HOUSE VOICE prompt, a material ledger and
+ *  the lesson-level teaching block, and baked into the cached tree forever.
+ *  That was the highest-traffic teaching content in the app deciding its own
+ *  chess. It is now `buildReviewMoveBriefing` in the present-tense `teach`
+ *  register — the same computer the DB-only fallback below already spoke —
+ *  seat-stamped to the student's side, replayed from the board, so a ply's
+ *  beat cannot be a board lie and is identical with the provider dead. The
+ *  corpus note still LEADS the beat and the computed beat fills behind it
+ *  (PASS 1); the phrasing pass is the one chokepoint, `voiceFacts`. */
+function computedPlyBeat(fenBefore: string, san: string, moverIsStudent: boolean): string {
+  try {
+    return buildReviewMoveBriefing({
+      fenBefore,
+      san: stripSanAnnotations(san),
+      moverIsStudent,
+      register: 'teach',
+    }) ?? '';
+  } catch {
+    return '';
+  }
 }
 
-interface NarrationOutput {
-  intro: string;
-  shortIntro?: string;
-  outro: string;
-  ideas: NarrationIdea[];
-  branchIdeas?: string[];
-  shortBranchIdeas?: string[];
-  branchExtensionIdeas?: NarrationIdea[][];
-}
-
-/** Did the narration payload survive to its LAST field, or was it cut off?
- *
- *  The model emits the schema in order — spine `ideas` first, then
- *  `branchIdeas`, then `branchExtensionIdeas` — and a payload that hits
- *  max_tokens is salvaged by keeping the complete prefix and dropping the
- *  partial tail. So a full spine proves nothing about the fork prose: the
- *  branches are exactly what a truncated payload loses. Absence is the signal.
- *  An extension array that is PRESENT but thin is the model skimping rather
- *  than running out of room, and a retry does not fix that (the per-move
- *  template fallback covers it), so only whole missing fields count here. */
-export function narrationTailCovered(
-  n: { branchIdeas?: string[]; branchExtensionIdeas?: unknown[] } | null,
-  branchCount: number,
-): boolean {
-  if (branchCount === 0) return true;
-  const ideas = Array.isArray(n?.branchIdeas) ? n.branchIdeas.filter((s) => !!s?.trim()).length : 0;
-  const ext = Array.isArray(n?.branchExtensionIdeas) ? n.branchExtensionIdeas.length : 0;
-  return ideas >= branchCount && ext >= branchCount;
+/** The ≤8-word Brief-register cue for one ply, computed from the board. */
+function computedPlyShort(
+  fenBefore: string,
+  fenAfter: string,
+  san: string,
+  from: string,
+  to: string,
+): string | undefined {
+  try {
+    const short = narrateContinuationMove(fenBefore, fenAfter, stripSanAnnotations(san), from, to).short.trim();
+    return short || undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 /** PRIMARY gen path: build the walkthrough tree skeleton from the
@@ -1941,253 +1892,27 @@ async function generateOpeningFromDbNarration(
       }))
     : rawBranches;
 
-  // 2. Single LLM call: ask for narration text only.
-  // Student side: in normal mode, derive from the canonical name.
-  // In FACE mode the student plays the OPPOSITE side (they're
-  // learning the counter to the named opening, not the opening
-  // itself), so flip.
+  // 2. THE STUDENT'S SEAT. In normal mode, derive from the canonical name.
+  // In FACE mode the student plays the OPPOSITE side (they're learning the
+  // counter to the named opening, not the opening itself), so flip.
   const baseStudentSide = inferStudentSideFromName(entry.canonicalName);
   const studentSide = faceContext
     ? (baseStudentSide === 'white' ? 'black' : 'white')
     : baseStudentSide;
-  const moveLabels = positions
-    .map((p, idx) => {
-      const moveNum = Math.floor(p.ply / 2) + 1;
-      const dotted = p.movedBy === 'white' ? `${moveNum}.` : `${moveNum}…`;
-      // MATERIAL LEDGER (David 2026-08-13, the Benko color-swap incident):
-      // the model inverted who was up material because nothing computed told
-      // it. The balance per ply is code-computed; the prompt directive below
-      // makes it the ONLY permissible material claim.
-      const bal = materialBalance(p.fen);
-      const matNote = bal === null || bal === 0
-        ? 'material even'
-        : bal > 0 ? `WHITE is up ${bal} point${bal === 1 ? '' : 's'} of material`
-          : `BLACK is up ${-bal} point${bal === -1 ? '' : 's'} of material`;
-      return `${idx + 1}. ${dotted}${p.san}  (after this move FEN: ${p.fen}; ${matNote})`;
-    })
-    .join('\n');
-  // Branches sit at the position AFTER the canonical's last move.
-  // Same FEN = positions[last].fen. Whose turn is determined by the
-  // total ply count's parity.
-  const branchLabels = branches
-    .map((b, idx) => {
-      const extInfo =
-        b.extensionMoves.length > 0
-          ? ` extending into middlegame with: ${b.extensionMoves.join(' ')}`
-          : '';
-      return `${idx + 1}. "${b.label}" (entry move: ${b.san}) — ${b.count} sub-line${b.count === 1 ? '' : 's'} in DB${extInfo}`;
-    })
-    .join('\n');
-  const lessonFraming = faceContext
-    ? `a walkthrough of "${entry.canonicalName}" — the canonical White (or attacking side) counter to "${faceContext.originalDisplayName}". The student is the side PLAYING this counter (learning to face the named opening from the opposite perspective), not the side being countered.`
-    : `a walkthrough of "${entry.canonicalName}".`;
-  const systemPrompt = `You are a warm, world-class chess coach — think Daniel Naroditsky sitting right next to the student, teaching this opening. Narrate ${lessonFraming} Output ONLY a JSON object matching the schema. The move sequence and positions are PROVIDED — do NOT invent or alter them. Your only job is to write the coach commentary plus optional visualization arrows.
 
-HOUSE VOICE (David 2026-07-05 — the ENTIRE repertoire should feel like Naroditsky is teaching it, not a database dumping annotations):
-- Teach the IDEA, not just the move. A student should finish each beat understanding WHY, not just WHAT. "Nc3 does two jobs — it braces e4 so Black can never strike there for free, and it keeps the king-knight home, so White still gets to choose which attacking setup to build" beats "Nc3 develops and defends e4."
-- Concept-first and conversational. It's fine to sound like a person talking: "Here's the thing about this line…", "notice that…", "the point is…". Warmth is welcome; hollow hype is not.
-- Every opening turns on ONE central idea or question — find it and teach toward it, so the beats build an argument instead of listing facts. (See the through-line field below.)
-- Reach for the clarifying detail — the square that matters, the piece that's secretly the star, the plan three moves away — the way a great coach does out loud.
-
-WHY DISCIPLINE (David 2026-07-19 — "be careful not to overstate the why, I don't want non-applicable reasons stated"):
-- State only reasons that are TRUE of THIS EXACT position. ONE true, concrete reason beats three plausible-sounding ones. Multiple reasons are welcome ONLY when each is genuinely true here — never pad a move with a second or third justification just to sound thorough or fill space.
-- A normal developing move is allowed to be just that. If a move is routine, say so plainly ("Castles kingside — all very natural") rather than inventing a deep hidden purpose. A tag that says "this needs no theory" is itself useful information; a fabricated deep reason is not.
-- Anchor the reason to something on the board: a specific square, pawn, piece, or line. If you can't name what the reason points AT, don't state it.
-- MATERIAL ACCOUNTING IS COMPUTED, NOT YOURS TO JUDGE: every move below carries a computed material note ("material even" / "BLACK is up 1 point"). Any statement about who is up or down material, an extra pawn, or material being level MUST match that note for the move being narrated — including hypotheticals ("once White takes X" must describe the accounting that capture actually produces). Never claim a piece "stays home" or "is kept back" on the very move where that piece develops.
-
-STRUCTURAL BEATS (the tape's keystone shape — use on the defining/keystone moves, not routine ones):
-- Shape a keystone's WHY as: the TRIGGER that makes the plan apply (a structure, a pawn event like "once the center locks", or a piece placement) → the concrete PLAN as a square-by-square route ("the knight travels f3→d2→c4", not "the knight improves") → the ONE weakness it TARGETS, stated with "because" ("a monster on c4 because d6 can never challenge it"). Optionally add the rule then its exception ("you almost always meet …c6 with a4 — but here b4 is fine because…").
-
-NAME IT EARLY:
-- Name the opening in prose within the first couple of moves, the way a coach says "that's the Modern" out loud — not only in the intro. At a fork, NAME the specific variation each branch is ("the Austrian Attack", "the Classical") so the student learns the map, not just the moves.
-
-VOICE RULES (locked 2026-05-19, still in force):
-- Confident + declarative. Name what's happening. No "you might consider", no "this could be", no marketing voice.
-- Specific chess detail. Name squares, piece routes, named patterns. "the c3-knight reroutes via d2 to f1-g3" not "the knight goes to a good square".
-- Tactical verbs that match the action — threatens / pressures / kicks / blunts / outposts / hammers / undermines.
-- Cite by SAN inside prose. "After Bxc3 bxc3 Black has doubled c-pawns" not "the bishop trade gives doubled pawns".
-- NO move-number prefixes. Write "Nc3" or "the queen's knight to c3" — never "5.Nc3" or "5...Nc3". The voice reads "5." as "five" (robotic) and the count drifts across forks. Refer to moves by bare SAN or piece+square only.
-- BANNED (empty hype only — warmth is fine): "powerful", "devastating", "the secret of", "key to success", "essential to remember", "we will see", "let me show you".
-
-For each move in the line, return:
-- text: the coach's spoken teaching for this move. ${pace === 'tour'
-    ? 'TOUR MODE: keep every beat TIGHT — ONE sentence, max 14 words. The student wants a quick playthrough, not a lecture.'
-    : 'SPEND WORDS WHERE THEY MATTER — there is NO length cap on full narration (the user\'s verbosity setting handles brevity; you handle teaching). A routine developing move gets one tight sentence. A KEYSTONE move — the opening\'s defining decision, the tabiya, the pawn break, the move that gives the line its character — gets taught like a MASTERCLASS BEAT: what the move does, the plan it serves, what happens if the idea is ignored, and how the coming moves carry the plan forward. Take the space the teaching needs; a student should finish a keystone beat able to explain the idea to someone else.'} Conversational; mention the SAN or its spoken form. Examples:
-  - routine: "Nf3 develops toward the center and eyes e5."
-  - keystone (full): "Now the point of the whole line — c3, quietly building a big pawn duo with a later d4. It's not flashy, but it's the move that turns this into a space game: White wants to roll the center forward and leave Black cramped."
-  - keystone (full): "…c5 is the move that defines the Sicilian — Black refuses the symmetrical fight and takes the game onto the queenside, where the half-open c-file becomes the source of all his counterplay."
-- shortText: ONE sentence (max 18 words) — Brief mode variant of text. Strip the prose, keep the KEY chess idea (the threat / pattern / verdict). Mention the SAN. Same conventions as text but tighter. Examples:
-  - "e4 grabs the center and opens lines for the queen and bishop."
-  - "c5 — the Sicilian, asymmetric counterplay on the queenside."
-  - "Nc3 defends e4 and prepares Bc4."
-Do NOT emit arrows or square-coordinates as data — the board's lead-the-eye arrows are drawn by code. Just write the prose; if a square matters, NAME it in the sentence ("the bishop eyes f7") and the arrow will already be there.
-
-${perspectiveRule('student', studentSide)}
-
-Also produce:
-- intro: the HOOK — one or two sentences (up to ~40 words) that pose the ONE question or idea this opening turns on, the way a great coach opens a lesson. Not "sharp/positional" boilerplate — the actual central idea: what is this opening ABOUT, what is each side really fighting over, what's the one thing to understand. Good hooks: "The whole Italian grows from one question — which piece points at f7, the square only Black's king defends?" / "This is a space play: White stakes the center and dares Black to break it before it suffocates him." Name the plan or square that matters. CRITICAL: do NOT recite the move list (the board animates it). Do NOT say "after 1.e4 e5 2.Nf3..." or any variant — the student already sees the moves; tell them what the opening IS, not what the moves ARE.
-- shortIntro: ONE sentence (max 18 words) — Brief mode variant of intro. Same content rules but tighter.
-- outro: ONE sentence (max 15 words). Action-oriented — what to do next.
-${branches.length > 0 ? `- branchIdeas: ONE sentence (max 20 words) for EACH branch the student might dive into next. Mention the named line and its strategic flavor (sharp / positional / pawn-storm / quiet etc).
-- shortBranchIdeas: ONE sentence (max 15 words) per branch — Brief mode variants of branchIdeas, same order.
-- branchExtensionIdeas: a 2D array. For EACH branch (in the same order as branches[]), emit an array of EXACTLY ONE idea object per extension move provided. Each idea object MUST include both text AND shortText (Brief mode variant). If a branch has 6 extension moves you MUST emit 6 idea objects in its inner array — no fewer. This is the most-undersized field in past gens and the student ends up reading template prose instead of your prose; do not skimp.
-  - text rules: same as the spine ideas (max ${pace === 'tour' ? 12 : 25} words, mention the SAN, do NOT forecast future moves). No arrows/coordinates as data — the board's arrows are drawn by code; just write prose.
-  Example: for "English Attack" with extension "Ng4 Bg5 Qa5+", emit 3 idea objects narrating those three plies.` : ''}
-
-${(() => {
-  // TEACHING grounding (David 2026-07-12): Tier-3 narration grounds on the
-  // Danya teaching corpus — his explanation of the positions, the ideas, the
-  // plans — instead of the pre-1930 book passages ("unwire the books"). The
-  // spine SANs key position-specific notes; the name keys opening-level ones.
-  const block = buildDanyaTeachingBlock({
-    historySans: positions.map((p) => p.san),
-    openingName: entry.canonicalName,
-    maxNotes: 6,
+  // THE COMPUTED BEATS (G0 — see `computedPlyBeat`). One per spine ply, from
+  // the board, seat-stamped. Tour mode keeps every beat to its first sentence
+  // (the student wants a quick playthrough, not a lecture).
+  const startFenForBeats = new Chess().fen();
+  const computedBeats: string[] = positions.map((p, i) => {
+    const beat = computedPlyBeat(i === 0 ? startFenForBeats : positions[i - 1].fen, p.san, p.movedBy === studentSide);
+    return pace === 'tour' ? firstSentence(beat) : beat;
   });
-  if (block) {
-    void logAppAudit({
-      kind: 'book-grounding-injected',
-      category: 'subsystem',
-      source: 'openingGenerator.danyaTeaching',
-      summary: `narration grounded with teaching notes for "${entry.canonicalName}" (${block.length} chars)`,
-    });
-  }
-  return block;
-})()}`;
-  const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
-Student plays: ${studentSide}
-Total moves in spine: ${positions.length}
+  const computedShorts: Array<string | undefined> = positions.map((p, i) =>
+    computedPlyShort(i === 0 ? startFenForBeats : positions[i - 1].fen, p.fen, p.san, p.from, p.to),
+  );
 
-Moves with post-move FENs:
-${moveLabels}
-${branches.length > 0 ? `\nBranches available at the end of the spine (the student picks one to dive deeper):\n${branchLabels}\n\nFor each branch, write ONE short sentence describing what kind of line it is.` : ''}
-
-Emit a JSON object with intro (string), shortIntro (string), outro (string), ideas (array of ${positions.length} objects { text, shortText }, one per spine move in order)${branches.length > 0 ? `, branchIdeas (array of ${branches.length} strings), shortBranchIdeas (array of ${branches.length} strings), and branchExtensionIdeas (2D array of { text, shortText } objects)` : ''}.`;
-
-  // ── Tier 1 is THE CORPUS now (David 2026-08-24). The old generic offline
-  // bake (walkthrough-narrations.json via bakedNarrationFor) is DELETED — a
-  // generic line pinned to a position is a false claim, never a real tier. The
-  // spine narration is the LLM-generated house voice with the video-distilled
-  // corpus note SPLICED in per ply (PASS 1 below leads each beat with its
-  // graded note). No baked overlay remains.
-  let narration: NarrationOutput;
-  let narrationFellBack = false;
-  {
-  // Up to 2 attempts before the template fallback. A single transient
-  // failure (truncated/malformed tool JSON — the 2026-07-31 Alapin session:
-  // "JSON Parse error: Expected ']'") used to drop the WHOLE lesson to
-  // template ideas ("e4 — staking a claim…", "c5 — gaining space…" — the
-  // repetitive garbage David heard). One retry almost always recovers.
-  const callNarration = async (maxTokens: number): Promise<NarrationOutput> => {
-    const result = await getCoachStructuredResponse(
-      [{ role: 'user', content: userPrompt }],
-      systemPrompt,
-      'chat_response',
-      maxTokens,
-      'emit_walkthrough_narration',
-      'Emit short coach narrations (one sentence per provided move) plus an intro and outro for the line.',
-      NARRATION_SCHEMA,
-    );
-    return result as NarrationOutput;
-  };
-  // How many plies this output actually narrates. A truncated tool payload is
-  // now SALVAGED rather than thrown away (coachApi.callDeepseekWithTool), so a
-  // short `ideas` array means "the model ran out of room", not "it failed" —
-  // every unnarrated ply silently falls back to the generic template sentence.
-  const covered = (n: NarrationOutput | null): number =>
-    Array.isArray(n?.ideas) ? n.ideas.filter((e) => typeof e === 'object' ? !!e?.text?.trim() : !!e).length : 0;
-  // The spine is only the FIRST field the model emits. branchIdeas and
-  // branchExtensionIdeas come after it in the schema, so a payload cut off at
-  // max_tokens loses the TAIL first — the salvage keeps the complete prefix
-  // and drops everything past it. Counting spine plies alone therefore scores
-  // a truncated payload as fully covered and the retry never fires, which is
-  // how the fork branches ended up on template prose while the spine read
-  // fine. Missing tail FIELDS mean the JSON was cut short; an inner extension
-  // array that is present but thin is the model skimping, which a retry does
-  // not fix (the per-move template fallback covers it), so only absence counts.
-  const tailCovered = (n: NarrationOutput | null): boolean => narrationTailCovered(n, branches.length);
-  // Full narration is UNCAPPED (David 2026-07-30: the only caps are the user's
-  // verbosity settings; 2026-08-02: "remove the ceiling"). 8K was never the
-  // model's limit — it was ours: api.deepseek.com accepts max_tokens up to
-  // 131072 on deepseek-v4-flash (probed 2026-08-02), and the model burns part
-  // of whatever budget it gets on hidden reasoning_content before writing a
-  // token of output, so a deep line with a big grounding block ran out of room
-  // and shipped template prose (the Alapin lesson, "repetitive and sounded
-  // nothing like Naroditsky", 2026-07-31). A ceiling costs nothing when the
-  // output is short — generation stops when the model is done, not when the
-  // budget is spent — so there is no reason to sit below what the API allows.
-  const FIRST_BUDGET = 65536;
-  const RETRY_BUDGET = 131072;
-  try {
-    let attempt: NarrationOutput | null = null;
-    try {
-      attempt = await callNarration(FIRST_BUDGET);
-    } catch (firstErr) {
-      void logAppAudit({
-        kind: 'llm-error',
-        category: 'subsystem',
-        source: 'openingGenerator.generateOpeningFromDbNarration',
-        summary: `narration attempt 1 failed for "${name}" — retrying once: ${firstErr instanceof Error ? firstErr.message : String(firstErr)}`,
-      });
-    }
-    // Retry when the call failed outright OR narrated less than the whole
-    // line. Keep the better of the two — a wider retry that comes back worse
-    // (a transient stumble) must never cost us the first attempt's prose.
-    if (covered(attempt) < positions.length || !tailCovered(attempt)) {
-      const shortfall = tailCovered(attempt)
-        ? `${covered(attempt)}/${positions.length} plies`
-        : `${covered(attempt)}/${positions.length} plies and a truncated branch tail`;
-      try {
-        const wider = await callNarration(RETRY_BUDGET);
-        void logAppAudit({
-          kind: 'llm-error',
-          category: 'subsystem',
-          source: 'openingGenerator.generateOpeningFromDbNarration',
-          summary:
-            `narration covered only ${shortfall} for "${name}" at ${FIRST_BUDGET} tokens — ` +
-            `retried at ${RETRY_BUDGET}, got ${covered(wider)}/${positions.length}` +
-            (tailCovered(wider) ? ' with the branch tail intact' : ' and still no branch tail'),
-        });
-        // Prefer the retry when it narrates more of the spine, and also when it
-        // merely rescues the branch tail the first attempt lost — equal spine
-        // coverage plus real fork prose is strictly the better lesson.
-        // ...but never trade spine prose away for it: a retry that narrates
-        // FEWER plies is a transient stumble, tail or no tail.
-        const rescuesTail = tailCovered(wider) && !tailCovered(attempt) && covered(wider) >= covered(attempt);
-        if (covered(wider) > covered(attempt) || rescuesTail) attempt = wider;
-      } catch (retryErr) {
-        void logAppAudit({
-          kind: 'llm-error',
-          category: 'subsystem',
-          source: 'openingGenerator.generateOpeningFromDbNarration',
-          summary: `wider narration retry failed for "${name}" (kept ${shortfall}): ${retryErr instanceof Error ? retryErr.message : String(retryErr)}`,
-        });
-      }
-    }
-    if (covered(attempt) === 0) throw new Error('narration returned no usable ideas');
-    narration = attempt as NarrationOutput;
-  } catch (err) {
-    void logAppAudit({
-      kind: 'llm-error',
-      category: 'subsystem',
-      source: 'openingGenerator.generateOpeningFromDbNarration',
-      summary: `narration LLM call failed for "${name}" — falling back to template ideas: ${err instanceof Error ? err.message : String(err)}`,
-    });
-    // Template fallback: each move gets a generic sentence with
-    // its SAN. Same as buildFallbackTreeFromDb logic.
-    narrationFellBack = true;
-    narration = {
-      intro: `${entry.canonicalName} — book moves from the Lichess opening database. Quick walkthrough of the canonical line.`,
-      outro: `That's the canonical book line for the ${entry.canonicalName}. Drill the moves to lock them in, or ask for a deeper variation.`,
-      // Silent, not canned. If this fed templates back in, the tier chain
-      // above could not tell them from real prose and would append them after
-      // the authored text — filler in the one slot that is supposed to teach.
-      ideas: positions.map(() => ({ text: '' })),
-    };
-  }
-  }
-
-  // 3. Build the tree from the bottom up using the LLM's ideas.
+  // 3. Build the tree from the bottom up from the computed beats.
   //    Branches (if any) become the children of the spine's LAST
   //    node, so when the user reaches the end of the canonical line
   //    they see fork tiles for each named extension. Tapping a tile
@@ -2201,7 +1926,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // Tree-wide dedupe for BAKED gem-crush beats — a gem taught on the spine
   // terminus must not teach again on a branch that transposes to the same board.
   const splicedGemIds = new Set<string>();
-  const branchChildren: ChildWrap[] = branches.map((b, idx) => {
+  const branchChildren: ChildWrap[] = branches.map((b) => {
     // Notes ground this branch's arrows the same way they ground the spine's
     // (G0). Scoped per branch: a branch is a path the student takes INSTEAD of
     // the others, so one note may legitimately teach on two of them.
@@ -2243,15 +1968,19 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // Black to move).
     const branchMovedBy: 'white' | 'black' =
       positions.length % 2 === 0 ? 'white' : 'black';
-    const teaser =
-      narration.branchIdeas?.[idx]?.trim() ||
-      `${b.san} — ${b.label} (${b.count} sub-line${b.count === 1 ? '' : 's'} in the database).`;
+    // The spoken teaser NAMES the variation (the map the student is
+    // learning) and then says what its first move does — computed from the
+    // terminus board, never authored.
+    const branchBeat = branchSeq[0] ? computedPlyBeat(terminusFen, b.san, branchMovedBy === studentSide) : '';
+    const teaser = branchBeat
+      ? `${b.label}. ${branchBeat}`
+      : `${b.label} — ${b.count} sub-line${b.count === 1 ? '' : 's'} in the database.`;
+    const tileSubtitle = `${b.label} — ${b.count} sub-line${b.count === 1 ? '' : 's'}`;
     // Walk extension moves bottom-up to build the branch's chain.
     // Each extension ply gets its own node. User: "ALL lines extend
     // to here [middlegame]." Without these extensions every branch
     // dropped off at the moment the variation gets named — no plan,
     // no middlegame transition.
-    const extIdeas = narration.branchExtensionIdeas?.[idx] ?? [];
     let extChildren: ChildWrap[] = [];
     for (let j = b.extensionMoves.length - 1; j >= 0; j -= 1) {
       const extSan = b.extensionMoves[j];
@@ -2265,9 +1994,13 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const absolutePly = positions.length + 1 + j;
       const extMovedBy: 'white' | 'black' =
         absolutePly % 2 === 0 ? 'white' : 'black';
-      const ideaEntry = extIdeas[j];
-      const extGenerated =
-        (typeof ideaEntry === 'object' && ideaEntry?.text?.trim()) || '';
+      // branchSeq[j] is the move BEFORE extension j (branchSeq[0] = b.san),
+      // so its fen is this extension's fenBefore.
+      const extBefore = branchSeq[j];
+      const extAfter = branchSeq[j + 1];
+      const extGenerated = extBefore && extAfter
+        ? computedPlyBeat(extBefore.fen, extSan, extMovedBy === studentSide)
+        : '';
       // Same note-leads rule as the spine. The branch's arrows were ALREADY
       // grounded on this note (`branchNoteSources` below); until now the prose
       // never said what they pointed at, so a green arrow could land on a
@@ -2276,10 +2009,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const text = extNote
         ? (extGenerated ? `${extNote} ${extGenerated}` : extNote)
         : extGenerated;
-      const shortText =
-        typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
-          ? ideaEntry.shortText.trim()
-          : undefined;
+      const shortText = extBefore && extAfter
+        ? computedPlyShort(extBefore.fen, extAfter.fen, extSan, extAfter.from, extAfter.to)
+        : undefined;
       const node: WalkthroughTreeNode = {
         san: extSan,
         movedBy: extMovedBy,
@@ -2303,7 +2035,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       attachBakedGems(node, [...spineSans, ...branchSans.slice(0, j + 2)], splicedGemIds, studentSide);
       extChildren = [{ node }];
     }
-    const shortTeaser = narration.shortBranchIdeas?.[idx]?.trim();
+    const shortTeaser = branchSeq[0]
+      ? computedPlyShort(terminusFen, branchSeq[0].fen, b.san, branchSeq[0].from, branchSeq[0].to)
+      : undefined;
     // The note leads what is SPOKEN on the branch move. `teaser` itself stays
     // untouched — it doubles as the fork tile's `forkSubtitle`, which must
     // remain a short label, not a paragraph.
@@ -2329,7 +2063,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     attachBakedGems(branchNode, [...spineSans, b.san], splicedGemIds, studentSide);
     return {
       label: b.label,
-      forkSubtitle: teaser,
+      forkSubtitle: tileSubtitle,
       node: branchNode,
     };
   });
@@ -2447,20 +2181,15 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // with the note puts voice and board on the same source, which is the G0
   // posture: the note is the fact, the model only phrases it.
   //
-  // Nothing real is discarded — the generated idea still follows the note, and
-  // PASS 2's house-voice reword fuses them into one voice. What used to sit
-  // here was a SAN-shaped template ("Nc3 — developing toward the center and
-  // eyeing key squares") standing in whenever nothing real existed. It named
-  // nothing about the position in front of the student, so it is gone: those
-  // plies are silent now, which the narration rules explicitly allow.
+  // Nothing real is discarded — the COMPUTED beat still follows the note.
+  // What used to sit here was the model's authored idea (G0 inversion,
+  // WO-STANDARD-01 F1 — see `computedPlyBeat`), and before that a SAN-shaped
+  // template ("Nc3 — developing toward the center and eyeing key squares")
+  // that named nothing about the position in front of the student. A ply the
+  // computer has nothing to say about is silent, which the narration rules
+  // explicitly allow.
   const rawPlyTexts: string[] = positions.map((p, i) => {
-    const ideaEntry = narration.ideas[i];
-    const generated =
-      (typeof ideaEntry === 'object' && ideaEntry?.text?.trim()) ||
-      // Tolerate legacy string-shaped entries (older cached gens
-      // pre-arrows extension might still produce them).
-      (typeof ideaEntry === 'string' ? (ideaEntry as string).trim() : '') ||
-      '';
+    const generated = computedBeats[i] ?? '';
     // NO CANNED LINE WHEN NOTHING REAL IS AVAILABLE (David 2026-08-12: "adds
     // no value. It can be removed"). This used to emit a template chosen by SAN
     // shape — "Nc3 — developing toward the center and eyeing key squares" —
@@ -2595,40 +2324,42 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     });
   }
 
-  // PASS 2 — HOUSE-VOICE REWORD (David 2026-07-30: "hand the entire narration
-  // to the llm and have it reword it in our coaches voice"). Template ideas
-  // stitched to raw note prose read as two voices and neither is the coach.
-  // The model REWORDS supplied content only — it adds nothing, decides
-  // nothing (G0) — and every line is re-graded against its own ply's board;
-  // any failure falls back to that line's pre-reword text. Best-effort: on
-  // call failure the raw script ships as before.
-  let finalPlyTexts = rawPlyTexts;
-  try {
-    // The arrows are decided HERE, in code, from the note — then handed to
-    // the model as a requirement it must voice (David 2026-08-01: "we need to
-    // hand the arrows in the package to the llm... but we dont let the LLM
-    // decide"). Computing them before the reword is what makes that possible.
-    const arrowSans = positions.map((p, i) =>
-      groundedSegmentArrows(plyNoteText[i], rawPlyTexts[i], p).spans.map((sp) => sp.san),
-    );
-    finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts, arrowSans);
-  } catch (err) {
-    void logAppAudit({
-      kind: 'llm-error',
-      category: 'subsystem',
-      source: 'openingGenerator.houseVoiceReword',
-      summary: `reword pass failed — shipping raw script: ${err instanceof Error ? err.message : String(err)}`,
-    });
-  }
+  // PASS 2 — THE ONE CHOKEPOINT (G0). Every beat assembled above is already
+  // tight prose from a computer or a hand-written note: the corpus note (graded
+  // at selection), the authored variation prose (graded), the landed tactic,
+  // the refuted alternative, the weighing, the computed briefing. So the beat
+  // goes through `voiceFacts` with `preferRaw` — spoken as computed, no model
+  // in the loop, identical with the provider dead — which is the purest G0
+  // and what David asked for on this surface ("I want to hear only the
+  // computer", 2026-09-17). `speakableFacts` still strips any internal label
+  // or arrow notation on the way out.
+  //
+  // This REPLACES the house-voice reword (2026-07-30 → 2026-09-22): a second
+  // structured call that asked the model to "reword only", re-graded every
+  // line against its board and reverted any line that dropped an arrow move.
+  // Those three nets existed because the model was allowed to touch the
+  // prose; with the beat spoken as computed, the arrows the note names are
+  // in the sentence by construction. A warm `walkthrough-beat` register is
+  // the follow-up if the fusion of note + computed beat into one voice is
+  // wanted back — it would be one register added to voiceFacts, not a second
+  // call in here.
+  const finalPlyTexts: string[] = await Promise.all(rawPlyTexts.map(async (raw) => {
+    if (!raw.trim()) return raw;
+    try {
+      return (await voiceFacts(raw, {
+        preferRaw: true,
+        intent: 'walkthrough-beat',
+        perspective: { mode: 'student', studentSide },
+      })) ?? raw;
+    } catch {
+      return raw;
+    }
+  }));
 
   for (let i = positions.length - 1; i >= 0; i -= 1) {
     const p = positions[i];
-    const ideaEntry = narration.ideas[i];
     const text = finalPlyTexts[i] ?? rawPlyTexts[i];
-    const shortText =
-      typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
-        ? ideaEntry.shortText.trim()
-        : undefined;
+    const shortText = computedShorts[i];
     const node: WalkthroughTreeNode = {
       san: p.san,
       movedBy: p.movedBy,
@@ -2704,15 +2435,16 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   const displayName = faceContext
     ? `${entry.canonicalName} (facing ${faceContext.originalDisplayName})`
     : entry.canonicalName;
-  const shortIntro =
-    narration.shortIntro && narration.shortIntro.trim().length > 0
-      ? stripMoveRecitationLeadIn(narration.shortIntro.trim()) || undefined
-      : undefined;
   // THE ONE SELECTOR reads the taught line once (unified-coach N1): the thesis
   // (the landed tactic the line turns on, else the structure→plan), the moment
   // plies and the thread ride the tree as FACTS; the surface renders them in
   // its register. Never a blocker — a tree without `teaching` is the pre-N1 tree.
+  //
+  // THE INTRO IS THE THESIS (G0). The model used to write "the HOOK — the ONE
+  // question this opening turns on"; that question is exactly what the
+  // selector computes, rendered in the present register.
   let teaching: WalkthroughTree['teaching'];
+  let thesisLine = '';
   try {
     const startFen = new Chess().fen();
     const selectorPlies: SelectorPly[] = positions.map((q, i) => ({
@@ -2721,6 +2453,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     }));
     const pkg = selectTeaching({ plies: selectorPlies, studentColor: studentSide, kind: 'line', surface: 'teach' });
     teaching = { ...summarizeTeaching(pkg), refuted: refutedFacts };
+    thesisLine = renderThesis(pkg.thesis, 'present').trim();
     void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',
@@ -2729,16 +2462,14 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     });
   } catch { teaching = undefined; }
   const tree: WalkthroughTree = {
-    ...(narrationFellBack ? { narrationFallback: true } : {}),
     ...(teaching ? { teaching } : {}),
     openingName: displayName,
     eco: entry.eco,
     studentSide,
-    intro:
-      stripMoveRecitationLeadIn(narration.intro?.trim() || '') ||
-      `${displayName} — let's walk through the main line.`,
-    ...(shortIntro ? { shortIntro } : {}),
-    outro: narration.outro?.trim() || `Drill the moves to lock them in.`,
+    intro: thesisLine
+      ? `${displayName}. ${thesisLine}`
+      : `${displayName} — let's walk through the main line.`,
+    outro: `Drill the moves to lock them in.`,
     root: { san: null, movedBy: null, idea: '', children: nextChildren },
   };
   // Drop redundant arrows (no-ops + arrows pointing AT the move's
@@ -2836,82 +2567,6 @@ function buildFallbackTreeFromDb(
 /** Same logic as inferStudentSide in src/data/openingWalkthroughs/index.ts
  *  but local so this module doesn't import from a sibling. */
 
-
-/** PASS-2 house-voice reword. Hands the assembled per-move script to the
- *  model with one job: say the SAME content as ONE coach in the house
- *  register (concept-first, warm, rigorous). Hard rules in the prompt: no
- *  new chess content, never restate the move being played, keep every
- *  number/percentage verbatim. Output is validated per line against that
- *  ply's board (gradeNarrationText); a line that fails ships its pre-reword
- *  text instead, so the pass can polish but never corrupt. */
-async function rewordNarrationInHouseVoice(
-  positions: Array<{ san: string; fen: string; movedBy: 'white' | 'black' }>,
-  rawTexts: string[],
-  /** The moves CODE has already decided to draw an arrow for at each ply, in
-   *  SAN. Handed to the model as a requirement, never as a suggestion — see
-   *  the arrow contract below. */
-  arrowSans: string[][] = [],
-): Promise<string[]> {
-  if (rawTexts.length === 0) return rawTexts;
-  const script = rawTexts
-    .map((t, i) => {
-      const arrows = arrowSans[i] ?? [];
-      const arrowNote = arrows.length > 0 ? ` [ARROWS ON THE BOARD: ${arrows.join(', ')}]` : '';
-      return `${i + 1}. [after ${positions[i].san}]${arrowNote} ${t}`;
-    })
-    .join('\n');
-  const system = `You are rewording a chess walkthrough narration so it sounds like ONE warm, rigorous coach — concept-first, plain language, ideas before names.
-HARD RULES:
-- Reword ONLY. Add NO chess content: no new squares, pieces, plans, tactics, or evaluations that are not already in the line's text.
-- NEVER restate the move being played ("knight to c6 — the knight goes to c6" is banned); the voice announces the move separately. Speak only the idea.
-- Keep every number, percentage, and move token that appears, verbatim.
-- NO length cap: keep a keystone's full teaching intact, keep a routine move tight. No praise, no filler, no "let's".
-- ARROW CONTRACT: when a line is tagged [ARROWS ON THE BOARD: ...], those moves are ALREADY DRAWN on the student's board while your line is spoken. Your reworded line MUST mention every one of them, so the words match what the eye is being led to. You are not choosing them and you may not add others — arrows the student cannot hear explained, and words pointing at squares with no arrow, both read as broken.
-Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${rawTexts.length} entries, in order.`;
-  const result = (await getCoachStructuredResponse(
-    [{ role: 'user', content: `NARRATION SCRIPT (${rawTexts.length} lines):\n${script}` }],
-    system,
-    'chat_response',
-    Math.min(8192, 600 + rawTexts.length * 140),
-    'reword_walkthrough_narration',
-    'Reword each narration line into the single house coach voice, same content, one entry per input line.',
-    { type: 'object', properties: { lines: { type: 'array', items: { type: 'string' } } }, required: ['lines'] },
-  )) as { lines?: unknown };
-  const lines = Array.isArray(result?.lines) ? result.lines : [];
-  let kept = 0;
-  let dropped = 0;
-  const out = rawTexts.map((raw, i) => {
-    const candidate = typeof lines[i] === 'string' ? lines[i].trim() : '';
-    if (!candidate) return raw;
-    const graded = gradeNarrationText(candidate, positions[i].fen, 'openingGenerator.houseVoiceReword');
-    if (!graded) return raw;
-    // ARROW/WORD AGREEMENT, verified rather than trusted (David 2026-08-01:
-    // "we need to hand the arrows in the package to the llm. this should be
-    // done matching the narration... but we dont let the LLM decide").
-    // The arrows are already fixed by code; the model's only job is to voice
-    // them. A reword that drops one leaves an arrow nobody explains — which is
-    // exactly the mismatch reported from prod — so that line falls back to its
-    // pre-reword text, which names the squares by construction.
-    const required = arrowSans[i] ?? [];
-    if (required.length > 0) {
-      const bare = (san: string): string => san.replace(/[+#!?]/g, '');
-      const missing = required.filter((san) => !graded.includes(bare(san)));
-      if (missing.length > 0) {
-        dropped += 1;
-        return raw;
-      }
-    }
-    kept += 1;
-    return graded;
-  });
-  void logAppAudit({
-    kind: 'coach-surface-migrated',
-    category: 'subsystem',
-    source: 'openingGenerator.houseVoiceReword',
-    summary: `house-voice reword: ${kept}/${rawTexts.length} lines reworded (rest kept raw${dropped > 0 ? `; ${dropped} reverted for dropping their arrow moves` : ''})`,
-  });
-  return out;
-}
 
 /** Strip a leading move-recitation sentence from an intro string.
  *
