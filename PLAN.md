@@ -13,6 +13,220 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🏁 WO-STANDARD-01 — THE FULL BOARD: everything the 2026-09-22 evaluation found, in build order (David: "get my app up to standard" · "i want a full plan listed first, not just one section" · "i will not always be here — work independently")
+
+**How this was found.** One session, 2026-09-22: four levels of context, three
+adversarial code readers (the deciding door, the loop record→speech, G0 on the
+chat/voice path), a PostHog read of the 41 real native users, and the coach
+driven BY HAND on prod — Learn, Play, review, Weaknesses, Training Plan,
+custom lesson, My Mistakes — first cold, then with David's own 932 chess.com
+games (`knight_mare_01`) imported through the real Import page. Every item
+below was seen, not inferred; line cites are in the sub-sections.
+
+**Decisions made without David (he asked for independence; each is recorded
+here so he can flip it, never re-derived):**
+- D1. Home opening is a LOCK with a one-tap change (not a weighted focus).
+- D2. Play STEERS into the home repertoire while in book.
+- D3. Home-opening games ANALYSE AUTOMATICALLY on import; the rest on tap.
+- D4. Play keeps SPEAKING the blunder verdict (non-blocking) — the card is
+  gone (`BLUNDER_CARD_ENABLED=false`, shipped 0813e7f). The 07-06 "phase
+  narration only" rule and the 07-13 full-game standard disagree; until David
+  picks, the spoken verdict stays and the board never waits.
+- D5. Fixture games (`sample-*`) NEVER count as the student's games: not in
+  the cold-start count, not in the rating, not in the weakness spine.
+
+**THE BOARD — eleven buckets, A→K, in the order they ship. Each item carries
+its gate; a wire is proven only by a sentence or a row coming OUT on prod.**
+
+### A. THE PERSONAL COACH — WO-HOME-OPENING-01 (the section below; items A1–A11)
+The student's home opening per colour drives the plan, the drills, the
+opponent's lines and the review's opening line. A1 (one opening key) blocks
+everything; A2–A3 next; A4–A8 are the visible payoff; A11 is the audit.
+
+### B. THE DECIDING PATH — wire the student into the door (the readers' findings, verified)
+- B1. `positionFacts.ts:480` pre-gate gets `standingChance`; `decide()` at :651
+  does not → the T5 fork-two-moves-out is dead on interrupt surfaces and the
+  emission calls it a legitimate close. Pass the same signals to both.
+- B2. `narrationImportance.ts:204` adds the student boost only when rank > 0,
+  speak = rank > 0 → the student's record can never flip a verdict. Decide
+  whether the boost may lift a moment over the interrupt bar (recommend: yes,
+  bounded, so a RED hole can earn an interruption).
+- B3. Play / phase / read-position / whyBestMove pass neither `lastMove` nor
+  `studentNeedContext` (useLiveCoach:234, usePhaseNarration:597,
+  usePositionNarration:236, whyBestMove:81) → grey/green/red indistinguishable
+  on four of five live surfaces. Thread both through every composer.
+- B4. Review say-once ledgers (`coachFeatureService.ts:1740–1815`) burn BEFORE
+  `decide()` (:1855) → a floored fact is lost for the whole game; opening and
+  middlegame plan facets rank under the floor and are structurally never
+  spoken. Mutate ledgers after the door, only for spoken facts.
+- B5. The need veto (`coachDecider.ts:245`) is tier-blind → can silence a
+  hanging piece on a familiar line. Mate/must-defend/only-move speak on their
+  own importance.
+- B6. Rating decides volume through the back door: cpLoss tiers by band
+  (`criticalityScan.ts:229`) and review's label buckets (300/150/60 at
+  `coachFeatureService.ts:1858`). Use the real cpLoss and a band-free tier.
+- B7. Cold start is `fullyAnalyzed` count (`studentNeedLoader.ts:104`): samples
+  count, Learn games never do, and while cold the score is a constant 100.
+  D5 above + Learn games flagged + a prior that fades instead of switching.
+- B8. `needScore.ts:343` green for X subtracts from Y. Scope the capability
+  term to the matching tag.
+- B9. `quietBy` labels importance- and need-closes both `below-bar`
+  (`coachDecider.ts:241,246`) → the emission cannot distinguish the two gates
+  it exists to distinguish.
+- B10. Hidden caps on the deciding path: `teachingSelector` MAX_MOMENTS=3,
+  `reviewTurningPoint` MAX_CANDIDATES=4, `coachFeatureService:1223` budget:2,
+  `openingGenerator` REFUTED_PLY_CAP=12 + a literal `rating: 1500`.
+- B11. `methodBeat` ignores `closed` standing on the retrospective register;
+  `Math.abs` on cpLoss turns noise into "slow down" on a good move.
+- B12. Subsumption: a 2-square fact eaten by a 3-square superset at 0.67.
+
+### C. THE RECORD PATH — what the coach fails to learn
+- C1. Review's `learned:true` + `capabilityPlies` capture is dead
+  (`GameReviewWeaknessCapture.tsx:187`, pre-empted by the mount sweep at
+  `CoachGameReview.tsx:346`) → import-and-review users write no counted rows
+  and no held rows; green unreachable for them.
+- C2. Eval-comment imports (chess.com/lichess `%eval`) arrive with
+  `bestMove:null` → attributed `other` and LATCHED forever
+  (`autoAnalyzeGame.ts:227,310`); never re-attributed when review deepens.
+- C3. Play games log from depth-10 live annotations with no `pv` →
+  `calculation-depth` can never land; live captures carry no
+  `pvAfterPlayed`/`evalBefore`.
+- C4. Learn passes `fundamentalId: null` (`positionFacts.ts:641`); Learn
+  recurrence can count the CURRENT game as prior
+  (`learnFundamentalNarration.ts:157`).
+- C5. Section-14 detectors (`calculation-depth`, `left-book-early`, `no-plan`)
+  fire on nothing real, by construction.
+- C6. Decay only by drilling or an archive-relative window; a one-off slip
+  raises the ranker forever (`weaknessSignal.ts:126`).
+- C7. Learn's End Lesson discards the game: not saved, not in review, no
+  hand-off. Save it and offer the review.
+- C8. Fixture contamination: reviewing a sample moved the profile 1200→1500
+  and counted 3 games (D5).
+- C9. Provenance lost at import: My Mistakes shows source "Coach", opponent
+  "Unknown", date = import date for chess.com slips.
+- C10. The "10 games running" / "we've been working on" framing counts
+  occurrences as games and sessions that never happened.
+
+### D. THE WRONG COMPUTERS AND THE JANK — every false or repeated sentence heard today
+- D-1. `positionReadingService.ts:417` bad-bishop on mobility ≤3 with an
+  invented reason ("hemmed in behind its own pawns … a pawn to a6 would fix
+  it") — spoken 4× at one ply.
+- D-2. "pins the pawn on f7 to the knight on g8" / "queen on d5 pins your pawn
+  on g2 against your rook on h1" — value check on the back piece.
+- D-3. "1 attacker to 0 defenders, so it falls" on a queen that steps away —
+  the counter must respect mobility.
+- D-4. `reviewSacrifice.ts:51` "compensation: the position holds up
+  completely" on a 4.7-point blunder.
+- D-5. Pawn-move method beat on a king move (Ke2); the Ke2 slip recorded as
+  "left a piece passive" — the real lesson (castling lost) never named.
+- D-6. Wrong WHY on the coach's own move ("Nc6 was the move, to trade off the
+  knight" — nothing to trade).
+- D-7. "knight takes e4 — it would win the piece on e4" (a pawn).
+- D-8. The "genuinely close — X is about as good, so don't agonise" stem 4× in
+  seven moves; "Undefended right now:" and "the eval bar ticks 0.4 your way
+  with no material story" on nearly every ply; "It stakes out the center and
+  grabs space" with no subject.
+- D-9. Seat/register mixes: "That was a blunder from me … He let you off";
+  "they're lining up a pin in 2: Bg5, then Bg4" where Bg5 is the student's
+  move; a standing-danger fork announced on the student's own move.
+- D-10. Bare SAN spoken ("Bg5, then Bg4") beside its spelled twin; the same
+  refrain spoken twice.
+- D-11. Unprompted "I don't have any of your games yet — upload…" on move 1
+  of a game.
+- D-12. Mate score rendered "-7.5 to -300.0"; the recap card is the raw
+  third-person fact package ("The student made 1 blunder(s)").
+- D-13. Turning-point question spoken with no card; the walk ends at
+  "Ply 28/27" on the START position; no result card.
+- D-14. Corpus fragments narrating the video onto the board ("with the knight
+  to c3 and f4. If they go the knight to f6, of course"; "but the second
+  component of this setup…").
+- D-15. Plan template outranking a mate threat ("win their weak pawn on h7 —
+  plant your knight on h6" with Qxf7# on the board); "Your plan is to advance
+  your kingside majority / theirs the queenside" at move 7.
+- D-16. "You're in trouble: you're two pieces further developed"; "their
+  knight on a1 is doing nothing — passivity is the whole story" on a knight
+  that just took a rook.
+- D-17. Chat transcript duplicates ("Watch out — if I play Qxg2…" twice);
+  "hanging_piece" raw enum and "365.5 points" spoken in the tactics answer.
+
+### E. THE ROUTER AND CHAT (A6, plus)
+- E1. "why was X bad", "what should I be thinking about", "what did you have
+  in mind" → best-move-now (3 of 3, both bundles).
+- E2. "what is my weakest opening?" → a sales pitch while the answer sits in
+  the Openings tab.
+- E3. "what should I learn?" → a 3-game 0% opening (A3 fixes the source).
+- E4. Hint taps: 47% "I can't verify that precisely" (PostHog, 30d) — each
+  hint must resolve to a computed line or say why not.
+- E5. The typo question about the f1 bishop answered with a generic plan.
+
+### F. THE G0 RING — the un-inverted surfaces (the G0 reader's inventory)
+- F1. `openingGenerator` structured narration: the model authors the ideas
+  under a "LINE FACTS" allowance, regen loop, BAKED forever — the highest-
+  traffic teaching content in the app.
+- F2. `usePositionNarration.ts:375` "Read this position" — free LLM with a
+  streaming sentence gate.
+- F3. `walkthroughLlmNarrator.ts:269` (legacy WalkthroughMode, ~3,000 DB
+  openings), `middlegamePlanner.ts:343` PV sentences, `generateOneStage`
+  retry loop, `kidGameCoach.ts:385` Q&A.
+- F4. `voiceFacts` skips `containmentCheck` when translating (coachApi:2925)
+  and none of its four prompts carry `perspectiveRule`.
+- F5. `validateArrowClaims` has no call site; CLAUDE.md G6 is stale.
+
+### G. THE PLAY SURFACE
+- G1. Card off (shipped). D4 records the spoken-verdict decision.
+- G2. Play steers (A7). Play speaks the phase transitions and, per D4, the
+  verdict; never a picker.
+
+### H. REAL-USER PLUMBING (PostHog, native, 30d)
+- H1. 926 of 932 imported games unanalysed by default (A2).
+- H2. `coach_tool_call_error`: walkthrough refused on `/coach/teach` because
+  the drawer kept `surface=home-chat` after `navigate_to_route` (Thai user,
+  10×). Bucket D marks D3 done — VERIFY on prod, do not assume.
+- H3. A Learn game (`teach-*`) could not open in review (PGN unparseable).
+- H4. Feedback submits twice (every row duplicated).
+- H5. `ota_download_failed` 41 events / 18 users vs 59 successes; `voice_fallover`
+  "cloud voice not live" on September builds; `stockfish-analysis-stalled`
+  5 users; `phase_transition_suppressed` fires on every coach ply (noise).
+- H6. Analytics hygiene: `coach_question_asked` is 10× inflated by the hint
+  prompt and the canned best-move button.
+
+### I. DOCS AND GATES THAT LIE
+- I1. CLAUDE.md G6 claims `validateArrowClaims` is wired — it is not.
+- I2. CLAUDE.md "ONE literal" for the rating — 63 inline `?? 1200` remain
+  (same value; the gate only catches a different number). Migrate to the
+  constant so drift is impossible, not merely unlikely.
+- I3. The Play contract contradiction (07-06 vs 07-13) — resolve by D4 and
+  delete the losing sentence, per the Lake Butler rule.
+- I4. Three vacuous CRIT rows pass on "no moment selected"; the Weaknesses
+  header says "932 analysed" over "926 not analysed".
+
+### J. AUDITS THAT PROVE IT
+- J1. `audit-home-opening-prod.mjs` (A11).
+- J2. The standing pair after every batch, sequentially, narrations read.
+- J3. `audit-second-game-memory-prod` after C7; `audit-loop-closes-prod` after
+  C1–C4; `audit-coach-all-questions-prod` exhaustive after E.
+
+### K. NOT NOW, RECORDED SO IT IS NOT LOST
+- Kids Mode: zero native opens in 60 days (product, not coach).
+- The 47-game corpus measurement; the boot-payload split (§E in the earlier
+  plan); the dashboard bars grading (needs users).
+
+**BATCHES AND OWNERS — one push and one audit pair per batch, sequential.**
+- Batch 0 (in parallel, isolated worktrees): B (door wiring) · D (wrong
+  computers + jank) · E (router) · C7/C8/C9/C10 (Learn hand-off, fixtures,
+  provenance, framing). Main session: A1 (one key).
+- Batch 1: A2, A3 (analysis priority, home opening), C1–C6 (record path).
+- Batch 2: A4, A5, A7, A8 (plan, drills, steer, review record), G.
+- Batch 3: F (the G0 ring; F1 is the long one).
+- Batch 4: H, I, J.
+Every batch: surface-map --changed on every touched file, gates negative-
+controlled, ship-check green, push to main, both standing audits, narrations
+read and quoted in PLAN. No OTA dispatch — that is David's.
+
+**Next-session pickup.** `TaskList` holds the live items. Batch 0 helpers
+report a branch + SHA; integrate on main in the order B → D → E → C, one
+ship-check per merge. Then A1.
+
 ## 🎯 WO-HOME-OPENING-01 — a personal coach: one home opening per colour, everything reads it (David 2026-09-22)
 
 **Where this came from.** A full hand-driven evaluation on prod with David's own

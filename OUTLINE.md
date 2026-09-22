@@ -21,6 +21,19 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 00. WO-STANDARD-01 — THE FULL BOARD (David 2026-09-22: "get my app up to standard")
+- 🔴 A. The personal coach — WO-HOME-OPENING-01 (section 0 below, A1–A11)
+- 🔴 B. The deciding path — B1 pre-gate vs decide() signals · B2 boost cannot flip a verdict · B3 four live surfaces pass no student · B4 ledgers before the door · B5 tier-blind need veto · B6 rating decides volume via tiers/buckets · B7 cold start counts samples, Learn never, constant 100 · B8 green for X mutes Y · B9 quietBy collapses two gates · B10 hidden caps · B11 methodBeat closed-standing/abs · B12 subsumption superset
+- 🔴 C. The record path — C1 review capture dead · C2 eval-comment imports latched `other` · C3 Play/live captures carry no pv · C4 Learn fundamentalId null + self-counting recurrence · C5 section-14 fires on nothing · C6 decay only by absence · C7 Learn End Lesson discards the game · C8 fixtures move the rating and count as games · C9 provenance lost at import · C10 "10 games running" framing
+- 🔴 D. The wrong computers and the jank — D-1 bad bishop · D-2 pawn-to-piece pins · D-3 "so it falls" on a mobile piece · D-4 compensation on a losing sac · D-5 pawn method on a king move · D-6 wrong WHY on the coach's move · D-7 pawn called a piece · D-8 repeated stems and per-ply templates · D-9 seat/register mixes · D-10 bare SAN + double refrains · D-11 unprompted upload nag · D-12 -300.0 mate + raw recap card · D-13 no turning card, Ply 28/27, no result card · D-14 corpus narrating the video · D-15 plan template over a mate threat · D-16 contradictory verdict sentences · D-17 chat duplicates, raw enum, "365.5 points"
+- 🔴 E. The router — E1 why/method → best-move-now · E2 weakest-opening sales pitch · E3 3-game "worst" · E4 47% hint non-answers · E5 typo question ignored
+- 🔴 F. The G0 ring — F1 openingGenerator baked model-authored ideas · F2 read-this-position · F3 legacy narrator, PV sentences, stage-gen retry, kid Q&A · F4 voiceFacts translation skips containment, no perspectiveRule · F5 validateArrowClaims dead
+- 🟠 G. Play — G1 card off (shipped 0813e7f) · G2 steer; D4 decision recorded (spoken verdict stays until David flips)
+- 🔴 H. Real-user plumbing — H1 926/932 unanalysed · H2 verify walkthrough refusal on home-chat · H3 Learn game unparseable in review · H4 feedback double-submit · H5 OTA fails / cloud voice fallover / analysis stalls / suppressed-transition noise · H6 analytics inflation
+- 🔴 I. Docs and gates that lie — I1 G6 stale · I2 63 inline 1200 · I3 Play contract contradiction · I4 vacuous CRIT rows + header
+- 🔴 J. Audits — J1 home-opening audit · J2 standing pair per batch · J3 memory/loop/routing audits after their batches
+- 🟡 K. Not now — Kids Mode opens, 47-game corpus, boot payload, dashboard grading
+
 ## 0. WO-HOME-OPENING-01 — a personal coach: one home opening per colour (David 2026-09-22)
 - 🔴 1. ONE opening key across import / Play / Learn / review — four key spaces today, the departure and result terms never join
 - 🔴 2. Batch analysis orders the home openings' games first; the "932 analysed / 926 not analysed" header derives from one count
