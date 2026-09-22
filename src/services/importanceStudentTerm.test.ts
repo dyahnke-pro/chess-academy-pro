@@ -21,10 +21,13 @@ describe('importance takes the student term — raise-only, pre-matched', () => 
     expect(known.reasons.join(' ')).toMatch(/recorded weakness/);
   });
 
-  it('🚨 a weakness NEVER manufactures a moment out of a quiet ply', () => {
+  it('🚨 a raise-only boost NEVER manufactures a moment out of a quiet ply', () => {
     // Without this guard a persistent hole makes every position important and
     // the coach interrupts constantly — "nothing gets stated" inverted into
-    // "nothing can be heard over the noise".
+    // "nothing can be heard over the noise". (B2 carves out ONE bounded
+    // exception — a RECURRING red hole, carried as `StudentBoost.opens` — and
+    // that is pinned in studentMomentBoost.test.ts; a bare number is the
+    // raise-only form and still cannot open anything.)
     const nothing = quiet();
     expect(computeImportance(nothing, 1500, 0).speak).toBe(false);
     expect(computeImportance(nothing, 1500, 40).speak, 'a hole invented a moment').toBe(false);

@@ -38,7 +38,7 @@ import { structurePlan } from './boardPlan';
 import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
-import { studentMomentBoost } from './studentMomentBoost';
+import { studentMomentBoost, type StudentBoost } from './studentMomentBoost';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 export interface SelectorPly {
@@ -128,7 +128,7 @@ export interface TeachingPackage {
    *  a computer already produced and never manufactures one. Red (a recorded
    *  hole) or grey (a posed capability with no record) — see
    *  `studentMomentBoost`. */
-  boostByPly: ReadonlyMap<number, number>;
+  boostByPly: ReadonlyMap<number, StudentBoost>;
 }
 
 export const MAX_MOMENTS = 3;
@@ -252,7 +252,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   const student = input.student ?? coldStudent(rating);
   const tacticByPly = new Map<number, string | null>(moments.map((m) => [m.ply, m.tactic] as const));
   const needByPly = new Map<number, NeedVerdict>();
-  const boostByPly = new Map<number, number>();
+  const boostByPly = new Map<number, StudentBoost>();
   for (const p of plies) {
     if (p.playerColor !== input.studentColor) continue;
     const tactic = tacticByPly.get(p.ply) ?? landedByPly.get(p.ply) ?? null;

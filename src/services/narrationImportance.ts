@@ -22,6 +22,7 @@
 // lesson (plan in a calm position). The composition below catches all four.
 import { criticalityThresholds, type CriticalMoment } from './criticalityScan';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 
 export interface ImportanceSignals {
   /** Prospective decision-leverage — `scanCriticality`'s read of THIS position
@@ -129,8 +130,11 @@ export function isContested(
 export function computeImportance(
   s: ImportanceSignals,
   rating = DEFAULT_STUDENT_RATING,
-  studentBoost = 0,
+  /** A bare number is the raise-only form (`opens: false`) — kept for the leaf's
+   *  own tests; the door always hands a full `StudentBoost`. */
+  studentBoost: number | StudentBoost = NO_BOOST,
 ): ImportanceVerdict {
+  const boost: StudentBoost = typeof studentBoost === 'number' ? { rank: studentBoost, opens: false } : studentBoost;
   const contested = isContested(s.evalCpWhitePov, s.wdl);
   const th = criticalityThresholds(rating);
   const reasons: string[] = [];
@@ -195,15 +199,26 @@ export function computeImportance(
   }
 
   // ── THE STUDENT TERM (algo-based supreme law) ────────────────────────────
-  // Their own recorded mistakes raise this moment. RAISE-ONLY and only on a
-  // moment that ALREADY fired: a weakness makes a real moment more worth
-  // stopping for, it never MANUFACTURES one out of a quiet ply. Without that
-  // guard a persistent hole would make every position important and the coach
-  // would interrupt constantly — the "things don't get stated" failure inverted
-  // into "nothing can be heard over the noise".
-  if (studentBoost > 0 && rank > 0) {
-    rank += studentBoost;
-    reasons.push(`this student's own recorded weakness (+${studentBoost})`);
+  // Their own recorded mistakes raise this moment. RAISE-ONLY: a weakness makes
+  // a real moment more worth stopping for. On a moment that ALREADY fired the
+  // term simply adds. On a QUIET ply it may open the moment only when the term
+  // says so (`opens` — a RED hole that has recurred; grey and green never
+  // manufacture one) and only while the game is CONTESTED (a recurring hole in
+  // a decided game is not worth an interruption, the same gate `standingChance`
+  // sits behind). The opened moment ranks at the boost itself, which is capped
+  // at MAX_WEAKNESS_BOOST (30) — under every engine-driven tier and under a
+  // declared teaching beat (40) — so it can never vault a real moment, and the
+  // floor for its tier is the `teaching` bar. Without the `opens` bound a
+  // persistent hole would make every position important and the coach would
+  // interrupt constantly — the "things don't get stated" failure inverted into
+  // "nothing can be heard over the noise" (B2, 2026-09-22).
+  if (boost.rank > 0) {
+    if (rank > 0) {
+      rank += boost.rank;
+      reasons.push(`this student's own recorded weakness (+${boost.rank})`);
+    } else if (boost.opens && contested) {
+      bump(boost.rank, 'teaching', `this student's own RECURRING weakness opens a quiet moment (+${boost.rank})`);
+    }
   }
 
   return { speak: rank > 0, rank, tier, reasons, contested };

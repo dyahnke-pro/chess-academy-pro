@@ -36,6 +36,7 @@ import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, 
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision } from './coachDecisionEvents';
+import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
  *
@@ -75,7 +76,9 @@ export interface StudentContext {
    *  `Record<ImportanceTier, cluster>` lookup — a fourth, coarser join beside
    *  three existing ones, on a lossy key. See narrationImportance.)
    *
-   *  0 = no data / a hole the lifecycle marks `fixed`. RAISE-ONLY.
+   *  `NO_BOOST` = no data / a hole the lifecycle marks `fixed`. `rank` is
+   *  RAISE-ONLY; `opens` (a recurring RED hole) may open a quiet contested
+   *  moment — see `studentMomentBoost` (B2).
    *
    * 🚨 REQUIRED, and this is the third field in this codebase made required for
    * the same reason. Both student terms were optional, and review simply never
@@ -90,9 +93,10 @@ export interface StudentContext {
    * `posedTags` (pre-filtered by a guard that belonged to the other consumer).
    * Three instances, all found by hand, all invisible to every prod audit.
    * An optional student term is a lane's licence to forget the student, so the
-   * door no longer offers one: a caller must ANSWER, even if the answer is 0.
+   * door no longer offers one: a caller must ANSWER, even if the answer is
+   * `NO_BOOST`.
    */
-  momentBoost: number;
+  momentBoost: StudentBoost;
 }
 
 /** The facts a surface computed at this moment, with the geometry coupled from
@@ -164,8 +168,9 @@ export function judgeMoment(
   signals: ImportanceSignals,
   rating: number,
   posture: SurfacePosture,
-  /** The student term — see `StudentContext.momentBoost`. Raise-only. */
-  momentBoost = 0,
+  /** The student term — see `StudentContext.momentBoost`. A bare number is the
+   *  raise-only form, for the leaf tests; a surface hands a `StudentBoost`. */
+  momentBoost: number | StudentBoost = NO_BOOST,
 ): MomentVerdict {
   const importance = computeImportance(signals, rating, momentBoost);
   return { importance, speaks: posture === 'walk' || importance.speak };
@@ -253,7 +258,7 @@ export function decide(
    *  this function computes (David 2026-09-16: how to think IS the teaching). */
   method?: MethodContext,
 ): CoachDecision {
-  const { importance, speaks } = judgeMoment(signals, student.rating, posture, student.momentBoost ?? 0);
+  const { importance, speaks } = judgeMoment(signals, student.rating, posture, student.momentBoost ?? NO_BOOST);
   const base = { tier: importance.tier, rank: importance.rank };
 
   // 1 — THE MOMENT, but ONLY where silence is the default. On a 'walk' the

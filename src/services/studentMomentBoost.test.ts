@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { studentMomentBoost, GREY_BOOST } from './studentMomentBoost';
+import { studentMomentBoost, holeOpensMoment, GREY_BOOST, NO_BOOST, RECURRENCE_OPENS_AT } from './studentMomentBoost';
 import { computeImportance } from './narrationImportance';
 import type { CapabilityProfile, CapabilityProfileEntry } from './capabilityEvidence';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -17,26 +17,26 @@ const persistentHole = {
 
 describe('the heat map feeds the RANKER', () => {
   it('GREY raises — never asked is not mastered', () => {
-    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) })).toBe(GREY_BOOST);
+    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) })).toEqual({ rank: GREY_BOOST, opens: false });
   });
 
   it('GREEN earns nothing here — the ranker is raise-only, green lowers through need', () => {
-    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 9, broken: 0, heldStreak: 9, streakGames: 2 }) })).toBe(0);
+    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 9, broken: 0, heldStreak: 9, streakGames: 2 }) })).toEqual(NO_BOOST);
   });
 
   it('RED outranks GREY when the hole is persistent and worsening', () => {
     const red = studentMomentBoost({ hole: persistentHole, posedTags: [TAG], capabilities: caps(null) });
-    expect(red).toBeGreaterThan(GREY_BOOST);
+    expect(red.rank).toBeGreaterThan(GREY_BOOST);
   });
 
   it('takes the MAX, never the sum', () => {
     const both = studentMomentBoost({ hole: persistentHole, posedTags: [TAG], capabilities: caps(null) });
     const redOnly = studentMomentBoost({ hole: persistentHole });
-    expect(both).toBe(redOnly);
+    expect(both).toEqual(redOnly);
   });
 
   it('a board that asked nothing contributes nothing', () => {
-    expect(studentMomentBoost({ posedTags: [], capabilities: caps(null) })).toBe(0);
+    expect(studentMomentBoost({ posedTags: [], capabilities: caps(null) })).toEqual(NO_BOOST);
   });
 
   /**
@@ -49,15 +49,45 @@ describe('the heat map feeds the RANKER', () => {
    */
   it('GREY cannot manufacture a moment out of a quiet ply', () => {
     const quiet = { decision: null, cpLossCp: null, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
-    const withGrey = computeImportance(quiet, 1400, GREY_BOOST);
+    const withGrey = computeImportance(quiet, 1400, studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) }));
     expect(withGrey.rank).toBe(0);
     expect(withGrey.speak).toBe(false);
   });
 
+  // B2 (decision recorded 2026-09-22): the student's RECORD may flip a verdict
+  // — bounded. A RED hole that has recurred opens a quiet CONTESTED moment at
+  // its own rank (≤ 30, under every engine tier); grey never does, green never
+  // does, a first-time hole never does, and a decided game never does.
+  // Negative control: drop the `opens` branch in computeImportance → the first
+  // `it` fails; make grey open → the second fails.
+  it('a RECURRING RED hole may open a quiet moment — bounded to its own rank', () => {
+    const quiet = { decision: null, cpLossCp: null, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
+    const red = studentMomentBoost({ hole: persistentHole });
+    expect(red.opens).toBe(true);
+    const opened = computeImportance(quiet, 1400, red);
+    expect(opened.speak).toBe(true);
+    expect(opened.tier).toBe('teaching');
+    expect(opened.rank).toBe(red.rank);
+    expect(opened.rank).toBeLessThan(40); // under a declared teaching beat, under every engine tier
+    // …but never in a decided game — the contested gate holds here too.
+    expect(computeImportance({ ...quiet, evalCpWhitePov: 900, wdl: [960, 30, 10] }, 1400, red).speak).toBe(false);
+  });
+
+  it('a first-time hole, grey and green never open a quiet moment', () => {
+    const once = { ...persistentHole, openCount: 1, total: 1 } as WeaknessSignal;
+    expect(holeOpensMoment(once)).toBe(false);
+    expect(RECURRENCE_OPENS_AT).toBe(2);
+    expect(studentMomentBoost({ hole: once }).opens).toBe(false);
+    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) }).opens).toBe(false);
+    expect(studentMomentBoost({ posedTags: [TAG], capabilities: caps({ held: 9, broken: 0, heldStreak: 9, streakGames: 2 }) }).opens).toBe(false);
+    const fixed = { ...persistentHole, lifecycleStatus: 'fixed' } as WeaknessSignal;
+    expect(studentMomentBoost({ hole: fixed }).opens).toBe(false);
+  });
+
   it('but it DOES raise a moment that already fired', () => {
     const real = { decision: null, cpLossCp: null, threatNet: 0, teachingBeat: true, evalCpWhitePov: 20, wdl: null };
-    const plain = computeImportance(real, 1400, 0);
-    const boosted = computeImportance(real, 1400, GREY_BOOST);
+    const plain = computeImportance(real, 1400, NO_BOOST);
+    const boosted = computeImportance(real, 1400, studentMomentBoost({ posedTags: [TAG], capabilities: caps(null) }));
     expect(plain.rank).toBeGreaterThan(0);
     expect(boosted.rank).toBe(plain.rank + GREY_BOOST);
   });
@@ -96,8 +126,8 @@ describe('the door cannot offer a lane a way to forget the student', () => {
     const src = readFileSync('src/services/coachDecider.ts', 'utf8');
     expect(src, 'need must be required — null is the answer, absence is not')
       .toMatch(/\n {2}need: \{ speak: boolean \} \| null;/);
-    expect(src, 'momentBoost must be required — 0 is the answer, absence is not')
-      .toMatch(/\n {2}momentBoost: number;/);
+    expect(src, 'momentBoost must be required — NO_BOOST is the answer, absence is not')
+      .toMatch(/\n {2}momentBoost: StudentBoost;/);
     expect(src).not.toMatch(/\n {2}need\?:/);
     expect(src).not.toMatch(/\n {2}momentBoost\?:/);
   });

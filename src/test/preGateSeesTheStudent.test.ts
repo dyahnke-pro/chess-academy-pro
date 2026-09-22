@@ -81,7 +81,7 @@ describe('the student term reaches the pre-gate', () => {
     // The pre-gate can only use grey (red needs the clause→hole join, which does
     // not exist yet). If grey were always 0 the wire would be decorative.
     const grey = studentMomentBoost({ posedTags: ['hung-material'], capabilities: undefined });
-    expect(grey, 'grey boost is zero — the pre-gate wire buys nothing').toBeGreaterThan(0);
+    expect(grey.rank, 'grey boost is zero — the pre-gate wire buys nothing').toBeGreaterThan(0);
   });
 
   it('positionFacts passes a boost to the EARLY judgeMoment', () => {
@@ -90,6 +90,6 @@ describe('the student term reaches the pre-gate', () => {
     // boost's tuning rather than the wiring this is about.
     const src = readFileSync(resolve(__dirname, '../services/positionFacts.ts'), 'utf8');
     expect(src, 'the early judgeMoment lost its student term')
-      .toMatch(/\}, rating, input\.posture, preGateBoost\);/);
+      .toMatch(/judgeMoment\(momentSignals, rating, input\.posture, preGateBoost\);/);
   });
 });

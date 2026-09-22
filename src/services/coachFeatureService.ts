@@ -28,6 +28,7 @@ import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment'
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
+import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { habitIsOwed, type MethodHabit } from './methodBeat';
 import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
@@ -1247,7 +1248,7 @@ export function buildReviewSegments(
   // on the surface where diagnosis happens a student's own recorded holes could
   // not raise a single moment: the weaknesses were loaded, used to ORDER facts,
   // and ignored by the computer that decides how much a moment is worth saying.
-  const selectorPkg: { needByPly: ReadonlyMap<number, NeedVerdict>; boostByPly: ReadonlyMap<number, number> } = playerColor
+  const selectorPkg: { needByPly: ReadonlyMap<number, NeedVerdict>; boostByPly: ReadonlyMap<number, StudentBoost> } = playerColor
     ? (!studentNeed || studentNeed.gamesPlayed < COLD_START_GAMES)
       ? { boostByPly: new Map(), needByPly: new Map(moves.slice(0, usable)
           .filter((mv) => (mv.ply % 2 === 1 ? 'white' : 'black') === playerColor)
@@ -1276,9 +1277,9 @@ export function buildReviewSegments(
             })),
             studentColor: playerColor, rating, kind: 'game', surface: 'review', student: studentNeed,
           });
-        } catch { return { needByPly: new Map<number, NeedVerdict>(), boostByPly: new Map<number, number>() }; }
+        } catch { return { needByPly: new Map<number, NeedVerdict>(), boostByPly: new Map<number, StudentBoost>() }; }
       })()
-    : { needByPly: new Map<number, NeedVerdict>(), boostByPly: new Map<number, number>() };
+    : { needByPly: new Map<number, NeedVerdict>(), boostByPly: new Map<number, StudentBoost>() };
   const needByPly = selectorPkg.needByPly;
   const boostByPly = selectorPkg.boostByPly;
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
@@ -1869,7 +1870,7 @@ export function buildReviewSegments(
           // THE STUDENT TERM FOR THE RANKER — red or grey, raise-only, applied
           // by `computeImportance` under `rank > 0` so it re-weights a moment a
           // computer already produced and never manufactures one.
-          momentBoost: boostByPly.get(m.ply) ?? 0,
+          momentBoost: boostByPly.get(m.ply) ?? NO_BOOST,
           // 🚨 DELIBERATELY null, and this is why the field is required.
           //
           // Review DOES gate on need — narrowly, at `quietOpeningPly` below:

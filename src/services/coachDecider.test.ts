@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { decide } from './coachDecider';
 import type { ImportanceSignals } from './narrationImportance';
+import { NO_BOOST } from './studentMomentBoost';
 
 const PIN = '[tactic] Your bishop on g4 pins their bishop on e2 against their queen on d1.';
 const BATTERY = '[tactic] Their queen on d1 and their bishop on e2 form a battery on the diagonal, bearing down on your bishop on g4.';
@@ -12,7 +13,7 @@ const bundle = { facts: [PIN, BATTERY, TRIVIA], squares: SQ, incoming: new Set([
 // type says so because making it optional is exactly how review ended up
 // never supplying it. The fixture omitted it, so this gate never once
 // exercised the absent-need path it documents (found 2026-09-19).
-const student = { rating: 1500, weaknesses: [], need: null, momentBoost: 0 };
+const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST };
 
 const quiet: ImportanceSignals = {
   decision: null, cpLossCp: null, threatNet: 0, teachingBeat: false,

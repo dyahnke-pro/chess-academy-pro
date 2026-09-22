@@ -25,7 +25,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🔴 A. The personal coach — WO-HOME-OPENING-01 (section 0 below, A1–A11)
 - 🔴 B. The deciding path (one line per item; ✅ carries its proof)
   - ✅ B1 pre-gate vs decide() signals — one `momentSignals: ImportanceSignals` const feeds both `judgeMoment` and `decide` (positionFacts); gate `positionFacts.test.ts` 'B1 —' (a fork-in-two speaks through the door on interrupt; statement-blame on the shared identifier; negative-controlled)
-  - 🔴 B2 boost cannot flip a verdict
+  - ✅ B2 boost cannot flip a verdict — `StudentBoost {rank, opens}`; a RECURRING red hole (≥2 instances, open, not fixed) opens a quiet CONTESTED moment at its own rank (≤30, tier teaching); grey/green never; gate `studentMomentBoost.test.ts` 'a RECURRING RED hole may open…' + 'grey and green never open' (negative-controlled both ways)
   - 🔴 B3 four live surfaces pass no student
   - 🔴 B4 ledgers before the door
   - ✅ B5 tier-blind need veto — `NEED_MAY_VETO: Record<ImportanceTier, boolean>`; mate/only-move/blunder/must-defend speak on importance; gate `coachDecider.test.ts` "NEED cannot veto…" (negative-controlled)
