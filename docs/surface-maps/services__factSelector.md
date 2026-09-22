@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**215 lines · 7 exports · 3 importers · 1 tests · 1 audits**
+**261 lines · 8 exports · 3 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -44,8 +44,11 @@
 ### `FactSelectOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `selectFacts` (function) — 14 call sites
-- `src/services/coachDecider.ts:239`
+### `sameClaim` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `selectFacts` (function) — 17 call sites
+- `src/services/coachDecider.ts:294`
 - `src/services/factSelector.test.ts:23`
 - `src/services/factSelector.test.ts:33`
 - `src/services/factSelector.test.ts:41`
@@ -54,11 +57,14 @@
 - `src/services/factSelector.test.ts:69`
 - `src/services/factSelector.test.ts:74`
 - `src/services/factSelector.test.ts:92`
-- `src/services/factSelector.test.ts:99`
-- `src/services/factSelector.test.ts:110`
-- `src/services/factSelector.test.ts:118`
-- `src/services/factSelector.test.ts:127`
-- `src/services/factSelector.test.ts:136`
+- `src/services/factSelector.test.ts:102`
+- `src/services/factSelector.test.ts:112`
+- `src/services/factSelector.test.ts:115`
+- `src/services/factSelector.test.ts:123`
+- `src/services/factSelector.test.ts:134`
+- `src/services/factSelector.test.ts:142`
+- `src/services/factSelector.test.ts:151`
+- `src/services/factSelector.test.ts:160`
 
 ## Tests
 

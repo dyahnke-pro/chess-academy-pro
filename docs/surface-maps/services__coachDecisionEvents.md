@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**142 lines · 7 exports · 4 importers · 1 tests · 1 audits**
+**144 lines · 7 exports · 4 importers · 1 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3795) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:5877) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3832) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:5914) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -24,12 +24,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onCoachDecision` (function) — 3 call sites
-- `src/services/appAuditor.ts:2088`
+- `src/services/appAuditor.ts:2123`
 - `src/services/coachDecisionEmits.test.ts:31`
 - `src/services/coachDecisionEmits.test.ts:79`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:190`
+- `src/services/coachDecider.ts:213`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -40,7 +40,7 @@
 - `src/services/coachDecisionEmits.test.ts:131`
 
 ### `emitNeedScore` (function) — 1 call site
-- `src/services/needScore.ts:358`
+- `src/services/needScore.ts:446`
 
 ### `resetCoachDecisionListeners` (function) — 5 call sites
 - `src/services/coachDecisionEmits.test.ts:30`
@@ -54,5 +54,9 @@
 - `src/services/coachDecisionEmits.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-concept-gameplay-prod.mjs`

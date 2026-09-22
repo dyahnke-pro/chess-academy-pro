@@ -4,32 +4,35 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**180 lines · 10 exports · 22 importers · 2 tests · 0 audits**
+**184 lines · 10 exports · 24 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3717) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3908) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3938) — names `explorerBandFor`, `ratingBands`
 
 ## Who calls in
 
 - `src/components/Coach/CoachAnalysePage.tsx`
+- `src/components/Coach/CoachGameReview.tsx`
+- `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/ExplainPositionSessionView.tsx`
 - `src/components/Openings/OpeningPlayMode.tsx`
+- `src/hooks/useStudentNeed.ts`
 - `src/services/amateurPlayCache.ts`
 - `src/services/causalChainVoice.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/coachGameEngine.ts`
 - `src/services/conceptEngine.ts`
-- `src/services/criticalityScan.ts`
+- `src/services/dbService.test.ts`
+- `src/services/dbService.ts`
 - `src/services/hintRegister.ts`
-- `src/services/narrationImportance.ts`
 - `src/services/needScore.ts`
 - `src/services/oneStudentRating.test.ts`
+- `src/services/openingGenerator.ts`
 - `src/services/playerRatingService.ts`
 - `src/services/positionFacts.ts`
 - `src/services/ratingBands.test.ts`
-- `src/services/refutedAlternative.ts`
-- `src/services/reviewTurningPoint.ts`
 - `src/services/slipDetector.ts`
 - `src/services/teachingSelector.ts`
 - `src/services/theoryDeparture.ts`
@@ -40,18 +43,17 @@
 ### `RatingTier` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `coreRatingTier` (function) — 12 call sites
-- `src/services/criticalityScan.ts:73`
+### `coreRatingTier` (function) — 11 call sites
 - `src/services/hintRegister.ts:65`
+- `src/services/ratingBands.test.ts:15`
 - `src/services/ratingBands.test.ts:16`
 - `src/services/ratingBands.test.ts:17`
 - `src/services/ratingBands.test.ts:18`
 - `src/services/ratingBands.test.ts:19`
 - `src/services/ratingBands.test.ts:20`
 - `src/services/ratingBands.test.ts:21`
-- `src/services/ratingBands.test.ts:22`
+- `src/services/ratingBands.test.ts:25`
 - `src/services/ratingBands.test.ts:26`
-- `src/services/ratingBands.test.ts:27`
 - `src/services/slipDetector.ts:79`
 
 ### `DEFAULT_STUDENT_RATING` (const) — 0 call sites
@@ -62,15 +64,15 @@
 
 ### `explorerBandFor` (function) — 11 call sites
 - `src/services/coachGameEngine.ts:245`
-- `src/services/ratingBands.test.ts:37`
-- `src/services/ratingBands.test.ts:45`
-- `src/services/ratingBands.test.ts:51`
-- `src/services/ratingBands.test.ts:53`
-- `src/services/ratingBands.test.ts:55`
-- `src/services/ratingBands.test.ts:60`
+- `src/services/ratingBands.test.ts:36`
+- `src/services/ratingBands.test.ts:44`
+- `src/services/ratingBands.test.ts:50`
+- `src/services/ratingBands.test.ts:52`
+- `src/services/ratingBands.test.ts:54`
+- `src/services/ratingBands.test.ts:59`
+- `src/services/ratingBands.test.ts:67`
 - `src/services/ratingBands.test.ts:68`
 - `src/services/ratingBands.test.ts:69`
-- `src/services/ratingBands.test.ts:70`
 - `src/services/theoryDeparture.ts:63`
 
 ### `DeciderKind` (type) — 0 call sites
@@ -90,9 +92,14 @@
 
 ## Tests
 
+- `src/services/dbService.test.ts`
 - `src/services/oneStudentRating.test.ts`
 - `src/services/ratingBands.test.ts`
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

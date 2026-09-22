@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**169 lines · 7 exports · 2 importers · 1 tests · 0 audits**
+**166 lines · 7 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:5643) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:5939) — names `refutedAlternative`
 
 ## Who calls in
 
@@ -38,14 +38,14 @@
 
 ### `refutedAlternative` (function) — 6 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/openingGenerator.ts:2409`
+- `src/services/openingGenerator.ts:2421`
 - `src/services/refutedAlternative.test.ts:62`
 - `src/services/refutedAlternative.test.ts:85`
 - `src/services/refutedAlternative.test.ts:102`
 - `src/services/refutedAlternative.test.ts:111`
 
 ### `candidatesFromMasters` (function) — 6 call sites
-- `src/services/openingGenerator.ts:2406`
+- `src/services/openingGenerator.ts:2418`
 - `src/services/refutedAlternative.test.ts:39`
 - `src/services/refutedAlternative.test.ts:47`
 - `src/services/refutedAlternative.test.ts:62`
@@ -58,4 +58,8 @@
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

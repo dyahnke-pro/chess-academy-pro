@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1525 lines · 7 exports · 11 importers · 7 tests · 0 audits**
+**1527 lines · 7 exports · 11 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,15 +27,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `computeWeaknessProfile` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2018`
+- `src/components/Coach/CoachGamePage.tsx:2070`
 - `src/components/Stats/StatsPage.tsx:50`
 - `src/services/analyticsService.ts:463`
-- `src/services/gameAnalysisService.ts:2349`
+- `src/services/gameAnalysisService.ts:2549`
 - `src/services/weaknessAnalyzer.test.ts:528`
 - `src/services/weaknessAnalyzer.test.ts:544`
 
 ### `getStoredWeaknessProfile` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10414`
+- `src/components/Coach/CoachTeachPage.tsx:10628`
 - `src/components/Stats/StatsPage.tsx:68`
 - `src/services/coachChatService.ts:188`
 - `src/services/coachContextSnapshot.ts:85`
@@ -90,4 +90,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

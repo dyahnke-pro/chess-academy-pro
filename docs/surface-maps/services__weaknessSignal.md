@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**206 lines · 8 exports · 30 importers · 15 tests · 1 audits**
+**230 lines · 9 exports · 30 importers · 15 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -65,26 +65,29 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `boostFor` (function) — 14 call sites
-- `src/services/coachDecider.ts:66`
+- `src/services/coachDecider.ts:70`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
-- `src/services/needScore.ts:266`
-- `src/services/needScore.ts:280`
-- `src/services/positionFacts.ts:776`
-- `src/services/positionFacts.ts:798`
+- `src/services/needScore.ts:273`
+- `src/services/needScore.ts:287`
+- `src/services/positionFacts.ts:783`
+- `src/services/positionFacts.ts:805`
 - `src/services/reviewFacetRank.ts:145`
-- `src/services/studentMomentBoost.ts:87`
-- `src/services/teachingSelector.ts:156`
+- `src/services/studentMomentBoost.ts:119`
+- `src/services/teachingSelector.ts:170`
 - `src/services/weaknessSignal.test.ts:56`
 - `src/services/weaknessSignal.test.ts:57`
 - `src/services/weaknessSignal.test.ts:58`
 - `src/services/weaknessSignal.test.ts:64`
 
+### `clauseKindBucket` (function) — 1 call site
+- `src/services/needScore.ts:330`
+
 ### `matchClauseKind` (function) — 12 call sites
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
-- `src/services/needScore.ts:277`
-- `src/services/positionFacts.ts:742`
+- `src/services/needScore.ts:284`
+- `src/services/positionFacts.ts:749`
 - `src/services/reviewFacetRank.ts:144`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
@@ -96,33 +99,33 @@
 
 ### `matchTacticPattern` (function) — 9 call sites
 - `src/services/liveTacticsContext.ts:488`
-- `src/services/needScore.ts:275`
-- `src/services/positionFacts.ts:741`
-- `src/services/teachingSelector.ts:155`
-- `src/services/teachingSelector.ts:290`
+- `src/services/needScore.ts:282`
+- `src/services/positionFacts.ts:748`
+- `src/services/teachingSelector.ts:169`
+- `src/services/teachingSelector.ts:305`
 - `src/services/weaknessSignal.test.ts:100`
 - `src/services/weaknessSignal.test.ts:103`
 - `src/services/weaknessSignal.test.ts:104`
 - `src/services/weaknessSignal.test.ts:107`
 
 ### `matchTag` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1607`
-- `src/services/needScore.ts:264`
-- `src/services/teachingSelector.ts:291`
+- `src/services/coachFeatureService.ts:1621`
+- `src/services/needScore.ts:271`
+- `src/services/teachingSelector.ts:306`
 - `src/services/weaknessSignal.test.ts:116`
 - `src/services/weaknessSignal.test.ts:119`
 - `src/services/weaknessSignal.test.ts:120`
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:1904`
+- `src/services/coachFeatureService.ts:1955`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`
 - `src/services/fundamentalRecurrence.ts:44`
 - `src/services/loopCloses.review.integration.test.ts:82`
-- `src/services/needScore.ts:274`
-- `src/services/teachingSelector.ts:289`
+- `src/services/needScore.ts:281`
+- `src/services/teachingSelector.ts:304`
 - `src/services/weaknessSpine.fundamentals.test.ts:117`
 - `src/services/weaknessSpine.fundamentals.test.ts:118`
 
