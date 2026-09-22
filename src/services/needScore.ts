@@ -33,11 +33,11 @@
 // this same function (invariant: one computer set).
 
 import type { WeaknessSignal } from './weaknessSignal';
-import { matchClauseKind, matchFundamental, matchTacticPattern, matchTag, boostFor, MAX_WEAKNESS_BOOST } from './weaknessSignal';
+import { matchClauseKind, matchFundamental, matchTacticPattern, matchTag, boostFor, clauseKindBucket, MAX_WEAKNESS_BOOST } from './weaknessSignal';
 import { bookDepartureIsCostly, type BookDepartureRow } from './bookDepartureWeakness';
 import type { TacticPatternType } from '../types/tacticTypes';
 import { capabilityProven, HELD_FOR_PROVEN, type CapabilityProfile } from './capabilityEvidence';
-import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { getMisconceptionTag, type MisconceptionBucket, type MisconceptionTagId } from '../data/misconceptionTags';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { emitNeedScore } from './coachDecisionEvents';
 
@@ -319,6 +319,38 @@ export { HELD_FOR_PROVEN };
  * costing a pawn or more, so a ply the student got wrong carries no tags to
  * lower with.
  */
+/** THE CLAIM THIS PLY IS ABOUT, as a bucket — the finest key every lane can
+ *  answer today. Precise before coarse, the same order `weaknessTerm` reads:
+ *  the attributed fundamental is a `fundamental:<id>` row (positional), a
+ *  landed tactic is tactical, else the clause kind's own bucket. `null` = the
+ *  ply carries no claim at all. */
+export function plyClaimBucket(p: Pick<NeedPlyInput, 'fundamentalId' | 'conceptId' | 'clauseKind'>): MisconceptionBucket | null {
+  if (p.fundamentalId) return 'positional';
+  if (p.conceptId) return 'tactical';
+  return clauseKindBucket(p.clauseKind);
+}
+
+/**
+ * GREEN FOR X MAY NOT LOWER A PLY ABOUT Y (B8, 2026-09-22). The board can pose
+ * several capabilities on one move — the same push that ceded space also
+ * developed a piece — and one of them being PROVEN used to subtract a bar's
+ * worth from the WHOLE sum, including the weakness term about a hole in a
+ * different part of the game. So a student proven at development went quiet
+ * on a ply whose teaching was a hanging piece.
+ *
+ * The scope is the ply's own claim: a proven tag counts only when the ply
+ * carries NO claim (then what the board posed IS the teaching — the measured
+ * contract `capabilityGreen.measure.test.ts` holds) or when the tag's bucket
+ * is the claim's bucket. Bucket, not tag, because the live lane's clause is a
+ * KIND with no tag id (positionFacts' fundamental clause carries an idea, not
+ * an id); it is the finest join the vocabularies support without authoring a
+ * new table — the sibling of the rule that the rot-ban exists for.
+ */
+function provenTagMatchesClaim(tag: MisconceptionTagId, claim: MisconceptionBucket | null): boolean {
+  if (claim === null) return true;
+  return getMisconceptionTag(tag)?.bucket === claim;
+}
+
 function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
   // THE GREEN GUARD, now explicit. It used to live inside `capabilitiesShown`,
   // so this term was safe only because of which list the caller passed — a
@@ -332,6 +364,7 @@ function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: numb
   // capability on a ply it could not grade.
   if (p.playedCleanly !== true) return { score: 0, reason: null };
   if (!p.posedTags?.length || ctx.capabilities.size === 0) return { score: 0, reason: null };
+  const claim = plyClaimBucket(p);
   const proven: string[] = [];
   for (const tag of p.posedTags) {
     const e = ctx.capabilities.get(tag);
@@ -340,6 +373,8 @@ function capabilityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: numb
     // and RED (a break inside the streak) both fail it, so the three states
     // still fall out of the one call rather than out of three branches here.
     if (!e || !capabilityProven(e)) continue;
+    // …and the proof must be about THIS ply's claim (B8).
+    if (!provenTagMatchesClaim(tag, claim)) continue;
     proven.push(`${tag} (${e.heldStreak} held in a row across ${e.streakGames} games)`);
   }
   if (proven.length === 0) return { score: 0, reason: null };

@@ -95,6 +95,27 @@ describe('the capability profile is READ by the need computer', () => {
     expect(computeNeed(ply([]), proven).score).toBe(computeNeed(ply([]), ctxWith(new Map())).score);
   });
 
+  // B8 (2026-09-22): GREEN FOR X MAY NOT LOWER A PLY ABOUT Y. The board poses
+  // several capabilities on one move; a proven one used to subtract from the
+  // whole sum, including a weakness term about a different part of the game.
+  // Negative control: make `provenTagMatchesClaim` return true → the first
+  // assertion fails (the tactical proof lowers the positional ply).
+  it('a proven TACTICAL capability does not lower a ply whose claim is POSITIONAL — and does lower a tactical one', () => {
+    const THREAT = 'missed-opponents-threat' as MisconceptionTagId; // bucket: tactical
+    const proven = ctxWith(new Map([[THREAT, entry({ streak: 99, games: 4 })]]));
+    const bare = ctxWith(new Map());
+    const positional = { ...ply([THREAT]), clauseKind: 'fundamental' };
+    expect(computeNeed(positional, proven).score).toBe(computeNeed(positional, bare).score);
+    const tactical = { ...ply([THREAT]), clauseKind: 'must-defend' };
+    expect(computeNeed(tactical, proven).score).toBeLessThan(computeNeed(tactical, bare).score);
+    // …an attributed fundamental is a positional claim too.
+    const attributed = { ...ply([THREAT]), fundamentalId: 'same-piece-twice' };
+    expect(computeNeed(attributed, proven).score).toBe(computeNeed(attributed, bare).score);
+    // …and a ply with NO claim keeps the measured contract: what the board
+    // posed IS the teaching, so the proof lowers it.
+    expect(computeNeed(ply([THREAT]), proven).score).toBeLessThan(computeNeed(ply([THREAT]), bare).score);
+  });
+
   it('GREEN cannot silence a ply the student got WRONG — the blunder guard', () => {
     // This used to be structural-by-accident: `capabilitiesShown` pre-filtered
     // the list, so green was safe only because of WHICH list the caller passed
