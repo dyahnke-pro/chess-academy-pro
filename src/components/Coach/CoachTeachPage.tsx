@@ -3053,6 +3053,20 @@ export function CoachTeachPage(): JSX.Element {
         });
         if (action) {
           const result = await actuate(action);
+          // 🔒 THE DOOR EMITS. Every algo-based decision must be observable
+          // (CLAUDE.md: "a computed decision nobody can inspect is not
+          // finished"), and the first run of `audit-coach-hands-prod` had no
+          // way to tell "Learn obeyed" from "Learn handed it to the LLM" —
+          // GameChatPanel emitted this and Learn did not, so the audit asserted
+          // on an event this surface could never produce.
+          void logAppAudit({
+            kind: 'coach-brain-tool-called',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit',
+            summary: `${routed.kind} ${result.ok ? 'ok' : 'failed'} (router-direct)`,
+            details: result.reason ? `reason=${result.reason}` : undefined,
+            fen: liveFenRef.current,
+          });
           if (result.ok) {
             setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);
             return;

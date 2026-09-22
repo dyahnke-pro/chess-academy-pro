@@ -77,6 +77,20 @@ async function command(page, listener, text) {
 const routerDirect = (events) => events.filter((e) =>
   /coach-brain-tool-called/.test(e.kind ?? '') && /router-direct/.test(`${e.summary ?? ''}`));
 
+/**
+ * The board's orientation, read off the DOM — an observable that owes nothing
+ * to an audit event. The first `[data-square]` in document order is the
+ * top-left corner: a8 with white at the bottom, h1 when flipped.
+ *
+ * 🚨 TWO INDEPENDENT SIGNALS ON PURPOSE. The first run of this audit asserted
+ * only on `router-direct` events, and Learn emitted none — so every row
+ * false-failed on a missing instrument rather than on the product, twice.
+ */
+const firstSquare = (page) => page.evaluate(() => {
+  const el = document.querySelector('[data-square]');
+  return el ? el.getAttribute('data-square') : null;
+});
+
 async function main() {
   console.log(`\n── coach hands, on ${BASE_URL} ──\n`);
   const listener = await startAuditListener();
@@ -121,10 +135,17 @@ async function main() {
       routerDirect(harder.events).length > 0,
       `routerDirect=${routerDirect(harder.events).length}`);
 
+    const cornerBefore = await firstSquare(page);
     const flip = await command(page, listener, 'flip the board');
-    record('LEARN: "flip the board" reaches the one door',
-      routerDirect(flip.events).length > 0,
-      `routerDirect=${routerDirect(flip.events).length}`);
+    const cornerAfter = await firstSquare(page);
+    record('LEARN: "flip the board" actually flips the BOARD',
+      cornerBefore !== null && cornerAfter !== null && cornerBefore !== cornerAfter,
+      `corner ${cornerBefore} -> ${cornerAfter}, routerDirect=${routerDirect(flip.events).length}`);
+    record('LEARN: flipping did NOT swap the student\'s side',
+      // The bug that shipped: `setPlayerColor` in the orientation hand. If the
+      // SIDE changed, the game's own turn/result bookkeeping moved with it.
+      !/you are now playing|switched you to/i.test(flip.transcript ?? ''),
+      'no side-swap language in the transcript');
 
     // ── the instruments themselves ───────────────────────────────────────
     const all = listener.getCapturedEvents();
