@@ -23,7 +23,10 @@
 // own. See `TeachGameOverCard.test.tsx`.
 import { ChevronRight } from 'lucide-react';
 
-export type TeachGameResult = 'win' | 'loss' | 'draw';
+/** `ended` = the student pressed End Lesson with a game in progress. The
+ *  game is SAVED (result `*`, nobody lost) and the review offered exactly as
+ *  after a mate — the board stays, leaving is a tap (C7, 2026-09-22). */
+export type TeachGameResult = 'win' | 'loss' | 'draw' | 'ended';
 
 export interface TeachGameOverCardProps {
   result: TeachGameResult;
@@ -39,6 +42,7 @@ export interface TeachGameOverCardProps {
 function headline(result: TeachGameResult, byMate: boolean): string {
   if (result === 'win') return byMate ? 'Checkmate — you win.' : 'You win.';
   if (result === 'loss') return byMate ? "Checkmate — that's the game." : "That's the game.";
+  if (result === 'ended') return 'Lesson ended — the game is saved.';
   return "That's a draw.";
 }
 

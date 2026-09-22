@@ -51,6 +51,8 @@ describe('the finished game keeps the board', () => {
       ['draw', false, "That's a draw."],
       // A draw is a draw however it arrived; there is no "checkmate draw".
       ['draw', true, "That's a draw."],
+      // End Lesson with a game in progress: saved, nobody lost (C7).
+      ['ended', false, 'Lesson ended — the game is saved.'],
     ];
     for (const [result, byMate, expected] of cases) {
       const { unmount } = render(

@@ -19,7 +19,7 @@ import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { registerCoachHands } from '../../services/coachActuator';
 import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
-import { TeachGameOverCard } from './TeachGameOverCard';
+import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
@@ -253,6 +253,7 @@ import { PlayerInfoBar } from './PlayerInfoBar';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { coachService, isProgressQuestion, isImprovementTrendQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion, isOpeningProfileQuestion, isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion, isOpeningTrapsQuestion, isReviewDueQuestion, isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion, isRepertoireGapQuestion, isAccuracyQuestion, isConsistencyQuestion, isConvertingQuestion, isColorQuestion, isRecordsQuestion, isRecordVsQuestion, isMoveRatingQuestion, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
+import { buildLearnGameRecord, type LearnLiveGrade } from '../../services/learnGameRecord';
 import { uciMoveToSan } from '../../utils/uciToSan';
 import { resolveCoachNarration } from '../../utils/coachNarration';
 import { recoverCoachMoveFromText } from '../../utils/recoverCoachMove';
@@ -1666,6 +1667,7 @@ export function CoachTeachPage(): JSX.Element {
   const forgetPageRefsRef = useRef<() => void>(() => undefined);
   const forgetPageRefs = useCallback((): void => {
     announcedPliesRef.current.clear();
+    liveGradesRef.current.clear();
     announcedTrapsRef.current.clear();
     teachNoteSeenIdsRef.current.clear();
     fundamentalSeenRef.current.clear();
@@ -1688,6 +1690,12 @@ export function CoachTeachPage(): JSX.Element {
    *  Saved on the game record so the post-game sweep files a find there as
    *  PROMPTED (grey), never as unaided evidence. Reset per game. */
   const announcedPliesRef = useRef(new Set<number>());
+  // THE LIVE PER-MOVE EVALUATIONS (C7, 2026-09-22). Every student ply is
+  // graded off the paid-for pre-move read (`gradePlayedMove`, below) and the
+  // saved record used to carry `annotations: null` regardless. Keyed by ply so
+  // a takeback overwrites rather than duplicates. Cleared per game with the
+  // other page refs. Coach plies are never graded — see `learnGameRecord`.
+  const liveGradesRef = useRef(new Map<number, LearnLiveGrade>());
 
   /** The most recent look-ahead plan, KEYED BY THE FEN IT DESCRIBES.
    *
@@ -8380,6 +8388,19 @@ export function CoachTeachPage(): JSX.Element {
           studentColor: playerColor === 'white' ? 'w' : 'b',
         });
         if (grade) studentCpLoss = grade.cpLossCp;
+        // File the live evaluation so the saved record carries it (C7). The
+        // engine read is White-POV centipawns; `move.history` includes this
+        // move, so its index is the ply.
+        if (grade) {
+          liveGradesRef.current.set(move.history.length - 1, {
+            ply: move.history.length - 1,
+            san: move.san,
+            color: playerColor,
+            bestMoveUci: preStudentRead.bestMove || null,
+            bestMoveEvalCp: preStudentRead.evaluation,
+            cpLossCp: grade.cpLossCp,
+          });
+        }
         if (grade?.worthSpeaking && grade.clause) {
           setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: grade.clause, timestamp: Date.now() }]);
           void voiceService.speak(grade.clause);
@@ -10799,7 +10820,7 @@ export function CoachTeachPage(): JSX.Element {
   // So the record is still written immediately — the review, the mistake
   // puzzles and the weakness spine all hang off that write and must not wait
   // for a tap — and only the NAVIGATION is held back behind a button.
-  const [finishedGame, setFinishedGame] = useState<{ id: string; result: 'win' | 'loss' | 'draw'; byMate: boolean } | null>(null);
+  const [finishedGame, setFinishedGame] = useState<{ id: string; result: TeachGameResult; byMate: boolean } | null>(null);
   useEffect(() => {
     if (!game.isGameOver) { teachGameOverHandledRef.current = false; setFinishedGame(null); return; }
     // 🔒 A PAUSED WALKTHROUGH IS STILL A PLAYABLE BOARD. This used to bail on
@@ -10835,31 +10856,29 @@ export function CoachTeachPage(): JSX.Element {
     // (PostHog 2026-09-03, Port Harcourt ×2).
     const pgn = game.pgn;
     const openingId = walkthrough.tree?.openingName ?? null;
+    // ONE record shape for a Learn game, whichever way it ended — End Lesson
+    // builds through the same function (C7). The live per-move grades ride
+    // along as annotations, where they exist.
+    const record = buildLearnGameRecord({
+      gameId,
+      pgn,
+      plyCount: game.history.length,
+      playerColor,
+      playerName,
+      rating,
+      openingId,
+      ending: game.isCheckmate
+        ? { kind: 'checkmate', winner: won ? playerColor : (playerColor === 'white' ? 'black' : 'white') }
+        : { kind: 'draw' },
+      liveGrades: [...liveGradesRef.current.values()],
+      promptedPlies: [...announcedPliesRef.current],
+    });
     void (async () => {
       try {
-        const { db } = await import('../../db/schema');
-        await db.games.add({
-          id: gameId,
-          pgn,
-          white: playerColor === 'white' ? playerName : 'Coach',
-          black: playerColor === 'black' ? playerName : 'Coach',
-          // DECLARED — see the same line in CoachGamePage.
-          studentSide: playerColor,
-          result: playerColor === 'white'
-            ? (won ? '1-0' : game.isCheckmate ? '0-1' : '1/2-1/2')
-            : (won ? '0-1' : game.isCheckmate ? '1-0' : '1/2-1/2'),
-          date: new Date().toISOString().split('T')[0],
-          event: 'Learn with Coach',
-          eco: null,
-          whiteElo: playerColor === 'white' ? rating : null,
-          blackElo: playerColor === 'black' ? rating : null,
-          source: 'coach',
-          annotations: null,
-          coachAnalysis: null,
-          isMasterGame: false,
-          openingId,
-          promptedPlies: [...announcedPliesRef.current],
-        });
+        if (record) {
+          const { db } = await import('../../db/schema');
+          await db.games.add(record);
+        }
       } catch {
         /* save is best-effort; the offer below still stands */
       }
@@ -11972,6 +11991,41 @@ export function CoachTeachPage(): JSX.Element {
                   const closer = `Good session. ${parts.join(', and ')}.`;
                   captureEvent('session_closer_spoken', { surface: 'coach-teach', ...s });
                   void voiceService.speakForced(closer).catch(() => undefined);
+                }
+                // THE GAME IS SAVED, NOT DISCARDED (C7, 2026-09-22). This used
+                // to navigate home and the game in progress was gone — not in
+                // db.games, not in the review list — while Play's resign has
+                // saved the game since 2026-06-01. A lesson with a live game
+                // of at least MIN_PERSIST_PLIES is written through the same
+                // builder the game-over path uses (result `*`: nobody lost)
+                // and the review is OFFERED on the board, the way the
+                // game-over card offers it. A second End Lesson — nothing left
+                // to save — leaves as before.
+                const boardWasPlayable = !walkthrough.isActive || walkthrough.phase === 'paused';
+                if (boardWasPlayable && !teachGameOverHandledRef.current && !game.isGameOver) {
+                  const record = buildLearnGameRecord({
+                    gameId: learnMemRef.current.gameId,
+                    pgn: game.pgn,
+                    plyCount: game.history.length,
+                    playerColor,
+                    playerName: activeProfile?.name ?? 'Player',
+                    rating: studentPlayingRating(activeProfile),
+                    openingId: walkthrough.tree?.openingName ?? null,
+                    ending: { kind: 'ended' },
+                    liveGrades: [...liveGradesRef.current.values()],
+                    promptedPlies: [...announcedPliesRef.current],
+                  });
+                  if (record) {
+                    teachGameOverHandledRef.current = true;
+                    void (async () => {
+                      try {
+                        const { db } = await import('../../db/schema');
+                        await db.games.add(record);
+                      } catch { /* save is best-effort; the offer below still stands */ }
+                      setFinishedGame({ id: record.id, result: 'ended', byMate: false });
+                    })();
+                    return;
+                  }
                 }
                 void navigate('/coach/home');
               }}
