@@ -3841,10 +3841,16 @@ export async function getCoachChatResponse(
               return voicedMiss ?? msg;
             }
             const ply = plies[idx];
-            const mover: 'student' | 'coach' = seat ? (ply.color === seat ? 'student' : 'coach') : 'student';
+            // THE SEAT. A live board (Learn/Play) has no stored annotations and
+            // the other side IS the coach; review threads annotations whose
+            // `isCoachMove` says whether the other side was the coach or a human
+            // opponent. "My skill-level move" is said only about the coach's own.
+            const stored = grounding.moveAnnotations?.[idx];
+            const mover: 'student' | 'coach' | 'opponent' = !seat || ply.color === seat
+              ? 'student'
+              : (grounding.moveAnnotations ? (stored?.isCoachMove ? 'coach' : 'opponent') : 'coach');
             // The engine's read of THAT ply: stored annotation first (review),
             // else a fresh two-position search (the same cost as the rating lane).
-            const stored = grounding.moveAnnotations?.[idx];
             let bestMoveUci: string | null = stored?.bestMoveUci ?? null;
             let cpLoss: number | null = null;
             let quality: 'best' | 'excellent' | 'good' | 'inaccuracy' | 'mistake' | 'blunder' | null = null;

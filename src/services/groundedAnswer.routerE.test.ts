@@ -35,6 +35,15 @@ describe('assembleRetrospectiveAnswer — the move ON THE TAPE, whose move it wa
     expect(a.facts).toMatch(/my skill-level move/);
     expect(a.bestMoveSan).toBe('Bc5');
   });
+  it("a human OPPONENT's move (imported game in review) is 'Their …' and never 'my skill-level move'", () => {
+    const a = assembleRetrospectiveAnswer({
+      playedSan: 'a6', fenBefore: beforeBc5, moveNumber: 3, moverColor: 'black', mover: 'opponent',
+      bestMoveUci: 'f8c5', cpLoss: 60, quality: 'inaccuracy', missedMate: null, allowedMate: null,
+    });
+    expect(a.facts).toMatch(/^Their a6 on move 3/);
+    expect(a.facts).not.toMatch(/skill-level|\bmy\b/);
+    expect(a.facts).not.toMatch(/\bwe\b|\bour\b/);
+  });
   it('a stored CLASS with no centipawns speaks the class and NO invented figure (G0)', () => {
     const a = assembleRetrospectiveAnswer({
       playedSan: 'a6', fenBefore: beforeBc5, moveNumber: 3, moverColor: 'black', mover: 'student',

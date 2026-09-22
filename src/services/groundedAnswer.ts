@@ -5161,8 +5161,10 @@ export interface RetrospectiveMoveLike {
   /** 1-based move number of the ply ("move 7"). */
   moveNumber: number;
   moverColor: 'white' | 'black';
-  /** Whose move it was — the STUDENT's, or the COACH's own reply (Learn/Play). */
-  mover: 'student' | 'coach';
+  /** Whose move it was — the STUDENT's, the COACH's own reply (Learn/Play), or
+   *  a human OPPONENT's (an imported game in review). The coach owns only the
+   *  moves it played: "my skill-level move" is never said about an opponent. */
+  mover: 'student' | 'coach' | 'opponent';
   bestMoveUci: string | null;
   cpLoss: number | null;
   quality: MoveRatingLike['quality'] | null;
@@ -5185,8 +5187,9 @@ export interface RetrospectiveMoveLike {
  * still names the move, its ply and what it did, and says the grade is missing.
  */
 export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedAnswer {
-  const who = r.mover === 'coach' ? 'my' : 'your';
-  const lead = `${who === 'my' ? 'My' : 'Your'} ${r.playedSan} on move ${r.moveNumber}`;
+  // ONE PERSPECTIVE (CLAUDE.md): the student is "your", the coach's own reply
+  // is "my", a human opponent is "their" — never "we", never a bare colour.
+  const lead = `${r.mover === 'coach' ? 'My' : r.mover === 'opponent' ? 'Their' : 'Your'} ${r.playedSan} on move ${r.moveNumber}`;
   // What the move itself DID — the concrete geometry first, else the
   // fundamental it served. Board-computed, never invented.
   const did = describeMoveGeometry(r.fenBefore, r.playedSan, r.moverColor)
