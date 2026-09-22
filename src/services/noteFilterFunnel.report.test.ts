@@ -40,6 +40,7 @@ import { secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorp
 import {
   noteDescribesPosition,
   noteTeachesChessNotItsSource,
+  noteIsWholeSentence,
   noteStaysInScope,
 } from './noteAnchorIntegrity';
 
@@ -74,6 +75,7 @@ describe('note filter funnel — where candidate notes die', () => {
       rejected: {
         noteDescribesPosition: 0,
         noteTeachesChessNotItsSource: 0,
+        noteIsWholeSentence: 0,
         noteStaysInScope: 0,
         noteOpeningConflicts: 0,
         anchorTeachesItsPosition: 0,
@@ -96,6 +98,7 @@ describe('note filter funnel — where candidate notes die', () => {
     const blankFilterTally = {
       noteDescribesPosition: 0,
       noteTeachesChessNotItsSource: 0,
+      noteIsWholeSentence: 0,
       noteStaysInScope: 0,
       noteOpeningConflicts: 0,
       anchorTeachesItsPosition: 0,
@@ -161,6 +164,7 @@ describe('note filter funnel — where candidate notes die', () => {
           // that trips several.
           if (!noteDescribesPosition(n, fen)) { tally.rejected.noteDescribesPosition += 1; survivorsPerFilter.noteDescribesPosition += 1; continue; }
           if (!noteTeachesChessNotItsSource(n)) { tally.rejected.noteTeachesChessNotItsSource += 1; survivorsPerFilter.noteTeachesChessNotItsSource += 1; continue; }
+          if (!noteIsWholeSentence(n)) { tally.rejected.noteIsWholeSentence += 1; survivorsPerFilter.noteIsWholeSentence += 1; continue; }
           if (!noteStaysInScope(n, entry.name ?? null)) { tally.rejected.noteStaysInScope += 1; survivorsPerFilter.noteStaysInScope += 1; continue; }
           if (noteOpeningConflicts(n.opening, entry.name ?? null)) { tally.rejected.noteOpeningConflicts += 1; survivorsPerFilter.noteOpeningConflicts += 1; continue; }
           // The three that used to be invisible.

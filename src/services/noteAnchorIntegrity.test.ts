@@ -21,7 +21,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
 import { readFileSync } from 'node:fs';
-import { noteDescribesPosition, noteTeachesChessNotItsSource } from './noteAnchorIntegrity';
+import { noteDescribesPosition, noteTeachesChessNotItsSource, noteIsWholeSentence } from './noteAnchorIntegrity';
 import type { DanyaNote } from './danyaTeachingService';
 
 /** The board a note's own taught line produces, or null if it won't replay. */
@@ -193,5 +193,39 @@ describe('notes stay in the lesson\'s scope', () => {
     const plain = noteWith('The centre is the first thing to fight for.');
     expect(noteStaysInScope(plain, 'Caro-Kann Defense')).toBe(true);
     expect(noteStaysInScope(noteWith('In the Fantasy Variation, c3 holds.'), null)).toBe(true);
+  });
+});
+
+describe('a corpus fragment never reaches the board (WO-STANDARD-01 D-14, 2026-09-22)', () => {
+  const note = (explains: string, lineSan: string[] = []): DanyaNote => ({
+    id: 't', lineSan, opening: null, phase: 'opening', explains, teaches: '', plans: '', concepts: [], sources: [],
+  } as unknown as DanyaNote);
+
+  it('drops the two real prod fragments — a note that begins mid-sentence', () => {
+    expect(noteIsWholeSentence(note('with the knight to c3 and f4. If they go the knight to f6, of course'))).toBe(false);
+    expect(noteIsWholeSentence(note('but the second component of this setup is the pawn on d4.'))).toBe(false);
+    expect(noteIsWholeSentence(note('… and then the rook lift.'))).toBe(false);
+  });
+  it('NEGATIVE CONTROL: a whole sentence — even one opening on a conjunction — is kept', () => {
+    expect(noteIsWholeSentence(note('The knight goes to c3 and then f4, eyeing d5.'))).toBe(true);
+    expect(noteIsWholeSentence(note('But the point is the pawn on d4: it fixes the centre.'))).toBe(true);
+    expect(noteIsWholeSentence(note('"After Nf3, the plan is to castle."'))).toBe(true);
+    expect(noteIsWholeSentence(note(''))).toBe(true);
+    // A sentence that OPENS on a pawn move is lowercase and whole — 795 corpus
+    // notes do this ("c3 shores up the centre but is another slow move").
+    expect(noteIsWholeSentence(note('c3 shores up the centre but is another slow move.'))).toBe(true);
+    expect(noteIsWholeSentence(note('exd5 opens the e-file for the rook.'))).toBe(true);
+    expect(noteIsWholeSentence(note('d6. You have mostly been playing the Accelerated Dragon.'))).toBe(true);
+  });
+
+  it('a SPELLED hypothetical move is judged against the board like a SAN one', () => {
+    // After 1.e4 e5 2.Nf3 (Black to move) "If they go the knight to f6" is
+    // reachable (…Nf6); "If they go the knight to f4" is not for either side.
+    const c = new Chess(); for (const s of ['e4', 'e5', 'Nf3']) c.move(s);
+    const fen = c.fen();
+    expect(noteDescribesPosition(note('If they go the knight to f6, of course you take the centre.'), fen)).toBe(true);
+    expect(noteDescribesPosition(note('If they go the knight to f4, of course you take the centre.'), fen)).toBe(false);
+    // NEGATIVE CONTROL: a note that names no move at all is never judged.
+    expect(noteDescribesPosition(note('If the centre is closed, play on the wings.'), fen)).toBe(true);
   });
 });
