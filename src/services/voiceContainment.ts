@@ -84,6 +84,18 @@ export function introducedChessTerms(facts: string, out: string): string[] {
   return violations;
 }
 
+/** Squares in `out` absent from `facts` — the language-agnostic half of
+ *  `introducedChessTerms`. Exported for the translated path (see
+ *  `ContainmentOptions.lexicon`). */
+export function introducedSquares(facts: string, out: string): string[] {
+  const factSquares = squaresIn(facts);
+  const violations: string[] = [];
+  for (const sq of squaresIn(out)) {
+    if (!factSquares.has(sq)) violations.push(sq);
+  }
+  return violations;
+}
+
 /** CHESS PROSE IS FULL OF PERIODS THAT ARE NOT SENTENCE ENDS. A move number
  *  ("12. Nf3"), a black-move ellipsis ("12... Nf3") and a numbered list marker
  *  all read as terminator + whitespace + capital, so the raw count inflated
@@ -175,6 +187,22 @@ export function stripUngroundedDefinitions(facts: string, out: string): string {
   return kept.length === parts.length ? out : kept.join(' ').trim();
 }
 
+export interface ContainmentOptions {
+  /** WHICH VOCABULARY THE NET READS.
+   *
+   *  `'full'` (default) — squares/SANs AND the closed concept lexicon.
+   *  `'squares'` — squares/SANs ONLY. For the TRANSLATED path: the concept
+   *  lexicon is English, and a Spanish reply legitimately shares none of it
+   *  with the English facts ("horquilla" is a fork), so the full net would
+   *  false-trip on every translated turn — which is why voiceFacts used to
+   *  SKIP containment entirely when translating (WO-STANDARD-01 F4). But a
+   *  square is a square in every language, and the phrasing prompt keeps
+   *  moves in SAN, so "the model wandered to a part of the board it was not
+   *  given" is still catchable there. A translated tangent that names e5
+   *  when the facts never did is refused exactly like an English one. */
+  lexicon?: 'full' | 'squares';
+}
+
 export interface ContainmentVerdict {
   /** The output to speak: the (possibly definition-stripped) phrasing when it
    *  passes, or null when the caller should serve the computed facts. */
@@ -200,10 +228,17 @@ export function containmentCheck(
   facts: string,
   out: string,
   extraLicensed = '',
+  opts: ContainmentOptions = {},
 ): ContainmentVerdict {
-  const stripped = stripUngroundedDefinitions(facts, out);
+  const lexicon = opts.lexicon ?? 'full';
+  // The definition-shape detector is English ("is when", "means", "In chess,");
+  // on a translated output it can only miss, so it is skipped rather than
+  // pretended at.
+  const stripped = lexicon === 'full' ? stripUngroundedDefinitions(facts, out) : out;
   const licensed = extraLicensed ? `${facts}\n${extraLicensed}` : facts;
-  const introduced = introducedChessTerms(licensed, stripped);
+  const introduced = lexicon === 'full'
+    ? introducedChessTerms(licensed, stripped)
+    : introducedSquares(licensed, stripped);
   if (introduced.length > 0) return { text: null, violations: introduced };
   if (sentenceBudgetExceeded(facts, stripped)) {
     return {

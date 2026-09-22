@@ -78,6 +78,7 @@ import { detectOpeningTranspositional } from './openingDetectionService';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { fuzzyMatchOpening } from './openingFuzzyMatcher';
 import { containmentCheck, containmentAudit } from './voiceContainment';
+import { perspectiveRule, type PerspectiveMode } from './perspectiveRule';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
 import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getLastGameErrors, getRecentGamesErrors, getPlayerStyleProfile } from './gameInsightsService';
@@ -2706,6 +2707,15 @@ export async function voiceFacts(
      *  Forces the phrasing model even under preferRaw (raw facts are English and
      *  must be translated). Detected from the student's message by the caller. */
     targetLanguage?: string;
+    /** THE SEAT THE PHRASING SPEAKS FROM (WO-STANDARD-01 F4). Every one of the
+     *  four registers below carries `perspectiveRule(mode, studentSide)` — the
+     *  ONE string, never a hand-written copy (`perspectiveRule.test.ts`). The
+     *  facts arrive already seat-stamped by their computer ("your knight",
+     *  "their bishop"); this tells the model not to re-seat them. Default is
+     *  the ordinary `'student'` mode with the colour unknown; a caller that
+     *  knows the colour passes it so "your" resolves, and a surface where the
+     *  coach IS the opponent (Play, Learn guided play) says so. */
+    perspective?: { mode: PerspectiveMode; studentSide?: 'white' | 'black' };
   } = {},
 ): Promise<string | null> {
   // Lean-on-raw short-circuit — the computed facts ARE the answer; don't spend
@@ -2830,7 +2840,11 @@ export async function voiceFacts(
       `names are labels, NOT phrases: never translate, inflect or respell them. ` +
       `Translate the rest into ${targetLanguage}.`
     : '';
-  const system = systemBase + langInstruction;
+  // ONE perspective string on EVERY register (kid / review / warm / plain) —
+  // appended, never inlined, so a new register cannot ship without it and a
+  // hand-written copy cannot drift (perspectiveRule.test.ts).
+  const perspective = ' ' + perspectiveRule(opts.perspective?.mode ?? 'student', opts.perspective?.studentSide);
+  const system = systemBase + perspective + langInstruction;
   const user =
     `FACTS (say these, add nothing):\n${facts}` +
     // Directives reach the model here and NOWHERE else. They are never part of
@@ -2919,25 +2933,30 @@ export async function voiceFacts(
       // containmentCheck strips ungrounded definition sentences surgically,
       // then rejects on any remaining introduced chess term or sentence
       // overrun — fallback is the computed prose, never a regen.
-      // Skipped when translating: the closed lexicon is English, and a
-      // translated output legitimately shares few literal tokens with the
-      // English facts (the number net above remains language-agnostic).
-      if (!translating) {
+      // WHEN TRANSLATING the net reads SQUARES ONLY (WO-STANDARD-01 F4). The
+      // closed concept lexicon is English, so a translated output legitimately
+      // shares none of it with the English facts — which is why this path used
+      // to SKIP containment altogether, leaving the translated student the one
+      // reader with no "nothing added" net at all. A square is a square in every
+      // language and the prompt keeps moves in SAN, so the board-wandering
+      // class of addition is caught in Spanish exactly as in English.
+      {
         // The directives + student message are part of the code-assembled
         // prompt, so their vocabulary is licensed — checking against facts
         // alone false-tripped on every warm move-narration turn (2026-08-06).
         const licensed = `${opts.directives ?? ''}\n${opts.studentMessage ?? ''}`;
-        const contained = containmentCheck(facts, vetted, licensed);
+        const lexicon = translating ? 'squares' as const : 'full' as const;
+        const contained = containmentCheck(facts, vetted, licensed, { lexicon });
         if (contained.text === null) {
           // Proportionate: drop the sentences carrying the introduced terms
           // and re-check — the beat survives minus the bad sentence(s).
           const stripped = stripSentencesWith(vetted, contained.violations);
-          const recheck = stripped ? containmentCheck(facts, stripped, licensed) : { text: null as string | null, violations: [] as string[] };
+          const recheck = stripped ? containmentCheck(facts, stripped, licensed, { lexicon }) : { text: null as string | null, violations: [] as string[] };
           void logAppAudit({
             kind: 'claim-validator-trip',
             category: 'subsystem',
             source: 'voiceFacts.containment',
-            summary: `phrasing containment trip (intent=${opts.intent ?? 'n/a'}): added [${contained.violations.join(', ')}] → ${recheck.text !== null ? 'stripped offending sentence(s)' : 'served computed prose'}`,
+            summary: `phrasing containment trip (intent=${opts.intent ?? 'n/a'}${translating ? `, ${targetLanguage}` : ''}): added [${contained.violations.join(', ')}] → ${recheck.text !== null ? 'stripped offending sentence(s)' : 'served computed prose'}`,
             details: JSON.stringify({ intent: opts.intent ?? null, violations: contained.violations, facts: facts.slice(0, 200), out: vetted.slice(0, 200) }),
           });
           if (recheck.text !== null && recheck.text.trim()) return recheck.text;
@@ -2945,7 +2964,6 @@ export async function voiceFacts(
         }
         return contained.text;
       }
-      return vetted;
     }
     // Empty / whitespace-only phrasing → don't hand the caller a falsy value
     // that drops it to the ungrounded path. Speak the computed facts.
