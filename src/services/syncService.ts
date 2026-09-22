@@ -1,4 +1,5 @@
 import { db } from '../db/schema';
+import { asOpeningKey } from './openingKey';
 import { exportUserData } from './dbService';
 import { decryptApiKey } from './cryptoService';
 import type {
@@ -198,7 +199,10 @@ export async function importUserData(json: string): Promise<void> {
     await db.puzzles.bulkPut(data.puzzles);
   }
   if (data.games) {
-    await db.games.bulkPut(data.games);
+    // The one opening key (A1): a row synced from an older client may carry a
+    // NAME here; accept only the minted shape and let the boot backfill re-mint
+    // the rest from the PGN.
+    await db.games.bulkPut(data.games.map((g) => ({ ...g, openingId: asOpeningKey(g.openingId) })));
   }
   if (data.mistakePuzzles) {
     await db.mistakePuzzles.bulkPut(data.mistakePuzzles);

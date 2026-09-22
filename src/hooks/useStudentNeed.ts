@@ -12,11 +12,12 @@
 import { useEffect, useRef } from 'react';
 import { loadStudentNeedContext } from '../services/studentNeedLoader';
 import { coldStudent, type StudentNeedContext } from '../services/needScore';
+import type { OpeningKey } from '../types';
 
 export interface UseStudentNeedArgs {
   rating: number;
   studentColor: 'white' | 'black';
-  openingId?: string | null;
+  openingId?: OpeningKey | null;
   eco?: string | null;
   /** The line so far. Familiarity is measured against the WHOLE prefix, so this
    *  is re-read on each reload; pass the game's SANs from the start. */

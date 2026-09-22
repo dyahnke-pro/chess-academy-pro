@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { db } from '../../db/schema';
+import { openingKeyFromPgn } from '../../services/openingKey';
 import { GameCard } from './GameCard';
 import { GameViewer } from './GameViewer';
 import { Upload, FileText, Download } from 'lucide-react';
@@ -218,7 +219,7 @@ async function importPgnText(text: string): Promise<void> {
       annotations: null,
       coachAnalysis: null,
       isMasterGame: false,
-      openingId: null,
+      openingId: openingKeyFromPgn(gameText.trim()),
     };
 
     await db.games.put(game);

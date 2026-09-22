@@ -18,6 +18,9 @@ import { criticalityThresholds } from './criticalityScan';
 import { coldStudent, type StudentNeedContext } from './needScore';
 import type { GameRecord } from '../types';
 import { getCapabilityProfile } from './capabilityEvidence';
+import { sameOpeningFamily } from './openingKey';
+import { fenKey } from './needScore';
+import type { OpeningKey } from '../types';
 
 const TTL_MS = 5 * 60 * 1000;
 let cache: { at: number; key: string; ctx: StudentNeedContext } | null = null;
@@ -27,7 +30,7 @@ export interface StudentNeedQuery {
   /** The sequence being narrated (SANs from the start), to measure familiarity. */
   sans: readonly string[];
   studentColor: 'white' | 'black';
-  openingId?: string | null;
+  openingId?: OpeningKey | null;
   /** ECO of the game, when known — scopes the opening score (games are indexed by eco). */
   eco?: string | null;
 }
@@ -80,6 +83,19 @@ export function lineRepsFromGames(
   return reps;
 }
 
+/** Position keys (board+side+castling+ep) after 0..n plies of the line — the
+ *  join the departure term uses: a departure row belongs to THIS line when its
+ *  last-in-book position is one of these, whatever either game was named. */
+export function lineFenKeys(sans: readonly string[]): string[] {
+  const c = new Chess();
+  const out = [fenKey(c.fen())];
+  for (const s of sans) {
+    c.move(s);
+    out.push(fenKey(c.fen()));
+  }
+  return out;
+}
+
 /** Sanity-replay the SANs so a corrupt sequence never poisons the reps. */
 function legalPrefix(sans: readonly string[]): string[] {
   const c = new Chess();
@@ -104,7 +120,10 @@ export async function loadStudentNeedContext(q: StudentNeedQuery): Promise<Stude
     const analysed = games.filter((g) => g.fullyAnalyzed);
     const bookDepartures = await getCachedBookDepartureRows(games, names, q.rating).catch(() => []);
     const sans = legalPrefix(q.sans);
-    const inOpening = games.filter((g) => (q.openingId && g.openingId === q.openingId) || (q.eco && g.eco === q.eco));
+    // "Your results in this opening": the FAMILY (Sicilian, not one Najdorf
+    // sub-line), which is the unit the home-opening computer ranks. ECO is the
+    // fallback for a game whose key never resolved.
+    const inOpening = games.filter((g) => (q.openingId && sameOpeningFamily(g.openingId, q.openingId)) || (!q.openingId && q.eco && g.eco === q.eco));
     // THE POSITIVE HALF. `getCapabilityProfile` had three call sites before
     // 2026-09-18 and all three were in its own test, so every `held` row the
     // review pass had ever written was unreadable to the coach. Loaded beside
@@ -118,6 +137,7 @@ export async function loadStudentNeedContext(q: StudentNeedQuery): Promise<Stude
       bookDepartures,
       capabilities,
       openingId: q.openingId ?? null,
+      lineFenKeys: lineFenKeys(sans),
       lineReps: lineRepsFromGames(analysed, sans, q.studentColor, names, q.rating),
       openingScore: scoreShare(inOpening, names),
       overallScore: scoreShare(games, names),

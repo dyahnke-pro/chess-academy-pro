@@ -702,7 +702,12 @@ export interface GameRecord {
   annotations: MoveAnnotation[] | null;
   coachAnalysis: string | null;
   isMasterGame: boolean;
-  openingId: string | null;
+  /** The ONE opening key (see `OpeningKey`). Null when the game left every
+   *  named line before its first move matched — never a name. */
+  openingId: OpeningKey | null;
+  /** Stamp of the key-minting revision that last wrote `openingId`
+   *  (`openingKeyBackfill.ts`); absent on rows written before A1. */
+  openingKeyRev?: string;
   /** True when analyzeAllGames has completed full Stockfish per-move
    *  analysis on this game. False / undefined for freshly-imported
    *  games that only have sparse detectBlunders annotations. Every
@@ -1979,10 +1984,20 @@ export interface JourneyProgress {
 
 // ─── Board Utils ────────────────────────────────────────────────────────────
 
+/** THE ONE OPENING KEY (WO-STANDARD-01 A1, 2026-09-22). The Dexie `openings`
+ *  id, minted ONLY by `openingKey.ts` from (eco, name) — the same slug
+ *  `dataLoader` seeds. Branded so a NAME ("Sicilian Defense: Bowdler Attack"),
+ *  a book-corpus id or a bare string cannot be assigned where a key belongs:
+ *  four writers used four key spaces and the departure + result terms never
+ *  joined. A new writer now fails to compile until it mints a real key. */
+export type OpeningKey = string & { readonly __openingKey: true };
+
 export interface DetectedOpening {
   eco: string;
   name: string;
   plyCount: number;
+  /** The one key for this entry — what every game record stores. */
+  key: OpeningKey;
 }
 
 export interface CapturedPieces {

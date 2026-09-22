@@ -56,7 +56,7 @@ import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSigna
 import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
-import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
+import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
@@ -4182,7 +4182,7 @@ export async function generateReviewNarration(params: {
   uncapped?: boolean;
   /** The game's opening id / ECO when known — scope the student's need context
    *  (opening results, departures) to this opening (N2). */
-  openingId?: string | null;
+  openingId?: OpeningKey | null;
   eco?: string | null;
   /** The game's id — lets the recurrence clause tell this game's own swept
    *  rows from a prior game's (WO-LOOP-01). */

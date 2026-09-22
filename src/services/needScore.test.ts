@@ -6,6 +6,11 @@ import { describe, it, expect } from 'vitest';
 import { computeNeed, coldStudent, coldStartPrior, familiarity, NEED_THRESHOLD, COLD_START_GAMES, FAMILIAR_REPS, type StudentNeedContext, type NeedPlyInput } from './needScore';
 import type { WeaknessSignal } from './weaknessSignal';
 import type { BookDepartureRow } from './bookDepartureWeakness';
+import { openingKeyFor } from './openingKey';
+
+// Real minted keys (A1): a bare string is not a key and the family join reads the entry list.
+const ITALIAN = openingKeyFor('C50', 'Italian Game');
+const SICILIAN = openingKeyFor('B20', 'Sicilian Defense');
 
 const forkHole: WeaknessSignal = {
   clusterId: 'analysis:tactic:fork', bucket: 'tactical', label: 'Forks', openCount: 4, total: 4, severity: 70,
@@ -76,14 +81,14 @@ describe('needScore — the data takes over', () => {
     expect(v.speak).toBe(false);
   });
   it('a habitual costly book departure at this ply SPEAKS even on a familiar line', () => {
-    const row: BookDepartureRow = { gameId: 'g1', departurePly: 7, departedSan: 'a6', mainSan: 'Nf6', bookFen: 'x', evalCostCp: 120, openingId: 'italian', playedAt: 1 };
-    const ctx = warm({ bookDepartures: [row], openingId: 'italian', lineReps: new Array(20).fill(FAMILIAR_REPS) });
+    const row: BookDepartureRow = { gameId: 'g1', departurePly: 7, departedSan: 'a6', mainSan: 'Nf6', bookFen: 'x', evalCostCp: 120, openingId: ITALIAN, playedAt: 1 };
+    const ctx = warm({ bookDepartures: [row], openingId: ITALIAN, lineReps: new Array(20).fill(FAMILIAR_REPS) });
     expect(computeNeed(ply({ ply: 7, studentMove: true }), ctx).speak).toBe(true);
     expect(computeNeed(ply({ ply: 13, studentMove: true }), ctx).speak).toBe(false); // elsewhere in the line
   });
   it('a departure in ANOTHER opening does not bleed into this one', () => {
-    const row: BookDepartureRow = { gameId: 'g1', departurePly: 7, departedSan: 'a6', mainSan: 'Nf6', bookFen: 'x', evalCostCp: 120, openingId: 'sicilian', playedAt: 1 };
-    const ctx = warm({ bookDepartures: [row], openingId: 'italian', lineReps: new Array(20).fill(FAMILIAR_REPS) });
+    const row: BookDepartureRow = { gameId: 'g1', departurePly: 7, departedSan: 'a6', mainSan: 'Nf6', bookFen: 'x', evalCostCp: 120, openingId: SICILIAN, playedAt: 1 };
+    const ctx = warm({ bookDepartures: [row], openingId: ITALIAN, lineReps: new Array(20).fill(FAMILIAR_REPS) });
     expect(computeNeed(ply({ ply: 7, studentMove: true }), ctx).speak).toBe(false);
   });
   it('a causal-thread ply plus a result deficit clears the bar together', () => {
@@ -92,8 +97,8 @@ describe('needScore — the data takes over', () => {
     expect(computeNeed(ply({ ply: 11, studentMove: true, onThread: true }), ctx).speak).toBe(true);
   });
   it('score is clamped to 0–100', () => {
-    const row: BookDepartureRow = { gameId: 'g1', departurePly: 7, departedSan: 'a6', mainSan: 'Nf6', bookFen: 'x', evalCostCp: 120, openingId: null, playedAt: 1 };
-    const ctx = warm({ signals: [forkHole], bookDepartures: [row], lineReps: [], openingScore: 0, overallScore: 0.9 });
+    const row: BookDepartureRow = { gameId: 'g1', departurePly: 7, departedSan: 'a6', mainSan: 'Nf6', bookFen: 'x', evalCostCp: 120, openingId: ITALIAN, playedAt: 1 };
+    const ctx = warm({ signals: [forkHole], bookDepartures: [row], openingId: ITALIAN, lineReps: [], openingScore: 0, overallScore: 0.9 });
     const v = computeNeed(ply({ ply: 7, studentMove: true, conceptId: 'fork', onThread: true }), ctx);
     expect(v.score).toBe(100);
   });

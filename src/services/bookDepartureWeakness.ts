@@ -19,6 +19,7 @@
 // the data can't prove hurt.
 
 import type { UnifiedWeakness } from './weaknessSpine';
+import type { OpeningKey } from '../types';
 
 /** The book-departure cluster id family (matches the `analysis:<family>:<key>`
  *  convention `bucketForMistake` uses; joins to Phase-1 WeaknessSignal.clusterId
@@ -43,8 +44,8 @@ export interface BookDepartureRow {
   /** Eval COST of the departure, student-POV centipawns (>0 = it hurt). Computed
    *  from the game's annotations (evaluation before vs after leaving book). */
   evalCostCp: number;
-  /** The opening being left, when known. */
-  openingId?: string | null;
+  /** The opening being left, when known — the ONE key (A1). */
+  openingId?: OpeningKey | null;
   openingName?: string | null;
   /** When the game was played (for recency / lastSeenAt). */
   playedAt: number;

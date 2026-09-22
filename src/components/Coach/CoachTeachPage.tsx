@@ -87,6 +87,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
+import { ecoOfKey, openingKeyFromSans } from '../../services/openingKey';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
@@ -7155,16 +7156,15 @@ export function CoachTeachPage(): JSX.Element {
   // their results. Review has computed it since N2; Learn never did, so the
   // coach said the same thing on a line the student has played right five times.
   // Cold / still loading reads as SPEAK — a fresh install meets a teaching coach.
+  const liveOpeningKey = openingKeyFromSans(game.history);
   const studentNeedRef = useStudentNeed({
     rating: activeProfile?.currentRating ?? 1200,
     studentColor: playerColor,
-    // Honest nulls: Learn tracks the opening by NAME, not by id/eco. Without
-    // them the departure + opening-score terms simply do not fire; familiarity
-    // and the weakness term — which are what make a repeated line go quiet —
-    // still do. A fabricated id would scope the departures to the wrong opening,
-    // which is worse than a term that stays silent.
-    openingId: null,
-    eco: null,
+    // THE ONE KEY (A1): minted from the board, so the departure + opening-score
+    // terms scope to the same opening the import and Play records carry. Null
+    // until the line reaches a named entry — cold reads as SPEAK.
+    openingId: liveOpeningKey,
+    eco: liveOpeningKey ? ecoOfKey(liveOpeningKey) : null,
     sans: gameRef.current.history,
   });
   // SAY-ONCE across the lesson. A standing fact (the pawn structure, a pin in
@@ -10834,7 +10834,7 @@ export function CoachTeachPage(): JSX.Element {
     // adaptGameRecord returned null and showed "could not replay this game"
     // (PostHog 2026-09-03, Port Harcourt ×2).
     const pgn = game.pgn;
-    const openingId = walkthrough.tree?.openingName ?? null;
+    const openingId = openingKeyFromSans(game.history);
     void (async () => {
       try {
         const { db } = await import('../../db/schema');

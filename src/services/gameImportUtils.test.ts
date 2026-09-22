@@ -1,6 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { detectOpening, detectBlunders, extractClockMs } from './gameImportUtils';
-import { db } from '../db/schema';
+import { describe, it, expect } from 'vitest';
+import { detectBlunders, extractClockMs } from './gameImportUtils';
 
 describe('extractClockMs', () => {
   it('parses H:MM:SS clock tags in move order to ms', () => {
@@ -24,112 +23,6 @@ describe('extractClockMs', () => {
 });
 
 describe('gameImportUtils', () => {
-  describe('detectOpening', () => {
-    beforeEach(async () => {
-      await db.openings.clear();
-      await db.openings.bulkPut([
-        {
-          id: 'sicilian',
-          eco: 'B20',
-          name: 'Sicilian Defense',
-          pgn: 'e4 c5',
-          uci: 'e2e4 c7c5',
-          fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
-          color: 'white',
-          style: 'tactical',
-          isRepertoire: false,
-          overview: null,
-          keyIdeas: null,
-          traps: null,
-          warnings: null,
-          variations: null,
-          drillAccuracy: 0,
-          drillAttempts: 0,
-          lastStudied: null,
-          woodpeckerReps: 0,
-          woodpeckerSpeed: null,
-          woodpeckerLastDate: null,
-          isFavorite: false,
-        },
-        {
-          id: 'sicilian-najdorf',
-          eco: 'B90',
-          name: 'Sicilian Najdorf',
-          pgn: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6',
-          uci: 'e2e4 c7c5 g1f3 d7d6 d2d4 c5d4 f3d4 g8f6 b1c3 a7a6',
-          fen: 'rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6',
-          color: 'white',
-          style: 'tactical',
-          isRepertoire: false,
-          overview: null,
-          keyIdeas: null,
-          traps: null,
-          warnings: null,
-          variations: null,
-          drillAccuracy: 0,
-          drillAttempts: 0,
-          lastStudied: null,
-          woodpeckerReps: 0,
-          woodpeckerSpeed: null,
-          woodpeckerLastDate: null,
-          isFavorite: false,
-        },
-        {
-          id: 'italian',
-          eco: 'C50',
-          name: 'Italian Game',
-          pgn: 'e4 e5 Nf3 Nc6 Bc4',
-          uci: 'e2e4 e7e5 g1f3 b8c6 f1c4',
-          fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3',
-          color: 'white',
-          style: 'classical',
-          isRepertoire: false,
-          overview: null,
-          keyIdeas: null,
-          traps: null,
-          warnings: null,
-          variations: null,
-          drillAccuracy: 0,
-          drillAttempts: 0,
-          lastStudied: null,
-          woodpeckerReps: 0,
-          woodpeckerSpeed: null,
-          woodpeckerLastDate: null,
-          isFavorite: false,
-        },
-      ]);
-    });
-
-    it('detects the best matching opening', async () => {
-      const pgn = '1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be2 e5';
-      const result = await detectOpening(pgn);
-      expect(result).toBe('sicilian-najdorf');
-    });
-
-    it('matches shorter opening when no longer match exists', async () => {
-      const pgn = '1. e4 c5 2. Nf3 e6';
-      const result = await detectOpening(pgn);
-      expect(result).toBe('sicilian');
-    });
-
-    it('returns null for unrecognized openings', async () => {
-      const pgn = '1. d4 d5 2. c4 e6';
-      const result = await detectOpening(pgn);
-      expect(result).toBeNull();
-    });
-
-    it('returns null for empty PGN', async () => {
-      const result = await detectOpening('');
-      expect(result).toBeNull();
-    });
-
-    it('matches Italian Game', async () => {
-      const pgn = '1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6';
-      const result = await detectOpening(pgn);
-      expect(result).toBe('italian');
-    });
-  });
-
   describe('detectBlunders', () => {
     it('detects blunders from eval annotations', () => {
       // Simulating a game where Black blunders on move 2
@@ -268,19 +161,4 @@ describe('gameImportUtils', () => {
     });
   });
 
-  describe('detectOpening — partial match', () => {
-    it('matches the longest opening when multiple match', async () => {
-      // Najdorf is longer than plain Sicilian, so it should win
-      const pgn = '1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6';
-      const result = await detectOpening(pgn);
-      expect(result).toBe('sicilian-najdorf');
-    });
-
-    it('returns null when openings table is empty', async () => {
-      await db.openings.clear();
-      const pgn = '1. e4 e5';
-      const result = await detectOpening(pgn);
-      expect(result).toBeNull();
-    });
-  });
 });

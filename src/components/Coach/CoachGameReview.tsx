@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { ecoOfKey, openingKeyFromSans } from '../../services/openingKey';
 import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Target, Crosshair, Play, Pause } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
@@ -618,10 +619,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         });
         return hit;
       }
+      const reviewOpeningKey = openingKeyFromSans(reviewMoveInputs.map((m) => m.san));
       return generateReviewNarration({
         moves: reviewMoveInputs,
         playerColor,
         openingName,
+        // THE ONE KEY (A1): the need context's departure + result terms scope
+        // to it; review never passed one, so both terms were inert here.
+        openingId: reviewOpeningKey,
+        eco: reviewOpeningKey ? ecoOfKey(reviewOpeningKey) : null,
         result,
         playerRating,
         coachNarration,

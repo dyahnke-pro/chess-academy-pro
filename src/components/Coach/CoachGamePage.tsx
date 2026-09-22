@@ -121,6 +121,7 @@ import { limitStrengthElo } from '../../services/engineConstants';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
 import { detectOpening, getOpeningMoves, resolveOpeningEntry } from '../../services/openingDetectionService';
+import { openingEntryForKey } from '../../services/openingKey';
 import { stripSanAnnotations } from '../../data/openingWalkthroughs/validate';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
@@ -2035,7 +2036,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       analysisDepth: LIVE_ANALYSIS_DEPTH,
       coachAnalysis: JSON.stringify(summary),
       isMasterGame: false,
-      openingId: detectedOpening?.name ?? null,
+      openingId: detectedOpening?.key ?? null,
       timeControlId: clocked ? timeControl.id : undefined,
       clockRemainingMs: clocked ? [...clockHistoryRef.current] : undefined,
     };
@@ -4610,7 +4611,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           keyMoments={[]}
           playerColor={reviewPlayerColor}
           result={reviewGame.result}
-          openingName={reviewGame.openingId}
+          openingName={reviewGame.openingId ? openingEntryForKey(reviewGame.openingId)?.name ?? null : null}
           playerName={reviewPlayerName}
           playerRating={reviewPlayerRating}
           opponentRating={reviewOpponentRating}

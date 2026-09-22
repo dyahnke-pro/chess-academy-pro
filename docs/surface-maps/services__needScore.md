@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**404 lines · 11 exports · 16 importers · 10 tests · 2 audits**
+**426 lines · 12 exports · 17 importers · 11 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/needCoverage.report.test.ts`
 - `src/services/needScore.test.ts`
 - `src/services/needWeaknessWire.test.ts`
+- `src/services/oneOpeningKey.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewNeedGate.test.ts`
@@ -47,7 +48,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coldStudent` (function) — 21 call sites
-- `src/hooks/useStudentNeed.ts:35`
+- `src/hooks/useStudentNeed.ts:36`
 - `src/services/capabilityGreen.measure.test.ts:533`
 - `src/services/capabilityRead.test.ts:35`
 - `src/services/coachDecisionEmits.test.ts:108`
@@ -58,15 +59,15 @@
 - `src/services/coachFeatureService.ts:4259`
 - `src/services/fundamentalReachesDecider.test.ts:62`
 - `src/services/needCoverage.report.test.ts:93`
-- `src/services/needScore.test.ts:31`
-- `src/services/needScore.test.ts:47`
+- `src/services/needScore.test.ts:36`
+- `src/services/needScore.test.ts:52`
 - `src/services/oneStudentRating.test.ts:70`
-- `src/services/openingGenerator.ts:2404`
+- `src/services/openingGenerator.ts:2405`
 - `src/services/reviewNeedGate.test.ts:30`
 - `src/services/reviewNeedGate.test.ts:46`
 - `src/services/reviewNeedGate.test.ts:58`
 - `src/services/reviewNeedGate.test.ts:80`
-- `src/services/studentNeedLoader.ts:128`
+- `src/services/studentNeedLoader.ts:148`
 - `src/services/teachingSelector.ts:252`
 
 ### `NeedPlyInput` (interface) — 0 call sites
@@ -76,13 +77,36 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coldStartPrior` (function) — 2 call sites
-- `src/services/needScore.test.ts:34`
-- `src/services/needScore.test.ts:43`
+- `src/services/needScore.test.ts:39`
+- `src/services/needScore.test.ts:48`
 
 ### `familiarity` (function) — 1 call site
-- `src/services/needScore.test.ts:57`
+- `src/services/needScore.test.ts:62`
 
-### `computeNeed` (function) — 49 call sites
+### `fenKey` (function) — 21 call sites
+- `scripts/build-danya-play-db.mjs:37`
+- `scripts/build-danya-play-db.mjs:91`
+- `scripts/catalog-sweep/gatec-reconnect.mjs:20`
+- `scripts/catalog-sweep/gatec-reconnect.mjs:44`
+- `scripts/catalog-sweep/gatec-reconnect.mjs:93`
+- `scripts/catalog-sweep/sweep-matrix.test.ts:37`
+- `scripts/catalog-sweep/sweep-matrix.test.ts:42`
+- `scripts/catalog-sweep/sweep-matrix.test.ts:43`
+- `scripts/catalog-sweep/sweep-matrix.test.ts:112`
+- `src/services/oneOpeningKey.test.ts:112`
+- `src/services/openingWalkthroughService.test.ts:32`
+- `src/services/openingWalkthroughService.test.ts:79`
+- `src/services/openingWalkthroughService.ts:59`
+- `src/services/openingWalkthroughService.ts:74`
+- `src/services/openingWalkthroughService.ts:76`
+- `src/services/openingWalkthroughService.ts:90`
+- `src/services/openingWalkthroughService.ts:123`
+- `src/services/openingWalkthroughService.ts:124`
+- `src/services/openingWalkthroughService.ts:136`
+- `src/services/studentNeedLoader.ts:91`
+- `src/services/studentNeedLoader.ts:94`
+
+### `computeNeed` (function) — 53 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
 - `src/services/capabilityGreen.measure.test.ts:545`
 - `src/services/capabilityGreen.measure.test.ts:546`
@@ -109,19 +133,19 @@
 - `src/services/fundamentalReachesDecider.test.ts:154`
 - `src/services/fundamentalReachesDecider.test.ts:165`
 - `src/services/needCoverage.report.test.ts:83`
-- `src/services/needScore.test.ts:31`
-- `src/services/needScore.test.ts:47`
-- `src/services/needScore.test.ts:54`
-- `src/services/needScore.test.ts:60`
-- `src/services/needScore.test.ts:63`
-- `src/services/needScore.test.ts:69`
-- `src/services/needScore.test.ts:75`
-- `src/services/needScore.test.ts:81`
-- `src/services/needScore.test.ts:82`
+- `src/services/needScore.test.ts:36`
+- `src/services/needScore.test.ts:52`
+- `src/services/needScore.test.ts:59`
+- `src/services/needScore.test.ts:65`
+- `src/services/needScore.test.ts:68`
+- `src/services/needScore.test.ts:74`
+- `src/services/needScore.test.ts:80`
+- `src/services/needScore.test.ts:86`
 - `src/services/needScore.test.ts:87`
-- `src/services/needScore.test.ts:91`
 - `src/services/needScore.test.ts:92`
+- `src/services/needScore.test.ts:96`
 - `src/services/needScore.test.ts:97`
+- `src/services/needScore.test.ts:102`
 - `src/services/needWeaknessWire.test.ts:49`
 - `src/services/needWeaknessWire.test.ts:55`
 - `src/services/needWeaknessWire.test.ts:62`
@@ -130,7 +154,11 @@
 - `src/services/needWeaknessWire.test.ts:117`
 - `src/services/needWeaknessWire.test.ts:130`
 - `src/services/needWeaknessWire.test.ts:134`
-- `src/services/positionFacts.ts:540`
+- `src/services/oneOpeningKey.test.ts:105`
+- `src/services/oneOpeningKey.test.ts:116`
+- `src/services/oneOpeningKey.test.ts:121`
+- `src/services/oneOpeningKey.test.ts:123`
+- `src/services/positionFacts.ts:615`
 - `src/services/teachingSelector.ts:297`
 
 ### `HELD_FOR_PROVEN` (re-export) — 0 call sites
@@ -147,6 +175,7 @@
 - `src/services/needCoverage.report.test.ts`
 - `src/services/needScore.test.ts`
 - `src/services/needWeaknessWire.test.ts`
+- `src/services/oneOpeningKey.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 
 ## Audits that reach it

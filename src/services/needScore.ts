@@ -30,6 +30,8 @@
 // this same function (invariant: one computer set).
 
 import type { WeaknessSignal } from './weaknessSignal';
+import { sameOpeningFamily } from './openingKey';
+import type { OpeningKey } from '../types';
 import { matchClauseKind, matchFundamental, matchTacticPattern, matchTag, boostFor, MAX_WEAKNESS_BOOST } from './weaknessSignal';
 import { bookDepartureIsCostly, type BookDepartureRow } from './bookDepartureWeakness';
 import type { TacticPatternType } from '../types/tacticTypes';
@@ -53,8 +55,11 @@ export interface StudentNeedContext {
   signals: readonly WeaknessSignal[];
   /** The student's book departures (all openings; matched by opening here). */
   bookDepartures: readonly BookDepartureRow[];
-  /** This game's opening, when known — scopes departures + results. */
-  openingId?: string | null;
+  /** This game's opening, when known — the ONE key (A1); scopes results. */
+  openingId?: OpeningKey | null;
+  /** Position keys after 0..n plies of the line (`lineFenKeys`); when present
+   *  the departure term joins by POSITION. Absent on a cold context. */
+  lineFenKeys?: ReadonlyArray<string>;
   /** Correct (book/good) repetitions of this exact line prefix by this student,
    *  per ply index (0-based). Missing/undefined = never seen. */
   lineReps?: ReadonlyArray<number>;
@@ -210,10 +215,27 @@ export function familiarity(reps: number | undefined): number {
   return Math.min(1, reps / FAMILIAR_REPS);
 }
 
+/** The first four FEN fields — board, side, castling, en passant. */
+export function fenKey(fen: string): string {
+  return fen.split(' ').slice(0, 4).join(' ');
+}
+
+/** Does this departure row belong to the line being narrated? By POSITION when
+ *  the context carries the line's FENs (a departure's last-in-book board IS a
+ *  board on this line); by opening FAMILY otherwise. A null on either side is
+ *  NOT a wildcard — the old `openingId == null ||` matched every departure the
+ *  student ever made against a game whose opening never resolved, so an
+ *  unknown-opening game heard "you leave book here" about a different opening. */
+function departureOnLine(r: BookDepartureRow, ctx: StudentNeedContext): boolean {
+  if (ctx.lineFenKeys) {
+    const at = ctx.lineFenKeys[r.departurePly - 1];
+    return at !== undefined && at === fenKey(r.bookFen);
+  }
+  return sameOpeningFamily(r.openingId ?? null, ctx.openingId ?? null);
+}
+
 function departureTerm(ply: number, ctx: StudentNeedContext): { score: number; reason: string | null } {
-  const here = ctx.bookDepartures.filter((r) =>
-    (ctx.openingId == null || r.openingId == null || r.openingId === ctx.openingId)
-    && Math.abs(r.departurePly - ply) <= 1);
+  const here = ctx.bookDepartures.filter((r) => departureOnLine(r, ctx) && Math.abs(r.departurePly - ply) <= 1);
   if (here.length === 0) return { score: 0, reason: null };
   const costly = here.some((r) => bookDepartureIsCostly(r, ctx.rating));
   const score = costly ? 55 : 35;

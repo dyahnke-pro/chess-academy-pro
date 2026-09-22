@@ -299,12 +299,31 @@ Not a random thin-sample opening.
 a sentence or a row comes OUT of the surface on prod — "a wire that does not
 fire is not a wire"):**
 
-1. **ONE OPENING KEY.** A single `openingKey` normaliser used by import, Play,
-   Learn, review, the departure precompute and `studentNeedLoader`; a
-   `Record`/required-parameter shape so a new writer fails to compile until it
-   answers. Gate: a test that writes one game through each of the four paths
-   and reads it back through `loadStudentNeedContext` with the departure and
-   result terms non-zero.
+1. ✅ **ONE OPENING KEY** (2026-09-22). `src/services/openingKey.ts` is the
+   only minter: the key IS the Dexie `openings` id (`slug(eco-name)`, the seed
+   now imports the same function), minted from the BOARD via the detector's
+   trie — `openingKeyFromPgn` / `openingKeyFromSans` / `detectOpening().key` —
+   and BRANDED (`OpeningKey`) so a name cannot be assigned where a key belongs;
+   `GameRecord.openingId` is `OpeningKey | null`. The typecheck named the four
+   writers that had stored a name (import ×2, Play, Learn) and all four now
+   mint. Readers: `studentNeedLoader` scores "this opening" by FAMILY
+   (`sameOpeningFamily`, the home-opening unit) with ECO as the no-key
+   fallback; the departure term joins by POSITION (`lineFenKeys` — a row
+   belongs to the line when its last-in-book board is on it), never the old
+   `openingId == null ||` wildcard that matched every departure against an
+   unknown-opening game; review now passes the key + eco (both terms had been
+   inert there); `openingEntryForKey` resolves the key back to a name for the
+   Play→review hand-off. Persisted rows: `openingKeyBackfill.reconcileOpeningKeys`
+   (per-row `openingKeyRev`, idempotent, detached at boot beside the tactic
+   backfill) re-mints every stored value from the PGN; sync accepts only the
+   minted shape. `gameImportUtils.detectOpening` (a Dexie scan) is deleted.
+   Gates: `openingKey.test.ts`, `oneOpeningKey.test.ts` (four writers → one
+   key; loader joins; position join with negative controls),
+   `openingKeyBackfill.test.ts`. What A1 does NOT do: `misconceptionTags`,
+   `openingWeakSpots` etc. still carry their own `openingId` strings (the
+   book-corpus id from `resolveOpeningIdFromName` on the review capture) — a
+   persisted second key space, bridged not merged; A3's home-opening computer
+   reads `games.openingId` and does not need them.
 2. **ANALYSIS PRIORITY + HONEST HEADER.** `gameAnalysisService` batch order =
    home openings' games first (both colours), then recency; auto-run for the
    home openings on import. The Weaknesses header stops saying "932 analysed"

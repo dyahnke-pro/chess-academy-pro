@@ -35,7 +35,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🟡 K. Not now — Kids Mode opens, 47-game corpus, boot payload, dashboard grading
 
 ## 0. WO-HOME-OPENING-01 — a personal coach: one home opening per colour (David 2026-09-22)
-- 🔴 1. ONE opening key across import / Play / Learn / review — four key spaces today, the departure and result terms never join
+- ✅ 1. ONE opening key across import / Play / Learn / review — `openingKey.ts` mints it from the board, branded type, boot backfill re-mints persisted rows; loader joins by family (results) and position (departures)
 - 🔴 2. Batch analysis orders the home openings' games first; the "932 analysed / 926 not analysed" header derives from one count
 - 🔴 3. `homeOpening(colour)` computer — volume + floor, variation granularity, persisted, confirmed, one-tap change; a 3-game 0% line can never win
 - 🔴 4. Training Plan built from the home openings and their recorded weaknesses, not favourites (empty with 932 games in)

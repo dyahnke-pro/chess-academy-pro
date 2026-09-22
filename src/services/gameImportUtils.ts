@@ -1,45 +1,7 @@
 import { Chess } from 'chess.js';
-import { db } from '../db/schema';
 import type { MoveAnnotation, MoveClassification } from '../types';
 import { isBookLine } from './openingDetectionService';
 import { winPctLost, bandForWinPctLost } from './accuracyService';
-
-// ─── Opening Detection ──────────────────────────────────────────────────────
-
-/**
- * Match a PGN's first moves against the openings table to find the best match.
- * Returns the openingId of the longest-matching opening, or null.
- */
-export async function detectOpening(pgn: string): Promise<string | null> {
-  const gameMoves = extractMovesFromPgn(pgn);
-  if (gameMoves.length === 0) return null;
-
-  // Build a move prefix string from the game (first 10 moves = up to 20 half-moves)
-  const maxHalfMoves = 20;
-  const prefix = gameMoves.slice(0, maxHalfMoves).join(' ');
-
-  const allOpenings = await db.openings.toArray();
-
-  let bestMatch: { id: string; length: number } | null = null;
-
-  for (const opening of allOpenings) {
-    const openingMoves = opening.pgn.split(/\s+/).filter((m) => m.length > 0);
-
-    if (openingMoves.length === 0) continue;
-    if (openingMoves.length > gameMoves.length) continue;
-
-    // Check if game starts with this opening's moves
-    const openingStr = openingMoves.join(' ');
-    if (prefix.startsWith(openingStr) &&
-        (prefix.length === openingStr.length || prefix[openingStr.length] === ' ')) {
-      if (!bestMatch || openingMoves.length > bestMatch.length) {
-        bestMatch = { id: opening.id, length: openingMoves.length };
-      }
-    }
-  }
-
-  return bestMatch?.id ?? null;
-}
 
 /**
  * Extract SAN moves from a PGN string, stripping move numbers and annotations.

@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import type { GameRecord, PlatformStats } from '../types';
-import { detectOpening, detectBlunders, extractClockMs, annotationsFromEvalComments, EVAL_COMMENT_ANALYSIS_DEPTH } from './gameImportUtils';
+import { detectBlunders, extractClockMs, annotationsFromEvalComments, EVAL_COMMENT_ANALYSIS_DEPTH } from './gameImportUtils';
+import { openingKeyFromPgn } from './openingKey';
 import { generateMistakePuzzlesForBatch } from './mistakePuzzleService';
 import { runBackgroundAnalysis } from './gameAnalysisService';
 
@@ -128,7 +129,7 @@ export async function importLichessGames(
     const existing = await db.games.get(record.id);
     if (!existing) {
       if (record.pgn) {
-        record.openingId = await detectOpening(record.pgn);
+        record.openingId = openingKeyFromPgn(record.pgn);
       }
       if (record.pgn) {
         // A PGN that carries a server eval on EVERY ply is already analysed —

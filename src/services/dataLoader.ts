@@ -18,6 +18,8 @@ import gambitPlansData from '../data/gambit-plans.json';
 import { CURATED_NARRATIONS } from '../data/opening-narrations';
 import type { OpeningRecord, FlashcardRecord, ModelGame, MiddlegamePlan, ProGameReference } from '../types';
 import { reconcileTacticTypes } from './tacticTypeBackfill';
+import { openingKeyFor } from './openingKey';
+import { reconcileOpeningKeys } from './openingKeyBackfill';
 import { logAppAudit } from './appAuditor';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -90,15 +92,6 @@ export function computePosition(pgn: string): PositionResult {
   return { fen: chess.fen(), uci: uciMoves.join(' ') };
 }
 
-/**
- * Generates a URL-safe slug from a name.
- */
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-}
 
 // ─── Seeding State ────────────────────────────────────────────────────────────
 
@@ -242,7 +235,7 @@ export async function loadEcoData(): Promise<void> {
   // stays responsive and interactive writes aren't starved (the freeze fix).
   await buildAndBulkPutChunked(db.openings, ecoData as EcoEntry[], (entry): OpeningRecord => {
     const { fen, uci } = computePosition(entry.pgn);
-    const id = slugify(`${entry.eco}-${entry.name}`);
+    const id = openingKeyFor(entry.eco, entry.name);
 
     return {
       id,
@@ -953,6 +946,17 @@ async function runSeedOnce(): Promise<void> {
       category: 'subsystem',
       source: 'dataLoader.reconcileTacticTypes',
       summary: `tacticType backfill failed: ${err instanceof Error ? err.message : String(err)}`,
+    });
+  });
+
+  // Persisted game rows → the ONE opening key (A1). Same shape as the tactic
+  // backfill: per-row rev, idempotent, detached, audited never thrown.
+  void reconcileOpeningKeys().catch((err: unknown) => {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'dataLoader.reconcileOpeningKeys',
+      summary: `openingId backfill failed: ${err instanceof Error ? err.message : String(err)}`,
     });
   });
 

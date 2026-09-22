@@ -2,6 +2,7 @@ import canonicalOpenings from '../data/openings-lichess.json';
 import extendedOpenings from '../data/openings-lichess-extended.json';
 import repertoireData from '../data/repertoire.json';
 import type { DetectedOpening, OpeningVariation } from '../types';
+import { openingKeyFor } from './openingKey';
 import { buildVariationTabs } from './variationTabs';
 import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
 // Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
@@ -61,6 +62,12 @@ const openingsData: OpeningEntry[] = [
   ...(canonicalOpenings as OpeningEntry[]),
   ...extendedAsArray,
 ];
+
+/** Every named entry (canonical + extended), for `openingKey.ts` — the ONE
+ *  importer of the JSON stays this file. */
+export function openingEntriesForKeys(): ReadonlyArray<{ eco: string; name: string }> {
+  return openingsData;
+}
 
 interface TrieNode {
   children: Map<string, TrieNode>;
@@ -178,6 +185,7 @@ export function detectOpening(moveHistory: string[]): DetectedOpening | null {
     eco: lastMatch.opening.eco,
     name: lastMatch.opening.name,
     plyCount: lastMatch.plyCount,
+    key: openingKeyFor(lastMatch.opening.eco, lastMatch.opening.name),
   };
 }
 
@@ -247,7 +255,7 @@ export function detectOpeningTranspositional(moveHistory: string[]): DetectedOpe
     // Attack", never overwrite an unrelated specific name.
     if (exact && !sig.name.startsWith(exact.name.split(':')[0])) continue;
     if (sig.name.length > bestSpecificity) {
-      best = { eco: sig.eco, name: sig.name, plyCount: moveHistory.length };
+      best = { eco: sig.eco, name: sig.name, plyCount: moveHistory.length, key: openingKeyFor(sig.eco, sig.name) };
       bestSpecificity = sig.name.length;
     }
   }

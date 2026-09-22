@@ -17,6 +17,7 @@
  * won't bring it back unless the meta flag is also reset.
  */
 import { Chess } from 'chess.js';
+import { openingKeyFromPgn } from './openingKey';
 import { db } from '../db/schema';
 import type { GameRecord, MoveAnnotation, MoveClassification } from '../types';
 import { logAppAudit } from './appAuditor';
@@ -452,7 +453,7 @@ function buildGameRecord(s: SampleGame): GameRecord {
     annotations: expandAnnotations(s.annotations, s.pgn),
     coachAnalysis: null,
     isMasterGame: s.source === 'master',
-    openingId: null,
+    openingId: openingKeyFromPgn(s.pgn),
     fullyAnalyzed: true,
   };
 }

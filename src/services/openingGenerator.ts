@@ -23,6 +23,7 @@
  * Style drift is the main risk; that's why we anchor on a sample.
  */
 import { Chess, type Move } from 'chess.js';
+import { openingKeyFromSans } from './openingKey';
 import { perspectiveRule } from './perspectiveRule';
 import { buildExplorerTeachLine } from './explorerTeachLine';
 import puzzleData from '../data/puzzles.json';
@@ -2400,7 +2401,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   try {
     await ensureMastersDbLoaded().catch(() => undefined);
     const spineSans = positions.map((q) => q.san);
-    const student = await loadStudentNeedContext({ rating: 1500, sans: spineSans, studentColor: studentSide, openingId: null, eco: entry.eco ?? null })
+    const student = await loadStudentNeedContext({ rating: 1500, sans: spineSans, studentColor: studentSide, openingId: openingKeyFromSans(spineSans), eco: entry.eco ?? null })
       .catch(() => coldStudent(1500));
     const needPlies = new Set(teachingForLine(spineSans, studentSide, student)?.needPlies ?? []);
     for (let i = 0; i < positions.length && i < REFUTED_PLY_CAP; i += 1) {
