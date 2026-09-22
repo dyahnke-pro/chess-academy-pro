@@ -234,7 +234,9 @@ function detectPin(
       isRealPin({
         chess: chessAfter,
         dir,
+        attacker: toSquare,
         pinned: first.square,
+        behind: second.square,
         frontValue: pieceValue(first.type),
         behindValue: pieceValue(second.type),
       })

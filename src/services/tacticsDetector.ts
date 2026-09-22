@@ -220,7 +220,9 @@ function findPins(chess: Chess): TacticPattern[] {
           isRealPin({
             chess,
             dir,
+            attacker: sq,
             pinned: first.square,
+            behind: second.square,
             frontValue: PIECE_VALUE[first.type] ?? 0,
             behindValue: PIECE_VALUE[second.type] ?? 0,
           })

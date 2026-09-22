@@ -111,17 +111,63 @@ export function canLeaveLine(chess: Chess, pinned: Square, dir: Vec): boolean {
 
 /**
  * The full pin test, shared by every detector: three pieces on a ray, the one
- * behind worth more, and the one in front with a move that would leave the line.
+ * behind worth more, the one in front with a move that would leave the line —
+ * AND the pin must BITE.
+ *
+ * 🔒 A PIN THAT WINS NOTHING IS NOT A PIN (WO-STANDARD-01 D-2, read off the
+ * prod tape 2026-09-22). Two sentences a student heard:
+ *
+ *     "Your bishop on c4 pins their pawn on f7 against their knight on g8"
+ *     "Their queen on d5 pins your pawn on g2 against your rook on h1"
+ *
+ * Both pass geometry (three on a ray), value (knight > pawn, rook > pawn) and
+ * escape (a pawn leaves a diagonal by pushing). Both are chess noise: if the
+ * f7 pawn steps aside, Bxg8 is a bishop for a DEFENDED knight — an even trade
+ * the "pinned" side would happily allow; if g2 steps aside, Qxh1 is a queen
+ * for a defended rook. Nothing is frozen because nothing is threatened.
+ *
+ * The bite is what every coach means by the word: the piece behind is the
+ * KING (an absolute pin), or it is worth MORE than the attacker that would
+ * take it, or it is UNDEFENDED (so the attacker collects it for free). One
+ * clause per case, computed off the board — the defence count excludes the
+ * front piece, which is the one that has just been imagined away.
  */
 export function isRealPin(args: {
   chess: Chess;
   /** Direction from the attacker through the pinned piece. */
   dir: Vec;
+  /** The pinning piece's square — needed to price the capture it threatens. */
+  attacker: Square;
   pinned: Square;
+  behind: Square;
   frontValue: number;
   behindValue: number;
 }): boolean {
-  return args.behindValue > args.frontValue && canLeaveLine(args.chess, args.pinned, args.dir);
+  if (!(args.behindValue > args.frontValue)) return false;
+  if (!canLeaveLine(args.chess, args.pinned, args.dir)) return false;
+  return pinBites(args.chess, args.attacker, args.pinned, args.behind);
+}
+
+/** The value of a piece for pricing a capture; the king is never captured, so
+ *  its value only matters as "more than anything". */
+const CAPTURE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+
+/**
+ * Would the attacker actually WIN something by taking the piece behind once the
+ * front piece steps off the line? True for an absolute pin (king behind), for a
+ * piece behind worth more than the attacker, and for an undefended piece
+ * behind. The front piece is excluded from the defence count — it is the one
+ * being imagined off the ray.
+ */
+export function pinBites(chess: Chess, attacker: Square, pinned: Square, behind: Square): boolean {
+  const back = chess.get(behind);
+  const att = chess.get(attacker);
+  if (!back || !att) return false;
+  if (back.type === 'k') return true;
+  if (CAPTURE_VALUE[back.type] > CAPTURE_VALUE[att.type]) return true;
+  let defenders: Square[];
+  try { defenders = chess.attackers(behind, back.color); } catch { return false; }
+  return !defenders.some((sq) => sq !== pinned);
 }
 
 export type { PieceSymbol, Color };
