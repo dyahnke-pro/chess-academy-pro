@@ -27,7 +27,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `computeWeaknessProfile` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:2065`
+- `src/components/Coach/CoachGamePage.tsx:2066`
 - `src/components/Stats/StatsPage.tsx:50`
 - `src/services/analyticsService.ts:463`
 - `src/services/gameAnalysisService.ts:2581`
@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weaknessAnalyzer.test.ts:544`
 
 ### `getStoredWeaknessProfile` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10637`
+- `src/components/Coach/CoachTeachPage.tsx:10640`
 - `src/components/Stats/StatsPage.tsx:68`
 - `src/services/coachChatService.ts:188`
 - `src/services/coachContextSnapshot.ts:85`

@@ -267,7 +267,7 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8554`
+- `src/components/Coach/CoachTeachPage.tsx:8557`
 - `src/services/coachApi.ts:3301`
 - `src/services/coachApi.ts:5347`
 - `src/services/coachFeatureService.test.ts:40`
@@ -857,8 +857,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:56`
 
 ### `assembleSlipNarration` (function) — 4 call sites
-- `src/components/Coach/CoachGamePage.tsx:3777`
-- `src/components/Coach/CoachGamePage.tsx:3911`
+- `src/components/Coach/CoachGamePage.tsx:3804`
+- `src/components/Coach/CoachGamePage.tsx:3938`
 - `src/services/groundedAnswer.test.ts:725`
 - `src/services/groundedAnswer.test.ts:740`
 

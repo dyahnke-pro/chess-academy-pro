@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**106 lines · 9 exports · 34 importers · 17 tests · 1 audits**
+**106 lines · 9 exports · 35 importers · 18 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,6 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/homeOpeningPlan.test.ts`
 - `src/services/homeOpeningPlan.ts`
 - `src/services/homeOpeningService.test.ts`
+- `src/services/homeOpeningSteer.test.ts`
 - `src/services/learnGameRecord.test.tsx`
 - `src/services/lichessService.ts`
 - `src/services/needScore.test.ts`
@@ -52,7 +53,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `slugifyOpening` (function) — 1 call site
 - `src/services/openingKey.test.ts:18`
 
-### `openingKeyFor` (function) — 31 call sites
+### `openingKeyFor` (function) — 32 call sites
 - `src/components/Insights/HomeOpeningCard.test.tsx:17`
 - `src/components/Insights/HomeOpeningCard.test.tsx:18`
 - `src/services/analysisBatchOrder.test.ts:16`
@@ -73,6 +74,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/homeOpeningService.test.ts:19`
 - `src/services/homeOpeningService.test.ts:20`
 - `src/services/homeOpeningService.test.ts:21`
+- `src/services/homeOpeningSteer.test.ts:20`
 - `src/services/learnGameRecord.test.tsx:22`
 - `src/services/needScore.test.ts:12`
 - `src/services/needScore.test.ts:13`
@@ -87,9 +89,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingKeyFromSans` (function) — 18 call sites
 - `src/components/Coach/CoachGameReview.tsx:622`
-- `src/components/Coach/CoachTeachPage.tsx:7173`
-- `src/components/Coach/CoachTeachPage.tsx:10865`
-- `src/components/Coach/CoachTeachPage.tsx:12020`
+- `src/components/Coach/CoachTeachPage.tsx:7176`
+- `src/components/Coach/CoachTeachPage.tsx:10868`
+- `src/components/Coach/CoachTeachPage.tsx:12023`
 - `src/services/oneOpeningKey.test.ts:44`
 - `src/services/oneOpeningKey.test.ts:59`
 - `src/services/oneOpeningKey.test.ts:60`
@@ -142,7 +144,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `ecoOfKey` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:630`
-- `src/components/Coach/CoachTeachPage.tsx:7181`
+- `src/components/Coach/CoachTeachPage.tsx:7184`
 - `src/services/openingKey.test.ts:31`
 
 ### `sameOpeningFamily` (function) — 10 call sites
@@ -158,7 +160,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/studentNeedLoader.ts:150`
 
 ### `openingEntryForKey` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:4614`
+- `src/components/Coach/CoachGamePage.tsx:4641`
 - `src/services/homeOpening.ts:112`
 - `src/services/homeOpening.ts:193`
 - `src/services/homeOpeningPlan.ts:163`
@@ -176,6 +178,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/homeOpening.test.ts`
 - `src/services/homeOpeningPlan.test.ts`
 - `src/services/homeOpeningService.test.ts`
+- `src/services/homeOpeningSteer.test.ts`
 - `src/services/learnGameRecord.test.tsx`
 - `src/services/needScore.test.ts`
 - `src/services/needWeaknessWire.test.ts`

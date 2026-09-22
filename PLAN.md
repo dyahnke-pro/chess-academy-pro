@@ -400,11 +400,22 @@ fire is not a wire"):**
    falling into best-move-now; "what should I learn" answers from the home
    opening. Every phrasing added to the ONE English matrix and run through
    `audit-coach-all-questions-prod.mjs` exhaustively.
-7. **PLAY STEERS.** The opponent's opening moves come from the home
-   repertoire's most-faced continuations while in book, Stockfish after.
-   Gate: with the Pirc as home and the student Black, the bot's first move is
-   e4 on 10 of 10 games; a control with no home opening keeps today's
-   behaviour.
+7. ✅ **PLAY STEERS** (2026-09-22). `homeOpeningSteer.ts`: `buildSteerIndex`
+   walks the student's home games (seat-resolved; a Pirc they FACED as White
+   indexes nothing for Black) and records the OPPONENT's reply at every
+   position by FEN key; `steerFromIndex` picks by frequency — weighted-random
+   among several faced continuations (the sanctioned opponent randomness),
+   deterministic when there is one — with a floor of `STEER_MIN_GAMES` (3)
+   games at the position and `STEER_MAX_PLY` (24). `pickHomeSteerMove` reads
+   the persisted home for the student's colour. Wired at the SAME precedence
+   in both play paths, below the taught slip and above the engine — in
+   `getAdaptiveMove` behind an opt-in `steerHomeFor` (OpeningPlayMode's
+   locked line never passes it), and in CoachGamePage's fast path, which
+   reaches `getAdaptiveMove` only on engine failure. Learn passes it only
+   when the student named no opening. Emits `coach-opponent-move-source`
+   `source=home-steer`. Gate: `homeOpeningSteer.test.ts` (e4 on 10 of 10
+   with the Pirc as home; the no-home control is null; the other colour is
+   untouched; the student's own moves are never indexed).
 8. ✅ **REVIEW OPENS WITH THE RECORD** (2026-09-22). `openingRecordBeat.ts`
    (pure): `openingRecordClause` — "your 63rd Pirc Defense, 49% so far — your
    home opening" (silent under 2 games; the score only when ≥4 decided games

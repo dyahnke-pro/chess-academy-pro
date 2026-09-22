@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js';
+import { pickHomeSteerMove } from './homeOpeningSteer';
 import { stockfishEngine } from './stockfishEngine';
 import { limitStrengthElo, ENGINE_ELO_MIN } from './engineConstants';
 import { getNextOpeningBookMove } from './openingDetectionService';
@@ -487,8 +488,8 @@ export async function getAdaptiveMove(
    *  a 1500 on easy from an 800 on medium. Optional so every existing caller
    *  still compiles — and absent, no slip is offered, which is the safe way
    *  round for a feature that hands the student a won position. */
-  opts?: { studentElo?: number; difficulty?: CoachDifficulty | 'auto' },
-): Promise<{ move: string; analysis: StockfishAnalysis; source: 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random' }> {
+  opts?: { studentElo?: number; difficulty?: CoachDifficulty | 'auto'; /** Steer into the student's HOME opening (A7): the surface says which colour the student holds. Absent = no steer (a locked taught line must never be steered off). */ steerHomeFor?: 'white' | 'black' },
+): Promise<{ move: string; analysis: StockfishAnalysis; source: 'masters' | 'lichess-games' | 'amateur-band' | 'taught-slip' | 'home-steer' | 'stockfish-best' | 'stockfish-variety' | 'stockfish-fallback' | 'random' }> {
   // Single-threaded Stockfish (iOS / any context without SharedArrayBuffer +
   // cross-origin isolation) is ~5-10x slower than the threaded build, so a
   // depth 14-16 search blows the COACH_MOVE_TIMEOUT_MS budget → timeout →
@@ -559,6 +560,31 @@ export async function getAdaptiveMove(
       analysis: { ...FALLBACK_ANALYSIS, bestMove: taught.uci },
       source: 'taught-slip',
     };
+  }
+
+  // ── LAYER 0.07 — STEER INTO THE STUDENT'S HOME OPENING (A7) ─────────────
+  //
+  // Below the taught slip (a once-per-game lesson keeps its turn), above the
+  // amateur band: while in the opening, the opponent plays what the student's
+  // OWN opponents played at this position in their home games — so a Black
+  // student whose home is the Pirc meets 1.e4 and the lines they actually
+  // face, at their strength. Null past the trie, and the layers below run
+  // exactly as before. Opt-in per surface: a locked taught line is never
+  // steered off it.
+  if (opts?.steerHomeFor) {
+    try {
+      const steer = await withBudget(pickHomeSteerMove(fen, opts.steerHomeFor), BAND_BUDGET_MS);
+      if (steer) {
+        void logAppAudit({
+          kind: 'coach-opponent-move-source',
+          category: 'subsystem',
+          source: 'coachGameEngine.getAdaptiveMove',
+          summary: `source=home-steer san=${steer.san} uci=${steer.uci} family=${steer.family} faced=${steer.games}/${steer.total} elo=${targetElo}`,
+          fen,
+        });
+        return { move: steer.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: steer.uci }, source: 'home-steer' };
+      }
+    } catch { /* a missed steer is never worth a stalled move */ }
   }
 
   // ── LAYER 0.1 — WHAT PLAYERS AT THIS LEVEL ACTUALLY PLAY ────────────────

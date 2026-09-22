@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**432 lines · 12 exports · 18 importers · 11 tests · 2 audits**
+**432 lines · 12 exports · 19 importers · 11 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/fundamentalReachesDecider.test.ts`
+- `src/services/homeOpeningSteer.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
 - `src/services/needCoverage.report.test.ts`
@@ -84,7 +85,7 @@
 ### `familiarity` (function) — 1 call site
 - `src/services/needScore.test.ts:62`
 
-### `fenKey` (function) — 23 call sites
+### `fenKey` (function) — 26 call sites
 - `scripts/build-danya-play-db.mjs:37`
 - `scripts/build-danya-play-db.mjs:91`
 - `scripts/catalog-sweep/gatec-reconnect.mjs:20`
@@ -94,6 +95,9 @@
 - `scripts/catalog-sweep/sweep-matrix.test.ts:42`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:43`
 - `scripts/catalog-sweep/sweep-matrix.test.ts:112`
+- `src/services/homeOpeningSteer.ts:41`
+- `src/services/homeOpeningSteer.ts:58`
+- `src/services/homeOpeningSteer.ts:72`
 - `src/services/oneOpeningKey.test.ts:124`
 - `src/services/openingRecordBeat.ts:48`
 - `src/services/openingRecordBeat.ts:49`

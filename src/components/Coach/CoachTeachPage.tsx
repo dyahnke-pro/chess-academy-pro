@@ -7140,6 +7140,9 @@ export function CoachTeachPage(): JSX.Element {
         // must not disagree with the strength the opponent is set to.
         studentElo: studentPlayingRating(activeProfile),
         difficulty,
+        // STEER INTO THE HOME OPENING (A7) — only when the student named NO
+        // opening for this game; a line they asked for is theirs to play.
+        ...(openingName ? {} : { steerHomeFor: playerColor }),
       });
       if (adaptive.move) {
         const san = uciToSan(adaptive.move);

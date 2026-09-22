@@ -84,7 +84,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5589`
 - `src/components/Coach/CoachTeachPage.tsx:5663`
 - `src/components/Coach/CoachTeachPage.tsx:6420`
-- `src/components/Coach/CoachTeachPage.tsx:10519`
+- `src/components/Coach/CoachTeachPage.tsx:10522`
 - `src/services/lessonCacheKey.test.ts:58`
 - `src/services/lessonCacheKey.test.ts:63`
 - `src/services/lessonCacheKey.test.ts:72`
@@ -148,8 +148,8 @@
 - `src/services/puzzleConceptExplanation.ts:168`
 
 ### `noteArrowSourceAt` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7665`
-- `src/components/Coach/CoachTeachPage.tsx:9647`
+- `src/components/Coach/CoachTeachPage.tsx:7668`
+- `src/components/Coach/CoachTeachPage.tsx:9650`
 - `src/services/noteSelectionDeterminism.test.ts:124`
 - `src/services/teachingCoverage.report.test.ts:164`
 
@@ -157,8 +157,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `groundedSegmentArrows` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7670`
-- `src/components/Coach/CoachTeachPage.tsx:9652`
+- `src/components/Coach/CoachTeachPage.tsx:7673`
+- `src/components/Coach/CoachTeachPage.tsx:9655`
 - `src/services/groundedArrows.test.ts:41`
 - `src/services/groundedArrows.test.ts:53`
 - `src/services/groundedArrows.test.ts:62`
@@ -255,7 +255,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5544`
 - `src/components/Coach/CoachTeachPage.tsx:5657`
 - `src/components/Coach/CoachTeachPage.tsx:6415`
-- `src/components/Coach/CoachTeachPage.tsx:10513`
+- `src/components/Coach/CoachTeachPage.tsx:10516`
 - `src/services/openingGenerator.test.ts:934`
 - `src/services/openingGenerator.test.ts:937`
 

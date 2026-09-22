@@ -49,6 +49,7 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTaughtSlip, studentPlayingRating } from '../../services/coachGameEngine';
+import { pickHomeSteerMove } from '../../services/homeOpeningSteer';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById, type ClockState } from '../../services/chessClock';
@@ -2421,6 +2422,32 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             }
           } catch {
             /* a missed teaching moment is never worth a broken move */
+          }
+        }
+        // STEER INTO THE HOME OPENING (A7) — the same precedence as in
+        // `getAdaptiveMove` (below the slip, above the engine), for the same
+        // reason the slip sits here: this page reaches `getAdaptiveMove` only
+        // when the engine fails, so a steer wired only there would read as
+        // connected and fire approximately never.
+        if (!brainPickSan) {
+          try {
+            const steer = await withTimeout(pickHomeSteerMove(game.fen, playerColor), 1_500, 'home-steer');
+            if (steer.ok && steer.value) {
+              const probe = new Chess(game.fen);
+              const played = probe.move(steer.value.san);
+              if (played) {
+                brainPickSan = played.san;
+                void logAppAudit({
+                  kind: 'coach-opponent-move-source',
+                  category: 'subsystem',
+                  source: 'CoachGamePage.coachTurn',
+                  summary: `source=home-steer san=${steer.value.san} family=${steer.value.family} faced=${steer.value.games}/${steer.value.total}`,
+                  fen: game.fen,
+                });
+              }
+            }
+          } catch {
+            /* a missed steer is never worth a stalled move */
           }
         }
         if (!brainPickSan) {
