@@ -49,6 +49,13 @@ const NOT_A_CHAT_LANE = new Set<string>([
   'legalSeeGain', 'legalSeeGainOn', 'signedLegalSeeFor',
   // reached through an existing chat lane, not on their own
   'findHangingBySee',          // behind the hanging/loose lane (seeGain)
+  // D-1 (2026-09-22): the bad-bishop ray computer. `bishopBlockingPawns` is
+  // reached through positionalRead.readPosition, which groundedAnswer's plan
+  // lane consumes (line ~1290); `bishopHemmedByOwnPawns` is its one-line
+  // boolean form, the vocabulary of the fundamentals attributor
+  // (principleAttribution) and the review teaching points — one computer,
+  // consumed through an existing lane, not a Q&A lane of its own.
+  'bishopBlockingPawns', 'bishopHemmedByOwnPawns',
   // narration / reading-drill renderers + graders (not typed Q&A)
   'formatReadingFacts', 'samplePositionsFromGame', 'findMistakePositions',
   'buildReadingQuestions', 'readingHint', 'gradeReadingAnswerDeterministic',

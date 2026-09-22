@@ -155,7 +155,7 @@ describe('the live lane feeds the heat map too', () => {
     // they never made, and grey for a question they were never asked.
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src, "the student's own board and move, handed over raw")
-      .toMatch(/lastMove: \{ fenBefore, san: move\.san, cpLoss: studentCpLoss \}/);
+      .toMatch(/lastMove: \{\s*fenBefore, san: move\.san, cpLoss: studentCpLoss,/); // C4 adds `reads` after these three
     expect(src, 'never the coach reply').not.toMatch(/lastMove: \{[^}]*probe/);
     expect(src, 'never the coach reply').not.toMatch(/lastMove: \{[^}]*san: m\.san/);
     // and the surface must NOT compose the computer itself — that is the
