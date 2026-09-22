@@ -190,6 +190,60 @@ everything; A2–A3 next; A4–A8 are the visible payoff; A11 is the audit.
 - H6. Analytics hygiene: `coach_question_asked` is 10× inflated by the hint
   prompt and the canned best-move button.
 
+**§H MEASURED + LANDED 2026-09-22 (helper branch; native, `distribution='appstore'`,
+Cupertino/audit/bot/David's three device ids excluded, 30 days — control:
+15,611 events / 40 devices, so a zero below is a measurement, not a broken
+filter).**
+- H2 — `coach_tool_call_error`: **12 rows / 1 device**; 10 are
+  `start_walkthrough_for_opening: Cannot start a walkthrough here — this
+  surface can't host one` (the pre-queue wording), 2 are `reset_board`. Root:
+  the global drawer filed every ask as `surface:'home-chat'` (a constant), the
+  tool ctx never defaulted the sixth hand to the actuator, and Learn never
+  registered `startWalkthrough`, so a queued lesson on an already-mounted Learn
+  never drained. Fixed at all three; the count above is the baseline the next
+  post-deploy read compares against (query shape: `GROUP BY properties.summary`
+  on `event='coach_tool_call_error'`).
+- H3 — `$exception` (`audit_kind='stockfish-error'`), summary
+  `adaptGameRecord returned null for game teach-1788396074396 — pgnLength 214`,
+  build `ff5ed1a2b` (Sept 2), **2 rows, 1 game** in 90 days. That build saved
+  Learn games as a headerless `history.join(' ')` from a lesson position; the
+  save site was fixed 09-03, the row is still in that device's Dexie. Review now
+  replays from the `[FEN]` header, keeps a legal prefix with a note, or fails
+  with a sentence naming the game (`gamePgnReplay.ts`).
+- H4 — `feedback_submitted`: **2 rows / 1 device**, same note, 7 s apart, one
+  session, two uuids, both `QuickFeedbackButton` — a re-tap after a dismissed
+  share sheet. Capture is now keyed on the note; the share/mail step may re-run.
+- H5 — measured, one fixed:
+  - `ota_download_failed` **39 / 17 devices** vs `ota_download_complete`
+    58 / 27, `ota_update_available` 65 / 27. Cut by `to` vs the observer's
+    `running` prop: **24 rows are phantom-shaped (`to == running`, the
+    plugin's missing-`kind` failure for the bundle already on the device) and
+    every one is dated 2026-08-23 → 09-02** — none after `noUpdate` in
+    `api/ota/manifest.ts` began sending `kind:'up_to_date'` (09-03). The
+    **11 rows after 09-05 are all `to ≠ running`** (a real newer bundle,
+    about one device per day: `9bbe43aa`, `c18e02fd`, `4f516bd9`, `51ea8edc`,
+    `26f7b9f1`, `5169b560`, `5267e0a0` ×2, `586ec796`) — genuine transfer
+    failures against 58 completes, not ours to generate. No code change:
+    the phantom is closed at the reply; the residue is the network.
+  - `voice_fallover` **343 / 5 devices**, but 333 are one device on the
+    Aug-5 build `c02ae379`; September builds (`bbd617c26`, `51ea8ed`,
+    `9a2d187`) total **9 rows / 3 devices**, each a burst inside ONE 20-s
+    warmup-retry or 15-s post-failure cooldown ("never attempted"). Not
+    sticky: `isPollyLive` clears the cooldown on expiry. No fix this session.
+  - `stockfish-analysis-stalled` lives under `$exception`, not its own event:
+    **15 / 5 devices** — 11 "no bestmove in 12000ms" (audit-only watchdog),
+    3 "30000ms — resetting worker" (the recovery), 1 backgrounded. Real iOS
+    engine stalls at depth 18; no root cause reachable from a test. Not this
+    session.
+  - `phase_transition_suppressed` **941 / 4 devices** = 512 `skipped: coach
+    move` + 428 `no-fire` + **1** real suppression. Fixed: coach moves write
+    nothing; no-fire writes once per input signature (`planPhaseNoFireAudit`).
+- H6 — `coach_question_asked` **317 / 7 devices** = 173 canned best-move taps
+  (`ask_text` "What's the strongest move for me in this exact position…", ONE
+  device — its computed WHY kept throwing, see FOUND IN PASSING) + 115 hint
+  prompts (`[internal:hint]`) + 26 home-chat + 2 teach. Every producer now
+  carries `ask_source`; the usage recipe counts `'typed'` (CLAUDE.md).
+
 ### I. DOCS AND GATES THAT LIE
 - I1. CLAUDE.md G6 claims `validateArrowClaims` is wired — it is not.
 - I2. CLAUDE.md "ONE literal" for the rating — 63 inline `?? 1200` remain

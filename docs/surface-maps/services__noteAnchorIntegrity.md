@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3623) — names `noteSeatMatches`
-- **🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).** (CLAUDE.md:4082) — names `noteAnchorIntegrity`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3634) — names `noteSeatMatches`
+- **🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).** (CLAUDE.md:4093) — names `noteAnchorIntegrity`
 
 ## Who calls in
 
@@ -78,7 +78,7 @@
 - `src/services/noteFilterFunnel.report.test.ts:167`
 
 ### `noteStaysInScope` (function) — 21 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7934`
+- `src/components/Coach/CoachTeachPage.tsx:7961`
 - `src/services/computedVoiceAudit.report.test.ts:342`
 - `src/services/computedVoiceAudit.report.test.ts:390`
 - `src/services/danyaTeachingService.ts:456`
@@ -101,7 +101,7 @@
 - `src/services/viennaNarrationExample.report.test.ts:99`
 
 ### `noteAdvisesSide` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7980`
+- `src/components/Coach/CoachTeachPage.tsx:8007`
 - `src/services/coachSideAwareness.test.ts:31`
 - `src/services/coachSideAwareness.test.ts:32`
 - `src/services/coachSideAwareness.test.ts:33`
@@ -109,7 +109,7 @@
 - `src/services/coachSideAwareness.test.ts:103`
 
 ### `noteSuitsStudentSide` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7947`
+- `src/components/Coach/CoachTeachPage.tsx:7974`
 - `src/services/coachSideAwareness.test.ts:45`
 - `src/services/coachSideAwareness.test.ts:46`
 - `src/services/coachSideAwareness.test.ts:51`

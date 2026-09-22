@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:5913) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:5929) — names `conceptEngine`
 
 ## Who calls in
 
@@ -191,7 +191,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7476`
+- `src/components/Coach/CoachTeachPage.tsx:7503`
 - `src/services/dnaLineNarrator.ts:175`
 - `src/services/dnaLineNarrator.ts:206`
 - `src/services/dnaLineNarrator.ts:242`

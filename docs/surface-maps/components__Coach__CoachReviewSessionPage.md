@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**463 lines · 2 exports · 3 importers · 2 tests · 3 audits**
+**519 lines · 5 exports · 3 importers · 2 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts`
 
 ## Exports and every call site
+
+### `describeGameForStudent` (function) — 2 call sites
+- `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:103`
+- `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:105`
+
+### `AdaptOutcome` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `adaptGameRecordExplained` (function) — 2 call sites
+- `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:89`
+- `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:97`
 
 ### `adaptGameRecord` (function) — 3 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:39`

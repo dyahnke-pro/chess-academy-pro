@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ensureSampleGameSeeded` (function) — 4 call sites
-- `src/components/Coach/CoachReviewSessionPage.tsx:223`
+- `src/components/Coach/CoachReviewSessionPage.tsx:259`
 - `src/services/reviewSampleGames.test.ts:55`
 - `src/services/reviewSampleGames.test.ts:62`
 - `src/services/reviewSampleGames.test.ts:67`

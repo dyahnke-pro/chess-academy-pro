@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5945) — names `misconceptionService`
+- **The standard post-deploy ritual** (CLAUDE.md:5961) — names `misconceptionService`
 
 ## Who calls in
 
@@ -46,7 +46,7 @@
 - `src/services/bucketPipelineAudit.ts:252`
 - `src/services/misconceptionService.test.ts:114`
 - `src/services/misconceptionService.test.ts:149`
-- `src/services/weaknessSpine.ts:444`
+- `src/services/weaknessSpine.ts:445`
 
 ### `LogMisconceptionInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -139,11 +139,11 @@
 - `src/services/misconceptionService.test.ts:98`
 - `src/services/misconceptionService.test.ts:116`
 - `src/services/weaknessAnalyzer.ts:997`
-- `src/services/weaknessSpine.ts:842`
+- `src/services/weaknessSpine.ts:843`
 
 ### `recordTagDrillResult` (function) — 8 call sites
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:245`
-- `src/components/Puzzles/AdaptivePuzzlePage.tsx:329`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:246`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx:330`
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:64`
 - `src/services/misconceptionService.test.ts:107`
 - `src/services/misconceptionService.test.ts:124`

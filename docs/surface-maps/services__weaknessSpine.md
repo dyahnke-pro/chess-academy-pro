@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**934 lines · 21 exports · 30 importers · 15 tests · 2 audits**
+**935 lines · 21 exports · 30 importers · 15 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:236) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:5945) — names `weaknessSpine`
+- **The standard post-deploy ritual** (CLAUDE.md:5961) — names `weaknessSpine`
 
 ## Who calls in
 
@@ -74,7 +74,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `bucketForMistake` (function) — 7 call sites
-- `src/services/coachDrillService.ts:347`
+- `src/services/coachDrillService.ts:348`
 - `src/services/tacticTypeBackfill.test.ts:94`
 - `src/services/tacticTypeBackfill.test.ts:115`
 - `src/services/weaknessLifecycle.ts:108`
@@ -83,8 +83,8 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2604`
-- `src/services/coachDrillService.ts:559`
+- `src/components/Coach/CoachTeachPage.tsx:2631`
+- `src/services/coachDrillService.ts:560`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
 
@@ -144,8 +144,8 @@
 - `src/services/weaknessSpine.test.ts:272`
 
 ### `getUnifiedWeaknessProfile` (function) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2528`
-- `src/components/Coach/CoachTeachPage.tsx:10645`
+- `src/components/Coach/CoachTeachPage.tsx:2555`
+- `src/components/Coach/CoachTeachPage.tsx:10672`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:71`
 - `src/components/Dashboard/DashboardPage.tsx:133`
 - `src/components/Tactics/TacticalProfilePage.tsx:69`

@@ -26,4 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Audits that reach it
 
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
 - `scripts/audit-coach-full-interactive.mjs`

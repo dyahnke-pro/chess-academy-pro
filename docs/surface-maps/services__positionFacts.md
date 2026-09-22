@@ -11,10 +11,10 @@
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `positionFacts`
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:287) — names `positionFacts`
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:903) — names `positionFacts`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3782) — names `ClauseKind`, `positionFacts`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3934) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5807) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:5913) — names `positionFacts`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3793) — names `ClauseKind`, `positionFacts`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3945) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5823) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:5929) — names `positionFacts`
 
 ## Who calls in
 
@@ -54,10 +54,10 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8849`
-- `src/hooks/useLiveCoach.ts:285`
-- `src/hooks/usePhaseNarration.ts:630`
-- `src/hooks/usePositionNarration.ts:264`
+- `src/components/Coach/CoachTeachPage.tsx:8876`
+- `src/hooks/useLiveCoach.ts:286`
+- `src/hooks/usePhaseNarration.ts:631`
+- `src/hooks/usePositionNarration.ts:265`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:251`
 - `src/services/positionFacts.test.ts:252`
@@ -67,11 +67,11 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 54 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8820`
+- `src/components/Coach/CoachTeachPage.tsx:8847`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
-- `src/hooks/useLiveCoach.ts:254`
-- `src/hooks/usePhaseNarration.ts:608`
-- `src/hooks/usePositionNarration.ts:243`
+- `src/hooks/useLiveCoach.ts:255`
+- `src/hooks/usePhaseNarration.ts:609`
+- `src/hooks/usePositionNarration.ts:244`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/latentFork.test.ts:148`
 - `src/services/liveNeedGate.test.ts:127`

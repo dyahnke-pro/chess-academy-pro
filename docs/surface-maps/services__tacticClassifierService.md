@@ -30,10 +30,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getTacticTypeFromThemes` (function) — 1 call site
-- `src/components/Puzzles/PuzzleBoard.tsx:134`
+- `src/components/Puzzles/PuzzleBoard.tsx:135`
 
 ### `getPrimaryThemeLabel` (function) — 1 call site
-- `src/components/Puzzles/PuzzleBoard.tsx:135`
+- `src/components/Puzzles/PuzzleBoard.tsx:136`
 
 ### `classifyTacticsFromGame` (function) — 1 call site
 - `src/services/gameAnalysisService.ts:2081`

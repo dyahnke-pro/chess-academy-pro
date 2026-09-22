@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**177 lines · 3 exports · 2 importers · 3 tests · 0 audits**
+**178 lines · 3 exports · 2 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachTemplates.test.ts:94`
 
 ### `getScenarioTemplate` (function) — 9 call sites
-- `src/components/Coach/CoachGamePage.tsx:4387`
+- `src/components/Coach/CoachGamePage.tsx:4526`
 - `src/services/coachTemplates.test.ts:47`
 - `src/services/coachTemplates.test.ts:54`
 - `src/services/coachTemplates.test.ts:103`

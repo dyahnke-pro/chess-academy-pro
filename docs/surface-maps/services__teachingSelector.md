@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **STEP 11 — Add model games (multi-game per variation)** (CLAUDE.md:1974) — names `Moment`
-- **The standard post-deploy ritual** (CLAUDE.md:5902) — names `Moment`
+- **The standard post-deploy ritual** (CLAUDE.md:5918) — names `Moment`
 
 ## Who calls in
 
@@ -56,7 +56,7 @@
 - `src/services/teachingSelector.test.ts:146`
 
 ### `selectTeaching` (function) — 14 call sites
-- `src/hooks/usePhaseNarration.ts:521`
+- `src/hooks/usePhaseNarration.ts:522`
 - `src/services/coachFeatureService.ts:1322`
 - `src/services/needCoverage.report.test.ts:60`
 - `src/services/openingGenerator.ts:519`
@@ -77,14 +77,14 @@
 ### `renderThesis` (function) — 7 call sites
 - `src/coach/surfaceContract.scan.test.ts:50`
 - `src/components/Coach/CoachGameReview.tsx:1485`
-- `src/hooks/usePhaseNarration.ts:522`
+- `src/hooks/usePhaseNarration.ts:523`
 - `src/services/teachingSelector.test.ts:45`
 - `src/services/teachingSelector.test.ts:46`
 - `src/services/teachingSelector.test.ts:64`
 - `src/services/teachingSelector.test.ts:92`
 
 ### `pliesFromSans` (function) — 6 call sites
-- `src/hooks/usePhaseNarration.ts:521`
+- `src/hooks/usePhaseNarration.ts:522`
 - `src/services/needCoverage.report.test.ts:59`
 - `src/services/openingGenerator.ts:517`
 - `src/services/teachingSelector.test.ts:113`

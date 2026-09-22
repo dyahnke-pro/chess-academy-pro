@@ -4,25 +4,45 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**184 lines · 10 exports · 25 importers · 3 tests · 0 audits**
+**184 lines · 10 exports · 47 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3908) — names `explorerBandFor`, `ratingBands`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3938) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3919) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3949) — names `explorerBandFor`, `ratingBands`
 
 ## Who calls in
 
 - `src/components/Coach/CoachAnalysePage.tsx`
+- `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/ExplainPositionSessionView.tsx`
+- `src/components/Coach/GameChatPanel.tsx`
+- `src/components/Debug/OpeningBlundersPage.tsx`
+- `src/components/Openings/MiddlegamePractice.tsx`
 - `src/components/Openings/OpeningPlayMode.tsx`
+- `src/components/Play/OpeningChallenge.tsx`
+- `src/components/Puzzles/AdaptivePuzzlePage.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx`
+- `src/components/Puzzles/PuzzleBoard.tsx`
+- `src/components/Puzzles/PuzzleTrainerPage.tsx`
+- `src/components/Settings/OnboardingPage.tsx`
+- `src/components/Tactics/AnalysisPracticePage.tsx`
+- `src/components/Tactics/TacticDrillPage.tsx`
+- `src/components/Tactics/TacticSetupBoard.tsx`
+- `src/components/Tactics/TacticSetupPage.tsx`
+- `src/hooks/useAdaptiveDrillSession.ts`
+- `src/hooks/useLiveCoach.ts`
+- `src/hooks/usePhaseNarration.ts`
+- `src/hooks/usePositionNarration.ts`
 - `src/hooks/useStudentNeed.ts`
 - `src/services/amateurPlayCache.ts`
 - `src/services/causalChainVoice.ts`
+- `src/services/coachDrillService.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/coachGameEngine.ts`
+- `src/services/coachTemplates.ts`
 - `src/services/conceptEngine.ts`
 - `src/services/dbService.test.ts`
 - `src/services/dbService.ts`
@@ -33,10 +53,12 @@
 - `src/services/openingGenerator.ts`
 - `src/services/playerRatingService.ts`
 - `src/services/positionFacts.ts`
+- `src/services/positionReadingService.ts`
 - `src/services/ratingBands.test.ts`
 - `src/services/slipDetector.ts`
 - `src/services/teachingSelector.ts`
 - `src/services/theoryDeparture.ts`
+- `src/services/weaknessSpine.ts`
 - `src/services/whyBestMove.ts`
 
 ## Exports and every call site

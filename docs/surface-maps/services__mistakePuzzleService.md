@@ -94,8 +94,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:7175`
-- `src/components/Coach/CoachTeachPage.tsx:7181`
+- `src/components/Coach/CoachTeachPage.tsx:7202`
+- `src/components/Coach/CoachTeachPage.tsx:7208`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -140,12 +140,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticClassifierService.ts:440`
 
 ### `determinePlayerColor` (function) — 3 call sites
-- `src/components/Tactics/AnalysisPracticePage.tsx:99`
+- `src/components/Tactics/AnalysisPracticePage.tsx:100`
 - `src/services/autoAnalyzeGame.ts:214`
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2068`
+- `src/components/Coach/CoachGamePage.tsx:2069`
 - `src/components/Coach/CoachGameReview.tsx:343`
 - `src/services/gameAnalysisService.ts:2076`
 - `src/services/mistakePuzzleService.test.ts:109`
@@ -236,7 +236,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `gradeMistakePuzzle` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:2329`
+- `src/components/Coach/CoachTeachPage.tsx:2356`
 - `src/components/Puzzles/MyMistakesPage.tsx:227`
 - `src/components/Puzzles/WeaknessThemesPage.tsx:116`
 - `src/components/Tactics/TacticCreatePage.tsx:219`

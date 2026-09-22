@@ -4,22 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**911 lines · 30 exports · 915 importers · 200 tests · 39 audits**
+**924 lines · 32 exports · 916 importers · 200 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:457) — names `types`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3018) — names `Provider`, `ProviderName`, `types`
-- **TypeScript** (CLAUDE.md:3475) — names `types`
-- **React** (CLAUDE.md:3485) — names `types`
-- **File Organization** (CLAUDE.md:3496) — names `types`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3984) — names `types`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4023) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4493) — names `types`
-- **Naming** (CLAUDE.md:5054) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5099) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5166) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:5916) — names `TacticsLiveContext`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3029) — names `Provider`, `ProviderName`, `types`
+- **TypeScript** (CLAUDE.md:3486) — names `types`
+- **React** (CLAUDE.md:3496) — names `types`
+- **File Organization** (CLAUDE.md:3507) — names `types`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3995) — names `types`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4034) — names `CoachSurface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4504) — names `types`
+- **Naming** (CLAUDE.md:5070) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5115) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5182) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:5932) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -43,6 +43,7 @@
 - `src/coach/providers/deepseek.test.ts`
 - `src/coach/providers/deepseek.ts`
 - `src/coach/providers/types.ts`
+- `src/coach/questionIntents.ts`
 - `src/coach/sources/annotationContext.ts`
 - `src/coach/sources/bookGrounding.ts`
 - `src/coach/sources/identity.ts`
@@ -1023,6 +1024,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `Provider` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `AskOrigin` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `AskSource` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `CoachAskInput` (interface) — 0 call sites

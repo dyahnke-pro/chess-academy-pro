@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1675 lines · 2 exports · 9 importers · 5 tests · 6 audits**
+**1690 lines · 2 exports · 10 importers · 6 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/components/Board/BoardPageLayout.tsx`
 - `src/components/Coach/CoachGamePage.tsx`
+- `src/components/Coach/GameChatPanel.surface.test.tsx`
 - `src/components/Coach/GameChatPanel.test.tsx`
 - `src/components/Coach/GlobalCoachDrawer.tsx`
 - `src/components/Openings/LessonScaffold.tsx`
@@ -32,6 +33,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/components/Coach/GameChatPanel.surface.test.tsx`
 - `src/components/Coach/GameChatPanel.test.tsx`
 - `src/components/Kid/GameChapterPage.test.tsx`
 - `src/components/Openings/ModelGameViewer.test.tsx`

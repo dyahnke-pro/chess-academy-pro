@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3832) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:5914) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3843) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:5930) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -24,7 +24,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onCoachDecision` (function) — 3 call sites
-- `src/services/appAuditor.ts:2134`
+- `src/services/appAuditor.ts:2138`
 - `src/services/coachDecisionEmits.test.ts:31`
 - `src/services/coachDecisionEmits.test.ts:79`
 
@@ -35,7 +35,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 3 call sites
-- `src/services/appAuditor.ts:2086`
+- `src/services/appAuditor.ts:2090`
 - `src/services/coachDecisionEmits.test.ts:104`
 - `src/services/coachDecisionEmits.test.ts:131`
 
