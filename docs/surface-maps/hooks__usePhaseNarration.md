@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**907 lines · 3 exports · 3 importers · 1 tests · 2 audits**
+**910 lines · 3 exports · 3 importers · 1 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3903) — names `usePhaseNarration`
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5051) — names `usePhaseNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:5954) — names `usePhaseNarration`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3905) — names `usePhaseNarration`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5053) — names `usePhaseNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:5956) — names `usePhaseNarration`
 
 ## Who calls in
 

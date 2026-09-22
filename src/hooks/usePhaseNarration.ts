@@ -132,6 +132,11 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
 export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarrationResult {
   const weaknessRef = useWeaknessSignals(); // student model → re-ranks phase narration (Phase 1)
   // …AND THE NEED TERM (B3) — the line is read from the PGN at fire time.
+  // Declared BEFORE the need hook: the hook reads the `sans` getter during
+  // render now (it mints the ONE opening key from the line), so the ref it
+  // closes over must already exist.
+  const argsRef = useRef(args);
+  argsRef.current = args;
   const studentNeedRef = useStudentNeed({
     studentColor: args.playerColor, openingId: null, eco: null,
     sans: () => sansOfPgn(argsRef.current.getPgn() ?? ''),
@@ -150,8 +155,6 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
   // Capture args in a ref so the narrate callback's dependency list
   // stays empty — the hook is called once per coach play session and
   // should reuse the same narrate reference across renders.
-  const argsRef = useRef(args);
-  argsRef.current = args;
 
   useEffect(() => {
     return () => {
