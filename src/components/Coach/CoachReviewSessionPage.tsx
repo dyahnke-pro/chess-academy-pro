@@ -28,6 +28,7 @@ import { detectOpeningTranspositional } from '../../services/openingDetectionSer
 import { useAppStore } from '../../stores/appStore';
 import { resolvePlayerColor } from '../../services/playerIdentity';
 import { logAppAudit } from '../../services/appAuditor';
+import { replayGamePgn } from '../../services/gamePgnReplay';
 import type {
   GameRecord,
   CoachGameMove,
@@ -61,29 +62,64 @@ function annotationFor(
   );
 }
 
+/** How the review names a game to the student when it has to explain itself —
+ *  never "this game". A Learn game is named by the surface and its date; an
+ *  imported one by the players. */
+export function describeGameForStudent(game: GameRecord): string {
+  const date = game.date ? ` from ${game.date}` : '';
+  if (game.source === 'coach') {
+    const where = game.event && /learn/i.test(game.event) ? 'Learn with Coach' : 'Play with Coach';
+    return `Your ${where} game${date} (${game.id})`;
+  }
+  return `Your game ${game.white} vs ${game.black}${date}`;
+}
+
+/** The adapter's full answer: the review, or a SENTENCE saying why not — and,
+ *  when the PGN had to be cut to its legal prefix, a note saying so. */
+export type AdaptOutcome =
+  | { adapted: AdaptedReviewProps; reason: null; repairNote: string | null }
+  | { adapted: null; reason: string; repairNote: null };
+
+/**
+ * REPAIR OR EXPLAIN — never a blank (WO-STANDARD-01 H3). A real native user's
+ * Learn game (`teach-1788396074396`) could not open and read "We could not
+ * replay this game" with no game named and no cause. `replayGamePgn` replays
+ * from the `[FEN]` header when there is one and from the standard start when
+ * there is not, keeps the legal prefix when a later move is broken, and hands
+ * back a sentence naming THIS game when nothing can be shown.
+ */
+export function adaptGameRecordExplained(
+  game: GameRecord,
+  playerColor: 'white' | 'black',
+): AdaptOutcome {
+  const replayed = replayGamePgn(game.pgn, describeGameForStudent(game));
+  if (!replayed.ok) return { adapted: null, reason: replayed.reason, repairNote: null };
+  const adapted = adaptReplayedGame(game, playerColor, replayed.startFen, replayed.sans);
+  return { adapted, reason: null, repairNote: replayed.repair?.note ?? null };
+}
+
+/** Back-compat shape: the review or null. Callers that can say WHY use
+ *  `adaptGameRecordExplained`; this exists for the sites that only branch. */
 export function adaptGameRecord(
   game: GameRecord,
   playerColor: 'white' | 'black',
 ): AdaptedReviewProps | null {
-  const chess = new Chess();
-  try {
-    chess.loadPgn(game.pgn);
-  } catch {
-    return null;
-  }
-  const history = chess.history();
-  if (history.length === 0) return null;
+  return adaptGameRecordExplained(game, playerColor).adapted;
+}
 
+function adaptReplayedGame(
+  game: GameRecord,
+  playerColor: 'white' | 'black',
+  startFen: string,
+  history: readonly string[],
+): AdaptedReviewProps {
   // Re-walk to capture FEN after each ply — from the GAME's ACTUAL starting
-  // position. loadPgn honored a `[SetUp]`/`[FEN]` header (odds games, custom
-  // positions), so replaying from a fresh STANDARD board would make a later
-  // move illegal and throw uncaught — the prod "Invalid move: O-O" crash on the
-  // two-knights-odds game chesscom-996944614, where 3.O-O is legal on the
-  // knight-less board but not on a standard one (a knight still sits on g1).
-  // `.before` on the first verbose move is that true start FEN (standard when
-  // there was no header). The per-move replay is also try-guarded so no other
-  // odd game can ever crash the review load.
-  const startFen = chess.history({ verbose: true })[0]?.before;
+  // position (the `[SetUp]`/`[FEN]` header on odds games and Learn games that
+  // began from a lesson position). Replaying from a fresh STANDARD board made
+  // a later move illegal and threw uncaught — the prod "Invalid move: O-O"
+  // crash on the two-knights-odds game chesscom-996944614, where 3.O-O is
+  // legal on the knight-less board but not on a standard one. The per-move
+  // replay is try-guarded so no other odd game can ever crash the review load.
   const replay = new Chess(startFen);
   const moves: CoachGameMove[] = [];
   let prevEval: number | null = null;
@@ -348,30 +384,42 @@ export function CoachReviewSessionPage(): JSX.Element {
     ],
   );
 
-  const adapted = useMemo(
-    () => (game ? adaptGameRecord(game, playerColor) : null),
+  const outcome = useMemo(
+    () => (game ? adaptGameRecordExplained(game, playerColor) : null),
     [game, playerColor],
   );
+  const adapted = outcome?.adapted ?? null;
 
-  // Audit-driven: if game loaded from Dexie but adaptGameRecord
-  // returned null (PGN unparseable, history empty), the page would
-  // sit on "Loading game…" indefinitely. Surface a concrete error
-  // with a "Back" CTA instead so the user can recover. Production
-  // repro: sample-london-amateur-3 shipped with an illegal 8.Qxd3
-  // that chess.js rejected — caught by audit-coach-review.mjs.
+  // REPAIR OR EXPLAIN (WO-STANDARD-01 H3). If the game loaded from Dexie but
+  // cannot be replayed, the page used to sit on "Loading game…" and then show a
+  // blank "could not replay" naming nothing. Now the sentence names THE GAME
+  // and the move that broke it (`replayGamePgn`); a game cut to its legal
+  // prefix opens and says so. Production repros: sample-london-amateur-3
+  // (illegal 8.Qxd3) and the native Learn game teach-1788396074396 (headerless
+  // bare SANs from a lesson position, saved before the 2026-09-03 fix).
   useEffect(() => {
-    if (!game || adapted || loadError || analyzing) return;
+    if (!game || !outcome || loadError || analyzing) return;
+    if (outcome.adapted) {
+      if (outcome.repairNote) {
+        void logAppAudit({
+          kind: 'stockfish-error',
+          category: 'subsystem',
+          source: 'CoachReviewSessionPage.adapt',
+          summary: `game ${game.id} replayed to its legal prefix — ${outcome.repairNote}`,
+          details: JSON.stringify({ gameId: game.id, pgnLength: game.pgn.length }),
+        });
+      }
+      return;
+    }
     void logAppAudit({
       kind: 'stockfish-error',
       category: 'subsystem',
       source: 'CoachReviewSessionPage.adapt',
-      summary: `adaptGameRecord returned null for game ${game.id} — PGN unparseable or history empty`,
+      summary: `game ${game.id} cannot be replayed — ${outcome.reason}`,
       details: JSON.stringify({ gameId: game.id, pgnLength: game.pgn.length }),
     });
-    setLoadError(
-      'We could not replay this game from its PGN. Pick a different game from the list, or import a fresh one.',
-    );
-  }, [game, adapted, loadError, analyzing]);
+    setLoadError(`${outcome.reason} Pick a different game from the list, or import a fresh one.`);
+  }, [game, outcome, loadError, analyzing]);
 
   if (loadError) {
     return (
@@ -398,6 +446,14 @@ export function CoachReviewSessionPage(): JSX.Element {
 
   return (
     <div className="relative flex flex-col md:flex-row flex-1 min-h-0">
+      {outcome?.repairNote && (
+        <div
+          data-testid="review-repair-note"
+          className="absolute top-2 left-2 z-20 max-w-[70%] px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 text-[11px] font-medium pointer-events-none"
+        >
+          {outcome.repairNote}
+        </div>
+      )}
       {deepening && (
         <div
           data-testid="review-deepening-pill"

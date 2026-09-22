@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { adaptGameRecord } from './CoachReviewSessionPage';
+import { adaptGameRecord, adaptGameRecordExplained, describeGameForStudent } from './CoachReviewSessionPage';
 import { replayPgnToFens } from '../../services/gameAnalysisService';
 import type { GameRecord } from '../../types';
 
@@ -77,5 +77,31 @@ describe('teach game played out from a non-standard start', () => {
     expect(adapted!.moves.length).toBeGreaterThan(0);
     // The bug it replaces: headerless bare-SAN of a non-standard start → null.
     expect(adaptGameRecord(makeGame(headerless), 'black')).toBeNull();
+  });
+
+  // WO-STANDARD-01 H3: the null is never BLANK any more. The explained shape
+  // names the game and the move; rows already on real devices (saved before
+  // the 2026-09-03 fix) are what this sentence is for.
+  it('the headerless row is EXPLAINED with a sentence naming the game', () => {
+    const c = new Chess(LEAF);
+    for (const m of ['a6', 'Ba4', 'Nf6']) c.move(m);
+    const game = { ...makeGame(c.history().join(' ')), id: 'teach-1788396074396', source: 'coach', event: 'Learn with Coach', date: '2026-09-02' } as unknown as GameRecord;
+    const out = adaptGameRecordExplained(game, 'black');
+    expect(out.adapted).toBeNull();
+    expect(out.reason).toContain('Your Learn with Coach game from 2026-09-02 (teach-1788396074396)');
+    expect(out.reason).toContain('a6');
+  });
+
+  it('a row with a broken LATER move opens on its legal prefix and carries the repair note', () => {
+    const game = { ...makeGame('1. e4 e5 2. Nf3 Nc6 3. Qxe5 Nxe5'), id: 'sample-london-amateur-3' } as unknown as GameRecord;
+    const out = adaptGameRecordExplained(game, 'white');
+    expect(out.adapted?.moves.map((m) => m.san)).toEqual(['e4', 'e5', 'Nf3', 'Nc6']);
+    expect(out.repairNote).toMatch(/cut short at move 3/);
+  });
+
+  it('describeGameForStudent names a Learn game by surface + date, an import by players', () => {
+    expect(describeGameForStudent({ ...makeGame('1. e4'), source: 'coach', event: 'Learn with Coach', date: '2026-09-02', id: 'teach-1' } as unknown as GameRecord))
+      .toBe('Your Learn with Coach game from 2026-09-02 (teach-1)');
+    expect(describeGameForStudent(makeGame('1. e4'))).toBe('Your game Knight_Mare_01 vs jkern1013 from 2026.07.09');
   });
 });
