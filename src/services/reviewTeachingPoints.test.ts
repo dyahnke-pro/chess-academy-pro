@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
+import { mateInOneExists } from './nextPlans';
 import {
   attackerDefenderCount, royalDefenderTarget, rookOnSeventh,
   badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlan, deriveNextPlans,
@@ -420,4 +421,24 @@ describe('a piece that can step away does not "fall" — D-3 (WO-STANDARD-01, pr
       .filter((m) => { const a = new Chess(covered.fen()); a.move(m); return a.attackers(m.to, 'w').length === 0; });
     expect(pieceHasSafeEscape(covered, 'a1', 'w')).toBe(escapesTo.length > 0);
   });
+});
+
+describe('deriveNextPlans — a mate on the board outranks every plan (WO-STANDARD-01 D-15, 2026-09-22)', () => {
+  // 1.e4 e5 2.Bc4 Nc6 3.Qh5 Nf6?? — Qxf7# is on the board. Prod said "win
+  // their weak pawn on h7 — plant your knight on h6" here.
+  const MATE = ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'Nf6'];
+  const SAFE = ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'g6'];
+  it('sees the mate in one for the side to move, and for the other side via the null-move flip', () => {
+    expect(mateInOneExists(new Chess(fenAfter(MATE)))).toBe(true);
+    // Black to move with White's Qxf7# hanging over the board: still true.
+    const c = new Chess(fenAfter(MATE)); c.move('Qxf7#');
+    expect(c.isCheckmate()).toBe(true);
+    expect(mateInOneExists(new Chess(fenAfter(SAFE)))).toBe(false);
+  });
+  it('returns NO plan when a mate in one exists — the mate is the whole story', () => {
+    expect(deriveNextPlans(fenAfter(MATE), 'w')).toEqual([]);
+    expect(deriveNextPlans(fenAfter(MATE), 'b')).toEqual([]);
+  });
+  // The Opera-game plans above are the negative control: with no mate on the
+  // board the same computer still returns multiple plans.
 });

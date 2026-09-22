@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**594 lines · 9 exports · 7 importers · 4 tests · 1 audits**
+**601 lines · 9 exports · 7 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `buildOpeningMoveDetail` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2428`
+- `src/services/coachFeatureService.ts:2713`
 
 ### `PlanArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -40,11 +40,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:78`
 
 ### `buildOpeningDevelopmentPlan` (function) — 12 call sites
-- `src/services/coachFeatureService.ts:2262`
+- `src/services/coachFeatureService.ts:2547`
 - `src/services/planPrescriptions.test.ts:53`
 - `src/services/planPrescriptions.test.ts:61`
 - `src/services/planPrescriptions.test.ts:74`
-- `src/services/reviewFullData.ts:541`
+- `src/services/reviewFullData.ts:575`
 - `src/services/reviewStrategicOrientation.test.ts:37`
 - `src/services/reviewStrategicOrientation.test.ts:54`
 - `src/services/reviewStrategicOrientation.test.ts:55`
@@ -54,25 +54,29 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewStrategicOrientation.test.ts:99`
 
 ### `buildHisGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2260`
+- `src/services/coachFeatureService.ts:2545`
 - `src/services/groundedPlanBeat.test.ts:21`
 - `src/services/groundedPlanBeat.test.ts:31`
 - `src/services/groundedPlanBeat.test.ts:55`
 
 ### `buildMastersGroundedPlanBeat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2261`
+- `src/services/coachFeatureService.ts:2546`
 - `src/services/groundedPlanBeat.test.ts:41`
 - `src/services/groundedPlanBeat.test.ts:49`
 - `src/services/groundedPlanBeat.test.ts:56`
 
-### `buildMiddlegameOrientation` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2283`
-- `src/services/reviewFullData.ts:547`
+### `buildMiddlegameOrientation` (function) — 11 call sites
+- `src/services/coachFeatureService.ts:2568`
+- `src/services/reviewFullData.ts:581`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
 - `src/services/reviewStrategicOrientation.test.ts:16`
 - `src/services/reviewStrategicOrientation.test.ts:26`
 - `src/services/reviewStrategicOrientation.test.ts:33`
+- `src/services/reviewStrategicOrientation.test.ts:115`
+- `src/services/reviewStrategicOrientation.test.ts:116`
+- `src/services/reviewStrategicOrientation.test.ts:123`
+- `src/services/reviewStrategicOrientation.test.ts:125`
 
 ## Tests
 
@@ -82,5 +86,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewStrategicOrientation.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-this-review.mjs`
