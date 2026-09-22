@@ -198,7 +198,12 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # reachable from CI — it alone would have caught every RELEASED-version case
 # here; the ASC train query (keys already in the workflow) additionally catches
 # an approved-but-unreleased train (the 4.0.1 window). Wire the preflight next.
-PINNED_MARKETING_VERSION="4.0.3"
+# BUMP 4.0.3 -> 4.0.4 (2026-09-22): 4.0.3 went LIVE on the App Store on
+# 2026-09-10 (iTunes lookup, confirmed), so the 4.0.3 train is closed and any
+# new archive under it dies with ITMS-90062. The preflight below would have
+# self-healed this to 4.0.4 anyway — the pin is bumped so the INTENT is in the
+# file and the preflight stays a backstop rather than the mechanism.
+PINNED_MARKETING_VERSION="4.0.4"
 # DURABLE PREFLIGHT (2026-09-09): the pinned string self-heals. resolve-marketing
 # -version.mjs reads the LIVE App Store version (public iTunes lookup, no ASC
 # keys) and, if the pin isn't already above it, bumps the patch — so a forgotten
