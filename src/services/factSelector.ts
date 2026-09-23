@@ -45,8 +45,12 @@ import type { WeaknessSignal } from './weaknessSignal';
  *  `'need'` — this student did not need it here. Until 2026-09-22 both were
  *  emitted as `'below-bar'`, so the `quietBy` distribution the audits read could
  *  not tell a posture bug (importance closing a walk) from a need bug — the
- *  exact two diagnoses the emission exists to separate. */
-export type QuietReason = 'subsumed' | 'below-bar' | 'said-already' | 'importance' | 'need';
+ *  exact two diagnoses the emission exists to separate.
+ *
+ *  `'unsupported'` (2026-09-23) — a DESCRIPTION of the board that pointed at
+ *  none of the squares a teaching point on the same ply named (see
+ *  `supportedFacts`). */
+export type QuietReason = 'subsumed' | 'below-bar' | 'said-already' | 'importance' | 'need' | 'unsupported';
 
 export interface QuietFact {
   text: string;
@@ -257,4 +261,46 @@ export function selectFacts(
     spoken.push(w);
   }
   return { spoken: spoken.map((x) => x.text), quiet };
+}
+
+/**
+ * TEACHING POINTS FIRST (David 2026-09-23: "board descriptions like 'fights
+ * for d5' only speak when they support the teaching point").
+ *
+ * Runs on what already survived subsumption and the floor. A TEACH fact always
+ * speaks. A DESCRIBE fact speaks only when its coupled squares meet a square a
+ * teaching fact on the same ply named — that is what "supports" means, and it
+ * is judged on coupled squares, never scraped from prose. A description with no
+ * coupled squares cannot be shown to support anything, so it goes quiet.
+ *
+ * On a ply with NO teaching point, the move's own reason (the first fact
+ * `isMoveReason` accepts) is the one description that speaks, so a quiet good
+ * move still hears why it was played — measured-silent stretches read as a
+ * broken coach. Everything else there goes quiet.
+ *
+ * This is a ROLE rule, not a cap (G4.5): it never counts. Every teaching point
+ * speaks however many there are, and every description that supports one
+ * speaks with it.
+ */
+export function supportedFacts(
+  spoken: readonly string[],
+  squares: ReadonlyMap<string, readonly string[]>,
+  roleOf: (text: string) => 'teach' | 'describe',
+  isMoveReason: (text: string) => boolean,
+): FactSelection {
+  const teach = spoken.filter((t) => roleOf(t) === 'teach');
+  const quiet: QuietFact[] = [];
+  if (teach.length === 0) {
+    const reason = spoken.find(isMoveReason);
+    for (const t of spoken) if (t !== reason) quiet.push({ text: t, why: 'unsupported' });
+    return { spoken: reason ? [reason] : [], quiet };
+  }
+  const taught = new Set<string>();
+  for (const t of teach) for (const sq of squares.get(t) ?? []) taught.add(sq);
+  const out: string[] = [];
+  for (const t of spoken) {
+    if (roleOf(t) === 'teach' || (squares.get(t) ?? []).some((sq) => taught.has(sq))) out.push(t);
+    else quiet.push({ text: t, why: 'unsupported' });
+  }
+  return { spoken: out, quiet };
 }

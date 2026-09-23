@@ -30,8 +30,8 @@
 // Steps 1–2 decide WHETHER, 3–5 decide WHAT. Silence at any step is a computed
 // verdict with a reason attached — never an absence.
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
-import { selectFacts, type QuietFact } from './factSelector';
-import { rankFacets } from './reviewFacetRank';
+import { selectFacts, supportedFacts, type QuietFact } from './factSelector';
+import { rankFacets, facetTag, FACET_ROLE } from './reviewFacetRank';
 import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -298,6 +298,20 @@ export function decide(
     student.weaknesses,
     { incoming: bundle.incoming, alreadySaid: bundle.alreadySaid, order: bundle.order, family: bundle.family },
   );
+  // 4b — TEACHING POINTS FIRST (2026-09-23). A description speaks only where it
+  // supports a teaching point on this ply; a ply with no teaching point keeps
+  // the move's own reason. Applies where facts carry review's `[tag]` roles —
+  // a surface ranking its own facts (`bundle.order`) has no roles to read.
+  if (!bundle.order) {
+    const support = supportedFacts(
+      selection.spoken,
+      bundle.squares,
+      (t) => { const tag = facetTag(t); return tag === null ? 'teach' : FACET_ROLE[tag]; },
+      (t) => facetTag(t) === 'does',
+    );
+    selection.spoken = support.spoken;
+    selection.quiet = [...selection.quiet, ...support.quiet];
+  }
   // 5 — THE ORDER. The surface's own ranks when it supplied them, else the
   // review ranker. Either way the student's holes are raised: `rankFacets` does
   // it by tag, and a surface that ranks its own facts has already applied its

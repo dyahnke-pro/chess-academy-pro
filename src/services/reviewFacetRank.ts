@@ -97,6 +97,63 @@ export const FACET_RANK: Record<FacetTag, number> = {
   method: 8,
 };
 
+/**
+ * TEACHING POINTS FIRST (David 2026-09-23: "board descriptions like 'fights
+ * for d5' only speak when they support the teaching point. AGREED! Teaching
+ * points first!!").
+ *
+ * A fact either TEACHES — says what the student should take away: the
+ * principle crossed, the cost and the better move, what is forced, the threat,
+ * the tactic, the plan, the habit — or DESCRIBES the board around it: defender
+ * counts, the eval, what changed, the structure. A description earns its voice
+ * only by pointing at the same squares as a teaching point on the same ply
+ * (`supportedFacts` in factSelector). On a ply with no teaching point, the
+ * move's own reason (`does`) is the one line that speaks.
+ *
+ * Exhaustive over `FacetTag`: a new tag fails to compile until someone decides
+ * which kind of fact it is.
+ */
+export type FacetRole = 'teach' | 'describe';
+export const FACET_ROLE: Record<FacetTag, FacetRole> = {
+  principle: 'teach',
+  quality: 'teach',
+  forced: 'teach',
+  threat: 'teach',
+  tactic: 'teach',
+  trapped: 'teach',
+  loose: 'teach',          // a piece you can lose — actionable, not scenery
+  sac: 'teach',
+  'sac-why': 'teach',
+  method: 'teach',
+  opening: 'teach',        // naming the opening is the first move of the arc
+  endgame: 'teach',        // the ending's technique, said once
+  'plan-race': 'teach',
+  'plan-now': 'teach',
+  'plan-opening': 'teach',
+  'plan-middlegame': 'teach',
+  // What the move itself did — the ONE describe line a quiet ply may keep.
+  does: 'describe',
+  move: 'describe',
+  count: 'describe',
+  royal: 'describe',
+  king: 'describe',
+  note: 'describe',
+  delta: 'describe',
+  eval: 'describe',
+  passer: 'describe',
+  rook7: 'describe',
+  structure: 'describe',
+  badbishop: 'describe',
+  complex: 'describe',
+  minority: 'describe',
+  worst: 'describe',
+  verdict: 'describe',
+  'opp-target': 'describe',
+  'opp-dev': 'describe',
+  'plan-line': 'describe', // the long engine line — speaks only when it proves a point
+  consequence: 'describe',
+};
+
 const TAG_RE = /^\[([a-z0-9-]+)\]/;
 
 /** The tag on a facet string, or null when it carries none. */

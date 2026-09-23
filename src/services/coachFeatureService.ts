@@ -3406,13 +3406,6 @@ async function augmentWithProjections(
         x.evalBefore !== null && x.evalAfter !== null ? Math.abs(x.evalBefore - x.evalAfter) : 0;
       return swing(b) - swing(a);
     });
-  const openingPlanCandidate = segments.find((s) =>
-    s.narrationSource === 'opening-plan'
-    && !!s.planArrows && s.planArrows.length > 0
-    && s.ply <= 14
-    && s.playerColor === studentColorName);
-  const planSeg = segments.find((s) => s.narrationSource === 'assessment' || s.narrationSource === 'orientation')
-    ?? segments.find((s) => s.narration && (s.narration.includes('[verdict]') || s.narration.includes('[plan-middlegame]')));
   const betterDone = deferred<Map<ReviewMoveSegment, { line: PvLine | null; why: string | null }>>();
   const confirmDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
   const badPieceDone = {
@@ -3426,9 +3419,6 @@ async function augmentWithProjections(
       return bestPiece as { seg: ReviewMoveSegment; text: string; swing: number } | null;
     }),
   };
-  const openingPlanDone = deferred<PvLine | null>();
-  const planDone = deferred<PvLine | null>();
-  const consequenceDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
   void (async () => {
     // #4 the better line + the proven delta.
     const better = new Map<ReviewMoveSegment, { line: PvLine | null; why: string | null }>();
@@ -3455,28 +3445,6 @@ async function augmentWithProjections(
         confirm.set(s, await raceTimeout(computePvLine(s.staticThreat.nullFen, { maxPlies: 4 }), PROJ_TIMEOUT_MS, null).catch(() => null));
       }
     } finally { confirmDone.resolve(confirm); }
-    // #0 the opening plan played out.
-    try {
-      openingPlanDone.resolve(openingPlanCandidate
-        ? await raceTimeout(computePvLine(openingPlanCandidate.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null).catch(() => null)
-        : null);
-    } finally { openingPlanDone.resolve(null); }
-    // #1 plan realization + #2 consequence lines — 'full' scope only.
-    try {
-      planDone.resolve(scope !== 'mistakes' && planSeg
-        ? await raceTimeout(computePvLine(planSeg.fenAfter, { maxPlies: 8 }), PROJ_TIMEOUT_MS, null).catch(() => null)
-        : null);
-    } finally { planDone.resolve(null); }
-    const consequence = new Map<ReviewMoveSegment, PvLine | null>();
-    try {
-      if (scope !== 'mistakes') {
-        for (const s of segments) {
-          if (s === planSeg) continue;
-          if (s.classification !== 'great' && s.classification !== 'brilliant') continue;
-          consequence.set(s, await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null).catch(() => null));
-        }
-      }
-    } finally { consequenceDone.resolve(consequence); }
   })();
 
   // #3 compose — punishment / advantage lines.
@@ -3627,8 +3595,12 @@ async function augmentWithProjections(
       // clears it. A FORCING line is a "threat"; a decisive but non-forcing best
       // line is a "plan" — labelled honestly so we never overstate a plan as a
       // forced threat (the "if they sit still" framing is already true for both).
-      const deepKind = isForcingProjection(line) ? 'threat' : 'plan';
-      s.narration = `${s.narration ?? ''} And there's a deeper ${deepKind} brewing — if they sit still, it runs ${render(line)}.`.trim();
+      // TEACHING POINTS FIRST (2026-09-23): a FORCING line is a threat the
+      // student built — a teaching point. A decisive but non-forcing best line
+      // only describes where the game could go, and a long engine line speaks
+      // only when it proves a point, so it stays quiet.
+      if (!isForcingProjection(line)) continue;
+      s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${render(line)}.`.trim();
       attachLineArrows(s, line, 3); // deep threat (student's)
       deepBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
@@ -3720,66 +3692,15 @@ async function augmentWithProjections(
   }
 
   mark('badPiece');
-  // #0 — THE OPENING PLAN, PLAYED OUT (David 2026-07-24: "the first half did not
-  // have nearly as much detail as the back half"). The middlegame/endgame get
-  // their engine projection lines; the opening carried only single-beat plans. So
-  // the opening-plan beat's continuation is played out too — the engine's natural
-  // development from that position (G0, board-true) — giving the FIRST HALF a
-  // played-out line with lead-the-eye arrows (attachLineArrows), the same
-  // treatment that makes the back half rich. One opening beat; both scopes.
-  {
-    const openingPlanSeg = openingPlanCandidate;
-    if (openingPlanSeg && !openingPlanSeg.spokenLineArrows) {
-      const line = await openingPlanDone.promise;
-      // A DEVELOPING line only — quiet (a forcing shot is a tactic, not an opening
-      // plan; it belongs to the flag/threat passes) and the student stays sound
-      // (never play out a "plan" that quietly leaves them worse).
-      if (line && line.plies.length >= 4 && !isForcingProjection(line)) {
-        const whiteCp = line.terminalEvalCp ?? line.rootEvalCp;
-        const studentPov = studentColorWB === 'w' ? whiteCp : -whiteCp;
-        if (studentPov >= -80) {
-          openingPlanSeg.narration = `${openingPlanSeg.narration ?? ''} Played out, the game develops naturally from here — ${render(line)}.`.trim();
-          attachLineArrows(openingPlanSeg, line, 2);
-        }
-      }
-    }
-  }
-
-  mark('openingPlan');
+  // #0 THE OPENING PLAN PLAYED OUT, #1 THE PLAN LINE and #2 THE CONSEQUENCE LINE
+  // are REMOVED (2026-09-23, "teaching points first"). Each played a long engine
+  // line that DESCRIBED where a calm position could go — "Played out, the game
+  // develops naturally from here — …", "Follow it up and it goes …" — without
+  // proving a point the student needed. The lines that TEACH stay: the
+  // punishment, why the better move was better, the engine's verdict on a
+  // threat, the threats either side is building, the bad piece, prophylaxis.
+  // Nothing here is a cap: a teaching line of any length still speaks.
   if (scope === 'mistakes') return;
-
-  // #1 — plan realization from the plan's critical position. In uncapped mode
-  // every segment's source is 'per-move', so find the plan ply by its FACET tag
-  // (the verdict/middlegame-plan fact appears in the bundle text).
-  // `planSeg` is found up front (the passes above never add or remove the tags
-  // it looks for) so its line could be searched beside the pool.
-  if (planSeg) {
-    const line = await planDone.promise;
-    if (line && line.delivers && line.plies.length >= 2) {
-      planSeg.narration = `${planSeg.narration ?? ''} [plan-line] Played out from here, the plan runs ${render(line)}.`.trim();
-      attachLineArrows(planSeg, line, 2); // plan realization line
-    }
-  }
-
-  mark('plan');
-  // #2 — consequence projection on the student's strongest moves. No ceiling
-  // (G4.5): every great/brilliant move earns its follow-up line.
-  for (const s of segments) {
-    if (s === planSeg) continue;
-    if (s.classification !== 'great' && s.classification !== 'brilliant') continue;
-    // ONE LINE PER MOVE — the rule the deep-threat pass already states ("NEVER
-    // STACK two forcing lines on one move") was only checked against two older
-    // phrasings, so a ply carrying "a deeper threat brewing" got a second full
-    // line on top (walk 5, 2026-09-23).
-    if (s.narration && STACKED_LINE_RE.test(s.narration)) continue;
-    const line = (await consequenceDone.promise).get(s) ?? null;
-    if (line && line.delivers && line.plies.length >= 2) {
-      s.narration = `${s.narration ?? ''} [consequence] Follow it up and it goes ${render(line)}.`.trim();
-      attachLineArrows(s, line, 2); // consequence line
-    }
-  }
-
-  mark('consequence');
   // #5 — PROPHYLAXIS (David 2026-07-24: "keep going" — the concept-tool member
   // that needs the engine). A quiet student move that PREVENTS the opponent's
   // threat: give the opponent a FREE tempo (null move) at fenBefore — if their
@@ -4208,8 +4129,6 @@ const PAST_VERB: Record<string, string> = {
   offers: 'offered', offer: 'offered', grab: 'grabbed', settle: 'settled',
   meet: 'met', walk: 'walked', drop: 'dropped', recapture: 'recaptured', break: 'broke',
 };
-/** A projected line already spoken on this ply — any pass's phrasing. */
-const STACKED_LINE_RE = /engine confirms it|if they try to run|brewing — if they sit still|Follow it up and it goes|Played out from here/i;
 
 /** The student's move captured, and the opponent can take back on that square
  *  right now — an exchange still in progress. Pure chess.js. */
