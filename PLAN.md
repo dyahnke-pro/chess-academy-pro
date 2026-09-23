@@ -923,6 +923,21 @@ listener and the local audit log, not the pass count.
   positions, games, buildMs, trigger) so a `home-steer-miss` can be read
   against whether a warm ever ran. Gates: the warm pick reads no Dexie; two
   callers inside one build share it; import and choice change invalidate.
+- ✅ **VERIFIED ON PROD (chunk index-A3gZwVta, dccfd5a7).** Fresh device,
+  import Knight_mare_01, then Play as Black by IN-APP navigation:
+  `home-steer-warmed colour=black family=Sicilian Defense positions=705
+  buildMs=1787 trigger=import`, then the coach's FIRST move
+  `source=home-steer san=e4 faced=87/87`. OTA dccfd5a7 published; iOS build
+  run 364 (internal) triggered as the last step.
+  🟡 **STILL OPEN — a COLD APP LAUNCH straight into Play as Black.** The index
+  is in memory, so a reload/relaunch drops it; the boot warm starts at 8 s and
+  took 4.7–5.3 s, and the Play-mount build under post-import load took 12.5 s,
+  so a Black game started within ~13 s of launch still logs `home-steer-miss
+  warm=false` and the engine plays (e4 here — the same move). The next
+  increment is to PERSIST the index (Dexie `meta`, keyed colour+family, dropped
+  by the same two invalidation events) and read the home choice off the
+  profile in the store instead of re-ranking the games, so the cold path is one
+  meta read. Not built this round (David: one build per batch).
 
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
