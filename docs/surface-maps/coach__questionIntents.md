@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3045 lines · 90 exports · 35 importers · 27 tests · 4 audits**
+**3059 lines · 90 exports · 35 importers · 27 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5943) — names `questionIntents`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5995) — names `questionIntents`
+- **The standard post-deploy ritual** (CLAUDE.md:5949) — names `questionIntents`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6001) — names `questionIntents`
 
 ## Who calls in
 
@@ -622,10 +622,13 @@
 ### `RetrospectiveMoveRef` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `retrospectiveMoveRef` (function) — 3 call sites
+### `retrospectiveMoveRef` (function) — 6 call sites
 - `src/coach/coachService.ts:1368`
 - `src/coach/questionIntents.routerE.test.ts:45`
 - `src/coach/questionIntents.routerE.test.ts:65`
+- `src/coach/questionIntents.routerE.test.ts:181`
+- `src/coach/questionIntents.routerE.test.ts:182`
+- `src/coach/questionIntents.routerE.test.ts:183`
 
 ### `isRetrospectiveMoveQuestion` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -778,7 +781,10 @@
 - `src/coach/questionMatrix.audit.test.ts:140`
 - `src/services/kidGameCoach.ts:260`
 
-### `looksLikeQuestionNotAnOpeningName` (function) — 1 call site
+### `looksLikeQuestionNotAnOpeningName` (function) — 4 call sites
+- `src/coach/questionIntents.routerE.test.ts:187`
+- `src/coach/questionIntents.routerE.test.ts:189`
+- `src/coach/questionIntents.routerE.test.ts:190`
 - `src/components/Coach/CoachTeachPage.tsx:4626`
 
 ### `looksLikeConversationalReply` (function) — 1 call site

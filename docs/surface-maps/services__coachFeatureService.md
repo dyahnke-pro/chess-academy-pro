@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4584 lines · 32 exports · 29 importers · 25 tests · 5 audits**
+**4586 lines · 32 exports · 29 importers · 25 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:57) — names `coachFeatureService`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3734) — names `buildReviewSegments`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4054) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:5986) — names `coachFeatureService`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3738) — names `buildReviewSegments`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4058) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:5990) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -81,7 +81,7 @@
 ### `generateNarrativeSummary` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:517`
 
-### `recapSecondPerson` (function) — 8 call sites
+### `recapSecondPerson` (function) — 9 call sites
 - `src/services/coachFeatureService.test.ts:876`
 - `src/services/coachFeatureService.test.ts:884`
 - `src/services/coachFeatureService.test.ts:885`
@@ -89,7 +89,8 @@
 - `src/services/coachFeatureService.test.ts:898`
 - `src/services/coachFeatureService.test.ts:899`
 - `src/services/coachFeatureService.test.ts:900`
-- `src/services/coachFeatureService.test.ts:903`
+- `src/services/coachFeatureService.test.ts:905`
+- `src/services/coachFeatureService.test.ts:906`
 
 ### `ReviewNarrationSegments` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

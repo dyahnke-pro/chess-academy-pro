@@ -900,7 +900,10 @@ describe('recapSecondPerson — the Play surface hands a WORD, not a PGN score (
     expect(recapSecondPerson({ ...base, outcome: 'draw' })).toMatch(/^You drew the game against/);
   });
   it('an unknown result still names the game, never "The game ended <token>."', () => {
-    expect(recapSecondPerson({ ...base, outcome: '*' })).toMatch(/^This game the game against .* ended \*\./);
+    // An ABANDONED game is not a draw (Learn walk 2026-09-23: "End Lesson" at
+    // -4 was reviewed as "The game ended in a draw — the draw is the residue").
+    expect(recapSecondPerson({ ...base, outcome: '*' })).toMatch(/^You stopped the game against .* before it finished\./);
+    expect(recapSecondPerson({ ...base, outcome: 'abandoned' })).not.toMatch(/draw/);
   });
 });
 

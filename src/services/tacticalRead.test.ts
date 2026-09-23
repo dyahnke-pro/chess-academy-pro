@@ -465,6 +465,15 @@ describe('candidateCompareClause (his "X, not Y, because…", 2026-08-23)', () =
       { moves: ['d8b6'], evaluation: 300 },  // 280cp worse → but-turn territory
     ], 'black')).toBeNull();
   });
+  it('two different plans with no board-read reason → SILENT, never "keeps more of the edge" (Learn walk 2026-09-23)', async () => {
+    const { candidateCompareClause } = await import('./tacticalRead');
+    // 1.e4 c6 2.Nf3 d5 3.e5 Bg4 4.Be2 e6 — White to move; two quiet plans 60cp apart.
+    const fen = 'rn1qkbnr/pp3ppp/2p1p3/3pP3/6b1/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 5';
+    expect(candidateCompareClause(fen, [
+      { moves: ['e1g1'], evaluation: 40 },
+      { moves: ['c2c3'], evaluation: -20 },
+    ], 'white')).toBeNull();
+  });
   it('returns null with a single line', async () => {
     const { candidateCompareClause } = await import('./tacticalRead');
     expect(candidateCompareClause('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', [{ moves: ['e2e4'], evaluation: 20 }], 'white')).toBeNull();

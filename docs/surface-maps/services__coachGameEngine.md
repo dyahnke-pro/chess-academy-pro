@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4010) — names `coachGameEngine`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4014) — names `coachGameEngine`
 
 ## Who calls in
 
@@ -135,9 +135,9 @@
 - `src/components/Coach/CoachGamePage.tsx:404`
 - `src/components/Coach/CoachTeachPage.tsx:7182`
 - `src/components/Coach/CoachTeachPage.tsx:7191`
-- `src/components/Coach/CoachTeachPage.tsx:8494`
-- `src/components/Coach/CoachTeachPage.tsx:10949`
-- `src/components/Coach/CoachTeachPage.tsx:12120`
+- `src/components/Coach/CoachTeachPage.tsx:8495`
+- `src/components/Coach/CoachTeachPage.tsx:10950`
+- `src/components/Coach/CoachTeachPage.tsx:12121`
 - `src/services/coachGameEngine.test.ts:586`
 - `src/services/coachGameEngine.test.ts:592`
 - `src/services/coachGameEngine.test.ts:593`

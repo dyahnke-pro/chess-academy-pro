@@ -972,6 +972,12 @@ const DETECTORS: Detector[] = [
     if (last.captured === 'p' && VAL[last.piece] >= 3) return null;
     const offered = hangsBy(c.after, last.to) > 0;
     if (!offered && !isForcing(last.san)) return null;       // an aggressive commitment
+    // A piece that can simply be TAKEN on the square it landed on is not an
+    // investment, it is a hang — the loose-piece rule names it (walks 2 and 3,
+    // 2026-09-23: Bg4?? into Qxg4 and Ng5?? were both "overvalued the attack").
+    // Only a QUIET move that can be taken for free is a hang; a capture or a
+    // check that offers the piece is the sacrifice this rule exists for.
+    if (!last.captured && !isForcing(last.san) && hangsBy(c.after, last.to) >= VAL[last.piece] - 1) return null;
     if (!pvWinsMaterial(c.after, c.pvP, opp)) return null;    // the opponent wins material back
     if (c.pvB && pvWinsMaterial(c.afterBest, c.pvB, opp)) return null; // best doesn't
     return att('overvalued-attack', 4, { squares: [last.to], moves: [], pvMoves: (c.pvP ?? []).slice(0, 4) }, { move: last.san });

@@ -69,10 +69,14 @@ export interface GroundedAnswer {
 
 /** Convert a centipawn eval (side-to-move POV) into a grounded phrase. Never
  *  invents a number — rounds the real one. */
-function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black'): string | null {
+function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | undefined, mover: 'white' | 'black', studentColor?: 'white' | 'black' | null): string | null {
+  // ONE PERSPECTIVE: when the student's seat is known, the better side is
+  // "you" or "they" — never a bare colour (Learn walk 2026-09-23: "White is
+  // slightly better" to the student playing White).
+  const seatWord = (side: 'white' | 'black'): string => (studentColor ? (side === studentColor ? "you're" : "they're") : `${side} is`);
   if (typeof mateIn === 'number' && mateIn !== 0) {
     const who = mateIn > 0 ? mover : (mover === 'white' ? 'black' : 'white');
-    return `there is a forced mate in ${Math.abs(mateIn)} for ${who}`;
+    return studentColor ? `there is a forced mate in ${Math.abs(mateIn)} ${who === studentColor ? 'for you' : 'against you'}` : `there is a forced mate in ${Math.abs(mateIn)} for ${who}`;
   }
   if (typeof evalCp !== 'number') return null;
   const pawns = evalCp / 100;
@@ -81,9 +85,9 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
   if (mag < 0.3) return 'the position is roughly balanced';
   // Eval voiced in POINTS, never "pawns" (David 2026-07-24: "if the eval is
   // called out then say up by three points, not three pawns").
-  if (mag < 1.0) return `${who} is slightly better (about ${mag.toFixed(1)} points)`;
-  if (mag < 2.5) return `${who} is clearly better (about ${mag.toFixed(1)} points)`;
-  return `${who} is winning (about ${mag.toFixed(1)} points)`;
+  if (mag < 1.0) return `${seatWord(who)} slightly better (about ${mag.toFixed(1)} points)`;
+  if (mag < 2.5) return `${seatWord(who)} clearly better (about ${mag.toFixed(1)} points)`;
+  return `${seatWord(who)} winning (about ${mag.toFixed(1)} points)`;
 }
 
 // ── PIECE PURPOSE — "what is my bishop on c4 aiming at?" (David 2026-08-28) ────
@@ -1645,7 +1649,7 @@ export function assembleMoveEvalAnswer(opts: {
   // The GROUNDED reason it's strong — no LLM. (playedSan null: we're not
   // contrasting a played move here, just stating what the best move achieves.)
   const why = explainBestMoveGrounded(fen, null, bestMoveUci, mover);
-  const evalText = evalPhrase(opts.evalCp, opts.mateIn, mover);
+  const evalText = evalPhrase(opts.evalCp, opts.mateIn, mover, opts.studentColor ?? null);
 
   const theirMove = Boolean(opts.studentColor) && opts.studentColor !== mover;
   // The student named a piece and the engine's answer is a different one. Say
@@ -2966,7 +2970,7 @@ export function assemblePlanAnswer(opts: {
   // PV eval is white-perspective; convert to the student's POV for the phrase.
   const studentEvalCp = opts.evalCp == null ? null : (opts.studentSide === 'white' ? opts.evalCp : -opts.evalCp);
   const studentMateIn = opts.mateIn == null ? null : (opts.studentSide === 'white' ? opts.mateIn : -opts.mateIn);
-  const evalText = evalPhrase(studentEvalCp, studentMateIn, opts.studentSide);
+  const evalText = evalPhrase(studentEvalCp, studentMateIn, opts.studentSide, opts.studentSide);
   if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
 
   const first = moves[0];

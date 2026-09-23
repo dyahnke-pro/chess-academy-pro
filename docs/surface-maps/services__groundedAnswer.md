@@ -4,16 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6489 lines · 145 exports · 53 importers · 27 tests · 8 audits**
+**6493 lines · 145 exports · 53 importers · 27 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
 - **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:244) — names `describeThreatRecognition`
 - **G0. THE LLM DECIDES NOTHING — it voices facts computed in code (David 2026-06-10, LOCKED, supreme law).** (CLAUDE.md:305) — names `explainBestMoveGrounded`, `groundedAnswer`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:881) — names `groundedAnswer`
-- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3648) — names `describeThreatRecognition`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3736) — names `explainBestMoveGrounded`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5848) — names `describeThreatRecognition`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:885) — names `groundedAnswer`
+- **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3652) — names `describeThreatRecognition`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3740) — names `explainBestMoveGrounded`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5852) — names `describeThreatRecognition`
 
 ## Who calls in
 
@@ -267,7 +267,7 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8614`
+- `src/components/Coach/CoachTeachPage.tsx:8615`
 - `src/services/coachApi.ts:3319`
 - `src/services/coachApi.ts:5365`
 - `src/services/coachFeatureService.test.ts:40`
@@ -276,8 +276,8 @@
 - `src/services/coachFeatureService.test.ts:66`
 - `src/services/coachFeatureService.test.ts:80`
 - `src/services/coachFeatureService.test.ts:87`
-- `src/services/coachFeatureService.ts:2163`
-- `src/services/coachFeatureService.ts:2174`
+- `src/services/coachFeatureService.ts:2165`
+- `src/services/coachFeatureService.ts:2176`
 - `src/services/coachMoveCommentary.ts:222`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/groundedAnswer.test.ts:1043`
@@ -318,8 +318,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeMoveMerit` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:1023`
-- `src/services/coachFeatureService.ts:4084`
+- `src/services/coachFeatureService.ts:1025`
+- `src/services/coachFeatureService.ts:4086`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -329,7 +329,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:96`
 - `src/services/coachFeatureService.test.ts:102`
-- `src/services/coachFeatureService.ts:1023`
+- `src/services/coachFeatureService.ts:1025`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -362,7 +362,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:893`
+- `src/services/coachFeatureService.ts:895`
 - `src/services/groundedAnswer.test.ts:1064`
 - `src/services/groundedAnswer.test.ts:1072`
 - `src/services/groundedAnswer.test.ts:1079`
@@ -963,7 +963,7 @@
 - `src/services/coachApi.ts:4530`
 
 ### `seatPieceReferences` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:4498`
+- `src/services/coachFeatureService.ts:4500`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
 - `src/services/reviewBoardAwareness.test.ts:78`
@@ -985,7 +985,7 @@
 ### `detectNewThreat` (function) — 11 call sites
 - `src/data/patternRegistry.ts:43`
 - `src/data/patternRegistry.ts:123`
-- `src/services/coachFeatureService.ts:2489`
+- `src/services/coachFeatureService.ts:2491`
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/reviewMoveBriefing.ts:237`
@@ -996,7 +996,7 @@
 - `src/services/reviewTeachingPoints.ts:332`
 
 ### `describeStudentThreat` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2411`
+- `src/services/coachFeatureService.ts:2413`
 - `src/services/reviewFullData.ts:444`
 - `src/services/reviewNarrationFidelity.test.ts:184`
 - `src/services/reviewNarrationFidelity.test.ts:196`
@@ -1013,7 +1013,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2509`
+- `src/services/coachFeatureService.ts:2511`
 - `src/services/reviewNarrationFidelity.test.ts:254`
 
 ## Tests

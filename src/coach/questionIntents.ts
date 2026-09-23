@@ -2356,7 +2356,7 @@ const RETRO_VERDICT = String.raw`(?:so\s+|such\s+|really\s+|that\s+)?(?:good|bad
 // move-rating lane's own question (its contract is tested there), and "what
 // did it do" is the move-PURPOSE lane's — neither names a move on the tape.
 const RETRO_NAMED = String.raw`(?:O-O(?:-O)?|0-0(?:-0)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|(?:knight|night|bishop|rook|queen|king|pawn)\s*(?:to\s+|takes?\s+(?:on\s+)?|captures?\s+(?:on\s+)?|x\s*|on\s+)?[a-h]\s*[1-8]|(?:taking|capturing|the\s+capture|the\s+exchange|trading|the\s+trade|exchanging)\s+on\s+[a-h][1-8]|castl(?:e|ing)(?:\s+(?:long|short|queenside|kingside))?)`;
-const RETRO_POINTER = String.raw`(?:(?:my|your)\s+(?:last\s+|previous\s+)?move)`;
+const RETRO_POINTER = String.raw`(?:(?:my|your)\s+(?:last\s+|previous\s+)?move|(?:that|this)(?:\s+move)?)`;
 const RETRO_OBJ = String.raw`(?:${RETRO_NAMED}|${RETRO_POINTER})`;
 const RETROSPECTIVE_RE = anyOf([
   // "why was <obj> (so) good / bad / a mistake / the right call"
@@ -2372,6 +2372,10 @@ const RETROSPECTIVE_RE = anyOf([
   String.raw`\bwhat\s+did\s+${RETRO_NAMED}\s+(?:do|achieve|accomplish|threaten|win|lose|cost)\b`,
   // "why did you/I play <named>" — a WHY about a move on the tape.
   String.raw`\bwhy\s+did\s+(?:you|i)\s+(?:play|go|choose|pick|castle|take|push|trade)\s+${RETRO_NAMED}`,
+  // "why did you play that?" / "why did I do that" — the POINTER form (Learn
+  // walk 2026-09-23: with no named move the question fell to the brain, which
+  // answered about the STUDENT's move; "you" on a live board is the coach).
+  String.raw`\bwhy\s+did\s+(?:you|i)\s+(?:play|go|choose|pick|castle|take|push|trade|do)\s+(?:that|this|it)(?:\s+move)?\b`,
   // "was <obj> necessary / forced / a mistake / the right call"
   String.raw`\bwas\s+${RETRO_OBJ}\s+${RETRO_VERDICT}\b`,
   // "how bad was <obj>" / "how good was <obj>"
@@ -2389,6 +2393,9 @@ export function retrospectiveMoveRef(ask: string | undefined): RetrospectiveMove
   // Pointers first — "my last move" / "your move" / "that".
   if (/\b(?:my|the)\s+(?:last|previous)\s+move\b|\bmy\s+move\b/.test(t)) return { kind: 'my-last' };
   if (/\byour\s+(?:last\s+|previous\s+)?move\b/.test(t)) return { kind: 'coach-last' };
+  // The pointer form: "you" on a live board is the coach, "I" is the student.
+  if (/\bwhy\s+did\s+you\s+(?:play|go|choose|pick|castle|take|push|trade|do)\s+(?:that|this|it)\b/.test(t)) return { kind: 'coach-last' };
+  if (/\bwhy\s+did\s+i\s+(?:play|go|choose|pick|castle|take|push|trade|do)\s+(?:that|this|it)\b/.test(t)) return { kind: 'my-last' };
   // A capture named by its square — "taking on e5", "the exchange on d4".
   const cap = /\b(?:taking|capturing|the\s+capture|the\s+exchange|trading|the\s+trade|exchanging|take|capture|trade)\s+on\s+([a-h][1-8])\b/.exec(t);
   if (cap) return { kind: 'capture-on', square: cap[1] };
@@ -3003,11 +3010,18 @@ export function buildQuestionGrounding(
 const QUESTION_OPENER_RE =
   /^\s*(?:did|do|does|is|are|was|were|am|can|could|should|would|will|has|have|had|why|what|what'?s|how|who|when|where|which|tell|explain|show|give|help|find)\b/i;
 
+/** A bare COACH COMMAND is never an opening name (Learn walk 2026-09-23:
+ *  "hint" was fuzzy-matched to "Alekhine Defense: Hunt Variation" and offered
+ *  as a lesson while Play answered the same word with a hint). */
+const COACH_COMMAND_RE =
+  /^\s*(?:hint|hints|help|undo|take\s*back|takeback|resign|restart|stop|pause|resume|continue|next|skip|again|repeat|why|yes|no|ok|okay|sure|nope|yep|thanks|thank\s+you|hi|hello|hey)\s*$/i;
+
 export function looksLikeQuestionNotAnOpeningName(input: string | undefined): boolean {
   if (!input) return false;
   const t = input.trim();
   if (!t) return false;
   if (/[?.!]$/.test(t)) return true;
+  if (COACH_COMMAND_RE.test(t)) return true;
   return QUESTION_OPENER_RE.test(t);
 }
 

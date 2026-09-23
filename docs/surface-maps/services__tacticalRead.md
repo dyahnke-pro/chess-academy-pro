@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**767 lines · 25 exports · 5 importers · 3 tests · 0 audits**
+**771 lines · 25 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:164`
 - `src/services/tacticalRead.test.ts:239`
 - `src/services/tacticalRead.test.ts:293`
-- `src/services/tacticalRead.test.ts:496`
+- `src/services/tacticalRead.test.ts:505`
 
 ### `pickKeyTactic` (function) — 4 call sites
 - `src/services/tacticalRead.test.ts:87`
@@ -72,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:74`
 
 ### `namedTacticClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9192`
+- `src/components/Coach/CoachTeachPage.tsx:9193`
 - `src/services/danyaBehaviors.ts:320`
 - `src/services/danyaDeviceCoverage.test.ts:101`
 - `src/services/tacticalRead.test.ts:134`
@@ -83,7 +83,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:116`
 
 ### `tacticalReadFromLines` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8659`
+- `src/components/Coach/CoachTeachPage.tsx:8660`
 - `src/services/danyaBehaviors.ts:318`
 - `src/services/danyaDeviceCoverage.test.ts:72`
 - `src/services/liveVoiceDefects.test.ts:46`
@@ -101,38 +101,39 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:170`
 - `src/services/tacticalRead.test.ts:185`
 - `src/services/tacticalRead.test.ts:191`
-- `src/services/tacticalRead.test.ts:527`
+- `src/services/tacticalRead.test.ts:536`
 
 ### `temptingTurnClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8670`
-- `src/components/Coach/CoachTeachPage.tsx:9211`
+- `src/components/Coach/CoachTeachPage.tsx:8671`
+- `src/components/Coach/CoachTeachPage.tsx:9212`
 - `src/services/danyaDeviceCoverage.test.ts:78`
 - `src/services/tacticalRead.test.ts:427`
 - `src/services/tacticalRead.test.ts:440`
 
 ### `uncertaintyClause` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8671`
-- `src/components/Coach/CoachTeachPage.tsx:9214`
+- `src/components/Coach/CoachTeachPage.tsx:8672`
+- `src/components/Coach/CoachTeachPage.tsx:9215`
 - `src/services/danyaDeviceCoverage.test.ts:83`
 - `src/services/liveVoiceDefects.test.ts:281`
 - `src/services/tacticalRead.test.ts:412`
 - `src/services/tacticalRead.test.ts:433`
 - `src/services/tacticalRead.test.ts:441`
-- `src/services/tacticalRead.test.ts:507`
-- `src/services/tacticalRead.test.ts:518`
-- `src/services/tacticalRead.test.ts:554`
-- `src/services/tacticalRead.test.ts:558`
-- `src/services/tacticalRead.test.ts:561`
-- `src/services/tacticalRead.test.ts:562`
+- `src/services/tacticalRead.test.ts:516`
+- `src/services/tacticalRead.test.ts:527`
 - `src/services/tacticalRead.test.ts:563`
+- `src/services/tacticalRead.test.ts:567`
+- `src/services/tacticalRead.test.ts:570`
+- `src/services/tacticalRead.test.ts:571`
+- `src/services/tacticalRead.test.ts:572`
 
-### `candidateCompareClause` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8676`
+### `candidateCompareClause` (function) — 7 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8677`
 - `src/services/danyaDeviceCoverage.test.ts:88`
 - `src/services/tacticalRead.test.ts:445`
 - `src/services/tacticalRead.test.ts:453`
 - `src/services/tacticalRead.test.ts:463`
-- `src/services/tacticalRead.test.ts:470`
+- `src/services/tacticalRead.test.ts:472`
+- `src/services/tacticalRead.test.ts:479`
 
 ### `temptingFromAnalysis` (function) — 3 call sites
 - `src/services/tacticalRead.test.ts:197`

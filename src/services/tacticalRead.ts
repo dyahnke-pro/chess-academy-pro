@@ -543,14 +543,18 @@ export function candidateCompareClause(
       if (atkAlt > atkBest) {
         return `${sayN(bestMv.san)} over ${sayN(altMv.san)} — the square is safer, less exposed to attack.`;
       }
-      return `${sayN(bestMv.san)} is the better square than ${sayN(altMv.san)}, keeping more of the edge.`;
+      // No grounded reason for the square → say nothing (Learn walk 2026-09-23:
+      // "keeps more of the edge" fired on three consecutive plies as filler).
+      return null;
     }
     // Case 2 — best is the forcing one, the alt is quiet.
     if ((bestMv.captured || bestMv.san.includes('+')) && !altMv.captured && !altMv.san.includes('+')) {
       return `${sayN(bestMv.san)} over ${sayN(altMv.san)} — it does more, forcing the issue while the edge is there.`;
     }
-    // Case 3 — two different plans, best simply holds more.
-    return `${sayN(bestMv.san)} reads better than ${sayN(altMv.san)} here — it keeps more of the edge.`;
+    // Case 3 — two different plans and no board-read reason: SILENT. "It keeps
+    // more of the edge" is the eval bar read aloud, not a reason (G0, the
+    // Narration Voice Rules' filler test).
+    return null;
   }
   return null;
 }

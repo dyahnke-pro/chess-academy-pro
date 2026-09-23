@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1296 lines · 11 exports · 37 importers · 21 tests · 1 audits**
+**1302 lines · 11 exports · 37 importers · 21 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5985) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:5991) — names `FundamentalId`
 
 ## Who calls in
 
@@ -80,8 +80,8 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:113`
 
-### `attributePrinciples` (function) — 52 call sites
-- `src/services/coachFeatureService.ts:836`
+### `attributePrinciples` (function) — 53 call sites
+- `src/services/coachFeatureService.ts:823`
 - `src/services/liveFundamental.ts:132`
 - `src/services/misconceptionClassifier.ts:261`
 - `src/services/principleAttribution.section14.test.ts:22`
@@ -111,6 +111,7 @@
 - `src/services/principleAttribution.test.ts:103`
 - `src/services/principleAttribution.test.ts:121`
 - `src/services/principleAttribution.test.ts:134`
+- `src/services/principleAttribution.test.ts:143`
 - `src/services/principleAttributionEndgame.test.ts:43`
 - `src/services/principleAttributionEndgame.test.ts:57`
 - `src/services/principleAttributionEvalPv.test.ts:62`
@@ -139,8 +140,8 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
 - `src/services/autoAnalyzeGame.ts:373`
 - `src/services/autoAnalyzeGame.ts:376`
-- `src/services/coachFeatureService.ts:840`
-- `src/services/coachFeatureService.ts:842`
+- `src/services/coachFeatureService.ts:827`
+- `src/services/coachFeatureService.ts:829`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
 - `src/services/liveFundamental.ts:122`

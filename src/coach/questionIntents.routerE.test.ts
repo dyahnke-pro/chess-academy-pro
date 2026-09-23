@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  buildQuestionGrounding, retrospectiveMoveRef, isMethodQuestion, isProgressQuestion,
+  buildQuestionGrounding, retrospectiveMoveRef, isMethodQuestion, isProgressQuestion, looksLikeQuestionNotAnOpeningName,
   isOpeningProfileQuestion, stripQuestionFiller, isHintRequest,
 } from './questionIntents';
 import { pureBoardAspect } from '../services/boardQuestionRouter';
@@ -175,3 +175,19 @@ describe('E5 — a piece-scoped plan is the piece-plan aspect, typo-tolerant', (
     expect(pureBoardAspect("what's my plan here")).not.toBe('piece-plan');
   });
 });
+
+describe('Learn walk 2026-09-23 — the pointer question and the bare command', () => {
+  it('"why did you play that?" is about the COACH\'s last move; "why did I play that?" about mine', () => {
+    expect(retrospectiveMoveRef('why did you play that?')).toEqual({ kind: 'coach-last' });
+    expect(retrospectiveMoveRef('Why did you do that')).toEqual({ kind: 'coach-last' });
+    expect(retrospectiveMoveRef('why did I play that move?')).toEqual({ kind: 'my-last' });
+  });
+  it('a bare coach command is never an opening name', () => {
+    for (const w of ['hint', 'Hint', 'help', 'undo', 'take back', 'resign', 'yes', 'thanks']) {
+      expect(looksLikeQuestionNotAnOpeningName(w), w).toBe(true);
+    }
+    expect(looksLikeQuestionNotAnOpeningName('Vienna')).toBe(false);
+    expect(looksLikeQuestionNotAnOpeningName('Caro-Kann Defense')).toBe(false);
+  });
+});
+

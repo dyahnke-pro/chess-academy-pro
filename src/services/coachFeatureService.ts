@@ -395,13 +395,15 @@ export function recapSecondPerson(r: {
   // surface (walk 2, 2026-09-23: "The game ended loss." with the opening
   // clause dropped). One normaliser, both shapes.
   const raw = r.outcome.trim().toLowerCase();
-  const kind: 'win' | 'loss' | 'draw' | null =
+  const kind: 'win' | 'loss' | 'draw' | 'unfinished' | null =
     raw === '1-0' || raw === '0-1' ? (((raw === '1-0') === (r.playerColor === 'white')) ? 'win' : 'loss')
     : raw === '1/2-1/2' || raw === '½-½' || raw === 'draw' || raw === 'drawn' ? 'draw'
     : raw === 'win' || raw === 'won' ? 'win'
     : raw === 'loss' || raw === 'lost' ? 'loss'
+    : raw === '*' || raw === 'ended' || raw === 'unfinished' || raw === 'abandoned' ? 'unfinished'
     : null;
   const outcome = kind === 'win' ? `You won ${r.openingClause}.`
+    : kind === 'unfinished' ? `You stopped ${r.openingClause} before it finished.`
     : kind === 'loss' ? `You lost ${r.openingClause}.`
     : kind === 'draw' ? `You drew ${r.openingClause}.`
     : `This game ${r.openingClause} ended ${r.outcome}.`;

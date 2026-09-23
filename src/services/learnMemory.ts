@@ -103,6 +103,11 @@ export interface LearnMemory {
   readonly spokenKeys: Set<string>;
   /** Concept invariants already taught this game, by tactic type. */
   readonly conceptTaught: Set<string>;
+  /** The opening name already QUEUED for the voice this game. Queueing is not
+   *  saying (see `spokenOpeningName`), but re-queueing the SAME name every turn
+   *  spoke "This game is now the Caro-Kann Defense." on two consecutive plies
+   *  (Learn walk 2026-09-23). One queue per name per game. */
+  queuedOpeningName: string | null;
   /**
    * The opening name the student has actually HEARD. Per game: a second game of
    * the same line must be named again, because the student is being told what
@@ -222,6 +227,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     thinkAloudLastPly: NEVER_FIRED,
     spokenOpeningName: null,
     detectedOpeningName: null,
+    queuedOpeningName: null,
     observe(plies: number): boolean {
       const forgot = plies < lastPlies;
       if (forgot) mem.newGame();
@@ -247,6 +253,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.thinkAloudLastPly = NEVER_FIRED;
       mem.spokenOpeningName = null;
       mem.detectedOpeningName = null;
+      mem.queuedOpeningName = null;
       lastPlies = 0;
       // A NEW GAME IS A NEW ID. Re-minting here (rather than at a call site)
       // is what makes it impossible to record game 2's slips against game 1.

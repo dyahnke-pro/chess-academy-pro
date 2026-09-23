@@ -784,6 +784,66 @@ on the CHANGED files only (an eslint error can only be introduced in a file
 the work touched; the whole-repo run re-counted 1,756 warnings every time).
 Wall time is the slowest lane, not the sum.
 
+## 🚶 2026-09-23 — WALK 3 (LEARN, with the questions Play got): every narration graded
+
+Prod build ea66196, fresh device + import, "lets play, I am white": 1.e4 c6
+2.Nf3 d5 3.e5 Bg4 4.Be2 e6 5.Ng5?? Bxe2 → End Lesson → review. Each line is
+what the coach said; the grade is against the board and the voice rules.
+
+- ✅ "Board's set — you're White, I'm Black. Make your first move whenever
+  you're ready. Fight for the center and get your pieces out." — computed ack
+  (walk-2 item N is therefore closed: the no-name request has its own line).
+- ✅ "whats the plan here?" → "Your plan: Nf3, then e5, then d4. The opponent's
+  most likely reply is d5." board-true PV. 🔴→✅ "White is slightly better" —
+  a bare colour to the student playing White; `evalPhrase` now takes the seat
+  ("you're slightly better").
+- ✅ "what are they threatening?" → "They're eyeing the pawn on e4 — about 1
+  point if you don't cover it." Exact.
+- ✅ 3…Bg4: "Watch out — bishop on g4 pins knight on f3 against queen on d1.
+  Remember — a pin freezes the piece in front…" Concept taught, board-true.
+- 🔴→✅ "The knight to c3 reads better than the bishop to d3 here — it keeps
+  more of the edge" / "the bishop to e2 … keeps more of the edge" / "castling
+  short … keeps more of the edge" — three plies running. That clause is the
+  eval bar read aloud; `candidateCompareClause` now speaks only its two
+  grounded cases (safer square, forcing over quiet) and is silent otherwise.
+- 🔴→✅ "This game is now the Caro-Kann Defense." spoken on two consecutive
+  plies — the announce was re-queued every turn until the late package marked
+  it heard, and the queued hint never marks. One queue per name per game
+  (`learnMemory.queuedOpeningName`).
+- 🟠 "which of my pieces is worst placed?" → "the rook on a1 — it only covers 2
+  squares" at move 3. True and useless: undeveloped back-rank pieces are not
+  "worst placed" in the opening. Not changed.
+- 🔴→✅ "why did you play that?" → answered about MY move ("The pin only bites
+  if you leave the queen sitting behind the knight"). `retrospectiveMoveRef`
+  had no POINTER form — it needed a named move — so the question fell to the
+  brain. "why did you play that/this/it" → the coach's last move; "why did I
+  play that" → mine.
+- 🔴→✅ "hint" → "I don't have an exact match for "hint". Did you mean Alekhine
+  Defense: Hunt Variation?" — the bare-name pre-flight fuzzy-matched a coach
+  command to an opening. A bare command (hint, help, undo, resign, yes, no…)
+  is never an opening name.
+- ✅ "what should I be thinking about here?" — the routine, and "there are no
+  checks or captures on the board" is TRUE (Bxg4 is blocked by the knight on
+  f3 — verified by probe before believing the ear).
+- ✅ Read this position — king in the centre, my development, both pawn
+  breaks, "if you play the pawn to c3, I have the bishop taking on f3: that's
+  a pin in two" (weak but board-derived).
+- ✅ 5.Ng5?? Bxe2: "Careful — your knight on g5 is attacked and nothing's
+  defending it." ✓ 🟠 "Their bishop on e2 has nothing defending it — there's
+  something to win here" — a RECAPTURE of even material called a win (the
+  phrasing model's embellishment of "is undefended"; not changed).
+  🔴→✅ "The attack was overvalued: Ng5 commits material…" — the same
+  attribution as Bg4?? in walk 2. A QUIET move that can simply be taken on
+  its landing square is a hang, not an investment: `overvalued-attack` now
+  stands down for it and `loose-piece` names it. (A sacrifice — a capture or
+  check that offers the piece — keeps the rule; the Wave-3 fixture still fires.)
+- ✅ "why was my last move bad?" → "Your Ng5 on move 5 was a blunder — it
+  dropped about 4.3 points. The engine preferred O-O…" Exact.
+- 🔴→✅ End Lesson → review: "The game ended in a draw — … the draw is the
+  residue of it." An ABANDONED game (result `*`) reached the phrasing model as
+  "ended *" and it invented a draw. The recap now says "You stopped the game
+  … before it finished."
+
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
 Everything on the open list that is code I own and needs no decision from David.

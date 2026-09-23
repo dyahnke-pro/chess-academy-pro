@@ -137,3 +137,13 @@ describe('the king walk is the lesson, not the bishop it happened to block (WO-S
     expect(out.find((a) => a.id === 'king-left-in-centre' && a.facts.walked)).toBeUndefined();
   });
 });
+
+describe('a piece hung outright is a LOOSE PIECE, never an "overvalued attack" (walks 2+3, 2026-09-23)', () => {
+  it('3...Bg4?? into Qxg4 is attributed as the hang it is', () => {
+    const out = attributePrinciples({ historySans: ['e4', 'c5', 'Bc4', 'd6', 'd4', 'Bg4'], bestSan: 'cxd4', classification: 'blunder' });
+    const ids = out.map((a) => a.id);
+    expect(ids).not.toContain('overvalued-attack');
+    expect(ids).toContain('loose-piece');
+  });
+});
+

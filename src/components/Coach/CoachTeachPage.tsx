@@ -7634,7 +7634,7 @@ export function CoachTeachPage(): JSX.Element {
     try {
       const det = detectOpening(history);
       if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
-      if (det && det.name && det.name !== learnMemRef.current.spokenOpeningName) {
+      if (det && det.name && det.name !== learnMemRef.current.spokenOpeningName && det.name !== learnMemRef.current.queuedOpeningName) {
         const firstResolve = learnMemRef.current.spokenOpeningName === null;
         // NOT marked spoken here. Queueing is not saying — see the field's note
         // in `learnMemory.ts`. The late package sets `spokenOpeningName` when
@@ -7676,6 +7676,7 @@ export function CoachTeachPage(): JSX.Element {
         // late-package path as the plan/structure/register so a busy turn can't
         // swallow it.
         queueSpokenHint(args.fenAfterReply, announceLine, 'opening');
+        learnMemRef.current.queuedOpeningName = det.name;
         captureEvent('opening_announced', {
           surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: false,
         });

@@ -869,9 +869,11 @@ const laneBuild = async () => {
 // edit Foo.tsx → ship-check runs Foo.test.tsx.
 const _colocated = changedSourceTests(changedFiles());
 const laneGates = async () => {
-  await runStepAsync('content gates', 'npx', ['vitest', 'run', ...GATE_TESTS], { summary: summarizeVitest });
+  // Under three lanes a 4s test reads as a 5s timeout; the per-test ceiling is
+  // raised so CPU contention cannot masquerade as a failing gate.
+  await runStepAsync('content gates', 'npx', ['vitest', 'run', '--testTimeout=20000', ...GATE_TESTS], { summary: summarizeVitest });
   if (_colocated.length) {
-    await runStepAsync('changed-file tests', 'npx', ['vitest', 'run', ..._colocated], { summary: summarizeVitest });
+    await runStepAsync('changed-file tests', 'npx', ['vitest', 'run', '--testTimeout=20000', ..._colocated], { summary: summarizeVitest });
   } else {
     console.log('  • changed-file tests... ○ none beyond the gates');
   }
