@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4680 lines · 34 exports · 31 importers · 28 tests · 5 audits**
+**4680 lines · 34 exports · 32 importers · 29 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,6 +46,7 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Exports and every call site
 
@@ -136,7 +137,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 54 call sites
+### `buildReviewSegments` (function) — 55 call sites
 - `src/components/Coach/CoachGameReview.tsx:1874`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
@@ -191,6 +192,7 @@
 - `src/services/reviewNeedGate.test.ts:81`
 - `src/services/reviewNeedGate.test.ts:88`
 - `src/services/reviewNeedGate.test.ts:94`
+- `src/test/computedOrderWired.test.ts:59`
 
 ### `reviewOpeningRecord` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -323,6 +325,7 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Audits that reach it
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1145 lines · 9 exports · 12 importers · 9 tests · 3 audits**
+**1145 lines · 9 exports · 13 importers · 10 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,6 +30,7 @@
 - `src/services/positionReadComposer.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/whyBestMove.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Exports and every call site
 
@@ -66,15 +67,15 @@
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:641`
 - `src/services/computerAccuracy.audit.test.ts:113`
-- `src/services/positionFacts.test.ts:251`
-- `src/services/positionFacts.test.ts:252`
-- `src/services/positionFacts.test.ts:293`
-- `src/services/positionFacts.test.ts:351`
-- `src/services/positionFacts.test.ts:352`
+- `src/services/positionFacts.test.ts:253`
+- `src/services/positionFacts.test.ts:254`
+- `src/services/positionFacts.test.ts:295`
+- `src/services/positionFacts.test.ts:353`
+- `src/services/positionFacts.test.ts:354`
 - `src/services/positionReadComposer.ts:110`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 55 call sites
+### `computePositionFacts` (function) — 56 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8681`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
@@ -92,37 +93,37 @@
 - `src/services/positionFacts.test.ts:24`
 - `src/services/positionFacts.test.ts:37`
 - `src/services/positionFacts.test.ts:52`
-- `src/services/positionFacts.test.ts:62`
-- `src/services/positionFacts.test.ts:68`
-- `src/services/positionFacts.test.ts:74`
-- `src/services/positionFacts.test.ts:85`
-- `src/services/positionFacts.test.ts:91`
-- `src/services/positionFacts.test.ts:100`
-- `src/services/positionFacts.test.ts:107`
-- `src/services/positionFacts.test.ts:112`
-- `src/services/positionFacts.test.ts:117`
-- `src/services/positionFacts.test.ts:124`
-- `src/services/positionFacts.test.ts:133`
-- `src/services/positionFacts.test.ts:142`
-- `src/services/positionFacts.test.ts:151`
-- `src/services/positionFacts.test.ts:161`
-- `src/services/positionFacts.test.ts:178`
-- `src/services/positionFacts.test.ts:190`
-- `src/services/positionFacts.test.ts:200`
-- `src/services/positionFacts.test.ts:206`
-- `src/services/positionFacts.test.ts:219`
-- `src/services/positionFacts.test.ts:228`
-- `src/services/positionFacts.test.ts:231`
-- `src/services/positionFacts.test.ts:242`
-- `src/services/positionFacts.test.ts:257`
-- `src/services/positionFacts.test.ts:273`
-- `src/services/positionFacts.test.ts:289`
-- `src/services/positionFacts.test.ts:299`
-- `src/services/positionFacts.test.ts:308`
-- `src/services/positionFacts.test.ts:329`
-- `src/services/positionFacts.test.ts:350`
-- `src/services/positionFacts.test.ts:366`
-- `src/services/positionFacts.test.ts:374`
+- `src/services/positionFacts.test.ts:64`
+- `src/services/positionFacts.test.ts:70`
+- `src/services/positionFacts.test.ts:76`
+- `src/services/positionFacts.test.ts:87`
+- `src/services/positionFacts.test.ts:93`
+- `src/services/positionFacts.test.ts:102`
+- `src/services/positionFacts.test.ts:109`
+- `src/services/positionFacts.test.ts:114`
+- `src/services/positionFacts.test.ts:119`
+- `src/services/positionFacts.test.ts:126`
+- `src/services/positionFacts.test.ts:135`
+- `src/services/positionFacts.test.ts:144`
+- `src/services/positionFacts.test.ts:153`
+- `src/services/positionFacts.test.ts:163`
+- `src/services/positionFacts.test.ts:180`
+- `src/services/positionFacts.test.ts:192`
+- `src/services/positionFacts.test.ts:202`
+- `src/services/positionFacts.test.ts:208`
+- `src/services/positionFacts.test.ts:221`
+- `src/services/positionFacts.test.ts:230`
+- `src/services/positionFacts.test.ts:233`
+- `src/services/positionFacts.test.ts:244`
+- `src/services/positionFacts.test.ts:259`
+- `src/services/positionFacts.test.ts:275`
+- `src/services/positionFacts.test.ts:291`
+- `src/services/positionFacts.test.ts:301`
+- `src/services/positionFacts.test.ts:310`
+- `src/services/positionFacts.test.ts:331`
+- `src/services/positionFacts.test.ts:352`
+- `src/services/positionFacts.test.ts:368`
+- `src/services/positionFacts.test.ts:376`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
@@ -130,6 +131,7 @@
 - `src/services/positionReadComposer.ts:92`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:89`
+- `src/test/computedOrderWired.test.ts:32`
 
 ## Tests
 
@@ -142,6 +144,7 @@
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Audits that reach it
 
