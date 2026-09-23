@@ -143,6 +143,9 @@ export type AuditKind =
   | 'review-nav'
   // Additional review trail (WO-REVIEW-02a)
   | 'review-segments-generated'
+  // Per-phase milliseconds of one review prep (2026-09-23) — where the
+  // "Preparing…" wait goes, forwarded to PostHog as `review_prep_timing`.
+  | 'review-prep-timing'
   | 'review-segments-parse-failed'
   // Walk-mode exploration (better-move arrow → student plays it →
   // "Resume game" snap-back). Fires when the student drags a piece

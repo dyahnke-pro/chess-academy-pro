@@ -3150,7 +3150,11 @@ async function augmentWithProjections(
   /** The student's rating — scales how DEEP the spelled threat lines run
    *  (Phase 2: deeper for stronger, via pvDepthForRating). Default 1500. */
   rating = DEFAULT_STUDENT_RATING,
+  /** Per-pass wall-clock ms, filled as each pass finishes (review-prep-timing). */
+  timings: Record<string, number> = {},
 ): Promise<void> {
+  let passStart = Date.now();
+  const mark = (pass: string): void => { timings[pass] = Date.now() - passStart; passStart = Date.now(); };
   // How many plies to spell a deep threat line — rating-scaled, capped at the
   // reliable window (Phase 2, David 2026-09-07: "spell the lines out for
   // everyone", "the more advanced player should get a DEEPER calculation").
@@ -3349,6 +3353,7 @@ async function augmentWithProjections(
   } finally {
     pool?.release();
   }
+  mark('punish');
   // #4 — THE BETTER-LINE WHY (David 2026-07-21, IMG_4577: "Need to know why
   // Bf2 was better. The better lines need the why narrations. A deeper
   // understanding is critical."). On the student's flagged moves that name a
@@ -3404,6 +3409,7 @@ async function augmentWithProjections(
       whyBudget -= 1;
     }
   }
+  mark('better');
 
   // #4b — ENGINE-CONFIRMATION of the static threat call-outs (David
   // 2026-07-21: "We need to find a way for these two to work together. They
@@ -3440,6 +3446,7 @@ async function augmentWithProjections(
       attachLineArrows(s, line, 3); // engine's replacement threat line
     }
   }
+  mark('confirm');
 
   // #5 — THE DEEP THREAT, two-to-three moves out (David 2026-07-21: "What
   // about calling out future threats? Two or three moves ahead?"). Static
@@ -3537,6 +3544,7 @@ async function augmentWithProjections(
   // through the same render machinery, closed with the DEFENSE from the
   // stored analysis (the student's next best move — in the package, no
   // fresh search, G0).
+  mark('deep');
   let deepOppBudget = scope === 'full' ? 999 : 2; // uncapped: every opponent deep threat
   const oppWB: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
   // POOLED PRE-PASS (G4.6) — same superset-collect as #5 above.
@@ -3601,6 +3609,7 @@ async function augmentWithProjections(
     } catch { /* skip this ply — never block the walk on a threat probe */ }
   }
 
+  mark('deepOpp');
   // #6 — BAD-PIECE ATTRIBUTION (David 2026-07-23, IMG_4589: "the knight and the
   // bishop are so bad that White has fighting chances"). The method of comparison
   // aimed at a PIECE. TARGET the middlegame position with the most cramped MINOR
@@ -3646,6 +3655,7 @@ async function augmentWithProjections(
     }
   }
 
+  mark('badPiece');
   // #0 — THE OPENING PLAN, PLAYED OUT (David 2026-07-24: "the first half did not
   // have nearly as much detail as the back half"). The middlegame/endgame get
   // their engine projection lines; the opening carried only single-beat plans. So
@@ -3675,6 +3685,7 @@ async function augmentWithProjections(
     }
   }
 
+  mark('openingPlan');
   if (scope === 'mistakes') return;
 
   // #1 — plan realization from the plan's critical position. In uncapped mode
@@ -3690,6 +3701,7 @@ async function augmentWithProjections(
     }
   }
 
+  mark('plan');
   // #2 — consequence projection on the student's strongest moves. No ceiling
   // (G4.5): every great/brilliant move earns its follow-up line.
   for (const s of segments) {
@@ -3707,6 +3719,7 @@ async function augmentWithProjections(
     }
   }
 
+  mark('consequence');
   // #5 — PROPHYLAXIS (David 2026-07-24: "keep going" — the concept-tool member
   // that needs the engine). A quiet student move that PREVENTS the opponent's
   // threat: give the opponent a FREE tempo (null move) at fenBefore — if their
@@ -3761,6 +3774,7 @@ async function augmentWithProjections(
       prophyBudget -= 1;
     }
   }
+  mark('prophylaxis');
 }
 
 /**
@@ -4414,36 +4428,43 @@ export async function generateReviewNarration(params: {
   // THE ONE KEY (A1): minted HERE from the game's own moves when the caller
   // holds none — a surface never mints a key of its own.
   const reviewKey = params.openingId !== undefined ? params.openingId : openingKeyFromSans(moves.map((m) => m.san));
-  const studentNeed = await loadStudentNeedContext({
-    rating: playerRating, sans: moves.slice(0, usableCount).map((m) => m.san), studentColor: playerColor,
-    openingId: reviewKey, eco: params.eco ?? (reviewKey ? ecoOfKey(reviewKey) : null),
-  }).catch(() => coldStudent(playerRating));
+  // 🔒 THE PREP RUNS IN PARALLEL WHERE NOTHING DEPENDS ON ORDER (2026-09-23).
+  // These four loads, and then the intro phrasing, used to be awaited one after
+  // another, so the intro's 18s phrasing race sat at the FRONT of every review
+  // before a single segment was built. The student record, the two opening
+  // DBs and the weakness signals are independent reads; the intro phrasing
+  // needs only the record, so it starts as soon as the record exists and is
+  // collected at the end. Same inputs, same outputs — less waiting.
+  const prepStart = Date.now();
+  const timings: Record<string, number> = {};
+  const [studentNeed, , studentWeaknesses] = await Promise.all([
+    loadStudentNeedContext({
+      rating: playerRating, sans: moves.slice(0, usableCount).map((m) => m.san), studentColor: playerColor,
+      openingId: reviewKey, eco: params.eco ?? (reviewKey ? ecoOfKey(reviewKey) : null),
+    }).catch(() => coldStudent(playerRating)),
+    // Warm the opening-plan grounding sources before the sync segment build:
+    // the his-play DB (primary) + the masters DB (backup). Each degrades to
+    // null on failure so the beat just falls through.
+    Promise.all([getHisPlayDb(), ensureMastersDbLoaded()]),
+    // THE STUDENT MODEL (Phase 1) — so a chain the student keeps erring into
+    // gets the "this recurs for you, drill it" recap. Memoized once-per-game;
+    // degrades to [] (inert) on any failure.
+    loadWeaknessSignals().catch(() => []),
+  ]);
+  timings.loads = Date.now() - prepStart;
   const record = reviewOpeningRecord({ openingName, playerColor, studentNeed, gameId: params.gameId ?? null });
   const groundedIntro = defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
   const skipIntroLlm = coachNarration === 'silent';
-  const introRaw = skipIntroLlm
-    ? ''
-    : (await raceTimeout(
+  const introStart = Date.now();
+  const introPromise: Promise<string> = skipIntroLlm
+    ? Promise.resolve('')
+    : raceTimeout(
         voiceFacts(groundedIntro, { intent: 'review-intro', warm: true }).catch(() => ''),
         REVIEW_INTRO_VOICE_TIMEOUT_MS,
         '',
-      )) ?? '';
+      ).then((r) => { timings.intro = Date.now() - introStart; return r ?? ''; });
 
-  // Intro: use LLM response if non-empty and not the ⚠️ error placeholder;
-  // else fall back to a grounded default.
-  const introTrimmed = introRaw.trim();
-  const intro = introTrimmed && !introTrimmed.startsWith('⚠️')
-    ? introTrimmed
-    : defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
-
-  // Warm the opening-plan grounding sources before the sync segment build:
-  // the his-play DB (primary) + the masters DB (backup). Concurrent; each
-  // degrades to null on failure so the beat just falls through.
-  await Promise.all([getHisPlayDb(), ensureMastersDbLoaded()]);
-  // THE STUDENT MODEL (Phase 1) — so a chain the student keeps erring into gets
-  // the "this recurs for you, drill it" recap. Memoized once-per-game; degrades
-  // to [] (inert) on any failure.
-  const studentWeaknesses = await loadWeaknessSignals().catch(() => []);
+  let phaseStart = Date.now();
   const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null);
   // NEED COVERAGE (the audit's instrument for the retired R2 — CLAUDE.md
   // standard): per student ply, the computed need and whether the quiet
@@ -4491,11 +4512,17 @@ export async function generateReviewNarration(params: {
     // whatever lands after that touches nothing the student sees. Partial
     // results that landed in time are kept, exactly as before.
     const work = segments.map((seg) => ({ ...seg }));
-    await raceTimeout(
-      augmentWithProjections(work, playerColor === 'white' ? 'w' : 'b', 'full', playerRating),
+    timings.segments = Date.now() - phaseStart;
+    phaseStart = Date.now();
+    const augTimings: Record<string, number> = {};
+    const augWon = await raceTimeout(
+      augmentWithProjections(work, playerColor === 'white' ? 'w' : 'b', 'full', playerRating, augTimings).then(() => true),
       REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED,
-      undefined,
+      false,
     );
+    timings.augment = Date.now() - phaseStart;
+    timings.augmentCapped = augWon ? 0 : 1;
+    for (const [k, v] of Object.entries(augTimings)) timings[`aug_${k}`] = v;
     work.forEach((w, i) => {
       const snap = Object.fromEntries(Object.entries(w).map(([k, v]) => [k, Array.isArray(v) ? [...v] : v]));
       Object.assign(segments[i], snap);
@@ -4539,9 +4566,11 @@ export async function generateReviewNarration(params: {
   // contradicting each other. The plan must read from the SAME masters book as
   // the lecture (G0): rewrite any template arrow the book disagrees with and
   // SAY the book's development squares.
+  phaseStart = Date.now();
   try {
     await groundOpeningPlanInBook(segments);
   } catch { /* best-effort; the template arrows stand when the book is silent */ }
+  timings.book = Date.now() - phaseStart;
 
   // HOUSE-VOICE PASS (David 2026-07-19: "does NOT sound like Danya"). The
   // per-move narration above is computed deterministically (the FACTS, G0) but
@@ -4597,6 +4626,7 @@ export async function generateReviewNarration(params: {
   // stripping internal headers and notation the ear should never hear. Same
   // register, nothing to validate, no timeout, and a line can no longer be
   // dropped or reworded by a model that never saw the board.
+  phaseStart = Date.now();
   if (coachNarration !== 'silent') {
     for (const s of segments) {
       if (!s.narration || s.narration.trim().length === 0) continue;
@@ -4606,6 +4636,7 @@ export async function generateReviewNarration(params: {
       } catch { /* keep the computed template — it is already the voice */ }
     }
   }
+  timings.voice = Date.now() - phaseStart;
 
   // STRIP DIAGNOSTIC [tags] from EVERY spoken line — ALWAYS, not just uncapped
   // (David 2026-09-07 full-game read: the house voice ECHOED a "[converting]"
@@ -4642,6 +4673,25 @@ export async function generateReviewNarration(params: {
   const flaggedCount = studentSegs.filter((s) => s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'miss').length;
   const recap = renderFundamentalsRecap(studentSegs.map((s) => s.fundamentals ?? []), flaggedCount);
   const closing = recap ? (throughLine ? `${recap} ${throughLine}` : recap) : throughLine;
+
+  // Intro: use the phrased response if non-empty and not the ⚠️ error
+  // placeholder; else the grounded default. Collected LAST — it was started
+  // beside the segment build, so its phrasing race no longer delays the walk.
+  const introWaitStart = Date.now();
+  const introTrimmed = (await introPromise).trim();
+  timings.introWait = Date.now() - introWaitStart;
+  const intro = introTrimmed && !introTrimmed.startsWith('⚠️')
+    ? introTrimmed
+    : defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
+
+  timings.total = Date.now() - prepStart;
+  void logAppAudit({
+    kind: 'review-prep-timing',
+    category: 'subsystem',
+    source: 'coachFeatureService.generateReviewNarration',
+    summary: `review prep ${(timings.total / 1000).toFixed(1)}s — augment ${((timings.augment ?? 0) / 1000).toFixed(1)}s, segments ${((timings.segments ?? 0) / 1000).toFixed(1)}s, plies ${segments.length}`,
+    details: JSON.stringify({ ...timings, plies: segments.length }),
+  });
 
   return { intro, segments, closing };
 }

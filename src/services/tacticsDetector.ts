@@ -462,11 +462,38 @@ function findTrappedPieces(chess: Chess): TacticPattern[] {
 
 /** Piece types of `by` currently attacking `sq`. */
 function attackersOfSquare(chess: Chess, sq: Square, by: Color): PieceSymbol[] {
+  return moveIndexFor(chess, by).get(sq) ?? [];
+}
+
+// ONE MOVE GENERATION PER (position, side), NOT ONE PER SQUARE (2026-09-23).
+// `attackersOfSquare` used to rebuild the board and generate every legal move
+// for `by` on EACH call, then keep the moves landing on one square. The hot
+// detectors call it once per piece, and `computePlyFacts` runs them on every ply
+// of every projected line — a CPU profile of one review put 43 of ~60 seconds
+// here. The answer is a pure function of the position and the side, so it is
+// indexed once and read per square: same pieces, same order, no behaviour change.
+const MOVE_INDEX_CACHE = new Map<string, Map<Square, PieceSymbol[]>>();
+const MOVE_INDEX_CACHE_MAX = 2048;
+
+function moveIndexFor(chess: Chess, by: Color): Map<Square, PieceSymbol[]> {
+  const key = `${chess.fen()}|${by}`;
+  const hit = MOVE_INDEX_CACHE.get(key);
+  if (hit) return hit;
+  const index = new Map<Square, PieceSymbol[]>();
   const probe = withTurn(chess, by);
-  if (!probe) return [];
-  return probe.moves({ verbose: true })
-    .filter((m) => m.to === sq)
-    .map((m) => m.piece);
+  if (probe) {
+    for (const m of probe.moves({ verbose: true })) {
+      const list = index.get(m.to);
+      if (list) list.push(m.piece);
+      else index.set(m.to, [m.piece]);
+    }
+  }
+  if (MOVE_INDEX_CACHE.size >= MOVE_INDEX_CACHE_MAX) {
+    const oldest = MOVE_INDEX_CACHE.keys().next().value;
+    if (oldest !== undefined) MOVE_INDEX_CACHE.delete(oldest);
+  }
+  MOVE_INDEX_CACHE.set(key, index);
+  return index;
 }
 
 /** DISCOVERED ATTACK available: a piece standing between a friendly line
