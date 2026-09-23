@@ -9,7 +9,7 @@
 //
 // Plan-layer teaching: the door orders it after safety and principle, and a
 // student who has proven the plan layer does not hear it.
-import { Chess, type Square } from 'chess.js';
+import { Chess } from 'chess.js';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
@@ -25,7 +25,7 @@ function looseAfter(fenBefore: string, san: string): Map<string, string> | null 
   for (const row of c.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== me || cell.type === 'k') continue;
-      if (c.attackers(cell.square as Square, me).length === 0) out.set(cell.square, cell.type);
+      if (c.attackers(cell.square, me).length === 0) out.set(cell.square, cell.type);
     }
   }
   return out;

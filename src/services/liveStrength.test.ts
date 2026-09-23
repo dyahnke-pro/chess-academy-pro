@@ -16,7 +16,7 @@ const posedBoard = (() => {
     const c = new Chess(); for (const m of l) c.move(m);
     for (const mv of c.moves()) {
       const posed = capabilitiesPosed(c.fen(), mv, c.turn() === 'w' ? 'white' : 'black');
-      if (posed.some((p) => p.posedImportance >= PROVEN_MIN_IMPORTANCE)) return { fen: c.fen(), san: mv, color: (c.turn() === 'w' ? 'white' : 'black') as 'white' | 'black' };
+      if (posed.some((p) => p.posedImportance >= PROVEN_MIN_IMPORTANCE)) return { fen: c.fen(), san: mv, color: (c.turn() === 'w' ? 'white' : 'black') };
     }
   }
   return null;

@@ -88,7 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTrapQuestion.ts:113`
 
 ### `legalSeeGainOn` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:2316`
+- `src/services/coachFeatureService.ts:2317`
 - `src/services/groundedAnswer.ts:6411`
 - `src/services/reviewFullData.ts:630`
 - `src/services/reviewTeachingPoints.ts:98`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4710 lines · 34 exports · 33 importers · 30 tests · 5 audits**
+**4715 lines · 34 exports · 33 importers · 30 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -67,7 +67,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2101`
+- `src/components/Coach/CoachGamePage.tsx:2095`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`

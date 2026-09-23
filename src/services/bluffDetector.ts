@@ -14,9 +14,10 @@
 // Pure chess.js, no engine (G0/G3). Dual-use: the same computer that teaches
 // "no need to react" is the one that can see a student spend a move answering
 // nothing.
-import { Chess, type Square } from 'chess.js';
+import { Chess } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
 import { legalSeeGainFor } from './positionReadingService';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export interface Bluff {
   /** The opponent piece that made the aggressive-looking move. */
@@ -26,7 +27,6 @@ export interface Bluff {
   targets: Array<{ piece: string; square: string }>;
 }
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /**
  * The bluff in the move just played, from the MOVER's side, or null.
@@ -50,8 +50,8 @@ export function detectBluff(fenBefore: string, san: string): Bluff | null {
   for (const row of after.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== victim || cell.type === 'k' || cell.type === 'p') continue;
-      const sq = cell.square as Square;
-      const hitsNow = after.attackers(sq, mover).includes(mv.to as Square);
+      const sq = cell.square;
+      const hitsNow = after.attackers(sq, mover).includes(mv.to);
       if (!hitsNow) continue;
       // Can the mover win it? Then it is a threat, not a bluff.
       if (legalSeeGainFor(after.fen(), sq, mover) > 0) return null;
@@ -61,7 +61,7 @@ export function detectBluff(fenBefore: string, san: string): Bluff | null {
   if (targets.length === 0) return null;
   // The one door for real threats: forks, mates, winning captures elsewhere.
   if (detectNewThreat(fenBefore, after.fen(), mover)) return null;
-  targets.sort((a, b) => (VALUE[b.piece] ?? 0) - (VALUE[a.piece] ?? 0));
+  targets.sort((a, b) => (MATERIAL_VALUE[b.piece] ?? 0) - (MATERIAL_VALUE[a.piece] ?? 0));
   return { piece: mv.piece, square: mv.to, targets };
 }
 

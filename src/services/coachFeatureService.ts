@@ -6,6 +6,7 @@ import { selectTeaching } from './teachingSelector';
 import { coldStudent, computeNeed, type StudentNeedContext, type NeedVerdict } from './needScore';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
+import { MATERIAL_VALUE } from './pieceValues';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
@@ -3635,8 +3636,9 @@ async function augmentWithProjections(
       // only when it proves a point, so it stays quiet.
       if (!isForcingProjection(line)) continue;
       const deep = render(line);
-      if (!deep) continue;
-      s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${deep}.`.trim();
+      s.narration = deep
+        ? `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${deep}.`.trim()
+        : `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it starts with ${line.plies[0].san}.`.trim();
       attachLineArrows(s, line, 3); // deep threat (student's)
       deepBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
@@ -3693,9 +3695,12 @@ async function augmentWithProjections(
       // "threat"; decisive non-forcing → "idea/plan" (honest label). The decisive
       // ≥250cp gate is the noise floor; "left alone" is true for both.
       const oppDeepKind = isForcingProjection(line) ? 'threat' : 'idea';
+      // A proof when the line settles something; otherwise the IDEA is still
+      // the teaching (what they want) — named by its first move, not recited.
       const oppRun = render(line);
-      if (!oppRun) continue;
-      let callOut = `Watch what they're building — left alone, their ${oppDeepKind} runs ${oppRun}.`;
+      let callOut = oppRun
+        ? `Watch what they're building — left alone, their ${oppDeepKind} runs ${oppRun}.`
+        : `Watch what they're building — left alone, their ${oppDeepKind} starts with ${line.plies[0].san}.`;
       const next = segments[i + 1];
       if (next && next.playerColor === studentColorName && next.bestMoveSan) {
         callOut += ` Your defense starts with ${next.bestMoveSan}.`;
@@ -4140,7 +4145,7 @@ function fillSilentDevelopment(segments: ReviewMoveSegment[], playerColor: 'whit
     if (prev && prev.ply === s.ply - 1) {
       try {
         const pm = new Chess(prev.fenBefore).move(prev.san);
-        prevCapture = pm ? { square: pm.to, capturedValue: pm.captured ? ({ p: 1, n: 3, b: 3, r: 5, q: 9 } as Record<string, number>)[pm.captured] ?? 0 : 0 } : null;
+        prevCapture = pm ? { square: pm.to, capturedValue: pm.captured ? MATERIAL_VALUE[pm.captured] ?? 0 : 0 } : null;
       } catch { prevCapture = null; }
     }
     try { merit = describeMoveMerit(s.fenBefore, s.san, moverColor, prevCapture); } catch { merit = null; }

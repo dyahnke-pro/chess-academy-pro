@@ -64,10 +64,10 @@
 - `src/services/ratingBands.test.ts:62`
 
 ### `getRandomLegalMove` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:2702`
-- `src/components/Coach/CoachGamePage.tsx:2717`
-- `src/components/Coach/CoachGamePage.tsx:3004`
-- `src/components/Coach/CoachGamePage.tsx:3042`
+- `src/components/Coach/CoachGamePage.tsx:2693`
+- `src/components/Coach/CoachGamePage.tsx:2708`
+- `src/components/Coach/CoachGamePage.tsx:2995`
+- `src/components/Coach/CoachGamePage.tsx:3033`
 - `src/components/Coach/CoachTeachPage.tsx:7195`
 - `src/components/Openings/OpeningPlayMode.tsx:695`
 - `src/components/Openings/OpeningPlayMode.tsx:720`
@@ -98,13 +98,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prewarmTeachingReplies` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:488`
+- `src/components/Coach/CoachGamePage.tsx:482`
 
 ### `pickTeachingReply` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:2459`
+- `src/components/Coach/CoachGamePage.tsx:2450`
 
 ### `getAdaptiveMove` (function) — 28 call sites
-- `src/components/Coach/CoachGamePage.tsx:2520`
+- `src/components/Coach/CoachGamePage.tsx:2511`
 - `src/components/Coach/CoachTeachPage.tsx:7180`
 - `src/components/Openings/OpeningPlayMode.tsx:686`
 - `src/services/coachGameEngine.test.ts:70`
@@ -135,7 +135,7 @@
 
 ### `studentPlayingRating` (function) — 16 call sites
 - `src/App.tsx:163`
-- `src/components/Coach/CoachGamePage.tsx:422`
+- `src/components/Coach/CoachGamePage.tsx:421`
 - `src/components/Coach/CoachTeachPage.tsx:7174`
 - `src/components/Coach/CoachTeachPage.tsx:7183`
 - `src/components/Coach/CoachTeachPage.tsx:8330`
@@ -153,9 +153,9 @@
 
 ### `getTargetStrength` (function) — 13 call sites
 - `src/App.tsx:162`
-- `src/components/Coach/CoachGamePage.tsx:467`
-- `src/components/Coach/CoachGamePage.tsx:2461`
-- `src/components/Coach/CoachGamePage.tsx:2520`
+- `src/components/Coach/CoachGamePage.tsx:466`
+- `src/components/Coach/CoachGamePage.tsx:2452`
+- `src/components/Coach/CoachGamePage.tsx:2511`
 - `src/components/Coach/CoachTeachPage.tsx:7174`
 - `src/components/Openings/OpeningPlayMode.tsx:71`
 - `src/services/coachGameEngine.test.ts:183`

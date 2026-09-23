@@ -50,14 +50,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3183`
+- `src/services/coachFeatureService.ts:3184`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
 
 ### `describeProofResult` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:3170`
+- `src/services/coachFeatureService.ts:3171`
 - `src/services/lineProof.test.ts:27`
 
 ## Tests

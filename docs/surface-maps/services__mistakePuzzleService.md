@@ -100,8 +100,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
 - `src/hooks/useAcceptableMoves.ts:88`
-- `src/hooks/useDiscussionPractice.ts:259`
-- `src/hooks/useDiscussionPractice.ts:385`
+- `src/hooks/useDiscussionPractice.ts:266`
+- `src/hooks/useDiscussionPractice.ts:392`
 - `src/services/autoAnalyzeGame.ts:315`
 - `src/services/computerAccuracy.audit.test.ts:107`
 - `src/services/deliberation.ts:58`
@@ -145,7 +145,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/seatResolversReadDeclaredSeat.test.ts:15`
 
 ### `generateMistakePuzzlesFromGame` (function) — 15 call sites
-- `src/components/Coach/CoachGamePage.tsx:2102`
+- `src/components/Coach/CoachGamePage.tsx:2096`
 - `src/components/Coach/CoachGameReview.tsx:344`
 - `src/services/gameAnalysisService.ts:2076`
 - `src/services/mistakePuzzleService.test.ts:109`

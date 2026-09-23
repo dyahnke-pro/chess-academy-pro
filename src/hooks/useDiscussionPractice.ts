@@ -23,6 +23,7 @@
 // the student commits (rule 2); everything is computed, the coach only voices
 // it (rule 3, G0).
 
+import { startLiveStrength, updateLiveStrength, type LiveStrength } from '../services/liveStrength';
 import { useCallback, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
@@ -179,6 +180,10 @@ export interface UseDiscussionPracticeResult {
    * grade must keep using `evaluatePlayerMove`.
    */
   recordGradedMove: (args: GradedMoveArgs) => void;
+  /** THE OPPONENT'S STRENGTH, MATCHED LIVE (WO-LAYERS-01 step 8) — moved by
+   *  the same graded moves `recordGradedMove` records (one detector, two
+   *  consumers). Per game: a new `gameId` re-seeds from `seed`. */
+  liveRating: (gameId: string, seed: number) => number;
   raiseSlipPrompt: (args: RaiseSlipPromptArgs) => void;
   submitReason: (reason: string) => Promise<void>;
   skip: () => Promise<void>;
@@ -200,6 +205,8 @@ export interface GradedMoveArgs {
   /** The game this move belongs to. REQUIRED: green's bar counts DISTINCT
    *  GAMES, so a row without one can never prove a capability. */
   sourceGameId: string;
+  /** The stored rating the live strength estimate starts this game from. */
+  seedRating: number;
 }
 
 export interface UseDiscussionPracticeOptions {
@@ -809,7 +816,17 @@ export function useDiscussionPractice(
   // Records off a grade the surface already has — no analysis, no second
   // classifier. Gated on `recording` exactly like the capture inside
   // `evaluatePlayerMove`, so a surface that opts out of recording stays inert.
+  const liveRef = useRef<{ gameId: string; s: LiveStrength } | null>(null);
+  const liveFor = useCallback((gameId: string, seed: number): { gameId: string; s: LiveStrength } => {
+    if (!liveRef.current || liveRef.current.gameId !== gameId) liveRef.current = { gameId, s: startLiveStrength(seed) };
+    return liveRef.current;
+  }, []);
+  const liveRating = useCallback((gameId: string, seed: number): number => liveFor(gameId, seed).s.rating, [liveFor]);
+
   const recordGradedMove = useCallback((args: GradedMoveArgs): void => {
+    // The opponent's strength moves on every graded move, recorded or not.
+    const live = liveFor(args.sourceGameId, args.seedRating);
+    live.s = updateLiveStrength(live.s, { fenBefore: args.fenBefore, san: args.playedSan, moverColor: args.moverColor, cpLoss: args.cpLoss });
     if (!recording) return;
     if (args.cpLoss === null) return;   // unknown is not clean
     void recordMoveEvidence({
@@ -824,9 +841,10 @@ export function useDiscussionPractice(
       prompted: false,
       sourceGameId: args.sourceGameId,
     });
-  }, [recording, opts.capabilityOrigin]);
+  }, [recording, opts.capabilityOrigin, liveFor]);
 
   return {
+    liveRating,
     phase,
     prompt,
     teach,

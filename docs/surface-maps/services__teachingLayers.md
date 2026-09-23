@@ -49,7 +49,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `layerStandings` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:1262`
+- `src/services/coachFeatureService.ts:1263`
 - `src/services/positionFacts.ts:734`
 - `src/services/teachingLayers.test.ts:20`
 - `src/services/teachingLayers.test.ts:28`

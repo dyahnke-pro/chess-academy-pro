@@ -12,7 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachGamePage.tsx`
+- `src/hooks/useDiscussionPractice.ts`
 - `src/services/liveStrength.test.ts`
 
 ## Exports and every call site
@@ -32,16 +32,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `STEP_DOWN` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `startLiveStrength` (function) — 6 call sites
-- `src/components/Coach/CoachGamePage.tsx:472`
-- `src/components/Coach/CoachGamePage.tsx:2149`
+### `startLiveStrength` (function) — 5 call sites
+- `src/hooks/useDiscussionPractice.ts:821`
 - `src/services/liveStrength.test.ts:27`
 - `src/services/liveStrength.test.ts:31`
 - `src/services/liveStrength.test.ts:38`
 - `src/services/liveStrength.test.ts:47`
 
 ### `updateLiveStrength` (function) — 5 call sites
-- `src/components/Coach/CoachGamePage.tsx:3265`
+- `src/hooks/useDiscussionPractice.ts:829`
 - `src/services/liveStrength.test.ts:32`
 - `src/services/liveStrength.test.ts:39`
 - `src/services/liveStrength.test.ts:40`

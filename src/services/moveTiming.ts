@@ -24,7 +24,7 @@ function bestWin(c: Chess): { san: string; piece: string; square: string; gain: 
   let best: { san: string; piece: string; square: string; gain: number } | null = null;
   for (const m of c.moves({ verbose: true })) {
     if (!m.captured || m.captured === 'k') continue;
-    const gain = legalSeeGain(c.fen(), m.to as Square);
+    const gain = legalSeeGain(c.fen(), m.to);
     if (gain >= 2 && (!best || gain > best.gain)) best = { san: m.san, piece: m.captured, square: m.to, gain };
   }
   return best;
