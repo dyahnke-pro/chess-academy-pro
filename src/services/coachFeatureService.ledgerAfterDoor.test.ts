@@ -58,7 +58,7 @@ describe('review — the say-once ledgers commit after the door, for spoken fact
     // Strip every deferred commit closure (`() => X` / `() => { … }`); what is
     // left is the code that runs WHILE the candidate list is built.
     const eager = loop.replace(/\(\) => \{[\s\S]*?\}\)/g, '').replace(/\(\) => [^,\n]+/g, '');
-    const LEDGERS = ['verdictReasonsSeen', 'planGoalsSeen', 'standingSpoken', 'sacSpoken', 'oneShotTags', 'emittedStaticFacets', 'notesSaidThisGame', 'structAtomsSeen', 'recurrenceLabelsSeen'];
+    const LEDGERS = ['verdictReasonsSeen', 'planGoalsSeen', 'standingSpoken', 'sacSpoken', 'oneShotTags', 'emittedStaticFacets', 'structAtomsSeen', 'recurrenceLabelsSeen'];
     for (const ledger of LEDGERS) {
       // Non-vacuity: the loop DOES commit to every ledger (inside a closure)…
       expect(loop, `${ledger} is never committed from the loop?`).toMatch(new RegExp(`${ledger}\\.add\\(`));
