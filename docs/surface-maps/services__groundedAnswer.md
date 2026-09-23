@@ -285,7 +285,7 @@
 - `src/services/groundedAnswer.test.ts:1043`
 - `src/services/groundedAnswer.test.ts:1052`
 - `src/services/learnMoveTeaching.ts:43`
-- `src/services/mistakeNarration.ts:610`
+- `src/services/mistakeNarration.ts:617`
 - `src/services/reviewNarrationFidelity.test.ts:167`
 - `src/services/reviewNarrationFidelity.test.ts:173`
 - `src/services/whyBestMove.ts:75`
@@ -311,7 +311,7 @@
 - `src/services/groundedMoveWhy.ts:79`
 - `src/services/guidedFindTheMove.ts:176`
 - `src/services/guidedFindTheMove.ts:212`
-- `src/services/mistakeNarration.ts:608`
+- `src/services/mistakeNarration.ts:615`
 - `src/services/reviewBoardAwareness.test.ts:16`
 - `src/services/reviewBoardAwareness.test.ts:25`
 - `src/services/thinkAloud.ts:101`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**665 lines · 3 exports · 4 importers · 3 tests · 0 audits**
+**672 lines · 3 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,10 +25,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `describePositionIdea` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `generateMistakeNarration` (function) — 28 call sites
-- `src/services/mistakeNarration.boardTruth.test.ts:131`
-- `src/services/mistakeNarration.boardTruth.test.ts:166`
-- `src/services/mistakeNarration.boardTruth.test.ts:183`
+### `generateMistakeNarration` (function) — 29 call sites
+- `src/services/mistakeNarration.boardTruth.test.ts:26`
 - `src/services/mistakeNarration.test.ts:27`
 - `src/services/mistakeNarration.test.ts:37`
 - `src/services/mistakeNarration.test.ts:44`
@@ -51,9 +49,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeNarration.test.ts:181`
 - `src/services/mistakeNarration.test.ts:259`
 - `src/services/mistakeNarration.test.ts:270`
-- `src/services/mistakePuzzleService.ts:525`
-- `src/services/mistakePuzzleService.ts:826`
-- `src/services/mistakePuzzleService.ts:1170`
+- `src/services/mistakeNarration.test.ts:286`
+- `src/services/mistakeNarration.test.ts:300`
+- `src/services/mistakeNarration.test.ts:301`
+- `src/services/mistakePuzzleService.ts:642`
+- `src/services/mistakePuzzleService.ts:955`
+- `src/services/mistakePuzzleService.ts:1303`
 
 ## Tests
 
@@ -63,4 +64,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._
