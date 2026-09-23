@@ -5,7 +5,7 @@ import { startLiveStrength, updateLiveStrength, STEP_UP, STEP_DOWN, LIVE_MIN } f
 import { capabilitiesPosed, PROVEN_MIN_IMPORTANCE } from './capabilityEvidence';
 
 // A board that POSES a real question: find one by scanning a few positions.
-const posedBoard = (() => {
+const posedBoard = ((): { fen: string; san: string; color: 'white' | 'black' } | null => {
   const lines = [
     ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nd4'],
     ['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3', 'g6'],
