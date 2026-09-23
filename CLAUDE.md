@@ -666,14 +666,18 @@ The pattern (battle-tested 2026-05-16 + 2026-05-28):
    enclosing `try`, so they had been CRASHING since the day it was removed.
    The sweep took that to 36s. What survives is the doctrine's real half:
 
-   **The page-help modal DOES still exist** (`PageHelp.tsx`), auto-opens on
-   many surfaces, and intercepts the first click. Neutralise it — and anything
-   like it — by injecting `autoDismissCalibration`
-   (`scripts/audit-lib/auto-dismiss.mjs`) on the CONTEXT, which kills overlays
-   with CSS rather than clicking them. The helper keeps its historical name;
-   its calibration half is now a no-op against a build that no longer has one,
-   and it is gated so no new script may start chasing the bubble again
-   (`src/test/noDeadCalibrationBubble.test.ts`).
+   **The page-help modal NO LONGER AUTO-OPENS either (David 2026-09-23: "Page
+   help overlay? Those have been gone for a while now").** `PageHelp.tsx` opens
+   ONLY on its own button; `suppressAutoOpen` is a voided prop kept so call
+   sites did not have to change. The paragraph this replaces said it "auto-opens
+   on many surfaces and intercepts the first click" — DELETED, not annotated,
+   because a session read it and blamed a swallowed Playwright click on an
+   overlay that does not exist. A click that does nothing on a fresh device is
+   a HARNESS timing artifact (React state not yet committed, an animating
+   target); a DOM `.click()` retry answers it, an overlay hunt does not.
+   `autoDismissCalibration` (`scripts/audit-lib/auto-dismiss.mjs`) stays
+   injected as a no-op safety net and is gated so no new script may start
+   chasing the bubble again (`src/test/noDeadCalibrationBubble.test.ts`).
 
 6. **Deferred-seed timing.** On a cold context, `runSeedOnce` →
    `startDeferredSeed` runs `loadEcoData` (~25s for 3300 entries)
