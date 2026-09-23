@@ -45,7 +45,10 @@ describe('destroyAllAnalysisWorkers — every worker dies with the document', ()
     lease!.release();
     expect(await m.warmAnalysisPool()).toBeGreaterThan(0); // fresh spawns, not the dead ones
     expect(spawned.length).toBeGreaterThan(before);
-  });
+  // 30s, not the 5s default: after `resetModules` the first dynamic import
+  // re-transforms the whole coach service graph (~7-8s measured 2026-09-23),
+  // so the default timed out before a single assertion ran.
+  }, 30_000);
 
   it('negative control: with nothing spawned it tears down nothing and does not throw', async () => {
     const m = await import('./gameAnalysisService');
