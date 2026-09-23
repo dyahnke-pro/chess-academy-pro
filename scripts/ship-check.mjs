@@ -101,7 +101,8 @@ function runStep(label, cmd, args, opts = {}) {
 // with build checks"). Measured on the walk-fixes run: typecheck 76s, test
 // typecheck 94s, prod build 134s, lint 325s, content gates 308s — ~16 min run
 // SERIALLY on a 4-core box, every phase independent of the others. Three
-// lanes now run at once (each lane is serial inside, so memory stays bounded:
+// lanes ran at once at first; see the phase note at the call site for why the
+// vitest lane now waits (each lane is serial inside, so memory stays bounded:
 // the 8 GB tsc heap, the vite build and one vitest never stack more than one
 // deep per lane). The rows print as each finishes; `results` is shared.
 function runStepAsync(label, cmd, args, opts = {}) {
@@ -878,8 +879,15 @@ const laneGates = async () => {
     console.log('  • changed-file tests... ○ none beyond the gates');
   }
 };
-console.log('  • lanes: [typecheck → test typecheck] ‖ [prod build → lint] ‖ [content gates → changed-file tests]');
-await Promise.all([laneTypes(), laneBuild(), laneGates()]);
+// THE VITEST PHASE RUNS ALONE. Measured twice on 2026-09-23: with the gates in
+// a third lane beside tsc (8 GB heap) and the vite build, "content gates"
+// went red at 389s and 404s — and the same 145 files passed in 300s with the
+// machine to themselves. Starved workers read exactly like failing gates
+// (the "never run audits beside ship-check" rule, one layer down). So the two
+// CPU-heavy lanes run together, and every vitest step runs after them, alone.
+console.log('  • lanes: [typecheck → test typecheck] ‖ [prod build → lint], then [content gates → changed-file tests] alone');
+await Promise.all([laneTypes(), laneBuild()]);
+await laneGates();
 
 // INFORMATIONAL: audit stream pull (never blocks).
 pullAuditStream();
