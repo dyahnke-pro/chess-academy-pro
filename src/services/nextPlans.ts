@@ -127,7 +127,16 @@ export function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {
  * applies (not just the top one), so the student hears the full agenda. Empty when
  * nothing concrete stands out.
  */
-export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
+export function deriveNextPlans(
+  fen: string,
+  studentColorWB: Color,
+  // The engine's student-POV eval at this position, when the caller has one.
+  // The material plan reads the COUNT; the count lies while the material is
+  // on its way back (walk 2026-09-23: after Bxf7+ Kxf7 the review said "convert
+  // your extra material" at +0.5 for the other side — Ng5+ was about to win the
+  // bishop back). With an eval in hand, "extra" must also be an edge.
+  opts: { studentPovCp?: number | null } = {},
+): string[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
   // A MATE ON THE BOARD OUTRANKS EVERY PLAN (WO-STANDARD-01 D-15, prod tape
@@ -226,7 +235,8 @@ export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
   // exchange (root-cause doctrine, David 2026-07-22: advice text is composed
   // from board objects, never written ahead of the board).
   const bal = struct.material.balance * (studentColorWB === 'w' ? 1 : -1);
-  if (bal >= 2) {
+  const evalAgrees = opts.studentPovCp === undefined || opts.studentPovCp === null || opts.studentPovCp >= 50;
+  if (bal >= 2 && evalAgrees) {
     const pts: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
     const nonPawn = (color: Color): number => all.filter((c) => c.color === color && c.type !== 'p' && c.type !== 'k')
       .reduce((s, c) => s + (pts[c.type] ?? 0), 0);

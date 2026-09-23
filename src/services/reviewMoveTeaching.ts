@@ -271,7 +271,7 @@ export function buildReviewMoveTeaching(
         if (sq === mv.from || pinnedAfter.has(sq)) continue;
         const freed = chess.get(sq as Sq);
         if (!freed) continue;
-        const base = `Unpins your ${PIECE_NOUN[freed.type]} on ${sq}`;
+        const base = `Unpins ${moverIsStudent ? 'your' : 'their'} ${PIECE_NOUN[freed.type]} on ${sq}`;
         const eyed = moverEyes.enemies.find((e) => e.type !== 'k');
         return eyed
           ? `${base} — and the ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyed.type]} on ${eyed.sq}.`

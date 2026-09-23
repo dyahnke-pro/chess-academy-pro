@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**793 lines · 3 exports · 13 importers · 3 tests · 0 audits**
+**797 lines · 3 exports · 13 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,8 +40,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatOut.ts:78`
 - `src/test/kingIsNeverHanging.test.ts:53`
 
-### `classifyPosition` (function) — 29 call sites
-- `src/components/Coach/CoachGamePage.tsx:3293`
+### `classifyPosition` (function) — 30 call sites
+- `src/components/Coach/CoachGamePage.tsx:3301`
 - `src/services/missedTacticService.ts:755`
 - `src/services/pvPlayback.ts:384`
 - `src/services/tacticClassifier.test.ts:32`
@@ -70,6 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticClassifier.test.ts:299`
 - `src/services/tacticClassifier.test.ts:314`
 - `src/services/tacticClassifier.test.ts:323`
+- `src/services/tacticClassifier.test.ts:334`
 
 ### `scanUpcomingTactics` (function) — 2 call sites
 - `src/components/Coach/CoachGamePage.tsx:2841`

@@ -18,13 +18,9 @@ vi.mock('./middlegamePlanner', () => ({
 vi.mock('./gameContextService', () => ({
   findLastMatchingGame: vi.fn(),
 }));
-vi.mock('./openingService', () => ({
-  getWeakestOpenings: vi.fn(async () => []),
-}));
 
 import { matchOpeningForSubject } from './walkthroughResolver';
 import { findLastMatchingGame } from './gameContextService';
-import { getWeakestOpenings } from './openingService';
 import {
   findPlanForOpening,
   findPlanBySubject,
@@ -309,34 +305,17 @@ describe('affirmation-after-game-proposal', () => {
   });
 });
 
-describe('weakest-opening intent', () => {
-  beforeEach(() => {
-    vi.mocked(getWeakestOpenings).mockReset();
-    vi.mocked(getWeakestOpenings).mockResolvedValue([]);
-  });
-
-  it('answers "What is my weakest opening?" without navigation', async () => {
-    const routed = await routeChatIntent('What is my weakest opening?');
-    expect(routed).not.toBeNull();
-    expect(routed!.path).toBeUndefined();
-    expect(routed!.ackMessage).toMatch(/opening|repertoire/i);
-  });
-
-  it('forwards an "as black" side filter to getWeakestOpenings', async () => {
-    await routeChatIntent("What's my worst opening as black?");
-    expect(getWeakestOpenings).toHaveBeenCalledWith(3, 'black');
-  });
-
-  it('formats the list when openings exist', async () => {
-    vi.mocked(getWeakestOpenings).mockResolvedValue([
-      { name: 'Sicilian Defense', color: 'black', drillAttempts: 10, drillAccuracy: 0.4 },
-      { name: 'French Defense', color: 'black', drillAttempts: 0, drillAccuracy: 0 },
-    ] as never);
-    const routed = await routeChatIntent('What are my weakest openings?');
-    expect(routed!.ackMessage).toContain('Sicilian Defense');
-    expect(routed!.ackMessage).toContain('40% accuracy');
-    expect(routed!.ackMessage).toContain('French Defense');
-    expect(routed!.ackMessage).toContain('not drilled yet');
+describe('"weakest opening" is NOT intercepted (walk 2026-09-23)', () => {
+  // The router used to answer "what is my weakest opening?" itself with the
+  // DRILL-accuracy list ("Accelerated Dragon — not drilled yet…"), so the
+  // record-based lane (`openingProfileKind: 'weakest'`, the student's own
+  // results) never saw the question. The router now lets it through.
+  it.each([
+    'What is my weakest opening?',
+    "What's my worst opening as black?",
+    'What are my weakest openings?',
+  ])('%s reaches the coach lanes untouched', async (q) => {
+    expect(await routeChatIntent(q)).toBeNull();
   });
 });
 

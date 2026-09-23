@@ -544,7 +544,7 @@ export function buildTacticAlertMessage(
   if (isWeakness) {
     return `You missed a tactic — and it is one of your weaker areas. ${teaching.concept} Take the move back and try to find it.`;
   }
-  return `You missed a tactic there. ${teaching.lookFor} Consider taking the move back.`;
+  return `You missed a tactic there. ${teaching.lookFor}`;
 }
 
 // ─── Weakness-Aware Helpers ───────────────────────────────────────────────────

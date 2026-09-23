@@ -63,6 +63,13 @@ export interface ImportLichessOptions {
  * Import recent games from a Lichess account.
  * Fetches up to 200 games (vs the old limit of 20).
  */
+function lichessSeat(game: LichessGame, username: string): 'white' | 'black' | undefined {
+  const u = username.trim().toLowerCase();
+  const w = game.players.white.user?.name?.toLowerCase();
+  const b = game.players.black.user?.name?.toLowerCase();
+  return w === u ? 'white' : b === u ? 'black' : undefined;
+}
+
 export async function importLichessGames(
   username: string,
   onProgress?: (count: number, status?: string) => void,
@@ -122,6 +129,8 @@ export async function importLichessGames(
       coachAnalysis: null,
       isMasterGame: false,
       openingId: null,
+      // The importer KNOWS whose game this is — stamp the seat (see chesscomService).
+      ...(lichessSeat(game, username) ? { studentSide: lichessSeat(game, username) } : {}),
       ...(clockRemainingMs.length ? { clockRemainingMs } : {}),
     };
 

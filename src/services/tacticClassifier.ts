@@ -325,7 +325,11 @@ function detectDiscovery(
     // Look forward along the ray for an enemy piece
     const forwardPieces = traceRay(chessAfter, fromSquare, dir);
     for (const fp of forwardPieces) {
-      if (fp.square === toSquare) continue;
+      // The moved piece still stands ON this ray (it moved along the line, e.g.
+      // d7-d6 in front of the queen on d8): nothing was uncovered. Walk 2026-09-23
+      // heard "a discovery in two" for …d6 "revealing" the queen on the knight it
+      // still blocks — `continue` here read straight through the blocker.
+      if (fp.square === toSquare) break;
       if (fp.color === oppositeColor(movingColor) && pieceValue(fp.type) >= 3) {
         return {
           type: 'discovery',

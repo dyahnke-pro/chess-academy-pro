@@ -3054,11 +3054,14 @@ export function assembleMethodAnswer(opts: {
     : `Then candidates: name two or three before you calculate any one of them.`);
 
   // 4 — THE HABIT this moment earns (the same computer the live briefing uses).
+  // `realChoice: false` — step 3 above IS the candidate-discipline beat, so the
+  // habit computer may add only the threat-first / forcing-scan habits (walk
+  // 2026-09-23: the routine said "name two or three" twice in one answer).
   const habit = liveMethodBeatFor({
     bestSan: opts.engineBestSan,
     threatStanding: loose.length > 0,
     isStudentMove: true,
-    realChoice: true,
+    realChoice: false,
     tier: 'critical',
   }, opts.plyForVariety ?? (Number.parseInt(opts.fen.split(' ')[5] ?? '0', 10) || 0));
   if (habit) steps.push(habit);
@@ -5238,10 +5241,15 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
     ? ` The engine preferred ${bestSan}${why ? `: ${why.replace(/[.!?]+$/, '')}` : ''}.`
     : '';
 
-  if (noRead && !bestSan) {
+  if (noRead) {
+    // No cp swing on this ply → no verdict. "Wasn't the engine's choice. The
+    // engine preferred Kd7." (walk 2026-09-23, on a forced recapture) graded a
+    // move it had never measured. The engine's line may be named as a line,
+    // never as a judgement on the move played.
+    const lineBit = bestSan ? ` The engine's line there ran ${bestSan}${why ? `: ${why.replace(/[.!?]+$/, '')}` : ''}.` : '';
     return {
-      facts: `${lead}${didClause}. I don't have an engine read on that position yet, so I can't grade it — ask me again in a moment and I'll have the number.`,
-      bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'],
+      facts: `${lead}${didClause}. I don't have an engine read on that ply yet, so I can't grade it — ask me again in a moment and I'll have the number.${lineBit}`,
+      bestMoveSan: bestSan, bestMoveFromTo: r.bestMoveUci && bestSan ? { from: r.bestMoveUci.slice(0, 2), to: r.bestMoveUci.slice(2, 4) } : null, sources: ['board:chess.js'],
     };
   }
 

@@ -288,7 +288,13 @@ export function computeMoveFacets(
     const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')
       ? prematureBreakWhy(fenBefore, san)
       : null;
-    const better = ctx.bestMoveSan ? `the stronger move was ${ctx.bestMoveSan}` : '';
+    // A "STRONGER MOVE" ONLY WHEN THE MOVE FELL SHORT (walk 2026-09-23, prod
+    // tape: "You: that was a great move — the stronger move was Kd7" on a GREAT
+    // ply). On great/best/brilliant the engine's top line may still differ by
+    // a hair, and naming it as "stronger" contradicts the verdict in the same
+    // breath. The comparison earns voice only on a class that cost something.
+    const fellShort = costsPoints || ctx.classification === 'miss';
+    const better = ctx.bestMoveSan && fellShort ? `the stronger move was ${ctx.bestMoveSan}` : '';
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';
     // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move
@@ -530,7 +536,7 @@ export function computeMoveFacets(
     // plan, each with its method; deduped to first mention of each distinct plan
     // (see the caller) so the agenda is stated when it becomes relevant and
     // re-stated only when it changes.
-    for (const plan of deriveNextPlans(fenAfter, studentColorWB)) {
+    for (const plan of deriveNextPlans(fenAfter, studentColorWB, { studentPovCp })) {
       facets.push(`[plan-now] ${cap(plan)}.`);
     }
     // PLAN VERSUS PLAN — the RACE, in the retrospective register. `deriveNextPlans`

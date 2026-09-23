@@ -71,6 +71,14 @@ describe('one opening key — the reader joins on it', () => {
     const ctx = await loadStudentNeedContext({ rating: 1500, sans: NAJDORF, studentColor: 'black', openingId: naj, eco: null });
     // The Dragon games count (same family); the Italian ones do not → 2/4.
     expect(ctx.openingScore).toBe(0.5);
+    // THE SEAT IS PART OF THE RECORD (walk 2026-09-23: "your 126th Sicilian" vs
+    // the home card's 87 — games AGAINST the Sicilian as White had been counted).
+    await db.games.put(buildGameRecord({ id: 'w1', white: 'student', black: 'x', result: '1-0', openingId: naj, pgn: pgnOf(NAJDORF) }));
+    // A different rating misses the loader's memo, so the new row is actually read.
+    const seatScoped = await loadStudentNeedContext({ rating: 1501, sans: NAJDORF, studentColor: 'black', openingId: naj, eco: null });
+    expect(seatScoped.openingGames).toBe(4);
+    expect(seatScoped.openingScore).toBe(0.5);
+    await db.games.delete('w1');
     expect(ctx.overallScore).toBeCloseTo(4 / 6);
     expect(ctx.lineFenKeys).toEqual(lineFenKeys(NAJDORF));
     // A8: the record the review opens with — the family COUNT, and whether it

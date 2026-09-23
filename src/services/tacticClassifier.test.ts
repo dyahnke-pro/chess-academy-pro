@@ -324,3 +324,14 @@ describe('classifyPosition — eval swing', () => {
     expect(result.evalSwing).toBe(-250);
   });
 });
+
+describe('discovery — a piece moving ALONG the ray uncovers nothing (walk 2026-09-23)', () => {
+  it('…d6 in front of the queen on d8 is not a "discovery" on the knight on d5', () => {
+    const c = new Chess();
+    for (const m of ['e4', 'e5', 'Nc3', 'Nf6', 'Nd5']) c.move(m);
+    const fen = c.fen();
+    const fenAfter = playMove(fen, 'd6');
+    const result = classifyPosition(fen, fenAfter, 'd6', 0, 0);
+    expect(hasTactic(result, 'discovery')).toBe(false);
+  });
+});

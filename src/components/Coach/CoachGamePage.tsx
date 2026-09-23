@@ -2893,8 +2893,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 'CoachGamePage.tacticAlert',
               );
             } catch { descGrounded = true; }
+            // The plies BEFORE the shot are the student's own replies (ply 0 of
+            // the line is theirs to play). Walk 2026-09-23: with the student in
+            // check after Bxf7+, the alert said "if I play knight to g5, check"
+            // as though it were available now — Kxf7 comes first, so say so.
+            const studentFirst = threat.line.slice(0, threatMoveIdx).filter((_, k) => k % 2 === 0);
+            const yours = studentFirst.join(' then ');
             const warning = isOppMove && threatMove
-              ? (descGrounded ? `Watch out — if I play ${threatMove}, ${lowerDesc}.` : `Watch out — I might play ${threatMove} here.`)
+              ? (yours
+                ? (descGrounded ? `Watch out — if you play ${yours}, I answer ${threatMove} and ${lowerDesc}.` : `Watch out — if you play ${yours}, I have ${threatMove}.`)
+                : (descGrounded ? `Watch out — if I play ${threatMove}, ${lowerDesc}.` : `Watch out — I might play ${threatMove} here.`))
               : threatMove
                 ? (descGrounded ? `Watch out — ${threatMove} from you would let ${lowerDesc}.` : `Careful — ${threatMove} looks risky here.`)
                 : (descGrounded ? `Watch out — ${threat.pattern.description}.` : '');

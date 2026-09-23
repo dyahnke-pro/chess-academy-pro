@@ -40,7 +40,14 @@ interface ChessComTimeControl {
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-function parseChessComGame(game: ChessComGame): GameRecord {
+function parseChessComGame(game: ChessComGame, username: string): GameRecord {
+  // The importer KNOWS whose game this is — say so on the row (`studentSide`),
+  // so no later reader has to guess the seat back out of a name that may not
+  // be in the profile yet (walk 2026-09-23: the analysis order ran with "no
+  // home opening yet" on a fresh import because the seat could not resolve).
+  const u = username.trim().toLowerCase();
+  const studentSide: GameRecord['studentSide'] = game.white.username.toLowerCase() === u ? 'white'
+    : game.black.username.toLowerCase() === u ? 'black' : undefined;
   const urlParts = game.url.split('/');
   const gameId = urlParts[urlParts.length - 1];
 
@@ -77,6 +84,7 @@ function parseChessComGame(game: ChessComGame): GameRecord {
     coachAnalysis: null,
     isMasterGame: false,
     openingId: null,
+    ...(studentSide ? { studentSide } : {}),
     ...(clockRemainingMs.length ? { clockRemainingMs } : {}),
   };
 }
@@ -163,7 +171,7 @@ export async function importChessComGames(
       const data = (await response.json()) as ChessComResponse;
 
       for (const game of data.games) {
-        const record = parseChessComGame(game);
+        const record = parseChessComGame(game, username);
 
         const existing = await db.games.get(record.id);
         if (!existing) {

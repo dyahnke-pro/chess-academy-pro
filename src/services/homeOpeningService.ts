@@ -21,7 +21,7 @@ export type HomeOpenings = Record<PlayerColor, HomeOpeningChoice | null>;
 
 const COLOURS: readonly PlayerColor[] = ['white', 'black'];
 const TTL_MS = 5 * 60 * 1000;
-let cache: { at: number; gameCount: number; rankings: Record<PlayerColor, HomeOpeningRanking> } | null = null;
+let cache: { at: number; key: string; rankings: Record<PlayerColor, HomeOpeningRanking> } | null = null;
 
 async function loadProfile(): Promise<UserProfile | null> {
   return useAppStore.getState().activeProfile ?? (await db.profiles.toCollection().first()) ?? null;
@@ -39,13 +39,16 @@ function identityOf(p: UserProfile | null): PlayerIdentity {
 export async function getHomeOpeningRankings(opts: { force?: boolean } = {}): Promise<Record<PlayerColor, HomeOpeningRanking>> {
   // Fixtures are not the student (D5): a seeded demo never votes for a home opening.
   const games = await db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).toArray();
-  if (!opts.force && cache && cache.gameCount === games.length && Date.now() - cache.at < TTL_MS) return cache.rankings;
   const identity = identityOf(await loadProfile());
+  // Keyed on the game count AND the identity: a ranking computed before the
+  // username landed in the profile must not be served after it did.
+  const key = `${games.length}|${identity.profileName ?? ''}|${identity.chessComUsername ?? ''}|${identity.lichessUsername ?? ''}`;
+  if (!opts.force && cache && cache.key === key && Date.now() - cache.at < TTL_MS) return cache.rankings;
   const rankings = {
     white: rankHomeOpeningCandidates(games, identity, 'white'),
     black: rankHomeOpeningCandidates(games, identity, 'black'),
   };
-  cache = { at: Date.now(), gameCount: games.length, rankings };
+  cache = { at: Date.now(), key, rankings };
   return rankings;
 }
 

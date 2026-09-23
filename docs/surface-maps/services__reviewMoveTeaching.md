@@ -26,10 +26,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `buildReviewMoveTeaching` (function) — 26 call sites
-- `src/components/Coach/CoachGameReview.tsx:1487`
-- `src/services/coachFeatureService.ts:931`
-- `src/services/coachFeatureService.ts:2556`
-- `src/services/discussionPractice.ts:167`
+- `src/components/Coach/CoachGameReview.tsx:1758`
+- `src/services/coachFeatureService.ts:1053`
+- `src/services/coachFeatureService.ts:2893`
+- `src/services/discussionPractice.ts:169`
 - `src/services/dnaLineNarrator.ts:134`
 - `src/services/learnMoveTeaching.ts:44`
 - `src/services/learnMoveTeaching.ts:102`
@@ -54,8 +54,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.ts:526`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2467`
-- `src/services/reviewFullData.ts:560`
+- `src/services/coachFeatureService.ts:2804`
+- `src/services/reviewFullData.ts:609`
 - `src/services/reviewMoveTeaching.test.ts:141`
 - `src/services/reviewMoveTeaching.test.ts:143`
 - `src/services/reviewMoveTeaching.test.ts:148`
@@ -63,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts:157`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2464`
+- `src/services/coachFeatureService.ts:2801`
 - `src/services/reviewMoveTeaching.test.ts:122`
 - `src/services/reviewMoveTeaching.test.ts:125`
 - `src/services/reviewMoveTeaching.test.ts:131`
@@ -78,4 +78,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

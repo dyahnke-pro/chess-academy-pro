@@ -37,7 +37,6 @@ import {
 } from './middlegamePlanner';
 import { TACTICAL_THEMES } from './puzzleService';
 import { findLastMatchingGame } from './gameContextService';
-import { getWeakestOpenings } from './openingService';
 import { applyCoachSetting } from './coachSettingsAction';
 import { translateToEnglish } from './coachApi';
 import { detectStudentLanguage } from './spokenLanguage';
@@ -91,13 +90,6 @@ const AFFIRMATION_RE =
 const ASSISTANT_GAME_PROPOSAL_RE =
   /\b(let'?s\s+play|play\s+(?:a\s+)?(?:new\s+)?(?:game|match)|start\s+(?:a\s+)?(?:new\s+)?(?:game|match)|ready\s+to\s+play|shall\s+we\s+play|want\s+to\s+play\??)\b/i;
 
-/** "What's my worst/weakest opening?" — reply-only intent. The backend
- *  has `getWeakestOpenings()` ranked by drill accuracy; we summarize the
- *  top 3 in chat so the user can decide what to drill next. Side filter
- *  ("as white" / "as black") is honored when present. */
-const WEAKEST_OPENING_RE =
-  /\b(?:my\s+)?(?:worst|weakest|lowest[- ]?scoring|most[- ]struggled[- ]?with)\s+(?:opening|openings|line|lines|repertoire)\b|\bwhich\s+opening\s+(?:do\s+i|am\s+i)\s+(?:struggle|struggling|worst|weakest)\b|\bwhere\s+(?:do\s+i|am\s+i)\s+(?:struggling|weakest)\s+(?:in\s+my\s+)?openings?\b/i;
-
 /**
  * Map a user message to a session route, or return null if the message
  * should be handled as normal LLM chat.
@@ -145,16 +137,6 @@ export async function routeChatIntent(
   // bare "yes" otherwise falls through to qa.
   // Weakest-opening lookup — answered directly from the repertoire data
   // in Dexie, no LLM round-trip. Reply-only (no navigation). Honors an
-  // optional "as white" / "as black" side filter.
-  if (WEAKEST_OPENING_RE.test(text)) {
-    const sideMatch = text.match(/\bas\s+(white|black)\b/i);
-    const side = sideMatch ? (sideMatch[1].toLowerCase() as 'white' | 'black') : undefined;
-    const weakest = await getWeakestOpenings(3, side);
-    return {
-      ackMessage: buildWeakestOpeningsMessage(weakest, side),
-      intent: { kind: 'qa', raw: text },
-    };
-  }
 
   if (
     options.lastAssistantMessage &&
@@ -477,30 +459,6 @@ function buildNoMatchOfferMessage(intent: CoachIntent): string {
     : `Want to play a quick game so we can review it together afterwards?`;
 
   return `I don't see ${lacksWhat} in your history yet. ${offer}`;
-}
-
-/**
- * Format the weakest-openings list into a chat-ready message. When the
- * repertoire is empty we say so explicitly instead of returning a
- * generic "I don't know" reply — the absence of data is the answer.
- */
-function buildWeakestOpeningsMessage(
-  weakest: { name: string; color: string; drillAttempts: number; drillAccuracy: number }[],
-  side?: 'white' | 'black',
-): string {
-  const sideLabel = side ? ` as ${side === 'white' ? 'White' : 'Black'}` : '';
-  if (weakest.length === 0) {
-    return `I don't have any openings in your repertoire${sideLabel} yet. Once you add openings and drill them, I can rank which ones need work.`;
-  }
-  const lines = weakest.map((op, i) => {
-    const colorLabel = op.color === 'white' ? 'W' : 'B';
-    if (op.drillAttempts === 0) {
-      return `${i + 1}. ${op.name} (${colorLabel}) — not drilled yet`;
-    }
-    const pct = Math.round(op.drillAccuracy * 100);
-    return `${i + 1}. ${op.name} (${colorLabel}) — ${pct}% accuracy over ${op.drillAttempts} drill${op.drillAttempts === 1 ? '' : 's'}`;
-  });
-  return `Here are the openings${sideLabel} you're struggling with most:\n\n${lines.join('\n')}\n\nWant to drill one of them?`;
 }
 
 /**

@@ -96,15 +96,20 @@ function detectDevelopmentReminder(ctx: TipContext): string | null {
     const color = playerColor === 'white' ? 'w' : 'b';
     const backRank = color === 'w' ? 7 : 0;
 
-    let undeveloped = 0;
-    for (const sq of board[backRank] ?? []) {
+    const files = 'abcdefgh';
+    const rankLabel = color === 'w' ? '1' : '8';
+    const home: string[] = [];
+    (board[backRank] ?? []).forEach((sq, i) => {
       if (sq && sq.color === color && (sq.type === 'n' || sq.type === 'b')) {
-        undeveloped++;
+        home.push(`${sq.type === 'n' ? 'knight' : 'bishop'} on ${files[i]}${rankLabel}`);
       }
-    }
+    });
 
-    if (undeveloped >= 3) {
-      return 'Remember to develop your pieces early. Knights and bishops are most effective when active.';
+    if (home.length >= 3) {
+      // Concrete over generic (Narration Voice Rule 1; walk 2026-09-23 heard
+      // "Remember to develop your pieces early" in Play). Name the pieces.
+      const named = `${home.slice(0, -1).join(', ')} and ${home[home.length - 1]}`;
+      return `Your ${named} are still at home — bring them out before another pawn move.`;
     }
   } catch {
     // skip

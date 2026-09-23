@@ -170,3 +170,26 @@ describe('assembleOpeningProfileAnswer — a thin row always carries its sample 
     expect(a!.facts).not.toMatch(/only/);
   });
 });
+
+describe('walk 2026-09-23 — the routine and the unmeasured ply', () => {
+  it('the thinking routine names the candidate step ONCE', () => {
+    // Prod tape: "Then candidates: name two or three … Name your candidates
+    // before you calculate: two or three moves …" — the routine's own step 3
+    // and the appended habit said the same thing.
+    const a = assembleMethodAnswer({ fen: 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3', studentColor: 'white', engineBestSan: 'Nf3', plyForVariety: 4 });
+    expect(a).not.toBeNull();
+    const n = (a!.facts.match(/candidates?/gi) ?? []).length;
+    expect(n).toBeLessThanOrEqual(2);
+    expect(a!.facts).not.toMatch(/Name your candidates before you calculate/);
+  });
+  it('a ply with no engine read is not graded — the engine line is named as a line, never a verdict', () => {
+    // Prod tape (forced recapture, no read): "wasn't the engine's choice. The engine preferred Kd7."
+    const a = assembleRetrospectiveAnswer({
+      playedSan: 'Kxf7', fenBefore: 'rn1qkbnr/pp2pBpp/3p4/2p5/4P1b1/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4',
+      moveNumber: 4, moverColor: 'black', mover: 'student', bestMoveUci: 'e8d7', cpLoss: null, quality: null, missedMate: null, allowedMate: null,
+    });
+    expect(a.facts).not.toMatch(/engine's choice|engine preferred/);
+    expect(a.facts).toMatch(/don't have an engine read/);
+    expect(a.facts).toMatch(/engine's line there ran Kd7/);
+  });
+});

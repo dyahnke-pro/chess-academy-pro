@@ -46,7 +46,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🟠 J. Audits — ✅ J1 `audit-home-opening-prod.mjs` (holds `home-opening-chosen` + `analysis-batch-ordered`; vacuity-checked) · 🔴 J2 standing pair after the push, sequentially, narrations read · 🔴 J3 `audit-second-game-memory-prod` (C7) · `audit-loop-closes-prod` (C1–C4) · `audit-coach-all-questions-prod` exhaustive (E) — all after the push
 - ✅ HOTFIX 2026-09-22 (night) — a boot backfill froze David's phone (tactic re-tag, ~263 ms/row, thousands of rows, nothing persisted, restarted per kill) → `backfillSchedule` (start late · yield per row · persist per batch), both backfills read it; on `main` d6e756bcf, OTA d6e756bc. PLAN §"THE FREEZE"
 - ✅ THE CEILING — composition scan 271 → ≤254 by ROUTING (one key minted in three services, one slip→steer door, `positionReadComposer`, drill beats in the drill service) + six proof-checked infra reclassifications; kept-bad-bishop fixture re-found as a real hemmed game
-- 🔴 AFTER THE PUSH — the hand walk (the audit) → native iOS build + full-body OTA (David: "Then we update iOS native and send an ota")
+- ✅ THE WALK 2026-09-23 — driven by hand on prod with David's 932 games; 14 defects fixed in one push (great-move "stronger move", third-person recap card, recap theatre dropping the moves, seat-less "126th Sicilian", material plan vs eval, "unpins your" seat, the every-ply hedge, the false "discovery in two", the doubled candidate step, a verdict on an unmeasured ply, the threat alert while in check, generic Play tips, the weakest-opening router intercept, importers not stamping the seat). PLAN §"THE WALK"
+- 🔴 AFTER THE WALK PUSH — re-walk the fixed surfaces on prod → native iOS build + full-body OTA (David: "Then we update iOS native and send an ota")
 - 🟡 K. Not now — Kids Mode opens, 47-game corpus, boot payload, dashboard grading
 
 ## 0. WO-HOME-OPENING-01 — a personal coach: one home opening per colour (David 2026-09-22)

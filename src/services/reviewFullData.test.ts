@@ -325,3 +325,30 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
     expect(loose(B, C, 'Kd8', 2, 'black')).toEqual([]);
   });
 });
+
+describe('[quality] names a "stronger move" only on a move that fell short (walk 2026-09-23)', () => {
+  // Prod tape: "You: that was a great move — the stronger move was Kd7" on a
+  // GREAT ply. The engine's top line can differ by a hair from a great move;
+  // calling it "stronger" contradicts the verdict in the same sentence.
+  const base = () => {
+    const c = new Chess();
+    const fenBefore = c.fen();
+    c.move('e4');
+    return { fenBefore, fenAfter: c.fen() };
+  };
+  const facetsFor = (classification: string) => {
+    const { fenBefore, fenAfter } = base();
+    return computeMoveFacets({
+      fenBefore, fenAfter, san: 'e4', ply: 1, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 30, preMoveEval: 20, classification, bestMoveSan: 'd4',
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null,
+    }).join(' ');
+  };
+  it('GREAT / BEST carry no "stronger move" clause', () => {
+    expect(facetsFor('great')).not.toMatch(/stronger move/);
+    expect(facetsFor('best')).not.toMatch(/stronger move/);
+  });
+  it('a mistake still names the stronger move', () => {
+    expect(facetsFor('mistake')).toMatch(/the stronger move was d4/);
+  });
+});

@@ -589,7 +589,12 @@ export async function computePvLine(
 
   // Root decision tension (Danya's "hard to decide"): runner-up within 40cp.
   let closeAlternative: PvLine['closeAlternative'] = null;
-  if (lines.length >= 2) {
+  // A TWO-HORSE RACE, not a flat field (walk 2026-09-23: at the start position
+  // and after 2.Nc3 the hedge fired every ply — "the knight to c3 does the same
+  // job" — because in a quiet opening EVERY runner-up is within 40cp). The
+  // hedge is a decision only when the field behind the two is clearly worse.
+  const thirdClearlyWorse = lines.length < 3 || Math.abs(lines[0].evaluation - lines[2].evaluation) >= 80;
+  if (lines.length >= 2 && thirdClearlyWorse) {
     const gap = Math.abs(lines[0].evaluation - lines[1].evaluation);
     if (gap <= 40 && lines[1].moves[0]) {
       try {

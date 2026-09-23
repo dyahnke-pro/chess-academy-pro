@@ -269,7 +269,7 @@ export async function generateNarrativeSummary(
   playerColor: string,
   openingName: string | null,
   result: string,
-  playerRating: number,
+  _playerRating: number,
   onStream?: (chunk: string) => void,
   moveData?: NarrativeMoveData[],
   /** Verbosity override for tests. Production reads the user's
@@ -345,14 +345,6 @@ export async function generateNarrativeSummary(
   const totalErrors = blunderCount + mistakeCount + inaccuracyCount;
 
   // Result → student-relative outcome (computed, not asked).
-  const outcomeClause =
-    result === '1-0' || result === '0-1'
-      ? (result === '1-0') === (playerColor === 'white')
-        ? 'The student won.'
-        : 'The student lost.'
-      : result === '1/2-1/2' || result === '½-½'
-        ? 'The game was a draw.'
-        : `The game ended ${result}.`;
   const framedOpening = openingName ? frameOpeningForStudent(openingName, playerColor === 'black' ? 'black' : 'white') : null;
   const openingClause = framedOpening
     ? (framedOpening.owned ? `the ${framedOpening.label}` : `the game against the ${framedOpening.label}`)
@@ -361,45 +353,30 @@ export async function generateNarrativeSummary(
   // Verbosity caps the number of moments named (brief = 1) — the SAME hard
   // contract the old prompt tried to hint at, now enforced in code (G5).
   const momentBudget = verbosity === 'brief' ? 1 : 3;
-  const errorClause =
-    totalErrors === 0
-      ? 'The engine flagged no blunders, mistakes, or inaccuracies — the student played cleanly.'
-      : `The student made ${blunderCount} blunder(s), ${mistakeCount} mistake(s), and ${inaccuracyCount} inaccuracy/inaccuracies.`;
-  const tipClause =
-    totalErrors === 0
-      ? 'Reinforce the accuracy and pick one sharper idea to try next game.'
-      : 'The one thing to carry into the next game is to slow down on the flagged moment(s).';
 
-  const factParts =
-    verbosity === 'brief'
-      ? [
-          `Post-game recap of ${openingClause}. ${outcomeClause}`,
-          errorClause,
-          ...keyMoments.slice(0, momentBudget),
-        ]
-      : [
-          `Post-game recap of ${openingClause} (student rated about ${playerRating}). ${outcomeClause}`,
-          errorClause,
-          ...keyMoments.slice(0, momentBudget),
-          tipClause,
-        ];
-  const facts = factParts.filter(Boolean).join(' ');
-
-  // THE CARD NEVER SHOWS THE FACT PACKAGE (WO-STANDARD-01 D-12, prod tape
-  // 2026-09-22: "Post-game recap … The student made 1 blunder(s)" rendered
-  // raw when the phrasing model was unavailable). The package is written in
-  // the third person for the MODEL; when the model does not answer, the
-  // student gets the same numbers in a second-person computed template —
-  // same facts, one voice (G0: the fallback is the computed register, not a
-  // debug string).
+  // ONE TEXT, ONE VOICE (walk 2026-09-23: the card STILL rendered "Post-game
+  // recap of … (student rated about 1366). The student made 0 blunder(s)" —
+  // `voiceFacts` speaks the RAW facts on every one of its failure paths, so a
+  // third-person package handed to the model was what the student read
+  // whenever the model did not answer, and the `?? spokenFallback` below it
+  // never fired). The second-person computed recap is now the only text: the
+  // model warms it, and every fallback IS it.
   const spokenFallback = recapSecondPerson({
     outcome: result, playerColor, openingClause,
     blunderCount, mistakeCount, inaccuracyCount, keyMoments: keyMoments.slice(0, momentBudget), totalErrors,
   });
-  const voiced = (await voiceFacts(facts, { intent: `review-recap:${verbosity}`, warm: true })) ?? spokenFallback;
+  // The flagged moments' moves must survive the phrasing: the review register's
+  // "and there it is" beat kept the theatre and dropped the moves (walk
+  // 2026-09-23 tape: "Here it is. That's where this one slipped." with no Bg4,
+  // no Nc6). A reword that loses one is refused in favour of the computed text.
+  const mustPreserve = keyMoments.slice(0, momentBudget).flatMap((k) => k.match(SAN_TOKEN_RE) ?? []);
+  const voiced = (await voiceFacts(spokenFallback, { intent: `review-recap:${verbosity}`, warm: true, mustPreserve })) ?? spokenFallback;
   onStream?.(voiced);
   return voiced;
 }
+
+/** A SAN token inside a computed moment ("On move 3, Bg4 was a mistake; the engine preferred Nc6"). */
+const SAN_TOKEN_RE = /\b(?:O-O(?:-O)?|[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](?:=[NBRQ])?)[+#]?/g;
 
 /** The recap in the STUDENT's register, from the same computed numbers the
  *  model is handed. Exported so the gate can prove it never says "the

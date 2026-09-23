@@ -610,6 +610,106 @@ new questions beside the old, different moves, a game started from the home
 screen); then a native iOS build AND an OTA carrying the full body (David
 2026-09-22: "Then we update iOS native and send an ota").
 
+## 🚶 2026-09-23 — THE WALK (the audit): what prod said on a fresh device with David's 932 games, and what it cost
+
+David 2026-09-22: "the walk will be the audit … same questions plus different
+ones. different moves." Driven BY HAND on `main` b16139537 (fresh device,
+chess.com import, home screen → Weaknesses → Plan → Play a game from the home
+screen as Black → chat → resign → review → Learn "let's play, I'm white" →
+read this position → drill my mistakes → My Mistakes). Every line below is a
+sentence the app actually spoke or rendered. Sixteen findings; fifteen are
+fixed in the push that carries this section, one is an artifact of the driver.
+
+**WORKING (read, not assumed):** honest header "6 of 932 games analysed" ·
+home card by census (White Vienna 101·59%, Black Sicilian 87·61%) · plan
+sections + reps for both colours · start-a-game from the home screen lands on
+`/coach/play?side=black` · home steer 1.e4/2.Nf3/3.Bc4 vs the Sicilian, and on
+Learn 1…e5 / 2…Nf6 into the Falkbeer (the most-faced reply to his Vienna) ·
+spoken verdict, no card · "why was Ne5 good?" answered honestly ("it gives
+check, and it was a blunder — my skill-level move") · "plan for my bishop on
+f8" board-true · drill: wrong move → concrete reason, Hint withholds the
+square, solve → next slip · My Mistakes with provenance ("vs vribak
+Chess.com"), home opening first.
+
+**DEFECTS, with the sentence and the disease:**
+
+1. 🔴→✅ Review ply beat on a GREAT move: *"that was a great move — the stronger
+   move was Kd7."* `reviewFullData` [quality] appended "the stronger move"
+   whenever `bestMoveSan` existed. Now only on a class that cost something.
+2. 🔴→✅ Recap card rendered the third-person fact package: *"Post-game recap of
+   … (student rated about 1366). The student made 0 blunder(s)…"* D-12 had
+   added a second-person fallback behind `?? spokenFallback`, but `voiceFacts`
+   returns the RAW facts on every failure path, so the fallback never fired.
+   ONE text now: the second-person recap is what the model warms AND what every
+   failure speaks. The rating was deleted from the text — the student never
+   heard a number about themselves before, and a "student rated about N" is a
+   claim to the model, not teaching.
+3. 🔴→✅ Spoken recap: *"Here it is. That's where this one slipped. And there it
+   is — this was the game."* The review register's permitted "one beat of
+   feeling" ate the facts — no Bg4, no Nc6. `mustPreserve` now carries the
+   flagged moments' SANs; a reword that drops one is refused.
+4. 🔴→✅ *"your 126th Sicilian"* while the home card says 87. `studentNeedLoader`
+   counted the family without the SEAT — his games AGAINST the Sicilian as
+   White were his Sicilian record. Filtered by `resolvePlayerColor === studentColor`;
+   `openingScore` follows.
+5. 🔴→✅ Plan beat after Bxf7+ Kxf7 at +0.5 for White: *"convert your extra
+   material … steer for an endgame where the extra piece is decisive."*
+   `deriveNextPlans` read the material COUNT; Ng5+ was about to take the bishop
+   back. With an eval in hand the material plan needs the eval to agree (≥ +0.5).
+6. 🔴→✅ *"Qxd4, unpins your knight on f3"* to a BLACK student — `reviewMoveTeaching`'s
+   unpin gloss hard-coded "your" while its sibling clauses already flip on
+   `moverIsStudent`.
+7. 🔴→✅ Learn after 1.e4: *"Nothing to lose sleep over — the knight to c3 does the
+   same job"*; after 2.Nc3: *"the bishop to c4 is about as good, so don't
+   agonise."* The hedge fires when the runner-up is within 40cp — in a quiet
+   opening EVERY runner-up is, so it fired every ply (D-8 rotated the stems and
+   kept the disease). Gate: a two-horse race only — the third line must be ≥80cp
+   worse (`pvPlayback` + `tacticalRead`, one criterion).
+8. 🔴→✅ Read-this-position: *"if you send the knight to d5, I have the pawn to d6,
+   and that's a discovery in two."* `tacticClassifier.detectDiscovery` walked
+   the ray with `continue` past the moved piece — so d7-d6 "revealed" the queen
+   on d8 onto the knight on d5 that the pawn still blocks. A piece moving ALONG
+   the ray uncovers nothing: `break`.
+9. 🔴→✅ "What should I be thinking about here?": the routine said "name two or
+   three" twice (its own step 3 + the appended candidate habit). The habit
+   computer gets `realChoice: false` there — step 3 IS that beat.
+10. 🔴→✅ "why was my last move bad?" after the forced Kxf7: *"wasn't the engine's
+    choice. The engine preferred Kd7."* — a verdict on a ply with no engine read.
+    No read → no grade, said plainly; the engine's line is named as a line.
+11. 🔴→✅ Play threat alert with the student IN CHECK: *"Watch out — if I play
+    knight to g5, check …"* — Kxf7 came first. The alert names the student's
+    own plies before the shot ("if you play Kxf7, I answer Ng5+ and …").
+12. 🔴→✅ Generic filler in Play chat: *"Remember to develop your pieces early…"*,
+    *"Consider taking the move back."* The development tip names the pieces
+    still at home; the interface directive is gone.
+13. 🔴→✅ "what is my weakest opening?" → *"Accelerated Dragon (B) — not drilled
+    yet…"* — `coachSessionRouter` intercepted it with the DRILL-accuracy list
+    before the record-based lane (`openingProfileKind: 'weakest'`) could see it.
+    The intercept is deleted; the lane answers from his results.
+14. 🔴→✅ Import ordered analysis with *"0 home-opening game(s) first (no home
+    opening yet)"* — the importers never stamped `studentSide`, and the ranking
+    cache was keyed on the game COUNT alone, so a ranking computed before the
+    username reached the profile was served after it did. Both importers stamp
+    the seat they know; the cache keys on identity too.
+15. 🟠 "which opening do I play most as white?" — answered ("Vienna Game, 101
+    games") — the earlier note that it fell into board-verdict was wrong; the
+    panel tail I read was stale. Not a defect.
+16. ⚪ "lets play, I am white" appeared twice as a user message — the hand
+    driver's Enter + click. Driver artifact, not product.
+
+**Gates added with the fixes:** `tacticClassifier.test` (…d6 is not a
+discovery), `reviewFullData.test` (GREAT/BEST carry no "stronger move"),
+`groundedAnswer.routerE.test` (candidate step once; unmeasured ply not
+graded), `chesscomService.test` (seat stamped, case-insensitive),
+`oneOpeningKey.test` (seat-scoped record), `coachSessionRouter.test` (the
+weakest-opening question is NOT intercepted).
+
+**Still open after this push (not walked, or walked and owed):** the review
+intro fact package at `coachFeatureService` ~L503 still hands the model
+"student rated about N" (same shape as #2 — it phrased fine on this walk, but
+it has the same raw-fallback exposure); the Watch-register beats on the live
+board (BACKLOG §4.6) are untouched by this.
+
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
 Everything on the open list that is code I own and needs no decision from David.

@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5557 lines · 3 exports · 3 importers · 2 tests · 9 audits**
+**5565 lines · 3 exports · 3 importers · 2 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4947) — names `BLUNDER_CARD_ENABLED`
-- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6064) — names `BLUNDER_CARD_ENABLED`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4949) — names `BLUNDER_CARD_ENABLED`
+- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6066) — names `BLUNDER_CARD_ENABLED`
 
 ## Who calls in
 

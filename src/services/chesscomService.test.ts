@@ -337,3 +337,33 @@ describe('chesscomService', () => {
     });
   });
 });
+
+describe('the importer stamps the seat it KNOWS (walk 2026-09-23)', () => {
+  beforeEach(async () => {
+    await db.delete();
+    await db.open();
+  });
+  it('studentSide is the colour whose username matches, case-insensitively', async () => {
+    const archive = 'https://api.chess.com/pub/player/alice/games/2024/05';
+    mockArchivesFlow([archive], {
+      [archive]: [
+        makeChessComGame({ url: 'https://www.chess.com/game/live/seat1' }),
+        makeChessComGame({
+          url: 'https://www.chess.com/game/live/seat2',
+          white: { username: 'Bob', rating: 1400, result: 'win' },
+          black: { username: 'alice', rating: 1500, result: 'checkmated' },
+        }),
+        makeChessComGame({
+          url: 'https://www.chess.com/game/live/seat3',
+          white: { username: 'Carol', rating: 1400, result: 'win' },
+          black: { username: 'Dave', rating: 1500, result: 'checkmated' },
+        }),
+      ],
+    });
+    await importChessComGames('Alice');
+    const byId = new Map((await db.games.toArray()).map((g) => [g.id, g]));
+    expect(byId.get('chesscom-seat1')?.studentSide).toBe('white');
+    expect(byId.get('chesscom-seat2')?.studentSide).toBe('black');
+    expect(byId.get('chesscom-seat3')?.studentSide).toBeUndefined();
+  });
+});

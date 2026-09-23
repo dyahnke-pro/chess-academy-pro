@@ -354,7 +354,11 @@ export function tacticalReadFromLines(
 
   // Uncertainty: runner-up within 40cp, its SAN resolved on THIS board.
   let closeAlternative: { san: string; gapCp: number } | null = null;
-  if (topLines.length > 1) {
+  // Two-horse race only — same gate as `pvPlayback` (a flat opening field is
+  // not a close call, it is a quiet position; walk 2026-09-23).
+  const third = topLines[2];
+  const thirdClearlyWorse = !third || bestStudentCp - toStudentCp(third.evaluation, studentColor) >= 80;
+  if (topLines.length > 1 && thirdClearlyWorse) {
     const runner = topLines[1];
     const gap = bestStudentCp - toStudentCp(runner.evaluation, studentColor);
     const rUci = runner?.moves?.[0];

@@ -195,7 +195,12 @@ export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase
     // "Your results in this opening": the FAMILY (Sicilian, not one Najdorf
     // sub-line), which is the unit the home-opening computer ranks. ECO is the
     // fallback for a game whose key never resolved (A1).
-    const inOpening = games.filter((g) => (q.openingId && sameOpeningFamily(g.openingId, q.openingId)) || (!q.openingId && q.eco && g.eco === q.eco));
+    // THE SEAT IS PART OF THE RECORD (walk 2026-09-23: a review opened with
+    // "your 126th Sicilian" while the home card said 87 — the family filter
+    // counted the student's games AGAINST the Sicilian as White too). "Your
+    // record in this opening" is the record from the seat being reviewed.
+    const inOpening = games.filter((g) => resolvePlayerColor(g, names) === q.studentColor
+      && ((q.openingId && sameOpeningFamily(g.openingId, q.openingId)) || (!q.openingId && q.eco && g.eco === q.eco)));
     // THE POSITIVE HALF. `getCapabilityProfile` had three call sites before
     // 2026-09-18 and all three were in its own test, so every `held` row the
     // review pass had ever written was unreadable to the coach. Loaded beside
