@@ -36,6 +36,10 @@ import { describeStructure } from './boardStructure';
  */
 export const NO_COMPENSATION_BELOW_CP = -150;
 
+/** The cost, in the mover's centipawns, above which a sacrifice has not paid
+ *  for itself — the review's inaccuracy bar. */
+export const SAC_COST_BAR_CP = 50;
+
 export function sacrificeCompensation(
   fenAfter: string,
   moverColorWB: 'w' | 'b',
@@ -45,10 +49,20 @@ export function sacrificeCompensation(
   // "you" only when it is the student (walk 5, R13: the opponent's Rxf6 was
   // voiced "compensation: you were already on top here").
   moverIsStudent: boolean,
+  // The mover's eval BEFORE the sacrifice. REQUIRED (walk 6, R11/R14): the
+  // same review said "inaccuracy, costing 0.6" and "compensation: the position
+  // holds up completely" on one ply, and "compensation: they were already on
+  // top here" for a side that was on top BEFORE it gave anything. Compensation
+  // is what the material BUYS, so it is measured against where the mover stood.
+  moverPovBeforeCp: number | null,
 ): string[] {
   const clauses: string[] = [];
   const they = moverIsStudent ? "you're" : "they're";
   if (moverPovEvalCp !== null && moverPovEvalCp < NO_COMPENSATION_BELOW_CP) return clauses;
+  // A sac that COST (by the grading's own inaccuracy bar) has not been paid
+  // back; the verdict facet names what it cost, and there is nothing to add.
+  if (moverPovEvalCp !== null && moverPovBeforeCp !== null
+    && moverPovEvalCp < moverPovBeforeCp - SAC_COST_BAR_CP) return clauses;
   let board: Chess;
   try { board = new Chess(fenAfter); } catch { return clauses; }
   const enemy: 'w' | 'b' = moverColorWB === 'w' ? 'b' : 'w';
@@ -68,7 +82,8 @@ export function sacrificeCompensation(
   // 3. The verdict — the position already favours the attacker (the eval encodes
   //    the compensation the future pays out). Never say "engine".
   if (moverPovEvalCp !== null) {
-    if (moverPovEvalCp >= 100) clauses.push(`${they} already on top here`);
+    // "On top" is compensation only when the sac PUT them there.
+    if (moverPovEvalCp >= 100 && (moverPovBeforeCp === null || moverPovBeforeCp < 100)) clauses.push(`${they} already on top here`);
     else if (moverPovEvalCp >= -60) clauses.push('the position holds up completely');
   }
   return clauses;

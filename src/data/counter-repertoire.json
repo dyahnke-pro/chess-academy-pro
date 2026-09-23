@@ -15,7 +15,7 @@
       "recommendations": [
         {
           "openingId": "pro-naroditsky-alapin",
-          "name": "the Alapin (2.c3)",
+          "name": "the Alapin (c3)",
           "styleTags": [
             "solid",
             "positional"
@@ -52,7 +52,7 @@
       "recommendations": [
         {
           "openingId": "pro-naroditsky-fantasy-caro",
-          "name": "the Fantasy Variation (3.f3)",
+          "name": "the Fantasy Variation (f3)",
           "styleTags": [
             "sharp",
             "aggressive"
@@ -74,7 +74,7 @@
       "recommendations": [
         {
           "openingId": "anti-french-tarrasch",
-          "name": "the Tarrasch (3.Nd2)",
+          "name": "the Tarrasch (Nd2)",
           "styleTags": [
             "solid",
             "positional"
@@ -112,7 +112,7 @@
         },
         {
           "openingId": "anti-pirc-austrian",
-          "name": "the Austrian Attack (4.f4)",
+          "name": "the Austrian Attack (f4)",
           "styleTags": [
             "aggressive",
             "sharp"
@@ -161,7 +161,7 @@
       "recommendations": [
         {
           "openingId": "anti-scandinavian",
-          "name": "the Main Line (3.Nc3)",
+          "name": "the Main Line (Nc3)",
           "styleTags": [
             "solid",
             "positional"
@@ -181,7 +181,7 @@
       "recommendations": [
         {
           "openingId": "anti-alekhine-modern",
-          "name": "the Modern Variation (4.Nf3)",
+          "name": "the Modern Variation (Nf3)",
           "styleTags": [
             "solid",
             "positional"
@@ -191,7 +191,7 @@
     },
     {
       "key": "open-e5",
-      "displayName": "1…e5 (the Open Games)",
+      "displayName": "…e5 (the Open Games)",
       "studentSide": "white",
       "aliases": [
         "e5 defense",
@@ -244,7 +244,7 @@
       "recommendations": [
         {
           "openingId": "anti-kid-saemisch",
-          "name": "the Sämisch (5.f3)",
+          "name": "the Sämisch (f3)",
           "styleTags": [
             "aggressive",
             "solid"
@@ -321,7 +321,7 @@
       "recommendations": [
         {
           "openingId": "anti-nimzo-qc2",
-          "name": "the Classical 4.Qc2",
+          "name": "the Classical Qc2",
           "styleTags": [
             "positional",
             "solid"
@@ -397,7 +397,7 @@
       "recommendations": [
         {
           "openingId": "anti-budapest",
-          "name": "the 4.Bf4 line",
+          "name": "the Bf4 line",
           "styleTags": [
             "solid",
             "positional"
@@ -407,7 +407,7 @@
     },
     {
       "key": "vs-e4",
-      "displayName": "1.e4",
+      "displayName": "e4 openings",
       "studentSide": "black",
       "aliases": [
         "e4 as black",
@@ -446,7 +446,7 @@
     },
     {
       "key": "vs-d4",
-      "displayName": "1.d4",
+      "displayName": "d4 openings",
       "studentSide": "black",
       "aliases": [
         "d4 as black",
@@ -527,7 +527,7 @@
       "recommendations": [
         {
           "openingId": "anti-trompowsky-black",
-          "name": "the 2…Ne4 counter",
+          "name": "the …Ne4 counter",
           "styleTags": [
             "tactical",
             "sharp"
@@ -588,7 +588,7 @@
       "recommendations": [
         {
           "openingId": "anti-alapin-black",
-          "name": "the 2…Nf6 line",
+          "name": "the …Nf6 line",
           "styleTags": [
             "solid",
             "tactical"
@@ -663,7 +663,7 @@
       "recommendations": [
         {
           "openingId": "anti-elephant",
-          "name": "the knight-capture demolition (3.Nxe5)",
+          "name": "the knight-capture demolition (Nxe5)",
           "styleTags": [
             "solid",
             "tactical"
@@ -757,7 +757,7 @@
     },
     {
       "key": "passive-white",
-      "displayName": "passive setups like 1.e3 or 1.d3",
+      "displayName": "passive setups like e3 or d3",
       "studentSide": "black",
       "aliases": [
         "van't kruijs",

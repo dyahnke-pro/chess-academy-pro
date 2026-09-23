@@ -157,6 +157,11 @@ interface CoachGameReviewProps {
    *  uses it to FREEZE the review: a background deepen that lands after this
    *  is held for the next open instead of rewriting the walk mid-stride. */
   onWalkStarted?: () => void;
+  /** Fires once the walk narration build has SETTLED (built, cached, empty or
+   *  failed). The session page holds its background deepen until then, so the
+   *  deep analysis never competes with the build the student is waiting on
+   *  (walk 6, R1: both ran at once and first narration took 74s). */
+  onNarrationSettled?: () => void;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -662,6 +667,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         details: msg,
       });
     }).finally(() => {
+      props.onNarrationSettled?.();
       if (!walkMountedRef.current) return;
       setIsLoadingWalk(false);
     });
@@ -1184,7 +1190,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // at the position BEFORE the capture ("do you take it?"); the reveal
         // plays out the losing swap. Board stays at fenBefore.
         if (planned.kind === 'trap') {
-          const trap = buildTrapQuestion({ fen: seg.fenBefore, studentColor: playerColor });
+          const trap = buildTrapQuestion({ fen: seg.fenBefore, studentColor: playerColor, playedSan: seg.san });
           if (trap) {
             setTrapQ(trap);
             captureEvent('review_trap_asked', { target: trap.targetSquare, tempting: trap.temptingSan, ply: nextPly });

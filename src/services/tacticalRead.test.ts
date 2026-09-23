@@ -454,7 +454,7 @@ describe('candidateCompareClause (his "X, not Y, because…", 2026-08-23)', () =
       { moves: ['d8c7'], evaluation: 20 },   // white-POV; black-POV = -20
       { moves: ['d8b6'], evaluation: 80 },   // black-POV = -80 → 60cp worse for Black
     ], 'black');
-    expect(clause).toMatch(/Qc7 over Qb6/);
+    expect(clause).toMatch(/Prefer Qc7 to Qb6/);
     expect(clause).toMatch(/safer|less exposed/);
   });
   it('returns null when the gap is a blunder-sized drop (that is the but-turn, not a compare)', async () => {

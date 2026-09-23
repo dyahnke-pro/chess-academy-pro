@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**166 lines · 4 exports · 3 importers · 1 tests · 0 audits**
+**181 lines · 5 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,10 +21,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `NO_COMPENSATION_BELOW_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sacrificeCompensation` (function) — 12 call sites
+### `SAC_COST_BAR_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `sacrificeCompensation` (function) — 16 call sites
 - `src/data/patternRegistry.ts:133`
-- `src/services/coachFeatureService.ts:2343`
-- `src/services/reviewFullData.ts:578`
+- `src/services/coachFeatureService.ts:2318`
+- `src/services/reviewFullData.ts:633`
 - `src/services/reviewSacrifice.test.ts:14`
 - `src/services/reviewSacrifice.test.ts:18`
 - `src/services/reviewSacrifice.test.ts:22`
@@ -33,19 +36,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewSacrifice.test.ts:39`
 - `src/services/reviewSacrifice.test.ts:40`
 - `src/services/reviewSacrifice.test.ts:44`
-- `src/services/reviewSacrifice.test.ts:80`
+- `src/services/reviewSacrifice.test.ts:81`
+- `src/services/reviewSacrifice.test.ts:83`
+- `src/services/reviewSacrifice.test.ts:87`
+- `src/services/reviewSacrifice.test.ts:88`
+- `src/services/reviewSacrifice.test.ts:94`
 
 ### `enemyKingStuckInCenter` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2626`
+- `src/services/coachFeatureService.ts:2602`
+- `src/services/coachFeatureService.ts:2628`
 - `src/services/coachFeatureService.ts:2652`
-- `src/services/coachFeatureService.ts:2676`
-- `src/services/reviewFullData.ts:500`
-- `src/services/reviewFullData.ts:600`
-- `src/services/reviewFullData.ts:670`
+- `src/services/reviewFullData.ts:553`
+- `src/services/reviewFullData.ts:657`
+- `src/services/reviewFullData.ts:736`
 
 ### `describeSacBreaksKingShield` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:2371`
-- `src/services/reviewFullData.ts:582`
+- `src/services/coachFeatureService.ts:2347`
+- `src/services/reviewFullData.ts:637`
 - `src/services/reviewSacrifice.test.ts:53`
 - `src/services/reviewSacrifice.test.ts:58`
 - `src/services/reviewSacrifice.test.ts:70`

@@ -1556,7 +1556,7 @@ export function formatReadingFacts(fen: string, studentColor: 'white' | 'black')
   const mine = hanging.filter((h) => h.color === me);
   const theirs = hanging.filter((h) => h.color !== me);
   if (mine.length > 0 || theirs.length > 0) {
-    lines.push('  MATERIAL AT RISK (SEE — a forced capture sequence wins material here; the piece may be DEFENDED yet still lose to a cheaper attacker — say "loses the exchange", NOT "undefended"):');
+    lines.push('  MATERIAL AT RISK (SEE — a forced capture sequence wins material here; the piece may be DEFENDED yet still lose to a cheaper attacker — say "loses material on the swap-off" and give the points below, NOT "undefended", and never "the exchange" unless a rook is traded for a minor piece):');
     if (mine.length > 0) {
       const list = mine.map((h) => `${PIECE_NAME[h.piece]} on ${h.square} (drops ${h.gain})`).join(', ');
       lines.push(`    YOUR material at risk — WARN the student: ${list}.`);

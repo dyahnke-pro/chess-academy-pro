@@ -22,6 +22,10 @@ export interface NarrationParams {
   gameDate?: string | null;
   openingName?: string | null;
   evalBefore?: number | null; // from player's perspective in pawns (positive = player ahead)
+  /** The played move let the opponent force mate. The capped cpLoss would
+   *  call that "about 3.5 points" (walk 6, S2) — the size of a mate is not a
+   *  number of points. */
+  allowedMate?: boolean;
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -502,7 +506,7 @@ function buildOutro(params: NarrationParams, idea: MoveIdea): string {
 export function generateMistakeNarration(params: NarrationParams): MistakeNarration {
   const { classification, gamePhase, playerMoveSan, bestMoveSan, cpLoss, fen, moves } = params;
 
-  const cpText = cpToText(cpLoss);
+  const cpText = params.allowedMate ? 'everything — it allowed a forced mate' : cpToText(cpLoss);
   const idea = analyzeMoveIdea(fen, bestMoveSan, gamePhase);
 
   // THE INTRO, in the order a coach would say it: which game, where you stood,
@@ -522,8 +526,11 @@ export function generateMistakeNarration(params: NarrationParams): MistakeNarrat
     // THE STANDARD: the distilled note leads; the computed board read is the
     // fallback when the corpus has never taught this position; silence is the
     // fallback below that.
-    buildNoteRead(fen, params.openingName, spoilers, params.evalBefore)
-      || buildPositionRead(fen, spoilers),
+    // A move that allowed MATE is the whole story: a loose pawn read in front
+    // of it buries the one thing the student must see (walk 6, S2: "The pawn
+    // on f3 is loose. Rd1 was a serious mistake — you lost about 3.5 points").
+    params.allowedMate ? '' : (buildNoteRead(fen, params.openingName, spoilers, params.evalBefore)
+      || buildPositionRead(fen, spoilers)),
     pick(INTRO_TEMPLATES[classification], fen)
       .replace(/\{playerMove\}/g, playerMoveSan)
       .replace(/\{bestMove\}/g, bestMoveSan)

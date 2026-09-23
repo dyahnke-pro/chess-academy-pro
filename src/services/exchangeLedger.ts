@@ -28,6 +28,12 @@ export interface ExchangeLedger {
   netPawns: number;
   /** True when BOTH sides captured — the case a subjectless line garbles. */
   isExchange: boolean;
+  /** False when the line stops mid-trade: the side to move at its end can
+   *  still take back on the last capture's square. A net read there is the
+   *  middle of an exchange, not its result (walk 6, R7: "you come out behind,
+   *  a pawn for a queen, but you're clearly better" — the queen was coming
+   *  straight back). */
+  settled: boolean;
 }
 
 const VALUE: Record<PieceLetter, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
@@ -44,17 +50,22 @@ export function computeExchangeLedger(
   try { chess = new Chess(fenBefore); } catch { return null; }
   const studentWon: PieceLetter[] = [];
   const opponentWon: PieceLetter[] = [];
+  let lastCaptureSq: string | null = null;
   for (const san of sans) {
     let mv;
     try { mv = chess.move(san); } catch { return null; }
     if (!mv) return null;
+    lastCaptureSq = mv.captured ? mv.to : null;
     if (!mv.captured || mv.captured === 'k') continue;
     const piece = mv.captured as PieceLetter;
     if (mv.color === studentColorWB) studentWon.push(piece);
     else opponentWon.push(piece);
   }
   const sum = (xs: PieceLetter[]): number => xs.reduce((a, p) => a + VALUE[p], 0);
+  const settled = lastCaptureSq === null
+    || !chess.moves({ verbose: true }).some((m) => m.to === lastCaptureSq && !!m.captured);
   return {
+    settled,
     studentWon,
     opponentWon,
     netPawns: sum(studentWon) - sum(opponentWon),
@@ -90,7 +101,7 @@ function nameSide(pieces: readonly PieceLetter[]): string {
  *    recapture the student watched happen).
  */
 export function describeExchange(ledger: ExchangeLedger | null): string | null {
-  if (!ledger || !ledger.isExchange) return null;
+  if (!ledger || !ledger.isExchange || !ledger.settled) return null;
   const mine = nameSide(ledger.studentWon);
   const theirs = nameSide(ledger.opponentWon);
   if (!mine || !theirs) return null;

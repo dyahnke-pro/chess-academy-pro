@@ -76,6 +76,12 @@ describe('every decision path is observable', () => {
     expect(rows[0]).toMatchObject({ speak: false, reason: 'unsupported' });
   });
 
+  it('an EMPTY bundle names its own gate, not unsupported (walk 6, D1)', () => {
+    const d = decide(loudSignals, student({ speak: true }), bundle([]), 'walk');
+    expect(d.speak).toBe(false);
+    expect(rows[0]).toMatchObject({ speak: false, reason: 'empty' });
+  });
+
   it('absent need is recorded as ABSENT, never as false', () => {
     // Absent need reads as SPEAK by the cold-start rule, so an audit must be
     // able to tell "no data" from "the student did not need it".

@@ -19,7 +19,7 @@ import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  legalSeeGain, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -2538,6 +2538,12 @@ export function describeMoveMerit(
   const geo = describeMoveGeometry(fenBefore, san, moverColor);
   // STRONG, unambiguous geometry is the point — fork / real pin / check / mate /
   // a winning capture. Say it.
+  // A merit clause is read from the MOVER's chair (`toOpponentSeat` swaps it
+  // for the opponent), so a captured piece is named "their". Left as "the",
+  // a later pass seats it off the board AFTER the move — where the capturer now
+  // stands — and calls the victim the wrong side's (walk 6 sweep: "Your
+  // opponent won their pawn on c5" about the student's own pawn).
+  if (geo && /^wins the /.test(geo)) return geo.replace(/^wins the /, 'wins their ');
   if (geo && !geo.startsWith('attacks') && !geo.startsWith('pins the pawn')) return geo;
   // A bare tempo-attack ("attacks the pawn on e5" for a developing knight, where
   // the pawn is defended) or a pawn-to-piece x-ray "pin" is technically true but
@@ -6101,7 +6107,10 @@ export function pickCounterRecommendation(
 /** Anonymous corpus stat — the phrasing contract bans pro names. */
 function statClause(stat: { games: number; scorePct: number } | null | undefined): string {
   if (!stat || stat.games <= 0) return '';
-  return ` — it scores ${stat.scorePct}% across ${stat.games.toLocaleString()} games at grandmaster level`;
+  // The stat is ONE strong player's own games (the pro-repertoire corpus), not
+  // master play at large (walk 6, S1: "73.4% across 370 games at grandmaster
+  // level"). Anonymous by contract — the phrasing never names the player.
+  return ` — a titled player scored ${stat.scorePct}% with it across ${stat.games.toLocaleString()} of their own games`;
 }
 
 /**
@@ -6353,6 +6362,11 @@ export function detectNewThreat(
     parts[3] = '-'; // clear en passant — not meaningful for a null-move scan
     const threat = findBest(parts.join(' '));
     if (!threat) return null;
+    // A CAPTURE THREAT THE VICTIM SIMPLY WALKS AWAY FROM IS NOT A WIN (walk 6,
+    // R6: every attack on a queen was spoken as "it wins their queen", and with
+    // computed stakes it LED the ply at nine points, though the queen just
+    // moved). It stands only if EVERY reply still leaves a winning capture.
+    if (threat.kind === 'capture' && captureThreatIsAnswerable(fenAfter, moverWB)) return null;
     // NEW threats only — a threat that already existed before the move was
     // not created by it, and re-narrating a standing threat every ply is
     // noise (the repetition class).
@@ -6362,6 +6376,28 @@ export function detectNewThreat(
   } catch {
     return null;
   }
+}
+
+/** True when the side under threat has a reply after which `moverWB` no longer
+ *  has any capture netting a piece (≥3 by static exchange). `fenAfter` has the
+ *  threatened side to move. Mirrors how a player reads a threat: move the
+ *  piece, guard it, block, or take the attacker. */
+export function captureThreatIsAnswerable(fenAfter: string, moverWB: 'w' | 'b'): boolean {
+  let pos: Chess;
+  try { pos = new Chess(fenAfter); } catch { return false; }
+  if (pos.turn() === moverWB) return false;
+  for (const reply of pos.moves({ verbose: true })) {
+    const sim = new Chess(fenAfter);
+    try { sim.move(reply.san); } catch { continue; }
+    if (sim.isGameOver()) return true;
+    let stillWins = false;
+    for (const cap of sim.moves({ verbose: true })) {
+      if (!cap.captured) continue;
+      if (legalSeeGainOn(sim, cap.to) >= 3) { stillWins = true; break; }
+    }
+    if (!stillWins) return true;
+  }
+  return false;
 }
 
 /** The student-voice phrasing of detectNewThreat (back-compat wrapper). */

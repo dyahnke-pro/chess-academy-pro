@@ -10,7 +10,7 @@ const NO_CAPTURE_FEN = '4k3/8/8/8/8/8/8/4K3 w - - 0 1';
 
 describe('buildTrapQuestion — the poisoned capture, computed by SEE', () => {
   it('flags a poisoned pawn (Qxd5?? exd5) and calls the right answer "leave"', () => {
-    const q = buildTrapQuestion({ fen: POISONED_PAWN_FEN, studentColor: 'white' })!;
+    const q = buildTrapQuestion({ fen: POISONED_PAWN_FEN, studentColor: 'white', playedSan: 'Qxd5' })!;
     expect(q).not.toBeNull();
     expect(q.temptingSan).toBe('Qxd5');
     expect(q.targetSquare).toBe('d5');
@@ -26,21 +26,27 @@ describe('buildTrapQuestion — the poisoned capture, computed by SEE', () => {
   });
 
   it('returns null on a genuinely FREE piece (SEE >= 0 — not a trap)', () => {
-    expect(buildTrapQuestion({ fen: FREE_PIECE_FEN, studentColor: 'white' })).toBeNull();
+    expect(buildTrapQuestion({ fen: FREE_PIECE_FEN, studentColor: 'white', playedSan: 'dxe5' })).toBeNull();
   });
 
   it('returns null when there is no capture to tempt', () => {
-    expect(buildTrapQuestion({ fen: NO_CAPTURE_FEN, studentColor: 'white' })).toBeNull();
+    expect(buildTrapQuestion({ fen: NO_CAPTURE_FEN, studentColor: 'white', playedSan: 'Kd2' })).toBeNull();
   });
 
   it('returns null when it is not the student to move', () => {
     // POISONED_PAWN_FEN has White to move; asking as Black → not their turn.
-    expect(buildTrapQuestion({ fen: POISONED_PAWN_FEN, studentColor: 'black' })).toBeNull();
+    expect(buildTrapQuestion({ fen: POISONED_PAWN_FEN, studentColor: 'black', playedSan: 'Qxd5' })).toBeNull();
   });
 
   it('judges the answer — "leave" is correct, "take" is the trap', () => {
-    const q = buildTrapQuestion({ fen: POISONED_PAWN_FEN, studentColor: 'white' })!;
+    const q = buildTrapQuestion({ fen: POISONED_PAWN_FEN, studentColor: 'white', playedSan: 'Qxd5' })!;
     expect(judgeTrapAnswer(q, 'leave')).toBe(true);
     expect(judgeTrapAnswer(q, 'take')).toBe(false);
+  });
+
+  it('asks about the capture the student PLAYED, never another poisoned piece (walk 6, R12)', () => {
+    // The d5 pawn is poisoned, but the student played a quiet king move: there
+    // is no grab of theirs to ask about, so no question.
+    expect(buildTrapQuestion({ fen: POISONED_PAWN_FEN, studentColor: 'white', playedSan: 'Kd2' })).toBeNull();
   });
 });

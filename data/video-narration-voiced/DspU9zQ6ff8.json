@@ -106,7 +106,7 @@
         "Nf6",
         "Nxe5"
       ],
-      "spoken": "The knight to f6, and if White grabs with the knight takes e5 —"
+      "spoken": "The knight to f6 — and if White grabs the pawn on e5 with the knight, Black answers with the knight to c6."
     },
     {
       "ply": 6,
@@ -115,7 +115,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "the knight to c6."
+      "spoken": "The knight to c6."
     },
     {
       "ply": 7,

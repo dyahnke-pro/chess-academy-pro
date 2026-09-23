@@ -19,6 +19,7 @@
  * callers (e.g. `coachPlaySession.resolveConfig`) apply their own
  * easy/medium/hard offsets.
  */
+import { isComputerOpponent } from '../utils/computerOpponent';
 import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
 import type { GameRecord } from '../types';
@@ -165,7 +166,9 @@ export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
   const importedGames = (await db.games
     .where('source')
     .anyOf('lichess', 'chesscom')
-    .toArray()).filter((g) => !isFixtureGame(g));
+    // An unrated play-vs-computer game carries no rating of the student's own
+    // (walk 6, W3 — the same predicate the Insights opponent stats use).
+    .toArray()).filter((g) => !isFixtureGame(g) && !isComputerOpponent(g));
 
   if (importedGames.length > 0) {
     const sorted = importedGames

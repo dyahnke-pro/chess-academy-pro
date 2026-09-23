@@ -113,6 +113,7 @@ describe('gameInsightsService', () => {
       expect(result.winRate).toBe(0);
       expect(result.avgElo).toBe(0);
       expect(result.avgAccuracy).toBe(0);
+      expect(result.accuracyGames).toBe(0);
       expect(result.highestBeaten).toBeNull();
       expect(result.lowestLostTo).toBeNull();
     }, 15000); // first dynamic import + module init runs ~4s; tight against the
@@ -198,6 +199,8 @@ describe('gameInsightsService', () => {
       expect(result.analyzedGameCount).toBe(1);
       expect(result.gamesNeedingAnalysis).toBe(0);
       expect(result.avgAccuracy).toBeGreaterThan(0);
+      // W1 (walk 6): the headline states the analysed games it rests on.
+      expect(result.accuracyGames).toBeGreaterThan(0);
       expect(result.accuracyWhite).toBeGreaterThan(0);
     });
 

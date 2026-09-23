@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4680 lines · 34 exports · 32 importers · 29 tests · 5 audits**
+**4686 lines · 34 exports · 32 importers · 29 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -82,7 +82,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:511`
+- `src/components/Coach/CoachGameReview.tsx:516`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -124,7 +124,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:571`
+- `src/components/Coach/CoachGameReview.tsx:576`
 - `src/services/coachFeatureService.test.ts:744`
 - `src/services/coachFeatureService.test.ts:752`
 - `src/services/coachFeatureService.test.ts:784`
@@ -138,7 +138,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 55 call sites
-- `src/components/Coach/CoachGameReview.tsx:1874`
+- `src/components/Coach/CoachGameReview.tsx:1880`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
 - `src/services/coachFeatureService.causalChain.test.ts:47`
@@ -204,7 +204,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4986`
+- `src/components/Coach/CoachGameReview.tsx:4992`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -271,7 +271,7 @@
 - `src/services/reviewRegister.test.ts:32`
 
 ### `openingNameForKey` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:208`
+- `src/components/Coach/CoachGameReview.tsx:213`
 
 ### `generateReviewNarration` (function) — 10 call sites
 - `src/services/reviewBetterLineWhy.test.ts:56`

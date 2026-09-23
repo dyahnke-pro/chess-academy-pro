@@ -52,7 +52,7 @@ describe('buildTrapQuestion — a piece defended only by a PINNED piece is not p
     // by a white rook on f1. White Rxf7 is not the case; use a knight grab:
     // White knight on d4 takes e6 knight; e6 defended by f7 bishop pinned by Rf1.
     const fen = '6k1/5b2/4n3/8/3N4/8/8/5R1K w - - 0 1';
-    const q = buildTrapQuestion({ fen, studentColor: 'white' });
+    const q = buildTrapQuestion({ fen, studentColor: 'white', playedSan: 'Nxe6' });
     // The f7 bishop is pinned to g8 by Rf1, so it can't recapture on e6 — Nxe6
     // wins the knight clean. It must NOT be presented as a poisoned trap.
     if (q) {

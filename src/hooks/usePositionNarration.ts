@@ -15,7 +15,7 @@ import {
 import type { StockfishAnalysis } from '../types';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { useStudentNeed } from './useStudentNeed';
-import { composePositionRead } from '../services/positionReadComposer';
+import { composePositionRead, READ_SEAT } from '../services/positionReadComposer';
 
 export interface UsePositionNarrationArgs {
   fen: string;
@@ -98,7 +98,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
  * (`teachingSourceForBoard`), then the phase, the position facts, the ranked
  * positional read (`readPosition`) and the engine's deepest look-ahead — and
  * the model only PHRASES that bundle through the one chokepoint, `voiceFacts`,
- * from the coach-is-opponent seat. With the provider dead the same facts are
+ * in the one seat the facts were computed in. With the provider dead the same facts are
  * spoken in the raw computed register, so the button can never go silent
  * over a phrasing hiccup. There is nothing left to validate per sentence.
  *
@@ -119,6 +119,19 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
  * the button can NEVER get stuck in "Reading…" and the board can NEVER
  * stay frozen. That's WO-COACH-NARRATION-05's invariant.
  */
+/**
+ * A question in the phrased read that the facts never asked is the model's own
+ * (walk 6, P2: the read ended on "So what matters beyond that?" with nothing
+ * after it). The read is a statement of computed facts; a sentence the facts do
+ * not contain cannot be one of them. Kept when the facts themselves ask.
+ */
+export function dropInventedQuestions(spoken: string, facts: string): string {
+  if (facts.includes('?')) return spoken;
+  const parts = spoken.match(/[^.!?]+[.!?]+["')\]]*\s*|[^.!?]+$/g) ?? [spoken];
+  const kept = parts.filter((p) => !/\?["')\]]*\s*$/.test(p));
+  return kept.join('').trim();
+}
+
 export function usePositionNarration(args: UsePositionNarrationArgs): UsePositionNarrationResult {
   const weaknessRef = useWeaknessSignals(); // student model → re-ranks the read (Phase 1)
   // …AND THE NEED TERM (B3) — the line is the PGN the surface hands in; the
@@ -229,9 +242,11 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         return;
       }
 
-      // ── THE PHRASING — one call through the one chokepoint. The coach on
-      //    this surface IS the opponent (Play, Learn guided play), so it speaks
-      //    as "I / my" for its own pieces and "you / your" for the student's.
+      // ── THE PHRASING — one call through the one chokepoint, in the SAME
+      //    seat the facts were computed in ("you / they"). It used to ask for
+      //    the coach-is-opponent seat, which made the model convert every
+      //    "they" into "I" — and on prod it converted the wrong way ("you're
+      //    threatening to win my bishop on c4" to the owner of that bishop).
       //    A timeout or a dead provider serves the computed facts raw
       //    (speakableFacts) — the correct read exists before the model is
       //    asked, so nothing can race it away (David 2026-07-04).
@@ -241,7 +256,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
           voiceFacts(facts, {
             warm: true,
             intent: 'position-read',
-            perspective: { mode: 'coach-is-opponent' },
+            perspective: { mode: READ_SEAT, studentSide: args.playerColor },
             directives: 'The student tapped "read this position" and is listening to you live. Speak every fact given, most important first; the first sentence must stand alone. Do not suggest a move. Do not recap the last move.',
           }),
           NARRATION_API_TIMEOUT_MS,
@@ -263,7 +278,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         spoken = speakableFacts(facts);
       }
       if (token !== activeTokenRef.current) return;
-      spoken = spoken.trim();
+      spoken = dropInventedQuestions(spoken, facts) || speakableFacts(facts).trim();
       if (!spoken) return;
       setCurrentText(spoken);
 

@@ -391,3 +391,18 @@ describe('passed pawns are owned by a side (walk 5, R16)', () => {
     expect(plyFactsClause(fen, 'exf6')).toMatch(/leaves the other side a passed pawn on e6/);
   });
 });
+
+
+describe('an even trade is a removal of the defender only if the target still falls (walk 6, R8)', () => {
+  const landed = (fen: string, san: string): string | null => {
+    const c = new Chess(fen);
+    const mv = c.move(san);
+    return computePlyFacts(fen, c.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }).tacticLanded;
+  };
+  it('Qxb5 Rxb5 re-guards f5 — a plain queen trade', () => {
+    expect(landed('1r4k1/8/8/1q3b2/7N/1Q6/8/6K1 w - - 0 1', 'Qxb5')).not.toBe('removal_of_guard');
+  });
+  it('Qxb5 cxb5 leaves f5 to the knight — a real removal', () => {
+    expect(landed('6k1/8/2p5/1q3b2/7N/1Q6/8/6K1 w - - 0 1', 'Qxb5')).toBe('removal_of_guard');
+  });
+});

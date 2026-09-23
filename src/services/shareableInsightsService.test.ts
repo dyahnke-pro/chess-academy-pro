@@ -20,6 +20,7 @@ function buildOverview(overrides?: Partial<OverviewInsights>): OverviewInsights 
     winRateBlack: 45,
     avgElo: 1500,
     avgAccuracy: 72,
+    accuracyGames: 10,
     highestBeaten: null,
     lowestLostTo: null,
     classificationCounts: {

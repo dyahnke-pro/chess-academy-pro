@@ -325,7 +325,9 @@ describe('B1 — the pre-gate and the door judge ONE signals object (2026-09-22)
   // silence — the T5 fork two moves out was dead on every live surface and the
   // emission called it a legitimate close. Negative control: hand the door a
   // literal without `standingChance` again → `decision.speak` reads false.
-  const FORK_IN_TWO = 'r1bqkb1r/pp3ppp/2np1n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 14';
+  // Walk 6: the queen was on d8 here, guarding c7, so Nb5–c7 was never a fork
+  // (a vacuous safety gate passed it). With the queen on g6 it is one.
+  const FORK_IN_TWO = 'r1b1kb1r/pp3ppp/2np1nq1/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 14';
 
   it('a fork the student can set up SPEAKS through the door on an interrupt surface', async () => {
     const r = await computePositionFacts({ posture: 'interrupt', fen: FORK_IN_TWO, moverColor: 'w', studentColor: 'w', analysis: flat });

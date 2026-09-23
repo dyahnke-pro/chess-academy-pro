@@ -46,7 +46,7 @@ you/your (student), they/their (opponent), never we/our (`CLAUDE.md`
 | Route | Component (src/components/…) | Register | Notes |
 |---|---|---|---|
 | `/coach/teach` | `Coach/CoachTeachPage` | learn (present-tense) | THE canonical lesson surface. Board+chat two-column. Live "talk you through the game" commentary + phase transitions. Mid-game cards REMOVED (record kept). |
-| `/coach/play` | `Coach/…` (`OpeningPlayMode` in-page) | in-game | PURE playing surface. Silent unless student asks; only phase-transition narration volunteers. Full diagnostic → review. |
+| `/coach/play` | `Coach/CoachGamePage` | in-game | PURE playing surface. The coach volunteers NOTHING (`PLAY_VOLUNTEERS_COACHING = false`, 2026-09-23) — no phase narration, no slip verdict, no card; taps (read position, hint, why, chat) still answer. Slips are still recorded. Full diagnostic → review. |
 | `/coach/review`, `/coach/review/:gameId` | `Coach/CoachGameReview` | review | Ply-by-ply walk; diagnostic cards; the causal chain leads the beat here. |
 | `/coach/chat` | `Coach/…` | Q&A | Text coach; grounded answers via `groundedAnswer`. |
 | `/coach/endgame`, `/coach/session/:kind`, `/coach/plan`, `/coach/train`, `/coach/fundamentals` | `Coach/…` | mixed | Lesson/session surfaces built on the walkthrough runtime. |
@@ -162,10 +162,11 @@ coach's fingertips.")
 - `openingGenerator.ts` — `generateOpeningFromDbNarration` (DB moves → LLM prose
   only). `openingFactChains.ts`, `reviewOpeningTheory.ts`.
 
-**The corpus (90% of what gets said — `CLAUDE.md`)**
-- `farmedCorpusData.ts` / secondary corpora → position-keyed notes selected by
-  BOARD (`teachingNoteForBoard`, `noteAtPosition`), never by name. Voiced corpus
-  (`vc-`) is the sole exact-position source on play surfaces.
+**The corpus (scoped — `CLAUDE.md` "CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON")**
+- Notes speak in the "teach me X opening" walkthrough (the note leads the beat),
+  coach chat, the tactics drill and endgame lessons — NOT in Learn free play or
+  review (2026-09-23; gate `corpusScope.test.ts`). Selected by BOARD
+  (`noteAtPosition`), never by name; voiced (`vc-`) is the exact-position source.
 
 ---
 

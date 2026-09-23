@@ -19,7 +19,7 @@ import { playedAtMs, type WeaknessProvenance } from './weaknessSpine';
 import { capEval } from './accuracyService';
 import { verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { useAppStore } from '../stores/appStore';
-import { MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { MISTAKE_CP, BLUNDER_CP, isMateEval } from './engineConstants';
 import { winPctLost, bandForWinPctLost } from './accuracyService';
 import type {
   MistakePuzzle,
@@ -632,6 +632,8 @@ async function analyzeGameWithStockfish(
       gameDate: gameContext.gameDate,
       openingName: gameContext.openingName,
       evalBefore: evalBeforeFromPlayer,
+      // Mate for the OPPONENT after the move (both evals White POV).
+      allowedMate: isMateEval(evalAfter) && (playerColor === 'white' ? evalAfter < 0 : evalAfter > 0),
     };
     // PASS 1 computes the facts (distilled note first, board read behind it);
     // PASS 2 hands them to the phrasing model through the one grounding

@@ -257,13 +257,18 @@ export function whyItFailed(args: {
   // simulated), and it names the guard that makes it a bad trade.
   let studentBoard: Chess | null = null;
   try { studentBoard = new Chess(withTurn(after.fen(), me)); } catch { studentBoard = null; }
-  if (guards.length > 0 && studentBoard && seeInitiate(studentBoard, target.sq) < 0) {
+  const swap = guards.length > 0 && studentBoard ? seeInitiate(studentBoard, target.sq) : 0;
+  if (swap < 0) {
     const guard = leastValuableAttackerOf(after, target.sq);
     if (guard) {
+      // The COMPUTED cost of the swap-off, never "the exchange" — that term
+      // means rook for minor piece, and walk 6 (L2) heard it said of a bishop
+      // taking a guarded pawn.
+      const down = -swap;
       return {
         kind: 'held-by-defender',
         squares: [target.sq, guard.sq],
-        line: `That eyed the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.type]} on ${guard.sq} holds it — taking there just loses the exchange.`,
+        line: `That eyed the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.type]} on ${guard.sq} holds it — taking there comes out ${down === 1 ? 'a pawn' : `${down} points`} down.`,
       };
     }
   }

@@ -15,16 +15,16 @@ describe('sacrificeCompensation (David 2026-07-20 — teach the sac, don\'t asse
   it('names the board-true compensation for the Opera knight sac', () => {
     // After 10.Nxb5: Black king stuck on e8, d-file open, White far ahead in
     // development — the concrete reasons the knight is worth giving.
-    const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60, true);
+    const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60, true, null);
     expect(clauses.some((c) => /stuck in the cent/i.test(c))).toBe(true);
     expect(clauses.some((c) => /ahead in development/i.test(c))).toBe(true);
     // A winning eval (>=100) → the "already on top" verdict.
-    const winning = sacrificeCompensation(fenAfter(OPERA), 'w', 250, true);
+    const winning = sacrificeCompensation(fenAfter(OPERA), 'w', 250, true, null);
     expect(winning.some((c) => /already on top/i.test(c))).toBe(true);
   });
 
   it('emits no false compensation from the starting position (nothing is stuck)', () => {
-    const clauses = sacrificeCompensation(new Chess().fen(), 'w', 0, true);
+    const clauses = sacrificeCompensation(new Chess().fen(), 'w', 0, true, null);
     expect(clauses.some((c) => /stuck in the cent/i.test(c))).toBe(false);
     expect(clauses.some((c) => /ahead in development/i.test(c))).toBe(false);
   });
@@ -35,13 +35,13 @@ describe('sacrificeCompensation (David 2026-07-20 — teach the sac, don\'t asse
     // reason — the verdict facet says what it cost. Negative control: the
     // same board at -60 still names the compensation, so the gate is the eval,
     // not the board.
-    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470, true)).toEqual([]);
-    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -60, true).length).toBeGreaterThan(0);
-    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470, true).some((c) => /holds up/i.test(c))).toBe(false);
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470, true, null)).toEqual([]);
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -60, true, null).length).toBeGreaterThan(0);
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470, true, null).some((c) => /holds up/i.test(c))).toBe(false);
   });
 
   it('every clause is a plain string with no move/piece/square invented (G0 shape)', () => {
-    const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60, true);
+    const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60, true, null);
     // The clauses never mention a specific SAN or "engine" (voice rules).
     for (const c of clauses) {
       expect(c).not.toMatch(/\bengine\b/i);
@@ -75,9 +75,23 @@ describe('describeSacBreaksKingShield (David 2026-07-20 — the exchange-sac WHY
   });
 });
 
+describe('compensation is measured against where the mover stood (walk 6, R11/R14)', () => {
+  it('a sacrifice that cost an inaccuracy names no compensation', () => {
+    // Before: +0.2; after: -0.4 — it cost 0.6, the review grades it, nothing was bought.
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -40, true, 20)).toEqual([]);
+    // Same board, cost nothing → the board-true reasons speak.
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', 20, true, 20).length).toBeGreaterThan(0);
+  });
+
+  it('"already on top" is not compensation for a side that was on top before', () => {
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', 250, false, 260).join(' ')).not.toMatch(/already on top/);
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', 250, false, 30).join(' ')).toMatch(/already on top/);
+  });
+});
+
 describe('the compensation names the mover from the student\'s chair (walk 5, R13)', () => {
   it('an opponent\'s sacrifice is never voiced as "you"', () => {
-    const theirs = sacrificeCompensation(fenAfter(OPERA), 'w', 250, false);
+    const theirs = sacrificeCompensation(fenAfter(OPERA), 'w', 250, false, null);
     expect(theirs.length).toBeGreaterThan(0);
     expect(theirs.join(' ')).not.toMatch(/\byou're\b/);
     expect(theirs.join(' ')).toMatch(/they're already on top/);

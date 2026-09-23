@@ -18,6 +18,12 @@ import type { StudentNeedContext } from './needScore';
 import type { StockfishAnalysis } from '../types';
 import type { WeaknessSignal } from './weaknessSignal';
 
+/** The seat every sentence of the read is computed in. The facts computers
+ *  write "you / they", so the read speaks that seat end to end and the phraser
+ *  is never asked to re-seat anything (G0: pronouns are a board fact — whose
+ *  piece — not a phrasing choice). `usePositionNarration` phrases in it too. */
+export const READ_SEAT = 'student' as const;
+
 /** The phase, as the coach names it opening a read — computed, one line each.
  *  A Record over the union so a fourth phase cannot ship without a sentence. */
 const PHASE_LINE: Record<ReturnType<typeof detectPhase>, string> = {
@@ -129,7 +135,11 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   // 5. THE DEEPEST LOOK-AHEAD — the PV scan, pre-composed as the exact spoken
   //    line in code (G0: the engine decided, the voice only phrases). Null on
   //    a quiet board.
-  const lookaheadLine = tactics ? speakDeepestLookahead(tactics, 'coach-is-opponent', studentCC, i.studentWeaknesses) : null;
+  //    ONE SEAT for the whole bundle (walk 6, P1): the facts computers speak
+  //    "you / they", so the look-ahead does too. A bundle mixing "they" and "I"
+  //    for the same side left the phraser to re-seat it, and it inverted it —
+  //    "you're threatening to win my bishop" to the student whose bishop it was.
+  const lookaheadLine = tactics ? speakDeepestLookahead(tactics, READ_SEAT, studentCC, i.studentWeaknesses) : null;
 
   return [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '']
     .map((t) => t.trim())

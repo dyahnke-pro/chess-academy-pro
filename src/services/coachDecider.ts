@@ -177,7 +177,9 @@ export interface CoachDecision {
   /** Does this moment speak at all? */
   speak: boolean;
   /** Why it does or does not — the observability trail. */
-  reason: 'importance' | 'need' | 'unsupported' | 'spoken';
+  /** `empty`: the moment cleared both gates but its caller handed no facts —
+   *  nothing was dropped, so it must not read as `unsupported` (walk 6, D1). */
+  reason: 'importance' | 'need' | 'unsupported' | 'empty' | 'spoken';
   tier: ImportanceTier;
   /** Moment-level weight, for ordering moments against each other. */
   rank: number;
@@ -341,7 +343,8 @@ export function decide(
   // support says nothing — and says WHICH gate closed it, rather than
   // reporting `speak: true` over an empty list.
   if (spoken.length === 0) {
-    return emit(posture, { ...base, speak: false, reason: 'unsupported', spoken, quiet: selection.quiet }, student, false, bundle.stakes);
+    const reason = bundle.facts.length === 0 ? 'empty' : 'unsupported';
+    return emit(posture, { ...base, speak: false, reason, spoken, quiet: selection.quiet }, student, false, bundle.stakes);
   }
   return emit(posture, { ...base, speak: true, reason: 'spoken', spoken, quiet: selection.quiet }, student, methodSpoke, bundle.stakes);
 }

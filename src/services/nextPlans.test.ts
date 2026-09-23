@@ -24,3 +24,14 @@ describe('the weak-pawn plan reads the board it prescribes on (walk 5, R7)', () 
     expect(deriveNextPlans('6k1/pp4pp/4pn2/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b')).toEqual([]);
   });
 });
+
+describe('findWorstPlacedPiece — a back-rank rook is not misplaced (walk 6, R10)', () => {
+  it('does not name the castled rook on f1 the worst piece', async () => {
+    const { Chess } = await import('chess.js');
+    const { findWorstPlacedPiece } = await import('./nextPlans');
+    // Italian-style middlegame, move 11: White castled, f1 rook boxed by the king — closed centre.
+    const fen = 'r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP1N1PPP/R1BQ1RK1 w - - 0 11';
+    const w = findWorstPlacedPiece(new Chess(fen), 'w');
+    expect(w?.type === 'r' && w.sq[1] === '1').toBe(false);
+  });
+});

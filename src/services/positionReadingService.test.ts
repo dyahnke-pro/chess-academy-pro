@@ -347,7 +347,7 @@ describe('formatReadingFacts (grounded read-this-position block)', () => {
     expect(block).toContain('queen on d5');
     // Frames the risk as an EXCHANGE loss, not as "undefended" (the piece may
     // well be defended — the instruction tells the coach to say so).
-    expect(block).toContain('loses the exchange');
+    expect(block).toContain('loses material on the swap-off');
   });
 
   it('flags enemy material the student can win as an OPPORTUNITY', () => {

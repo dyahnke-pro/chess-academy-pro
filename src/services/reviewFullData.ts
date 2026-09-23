@@ -235,11 +235,16 @@ export function computeMoveFacets(
   // enemy pieces it eyes, central squares it fights for, own pieces it now
   // guards. Every claim board-computed; emitted only when non-empty.
   const influenceSquares: string[] = [];
-  const influence0 = describeMoveInfluence(fenBefore, fenAfter, san, influenceSquares);
+  const influenceShape = { hitsPiece: false };
+  const influence0 = describeMoveInfluence(fenBefore, fenAfter, san, influenceSquares, influenceShape);
   const influence = influence0 && ctx.studentColorWB
     ? seatPieceReferences(influence0, fenAfter, ctx.studentColorWB)
     : influence0;
-  if (influence) { const f = `[does] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
+  // A move REASON only when the piece now bears on an enemy piece. "Fights for
+  // d5" alone is the board's scenery, not why the move was played (walk 6, R3:
+  // "Their pawn on c6 now fights for d5" on ~20 plies), so it rides as a
+  // description — heard only beside a teaching point on the same squares.
+  if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
 
   // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
   // (David 2026-07-22: "the package must contain every relevant change that
@@ -413,9 +418,16 @@ export function computeMoveFacets(
   // 2026-07-21: "ship the correct answer to the LLM").
   try {
     const t = detectTactics(fenAfter);
-    const seat = (s: string): string => ctx.studentColorWB
-      ? seatPieceReferences(s, fenAfter, ctx.studentColorWB)
-      : s;
+    // The ONE colour-named description the detector writes ("Black has a
+    // checkmate available from c8") is seated here too — walk 6, R13 spoke it
+    // to the student in the third person.
+    const seat = (s: string): string => {
+      if (!ctx.studentColorWB) return s;
+      const me = ctx.studentColorWB === 'w' ? 'White' : 'Black';
+      const seated = s.replace(/^(White|Black) has a checkmate available from\b/,
+        (_m, side: string) => (side === me ? 'You have a checkmate available from' : 'They have a checkmate available from'));
+      return seatPieceReferences(seated, fenAfter, ctx.studentColorWB);
+    };
     for (const tac of t.tactics) {
       if (tac.type === 'none' || !tac.description) continue;
       // A fork SHAPE is tempo-blind — the static scanner reports it whether or
@@ -444,10 +456,17 @@ export function computeMoveFacets(
         continue;
       }
       {
+        // What it wins by exchange on its own squares, from the side it hurts.
+        const stakes = exchangeStakes(fenAfter, tac.involvedSquares, tac.beneficiary ? (tac.beneficiary === 'w' ? 'b' : 'w') : null);
+        // A PIN ON A PAWN THAT WINS NOTHING IS SCENERY (walk 6, R5: "their
+        // queen on d5 pins your pawn on g2 against your rook on h1" on move
+        // two, and the fianchetto bishop "pinning" b7 for thirty moves). It
+        // teaches only when the pin actually costs material.
+        const front = tac.type === 'pin' ? piecesOn(fenAfter, [tac.involvedSquares[1]])[0] ?? null : null;
+        if (front === 'p' && stakes === null) continue;
         const f = `[tactic] ${seat(tac.description)}.`;
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-        // What it wins by exchange on its own squares, from the side it hurts.
-        recStakes(f, exchangeStakes(fenAfter, tac.involvedSquares, tac.beneficiary ? (tac.beneficiary === 'w' ? 'b' : 'w') : null));
+        recStakes(f, stakes);
       }
     }
     // ONLY THE DELTA SPEAKS (WO-STANDARD-01 D-8, prod tape 2026-09-22:
@@ -459,7 +478,13 @@ export function computeMoveFacets(
     if (t.hangingPieces.length > 0) {
       let before = new Set<string>();
       try { before = new Set(detectTactics(fenBefore).hangingPieces.map((h) => `${h.piece}${h.square}`)); } catch { before = new Set(); }
-      const fresh = t.hangingPieces.filter((h) => !before.has(`${h.piece}${h.square}`));
+      // …and only a MINOR PIECE OR ROOK the opponent can actually win (walk 6,
+      // R4: "Newly undefended: your pawn on e4" on move one, and a queen that
+      // was merely attacked). A pawn is undefended half the opening and a
+      // queen answers an attack by moving; neither is a loose-piece lesson.
+      const fresh = t.hangingPieces.filter((h) => !before.has(`${h.piece}${h.square}`)
+        && 'nbr'.includes(h.piece.toLowerCase())
+        && exchangeStakes(fenAfter, [h.square]) !== null);
       if (fresh.length > 0) {
         const desc = fresh.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
         const f = `[loose] Newly undefended: ${seat(desc)}.`;
@@ -603,7 +628,9 @@ export function computeMoveFacets(
         // the side that made it. Handing it the student's number flipped the
         // sign on every opponent sacrifice (D-4, 2026-09-22).
         const moverPovCp = studentPovCp === null ? null : (moverWB === studentColorWB ? studentPovCp : -studentPovCp);
-        const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp, moverWB === studentColorWB);
+        const moverPovBeforeCp = ctx.preMoveEval == null || isMateEval(ctx.preMoveEval) ? null
+          : (moverWB === 'w' ? ctx.preMoveEval : -ctx.preMoveEval);
+        const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp, moverWB === studentColorWB, moverPovBeforeCp);
         if (comp.length) facets.push(`[sac] It's a sacrifice — compensation: ${comp.join('; ')}.`);
         const mech = isStudent ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
         if (mech) facets.push(`[sac-why] ${cap(mech)}.`);
@@ -634,7 +661,16 @@ export function computeMoveFacets(
   }
 
   // ── 10. OPENING IDENTITY (the named line so far) ──
-  const named = detectOpening(ctx.allSans.slice(0, ply))?.name ?? null;
+  // ONCE, at its final name (walk 6, R16: "King's Pawn Game" → "Scandinavian"
+  // → "Mieses-Kotroc" → "Main Line" spoke four times in six plies, because each
+  // refinement is new text). The name spoken is the VARIATION: a bare family
+  // ("King's Pawn Game", "Sicilian Defense") is a waypoint, and a comma
+  // sub-line (", Main Line", ", Smith-Morra Declined") refines a name already
+  // given. So every ply of one variation carries the same text and the say-once
+  // ledger speaks it on the first ply that actually speaks — a need-silenced
+  // ply cannot swallow it.
+  const detected = detectOpening(ctx.allSans.slice(0, ply))?.name ?? null;
+  const named = detected && detected.includes(':') ? detected.split(',')[0].trim() : null;
   if (named) facets.push(`[opening] The line so far is the ${named}.`);
 
   // ── 11. OPPONENT READ — what the opponent's move targets + their dev lag ──
@@ -644,8 +680,8 @@ export function computeMoveFacets(
     // eyeing d5" — ONE claim, two families, spoken back to back on every
     // opponent development move (walk 5, 2026-09-23). The selector keeps
     // different families apart on purpose (B12), so the restatement is dropped
-    // here, where both are known: `[does]` already carries the reach.
-    const restates = opp?.kind === 'influence' && facets.some((x) => x.startsWith('[does] '));
+    // here, where both are known: the influence line (`[does]`, or `[delta]` when it hits no piece) already carries the reach.
+    const restates = opp?.kind === 'influence' && !!influence;
     if (opp && !restates) { const f = `[opp-target] ${opp.text}`; facets.push(f); recSquares(f, opp.squares ?? []); }
     // The opponent's OWN moves so far (parity from the student's colour): white
     // plays odd ply numbers (even index), black plays even ply numbers (odd index).
@@ -759,7 +795,7 @@ function pieceWord(p: string): string {
  *  central squares it now fights for, own pieces it now guards. Pure chess.js
  *  (attackers()) — the quiet-move beat that gives EVERY ply its own computed
  *  content (David 2026-07-22). Null when the move creates none of the three. */
-export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: string, squaresOut?: string[]): string | null {
+export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: string, squaresOut?: string[], shapeOut?: { hitsPiece: boolean }): string | null {
   try {
     const b = new Chess(fenBefore);
     const mv = b.move(san.replace(/[?!]+$/, ''));
@@ -796,6 +832,7 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     if (eyes.length) bits.push(`eyes ${andList(eyes)}`);
     if (fights.length) bits.push(`fights for ${andList(fights)}`);
     if (!bits.length) return null;
+    if (shapeOut) shapeOut.hitsPiece = eyes.length > 0;
     return `The ${pieceWord(pc.type)} on ${to} now ${bits.join(', ')}.`;
   } catch {
     return null;

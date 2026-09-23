@@ -1698,6 +1698,9 @@ export interface OverviewInsights {
   winRateBlack: number;
   avgElo: number;
   avgAccuracy: number;
+  /** How many analysed games `avgAccuracy` rests on (walk 6, W1: a 95% headline
+   *  read off 1 of 932 games). A headline with no basis stated is a false claim. */
+  accuracyGames: number;
   highestBeaten: { name: string; elo: number; gameId: string } | null;
   lowestLostTo: { name: string; elo: number; gameId: string } | null;
   classificationCounts: MoveClassificationCounts;

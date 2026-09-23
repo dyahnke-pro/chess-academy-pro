@@ -128,7 +128,7 @@ describe('usePositionNarration', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('hands COMPUTED facts to voiceFacts from the coach-is-opponent seat (G0)', async () => {
+  it('hands COMPUTED facts to voiceFacts in the seat they were computed in (G0, walk 6 P1)', async () => {
     const { result } = renderHook(() => usePositionNarration(defaultArgs()));
 
     act(() => {
@@ -141,7 +141,10 @@ describe('usePositionNarration', () => {
     expect(call.facts).toMatch(/Still in the opening\./);
     // The positional read (readPosition) is computed on the board, both sides.
     expect(call.facts.length).toBeGreaterThan('Still in the opening.'.length);
-    expect(call.opts.perspective).toEqual({ mode: 'coach-is-opponent' });
+    // ONE seat end to end: the phraser is never asked to turn "they" into
+    // "I" (on prod it turned it into "you" — a whose-piece inversion).
+    expect(call.opts.perspective).toEqual({ mode: 'student', studentSide: 'white' });
+    expect(call.facts).not.toMatch(/\bI('m|'ve| have| am)\b|\bmy\b/);
     expect(call.opts.intent).toBe('position-read');
     expect(call.opts.warm).toBe(true);
     expect(result.current.isNarrating).toBe(true);
@@ -377,5 +380,18 @@ describe('the COMPUTED CONCEPT reaches "Read this position" (P4c — a wire that
     act(() => { void result.current.narrate(); });
     await waitFor(() => expect(voiceCalls.length).toBe(1), { timeout: 4000 });
     expect(voiceCalls[0].facts, 'the concept clause never reached the phraser').toMatch(/a fork hits two targets at once/);
+  });
+});
+
+describe('dropInventedQuestions — walk 6 P2', () => {
+  it('drops a question the facts never asked, keeps the facts', async () => {
+    const { dropInventedQuestions } = await import('./usePositionNarration');
+    const facts = "They're threatening to win the bishop on c4 — that has to be met first.";
+    expect(dropInventedQuestions(`First thing: they're threatening your bishop on c4. So what matters beyond that?`, facts))
+      .toBe("First thing: they're threatening your bishop on c4.");
+    // All question → nothing kept; the caller then speaks the facts raw.
+    expect(dropInventedQuestions('What now?', facts)).toBe('');
+    // A question the facts DO ask survives.
+    expect(dropInventedQuestions('Can you find it?', 'Can you find it?')).toBe('Can you find it?');
   });
 });

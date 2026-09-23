@@ -115,7 +115,9 @@ const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [
 // that fixture could no longer test the gate. If this ever falls silent for an
 // unrelated reason the "need silenced it" assertions below would pass
 // vacuously, so the first test pins that.
-const LOUD_FEN = 'r1bqkb1r/pp3ppp/2np1n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 14';
+// Walk 6: the queen was on d8, guarding c7, so the fork was never real (a
+// vacuous safety gate passed it). With the queen on g6 it is.
+const LOUD_FEN = 'r1b1kb1r/pp3ppp/2np1nq1/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 14';
 const flat = {
   topLines: [line(1, 20), line(2, 15), line(3, 10)],
   evaluation: 20, isMate: false, mateIn: null, seldepth: 20, depth: 18,

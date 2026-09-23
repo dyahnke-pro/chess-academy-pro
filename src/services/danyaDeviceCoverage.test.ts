@@ -88,7 +88,7 @@ describe('Danya device coverage — every device fires on its trigger position (
     expect(candidateCompareClause(fen, [
       { moves: ['d8c7'], evaluation: 20 },
       { moves: ['d8b6'], evaluation: 80 },
-    ], 'black')).toMatch(/Qc7 over Qb6/);
+    ], 'black')).toMatch(/Prefer Qc7 to Qb6/);
   });
 
   it('named-tactic clause names a fork in the line', () => {
