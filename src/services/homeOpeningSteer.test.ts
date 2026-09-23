@@ -14,7 +14,7 @@ vi.mock('../stores/appStore', () => ({
 }));
 vi.mock('./appAuditor', () => ({ logAppAudit: async () => undefined }));
 
-import { buildSteerIndex, isHomeSteerWarm, pickHomeSteerMove, steerFromIndex, STEER_MIN_GAMES, __resetHomeSteerCacheForTests } from './homeOpeningSteer';
+import { buildSteerIndex, isHomeSteerWarm, openingSans, pickHomeSteerMove, steerFromIndex, STEER_MAX_PLY, STEER_MIN_GAMES, __resetHomeSteerCacheForTests } from './homeOpeningSteer';
 import { __resetHomeOpeningCacheForTests } from './homeOpeningService';
 
 const PIRC = openingKeyFor('B07', 'Pirc Defense');
@@ -94,3 +94,27 @@ describe('isHomeSteerWarm — the cold build is a different budget from the warm
   });
 });
 
+
+describe('openingSans — the raw imported PGN, opening plies only (walk 4, 2026-09-23)', () => {
+  const RAW = `[Event "Live Chess"]
+[Site "Chess.com"]
+[Result "1-0"]
+[ECO "B90"]
+
+1. e4 {[%clk 0:09:58.3]} 1... c5 {[%clk 0:09:57]} 2. Nf3 $1 {[%eval 0.3]} d6 (2... Nc6 3. d4) 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 1-0`;
+
+  it('matches chess.js loadPgn on a chess.com game with headers, clocks, a variation and a NAG', () => {
+    const c = new Chess();
+    c.loadPgn(RAW);
+    expect(openingSans(RAW, STEER_MAX_PLY)).toEqual(c.history());
+    expect(openingSans(RAW, 3)).toEqual(['e4', 'c5', 'Nf3']);
+  });
+
+  it('a corrupt tail never poisons the index: replay stops at the first illegal token', () => {
+    const g = buildGameRecord({ id: 'bad', openingId: PIRC, pgn: '1. e4 d6 2. d4 Nf6 3. Nc3 g6 4. Qz9 Bg7', white: 'opp', black: 'student', result: '1-0' });
+    const index = buildSteerIndex([g, g, g], ID, 'black', 'Pirc Defense');
+    const c = new Chess(); for (const s of ['e4', 'd6', 'd4', 'Nf6', 'Nc3', 'g6']) c.move(s);
+    expect(steerFromIndex(index, new Chess().fen(), 'Pirc Defense')?.san).toBe('e4');
+    expect(steerFromIndex(index, c.fen(), 'Pirc Defense')).toBeNull();
+  });
+});

@@ -844,6 +844,64 @@ what the coach said; the grade is against the board and the voice rules.
   "ended *" and it invented a draw. The recap now says "You stopped the game
   … before it finished."
 
+## 🚶 2026-09-23 — WALK 4 (verification of the walk-2/3 batch on prod, chunk index-5mneGZ0v): what stuck, what did not
+
+Live chunk carried every new string of the batch and none of the replaced ones
+("before it finished", "home-steer-miss", "engine's line there ran", "are still
+at home" ×5; "Consider taking the move back" 0). Fresh device, import
+Knight_mare_01 (932 games, rapid 1214), then Learn, then Play — read off the
+listener and the local audit log, not the pass count.
+
+- ✅ **Import saves the username on a fresh device** — profile
+  `preferences.chessComUsername = Knight_mare_01`, `currentRating = 1214`,
+  Weaknesses header "Analyze 50 of 932 games" (walk 2's "0 of 0" is gone).
+- ✅ **"what is my weakest opening?"** answered from the record by the brain's
+  profile lane ("as White is Vienna Game (59% win over 101 games); as Black it's
+  Sicilian Defense (61% win over 87 games)") — the router intercept is gone and
+  the lane still answers. `home-opening-chosen` emitted for both colours,
+  computed from the record (472 White / 460 Black keyed games, 4 unkeyed).
+- ✅ **"hint"** on Learn gives a hint ("look at your pawn on e7 — it has a
+  better square waiting"), no opening picker. 🟡 The hint is engine-led, not
+  line-led: in a Najdorf the student asked to play, the first hint pointed at
+  e7 rather than …c5. Observed, not fixed — the hint computer does not know the
+  taught line; owed as a separate item, not a walk regression.
+- ✅ **"why did you play that?"** → "My Nf3 on move 2 was the engine's top
+  move — it develops the knight into the game, fighting for the center on d4
+  and e5. That was my move, and the engine agrees with it." — the coach's move,
+  first person, not the student's own.
+- ✅ **The opening is announced once** — "This game is now the Sicilian
+  Defense." on 2.Nf3 and never again on 2…d6 ("They open with d4, the Open
+  Sicilian, and after the trades you reach the tabiya.").
+- 🟡 **A voiced note in the spectator register on a live board** — "White
+  develops the knight to f3, the natural Open Sicilian move-order — but they
+  have a quieter idea in mind than d4" said to the Black student. That is the
+  `beatRegister` class (CLAUDE.md "AND ITS SIBLING — THE REGISTER"), the offline
+  bake in BACKLOG §4.6; the note is corpus content, not this batch. Not fixed
+  here.
+- 🔴→✅ **THE FIRST OPPONENT MOVE STILL MISSED THE HOME STEER.** Play as Black
+  with the Learn intent cleared: `coach-opponent-move-source: source=home-steer-
+  miss colour=black warm=false elo=1366`, then Stockfish e4; move two hit warm
+  (`home-steer san=Bc4 family=Sicilian Defense faced=19/87`). So walk 2's 4 s
+  cold budget was not the fix — the cold BUILD is what was slow. Measured: a raw
+  read of all 932 games is 67 ms, but `buildSteerIndex` ran `chess.loadPgn` +
+  `history()` on every home game's WHOLE 80-ply PGN (headers, `[%clk]`
+  comments) — ~12 ms each, ~1.03 s for the 87 Sicilian games in Node, worse on
+  a contended main thread — and only the first 24 plies were ever used. Fixed
+  at the cost, not the budget: `openingSans(pgn, STEER_MAX_PLY)` strips headers,
+  comments, variations, NAGs, numbers and the result and hands the first 24
+  tokens to the same chess.js replay (legality unchanged — an illegal token
+  still breaks the replay). 1028 ms → 215 ms on the same 87 games, and 180 of
+  those are the per-ply `fen()` the index needs. Gate: `openingSans` matches
+  `loadPgn` on a chess.com PGN with headers, clocks, a variation and a NAG; a
+  corrupt tail never poisons the index.
+  Note for the next reader: the Learn game had left `intendedOpening = Najdorf`
+  in coach memory, so the FIRST Play game took the book fast path (`coach-move-
+  fastpath: book: e4`) and never reached the steer — that is the designed
+  precedence (intent > slip > steer), not a miss. The miss above is from a
+  second game with the intent cleared.
+- 🟡 `home-opening-chosen` is emitted twice per computation (both callers ran
+  `getHomeOpenings` before the memo landed). Cosmetic; the memo key is right.
+
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
 Everything on the open list that is code I own and needs no decision from David.

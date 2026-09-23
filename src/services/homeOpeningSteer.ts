@@ -38,6 +38,32 @@ export interface HomeSteerPick {
   family: string;
 }
 
+/**
+ * The first `maxPly` SAN tokens of a raw imported PGN — headers, `{…}` clock
+ * and eval comments, `(…)` variations, NAGs, move numbers and the result
+ * stripped. NOT validated here: the replay below plays each token through
+ * chess.js and breaks on the first illegal one, which is the same legality the
+ * old `loadPgn` gave — at a fraction of the cost. Measured 2026-09-23 (walk 4):
+ * `loadPgn` + `history()` on a whole 80-ply chess.com game is ~12 ms, so the
+ * 87-game home set cost ~1 s on the main thread at the coach's FIRST move —
+ * the cold build lost its 4 s budget on prod (`home-steer-miss warm=false`)
+ * while move two hit warm. Only the opening plies were ever needed.
+ */
+export function openingSans(pgn: string, maxPly: number): string[] {
+  const body = pgn
+    .replace(/^\s*\[[^\]]*\]\s*$/gm, ' ')
+    .replace(/\{[^}]*\}/g, ' ')
+    .replace(/\([^)]*\)/g, ' ');
+  const out: string[] = [];
+  for (const raw of body.split(/\s+/)) {
+    if (out.length >= maxPly) break;
+    const t = raw.replace(/^\d+\.(?:\.\.)?/, '');
+    if (!t || /^\d+\.*$/.test(t) || /^\$\d+$/.test(t) || /^(?:1-0|0-1|1\/2-1\/2|\*)$/.test(t)) continue;
+    out.push(t);
+  }
+  return out;
+}
+
 /** fenKey(position before the opponent's move) → san → games. */
 export type SteerIndex = Map<string, Map<string, number>>;
 
@@ -48,11 +74,9 @@ export function buildSteerIndex(games: readonly GameRecord[], identity: PlayerId
   const opponentTurn = colour === 'white' ? 'b' : 'w';
   for (const g of games) {
     if (!isHomeOpeningGame(g, identity, { [colour]: { family } })) continue;
-    const chess = new Chess();
-    let sans: string[];
-    try { chess.loadPgn(g.pgn); sans = chess.history(); } catch { continue; }
+    const sans = openingSans(g.pgn, STEER_MAX_PLY);
     const replay = new Chess();
-    for (let i = 0; i < sans.length && i < STEER_MAX_PLY; i += 1) {
+    for (let i = 0; i < sans.length; i += 1) {
       const before = replay.fen();
       if (replay.turn() === opponentTurn) {
         const k = fenKey(before);
