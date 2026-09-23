@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4648 lines · 34 exports · 29 importers · 26 tests · 5 audits**
+**4680 lines · 34 exports · 32 importers · 29 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:57) — names `coachFeatureService`
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3738) — names `buildReviewSegments`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4058) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:5990) — names `coachFeatureService`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3749) — names `buildReviewSegments`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4069) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:5996) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -38,12 +38,15 @@
 - `src/services/reviewCorpusSweep.test.ts`
 - `src/services/reviewDeepThreat.test.ts`
 - `src/services/reviewForesight.test.ts`
+- `src/services/reviewNarrationBuild.ts`
 - `src/services/reviewNarrationCache.test.ts`
 - `src/services/reviewNarrationCache.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Exports and every call site
 
@@ -63,7 +66,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2071`
+- `src/components/Coach/CoachGamePage.tsx:2095`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`
@@ -79,7 +82,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:517`
+- `src/components/Coach/CoachGameReview.tsx:511`
 - `src/services/recapSeat.test.ts:17`
 
 ### `recapSecondPerson` (function) — 9 call sites
@@ -121,7 +124,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:590`
+- `src/components/Coach/CoachGameReview.tsx:571`
 - `src/services/coachFeatureService.test.ts:744`
 - `src/services/coachFeatureService.test.ts:752`
 - `src/services/coachFeatureService.test.ts:784`
@@ -134,8 +137,8 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 54 call sites
-- `src/components/Coach/CoachGameReview.tsx:1911`
+### `buildReviewSegments` (function) — 55 call sites
+- `src/components/Coach/CoachGameReview.tsx:1874`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
 - `src/services/coachFeatureService.causalChain.test.ts:47`
@@ -189,6 +192,7 @@
 - `src/services/reviewNeedGate.test.ts:81`
 - `src/services/reviewNeedGate.test.ts:88`
 - `src/services/reviewNeedGate.test.ts:94`
+- `src/test/computedOrderWired.test.ts:59`
 
 ### `reviewOpeningRecord` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -200,7 +204,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:5023`
+- `src/components/Coach/CoachGameReview.tsx:4986`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -267,18 +271,19 @@
 - `src/services/reviewRegister.test.ts:32`
 
 ### `openingNameForKey` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:214`
+- `src/components/Coach/CoachGameReview.tsx:208`
 
-### `generateReviewNarration` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:632`
+### `generateReviewNarration` (function) — 10 call sites
 - `src/services/reviewBetterLineWhy.test.ts:56`
 - `src/services/reviewBetterLineWhy.test.ts:82`
-- `src/services/reviewCorpusSweep.test.ts:270`
+- `src/services/reviewCorpusSweep.test.ts:148`
 - `src/services/reviewDeepThreat.test.ts:36`
 - `src/services/reviewDeepThreat.test.ts:62`
-- `src/services/reviewDeepThreat.test.ts:109`
-- `src/services/reviewDeepThreat.test.ts:145`
+- `src/services/reviewDeepThreat.test.ts:114`
+- `src/services/reviewDeepThreat.test.ts:150`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
+- `src/services/reviewNarrationBuild.ts:83`
+- `src/services/reviewRealSweep.test.ts:187`
 
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
@@ -313,11 +318,14 @@
 - `src/services/reviewDeepThreat.test.ts`
 - `src/services/reviewForesight.test.ts`
 - `src/services/reviewFullGameNarration.harness.test.ts`
+- `src/services/reviewNarrationBuild.test.ts`
 - `src/services/reviewNarrationCache.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Audits that reach it
 

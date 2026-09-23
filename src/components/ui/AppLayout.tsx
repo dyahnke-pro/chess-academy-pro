@@ -1,4 +1,5 @@
-import { useCallback, useState, useRef, useEffect } from 'react';
+import { useCallback, useState, useRef, useEffect, Suspense } from 'react';
+import { PageFallback } from './PageFallback';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { usePullToRefresh, PULL_TO_REFRESH_THRESHOLD_PX } from '../../hooks/usePullToRefresh';
 import {
@@ -470,7 +471,9 @@ export function AppLayout(): JSX.Element {
               </span>
             </div>
           )}
-          <Outlet />
+          <Suspense fallback={<PageFallback />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 

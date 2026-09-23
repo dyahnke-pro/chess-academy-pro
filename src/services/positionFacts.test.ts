@@ -48,14 +48,16 @@ describe('computePositionFacts — the composer', () => {
   // THE DOOR IS WIRED — and a wire that does not fire is not a wire. These
   // prove steps 3-6 of `coachDecider` actually ran over this composer's output,
   // not that the import exists.
-  it('the door keeps THIS composer\'s ranking scale, not the review ranker\'s', async () => {
+  it('the door orders by computed stakes — the hanging piece leads the habit', async () => {
     const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
-    // must-defend (75) must outrank method (10). `rankFacets` knows neither of
-    // these texts, so if the review ranker had been applied the order would be
-    // whatever its default produces — this is the passthrough firing.
+    // The hanging knight carries stakes (3 points, two plies away) and the habit
+    // carries none, so the computed order puts the knight first — and every
+    // staked clause ahead of every unstaked one.
     const kinds = r.clauses.map((c) => c.kind);
     expect(kinds.indexOf('must-defend')).toBeLessThan(kinds.indexOf('method'));
-    expect(r.clauses).toEqual([...r.clauses].sort((a, b) => b.rank - a.rank));
+    const firstUnstaked = r.clauses.findIndex((c) => !c.stakes);
+    const lastStaked = r.clauses.map((c) => !!c.stakes).lastIndexOf(true);
+    expect(firstUnstaked === -1 || lastStaked < firstUnstaked).toBe(true);
   });
 
   it('returns the quiet trail — silence is a verdict you can read back', async () => {

@@ -16,7 +16,8 @@ import { plyFactsForMove } from './pvPlayback';
 import { legalSeeGainOn, findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
-import { seatPieceReferences, describeStudentThreat } from './groundedAnswer';
+import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
+import { costStakes, exchangeStakes, forkPoints, piecesOn, MATE_POINTS, type FactStakes } from './factStakes';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
 import { isMateEval } from './engineConstants';
@@ -190,6 +191,9 @@ export function computeMoveFacets(
    *  that their battery outranks your pin when both describe one diagonal.
    *  Coupled here, never inferred from the prose (G0). */
   outIncoming?: Set<string>,
+  /** WHAT EACH FACET IS WORTH ON THE BOARD — coupled here from the computer
+   *  that produced it (`factStakes.ts`); the door orders by it. */
+  outStakes?: Map<string, FactStakes>,
 ): string[] {
   const facets: string[] = [];
   // Record the KEY SQUARES a facet named, keyed by the facet text, so the
@@ -201,6 +205,9 @@ export function computeMoveFacets(
   const recIncoming = (facet: string, beneficiary: 'w' | 'b' | undefined): void => {
     if (!outIncoming || !beneficiary || !ctx.studentColorWB) return;
     if (beneficiary !== ctx.studentColorWB) outIncoming.add(facet);
+  };
+  const recStakes = (facet: string, stakes: FactStakes | null | undefined): void => {
+    if (outStakes && stakes && stakes.points > 0) outStakes.set(facet, stakes);
   };
   const recSquares = (facet: string, squares: ReadonlyArray<string | null | undefined>): void => {
     if (!outSquares) return;
@@ -309,13 +316,19 @@ export function computeMoveFacets(
     // clue to whose move it was — and with it subject-less, the LLM voiced Black's
     // great move as "a great move from you" (the White student). Mirror the [move]
     // facet's "You:" / "Your opponent:" tag so attribution is never guessed.
-    facets.push(`[quality] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.`);
+    const qf = `[quality] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.`;
+    facets.push(qf);
+    // The cost the move already paid — only on a class that cost something.
+    if (costsPoints) recStakes(qf, costStakes(swing));
   }
   // ── 2a. THE FUNDAMENTAL NEGLECTED (David 2026-09-05) — the attributed rule
   // the flagged move crossed, proven on the board; stated as its own facet so
   // the uncapped inventory carries it and the capped cascade can lead with it.
   if (ctx.fundamentals && ctx.fundamentals.length > 0) {
-    facets.push(`[principle] ${renderFundamentalVerdict(ctx.fundamentals, { ply, seen: ctx.seenFundamentals })}`);
+    const pf = `[principle] ${renderFundamentalVerdict(ctx.fundamentals, { ply, seen: ctx.seenFundamentals })}`;
+    facets.push(pf);
+    // The rule explains the cost the move paid, so it is worth that cost.
+    if (negativeClass) recStakes(pf, costStakes(swing));
   }
 
   // ── 2b. EVAL ATTRIBUTION — when the bar visibly moves on an UNFLAGGED ply,
@@ -421,9 +434,11 @@ export function computeMoveFacets(
         if (v.status === 'live') {
           const f = `[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
+          recStakes(f, { points: v.winsPoints, plies: 1 });
         } else if (v.status === 'threat') {
           const f = `[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
+          recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 });
         }
         // status 'none' → unproven fork shape, say nothing (G0).
         continue;
@@ -431,6 +446,8 @@ export function computeMoveFacets(
       {
         const f = `[tactic] ${seat(tac.description)}.`;
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
+        // What it wins by exchange on its own squares, from the side it hurts.
+        recStakes(f, exchangeStakes(fenAfter, tac.involvedSquares, tac.beneficiary ? (tac.beneficiary === 'w' ? 'b' : 'w') : null));
       }
     }
     // ONLY THE DELTA SPEAKS (WO-STANDARD-01 D-8, prod tape 2026-09-22:
@@ -447,6 +464,7 @@ export function computeMoveFacets(
         const desc = fresh.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
         const f = `[loose] Newly undefended: ${seat(desc)}.`;
         facets.push(f); recSquares(f, fresh.map((h) => h.square));
+        recStakes(f, exchangeStakes(fenAfter, fresh.map((h) => h.square)));
       }
     }
   } catch { /* ignore */ }
@@ -455,8 +473,18 @@ export function computeMoveFacets(
   // identify my threat and call it out!!") — null-move scan for the biggest
   // threat this move CREATED: mate-in-one / safe royal fork / clean win.
   if (ctx.studentColorWB && ctx.moverColor === ctx.playerColor) {
-    const threat = describeStudentThreat(ctx.fenBefore, fenAfter, ctx.studentColorWB);
-    if (threat) facets.push(`[threat] ${threat.charAt(0).toUpperCase()}${threat.slice(1)}.`);
+    const t = detectNewThreat(ctx.fenBefore, fenAfter, ctx.studentColorWB);
+    if (t) {
+      const threat = `you're now threatening ${t.san} — it ${t.detail}`;
+      const f = `[threat] ${threat.charAt(0).toUpperCase()}${threat.slice(1)}.`;
+      facets.push(f);
+      // The student's next move cashes it (their opponent moves first: 2 plies).
+      recStakes(f, t.kind === 'mate'
+        ? { points: MATE_POINTS, plies: 2 }
+        : t.kind === 'fork'
+          ? { points: forkPoints(piecesOn(fenAfter, t.targetSquares)), plies: 2 }
+          : { points: t.rank, plies: 2 });
+    }
   }
 
   // ── 4. POSITIONAL VERDICT + THE FULL ASSET LIST (no cap) ──
@@ -506,9 +534,9 @@ export function computeMoveFacets(
   if (studentColorWB) {
     const enemyWB: Color = studentColorWB === 'w' ? 'b' : 'w';
     const trapTheirs = findTrappedPiece(fenAfter, enemyWB);
-    if (trapTheirs) { const f = `[trapped] Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered; it's coming off the board.`; facets.push(f); recSquares(f, [trapTheirs.square, trapTheirs.attackerSquare]); }
+    if (trapTheirs) { const f = `[trapped] Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered; it's coming off the board.`; facets.push(f); recSquares(f, [trapTheirs.square, trapTheirs.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapTheirs.square])); }
     const trapMine = findTrappedPiece(fenAfter, studentColorWB);
-    if (trapMine) { const f = `[trapped] Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`; facets.push(f); recSquares(f, [trapMine.square, trapMine.attackerSquare]); }
+    if (trapMine) { const f = `[trapped] Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`; facets.push(f); recSquares(f, [trapMine.square, trapMine.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapMine.square])); }
   }
 
   // ── 6b. THE MISSING TEACHING POINTS (Naroditsky message catalog) ──
@@ -587,7 +615,9 @@ export function computeMoveFacets(
 
   // ── 8. FORCED MATING RUN — this ply begins a forced checking finish ──
   if (ctx.forcedRunStartPly != null && ply === ctx.forcedRunStartPly) {
-    facets.push('[forced] From here it is a forced checking run to mate — every move a check, no escape.');
+    const ff = '[forced] From here it is a forced checking run to mate — every move a check, no escape.';
+    facets.push(ff);
+    recStakes(ff, { points: MATE_POINTS, plies: 2 });
   }
 
   // ── 9. PLANS — opening development + middlegame orientation (both sides) ──

@@ -2556,6 +2556,24 @@ export async function analyzeAllGames(
     phase: 'done',
   });
 
+  // THE NEWEST GAME'S REVIEW IS READY BEFORE IT IS TAPPED (2026-09-23). The
+  // game a student reviews after an import is almost always the one they just
+  // played, and its first open used to pay the whole narration prep. Build it
+  // now, in the background, from the exact inputs the review page will ask
+  // for, so that open is a cache hit. Lazy import: the builder reaches
+  // coachFeatureService, which already imports this module.
+  if (analyzedGameIds.length > 0 && !_abortAnalysis) {
+    void (async () => {
+      const analyzedSet = new Set(analyzedGameIds);
+      const newest = games
+        .filter((g) => analyzedSet.has(g.id))
+        .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))[0];
+      if (!newest) return;
+      const { prebuildReviewNarration } = await import('./reviewNarrationBuild');
+      await prebuildReviewNarration(newest.id, 'import-batch');
+    })().catch(() => undefined);
+  }
+
   return analyzed;
 }
 

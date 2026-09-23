@@ -48,9 +48,17 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { Chess } from 'chess.js';
 
-const OUT_DIR = 'data/sources/wo4-corpus';
+// Defaults build the WO-4 corpus exactly as before. The flags let the same
+// producer build a LARGER, separate corpus without touching that one — the
+// real-engine review sweep (2026-09-23) reads `--out data/sources/sweep-corpus
+// --target 300 --country IS,IE,NZ,SG`.
+const flag = (name, fallback) => {
+  const i = process.argv.indexOf(name);
+  return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : fallback;
+};
+const OUT_DIR = flag('--out', 'data/sources/wo4-corpus');
 const GAMES = `${OUT_DIR}/games.json`;
-const TARGET_GAMES = 47;
+const TARGET_GAMES = Number(flag('--target', 47));
 
 // An ordinary club player, both sides, so the game is a real contest rather
 // than a demolition. These bounds decide what "amateur" means here; they are
@@ -59,7 +67,8 @@ const ELO_MIN = 800;
 const ELO_MAX = 1800;
 const MIN_PLIES = 30;
 const MAX_PLIES = 160;
-const COUNTRY = 'IS'; // small federation ⇒ a short, stable player list
+// Small federations ⇒ short, stable player lists. Walked in the order given.
+const COUNTRIES = flag('--country', 'IS').split(',').map((c) => c.trim()).filter(Boolean);
 /** 🚨 SPREAD THE CORPUS ACROSS PLAYERS. The first run took every qualifying
  *  game from each archive before moving on and produced 47 games in which ONE
  *  player appeared 40+ times. WO-4 measures an attribution gap over a
@@ -96,11 +105,16 @@ function sansOf(pgn) {
 
 async function fetchPhase() {
   mkdirSync(OUT_DIR, { recursive: true });
-  const list = await getJson(`https://api.chess.com/pub/country/${COUNTRY}/players`);
-  if (!list?.players?.length) throw new Error('could not list players — chess.com unreachable?');
-  // DETERMINISTIC: sort, then walk in order. Never "first N the API returned".
-  const players = [...list.players].sort();
-  console.log(`[fetch] ${players.length} players in /${COUNTRY}/, walking in sorted order`);
+  // DETERMINISTIC: each country's list sorted, countries in the order given.
+  // Never "first N the API returned".
+  const players = [];
+  for (const country of COUNTRIES) {
+    const list = await getJson(`https://api.chess.com/pub/country/${country}/players`);
+    if (!list?.players?.length) { console.log(`[fetch] /${country}/ unreachable or empty — skipped`); continue; }
+    players.push(...[...list.players].sort());
+    console.log(`[fetch] ${list.players.length} players in /${country}/`);
+  }
+  if (!players.length) throw new Error('could not list players — chess.com unreachable?');
 
   const picked = [];
   const seen = new Set();

@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**340 lines · 4 exports · 4 importers · 3 tests · 1 audits**
+**344 lines · 4 exports · 4 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1163) — names `usePositionNarration`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3904) — names `usePositionNarration`
-- **🔒🔒 EVERY COACHING SURFACE GETS THE CORPUS — review, play, learn, tactics, all of it (David 2026-08-07, emphatic).** (CLAUDE.md:4258) — names `usePositionNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:5954) — names `usePositionNarration`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1178) — names `usePositionNarration`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3921) — names `usePositionNarration`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4252) — names `usePositionNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:5966) — names `usePositionNarration`
 
 ## Who calls in
 
@@ -30,23 +30,23 @@
 
 ### `__resetStockfishCacheForTests` (const) — 2 call sites
 - `src/hooks/usePositionNarration.degrade.test.ts:78`
-- `src/hooks/usePositionNarration.test.ts:115`
+- `src/hooks/usePositionNarration.test.ts:116`
 
 ### `usePositionNarration` (function) — 14 call sites
-- `src/components/Coach/CoachGamePage.tsx:1783`
-- `src/components/Coach/CoachTeachPage.tsx:7243`
+- `src/components/Coach/CoachGamePage.tsx:1806`
+- `src/components/Coach/CoachTeachPage.tsx:7235`
 - `src/hooks/usePositionNarration.degrade.test.ts:85`
-- `src/hooks/usePositionNarration.test.ts:124`
-- `src/hooks/usePositionNarration.test.ts:131`
-- `src/hooks/usePositionNarration.test.ts:151`
-- `src/hooks/usePositionNarration.test.ts:179`
-- `src/hooks/usePositionNarration.test.ts:200`
-- `src/hooks/usePositionNarration.test.ts:224`
-- `src/hooks/usePositionNarration.test.ts:241`
-- `src/hooks/usePositionNarration.test.ts:263`
-- `src/hooks/usePositionNarration.test.ts:302`
-- `src/hooks/usePositionNarration.test.ts:335`
-- `src/hooks/usePositionNarration.test.ts:375`
+- `src/hooks/usePositionNarration.test.ts:125`
+- `src/hooks/usePositionNarration.test.ts:132`
+- `src/hooks/usePositionNarration.test.ts:152`
+- `src/hooks/usePositionNarration.test.ts:180`
+- `src/hooks/usePositionNarration.test.ts:201`
+- `src/hooks/usePositionNarration.test.ts:225`
+- `src/hooks/usePositionNarration.test.ts:242`
+- `src/hooks/usePositionNarration.test.ts:264`
+- `src/hooks/usePositionNarration.test.ts:303`
+- `src/hooks/usePositionNarration.test.ts:336`
+- `src/hooks/usePositionNarration.test.ts:376`
 
 ## Tests
 

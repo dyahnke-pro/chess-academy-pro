@@ -70,6 +70,13 @@ export interface CoachDecisionRow {
   /** Whether a method beat closed the beat — the habit teaching, which is the
    *  half of the coach that was near-silent before 2026-09-16. */
   method: boolean;
+  /** THE COMPUTED ORDER (2026-09-23): how many of the ply's facts carried
+   *  STAKES — material from the computer that made them — and whether the
+   *  first fact spoken was one of them (`null` when nothing spoke). A run in
+   *  which no fact ever carries stakes means the wire does not fire and every
+   *  ply is ordered by the tie table alone. */
+  stakedCount: number;
+  leadStaked: boolean | null;
 }
 
 type Listener = (row: CoachDecisionRow) => void;

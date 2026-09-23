@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**792 lines · 2 exports · 31 importers · 12 tests · 0 audits**
+**819 lines · 2 exports · 31 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4964) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4976) — names `detectTactics`
 
 ## Who calls in
 
@@ -31,7 +31,6 @@
 - `src/services/pvPlayback.ts`
 - `src/services/relationClaimCost.report.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
-- `src/services/reviewCorpusSweep.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewMoveBriefing.ts`
 - `src/services/reviewOpponentCommentary.ts`
@@ -44,6 +43,7 @@
 - `src/services/tacticsDetector.groundTruth.test.ts`
 - `src/services/tacticsDetector.test.ts`
 - `src/services/weaknessAnalyzer.ts`
+- `src/test/narrationScanner.ts`
 
 ## Exports and every call site
 
@@ -62,7 +62,7 @@
 - `src/services/discussionPractice.ts:55`
 - `src/services/discussionPractice.ts:100`
 - `src/services/discussionPractice.ts:143`
-- `src/services/liveNoteTruth.test.ts:54`
+- `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:353`
 - `src/services/lookaheadPlan.ts:1092`
 - `src/services/lookaheadPlan.ts:1155`
@@ -77,13 +77,12 @@
 - `src/services/pinGeometry.test.ts:115`
 - `src/services/pinGeometry.test.ts:122`
 - `src/services/playCommentary.ts:677`
-- `src/services/pvPlayback.ts:319`
-- `src/services/pvPlayback.ts:339`
+- `src/services/pvPlayback.ts:326`
+- `src/services/pvPlayback.ts:346`
 - `src/services/relationClaimCost.report.test.ts:52`
 - `src/services/reviewCorpusNote.test.ts:61`
-- `src/services/reviewCorpusSweep.test.ts:163`
-- `src/services/reviewFullData.ts:382`
-- `src/services/reviewFullData.ts:424`
+- `src/services/reviewFullData.ts:415`
+- `src/services/reviewFullData.ts:461`
 - `src/services/reviewMoveBriefing.ts:64`
 - `src/services/reviewMoveBriefing.ts:65`
 - `src/services/reviewOpponentCommentary.ts:67`
@@ -140,6 +139,7 @@
 - `src/services/weaknessAnalyzer.ts:1283`
 - `src/services/weaknessAnalyzer.ts:1444`
 - `src/services/weaknessAnalyzer.ts:1450`
+- `src/test/narrationScanner.ts:125`
 
 ## Tests
 
@@ -149,7 +149,6 @@
 - `src/services/pinGeometry.test.ts`
 - `src/services/relationClaimCost.report.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
-- `src/services/reviewCorpusSweep.test.ts`
 - `src/services/tacticClaimValidator.test.ts`
 - `src/services/tacticLaneVocabulary.test.ts`
 - `src/services/tacticsDetector.expansion.test.ts`

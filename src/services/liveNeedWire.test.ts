@@ -36,7 +36,7 @@ function composerCalls(src: string): string[] {
 const LIVE = [
   'src/hooks/useLiveCoach.ts',
   'src/hooks/usePhaseNarration.ts',
-  'src/hooks/usePositionNarration.ts',
+  'src/services/positionReadComposer.ts', // the hook composes through here since 8ab0c5f
   'src/services/whyBestMove.ts',
 ] as const;
 
@@ -50,7 +50,7 @@ describe('the live composer calls carry the student model (B3)', () => {
   });
 
   it('the three hooks that see the student\'s move hand over lastMove; the Why button honestly does not', () => {
-    for (const f of ['src/hooks/useLiveCoach.ts', 'src/hooks/usePhaseNarration.ts', 'src/hooks/usePositionNarration.ts']) {
+    for (const f of ['src/hooks/useLiveCoach.ts', 'src/hooks/usePhaseNarration.ts', 'src/services/positionReadComposer.ts']) {
       for (const c of composerCalls(read(f))) expect(c, `${f} never hands over the move just played`).toMatch(/lastMove/);
     }
     // The student is to move at a "Why?" tap — the last move is the opponent's.

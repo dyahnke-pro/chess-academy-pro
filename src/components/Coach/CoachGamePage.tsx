@@ -1809,6 +1809,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     moveNumber: moveCountRef.current,
     playerColor,
     openingName: detectedOpening?.name ?? null,
+    // Play is out of scope for the 2026-09-23 corpus removal — unchanged.
+    corpusNotes: true,
     // The read now STREAMS into the chat below the board (see the effect below),
     // so no separate final-report inject — that would duplicate the streamed
     // bubble. David 2026-07-10: "no more special place for them."
@@ -1849,6 +1851,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     playerColor,
     getOpeningName: () => detectedOpening?.name ?? null,
     getLiveFen: () => game.fen,
+    // Play is out of scope for the 2026-09-23 corpus removal — unchanged.
+    corpusNotes: true,
     // Persist the phase-transition report in the chat messages under the board
     // (David 2026-07-01) instead of the transient narration banner that pops
     // up then disappears. Voice still plays live via the hook.

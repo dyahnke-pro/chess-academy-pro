@@ -60,11 +60,20 @@ describe('every decision path is observable', () => {
   });
 
   it('emits when the coach SPEAKS, with the counts an audit can trend', () => {
-    const d = decide(loudSignals, student({ speak: true }), bundle(['[delta] one', '[delta] two']), 'walk');
+    const d = decide(loudSignals, student({ speak: true }), bundle(['[threat] one', '[delta] two']), 'walk');
     expect(d.speak).toBe(true);
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({ speak: true, reason: 'spoken' });
     expect(rows[0].spokenCount + rows[0].quietCount).toBeGreaterThan(0);
+  });
+
+  it('emits when every fact was an unsupported description, and names that gate', () => {
+    // TEACHING POINTS FIRST (2026-09-23): a ply of descriptions with no
+    // teaching point says nothing — a third silence, distinct from the two above.
+    const d = decide(loudSignals, student({ speak: true }), bundle(['[delta] one', '[delta] two']), 'walk');
+    expect(d.speak).toBe(false);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({ speak: false, reason: 'unsupported' });
   });
 
   it('absent need is recorded as ABSENT, never as false', () => {

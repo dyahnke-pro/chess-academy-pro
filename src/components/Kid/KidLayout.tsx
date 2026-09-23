@@ -1,4 +1,5 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, Suspense } from 'react';
+import { PageFallback } from '../ui/PageFallback';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
@@ -90,7 +91,9 @@ export function KidLayout(): JSX.Element {
 
       {/* Content */}
       <main className="flex flex-1 flex-col min-h-0 overflow-hidden">
-        <Outlet />
+        <Suspense fallback={<PageFallback />}>
+          <Outlet />
+        </Suspense>
       </main>
     </div>
   );

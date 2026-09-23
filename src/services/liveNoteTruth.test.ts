@@ -50,7 +50,12 @@ describe('the live lane speaks about THIS board', () => {
     // get the SAME note back. Selection never looked at either board, so the
     // note cannot be a description of one, and announcing it as "the pin on the
     // board" was false for at least one of them by construction.
-    const fen = fenAfter(18);
+    // A board with an UNAMBIGUOUS pattern (Qh5 + Bc4 on f7: a mate threat and a
+    // pin). This used David's Pirc at ply 18, whose only "tactic" was one the
+    // walk-5 detector corrections (2026-09-23) rightly stopped calling a tactic —
+    // so the precondition failed and the structural proof below never ran. The
+    // proof is about the tag tier, not about that board.
+    const fen = 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4';
     const types = detectTactics(fen).tactics.map((t) => t.type).filter((t) => t !== 'none');
     expect(types.length).toBeGreaterThan(0);   // a pattern really is on this board
 

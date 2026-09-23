@@ -60,7 +60,6 @@ import { captureEvent } from '../../services/analytics';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import {
   generateNarrativeSummary,
-  generateReviewNarration,
   buildReviewCitations,
   buildReviewSegments,
   frameOpeningForStudent,
@@ -89,7 +88,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
-import { reviewNarrationCacheKey, getCachedReviewNarration, storeReviewNarration } from '../../services/reviewNarrationCache';
+import { getOrBuildReviewNarration, isReviewUncapped, reviewMoveInputsFrom } from '../../services/reviewNarrationBuild';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import { registerCoachHands, actionForCommand, actuate } from '../../services/coachActuator';
@@ -120,15 +119,10 @@ import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassific
  *
  *  `?uncapped=0` still forces the old one-beat cascade for a quick manual
  *  comparison; `reviewFullDetail` on the profile remains unread (its Settings
- *  row is gone and stays gone — the choice is the computer's, not a toggle). */
-function isReviewUncapped(): boolean {
-  try {
-    if (typeof window === 'undefined') return true;
-    if (new URLSearchParams(window.location.search).get('uncapped') === '0') return false;
-    if ((window as unknown as { __REVIEW_UNCAPPED__?: boolean }).__REVIEW_UNCAPPED__ === false) return false;
-    return true;
-  } catch { return true; }
-}
+ *  row is gone and stays gone — the choice is the computer's, not a toggle).
+ *
+ *  `isReviewUncapped` itself now lives in `services/reviewNarrationBuild`, so a
+ *  narration built off-screen reads the same mode the page does. */
 
 interface CoachGameReviewProps {
   moves: CoachGameMove[];
@@ -568,20 +562,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // parallel with the legacy narrativeSummary fetch; if the walk
   // narration succeeds we render the walk UI, otherwise the summary
   // card's paragraph is the graceful fallback.
-  const reviewMoveInputs = useMemo<ReviewMoveInput[]>(() =>
-    moves.map((m, i) => ({
-      ply: i + 1,
-      san: m.san,
-      isCoachMove: m.isCoachMove,
-      classification: m.classification ?? null,
-      evaluation: m.evaluation,
-      preMoveEval: m.preMoveEval,
-      bestMove: m.bestMove,
-      fenAfter: m.fen,
-      ...(m.pv ? { pv: m.pv } : {}),
-    })),
-    [moves],
-  );
+  const reviewMoveInputs = useMemo<ReviewMoveInput[]>(() => reviewMoveInputsFrom(moves), [moves]);
 
   // Grounded preview spine (Phase 1c) — the student's flagged moves as
   // structured citations (position + played/suggested squares), computed from
@@ -607,43 +588,25 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // review stays capped.
     const uncapped = isReviewUncapped();
     const cacheGameId = props.gameId ?? null;
-    const cacheKey = reviewNarrationCacheKey({
-      moves: reviewMoveInputs, playerColor, openingName, result, playerRating, coachNarration, uncapped,
-    });
     // PERSISTED NARRATION (David 2026-09-05: "I clicked on that game again and
     // it restarted all over"). The walk is a pure function of the annotations
-    // + settings, so a cached one under the same key IS the narration — no
-    // facet recompute, no house-voice pass. A deepened annotation changes the
-    // key and regenerates.
-    const cached = cacheGameId ? getCachedReviewNarration(cacheGameId, cacheKey) : Promise.resolve(null);
-    void cached.then((hit) => {
-      if (hit) {
+    // + settings, so a cached one under the same key IS the narration. The one
+    // door (`getOrBuildReviewNarration`) also JOINS a build already running
+    // for the same game — the background deepen and the import pre-build ask
+    // it with identical inputs — instead of starting a second one.
+    void getOrBuildReviewNarration({
+      gameId: cacheGameId, moves: reviewMoveInputs, playerColor, openingName, result, playerRating, coachNarration, uncapped,
+    }).then(({ narration, cacheHit, key }) => {
+      if (cacheHit && narration) {
         void logAppAudit({
           kind: 'review-walk-skipped',
           category: 'subsystem',
           source: 'CoachGameReview.walkNarration',
-          summary: `walk narration served from cache (${hit.segments.length} segments)`,
-          details: JSON.stringify({ cacheHit: true, key: cacheKey, segmentCount: hit.segments.length }),
+          summary: `walk narration served from cache (${narration.segments.length} segments)`,
+          details: JSON.stringify({ cacheHit: true, key, segmentCount: narration.segments.length }),
         });
-        return hit;
       }
-      // THE ONE KEY (A1) is minted inside generateReviewNarration from these
-      // very moves — the need context's departure + result terms scope to it.
-      return generateReviewNarration({
-        moves: reviewMoveInputs,
-        playerColor,
-        openingName,
-        result,
-        playerRating,
-        coachNarration,
-        uncapped,
-        gameId: cacheGameId ?? null,
-      }).then((narration) => {
-        if (narration && narration.segments.length > 0 && cacheGameId) {
-          void storeReviewNarration(cacheGameId, cacheKey, narration);
-        }
-        return narration;
-      });
+      return narration;
     }).then((narration) => {
       // Audit-driven (review walk #4): bail if the component
       // unmounted mid-call (user navigated away). React-level

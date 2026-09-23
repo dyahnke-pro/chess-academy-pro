@@ -1716,9 +1716,16 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     await add('DECIDER walk-posture-never-gated-by-importance', importanceClosed.length === 0,
       `${walk.length}/${decisions.length} rows judged as walk; ${importanceClosed.length} closed on importance (must be 0 — that is the 46-ply-to-6 bug)`);
     const silent = decisions.filter((d) => d.speak === false);
-    const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need');
+    const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need' && d.reason !== 'unsupported');
     await add('DECIDER every-silence-names-its-gate', unattributed.length === 0,
-      `silent=${silent.length} importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unattributed=${unattributed.length}`);
+      `silent=${silent.length} importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} unattributed=${unattributed.length}`);
+    // THE COMPUTED ORDER (2026-09-23): facts carry STAKES from the computer that
+    // made them and the door orders by them. A run where no row ever carried
+    // stakes means the wire does not fire and every ply fell back to the tie table.
+    const stakedRows = decisions.filter((d) => (d.stakedCount ?? 0) > 0);
+    const ledStaked = decisions.filter((d) => d.leadStaked === true);
+    await add('DECIDER computed-order-carries-stakes', stakedRows.length > 0 && ledStaked.length > 0,
+      `${stakedRows.length}/${decisions.length} rows carried stakes; ${ledStaked.length} led by a staked fact`);
     const spoke = decisions.filter((d) => d.speak);
     // SUBSUMPTION — the knob behind "calling out the pins and the batteries was
     // a bit much" (David 2026-09-16). It is the mechanism the rule says to

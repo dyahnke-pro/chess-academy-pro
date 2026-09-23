@@ -42,6 +42,9 @@ export interface PositionReadInput {
   evalBoard: EvalBoardFn;
   /** True once the caller has moved on (a newer tap, an unmount): stop composing. */
   isCancelled: () => boolean;
+  /** May a corpus note lead the read? REQUIRED (2026-09-23): Learn free play
+   *  carries no corpus notes; the surface that mounts the read decides. */
+  corpusNotes: boolean;
 }
 
 /**
@@ -72,7 +75,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   //    at retrieval, framed honestly by origin. No note = the computed facts
   //    carry the read alone.
   let noteLine = '';
-  try {
+  if (i.corpusNotes) try {
     const src = teachingSourceForBoard(sans, i.fen, i.openingName, i.playerColor);
     if (src) noteLine = generalizedTeaching(src.origin, spokenBeatText(src.note)).trim();
   } catch { /* corpus unavailable — the computed read stands alone */ }

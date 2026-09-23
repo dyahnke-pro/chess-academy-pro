@@ -171,6 +171,15 @@ coach's fingertips.")
 
 ## 4b. THE ONE SELECTOR — how the coach decides WHAT to say (2026-09-15, unified-coach N0–N6)
 
+> **THE ONE DOOR ORDERS BY COMPUTED STAKES (2026-09-23).** Every fact on every
+> surface passes `coachDecider.decide()` (importance → need → subsume → floor →
+> support → order → method). The ORDER is computed, not tabled: each computer
+> couples `FactStakes` at emission (`factStakes.ts` — cost paid, exchange value
+> via `seeGain`, fork/pin/skewer counts, the critical-moment gap; plies until it
+> lands), and `reviewFacetRank.factValue` scores 1000 + cp × 0.8^plies + the
+> student's hole. Unstaked facts use the one `TIE_ORDER` over `FactKind`
+> (review tags ∪ live clause kinds); `FACT_ROLE` decides teach vs describe.
+
 Plan: `docs/plans/2026-09-15-one-coach-need-selector.md`. Standard: CLAUDE.md
 "NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED". Four invariants: ONE
 selector, ONE fact-computer set, ONE chokepoint (`voiceFacts`), ONE surface

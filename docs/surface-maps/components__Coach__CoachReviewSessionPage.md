@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**519 lines · 5 exports · 3 importers · 2 tests · 3 audits**
+**355 lines · 4 exports · 2 importers · 2 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,30 +12,32 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/App.tsx`
 - `src/components/Coach/CoachReviewSessionPage.nonBlocking.test.tsx`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts`
 
 ## Exports and every call site
 
-### `describeGameForStudent` (function) — 2 call sites
-- `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:103`
-- `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:105`
-
-### `AdaptOutcome` (type) — 0 call sites
+### `CoachReviewSessionPage` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `adaptGameRecordExplained` (function) — 2 call sites
+### `adaptGameRecordExplained` (re-export) — 5 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:89`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:97`
+- `src/services/reviewGameAdapter.ts:70`
+- `src/services/reviewGameAdapter.ts:86`
+- `src/services/reviewNarrationBuild.ts:115`
 
-### `adaptGameRecord` (function) — 3 call sites
+### `adaptGameRecord` (re-export) — 4 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:39`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:75`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:79`
+- `src/services/reviewGameAdapter.ts:82`
 
-### `CoachReviewSessionPage` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `describeGameForStudent` (re-export) — 4 call sites
+- `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:103`
+- `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:105`
+- `src/services/reviewGameAdapter.ts:47`
+- `src/services/reviewGameAdapter.ts:74`
 
 ## Tests
 

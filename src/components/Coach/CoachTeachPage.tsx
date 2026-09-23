@@ -118,8 +118,6 @@ import {
   getCachedOpening,
   cacheOpening,
   generateMissingStagesInBackground,
-  noteArrowSourceAt,
-  groundedSegmentArrows,
 } from '../../services/openingGenerator';
 import {
   readSharedCache,
@@ -183,9 +181,7 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { forkOfferAt } from '../../services/forkNarration';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText } from '../../services/danyaTeachingService';
-import { framedOpponentPlan } from '../../services/opponentVoice';
-import { noteStaysInScope, noteSuitsStudentSide, noteAdvisesSide } from '../../services/noteAnchorIntegrity';
+import { noteCoverageForLine } from '../../services/danyaTeachingService';
 
 /** How many note-covered plies an opening needs before the NOTES take the
  *  lesson from a hand-authored masterclass.
@@ -284,7 +280,7 @@ import { renderCausalChain } from '../../services/causalChainVoice';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
-import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching, takeBorrowedProbeStats } from '../../services/coachAnswerGates';
+import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
@@ -1641,9 +1637,6 @@ export function CoachTeachPage(): JSX.Element {
    *  recognition, or refinement like Vienna Game → Vienna Gambit). The Play
    *  page has had announce-on-first-recognition since WO-NARRATION-CADENCE;
    *  Learn never got the wire. */
-  /** Notes already spliced into this game's narration (same dedup contract as
-   *  the walkthrough's `noteArrowSourceAt` seenIds — a note teaches once). */
-  const teachNoteSeenIdsRef = useRef(new Set<string>());
   /** Fundamentals the coach has already NAMED IN FULL this game (David
    *  2026-09-07: "Learn it needs to be added into the narration"). The Learn
    *  narration leads a slip's beat with the fundamental it neglected — the same
@@ -1675,7 +1668,6 @@ export function CoachTeachPage(): JSX.Element {
     announcedPliesRef.current.clear();
     liveGradesRef.current.clear();
     announcedTrapsRef.current.clear();
-    teachNoteSeenIdsRef.current.clear();
     fundamentalSeenRef.current.clear();
     planSaidRef.current.clear();
     positionalSaidRef.current.clear();
@@ -7246,6 +7238,8 @@ export function CoachTeachPage(): JSX.Element {
     moveNumber: Math.floor(game.history.length / 2) + 1,
     playerColor,
     openingName: walkthrough.tree?.openingName ?? null,
+    // Learn free play carries no corpus notes (David 2026-09-23).
+    corpusNotes: false,
   });
 
   // PHASE TRANSITIONS — Learn never had them (2026-08-05). `usePhaseNarration`
@@ -7262,6 +7256,8 @@ export function CoachTeachPage(): JSX.Element {
       ?? useCoachMemoryStore.getState().intendedOpening?.name
       ?? null,
     getLiveFen: () => liveFenRef.current,
+    // Learn free play carries no corpus notes (David 2026-09-23).
+    corpusNotes: false,
     onReport: (text) => setMessages((prev) => [...prev, {
       id: uid('phase'), role: 'assistant', content: text, timestamp: Date.now(),
     }]),
@@ -7404,16 +7400,8 @@ export function CoachTeachPage(): JSX.Element {
     let threatLine: string | null = null;
     let alertArrow: BoardArrow | null = null;
     let announceLine: string | null = null;
-    let noteLine: string | null = null;
     let gemLine: string | null = null;
     teachingTierRef.current = 'none';
-    // THE COACH IS THE OPPONENT ON THIS PATH. This builder runs once per coach
-    // REPLY in a live game — it is handed the move the coach just played and
-    // the board after it — so the side opposite the student is being played by
-    // the coach, and a note written for that side is the coach's own plan
-    // rather than misdirected advice. A lesson does not come through here; the
-    // lesson player drives its own beats.
-    const coachIsOpponent = Boolean(args.studentColor);
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     const history = args.historyAfterReply;
@@ -7708,34 +7696,12 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* gems are a bonus, never a blocker */ }
 
-    // ── TIER 1 REMOVED — the generic offline bake (walkthrough-narrations.json)
-    // is gone (David 2026-08-24). A generic line pinned to a position is a false
-    // claim, never a real tier. Tier 1 is now THE CORPUS — the video-distilled,
-    // position-keyed, board-true notes below (`noteArrowSourceAt`), which now
-    // lead in free play instead of being suppressed by the bake.
-
-    // ── THE TAUGHT NOTE + its lead-the-eye arrows ──────────────────────────
-    try {
-      const noteText = noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current, null, args.studentColor);
-      if (noteText) {
-        factLines.push(`Coaching note taught at THIS position: ${noteText}`);
-        noteLine = noteText;
-        teachingTierRef.current = 'position';
-        const seg = groundedSegmentArrows(noteText, '', { from: args.moveFrom, to: args.moveTo, fen: args.fenAfterReply });
-        for (const a of (seg.arrows ?? [])) {
-          if (a.color === 'green') leadEyeArrows.push({ startSquare: a.from, endSquare: a.to, color: 'green' });
-        }
-        if (leadEyeArrows.length > 0) {
-          void logAppAudit({
-            kind: 'coach-narration-spoken',
-            category: 'narration',
-            source: 'CoachTeachPage.noteLeadEye',
-            summary: `note lead-the-eye: ${leadEyeArrows.length} green arrow(s) from the taught note`,
-            fen: args.fenAfterReply,
-          });
-        }
-      }
-    } catch { /* corpus is a bonus, never a blocker */ }
+    // ── NO CORPUS NOTES IN LEARN FREE PLAY (David 2026-09-23: "remove corpus
+    // notes for learn with coach (free play) and review with coach"). A live
+    // game here is narrated from what code computes on THIS board — the gem,
+    // the tactic, the threat, the commentary, the plan. Notes stay on the
+    // "teach me X opening" lesson (the walkthrough and its play-out), where the
+    // student asked for the opening's teaching. Gate: corpusScope.test.ts.
 
     // ── THE COMPUTED READ — what is actually true of THIS board right now.
     //
@@ -7829,14 +7795,8 @@ export function CoachTeachPage(): JSX.Element {
     //
     // Two fallbacks, in order, both only when everything above stayed quiet:
     //
-    //  1. The BROADER teaching tiers. `noteArrowSourceAt` is position-only by
-    //     design and must stay that way inside a taught lesson. But this is a
-    //     LIVE game past book, and the locked rule draws exactly that line:
-    //     borrowing a note because the structures rhyme is right for a live
-    //     board, wrong when the student named the opening they wanted taught.
-    //     `generalizedTeaching` frames it honestly ("The same idea shows up in
-    //     positions like this"), so a borrowed note is never heard as a claim
-    //     about these squares.
+    //  1. (REMOVED 2026-09-23.) The borrowed corpus tiers used to fill here;
+    //     free play carries no corpus notes now — only the computed reads.
     //
     //  2. The POSITIONAL READ — king safety, development, a bad piece, a weak
     //     pawn, an available lever. All of it was already computed and
@@ -7876,13 +7836,9 @@ export function CoachTeachPage(): JSX.Element {
     // is the standard a farmed note only reaches once baked.
     let curatedLine: string | null = null;
     try {
-      // TIER 2 — the hand-written masterclass beat. It fires only when the
-      // corpus (Tier 1) is silent here: saying both stacks two full teaching
-      // paragraphs onto one move (the wordiness David called out), so the
-      // corpus leads and the masterclass beat fills where the corpus can't.
-      const beat = noteLine
-        ? null
-        : curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.detectedOpeningName, playerColor, 'live', learnMemRef.current.curatedBeatSubjects);
+      // The hand-written masterclass beat. Free play carries no corpus notes
+      // (2026-09-23), so this is the only authored teaching on a live Learn ply.
+      const beat = curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.detectedOpeningName, playerColor, 'live', learnMemRef.current.curatedBeatSubjects);
       if (beat) {
         learnMemRef.current.curatedBeatSeen.add(beat.id);
         if (beat.subject) learnMemRef.current.curatedBeatSubjects.add(beat.subject);
@@ -7892,126 +7848,6 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* curated teaching is a bonus, never a blocker */ }
 
-    let teachingLine: string | null = null;
-    // ── A TIER THAT HAS SOMETHING NEW GETS TO SAY IT ──────────────────────
-    //
-    // David 2026-08-15: "And all narration tiers fire as long as they add
-    // something new?" Measured over 118 turns of twelve openings: not quite —
-    // on 5 of them the corpus had board-surviving teaching this ply and never
-    // got asked, because this gate had already been satisfied by the bake or a
-    // curated beat.
-    //
-    // The gate was there so one move does not collect two teaching paragraphs.
-    // That reasoning was about LENGTH, and length is no longer the constraint
-    // ("The longer narrations are good. Do not cap them."). What the gate
-    // cannot distinguish is the case that matters: a corpus note about a
-    // DIFFERENT idea than the baked one is not a second paragraph on the same
-    // point, it is the second point.
-    //
-    // Repetition is still governed, and by the mechanism built for it rather
-    // than by refusing to compute: `buildVoicePackage` matches sentence by
-    // sentence and refuses a fact left with nothing new, so a corpus note that
-    // merely restates the bake is dropped there — where the reason is recorded
-    // — instead of never being asked, where nothing is.
-    {
-      try {
-        // 🔒 PASS THE OPENING. It was `null`, which switches OFF
-        // `noteOpeningConflicts` — the guard whose entire job is stopping a
-        // note tagged for one opening from teaching in another. Walking the
-        // Vienna with it null, ply 1 spoke "The Scotch was beloved in Morphy's
-        // era, then vanished for eight decades. Kasparov's 1990 title match
-        // revival…" — the Scotch, in a Vienna, which is the exact failure the
-        // guard was built for (the hp-5d5 Caro-in-a-Vienna incident).
-        //
-        // The board cannot catch this: at ply 1 the position is consistent with
-        // both openings. Only the note's own tag can, and only if it is given
-        // something to disagree with.
-        //
-        // WHAT THE VOICE WILL TAKE IS PART OF THE SELECTION. This used to
-        // accept the first note offered and then drop it — already-said, or
-        // stripped to nothing by `spokenBeatText` — leaving the ply silent with
-        // teaching still sitting in the corpus. Walking a Vienna Gambit game,
-        // five of twelve plies died that way, three of them re-picking the
-        // exact note the previous ply had already rejected. The predicate makes
-        // every tier keep looking instead.
-        const openingNow = learnMemRef.current.detectedOpeningName;
-        const src = teachingSourceForBoard(
-          history,
-          args.fenAfterReply,
-          openingNow,
-          // THE SEAT, and it binds even though the coach is the opponent here.
-          // The `coachIsOpponent` carve-out below reframes a note that ADVISES
-          // the other side into the coach's own first person — but that works
-          // on third-person prose ("White should…"). A voiced note with a
-          // declared seat speaks in the SECOND person, and there is no rewrite
-          // that turns "your knight" into the opponent's knight. So a
-          // wrong-seat voiced note is dropped here rather than reframed.
-          args.studentColor,
-          (note) =>
-            !teachNoteSeenIdsRef.current.has(note.id)
-            // A note whose own prose teaches a DIFFERENT opening ("In the
-            // Italian Game… avoid the Fried Liver") is off-topic in this game
-            // however honestly it is framed. Same guard the lesson path uses.
-            && noteStaysInScope(note, openingNow)
-            // NOT COACHING FOR THE OPPONENT — SPEAKING AS THEM. A note carries
-            // no side field, and the corpus is written from whichever
-            // perspective its opening is taught from, so a White student was
-            // handed Black's repertoire as coaching. Dropping those notes was
-            // the first fix and it threw away one note in six.
-            //
-            // The coach IS the opponent here, so the note was never wrong —
-            // only mis-attributed. Kept and spoken in the first person below
-            // (David 2026-08-09: "I still want to know what my opponent's
-            // plans are. That is very important in chess."). Only a note
-            // advising the opponent on a surface where the coach ISN'T playing
-            // has nobody to say it, and that is what the guard still catches.
-            && (coachIsOpponent || noteSuitsStudentSide(note, args.studentColor))
-            // WHAT SURVIVES THE BOARD IS WHAT COUNTS. A borrowed note is
-            // framed honestly ("as a rule in these positions") and then names
-            // concrete squares from the game it was authored in: a full-game
-            // run heard "White should snap off the bishop on d6" with d6
-            // empty, twice in one game. The honest framing does not make the
-            // squares true, and the student hears squares. Grading here rather
-            // than after selection is what lets the tier keep looking — a note
-            // that grades to nothing is skipped, not spoken hollow.
-            // `probe` — this call is the SEARCH, not the verdict. See the
-            // parameter's own note: auditing every candidate turned one game
-            // into 130 `claim-validator-trip` entries and ate 43% of the
-            // rolling buffer.
-            && gradeBorrowedTeaching(spokenBeatText(note), args.fenAfterReply, 'coachTeach.teachingTier', { probe: true }).length > 0,
-        );
-        const probes = takeBorrowedProbeStats();
-        if (probes.notes > 0) {
-          void logAppAudit({
-            kind: 'claim-validator-trip',
-            category: 'subsystem',
-            source: 'coachTeach.teachingTier.selectionSearch',
-            summary: `search passed over ${probes.notes} candidate note(s) (${probes.sentences} sentence(s) false here) before settling`,
-            fen: args.fenAfterReply,
-          });
-        }
-        if (src) {
-          const t = gradeBorrowedTeaching(spokenBeatText(src.note), args.fenAfterReply, 'coachTeach.teachingTier');
-          if (t.trim()) {
-            // A note written for the side the COACH is playing is the
-            // opponent's own plan. It is spoken as theirs, behind a lead-in
-            // that says so — "clear distinction is necessary" — rather than
-            // handed to the student as though it were advice.
-            const forOpponent = coachIsOpponent
-              && noteAdvisesSide(src.note) === (args.studentColor === 'white' ? 'black' : 'white');
-            teachingLine = forOpponent
-              ? framedOpponentPlan(t, {
-                coachSide: args.studentColor === 'white' ? 'black' : 'white',
-                ply: history.length,
-              })
-              : generalizedTeaching(src.origin, t);
-            teachingTierRef.current = src.origin;
-            teachNoteSeenIdsRef.current.add(src.note.id);
-            factLines.push(`Teaching (${src.origin}): ${teachingLine}`);
-          }
-        }
-      } catch { /* the corpus is a bonus, never a blocker */ }
-    }
 
     // The POSITIONAL READ stays a true last resort — king safety, development,
     // a bad piece, a weak pawn, a lever. It is the only lane here that is
@@ -8097,7 +7933,7 @@ export function CoachTeachPage(): JSX.Element {
     // fired (which is most plies). The SOFT positional reads still only fill a
     // genuinely quiet turn, so a plan + a soft observation never double up.
     const BEHAVIOR_ALWAYS_RIDE = new Set(['prophylaxis', 'pressure', 'x-ray', 'passed-pawn', 'knight-maneuver', 'weak-square', 'outpost']);
-    const quietTurn = !computedLine && !noteLine && !curatedLine && !teachingLine && !planLine;
+    const quietTurn = !computedLine && !curatedLine && !planLine;
     if (!gemLine && !tacticLine && !threatLine && !announceLine) {
       try {
         const allHits = detectBehaviors({ fen: args.fenAfterReply, studentColor: args.studentColor });
@@ -8140,7 +7976,7 @@ export function CoachTeachPage(): JSX.Element {
     // belongs to the PROSE, not to the tier it came from. Student moves green,
     // the opponent's blue, so whose move is whose needs no narration.
     try {
-      const recited = noteLine ?? curatedLine ?? teachingLine;
+      const recited = curatedLine;
       if (recited) {
         for (const a of moveOrderArrows(recited, args.fenAfterReply)) {
           leadEyeArrows.push({
@@ -8164,7 +8000,7 @@ export function CoachTeachPage(): JSX.Element {
     // behaviour and the positional filler. The URGENT interrupts (gem / tactic /
     // threat) and the opening naming still ride — those are the ~10% the corpus
     // doctrine keeps alongside the note, not the wordy lanes he flagged.
-    const noteHere = !!(curatedLine || noteLine);
+    const noteHere = !!curatedLine;
     const softStandDown = NARRATE_DNA_ONLY && noteHere;
     const instantFull = buildVoicePackage([
       ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
@@ -8179,15 +8015,8 @@ export function CoachTeachPage(): JSX.Element {
       // both once computed is now one deduped lane). Stands down behind a note
       // and in a decided game (the contested gate).
       ...(behaviorLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
-      // TIER 1 — the corpus (video-distilled, position-keyed, board-true) leads
-      // the teaching lanes. It is the coach's DNA voice on this exact board, and
-      // David's tier restructure (2026-08-24) makes it primary: "Tier 1 needs to
-      // be the baked narrations we just made from the video. The corpus."
-      ...(noteLine ? [{ kind: 'note' as const, text: noteLine, fen: args.fenAfterReply }] : []),
-      // TIER 2 — the hand-written masterclass beat, verified before it shipped
-      // (narrationAccuracy, lessonIntegrity). It is selected only when the corpus
-      // is silent here (see `curatedBeatAt` gated on `noteLine`), so reaching
-      // this entry means Tier 1 had nothing at this position.
+      // The hand-written masterclass beat, verified before it shipped
+      // (narrationAccuracy, lessonIntegrity). No corpus note rides free play.
       ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
       // Corpus teaching reached by structure/concept transfer — BORROWED, and
       // now ranked as such. It used to ship at the same `note` rank as the
@@ -8299,7 +8128,7 @@ export function CoachTeachPage(): JSX.Element {
       leadEyeArrows,
       planArrows,
       planHighlights,
-      borrowedLine: teachingLine,
+      borrowedLine: null,
       factLines,
     };
   }, [activeProfile?.puzzleRating, activeProfile?.currentRating]);
@@ -9716,46 +9545,9 @@ export function CoachTeachPage(): JSX.Element {
                       }
                     }
                   } catch { /* the chain is a bonus, never a blocker */ }
-                  try {
-                    // LEAD-THE-EYE FROM THE NOTE (David 2026-08-07: "add the
-                    // lead the eye arrows like teach me x opening has").
-                    // Position-taught notes ride the SAME grounded pipeline
-                    // the walkthrough uses: `noteArrowSourceAt` grades the
-                    // spoken note against THIS board, and
-                    // `groundedSegmentArrows` derives green vision arrows
-                    // from the moves the NOTE names — the note decides what
-                    // gets pointed at, never the model's prose (G0). Other
-                    // origins (opening-family / structure / concept) keep the
-                    // provenance-labeled fact line, no arrows — they are not
-                    // about this board.
-                    const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current, null, playerColor);
-                    if (noteText) {
-                      facts.push(`Coaching note taught at THIS position: ${noteText}`);
-                      // Voiced by the instant pass instead (which also
-                      // marked the note seen, so this rarely re-derives one).
-                      const seg = groundedSegmentArrows(noteText, '', { from: m.from, to: m.to, fen: probe.fen() });
-                      // Map the narration-arrow shape onto the board's
-                      // (startSquare/endSquare); green vision arrows only —
-                      // the orange trail is the move itself, already visible.
-                      const leadEye: BoardArrow[] = (seg.arrows ?? [])
-                        .filter((a) => a.color === 'green')
-                        .map((a) => ({ startSquare: a.from, endSquare: a.to, color: 'green' }));
-                      if (leadEye.length > 0) {
-                        chainArrowsRef.current = [...chainArrowsRef.current, ...leadEye];
-                        void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...leadEye])));
-                        void logAppAudit({
-                          kind: 'coach-narration-spoken',
-                          category: 'narration',
-                          source: 'CoachTeachPage.noteLeadEye',
-                          summary: `note lead-the-eye: ${leadEye.length} green arrow(s) from the taught note`,
-                          fen: probe.fen(),
-                        });
-                      }
-                    } else {
-                      const source = teachingSourceForBoard(historyAfterReply, probe.fen(), null, playerColor);
-                      if (source) facts.push(teachingFactLine(source));
-                    }
-                  } catch { /* corpus is a bonus, never a blocker */ }
+                  // No corpus note on a free-play reply (2026-09-23) — the
+                  // facts above are computed on THIS board; notes belong to the
+                  // "teach me X" lesson. Gate: corpusScope.test.ts.
                   // GEM DETECTION on Learn (David 2026-07-30: "This is for the
                   // learn with coach tab!!"). If the coach's reply just walked
                   // into a known engine-verified gem inaccuracy, the coach
@@ -11108,13 +10900,6 @@ export function CoachTeachPage(): JSX.Element {
       // capture it BEFORE stopping, then seed `game` with it so both the
       // visible board and the continuation begin from where the lesson ended.
       const startFen = walkthrough.fen || gameRef.current.fen;
-      // The opening the student asked to be taught — captured before stop()
-      // clears the tree. It scopes the teaching notes below to THIS opening
-      // (see danyaTeachingService), exactly as the opening walkthrough does.
-      const taughtOpening = walkthrough.tree?.openingName ?? null;
-      // The moves that got us here, so a note keyed at this line can be found
-      // by prefix and not only by FEN.
-      const openingSans = walkthrough.pathSans ?? [];
       walkthrough.stop(); // release the board from the walkthrough state machine
       gameRef.current.loadFen(startFen);
       const intro = "Let's watch it play out. I'll take both sides and call out the turning points.";
@@ -11127,8 +10912,6 @@ export function CoachTeachPage(): JSX.Element {
       });
 
       const local = new Chess(startFen);
-      /** One splice per note — an opening-level note must not narrate every move. */
-      const continuationNoteIds = new Set<string>();
       // Ply count from the FEN's fullmove clock (game.history is the free
       // board's, not the walkthrough's).
       const parts = startFen.split(' ');
@@ -11176,47 +10959,10 @@ export function CoachTeachPage(): JSX.Element {
         const { text: keystone, state: next } = continuationNarration(local.fen(), ply, state);
         const phaseChanged = next.phase !== state.phase;
         state = next;
-        let text = keystone ?? perMove.say;
+        const text = keystone ?? perMove.say;
 
-        // TEACHING NOTE, same as the opening (David 2026-08-02: "the same level
-        // of standard throughout the entire teaching session"). The opening
-        // walkthrough splices a curated corpus note per ply; the play-out never
-        // consulted the corpus at all, so the middlegame and endgame got bare
-        // move mechanics — "Black's rook to g7, eyeing the queen on g6" —
-        // where the opening had teaching. Same selection rule (code picks,
-        // scoped to the taught opening), same board-grading of the prose, and
-        // once per note so one note can't narrate every move.
-        //
-        // MIDDLEGAME + ENDGAME TEACHING (David 2026-08-05: "need middle and
-        // endgame notes under learn with coach as well"). This play-out IS the
-        // middlegame and endgame of a taught lesson, and restricting it to
-        // position-taught notes made it near-silent past book — exact-position
-        // hits are 0.2% of middlegame plies and 0% of endgame plies, because
-        // middlegames do not repeat.
-        //
-        // A borrowed note still may NOT be spoken as a description of this
-        // board — that was the whole 2026-08-04 lesson. It is spoken as what it
-        // is: an explicit generalization ("in rook endings, …"), which is true
-        // wherever it is said. Same rule the phase transitions follow.
-        try {
-          const source = teachingSourceForBoard(
-            [...openingSans, ...local.history()],
-            local.fen(),
-            taughtOpening,
-            playerColor,
-          );
-          if (source && !continuationNoteIds.has(source.note.id)) {
-            const graded = gradeNarrationText(
-              spokenBeatText(source.note),
-              local.fen(),
-              'CoachTeachPage.continuationNote',
-            );
-            if (graded?.trim()) {
-              continuationNoteIds.add(source.note.id);
-              text = `${text} ${generalizedTeaching(source.origin, graded.trim())}`;
-            }
-          }
-        } catch { /* the corpus is a bonus, never a blocker */ }
+        // No corpus note in the play-out (2026-09-23: "this is now free
+        // play"). The move text above is computed on the board it describes.
 
         setMessages((prev) => [...prev, { id: uid('cont-move'), role: 'assistant', content: text, timestamp: Date.now() }]);
 

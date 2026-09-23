@@ -97,6 +97,11 @@ const MT_EARLY_FAILURE_WINDOW_MS = 5_000;
  *  /coach + /weaknesses). A working native ARM engine signals `uciok` in well
  *  under a second, so 8s is generous; a silent hang fails fast → asm. */
 const NATIVE_EARLY_FAILURE_WINDOW_MS = 8_000;
+/** How long a single-thread WASM worker may stay COMPLETELY silent after spawn
+ *  before it is replaced once (see the `single` branch in `tryStart`). The
+ *  lite-single build answers `uciok` in well under a few seconds on any host
+ *  that can run it; 15s of zero messages is a dead worker, not a slow one. */
+const SINGLE_SILENT_RETRY_MS = 15_000;
 
 export type StockfishVariant = 'multi' | 'single' | 'lila' | 'asm' | 'ios-native';
 
@@ -579,6 +584,9 @@ class StockfishEngine {
   // session. When set, initialize() stops picking `ios-native` and falls back
   // to the asm.js Worker so the iOS app is never left with no engine.
   private _nativeFallbackAttempted = false;
+  // One replacement of a SILENT single-thread worker per session (see
+  // SINGLE_SILENT_RETRY_MS).
+  private _singleSilentRetryUsed = false;
   // Phase 8 — coalesce worker error spam. Multi-thread crashes can
   // emit 60+ ErrorEvents in ~100ms; we want one audit-log row, not
   // 60. Tracks the first error timestamp + count in the current
@@ -1014,6 +1022,29 @@ class StockfishEngine {
             earlyFailureTimer = setTimeout(() => {
               handleEarlyMultiFailure('no uciok within 5s of spawn');
             }, MT_EARLY_FAILURE_WINDOW_MS);
+          } else if (resolved.variant === 'single' && !this._singleSilentRetryUsed) {
+            // A SILENT single-thread worker is replaced once, not waited out for
+            // 45s (PostHog 2026-09-23: "Stockfish initialization timed out after
+            // 45s (last stage: none — worker never signaled)" on variant=single).
+            // Only TOTAL silence counts: a worker that has said anything at all
+            // is alive and compiling, and is left to finish. One retry per
+            // session, so a host that genuinely cannot run it still reaches the
+            // 45s verdict instead of looping.
+            const spawnedAt = this._lastMessageAt;
+            earlyFailureTimer = setTimeout(() => {
+              earlyFailureTimer = null;
+              if (this.isReady || this._lastMessageAt !== spawnedAt) return;
+              this._singleSilentRetryUsed = true;
+              void logAppAudit({
+                kind: 'stockfish-variant-fallback',
+                category: 'subsystem',
+                source: 'stockfishEngine.initialize',
+                summary: `single-thread worker silent for ${SINGLE_SILENT_RETRY_MS}ms after spawn — replaced once with a fresh worker`,
+              });
+              this.worker?.terminate();
+              this.worker = null;
+              setTimeout(() => tryStart(true), WASM_RECLAIM_DELAY_MS);
+            }, SINGLE_SILENT_RETRY_MS);
           } else if (resolved.variant === 'ios-native') {
             // The native plugin can hang SILENTLY (registers available, never
             // signals uciok, never fires onerror). Without this timer that case

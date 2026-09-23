@@ -117,11 +117,12 @@ const ANALYSIS = {
   nodesPerSecond: 1,
 };
 
-const setup = (getLiveFen?: () => string) => renderHook(() => usePhaseNarration({
+const setup = (getLiveFen?: () => string, corpusNotes = true) => renderHook(() => usePhaseNarration({
   getPgn: () => 'e4 e6 d4 d5 Nc3 Nf6',
   playerColor: 'black',
   getOpeningName: () => 'French Defense',
   getLiveFen,
+  corpusNotes,
 }));
 
 beforeEach(() => {
@@ -132,6 +133,15 @@ beforeEach(() => {
   engineGate = deferred<unknown>();
   noteText = 'Black should trade the light-squared bishops.';
   noteOrigin = 'position';
+});
+
+describe('a surface that carries no corpus notes hears none (2026-09-23)', () => {
+  it('Learn free play (corpusNotes: false) never speaks the transition note', async () => {
+    const { result } = setup(() => FEN, false);
+    act(() => { void result.current.narrate(EVENT, 'full'); });
+    await new Promise((r) => setTimeout(r, 300));
+    expect(spoken.join(' ')).not.toContain('light-squared bishops');
+  });
 });
 
 describe('the teaching does not wait for the engine', () => {
@@ -327,6 +337,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       playerColor: 'black',
       getOpeningName: () => 'Scandinavian Defense: Lasker Variation',
       getLiveFen: () => FEN,
+      corpusNotes: true,
     }));
     act(() => { void result.current.narrate({ ...EVENT, playerColor: 'black' }, 'full'); });
     await vi.waitFor(() => {
@@ -343,6 +354,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       playerColor: 'black',
       getOpeningName: () => 'French Defense',
       getLiveFen: () => FEN,
+      corpusNotes: true,
     }));
     act(() => { void result.current.narrate(EVENT, 'full'); });
     await new Promise((r) => setTimeout(r, 300));

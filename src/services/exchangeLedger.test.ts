@@ -165,8 +165,10 @@ describe('THE COMPUTER CUTS, NOT A CODE BRANCH (David 2026-09-16)', () => {
   it('the register renders, and the SELECTOR is what decides', async () => {
     const { readFileSync } = await import('node:fs');
     const { join } = await import('node:path');
-    const comp = readFileSync(join(process.cwd(), 'src/components/Coach/CoachGameReview.tsx'), 'utf8');
-    const fn = comp.slice(comp.indexOf('function isReviewUncapped'), comp.indexOf('interface CoachGameReviewProps'));
+    // `isReviewUncapped` moved to the one narration door (2026-09-23) so a
+    // narration built off-screen reads the same mode the page does.
+    const door = readFileSync(join(process.cwd(), 'src/services/reviewNarrationBuild.ts'), 'utf8');
+    const fn = door.slice(door.indexOf('function isReviewUncapped'), door.indexOf('export function reviewMoveInputsFrom'));
     expect(fn).toMatch(/^\s*return true;\s*$/m);              // default ON
     expect(fn).toMatch(/get\('uncapped'\) === '0'/);            // manual compare only
     // The cut lives in the ONE deciding computer, wired into the facet path.
@@ -197,22 +199,31 @@ describe('THE COMPUTER CUTS, NOT A CODE BRANCH (David 2026-09-16)', () => {
     expect(src).not.toMatch(/uncapped \? 'full' : 'mistakes'/);
     // `work` is the copy the pass writes into (walk 5, R5: a timed-out pass
     // wrote raw tags into the returned segments); the scope is what matters.
-    expect(src).toMatch(/augmentWithProjections\((segments|work),[^)]*'full', playerRating\)/);
+    expect(src).toMatch(/augmentWithProjections\((segments|work),[^)]*'full', playerRating[,)]/);
   });
 });
 
 describe('uncapped projections are POOLED, never serialized (G4.6)', () => {
-  it('the three unbounded passes batch their probes instead of awaiting in a loop', async () => {
+  it('every pooled pass reads ONE shared schedule, one engine per lane — never a probe per iteration', async () => {
     const { readFileSync } = await import('node:fs');
     const { join } = await import('node:path');
     const src = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
-    // Cutting the projection caps (G4.5) made three passes unbounded. Unbounded
-    // × serialized-on-the-singleton took the post-dive review regenerate from
-    // 1.8s to 30.2s on prod. The answer to "uncapped is slow" is parallel,
-    // never a reinstated cap — so each pass must pre-batch through `pvBatch`.
-    expect(src).toMatch(/const pvBatch = async/);
-    expect(src.match(/await pvBatch\(/g) ?? []).toHaveLength(3);
+    // Cutting the projection caps (G4.5) made the passes unbounded; unbounded ×
+    // serialized-on-the-singleton took the review regenerate from 1.8s to 30.2s
+    // (2026-09-16). The answer is parallel, never a reinstated cap. Since
+    // 2026-09-23 every pooled probe is scheduled UP FRONT on one lease (the
+    // per-pass batches still left the pool idle between passes: 54-75s of
+    // projections on a real game, twice over the 75s cap).
+    expect(src).toMatch(/const poolTasks: Array</);
+    // Each LANE owns ONE engine — the old helper handed engines out by item
+    // index, so two lanes could drive the same worker at once.
+    expect(src).toMatch(/const engine = engines\[lane\]/);
+    // Punish, the two deep-threat passes and prophylaxis read the schedule…
+    expect((src.match(/poolLine\(/g) ?? []).length).toBeGreaterThanOrEqual(4);
+    // …and the bad-piece ablation is pooled too (39.6s serial on the singleton).
+    expect(src).toMatch(/badPieceCandidates\.forEach/);
     // …and none of those passes may go back to awaiting one probe per iteration.
+    expect(src).not.toMatch(/const pvBatch = async/);
     expect(src).not.toMatch(/const line = await raceTimeout\(computePvLine\(nullFen/);
     expect(src).not.toMatch(/const threatLine = await raceTimeout\(computePvLine\(nullFen/);
   });

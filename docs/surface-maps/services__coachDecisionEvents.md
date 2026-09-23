@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**144 lines · 7 exports · 5 importers · 2 tests · 1 audits**
+**151 lines · 7 exports · 6 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3866) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:5953) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3883) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:5965) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -18,27 +18,29 @@
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/needScore.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Exports and every call site
 
 ### `CoachDecisionRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onCoachDecision` (function) — 3 call sites
-- `src/services/appAuditor.ts:2138`
+### `onCoachDecision` (function) — 4 call sites
+- `src/services/appAuditor.ts:2149`
 - `src/services/coachDecisionEmits.test.ts:31`
-- `src/services/coachDecisionEmits.test.ts:79`
+- `src/services/coachDecisionEmits.test.ts:88`
+- `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:213`
+- `src/services/coachDecider.ts:209`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
-- `src/services/appAuditor.ts:2090`
-- `src/services/coachDecisionEmits.test.ts:104`
-- `src/services/coachDecisionEmits.test.ts:131`
+- `src/services/appAuditor.ts:2101`
+- `src/services/coachDecisionEmits.test.ts:113`
+- `src/services/coachDecisionEmits.test.ts:140`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
 
 ### `emitNeedScore` (function) — 1 call site
@@ -47,14 +49,15 @@
 ### `resetCoachDecisionListeners` (function) — 5 call sites
 - `src/services/coachDecisionEmits.test.ts:30`
 - `src/services/coachDecisionEmits.test.ts:33`
-- `src/services/coachDecisionEmits.test.ts:78`
-- `src/services/coachDecisionEmits.test.ts:104`
-- `src/services/coachDecisionEmits.test.ts:105`
+- `src/services/coachDecisionEmits.test.ts:87`
+- `src/services/coachDecisionEmits.test.ts:113`
+- `src/services/coachDecisionEmits.test.ts:114`
 
 ## Tests
 
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
+- `src/test/computedOrderWired.test.ts`
 
 ## Audits that reach it
 

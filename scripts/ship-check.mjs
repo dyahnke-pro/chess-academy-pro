@@ -458,6 +458,15 @@ const GATE_TESTS = [
   // decoration, so both gates ship together or neither means anything.
   'src/services/coachDecisionEmits.test.ts',
   'src/test/algoAuditContract.test.ts',
+  // 2026-09-23: the wiring of this branch's builds, so they cannot silently
+  // come unwired — corpus notes kept out of Learn free play + review, teaching
+  // points first, the computed order (stakes coupled by BOTH producers and
+  // read by the door), and the lazy route pages' reload-once guard.
+  'src/test/corpusScope.test.ts',
+  'src/services/supportedFacts.test.ts',
+  'src/services/factStakes.test.ts',
+  'src/test/computedOrderWired.test.ts',
+  'src/utils/lazyPage.test.tsx',
   'src/services/methodBeat.test.ts',
   'src/services/mapConcurrent.test.ts',
   'src/services/reviewFacetRank.test.ts',

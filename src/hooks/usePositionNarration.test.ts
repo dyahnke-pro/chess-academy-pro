@@ -102,6 +102,7 @@ function defaultArgs(): Parameters<typeof usePositionNarration>[0] {
     moveNumber: 1,
     playerColor: 'white',
     openingName: null,
+    corpusNotes: true,
   };
 }
 

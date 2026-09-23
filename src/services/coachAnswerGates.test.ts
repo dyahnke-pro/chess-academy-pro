@@ -168,13 +168,14 @@ describe('gradeBorrowedTeaching — probe calls do not pollute the audit', () =>
     expect(takeBorrowedProbeStats().notes).toBe(0);
   });
 
-  it('is wired as a probe at the selection predicate, not at the verdict', async () => {
+  it('free play carries no corpus notes, so it grades none (David 2026-09-23)', async () => {
     const { readFileSync } = await import('node:fs');
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    // The predicate inside teachingSourceForBoard's accept — probed.
-    expect(page).toMatch(/gradeBorrowedTeaching\(spokenBeatText\(note\)[^)]*\{ probe: true \}\)/);
-    // The grade of the note actually spoken — audited.
-    expect(page).toMatch(/gradeBorrowedTeaching\(spokenBeatText\(src\.note\), args\.fenAfterReply, 'coachTeach\.teachingTier'\)/);
+    // "Just remove corpus notes for learn with coach (free play)". The borrowed
+    // grader stays for chat-side and report tooling; the Learn board no longer
+    // selects a note, so a grade call there would mean one crept back in.
+    expect(page).not.toMatch(/gradeBorrowedTeaching\(/);
+    expect(page).not.toMatch(/teachingSourceForBoard\(/);
   });
 });
 
