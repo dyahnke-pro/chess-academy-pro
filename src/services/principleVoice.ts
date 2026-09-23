@@ -126,6 +126,25 @@ const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
     'Name the target before you touch a piece. Ask what the position wants — a weak pawn, an open file, a passed pawn — and let the move serve that. If a move serves no plan you can say in one sentence, it is not the move.',
 };
 
+/** The HOW's lead-in, rotated by how many HOWs this ply has already spoken:
+ *  two lessons earned on one ply both speak, but never under the same stem
+ *  twice in a row (walk 5, R10 — "Here's how: … Here's how: …"). */
+const HOW_STEMS = ["Here's how:", 'The habit that fixes it:', 'Next time:'] as const;
+
+/** Every sentence of every HOW — the procedure the student runs next game.
+ *  A HOW is an instruction, so the review's past-tense pass must never touch
+ *  it; its SECOND sentence carries no "here's how" of its own and used to come
+ *  out as "check, captured, threat" (walk 5, R17). */
+const HOW_SENTENCES: ReadonlySet<string> = new Set(
+  Object.values(FUNDAMENTAL_HOW).flatMap((how) => how.split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter(Boolean)),
+);
+export function isMethodSentence(sentence: string): boolean {
+  const t = sentence.trim();
+  if (HOW_SENTENCES.has(t)) return true;
+  for (const stem of HOW_STEMS) if (t.includes(stem)) return true;
+  return false;
+}
+
 /** The habit that prevents this fundamental next game, or null when the id is
  *  unknown (a caller holding a stale id gets silence, never a guess). */
 export function fundamentalHow(id: FundamentalId, facts: Record<string, string | number> = {}): string | null {
@@ -155,7 +174,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       const s = [
         `That hands them a tempo: ${kick} comes with a threat on your ${f.target}, and you have to spend a move answering it instead of building.`,
         `Tempo lost — after this they get ${kick} for free, hitting your ${f.target}, and your next move is forced to react.`,
-        `The cost is time: ${kick} now attacks your ${f.target}, so they develop with a threat and you move the same piece again.`,
+        `The cost is time: ${kick} is now on for them, hitting your ${f.target}, and you would spend your next move on the same piece again.`,
       ];
       return s[v % s.length];
     }
@@ -509,6 +528,7 @@ export interface FundamentalVerdictOptions {
  */
 export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[], opts: FundamentalVerdictOptions): string {
   const parts: string[] = [];
+  let hows = 0;
   attrs.forEach((a, i) => {
     const first = !opts.seen.has(a.id);
     opts.seen.add(a.id);
@@ -522,7 +542,7 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     // the board earned both and the student hears both (G4.5). They spread
     // themselves out across the game because each can only fire once.
     const how = fundamentalHow(a.id, a.facts);
-    parts.push(how ? `${fullVerdict(a, opts.ply + i)} Here's how: ${how}` : fullVerdict(a, opts.ply + i));
+    parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${how}` : fullVerdict(a, opts.ply + i));
   });
   return parts.join(' ');
 }

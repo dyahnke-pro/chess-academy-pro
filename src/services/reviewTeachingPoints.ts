@@ -232,8 +232,23 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
-  const enemyHasKnight = cells(chess).some((c) => c.type === 'n' && c.color === enemy);
-  const knightNote = enemyHasKnight ? ', and their knight is a poor blocker — knights are bad at stopping a runner' : '';
+  // The note names THEIR knight as the blocker, so a knight must actually be
+  // standing on the runner's path or guarding a square on it — owning a knight
+  // somewhere else on the board is not blocking anything (walk 5, R11).
+  const file = passedSquare[0];
+  const rank = Number(passedSquare[1]);
+  const step = studentColorWB === 'w' ? 1 : -1;
+  const path: string[] = [];
+  for (let r = rank + step; r >= 1 && r <= 8; r += step) path.push(`${file}${r}`);
+  const knightOnPath = cells(chess).some((c) => {
+    if (c.type !== 'n' || c.color !== enemy) return false;
+    if (path.includes(c.square)) return true;
+    const f = c.square.charCodeAt(0);
+    const rk = Number(c.square[1]);
+    return [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]].some(([df, dr]) =>
+      path.includes(`${String.fromCharCode(f + df)}${rk + dr}`));
+  });
+  const knightNote = knightOnPath ? ', and their knight is a poor blocker — knights are bad at stopping a runner' : '';
   return `your passed pawn on ${passedSquare} wants to run — passed pawns are meant to be pushed${knightNote}`;
 }
 

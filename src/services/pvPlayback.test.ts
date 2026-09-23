@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, plyFactsClause, tacticWord, tacticWinsMaterial, pvDepthForRating, type PvEngine } from './pvPlayback';
+import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, plyFactsClause, computePlyFacts, tacticWord, tacticWinsMaterial, pvDepthForRating, type PvEngine } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
 
 /** Canned engine: maps fen → analysis. Unknown fen → throws (like a dead worker). */
@@ -203,7 +203,7 @@ describe('deterministic fallback voice + batch facts', () => {
       facts: {
         captured: null, isCheck: false, isMate: false, promotion: null,
         tacticLanded: null, materialGained: 0, newOpenFiles: [],
-        newPassedPawns: [], outpostGained: null, shieldLost: 0,
+        newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0,
       },
     };
     expect(renderPlyFactLine(quiet)).toBeNull();
@@ -376,5 +376,18 @@ describe('tacticWinsMaterial — the royal carve-outs that drifted', () => {
   it('a pin is kept without a material test — the immobilization IS the point', () => {
     const board = new Chess('rnbqkb1r/pppp1ppp/5n2/4p1B1/4P3/8/PPPP1PPP/RN1QKBNR b KQkq - 0 1');
     expect(tacticWinsMaterial(board, { type: 'pin', involvedSquares: ['g5', 'f6', 'd8'] })).toBe(true);
+  });
+});
+
+describe('passed pawns are owned by a side (walk 5, R16)', () => {
+  it('a capture that frees the OTHER side\'s pawn hands them the passer — it never creates one for the mover', () => {
+    const fen = '6k1/pp4pp/4pn2/4P3/8/8/PP4PP/6K1 w - - 0 20';
+    const c = new Chess(fen);
+    const mv = c.move('exf6');
+    const f = computePlyFacts(fen, c.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion });
+    expect(f.newPassedPawns).toEqual([]);
+    expect(f.passedPawnsHanded).toEqual(['e6']);
+    expect(plyFactsClause(fen, 'exf6')).not.toMatch(/creates a passed pawn/);
+    expect(plyFactsClause(fen, 'exf6')).toMatch(/leaves the other side a passed pawn on e6/);
   });
 });

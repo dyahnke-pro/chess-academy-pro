@@ -585,7 +585,10 @@ export function MyMistakesPage(): JSX.Element {
               data-testid="solve-button"
             >
               <div className="text-sm font-medium text-theme-text">
-                Move {puzzle.moveNumber} — {puzzle.bestMoveSan}
+                {/* THE PLAYED MOVE, NOT THE ANSWER (walk 5, S3a): the title
+                    printed bestMoveSan above "What should you have played?",
+                    so every unsolved card carried its own solution. */}
+                Move {puzzle.moveNumber} — you played {puzzle.playerMoveSan}
               </div>
               <div className="flex items-center gap-2 text-xs text-theme-text-muted flex-wrap">
                 {puzzle.opponentName && (

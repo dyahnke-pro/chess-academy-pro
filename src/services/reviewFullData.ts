@@ -29,7 +29,7 @@ import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
 import { planRaceClause } from './planRace';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
-import type { PrincipleAttribution } from './principleAttribution';
+import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { andList } from '../utils/andList';
 
@@ -140,6 +140,12 @@ export interface MoveFactContext {
   /** The fundamentals the (student, flagged) move neglected — attributed on the
    *  board by principleAttribution; the `[principle]` facet speaks them. */
   fundamentals?: PrincipleAttribution[];
+  /** The GAME's say-once ledger for fundamentals — each is spoken in full with
+   *  its HOW the first time and as a short stem after. Required, and owned by
+   *  the caller that walks the game: a fresh set per ply (what this facet used
+   *  to build) re-taught the same tempo lesson four times in one review
+   *  (walk 5, R19). */
+  seenFundamentals: Set<FundamentalId>;
 }
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -221,11 +227,12 @@ export function computeMoveFacets(
   // with chess.js attackers(), what the moved piece does from its NEW square:
   // enemy pieces it eyes, central squares it fights for, own pieces it now
   // guards. Every claim board-computed; emitted only when non-empty.
-  const influence0 = describeMoveInfluence(fenBefore, fenAfter, san);
+  const influenceSquares: string[] = [];
+  const influence0 = describeMoveInfluence(fenBefore, fenAfter, san, influenceSquares);
   const influence = influence0 && ctx.studentColorWB
     ? seatPieceReferences(influence0, fenAfter, ctx.studentColorWB)
     : influence0;
-  if (influence) facets.push(`[does] ${influence}`);
+  if (influence) { const f = `[does] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
 
   // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
   // (David 2026-07-22: "the package must contain every relevant change that
@@ -308,7 +315,7 @@ export function computeMoveFacets(
   // the flagged move crossed, proven on the board; stated as its own facet so
   // the uncapped inventory carries it and the capped cascade can lead with it.
   if (ctx.fundamentals && ctx.fundamentals.length > 0) {
-    facets.push(`[principle] ${renderFundamentalVerdict(ctx.fundamentals, { ply, seen: new Set() })}`);
+    facets.push(`[principle] ${renderFundamentalVerdict(ctx.fundamentals, { ply, seen: ctx.seenFundamentals })}`);
   }
 
   // ── 2b. EVAL ATTRIBUTION — when the bar visibly moves on an UNFLAGGED ply,
@@ -350,9 +357,16 @@ export function computeMoveFacets(
         facets.push(`[eval] The eval bar moves ${mag} ${dir} — material changed hands, and the count above is the reason.`);
       } else {
         const fired: string[] = [];
-        if (facets.some((f) => f.startsWith('[does]'))) fired.push('the new pressure the move creates');
+        // A reason must point the SAME WAY as the swing (walk 5, R20). The
+        // mover's new pressure and its tactic can only explain the bar moving
+        // TOWARD the mover; after the opponent's c4 hit the student's rook the
+        // review said the eval moved "your way — that is the new pressure the
+        // move creates". A swing against the mover is explained, if at all, by
+        // what the move gave up.
+        const towardMover = (moverWB === studentColorWB) === (d > 0);
+        if (towardMover && facets.some((f) => f.startsWith('[does]'))) fired.push('the new pressure the move creates');
         if (facets.some((f) => f.startsWith('[delta]'))) fired.push('the lines it opened and what it gave up');
-        if (facets.some((f) => f.startsWith('[tactic]'))) fired.push('the tactic now sitting on the board');
+        if (towardMover && facets.some((f) => f.startsWith('[tactic]'))) fired.push('the tactic now sitting on the board');
         // Only speak the eval shift when a CONCRETE change explains it. With no
         // grounded reason, the old fallback ("the activity balance moved with no
         // single tactical event") named nothing — pure filler. Silence teaches
@@ -561,7 +575,7 @@ export function computeMoveFacets(
         // the side that made it. Handing it the student's number flipped the
         // sign on every opponent sacrifice (D-4, 2026-09-22).
         const moverPovCp = studentPovCp === null ? null : (moverWB === studentColorWB ? studentPovCp : -studentPovCp);
-        const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp);
+        const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp, moverWB === studentColorWB);
         if (comp.length) facets.push(`[sac] It's a sacrifice — compensation: ${comp.join('; ')}.`);
         const mech = isStudent ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
         if (mech) facets.push(`[sac-why] ${cap(mech)}.`);
@@ -596,7 +610,13 @@ export function computeMoveFacets(
   // ── 11. OPPONENT READ — what the opponent's move targets + their dev lag ──
   if (!isStudent && studentColorWB) {
     const opp = buildOpponentMoveTeaching(fenBefore, san, studentColorWB);
-    if (opp) facets.push(`[opp-target] ${opp.text}`);
+    // "Their knight on c3 now fights for d5. Your opponent's knight steps in
+    // eyeing d5" — ONE claim, two families, spoken back to back on every
+    // opponent development move (walk 5, 2026-09-23). The selector keeps
+    // different families apart on purpose (B12), so the restatement is dropped
+    // here, where both are known: `[does]` already carries the reach.
+    const restates = opp?.kind === 'influence' && facets.some((x) => x.startsWith('[does] '));
+    if (opp && !restates) { const f = `[opp-target] ${opp.text}`; facets.push(f); recSquares(f, opp.squares ?? []); }
     // The opponent's OWN moves so far (parity from the student's colour): white
     // plays odd ply numbers (even index), black plays even ply numbers (odd index).
     const oppIsWhite = studentColorWB === 'b';
@@ -709,7 +729,7 @@ function pieceWord(p: string): string {
  *  central squares it now fights for, own pieces it now guards. Pure chess.js
  *  (attackers()) — the quiet-move beat that gives EVERY ply its own computed
  *  content (David 2026-07-22). Null when the move creates none of the three. */
-export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: string): string | null {
+export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: string, squaresOut?: string[]): string | null {
   try {
     const b = new Chess(fenBefore);
     const mv = b.move(san.replace(/[?!]+$/, ''));
@@ -729,14 +749,19 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
         // is mechanics, not an idea (David 2026-07-23: cut the per-move filler);
         // a piece that must defend an ATTACKED friend surfaces via the
         // [loose]/count detectors instead.
-        if (cell.color === enemyWB && cell.type !== 'k') eyes.push(`the ${pieceWord(cell.type)} on ${cell.square}`);
+        if (cell.color === enemyWB && cell.type !== 'k') { eyes.push(`the ${pieceWord(cell.type)} on ${cell.square}`); squaresOut?.push(cell.square); }
       }
     }
     const fights: string[] = [];
     for (const sq of ['d4', 'e4', 'd5', 'e5'] as const) {
       if (sq === to || a.get(sq)) continue;
-      if (a.attackers(sq, pc.color).includes(to)) fights.push(sq);
+      if (a.attackers(sq, pc.color).includes(to)) { fights.push(sq); squaresOut?.push(sq); }
     }
+    // The moved piece's own square leads the set — the same geometry the
+    // opponent read (`[opp-target]`) couples, so the selector can prove the
+    // two lines are ONE claim (walk 5, 2026-09-23: "Their knight on c3 now
+    // fights for d5. Your opponent's knight steps in eyeing d5" on every ply).
+    squaresOut?.unshift(to);
     const bits: string[] = [];
     if (eyes.length) bits.push(`eyes ${andList(eyes)}`);
     if (fights.length) bits.push(`fights for ${andList(fights)}`);

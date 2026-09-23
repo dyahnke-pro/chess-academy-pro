@@ -48,7 +48,7 @@ describe('computeMoveRatingAt', () => {
     analyzePosition
       .mockResolvedValueOnce(mk(30, 'g1f3'))
       .mockResolvedValueOnce(mk(30, 'b8c6'));
-    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3']);
+    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3'], null);
     expect(r?.playedSan).toBe('Nf3');
     expect(r?.wasBest).toBe(true);
   });

@@ -939,6 +939,88 @@ listener and the local audit log, not the pass count.
   profile in the store instead of re-ranking the games, so the cold path is one
   meta read. Not built this round (David: one build per batch).
 
+
+## 🚶 2026-09-23 — WALK 5 (the full capability list, walked by hand on prod): every item, one push
+
+David: "Make a list of all coach capabilities and do one full play audit… flag
+it and keep moving… Fix all at the end with one solid push." The list: Record
+C1–C3, Play P1–P14, Review R1–R5, Learn L1–L6, Study S1–S3. Walked on prod
+(chunk index-A3gZwVta) with Knight_mare_01's 932 games, muted, by hand — two
+Play games, three reviews (the Play game, a 79-ply chess.com loss, the Learn
+lesson), a Learn game, Weaknesses, the plan, a mistake drill.
+
+GREEN as walked: import + home openings; the steer (e4 87/87, Nf3 29/87);
+phase narration; the spoken blunder verdict; hint; threats; game saved; review
+opens; recap + result card; opening named with the home record ("88 games of
+this Sicilian, 60%"); the turning-point card (pick → confirm → reveal → done);
+weakest opening per colour; play-an-opening → line picker → "You're White…";
+End Lesson saves and opens its review; the plan from home openings; the drill
+loads, replays and grades.
+
+Fixed in this push — each a computed fact that was wrong, not a phrasing nit:
+- **Play** — F1 a steer move faced once (1/87) could be picked → per-move floor.
+  F3 "what should I play here?" navigated off the live board. F4 a plan break
+  (d5) that drops the pawn → `findPawnBreaks` requires a safe landing. F5 "was
+  that a good move?" graded the COACH's move → `lastPlyOf` the student's seat
+  (required). F6 a plain even trade announced as a fork → threats judged after
+  the defender's best reply (`guaranteedWinCp`). F7 "why did you castle?" fell
+  to best-move-now → castle + bare-verb retrospective refs.
+- **iOS** — F2 build 364 failed: the 4.0.4 train closed while the us storefront
+  still said 4.0.3 → pin 4.0.5 and take the MAX over storefronts.
+- **Review, seat** — R12 projected lines now say "they answer X" on the
+  opponent's quiet plies; R13 the sacrifice compensation takes a REQUIRED
+  mover seat; R15 an opponent's merit clause swaps possessives ("castled your
+  king" was the opponent's king); R16 `newPassedPawns` pooled both colours
+  (exf6 "created a passed pawn on e6" — Black's) → mover-only +
+  `passedPawnsHanded`, the lookaheadPlan workaround now redundant; R14 the recap
+  swing is stated from the student's side; R20 an eval swing is never credited
+  to the mover's own pressure when it went against the mover.
+- **Review, truth** — R1a/R1c/R1d (a "steps in eyeing" restatement, "reaches
+  into your half" from its own half + a `.slice(0,3)` cap, "great" meaning two
+  things); R2 a 13-ply "deeper threat" mid-exchange; R4/R6 an undeveloped
+  bishop called passive/worst at move 8–10 (`utils/undeveloped`, one rule for
+  both); R5 a timed-out projection pass wrote a raw `[consequence]`/`[plan-line]`
+  tag after the strip → it works on a copy; R7 a blockade plan on a square the
+  student's own pawn held, while a knight hung → occupancy-aware + no plan
+  while a piece is en prise (SEE ≥ 2, not in check); R8 a kick from the engine
+  line stated as played; R9 the in-page review never passed its gameId, so the
+  game on screen counted as "the last one… earlier today"; R11 "their knight is
+  a poor blocker" with no knight near the runner.
+- **Review, repetition** — R10 two HOWs on one ply under one stem → rotated;
+  R17 the past-tense pass rewrote a HOW's second sentence ("check, captured,
+  threat") → HOW sentences protected; R18 "the move X" is a subject, so a
+  clause keeps one tense; R19 the `[principle]` facet built a fresh say-once
+  set every ply (the tempo lecture ×4) → the game ledger, required; R22 "a rook
+  endgame…" on ten plies → say-once.
+- **Learn** — L3a "their knight on c6 is doing the most work — trade it off" at
+  move two → no minor is "their best piece" before the middlegame.
+- **Study** — S1a a Learn lesson (`*`) shown as LOSS; S1b game cards printed the
+  opening key slug; S1c "best move agreement 0%" on every account (the analyser
+  stores `bestMove` only when it differed) → counted from the eval pair; S2a one
+  hole in two plan slots under two names → one rep per `capabilityTag`; S3a
+  every mistake card's title printed the answer; S3b "Explain why" said only
+  "The engine plays Nd5" → `describeEscape`.
+- **Found while fixing** — `boardDelta.test`'s `[eval]` test had been RED on
+  main since D-8 raised the floor; nothing in ship-check touched the file.
+  `reviewCorpusSweep` had outgrown its 900 s single test (measured ~95 s a
+  game on the pushed commit and on this batch alike — no regression — so 8
+  games timed out under ship-check load, reading the same as "found
+  nothing"). Split to one test per game with its own budget; coverage unchanged.
+  The chat plan lane's comment promised a separate clause for undeveloped
+  pieces that never existed; with safe-landing breaks and undeveloped ≠ worst,
+  a quiet move-7 Italian answered "what's my plan?" with nothing. Now: "bring
+  your bishop on c1 into the game, since development comes first."
+  F3's other half: with "explain this position" no longer a navigation, the
+  in-place assessment lane caught only 2 of its 7 phrasings — the detector now
+  takes explain / analyse / break down this position and "what's happening
+  here", and the matrix row moved from ACTIONS to LIVE_BOARD.
+
+Open, not this push: F8 seat-neutral tactic templates (7, shared by review /
+drills / alerts); R1b spectator corpus notes on live and review boards (§4.6
+bake); R3 "Follow it up" line density (the locked `'full'` scope); L5a a
+retrospective answer that misses g5's defensive point; the cold-launch steer
+miss (persist the index).
+
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
 Everything on the open list that is code I own and needs no decision from David.

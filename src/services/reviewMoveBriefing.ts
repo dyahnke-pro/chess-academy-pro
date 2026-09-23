@@ -265,6 +265,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   // 7. Structure the move MAKES for the mover.
   if (facts.outpostGained) aspects.push({ text: `planting an outpost on ${facts.outpostGained} that no pawn can challenge`, weight: 52 });
   if (facts.newPassedPawns.length > 0) aspects.push({ text: `creating a passed pawn on ${facts.newPassedPawns[0]}`, weight: 54 });
+  if (facts.passedPawnsHanded.length > 0) aspects.push({ text: `handing ${moverIsStudent === undefined ? 'the other side' : enemyObj} a passed pawn on ${facts.passedPawnsHanded[0]}`, weight: 54 });
   if (facts.newOpenFiles.length > 0) aspects.push({ text: `opening the ${facts.newOpenFiles[0]}-file`, weight: 44 });
 
   // 8. Structural damage the move INFLICTS on the opponent vs CONCEDES in its own

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3059 lines · 90 exports · 35 importers · 27 tests · 4 audits**
+**3079 lines · 90 exports · 35 importers · 27 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -227,7 +227,7 @@
 - `src/coach/batteryRouting.test.ts:106`
 - `src/coach/batteryRouting.test.ts:109`
 - `src/services/coachApi.ts:2393`
-- `src/services/coachApi.ts:5805`
+- `src/services/coachApi.ts:5807`
 
 ### `isWhoseTurnQuestion` (function) — 4 call sites
 - `src/coach/batteryRouting.test.ts:120`
@@ -277,7 +277,7 @@
 - `src/coach/questionIntents.test.ts:571`
 - `src/coach/questionIntents.test.ts:579`
 - `src/coach/questionIntents.test.ts:585`
-- `src/services/coachApi.ts:5974`
+- `src/services/coachApi.ts:5976`
 
 ### `isEndgameWeaknessQuestion` (function) — 4 call sites
 - `src/coach/coachService.ts:1282`
@@ -338,7 +338,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:94`
 
 ### `fundamentalsTopicFromText` (function) — 6 call sites
-- `src/services/coachApi.ts:5108`
+- `src/services/coachApi.ts:5110`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:47`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:48`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:49`
@@ -382,7 +382,7 @@
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:143`
 
 ### `famousGameFromText` (function) — 2 call sites
-- `src/services/coachApi.ts:5063`
+- `src/services/coachApi.ts:5065`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:135`
 
 ### `isProgressQuestion` (function) — 27 call sites
@@ -622,16 +622,21 @@
 ### `RetrospectiveMoveRef` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `retrospectiveMoveRef` (function) — 6 call sites
+### `retrospectiveMoveRef` (function) — 11 call sites
 - `src/coach/coachService.ts:1368`
 - `src/coach/questionIntents.routerE.test.ts:45`
 - `src/coach/questionIntents.routerE.test.ts:65`
 - `src/coach/questionIntents.routerE.test.ts:181`
 - `src/coach/questionIntents.routerE.test.ts:182`
 - `src/coach/questionIntents.routerE.test.ts:183`
+- `src/coach/questionIntents.routerE.test.ts:198`
+- `src/coach/questionIntents.routerE.test.ts:199`
+- `src/coach/questionIntents.routerE.test.ts:200`
+- `src/coach/questionIntents.routerE.test.ts:201`
+- `src/coach/questionIntents.routerE.test.ts:203`
 
-### `isRetrospectiveMoveQuestion` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `isRetrospectiveMoveQuestion` (function) — 1 call site
+- `src/coach/questionIntents.routerE.test.ts:204`
 
 ### `isMethodQuestion` (function) — 3 call sites
 - `src/coach/coachService.ts:1370`

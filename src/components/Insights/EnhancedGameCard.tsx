@@ -13,6 +13,7 @@
  */
 import { useNavigate } from 'react-router-dom';
 import type { GameRecord } from '../../types';
+import { asOpeningKey, openingEntryForKey } from '../../services/openingKey';
 import { countFullMovesInPgn } from '../../utils/pgnMoveCount';
 
 const AI_NAMES = ['AI Coach', 'Stockfish Bot'];
@@ -27,7 +28,12 @@ function getPlayerColor(game: GameRecord, username: string | null): 'white' | 'b
   return 'white';
 }
 
-function getResult(game: GameRecord, color: 'white' | 'black'): 'win' | 'loss' | 'draw' {
+type CardResult = 'win' | 'loss' | 'draw' | 'unfinished';
+
+function getResult(game: GameRecord, color: 'white' | 'black'): CardResult {
+  // An ended lesson or abandoned game carries '*'. The insights stats already
+  // leave it out; the card used to call it a LOSS (walk 5, S1a).
+  if (game.result === '*') return 'unfinished';
   if (game.result === '1/2-1/2') return 'draw';
   if ((color === 'white' && game.result === '1-0') || (color === 'black' && game.result === '0-1')) return 'win';
   return 'loss';
@@ -55,10 +61,11 @@ function parseTimeControlLabel(pgn: string): string | null {
 // (David 2026-06-11); see utils/pgnMoveCount.
 const countMovesInPgn = countFullMovesInPgn;
 
-const RESULT_STYLES: Record<string, { label: string; color: string; bg: string }> = {
+const RESULT_STYLES: Record<CardResult, { label: string; color: string; bg: string }> = {
   win:  { label: 'WIN',  color: 'var(--color-success)', bg: 'color-mix(in srgb, var(--color-success) 10%, transparent)' },
   loss: { label: 'LOSS', color: 'var(--color-error)',   bg: 'color-mix(in srgb, var(--color-error) 10%, transparent)' },
   draw: { label: 'DRAW', color: 'var(--color-text-muted)', bg: 'color-mix(in srgb, var(--color-text-muted) 10%, transparent)' },
+  unfinished: { label: 'UNFINISHED', color: 'var(--color-text-muted)', bg: 'color-mix(in srgb, var(--color-text-muted) 10%, transparent)' },
 };
 
 // ─── Eval sparkline ───────────────────────────────────────────────────────
@@ -148,7 +155,10 @@ export function EnhancedGameCard({ game, username, reviewHref }: EnhancedGameCar
   const rs = RESULT_STYLES[result];
   const tcLabel = parseTimeControlLabel(game.pgn);
   const moves = countMovesInPgn(game.pgn);
-  const openingName = game.openingId ?? game.eco; // best-effort; OpeningDrilldown resolves richer names
+  // The stored openingId is the ONE opening key (a slug) since walk 1 — the
+  // card printed it raw ("b50-sicilian-defense-modern-variations", walk 5 S1b).
+  const openingKey = asOpeningKey(game.openingId);
+  const openingName = (openingKey ? openingEntryForKey(openingKey)?.name : null) ?? game.openingId ?? game.eco;
 
   // Per-game accuracy + blunders/mistakes from annotations.
   let accuracyPct: number | null = null;

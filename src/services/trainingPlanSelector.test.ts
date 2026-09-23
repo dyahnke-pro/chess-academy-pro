@@ -58,3 +58,20 @@ describe('buildTodaysReps', () => {
     expect(reps[0].tag).toBe('a');
   });
 });
+
+describe('one hole, one rep (walk 5, S2a)', () => {
+  it('a fundamental row and the tag it files under take ONE slot', () => {
+    const reps = buildTodaysReps({
+      weaknesses: [
+        { tag: 'fundamental:ignored-threat', capabilityTag: 'missed-opponents-threat', label: 'Ignoring a threat', openCount: 4 },
+        { tag: 'missed-opponents-threat', capabilityTag: 'missed-opponents-threat', label: "Missed the opponent's threat", openCount: 3 },
+        { tag: 'calculation-depth', label: 'Long tactical sequences', openCount: 2 },
+      ],
+      srsDue: [], newLines: [], total: 5,
+    });
+    const labels = reps.map((r) => r.label);
+    expect(labels).toContain('Ignoring a threat');
+    expect(labels).not.toContain("Missed the opponent's threat");
+    expect(labels).toContain('Long tactical sequences');
+  });
+});

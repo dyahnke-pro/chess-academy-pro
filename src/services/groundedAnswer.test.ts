@@ -1596,7 +1596,10 @@ describe('the plan lane: the worst piece needs a bar, not a mention', () => {
     // A white passed pawn on d5 with the road clear: review's `deriveNextPlans`
     // already says HOW ("clear the square in front of it…"); the chat lane must
     // say the same thing, not the bare lever "put a rook on the e-file".
-    const a = assembleBoardPlanAnswer('r4rk1/pp3ppp/2n5/3P4/8/2N5/PP3PPP/R4RK1 w - - 0 20', 'white', 'me');
+    // (Knight on d7, not c6: on c6 it stood en prise to the d5 pawn, and a
+    // plan computer that states strategy while a piece hangs is the walk-5 R7
+    // defect — there the right answer is dxc6.)
+    const a = assembleBoardPlanAnswer('r4rk1/pp1n1ppp/8/3P4/8/2N5/PP3PPP/R4RK1 w - - 0 20', 'white', 'me');
     expect(a?.facts ?? '').toMatch(/passed pawn on d5/i);
     expect(a?.facts ?? '').toMatch(/here's how/i);
   });

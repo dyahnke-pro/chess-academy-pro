@@ -8,9 +8,11 @@
 // review, one import away, said "the plan from here is to win their weak pawn
 // on d5. Here's how: …" (PLAN §C 17, #64). Capability parity: one computer,
 // both surfaces. Nothing here imports a surface module; keep it that way.
+import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { isKnightOutpost } from './forwardTeaching';
+import { legalSeeGainFor } from './positionReadingService';
 
 export const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -28,6 +30,25 @@ export function cells(chess: Chess): Cell[] {
  * can be illegal when that side is already in check — then only the real side
  * is judged). Board-true, chess.js only.
  */
+function isLightSquare(sq: string): boolean {
+  return (sq.charCodeAt(0) - 97 + Number(sq[1])) % 2 === 0;
+}
+
+/** A minor or bigger that the other side wins at least two pawns' worth of
+ *  by SEE. Only ATTACKED pieces reach the (costly) SEE — the full-board
+ *  `findHangingBySee` sweep was ~15 ms a ply, a second across a review. */
+function pieceEnPrise(chess: Chess, fen: string): boolean {
+  for (const row of chess.board()) {
+    for (const c of row) {
+      if (!c || c.type === 'p' || c.type === 'k') continue;
+      const enemy: Color = c.color === 'w' ? 'b' : 'w';
+      if (!chess.isAttacked(c.square, enemy)) continue;
+      if (legalSeeGainFor(fen, c.square, enemy) >= 2) return true;
+    }
+  }
+  return false;
+}
+
 export function mateInOneExists(chess: Chess): boolean {
   const probes: Chess[] = [chess];
   try {
@@ -68,6 +89,10 @@ export function findWorstPlacedPiece(
   for (const c of cells(chess)) {
     if (c.color !== studentColorWB) continue;
     if (c.type !== 'n' && c.type !== 'b' && c.type !== 'r') continue;
+    // An UNDEVELOPED piece is not misplaced — its lesson is development, with
+    // its own clause (walk 5: "rescue your worst piece, the bishop on c8" at
+    // move 10 of a Najdorf, spoken on the OPPONENT's ply).
+    if (isUndevelopedInOpening(chess.fen(), studentColorWB, c.type, c.square)) continue;
     // A piece UNDER ATTACK needs saving, not rerouting — and its mobility reads
     // low precisely because it is boxed in by the attack. Naming it "worst
     // placed, reroute it" buries the live threat under a positional plan.
@@ -146,6 +171,14 @@ export function deriveNextPlans(
   // state — the mate is the whole story, and the tactic facets already name
   // it. Computed here, in the plan computer, so no surface can rank around it.
   if (mateInOneExists(chess)) return [];
+  // …and the same ranking one rung down: while a whole piece is en prise the
+  // material IS the story. Walk 5 (R7): after fxe5 attacked the student's
+  // knight on f6 the review prescribed a blockade plan instead of the knight.
+  // SEE nets in pawns; a lone pawn (gain 1) stays out — a gambit pawn is not a verdict.
+  // Not while in check: SEE there is read with every recapture illegal until
+  // the check is answered, so a defended piece reads as lost (Opera Game after
+  // Bxb5+ scored the guarded f6 knight at 3).
+  if (!chess.inCheck() && pieceEnPrise(chess, fen)) return [];
   const struct = describeStructure(fen);
   if (!struct) return [];
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
@@ -196,13 +229,27 @@ export function deriveNextPlans(
     // cause doctrine, David 2026-07-22). Knight preferred (the classic
     // blockader), any minor otherwise, square-control phrasing when no minor
     // exists at all.
+    // What already stands on the block square decides the clause (walk 5,
+    // R7: "plant your knight on e6" with the student's own pawn on e6). A
+    // student pawn there has already done the blockading; an enemy piece
+    // there means the square is not ours to plant on; a student minor there
+    // is the blockader already. A bishop is only offered when it can ever
+    // stand on that square's colour.
+    const occupant = chess.get(block as Square);
+    const sqLight = isLightSquare(block);
     const blockader = all.find((c) => c.type === 'n' && c.color === studentColorWB)
-      ?? all.find((c) => c.type === 'b' && c.color === studentColorWB)
+      ?? all.find((c) => c.type === 'b' && c.color === studentColorWB && isLightSquare(c.square) === sqLight)
       ?? null;
-    const blockBit = blockader
-      ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on the square right in front of it, ${block}, so it can never advance to free itself`
-      : `control the square right in front of it, ${block}, so it can never advance to free itself`;
-    plans.push(`the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit}; then stack your heavy pieces on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it`);
+    const blockBit = occupant && occupant.color === studentColorWB && occupant.type === 'p'
+      ? `your pawn on ${block} already stops it from advancing`
+      : occupant && occupant.color === studentColorWB && (occupant.type === 'n' || occupant.type === 'b')
+        ? `keep your ${occupant.type === 'n' ? 'knight' : 'bishop'} planted on ${block}, right in front of it, so it can never advance to free itself`
+        : occupant
+          ? null
+          : blockader
+            ? `plant your ${blockader.type === 'n' ? 'knight' : 'bishop'} on the square right in front of it, ${block}, so it can never advance to free itself`
+            : `control the square right in front of it, ${block}, so it can never advance to free itself`;
+    plans.push(`the plan from here is to win their weak pawn on ${weak}. Here's how: ${blockBit ? `${blockBit}; then ` : ''}stack your heavy pieces on the file to gang up on it, trade off the pieces that defend it one by one, and either win it outright or tie their whole army to babysitting it`);
   }
 
   // 4. An open file you don't yet own with a heavy piece → seize it, HOW

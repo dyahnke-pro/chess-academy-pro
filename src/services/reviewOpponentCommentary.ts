@@ -140,6 +140,7 @@ export function buildOpponentMoveTeaching(
       if (eyed.length > 0) {
         return {
           id: 'opponent-move',
+          kind: 'influence',
           text: `Your opponent's ${movedLabel} steps in eyeing ${eyed.join(' and ')} — contesting the centre.`,
           // EVERY square the sentence just named. The text says
           // `eyed.join(' and ')` — all of them — while this drew the first two,

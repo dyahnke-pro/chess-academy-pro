@@ -74,3 +74,31 @@ describe('pastTenseReviewNarration — retrospective, but never over a plan', ()
     expect(past(src)).toBe("You were better.  They were worse.\nThe plan from here is to push.");
   });
 });
+
+describe('an opponent merit clause speaks from the student\'s chair (walk 5, R15)', () => {
+  it('"castles your king" becomes "castles their king" when the opponent castled', async () => {
+    const { toOpponentSeat } = await import('./coachFeatureService');
+    const { describeMoveMerit } = await import('./groundedAnswer');
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5';
+    const merit = describeMoveMerit(fen, 'O-O', 'white') ?? '';
+    expect(merit).toMatch(/your king/);
+    expect(toOpponentSeat(merit)).toMatch(/their king/);
+    expect(toOpponentSeat(merit)).not.toMatch(/\byour\b/);
+    expect(toOpponentSeat('takes the b5 square away from their bishop')).toBe('takes the b5 square away from your bishop');
+  });
+});
+
+describe('the past-tense pass leaves instructions alone and keeps one tense (walk 5, R17/R18)', () => {
+  it('every sentence of a HOW stays an instruction — never "check, captured, threat"', () => {
+    const out = past("The move looks fine for two moves — then fxe6 lands. Here's how: Calculate to a QUIET position, not to a good feeling. Follow every forcing reply — check, capture, threat — until nothing forces, then judge.");
+    expect(out).toMatch(/check, capture, threat/);
+    expect(out).not.toMatch(/captured, threat/);
+  });
+  it('the rotated HOW stems are instructions too', () => {
+    expect(past('The habit that fixes it: take the free piece first.')).toMatch(/take the free piece/);
+  });
+  it('"the move X captures …, creates …, wins …" moves as one tense', () => {
+    const out = past('Your opponent: the move Qxh7 captures the pawn, creates a passed pawn on h2, wins material.');
+    expect(out).toMatch(/Qxh7 captured the pawn, created a passed pawn on h2, won material/);
+  });
+});

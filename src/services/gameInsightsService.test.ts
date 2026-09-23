@@ -140,6 +140,28 @@ describe('gameInsightsService', () => {
       expect(result.winRate).toBe(50);
     });
 
+    it('best-move agreement counts moves that matched the engine even when no bestMove was stored (walk 5, S1c)', async () => {
+      await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
+      // The analyser nulls `bestMove` when the played move WAS the best — the
+      // real stored shape. Two White moves hold the eval, one drops 0.5.
+      const ann = [
+        { moveNumber: 1, color: 'white' as const, san: 'e4', evaluation: 20, bestMove: null, bestMoveEval: 20, classification: 'good' as const, comment: null },
+        { moveNumber: 1, color: 'black' as const, san: 'e5', evaluation: 20, bestMove: null, bestMoveEval: 20, classification: 'good' as const, comment: null },
+        { moveNumber: 2, color: 'white' as const, san: 'Nf3', evaluation: 25, bestMove: null, bestMoveEval: 20, classification: 'good' as const, comment: null },
+        { moveNumber: 2, color: 'black' as const, san: 'Nc6', evaluation: 20, bestMove: null, bestMoveEval: 25, classification: 'good' as const, comment: null },
+        { moveNumber: 3, color: 'white' as const, san: 'Bb5', evaluation: -30, bestMove: null, bestMoveEval: 20, classification: 'good' as const, comment: null },
+        { moveNumber: 3, color: 'black' as const, san: 'a6', evaluation: -30, bestMove: null, bestMoveEval: -30, classification: 'good' as const, comment: null },
+      ];
+      await db.games.add(buildGameRecord({ id: 'g1', white: 'TestUser', black: 'AI Coach', result: '1-0', annotations: ann, fullyAnalyzed: true }));
+      mockReconstructMovesFromGame.mockReturnValue(ann.map((a, i) => buildCoachMove({
+        moveNumber: i + 1, san: a.san, classification: a.classification, isCoachMove: a.color === 'black',
+        evaluation: a.evaluation, bestMove: null, bestMoveEval: a.bestMoveEval,
+      })));
+      const { getOverviewInsights } = await import('./gameInsightsService');
+      const result = await getOverviewInsights();
+      expect(result.bestMoveAgreement).toBe(67);
+    }, 15000);
+
     it('computes accuracy from fully-analyzed games', async () => {
       await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
 

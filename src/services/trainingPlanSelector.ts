@@ -20,6 +20,10 @@ export interface WeaknessRep {
   puzzleThemes?: string[];
   /** A single position to play out (conversion: the winning peak FEN). */
   fen?: string;
+  /** The tag this row files under when it is a finer view of one (a
+   *  fundamental row carries its misconception tag here). Two rows that
+   *  share it are ONE hole for the drill feed. */
+  capabilityTag?: string | null;
 }
 
 export interface RepCandidate {
@@ -80,7 +84,20 @@ export function buildTodaysReps(input: BuildTodaysRepsInput): RepCandidate[] {
   const total = input.total ?? DEFAULT_TOTAL;
   if (total <= 0) return [];
 
-  const openWeaknesses = input.weaknesses.filter((w) => w.openCount > 0);
+  // ONE HOLE, ONE REP (walk 5, S2a). The spine lists a fundamental row
+  // ("Ignoring a threat") beside the tag it files under ("Missed the
+  // opponent's threat") — a finer view, right on the Weaknesses page. In a
+  // five-slot drill feed the pair took two slots for the same drill. The
+  // first-ranked row keeps the slot.
+  const seenHoles = new Set<string>();
+  const openWeaknesses = input.weaknesses.filter((w) => {
+    if (w.openCount <= 0) return false;
+    // A row with no capability tag is its own hole (tag+label is its key).
+    const hole = w.capabilityTag ?? `${w.tag}:${w.label}`;
+    if (seenHoles.has(hole)) return false;
+    seenHoles.add(hole);
+    return true;
+  });
 
   const weaknessPool: RepCandidate[] = openWeaknesses.map((w, i) => weaknessRep(w, i));
   const srsPool: RepCandidate[] = input.srsDue.map((o) => ({

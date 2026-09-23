@@ -123,6 +123,10 @@ export interface PlanBeat {
   /** The squares this beat's claim is about — the subsumption key. Derived from
    *  the same board data as `arrows`, so it can never disagree with them. */
   squares: string[];
+  /** Set when the beat restates the moved piece's reach into the centre — the
+   *  same claim the review's `[does]` fact computes, so a surface that already
+   *  speaks `[does]` for the ply drops this one (walk 5, 2026-09-23). */
+  kind?: 'influence';
 }
 
 /** The squares an arrow set touches — one place, so every producer couples the

@@ -16,7 +16,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
   it('emits multiple board-true facets on one move (verdict, structure, opening)', () => {
     const fens = fensAfter(SICILIAN_IQP);
     const ply = 19; // Re1 — White owns the open e-file, Black has the isolated d5
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: fens[ply - 2],
       fenAfter: fens[ply - 1],
       san: 'Re1',
@@ -50,7 +50,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     const c = new Chess(FISCHER_BEFORE);
     const mv = c.move('Qe7');
     expect(mv).toBeTruthy();
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: FISCHER_BEFORE,
       fenAfter: c.fen(),
       san: 'Qe7',
@@ -81,7 +81,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     // is the only mover clue. It MUST carry "Your opponent:" — else the LLM credits
     // Black's move to the White student ("a great move from you"). David 2026-07-20.
     const fens = fensAfter(SICILIAN_IQP);
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: fens[16], fenAfter: fens[17], san: 'Be6', ply: 18,
       moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 150, preMoveEval: 150, classification: 'great', bestMoveSan: null,
@@ -95,7 +95,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
 
   it('attributes a non-good STUDENT move to the student', () => {
     const fens = fensAfter(SICILIAN_IQP);
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: fens[18], fenAfter: fens[19], san: 'Nc6', ply: 20,
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: 20, preMoveEval: 150, classification: 'inaccuracy', bestMoveSan: 'Nd7',
@@ -112,7 +112,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     const OPERA = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O', 'Rd8', 'Rxd7', 'Rxd7', 'Rd1', 'Qe6', 'Bxd7+', 'Nxd7', 'Qb8+', 'Nxb8', 'Rd8#'];
     const fens = fensAfter(OPERA);
     const ply = 29; // 15.Bxd7+ (White, the student)
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: 'Bxd7+', ply,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 20, preMoveEval: 620, classification: 'inaccuracy', bestMoveSan: 'Qb8+',
@@ -123,7 +123,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
 
   it('STILL grades a losing student move outside a forced mate (guard is scoped)', () => {
     const fens = fensAfter(SICILIAN_IQP);
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: fens[18], fenAfter: fens[19], san: 'Nc6', ply: 20,
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: 20, preMoveEval: 300, classification: 'mistake', bestMoveSan: 'Nd7',
@@ -134,7 +134,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
 
   it('every facet is bracket-tagged prose (the inventory shape)', () => {
     const fens = fensAfter(SICILIAN_IQP);
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: fens[16], fenAfter: fens[17], san: 'Be6', ply: 18,
       moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
       evaluation: 150, preMoveEval: 150, classification: 'good', bestMoveSan: null,
@@ -152,7 +152,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     const fenBefore = '4k3/8/8/P7/8/8/6K1/8 w - - 0 1';
     const c = new Chess(fenBefore); c.move('a6'); const fenAfter = c.fen();
     const out = new Map<string, readonly string[]>();
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore, fenAfter, san: 'a6', ply: 1,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 200, preMoveEval: 200, classification: 'good', bestMoveSan: null,
@@ -181,7 +181,7 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     // without a board-true square behind it" (G0), so assert THAT.
     const c = new Chess(); c.move('e4'); const fenAfter = c.fen();
     const out = new Map<string, readonly string[]>();
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: new Chess().fen(), fenAfter, san: 'e4', ply: 1,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 20, preMoveEval: 0, classification: 'good', bestMoveSan: null,
@@ -222,7 +222,7 @@ describe('computeThroughLine (David 2026-07-20 — through-line theme ledger)', 
 describe('the empty opening verdict (David 2026-09-16, reading ply 1)', () => {
   it('does not spend a sentence saying the game starts level', () => {
     const c = new Chess(); c.move('e4'); const fenAfter = c.fen();
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: new Chess().fen(), fenAfter, san: 'e4', ply: 1,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 20, preMoveEval: 0, classification: 'book', bestMoveSan: null,
@@ -236,7 +236,7 @@ describe('the empty opening verdict (David 2026-09-16, reading ply 1)', () => {
     const c = new Chess();
     for (const m of ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4']) c.move(m);
     const fenBefore = c.fen(); const after = new Chess(fenBefore); after.move('cxd4');
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore, fenAfter: after.fen(), san: 'cxd4', ply: 9,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 15, preMoveEval: 15, classification: 'book', bestMoveSan: null,
@@ -257,7 +257,7 @@ describe('[sac] is judged from the MOVER\'s seat — D-4 (WO-STANDARD-01, 2026-0
   const OPERA = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5'];
   const facetsFor = (studentColorWB: 'w' | 'b', evaluation: number): string[] => {
     const fens = fensAfter(OPERA);
-    return computeMoveFacets({
+    return computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: fens[OPERA.length - 2], fenAfter: fens[OPERA.length - 1], san: 'Nxb5', ply: OPERA.length,
       moverColor: 'white', playerColor: studentColorWB === 'w' ? 'white' : 'black', studentColorWB,
       evaluation, preMoveEval: 0, classification: studentColorWB === 'w' ? 'good' : 'blunder', bestMoveSan: null,
@@ -281,7 +281,7 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
     const fens = fensAfter(SICILIAN_IQP);
     // Bg5 (ply 17): the bishop eyes f6 — a [does] facet, so the eval shift
     // has a concrete positional reason to attach to.
-    return computeMoveFacets({
+    return computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: fens[15], fenAfter: fens[16], san: 'Bg5', ply,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation, preMoveEval: 15, classification: 'good', bestMoveSan: null,
@@ -309,7 +309,7 @@ describe('D-8 (WO-STANDARD-01, 2026-09-22) — the [eval] facet needs a real shi
   const cA = new Chess(A); cA.move('d4'); const B = cA.fen();
   const cB = new Chess(B); cB.move('Kd8'); const C = cB.fen();
   const loose = (fenBefore: string, fenAfter: string, san: string, ply: number, moverColor: 'white' | 'black'): string[] =>
-    computeMoveFacets({
+    computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore, fenAfter, san, ply, moverColor, playerColor: 'white', studentColorWB: 'w',
       evaluation: 0, preMoveEval: 0, classification: null, bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: ['d4', 'Kd8'], forcedRunStartPly: null,
@@ -338,7 +338,7 @@ describe('[quality] names a "stronger move" only on a move that fell short (walk
   };
   const facetsFor = (classification: string) => {
     const { fenBefore, fenAfter } = base();
-    return computeMoveFacets({
+    return computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore, fenAfter, san: 'e4', ply: 1, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 30, preMoveEval: 20, classification, bestMoveSan: 'd4',
       prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null,
@@ -350,5 +350,25 @@ describe('[quality] names a "stronger move" only on a move that fell short (walk
   });
   it('a mistake still names the stronger move', () => {
     expect(facetsFor('mistake')).toMatch(/the stronger move was d4/);
+  });
+});
+
+describe('the [principle] facet teaches its HOW once per game (walk 5, R19)', () => {
+  it('a second ply carrying the same fundamental gets the short stem, not the lecture', () => {
+    const fens = fensAfter(SICILIAN_IQP);
+    const seen = new Set<import('./principleAttribution').FundamentalId>();
+    const fundamentals = [({ id: 'tempo-handed', facts: { target: 'rook on d5', kick: 'c4' }, evidence: { moves: ['c4'], pvMoves: [] } }) as never];
+    const at = (ply: number): string => computeMoveFacets({
+      seenFundamentals: seen, fundamentals,
+      fenBefore: fens[ply - 2], fenAfter: fens[ply - 1], san: SICILIAN_IQP[ply - 1], ply,
+      moverColor: ply % 2 === 1 ? 'white' : 'black', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 0, preMoveEval: 0, classification: 'inaccuracy', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null,
+    }).find((f) => f.startsWith('[principle]')) ?? '';
+    const first = at(17);
+    const again = at(19);
+    expect(first).toMatch(/Here's how:/);
+    expect(again).toMatch(/Another tempo handed over/);
+    expect(again).not.toMatch(/Here's how:/);
   });
 });

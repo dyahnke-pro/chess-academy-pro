@@ -4660,6 +4660,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         <CoachGameReview
           moves={reviewMoves}
           keyMoments={[]}
+          gameId={reviewGameId}
           playerColor={reviewPlayerColor}
           result={reviewGame.result}
           openingId={reviewGame.openingId}
@@ -4783,6 +4784,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         <CoachGameReview
           moves={gameState.moves}
           keyMoments={gameState.keyMoments}
+          // THE GAME'S OWN ID (walk 5, R9). Without it the review counted this
+          // game's freshly-swept rows as a PRIOR game and said "the last one
+          // was against Stockfish Bot earlier today" about the game on screen.
+          gameId={gameState.gameId}
           playerColor={playerColor}
           result={gameState.result === 'ongoing' ? 'draw' : gameState.result}
           openingName={detectedOpening?.name ?? null}

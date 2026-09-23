@@ -59,6 +59,14 @@ describe('reviewTeachingPoints — the missing Naroditsky messages (David 2026-0
     expect(t).toMatch(/poor blocker|bad at stopping/i);
   });
 
+  it('passedPawnPush names no knight blocker when no knight touches the runner\'s path (walk 5, R11)', () => {
+    const t = passedPawnPush('k7/8/8/4P3/8/8/8/K6n w - - 0 40', 'w', 'e5');
+    expect(t).toMatch(/passed pawn on e5/i);
+    expect(t).not.toMatch(/poor blocker|bad at stopping/i);
+    const guarded = passedPawnPush('k7/8/5n2/4P3/8/8/8/K7 w - - 0 40', 'w', 'e5');
+    expect(guarded).toMatch(/poor blocker/i);
+  });
+
   it('passedPawnPush returns null with no passer', () => {
     expect(passedPawnPush(new Chess().fen(), 'w', null)).toBeNull();
   });

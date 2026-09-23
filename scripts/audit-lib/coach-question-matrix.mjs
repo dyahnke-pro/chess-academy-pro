@@ -38,6 +38,16 @@ export const LIVE_BOARD = [
     qs3: ['plus or minus for me?', 'am I busted here?', 'how do I stand?'],
   },
   {
+    // "explain this position" is answered IN PLACE on the board surface (walk 5,
+    // 2026-09-23). It used to be an ACTION that navigated to the explain page —
+    // from inside a live game, which cost the student the game. Moved here from
+    // ACTIONS: the router returns null and the assessment lane answers.
+    id: 'explain-position', lane: 'assemblePositionAssessment', needsData: 'fen+eval',
+    qs: ['explain this position', 'break down this position', "what's going on here"],
+    qs2: ['analyze this position', 'evaluate this', "what's happening here"],
+    qs3: ['explain this position', 'analyse this position', 'break down this position'],
+  },
+  {
     id: 'best-move', lane: 'assembleMoveEvalAnswer', needsData: 'fen+engineBestMove',
     qs: ["what's my best move?", 'what should I play here?', 'best move?'],
     qs2: ['what would the engine play here?', 'give me the strongest continuation', 'what move should I make now?', 'top move in this spot?'],
@@ -387,15 +397,6 @@ export const ACTIONS = [
     qs: ['review my last game', 'go over my last game', 'walk me through my most recent game'],
     qs2: ['recap my latest game', 'run me through my previous game', 'narrate my last game'],
     qs3: ['review my last game', 'go over my most recent game', 'recap my latest game'],
-  },
-  {
-    // parseCoachIntent → 'explain-position' (needs currentFen). This is the
-    // ACTION that reaches assembleGameReviewAnswer / position-assessment on the
-    // explain surface.
-    id: 'explain-position', kind: 'explain-position',
-    qs: ['explain this position', 'break down this position', "what's going on here"],
-    qs2: ['analyze this position', 'evaluate this', "what's happening here"],
-    qs3: ['explain this position', 'analyse this position', 'break down this position'],
   },
   {
     // parseCoachIntent → 'continue-middlegame' (routes to a plan; carry a

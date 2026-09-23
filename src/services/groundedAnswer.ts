@@ -41,6 +41,7 @@ import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
 import { andList, orList } from '../utils/andList';
+import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { pieceIsOn } from './tacticsContextIdentity';
 import { clearsVolumeFloor } from './openingVolumeFloor';
 
@@ -395,6 +396,18 @@ export function assembleBoardPlanAnswer(
   // clause; it is misplaced only once the game has left the opening or the
   // piece has already moved and landed badly. Silence here is the computed
   // verdict, never a truncation.
+  // …THE CLAUSE THAT COMMENT PROMISED (walk 5, 2026-09-23). It said an
+  // undeveloped piece is "a different lesson with its own clause" — and no such
+  // clause existed. Once breaks had to land safe and undeveloped pieces stopped
+  // counting as "worst", a quiet move-7 Italian answered "what's my plan?" with
+  // nothing. In the opening the plan IS development: name the minors still home.
+  const homeMinors: string[] = [];
+  for (const row of chess.board()) for (const p of row) {
+    if (p && p.color === myC && (p.type === 'n' || p.type === 'b') && isUndevelopedInOpening(fen, myC, p.type, p.square)) {
+      homeMinors.push(`${REVIEW_PIECE_NAME[p.type]} on ${p.square}`);
+    }
+  }
+  if (homeMinors.length) levers.unshift(`bring your ${andList(homeMinors)} into the game, since development comes first`);
   const homeRank = myC === 'w' ? '1' : '8';
   const pastOpening = (Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
   if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
@@ -2693,6 +2706,44 @@ export function assembleMovePurpose(opts: {
   };
 }
 
+const ESCAPE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+
+/**
+ * A move whose point is that the piece was LOST where it stood: attacked by a
+ * cheaper piece, or attacked and undefended — and it lands safe. Walk 5 (S3b):
+ * on the student's own mistake the engine's Nd5 rescued the knight the e5 pawn
+ * was hitting, and "Explain why" said only "The engine plays Nd5", because
+ * neither the geometry nor the quiet-purpose computer has a word for getting
+ * out of an attack. Board-computed (chess.js attackers + the pin-aware
+ * `landingIsSafe`); null for a capture, which the geometry already names.
+ */
+export function describeEscape(fenBefore: string, san: string): string | null {
+  try {
+    const before = new Chess(fenBefore);
+    const mv = before.move(san);
+    if (!mv || mv.captured || mv.piece === 'k' || mv.piece === 'p') return null;
+    const board = new Chess(fenBefore);
+    const enemy: 'w' | 'b' = mv.color === 'w' ? 'b' : 'w';
+    const attackers = board.attackers(mv.from, enemy);
+    if (attackers.length === 0) return null;
+    const own = ESCAPE_VALUE[mv.piece] ?? 0;
+    const cheapest = attackers
+      .map((sq) => board.get(sq))
+      .filter((p): p is NonNullable<typeof p> => !!p)
+      .sort((a, b) => (ESCAPE_VALUE[a.type] ?? 0) - (ESCAPE_VALUE[b.type] ?? 0))[0];
+    if (!cheapest) return null;
+    const defended = board.attackers(mv.from, mv.color).length > 0;
+    const lost = (ESCAPE_VALUE[cheapest.type] ?? 0) < own || !defended;
+    if (!lost) return null;
+    // "Safe" only when the landing really is — on the walk's own position
+    // White can still trade on d5, so there the escape is stated plain.
+    const safe = landingIsSafe(before.fen(), mv.to) ? ` to a safe square on ${mv.to}` : '';
+    return `takes the ${REVIEW_PIECE_NAME[mv.piece]} on ${mv.from} out of the ${REVIEW_PIECE_NAME[cheapest.type]}'s attack${safe}`;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * assembleEngineReasoning — "why does the engine like this move?" / "walk me
  * through Stockfish's line" (David 2026-07-10: "get the coach deciphering why
@@ -2759,6 +2810,7 @@ export function assembleEngineReasoning(opts: {
   //    engine plays h3" (coach audit 2026-09-11, chat-why depth).
   const firstReason =
     describeMoveGeometry(plies[0].fenBefore, plies[0].san, opts.moverColor)
+    ?? describeEscape(plies[0].fenBefore, plies[0].san)
     ?? quietPurposePhrase(plies[0].fenBefore, plies[0].san, opts.moverColor);
   clauses.push(
     firstReason

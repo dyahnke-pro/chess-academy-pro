@@ -426,7 +426,11 @@ export function buildReviewMoveTeaching(
   }
   const advanced = eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4));
   if (advanced.length) {
-    return `The ${PIECE_NOUN[mv.piece]} reaches into ${moverIsStudent ? 'their' : 'your'} half, covering ${list(advanced.slice(0, 3))}.`;
+    // The PIECE's reach, not the piece: "the pawn reaches into your half" was
+    // said of White's a4 — a pawn still in its own half whose CONTROL reaches
+    // b5 (walk 5, 2026-09-23). And no slice here either, the same G4.5 cap
+    // this block's own header had already banned one clause up.
+    return `The ${PIECE_NOUN[mv.piece]} now covers ${list(advanced)} in ${moverIsStudent ? 'their' : 'your'} half.`;
   }
   // (e) The king — its journey IS the lesson (endgame = few pieces left → the
   //     king turns into a fighting piece; else it's about getting to safety).

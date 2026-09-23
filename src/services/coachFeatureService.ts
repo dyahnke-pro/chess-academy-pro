@@ -55,13 +55,13 @@ import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissed
 import { renderCausalChain } from './causalChainVoice';
 import { matchFundamental, matchTag, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
-import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
+import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration, OpeningKey } from '../types';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
-import { describeEvalCp } from './engineConstants';
+import { describeEvalCp, isMateEval } from './engineConstants';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -331,8 +331,13 @@ export async function generateNarrativeSummary(
       const fullMove = Math.ceil(m.moveNumber / 2);
       // Mate-aware (D-12): a sentinel eval reads "a forced mate for Black",
       // never "-300.0".
+      // FROM THE STUDENT'S SIDE (walk 5, R14): the engine's numbers are
+      // White's, so a Black student heard "+0.6 to +3.7" about the move that
+      // lost them the game. A mate eval already names its colour — kept as is.
+      const sideSign = studentColorWB === 'White' ? 1 : -1;
+      const forStudent = (cp: number): string => (isMateEval(cp) ? describeEvalCp(cp) : describeEvalCp(cp * sideSign));
       const swing = prevEvalCp !== null && m.evaluation !== null
-        ? ` (the evaluation moved from ${describeEvalCp(prevEvalCp)} to ${describeEvalCp(m.evaluation)})`
+        ? ` (the evaluation moved from ${forStudent(prevEvalCp)} to ${forStudent(m.evaluation)}, counted from your side)`
         : '';
       // Convert the engine's best-move UCI → clean SAN (never speak raw UCI).
       const bestSan = m.bestMove ? (uciToSanAt(m.bestMove, fenBefore[i] ?? '') ?? m.bestMove) : null;
@@ -1692,6 +1697,7 @@ export function buildReviewSegments(
       const facetIncoming = new Set<string>();
       const facets = computeMoveFacets({
         fundamentals,
+        seenFundamentals,
         fenBefore: fenPair.fenBefore,
         fenAfter: fenPair.fenAfter,
         san: m.san,
@@ -1870,7 +1876,11 @@ export function buildReviewSegments(
           keep(f, () => oneShotTags.add(tag));
           continue;
         }
-        if (/^\[(opening|plan-middlegame|passer|badbishop|worst|trapped|minority|complex)\]/.test(f)) {
+        // [endgame] joins the static set (walk 5, R22): "The position is a
+        // rook endgame…" spoke on all ten plies of the ending. Keyed on the
+        // exact string, so the class still speaks again when it CHANGES
+        // (rook ending → king-and-pawn ending).
+        if (/^\[(opening|plan-middlegame|passer|badbishop|worst|trapped|minority|complex|endgame)\]/.test(f)) {
           if (emittedStaticFacets.has(f) || !claim(`static:${f}`)) continue;
           keep(f, () => emittedStaticFacets.add(f));
           continue;
@@ -2334,6 +2344,7 @@ export function buildReviewSegments(
             fenPair.fenAfter,
             moverColor === 'white' ? 'w' : 'b',
             m.evaluation != null ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : null,
+            true,
           )
         : [];
       // If a standalone beat already taught "king stuck in the centre", drop that
@@ -3475,6 +3486,12 @@ async function augmentWithProjections(
       if (parts[1] === (studentColorWB === 'w' ? 'w' : 'b')) continue; // already student's turn — not a threat read
       const probe = new Chess(s.fenAfter);
       if (probe.inCheck()) continue;
+      // NOT IN THE MIDDLE OF AN EXCHANGE (walk 5, 2026-09-23). After 5…cxd4
+      // the probe asked "if they sit still" and read out a 13-ply line — but
+      // Nxd4 was always coming, and came. A capture the opponent can take back
+      // is an exchange in progress; "what if they don't recapture" is not a
+      // threat the student built, it is the opponent forgetting a move.
+      if (pendingRecapture(s.fenBefore, s.san, s.fenAfter)) continue;
       parts[1] = studentColorWB;
       parts[3] = '-';
       const nullFen = parts.join(' ');
@@ -3678,6 +3695,11 @@ async function augmentWithProjections(
   for (const s of segments) {
     if (s === planSeg) continue;
     if (s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    // ONE LINE PER MOVE — the rule the deep-threat pass already states ("NEVER
+    // STACK two forcing lines on one move") was only checked against two older
+    // phrasings, so a ply carrying "a deeper threat brewing" got a second full
+    // line on top (walk 5, 2026-09-23).
+    if (s.narration && STACKED_LINE_RE.test(s.narration)) continue;
     const line = await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
     if (line && line.delivers && line.plies.length >= 2) {
       s.narration = `${s.narration ?? ''} [consequence] Follow it up and it goes ${render(line)}.`.trim();
@@ -4077,6 +4099,16 @@ function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 
   }
 }
 
+/** A merit clause is written from the MOVER's chair ("castles your king into
+ *  safety", "takes the b5 square away from their bishop"). Voiced for the
+ *  opponent, the possessives swap: their king, your bishop (walk 5, R15 —
+ *  "Your opponent castled your king into safety"). Possessive determiners
+ *  only — they carry no verb agreement, so the swap cannot break grammar;
+ *  the merit computers never use "you" as a subject. */
+export function toOpponentSeat(clause: string): string {
+  return clause.replace(/\b(your|their|Your|Their)\b/g, (w) => ({ your: 'their', their: 'your', Your: 'Their', Their: 'Your' } as Record<string, string>)[w] ?? w);
+}
+
 function fillSilentDevelopment(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
   for (const s of segments) {
     if (s.narration || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'inaccuracy') continue;
@@ -4086,7 +4118,7 @@ function fillSilentDevelopment(segments: ReviewMoveSegment[], playerColor: 'whit
     try { merit = describeMoveMerit(s.fenBefore, s.san, moverColor); } catch { merit = null; }
     if (!merit) continue;
     const mine = moverColor === playerColor;
-    s.narration = mine ? `It ${merit}.` : `Your opponent ${merit}.`;
+    s.narration = mine ? `It ${merit}.` : `Your opponent ${toOpponentSeat(merit)}.`;
     s.narrationSource = mine ? 'per-move' : 'opponent';
   }
 }
@@ -4116,12 +4148,29 @@ const PAST_VERB: Record<string, string> = {
   offers: 'offered', offer: 'offered', grab: 'grabbed', settle: 'settled',
   meet: 'met', walk: 'walked', drop: 'dropped', recapture: 'recaptured', break: 'broke',
 };
+/** A projected line already spoken on this ply — any pass's phrasing. */
+const STACKED_LINE_RE = /engine confirms it|if they try to run|brewing — if they sit still|Follow it up and it goes|Played out from here/i;
+
+/** The student's move captured, and the opponent can take back on that square
+ *  right now — an exchange still in progress. Pure chess.js. */
+export function pendingRecapture(fenBefore: string, san: string, fenAfter: string): boolean {
+  try {
+    const mv = new Chess(fenBefore).move(san);
+    if (!mv?.captured) return false;
+    const after = new Chess(fenAfter);
+    return after.moves({ verbose: true }).some((m) => m.to === mv.to && !!m.captured);
+  } catch { return false; }
+}
+
 const PROJECTION_MARKER = /(here's how you take advantage|the line runs|why [nbrqko][\w+#=-]* was better|why [a-h][\w+#=-]* was better|if they (sit still|try to run)|the engine confirms it|there's a deeper threat|deeper threat brewing|the real threat here|and the real threat|you're now threatening|now threatening|the pattern to spot|and once your opponent started slipping|watch out|careful)/i;
 // Verbs converted ONLY in verb position (after a subject or in a comma-series),
 // so noun objects survive — "lands a pin" → "landed a pin" (not "a pinned"),
 // "every trade" stays a noun.
 const V_ALT = '(captures?|forks?|gives?|wins?|throws?|takes?|sacrifices?|opens?|creates?|comes|breaks?|castles?|plants?|attacks?|develops?|settles?|recaptures?|adds?|meets?|drops?|walks?|holds?|plays?|goes|trades?|offers?|bears?|lands?|skewers?|strips?|grabs?)';
-const SUBJECT_VERB = new RegExp(`\\b(You|It|Your opponent|The (?:knight|bishop|rook|queen|king|pawn)) ${V_ALT}\\b`, 'g');
+// "the move Qxh7 captures …" is a subject too (walk 5, R18): without it the
+// series verbs after it changed tense and the head did not — "captures the
+// pawn, created a passed pawn, won material".
+const SUBJECT_VERB = new RegExp(`\\b(You|It|Your opponent|The (?:knight|bishop|rook|queen|king|pawn)|[Tt]he move [A-Za-z0-9+#=-]+) ${V_ALT}\\b`, 'g');
 const SERIES_VERB = new RegExp(`, ${V_ALT}\\b`, 'g');
 // PRESCRIPTIVE SENTENCES ARE NEVER PAST-TENSED (found 2026-09-16 by reading the
 // shipped review of David's Alapin). The retrospective register describes what
@@ -4141,7 +4190,7 @@ function sub(h: string, re: RegExp, past: string): string {
   return h.replace(re, (m) => (m[0] === m[0].toUpperCase() ? past[0].toUpperCase() + past.slice(1) : past));
 }
 function toPastSentence(sentence: string): string {
-  if (PRESCRIPTIVE.test(sentence)) return sentence;
+  if (PRESCRIPTIVE.test(sentence) || isMethodSentence(sentence)) return sentence;
   let h = sentence;
   // contractions / state-of-being → past
   h = sub(h, /\bthat's\b/gi, 'that was');
@@ -4433,11 +4482,24 @@ export async function generateReviewNarration(params: {
     // budgets (deep threats, opponent deep threats, prophylactic moves), which
     // is exactly the hard cap G4.5 forbids — it would delete the "here's how you
     // take advantage" lines David asked for while looking like a tidy-up.
+    // 🔒 A TIMED-OUT PASS MUST NOT KEEP WRITING (walk 5, 2026-09-23). The race
+    // bounds the WAIT, not the WORK: a pass that lost the race kept running and
+    // appended "[consequence] Follow it up…" onto the very segment objects the
+    // walk had already returned — after the tag strip, the past-tense pass and
+    // the de-dupe had run — so a raw bracket reached the banner. The pass now
+    // works on a COPY; one snapshot is taken the moment the race settles, and
+    // whatever lands after that touches nothing the student sees. Partial
+    // results that landed in time are kept, exactly as before.
+    const work = segments.map((seg) => ({ ...seg }));
     await raceTimeout(
-      augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', 'full', playerRating),
+      augmentWithProjections(work, playerColor === 'white' ? 'w' : 'b', 'full', playerRating),
       REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED,
       undefined,
     );
+    work.forEach((w, i) => {
+      const snap = Object.fromEntries(Object.entries(w).map(([k, v]) => [k, Array.isArray(v) ? [...v] : v]));
+      Object.assign(segments[i], snap);
+    });
   } catch { /* projections are best-effort; the walk ships without them */ }
 
   // SILENT-MIDDLE FILL then STEM VARIETY (David 2026-07-24) — first give quiet

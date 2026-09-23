@@ -150,11 +150,11 @@ const URL_PROOF = {
 // Section layout: reload between sections so a stage started by one ask
 // can't swallow the next section's turns.
 const SECTIONS = [
-  ['board', ['position-assessment', 'best-move', 'why-best-move', 'plan', 'tactics-live', 'master-play', 'move-rating', 'endgame-tablebase', 'player-games']],
+  ['board', ['position-assessment', 'explain-position', 'best-move', 'why-best-move', 'plan', 'tactics-live', 'master-play', 'move-rating', 'endgame-tablebase', 'player-games']],
   ['profile', ['weakness', 'progress', 'trend', 'stats', 'strengths', 'opening-profile', 'opening-accuracy', 'opening-record', 'opponent-record', 'review-due', 'mistakes', 'tactics-profile', 'phase-profile', 'repertoire-gap', 'accuracy', 'consistency', 'converting', 'color', 'records', 'record-vs-target', 'puzzle-stats', 'transfer-gap', 'skill-radar', 'time-trouble', 'last-game']],
   ['knowledge', ['concept', 'opening-existence', 'teaching-method', 'settings-query', 'app-help']],
   ['settings', ['set-voice', 'set-verbosity', 'set-hints', 'set-premium-voice', 'set-theme']],
-  ['actions', ['board-control', 'favorite-opening', 'manage-repertoire', 'training-aid', 'opening-traps', 'explain-position', 'continue-middlegame', 'drill-stage', 'play-against', 'teach-opening', 'review-game', 'navigate']],
+  ['actions', ['board-control', 'favorite-opening', 'manage-repertoire', 'training-aid', 'opening-traps', 'continue-middlegame', 'drill-stage', 'play-against', 'teach-opening', 'review-game', 'navigate']],
 ];
 
 // EVERY RUN ASKS DIFFERENT QUESTIONS (David 2026-08-13: "make sure the new

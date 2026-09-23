@@ -1908,7 +1908,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (inputs.length === 0 || !alive()) return;
     let text: string | null = null;
     try {
-      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current);
+      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null);
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }
     void logAppAudit({

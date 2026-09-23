@@ -69,6 +69,16 @@ describe('attribution — an alternating line never says a subjectless "winning 
     expect(line).toMatch(/they take the rook/);
     expect(line).not.toMatch(/winning the rook/); // the ambiguity that started this
   });
+  it('an opponent ply that wins nothing is still marked as theirs (walk 5, R12)', async () => {
+    const { Chess } = await import('chess.js');
+    const { narrateDnaLine } = await import('./dnaLineNarrator');
+    const c = new Chess();
+    const plies = ['e4', 'e5', 'Nf3'].map((san) => { const fenBefore = c.fen(); c.move(san); return { fenBefore, san }; });
+    const line = narrateDnaLine(plies, { studentColor: 'b' });
+    expect(line).toMatch(/^they answer e4/);
+    expect(line).toMatch(/they answer Nf3/);
+    expect(line).not.toMatch(/they answer e5/);
+  });
   it('an unseated caller keeps the old subjectless register (no caller breakage)', async () => {
     const { Chess } = await import('chess.js');
     const { narrateDnaLine } = await import('./dnaLineNarrator');
@@ -185,7 +195,9 @@ describe('THE COMPUTER CUTS, NOT A CODE BRANCH (David 2026-09-16)', () => {
     // Re-coupling the scope to the register flag silently reinstates three
     // `scope === 'full' ? 999 : 2` budgets.
     expect(src).not.toMatch(/uncapped \? 'full' : 'mistakes'/);
-    expect(src).toMatch(/augmentWithProjections\(segments,[^)]*'full', playerRating\)/);
+    // `work` is the copy the pass writes into (walk 5, R5: a timed-out pass
+    // wrote raw tags into the returned segments); the scope is what matters.
+    expect(src).toMatch(/augmentWithProjections\((segments|work),[^)]*'full', playerRating\)/);
   });
 });
 

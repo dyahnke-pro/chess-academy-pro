@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1050 lines · 10 exports · 14 importers · 9 tests · 4 audits**
+**1045 lines · 10 exports · 14 importers · 9 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5984) — names `coachSessionRouter`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:5998) — names `coachSessionRouter`
+- **The standard post-deploy ritual** (CLAUDE.md:5988) — names `coachSessionRouter`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6002) — names `coachSessionRouter`
 
 ## Who calls in
 
@@ -48,62 +48,62 @@
 - `src/services/coachSessionRouter.test.ts:37`
 - `src/services/coachSessionRouter.test.ts:42`
 - `src/services/coachSessionRouter.test.ts:50`
-- `src/services/coachSessionRouter.test.ts:58`
-- `src/services/coachSessionRouter.test.ts:73`
-- `src/services/coachSessionRouter.test.ts:79`
-- `src/services/coachSessionRouter.test.ts:92`
-- `src/services/coachSessionRouter.test.ts:104`
-- `src/services/coachSessionRouter.test.ts:118`
-- `src/services/coachSessionRouter.test.ts:122`
-- `src/services/coachSessionRouter.test.ts:131`
-- `src/services/coachSessionRouter.test.ts:141`
-- `src/services/coachSessionRouter.test.ts:154`
-- `src/services/coachSessionRouter.test.ts:175`
-- `src/services/coachSessionRouter.test.ts:191`
-- `src/services/coachSessionRouter.test.ts:206`
-- `src/services/coachSessionRouter.test.ts:214`
-- `src/services/coachSessionRouter.test.ts:226`
-- `src/services/coachSessionRouter.test.ts:238`
-- `src/services/coachSessionRouter.test.ts:248`
-- `src/services/coachSessionRouter.test.ts:259`
-- `src/services/coachSessionRouter.test.ts:268`
-- `src/services/coachSessionRouter.test.ts:280`
-- `src/services/coachSessionRouter.test.ts:287`
-- `src/services/coachSessionRouter.test.ts:294`
-- `src/services/coachSessionRouter.test.ts:301`
-- `src/services/coachSessionRouter.test.ts:318`
-- `src/services/coachSessionRouter.test.ts:403`
-- `src/services/coachSessionRouter.test.ts:413`
-- `src/services/coachSessionRouter.test.ts:433`
-- `src/services/coachSessionRouter.test.ts:439`
+- `src/services/coachSessionRouter.test.ts:63`
+- `src/services/coachSessionRouter.test.ts:71`
+- `src/services/coachSessionRouter.test.ts:77`
+- `src/services/coachSessionRouter.test.ts:90`
+- `src/services/coachSessionRouter.test.ts:102`
+- `src/services/coachSessionRouter.test.ts:116`
+- `src/services/coachSessionRouter.test.ts:120`
+- `src/services/coachSessionRouter.test.ts:129`
+- `src/services/coachSessionRouter.test.ts:139`
+- `src/services/coachSessionRouter.test.ts:152`
+- `src/services/coachSessionRouter.test.ts:173`
+- `src/services/coachSessionRouter.test.ts:189`
+- `src/services/coachSessionRouter.test.ts:204`
+- `src/services/coachSessionRouter.test.ts:212`
+- `src/services/coachSessionRouter.test.ts:224`
+- `src/services/coachSessionRouter.test.ts:236`
+- `src/services/coachSessionRouter.test.ts:246`
+- `src/services/coachSessionRouter.test.ts:257`
+- `src/services/coachSessionRouter.test.ts:266`
+- `src/services/coachSessionRouter.test.ts:278`
+- `src/services/coachSessionRouter.test.ts:285`
+- `src/services/coachSessionRouter.test.ts:292`
+- `src/services/coachSessionRouter.test.ts:299`
+- `src/services/coachSessionRouter.test.ts:316`
+- `src/services/coachSessionRouter.test.ts:401`
+- `src/services/coachSessionRouter.test.ts:411`
+- `src/services/coachSessionRouter.test.ts:431`
+- `src/services/coachSessionRouter.test.ts:437`
 - `src/services/spokenLanguage.live.test.ts:51`
 - `src/services/spokenLanguage.live.test.ts:57`
 - `src/services/spokenLanguage.live.test.ts:64`
 - `src/services/spokenLanguage.live.test.ts:65`
 
 ### `__test__resolvePuzzleTheme` (function) — 6 call sites
+- `src/services/coachSessionRouter.test.ts:342`
+- `src/services/coachSessionRouter.test.ts:343`
 - `src/services/coachSessionRouter.test.ts:344`
-- `src/services/coachSessionRouter.test.ts:345`
-- `src/services/coachSessionRouter.test.ts:346`
-- `src/services/coachSessionRouter.test.ts:350`
-- `src/services/coachSessionRouter.test.ts:354`
-- `src/services/coachSessionRouter.test.ts:355`
+- `src/services/coachSessionRouter.test.ts:348`
+- `src/services/coachSessionRouter.test.ts:352`
+- `src/services/coachSessionRouter.test.ts:353`
 
 ### `__test__extractFocus` (function) — 3 call sites
-- `src/services/coachSessionRouter.test.ts:325`
-- `src/services/coachSessionRouter.test.ts:330`
-- `src/services/coachSessionRouter.test.ts:337`
+- `src/services/coachSessionRouter.test.ts:323`
+- `src/services/coachSessionRouter.test.ts:328`
+- `src/services/coachSessionRouter.test.ts:335`
 
 ### `__test__extractProposedOpening` (function) — 3 call sites
-- `src/services/coachSessionRouter.test.ts:362`
-- `src/services/coachSessionRouter.test.ts:370`
-- `src/services/coachSessionRouter.test.ts:376`
+- `src/services/coachSessionRouter.test.ts:360`
+- `src/services/coachSessionRouter.test.ts:368`
+- `src/services/coachSessionRouter.test.ts:374`
 
 ### `__test__extractProposedUserSide` (function) — 4 call sites
-- `src/services/coachSessionRouter.test.ts:384`
-- `src/services/coachSessionRouter.test.ts:389`
-- `src/services/coachSessionRouter.test.ts:393`
-- `src/services/coachSessionRouter.test.ts:397`
+- `src/services/coachSessionRouter.test.ts:382`
+- `src/services/coachSessionRouter.test.ts:387`
+- `src/services/coachSessionRouter.test.ts:391`
+- `src/services/coachSessionRouter.test.ts:395`
 
 ### `RoutedIntent` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -40,8 +40,14 @@ export function sacrificeCompensation(
   fenAfter: string,
   moverColorWB: 'w' | 'b',
   moverPovEvalCp: number | null,
+  // WHO SACRIFICED, from the student's chair. Required, so no caller inherits
+  // a default seat: every clause below names the mover, and the mover is
+  // "you" only when it is the student (walk 5, R13: the opponent's Rxf6 was
+  // voiced "compensation: you were already on top here").
+  moverIsStudent: boolean,
 ): string[] {
   const clauses: string[] = [];
+  const they = moverIsStudent ? "you're" : "they're";
   if (moverPovEvalCp !== null && moverPovEvalCp < NO_COMPENSATION_BELOW_CP) return clauses;
   let board: Chess;
   try { board = new Chess(fenAfter); } catch { return clauses; }
@@ -50,19 +56,19 @@ export function sacrificeCompensation(
   // 1. Enemy king stuck in the CENTRE — the keystone concept (extracted as a
   //    reusable predicate so a standalone beat can teach it too).
   if (enemyKingStuckInCenter(fenAfter, moverColorWB)) {
-    clauses.push('their king is stuck in the centre with the files opening around it');
+    clauses.push(`${moverIsStudent ? 'their' : 'your'} king is stuck in the centre with the files opening around it`);
   }
 
   // 2. Development lead — more pieces in play than the defender.
   const lead = developedCount(board, moverColorWB) - developedCount(board, enemy);
   if (lead >= 2) {
-    clauses.push(`you're ${lead === 2 ? 'two pieces' : `${lead} pieces`} ahead in development`);
+    clauses.push(`${they} ${lead === 2 ? 'two pieces' : `${lead} pieces`} ahead in development`);
   }
 
   // 3. The verdict — the position already favours the attacker (the eval encodes
   //    the compensation the future pays out). Never say "engine".
   if (moverPovEvalCp !== null) {
-    if (moverPovEvalCp >= 100) clauses.push("you're already on top here");
+    if (moverPovEvalCp >= 100) clauses.push(`${they} already on top here`);
     else if (moverPovEvalCp >= -60) clauses.push('the position holds up completely');
   }
   return clauses;

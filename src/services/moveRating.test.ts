@@ -158,3 +158,12 @@ describe('lastPlyOf — "was that a good move?" grades the STUDENT\'s move (walk
     expect(lastPlyOf(h, null)).toBe(h.length - 1); // no seat: the last move on the board
   });
 });
+
+describe('classifyMoveFull — "great" means you FOUND something (walk 5, 2026-09-23)', () => {
+  it('an engine-best move that only keeps the balance is good; one that gains ground is great', async () => {
+    const { classifyMoveFull } = await import('./moveRating');
+    const base = { isEngineBestMove: true, playerColor: 'black' as const, bestMoveEval: 20, secondBestEval: null };
+    expect(classifyMoveFull({ ...base, preMoveEval: 25, postMoveEval: 20 })).toBe('good');
+    expect(classifyMoveFull({ ...base, preMoveEval: 40, postMoveEval: -160, bestMoveEval: -160 })).toBe('great');
+  });
+});

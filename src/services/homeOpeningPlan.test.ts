@@ -75,6 +75,18 @@ describe('homePlanFor — the reps inside the home opening', () => {
     expect(s.reps[5].route.path).toContain('/coach/session/middlegame?subject=');
   });
 
+  it('a fundamental row and the tag it files under are one rep (walk 5, S2a)', () => {
+    const s = homePlanFor({
+      colour: 'black', choice, candidate, homeGames: games, departures: [], plan: null,
+      weaknesses: [
+        weakness({ key: 'fundamental:ignored-threat', tag: 'fundamental:ignored-threat', label: 'Ignoring a threat', gameIds: ['p-1', 'p-2'], capabilityTag: 'missed-opponents-threat' }),
+        weakness({ key: 'coach:missed-opponents-threat:x', tag: 'missed-opponents-threat', label: "Missed the opponent's threat", gameIds: ['p-1'], capabilityTag: 'missed-opponents-threat' }),
+      ],
+    });
+    const labels = s.reps.filter((r) => r.kind === 'fundamental').map((r) => r.label);
+    expect(labels).toEqual(['Ignoring a threat']);
+  });
+
   it('nothing recorded inside it → no reps, honestly (never an invented one)', () => {
     const all = pirc(PIRC, 12, 0.5, 'p', true);
     const r = rankHomeOpeningCandidates(all, ID, 'black');

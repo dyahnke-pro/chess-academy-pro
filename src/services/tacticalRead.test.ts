@@ -82,7 +82,7 @@ describe('pickKeyTactic', () => {
     const line: PvPly[] = [{
       san: 'Nxe3', uci: 'g4e3', moverColor: 'black',
       fenBefore: '', fenAfter,
-      facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+      facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
     }];
     const key = pickKeyTactic(line);
     expect(key?.type).toBe('fork');
@@ -133,7 +133,7 @@ describe('namedTacticClause', () => {
     const fenAfter = '1r2qb1k/3b2p1/3p1r2/ppp1nP1p/4P2P/P1P1nNQ1/1PBN3K/3R2R1 w - - 0 29';
     const clause = namedTacticClause([{
       san: 'Nxe3', uci: 'g4e3', moverColor: 'black', fenBefore: '', fenAfter,
-      facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+      facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
     }]);
     expect(clause).toMatch(/^The point — knight on e3 forks/);
     expect(clause).toContain('d1');
@@ -142,7 +142,7 @@ describe('namedTacticClause', () => {
   it('returns null when the line lands no named tactic', () => {
     expect(namedTacticClause([{
       san: 'Be2', uci: 'f1e2', moverColor: 'white', fenBefore: '', fenAfter: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPBPPP/RNBQK1NR b KQkq - 0 1',
-      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
     }])).toBeNull();
   });
 });
@@ -151,13 +151,13 @@ describe('narrateTacticalRead (the computed voice)', () => {
   const forkPly: PvPly = {
     san: 'Nxe3', uci: 'g4e3', moverColor: 'black', fenBefore: '',
     fenAfter: '1r2qb1k/3b2p1/3p1r2/ppp1nP1p/4P2P/P1P1nNQ1/1PBN3K/3R2R1 w - - 0 29',
-    facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+    facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
   };
   const base = {
     fen: 'x', studentColor: 'black' as const, bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
     line: [
-      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: 'g4', shieldLost: 0 } },
-      { san: 'Kh1', uci: 'g1h1', moverColor: 'white' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: 'g4', shieldLost: 0 } },
+      { san: 'Kh1', uci: 'g1h1', moverColor: 'white' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
       forkPly,
     ],
     // +439 eval AND the line wins a bishop (net +3, board-backed) → "up a piece".
@@ -170,8 +170,8 @@ describe('narrateTacticalRead (the computed voice)', () => {
     const out = narrateTacticalRead({
       ...base,
       tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
-        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
-        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
+        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
       ] },
     });
     expect(out).toContain('Nxf3+');           // the tempting move is named
@@ -225,12 +225,12 @@ describe('tacticalReadFacts (facts for the voice model, not prose)', () => {
   const forkPly: PvPly = {
     san: 'Nxe3', uci: 'g4e3', moverColor: 'black', fenBefore: '',
     fenAfter: '1r2qb1k/3b2p1/3p1r2/ppp1nP1p/4P2P/P1P1nNQ1/1PBN3K/3R2R1 w - - 0 29',
-    facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+    facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
   };
   it('states the tempting move, the line, the named tactic and the verdict as facts', () => {
     const line: PvPly[] = [
-      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: 'g4', shieldLost: 0 } },
-      { san: 'Kh1', uci: 'g1h1', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: 'g4', shieldLost: 0 } },
+      { san: 'Kh1', uci: 'g1h1', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
       forkPly,
     ];
     const facts = tacticalReadFacts({
@@ -240,8 +240,8 @@ describe('tacticalReadFacts (facts for the voice model, not prose)', () => {
       keyTactic: pickKeyTactic(line),
       checkPlies: [0], closeAlternative: null,
       tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
-        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
-        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
+        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
       ] },
     });
     expect(facts).toContain('Nxf3+');            // tempting move stated
@@ -287,8 +287,8 @@ describe('voiceNamesUngroundedMove (move-hallucination guard)', () => {
   const read = {
     fen: 'x', studentColor: 'black' as const, bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
     line: [
-      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
-      { san: 'Nxe3', uci: 'g4e3', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: 'b', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
+      { san: 'Nxe3', uci: 'g4e3', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: 'b', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
     ],
     verdict: summarizeVerdict(439, null), keyTactic: null, checkPlies: [0], tempting: null, closeAlternative: null,
   };
@@ -322,7 +322,7 @@ describe('pickKeyTactic mate_threat downgrade (false-claim audit)', () => {
     const fenAfter = 'r5r1/8/8/2k5/8/7p/2P4P/7K w - - 0 1';
     const ply: PvPly = {
       san: 'Rga8', uci: 'g8a8', moverColor: 'black', fenBefore: '', fenAfter,
-      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: 'mate_threat', materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: 'mate_threat', materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
     };
     const key = pickKeyTactic([ply]);
     expect(key?.type).toBe('mate_threat');
@@ -497,7 +497,7 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
   // for it would couple this gate to an unrelated test's shape.
   const quietPly = (san: string, mover: 'white' | 'black'): PvPly => ({
     san, uci: 'e5g4', moverColor: mover, fenBefore: '', fenAfter: '',
-    facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+    facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 },
   });
   const base = {
     fen: 'x', studentColor: 'black' as const, bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
@@ -536,8 +536,8 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
     const out = narrateTacticalRead({
       ...base,
       tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
-        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
-        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
+        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 } },
       ] },
     } as TacticalRead, { spoken: true });
     expect(out).not.toMatch(AFTER_PREPOSITION);

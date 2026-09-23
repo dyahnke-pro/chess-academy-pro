@@ -232,8 +232,15 @@ export interface PlyFacts {
   materialGained: number;
   /** Files newly opened by this ply. */
   newOpenFiles: string[];
-  /** Passed pawns newly created (squares). */
+  /** The MOVER's passed pawns newly created by this ply (squares). Mover-only
+   *  since walk 5 (R16): the list used to pool both colours, so exf6 — which
+   *  left BLACK a passer on e6 — was voiced "your opponent created a passed
+   *  pawn on e6". A consumer that wants the other side's goes to
+   *  `passedPawnsHanded`; nothing has to re-check the board for ownership. */
   newPassedPawns: string[];
+  /** The OTHER side's passed pawns this ply created (a capture that removed
+   *  the last pawn standing in front of one). */
+  passedPawnsHanded: string[];
   /** Outpost newly established by the mover (square), if any. */
   outpostGained: string | null;
   /** Defender king-shield pawns lost this ply (>0 = the defense got airier). */
@@ -448,10 +455,12 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   const newOpenFiles = before && after
     ? after.pawns.openFiles.filter((f) => !before.pawns.openFiles.includes(f))
     : [];
-  const passedBefore = before ? [...before.pawns.passedPawns.w, ...before.pawns.passedPawns.b] : [];
-  const newPassedPawns = after
-    ? [...after.pawns.passedPawns.w, ...after.pawns.passedPawns.b].filter((sq) => !passedBefore.includes(sq))
-    : [];
+  const newPassersFor = (side: 'w' | 'b'): string[] => {
+    const had = before ? before.pawns.passedPawns[side] : [];
+    return after ? after.pawns.passedPawns[side].filter((sq) => !had.includes(sq)) : [];
+  };
+  const newPassedPawns = newPassersFor(mover);
+  const passedPawnsHanded = newPassersFor(defender);
   const outpostsBefore = before ? before.outposts.filter((o) => o.color === mover).map((o) => o.square) : [];
   const outpostAfterNew = after
     ? after.outposts.find((o) => o.color === mover && !outpostsBefore.includes(o.square))
@@ -469,6 +478,7 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     materialGained,
     newOpenFiles,
     newPassedPawns,
+    passedPawnsHanded,
     outpostGained: outpostAfterNew?.square ?? null,
     shieldLost,
   };
@@ -627,6 +637,7 @@ export function renderPlyFactLine(ply: PvPly): string | null {
   if (f.tacticLanded) bits.push(`landing a ${tacticWord(f.tacticLanded)}`);
   if (f.outpostGained) bits.push(`planting an outpost on ${f.outpostGained}`);
   if (f.newPassedPawns.length > 0) bits.push(`creating a passed pawn on ${f.newPassedPawns[0]}`);
+  if (f.passedPawnsHanded.length > 0) bits.push(`leaving the other side a passed pawn on ${f.passedPawnsHanded[0]}`);
   if (f.newOpenFiles.length > 0) bits.push(`opening the ${f.newOpenFiles[0]}-file`);
   if (f.shieldLost > 0) bits.push('stripping the king cover');
   if (bits.length === 0) return null;
@@ -646,6 +657,7 @@ export function plyFactsString(ply: PvPly): string | null {
   if (f.tacticLanded) parts.push(`lands a ${tacticWord(f.tacticLanded)}`);
   if (f.outpostGained) parts.push(`outpost established on ${f.outpostGained}`);
   if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
+  if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
   if (f.newOpenFiles.length > 0) parts.push(`opens the ${f.newOpenFiles.join(' and ')}-file`);
   if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
   // Say "wins material" — NEVER the point count (David 2026-07-24: "we don't need
@@ -682,6 +694,8 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
     if (f.tacticLanded) parts.push(`lands a ${tacticWord(f.tacticLanded)}`);
     if (f.outpostGained) parts.push(`plants an outpost on ${f.outpostGained}`);
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
+    if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
+  if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
     if (f.newOpenFiles.length > 0) parts.push(`opens the ${f.newOpenFiles.join(' and ')}-file`);
     if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
     // "wins material", never the point count (David 2026-07-24 — sounds bad).
@@ -754,7 +768,7 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
     // itself, no material won and no tactical/structural consequence, stay
     // silent. A capture that WINS material or lands a real tactic still speaks.
     const onlyBareCapture = !!f.captured && f.materialGained < 1 && !f.tacticLanded
-      && !f.isCheck && !f.outpostGained && f.newPassedPawns.length === 0
+      && !f.isCheck && !f.outpostGained && f.newPassedPawns.length === 0 && f.passedPawnsHanded.length === 0
       && f.newOpenFiles.length === 0 && f.shieldLost === 0;
 
     // Name the PLAYER, not "The move Nxb5 …" (David 2026-07-23: the robotic
@@ -773,6 +787,7 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
     if (f.tacticLanded) parts.push(vb(`land a ${tacticWord(f.tacticLanded)}`, `lands a ${tacticWord(f.tacticLanded)}`));
     if (f.outpostGained) parts.push(vb(`plant an outpost on ${f.outpostGained}`, `plants an outpost on ${f.outpostGained}`));
     if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
+    if (f.passedPawnsHanded.length > 0) parts.push(vb(`hand them a passed pawn on ${f.passedPawnsHanded[0]}`, isYou || moverIsStudent === false ? `hands you a passed pawn on ${f.passedPawnsHanded[0]}` : `leaves the other side a passed pawn on ${f.passedPawnsHanded[0]}`));
     if (f.newOpenFiles.length > 0) parts.push(vb(`open the ${f.newOpenFiles[0]}-file`, `opens the ${f.newOpenFiles[0]}-file`));
     if (f.shieldLost > 0) parts.push(vb(`strip ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`, `strips ${f.shieldLost} pawn${plural(f.shieldLost)} from the king's cover`));
     // "win/wins material", never the point count (David 2026-07-24 — sounds bad).

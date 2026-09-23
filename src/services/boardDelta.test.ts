@@ -10,7 +10,7 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
   const base = (over: Partial<Parameters<typeof computeMoveFacets>[0]>): string[] => {
     const c = new Chess();
     c.move('e4');
-    return computeMoveFacets({
+    return computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore: new Chess().fen(),
       fenAfter: c.fen(),
       san: 'e4',
@@ -29,13 +29,26 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
     });
   };
 
-  it('attributes a quiet positional drift to the computed changes that fired', () => {
-    const facets = base({});
+  // D-8 (2026-09-22) raised the bar to EVAL_FACET_MIN_CP: a 0.4 wobble was the
+  // "ticks 0.4 your way" drumbeat on nearly every ply. This test still pinned
+  // the old 0.4 contract and had been red since — invisible, because nothing
+  // in ship-check touched this file until walk 5.
+  it('attributes a real positional shift to the computed changes that fired', () => {
+    const facets = base({ evaluation: 110 });
     const evalFacet = facets.find((f) => f.startsWith('[eval]'));
     expect(evalFacet).toBeTruthy();
-    expect(evalFacet).toMatch(/0\.4 your way/);
-    expect(evalFacet).toMatch(/no material story/);
-    expect(evalFacet).toMatch(/positional/);
+    expect(evalFacet).toMatch(/0\.9 your way/);
+    expect(evalFacet).toMatch(/no material|nothing was captured|No material changed hands/i);
+  });
+
+  it('a sub-floor wobble stays quiet (D-8)', () => {
+    expect(base({}).find((f) => f.startsWith('[eval]'))).toBeUndefined();
+  });
+
+  it('never credits the mover\'s own pressure for a swing against the mover (walk 5, R20)', () => {
+    const facets = base({ evaluation: -70, preMoveEval: 20 });
+    const evalFacet = facets.find((f) => f.startsWith('[eval]')) ?? '';
+    expect(evalFacet).not.toMatch(/new pressure the move creates|the tactic now sitting/);
   });
 
   it('stays quiet when the bar barely moves', () => {
@@ -50,7 +63,7 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
     const fenBefore = 'k7/8/8/8/3q4/8/8/K2Q4 w - - 0 1';
     const c = new Chess(fenBefore);
     c.move('Qxd4');
-    const facets = computeMoveFacets({
+    const facets = computeMoveFacets({ seenFundamentals: new Set(),
       fenBefore,
       fenAfter: c.fen(),
       san: 'Qxd4',

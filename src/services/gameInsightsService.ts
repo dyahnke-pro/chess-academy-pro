@@ -100,6 +100,10 @@ interface AnnotatedGame {
   playerColor: 'white' | 'black';
 }
 
+/** Centipawns a played move may trail the engine's best and still count as
+ *  agreeing with it — engine noise between depths, not a different idea. */
+const BEST_MOVE_AGREEMENT_CP = 10;
+
 /** Classify an opening NAME by which color named it. Black-named
  *  openings (Defense, Defence, Indian, Sicilian, etc.) reflect
  *  Black's choice — they should never appear in a user's "Most
@@ -291,11 +295,22 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
         if (move.isCoachMove) continue;
         const isMoveWhite = move.moveNumber % 2 === 1;
         if ((playerColor === 'white' && !isMoveWhite) || (playerColor === 'black' && isMoveWhite)) continue;
+        // Book moves are theory, not a choice against the engine.
+        if (move.classification === 'book') continue;
         if (move.bestMove && move.san) {
           bestMoveTotal++;
           const preFen = mi > 0 ? moves[mi - 1].fen : STARTING_FEN;
           const bestSan = uciMoveToSan(move.bestMove, preFen);
           if (move.san === bestSan) bestMoveMatches++;
+        } else if (move.evaluation !== null && move.bestMoveEval !== null) {
+          // 🔴 THE ANALYSER STORES `bestMove` ONLY ON A MOVE THAT DIFFERED
+          // (walk 5, S1c). It nulls it when the student played the engine's
+          // move, so the branch above only ever saw mismatches and the stat
+          // read 0% on every account. The eval pair is on every move: the
+          // played move AGREES when it reaches the best move's eval.
+          bestMoveTotal++;
+          const loss = isMoveWhite ? move.bestMoveEval - move.evaluation : move.evaluation - move.bestMoveEval;
+          if (loss <= BEST_MOVE_AGREEMENT_CP) bestMoveMatches++;
         }
       }
     }

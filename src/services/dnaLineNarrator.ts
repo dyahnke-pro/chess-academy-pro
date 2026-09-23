@@ -97,8 +97,18 @@ export function dnaMoveClause(
     prev,
   );
 
+  const moverIsStudent = studentColor === null || mv.color === studentColor;
+  // WHOSE MOVE, on the opponent's plies (walk 5, R12). A projected line
+  // alternates, and under "here's how you take advantage" a bare
+  // "Bxd4+, you win the knight, then Be3, the bishop trains on…" hands the
+  // student White's Be3. Captures already say "they take"; every other
+  // opponent ply is led with "they answer". Unseated callers are unchanged.
+  const theirs = studentColor !== null && !moverIsStudent;
+  const saysTheyTake = theirs && !!mv.captured && facts.materialGained >= 1;
+  const lead = theirs && !saysTheyTake ? `they answer ${mv.san}` : mv.san;
+
   // Mate ends the line — nothing else matters.
-  if (facts.isMate) return { text: `${mv.san} — checkmate`, prev: nextPrev, tacticLanded: null, concept: null };
+  if (facts.isMate) return { text: `${lead} — checkmate`, prev: nextPrev, tacticLanded: null, concept: null };
 
   // Tactical outcome, in the DNA register. A winning capture NAMES the piece
   // it wins (concrete + naturally varied by piece) rather than the flat,
@@ -111,7 +121,6 @@ export function dnaMoveClause(
   // ALTERNATES, and "Kxd7, winning the knight … then Nxa8, winning the rook"
   // under a heading promising the student an advantage tells them they won the
   // rook that was just taken from them. One perspective law: you / they.
-  const moverIsStudent = studentColor === null || mv.color === studentColor;
   if (mv.captured && facts.materialGained >= 1) {
     bits.push(studentColor === null
       ? `winning the ${facts.captured}`
@@ -125,6 +134,7 @@ export function dnaMoveClause(
   // The SAN carries the check; the concept clause carries WHY it matters.
   if (facts.outpostGained) bits.push(`planting an outpost on ${facts.outpostGained}`);
   if (facts.newPassedPawns.length > 0) bits.push(`creating a passed pawn on ${facts.newPassedPawns[0]}`);
+  if (facts.passedPawnsHanded.length > 0) bits.push(`handing ${studentColor === null ? 'the other side' : moverIsStudent ? 'them' : 'you'} a passed pawn on ${facts.passedPawnsHanded[0]}`);
   if (facts.newOpenFiles.length > 0) bits.push(`opening the ${facts.newOpenFiles[0]}-file`);
   if (facts.shieldLost > 0) bits.push('stripping the king cover');
 
@@ -145,9 +155,9 @@ export function dnaMoveClause(
   // the outcome; the concept is added only when it brings a DISTINCT idea and
   // the line hasn't already earned two clauses (keeps each move tight).
   if (bits.length === 0) {
-    return { text: concept ? `${mv.san}, ${concept}` : mv.san, prev: nextPrev, tacticLanded: facts.tacticLanded, concept: rawConcept };
+    return { text: concept ? `${lead}, ${concept}` : lead, prev: nextPrev, tacticLanded: facts.tacticLanded, concept: rawConcept };
   }
-  let text = `${mv.san}, ${bits.join(', ')}`;
+  let text = `${lead}, ${bits.join(', ')}`;
   if (concept && bits.length <= 1) text += `, ${concept}`;
   return { text, prev: nextPrev, tacticLanded: facts.tacticLanded, concept: rawConcept };
 }

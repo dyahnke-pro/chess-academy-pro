@@ -15,16 +15,16 @@ describe('sacrificeCompensation (David 2026-07-20 — teach the sac, don\'t asse
   it('names the board-true compensation for the Opera knight sac', () => {
     // After 10.Nxb5: Black king stuck on e8, d-file open, White far ahead in
     // development — the concrete reasons the knight is worth giving.
-    const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60);
+    const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60, true);
     expect(clauses.some((c) => /stuck in the cent/i.test(c))).toBe(true);
     expect(clauses.some((c) => /ahead in development/i.test(c))).toBe(true);
     // A winning eval (>=100) → the "already on top" verdict.
-    const winning = sacrificeCompensation(fenAfter(OPERA), 'w', 250);
+    const winning = sacrificeCompensation(fenAfter(OPERA), 'w', 250, true);
     expect(winning.some((c) => /already on top/i.test(c))).toBe(true);
   });
 
   it('emits no false compensation from the starting position (nothing is stuck)', () => {
-    const clauses = sacrificeCompensation(new Chess().fen(), 'w', 0);
+    const clauses = sacrificeCompensation(new Chess().fen(), 'w', 0, true);
     expect(clauses.some((c) => /stuck in the cent/i.test(c))).toBe(false);
     expect(clauses.some((c) => /ahead in development/i.test(c))).toBe(false);
   });
@@ -35,13 +35,13 @@ describe('sacrificeCompensation (David 2026-07-20 — teach the sac, don\'t asse
     // reason — the verdict facet says what it cost. Negative control: the
     // same board at -60 still names the compensation, so the gate is the eval,
     // not the board.
-    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470)).toEqual([]);
-    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -60).length).toBeGreaterThan(0);
-    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470).some((c) => /holds up/i.test(c))).toBe(false);
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470, true)).toEqual([]);
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -60, true).length).toBeGreaterThan(0);
+    expect(sacrificeCompensation(fenAfter(OPERA), 'w', -470, true).some((c) => /holds up/i.test(c))).toBe(false);
   });
 
   it('every clause is a plain string with no move/piece/square invented (G0 shape)', () => {
-    const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60);
+    const clauses = sacrificeCompensation(fenAfter(OPERA), 'w', 60, true);
     // The clauses never mention a specific SAN or "engine" (voice rules).
     for (const c of clauses) {
       expect(c).not.toMatch(/\bengine\b/i);
@@ -72,5 +72,14 @@ describe('describeSacBreaksKingShield (David 2026-07-20 — the exchange-sac WHY
 
   it('returns null for a non-capture', () => {
     expect(describeSacBreaksKingShield(new Chess().fen(), 'e4')).toBeNull();
+  });
+});
+
+describe('the compensation names the mover from the student\'s chair (walk 5, R13)', () => {
+  it('an opponent\'s sacrifice is never voiced as "you"', () => {
+    const theirs = sacrificeCompensation(fenAfter(OPERA), 'w', 250, false);
+    expect(theirs.length).toBeGreaterThan(0);
+    expect(theirs.join(' ')).not.toMatch(/\byou're\b/);
+    expect(theirs.join(' ')).toMatch(/they're already on top/);
   });
 });

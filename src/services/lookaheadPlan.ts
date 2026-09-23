@@ -1488,7 +1488,7 @@ function shortLineRead(
       fenBefore: fen, fenAfter: fen,
       facts: {
         captured: null, isCheck: board.isCheck(), isMate: mated, promotion: null,
-        tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [],
+        tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [],
         outpostGained: null, shieldLost: 0,
       },
     }],

@@ -216,7 +216,7 @@ for (const g of games) {
 // "a your passed pawn" hid) fits the test budget; SWEEP_SHARD walks other
 // slices for a broader one-time pass.
 const SHARD = Number(process.env.SWEEP_SHARD ?? 0);
-const SIZE = 8;
+const SIZE = Number(process.env.SWEEP_SIZE ?? 8);
 const sample = candidates.slice(SHARD * SIZE, SHARD * SIZE + SIZE);
 
 function synthMoves(sans: string[]): ReviewMoveInput[] {
@@ -254,41 +254,32 @@ function synthMoves(sans: string[]): ReviewMoveInput[] {
 }
 
 describe('review corpus sweep — no board-untrue line hides in any path (David 2026-07-22)', () => {
-  it('every emitted narration line is board-true across a diverse real-game corpus', async () => {
-    expect(sample.length).toBeGreaterThanOrEqual(6);
-    const violations: Violation[] = [];
-    for (const game of sample) {
+  it('the corpus slice is real', () => {
+    expect(sample.length).toBeGreaterThanOrEqual(Math.min(6, SIZE));
+  });
+  // ONE TEST PER GAME (walk 5, 2026-09-23). Eight games inside one 900s test
+  // measured ~95s a game — 760s on an idle machine, over 900s under ship-check's
+  // parallel load — so the gate ended "Test timed out", which reads the same
+  // whether the scan found nothing or never finished. Per game, each has its
+  // own budget, a slow machine costs one game's verdict at most, and a
+  // violation names its game in the test title. Coverage is unchanged.
+  for (const game of sample) {
+    it(`every emitted narration line is board-true — ${game.id}`, async () => {
+      const violations: Violation[] = [];
       const moves = synthMoves(game.sans);
-      let narration;
-      try {
-        narration = await generateReviewNarration({
-          moves, playerColor: game.studentWB === 'w' ? 'white' : 'black',
-          openingName: null, result: '*', playerRating: 1500,
-          coachNarration: 'silent', uncapped: true,
-        });
-      } catch { continue; }
+      const narration = await generateReviewNarration({
+        moves, playerColor: game.studentWB === 'w' ? 'white' : 'black',
+        openingName: null, result: '*', playerRating: 1500,
+        coachNarration: 'silent', uncapped: true,
+      });
       for (const seg of narration.segments) {
         if (!seg.narration) continue;
         violations.push(...scanLine(seg.narration, seg.fenAfter, game.studentWB, { game: game.id, ply: seg.ply, san: seg.san, line: seg.narration }));
       }
-    }
-    // Group + report for triage.
-    if (violations.length) {
-      const byRule: Record<string, number> = {};
-      for (const v of violations) byRule[v.rule] = (byRule[v.rule] ?? 0) + 1;
-      console.log(`\n[corpus-sweep] ${violations.length} violations over ${sample.length} games:`, byRule);
       for (const v of violations.slice(0, 60)) {
         console.log(`  [${v.rule}] ${v.game} ply${v.ply} ${v.san}: ${v.detail}\n    → ${v.line.slice(0, 200)}`);
       }
-    }
-    expect(violations, `board-untrue lines: ${violations.slice(0, 12).map((v) => `${v.rule}@${v.game}#${v.ply}`).join(', ')}`).toEqual([]);
-    // 900s, because 240s was a budget the sweep had outgrown and the overrun
-    // was INVISIBLE: the run always ended "Test timed out in 240000ms", which
-    // reads exactly the same whether the scan found nothing or never finished.
-    // A gate that cannot reach its own assertion reports nothing — the same
-    // vacuous-gate failure as one that asserts too little, wearing a stopwatch.
-    // Measured 2026-08-08: 569s for 8 games here (1271s before this session's
-    // engine-coalescing and tactic-position caching landed). Not in
-    // ship-check's curated list, so the length costs a push nothing.
-  }, 900000);
+      expect(violations, `board-untrue lines: ${violations.slice(0, 12).map((v) => `${v.rule}@${v.game}#${v.ply}`).join(', ')}`).toEqual([]);
+    }, 400_000);
+  }
 });

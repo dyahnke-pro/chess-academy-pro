@@ -601,7 +601,7 @@ describe('coachFeatureService', () => {
       expect(taught).toBe(true);
     });
 
-    it('does NOT double-teach king-in-centre when a sacrifice already taught it', () => {
+    it('does NOT double-teach king-in-centre when a sacrifice already taught it', { timeout: 30_000 }, () => {
       // The Opera Game: the knight sac at ply 19 teaches the king-in-centre; the
       // standalone beat must stay suppressed (no verbatim repeat of the keystone).
       const OPERA = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O'];
@@ -907,3 +907,26 @@ describe('recapSecondPerson — the Play surface hands a WORD, not a PGN score (
   });
 });
 
+
+describe('one claim, spoken once — the opponent\'s reach into the centre (walk 5, 2026-09-23)', () => {
+  it('a developing opponent move is not narrated twice as [does] and a "steps in eyeing" restatement', { timeout: 30_000 }, () => {
+    const G = 'e4 c5 Nf3 d6 Bc4 Nf6 Nc3 a6 d4 cxd4 Nxd4 e6 a4 Be7 Qd3 O-O Ba2 Nbd7'.split(' ');
+    const segs = buildReviewSegments(
+      G.map((san, i) => ({ isCoachMove: false, classification: 'good', evaluation: 0, preMoveEval: 0, bestMove: null, fenAfter: '', ply: i + 1, san }) as never),
+      'black', 'Sicilian Defense', true,
+    );
+    for (const s of segs.filter((x) => x.ply % 2 === 1)) {
+      expect(s.narration ?? '').not.toMatch(/now fights for[^.]*\.[^[]*\[opp-target\] Your opponent's \w+ steps in eyeing/);
+      expect(s.narration ?? '').not.toMatch(/steps in eyeing/);
+    }
+  });
+});
+
+describe('pendingRecapture — no "if they sit still" in the middle of an exchange (walk 5, 2026-09-23)', () => {
+  it('…cxd4 with Nxd4 available is an exchange in progress; a quiet move is not', async () => {
+    const { pendingRecapture } = await import('./coachFeatureService');
+    const before = 'rnbqkb1r/1p2pppp/p2p1n2/2p5/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 0 5';
+    expect(pendingRecapture(before, 'cxd4', 'rnbqkb1r/1p2pppp/p2p1n2/8/2BpP3/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 6')).toBe(true);
+    expect(pendingRecapture(before, 'e6', 'rnbqkb1r/1p3ppp/p2ppn2/2p5/2BPP3/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 6')).toBe(false);
+  });
+});

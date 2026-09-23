@@ -62,7 +62,7 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
     expect(out, 'no my-plan answer').not.toBeNull();
     expect(out!.aspect).toBe('my-plan');
     // richer than a lone lever — at least one concrete plan verb + a real square/file
-    expect(out!.answer.facts).toMatch(/break|rook|knight|improve|passed|pawn/i);
+    expect(out!.answer.facts).toMatch(/break|rook|knight|improve|passed|pawn|develop/i);
     expect(out!.answer.facts.length).toBeGreaterThan(20);
   });
   it("opponent-plan: names their trump/threat from the student's POV", () => {

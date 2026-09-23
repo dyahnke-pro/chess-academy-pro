@@ -47,7 +47,7 @@ function lineShape(over: Partial<LineShape>): LineShape {
 
 const EMPTY: PlyFacts = {
   captured: null, isCheck: false, isMate: false, promotion: null,
-  tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [],
+  tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [],
   outpostGained: null, shieldLost: 0,
 };
 

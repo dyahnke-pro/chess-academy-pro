@@ -15,6 +15,7 @@
 // small swing → we stay quiet). We never over-claim, because the swing is the
 // engine's verdict, not ours (G0/G3). 100% engine + chess.js; zero LLM.
 
+import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import type { Evaluate } from './moveComparison';
@@ -228,8 +229,10 @@ export async function explainEvalByPieceQuality(
   // eval toward that side.
   let winner: BadPieceDelta | null = null;
 
+  // UNDEVELOPED IS NOT PASSIVE (walk 5, 2026-09-23) — one rule, shared with
+  // the worst-placed-piece plan (`utils/undeveloped`).
   for (const color of ['w', 'b'] as Color[]) {
-    const cands = worstPieces(fen, color, maxBadMobility);
+    const cands = worstPieces(fen, color, maxBadMobility).filter((c) => !isUndevelopedInOpening(fen, color, c.type, c.sq));
     if (!cands.length) continue;
     const sign = color === 'w' ? 1 : -1;
     const beforeOwn = sign * evalCp;
@@ -248,7 +251,7 @@ export async function explainEvalByPieceQuality(
             color,
             squares: [one.sq],
             pieces: [one.type],
-            text: `the ${PIECE_WORD[one.type]} on ${one.sq} is doing nothing where it sits — that passivity is the whole story here`,
+            text: `the ${PIECE_WORD[one.type]} on ${one.sq} is doing nothing where it sits — improving it is the biggest gain on the board`,
             proof: 'ablation',
             ablation: { before: beforeOwn, after: afterOwn, swingCp: swing },
           };
@@ -271,7 +274,7 @@ export async function explainEvalByPieceQuality(
                   color,
                   squares: [one.sq, two.sq],
                   pieces: [one.type, two.type],
-                  text: `the ${PIECE_WORD[one.type]} on ${one.sq} and the ${PIECE_WORD[two.type]} on ${two.sq} are both so passive they're the whole story here`,
+                  text: `the ${PIECE_WORD[one.type]} on ${one.sq} and the ${PIECE_WORD[two.type]} on ${two.sq} are both passive — improving them is the biggest gain on the board`,
                   proof: 'ablation',
                   ablation: { before: beforeOwn, after: afterOwn2, swingCp: swing2 },
                 };

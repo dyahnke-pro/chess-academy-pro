@@ -5,7 +5,7 @@ import type { PvPly } from './pvPlayback';
 const QUIET_FACTS = {
   captured: null, isCheck: false, isMate: false, promotion: null,
   tacticLanded: null, materialGained: 0, newOpenFiles: [],
-  newPassedPawns: [], outpostGained: null, shieldLost: 0,
+  newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0,
 };
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

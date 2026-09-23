@@ -764,6 +764,11 @@ const POSITION_ASSESSMENT_RE = anyOf([
   String.raw`\bhow\s+(?:good|bad)\s+is\s+(?:my|this|the)\s+position\b`,
   String.raw`\bassess(?:\s+(?:this|the\s+position))?\b`,
   String.raw`\bevaluate\s+(?:this|the\s+position)\b`,
+  // "explain / analyse / break down this position" (walk 5, 2026-09-23): these
+  // used to NAVIGATE off the live board to the explain page; the board
+  // surface now answers in place, so the in-place lane must catch them.
+  String.raw`\b(?:explain|analy[sz]e|break\s+down)\s+(?:this|the|my)\s+position\b`,
+  String.raw`\bwhat(?:'?s| is)\s+happening\s+(?:here|in\s+this)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+going\s+on\s+(?:here|in\s+this)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:situation|status)\b`,
   // conversational "read me the position" / "lay of the land here" (pass 21).

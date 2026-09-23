@@ -127,6 +127,9 @@ export function homePlanFor(input: HomePlanInput): HomePlanSection {
     .filter((w) => w.openCount > 0 && w.gameIds.some((id) => homeIds.has(id)))
     .map((w) => ({ w, games: w.gameIds.filter((id) => homeIds.has(id)).length }))
     .sort((a, b) => b.games - a.games || b.w.severity - a.w.severity)
+    // One hole, one rep (walk 5, S2a): a fundamental row and the tag it files
+    // under are the same drill — the first-ranked keeps the slot.
+    .filter(({ w }, i, all) => all.findIndex((o) => (o.w.capabilityTag ?? o.w.key) === (w.capabilityTag ?? w.key)) === i)
     .slice(0, FUNDAMENTAL_REPS); // a plan's shape (the daily feed), not a cap on facts — the Weaknesses hub lists them all
   for (const { w, games } of inside) {
     reps.push({

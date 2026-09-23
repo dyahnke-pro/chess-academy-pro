@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**615 lines · 5 exports · 10 importers · 6 tests · 3 audits**
+**635 lines · 6 exports · 10 importers · 6 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,26 +25,31 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `fundamentalHow` (function) — 8 call sites
+### `isMethodSentence` (function) — 1 call site
+- `src/services/coachFeatureService.ts:4193`
+
+### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:25`
 - `src/services/fundamentalHow.test.ts:32`
 - `src/services/fundamentalHow.test.ts:41`
-- `src/services/fundamentalHow.test.ts:60`
-- `src/services/fundamentalHow.test.ts:67`
-- `src/services/fundamentalHow.test.ts:72`
-- `src/services/fundamentalHow.test.ts:73`
+- `src/services/fundamentalHow.test.ts:57`
+- `src/services/fundamentalHow.test.ts:58`
+- `src/services/fundamentalHow.test.ts:64`
+- `src/services/fundamentalHow.test.ts:71`
+- `src/services/fundamentalHow.test.ts:76`
+- `src/services/fundamentalHow.test.ts:77`
 - `src/services/principleAttribution.section14.test.ts:159`
 
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderFundamentalVerdict` (function) — 19 call sites
-- `src/services/coachFeatureService.ts:2158`
+- `src/services/coachFeatureService.ts:2155`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
-- `src/services/fundamentalHow.test.ts:77`
+- `src/services/fundamentalHow.test.ts:81`
 - `src/services/learnFundamentalNarration.ts:75`
 - `src/services/misconceptionClassifier.ts:274`
 - `src/services/principleAttribution.section14.test.ts:162`
@@ -57,15 +62,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:25`
 - `src/services/principleVoice.test.ts:31`
 - `src/services/principleVoice.test.ts:32`
-- `src/services/reviewFullData.ts:305`
+- `src/services/reviewFullData.ts:318`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2169`
+- `src/services/coachFeatureService.ts:2166`
 - `src/services/principleVoice.test.ts:38`
 - `src/services/principleVoice.test.ts:40`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:4594`
+- `src/services/coachFeatureService.ts:4643`
 - `src/services/principleVoice.test.ts:48`
 - `src/services/principleVoice.test.ts:53`
 - `src/services/principleVoice.test.ts:57`

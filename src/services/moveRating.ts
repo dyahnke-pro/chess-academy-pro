@@ -184,7 +184,15 @@ export function classifyMoveFull(r: {
     evalAfter: r.postMoveEval,
     isWhiteMove: r.playerColor === 'white',
   })) {
-    case 'best': return 'great';
+    // ONE MEANING FOR "GREAT" (walk 5, 2026-09-23). Batch analysis calls a
+    // move great when it IMPROVES the mover's position beyond noise (win%
+    // gained ≥ EXCELLENT_WIN_PCT); this path called every engine-best move
+    // great, so a book 4…a6 was "You: that was a great move" and a 16-move
+    // game showed nine Greats. Same label, two meanings — the enum split the
+    // foundation warns about. The live path now asks the batch path's
+    // question: a best move that merely keeps the balance is good.
+    case 'best': return r.preMoveEval !== null
+      && winPctLost(r.preMoveEval, r.postMoveEval, white) <= -EXCELLENT_WIN_PCT ? 'great' : 'good';
     case 'excellent': return 'good';
     case 'good': return 'good';
     case 'inaccuracy': return 'inaccuracy';

@@ -228,8 +228,16 @@ export function pieceQualityLines(
   // Home-square pieces are out until the middlegame — see `onHomeSquare`. The
   // sibling branch below already excludes rooks and gates on `isMiddlegame`;
   // this branch had neither guard, which is how a move-3 rook won the lane.
+  // …and before the middlegame a MINOR is never "the best piece" (walk 5,
+  // L3a). On move two a freshly developed Nc6 outscores its twin still on g8,
+  // so the relative ranking crowned it and the coach told the student to trade
+  // off a knight that had moved once. In the opening a developed minor is just
+  // development — it measures which one left home first, the same rule as
+  // undeveloped ≠ misplaced on the student's side. A rook or queen that is
+  // already doing work this early IS the exception worth naming.
   const best = theirs.filter((v) => v.piece.toLowerCase() !== 'p')
     .filter((v) => opts?.isMiddlegame === true || !onHomeSquare(v))
+    .filter((v) => opts?.isMiddlegame === true || !'nb'.includes(v.piece.toLowerCase()))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => b.d - a.d)[0];
   if (best && best.d >= 0.3) {

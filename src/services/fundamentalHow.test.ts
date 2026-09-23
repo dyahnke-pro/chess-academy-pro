@@ -53,7 +53,11 @@ describe('fundamentalHow — no diagnosis without a remedy', () => {
   it('two NEW fundamentals on one ply both teach — the board earned both (G4.5)', () => {
     const seen = new Set<FundamentalId>();
     const out = renderFundamentalVerdict([attr('same-piece-twice'), attr('loose-piece')], { ply: 12, seen });
-    expect(out.match(/Here's how:/g) ?? []).toHaveLength(2);
+    // Both HOWs speak (G4.5), under different stems (walk 5, R10).
+    expect(out).toContain(fundamentalHow('same-piece-twice') ?? '__');
+    expect(out).toContain(fundamentalHow('loose-piece') ?? '__');
+    expect(out.match(/Here's how:/g) ?? []).toHaveLength(1);
+    expect(out).toContain('The habit that fixes it:');
   });
 
   it('uses the student/opponent perspective, never we/our', () => {

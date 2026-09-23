@@ -106,3 +106,16 @@ describe('explainEvalByPieceQuality', () => {
     expect(await explainEvalByPieceQuality('not a fen', async () => ({ cp: 0 }))).toBeNull();
   });
 });
+
+describe('explainEvalByPieceQuality — undeveloped is not passive (walk 5, 2026-09-23)', () => {
+  it('at move 8 a bishop still on c8 is never the passive piece, however much relocating it gains', async () => {
+    const { explainEvalByPieceQuality } = await import('./pieceQuality');
+    // The walk-5 Najdorf after 8.Qd3: Black's c8 bishop has not moved.
+    const fen = 'rnbq1rk1/1p2bppp/p2ppn2/8/P2NP3/2NQ4/1PP2PPP/R1B1KB1R b KQ - 3 8';
+    // An engine that rewards ANY relocation away from the home squares by 3 pawns.
+    const evaluate = async (f: string): Promise<{ cp: number }> => ({ cp: f === fen ? 0 : -300 });
+    const r = await explainEvalByPieceQuality(fen, evaluate as never);
+    expect(r?.delta?.squares ?? []).not.toContain('c8');
+    expect(r?.delta?.text ?? '').not.toMatch(/whole story/);
+  });
+});

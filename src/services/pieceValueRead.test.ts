@@ -241,3 +241,18 @@ describe('pieceQualityLines — worst piece only in the middlegame (David 2026-0
   });
 
 });
+
+describe('their best piece is never a freshly developed minor in the opening (walk 5, L3a)', () => {
+  it('a knight that moved once is not "doing the most work" at move two', () => {
+    const values = [
+      { piece: 'n', color: 'b', square: 'c6', value: -1.4 },
+      { piece: 'n', color: 'b', square: 'g8', value: -0.3 },
+      { piece: 'n', color: 'w', square: 'c3', value: 0.9 },
+      { piece: 'n', color: 'w', square: 'g1', value: 0.3 },
+    ] as never;
+    const opening = pieceQualityLines(values, 'white', undefined, { isMiddlegame: false });
+    expect(opening.find((l) => l.kind === 'their-best-piece')).toBeUndefined();
+    const middlegame = pieceQualityLines(values, 'white', undefined, { isMiddlegame: true });
+    expect(middlegame.find((l) => l.kind === 'their-best-piece')?.text ?? '').toMatch(/knight on c6/);
+  });
+});

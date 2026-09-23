@@ -96,8 +96,10 @@ describe('MyMistakesPage', () => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(2);
     });
 
-    expect(screen.getByText('Move 5 — d4')).toBeInTheDocument();
-    expect(screen.getByText('Move 12 — d4')).toBeInTheDocument();
+    expect(screen.getByText('Move 5 — you played Ng5')).toBeInTheDocument();
+    expect(screen.getByText('Move 12 — you played Ng5')).toBeInTheDocument();
+    // The answer (d4) never sits on an unsolved card (walk 5, S3a).
+    expect(screen.queryByText(/— d4/)).toBeNull();
   });
 
   it('displays stats bar with counts', async () => {
@@ -173,7 +175,7 @@ describe('MyMistakesPage', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(1);
     });
-    expect(screen.getByText('Move 3 — d4')).toBeInTheDocument();
+    expect(screen.getByText('Move 3 — you played Ng5')).toBeInTheDocument();
   });
 
   it('only offers classification filters that exist in the data', async () => {
@@ -469,6 +471,6 @@ describe('MyMistakesPage', () => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(1);
     });
 
-    expect(screen.getByText('Move 5 — d4')).toBeInTheDocument();
+    expect(screen.getByText('Move 5 — you played Ng5')).toBeInTheDocument();
   });
 });
