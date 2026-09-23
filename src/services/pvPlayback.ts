@@ -22,7 +22,7 @@ import { stockfishEngine } from './stockfishEngine';
 import { detectTactics } from './tacticsDetector';
 import { classifyPosition } from './tacticClassifier';
 import { describeStructure } from './boardStructure';
-import { legalSeeGain } from './positionReadingService';
+import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 import type { StockfishAnalysis } from '../types';
 import { MATERIAL_VALUE } from './pieceValues';
 
@@ -191,6 +191,21 @@ export function tacticWinsMaterial(
  *  captured on the square we're now capturing on, this move is a RECAPTURE and
  *  its honest material figure is the NET of the two-ply swap, not the face value
  *  (David 2026-07-20: "Qxf3 nets three points" was an even recapture). */
+/** After an even swap, is `target` still winnable by `mover` whatever the
+ *  opponent recaptures on `square` with? With no recapture available, it is
+ *  winnable if the mover can take it now. */
+function stillFallsAfterRecapture(fenAfter: string, square: Square, target: Square, mover: 'w' | 'b'): boolean {
+  let board: Chess;
+  try { board = new Chess(fenAfter); } catch { return false; }
+  const retakes = board.moves({ verbose: true }).filter((m) => m.to === square && !!m.captured);
+  if (retakes.length === 0) return legalSeeGainFor(fenAfter, target, mover) > 0;
+  return retakes.every((m) => {
+    const sim = new Chess(fenAfter);
+    try { sim.move(m); } catch { return false; }
+    return legalSeeGainFor(sim.fen(), target, mover) > 0;
+  });
+}
+
 export interface PrevCaptureContext {
   /** The square the previous ply captured on (its destination), or null. */
   square: string | null;
@@ -411,7 +426,17 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
             const unguarded = t.involvedSquares[1] as Square;
             let captureNets = 0;
             try { captureNets = pieceVal(mv.captured) - legalSeeGain(fenAfter, toSquare as Square); } catch { captureNets = 0; }
-            if (captureNets >= 0 && afterBoard.attackers(unguarded, mover).length > 0) { tacticLanded = 'removal_of_guard'; break; }
+            // AN EVEN TRADE IS A REMOVAL ONLY IF THE TARGET STILL FALLS (walk
+            // 6, R8: the queen trade Qxb5 cxb5 was voiced "landing a removal
+            // of the defender" on BOTH moves). A retake nets against what was
+            // just taken on that square. When the swap comes out level, the
+            // guard is only really gone if the piece it guarded is still
+            // winnable after the opponent's recapture — the classic Bxf6 gxf6
+            // then the h7 pawn falls; not a plain trade of queens.
+            const retake = !!prev?.square && prev.square === toSquare && prev.capturedValue > 0;
+            const net = retake ? captureNets - (prev?.capturedValue ?? 0) : captureNets;
+            if (net > 0 && afterBoard.attackers(unguarded, mover).length > 0) { tacticLanded = 'removal_of_guard'; break; }
+            if (net === 0 && afterBoard.attackers(unguarded, mover).length > 0 && stillFallsAfterRecapture(fenAfter, toSquare as Square, unguarded, mover)) { tacticLanded = 'removal_of_guard'; break; }
           }
         }
       } catch { /* move-based scan failed — facts stay as they are */ }

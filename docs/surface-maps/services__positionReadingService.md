@@ -78,8 +78,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2579`
 - `src/services/groundedAnswer.ts:2937`
 - `src/services/groundedAnswer.ts:6350`
-- `src/services/pvPlayback.ts:413`
-- `src/services/pvPlayback.ts:450`
+- `src/services/pvPlayback.ts:428`
+- `src/services/pvPlayback.ts:475`
 - `src/services/reviewQuestionPlan.ts:67`
 - `src/services/reviewTrapQuestion.ts:113`
 
@@ -106,7 +106,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:204`
 - `src/services/moveFundamentals.ts:239`
 
-### `legalSeeGainFor` (function) — 11 call sites
+### `legalSeeGainFor` (function) — 13 call sites
 - `src/services/causalChain.ts:41`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
@@ -116,6 +116,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:783`
 - `src/services/groundedAnswer.ts:1034`
 - `src/services/nextPlans.ts:46`
+- `src/services/pvPlayback.ts:201`
+- `src/services/pvPlayback.ts:205`
 - `src/services/tacticAlertService.ts:329`
 - `src/services/tacticVerification.ts:101`
 
