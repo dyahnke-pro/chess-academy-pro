@@ -10,6 +10,7 @@ import { db } from '../../db/schema';
 import { ArrowLeft, Loader2, CheckCircle, TrendingUp, Brain, ExternalLink } from 'lucide-react';
 import type { PlatformStats, UserProfile } from '../../types';
 import { captureEvent } from '../../services/analytics';
+import { invalidateHomeSteer, warmHomeSteer } from '../../services/homeOpeningSteer';
 
 type Platform = 'lichess' | 'chesscom';
 
@@ -218,6 +219,12 @@ export function ImportPage(): JSX.Element {
           setActiveProfile(refreshed);
         }
       }
+      // New games, and the username they resolve against, are on the record:
+      // build the home steer NOW, while the student is still reading the
+      // stats, so the first Play move never races the batch analysis that
+      // starts right after an import (walk 4).
+      invalidateHomeSteer();
+      void warmHomeSteer(undefined, 'import');
     } catch (err) {
       if (mountedRef.current) setError(err instanceof Error ? err.message : 'Import failed');
       // The ANALYTICS still fire either way: the import genuinely failed and

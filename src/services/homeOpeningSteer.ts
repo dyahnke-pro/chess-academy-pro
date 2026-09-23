@@ -16,12 +16,17 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { useAppStore } from '../stores/appStore';
+import { logAppAudit } from './appAuditor';
 import { isFixtureGame } from './fixtureGames';
 import { isHomeOpeningGame } from './homeOpening';
 import { getHomeOpenings } from './homeOpeningService';
+import { getHomeSteerEntry, invalidateHomeSteer, setHomeSteerEntry, type HomeSteerEntry, type SteerIndex } from './homeSteerCache';
 import { fenKey } from './needScore';
 import type { PlayerColor, PlayerIdentity } from './playerIdentity';
 import type { GameRecord } from '../types';
+
+export { invalidateHomeSteer } from './homeSteerCache';
+export type { SteerIndex } from './homeSteerCache';
 
 /** Games that must have reached a position before the steer follows it. */
 export const STEER_MIN_GAMES = 3;
@@ -64,9 +69,6 @@ export function openingSans(pgn: string, maxPly: number): string[] {
   return out;
 }
 
-/** fenKey(position before the opponent's move) → san → games. */
-export type SteerIndex = Map<string, Map<string, number>>;
-
 /** Build the index from the student's home games: the OPPONENT's replies at
  *  every position the games reached, for the given student colour. Pure. */
 export function buildSteerIndex(games: readonly GameRecord[], identity: PlayerIdentity, colour: PlayerColor, family: string): SteerIndex {
@@ -107,37 +109,79 @@ export function steerFromIndex(index: SteerIndex, fen: string, family: string, r
   return { san: move.san, uci: `${move.from}${move.to}${move.promotion ?? ''}`, games: pick[1], total, family };
 }
 
-const TTL_MS = 5 * 60 * 1000;
-let cache: { at: number; key: string; index: SteerIndex; family: string } | null = null;
+const COLOURS: readonly PlayerColor[] = ['white', 'black'];
+const inFlight = new Map<PlayerColor, Promise<HomeSteerEntry | null>>();
 
 /** Test hook. */
-export function __resetHomeSteerCacheForTests(): void { cache = null; }
+export function __resetHomeSteerCacheForTests(): void { invalidateHomeSteer(); inFlight.clear(); }
 
-/** Whether the steer index for this colour is already built (the first call of
- *  a game pays the whole build — 932 PGNs parsed — and must not be held to the
- *  warm-lookup budget; walk 2, 2026-09-23: the opening move of a Learn game
- *  fell through to the amateur band while the index was still building). */
+/** Is this colour's index already built? The warm lookup is synchronous and
+ *  touches no Dexie; the cold path is the build below. `coachGameEngine` sizes
+ *  its budget on this (walk 2, 2026-09-23). */
 export function isHomeSteerWarm(studentColor: PlayerColor): boolean {
-  return !!cache && cache.key.startsWith(`${studentColor}:`) && Date.now() - cache.at <= TTL_MS;
+  return getHomeSteerEntry(studentColor) !== null;
+}
+
+function identityNow(): PlayerIdentity {
+  const p = useAppStore.getState().activeProfile;
+  return { profileName: p?.name ?? null, chessComUsername: p?.preferences.chessComUsername ?? null, lichessUsername: p?.preferences.lichessUsername ?? null };
+}
+
+/**
+ * Build (or join the in-flight build of) one colour's index. One build per
+ * colour at a time: a Play mount and the coach's first turn both asking within
+ * the same second share the work instead of doubling it on a starved thread.
+ * Null when the student has no home opening for that colour — nothing is
+ * cached, so the next call asks the record again (cheap, and an import that
+ * creates a home will be followed by its own warm).
+ */
+async function buildFor(colour: PlayerColor, trigger: string): Promise<HomeSteerEntry | null> {
+  const cached = getHomeSteerEntry(colour);
+  if (cached) return cached;
+  const running = inFlight.get(colour);
+  if (running) return running;
+  const work = (async (): Promise<HomeSteerEntry | null> => {
+    const t0 = Date.now();
+    const home = await getHomeOpenings();
+    const choice = home[colour];
+    if (!choice) return null;
+    const games = await db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).toArray();
+    const index = buildSteerIndex(games, identityNow(), colour, choice.family);
+    const entry: HomeSteerEntry = { index, family: choice.family, games: games.length, builtAt: Date.now(), buildMs: Date.now() - t0 };
+    setHomeSteerEntry(colour, entry);
+    void logAppAudit({
+      kind: 'home-steer-warmed',
+      category: 'subsystem',
+      source: 'homeOpeningSteer.buildFor',
+      summary: `colour=${colour} family=${choice.family} positions=${index.size} games=${games.length} buildMs=${entry.buildMs} trigger=${trigger}`,
+    });
+    return entry;
+  })().finally(() => { inFlight.delete(colour); });
+  inFlight.set(colour, work);
+  return work;
+}
+
+/**
+ * Warm the index ahead of the move that needs it — at boot (deferred, after
+ * the first paint), after an import, and when Play mounts. Never throws: a
+ * failed warm just leaves the cold path to the pick, budgeted as before.
+ */
+export async function warmHomeSteer(colour?: PlayerColor, trigger = 'warm'): Promise<void> {
+  const targets = colour ? [colour] : COLOURS;
+  await Promise.all(targets.map((c) => buildFor(c, trigger).catch(() => null)));
 }
 
 /**
  * The opponent's steer at `fen` for a student playing `studentColor`, from
  * their persisted home opening for that colour. Null when there is no home,
  * the position is past the opening, or too few home games reached it.
+ * Warm: a synchronous map lookup. Cold: the build above, which the caller
+ * budgets.
  */
 export async function pickHomeSteerMove(fen: string, studentColor: PlayerColor, rng: () => number = Math.random): Promise<HomeSteerPick | null> {
   const ply = (Number(fen.split(' ')[5] ?? '1') - 1) * 2 + (fen.split(' ')[1] === 'b' ? 1 : 0);
   if (ply >= STEER_MAX_PLY) return null;
-  const home = await getHomeOpenings();
-  const choice = home[studentColor];
-  if (!choice) return null;
-  const games = await db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).toArray();
-  const key = `${studentColor}:${choice.family}:${games.length}`;
-  if (!cache || cache.key !== key || Date.now() - cache.at > TTL_MS) {
-    const p = useAppStore.getState().activeProfile;
-    const identity: PlayerIdentity = { profileName: p?.name ?? null, chessComUsername: p?.preferences.chessComUsername ?? null, lichessUsername: p?.preferences.lichessUsername ?? null };
-    cache = { at: Date.now(), key, index: buildSteerIndex(games, identity, studentColor, choice.family), family: choice.family };
-  }
-  return steerFromIndex(cache.index, fen, cache.family, rng);
+  const entry = getHomeSteerEntry(studentColor) ?? await buildFor(studentColor, 'pick');
+  if (!entry) return null;
+  return steerFromIndex(entry.index, fen, entry.family, rng);
 }

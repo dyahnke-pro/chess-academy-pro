@@ -901,6 +901,28 @@ listener and the local audit log, not the pass count.
   second game with the intent cleared.
 - 🟡 `home-opening-chosen` is emitted twice per computation (both callers ran
   `getHomeOpenings` before the memo landed). Cosmetic; the memo key is right.
+- 🔴→✅ **AND THE TOKENIZER WAS NOT ENOUGH — the first move missed AGAIN on
+  the new chunk (index-C23NqKA2), so the cost was measured instead of guessed.**
+  David's real 932-game record, seeded into fake-indexeddb and run through the
+  real code: games read 49 ms, rankings cold 63 ms, `buildSteerIndex` 312 ms,
+  the whole cold `pickHomeSteerMove` **306 ms**. A 306 ms job lost a 4 s race
+  because of what ELSE the device was doing at the coach's first move: the
+  listener showed `analysis-batch-ordered: batch of 188` with a 3-worker pool
+  warm (`analysis-pool-warmed 3/3`) plus the singleton engine respawning
+  (`stockfish-analysis-stalled … resetting worker`) — four cores saturated
+  right after an import, which is exactly when a new student opens Play. A
+  starved main thread loses any race, whatever the budget. So the first move
+  must never RACE a build: `homeSteerCache.ts` (a leaf) holds the index per
+  colour; `warmHomeSteer` builds it at boot (deferred by the backfill
+  schedule's start delay), after an import (once the username has landed), and
+  on Play mount (the build is shared with the coach's first turn through one
+  in-flight promise, so two askers cost one build); the warm lookup is
+  synchronous and touches no Dexie at all. Invalidation is an EVENT, not a
+  TTL: the service's `persist` drops the index on any home-opening change and
+  the import drops it explicitly. Emits `home-steer-warmed` (colour, family,
+  positions, games, buildMs, trigger) so a `home-steer-miss` can be read
+  against whether a warm ever ran. Gates: the warm pick reads no Dexie; two
+  callers inside one build share it; import and choice change invalidate.
 
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 

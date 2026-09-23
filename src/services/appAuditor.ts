@@ -753,6 +753,11 @@ export type AuditKind =
   //   / 'stockfish-fallback', or 'random'. Diagnostic for "opponent
   //   doesn't use the DB" complaints.
   | 'coach-opponent-move-source'
+  // The home steer's index was (re)built ahead of a move — colour, family,
+  //   positions indexed, games read, buildMs and what triggered it (boot /
+  //   import / mount / pick). A `home-steer-miss` with no warm row before it
+  //   is a prewarm that never ran; one WITH a warm row is a real miss.
+  | 'home-steer-warmed'
   // Both masters miss + masters lookup error variants — separate so
   //   you can tell "no data for this position" from "network /
   //   parser failure".

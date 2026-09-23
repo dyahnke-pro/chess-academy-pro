@@ -50,7 +50,7 @@ import { useCoachSessionStore } from '../../stores/coachSessionStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
-import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTeachingReply, studentPlayingRating } from '../../services/coachGameEngine';
+import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTeachingReply, studentPlayingRating, prewarmTeachingReplies } from '../../services/coachGameEngine';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById, type ClockState } from '../../services/chessClock';
@@ -458,6 +458,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   // Player color selection (disabled once game has started)
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>(initialSide);
+  // The home steer's index for this seat, built before (or alongside — the
+  // build is shared) the coach's first turn, so a Black student's very first
+  // opponent move comes from their own record instead of losing a race to
+  // the engine (walk 4, 2026-09-23).
+  useEffect(() => { prewarmTeachingReplies(playerColor); }, [playerColor]);
   /**
    * 🔴 FLIPPING THE BOARD IS A VIEW, NOT A SIDE SWAP (fixed 2026-09-21).
    *

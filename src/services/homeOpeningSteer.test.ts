@@ -14,7 +14,8 @@ vi.mock('../stores/appStore', () => ({
 }));
 vi.mock('./appAuditor', () => ({ logAppAudit: async () => undefined }));
 
-import { buildSteerIndex, isHomeSteerWarm, openingSans, pickHomeSteerMove, steerFromIndex, STEER_MAX_PLY, STEER_MIN_GAMES, __resetHomeSteerCacheForTests } from './homeOpeningSteer';
+import { buildSteerIndex, invalidateHomeSteer, isHomeSteerWarm, openingSans, pickHomeSteerMove, steerFromIndex, warmHomeSteer, STEER_MAX_PLY, STEER_MIN_GAMES, __resetHomeSteerCacheForTests } from './homeOpeningSteer';
+import { getHomeOpeningRankings, setHomeOpening } from './homeOpeningService';
 import { __resetHomeOpeningCacheForTests } from './homeOpeningService';
 
 const PIRC = openingKeyFor('B07', 'Pirc Defense');
@@ -116,5 +117,49 @@ describe('openingSans — the raw imported PGN, opening plies only (walk 4, 2026
     const c = new Chess(); for (const s of ['e4', 'd6', 'd4', 'Nf6', 'Nc3', 'g6']) c.move(s);
     expect(steerFromIndex(index, new Chess().fen(), 'Pirc Defense')?.san).toBe('e4');
     expect(steerFromIndex(index, c.fen(), 'Pirc Defense')).toBeNull();
+  });
+});
+
+describe('warmHomeSteer — the first move never races a build (walk 4, 2026-09-23)', () => {
+  beforeEach(async () => {
+    resetFactoryCounter();
+    __resetHomeSteerCacheForTests();
+    __resetHomeOpeningCacheForTests();
+    await db.delete();
+    await db.open();
+    await db.profiles.put(buildUserProfile({ id: 'main', preferences: { ...buildUserProfile().preferences, chessComUsername: 'student' } }));
+    await db.games.bulkPut(pircGames(12, AUSTRIAN, 'a'));
+  });
+
+  it('warms the colour with a home and leaves the other cold; the warm pick reads NO Dexie', async () => {
+    await warmHomeSteer();
+    expect(isHomeSteerWarm('black')).toBe(true);
+    expect(isHomeSteerWarm('white')).toBe(false); // no White home — nothing cached, nothing to go stale
+    const filter = vi.spyOn(db.games, 'filter');
+    const pick = await pickHomeSteerMove(new Chess().fen(), 'black');
+    expect(pick?.san).toBe('e4');
+    expect(filter).not.toHaveBeenCalled();
+    filter.mockRestore();
+  });
+
+  it('two callers inside one build share it — one index, not two', async () => {
+    await getHomeOpeningRankings();
+    const filter = vi.spyOn(db.games, 'filter');
+    await Promise.all([warmHomeSteer('black', 'play-mount'), pickHomeSteerMove(new Chess().fen(), 'black')]);
+    // ONE build = two table reads: `getHomeOpenings` reads the games to form its
+    // memo key, then the build reads them for the index. Two separate builds
+    // would be four.
+    expect(filter).toHaveBeenCalledTimes(2);
+    filter.mockRestore();
+  });
+
+  it('an import invalidates (explicitly) and a home-opening change invalidates (through persist)', async () => {
+    await warmHomeSteer('black');
+    expect(isHomeSteerWarm('black')).toBe(true);
+    invalidateHomeSteer();
+    expect(isHomeSteerWarm('black')).toBe(false);
+    await warmHomeSteer('black');
+    await setHomeOpening('black', 'Pirc Defense');
+    expect(isHomeSteerWarm('black')).toBe(false);
   });
 });

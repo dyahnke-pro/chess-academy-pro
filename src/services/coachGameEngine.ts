@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { isHomeSteerWarm, pickHomeSteerMove } from './homeOpeningSteer';
+import { isHomeSteerWarm, pickHomeSteerMove, warmHomeSteer } from './homeOpeningSteer';
 import { stockfishEngine } from './stockfishEngine';
 import { limitStrengthElo, ENGINE_ELO_MIN } from './engineConstants';
 import { getNextOpeningBookMove } from './openingDetectionService';
@@ -484,6 +484,15 @@ export async function pickTaughtSlip(
 }
 
 export type TeachingReplySource = 'taught-slip' | 'home-steer';
+
+/**
+ * Warm the teaching-reply layers for a seat before its first move (Play mount).
+ * The surface calls THIS, not the steer — the composition ceiling keeps a page
+ * from importing fact-computers directly, and the engine already owns the door.
+ */
+export function prewarmTeachingReplies(studentColor: 'white' | 'black', trigger = 'play-mount'): void {
+  void warmHomeSteer(studentColor, trigger);
+}
 
 /**
  * THE ONE TEACHING-REPLY DOOR (2026-09-22). Two surfaces composed the same

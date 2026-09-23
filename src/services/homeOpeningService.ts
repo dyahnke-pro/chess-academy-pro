@@ -9,6 +9,7 @@ import { db } from '../db/schema';
 import { isFixtureGame } from './fixtureGames';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
+import { invalidateHomeSteer } from './homeSteerCache';
 import type { PlayerColor, PlayerIdentity } from './playerIdentity';
 import {
   chooseHomeOpening, isHomeOpeningGame, rankHomeOpeningCandidates, toChoice,
@@ -58,6 +59,9 @@ export function __resetHomeOpeningCacheForTests(): void {
 }
 
 async function persist(profile: UserProfile, next: HomeOpenings): Promise<void> {
+  // A different home family is a different steer index (homeSteerCache):
+  // every persisted change — computed, student-chosen or cleared — drops it.
+  invalidateHomeSteer();
   const preferences = { ...profile.preferences, homeOpenings: next };
   await db.profiles.update(profile.id, { preferences });
   const store = useAppStore.getState();

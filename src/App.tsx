@@ -6,6 +6,8 @@ import { useAppStore } from './stores/appStore';
 import { getTargetStrength, studentPlayingRating } from './services/coachGameEngine';
 import { getOrCreateMainProfile } from './services/dbService';
 import { calibrateStrength } from './services/strengthCalibrationService';
+import { warmHomeSteer } from './services/homeOpeningSteer';
+import { PRODUCTION_BACKFILL_SCHEDULE } from './services/backfillSchedule';
 import { AiConsentModal } from './components/Legal/AiConsentModal';
 import { useAiConsentStore } from './stores/aiConsentStore';
 import { getThemeById, applyTheme } from './services/themeService';
@@ -379,6 +381,13 @@ export function App(): JSX.Element {
           // Never block boot on calibration — fall through to defaults.
           console.error('[calibration] failed:', e);
         }
+
+        // The home steer's index for both colours, built after the first
+        // paint and the OTA launch-install (the backfill schedule's start
+        // delay), so a returning student's first Play move as Black never
+        // waits on a cold build — walk 4, 2026-09-23. In-memory, so it is
+        // cold on every launch; this is the one place it gets warm early.
+        setTimeout(() => { void warmHomeSteer(undefined, 'boot'); }, PRODUCTION_BACKFILL_SCHEDULE.startDelayMs);
 
         // Hydrate the audit-stream config cache from Dexie (with
         // one-time localStorage migration if any pre-Dexie values

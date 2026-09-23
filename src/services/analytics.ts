@@ -182,6 +182,7 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // carries source= + san= + elo; the masters-miss/error kinds show WHY the
   // theory layer fell through.
   'coach-opponent-move-source': 'coach_opponent_move_source',
+  'home-steer-warmed': 'home_steer_warmed',
   'coach-opponent-masters-miss': 'coach_opponent_masters_miss',
   'coach-opponent-masters-error': 'coach_opponent_masters_error',
   // Coach LLM health (David 2026-06-15 gap audit). When the brain call

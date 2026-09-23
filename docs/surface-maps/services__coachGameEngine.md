@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1070 lines · 12 exports · 7 importers · 6 tests · 1 audits**
+**1079 lines · 13 exports · 7 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -64,10 +64,10 @@
 - `src/services/ratingBands.test.ts:62`
 
 ### `getRandomLegalMove` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:2663`
-- `src/components/Coach/CoachGamePage.tsx:2678`
-- `src/components/Coach/CoachGamePage.tsx:2965`
-- `src/components/Coach/CoachGamePage.tsx:3003`
+- `src/components/Coach/CoachGamePage.tsx:2668`
+- `src/components/Coach/CoachGamePage.tsx:2683`
+- `src/components/Coach/CoachGamePage.tsx:2970`
+- `src/components/Coach/CoachGamePage.tsx:3008`
 - `src/components/Coach/CoachTeachPage.tsx:7203`
 - `src/components/Openings/OpeningPlayMode.tsx:695`
 - `src/components/Openings/OpeningPlayMode.tsx:720`
@@ -97,11 +97,14 @@
 ### `TeachingReplySource` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `prewarmTeachingReplies` (function) — 1 call site
+- `src/components/Coach/CoachGamePage.tsx:465`
+
 ### `pickTeachingReply` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:2420`
+- `src/components/Coach/CoachGamePage.tsx:2425`
 
 ### `getAdaptiveMove` (function) — 28 call sites
-- `src/components/Coach/CoachGamePage.tsx:2481`
+- `src/components/Coach/CoachGamePage.tsx:2486`
 - `src/components/Coach/CoachTeachPage.tsx:7188`
 - `src/components/Openings/OpeningPlayMode.tsx:686`
 - `src/services/coachGameEngine.test.ts:70`
@@ -131,7 +134,7 @@
 - `src/services/coachGameEngine.test.ts:498`
 
 ### `studentPlayingRating` (function) — 16 call sites
-- `src/App.tsx:153`
+- `src/App.tsx:155`
 - `src/components/Coach/CoachGamePage.tsx:404`
 - `src/components/Coach/CoachTeachPage.tsx:7182`
 - `src/components/Coach/CoachTeachPage.tsx:7191`
@@ -149,7 +152,7 @@
 - `src/services/coachGameEngine.test.ts:618`
 
 ### `getTargetStrength` (function) — 11 call sites
-- `src/App.tsx:152`
+- `src/App.tsx:154`
 - `src/components/Coach/CoachGamePage.tsx:449`
 - `src/components/Coach/CoachTeachPage.tsx:7182`
 - `src/components/Openings/OpeningPlayMode.tsx:71`

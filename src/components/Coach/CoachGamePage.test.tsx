@@ -71,6 +71,8 @@ vi.mock('../../services/coachGameEngine', () => ({
   // prefers the rating they SET over their puzzle rating (see its note).
   studentPlayingRating: vi.fn((p) => p?.currentRating ?? p?.puzzleRating ?? 1200),
   getRandomLegalMove: vi.fn().mockReturnValue('e7e5'),
+  // The mount prewarm of the home steer (walk 4) — a no-op here; the steer has its own gates.
+  prewarmTeachingReplies: vi.fn(),
 }));
 
 vi.mock('../../coach/coachService', () => ({
