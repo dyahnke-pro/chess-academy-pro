@@ -64,6 +64,7 @@ import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { readCriticalMoment, criticalMomentStatement, type CriticalMomentRead } from './criticalMoment';
+import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes } from './factStakes';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -264,6 +265,11 @@ export interface ClauseItem {
    *  the moment), `convert`, and `method` (a habit, which must survive every
    *  collapse because it is never a restatement of a fact). */
   squares?: readonly string[];
+  /** WHAT THIS CLAUSE IS WORTH ON THE BOARD — coupled at emission from the
+   *  detector's own numbers (`factStakes.ts`), never inferred from the prose.
+   *  The door orders by it. Omitted where the clause carries no material
+   *  (a plan, the status band, a habit): those rank below every staked fact. */
+  stakes?: FactStakes;
 }
 
 /** THE STANDING KINDS — say these once per game, not once per ply.
@@ -636,7 +642,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   } catch { methodBeat = null; }
 
   const composed = applyWeaknessBoost(
-    buildClauses({ slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
+    buildClauses({ fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
     input.studentWeaknesses ?? [],
   );
 
@@ -649,13 +655,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // latent-danger over one geometry — the hang now and the pin that causes it
   // — are two claims and both speak.)
   //
-  // The scale is OURS, not the review ranker's — hence `order`. The bar is 0 on
-  // purpose and that is not a loophole: every clause here is emitted by a
-  // computer with its own tight gate (a pin was FOUND, a piece IS hanging),
-  // unlike review's facet inventory, which carries a low-value consequence band
-  // worth sweeping. There is nothing here to floor, so flooring would only mean
-  // deleting a fact that a probe had already proved. Silence on these surfaces
-  // is step 1's job, and step 1 has already run.
+  // THE ORDER IS THE DOOR'S (2026-09-23). Each clause hands over its STAKES —
+  // the material it is about and how soon it lands — and the door computes the
+  // order the same way it does for review. The floor sweeps descriptions only,
+  // so no clause a probe proved is deleted as trivia.
   // THE STUDENT'S NEED (N2) — computed HERE, never at a call site.
   //
   // The ply comes off the FEN rather than from the caller: fullmove + side to
@@ -726,7 +729,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // from the prose. Their threat, their idea and their best piece are all
       // questions you have to answer; your own assets are not.
       incoming: new Set(composed.filter((c) => c.kind === 'must-defend' || c.kind === 'opponent-intent' || c.kind === 'opponent-leans' || c.kind === 'latent-danger').map((c) => c.text)),
-      order: { rank: new Map(composed.map((c) => [c.text, c.rank] as const)), bar: 0 },
+      // WHAT EACH CLAUSE IS WORTH — coupled at emission; the door orders by it.
+      stakes: new Map(composed.flatMap((c) => (c.stakes ? [[c.text, c.stakes] as const] : []))),
+      // The hole each clause meets in this student's record — the SAME join the
+      // need score reads (`clauseHole`), so relevance and need cannot disagree.
+      holeByFact: new Map(composed.map((c) => [c.text, clauseHole(c, input.studentWeaknesses ?? [])] as const)),
       // THE CLAIM FAMILY — the clause's own kind, coupled at emission (B12).
       // Two clauses over one geometry collapse only when the same computer
       // produced them; a must-defend and a pin-in-waiting on the same three
@@ -857,6 +864,8 @@ function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSig
  *  is to move, the opponent's INTENT ("they have a real decision") — so the coach
  *  explains both sides. Empty when nothing earns voice. */
 function buildClauses(a: {
+  /** The board the clauses describe — the stakes computer reads it. */
+  fen: string;
   /** Does this student's own record still owe them the slow-down teaching?
    *  Computed by the caller from the weakness lifecycle (`habitNeedFrom`), not
    *  re-derived here — one door, one answer. */
@@ -919,7 +928,9 @@ function buildClauses(a: {
   // student choice out of the opening (gated at computePositionFacts).
   if (deliberation?.isRealChoice) {
     const text = deliberationFacts(deliberation);
-    if (text) ranked.push({ kind: 'deliberation', rank: 95, text });
+    // The choice is worth what the tempting alternative would cost.
+    const worst = Math.max(0, ...deliberation.alternatives.map((c) => c.deltaCp));
+    if (text) ranked.push({ kind: 'deliberation', rank: 95, text, stakes: costStakes(worst) ?? undefined });
   }
 
   // The prevention layer — a pin/skewer on your own king/queen, guide-don't-tell.
@@ -931,11 +942,16 @@ function buildClauses(a: {
       // The alignment AND the capture that creates it — that whole geometry is
       // the claim, so a must-defend about the same pieces is the same claim.
       squares: [tradeDanger.enemySquare, tradeDanger.frontSquare, tradeDanger.backSquare, tradeDanger.tradeFrom, tradeDanger.tradeTo],
+      // The trade walks into the line now: it lands one move after it.
+      stakes: { points: lineTacticPoints(tradeDanger.frontPiece, tradeDanger.backPiece), plies: 2 },
     });
   } else if (latentDanger) {
     ranked.push({
       kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger),
       squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare],
+      // A LATENT line needs their piece to arrive first (3 plies); a standing one
+      // can be cashed on their next move.
+      stakes: { points: lineTacticPoints(latentDanger.frontPiece, latentDanger.backPiece), plies: latentDanger.latent ? 3 : 2 },
     });
   }
 
@@ -958,6 +974,8 @@ function buildClauses(a: {
       // The destination and both targets ARE the claim — so a tactic clause
       // about the same geometry subsumes this one rather than stacking on it.
       squares: [latentFork.square, ...latentFork.targets.map((t) => t.square)],
+      // The fork wins the lesser target, `moves` moves away.
+      stakes: { points: forkPoints(latentFork.targets.map((t) => t.piece)), plies: 2 * latentFork.moves },
     });
   }
 
@@ -991,6 +1009,8 @@ function buildClauses(a: {
         ? `You're on top — don't let them punch back: they're threatening the ${PNAME[p.piece.toLowerCase()]} on ${p.square}, so shore that up before you press.`
         : `They're threatening to win the ${PNAME[p.piece.toLowerCase()]} on ${p.square} — that has to be met first.`,
       squares: [p.square],
+      // The null-move probe's own net: taken on their next move.
+      stakes: { points: mustDefend.net, plies: studentToMove ? 2 : 1 },
     });
   }
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
@@ -1027,6 +1047,8 @@ function buildClauses(a: {
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.
       squares: concept.squares,
+      // What the idea wins on its own targets (agent first, then targets).
+      stakes: concept.source === 'tactic' ? (exchangeStakes(a.fen, concept.squares.slice(1)) ?? undefined) : undefined,
     });
   }
 
@@ -1067,6 +1089,8 @@ function buildClauses(a: {
       kind: 'key-moment',
       rank: importance.tier === 'only-move' ? 85 : criticalRead.count === 1 ? 65 : 60,
       text: criticalStatement,
+      // The decision is now; missing it costs the gap the fan measured.
+      stakes: costStakes(criticalRead.gapCp) ?? undefined,
     });
   } else if (studentToMove) {
     // Owed nothing here — their record says they handle these. Silence is the

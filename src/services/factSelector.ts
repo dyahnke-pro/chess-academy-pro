@@ -161,6 +161,9 @@ export interface FactSelectOptions {
    *  splitting them is how they end up disagreeing. Omitted → facts are ranked
    *  by their `[tag]` and swept by `barForTier`. */
   order?: { rank: ReadonlyMap<string, number>; bar: number };
+  /** Facts the floor never sweeps — the door exempts every TEACHING point; the
+   *  floor is for descriptions not worth their breath. */
+  exemptFromBar?: ReadonlySet<string>;
   /** THE CLAIM FAMILY of each fact — the KIND of computer that produced it
    *  (`ClauseKind` on the live lane), coupled at emission. Two facts are ONE
    *  claim only when their squares coincide AND they are the same kind of
@@ -207,7 +210,7 @@ export function selectFacts(
   signals: readonly WeaknessSignal[] = [],
   opts: FactSelectOptions = {},
 ): FactSelection {
-  const { incoming = new Set<string>(), alreadySaid, order, family } = opts;
+  const { incoming = new Set<string>(), alreadySaid, order, family, exemptFromBar } = opts;
   const said = alreadySaid ?? new Set<string>();
   const bar = order ? order.bar : barForTier(tier);
   const rankOf = (text: string): number => (order ? (order.rank.get(text) ?? 0) : facetRank(text, signals));
@@ -257,7 +260,7 @@ export function selectFacts(
   const spoken: typeof winners = [];
   for (const w of winners) {
     if (said.has(w.text)) { quiet.push({ text: w.text, why: 'said-already' }); continue; }
-    if (w.rank < bar) { quiet.push({ text: w.text, why: 'below-bar' }); continue; }
+    if (w.rank < bar && !exemptFromBar?.has(w.text)) { quiet.push({ text: w.text, why: 'below-bar' }); continue; }
     spoken.push(w);
   }
   return { spoken: spoken.map((x) => x.text), quiet };

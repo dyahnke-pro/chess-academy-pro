@@ -8,9 +8,9 @@
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1230) — names `CoachTeachPage`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3052) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:5942) — names `CoachTeachPage`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1237) — names `CoachTeachPage`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3059) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:5949) — names `CoachTeachPage`
 
 ## Who calls in
 

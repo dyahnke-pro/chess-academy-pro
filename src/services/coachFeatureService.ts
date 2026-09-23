@@ -34,6 +34,7 @@ import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
+import type { FactStakes } from './factStakes';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
@@ -1689,6 +1690,9 @@ export function buildReviewSegments(
       // Facts describing what the OPPONENT is doing TO the student, coupled from
       // the tactic detector's own `beneficiary` — the selector's tie-break.
       const facetIncoming = new Set<string>();
+      // What each facet is worth on the board — coupled by the computer that
+      // produced it; the door orders by it (factStakes.ts).
+      const facetStakes = new Map<string, FactStakes>();
       const facets = computeMoveFacets({
         fundamentals,
         seenFundamentals,
@@ -1706,7 +1710,7 @@ export function buildReviewSegments(
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
-      }, facetSquares, facetIncoming);
+      }, facetSquares, facetIncoming, facetStakes);
       // THE LOOP, OUT LOUD — ON THE PATH PROD ACTUALLY RUNS (WO-LOOP-01, run 4).
       // `isReviewUncapped()` is TRUE by default, so every shipped review beat is
       // composed here from facets; the capped block below never runs for a real
@@ -1858,6 +1862,19 @@ export function buildReviewSegments(
       const claimedRefrains = new Set<number>();
       const refrained = keptRaw.map((raw) => refrainOnce(raw, claimedRefrains));
       const kept = refrained.map((r) => r.text);
+      // THE DOOR SEES `kept`, the side maps are keyed by the RAW facet. The
+      // refrain-once pass can change the text, and a changed fact used to reach
+      // the door with no squares, no stakes and no "incoming" flag — blind to
+      // subsumption and to support. Re-key all three by position.
+      const keptSquares = new Map<string, readonly string[]>();
+      const keptStakes = new Map<string, FactStakes>();
+      const keptIncoming = new Set<string>();
+      kept.forEach((k, i) => {
+        const raw = keptRaw[i];
+        const sq = facetSquares.get(raw); if (sq) keptSquares.set(k, sq);
+        const st = facetStakes.get(raw); if (st) keptStakes.set(k, st);
+        if (facetIncoming.has(raw)) keptIncoming.add(k);
+      });
       // KEY-SQUARE HIGHLIGHTS (David 2026-09-13): every square a KEPT facet
       // named, from the computer's own squares (facetSquares), so the review
       // board leads the eye in yellow exactly where the narration points —
@@ -1943,7 +1960,7 @@ export function buildReviewSegments(
           need: null,
         },
         {
-          facts: kept, squares: facetSquares, incoming: facetIncoming,
+          facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes,
           // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
           // `[principle]` facet IS the attributed fundamental, so ranking it by
           // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse

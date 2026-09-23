@@ -70,7 +70,6 @@ describe('decide — teaching points first on the LIVE vocabulary too', async ()
   const live = (facts: string[], kinds: Record<string, string>, sq: Record<string, string[]>) => ({
     facts,
     squares: new Map(Object.entries(sq)),
-    order: { rank: new Map(facts.map((f, i) => [f, 100 - i] as const)), bar: 0 },
     family: new Map(Object.entries(kinds)),
   });
 

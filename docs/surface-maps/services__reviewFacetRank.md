@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**269 lines · 8 exports · 4 importers · 2 tests · 0 audits**
+**336 lines · 13 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:944) — names `FACET_RANK`, `reviewFacetRank`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1005) — names `FACET_ROLE`, `rankFacets`, `reviewFacetRank`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3827) — names `reviewFacetRank`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1005) — names `FACT_ROLE`, `FactKind`, `TIE_ORDER`, `rankFacets`, `reviewFacetRank`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3834) — names `reviewFacetRank`
 
 ## Who calls in
 
@@ -36,9 +36,22 @@
 ### `CLAUSE_ROLE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `facetTag` (function) — 7 call sites
-- `src/services/coachDecider.ts:312`
-- `src/services/coachDecider.ts:313`
+### `FactKind` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `FACT_ROLE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `TIE_ORDER` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `factKind` (function) — 1 call site
+- `src/services/coachDecider.ts:293`
+
+### `factValue` (function) — 1 call site
+- `src/services/coachDecider.ts:299`
+
+### `facetTag` (function) — 5 call sites
 - `src/services/reviewFacetRank.test.ts:19`
 - `src/services/reviewFacetRank.test.ts:20`
 - `src/services/reviewFacetRank.test.ts:21`
@@ -46,13 +59,12 @@
 - `src/services/supportedFacts.test.ts:8`
 
 ### `facetRank` (function) — 4 call sites
-- `src/services/factSelector.ts:213`
+- `src/services/factSelector.ts:216`
 - `src/services/reviewFacetRank.test.ts:51`
 - `src/services/reviewFacetRank.test.ts:55`
 - `src/services/reviewFacetRank.test.ts:61`
 
-### `rankFacets` (function) — 7 call sites
-- `src/services/coachDecider.ts:324`
+### `rankFacets` (function) — 6 call sites
 - `src/services/reviewFacetRank.test.ts:25`
 - `src/services/reviewFacetRank.test.ts:32`
 - `src/services/reviewFacetRank.test.ts:40`

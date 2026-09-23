@@ -4,17 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1121 lines · 9 exports · 11 importers · 9 tests · 3 audits**
+**1145 lines · 9 exports · 12 importers · 9 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `positionFacts`
 - **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:287) — names `positionFacts`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:903) — names `positionFacts`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3816) — names `ClauseKind`, `positionFacts`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3968) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5846) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:5952) — names `positionFacts`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:907) — names `positionFacts`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3833) — names `ClauseKind`, `positionFacts`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3985) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5857) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:5964) — names `positionFacts`
 
 ## Who calls in
 
@@ -28,6 +28,7 @@
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionReadComposer.ts`
+- `src/services/reviewFacetRank.ts`
 - `src/services/whyBestMove.ts`
 
 ## Exports and every call site
@@ -61,23 +62,23 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8898`
+- `src/components/Coach/CoachTeachPage.tsx:8728`
 - `src/hooks/useLiveCoach.ts:295`
-- `src/hooks/usePhaseNarration.ts:631`
+- `src/hooks/usePhaseNarration.ts:641`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:251`
 - `src/services/positionFacts.test.ts:252`
 - `src/services/positionFacts.test.ts:293`
 - `src/services/positionFacts.test.ts:351`
 - `src/services/positionFacts.test.ts:352`
-- `src/services/positionReadComposer.ts:107`
+- `src/services/positionReadComposer.ts:110`
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 55 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8851`
+- `src/components/Coach/CoachTeachPage.tsx:8681`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
-- `src/hooks/usePhaseNarration.ts:609`
+- `src/hooks/usePhaseNarration.ts:619`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/latentFork.test.ts:148`
 - `src/services/liveNeedGate.test.ts:127`
@@ -126,7 +127,7 @@
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
-- `src/services/positionReadComposer.ts:89`
+- `src/services/positionReadComposer.ts:92`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:89`
 

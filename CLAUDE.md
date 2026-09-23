@@ -1002,10 +1002,17 @@ make it and no two callers composed them the same way, which is why
 3. **SUBSUME** — collapse facts that are one claim about one geometry.
 4. **FLOOR** — sweep what is not worth saying at this moment.
 4b. **SUPPORT** — a DESCRIPTION speaks only where a teaching point on the ply names
-   its squares (`supportedFacts`; roles in `FACET_ROLE` for review, `CLAUSE_ROLE`
-   for the live composer — one rule, two vocabularies, David 2026-09-23). A ply
-   of descriptions alone closes as `reason: 'unsupported'`.
-5. **ORDER** — most-important-first, their weaknesses raised.
+   its squares (`supportedFacts`; one role table `FACT_ROLE` over the one
+   vocabulary `FactKind` = review tags ∪ live clause kinds, David 2026-09-23). A
+   ply of descriptions alone closes as `reason: 'unsupported'`.
+5. **ORDER** — COMPUTED, on every surface (David 2026-09-23: "Decision computer
+   should compute that!!"). Each fact couples its STAKES at emission
+   (`factStakes.ts`: centipawns at stake — the cost paid, the exchange value, what
+   a fork wins, the critical gap — and plies until it lands); value =
+   1000 + cp × 0.8^plies, plus the student's own hole (raise-only). Facts with no
+   stakes rank below every staked fact, on the one `TIE_ORDER`. The same value
+   drives subsumption and the floor; the floor sweeps descriptions only. There is
+   no per-surface rank table any more — the live composer's `order` is gone.
 6. **METHOD** — the habit that finds it next time, appended LAST.
 
 Steps 1–2 decide WHETHER, 3–6 decide WHAT. The maths still lives in

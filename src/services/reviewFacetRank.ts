@@ -18,6 +18,7 @@
 // ranking changes the ORDER, never the SET (CLAUDE.md G4.5).
 import { matchClauseKind, boostFor, type WeaknessSignal } from './weaknessSignal';
 import type { ClauseKind } from './positionFacts';
+import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
 
 /** Every tag `computeMoveFacets` (and the review's own passes) can emit. The
  *  Record below is exhaustive over this union, so a NEW tag fails to compile
@@ -186,6 +187,72 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
+
+/**
+ * ONE VOCABULARY (David 2026-09-23: "Unified coach!"). Review's facts carry a
+ * `[tag]`; the live composer's carry a clause kind. The two name sets do not
+ * overlap except `method`, so their union IS the one vocabulary — every table
+ * below is exhaustive over it, so a new kind on either side fails to compile
+ * until someone decides its role and its place in the tie order.
+ */
+export type FactKind = FacetTag | ClauseKind;
+
+export const FACT_ROLE: Record<FactKind, FacetRole> = { ...FACET_ROLE, ...CLAUSE_ROLE };
+
+/**
+ * THE TIE ORDER — used ONLY where no stakes decide: between facts that carry
+ * none (a plan, the structure, the opening's name, the habit), and to break an
+ * exact tie. Every fact with real stakes outranks every fact in this table
+ * (`STAKED_FLOOR`). Review's scale is kept as is; the live kinds sit where
+ * their review siblings sit, so a live and a review fact of the same meaning
+ * tie the same way.
+ */
+const CLAUSE_TIE: Record<ClauseKind, number> = {
+  'must-defend': FACET_RANK.threat,
+  'latent-danger': FACET_RANK.tactic,
+  'latent-chance': FACET_RANK.tactic,
+  'key-moment': FACET_RANK.forced,
+  deliberation: FACET_RANK.quality,
+  status: FACET_RANK.verdict,
+  concept: FACET_RANK.tactic,
+  'opponent-intent': FACET_RANK['opp-target'],
+  fundamental: FACET_RANK.principle,
+  'structure-plan': FACET_RANK['plan-now'],
+  convert: FACET_RANK.endgame,
+  'student-leans': FACET_RANK.worst,
+  'opponent-leans': FACET_RANK.worst,
+  method: FACET_RANK.method,
+};
+export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
+
+/** The kind of a fact: the surface's declared family first (the live clause
+ *  kind), else the `[tag]` prefix. Null for untagged prose (the causal lead). */
+export function factKind(text: string, family?: ReadonlyMap<string, string>): FactKind | null {
+  const declared = family?.get(text);
+  if (declared !== undefined && declared in TIE_ORDER) return declared as FactKind;
+  return facetTag(text);
+}
+
+/**
+ * THE VALUE OF ONE FACT — the whole ordering decision, in one place.
+ *   staked:   STAKED_FLOOR + centipawns × 0.8^plies (factStakes.ts)
+ *   unstaked: the tie order (0–100)
+ *   + the student's own hole on it (raise-only, ≤30) — relevance to THIS student
+ * Untagged prose (the causal-chain lead) is the cross-move story and leads.
+ */
+export function factValue(
+  kind: FactKind | null,
+  stakes: FactStakes | null | undefined,
+  signals: readonly WeaknessSignal[] = [],
+  matched?: WeaknessSignal | null,
+): number {
+  if (kind === null) return STAKED_FLOOR * 10;
+  const base = stakeValue(stakes) ?? TIE_ORDER[kind];
+  const hole = matched !== undefined
+    ? matched
+    : (signals.length > 0 ? matchClauseKind(kind in CLAUSE_TIE ? kind : clauseKindForTag(kind as FacetTag), signals) : null);
+  return base + (hole ? boostFor(hole) : 0);
+}
 
 const TAG_RE = /^\[([a-z0-9-]+)\]/;
 
