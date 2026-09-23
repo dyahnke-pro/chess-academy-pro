@@ -4216,21 +4216,35 @@ It and `loadFullCorpus` and `secondaryTeachings.test` now all derive from the
 registry. A test that hardcodes the creator roster CRASHES rather than fails
 when the roster changes; do not write one.
 
-### 🔒🔒 THE CORPUS IS THE COACH'S VOICE — 90% of what gets said lives in the notes (David 2026-08-07: "This is the heart and soul of coach narrations. 90% of what needs to be said to user lives within these notes. The other 10% comes from threat and gem detection.").
+### 🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").
 
-Read that as the ARCHITECTURE, not a compliment to the corpus. When a coach
-surface has something to say, the default source is a farmed note; the
-detectors (threats, hanging pieces, gems, tactics) supply the remaining ~10% —
-the urgent, board-computed interrupts. A surface that narrates mostly from code
-templates or mostly from the model has the ratio inverted and is not this coach.
+🔴 **This REPLACES two sections that are DELETED rather than annotated (the Lake
+Butler rule):** "THE CORPUS IS THE COACH'S VOICE — 90% of what gets said lives
+in the notes" and "EVERY COACHING SURFACE GETS THE CORPUS". David reversed both
+after reading the output: literary corpus notes beside mechanical computed lines
+read as two different coaches, and on a live board or a review of the student's
+own game the computed facts are the teaching.
 
-Practical consequences:
-- **Coverage work beats phrasing work.** A note that cannot be retrieved is 100%
-  lost; a note phrased slightly stiffly is still teaching. Reach first.
-- **Latency budget follows the ratio.** The 90% is a synchronous index lookup —
-  it has no business arriving behind an engine read or a model call.
-- **A silent surface is a retrieval failure, not a design choice** (except Play,
-  which is silent by contract — see below).
+**Where notes speak, and where they do not:**
+- **KEPT:** the **"teach me X opening"** walkthrough (`openingGenerator` — the
+  note LEADS the beat there, see THE NOTE LEADS THE BEAT below); **coach chat**
+  (`buildDanyaTeachingBlock` — "that's not narration"); the **tactics drill**
+  (`tacticNoteForPuzzleThemes`) and **`/coach/endgame` lessons**
+  (`endgameNoteForLesson`). The masterclass lesson BEATS (`curatedBeatAt`) are
+  hand-authored lesson prose, not corpus, and stay on the live Learn board.
+- **REMOVED:** **Learn free play** — the live reply narration, the play-out after
+  a walkthrough ("this is now free play"), fork talk, think-aloud, and Learn's
+  mounts of read-position and phase-change narration; and **post-game review**.
+- **Play** is out of this change: its mounts pass `corpusNotes: true`, and Play
+  stays silent until the student asks (its own locked rule).
+
+**Made unreopenable, not just removed.** `usePositionNarration`,
+`usePhaseNarration` and `composePositionRead` take a REQUIRED `corpusNotes:
+boolean` — no default a new mount can inherit — and Learn passes `false`. Gate:
+`src/test/corpusScope.test.ts` fails if review, Learn free play, fork talk or
+think-aloud calls any corpus retrieval (scanned by statement, comments
+stripped), and holds POSITIVE controls so it cannot pass by deleting too much:
+the walkthrough still splices its notes and chat still gets its block.
 
 ### 🔒🔒 THE VOICED-NARRATION PIPELINE — its own locked playbook (David 2026-08-24).
 
@@ -4243,8 +4257,8 @@ narration / walkthrough / matchup / corpus wiring. The reusable authoring tools
 live in `scripts/voiced-authoring/` (`inspect.mjs`, `verify.mjs`, `lib.mjs`);
 the derived builders are `scripts/build-voiced-{walkthroughs,matchups,teachings}.mjs`.
 The voiced notes ARE corpus notes (position-keyed, `opening:null`, exact-board
-selection) — they feed free-play/review/tactics via `teachingNoteForBoard`, same
-as every other corpus below.
+selection) — they feed the "teach me X opening" lesson and the other KEPT
+surfaces in the CORPUS NOTES SPEAK ONLY WHERE… rule above.
 
 **🔁 Absorbing a new authoring batch ("ping" / "more videos inbound"):** the
 wiring needs NO code changes — voiced is the sole exact-position corpus. The
@@ -4255,37 +4269,13 @@ batch; the push is large so background it) is **§8 of
 to the tactics drill + endgame lessons ONLY; every play surface speaks voiced
 (exact-position) or code-computed prose (David 2026-08-26 cleanup).
 
-### 🔒🔒 EVERY COACHING SURFACE GETS THE CORPUS — review, play, learn, tactics, all of it (David 2026-08-07, emphatic).
-
-The 58,124 farmed notes are the app's teaching. A surface that coaches without
-them is coaching from nothing. As of the 2026-08-03 integration audit **three
-surfaces had literal ZERO corpus access** — post-game review (~20 facet
-computers), tactics (all 14 files), and "read this position"
-(`usePositionNarration`) — plus the endgame page. That is the gap this rule
-exists to close, and to keep closed.
-
-**The contract, per surface:**
-- **Learn** (`/coach/teach`) — wired. The note LEADS the beat.
-- **Post-game review** — owed. Every facet that explains a moment should be able
-  to reach the note that teaches it.
-- **Tactics** — owed, and it is the highest-value gap: 17,972 notes carry a
-  tactical concept tag, and a drill is exactly where that teaching belongs.
-- **Read this position** — owed. It is a READ of the board; a note about this
-  structure is the substance of the read.
-- **Endgame** — owed. 7,120 endgame notes, 1.4% position-keyed, so this surface
-  lives on the concept + structure tiers.
-- **Play** (`/coach/play`) — wired for access, but **PLAY STAYS SILENT UNTIL THE
-  STUDENT ASKS.** Play is a pure playing surface (locked): the corpus is
-  available to phase-transition narration and to anything the student explicitly
-  requests, and it NEVER volunteers a note mid-game. Access is not permission
-  to speak.
-- **Kid surfaces** — permanently EXCLUDED by contract. Do not wire them.
+### 🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).
 
 **🔒🔒 UPDATE 2026-08-26 — FLOATING NOTES ARE FENCED TO TACTICS + ENDGAME ONLY;
 VOICED IS THE SOLE EXACT-POSITION SOURCE ON THE PLAY SURFACES (David, emphatic:
 "make sure I hear no floating notes in the play surfaces — make them stay where
-they belong").** The every-surface-gets-the-corpus contract above still holds,
-but WHICH notes each surface may speak is now split by anchoring:
+they belong").** On the surfaces that still carry notes (see the CORPUS NOTES
+SPEAK ONLY WHERE… rule above), WHICH notes may speak is split by anchoring:
 - **Floating notes** (no `lineSan` → no exact position) fire ONLY on the
   **tactics drill** (`tacticNoteForPuzzleThemes`) and **endgame lessons**
   (`endgameNoteForLesson`) — where geometry-free pattern teaching belongs. They

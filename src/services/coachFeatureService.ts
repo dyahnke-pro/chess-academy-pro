@@ -34,9 +34,6 @@ import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
-import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
-import { beatRegister } from './curatedBeatSource';
-import { gradeNarrationText } from './coachAnswerGates';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
 import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
@@ -1332,9 +1329,6 @@ export function buildReviewSegments(
   const boostByPly = selectorPkg.boostByPly;
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
-  /** Corpus notes already spoken this game. Doubles as `noteAtPosition`'s own
-   *  exclude set, so the selector skips them instead of re-picking and losing. */
-  const notesSaidThisGame = new Set<string>();
   const segments: ReviewMoveSegment[] = [];
   // §7: the endgame phase is announced once per game (the first quiet student
   // move that's in a readable endgame), not on every endgame ply.
@@ -1735,44 +1729,13 @@ export function buildReviewSegments(
           else facets.push(`[principle] ${recur}`);
         }
       }
-      // ── THE CORPUS REACHES REVIEW ───────────────────────────────────────
-      //
-      // "EVERY COACHING SURFACE GETS THE CORPUS ... a surface that coaches
-      // without them is coaching from nothing" — and review, where the
-      // diagnosis happens, had ZERO corpus calls. `buildReviewSegments` is the
-      // producer (the component only renders what this returns), so the note
-      // has to be spliced HERE.
-      //
-      // EXACT-POSITION ONLY, per the 2026-08-26 fencing: `noteAtPosition`
-      // selects by the note's own taught line producing THIS board, never by
-      // opening-name overlap — the selection bug that once narrated a
-      // Caro-Kann lesson at move two of a different game. Floating notes stay
-      // fenced to the tactics drill and endgame lessons.
-      //
-      // The SEAT is required and fails closed: both colours share a FEN, so a
-      // note authored from the other side would be handed to this student
-      // wholesale. Board-graded on top, because a corpus note is prose about a
-      // position and the board is still the ground truth.
-      try {
-        const noteSeat = playerColor ?? null;
-        const priorSans = sansForRun.slice(0, m.ply);
-        const corpusNote = noteAtPosition(priorSans, fenPair.fenAfter, openingName ?? null, noteSeat, notesSaidThisGame);
-        const noteText = corpusNote ? spokenBeatText(corpusNote)?.trim() : '';
-        // REGISTER, not just position. A corpus note authored for a WATCH
-        // audience narrates the players in the third person ("White develops
-        // the knight..."), and replayed into review that becomes the coach
-        // describing the student to a stranger. `beatRegister` is the same
-        // classifier the live lane uses — it never rewrites prose, it only
-        // decides whether this source can be spoken to a seated student.
-        const register = noteText && noteSeat ? beatRegister(noteText, noteSeat) : 'spectator';
-        if (noteText && register === 'live-safe') {
-          const graded = gradeNarrationText(noteText, fenPair.fenAfter, 'buildReviewSegments.note')?.trim();
-          // Say each note ONCE per game — a standing idea re-earns its place on
-          // every ply and would otherwise repeat verbatim. The ledger is written
-          // below, once the note has actually SPOKEN (B4).
-          if (graded && !notesSaidThisGame.has(graded)) facets.push(`[note] ${graded}`);
-        }
-      } catch { /* the corpus is a bonus on this lane, never a blocker */ }
+      // ── NO CORPUS NOTE IN REVIEW (David 2026-09-23) ─────────────────────
+      // "Remove corpus notes for learn with coach (free play) and review with
+      // coach." Review narrates what was computed on the student's own board;
+      // a literary note beside a computed line read as two coaches. The notes
+      // stay on the "teach me X opening" lesson and in chat. Gate:
+      // corpusScope.test.ts. (This REPLACES the 2026-08-07 "the corpus reaches
+      // review" splice, which is deleted rather than annotated.)
       // Drop an identical STATIC state facet already spoken on an earlier ply
       // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.
@@ -1883,11 +1846,6 @@ export function buildReviewSegments(
         if (/^\[(opening|plan-middlegame|passer|badbishop|worst|trapped|minority|complex|endgame)\]/.test(f)) {
           if (emittedStaticFacets.has(f) || !claim(`static:${f}`)) continue;
           keep(f, () => emittedStaticFacets.add(f));
-          continue;
-        }
-        // The corpus note — once per game, ledgered when it speaks.
-        if (/^\[note\]/.test(f)) {
-          keep(f, () => notesSaidThisGame.add(f.replace(/^\[note\]\s*/, '')));
           continue;
         }
         // The [principle] facet carries the recurrence label, if one was named.

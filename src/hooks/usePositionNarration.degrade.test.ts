@@ -82,7 +82,7 @@ describe('read this position — the provider is dead', () => {
   it('the computed read reaches the real chokepoint and is spoken in the raw register', async () => {
     // White to move; Ne5+ forks Kd7 and Rc6 (the P4c fixture).
     const FORK_FEN = '8/3k4/2r5/8/8/3N4/8/6K1 w - - 0 40';
-    const { result } = renderHook(() => usePositionNarration({ fen: FORK_FEN, pgn: '', moveNumber: 40, playerColor: 'white', openingName: null }));
+    const { result } = renderHook(() => usePositionNarration({ fen: FORK_FEN, pgn: '', moveNumber: 40, playerColor: 'white', openingName: null, corpusNotes: true }));
     act(() => { void result.current.narrate(); });
     await waitFor(() => expect(speakRecords.length).toBeGreaterThan(0), { timeout: 15_000 });
     await waitFor(() => expect(result.current.isNarrating).toBe(false), { timeout: 15_000 });

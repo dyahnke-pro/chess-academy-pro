@@ -53,6 +53,11 @@ export interface UsePhaseNarrationArgs {
    *  a transient banner that pops up then disappears). Called once with the
    *  final report text when the narration content is finalized. */
   onReport?: (text: string) => void;
+  /** May a corpus note ride the transition ritual? REQUIRED, no default, so a
+   *  new mount has to decide (2026-09-23: David removed corpus notes from Learn
+   *  free play and review — "teach me X opening" keeps them). Learn passes
+   *  false; Play decides for itself. */
+  corpusNotes: boolean;
 }
 
 export interface UsePhaseNarrationResult {
@@ -443,12 +448,14 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           const openingName = argsRef.current.getOpeningName?.() ?? detectOpening(sans)?.name ?? null;
           // The transition event knows whose game it is, so the ritual can
           // stop handing the student their opponent's plan.
-          const source = transitionTeachingSourceForGame({
-            historySans: sans,
-            fen: event.fen,
-            openingName,
-            studentSide: event.playerColor,
-          });
+          const source = argsRef.current.corpusNotes
+            ? transitionTeachingSourceForGame({
+              historySans: sans,
+              fen: event.fen,
+              openingName,
+              studentSide: event.playerColor,
+            })
+            : null;
           if (source) {
             // HOW MUCH of the note may be spoken depends on WHERE it came from
             // (2026-08-04). Only the exact-position tier was authored at the

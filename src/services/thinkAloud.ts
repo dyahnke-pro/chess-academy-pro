@@ -17,8 +17,6 @@ import { Chess } from 'chess.js';
 import { developmentRead, kingSafetyRead, findPieceQuality, findWeakPawns, findPawnBreaks } from './positionReadingService';
 import { describeMoveGeometry } from './groundedAnswer';
 import { detectPrincipleViolations } from './principleDetector';
-import { teachingSourceForBoard, teachingFactLine } from './danyaTeachingService';
-import { sideToMove } from './conceptEngine';
 
 export interface ThinkAloudLine {
   /** SAN of the line's first move (student POV candidates). */
@@ -112,19 +110,9 @@ export function buildThinkAloud(opts: {
     facts.push(`Principle in the air: ${p.principle} ${p.observed}`);
   }
 
-  // 4. The curated teaching note, LABELLED with where it came from.
-  //
-  // This said "Coaching note for this position" for every note, including ones
-  // borrowed from a different opening whose structure matches and general
-  // principles attached to no position at all. The note was fine; the claim
-  // around it was false, and a deliberation weighing a false premise reaches a
-  // false conclusion. `teachingFactLine` states the provenance (2026-08-04).
-  try {
-    const source = teachingSourceForBoard(historySans, fen, null, sideToMove(fen));
-    // The whole beat, `plans` included — that field carries what the position
-    // is heading toward, which is exactly what a deliberation should weigh.
-    if (source) facts.push(teachingFactLine(source));
-  } catch { /* bonus */ }
+  // 4. (REMOVED 2026-09-23.) The corpus note used to ride here. Think-aloud
+  //    runs on the Learn free-play board, which carries no corpus notes now —
+  //    the deliberation weighs only what was computed on this board.
 
   if (facts.length === 0) return null;
 

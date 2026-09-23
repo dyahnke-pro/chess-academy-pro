@@ -29,6 +29,9 @@ export interface UsePositionNarrationArgs {
    *  narration got. The banner is the live subtitle; this is the durable,
    *  rereadable copy. Fires once per read with the full text. */
   onReport?: (text: string) => void;
+  /** May a corpus note lead the read? REQUIRED, no default (2026-09-23): Learn
+   *  free play passes false; the mounting surface decides. */
+  corpusNotes: boolean;
 }
 
 export interface UsePositionNarrationResult {
@@ -218,6 +221,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         studentNeedContext: studentNeedRef.current,
         evalBoard: (f) => stockfishEngine.evalBoard(f),
         isCancelled: () => token !== activeTokenRef.current,
+        corpusNotes: args.corpusNotes,
       });
       if (token !== activeTokenRef.current) return;
       if (!facts) {
@@ -333,7 +337,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         setIsNarrating(false);
       }
     }
-  }, [args.fen, args.pgn, args.moveNumber, args.playerColor, args.openingName, args.onReport]);
+  }, [args.fen, args.pgn, args.moveNumber, args.playerColor, args.openingName, args.onReport, args.corpusNotes]);
 
   return { narrate, cancel, isNarrating, currentText, error };
 }
