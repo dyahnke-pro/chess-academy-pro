@@ -68542,7 +68542,7 @@
             "node": {
              "san": "Nf3",
              "movedBy": "white",
-             "idea": "Then they almost alway plays the knight to f3, so that's to be expected.",
+             "idea": "Then they almost always play the knight to f3, so that's to be expected.",
              "children": [
               {
                "node": {
@@ -69285,11 +69285,11 @@
                }
               }
              ],
-             "shortIdea": "Then they almost alway plays the knight to f3, so that's to be expected.",
+             "shortIdea": "Then they almost always play the knight to f3, so that's to be expected.",
              "asides": [
               {
-               "idea": "The knight to f6, and if White grabs with the knight takes e5 —",
-               "shortIdea": "The knight to f6, and if White grabs with the knight takes e5 —",
+               "idea": "The knight to f6 — and if White grabs the pawn on e5 with the knight, Black answers with the knight to c6.",
+               "shortIdea": "The knight to f6 — and if White grabs the pawn on e5 with the knight, Black answers with the knight to c6.",
                "arrows": [
                 {
                  "from": "g8",

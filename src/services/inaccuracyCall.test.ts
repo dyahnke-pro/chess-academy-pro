@@ -272,3 +272,14 @@ describe('the callout gives one reason, the highest-ranked one', () => {
     expect(parts.length, `run-on reason: ${why}`).toBeLessThanOrEqual(2);
   });
 });
+
+describe('a coach MISS is not a giveaway (walk 6, L4)', () => {
+  it('when the coach declined a capture of the student piece, it warns — it does not say "go and take it"', () => {
+    // Black (the coach) could take the White knight on g5 with the queen and
+    // played …d6 instead; the knight is still hanging.
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/6N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5';
+    const call = callInaccuracy({ fenBefore: fen, playedSan: 'd6', bestSan: 'Qxg5', cpLoss: 400, side: 'coach', moverColor: 'black' });
+    expect(call?.said).toMatch(/knight on g5 is still hanging/);
+    expect(call?.said).not.toMatch(/go and take it/);
+  });
+});

@@ -271,9 +271,18 @@ export function callInaccuracyDetailed(args: {
         ? `That was a mistake from me. ${args.playedSan} is not what the position wanted.`
         : `A touch inaccurate from me — ${args.playedSan} is not quite right.`;
     const should = better ? ` ${args.bestSan} was the move, to ${better.why}.` : ` ${args.bestSan} was the move.`;
-    // The punishment stays theirs to find — the same shape as every other
-    // opportunity beat. An inaccuracy is too small to promise anything.
-    const punish = quality === 'inaccuracy' ? '' : ' There is something here for you now — go and take it.';
+    // WHICH KIND OF SLIP, read off the board (walk 6, L4). The coach's move can
+    // cost by GIVING something (the student now has a capture to find) or by
+    // MISSING a capture of the student's piece — and then that piece is still
+    // hanging and the student has nothing to take. The old line promised
+    // "something here for you — go and take it" after the coach had merely
+    // declined Qxg5, with the student's knight still en prise.
+    const stillHanging = missedCaptureStillOn(args.fenBefore, args.playedSan, args.bestSan);
+    const punish = quality === 'inaccuracy'
+      ? ''
+      : stillHanging
+        ? ` Your ${stillHanging.piece} on ${stillHanging.square} is still hanging, though — see to it.`
+        : ' There is something here for you now — go and take it.';
     return { call: { quality, side: 'coach', cost, said: `${head}${should}${punish}`, square: better?.square ?? '' } };
   }
 
@@ -295,4 +304,28 @@ export function callInaccuracyDetailed(args: {
  *  never drift from the decision that produced it. */
 export function callInaccuracy(args: Parameters<typeof callInaccuracyDetailed>[0]): InaccuracyCall | null {
   return callInaccuracyDetailed(args).call;
+}
+
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** The coach's best move was a capture it did not play, and after the move it
+ *  DID play that capture is still on: the student's piece is still hanging. */
+function missedCaptureStillOn(fenBefore: string, playedSan: string, bestSan: string | null): { piece: string; square: string } | null {
+  if (!bestSan) return null;
+  try {
+    const probe = new Chess(fenBefore);
+    const best = probe.move(bestSan);
+    if (!best?.captured) return null;
+    const after = new Chess(fenBefore);
+    after.move(playedSan);
+    const victim = after.get(best.to);
+    if (!victim || victim.color === best.color) return null;
+    // Student to move now; would the coach still win it next turn?
+    const parts = after.fen().split(' ');
+    parts[1] = best.color;
+    parts[3] = '-';
+    const again = new Chess(parts.join(' '));
+    const stillOn = again.moves({ verbose: true }).some((m) => m.to === best.to && !!m.captured);
+    return stillOn ? { piece: PIECE_NAME[victim.type] ?? 'piece', square: best.to } : null;
+  } catch { return null; }
 }
