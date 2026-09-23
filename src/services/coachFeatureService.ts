@@ -3265,109 +3265,141 @@ async function augmentWithProjections(
   // you take advantage" — same computed line, correct seat. Runs in BOTH
   // scopes; in 'mistakes' scope it's the only pass.
   const studentColorName = studentColorWB === 'w' ? 'white' : 'black';
-  /** BATCH a set of position probes across the worker pool (CLAUDE.md G4.6).
-   *
-   *  Every `computePvLine` is ~7 engine calls (a root read plus one per ply of
-   *  playout) and `stockfishEngine` is a SINGLETON whose queue deliberately
-   *  serializes, so `Promise.all` over projections buys nothing — the calls just
-   *  queue. With one engine per pool worker a batch costs about the slowest
-   *  probe instead of the sum.
-   *
-   *  This exists because cutting the projection caps (G4.5) made three passes
-   *  unbounded, and unbounded × serialized took the post-dive review REGENERATE
-   *  from 1.8s to 30.2s on prod (audit 2026-09-16). The fix for "uncapped is
-   *  slow" is ALWAYS to make it parallel, never to put the cap back.
-   *
-   *  Returns a FEN→line map. A pool that cannot be had degrades to the
-   *  singleton exactly as before: slower, never quieter. */
-  const pvBatch = async (fens: readonly string[], maxPlies: number): Promise<Map<string, PvLine | null>> => {
-    const out = new Map<string, PvLine | null>();
-    const unique = [...new Set(fens)];
-    if (unique.length === 0) return out;
-    const batchPool = unique.length > 1
-      ? await import('./gameAnalysisService')
-        .then((m) => m.acquirePvEngines(unique.length))
-        .catch(() => null)
-      : null;
-    try {
-      const engines = batchPool?.engines ?? [];
-      const lines = await mapConcurrent(
-        unique,
-        engines.length > 0 ? engines.length : 1,
-        (fen, i) => raceTimeout(
-          computePvLine(fen, { maxPlies, ...(engines.length > 0 ? { engine: engines[i % engines.length] } : {}) }),
-          PROJ_TIMEOUT_MS,
-          null,
-        ),
-      );
-      unique.forEach((fen, i) => out.set(fen, lines[i] ?? null));
-    } finally {
-      batchPool?.release();
-    }
-    return out;
+  // ── ONE ENGINE SCHEDULE, STARTED UP FRONT (2026-09-23) ─────────────────────
+  //
+  // Measured on a real 53-ply amateur game: the passes below ran strictly one
+  // after another — each pooled pass leased the pool, waited for its slowest
+  // line, released it, and only then did the next pass start, while the
+  // singleton sat idle through every pooled pass and the pool sat idle through
+  // every singleton pass. The projections alone took 54–75s and twice hit the
+  // 75s cap, which drops whatever had not landed.
+  //
+  // So every engine probe the passes will want is SCHEDULED here, before any
+  // pass composes a word: the pooled probes on ONE lease (in pass order, so the
+  // early passes' lines land first), the singleton probes on their own chain,
+  // both running at once. The passes below still COMPOSE in their original
+  // order with their original filters — they only read results instead of
+  // starting searches — so what a pass says is unchanged. Each probe set is a
+  // SUPERSET of what its pass will read (collected before earlier passes have
+  // appended text), because a probe the pass never reads costs a little engine
+  // time and a probe it wants and cannot find would silently drop a beat.
+  //
+  // Each LANE owns ONE engine. The helper this replaces handed engines out by
+  // item index (`i % engines.length`), so two lanes could drive the same
+  // worker at once whenever they finished out of order.
+  const poolKey = (fen: string, maxPlies: number): string => `${maxPlies}|${fen}`;
+  const deferred = <T,>(): { promise: Promise<T>; resolve: (v: T) => void } => {
+    let resolve!: (v: T) => void;
+    const promise = new Promise<T>((r) => { resolve = r; });
+    return { promise, resolve };
+  };
+  const nullMoveFen = (fen: string, mover: 'w' | 'b'): string => {
+    const parts = fen.split(' ');
+    parts[1] = mover;
+    parts[3] = '-';
+    return parts.join(' ');
   };
 
-  // 🔒 RUN THESE CONCURRENTLY ACROSS THE WORKER POOL (CLAUDE.md G4.6). This is
-  // the pass whose count became unbounded when the caps came out (G4.5), and
-  // every call used to queue behind the previous one inside the stockfishEngine
-  // singleton — ~7 engine calls per line, times every flagged move, strictly in
-  // series. With one engine per pool worker the batch costs about the slowest
-  // line instead of the sum, and no beat is dropped for time. `acquirePvEngines`
-  // returns null when no worker can be had, in which case every call falls back
-  // to the singleton exactly as before — slower, never quieter.
+  // #3 punish — every flagged move, both sides.
   const flaggedForPunish = segments.filter(
     (s) => s.classification === 'mistake' || s.classification === 'blunder',
   );
-  // LAZY import on purpose: `gameAnalysisService` already imports from THIS
-  // module (`detectBadHabitsFromGame`), so a static import here would close a
-  // module cycle — the class of bug that surfaces as an undefined binding at
-  // runtime and never in a unit test. A dynamic import at call time has no
-  // static edge.
-  const pool = flaggedForPunish.length > 1
-    ? await import('./gameAnalysisService')
-      .then((m) => m.acquirePvEngines(flaggedForPunish.length))
-      .catch(() => null)
-    : null;
-  try {
-    const engines = pool?.engines ?? [];
-    const lines = await mapConcurrent(
-      flaggedForPunish,
-      engines.length > 0 ? engines.length : 1,
-      (s, i) => raceTimeout(
-        computePvLine(s.fenAfter, { maxPlies: 6, ...(engines.length > 0 ? { engine: engines[i % engines.length] } : {}) }),
-        PROJ_TIMEOUT_MS,
-        null,
-      ),
-    );
-    flaggedForPunish.forEach((s, i) => {
-      const line = lines[i];
-      const isStudentSlip = s.playerColor === studentColorName;
-      if (line && line.delivers && line.plies.length >= 2) {
-        const frame = isStudentSlip
-          ? `Here's how it gets punished from here: ${render(line, true)}.`
-          : `Here's how you take advantage: ${render(line, true)}.`;
-        s.narration = `${s.narration ?? ''} ${frame}`.trim();
-        attachLineArrows(s, line, 4); // punishment/advantage line
-      }
-    });
-  } finally {
-    pool?.release();
+  // #5 deep threat — the student's good moves, null-moved to the student.
+  const deepFens = new Map<string, string>(); // segment fenAfter -> nullFen
+  for (const s of segments) {
+    if (s.playerColor !== studentColorName) continue;
+    if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    try {
+      if (s.fenAfter.split(' ')[1] === studentColorWB) continue;
+      if (new Chess(s.fenAfter).inCheck()) continue;
+      deepFens.set(s.fenAfter, nullMoveFen(s.fenAfter, studentColorWB));
+    } catch { /* an unparseable segment simply contributes no probe */ }
   }
-  mark('punish');
-  // #4 — THE BETTER-LINE WHY (David 2026-07-21, IMG_4577: "Need to know why
-  // Bf2 was better. The better lines need the why narrations. A deeper
-  // understanding is critical."). On the student's flagged moves that name a
-  // distinct best move — INACCURACIES included, which the punishment pass
-  // skips — play the engine's line STARTING WITH the better move and narrate
-  // every ply's why, so "the stronger move was X" always carries the
-  // understanding, never just the name. Seeding firstUci reuses the stored
-  // analysis' own top line, so this is usually a cache hit, not fresh engine
-  // time. Biggest swings first so the budget lands on the moves that matter.
-  let whyBudget = Number.POSITIVE_INFINITY; // every better-move delta (no ceiling)
-  // THE DELTA (David 2026-07-24: "the delta is what computes why a stockfish
-  // move is good — wire it in"): the method of comparison proves the concrete
-  // reason the better move beats the played one (engine-verified ablation), so
-  // "Why X was better" LEADS with the proven why, not just the line.
+  // #5c deep threat against the student — the opponent's good moves.
+  const oppWB: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
+  const deepOppFens = new Map<string, string>();
+  for (const s of segments) {
+    if (s.playerColor === studentColorName) continue;
+    if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
+    try {
+      if (s.fenAfter.split(' ')[1] === oppWB) continue;
+      if (new Chess(s.fenAfter).inCheck()) continue;
+      deepOppFens.set(s.fenAfter, nullMoveFen(s.fenAfter, oppWB));
+    } catch { /* an unparseable segment simply contributes no probe */ }
+  }
+  // Prophylaxis — the student's quiet, still-silent moves from ply 10.
+  const prophyFens = new Map<string, string>();
+  if (scope !== 'mistakes') {
+    for (const s of segments) {
+      if (s.narration) continue;
+      if (s.playerColor !== studentColorName) continue;
+      if (s.ply < 10) continue;
+      if (/[x+=]/.test(s.san)) continue;
+      if (s.evalBefore === null || s.evalAfter === null) continue;
+      const parts = s.fenBefore.split(' ');
+      if (parts.length < 4) continue;
+      parts[1] = parts[1] === 'w' ? 'b' : 'w';
+      parts[3] = '-';
+      const nf = parts.join(' ');
+      try { new Chess(nf); } catch { continue; }
+      prophyFens.set(s.fenBefore, nf);
+    }
+  }
+
+  // The pooled schedule, in pass order. Duplicate (fen, depth) probes share one
+  // search.
+  const poolOrder: Array<{ fen: string; maxPlies: number }> = [
+    ...flaggedForPunish.map((s) => ({ fen: s.fenAfter, maxPlies: 6 })),
+    ...[...deepFens.values()].map((fen) => ({ fen, maxPlies: deepThreatPlies })),
+    ...[...deepOppFens.values()].map((fen) => ({ fen, maxPlies: deepThreatPlies })),
+    ...[...prophyFens.values()].map((fen) => ({ fen, maxPlies: 3 })),
+  ];
+  const poolDone = new Map<string, { promise: Promise<PvLine | null>; resolve: (v: PvLine | null) => void }>();
+  const poolTasks: Array<{ key: string; fen: string; maxPlies: number }> = [];
+  for (const p of poolOrder) {
+    const key = poolKey(p.fen, p.maxPlies);
+    if (poolDone.has(key)) continue;
+    poolDone.set(key, deferred<PvLine | null>());
+    poolTasks.push({ key, ...p });
+  }
+  const poolLine = (fen: string, maxPlies: number): Promise<PvLine | null> =>
+    poolDone.get(poolKey(fen, maxPlies))?.promise ?? Promise.resolve(null);
+  // A pool that cannot be had degrades to the singleton exactly as before:
+  // slower, never quieter. A single probe never leases (it would only add the
+  // spawn cost), which is what the old per-pass helper did too.
+  void (async () => {
+    const lease = poolTasks.length > 1
+      ? await import('./gameAnalysisService')
+        .then((m) => m.acquirePvEngines(poolTasks.length))
+        .catch(() => null)
+      : null;
+    try {
+      const engines = lease?.engines ?? [];
+      let next = 0;
+      const laneCount = Math.max(1, Math.min(engines.length, poolTasks.length));
+      await Promise.all(Array.from({ length: laneCount }, async (_unused, lane) => {
+        const engine = engines[lane];
+        for (;;) {
+          const i = next++;
+          if (i >= poolTasks.length) return;
+          const t = poolTasks[i];
+          const line = await raceTimeout(
+            computePvLine(t.fen, { maxPlies: t.maxPlies, ...(engine ? { engine } : {}) }),
+            PROJ_TIMEOUT_MS,
+            null,
+          ).catch(() => null);
+          poolDone.get(t.key)?.resolve(line);
+        }
+      }));
+    } finally {
+      lease?.release();
+      // Anything never reached (a lane threw) settles as "no line", never hangs.
+      for (const d of poolDone.values()) d.resolve(null);
+    }
+  })();
+
+  // THE SINGLETON CHAIN — the passes that search on `stockfishEngine`, in their
+  // original order, running BESIDE the pool instead of after it.
   const deltaEvaluate: Evaluate = async (fen) => {
     const l = await raceTimeout(computePvLine(fen, { maxPlies: 1 }), PROJ_TIMEOUT_MS, null);
     return { cp: l ? l.rootEvalCp : NaN };
@@ -3388,20 +3420,127 @@ async function augmentWithProjections(
         x.evalBefore !== null && x.evalAfter !== null ? Math.abs(x.evalBefore - x.evalAfter) : 0;
       return swing(b) - swing(a);
     });
+  const openingPlanCandidate = segments.find((s) =>
+    s.narrationSource === 'opening-plan'
+    && !!s.planArrows && s.planArrows.length > 0
+    && s.ply <= 14
+    && s.playerColor === studentColorName);
+  const planSeg = segments.find((s) => s.narrationSource === 'assessment' || s.narrationSource === 'orientation')
+    ?? segments.find((s) => s.narration && (s.narration.includes('[verdict]') || s.narration.includes('[plan-middlegame]')));
+  const betterDone = deferred<Map<ReviewMoveSegment, { line: PvLine | null; why: string | null }>>();
+  const confirmDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
+  const badPieceDone = deferred<{ seg: ReviewMoveSegment; text: string; swing: number } | null>();
+  const openingPlanDone = deferred<PvLine | null>();
+  const planDone = deferred<PvLine | null>();
+  const consequenceDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
+  void (async () => {
+    // #4 the better line + the proven delta.
+    const better = new Map<ReviewMoveSegment, { line: PvLine | null; why: string | null }>();
+    try {
+      for (const s of flaggedStudent) {
+        const line = await raceTimeout(
+          computePvLine(s.fenBefore, { firstUci: s.bestMoveUci as string, maxPlies: 6 }),
+          PROJ_TIMEOUT_MS,
+          null,
+        ).catch(() => null);
+        let why: string | null = null;
+        if (line && line.plies.length >= 3) {
+          const cmp = await raceTimeout(compareTwoMoves(s.fenBefore, s.san, line.plies[0].san, deltaEvaluate), PROJ_TIMEOUT_MS, null).catch(() => null);
+          why = cmp?.delta?.text ?? null;
+        }
+        better.set(s, { line, why });
+      }
+    } finally { betterDone.resolve(better); }
+    // #4b the engine's verdict on each static threat.
+    const confirm = new Map<ReviewMoveSegment, PvLine | null>();
+    try {
+      for (const s of segments) {
+        if (!s.staticThreat) continue;
+        confirm.set(s, await raceTimeout(computePvLine(s.staticThreat.nullFen, { maxPlies: 4 }), PROJ_TIMEOUT_MS, null).catch(() => null));
+      }
+    } finally { confirmDone.resolve(confirm); }
+    // #6 the bad-piece ablation.
+    let bestPiece: { seg: ReviewMoveSegment; text: string; swing: number } | null = null;
+    try {
+      const candidates = segments
+        .filter((s) => s.ply >= 14 && !(s.evalAfter !== null && Math.abs(s.evalAfter) >= 5000))
+        .map((s) => ({ s, mob: lowestMinorMobility(s.fenAfter) }))
+        .filter((c) => c.mob <= 2)
+        .sort((a, b) => a.mob - b.mob);
+      for (const c of candidates) {
+        const res = await raceTimeout(
+          explainEvalByPieceQuality(c.s.fenAfter, deltaEvaluate, { swingThresholdCp: 150, pairThresholdCp: 220, baseCp: c.s.evalAfter ?? undefined }),
+          PROJ_TIMEOUT_MS * 2,
+          null,
+        ).catch(() => null);
+        if (res?.delta && (!bestPiece || res.delta.ablation.swingCp > bestPiece.swing)) {
+          bestPiece = { seg: c.s, text: res.delta.text, swing: res.delta.ablation.swingCp };
+        }
+      }
+    } finally { badPieceDone.resolve(bestPiece); }
+    // #0 the opening plan played out.
+    try {
+      openingPlanDone.resolve(openingPlanCandidate
+        ? await raceTimeout(computePvLine(openingPlanCandidate.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null).catch(() => null)
+        : null);
+    } finally { openingPlanDone.resolve(null); }
+    // #1 plan realization + #2 consequence lines — 'full' scope only.
+    try {
+      planDone.resolve(scope !== 'mistakes' && planSeg
+        ? await raceTimeout(computePvLine(planSeg.fenAfter, { maxPlies: 8 }), PROJ_TIMEOUT_MS, null).catch(() => null)
+        : null);
+    } finally { planDone.resolve(null); }
+    const consequence = new Map<ReviewMoveSegment, PvLine | null>();
+    try {
+      if (scope !== 'mistakes') {
+        for (const s of segments) {
+          if (s === planSeg) continue;
+          if (s.classification !== 'great' && s.classification !== 'brilliant') continue;
+          consequence.set(s, await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null).catch(() => null));
+        }
+      }
+    } finally { consequenceDone.resolve(consequence); }
+  })();
+
+  // #3 compose — punishment / advantage lines.
+  {
+    const lines = await Promise.all(flaggedForPunish.map((s) => poolLine(s.fenAfter, 6)));
+    flaggedForPunish.forEach((s, i) => {
+      const line = lines[i];
+      const isStudentSlip = s.playerColor === studentColorName;
+      if (line && line.delivers && line.plies.length >= 2) {
+        const frame = isStudentSlip
+          ? `Here's how it gets punished from here: ${render(line, true)}.`
+          : `Here's how you take advantage: ${render(line, true)}.`;
+        s.narration = `${s.narration ?? ''} ${frame}`.trim();
+        attachLineArrows(s, line, 4); // punishment/advantage line
+      }
+    });
+  }
+  mark('punish');
+  // #4 — THE BETTER-LINE WHY (David 2026-07-21, IMG_4577: "Need to know why
+  // Bf2 was better. The better lines need the why narrations. A deeper
+  // understanding is critical."). On the student's flagged moves that name a
+  // distinct best move — INACCURACIES included, which the punishment pass
+  // skips — play the engine's line STARTING WITH the better move and narrate
+  // every ply's why, so "the stronger move was X" always carries the
+  // understanding, never just the name. Seeding firstUci reuses the stored
+  // analysis' own top line, so this is usually a cache hit, not fresh engine
+  // time. Biggest swings first so the budget lands on the moves that matter.
+  let whyBudget = Number.POSITIVE_INFINITY; // every better-move delta (no ceiling)
+  // THE DELTA (David 2026-07-24: "the delta is what computes why a stockfish
+  // move is good — wire it in"): the method of comparison proves the concrete
+  // reason the better move beats the played one (engine-verified ablation), so
+  // "Why X was better" LEADS with the proven why, not just the line. Searched on
+  // the singleton chain above; composed here in the original order.
+  const better = await betterDone.promise;
   for (const s of flaggedStudent) {
     if (whyBudget <= 0) break;
-    const line = await raceTimeout(
-      computePvLine(s.fenBefore, { firstUci: s.bestMoveUci as string, maxPlies: 6 }),
-      PROJ_TIMEOUT_MS,
-      null,
-    );
+    const got = better.get(s);
+    const line = got?.line ?? null;
     if (line && line.plies.length >= 3) {
       const bestName = line.plies[0].san;
-      // THE DELTA: prove WHY bestName beats the played move (engine-verified). A
-      // proven reason leads; when nothing survives, fall back to showing the
-      // line (compareTwoMoves returns delta=null and we just play it out).
-      const cmp = await raceTimeout(compareTwoMoves(s.fenBefore, s.san, bestName, deltaEvaluate), PROJ_TIMEOUT_MS, null);
-      const why = cmp?.delta?.text ?? null;
+      const why = got?.why ?? null;
       s.narration = why
         ? `${s.narration ?? ''} Why ${bestName} was better — ${why}. The line runs ${render(line, true)}.`.trim()
         : `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line, true)}.`.trim();
@@ -3422,10 +3561,11 @@ async function augmentWithProjections(
   // through the same per-ply fact-computers. Truth from the engine,
   // mechanism from the statics — never a static story the engine disowns.
   let confirmBudget = Number.POSITIVE_INFINITY; // every threat confirmation (no ceiling)
+  const confirmed = await confirmDone.promise;
   for (const s of segments) {
     if (confirmBudget <= 0) break;
     if (!s.staticThreat) continue;
-    const line = await raceTimeout(computePvLine(s.staticThreat.nullFen, { maxPlies: 4 }), PROJ_TIMEOUT_MS, null);
+    const line = confirmed.get(s) ?? null;
     confirmBudget -= 1;
     if (!line || line.plies.length === 0) continue; // engine unavailable — the static-verified claim stands
     const stripGl = (x: string): string => x.replace(/[+#!?]+$/, '');
@@ -3459,26 +3599,10 @@ async function augmentWithProjections(
   // when the position is in check (forcing lines are the punishment pass's
   // job) and on one-move threats (the static call-out already owns those).
   let deepBudget = scope === 'full' ? 999 : 2; // uncapped: every deep threat
-  // POOLED PRE-PASS (G4.6): collect every null-move probe this loop will want,
-  // run them concurrently, then walk the loop reading the results. The collect
-  // repeats the loop's own SYNCHRONOUS filters and deliberately omits the budget
-  // so it is a SUPERSET — a probe the loop never reaches is wasted work, but a
-  // probe the loop wants and cannot find would silently drop a beat.
-  const deepFens = new Map<string, string>(); // segment fenAfter -> nullFen
-  for (const s of segments) {
-    if (s.playerColor !== studentColorName) continue;
-    if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
-    if (s.narration && /engine confirms it|if they try to run/i.test(s.narration)) continue;
-    try {
-      const parts = s.fenAfter.split(' ');
-      if (parts[1] === (studentColorWB === 'w' ? 'w' : 'b')) continue;
-      if (new Chess(s.fenAfter).inCheck()) continue;
-      parts[1] = studentColorWB;
-      parts[3] = '-';
-      deepFens.set(s.fenAfter, parts.join(' '));
-    } catch { /* an unparseable segment simply contributes no probe */ }
-  }
-  const deepPv = await pvBatch([...deepFens.values()], deepThreatPlies);
+  // The probes were collected and scheduled up front (see THE ENGINE SCHEDULE);
+  // this pass reads them in its original order.
+  const deepPv = new Map<string, PvLine | null>();
+  for (const nf of deepFens.values()) deepPv.set(nf, await poolLine(nf, deepThreatPlies));
   for (const s of segments) {
     if (deepBudget <= 0) break;
     if (s.playerColor !== studentColorName) continue;
@@ -3546,22 +3670,8 @@ async function augmentWithProjections(
   // fresh search, G0).
   mark('deep');
   let deepOppBudget = scope === 'full' ? 999 : 2; // uncapped: every opponent deep threat
-  const oppWB: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
-  // POOLED PRE-PASS (G4.6) — same superset-collect as #5 above.
-  const deepOppFens = new Map<string, string>();
-  for (const s of segments) {
-    if (s.playerColor === studentColorName) continue;
-    if (s.classification !== 'good' && s.classification !== 'great' && s.classification !== 'brilliant') continue;
-    try {
-      const parts = s.fenAfter.split(' ');
-      if (parts[1] === oppWB) continue;
-      if (new Chess(s.fenAfter).inCheck()) continue;
-      parts[1] = oppWB;
-      parts[3] = '-';
-      deepOppFens.set(s.fenAfter, parts.join(' '));
-    } catch { /* an unparseable segment simply contributes no probe */ }
-  }
-  const deepOppPv = await pvBatch([...deepOppFens.values()], deepThreatPlies);
+  const deepOppPv = new Map<string, PvLine | null>();
+  for (const nf of deepOppFens.values()) deepOppPv.set(nf, await poolLine(nf, deepThreatPlies));
   for (let i = 0; i < segments.length; i++) {
     const s = segments[i];
     if (deepOppBudget <= 0) break;
@@ -3621,32 +3731,9 @@ async function augmentWithProjections(
   // timeout-guarded; both scopes (this is where Danya's "his pieces are
   // terrible" reads live).
   {
-    const pieceEvaluate: Evaluate = async (fen) => {
-      const l = await raceTimeout(computePvLine(fen, { maxPlies: 1 }), PROJ_TIMEOUT_MS, null);
-      return { cp: l ? l.rootEvalCp : NaN };
-    };
-    // Free selection: the middlegame plies whose most-cramped minor is the most
-    // cramped (≤ 2 legal moves = a genuinely bad minor worth the ablation). Probe
-    // the top TWO distinct positions — a cramped minor isn't always a COSTLY one,
-    // so trying just the single most-cramped can miss the real story. Reuse the
-    // already-computed eval as the ablation base (no extra base eval). Attach the
-    // biggest proven swing.
-    const candidates = segments
-      .filter((s) => s.ply >= 14 && !(s.evalAfter !== null && Math.abs(s.evalAfter) >= 5000))
-      .map((s) => ({ s, mob: lowestMinorMobility(s.fenAfter) }))
-      .filter((c) => c.mob <= 2)
-      .sort((a, b) => a.mob - b.mob);
-    let best: { seg: ReviewMoveSegment; text: string; swing: number } | null = null;
-    for (const c of candidates) {
-      const res = await raceTimeout(
-        explainEvalByPieceQuality(c.s.fenAfter, pieceEvaluate, { swingThresholdCp: 150, pairThresholdCp: 220, baseCp: c.s.evalAfter ?? undefined }),
-        PROJ_TIMEOUT_MS * 2,
-        null,
-      );
-      if (res?.delta && (!best || res.delta.ablation.swingCp > best.swing)) {
-        best = { seg: c.s, text: res.delta.text, swing: res.delta.ablation.swingCp };
-      }
-    }
+    // Searched on the singleton chain above (same candidates, same ablation);
+    // composed here.
+    const best = await badPieceDone.promise;
     if (best) {
       // Appended as its own sentence — capitalize the lead so the seat-stamped
       // possessive ("their"/"your") reads as a sentence start, not mid-clause.
@@ -3664,13 +3751,9 @@ async function augmentWithProjections(
   // played-out line with lead-the-eye arrows (attachLineArrows), the same
   // treatment that makes the back half rich. One opening beat; both scopes.
   {
-    const openingPlanSeg = segments.find((s) =>
-      s.narrationSource === 'opening-plan'
-      && !!s.planArrows && s.planArrows.length > 0
-      && s.ply <= 14
-      && s.playerColor === studentColorName);
+    const openingPlanSeg = openingPlanCandidate;
     if (openingPlanSeg && !openingPlanSeg.spokenLineArrows) {
-      const line = await raceTimeout(computePvLine(openingPlanSeg.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
+      const line = await openingPlanDone.promise;
       // A DEVELOPING line only — quiet (a forcing shot is a tactic, not an opening
       // plan; it belongs to the flag/threat passes) and the student stays sound
       // (never play out a "plan" that quietly leaves them worse).
@@ -3691,10 +3774,10 @@ async function augmentWithProjections(
   // #1 — plan realization from the plan's critical position. In uncapped mode
   // every segment's source is 'per-move', so find the plan ply by its FACET tag
   // (the verdict/middlegame-plan fact appears in the bundle text).
-  const planSeg = segments.find((s) => s.narrationSource === 'assessment' || s.narrationSource === 'orientation')
-    ?? segments.find((s) => s.narration && (s.narration.includes('[verdict]') || s.narration.includes('[plan-middlegame]')));
+  // `planSeg` is found up front (the passes above never add or remove the tags
+  // it looks for) so its line could be searched beside the pool.
   if (planSeg) {
-    const line = await raceTimeout(computePvLine(planSeg.fenAfter, { maxPlies: 8 }), PROJ_TIMEOUT_MS, null);
+    const line = await planDone.promise;
     if (line && line.delivers && line.plies.length >= 2) {
       planSeg.narration = `${planSeg.narration ?? ''} [plan-line] Played out from here, the plan runs ${render(line)}.`.trim();
       attachLineArrows(planSeg, line, 2); // plan realization line
@@ -3712,7 +3795,7 @@ async function augmentWithProjections(
     // phrasings, so a ply carrying "a deeper threat brewing" got a second full
     // line on top (walk 5, 2026-09-23).
     if (s.narration && STACKED_LINE_RE.test(s.narration)) continue;
-    const line = await raceTimeout(computePvLine(s.fenAfter, { maxPlies: 6 }), PROJ_TIMEOUT_MS, null);
+    const line = (await consequenceDone.promise).get(s) ?? null;
     if (line && line.delivers && line.plies.length >= 2) {
       s.narration = `${s.narration ?? ''} [consequence] Follow it up and it goes ${render(line)}.`.trim();
       attachLineArrows(s, line, 2); // consequence line
@@ -3731,23 +3814,9 @@ async function augmentWithProjections(
   {
     let prophyBudget = scope === 'full' ? 999 : 2; // uncapped: every prophylactic move
     const studentPov = (cp: number): number => (studentColorWB === 'w' ? cp : -cp);
-    // POOLED PRE-PASS (G4.6) — superset-collect, same synchronous filters, no budget.
-    const prophyFens = new Map<string, string>();
-    for (const s of segments) {
-      if (s.narration) continue;
-      if (s.playerColor !== studentColorName) continue;
-      if (s.ply < 10) continue;
-      if (/[x+=]/.test(s.san)) continue;
-      if (s.evalBefore === null || s.evalAfter === null) continue;
-      const parts = s.fenBefore.split(' ');
-      if (parts.length < 4) continue;
-      parts[1] = parts[1] === 'w' ? 'b' : 'w';
-      parts[3] = '-';
-      const nf = parts.join(' ');
-      try { new Chess(nf); } catch { continue; }
-      prophyFens.set(s.fenBefore, nf);
-    }
-    const prophyPv = await pvBatch([...prophyFens.values()], 3);
+    // Collected and scheduled up front (THE ENGINE SCHEDULE); read here.
+    const prophyPv = new Map<string, PvLine | null>();
+    for (const nf of prophyFens.values()) prophyPv.set(nf, await poolLine(nf, 3));
     for (const s of segments) {
       if (prophyBudget <= 0) break;
       if (s.narration) continue;                            // fill only silent moves

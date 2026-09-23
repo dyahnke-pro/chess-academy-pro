@@ -238,9 +238,6 @@ export function CoachReviewSessionPage(): JSX.Element {
   const [analyzeProgress, setAnalyzeProgress] = useState<string | null>(null);
   /** A background deepen is running (the review is already on screen). */
   const [deepening, setDeepening] = useState(false);
-  /** Bumped when a background deepen lands BEFORE the walk started, so the
-   *  review remounts on the deeper annotations. */
-  const [analysisRev, setAnalysisRev] = useState(0);
   const walkStartedRef = useRef(false);
 
   useEffect(() => {
@@ -293,18 +290,22 @@ export function CoachReviewSessionPage(): JSX.Element {
             if (cancelled) return;
             const refreshed = await db.games.get(started.id);
             if (cancelled || !refreshed) return;
-            if (walkStartedRef.current) {
-              void logAppAudit({
-                kind: 'coach-surface-migrated',
-                category: 'subsystem',
-                source: 'CoachReviewSessionPage.deepen',
-                summary: `deepen landed after walk start — held for next open (game ${started.id})`,
-                details: JSON.stringify({ gameId: started.id, analysisDepth: refreshed.analysisDepth }),
-              });
-              return;
-            }
-            setGame(refreshed);
-            setAnalysisRev((r) => r + 1);
+            // 🔒 THE DEEPEN NEVER RESETS AN OPEN REVIEW (2026-09-23). It used to
+            // remount the review whenever it landed before the walk STARTED —
+            // which is exactly while the student is watching "Preparing…". The
+            // remount threw the in-flight narration away and ran the whole prep
+            // again: measured on a real 53-ply game, first open reached Start at
+            // 126s with the prep run twice (four times under dev StrictMode).
+            // The deeper annotations are already written to the game, so the
+            // next open narrates from them — the same rule the after-start case
+            // always had.
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachReviewSessionPage.deepen',
+              summary: `deepen landed ${walkStartedRef.current ? 'after walk start' : 'before walk start'} — held for next open (game ${started.id})`,
+              details: JSON.stringify({ gameId: started.id, analysisDepth: refreshed.analysisDepth }),
+            });
           }).catch((err: unknown) => {
             if (cancelled) return;
             void logAppAudit({
@@ -487,7 +488,7 @@ export function CoachReviewSessionPage(): JSX.Element {
         // a different deep-linked ply on the same game (e.g. moving
         // from one costliest-mistake row to another) so
         // `initialMoveIndex` re-applies on mount.
-        key={`${gameId}:${initialMoveIndex}:${analysisRev}`}
+        key={`${gameId}:${initialMoveIndex}`}
         onWalkStarted={() => { walkStartedRef.current = true; }}
         // ship-5: forward gameId so `useReviewPlayback` can scope hint
         // callouts to this specific game (no cross-game leakage via
