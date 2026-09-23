@@ -281,7 +281,7 @@
 - `src/services/reviewDeepThreat.test.ts:150`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewNarrationBuild.ts:83`
-- `src/services/reviewRealSweep.test.ts:185`
+- `src/services/reviewRealSweep.test.ts:187`
 
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`

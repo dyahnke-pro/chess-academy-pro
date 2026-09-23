@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5599 lines · 4 exports · 4 importers · 3 tests · 9 audits**
+**5599 lines · 4 exports · 3 importers · 3 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,7 +14,6 @@
 
 ## Who calls in
 
-- `src/App.tsx`
 - `src/components/Coach/CoachGamePage.blunderCard.test.ts`
 - `src/components/Coach/CoachGamePage.playSilent.test.ts`
 - `src/components/Coach/CoachGamePage.test.tsx`

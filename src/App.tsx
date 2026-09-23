@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { lazyPage } from './utils/lazyPage';
+import { PageFallback } from './components/ui/PageFallback';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { registerCoachNavigate, clearCoachNavigate, registerStrengthSetter } from './services/coachActuator';
 import './services/bucketAuditBridge'; // installs window.__bucketAudit for the bucket-delivery audit (no-op for real users)
@@ -35,92 +37,98 @@ import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { BuildVersionWidget } from './components/Debug/BuildVersionWidget';
 import { StarAnimationLayer } from './components/StarAnimationLayer';
 
-// Page-level imports
+// Page-level imports — every page except the dashboard loads on first visit
+// (`lazyPage`), so its code and data stay off the boot path.
 import { DashboardPage } from './components/Dashboard/DashboardPage';
-import { AcademyPage } from './components/Academy/AcademyPage';
-import { CourseSyllabusPage } from './components/Academy/CourseSyllabusPage';
-import { CourseTrainerPage } from './components/Academy/CourseTrainerPage';
-import { OpeningExplorerPage } from './components/Openings/OpeningExplorerPage';
-import { OpeningDetailPage } from './components/Openings/OpeningDetailPage';
-import { SrsTrainerPage } from './components/Openings/SrsTrainerPage';
-import { PuzzleTrainerPage } from './components/Puzzles/PuzzleTrainerPage';
-import { AdaptivePuzzlePage } from './components/Puzzles/AdaptivePuzzlePage';
-import { MyMistakesPage } from './components/Puzzles/MyMistakesPage';
-import { LichessDashboardPage } from './components/Puzzles/LichessDashboardPage';
-import { WeaknessTagDrillPage } from './components/Puzzles/WeaknessTagDrillPage';
-import { WeaknessThemesPage } from './components/Puzzles/WeaknessThemesPage';
-// PuzzlesHubPage removed — Puzzles tab merged into Tactics
-import { CoachGamePage } from './components/Coach/CoachGamePage';
-import { CoachChatPage } from './components/Coach/CoachChatPage';
-import { CoachSessionPage } from './components/Coach/CoachSessionPage';
-import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
-import { CoachTrainPage } from './components/Coach/CoachTrainPage';
-import { TrainingPlanRolodexPage } from './components/Coach/TrainingPlanRolodexPage';
-import { GameInsightsPage } from './components/Insights/GameInsightsPage';
-import { GamesDrilldownPage } from './components/Insights/GamesDrilldownPage';
-import { CoachTeachPage } from './components/Coach/CoachTeachPage';
-import { ProGamesPage } from './components/Coach/ProGamesPage';
-import { CoachEndgamePage } from './components/Coach/CoachEndgamePage';
-import { EndgameTrainerPage } from './components/Coach/EndgameTrainerPage';
-import { FundamentalsPage } from './components/Coach/FundamentalsPage';
-import { CoachesLibraryPage } from './components/Coach/CoachesLibraryPage';
-import { CoachReviewListPage } from './components/Coach/CoachReviewListPage';
-import { CoachReviewSessionPage } from './components/Coach/CoachReviewSessionPage';
-import { CoachPage } from './components/Coach/CoachPage';
-import { TacticsPage } from './components/Tactics/TacticsPage';
-import { FindSquarePage } from './components/Tactics/FindSquarePage';
-import { AnalysisPracticePage } from './components/Tactics/AnalysisPracticePage';
-import { CalculationDrillPage } from './components/Tactics/CalculationDrillPage';
-import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
-import { PatternSchoolPage } from './components/Tactics/PatternSchoolPage';
-import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
-import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
-import { TacticCreatePage } from './components/Tactics/TacticCreatePage';
-import { SettingsPage } from './components/Settings/SettingsPage';
-import { OnboardingPage } from './components/Settings/OnboardingPage';
-import { GameDatabasePage } from './components/Games/GameDatabasePage';
-import { ImportPage } from './components/Games/ImportPage';
-import { ProPlayerPage } from './components/Openings/ProPlayerPage';
 import { KidLayout } from './components/Kid/KidLayout';
-import { KidModePage } from './components/Kid/KidModePage';
-import { KidPiecePage } from './components/Kid/KidPiecePage';
-import { JourneyMapPage } from './components/Kid/JourneyMapPage';
-import { JourneyChapterPage } from './components/Kid/JourneyChapterPage';
-import { FairyTaleMapPage } from './components/Kid/FairyTaleMapPage';
-import { FairyTaleChapterPage } from './components/Kid/FairyTaleChapterPage';
-import { RookGamesPage } from './components/Kid/RookGamesPage';
-import { RookMazePage } from './components/Kid/RookMazePage';
-import { RowClearerPage } from './components/Kid/RowClearerPage';
-import { MiniGameHubPage } from './components/Kid/MiniGameHubPage';
-import { MiniGamePage } from './components/Kid/MiniGamePage';
-import { KingEscapeGame } from './components/Kid/KingEscapeGame';
-import { KingMarchGame } from './components/Kid/KingMarchGame';
-import { KingGamesPage } from './components/Kid/KingGamesPage';
-import { BishopGamesPage, BishopVsPawnsRoute, ColorWarsRoute } from './components/Kid/BishopGamesPage';
-import { KidPiecePuzzlesPage } from './components/Kid/KidPiecePuzzlesPage';
-import { PieceMazePage } from './components/Kid/PieceMazePage';
-import { PieceSweepPage } from './components/Kid/PieceSweepPage';
-import { PieceRaceGame } from './components/Kid/PieceRaceGame';
-import { KnightArmyRoute, BishopArmyRoute } from './components/Kid/PairArmyGame';
-import { PieceLevelSelect } from './components/Kid/PieceLevelSelect';
-import { KnightGamesPage } from './components/Kid/KnightGamesPage';
-import { LeapFrogGame } from './components/Kid/LeapFrogGame';
-import { KnightSweepGame } from './components/Kid/KnightSweepGame';
-import { QueenGamesHub, QueenVsArmyRoute, QueensGauntletRoute } from './components/Kid/QueenGamesHub';
-import { KidPuzzlePage } from './components/Kid/KidPuzzlePage';
-import { GuidedGameHubPage } from './components/Kid/GuidedGameHubPage';
-import { GuidedGamePage } from './components/Kid/GuidedGamePage';
-import { NeonBoardMock } from './components/Board/NeonBoardMock';
-import { DebugAuditPage } from './components/Debug/DebugAuditPage';
-import { OpeningBlundersPage } from './components/Debug/OpeningBlundersPage';
 import { useAndroidBackButton } from './hooks/useAndroidBackButton';
-import { PrivacyPolicyPage } from './components/Legal/PrivacyPolicyPage';
-import { TermsOfServicePage } from './components/Legal/TermsOfServicePage';
-import { SupportPage } from './components/Legal/SupportPage';
 import { AccessGate } from './components/Paywall/AccessGate';
 import { initBilling, getStableAnalyticsId } from './services/billingService';
 import { useFreeTierStore } from './stores/freeTierStore';
 import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
+
+const AcademyPage = lazyPage('AcademyPage', () => import('./components/Academy/AcademyPage').then((m) => m.AcademyPage));
+const CourseSyllabusPage = lazyPage('CourseSyllabusPage', () => import('./components/Academy/CourseSyllabusPage').then((m) => m.CourseSyllabusPage));
+const CourseTrainerPage = lazyPage('CourseTrainerPage', () => import('./components/Academy/CourseTrainerPage').then((m) => m.CourseTrainerPage));
+const OpeningExplorerPage = lazyPage('OpeningExplorerPage', () => import('./components/Openings/OpeningExplorerPage').then((m) => m.OpeningExplorerPage));
+const OpeningDetailPage = lazyPage('OpeningDetailPage', () => import('./components/Openings/OpeningDetailPage').then((m) => m.OpeningDetailPage));
+const SrsTrainerPage = lazyPage('SrsTrainerPage', () => import('./components/Openings/SrsTrainerPage').then((m) => m.SrsTrainerPage));
+const PuzzleTrainerPage = lazyPage('PuzzleTrainerPage', () => import('./components/Puzzles/PuzzleTrainerPage').then((m) => m.PuzzleTrainerPage));
+const AdaptivePuzzlePage = lazyPage<{ master?: boolean }>('AdaptivePuzzlePage', () => import('./components/Puzzles/AdaptivePuzzlePage').then((m) => m.AdaptivePuzzlePage));
+const MyMistakesPage = lazyPage('MyMistakesPage', () => import('./components/Puzzles/MyMistakesPage').then((m) => m.MyMistakesPage));
+const LichessDashboardPage = lazyPage('LichessDashboardPage', () => import('./components/Puzzles/LichessDashboardPage').then((m) => m.LichessDashboardPage));
+const WeaknessTagDrillPage = lazyPage('WeaknessTagDrillPage', () => import('./components/Puzzles/WeaknessTagDrillPage').then((m) => m.WeaknessTagDrillPage));
+const WeaknessThemesPage = lazyPage('WeaknessThemesPage', () => import('./components/Puzzles/WeaknessThemesPage').then((m) => m.WeaknessThemesPage));
+const CoachGamePage = lazyPage('CoachGamePage', () => import('./components/Coach/CoachGamePage').then((m) => m.CoachGamePage));
+const CoachChatPage = lazyPage('CoachChatPage', () => import('./components/Coach/CoachChatPage').then((m) => m.CoachChatPage));
+const CoachSessionPage = lazyPage('CoachSessionPage', () => import('./components/Coach/CoachSessionPage').then((m) => m.CoachSessionPage));
+const CoachAnalysePage = lazyPage('CoachAnalysePage', () => import('./components/Coach/CoachAnalysePage').then((m) => m.CoachAnalysePage));
+const CoachTrainPage = lazyPage('CoachTrainPage', () => import('./components/Coach/CoachTrainPage').then((m) => m.CoachTrainPage));
+const TrainingPlanRolodexPage = lazyPage('TrainingPlanRolodexPage', () => import('./components/Coach/TrainingPlanRolodexPage').then((m) => m.TrainingPlanRolodexPage));
+const GameInsightsPage = lazyPage('GameInsightsPage', () => import('./components/Insights/GameInsightsPage').then((m) => m.GameInsightsPage));
+const GamesDrilldownPage = lazyPage('GamesDrilldownPage', () => import('./components/Insights/GamesDrilldownPage').then((m) => m.GamesDrilldownPage));
+const CoachTeachPage = lazyPage('CoachTeachPage', () => import('./components/Coach/CoachTeachPage').then((m) => m.CoachTeachPage));
+const ProGamesPage = lazyPage('ProGamesPage', () => import('./components/Coach/ProGamesPage').then((m) => m.ProGamesPage));
+const CoachEndgamePage = lazyPage('CoachEndgamePage', () => import('./components/Coach/CoachEndgamePage').then((m) => m.CoachEndgamePage));
+const EndgameTrainerPage = lazyPage('EndgameTrainerPage', () => import('./components/Coach/EndgameTrainerPage').then((m) => m.EndgameTrainerPage));
+const FundamentalsPage = lazyPage('FundamentalsPage', () => import('./components/Coach/FundamentalsPage').then((m) => m.FundamentalsPage));
+const CoachesLibraryPage = lazyPage('CoachesLibraryPage', () => import('./components/Coach/CoachesLibraryPage').then((m) => m.CoachesLibraryPage));
+const CoachReviewListPage = lazyPage('CoachReviewListPage', () => import('./components/Coach/CoachReviewListPage').then((m) => m.CoachReviewListPage));
+const CoachReviewSessionPage = lazyPage('CoachReviewSessionPage', () => import('./components/Coach/CoachReviewSessionPage').then((m) => m.CoachReviewSessionPage));
+const CoachPage = lazyPage('CoachPage', () => import('./components/Coach/CoachPage').then((m) => m.CoachPage));
+const TacticsPage = lazyPage('TacticsPage', () => import('./components/Tactics/TacticsPage').then((m) => m.TacticsPage));
+const FindSquarePage = lazyPage('FindSquarePage', () => import('./components/Tactics/FindSquarePage').then((m) => m.FindSquarePage));
+const AnalysisPracticePage = lazyPage('AnalysisPracticePage', () => import('./components/Tactics/AnalysisPracticePage').then((m) => m.AnalysisPracticePage));
+const CalculationDrillPage = lazyPage('CalculationDrillPage', () => import('./components/Tactics/CalculationDrillPage').then((m) => m.CalculationDrillPage));
+const TacticalProfilePage = lazyPage('TacticalProfilePage', () => import('./components/Tactics/TacticalProfilePage').then((m) => m.TacticalProfilePage));
+const PatternSchoolPage = lazyPage('PatternSchoolPage', () => import('./components/Tactics/PatternSchoolPage').then((m) => m.PatternSchoolPage));
+const TacticDrillPage = lazyPage('TacticDrillPage', () => import('./components/Tactics/TacticDrillPage').then((m) => m.TacticDrillPage));
+const TacticSetupPage = lazyPage('TacticSetupPage', () => import('./components/Tactics/TacticSetupPage').then((m) => m.TacticSetupPage));
+const TacticCreatePage = lazyPage('TacticCreatePage', () => import('./components/Tactics/TacticCreatePage').then((m) => m.TacticCreatePage));
+const SettingsPage = lazyPage('SettingsPage', () => import('./components/Settings/SettingsPage').then((m) => m.SettingsPage));
+const OnboardingPage = lazyPage('OnboardingPage', () => import('./components/Settings/OnboardingPage').then((m) => m.OnboardingPage));
+const GameDatabasePage = lazyPage('GameDatabasePage', () => import('./components/Games/GameDatabasePage').then((m) => m.GameDatabasePage));
+const ImportPage = lazyPage('ImportPage', () => import('./components/Games/ImportPage').then((m) => m.ImportPage));
+const ProPlayerPage = lazyPage('ProPlayerPage', () => import('./components/Openings/ProPlayerPage').then((m) => m.ProPlayerPage));
+const KidModePage = lazyPage('KidModePage', () => import('./components/Kid/KidModePage').then((m) => m.KidModePage));
+const KidPiecePage = lazyPage('KidPiecePage', () => import('./components/Kid/KidPiecePage').then((m) => m.KidPiecePage));
+const JourneyMapPage = lazyPage('JourneyMapPage', () => import('./components/Kid/JourneyMapPage').then((m) => m.JourneyMapPage));
+const JourneyChapterPage = lazyPage('JourneyChapterPage', () => import('./components/Kid/JourneyChapterPage').then((m) => m.JourneyChapterPage));
+const FairyTaleMapPage = lazyPage('FairyTaleMapPage', () => import('./components/Kid/FairyTaleMapPage').then((m) => m.FairyTaleMapPage));
+const FairyTaleChapterPage = lazyPage('FairyTaleChapterPage', () => import('./components/Kid/FairyTaleChapterPage').then((m) => m.FairyTaleChapterPage));
+const RookGamesPage = lazyPage('RookGamesPage', () => import('./components/Kid/RookGamesPage').then((m) => m.RookGamesPage));
+const RookMazePage = lazyPage('RookMazePage', () => import('./components/Kid/RookMazePage').then((m) => m.RookMazePage));
+const RowClearerPage = lazyPage('RowClearerPage', () => import('./components/Kid/RowClearerPage').then((m) => m.RowClearerPage));
+const MiniGameHubPage = lazyPage('MiniGameHubPage', () => import('./components/Kid/MiniGameHubPage').then((m) => m.MiniGameHubPage));
+const MiniGamePage = lazyPage('MiniGamePage', () => import('./components/Kid/MiniGamePage').then((m) => m.MiniGamePage));
+const KingEscapeGame = lazyPage('KingEscapeGame', () => import('./components/Kid/KingEscapeGame').then((m) => m.KingEscapeGame));
+const KingMarchGame = lazyPage('KingMarchGame', () => import('./components/Kid/KingMarchGame').then((m) => m.KingMarchGame));
+const KingGamesPage = lazyPage('KingGamesPage', () => import('./components/Kid/KingGamesPage').then((m) => m.KingGamesPage));
+const BishopGamesPage = lazyPage('BishopGamesPage', () => import('./components/Kid/BishopGamesPage').then((m) => m.BishopGamesPage));
+const BishopVsPawnsRoute = lazyPage('BishopVsPawnsRoute', () => import('./components/Kid/BishopGamesPage').then((m) => m.BishopVsPawnsRoute));
+const ColorWarsRoute = lazyPage('ColorWarsRoute', () => import('./components/Kid/BishopGamesPage').then((m) => m.ColorWarsRoute));
+const KidPiecePuzzlesPage = lazyPage('KidPiecePuzzlesPage', () => import('./components/Kid/KidPiecePuzzlesPage').then((m) => m.KidPiecePuzzlesPage));
+const PieceMazePage = lazyPage('PieceMazePage', () => import('./components/Kid/PieceMazePage').then((m) => m.PieceMazePage));
+const PieceSweepPage = lazyPage('PieceSweepPage', () => import('./components/Kid/PieceSweepPage').then((m) => m.PieceSweepPage));
+const PieceRaceGame = lazyPage('PieceRaceGame', () => import('./components/Kid/PieceRaceGame').then((m) => m.PieceRaceGame));
+const KnightArmyRoute = lazyPage('KnightArmyRoute', () => import('./components/Kid/PairArmyGame').then((m) => m.KnightArmyRoute));
+const BishopArmyRoute = lazyPage('BishopArmyRoute', () => import('./components/Kid/PairArmyGame').then((m) => m.BishopArmyRoute));
+const PieceLevelSelect = lazyPage('PieceLevelSelect', () => import('./components/Kid/PieceLevelSelect').then((m) => m.PieceLevelSelect));
+const KnightGamesPage = lazyPage('KnightGamesPage', () => import('./components/Kid/KnightGamesPage').then((m) => m.KnightGamesPage));
+const LeapFrogGame = lazyPage('LeapFrogGame', () => import('./components/Kid/LeapFrogGame').then((m) => m.LeapFrogGame));
+const KnightSweepGame = lazyPage('KnightSweepGame', () => import('./components/Kid/KnightSweepGame').then((m) => m.KnightSweepGame));
+const QueenGamesHub = lazyPage('QueenGamesHub', () => import('./components/Kid/QueenGamesHub').then((m) => m.QueenGamesHub));
+const QueenVsArmyRoute = lazyPage('QueenVsArmyRoute', () => import('./components/Kid/QueenGamesHub').then((m) => m.QueenVsArmyRoute));
+const QueensGauntletRoute = lazyPage('QueensGauntletRoute', () => import('./components/Kid/QueenGamesHub').then((m) => m.QueensGauntletRoute));
+const KidPuzzlePage = lazyPage('KidPuzzlePage', () => import('./components/Kid/KidPuzzlePage').then((m) => m.KidPuzzlePage));
+const GuidedGameHubPage = lazyPage('GuidedGameHubPage', () => import('./components/Kid/GuidedGameHubPage').then((m) => m.GuidedGameHubPage));
+const GuidedGamePage = lazyPage('GuidedGamePage', () => import('./components/Kid/GuidedGamePage').then((m) => m.GuidedGamePage));
+const NeonBoardMock = lazyPage('NeonBoardMock', () => import('./components/Board/NeonBoardMock').then((m) => m.NeonBoardMock));
+const DebugAuditPage = lazyPage('DebugAuditPage', () => import('./components/Debug/DebugAuditPage').then((m) => m.DebugAuditPage));
+const OpeningBlundersPage = lazyPage('OpeningBlundersPage', () => import('./components/Debug/OpeningBlundersPage').then((m) => m.OpeningBlundersPage));
+const PrivacyPolicyPage = lazyPage('PrivacyPolicyPage', () => import('./components/Legal/PrivacyPolicyPage').then((m) => m.PrivacyPolicyPage));
+const TermsOfServicePage = lazyPage('TermsOfServicePage', () => import('./components/Legal/TermsOfServicePage').then((m) => m.TermsOfServicePage));
+const SupportPage = lazyPage('SupportPage', () => import('./components/Legal/SupportPage').then((m) => m.SupportPage));
 
 /**
  * Mounted inside BrowserRouter so it can use router hooks. Wires the
@@ -543,6 +551,7 @@ export function App(): JSX.Element {
     <BrowserRouter>
       <NativeBackButton />
       <CoachActuatorBridge />
+      <Suspense fallback={<PageFallback />}>
       <Routes>
         {/* Standalone legal route — no app chrome, so the production URL
             (/privacy) doubles as the hosted privacy-policy link the App
@@ -727,6 +736,7 @@ export function App(): JSX.Element {
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
       </Routes>
+      </Suspense>
       <BuildVersionWidget />
       <StarAnimationLayer />
       {/* AI data-sharing consent — the ONLY first-run prompt now (the strength

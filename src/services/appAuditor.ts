@@ -65,6 +65,9 @@ export type AuditKind =
   | 'sanitizer-leak'
   // Runtime errors
   | 'uncaught-error'
+  // A route page's code failed to load (usually a chunk gone after a deploy);
+  // `lazyPage` reloads once, then lets the ErrorBoundary show it.
+  | 'lazy-page-load-failed'
   | 'unhandled-rejection'
   // Subsystem failures
   | 'tts-failure'

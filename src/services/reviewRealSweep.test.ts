@@ -180,6 +180,8 @@ describe.skipIf(!ON)('real-engine amateur sweep — every line board-true, nothi
     const repeats: Array<{ game: string; sentence: string; count: number }> = [];
     let plies = 0;
     let narrated = 0;
+    let words = 0;
+    const sample: Array<{ game: string; ply: number; san: string; line: string }> = [];
     for (const g of games) {
       const { moves, studentWB, rating } = inputsFor(g);
       const narration = await generateReviewNarration({
@@ -192,6 +194,8 @@ describe.skipIf(!ON)('real-engine amateur sweep — every line board-true, nothi
         plies += 1;
         if (!seg.narration) continue;
         narrated += 1;
+        words += seg.narration.split(/\s+/).filter(Boolean).length;
+        if (sample.length < 300 && games.indexOf(g) < 5) sample.push({ game: g.id, ply: seg.ply, san: seg.san, line: seg.narration });
         lines.push(seg.narration);
         violations.push(...scanLine(seg.narration, seg.fenAfter, studentWB, { game: g.id, ply: seg.ply, san: seg.san, line: seg.narration }, seg.fenBefore));
       }
@@ -204,10 +208,10 @@ describe.skipIf(!ON)('real-engine amateur sweep — every line board-true, nothi
     for (const v of violations) byRule[v.rule] = (byRule[v.rule] ?? 0) + 1;
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/review-real-sweep.json', JSON.stringify({
-      games: games.length, plies, narrated, byRule, repeats: repeats.length,
-      violations: violations.slice(0, 400), repeatSamples: repeats.slice(0, 200),
+      games: games.length, plies, narrated, words, wordsPerGame: Math.round(words / Math.max(1, games.length)), byRule, repeats: repeats.length,
+      violations: violations.slice(0, 400), repeatSamples: repeats.slice(0, 200), sample,
     }, null, 1));
-    console.log(`\n  REAL SWEEP: ${games.length} games, ${plies} plies, ${narrated} narrated — `
+    console.log(`\n  REAL SWEEP: ${games.length} games, ${plies} plies, ${narrated} narrated, ${words} words — `
       + `${violations.length} board-truth violations ${JSON.stringify(byRule)}, ${repeats.length} sentences said 3+ times\n`);
     for (const v of violations.slice(0, 25)) console.log(`  [${v.rule}] ${v.game} ply${v.ply} ${v.san}: ${v.detail}\n    → ${v.line.slice(0, 220)}`);
     for (const r of repeats.slice(0, 15)) console.log(`  [repeat×${r.count}] ${r.game}: ${r.sentence.slice(0, 160)}`);
