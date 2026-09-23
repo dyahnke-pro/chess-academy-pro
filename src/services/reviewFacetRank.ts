@@ -19,6 +19,7 @@
 import { matchClauseKind, boostFor, type WeaknessSignal } from './weaknessSignal';
 import type { ClauseKind } from './positionFacts';
 import { stakeValue, STAKED_FLOOR, type FactStakes } from './factStakes';
+import type { TeachingLayer } from './teachingLayers';
 
 /** Every tag `computeMoveFacets` (and the review's own passes) can emit. The
  *  Record below is exhaustive over this union, so a NEW tag fails to compile
@@ -31,7 +32,7 @@ export type FacetTag =
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
-  | 'note' | 'method';
+  | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -52,6 +53,12 @@ export const FACET_RANK: Record<FacetTag, number> = {
   threat: 85,
   tactic: 84,
   trapped: 80,
+  // "Not X, because Y" — the move most players at this level reach for, and
+  // the punishment. Below a live threat (that is the board), above the rest.
+  refuted: 82,
+  // "It looks aggressive but wins nothing" — the phantom threat, named so the
+  // student stops paying tempo for it.
+  bluff: 81,
   loose: 78,
   count: 76,
   royal: 74,
@@ -81,6 +88,12 @@ export const FACET_RANK: Record<FacetTag, number> = {
   'opp-target': 26,
   'opp-dev': 24,
   endgame: 22,
+  // The conversion step the board is on — the method, not the task.
+  technique: 34,
+  // Two good moves, one difference — the plan layer's fine choice.
+  contrast: 32,
+  // WHEN, not just what — the move a turn early would have lost.
+  timing: 31,
   // THE RACE OUTRANKS THE PLAN IT CORRECTS. `plan-now` says "push your passer";
   // `plan-race` says whether that plan arrives in time. Hearing the instruction
   // first and the disqualification second is backwards — the student has already
@@ -123,12 +136,17 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   threat: 'teach',
   tactic: 'teach',
   trapped: 'teach',
+  refuted: 'teach',
+  bluff: 'teach',
   loose: 'teach',          // a piece you can lose — actionable, not scenery
   sac: 'teach',
   'sac-why': 'teach',
   method: 'teach',
   opening: 'teach',        // naming the opening is the first move of the arc
   endgame: 'teach',        // the ending's technique, said once
+  technique: 'teach',
+  contrast: 'teach',
+  timing: 'teach',
   'plan-race': 'teach',
   'plan-now': 'teach',
   'plan-opening': 'teach',
@@ -184,6 +202,7 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   convert: 'teach',
   concept: 'teach',
   method: 'teach',
+  bluff: 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -198,6 +217,33 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
 export type FactKind = FacetTag | ClauseKind;
 
 export const FACT_ROLE: Record<FactKind, FacetRole> = { ...FACET_ROLE, ...CLAUSE_ROLE };
+
+/**
+ * THE TEACHING LAYER OF EVERY FACT KIND (WO-LAYERS-01, David 2026-09-23) — see
+ * `teachingLayers.ts`. SAFETY is what can be lost or won right now; PRINCIPLE
+ * the rules every game rests on; PLAN the structure and the judgement. The
+ * door orders by the student's standing in each layer and quiets a layer they
+ * have PROVEN. Exhaustive over `FactKind`, so a new kind fails to compile
+ * until someone decides which layer it teaches.
+ */
+export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
+  // SAFETY — the verdict on the move and what is forcing on the board.
+  quality: 'safety', move: 'safety', forced: 'safety', threat: 'safety',
+  tactic: 'safety', trapped: 'safety', refuted: 'safety', bluff: 'safety', loose: 'safety', count: 'safety',
+  royal: 'safety', sac: 'safety', 'sac-why': 'safety', method: 'safety',
+  'must-defend': 'safety', 'latent-danger': 'safety', 'latent-chance': 'safety',
+  'key-moment': 'safety', deliberation: 'safety', concept: 'safety',
+  // PRINCIPLE — development, the king, the opening, converting.
+  principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
+  does: 'principle', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
+  status: 'principle',
+  // PLAN — structure, targets, the plan and the long read.
+  'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
+  'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
+  badbishop: 'plan', complex: 'plan', minority: 'plan', worst: 'plan', 'opp-target': 'plan',
+  verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan',
+  'structure-plan': 'plan', 'opponent-intent': 'plan', 'student-leans': 'plan', 'opponent-leans': 'plan',
+};
 
 /**
  * THE TIE ORDER — used ONLY where no stakes decide: between facts that carry
@@ -222,6 +268,7 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'student-leans': FACET_RANK.worst,
   'opponent-leans': FACET_RANK.worst,
   method: FACET_RANK.method,
+  bluff: FACET_RANK.bluff,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 

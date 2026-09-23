@@ -50,7 +50,7 @@ import type { WeaknessSignal } from './weaknessSignal';
  *  `'unsupported'` (2026-09-23) — a DESCRIPTION of the board that pointed at
  *  none of the squares a teaching point on the same ply named (see
  *  `supportedFacts`). */
-export type QuietReason = 'subsumed' | 'below-bar' | 'said-already' | 'importance' | 'need' | 'unsupported';
+export type QuietReason = 'subsumed' | 'below-bar' | 'said-already' | 'importance' | 'need' | 'unsupported' | 'proven';
 
 export interface QuietFact {
   text: string;

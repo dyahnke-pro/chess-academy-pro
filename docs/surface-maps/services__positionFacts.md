@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1145 lines · 9 exports · 13 importers · 10 tests · 3 audits**
+**1178 lines · 9 exports · 13 importers · 11 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -63,29 +63,31 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8728`
+- `src/components/Coach/CoachTeachPage.tsx:8737`
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:641`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:253`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:295`
-- `src/services/positionFacts.test.ts:353`
-- `src/services/positionFacts.test.ts:354`
-- `src/services/positionReadComposer.ts:110`
+- `src/services/positionFacts.test.ts:355`
+- `src/services/positionFacts.test.ts:356`
+- `src/services/positionReadComposer.ts:116`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 56 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8681`
+### `computePositionFacts` (function) — 58 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8687`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:619`
+- `src/services/bluffDetector.test.ts:36`
+- `src/services/bluffDetector.test.ts:46`
 - `src/services/computerAccuracy.audit.test.ts:112`
-- `src/services/latentFork.test.ts:148`
-- `src/services/liveNeedGate.test.ts:127`
-- `src/services/liveNeedGate.test.ts:132`
-- `src/services/liveNeedGate.test.ts:146`
-- `src/services/liveNeedGate.test.ts:152`
+- `src/services/latentFork.test.ts:150`
+- `src/services/liveNeedGate.test.ts:130`
+- `src/services/liveNeedGate.test.ts:135`
+- `src/services/liveNeedGate.test.ts:149`
+- `src/services/liveNeedGate.test.ts:155`
 - `src/services/liveNeedWire.test.ts:22`
 - `src/services/liveNeedWire.test.ts:31`
 - `src/services/loopCloses.test.ts:112`
@@ -120,15 +122,15 @@
 - `src/services/positionFacts.test.ts:291`
 - `src/services/positionFacts.test.ts:301`
 - `src/services/positionFacts.test.ts:310`
-- `src/services/positionFacts.test.ts:331`
-- `src/services/positionFacts.test.ts:352`
-- `src/services/positionFacts.test.ts:368`
-- `src/services/positionFacts.test.ts:376`
+- `src/services/positionFacts.test.ts:333`
+- `src/services/positionFacts.test.ts:354`
+- `src/services/positionFacts.test.ts:370`
+- `src/services/positionFacts.test.ts:378`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
-- `src/services/positionReadComposer.ts:92`
+- `src/services/positionReadComposer.ts:98`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:89`
 - `src/test/computedOrderWired.test.ts:32`
@@ -136,6 +138,7 @@
 ## Tests
 
 - `src/hooks/useLiveCoach.needWire.test.tsx`
+- `src/services/bluffDetector.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/latentFork.test.ts`
 - `src/services/liveNeedGate.test.ts`

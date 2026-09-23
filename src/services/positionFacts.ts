@@ -13,6 +13,9 @@
 //  • `computeCriticality` is the sharpness SCORE (from the same analysis);
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
+import { layerStandings } from './teachingLayers';
+import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
+import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
@@ -140,6 +143,12 @@ export interface PositionFactsInput {
    * asks only whether the question was posed.
    */
   lastMove?: LastMoveInput;
+  /** THE OPPONENT'S MOVE that produced this board, when the student is to
+   *  move — raw board data (the board before it + its SAN), so this composer
+   *  can read what that move does TO the student: today, whether it is a BLUFF
+   *  (WO-LAYERS-01 step 4 — looks aggressive, wins nothing). Absent = the
+   *  surface has no such move; nothing is guessed. */
+  opponentLastMove?: { fenBefore: string; san: string };
   /** THE STUDENT'S NEED AT THIS PLY (N2) — the second half of the student model,
    *  and the half the live surfaces never had.
    *
@@ -210,7 +219,7 @@ export interface PositionFactsResult {
   remember: string[];
 }
 
-export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-chance' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method';
+export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-chance' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method' | 'bluff';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -642,7 +651,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   } catch { methodBeat = null; }
 
   const composed = applyWeaknessBoost(
-    buildClauses({ fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat }),
+    buildClauses({ fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null }),
     input.studentWeaknesses ?? [],
   );
 
@@ -720,6 +729,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // THIS STUDENT need teaching here", which is only a question about their
       // own move; on the opponent's ply it is null and importance decides.
       need: needVerdict,
+      // The student's standing per teaching layer — the same record that
+      // feeds the boost above, read as layers (WO-LAYERS-01).
+      layers: layerStandings(input.studentWeaknesses ?? [], input.studentNeedContext?.capabilities),
     },
     {
       facts: composed.map((c) => c.text),
@@ -880,6 +892,8 @@ function buildClauses(a: {
    *  at all. Distinct from `importance.speak`, which is posture-blind. */
   speaks: boolean;
   mustDefend: MustDefend;
+  /** The opponent's last move, read as a bluff (null = none, or no move given). */
+  bluff: Bluff | null;
   leansOn: LeansOn | null;
   opponentLeansOn: LeansOn | null;
   studentToMove: boolean;
@@ -1013,6 +1027,19 @@ function buildClauses(a: {
       stakes: { points: mustDefend.net, plies: studentToMove ? 2 : 1 },
     });
   }
+  // THE BLUFF (WO-LAYERS-01 step 4) — speaks in the opening too: "the knight
+  // jumps to d4, a move designed to scare a beginner". Only when a real threat
+  // is NOT standing (a must-defend above means something is genuinely hit).
+  if (a.bluff && !(mustDefend.net >= 3)) {
+    const bluff = a.bluff;
+    {
+      ranked.push({
+        kind: 'bluff', rank: 72,
+        text: `${bluffClause(bluff, openingPhase)}.`,
+        squares: [bluff.square, ...bluff.targets.map((t) => t.square)],
+      });
+    }
+  }
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
   // ranked just under a live hanging threat. Its gate (central king + tension +
   // aligned enemy heavy) is tight enough to stay off calm development.
@@ -1024,6 +1051,13 @@ function buildClauses(a: {
   }
   // In the opening, nothing but a real hanging threat / castle-now speaks — no
   // "critical moment" / "knife-edge" / "best piece, trade it off" on move one.
+  // THE METHOD, not the task (WO-LAYERS-01 step 5): the one conversion step
+  // this board is on — finish developing, trade pieces, make a passer, escort
+  // it, cut off the king. Only on the student's move, when they are a piece or
+  // more up. The old generic line stays for a decided game with no such edge.
+  const conversion = studentToMove ? readConversion(a.fen, studentSeat === 'white' ? 'w' : 'b') : null;
+  if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text });
+  else if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
   if (openingPhase) return ranked;
 
   // THE COMPUTED CONCEPT — the teachable idea of this position, from the SAME
@@ -1130,7 +1164,6 @@ function buildClauses(a: {
   // The campaign's structural plan — the textbook idea the pawn structure sets.
   if (structureText) ranked.push({ kind: 'structure-plan', rank: 35, text: structureText });
   // Convert-mode — decided game, one beat.
-  if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
   // THE METHOD, last (David 2026-09-16: "Calling out pins and forks isn't
   // teaching. Future moves, how to think, threat identification, that is
   // teaching"). Until now the habit teaching reached post-game review ONLY; the

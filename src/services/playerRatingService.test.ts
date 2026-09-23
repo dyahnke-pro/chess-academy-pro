@@ -110,7 +110,7 @@ describe('playerRatingService', () => {
     });
 
     // 5 coach games, all won by the player as white against engine at 1200.
-    // K=32 should push rating up from 1200.
+    // K=32 should push rating up from the anchor (no baseline → DEFAULT_RATING).
     const games = Array.from({ length: 5 }, (_, i) =>
       buildGameRecord({
         id: `coach-${i}`,
@@ -127,7 +127,7 @@ describe('playerRatingService', () => {
 
     const estimate = await getPlayerRatingEstimate();
     expect(estimate.source).toBe('coach-games');
-    expect(estimate.rating).toBeGreaterThan(1200);
+    expect(estimate.rating).toBeGreaterThan(DEFAULT_RATING);
   });
 
   it('ignores coach games when <5 played and falls back to profile', async () => {

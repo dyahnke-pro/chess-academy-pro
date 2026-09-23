@@ -2534,8 +2534,23 @@ export function describeMoveMerit(
   fenBefore: string,
   san: string,
   moverColor: 'white' | 'black',
+  /** The capture the PREVIOUS move made (square + points), or null. REQUIRED:
+   *  "wins the X" reads the board BEFORE the move only, so the recapture that
+   *  closes an even trade looked like a free queen ("It won their queen on
+   *  f6" — prod audit 2026-09-23, Qxf6 Qxf6 gxf6). A merit caller has the
+   *  previous move in hand; it must say so rather than inherit a default. */
+  prevCapture: { square: string | null; capturedValue: number } | null,
 ): string | null {
-  const geo = describeMoveGeometry(fenBefore, san, moverColor);
+  let geo = describeMoveGeometry(fenBefore, san, moverColor);
+  if (geo && /^wins the /.test(geo) && prevCapture?.square) {
+    try {
+      const mv = new Chess(fenBefore).move(san);
+      const got = mv?.captured ? (REVIEW_PIECE_VALUE[mv.captured] ?? 0) : 0;
+      // Taking back on the square the opponent just captured on, for no more
+      // than they took: that is the second half of a trade, not a win.
+      if (mv && mv.to === prevCapture.square && got <= prevCapture.capturedValue) geo = null;
+    } catch { /* keep geo */ }
+  }
   // STRONG, unambiguous geometry is the point — fork / real pin / check / mate /
   // a winning capture. Say it.
   // A merit clause is read from the MOVER's chair (`toOpponentSeat` swaps it

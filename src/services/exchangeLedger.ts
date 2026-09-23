@@ -15,7 +15,8 @@
 // piece names — "you come out with two knights for the rook" — which is the
 // sentence that settles the ambiguity AND carries the lesson (why an engine
 // still calls that fork a mistake). Pure chess.js, no engine, no model (G0/G3).
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
+import { legalSeeGainFor } from './positionReadingService';
 
 export type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
 
@@ -55,15 +56,21 @@ export function computeExchangeLedger(
     let mv;
     try { mv = chess.move(san); } catch { return null; }
     if (!mv) return null;
-    lastCaptureSq = mv.captured ? mv.to : null;
+    // The last capture square is REMEMBERED across quiet moves: after exd5 Nf6
+    // the pawn on d5 can still be taken back, and forgetting the square the
+    // moment a quiet move was played is how "exd5 Nf6" read as a won pawn.
+    if (mv.captured) lastCaptureSq = mv.to;
     if (!mv.captured || mv.captured === 'k') continue;
     const piece = mv.captured as PieceLetter;
     if (mv.color === studentColorWB) studentWon.push(piece);
     else opponentWon.push(piece);
   }
   const sum = (xs: PieceLetter[]): number => xs.reduce((a, p) => a + VALUE[p], 0);
-  const settled = lastCaptureSq === null
-    || !chess.moves({ verbose: true }).some((m) => m.to === lastCaptureSq && !!m.captured);
+  // Settled = the side that lost that square cannot profitably win it back,
+  // WHOEVER is to move (a take-back next move is still a take-back). Pin-aware.
+  const occupant = lastCaptureSq ? chess.get(lastCaptureSq as Square) : null;
+  const settled = lastCaptureSq === null || !occupant
+    || legalSeeGainFor(chess.fen(), lastCaptureSq as Square, occupant.color === 'w' ? 'b' : 'w') <= 0;
   return {
     settled,
     studentWon,
@@ -122,4 +129,61 @@ export function exchangeNetForLine(
   studentColorWB: 'w' | 'b',
 ): string | null {
   return describeExchange(computeExchangeLedger(fenBefore, sans, studentColorWB));
+}
+
+/**
+ * THE LINE AS PROOF (WO-LAYERS-01, from 424 narrated moves of Naroditsky: a
+ * line is played only to prove ONE claim — "Qxd4, Qxd4, and the knight forks on
+ * c2, winning a piece" — two to four plies that END ON THE RESULT, with no
+ * adjective per move). Ours spoke all six plies with a description on each
+ * ("the bishop trains on their rook on a8 — pressure they have to answer…"),
+ * 120–300 words a move.
+ *
+ * The shortest prefix of a projected line that already reaches the line's
+ * FINAL result:
+ *  - the whole line mates → the whole line (mate is the point), or
+ *  - the whole line ends on a FINISHED trade (no take-back on the last capture
+ *    square) with a net gain → the first point that net is reached and settled.
+ * Null when the line settles no material point — the line proves no material point,
+ * and the caller says the verdict instead of reciting it. The cut is decided by
+ * the claim, never by a count (G4.5: a cap stops after N regardless of worth).
+ */
+export interface LineProof {
+  /** Plies of the line that prove the point. */
+  plies: number;
+  mate: boolean;
+  ledger: ExchangeLedger | null;
+}
+
+export function proofCut(
+  fenBefore: string,
+  sans: readonly string[],
+  studentColorWB: 'w' | 'b',
+): LineProof | null {
+  // The claim is what the WHOLE line ends on — mate, or its settled net. A
+  // pawn grabbed on the way to a mate is not the point, so the cut is the
+  // shortest prefix that already reaches the line's FINAL result.
+  let chess: Chess;
+  try { chess = new Chess(fenBefore); } catch { return null; }
+  for (const san of sans) {
+    try { if (!chess.move(san)) return null; } catch { return null; }
+  }
+  if (chess.isCheckmate()) return { plies: sans.length, mate: true, ledger: null };
+  const full = computeExchangeLedger(fenBefore, sans, studentColorWB);
+  if (!full || !full.settled || full.netPawns === 0) return null;
+  for (let k = 1; k <= sans.length; k += 1) {
+    const ledger = computeExchangeLedger(fenBefore, sans.slice(0, k), studentColorWB);
+    if (ledger && ledger.settled && ledger.netPawns === full.netPawns) return { plies: k, mate: false, ledger };
+  }
+  return { plies: sans.length, mate: false, ledger: full };
+}
+
+/** The result a proof line ends on, from the student's seat, in piece names:
+ *  "you win a knight", "they win a rook", or the two-sided trade sentence. */
+export function describeProofResult(ledger: ExchangeLedger): string {
+  const two = describeExchange(ledger);
+  if (two) return two;
+  if (ledger.studentWon.length > 0 && ledger.opponentWon.length === 0) return `you win ${nameSide(ledger.studentWon)}`;
+  if (ledger.opponentWon.length > 0 && ledger.studentWon.length === 0) return `they win ${nameSide(ledger.opponentWon)}`;
+  return ledger.netPawns > 0 ? 'you come out ahead on material' : 'you come out behind on material';
 }

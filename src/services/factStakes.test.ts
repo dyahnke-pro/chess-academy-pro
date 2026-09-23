@@ -8,6 +8,7 @@
 // that a queen outweighs a knight, or that a bigger cost should lead. The
 // pawn-pin and no-stakes tests still pass then: the unified tie order already
 // puts a hanging piece over a coming pin (the old live table did not).
+import { ALL_GREY } from './teachingLayers';
 import { describe, it, expect } from 'vitest';
 import {
   exchangeStakes, forkPoints, lineTacticPoints, costStakes, stakeValue,
@@ -63,7 +64,7 @@ describe('factStakes — what a fact is worth, from the board', () => {
 });
 
 describe('the door orders every surface by computed value', () => {
-  const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST };
+  const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST, layers: ALL_GREY };
   const blunder: ImportanceSignals = { decision: null, cpLossCp: 300, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
   const run = (facts: Array<[string, string, FactStakes | null]>) => decide(blunder, student, {
     facts: facts.map(([t]) => t),

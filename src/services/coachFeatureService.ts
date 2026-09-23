@@ -5,9 +5,11 @@ import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeS
 import { selectTeaching } from './teachingSelector';
 import { coldStudent, computeNeed, type StudentNeedContext, type NeedVerdict } from './needScore';
 import { loadStudentNeedContext } from './studentNeedLoader';
+import { layerStandings } from './teachingLayers';
+import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
-import { narrateDnaLine } from './dnaLineNarrator';
+import { andList } from '../utils/andList';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
@@ -32,7 +34,7 @@ import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { habitIsOwed, type MethodHabit } from './methodBeat';
 import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
-import { computeExchangeLedger, describeExchange } from './exchangeLedger';
+import { proofCut, describeProofResult, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import type { FactStakes } from './factStakes';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
@@ -960,8 +962,10 @@ function buildDeterministicNarration(params: {
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
+  /** The previous move's capture — a recapture is never a win (see describeMoveMerit). */
+  prevCapture: { square: string | null; capturedValue: number } | null;
 }): string | null {
-  const { ply, isStudentMove, classification, bestMoveSan, preMoveEval, evaluation, fenBefore, playedSan, moverColor } = params;
+  const { ply, isStudentMove, classification, bestMoveSan, preMoveEval, evaluation, fenBefore, playedSan, moverColor, prevCapture } = params;
   if (classification === null || classification === 'book' || classification === 'good') {
     return null;
   }
@@ -1025,7 +1029,7 @@ function buildDeterministicNarration(params: {
   // a real sacrifice (decoy/deflection), not a hang — name it as such rather
   // than mislabel it as development or fall silent.
   const playedMerit = isStudentMove
-    ? (describeMoveMerit(fenBefore, playedSan, moverColor) ?? describeSacrifice(fenBefore, playedSan))
+    ? (describeMoveMerit(fenBefore, playedSan, moverColor, prevCapture) ?? describeSacrifice(fenBefore, playedSan))
     : null;
 
   if (classification === 'brilliant') {
@@ -1253,6 +1257,9 @@ export function buildReviewSegments(
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
+  // WHERE THIS STUDENT STANDS PER TEACHING LAYER (WO-LAYERS-01), once per
+  // review — the same record every ply of the walk is judged against.
+  const layers = layerStandings(studentWeaknesses ?? [], studentNeed?.capabilities);
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once.
   let tradeIdeaSpoken = false;
@@ -1330,6 +1337,7 @@ export function buildReviewSegments(
   const boostByPly = selectorPkg.boostByPly;
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
+  const seenConversionSteps = new Set<ConversionStep>();
   const segments: ReviewMoveSegment[] = [];
   // §7: the endgame phase is announced once per game (the first quiet student
   // move that's in a readable endgame), not on every endgame ply.
@@ -1711,6 +1719,16 @@ export function buildReviewSegments(
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
       }, facetSquares, facetIncoming, facetStakes);
+      // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
+      // they are a piece or more up — the step the board is on, once per step
+      // per game (the step only changes when the board does).
+      if (moverColor === playerColor && studentColorWB) {
+        const conv = readConversion(fenPair.fenAfter, studentColorWB);
+        if (conv && !seenConversionSteps.has(conv.step)) {
+          seenConversionSteps.add(conv.step);
+          facets.push(`[technique] ${conv.text}`);
+        }
+      }
       // THE LOOP, OUT LOUD — ON THE PATH PROD ACTUALLY RUNS (WO-LOOP-01, run 4).
       // `isReviewUncapped()` is TRUE by default, so every shipped review beat is
       // composed here from facets; the capped block below never runs for a real
@@ -1944,6 +1962,7 @@ export function buildReviewSegments(
           // by `computeImportance` under `rank > 0` so it re-weights a moment a
           // computer already produced and never manufactures one.
           momentBoost: boostByPly.get(m.ply) ?? NO_BOOST,
+          layers,
           // 🚨 DELIBERATELY null, and this is why the field is required.
           //
           // Review DOES gate on need — narrowly, at `quietOpeningPly` below:
@@ -2118,6 +2137,7 @@ export function buildReviewSegments(
       fenBefore: fenPair.fenBefore,
       playedSan: m.san,
       moverColor,
+      prevCapture: prevCap,
     });
     // 🔒 THE FUNDAMENTAL LEADS; EVERYTHING ELSE IS EVIDENCE (David 2026-09-05:
     // "the fundamental flaw stated first and then the other computer narration
@@ -3135,77 +3155,34 @@ async function augmentWithProjections(
   // reliable window (Phase 2, David 2026-09-07: "spell the lines out for
   // everyone", "the more advanced player should get a DEEPER calculation").
   const deepThreatPlies = pvDepthForRating(rating);
-  // 🔒 A VERDICT WITHOUT ITS REASON IS THE EVAL BAR READ ALOUD (David
-  // 2026-09-16, on the shipped ply-29 line: "Why is the user clearly better?
-  // That sentence is missing"). The Narration Voice Rules call a sentence that
-  // names no square, piece or concept filler, and G0 says the coach voices
-  // FACTS, not a number — "you're clearly better" is the number.
-  //
-  // The app already computes the reasons: `assessPositionalEdge` returns
-  // {verdict, reasons} and the per-move [verdict] facet has been speaking
-  // "You're clearly better: you have the bishop pair" all along. This private
-  // `verdictWord` was a SECOND, dumber verdict computer over the same bands,
-  // and the projected lines got that one — the exact two-computers-one-job
-  // split David named. There is now one verdict computer; this reads the
-  // TERMINAL position of the line, so the reasons describe where the line
-  // ENDS, which is what the verdict is about.
-  const verdictAtEnd = (line: PvLine, studentPovCp: number | null): string => {
-    if (studentPovCp === null) return 'the position stays balanced';
-    const endFen = line.plies[line.plies.length - 1]?.fenAfter ?? null;
-    const assess = endFen ? assessPositionalEdge(endFen, studentColorWB, studentPovCp) : { verdict: null, reasons: [] };
-    // The fallback reads THE SAME ladder (`verdictBand`), never a second one.
-    // The first cut of this fix deleted `verdictWord` and then re-created its
-    // vocabulary right here as the no-assessment branch — caught only by
-    // grepping the deployed bundle. One ladder, one vocabulary, one place.
-    const word = `you're ${assess.verdict ?? verdictBand(studentPovCp) ?? 'balanced'}`;
-    // EVERY computed reason speaks (David 2026-09-16: "I DONT WANT ANYTHING
-    // LIMITED!!! We cannot set hard caps!!! That's how things don't get stated
-    // or teachings left out"). This line shipped with a slice(0, 2) on the
-    // reasoning that the line was already long — cost-flavoured reasoning about
-    // length, which the quality-is-the-only-metric rule bans outright. If the
-    // board supports four reasons the student hears four. No reasons computed →
-    // the word alone, never an invented why.
-    const why = assess.reasons.join('; ');
-    return why ? `${word}: ${why}` : word;
-  };
-  // Render the projected line in the DNA register — the SAME voice as the rest
-  // of the walk, written in code, no LLM (David 2026-09-07: "run dna through
-  // the computer NOT the llm"; "only says wins material… those narrations do
-  // not follow the same standard as everything else"). The shared
-  // `narrateDnaLine` merges each move's tactical outcome (a winning capture
-  // NAMES the piece won, never a bare repeated "wins material") with its
-  // board-true positional concept as flowing prose — no `SAN (…, wins
-  // material), then …` template. `rich` is retained for call-site
-  // compatibility; the DNA renderer is always rich. The recapture context is
-  // threaded inside the renderer, so an even trade never reads as a windfall.
+  // Render a projected line — computed in code, no LLM (G0). `rich` is kept
+  // for call-site compatibility.
   const render = (line: PvLine, _rich = false): string => {
-    const clause = narrateDnaLine(line.plies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), { studentColor: studentColorWB });
-    const lastPly = line.plies[line.plies.length - 1];
-    if (lastPly?.facts.isMate) return `${clause} — and it's mate`;
-    // THE NET OF THE SEQUENCE (N7). A line that trades on BOTH sides leaves the
-    // student counting captures in their head; the ledger says the outcome in
-    // piece names. Silent on a one-sided win or a plain recapture, so it only
-    // ever ADDS the thing the line could not show.
-    const ledger = line.plies.length > 0
-      ? computeExchangeLedger(line.plies[0].fenBefore, line.plies.map((p) => p.san), studentColorWB)
+    // 🔒 THE LINE AS PROOF (WO-LAYERS-01). A line is spoken only as far as the
+    // point it proves: mate, or a finished trade that wins something — the
+    // moves, then the result, no description per move ("Qxd4, Qxd4, and the
+    // knight forks on c2, winning a piece"). It replaced a six-ply recital
+    // with an adjective on every move, which ran 120–300 words a ply.
+    const sans = line.plies.map((p) => p.san);
+    const proof = linePlies(line);
+    if (proof.proof) {
+      const moves = andList(sans.slice(0, proof.plies));
+      return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
+    }
+    // No material point settles: the line proves nothing a sentence can hold,
+    // and its verdict is already the move's own verdict. Say nothing — every
+    // caller skips an empty line (a recital of moves that prove nothing is
+    // exactly what this replaced).
+    return '';
+  };
+  /** How many plies of a line are SPOKEN (and so drawn): the proof's length,
+   *  or just the first move when nothing settles. One answer for the voice and
+   *  the arrows, so the board never plays moves the coach did not name. */
+  const linePlies = (line: PvLine): { plies: number; proof: LineProof | null } => {
+    const proof = line.plies.length > 0
+      ? proofCut(line.plies[0].fenBefore, line.plies.map((p) => p.san), studentColorWB)
       : null;
-    const net = describeExchange(ledger);
-    const withNet = net ? `${clause} — ${net}` : clause;
-    // Append an outcome verdict ONLY when the terminal position was actually
-    // re-evaluated (D#1). `terminalEvalCp === null` on a non-mate line means the
-    // verify pass failed (`delivers=false`); falling back to the ROOT eval would
-    // spell "you're winning" on a line the engine never confirmed. The gated
-    // passes (#3/#5) never reach that state, but the ungated better-line pass
-    // (#4) could — so narrate the line WITHOUT a verdict rather than invent one.
-    if (line.terminalEvalCp == null) return withNet;
-    const studentPov = studentColorWB === 'w' ? line.terminalEvalCp : -line.terminalEvalCp;
-    // COMPENSATION READS "BUT", NOT "AND" (N7). When the ledger and the engine
-    // disagree in sign — material lost, position won, or the reverse — that
-    // tension IS the lesson, and "and" flattens it into a contradiction the
-    // student has to resolve alone.
-    const opposed = net != null && ledger != null && ledger.netPawns !== 0
-      && ((ledger.netPawns < 0 && studentPov >= 50) || (ledger.netPawns > 0 && studentPov <= -50));
-    return `${withNet}${opposed ? ', but ' : ' — and '}${verdictAtEnd(line, studentPov)}`;
+    return { plies: proof ? proof.plies : Math.min(1, line.plies.length), proof };
   };
   // David 2026-07-24: "we NEED arrows showing the lines the coach mentions. The
   // delta!" — whenever a projection line is spoken (render() above), the board
@@ -3217,6 +3194,7 @@ async function augmentWithProjections(
     const existing = spokenLineArrowPriority.get(s) ?? -1;
     if (priority <= existing) return;
     const arrows = line.plies
+      .slice(0, linePlies(line).plies)
       .filter((p) => p.uci && p.uci.length >= 4)
       .map((p) => ({ uci: p.uci, fenBefore: p.fenBefore, fenAfter: p.fenAfter }));
     if (arrows.length === 0) return;
@@ -3303,6 +3281,18 @@ async function augmentWithProjections(
       deepOppFens.set(s.fenAfter, nullMoveFen(s.fenAfter, oppWB));
     } catch { /* an unparseable segment simply contributes no probe */ }
   }
+  // Missed prevention (WO-LAYERS-01 step 6) — the student's flagged moves whose
+  // best move was QUIET: what was the opponent threatening before it? Probed
+  // as a free move for the opponent at the board before the slip.
+  const missedProphyFens = new Map<string, string>(); // segment fenBefore -> nullFen
+  for (const s of flaggedForPunish) {
+    if (s.playerColor !== studentColorName || !s.bestMoveSan) continue;
+    if (/[x+#=]/.test(s.bestMoveSan)) continue;
+    try {
+      if (new Chess(s.fenBefore).inCheck()) continue;
+      missedProphyFens.set(s.fenBefore, nullMoveFen(s.fenBefore, oppWB));
+    } catch { /* no probe for an unparseable board */ }
+  }
   // Prophylaxis — the student's quiet, still-silent moves from ply 10.
   const prophyFens = new Map<string, string>();
   if (scope !== 'mistakes') {
@@ -3329,6 +3319,7 @@ async function augmentWithProjections(
     ...[...deepFens.values()].map((fen) => ({ fen, maxPlies: deepThreatPlies })),
     ...[...deepOppFens.values()].map((fen) => ({ fen, maxPlies: deepThreatPlies })),
     ...[...prophyFens.values()].map((fen) => ({ fen, maxPlies: 3 })),
+    ...[...missedProphyFens.values()].map((fen) => ({ fen, maxPlies: 3 })),
   ];
   const poolDone = new Map<string, { promise: Promise<PvLine | null>; resolve: (v: PvLine | null) => void }>();
   /** One unit of pooled work. `engine` is the lane's own worker, or undefined
@@ -3476,10 +3467,11 @@ async function augmentWithProjections(
     flaggedForPunish.forEach((s, i) => {
       const line = lines[i];
       const isStudentSlip = s.playerColor === studentColorName;
-      if (line && line.delivers && line.plies.length >= 2) {
+      const proof = line && line.delivers && line.plies.length >= 2 ? render(line, true) : '';
+      if (line && proof) {
         const frame = isStudentSlip
-          ? `Here's how it gets punished from here: ${render(line, true)}.`
-          : `Here's how you take advantage: ${render(line, true)}.`;
+          ? `Here's how it gets punished from here: ${proof}.`
+          : `Here's how you take advantage: ${proof}.`;
         s.narration = `${s.narration ?? ''} ${frame}`.trim();
         attachLineArrows(s, line, 4); // punishment/advantage line
       }
@@ -3509,11 +3501,30 @@ async function augmentWithProjections(
     if (line && line.plies.length >= 3) {
       const bestName = line.plies[0].san;
       const why = got?.why ?? null;
-      s.narration = why
-        ? `${s.narration ?? ''} Why ${bestName} was better — ${why}. The line runs ${render(line, true)}.`.trim()
-        : `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line, true)}.`.trim();
-      attachLineArrows(s, line, 5); // the delta / better-line — David's named priority
-      whyBudget -= 1;
+      const proof = render(line, true);
+      // The why, and the line only where it PROVES something. Neither → the
+      // move's own verdict ("X keeps the edge") has already said it.
+      const parts = [why, proof ? `the line runs ${proof}` : null].filter((x): x is string => !!x);
+      if (parts.length > 0) {
+        s.narration = `${s.narration ?? ''} Why ${bestName} was better — ${parts.join('. ')}.`.trim();
+        if (proof) attachLineArrows(s, line, 5); // the delta / better-line — David's named priority
+        whyBudget -= 1;
+      }
+    }
+    // MISSED PREVENTION (WO-LAYERS-01 step 6 — "h3 takes g4 away before the
+    // pin"). Three engine reads must agree before it is said: the opponent's
+    // free move at the board before the slip (their threat), their reply to
+    // the move played (the punishment) — the SAME move — and their reply to
+    // the quiet best move, which is NOT that move. Only then did the best move
+    // take it away.
+    const nullFen = missedProphyFens.get(s.fenBefore);
+    if (nullFen && line && line.plies.length >= 2) {
+      const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
+      const [threat, punish] = await Promise.all([poolLine(nullFen, 3), poolLine(s.fenAfter, 6)]);
+      const t = threat?.plies[0]?.san;
+      if (t && punish?.plies[0] && strip(punish.plies[0].san) === strip(t) && strip(line.plies[1].san) !== strip(t)) {
+        s.narration = `${s.narration ?? ''} ${line.plies[0].san} first was the preventive move — it takes away their ${t}, and that is exactly the reply that punishes this.`.trim();
+      }
     }
   }
   mark('better');
@@ -3541,8 +3552,8 @@ async function augmentWithProjections(
       // AGREEMENT — extend the claim with the engine's continuation when it
       // has real follow-up teaching (2+ further plies).
       if (line.plies.length >= 3 && s.narration) {
-        const tail = narrateDnaLine(line.plies.slice(1).map((p) => ({ fenBefore: p.fenBefore, san: p.san })), { studentColor: studentColorWB });
-        s.narration = `${s.narration} The engine confirms it — and if they try to run, it continues ${tail}.`;
+        const tail = render({ ...line, plies: line.plies.slice(1) });
+        if (tail) s.narration = `${s.narration} The engine confirms it — and if they try to run, it continues ${tail}.`;
         attachLineArrows(s, line, 3); // confirmed threat continuation
       }
     } else if (s.narration) {
@@ -3623,7 +3634,9 @@ async function augmentWithProjections(
       // only describes where the game could go, and a long engine line speaks
       // only when it proves a point, so it stays quiet.
       if (!isForcingProjection(line)) continue;
-      s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${render(line)}.`.trim();
+      const deep = render(line);
+      if (!deep) continue;
+      s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${deep}.`.trim();
       attachLineArrows(s, line, 3); // deep threat (student's)
       deepBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
@@ -3680,7 +3693,9 @@ async function augmentWithProjections(
       // "threat"; decisive non-forcing → "idea/plan" (honest label). The decisive
       // ≥250cp gate is the noise floor; "left alone" is true for both.
       const oppDeepKind = isForcingProjection(line) ? 'threat' : 'idea';
-      let callOut = `Watch what they're building — left alone, their ${oppDeepKind} runs ${render(line)}.`;
+      const oppRun = render(line);
+      if (!oppRun) continue;
+      let callOut = `Watch what they're building — left alone, their ${oppDeepKind} runs ${oppRun}.`;
       const next = segments[i + 1];
       if (next && next.playerColor === studentColorName && next.bestMoveSan) {
         callOut += ` Your defense starts with ${next.bestMoveSan}.`;
@@ -4114,12 +4129,21 @@ export function toOpponentSeat(clause: string): string {
 }
 
 function fillSilentDevelopment(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
-  for (const s of segments) {
+  for (let i = 0; i < segments.length; i += 1) {
+    const s = segments[i];
     if (s.narration || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'inaccuracy') continue;
     if (s.ply < 3 || s.ply > 30) continue;
     const moverColor: 'white' | 'black' = s.ply % 2 === 1 ? 'white' : 'black';
     let merit: string | null = null;
-    try { merit = describeMoveMerit(s.fenBefore, s.san, moverColor); } catch { merit = null; }
+    const prev = segments[i - 1];
+    let prevCapture: { square: string | null; capturedValue: number } | null = null;
+    if (prev && prev.ply === s.ply - 1) {
+      try {
+        const pm = new Chess(prev.fenBefore).move(prev.san);
+        prevCapture = pm ? { square: pm.to, capturedValue: pm.captured ? ({ p: 1, n: 3, b: 3, r: 5, q: 9 } as Record<string, number>)[pm.captured] ?? 0 : 0 } : null;
+      } catch { prevCapture = null; }
+    }
+    try { merit = describeMoveMerit(s.fenBefore, s.san, moverColor, prevCapture); } catch { merit = null; }
     if (!merit) continue;
     const mine = moverColor === playerColor;
     s.narration = mine ? `It ${merit}.` : `Your opponent ${toOpponentSeat(merit)}.`;

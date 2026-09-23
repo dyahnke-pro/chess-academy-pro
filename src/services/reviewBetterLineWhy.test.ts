@@ -52,29 +52,31 @@ describe('review — the better-line why on flagged moves', () => {
     } as never);
   });
 
-  it('appends the ply-narrated engine line starting with the better move on an INACCURACY', async () => {
+  it('a line that settles nothing is not recited (WO-LAYERS-01: a line is spoken only as proof)', async () => {
+    // Ng5 d5 exd5 Na5 — …Nxd5 still wins the pawn back, so the line proves
+    // no material point, and the move's own verdict has already been said.
     const narration = await generateReviewNarration({
-      moves: buildMoves(),
-      playerColor: 'white',
-      openingName: 'Italian Game',
-      result: '1-0',
-      playerRating: 1500,
-      coachNarration: 'silent',
+      moves: buildMoves(), playerColor: 'white', openingName: 'Italian Game', result: '1-0', playerRating: 1500, coachNarration: 'silent',
     });
-    const flagged = narration.segments.find((s) => s.ply === 7);
-    expect(flagged).toBeTruthy();
-    const text = flagged?.narration ?? '';
-    // The why-line fired, led by the better move's SAN…
-    expect(text).toMatch(/Why Ng5 was better — the line runs/);
-    // …walks the line (the d5 strike and the exd5 capture appear)…
-    expect(text).toContain('d5');
-    // The capture ply carries its computed why in the DNA register — flowing
-    // prose, no robotic parenthetical (David 2026-09-07: "run dna through the
-    // computer"). e.g. "exd5, opens the e-file for the rooks".
-    expect(text).toMatch(/exd5, /);
-    expect(text).not.toContain('exd5 (');
-    // …and closes on a student-POV verdict.
-    expect(text).toMatch(/— and (you're|it's|the position)/);
+    const text = narration.segments.find((s) => s.ply === 7)?.narration ?? '';
+    expect(text).toMatch(/Ng5/);                   // the better move is still named
+    expect(text).not.toMatch(/the line runs/);     // …but no recital that proves nothing
+  });
+
+  it('a line that PROVES something is spoken to its result and stops', async () => {
+    // Ng5 h6 Nxf7 — the pawn on f7 falls and the knight is defended by the
+    // c4-bishop: a settled pawn. Then …Qe7 is a move the proof does not need.
+    analyzeMock.mockResolvedValue({
+      evaluation: 90,
+      bestMove: 'f3g5',
+      topLines: [{ moves: ['f3g5', 'h7h6', 'g5f7', 'd8e7'], evaluation: 90 }],
+    } as never);
+    const narration = await generateReviewNarration({
+      moves: buildMoves(), playerColor: 'white', openingName: 'Italian Game', result: '1-0', playerRating: 1500, coachNarration: 'silent',
+    });
+    const text = narration.segments.find((s) => s.ply === 7)?.narration ?? '';
+    expect(text).toMatch(/Why Ng5 was better — the line runs Ng5, h6 and Nxf7 — you win a pawn/);
+    expect(text).not.toMatch(/Qe7/);               // cut where the claim settled
   });
 
   it('stays silent when the flagged move has no recorded best move', async () => {

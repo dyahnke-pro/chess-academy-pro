@@ -28,8 +28,8 @@ describe('ratingBandFor', () => {
     // had nothing to pair with. 2500 is a real explorer bucket.
     expect(ratingBandFor(2400).band).toBe('2200,2500');
   });
-  it('defaults an unrated student to the 1200 cold-start prior', () => {
-    expect(ratingBandFor(NaN).band).toBe('1200,1400');
+  it('defaults an unrated student to the lowest band — the app serves beginners (2026-09-23)', () => {
+    expect(ratingBandFor(NaN).band).toBe('1000,1200');
   });
 });
 

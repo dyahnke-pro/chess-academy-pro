@@ -281,6 +281,32 @@ read and quoted in PLAN. No OTA dispatch — that is David's.
 report a branch + SHA; integrate on main in the order B → D → E → C, one
 ship-check per merge. Then A1.
 
+## 🎓 WO-LAYERS-01 — teach in LAYERS, the way Naroditsky does, chosen by the student's record (David 2026-09-23: "take those two different teaching styles and algo them in … all 7" · "default should be lowest setting. This app attacks beginner players")
+
+**The finding (read 424 narrated moves across 10 videos, then 8 low-Elo vs 7 high-Elo speedruns).** Length does not change with level — median ~25–30 words per move at both ends; ours ran 120–300. What changes is the LAYER:
+- **SAFETY** (700–1200): count attackers vs defenders, loose pieces, the first impulse corrected ("resist the check — capture first"), phantom threats ("don't buy the bluff"), a tactic with its test ("the Greek gift needs g5 free").
+- **PRINCIPLE**: develop, castle, trade when ahead, the conversion method (trade → passer → cut off → ladder).
+- **PLAN** (2000+): one goal for the game, targets, prophylaxis, the choice between two good moves, timing.
+- **Shared everywhere**: "not X, because Y" (the refuted alternative) and short lines played ONLY as proof of one claim (2–4 plies, ending on the result, no per-move adjectives).
+
+**The algorithm.** Rating is NOT the input (the locked grey rule; a new player's rating is a guess). The input is the student's record, including the game being played:
+1. `FACT_LAYER: Record<FactKind, TeachingLayer>` — every fact kind has a layer; a new kind fails to compile until it has one.
+2. `layerStanding(weaknesses, capabilities)` — per layer: RED (an open hole there), GREEN (proven held, `capabilityProven`, and nothing red), GREY (no evidence).
+3. The door: red layer raised; grey ordered bottom-up (safety → principle → plan); green layer QUIET unless the stakes are big (a hung queen still speaks to a strong player; "develop your knight" does not). A new quiet reason `proven`, emitted like every other gate.
+
+**Build order (all in this WO):**
+- [x] 0. `DEFAULT_STUDENT_RATING` 1200 → 400. Also removed two literals that had drifted from it: `explorerBandFor`'s own `1200` and `studentPlayingRating`'s `return 1200` (every new Play student faced a 1200 bot).
+- [x] 1. `teachingLayers.ts` (`layerStandings`, `layerBonus`) + `FACT_LAYER` + the door: `StudentContext.layers` REQUIRED, bottom-up order kept under red, GREEN quiet below `GREEN_QUIET_BELOW` (1.5 pawns) as `why/reason: 'proven'`. The fundamental still leads (locked 2026-09-05). Both audits accept `proven`.
+- [x] 2. `proofCut` + `describeProofResult` (exchangeLedger): the line is spoken to the shortest prefix that reaches its FINAL result (mate, or the settled net), then the result — no per-move adjectives; arrows cut to the same plies. Found + fixed on the way: `settled` forgot the last capture square after any quiet move (exd5 Nf6 read as a won pawn). HONEST: this cuts words, not engine time — the lines are still computed to 6 plies.
+- [x] 3. `[refuted]` from the punish-gems (amateur slips at rating bands): the slip the student AVOIDED, or the one the opponent PLAYED. The latter restores the review gem note, which sat in the capped branch no real review runs. Found + fixed: gem payoff called any 2-point gain "winning the exchange" (Watch/Learn too).
+- [x] 4. `bluffDetector.ts` — review `[bluff]` + live clause `bluff` (new `opponentLastMove` input, Learn passes the coach's reply). OWED: the dual-use record (student paid a tempo to a bluff) is not a tag yet.
+- [x] 5. `conversionMethod.ts` — the ONE step the board is on; live `convert` clause (before the opening gate) + review `[technique]` once per step per game.
+- [x] 6. Missed prevention (three engine reads must agree: the opponent's free move = the punishment, and not their reply to the best move) + `moveContrast.ts` `[contrast]` (what each move leaves undefended).
+- [x] 7. `moveTiming.ts` `[timing]` — the move a turn early lost material to a reply it caused and that no longer works.
+- [x] 8. `liveStrength.ts` — reads the SAME `capabilitiesPosed` + `movePlayedCleanly` the heat map records (one detector, two consumers); ±60 up / −35 down per posed question; Play reads it on every coach move. OWED: gem-hit and book-departure signals are not in it yet.
+
+**Fixed first, from the 5ef6f45 prod review audit:** "It won their queen on f6" on the recapture closing an even trade (`describeMoveMerit` now REQUIRES the previous capture); "It's a sacrifice" on the opponent's move (seated). Reopen-walk wedge = #21, another session's.
+
 ## 🎯 WO-HOME-OPENING-01 — a personal coach: one home opening per colour, everything reads it (David 2026-09-22)
 
 **Where this came from.** A full hand-driven evaluation on prod with David's own

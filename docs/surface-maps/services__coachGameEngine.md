@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1079 lines · 13 exports · 7 importers · 6 tests · 1 audits**
+**1081 lines · 13 exports · 7 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4014) — names `coachGameEngine`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4025) — names `coachGameEngine`
 
 ## Who calls in
 
@@ -64,11 +64,11 @@
 - `src/services/ratingBands.test.ts:62`
 
 ### `getRandomLegalMove` (function) — 7 call sites
-- `src/components/Coach/CoachGamePage.tsx:2668`
-- `src/components/Coach/CoachGamePage.tsx:2683`
-- `src/components/Coach/CoachGamePage.tsx:2970`
-- `src/components/Coach/CoachGamePage.tsx:3008`
-- `src/components/Coach/CoachTeachPage.tsx:7203`
+- `src/components/Coach/CoachGamePage.tsx:2702`
+- `src/components/Coach/CoachGamePage.tsx:2717`
+- `src/components/Coach/CoachGamePage.tsx:3004`
+- `src/components/Coach/CoachGamePage.tsx:3042`
+- `src/components/Coach/CoachTeachPage.tsx:7195`
 - `src/components/Openings/OpeningPlayMode.tsx:695`
 - `src/components/Openings/OpeningPlayMode.tsx:720`
 
@@ -98,14 +98,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `prewarmTeachingReplies` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:465`
+- `src/components/Coach/CoachGamePage.tsx:488`
 
 ### `pickTeachingReply` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:2425`
+- `src/components/Coach/CoachGamePage.tsx:2459`
 
 ### `getAdaptiveMove` (function) — 28 call sites
-- `src/components/Coach/CoachGamePage.tsx:2486`
-- `src/components/Coach/CoachTeachPage.tsx:7188`
+- `src/components/Coach/CoachGamePage.tsx:2520`
+- `src/components/Coach/CoachTeachPage.tsx:7180`
 - `src/components/Openings/OpeningPlayMode.tsx:686`
 - `src/services/coachGameEngine.test.ts:70`
 - `src/services/coachGameEngine.test.ts:84`
@@ -134,13 +134,13 @@
 - `src/services/coachGameEngine.test.ts:498`
 
 ### `studentPlayingRating` (function) — 16 call sites
-- `src/App.tsx:155`
-- `src/components/Coach/CoachGamePage.tsx:404`
-- `src/components/Coach/CoachTeachPage.tsx:7182`
-- `src/components/Coach/CoachTeachPage.tsx:7191`
-- `src/components/Coach/CoachTeachPage.tsx:8495`
-- `src/components/Coach/CoachTeachPage.tsx:10950`
-- `src/components/Coach/CoachTeachPage.tsx:12121`
+- `src/App.tsx:163`
+- `src/components/Coach/CoachGamePage.tsx:422`
+- `src/components/Coach/CoachTeachPage.tsx:7174`
+- `src/components/Coach/CoachTeachPage.tsx:7183`
+- `src/components/Coach/CoachTeachPage.tsx:8330`
+- `src/components/Coach/CoachTeachPage.tsx:10751`
+- `src/components/Coach/CoachTeachPage.tsx:11876`
 - `src/services/coachGameEngine.test.ts:586`
 - `src/services/coachGameEngine.test.ts:592`
 - `src/services/coachGameEngine.test.ts:593`
@@ -151,10 +151,12 @@
 - `src/services/coachGameEngine.test.ts:608`
 - `src/services/coachGameEngine.test.ts:618`
 
-### `getTargetStrength` (function) — 11 call sites
-- `src/App.tsx:154`
-- `src/components/Coach/CoachGamePage.tsx:449`
-- `src/components/Coach/CoachTeachPage.tsx:7182`
+### `getTargetStrength` (function) — 13 call sites
+- `src/App.tsx:162`
+- `src/components/Coach/CoachGamePage.tsx:467`
+- `src/components/Coach/CoachGamePage.tsx:2461`
+- `src/components/Coach/CoachGamePage.tsx:2520`
+- `src/components/Coach/CoachTeachPage.tsx:7174`
 - `src/components/Openings/OpeningPlayMode.tsx:71`
 - `src/services/coachGameEngine.test.ts:183`
 - `src/services/coachGameEngine.test.ts:187`

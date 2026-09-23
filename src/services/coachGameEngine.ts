@@ -14,7 +14,7 @@ import { teachableSlipAt } from './gemCrushLines';
 import { configFromTargetElo } from './coachPlaySession';
 import { logAppAudit } from './appAuditor';
 import type { StockfishAnalysis, CoachDifficulty } from '../types';
-import { explorerBandFor } from './ratingBands';
+import { explorerBandFor, DEFAULT_STUDENT_RATING } from './ratingBands';
 
 // Budget for the skill-limited opponent search before falling back to a
 // movetime best-move. 8s (was 5s) gives the slower single-threaded iOS engine
@@ -1063,7 +1063,9 @@ export function studentPlayingRating(
   // than a constant, and a fresh profile has them equal anyway.
   const puzzles = profile?.puzzleRating;
   if (typeof puzzles === 'number' && Number.isFinite(puzzles) && puzzles > 0) return puzzles;
-  return 1200;
+  // THE ONE DEFAULT (the app serves beginners — David 2026-09-23). A second
+  // literal here put every new Play student against a 1200 bot.
+  return DEFAULT_STUDENT_RATING;
 }
 
 /** ELO offset per difficulty level relative to the player rating. */

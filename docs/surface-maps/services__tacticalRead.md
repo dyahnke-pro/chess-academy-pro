@@ -72,7 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:74`
 
 ### `namedTacticClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9028`
+- `src/components/Coach/CoachTeachPage.tsx:9031`
 - `src/services/danyaBehaviors.ts:320`
 - `src/services/danyaDeviceCoverage.test.ts:101`
 - `src/services/tacticalRead.test.ts:134`
@@ -105,14 +105,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `temptingTurnClause` (function) — 5 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8506`
-- `src/components/Coach/CoachTeachPage.tsx:9047`
+- `src/components/Coach/CoachTeachPage.tsx:9050`
 - `src/services/danyaDeviceCoverage.test.ts:78`
 - `src/services/tacticalRead.test.ts:427`
 - `src/services/tacticalRead.test.ts:440`
 
 ### `uncertaintyClause` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8507`
-- `src/components/Coach/CoachTeachPage.tsx:9050`
+- `src/components/Coach/CoachTeachPage.tsx:9053`
 - `src/services/danyaDeviceCoverage.test.ts:83`
 - `src/services/liveVoiceDefects.test.ts:281`
 - `src/services/tacticalRead.test.ts:412`

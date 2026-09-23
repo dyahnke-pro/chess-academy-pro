@@ -11,6 +11,11 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { readTiming, timingClause } from './moveTiming';
+import { contrastMoves, contrastClause } from './moveContrast';
+import { detectBluff, bluffClause } from './bluffDetector';
+import { computeGemCrush } from './gemCrushLines';
+import { getPunishGemById } from '../data/lessons/punishGems';
 import { Chess, type Color } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
 import { legalSeeGainOn, findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
@@ -631,7 +636,9 @@ export function computeMoveFacets(
         const moverPovBeforeCp = ctx.preMoveEval == null || isMateEval(ctx.preMoveEval) ? null
           : (moverWB === 'w' ? ctx.preMoveEval : -ctx.preMoveEval);
         const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp, moverWB === studentColorWB, moverPovBeforeCp);
-        if (comp.length) facets.push(`[sac] It's a sacrifice — compensation: ${comp.join('; ')}.`);
+        // Seated: "It's a sacrifice" on the opponent's move read as the student's
+        // own (prod 2026-09-23, QGD c4). The clauses are already seated.
+        if (comp.length) facets.push(`[sac] ${moverWB === studentColorWB ? 'Your' : 'Their'} move is a sacrifice — compensation: ${comp.join('; ')}.`);
         const mech = isStudent ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
         if (mech) facets.push(`[sac-why] ${cap(mech)}.`);
         const shield = isStudent ? describeSacBreaksKingShield(fenBefore, san) : null;
@@ -639,6 +646,77 @@ export function computeMoveFacets(
       }
     }
   } catch { /* ignore */ }
+
+  // ── 7c. TWO GOOD MOVES, ONE DIFFERENCE (WO-LAYERS-01 step 6). The student's
+  // move and the engine's best were both fine; name the one board-true thing
+  // that separates them — what one of them leaves undefended.
+  const goodish = ctx.classification === null || ctx.classification === 'good' || ctx.classification === 'book'
+    || ctx.classification === 'great' || ctx.classification === 'excellent';
+  if (isStudent && goodish && ctx.bestMoveSan && ctx.bestMoveSan.replace(/[+#!?]+$/, '') !== san.replace(/[+#!?]+$/, '')) {
+    const c = contrastMoves(fenBefore, san, ctx.bestMoveSan);
+    if (c) {
+      const t = `[contrast] ${contrastClause(c)}.`;
+      facets.push(t);
+      recSquares(t, [c.square]);
+    }
+  }
+
+  // ── 7d. TIMING (WO-LAYERS-01 step 7) — the student's move, played a turn
+  // early, would have lost material to a reply that no longer works.
+  if (isStudent && ply >= 3 && ctx.allSans.length >= ply) {
+    try {
+      const early = new Chess();
+      for (const m of ctx.allSans.slice(0, ply - 3)) early.move(m);
+      const t = readTiming(early.fen(), fenBefore, san);
+      if (t) {
+        const f = `[timing] ${timingClause(t)}.`;
+        facets.push(f);
+        recSquares(f, [t.square]);
+      }
+    } catch { /* a replay that fails has no earlier board */ }
+  }
+
+  // ── 7a. THE BLUFF — "don't buy it" (WO-LAYERS-01 step 4). On the OPPONENT's
+  // move: their piece lands in the student's half hitting things, and wins
+  // nothing. Beginners spend tempo after tempo answering these.
+  if (!isStudent && studentColorWB) {
+    const bluff = detectBluff(fenBefore, san);
+    if (bluff) {
+      const t = `[bluff] ${bluffClause(bluff, ply <= 20)}.`;
+      facets.push(t);
+      recSquares(t, [bluff.square, ...bluff.targets.map((x) => x.square)]);
+    }
+  }
+
+  // ── 7b. THE REFUTED ALTERNATIVE — "not X, because Y" (WO-LAYERS-01 step 3).
+  // Naroditsky's single most common teaching move at every level: name the
+  // move the student was about to play and why it fails. The data is the
+  // mined punish-gems — amateur slips at rating bands, with their frequency,
+  // an engine-verified punishment and the board-computed payoff (G3). Two
+  // shapes: the mover AVOIDED a known slip (student ply — teach why), or the
+  // opponent PLAYED one (the crush the student had — restores the review gem
+  // note, which sat in the capped branch no real review runs).
+  if (ply <= 24 && ctx.allSans.length >= ply) {
+    try {
+      const crush = computeGemCrush(undefined, ctx.allSans.slice(0, ply - 1));
+      if (crush) {
+        const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
+        const gem = getPunishGemById(crush.gemId);
+        const played = strip(san) === strip(crush.inaccuracy);
+        const moverSlips = moverColor === crush.opponentSide;
+        if (isStudent && moverSlips && !played) {
+          const freq = gem && gem.freqPct > 0 ? ` in ${Math.round(gem.freqPct)}% of games` : '';
+          facets.push(`[refuted] Players at your level often play ${crush.inaccuracy} here${freq} — it loses to ${crush.punish}, ${crush.payoff}.`);
+        } else if (!isStudent && moverSlips && played) {
+          const next = ctx.allSans[ply];
+          const found = next !== undefined && strip(next) === strip(crush.punish);
+          facets.push(found
+            ? `[refuted] ${crush.inaccuracy} is a known mistake at club level, and you punished it with ${crush.punish}, ${crush.payoff}.`
+            : `[refuted] ${crush.inaccuracy} is a known mistake at club level — ${crush.punish} punishes it, ${crush.payoff}.`);
+        }
+      }
+    } catch { /* no gem here */ }
+  }
 
   // ── 8. FORCED MATING RUN — this ply begins a forced checking finish ──
   if (ctx.forcedRunStartPly != null && ply === ctx.forcedRunStartPly) {

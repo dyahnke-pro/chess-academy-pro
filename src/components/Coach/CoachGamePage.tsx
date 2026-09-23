@@ -1,3 +1,4 @@
+import { startLiveStrength, updateLiveStrength, type LiveStrength } from '../../services/liveStrength';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -464,6 +465,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // Mount-only: a later store change is someone ASKING for it, not a re-seed.
   }, [initialDifficulty, difficulty, setDifficulty]);
   const targetStrength = getTargetStrength(playerRating, difficulty);
+  // STRENGTH MATCHED IN REAL TIME, FROM MOVE ONE (WO-LAYERS-01 step 8). Seeded
+  // from the stored rating (a new player: the lowest setting), moved by the
+  // same "did they answer the question the board posed" evidence the heat map
+  // records, and read on every coach move — reset when a fresh game starts.
+  const liveStrengthRef = useRef<LiveStrength>(startLiveStrength(playerRating));
 
   // Time control selection (disabled once the game has started). Defaults to
   // Unlimited unless a `?time=` intent param requests a clocked game.
@@ -2138,10 +2144,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   // Reset the clock + per-ply history whenever a fresh game starts.
   useEffect(() => {
+    // Each game re-seeds from the stored rating; the in-game estimate is this
+    // game's calibration, not a second persisted rating.
+    liveStrengthRef.current = startLiveStrength(playerRating);
     resetClock();
     prevMovesLenRef.current = 0;
     clockHistoryRef.current = [];
-  }, [gameState.gameId, resetClock]);
+  }, [gameState.gameId, resetClock, playerRating]);
 
   // WO-RESUME-01: restore a resumed game's remaining clock. Declared
   // AFTER the reset-on-gameId effect above so it wins: the resume sets a
@@ -2446,10 +2455,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             // ONE DOOR: the taught slip, then the home-opening steer (A7),
             // in the engine's own order — `pickTeachingReply` — so this page
             // and `getAdaptiveMove` can never disagree about precedence.
+            const liveElo = liveStrengthRef.current.rating;
             const teaching = await pickTeachingReply(
               game.fen,
-              targetStrength,
-              { studentElo: playerRating, difficulty, steerHomeFor: playerColor },
+              getTargetStrength(liveElo, difficulty),
+              { studentElo: liveElo, difficulty, steerHomeFor: playerColor },
               'CoachGamePage.coachTurn',
             );
             if (teaching) {
@@ -2463,7 +2473,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         }
         if (!brainPickSan) {
           try {
-            const config = resolvePlayConfig(difficulty, playerRating);
+            const config = resolvePlayConfig(difficulty, liveStrengthRef.current.rating);
             const uciResult = await withTimeout(
               stockfishEngine.getBestMove(game.fen, config.moveTimeMs, config.skill, config.targetElo),
               Math.max(2_000, config.moveTimeMs + 1_000),
@@ -2490,7 +2500,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                   // not an Elo". Play is where most games happen and its
                   // opponent strength was unobservable in the log; that is how
                   // the dead wire survived.
-                  summary: `stockfish: ${result.san} at elo ${limitStrengthElo(config.targetElo)} (requested ${targetStrength}, UCI_LimitStrength, ${config.moveTimeMs}ms)`,
+                  summary: `stockfish: ${result.san} at elo ${limitStrengthElo(config.targetElo)} (requested ${targetStrength}, live ${liveStrengthRef.current.rating}, UCI_LimitStrength, ${config.moveTimeMs}ms)`,
                   fen: game.fen,
                 });
               }
@@ -2507,7 +2517,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         if (!brainPickSan) {
           try {
             const adaptive = await withTimeout(
-              getAdaptiveMove(game.fen, targetStrength),
+              getAdaptiveMove(game.fen, getTargetStrength(liveStrengthRef.current.rating, difficulty)),
               8_000,
               'coach-move-adaptive-fallback',
             );
@@ -3249,6 +3259,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       moverColor: playerColor,
       cpLoss: analysis ? evalLoss : null,
       sourceGameId: gameState.gameId,
+    });
+    // The SAME graded move moves the opponent's strength (one detector, two
+    // consumers — never a second estimator).
+    liveStrengthRef.current = updateLiveStrength(liveStrengthRef.current, {
+      fenBefore: preFen, san: moveResult.san, moverColor: playerColor, cpLoss: analysis ? evalLoss : null,
     });
 
     // bestMove from pre-analysis = what the player SHOULD have played (convert UCI → SAN)

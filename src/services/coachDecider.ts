@@ -31,7 +31,9 @@
 // verdict with a reason attached — never an absence.
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
-import { factKind, factValue, FACT_ROLE, type FactKind, type FacetRole } from './reviewFacetRank';
+import { factKind, factValue, FACT_ROLE, FACT_LAYER, type FactKind, type FacetRole } from './reviewFacetRank';
+import { layerBonus, type LayerStandings } from './teachingLayers';
+import { STAKED_FLOOR } from './factStakes';
 import type { FactStakes } from './factStakes';
 import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -101,7 +103,21 @@ export interface StudentContext {
    * `NO_BOOST`.
    */
   momentBoost: StudentBoost;
+  /** WHERE THIS STUDENT STANDS IN EACH TEACHING LAYER (WO-LAYERS-01) —
+   *  `layerStandings(weaknesses, capabilities)`, from their own record. The
+   *  door teaches the layers bottom-up, raises a RED layer, and quiets a layer
+   *  they have PROVEN unless the stakes are big. REQUIRED for the same reason
+   *  `momentBoost` is: an optional student term is a lane's licence to forget
+   *  the student. `ALL_GREY` is a real answer (a fresh install). */
+  layers: LayerStandings;
 }
+
+/** Below this value a fact in a GREEN layer goes quiet — they have proven the
+ *  layer, so the routine instance teaches them nothing (Naroditsky to a 2200:
+ *  "Black defends with the bishop to d7", and nothing more). At or above it —
+ *  a pawn and a half at stake, landing now — the board speaks regardless: a
+ *  hung queen is not a lesson a strong player has outgrown. */
+export const GREEN_QUIET_BELOW = STAKED_FLOOR + 150;
 
 /** The facts a surface computed at this moment, with the geometry coupled from
  *  the computers that produced them (never scraped from the prose). */
@@ -179,7 +195,7 @@ export interface CoachDecision {
   /** Why it does or does not — the observability trail. */
   /** `empty`: the moment cleared both gates but its caller handed no facts —
    *  nothing was dropped, so it must not read as `unsupported` (walk 6, D1). */
-  reason: 'importance' | 'need' | 'unsupported' | 'empty' | 'spoken';
+  reason: 'importance' | 'need' | 'unsupported' | 'empty' | 'proven' | 'spoken';
   tier: ImportanceTier;
   /** Moment-level weight, for ordering moments against each other. */
   rank: number;
@@ -298,12 +314,26 @@ export function decide(
   // order, on every surface.
   const value = new Map<string, number>();
   for (const t of bundle.facts) {
-    value.set(t, factValue(kindOf(t), bundle.stakes?.get(t), student.weaknesses,
-      bundle.holeByFact?.has(t) ? bundle.holeByFact.get(t) : undefined));
+    const k = kindOf(t);
+    value.set(t, factValue(k, bundle.stakes?.get(t), student.weaknesses,
+      bundle.holeByFact?.has(t) ? bundle.holeByFact.get(t) : undefined)
+      + (k === null ? 0 : layerBonus(FACT_LAYER[k], student.layers)));
   }
+  // 2b — THE LAYERS (WO-LAYERS-01). A fact in a layer this student has PROVEN
+  // goes quiet unless the stakes are big. The method beat is exempt: whether a
+  // habit is still owed is the habit's own standing, read below.
+  const provenQuiet: QuietFact[] = [];
+  const live = bundle.facts.filter((t) => {
+    const k = kindOf(t);
+    if (k === null || k === 'method') return true;
+    if (student.layers[FACT_LAYER[k]] !== 'green') return true;
+    if ((value.get(t) ?? 0) >= GREEN_QUIET_BELOW) return true;
+    provenQuiet.push({ text: t, why: 'proven' });
+    return false;
+  });
   const roleOf = (t: string): FacetRole => { const k = kindOf(t); return k === null ? 'teach' : FACT_ROLE[k]; };
   const selection = selectFacts(
-    bundle.facts,
+    live,
     bundle.squares,
     importance.tier,
     student.weaknesses,
@@ -314,9 +344,10 @@ export function decide(
       family,
       // The floor sweeps trivia — a DESCRIPTION not worth its breath. A
       // teaching point is never trivia; whether it speaks is steps 1–2's call.
-      exemptFromBar: new Set(bundle.facts.filter((t) => roleOf(t) === 'teach')),
+      exemptFromBar: new Set(live.filter((t) => roleOf(t) === 'teach')),
     },
   );
+  selection.quiet = [...provenQuiet, ...selection.quiet];
   // 4b — TEACHING POINTS FIRST (2026-09-23). A description speaks only where it
   // supports a teaching point on this ply. One role table (`FACT_ROLE`) over
   // both vocabularies. Only review has a move-reason line (`[does]`) to keep on
@@ -343,7 +374,9 @@ export function decide(
   // support says nothing — and says WHICH gate closed it, rather than
   // reporting `speak: true` over an empty list.
   if (spoken.length === 0) {
-    const reason = bundle.facts.length === 0 ? 'empty' : 'unsupported';
+    const reason = bundle.facts.length === 0 ? 'empty'
+      : live.length === 0 ? 'proven'
+        : 'unsupported';
     return emit(posture, { ...base, speak: false, reason, spoken, quiet: selection.quiet }, student, false, bundle.stakes);
   }
   return emit(posture, { ...base, speak: true, reason: 'spoken', spoken, quiet: selection.quiet }, student, methodSpoke, bundle.stakes);
