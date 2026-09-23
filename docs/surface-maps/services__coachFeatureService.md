@@ -277,8 +277,8 @@
 - `src/services/reviewCorpusSweep.test.ts:148`
 - `src/services/reviewDeepThreat.test.ts:36`
 - `src/services/reviewDeepThreat.test.ts:62`
-- `src/services/reviewDeepThreat.test.ts:109`
-- `src/services/reviewDeepThreat.test.ts:145`
+- `src/services/reviewDeepThreat.test.ts:114`
+- `src/services/reviewDeepThreat.test.ts:150`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewNarrationBuild.ts:83`
 - `src/services/reviewRealSweep.test.ts:185`

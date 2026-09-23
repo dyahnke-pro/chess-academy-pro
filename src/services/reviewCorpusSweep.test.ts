@@ -152,7 +152,7 @@ describe('review corpus sweep — no board-untrue line hides in any path (David 
       });
       for (const seg of narration.segments) {
         if (!seg.narration) continue;
-        violations.push(...scanLine(seg.narration, seg.fenAfter, game.studentWB, { game: game.id, ply: seg.ply, san: seg.san, line: seg.narration }));
+        violations.push(...scanLine(seg.narration, seg.fenAfter, game.studentWB, { game: game.id, ply: seg.ply, san: seg.san, line: seg.narration }, seg.fenBefore));
       }
       for (const v of violations.slice(0, 60)) {
         console.log(`  [${v.rule}] ${v.game} ply${v.ply} ${v.san}: ${v.detail}\n    → ${v.line.slice(0, 200)}`);

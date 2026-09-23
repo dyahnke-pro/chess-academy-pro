@@ -193,7 +193,7 @@ describe.skipIf(!ON)('real-engine amateur sweep — every line board-true, nothi
         if (!seg.narration) continue;
         narrated += 1;
         lines.push(seg.narration);
-        violations.push(...scanLine(seg.narration, seg.fenAfter, studentWB, { game: g.id, ply: seg.ply, san: seg.san, line: seg.narration }));
+        violations.push(...scanLine(seg.narration, seg.fenAfter, studentWB, { game: g.id, ply: seg.ply, san: seg.san, line: seg.narration }, seg.fenBefore));
       }
       for (const r of repetitions(lines)) repeats.push({ game: g.id, ...r });
       if (dirty > 0) { mkdirSync('data/sources/sweep-corpus', { recursive: true }); writeFileSync(ENGINE_CACHE, JSON.stringify(cache)); dirty = 0; }

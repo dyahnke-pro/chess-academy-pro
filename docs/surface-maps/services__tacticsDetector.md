@@ -139,7 +139,7 @@
 - `src/services/weaknessAnalyzer.ts:1283`
 - `src/services/weaknessAnalyzer.ts:1444`
 - `src/services/weaknessAnalyzer.ts:1450`
-- `src/test/narrationScanner.ts:112`
+- `src/test/narrationScanner.ts:125`
 
 ## Tests
 

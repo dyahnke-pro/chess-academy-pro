@@ -72,11 +72,16 @@ describe('teaching refrains speak ONCE per review (David 2026-07-22)', () => {
     //
     // A square its remaining pawns still cover is NOT called weakened (1.e4).
     expect(texts[0]).not.toMatch(/g(?:ives|ave) up .* for good/);
-    // Ply 3 (c4) teaches the principle with the fact…
-    expect(texts[2]).toMatch(/gave up d3 for good — pawns don't move back/);
-    // …ply 5 (g4) keeps the FACT but not the refrain.
-    expect(texts[4]).toMatch(/gave up f3 for good/);
-    expect(texts[4]).not.toMatch(/pawns don't move back/);
+    // TEACHING POINTS FIRST (David 2026-09-23). "c4 gave up d3 for good" is a
+    // [delta] DESCRIPTION, and on these quiet book plies no teaching point
+    // names d3 or f3 — so it stays quiet and the move's own reason speaks.
+    // The 2026-07-22 version asserted the weakening was SPOKEN here; that was
+    // the describe-first register this build retired.
+    expect(texts[2]).not.toMatch(/gave up d3 for good/);
+    expect(texts[4]).not.toMatch(/gave up f3 for good/);
+    // …and the refrain, wherever a weakening does earn voice, is taught once.
+    const refrains = texts.filter((t) => t.includes("pawns don't move back")).length;
+    expect(refrains).toBeLessThanOrEqual(1);
     // The development nag ("boxed in at home") appears in exactly one segment.
     const nagCount = texts.filter((t) => t.includes('boxed in at home')).length;
     expect(nagCount).toBeLessThanOrEqual(1);

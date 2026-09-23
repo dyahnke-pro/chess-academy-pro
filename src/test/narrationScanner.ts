@@ -60,7 +60,15 @@ export interface Violation { game: string; ply: number; san: string; rule: strin
 
 /** The board-truth scanner. `fenAfter` is the position at this ply; `studentWB`
  *  is the student's colour (so "your"/"their" map to a concrete colour). */
-export function scanLine(line: string, fenAfter: string, studentWB: Color, ctx: Omit<Violation, 'rule' | 'detail'>): Violation[] {
+/**
+ * @param fenBefore the board BEFORE this ply's move, when the caller has it. A
+ *   CAPTURE clause on the move's own landing square ("It won the pawn on d4"
+ *   after Nxd4) names the piece that stood there until the move took it, so it
+ *   is judged on the board before the move — the same piece type must have
+ *   been there. PAST tense only: "win their weak pawn on d5" is a PLAN about
+ *   the board after, and reading it on the board before is a false seat error. Every other claim is judged on the board after, as always.
+ */
+export function scanLine(line: string, fenAfter: string, studentWB: Color, ctx: Omit<Violation, 'rule' | 'detail'>, fenBefore?: string): Violation[] {
   const out: Violation[] = [];
   const add = (rule: string, detail: string): void => { out.push({ ...ctx, rule, detail, line }); };
   let board: Chess;
@@ -90,11 +98,16 @@ export function scanLine(line: string, fenAfter: string, studentWB: Color, ctx: 
   // Piece-on-square: every "<poss>? <adj>? <piece> on <sq>" must be real, and a
   // your/their possessive must match the piece's actual colour.
   const pieceRe = new RegExp(`\\b(your|their|the)?\\s*(?:(?:${ADJ})\\s+)?(${PIECE_WORDS})\\s+on\\s+([a-h][1-8])\\b`, 'gi');
+  const landing = ctx.san.includes('x') ? (ctx.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?!.*[a-h][1-8])/)?.[1] ?? null) : null;
+  let before: Chess | null = null;
+  if (fenBefore && landing) { try { before = new Chess(fenBefore); } catch { before = null; } }
   for (const m of head.matchAll(pieceRe)) {
     const poss = (m[1] ?? '').toLowerCase();
     const type = WANT[m[2].toLowerCase()];
     const sq = m[3].toLowerCase();
-    const cell = board.get(sq as Parameters<typeof board.get>[0]);
+    const captureClause = before !== null && sq === landing
+      && /\b(won|took|captured|grabbed|picked up)\s*$/i.test(head.slice(0, m.index));
+    const cell = (captureClause && before ? before : board).get(sq as Parameters<typeof board.get>[0]);
     if (!cell || cell.type !== type) { add('phantom-piece', `"${m[0].trim()}" — board has ${cell ? cell.type : 'empty'} on ${sq}`); continue; }
     if (poss === 'your' && cell.color !== studentWB) add('seat-error', `"${m[0].trim()}" — that ${m[2]} is the opponent's`);
     if (poss === 'their' && cell.color !== enemy) add('seat-error', `"${m[0].trim()}" — that ${m[2]} is yours`);

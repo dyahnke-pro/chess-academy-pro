@@ -29,12 +29,13 @@ the coach says — an unrated player gets the full detectors (CLAUDE.md).
 ## SAY — which surfaces can reach the corpus?
 
 - **review**: 1 file(s)
-- **teach**: 1 file(s)
+- **teach**: 0 file(s)
 - **tactics**: 1 file(s)
 - **endgame**: 1 file(s)
 - **read-position**: 1 file(s)
 
-Every listed surface reaches the corpus.
+🚨 **ZERO on: teach.** A surface that coaches without the corpus
+coaches from nothing — and review is where the diagnosis happens.
 
 ## GROWTH — the third-coach tax
 
@@ -44,7 +45,7 @@ fact-computer count (which excludes infrastructure) lives in
 `surfaceComposition.scan.test.ts`, and duplicating its INFRA list here would be
 exactly the drifting-constant the rot rule bans.
 
-- **CoachTeachPage.tsx**: 104
+- **CoachTeachPage.tsx**: 102
 - **CoachGamePage.tsx**: 46
 - **CoachGameReview.tsx**: 43
 
