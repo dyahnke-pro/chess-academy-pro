@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4786 lines · 34 exports · 30 importers · 27 tests · 5 audits**
+**4663 lines · 34 exports · 31 importers · 28 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:57) — names `coachFeatureService`
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3738) — names `buildReviewSegments`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4058) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:5995) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:5985) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -43,6 +43,7 @@
 - `src/services/reviewNarrationCache.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
 
@@ -64,7 +65,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectBadHabitsFromGame` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:2091`
+- `src/components/Coach/CoachGamePage.tsx:2095`
 - `src/services/coachFeatureService.test.ts:200`
 - `src/services/coachFeatureService.test.ts:215`
 - `src/services/coachFeatureService.test.ts:238`
@@ -270,16 +271,17 @@
 ### `openingNameForKey` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:208`
 
-### `generateReviewNarration` (function) — 9 call sites
+### `generateReviewNarration` (function) — 10 call sites
 - `src/services/reviewBetterLineWhy.test.ts:56`
 - `src/services/reviewBetterLineWhy.test.ts:82`
-- `src/services/reviewCorpusSweep.test.ts:270`
+- `src/services/reviewCorpusSweep.test.ts:148`
 - `src/services/reviewDeepThreat.test.ts:36`
 - `src/services/reviewDeepThreat.test.ts:62`
 - `src/services/reviewDeepThreat.test.ts:109`
 - `src/services/reviewDeepThreat.test.ts:145`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewNarrationBuild.ts:83`
+- `src/services/reviewRealSweep.test.ts:185`
 
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
@@ -318,6 +320,7 @@
 - `src/services/reviewNarrationCache.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewNeedGate.test.ts`
+- `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
 

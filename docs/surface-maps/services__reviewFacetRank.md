@@ -4,19 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**179 lines · 5 exports · 3 importers · 1 tests · 0 audits**
+**236 lines · 7 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:940) — names `FACET_RANK`, `reviewFacetRank`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1004) — names `rankFacets`, `reviewFacetRank`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3783) — names `reviewFacetRank`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:944) — names `FACET_RANK`, `reviewFacetRank`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1008) — names `rankFacets`, `reviewFacetRank`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3823) — names `reviewFacetRank`
 
 ## Who calls in
 
 - `src/services/coachDecider.ts`
 - `src/services/factSelector.ts`
 - `src/services/reviewFacetRank.test.ts`
+- `src/services/supportedFacts.test.ts`
 
 ## Exports and every call site
 
@@ -26,19 +27,29 @@
 ### `FACET_RANK` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `facetTag` (function) — 3 call sites
+### `FacetRole` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `FACET_ROLE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `facetTag` (function) — 7 call sites
+- `src/services/coachDecider.ts:309`
+- `src/services/coachDecider.ts:310`
 - `src/services/reviewFacetRank.test.ts:19`
 - `src/services/reviewFacetRank.test.ts:20`
 - `src/services/reviewFacetRank.test.ts:21`
+- `src/services/supportedFacts.test.ts:7`
+- `src/services/supportedFacts.test.ts:8`
 
 ### `facetRank` (function) — 4 call sites
-- `src/services/factSelector.ts:164`
+- `src/services/factSelector.ts:213`
 - `src/services/reviewFacetRank.test.ts:51`
 - `src/services/reviewFacetRank.test.ts:55`
 - `src/services/reviewFacetRank.test.ts:61`
 
 ### `rankFacets` (function) — 7 call sites
-- `src/services/coachDecider.ts:265`
+- `src/services/coachDecider.ts:322`
 - `src/services/reviewFacetRank.test.ts:25`
 - `src/services/reviewFacetRank.test.ts:32`
 - `src/services/reviewFacetRank.test.ts:40`
@@ -49,6 +60,7 @@
 ## Tests
 
 - `src/services/reviewFacetRank.test.ts`
+- `src/services/supportedFacts.test.ts`
 
 ## Audits that reach it
 
