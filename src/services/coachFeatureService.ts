@@ -6,10 +6,10 @@ import { selectTeaching } from './teachingSelector';
 import { coldStudent, computeNeed, type StudentNeedContext, type NeedVerdict } from './needScore';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine } from './pvPlayback';
+import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
 import { narrateDnaLine } from './dnaLineNarrator';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
-import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
+import { explainEvalByPieceQuality, lowestMinorMobility, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
 // (removed spokenTacticNote / generalizedTeaching — review no longer voices a
@@ -3355,13 +3355,46 @@ async function augmentWithProjections(
     ...[...prophyFens.values()].map((fen) => ({ fen, maxPlies: 3 })),
   ];
   const poolDone = new Map<string, { promise: Promise<PvLine | null>; resolve: (v: PvLine | null) => void }>();
-  const poolTasks: Array<{ key: string; fen: string; maxPlies: number }> = [];
+  /** One unit of pooled work. `engine` is the lane's own worker, or undefined
+   *  when no pool could be had (then it runs on the singleton, as before). */
+  const poolTasks: Array<(engine: PvEngine | undefined) => Promise<void>> = [];
   for (const p of poolOrder) {
     const key = poolKey(p.fen, p.maxPlies);
     if (poolDone.has(key)) continue;
-    poolDone.set(key, deferred<PvLine | null>());
-    poolTasks.push({ key, ...p });
+    const d = deferred<PvLine | null>();
+    poolDone.set(key, d);
+    poolTasks.push(async (engine) => {
+      d.resolve(await raceTimeout(
+        computePvLine(p.fen, { maxPlies: p.maxPlies, ...(engine ? { engine } : {}) }),
+        PROJ_TIMEOUT_MS,
+        null,
+      ).catch(() => null));
+    });
   }
+  // #6 bad-piece ablation — POOLED too. Measured on the real game it ran every
+  // cramped-minor candidate one after another on the singleton (39.6s, the
+  // single longest pass). Each candidate is independent, so they go on the pool
+  // lanes; the pass still picks the biggest proven swing in candidate order.
+  const badPieceCandidates = segments
+    .filter((s) => s.ply >= 14 && !(s.evalAfter !== null && Math.abs(s.evalAfter) >= 5000))
+    .map((s) => ({ s, mob: lowestMinorMobility(s.fenAfter) }))
+    .filter((c) => c.mob <= 2)
+    .sort((a, b) => a.mob - b.mob);
+  const badPieceResults: Array<{ promise: Promise<PieceQualityResult | null>; resolve: (v: PieceQualityResult | null) => void }> =
+    badPieceCandidates.map(() => deferred<PieceQualityResult | null>());
+  badPieceCandidates.forEach((c, i) => {
+    poolTasks.push(async (engine) => {
+      const evaluate: Evaluate = async (fen) => {
+        const l = await raceTimeout(computePvLine(fen, { maxPlies: 1, ...(engine ? { engine } : {}) }), PROJ_TIMEOUT_MS, null);
+        return { cp: l ? l.rootEvalCp : NaN };
+      };
+      badPieceResults[i].resolve(await raceTimeout(
+        explainEvalByPieceQuality(c.s.fenAfter, evaluate, { swingThresholdCp: 150, pairThresholdCp: 220, baseCp: c.s.evalAfter ?? undefined }),
+        PROJ_TIMEOUT_MS * 2,
+        null,
+      ).catch(() => null));
+    });
+  });
   const poolLine = (fen: string, maxPlies: number): Promise<PvLine | null> =>
     poolDone.get(poolKey(fen, maxPlies))?.promise ?? Promise.resolve(null);
   // A pool that cannot be had degrades to the singleton exactly as before:
@@ -3382,19 +3415,14 @@ async function augmentWithProjections(
         for (;;) {
           const i = next++;
           if (i >= poolTasks.length) return;
-          const t = poolTasks[i];
-          const line = await raceTimeout(
-            computePvLine(t.fen, { maxPlies: t.maxPlies, ...(engine ? { engine } : {}) }),
-            PROJ_TIMEOUT_MS,
-            null,
-          ).catch(() => null);
-          poolDone.get(t.key)?.resolve(line);
+          await poolTasks[i](engine).catch(() => undefined);
         }
       }));
     } finally {
       lease?.release();
       // Anything never reached (a lane threw) settles as "no line", never hangs.
       for (const d of poolDone.values()) d.resolve(null);
+      for (const d of badPieceResults) d.resolve(null);
     }
   })();
 
@@ -3429,7 +3457,17 @@ async function augmentWithProjections(
     ?? segments.find((s) => s.narration && (s.narration.includes('[verdict]') || s.narration.includes('[plan-middlegame]')));
   const betterDone = deferred<Map<ReviewMoveSegment, { line: PvLine | null; why: string | null }>>();
   const confirmDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
-  const badPieceDone = deferred<{ seg: ReviewMoveSegment; text: string; swing: number } | null>();
+  const badPieceDone = {
+    promise: Promise.all(badPieceResults.map((d) => d.promise)).then((results) => {
+      let bestPiece: { seg: ReviewMoveSegment; text: string; swing: number } | null = null;
+      results.forEach((res, i) => {
+        if (res?.delta && (!bestPiece || res.delta.ablation.swingCp > bestPiece.swing)) {
+          bestPiece = { seg: badPieceCandidates[i].s, text: res.delta.text, swing: res.delta.ablation.swingCp };
+        }
+      });
+      return bestPiece as { seg: ReviewMoveSegment; text: string; swing: number } | null;
+    }),
+  };
   const openingPlanDone = deferred<PvLine | null>();
   const planDone = deferred<PvLine | null>();
   const consequenceDone = deferred<Map<ReviewMoveSegment, PvLine | null>>();
@@ -3459,25 +3497,6 @@ async function augmentWithProjections(
         confirm.set(s, await raceTimeout(computePvLine(s.staticThreat.nullFen, { maxPlies: 4 }), PROJ_TIMEOUT_MS, null).catch(() => null));
       }
     } finally { confirmDone.resolve(confirm); }
-    // #6 the bad-piece ablation.
-    let bestPiece: { seg: ReviewMoveSegment; text: string; swing: number } | null = null;
-    try {
-      const candidates = segments
-        .filter((s) => s.ply >= 14 && !(s.evalAfter !== null && Math.abs(s.evalAfter) >= 5000))
-        .map((s) => ({ s, mob: lowestMinorMobility(s.fenAfter) }))
-        .filter((c) => c.mob <= 2)
-        .sort((a, b) => a.mob - b.mob);
-      for (const c of candidates) {
-        const res = await raceTimeout(
-          explainEvalByPieceQuality(c.s.fenAfter, deltaEvaluate, { swingThresholdCp: 150, pairThresholdCp: 220, baseCp: c.s.evalAfter ?? undefined }),
-          PROJ_TIMEOUT_MS * 2,
-          null,
-        ).catch(() => null);
-        if (res?.delta && (!bestPiece || res.delta.ablation.swingCp > bestPiece.swing)) {
-          bestPiece = { seg: c.s, text: res.delta.text, swing: res.delta.ablation.swingCp };
-        }
-      }
-    } finally { badPieceDone.resolve(bestPiece); }
     // #0 the opening plan played out.
     try {
       openingPlanDone.resolve(openingPlanCandidate
