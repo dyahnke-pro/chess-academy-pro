@@ -64,7 +64,16 @@ const TRAP_MIN_LOSS = 1;
  * exchange loses material (seeGain < 0). Prefers the highest-value victim (the
  * most tempting "free" piece).
  */
-export function buildTrapQuestion(args: { fen: string; studentColor: 'white' | 'black' }): TrapQuestion | null {
+export function buildTrapQuestion(args: {
+  fen: string;
+  studentColor: 'white' | 'black';
+  /** The capture the student ACTUALLY played from `fen`. REQUIRED (walk 6,
+   *  R12): the question used to pick the most tempting poisoned piece on the
+   *  board, so it asked about the pawn on f7 while the student had grabbed the
+   *  one on c6 — and the reveal then explained a different capture. When the
+   *  played move is not a poisoned grab there is no trap to ask about. */
+  playedSan: string;
+}): TrapQuestion | null {
   const { fen, studentColor } = args;
   const studentWB: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   let chess: Chess;
@@ -76,12 +85,16 @@ export function buildTrapQuestion(args: { fen: string; studentColor: 'white' | '
   // Only ask on the student's own move.
   if (chess.turn() !== studentWB) return null;
   const enemy: 'w' | 'b' = studentWB === 'w' ? 'b' : 'w';
+  let played: ReturnType<Chess['move']> | null = null;
+  try { played = new Chess(fen).move(args.playedSan.replace(/[?!]+$/, '')); } catch { played = null; }
+  if (!played?.captured) return null;
 
   let best: { square: Square; victimType: string; loss: number } | null = null;
   for (const row of chess.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== enemy) continue;
       const square = cell.square;
+      if (square !== played.to) continue;
       // The student must actually be able to LEGALLY capture here — a pinned
       // attacker can't grab it, so it is no trap for the student (2026-09-13
       // sweep; the old geometric attackers() guard counted pinned pieces).
@@ -93,8 +106,10 @@ export function buildTrapQuestion(args: { fen: string; studentColor: 'white' | '
       // Signed, pin-aware net: the student grabs with the least-valuable
       // attacker, then the opponent plays their best LEGAL recapture. net < 0 ⇒
       // poisoned bait (the trap).
+      // The grab is the student's own capture, not the cheapest one available.
+      const grab = grabs.find((m) => m.from === played.from) ?? grabs[0];
       let acc: Chess;
-      try { acc = new Chess(fen); acc.move(grabs[0]); } catch { continue; }
+      try { acc = new Chess(fen); acc.move(grab); } catch { continue; }
       const net = (PIECE_VALUE[cell.type] ?? 0) - legalSeeGain(acc.fen(), square);
       if (net >= 0) continue; // a real free/even piece — not a trap
       const loss = -net;
@@ -112,8 +127,15 @@ export function buildTrapQuestion(args: { fen: string; studentColor: 'white' | '
 
   // Resolve the actual tempting capture SAN (student's least-valuable attacker
   // takes — the natural first grab) + the real swap sequence.
-  const sequence = seeSequence(fen, best.square);
-  if (sequence.length === 0) return null;
+  // The swap as it actually starts: the student's capture, then the best legal
+  // recapture sequence from there.
+  let sequence: string[];
+  try {
+    const afterGrab = new Chess(fen);
+    afterGrab.move(played.san);
+    sequence = [played.san, ...seeSequence(afterGrab.fen(), best.square)];
+  } catch { return null; }
+  if (sequence.length < 2) return null;
 
   // VERIFY the poisoned verdict against the LEGAL sequence (board-awareness
   // sweep, 2026-07-22). seeGain counts pinned defenders, so a piece defended

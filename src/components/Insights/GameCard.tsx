@@ -58,9 +58,16 @@ export function GameCard({
       <div className="grid grid-cols-2 gap-x-4 gap-y-1">
         {accuracy !== null && <StatRow label="Accuracy" value={`${accuracy}%`} />}
         <StatRow label="Moves" value={`${moves}`} />
-        <StatRow label="Blunders" value={`${blunders}`} color={blunders > 0 ? 'var(--color-error)' : undefined} />
-        <StatRow label="Mistakes" value={`${mistakes}`} color={mistakes > 0 ? 'var(--color-warning)' : undefined} />
-        <StatRow label="Inaccuracies" value={`${inaccuracies}`} color={inaccuracies > 0 ? '#f59e0b' : undefined} />
+        {/* Unanalysed is not clean (walk 6, W2). */}
+        {accuracy !== null ? (
+          <>
+            <StatRow label="Blunders" value={`${blunders}`} color={blunders > 0 ? 'var(--color-error)' : undefined} />
+            <StatRow label="Mistakes" value={`${mistakes}`} color={mistakes > 0 ? 'var(--color-warning)' : undefined} />
+            <StatRow label="Inaccuracies" value={`${inaccuracies}`} color={inaccuracies > 0 ? '#f59e0b' : undefined} />
+          </>
+        ) : (
+          <span className="col-span-2 text-xs" style={{ color: 'var(--color-text-muted)' }} data-testid="game-card-unanalysed">Not analysed yet</span>
+        )}
         {cpLoss !== null && <StatRow label="Avg CP loss" value={`${cpLoss} cp`} />}
       </div>
       <div className="text-[10px] mt-2" style={{ color: 'var(--color-text-muted)' }}>{date}</div>

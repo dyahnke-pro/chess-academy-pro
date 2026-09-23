@@ -7,13 +7,25 @@ import type { MoveAnnotation } from '../../types';
 
 // The review itself is a 235 KB component with its own engine wiring — mock it
 // to a probe that reports it mounted and lets the test "start the walk".
-vi.mock('./CoachGameReview', () => ({
-  CoachGameReview: (props: { onWalkStarted?: () => void; moves: unknown[] }) => (
-    <button data-testid="mock-review" onClick={() => props.onWalkStarted?.()}>
-      review:{props.moves.length}
-    </button>
-  ),
-}));
+// `autoSettle` makes the probe report its narration settled on mount; the R1
+// test turns it off and settles by hand to prove the deepen WAITS for it.
+let autoSettle = true;
+vi.mock('./CoachGameReview', async () => {
+  const { useEffect } = await import('react');
+  return {
+    CoachGameReview: (props: { onWalkStarted?: () => void; onNarrationSettled?: () => void; moves: unknown[] }) => {
+      useEffect(() => { if (autoSettle) props.onNarrationSettled?.(); }, []);
+      return (
+        <>
+          <button data-testid="mock-review" onClick={() => props.onWalkStarted?.()}>
+            review:{props.moves.length}
+          </button>
+          <button data-testid="mock-settle" onClick={() => props.onNarrationSettled?.()}>settle</button>
+        </>
+      );
+    },
+  };
+});
 
 /** Deferred analyzeSingleGame so the test controls when the deepen lands. */
 let resolveDeepen: (() => void) | null = null;
@@ -49,6 +61,20 @@ beforeEach(async () => {
   await db.open();
   analyzeSingleGame.mockClear();
   resolveDeepen = null;
+  autoSettle = true;
+});
+
+describe('R1 — the deepen waits for the review\'s own narration (walk 6)', () => {
+  it('does not start the depth pass until the narration build has settled', async () => {
+    autoSettle = false;
+    await db.games.put(buildGameRecord({ id: 'g-wait', pgn: PGN, annotations: SWEPT, fullyAnalyzed: true, analysisDepth: 12, isMasterGame: false }));
+    renderPage('g-wait');
+    await screen.findByTestId('mock-review');
+    await new Promise((r) => setTimeout(r, 50));
+    expect(analyzeSingleGame).not.toHaveBeenCalled();
+    await act(async () => { screen.getByTestId('mock-settle').click(); });
+    await waitFor(() => expect(analyzeSingleGame).toHaveBeenCalledWith('g-wait'));
+  });
 });
 
 describe('CoachReviewSessionPage — never block on analysis the game already has', () => {

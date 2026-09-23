@@ -226,9 +226,17 @@ export function EnhancedGameCard({ game, username, reviewHref }: EnhancedGameCar
         <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 flex-1 text-[11px]">
           {accuracyPct !== null && <StatRow label="Accuracy" value={`${accuracyPct}%`} />}
           <StatRow label="Moves" value={`${moves}`} />
-          <StatRow label="Blunders" value={`${blunders}`} color={blunders > 0 ? 'var(--color-error)' : undefined} />
-          <StatRow label="Mistakes" value={`${mistakes}`} color={mistakes > 0 ? 'var(--color-warning)' : undefined} />
-          <StatRow label="Inaccuracies" value={`${inaccuracies}`} color={inaccuracies > 0 ? '#f59e0b' : undefined} />
+          {/* Unanalysed is not clean (walk 6, W2): zeros here read as a flawless
+              game when no move has been scored yet. */}
+          {accuracyPct !== null ? (
+            <>
+              <StatRow label="Blunders" value={`${blunders}`} color={blunders > 0 ? 'var(--color-error)' : undefined} />
+              <StatRow label="Mistakes" value={`${mistakes}`} color={mistakes > 0 ? 'var(--color-warning)' : undefined} />
+              <StatRow label="Inaccuracies" value={`${inaccuracies}`} color={inaccuracies > 0 ? '#f59e0b' : undefined} />
+            </>
+          ) : (
+            <span className="col-span-2" style={{ color: 'var(--color-text-muted)' }} data-testid="game-card-unanalysed">Not analysed yet</span>
+          )}
         </div>
         <EvalSparkline game={game} playerColor={playerColor} />
       </div>

@@ -71,9 +71,22 @@ export function CoachReviewSessionPage(): JSX.Element {
   /** A background deepen is running (the review is already on screen). */
   const [deepening, setDeepening] = useState(false);
   const walkStartedRef = useRef(false);
+  /** Resolves when the review's narration build has settled. The deepen waits
+   *  on it: one build at a time on the engine, the student's first (walk 6, R1:
+   *  the depth-16 pass and a second narration build ran beside the page's own
+   *  build, and the first narration arrived at 74s). */
+  const narrationSettledRef = useRef<{ promise: Promise<void>; resolve: () => void } | null>(null);
+  const freshSettled = (): { promise: Promise<void>; resolve: () => void } => {
+    let resolve: () => void = () => undefined;
+    const promise = new Promise<void>((r) => { resolve = r; });
+    return { promise, resolve };
+  };
+  if (narrationSettledRef.current === null) narrationSettledRef.current = freshSettled();
 
   useEffect(() => {
     let cancelled = false;
+    // A new game waits on ITS OWN narration, never the last one's.
+    narrationSettledRef.current = freshSettled();
     async function load(): Promise<void> {
       if (!gameId) {
         setLoadError('No game id in URL.');
@@ -118,7 +131,8 @@ export function CoachReviewSessionPage(): JSX.Element {
          *  swept-game open and the cold open (after its sweep). */
         const deepenBehind = (started: GameRecord): void => {
           setDeepening(true);
-          void analyzeSingleGame(started.id).then(async () => {
+          const settled = narrationSettledRef.current?.promise ?? Promise.resolve();
+          void settled.then(() => (cancelled ? undefined : analyzeSingleGame(started.id))).then(async () => {
             if (cancelled) return;
             const refreshed = await db.games.get(started.id);
             if (cancelled || !refreshed) return;
@@ -325,6 +339,7 @@ export function CoachReviewSessionPage(): JSX.Element {
         // `initialMoveIndex` re-applies on mount.
         key={`${gameId}:${initialMoveIndex}`}
         onWalkStarted={() => { walkStartedRef.current = true; }}
+        onNarrationSettled={() => { narrationSettledRef.current?.resolve(); }}
         // ship-5: forward gameId so `useReviewPlayback` can scope hint
         // callouts to this specific game (no cross-game leakage via
         // useCoachMemoryStore.hintRequests).

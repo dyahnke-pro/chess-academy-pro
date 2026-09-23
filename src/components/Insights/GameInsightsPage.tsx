@@ -323,7 +323,11 @@ export function GameInsightsPage(): JSX.Element {
             <SummaryItem value={`${overview.totalGames}`} label="Games" />
             <SummaryItem value={`${overview.winRate}%`} label="Win Rate" color="var(--color-success)" />
             <SummaryItem value={`${overview.avgElo}`} label="Avg ELO" />
-            <SummaryItem value={`${overview.avgAccuracy}%`} label="Accuracy" color="var(--color-warning)" />
+            <SummaryItem
+              value={overview.accuracyGames > 0 ? `${overview.avgAccuracy}%` : '—'}
+              label={overview.accuracyGames > 0 ? `Accuracy · ${overview.accuracyGames} game${overview.accuracyGames === 1 ? '' : 's'}` : 'Accuracy'}
+              color="var(--color-warning)"
+            />
           </div>
         )}
 

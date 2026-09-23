@@ -183,7 +183,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     return {
       totalGames: 0, wins: 0, losses: 0, draws: 0,
       winRate: 0, winRateWhite: 0, winRateBlack: 0,
-      avgElo: 0, avgAccuracy: 0,
+      avgElo: 0, avgAccuracy: 0, accuracyGames: 0,
       highestBeaten: null, lowestLostTo: null,
       classificationCounts: emptyClassifications(),
       totalMoves: 0, avgMovesPerGame: 0,
@@ -381,7 +381,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
   return {
     totalGames, wins, losses, draws,
     winRate, winRateWhite, winRateBlack,
-    avgElo, avgAccuracy,
+    avgElo, avgAccuracy, accuracyGames: annotatedGameCount,
     highestBeaten, lowestLostTo,
     classificationCounts: totalCounts,
     totalMoves, avgMovesPerGame,

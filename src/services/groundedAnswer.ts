@@ -2538,6 +2538,12 @@ export function describeMoveMerit(
   const geo = describeMoveGeometry(fenBefore, san, moverColor);
   // STRONG, unambiguous geometry is the point — fork / real pin / check / mate /
   // a winning capture. Say it.
+  // A merit clause is read from the MOVER's chair (`toOpponentSeat` swaps it
+  // for the opponent), so a captured piece is named "their". Left as "the",
+  // a later pass seats it off the board AFTER the move — where the capturer now
+  // stands — and calls the victim the wrong side's (walk 6 sweep: "Your
+  // opponent won their pawn on c5" about the student's own pawn).
+  if (geo && /^wins the /.test(geo)) return geo.replace(/^wins the /, 'wins their ');
   if (geo && !geo.startsWith('attacks') && !geo.startsWith('pins the pawn')) return geo;
   // A bare tempo-attack ("attacks the pawn on e5" for a developing knight, where
   // the pawn is defended) or a pawn-to-piece x-ray "pin" is technically true but

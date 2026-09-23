@@ -93,6 +93,11 @@ export function findWorstPlacedPiece(
     // its own clause (walk 5: "rescue your worst piece, the bishop on c8" at
     // move 10 of a Najdorf, spoken on the OPPONENT's ply).
     if (isUndevelopedInOpening(chess.fen(), studentColorWB, c.type, c.square)) continue;
+    // A ROOK ON ITS OWN BACK RANK is where rooks live until a file opens —
+    // its low mobility is the closed centre, not a bad square, and its lesson
+    // (take the open file) has its own clause. Walk 6 (R10): "rescue your worst
+    // piece, the rook on f1" the move after castling.
+    if (c.type === 'r' && c.square[1] === (studentColorWB === 'w' ? '1' : '8')) continue;
     // A piece UNDER ATTACK needs saving, not rerouting — and its mobility reads
     // low precisely because it is boxed in by the attack. Naming it "worst
     // placed, reroute it" buries the live threat under a positional plan.

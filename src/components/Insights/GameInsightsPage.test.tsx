@@ -49,6 +49,7 @@ const mockOverview: OverviewInsights = {
   winRateBlack: 40,
   avgElo: 1500,
   avgAccuracy: 78,
+  accuracyGames: 10,
   highestBeaten: null,
   lowestLostTo: null,
   classificationCounts: emptyClassifications(),

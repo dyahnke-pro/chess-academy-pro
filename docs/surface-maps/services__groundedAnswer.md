@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6582 lines · 147 exports · 55 importers · 30 tests · 8 audits**
+**6588 lines · 147 exports · 55 importers · 30 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -980,9 +980,9 @@
 - `src/services/reviewBoardAwareness.test.ts:74`
 - `src/services/reviewBoardAwareness.test.ts:78`
 - `src/services/reviewBoardAwareness.test.ts:83`
-- `src/services/reviewFullData.ts:240`
-- `src/services/reviewFullData.ts:257`
-- `src/services/reviewFullData.ts:424`
+- `src/services/reviewFullData.ts:241`
+- `src/services/reviewFullData.ts:262`
+- `src/services/reviewFullData.ts:429`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`
@@ -1001,7 +1001,7 @@
 - `src/services/coachFeatureService.ts:2478`
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
-- `src/services/reviewFullData.ts:496`
+- `src/services/reviewFullData.ts:501`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`

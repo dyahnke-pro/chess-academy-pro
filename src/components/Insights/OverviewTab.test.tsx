@@ -24,6 +24,7 @@ function buildOverviewData(overrides?: Partial<OverviewInsights>): OverviewInsig
     winRateBlack: 45,
     avgElo: 1450,
     avgAccuracy: 72,
+    accuracyGames: 10,
     highestBeaten: { name: 'GrandBot', elo: 1800, gameId: 'g1' },
     lowestLostTo: { name: 'Beginner', elo: 900, gameId: 'g2' },
     classificationCounts: {

@@ -235,11 +235,16 @@ export function computeMoveFacets(
   // enemy pieces it eyes, central squares it fights for, own pieces it now
   // guards. Every claim board-computed; emitted only when non-empty.
   const influenceSquares: string[] = [];
-  const influence0 = describeMoveInfluence(fenBefore, fenAfter, san, influenceSquares);
+  const influenceShape = { hitsPiece: false };
+  const influence0 = describeMoveInfluence(fenBefore, fenAfter, san, influenceSquares, influenceShape);
   const influence = influence0 && ctx.studentColorWB
     ? seatPieceReferences(influence0, fenAfter, ctx.studentColorWB)
     : influence0;
-  if (influence) { const f = `[does] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
+  // A move REASON only when the piece now bears on an enemy piece. "Fights for
+  // d5" alone is the board's scenery, not why the move was played (walk 6, R3:
+  // "Their pawn on c6 now fights for d5" on ~20 plies), so it rides as a
+  // description — heard only beside a teaching point on the same squares.
+  if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
 
   // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
   // (David 2026-07-22: "the package must contain every relevant change that
@@ -656,7 +661,16 @@ export function computeMoveFacets(
   }
 
   // ── 10. OPENING IDENTITY (the named line so far) ──
-  const named = detectOpening(ctx.allSans.slice(0, ply))?.name ?? null;
+  // ONCE, at its final name (walk 6, R16: "King's Pawn Game" → "Scandinavian"
+  // → "Mieses-Kotroc" → "Main Line" spoke four times in six plies, because each
+  // refinement is new text). The name spoken is the VARIATION: a bare family
+  // ("King's Pawn Game", "Sicilian Defense") is a waypoint, and a comma
+  // sub-line (", Main Line", ", Smith-Morra Declined") refines a name already
+  // given. So every ply of one variation carries the same text and the say-once
+  // ledger speaks it on the first ply that actually speaks — a need-silenced
+  // ply cannot swallow it.
+  const detected = detectOpening(ctx.allSans.slice(0, ply))?.name ?? null;
+  const named = detected && detected.includes(':') ? detected.split(',')[0].trim() : null;
   if (named) facets.push(`[opening] The line so far is the ${named}.`);
 
   // ── 11. OPPONENT READ — what the opponent's move targets + their dev lag ──
@@ -666,8 +680,8 @@ export function computeMoveFacets(
     // eyeing d5" — ONE claim, two families, spoken back to back on every
     // opponent development move (walk 5, 2026-09-23). The selector keeps
     // different families apart on purpose (B12), so the restatement is dropped
-    // here, where both are known: `[does]` already carries the reach.
-    const restates = opp?.kind === 'influence' && facets.some((x) => x.startsWith('[does] '));
+    // here, where both are known: the influence line (`[does]`, or `[delta]` when it hits no piece) already carries the reach.
+    const restates = opp?.kind === 'influence' && !!influence;
     if (opp && !restates) { const f = `[opp-target] ${opp.text}`; facets.push(f); recSquares(f, opp.squares ?? []); }
     // The opponent's OWN moves so far (parity from the student's colour): white
     // plays odd ply numbers (even index), black plays even ply numbers (odd index).
@@ -781,7 +795,7 @@ function pieceWord(p: string): string {
  *  central squares it now fights for, own pieces it now guards. Pure chess.js
  *  (attackers()) — the quiet-move beat that gives EVERY ply its own computed
  *  content (David 2026-07-22). Null when the move creates none of the three. */
-export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: string, squaresOut?: string[]): string | null {
+export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: string, squaresOut?: string[], shapeOut?: { hitsPiece: boolean }): string | null {
   try {
     const b = new Chess(fenBefore);
     const mv = b.move(san.replace(/[?!]+$/, ''));
@@ -818,6 +832,7 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
     if (eyes.length) bits.push(`eyes ${andList(eyes)}`);
     if (fights.length) bits.push(`fights for ${andList(fights)}`);
     if (!bits.length) return null;
+    if (shapeOut) shapeOut.hitsPiece = eyes.length > 0;
     return `The ${pieceWord(pc.type)} on ${to} now ${bits.join(', ')}.`;
   } catch {
     return null;
