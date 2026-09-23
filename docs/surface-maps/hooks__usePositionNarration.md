@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**344 lines · 4 exports · 4 importers · 3 tests · 1 audits**
+**359 lines · 5 exports · 4 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,21 +32,26 @@
 - `src/hooks/usePositionNarration.degrade.test.ts:78`
 - `src/hooks/usePositionNarration.test.ts:116`
 
+### `dropInventedQuestions` (function) — 3 call sites
+- `src/hooks/usePositionNarration.test.ts:390`
+- `src/hooks/usePositionNarration.test.ts:393`
+- `src/hooks/usePositionNarration.test.ts:395`
+
 ### `usePositionNarration` (function) — 14 call sites
 - `src/components/Coach/CoachGamePage.tsx:1806`
 - `src/components/Coach/CoachTeachPage.tsx:7235`
 - `src/hooks/usePositionNarration.degrade.test.ts:85`
 - `src/hooks/usePositionNarration.test.ts:125`
 - `src/hooks/usePositionNarration.test.ts:132`
-- `src/hooks/usePositionNarration.test.ts:152`
-- `src/hooks/usePositionNarration.test.ts:180`
-- `src/hooks/usePositionNarration.test.ts:201`
-- `src/hooks/usePositionNarration.test.ts:225`
-- `src/hooks/usePositionNarration.test.ts:242`
-- `src/hooks/usePositionNarration.test.ts:264`
-- `src/hooks/usePositionNarration.test.ts:303`
-- `src/hooks/usePositionNarration.test.ts:336`
-- `src/hooks/usePositionNarration.test.ts:376`
+- `src/hooks/usePositionNarration.test.ts:155`
+- `src/hooks/usePositionNarration.test.ts:183`
+- `src/hooks/usePositionNarration.test.ts:204`
+- `src/hooks/usePositionNarration.test.ts:228`
+- `src/hooks/usePositionNarration.test.ts:245`
+- `src/hooks/usePositionNarration.test.ts:267`
+- `src/hooks/usePositionNarration.test.ts:306`
+- `src/hooks/usePositionNarration.test.ts:339`
+- `src/hooks/usePositionNarration.test.ts:379`
 
 ## Tests
 

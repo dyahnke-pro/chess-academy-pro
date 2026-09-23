@@ -65,10 +65,12 @@ describe('it stays QUIET where the naive version would not', () => {
 });
 
 describe('it SPEAKS on a real latent fork', () => {
-  // The Sicilian's Nd4–b5–c7 — the canonical latent knight fork, and one of
-  // exactly two positions out of eleven probed that survives every gate plus
-  // the two-move domain. Found by READING the detector's output, not chosen.
-  const FEN = 'r1bqkb1r/pp2pppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7';
+  // The Sicilian's Nd4–b5–c7 — the canonical latent knight fork. CORRECTED
+  // (walk 6): this fixture had the black queen on d8, where Nc7+ simply loses
+  // the knight to Qxc7; gate (d) judged safety with WHITE on move and so asked
+  // whether White could take its own knight. With the queen gone to h4 the
+  // fork is real — c7 unguarded, b5 unguarded, king and rook both hit.
+  const FEN = 'r1b1kb1r/pp2pppp/2np1n2/8/3NP2q/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7';
 
   it('finds a knight fork two or more quiet moves out, and every gate holds', () => {
     const f = detectLatentFork(FEN, 'white');
@@ -135,7 +137,7 @@ describe('cost — it must not dwarf the detectors beside it', () => {
 // The detector being correct proves nothing about whether a student ever hears
 // it. These drive the real composer and read the clause back out.
 describe('it reaches the LIVE composer', () => {
-  const SICILIAN = 'r1bqkb1r/pp2pppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7';
+  const SICILIAN = 'r1b1kb1r/pp2pppp/2np1n2/8/3NP2q/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7';
   const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [], mate: null });
   const flat = {
     topLines: [line(1, 20), line(2, 15), line(3, 10)],
@@ -171,5 +173,14 @@ describe('it reaches the LIVE composer', () => {
     expect(forkRank).not.toBeNull();
     expect(mustDefend).not.toBeNull();
     expect(Number(forkRank![1])).toBeLessThan(Number(mustDefend![1]));
+  });
+});
+
+describe('gate (e) — the route must survive the first hop (walk 6, L3)', () => {
+  it('no fork "waiting on f7" when both waypoints (g5, e5) lose the knight', () => {
+    // Italian shape: Nf3 → g5 → f7 would fork Qd8 and Rh8, and Bc4 guards f7 —
+    // but the only route square, g5, hangs to the queen on d8 (e5 is occupied).
+    const fen = 'r1bqk2r/pppp2pp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5';
+    expect(detectLatentFork(fen, 'white')?.square).not.toBe('f7');
   });
 });

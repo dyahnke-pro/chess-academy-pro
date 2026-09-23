@@ -111,6 +111,32 @@ function boardWithKnightOn(chess: Chess, from: string, target: string, colour: '
   }
 }
 
+/** `landingIsSafe` asks whether the SIDE TO MOVE can win the square, so a
+ *  safety check must hand it the opponent on move — with the forker on move it
+ *  asked whether White could take White's own knight, and always said yes-safe. */
+function withMover(fen: string, mover: 'w' | 'b'): string {
+  const parts = fen.split(' ');
+  parts[1] = mover;
+  parts[3] = '-';
+  return parts.join(' ');
+}
+
+/** A one-hop waypoint from `from` that reaches `target` next, and on which
+ *  the knight is not simply lost. */
+function hasSafeWaypoint(chess: Chess, from: string, target: string, me: 'w' | 'b', them: 'w' | 'b'): boolean {
+  const next = new Set(squaresHitFrom(target));
+  for (const w of squaresHitFrom(from)) {
+    if (!next.has(w)) continue;
+    const occ = chess.get(w as Square);
+    if (occ && occ.color === me) continue;
+    const at = boardWithKnightOn(chess, from, w, me);
+    if (!at) continue;
+    // The opponent moves next: judge the waypoint with them on move.
+    if (landingIsSafe(withMover(at, them), w as Square)) return true;
+  }
+  return false;
+}
+
 /**
  * The best latent knight fork for `forker`, or null.
  *
@@ -175,7 +201,12 @@ export function detectLatentFork(fen: string, forker: 'white' | 'black'): Latent
       if (moves == null || moves < 2 || moves > MAX_TEMPO) continue;
       // Gate (d) — safe ON ARRIVAL, judged on the arrived-at board.
       const after = boardWithKnightOn(chess, from, square, me);
-      if (!after || !landingIsSafe(after, square as Square)) continue;
+      if (!after || !landingIsSafe(withMover(after, them), square as Square)) continue;
+      // Gate (e) — a ROUTE that survives the first hop (walk 6, L3: "your
+      // knight has a fork waiting on f7" when the only way there, g5, hangs
+      // to the queen). At N = 2 the route is one intermediate square; at least
+      // one must be a square the knight can stand on without being lost.
+      if (!hasSafeWaypoint(chess, from, square, me, them)) continue;
 
       hit.sort((a, b) => (VAL[b.piece] ?? 0) - (VAL[a.piece] ?? 0));
       const found: LatentFork = { square, from, moves, targets: hit, forker };

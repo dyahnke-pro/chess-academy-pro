@@ -413,9 +413,16 @@ export function computeMoveFacets(
   // 2026-07-21: "ship the correct answer to the LLM").
   try {
     const t = detectTactics(fenAfter);
-    const seat = (s: string): string => ctx.studentColorWB
-      ? seatPieceReferences(s, fenAfter, ctx.studentColorWB)
-      : s;
+    // The ONE colour-named description the detector writes ("Black has a
+    // checkmate available from c8") is seated here too — walk 6, R13 spoke it
+    // to the student in the third person.
+    const seat = (s: string): string => {
+      if (!ctx.studentColorWB) return s;
+      const me = ctx.studentColorWB === 'w' ? 'White' : 'Black';
+      const seated = s.replace(/^(White|Black) has a checkmate available from\b/,
+        (_m, side: string) => (side === me ? 'You have a checkmate available from' : 'They have a checkmate available from'));
+      return seatPieceReferences(seated, fenAfter, ctx.studentColorWB);
+    };
     for (const tac of t.tactics) {
       if (tac.type === 'none' || !tac.description) continue;
       // A fork SHAPE is tempo-blind — the static scanner reports it whether or
@@ -444,10 +451,17 @@ export function computeMoveFacets(
         continue;
       }
       {
+        // What it wins by exchange on its own squares, from the side it hurts.
+        const stakes = exchangeStakes(fenAfter, tac.involvedSquares, tac.beneficiary ? (tac.beneficiary === 'w' ? 'b' : 'w') : null);
+        // A PIN ON A PAWN THAT WINS NOTHING IS SCENERY (walk 6, R5: "their
+        // queen on d5 pins your pawn on g2 against your rook on h1" on move
+        // two, and the fianchetto bishop "pinning" b7 for thirty moves). It
+        // teaches only when the pin actually costs material.
+        const front = tac.type === 'pin' ? piecesOn(fenAfter, [tac.involvedSquares[1]])[0] ?? null : null;
+        if (front === 'p' && stakes === null) continue;
         const f = `[tactic] ${seat(tac.description)}.`;
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-        // What it wins by exchange on its own squares, from the side it hurts.
-        recStakes(f, exchangeStakes(fenAfter, tac.involvedSquares, tac.beneficiary ? (tac.beneficiary === 'w' ? 'b' : 'w') : null));
+        recStakes(f, stakes);
       }
     }
     // ONLY THE DELTA SPEAKS (WO-STANDARD-01 D-8, prod tape 2026-09-22:
@@ -459,7 +473,13 @@ export function computeMoveFacets(
     if (t.hangingPieces.length > 0) {
       let before = new Set<string>();
       try { before = new Set(detectTactics(fenBefore).hangingPieces.map((h) => `${h.piece}${h.square}`)); } catch { before = new Set(); }
-      const fresh = t.hangingPieces.filter((h) => !before.has(`${h.piece}${h.square}`));
+      // …and only a MINOR PIECE OR ROOK the opponent can actually win (walk 6,
+      // R4: "Newly undefended: your pawn on e4" on move one, and a queen that
+      // was merely attacked). A pawn is undefended half the opening and a
+      // queen answers an attack by moving; neither is a loose-piece lesson.
+      const fresh = t.hangingPieces.filter((h) => !before.has(`${h.piece}${h.square}`)
+        && 'nbr'.includes(h.piece.toLowerCase())
+        && exchangeStakes(fenAfter, [h.square]) !== null);
       if (fresh.length > 0) {
         const desc = fresh.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
         const f = `[loose] Newly undefended: ${seat(desc)}.`;
@@ -603,7 +623,9 @@ export function computeMoveFacets(
         // the side that made it. Handing it the student's number flipped the
         // sign on every opponent sacrifice (D-4, 2026-09-22).
         const moverPovCp = studentPovCp === null ? null : (moverWB === studentColorWB ? studentPovCp : -studentPovCp);
-        const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp, moverWB === studentColorWB);
+        const moverPovBeforeCp = ctx.preMoveEval == null || isMateEval(ctx.preMoveEval) ? null
+          : (moverWB === 'w' ? ctx.preMoveEval : -ctx.preMoveEval);
+        const comp = sacrificeCompensation(fenAfter, moverWB, moverPovCp, moverWB === studentColorWB, moverPovBeforeCp);
         if (comp.length) facets.push(`[sac] It's a sacrifice — compensation: ${comp.join('; ')}.`);
         const mech = isStudent ? explainMatingSacMechanism(ctx.allSans, ply - 1) : null;
         if (mech) facets.push(`[sac-why] ${cap(mech)}.`);

@@ -88,11 +88,11 @@ describe('read this position — the provider is dead', () => {
     await waitFor(() => expect(result.current.isNarrating).toBe(false), { timeout: 15_000 });
 
     // The real voiceFacts was called ONCE with the computed bundle, fork
-    // clause included, from the coach-is-opponent seat.
+    // clause included, in the one seat the facts were computed in.
     expect(voiceFactsSpy).toHaveBeenCalledTimes(1);
     const [facts, opts] = voiceFactsSpy.mock.calls[0] as [string, { perspective?: { mode: string } }];
     expect(facts).toMatch(/a fork hits two targets at once/);
-    expect(opts.perspective?.mode).toBe('coach-is-opponent');
+    expect(opts.perspective?.mode).toBe('student');
 
     // The provider 401'd; what was SPOKEN is the raw computed register.
     const spoken = speakRecords.join(' ');

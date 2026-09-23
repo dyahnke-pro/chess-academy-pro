@@ -7553,14 +7553,20 @@ export function CoachTeachPage(): JSX.Element {
         // honesty contract withholds an answer the student is meant to find,
         // and the opponent's plan is not that. Same call `CoachGamePage` makes
         // ("Watch out — if I play Nc7, …").
-        const up = tctx.threats[0];
-        const first = up.line?.[0];
-        threatKey = `soon:${up.type}:${first ?? ''}`;
-        threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
-        const desc = `${up.description.charAt(0).toLowerCase()}${up.description.slice(1)}`;
-        threatLine = first
-          ? `Watch out — if they play ${first}, ${desc}.`
-          : `Watch out — ${desc} is coming.`;
+        // THE MOVE THAT CREATES IT IS THE LAST ONE IN THE LINE, not the first
+        // (walk 6, L1: the PV starts with the STUDENT's move, so "if they play
+        // Bb3" named White's own bishop move to a White student). And a pin on
+        // a pawn is recaptured scenery, not a warning.
+        const up = tctx.threats.find((t) => !(t.type === 'pin' && / pins pawn /i.test(t.description))) ?? null;
+        const theirs = up?.line?.[up.line.length - 1];
+        if (up) {
+          threatKey = `soon:${up.type}:${theirs ?? ''}`;
+          threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
+          const desc = `${up.description.charAt(0).toLowerCase()}${up.description.slice(1)}`;
+          threatLine = theirs
+            ? `Watch out — their idea is ${theirs}: ${desc}.`
+            : `Watch out — ${desc} is coming.`;
+        }
       } else if (myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) {
         // Only a real PIECE (minor or better) earns the interrupt. A hanging pawn
         // is the small stuff Naroditsky assumes you see — flagging every one is

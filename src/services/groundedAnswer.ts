@@ -19,7 +19,7 @@ import { tacticWord } from './tacticVocabulary';
 import { CENTRAL_SQUARES, keyTargetSquares, kingZoneAmong, kingZoneClause, POSITIONAL_TARGETS } from './keySquares';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  legalSeeGain, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  legalSeeGain, legalSeeGainOn, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -6353,6 +6353,11 @@ export function detectNewThreat(
     parts[3] = '-'; // clear en passant — not meaningful for a null-move scan
     const threat = findBest(parts.join(' '));
     if (!threat) return null;
+    // A CAPTURE THREAT THE VICTIM SIMPLY WALKS AWAY FROM IS NOT A WIN (walk 6,
+    // R6: every attack on a queen was spoken as "it wins their queen", and with
+    // computed stakes it LED the ply at nine points, though the queen just
+    // moved). It stands only if EVERY reply still leaves a winning capture.
+    if (threat.kind === 'capture' && captureThreatIsAnswerable(fenAfter, moverWB)) return null;
     // NEW threats only — a threat that already existed before the move was
     // not created by it, and re-narrating a standing threat every ply is
     // noise (the repetition class).
@@ -6362,6 +6367,28 @@ export function detectNewThreat(
   } catch {
     return null;
   }
+}
+
+/** True when the side under threat has a reply after which `moverWB` no longer
+ *  has any capture netting a piece (≥3 by static exchange). `fenAfter` has the
+ *  threatened side to move. Mirrors how a player reads a threat: move the
+ *  piece, guard it, block, or take the attacker. */
+export function captureThreatIsAnswerable(fenAfter: string, moverWB: 'w' | 'b'): boolean {
+  let pos: Chess;
+  try { pos = new Chess(fenAfter); } catch { return false; }
+  if (pos.turn() === moverWB) return false;
+  for (const reply of pos.moves({ verbose: true })) {
+    const sim = new Chess(fenAfter);
+    try { sim.move(reply.san); } catch { continue; }
+    if (sim.isGameOver()) return true;
+    let stillWins = false;
+    for (const cap of sim.moves({ verbose: true })) {
+      if (!cap.captured) continue;
+      if (legalSeeGainOn(sim, cap.to) >= 3) { stillWins = true; break; }
+    }
+    if (!stillWins) return true;
+  }
+  return false;
 }
 
 /** The student-voice phrasing of detectNewThreat (back-compat wrapper). */

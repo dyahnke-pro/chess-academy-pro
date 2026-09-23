@@ -2320,6 +2320,7 @@ export function buildReviewSegments(
             moverColor === 'white' ? 'w' : 'b',
             m.evaluation != null ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : null,
             true,
+            m.preMoveEval != null ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : null,
           )
         : [];
       // If a standalone beat already taught "king stuck in the centre", drop that
@@ -3449,7 +3450,12 @@ async function augmentWithProjections(
         let why: string | null = null;
         if (line && line.plies.length >= 3) {
           const cmp = await raceTimeout(compareTwoMoves(s.fenBefore, s.san, line.plies[0].san, deltaEvaluate), PROJ_TIMEOUT_MS, null).catch(() => null);
-          why = cmp?.delta?.text ?? null;
+          // A "why" only when the comparison AGREES with the grading: the
+          // engine's move came out ahead and there is a proven delta. Walk 6,
+          // R15 spoke "that was a blunder" then "Why b3 was better — the two
+          // moves come out about the same": a shallower re-evaluation
+          // contradicting the verdict one clause later.
+          why = cmp && cmp.better === 'B' && cmp.delta && cmp.delta.kind !== 'none' ? cmp.delta.text : null;
         }
         better.set(s, { line, why });
       }
