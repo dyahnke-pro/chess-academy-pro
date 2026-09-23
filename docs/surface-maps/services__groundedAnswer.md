@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6545 lines · 146 exports · 54 importers · 29 tests · 8 audits**
+**6555 lines · 146 exports · 54 importers · 29 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -859,7 +859,7 @@
 ### `RetrospectiveMoveLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `assembleRetrospectiveAnswer` (function) — 7 call sites
+### `assembleRetrospectiveAnswer` (function) — 9 call sites
 - `src/services/coachApi.ts:3898`
 - `src/services/groundedAnswer.routerE.test.ts:21`
 - `src/services/groundedAnswer.routerE.test.ts:29`
@@ -867,6 +867,8 @@
 - `src/services/groundedAnswer.routerE.test.ts:48`
 - `src/services/groundedAnswer.routerE.test.ts:56`
 - `src/services/groundedAnswer.routerE.test.ts:187`
+- `src/services/groundedAnswer.routerE.test.ts:201`
+- `src/services/groundedAnswer.routerE.test.ts:206`
 
 ### `assembleSlipNarration` (function) — 4 call sites
 - `src/components/Coach/CoachGamePage.tsx:3800`

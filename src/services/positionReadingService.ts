@@ -649,7 +649,10 @@ export function findMinorityAttack(fen: string, color: Color): MinorityAttack | 
         const diagSq = `${String.fromCharCode(97 + tf)}${toRank + fwd}` as Square;
         const occ = chess.get(diagSq);
         if (occ && occ.type === 'p' && occ.color === enemy && flank.files.includes(tf)) {
-          return { flank: flank.name, leverSan: push.san, leverFrom: push.from, leverTo: push.to, target: diagSq };
+          // No check marks: the lever is read on a board with the side to move
+          // FORCED, so a check the OTHER side already stands in rides along —
+          // "b3+ is the lever" with Black's king in check from Qh4 (walk 5).
+          return { flank: flank.name, leverSan: push.san.replace(/[+#]+$/, ''), leverFrom: push.from, leverTo: push.to, target: diagSq };
         }
       }
     }

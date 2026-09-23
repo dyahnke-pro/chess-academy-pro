@@ -178,7 +178,9 @@ describe('computedTruth.fuzz — positional computers satisfy their own definiti
         const parts = fen.split(' '); parts[1] = color; parts[3] = '-';
         let c: Chess;
         try { c = new Chess(parts.join(' ')); } catch { bad.push(`${fen}: bad forced-turn`); continue; }
-        const legal = c.moves({ verbose: true }).some((m) => m.san === ma.leverSan && m.to === ma.leverTo && m.from === ma.leverFrom);
+        // The lever is reported WITHOUT check marks: on a turn-forced board a
+        // check the other side already stands in rides along on chess.js's SAN.
+        const legal = c.moves({ verbose: true }).some((m) => m.san.replace(/[+#]+$/, '') === ma.leverSan && m.to === ma.leverTo && m.from === ma.leverFrom);
         const tgt = c.get(ma.target);
         if (!legal) bad.push(`${fen}: ${color} minority lever ${ma.leverSan} is not legal`);
         if (!tgt || tgt.type !== 'p' || tgt.color === color) bad.push(`${fen}: ${color} minority target ${ma.target} is not an enemy pawn`);

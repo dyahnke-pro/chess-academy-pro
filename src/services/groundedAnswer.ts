@@ -28,7 +28,7 @@ import {
 import type { PressureCount } from './positionReadingService';
 import { readPosition } from './positionalRead';
 import { structurePlan } from './boardPlan';
-import { strategicWhyLed, strategicWhySelfContained, strategicWhyImperative } from './moveFundamentals';
+import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { liveMethodBeatFor } from './methodBeat';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
@@ -5264,8 +5264,18 @@ export function assembleRetrospectiveAnswer(r: RetrospectiveMoveLike): GroundedA
   const lead = `${r.mover === 'coach' ? 'My' : r.mover === 'opponent' ? 'Their' : 'Your'} ${r.playedSan} on move ${r.moveNumber}`;
   // What the move itself DID — the concrete geometry first, else the
   // fundamental it served. Board-computed, never invented.
-  const did = describeMoveGeometry(r.fenBefore, r.playedSan, r.moverColor)
-    ?? strategicWhySelfContained(r.fenBefore, r.playedSan, r.moverColor);
+  // The VERB-LED form: this clause follows "— it", and the self-contained form
+  // read "it castling gets your king to safety" (walk 5, 2026-09-23). The led
+  // form is written from the mover's chair, so its possessives are re-seated
+  // for a move the student did not make ("my king" for the coach's castle).
+  const ledRaw = describeMoveGeometry(r.fenBefore, r.playedSan, r.moverColor)
+    ?? strategicWhyLed(r.fenBefore, r.playedSan, r.moverColor);
+  const reseat: Record<string, string> = r.mover === 'coach'
+    ? { your: 'my', their: 'your', Your: 'My', Their: 'Your' }
+    : r.mover === 'opponent'
+      ? { your: 'their', their: 'your', Your: 'Their', Their: 'Your' }
+      : {};
+  const did = ledRaw ? ledRaw.replace(/\b(your|their|Your|Their)\b/g, (w) => reseat[w] ?? w) : null;
   const didClause = did ? ` — it ${did.replace(/[.!?]+$/, '')}` : '';
 
   // The engine's better move, by COORDINATES — the same move renders Nxd4 or

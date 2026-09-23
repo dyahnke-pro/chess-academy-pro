@@ -21,7 +21,7 @@ import type { ReviewMoveInput, ReviewNarration } from './coachFeatureService';
 
 /** Bump whenever the narration ENGINE changes what it would say for the same
  *  inputs (a new facet, a reordered cascade, a template change). */
-export const REVIEW_NARRATION_REV = 4; // 4: seat-correct structure prose + one worst-piece finder (2026-09-15)
+export const REVIEW_NARRATION_REV = 5; // 5: walk 5 — seat, passer ownership, the HOW ledger, en-prise plans (2026-09-23)
 
 export interface ReviewNarrationCacheEntry {
   rev: number;

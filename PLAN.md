@@ -1015,6 +1015,23 @@ Fixed in this push — each a computed fact that was wrong, not a phrasing nit:
   takes explain / analyse / break down this position and "what's happening
   here", and the matrix row moved from ACTIONS to LIVE_BOARD.
 
+**RE-WALK on prod (chunk index-BaItklag, dc7eab01a)** — every fix above held:
+UNFINISHED / opening names / best-move agreement 42% (was 0%); one threat rep;
+"Move 14 — you played Bc6"; "The engine plays Nd5 — it takes the knight on f6
+out of the pawn's attack"; "check, capture, threat"; "f4 is now on for them";
+"Another tempo handed over" (the HOW said once); "f5 leaves the other side a
+passed pawn on g5"; "they answer Rae1"; the rook-endgame line said once (ply
+69); no "best piece" at move two; "what should I play here?" and "explain this
+position" answered ON /coach/play; "Nf3 was the engine's top move — you gave up
+nothing"; "why did I castle?" routed to the castle. Three new, fixed in the
+follow-up push: `REVIEW_NARRATION_REV` had not moved since 09-15, so every game
+a user had ALREADY reviewed kept replaying the old narration (bumped to 5 —
+the audit device's cache held the stale entry, proving it); "b3+ is the lever"
+(the minority lever is read on a turn-forced board, so the OTHER side's check
+rode along on the SAN); "it castling gets your king to safety" (the
+retrospective answer used the self-contained form after "it" — now the
+verb-led form, re-seated for the coach's or opponent's move).
+
 Open, not this push: F8 seat-neutral tactic templates (7, shared by review /
 drills / alerts); R1b spectator corpus notes on live and review boards (§4.6
 bake); R3 "Follow it up" line density (the locked `'full'` scope); L5a a

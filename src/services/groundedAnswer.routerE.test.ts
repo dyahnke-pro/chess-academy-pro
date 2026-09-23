@@ -193,3 +193,17 @@ describe('walk 2026-09-23 — the routine and the unmeasured ply', () => {
     expect(a.facts).toMatch(/engine's line there ran Kd7/);
   });
 });
+
+describe('the retrospective clause after "it" is verb-led and seated (walk 5, 2026-09-23)', () => {
+  const beforeOO = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 4';
+  const base = { playedSan: 'O-O', fenBefore: beforeOO, moveNumber: 4, moverColor: 'white' as const, bestMoveUci: 'e1g1', cpLoss: 0, quality: 'best' as const, missedMate: null, allowedMate: null };
+  it('never "it castling gets…" — the student\'s castle castles YOUR king', () => {
+    const a = assembleRetrospectiveAnswer({ ...base, mover: 'student' });
+    expect(a.facts).not.toMatch(/it castling/);
+    expect(a.facts).toMatch(/it castles your king/);
+  });
+  it('the coach\'s castle castles MY king', () => {
+    const a = assembleRetrospectiveAnswer({ ...base, mover: 'coach' });
+    expect(a.facts).toMatch(/it castles my king/);
+  });
+});
