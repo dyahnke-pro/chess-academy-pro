@@ -10,10 +10,10 @@
 
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:846) — names `factSelector`
 - **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:927) — names `factSelector`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:997) — names `factSelector`, `selectFacts`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3933) — names `factSelector`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5859) — names `factSelector`
-- **The standard post-deploy ritual** (CLAUDE.md:5955) — names `factSelector`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:997) — names `factSelector`, `selectFacts`, `supportedFacts`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3937) — names `factSelector`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5863) — names `factSelector`
+- **The standard post-deploy ritual** (CLAUDE.md:5959) — names `factSelector`
 
 ## Who calls in
 
@@ -68,7 +68,7 @@
 - `src/services/factSelector.test.ts:160`
 
 ### `supportedFacts` (function) — 7 call sites
-- `src/services/coachDecider.ts:306`
+- `src/services/coachDecider.ts:307`
 - `src/services/supportedFacts.test.ts:21`
 - `src/services/supportedFacts.test.ts:27`
 - `src/services/supportedFacts.test.ts:34`

@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4965) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4969) — names `detectTactics`
 
 ## Who calls in
 

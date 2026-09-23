@@ -54,3 +54,48 @@ describe('supportedFacts — a description speaks only where it supports a teach
     expect(supportedFacts([lead], new Map(), roleOf, isMoveReason).spoken).toEqual([lead]);
   });
 });
+
+// ONE COACH (David 2026-09-23: "Review should rank the same way as learn! And
+// play!"). The live composer hands the door clauses, not `[tag]` facets; their
+// role rides the clause KIND in `family`. Same rule, second vocabulary.
+describe('decide — teaching points first on the LIVE vocabulary too', async () => {
+  const { decide } = await import('./coachDecider');
+  const { NO_BOOST } = await import('./studentMomentBoost');
+  const { CLAUSE_ROLE } = await import('./reviewFacetRank');
+  const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST };
+  const blunder = { decision: null, cpLossCp: 300, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
+  const HANG = 'Your knight on f3 is hanging to the bishop on g4.';
+  const LEANS_HERE = 'Their bishop on g4 is doing all the work.';
+  const LEANS_ELSEWHERE = 'Your rook on a1 is carrying your whole position.';
+  const live = (facts: string[], kinds: Record<string, string>, sq: Record<string, string[]>) => ({
+    facts,
+    squares: new Map(Object.entries(sq)),
+    order: { rank: new Map(facts.map((f, i) => [f, 100 - i] as const)), bar: 0 },
+    family: new Map(Object.entries(kinds)),
+  });
+
+  it('a leans line speaks beside the teaching point it supports, and not beside one it does not', () => {
+    const d = decide(blunder, student, live(
+      [HANG, LEANS_HERE, LEANS_ELSEWHERE],
+      { [HANG]: 'must-defend', [LEANS_HERE]: 'opponent-leans', [LEANS_ELSEWHERE]: 'student-leans' },
+      { [HANG]: ['f3', 'g4'], [LEANS_HERE]: ['g4'], [LEANS_ELSEWHERE]: ['a1'] },
+    ), 'interrupt');
+    expect(d.spoken).toEqual([HANG, LEANS_HERE]);
+    expect(d.quiet.find((q) => q.text === LEANS_ELSEWHERE)?.why).toBe('unsupported');
+  });
+
+  it('a ply of descriptions alone says nothing — and names the gate', () => {
+    const d = decide(blunder, student, live(
+      [LEANS_ELSEWHERE], { [LEANS_ELSEWHERE]: 'student-leans' }, { [LEANS_ELSEWHERE]: ['a1'] },
+    ), 'interrupt');
+    expect(d.speak).toBe(false);
+    expect(d.reason).toBe('unsupported');
+  });
+
+  it('the band-change status line is teaching, so it survives on its own', () => {
+    expect(CLAUSE_ROLE.status).toBe('teach');
+    const STATUS = "You're winning this now — technique from here.";
+    const d = decide(blunder, student, live([STATUS], { [STATUS]: 'status' }, {}), 'interrupt');
+    expect(d.spoken).toEqual([STATUS]);
+  });
+});

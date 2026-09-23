@@ -17,6 +17,7 @@
 // A fact's rank is the first plus the second. No ceiling is introduced here:
 // ranking changes the ORDER, never the SET (CLAUDE.md G4.5).
 import { matchClauseKind, boostFor, type WeaknessSignal } from './weaknessSignal';
+import type { ClauseKind } from './positionFacts';
 
 /** Every tag `computeMoveFacets` (and the review's own passes) can emit. The
  *  Record below is exhaustive over this union, so a NEW tag fails to compile
@@ -152,6 +153,38 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'opp-dev': 'describe',
   'plan-line': 'describe', // the long engine line — speaks only when it proves a point
   consequence: 'describe',
+};
+
+/**
+ * THE SAME RULE FOR THE LIVE SURFACES (David 2026-09-23: "Review should rank
+ * the same way as learn! And play! Unified coach!").
+ *
+ * Learn, phase transitions and "read this position" hand the door clauses from
+ * `positionFacts`, not review's `[tag]` facets — so until this table existed,
+ * teaching-points-first ran on review alone and the other surfaces spoke every
+ * description they computed. Two vocabularies, one rule: exhaustive over
+ * `ClauseKind`, so a new clause kind fails to compile until someone decides.
+ *
+ * `status` TEACHES on purpose: it fires only on a band CHANGE and carries the
+ * instruction ("technique from here", "make it as hard as you can"). The two
+ * `leans` kinds are the live board's "fights for d5": which piece is doing the
+ * work. They speak when a teaching point on the ply names the same squares.
+ */
+export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
+  status: 'teach',
+  deliberation: 'teach',
+  'latent-danger': 'teach',
+  'latent-chance': 'teach',
+  'must-defend': 'teach',
+  'key-moment': 'teach',
+  'opponent-intent': 'teach',
+  fundamental: 'teach',
+  'structure-plan': 'teach',
+  convert: 'teach',
+  concept: 'teach',
+  method: 'teach',
+  'student-leans': 'describe',
+  'opponent-leans': 'describe',
 };
 
 const TAG_RE = /^\[([a-z0-9-]+)\]/;

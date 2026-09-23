@@ -1001,6 +1001,10 @@ make it and no two callers composed them the same way, which is why
 2. **NEED** — does THIS student need it here (their own data; absent ≠ silent).
 3. **SUBSUME** — collapse facts that are one claim about one geometry.
 4. **FLOOR** — sweep what is not worth saying at this moment.
+4b. **SUPPORT** — a DESCRIPTION speaks only where a teaching point on the ply names
+   its squares (`supportedFacts`; roles in `FACET_ROLE` for review, `CLAUSE_ROLE`
+   for the live composer — one rule, two vocabularies, David 2026-09-23). A ply
+   of descriptions alone closes as `reason: 'unsupported'`.
 5. **ORDER** — most-important-first, their weaknesses raised.
 6. **METHOD** — the habit that finds it next time, appended LAST.
 

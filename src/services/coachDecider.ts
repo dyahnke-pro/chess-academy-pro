@@ -31,7 +31,7 @@
 // verdict with a reason attached — never an absence.
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, type QuietFact } from './factSelector';
-import { rankFacets, facetTag, FACET_ROLE } from './reviewFacetRank';
+import { rankFacets, facetTag, FACET_ROLE, CLAUSE_ROLE } from './reviewFacetRank';
 import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, type MethodHabit } from './methodBeat';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -182,7 +182,7 @@ export interface CoachDecision {
   /** Does this moment speak at all? */
   speak: boolean;
   /** Why it does or does not — the observability trail. */
-  reason: 'importance' | 'need' | 'spoken';
+  reason: 'importance' | 'need' | 'unsupported' | 'spoken';
   tier: ImportanceTier;
   /** Moment-level weight, for ordering moments against each other. */
   rank: number;
@@ -299,19 +299,21 @@ export function decide(
     { incoming: bundle.incoming, alreadySaid: bundle.alreadySaid, order: bundle.order, family: bundle.family },
   );
   // 4b — TEACHING POINTS FIRST (2026-09-23). A description speaks only where it
-  // supports a teaching point on this ply; a ply with no teaching point keeps
-  // the move's own reason. Applies where facts carry review's `[tag]` roles —
-  // a surface ranking its own facts (`bundle.order`) has no roles to read.
-  if (!bundle.order) {
-    const support = supportedFacts(
-      selection.spoken,
-      bundle.squares,
-      (t) => { const tag = facetTag(t); return tag === null ? 'teach' : FACET_ROLE[tag]; },
-      (t) => facetTag(t) === 'does',
-    );
-    selection.spoken = support.spoken;
-    selection.quiet = [...selection.quiet, ...support.quiet];
-  }
+  // supports a teaching point on this ply. ONE rule on every surface: review's
+  // facts carry their role in the `[tag]`, the live composer's in the clause
+  // `family` (its kind). Only review has a move-reason line (`[does]`) to keep
+  // on a ply with no teaching point; a live clause set has no such kind.
+  const family = bundle.family;
+  const support = supportedFacts(
+    selection.spoken,
+    bundle.squares,
+    family
+      ? (t) => { const k = family.get(t); return k !== undefined && k in CLAUSE_ROLE ? CLAUSE_ROLE[k as keyof typeof CLAUSE_ROLE] : 'teach'; }
+      : (t) => { const tag = facetTag(t); return tag === null ? 'teach' : FACET_ROLE[tag]; },
+    family ? () => false : (t) => facetTag(t) === 'does',
+  );
+  selection.spoken = support.spoken;
+  selection.quiet = [...selection.quiet, ...support.quiet];
   // 5 — THE ORDER. The surface's own ranks when it supplied them, else the
   // review ranker. Either way the student's holes are raised: `rankFacets` does
   // it by tag, and a surface that ranks its own facts has already applied its
@@ -332,6 +334,12 @@ export function decide(
       method.ply ?? 0,
     );
     if (beat) { spoken.push(`[method] ${beat}`); methodSpoke = true; }
+  }
+  // A ply whose every fact was a description with no teaching point to
+  // support says nothing — and says WHICH gate closed it, rather than
+  // reporting `speak: true` over an empty list.
+  if (spoken.length === 0) {
+    return emit(posture, { ...base, speak: false, reason: 'unsupported', spoken, quiet: selection.quiet }, student, false);
   }
   return emit(posture, { ...base, speak: true, reason: 'spoken', spoken, quiet: selection.quiet }, student, methodSpoke);
 }

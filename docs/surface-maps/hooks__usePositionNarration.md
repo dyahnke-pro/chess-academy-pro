@@ -8,10 +8,10 @@
 
 ## Locked rules that govern this surface
 
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1167) — names `usePositionNarration`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3910) — names `usePositionNarration`
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4241) — names `usePositionNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:5955) — names `usePositionNarration`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1171) — names `usePositionNarration`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3914) — names `usePositionNarration`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4245) — names `usePositionNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:5959) — names `usePositionNarration`
 
 ## Who calls in
 
