@@ -327,7 +327,10 @@ describe('CoachGamePage', () => {
       await vi.advanceTimersByTimeAsync(100);
     }
 
-    it('fires voiceService.speakForced when intent was captured from URL', async () => {
+    // Play volunteers nothing (David 2026-09-23: "Coach play shouldn't talk
+    // at all") — the deep-link entry beat is unprompted, so it is silent
+    // even when the intent came from the URL. Gate: CoachGamePage.playSilent.
+    it('does NOT speak the entry beat even when intent was captured from URL', async () => {
       useCoachMemoryStore.setState({
         intendedOpening: {
           name: 'Italian Game',
@@ -338,38 +341,12 @@ describe('CoachGamePage', () => {
       });
       render(<CoachGamePage />);
       await flushEntryBeat();
-      // useNarration's dedup window may suppress the first speak if
-      // the test infra fires multiple effects within 6s of fake time;
-      // also drain longer to be sure.
       await vi.advanceTimersByTimeAsync(7000);
       const calls = vi.mocked(voiceService.speakForced).mock.calls;
       const entryBeatCall = calls.find(
         (args) => typeof args[0] === 'string' && /^Italian Game as White\./.test(args[0]),
       );
-      // Diagnostic: dump store state + all speakForced calls if assertion fails
-      const storeState = useCoachMemoryStore.getState().intendedOpening;
-      expect(
-        entryBeatCall,
-        `speakForced calls: ${JSON.stringify(calls.map((c) => c[0]))}; storeState: ${JSON.stringify(storeState)}`,
-      ).toBeDefined();
-    });
-
-    it('formats the spoken text with the side label matching intendedOpening.color', async () => {
-      useCoachMemoryStore.setState({
-        intendedOpening: {
-          name: 'Caro-Kann Defense',
-          color: 'black',
-          setAt: Date.now(),
-          capturedFromSurface: 'url-or-resume',
-        },
-      });
-      render(<CoachGamePage />);
-      await flushEntryBeat();
-      const calls = vi.mocked(voiceService.speakForced).mock.calls;
-      const entryBeat = calls.find(
-        (args) => typeof args[0] === 'string' && /^Caro-Kann Defense as Black\./.test(args[0]),
-      );
-      expect(entryBeat).toBeDefined();
+      expect(entryBeatCall).toBeUndefined();
     });
 
     it('does NOT fire when intent was captured from chat (not URL)', async () => {

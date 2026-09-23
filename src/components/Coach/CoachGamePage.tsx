@@ -262,6 +262,23 @@ export interface CoachGamePageProps {}
  *  rebuild. Gate: `CoachGamePage.blunderCard.test.ts`. */
 export const BLUNDER_CARD_ENABLED = false;
 
+/** PLAY IS SILENT UNLESS THE STUDENT ASKS (David 2026-09-23: "Coach play
+ *  shouldn't talk at all."). A new App Store user's first game on this
+ *  surface heard 24 volunteered lines in two minutes — per-move slip lines,
+ *  blunder verdicts, threat alerts, phase summaries — and never came back.
+ *
+ *  OFF silences EVERY unprompted line on /coach/play, voice AND chat text:
+ *  the deep-link entry beat, the per-move slip line, the blunder verdict, the
+ *  "Watch out" threat alert and phase-transition narration. What the student
+ *  TAPS still answers (Read this position, Why?, Hint, typed chat, mic), and
+ *  post-game review keeps its voice — that is where the diagnosis lives.
+ *
+ *  The RECORD is not the UI: slips are still classified and `raiseWhyForSlip`
+ *  still files them to My Mistakes / the weakness spine. Scope is /coach/play
+ *  only; OpeningPlayMode's Play rung is a separate decision.
+ *  Gate: `CoachGamePage.playSilent.test.ts`. */
+export const PLAY_VOLUNTEERS_COACHING: boolean = false;
+
 export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -639,6 +656,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const entryBeatFiredRef = useRef(false);
   useNarration({ text: entryBeatText });
   useEffect(() => {
+    if (!PLAY_VOLUNTEERS_COACHING) return;
     if (entryBeatFiredRef.current) return;
     if (!intendedOpening) return;
     if (intendedOpening.capturedFromSurface !== 'url-or-resume') return;
@@ -1892,8 +1910,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     const blunderActive =
       gameState.status === 'blunder_pause' || blunderPause !== null;
 
-    if (verbosity === 'off' || blunderActive || positionNarration.isNarrating) {
-      const reason = verbosity === 'off'
+    if (!PLAY_VOLUNTEERS_COACHING || verbosity === 'off' || blunderActive || positionNarration.isNarrating) {
+      const reason = !PLAY_VOLUNTEERS_COACHING
+        ? 'play-silent'
+        : verbosity === 'off'
         ? 'verbosity-off'
         : blunderActive
           ? 'blunder-priority'
@@ -1958,12 +1978,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // Speak the Discussion Practice "why?" prompt and the coach's teaching
   // note (voice-first; voiceService self-gates on the silent verbosity).
   useEffect(() => {
-    if (discussion.phase === 'asking' && discussion.prompt) {
+    if (PLAY_VOLUNTEERS_COACHING && discussion.phase === 'asking' && discussion.prompt) {
       void voiceService.speak(discussion.prompt.question).catch(() => { /* best-effort */ });
     }
   }, [discussion.phase, discussion.prompt]);
   useEffect(() => {
-    if (discussion.phase === 'teaching' && discussion.teach) {
+    if (PLAY_VOLUNTEERS_COACHING && discussion.phase === 'teaching' && discussion.teach) {
       void voiceService.speak(discussion.teach).catch(() => { /* best-effort */ });
     }
   }, [discussion.phase, discussion.teach]);
@@ -2913,7 +2933,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 : (descGrounded ? `Watch out — ${threat.pattern.description}.` : '');
             // Nothing board-true left to say (no setup move + hallucinated
             // description) — stay silent rather than speak a false square.
-            if (warning) {
+            if (warning && PLAY_VOLUNTEERS_COACHING) {
             gameChatRef.current?.injectAssistantMessage(warning);
             const tacticVerbosity = resolveVerbosity(useAppStore.getState().activeProfile);
             if (tacticVerbosity !== 'off') {
@@ -3818,7 +3838,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         density: narrationDensity,
         announcedHangingSquares: announcedHangingRef.current.squares,
       });
-      if (fastLine) {
+      if (fastLine && PLAY_VOLUNTEERS_COACHING) {
         commentary = fastLine;
         // The downstream speak path (WO-NARR-POLICY-05) fires
         // voiceService.speakIfFree(commentary) only when this is true.
@@ -4120,7 +4140,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // voiceService.stop() on entry, and voiceService.speakInternal
       // also stops in-flight speech before starting — so a phase
       // summary firing will cleanly cut this off.
-      if (verbosity !== 'off' && explanation.trim()) {
+      if (PLAY_VOLUNTEERS_COACHING && verbosity !== 'off' && explanation.trim()) {
         void logAppAudit({
           kind: 'coach-move-narration-fired',
           category: 'subsystem',
@@ -4147,7 +4167,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           kind: 'coach-move-narration-skipped',
           category: 'subsystem',
           source: 'CoachGamePage.blunder',
-          summary: `verbosity=${verbosity} hasExplanation=${Boolean(explanation.trim())}`,
+          summary: `verbosity=${verbosity} hasExplanation=${Boolean(explanation.trim())} playSilent=${!PLAY_VOLUNTEERS_COACHING}`,
           fen: moveResult.fen,
         });
       }
@@ -4171,7 +4191,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // and it would fire on every move regardless of the
     // 'key-moments' setting. Audit build ac8088d caught this bug.
     // WO-NARR-POLICY-03.
-    if (llmProducedSpeech) {
+    if (llmProducedSpeech && PLAY_VOLUNTEERS_COACHING) {
       void logAppAudit({
         kind: 'coach-move-narration-fired',
         category: 'subsystem',
@@ -4194,7 +4214,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         kind: 'coach-move-narration-skipped',
         category: 'subsystem',
         source: 'CoachGamePage.move',
-        summary: `verbosity=${verbosity} classification=${classification} reason=${commentary.trim() ? 'tactic-suffix-only' : 'empty-commentary'}`,
+        summary: `verbosity=${verbosity} classification=${classification} reason=${!PLAY_VOLUNTEERS_COACHING ? 'play-silent' : commentary.trim() ? 'tactic-suffix-only' : 'empty-commentary'}`,
         fen: moveResult.fen,
       });
     }

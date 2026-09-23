@@ -51,7 +51,7 @@ import { clickMove, awaitCoachReply, readPlacement, samePlacement, placementOf, 
 // is fed input it must reject in src/test/coachTabGraders.test.ts. A private
 // copy here would drift out from under those controls, which is how the
 // TACTIC_WORDS alternation bug survived a green run in the first place.
-import { STOCK, isGrounded, TACTIC_WORDS, SANCTIONED, spokenTextOf, evalSpread, evalMagnitudeOf, freshTexts, tally } from './audit-lib/coach-tab-graders.mjs';
+import { STOCK, isGrounded, TACTIC_WORDS, spokenTextOf, evalSpread, evalMagnitudeOf, freshTexts, tally } from './audit-lib/coach-tab-graders.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -423,33 +423,20 @@ async function main() {
   //    here is CORRECT to be absent. What must work is the ON-DEMAND answer,
   //    which the parity battery below tests. We only record what it did say.
   const playSpoken = spokenOf(listener.getCapturedEvents().slice(beforePlay));
-  // NAME WHAT IT SAID. "14 unprompted spoken lines" is a number nobody can act
-  // on: Play is silent-by-contract mid-game, but phase transitions, the opening
-  // announcement and move dictation are all sanctioned, so the count alone
-  // cannot separate a contract breach from the contract working. Sort them.
-  // THE BLUNDER CARD IS NOT VOLUNTEERING. When the student blunders, Play
-  // raises the blocking "Blunder Detected" interception and speaks its
-  // explanation (`CoachGamePage.blunder`). That card is a documented, deliberate
-  // feature — the full-game audit standard counts its interceptions as PROOF
-  // the slip detector fires end-to-end — and the student is engaged with it, so
-  // it is not the coach reading the board out to someone who never asked.
-  //
-  // What Play must not do, and no longer does, is narrate the pin and the fork
-  // move-by-move while the student is just playing. That is the distinction
-  // this check exists to hold, so it is drawn on the SOURCE, which cannot be
-  // faked by rewording. Flagged to David 2026-08-16 as a judgement call to
-  // overrule if he wants the card muted too.
-  const blunderCard = new Set(listener.getCapturedEvents().slice(beforePlay)
-    .filter((e) => /CoachGamePage\.blunder/.test(e.source ?? ''))
-    .map(spokenTextOf).filter(Boolean));
-  const volunteered = playSpoken.filter((t) => !SANCTIONED.test(t) && !blunderCard.has(t));
-  if (!volunteered.length) {
-    pass('Play stays silent until asked', `${playSpoken.length} line(s), all sanctioned (move dictation / opening name / phase transition)`);
+  // PLAY VOLUNTEERS NOTHING (David 2026-09-23: "Coach play shouldn't talk at
+  // all"). The exemptions that used to live here — the blunder verdict
+  // (`CoachGamePage.blunder`), phase transitions, the opening announcement —
+  // are GONE with the contract they excused: every unprompted line is now
+  // behind `PLAY_VOLUNTEERS_COACHING` (off). So the bar is ZERO spoken lines
+  // before the student asks; the on-demand battery below proves asking works.
+  // Named by SOURCE so a breach says which code path spoke.
+  if (!playSpoken.length) {
+    pass('Play stays silent until asked', '0 unprompted lines mid-game');
   } else {
     const srcOf = (txt) => (listener.getCapturedEvents().slice(beforePlay)
       .find((e) => spokenTextOf(e) === txt)?.source) ?? '?';
     fail('Play stays silent until asked',
-      `${volunteered.length} of ${playSpoken.length} line(s) were volunteered teaching mid-game — sources: ${[...new Set(volunteered.map(srcOf))].join(', ')} — e.g. "${volunteered[0].slice(0, 110)}"`);
+      `${playSpoken.length} unprompted line(s) mid-game — sources: ${[...new Set(playSpoken.map(srcOf))].join(', ')} — e.g. "${playSpoken[0].slice(0, 110)}"`);
   }
   // KEEP THE SOURCE, not just the words. Run 13 caught Play volunteering three
   // lines of real teaching that `buildFastMoveLine` cannot produce, and finding
