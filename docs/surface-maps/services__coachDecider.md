@@ -133,9 +133,9 @@
 - `src/services/liveNeedGate.test.ts:64`
 - `src/services/liveNeedGate.test.ts:76`
 - `src/services/positionFacts.ts:703`
-- `src/services/supportedFacts.test.ts:78`
-- `src/services/supportedFacts.test.ts:88`
-- `src/services/supportedFacts.test.ts:98`
+- `src/services/supportedFacts.test.ts:77`
+- `src/services/supportedFacts.test.ts:87`
+- `src/services/supportedFacts.test.ts:97`
 
 ### `habitNeedFrom` (function) — 11 call sites
 - `src/services/coachFeatureService.ts:1483`
