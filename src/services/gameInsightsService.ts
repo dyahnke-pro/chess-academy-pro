@@ -1,3 +1,4 @@
+import { isComputerOpponent } from '../utils/computerOpponent';
 import { db } from '../db/schema';
 import { getRepertoireOpenings } from './openingService';
 import { reconstructMovesFromGame } from './gameReconstructionService';
@@ -236,18 +237,21 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     totalMoves += countFullMovesInPgn(game.pgn);
 
     // Opponent ELO
-    const oppElo = getOpponentElo(game, playerColor);
+    // A computer set to a strength is not a rated opponent (walk 6, W3): it
+    // sits out every opponent-rating stat.
+    const vsPerson = !isComputerOpponent(game);
+    const oppElo = vsPerson ? getOpponentElo(game, playerColor) : null;
     if (oppElo) {
       totalElo += oppElo;
       eloCount++;
 
       const oppName = getOpponentName(game, playerColor);
-      if (isWin(game, playerColor)) {
+      if (vsPerson && isWin(game, playerColor)) {
         if (!highestBeaten || oppElo > highestBeaten.elo) {
           highestBeaten = { name: oppName, elo: oppElo, gameId: game.id };
         }
       }
-      if (isLoss(game, playerColor)) {
+      if (vsPerson && isLoss(game, playerColor)) {
         if (!lowestLostTo || oppElo < lowestLostTo.elo) {
           lowestLostTo = { name: oppName, elo: oppElo, gameId: game.id };
         }

@@ -6107,7 +6107,10 @@ export function pickCounterRecommendation(
 /** Anonymous corpus stat — the phrasing contract bans pro names. */
 function statClause(stat: { games: number; scorePct: number } | null | undefined): string {
   if (!stat || stat.games <= 0) return '';
-  return ` — it scores ${stat.scorePct}% across ${stat.games.toLocaleString()} games at grandmaster level`;
+  // The stat is ONE strong player's own games (the pro-repertoire corpus), not
+  // master play at large (walk 6, S1: "73.4% across 370 games at grandmaster
+  // level"). Anonymous by contract — the phrasing never names the player.
+  return ` — a titled player scored ${stat.scorePct}% with it across ${stat.games.toLocaleString()} of their own games`;
 }
 
 /**

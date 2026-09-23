@@ -96,7 +96,14 @@ export function buildCustomLessonPlan(
     if (seen.has(tag)) continue;
     const w = byTag.get(tag);
     if (!w) continue;
+    // ONE HOLE, ONE OFFER (walk 6, W4: "the two patterns hurting you most are
+    // took a poisoned pawn and taking a poisoned pawn"). The spine carries a
+    // fundamental's own row beside the coach's tag row for the same hole; both
+    // name that tag as `capabilityTag`, which is the join, never the label.
+    const hole = w.capabilityTag ?? tag;
+    if (seen.has(hole)) continue;
     seen.add(tag);
+    seen.add(hole);
     parts.push({
       tag,
       label: w.label,

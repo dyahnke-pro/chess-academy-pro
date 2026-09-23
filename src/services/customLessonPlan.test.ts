@@ -39,6 +39,16 @@ function arc(...tags: { tag: string; label: string; status: 'active' | 'queued' 
 }
 
 describe('buildCustomLessonPlan', () => {
+  it('offers one hole once, even when the spine carries it twice (walk 6, W4)', () => {
+    const plan = buildCustomLessonPlan(null, [
+      w('poisoned-pawn', 'Took a poisoned pawn', { severity: 60, capabilityTag: 'poisoned-pawn' }),
+      w('fundamental:poisoned-pawn', 'Taking a poisoned pawn', { severity: 55, capabilityTag: 'poisoned-pawn' }),
+      w('analysis:tactic:fork', 'Missed forks', { severity: 40 }),
+    ]);
+    expect(plan.parts.map((p) => p.tag)).toEqual(['poisoned-pawn', 'analysis:tactic:fork']);
+    expect(plan.pickerLine).not.toMatch(/poisoned pawn and taking a poisoned pawn/i);
+  });
+
   it('is empty when there are no open holes', () => {
     const plan = buildCustomLessonPlan(null, [w('analysis:tactic:fork', 'Forks', { openCount: 0 })]);
     expect(plan.parts).toHaveLength(0);

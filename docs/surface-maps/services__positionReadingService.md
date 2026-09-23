@@ -77,7 +77,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2173`
 - `src/services/groundedAnswer.ts:2579`
 - `src/services/groundedAnswer.ts:2937`
-- `src/services/groundedAnswer.ts:6347`
+- `src/services/groundedAnswer.ts:6350`
 - `src/services/pvPlayback.ts:413`
 - `src/services/pvPlayback.ts:450`
 - `src/services/reviewQuestionPlan.ts:67`
@@ -85,7 +85,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `legalSeeGainOn` (function) — 8 call sites
 - `src/services/coachFeatureService.ts:2296`
-- `src/services/groundedAnswer.ts:6393`
+- `src/services/groundedAnswer.ts:6396`
 - `src/services/reviewFullData.ts:625`
 - `src/services/reviewTeachingPoints.ts:98`
 - `src/services/reviewTeachingPoints.ts:134`
@@ -101,7 +101,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2328`
 - `src/services/groundedAnswer.ts:2468`
 - `src/services/groundedAnswer.ts:2746`
-- `src/services/groundedAnswer.ts:6325`
+- `src/services/groundedAnswer.ts:6328`
 - `src/services/latentFork.ts:135`
 - `src/services/latentFork.ts:204`
 - `src/services/moveFundamentals.ts:239`
