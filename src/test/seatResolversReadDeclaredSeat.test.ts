@@ -13,6 +13,7 @@ const RESOLVERS: Array<{ file: string; fn: string }> = [
   { file: 'src/services/conversionDetector.ts', fn: 'export function resolvePlayerColor(' },
   { file: 'src/services/tacticClassifierService.ts', fn: 'function resolvePlayerColor(' },
   { file: 'src/services/mistakePuzzleService.ts', fn: 'export function determinePlayerColor(' },
+  { file: 'src/services/gameInsightsService.ts', fn: 'function getPlayerColorWithUsername(' },
 ];
 
 describe('seat resolvers read GameRecord.studentSide before guessing from names', () => {

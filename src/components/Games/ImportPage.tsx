@@ -190,11 +190,16 @@ export function ImportPage(): JSX.Element {
         // Stats are best-effort
       }
 
-      // Save username + update profile
-      if (activeProfile) {
+      // Save username + update profile. The STORE may not hold the profile yet
+      // on a fresh device that opens Import first (walk 2, 2026-09-23: 932
+      // games imported, username never saved, so every name-keyed reader —
+      // the Weaknesses header, "what is my weakest opening?" — read zero
+      // games). Dexie is the source of truth; the store is a cache of it.
+      const target = activeProfile ?? (await db.profiles.toCollection().first()) ?? null;
+      if (target) {
         const prefKey = platform === 'chesscom' ? 'chessComUsername' : 'lichessUsername';
         const updates: Partial<UserProfile> = {
-          preferences: { ...activeProfile.preferences, [prefKey]: username.trim() },
+          preferences: { ...target.preferences, [prefKey]: username.trim() },
         };
 
         if (platformStats) {
@@ -207,8 +212,8 @@ export function ImportPage(): JSX.Element {
           }
         }
 
-        await db.profiles.update(activeProfile.id, updates);
-        const refreshed = await db.profiles.get(activeProfile.id);
+        await db.profiles.update(target.id, updates);
+        const refreshed = await db.profiles.get(target.id);
         if (refreshed) {
           setActiveProfile(refreshed);
         }

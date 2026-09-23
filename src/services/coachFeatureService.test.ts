@@ -46,7 +46,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // pawn, undefended. best = Ke2 (e1e2), a quiet move (no capture/check).
     // GROUNDED punishment: Black's cheapest attacker (the a6 pawn) takes it.
     const r = explainBestMoveGrounded('4k3/8/p7/8/8/8/8/4KB2 w - - 0 1', 'Bb5', 'e1e2', 'white');
-    expect(r).toBe('Your move let Black play axb5, winning the bishop.');
+    expect(r).toBe('Your move let them play axb5, winning the bishop.');
   });
 
   it('reports check when the punishing capture lands with check', () => {
@@ -54,7 +54,7 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // White's Rxe5+ takes it for free AND checks the black king on e8.
     // best = Kf8 (e8f8), a quiet king move (no capture/check) → no merit clause.
     const r = explainBestMoveGrounded('4k3/8/3q4/8/8/8/8/4R1K1 b - - 0 1', 'Qe5', 'e8f8', 'black');
-    expect(r).toBe('Your move let White play Rxe5+, winning the queen with check.');
+    expect(r).toBe('Your move let them play Rxe5+, winning the queen with check.');
   });
 
   it('names the quiet POSITIONAL purpose of a developing best move (David 2026-07-10: WHY on every wrong move)', () => {
@@ -890,3 +890,17 @@ describe('recapSecondPerson — the card never shows the fact package (WO-STANDA
     expect(s).not.toMatch(/You made/);
   });
 });
+
+describe('recapSecondPerson — the Play surface hands a WORD, not a PGN score (walk 2, 2026-09-23)', () => {
+  // Prod card: "The game ended loss." with the opening clause dropped.
+  const base = { playerColor: 'black', openingClause: "the game against the Van't Kruijs Opening", blunderCount: 0, mistakeCount: 0, inaccuracyCount: 0, keyMoments: [], totalErrors: 0 };
+  it('"loss" / "win" / "draw" read as the result they are', () => {
+    expect(recapSecondPerson({ ...base, outcome: 'loss' })).toMatch(/^You lost the game against the Van't Kruijs Opening\./);
+    expect(recapSecondPerson({ ...base, outcome: 'win' })).toMatch(/^You won the game against/);
+    expect(recapSecondPerson({ ...base, outcome: 'draw' })).toMatch(/^You drew the game against/);
+  });
+  it('an unknown result still names the game, never "The game ended <token>."', () => {
+    expect(recapSecondPerson({ ...base, outcome: '*' })).toMatch(/^This game the game against .* ended \*\./);
+  });
+});
+

@@ -391,12 +391,20 @@ export function recapSecondPerson(r: {
   keyMoments: readonly string[];
   totalErrors: number;
 }): string {
-  const won = (r.outcome === '1-0') === (r.playerColor === 'white');
-  const outcome = r.outcome === '1-0' || r.outcome === '0-1'
-    ? (won ? `You won ${r.openingClause}.` : `You lost ${r.openingClause}.`)
-    : r.outcome === '1/2-1/2' || r.outcome === '½-½'
-      ? `You drew ${r.openingClause}.`
-      : `The game ended ${r.outcome}.`;
+  // The result arrives as a PGN score from review AND as a word from the Play
+  // surface (walk 2, 2026-09-23: "The game ended loss." with the opening
+  // clause dropped). One normaliser, both shapes.
+  const raw = r.outcome.trim().toLowerCase();
+  const kind: 'win' | 'loss' | 'draw' | null =
+    raw === '1-0' || raw === '0-1' ? (((raw === '1-0') === (r.playerColor === 'white')) ? 'win' : 'loss')
+    : raw === '1/2-1/2' || raw === '½-½' || raw === 'draw' || raw === 'drawn' ? 'draw'
+    : raw === 'win' || raw === 'won' ? 'win'
+    : raw === 'loss' || raw === 'lost' ? 'loss'
+    : null;
+  const outcome = kind === 'win' ? `You won ${r.openingClause}.`
+    : kind === 'loss' ? `You lost ${r.openingClause}.`
+    : kind === 'draw' ? `You drew ${r.openingClause}.`
+    : `This game ${r.openingClause} ended ${r.outcome}.`;
   const n = (count: number, word: string): string => `${count} ${word}${count === 1 ? '' : (word === 'inaccuracy' ? '' : 's')}`;
   const errors = r.totalErrors === 0
     ? 'The engine flagged nothing — you played cleanly.'

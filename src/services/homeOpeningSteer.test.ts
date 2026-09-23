@@ -14,7 +14,7 @@ vi.mock('../stores/appStore', () => ({
 }));
 vi.mock('./appAuditor', () => ({ logAppAudit: async () => undefined }));
 
-import { buildSteerIndex, pickHomeSteerMove, steerFromIndex, STEER_MIN_GAMES, __resetHomeSteerCacheForTests } from './homeOpeningSteer';
+import { buildSteerIndex, isHomeSteerWarm, pickHomeSteerMove, steerFromIndex, STEER_MIN_GAMES, __resetHomeSteerCacheForTests } from './homeOpeningSteer';
 import { __resetHomeOpeningCacheForTests } from './homeOpeningService';
 
 const PIRC = openingKeyFor('B07', 'Pirc Defense');
@@ -83,3 +83,14 @@ describe('pickHomeSteerMove — from the persisted home opening', () => {
     expect(await pickHomeSteerMove(new Chess().fen(), 'white')).toBeNull(); // no home as White
   });
 });
+
+describe('isHomeSteerWarm — the cold build is a different budget from the warm lookup (walk 2, 2026-09-23)', () => {
+  it('is false before the first call and true for that colour after it', async () => {
+    __resetHomeSteerCacheForTests();
+    expect(isHomeSteerWarm('black')).toBe(false);
+    await pickHomeSteerMove(new Chess().fen(), 'black');
+    expect(isHomeSteerWarm('black')).toBe(true);
+    expect(isHomeSteerWarm('white')).toBe(false);
+  });
+});
+

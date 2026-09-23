@@ -710,6 +710,80 @@ intro fact package at `coachFeatureService` ~L503 still hands the model
 it has the same raw-fallback exposure); the Watch-register beats on the live
 board (BACKLOG §4.6) are untouched by this.
 
+## 🚶 2026-09-23 — WALK 2 (the re-walk on ea66196df): the fixes that stuck, and what the fresh device exposed
+
+Fresh device, chess.com import of the 932 games again, Play as Black twice
+(1.e3 engine game resigned at move 3; a Sicilian 1.e4 c5 2.Bc4 d6 3.d4 Bg4??
+4.Qxg4 resigned), review of both, Learn "lets play, I am white" 1.e4 c5 2.Nf3
+g6 + read this position + drill. Read, not assumed.
+
+**WALK-1 FIXES CONFIRMED ON PROD:** #2 recap in second person ("You made 1
+blunder. On move 3 your Bg4 was a blunder; the engine preferred cxd4") · #3
+the moves survive the phrasing · #4 the record beat ("That's your 87th
+Sicilian Defense, 61% so far — your home opening") · #9 the routine names the
+candidate step once · #10 a measured ply is graded, honestly · #12 the
+development tip names the pieces ("Your knight on b8, bishop on f8 and knight
+on g8 are still at home") · #13 the question reaches the record lane · #14
+"188 home-opening game(s) first (Vienna Game / Sicilian Defense)" at import ·
+the spoken verdict fires as the blunder lands ("bishop to g4 is a blunder —
+about 4.2 points … your move let White play queen takes g4"). Not reproducible
+on this device's lines: #1 (a GREAT ply with a differing engine pick), #5, #6,
+#11 (the in-check alert), #7/#8 partially (no hedge fired after 1.e4 ✓; the
+read-this-position "discovery in two" is gone; it now says "a pin in two" for
+Bg7 vs the b2-pawn/a1-rook, which is board-true and weak).
+
+**WHAT THE FRESH DEVICE EXPOSED — one disease behind four symptoms:**
+
+- 🔴→✅ **E. The import never saved the username** when the STORE had no
+  profile yet (a fresh device that opens Import first). `ImportPage` wrote
+  the username through `activeProfile` and did nothing when it was null, so
+  every NAME-keyed reader read zero games: the Weaknesses header said "0 of
+  0 games analysed" with 932 imported; "what is my weakest opening?" answered
+  "none of your real games are in here". Dexie is the source of truth; the
+  page now writes to the first Dexie profile and hydrates the store.
+- 🔴→✅ **H. A third seat resolver** (`gameInsightsService.getPlayerColorWithUsername`)
+  ignored the declared `studentSide` the importer now stamps — the seat rule's
+  gate listed four resolvers and not this one. It reads the seat first and is
+  in the gate.
+- 🔴→✅ **M. The home steer's first move of a game was never steered.** The
+  first call of a colour builds the whole index (932 PGNs) inside the 1200ms
+  warm-lookup budget and fell through to the amateur band ("source=amateur-band
+  san=c5" — a Vienna player's opponents play 1…e5 in 104 of 104 games). The
+  cold build has its own 4s ceiling (`isHomeSteerWarm`), and a MISS is now an
+  audited row (`source=home-steer-miss`) — walk 2 could not tell whether the
+  steer had run because a miss emitted nothing.
+- 🔴→✅ **D. "The game ended loss."** — the Play surface hands the recap a
+  WORD, review hands it a PGN score; the recap knew only the score and dropped
+  the opening clause on the word. One normaliser.
+- 🔴→✅ **G. "your move let White play queen takes g4"** — spoken by the coach
+  PLAYING White. The opponent is "them", never a bare colour.
+- 🔴→✅ **J. "your 87th Sicilian" on the 88th** — the need loader's memo was
+  keyed without the game count, so a game saved seconds before its review was
+  not in its own record.
+- 🟠 **K.** Bg4?? (a bishop hung to the queen) was attributed "overvalued the
+  attack" — `principleAttribution`'s rule counts any move that hangs its piece
+  as an "offered" investment. Board-true by its own definition, wrong as
+  teaching; the rule needs a threat-intent test. Not changed.
+- 🟠 **I.** The spoken verdict names cxd4 as the better move and the chat's
+  "why was my last move bad?" names Nd7 — two engine reads at two depths, one
+  ply. Not changed.
+- 🟠 **N.** "lets play, I am white" on Learn: the game starts (with the steer
+  wired) but the chat reply is whatever the brain says — this time the stock
+  "I can't verify that precisely" after the strip emptied it. `parseCoachIntent`
+  reads it correctly (`play-against`, white); the Learn handler's play branch
+  requires a NAMED opening (`startOpeningPlay`). The no-name request needs a
+  computed acknowledgement of its own. Not changed.
+- ⚪ Weaknesses "Analysing your games…" header reads "0 of 0" until the first
+  overview loads — cosmetic, resolved by E in practice.
+
+**SHIP-CHECK (David: "find a serious way to be more efficient with build
+checks").** Measured serial run: 76 + 94 + 134 + 325 + 308 s ≈ 16 min, every
+phase independent. Now three lanes in parallel — [typecheck → test typecheck]
+‖ [prod build → lint] ‖ [content gates → changed-file tests] — and lint runs
+on the CHANGED files only (an eslint error can only be introduced in a file
+the work touched; the whole-repo run re-counted 1,756 warnings every time).
+Wall time is the slowest lane, not the sum.
+
 ## 🧹 WO-CLOSEOUT-01 — one session, code first, one push, one audit (David 2026-09-20: "yes, thank you. can you take the second list first?")
 
 Everything on the open list that is code I own and needs no decision from David.

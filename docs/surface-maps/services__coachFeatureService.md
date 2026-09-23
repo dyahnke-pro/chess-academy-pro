@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4576 lines · 32 exports · 29 importers · 25 tests · 5 audits**
+**4584 lines · 32 exports · 29 importers · 25 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -81,11 +81,15 @@
 ### `generateNarrativeSummary` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:517`
 
-### `recapSecondPerson` (function) — 4 call sites
+### `recapSecondPerson` (function) — 8 call sites
 - `src/services/coachFeatureService.test.ts:876`
 - `src/services/coachFeatureService.test.ts:884`
 - `src/services/coachFeatureService.test.ts:885`
 - `src/services/coachFeatureService.test.ts:888`
+- `src/services/coachFeatureService.test.ts:898`
+- `src/services/coachFeatureService.test.ts:899`
+- `src/services/coachFeatureService.test.ts:900`
+- `src/services/coachFeatureService.test.ts:903`
 
 ### `ReviewNarrationSegments` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

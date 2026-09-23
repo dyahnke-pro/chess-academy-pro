@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1053 lines · 12 exports · 7 importers · 6 tests · 1 audits**
+**1070 lines · 12 exports · 7 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4008) — names `coachGameEngine`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4010) — names `coachGameEngine`
 
 ## Who calls in
 
@@ -66,8 +66,8 @@
 ### `getRandomLegalMove` (function) — 7 call sites
 - `src/components/Coach/CoachGamePage.tsx:2663`
 - `src/components/Coach/CoachGamePage.tsx:2678`
-- `src/components/Coach/CoachGamePage.tsx:2957`
-- `src/components/Coach/CoachGamePage.tsx:2995`
+- `src/components/Coach/CoachGamePage.tsx:2965`
+- `src/components/Coach/CoachGamePage.tsx:3003`
 - `src/components/Coach/CoachTeachPage.tsx:7203`
 - `src/components/Openings/OpeningPlayMode.tsx:695`
 - `src/components/Openings/OpeningPlayMode.tsx:720`

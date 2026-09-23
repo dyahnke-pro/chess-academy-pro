@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { pickHomeSteerMove } from './homeOpeningSteer';
+import { isHomeSteerWarm, pickHomeSteerMove } from './homeOpeningSteer';
 import { stockfishEngine } from './stockfishEngine';
 import { limitStrengthElo, ENGINE_ELO_MIN } from './engineConstants';
 import { getNextOpeningBookMove } from './openingDetectionService';
@@ -193,6 +193,9 @@ const BAND_BUDGET_MS = 1200;
  *  freezing; this one runs only when a curated gem already sits at the live
  *  position, which is a handful of boards in a game at most. */
 const SLIP_BAND_BUDGET_MS = 2500;
+/** The home steer's FIRST call of a colour builds the whole index (see
+ *  `isHomeSteerWarm`); 4s is the cold ceiling, the warm lookup keeps BAND_BUDGET_MS. */
+const STEER_COLD_BUDGET_MS = 4000;
 
 async function withBudget<T>(work: Promise<T>, ms: number): Promise<T | null> {
   return Promise.race([
@@ -508,7 +511,21 @@ export async function pickTeachingReply(
   if (taught) return { uci: taught.uci, san: taught.san, source: 'taught-slip' };
   if (opts?.steerHomeFor) {
     try {
-      const steer = await withBudget(pickHomeSteerMove(fen, opts.steerHomeFor), BAND_BUDGET_MS);
+      // The COLD build (once per colour per session) gets a longer ceiling than
+      // the warm lookup — the first move of the game is the one the steer
+      // exists for, and it was the one the 1200ms budget lost (walk 2).
+      const steer = await withBudget(pickHomeSteerMove(fen, opts.steerHomeFor), isHomeSteerWarm(opts.steerHomeFor) ? BAND_BUDGET_MS : STEER_COLD_BUDGET_MS);
+      if (!steer) {
+        // An unobservable miss is why walk 2 could not say whether the steer
+        // ran (every algo decision is audited — the miss is a decision too).
+        void logAppAudit({
+          kind: 'coach-opponent-move-source',
+          category: 'subsystem',
+          source,
+          summary: `source=home-steer-miss colour=${opts.steerHomeFor} warm=${isHomeSteerWarm(opts.steerHomeFor)} elo=${targetElo}`,
+          fen,
+        });
+      }
       if (steer) {
         void logAppAudit({
           kind: 'coach-opponent-move-source',

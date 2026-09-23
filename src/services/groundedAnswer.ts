@@ -2111,10 +2111,11 @@ export function explainBestMoveGrounded(
           // story (empty > invented); the eval swing + best move still speak.
           const refuted = captureHasCounterTactic(c.fen(), worst.san, mc, worst.gain);
           if (!refuted) {
-            const punisher = mc === 'w' ? 'Black' : 'White';
             let givesCheck = false;
             try { const after = new Chess(c.fen()); after.move(worst.san); givesCheck = after.inCheck(); } catch { /* keep false */ }
-            costClause = `your move let ${punisher} play ${worst.san}, winning the ${REVIEW_PIECE_NAME[worst.piece]}${givesCheck ? ' with check' : ''}`;
+            // ONE PERSPECTIVE: the opponent is "them", never a bare colour (walk 2,
+            // 2026-09-23: the coach, playing White, spoke "let White play Qxg4").
+            costClause = `your move let them play ${worst.san}, winning the ${REVIEW_PIECE_NAME[worst.piece]}${givesCheck ? ' with check' : ''}`;
           }
         }
       }

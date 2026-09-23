@@ -178,7 +178,11 @@ function legalPrefix(sans: readonly string[]): string[] {
 /** The Dexie half, memoised for TTL_MS. `null` = the read failed (the caller
  *  derives the cold student, which TEACHES). */
 export async function loadStudentNeedBase(q: BaseQuery): Promise<StudentNeedBase | null> {
-  const key = `${q.rating}:${q.studentColor}:${q.openingId ?? ''}:${q.eco ?? ''}`;
+  // The game COUNT is part of the key: a game saved seconds before the review
+  // opened must be in its own record (walk 2, 2026-09-23: "your 87th Sicilian"
+  // on the 88th, served from a memo built before the save landed).
+  const gameCount = await db.games.count().catch(() => -1);
+  const key = `${q.rating}:${q.studentColor}:${q.openingId ?? ''}:${q.eco ?? ''}:${gameCount}`;
   if (baseCache && baseCache.key === key && Date.now() - baseCache.at < TTL_MS) return baseCache.base;
   try {
     const prefs = useAppStore.getState().activeProfile?.preferences;

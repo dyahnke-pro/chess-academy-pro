@@ -89,6 +89,14 @@ let cache: { at: number; key: string; index: SteerIndex; family: string } | null
 /** Test hook. */
 export function __resetHomeSteerCacheForTests(): void { cache = null; }
 
+/** Whether the steer index for this colour is already built (the first call of
+ *  a game pays the whole build — 932 PGNs parsed — and must not be held to the
+ *  warm-lookup budget; walk 2, 2026-09-23: the opening move of a Learn game
+ *  fell through to the amateur band while the index was still building). */
+export function isHomeSteerWarm(studentColor: PlayerColor): boolean {
+  return !!cache && cache.key.startsWith(`${studentColor}:`) && Date.now() - cache.at <= TTL_MS;
+}
+
 /**
  * The opponent's steer at `fen` for a student playing `studentColor`, from
  * their persisted home opening for that colour. Null when there is no home,

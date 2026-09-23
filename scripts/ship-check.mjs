@@ -21,7 +21,7 @@
 
 import { crashed } from './ship-check-lib/crashed.mjs';
 import { testsFor } from './ship-check-lib/tests-for.mjs';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { loadavg, cpus } from 'node:os';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -94,6 +94,41 @@ function runStep(label, cmd, args, opts = {}) {
   const detail = summary ? `:: ${summary}` : '';
   process.stdout.write(`${mark} ${(ms/1000).toFixed(1)}s ${detail}\n`);
   return ok;
+}
+
+
+// ── PARALLEL LANES (David 2026-09-23: "find a serious way to be more efficient
+// with build checks"). Measured on the walk-fixes run: typecheck 76s, test
+// typecheck 94s, prod build 134s, lint 325s, content gates 308s — ~16 min run
+// SERIALLY on a 4-core box, every phase independent of the others. Three
+// lanes now run at once (each lane is serial inside, so memory stays bounded:
+// the 8 GB tsc heap, the vite build and one vitest never stack more than one
+// deep per lane). The rows print as each finishes; `results` is shared.
+function runStepAsync(label, cmd, args, opts = {}) {
+  const start = Date.now();
+  return new Promise((resolve) => {
+    const child = spawn(cmd, args, {
+      cwd: REPO_ROOT,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      env: { ...process.env, ...(opts.env ?? {}) },
+    });
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (d) => { stdout += d; });
+    child.stderr.on('data', (d) => { stderr += d; });
+    child.on('close', (status, signal) => {
+      const ms = Date.now() - start;
+      const ok = status === 0;
+      const out = stdout + '\n' + stderr;
+      const res = { status, signal, stdout, stderr };
+      const summary = opts.summary ? opts.summary(out, res) : null;
+      results.push({ label, ok, ms, out, summary, optional: opts.optional ?? false });
+      const mark = ok ? '✓' : (opts.optional ? '○' : '✗');
+      const detail = summary ? `:: ${summary}` : '';
+      process.stdout.write(`  • ${label}... ${mark} ${(ms/1000).toFixed(1)}s ${detail}\n`);
+      resolve(ok);
+    });
+  });
 }
 
 // ── Helpers to extract a one-line summary from a step's output ─────
@@ -709,8 +744,7 @@ runStep('context gate', 'node', ['scripts/surface-map.mjs', '--verify']);
 // the code now says. Nothing in it is typed by hand, so it cannot be
 // hand-waved, and a state written before the change cannot survive it.
 runStep('state gate  ', 'node', ['scripts/state-of-build.mjs', '--verify']);
-runStep('typecheck   ', 'npm', ['run', 'typecheck']);
-
+// Lanes are declared as thunks and started together below.
 // TEST-FILE TYPECHECK — a SHRINK-ONLY CEILING, not a hard zero (#61).
 //
 // `tsconfig.app.json` excludes every test file, so a type error in a test was
@@ -768,7 +802,9 @@ const TEST_TYPE_ERROR_CEILING = 0;
 // anyone obeyed, the next healthy run would have failed 296 over a ceiling of
 // 0. Two fixes: give it the heap it needs (8 GB measures 296 in ~35s), and
 // name a crash as a crash — the count is UNKNOWN, not zero.
-runStep('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'], {
+const laneTypes = async () => {
+  await runStepAsync('typecheck   ', 'npm', ['run', 'typecheck']);
+  await runStepAsync('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'], {
   optional: true,
   env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
   summary: (out, res) => {
@@ -785,13 +821,13 @@ runStep('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'
       : `${n} errors (at the ceiling)`;
   },
 });
+};
 // PRODUCTION BUILD (2026-07-12, the corpus-bundle incident): typecheck+lint
 // can be green while `npm run build` FAILS — a data JSON inlined into the
 // entry chunk pushed index.js past the Workbox precache cap and every Vercel
 // deploy silently errored for hours (prod stale at an old commit while
 // ship-check kept saying READY TO PUSH). The vite build IS the deploy gate;
 // run it here so a broken production build can never ship silently again.
-runStep('prod build  ', 'npm', ['run', 'build']);
 // Lint with NO warning cap — ship-check blocks on ERRORS only (warnings are
 // pre-existing rot that drifts up and down at a different cadence than the
 // gate set). `npm run lint` enforces a project-wide warning cap (currently
@@ -805,30 +841,43 @@ runStep('prod build  ', 'npm', ['run', 'build']);
 // 8 GB heap exits 0. An instrument must never report a crash as a verdict, so
 // the heap rides on the step itself rather than on whoever remembers to
 // export it. Any caller-supplied NODE_OPTIONS is kept in front of it.
-runStep('lint (errors)', 'npx', [
-  'eslint', '.', '--ext', 'ts,tsx',
-  '--report-unused-disable-directives',
-  '--max-warnings', '99999',
-], {
-  summary: summarizeLint,
-  // Whole-repo eslint exceeds Node 26's default heap on an arm64 Mac and dies
-  // with SIGABRT after ~100s; see the test-typecheck note above for the same
-  // failure and the same fix.
-  env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
-});
-runStep('content gates', 'npx', ['vitest', 'run', ...GATE_TESTS], { summary: summarizeVitest });
-
+// CHANGED FILES ONLY (2026-09-23). ship-check blocks on lint ERRORS, and eslint
+// is per-file: an error can only be introduced in a file this work touched.
+// A whole-repo run (325s, 1,756 warnings re-counted every time) measured the
+// same errors as the changed set does in seconds. `npm run lint` keeps the
+// project-wide warning cap for code review; the gate needs only the diff.
+const lintTargets = changedFiles().filter((f) => /\.(ts|tsx|mjs)$/.test(f) && !f.startsWith('.') && existsSync(f));
+const laneBuild = async () => {
+  await runStepAsync('prod build  ', 'npm', ['run', 'build']);
+  if (lintTargets.length === 0) {
+    console.log('  • lint (errors)... ○ no changed .ts/.tsx/.mjs files');
+    return;
+  }
+  await runStepAsync('lint (errors)', 'npx', [
+    'eslint', ...lintTargets,
+    '--report-unused-disable-directives',
+    '--max-warnings', '99999',
+  ], {
+    summary: summarizeLint,
+    env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
+  });
+};
 // Co-located tests for the source files changed in THIS work — catches
 // regressions in tests that aren't in the curated GATE_TESTS and that the
 // (un-run) full suite would otherwise hide. David 2026-05-24: ship-check let a
 // ModelGamesSection regression through because that .test wasn't gated. Rule:
 // edit Foo.tsx → ship-check runs Foo.test.tsx.
 const _colocated = changedSourceTests(changedFiles());
-if (_colocated.length) {
-  runStep('changed-file tests', 'npx', ['vitest', 'run', ..._colocated], { summary: summarizeVitest });
-} else {
-  console.log('  • changed-file tests... ○ none beyond the gates');
-}
+const laneGates = async () => {
+  await runStepAsync('content gates', 'npx', ['vitest', 'run', ...GATE_TESTS], { summary: summarizeVitest });
+  if (_colocated.length) {
+    await runStepAsync('changed-file tests', 'npx', ['vitest', 'run', ..._colocated], { summary: summarizeVitest });
+  } else {
+    console.log('  • changed-file tests... ○ none beyond the gates');
+  }
+};
+console.log('  • lanes: [typecheck → test typecheck] ‖ [prod build → lint] ‖ [content gates → changed-file tests]');
+await Promise.all([laneTypes(), laneBuild(), laneGates()]);
 
 // INFORMATIONAL: audit stream pull (never blocks).
 pullAuditStream();

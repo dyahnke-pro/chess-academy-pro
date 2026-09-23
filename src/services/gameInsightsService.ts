@@ -32,6 +32,11 @@ function getPlayerColorWithUsername(
   game: GameRecord,
   username: string | null,
 ): 'white' | 'black' | null {
+  // THE DECLARED SEAT FIRST (the seat rule; walk 2, 2026-09-23: 932 imported
+  // games with `studentSide` stamped read as "none of your real games are in
+  // here" because this resolver only knew names, and the username had not
+  // been saved). Gate: seatResolversReadDeclaredSeat.test.ts.
+  if (game.studentSide === 'white' || game.studentSide === 'black') return game.studentSide;
   if (AI_NAMES.includes(game.white)) return 'black';
   if (AI_NAMES.includes(game.black)) return 'white';
   if (username) {

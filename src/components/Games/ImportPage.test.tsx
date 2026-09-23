@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { ImportPage } from './ImportPage';
 import { useAppStore } from '../../stores/appStore';
 import { buildUserProfile } from '../../test/factories';
+import { db } from '../../db/schema';
 
 const mockImportLichessGames = vi.fn();
 const mockImportLichessStats = vi.fn();
@@ -170,3 +171,26 @@ describe('ImportPage', () => {
     });
   });
 });
+
+describe('ImportPage — the username is saved even when the STORE has no profile yet (walk 2, 2026-09-23)', () => {
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    mockImportChessComGames.mockResolvedValue(3);
+    mockImportChessComStats.mockResolvedValue(null);
+    await db.delete();
+    await db.open();
+    await db.profiles.put(buildUserProfile({ id: 'main', name: 'Player' }));
+    useAppStore.setState({ activeProfile: null });
+  });
+  it('writes chessComUsername to the Dexie profile and hydrates the store', async () => {
+    render(<ImportPage />);
+    fireEvent.change(screen.getByTestId('username-input'), { target: { value: 'Knight_mare_01' } });
+    fireEvent.click(screen.getByTestId('import-btn'));
+    await waitFor(async () => {
+      const p = await db.profiles.get('main');
+      expect(p?.preferences.chessComUsername).toBe('Knight_mare_01');
+    });
+    await waitFor(() => expect(useAppStore.getState().activeProfile?.preferences.chessComUsername).toBe('Knight_mare_01'));
+  });
+});
+
