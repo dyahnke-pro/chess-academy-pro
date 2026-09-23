@@ -328,7 +328,15 @@ export function findPawnBreaks(fen: string): Square[] {
       const occ = probe.get(sq);
       if (occ && occ.type === 'p' && occ.color !== mover) contact = true; // our pawn now attacks an enemy pawn
     }
-    if (contact) breaks.add(to);
+    // A BREAK THAT JUST DROPS THE PAWN IS NOT A PLAN (walk 5, 2026-09-23).
+    // After 1.e4 c5 2.Nf3 d6 3.Bc4 Nf6 4.Nc3 the chat plan said "break with
+    // d5" — but e4, Nc3 and Bc4 hit d5 against two defenders, so the push
+    // loses a pawn and 6…Qxd5 would hang the queen to Bc4. Every consumer of
+    // this computer (the plan, "they can break with", think-aloud, the review
+    // read) presents a break as ADVICE, so the one test belongs here: the
+    // pushed pawn must survive the exchange on its landing square. A break
+    // that trades evenly still counts — that IS opening the position.
+    if (contact && landingIsSafe(probe.fen(), to)) breaks.add(to);
   }
   return [...breaks];
 }

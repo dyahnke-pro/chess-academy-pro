@@ -191,3 +191,16 @@ describe('Learn walk 2026-09-23 — the pointer question and the bare command', 
   });
 });
 
+
+describe('bare-verb retrospective questions (walk 5, 2026-09-23)', () => {
+  it('"why did you castle?" is the coach\'s castling move — never the best move now', async () => {
+    const { retrospectiveMoveRef, isRetrospectiveMoveQuestion } = await import('./questionIntents');
+    expect(retrospectiveMoveRef('why did you castle?')).toEqual({ kind: 'castle', by: 'coach' });
+    expect(retrospectiveMoveRef('why did I castle')).toEqual({ kind: 'castle', by: 'student' });
+    expect(retrospectiveMoveRef('why did you take?')).toEqual({ kind: 'coach-last' });
+    expect(retrospectiveMoveRef('why did I trade?')).toEqual({ kind: 'my-last' });
+    // A bare verb with an object is not bare — the named forms still resolve as before.
+    expect(retrospectiveMoveRef('why did you take on e5?')).toEqual({ kind: 'capture-on', square: 'e5' });
+    expect(isRetrospectiveMoveQuestion('why did you castle?')).toBe(true);
+  });
+});

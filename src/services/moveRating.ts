@@ -195,9 +195,30 @@ export function classifyMoveFull(r: {
 
 /** Rate the last move in `moveHistory` (full SAN list from the standard start).
  *  Returns null on any failure so the caller can fall through. */
-export async function computeLastMoveRating(moveHistory: readonly string[]): Promise<MoveRating | null> {
+export async function computeLastMoveRating(
+  moveHistory: readonly string[],
+  studentColor: 'white' | 'black' | null,
+): Promise<MoveRating | null> {
+  const ply = lastPlyOf(moveHistory, studentColor);
+  return ply === null ? null : computeMoveRatingAt(moveHistory, ply);
+}
+
+/**
+ * The ply index of the STUDENT's last move (walk 5, 2026-09-23). "Was that a
+ * good move?" on Play was graded against whatever move was LAST — which, once
+ * the coach has replied, is the COACH's move: the student played 4…a6 and
+ * heard "d4 was the engine's top move — you gave up nothing", their opponent's
+ * move handed to them as their own. The seat is REQUIRED so a new caller has
+ * to decide it: null means the surface genuinely has no seat (a free board),
+ * and only then is the last move on the board the one being asked about.
+ * History is from the initial position, so White moved on even plies.
+ */
+export function lastPlyOf(moveHistory: readonly string[], studentColor: 'white' | 'black' | null): number | null {
   if (moveHistory.length === 0) return null;
-  return computeMoveRatingAt(moveHistory, moveHistory.length - 1);
+  if (studentColor === null) return moveHistory.length - 1;
+  const parity = studentColor === 'white' ? 0 : 1;
+  for (let i = moveHistory.length - 1; i >= 0; i -= 1) if (i % 2 === parity) return i;
+  return null;
 }
 
 /** Rate the move at `plyIndex` (0-based) of `moveHistory` against the engine's

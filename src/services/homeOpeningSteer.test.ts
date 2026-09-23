@@ -163,3 +163,23 @@ describe('warmHomeSteer — the first move never races a build (walk 4, 2026-09-
     expect(isHomeSteerWarm('black')).toBe(false);
   });
 });
+
+describe('the steer never plays a one-off (walk 5, 2026-09-23)', () => {
+  it('a move faced once is never drawn, even when rng lands on it; the common line still plays', () => {
+    const one = pircGames(1, CLASSICAL, 'c');
+    const many = pircGames(9, AUSTRIAN, 'a');
+    const index = buildSteerIndex([...many, ...one], ID, 'black', 'Pirc Defense');
+    const c = new Chess(); for (const s of AUSTRIAN.slice(0, 6)) c.move(s);
+    for (const r of [0, 0.5, 0.9999]) expect(steerFromIndex(index, c.fen(), 'Pirc Defense', () => r)?.san).toBe('f4');
+    expect(steerFromIndex(index, c.fen(), 'Pirc Defense', () => 0.9999)?.total).toBe(10);
+  });
+
+  it('a position whose every continuation is a one-off steers nothing', () => {
+    const lines = [AUSTRIAN, CLASSICAL, ['e4', 'd6', 'd4', 'Nf6', 'Nc3', 'g6', 'Be3', 'Bg7']];
+    const games = lines.flatMap((l, i) => pircGames(1, l, `x${i}`));
+    const index = buildSteerIndex(games, ID, 'black', 'Pirc Defense');
+    const c = new Chess(); for (const s of AUSTRIAN.slice(0, 6)) c.move(s);
+    expect(steerFromIndex(index, c.fen(), 'Pirc Defense', () => 0.5)).toBeNull();
+    expect(steerFromIndex(index, new Chess().fen(), 'Pirc Defense')?.san).toBe('e4');
+  });
+});

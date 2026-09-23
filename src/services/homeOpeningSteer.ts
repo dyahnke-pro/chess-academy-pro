@@ -97,10 +97,20 @@ export function buildSteerIndex(games: readonly GameRecord[], identity: PlayerId
 export function steerFromIndex(index: SteerIndex, fen: string, family: string, rng: () => number = Math.random): HomeSteerPick | null {
   const bucket = index.get(fenKey(fen));
   if (!bucket) return null;
-  const rows = [...bucket.entries()].filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
-  const total = rows.reduce((s, [, n]) => s + n, 0);
+  const all = [...bucket.entries()].filter(([, n]) => n > 0);
+  const total = all.reduce((s, [, n]) => s + n, 0);
   if (total < STEER_MIN_GAMES) return null;
-  let r = rng() * total;
+  // A MOVE, not only the position, must clear the floor (walk 5, 2026-09-23):
+  // after 1.e4 c5 the weighted pick drew 2.Bb5 — faced in ONE of 87 home
+  // Sicilians. That is not "the lines the student actually faces", it is a
+  // one-off game. The randomness among real lines stays (the opponent is
+  // random on purpose); the one-offs leave the draw. `total` keeps counting
+  // every game at the position, so "faced N of M" still reads against the
+  // student's whole record.
+  const rows = all.filter(([, n]) => n >= STEER_MIN_GAMES).sort((a, b) => b[1] - a[1]);
+  if (rows.length === 0) return null;
+  const pool = rows.reduce((s, [, n]) => s + n, 0);
+  let r = rng() * pool;
   let pick = rows[rows.length - 1];
   for (const row of rows) { r -= row[1]; if (r < 0) { pick = row; break; } }
   const chess = new Chess(fen);

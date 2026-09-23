@@ -879,3 +879,13 @@ describe('the bad bishop is a bishop whose own pawns stop its FORWARD rays (WO-S
     expect(findPieceQuality(c.fen()).find((n) => n.square === 'd2' && n.quality === 'bad')).toBeUndefined();
   });
 });
+
+describe('findPawnBreaks — a break that just drops the pawn is not a plan (walk 5, 2026-09-23)', () => {
+  it('drops …d5 when e4, Nc3 and Bc4 win the pawn; keeps an even break', async () => {
+    const { findPawnBreaks } = await import('./positionReadingService');
+    // 1.e4 c5 2.Nf3 d6 3.Bc4 Nf6 4.Nc3 — the prod position the plan answered with "break with d5".
+    expect(findPawnBreaks('rnbqkb1r/pp2pppp/3p1n2/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 3 4')).not.toContain('d5');
+    // Open Sicilian after 1.e4 c5 2.Nf3 d6: 3.d4 trades evenly (…cxd4 Nxd4) — still a break.
+    expect(findPawnBreaks('rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3')).toContain('d4');
+  });
+});

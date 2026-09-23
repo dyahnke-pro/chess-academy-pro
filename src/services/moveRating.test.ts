@@ -43,7 +43,7 @@ describe('computeLastMoveRating', () => {
     analyzePosition
       .mockResolvedValueOnce(mk(30, 'g1f3'))  // pre-move (White to move)
       .mockResolvedValueOnce(mk(30, 'b8c6')); // post-move (Black to move) — value irrelevant here
-    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3']);
+    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3'], null);
     expect(r).not.toBeNull();
     expect(r!.studentColor).toBe('white');
     expect(r!.wasBest).toBe(true);
@@ -56,7 +56,7 @@ describe('computeLastMoveRating', () => {
     analyzePosition
       .mockResolvedValueOnce(mk(50, 'd2d4'))    // pre-move best is d4
       .mockResolvedValueOnce(mk(-200, 'e7e5')); // after student's move White is -2.0
-    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3']);
+    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3'], null);
     expect(r).not.toBeNull();
     expect(r!.studentColor).toBe('white');
     expect(r!.wasBest).toBe(false);
@@ -73,7 +73,7 @@ describe('computeLastMoveRating', () => {
     analyzePosition
       .mockResolvedValueOnce(mk(20, 'c7c5'))   // pre-move, Black to move; White +0.2
       .mockResolvedValueOnce(mk(120, 'd2d4')); // after Black's move, White +1.2
-    const r = await computeLastMoveRating(['e4', 'a6']);
+    const r = await computeLastMoveRating(['e4', 'a6'], null);
     expect(r).not.toBeNull();
     expect(r!.studentColor).toBe('black');
     // studentPOV: pre = -20, post = -120 → cpLoss = 100 → mistake on the shared
@@ -89,7 +89,7 @@ describe('computeLastMoveRating', () => {
     analyzePosition
       .mockResolvedValueOnce(mk(0, 'd1h5', 2))  // White mates in 2 with the best move
       .mockResolvedValueOnce(mk(500, 'e8e7'));  // student's move: up material but no mate
-    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'Nc3']);
+    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'Nc3'], null);
     expect(r).not.toBeNull();
     expect(r!.missedMate).toBe(2);
     expect(r!.quality).toBe('blunder');
@@ -100,7 +100,7 @@ describe('computeLastMoveRating', () => {
     analyzePosition
       .mockResolvedValueOnce(mk(15, 'c7c5'))   // pre-move, Black to move
       .mockResolvedValueOnce(mk(15, 'g1f3'));  // post-move, White to move
-    const r = await computeLastMoveRating(['e4', 'c5']);
+    const r = await computeLastMoveRating(['e4', 'c5'], null);
     expect(r).not.toBeNull();
     expect(r!.studentColor).toBe('black');
     expect(r!.wasBest).toBe(true);
@@ -114,7 +114,7 @@ describe('computeLastMoveRating', () => {
     analyzePosition
       .mockResolvedValueOnce(mk(20, 'd2d4'))   // pre: White +0.2, best d4
       .mockResolvedValueOnce(mk(90, 'e7e5'));  // post: White +0.9 (improved)
-    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3']);
+    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3'], null);
     expect(r).not.toBeNull();
     expect(r!.studentColor).toBe('white');
     expect(r!.cpLoss).toBe(0);       // max(0, 20 - 90) = 0, NOT -70
@@ -128,7 +128,7 @@ describe('computeLastMoveRating', () => {
     analyzePosition
       .mockResolvedValueOnce(mk(10, 'g8f6'))   // pre, Black to move
       .mockResolvedValueOnce(mk(160, 'd2d4')); // post, White to move — White jumped
-    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4']);
+    const r = await computeLastMoveRating(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4'], null);
     expect(r).not.toBeNull();
     expect(r!.studentColor).toBe('black');
     expect(r!.cpLoss).toBe(150);       // -10 - (-160) = 150 in student POV
@@ -138,12 +138,23 @@ describe('computeLastMoveRating', () => {
   });
 
   it('returns null on empty history or engine failure', async () => {
-    expect(await computeLastMoveRating([])).toBeNull();
+    expect(await computeLastMoveRating([], null)).toBeNull();
     analyzePosition.mockRejectedValueOnce(new Error('engine down'));
-    expect(await computeLastMoveRating(['e4', 'e5'])).toBeNull();
+    expect(await computeLastMoveRating(['e4', 'e5'], null)).toBeNull();
   });
 
   it('returns null when the history does not replay legally', async () => {
-    expect(await computeLastMoveRating(['e4', 'e4'])).toBeNull(); // second e4 illegal
+    expect(await computeLastMoveRating(['e4', 'e4'], null)).toBeNull(); // second e4 illegal
+  });
+});
+
+describe('lastPlyOf — "was that a good move?" grades the STUDENT\'s move (walk 5, 2026-09-23)', () => {
+  it('Black student after the coach replied: the student\'s …a6, never the coach\'s d4', async () => {
+    const { lastPlyOf } = await import('./moveRating');
+    const h = ['e4', 'c5', 'Nf3', 'd6', 'Bc4', 'Nf6', 'Nc3', 'a6', 'd4'];
+    expect(h[lastPlyOf(h, 'black')!]).toBe('a6');
+    expect(h[lastPlyOf(h, 'white')!]).toBe('d4');
+    expect(lastPlyOf(['e4'], 'black')).toBeNull(); // the student has not moved yet
+    expect(lastPlyOf(h, null)).toBe(h.length - 1); // no seat: the last move on the board
   });
 });

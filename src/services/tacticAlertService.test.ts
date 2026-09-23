@@ -272,10 +272,13 @@ describe('tacticAlertService', () => {
       expect(msg).toContain('You have a tactic');
     });
 
-    it('builds a missed alert with takeback suggestion', () => {
+    // Walk 1 (2026-09-23): the takeback suggestion was dropped — Play is a pure
+    // playing surface, and the line told a student to undo a move the coach had
+    // already answered. The missed alert names the pattern to look for instead.
+    it('builds a missed alert that names what to look for, never a takeback', () => {
       const msg = buildTacticAlertMessage('pin', 'missed', 1500, false);
       expect(msg).toContain('missed');
-      expect(msg).toContain('taking the move back');
+      expect(msg).not.toMatch(/tak(e|ing) the move back/i);
     });
 
     it('emphasizes weakness when tactic is a known weak area', () => {
@@ -328,5 +331,25 @@ describe('tacticAlertService', () => {
       // The fork failure is now beyond the last 5
       expect(hasRecentFailure('fork')).toBe(false);
     });
+  });
+});
+
+describe('isCriticalThreat — the victim moves first (walk 5, 2026-09-23)', () => {
+  it('a "fork" by a knight that is simply recaptured is NOT critical (…Nc6 Nxc6 bxc6)', async () => {
+    const { Chess } = await import('chess.js');
+    const { isCriticalThreat } = await import('./tacticAlertService');
+    // The prod board before 9…Nc6: Najdorf-style, White Qd3 Ba2 Nd4, Black castled.
+    const c = new Chess('rnbq1rk1/1p2bppp/p2ppn2/8/P2NP3/2NQ4/BPP2PPP/R1B1K2R b KQ - 3 9');
+    c.move('Nc6'); c.move('Nxc6');
+    const fork = { pattern: { type: 'fork', description: 'Knight on c6 forks queen on d8 and bishop on e7' }, fen: c.fen(), lineEval: 0, lineMate: null };
+    expect(isCriticalThreat(fork as never, 'b', false, 1400)).toBe(false);
+  });
+
+  it('a SAFE knight fork of king and rook still fires', async () => {
+    const { isCriticalThreat } = await import('./tacticAlertService');
+    // White knight on c7 checks the king on e8 and hits the rook on a8; nothing can take it.
+    const fen = 'r3k3/2N5/8/8/8/8/5PPP/6K1 b - - 0 1';
+    const fork = { pattern: { type: 'fork', description: 'Knight on c7 forks king on e8 and rook on a8' }, fen, lineEval: 0, lineMate: null };
+    expect(isCriticalThreat(fork as never, 'b', false, 1400)).toBe(true);
   });
 });

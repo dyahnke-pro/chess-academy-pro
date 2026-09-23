@@ -207,24 +207,19 @@ export async function routeChatIntent(
       };
     }
 
-    case 'explain-position': {
-      // Only route to the explain-position session when there's an actual
-      // board FEN to explain. On a board-less surface (e.g. /coach/chat)
-      // there is no `currentFen`, so navigating would land the user on the
-      // session page showing the STARTING position — which is never what
-      // they asked about. Audit 2026-06-02: "evaluate this position
-      // <prose piece list>" misrouted to /coach/session/explain-position
-      // with the start board. Fall through to plain chat so the brain
-      // answers in-place (and can ask for a FEN / offer to set the board).
-      if (!options.currentFen) return null;
-      const params = new URLSearchParams();
-      params.set('fen', options.currentFen);
-      return {
-        path: withQuery('/coach/session/explain-position', params),
-        ackMessage: 'Let me analyse this position…',
-        intent,
-      };
-    }
+    case 'explain-position':
+      // 🔴 NEVER A NAVIGATION (walk 5, 2026-09-23). This branch used to route
+      // to /coach/session/explain-position whenever a FEN came with the ask —
+      // and the only callers that pass a FEN are the LIVE BOARD surfaces
+      // (dispatchCoachTurn hands over `liveState.fen`). So "what should I play
+      // here?" typed mid-game on Play left the game for a separate page, and
+      // Back started a NEW game: the question cost the student the position
+      // they asked about. A surface that has the board answers about it in
+      // place; the explain-position page is the SEARCH bar's destination,
+      // which routes on `parseCoachIntent` directly and never reaches here.
+      // Board-less surfaces fell through to chat already — now every caller
+      // does, so the branch cannot be taken from inside a game at all.
+      return null;
 
     case 'puzzle': {
       // Only navigate when the theme maps to a known tactic. Otherwise

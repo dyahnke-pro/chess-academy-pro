@@ -333,6 +333,36 @@ function maxMaterialWinCp(fen: string, capturingColor: 'w' | 'b'): number {
   return best * 100;
 }
 
+const CAPTURE_CP: Record<string, number> = { p: 100, n: 300, b: 300, r: 500, q: 900, k: 0 };
+
+/**
+ * What the capturer is GUARANTEED to win at `fen` once the side to move has
+ * had its say (walk 5, 2026-09-23). `maxMaterialWinCp` forces the turn to the
+ * capturer, which is right only when the capturer IS to move. A pattern found
+ * in the middle of a PV usually sits one ply BEFORE the victim's reply — after
+ * 9…Nc6 10.Nxc6 the knight "forks" d8 and e7, but Black moves next and plays
+ * …bxc6, and the fork never existed. The alert said "Watch out — if you play
+ * Nc6, I answer Nxc6 and knight on c6 forks queen on d8 and bishop on e7" for a
+ * plain even trade. When the victim is to move, every legal reply is tried and
+ * the capturer keeps only what it wins against the BEST one, net of anything
+ * that reply took.
+ */
+function guaranteedWinCp(fen: string, capturingColor: 'w' | 'b'): number {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return 0; }
+  if (chess.turn() === capturingColor) return maxMaterialWinCp(fen, capturingColor);
+  let worst = Number.POSITIVE_INFINITY;
+  for (const mv of chess.moves({ verbose: true })) {
+    chess.move(mv);
+    const taken = mv.captured ? (CAPTURE_CP[mv.captured] ?? 0) : 0;
+    const net = maxMaterialWinCp(chess.fen(), capturingColor) - taken;
+    chess.undo();
+    if (net < worst) worst = net;
+    if (worst <= 0) return 0;
+  }
+  return Number.isFinite(worst) ? Math.max(0, worst) : 0;
+}
+
 /**
  * Is an upcoming OPPONENT tactic worth a proactive "Watch out" alert?
  *
@@ -376,7 +406,7 @@ export function isCriticalThreat(
   if (tactic.pattern && tactic.fen) {
     if (MATE_MOTIFS.has(tactic.pattern.type)) return true; // a real mate motif HERE
     const oppWB: 'w' | 'b' = playerColor === 'w' ? 'b' : 'w';
-    return maxMaterialWinCp(tactic.fen, oppWB) >= bar; // opponent must WIN material here
+    return guaranteedWinCp(tactic.fen, oppWB) >= bar; // opponent must WIN material here, after your best reply
   }
 
   // Fallback (no pattern/fen): the original line-terminal signal.

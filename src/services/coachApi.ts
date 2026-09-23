@@ -3849,11 +3849,13 @@ export async function getCoachChatResponse(
               idx = lastIdxOf((p) => p.captured && p.to === ref.square);
             } else if (ref.kind === 'my-last') {
               idx = seat ? lastIdxOf((p) => p.color === seat) : plies.length - 1;
+            } else if (ref.kind === 'castle') {
+              idx = lastIdxOf((p) => p.san.startsWith('O-O') && (!seat || (ref.by === 'student' ? p.color === seat : p.color !== seat)));
             } else {
               idx = seat ? lastIdxOf((p) => p.color !== seat) : plies.length - 1;
             }
             if (idx < 0) {
-              const named = ref.kind === 'san' ? ref.san : ref.kind === 'capture-on' ? `a capture on ${ref.square}` : 'that move';
+              const named = ref.kind === 'san' ? ref.san : ref.kind === 'capture-on' ? `a capture on ${ref.square}` : ref.kind === 'castle' ? (ref.by === 'coach' ? 'my castling move' : 'your castling move') : 'that move';
               const tail = plies.slice(-6).map((p) => p.san);
               const msg = `I can't find ${named} in this game — the last moves on the board were ${tail.join(', ')}. Name one of those and I'll grade it.`;
               const voicedMiss = await voice(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'move-rating', preferRaw: true });
@@ -3946,7 +3948,7 @@ export async function getCoachChatResponse(
         // them. Falls through when there's no move history to reconstruct from.
         if (grounding.moveRatingQuestion && grounding.moveHistory && grounding.moveHistory.length > 0) {
           try {
-            const rating = await computeLastMoveRating(grounding.moveHistory);
+            const rating = await computeLastMoveRating(grounding.moveHistory, grounding.studentColor ?? null);
             if (rating) {
               const answer = assembleMoveRatingAnswer(rating);
               if (answer) {

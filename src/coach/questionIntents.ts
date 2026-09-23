@@ -2345,7 +2345,9 @@ export type RetrospectiveMoveRef =
   | { kind: 'san'; san: string }
   | { kind: 'capture-on'; square: string }
   | { kind: 'my-last' }
-  | { kind: 'coach-last' };
+  | { kind: 'coach-last' }
+  /** "why did you castle?" — that side's castling move, wherever it was. */
+  | { kind: 'castle'; by: 'student' | 'coach' };
 
 const RETRO_VERDICT = String.raw`(?:so\s+|such\s+|really\s+|that\s+)?(?:good|bad|strong|weak|wrong|right|correct|necessary|forced|important|clever|smart|dumb|terrible|awful|great|brilliant|the\s+right\s+(?:move|call|idea)|a\s+(?:good|bad|strong|weak|great)\s+(?:move|idea|choice)|(?:a|an)\s+(?:mistake|blunder|inaccuracy|error|slip)|not\s+(?:good|best|right))`;
 // A move object: SAN, a spoken piece+square, a capture on a square, castling,
@@ -2376,6 +2378,13 @@ const RETROSPECTIVE_RE = anyOf([
   // walk 2026-09-23: with no named move the question fell to the brain, which
   // answered about the STUDENT's move; "you" on a live board is the coach).
   String.raw`\bwhy\s+did\s+(?:you|i)\s+(?:play|go|choose|pick|castle|take|push|trade|do)\s+(?:that|this|it)(?:\s+move)?\b`,
+  // The BARE verb — "why did you castle?", "why did I take?" (walk 5,
+  // 2026-09-23: "why did you castle?" matched nothing and the lane answered
+  // with the best move NOW, "The best move is Bd7"). The verb is itself the
+  // move, so nothing may follow it but punctuation.
+  String.raw`\bwhy\s+did\s+(?:you|i)\s+(?:castle|take|capture|recapture|trade|retreat|sacrifice)\s*[?.!]*\s*$`,
+  // "why did you take on e5?" — a capture named by its square.
+  String.raw`\bwhy\s+did\s+(?:you|i)\s+(?:take|capture|recapture|trade|exchange)\s+on\s+[a-h][1-8]\b`,
   // "was <obj> necessary / forced / a mistake / the right call"
   String.raw`\bwas\s+${RETRO_OBJ}\s+${RETRO_VERDICT}\b`,
   // "how bad was <obj>" / "how good was <obj>"
@@ -2396,6 +2405,12 @@ export function retrospectiveMoveRef(ask: string | undefined): RetrospectiveMove
   // The pointer form: "you" on a live board is the coach, "I" is the student.
   if (/\bwhy\s+did\s+you\s+(?:play|go|choose|pick|castle|take|push|trade|do)\s+(?:that|this|it)\b/.test(t)) return { kind: 'coach-last' };
   if (/\bwhy\s+did\s+i\s+(?:play|go|choose|pick|castle|take|push|trade|do)\s+(?:that|this|it)\b/.test(t)) return { kind: 'my-last' };
+  // Castling by name: that side's castle, which need not be the last move.
+  const castled = /\bwhy\s+did\s+(you|i)\s+castle\b/.exec(t);
+  if (castled) return { kind: 'castle', by: castled[1] === 'you' ? 'coach' : 'student' };
+  // Any other bare verb points at that side's last move.
+  const bare = /\bwhy\s+did\s+(you|i)\s+(?:take|capture|recapture|trade|retreat|sacrifice)\s*[?.!]*\s*$/.exec(t);
+  if (bare) return { kind: bare[1] === 'you' ? 'coach-last' : 'my-last' };
   // A capture named by its square — "taking on e5", "the exchange on d4".
   const cap = /\b(?:taking|capturing|the\s+capture|the\s+exchange|trading|the\s+trade|exchanging|take|capture|trade)\s+on\s+([a-h][1-8])\b/.exec(t);
   if (cap) return { kind: 'capture-on', square: cap[1] };

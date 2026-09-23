@@ -53,17 +53,15 @@ describe('routeChatIntent', () => {
     expect(routed!.path).toContain('difficulty=easy');
   });
 
-  it('routes explain-position with optional fen', async () => {
-    const fen = '8/8/8/8/8/8/8/k6K w - - 0 1';
-    const routed = await routeChatIntent('explain this position', {
-      currentFen: fen,
-    });
-    expect(routed).not.toBeNull();
-    expect((routed?.path ?? '').startsWith('/coach/session/explain-position')).toBe(true);
-    // Round-trip the FEN through URLSearchParams to check encoding.
-    const qs = (routed?.path ?? '').split('?')[1];
-    const params = new URLSearchParams(qs);
-    expect(params.get('fen')).toBe(fen);
+  // Walk 5 (2026-09-23): "what should I play here?" typed into Play's chat
+  // navigated away from the live game and Back started a new one. A board
+  // question from a board surface is answered IN PLACE — the router never
+  // navigates for it, with or without a FEN.
+  it('never navigates an explain-position ask away from a live board', async () => {
+    const fen = 'rnbqkbnr/pp1ppppp/8/1Bp5/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2';
+    for (const ask of ['what should I play here?', 'explain this position', 'what should I do here']) {
+      expect(await routeChatIntent(ask, { currentFen: fen })).toBeNull();
+    }
   });
 
   // Audit 2026-06-02: "evaluate this position <prose>" on a board-less

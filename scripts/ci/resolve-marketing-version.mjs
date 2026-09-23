@@ -44,15 +44,23 @@ async function main() {
   const pp = parts(pinned);
   if (!pp) { process.stdout.write(pinned); return; }
 
+  // 🔴 READ EVERY STOREFRONT AND TAKE THE HIGHEST (2026-09-23). This used to
+  // read `country=us` only. Apple's storefronts do not update together: 4.0.4
+  // released at 00:21 UTC and four hours later the GLOBAL lookup said 4.0.4
+  // while `country=us` still said 4.0.3 — so the preflight judged the closed
+  // 4.0.4 train "above live", kept it, and Xcode Cloud run #202 died at
+  // "Preparing build for App Store Connect". The highest version any
+  // storefront reports is the one whose train is closed.
   let live = null;
-  try {
-    const res = await fetch(`https://itunes.apple.com/lookup?id=${APP_ID}&country=us`, { cache: 'no-store' });
-    if (res.ok) {
+  for (const qs of ['', '&country=us']) {
+    try {
+      const res = await fetch(`https://itunes.apple.com/lookup?id=${APP_ID}${qs}`, { cache: 'no-store' });
+      if (!res.ok) continue;
       const j = await res.json();
-      const v = j?.results?.[0]?.version;
-      if (typeof v === 'string') live = parts(v);
-    }
-  } catch { /* offline / blocked — fall through to pinned */ }
+      const v = parts(j?.results?.[0]?.version ?? '');
+      if (v && (!live || gt(v, live))) live = v;
+    } catch { /* offline / blocked — try the next storefront, then fall through to pinned */ }
+  }
 
   // No live read, or pinned already exceeds live → keep pinned.
   if (!live || gt(pp, live)) { process.stdout.write(pinned); return; }
