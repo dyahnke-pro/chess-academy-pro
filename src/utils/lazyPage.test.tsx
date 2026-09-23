@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Suspense } from 'react';
 
@@ -7,12 +7,16 @@ vi.mock('../services/appAuditor', () => ({ logAppAudit: vi.fn(() => Promise.reso
 import { lazyPage } from './lazyPage';
 
 const reload = vi.fn();
+const realLocation = globalThis.location;
 
 describe('lazyPage — a page loads on first visit, and a chunk gone after a deploy reloads once', () => {
   beforeEach(() => {
     reload.mockReset();
     sessionStorage.clear();
-    Object.defineProperty(globalThis, 'location', { value: { ...globalThis.location, reload }, configurable: true });
+    Object.defineProperty(globalThis, 'location', { value: { reload }, configurable: true });
+  });
+  afterEach(() => {
+    Object.defineProperty(globalThis, 'location', { value: realLocation, configurable: true });
   });
 
   it('renders the page once its code arrives', async () => {
