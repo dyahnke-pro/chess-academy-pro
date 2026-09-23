@@ -4,17 +4,18 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**5575 lines · 3 exports · 3 importers · 2 tests · 9 audits**
+**5595 lines · 4 exports · 4 importers · 3 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4953) — names `BLUNDER_CARD_ENABLED`
-- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6070) — names `BLUNDER_CARD_ENABLED`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:4951) — names `BLUNDER_CARD_ENABLED`, `CoachGamePage`
+- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:6072) — names `BLUNDER_CARD_ENABLED`, `PLAY_VOLUNTEERS_COACHING`
 
 ## Who calls in
 
 - `src/App.tsx`
 - `src/components/Coach/CoachGamePage.blunderCard.test.ts`
+- `src/components/Coach/CoachGamePage.playSilent.test.ts`
 - `src/components/Coach/CoachGamePage.test.tsx`
 
 ## Exports and every call site
@@ -25,12 +26,16 @@
 ### `BLUNDER_CARD_ENABLED` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `PLAY_VOLUNTEERS_COACHING` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `CoachGamePage` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ## Tests
 
 - `src/components/Coach/CoachGamePage.blunderCard.test.ts`
+- `src/components/Coach/CoachGamePage.playSilent.test.ts`
 - `src/components/Coach/CoachGamePage.test.tsx`
 
 ## Audits that reach it

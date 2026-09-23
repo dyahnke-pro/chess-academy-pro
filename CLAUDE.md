@@ -4944,15 +4944,20 @@ surface.
 tab!!! That is a pure playing surface").**
 - **Learn (`/coach/teach`)** — the interruptive "why did you play that?"
   picker lives HERE. Learn is a teaching surface; a blocking probe belongs.
-- **Play (`/coach/play`, `OpeningPlayMode` play phase) — PURE PLAYING
-  SURFACE. NO blocking interruptions, EVER.** During a Play game the coach
-  speaks exactly two things, both NON-BLOCKING: **phase-transition
-  narration** (opening→middlegame→endgame) and the **spoken blunder
-  verdict** — the slip detector's computed sentence, voiced as the move lands
-  (D4, 2026-09-22; the "Blunder Detected" CARD that used to pause the board
-  is OFF, `BLUNDER_CARD_ENABLED = false`, and stays off until David flips
-  it). The board never waits: it NEVER stops the game with a picker or a
-  card.
+- **Play (`/coach/play`) — PURE PLAYING SURFACE. THE COACH VOLUNTEERS
+  NOTHING (David 2026-09-23: "Coach play shouldn't talk at all").** No
+  phase-transition narration, no blunder verdict, no per-move slip line, no
+  "Watch out" threat alert, no deep-link entry beat — voice OR chat text.
+  One switch, `PLAY_VOLUNTEERS_COACHING = false` in `CoachGamePage.tsx`,
+  gated by `CoachGamePage.playSilent.test.ts` (every unprompted speak site
+  must sit inside it). What the student TAPS still answers (Read this
+  position, Why?, Hint, typed chat, mic). Slips are still RECORDED
+  (`raiseWhyForSlip`) and taught in post-game review, which keeps its voice.
+  Why: the first new App Store user after the D4 build heard 24 volunteered
+  lines in a two-minute game and never came back. The board never waits
+  either: no picker, no card (`BLUNDER_CARD_ENABLED = false`).
+  `OpeningPlayMode`'s Play rung is NOT covered by this switch — David kept it
+  as is (it still speaks its intro, punish callouts, threats, tips).
 - **The full diagnostic for a Play game happens in POST-GAME REVIEW**, not
   live. Wiring the "why did you play that?" into review is a SEPARATE step
   to be **designed with David first** ("we will wire it into that after we
@@ -5031,9 +5036,8 @@ the prompt.
 
 **COORDINATION:** on the LEARN surface, a picker moment SUPPRESSES narration
 (the clean probe replaces any comment, so nothing leaks); ordinary moments
-narrate freely. On PLAY, there is no picker to coordinate with — only the
-non-blocking voice: phase-transition narration and the spoken blunder verdict
-(D4).
+narrate freely. On PLAY (`/coach/play`) there is nothing to coordinate: the
+coach volunteers nothing (2026-09-23).
 
 **QUALITY IS THE ONLY METRIC — COST IS NEVER A FACTOR (David 2026-07-06:
 "I don't care about cost, I care about quality and providing value and
@@ -6064,14 +6068,14 @@ The contract, per run:
    defenses: Sicilian / Caro-Kann / French / Modern / Scandinavian, via
    `/coach/play?side=black`). Distinctness is asserted on the app's own
    `coach-opening-auto-detected` names — not on the plan labels.
-3. **REAL MID-GAME FLOWS ANSWERED, not dodged**: the slip detector reaches
-   the student on Play as a SPOKEN, non-blocking verdict (D4, 2026-09-22) —
-   the blocking "Blunder Detected" card (testid `blunder-interception`) is
-   OFF (`BLUNDER_CARD_ENABLED = false`, David: "i want the blunder card
-   removed for now"; it was modal, no timeout, and re-raised every move while
-   the piece stayed hung), so the board never waits. The audit clicks the
-   card only if it is present (today it never is) and does NOT yet count the
-   spoken verdicts — that count is OWED as the E2E proof the detector fires.
+3. **REAL MID-GAME FLOWS ANSWERED, not dodged**: Play is SILENT mid-game
+   (2026-09-23, `PLAY_VOLUNTEERS_COACHING = false`) — the slip detector still
+   classifies and RECORDS every slip, but says nothing; the blocking "Blunder
+   Detected" card (testid `blunder-interception`) is OFF
+   (`BLUNDER_CARD_ENABLED = false`), so the board never waits. The audit
+   clicks the card only if it is present (today it never is). The E2E proof
+   the detector fires is now the RECORD (mistake rows / review flags), not a
+   spoken verdict — asserting that is OWED.
    If David flips the card back on, the audit must click Continue and count
    the interceptions again; any new blocking card added to the play surface
    MUST be handled + counted the same way.
