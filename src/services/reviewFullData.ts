@@ -16,7 +16,7 @@ import { contrastMoves, contrastClause } from './moveContrast';
 import { detectBluff, bluffClause } from './bluffDetector';
 import { computeGemCrush } from './gemCrushLines';
 import { getPunishGemById } from '../data/lessons/punishGems';
-import { Chess, type Color } from 'chess.js';
+import { Chess, type Color, type Square } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
 import { legalSeeGainOn, findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
@@ -654,7 +654,10 @@ export function computeMoveFacets(
     || ctx.classification === 'great' || ctx.classification === 'excellent';
   if (isStudent && goodish && ctx.bestMoveSan && ctx.bestMoveSan.replace(/[+#!?]+$/, '') !== san.replace(/[+#!?]+$/, '')) {
     const c = contrastMoves(fenBefore, san, ctx.bestMoveSan);
-    if (c) {
+    // The piece it names must stand on that square on the REAL board after the
+    // move played — the other candidate's board is hypothetical.
+    const onBoard = c ? (() => { try { const p = new Chess(fenAfter).get(c.square as Square); return !!p && p.type === c.piece && p.color === studentColorWB; } catch { return false; } })() : false;
+    if (c && onBoard) {
       const t = `[contrast] ${contrastClause(c)}.`;
       facets.push(t);
       recSquares(t, [c.square]);

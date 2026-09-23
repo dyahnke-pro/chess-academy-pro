@@ -54,5 +54,9 @@ export function readTiming(fenEarlier: string, fenNow: string, san: string): Mov
 }
 
 export function timingClause(t: MoveTiming): string {
-  return `${t.san} now, not a move earlier — then ${t.reply} would have won your ${NAME[t.piece] ?? 'piece'} on ${t.square}`;
+  // No "<piece> on <square>": the square describes the HYPOTHETICAL board a
+  // move earlier, and read against the real one it is a false claim (the
+  // corpus sweep caught "your queen on f6" where a knight stood). The square
+  // is the facet's highlight instead.
+  return `${t.san} now, not a move earlier — then ${t.reply} would have won your ${NAME[t.piece] ?? 'piece'}`;
 }

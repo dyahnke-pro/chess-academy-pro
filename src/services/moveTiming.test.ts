@@ -9,7 +9,7 @@ describe('readTiming', () => {
   it('Nd5 after …e5 is right; a move earlier …exd5 won the knight', () => {
     const t = readTiming(fen(['e4', 'e6', 'Nc3', 'a6']), fen(['e4', 'e6', 'Nc3', 'a6', 'Nf3', 'e5']), 'Nd5');
     expect(t).toEqual({ san: 'Nd5', reply: 'exd5', piece: 'n', square: 'd5' });
-    expect(timingClause(t!)).toBe('Nd5 now, not a move earlier — then exd5 would have won your knight on d5');
+    expect(timingClause(t!)).toBe('Nd5 now, not a move earlier — then exd5 would have won your knight');
   });
 
   it('negative control: a move that was safe a turn earlier too has no timing point', () => {
