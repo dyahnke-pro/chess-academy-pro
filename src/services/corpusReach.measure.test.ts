@@ -8,7 +8,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import repertoire from '../data/repertoire.json';
-import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadFullCorpus, unprimedCorpora } from '../test/loadFullCorpus';
 import { transitionTeachingForGame, buildDanyaTeachingBlock } from './danyaTeachingService';
 
 interface RepEntry { id: string; name: string; pgn: string }
@@ -22,8 +22,9 @@ describe('corpus reach — transition ritual + lesson background, full corpus', 
   // loaded note count, not on the reach numbers, so it fails at the cause.
   beforeAll(async () => {
     const loaded = await Promise.resolve(loadFullCorpus());
-    const notes = loaded.reduce((n, b) => n + b.notes, 0);
-    expect(notes, `the full corpus did not load (public/data missing?) — ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+    // Derived from the registry, never a count — a hard-coded floor went stale
+    // when the anchored farms were retired (see `unprimedCorpora`).
+    expect(unprimedCorpora(loaded), `corpora loaded: ${JSON.stringify(loaded)}`).toEqual([]);
   }, 120_000);
 
   it('measures every repertoire opening (non-vacuous) and records the numbers', () => {

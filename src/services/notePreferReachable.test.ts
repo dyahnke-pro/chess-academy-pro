@@ -27,7 +27,7 @@ import { openingReachesPosition } from './openingBranches';
 // the proof it was once measuring a loaded corpus and stopped. The helper's own
 // header warns about exactly this failure — "a gate written without it passes
 // while testing a fifth of the data" — and this gate fell into it.
-import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadFullCorpus, unprimedCorpora } from '../test/loadFullCorpus';
 
 /** Walk the taught lines and record what selection returns per ply.
  *
@@ -63,10 +63,11 @@ function walk(limit: number): { plies: number; withNote: number; eitherSeat: num
 describe('the anchor preference', () => {
   beforeAll(() => {
     const loaded = loadFullCorpus();
-    const total = loaded.reduce((n, c) => n + c.notes, 0);
     // Non-vacuity: with the fetched corpora missing from disk every assertion
     // below would measure an empty index and this gate would be theatre.
-    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+    // Derived from the registry, never a count — a hard-coded floor went stale
+    // when the anchored farms were retired (see `unprimedCorpora`).
+    expect(unprimedCorpora(loaded), `corpora loaded: ${JSON.stringify(loaded)}`).toEqual([]);
   }, 180_000);
 
   it('does not cost coverage — the whole reason it is a preference', () => {

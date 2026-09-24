@@ -25,7 +25,7 @@ import { Chess } from 'chess.js';
 // FLOATING-ONLY, so any exact-position assertion was querying an index that
 // cannot contain a hit. Every check in this file was green against a fifth of
 // the data.
-import { loadFullCorpus } from './../test/loadFullCorpus';
+import { loadFullCorpus, unprimedCorpora } from './../test/loadFullCorpus';
 import { teachingSourceForBoard } from './danyaTeachingService';
 import { noteStaysInScope, notePhaseMatchesBoardWords, noteRecommendsALegalMove } from './noteAnchorIntegrity';
 
@@ -41,10 +41,11 @@ const VIENNA = ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5'];
 describe('the opening never borrows another position ideas', () => {
   beforeAll(() => {
     const loaded = loadFullCorpus();
-    const total = loaded.reduce((n, c) => n + c.notes, 0);
     // Non-vacuity: with the fetched corpora missing from disk every assertion
     // below would measure an empty index and this gate would be theatre.
-    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(15_000);
+    // Derived from the registry, never a count — a hard-coded floor went stale
+    // when the anchored farms were retired (see `unprimedCorpora`).
+    expect(unprimedCorpora(loaded), `corpora loaded: ${JSON.stringify(loaded)}`).toEqual([]);
   }, 180_000);
 
   it.each([1, 2, 3, 4, 5, 6])('ply %i selects nothing, or a note about THIS line', (n) => {

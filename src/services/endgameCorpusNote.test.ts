@@ -22,7 +22,7 @@ import { describe, expect, it , beforeAll} from 'vitest';
 // CONCEPT tier, not the exact-position one. The gate was not hiding a defect; it
 // was simply not measuring what it claimed to. It is now, and the floor below
 // records the real number instead of the one it happened to clear.
-import { loadFullCorpus } from './../test/loadFullCorpus';
+import { loadFullCorpus, unprimedCorpora } from './../test/loadFullCorpus';
 import {
   ENDGAME_LESSON_CONCEPTS,
   endgameNoteForLesson,
@@ -37,10 +37,11 @@ const NAMES_A_SQUARE = /\b[a-hA-H][1-8]\b/;
 describe('endgame corpus wiring', () => {
   beforeAll(() => {
     const loaded = loadFullCorpus();
-    const total = loaded.reduce((n, c) => n + c.notes, 0);
     // Non-vacuity: with the fetched corpora missing from disk every assertion
     // below would measure an empty index and this gate would be theatre.
-    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(20_000);
+    // Derived from the registry, never a count — a hard-coded floor went stale
+    // when the anchored farms were retired (see `unprimedCorpora`).
+    expect(unprimedCorpora(loaded), `corpora loaded: ${JSON.stringify(loaded)}`).toEqual([]);
   }, 180_000);
 
   const lessons = getAllEndgameLessons();
