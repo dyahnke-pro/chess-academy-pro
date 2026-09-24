@@ -47,8 +47,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts:2649`
 - `src/services/coachFeatureService.ts:2673`
 - `src/services/reviewFullData.ts:558`
-- `src/services/reviewFullData.ts:735`
-- `src/services/reviewFullData.ts:814`
+- `src/services/reviewFullData.ts:738`
+- `src/services/reviewFullData.ts:817`
 
 ### `describeSacBreaksKingShield` (function) — 6 call sites
 - `src/services/coachFeatureService.ts:2368`
