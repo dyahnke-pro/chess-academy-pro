@@ -3017,7 +3017,13 @@ export function CoachTeachPage(): JSX.Element {
     // walkthrough) would otherwise keep talking over the answer. Cut the voice
     // up front for every genuine user turn — a kickoff greeting and the coach's
     // own move-narration are not the student interrupting, so leave those.
-    if (!opts?.kickoff && opts?.coachReplyPlayed === undefined) voiceService.stop();
+    if (!opts?.kickoff && opts?.coachReplyPlayed === undefined) {
+      voiceService.stop();
+      // …and the live commentary still QUEUED behind it goes too — Track A's
+      // generation counter drops every line chained before this question
+      // (David 2026-09-24: "stop calculations and answer question").
+      trackAGenRef.current += 1;
+    }
 
     // Any new user turn cancels a running narrated continuation.
     continuationRef.current = false;
@@ -6918,10 +6924,16 @@ export function CoachTeachPage(): JSX.Element {
         // displayText is post-strip and is exactly what was said, so arrows
         // now follow the voice by construction.
         const arrowSourceText = displayText.trim() || finalText;
-        const arrowed = await applyCandidateArrows(arrowSourceText, fen, 'CoachTeachPage', {
-          excludeSan: replyPlayed,
-          spokenText: spokenForArrows || undefined,
-        });
+        // An answer that brings its OWN calculated lines names its moves at the
+        // question's position, not the live one — ranking them here would cost
+        // a fresh MultiPV search (~8s behind a busy engine, measured locally)
+        // to colour arrows the lines already draw. Skip the pass for it.
+        const arrowed = result.lines && result.lines.length > 0
+          ? arrowSourceText
+          : await applyCandidateArrows(arrowSourceText, fen, 'CoachTeachPage', {
+            excludeSan: replyPlayed,
+            spokenText: spokenForArrows || undefined,
+          });
         const highlightMarkers = candidateHighlightMarkers(arrowSourceText, 'CoachTeachPage');
         const annotated = highlightMarkers.length > 0
           ? `${arrowed} ${highlightMarkers.join(' ')}`
@@ -6960,7 +6972,10 @@ export function CoachTeachPage(): JSX.Element {
           setHighlights([]);
           setLineWalkFen(calcLines[0].startFen);
           setLineWalkArrows([]);
-          void beatSpeechStarted.then(() => {
+          // NEVER wait on the speech signal alone: an answer spoken by a path
+          // that does not resolve it left the board STUCK on the question's
+          // position (local run, 2026-09-24). Start the clock by 1.2s either way.
+          void Promise.race([beatSpeechStarted, new Promise<void>((r) => { window.setTimeout(r, 1200); })]).then(() => {
             let acc = 0;
             for (const sent of sentences) {
               const at = (acc / total) * estMs;
@@ -11566,6 +11581,9 @@ export function CoachTeachPage(): JSX.Element {
               // reset / eval bar / mic), and spreading them in only
               // type-checks by accident.
               (lineWalkFen ?? reviewFen) ? (
+                <>
+                {/* Observable: a calculated line is on the board (audits wait on it). */}
+                {lineWalkFen && <span data-testid="line-walk-active" hidden />}
                 <ConsistentChessboard
                   fen={(lineWalkFen ?? reviewFen) as string}
                   arrows={lineWalkFen ? lineWalkArrows : undefined}
@@ -11573,6 +11591,7 @@ export function CoachTeachPage(): JSX.Element {
                   boardOrientation={playerColor}
                   showLastMoveHighlight
                 />
+                </>
               ) : (
                 <ConsistentChessboard
                   game={game}

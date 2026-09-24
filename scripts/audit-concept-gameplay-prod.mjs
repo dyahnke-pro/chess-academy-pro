@@ -431,30 +431,45 @@ async function main() {
       for (const ask of ["couldn't they just move their queen?", "couldn't they just move their rook?", 'could I just move my knight?', "couldn't they just move their bishop?"]) {
         const before = await page.locator('[data-testid="chat-message-assistant"]').count();
         await input.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => {});
+        // The input is disabled while the previous turn is busy — typing into
+        // it then sends nothing (the local run's "knight" ask vanished).
+        for (let t = Date.now(); Date.now() - t < 60_000 && await input.isDisabled().catch(() => false);) await page.waitForTimeout(500);
         await input.pressSequentially(ask, { delay: 12 }).catch(() => {});
         await page.keyboard.press('Enter');
-        const by = Date.now() + 60_000;
-        while (Date.now() < by && (await page.locator('[data-testid="chat-message-assistant"]').count()) <= before) await page.waitForTimeout(1000);
-        await page.waitForTimeout(1500);
-        // The transcript renders NEWEST FIRST — `.last()` is the greeting.
+        const askedAt = Date.now();
+        const by = askedAt + 60_000;
+        // The transcript renders NEWEST FIRST — `.last()` is the greeting. A new
+        // bubble can land EMPTY (the streaming placeholder), so wait for text.
         const last = page.locator('[data-testid="chat-message-assistant"]').first();
-        const text = (await last.innerText().catch(() => '')).replace(/\s+/g, ' ');
+        let text = '';
+        while (Date.now() < by) {
+          await page.waitForTimeout(500);
+          if ((await page.locator('[data-testid="chat-message-assistant"]').count()) <= before) continue;
+          text = (await last.innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+          if (text.replace(/^C\s*/, '').length > 10) break;
+        }
+        console.log(`[piece-latency] ${Date.now() - askedAt}ms`);
         const walks = await last.locator('[data-testid^="message-walk-line-"]').count();
         console.log(`[piece] ask="${ask}" walks=${walks} → ${text.slice(0, 260)}`);
         if (walks > 0) { answered = { ask, text, walks, last }; break; }
       }
       for (const e of listener.getCapturedEvents().filter((x) => x.source === 'coachService.pieceOptions')) console.log(`[piece-stage] ${e.summary}`);
-      record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|square that holds|gives up its guard|is attacked)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
+      record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|So [A-Z][a-z]?[a-h1-8x+]* was about as good|comes down to the best square|square that holds|gives up its guard|is attacked|holds?\.)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
       record('H2. the answer carries a Walk button per calculated line', !!answered && answered.walks > 0, answered ? `${answered.walks} walk button(s)` : '0');
       if (answered) {
+        // While the answer is spoken the board SHOWS the question's position
+        // (`line-walk-active`). Baseline only once it has handed back.
+        const active = page.locator('[data-testid="line-walk-active"]');
+        for (let t = Date.now(); Date.now() - t < 45_000 && (await active.count()) > 0;) await page.waitForTimeout(500);
         const live = await readPlacement(page);
         await answered.last.locator('[data-testid="message-walk-line-0"]').click({ force: true }).catch(() => {});
         let moved = false;
-        const byWalk = Date.now() + 8000;
-        while (Date.now() < byWalk && !moved) { await page.waitForTimeout(500); moved = !samePlacement(await readPlacement(page), live); }
+        for (let t = Date.now(); Date.now() - t < 8000 && !moved;) { await page.waitForTimeout(300); moved = (await active.count()) > 0; }
         let back = false;
-        const byBack = Date.now() + 30_000;
-        while (moved && Date.now() < byBack && !back) { await page.waitForTimeout(1000); back = samePlacement(await readPlacement(page), live); }
+        for (let t = Date.now(); moved && Date.now() - t < 30_000 && !back;) {
+          await page.waitForTimeout(500);
+          back = (await active.count()) === 0 && samePlacement(await readPlacement(page), live);
+        }
         record('H3. Walk plays the line on the board and returns to the game', moved && back, `moved=${moved} returned=${back}`);
       }
     }

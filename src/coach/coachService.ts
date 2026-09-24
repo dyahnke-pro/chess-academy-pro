@@ -212,7 +212,7 @@ import {
   isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
 } from './questionIntents';
 import { isAnyBoardQuestion } from './boardQuestions';
-import { computePieceOptions, resolvePieceQuestion } from '../services/pieceOptions';
+import { computePieceOptions, pieceAbsentAnswer, resolvePieceQuestion } from '../services/pieceOptions';
 import { stockfishEngine } from '../services/stockfishEngine';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
@@ -502,6 +502,7 @@ export function stripInjectedBlocks(ask: string): string {
 }
 
 async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
+  const askStartedAt = Date.now();
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
   // picked which model. Surfaces migrated onto the spine are
@@ -1446,7 +1447,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // coachApi, and the lines ride back to the board as arrows + a walk button.
     // Time-boxed: a stuck engine answers nothing rather than holding the turn.
     let pieceOptions: import('../services/pieceOptions').PieceOptionsAnswer | undefined;
+    let pieceEngine = '-';
     const pieceRef = pieceOptionsRef(askForIntents);
+    const pieceStartedAt = Date.now();
     if (pieceRef && input.liveState.fen) {
       const resolved = resolvePieceQuestion({
         ref: pieceRef,
@@ -1454,16 +1457,33 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         history: input.liveState.moveHistory ?? [],
         studentColor: input.liveState.studentColor ?? ((input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white'),
       });
+      const absent = resolved ? null : pieceAbsentAnswer({
+        ref: pieceRef,
+        fen: input.liveState.fen,
+        studentColor: input.liveState.studentColor ?? 'white',
+      });
+      if (absent) {
+        pieceOptions = {
+          seat: pieceRef.seat ?? 'opponent', piece: pieceRef.piece, from: '', duty: [], narrowedBy: 'all',
+          options: [], playedSan: null, lines: [], facts: absent,
+        };
+      }
       if (resolved) {
+        // STOP THE CALCULATIONS AND ANSWER THE QUESTION (David 2026-09-24).
+        // The live engine is HELD — its search in flight stops and background
+        // reads wait — and the question runs on that same warm engine, so the
+        // answer never queues behind the game's own analysis.
+        pieceEngine = 'held-live-engine';
         pieceOptions = (await Promise.race([
-          computePieceOptions({
+          stockfishEngine.holdForQuestion((engine) => computePieceOptions({
             fen: resolved.fen,
             pieceSquare: resolved.pieceSquare,
             seat: resolved.seat,
             studentColor: input.liveState.studentColor ?? 'white',
             playedUci: resolved.playedUci,
-            engine: stockfishEngine,
-          }).catch(() => null),
+            engine,
+            depth: 10,
+          }).catch(() => null)),
           new Promise<null>((r) => setTimeout(() => r(null), 12000)),
         ])) ?? undefined;
       }
@@ -1472,7 +1492,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
         kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'coachService.pieceOptions',
-        summary: `piece=${pieceRef.piece} seat=${pieceRef.seat ?? pieceRef.color ?? 'unsaid'} resolved=${resolved ? `${resolved.seat}@${resolved.pieceSquare}${resolved.playedUci ? ` played=${resolved.playedUci}` : ''}` : 'no'} options=${pieceOptions ? pieceOptions.options.length : 'none'} narrowedBy=${pieceOptions?.narrowedBy ?? '-'}`,
+        summary: `piece=${pieceRef.piece} seat=${pieceRef.seat ?? pieceRef.color ?? 'unsaid'} resolved=${resolved ? `${resolved.seat}@${resolved.pieceSquare}${resolved.playedUci ? ` played=${resolved.playedUci}` : ''}` : 'no'} options=${pieceOptions ? pieceOptions.options.length : 'none'} narrowedBy=${pieceOptions?.narrowedBy ?? '-'} engine=${pieceEngine} ms=${Date.now() - pieceStartedAt} sinceAsk=${Date.now() - askStartedAt}`,
         fen: input.liveState.fen,
       });
     }

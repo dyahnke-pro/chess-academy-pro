@@ -120,3 +120,36 @@ describe('resolvePieceQuestion — the decision the question is about', () => {
     expect(resolvePieceQuestion({ ref: { seat: 'opponent', color: null, piece: 'b', square: null }, fen: c.fen(), history: ['d4'], studentColor: 'black' })).toBeNull();
   });
 });
+
+describe('pieceOptions — a refutation must prove something AGAINST the option', () => {
+  it("THE LOCAL RUN: a line where the student comes out behind never refutes the OPPONENT's option", () => {
+    // Opponent (White) option; the engine line ends with the STUDENT losing
+    // material — that line shows the option WORKING, so it is not a refutation.
+    const text = renderPieceOptions({
+      seat: 'opponent', piece: 'q', from: 'd1', duty: [], narrowedBy: 'all',
+      options: [{ san: 'Qc1', moverCp: 40, refutation: null, line: { label: 'Qc1', startFen: FEN, plies: [] } }],
+      playedSan: 'Qf3', playedCp: 30, allMoves: 6,
+    });
+    expect(text).toBe("Their queen on d1 wasn't guarding anything or under attack, so it comes down to the best square: Qc1. So Qc1 was about as good as Qf3 — neither changes much.");
+  });
+  it('narrowed options that survive are said to hold', () => {
+    const text = renderPieceOptions({
+      seat: 'opponent', piece: 'q', from: 'f3', duty: ['e4'], narrowedBy: 'duty',
+      options: [
+        { san: 'Qg4', moverCp: -20, refutation: null, line: { label: 'Qg4', startFen: FEN, plies: [] } },
+        { san: 'Qf5', moverCp: -300, refutation: 'Then O-O and Bxf5 — you win a queen for a bishop', line: { label: 'Qf5', startFen: FEN, plies: [] } },
+      ],
+      playedSan: null, playedCp: null, allMoves: 9,
+    });
+    expect(text).toMatch(/Qf5\? Then O-O and Bxf5 — you win a queen for a bishop\. Qg4 holds\./);
+  });
+});
+
+describe('pieceOptions — a piece that cannot move', () => {
+  it('says so, instead of falling through to the best move', async () => {
+    const start = new Chess().fen(); // the a1 rook has no legal move
+    const a = await computePieceOptions({ fen: start, pieceSquare: 'a1', seat: 'student', studentColor: 'white', playedUci: null, engine: engineFrom({}) });
+    expect(a?.facts).toBe("Your rook on a1 had no legal move — it couldn't go anywhere.");
+    expect(a?.lines).toEqual([]);
+  });
+});

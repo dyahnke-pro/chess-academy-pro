@@ -101,12 +101,21 @@ function moverPov(whiteCp: number, isMate: boolean, mateIn: number | null, mover
   return mover === 'w' ? cp : -cp;
 }
 
-function refutationOf(fenAfter: string, pvSans: readonly string[], studentWB: 'w' | 'b'): string | null {
+/** The reply line cut to what it proves AGAINST the side that chose the
+ *  option — or null when it proves nothing against it. The 2026-09-24 local
+ *  run said "Qe2? Then … Rxd3 and cxd3 — you come out behind" about THEIR
+ *  queen move: the line was real, but it showed the option WORKING, so reading
+ *  it as a refutation said the opposite of the truth. */
+function refutationOf(fenAfter: string, pvSans: readonly string[], studentWB: 'w' | 'b', optionMover: Color): string | null {
   const proof = proofCut(fenAfter, pvSans, studentWB);
   if (!proof) return null;
   const moves = andList(pvSans.slice(0, proof.plies));
-  if (proof.mate) return `Then ${moves} — and it's mate`;
-  return proof.ledger ? `Then ${moves} — ${describeProofResult(proof.ledger)}` : null;
+  // The line opens with the REPLY, so the replier delivers mate on an odd ply.
+  if (proof.mate) return proof.plies % 2 === 1 ? `Then ${moves} — and it's mate` : null;
+  if (!proof.ledger) return null;
+  const studentAhead = proof.ledger.netPawns > 0;
+  const againstMover = optionMover === studentWB ? !studentAhead : studentAhead;
+  return againstMover ? `Then ${moves} — ${describeProofResult(proof.ledger)}` : null;
 }
 
 /**
@@ -121,6 +130,9 @@ export async function computePieceOptions(input: {
   studentColor: 'white' | 'black';
   playedUci: string | null;
   engine: PvEngine;
+  /** More engines to spread the options over — the options are independent,
+   *  so N engines answer in about 1/N of the time. */
+  extraEngines?: readonly PvEngine[];
   depth?: number;
 }): Promise<PieceOptionsAnswer | null> {
   let c: Chess;
@@ -132,7 +144,16 @@ export async function computePieceOptions(input: {
   const depth = input.depth ?? 12;
 
   const moves = c.moves({ square: input.pieceSquare, verbose: true });
-  if (moves.length === 0) return null;
+  if (moves.length === 0) {
+    // "Couldn't the rook just move?" — it couldn't: no legal move at all. That
+    // IS the answer, not a reason to fall through to the best move.
+    const who = `${whose(input.seat)} ${NAME[piece.type]} on ${input.pieceSquare}`;
+    return {
+      seat: input.seat, piece: piece.type, from: input.pieceSquare, duty: [], narrowedBy: 'all',
+      options: [], playedSan: null, lines: [],
+      facts: `${who[0].toUpperCase()}${who.slice(1)} had no legal move — it couldn't go anywhere.`,
+    };
+  }
   const duty = dutiesOf(input.fen, input.pieceSquare);
   const attacked = c.isAttacked(input.pieceSquare, other(mover));
   let narrowedBy: PieceOptionsAnswer['narrowedBy'] = 'all';
@@ -149,44 +170,59 @@ export async function computePieceOptions(input: {
     });
   }
 
+  const engines = [input.engine, ...(input.extraEngines ?? [])];
   const options: PieceOption[] = [];
-  for (const m of pool) {
-    const t = new Chess(input.fen);
-    t.move(m.san);
-    const fenAfter = t.fen();
-    let a;
-    try { a = await input.engine.analyzePosition(fenAfter, depth); } catch { continue; }
-    const pv = a.topLines?.[0]?.moves ?? (a.bestMove ? [a.bestMove] : []);
-    const uci = `${m.from}${m.to}${m.promotion ?? ''}`;
-    const line = walk(input.fen, [uci, ...pv], m.san);
-    const pvSans = line.plies.slice(1).map((p) => p.san);
-    options.push({
-      san: m.san,
-      moverCp: moverPov(a.evaluation, a.isMate, a.mateIn, mover),
-      refutation: refutationOf(fenAfter, pvSans, studentWB),
-      line,
-    });
-  }
-  options.sort((x, y) => y.moverCp - x.moverCp);
-
   let playedSan: string | null = null;
   let playedCp: number | null = null;
-  if (input.playedUci) {
-    const t = new Chess(input.fen);
-    try {
-      playedSan = t.move({ from: input.playedUci.slice(0, 2), to: input.playedUci.slice(2, 4), promotion: input.playedUci[4] }).san;
-      const a = await input.engine.analyzePosition(t.fen(), depth);
-      playedCp = moverPov(a.evaluation, a.isMate, a.mateIn, mover);
-    } catch { /* the verdict falls back to the options alone */ }
-  }
+  // One job per option, plus the move actually played — independent reads,
+  // spread over every engine at hand through one shared queue.
+  type Job = { kind: 'option'; m: (typeof pool)[number] } | { kind: 'played'; uci: string };
+  const jobs: Job[] = [...pool.map((m) => ({ kind: 'option' as const, m })), ...(input.playedUci ? [{ kind: 'played' as const, uci: input.playedUci }] : [])];
+  let next = 0;
+  const runLane = async (engine: PvEngine): Promise<void> => {
+    while (next < jobs.length) {
+      const job = jobs[next];
+      next += 1;
+      if (job.kind === 'played') {
+        const t = new Chess(input.fen);
+        try {
+          playedSan = t.move({ from: job.uci.slice(0, 2), to: job.uci.slice(2, 4), promotion: job.uci[4] }).san;
+          const a = await engine.analyzePosition(t.fen(), depth);
+          playedCp = moverPov(a.evaluation, a.isMate, a.mateIn, mover);
+        } catch { /* the verdict falls back to the options alone */ }
+        continue;
+      }
+      const m = job.m;
+      const t = new Chess(input.fen);
+      t.move(m.san);
+      const fenAfter = t.fen();
+      let a;
+      try { a = await engine.analyzePosition(fenAfter, depth); } catch { continue; }
+      const pv = a.topLines?.[0]?.moves ?? (a.bestMove ? [a.bestMove] : []);
+      const uci = `${m.from}${m.to}${m.promotion ?? ''}`;
+      const line = walk(input.fen, [uci, ...pv], m.san);
+      const pvSans = line.plies.slice(1).map((p) => p.san);
+      options.push({
+        san: m.san,
+        moverCp: moverPov(a.evaluation, a.isMate, a.mateIn, mover),
+        refutation: refutationOf(fenAfter, pvSans, studentWB, mover),
+        line,
+      });
+    }
+  };
+  await Promise.all(engines.map(runLane));
+  options.sort((x, y) => y.moverCp - x.moverCp);
 
   const facts = renderPieceOptions({
     seat: input.seat, piece: piece.type, from: input.pieceSquare, duty, narrowedBy,
     options, playedSan, playedCp, allMoves: moves.length,
   });
+  // With nothing narrowing the options, the answer is the BEST one against
+  // what was played — listing every square would be a tour, not a lesson.
+  const spoken = narrowedBy === 'all' ? options.slice(0, 1) : options;
   return {
     seat: input.seat, piece: piece.type, from: input.pieceSquare, duty, narrowedBy,
-    options, playedSan, facts, lines: options.map((o) => o.line),
+    options, playedSan, facts, lines: spoken.map((o) => o.line),
   };
 }
 
@@ -220,10 +256,21 @@ export function renderPieceOptions(a: {
       ? `${pieceName[0].toUpperCase()}${pieceName.slice(1)} is attacked, and every square it can reach is covered.`
       : `Where can ${pieceName} go and be safe? ${andList(a.options.map((o) => o.san))}.`);
   }
-  for (const o of a.options) {
-    if (o.refutation) out.push(`${o.san}? ${o.refutation}.`);
-  }
   const best = a.options[0];
+  if (a.narrowedBy === 'all') {
+    // Nothing to narrow by — the piece guarded nothing and was not attacked —
+    // so the question is which square was best, against what was played.
+    if (best) out.push(`${pieceName[0].toUpperCase()}${pieceName.slice(1)} wasn't guarding anything or under attack, so it comes down to the best square: ${best.san}.`);
+    if (best?.refutation) out.push(`${best.san}? ${best.refutation}.`);
+  } else {
+    for (const o of a.options) {
+      if (o.refutation) out.push(`${o.san}? ${o.refutation}.`);
+    }
+    const holding = a.options.filter((o) => !o.refutation).map((o) => o.san);
+    if (holding.length > 0 && holding.length < a.options.length) {
+      out.push(`${andList(holding)} ${holding.length === 1 ? 'holds' : 'hold'}.`);
+    }
+  }
   if (best && a.playedSan && a.playedCp !== null) {
     if (best.moverCp > a.playedCp + SAME_BAND_CP) {
       out.push(`So yes — ${best.san} was better than ${a.playedSan}.`);
@@ -311,4 +358,22 @@ export function resolvePieceQuestion(input: {
   }
   if (!square) return null;
   return { fen, pieceSquare: square, seat, playedUci };
+}
+
+/** "Couldn't they just move their queen?" when there is no queen: that is the
+ *  answer. Null when the side does have the piece (the question is live). */
+export function pieceAbsentAnswer(input: { ref: PieceQuestionRef; fen: string; studentColor: 'white' | 'black' }): string | null {
+  let c: Chess;
+  try { c = new Chess(input.fen); } catch { return null; }
+  const studentWB: Color = input.studentColor === 'white' ? 'w' : 'b';
+  const seat: Seat | null = input.ref.seat
+    ?? (input.ref.color ? ((input.ref.color === 'white' ? 'w' : 'b') === studentWB ? 'student' : 'opponent') : null);
+  if (!seat) return null;
+  const side: Color = seat === 'student' ? studentWB : other(studentWB);
+  const has = c.board().some((row) => row.some((cell) => cell?.type === input.ref.piece && cell.color === side));
+  if (has) return null;
+  const plural = input.ref.piece === 'p' ? 'pawns are' : `${NAME[input.ref.piece]} is`;
+  return seat === 'student'
+    ? `Your ${plural} already off the board.`
+    : `Their ${plural} already off the board.`;
 }
