@@ -99,3 +99,13 @@ describe('buildGuidedFindChallenge — a pre-existing OPPONENT tactic is not the
     if (ch) expect(ch.question).not.toMatch(/land a fork/i);
   });
 });
+
+describe('seatPieceReferences — a colour possessive is replaced, never doubled (2026-09-24 prod review)', () => {
+  // Student Black; White king on h1.
+  const fen = '6k1/5ppp/8/8/8/8/5PPP/7K b - - 0 1';
+  it("\"White's king on h1\" becomes \"Their king on h1\" — not \"White's their king\"", () => {
+    expect(seatPieceReferences("White's king on h1 has no escape square.", fen, 'b')).toBe('Their king on h1 has no escape square.');
+    expect(seatPieceReferences("Watch: White's king on h1 is boxed in.", fen, 'b')).toBe('Watch: their king on h1 is boxed in.');
+    expect(seatPieceReferences("Black's king on g8 is safe.", fen, 'b')).toBe('Your king on g8 is safe.');
+  });
+});

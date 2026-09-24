@@ -6210,10 +6210,10 @@ export function seatPieceReferences(
     const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
     return text.replace(
       new RegExp(
-        `(\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
+        `(\\b(?:White|Black)'s\\s+|\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
         'g',
       ),
-      (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string) => {
+      (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string, offset: number, all: string) => {
         const leadLower = (lead ?? '').toLowerCase().trim();
         // Already seated — leave the author's possessive (and any adjective it
         // introduced) alone.
@@ -6229,6 +6229,17 @@ export function seatPieceReferences(
         // determiner: "make that your knight on d4 the boss" (prod line-read of
         // David's Alapin, plies 34 and 44). Replacing keeps BOTH the grammar and
         // the seat, which dropping the possessive would have lost.
+        // A COLOUR possessive is a determiner too — "White's king on h1" came
+        // out as "White's their king on h1" on a 2026-09-24 prod review. The
+        // seat REPLACES it, the same way it replaces a demonstrative.
+        if (/^(white|black)'s$/.test(leadLower)) {
+          const cellC = board.get(sq as Square);
+          if (!cellC || cellC.type !== WANT[piece.toLowerCase()]) return whole;
+          const ownerC = cellC.color === studentColorWB ? 'your' : 'their';
+          const sentenceStart = /(^|[.!?]\s+)$/.test(all.slice(0, offset));
+          const word = sentenceStart ? ownerC[0].toUpperCase() + ownerC.slice(1) : ownerC;
+          return `${word} ${adj ?? ''}${piece} on ${sq}`;
+        }
         if (/^th(at|is|ose|ese)$/.test(leadLower)) {
           const cellD = board.get(sq as Square);
           if (!cellD || cellD.type !== WANT[piece.toLowerCase()]) return whole;

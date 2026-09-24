@@ -26,6 +26,7 @@ import { costStakes, exchangeStakes, forkPoints, piecesOn, MATE_POINTS, type Fac
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
+import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { principleToTeach, principleOnceLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { isMateEval } from './engineConstants';
@@ -246,7 +247,7 @@ export function computeMoveFacets(
   const recStakes = (facet: string, stakes: FactStakes | null | undefined): void => {
     if (outStakes && stakes && stakes.points > 0) outStakes.set(facet, stakes);
   };
-  const recMotif = (facet: string, motif: string): void => { outIdentity?.set(facet, `motif:${motif}`); };
+  const recMotif = (facet: string, motif: string, squares: readonly string[]): void => { outIdentity?.set(facet, `motif:${motif}:${squares.join('')}`); };
   const recSquares = (facet: string, squares: ReadonlyArray<string | null | undefined>): void => {
     if (!outSquares) return;
     const clean = squares.filter((s): s is string => typeof s === 'string' && /^[a-h][1-8]$/.test(s));
@@ -493,11 +494,11 @@ export function computeMoveFacets(
         if (v.status === 'live') {
           const f = `[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-          recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type);
+          recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type, tac.involvedSquares);
         } else if (v.status === 'threat') {
           const f = `[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-          recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type);
+          recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type, tac.involvedSquares);
         }
         // status 'none' → unproven fork shape, say nothing (G0).
         continue;
@@ -513,7 +514,7 @@ export function computeMoveFacets(
         if (front === 'p' && stakes === null) continue;
         const f = `[tactic] ${seat(tac.description)}.`;
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-        recStakes(f, stakes); recMotif(f, tac.type);
+        recStakes(f, stakes); recMotif(f, tac.type, tac.involvedSquares);
       }
     }
     // ONLY THE DELTA SPEAKS (WO-STANDARD-01 D-8, prod tape 2026-09-22:
@@ -751,8 +752,16 @@ export function computeMoveFacets(
         const played = strip(san) === strip(crush.inaccuracy);
         const moverSlips = moverColor === crush.opponentSide;
         if (isStudent && moverSlips && !played) {
-          const freq = gem && gem.freqPct > 0 ? ` in ${Math.round(gem.freqPct)}% of games` : '';
-          facets.push(`[refuted] Players at your level often play ${crush.inaccuracy} here${freq} — it loses to ${crush.punish}, ${crush.payoff}.`);
+          // "Often" only when it IS often. The prod tape said "often play c4
+          // here in 2% of games" — gems are mined from 2% up, so the share
+          // decides the wording; the claim (the slip, its refutation) does not.
+          const pct = gem && gem.freqPct > 0 ? Math.round(gem.freqPct) : null;
+          const lead = pct !== null && pct >= MIN_ALTERNATIVE_SHARE
+            ? `${pct}% of players at your level play ${crush.inaccuracy} here`
+            : pct !== null
+              ? `The trap here is ${crush.inaccuracy} (${pct}% of games at your level)`
+              : `The trap here is ${crush.inaccuracy}`;
+          facets.push(`[refuted] ${lead} — it loses to ${crush.punish}, ${crush.payoff}.`);
           gemRefuted = true;
         } else if (!isStudent && moverSlips && played) {
           const next = ctx.allSans[ply];

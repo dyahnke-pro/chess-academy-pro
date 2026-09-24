@@ -35,7 +35,8 @@ describe('buildDeliberation — the weighing from the fan', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w' })!;
     const facts = deliberationFacts(d);
     expect(facts).toMatch(/Nxe5\? That drops the knight on e5\./);
-    expect(facts).toMatch(/d3 is playable, but not as precise\./);
+    // d3 sits inside the coin-flip band — weighing it is the banned filler.
+    expect(facts).not.toMatch(/d3/);
     expect(facts).toMatch(/The move is O-O\.$/);
   });
 
@@ -92,7 +93,7 @@ describe('S5 — a candidate is a lesson only with its reason', () => {
     })!;
     const alt = d.alternatives[0];
     expect(alt.proof).toBe('Qh4 and Nxh4 — they win a queen');
-    expect(deliberationAlternativesFacts(d)).toContain('Qh4? Qh4 and Nxh4 — they win a queen.');
+    expect(deliberationAlternativesFacts(d)).toContain('Qh4? Then Nxh4 — they win a queen.');
   });
 
   it('NEGATIVE CONTROL: a line that proves nothing gets no invented reason', async () => {

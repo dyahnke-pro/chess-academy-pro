@@ -53,7 +53,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:3294`
+- `src/services/coachFeatureService.ts:3295`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
@@ -61,7 +61,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternativeCore.ts:145`
 
 ### `describeProofResult` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3281`
+- `src/services/coachFeatureService.ts:3282`
 - `src/services/lineProof.test.ts:27`
 - `src/services/refutedAlternativeCore.ts:147`
 

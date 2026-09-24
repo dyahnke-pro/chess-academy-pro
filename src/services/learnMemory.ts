@@ -1,3 +1,5 @@
+import type { MotifLedger } from './motifLedger';
+
 /**
  * learnMemory — ONE per-game memory for the Learn producer.
  *
@@ -106,7 +108,7 @@ export interface LearnMemory {
   /** Opening principles taught this game (WO-TEACH-02 S2) — each once. */
   readonly principleTaught: Set<string>;
   /** Tactic motif → the move number it was first taught (S6 transfer). */
-  readonly motifFirstMove: Map<string, number>;
+  readonly motifFirstMove: MotifLedger;
   /** The opening name already QUEUED for the voice this game. Queueing is not
    *  saying (see `spokenOpeningName`), but re-queueing the SAME name every turn
    *  spoke "This game is now the Caro-Kann Defense." on two consecutive plies
@@ -209,7 +211,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
   const spokenKeys = new Set<string>();
   const conceptTaught = new Set<string>();
   const principleTaught = new Set<string>();
-  const motifFirstMove = new Map<string, number>();
+  const motifFirstMove: MotifLedger = new Map();
   const spokenTacticLines = new Set<string>();
   const spokenThreatLines = new Set<string>();
   let lastPlies = 0;

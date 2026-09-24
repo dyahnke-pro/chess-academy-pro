@@ -81,7 +81,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2173`
 - `src/services/groundedAnswer.ts:2594`
 - `src/services/groundedAnswer.ts:2952`
-- `src/services/groundedAnswer.ts:6365`
+- `src/services/groundedAnswer.ts:6376`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:428`
 - `src/services/pvPlayback.ts:475`
@@ -89,10 +89,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTrapQuestion.ts:113`
 
 ### `legalSeeGainOn` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:2367`
-- `src/services/groundedAnswer.ts:6411`
+- `src/services/coachFeatureService.ts:2368`
+- `src/services/groundedAnswer.ts:6422`
 - `src/services/opponentMovePurpose.ts:33`
-- `src/services/reviewFullData.ts:672`
+- `src/services/reviewFullData.ts:673`
 - `src/services/reviewTeachingPoints.ts:98`
 - `src/services/reviewTeachingPoints.ts:134`
 - `src/services/reviewTeachingPoints.ts:465`
@@ -107,7 +107,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2328`
 - `src/services/groundedAnswer.ts:2468`
 - `src/services/groundedAnswer.ts:2761`
-- `src/services/groundedAnswer.ts:6343`
+- `src/services/groundedAnswer.ts:6354`
 - `src/services/latentFork.ts:135`
 - `src/services/latentFork.ts:204`
 - `src/services/moveFundamentals.ts:240`
@@ -245,8 +245,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:255`
 - `src/services/positionalTruth.corpus.test.ts:95`
 - `src/services/positionalTruth.corpus.test.ts:100`
-- `src/services/reviewFullData.ts:640`
-- `src/services/reviewFullData.ts:644`
+- `src/services/reviewFullData.ts:641`
+- `src/services/reviewFullData.ts:645`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -259,8 +259,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:230`
 - `src/services/positionalTruth.corpus.test.ts:108`
 - `src/services/positionalTruth.corpus.test.ts:113`
-- `src/services/reviewFullData.ts:636`
-- `src/services/reviewFullData.ts:638`
+- `src/services/reviewFullData.ts:637`
+- `src/services/reviewFullData.ts:639`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -305,7 +305,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8562`
+- `src/components/Coach/CoachTeachPage.tsx:8574`
 - `src/services/danyaDeviceCoverage.test.ts:106`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/groundedAnswer.ts:5991`

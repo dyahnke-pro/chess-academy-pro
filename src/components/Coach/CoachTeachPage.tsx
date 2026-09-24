@@ -24,7 +24,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
-import { transferClause, recordMotif } from '../../services/motifLedger';
+import { transferClause, recordMotif, withTransfer } from '../../services/motifLedger';
 import { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
@@ -88,7 +88,7 @@ import { stageArrayHasUsableEntry } from '../../services/stageEntryValidity';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
-import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
+import { findSiblingExtensionBranches, isBookLine, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { openingAnnouncement } from '../../services/openingAnnouncement';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -7442,6 +7442,7 @@ export function CoachTeachPage(): JSX.Element {
       const cachedForAlert = stockfishCache.get(args.fenAfterReply, COACH_TURN_DEPTH) ?? null;
       const tctx = buildTacticsLiveContext(args.fenAfterReply, cachedForAlert, studentCC, rating);
       let tacticKey = '';
+      let pendingMotif: { type: string; instance: string; moveNo: number } | null = null;
       let threatKey = '';
       /** The tactic type the STUDENT has available, so the threat lane can tell
        *  when both lanes are about to describe the same shape. */
@@ -7516,9 +7517,16 @@ export function CoachTeachPage(): JSX.Element {
           // uses; an unnamed pattern says nothing rather than saying its id.
           const word = tacticWord(t.type);
           // S6 TRANSFER — the same motif taught earlier this game is named.
+          // The reference is INSIDE the first sentence (an orphaned trailing
+          // "You saw this idea on move 3." spoke alone on prod), fires only for
+          // a NEW instance, and is recorded only once the line survives the
+          // repeat guards below — computed is not said.
           const moveNo = Number.parseInt(args.fenAfterReply.split(' ')[5] ?? '0', 10) || 0;
-          tacticLine = word ? `There's a ${word} here for you — have a look.${conceptTail(t.type)}${transferClause(t.type, moveNo, learnMemRef.current.motifFirstMove)}` : null;
-          if (word) recordMotif(t.type, moveNo, learnMemRef.current.motifFirstMove);
+          const instance = t.squares.join('');
+          tacticLine = word
+            ? withTransfer(`There's a ${word} here for you — have a look.${conceptTail(t.type)}`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifFirstMove))
+            : null;
+          if (word) pendingMotif = { type: t.type, instance, moveNo };
           myTacticType = word ? t.type : null;
           if (word) tacticSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         }
@@ -7609,6 +7617,7 @@ export function CoachTeachPage(): JSX.Element {
       } else if (tacticLine) {
         learnMemRef.current.lastTacticKey = tacticKey;
         learnMemRef.current.spokenTacticLines.add(tacticLine);
+        if (pendingMotif) recordMotif(pendingMotif.type, pendingMotif.instance, pendingMotif.moveNo, learnMemRef.current.motifFirstMove);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
       }
       if (threatLine && (threatKey === learnMemRef.current.lastThreatKey || learnMemRef.current.spokenThreatLines.has(threatLine))) {
@@ -7638,7 +7647,7 @@ export function CoachTeachPage(): JSX.Element {
       // (`openingAnnouncement`): first identification, then the settled
       // name once, where the game leaves book — never every refinement.
       const announce = det && det.name !== learnMemRef.current.queuedOpeningName
-        ? openingAnnouncement(det, history.length, learnMemRef.current.spokenOpeningName)
+        ? openingAnnouncement(det, isBookLine(history), learnMemRef.current.spokenOpeningName)
         : null;
       if (det && announce) {
         const firstResolve = learnMemRef.current.spokenOpeningName === null;
@@ -8318,8 +8327,11 @@ export function CoachTeachPage(): JSX.Element {
           });
         }
         if (grade?.worthSpeaking && grade.clause) {
-          setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: grade.clause, timestamp: Date.now() }]);
-          void speakComputed(grade.clause, { forced: false, intent: 'learn' });
+          // The clause is a verdict ("good — that meets the threat cleanly.");
+          // heard on its own it names no move. Lead with the move it grades.
+          const gradeLine = `${move.san}: ${grade.clause}`;
+          setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: gradeLine, timestamp: Date.now() }]);
+          void speakComputed(gradeLine, { forced: false, intent: 'learn' });
           captureEvent('post_move_grade_spoken', { surface: 'coach-teach', reason: grade.reason, cp_loss: Math.round(grade.cpLossCp), fault: grade.fault });
         }
       }
@@ -9427,7 +9439,7 @@ export function CoachTeachPage(): JSX.Element {
                     try {
                       const det = detectOpening(chainHistory);
                       if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
-                      const announce = openingAnnouncement(det, chainHistory.length, learnMemRef.current.spokenOpeningName);
+                      const announce = openingAnnouncement(det, isBookLine(chainHistory), learnMemRef.current.spokenOpeningName);
                       if (det && announce) {
                         const firstResolve = learnMemRef.current.spokenOpeningName === null;
                         // NOT marked spoken here either. This site pushes into

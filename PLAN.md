@@ -461,6 +461,39 @@ every WO-TEACH-02 line against it:
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.
 
+## 🎙️ WO-DANYA-01 — Learn free play taught like the video (David 2026-09-24: "I want to be taught like the video I sent you! That's the only reason I'm making this app.")
+
+Target: `MWMloBpKuVg` (Nimzo-Larsen master class) + the 700/2300 speedruns
+(`docs/plans/2026-09-24-speedrun-target.md`). His unit is the DECISION, not the
+move: plans for both sides, "what's his next move — prepare the answer", options
+at a hard moment each with its line and drawback, move orders re-checked, arrows
+drawn along the line he calculates. Scoped to Learn free play (+ review lines).
+
+**David's calls (2026-09-24):** the "couldn't he just move X?" question lane
+answers for BOTH seats, ANY time (mid-game included); arrows draw the line, a
+button walks it on the board. Review lines get arrows + a walk button.
+
+**Prod tapes that set the baseline:** review 79% teach (15/19), 53/54; Learn free
+play 17/17 on a 47-ply game but piles of 5–8 separate facts per move, the banned
+"playable, but not as precise" register, "left the book" ×4, "same idea as move 3"
+ON move 3, fragments. Learn ≈ 40% of the video, review ≈ 60%.
+
+- [x] **A. Clean-up** — weighing speaks only real forks; "left the book" = no book
+  line continues the game (`isBookLine`), said once; transfer is instance-aware,
+  inline, recorded only when spoken; review gem share honest ("often" only ≥10%);
+  "White's their king" seated; grade line names its move; "Qf5? Then …".
+- [ ] **B. Subsumption, not a cap** — raised with David: a per-move limit violates
+  G4.5; same-claim facts (material ×3, open king ×3) collapse instead.
+- [ ] **C. "Couldn't X just move" lane** — the piece's duty → moves that keep it →
+  engine reply line per option → verdict; arrows + walk button; both seats.
+- [ ] **D. Review lines** — arrows for every spoken line (refuted alt has none today;
+  one line per segment), walk button narrated.
+
+**Red on main, NOT from this WO (found 2026-09-24, logged not widened):**
+`gemPunishLessons.test.ts` ×4 time out at 120s, `punishGems.test.ts` arrow rows
+time out at the default 5s (ship-check runs 20s), `section14RecordPath.test.ts`
+no-plan returns undefined (since 4a9614f).
+
 ## 🎓 WO-LAYERS-01 — teach in LAYERS, the way Naroditsky does, chosen by the student's record (David 2026-09-23: "take those two different teaching styles and algo them in … all 7" · "default should be lowest setting. This app attacks beginner players")
 
 **The finding (read 424 narrated moves across 10 videos, then 8 low-Elo vs 7 high-Elo speedruns).** Length does not change with level — median ~25–30 words per move at both ends; ours ran 120–300. What changes is the LAYER:

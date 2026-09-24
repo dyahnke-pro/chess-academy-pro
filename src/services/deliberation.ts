@@ -150,7 +150,15 @@ export function buildDeliberation(input: {
  *  never an invented positional reason. */
 function shortfallText(c: Candidate): string {
   // The proof leads: the line that shows WHY beats a label for it.
-  if (c.proof && c.shortfall !== 'less-precise') return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
+  if (c.proof && c.shortfall !== 'less-precise') {
+    // The proof line starts with the candidate itself; asked as a question it
+    // is already named, so the answer starts with the REPLY — "Qf5? Then
+    // castles, and the rook on e8 falls", never "Qf5? Qf5, castles…".
+    const esc = c.san.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const rest = c.proof.replace(new RegExp(`^${esc}(?:, | and )`), '');
+    if (rest !== c.proof) return `${c.san}? Then ${rest}.`;
+    return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
+  }
   if (c.shortfall === 'drops-material' && c.drops) {
     return `${c.san}? That drops the ${PNAME[c.drops.piece] ?? 'piece'} on ${c.drops.square}.`;
   }
@@ -165,9 +173,13 @@ function shortfallText(c: Candidate): string {
  * Returns '' when there's nothing to weigh.
  */
 export function deliberationFacts(d: Deliberation): string {
-  if (!d.isRealChoice) return '';
-  const weigh = d.alternatives.map(shortfallText);
-  return `${weigh.join(' ')} The move is ${d.best.san}.`;
+  // Only a REAL fork is weighed out loud (the 2026-09-24 Learn tape: "h5 is
+  // playable, but not as precise. g6 is playable, but not as precise. The move
+  // is Rg8." on a quiet endgame move). Coin-flip alternatives are the banned
+  // filler register; with none left there is no choice to narrate — silence.
+  const meaningful = meaningfulAlternatives(d);
+  if (!d.isRealChoice || meaningful.length === 0) return '';
+  return `${meaningful.map(shortfallText).join(' ')} The move is ${d.best.san}.`;
 }
 
 /** The alternatives that are a real fork in the road — they drop material or

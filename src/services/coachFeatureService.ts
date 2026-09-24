@@ -20,7 +20,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGround
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
-import { transferClause, recordMotif } from './motifLedger';
+import { transferClause, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -1353,7 +1353,7 @@ export function buildReviewSegments(
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
   const seenConversionSteps = new Set<ConversionStep>();
   /** S6 transfer: tactic motif → the move it was first SPOKEN this game. */
-  const motifFirstMove = new Map<string, number>();
+  const motifFirstMove: MotifLedger = new Map();
   /** S2: opening principles SPOKEN this game — committed after the door. */
   const principlesTaught = new Set<string>();
   /** S4: the first ply of each phase the game reaches after the opening. */
@@ -2135,10 +2135,11 @@ export function buildReviewSegments(
           const identity = facetIdentity.get(raw);
           if (!identity) continue;
           if (identity.startsWith('rule:')) { principlesTaught.add(identity.slice(5)); continue; }
-          const motif = identity.slice('motif:'.length);
-          const ref = transferClause(motif, fullMove, motifFirstMove);
-          if (ref) uncappedParts[k] = `${uncappedParts[k].replace(/\.$/, '')}.${ref}`;
-          recordMotif(motif, fullMove, motifFirstMove);
+          // `motif:<type>:<squares>` — the squares make it THIS instance, so a
+          // standing tactic is never "the same idea as move N" of itself.
+          const [motif, instance = ''] = identity.slice('motif:'.length).split(':');
+          uncappedParts[k] = withTransfer(uncappedParts[k], transferClause(motif, instance, fullMove, motifFirstMove));
+          recordMotif(motif, instance, fullMove, motifFirstMove);
         }
       }
       segments.push({
