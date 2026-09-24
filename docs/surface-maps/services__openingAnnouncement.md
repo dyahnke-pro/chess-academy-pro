@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**58 lines · 3 exports · 3 importers · 3 tests · 1 audits**
+**64 lines · 4 exports · 3 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,16 +23,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingAnnouncement` (function) — 7 call sites
 - `src/services/computedVoiceAudit.report.test.ts:310`
-- `src/services/openingAnnouncement.test.ts:14`
-- `src/services/openingAnnouncement.test.ts:17`
-- `src/services/openingAnnouncement.test.ts:20`
-- `src/services/openingAnnouncement.test.ts:22`
-- `src/services/openingAnnouncement.test.ts:26`
+- `src/services/openingAnnouncement.test.ts:15`
+- `src/services/openingAnnouncement.test.ts:18`
+- `src/services/openingAnnouncement.test.ts:21`
+- `src/services/openingAnnouncement.test.ts:23`
 - `src/services/openingAnnouncement.test.ts:27`
+- `src/services/openingAnnouncement.test.ts:28`
 
 ### `openingAnnouncementForGame` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7797`
-- `src/components/Coach/CoachTeachPage.tsx:9638`
+- `src/components/Coach/CoachTeachPage.tsx:7807`
+- `src/components/Coach/CoachTeachPage.tsx:9648`
+
+### `warmOpeningBook` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:978`
 
 ## Tests
 
