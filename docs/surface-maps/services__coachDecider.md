@@ -131,7 +131,7 @@
 - `src/services/coachDecisionEmits.test.ts:95`
 - `src/services/coachDecisionEmits.test.ts:104`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:1954`
+- `src/services/coachFeatureService.ts:1953`
 - `src/services/factStakes.test.ts:69`
 - `src/services/liveNeedGate.test.ts:50`
 - `src/services/liveNeedGate.test.ts:56`
@@ -151,7 +151,7 @@
 - `src/services/teachingLayers.test.ts:104`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1496`
+- `src/services/coachFeatureService.ts:1495`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`

@@ -24,7 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectConcept` (function) — 26 call sites
-- `src/services/coachFeatureService.ts:4109`
+- `src/services/coachFeatureService.ts:4108`
 - `src/services/reviewConcepts.test.ts:23`
 - `src/services/reviewConcepts.test.ts:26`
 - `src/services/reviewConcepts.test.ts:34`
