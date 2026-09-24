@@ -21,6 +21,7 @@
 
 import { crashed } from './ship-check-lib/crashed.mjs';
 import { testsFor } from './ship-check-lib/tests-for.mjs';
+import { createGreenMemory, STEP_READS, stepNeedsRun, pickTests } from './ship-check-lib/green-memory.mjs';
 import { spawn, spawnSync } from 'node:child_process';
 import { loadavg, cpus } from 'node:os';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -73,6 +74,17 @@ if (SUMMARY) {
 
 const results = [];
 
+// GREEN MEMORY (2026-09-24) — see ship-check-lib/green-memory.mjs. A retry
+// after a failure re-runs only what the fix could have changed.
+const NO_CACHE = ARGS.has('--no-cache') || process.env.SHIP_CHECK_NO_CACHE === '1';
+const memory = createGreenMemory({ repoRoot: REPO_ROOT, logDir: LOG_DIR, disabled: NO_CACHE });
+/** Print + record a step reused from its last green tree. */
+function reusedStep(label, since) {
+  const note = since.length === 0 ? 'nothing changed since it passed' : `${since.length} file(s) changed since it passed, none it reads`;
+  results.push({ label, ok: true, ms: 0, out: '', summary: `reused — ${note}`, optional: false, reused: true });
+  process.stdout.write(`  • ${label}... ✓ reused (${note})\n`);
+}
+
 function runStep(label, cmd, args, opts = {}) {
   const start = Date.now();
   process.stdout.write(`  • ${label}... `);
@@ -107,6 +119,12 @@ function runStep(label, cmd, args, opts = {}) {
 // deep per lane). The rows print as each finishes; `results` is shared.
 function runStepAsync(label, cmd, args, opts = {}) {
   const start = Date.now();
+  // `opts.cache = { key, reads }`: skip when nothing the step reads changed
+  // since it last went green; record the verdict for next time.
+  if (opts.cache && memory.enabled) {
+    const since = memory.stepSince(opts.cache.key);
+    if (!stepNeedsRun(since, opts.cache.reads)) { reusedStep(label, since); return Promise.resolve(true); }
+  }
   return new Promise((resolve) => {
     const child = spawn(cmd, args, {
       cwd: REPO_ROOT,
@@ -127,6 +145,7 @@ function runStepAsync(label, cmd, args, opts = {}) {
       const mark = ok ? '✓' : (opts.optional ? '○' : '✗');
       const detail = summary ? `:: ${summary}` : '';
       process.stdout.write(`  • ${label}... ${mark} ${(ms/1000).toFixed(1)}s ${detail}\n`);
+      if (opts.cache) memory.markStep(opts.cache.key, ok);
       resolve(ok);
     });
   });
@@ -813,9 +832,11 @@ const TEST_TYPE_ERROR_CEILING = 0;
 // 0. Two fixes: give it the heap it needs (8 GB measures 296 in ~35s), and
 // name a crash as a crash — the count is UNKNOWN, not zero.
 const laneTypes = async () => {
-  await runStepAsync('typecheck   ', 'npm', ['run', 'typecheck']);
+  await runStepAsync('typecheck   ', 'npm', ['run', 'typecheck'], { cache: { key: 'typecheck', reads: STEP_READS.typecheck } });
   await runStepAsync('test typecheck', 'npx', ['tsc', '-p', 'tsconfig.tests.json', '--noEmit'], {
   optional: true,
+  // Recorded green only on exit 0 — i.e. zero errors, the ceiling.
+  cache: { key: 'testTypecheck', reads: STEP_READS.testTypecheck },
   env: { NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} --max-old-space-size=8192`.trim() },
   summary: (out, res) => {
     if (crashed(out, res)) {
@@ -858,7 +879,7 @@ const laneTypes = async () => {
 // project-wide warning cap for code review; the gate needs only the diff.
 const lintTargets = changedFiles().filter((f) => /\.(ts|tsx|mjs)$/.test(f) && !f.startsWith('.') && existsSync(f));
 const laneBuild = async () => {
-  await runStepAsync('prod build  ', 'npm', ['run', 'build']);
+  await runStepAsync('prod build  ', 'npm', ['run', 'build'], { cache: { key: 'build', reads: STEP_READS.build } });
   if (lintTargets.length === 0) {
     console.log('  • lint (errors)... ○ no changed .ts/.tsx/.mjs files');
     return;
@@ -878,12 +899,48 @@ const laneBuild = async () => {
 // ModelGamesSection regression through because that .test wasn't gated. Rule:
 // edit Foo.tsx → ship-check runs Foo.test.tsx.
 const _colocated = changedSourceTests(changedFiles());
+// PER-FILE MEMORY for the two vitest steps (green-memory.mjs). A test file is
+// reused only when it passed at a known tree and nothing it depends on changed
+// since; every file the step owns is still accounted for in its summary.
+const _testsForCache = new Map();
+const dependsOn = (t, f) => {
+  if (!_testsForCache.has(f)) _testsForCache.set(f, new Set(testsFor(f)));
+  return _testsForCache.get(f).has(t);
+};
+async function runTestFiles(label, files) {
+  const toRun = memory.enabled
+    ? pickTests(files, { sinceFor: memory.testSince, readsSource: memory.readsSource, dependsOn })
+    : files;
+  const reused = files.length - toRun.length;
+  if (toRun.length === 0) { reusedStep(label, []); return true; }
+  const json = join(LOG_DIR, `vitest-${label.trim().replace(/\W+/g, '-')}-${process.pid}.json`);
+  mkdirSync(LOG_DIR, { recursive: true });
+  const ok = await runStepAsync(label, 'npx', [
+    'vitest', 'run', '--testTimeout=20000',
+    '--reporter=default', '--reporter=json', `--outputFile.json=${json}`,
+    ...toRun,
+  ], { summary: (out, res) => `${summarizeVitest(out, res) ?? ''}${reused ? ` — ${reused} file(s) reused from their last green` : ''}` });
+  try {
+    const report = JSON.parse(readFileSync(json, 'utf-8'));
+    const rel = (p) => p.startsWith(REPO_ROOT) ? p.slice(REPO_ROOT.length + 1) : p;
+    const passed = [];
+    const failed = [];
+    for (const r of report.testResults ?? []) (r.status === 'passed' ? passed : failed).push(rel(r.name));
+    // A file the run was asked for but never reported (crash, collection
+    // error) is NOT green.
+    for (const t of toRun) if (!passed.includes(t) && !failed.includes(t)) failed.push(t);
+    memory.markTests(passed, failed);
+  } catch {
+    memory.markTests([], toRun);
+  }
+  return ok;
+}
 const laneGates = async () => {
   // Under three lanes a 4s test reads as a 5s timeout; the per-test ceiling is
   // raised so CPU contention cannot masquerade as a failing gate.
-  await runStepAsync('content gates', 'npx', ['vitest', 'run', '--testTimeout=20000', ...GATE_TESTS], { summary: summarizeVitest });
+  await runTestFiles('content gates', GATE_TESTS);
   if (_colocated.length) {
-    await runStepAsync('changed-file tests', 'npx', ['vitest', 'run', '--testTimeout=20000', ..._colocated], { summary: summarizeVitest });
+    await runTestFiles('changed-file tests', _colocated);
   } else {
     console.log('  • changed-file tests... ○ none beyond the gates');
   }
