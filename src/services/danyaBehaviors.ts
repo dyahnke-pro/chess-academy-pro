@@ -26,6 +26,7 @@ import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { attackerCanUseFile } from './positionalRead';
+import { seatBare } from '../utils/seatPieces';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import {
@@ -312,7 +313,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       });
       if (meaningful.length > 0) {
         const p = meaningful[0];
-        return { fact: p.description, squares: p.involvedSquares.map(sq) };
+        return { fact: seatBare(p.description, fen, student), squares: p.involvedSquares.map(sq) };
       }
       return null;
     },

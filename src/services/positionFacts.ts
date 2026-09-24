@@ -14,6 +14,7 @@
 //    `computeImportance` is the speak/rank verdict. One analysis, both reads.
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
 import { layerStandings } from './teachingLayers';
+import { seatBare } from '../utils/seatPieces';
 import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
 import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
@@ -1152,7 +1153,9 @@ function buildClauses(a: {
   if (concept) {
     const rank = concept.source === 'tactic' ? 70 : 39;
     ranked.push({
-      kind: 'concept', rank, text: concept.full,
+      // SEATED — the detector's instance names bare pieces (hand walk
+      // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
+      kind: 'concept', rank, text: concept.source === 'tactic' ? seatBare(concept.full, a.fen, studentSeat === 'white' ? 'w' : 'b') : concept.full,
       conceptId: concept.source === 'tactic' ? concept.id : undefined,
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.

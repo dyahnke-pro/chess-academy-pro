@@ -7669,8 +7669,12 @@ export function CoachTeachPage(): JSX.Element {
         // "…pins pawn on d3 against queen on d1". Including the middle square
         // made the second look like fresh news. The attacker and the piece it
         // is pinning against are what identify the threat.
-        const ends = [t.squares[0] ?? '', t.squares[t.squares.length - 1] ?? ''];
-        threatKey = `vs:${t.type}:${ends.join('')}`;
+        // …and not on the ATTACKER's square either (hand walk 2026-09-24: Bg4
+        // then …Bh5 kept the same pin on the e2-knight against the queen and it
+        // was announced again, then twice more in other words). What the pin
+        // is AIMED AT identifies it; it is said once a game.
+        const aimedAt = t.squares[t.squares.length - 1] ?? '';
+        threatKey = `vs:${t.type}:${aimedAt}`;
         threatSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         // SEATED: the detector's description names pieces bare ("queen on e1
         // pins bishop on c3 against queen on a5"); whose each piece is, is the
@@ -7753,13 +7757,14 @@ export function CoachTeachPage(): JSX.Element {
         if (pendingMotif) recordMotif(pendingMotif.type, pendingMotif.instance, pendingMotif.moveNo, learnMemRef.current.motifFirstMove);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
       }
-      if (threatLine && (threatKey === learnMemRef.current.lastThreatKey || learnMemRef.current.spokenThreatLines.has(threatLine))) {
+      if (threatLine && (threatKey === learnMemRef.current.lastThreatKey || learnMemRef.current.spokenThreatLines.has(threatLine) || learnMemRef.current.spokenThreatLines.has(threatKey))) {
         threatLine = null;
         alertArrow = null;
         threatSquares = [];
       } else if (threatLine) {
         learnMemRef.current.lastThreatKey = threatKey;
         learnMemRef.current.spokenThreatLines.add(threatLine);
+        learnMemRef.current.spokenThreatLines.add(threatKey);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
       }
       // What the alert lane has CLAIMED this turn. The keys carry their squares
