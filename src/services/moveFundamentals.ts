@@ -263,7 +263,7 @@ export function computeMoveFundamentals(
     out.push({
       id: 'outpost',
       weight: 84,
-      led: `lands on the ${mv.to} outpost, a square no pawn can ever kick it from`,
+      led: `lands on the ${mv.to} outpost, a square none of their pawns can attack`,
       selfContained: `plants the ${name} on the ${mv.to} outpost, where no pawn can challenge it`,
       imperative: `plant the ${name} on the ${mv.to} outpost, where no pawn can challenge it`,
       squares: [mv.to],

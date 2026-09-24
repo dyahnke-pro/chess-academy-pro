@@ -373,6 +373,14 @@ present tense), each ships with its gate and an audit contract:**
 `matchClauseKind`; dual use — the miss it can record (or a stated reason it
 records none). Negative-control every gate.
 
+**Reds found while building, NOT this build's (measured on a clean worktree at
+7cae1ca and again at b499e4a, before this session's merges):**
+`section14RecordPath` "no-plan LANDS" (fundamentalId undefined), the corpus
+data tests (`corpusReach.measure`, `endgameCorpusNote`, `notePreferReachable`,
+`noteSelectionDeterminism`, `teachingCoverage.report`) and `gemPunishLessons`
+(three). Owed separately. `AdaptivePuzzlePage` badge WAS mine (WO-LAYERS moved
+the default to 400; the test hard-coded 1400) — fixed here, now derived.
+
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.
 

@@ -543,8 +543,8 @@ export function buildPriorityFirst(args: {
     const target = weakPawns.find((p) => attacked.has(p.square as Square));
     if (!target) return null;
     const flaw = !theirFiles.has(fileOf(target.square) - 1) && !theirFiles.has(fileOf(target.square) + 1)
-      ? 'isolated — no pawn can ever defend it'
-      : 'doubled — its file is a lasting weakness';
+      ? 'isolated — no pawn beside it can defend it'
+      : 'doubled — its file is a weakness';
     // The detail tier deliberately does NOT name the attacking piece: naming
     // it is naming the move on most boards, and the withhold below would then
     // be contradicting the package it ships with.

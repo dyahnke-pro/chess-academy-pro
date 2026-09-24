@@ -738,7 +738,7 @@ export function describePlan(
     add(10 + advanced * 8, `create a passed pawn on ${sq}`, [sq]);
   }
   if (plan.outposts.length > 0) {
-    add(35, `park a piece on ${plan.outposts[0]}, where no pawn can chase it off`, [plan.outposts[0]]);
+    add(35, `park a piece on ${plan.outposts[0]}, where none of their pawns can attack it`, [plan.outposts[0]]);
   }
   if (plan.opening.length > 0) add(25, `prise open the ${plan.opening[0]}-file`);
   if (plan.trading.length > 0) {

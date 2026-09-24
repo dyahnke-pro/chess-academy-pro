@@ -2293,7 +2293,7 @@ const HINT_TIER1: Partial<Record<ReadingQuestionType, string>> = {
   'pawn-break': "Which pawn push strikes the base of the opponent's chain?",
   'king-safety': 'Look at the shelter directly around your king.',
   development: 'Count the pieces still sitting on their starting squares.',
-  outpost: 'Is there a square for a knight that no pawn can ever kick away?',
+  outpost: 'Is there a square for a knight that none of their pawns can attack?',
   'bishop-pair': 'Count the bishops on each side.',
   'who-is-winning': 'Weigh material, king safety, and piece activity together.',
   material: 'Count the points of material on each side.',

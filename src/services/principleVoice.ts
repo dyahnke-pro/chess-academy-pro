@@ -301,9 +301,9 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'created-pawn-weakness': {
       const s = [
-        `That creates a lasting weakness: the pawn on ${f.pawn} can't be defended by another pawn again, and it becomes a target.`,
-        `Pawns don't move backwards — the pawn on ${f.pawn} is now a permanent weakness they can pile on.`,
-        `A structural cost: ${f.pawn} is a weak pawn for the rest of the game.`,
+        `That creates a weakness: no pawn beside ${f.pawn} can defend it now, and it becomes a target.`,
+        `Pawns don't move backwards — the pawn on ${f.pawn} is now a weakness they can pile on.`,
+        `A structural cost: ${f.pawn} is a weak pawn now.`,
       ];
       return s[v % s.length];
     }

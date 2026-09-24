@@ -228,7 +228,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         .find((p): p is Square => !!p && pawnIsAttackable(chess, p, student));
       if (theirsPick) {
         const kind = theirs.backward.includes(theirsPick) ? 'backward' : theirs.isolated.includes(theirsPick) ? 'isolated' : 'doubled';
-        return { fact: `The ${kind} pawn on ${theirsPick} is a lasting weakness — pile up on it.`, squares: [theirsPick] };
+        return { fact: `The ${kind} pawn on ${theirsPick} is a weakness — pile up on it.`, squares: [theirsPick] };
       }
       const mine = findWeakPawns(fen, student);
       const minePick = [mine.backward[0], mine.isolated[0]]

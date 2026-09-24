@@ -153,8 +153,8 @@ function detectOutpost(ctx: ConceptCtx): ConceptBeat | null {
   const pieceWord = piece === 'n' ? 'knight' : 'bishop';
   const mine = MINE(mover, ctx.studentColor);
   const text = mine
-    ? `You've planted the ${pieceWord} on ${dest} as an outpost — no pawn can ever kick it off, and a pawn of yours holds it there. A piece that can't be challenged is worth more than the square it stands on.`
-    : `Your opponent's ${pieceWord} settles on ${dest} as an outpost — no pawn can chase it off. Worth noting where it can't be challenged, so you can plan around it.`;
+    ? `You've planted the ${pieceWord} on ${dest} as an outpost — none of their pawns can attack that square right now, and a pawn of yours holds it there. A piece they can't kick with a pawn is worth more than the square it stands on.`
+    : `Your opponent's ${pieceWord} settles on ${dest} as an outpost — none of your pawns can attack that square right now. Plan around it, or bring a piece to challenge it.`;
   return { concept: 'outpost', text, source: 'concept:pos-outpost' };
 }
 
@@ -487,8 +487,8 @@ function detectCreateWeakness(ctx: ConceptCtx): ConceptBeat | null {
   const fileLetter = String.fromCharCode(97 + file);
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
-    ? `That leaves them with ${kind === 'isolated' ? 'an isolated' : 'a doubled'} pawn on the ${fileLetter}-file — a permanent structural weakness. Pieces come and go, but a bad pawn stays bad; pile your pieces onto it and make them defend.`
-    : `Your structure just took a hit — ${kind === 'isolated' ? 'an isolated' : 'doubled'} pawn${kind === 'isolated' ? '' : 's'} on the ${fileLetter}-file. It's a lasting target; look to trade it off or use the half-open file it hands you.`;
+    ? `That leaves them with ${kind === 'isolated' ? 'an isolated' : 'a doubled'} pawn on the ${fileLetter}-file — a structural weakness. Pieces come and go, but a pawn weakness is slow to fix; pile your pieces onto it and make them defend.`
+    : `Your structure just took a hit — ${kind === 'isolated' ? 'an isolated' : 'doubled'} pawn${kind === 'isolated' ? '' : 's'} on the ${fileLetter}-file. It's a target now; look to trade it off or use the half-open file it hands you.`;
   return { concept: 'create-weakness', text, source: kind === 'isolated' ? 'concept:pawn-isolated' : 'concept:pawn-doubled' };
 }
 
