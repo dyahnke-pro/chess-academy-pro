@@ -99,7 +99,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTeachingPoints.ts:666`
 - `src/services/reviewTeachingPoints.ts:769`
 
-### `landingIsSafe` (function) — 11 call sites
+### `landingIsSafe` (function) — 12 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:160`
 - `src/services/computedVoiceGrounding.test.ts:75`
 - `src/services/danyaBehaviors.ts:459`
@@ -111,6 +111,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/latentFork.ts:135`
 - `src/services/latentFork.ts:204`
 - `src/services/moveFundamentals.ts:247`
+- `src/services/moveFundamentals.ts:715`
 
 ### `legalSeeGainFor` (function) — 16 call sites
 - `src/services/bluffDetector.ts:57`
@@ -306,7 +307,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8749`
+- `src/components/Coach/CoachTeachPage.tsx:8755`
 - `src/services/danyaDeviceCoverage.test.ts:106`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/groundedAnswer.ts:5991`

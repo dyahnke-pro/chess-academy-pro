@@ -30,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10431`
+- `src/components/Coach/CoachTeachPage.tsx:10437`
 - `src/services/voicePackage.test.ts:419`
 - `src/services/voicePackage.test.ts:428`
 - `src/services/voicePackage.test.ts:438`
@@ -45,10 +45,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachGameReview.tsx:1983`
 - `src/components/Coach/CoachGameReview.tsx:2021`
 - `src/components/Coach/CoachTeachPage.tsx:7502`
-- `src/components/Coach/CoachTeachPage.tsx:8175`
-- `src/components/Coach/CoachTeachPage.tsx:8230`
-- `src/components/Coach/CoachTeachPage.tsx:10397`
-- `src/components/Coach/CoachTeachPage.tsx:10409`
+- `src/components/Coach/CoachTeachPage.tsx:8181`
+- `src/components/Coach/CoachTeachPage.tsx:8236`
+- `src/components/Coach/CoachTeachPage.tsx:10403`
+- `src/components/Coach/CoachTeachPage.tsx:10415`
 - `src/hooks/usePhaseNarration.ts:417`
 - `src/hooks/usePhaseNarration.ts:867`
 - `src/hooks/usePositionNarration.ts:314`
@@ -110,15 +110,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:554`
 
 ### `spokenSentenceKeys` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10005`
-- `src/components/Coach/CoachTeachPage.tsx:10419`
+- `src/components/Coach/CoachTeachPage.tsx:10011`
+- `src/components/Coach/CoachTeachPage.tsx:10425`
 - `src/services/voicePackage.test.ts:525`
 - `src/services/voicePackage.test.ts:534`
 - `src/services/voicePackage.test.ts:546`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9997`
-- `src/components/Coach/CoachTeachPage.tsx:10443`
+- `src/components/Coach/CoachTeachPage.tsx:10003`
+- `src/components/Coach/CoachTeachPage.tsx:10449`
 - `src/services/voicePackage.test.ts:38`
 
 ## Tests

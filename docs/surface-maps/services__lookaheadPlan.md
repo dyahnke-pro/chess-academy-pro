@@ -153,7 +153,7 @@
 - `src/services/lookaheadPlan.test.ts:1258`
 
 ### `positionReadLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9321`
+- `src/components/Coach/CoachTeachPage.tsx:9327`
 - `src/services/coachLaneWiring.test.ts:38`
 - `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/lookaheadPlan.test.ts:541`
@@ -172,7 +172,7 @@
 - `src/services/narrationAdversarial.test.ts:67`
 
 ### `lineShapeLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9325`
+- `src/components/Coach/CoachTeachPage.tsx:9331`
 - `src/services/coachLaneWiring.test.ts:39`
 - `src/services/computedVoiceAudit.report.test.ts:225`
 - `src/services/lookaheadPlan.test.ts:881`
@@ -191,7 +191,7 @@
 - `src/services/lookaheadPlan.test.ts:1015`
 
 ### `terminalReadLine` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9328`
+- `src/components/Coach/CoachTeachPage.tsx:9334`
 - `src/services/coachLaneWiring.test.ts:40`
 - `src/services/computedVoiceAudit.report.test.ts:229`
 - `src/services/lookaheadPlan.test.ts:988`
@@ -205,7 +205,7 @@
 - `src/services/lookaheadPlan.test.ts:1016`
 
 ### `keySquareLine` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9316`
+- `src/components/Coach/CoachTeachPage.tsx:9322`
 - `src/services/coachLaneWiring.test.ts:37`
 - `src/services/computedVoiceAudit.report.test.ts:223`
 - `src/services/forkNarration.ts:108`
@@ -225,7 +225,7 @@
 - `src/services/planMarks.test.ts:37`
 
 ### `planFromUci` (function) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9313`
+- `src/components/Coach/CoachTeachPage.tsx:9319`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:219`
 - `src/services/concessionBeat.ts:382`

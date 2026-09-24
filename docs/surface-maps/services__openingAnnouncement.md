@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `openingAnnouncement` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7790`
-- `src/components/Coach/CoachTeachPage.tsx:9616`
+- `src/components/Coach/CoachTeachPage.tsx:9622`
 - `src/services/computedVoiceAudit.report.test.ts:309`
 - `src/services/openingAnnouncement.test.ts:10`
 - `src/services/openingAnnouncement.test.ts:13`
