@@ -23,7 +23,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
 import { noteAtPosition, teachingSourceForBoard, teachingFactLine } from './danyaTeachingService';
 import { noteArrowSourceAt } from './openingGenerator';
-import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadFullCorpus, unprimedCorpora } from '../test/loadFullCorpus';
 import repertoireRaw from '../data/repertoire.json';
 
 interface Entry { id: string; name: string; pgn: string; color?: string }
@@ -75,11 +75,11 @@ describe('note selection is position-determined', () => {
   beforeAll(() => {
     // Two of the four corpora are fetched at runtime, so without this the whole
     // suite would pass while exercising a fifth of the data.
-    // Floor proves the full corpus loaded (not the fetched-corpora fifth). Dropped
-    // from 46k after the anchored farmed notes were archived 2026-08-26 (voiced is
-    // now the sole exact-position corpus); the floating corpus is still ~56k.
-    const total = loadFullCorpus().reduce((n, c) => n + c.notes, 0);
-    expect(total).toBeGreaterThan(45_000);
+    // Every fetched corpus the registry declares loaded — derived, never a
+    // count (a hard-coded floor went stale when the farms were retired).
+    const loaded = loadFullCorpus();
+    expect(loaded.length).toBeGreaterThan(0);
+    expect(unprimedCorpora(loaded)).toEqual([]);
   }, 120_000);
 
   it('never selects a note authored at a different position', () => {

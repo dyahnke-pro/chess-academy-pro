@@ -152,7 +152,7 @@
 
 ### `noteArrowSourceAt` (function) — 2 call sites
 - `src/services/noteSelectionDeterminism.test.ts:124`
-- `src/services/teachingCoverage.report.test.ts:164`
+- `src/services/teachingCoverage.report.test.ts:165`
 
 ### `MAX_GREEN_ARROWS_PER_PLY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

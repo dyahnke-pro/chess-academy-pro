@@ -157,3 +157,19 @@ export function primaryCorpusNotes(): DanyaNote[] {
 export function unloadFullCorpus(): void {
   __setFarmedCorporaCache(undefined);
 }
+
+/**
+ * PROVE THE WHOLE CORPUS LOADED — derived from the registry, never a count.
+ *
+ * Two suites used to assert a hard-coded floor (`> 46_000`, `> 45_000`) to
+ * prove they were not measuring a fraction of the data. The floor was a copy of
+ * the roster, and it went stale the day the anchored farms were retired: the
+ * registry now declares two corpora and both load in full, yet both suites
+ * failed "not primed" on 17,405 notes. The claim the floor stood for is this
+ * one: EVERY fetched corpus the registry declares was read, and none came back
+ * empty. A missing or unreadable file still fails here, loudly.
+ */
+export function unprimedCorpora(loaded: ReadonlyArray<{ key: string; notes: number }>): string[] {
+  const got = new Map(loaded.map((c) => [c.key, c.notes]));
+  return FARMED_FILES.filter(({ key }) => !((got.get(key) ?? 0) > 0)).map(({ key, file }) => `${key} (${file})`);
+}
