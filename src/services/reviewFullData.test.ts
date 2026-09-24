@@ -87,10 +87,11 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
       evaluation: 150, preMoveEval: 150, classification: 'great', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: SICILIAN_IQP, forcedRunStartPly: null,
     });
-    const quality = facets.find((f) => f.startsWith('[quality]'));
+    // A positive verdict is [praise] now (WO-TEACH-02) — same seat contract.
+    const quality = facets.find((f) => f.startsWith('[praise]'));
     expect(quality).toBeDefined();
     expect(quality).toMatch(/Your opponent:/);
-    expect(quality).not.toMatch(/^\[quality\] You:/);
+    expect(quality).not.toMatch(/^\[praise\] You:/);
   });
 
   it('attributes a non-good STUDENT move to the student', () => {

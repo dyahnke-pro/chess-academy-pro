@@ -32,7 +32,7 @@ export type FacetTag =
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
-  | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing';
+  | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -47,6 +47,10 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // The move and its verdict — the student's own action, and what it cost.
   principle: 100, // the fundamental it crossed: the lesson, and it LEADS (2026-09-05)
   quality: 95,    // inaccuracy / mistake / blunder + the cost + the better move
+  // "That was a great move" — a verdict with no reason. Speaks only beside a
+  // teaching fact on the move's own squares (WO-TEACH-02: a label is not a
+  // reason, and Voice Rule 5 bans the bare acknowledgment).
+  praise: 93,
   move: 90,       // the mechanics: what it captured, checked, promoted
   // Forcing and losing material beats every quiet consideration.
   forced: 88,
@@ -151,8 +155,10 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'plan-now': 'teach',
   'plan-opening': 'teach',
   'plan-middlegame': 'teach',
-  // What the move itself did — the ONE describe line a quiet ply may keep.
+  // What the move did — descriptions. Each speaks only beside a teaching
+  // point on its own squares; a ply of descriptions alone is silent.
   does: 'describe',
+  praise: 'describe',
   move: 'describe',
   count: 'describe',
   royal: 'describe',
@@ -228,7 +234,7 @@ export const FACT_ROLE: Record<FactKind, FacetRole> = { ...FACET_ROLE, ...CLAUSE
  */
 export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   // SAFETY — the verdict on the move and what is forcing on the board.
-  quality: 'safety', move: 'safety', forced: 'safety', threat: 'safety',
+  quality: 'safety', praise: 'safety', move: 'safety', forced: 'safety', threat: 'safety',
   tactic: 'safety', trapped: 'safety', refuted: 'safety', bluff: 'safety', loose: 'safety', count: 'safety',
   royal: 'safety', sac: 'safety', 'sac-why': 'safety', method: 'safety',
   'must-defend': 'safety', 'latent-danger': 'safety', 'latent-chance': 'safety',

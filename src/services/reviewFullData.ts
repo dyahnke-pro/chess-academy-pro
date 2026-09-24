@@ -326,8 +326,17 @@ export function computeMoveFacets(
     // clue to whose move it was — and with it subject-less, the LLM voiced Black's
     // great move as "a great move from you" (the White student). Mirror the [move]
     // facet's "You:" / "Your opponent:" tag so attribution is never guessed.
-    const qf = `[quality] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.`;
+    // A positive verdict is PRAISE, not a reason (WO-TEACH-02): it rides the
+    // move's own squares and speaks only beside a teaching fact about them.
+    const positive = !costsPoints && !fellShort;
+    const qf = `[${positive ? 'praise' : 'quality'}] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.`;
     facets.push(qf);
+    if (positive) {
+      try {
+        const pm = new Chess(fenBefore).move(san);
+        if (pm) recSquares(qf, [pm.from, pm.to]);
+      } catch { /* no squares → it cannot be shown to support anything */ }
+    }
     // The cost the move already paid — only on a class that cost something.
     if (costsPoints) recStakes(qf, costStakes(swing));
   }
@@ -736,7 +745,7 @@ export function computeMoveFacets(
     // enemy king is exposed in the centre — that's a king-hunt, not a majority
     // grind (David 2026-07-20 diagnostic: it fired every move of a mating attack).
     if (!enemyKingStuckInCenter(fenAfter, studentColorWB)) {
-      const orient = buildMiddlegameOrientation(fenAfter, studentColorWB);
+      const orient = buildMiddlegameOrientation(fenAfter, studentColorWB, undefined, isStudent ? 'student' : 'opponent');
       if (orient) facets.push(`[plan-middlegame] ${orient.text}`);
     }
   }
@@ -750,9 +759,16 @@ export function computeMoveFacets(
   // given. So every ply of one variation carries the same text and the say-once
   // ledger speaks it on the first ply that actually speaks — a need-silenced
   // ply cannot swallow it.
-  const detected = detectOpening(ctx.allSans.slice(0, ply))?.name ?? null;
-  const named = detected && detected.includes(':') ? detected.split(',')[0].trim() : null;
-  if (named) facets.push(`[opening] The line so far is the ${named}.`);
+  // ONLY THE GAME'S FINAL VARIATION (WO-TEACH-02, prod tape 2026-09-24: "the
+  // Indian Defense: Normal Variation" → "…: West Indian Defense" → "the King's
+  // Indian Defense: Normal Variation" — three names for one opening, each a new
+  // string the say-once ledger could not catch). Review sees the whole game,
+  // so it names the variation the game SETTLED on, at the first ply it holds.
+  const variationOf = (name: string | null): string | null =>
+    name && name.includes(':') ? name.split(',')[0].trim() : null;
+  const named = variationOf(detectOpening(ctx.allSans.slice(0, ply))?.name ?? null);
+  const settled = settledVariation(ctx.allSans, variationOf);
+  if (named && named === settled) facets.push(`[opening] The line so far is the ${named}.`);
 
   // ── 11. OPPONENT READ — what the opponent's move targets + their dev lag ──
   if (!isStudent && studentColorWB) {
@@ -918,4 +934,15 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
   } catch {
     return null;
   }
+}
+
+/** The variation a whole game settled on — the detector's name for the full
+ *  move list. Memoized per game (the facet builder runs once per ply). */
+const settledCache = new WeakMap<readonly string[], string | null>();
+function settledVariation(allSans: readonly string[], variationOf: (n: string | null) => string | null): string | null {
+  if (settledCache.has(allSans)) return settledCache.get(allSans) ?? null;
+  let v: string | null = null;
+  try { v = variationOf(detectOpening([...allSans])?.name ?? null); } catch { v = null; }
+  settledCache.set(allSans, v);
+  return v;
 }

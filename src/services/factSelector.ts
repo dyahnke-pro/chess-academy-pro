@@ -276,10 +276,14 @@ export function selectFacts(
  * is judged on coupled squares, never scraped from prose. A description with no
  * coupled squares cannot be shown to support anything, so it goes quiet.
  *
- * On a ply with NO teaching point, the move's own reason (the first fact
- * `isMoveReason` accepts) is the one description that speaks, so a quiet good
- * move still hears why it was played — measured-silent stretches read as a
- * broken coach. Everything else there goes quiet.
+ * On a ply with NO teaching point, NOTHING speaks (WO-TEACH-02, David
+ * 2026-09-24: "Everything said needs to teach something. Not state the
+ * move."). This used to keep one description as "the move's reason" so a
+ * quiet move was never silent — and on a real review that keep-alive was most
+ * of what the student heard: "Your pawn on b4 now eyes their pawn on c5", 20
+ * of 25 student plies describing, 5 teaching. A quiet stretch is filled by
+ * TEACHING computers (the refuted alternative, the principle, the opponent's
+ * purpose), never by a description standing in for one.
  *
  * This is a ROLE rule, not a cap (G4.5): it never counts. Every teaching point
  * speaks however many there are, and every description that supports one
@@ -289,14 +293,12 @@ export function supportedFacts(
   spoken: readonly string[],
   squares: ReadonlyMap<string, readonly string[]>,
   roleOf: (text: string) => 'teach' | 'describe',
-  isMoveReason: (text: string) => boolean,
 ): FactSelection {
   const teach = spoken.filter((t) => roleOf(t) === 'teach');
   const quiet: QuietFact[] = [];
   if (teach.length === 0) {
-    const reason = spoken.find(isMoveReason);
-    for (const t of spoken) if (t !== reason) quiet.push({ text: t, why: 'unsupported' });
-    return { spoken: reason ? [reason] : [], quiet };
+    for (const t of spoken) quiet.push({ text: t, why: 'unsupported' });
+    return { spoken: [], quiet };
   }
   const taught = new Set<string>();
   for (const t of teach) for (const sq of squares.get(t) ?? []) taught.add(sq);

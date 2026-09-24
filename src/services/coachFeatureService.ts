@@ -4096,14 +4096,12 @@ export function narrationCoversFacets(det: string, warmed: string): boolean {
  * a brief nod the second, silent after — a concept lectured on every trade in a
  * won game would tune out (the very repetition dial we just turned).
  */
-const MAX_CONCEPT_BEATS_PER_GAME = 5;
+// No per-game total (G4.5): a cap cannot know what it deletes. Repetition is
+// handled by the per-concept dedupe below — full once, a nod once, then silent.
 function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
   const studentColor: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
   const shown = new Map<string, number>();
-  let total = 0;  // Danya is SELECTIVE — a rich positional game shouldn't become a
-                  // wall of concept lectures. Cap the whole game's concept beats.
   for (const s of segments) {
-    if (total >= MAX_CONCEPT_BEATS_PER_GAME) break;
     if (s.narration || s.evalBefore === null || s.evalAfter === null) continue;
     const moverColor: 'w' | 'b' = s.ply % 2 === 1 ? 'w' : 'b';
     let beat: ReturnType<typeof detectConcept> = null;
@@ -4116,50 +4114,26 @@ function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 
     if (!beat) continue;
     const n = shown.get(beat.concept) ?? 0;
     shown.set(beat.concept, n + 1);
-    if (n === 0) { s.narration = beat.text; s.narrationSource = 'orientation'; total += 1; }
+    if (n === 0) { s.narration = beat.text; s.narrationSource = 'orientation'; s.teaches = true; }
     else if (n === 1 && beat.concept === 'simplify-when-ahead') {
       s.narration = moverColor === studentColor
         ? `Another pair comes off — exactly right when you're winning.`
         : `More pieces off the board — that only speeds your win.`;
       s.narrationSource = 'orientation';
-      total += 1;
+      s.teaches = true;
     }
     // n >= 2 (or a repeat of a non-simplify concept): stay silent, the point landed.
   }
 }
 
-/** A merit clause is written from the MOVER's chair ("castles your king into
- *  safety", "takes the b5 square away from their bishop"). Voiced for the
- *  opponent, the possessives swap: their king, your bishop (walk 5, R15 —
- *  "Your opponent castled your king into safety"). Possessive determiners
- *  only — they carry no verb agreement, so the swap cannot break grammar;
- *  the merit computers never use "you" as a subject. */
-export function toOpponentSeat(clause: string): string {
-  return clause.replace(/\b(your|their|Your|Their)\b/g, (w) => ({ your: 'their', their: 'your', Your: 'Their', Their: 'Your' } as Record<string, string>)[w] ?? w);
-}
-
-function fillSilentDevelopment(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
-  for (let i = 0; i < segments.length; i += 1) {
-    const s = segments[i];
-    if (s.narration || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'inaccuracy') continue;
-    if (s.ply < 3 || s.ply > 30) continue;
-    const moverColor: 'white' | 'black' = s.ply % 2 === 1 ? 'white' : 'black';
-    let merit: string | null = null;
-    const prev = segments[i - 1];
-    let prevCapture: { square: string | null; capturedValue: number } | null = null;
-    if (prev && prev.ply === s.ply - 1) {
-      try {
-        const pm = new Chess(prev.fenBefore).move(prev.san);
-        prevCapture = pm ? { square: pm.to, capturedValue: pm.captured ? MATERIAL_VALUE[pm.captured] ?? 0 : 0 } : null;
-      } catch { prevCapture = null; }
-    }
-    try { merit = describeMoveMerit(s.fenBefore, s.san, moverColor, prevCapture); } catch { merit = null; }
-    if (!merit) continue;
-    const mine = moverColor === playerColor;
-    s.narration = mine ? `It ${merit}.` : `Your opponent ${toOpponentSeat(merit)}.`;
-    s.narrationSource = mine ? 'per-move' : 'opponent';
-  }
-}
+// fillSilentDevelopment is RETIRED (WO-TEACH-02 S1, David 2026-09-24:
+// "Everything said needs to teach something. Not state the move."). It ran
+// AFTER the deciding door and refilled every ply the door had silenced with a
+// description of the move — "It developed into the game", "Your opponent
+// stakes out the center" — which was most of what a student heard. The retired
+// R2 loop by another name. Quiet plies are now filled only by TEACHING
+// computers (the refuted alternative, a principle taught once, the opponent's
+// purpose) or stay silent.
 
 /**
  * PAST-TENSE PASS (David 2026-07-24: "it's a post-game review" — the walk speaks
@@ -4543,7 +4517,6 @@ export async function generateReviewNarration(params: {
   // single game. Both pure rephrases; run after every fact is on the segment and
   // before the house-voice warm so the warmer varies from varied input.
   fillConceptBeats(segments, playerColor);
-  fillSilentDevelopment(segments, playerColor);
   varyRepeatedStems(segments);
   // POST-GAME REVIEW register (David 2026-07-24) — the walk narrates a game
   // already played, so the actual-move clauses speak in past tense (the

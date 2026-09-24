@@ -88,6 +88,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
+import { openingAnnouncement } from '../../services/openingAnnouncement';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
@@ -7628,7 +7629,13 @@ export function CoachTeachPage(): JSX.Element {
     try {
       const det = detectOpening(history);
       if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
-      if (det && det.name && det.name !== learnMemRef.current.spokenOpeningName && det.name !== learnMemRef.current.queuedOpeningName) {
+      // WHEN to name it is one rule shared with the late lane below
+      // (`openingAnnouncement`): first identification, then the settled
+      // name once, where the game leaves book — never every refinement.
+      const announce = det && det.name !== learnMemRef.current.queuedOpeningName
+        ? openingAnnouncement(det, history.length, learnMemRef.current.spokenOpeningName)
+        : null;
+      if (det && announce) {
         const firstResolve = learnMemRef.current.spokenOpeningName === null;
         // NOT marked spoken here. Queueing is not saying — see the field's note
         // in `learnMemory.ts`. The late package sets `spokenOpeningName` when
@@ -7657,9 +7664,7 @@ export function CoachTeachPage(): JSX.Element {
         // "make sure I hear no floating notes in the play surfaces"). The idea
         // note was reached by opening NAME, not by the board — floating. The
         // opening is still named; the floating idea clause is gone.
-        announceLine = firstResolve
-          ? `This game is now the ${det.name}.`
-          : `The line has sharpened into the ${det.name}.`;
+        announceLine = announce;
         factLines.push(announceLine);
         // GUARANTEE it is HEARD — naming the opening is R1 of the teaching arc,
         // his first move every game. The say-once ref is spent on THIS turn
@@ -9408,7 +9413,8 @@ export function CoachTeachPage(): JSX.Element {
                     try {
                       const det = detectOpening(chainHistory);
                       if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
-                      if (det && det.name && det.name !== learnMemRef.current.spokenOpeningName) {
+                      const announce = openingAnnouncement(det, chainHistory.length, learnMemRef.current.spokenOpeningName);
+                      if (det && announce) {
                         const firstResolve = learnMemRef.current.spokenOpeningName === null;
                         // NOT marked spoken here either. This site pushes into
                         // `facts`, which is the MODEL's grounding list — the name
@@ -9438,9 +9444,7 @@ export function CoachTeachPage(): JSX.Element {
                         // passing" instruction read aloud, 2026-08-07). The
                         // say-the-name-naturally instruction travels in the
                         // step directive, never here.
-                        const announceLine = firstResolve
-                          ? `This game is now the ${det.name}.`
-                          : `The line has sharpened into the ${det.name}.`;
+                        const announceLine = announce;
                         facts.push(announceLine);
                         // Track A speaks this the moment the move lands —
                         // David's 2026-08-07 game had three announcements

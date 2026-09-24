@@ -358,7 +358,7 @@ export function decide(
   // supports a teaching point on this ply. One role table (`FACT_ROLE`) over
   // both vocabularies. Only review has a move-reason line (`[does]`) to keep on
   // a ply with no teaching point.
-  const support = supportedFacts(selection.spoken, bundle.squares, roleOf, (t) => kindOf(t) === 'does');
+  const support = supportedFacts(selection.spoken, bundle.squares, roleOf);
   selection.spoken = support.spoken;
   selection.quiet = [...selection.quiet, ...support.quiet];
   // 5 — THE ORDER: the same values, highest first.
