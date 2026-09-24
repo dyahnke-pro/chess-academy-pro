@@ -20,7 +20,7 @@ const BEHAVIOR_CASES: Array<{ id: string; fen: string; student: 'white' | 'black
   // Dense MIDDLEGAME (queens, rooks, minors) with the black king exposed —
   // only h7 shields it, the f/g files are open. king SAFETY is a middlegame
   // idea and now stands down in the endgame (David 2026-08-23).
-  { id: 'king-safety', fen: 'r2q1rk1/ppp4p/2n1pn2/3p4/3P4/2N1PN2/PPP1QPPP/R3K2R w KQ - 0 14', student: 'white' },
+  { id: 'king-safety', fen: 'r2q1rk1/ppp4p/2n1pn2/3p4/3P4/2N1PN2/PPP1QP1P/R3K2R w KQ - 0 14', student: 'white' },
   { id: 'prophylaxis', fen: 'r3k3/8/8/8/6b1/5N2/8/4K3 w - - 0 1', student: 'white' },
   { id: 'tactics', fen: '8/2r1k3/8/3N4/8/8/8/4K3 w - - 0 1', student: 'white' },
   { id: 'outpost', fen: '4k3/8/8/3N4/4P3/8/8/4K3 w - - 0 1', student: 'white' },

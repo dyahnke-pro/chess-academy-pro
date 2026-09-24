@@ -331,13 +331,22 @@ export function computeMoveFundamentals(
     // steps off its diagonal has just been developed by the pawn move.
     const freed = bishopFreedBy(new Chess(fenBefore), after, mover, mv.from);
     if (freed) {
+      // g2/b2 (g7/b7) vacated = the fianchetto square: "g3 — preparing to
+      // fianchetto" is how he names it.
+      const fianchetto = ['g2', 'b2', 'g7', 'b7'].includes(mv.from) ? mv.from : null;
       out.push({
         id: 'development',
         weight: 60,
-        led: `opens the diagonal for the bishop on ${freed}`,
-        selfContained: `opens the diagonal for the bishop on ${freed} with the pawn to ${mv.to}`,
-        imperative: `open the diagonal for the bishop on ${freed}`,
-        squares: [mv.to, freed],
+        led: fianchetto
+          ? `prepares to fianchetto the bishop to ${fianchetto}`
+          : `opens the diagonal for the bishop on ${freed}`,
+        selfContained: fianchetto
+          ? `prepares to fianchetto the bishop to ${fianchetto} with the pawn to ${mv.to}`
+          : `opens the diagonal for the bishop on ${freed} with the pawn to ${mv.to}`,
+        imperative: fianchetto
+          ? `fianchetto the bishop to ${fianchetto}`
+          : `open the diagonal for the bishop on ${freed}`,
+        squares: fianchetto ? [mv.to, fianchetto] : [mv.to, freed],
       });
     }
     const guards = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s));

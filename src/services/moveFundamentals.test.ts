@@ -191,3 +191,12 @@ describe('a pawn move that opens a bishop (hand walk 2026-09-24)', () => {
     expect(funds.some((f) => f.led.includes('bishop on'))).toBe(false);
   });
 });
+
+describe('g3 prepares the fianchetto (hand walk 2026-09-24)', () => {
+  it('names the fianchetto — his "special setup, g3, preparing to fianchetto"', () => {
+    // 1.e4 d5 2.exd5 Qxd5 3.Nc3 Qa5 — White plays g3.
+    const fen = 'rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4';
+    const top = computeMoveFundamentals(fen, 'g3', 'white').sort((a, b) => b.weight - a.weight)[0];
+    expect(top?.led).toBe('prepares to fianchetto the bishop to g2');
+  });
+});

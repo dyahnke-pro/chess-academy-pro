@@ -85,11 +85,15 @@ describe('findHangingBySee', () => {
 
 describe('findPawnBreaks', () => {
   it('finds a pawn push that makes contact with an enemy pawn', () => {
-    // White c-pawn on c4 can push c4-c5? No — pick d4 vs black c5/e5: white pawn d4,
-    // black pawns c5 and e5 → d4 is already in contact; instead test a real lever:
-    // White pawn e4, black pawn d5 → exd5 (capture of a pawn = a break) is listed.
-    const breaks = findPawnBreaks('4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1');
-    expect(breaks).toContain('d5'); // exd5 captures the black pawn
+    // c2-c4 hits the d5-pawn, supported by b3 so it survives the trade — a
+    // real lever.
+    const breaks = findPawnBreaks('4k3/8/8/3p4/8/1P6/2P5/4K3 w - - 0 1');
+    expect(breaks).toContain('c4');
+  });
+
+  it('a CAPTURE is not a break (hand walk 2026-09-24: "a pawn break on a5" meant …bxa5)', () => {
+    // exd5 resolves the tension; it is named as a capture, never a lever.
+    expect(findPawnBreaks('4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1')).not.toContain('d5');
   });
 
   it('returns [] when no pawn lever exists', () => {

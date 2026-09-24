@@ -31,6 +31,7 @@
  * shape, and inventing a geometry for them would teach the student to distrust
  * the ones that are real.
  */
+import { gambitFile } from './inaccuracyCall';
 import { Chess, type Square, type Color, type Move } from 'chess.js';
 
 export interface WhyItFailed {
@@ -191,6 +192,10 @@ export function whyItFailed(args: {
   // down (held-by-defender — name the recapturer) vs a piece simply left
   // hanging (lost-the-piece). The upstream caller only asks about moves already
   // graded as errors, so naming the loss is the lesson, not an over-claim.
+  // A PAWN OFFERED TO PRY THEIR KING OPEN IS NOT "LEFT HANGING" (hand walk
+  // 2026-09-24: Naroditsky's a5 against b6 beside the long-castled king was
+  // "That left your pawn on a5 hanging"). The gambit wording names it instead.
+  if (mv.piece === 'p' && gambitFile(args.fenBefore, args.playedSan, args.studentColor)) return null;
   const netOnLanding = captureNet(after, mv.to, mv.captured ?? null);
   if (netOnLanding < 0) {
     const recap = leastValuableAttackerOf(after, mv.to);

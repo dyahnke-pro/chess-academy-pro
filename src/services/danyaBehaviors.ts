@@ -203,10 +203,15 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'prophylaxis',
     weight: 927,
-    detect: ({ fen, studentWord }) => {
+    detect: ({ fen, studentWord, student }) => {
       const intent = opponentIntentRead(fen, studentWord);
       if (!intent) return null;
       if (intent.kind === 'capture') {
+        // THE STUDENT'S OWN LEVER IS NOT A THREAT TO "DEAL WITH" (hand walk
+        // 2026-09-24: after a5 hit b6 beside the long-castled king, "the
+        // opponent is eyeing bxa5 … deal with that first" — the pawn is there
+        // to pry the king open, and his plan was Bf4 first, then axb6).
+        if (intent.targetPiece === 'p' && isLeverOnKing(fen, intent.target, student)) return null;
         // The piece is NAMED from the board, never "the piece" — a pawn on e4
         // is a pawn (D-7, prod tape 2026-09-22).
         const what = intent.targetPiece ? `your ${PIECE_NAME[intent.targetPiece]} on ${intent.target}` : `what sits on ${intent.target}`;
@@ -686,4 +691,24 @@ export class BehaviorScheduler {
   }
 
   reset(): void { this.pass.clear(); }
+}
+
+/** The student's pawn on `sq` attacks an enemy pawn on a file beside the enemy
+ *  king — a lever against the king's cover, not a loose pawn. */
+function isLeverOnKing(fen: string, sq: string, student: Color): boolean {
+  try {
+    const b = new Chess(fen);
+    const them: Color = student === 'w' ? 'b' : 'w';
+    let kingFile = -1;
+    for (const row of b.board()) for (const c of row) if (c && c.type === 'k' && c.color === them) kingFile = c.square.charCodeAt(0);
+    if (kingFile < 0) return false;
+    const dir = student === 'w' ? 1 : -1;
+    for (const df of [-1, 1]) {
+      const f = sq.charCodeAt(0) + df;
+      const target = `${String.fromCharCode(f)}${Number(sq[1]) + dir}` as Square;
+      const p = b.get(target);
+      if (p && p.type === 'p' && p.color === them && Math.abs(f - kingFile) <= 1) return true;
+    }
+    return false;
+  } catch { return false; }
 }

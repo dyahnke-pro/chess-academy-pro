@@ -283,3 +283,19 @@ describe('a coach MISS is not a giveaway (walk 6, L4)', () => {
     expect(call?.said).not.toMatch(/go and take it/);
   });
 });
+
+describe('a gambit is taught from both sides (hand walk 2026-09-24)', () => {
+  // Naroditsky's 10.b4 against the long-castled king: "if Black takes, the
+  // b-file opens straight onto the king". The coach said "b4 was a mistake".
+  const fen = '2kr1b1r/pp1npppp/2p2n2/q6b/8/2NP2PP/PPP1NPB1/R1BQ1RK1 w - - 1 10';
+  it('names the file the pawn offers to open, then the engine\'s preference', () => {
+    const call = callInaccuracy({ fenBefore: fen, playedSan: 'b4', bestSan: 'a3', cpLoss: 120, side: 'student', moverColor: 'white' });
+    expect(call?.said).toContain('b-file opens toward their king');
+    expect(call?.said).not.toMatch(/was a mistake/);
+    expect(call?.said).toContain('a3');
+  });
+  it('NEGATIVE CONTROL: a push nobody can take is graded as before', () => {
+    const call = callInaccuracy({ fenBefore: fen, playedSan: 'a3', bestSan: 'b4', cpLoss: 120, side: 'student', moverColor: 'white' });
+    expect(call?.said ?? '').not.toContain('offers a pawn');
+  });
+});
