@@ -58,5 +58,7 @@ export function timingClause(t: MoveTiming): string {
   // move earlier, and read against the real one it is a false claim (the
   // corpus sweep caught "your queen on f6" where a knight stood). The square
   // is the facet's highlight instead.
-  return `${t.san} now, not a move earlier — then ${t.reply} would have won your ${NAME[t.piece] ?? 'piece'}`;
+  // Led by a word, never the SAN: spoken, the SAN expands to lowercase words
+  // ("bishop to a5 now…") and the sentence opens uncapitalised.
+  return `The timing of ${t.san} matters — a move earlier, ${t.reply} would have won your ${NAME[t.piece] ?? 'piece'}`;
 }

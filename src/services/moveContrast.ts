@@ -58,5 +58,6 @@ export function contrastMoves(fenBefore: string, sanA: string, sanB: string): Mo
 
 /** Spoken from the student's seat. */
 export function contrastClause(c: MoveContrast): string {
-  return `${c.keeps} rather than ${c.drops} — ${c.keeps} keeps your ${NAME[c.piece] ?? 'piece'} on ${c.square} defended, and ${c.drops} leaves it with no guard`;
+  // Led by a word, never the SAN (spoken, a leading SAN opens lowercase).
+  return `The difference between ${c.keeps} and ${c.drops}: ${c.keeps} keeps your ${NAME[c.piece] ?? 'piece'} on ${c.square} defended, and ${c.drops} leaves it with no guard`;
 }
