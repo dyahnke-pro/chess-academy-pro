@@ -387,9 +387,12 @@ export function decide(
     // lost a subsumption to a description — which then had no teaching point
     // to support it — was silenced by SUPPORT, not by the collapse: nothing
     // from its claim speaks. Filing it `subsumed` on a silent row reported a
-    // second mechanism for one silence (prod review 2026-09-24).
+    // second mechanism for one silence (prod review 2026-09-24). Only the
+    // collapse is refiled: `proven` and `said-already` are separate verdicts on
+    // the fact itself (the student owns the layer / already heard it), and keep
+    // their own names.
     const quiet = reason === 'unsupported'
-      ? selection.quiet.map((q) => (q.why === 'proven' ? q : { ...q, why: 'unsupported' as const }))
+      ? selection.quiet.map((q) => (q.why === 'subsumed' ? { ...q, why: 'unsupported' as const } : q))
       : selection.quiet;
     return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet }, student, false, bundle.stakes);
   }

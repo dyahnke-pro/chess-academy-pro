@@ -1757,8 +1757,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // student has PROVEN is quieted BEFORE the door's gates by the green-layer
     // step (WO-LAYERS-01), so it keeps its own name on any row — relabelling it
     // would erase the heat map's only visible trace in the decision row.
+    // `said-already` likewise: the say-once verdict is on the fact (the student
+    // already heard it), not on the row.
+    const ownVerdict = (d) => (d.reason === 'proven' ? 0 : (d.quietBy?.proven ?? 0)) + (d.quietBy?.['said-already'] ?? 0);
     const misfiled = silent.filter((d) => (d.quietCount ?? 0) > 0
-      && ((d.quietBy?.[d.reason] ?? 0) + (d.reason === 'proven' ? 0 : (d.quietBy?.proven ?? 0))) !== d.quietCount);
+      && ((d.quietBy?.[d.reason] ?? 0) + ownVerdict(d)) !== d.quietCount);
     await add('DECIDER door-closed-rows-file-facts-under-their-gate', misfiled.length === 0,
       `${silent.length} silent rows; ${misfiled.length} file facts under a mechanism other than their own gate${misfiled[0] ? ` (e.g. reason=${misfiled[0].reason} quietBy=${JSON.stringify(misfiled[0].quietBy)})` : ''}`);
     // Every subsumption names BOTH sides. A pair with no winner means a fact
