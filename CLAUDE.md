@@ -6170,6 +6170,37 @@ the same commit.
   audit against the old bundle wastes time chasing a "regression"
   that doesn't exist yet because your code isn't shipped.
 
+## 🔒🔒 ONE PUSH, NOT FIVE — ship-check remembers, and you check BEFORE you push (David 2026-09-24, furious: "You NEED TO FIGURE THIS SHIT OUT!! LOCK THIS IN FOR FUTURE SESSIONS").
+
+One build took **five push attempts and about an hour**. Each attempt ran the
+full 11-minute ship-check inside the pre-push hook, found ONE failure, and the
+fix — usually a single test file — then paid the whole 11 minutes again.
+Every one of those failures could have been caught locally in seconds. Two
+causes, two fixes, both mandatory:
+
+**1. SHIP-CHECK REMEMBERS WHAT PASSED (`scripts/ship-check-lib/green-memory.mjs`).**
+Every step records the working TREE it went green on. A retry skips any step
+whose inputs did not change (a test-only fix no longer re-runs typecheck or the
+prod build — "✓ reused" in the output), and the two vitest steps remember each
+test FILE, so a retry re-runs only the files that failed plus the tests of what
+changed. Reuse is conservative by construction: no baseline, a git failure, a
+toolchain file, a shared `src/test/` helper → re-run; a test that reads source
+off disk (`readFileSync`) re-runs on ANY change. Gate: `green-memory.test.ts`.
+`--no-cache` / `SHIP_CHECK_NO_CACHE=1` forces the whole run. **Never widen what
+counts as "unchanged" to make a run faster** — a reuse that hides a real
+failure is worse than the hour it saves.
+
+**2. THE PUSH HOOK IS NOT YOUR FIRST CHECK.** Before `git push`:
+- **Changed a default, a constant, or a shared signature?** Run the tests that
+  depend on it FIRST: `npx vitest related <the file> --run`. The 2026-09-24 hour
+  was a rating default moved 1200 → 400 with two hint-dial tests still asserting
+  the old register — `vitest related ratingBands.ts` finds them in seconds.
+- **Run `npm run ship-check > /tmp/sc.log 2>&1` yourself, then push.** The hook's
+  run is then all "✓ reused", so a green push takes seconds and a red one was
+  already fixed before the hook saw it.
+- **A test that passes alone but fails in ship-check is a RACE, not a flake** —
+  fix the test's timing (await the effect with `waitFor`), never re-push hoping.
+
 ## Before Finishing a Session
 
 **🚨 The one-button "am I done?" check is `npm run ship-check`.** David
