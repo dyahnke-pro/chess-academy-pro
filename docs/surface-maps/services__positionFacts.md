@@ -135,14 +135,14 @@
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:89`
 - `src/test/computedOrderWired.test.ts:32`
-- `src/test/teach02Wired.test.ts:70`
-- `src/test/teach02Wired.test.ts:79`
-- `src/test/teach02Wired.test.ts:93`
-- `src/test/teach02Wired.test.ts:96`
-- `src/test/teach02Wired.test.ts:101`
+- `src/test/teach02Wired.test.ts:82`
+- `src/test/teach02Wired.test.ts:91`
+- `src/test/teach02Wired.test.ts:105`
 - `src/test/teach02Wired.test.ts:108`
-- `src/test/teach02Wired.test.ts:118`
+- `src/test/teach02Wired.test.ts:113`
 - `src/test/teach02Wired.test.ts:120`
+- `src/test/teach02Wired.test.ts:130`
+- `src/test/teach02Wired.test.ts:132`
 
 ## Tests
 

@@ -46,10 +46,17 @@ export interface RefutedAlternative {
   text: string;
 }
 
-/** The most-played real alternative that is not the taught move. */
+/** Below this share a move is not what people REACH FOR here — it is a stray
+ *  (a prod review said "Most people play Bg6 here (1% of players)"). A bar,
+ *  not a cap: every alternative at or above it is eligible. */
+export const MIN_ALTERNATIVE_SHARE = 10;
+
+/** The most-played real alternative that is not the taught move, when it is
+ *  played often enough to be a real temptation. */
 export function pickAlternative(taughtSan: string, candidates: readonly AlternativeCandidate[]): AlternativeCandidate | null {
   const taught = stripGlyphs(taughtSan);
-  const alts = candidates.filter((c) => stripGlyphs(c.san) !== taught && c.games > 0);
+  const alts = candidates.filter((c) => stripGlyphs(c.san) !== taught && c.games > 0
+    && (c.pct === null || c.pct >= MIN_ALTERNATIVE_SHARE));
   if (alts.length === 0) return null;
   return [...alts].sort((a, b) => b.games - a.games)[0];
 }
@@ -59,9 +66,15 @@ function pawns(cp: number): string { return (cp / 100).toFixed(1); }
 /** The DNA-register sentence over the computed facts. Pure; exported for the
  *  review, which supplies its own cost + line from the stored analysis. */
 export function renderRefutedAlternative(f: Omit<RefutedAlternative, 'text'>, taughtSan: string): string {
-  const who = f.source === 'amateur' ? 'players at your level' : 'players';
-  const pop = f.pct != null ? `${f.pct}% of ${who}` : `${f.games} games`;
-  const lead = f.source === 'amateur' ? `Most players at your level play ${f.alt} here (${pop})` : `Most people play ${f.alt} here (${pop})`;
+  // THE SHARE IS STATED, NEVER ROUNDED UP TO "MOST" — and the source is named
+  // as what it is: the amateur band is "players at your level", the masters
+  // database is "masters".
+  const who = f.source === 'amateur' ? 'players at your level' : 'masters';
+  const lead = f.pct === null
+    ? `${f.alt} is a common choice here (${f.games} games)`
+    : f.pct >= 50
+      ? `Most ${who} play ${f.alt} here (${f.pct}%)`
+      : `${f.pct}% of ${who} play ${f.alt} here`;
   // THE LINE AS PROOF (WO-LAYERS-01): the moves are spoken only as far as the
   // point they prove, then the result — never a recital of a line that proves
   // nothing.

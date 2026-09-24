@@ -417,6 +417,19 @@ context!!"); rewired before any push:
 - Gate: `src/test/teach02Wired.test.ts` — both producers, every fact, each with
   a negative control.
 
+**Prod review audit after merge (a4aa702, game vs Firouzja, student Black):**
+teach meter 13/22 = 59% (baseline 5/25 = 20%); ACC + SEAT clean over 40 plies.
+Read the lines, found two defects every gate passed, fixed in the follow-up:
+"Most people play Bg6 here (1% of players)" — "most" on a 1% stray and the
+masters DB called "people" → share floor 10% (`MIN_ALTERNATIVE_SHARE`), the
+share stated, the source named; "Taking stock as the middlegame begins: you
+were a bit worse." — a verdict with no reason → no reason, no line. Also the
+DECIDER filing row: an unsupported-closed row now files its subsumed facts under
+`unsupported` (proven keeps its own name; the audit row now says so). Still red
+and NOT from this build: the turning-point DRIVER card (harness — CRIT/THESIS/
+RECAP follow from it), FUNDLEAD 0/4 (every fundamental on this game DECLINED by
+attribution, so there is nothing to lead with), NEED 8/12 owed plies heard.
+
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.
 
