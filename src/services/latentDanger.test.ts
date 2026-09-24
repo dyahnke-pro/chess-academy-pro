@@ -89,3 +89,10 @@ describe('detectTradeCreatesPin — v2, the trade that CREATES the pin (David\'s
     expect(detectTradeCreatesPin(FEN, 'b')).toBeNull();
   });
 });
+
+describe('a pawn pinned down its own file is not frozen (hand walk 2026-09-24)', () => {
+  it('e5 in front of the e1-queen, the e7-queen behind: no pin warning', () => {
+    const d = detectLatentDanger('5r1k/p3q1pp/2p5/1pb1P2P/2B2B2/2N2R1P/PPP3K1/4Q3 w - - 0 28', 'w');
+    expect(d?.frontSquare).not.toBe('e5');
+  });
+});

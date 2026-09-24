@@ -74,7 +74,7 @@ export interface LastMoveInput {
 }
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard } from './conceptEngine';
-import { liveMethodBeatFor, habitIsOwed } from './methodBeat';
+import { liveMethodBeat, habitIsOwed } from './methodBeat';
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -674,15 +674,18 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // Stems rotate on the position's own halfmove count so a long game never
   // repeats one verbatim.
   let methodBeat: string | null = null;
+  let methodKey: string | null = null;
   try {
     const halfmove = Number.parseInt(fen.split(' ')[5] ?? '0', 10) || 0;
-    methodBeat = liveMethodBeatFor({
+    const mb = liveMethodBeat({
       bestSan: bestSanHere,
       threatStanding: mustDefend.net > 0,
       isStudentMove: studentToMove,
       realChoice: !!deliberation?.isRealChoice,
       tier: importance.tier,
-    }, halfmove);
+    }, halfmove, input.alreadySaid);
+    methodBeat = mb?.text ?? null;
+    methodKey = mb?.key ?? null;
   } catch { methodBeat = null; }
 
   // ── WO-TEACH-02: the four teaching facts review carries as facets ─────────
@@ -827,7 +830,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     /** Every clause the door silenced, and why — the observability trail. */
     quiet: decision.quiet,
     // What the caller should carry forward so a standing fact is said once.
-    remember: clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
+    // A method habit is keyed on the HABIT (its stems rotate), once per game.
+    remember: [
+      ...clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
+      ...(methodKey && clauses.some((c) => c.kind === 'method') ? [methodKey] : []),
+    ],
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
   };

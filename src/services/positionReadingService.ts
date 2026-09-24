@@ -955,6 +955,21 @@ export function strongestWeakestPiece(fen: string, color: Color): { strongest: A
  *  can ever support it advancing, AND the square directly ahead is already
  *  controlled by an enemy pawn — so it can neither be defended by a pawn nor
  *  safely pushed). The squares the opponent targets. */
+/** WHY a good piece is good, as a clause after "is your/their best-placed
+ *  piece" — ONE wording per reason, shared by every computer that reads
+ *  `findPieceQuality` (hand walk 2026-09-24: "rook on f1 — rook on a semi-open
+ *  file" was a label glued on with a dash, in two computers). */
+export function goodPieceClause(reason: string, square: string): string {
+  const file = square[0];
+  const said: Record<string, string> = {
+    'knight outpost': 'it sits on an outpost no pawn can kick',
+    'rook on the open file': `it owns the open ${file}-file`,
+    'rook on a semi-open file': `it has the half-open ${file}-file`,
+    'rook on the seventh rank': 'it has reached the seventh rank',
+  };
+  return said[reason] ?? reason;
+}
+
 export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; doubled: Square[]; backward: Square[] } {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return { isolated: [], doubled: [], backward: [] }; }

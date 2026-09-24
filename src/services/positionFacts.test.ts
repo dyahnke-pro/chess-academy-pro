@@ -81,9 +81,10 @@ describe('computePositionFacts — the composer', () => {
   // SAY-ONCE. The repetition these surfaces actually suffer from is a STANDING
   // fact re-earned every ply, not duplicate geometry.
   it('says a standing fact once and hands the caller what to remember', async () => {
-    // Alapin, after 10...Rd8 — the isolated d-pawn AND the d-file pin geometry
-    // (David's own game; the walk that measured this repetition).
-    const fen = '3rkb1r/pp3ppp/2n1pn2/3q3b/3P4/4BN1P/PP2BPP1/RN1Q1RK1 w k - 1 11';
+    // A standing pin: …Bg4 holds the f3-knight to the d1-queen. (The Alapin
+    // fixture this used measured a PAWN pinned down its own file, which is not
+    // a pin — it can still push — and stopped speaking 2026-09-24.)
+    const fen = 'r2qk2r/ppp2ppp/2np1n2/2b1p3/2B1P1b1/2NP1N2/PPP2PPP/R1BQ1RK1 w kq - 2 12';
     const first = await computePositionFacts({ posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat });
     const standing = first.clauses.filter((c) => c.kind === 'structure-plan' || c.kind === 'latent-danger' || c.kind === 'student-leans' || c.kind === 'opponent-leans');
     // The fixture must actually produce one, or this test proves nothing.

@@ -31,6 +31,7 @@ import {
   developmentRead,
   findWeakPawns,
   findPieceQuality,
+  goodPieceClause,
   findPawnBreaks,
   findColorComplexWeakness,
   findMinorityAttack,
@@ -222,8 +223,8 @@ function observationsFor(
       key: `${side}-good-${outpost.square}`, side, kind: 'piece', rank: rank('piece'),
       squares: [outpost.square],
       text: own
-        ? `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${outpost.reason}.`
-        : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is their best-placed piece — ${outpost.reason}. Trading it off is a plan in itself.`,
+        ? `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${goodPieceClause(outpost.reason, outpost.square)}.`
+        : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is their best-placed piece — ${goodPieceClause(outpost.reason, outpost.square)}. Trading it off is a plan in itself.`,
     });
   }
   // Same rule as the join: a piece still on its starting square is not a

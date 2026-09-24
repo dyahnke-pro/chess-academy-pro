@@ -125,6 +125,10 @@ export function detectLatentDanger(fen: string, studentColor: 'w' | 'b'): Latent
         if (!back || back.color !== studentColor) continue;
         if (!(back.piece === 'k' || back.piece === 'q')) continue;
         if ((VAL[back.piece] ?? 0) <= (VAL[front.piece] ?? 0)) continue;
+        // A PAWN PINNED DOWN ITS OWN FILE IS NOT FROZEN: every push keeps it on
+        // the file (hand walk 2026-09-24: "your pawn on e5 and your queen share
+        // that file — that file is a pin", next to "push it").
+        if (front.piece === 'p' && dc === 0) continue;
         const danger: LatentDanger = {
           frontSquare: front.sq, frontPiece: front.piece,
           backSquare: back.sq, backPiece: back.piece,

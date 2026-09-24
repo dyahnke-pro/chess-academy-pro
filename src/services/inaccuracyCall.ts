@@ -62,6 +62,22 @@ function whyBetter(
   moverColor: 'white' | 'black',
 ): { why: string; square: string } | null {
   if (bestUci.length < 4) return null;
+  // THE CAPTURE IS THE REASON. When the better move itself takes a real piece,
+  // say what it takes — the plan's material read is the NET over the line
+  // ("win a rook" for Bxd8, which takes the QUEEN and gives the bishop back;
+  // hand walk 2026-09-24).
+  try {
+    const b = new Chess(fenBefore);
+    const u = bestUci[0];
+    const first = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+    const NAME: Record<string, string> = { q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
+    const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+    // Only when it takes MORE than the capturer is worth — an even trade is not
+    // the reason a move is better.
+    if (first?.captured && NAME[first.captured] && VAL[first.captured] > VAL[first.piece]) {
+      return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to };
+    }
+  } catch { /* fall through to the plan read */ }
   const plan = planFromUci(fenBefore, bestUci, moverColor);
   const text = plan?.mine.text?.trim();
   if (!text) return null;

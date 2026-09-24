@@ -164,7 +164,11 @@ export function buildDeliberation(input: {
  *  never an invented positional reason. */
 function shortfallText(c: Candidate): string {
   // The proof leads: the line that shows WHY beats a label for it.
-  if (c.proof && c.shortfall !== 'less-precise') {
+  // …for EVERY shortfall with a proof. `deliberationFacts` lets a less-precise
+  // move through only BECAUSE it has one, and this branch used to skip it for
+  // exactly that category — so the move fell to the filler line below (hand
+  // walk 2026-09-24: "Bb3 is playable, but not as precise").
+  if (c.proof) {
     // The proof line starts with the candidate itself; asked as a question it
     // is already named, so the answer starts with the REPLY — "Qf5? Then
     // castles, and the rook on e8 falls", never "Qf5? Qf5, castles…".

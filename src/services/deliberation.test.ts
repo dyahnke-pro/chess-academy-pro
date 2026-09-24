@@ -129,3 +129,17 @@ describe('an exchange is not "drops the rook" (hand walk 2026-09-24)', () => {
     expect(rxd8?.shortfall).not.toBe('drops-material');
   });
 });
+
+describe('a less-precise move with a proof speaks the proof, never the filler (hand walk 2026-09-24)', () => {
+  it('renders the line, not "playable, but not as precise"', () => {
+    const withProof = {
+      best: { san: 'O-O', evalCp: 60, deltaCp: 0 },
+      alternatives: [{ san: 'd3', evalCp: 0, deltaCp: 60, shortfall: 'less-precise' as const, proof: 'd3, Nxe4 and the pawn on e4 falls' }],
+      isRealChoice: true,
+      bestWhy: null,
+    };
+    const facts = deliberationFacts(withProof);
+    expect(facts).not.toMatch(/playable, but not as precise/);
+    expect(facts).toMatch(/d3\? Then Nxe4 and the pawn on e4 falls\./);
+  });
+});

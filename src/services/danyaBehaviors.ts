@@ -35,6 +35,7 @@ import {
   findWeakPawns,
   developmentRead,
   findPieceQuality,
+  goodPieceClause,
   countMaterial,
   findPassedPawns,
   findPawnBreaks,
@@ -158,15 +159,8 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // A sentence per reason, not a noun phrase glued to a dash (hand walk
         // 2026-09-24: "Your rook on f1 — rook on a semi-open file. Build around
         // it." read like a label).
-        const file = good.square[0];
-        const said: Record<string, string> = {
-          'knight outpost': `Your knight on ${good.square} sits on an outpost — no pawn can kick it. Build your play around it.`,
-          'rook on the open file': `Your rook on ${good.square} owns the open ${file}-file — build your play around it.`,
-          'rook on a semi-open file': `Your rook on ${good.square} has the half-open ${file}-file — build your play around it.`,
-          'rook on the seventh rank': `Your rook on ${good.square} has reached the seventh rank — build your play around it.`,
-        };
         return {
-          fact: said[good.reason] ?? `Your ${PIECE_NAME[good.piece]} on ${good.square} — ${good.reason}. Build around it.`,
+          fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} ${goodPieceClause(good.reason, good.square).replace(/^it /, '')} — build your play around it.`,
           squares: [good.square],
         };
       }

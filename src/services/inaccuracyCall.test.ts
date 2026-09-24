@@ -311,3 +311,13 @@ describe('a defended pawn is not a gambit (hand walk 2026-09-24)', () => {
     expect(gambitFile(fen, 'g4', 'white')).not.toBeNull();
   });
 });
+
+describe('the better move\'s reason is what it TAKES (hand walk 2026-09-24)', () => {
+  it('25.Bxf4 missed Bxd8, which takes the queen — not "win a rook"', () => {
+    const call = callInaccuracy({
+      fenBefore: '3q1r1k/pp4pp/2p1B3/4P1BP/1b3p2/2N2R1P/PPP5/4Q1K1 w - - 0 25', playedSan: 'Bxf4', bestSan: 'Bxd8', cpLoss: 600, moverColor: 'white', side: 'student',
+      bestLineUci: ['g5d8', 'f8d8', 'f3f4', 'b4c5'],
+    } as never);
+    expect(call?.said ?? '').toMatch(/take the queen on d8/);
+  });
+});

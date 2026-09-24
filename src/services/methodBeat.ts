@@ -267,14 +267,23 @@ function isDecidingTier(t: ImportanceTier | undefined): boolean {
   return t === 'critical' || t === 'only-move' || t === 'blunder' || t === 'swing';
 }
 
-export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0): string | null {
+/** The three live habits. Each is taught ONCE per game: the 2026-09-24 hand
+ *  walk heard "their threat first, your idea second" three times in six moves —
+ *  the stems rotate, so a text dedupe never matched. Keyed on the HABIT. */
+export type LiveHabit = 'opponent-threat' | 'forcing-scan' | 'candidates';
+export interface LiveMethodBeat { text: string; key: string }
+/** The say-once key a caller carries forward in its `alreadySaid` set. */
+export function liveHabitKey(habit: LiveHabit): string { return `method:${habit}`; }
+
+export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: ReadonlySet<string>): LiveMethodBeat | null {
   if (!s.isStudentMove) return null;
+  const owed = (habit: LiveHabit): boolean => !said?.has(liveHabitKey(habit));
 
   // 1 — THREAT IDENTIFICATION AS A HABIT. The board already names the threat
   // elsewhere in the briefing; this names the ROUTINE that finds it unprompted
   // next time, which is the thing the app was not teaching at all.
-  if (s.threatStanding) {
-    return pick([
+  if (s.threatStanding && owed('opponent-threat')) {
+    return beat('opponent-threat', [
       'Before you pick a move: what is their last move doing? Answer that first, every time — their idea comes before yours.',
       'Run the question now — what are they threatening? Deal with the answer before you look at your own plan.',
       'The habit here is order of operations: their threat first, your idea second. Never the other way round.',
@@ -289,8 +298,8 @@ export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0): stri
   // of them. It teaches only where the forcing move DECIDES the moment: a
   // critical or only-move position (or one the student can swing). Elsewhere
   // the recapture is obvious and the prompt is nagging.
-  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && isDecidingTier(s.tier)) {
-    return pick([
+  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && isDecidingTier(s.tier) && owed('forcing-scan')) {
+    return beat('forcing-scan', [
       'Start with the forcing moves here — every check, every capture, before you look at anything quiet.',
       'List the checks and the captures first. Something in this position is forcing, and quiet moves can wait.',
       'Scan forcing first: checks, then captures, then the quiet moves. That order is what finds shots like this.',
@@ -302,8 +311,8 @@ export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0): stri
   // this teaches the routine of finding them yourself, which is the half the
   // student has to own. It is last because it is the most general of the three,
   // and it is the narrowest-gated for the same reason — see `tier` above.
-  if (s.realChoice && isDecidingTier(s.tier)) {
-    return pick([
+  if (s.realChoice && isDecidingTier(s.tier) && owed('candidates')) {
+    return beat('candidates', [
       'Name your candidates before you calculate: two or three moves you would consider, then compare them. Picking first and checking after is how good moves get missed.',
       'Two or three candidate moves, written down in your head, before any calculation — then work out which one holds up.',
       'The discipline here is listing the options first. Decide what the candidates are, then spend your thinking on comparing them.',
@@ -311,4 +320,13 @@ export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0): stri
   }
 
   return null; // empty > generic
+}
+
+function beat(habit: LiveHabit, stems: string[], ply: number): LiveMethodBeat {
+  return { text: pick(stems, ply), key: liveHabitKey(habit) };
+}
+
+/** Text-only form (no say-once) — kept for callers that do not carry a set. */
+export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0, said?: ReadonlySet<string>): string | null {
+  return liveMethodBeat(s, plyForVariety, said)?.text ?? null;
 }
