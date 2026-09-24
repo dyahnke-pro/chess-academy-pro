@@ -3,7 +3,7 @@
 // punishment lands. G0/G3: every field computed; positional → concept null.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { refutedAlternative, pickAlternative, candidatesFromMasters, renderRefutedAlternative, type AlternativeCandidate } from './refutedAlternative';
+import { refutedAlternative, pickAlternative, candidatesFromMasters, renderRefutedAlternative, candidatesForPosition, type AlternativeCandidate } from './refutedAlternative';
 import type { PvEngine } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
 
@@ -112,7 +112,25 @@ describe('refutedAlternative', () => {
   });
 
   it('renderRefutedAlternative is a template over the facts (pure)', () => {
-    const t = renderRefutedAlternative({ alt: 'Nf6', games: 300, pct: 38, costCp: 900, line: null, concept: { id: 'mate', name: 'Checkmate', full: 'The queen lands on f7 with the bishop covering it — mate.', short: 'mate' }, lineSans: ['Nf6', 'Qxf7#'] }, 'g6');
-    expect(t).toBe('Most people play Nf6 here (38% of players), and it walks into a checkmate: the line runs Nf6, Qxf7# — The queen lands on f7 with the bishop covering it — mate. g6 keeps that off the board.');
+    const t = renderRefutedAlternative({ alt: 'Nf6', games: 300, pct: 38, costCp: 900, line: null, concept: { id: 'mate', name: 'Checkmate', full: 'The queen lands on f7 with the bishop covering it — mate.', short: 'mate' }, lineSans: ['Nf6', 'Qxf7#'], proofResult: "it's mate" }, 'g6');
+    expect(t).toBe("Most people play Nf6 here (38% of players), and it walks into a checkmate: Nf6 and Qxf7# — it's mate. The queen lands on f7 with the bishop covering it — mate. g6 keeps that off the board.");
+  });
+
+  it('a line that proves nothing is not recited (the line as proof)', () => {
+    const t = renderRefutedAlternative({ alt: 'a6', games: 40, pct: 12, costCp: 150, line: null, concept: null, lineSans: [], proofResult: null }, 'Nf3');
+    expect(t).not.toMatch(/line runs/);
+    expect(t).toMatch(/costs about 1\.5 points/);
+  });
+
+  it('players at the student\'s level come first; masters are the fallback', async () => {
+    const { __seedAmateurPlayCache, __clearAmateurPlayCache } = await import('./amateurPlayCache');
+    __clearAmateurPlayCache();
+    expect(candidatesForPosition(FEN, MASTERS).every((c) => c.source === 'masters')).toBe(true);
+    __seedAmateurPlayCache(FEN, { band: '1000,1200', bandLabel: 'around 1000–1200', totalGames: 100, moves: [{ san: 'Nf6', games: 60, pct: 60 }, { san: 'g6', games: 40, pct: 40 }] });
+    const c = candidatesForPosition(FEN, MASTERS);
+    expect(c[0]).toEqual({ san: 'Nf6', games: 60, pct: 60, source: 'amateur' });
+    const t = renderRefutedAlternative({ alt: 'Nf6', games: 60, pct: 60, costCp: 150, line: null, concept: null, lineSans: [], source: 'amateur' }, 'g6');
+    expect(t).toMatch(/^Most players at your level play Nf6 here \(60% of players at your level\)/);
+    __clearAmateurPlayCache();
   });
 });

@@ -24,6 +24,10 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
+import { refutedAlternative, candidatesForPosition } from '../../services/refutedAlternative';
+import { principleToTeach, principleOnceLine } from '../../services/moveFundamentals';
+import { threatStoppedBy } from '../../services/opponentMovePurpose';
+import { transferClause, recordMotif } from '../../services/motifLedger';
 import { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
@@ -212,7 +216,7 @@ import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
   type ForkLog, type Fork,
 } from '../../services/branchExplorer';
-import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
+import { warmAmateurPlay, buildRatingRealityFact, getCachedAmateurPlay } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
 
 /** Min plies between think-aloud deliberations — a coach who deliberates on
@@ -7513,7 +7517,10 @@ export function CoachTeachPage(): JSX.Element {
           // underscores taken out. `tacticWord` is the same map the plan lane
           // uses; an unnamed pattern says nothing rather than saying its id.
           const word = tacticWord(t.type);
-          tacticLine = word ? `There's a ${word} here for you — have a look.${conceptTail(t.type)}` : null;
+          // S6 TRANSFER — the same motif taught earlier this game is named.
+          const moveNo = Number.parseInt(args.fenAfterReply.split(' ')[5] ?? '0', 10) || 0;
+          tacticLine = word ? `There's a ${word} here for you — have a look.${conceptTail(t.type)}${transferClause(t.type, moveNo, learnMemRef.current.motifFirstMove)}` : null;
+          if (word) recordMotif(t.type, moveNo, learnMemRef.current.motifFirstMove);
           myTacticType = word ? t.type : null;
           if (word) tacticSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         }
@@ -8632,6 +8639,55 @@ export function CoachTeachPage(): JSX.Element {
                     }
                   }
                 } catch { /* the engine read is a bonus, never a blocker */ }
+
+                // ── WHY DID THEY PLAY THAT? ──────────────────────────────
+                //
+                // WO-TEACH-02 S3 — the reply that answers the student's threat
+                // is the commonest purposeful move there is, and it used to pass
+                // without a word. The same fact the review proves with the
+                // engine, here from the board alone (`threatStoppedBy`).
+                try {
+                  const stopped = threatStoppedBy(fenBefore, move.fen, m.san, studentCC);
+                  if (stopped) queueSpokenHint(probe.fen(), stopped.text, 'computed', [stopped.threat.landing]);
+                } catch { /* the purpose is a bonus, never a blocker */ }
+
+                // ── WHAT PLAYERS AT YOUR LEVEL PLAY HERE, AND WHAT IT COSTS ─
+                //
+                // WO-TEACH-02 S2 — the same computer the review uses on its owed
+                // opening plies. Live, it speaks only on the evidence of players
+                // at the student's OWN level (the amateur band the master-play
+                // watcher warms — cache-only, never the network) and only when
+                // the engine proves the popular alternative costs a notable
+                // amount against the move the student actually played. A move
+                // that was itself worse returns null — nothing true to teach.
+                try {
+                  let taughtAlternative = false;
+                  const amateurHere = move.history.length <= 24 ? getCachedAmateurPlay(fenBefore) : null;
+                  if (amateurHere && amateurHere.moves.length >= 2) {
+                    const r = await refutedAlternative({
+                      fenBefore,
+                      taughtSan: move.san,
+                      candidates: candidatesForPosition(fenBefore, null),
+                      studentColor: playerColor,
+                      depth: 10,
+                      maxPlies: 4,
+                    });
+                    if (r) {
+                      queueSpokenHint(probe.fen(), r.text, 'computed');
+                      taughtAlternative = true;
+                    }
+                  }
+                  // Nothing people at this level get wrong here: the opening
+                  // PRINCIPLE the move follows, each taught once per game — the
+                  // same computer the review uses on its quiet owed plies.
+                  if (move.history.length <= 24 && !taughtAlternative) {
+                    const lead = principleToTeach(fenBefore, move.san, playerColor, learnMemRef.current.principleTaught);
+                    if (lead) {
+                      learnMemRef.current.principleTaught.add(lead.id);
+                      queueSpokenHint(probe.fen(), principleOnceLine(move.san, lead), 'computed');
+                    }
+                  }
+                } catch { /* the alternative is a bonus, never a blocker */ }
 
                 // ── WHICH PIECE IS WORKING, AND WHICH IS ASLEEP ───────────
                 //

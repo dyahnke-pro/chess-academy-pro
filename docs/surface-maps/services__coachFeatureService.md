@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4701 lines · 33 exports · 33 importers · 30 tests · 5 audits**
+**4834 lines · 34 exports · 33 importers · 30 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -258,6 +258,9 @@
 ### `narrationCoversFacets` (function) — 2 call sites
 - `src/services/reviewNarrationFidelity.test.ts:112`
 - `src/services/reviewNarrationFidelity.test.ts:118`
+
+### `speakPhaseVerdicts` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pendingRecapture` (function) — 2 call sites
 - `src/services/coachFeatureService.test.ts:929`

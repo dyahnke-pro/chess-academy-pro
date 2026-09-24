@@ -322,13 +322,13 @@ spoken line teaches, or the ply is silent.
 end to end, each lands BOTH surfaces (review wording retrospective, Learn
 present tense), each ships with its gate and an audit contract:**
 
-- [ ] **S0 Instruments.** (a) the stream breaker never latches the loopback
+- [x] **S0 Instruments.** (a) the stream breaker never latches the loopback
   sidecar (and recovers after a success); gate. (b) need-coverage counts what
   the student actually HEARD (after every fill). (c) a teach/describe METER:
   per spoken student ply, does a TEACH-role fact speak — emitted on
   `coach-decision`, asserted by both standing audits, measured over the
   real-engine sweep before and after.
-- [ ] **S1 Cut describing at the source (universal).** Retire
+- [x] **S1 Cut describing at the source (universal).** Retire
   `fillSilentDevelopment` + the merit fallback in `buildDeterministicNarration`;
   drop the `[does]` move-reason keep-alive (a description speaks only as
   support for a teaching fact on its squares); `[quality]` "great move" alone
@@ -336,30 +336,30 @@ present tense), each ships with its gate and an audit contract:**
   settles, with its plan (review facet + both Learn lanes); `[plan-middlegame]`
   seat-gated (their plan on their ply, yours on yours). Update every test that
   pins the retired strings.
-- [ ] **S2 "Most players go wrong here" + principle-once.** Wire
+- [x] **S2 "Most players go wrong here" + principle-once.** Wire
   `refutedAlternative` into review and live on owed student plies, reading
   the AMATEUR band first (`amateurPlayCache`) then masters, engine-proven
   cost only. For a grey/red principle layer, one principle line per principle
   per game ("Develop a new piece every move — this knight also hits e5"),
   replacing the retired description. Nothing true to teach → silent.
-- [ ] **S3 "Why did they play that?"** One computer `opponentMovePurpose`:
+- [x] **S3 "Why did they play that?"** One computer `opponentMovePurpose`:
   threat (existing) · bluff (existing) · STOPS your idea (your best move
   before vs after their move) · the plan step it prepares (engine PV) · the
   target it hits. Spoken on every opponent move that has a purpose; quiet
   development stays silent. Review `[opp-intent]` facet; live clause via
   `opponentLastMove`; fix the Learn gate.
-- [ ] **S4 "Who's better, and why."** One computer `positionVerdict`: band from
+- [x] **S4 "Who's better, and why."** One computer `positionVerdict`: band from
   the eval + reasons from material, king safety, activity/development,
   structure. Spoken at each phase change (review: the ply the phase turns;
   Learn: `runPhaseTransition`) and absorbs the describe-role `[verdict]`.
-- [ ] **S5 Candidate moves at critical moments.** Keep the fan lines on
+- [x] **S5 Candidate moves at critical moments.** Keep the fan lines on
   `CriticalMomentRead`; `candidateSet` names 2–3 real options with the proven
   reason each alternative fails (`proofCut` over its PV). Review: the critical
   moment reveal. Learn: `deliberation` shortfalls gain the proof line.
-- [ ] **S6 Transfer.** A per-game motif ledger (motif → first ply) on both
+- [x] **S6 Transfer.** A per-game motif ledger (motif → first ply) on both
   surfaces → "same idea as move 12"; `WeaknessProvenance` gains an optional
   `ply` (additive, no migration) so the cross-game recurrence line names it.
-- [ ] **S7 Checks, captures, threats — before the move.** Live only (review is
+- [x] **S7 Checks, captures, threats — before the move.** Live only (review is
   retrospective): on a critical/only-move tier with a forcing best move, the
   scan prompt WITHOUT naming the move (honesty contract), say-once rotating
   stems; tier-gate the forcing beat.
@@ -380,6 +380,32 @@ data tests (`corpusReach.measure`, `endgameCorpusNote`, `notePreferReachable`,
 `noteSelectionDeterminism`, `teachingCoverage.report`) and `gemPunishLessons`
 (three). Owed separately. `AdaptivePuzzlePage` badge WAS mine (WO-LAYERS moved
 the default to 400; the test hard-coded 1400) — fixed here, now derived.
+
+**What landed (S2–S7, 2026-09-24), and how each is wired:**
+- S2 — `refutedAlternative` reads the AMATEUR band first (`candidatesForPosition`,
+  cache-only) then masters; its line is spoken only as far as it PROVES
+  (`proofCut`), never "the line runs". Review: a pooled pass over owed quiet
+  student opening plies (`augmentWithProjections`, pass `refuted`). Learn: the
+  late lane on opening student moves when the amateur cache has the position.
+  Where nothing is refuted, `principleToTeach` (moveFundamentals) teaches one
+  opening principle once per game (development, centre, king safety, outpost,
+  open file — never a flank space grab). The generator reads the same candidates.
+- S3 — "X has a point: it stops your Y". Review proves it with the engine: the
+  student's threat line (static-threat confirmation or deep probe) proves a
+  point, the same moves no longer prove it after the reply, and the eval after
+  the reply is ≥150 short of the promise (pass `stopsIdea`). Learn uses the
+  static twin `threatStoppedBy` (opponentMovePurpose.ts). NOT done: the
+  `opponentIntent` clause gate (`!studentToMove`) — it forecasts THEIR next
+  move, which Learn already covers through must-defend; left as is.
+- S4 — `assetsFor` gains material and king safety; `phaseVerdictLine` speaks the
+  band + reasons once per phase (review `speakPhaseVerdicts`, Learn
+  `usePhaseNarration`). Band words only, never the number.
+- S5 — the critical-moment fan keeps each discarded candidate's proof
+  (`discardedProofs`); the reveal says "X didn't work: … — they win a knight".
+  Learn's deliberation uses the same `proofAgainstMover` (exchangeLedger).
+- S7 — the forcing-scan habit is tier-gated (critical/only-move/blunder/swing).
+- S6 — `motifLedger`: review records at the commit (spoken tactics only),
+  Learn on the tactic lane. OWED: `WeaknessProvenance.ply` (cross-game half).
 
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.

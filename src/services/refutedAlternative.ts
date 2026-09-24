@@ -25,12 +25,18 @@ import { computePvLine, type PvEngine, type PvLine } from './pvPlayback';
 import { conceptForLine, type ComputedConcept } from './conceptEngine';
 import { criticalityThresholds } from './criticalityScan';
 import { stockfishEngine } from './stockfishEngine';
+import { proofCut, describeProofResult } from './exchangeLedger';
+import { getCachedAmateurPlay } from './amateurPlayCache';
+import { andList } from '../utils/andList';
 
 export interface AlternativeCandidate {
   san: string;
   games: number;
   /** Share of games at this position (0–100), when known. */
   pct: number | null;
+  /** Whose games: players at the student's level (the amateur explorer band)
+   *  or masters. Absent = masters (the historical source). */
+  source?: 'amateur' | 'masters';
 }
 
 export interface RefutedAlternative {
@@ -44,8 +50,14 @@ export interface RefutedAlternative {
   line: PvLine | null;
   /** The concept the punishment lands, or null when it is positional. */
   concept: Pick<ComputedConcept, 'id' | 'name' | 'full' | 'short'> | null;
-  /** Spoken SANs of the punishing line (≤ 4 plies). */
+  /** Spoken SANs of the punishing line — exactly the plies that PROVE its
+   *  point (mate, or a settled material gain); empty when nothing settles. */
   lineSans: string[];
+  /** What the proven line ends on, from the student's seat ("they win a
+   *  knight", "it's mate"), or null when the line proves no material point. */
+  proofResult?: string | null;
+  /** Whose games the popularity is counted over. */
+  source?: 'amateur' | 'masters';
   /** DNA-register text, present tense. */
   text: string;
 }
@@ -95,12 +107,18 @@ function pawns(cp: number): string { return (cp / 100).toFixed(1); }
 /** The DNA-register sentence over the computed facts. Pure; exported for the
  *  review, which supplies its own cost + line from the stored analysis. */
 export function renderRefutedAlternative(f: Omit<RefutedAlternative, 'text'>, taughtSan: string): string {
-  const pop = f.pct != null ? `${f.pct}% of players` : `${f.games} games`;
-  const runs = f.lineSans.length > 0 ? ` the line runs ${f.lineSans.join(', ')}` : '';
+  const who = f.source === 'amateur' ? 'players at your level' : 'players';
+  const pop = f.pct != null ? `${f.pct}% of ${who}` : `${f.games} games`;
+  const lead = f.source === 'amateur' ? `Most players at your level play ${f.alt} here (${pop})` : `Most people play ${f.alt} here (${pop})`;
+  // THE LINE AS PROOF (WO-LAYERS-01): the moves are spoken only as far as the
+  // point they prove, then the result — never a recital of a line that proves
+  // nothing.
+  const proven = f.lineSans.length > 0 && f.proofResult ? ` ${andList(f.lineSans)} — ${f.proofResult}.` : '';
   if (f.concept) {
-    return `Most people play ${f.alt} here (${pop}), and it walks into a ${f.concept.name.toLowerCase()}:${runs ? runs + ' —' : ''} ${f.concept.full} ${taughtSan} keeps that off the board.`;
+    return `${lead}, and it walks into a ${f.concept.name.toLowerCase()}:${proven} ${f.concept.full} ${taughtSan} keeps that off the board.`;
   }
-  return `Most people play ${f.alt} here (${pop}), and it costs about ${pawns(f.costCp)} points —${runs ? runs + ';' : ''} nothing forcing, just a worse position. ${taughtSan} holds the balance.`;
+  if (proven) return `${lead}, and it loses material:${proven} ${taughtSan} avoids that.`;
+  return `${lead}, and it costs about ${pawns(f.costCp)} points — nothing forcing, just a worse position. ${taughtSan} holds the balance.`;
 }
 
 /**
@@ -123,11 +141,12 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
 
   let taughtLine: PvLine | null = null;
   let altLine: PvLine | null = null;
+  // SEQUENTIAL, never Promise.all: a pooled caller hands in ONE lane's
+  // worker, and two searches at once on one worker corrupt each other; the
+  // singleton queues them anyway, so parallel bought nothing there.
   try {
-    [taughtLine, altLine] = await Promise.all([
-      computePvLine(input.fenBefore, { firstUci: taughtUci, maxPlies, depth, engine }),
-      computePvLine(input.fenBefore, { firstUci: altUci, maxPlies, depth, engine }),
-    ]);
+    taughtLine = await computePvLine(input.fenBefore, { firstUci: taughtUci, maxPlies, depth, engine });
+    altLine = await computePvLine(input.fenBefore, { firstUci: altUci, maxPlies, depth, engine });
   } catch { return null; }
   if (!taughtLine || !altLine) return null;
   const costCp = Math.round(moverEval(taughtLine, moverIsWhite) - moverEval(altLine, moverIsWhite));
@@ -152,8 +171,12 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
       if (lead && lead.source !== 'positional') concept = { id: lead.id, name: lead.name, full: lead.full, short: lead.short };
     } catch { concept = null; }
   }
-  const lineSans = altLine.plies.slice(0, 4).map((p) => p.san);
-  const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: altLine, concept, lineSans };
+  const sans = altLine.plies.map((p) => p.san);
+  const studentWB: 'w' | 'b' = input.studentColor === 'white' ? 'w' : 'b';
+  const proof = sans.length > 0 ? proofCut(input.fenBefore, sans, studentWB) : null;
+  const lineSans = proof ? sans.slice(0, proof.plies) : [];
+  const proofResult = proof ? (proof.mate ? "it's mate" : proof.ledger ? describeProofResult(proof.ledger) : null) : null;
+  const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: altLine, concept, lineSans, proofResult, source: alt.source ?? 'masters' };
   return { ...facts, text: renderRefutedAlternative(facts, input.taughtSan) };
 }
 
@@ -162,4 +185,20 @@ export function candidatesFromMasters(moves: ReadonlyArray<{ san: string; games:
   if (!moves || moves.length === 0) return [];
   const total = moves.reduce((s, m) => s + m.games, 0);
   return moves.map((m) => ({ san: m.san, games: m.games, pct: total > 0 ? Math.round((m.games / total) * 100) : null }));
+}
+
+/** Candidates for a position, players at the student's level FIRST (the
+ *  amateur explorer band — cache-only, never the network, per the amateur
+ *  cache's rate-limit contract), masters as the fallback. The alternative a
+ *  student is most likely to reach for is the one people at their level play;
+ *  a masters-only list hides the mistakes they actually make. */
+export function candidatesForPosition(
+  fen: string,
+  masters: ReadonlyArray<{ san: string; games: number }> | null,
+): AlternativeCandidate[] {
+  const amateur = getCachedAmateurPlay(fen);
+  if (amateur && amateur.moves.length >= 2) {
+    return amateur.moves.map((m) => ({ san: m.san, games: m.games, pct: m.pct, source: 'amateur' as const }));
+  }
+  return candidatesFromMasters(masters).map((c) => ({ ...c, source: 'masters' as const }));
 }

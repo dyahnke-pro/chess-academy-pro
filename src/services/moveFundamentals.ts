@@ -596,3 +596,37 @@ export function strategicWhyImperative(
 ): string | null {
   return renderStrategic(fenBefore, moveSan, moverColor, 'imperative');
 }
+
+/** A principle taught once per game on a quiet student opening ply (S2): the
+ *  move, and the rule it follows. The rule is the board's own imperative clause
+ *  (`computeMoveFundamentals`), so nothing here is asserted without proof. */
+export function principleOnceLine(san: string, f: Pick<MoveFundamental, 'imperative'>): string {
+  return `${san} follows a principle worth keeping: ${f.imperative}.`;
+}
+
+/** Which positive fundamentals are opening PRINCIPLES a beginner is taught.
+ *  Space grabs with a flank pawn and prophylaxis are real fundamentals but not
+ *  rules to follow on every move — "grab space with h5" is not a principle. A
+ *  `Record` so a new fundamental fails to compile until someone answers. */
+const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
+  development: true,
+  center: true,
+  'king-safety': true,
+  outpost: true,
+  'open-file': true,
+  'king-activity': false,
+  promotion: false,
+  'passed-pawn': false,
+  luft: false,
+  space: false,
+  prophylaxis: false,
+};
+
+/** The first opening principle this move follows that has not been taught
+ *  yet this game, or null. */
+export function principleToTeach(
+  fenBefore: string, san: string, mover: 'white' | 'black', taught: ReadonlySet<string>,
+): MoveFundamental | null {
+  return computeMoveFundamentals(fenBefore, san, mover)
+    .find((f) => IS_OPENING_PRINCIPLE[f.id] && !taught.has(f.id)) ?? null;
+}

@@ -261,6 +261,12 @@ export interface LiveMethodSignals {
  * intent first (the most common gap and the most teachable), then the forcing
  * scan when the move that is there is forcing.
  */
+/** The tiers where the choice decides something — one list for every live
+ *  habit that must not fire on routine plies. */
+function isDecidingTier(t: ImportanceTier | undefined): boolean {
+  return t === 'critical' || t === 'only-move' || t === 'blunder' || t === 'swing';
+}
+
 export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0): string | null {
   if (!s.isStudentMove) return null;
 
@@ -277,7 +283,13 @@ export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0): stri
 
   // 2 — THE FORCING SCAN, prospectively. The move that is there is a check or a
   // capture, so name the scan that finds it rather than the move itself.
-  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan)) {
+  //
+  // TIER-GATED (WO-TEACH-02 S7). A capture or check is the engine's best on a
+  // large share of plies — every recapture — and the scan prompt fired on all
+  // of them. It teaches only where the forcing move DECIDES the moment: a
+  // critical or only-move position (or one the student can swing). Elsewhere
+  // the recapture is obvious and the prompt is nagging.
+  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && isDecidingTier(s.tier)) {
     return pick([
       'Start with the forcing moves here — every check, every capture, before you look at anything quiet.',
       'List the checks and the captures first. Something in this position is forcing, and quiet moves can wait.',
@@ -290,7 +302,7 @@ export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0): stri
   // this teaches the routine of finding them yourself, which is the half the
   // student has to own. It is last because it is the most general of the three,
   // and it is the narrowest-gated for the same reason — see `tier` above.
-  if (s.realChoice && (s.tier === 'critical' || s.tier === 'only-move' || s.tier === 'blunder' || s.tier === 'swing')) {
+  if (s.realChoice && isDecidingTier(s.tier)) {
     return pick([
       'Name your candidates before you calculate: two or three moves you would consider, then compare them. Picking first and checking after is how good moves get missed.',
       'Two or three candidate moves, written down in your head, before any calculation — then work out which one holds up.',

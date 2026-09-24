@@ -25,6 +25,7 @@
 // wraps them.
 import { Chess } from 'chess.js';
 import { criticalityThresholds } from './criticalityScan';
+import { proofAgainstMover } from './exchangeLedger';
 
 /** A mate is scored flat, for BOTH sides, on purpose: three moves that all mate
  *  are three moves that all win, so nothing hinges and the coach stays silent.
@@ -76,6 +77,11 @@ export interface CriticalMomentRead {
    *  a review question: real engine lines from this very position, never a
    *  generated distractor (G0 — nothing here is invented). */
   discardedSans: string[];
+  /** WHY each discarded candidate fails, when its own engine line PROVES it
+   *  (mate, or a settled material loss) — "Nxe5 doesn't work: Nxe5, Qd4 and
+   *  Qxe5 — they win a knight". The fan's PVs were read and thrown away before
+   *  (WO-TEACH-02 S5); a candidate whose line proves nothing gets no reason. */
+  discardedProofs?: Array<{ san: string; text: string }>;
 }
 
 /** Mover-POV score of a fan line, mate flattened. */
@@ -177,6 +183,7 @@ export function readCriticalMoment(input: {
 
   const holdingSans: string[] = [];
   const discardedSans: string[] = [];
+  const discardedProofs: Array<{ san: string; text: string }> = [];
   if (input.fen) {
     for (let i = 0; i < lines.length; i += 1) {
       const uci = lines[i].moves?.[0];
@@ -185,6 +192,10 @@ export function readCriticalMoment(input: {
         const c = new Chess(input.fen);
         const m = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
         if (m) (i < within ? holdingSans : discardedSans).push(m.san);
+        if (m && i >= within) {
+          const proof = proofAgainstMover(input.fen, lines[i].moves ?? [], input.moverColor);
+          if (proof) discardedProofs.push({ san: m.san, text: proof });
+        }
       } catch { /* an unplayable uci names no move */ }
     }
   }
@@ -199,8 +210,10 @@ export function readCriticalMoment(input: {
     bestCp,
     holdingSans,
     discardedSans,
+    discardedProofs,
   };
 }
+
 
 /** Does this read earn a word at all? Resolved, and 1 or 2 moves hold. */
 export type SpeakingCriticalMoment = CriticalMomentRead & { stake: StakeId };
@@ -285,10 +298,13 @@ export function criticalMomentReveal(read: CriticalMomentRead | null): string | 
   // Capitalised: it is a whole sentence, and every caller sets it after a full
   // stop ("You played d4. Only one move kept…").
   const lead = count[0].toUpperCase() + count.slice(1);
+  // THE CANDIDATES THAT FAIL, AND WHY (S5) — every discarded move whose own
+  // line proves its failure. A candidate move is a lesson only with its reason.
+  const fails = (read.discardedProofs ?? []).map((d) => ` ${d.san} didn't work: ${d.text}.`).join('');
   if (read.count === 1 || sans.length === 1) {
-    return `${lead} ${stake} here, and it was ${sans[0]}.`;
+    return `${lead} ${stake} here, and it was ${sans[0]}.${fails}`;
   }
-  return `${lead} ${stake} here — ${sans[0]} and ${sans[1]}. Everything else conceded.`;
+  return `${lead} ${stake} here — ${sans[0]} and ${sans[1]}. Everything else conceded.${fails}`;
 }
 
 /** Did the student play one of the moves that held? Coordinate-free comparison

@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**303 lines · 8 exports · 7 importers · 3 tests · 1 audits**
+**315 lines · 8 exports · 7 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `methodBeat`
 - **Why determinism** (CLAUDE.md:57) — names `methodBeat`
-- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1029) — names `methodBeat`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1044) — names `methodBeat`
 
 ## Who calls in
 
@@ -37,11 +37,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2222`
-- `src/services/positionFacts.ts:639`
+- `src/services/coachFeatureService.ts:2237`
+- `src/services/positionFacts.ts:654`
 
 ### `methodBeatFor` (function) — 43 call sites
-- `src/services/coachDecider.ts:316`
+- `src/services/coachDecider.ts:373`
 - `src/services/methodBeat.need.test.ts:19`
 - `src/services/methodBeat.need.test.ts:23`
 - `src/services/methodBeat.need.test.ts:29`
@@ -88,8 +88,8 @@
 ### `LiveMethodSignals` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `liveMethodBeatFor` (function) — 20 call sites
-- `src/services/groundedAnswer.ts:3057`
+### `liveMethodBeatFor` (function) — 22 call sites
+- `src/services/groundedAnswer.ts:3138`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`
@@ -108,7 +108,9 @@
 - `src/services/methodBeat.live.test.ts:98`
 - `src/services/methodBeat.live.test.ts:99`
 - `src/services/methodBeat.live.test.ts:103`
-- `src/services/positionFacts.ts:629`
+- `src/services/methodBeat.test.ts:79`
+- `src/services/methodBeat.test.ts:83`
+- `src/services/positionFacts.ts:644`
 
 ## Tests
 

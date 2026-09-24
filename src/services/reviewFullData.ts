@@ -199,6 +199,9 @@ export function computeMoveFacets(
   /** WHAT EACH FACET IS WORTH ON THE BOARD — coupled here from the computer
    *  that produced it (`factStakes.ts`); the door orders by it. */
   outStakes?: Map<string, FactStakes>,
+  /** The tactic MOTIF each `[tactic]` facet names — the detector's own type,
+   *  for the in-game transfer ledger ("same idea as move 12", S6). */
+  outMotif?: Map<string, string>,
 ): string[] {
   const facets: string[] = [];
   // Record the KEY SQUARES a facet named, keyed by the facet text, so the
@@ -214,6 +217,7 @@ export function computeMoveFacets(
   const recStakes = (facet: string, stakes: FactStakes | null | undefined): void => {
     if (outStakes && stakes && stakes.points > 0) outStakes.set(facet, stakes);
   };
+  const recMotif = (facet: string, motif: string): void => { outMotif?.set(facet, motif); };
   const recSquares = (facet: string, squares: ReadonlyArray<string | null | undefined>): void => {
     if (!outSquares) return;
     const clean = squares.filter((s): s is string => typeof s === 'string' && /^[a-h][1-8]$/.test(s));
@@ -460,11 +464,11 @@ export function computeMoveFacets(
         if (v.status === 'live') {
           const f = `[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-          recStakes(f, { points: v.winsPoints, plies: 1 });
+          recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type);
         } else if (v.status === 'threat') {
           const f = `[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-          recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 });
+          recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type);
         }
         // status 'none' → unproven fork shape, say nothing (G0).
         continue;
@@ -480,7 +484,7 @@ export function computeMoveFacets(
         if (front === 'p' && stakes === null) continue;
         const f = `[tactic] ${seat(tac.description)}.`;
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-        recStakes(f, stakes);
+        recStakes(f, stakes); recMotif(f, tac.type);
       }
     }
     // ONLY THE DELTA SPEAKS (WO-STANDARD-01 D-8, prod tape 2026-09-22:

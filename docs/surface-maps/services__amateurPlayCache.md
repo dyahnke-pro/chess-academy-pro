@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3548) — names `amateurPlayCache`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4025) — names `amateurPlayCache`, `ratingBandFor`
 
 ## Who calls in
 
@@ -29,24 +29,24 @@
 - `src/services/amateurPlayCache.test.ts:25`
 - `src/services/amateurPlayCache.test.ts:29`
 - `src/services/amateurPlayCache.test.ts:32`
-- `src/services/theoryDeparture.test.ts:125`
-- `src/services/theoryDeparture.test.ts:126`
-- `src/services/theoryDeparture.test.ts:127`
 - `src/services/theoryDeparture.test.ts:128`
 - `src/services/theoryDeparture.test.ts:129`
+- `src/services/theoryDeparture.test.ts:130`
+- `src/services/theoryDeparture.test.ts:131`
+- `src/services/theoryDeparture.test.ts:132`
 - `src/services/theoryDeparture.ts:62`
 - `src/services/theoryDeparture.ts:114`
 
 ### `getCachedAmateurPlay` (function) — 2 call sites
 - `src/services/amateurPlayCache.test.ts:38`
-- `src/services/coachApi.ts:1665`
+- `src/services/coachApi.ts:1710`
 
 ### `warmAmateurPlay` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8497`
+- `src/components/Coach/CoachTeachPage.tsx:8796`
 - `src/services/masterPlayWatcher.ts:169`
 
 ### `buildRatingRealityFact` (function) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9197`
+- `src/components/Coach/CoachTeachPage.tsx:9492`
 - `src/services/amateurPlayCache.test.ts:42`
 - `src/services/amateurPlayCache.test.ts:47`
 - `src/services/amateurPlayCache.test.ts:53`
@@ -73,4 +73,8 @@
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

@@ -4,15 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**166 lines · 7 exports · 2 importers · 1 tests · 0 audits**
+**205 lines · 8 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:5978) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:5990) — names `refutedAlternative`
 
 ## Who calls in
 
+- `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/coachFeatureService.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/refutedAlternative.test.ts`
 
@@ -33,24 +35,34 @@
 - `src/services/refutedAlternative.test.ts:45`
 - `src/services/refutedAlternative.test.ts:46`
 
-### `renderRefutedAlternative` (function) — 1 call site
+### `renderRefutedAlternative` (function) — 3 call sites
 - `src/services/refutedAlternative.test.ts:115`
+- `src/services/refutedAlternative.test.ts:120`
+- `src/services/refutedAlternative.test.ts:132`
 
-### `refutedAlternative` (function) — 6 call sites
+### `refutedAlternative` (function) — 8 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
+- `src/components/Coach/CoachTeachPage.tsx:8667`
+- `src/services/coachFeatureService.ts:3405`
 - `src/services/openingGenerator.ts:2157`
 - `src/services/refutedAlternative.test.ts:62`
 - `src/services/refutedAlternative.test.ts:85`
 - `src/services/refutedAlternative.test.ts:102`
 - `src/services/refutedAlternative.test.ts:111`
 
-### `candidatesFromMasters` (function) — 6 call sites
-- `src/services/openingGenerator.ts:2154`
+### `candidatesFromMasters` (function) — 5 call sites
 - `src/services/refutedAlternative.test.ts:39`
 - `src/services/refutedAlternative.test.ts:47`
 - `src/services/refutedAlternative.test.ts:62`
 - `src/services/refutedAlternative.test.ts:85`
 - `src/services/refutedAlternative.test.ts:111`
+
+### `candidatesForPosition` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8670`
+- `src/services/coachFeatureService.ts:3402`
+- `src/services/openingGenerator.ts:2154`
+- `src/services/refutedAlternative.test.ts:128`
+- `src/services/refutedAlternative.test.ts:130`
 
 ## Tests
 

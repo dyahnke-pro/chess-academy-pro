@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**178 lines · 3 exports · 5 importers · 4 tests · 0 audits**
+**219 lines · 4 exports · 7 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,7 +12,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/hooks/usePhaseNarration.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/phaseVerdict.test.ts`
 - `src/services/planPrescriptions.test.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewPositionalAssessment.test.ts`
@@ -23,22 +25,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PositionalAssessment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `verdictBand` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:1003`
-- `src/services/coachFeatureService.ts:3182`
-- `src/services/exchangeLedger.test.ts:118`
-- `src/services/exchangeLedger.test.ts:120`
+### `verdictBand` (function) — 3 call sites
+- `src/services/coachFeatureService.ts:1005`
+- `src/services/exchangeLedger.test.ts:128`
+- `src/services/exchangeLedger.test.ts:130`
 
 ### `assessPositionalEdge` (function) — 26 call sites
-- `src/services/coachFeatureService.ts:2657`
-- `src/services/coachFeatureService.ts:3177`
-- `src/services/exchangeLedger.test.ts:87`
-- `src/services/exchangeLedger.test.ts:88`
-- `src/services/exchangeLedger.test.ts:95`
-- `src/services/exchangeLedger.test.ts:118`
+- `src/services/coachFeatureService.ts:2674`
+- `src/services/exchangeLedger.test.ts:97`
+- `src/services/exchangeLedger.test.ts:98`
+- `src/services/exchangeLedger.test.ts:105`
+- `src/services/exchangeLedger.test.ts:128`
+- `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`
 - `src/services/planPrescriptions.test.ts:91`
-- `src/services/reviewFullData.ts:446`
+- `src/services/reviewFullData.ts:537`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:8`
@@ -57,9 +58,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/standingRefrains.test.ts:80`
 - `src/services/standingRefrains.test.ts:110`
 
+### `phaseVerdictLine` (function) — 5 call sites
+- `src/hooks/usePhaseNarration.ts:683`
+- `src/services/coachFeatureService.ts:4221`
+- `src/services/phaseVerdict.test.ts:16`
+- `src/services/phaseVerdict.test.ts:22`
+- `src/services/phaseVerdict.test.ts:27`
+
 ## Tests
 
 - `src/services/exchangeLedger.test.ts`
+- `src/services/phaseVerdict.test.ts`
 - `src/services/planPrescriptions.test.ts`
 - `src/services/reviewPositionalAssessment.test.ts`
 - `src/services/standingRefrains.test.ts`

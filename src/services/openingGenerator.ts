@@ -61,7 +61,7 @@ import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { gemsForPosition } from './gemCrushLines';
 import { stockfishEngine } from './stockfishEngine';
 import { buildDeliberation, deliberationAlternativesFacts } from './deliberation';
-import { refutedAlternative, candidatesFromMasters } from './refutedAlternative';
+import { refutedAlternative, candidatesForPosition } from './refutedAlternative';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { coldStudent } from './needScore';
@@ -2151,7 +2151,7 @@ async function generateOpeningFromDbNarration(
       if (positions[i].movedBy !== studentSide) continue;
       if (!needPlies.has(i + 1)) continue;
       const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
-      const candidates = candidatesFromMasters(mastersMovesSync(preFen));
+      const candidates = candidatesForPosition(preFen, mastersMovesSync(preFen));
       if (candidates.length < 2) continue;
       try {
         const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, depth: 12, maxPlies: 6 });

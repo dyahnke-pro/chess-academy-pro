@@ -224,3 +224,20 @@ describe('criticalMoment — two registers, one claim', () => {
     }
   });
 });
+
+describe('S5 — the reveal names why the failing candidates fail', () => {
+  it('a discarded candidate whose line proves a loss is explained', async () => {
+    const { readCriticalMoment, criticalMomentReveal } = await import('./criticalMoment');
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+    const read = readCriticalMoment({
+      fen, moverColor: 'b',
+      topLines: [
+        { rank: 1, evaluation: -20, mate: null, moves: ['g8f6'] },
+        { rank: 2, evaluation: 600, mate: null, moves: ['d8h4', 'f3h4'] },
+      ],
+    });
+    expect(read?.discardedProofs).toEqual([{ san: 'Qh4', text: 'Qh4 and Nxh4 — they win a queen' }]);
+    const t = criticalMomentReveal(read);
+    expect(t).toContain("Qh4 didn't work: Qh4 and Nxh4 — they win a queen.");
+  });
+});

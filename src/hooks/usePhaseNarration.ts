@@ -1,3 +1,4 @@
+import { phaseVerdictLine } from '../services/reviewPositionalAssessment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createStandingFactMemory, fullmoveOf } from '../services/standingFactMemory';
 import { voiceService } from '../services/voiceService';
@@ -670,6 +671,19 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // fact, not an LLM afterthought. Null on a quiet position.
       const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics, 'student', event.playerColor === 'white' ? 'w' : 'b', weaknessRef.current) : null;
       if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
+
+      // S4 — WHO'S BETTER, AND WHY (WO-TEACH-02). The turn of the game is where
+      // a strong player takes stock; the verdict band plus the board's own
+      // reasons, the same computer the review speaks at its phase ply. Band
+      // words only — never the number (David 2026-08-23 stripped the eval).
+      try {
+        if (stockfishAnalysis && !stockfishAnalysis.isMate) {
+          const wb: 'w' | 'b' = event.playerColor === 'white' ? 'w' : 'b';
+          const cp = wb === 'w' ? stockfishAnalysis.evaluation : -stockfishAnalysis.evaluation;
+          const verdict = phaseVerdictLine(event.fen, wb, cp, event.kind === 'opening-to-middlegame' ? 'middlegame' : 'endgame');
+          if (verdict) { transitionSentence = `${verdict}${transitionSentence}`; pfConcrete = true; }
+        }
+      } catch { /* the verdict is a bonus, never a blocker */ }
 
       // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────
       // David 2026-08-08: "phase narration stays silent if no notes are
