@@ -134,7 +134,16 @@ async function main() {
     if (!reply) { offLine = `no coach reply after ${white}`; break; }
     chess.move(reply);
     rows.push({ ply: chess.history().length, san: reply, note: noteAt.get(chess.history().length) ?? '', coach: [], told: black });
-    if (reply.replace(/[+#]/g, '') !== black.replace(/[+#]/g, '')) { offLine = `told ${black}, coach played ${reply}`; break; }
+    if (reply.replace(/[+#]/g, '') !== black.replace(/[+#]/g, '')) {
+      offLine = `told ${black}, coach played ${reply}`;
+      // Why it left: the app's own record of the dictation branch.
+      for (const e of listener.getCapturedEvents().slice(-80)) {
+        if (/coachMoveCommand|coach-move-command|walkthrough|dictated/i.test(`${e.source ?? ''} ${e.summary ?? ''}`)) {
+          console.log(`[danya][why] ${e.kind} ${e.source ?? ''} — ${(e.summary ?? '').slice(0, 200)}`);
+        }
+      }
+      break;
+    }
     console.log(`[danya] ${Math.ceil(chess.history().length / 2)}. ${white} ${reply}`);
   }
 
