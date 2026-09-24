@@ -8124,9 +8124,15 @@ export function CoachTeachPage(): JSX.Element {
       // full board-awareness pool — surfaces each turn instead of repeating.
       try {
         const pr = buildPositionalRead(args.fenAfterReply, args.studentColor, positionalSaidRef.current);
-        if (pr) {
+        const prSquares = (pr?.squares ?? []).filter((s) => /^[a-h][1-8]$/.test(s));
+        // ONE CLAIM, ONE VOICE (hand walk 2026-09-24: "b5 is the pawn break …
+        // prepare it. A pawn break is available on b5 …" on one turn). When the
+        // positional read is about a square the behaviour just named, it is the
+        // same claim — the behaviour already said it.
+        const sameClaim = prSquares.length > 0 && prSquares.some((sq) => behaviorSquares.includes(sq));
+        if (pr && !sameClaim) {
           positionalLine = pr.text;
-          positionalSquares = (pr.squares ?? []).filter((s) => /^[a-h][1-8]$/.test(s));
+          positionalSquares = prSquares;
           factLines.push(`Positional read: ${pr.text}`);
         }
       } catch { /* never a blocker */ }

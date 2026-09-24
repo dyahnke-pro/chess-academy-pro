@@ -304,13 +304,19 @@ export function computeMoveFundamentals(
     const centerTail = (central.length ? `, fighting for the center on ${andList(central)}` : '')
       + (holes.length ? `, leaning on ${andList(holes)}` : '')
       + kingZoneClause(nearKing);
+    // WITH TEMPO (hand walk 2026-09-24: 3.Nc3 against the Scandinavian queen on
+    // d5 — "you hit the queen with the knight"; the coach said only "develop
+    // into the game"). A developing move that newly attacks their queen or a
+    // rook, from a square it can hold, gains a move: they must answer it.
+    const hit = tempoTarget(fenBefore, after, mv.from, mv.to, mover);
+    const tempo = hit ? ` with tempo, hitting the ${hit.name} on ${hit.square}` : '';
     out.push({
       id: 'development',
-      weight,
-      led: `develops into the game${centerTail}`,
-      selfContained: `develops the ${name} into the game${centerTail}`,
-      imperative: `develop into the game${centerTail}`,
-      squares: [mv.to, ...eyes],
+      weight: hit ? weight + 10 : weight,
+      led: `develops into the game${tempo}${centerTail}`,
+      selfContained: `develops the ${name} into the game${tempo}${centerTail}`,
+      imperative: `develop into the game${tempo}${centerTail}`,
+      squares: hit ? [mv.to, hit.square, ...eyes] : [mv.to, ...eyes],
     });
   }
 
@@ -696,6 +702,26 @@ function bishopFreedBy(before: Chess, after: Chess, mover: 'w' | 'b', vacated: s
     const dr = Math.abs(Number(home[1]) - Number(vacated[1]));
     if (df !== dr || df === 0) continue;
     if (count(after, home) - count(before, home) >= 2) return home;
+  }
+  return null;
+}
+
+/** The enemy queen or rook the moved piece NEWLY attacks from a square where it
+ *  cannot simply be taken — a developing move that gains a tempo. */
+function tempoTarget(
+  fenBefore: string, after: Chess, from: string, to: string, mover: 'w' | 'b',
+): { name: string; square: string } | null {
+  const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  if (!landingIsSafe(after.fen(), to)) return null;
+  let before: Chess;
+  try { before = new Chess(fenBefore); } catch { return null; }
+  for (const row of after.board()) {
+    for (const c of row) {
+      if (!c || c.color !== them || (c.type !== 'q' && c.type !== 'r')) continue;
+      if (!after.attackers(c.square, mover).includes(to as Square)) continue;
+      if (before.attackers(c.square, mover).includes(from as Square)) continue;
+      return { name: c.type === 'q' ? 'queen' : 'rook', square: c.square };
+    }
   }
   return null;
 }

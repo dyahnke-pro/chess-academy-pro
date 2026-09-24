@@ -200,3 +200,17 @@ describe('g3 prepares the fianchetto (hand walk 2026-09-24)', () => {
     expect(top?.led).toBe('prepares to fianchetto the bishop to g2');
   });
 });
+
+describe('development with tempo (hand walk 2026-09-24)', () => {
+  it('3.Nc3 against the Scandinavian queen says it hits the queen', () => {
+    // 1.e4 d5 2.exd5 Qxd5 — White plays Nc3.
+    const fen = 'rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3';
+    const dev = computeMoveFundamentals(fen, 'Nc3', 'white').find((f) => f.id === 'development');
+    expect(dev?.led).toContain('with tempo, hitting the queen on d5');
+  });
+  it('NEGATIVE CONTROL: 2.Nf3 hits nothing and says nothing about tempo', () => {
+    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const dev = computeMoveFundamentals(fen, 'Nf3', 'white').find((f) => f.id === 'development');
+    expect(dev?.led ?? '').not.toContain('tempo');
+  });
+});
