@@ -251,6 +251,11 @@ describe('back-rank alignment after castling long', () => {
     expect(fact ?? '').not.toContain('a-file');
   });
 
+  it('an alignment is not "contested" by capturing one of the pair (Rd7 + Qd6, move 17)', () => {
+    const fact = seed('2k4r/R2r1ppp/1n1qpn2/1Pp4b/8/2NP2PP/2P1NPB1/3Q1RK1 w - - 1 18');
+    expect(fact ?? '').not.toContain('d-file');
+  });
+
   it('still says nothing about the untouched starting huddle', () => {
     expect(seed('rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1')).toBeNull();
   });

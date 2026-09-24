@@ -105,8 +105,14 @@ function withTurn(fen: string, color: 'w' | 'b'): string {
  *  which it ATTACKS one of the aligned pieces — already, or within ~2 moves? An
  *  alignment no slider can contest is tidy geometry, not a threat. */
 function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[]): PieceSymbol | null {
+  // A move that TAKES one of the aligned pair has destroyed the alignment, not
+  // exploited it (hand walk 2026-09-24: Rd7 + Qd6 "line up on the d-file" was
+  // "contested" by Rxd7 then Rxd6 — the rook ate the geometry it was naming).
   const gen = (f: string): { from: Square; to: Square }[] => {
-    try { return new Chess(f).moves({ verbose: true }).filter((m) => types.includes(m.piece)); } catch { return []; }
+    try {
+      return new Chess(f).moves({ verbose: true })
+        .filter((m) => types.includes(m.piece) && m.to !== aSq && m.to !== bSq);
+    } catch { return []; }
   };
   // ALONG THE LINE, not from anywhere (hand walk 2026-09-24: queen a5 + rook a8
   // "line up on the a-file, and you have a rook that moves along it" — the only
