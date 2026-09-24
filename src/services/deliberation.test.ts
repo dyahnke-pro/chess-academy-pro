@@ -37,7 +37,13 @@ describe('buildDeliberation — the weighing from the fan', () => {
     expect(facts).toMatch(/Nxe5\? That drops the knight on e5\./);
     // d3 sits inside the coin-flip band — weighing it is the banned filler.
     expect(facts).not.toMatch(/d3/);
-    expect(facts).toMatch(/The move is O-O\.$/);
+    expect(facts).toMatch(/The move is O-O — it castles/);
+  });
+
+  it('the verdict carries its reason, or it is not said (David 2026-09-24)', () => {
+    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w' })!;
+    expect(deliberationFacts({ ...d, bestWhy: null })).not.toMatch(/The move is/);
+    expect(deliberationFacts({ ...d, bestWhy: 'castles your king into safety' })).toMatch(/The move is O-O — it castles your king into safety\.$/);
   });
 
   it('honours the "first 3, maybe 4" cap', () => {
@@ -107,5 +113,19 @@ describe('S5 — a candidate is a lesson only with its reason', () => {
       ] } as never,
     })!;
     expect(d.alternatives[0].proof).toBeUndefined();
+  });
+});
+
+describe('an exchange is not "drops the rook" (hand walk 2026-09-24)', () => {
+  it('19…Rd8: Rxd8 trades rooks — it drops nothing', () => {
+    const fen = '3rq1k1/pp3ppp/2p1n3/4P2n/1b6/1BN1BR1P/PPP3P1/3RQ1K1 w - - 1 20';
+    const analysis = { topLines: [
+      { rank: 1, moves: ['g2g4'], evaluation: 250, mate: null, depth: 20 },
+      { rank: 2, moves: ['d1d8'], evaluation: 230, mate: null, depth: 20 },
+    ] };
+    const d = buildDeliberation({ analysis: analysis as never, fenBefore: fen, moverColor: 'w' })!;
+    const rxd8 = d.alternatives.find((a) => a.san === 'Rxd8');
+    expect(rxd8, 'Rxd8 must be weighed for this test to mean anything').toBeDefined();
+    expect(rxd8?.shortfall).not.toBe('drops-material');
   });
 });

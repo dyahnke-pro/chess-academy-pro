@@ -17,6 +17,7 @@ import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { findHangingPieces } from './tacticClassifier';
 import { proofAgainstMover } from './exchangeLedger';
+import { strategicWhyLed } from './moveFundamentals';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -58,6 +59,9 @@ export interface Deliberation {
   alternatives: Candidate[];
   /** True when there's a genuine choice to weigh out loud (≥1 real alternative). */
   isRealChoice: boolean;
+  /** Why the best move is best, from the board (`strategicWhyLed`). Null when
+   *  the board gives no reason — then the verdict is not spoken. */
+  bestWhy: string | null;
 }
 
 function uciToSan(fen: string, uci: string): string | null {
@@ -73,10 +77,14 @@ function uciToSan(fen: string, uci: string): string | null {
  *  hanging piece, or null. */
 function dropsAfter(fen: string, uci: string, moverColor: 'w' | 'b'): { piece: string; square: string; value: number } | null {
   let after: Chess;
+  let captured = 0;
+  let landed = '';
   try {
     after = new Chess(fen);
     const m = after.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
     if (!m) return null;
+    captured = m.captured ? VAL[m.captured] ?? 0 : 0;
+    landed = m.to;
   } catch { return null; }
   let worst: { piece: string; square: string; value: number } | null = null;
   try {
@@ -86,7 +94,12 @@ function dropsAfter(fen: string, uci: string, moverColor: 'w' | 'b'): { piece: s
       if (!worst || value > worst.value) worst = { piece: h.piece.toLowerCase(), square: h.square, value };
     }
   } catch { return null; }
-  return worst && worst.value >= 2 ? worst : null;
+  if (!worst || worst.value < 2) return null;
+  // AN EXCHANGE IS NOT A DROP. The capturing piece standing en prise on the
+  // square it took on is a trade when it took at least as much (hand walk
+  // 2026-09-24: "Rxd8? That drops the rook on d8." — rook for rook).
+  if (worst.square === landed && captured >= worst.value - 1) return null;
+  return worst;
 }
 
 /**
@@ -141,7 +154,8 @@ export function buildDeliberation(input: {
     });
   }
 
-  return { best, alternatives, isRealChoice: alternatives.length > 0 };
+  const bestWhy = strategicWhyLed(fenBefore, bestSan, moverColor === 'w' ? 'white' : 'black');
+  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy };
 }
 
 
@@ -184,7 +198,11 @@ export function deliberationFacts(d: Deliberation): string {
   // or a gap big enough to call clearly worse.
   const reasoned = meaningfulAlternatives(d).filter((a) => a.shortfall !== 'less-precise' || !!a.proof);
   if (!d.isRealChoice || reasoned.length === 0) return '';
-  return `${reasoned.map(shortfallText).join(' ')} The move is ${d.best.san}.`;
+  // THE VERDICT CARRIES ITS REASON, or it is not said (David 2026-09-24:
+  // "The move is Rxf3" alone is an order, not teaching). The weighing still
+  // stands on its own — ruling the bad moves out IS the thinking out loud.
+  const verdict = d.bestWhy ? ` The move is ${d.best.san} — it ${d.bestWhy}.` : '';
+  return `${reasoned.map(shortfallText).join(' ')}${verdict}`;
 }
 
 /** The alternatives that are a real fork in the road — they drop material or

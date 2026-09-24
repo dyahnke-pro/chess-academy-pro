@@ -5080,9 +5080,32 @@ keeps its real job — deciding whether to interrupt — and loses the one it
 should never have had. Gate: `learnSilentCapture.test.ts`.
 
 **Still true, and still the standard** — everything above about the VOICE
-(concept-first, facts then the point, warm but rigorous, grounded per G0),
-the honesty contract (never hand over the answer), and PLAY staying a pure
-playing surface. What changed is only the delivery: commentary, not cards.
+(concept-first, facts then the point, warm but rigorous, grounded per G0), and
+PLAY staying a pure playing surface. What changed is only the delivery:
+commentary, not cards.
+
+### 🔒🔒 LEARN NAMES THE MOVE — WITH ITS REASON (David 2026-09-24: "Rules can change. That was an old rule when we asked questions. We don't do that anymore.").
+
+🔴 **The "honesty contract — never hand over the answer" is DELETED for Learn**
+(it stood in the line above; removed, not annotated, per the Lake Butler rule).
+It belonged to the why-did-you-play-that card: a probe that must not leak its
+own answer. The card is gone, so on Learn's live commentary a session that
+withholds the move is enforcing a dead rule — and the 1380 hand walk did exactly
+that, stripping the hedge, the compare and "The move is X" as "leaks". What
+replaces it, stress-tested against the failure it risks (Learn turning into
+copy-the-coach):
+1. **The move is said WITH its reason, never as a bare verdict.** "The move is
+   Rxf3." alone is an order; "The move is Rxf3 — it takes the half-open f-file"
+   teaches. No computed reason → the verdict is not said
+   (`deliberation.bestWhy`, `deliberationFacts`).
+2. **Rule the bad moves OUT first, then name the good one.** The weighing
+   ("gxf3? Then Bxc3 and it falls apart") IS his thinking out loud — the part
+   worth hearing. The but-turn, the hedge and the compare all speak.
+3. **One fact once per move.** Two computers stating the same claim back to
+   back ("two good moves here…" + "two moves keep you level") is a defect: the
+   hedge carries no COUNT stem because the critical-moment read owns the count.
+Withholding stays only where a surface is literally a QUESTION the student is
+answering (a drill, a find-the-move, a gem before it is played).
 
 **KEPT in Learn** because none of them stop the board: in-place drills, live
 gem detection (names the opportunity, withholds the square), fork-in-the-road

@@ -497,9 +497,10 @@ export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean; 
     `It’s genuinely close — ${alt} is about as good, so don’t agonise.`,
     `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative here; the two are within a whisker.`,
     `Nothing to lose sleep over — ${alt} does the same job.`,
-    // Not "right there with IT" — on a live board the best move is withheld,
-    // so "it" pointed at nothing (hand walk 2026-09-24).
-    `There are two good moves here, and ${alt} is one of them.`,
+    // No COUNT stem ("there are two good moves here…"): the critical-moment
+    // read already counts the moves that hold, and the two spoke back to back
+    // as one fact said twice (hand walk 2026-09-24).
+    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} works just as well here.`,
   ];
   return stems[Math.abs(opts.rotation ?? 0) % stems.length];
 }
