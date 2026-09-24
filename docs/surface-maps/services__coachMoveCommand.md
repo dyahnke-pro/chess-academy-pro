@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**155 lines · 2 exports · 2 importers · 1 tests · 1 audits**
+**155 lines · 2 exports · 2 importers · 1 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -62,3 +62,5 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-move-dictation-prod.mjs`
+- `scripts/audit-danya-match-learn.mjs`
+- `scripts/audit-lib/hand-driver.mjs`
