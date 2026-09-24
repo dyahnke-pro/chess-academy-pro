@@ -38,6 +38,9 @@ function exportedFns(src: string): string[] {
 // narration renderers, and computers already reached THROUGH another chat lane.
 // Adding a name here is a deliberate, reviewed exception; keep it justified.
 const NOT_A_CHAT_LANE = new Set<string>([
+  // a PHRASING helper — one wording per good-piece reason; the fact itself is
+  // `findPieceQuality`, which the chat path already reaches
+  'goodPieceClause',
   // low-level helpers other computers call
   'seeSequence', 'minorCanReachSquare', 'pieceScope', 'pressureCount',
   'forcingPrefix', 'findForcingCandidates',
