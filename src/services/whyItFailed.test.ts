@@ -50,6 +50,22 @@ describe('held by a defender', () => {
     if (out) expect(out.kind).not.toBe('held-by-defender');
   });
 
+  it('a PINNED guard does not hold (Nc3 hitting d5, guarded only by the pinned b6-knight)', () => {
+    // Naroditsky's game, move 22 (hand walk 2026-09-24): the knight on b6 is
+    // pinned to the queen on d6 by the rook on a6. The coach said "the knight
+    // on b6 holds it — taking there gives up your knight for the pawn"; his
+    // next move was Nxd5 and it won.
+    const fen = '2k4r/1r3ppp/Rn1q2b1/1Ppp4/6P1/3P3P/2P1NPB1/Q4RK1 w - - 3 22';
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Nc3', studentColor: 'white' });
+    if (out) expect(out.kind).not.toBe('held-by-defender');
+  });
+
+  it('a move that PINS its target was not "eyeing" it (Ra6 pinning Nb6 to the queen)', () => {
+    const fen = '2k4r/R2r1ppp/1n1qpn2/1Pp4b/8/2NP2PP/2P1NPB1/3Q1RK1 w - - 1 18';
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ra6', studentColor: 'white' });
+    if (out) expect(out.kind).not.toBe('held-by-defender');
+  });
+
   it('says nothing about an equal trade — that is a real option, not a failure', () => {
     // A guarded target of the SAME value is a trade a student may well want.
     // Calling it a failed idea would be teaching them something untrue.

@@ -176,7 +176,7 @@ describe('the coach side runs the same model, in the first person', () => {
   });
 
   it('owns it in the first person', () => {
-    expect(coachCall!.line).toMatch(/\bfrom me\b|\bI\b/);
+    expect(coachCall!.line).toMatch(/\bfrom me\b|\bI\b|\bmy\b/);
   });
 
   it('never apologises for it', () => {

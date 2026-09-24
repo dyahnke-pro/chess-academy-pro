@@ -193,6 +193,10 @@ export function appealScore(mv: {
 
 /** From scored candidates, the seductive-but-wrong one: the highest-appeal move
  *  that is clearly inferior to best (≥ `dropThresholdCp` worse, student POV). */
+/** A tempting move that still leaves the student this far ahead has not
+ *  fallen apart, however much better the engine's best move was. */
+export const STILL_WINNING_CP = 200;
+
 export function pickTempting(
   candidates: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number }>,
   bestStudentCp: number,
@@ -200,6 +204,11 @@ export function pickTempting(
 ): { san: string; uci: string; appeal: string; evalDropCp: number } | null {
   const inferior = candidates
     .filter((c) => bestStudentCp - c.studentCp >= dropThresholdCp)
+    // "…AND IT FALLS APART" MUST BE TRUE. A move that is merely worse than a
+    // forced mate but still leaves the student clearly winning is not a trap
+    // (hand walk 2026-09-24: Rxb6 won a queen for a rook, ~+4, and was called
+    // "falls apart" because the engine had a mate).
+    .filter((c) => c.studentCp < STILL_WINNING_CP)
     .sort((a, b) => b.appealScore - a.appealScore || (bestStudentCp - a.studentCp) - (bestStudentCp - b.studentCp));
   const top = inferior.length > 0 ? inferior[0] : undefined;
   if (!top || top.appealScore <= 0) return null;

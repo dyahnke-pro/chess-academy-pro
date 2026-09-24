@@ -70,6 +70,13 @@ describe('pickTempting', () => {
     expect(t?.san).toBe('Qxb2');
     expect(t?.evalDropCp).toBe(350);
   });
+  it('a capture that is worse than a mate but still wins big has not "fallen apart"', () => {
+    // Naroditsky's 25.Rxb6 (hand walk 2026-09-24): a queen for a rook, ~+4,
+    // while the engine had a forced mate. Not a warning.
+    expect(pickTempting([{ san: 'Rxb6', uci: 'a6b6', appeal: 'capture', appealScore: 5, studentCp: 420 }], 10000, 120)).toBeNull();
+    // NEGATIVE CONTROL: the same drop into a level position IS the warning.
+    expect(pickTempting([{ san: 'Rxb6', uci: 'a6b6', appeal: 'capture', appealScore: 5, studentCp: 20 }], 10000, 120)?.san).toBe('Rxb6');
+  });
   it('returns null when nothing eye-catching is inferior', () => {
     expect(pickTempting([{ san: 'Nf3', uci: 'g1f3', appeal: 'central-develop', appealScore: 2, studentCp: 300 }], 300, 120)).toBeNull();
   });

@@ -91,8 +91,19 @@ const routes = {
     if (!ok) { chess.undo(); return { error: `board did not take ${q.get('san')}`, ...(await state()) }; }
     return state();
   },
+  /** Re-sync the mirror after a takeback: the move list as the board shows it. */
+  async setline(q) {
+    chess.reset();
+    for (const m of (q.get('moves') ?? '').split(/\s+/).filter(Boolean)) chess.move(m);
+    return state();
+  },
   async wait(q) { await sleep(Number(q.get('ms') ?? 5000)); return state(); },
   state,
+  async shot(q) {
+    const path = q.get('path') ?? '/tmp/hand-shot.png';
+    await page.screenshot({ path, fullPage: false });
+    return { path, placement: await readPlacement(page) };
+  },
   async quit() { setTimeout(async () => { await browser.close(); await listener.close?.(); process.exit(0); }, 100); return { bye: true }; },
 };
 

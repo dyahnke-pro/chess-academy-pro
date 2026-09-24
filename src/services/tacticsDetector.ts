@@ -447,7 +447,23 @@ function findTrappedPieces(chess: Chess): TacticPattern[] {
           return after.attackers(m.to, p.color).some((d) => d !== m.to);
         } catch { return true; }
       });
-      if (!hasSafeSquare) {
+      // NOTHING ELSE SAVES IT EITHER (David's Learn walk 2026-09-24: after
+      // ...Bg4 the coach said "your queen on d1 … is trapped", and his move was
+      // Nge2 — the block). A piece with no square to run to is still not
+      // trapped when another move BLOCKS the attack or TAKES the attacker, so
+      // "won whoever is to move" is only true when no move at all rescues it.
+      const rescued = !hasSafeSquare && myView.moves({ verbose: true }).some((m) => {
+        if (m.from === sq) return false;
+        try {
+          const after = new Chess(myView.fen());
+          after.move({ from: m.from, to: m.to, promotion: 'q' });
+          const attackers = attackersOfSquare(after, sq, enemy);
+          if (attackers.length === 0) return true;
+          if (attackers.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type])) return false;
+          return after.attackers(sq, p.color).some((d) => d !== sq);
+        } catch { return false; }
+      });
+      if (!hasSafeSquare && !rescued) {
         out.push({
           type: 'trapped_piece',
           beneficiary: enemy,

@@ -55,19 +55,20 @@ const NAME: Record<string, string> = {
 
 /** Which squares a side's pieces defend or attack, by square. */
 function coverage(fen: string, color: Color): Map<string, number> {
+  // DEFENCE IS ATTACK, NOT MOBILITY (hand walk 2026-09-24). This used to count
+  // the squares `color` could MOVE to — so a pawn push "covered" the square in
+  // front of it and a king stepping somewhere counted as a guard. After g3–g4
+  // the coach said "that took your last defender off h2": no pawn on g3 ever
+  // defended h2. `attackers()` is what guards a square.
   const out = new Map<string, number>();
   let board: Chess;
   try { board = new Chess(fen); } catch { return out; }
-  // Force the colour to move so `moves()` reports its coverage, and clear en
-  // passant + castling so the probe cannot invent a move the real position
-  // does not allow.
-  const parts = board.fen().split(' ');
-  parts[1] = color;
-  parts[3] = '-';
-  let probe: Chess;
-  try { probe = new Chess(parts.join(' ')); } catch { return out; }
-  for (const mv of probe.moves({ verbose: true })) {
-    out.set(mv.to, (out.get(mv.to) ?? 0) + 1);
+  for (const file of 'abcdefgh') {
+    for (const rank of '12345678') {
+      const sq = `${file}${rank}` as Square;
+      const n = board.attackers(sq, color).length;
+      if (n > 0) out.set(sq, n);
+    }
   }
   return out;
 }

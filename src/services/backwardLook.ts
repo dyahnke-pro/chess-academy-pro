@@ -308,8 +308,11 @@ export function backwardLook(args: {
     // This beat is a pure function of (fenAfter, replyPvUci, cpLoss). Logging
     // those three makes the next occurrence reproducible offline in one call.
     if (allowed) {
+      // A DIAGNOSTIC, NOT A SPOKEN LINE: labelled `coach-narration-spoken` it
+      // landed in every "what did the coach say" inventory with its cpLoss and
+      // raw PV attached (hand walk 2026-09-24 read it as speech).
       void logAppAudit({
-        kind: 'coach-narration-spoken',
+        kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'backwardLook.drawback',
         summary: `"${allowed.line}" · cpLoss=${args.cpLoss} · pv=${(args.replyPvUci ?? []).slice(0, 12).join(' ') || 'none'}`,

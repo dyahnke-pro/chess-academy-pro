@@ -261,6 +261,7 @@ import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_R
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
+import { mateContext } from '../../services/moveRating';
 import { speakComputed } from '../../services/speakComputed';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
 import { detectStudentLanguage } from '../../services/spokenLanguage';
@@ -1876,6 +1877,9 @@ export function CoachTeachPage(): JSX.Element {
   // coach's next reply is exactly the dictated move (validated legal at
   // consume time; silently dropped with an audit if the position moved on).
   const pendingCoachMoveRef = useRef<string | null>(null);
+  /** The coach's last reply was one the STUDENT dictated — so "that was a
+   *  mistake from me" would be false (hand walk 2026-09-24). */
+  const lastReplyDictatedRef = useRef(false);
   const rejectedTemptingCountRef = useRef(0);
   const priorityFirstLastPlyRef = useRef(-999);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
@@ -3199,7 +3203,15 @@ export function CoachTeachPage(): JSX.Element {
       // beside the shared one. The arms above stay because they do more than
       // actuate (they speak Learn's own confirmations and interact with the
       // walkthrough); everything they do not claim now reaches `actuate`.
-      if (routed) {
+      // "play X" ON THE STUDENT'S TURN IS A DICTATION FOR THE COACH'S NEXT
+      // REPLY, never the play-move hand (David's hand walk 2026-09-24: "play
+      // b6", "play e5", "play Rxb6" were each refused whenever the named move
+      // was ALSO legal for the student right now — the hand can only play the
+      // coach's move on the coach's turn, so it said no and returned before
+      // the dictation branch below could arm it).
+      const studentsTurnNow = gameRef.current.turn === playerColor?.[0];
+      const dictation = routed?.kind === 'play_move' && studentsTurnNow;
+      if (routed && !dictation) {
         const action = actionForCommand(routed, {
           fen: liveFenRef.current,
           // THE TEACHABLE MOVE, FROM THE ENGINE. Gated on the cached analysis
@@ -3245,12 +3257,18 @@ export function CoachTeachPage(): JSX.Element {
           // would hand the same text to the LLM and get a second, different
           // answer to one question.
           if (result.reason) {
+            // The play-move hand's refusal is written for the LLM's tool loop
+            // ("…use set_board_position… play_move is reserved…") — never a
+            // sentence for the student.
+            const said = routed.kind === 'play_move'
+              ? `I can't play ${sanToSpeech(routed.san)} here — it isn't a legal move for me right now.`
+              : result.reason;
             setMessages((prev) => [
               ...prev,
               { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() },
-              { id: uid('cmd-a'), role: 'assistant', content: result.reason ?? '', timestamp: Date.now() },
+              { id: uid('cmd-a'), role: 'assistant', content: said, timestamp: Date.now() },
             ]);
-            void speakComputed(result.reason, { forced: false, intent: 'learn' });
+            void speakComputed(said, { forced: false, intent: 'learn' });
             return;
           }
         }
@@ -7206,12 +7224,14 @@ export function CoachTeachPage(): JSX.Element {
     //    (David 2026-07-12). Validated legal on the live FEN; dropped with an
     //    audit if the position moved past it.
     const dictated = pendingCoachMoveRef.current;
+    lastReplyDictatedRef.current = false;
     if (dictated) {
       pendingCoachMoveRef.current = null;
       try {
         const probe = new Chess(fen);
         const m = probe.move(dictated);
         if (m) {
+          lastReplyDictatedRef.current = true;
           captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'pending-played', san: m.san });
           return m.san;
         }
@@ -8854,8 +8874,7 @@ export function CoachTeachPage(): JSX.Element {
                           playedPvUci: midReadForFacts?.topLines?.[0]?.moves ?? [],
                           evalBeforeWhiteCp: preStudentRead.isMate ? undefined : preStudentRead.evaluation,
                           evalAfterWhiteCp: midReadForFacts && !midReadForFacts.isMate ? midReadForFacts.evaluation : undefined,
-                          missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
-                          allowedMate: midReadForFacts?.isMate ? midReadForFacts.mateIn : null,
+                          ...mateContext(preStudentRead, midReadForFacts, playerColor),
                         } : null,
                         // RAW DATA for the refuted alternative (WO-TEACH-02
                         // S2): what players at this level play at the board
@@ -10137,8 +10156,7 @@ export function CoachTeachPage(): JSX.Element {
                       replyPvUci: mid.topLines?.[0]?.moves ?? [],
                       cpLoss,
                       studentColor: playerColor,
-                      missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
-                      allowedMate: mid.isMate ? mid.mateIn : null,
+                      ...mateContext(preStudentRead, mid, playerColor),
                     });
                     // THE FUNDAMENTAL, NAMED FIRST (David 2026-09-07: "Learn it
                     // needs to be added into the narration"). Same attributor +
@@ -10162,8 +10180,7 @@ export function CoachTeachPage(): JSX.Element {
                       evalAfterWhiteCp: mid.isMate ? undefined : mid.evaluation,
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       playedPvUci: mid.topLines?.[0]?.moves ?? [],
-                      missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
-                      allowedMate: mid.isMate ? mid.mateIn : null,
+                      ...mateContext(preStudentRead, mid, playerColor),
                     }, fundamentalSeenRef.current, weaknessSignalsRef.current);
                     if (look) {
                       // THE SQUARE TRAVELS WITH THE SENTENCE, and is drawn below
@@ -10213,6 +10230,7 @@ export function CoachTeachPage(): JSX.Element {
                   // any early exit and logged with the numbers behind it, so one
                   // real game says which of the two it is.
                   const declineReason = !cm ? 'no coach move captured (engine read failed)'
+                    : lastReplyDictatedRef.current ? 'the student dictated this move'
                     : !mid ? 'no analysis of the pre-reply board'
                       : !samePosition(cm.fenAfter, fenAfterReply) ? 'board moved on before the verdict'
                         : null;
@@ -10250,8 +10268,7 @@ export function CoachTeachPage(): JSX.Element {
                       bestPvUci: mid.topLines?.[0]?.moves ?? [],
                       cpLoss,
                       studentColor: coachColor,
-                      missedMate: mid.isMate ? mid.mateIn : null,
-                      allowedMate: cm.afterIsMate ? cm.afterMateIn : null,
+                      ...mateContext(mid, { isMate: cm.afterIsMate, mateIn: cm.afterMateIn }, coachColor),
                       side: 'coach',
                     });
                     // ── THE CURATED CALLOUT ALREADY SAID THIS, BETTER ──────
