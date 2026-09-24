@@ -29,8 +29,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7620`
-- `src/components/Coach/CoachTeachPage.tsx:7663`
+- `src/components/Coach/CoachTeachPage.tsx:7653`
+- `src/components/Coach/CoachTeachPage.tsx:7700`
 - `src/services/computedVoiceAudit.report.test.ts:261`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
@@ -153,7 +153,7 @@
 - `src/services/lookaheadPlan.test.ts:1258`
 
 ### `positionReadLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9257`
+- `src/components/Coach/CoachTeachPage.tsx:9294`
 - `src/services/coachLaneWiring.test.ts:38`
 - `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/lookaheadPlan.test.ts:541`
@@ -172,7 +172,7 @@
 - `src/services/narrationAdversarial.test.ts:67`
 
 ### `lineShapeLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9261`
+- `src/components/Coach/CoachTeachPage.tsx:9298`
 - `src/services/coachLaneWiring.test.ts:39`
 - `src/services/computedVoiceAudit.report.test.ts:225`
 - `src/services/lookaheadPlan.test.ts:881`
@@ -191,7 +191,7 @@
 - `src/services/lookaheadPlan.test.ts:1015`
 
 ### `terminalReadLine` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9264`
+- `src/components/Coach/CoachTeachPage.tsx:9301`
 - `src/services/coachLaneWiring.test.ts:40`
 - `src/services/computedVoiceAudit.report.test.ts:229`
 - `src/services/lookaheadPlan.test.ts:988`
@@ -205,7 +205,7 @@
 - `src/services/lookaheadPlan.test.ts:1016`
 
 ### `keySquareLine` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9252`
+- `src/components/Coach/CoachTeachPage.tsx:9289`
 - `src/services/coachLaneWiring.test.ts:37`
 - `src/services/computedVoiceAudit.report.test.ts:223`
 - `src/services/forkNarration.ts:108`
@@ -225,10 +225,10 @@
 - `src/services/planMarks.test.ts:37`
 
 ### `planFromUci` (function) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9249`
+- `src/components/Coach/CoachTeachPage.tsx:9286`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:219`
-- `src/services/concessionBeat.ts:381`
+- `src/services/concessionBeat.ts:382`
 - `src/services/forkNarration.ts:106`
 - `src/services/inaccuracyCall.ts:65`
 - `src/services/lookaheadPlan.test.ts:262`

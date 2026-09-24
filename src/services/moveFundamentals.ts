@@ -36,7 +36,11 @@ export type MoveFundamentalId =
   | 'passed-pawn'
   | 'luft'
   | 'space'
-  | 'prophylaxis';
+  | 'prophylaxis'
+  /** A pawn move that frees a home-square bishop's diagonal (d3 opens c1; g3
+   *  prepares the fianchetto). Its own idea, so "develop" taught on move 3 does
+   *  not silence it on move 9 (hand walk 2026-09-24). */
+  | 'open-diagonal';
 
 export interface MoveFundamental {
   id: MoveFundamentalId;
@@ -85,6 +89,9 @@ export interface MoveFundamental {
  */
 export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId | null> = {
   development: 'neglected-development',
+  // A bishop left blocked behind its own pawn is an undeveloped bishop — the
+  // same habit, from the other side.
+  'open-diagonal': 'neglected-development',
   'king-safety': 'weakened-king-safety',
   space: 'space-conceded',
   // A promotion is a THING DONE, not a habit neglected — there is no
@@ -335,7 +342,7 @@ export function computeMoveFundamentals(
       // fianchetto" is how he names it.
       const fianchetto = ['g2', 'b2', 'g7', 'b7'].includes(mv.from) ? mv.from : null;
       out.push({
-        id: 'development',
+        id: 'open-diagonal',
         weight: 60,
         led: fianchetto
           ? `prepares to fianchetto the bishop to ${fianchetto}`
@@ -646,6 +653,7 @@ export function principleOnceLine(
  *  `Record` so a new fundamental fails to compile until someone answers. */
 const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
   development: true,
+  'open-diagonal': true,
   center: true,
   'king-safety': true,
   outpost: true,
@@ -663,8 +671,10 @@ const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
 export function principleToTeach(
   fenBefore: string, san: string, mover: 'white' | 'black', taught: ReadonlySet<string>,
 ): MoveFundamental | null {
+  // The WEIGHTIEST untaught principle, not the first one pushed.
   return computeMoveFundamentals(fenBefore, san, mover)
-    .find((f) => IS_OPENING_PRINCIPLE[f.id] && !taught.has(f.id)) ?? null;
+    .filter((f) => IS_OPENING_PRINCIPLE[f.id] && !taught.has(f.id))
+    .sort((a, b) => b.weight - a.weight)[0] ?? null;
 }
 
 /** The home-square bishop (c1/f1 or c8/f8) whose MOVES grew by at least two

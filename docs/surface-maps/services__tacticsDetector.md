@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**819 lines · 2 exports · 31 importers · 11 tests · 0 audits**
+**835 lines · 2 exports · 31 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -58,7 +58,7 @@
 - `src/services/computerAccuracy.audit.test.ts:117`
 - `src/services/conceptEngine.ts:417`
 - `src/services/conceptEngine.ts:585`
-- `src/services/danyaBehaviors.ts:271`
+- `src/services/danyaBehaviors.ts:279`
 - `src/services/discussionPractice.ts:55`
 - `src/services/discussionPractice.ts:100`
 - `src/services/discussionPractice.ts:143`
@@ -68,21 +68,21 @@
 - `src/services/lookaheadPlan.ts:1155`
 - `src/services/misconceptionClassifier.ts:123`
 - `src/services/misconceptionClassifier.ts:279`
-- `src/services/mistakeNarration.ts:391`
-- `src/services/openingGenerator.ts:3542`
+- `src/services/mistakeNarration.ts:395`
+- `src/services/openingGenerator.ts:3545`
 - `src/services/pinGeometry.test.ts:72`
 - `src/services/pinGeometry.test.ts:74`
 - `src/services/pinGeometry.test.ts:87`
 - `src/services/pinGeometry.test.ts:109`
 - `src/services/pinGeometry.test.ts:115`
 - `src/services/pinGeometry.test.ts:122`
-- `src/services/playCommentary.ts:677`
-- `src/services/pvPlayback.ts:326`
-- `src/services/pvPlayback.ts:346`
+- `src/services/playCommentary.ts:729`
+- `src/services/pvPlayback.ts:341`
+- `src/services/pvPlayback.ts:361`
 - `src/services/relationClaimCost.report.test.ts:52`
 - `src/services/reviewCorpusNote.test.ts:61`
-- `src/services/reviewFullData.ts:415`
-- `src/services/reviewFullData.ts:461`
+- `src/services/reviewFullData.ts:468`
+- `src/services/reviewFullData.ts:528`
 - `src/services/reviewMoveBriefing.ts:64`
 - `src/services/reviewMoveBriefing.ts:65`
 - `src/services/reviewOpponentCommentary.ts:67`
@@ -91,9 +91,9 @@
 - `src/services/tacticLaneVocabulary.test.ts:69`
 - `src/services/tacticVisuals.ts:44`
 - `src/services/tacticVisuals.ts:58`
-- `src/services/tacticalRead.ts:156`
+- `src/services/tacticalRead.ts:157`
 - `src/services/tacticsDetector.expansion.test.ts:10`
-- `src/services/tacticsDetector.expansion.test.ts:63`
+- `src/services/tacticsDetector.expansion.test.ts:73`
 - `src/services/tacticsDetector.groundTruth.test.ts:48`
 - `src/services/tacticsDetector.groundTruth.test.ts:63`
 - `src/services/tacticsDetector.groundTruth.test.ts:95`

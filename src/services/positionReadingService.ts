@@ -122,9 +122,15 @@ function seeCaptureValue(chess: Chess, square: Square, depth = 0): number {
   // the legal capturers, so if the side to move has NONE, no legal capture
   // exists and we can skip the expensive full `moves()` generation. This is the
   // common case in per-ply review loops (a queried square with no attacker).
-  if (chess.attackers(square, chess.turn()).length === 0) return 0;
-  const caps = chess
-    .moves({ verbose: true })
+  const attackerSquares = chess.attackers(square, chess.turn());
+  if (attackerSquares.length === 0) return 0;
+  // ONLY THE ATTACKERS' MOVES (2026-09-24 perf): generating every legal move on
+  // the board at each ply of the exchange was ~70% of the gem-lesson build (the
+  // punish-gem tests ran 200s+). `moves({ square })` is still LEGAL — pins and
+  // checks are filtered exactly as before — for just the pieces that can reach
+  // this square, which `attackers()` already names.
+  const caps = attackerSquares
+    .flatMap((from) => chess.moves({ square: from, verbose: true }))
     .filter((m) => m.to === square && m.captured);
   if (caps.length === 0) return 0;
   caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));

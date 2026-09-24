@@ -7,12 +7,15 @@ import { Chess, type Color, type Square } from 'chess.js';
 export function seatBare(text: string, fen: string, student: Color): string {
   let b: Chess;
   try { b = new Chess(fen); } catch { return text; }
-  const out = text.replace(/(\b(?:your|their|my|his|her)\s+)?\b(pawn|knight|bishop|rook|queen|king) on ([a-h][1-8])\b/gi,
+  // "the knight on b6" becomes "their knight on b6" — the article is REPLACED,
+  // never kept ("the their knight", hand walk 2026-09-24).
+  const out = text.replace(/(\b(?:your|their|my|his|her|the)\s+)?\b(pawn|knight|bishop|rook|queen|king) on ([a-h][1-8])\b/gi,
     (whole: string, owned: string | undefined, piece: string, square: string) => {
-      if (owned) return whole;
+      if (owned && !/^the\s+$/i.test(owned)) return whole;
       const at = b.get(square as Square);
       if (!at) return whole;
-      return `${at.color === student ? 'your' : 'their'} ${piece.toLowerCase()} on ${square}`;
+      const lead = owned && /^The/.test(owned) ? (at.color === student ? 'Your' : 'Their') : (at.color === student ? 'your' : 'their');
+      return `${lead} ${piece.toLowerCase()} on ${square}`;
     });
   return out.charAt(0).toUpperCase() + out.slice(1);
 }

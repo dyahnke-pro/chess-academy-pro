@@ -21,8 +21,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `parseCoachMoveCommand` (function) — 29 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3168`
-- `src/components/Coach/CoachTeachPage.tsx:3684`
+- `src/components/Coach/CoachTeachPage.tsx:3177`
+- `src/components/Coach/CoachTeachPage.tsx:3707`
 - `src/services/coachMoveCommand.test.ts:11`
 - `src/services/coachMoveCommand.test.ts:18`
 - `src/services/coachMoveCommand.test.ts:24`

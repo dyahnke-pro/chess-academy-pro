@@ -8707,7 +8707,7 @@ export function CoachTeachPage(): JSX.Element {
                         });
                         if (gap) {
                           // Learn: the coach IS the opponent, so the nudge says "I".
-                          const nudge = gradeNarrationText(opponentGapClause(gap, 'coach-is-opponent'), probe.fen(), 'CoachTeachPage.opponentGap')?.trim();
+                          const nudge = gradeNarrationText(opponentGapClause(gap, lastReplyDictatedRef.current ? 'dictated' : 'coach-is-opponent'), probe.fen(), 'CoachTeachPage.opponentGap')?.trim();
                           if (nudge) queueSpokenHint(probe.fen(), nudge, 'computed', [gap.toSquare]);
                           captureEvent('opponent_gap_nudged', { surface: 'coach-teach', gain_cp: Math.round(gap.gainCp) });
                         }

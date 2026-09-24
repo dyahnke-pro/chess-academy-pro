@@ -19,7 +19,7 @@
 - **Naming** (CLAUDE.md:5104) — names `CoachPersonality`
 - **Testing Best Practices** (CLAUDE.md:5149) — names `Provider`
 - **Shared types / services** (CLAUDE.md:5216) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:5967) — names `TacticsLiveContext`
+- **The standard post-deploy ritual** (CLAUDE.md:5992) — names `TacticsLiveContext`
 
 ## Who calls in
 

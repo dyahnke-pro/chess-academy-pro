@@ -49,8 +49,13 @@ describe('the fundamentals vocabularies reconcile', () => {
     // neglected, so there is no misconception to drill it as. Moving this
     // number is the deliberate act the gate exists to force; it should only
     // ever change in a commit that says which way the new id files.
+    //
+    // 11 → 12 on 2026-09-24: `open-diagonal` (a pawn move that frees a
+    // home-square bishop — d3 opens c1, g3 prepares the fianchetto). It files
+    // under `neglected-development`: a bishop left blocked behind its own pawn
+    // IS an undeveloped bishop, the same habit from the other side.
     const mapped = Object.keys(MOVE_FUNDAMENTAL_TAG).length;
-    expect(mapped).toBe(11);
+    expect(mapped).toBe(12);
   });
 
   it('THE STRUCTURE CROSSES THE BOUNDARY — ids reach a caller, not just prose', () => {

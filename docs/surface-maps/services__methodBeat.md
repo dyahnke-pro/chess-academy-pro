@@ -38,7 +38,7 @@
 
 ### `habitIsOwed` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:2266`
-- `src/services/positionFacts.ts:713`
+- `src/services/positionFacts.ts:714`
 
 ### `methodBeatFor` (function) — 43 call sites
 - `src/services/coachDecider.ts:373`
@@ -110,7 +110,7 @@
 - `src/services/methodBeat.live.test.ts:103`
 - `src/services/methodBeat.test.ts:79`
 - `src/services/methodBeat.test.ts:83`
-- `src/services/positionFacts.ts:678`
+- `src/services/positionFacts.ts:679`
 
 ## Tests
 

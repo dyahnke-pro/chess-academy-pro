@@ -17,9 +17,9 @@
 - **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3763) — names `coachApi`, `voiceFacts`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4072) — names `voiceFacts`
 - **Do NOT** (CLAUDE.md:5187) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5857) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:5992) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6007) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5882) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6017) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6032) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -218,7 +218,7 @@
 - `src/hooks/useLiveCoach.test.tsx:13`
 - `src/hooks/useLiveCoach.ts:312`
 - `src/hooks/usePhaseNarration.test.ts:68`
-- `src/hooks/usePhaseNarration.ts:728`
+- `src/hooks/usePhaseNarration.ts:731`
 - `src/services/coachMoveCommentary.ts:303`
 - `src/services/groundedComputedOnly.test.ts:25`
 - `src/services/groundedMoveFeedback.test.ts:14`
@@ -227,7 +227,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:569`
-- `src/components/Coach/CoachTeachPage.tsx:3294`
+- `src/components/Coach/CoachTeachPage.tsx:3317`
 - `src/services/coachSessionRouter.ts:117`
 - `src/services/coachSettingsAction.ts:242`
 
@@ -266,7 +266,7 @@
 - `src/components/Coach/CoachGameReview.tsx:1654`
 - `src/components/Coach/CoachGameReview.tsx:1773`
 - `src/components/Coach/CoachGameReview.tsx:1961`
-- `src/hooks/usePhaseNarration.ts:715`
+- `src/hooks/usePhaseNarration.ts:718`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:256`
 - `src/services/coachChatText.ts:221`

@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:5990) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:6015) — names `refutedAlternative`
 
 ## Who calls in
 

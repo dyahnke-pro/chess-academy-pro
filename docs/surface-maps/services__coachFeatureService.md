@@ -11,7 +11,7 @@
 - **Why determinism** (CLAUDE.md:57) — names `coachFeatureService`
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3749) — names `buildReviewSegments`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4069) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:5996) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6021) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -131,8 +131,8 @@
 - `src/services/coachFeatureService.test.ts:784`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:805`
-- `src/services/whyItFailed.test.ts:240`
-- `src/services/whyItFailed.test.ts:278`
+- `src/services/whyItFailed.test.ts:256`
+- `src/services/whyItFailed.test.ts:294`
 
 ### `frameTeachingForOpponent` (function) — 2 call sites
 - `src/services/coachFeatureService.test.ts:15`

@@ -262,3 +262,12 @@ describe('check and mate suffixes are spoken, not punctuated', () => {
     expect(sanitizeForTTS('Use the #1 plan.')).toBe('Use the #1 plan.');
   });
 });
+
+describe('a file name is never read as a piece (hand walk 2026-09-24)', () => {
+  it('"the b-file" stays the b-file — not "the bishop-file"', () => {
+    expect(sanitizeForTTS('if they take, the b-file opens toward their king.')).toBe('if they take, the b-file opens toward their king.');
+  });
+  it('NEGATIVE CONTROL: "the B" on its own is still the bishop', () => {
+    expect(sanitizeForTTS('save the B now')).toContain('the bishop');
+  });
+});

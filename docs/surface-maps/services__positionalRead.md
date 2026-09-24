@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**441 lines · 4 exports · 5 importers · 2 tests · 1 audits**
+**457 lines · 5 exports · 6 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/danyaBehaviors.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionReadComposer.ts`
@@ -27,13 +28,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `readPosition` (function) — 27 call sites
-- `src/services/groundedAnswer.ts:1290`
+- `src/services/groundedAnswer.ts:1307`
 - `src/services/lookaheadPlan.ts:881`
 - `src/services/lookaheadPlan.ts:1150`
 - `src/services/lookaheadPlan.ts:1504`
 - `src/services/narrationAdversarial.test.ts:87`
 - `src/services/narrationAdversarial.test.ts:173`
-- `src/services/positionReadComposer.ts:119`
+- `src/services/positionReadComposer.ts:128`
 - `src/services/positionalRead.test.ts:26`
 - `src/services/positionalRead.test.ts:37`
 - `src/services/positionalRead.test.ts:38`
@@ -56,7 +57,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:268`
 
 ### `buildPositionalRead` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8119`
+- `src/components/Coach/CoachTeachPage.tsx:8128`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
 - `src/services/positionalRead.test.ts:159`
@@ -64,6 +65,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:171`
 - `src/services/positionalRead.test.ts:182`
 - `src/services/positionalRead.test.ts:187`
+
+### `attackerCanUseFile` (function) — 1 call site
+- `src/services/danyaBehaviors.ts:190`
 
 ## Tests
 

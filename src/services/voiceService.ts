@@ -334,7 +334,7 @@ const PIECE_LETTER_IN_PARENS_RE = /([([<])([PNBRQK])(?=[)\]>.,;:\s])/g;
  *  enough to cover the verbs and qualifiers LLMs actually emit
  *  when they slip back into SAN shorthand. */
 const PIECE_LETTER_AFTER_CONTEXT_RE =
-  /\b(hanging|loose|dropped|undefended|attacked|captured|defended|protected|pinned|skewered|forked|trapped|weak|strong|passed|isolated|doubled|exposed|advanced|central|enemy|opposing|opponent's|white's|black's|white|black|the|a|an|my|your|their|our|his|her|its|that|this|these|those|both|either|neither|every|each|one|two|three|save|saving|protect|protecting|lose|losing|take|taking|grab|grabbing|trade|trading|exchange|exchanging|develop|developing|advance|advancing|push|pushing|promote|promoting|sacrifice|sacrificing|hang|hangs)\s+([PNBRQK])\b/gi;
+  /\b(hanging|loose|dropped|undefended|attacked|captured|defended|protected|pinned|skewered|forked|trapped|weak|strong|passed|isolated|doubled|exposed|advanced|central|enemy|opposing|opponent's|white's|black's|white|black|the|a|an|my|your|their|our|his|her|its|that|this|these|those|both|either|neither|every|each|one|two|three|save|saving|protect|protecting|lose|losing|take|taking|grab|grabbing|trade|trading|exchange|exchanging|develop|developing|advance|advancing|push|pushing|promote|promoting|sacrifice|sacrificing|hang|hangs)\s+([PNBRQK])\b(?![-\u2011])/gi;
 /** Piece letter followed by an action word (on/to/at/from/hangs/etc.).
  *  Runs after the "after-context" pass so both halves of a sentence
  *  like "your P on f3" get caught. */

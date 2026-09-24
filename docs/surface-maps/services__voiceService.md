@@ -4,20 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2895 lines · 16 exports · 100 importers · 77 tests · 19 audits**
+**2901 lines · 16 exports · 101 importers · 82 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:353) — names `CLOUD_VOICES`, `voiceService`
-- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:735) — names `voiceService`
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1096) — names `voiceService`
-- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1474) — names `sanitizeForTTS`
-- **Golden rules (the most important — read these every time)** (CLAUDE.md:2130) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:2992) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:3169) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3478) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:4903) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:5632) — names `voiceService`
+- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:797) — names `voiceService`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1169) — names `voiceService`
+- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:1561) — names `sanitizeForTTS`
+- **Golden rules (the most important — read these every time)** (CLAUDE.md:2217) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3149) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:3326) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3635) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:5227) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6003) — names `voiceService`
 
 ## Who calls in
 
@@ -114,6 +114,7 @@
 - `src/services/coachActionDispatcher.ts`
 - `src/services/coachAgentRunner.ts`
 - `src/services/sanitizeForTTS.test.ts`
+- `src/services/speakComputed.ts`
 - `src/services/streamingSpeaker.ts`
 - `src/services/ttsProsody.test.ts`
 - `src/services/voiceService.fallover.test.ts`
@@ -166,7 +167,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3546`
+- `src/components/Coach/CoachGamePage.tsx:3675`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -208,11 +209,11 @@
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 46 call sites
-- `src/components/Openings/MiddlegamePractice.tsx:304`
-- `src/components/Openings/MiddlegamePractice.tsx:348`
-- `src/components/Openings/MiddlegamePractice.tsx:353`
-- `src/components/Openings/OpeningDetailPage.tsx:736`
+### `sanitizeForTTS` (function) — 48 call sites
+- `src/components/Openings/MiddlegamePractice.tsx:305`
+- `src/components/Openings/MiddlegamePractice.tsx:349`
+- `src/components/Openings/MiddlegamePractice.tsx:354`
+- `src/components/Openings/OpeningDetailPage.tsx:721`
 - `src/components/Settings/VoiceSettingsPanel.tsx:118`
 - `src/components/Settings/VoiceSettingsPanel.tsx:160`
 - `src/hooks/useProseReader.ts:66`
@@ -255,6 +256,8 @@
 - `src/services/sanitizeForTTS.test.ts:257`
 - `src/services/sanitizeForTTS.test.ts:261`
 - `src/services/sanitizeForTTS.test.ts:262`
+- `src/services/sanitizeForTTS.test.ts:268`
+- `src/services/sanitizeForTTS.test.ts:271`
 
 ### `voiceService` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -271,6 +274,7 @@
 - `src/components/Coach/CoachTeachPage.drillOrientation.test.tsx`
 - `src/components/Coach/CoachTeachPage.test.tsx`
 - `src/components/Coach/EndgameTrainerPage.test.tsx`
+- `src/components/Coach/GameChatPanel.surface.test.tsx`
 - `src/components/Coach/GameChatPanel.test.tsx`
 - `src/components/Coach/RolodexRow.test.tsx`
 - `src/components/Kid/BishopVsPawns.test.tsx`
@@ -309,6 +313,8 @@
 - `src/components/Openings/WalkthroughIntegration.test.tsx`
 - `src/components/Openings/WalkthroughMode.test.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.repcap.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.capabilityEvidence.test.tsx`
+- `src/components/Puzzles/MistakePuzzleBoard.capabilityRow.test.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
 - `src/components/Tactics/TacticSetupBoard.test.tsx`
@@ -316,9 +322,11 @@
 - `src/hooks/learnSilentCapture.test.ts`
 - `src/hooks/useDiscussionPractice.test.ts`
 - `src/hooks/useHintSystem.test.ts`
+- `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
 - `src/hooks/useNarration.test.tsx`
 - `src/hooks/usePhaseNarration.test.ts`
+- `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`
 - `src/hooks/useReviewPlayback.test.ts`
 - `src/hooks/useStrictNarration.test.tsx`
@@ -341,21 +349,29 @@
 
 ## Audits that reach it
 
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
 - `scripts/audit-book-reader-prod.mjs`
 - `scripts/audit-coach-chat.mjs`
 - `scripts/audit-coach-play-listen.mjs`
 - `scripts/audit-coach-teach-gaps.mjs`
+- `scripts/audit-concept-gameplay-prod.mjs`
 - `scripts/audit-drill-why-prod.mjs`
 - `scripts/audit-kid-play-coach-loop.mjs`
 - `scripts/audit-kid-static.mjs`
 - `scripts/audit-learn-full-game.mjs`
 - `scripts/audit-lib/coach-tab-graders.mjs`
 - `scripts/audit-lib/mute-tts.mjs`
+- `scripts/audit-loop-closes-prod.mjs`
 - `scripts/audit-masterclass-variation-watch-prod.mjs`
 - `scripts/audit-narration-latency-prod.mjs`
 - `scripts/audit-play-vienna-live.mjs`
 - `scripts/audit-pro-naroditsky-prod.mjs`
 - `scripts/audit-punish-gems-loop.mjs`
+- `scripts/audit-read-position-prod.mjs`
+- `scripts/audit-review-overhaul-prod.mjs`
 - `scripts/audit-rolodex-deep-links.mjs`
 - `scripts/audit-settings-behavior.mjs`
 - `scripts/audit-teach-corpus-spoken-prod.mjs`
