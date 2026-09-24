@@ -18,6 +18,7 @@ import type { Square, PieceSymbol } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { phaseOfFen } from './boardConcepts';
 import { packageForRegister, type HintPackage } from './hintRegister';
+import { CAPTURE_VALUE } from './pieceValues';
 
 export type CommentaryKind =
   | 'tactic'
@@ -124,7 +125,7 @@ function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', ty
   // …and from a square it can STAND on: a queen "contesting" from a6 where the
   // b7-pawn takes it contests nothing. Returns the piece that can do it, so
   // the sentence names THAT piece rather than whichever one the student owns.
-  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+  const VAL = CAPTURE_VALUE;
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   const contests = (c: Chess): PieceSymbol | null => {
     for (const sq of [...c.attackers(aSq, me), ...c.attackers(bSq, me)]) {

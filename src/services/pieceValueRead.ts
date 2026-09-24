@@ -24,6 +24,7 @@
 //
 // This lane REMOVES judgement rather than adding it.
 import { Chess, type Square } from 'chess.js';
+import { CAPTURE_VALUE } from './pieceValues';
 
 export interface PieceValue {
   square: string;
@@ -359,7 +360,7 @@ export function evalSplitLine(
  *  something bigger, is work the table cannot see. */
 function atWork(fen: string | undefined, square: string, me: 'w' | 'b'): boolean {
   if (!fen) return false;
-  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+  const VAL = CAPTURE_VALUE;
   const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
   let board: Chess;
   try { board = new Chess(fen); } catch { return false; }

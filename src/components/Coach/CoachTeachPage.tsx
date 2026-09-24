@@ -261,7 +261,7 @@ import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_R
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
-import { mateContext } from '../../services/moveRating';
+import { mateContext } from '../../utils/mateContext';
 import { speakComputed } from '../../services/speakComputed';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
 import { detectStudentLanguage } from '../../services/spokenLanguage';
