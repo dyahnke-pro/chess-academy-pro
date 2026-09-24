@@ -261,9 +261,10 @@ import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_R
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
+import { speakComputed } from '../../services/speakComputed';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
 import { detectStudentLanguage } from '../../services/spokenLanguage';
-import { translateToEnglish, voiceFacts } from '../../services/coachApi';
+import { translateToEnglish } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
@@ -2086,7 +2087,7 @@ export function CoachTeachPage(): JSX.Element {
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach', role: 'coach', text: line, fen: liveFenRef.current, trigger: null,
       });
-      void voiceService.speakForced(line).catch(() => undefined);
+      void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
     };
 
     // When the coach has White it MUST open, or the game just sits there
@@ -2311,7 +2312,7 @@ export function CoachTeachPage(): JSX.Element {
     useCoachMemoryStore.getState().appendConversationMessage({
       surface: 'chat-teach', role: 'coach', text, fen: gameRef.current.fen, trigger: null,
     });
-    void voiceService.speak(text);
+    void speakComputed(text, { forced: false, intent: 'learn' });
   }, []);
 
   /** Put a drill's position on the board (no announce) + arm the ref. */
@@ -2384,7 +2385,7 @@ export function CoachTeachPage(): JSX.Element {
       source: 'CoachTeachPage.startCoachDrill',
       summary: `in-place drill ${drill.aid} puzzle=${drill.puzzleId} r=${drill.rating} queue=${progress ? `${progress.themeIdx}.${progress.puzzleIdx}` : 'single'}`,
     });
-    void voiceService.speak(intro);
+    void speakComputed(intro, { forced: false, intent: 'learn' });
   }, [walkthrough, loadDrillOntoBoard]);
   // Fill the ref the quiz hand reads (declared above the hands registration).
   useEffect(() => { startCoachDrillRef.current = startCoachDrill; }, [startCoachDrill]);
@@ -3047,7 +3048,7 @@ export function CoachTeachPage(): JSX.Element {
           say = `I couldn't find "${subject}" in the openings database, so nothing was favorited.`;
         }
         setMessages((prev) => [...prev, { id: uid('fav-a'), role: 'assistant', content: say, timestamp: Date.now() }]);
-        void voiceService.speak(say);
+        void speakComputed(say, { forced: false, intent: 'learn' });
         return;
       }
       // NAVIGATION + "review my last game" (2026-08-13 all-questions audit):
@@ -3118,7 +3119,7 @@ export function CoachTeachPage(): JSX.Element {
             ? 'Board reset — fresh start.'
             : routed.count === 2 ? 'Took the last exchange back.' : 'Took it back — your move again.';
         setMessages((prev) => [...prev, { id: uid('cmd-a'), role: 'assistant', content: say, timestamp: Date.now() }]);
-        void voiceService.speak(say);
+        void speakComputed(say, { forced: false, intent: 'learn' });
         return;
       }
 
@@ -3189,7 +3190,7 @@ export function CoachTeachPage(): JSX.Element {
               { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() },
               { id: uid('cmd-a'), role: 'assistant', content: result.reason ?? '', timestamp: Date.now() },
             ]);
-            void voiceService.speak(result.reason);
+            void speakComputed(result.reason, { forced: false, intent: 'learn' });
             return;
           }
         }
@@ -3285,7 +3286,7 @@ export function CoachTeachPage(): JSX.Element {
                 : "That's every trap I have for this opening.",
               ...(page.length ? { choices: plainChips(page) } : {}) },
           ]);
-          void voiceService.speakForced(taught).catch(() => undefined);
+          void speakComputed(taught, { forced: true, intent: 'learn' }).catch(() => undefined);
           return;
         }
       }
@@ -3459,7 +3460,7 @@ export function CoachTeachPage(): JSX.Element {
           fen: gameRef.current.fen,
           trigger: null,
         });
-        void voiceService.speakForced(ack).catch(() => undefined);
+        void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
@@ -3524,7 +3525,7 @@ export function CoachTeachPage(): JSX.Element {
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach', role: 'coach', text: ack, fen: gameRef.current.fen, trigger: null,
         });
-        void voiceService.speakForced(ack).catch(() => undefined);
+        void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',
@@ -3562,7 +3563,7 @@ export function CoachTeachPage(): JSX.Element {
             { id: `${reportTurnId}-u`, role: 'user', content: text, timestamp: Date.now() },
             { id: `${reportTurnId}-c`, role: 'assistant', content: reply, timestamp: Date.now() },
           ]);
-          void voiceService.speakForced(reply).catch(() => undefined);
+          void speakComputed(reply, { forced: true, intent: 'learn' }).catch(() => undefined);
         };
         const liveFen = liveFenRef.current;
         const sideToMove = liveFen.split(' ')[1] === 'w' ? 'white' : 'black';
@@ -3633,7 +3634,7 @@ export function CoachTeachPage(): JSX.Element {
           mem.appendConversationMessage({ surface: 'chat-teach', role: 'user', text, fen: liveFenRef.current, trigger: null });
           mem.appendConversationMessage({ surface: 'chat-teach', role: 'coach', text: ack, fen: liveFenRef.current, trigger: null });
           voiceService.stop();
-          void voiceService.speakForced(ack).catch(() => undefined);
+          void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
         };
         const fenSide: 'white' | 'black' = liveFenRef.current.split(' ')[1] === 'w' ? 'white' : 'black';
         const atStart = gameRef.current.history.length === 0;
@@ -3813,7 +3814,7 @@ export function CoachTeachPage(): JSX.Element {
             content: settingResult.confirmation,
             timestamp: Date.now(),
           }]);
-          void voiceService.speak(settingResult.confirmation);
+          void speakComputed(settingResult.confirmation, { forced: false, intent: 'learn' });
           void logAppAudit({
             kind: 'coach-setting-changed',
             category: 'subsystem',
@@ -4595,7 +4596,7 @@ export function CoachTeachPage(): JSX.Element {
               surface: 'chat-teach', role: 'coach', text: dProse,
               fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
             });
-            void voiceService.speak(dProse);
+            void speakComputed(dProse, { forced: false, intent: 'learn' });
             return;
           }
         } else {
@@ -5193,7 +5194,7 @@ export function CoachTeachPage(): JSX.Element {
               trigger: null,
             });
             voiceService.stop();
-            void voiceService.speakForced(ack).catch(() => undefined);
+            void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
             setLinePickerPlay({ coachPlaysIt, sideOverride: sideOverride ?? null });
             setLinePicker(playPicker);
             void logAppAudit({
@@ -5463,7 +5464,7 @@ export function CoachTeachPage(): JSX.Element {
               trigger: null,
             });
             voiceService.stop();
-            void voiceService.speakForced(ack).catch(() => undefined);
+            void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
             setLinePicker(pickerData);
             void logAppAudit({
               kind: 'coach-surface-migrated',
@@ -6008,7 +6009,7 @@ export function CoachTeachPage(): JSX.Element {
             narrationText: sentence,
             fen: liveFenRef.current,
           });
-          return voiceService.speakForced(sentence);
+          return speakComputed(sentence, { forced: true, intent: 'learn' });
         })
         .catch(() => undefined);
     };
@@ -8318,7 +8319,7 @@ export function CoachTeachPage(): JSX.Element {
         }
         if (grade?.worthSpeaking && grade.clause) {
           setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: grade.clause, timestamp: Date.now() }]);
-          void voiceService.speak(grade.clause);
+          void speakComputed(grade.clause, { forced: false, intent: 'learn' });
           captureEvent('post_move_grade_spoken', { surface: 'coach-teach', reason: grade.reason, cp_loss: Math.round(grade.cpLossCp), fault: grade.fault });
         }
       }
@@ -9745,7 +9746,7 @@ export function CoachTeachPage(): JSX.Element {
                 speechChainRef.current = Promise.resolve();
               }
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
-                .then(async () => {
+                .then(() => {
                   if (trackAGenRef.current !== myTrackAGen) return undefined;
                   // THE ONE CHOKEPOINT (G0; David 2026-09-24: "everything built
                   // needs to be deterministic, worded by the DNA, and handed to
@@ -9753,9 +9754,7 @@ export function CoachTeachPage(): JSX.Element {
                   // code; they reach the voice THROUGH `voiceFacts`, in the raw
                   // register (the computed text is spoken as-is, no model call,
                   // no latency) — the same seam review speaks through.
-                  const voiced = (await voiceFacts(line, { preferRaw: true, intent: 'learn-live' }).catch(() => null)) ?? line;
-                  if (trackAGenRef.current !== myTrackAGen) return undefined;
-                  return voiceService.speakForced(voiced);
+                  return speakComputed(line, { forced: true, intent: 'learn-live' });
                 })
                 .catch(() => undefined);
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${line}` : line;
@@ -10417,7 +10416,7 @@ export function CoachTeachPage(): JSX.Element {
           trigger: null,
         });
         voiceService.stop();
-        speechChainRef.current = Promise.resolve(voiceService.speakForced(intro))
+        speechChainRef.current = Promise.resolve(speakComputed(intro, { forced: true, intent: 'learn' }))
           .catch(() => undefined);
         // Launch the lesson. When we came from the openings page we have the
         // exact opening id, so load its record (getOpeningById is UNFILTERED)
@@ -10579,7 +10578,7 @@ export function CoachTeachPage(): JSX.Element {
                 setMessages((prev) => [...prev, { id: uid('cold-start'), role: 'assistant', content: cold.line, timestamp: Date.now() }]);
                 setCoachChoices(cold.chips.slice(0, 3));
                 speechChainRef.current = speechChainRef.current
-                  .then(() => voiceService.speakForced(cold.line))
+                  .then(() => speakComputed(cold.line, { forced: true, intent: 'learn' }))
                   .catch(() => undefined);
               }
               return; // no weakness data → generic set (or cold-start) stands
@@ -10637,14 +10636,14 @@ export function CoachTeachPage(): JSX.Element {
                   if (stand && !userInteractedRef.current) {
                     const standLine = withTrend(stand);
                     setMessages((prev) => [...prev, { id: uid('dossier-stand'), role: 'assistant', content: standLine, timestamp: Date.now() }]);
-                    speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(standLine)).catch(() => undefined);
+                    speechChainRef.current = speechChainRef.current.then(() => speakComputed(standLine, { forced: true, intent: 'learn' })).catch(() => undefined);
                   }
                 } catch { /* dossier is a bonus — the picker still opens */ }
                 const pickerLine = withTrend(plan.pickerLine);
                 setMessages((prev) => [...prev, { id: uid('lesson-picker'), role: 'assistant', content: pickerLine, timestamp: Date.now() }]);
                 setCoachChoices(capChips([...plan.pickerChips, ...generic]));
                 speechChainRef.current = speechChainRef.current
-                  .then(() => voiceService.speakForced(pickerLine))
+                  .then(() => speakComputed(pickerLine, { forced: true, intent: 'learn' }))
                   .catch(() => undefined);
                 captureEvent('custom_lesson_offered', { surface: 'coach-teach', holes: plan.parts.length });
                 return; // the picker is the opener — don't stack the older one
@@ -10675,7 +10674,7 @@ export function CoachTeachPage(): JSX.Element {
                 setMessages((prev) => [...prev, { id: uid('coachs-call'), role: 'assistant', content: callLine, timestamp: Date.now() }]);
                 setCoachChoices((prev) => capChips([chip, ...(prev ?? generic).filter((q) => q !== chip)]));
                 speechChainRef.current = speechChainRef.current
-                  .then(() => voiceService.speakForced(callLine))
+                  .then(() => speakComputed(callLine, { forced: true, intent: 'learn' }))
                   .catch(() => undefined);
               }
             } catch { /* the call is a bonus — fall through to the opener */ }
@@ -10697,7 +10696,7 @@ export function CoachTeachPage(): JSX.Element {
               const openerLine = withTrend(planLine);
               setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: openerLine, timestamp: Date.now() }]);
               speechChainRef.current = speechChainRef.current
-                .then(() => voiceService.speakForced(openerLine))
+                .then(() => speakComputed(openerLine, { forced: true, intent: 'learn' }))
                 .catch(() => undefined);
             }
           })
@@ -10711,7 +10710,7 @@ export function CoachTeachPage(): JSX.Element {
         trigger: null,
       });
       voiceService.stop();
-      speechChainRef.current = Promise.resolve(voiceService.speakForced(welcomeLine))
+      speechChainRef.current = Promise.resolve(speakComputed(welcomeLine, { forced: true, intent: 'learn' }))
         .catch(() => undefined);
     })();
 
@@ -10942,7 +10941,7 @@ export function CoachTeachPage(): JSX.Element {
       gameRef.current.loadFen(startFen);
       const intro = "Let's watch it play out. I'll take both sides and call out the turning points.";
       setMessages((prev) => [...prev, { id: uid('cont-intro'), role: 'assistant', content: intro, timestamp: Date.now() }]);
-      speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(intro)).catch(() => undefined);
+      speechChainRef.current = speechChainRef.current.then(() => speakComputed(intro, { forced: true, intent: 'learn' })).catch(() => undefined);
       void logAppAudit({
         kind: 'coach-surface-migrated', category: 'subsystem',
         source: 'CoachTeachPage.narratedContinuation',
@@ -11028,7 +11027,7 @@ export function CoachTeachPage(): JSX.Element {
         // the board still can't outrun the teaching.
         const spokeAt = Date.now();
         speechChainRef.current = speechChainRef.current
-          .then(() => voiceService.speakForced(text))
+          .then(() => speakComputed(text, { forced: true, intent: 'learn' }))
           .catch(() => undefined);
         await speechChainRef.current;
         const spokenMs = Date.now() - spokeAt;
@@ -11042,7 +11041,7 @@ export function CoachTeachPage(): JSX.Element {
       if (!continuationRef.current) return;
       const resultLine = continuationResult(local.isCheckmate(), local.isDraw(), local.turn());
       setMessages((prev) => [...prev, { id: uid('cont-result'), role: 'assistant', content: resultLine, timestamp: Date.now() }]);
-      speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(resultLine)).catch(() => undefined);
+      speechChainRef.current = speechChainRef.current.then(() => speakComputed(resultLine, { forced: true, intent: 'learn' })).catch(() => undefined);
       // Teaching memory: the play-out is a delivered layer — the next
       // "teach me X" recaps it and moves to the weave-together visit.
       if (walkthrough.tree && !walkthrough.tree.derived) {
@@ -11249,7 +11248,7 @@ export function CoachTeachPage(): JSX.Element {
                           const ack = `I'll open with ${sanToSpeech(opening)}. Your move.`;
                           setMessages((prev) => [...prev, { id: freshTurnId('coach-open'), role: 'assistant', content: ack, timestamp: Date.now() }]);
                           voiceService.stop();
-                          void voiceService.speakForced(ack).catch(() => undefined);
+                          void speakComputed(ack, { forced: true, intent: 'learn' }).catch(() => undefined);
                         }
                       })();
                     }
@@ -11883,7 +11882,7 @@ export function CoachTeachPage(): JSX.Element {
                   if (s.slips > 0) parts.push(`we stopped on ${s.slips} slip${s.slips === 1 ? '' : 's'} — those are in your weakness profile now and they'll come back as drills`);
                   const closer = `Good session. ${parts.join(', and ')}.`;
                   captureEvent('session_closer_spoken', { surface: 'coach-teach', ...s });
-                  void voiceService.speakForced(closer).catch(() => undefined);
+                  void speakComputed(closer, { forced: true, intent: 'learn' }).catch(() => undefined);
                 }
                 // THE GAME IS SAVED, NOT DISCARDED (C7, 2026-09-22). This used
                 // to navigate home and the game in progress was gone — not in
@@ -13717,7 +13716,7 @@ function QuizPanel({
       }
     }
     if (promptToSpeak.trim()) {
-      void voiceService.speakForced(promptToSpeak);
+      void speakComputed(promptToSpeak, { forced: true, intent: 'learn' });
     }
     // Keyed on the QUESTION IDENTITY (stage + index + opening), NOT the tree
     // object. Background `mergeStagesFromCache` swaps the tree's identity

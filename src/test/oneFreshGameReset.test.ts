@@ -54,7 +54,7 @@ describe('CoachTeachPage — one fresh-game reset', () => {
     const start = SRC.indexOf('const forgetPageRefs = useCallback');
     const body = SRC.slice(start, SRC.indexOf('}, []);', start));
     for (const ref of [
-      'announcedPliesRef', 'announcedTrapsRef', 'teachNoteSeenIdsRef', 'fundamentalSeenRef',
+      'announcedPliesRef', 'announcedTrapsRef', 'fundamentalSeenRef',
       'planSaidRef', 'positionalSaidRef', 'forkTalkCountRef', 'pendingForkRef',
       'rejectedTemptingCountRef', 'priorityFirstLastPlyRef',
     ]) {

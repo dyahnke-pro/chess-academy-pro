@@ -56,6 +56,10 @@ const INFRA = new Set([
   // decides which language a fixed app string is shown in. Same class as
   // `spokenLanguage` above and `narrationSegments`. It did NOT move a ceiling.
   'coachChatText',
+  // `speakComputed` is the voice DOOR for Learn (2026-09-24): it hands a line
+  // through `voiceFacts` to `voiceService` and computes nothing. Same class as
+  // `voiceService` and `coachApi`, both already here. It did NOT move a ceiling.
+  'speakComputed',
   // `weaknessModelEvents` is ONE leaf signal — "the student model just
   // changed" — with a listener set and nothing else: it imports NOTHING and
   // computes no chess or teaching fact, the same class as `standingFactMemory`

@@ -183,9 +183,8 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // directly, so Learn's computed lines never met the one chokepoint.
     const body = TEACH.slice(TEACH.indexOf('const speakTrackA = (line: string)'), TEACH.indexOf('instantSpokenText = instantSpokenText'));
     expect(body.length).toBeGreaterThan(0);
-    expect(body).toMatch(/voiceFacts\(line, \{ preferRaw: true, intent: 'learn-live' \}\)/);
-    expect(body).toMatch(/speakForced\(voiced\)/);
-    expect(body).not.toMatch(/speakForced\(line\)/);
+    expect(body).toMatch(/speakComputed\(line, \{ forced: true, intent: 'learn-live' \}\)/);
+    expect(body).not.toMatch(/voiceService\.speak/);
   });
 });
 

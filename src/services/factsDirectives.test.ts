@@ -26,8 +26,10 @@ describe('facts vs directives', () => {
     const api = src('src/services/coachApi.ts');
     // Present in the prompt...
     expect(api).toMatch(/HOW TO SAY IT \(instructions for you — never speak these\)/);
-    // ...and the fallback still serves `facts`, which no longer holds them.
-    expect(api).toMatch(/return facts\.trim\(\);/);
+    // ...and every fallback serves `facts` (label-stripped by speakableFacts),
+    // which never holds them — no fallback returns the directives.
+    expect(api).toMatch(/return speakableFacts\(facts\);/);
+    expect(api).not.toMatch(/return [^;]*directives/);
   });
 
   it('the directives actually reach voiceFacts', () => {
