@@ -193,7 +193,7 @@ import { noteCoverageForLine } from '../../services/danyaTeachingService';
  *  single opening-level note that happened to match early. Below the floor the
  *  instant, verified masterclass is still the better lesson, so it keeps it. */
 const NOTE_PRIMARY_MIN_PLIES = 3;
-import { findLivePunishment, bakeGemsIntoTree } from '../../services/gemCrushLines';
+import { findLivePunishment, bakeGemsIntoTree, gemResolution } from '../../services/gemCrushLines';
 import { findAndBakeGems } from '../../services/gemFinder';
 import { engineReadLines } from '../../services/engineReadNarration';
 import { moveOrderArrows } from '../../services/moveOrderArrows';
@@ -1877,9 +1877,6 @@ export function CoachTeachPage(): JSX.Element {
   // coach's next reply is exactly the dictated move (validated legal at
   // consume time; silently dropped with an audit if the position moved on).
   const pendingCoachMoveRef = useRef<string | null>(null);
-  /** The coach's last reply was one the STUDENT dictated — so "that was a
-   *  mistake from me" would be false (hand walk 2026-09-24). */
-  const lastReplyDictatedRef = useRef(false);
   const rejectedTemptingCountRef = useRef(0);
   const priorityFirstLastPlyRef = useRef(-999);
   // SESSION BOOKENDS (David 2026-07-11): running tallies for the closing
@@ -7229,14 +7226,14 @@ export function CoachTeachPage(): JSX.Element {
     //    (David 2026-07-12). Validated legal on the live FEN; dropped with an
     //    audit if the position moved past it.
     const dictated = pendingCoachMoveRef.current;
-    lastReplyDictatedRef.current = false;
+    learnMemRef.current.lastReplyDictated = null;
     if (dictated) {
       pendingCoachMoveRef.current = null;
       try {
         const probe = new Chess(fen);
         const m = probe.move(dictated);
         if (m) {
-          lastReplyDictatedRef.current = true;
+          learnMemRef.current.lastReplyDictated = m.san;
           captureEvent('coach_move_command', { surface: 'coach-teach', mode: 'pending-played', san: m.san });
           return m.san;
         }
@@ -7858,6 +7855,7 @@ export function CoachTeachPage(): JSX.Element {
       if (gem && gem.callout && learnMemRef.current.gemSeen !== gem.callout) {
         learnMemRef.current.gemSeen = gem.callout;
         learnMemRef.current.gemFen = args.fenAfterReply;
+        learnMemRef.current.gemPending = gem;
         gemLine = gem.callout;
         factLines.push(`GEM ALERT (verified inaccuracy by the coach's last move): ${gem.callout}`);
         captureEvent('gem_alert_spoken', { surface: 'coach-teach' });
@@ -8375,6 +8373,35 @@ export function CoachTeachPage(): JSX.Element {
     // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
     // needs the position the student moved FROM.
     const fenBefore = liveFenRef.current;
+    // THE GEM, RESOLVED (David 2026-09-24: "After you've played it (or missed
+    // it): then the full narration, arrows, and Walk button"). The callout only
+    // said there was something to find; now the student has answered, so the
+    // stored line is spoken, the punish drawn if they missed it, and a Walk
+    // button plays the whole thing. Nothing loads — it is the gem's own data.
+    try {
+      const pendingGem = learnMemRef.current.gemPending;
+      const gemAt = learnMemRef.current.gemFen;
+      if (pendingGem && gemAt && samePosition(gemAt, fenBefore)) {
+        learnMemRef.current.gemPending = null;
+        const res = gemResolution(pendingGem, fenBefore, move.san);
+        if (res) {
+          setMessages((prev) => [...prev, {
+            id: uid('gem-walk'), role: 'assistant', content: res.say, timestamp: Date.now(), lines: [res.line],
+          }]);
+          void speakComputed(res.say, { forced: false, intent: 'learn' }).catch(() => undefined);
+          if (!res.found) {
+            const a = pendingGem.revealArrows[0];
+            try {
+              const board = new Chess(move.fen);
+              if (a && board.get(a.from as Square)) setArrows([{ startSquare: a.from, endSquare: a.to, color: 'rgba(34,197,94,0.85)' }]);
+            } catch { /* the arrow is a bonus */ }
+          }
+          captureEvent('gem_resolved', { surface: 'coach-teach', found: res.found, plies: res.line.plies.length });
+        }
+      } else if (pendingGem && gemAt && !samePosition(gemAt, fenBefore)) {
+        learnMemRef.current.gemPending = null;
+      }
+    } catch { /* a gem is a bonus, never a blocker */ }
     // AND THE READ OF IT, taken in the same breath. The eval-bar effect has
     // been analysing every position the board reaches at depth 12 and storing
     // it here keyed by FEN; the position the student just moved FROM is the one
@@ -8707,7 +8734,7 @@ export function CoachTeachPage(): JSX.Element {
                         });
                         if (gap) {
                           // Learn: the coach IS the opponent, so the nudge says "I".
-                          const nudge = gradeNarrationText(opponentGapClause(gap, lastReplyDictatedRef.current ? 'dictated' : 'coach-is-opponent'), probe.fen(), 'CoachTeachPage.opponentGap')?.trim();
+                          const nudge = gradeNarrationText(opponentGapClause(gap, learnMemRef.current.lastReplyDictated !== null ? 'dictated' : 'coach-is-opponent'), probe.fen(), 'CoachTeachPage.opponentGap')?.trim();
                           if (nudge) queueSpokenHint(probe.fen(), nudge, 'computed', [gap.toSquare]);
                           captureEvent('opponent_gap_nudged', { surface: 'coach-teach', gain_cp: Math.round(gap.gainCp) });
                         }
@@ -10248,7 +10275,7 @@ export function CoachTeachPage(): JSX.Element {
                   // any early exit and logged with the numbers behind it, so one
                   // real game says which of the two it is.
                   const declineReason = !cm ? 'no coach move captured (engine read failed)'
-                    : lastReplyDictatedRef.current ? 'the student dictated this move'
+                    : learnMemRef.current.lastReplyDictated !== null ? 'the student dictated this move'
                     : !mid ? 'no analysis of the pre-reply board'
                       : !samePosition(cm.fenAfter, fenAfterReply) ? 'board moved on before the verdict'
                         : null;
