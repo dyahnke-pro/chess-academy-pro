@@ -139,7 +139,7 @@
 - `src/services/liveNeedGate.test.ts:56`
 - `src/services/liveNeedGate.test.ts:65`
 - `src/services/liveNeedGate.test.ts:77`
-- `src/services/positionFacts.ts:768`
+- `src/services/positionFacts.ts:771`
 - `src/services/supportedFacts.test.ts:77`
 - `src/services/supportedFacts.test.ts:87`
 - `src/services/supportedFacts.test.ts:97`
@@ -163,7 +163,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:710`
+- `src/services/positionFacts.ts:713`
 
 ### `habitForCluster` (function) — 9 call sites
 - `src/services/habitJoin.test.ts:17`

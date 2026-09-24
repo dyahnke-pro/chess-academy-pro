@@ -280,7 +280,7 @@ import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainArrows, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
-import { explainBestMoveGrounded } from '../../services/groundedAnswer';
+import { explainBestMoveGrounded, seatPieceReferences } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';
@@ -301,7 +301,7 @@ import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { actionForCommand, actuate } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -1855,6 +1855,14 @@ export function CoachTeachPage(): JSX.Element {
    *  an older turn can't speak a line about a position the student already
    *  left (and can't steal the throttle window from the current line). */
   const trackAGenRef = useRef(0);
+  /** THE STUDENT IS IN CONTROL (David 2026-09-24: "even just the question
+   *  should immediately cause coach to stop"). The first keystroke of a
+   *  question, a tap on the mic, or a spoken "stop" silences the coach at
+   *  once and drops every line it had queued — before anything is sent. */
+  const stopCoachNow = useCallback((): void => {
+    voiceService.stop();
+    trackAGenRef.current += 1;
+  }, []);
   // FORK IN THE ROAD (David 2026-07-11: "when there is a fork in the road the
   // coach could talk about both options… advantages and disadvantages of
   // both"). Near-equal, different-character options get deliberated — the
@@ -3017,6 +3025,13 @@ export function CoachTeachPage(): JSX.Element {
     // walkthrough) would otherwise keep talking over the answer. Cut the voice
     // up front for every genuine user turn — a kickoff greeting and the coach's
     // own move-narration are not the student interrupting, so leave those.
+    // "stop" / "wait" / "hold on" — a command to be quiet, not a question.
+    // Silence IS the reply: stop, and say nothing back.
+    if (!opts?.kickoff && opts?.coachReplyPlayed === undefined && isStopCommand(text)) {
+      stopCoachNow();
+      captureEvent('coach_stop_command', { surface: 'coach-teach' });
+      return;
+    }
     if (!opts?.kickoff && opts?.coachReplyPlayed === undefined) {
       voiceService.stop();
       // …and the live commentary still QUEUED behind it goes too — Track A's
@@ -7629,7 +7644,10 @@ export function CoachTeachPage(): JSX.Element {
         const ends = [t.squares[0] ?? '', t.squares[t.squares.length - 1] ?? ''];
         threatKey = `vs:${t.type}:${ends.join('')}`;
         threatSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
-        threatLine = `Watch out — ${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}.${conceptTail(t.type)}`;
+        // SEATED: the detector's description names pieces bare ("queen on e1
+        // pins bishop on c3 against queen on a5"); whose each piece is, is the
+        // board's fact and the whole point of a warning.
+        threatLine = `Watch out — ${seatPieceReferences(`${t.description.charAt(0).toLowerCase()}${t.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b')}.${conceptTail(t.type)}`;
         // SAY WHOSE, WHEN BOTH ARE THE SAME SHAPE. David's transcript, 02:50:
         // "Watch out — queen on a5 pins knight on c3 against king on e1.
         //  There's a real pin here for you — look for it."
@@ -8617,7 +8635,12 @@ export function CoachTeachPage(): JSX.Element {
                     // inferior move / a genuine close call (G0).
                     if (turnRead) {
                       const butTurn = temptingTurnClause(turnRead, { spoken: true });
-                      const hedge = uncertaintyClause(turnRead, { spoken: true, rotation: gameRef.current.history.length });
+                      // Framed as the NEXT decision: queued, it is heard after the
+                      // verdict on the move just played, and unframed the two
+                      // read as one contradiction ("that let them win a rook… it's
+                      // genuinely close, don't agonise").
+                      const rawHedge = uncertaintyClause(turnRead, { spoken: true, rotation: gameRef.current.history.length });
+                      const hedge = rawHedge ? `As for your next move: ${rawHedge.charAt(0).toLowerCase()}${rawHedge.slice(1)}` : null;
                       // His "X, not Y, because…" — only when there is NO but-turn
                       // (a seductive blunder outranks a fine-margin preference) and
                       // NO hedge (a genuine coin-flip is the hedge, not a compare).
@@ -12067,6 +12090,7 @@ export function CoachTeachPage(): JSX.Element {
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
             coachChoices={coachChoices}
             onPickCoachChoice={pickCoachChoice}
+            onStartAsking={stopCoachNow}
           />
         </div>
 

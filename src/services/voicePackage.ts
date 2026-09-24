@@ -536,7 +536,10 @@ export function buildVoicePackage(
   // no bearing on whether it starts with a capital; only whether it opens with
   // a move name does.
   const sentence = (t: string): string => {
-    const trimmed = t.trim();
+    // Every line ENDS as a sentence before the join — the 2026-09-24 Learn tape
+    // ran "…against king on e1 Your king is still in the centre" together.
+    const bare = t.trim();
+    const trimmed = bare && !/[.!?…]["'’”)\]]*$/.test(bare) ? `${bare}.` : bare;
     if (!trimmed) return trimmed;
     // Leave an intentional lowercase opener alone when it is a SAN token
     // ("dxe5 wins a pawn") — capitalising a move name would be wrong.

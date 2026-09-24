@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**567 lines · 7 exports · 8 importers · 5 tests · 2 audits**
+**570 lines · 7 exports · 8 importers · 5 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,34 +30,34 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9912`
-- `src/services/voicePackage.test.ts:416`
-- `src/services/voicePackage.test.ts:425`
-- `src/services/voicePackage.test.ts:435`
-- `src/services/voicePackage.test.ts:442`
-- `src/services/voicePackage.test.ts:449`
-- `src/services/voicePackage.test.ts:508`
+- `src/components/Coach/CoachTeachPage.tsx:10364`
+- `src/services/voicePackage.test.ts:419`
+- `src/services/voicePackage.test.ts:428`
+- `src/services/voicePackage.test.ts:438`
+- `src/services/voicePackage.test.ts:445`
+- `src/services/voicePackage.test.ts:452`
+- `src/services/voicePackage.test.ts:511`
 
 ### `VoicePackage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildVoicePackage` (function) — 66 call sites
-- `src/components/Coach/CoachGameReview.tsx:1742`
-- `src/components/Coach/CoachGameReview.tsx:1780`
-- `src/components/Coach/CoachTeachPage.tsx:7037`
-- `src/components/Coach/CoachTeachPage.tsx:7812`
-- `src/components/Coach/CoachTeachPage.tsx:7874`
-- `src/components/Coach/CoachTeachPage.tsx:9883`
-- `src/components/Coach/CoachTeachPage.tsx:9895`
-- `src/hooks/usePhaseNarration.ts:397`
-- `src/hooks/usePhaseNarration.ts:829`
-- `src/hooks/usePositionNarration.ts:339`
-- `src/services/coachSurfaceScorecard.report.test.ts:118`
-- `src/services/coachSurfaceScorecard.report.test.ts:140`
-- `src/services/coachSurfaceScorecard.report.test.ts:151`
-- `src/services/coachSurfaceScorecard.report.test.ts:172`
-- `src/services/computedVoiceAudit.report.test.ts:369`
-- `src/services/computedVoiceAudit.report.test.ts:410`
+- `src/components/Coach/CoachGameReview.tsx:1983`
+- `src/components/Coach/CoachGameReview.tsx:2021`
+- `src/components/Coach/CoachTeachPage.tsx:7480`
+- `src/components/Coach/CoachTeachPage.tsx:8139`
+- `src/components/Coach/CoachTeachPage.tsx:8194`
+- `src/components/Coach/CoachTeachPage.tsx:10330`
+- `src/components/Coach/CoachTeachPage.tsx:10342`
+- `src/hooks/usePhaseNarration.ts:417`
+- `src/hooks/usePhaseNarration.ts:864`
+- `src/hooks/usePositionNarration.ts:314`
+- `src/services/coachSurfaceScorecard.report.test.ts:116`
+- `src/services/coachSurfaceScorecard.report.test.ts:138`
+- `src/services/coachSurfaceScorecard.report.test.ts:149`
+- `src/services/coachSurfaceScorecard.report.test.ts:170`
+- `src/services/computedVoiceAudit.report.test.ts:368`
+- `src/services/computedVoiceAudit.report.test.ts:409`
 - `src/services/laneReachability.test.ts:168`
 - `src/services/voicePackage.test.ts:19`
 - `src/services/voicePackage.test.ts:32`
@@ -67,58 +67,58 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:65`
 - `src/services/voicePackage.test.ts:69`
 - `src/services/voicePackage.test.ts:83`
-- `src/services/voicePackage.test.ts:106`
-- `src/services/voicePackage.test.ts:120`
-- `src/services/voicePackage.test.ts:128`
-- `src/services/voicePackage.test.ts:138`
-- `src/services/voicePackage.test.ts:154`
-- `src/services/voicePackage.test.ts:173`
-- `src/services/voicePackage.test.ts:179`
-- `src/services/voicePackage.test.ts:211`
-- `src/services/voicePackage.test.ts:228`
-- `src/services/voicePackage.test.ts:237`
-- `src/services/voicePackage.test.ts:248`
-- `src/services/voicePackage.test.ts:256`
-- `src/services/voicePackage.test.ts:285`
-- `src/services/voicePackage.test.ts:294`
-- `src/services/voicePackage.test.ts:303`
-- `src/services/voicePackage.test.ts:312`
-- `src/services/voicePackage.test.ts:323`
-- `src/services/voicePackage.test.ts:325`
-- `src/services/voicePackage.test.ts:333`
-- `src/services/voicePackage.test.ts:340`
-- `src/services/voicePackage.test.ts:350`
-- `src/services/voicePackage.test.ts:366`
-- `src/services/voicePackage.test.ts:376`
-- `src/services/voicePackage.test.ts:385`
-- `src/services/voicePackage.test.ts:393`
-- `src/services/voicePackage.test.ts:412`
-- `src/services/voicePackage.test.ts:422`
-- `src/services/voicePackage.test.ts:431`
-- `src/services/voicePackage.test.ts:439`
-- `src/services/voicePackage.test.ts:446`
-- `src/services/voicePackage.test.ts:466`
-- `src/services/voicePackage.test.ts:476`
-- `src/services/voicePackage.test.ts:482`
-- `src/services/voicePackage.test.ts:490`
-- `src/services/voicePackage.test.ts:498`
-- `src/services/voicePackage.test.ts:504`
-- `src/services/voicePackage.test.ts:523`
-- `src/services/voicePackage.test.ts:534`
-- `src/services/voicePackage.test.ts:542`
-- `src/services/voicePackage.test.ts:546`
-- `src/services/voicePackage.test.ts:551`
+- `src/services/voicePackage.test.ts:109`
+- `src/services/voicePackage.test.ts:123`
+- `src/services/voicePackage.test.ts:131`
+- `src/services/voicePackage.test.ts:141`
+- `src/services/voicePackage.test.ts:157`
+- `src/services/voicePackage.test.ts:176`
+- `src/services/voicePackage.test.ts:182`
+- `src/services/voicePackage.test.ts:214`
+- `src/services/voicePackage.test.ts:231`
+- `src/services/voicePackage.test.ts:240`
+- `src/services/voicePackage.test.ts:251`
+- `src/services/voicePackage.test.ts:259`
+- `src/services/voicePackage.test.ts:288`
+- `src/services/voicePackage.test.ts:297`
+- `src/services/voicePackage.test.ts:306`
+- `src/services/voicePackage.test.ts:315`
+- `src/services/voicePackage.test.ts:326`
+- `src/services/voicePackage.test.ts:328`
+- `src/services/voicePackage.test.ts:336`
+- `src/services/voicePackage.test.ts:343`
+- `src/services/voicePackage.test.ts:353`
+- `src/services/voicePackage.test.ts:369`
+- `src/services/voicePackage.test.ts:379`
+- `src/services/voicePackage.test.ts:388`
+- `src/services/voicePackage.test.ts:396`
+- `src/services/voicePackage.test.ts:415`
+- `src/services/voicePackage.test.ts:425`
+- `src/services/voicePackage.test.ts:434`
+- `src/services/voicePackage.test.ts:442`
+- `src/services/voicePackage.test.ts:449`
+- `src/services/voicePackage.test.ts:469`
+- `src/services/voicePackage.test.ts:479`
+- `src/services/voicePackage.test.ts:485`
+- `src/services/voicePackage.test.ts:493`
+- `src/services/voicePackage.test.ts:501`
+- `src/services/voicePackage.test.ts:507`
+- `src/services/voicePackage.test.ts:526`
+- `src/services/voicePackage.test.ts:537`
+- `src/services/voicePackage.test.ts:545`
+- `src/services/voicePackage.test.ts:549`
+- `src/services/voicePackage.test.ts:554`
 
 ### `spokenSentenceKeys` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9541`
-- `src/components/Coach/CoachTeachPage.tsx:9905`
-- `src/services/voicePackage.test.ts:522`
-- `src/services/voicePackage.test.ts:531`
-- `src/services/voicePackage.test.ts:543`
+- `src/components/Coach/CoachTeachPage.tsx:9941`
+- `src/components/Coach/CoachTeachPage.tsx:10352`
+- `src/services/voicePackage.test.ts:525`
+- `src/services/voicePackage.test.ts:534`
+- `src/services/voicePackage.test.ts:546`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9533`
-- `src/components/Coach/CoachTeachPage.tsx:9924`
+- `src/components/Coach/CoachTeachPage.tsx:9933`
+- `src/components/Coach/CoachTeachPage.tsx:10376`
 - `src/services/voicePackage.test.ts:38`
 
 ## Tests
@@ -130,6 +130,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-turn-truth-prod.mjs`
 - `scripts/audit-learn-full-game.mjs`

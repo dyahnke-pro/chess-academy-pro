@@ -25,7 +25,7 @@ import { buildPlayCommentary } from './playCommentary';
 import { findLivePunishment } from './gemCrushLines';
 import { teachingSourceForBoard, spokenBeatText, generalizedTeaching } from './danyaTeachingService';
 import { curatedBeatAt } from './curatedBeatSource';
-import { detectOpening } from './openingDetectionService';
+import { isBookLine, detectOpening } from './openingDetectionService';
 import { noteStaysInScope } from './noteAnchorIntegrity';
 import { gradeBorrowedTeaching } from './coachAnswerGates';
 import { buildVoicePackage, type VoiceFact, type VoiceFactKind } from './voicePackage';
@@ -306,7 +306,7 @@ describe('computed voice audit', () => {
         let announceLine: string | null = null;
         const det = (() => { try { return detectOpening(history); } catch { return null; } })();
         // The surface's ONE rule (openingAnnouncement), not a copy of it.
-        const announced = openingAnnouncement(det, history.length, openingName);
+        const announced = openingAnnouncement(det, isBookLine(history), openingName);
         if (det && announced) { openingName = det.name; announceLine = announced; }
 
         let noteLine: string | null = null;

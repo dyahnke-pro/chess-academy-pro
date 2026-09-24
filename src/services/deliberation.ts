@@ -177,9 +177,14 @@ export function deliberationFacts(d: Deliberation): string {
   // playable, but not as precise. g6 is playable, but not as precise. The move
   // is Rg8." on a quiet endgame move). Coin-flip alternatives are the banned
   // filler register; with none left there is no choice to narrate — silence.
-  const meaningful = meaningfulAlternatives(d);
-  if (!d.isRealChoice || meaningful.length === 0) return '';
-  return `${meaningful.map(shortfallText).join(' ')} The move is ${d.best.san}.`;
+  // …and only with a REASON. "g6 is playable, but not as precise" came back on
+  // a real 40–150cp gap (same tape): true, and still filler — it names a move
+  // and teaches nothing about it. An alternative is weighed out loud only when
+  // the board says WHY it falls short: a line that proves it, a piece it drops,
+  // or a gap big enough to call clearly worse.
+  const reasoned = meaningfulAlternatives(d).filter((a) => a.shortfall !== 'less-precise' || !!a.proof);
+  if (!d.isRealChoice || reasoned.length === 0) return '';
+  return `${reasoned.map(shortfallText).join(' ')} The move is ${d.best.san}.`;
 }
 
 /** The alternatives that are a real fork in the road — they drop material or

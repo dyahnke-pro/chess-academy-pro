@@ -652,6 +652,14 @@ export function pieceOptionsRef(ask: string | undefined): import('../services/pi
   return { seat, color: cm ? (cm[1] as 'white' | 'black') : null, piece: PIECE_LETTER[pm[1]], square: pm[2] ?? null };
 }
 
+/** "stop" / "wait" / "hold on" / "shh" — the student telling the coach to be
+ *  quiet (David 2026-09-24: "User is in control"). The WHOLE message must be
+ *  the command, so "stop — why is Nf3 bad?" is still a question. */
+export function isStopCommand(text: string | undefined): boolean {
+  if (!text) return false;
+  return /^\s*(?:(?:ok(?:ay)?|coach|please)[,\s]+)?(?:stop(?:\s+(?:talking|it|please))?|wait(?:\s+a\s+(?:sec(?:ond)?|minute|moment))?|hold\s+on|hang\s+on|pause|shh+|quiet|be\s+quiet|silence|enough|one\s+sec(?:ond)?)(?:[,\s]+please)?\s*[.!]*\s*$/i.test(text);
+}
+
 export function isCandidateMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   if (isWhyBestMoveQuestion(ask)) return false; // "why is X best" is engine-reasoning

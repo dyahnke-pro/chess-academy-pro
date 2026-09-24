@@ -495,6 +495,23 @@ ON move 3, fragments. Learn ≈ 40% of the video, review ≈ 60%.
   board shows the question's position, each option's line is drawn as its
   sentence plays, and a Walk button steps it and returns to the game. Audit:
   Learn audit rows H1–H3.
+- [x] **C2. The student is in control (David 2026-09-24: "stop calculations and
+  answer question" · "even just the question should immediately cause coach to
+  stop").** `stockfishEngine.holdForQuestion`: the search in flight stops (its
+  result is not cached), background reads wait — including ones already queued
+  — and the question's reads skip the line on the same warm engine (the pool
+  cost ~14s cold). The first keystroke / a mic tap stops the voice and drops
+  queued commentary (`ChatInput.onStartAsking` → `stopCoachNow`); "stop / wait /
+  hold on" is a command answered by silence (`isStopCommand`). Local audit: the
+  lane answered in ~2s warm.
+- [x] **A2. Tape fixes (local run 2026-09-24):** principle praise only on a GRADED
+  clean move; the next-move hedge framed "As for your next move"; warnings seated
+  ("their queen on e1 pins your bishop"); every packaged line ends as a
+  sentence; "taking there gives up your queen for the pawn", not "8 points";
+  an alternative is weighed aloud only with a reason.
+- OPEN (seen on the same tape, this is build B): same-claim pairs still both
+  speak — "the e-file is open — your rook belongs there" + "the e-file is open —
+  that is where a rook wants to be"; the open-king pair; the doubled-pawn pair.
 - [ ] **D. Review lines** — arrows for every spoken line (refuted alt has none today;
   one line per segment), walk button narrated.
 

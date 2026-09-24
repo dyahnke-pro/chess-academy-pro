@@ -265,10 +265,25 @@ export function whyItFailed(args: {
       // means rook for minor piece, and walk 6 (L2) heard it said of a bishop
       // taking a guarded pawn.
       const down = -swap;
+      // IN PIECES, NOT POINTS (2026-09-24 Learn tape: "taking there comes out 8
+      // points down" meant the queen for a pawn). The first capture is made by
+      // the cheapest attacker, so that is the piece given up for the target.
+      let taker: { type: string } | null = null;
+      if (studentBoard) {
+        let bestVal = Infinity;
+        for (const a of studentBoard.attackers(target.sq, me)) {
+          const p = studentBoard.get(a);
+          const v = p ? VALUE[p.type] ?? 0 : Infinity;
+          if (p && v < bestVal) { bestVal = v; taker = { type: p.type }; }
+        }
+      }
+      const cost = taker
+        ? `gives up your ${NAME[taker.type]} for the ${NAME[target.piece.type]}`
+        : `comes out ${down === 1 ? 'a pawn' : `${down} points`} down`;
       return {
         kind: 'held-by-defender',
         squares: [target.sq, guard.sq],
-        line: `That eyed the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.type]} on ${guard.sq} holds it — taking there comes out ${down === 1 ? 'a pawn' : `${down} points`} down.`,
+        line: `That eyed the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.type]} on ${guard.sq} holds it — taking there ${cost}.`,
       };
     }
   }

@@ -245,7 +245,7 @@ export function renderPieceOptions(a: {
   const pieceName = `${whose(a.seat)} ${NAME[a.piece]} on ${a.from}`;
   const out: string[] = [];
   if (a.narrowedBy === 'duty') {
-    const guarded = andList(a.duty.map((sq) => `${sq}`));
+    const guarded = andList([...a.duty]);
     if (a.options.length === 0) {
       out.push(`Moving ${pieceName} gives up its guard of ${guarded} — no square keeps it.`);
     } else {

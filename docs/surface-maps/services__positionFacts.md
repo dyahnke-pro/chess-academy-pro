@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1251 lines · 9 exports · 14 importers · 12 tests · 3 audits**
+**1254 lines · 9 exports · 14 importers · 12 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -64,7 +64,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8859`
+- `src/components/Coach/CoachTeachPage.tsx:8882`
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:644`
 - `src/services/computerAccuracy.audit.test.ts:113`
@@ -77,7 +77,7 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 66 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8800`
+- `src/components/Coach/CoachTeachPage.tsx:8823`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:619`

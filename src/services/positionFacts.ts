@@ -694,7 +694,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // S2 — otherwise the opening principle the move kept, once per game, only on
   // a move with nothing to correct (a clean or ungraded move).
   const ruleHere = !refutedHere && studentToMove && lm && input.taughtPrinciples && plyNumber <= 26
-    && (lm.cpLoss === null || lm.cpLoss < 50)
+    // GRADED clean only — an ungraded move is not a clean one. The 2026-09-24
+    // Learn tape praised "O-O-O does what the opening asks" one line after
+    // another lane called O-O-O a mistake: the grade had not reached here yet.
+    && lm.cpLoss !== null && lm.cpLoss < 50
     ? principleToTeach(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples)
     : null;
   // S3 — the opponent's reply took the student's threat off the board.

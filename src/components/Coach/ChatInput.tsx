@@ -27,9 +27,14 @@ interface ChatInputProps {
    *  the page past the board on mobile — the board must be seen first
    *  (David 2026-06-19). Re-focus-after-send is unaffected. */
   autoFocus?: boolean;
+  /** The student has STARTED asking — first character typed, or the mic
+   *  tapped on. The surface stops the coach right there (David 2026-09-24:
+   *  "even just the question should immediately cause coach to stop. User is
+   *  in control"). Fires once per question, not per keystroke. */
+  onStartAsking?: () => void;
 }
 
-export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickCoachChoice, autoFocus = false }: ChatInputProps): JSX.Element {
+export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickCoachChoice, autoFocus = false, onStartAsking }: ChatInputProps): JSX.Element {
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
   const [micError, setMicError] = useState<string | null>(null);
@@ -108,6 +113,8 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
       voiceInputService.stopListening();
       setListening(false);
     } else {
+      // Tapping the mic on IS starting to ask — the coach stops.
+      onStartAsking?.();
       // Pre-warm mic so first-tap reliably starts (fixes the
       // "press twice" bug).
       void voiceInputService.prewarmMic();
@@ -153,7 +160,7 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
         setTimeout(() => setMicError(null), 4000);
       }
     }
-  }, [listening]);
+  }, [listening, onStartAsking]);
 
   // One-tap "Talk to Coach" — when a Talk affordance opens the drawer it sets
   // coachDrawerAutoListen; kick off the mic immediately, then consume the flag
@@ -169,11 +176,13 @@ export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickC
 
   // Auto-resize textarea
   const handleInput = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // Empty → something: the student has started asking. Stop the coach now.
+    if (text.length === 0 && e.target.value.length > 0) onStartAsking?.();
     setText(e.target.value);
     const el = e.target;
     el.style.height = 'auto';
     el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
-  }, []);
+  }, [text, onStartAsking]);
 
   const handleSubmit = useCallback((e: React.SyntheticEvent) => {
     e.preventDefault();
