@@ -21,6 +21,17 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000. WO-DANYA-01 — Learn free play taught like his speedruns (David 2026-09-24)
+
+- ✅ Hand-walk 1 (his Scandinavian, vc-1zfJ7ABoh8k): ~25 board-false/misframed lines fixed at the computer (PLAN §WO-DANYA-01 "Hand-walk 1").
+- ✅ Hand-walk audit locked as the standard (CLAUDE.md "WALK IT, FLAG EVERYTHING, THEN FIX").
+- ✅ Gem tests: SEE 2x faster, convert-once, budgets.
+- 🔴 Quiet-move purpose computer (Nc3 tempo, Ne2 not Nf3, h3 for g4, Qa1 behind the rook).
+- 🔴 Plan arc / one thread per move (B).
+- 🟠 Phase narration still phrases chess facts through the model — David's call.
+- 🔴 Leftovers: rook template m17, "either works … with it", duplicate break lanes, transposition name.
+- 🟠 Hand-walks owed: moves 23-27 again; 1380 (xoS71OW-Re0), 2340 (pXBR9CxK3lQ), 2000 Black (7f2sPY2U204).
+
 ## 00. WO-STANDARD-01 — THE FULL BOARD (David 2026-09-22: "get my app up to standard")
 - 🔴 A. The personal coach — WO-HOME-OPENING-01 (section 0 below, A1–A11)
 - ✅ B. The deciding path (one line per item; ✅ carries its proof)

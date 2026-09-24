@@ -463,6 +463,39 @@ ship-check, both prod audits muted, narrations read and quoted here.
 
 ## 🎙️ WO-DANYA-01 — Learn free play taught like the video (David 2026-09-24: "I want to be taught like the video I sent you! That's the only reason I'm making this app.")
 
+### Hand-walk 1 — Naroditsky's Scandinavian (vc-1zfJ7ABoh8k), 2026-09-24
+
+Walked by hand (`scripts/audit-lib/hand-driver.mjs`), his moves as White, his
+Black replies dictated. Flags + fixes: `audit-reports/hand-walk-danya-2026-09-24.md`.
+
+**Fixed (all computers, all games):** mate verdicts read by side (`mateContext`);
+"play X" on the student's turn arms the coach reply (was the play-move tool);
+pinned guards / pinning moves (`whyItFailed`); "falls apart" only when the edge
+is lost (`pickTempting`); defenders = attackers (`concessionBeat.coverage`);
+trapped = no block/capture saves it; dictated replies never self-graded (and
+the decline is honoured); seated detector text (`utils/seatPieces`); alignment
+contest on the line, from a square it can hold; working minors never "doing the
+least"; hole = their half; open file = no attacker pawn; captures are not
+breaks; d3/g3 name the bishop (`open-diagonal`); gambit/lever taught from both
+sides (`gambitFile`); pinned pawns are no news; phase thesis past-tense and
+turns only; pin said once per game by target; "b-file" speech; stem rotation;
+takeback clears marks; SEE generates attackers' moves only (gem build 2x).
+
+**Open (next):**
+- quiet-move PURPOSE computer: Nc3 hits the queen (tempo), Ne2-not-Nf3 keeps
+  the g2 diagonal, h3 prepares g4 to break the pin, Qa1 backs the a-file rook;
+- plan ARC (b4-b5-a4-a5 storm as one story) — ties to B (one thread/move);
+- phase narration still hands tactic facts to a phrasing model (bare "Bishop on
+  h5 pins knight…") — David's rule says chess is computer-worded; needs his go;
+- rook template still fired on Rd7+Qd6 (move 17) with d3 blocking the file;
+- "either works: g4 is right there with it" — unnamed "it";
+- two lanes both say "b5 is the pawn break"; standing latent pin still a second
+  mention; "nothing covers c3" with a knight on c3;
+- opening name after transposition (1.e4 Nc6 2.Nf3 e5 → still "Nimzowitsch").
+- Walk moves 23-27 again; then the 1380 and 2340 speedruns (xoS71OW-Re0,
+  pXBR9CxK3lQ) and the 2000 Black game (7f2sPY2U204).
+
+
 Target: `MWMloBpKuVg` (Nimzo-Larsen master class) + the 700/2300 speedruns
 (`docs/plans/2026-09-24-speedrun-target.md`). His unit is the DECISION, not the
 move: plans for both sides, "what's his next move — prepare the answer", options
