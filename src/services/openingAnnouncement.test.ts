@@ -1,7 +1,8 @@
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { openingAnnouncement } from './openingAnnouncement';
 import { bookDeparture } from './bookDeparture';
-import { __setLocalDbForTests } from './masterPlayLookup';
+import { __setLocalDbForTests, lookupMasterPlay } from './masterPlayLookup';
+import { masterPlayCache, positionFen } from './masterPlayCache';
 import { Chess } from 'chess.js';
 
 // Prod Learn tape 2026-09-24: four announcements in ten plies, each the
@@ -51,5 +52,38 @@ describe('bookDeparture without the masters DB claims nothing', () => {
   it('a name-DB miss is not evidence of leaving book (the DB is sparse)', () => {
     __setLocalDbForTests(null);
     expect(bookDeparture(['e4', 'e5', 'Nf3', 'd6', 'd4', 'exd4', 'Nxd4', 'Be7'])).toBeNull();
+  });
+});
+
+// "live explorer with a cache" (David 2026-09-24): Learn never loads the 37 MB
+// file. Each position is looked up live as it appears; bookDeparture reads the
+// answers back from the lookup cache.
+describe('bookDeparture reads the LIVE explorer answers from the cache', () => {
+  const history = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'exd4', 'Nxd4', 'Be7'];
+  const fens = (() => { const c = new Chess(); const out = [c.fen()]; for (const s of history) { c.move(s); out.push(c.fen()); } return out; })();
+  const live = (fen: string, moves: { san: string; games: number }[]) => ({
+    fen: positionFen(fen), totalGames: moves.reduce((n, m) => n + m.games, 0), source: 'lichess-live' as const,
+    moves: moves.map((m) => ({ ...m, white: 0, draws: 0, black: 0, whitePct: 0, drawPct: 0, blackPct: 0 })),
+  });
+  afterEach(() => { masterPlayCache.clear(); __setLocalDbForTests(null); });
+
+  it('finds the departure with no local file loaded', () => {
+    __setLocalDbForTests(null);
+    history.forEach((san, i) => masterPlayCache.set(fens[i], live(fens[i], i === 7 ? [{ san: 'Nf6', games: 900 }] : [{ san, games: 500 }])));
+    expect(bookDeparture(history)).toEqual({ ply: 8, san: 'Be7', mover: 'b', mainSan: 'Nf6' });
+  });
+
+  it('a position not looked up yet claims nothing (unknown ≠ out of book)', () => {
+    __setLocalDbForTests(null);
+    history.slice(0, 3).forEach((san, i) => masterPlayCache.set(fens[i], live(fens[i], [{ san, games: 500 }])));
+    expect(bookDeparture(history)).toBeNull();
+  });
+
+  it('warming skips the 37 MB local file — only the explorer is asked', async () => {
+    const calls: string[] = [];
+    vi.spyOn(globalThis, 'fetch').mockImplementation(async (u) => { calls.push(u instanceof Request ? u.url : u.toString()); return new Response('{"moves":[],"topGames":[]}', { status: 200 }); });
+    await lookupMasterPlay(fens[0], { triggeredBy: 'book-departure', skipLocalDb: true });
+    expect(calls.some((u) => u.includes('openings-masters-db'))).toBe(false);
+    vi.restoreAllMocks();
   });
 });

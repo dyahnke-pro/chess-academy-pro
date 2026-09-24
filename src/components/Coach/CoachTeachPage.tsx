@@ -89,7 +89,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
-import { openingAnnouncementForGame } from '../../services/openingAnnouncement';
+import { openingAnnouncementForGame, warmOpeningBook } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -967,6 +967,16 @@ export function CoachTeachPage(): JSX.Element {
   // us click-to-move + legal dots + drag, plus loadFen/resetGame/undoMove
   // for LLM-driven mutations.
   const game = useChessGame(STARTING_FEN, 'white');
+
+  // THE BOOK READ, WARMED AS THE BOARD MOVES (David 2026-09-24: "live explorer
+  // with a cache"). Each position is looked up once in the masters explorer —
+  // saved on the device after that — so "you left the book" is answered from
+  // real master games without the 37 MB local file. Past move 20 nobody is in
+  // book, so nothing is asked.
+  useEffect(() => {
+    const fullmove = Number.parseInt(game.fen.split(' ')[5] ?? '1', 10) || 1;
+    if (fullmove <= 20) warmOpeningBook(game.fen, 'coach-teach');
+  }, [game.fen]);
 
   // In-place walkthrough runtime. When active, takes over the board
   // (renders walkthrough.fen instead of game.fen, board is read-only)

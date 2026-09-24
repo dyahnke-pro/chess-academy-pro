@@ -12,7 +12,7 @@
 //
 // One function, so the two Learn lanes that build this sentence cannot drift.
 
-import { bookDeparture, type BookDeparture } from './bookDeparture';
+import { bookDeparture, warmBookPosition, type BookDeparture } from './bookDeparture';
 import { sayMoveNoun } from './spokenMove';
 
 export interface DetectedName {
@@ -54,4 +54,10 @@ export function openingAnnouncementForGame(
   studentColor: 'w' | 'b',
 ): string | null {
   return openingAnnouncement(det, bookDeparture(history), spokenName, studentColor);
+}
+
+/** Warm the book read for the position now on the board — the surface calls
+ *  this once per new position, so the announcement never waits on a fetch. */
+export function warmOpeningBook(fen: string, surface: string): void {
+  warmBookPosition(fen, surface);
 }

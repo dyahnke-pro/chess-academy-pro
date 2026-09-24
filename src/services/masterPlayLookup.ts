@@ -91,7 +91,8 @@ export type LookupTrigger =
   | 'watcher-current'
   | 'watcher-lookahead'
   | 'watcher-walkthrough-preload'
-  | 'manual';
+  | 'manual'
+  | 'book-departure';
 
 export interface LookupOptions {
   /** Who is asking? Goes to the audit event. */
@@ -104,6 +105,11 @@ export interface LookupOptions {
    *  this knob to keep prefetches free; pre-injection / tool call
    *  always lets the live path run. */
   localOnly?: boolean;
+  /** Skip the 37 MB local masters file — memory cache → saved lookups on the
+   *  device → live explorer only. Learn uses this: a phone parsing the whole
+   *  file to answer "did this move leave book" is the memory spike that kills
+   *  iOS apps (David 2026-09-24). */
+  skipLocalDb?: boolean;
   /** Test-only — inject a synthetic local DB without touching the
    *  bundled `public/data/openings-masters-db.json`. Production code
    *  never passes this. */
@@ -189,6 +195,17 @@ export function mastersMovesSync(fen: string): LocalDbMove[] | null {
   if (!localDbCache) return null;
   const hit = readLocal(localDbCache, fen);
   return hit && hit.moves.length > 0 ? hit.moves : null;
+}
+
+/** The masters moves at a position from whatever is ALREADY IN MEMORY — the
+ *  lookup cache (live answers, saved answers) first, then the local file if
+ *  some other surface loaded it. Never fetches. `null` = unknown here (not yet
+ *  looked up, or the lookup had no source); `[]` = the live explorer answered
+ *  and masters never reached this position. */
+export function masterMovesCachedSync(fen: string): LocalDbMove[] | null {
+  const hit = masterPlayCache.get(fen);
+  if (hit && hit.source !== 'none') return hit.moves.map((m) => ({ san: m.san, games: m.games }));
+  return mastersMovesSync(fen);
 }
 
 /** Test seam — inject a masters DB directly (node/test has no fetch). */
@@ -377,7 +394,7 @@ export async function lookupMasterPlay(
   // 3. New lookup. Build a promise, register it for dedup, then
   //    resolve from local → live → none.
   const promise = (async (): Promise<MasterPlayResult> => {
-    const db = opts.__testLocalDb ?? (await getLocalDb());
+    const db = opts.__testLocalDb ?? (opts.skipLocalDb ? null : await getLocalDb());
     if (db) {
       const localMoves = readLocal(db, key);
       if (localMoves) {

@@ -7,6 +7,13 @@
 // stops at 3…exd4, so any fourth move "left book". The name DB says what a line
 // is CALLED; it was never a record of what is PLAYED.
 //
+// WHERE THE MASTERS DATA COMES FROM (David 2026-09-24: "live explorer with a
+// cache"). Not the 37 MB local file — parsing that on a phone is the memory
+// spike iOS kills apps for. Each position is looked up through the live
+// explorer as it appears on the board (`warmBookPosition`), saved on the
+// device, and read back here synchronously. A position not looked up yet reads
+// as unknown, and unknown claims nothing.
+//
 // Theory is what masters actually play, so the masters DB decides: a move is
 // book when masters played it at that position in at least MIN_BOOK_GAMES
 // games. Where the masters DB has no entry for a position (not loaded, or past
@@ -18,7 +25,7 @@
 // usual move there, so the sentence can teach the theory instead of blaming the
 // wrong side.
 import { Chess } from 'chess.js';
-import { mastersMovesSync } from './masterPlayLookup';
+import { masterMovesCachedSync, lookupMasterPlay } from './masterPlayLookup';
 import { isBookLine } from './openingDetectionService';
 
 /** Same bar as `theoryDeparture` — book claims need real mass behind them. */
@@ -44,7 +51,7 @@ export function bookDeparture(history: readonly string[]): BookDeparture | null 
     const mover = board.turn();
     let played;
     try { played = board.move(history[i]); } catch { return null; }
-    const masters = mastersMovesSync(fen);
+    const masters = masterMovesCachedSync(fen);
     if (masters) {
       const hit = masters.find((m) => m.san === played.san);
       if (hit && hit.games >= MIN_BOOK_GAMES) continue;
@@ -60,4 +67,12 @@ export function bookDeparture(history: readonly string[]): BookDeparture | null 
     return null;
   }
   return null;
+}
+
+/** Look this position up in the masters explorer ahead of time (memory → saved
+ *  on the device → live), so `bookDeparture` can answer synchronously when the
+ *  next move lands. Fire-and-forget: offline or a failed fetch just leaves the
+ *  position unknown. Skips the 37 MB local file on purpose. */
+export function warmBookPosition(fen: string, surface: string): void {
+  void lookupMasterPlay(fen, { triggeredBy: 'book-departure', surface, skipLocalDb: true }).catch(() => undefined);
 }
