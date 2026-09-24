@@ -25,7 +25,7 @@
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
-import { attackerCanUseFile } from './positionalRead';
+import { attackerCanUseFile, rookReachesFile } from './positionalRead';
 import { seatBare } from '../utils/seatPieces';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
@@ -155,7 +155,20 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const good = notes.find((n) => n.quality === 'good' && (n.piece === 'n' || n.piece === 'b' || n.piece === 'r'));
       if (good) {
         // A good outpost / rook on the open file is worth praising any time.
-        return { fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} — ${good.reason}. Build around it.`, squares: [good.square] };
+        // A sentence per reason, not a noun phrase glued to a dash (hand walk
+        // 2026-09-24: "Your rook on f1 — rook on a semi-open file. Build around
+        // it." read like a label).
+        const file = good.square[0];
+        const said: Record<string, string> = {
+          'knight outpost': `Your knight on ${good.square} sits on an outpost — no pawn can kick it. Build your play around it.`,
+          'rook on the open file': `Your rook on ${good.square} owns the open ${file}-file — build your play around it.`,
+          'rook on a semi-open file': `Your rook on ${good.square} has the half-open ${file}-file — build your play around it.`,
+          'rook on the seventh rank': `Your rook on ${good.square} has reached the seventh rank — build your play around it.`,
+        };
+        return {
+          fact: said[good.reason] ?? `Your ${PIECE_NAME[good.piece]} on ${good.square} — ${good.reason}. Build around it.`,
+          squares: [good.square],
+        };
       }
       // "Reroute your worst piece" is a MIDDLEGAME idea — in the opening a piece
       // is passive because it isn't developed yet (David 2026-08-23).
@@ -459,7 +472,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
           sound = landingIsSafe(probe.fen(), dest);
         } catch { sound = false; }
         if (sound) {
-          return { fact: `${dest} is the pawn break that cracks the position open — prepare it.`, squares: [dest] };
+          // It only reaches here when the push is legal NOW and the pawn is
+          // safe where it lands — so it is READY, not something to prepare
+          // (hand walk 2026-09-24: after 11.Qe1 prepared e5 the coach still
+          // said "prepare it"; his line was "now you can go e5").
+          return { fact: `${dest} is the pawn break that cracks the position open — and it's ready now.`, squares: [dest] };
         }
       }
       return null;
@@ -485,28 +502,15 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const all = [...files.open, ...mine];
       if (all.length === 0) return null;
       // Speak only when a rook of the student's can step ONTO the file in one
-      // move along its rank. At move five of an open game (hand walk
-      // 2026-09-24) the queen and the c1-bishop stood between the a1-rook and
-      // the d-file, and "your rook belongs there" was advice nobody could take.
-      // A rook already on one of these files means the job is done.
-      const rooks: string[] = [];
+      // move — the ONE predicate (`rookReachesFile`) the positional read uses
+      // too (hand walk 2026-09-24). A rook already on one of them: job done.
+      let onOne = false;
       for (const row of chess.board()) for (const cell of row) {
-        if (cell && cell.type === 'r' && cell.color === student) rooks.push(cell.square);
+        if (cell && cell.type === 'r' && cell.color === student && all.includes(cell.square[0])) onOne = true;
       }
-      if (rooks.length === 0 || rooks.some((sq) => all.includes(sq[0]))) return null;
-      const reaches = (rookSq: string, file: string): boolean => {
-        const rank = rookSq[1];
-        const from = rookSq.charCodeAt(0);
-        const to = file.charCodeAt(0);
-        const step = to > from ? 1 : -1;
-        for (let f = from + step; f !== to; f += step) {
-          if (chess.get(`${String.fromCharCode(f)}${rank}` as Square)) return false;
-        }
-        const target = chess.get(`${file}${rank}` as Square);
-        return !target || target.color !== student;
-      };
+      if (onOne) return null;
       for (const file of all) {
-        if (!rooks.some((sq) => reaches(sq, file))) continue;
+        if (!rookReachesFile(fen, student, file)) continue;
         const kind = files.open.includes(file) ? 'open' : 'half-open';
         return { fact: `The ${file}-file is ${kind} — your rook belongs there.`, squares: [] };
       }

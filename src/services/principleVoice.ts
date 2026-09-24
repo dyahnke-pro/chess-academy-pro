@@ -445,7 +445,7 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     case 'calculation-depth': {
       const s = [
         `The move looks fine for two moves — then ${f.punish} lands. The line had to be followed ${f.depth} plies deep, and the calculation stopped early.`,
-        `Nothing hangs right away, which is the trap: ${f.punish} arrives on their ${nth(Math.ceil(Number(f.depth) / 2))} move. Calculate to a quiet position, not to a good feeling.`,
+        `Nothing hangs right away, which is the trap: ${f.punish} arrives on their ${nth(Math.ceil(Number(f.depth) / 2))} move.`,
         `Shallow read: ${f.played} survives the first replies and breaks on ${f.punish}. That is a thread lost deeper in the line, not a piece left loose.`,
       ];
       return s[v % s.length];

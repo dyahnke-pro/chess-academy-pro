@@ -226,3 +226,11 @@ describe('open-file only when a rook can step onto it (hand walk 2026-09-24)', (
     expect(hit?.fact).toMatch(/is (open|half-open) — your rook belongs there/);
   });
 });
+
+describe('piece-activity speaks a sentence, not a label (hand walk 2026-09-24)', () => {
+  it('13.fxe5: the f1-rook on the half-open f-file', () => {
+    const fen = 'r2q1rk1/ppp1bppp/8/2n1P2n/6b1/1BN2N2/PPP3PP/R1B1QRK1 w - - 1 14';
+    const hit = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'piece-activity');
+    expect(hit?.fact).toBe('Your rook on f1 has the half-open f-file — build your play around it.');
+  });
+});

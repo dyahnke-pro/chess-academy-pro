@@ -355,3 +355,13 @@ describe('the rear-facing PV — what the move let them do', () => {
     })).not.toThrow();
   });
 });
+
+describe('a move that BLOCKS a guard is named as a block (hand walk 2026-09-24)', () => {
+  // 10.Nf3 in the Philidor: the knight steps onto the d1–g4 diagonal.
+  const fen = 'r1bq1rk1/pppnbppp/3p1n2/8/3NPP2/1BN5/PPP3PP/R1BQ1RK1 w - - 1 10';
+  it('does not say the knight "took your last defender off g4"', () => {
+    const d = findStudentDrawback({ fen, playedSan: 'Nf3', bestSan: 'Qe1', studentColor: 'white' });
+    expect(d?.square).toBe('g4');
+    expect(d?.said).toMatch(/^That shut your queen on d1 off from g4/);
+  });
+});

@@ -893,3 +893,17 @@ describe('findPawnBreaks — a break that just drops the pawn is not a plan (wal
     expect(findPawnBreaks('rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3')).toContain('d4');
   });
 });
+
+describe('an isolated pawn is not backward (hand walk 2026-09-24)', () => {
+  it('the lone e5-pawn after 13.fxe5 is isolated only', () => {
+    const fen = 'r2q1rk1/ppp1bppp/4n3/4P2n/6b1/1BN1BN2/PPP3PP/R3QRK1 w - - 3 15';
+    const wp = findWeakPawns(fen, 'w');
+    expect(wp.isolated).toContain('e5');
+    expect(wp.backward).not.toContain('e5');
+  });
+  it('NEGATIVE CONTROL: a pawn its neighbour left behind is still backward', () => {
+    // d6 with the c-pawn gone ahead to c5 and d5 controlled by a white pawn on e4.
+    const fen = '4k3/8/3p4/2p5/4P3/8/8/4K3 b - - 0 1';
+    expect(findWeakPawns(fen, 'b').backward).toContain('d6');
+  });
+});

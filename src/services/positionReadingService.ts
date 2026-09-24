@@ -977,6 +977,10 @@ export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; 
     if (!hasNeighbor) isolated.push(...ranks.map((r) => squareByFileRank[`${f}:${r}`]));
 
     for (const r of ranks) {
+      // No neighbour at all is ISOLATED, never backward — backward means the
+      // neighbours ADVANCED and left it behind (hand walk 2026-09-24: the lone
+      // e5-pawn after 13.fxe5 was called "your backward pawn on e5").
+      if (!hasNeighbor) continue;
       // A neighboring pawn on an adjacent file, level with or behind this one,
       // could one day advance to guard it — that rules out "backward".
       const neighborCouldSupport = [f - 1, f + 1].some((nf) =>

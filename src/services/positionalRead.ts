@@ -106,6 +106,30 @@ function withTurn(fen: string, color: Color): string | null {
   return parts.join(' ');
 }
 
+/** A rook of `color` can step onto `file` in one move along its own rank —
+ *  the empty squares between, and a landing square that is empty or enemy. A
+ *  rook already standing on the file counts as there. ONE predicate for every
+ *  "your rook belongs on that file" claim. */
+export function rookReachesFile(fen: string, color: Color, file: string): boolean {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return false; }
+  for (const c of b.board().flat()) {
+    if (!c || c.color !== color || c.type !== 'r') continue;
+    if (c.square[0] === file) return true;
+    const rank = c.square[1];
+    const from = c.square.charCodeAt(0);
+    const to = file.charCodeAt(0);
+    const step = to > from ? 1 : -1;
+    let clear = true;
+    for (let f = from + step; f !== to; f += step) {
+      if (b.get(`${String.fromCharCode(f)}${rank}` as Square)) { clear = false; break; }
+    }
+    const target = b.get(`${file}${rank}` as Square);
+    if (clear && (!target || target.color !== color)) return true;
+  }
+  return false;
+}
+
 /** The castling right is held and every square between king and rook is empty. */
 function castleIsOneMoveAway(fen: string, color: Color): boolean {
   let b: Chess;
@@ -299,16 +323,18 @@ function observationsFor(
   // is "open" and means nothing, the same precondition the king-open-file rung uses.
   const openFiles = findOpenFiles(fen).open;
   if (own && openFiles.length > 0) {
-    const hasRook = (() => {
-      try {
-        const b = new Chess(fen);
-        return b.board().flat().some((c) => c && c.color === color && c.type === 'r');
-      } catch { return false; }
-    })();
-    if (hasRook) {
+    // A rook must be able to step ONTO the file in one move — the same one
+    // predicate `danyaBehaviors`' open-file uses (hand walk 2026-09-24: at move
+    // twelve the e1-queen and the c1-bishop walled both rooks off the d-file).
+    const rookOn = (f: string): boolean => {
+      try { return new Chess(fen).board().flat().some((c) => c && c.color === color && c.type === 'r' && c.square[0] === f); }
+      catch { return false; }
+    };
+    const file = openFiles.some(rookOn) ? undefined : openFiles.find((f) => rookReachesFile(fen, color, f));
+    if (file) {
       out.push({
-        key: `${side}-file-${openFiles[0]}`, side, kind: 'file', rank: rank('file'),
-        text: `The ${openFiles[0]}-file is open — that is where a rook wants to be.`,
+        key: `${side}-file-${file}`, side, kind: 'file', rank: rank('file'),
+        text: `The ${file}-file is open — that is where a rook wants to be.`,
       });
     }
   }

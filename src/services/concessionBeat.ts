@@ -41,6 +41,10 @@ export interface Concession {
   said: string;
   /** What the student is being pointed toward, WITHOUT the move. */
   opening: string;
+  /** Set when the moved piece never guarded the square itself but STEPPED
+   *  INTO the line of the piece that did (10.Nf3 shutting the d1-queen off
+   *  g4) — "took your defender off" would be false there. */
+  blockedGuard?: { piece: string; square: string };
 }
 
 /** How close to the coach's own king an abandoned square has to be before it
@@ -184,6 +188,29 @@ export function findConcession(args: {
     }
   }
   if (abandoned) {
+    // WHO stopped guarding it. The mover itself, or a piece whose line the
+    // mover stepped into (hand walk 2026-09-24: 10.Nf3 put the knight on the
+    // d1–g4 diagonal and the coach said "that took your last defender off
+    // g4" — the knight never guarded g4).
+    let blockedGuard: Concession['blockedGuard'];
+    try {
+      const pre = new Chess(args.fen);
+      const guardsBefore = pre.attackers(abandoned as Square, me);
+      if (!guardsBefore.includes(moved.from) && guardsBefore.length > 0) {
+        const g = guardsBefore[0];
+        const c = pre.get(g);
+        if (c) blockedGuard = { piece: NAME[c.type] ?? 'piece', square: g };
+      }
+    } catch { /* keep the plain statement */ }
+    if (blockedGuard) {
+      return {
+        kind: 'defender-left',
+        square: abandoned,
+        blockedGuard,
+        said: `That shut my ${blockedGuard.piece} on ${blockedGuard.square} off from ${abandoned}.`,
+        opening: `Nothing of mine is watching ${abandoned} now.`,
+      };
+    }
     // David's framing — "I do not take your attack seriously so I remove one
     // defender to attack over here" — only fits when the piece actually went
     // to the OTHER WING. On a retreat it would be a non-sequitur, so the wing
@@ -326,7 +353,9 @@ export function findStudentDrawback(args: {
   // ACTION is finished; a consequence that is still true of the board stays in
   // the present, which is why the second clauses read as they do.
   const said = ({
-    'defender-left': `That took your last defender off ${found.square}.`,
+    'defender-left': found.blockedGuard
+      ? `That shut your ${found.blockedGuard.piece} on ${found.blockedGuard.square} off from ${found.square} — nothing of yours watches it now.`
+      : `That took your last defender off ${found.square}.`,
     'pawn-weakened': `That left your pawn on ${found.square} isolated — no pawn of yours can defend it now.`,
     'file-opened': `That opened the file next to your own king.`,
     'piece-offside': `Your piece went a long way from your king, to ${found.square}.`,

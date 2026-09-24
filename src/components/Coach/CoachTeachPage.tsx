@@ -290,7 +290,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
-import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause, candidateCompareClause } from '../../services/tacticalRead';
+import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause } from '../../services/tacticalRead';
 import { namedPawnStructure } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
@@ -8707,19 +8707,17 @@ export function CoachTeachPage(): JSX.Element {
                     // inferior move / a genuine close call (G0).
                     if (turnRead) {
                       const butTurn = temptingTurnClause(turnRead, { spoken: true });
-                      // Framed as the NEXT decision: queued, it is heard after the
-                      // verdict on the move just played, and unframed the two
-                      // read as one contradiction ("that let them win a rook… it's
-                      // genuinely close, don't agonise").
-                      const rawHedge = uncertaintyClause(turnRead, { spoken: true, rotation: gameRef.current.history.length });
-                      const hedge = rawHedge ? `As for your next move: ${rawHedge.charAt(0).toLowerCase()}${rawHedge.slice(1)}` : null;
-                      // His "X, not Y, because…" — only when there is NO but-turn
-                      // (a seductive blunder outranks a fine-margin preference) and
-                      // NO hedge (a genuine coin-flip is the hedge, not a compare).
-                      const compare = (!butTurn && !hedge)
-                        ? candidateCompareClause(probe.fen(), studentBest.topLines, playerColor, { spoken: true, recaptureOn: m.captured ? m.to : null })
-                        : null;
-                      const reg = [butTurn, hedge, compare].filter(Boolean).join(' ');
+                      // THE BUT-TURN ONLY, before the student moves. It names the
+                      // tempting move to AVOID, so it gives nothing away. The
+                      // honest hedge ("X is about as good") and the compare
+                      // ("prefer X to Y") both NAME A GOOD MOVE before the student
+                      // has chosen — the answer before the commit, which the
+                      // honesty contract forbids (hand walk 2026-09-24: "Nxd4
+                      // before Bd3", then the student played Nxd4; "two good
+                      // moves here, and Nxe5 is one of them" beside a second
+                      // "two moves keep you level" from the critical-moment read,
+                      // which counts the moves WITHOUT naming them).
+                      const reg = butTurn ?? '';
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
                       if (gradedReg) queueSpokenHint(probe.fen(), gradedReg);
                     }

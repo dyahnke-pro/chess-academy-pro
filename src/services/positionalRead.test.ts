@@ -202,7 +202,10 @@ describe('the widened board-awareness pool surfaces the new rungs', () => {
   });
 
   it('surfaces a fully-open file when the side has a rook to use it', () => {
-    const obs = readPosition('r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1', 'white');
+    // Rooks behind their own a- and h-pawns, so the open files are b–g and the
+    // a1-rook can step onto them — the claim is advice, not a description of
+    // a rook already there.
+    const obs = readPosition('r3k2r/p6p/8/8/8/8/P6P/R3K2R w KQkq - 0 1', 'white');
     expect(obs.some((o) => o.kind === 'file')).toBe(true);
   });
 
@@ -297,5 +300,16 @@ describe("their king in the centre is a weakness only when it is stuck (hand wal
   it('NEGATIVE CONTROL: rights gone, move twelve — it speaks', () => {
     const fen = 'rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQ - 0 12';
     expect(readPosition(fen, 'white').some((o) => o.key === 'opponent-king-centre')).toBe(true);
+  });
+});
+
+describe('"the d-file is open" only when a rook can get there (hand walk 2026-09-24)', () => {
+  it('move twelve: the e1-queen and c1-bishop wall both rooks off — silent', () => {
+    const fen = 'r2q1rk1/ppp1bppp/5n2/2n1p3/5Pb1/1BN2N2/PPP3PP/R1B1QRK1 w - - 0 13';
+    expect(readPosition(fen, 'white').some((o) => o.kind === 'file')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: a rook with a clear rank to the file hears it', () => {
+    const fen = 'r4rk1/ppp2ppp/8/4p3/4P3/8/PPP2PPP/R4RK1 w - - 0 20';
+    expect(readPosition(fen, 'white').some((o) => o.kind === 'file')).toBe(true);
   });
 });
