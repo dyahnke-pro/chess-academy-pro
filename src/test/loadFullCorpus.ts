@@ -27,6 +27,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { __setFarmedCorporaCache } from '../services/farmedCorpusData';
 import { warmSecondaryPositionIndexSync } from '../services/secondaryCorpora';
+import { primeFloatingTeaching } from '../services/danyaTeachingService';
 import type { TeachingsBundle } from '../services/secondaryCorpus';
 import type { DanyaNote } from '../services/danyaTeachingService';
 import registry from '../data/corpora.json';
@@ -91,6 +92,12 @@ export function loadFullCorpus(): Array<{ key: string; notes: number }> {
   // on a phone). Without this, a test asserting on the transposition tier would
   // pass or fail on whether some earlier test happened to warm the index.
   warmSecondaryPositionIndexSync();
+  // The PRIMARY corpus's floating half merges into its concept index through
+  // `primeFloatingTeaching` — in the browser the first consumer calls it; in
+  // vitest nothing did, so a test that read the concept index before any
+  // retrieval saw only the 122 bundled positioned notes and reported concepts
+  // the corpus holds hundreds of as missing. Same production path, once.
+  primeFloatingTeaching();
   return primed.map((c) => ({ key: c.key, notes: c.data.notes.length }));
 }
 
@@ -156,4 +163,20 @@ export function primaryCorpusNotes(): DanyaNote[] {
  *  before boot finishes). Use when a test needs to assert graceful degradation. */
 export function unloadFullCorpus(): void {
   __setFarmedCorporaCache(undefined);
+}
+
+/**
+ * PROVE THE WHOLE CORPUS LOADED — derived from the registry, never a count.
+ *
+ * Two suites used to assert a hard-coded floor (`> 46_000`, `> 45_000`) to
+ * prove they were not measuring a fraction of the data. The floor was a copy of
+ * the roster, and it went stale the day the anchored farms were retired: the
+ * registry now declares two corpora and both load in full, yet both suites
+ * failed "not primed" on 17,405 notes. The claim the floor stood for is this
+ * one: EVERY fetched corpus the registry declares was read, and none came back
+ * empty. A missing or unreadable file still fails here, loudly.
+ */
+export function unprimedCorpora(loaded: ReadonlyArray<{ key: string; notes: number }>): string[] {
+  const got = new Map(loaded.map((c) => [c.key, c.notes]));
+  return FARMED_FILES.filter(({ key }) => !((got.get(key) ?? 0) > 0)).map(({ key, file }) => `${key} (${file})`);
 }

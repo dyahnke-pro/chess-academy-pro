@@ -203,6 +203,11 @@ export interface CoachDecision {
   spoken: string[];
   /** Every fact that did not, and why. */
   quiet: QuietFact[];
+  /** THE TEACH METER (WO-TEACH-02 S0): does a TEACHING fact speak here, or
+   *  only descriptions? A spoken ply with `teaches: false` is the coach
+   *  narrating a move instead of teaching one — the thing the target
+   *  (Naroditsky) never does. Required, so every construction answers it. */
+  teaches: boolean;
 }
 
 /**
@@ -230,6 +235,7 @@ function emit(
     rank: d.rank,
     speak: d.speak,
     reason: d.reason,
+    teaches: d.teaches,
     needSpeak: student.need?.speak ?? null,
     spokenCount: d.spoken.length,
     quietCount: d.quiet.length,
@@ -286,7 +292,7 @@ export function decide(
   // emitted `quietBy` used to file both closes as `'below-bar'`, so the row
   // could name the gate in `reason` and then contradict itself per fact.
   if (!speaks) {
-    return emit(posture, { ...base, speak: false, reason: 'importance', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'importance' as const })) }, student, false, bundle.stakes);
+    return emit(posture, { ...base, speak: false, reason: 'importance', teaches: false, spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'importance' as const })) }, student, false, bundle.stakes);
   }
   // 2 — THE STUDENT. Absent need data reads as speak: a fresh install must meet
   // a teaching coach, not a mute one (the cold-start rule).
@@ -302,7 +308,7 @@ export function decide(
   // moment. The teaching / critical / swing / convert / none tiers stay
   // need-gated, which is where a familiar line SHOULD go quiet.
   if (student.need && !student.need.speak && !SPEAKS_ON_IMPORTANCE.has(importance.tier)) {
-    return emit(posture, { ...base, speak: false, reason: 'need', spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'need' as const })) }, student, false, bundle.stakes);
+    return emit(posture, { ...base, speak: false, reason: 'need', teaches: false, spoken: [], quiet: bundle.facts.map((text) => ({ text, why: 'need' as const })) }, student, false, bundle.stakes);
   }
   // 3 + 4 — WHICH FACTS. Subsumption collapses one-claim duplicates; the floor
   // sweeps trivia. The floor may never mute a ply — that was step 2's job and
@@ -352,7 +358,7 @@ export function decide(
   // supports a teaching point on this ply. One role table (`FACT_ROLE`) over
   // both vocabularies. Only review has a move-reason line (`[does]`) to keep on
   // a ply with no teaching point.
-  const support = supportedFacts(selection.spoken, bundle.squares, roleOf, (t) => kindOf(t) === 'does');
+  const support = supportedFacts(selection.spoken, bundle.squares, roleOf);
   selection.spoken = support.spoken;
   selection.quiet = [...selection.quiet, ...support.quiet];
   // 5 — THE ORDER: the same values, highest first.
@@ -377,9 +383,10 @@ export function decide(
     const reason = bundle.facts.length === 0 ? 'empty'
       : live.length === 0 ? 'proven'
         : 'unsupported';
-    return emit(posture, { ...base, speak: false, reason, spoken, quiet: selection.quiet }, student, false, bundle.stakes);
+    return emit(posture, { ...base, speak: false, reason, teaches: false, spoken, quiet: selection.quiet }, student, false, bundle.stakes);
   }
-  return emit(posture, { ...base, speak: true, reason: 'spoken', spoken, quiet: selection.quiet }, student, methodSpoke, bundle.stakes);
+  const teaches = spoken.some((t) => roleOf(t) === 'teach');
+  return emit(posture, { ...base, speak: true, reason: 'spoken', teaches, spoken, quiet: selection.quiet }, student, methodSpoke, bundle.stakes);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.

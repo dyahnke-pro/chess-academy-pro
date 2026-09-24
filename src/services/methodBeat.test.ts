@@ -72,3 +72,14 @@ describe('the wire FIRES — a real beat comes out of the review builder', () =>
     expect(p12).toMatch(/checks and (the )?captures|forcing/i);
   }, 120000);
 });
+
+describe('S7 — the forcing scan is taught where the forcing move decides', () => {
+  it('fires on a critical moment whose best move is a capture', async () => {
+    const { liveMethodBeatFor } = await import('./methodBeat');
+    expect(liveMethodBeatFor({ isStudentMove: true, threatStanding: false, bestSan: 'Nxe5', tier: 'critical' })).toMatch(/check|capture/i);
+  });
+  it('NEGATIVE CONTROL: silent on a routine recapture', async () => {
+    const { liveMethodBeatFor } = await import('./methodBeat');
+    expect(liveMethodBeatFor({ isStudentMove: true, threatStanding: false, bestSan: 'Nxe5', tier: 'none' })).toBeNull();
+  });
+});

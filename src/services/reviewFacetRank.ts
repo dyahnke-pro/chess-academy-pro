@@ -32,7 +32,8 @@ export type FacetTag =
   | 'badbishop' | 'worst' | 'minority' | 'complex' | 'structure'
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
-  | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing';
+  | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
+  | 'rule' | 'stopped' | 'stock';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -47,6 +48,10 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // The move and its verdict — the student's own action, and what it cost.
   principle: 100, // the fundamental it crossed: the lesson, and it LEADS (2026-09-05)
   quality: 95,    // inaccuracy / mistake / blunder + the cost + the better move
+  // "That was a great move" — a verdict with no reason. Speaks only beside a
+  // teaching fact on the move's own squares (WO-TEACH-02: a label is not a
+  // reason, and Voice Rule 5 bans the bare acknowledgment).
+  praise: 93,
   move: 90,       // the mechanics: what it captured, checked, promoted
   // Forcing and losing material beats every quiet consideration.
   forced: 88,
@@ -84,10 +89,19 @@ export const FACET_RANK: Record<FacetTag, number> = {
   worst: 38,
   // The standing read, then what to do about it.
   verdict: 30,
+  // The opening PRINCIPLE a quiet move follows, taught once per game (S2) —
+  // above the opening's name, below the standing read.
+  rule: 29,
   opening: 28,
+  // "That move has a point: it stops your threat" — the purpose of an
+  // opponent move that threatens nothing (S3). Just above their targets.
+  stopped: 27,
   'opp-target': 26,
   'opp-dev': 24,
   endgame: 22,
+  // WHO'S BETTER, AND WHY — once, at the turn of the game (WO-TEACH-02 S4).
+  // Above the per-ply standing verdict it absorbs, below the conversion method.
+  stock: 35,
   // The conversion step the board is on — the method, not the task.
   technique: 34,
   // Two good moves, one difference — the plan layer's fine choice.
@@ -138,6 +152,9 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   trapped: 'teach',
   refuted: 'teach',
   bluff: 'teach',
+  rule: 'teach',
+  stopped: 'teach',
+  stock: 'teach',
   loose: 'teach',          // a piece you can lose — actionable, not scenery
   sac: 'teach',
   'sac-why': 'teach',
@@ -151,8 +168,10 @@ export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   'plan-now': 'teach',
   'plan-opening': 'teach',
   'plan-middlegame': 'teach',
-  // What the move itself did — the ONE describe line a quiet ply may keep.
+  // What the move did — descriptions. Each speaks only beside a teaching
+  // point on its own squares; a ply of descriptions alone is silent.
   does: 'describe',
+  praise: 'describe',
   move: 'describe',
   count: 'describe',
   royal: 'describe',
@@ -203,6 +222,10 @@ export const CLAUSE_ROLE: Record<ClauseKind, FacetRole> = {
   concept: 'teach',
   method: 'teach',
   bluff: 'teach',
+  refuted: 'teach',
+  rule: 'teach',
+  stopped: 'teach',
+  stock: 'teach',
   'student-leans': 'describe',
   'opponent-leans': 'describe',
 };
@@ -228,20 +251,22 @@ export const FACT_ROLE: Record<FactKind, FacetRole> = { ...FACET_ROLE, ...CLAUSE
  */
 export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   // SAFETY — the verdict on the move and what is forcing on the board.
-  quality: 'safety', move: 'safety', forced: 'safety', threat: 'safety',
+  quality: 'safety', praise: 'safety', move: 'safety', forced: 'safety', threat: 'safety',
   tactic: 'safety', trapped: 'safety', refuted: 'safety', bluff: 'safety', loose: 'safety', count: 'safety',
+  stopped: 'safety',
   royal: 'safety', sac: 'safety', 'sac-why': 'safety', method: 'safety',
   'must-defend': 'safety', 'latent-danger': 'safety', 'latent-chance': 'safety',
   'key-moment': 'safety', deliberation: 'safety', concept: 'safety',
   // PRINCIPLE — development, the king, the opening, converting.
   principle: 'principle', technique: 'principle', king: 'principle', opening: 'principle', endgame: 'principle',
+  rule: 'principle',
   does: 'principle', 'opp-dev': 'principle', fundamental: 'principle', convert: 'principle',
   status: 'principle',
   // PLAN — structure, targets, the plan and the long read.
   'plan-now': 'plan', contrast: 'plan', timing: 'plan', 'plan-race': 'plan', 'plan-opening': 'plan', 'plan-middlegame': 'plan',
   'plan-line': 'plan', consequence: 'plan', structure: 'plan', passer: 'plan', rook7: 'plan',
   badbishop: 'plan', complex: 'plan', minority: 'plan', worst: 'plan', 'opp-target': 'plan',
-  verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan',
+  verdict: 'plan', eval: 'plan', delta: 'plan', note: 'plan', stock: 'plan',
   'structure-plan': 'plan', 'opponent-intent': 'plan', 'student-leans': 'plan', 'opponent-leans': 'plan',
 };
 
@@ -269,6 +294,10 @@ const CLAUSE_TIE: Record<ClauseKind, number> = {
   'opponent-leans': FACET_RANK.worst,
   method: FACET_RANK.method,
   bluff: FACET_RANK.bluff,
+  refuted: FACET_RANK.refuted,
+  rule: FACET_RANK.rule,
+  stopped: FACET_RANK.stopped,
+  stock: FACET_RANK.stock,
 };
 export const TIE_ORDER: Record<FactKind, number> = { ...FACET_RANK, ...CLAUSE_TIE };
 
@@ -358,6 +387,8 @@ function clauseKindForTag(tag: FacetTag): string {
     case 'loose': case 'threat': case 'count': case 'royal': case 'trapped': return 'must-defend';
     case 'tactic': case 'sac': case 'sac-why': case 'forced': return 'latent-danger';
     case 'endgame': case 'passer': case 'consequence': case 'plan-race': return 'convert';
+    case 'refuted': return 'refuted';
+    case 'rule': return 'fundamental';
     case 'principle': case 'structure': case 'complex': case 'minority':
     case 'badbishop': case 'worst': case 'plan-middlegame': case 'plan-now': return 'structure-plan';
     default: return 'status';

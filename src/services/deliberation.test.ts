@@ -76,3 +76,35 @@ describe('buildDeliberation — the weighing from the fan', () => {
     expect(deliberationFacts(d)).toBe('');
   });
 });
+
+describe('S5 — a candidate is a lesson only with its reason', () => {
+  it('a failing candidate carries the line that proves it fails', async () => {
+    const { buildDeliberation, deliberationAlternativesFacts } = await import('./deliberation');
+    // 1.e4 e5 2.Nf3 Nc6 3.Bc4, Black to move: 3…Qh4?? 4.Nxh4 drops the queen.
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+    const d = buildDeliberation({
+      fenBefore: fen,
+      moverColor: 'b',
+      analysis: { topLines: [
+        { rank: 1, evaluation: -20, mate: null, moves: ['g8f6'] },
+        { rank: 2, evaluation: 600, mate: null, moves: ['d8h4', 'f3h4'] },
+      ] } as never,
+    })!;
+    const alt = d.alternatives[0];
+    expect(alt.proof).toBe('Qh4 and Nxh4 — they win a queen');
+    expect(deliberationAlternativesFacts(d)).toContain('Qh4? Qh4 and Nxh4 — they win a queen.');
+  });
+
+  it('NEGATIVE CONTROL: a line that proves nothing gets no invented reason', async () => {
+    const { buildDeliberation } = await import('./deliberation');
+    const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+    const d = buildDeliberation({
+      fenBefore: fen, moverColor: 'b',
+      analysis: { topLines: [
+        { rank: 1, evaluation: -20, mate: null, moves: ['g8f6'] },
+        { rank: 2, evaluation: 200, mate: null, moves: ['a7a6', 'd2d4'] },
+      ] } as never,
+    })!;
+    expect(d.alternatives[0].proof).toBeUndefined();
+  });
+});

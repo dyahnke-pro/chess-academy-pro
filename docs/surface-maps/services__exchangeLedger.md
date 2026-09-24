@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**190 lines · 8 exports · 4 importers · 2 tests · 0 audits**
+**214 lines · 9 exports · 7 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,9 +13,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/criticalMoment.ts`
+- `src/services/deliberation.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gemCrushLines.ts`
 - `src/services/lineProof.test.ts`
+- `src/services/refutedAlternativeCore.ts`
 
 ## Exports and every call site
 
@@ -49,16 +52,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3184`
+### `proofCut` (function) — 6 call sites
+- `src/services/coachFeatureService.ts:3294`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
+- `src/services/refutedAlternativeCore.ts:103`
 
-### `describeProofResult` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:3171`
+### `describeProofResult` (function) — 3 call sites
+- `src/services/coachFeatureService.ts:3281`
 - `src/services/lineProof.test.ts:27`
+- `src/services/refutedAlternativeCore.ts:105`
+
+### `proofAgainstMover` (function) — 2 call sites
+- `src/services/criticalMoment.ts:196`
+- `src/services/deliberation.ts:136`
 
 ## Tests
 

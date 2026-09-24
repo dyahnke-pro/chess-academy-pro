@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**262 lines · 9 exports · 33 importers · 17 tests · 1 audits**
+**268 lines · 9 exports · 35 importers · 18 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3816) — names `boostFor`, `matchClauseKind`
-- **The standard post-deploy ritual** (CLAUDE.md:5984) — names `weaknessSignal`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3833) — names `boostFor`, `matchClauseKind`
+- **The standard post-deploy ritual** (CLAUDE.md:5996) — names `weaknessSignal`
 
 ## Who calls in
 
@@ -40,6 +40,8 @@
 - `src/services/reviewForesight.test.ts`
 - `src/services/studentMomentBoost.test.ts`
 - `src/services/studentMomentBoost.ts`
+- `src/services/teachingLayers.test.ts`
+- `src/services/teachingLayers.ts`
 - `src/services/teachingSelector.ts`
 - `src/services/weaknessSignal.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
@@ -71,15 +73,16 @@
 ### `MAX_WEAKNESS_BOOST` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `boostFor` (function) — 25 call sites
-- `src/services/coachDecider.ts:70`
+### `boostFor` (function) — 26 call sites
+- `src/services/coachDecider.ts:73`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/needScore.ts:301`
 - `src/services/needScore.ts:315`
-- `src/services/positionFacts.ts:822`
-- `src/services/positionFacts.ts:844`
-- `src/services/reviewFacetRank.ts:145`
+- `src/services/positionFacts.ts:898`
+- `src/services/positionFacts.ts:920`
+- `src/services/reviewFacetRank.ts:330`
+- `src/services/reviewFacetRank.ts:378`
 - `src/services/studentMomentBoost.ts:119`
 - `src/services/teachingSelector.ts:170`
 - `src/services/weaknessSignal.test.ts:56`
@@ -101,12 +104,13 @@
 ### `clauseKindBucket` (function) — 1 call site
 - `src/services/needScore.ts:358`
 
-### `matchClauseKind` (function) — 12 call sites
+### `matchClauseKind` (function) — 13 call sites
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
 - `src/services/needScore.ts:312`
-- `src/services/positionFacts.ts:788`
-- `src/services/reviewFacetRank.ts:144`
+- `src/services/positionFacts.ts:864`
+- `src/services/reviewFacetRank.ts:329`
+- `src/services/reviewFacetRank.ts:377`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`
@@ -118,7 +122,7 @@
 ### `matchTacticPattern` (function) — 9 call sites
 - `src/services/liveTacticsContext.ts:496`
 - `src/services/needScore.ts:310`
-- `src/services/positionFacts.ts:787`
+- `src/services/positionFacts.ts:863`
 - `src/services/teachingSelector.ts:169`
 - `src/services/teachingSelector.ts:305`
 - `src/services/weaknessSignal.test.ts:100`
@@ -127,7 +131,7 @@
 - `src/services/weaknessSignal.test.ts:107`
 
 ### `matchTag` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1672`
+- `src/services/coachFeatureService.ts:1696`
 - `src/services/needScore.ts:299`
 - `src/services/teachingSelector.ts:306`
 - `src/services/weaknessSignal.test.ts:116`
@@ -136,7 +140,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2006`
+- `src/services/coachFeatureService.ts:2033`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`
@@ -163,6 +167,7 @@
 - `src/services/reviewFacetRank.test.ts`
 - `src/services/reviewForesight.test.ts`
 - `src/services/studentMomentBoost.test.ts`
+- `src/services/teachingLayers.test.ts`
 - `src/services/weaknessSignal.test.ts`
 - `src/services/weaknessSignalLoader.green.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`

@@ -28,6 +28,17 @@ describe('buildMiddlegameOrientation (§1 anchor + §2 both-sides plans)', () =>
     expect(beat!.text).toMatch(/opponent/i);
   });
 
+  it("keeps each side's plan on its own move (WO-TEACH-02 SEAT)", () => {
+    // Black student; White holds the queenside majority.
+    const fen = '4k3/p4ppp/8/8/8/8/PPP2PP1/4K3 w - - 0 1';
+    const mine = buildMiddlegameOrientation(fen, 'b', undefined, 'student')?.text ?? '';
+    const theirs = buildMiddlegameOrientation(fen, 'b', undefined, 'opponent')?.text ?? '';
+    expect(mine).not.toMatch(/opponent's plan/);
+    expect(theirs).toMatch(/opponent's plan/);
+    expect(theirs).not.toMatch(/your plan/i);
+    expect(buildMiddlegameOrientation(fen, 'b', undefined, 'both')?.text).toMatch(/opponent's plan/);
+  });
+
   it('stays silent when the pawns are symmetric — no clear plan (empty > generic)', () => {
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     expect(buildMiddlegameOrientation(fen, 'w')).toBeNull();

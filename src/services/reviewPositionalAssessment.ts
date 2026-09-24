@@ -14,8 +14,10 @@
  * when it is true — never invented, never padded (David 2026-07-19: "don't
  * overstate the why, I don't want non-applicable reasons stated").
  */
+import { andList } from '../utils/andList';
 import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
@@ -122,6 +124,24 @@ function assetsFor(
   const their = own ? 'their' : 'your';
   const youre = own ? "you're" : "they're";
 
+  // 0. MATERIAL — the first thing a strong player counts (WO-TEACH-02 S4:
+  // "who's better and why" had no material in it at all). Only an edge the
+  // side actually holds; a level count says nothing.
+  const count = (c: Color): number => all.filter((p) => p.color === c).reduce((n, p) => n + (MATERIAL_VALUE[p.type] ?? 0), 0);
+  const up = count(side) - count(other);
+  if (up >= 1) reasons.push(`${youre} up ${up === 1 ? 'a pawn' : up === 3 ? 'a piece' : `${up} points of material`}`);
+
+  // 0b. KING SAFETY — castled against a king still in the centre, with queens
+  // on (without queens a central king is an endgame asset, not a target).
+  const kingOf = (c: Color): string | undefined => all.find((p) => p.type === 'k' && p.color === c)?.square;
+  const queensOn = all.some((p) => p.type === 'q');
+  const castled = (sq: string | undefined, c: Color): boolean =>
+    !!sq && sq[1] === (c === 'w' ? '1' : '8') && (sq[0] === 'g' || sq[0] === 'h' || sq[0] === 'b' || sq[0] === 'c');
+  const central = (sq: string | undefined): boolean => !!sq && (sq[0] === 'd' || sq[0] === 'e');
+  if (queensOn && castled(kingOf(side), side) && central(kingOf(other))) {
+    reasons.push(`${your} king is tucked away and ${own ? 'theirs' : 'yours'} is still in the centre`);
+  }
+
   // 1. Bishop pair — two bishops vs one-or-none, on a reasonably open board.
   const myB = all.filter((p) => p.type === 'b' && p.color === side).length;
   const enemyB = all.filter((p) => p.type === 'b' && p.color === other).length;
@@ -174,4 +194,25 @@ function assetsFor(
   if (lead >= 2) reasons.push(`${youre} ${lead === 2 ? 'two pieces' : `${lead} pieces`} further developed`);
 
   return reasons;
+}
+
+/**
+ * WHO'S BETTER, AND WHY — spoken when the game changes phase (WO-TEACH-02 S4,
+ * David 2026-09-24). The verdict word is the ONE band (`verdictBand`); the
+ * reasons are the board's own asset list from the side the verdict favours.
+ * Null when there is nothing to say: no eval, or a level position with no
+ * asset on either side worth naming.
+ */
+export function phaseVerdictLine(
+  fen: string,
+  studentColorWB: Color,
+  studentPovEvalCp: number | null,
+  phase: 'middlegame' | 'endgame',
+): string | null {
+  const a = assessPositionalEdge(fen, studentColorWB, studentPovEvalCp);
+  if (!a.verdict) return null;
+  if (a.verdict === 'balanced' && a.reasons.length === 0) return null;
+  const standing = a.verdict === 'balanced' ? "it's level" : `you're ${a.verdict}`;
+  const why = a.reasons.length === 0 ? '' : ` — ${andList(a.reasons)}`;
+  return `Taking stock as the ${phase} begins: ${standing}${why}.`;
 }

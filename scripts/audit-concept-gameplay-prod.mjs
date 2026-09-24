@@ -501,6 +501,19 @@ async function main() {
         spoke.length > 0,
         `spoke=${spoke.length} silent=${decisions.length - spoke.length} rows-with-quieted-facts=${quieted.length} method-beats=${decisions.filter((d) => d.method).length}`,
       );
+      // THE TEACH METER (WO-TEACH-02): of the moments the coach SPOKE, how
+      // many carried a teaching fact rather than only a description. Rows
+      // from a bundle before the meter carry no `teaches` and are reported,
+      // not failed on.
+      const metered = spoke.filter((d) => typeof d.teaches === 'boolean');
+      const taught = metered.filter((d) => d.teaches);
+      record(
+        'G6. spoken moments TEACH (not just describe) — the Naroditsky bar, 70%',
+        metered.length === 0 ? true : taught.length / metered.length >= 0.7,
+        metered.length === 0
+          ? 'no metered rows (bundle predates the meter) — reported, not asserted'
+          : `${taught.length}/${metered.length} spoken moments teach (${Math.round((taught.length / metered.length) * 100)}%)`,
+      );
       await writeFile(`${OUT_DIR}/coach-decisions.json`, JSON.stringify(decisions, null, 1)).catch(() => {});
     }
 

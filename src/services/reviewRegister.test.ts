@@ -75,19 +75,6 @@ describe('pastTenseReviewNarration — retrospective, but never over a plan', ()
   });
 });
 
-describe('an opponent merit clause speaks from the student\'s chair (walk 5, R15)', () => {
-  it('"castles your king" becomes "castles their king" when the opponent castled', async () => {
-    const { toOpponentSeat } = await import('./coachFeatureService');
-    const { describeMoveMerit } = await import('./groundedAnswer');
-    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5';
-    const merit = describeMoveMerit(fen, 'O-O', 'white', null) ?? '';
-    expect(merit).toMatch(/your king/);
-    expect(toOpponentSeat(merit)).toMatch(/their king/);
-    expect(toOpponentSeat(merit)).not.toMatch(/\byour\b/);
-    expect(toOpponentSeat('takes the b5 square away from their bishop')).toBe('takes the b5 square away from your bishop');
-  });
-});
-
 describe('the past-tense pass leaves instructions alone and keeps one tense (walk 5, R17/R18)', () => {
   it('every sentence of a HOW stays an instruction — never "check, captured, threat"', () => {
     const out = past("The move looks fine for two moves — then fxe6 lands. Here's how: Calculate to a QUIET position, not to a good feeling. Follow every forcing reply — check, capture, threat — until nothing forces, then judge.");

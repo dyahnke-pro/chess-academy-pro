@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4253) — names `PositionRead`
 
 ## Who calls in
 
@@ -29,14 +29,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7526`
-- `src/components/Coach/CoachTeachPage.tsx:7556`
-- `src/services/computedVoiceAudit.report.test.ts:260`
+- `src/components/Coach/CoachTeachPage.tsx:7516`
+- `src/components/Coach/CoachTeachPage.tsx:7549`
+- `src/services/computedVoiceAudit.report.test.ts:261`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
-- `src/services/groundedAnswer.ts:4681`
-- `src/services/groundedAnswer.ts:4693`
-- `src/services/groundedAnswer.ts:5437`
+- `src/services/groundedAnswer.ts:4702`
+- `src/services/groundedAnswer.ts:4714`
+- `src/services/groundedAnswer.ts:5468`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`
 - `src/services/pvPlayback.test.ts:293`
@@ -45,11 +45,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pvPlayback.test.ts:297`
 - `src/services/pvPlayback.test.ts:299`
 - `src/services/pvPlayback.test.ts:300`
-- `src/services/pvPlayback.ts:219`
-- `src/services/pvPlayback.ts:637`
-- `src/services/pvPlayback.ts:657`
-- `src/services/pvPlayback.ts:694`
-- `src/services/pvPlayback.ts:787`
+- `src/services/pvPlayback.ts:234`
+- `src/services/pvPlayback.ts:662`
+- `src/services/pvPlayback.ts:682`
+- `src/services/pvPlayback.ts:719`
+- `src/services/pvPlayback.ts:812`
 - `src/services/reviewMoveBriefing.ts:250`
 - `src/services/tacticVocabulary.ts:95`
 - `src/services/teachingSelector.ts:347`
@@ -153,9 +153,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.test.ts:1258`
 
 ### `positionReadLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9274`
+- `src/components/Coach/CoachTeachPage.tsx:9134`
 - `src/services/coachLaneWiring.test.ts:38`
-- `src/services/computedVoiceAudit.report.test.ts:223`
+- `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/lookaheadPlan.test.ts:541`
 - `src/services/lookaheadPlan.test.ts:550`
 - `src/services/lookaheadPlan.test.ts:556`
@@ -172,9 +172,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/narrationAdversarial.test.ts:67`
 
 ### `lineShapeLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9278`
+- `src/components/Coach/CoachTeachPage.tsx:9138`
 - `src/services/coachLaneWiring.test.ts:39`
-- `src/services/computedVoiceAudit.report.test.ts:224`
+- `src/services/computedVoiceAudit.report.test.ts:225`
 - `src/services/lookaheadPlan.test.ts:881`
 - `src/services/lookaheadPlan.test.ts:886`
 - `src/services/lookaheadPlan.test.ts:891`
@@ -191,9 +191,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.test.ts:1015`
 
 ### `terminalReadLine` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9281`
+- `src/components/Coach/CoachTeachPage.tsx:9141`
 - `src/services/coachLaneWiring.test.ts:40`
-- `src/services/computedVoiceAudit.report.test.ts:228`
+- `src/services/computedVoiceAudit.report.test.ts:229`
 - `src/services/lookaheadPlan.test.ts:988`
 - `src/services/lookaheadPlan.test.ts:989`
 - `src/services/lookaheadPlan.test.ts:993`
@@ -205,9 +205,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lookaheadPlan.test.ts:1016`
 
 ### `keySquareLine` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9269`
+- `src/components/Coach/CoachTeachPage.tsx:9129`
 - `src/services/coachLaneWiring.test.ts:37`
-- `src/services/computedVoiceAudit.report.test.ts:222`
+- `src/services/computedVoiceAudit.report.test.ts:223`
 - `src/services/forkNarration.ts:108`
 - `src/services/forkNarration.ts:109`
 - `src/services/lookaheadPlan.test.ts:214`
@@ -225,9 +225,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planMarks.test.ts:37`
 
 ### `planFromUci` (function) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9266`
+- `src/components/Coach/CoachTeachPage.tsx:9126`
 - `src/services/coachLaneWiring.test.ts:36`
-- `src/services/computedVoiceAudit.report.test.ts:218`
+- `src/services/computedVoiceAudit.report.test.ts:219`
 - `src/services/concessionBeat.ts:381`
 - `src/services/forkNarration.ts:106`
 - `src/services/inaccuracyCall.ts:65`

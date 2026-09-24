@@ -44,7 +44,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { noteAtPosition, supportNoteForPly, teachingNoteForBoard } from './danyaTeachingService';
 import { noteArrowSourceAt } from './openingGenerator';
 import { phaseOfFen, type Phase } from './boardConcepts';
-import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadFullCorpus, unprimedCorpora } from '../test/loadFullCorpus';
 import { getLessonScript } from '../data/lessons';
 import repertoireRaw from '../data/repertoire.json';
 import modelGamesRaw from '../data/model-games.json';
@@ -125,9 +125,10 @@ describe('teaching coverage report (Phase 0 measurement)', () => {
   // index in one synchronous pass. Heavy, deliberately — see loadFullCorpus.
   beforeAll(() => {
     const loaded = loadFullCorpus();
-    const total = loaded.reduce((n, c) => n + c.notes, 0);
-    // Fail loudly rather than quietly re-measuring against a fifth of the data.
-    expect(total, `farmed corpora not primed: ${JSON.stringify(loaded)}`).toBeGreaterThan(46_000);
+    // Fail loudly rather than quietly re-measuring against a fraction of the
+    // data — every corpus the registry declares must load (see unprimedCorpora).
+    expect(loaded.length).toBeGreaterThan(0);
+    expect(unprimedCorpora(loaded), `farmed corpora not primed: ${JSON.stringify(loaded)}`).toEqual([]);
   }, 120_000);
 
   it('measures both walkthrough paths and writes the report', () => {

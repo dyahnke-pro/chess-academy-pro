@@ -16,6 +16,7 @@
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { findHangingPieces } from './tacticClassifier';
+import { proofAgainstMover } from './exchangeLedger';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -44,6 +45,10 @@ export interface Candidate {
   shortfall?: Shortfall;
   /** The piece it drops, when `shortfall === 'drops-material'`. */
   drops?: { piece: string; square: string };
+  /** The candidate's own engine line cut to the point it PROVES against the
+   *  mover ("Nxe5, Qd4 and Qxe5 — they win a knight"), when it proves one
+   *  (WO-TEACH-02 S5). A candidate is a lesson only with its reason. */
+  proof?: string;
 }
 
 export interface Deliberation {
@@ -128,19 +133,24 @@ export function buildDeliberation(input: {
     const deltaCp = Math.max(0, bestEval - evalCp);
     const drop = dropsAfter(fenBefore, l.moves[0], moverColor);
     const shortfall: Shortfall = drop ? 'drops-material' : deltaCp >= CLEARLY_WORSE_CP ? 'clearly-worse' : 'less-precise';
+    const proof = proofAgainstMover(fenBefore, l.moves, moverColor);
     alternatives.push({
       san, evalCp, deltaCp, shortfall,
       drops: drop ? { piece: drop.piece, square: drop.square } : undefined,
+      ...(proof ? { proof } : {}),
     });
   }
 
   return { best, alternatives, isRealChoice: alternatives.length > 0 };
 }
 
+
 /** One alternative's shortfall, board-true and terse. Concrete where the drop is
  *  computed; honest-terse ("isn't as strong here") where only the eval says so —
  *  never an invented positional reason. */
 function shortfallText(c: Candidate): string {
+  // The proof leads: the line that shows WHY beats a label for it.
+  if (c.proof && c.shortfall !== 'less-precise') return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
   if (c.shortfall === 'drops-material' && c.drops) {
     return `${c.san}? That drops the ${PNAME[c.drops.piece] ?? 'piece'} on ${c.drops.square}.`;
   }

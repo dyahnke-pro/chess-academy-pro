@@ -281,6 +281,145 @@ read and quoted in PLAN. No OTA dispatch — that is David's.
 report a branch + SHA; integrate on main in the order B → D → E → C, one
 ship-check per merge. Then A1.
 
+## 🗣️ WO-TEACH-02 — every line teaches: Naroditsky is the target (David 2026-09-24: "Narotiski's narrations are the target/goal" · "all changes are universally adopted … same info used differently" · "Add those in!! All of them! … without any wiring being missed")
+
+**The baseline (prod review tape, game e09n1mAb, student Black).** Of 25 narrated
+student plies: **5 TEACH, 20 DESCRIBE** ("X now eyes Y", "Newly undefended…",
+bare "that was a great move", "It developed into the game…"). Target: every
+spoken line teaches, or the ply is silent.
+
+**Context gained (four maps, 2026-09-24; cite these before touching code):**
+- `fillSilentDevelopment` (coachFeatureService ~4136) runs AFTER `decide()` and
+  refills the plies the need gate and SUPPORT deliberately silenced — the R2
+  loop the 2026-09-15 standard said to retire, alive by another name. It also
+  runs after the need-coverage row, which is why that row undercounts.
+- `supportedFacts` (factSelector ~294) keeps a lone `[does]` "now eyes" line as
+  the "move reason"; `[quality]` bare "great move" and `[opening]` refinements
+  are role `teach` and pass every gate; `[opening]`'s say-once keys the exact
+  string, so each refined variation speaks again. Live Learn names the opening
+  in `computeInstantTeaching` (~7660) and again in the late lane (~9441),
+  outside `decide()`.
+- `[plan-middlegame]` (reviewFullData ~737) has no seat gate — the opponent's
+  plan lands on the student's ply (the SEAT red).
+- `refutedAlternative.ts` exists (explorer alternative + engine cost) but only
+  the Learn walkthrough generator calls it; review's `[refuted]` is gems only.
+- No surface explains a NON-threatening opponent move. `opponentIntent` clause
+  is gated `!studentToMove`, so it never fires in Learn.
+- "Who's better": `assessPositionalEdge` has no material / king safety /
+  activity, its `[verdict]` is role describe; Learn has no verdict at all.
+- Candidates: `scanCriticalMoments` computes a 3-line fan and throws the
+  per-line evals/PVs away at the read; Learn has `deliberation`.
+- Transfer: nothing records the ply of a motif seen earlier in the game;
+  `WeaknessProvenance` has no ply.
+- Scan: the live tier is computed on the post-reply board BEFORE the student
+  moves; `liveMethodBeatFor`'s forcing beat has no tier gate.
+- AUDIT INSTRUMENT: `appAuditor` latches `streamNetworkDisabled` after 20
+  failed POSTs and never clears — the review audit's listener went deaf at ply
+  12 (11 lines captured vs 71 the run before), which alone produced the EXPL
+  and CRIT reds.
+
+**Sub-builds — each starts with `surface-map --changed` + reading its files
+end to end, each lands BOTH surfaces (review wording retrospective, Learn
+present tense), each ships with its gate and an audit contract:**
+
+- [x] **S0 Instruments.** (a) the stream breaker never latches the loopback
+  sidecar (and recovers after a success); gate. (b) need-coverage counts what
+  the student actually HEARD (after every fill). (c) a teach/describe METER:
+  per spoken student ply, does a TEACH-role fact speak — emitted on
+  `coach-decision`, asserted by both standing audits, measured over the
+  real-engine sweep before and after.
+- [x] **S1 Cut describing at the source (universal).** Retire
+  `fillSilentDevelopment` + the merit fallback in `buildDeterministicNarration`;
+  drop the `[does]` move-reason keep-alive (a description speaks only as
+  support for a teaching fact on its squares); `[quality]` "great move" alone
+  → describe (a label is not a reason); the opening is named ONCE, when it
+  settles, with its plan (review facet + both Learn lanes); `[plan-middlegame]`
+  seat-gated (their plan on their ply, yours on yours). Update every test that
+  pins the retired strings.
+- [x] **S2 "Most players go wrong here" + principle-once.** Wire
+  `refutedAlternative` into review and live on owed student plies, reading
+  the AMATEUR band first (`amateurPlayCache`) then masters, engine-proven
+  cost only. For a grey/red principle layer, one principle line per principle
+  per game ("Develop a new piece every move — this knight also hits e5"),
+  replacing the retired description. Nothing true to teach → silent.
+- [x] **S3 "Why did they play that?"** One computer `opponentMovePurpose`:
+  threat (existing) · bluff (existing) · STOPS your idea (your best move
+  before vs after their move) · the plan step it prepares (engine PV) · the
+  target it hits. Spoken on every opponent move that has a purpose; quiet
+  development stays silent. Review `[opp-intent]` facet; live clause via
+  `opponentLastMove`; fix the Learn gate.
+- [x] **S4 "Who's better, and why."** One computer `positionVerdict`: band from
+  the eval + reasons from material, king safety, activity/development,
+  structure. Spoken at each phase change (review: the ply the phase turns;
+  Learn: `runPhaseTransition`) and absorbs the describe-role `[verdict]`.
+- [x] **S5 Candidate moves at critical moments.** Keep the fan lines on
+  `CriticalMomentRead`; `candidateSet` names 2–3 real options with the proven
+  reason each alternative fails (`proofCut` over its PV). Review: the critical
+  moment reveal. Learn: `deliberation` shortfalls gain the proof line.
+- [x] **S6 Transfer.** A per-game motif ledger (motif → first ply) on both
+  surfaces → "same idea as move 12"; `WeaknessProvenance` gains an optional
+  `ply` (additive, no migration) so the cross-game recurrence line names it.
+- [x] **S7 Checks, captures, threats — before the move.** Live only (review is
+  retrospective): on a critical/only-move tier with a forcing best move, the
+  scan prompt WITHOUT naming the move (honesty contract), say-once rotating
+  stems; tier-gate the forcing beat.
+- [ ] **S8 Review reds.** EXPL + CRIT re-judged after S0a; the reveal's
+  fire-and-forget overlap risk checked; SEAT closed by S1's seat gate; NEED
+  by S0b + S2.
+
+**Every new fact kind wires ALL of:** review — `FacetTag`, `FACET_RANK`,
+`FACET_ROLE`, `FACT_LAYER`, stakes/squares coupling, say-once branch; live —
+`ClauseKind`, `CLAUSE_ROLE`, `CLAUSE_TIE`, `FACT_LAYER`, `bundle.family`,
+`matchClauseKind`; dual use — the miss it can record (or a stated reason it
+records none). Negative-control every gate.
+
+**Reds found while building, NOT this build's (measured on a clean worktree at
+7cae1ca and again at b499e4a, before this session's merges):**
+`section14RecordPath` "no-plan LANDS" (fundamentalId undefined), the corpus
+data tests (`corpusReach.measure`, `endgameCorpusNote`, `notePreferReachable`,
+`noteSelectionDeterminism`, `teachingCoverage.report`) and `gemPunishLessons`
+(three). Owed separately. `AdaptivePuzzlePage` badge WAS mine (WO-LAYERS moved
+the default to 400; the test hard-coded 1400) — fixed here, now derived.
+
+**What landed (S2–S7, 2026-09-24) — and the correction that made it real.**
+The first cut of S2–S5 appended its lines AFTER `coachDecider.decide()` in
+review and queued them straight to the voice in Learn: unranked, unfloored,
+invisible to the teach meter, duplicating review's gem `[refuted]`, and it
+broke `surfaceContract.scan` (Learn called `refutedAlternative(` directly).
+Caught on regaining the four levels of context (David: "You're not regaining
+context!!"); rewired before any push:
+- ONE VOCABULARY: new kinds `rule` · `stopped` · `stock` (+ `refuted` as a live
+  clause) on BOTH sides — `FacetTag` and `ClauseKind` share the names, so
+  `FACET_RANK/FACET_ROLE/CLAUSE_ROLE/CLAUSE_TIE/FACT_LAYER` answer once; all
+  `teach`; `matchClauseKind` joins refuted→opening holes, rule→positional.
+- REVIEW (facets, through the door): `[refuted]` = the engine alternative
+  (`refutedAlternativesForGame`, pooled, 8s latency bound, computed before the
+  synchronous builder) where no mined gem covers the ply; `[rule]` = the
+  principle kept, committed as taught only after it SPEAKS; `[stopped]` =
+  `threatStoppedBy` on the opponent ply; `[stock]` = `phaseVerdictLine` on the
+  first middlegame / endgame ply. All post-door passes deleted.
+- LIVE (clauses of `positionFacts`, through the same door): `refuted` costed
+  off the fan Learn already read at the pre-move board (`refutedFromFan`, pure,
+  `refutedAlternativeCore.ts`) — silent when the popular move is not in the fan;
+  `rule` with `taughtPrinciples` in / `principleSpoken` out; `stopped` from
+  `lastMove` + `opponentLastMove`; `stock` from `phaseTurn`, which is a declared
+  teaching beat like a band change. Learn passes RAW data only.
+- S5 `proofAgainstMover` (exchangeLedger) — the reveal's failing candidates and
+  the live deliberation's shortfalls. S7 tier-gated forcing scan. S6
+  `motifLedger` (review commits at the door's commit; Learn on the tactic lane).
+- DUAL-USE, stated per fact: `rule` is dual already (capabilityEvidence records
+  the same positive fundamentals held/broken); `refuted` — PLAYING the popular
+  mistake is recorded by the flagged-move path, AVOIDING it has no honest tag
+  today (OWED — a persisted enum is not widened casually); `stopped` / `stock`
+  pose no decision to the student, so there is nothing to record.
+- OWED: `WeaknessProvenance.ply` (S6 cross-game); live `refuted` only fires when
+  the popular move is in the MultiPV fan (a real limit, not a bug).
+- Gate: `src/test/teach02Wired.test.ts` — both producers, every fact, each with
+  a negative control.
+
+**Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
+ship-check, both prod audits muted, narrations read and quoted here.
+
 ## 🎓 WO-LAYERS-01 — teach in LAYERS, the way Naroditsky does, chosen by the student's record (David 2026-09-23: "take those two different teaching styles and algo them in … all 7" · "default should be lowest setting. This app attacks beginner players")
 
 **The finding (read 424 narrated moves across 10 videos, then 8 low-Elo vs 7 high-Elo speedruns).** Length does not change with level — median ~25–30 words per move at both ends; ours ran 120–300. What changes is the LAYER:

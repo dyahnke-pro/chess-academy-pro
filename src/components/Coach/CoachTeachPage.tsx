@@ -24,6 +24,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
+import { transferClause, recordMotif } from '../../services/motifLedger';
 import { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
@@ -88,6 +89,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
+import { openingAnnouncement } from '../../services/openingAnnouncement';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
@@ -211,7 +213,7 @@ import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
   type ForkLog, type Fork,
 } from '../../services/branchExplorer';
-import { warmAmateurPlay, buildRatingRealityFact } from '../../services/amateurPlayCache';
+import { warmAmateurPlay, buildRatingRealityFact, getCachedAmateurPlay } from '../../services/amateurPlayCache';
 import { masterPlayCache } from '../../services/masterPlayCache';
 
 /** Min plies between think-aloud deliberations — a coach who deliberates on
@@ -7512,7 +7514,10 @@ export function CoachTeachPage(): JSX.Element {
           // underscores taken out. `tacticWord` is the same map the plan lane
           // uses; an unnamed pattern says nothing rather than saying its id.
           const word = tacticWord(t.type);
-          tacticLine = word ? `There's a ${word} here for you — have a look.${conceptTail(t.type)}` : null;
+          // S6 TRANSFER — the same motif taught earlier this game is named.
+          const moveNo = Number.parseInt(args.fenAfterReply.split(' ')[5] ?? '0', 10) || 0;
+          tacticLine = word ? `There's a ${word} here for you — have a look.${conceptTail(t.type)}${transferClause(t.type, moveNo, learnMemRef.current.motifFirstMove)}` : null;
+          if (word) recordMotif(t.type, moveNo, learnMemRef.current.motifFirstMove);
           myTacticType = word ? t.type : null;
           if (word) tacticSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         }
@@ -7628,7 +7633,13 @@ export function CoachTeachPage(): JSX.Element {
     try {
       const det = detectOpening(history);
       if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
-      if (det && det.name && det.name !== learnMemRef.current.spokenOpeningName && det.name !== learnMemRef.current.queuedOpeningName) {
+      // WHEN to name it is one rule shared with the late lane below
+      // (`openingAnnouncement`): first identification, then the settled
+      // name once, where the game leaves book — never every refinement.
+      const announce = det && det.name !== learnMemRef.current.queuedOpeningName
+        ? openingAnnouncement(det, history.length, learnMemRef.current.spokenOpeningName)
+        : null;
+      if (det && announce) {
         const firstResolve = learnMemRef.current.spokenOpeningName === null;
         // NOT marked spoken here. Queueing is not saying — see the field's note
         // in `learnMemory.ts`. The late package sets `spokenOpeningName` when
@@ -7657,9 +7668,7 @@ export function CoachTeachPage(): JSX.Element {
         // "make sure I hear no floating notes in the play surfaces"). The idea
         // note was reached by opening NAME, not by the board — floating. The
         // opening is still named; the floating idea clause is gone.
-        announceLine = firstResolve
-          ? `This game is now the ${det.name}.`
-          : `The line has sharpened into the ${det.name}.`;
+        announceLine = announce;
         factLines.push(announceLine);
         // GUARANTEE it is HEARD — naming the opening is R1 of the teaching arc,
         // his first move every game. The say-once ref is spent on THIS turn
@@ -8725,6 +8734,12 @@ export function CoachTeachPage(): JSX.Element {
                           missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
                           allowedMate: midReadForFacts?.isMate ? midReadForFacts.mateIn : null,
                         } : null,
+                        // RAW DATA for the refuted alternative (WO-TEACH-02
+                        // S2): what players at this level play at the board
+                        // the student moved from (cache-only) and the fan
+                        // already read there. The composer does the costing.
+                        popular: getCachedAmateurPlay(fenBefore)?.moves ?? null,
+                        fanBefore: preStudentRead?.topLines ?? null,
                       },
                       // The CONTEXT — the composer derives the ply from the FEN
                       // and owns the mover guard, so this surface decides none
@@ -8734,8 +8749,11 @@ export function CoachTeachPage(): JSX.Element {
                       // The coach's reply that produced this board — so the
                       // composer can tell a real threat from a bluff.
                       ...(m ? { opponentLastMove: { fenBefore: move.fen, san: m.san } } : {}),
+                      // Each opening principle is taught once per game (S2).
+                      taughtPrinciples: learnMemRef.current.principleTaught,
                     });
                     standingRef.current.rememberAll(pf.remember);
+                    if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
                     // The student is to move at `probe`; their coming move is ply history+1.
                     if (pf.clauses.some((c) => c.kind === 'key-moment')) announcedPliesRef.current.add(probe.history().length + 1);
                     for (const c of clauseText(pf.clauses, ['must-defend'])) {
@@ -9408,7 +9426,8 @@ export function CoachTeachPage(): JSX.Element {
                     try {
                       const det = detectOpening(chainHistory);
                       if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
-                      if (det && det.name && det.name !== learnMemRef.current.spokenOpeningName) {
+                      const announce = openingAnnouncement(det, chainHistory.length, learnMemRef.current.spokenOpeningName);
+                      if (det && announce) {
                         const firstResolve = learnMemRef.current.spokenOpeningName === null;
                         // NOT marked spoken here either. This site pushes into
                         // `facts`, which is the MODEL's grounding list — the name
@@ -9438,9 +9457,7 @@ export function CoachTeachPage(): JSX.Element {
                         // passing" instruction read aloud, 2026-08-07). The
                         // say-the-name-naturally instruction travels in the
                         // step directive, never here.
-                        const announceLine = firstResolve
-                          ? `This game is now the ${det.name}.`
-                          : `The line has sharpened into the ${det.name}.`;
+                        const announceLine = announce;
                         facts.push(announceLine);
                         // Track A speaks this the moment the move lands —
                         // David's 2026-08-07 game had three announcements

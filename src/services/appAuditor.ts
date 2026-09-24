@@ -1567,7 +1567,14 @@ async function postToStream(cfg: AuditStreamConfig, payload: AuditEntry | readon
         ...(isAuditMarkedPage() ? { [AUDIT_MARKED_HEADER]: '1' } : {}),
       },
       body: JSON.stringify(payload),
-      keepalive: true,
+      // 🔒 NOT for the sidecar (2026-09-24). Chrome caps in-flight keepalive
+      // bodies at ~64 KB per page. A review's burst of decision rows blew
+      // that cap, every POST over it threw, twenty in a row tripped the
+      // breaker below, and the audit's own listener went deaf at ply 12 (11
+      // lines captured vs 71 the run before) — reported as product reds. The
+      // loopback sidecar is its own origin with its own connection pool, so
+      // the queueing keepalive was added to dodge does not apply to it.
+      keepalive: !isStreamSidecarUrl(cfg.url),
       // Best-effort: don't block on slow networks.
       signal: AbortSignal.timeout(4000),
     });
@@ -1620,7 +1627,9 @@ async function postToStream(cfg: AuditStreamConfig, payload: AuditEntry | readon
     streamNetworkFailureStreak += 1;
     // Latch streaming off after a sustained run of network failures so a
     // persistently-unreachable endpoint can't retry-storm on every audit.
-    if (streamNetworkFailureStreak >= STREAM_NETWORK_FAILURE_LIMIT) {
+    // Never for the loopback sidecar: it is the audit's own instrument, and a
+    // latch there turns a transient burst into a silent rest of the run.
+    if (streamNetworkFailureStreak >= STREAM_NETWORK_FAILURE_LIMIT && !isStreamSidecarUrl(cfg.url)) {
       streamNetworkDisabled = true;
     }
     maybeEmitStreamFailureRollup(null, err);

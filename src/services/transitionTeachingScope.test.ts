@@ -22,7 +22,7 @@ import { describe, it, expect , beforeAll} from 'vitest';
 // FLOATING-ONLY, so any exact-position assertion was querying an index that
 // cannot contain a hit. Every check in this file was green against a fifth of
 // the data.
-import { loadFullCorpus } from '../test/loadFullCorpus';
+import { loadFullCorpus, unprimedCorpora } from '../test/loadFullCorpus';
 import { transitionTeachingSourceForGame } from './danyaTeachingService';
 import { noteStaysInScope } from './noteAnchorIntegrity';
 
@@ -48,10 +48,11 @@ const GAMES: Array<[string, string[], string]> = [
 describe('a transition ritual stays inside the opening being played', () => {
   beforeAll(() => {
     const loaded = loadFullCorpus();
-    const total = loaded.reduce((n, c) => n + c.notes, 0);
     // Non-vacuity: with the fetched corpora missing from disk every assertion
     // below would measure an empty index and this gate would be theatre.
-    expect(total, `corpora loaded: ${JSON.stringify(loaded)}`).toBeGreaterThan(15_000);
+    // Derived from the registry, never a count — a hard-coded floor went stale
+    // when the anchored farms were retired (see `unprimedCorpora`).
+    expect(unprimedCorpora(loaded), `corpora loaded: ${JSON.stringify(loaded)}`).toEqual([]);
   }, 180_000);
 
   it.each(GAMES)('%s picks a note that belongs to it', (name, sans, fen) => {

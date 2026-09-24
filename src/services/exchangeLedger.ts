@@ -15,6 +15,7 @@
 // piece names — "you come out with two knights for the rook" — which is the
 // sentence that settles the ambiguity AND carries the lesson (why an engine
 // still calls that fork a mistake). Pure chess.js, no engine, no model (G0/G3).
+import { andList } from '../utils/andList';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 
@@ -186,4 +187,27 @@ export function describeProofResult(ledger: ExchangeLedger): string {
   if (ledger.studentWon.length > 0 && ledger.opponentWon.length === 0) return `you win ${nameSide(ledger.studentWon)}`;
   if (ledger.opponentWon.length > 0 && ledger.studentWon.length === 0) return `they win ${nameSide(ledger.opponentWon)}`;
   return ledger.netPawns > 0 ? 'you come out ahead on material' : 'you come out behind on material';
+}
+
+/** A line cut to the point it PROVES AGAINST the side that starts it — mate
+ *  of that side, or a settled material loss for it — rendered from that
+ *  side's seat ("Qh4 and Nxh4 — they win a queen"). Null when the line
+ *  proves nothing against it (then no reason may be invented). One helper for
+ *  every "why that move fails" surface (WO-TEACH-02 S5): the critical-moment
+ *  reveal and the live deliberation. */
+export function proofAgainstMover(fen: string, uci: readonly string[], moverWB: 'w' | 'b'): string | null {
+  const sans: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (const u of uci) sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined }).san);
+  } catch { /* the playable prefix is what we have */ }
+  if (sans.length === 0) return null;
+  const proof = proofCut(fen, sans, moverWB);
+  if (!proof) return null;
+  const moves = andList(sans.slice(0, proof.plies));
+  // The line starts with the mover's move, so a mate of the MOVER ends on an
+  // even ply; an odd-length mate is the mover mating, which explains nothing.
+  if (proof.mate) return proof.plies % 2 === 0 ? `${moves} — and it's mate` : null;
+  if (!proof.ledger || proof.ledger.netPawns >= 0) return null;
+  return `${moves} — ${describeProofResult(proof.ledger)}`;
 }

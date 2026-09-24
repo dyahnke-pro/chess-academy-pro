@@ -4,13 +4,13 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { computeBoardDelta } from './boardDelta';
-import { computeMoveFacets } from './reviewFullData';
+import { computeMoveFacets, NO_TEACHING_CONTEXT } from './reviewFullData';
 
 describe('[eval] attribution — the bar never moves unexplained (David 2026-07-22)', () => {
   const base = (over: Partial<Parameters<typeof computeMoveFacets>[0]>): string[] => {
     const c = new Chess();
     c.move('e4');
-    return computeMoveFacets({ seenFundamentals: new Set(),
+    return computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: new Chess().fen(),
       fenAfter: c.fen(),
       san: 'e4',
@@ -63,7 +63,7 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
     const fenBefore = 'k7/8/8/8/3q4/8/8/K2Q4 w - - 0 1';
     const c = new Chess(fenBefore);
     c.move('Qxd4');
-    const facets = computeMoveFacets({ seenFundamentals: new Set(),
+    const facets = computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore,
       fenAfter: c.fen(),
       san: 'Qxd4',

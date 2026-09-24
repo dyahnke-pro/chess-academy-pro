@@ -6,7 +6,6 @@ import { selectTeaching } from './teachingSelector';
 import { coldStudent, computeNeed, type StudentNeedContext, type NeedVerdict } from './needScore';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
-import { MATERIAL_VALUE } from './pieceValues';
 import { readConversion, type ConversionStep } from './conversionMethod';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine, type PvEngine } from './pvPlayback';
@@ -20,6 +19,8 @@ import { detectConcept } from './reviewConcepts';
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
+import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
+import { transferClause, recordMotif } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -28,6 +29,7 @@ import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
+import { classifyPhase } from './gamePhaseService';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
@@ -560,6 +562,10 @@ export interface ReviewMoveSegment {
   bestMoveSan: string | null;
   bestMoveUci: string | null;
   narration: string | null;
+  /** WO-TEACH-02 meter: a TEACHING fact spoke on this ply (the decider's own
+   *  `teaches`). Undefined on plies no decision voiced — a fill that writes
+   *  narration afterwards is, by definition, not the door teaching. */
+  teaches?: boolean;
   /** N2 — the student's computed NEED for teaching at this ply (student plies
    *  only). The quiet per-move opening beat speaks only when `need.speak`;
    *  flags / plan one-shots / moments speak on their own importance. */
@@ -1152,6 +1158,7 @@ function buildDeterministicNarration(params: {
  *  badges it. Beyond it we honor R8 (silence in conversion) and only narrate
  *  flagged moments. ~move 12 covers the opening + early middlegame. */
 const OPENING_TEACH_MAX_PLY = 24;
+
 /** The opening DEVELOPING-plan beat fires early — once the opening is identified
  *  and enough pieces are out to describe a plan (~move 3), but before the
  *  middlegame orientation takes over. */
@@ -1255,6 +1262,12 @@ export function buildReviewSegments(
   /** The game being narrated (WO-LOOP-01). The recurrence clause counts PRIOR
    *  games, so the sweep's rows for THIS game must not be mistaken for one. */
   currentGameId?: string | null,
+  /** S2 — the refuted alternative per student ply, computed by the async caller
+   *  (engine work cannot run inside this synchronous builder). Absent = no
+   *  engine budget, the same honest answer as an empty map; both production
+   *  callers pass it explicitly (the walk's builder and CoachGameReview's
+   *  synchronous rebuild), so only the unit tests rely on the default. */
+  refutedByPly: ReadonlyMap<number, RefutedAlternative> = new Map(),
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
@@ -1339,6 +1352,21 @@ export function buildReviewSegments(
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
   const seenConversionSteps = new Set<ConversionStep>();
+  /** S6 transfer: tactic motif → the move it was first SPOKEN this game. */
+  const motifFirstMove = new Map<string, number>();
+  /** S2: opening principles SPOKEN this game — committed after the door. */
+  const principlesTaught = new Set<string>();
+  /** S4: the first ply of each phase the game reaches after the opening. */
+  const phaseTurnAt = new Map<number, 'middlegame' | 'endgame'>();
+  {
+    let prevPhase: string | null = null;
+    for (let k = 0; k < usable; k += 1) {
+      const phase = classifyPhase(fenChain[k].fenAfter, moves[k].ply);
+      if (prevPhase !== null && phase !== prevPhase && (phase === 'middlegame' || phase === 'endgame')
+        && ![...phaseTurnAt.values()].includes(phase)) phaseTurnAt.set(moves[k].ply, phase);
+      prevPhase = phase;
+    }
+  }
   const segments: ReviewMoveSegment[] = [];
   // §7: the endgame phase is announced once per game (the first quiet student
   // move that's in a readable endgame), not on every endgame ply.
@@ -1702,9 +1730,16 @@ export function buildReviewSegments(
       // What each facet is worth on the board — coupled by the computer that
       // produced it; the door orders by it (factStakes.ts).
       const facetStakes = new Map<string, FactStakes>();
+      const facetIdentity = new Map<string, string>();
       const facets = computeMoveFacets({
         fundamentals,
         seenFundamentals,
+        teaching: {
+          refutedAlt: refutedByPly.get(m.ply) ?? null,
+          prevFenBefore: i > 0 ? fenChain[i - 1].fenBefore : null,
+          phaseTurn: phaseTurnAt.get(m.ply) ?? null,
+          principlesTaught,
+        },
         fenBefore: fenPair.fenBefore,
         fenAfter: fenPair.fenAfter,
         san: m.san,
@@ -1719,7 +1754,7 @@ export function buildReviewSegments(
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
-      }, facetSquares, facetIncoming, facetStakes);
+      }, facetSquares, facetIncoming, facetStakes, facetIdentity);
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step
       // per game (the step only changes when the board does).
@@ -2091,6 +2126,20 @@ export function buildReviewSegments(
           for (const c of refrained[i].claims) spokenRefrains.add(c);
         });
         if (decision.spoken.some((f) => f.startsWith('[method] '))) for (const h of habitScratch) spokenHabits.add(h);
+        // THE STRUCTURED COMMITS (WO-TEACH-02), for facts that SPOKE:
+        //  • rule:<id>  — the principle is now taught; it will not speak again;
+        //  • motif:<t>  — S6 transfer: a tactic whose motif was spoken at an
+        //    earlier move names that move ("same idea as move 12").
+        for (let k = 0; k < uncappedParts.length; k += 1) {
+          const raw = keptRaw[kept.indexOf(uncappedParts[k])] ?? uncappedParts[k];
+          const identity = facetIdentity.get(raw);
+          if (!identity) continue;
+          if (identity.startsWith('rule:')) { principlesTaught.add(identity.slice(5)); continue; }
+          const motif = identity.slice('motif:'.length);
+          const ref = transferClause(motif, fullMove, motifFirstMove);
+          if (ref) uncappedParts[k] = `${uncappedParts[k].replace(/\.$/, '')}.${ref}`;
+          recordMotif(motif, fullMove, motifFirstMove);
+        }
       }
       segments.push({
         ply: m.ply,
@@ -2106,6 +2155,7 @@ export function buildReviewSegments(
         bestMoveUci: m.bestMove,
         narration: uncappedParts.length ? uncappedParts.join(' ') : null,
         narrationSource: uncappedParts.length ? 'per-move' : null,
+        ...(uncappedParts.length ? { teaches: decision.teaches } : {}),
         ...(needHere ? { need: needHere } : {}),
         ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
@@ -3111,6 +3161,66 @@ function raceTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
 /** Run `fn` over `items` with at most `limit` in flight, preserving order.
  *  Used to spread the review's engine reads across the worker pool without
  *  firing every line at once (G4.6). */
+/** How long the review waits for the refuted alternatives before building the
+ *  walk. A LATENCY bound, never a teaching cap (G4.5/G4.6): what landed in
+ *  time speaks through the door; a ply whose search was still running simply
+ *  has no alternative to teach this time. */
+const REFUTED_PREP_MS = 8_000;
+
+/**
+ * S2 — THE REFUTED ALTERNATIVE, computed BEFORE the walk is built (WO-TEACH-02).
+ * `buildReviewSegments` is synchronous and the door runs per ply inside it, so
+ * the engine work that costs the popular alternative happens here and is
+ * handed in; the `[refuted]` facet it becomes goes through `decide()` like
+ * every other fact. Student opening plies with nothing to correct only —
+ * those are the plies a strong coach teaches with "most players play X here".
+ * Candidates: players at the student's level first (cache), masters after.
+ */
+async function refutedAlternativesForGame(
+  moves: readonly ReviewMoveInput[],
+  playerColor: 'white' | 'black' | undefined,
+): Promise<Map<number, RefutedAlternative>> {
+  const out = new Map<number, RefutedAlternative>();
+  if (!playerColor) return out;
+  const chain = buildFenChain([...moves]);
+  const jobs = moves.slice(0, chain.length)
+    .map((m, i) => ({ m, fenBefore: chain[i].fenBefore }))
+    .filter(({ m }) => m.ply <= OPENING_TEACH_MAX_PLY
+      && (m.ply % 2 === 1) === (playerColor === 'white')
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good'))
+    .map((t) => ({ ...t, candidates: candidatesForPosition(t.fenBefore, mastersMovesSync(t.fenBefore)) }))
+    .filter((j) => j.candidates.length >= 2);
+  if (jobs.length === 0) return out;
+  const lease = await import('./gameAnalysisService')
+    .then((mod) => mod.acquirePvEngines(jobs.length))
+    .catch(() => null);
+  const engines = lease?.engines ?? [];
+  let next = 0;
+  let stopped = false;
+  const lanes = Math.max(1, Math.min(engines.length || 1, jobs.length));
+  // Each lane owns ONE engine (never two searches on one worker).
+  const work = Promise.all(Array.from({ length: lanes }, async (_unused, lane) => {
+    const engine = engines[lane];
+    for (;;) {
+      if (stopped) return;
+      const i = next++;
+      if (i >= jobs.length) return;
+      const j = jobs[i];
+      const r = await refutedAlternative({
+        fenBefore: j.fenBefore, taughtSan: j.m.san, candidates: j.candidates,
+        studentColor: playerColor, depth: 10, maxPlies: 4, ...(engine ? { engine } : {}),
+      }).catch(() => null);
+      if (r && !stopped) out.set(j.m.ply, r);
+    }
+  }));
+  await raceTimeout(work.then(() => undefined), REFUTED_PREP_MS, undefined);
+  stopped = true;
+  // The lease goes back only when the in-flight searches finish, so a worker
+  // is never handed to the next pass while this one still drives it.
+  void work.finally(() => lease?.release());
+  return new Map(out);
+}
+
 export async function mapConcurrent<T, R>(
   items: readonly T[],
   limit: number,
@@ -3712,6 +3822,7 @@ async function augmentWithProjections(
   }
 
   mark('deepOpp');
+
   // #6 — BAD-PIECE ATTRIBUTION (David 2026-07-23, IMG_4589: "the knight and the
   // bishop are so bad that White has fighting chances"). The method of comparison
   // aimed at a PIECE. TARGET the middlegame position with the most cramped MINOR
@@ -4091,14 +4202,12 @@ export function narrationCoversFacets(det: string, warmed: string): boolean {
  * a brief nod the second, silent after — a concept lectured on every trade in a
  * won game would tune out (the very repetition dial we just turned).
  */
-const MAX_CONCEPT_BEATS_PER_GAME = 5;
+// No per-game total (G4.5): a cap cannot know what it deletes. Repetition is
+// handled by the per-concept dedupe below — full once, a nod once, then silent.
 function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
   const studentColor: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
   const shown = new Map<string, number>();
-  let total = 0;  // Danya is SELECTIVE — a rich positional game shouldn't become a
-                  // wall of concept lectures. Cap the whole game's concept beats.
   for (const s of segments) {
-    if (total >= MAX_CONCEPT_BEATS_PER_GAME) break;
     if (s.narration || s.evalBefore === null || s.evalAfter === null) continue;
     const moverColor: 'w' | 'b' = s.ply % 2 === 1 ? 'w' : 'b';
     let beat: ReturnType<typeof detectConcept> = null;
@@ -4111,50 +4220,26 @@ function fillConceptBeats(segments: ReviewMoveSegment[], playerColor: 'white' | 
     if (!beat) continue;
     const n = shown.get(beat.concept) ?? 0;
     shown.set(beat.concept, n + 1);
-    if (n === 0) { s.narration = beat.text; s.narrationSource = 'orientation'; total += 1; }
+    if (n === 0) { s.narration = beat.text; s.narrationSource = 'orientation'; s.teaches = true; }
     else if (n === 1 && beat.concept === 'simplify-when-ahead') {
       s.narration = moverColor === studentColor
         ? `Another pair comes off — exactly right when you're winning.`
         : `More pieces off the board — that only speeds your win.`;
       s.narrationSource = 'orientation';
-      total += 1;
+      s.teaches = true;
     }
     // n >= 2 (or a repeat of a non-simplify concept): stay silent, the point landed.
   }
 }
 
-/** A merit clause is written from the MOVER's chair ("castles your king into
- *  safety", "takes the b5 square away from their bishop"). Voiced for the
- *  opponent, the possessives swap: their king, your bishop (walk 5, R15 —
- *  "Your opponent castled your king into safety"). Possessive determiners
- *  only — they carry no verb agreement, so the swap cannot break grammar;
- *  the merit computers never use "you" as a subject. */
-export function toOpponentSeat(clause: string): string {
-  return clause.replace(/\b(your|their|Your|Their)\b/g, (w) => ({ your: 'their', their: 'your', Your: 'Their', Their: 'Your' } as Record<string, string>)[w] ?? w);
-}
-
-function fillSilentDevelopment(segments: ReviewMoveSegment[], playerColor: 'white' | 'black'): void {
-  for (let i = 0; i < segments.length; i += 1) {
-    const s = segments[i];
-    if (s.narration || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'inaccuracy') continue;
-    if (s.ply < 3 || s.ply > 30) continue;
-    const moverColor: 'white' | 'black' = s.ply % 2 === 1 ? 'white' : 'black';
-    let merit: string | null = null;
-    const prev = segments[i - 1];
-    let prevCapture: { square: string | null; capturedValue: number } | null = null;
-    if (prev && prev.ply === s.ply - 1) {
-      try {
-        const pm = new Chess(prev.fenBefore).move(prev.san);
-        prevCapture = pm ? { square: pm.to, capturedValue: pm.captured ? MATERIAL_VALUE[pm.captured] ?? 0 : 0 } : null;
-      } catch { prevCapture = null; }
-    }
-    try { merit = describeMoveMerit(s.fenBefore, s.san, moverColor, prevCapture); } catch { merit = null; }
-    if (!merit) continue;
-    const mine = moverColor === playerColor;
-    s.narration = mine ? `It ${merit}.` : `Your opponent ${toOpponentSeat(merit)}.`;
-    s.narrationSource = mine ? 'per-move' : 'opponent';
-  }
-}
+// fillSilentDevelopment is RETIRED (WO-TEACH-02 S1, David 2026-09-24:
+// "Everything said needs to teach something. Not state the move."). It ran
+// AFTER the deciding door and refilled every ply the door had silenced with a
+// description of the move — "It developed into the game", "Your opponent
+// stakes out the center" — which was most of what a student heard. The retired
+// R2 loop by another name. Quiet plies are now filled only by TEACHING
+// computers (the refuted alternative, a principle taught once, the opponent's
+// purpose) or stay silent.
 
 /**
  * PAST-TENSE PASS (David 2026-07-24: "it's a post-game review" — the walk speaks
@@ -4469,6 +4554,12 @@ export async function generateReviewNarration(params: {
     loadWeaknessSignals().catch(() => []),
   ]);
   timings.loads = Date.now() - prepStart;
+  // After the masters DB is warm (the loads above), so the fallback candidates
+  // can be read synchronously.
+  const refutedStart = Date.now();
+  const refutedByPly = await refutedAlternativesForGame(moves.slice(0, usableCount), playerColor)
+    .catch(() => new Map<number, RefutedAlternative>());
+  timings.refuted = Date.now() - refutedStart;
   const record = reviewOpeningRecord({ openingName, playerColor, studentNeed, gameId: params.gameId ?? null });
   const groundedIntro = defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
   // SPOKEN RAW (prod audit 2026-09-24): the warm pass turned this computed
@@ -4486,25 +4577,7 @@ export async function generateReviewNarration(params: {
       ).then((r) => { timings.intro = Date.now() - introStart; return r ?? ''; });
 
   let phaseStart = Date.now();
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null);
-  // NEED COVERAGE (the audit's instrument for the retired R2 — CLAUDE.md
-  // standard): per student ply, the computed need and whether the quiet
-  // teaching beat spoke. The prod audit reads THIS, not a sentence count.
-  {
-    const rows = segments.flatMap((sg) => sg.need
-      ? [{ ply: sg.ply, score: sg.need.score, speak: sg.need.speak, prior: sg.need.prior, spoke: sg.narrationSource === 'per-move', source: sg.narrationSource ?? null }]
-      : []);
-    const owed = rows.filter((r) => r.speak && r.ply <= OPENING_TEACH_MAX_PLY);
-    const covered = owed.filter((r) => r.source !== null);
-    void logAppAudit({
-      kind: 'review-need-coverage',
-      category: 'subsystem',
-      source: 'coachFeatureService.generateReviewNarration',
-      summary: `need coverage: ${covered.length}/${owed.length} owed opening plies narrated; ${rows.filter((r) => !r.speak).length} silent by need; cold=${studentNeed.gamesPlayed < 5} games=${studentNeed.gamesPlayed}`,
-      details: JSON.stringify({ gamesPlayed: studentNeed.gamesPlayed, rows }),
-    });
-  }
-
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null, refutedByPly);
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the
@@ -4556,7 +4629,6 @@ export async function generateReviewNarration(params: {
   // single game. Both pure rephrases; run after every fact is on the segment and
   // before the house-voice warm so the warmer varies from varied input.
   fillConceptBeats(segments, playerColor);
-  fillSilentDevelopment(segments, playerColor);
   varyRepeatedStems(segments);
   // POST-GAME REVIEW register (David 2026-07-24) — the walk narrates a game
   // already played, so the actual-move clauses speak in past tense (the
@@ -4704,6 +4776,29 @@ export async function generateReviewNarration(params: {
   const intro = introTrimmed && !introTrimmed.startsWith('⚠️')
     ? introTrimmed
     : defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
+
+  // NEED COVERAGE + THE TEACH METER (WO-TEACH-02 S0) — measured on what the
+  // student will actually HEAR, after every fill pass. It used to be taken
+  // before the fills, so plies a later pass narrated read as silent and plies
+  // it filled with a description read as covered by nothing: the instrument
+  // and the tape disagreed (prod 2026-09-24: row 8/12, tape 11/12).
+  {
+    const heard = (sg: ReviewMoveSegment): boolean => !!(sg.narration ?? '').trim();
+    const rows = segments.flatMap((sg) => sg.need
+      ? [{ ply: sg.ply, score: sg.need.score, speak: sg.need.speak, prior: sg.need.prior, spoke: sg.narrationSource === 'per-move', heard: heard(sg), teaches: sg.teaches === true, source: sg.narrationSource ?? null }]
+      : []);
+    const owed = rows.filter((r) => r.speak && r.ply <= OPENING_TEACH_MAX_PLY);
+    const covered = owed.filter((r) => r.heard);
+    const studentSpoken = segments.filter((sg) => sg.playerColor === playerColor && heard(sg));
+    const studentTaught = studentSpoken.filter((sg) => sg.teaches === true);
+    void logAppAudit({
+      kind: 'review-need-coverage',
+      category: 'subsystem',
+      source: 'coachFeatureService.generateReviewNarration',
+      summary: `need coverage: ${covered.length}/${owed.length} owed opening plies heard; teach meter ${studentTaught.length}/${studentSpoken.length} spoken student plies teach; ${rows.filter((r) => !r.speak).length} silent by need; cold=${studentNeed.gamesPlayed < 5} games=${studentNeed.gamesPlayed}`,
+      details: JSON.stringify({ gamesPlayed: studentNeed.gamesPlayed, rows, taught: studentTaught.map((sg) => sg.ply), described: studentSpoken.filter((sg) => sg.teaches !== true).map((sg) => sg.ply) }),
+    });
+  }
 
   timings.total = Date.now() - prepStart;
   void logAppAudit({

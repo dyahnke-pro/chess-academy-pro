@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2389 lines · 74 exports · 40 importers · 11 tests · 2 audits**
+**2389 lines · 74 exports · 41 importers · 11 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,6 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveFundamentals.ts`
 - `src/services/moveTiming.ts`
 - `src/services/nextPlans.ts`
+- `src/services/opponentMovePurpose.ts`
 - `src/services/positionReadingGrader.test.ts`
 - `src/services/positionReadingGrader.ts`
 - `src/services/positionReadingService.test.ts`
@@ -87,10 +88,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewQuestionPlan.ts:67`
 - `src/services/reviewTrapQuestion.ts:113`
 
-### `legalSeeGainOn` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:2317`
+### `legalSeeGainOn` (function) — 9 call sites
+- `src/services/coachFeatureService.ts:2367`
 - `src/services/groundedAnswer.ts:6411`
-- `src/services/reviewFullData.ts:630`
+- `src/services/opponentMovePurpose.ts:32`
+- `src/services/reviewFullData.ts:671`
 - `src/services/reviewTeachingPoints.ts:98`
 - `src/services/reviewTeachingPoints.ts:134`
 - `src/services/reviewTeachingPoints.ts:465`
@@ -115,7 +117,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/causalChain.ts:41`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
-- `src/services/exchangeLedger.ts:73`
+- `src/services/exchangeLedger.ts:74`
 - `src/services/groundedAnswer.ts:284`
 - `src/services/groundedAnswer.ts:469`
 - `src/services/groundedAnswer.ts:493`
@@ -243,8 +245,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:255`
 - `src/services/positionalTruth.corpus.test.ts:95`
 - `src/services/positionalTruth.corpus.test.ts:100`
-- `src/services/reviewFullData.ts:598`
-- `src/services/reviewFullData.ts:602`
+- `src/services/reviewFullData.ts:639`
+- `src/services/reviewFullData.ts:643`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -257,8 +259,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:230`
 - `src/services/positionalTruth.corpus.test.ts:108`
 - `src/services/positionalTruth.corpus.test.ts:113`
-- `src/services/reviewFullData.ts:594`
-- `src/services/reviewFullData.ts:596`
+- `src/services/reviewFullData.ts:635`
+- `src/services/reviewFullData.ts:637`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -303,7 +305,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8548`
+- `src/components/Coach/CoachTeachPage.tsx:8561`
 - `src/services/danyaDeviceCoverage.test.ts:106`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/groundedAnswer.ts:5991`

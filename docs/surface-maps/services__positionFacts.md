@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1178 lines · 9 exports · 13 importers · 11 tests · 3 audits**
+**1250 lines · 9 exports · 14 importers · 12 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -31,6 +31,7 @@
 - `src/services/reviewFacetRank.ts`
 - `src/services/whyBestMove.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/teach02Wired.test.ts`
 
 ## Exports and every call site
 
@@ -63,9 +64,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8737`
+- `src/components/Coach/CoachTeachPage.tsx:8759`
 - `src/hooks/useLiveCoach.ts:295`
-- `src/hooks/usePhaseNarration.ts:641`
+- `src/hooks/usePhaseNarration.ts:644`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:253`
 - `src/services/positionFacts.test.ts:254`
@@ -75,8 +76,8 @@
 - `src/services/positionReadComposer.ts:116`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 58 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8687`
+### `computePositionFacts` (function) — 66 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8700`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:619`
@@ -134,6 +135,14 @@
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:89`
 - `src/test/computedOrderWired.test.ts:32`
+- `src/test/teach02Wired.test.ts:70`
+- `src/test/teach02Wired.test.ts:79`
+- `src/test/teach02Wired.test.ts:93`
+- `src/test/teach02Wired.test.ts:96`
+- `src/test/teach02Wired.test.ts:101`
+- `src/test/teach02Wired.test.ts:108`
+- `src/test/teach02Wired.test.ts:118`
+- `src/test/teach02Wired.test.ts:120`
 
 ## Tests
 
@@ -148,6 +157,7 @@
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/teach02Wired.test.ts`
 
 ## Audits that reach it
 

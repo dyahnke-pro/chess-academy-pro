@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../test/utils';
 import { AdaptivePuzzlePage } from './AdaptivePuzzlePage';
+import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
+import { STRETCH_SEED } from '../../services/reachRating';
 
 const mockPuzzle = {
   id: 'p1',
@@ -123,12 +125,14 @@ describe('AdaptivePuzzlePage', () => {
   });
 
   it('shows the reach-ladder badge in the header (Level + seeded reach rating)', async () => {
-    // No persisted reachState ⇒ seed = puzzleRating(1200) + STRETCH_SEED(200).
+    // No persisted reachState and no profile ⇒ seed = DEFAULT_STUDENT_RATING +
+    // STRETCH_SEED — derived, so a change to the one default cannot strand it.
     render(<AdaptivePuzzlePage />);
     await waitFor(() => {
       const badge = screen.getByTestId('player-rating-value');
-      expect(badge).toHaveTextContent('1400');
-      expect(badge.textContent).toMatch(/Level \d+ · 1400/);
+      const seed = String(DEFAULT_STUDENT_RATING + STRETCH_SEED);
+      expect(badge).toHaveTextContent(seed);
+      expect(badge.textContent).toMatch(new RegExp(`Level \\d+ · ${seed}`));
     });
   });
 

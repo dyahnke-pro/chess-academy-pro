@@ -636,6 +636,9 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             })(),
             studentNeedContext: studentNeedRef.current,
             alreadySaid: standingRef.current.said,
+            // WO-TEACH-02 S4 — this board IS the turn of the game, so the
+            // composer takes stock: who's better, and why.
+            phaseTurn: event.kind === 'opening-to-middlegame' ? 'middlegame' : 'endgame',
           });
           for (const t of pf.remember) standingRef.current.said.add(t);
           const cl = clauseText(pf.clauses, ['key-moment', 'convert']);
@@ -670,6 +673,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // fact, not an LLM afterthought. Null on a quiet position.
       const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics, 'student', event.playerColor === 'white' ? 'w' : 'b', weaknessRef.current) : null;
       if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
+
 
       // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────
       // David 2026-08-08: "phase narration stays silent if no notes are

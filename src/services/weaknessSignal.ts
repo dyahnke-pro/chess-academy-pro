@@ -220,9 +220,15 @@ export function matchClauseKind(kind: string, signals: readonly WeaknessSignal[]
     // joined to the wrong weakness, silently, for every student who had one.
     case 'latent-chance':
       return bestMatch(signals, (s) => s.clusterId === 'analysis:tactic:fork');
+    // The popular mistake at their level (WO-TEACH-02 S2) — an opening lesson,
+    // so it joins the student's opening holes: leaving book early, the opening
+    // bucket.
+    case 'refuted':
+      return bestMatch(signals, (s) => s.clusterId === 'left-book-early' || s.bucket === 'opening');
     case 'convert': // failing to convert a won position
       return bestMatch(signals, (s) => s.clusterId.startsWith('analysis:conversion-endgame:') || s.bucket === 'endgame');
     case 'fundamental':
+    case 'rule': // a principle kept — the same holes as a principle broken
     case 'structure-plan': // positional understanding
       // `fundamental:<id>` rows (weaknessSpine.aggregateFundamentals, 2026-09-19)
       // are the attributed fundamentals the batch sweep proved on the student's
@@ -230,7 +236,7 @@ export function matchClauseKind(kind: string, signals: readonly WeaknessSignal[]
       // the positional clauses beside the coarser bucket/structure rows.
       return bestMatch(signals, (s) => s.bucket === 'positional' || s.clusterId.startsWith('fundamental:') || s.clusterId.startsWith('analysis:structure') || s.clusterId.startsWith('analysis:phase:'));
     default:
-      return null; // status / deliberation / key-moment / *-leans / opponent-intent: no honest single-hole mapping
+      return null; // status / deliberation / key-moment / *-leans / opponent-intent / stopped / stock: no honest single-hole mapping
   }
 }
 

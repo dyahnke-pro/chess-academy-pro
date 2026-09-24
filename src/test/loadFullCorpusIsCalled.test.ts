@@ -98,7 +98,12 @@ describe('loadFullCorpus is called, not merely imported', () => {
     // floor to an underscored literal silently reclassified that caller as
     // floorless and tripped this ceiling. The gate asks whether a floor
     // EXISTS, never what its value is.
-    const noFloor = callers.filter((f) => !/toBeGreaterThan\(\s*\d[\d_]{4,}/.test(readFileSync(f, 'utf-8')));
-    expect(noFloor.length, noFloor.map((f) => f.replace(`${ROOT}/`, '')).join(', ')).toBeLessThanOrEqual(24);
+    // `unprimedCorpora(` IS a floor, and the stronger one (2026-09-24): every
+    // fetched corpus the REGISTRY declares loaded with notes, rather than a
+    // count copied from the roster — the copied counts (46k, 45k, 20k) went
+    // stale the day the anchored farms were retired and failed "not primed" on
+    // a corpus that had loaded in full.
+    const noFloor = callers.filter((f) => !/toBeGreaterThan\(\s*\d[\d_]{4,}|\bunprimedCorpora\s*\(/.test(readFileSync(f, 'utf-8')));
+    expect(noFloor.length, noFloor.map((f) => f.replace(`${ROOT}/`, '')).join(', ')).toBeLessThanOrEqual(22);
   });
 });

@@ -4,53 +4,62 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**166 lines · 7 exports · 2 importers · 1 tests · 0 audits**
+**144 lines · 6 exports · 4 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:5978) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:5990) — names `refutedAlternative`
 
 ## Who calls in
 
+- `src/services/coachFeatureService.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/refutedAlternative.test.ts`
+- `src/services/reviewFullData.ts`
 
 ## Exports and every call site
-
-### `AlternativeCandidate` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `RefutedAlternative` (interface) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `RefutedAlternativeInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pickAlternative` (function) — 4 call sites
-- `src/services/refutedAlternative.test.ts:41`
-- `src/services/refutedAlternative.test.ts:42`
-- `src/services/refutedAlternative.test.ts:45`
-- `src/services/refutedAlternative.test.ts:46`
-
-### `renderRefutedAlternative` (function) — 1 call site
-- `src/services/refutedAlternative.test.ts:115`
-
-### `refutedAlternative` (function) — 6 call sites
+### `refutedAlternative` (function) — 7 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
+- `src/services/coachFeatureService.ts:3209`
 - `src/services/openingGenerator.ts:2157`
 - `src/services/refutedAlternative.test.ts:62`
 - `src/services/refutedAlternative.test.ts:85`
 - `src/services/refutedAlternative.test.ts:102`
 - `src/services/refutedAlternative.test.ts:111`
 
-### `candidatesFromMasters` (function) — 6 call sites
+### `candidatesForPosition` (function) — 4 call sites
+- `src/services/coachFeatureService.ts:3191`
 - `src/services/openingGenerator.ts:2154`
+- `src/services/refutedAlternative.test.ts:128`
+- `src/services/refutedAlternative.test.ts:130`
+
+### `pickAlternative` (re-export) — 6 call sites
+- `src/services/refutedAlternative.test.ts:41`
+- `src/services/refutedAlternative.test.ts:42`
+- `src/services/refutedAlternative.test.ts:45`
+- `src/services/refutedAlternative.test.ts:46`
+- `src/services/refutedAlternativeCore.ts:50`
+- `src/services/refutedAlternativeCore.ts:125`
+
+### `renderRefutedAlternative` (re-export) — 5 call sites
+- `src/services/refutedAlternative.test.ts:115`
+- `src/services/refutedAlternative.test.ts:120`
+- `src/services/refutedAlternative.test.ts:132`
+- `src/services/refutedAlternativeCore.ts:61`
+- `src/services/refutedAlternativeCore.ts:147`
+
+### `candidatesFromMasters` (re-export) — 6 call sites
 - `src/services/refutedAlternative.test.ts:39`
 - `src/services/refutedAlternative.test.ts:47`
 - `src/services/refutedAlternative.test.ts:62`
 - `src/services/refutedAlternative.test.ts:85`
 - `src/services/refutedAlternative.test.ts:111`
+- `src/services/refutedAlternativeCore.ts:77`
 
 ## Tests
 

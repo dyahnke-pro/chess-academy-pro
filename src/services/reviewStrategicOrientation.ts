@@ -543,6 +543,12 @@ export function buildMiddlegameOrientation(
    *  (audit 2026-07-24: the race beat landed on g5, a kingside push, while
    *  advising to attack the queenside king). */
   moveSan?: string,
+  /** WHOSE PLAN this beat may carry (WO-TEACH-02, prod SEAT red 2026-09-24:
+   *  "Your opponent's plan is to push on the queenside" spoken as the whole
+   *  line on the student's own move). The per-ply review passes the mover's
+   *  seat: the student's move carries the student's plan and the race; the
+   *  opponent's move carries theirs. 'both' is the one-shot orientation. */
+  seat: 'student' | 'opponent' | 'both' = 'both',
 ): PlanBeat | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
@@ -568,7 +574,7 @@ export function buildMiddlegameOrientation(
     struct.kings.oppositeWings &&
     struct.kings.kingWing[studentColorWB] !== 'center' &&
     struct.kings.kingWing[enemyWB] !== 'center';
-  if (oppositeCastling) {
+  if (oppositeCastling && seat !== 'opponent') {
     const enemyKingWing = struct.kings.kingWing[enemyWB] === 'queenside' ? 'queenside' : 'kingside';
     const myKingWing = struct.kings.kingWing[studentColorWB] === 'queenside' ? 'queenside' : 'kingside';
     // Name the concrete TARGET, not a generic race (David 2026-07-24): storm the
@@ -587,11 +593,11 @@ export function buildMiddlegameOrientation(
     arrows.push(...stormArrows(all, enemyWB, myKingWing, PLAN_AMBER));
   }
 
-  if (studentWing) {
+  if (studentWing && seat !== 'opponent') {
     parts.push(`your plan is to advance your ${studentWing} pawn majority and make it count`);
     if (!oppositeCastling) arrows.push(...majorityArrows(all, studentColorWB, studentWing, PLAN_BLUE));
   }
-  if (enemyWing) {
+  if (enemyWing && seat !== 'student') {
     parts.push(`your opponent's plan is to push on the ${enemyWing}, where they hold the majority`);
     if (!oppositeCastling) arrows.push(...majorityArrows(all, enemyWB, enemyWing, PLAN_AMBER));
   }
