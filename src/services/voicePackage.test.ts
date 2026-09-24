@@ -555,3 +555,14 @@ describe('cross-turn novelty (priorKeys) — no lane repeats a phrase all game',
     expect(pkg.spoken).toBe('You want to win a pawn.');
   });
 });
+
+describe('a move question is never left bare (hand walk 2026-09-24)', () => {
+  it('when the answer was already said, the question goes with it', () => {
+    const pkg = buildVoicePackage(
+      [fact('computed', 'gxf3? Then Nf4, and it falls apart. Rd2? Clearly worse here.')],
+      'Then Nf4, and it falls apart.',
+    );
+    expect(pkg.spoken).not.toMatch(/gxf3\?(?! Then)/);
+    expect(pkg.spoken).toContain('Rd2? Clearly worse here.');
+  });
+});

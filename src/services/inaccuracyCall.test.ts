@@ -11,7 +11,7 @@
 // "inaccuracy" in review.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { callInaccuracy } from './inaccuracyCall';
+import { callInaccuracy, gambitFile } from './inaccuracyCall';
 import { classifyMove } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
 
@@ -297,5 +297,17 @@ describe('a gambit is taught from both sides (hand walk 2026-09-24)', () => {
   it('NEGATIVE CONTROL: a push nobody can take is graded as before', () => {
     const call = callInaccuracy({ fenBefore: fen, playedSan: 'a3', bestSan: 'b4', cpLoss: 120, side: 'student', moverColor: 'white' });
     expect(call?.said ?? '').not.toContain('offers a pawn');
+  });
+});
+
+describe('a defended pawn is not a gambit (hand walk 2026-09-24)', () => {
+  it('18.h3 against …Bg4: g2 guards h3, so nothing is offered', () => {
+    const fen = 'r3qrk1/pp3ppp/2p1n3/4P2n/1b4b1/1BN1BN2/PPP3PP/3RQRK1 w - - 2 18';
+    expect(gambitFile(fen, 'h3', 'white')).toBeNull();
+  });
+  it('NEGATIVE CONTROL: an undefended pawn a piece can take still is', () => {
+    // g4 pushed with nothing guarding it and their bishop on f5 able to take.
+    const fen = '6k1/5ppp/8/5b2/8/8/5PPP/6K1 w - - 0 20';
+    expect(gambitFile(fen, 'g4', 'white')).not.toBeNull();
   });
 });

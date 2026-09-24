@@ -245,8 +245,23 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // half-open for that side so a rook can pile on. A backward pawn defended
       // three times behind a closed file is not a target.
       const theirs = findWeakPawns(fen, opp);
+      // A DOUBLED PAIR IN FLUX IS NOT A STRUCTURE. After 3.d4 exd4 the d6 and
+      // d4 pawns are "doubled" for exactly one move — White is about to take
+      // the one on d4 (hand walk 2026-09-24: "The doubled pawn on d6 is a
+      // weakness — pile up on it"). If either pawn on that file can be taken
+      // right now, the doubling is about to end and is not advice.
+      const inFlux = (sq: Square): boolean => {
+        const file = sq[0];
+        for (let r = 1; r <= 8; r += 1) {
+          const at = `${file}${r}` as Square;
+          const c = chess.get(at);
+          if (c && c.type === 'p' && c.color === opp && chess.attackers(at, student).length > 0) return true;
+        }
+        return false;
+      };
       const theirsPick = [theirs.backward[0], theirs.isolated[0], theirs.doubled[0]]
-        .find((p): p is Square => !!p && pawnIsAttackable(chess, p, student));
+        .find((p): p is Square => !!p && pawnIsAttackable(chess, p, student)
+          && !(theirs.doubled.includes(p) && inFlux(p)));
       if (theirsPick) {
         const kind = theirs.backward.includes(theirsPick) ? 'backward' : theirs.isolated.includes(theirsPick) ? 'isolated' : 'doubled';
         return { fact: `The ${kind} pawn on ${theirsPick} is a weakness — pile up on it.`, squares: [theirsPick] };

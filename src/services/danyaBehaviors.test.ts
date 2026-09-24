@@ -234,3 +234,16 @@ describe('piece-activity speaks a sentence, not a label (hand walk 2026-09-24)',
     expect(hit?.fact).toBe('Your rook on f1 has the half-open f-file — build your play around it.');
   });
 });
+
+describe('a doubled pair about to be undone is not a weakness (hand walk 2026-09-24)', () => {
+  it('3.d4 exd4: d6+d4 are "doubled" only until Nxd4', () => {
+    const fen = 'rnbqkbnr/ppp2ppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4';
+    const hit = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'pawn-structure');
+    expect(hit?.fact ?? '').not.toMatch(/doubled pawn on d6/);
+  });
+  it('NEGATIVE CONTROL: a settled doubled pair still is', () => {
+    const fen = '4k3/ppp3pp/3p4/3p4/8/8/PPP3PP/R3K3 w - - 0 20';
+    const hit = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'pawn-structure');
+    expect(hit?.fact ?? '').toMatch(/doubled pawn on d/);
+  });
+});

@@ -317,7 +317,19 @@ function sharedPrefix(a: string, b: string): number {
 /** Sentences, for dedupe purposes. Our prose is generated, so a full stop
  *  followed by whitespace is a sentence boundary and nothing else is. */
 function sentencesOf(text: string): string[] {
-  return text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+  const raw = text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+  // A MOVE QUESTION BELONGS TO ITS ANSWER. "gxf3? Then Nf4, and it falls
+  // apart." is ONE claim; split at the "?" the answer could be deduped away and
+  // the bare "gxf3?" spoken on its own (hand walk 2026-09-24: "gxf3? Rd2? The
+  // move is Rxf3"). A short, space-free "X?" is glued to what follows it.
+  const out: string[] = [];
+  for (let i = 0; i < raw.length; i += 1) {
+    if (/^[^\s]{1,12}\?$/.test(raw[i]) && i + 1 < raw.length) {
+      out.push(`${raw[i]} ${raw[i + 1]}`);
+      i += 1;
+    } else out.push(raw[i]);
+  }
+  return out;
 }
 
 /** The comparison key: letters and digits only, so punctuation and casing

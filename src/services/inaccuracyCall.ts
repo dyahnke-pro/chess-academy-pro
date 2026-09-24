@@ -354,6 +354,10 @@ export function gambitFile(fenBefore: string, playedSan: string, moverColor: 'wh
     const them = me === 'w' ? 'b' : 'w';
     const takers = b.moves({ verbose: true }).filter((m) => m.to === mv.to && m.captured === 'p');
     if (takers.length === 0) return null;
+    // A DEFENDED pawn is not offered: taking it costs them the taker (hand walk
+    // 2026-09-24: 18.h3 against …Bg4 was called "h3 offers a pawn" — g2
+    // guards h3, so …Bxh3 gxh3 is a bishop for a pawn).
+    if (b.attackers(mv.to, me).length > 0) return null;
     const file = mv.to[0];
     let kingFile: string | null = null;
     for (const row of b.board()) for (const c of row) if (c && c.type === 'k' && c.color === them) kingFile = c.square[0];
