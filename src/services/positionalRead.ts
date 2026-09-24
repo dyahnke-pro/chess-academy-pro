@@ -106,6 +106,18 @@ function withTurn(fen: string, color: Color): string | null {
   return parts.join(' ');
 }
 
+/** The castling right is held and every square between king and rook is empty. */
+function castleIsOneMoveAway(fen: string, color: Color): boolean {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return false; }
+  const rights = fen.split(' ')[2] ?? '-';
+  const r = color === 'w' ? '1' : '8';
+  const clear = (files: readonly string[]): boolean => files.every((f) => !b.get(`${f}${r}` as Square));
+  const kingSide = rights.includes(color === 'w' ? 'K' : 'k') && clear(['f', 'g']);
+  const queenSide = rights.includes(color === 'w' ? 'Q' : 'q') && clear(['b', 'c', 'd']);
+  return kingSide || queenSide;
+}
+
 /** Every observation for one side. */
 function observationsFor(
   fen: string,
@@ -119,12 +131,24 @@ function observationsFor(
   const you = own ? 'you' : 'they';
 
   const king = kingSafetyRead(fen, color);
-  if (king?.inCenter && !king.castled) {
+  // "Get castled" is advice only when castling is ONE move away: the right is
+  // still held and the squares between king and rook are empty. At move three
+  // (1.e4 e5 2.Nf3 d6 3.d4) the f1-bishop still blocks it, so the line told the
+  // student to castle when they could not — and faulted the book move d4 for it
+  // (hand walk 2026-09-24). The student's version waits for that; the opponent's
+  // version is a different claim (lines toward their king) and keeps its gate.
+  const fullMove = Number(fen.split(' ')[5] ?? '1') || 1;
+  // Theirs is a weakness only once they CANNOT castle next move and the
+  // opening is over — at move five with …O-O one move away it is noise.
+  const centreCounts = own
+    ? castleIsOneMoveAway(fen, color)
+    : !castleIsOneMoveAway(fen, color) && fullMove >= 8;
+  if (king?.inCenter && !king.castled && centreCounts) {
     out.push({
       key: `${side}-king-centre`, side, kind: 'king', rank: rank('king'),
       squares: [king.square],
       text: own
-        ? 'Your king is still in the centre — getting it castled is worth more than another pawn move right now.'
+        ? 'Your king is still in the center and castling is ready — getting it tucked away is worth more than another pawn move right now.'
         : 'Their king is still in the centre — every line that opens toward it is worth looking at.',
     });
   }

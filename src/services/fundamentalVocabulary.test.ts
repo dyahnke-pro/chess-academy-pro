@@ -54,8 +54,12 @@ describe('the fundamentals vocabularies reconcile', () => {
     // home-square bishop — d3 opens c1, g3 prepares the fianchetto). It files
     // under `neglected-development`: a bishop left blocked behind its own pawn
     // IS an undeveloped bishop, the same habit from the other side.
+    //
+    // 12 → 13 on 2026-09-24: `tempo` (a pawn that kicks a piece — 9.f4 against
+    // …Ne5). It files under `tempo-handed`: gaining a tempo is the same habit
+    // as handing one over, from the other side.
     const mapped = Object.keys(MOVE_FUNDAMENTAL_TAG).length;
-    expect(mapped).toBe(12);
+    expect(mapped).toBe(13);
   });
 
   it('THE STRUCTURE CROSSES THE BOUNDARY — ids reach a caller, not just prose', () => {

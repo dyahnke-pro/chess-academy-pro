@@ -88,8 +88,9 @@ import { stageArrayHasUsableEntry } from '../../services/stageEntryValidity';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
-import { findSiblingExtensionBranches, isBookLine, resolveOpeningEntry } from '../../services/openingDetectionService';
+import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { openingAnnouncement } from '../../services/openingAnnouncement';
+import { bookDeparture } from '../../services/bookDeparture';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
@@ -7787,7 +7788,7 @@ export function CoachTeachPage(): JSX.Element {
       // (`openingAnnouncement`): first identification, then the settled
       // name once, where the game leaves book — never every refinement.
       const announce = det && det.name !== learnMemRef.current.queuedOpeningName
-        ? openingAnnouncement(det, isBookLine(history), learnMemRef.current.spokenOpeningName)
+        ? openingAnnouncement(det, bookDeparture(history), learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b')
         : null;
       if (det && announce) {
         const firstResolve = learnMemRef.current.spokenOpeningName === null;
@@ -8307,7 +8308,7 @@ export function CoachTeachPage(): JSX.Element {
       borrowedLine: null,
       factLines,
     };
-  }, [activeProfile?.puzzleRating, activeProfile?.currentRating]);
+  }, [activeProfile?.puzzleRating, activeProfile?.currentRating, playerColor]);
 
   /** Queue a computed line to be SPOKEN once the engine work settles.
    *
@@ -8716,7 +8717,7 @@ export function CoachTeachPage(): JSX.Element {
                       // (a seductive blunder outranks a fine-margin preference) and
                       // NO hedge (a genuine coin-flip is the hedge, not a compare).
                       const compare = (!butTurn && !hedge)
-                        ? candidateCompareClause(probe.fen(), studentBest.topLines, playerColor, { spoken: true })
+                        ? candidateCompareClause(probe.fen(), studentBest.topLines, playerColor, { spoken: true, recaptureOn: m.captured ? m.to : null })
                         : null;
                       const reg = [butTurn, hedge, compare].filter(Boolean).join(' ');
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
@@ -9619,7 +9620,7 @@ export function CoachTeachPage(): JSX.Element {
                     try {
                       const det = detectOpening(chainHistory);
                       if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
-                      const announce = openingAnnouncement(det, isBookLine(chainHistory), learnMemRef.current.spokenOpeningName);
+                      const announce = openingAnnouncement(det, bookDeparture(chainHistory), learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b');
                       if (det && announce) {
                         const firstResolve = learnMemRef.current.spokenOpeningName === null;
                         // NOT marked spoken here either. This site pushes into

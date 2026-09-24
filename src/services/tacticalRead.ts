@@ -521,7 +521,7 @@ export function candidateCompareClause(
   fen: string,
   topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
   studentColor: 'white' | 'black',
-  opts: { spoken?: boolean } = {},
+  opts: { spoken?: boolean; recaptureOn?: string | null } = {},
 ): string | null {
   if (topLines.length < 2) return null;
   // Comparison clauses put BOTH moves in noun slots ("X over Y", "X reads
@@ -561,6 +561,10 @@ export function candidateCompareClause(
     }
     // Case 2 — best is the forcing one, the alt is quiet.
     if ((bestMv.captured || bestMv.san.includes('+')) && !altMv.captured && !altMv.san.includes('+')) {
+      // Taking back what they just took is not "forcing the issue" — it only
+      // restores the material (hand walk 2026-09-24: 3.d4 exd4 heard "the knight
+      // taking on d4 before the bishop to d3: the forcing move first").
+      if (bestMv.captured && opts.recaptureOn && bestMv.to === opts.recaptureOn) return null;
       // ROTATED on the move number (hand walk 2026-09-24: the same stem three
       // moves running). Stable per ply, so resume-safe — never Math.random.
       const b = sayN(bestMv.san);

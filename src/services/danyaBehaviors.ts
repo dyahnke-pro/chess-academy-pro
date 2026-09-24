@@ -484,17 +484,31 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const mine = student === 'w' ? files.whiteSemiOpen : files.blackSemiOpen;
       const all = [...files.open, ...mine];
       if (all.length === 0) return null;
-      // Only speak if the student has a rook NOT yet on that file.
-      const file = all[0];
-      let hasRookOnIt = false; let hasRook = false;
+      // Speak only when a rook of the student's can step ONTO the file in one
+      // move along its rank. At move five of an open game (hand walk
+      // 2026-09-24) the queen and the c1-bishop stood between the a1-rook and
+      // the d-file, and "your rook belongs there" was advice nobody could take.
+      // A rook already on one of these files means the job is done.
+      const rooks: string[] = [];
       for (const row of chess.board()) for (const cell of row) {
-        if (cell && cell.type === 'r' && cell.color === student) {
-          hasRook = true;
-          if (cell.square[0] === file) hasRookOnIt = true;
-        }
+        if (cell && cell.type === 'r' && cell.color === student) rooks.push(cell.square);
       }
-      if (hasRook && !hasRookOnIt) {
-        return { fact: `The ${file}-file is open — your rook belongs there.`, squares: [] };
+      if (rooks.length === 0 || rooks.some((sq) => all.includes(sq[0]))) return null;
+      const reaches = (rookSq: string, file: string): boolean => {
+        const rank = rookSq[1];
+        const from = rookSq.charCodeAt(0);
+        const to = file.charCodeAt(0);
+        const step = to > from ? 1 : -1;
+        for (let f = from + step; f !== to; f += step) {
+          if (chess.get(`${String.fromCharCode(f)}${rank}` as Square)) return false;
+        }
+        const target = chess.get(`${file}${rank}` as Square);
+        return !target || target.color !== student;
+      };
+      for (const file of all) {
+        if (!rooks.some((sq) => reaches(sq, file))) continue;
+        const kind = files.open.includes(file) ? 'open' : 'half-open';
+        return { fact: `The ${file}-file is ${kind} — your rook belongs there.`, squares: [] };
       }
       return null;
     },

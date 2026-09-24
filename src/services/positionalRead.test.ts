@@ -18,8 +18,10 @@ import { readPosition, buildPositionalRead } from './positionalRead';
  *  its own pawns on light squares, both kings are home, play is quiet. */
 const FRENCH = 'r1bqk2r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 8';
 
-/** Black king still in the centre, White castled — an asymmetric read. */
-const BLACK_KING_CENTRE = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4';
+/** Black king still in the centre with castling one move away, White castled
+ *  — an asymmetric read. (…Be7 is in: until then the f8-bishop blocks castling
+ *  and the student version rightly stays quiet.) */
+const BLACK_KING_CENTRE = 'r1bqk2r/ppppbppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5';
 
 describe('the read describes both sides of the board', () => {
   it('returns observations about the opponent, not only the student', () => {
@@ -33,13 +35,16 @@ describe('the read describes both sides of the board', () => {
 
   it('reads the SAME board differently depending on which side the student is', () => {
     // The strongest available proof of symmetry: flip who is asking and the
-    // student/opponent labels must swap, not vanish.
-    const asWhite = readPosition(BLACK_KING_CENTRE, 'white');
-    const asBlack = readPosition(BLACK_KING_CENTRE, 'black');
+    // student/opponent labels must swap, not vanish. Each seat has its own
+    // gate (the student's: castling one move away; theirs: stuck, past the
+    // opening), so the board is one where Black lost the right on move twelve
+    // — stuck for a White student, and not advice a Black student can take.
+    const STUCK = 'rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQ - 0 12';
+    const asWhite = readPosition(STUCK, 'white');
     const centreAsWhite = asWhite.find((o) => o.key.endsWith('king-centre'));
-    const centreAsBlack = asBlack.find((o) => o.key.endsWith('king-centre'));
     expect(centreAsWhite?.side, "Black's uncastled king is the OPPONENT's, for a White student").toBe('opponent');
-    expect(centreAsBlack?.side, "…and the STUDENT's, for a Black student").toBe('student');
+    const centreAsBlack = readPosition(BLACK_KING_CENTRE, 'black').find((o) => o.key.endsWith('king-centre'));
+    expect(centreAsBlack?.side, "…and the STUDENT's, for a Black student who can castle").toBe('student');
   });
 
   it('addresses the student as "you" and the opponent as "they"', () => {
@@ -268,5 +273,29 @@ describe('a problem piece is joined to the pawn that BLOCKS it, once (WO-STANDAR
     const joins = readPosition(fen, 'white').filter((o) => /would fix it/.test(o.text) && /d2/.test(o.text));
     expect(joins.length).toBeLessThanOrEqual(1);
     for (const j of joins) expect(j.text).toMatch(/pawn to (c4|e4)/);
+  });
+});
+
+describe('"get castled" only when castling is one move away (hand walk 2026-09-24)', () => {
+  // 1.e4 e5 2.Nf3 d6 3.d4 exd4: the f1-bishop still blocks White's castling.
+  const MOVE_THREE = 'rnbqkbnr/ppp2ppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4';
+  it('does not tell the student to castle while their own pieces block it', () => {
+    const obs = readPosition(MOVE_THREE, 'white');
+    expect(obs.some((o) => o.key === 'student-king-centre')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: once the kingside is clear, it does', () => {
+    const clear = 'rnbqkbnr/ppp2ppp/3p4/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5';
+    expect(readPosition(clear, 'white').some((o) => o.key === 'student-king-centre')).toBe(true);
+  });
+});
+
+describe("their king in the centre is a weakness only when it is stuck (hand walk 2026-09-24)", () => {
+  it('move five, …O-O one move away — silent', () => {
+    const fen = 'rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6';
+    expect(readPosition(fen, 'white').some((o) => o.key === 'opponent-king-centre')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: rights gone, move twelve — it speaks', () => {
+    const fen = 'rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQ - 0 12';
+    expect(readPosition(fen, 'white').some((o) => o.key === 'opponent-king-centre')).toBe(true);
   });
 });

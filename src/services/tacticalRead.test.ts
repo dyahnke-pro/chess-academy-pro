@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import {
+import { candidateCompareClause,
   computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, tacticalReadFromLines, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, voiceNamesUngroundedMove, groundedMoveKeys, namedTacticClause, temptingTurnClause, uncertaintyClause,
   type TacticalRead,
 } from './tacticalRead';
@@ -577,5 +577,20 @@ describe('uncertaintyClause rotates its stem on a stable key (WO-STANDARD-01 D-8
     expect(uncertaintyClause(read, { rotation: 2 })).toBe(uncertaintyClause(read, { rotation: 2 }));
     expect(uncertaintyClause(read, { rotation: 4 })).toBe(uncertaintyClause(read, { rotation: 0 }));
     expect(uncertaintyClause(read)).toBe(uncertaintyClause(read, { rotation: 0 }));
+  });
+});
+
+describe('a recapture is not "the forcing move first" (hand walk 2026-09-24)', () => {
+  // 1.e4 e5 2.Nf3 d6 3.d4 exd4 — White to move; Nxd4 takes back, Bd3 is quiet.
+  const fen = 'rnbqkbnr/ppp2ppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4';
+  const lines = [
+    { moves: ['f3d4'], evaluation: 40 },
+    { moves: ['f1d3'], evaluation: -30 },
+  ];
+  it('stays silent when the best move just takes back on the square they captured on', () => {
+    expect(candidateCompareClause(fen, lines, 'white', { spoken: true, recaptureOn: 'd4' })).toBeNull();
+  });
+  it('NEGATIVE CONTROL: the same pair still compares when it is not a recapture', () => {
+    expect(candidateCompareClause(fen, lines, 'white', { spoken: true, recaptureOn: null })).not.toBeNull();
   });
 });

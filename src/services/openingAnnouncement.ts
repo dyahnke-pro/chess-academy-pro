@@ -12,25 +12,34 @@
 //
 // One function, so the two Learn lanes that build this sentence cannot drift.
 
+import type { BookDeparture } from './bookDeparture';
+import { sayMoveNoun } from './spokenMove';
+
 export interface DetectedName {
   name: string;
 }
 
 /**
- * `inBook` is REQUIRED and must be `isBookLine(history)` — does ANY book line
- * still continue this game. It used to be "the matched line is shorter than the
- * game", which is not the same fact: the DB is prefix-sparse, so the game sits
- * past the end of "Main Line" while still inside "Main Line, Mieses Variation".
- * The 2026-09-24 Learn tape said "You've left the book here" four times for
- * exactly that reason, each time naming a line the game was still following.
+ * `departure` is REQUIRED and must be `bookDeparture(history)` — the ply that
+ * left THEORY (the masters DB), or null while the game is still in book. It
+ * used to be `isBookLine(history)`, the NAME database, which is prefix-sparse:
+ * its Philidor Exchange entry ends at 3…exd4, so the main-line 4.Nxd4 was told
+ * "You've left the book here" (hand walk 2026-09-24). The departure also says
+ * WHO left and the usual move there, so the line teaches instead of blaming.
+ * `studentColor` is REQUIRED: "you left" and "they left" are different claims.
  */
 export function openingAnnouncement(
   det: DetectedName | null,
-  inBook: boolean,
+  departure: BookDeparture | null,
   spokenName: string | null,
+  studentColor: 'w' | 'b',
 ): string | null {
   if (!det || !det.name || det.name === spokenName) return null;
-  if (spokenName === null) return `This game is now the ${det.name}.`;
-  if (!inBook) return `You've left the book here — the line was the ${det.name}.`;
-  return null;
+  if (spokenName === null) return `This game is the ${det.name}.`;
+  if (!departure) return null;
+  const who = departure.mover === studentColor ? 'You' : 'They';
+  const main = departure.mainSan
+    ? `; the usual move there was ${sayMoveNoun(departure.mainSan)}`
+    : '';
+  return `${who} left the book with ${sayMoveNoun(departure.san)}${main}. The line was the ${det.name}.`;
 }

@@ -185,6 +185,24 @@ const HOME_SQUARES: Record<'w' | 'b', Record<string, readonly string[]>> = {
   b: { r: ['a8', 'h8'], n: ['b8', 'g8'], b: ['c8', 'f8'], q: ['d8'], k: ['e8'], p: [] },
 };
 
+/** No pawn of the rook's own colour stands on its file. Unknown board → false. */
+function rookFileFree(fen: string | undefined, v: PieceValue): boolean {
+  if (!fen) return false;
+  const file = v.square.toLowerCase()[0];
+  const pawn = v.color === 'w' ? 'P' : 'p';
+  const rows = fen.split(' ')[0].split('/');
+  const col = file.charCodeAt(0) - 97;
+  for (const row of rows) {
+    let c = 0;
+    for (const ch of row) {
+      if (/\d/.test(ch)) { c += Number(ch); continue; }
+      if (c === col && ch === pawn) return false;
+      c += 1;
+    }
+  }
+  return true;
+}
+
 function onHomeSquare(v: PieceValue): boolean {
   const side = v.color === 'w' ? 'w' : 'b';
   return (HOME_SQUARES[side][v.piece.toLowerCase()] ?? []).includes(v.square.toLowerCase());
@@ -239,6 +257,11 @@ export function pieceQualityLines(
   const best = theirs.filter((v) => v.piece.toLowerCase() !== 'p')
     .filter((v) => opts?.isMiddlegame === true || !onHomeSquare(v))
     .filter((v) => opts?.isMiddlegame === true || !'nb'.includes(v.piece.toLowerCase()))
+    // …and a pre-middlegame ROOK counts as "doing work" only on a file free of
+    // its own pawns. Castling is not work: on move six of a Philidor (hand walk
+    // 2026-09-24) the rook that had just castled to f8, behind its own f7-pawn,
+    // was crowned "the piece doing the most work for them".
+    .filter((v) => opts?.isMiddlegame === true || v.piece.toLowerCase() !== 'r' || rookFileFree(opts?.fen, v))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => b.d - a.d)[0];
   if (best && best.d >= 0.3) {
@@ -273,7 +296,14 @@ export function pieceQualityLines(
       out.push({
         kind: 'your-worst-piece',
         squares: [worst.v.square],
-        text: `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing the least of anything you own — finding it a better square is worth more than a new plan.`,
+        // Still on its home square it is UNDEVELOPED, not misplaced — the
+        // advice is the development rule, not a reroute (hand walk
+        // 2026-09-24: the c1-bishop at move nine; his line a few moves later
+        // was "never forget about development — you still have a whole side
+        // to finish").
+        text: onHomeSquare(worst.v)
+          ? `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} hasn't moved yet — in general, finish your development before starting anything new.`
+          : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing the least of anything you own — finding it a better square is worth more than a new plan.`,
       });
     }
   }

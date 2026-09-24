@@ -214,3 +214,15 @@ describe('a tactic fact names whose pieces they are (hand walk 2026-09-24)', () 
     expect(tac?.fact).toBe('Your rook on a6 pins their knight on b6 against their queen on d6');
   });
 });
+
+describe('open-file only when a rook can step onto it (hand walk 2026-09-24)', () => {
+  it('move five of the Philidor: queen and bishop block the a1-rook — silent', () => {
+    const fen = 'rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6';
+    expect(detectBehaviors({ fen, studentColor: 'white' }).some((h) => h.id === 'open-file')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: a clear back rank reaches the file, and a half-open file says so', () => {
+    const fen = 'r3k3/ppp2ppp/3p4/8/8/8/PPP2PPP/R3K3 w - - 0 20';
+    const hit = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'open-file');
+    expect(hit?.fact).toMatch(/is (open|half-open) — your rook belongs there/);
+  });
+});

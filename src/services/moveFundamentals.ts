@@ -40,7 +40,8 @@ export type MoveFundamentalId =
   /** A pawn move that frees a home-square bishop's diagonal (d3 opens c1; g3
    *  prepares the fianchetto). Its own idea, so "develop" taught on move 3 does
    *  not silence it on move 9 (hand walk 2026-09-24). */
-  | 'open-diagonal';
+  | 'open-diagonal'
+  | 'tempo';
 
 export interface MoveFundamental {
   id: MoveFundamentalId;
@@ -107,6 +108,8 @@ export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId 
   center: null,
   // Making luft is not the inverse of any hole we track.
   luft: null,
+  // Kicking a piece with a pawn GAINS a tempo — the inverse of handing one over.
+  tempo: 'tempo-handed',
 };
 
 const PIECE_NAME: Record<string, string> = {
@@ -263,6 +266,38 @@ export function computeMoveFundamentals(
       imperative: 'castle your king to safety and bring the rook toward the center',
       squares: [kingTo, rookTo],
     });
+  }
+
+  // ── TEMPO — a pawn that kicks an enemy piece (hand walk 2026-09-24: 9.f4
+  //    against …Ne5 was read as "stake out the center and grab space"; his
+  //    reason was "chasing the knight away"). The kicked piece must be worth
+  //    more than the pawn and the pawn must be safe where it lands (checked
+  //    above), so the piece really has to move.
+  if (mv.piece === 'p') {
+    const dir = mover === 'w' ? 1 : -1;
+    const f = mv.to.charCodeAt(0);
+    const r = Number(mv.to[1]) + dir;
+    const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+    let hit: { sq: string; type: string } | null = null;
+    for (const df of [-1, 1]) {
+      const file = String.fromCharCode(f + df);
+      if (file < 'a' || file > 'h' || r < 1 || r > 8) continue;
+      const sq = `${file}${r}`;
+      const c = after.get(sq as Square);
+      if (!c || c.color === mover || !(c.type in VALUE)) continue;
+      if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
+    }
+    if (hit) {
+      const name = PIECE_NAME[hit.type] ?? 'piece';
+      out.push({
+        id: 'tempo',
+        weight: 88,
+        led: `kicks their ${name} off ${hit.sq}, gaining time`,
+        selfContained: `the pawn kicks their ${name} off ${hit.sq}, so they spend a move while you gain one`,
+        imperative: `kick their ${name} off ${hit.sq} with a pawn and gain the time`,
+        squares: [mv.to, hit.sq],
+      });
+    }
   }
 
   // ── OUTPOST — a minor planted where no enemy pawn can ever evict it.
@@ -670,6 +705,9 @@ const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
   luft: false,
   space: false,
   prophylaxis: false,
+  // Kicking a piece with a pawn to gain time is taught as a rule of the
+  // opening — his 9.f4 "chasing the knight away".
+  tempo: true,
 };
 
 /** The first opening principle this move follows that has not been taught

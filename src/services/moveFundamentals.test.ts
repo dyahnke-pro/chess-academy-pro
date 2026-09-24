@@ -214,3 +214,15 @@ describe('development with tempo (hand walk 2026-09-24)', () => {
     expect(dev?.led ?? '').not.toContain('tempo');
   });
 });
+
+describe('a pawn that kicks a piece gains a tempo (hand walk 2026-09-24)', () => {
+  it('9.f4 against …Ne5 in the Philidor: the reason is the kick, not "grab space"', () => {
+    const fen = 'r1bq1rk1/ppp1bppp/3p1n2/4n3/3NP3/1BN5/PPP2PPP/R1BQ1RK1 w - - 5 9';
+    const top = computeMoveFundamentals(fen, 'f4', 'white').sort((a, b) => b.weight - a.weight)[0];
+    expect(top?.id).toBe('tempo');
+    expect(top?.led).toBe('kicks their knight off e5, gaining time');
+  });
+  it('NEGATIVE CONTROL: a pawn push that hits nothing is not tempo', () => {
+    expect(computeMoveFundamentals(START, 'e4', 'white').some((f) => f.id === 'tempo')).toBe(false);
+  });
+});
