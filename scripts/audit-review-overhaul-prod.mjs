@@ -1073,10 +1073,22 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     } else {
       const opening = rows.filter((r) => r.ply <= 24);
       const owed = opening.filter((r) => r.speak);
-      const covered = owed.filter((r) => r.source !== null);
+      // `heard` (2026-09-24): what the student actually hears, counted after
+      // every fill pass. Older bundles lack it and fall back to `source`.
+      const covered = owed.filter((r) => (r.heard ?? (r.source !== null)));
       const leaked = rows.filter((r) => !r.speak && r.spoke);
       await add('NEED coverage-rows-captured', rows.length > 0, `${rows.length} student plies scored; games=${cov.gamesPlayed} cold=${cov.gamesPlayed < 5}`);
       await add('NEED owed-plies-narrated', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.8), `${covered.length}/${owed.length} owed opening plies narrated`);
+      // THE TEACH METER (WO-TEACH-02): of the student's spoken plies, how many
+      // carried a TEACHING fact rather than only a description. The target is
+      // Naroditsky, where every line teaches; the bar is 70%.
+      if (Array.isArray(cov.taught) && Array.isArray(cov.described)) {
+        const spokenN = cov.taught.length + cov.described.length;
+        const share = spokenN ? cov.taught.length / spokenN : 0;
+        await add('TEACH student-plies-teach', spokenN > 0 && share >= 0.7, `${cov.taught.length}/${spokenN} spoken student plies teach (${Math.round(share * 100)}%) — describing only: ${cov.described.slice(0, 20).join(',')}`);
+      } else {
+        await add('TEACH meter-captured', false, 'the coverage row carries no taught/described split — bundle predates WO-TEACH-02');
+      }
       await add('NEED silent-where-not-needed', leaked.length === 0, leaked.length ? `per-move beat on ${leaked.map((r) => r.ply).join(',')} where need said silent` : 'no per-move beat where need said silent');
     }
   }

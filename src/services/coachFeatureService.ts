@@ -560,6 +560,10 @@ export interface ReviewMoveSegment {
   bestMoveSan: string | null;
   bestMoveUci: string | null;
   narration: string | null;
+  /** WO-TEACH-02 meter: a TEACHING fact spoke on this ply (the decider's own
+   *  `teaches`). Undefined on plies no decision voiced — a fill that writes
+   *  narration afterwards is, by definition, not the door teaching. */
+  teaches?: boolean;
   /** N2 — the student's computed NEED for teaching at this ply (student plies
    *  only). The quiet per-move opening beat speaks only when `need.speak`;
    *  flags / plan one-shots / moments speak on their own importance. */
@@ -2106,6 +2110,7 @@ export function buildReviewSegments(
         bestMoveUci: m.bestMove,
         narration: uncappedParts.length ? uncappedParts.join(' ') : null,
         narrationSource: uncappedParts.length ? 'per-move' : null,
+        ...(uncappedParts.length ? { teaches: decision.teaches } : {}),
         ...(needHere ? { need: needHere } : {}),
         ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
@@ -4487,24 +4492,6 @@ export async function generateReviewNarration(params: {
 
   let phaseStart = Date.now();
   const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed, params.gameId ?? null);
-  // NEED COVERAGE (the audit's instrument for the retired R2 — CLAUDE.md
-  // standard): per student ply, the computed need and whether the quiet
-  // teaching beat spoke. The prod audit reads THIS, not a sentence count.
-  {
-    const rows = segments.flatMap((sg) => sg.need
-      ? [{ ply: sg.ply, score: sg.need.score, speak: sg.need.speak, prior: sg.need.prior, spoke: sg.narrationSource === 'per-move', source: sg.narrationSource ?? null }]
-      : []);
-    const owed = rows.filter((r) => r.speak && r.ply <= OPENING_TEACH_MAX_PLY);
-    const covered = owed.filter((r) => r.source !== null);
-    void logAppAudit({
-      kind: 'review-need-coverage',
-      category: 'subsystem',
-      source: 'coachFeatureService.generateReviewNarration',
-      summary: `need coverage: ${covered.length}/${owed.length} owed opening plies narrated; ${rows.filter((r) => !r.speak).length} silent by need; cold=${studentNeed.gamesPlayed < 5} games=${studentNeed.gamesPlayed}`,
-      details: JSON.stringify({ gamesPlayed: studentNeed.gamesPlayed, rows }),
-    });
-  }
-
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
   // timeout so it never stalls the walk). Runs before the voice pass so the
@@ -4704,6 +4691,29 @@ export async function generateReviewNarration(params: {
   const intro = introTrimmed && !introTrimmed.startsWith('⚠️')
     ? introTrimmed
     : defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
+
+  // NEED COVERAGE + THE TEACH METER (WO-TEACH-02 S0) — measured on what the
+  // student will actually HEAR, after every fill pass. It used to be taken
+  // before the fills, so plies a later pass narrated read as silent and plies
+  // it filled with a description read as covered by nothing: the instrument
+  // and the tape disagreed (prod 2026-09-24: row 8/12, tape 11/12).
+  {
+    const heard = (sg: ReviewMoveSegment): boolean => !!(sg.narration ?? '').trim();
+    const rows = segments.flatMap((sg) => sg.need
+      ? [{ ply: sg.ply, score: sg.need.score, speak: sg.need.speak, prior: sg.need.prior, spoke: sg.narrationSource === 'per-move', heard: heard(sg), teaches: sg.teaches === true, source: sg.narrationSource ?? null }]
+      : []);
+    const owed = rows.filter((r) => r.speak && r.ply <= OPENING_TEACH_MAX_PLY);
+    const covered = owed.filter((r) => r.heard);
+    const studentSpoken = segments.filter((sg) => sg.playerColor === playerColor && heard(sg));
+    const studentTaught = studentSpoken.filter((sg) => sg.teaches === true);
+    void logAppAudit({
+      kind: 'review-need-coverage',
+      category: 'subsystem',
+      source: 'coachFeatureService.generateReviewNarration',
+      summary: `need coverage: ${covered.length}/${owed.length} owed opening plies heard; teach meter ${studentTaught.length}/${studentSpoken.length} spoken student plies teach; ${rows.filter((r) => !r.speak).length} silent by need; cold=${studentNeed.gamesPlayed < 5} games=${studentNeed.gamesPlayed}`,
+      details: JSON.stringify({ gamesPlayed: studentNeed.gamesPlayed, rows, taught: studentTaught.map((sg) => sg.ply), described: studentSpoken.filter((sg) => sg.teaches !== true).map((sg) => sg.ply) }),
+    });
+  }
 
   timings.total = Date.now() - prepStart;
   void logAppAudit({

@@ -105,7 +105,7 @@ describe('every algo emission has an audit contract standing on it', () => {
     const row = read('src/services/coachDecisionEvents.ts');
     const learn = read('scripts/audit-concept-gameplay-prod.mjs');
     const review = read('scripts/audit-review-overhaul-prod.mjs');
-    for (const field of ['posture', 'speak', 'reason', 'quietCount', 'method', 'quietBy', 'subsumed', 'stakedCount', 'leadStaked']) {
+    for (const field of ['posture', 'speak', 'reason', 'quietCount', 'method', 'quietBy', 'subsumed', 'stakedCount', 'leadStaked', 'teaches']) {
       expect(row.includes(`${field}:`), `CoachDecisionRow lost the ${field} field`).toBe(true);
       expect(
         learn.includes(`.${field}`) || review.includes(`.${field}`),

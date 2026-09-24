@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**151 lines · 7 exports · 6 importers · 3 tests · 1 audits**
+**154 lines · 7 exports · 6 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,21 +26,21 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onCoachDecision` (function) — 4 call sites
-- `src/services/appAuditor.ts:2149`
+- `src/services/appAuditor.ts:2158`
 - `src/services/coachDecisionEmits.test.ts:31`
-- `src/services/coachDecisionEmits.test.ts:88`
+- `src/services/coachDecisionEmits.test.ts:94`
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:209`
+- `src/services/coachDecider.ts:232`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
-- `src/services/appAuditor.ts:2101`
-- `src/services/coachDecisionEmits.test.ts:113`
-- `src/services/coachDecisionEmits.test.ts:140`
+- `src/services/appAuditor.ts:2110`
+- `src/services/coachDecisionEmits.test.ts:119`
+- `src/services/coachDecisionEmits.test.ts:146`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
 
 ### `emitNeedScore` (function) — 1 call site
@@ -49,9 +49,9 @@
 ### `resetCoachDecisionListeners` (function) — 5 call sites
 - `src/services/coachDecisionEmits.test.ts:30`
 - `src/services/coachDecisionEmits.test.ts:33`
-- `src/services/coachDecisionEmits.test.ts:87`
-- `src/services/coachDecisionEmits.test.ts:113`
-- `src/services/coachDecisionEmits.test.ts:114`
+- `src/services/coachDecisionEmits.test.ts:93`
+- `src/services/coachDecisionEmits.test.ts:119`
+- `src/services/coachDecisionEmits.test.ts:120`
 
 ## Tests
 

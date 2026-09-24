@@ -217,6 +217,33 @@ describe('appAuditor', () => {
       }
     });
 
+    it('the sidecar is never deafened: no keepalive quota, no breaker latch (2026-09-24)', async () => {
+      const inits: RequestInit[] = [];
+      let fail = true;
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = (async (_url: string | URL, init?: RequestInit) => {
+        inits.push(init ?? {});
+        if (fail) throw new TypeError('Failed to fetch');
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
+      }) as typeof fetch;
+      try {
+        await setAuditStreamConfig('http://127.0.0.1:4173/', 'secret');
+        for (let i = 0; i < 25; i++) {
+          await logAppAudit({ kind: 'bad-fen', category: 'subsystem', source: 'sidecar-burst', summary: `f${i}` });
+        }
+        await new Promise((r) => setTimeout(r, 30));
+        fail = false;
+        const before = inits.length;
+        await logAppAudit({ kind: 'bad-fen', category: 'subsystem', source: 'sidecar-burst', summary: 'after' });
+        await new Promise((r) => setTimeout(r, 30));
+        expect(inits.length, 'a burst of failures latched the sidecar off').toBeGreaterThan(before);
+        expect(inits.every((i) => i.keepalive !== true), 'sidecar POSTs must not spend the keepalive quota').toBe(true);
+      } finally {
+        globalThis.fetch = originalFetch;
+        await clearAuditStreamConfig();
+      }
+    });
+
     it('isStreamSidecarUrl: loopback only', () => {
       expect(isStreamSidecarUrl('http://localhost:4173/')).toBe(true);
       expect(isStreamSidecarUrl('http://127.0.0.1:5555')).toBe(true);

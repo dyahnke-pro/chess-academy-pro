@@ -37,6 +37,9 @@ export interface CoachDecisionRow {
    *  diagnoses and collapsing them is how a posture bug hides. */
   speak: boolean;
   reason: string;
+  /** The teach meter: a spoken row where only descriptions spoke reads
+   *  `false`. Audits hold the share of `teaches` among spoken rows. */
+  teaches: boolean;
   /** The student's own NEED VERDICT at this ply, when the surface computed
    *  one; `null` means it supplied none — itself worth seeing, since absent
    *  need reads as SPEAK by the cold-start rule.
