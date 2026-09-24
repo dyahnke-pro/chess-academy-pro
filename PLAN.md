@@ -430,6 +430,12 @@ and NOT from this build: the turning-point DRIVER card (harness — CRIT/THESIS/
 RECAP follow from it), FUNDLEAD 0/4 (every fundamental on this game DECLINED by
 attribution, so there is nothing to lead with), NEED 8/12 owed plies heard.
 
+**Prod Learn audit after #945 (af0b12f):** 17/17 green, `audit-concept-gameplay-prod`,
+muted; 4/4 spoken moments teach (G6); a spoken line: "Careful — your queen on d5 is
+attacked and nothing's defending it. There's a pin here for you — have a look."
+The run is 5 plies, so the new live clauses (refuted / stopped / rule / stock) were
+not posed on it — a longer live game is owed to hear them on prod.
+
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.
 
