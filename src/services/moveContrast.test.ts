@@ -8,7 +8,7 @@ describe('contrastMoves', () => {
   it('the f-rook, not the a-rook: the a1-rook stays home to guard a2', () => {
     const c = contrastMoves(FEN, 'Rad1', 'Rfd1');
     expect(c).toEqual({ keeps: 'Rfd1', drops: 'Rad1', piece: 'p', square: 'a2' });
-    expect(contrastClause(c!)).toBe('Rfd1 rather than Rad1 — Rfd1 keeps your pawn on a2 defended, and Rad1 leaves it with no guard');
+    expect(contrastClause(c!)).toBe('The difference between Rfd1 and Rad1: Rfd1 keeps your pawn on a2 defended, and Rad1 leaves it with no guard');
   });
 
   it('the order of the arguments does not change the answer', () => {

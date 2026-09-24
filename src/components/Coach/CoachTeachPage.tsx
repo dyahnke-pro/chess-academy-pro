@@ -7194,7 +7194,7 @@ export function CoachTeachPage(): JSX.Element {
     // 3) Never freeze.
     const random = getRandomLegalMove(fen);
     return random ? uciToSan(random) : null;
-  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating, activeProfile?.currentRating, difficulty]);
+  }, [walkthrough.tree?.openingName, activeProfile?.puzzleRating, activeProfile?.currentRating, difficulty, playerColor]);
 
   // "Read this position" — the SAME on-demand affordance Play carries
   // (David 2026-06-15: "You didn't like the read this position button?").
@@ -7730,7 +7730,7 @@ export function CoachTeachPage(): JSX.Element {
     try {
       const beat = buildPlayCommentary({
         fen: args.fenAfterReply,
-        studentColor: playerColor,
+        studentColor: args.studentColor,
         saidExplainers: learnMemRef.current.saidExplainers,
         // ROOT CAUSE, not the gate. Both this composer and the tactics alert
         // above read `detectTactics` off THIS board, and neither knew the
@@ -7844,7 +7844,11 @@ export function CoachTeachPage(): JSX.Element {
     try {
       // The hand-written masterclass beat. Free play carries no corpus notes
       // (2026-09-23), so this is the only authored teaching on a live Learn ply.
-      const beat = curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.detectedOpeningName, playerColor, 'live', learnMemRef.current.curatedBeatSubjects);
+      // The seat comes from ARGS, never `playerColor`: this callback's deps are
+      // the ratings only, so the state it closed over is the first render's
+      // 'white' — a Black student heard the White lesson ("Black snatches your
+      // e-pawn") on prod, 2026-09-24, with the seat guard below working as built.
+      const beat = curatedBeatAt(history, args.fenAfterReply, learnMemRef.current.curatedBeatSeen, learnMemRef.current.detectedOpeningName, args.studentColor, 'live', learnMemRef.current.curatedBeatSubjects);
       if (beat) {
         learnMemRef.current.curatedBeatSeen.add(beat.id);
         if (beat.subject) learnMemRef.current.curatedBeatSubjects.add(beat.subject);
@@ -7959,7 +7963,7 @@ export function CoachTeachPage(): JSX.Element {
       // has already offered, so a fresh, different observation — drawn from the
       // full board-awareness pool — surfaces each turn instead of repeating.
       try {
-        const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
+        const pr = buildPositionalRead(args.fenAfterReply, args.studentColor, positionalSaidRef.current);
         if (pr) {
           positionalLine = pr.text;
           positionalSquares = (pr.squares ?? []).filter((s) => /^[a-h][1-8]$/.test(s));

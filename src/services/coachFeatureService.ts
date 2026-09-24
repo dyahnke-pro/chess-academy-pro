@@ -511,8 +511,8 @@ export async function generateReviewNarrationSegments(
     'Keep practicing and learning from each game.',
   ].join(' ');
 
-  const intro = (await voiceFacts(introFacts, { intent: 'review-intro', warm: true })) ?? introFacts;
-  const closing = (await voiceFacts(closingFacts, { intent: 'review-closing', warm: true })) ?? closingFacts;
+  const intro = (await voiceFacts(introFacts, { intent: 'review-intro', preferRaw: true })) ?? introFacts;
+  const closing = (await voiceFacts(closingFacts, { intent: 'review-closing', preferRaw: true })) ?? closingFacts;
   return { intro, closing };
 }
 
@@ -4471,12 +4471,16 @@ export async function generateReviewNarration(params: {
   timings.loads = Date.now() - prepStart;
   const record = reviewOpeningRecord({ openingName, playerColor, studentNeed, gameId: params.gameId ?? null });
   const groundedIntro = defaultIntroText({ playerColor, result, openingName, mistakeCount, record });
+  // SPOKEN RAW (prod audit 2026-09-24): the warm pass turned this computed
+  // intro into "the facts for the four critical moments weren't included in
+  // what I was given" — a model asking for facts, with the wrong count, as the
+  // review's first line. The intro is already the house voice; nothing to warm.
   const skipIntroLlm = coachNarration === 'silent';
   const introStart = Date.now();
   const introPromise: Promise<string> = skipIntroLlm
     ? Promise.resolve('')
     : raceTimeout(
-        voiceFacts(groundedIntro, { intent: 'review-intro', warm: true }).catch(() => ''),
+        voiceFacts(groundedIntro, { intent: 'review-intro', preferRaw: true }).catch(() => ''),
         REVIEW_INTRO_VOICE_TIMEOUT_MS,
         '',
       ).then((r) => { timings.intro = Date.now() - introStart; return r ?? ''; });
