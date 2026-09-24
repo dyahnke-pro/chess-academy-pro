@@ -60,7 +60,10 @@ describe('buildPlayCommentary', () => {
   it('seeding observation: enemy queen and rook on one file, student owns a rook', () => {
     // Black Qd6 + Rd8 share the d-file (d7 empty, luft on h6 so no back-rank
     // flag); White owns Ra1. Not a tactic — the noticing that precedes one.
-    const beat = buildPlayCommentary({ fen: '3r2k1/5pp1/3q3p/8/8/8/6PP/R5K1 w - - 0 20', studentColor: 'white' });
+    // (The rook starts on a2 and the king on c1: its road to the d-file is d2,
+    // guarded by the king. From a1 the only road was d1, where the queen just
+    // takes it — that was never a contest.)
+    const beat = buildPlayCommentary({ fen: '3r2k1/5pp1/3q3p/8/8/8/R5PP/2K5 w - - 0 20', studentColor: 'white' });
     expect(beat?.kind).toBe('seeding-observation');
     expect(beat?.facts[0]).toContain('d-file');
     expect(beat?.facts[0]).toContain('rook');
@@ -238,6 +241,14 @@ describe('back-rank alignment after castling long', () => {
     expect(fact).toContain('king on c8');
     expect(fact).toContain('queen on f8');
     expect(fact).toContain('8th rank');
+  });
+
+  it('stays silent when no rook or queen can get ON the line (Scandinavian Qa5)', () => {
+    // Hand walk 2026-09-24: "rook on a8 and queen on a5 line up on the a-file,
+    // and you have a rook that moves along it" — the a1-rook is buried behind
+    // a2, and the only contest was the queen hitting a5 diagonally from d2.
+    const fact = seed('rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4');
+    expect(fact ?? '').not.toContain('a-file');
   });
 
   it('still says nothing about the untouched starting huddle', () => {

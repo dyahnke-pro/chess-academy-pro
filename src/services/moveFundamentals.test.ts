@@ -75,7 +75,11 @@ describe('a quiet pawn move that SUPPORTS the center has a why (prod hint audit 
     expect(strategicWhyLed(FRENCH, 'c3', 'white')).toBe('supports the center, guarding d4');
   });
   it('e3 from the start guards d4 (f4 is extended center, not core — filtered out)', () => {
-    expect(strategicWhyLed(START, 'e3', 'white')).toBe('supports the center, guarding d4');
+    // The centre clause is present and core-only (d4, never f4). Since
+    // 2026-09-24 e3 LEADS with freeing the f1-bishop — the other true reason.
+    const center = computeMoveFundamentals(START, 'e3', 'white').find((f) => f.id === 'center');
+    expect(center?.led).toBe('supports the center, guarding d4');
+    expect(strategicWhyLed(START, 'e3', 'white')).toContain('opens the diagonal for the bishop on f1');
   });
   it('a wing pawn (a3 guards only b4) is NOT center support — keeps the a3 contract null', () => {
     expect(strategicWhyLed(START, 'a3', 'white')).toBeNull();
@@ -171,5 +175,19 @@ describe('computeMoveFundamentals — positional fundamentals (audit 2026-09-11)
     const luft = funds.find((f) => f.id === 'luft');
     expect(luft, 'h3 in front of the castled king makes luft').toBeTruthy();
     expect(luft!.led).toContain('luft');
+  });
+});
+
+describe('a pawn move that opens a bishop (hand walk 2026-09-24)', () => {
+  it('Naroditsky\'s d3 opens the c1-bishop — and says so, not only "guards e4"', () => {
+    // After 8.O-O Nbd7 in his game; White to play d3.
+    const fen = 'r3kb1r/pp1npppp/2p2n2/q6b/8/2N3PP/PPPPNPB1/R1BQ1RK1 w kq - 3 9';
+    const funds = computeMoveFundamentals(fen, 'd3', 'white');
+    const top = funds.slice().sort((a, b) => b.weight - a.weight)[0];
+    expect(top?.led).toContain('bishop on c1');
+  });
+  it('NEGATIVE CONTROL: a pawn move that frees nothing names no bishop', () => {
+    const funds = computeMoveFundamentals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'a3', 'white');
+    expect(funds.some((f) => f.led.includes('bishop on'))).toBe(false);
   });
 });

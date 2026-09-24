@@ -100,6 +100,22 @@ describe('the engine\'s per-piece table', () => {
     expect(pieceQualityLines(parseEvalTable(REAL), 'black')).toHaveLength(0);
   });
 
+  it('never calls a minor that is PINNING or attacking a piece "doing the least"', () => {
+    // Naroditsky's game after 14.Bf4 Bd6 (hand walk 2026-09-24): the f4-bishop
+    // pins the d6-bishop to the queen on c7. The table scored it lowest.
+    const fen = '2kr3r/p1qn1ppp/1p1bpn2/PPp4b/5B2/2NP2PP/2P1NPB1/R2Q1RK1 w - - 2 15';
+    const values = [
+      { square: 'f4', piece: 'B', color: 'w' as const, value: 1 },
+      { square: 'g2', piece: 'B', color: 'w' as const, value: 4 },
+      { square: 'd6', piece: 'b', color: 'b' as const, value: -4 },
+    ];
+    const lines = pieceQualityLines(values, 'white', undefined, { isMiddlegame: true, fen });
+    expect(lines.some((l) => /bishop on f4/.test(l.text))).toBe(false);
+    // NEGATIVE CONTROL: without the board, the table alone still names it.
+    expect(pieceQualityLines(values, 'white', undefined, { isMiddlegame: true })
+      .some((l) => /bishop on f4/.test(l.text))).toBe(true);
+  });
+
   const BAD_MINOR = [
     { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },   // idle bishop → worst
     { square: 'c8', piece: 'b', color: 'b' as const, value: 4 },

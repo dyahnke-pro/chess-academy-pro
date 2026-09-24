@@ -312,6 +312,10 @@ export function findPawnBreaks(fen: string): Square[] {
   const breaks = new Set<Square>();
   for (const mv of chess.moves({ verbose: true })) {
     if (mv.piece !== 'p') continue;
+    // A CAPTURE IS NOT A BREAK (hand walk 2026-09-24: "they have a pawn break
+    // available on a5" meant …bxa5). The break is the PUSH that creates the
+    // tension; taking resolves it and is named as a capture wherever it matters.
+    if (mv.captured) continue;
     // Play the push, then check whether the new pawn touches an enemy pawn.
     const probe = new Chess(fen);
     try { probe.move(mv); } catch { continue; }
@@ -319,7 +323,7 @@ export function findPawnBreaks(fen: string): Square[] {
     const file = to.charCodeAt(0) - 97;
     const rank = Number(to[1]);
     const forward = mover === 'w' ? 1 : -1;
-    let contact = mv.captured === 'p'; // a capture of a pawn is itself a break
+    let contact = false;
     for (const df of [-1, 1]) {
       const af = file + df;
       const ar = rank + forward;

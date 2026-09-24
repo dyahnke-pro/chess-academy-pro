@@ -7628,7 +7628,15 @@ export function CoachTeachPage(): JSX.Element {
         tacticSquares = [prize.square];
         tacticLine = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} has nothing defending it — there's something to win here.`;
       } else {
-        const mine = tctx.immediate.filter((t) => t.side === 'student');
+        // A PINNED PAWN IS NOT "A PIN FOR YOU" (hand walk 2026-09-24: the g2
+        // bishop "pinning" b7 to the a8 rook was offered as an opportunity on
+        // move 5 and called back as "the same idea" on move 20). Nothing is won
+        // by pinning a pawn, so the opportunity lane skips it.
+        const pinnedPawn = (t: { type: string; squares: readonly string[] }): boolean => {
+          if (t.type !== 'pin' || t.squares.length < 2) return false;
+          try { return new Chess(args.fenAfterReply).get(t.squares[1] as Square)?.type === 'p'; } catch { return false; }
+        };
+        const mine = tctx.immediate.filter((t) => t.side === 'student' && !pinnedPawn(t));
         if (mine.length > 0) {
           const t = mine[0];
           tacticKey = `opp:${t.type}:${t.squares.join('')}`;
@@ -8800,7 +8808,7 @@ export function CoachTeachPage(): JSX.Element {
                     // on the phase so it never fires on an undeveloped opening
                     // piece (David 2026-08-23).
                     const isMiddlegame = Number(probe.fen().split(' ')[5] ?? '0') >= 10;
-                    for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, learnMemRef.current.pieceQualitySaid, { isMiddlegame })) {
+                    for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, learnMemRef.current.pieceQualitySaid, { isMiddlegame, fen: probe.fen() })) {
                       queueSpokenHint(probe.fen(), q.text, 'computed', q.squares);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }

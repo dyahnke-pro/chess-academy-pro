@@ -101,6 +101,11 @@ import { coachService } from '../../coach/coachService';
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
+// THIS PAGE IS HEAVY TO MOUNT (a 12,000-line component). Alone each test runs
+// in ~0.5s; beside nine other files in ship-check's parallel lane one render
+// took 11.4s and tripped vitest's 10s default — a budget, not a product bug.
+vi.setConfig({ testTimeout: 30_000, hookTimeout: 30_000 });
+
 describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bug)', () => {
   beforeEach(async () => {
     vi.clearAllMocks();

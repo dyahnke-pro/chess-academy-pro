@@ -23,7 +23,7 @@
 // number the engine will hand over.
 //
 // This lane REMOVES judgement rather than adding it.
-import type { Square } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 
 export interface PieceValue {
   square: string;
@@ -204,7 +204,7 @@ export function pieceQualityLines(
   values: readonly PieceValue[],
   studentColor: 'white' | 'black',
   said?: Set<string>,
-  opts?: { isMiddlegame?: boolean },
+  opts?: { isMiddlegame?: boolean; fen?: string },
 ): PieceQualityLine[] {
   const out: PieceQualityLine[] = [];
   if (values.length === 0) return out;
@@ -262,6 +262,7 @@ export function pieceQualityLines(
   // Also a MIDDLEGAME idea only — in the opening a minor is idle because it
   // isn't developed YET, not because it is misplaced (the caller passes phase).
   const worst = mine.filter((v) => v.piece.toLowerCase() === 'n' || v.piece.toLowerCase() === 'b')
+    .filter((v) => !atWork(opts?.fen, v.square, me))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => a.d - b.d)[0];
   if (opts?.isMiddlegame !== false && worst && worst.d <= -0.3) {
@@ -349,4 +350,34 @@ export function evalSplitLine(
   return key === 'edge-positional'
     ? 'Your edge here is not material — it is where your pieces are. Keep them on the board; trading down would hand it back.'
     : 'Your edge here is material rather than position, so simplifying is the plan: every trade makes the extra count for more.';
+}
+
+/** A MINOR THAT IS ATTACKING OR PINNING AN ENEMY PIECE IS NOT "DOING THE
+ *  LEAST" (hand walk 2026-09-24): the value table called the f4-bishop pinning
+ *  a bishop to the queen, and the g2-bishop raking the long diagonal onto b7,
+ *  "your worst piece". Attacking a non-pawn, or standing behind one that shields
+ *  something bigger, is work the table cannot see. */
+function atWork(fen: string | undefined, square: string, me: 'w' | 'b'): boolean {
+  if (!fen) return false;
+  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return false; }
+  const sq = square as Square;
+  for (const row of board.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== them || cell.type === 'p') continue;
+      if (board.attackers(cell.square, me).includes(sq)) return true;
+      // X-RAY: lift the enemy piece — does this minor now hit something bigger?
+      let lifted: Chess;
+      try { lifted = new Chess(fen); lifted.remove(cell.square); } catch { continue; }
+      for (const row2 of lifted.board()) {
+        for (const c2 of row2) {
+          if (!c2 || c2.color !== them || (VAL[c2.type] ?? 0) <= (VAL[cell.type] ?? 0)) continue;
+          if (lifted.attackers(c2.square, me).includes(sq) && !board.attackers(c2.square, me).includes(sq)) return true;
+        }
+      }
+    }
+  }
+  return false;
 }

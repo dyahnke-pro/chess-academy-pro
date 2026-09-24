@@ -325,6 +325,21 @@ export function computeMoveFundamentals(
     // the French guards d4). Caught live by the prod hint audit 2026-09-06: the
     // coach had no why for c3 and fell to the bare "that's the strongest move".
     // A wing pawn (a3 guards only b4) never qualifies — b4 is not the center.
+    // OPENS A BISHOP (hand walk 2026-09-24: Naroditsky's d3 is "the modest d3,
+    // opening the bishop"; the coach said only "d3 guards e4" — true and not
+    // the point). A home-square bishop whose squares grow by ≥2 when this pawn
+    // steps off its diagonal has just been developed by the pawn move.
+    const freed = bishopFreedBy(new Chess(fenBefore), after, mover, mv.from);
+    if (freed) {
+      out.push({
+        id: 'development',
+        weight: 60,
+        led: `opens the diagonal for the bishop on ${freed}`,
+        selfContained: `opens the diagonal for the bishop on ${freed} with the pawn to ${mv.to}`,
+        imperative: `open the diagonal for the bishop on ${freed}`,
+        squares: [mv.to, freed],
+      });
+    }
     const guards = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s));
     if (guards.length > 0) {
       const g = andList(guards); // no slice (G4.5) — CORE_CENTER is four squares
@@ -641,4 +656,27 @@ export function principleToTeach(
 ): MoveFundamental | null {
   return computeMoveFundamentals(fenBefore, san, mover)
     .find((f) => IS_OPENING_PRINCIPLE[f.id] && !taught.has(f.id)) ?? null;
+}
+
+/** The home-square bishop (c1/f1 or c8/f8) whose MOVES grew by at least two
+ *  because a pawn left `vacated` — counted from the board, never assumed. */
+function bishopFreedBy(before: Chess, after: Chess, mover: 'w' | 'b', vacated: string): string | null {
+  const homes = mover === 'w' ? ['c1', 'f1'] : ['c8', 'f8'];
+  const count = (board: Chess, sq: string): number => {
+    try {
+      const parts = board.fen().split(' ');
+      parts[1] = mover; parts[3] = '-';
+      return new Chess(parts.join(' ')).moves({ square: sq as Square, verbose: true }).length;
+    } catch { return 0; }
+  };
+  for (const home of homes) {
+    const p = after.get(home as Square);
+    if (!p || p.type !== 'b' || p.color !== mover) continue;
+    // the vacated square must sit on one of the bishop's diagonals
+    const df = Math.abs(home.charCodeAt(0) - vacated.charCodeAt(0));
+    const dr = Math.abs(Number(home[1]) - Number(vacated[1]));
+    if (df !== dr || df === 0) continue;
+    if (count(after, home) - count(before, home) >= 2) return home;
+  }
+  return null;
 }

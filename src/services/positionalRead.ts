@@ -25,7 +25,7 @@
 // It is the LOWEST-priority lane by design. It should never displace a tactic,
 // a threat, a gem or a taught note — it is what plays when none of them have
 // anything, which per the measurement is about half the game.
-import { Chess, type Color } from 'chess.js';
+import { Chess, type Color, type Square } from 'chess.js';
 import {
   kingSafetyRead,
   developmentRead,
@@ -140,9 +140,11 @@ function observationsFor(
       return b.board().flat().filter((c) => c && c.color === foe && (c.type === 'r' || c.type === 'q')).length;
     } catch { return 0; }
   })();
-  if (king?.exposed && king.openFilesNearKing.length > 0 && heavyAttackers > 0) {
-    const files = king.openFilesNearKing.slice(0, 2).join(' and ');
-    const plural = king.openFilesNearKing.length > 1 ? 's are' : ' is';
+  const foeColor: Color = color === 'w' ? 'b' : 'w';
+  const roads = (king?.openFilesNearKing ?? []).filter((f) => attackerCanUseFile(fen, f, foeColor));
+  if (king?.exposed && roads.length > 0 && heavyAttackers > 0) {
+    const files = roads.slice(0, 2).join(' and ');
+    const plural = roads.length > 1 ? 's are' : ' is';
     out.push({
       key: `${side}-king-open-file`, side, kind: 'king', rank: rank('king'),
       text: own
@@ -437,4 +439,18 @@ export function buildPositionalRead(
     return o;
   }
   return null;
+}
+
+/** A file is a ROAD toward a king only if the ATTACKER has no pawn on it (hand
+ *  walk 2026-09-24: "the d-file is open toward their king" with White's own
+ *  d3-pawn standing on it — the file was open for BLACK, not for the attack). */
+export function attackerCanUseFile(fen: string, file: string, attacker: 'w' | 'b'): boolean {
+  try {
+    const b = new Chess(fen);
+    for (let r = 1; r <= 8; r += 1) {
+      const p = b.get(`${file}${r}` as Square);
+      if (p && p.type === 'p' && p.color === attacker) return false;
+    }
+    return true;
+  } catch { return true; }
 }

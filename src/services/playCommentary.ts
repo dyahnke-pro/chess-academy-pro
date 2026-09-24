@@ -103,28 +103,59 @@ function withTurn(fen: string, color: 'w' | 'b'): string {
  *  actually be exploited"). Can a student slider of `types` reach a square from
  *  which it ATTACKS one of the aligned pieces — already, or within ~2 moves? An
  *  alignment no slider can contest is tidy geometry, not a threat. */
-function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[]): boolean {
+function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[]): PieceSymbol | null {
   const gen = (f: string): { from: Square; to: Square }[] => {
     try { return new Chess(f).moves({ verbose: true }).filter((m) => types.includes(m.piece)); } catch { return []; }
   };
-  const contests = (c: Chess): boolean => c.attackers(aSq, me).length > 0 || c.attackers(bSq, me).length > 0;
+  // ALONG THE LINE, not from anywhere (hand walk 2026-09-24: queen a5 + rook a8
+  // "line up on the a-file, and you have a rook that moves along it" — the only
+  // contest was the QUEEN hitting a5 diagonally from d2; no rook could reach the
+  // a-file). The attacker must stand on the same line as the pair.
+  const fa = aSq.charCodeAt(0); const ra = Number(aSq[1]);
+  const fb = bSq.charCodeAt(0); const rb = Number(bSq[1]);
+  const onLine = (sq: Square): boolean => {
+    const f = sq.charCodeAt(0); const r = Number(sq[1]);
+    if (fa === fb) return f === fa;
+    if (ra === rb) return r === ra;
+    // diagonal through a and b: same slope
+    const slope = (rb - ra) / (fb - fa);
+    return f !== fa && (r - ra) / (f - fa) === slope;
+  };
+  // …and from a square it can STAND on: a queen "contesting" from a6 where the
+  // b7-pawn takes it contests nothing. Returns the piece that can do it, so
+  // the sentence names THAT piece rather than whichever one the student owns.
+  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const contests = (c: Chess): PieceSymbol | null => {
+    for (const sq of [...c.attackers(aSq, me), ...c.attackers(bSq, me)]) {
+      const p = c.get(sq);
+      if (!p || !types.includes(p.type) || !onLine(sq)) continue;
+      const hitters = c.attackers(sq, them);
+      const hitByCheaper = hitters.some((e) => (VAL[c.get(e)?.type ?? 'k'] ?? 100) < (VAL[p.type] ?? 0));
+      const hangs = hitters.length > 0 && c.attackers(sq, me).filter((d) => d !== sq).length === 0;
+      if (hitByCheaper || hangs) continue;
+      return p.type;
+    }
+    return null;
+  };
   const start = withTurn(fen, me);
   let c0: Chess;
-  try { c0 = new Chess(start); } catch { return false; }
-  if (contests(c0)) return true;
+  try { c0 = new Chess(start); } catch { return null; }
+  const now = contests(c0);
+  if (now) return now;
   const m1 = gen(start);
   for (const m of m1) {
-    try { const mid = new Chess(start); mid.move({ from: m.from, to: m.to }); if (contests(mid)) return true; } catch { /* skip */ }
+    try { const mid = new Chess(start); mid.move({ from: m.from, to: m.to }); const t = contests(mid); if (t) return t; } catch { /* skip */ }
   }
   for (const m of m1.slice(0, 18)) {
     let mid: Chess;
     try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
     const nf = withTurn(mid.fen(), me);
     for (const mm of gen(nf)) {
-      try { const c2 = new Chess(nf); c2.move({ from: mm.from, to: mm.to }); if (contests(c2)) return true; } catch { /* skip */ }
+      try { const c2 = new Chess(nf); c2.move({ from: mm.from, to: mm.to }); const t = contests(c2); if (t) return t; } catch { /* skip */ }
     }
   }
-  return false;
+  return null;
 }
 
 function findAlignmentSeed(
@@ -172,6 +203,20 @@ function findAlignmentSeed(
     return n;
   };
 
+  const pawnAt = new Set(all.filter((p) => p.color === them && p.type === 'p').map((p) => p.square));
+  const pawnBetween = (a: Piece, b: Piece): boolean => {
+    const df = Math.sign(fileOf(b.square) - fileOf(a.square));
+    const dr = Math.sign(rankOf(b.square) - rankOf(a.square));
+    let f = fileOf(a.square) + df;
+    let r = rankOf(a.square) + dr;
+    while (f !== fileOf(b.square) || r !== rankOf(b.square)) {
+      if (pawnAt.has(`${String.fromCharCode(97 + f)}${r}`)) return true;
+      f += df;
+      r += dr;
+    }
+    return false;
+  };
+
   /** Is there an empty square just beyond either end of the pair, on their
    *  shared line, for a slider to stand on? That is what makes an alignment
    *  exploitable rather than merely tidy. */
@@ -217,10 +262,17 @@ function findAlignmentSeed(
       }
       if (!line || !tool) continue;
       if (betweenCount(a, b) > 1) continue;
+      // …and not through one of THEIR PAWNS (hand walk 2026-09-24): with the
+      // a7-pawn between queen a5 and rook a8 there is no pin or skewer to set
+      // up — a pawn is structure, not an x-ray target. A PIECE between stays
+      // allowed (the c8-king / d8-rook / f8-queen back rank, David 2026-08-07).
+      if (pawnBetween(a, b)) continue;
       // EXPLOITABILITY (David 2026-08-23): the tool must be able to CONTEST the
       // line — attack an aligned piece now or within ~2 moves. "You have a rook
       // that moves along it" is a lie if no rook can ever get onto that line.
-      if (!toolCanContest(fen, a.square as Square, b.square as Square, me, toolKinds)) continue;
+      const contester = toolCanContest(fen, a.square as Square, b.square as Square, me, toolKinds);
+      if (!contester) continue;
+      tool = NAME[contester as string] ?? tool;
       // An alignment is only worth a word if a slider can actually GET on the
       // line. This replaced a flat "adjacent pieces are a huddle" skip, which
       // threw away the sharpest version of the pattern: David 2026-08-07 —

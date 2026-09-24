@@ -25,6 +25,7 @@
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
+import { attackerCanUseFile } from './positionalRead';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import {
@@ -185,8 +186,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // only past the opening so it isn't just "the uncastled starting king".
       const moveNo = Number(fen.split(' ')[5] ?? '0');
       const theirs = kingSafetyRead(fen, opp);
-      if (theirs?.exposed && theirs.openFilesNearKing.length >= 1 && theirs.shieldPawns <= 1 && moveNo >= 8) {
-        const files = theirs.openFilesNearKing.join(', ');
+      const roads = (theirs?.openFilesNearKing ?? []).filter((f) => attackerCanUseFile(fen, f, student));
+      if (theirs?.exposed && roads.length >= 1 && theirs.shieldPawns <= 1 && moveNo >= 8) {
+        const files = roads.join(', ');
         return { fact: `The enemy king on ${theirs.square} is exposed — the ${files}-file is open toward it. Play for the attack.`, squares: [sq(theirs.square)] };
       }
       // Your own king stuck in the center is only a real problem once pieces are
@@ -533,7 +535,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // EXPLOITABILITY (David 2026-08-23): only name a hole a student MINOR can
       // actually reach and hold in ~2 moves. "Plant a knight or bishop there"
       // when the student has neither able to arrive is geometry — silence it.
-      const hole = holes.find((h) => minorCanReachSquare(fen, h, student));
+      // "IN THEIR CAMP" MEANS THEIR HALF (hand walk 2026-09-24: "c4 is a hole in
+      // their camp" — Black's weak c4 sits on White's side of the board).
+      const inTheirHalf = (sq: string): boolean => (opp === 'b' ? Number(sq[1]) >= 5 : Number(sq[1]) <= 4);
+      const hole = holes.find((h) => inTheirHalf(h) && minorCanReachSquare(fen, h, student));
       if (hole) {
         return { fact: `${hole} is a hole in their camp — a piece planted there can't be kicked.`, squares: [hole] };
       }
