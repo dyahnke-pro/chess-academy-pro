@@ -24,11 +24,13 @@ describe('where the dial opens', () => {
     expect(openingRegister(2400)).toBe('subtle');
   });
 
-  it('treats an unknown rating as the middle, not as a beginner', () => {
-    // Guessing "beginner" for a player we know nothing about is the more
-    // damaging error: it hands a strong player the answer on their first move.
-    expect(openingRegister(null)).toBe('moderate');
-    expect(openingRegister(undefined)).toBe('moderate');
+  it('treats an unknown rating as a BEGINNER — the app serves beginners (David 2026-09-23)', () => {
+    // This used to read "the middle, not a beginner", on the worry that it
+    // hands a strong player the answer. The default is now the lowest setting,
+    // and a strong newcomer is corrected by the live found-the-move dial below
+    // within a few moves.
+    expect(openingRegister(null)).toBe('obvious');
+    expect(openingRegister(undefined)).toBe('obvious');
   });
 });
 

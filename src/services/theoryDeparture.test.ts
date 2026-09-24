@@ -122,10 +122,10 @@ describe('theoryDeparture — where the game left the book (Phase 4)', () => {
   // Delegates to ratingBands.explorerBandFor since 2026-09-17. The hand-written
   // ladder this replaced quoted 1400–1600 games to a 1300 player and 1600–1800
   // games to a 1900 player — the band never contained the student. An unknown
-  // rating now falls to the same 1200 cold-start prior as coreRatingTier
+  // rating now falls to the same cold-start prior as coreRatingTier
   // instead of assuming the weakest bucket.
   it('ratingBandFor brackets the student with adjacent buckets', () => {
-    expect(ratingBandFor(null)).toBe('1200,1400');
+    expect(ratingBandFor(null)).toBe('1000,1200'); // unknown → the lowest band (2026-09-23)
     expect(ratingBandFor(1300)).toBe('1200,1400');
     expect(ratingBandFor(1500)).toBe('1400,1600');
     expect(ratingBandFor(1900)).toBe('1800,2000');

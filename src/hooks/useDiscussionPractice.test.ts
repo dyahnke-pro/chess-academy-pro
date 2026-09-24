@@ -280,7 +280,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     act(() => {
       result.current.recordGradedMove({
         fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
-        cpLoss: 0, sourceGameId: 'game-123',
+        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400,
       });
     });
     expect(recordMoveEvidence).toHaveBeenCalledTimes(1);
@@ -295,7 +295,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     act(() => {
       result.current.recordGradedMove({
         fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
-        cpLoss: null, sourceGameId: 'game-123',
+        cpLoss: null, sourceGameId: 'game-123', seedRating: 400,
       });
     });
     expect(recordMoveEvidence).not.toHaveBeenCalled();
@@ -310,7 +310,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     act(() => {
       result.current.recordGradedMove({
         fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
-        cpLoss: 0, sourceGameId: 'game-123',
+        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400,
       });
     });
     expect(recordMoveEvidence).not.toHaveBeenCalled();

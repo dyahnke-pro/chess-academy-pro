@@ -37,7 +37,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `barForTier` (function) — 5 call sites
-- `src/services/coachDecider.ts:311`
+- `src/services/coachDecider.ts:343`
 - `src/services/factSelector.test.ts:81`
 - `src/services/factSelector.test.ts:82`
 - `src/services/factSelector.test.ts:83`
@@ -50,7 +50,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectFacts` (function) — 17 call sites
-- `src/services/coachDecider.ts:303`
+- `src/services/coachDecider.ts:335`
 - `src/services/factSelector.test.ts:23`
 - `src/services/factSelector.test.ts:33`
 - `src/services/factSelector.test.ts:41`
@@ -69,13 +69,13 @@
 - `src/services/factSelector.test.ts:160`
 
 ### `supportedFacts` (function) — 7 call sites
-- `src/services/coachDecider.ts:322`
-- `src/services/supportedFacts.test.ts:21`
-- `src/services/supportedFacts.test.ts:27`
-- `src/services/supportedFacts.test.ts:34`
-- `src/services/supportedFacts.test.ts:41`
-- `src/services/supportedFacts.test.ts:48`
-- `src/services/supportedFacts.test.ts:54`
+- `src/services/coachDecider.ts:355`
+- `src/services/supportedFacts.test.ts:22`
+- `src/services/supportedFacts.test.ts:28`
+- `src/services/supportedFacts.test.ts:35`
+- `src/services/supportedFacts.test.ts:42`
+- `src/services/supportedFacts.test.ts:49`
+- `src/services/supportedFacts.test.ts:55`
 
 ## Tests
 

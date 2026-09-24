@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**126 lines · 5 exports · 2 importers · 1 tests · 0 audits**
+**190 lines · 8 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/coachFeatureService.ts`
 - `src/services/exchangeLedger.test.ts`
+- `src/services/gemCrushLines.ts`
+- `src/services/lineProof.test.ts`
 
 ## Exports and every call site
 
@@ -24,16 +26,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computeExchangeLedger` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3190`
 - `src/services/exchangeLedger.test.ts:12`
 - `src/services/exchangeLedger.test.ts:50`
 - `src/services/exchangeLedger.test.ts:51`
 - `src/services/exchangeLedger.test.ts:55`
 - `src/services/exchangeLedger.test.ts:241`
 - `src/services/exchangeLedger.test.ts:242`
+- `src/services/gemCrushLines.ts:285`
 
-### `describeExchange` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:3192`
+### `describeExchange` (function) — 4 call sites
 - `src/services/exchangeLedger.test.ts:18`
 - `src/services/exchangeLedger.test.ts:40`
 - `src/services/exchangeLedger.test.ts:45`
@@ -45,9 +46,24 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:34`
 - `src/services/exchangeLedger.test.ts:238`
 
+### `LineProof` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `proofCut` (function) — 5 call sites
+- `src/services/coachFeatureService.ts:3184`
+- `src/services/lineProof.test.ts:13`
+- `src/services/lineProof.test.ts:24`
+- `src/services/lineProof.test.ts:32`
+- `src/services/lineProof.test.ts:37`
+
+### `describeProofResult` (function) — 2 call sites
+- `src/services/coachFeatureService.ts:3171`
+- `src/services/lineProof.test.ts:27`
+
 ## Tests
 
 - `src/services/exchangeLedger.test.ts`
+- `src/services/lineProof.test.ts`
 
 ## Audits that reach it
 

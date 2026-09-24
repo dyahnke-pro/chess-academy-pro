@@ -25,6 +25,7 @@
  * arrow squares via chess.js. Only surfaceable (weapon-tier + narrated) gems
  * qualify.
  */
+import { computeExchangeLedger } from './exchangeLedger';
 import { Chess } from 'chess.js';
 import {
   getPunishGemsForOpening,
@@ -234,7 +235,25 @@ function boardMaterial(fen: string): number {
  *  the curated punish line to its quiet end and measures the punisher's real
  *  material swing + checks for mate. G0/G3: the FACT is computed in code; the
  *  LLM only phrases it. */
+/** Pure per gem, and looked up on every lesson ply — computed once. */
+const payoffMemo = new Map<string, { payoff: string; winsMaterial: boolean }>();
+
 function computePayoff(
+  staticFen: string,
+  inaccuracy: string,
+  punishSeq: string[],
+  punisher: 'w' | 'b',
+  tier: 'confirmed' | 'positional',
+): { payoff: string; winsMaterial: boolean } {
+  const key = `${staticFen}|${inaccuracy}|${punishSeq.join(' ')}|${punisher}|${tier}`;
+  const hit = payoffMemo.get(key);
+  if (hit) return hit;
+  const out = computePayoffUncached(staticFen, inaccuracy, punishSeq, punisher, tier);
+  payoffMemo.set(key, out);
+  return out;
+}
+
+function computePayoffUncached(
   staticFen: string,
   inaccuracy: string,
   punishSeq: string[],
@@ -259,8 +278,20 @@ function computePayoff(
   const gain = punisher === 'w' ? endMaterial : -endMaterial;
   if (mated) return { payoff: 'with a mating attack', winsMaterial: false };
   if (gain >= 5) return { payoff: 'winning decisive material', winsMaterial: true };
+  // Name what was actually won, off the capture ledger — never inferred from
+  // the point total. "gain === 2 → the exchange" called two pawns a rook for a
+  // minor (Caro-Kann …dxe4 f3 exf3: prod review 2026-09-23). The exchange is a
+  // rook won for a minor piece, and nothing else.
+  const ledger = computeExchangeLedger(staticFen, [inaccuracy, ...punishSeq], punisher);
+  const took = (p: string): number => ledger ? ledger.studentWon.filter((x) => x === p).length : 0;
+  const gave = (p: string): number => ledger ? ledger.opponentWon.filter((x) => x === p).length : 0;
+  const pawnsOnly = !!ledger && ledger.studentWon.every((x) => x === 'p');
+  if (gain >= 3 && pawnsOnly) return { payoff: PAWN_HAUL[gain] ?? 'winning several pawns', winsMaterial: true };
   if (gain >= 3) return { payoff: 'winning a piece', winsMaterial: true };
-  if (gain === 2) return { payoff: 'winning the exchange', winsMaterial: true };
+  if (gain === 2 && took('r') > gave('r') && gave('n') + gave('b') > took('n') + took('b')) {
+    return { payoff: 'winning the exchange', winsMaterial: true };
+  }
+  if (gain === 2) return { payoff: 'winning two pawns', winsMaterial: true };
   if (gain === 1) return { payoff: 'winning a pawn', winsMaterial: true };
   if (gain <= -1) return { payoff: 'sacrificing material for a winning initiative', winsMaterial: false };
   return {
@@ -268,6 +299,9 @@ function computePayoff(
     winsMaterial: false,
   };
 }
+
+/** A material count in words — piece sense, never an eval. */
+const PAWN_HAUL: Record<number, string> = { 3: 'winning three pawns', 4: 'winning four pawns' };
 
 function sideWord(turn: 'w' | 'b'): 'white' | 'black' {
   return turn === 'w' ? 'white' : 'black';

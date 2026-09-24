@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**336 lines · 13 exports · 4 importers · 2 tests · 0 audits**
+**383 lines · 14 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,21 +42,24 @@
 ### `FACT_ROLE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `FACT_LAYER` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `TIE_ORDER` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `factKind` (function) — 1 call site
-- `src/services/coachDecider.ts:293`
+- `src/services/coachDecider.ts:311`
 
 ### `factValue` (function) — 1 call site
-- `src/services/coachDecider.ts:299`
+- `src/services/coachDecider.ts:318`
 
 ### `facetTag` (function) — 5 call sites
 - `src/services/reviewFacetRank.test.ts:19`
 - `src/services/reviewFacetRank.test.ts:20`
 - `src/services/reviewFacetRank.test.ts:21`
-- `src/services/supportedFacts.test.ts:7`
 - `src/services/supportedFacts.test.ts:8`
+- `src/services/supportedFacts.test.ts:9`
 
 ### `facetRank` (function) — 4 call sites
 - `src/services/factSelector.ts:216`

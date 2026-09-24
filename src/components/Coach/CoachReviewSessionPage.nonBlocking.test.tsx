@@ -86,8 +86,10 @@ describe('CoachReviewSessionPage — never block on analysis the game already ha
     // The review is on screen while the deepen is STILL pending…
     await waitFor(() => expect(screen.getByTestId('mock-review')).toBeInTheDocument());
     expect(screen.queryByTestId('review-analyze-spinner')).toBeNull();
-    // …and the deepen was kicked off, with the pill saying so.
-    expect(analyzeSingleGame).toHaveBeenCalledWith('g-swept');
+    // …and the deepen was kicked off, with the pill saying so. It starts one
+    // microtask after render (it waits on the narration-settled promise), so
+    // it is awaited — a synchronous read races it under load.
+    await waitFor(() => expect(analyzeSingleGame).toHaveBeenCalledWith('g-swept'));
     expect(screen.getByTestId('review-deepening-pill')).toBeInTheDocument();
 
     // When it lands (walk not started) the review picks it up and the pill goes.

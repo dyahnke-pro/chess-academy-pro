@@ -1,3 +1,4 @@
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock stockfishEngine before importing
@@ -594,9 +595,10 @@ describe('the opponent is matched against the rating the student SET', () => {
   });
 
   it('survives a missing or nonsense profile rather than guessing high', () => {
-    expect(studentPlayingRating(null)).toBe(1200);
-    expect(studentPlayingRating(undefined)).toBe(1200);
-    expect(studentPlayingRating({ currentRating: 0, puzzleRating: 0 })).toBe(1200);
+    // The ONE default (the app serves beginners — 2026-09-23), never a literal.
+    expect(studentPlayingRating(null)).toBe(DEFAULT_STUDENT_RATING);
+    expect(studentPlayingRating(undefined)).toBe(DEFAULT_STUDENT_RATING);
+    expect(studentPlayingRating({ currentRating: 0, puzzleRating: 0 })).toBe(DEFAULT_STUDENT_RATING);
     expect(studentPlayingRating({ currentRating: Number.NaN, puzzleRating: 1500 })).toBe(1500);
   });
 

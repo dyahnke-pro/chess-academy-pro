@@ -1,5 +1,6 @@
 // TEACHING POINTS FIRST (David 2026-09-23) — the support rule, and the door's
 // step 4b that runs it on review's tagged facts.
+import { ALL_GREY } from './teachingLayers';
 import { describe, it, expect } from 'vitest';
 import { supportedFacts } from './factSelector';
 import { FACET_ROLE, facetTag } from './reviewFacetRank';
@@ -62,7 +63,7 @@ describe('decide — teaching points first on the LIVE vocabulary too', async ()
   const { decide } = await import('./coachDecider');
   const { NO_BOOST } = await import('./studentMomentBoost');
   const { CLAUSE_ROLE } = await import('./reviewFacetRank');
-  const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST };
+  const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST, layers: ALL_GREY };
   const blunder = { decision: null, cpLossCp: 300, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
   const HANG = 'Your knight on f3 is hanging to the bishop on g4.';
   const LEANS_HERE = 'Their bishop on g4 is doing all the work.';

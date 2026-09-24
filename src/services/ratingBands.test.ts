@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  coreRatingTier, explorerBandFor, ADAPTIVE_DECIDERS, type AdaptiveDeciderId,
+  coreRatingTier, explorerBandFor, ADAPTIVE_DECIDERS, type AdaptiveDeciderId, DEFAULT_STUDENT_RATING,
 } from './ratingBands';
 import { pvBandForRating } from './mistakePuzzleService';
 import { getTacticLookahead } from './tacticAlertService';
@@ -21,9 +21,9 @@ describe('coreRatingTier — the single teaching taxonomy', () => {
     expect(coreRatingTier(2400)).toBe('advanced');
   });
 
-  it('defaults an unknown rating to intermediate (1200)', () => {
-    expect(coreRatingTier(undefined)).toBe('intermediate');
-    expect(coreRatingTier(null)).toBe('intermediate');
+  it('defaults an unknown rating to BEGINNER — the app serves beginners (David 2026-09-23)', () => {
+    expect(coreRatingTier(undefined)).toBe('beginner');
+    expect(coreRatingTier(null)).toBe('beginner');
   });
 });
 
@@ -63,10 +63,10 @@ describe('explorerBandFor — ONE explorer band for every surface', () => {
     }
   });
 
-  it('an unknown rating falls to the same 1200 prior as coreRatingTier', () => {
-    expect(explorerBandFor(undefined).band).toBe(explorerBandFor(1200).band);
-    expect(explorerBandFor(null).band).toBe(explorerBandFor(1200).band);
-    expect(explorerBandFor(Number.NaN).band).toBe(explorerBandFor(1200).band);
+  it('an unknown rating falls to the same prior as coreRatingTier', () => {
+    expect(explorerBandFor(undefined).band).toBe(explorerBandFor(DEFAULT_STUDENT_RATING).band);
+    expect(explorerBandFor(null).band).toBe(explorerBandFor(DEFAULT_STUDENT_RATING).band);
+    expect(explorerBandFor(Number.NaN).band).toBe(explorerBandFor(DEFAULT_STUDENT_RATING).band);
   });
 });
 

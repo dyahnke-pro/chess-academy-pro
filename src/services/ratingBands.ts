@@ -62,7 +62,7 @@ export function coreRatingTier(rating: number | undefined | null): RatingTier {
  * the store — so a leaf fact-computer must never import it just to learn what
  * "unknown" means.
  */
-export const DEFAULT_STUDENT_RATING = 1200;
+export const DEFAULT_STUDENT_RATING = 400;
 
 const EXPLORER_BUCKETS = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500] as const;
 
@@ -77,10 +77,11 @@ export interface ExplorerBand {
  * The two buckets bracketing `rating` — the pool a player at this level
  * actually comes from. Pairs DOWNWARD at the top so the strongest band still
  * has two buckets rather than a lone one. Unknown/non-finite rating falls to
- * the same 1200 cold-start prior `coreRatingTier` uses.
+ * the same cold-start prior `coreRatingTier` uses (`DEFAULT_STUDENT_RATING` —
+ * a second literal here was the drift the one-rating rule exists to stop).
  */
 export function explorerBandFor(rating: number | null | undefined): ExplorerBand {
-  const r = typeof rating === 'number' && Number.isFinite(rating) ? rating : 1200;
+  const r = typeof rating === 'number' && Number.isFinite(rating) ? rating : DEFAULT_STUDENT_RATING;
   let i = 0;
   for (let k = 0; k < EXPLORER_BUCKETS.length; k++) {
     if (EXPLORER_BUCKETS[k] <= r) i = k;

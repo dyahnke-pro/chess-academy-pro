@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4686 lines · 34 exports · 32 importers · 29 tests · 5 audits**
+**4715 lines · 34 exports · 33 importers · 30 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -44,6 +44,7 @@
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/reviewRealSweep.test.ts`
+- `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
@@ -273,9 +274,10 @@
 ### `openingNameForKey` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:213`
 
-### `generateReviewNarration` (function) — 10 call sites
-- `src/services/reviewBetterLineWhy.test.ts:56`
-- `src/services/reviewBetterLineWhy.test.ts:82`
+### `generateReviewNarration` (function) — 14 call sites
+- `src/services/reviewBetterLineWhy.test.ts:58`
+- `src/services/reviewBetterLineWhy.test.ts:74`
+- `src/services/reviewBetterLineWhy.test.ts:84`
 - `src/services/reviewCorpusSweep.test.ts:148`
 - `src/services/reviewDeepThreat.test.ts:36`
 - `src/services/reviewDeepThreat.test.ts:62`
@@ -284,6 +286,9 @@
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewNarrationBuild.ts:83`
 - `src/services/reviewRealSweep.test.ts:187`
+- `src/services/reviewRefuted.test.ts:26`
+- `src/services/reviewRefuted.test.ts:33`
+- `src/services/reviewRefuted.test.ts:40`
 
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
@@ -323,6 +328,7 @@
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/reviewNeedGate.test.ts`
 - `src/services/reviewRealSweep.test.ts`
+- `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`

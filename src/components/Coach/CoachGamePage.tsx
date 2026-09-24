@@ -2446,10 +2446,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             // ONE DOOR: the taught slip, then the home-opening steer (A7),
             // in the engine's own order — `pickTeachingReply` — so this page
             // and `getAdaptiveMove` can never disagree about precedence.
+            const liveElo = discussion.liveRating(gameState.gameId, playerRating);
             const teaching = await pickTeachingReply(
               game.fen,
-              targetStrength,
-              { studentElo: playerRating, difficulty, steerHomeFor: playerColor },
+              getTargetStrength(liveElo, difficulty),
+              { studentElo: liveElo, difficulty, steerHomeFor: playerColor },
               'CoachGamePage.coachTurn',
             );
             if (teaching) {
@@ -2463,7 +2464,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         }
         if (!brainPickSan) {
           try {
-            const config = resolvePlayConfig(difficulty, playerRating);
+            const config = resolvePlayConfig(difficulty, discussion.liveRating(gameState.gameId, playerRating));
             const uciResult = await withTimeout(
               stockfishEngine.getBestMove(game.fen, config.moveTimeMs, config.skill, config.targetElo),
               Math.max(2_000, config.moveTimeMs + 1_000),
@@ -2490,7 +2491,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                   // not an Elo". Play is where most games happen and its
                   // opponent strength was unobservable in the log; that is how
                   // the dead wire survived.
-                  summary: `stockfish: ${result.san} at elo ${limitStrengthElo(config.targetElo)} (requested ${targetStrength}, UCI_LimitStrength, ${config.moveTimeMs}ms)`,
+                  summary: `stockfish: ${result.san} at elo ${limitStrengthElo(config.targetElo)} (requested ${targetStrength}, live ${discussion.liveRating(gameState.gameId, playerRating)}, UCI_LimitStrength, ${config.moveTimeMs}ms)`,
                   fen: game.fen,
                 });
               }
@@ -2507,7 +2508,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         if (!brainPickSan) {
           try {
             const adaptive = await withTimeout(
-              getAdaptiveMove(game.fen, targetStrength),
+              getAdaptiveMove(game.fen, getTargetStrength(discussion.liveRating(gameState.gameId, playerRating), difficulty)),
               8_000,
               'coach-move-adaptive-fallback',
             );
@@ -3249,6 +3250,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       moverColor: playerColor,
       cpLoss: analysis ? evalLoss : null,
       sourceGameId: gameState.gameId,
+      // STRENGTH MATCHED IN REAL TIME (WO-LAYERS-01 step 8): the same graded
+      // move moves the opponent's strength — one detector, two consumers.
+      seedRating: playerRating,
     });
 
     // bestMove from pre-analysis = what the player SHOULD have played (convert UCI → SAN)

@@ -80,7 +80,7 @@ describe('an opponent merit clause speaks from the student\'s chair (walk 5, R15
     const { toOpponentSeat } = await import('./coachFeatureService');
     const { describeMoveMerit } = await import('./groundedAnswer');
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5';
-    const merit = describeMoveMerit(fen, 'O-O', 'white') ?? '';
+    const merit = describeMoveMerit(fen, 'O-O', 'white', null) ?? '';
     expect(merit).toMatch(/your king/);
     expect(toOpponentSeat(merit)).toMatch(/their king/);
     expect(toOpponentSeat(merit)).not.toMatch(/\byour\b/);

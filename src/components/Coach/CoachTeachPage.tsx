@@ -8727,6 +8727,9 @@ export function CoachTeachPage(): JSX.Element {
                       // of it (§G4.5.15, and `surfaceContract.scan` enforces it).
                       studentNeedContext: studentNeedRef.current,
                       alreadySaid: standingRef.current.said,
+                      // The coach's reply that produced this board — so the
+                      // composer can tell a real threat from a bluff.
+                      ...(m ? { opponentLastMove: { fenBefore: move.fen, san: m.san } } : {}),
                     });
                     standingRef.current.rememberAll(pf.remember);
                     // The student is to move at `probe`; their coming move is ply history+1.

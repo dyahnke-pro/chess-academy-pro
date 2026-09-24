@@ -25,7 +25,6 @@
 // bugs, because audits run fresh devices. Profile A must be past
 // COLD_START_GAMES or this gate is theatre.
 import { describe, it, expect } from 'vitest';
-import { Chess } from 'chess.js';
 import { computePositionFacts } from './positionFacts';
 import { COLD_START_GAMES, type StudentNeedContext } from './needScore';
 import type { WeaknessSignal } from './weaknessSignal';
@@ -99,12 +98,13 @@ const matchingHole = {
  * That is the vacuity trap this file exists to close, so it is named here.
  */
 function board(): string {
-  const c = new Chess();
-  const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Be7',
-    'Re1', 'b5', 'Bb3', 'd6', 'c3', 'O-O', 'h3', 'Na5', 'Bc2', 'c5', 'd4', 'Qc7',
-    'Nbd2', 'cxd4'];
-  for (const s of sans) c.move(s);
-  return c.fen();
+  // CORRECTED 2026-09-23. The closed Ruy this used to replay produced one fact,
+  // a "fork waiting on e6" — which landed on a square the f7-pawn and the
+  // c8-bishop both guard. The latent-fork detector judged safety from the
+  // wrong seat until walk 6 fixed it, and this gate went red the same night
+  // (its only clause was the false fork). The replacement is the position
+  // `liveNeedGate` already uses: a REAL fork two moves out, past move 10.
+  return 'r1b1kb1r/pp3ppp/2np1nq1/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 14';
 }
 
 async function say(signals: readonly WeaknessSignal[]): Promise<string[]> {

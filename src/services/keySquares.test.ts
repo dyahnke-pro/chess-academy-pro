@@ -78,7 +78,7 @@ describe('the clause separates king pressure from central influence', () => {
 describe('the real case — read the output, not the unit', () => {
   it('Ng5 in the Two Knights finally names f7', () => {
     const fen = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 5 4';
-    const out = describeMoveMerit(fen, 'Ng5', 'white');
+    const out = describeMoveMerit(fen, 'Ng5', 'white', null);
     expect(out).toBeTruthy();
     expect(out!).toContain('f7');
     expect(out!).toContain('beside their king');
@@ -87,11 +87,11 @@ describe('the real case — read the output, not the unit', () => {
   it('and does NOT claim to eye a square its own pawn sits on', () => {
     // Ng5 attacks e4, where White's own pawn stands. That is DEFENCE.
     const fen = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 5 4';
-    expect(describeMoveMerit(fen, 'Ng5', 'white')!).not.toContain('e4');
+    expect(describeMoveMerit(fen, 'Ng5', 'white', null)!).not.toContain('e4');
   });
 
   it('a quiet developer with no king contact gains NO king clause', () => {
-    const out = describeMoveMerit(new Chess().fen(), 'Nf3', 'white');
+    const out = describeMoveMerit(new Chess().fen(), 'Nf3', 'white', null);
     expect(out!).not.toContain('beside their king');
   });
 });

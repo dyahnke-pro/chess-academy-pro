@@ -58,7 +58,7 @@ describe('AUDIT: gem crush lines (Watch + Play) — read every line', () => {
       if (!aside.say.includes(crush.punish.replace(/[!?]+$/g, ''))) problems.push(`${gem.openingId}: omits punish: "${aside.say}"`);
       if (/\b\d+\.[A-Za-z]/.test(aside.say)) problems.push(`${gem.openingId}: move-number prefix: "${aside.say}"`);
       // PAYOFF HONESTY: a material claim must match the board-computed flag.
-      const claimsMaterial = /winning (a pawn|a piece|the exchange|decisive material)/.test(crush.payoff);
+      const claimsMaterial = /winning (a pawn|two pawns|three pawns|four pawns|several pawns|a piece|the exchange|decisive material)/.test(crush.payoff);
       if (claimsMaterial && !crush.winsMaterial) problems.push(`${gem.openingId}: payoff claims material, board shows none: "${crush.payoff}"`);
       if (!claimsMaterial && crush.winsMaterial) problems.push(`${gem.openingId}: board wins material, payoff hides it: "${crush.payoff}"`);
       if (!aside.say.includes(crush.payoff)) problems.push(`${gem.openingId}: dropped payoff fact: "${aside.say}"`);

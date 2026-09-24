@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**184 lines · 10 exports · 47 importers · 3 tests · 0 audits**
+**185 lines · 10 exports · 48 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3942) — names `explorerBandFor`, `ratingBands`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3972) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3959) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3989) — names `explorerBandFor`, `ratingBands`
 
 ## Who calls in
 
@@ -41,6 +41,7 @@
 - `src/services/causalChainVoice.ts`
 - `src/services/coachDrillService.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/coachGameEngine.test.ts`
 - `src/services/coachGameEngine.ts`
 - `src/services/coachTemplates.ts`
 - `src/services/conceptEngine.ts`
@@ -86,7 +87,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explorerBandFor` (function) — 11 call sites
-- `src/services/coachGameEngine.ts:246`
+- `src/services/coachGameEngine.ts:249`
 - `src/services/ratingBands.test.ts:36`
 - `src/services/ratingBands.test.ts:44`
 - `src/services/ratingBands.test.ts:50`
@@ -115,6 +116,7 @@
 
 ## Tests
 
+- `src/services/coachGameEngine.test.ts`
 - `src/services/dbService.test.ts`
 - `src/services/oneStudentRating.test.ts`
 - `src/services/ratingBands.test.ts`

@@ -1209,7 +1209,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     if (i + 1 < SANS.length && SANS[i].includes('x') && SANS[i + 1].includes('x')) {
       const to = (x) => x.replace(/[+#]/g, '').slice(-2);
       if (to(SANS[i]) === to(SANS[i + 1]) && victimVal[i] !== null && victimVal[i] === victimVal[i + 1]
-        && /clean profit|material in the bag|wins? material|nets? (a|the|\d)|without giving up anything|free pawn|a real price/i.test(scan)) {
+        && /clean profit|material in the bag|wins? material|(?:won|wins?) (?:their|your|the) (?:pawn|knight|bishop|rook|queen)|nets? (a|the|\d)|without giving up anything|free pawn|a real price/i.test(scan)) {
         tradeFails.push(`ply ${n} ${SANS[i]}: "${narr.slice(0, 70)}"`);
       }
     }
@@ -1716,9 +1716,9 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     await add('DECIDER walk-posture-never-gated-by-importance', importanceClosed.length === 0,
       `${walk.length}/${decisions.length} rows judged as walk; ${importanceClosed.length} closed on importance (must be 0 — that is the 46-ply-to-6 bug)`);
     const silent = decisions.filter((d) => d.speak === false);
-    const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need' && d.reason !== 'unsupported' && d.reason !== 'empty');
+    const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need' && d.reason !== 'unsupported' && d.reason !== 'empty' && d.reason !== 'proven');
     await add('DECIDER every-silence-names-its-gate', unattributed.length === 0,
-      `silent=${silent.length} importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} empty=${silent.filter((d) => d.reason === 'empty').length} unattributed=${unattributed.length}`);
+      `silent=${silent.length} importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} empty=${silent.filter((d) => d.reason === 'empty').length} proven=${silent.filter((d) => d.reason === 'proven').length} unattributed=${unattributed.length}`);
     // THE COMPUTED ORDER (2026-09-23): facts carry STAKES from the computer that
     // made them and the door orders by them. A run where no row ever carried
     // stakes means the wire does not fire and every ply fell back to the tie table.
