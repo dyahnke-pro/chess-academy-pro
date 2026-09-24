@@ -23,6 +23,7 @@
 import { Chess } from 'chess.js';
 import { computePvLine, type PvEngine, type PvLine } from './pvPlayback';
 import { conceptForLine } from './conceptEngine';
+import { stemKeyOf } from '../utils/rotateStem';
 import { criticalityThresholds } from './criticalityScan';
 import { stockfishEngine } from './stockfishEngine';
 import { getCachedAmateurPlay } from './amateurPlayCache';
@@ -124,7 +125,7 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
   const studentWB: 'w' | 'b' = input.studentColor === 'white' ? 'w' : 'b';
   const { lineSans, proofResult } = provenPrefix(input.fenBefore, sans, studentWB);
   const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: altLine, concept, lineSans, proofResult, source: alt.source ?? 'masters' };
-  return { ...facts, text: renderRefutedAlternative(facts, input.taughtSan) };
+  return { ...facts, text: renderRefutedAlternative(facts, input.taughtSan, stemKeyOf(input.fenBefore)) };
 }
 
 

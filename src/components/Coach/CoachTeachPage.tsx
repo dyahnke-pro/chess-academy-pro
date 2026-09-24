@@ -263,7 +263,7 @@ import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
 import { detectStudentLanguage } from '../../services/spokenLanguage';
-import { translateToEnglish } from '../../services/coachApi';
+import { translateToEnglish, voiceFacts } from '../../services/coachApi';
 import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
@@ -9745,9 +9745,17 @@ export function CoachTeachPage(): JSX.Element {
                 speechChainRef.current = Promise.resolve();
               }
               speechChainRef.current = (speechChainRef.current ?? Promise.resolve())
-                .then(() => {
+                .then(async () => {
                   if (trackAGenRef.current !== myTrackAGen) return undefined;
-                  return voiceService.speakForced(line);
+                  // THE ONE CHOKEPOINT (G0; David 2026-09-24: "everything built
+                  // needs to be deterministic, worded by the DNA, and handed to
+                  // the LLM"). Learn's live lines are computed and DNA-worded in
+                  // code; they reach the voice THROUGH `voiceFacts`, in the raw
+                  // register (the computed text is spoken as-is, no model call,
+                  // no latency) — the same seam review speaks through.
+                  const voiced = (await voiceFacts(line, { preferRaw: true, intent: 'learn-live' }).catch(() => null)) ?? line;
+                  if (trackAGenRef.current !== myTrackAGen) return undefined;
+                  return voiceService.speakForced(voiced);
                 })
                 .catch(() => undefined);
               instantSpokenText = instantSpokenText ? `${instantSpokenText} ${line}` : line;

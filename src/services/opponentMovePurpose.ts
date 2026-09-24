@@ -16,6 +16,7 @@
 import { Chess, type Square } from 'chess.js';
 import { detectNewThreat, type DetectedThreat } from './groundedAnswer';
 import { legalSeeGainOn } from './positionReadingService';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 export interface StoppedThreat {
   threat: DetectedThreat;
@@ -66,5 +67,12 @@ export function threatStoppedBy(
   const what = threat.kind === 'mate' ? `the mate with ${san}`
     : threat.kind === 'fork' ? `your ${san} fork`
       : `your ${san}, which was winning material`;
-  return { threat, reply: replySan, text: `${replySan} has a point: it stops ${what}.` };
+  // Rotated on the board the student's threat stood on — only the wrapper
+  // varies; which threat, and that it stopped, never do.
+  const text = rotateStem([
+    `${replySan} has a point: it stops ${what}.`,
+    `${replySan} isn't idle — it stops ${what}.`,
+    `The point of ${replySan}: it stops ${what}.`,
+  ], stemKeyOf(studentFenAfter));
+  return { threat, reply: replySan, text };
 }

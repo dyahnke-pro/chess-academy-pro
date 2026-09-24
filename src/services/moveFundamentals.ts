@@ -17,6 +17,7 @@
 // pulls from without an import cycle.
 
 import { Chess } from 'chess.js';
+import { rotateStem } from '../utils/rotateStem';
 import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZoneClause, standingHoles } from './keySquares';
 import { andList } from '../utils/andList';
 import type { Square } from 'chess.js';
@@ -600,8 +601,19 @@ export function strategicWhyImperative(
 /** A principle taught once per game on a quiet student opening ply (S2): the
  *  move, and the rule it follows. The rule is the board's own imperative clause
  *  (`computeMoveFundamentals`), so nothing here is asserted without proof. */
-export function principleOnceLine(san: string, f: Pick<MoveFundamental, 'imperative'>): string {
-  return `${san} follows a principle worth keeping: ${f.imperative}.`;
+export function principleOnceLine(
+  san: string,
+  f: Pick<MoveFundamental, 'imperative'>,
+  /** Rotation key — required, stable about the moment (`stemKeyOf` of the
+   *  board the move was played from). Only the wrapper rotates. */
+  stemKey: number,
+): string {
+  return rotateStem([
+    `${san} follows a principle worth keeping: ${f.imperative}.`,
+    `The principle behind ${san}: ${f.imperative}.`,
+    `${san} does what the opening asks — ${f.imperative}.`,
+    `There's a rule behind ${san}: ${f.imperative}.`,
+  ], stemKey);
 }
 
 /** Which positive fundamentals are opening PRINCIPLES a beginner is taught.

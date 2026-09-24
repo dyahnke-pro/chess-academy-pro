@@ -58,12 +58,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
-- `src/services/refutedAlternativeCore.ts:116`
+- `src/services/refutedAlternativeCore.ts:145`
 
 ### `describeProofResult` (function) — 3 call sites
 - `src/services/coachFeatureService.ts:3281`
 - `src/services/lineProof.test.ts:27`
-- `src/services/refutedAlternativeCore.ts:118`
+- `src/services/refutedAlternativeCore.ts:147`
 
 ### `proofAgainstMover` (function) — 2 call sites
 - `src/services/criticalMoment.ts:196`

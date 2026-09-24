@@ -7,12 +7,20 @@
 // recorded only where the caller has decided the line is SPOKEN. A leaf: both
 // surfaces own their ledger (review per walk, Learn per game in learnMemory).
 
+import { rotateStem } from '../utils/rotateStem';
+
 /** " Same idea as move N." when this motif was taught at an EARLIER move this
  *  game, else ''. */
 export function transferClause(motif: string, moveNumber: number, ledger: ReadonlyMap<string, number>): string {
   const first = ledger.get(motif);
   if (first === undefined || first >= moveNumber) return '';
-  return ` Same idea as move ${first}.`;
+  // Rotated on the move number (stable, resume-safe); the move it refers
+  // back to never varies.
+  return rotateStem([
+    ` Same idea as move ${first}.`,
+    ` You saw this same idea on move ${first}.`,
+    ` It's the idea from move ${first} again.`,
+  ], moveNumber);
 }
 
 /** Record the first move a motif was taught. Later calls keep the first. */
