@@ -1877,7 +1877,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (inputs.length === 0 || !alive()) return;
     let text: string | null = null;
     try {
-      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null);
+      // No engine budget on this synchronous rebuild: no refuted alternatives (S2).
+      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current, undefined, props.gameId ?? null, new Map());
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }
     void logAppAudit({

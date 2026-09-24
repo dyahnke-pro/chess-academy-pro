@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**953 lines · 6 exports · 4 importers · 4 tests · 0 audits**
+**1030 lines · 8 exports · 5 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,11 +16,12 @@
 - `src/services/coachFeatureService.ts`
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
+- `src/test/teach02Wired.test.ts`
 
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:988`
+- `src/services/coachFeatureService.ts:987`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -29,13 +30,19 @@
 ### `MoveFactContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `MoveTeachingContext` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `NO_TEACHING_CONTEXT` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `EVAL_FACET_MIN_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 20 call sites
+### `computeMoveFacets` (function) — 21 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:1716`
+- `src/services/coachFeatureService.ts:1734`
 - `src/services/reviewFullData.test.ts:15`
 - `src/services/reviewFullData.test.ts:19`
 - `src/services/reviewFullData.test.ts:53`
@@ -53,9 +60,10 @@
 - `src/services/reviewFullData.test.ts:313`
 - `src/services/reviewFullData.test.ts:342`
 - `src/services/reviewFullData.test.ts:362`
+- `src/test/teach02Wired.test.ts:26`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4781`
+- `src/services/coachFeatureService.ts:4761`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`
@@ -71,6 +79,7 @@
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
+- `src/test/teach02Wired.test.ts`
 
 ## Audits that reach it
 

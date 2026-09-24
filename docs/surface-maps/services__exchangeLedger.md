@@ -18,7 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gemCrushLines.ts`
 - `src/services/lineProof.test.ts`
-- `src/services/refutedAlternative.ts`
+- `src/services/refutedAlternativeCore.ts`
 
 ## Exports and every call site
 
@@ -52,19 +52,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3206`
-- `src/services/coachFeatureService.ts:3784`
+### `proofCut` (function) — 6 call sites
+- `src/services/coachFeatureService.ts:3294`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
-- `src/services/refutedAlternative.ts:176`
+- `src/services/refutedAlternativeCore.ts:103`
 
 ### `describeProofResult` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3193`
+- `src/services/coachFeatureService.ts:3281`
 - `src/services/lineProof.test.ts:27`
-- `src/services/refutedAlternative.ts:178`
+- `src/services/refutedAlternativeCore.ts:105`
 
 ### `proofAgainstMover` (function) — 2 call sites
 - `src/services/criticalMoment.ts:196`

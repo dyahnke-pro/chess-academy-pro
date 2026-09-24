@@ -24,9 +24,6 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
-import { refutedAlternative, candidatesForPosition } from '../../services/refutedAlternative';
-import { principleToTeach, principleOnceLine } from '../../services/moveFundamentals';
-import { threatStoppedBy } from '../../services/opponentMovePurpose';
 import { transferClause, recordMotif } from '../../services/motifLedger';
 import { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
@@ -8640,55 +8637,6 @@ export function CoachTeachPage(): JSX.Element {
                   }
                 } catch { /* the engine read is a bonus, never a blocker */ }
 
-                // ── WHY DID THEY PLAY THAT? ──────────────────────────────
-                //
-                // WO-TEACH-02 S3 — the reply that answers the student's threat
-                // is the commonest purposeful move there is, and it used to pass
-                // without a word. The same fact the review proves with the
-                // engine, here from the board alone (`threatStoppedBy`).
-                try {
-                  const stopped = threatStoppedBy(fenBefore, move.fen, m.san, studentCC);
-                  if (stopped) queueSpokenHint(probe.fen(), stopped.text, 'computed', [stopped.threat.landing]);
-                } catch { /* the purpose is a bonus, never a blocker */ }
-
-                // ── WHAT PLAYERS AT YOUR LEVEL PLAY HERE, AND WHAT IT COSTS ─
-                //
-                // WO-TEACH-02 S2 — the same computer the review uses on its owed
-                // opening plies. Live, it speaks only on the evidence of players
-                // at the student's OWN level (the amateur band the master-play
-                // watcher warms — cache-only, never the network) and only when
-                // the engine proves the popular alternative costs a notable
-                // amount against the move the student actually played. A move
-                // that was itself worse returns null — nothing true to teach.
-                try {
-                  let taughtAlternative = false;
-                  const amateurHere = move.history.length <= 24 ? getCachedAmateurPlay(fenBefore) : null;
-                  if (amateurHere && amateurHere.moves.length >= 2) {
-                    const r = await refutedAlternative({
-                      fenBefore,
-                      taughtSan: move.san,
-                      candidates: candidatesForPosition(fenBefore, null),
-                      studentColor: playerColor,
-                      depth: 10,
-                      maxPlies: 4,
-                    });
-                    if (r) {
-                      queueSpokenHint(probe.fen(), r.text, 'computed');
-                      taughtAlternative = true;
-                    }
-                  }
-                  // Nothing people at this level get wrong here: the opening
-                  // PRINCIPLE the move follows, each taught once per game — the
-                  // same computer the review uses on its quiet owed plies.
-                  if (move.history.length <= 24 && !taughtAlternative) {
-                    const lead = principleToTeach(fenBefore, move.san, playerColor, learnMemRef.current.principleTaught);
-                    if (lead) {
-                      learnMemRef.current.principleTaught.add(lead.id);
-                      queueSpokenHint(probe.fen(), principleOnceLine(move.san, lead), 'computed');
-                    }
-                  }
-                } catch { /* the alternative is a bonus, never a blocker */ }
-
                 // ── WHICH PIECE IS WORKING, AND WHICH IS ASLEEP ───────────
                 //
                 // Stockfish's `eval` prints a per-square contribution for every
@@ -8776,6 +8724,12 @@ export function CoachTeachPage(): JSX.Element {
                       // absent, never a guess.
                       lastMove: {
                         fenBefore, san: move.san, cpLoss: studentCpLoss,
+                        // RAW DATA for the refuted alternative (WO-TEACH-02
+                        // S2): what players at this level play at the board
+                        // the student moved from (cache-only) and the fan
+                        // already read there. The composer does the costing.
+                        popular: getCachedAmateurPlay(fenBefore)?.moves ?? null,
+                        fanBefore: preStudentRead?.topLines ?? null,
                         reads: preStudentRead ? {
                           historySans: move.history,
                           bestMoveUci: preStudentRead.bestMove || null,
@@ -8795,8 +8749,11 @@ export function CoachTeachPage(): JSX.Element {
                       // The coach's reply that produced this board — so the
                       // composer can tell a real threat from a bluff.
                       ...(m ? { opponentLastMove: { fenBefore: move.fen, san: m.san } } : {}),
+                      // Each opening principle is taught once per game (S2).
+                      taughtPrinciples: learnMemRef.current.principleTaught,
                     });
                     standingRef.current.rememberAll(pf.remember);
+                    if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
                     // The student is to move at `probe`; their coming move is ply history+1.
                     if (pf.clauses.some((c) => c.kind === 'key-moment')) announcedPliesRef.current.add(probe.history().length + 1);
                     for (const c of clauseText(pf.clauses, ['must-defend'])) {

@@ -272,7 +272,7 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8466`
+- `src/components/Coach/CoachTeachPage.tsx:8463`
 - `src/services/coachApi.ts:3319`
 - `src/services/coachApi.ts:5367`
 - `src/services/coachFeatureService.test.ts:40`
@@ -281,8 +281,8 @@
 - `src/services/coachFeatureService.test.ts:66`
 - `src/services/coachFeatureService.test.ts:80`
 - `src/services/coachFeatureService.test.ts:87`
-- `src/services/coachFeatureService.ts:2193`
-- `src/services/coachFeatureService.ts:2204`
+- `src/services/coachFeatureService.ts:2221`
+- `src/services/coachFeatureService.ts:2232`
 - `src/services/coachMoveCommentary.ts:222`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/groundedAnswer.test.ts:1043`
@@ -323,7 +323,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1040`
+- `src/services/coachFeatureService.ts:1039`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -336,7 +336,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:96`
 - `src/services/coachFeatureService.test.ts:102`
-- `src/services/coachFeatureService.ts:1040`
+- `src/services/coachFeatureService.ts:1039`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -376,7 +376,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:908`
+- `src/services/coachFeatureService.ts:907`
 - `src/services/groundedAnswer.test.ts:1064`
 - `src/services/groundedAnswer.test.ts:1072`
 - `src/services/groundedAnswer.test.ts:1079`
@@ -979,14 +979,14 @@
 - `src/services/coachApi.ts:4532`
 
 ### `seatPieceReferences` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:4704`
+- `src/services/coachFeatureService.ts:4684`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
 - `src/services/reviewBoardAwareness.test.ts:78`
 - `src/services/reviewBoardAwareness.test.ts:83`
-- `src/services/reviewFullData.ts:250`
-- `src/services/reviewFullData.ts:271`
-- `src/services/reviewFullData.ts:447`
+- `src/services/reviewFullData.ts:278`
+- `src/services/reviewFullData.ts:299`
+- `src/services/reviewFullData.ts:475`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`
@@ -1003,11 +1003,11 @@
 - `src/data/patternRegistry.ts:123`
 - `src/services/bluffDetector.ts:63`
 - `src/services/captureThreatAnswerable.test.ts:13`
-- `src/services/coachFeatureService.ts:2521`
+- `src/services/coachFeatureService.ts:2549`
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:51`
-- `src/services/reviewFullData.ts:519`
+- `src/services/reviewFullData.ts:547`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1020,7 +1020,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2443`
+- `src/services/coachFeatureService.ts:2471`
 - `src/services/reviewNarrationFidelity.test.ts:184`
 - `src/services/reviewNarrationFidelity.test.ts:196`
 - `src/services/reviewNarrationFidelity.test.ts:204`
@@ -1036,7 +1036,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2541`
+- `src/services/coachFeatureService.ts:2569`
 - `src/services/reviewNarrationFidelity.test.ts:254`
 
 ## Tests

@@ -19,7 +19,10 @@ import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
-import { strategicWhyImperative } from './moveFundamentals';
+import { strategicWhyImperative, principleToTeach, principleOnceLine } from './moveFundamentals';
+import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
+import { threatStoppedBy, type StoppedThreat } from './opponentMovePurpose';
+import { phaseVerdictLine } from './reviewPositionalAssessment';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
 import type { QuietFact } from './factSelector';
@@ -59,6 +62,13 @@ export interface LastMoveInput {
   san: string;
   cpLoss: number | null;
   reads: LiveMoveReads | null;
+  /** RAW DATA, not a computed answer (WO-TEACH-02 S2): the moves players at
+   *  the student's level play at `fenBefore` (the amateur cache's entry), and
+   *  the MultiPV fan the surface already read there. The composer costs the
+   *  popular alternative off that fan — no new search. Absent / null = the
+   *  surface has neither, and nothing is said. */
+  popular?: ReadonlyArray<{ san: string; games: number; pct: number }> | null;
+  fanBefore?: readonly FanLine[] | null;
 }
 import type { TacticPatternType } from '../types/tacticTypes';
 import { conceptForBoard } from './conceptEngine';
@@ -149,6 +159,14 @@ export interface PositionFactsInput {
    *  (WO-LAYERS-01 step 4 — looks aggressive, wins nothing). Absent = the
    *  surface has no such move; nothing is guessed. */
   opponentLastMove?: { fenBefore: string; san: string };
+  /** WO-TEACH-02 S2 — the opening principles this game has ALREADY taught
+   *  (carried by the surface, committed from `principleSpoken`), so each is
+   *  taught once. Absent = the surface does not track them, and no principle
+   *  clause is offered (a principle repeated every move is nagging). */
+  taughtPrinciples?: ReadonlySet<string>;
+  /** WO-TEACH-02 S4 — set when this board is the turn of the game: who's
+   *  better, and why, is taken stock of once, here. */
+  phaseTurn?: 'middlegame' | 'endgame';
   /** THE STUDENT'S NEED AT THIS PLY (N2) — the second half of the student model,
    *  and the half the live surfaces never had.
    *
@@ -217,9 +235,15 @@ export interface PositionFactsResult {
    *  per game instead of once per ply. A caller that ignores this keeps the old
    *  behaviour; nothing breaks, it just repeats. */
   remember: string[];
+  /** The id of the opening principle that SPOKE this ply (S2), or null — the
+   *  surface adds it to `taughtPrinciples` so it is never taught twice. */
+  principleSpoken: string | null;
 }
 
-export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-chance' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method' | 'bluff';
+export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-chance' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method' | 'bluff'
+  // WO-TEACH-02: the same four teaching kinds review carries as facets — one
+  // name on both sides, so FACT_ROLE / FACT_LAYER / TIE_ORDER answer once.
+  | 'refuted' | 'rule' | 'stopped' | 'stock';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -293,6 +317,12 @@ export interface ClauseItem {
 const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>([
   'structure-plan', 'latent-danger', 'student-leans', 'opponent-leans',
 ]);
+
+/** A move's from/to squares on the board it is played from — empty when it
+ *  does not play there (never a guess). */
+function moveSquares(fen: string, san: string): string[] {
+  try { const m = new Chess(fen).move(san); return [m.from, m.to]; } catch { return []; }
+}
 
 /** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
 export function clauseText(items: readonly ClauseItem[], exclude: readonly ClauseKind[] = []): string[] {
@@ -555,7 +585,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // A band change IS a declared beat — "you've taken the better side" is the
     // general's read, and the importance model already knows how to rank one
     // (contested-gated to the convert beat in a decided game).
-    teachingBeat: !!input.teachingBeat || statusText.length > 0,
+    // So is the TURN OF THE GAME (WO-TEACH-02 S4): taking stock of who is
+    // better as the middlegame or endgame begins is a keystone, the same way
+    // a band change is.
+    teachingBeat: !!input.teachingBeat || statusText.length > 0 || !!input.phaseTurn,
     standingDanger,
     standingChance,
     evalCpWhitePov,
@@ -650,8 +683,30 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     }, halfmove);
   } catch { methodBeat = null; }
 
+  // ── WO-TEACH-02: the four teaching facts review carries as facets ─────────
+  const lm = input.lastMove;
+  // S2 — the move players at this level reach for, costed off the fan already
+  // read at the board the student moved from; proven by its own line.
+  const refutedHere = studentToMove && lm && lm.popular && lm.popular.length >= 2 && lm.fanBefore && lm.fanBefore.length > 0 && plyNumber <= 26
+    ? refutedFromFan({ fenBefore: lm.fenBefore, playedSan: lm.san, candidates: candidatesFromAmateur(lm.popular), fan: lm.fanBefore, moverWB: studentColor })
+    : null;
+  // S2 — otherwise the opening principle the move kept, once per game, only on
+  // a move with nothing to correct (a clean or ungraded move).
+  const ruleHere = !refutedHere && studentToMove && lm && input.taughtPrinciples && plyNumber <= 26
+    && (lm.cpLoss === null || lm.cpLoss < 50)
+    ? principleToTeach(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples)
+    : null;
+  // S3 — the opponent's reply took the student's threat off the board.
+  const stoppedHere = studentToMove && lm && input.opponentLastMove
+    ? threatStoppedBy(lm.fenBefore, input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor)
+    : null;
+  // S4 — who's better, and why, at the turn of the game.
+  const stockHere = input.phaseTurn && !analysis.isMate
+    ? phaseVerdictLine(fen, studentColor, evalCpWhitePov * sSign, input.phaseTurn)
+    : null;
+
   const composed = applyWeaknessBoost(
-    buildClauses({ fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null }),
+    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere ? { text: principleOnceLine(lm?.san ?? '', ruleHere), squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null }),
     input.studentWeaknesses ?? [],
   );
 
@@ -768,6 +823,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     quiet: decision.quiet,
     // What the caller should carry forward so a standing fact is said once.
     remember: clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
+    // Only a principle the door actually SPOKE is committed as taught.
+    principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
   };
 }
 
@@ -894,6 +951,13 @@ function buildClauses(a: {
   mustDefend: MustDefend;
   /** The opponent's last move, read as a bluff (null = none, or no move given). */
   bluff: Bluff | null;
+  /** WO-TEACH-02 — see `computePositionFacts`. */
+  /** The alternative, plus its squares on the board it was an alternative ON
+   *  (the student's pre-move board — coupled there, never from prose). */
+  refuted: { fact: RefutedAlternative; squares: readonly string[] } | null;
+  rule: { text: string; squares: readonly string[] } | null;
+  stopped: StoppedThreat | null;
+  stock: string | null;
   leansOn: LeansOn | null;
   opponentLeansOn: LeansOn | null;
   studentToMove: boolean;
@@ -1040,6 +1104,14 @@ function buildClauses(a: {
       });
     }
   }
+  // WO-TEACH-02 — the same four teaching facts review carries as `[refuted]`,
+  // `[rule]`, `[stopped]` and `[stock]`, ranked where their review twins sit.
+  if (a.refuted) {
+    ranked.push({ kind: 'refuted', rank: 82, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares] });
+  }
+  if (a.rule) ranked.push({ kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares] });
+  if (a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: a.stopped.text, squares: [a.stopped.threat.from, a.stopped.threat.landing] });
+  if (a.stock) ranked.push({ kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
   // ranked just under a live hanging threat. Its gate (central king + tension +
   // aligned enemy heavy) is tight enough to stay off calm development.

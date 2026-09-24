@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4834 lines · 34 exports · 33 importers · 30 tests · 5 audits**
+**4814 lines · 33 exports · 33 importers · 30 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -139,7 +139,7 @@
 - `src/services/coachFeatureService.test.ts:24`
 
 ### `buildReviewSegments` (function) — 55 call sites
-- `src/components/Coach/CoachGameReview.tsx:1880`
+- `src/components/Coach/CoachGameReview.tsx:1881`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
 - `src/services/coachFeatureService.causalChain.test.ts:47`
@@ -205,7 +205,7 @@
 - `src/services/mapConcurrent.test.ts:37`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4992`
+- `src/components/Coach/CoachGameReview.tsx:4993`
 - `src/services/coachFeatureService.test.ts:814`
 - `src/services/coachFeatureService.test.ts:817`
 - `src/services/coachFeatureService.test.ts:824`
@@ -258,9 +258,6 @@
 ### `narrationCoversFacets` (function) — 2 call sites
 - `src/services/reviewNarrationFidelity.test.ts:112`
 - `src/services/reviewNarrationFidelity.test.ts:118`
-
-### `speakPhaseVerdicts` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `pendingRecapture` (function) — 2 call sites
 - `src/services/coachFeatureService.test.ts:929`

@@ -64,7 +64,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:567`
+- `src/services/positionFacts.ts:600`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -131,13 +131,13 @@
 - `src/services/coachDecisionEmits.test.ts:95`
 - `src/services/coachDecisionEmits.test.ts:104`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:1961`
+- `src/services/coachFeatureService.ts:1985`
 - `src/services/factStakes.test.ts:69`
 - `src/services/liveNeedGate.test.ts:50`
 - `src/services/liveNeedGate.test.ts:56`
 - `src/services/liveNeedGate.test.ts:65`
 - `src/services/liveNeedGate.test.ts:77`
-- `src/services/positionFacts.ts:712`
+- `src/services/positionFacts.ts:767`
 - `src/services/supportedFacts.test.ts:77`
 - `src/services/supportedFacts.test.ts:87`
 - `src/services/supportedFacts.test.ts:97`
@@ -151,7 +151,7 @@
 - `src/services/teachingLayers.test.ts:104`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1502`
+- `src/services/coachFeatureService.ts:1520`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -161,7 +161,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:654`
+- `src/services/positionFacts.ts:709`
 
 ### `habitForCluster` (function) — 9 call sites
 - `src/services/habitJoin.test.ts:17`

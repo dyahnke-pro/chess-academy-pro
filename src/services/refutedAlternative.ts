@@ -22,45 +22,19 @@
 // + PV, no new engine call), and the live coach on demand.
 import { Chess } from 'chess.js';
 import { computePvLine, type PvEngine, type PvLine } from './pvPlayback';
-import { conceptForLine, type ComputedConcept } from './conceptEngine';
+import { conceptForLine } from './conceptEngine';
 import { criticalityThresholds } from './criticalityScan';
 import { stockfishEngine } from './stockfishEngine';
-import { proofCut, describeProofResult } from './exchangeLedger';
 import { getCachedAmateurPlay } from './amateurPlayCache';
-import { andList } from '../utils/andList';
+import {
+  pickAlternative, renderRefutedAlternative, candidatesFromMasters, candidatesFromAmateur, provenPrefix,
+  type AlternativeCandidate, type RefutedAlternative,
+} from './refutedAlternativeCore';
 
-export interface AlternativeCandidate {
-  san: string;
-  games: number;
-  /** Share of games at this position (0–100), when known. */
-  pct: number | null;
-  /** Whose games: players at the student's level (the amateur explorer band)
-   *  or masters. Absent = masters (the historical source). */
-  source?: 'amateur' | 'masters';
-}
+export { pickAlternative, renderRefutedAlternative, candidatesFromMasters };
+export type { AlternativeCandidate, RefutedAlternative };
 
-export interface RefutedAlternative {
-  /** The human-popular alternative to the taught/played move. */
-  alt: string;
-  games: number;
-  pct: number | null;
-  /** What it costs the mover, centipawns (>0 = worse than the taught move). */
-  costCp: number;
-  /** The punishing line after the alternative (engine), or null when unavailable. */
-  line: PvLine | null;
-  /** The concept the punishment lands, or null when it is positional. */
-  concept: Pick<ComputedConcept, 'id' | 'name' | 'full' | 'short'> | null;
-  /** Spoken SANs of the punishing line — exactly the plies that PROVE its
-   *  point (mate, or a settled material gain); empty when nothing settles. */
-  lineSans: string[];
-  /** What the proven line ends on, from the student's seat ("they win a
-   *  knight", "it's mate"), or null when the line proves no material point. */
-  proofResult?: string | null;
-  /** Whose games the popularity is counted over. */
-  source?: 'amateur' | 'masters';
-  /** DNA-register text, present tense. */
-  text: string;
-}
+
 
 export interface RefutedAlternativeInput {
   fenBefore: string;
@@ -83,7 +57,6 @@ function sanToUci(fen: string, san: string): string | null {
   } catch { return null; }
 }
 
-function stripGlyphs(s: string): string { return s.replace(/[+#!?]+$/, ''); }
 
 /** Mover-POV eval of a line's promise, graded at the QUIET END when the verify
  *  pass ran (the gem doctrine: never a one-ply eval). */
@@ -94,32 +67,8 @@ function moverEval(line: PvLine, moverIsWhite: boolean): number {
   return moverIsWhite ? cp : -cp;
 }
 
-/** The most-played real alternative that is not the taught move. */
-export function pickAlternative(taughtSan: string, candidates: readonly AlternativeCandidate[]): AlternativeCandidate | null {
-  const taught = stripGlyphs(taughtSan);
-  const alts = candidates.filter((c) => stripGlyphs(c.san) !== taught && c.games > 0);
-  if (alts.length === 0) return null;
-  return [...alts].sort((a, b) => b.games - a.games)[0];
-}
 
-function pawns(cp: number): string { return (cp / 100).toFixed(1); }
 
-/** The DNA-register sentence over the computed facts. Pure; exported for the
- *  review, which supplies its own cost + line from the stored analysis. */
-export function renderRefutedAlternative(f: Omit<RefutedAlternative, 'text'>, taughtSan: string): string {
-  const who = f.source === 'amateur' ? 'players at your level' : 'players';
-  const pop = f.pct != null ? `${f.pct}% of ${who}` : `${f.games} games`;
-  const lead = f.source === 'amateur' ? `Most players at your level play ${f.alt} here (${pop})` : `Most people play ${f.alt} here (${pop})`;
-  // THE LINE AS PROOF (WO-LAYERS-01): the moves are spoken only as far as the
-  // point they prove, then the result — never a recital of a line that proves
-  // nothing.
-  const proven = f.lineSans.length > 0 && f.proofResult ? ` ${andList(f.lineSans)} — ${f.proofResult}.` : '';
-  if (f.concept) {
-    return `${lead}, and it walks into a ${f.concept.name.toLowerCase()}:${proven} ${f.concept.full} ${taughtSan} keeps that off the board.`;
-  }
-  if (proven) return `${lead}, and it loses material:${proven} ${taughtSan} avoids that.`;
-  return `${lead}, and it costs about ${pawns(f.costCp)} points — nothing forcing, just a worse position. ${taughtSan} holds the balance.`;
-}
 
 /**
  * Compute the refuted alternative for a taught move, or null when there is no
@@ -173,19 +122,11 @@ export async function refutedAlternative(input: RefutedAlternativeInput): Promis
   }
   const sans = altLine.plies.map((p) => p.san);
   const studentWB: 'w' | 'b' = input.studentColor === 'white' ? 'w' : 'b';
-  const proof = sans.length > 0 ? proofCut(input.fenBefore, sans, studentWB) : null;
-  const lineSans = proof ? sans.slice(0, proof.plies) : [];
-  const proofResult = proof ? (proof.mate ? "it's mate" : proof.ledger ? describeProofResult(proof.ledger) : null) : null;
+  const { lineSans, proofResult } = provenPrefix(input.fenBefore, sans, studentWB);
   const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: altLine, concept, lineSans, proofResult, source: alt.source ?? 'masters' };
   return { ...facts, text: renderRefutedAlternative(facts, input.taughtSan) };
 }
 
-/** Candidates from a masters-DB move list (`mastersMovesSync`). */
-export function candidatesFromMasters(moves: ReadonlyArray<{ san: string; games: number }> | null): AlternativeCandidate[] {
-  if (!moves || moves.length === 0) return [];
-  const total = moves.reduce((s, m) => s + m.games, 0);
-  return moves.map((m) => ({ san: m.san, games: m.games, pct: total > 0 ? Math.round((m.games / total) * 100) : null }));
-}
 
 /** Candidates for a position, players at the student's level FIRST (the
  *  amateur explorer band — cache-only, never the network, per the amateur
@@ -197,8 +138,6 @@ export function candidatesForPosition(
   masters: ReadonlyArray<{ san: string; games: number }> | null,
 ): AlternativeCandidate[] {
   const amateur = getCachedAmateurPlay(fen);
-  if (amateur && amateur.moves.length >= 2) {
-    return amateur.moves.map((m) => ({ san: m.san, games: m.games, pct: m.pct, source: 'amateur' as const }));
-  }
+  if (amateur && amateur.moves.length >= 2) return candidatesFromAmateur(amateur.moves);
   return candidatesFromMasters(masters).map((c) => ({ ...c, source: 'masters' as const }));
 }

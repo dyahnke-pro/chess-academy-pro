@@ -24,7 +24,10 @@ import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
 import { costStakes, exchangeStakes, forkPoints, piecesOn, MATE_POINTS, type FactStakes } from './factStakes';
 import { describeStructure } from './boardStructure';
-import { assessPositionalEdge } from './reviewPositionalAssessment';
+import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
+import type { RefutedAlternative } from './refutedAlternative';
+import { principleToTeach, principleOnceLine } from './moveFundamentals';
+import { threatStoppedBy } from './opponentMovePurpose';
 import { isMateEval } from './engineConstants';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
@@ -152,7 +155,31 @@ export interface MoveFactContext {
    *  to build) re-taught the same tempo lesson four times in one review
    *  (walk 5, R19). */
   seenFundamentals: Set<FundamentalId>;
+  /** THE WO-TEACH-02 INPUTS — computed by the caller that walks the game
+   *  (engine work happens before this synchronous builder runs). REQUIRED:
+   *  `NO_TEACHING_CONTEXT` is the honest answer for a caller that has none,
+   *  and a new caller must say so rather than inherit silence. */
+  teaching: MoveTeachingContext;
 }
+
+export interface MoveTeachingContext {
+  /** The move players at the student's level reach for here, with its engine
+   *  cost and the line that proves it (S2) — student opening plies only. */
+  refutedAlt: RefutedAlternative | null;
+  /** The board before the PREVIOUS ply — on an opponent ply, the board the
+   *  student's own move was played from, so "their reply stopped your threat"
+   *  can be read (S3). Null on the first ply. */
+  prevFenBefore: string | null;
+  /** Set on the first ply the game is a middlegame / an endgame (S4). */
+  phaseTurn: 'middlegame' | 'endgame' | null;
+  /** Opening principles already SPOKEN this game (committed after the door),
+   *  so each is taught once. */
+  principlesTaught: ReadonlySet<string>;
+}
+
+export const NO_TEACHING_CONTEXT: MoveTeachingContext = {
+  refutedAlt: null, prevFenBefore: null, phaseTurn: null, principlesTaught: new Set(),
+};
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
@@ -199,9 +226,10 @@ export function computeMoveFacets(
   /** WHAT EACH FACET IS WORTH ON THE BOARD — coupled here from the computer
    *  that produced it (`factStakes.ts`); the door orders by it. */
   outStakes?: Map<string, FactStakes>,
-  /** The tactic MOTIF each `[tactic]` facet names — the detector's own type,
-   *  for the in-game transfer ledger ("same idea as move 12", S6). */
-  outMotif?: Map<string, string>,
+  /** A facet's STRUCTURED identity, for the say-once commits after the door:
+   *  `motif:<tactic type>` (the transfer ledger, S6) and `rule:<principle id>`
+   *  (each opening principle once, S2). Coupled here, never read off prose. */
+  outIdentity?: Map<string, string>,
 ): string[] {
   const facets: string[] = [];
   // Record the KEY SQUARES a facet named, keyed by the facet text, so the
@@ -217,7 +245,7 @@ export function computeMoveFacets(
   const recStakes = (facet: string, stakes: FactStakes | null | undefined): void => {
     if (outStakes && stakes && stakes.points > 0) outStakes.set(facet, stakes);
   };
-  const recMotif = (facet: string, motif: string): void => { outMotif?.set(facet, motif); };
+  const recMotif = (facet: string, motif: string): void => { outIdentity?.set(facet, `motif:${motif}`); };
   const recSquares = (facet: string, squares: ReadonlyArray<string | null | undefined>): void => {
     if (!outSquares) return;
     const clean = squares.filter((s): s is string => typeof s === 'string' && /^[a-h][1-8]$/.test(s));
@@ -712,6 +740,7 @@ export function computeMoveFacets(
   // shapes: the mover AVOIDED a known slip (student ply — teach why), or the
   // opponent PLAYED one (the crush the student had — restores the review gem
   // note, which sat in the capped branch no real review runs).
+  let gemRefuted = false;
   if (ply <= 24 && ctx.allSans.length >= ply) {
     try {
       const crush = computeGemCrush(undefined, ctx.allSans.slice(0, ply - 1));
@@ -723,6 +752,7 @@ export function computeMoveFacets(
         if (isStudent && moverSlips && !played) {
           const freq = gem && gem.freqPct > 0 ? ` in ${Math.round(gem.freqPct)}% of games` : '';
           facets.push(`[refuted] Players at your level often play ${crush.inaccuracy} here${freq} — it loses to ${crush.punish}, ${crush.payoff}.`);
+          gemRefuted = true;
         } else if (!isStudent && moverSlips && played) {
           const next = ctx.allSans[ply];
           const found = next !== undefined && strip(next) === strip(crush.punish);
@@ -732,6 +762,53 @@ export function computeMoveFacets(
         }
       }
     } catch { /* no gem here */ }
+  }
+  // The same fact, from the engine (WO-TEACH-02 S2): where no mined gem covers
+  // the ply, the alternative players at the student's level actually reach for,
+  // costed by the engine and proven by its own line. One `[refuted]` per ply —
+  // the gem, when there is one, is the curated statement of the same claim.
+  if (isStudent && !gemRefuted && ctx.teaching.refutedAlt) {
+    const r = ctx.teaching.refutedAlt;
+    const f = `[refuted] ${r.text}`;
+    facets.push(f);
+    recStakes(f, costStakes(r.costCp));
+    try {
+      const am = new Chess(fenBefore).move(r.alt);
+      recSquares(f, [am.from, am.to]);
+    } catch { /* no squares → it cannot be collapsed with another claim */ }
+  }
+
+  // ── 7c. THE PRINCIPLE A QUIET OPENING MOVE FOLLOWS — once per game (S2).
+  // Only where there is nothing to correct: a book/good/unclassified student
+  // move inside the opening window, and only a principle not yet SPOKEN this
+  // game (the ledger is committed after the door, so a principle the door
+  // silenced may speak later).
+  if (isStudent && ply <= 24 && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
+    const lead = principleToTeach(fenBefore, san, moverColor, ctx.teaching.principlesTaught);
+    if (lead) {
+      const f = `[rule] ${principleOnceLine(san, lead)}`;
+      facets.push(f);
+      outIdentity?.set(f, `rule:${lead.id}`);
+      recSquares(f, lead.squares);
+    }
+  }
+
+  // ── 7d. WHY DID THEY PLAY THAT? (S3) — on the opponent's move, the threat of
+  // the student's it took off the board. The same static computer Learn reads.
+  if (!isStudent && studentColorWB && ctx.teaching.prevFenBefore) {
+    const stop = threatStoppedBy(ctx.teaching.prevFenBefore, fenBefore, san, studentColorWB);
+    if (stop) {
+      const f = `[stopped] ${stop.text}`;
+      facets.push(f);
+      recSquares(f, [stop.threat.from, stop.threat.landing]);
+    }
+  }
+
+  // ── 7e. WHO'S BETTER, AND WHY — at the turn of the game (S4).
+  if (studentColorWB && ctx.teaching.phaseTurn) {
+    const cp = ctx.evaluation === null ? null : (studentColorWB === 'w' ? ctx.evaluation : -ctx.evaluation);
+    const line = phaseVerdictLine(fenAfter, studentColorWB, cp, ctx.teaching.phaseTurn);
+    if (line) facets.push(`[stock] ${line}`);
   }
 
   // ── 8. FORCED MATING RUN — this ply begins a forced checking finish ──

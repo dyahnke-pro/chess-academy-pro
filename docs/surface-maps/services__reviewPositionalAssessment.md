@@ -12,10 +12,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/hooks/usePhaseNarration.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/phaseVerdict.test.ts`
 - `src/services/planPrescriptions.test.ts`
+- `src/services/positionFacts.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewPositionalAssessment.test.ts`
 - `src/services/standingRefrains.test.ts`
@@ -26,12 +26,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1005`
+- `src/services/coachFeatureService.ts:1004`
 - `src/services/exchangeLedger.test.ts:128`
 - `src/services/exchangeLedger.test.ts:130`
 
 ### `assessPositionalEdge` (function) — 26 call sites
-- `src/services/coachFeatureService.ts:2674`
+- `src/services/coachFeatureService.ts:2702`
 - `src/services/exchangeLedger.test.ts:97`
 - `src/services/exchangeLedger.test.ts:98`
 - `src/services/exchangeLedger.test.ts:105`
@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`
 - `src/services/planPrescriptions.test.ts:91`
-- `src/services/reviewFullData.ts:537`
+- `src/services/reviewFullData.ts:565`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:8`
@@ -59,11 +59,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/standingRefrains.test.ts:110`
 
 ### `phaseVerdictLine` (function) — 5 call sites
-- `src/hooks/usePhaseNarration.ts:683`
-- `src/services/coachFeatureService.ts:4221`
 - `src/services/phaseVerdict.test.ts:16`
 - `src/services/phaseVerdict.test.ts:22`
 - `src/services/phaseVerdict.test.ts:27`
+- `src/services/positionFacts.ts:705`
+- `src/services/reviewFullData.ts:810`
 
 ## Tests
 

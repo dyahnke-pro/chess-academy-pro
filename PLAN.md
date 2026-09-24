@@ -381,31 +381,41 @@ data tests (`corpusReach.measure`, `endgameCorpusNote`, `notePreferReachable`,
 (three). Owed separately. `AdaptivePuzzlePage` badge WAS mine (WO-LAYERS moved
 the default to 400; the test hard-coded 1400) — fixed here, now derived.
 
-**What landed (S2–S7, 2026-09-24), and how each is wired:**
-- S2 — `refutedAlternative` reads the AMATEUR band first (`candidatesForPosition`,
-  cache-only) then masters; its line is spoken only as far as it PROVES
-  (`proofCut`), never "the line runs". Review: a pooled pass over owed quiet
-  student opening plies (`augmentWithProjections`, pass `refuted`). Learn: the
-  late lane on opening student moves when the amateur cache has the position.
-  Where nothing is refuted, `principleToTeach` (moveFundamentals) teaches one
-  opening principle once per game (development, centre, king safety, outpost,
-  open file — never a flank space grab). The generator reads the same candidates.
-- S3 — "X has a point: it stops your Y". Review proves it with the engine: the
-  student's threat line (static-threat confirmation or deep probe) proves a
-  point, the same moves no longer prove it after the reply, and the eval after
-  the reply is ≥150 short of the promise (pass `stopsIdea`). Learn uses the
-  static twin `threatStoppedBy` (opponentMovePurpose.ts). NOT done: the
-  `opponentIntent` clause gate (`!studentToMove`) — it forecasts THEIR next
-  move, which Learn already covers through must-defend; left as is.
-- S4 — `assetsFor` gains material and king safety; `phaseVerdictLine` speaks the
-  band + reasons once per phase (review `speakPhaseVerdicts`, Learn
-  `usePhaseNarration`). Band words only, never the number.
-- S5 — the critical-moment fan keeps each discarded candidate's proof
-  (`discardedProofs`); the reveal says "X didn't work: … — they win a knight".
-  Learn's deliberation uses the same `proofAgainstMover` (exchangeLedger).
-- S7 — the forcing-scan habit is tier-gated (critical/only-move/blunder/swing).
-- S6 — `motifLedger`: review records at the commit (spoken tactics only),
-  Learn on the tactic lane. OWED: `WeaknessProvenance.ply` (cross-game half).
+**What landed (S2–S7, 2026-09-24) — and the correction that made it real.**
+The first cut of S2–S5 appended its lines AFTER `coachDecider.decide()` in
+review and queued them straight to the voice in Learn: unranked, unfloored,
+invisible to the teach meter, duplicating review's gem `[refuted]`, and it
+broke `surfaceContract.scan` (Learn called `refutedAlternative(` directly).
+Caught on regaining the four levels of context (David: "You're not regaining
+context!!"); rewired before any push:
+- ONE VOCABULARY: new kinds `rule` · `stopped` · `stock` (+ `refuted` as a live
+  clause) on BOTH sides — `FacetTag` and `ClauseKind` share the names, so
+  `FACET_RANK/FACET_ROLE/CLAUSE_ROLE/CLAUSE_TIE/FACT_LAYER` answer once; all
+  `teach`; `matchClauseKind` joins refuted→opening holes, rule→positional.
+- REVIEW (facets, through the door): `[refuted]` = the engine alternative
+  (`refutedAlternativesForGame`, pooled, 8s latency bound, computed before the
+  synchronous builder) where no mined gem covers the ply; `[rule]` = the
+  principle kept, committed as taught only after it SPEAKS; `[stopped]` =
+  `threatStoppedBy` on the opponent ply; `[stock]` = `phaseVerdictLine` on the
+  first middlegame / endgame ply. All post-door passes deleted.
+- LIVE (clauses of `positionFacts`, through the same door): `refuted` costed
+  off the fan Learn already read at the pre-move board (`refutedFromFan`, pure,
+  `refutedAlternativeCore.ts`) — silent when the popular move is not in the fan;
+  `rule` with `taughtPrinciples` in / `principleSpoken` out; `stopped` from
+  `lastMove` + `opponentLastMove`; `stock` from `phaseTurn`, which is a declared
+  teaching beat like a band change. Learn passes RAW data only.
+- S5 `proofAgainstMover` (exchangeLedger) — the reveal's failing candidates and
+  the live deliberation's shortfalls. S7 tier-gated forcing scan. S6
+  `motifLedger` (review commits at the door's commit; Learn on the tactic lane).
+- DUAL-USE, stated per fact: `rule` is dual already (capabilityEvidence records
+  the same positive fundamentals held/broken); `refuted` — PLAYING the popular
+  mistake is recorded by the flagged-move path, AVOIDING it has no honest tag
+  today (OWED — a persisted enum is not widened casually); `stopped` / `stock`
+  pose no decision to the student, so there is nothing to record.
+- OWED: `WeaknessProvenance.ply` (S6 cross-game); live `refuted` only fires when
+  the popular move is in the MultiPV fan (a real limit, not a bug).
+- Gate: `src/test/teach02Wired.test.ts` — both producers, every fact, each with
+  a negative control.
 
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.
