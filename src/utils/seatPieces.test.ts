@@ -17,3 +17,13 @@ describe('seatBare', () => {
     expect(seatBare('your rook on a6 is active', FEN, 'w')).toBe('Your rook on a6 is active');
   });
 });
+
+describe('a future fact is seated on its OWN board (hand walk 2026-09-24)', () => {
+  const s = 'Rook on d8 skewers queen on e8 with rook on f8 behind it';
+  it('on the board after Rxd8 the d8 rook is yours', () => {
+    expect(seatBare(s, '3Rqrk1/pp4pp/2p1n3/4Pp1n/1b4P1/1BN1BR1P/PPP5/4Q1K1 b - - 0 21', 'w')).toMatch(/^Your rook on d8/);
+  });
+  it('NEGATIVE CONTROL: seated on the current board it is (wrongly) theirs — why boardFen exists', () => {
+    expect(seatBare(s, '3rqrk1/pp4pp/2p1n3/4Pp1n/1b4P1/1BN1BR1P/PPP5/3RQ1K1 w - f6 0 21', 'w')).toMatch(/^Their rook on d8/);
+  });
+});

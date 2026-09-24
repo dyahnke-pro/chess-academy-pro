@@ -566,3 +566,13 @@ describe('a move question is never left bare (hand walk 2026-09-24)', () => {
     expect(pkg.spoken).toContain('Rd2? Clearly worse here.');
   });
 });
+
+describe('"Here\'s how" never opens a line on its own (hand walk 2026-09-24)', () => {
+  it('when the sentence it explains was already said, the method goes with it', () => {
+    const pkg = buildVoicePackage(
+      [fact('computed', "Watch what they threaten. Here's how: their move first, always.")],
+      'Watch what they threaten.',
+    );
+    expect(pkg.spoken).not.toMatch(/^Here['’]s how/);
+  });
+});

@@ -312,3 +312,15 @@ describe('an undeveloped minor gets the development rule, not a reroute (hand wa
     expect(line?.text).toMatch(/finding it a better square/);
   });
 });
+
+describe('a bishop raking the king\'s squares is at work (hand walk 2026-09-24)', () => {
+  it('after 23.Bxe6+ Kh8 the e6-bishop is never "doing the least"', () => {
+    const values: PieceValue[] = [
+      { square: 'e6', piece: 'B', color: 'w', value: 2.0 },
+      { square: 'e3', piece: 'B', color: 'w', value: 4.8 },
+      { square: 'b4', piece: 'b', color: 'b', value: -4.0 },
+    ];
+    const line = pieceQualityLines(values, 'white', new Set(), { isMiddlegame: true, fen: '3q1r1k/pp4pp/2p1B3/4Pp1P/1b6/2N1BR1P/PPP5/4Q1K1 w - - 1 24' }).find((l) => l.kind === 'your-worst-piece');
+    expect(line?.text ?? '').not.toMatch(/e6/);
+  });
+});

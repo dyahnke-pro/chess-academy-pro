@@ -395,6 +395,22 @@ function atWork(fen: string | undefined, square: string, me: 'w' | 'b'): boolean
   let board: Chess;
   try { board = new Chess(fen); } catch { return false; }
   const sq = square as Square;
+  // PRESSURE ON THE KING'S SQUARES IS WORK (hand walk 2026-09-24: 23.Bxe6+ —
+  // the bishop that had just checked, raking g8 beside the h8-king, was "doing
+  // the least of anything you own").
+  for (const row of board.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== them || cell.type !== 'k') continue;
+      const kf = cell.square.charCodeAt(0);
+      const kr = Number(cell.square[1]);
+      for (let df = -1; df <= 1; df += 1) for (let dr = -1; dr <= 1; dr += 1) {
+        if (df === 0 && dr === 0) continue;
+        const f = kf + df; const r = kr + dr;
+        if (f < 97 || f > 104 || r < 1 || r > 8) continue;
+        if (board.attackers(`${String.fromCharCode(f)}${r}` as Square, me).includes(sq)) return true;
+      }
+    }
+  }
   for (const row of board.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== them || cell.type === 'p') continue;

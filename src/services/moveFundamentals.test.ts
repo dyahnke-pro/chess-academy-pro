@@ -226,3 +226,9 @@ describe('a pawn that kicks a piece gains a tempo (hand walk 2026-09-24)', () =>
     expect(computeMoveFundamentals(START, 'e4', 'white').some((f) => f.id === 'tempo')).toBe(false);
   });
 });
+
+describe('a capture is not "planting on an outpost" (hand walk 2026-09-24)', () => {
+  it('23.Bxe6+ takes a knight with check', () => {
+    expect(computeMoveFundamentals('3q1rk1/pp4pp/2p1n3/4Pp1P/1b6/1BN1BR1P/PPP5/4Q1K1 w - - 0 23', 'Bxe6+', 'white').some((f) => f.id === 'outpost')).toBe(false);
+  });
+});

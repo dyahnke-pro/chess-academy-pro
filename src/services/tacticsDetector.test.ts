@@ -382,3 +382,15 @@ describe('detectTactics — mate threats (2026-09-12)', () => {
     expect(whiteMate).toBeUndefined();
   });
 });
+
+describe('not a skewer when the front piece just takes an undefended attacker (hand walk 2026-09-24)', () => {
+  it('21.Rxd8: the e8-queen simply takes back — his idea is the deflection', () => {
+    const skewers = detectTactics('3Rqrk1/pp4pp/2p1n3/4Pp1n/1b4P1/1BN1BR1P/PPP5/4Q1K1 b - - 0 21').tactics.filter((t) => t.type === 'skewer');
+    expect(skewers.some((t) => t.involvedSquares[0] === 'd8')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: a defended rook on d8 still skewers queen and rook', () => {
+    const fen = '3Rqr1k/8/8/8/8/8/8/3RK3 b - - 0 1';
+    const skewers = detectTactics(fen).tactics.filter((t) => t.type === 'skewer');
+    expect(skewers.some((t) => t.involvedSquares[0] === 'd8')).toBe(true);
+  });
+});

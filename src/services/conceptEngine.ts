@@ -51,6 +51,13 @@ export interface ComputedConcept {
   short: string;
   /** Ranking score, filled by the router (0..1). */
   importance: number;
+  /** The board the INSTANCE sentence is true on, for a tactic concept. A tactic
+   *  read off the engine's line lives on a FUTURE board; seating its pieces
+   *  ("your"/"their") against the current board flips them (hand walk
+   *  2026-09-24: after 21.Rxd8 the white rook on d8 skewers queen and rook — on
+   *  the current board a BLACK rook stands on d8, so it was read "Their rook on
+   *  d8 skewers their queen"). */
+  boardFen?: string;
 }
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
@@ -176,7 +183,7 @@ function renderOppositionConcept(): ComputedConcept {
  * detector's own description) + the computed INVARIANT. `importance` is left 0
  * for the router to fill.
  */
-export function renderTacticConcept(pattern: TacticPattern): ComputedConcept | null {
+export function renderTacticConcept(pattern: TacticPattern, boardFen: string): ComputedConcept | null {
   if (pattern.type === 'none') return null;
   const inv = TACTIC_INVARIANT[pattern.type];
   const desc = pattern.description.trim().replace(/[.!?]$/, '');
@@ -188,6 +195,7 @@ export function renderTacticConcept(pattern: TacticPattern): ComputedConcept | n
     full: desc ? `${cap(desc)} — ${inv.full}` : cap(inv.full),
     short: inv.short,
     importance: 0,
+    boardFen,
   };
 }
 
@@ -417,7 +425,7 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
   try { tactics = detectTactics(fen).tactics; } catch { tactics = []; }
   for (const t of tactics) {
     if (!DECISIVE_ON_BOARD.has(t.type) || seen.has(t.type)) continue;
-    const concept = renderTacticConcept(t);
+    const concept = renderTacticConcept(t, fen);
     if (!concept) continue;
     concept.importance = 0.95;
     out.push(concept);
@@ -587,8 +595,8 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
         ) ?? null;
       } catch { pattern = null; }
       const concept = pattern
-        ? renderTacticConcept(pattern)
-        : renderTacticConcept({ type: type as TacticPatternType, involvedSquares: [best.to], description: '' });
+        ? renderTacticConcept(pattern, best.fenAfter)
+        : renderTacticConcept({ type: type as TacticPatternType, involvedSquares: [best.to], description: '' }, best.fenAfter);
       if (concept && !seen.has(concept.id)) {
         const fromEngine = importanceFromSwing(input);
         concept.importance = best.isMate

@@ -283,7 +283,16 @@ function findSkewers(chess: Chess): TacticPattern[] {
           // validation the sibling detectors already do.
           PIECE_VALUE[first.type] > PIECE_VALUE[piece.type] &&
           PIECE_VALUE[first.type] > PIECE_VALUE[second.type] &&
-          PIECE_VALUE[second.type] >= 3
+          PIECE_VALUE[second.type] >= 3 &&
+          // …and the front piece cannot simply TAKE an undefended attacker —
+          // then it is a trade offer, not a skewer (hand walk 2026-09-24: after
+          // 21.Rxd8 the queen on e8 just takes back on d8; his idea was the
+          // deflection, dragging the queen off e8).
+          // Only when it is THEIR move: with the attacker's side to move, the
+          // front piece is simply taken first.
+          !(chess.turn() === enemyColor
+            && chess.attackers(sq, enemyColor).includes(first.square)
+            && chess.attackers(sq, piece.color).length === 0)
         ) {
           skewers.push({
             type: 'skewer',

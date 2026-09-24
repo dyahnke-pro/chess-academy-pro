@@ -322,11 +322,16 @@ function sentencesOf(text: string): string[] {
   // apart." is ONE claim; split at the "?" the answer could be deduped away and
   // the bare "gxf3?" spoken on its own (hand walk 2026-09-24: "gxf3? Rd2? The
   // move is Rxf3"). A short, space-free "X?" is glued to what follows it.
+  // Likewise "Here's how: …" belongs to the sentence it explains — orphaned by
+  // the dedupe it opened a turn on its own ("Here's how: Their move first,
+  // always…" with no WHAT before it, same walk).
   const out: string[] = [];
   for (let i = 0; i < raw.length; i += 1) {
     if (/^[^\s]{1,12}\?$/.test(raw[i]) && i + 1 < raw.length) {
       out.push(`${raw[i]} ${raw[i + 1]}`);
       i += 1;
+    } else if (/^Here['’]s how:/.test(raw[i]) && out.length > 0) {
+      out[out.length - 1] = `${out[out.length - 1]} ${raw[i]}`;
     } else out.push(raw[i]);
   }
   return out;

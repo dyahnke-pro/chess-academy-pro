@@ -986,7 +986,7 @@ function buildClauses(a: {
   /** The lead COMPUTED CONCEPT of the position (conceptEngine, from the same
    *  analysis) — the teachable idea, joined to the briefing as a ranked fact.
    *  Null when nothing teachable / positional-only (no walk-over). */
-  concept: { id: string; source: string; full: string; squares: readonly string[] } | null;
+  concept: { id: string; source: string; full: string; squares: readonly string[]; boardFen?: string } | null;
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
 }): ClauseItem[] {
@@ -1155,7 +1155,7 @@ function buildClauses(a: {
     ranked.push({
       // SEATED — the detector's instance names bare pieces (hand walk
       // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
-      kind: 'concept', rank, text: concept.source === 'tactic' ? seatBare(concept.full, a.fen, studentSeat === 'white' ? 'w' : 'b') : concept.full,
+      kind: 'concept', rank, text: concept.source === 'tactic' ? seatBare(concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b') : concept.full,
       conceptId: concept.source === 'tactic' ? concept.id : undefined,
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.

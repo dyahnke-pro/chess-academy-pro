@@ -301,7 +301,10 @@ export function computeMoveFundamentals(
   }
 
   // ── OUTPOST — a minor planted where no enemy pawn can ever evict it.
-  if ((mv.piece === 'n' || mv.piece === 'b') && relRank(mv.to, mover) >= 5 && isOutpost(after, mv.to, mover)) {
+  // Not on a CAPTURE: taking a piece is its own reason, and the hanging-piece
+  // and tactic lanes name it (hand walk 2026-09-24: 23.Bxe6+ was "plant the
+  // bishop on the e6 outpost" — it takes a knight with check).
+  if ((mv.piece === 'n' || mv.piece === 'b') && !mv.captured && relRank(mv.to, mover) >= 5 && isOutpost(after, mv.to, mover)) {
     const name = PIECE_NAME[mv.piece];
     out.push({
       id: 'outpost',

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import {
+import { findMinorityAttack,
   seeGain,
   seeSequence,
   findHangingBySee,
@@ -905,5 +905,11 @@ describe('an isolated pawn is not backward (hand walk 2026-09-24)', () => {
     // d6 with the c-pawn gone ahead to c5 and d5 controlled by a white pawn on e4.
     const fen = '4k3/8/3p4/2p5/4P3/8/8/4K3 b - - 0 1';
     expect(findWeakPawns(fen, 'b').backward).toContain('d6');
+  });
+});
+
+describe('doubled pawns are not a minority attack (hand walk 2026-09-24)', () => {
+  it('h3+h5 against f5-g7-h7 after 23.Bxe6+', () => {
+    expect(findMinorityAttack('3q1r1k/pp4pp/2p1B3/4Pp1P/1b6/2N1BR1P/PPP5/4Q1K1 w - - 1 24', 'w')).toBeNull();
   });
 });

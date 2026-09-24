@@ -645,6 +645,10 @@ export function findMinorityAttack(fen: string, color: Color): MinorityAttack | 
     const mine = pawnsOn(color, flank.files);
     const theirs = pawnsOn(enemy, flank.files);
     if (mine.length < 2 || theirs.length < 3 || mine.length >= theirs.length) continue; // a real minority only
+    // DOUBLED PAWNS ARE NOT A MINORITY — they are a weakness (hand walk
+    // 2026-09-24: White's h3+h5 after 22.gxh5 was read as "a minority attack
+    // on the kingside").
+    if (new Set(mine.map((sq) => sq[0])).size < mine.length) continue;
     // A legal pawn push on the flank that lands diagonally adjacent to an enemy
     // pawn on the flank = the contact lever (…b5 hitting c6).
     for (const push of chess.moves({ verbose: true })) {
