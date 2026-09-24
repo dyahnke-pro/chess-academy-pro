@@ -31,6 +31,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🟠 Phase narration still phrases chess facts through the model — David's call.
 - 🔴 Leftovers: rook template m17, "either works … with it", duplicate break lanes, transposition name.
 - 🟠 Hand-walks owed: moves 23-27 again; 1380 (xoS71OW-Re0), 2340 (pXBR9CxK3lQ), 2000 Black (7f2sPY2U204).
+- 🔴 The fade: one fact, two phrasings — full teaching on grey/red tags, his 2100 shorthand on proven-green ones, per tag not per player, gradual, and back to full on a red regression (David 2026-09-24: "fade transitions into the 2100 narration style as the user gets better").
+- 🔴 Rules + theory lane: state a development rule when the board earns it — followed, broken at a cost, or broken on purpose (the exception); theory as the IDEA of the book move, the left-book move, and the common wrong move; both fade once proven (David 2026-09-24: "the rules of development for beginners … theory included").
+- ✅ Pre-commit check (`scripts/precommit-check.mjs`): typecheck ‖ test typecheck ‖ staged lint ‖ co-located tests, only when TS is staged; negative-controlled on a staged type error (blocked in ~80s).
 
 ## 00. WO-STANDARD-01 — THE FULL BOARD (David 2026-09-22: "get my app up to standard")
 - 🔴 A. The personal coach — WO-HOME-OPENING-01 (section 0 below, A1–A11)
