@@ -497,7 +497,9 @@ export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean; 
     `It’s genuinely close — ${alt} is about as good, so don’t agonise.`,
     `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative here; the two are within a whisker.`,
     `Nothing to lose sleep over — ${alt} does the same job.`,
-    `Either works: ${alt} is right there with it.`,
+    // Not "right there with IT" — on a live board the best move is withheld,
+    // so "it" pointed at nothing (hand walk 2026-09-24).
+    `There are two good moves here, and ${alt} is one of them.`,
   ];
   return stems[Math.abs(opts.rotation ?? 0) % stems.length];
 }
