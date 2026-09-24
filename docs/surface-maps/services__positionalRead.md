@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**457 lines · 5 exports · 6 importers · 2 tests · 1 audits**
+**508 lines · 6 exports · 6 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,7 +27,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PositionalObservation` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `readPosition` (function) — 27 call sites
+### `rookReachesFile` (function) — 1 call site
+- `src/services/danyaBehaviors.ts:522`
+
+### `readPosition` (function) — 33 call sites
 - `src/services/groundedAnswer.ts:1307`
 - `src/services/lookaheadPlan.ts:881`
 - `src/services/lookaheadPlan.ts:1150`
@@ -35,39 +38,45 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/narrationAdversarial.test.ts:87`
 - `src/services/narrationAdversarial.test.ts:173`
 - `src/services/positionReadComposer.ts:128`
-- `src/services/positionalRead.test.ts:26`
-- `src/services/positionalRead.test.ts:37`
-- `src/services/positionalRead.test.ts:38`
+- `src/services/positionalRead.test.ts:28`
+- `src/services/positionalRead.test.ts:43`
 - `src/services/positionalRead.test.ts:46`
-- `src/services/positionalRead.test.ts:57`
-- `src/services/positionalRead.test.ts:64`
-- `src/services/positionalRead.test.ts:72`
-- `src/services/positionalRead.test.ts:92`
-- `src/services/positionalRead.test.ts:107`
-- `src/services/positionalRead.test.ts:118`
-- `src/services/positionalRead.test.ts:136`
-- `src/services/positionalRead.test.ts:148`
-- `src/services/positionalRead.test.ts:195`
+- `src/services/positionalRead.test.ts:51`
+- `src/services/positionalRead.test.ts:62`
+- `src/services/positionalRead.test.ts:69`
+- `src/services/positionalRead.test.ts:77`
+- `src/services/positionalRead.test.ts:97`
+- `src/services/positionalRead.test.ts:112`
+- `src/services/positionalRead.test.ts:123`
+- `src/services/positionalRead.test.ts:141`
+- `src/services/positionalRead.test.ts:153`
 - `src/services/positionalRead.test.ts:200`
-- `src/services/positionalRead.test.ts:207`
-- `src/services/positionalRead.test.ts:225`
-- `src/services/positionalRead.test.ts:235`
-- `src/services/positionalRead.test.ts:248`
-- `src/services/positionalRead.test.ts:260`
+- `src/services/positionalRead.test.ts:208`
+- `src/services/positionalRead.test.ts:215`
+- `src/services/positionalRead.test.ts:233`
+- `src/services/positionalRead.test.ts:243`
+- `src/services/positionalRead.test.ts:256`
 - `src/services/positionalRead.test.ts:268`
+- `src/services/positionalRead.test.ts:276`
+- `src/services/positionalRead.test.ts:286`
+- `src/services/positionalRead.test.ts:291`
+- `src/services/positionalRead.test.ts:298`
+- `src/services/positionalRead.test.ts:302`
+- `src/services/positionalRead.test.ts:309`
+- `src/services/positionalRead.test.ts:313`
 
 ### `buildPositionalRead` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8126`
+- `src/components/Coach/CoachTeachPage.tsx:8134`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
-- `src/services/positionalRead.test.ts:159`
-- `src/services/positionalRead.test.ts:162`
-- `src/services/positionalRead.test.ts:171`
-- `src/services/positionalRead.test.ts:182`
+- `src/services/positionalRead.test.ts:164`
+- `src/services/positionalRead.test.ts:167`
+- `src/services/positionalRead.test.ts:176`
 - `src/services/positionalRead.test.ts:187`
+- `src/services/positionalRead.test.ts:192`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:190`
+- `src/services/danyaBehaviors.ts:197`
 
 ## Tests
 

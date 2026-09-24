@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3833) — names `boostFor`, `matchClauseKind`
-- **The standard post-deploy ritual** (CLAUDE.md:6021) — names `weaknessSignal`
+- **The standard post-deploy ritual** (CLAUDE.md:6044) — names `weaknessSignal`
 
 ## Who calls in
 
@@ -79,8 +79,8 @@
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/needScore.ts:301`
 - `src/services/needScore.ts:315`
-- `src/services/positionFacts.ts:903`
-- `src/services/positionFacts.ts:925`
+- `src/services/positionFacts.ts:910`
+- `src/services/positionFacts.ts:932`
 - `src/services/reviewFacetRank.ts:330`
 - `src/services/reviewFacetRank.ts:378`
 - `src/services/studentMomentBoost.ts:119`
@@ -108,7 +108,7 @@
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
 - `src/services/needScore.ts:312`
-- `src/services/positionFacts.ts:869`
+- `src/services/positionFacts.ts:876`
 - `src/services/reviewFacetRank.ts:329`
 - `src/services/reviewFacetRank.ts:377`
 - `src/services/weaknessSignal.test.ts:77`
@@ -122,7 +122,7 @@
 ### `matchTacticPattern` (function) — 9 call sites
 - `src/services/liveTacticsContext.ts:496`
 - `src/services/needScore.ts:310`
-- `src/services/positionFacts.ts:868`
+- `src/services/positionFacts.ts:875`
 - `src/services/teachingSelector.ts:169`
 - `src/services/teachingSelector.ts:305`
 - `src/services/weaknessSignal.test.ts:100`

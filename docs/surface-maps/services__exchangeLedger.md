@@ -70,7 +70,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `proofAgainstMover` (function) — 2 call sites
 - `src/services/criticalMoment.ts:196`
-- `src/services/deliberation.ts:136`
+- `src/services/deliberation.ts:149`
 
 ## Tests
 

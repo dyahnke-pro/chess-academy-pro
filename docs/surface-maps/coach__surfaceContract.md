@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 LEARN NAMES THE MOVE — WITH ITS REASON (David 2026-09-24: "Rules can change. That was an old rule when we asked questions. We don't do that anymore.").** (CLAUDE.md:5107) — names `Withholding`
 
 ## Who calls in
 

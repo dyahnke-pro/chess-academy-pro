@@ -16,10 +16,10 @@
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4035) — names `types`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4074) — names `CoachSurface`
 - **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4534) — names `types`
-- **Naming** (CLAUDE.md:5104) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5149) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5216) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:5992) — names `TacticsLiveContext`
+- **Naming** (CLAUDE.md:5127) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5172) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5239) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:6015) — names `TacticsLiveContext`
 
 ## Who calls in
 

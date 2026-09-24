@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**37 lines · 2 exports · 3 importers · 3 tests · 1 audits**
+**46 lines · 2 exports · 3 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,15 +22,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingAnnouncement` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7790`
-- `src/components/Coach/CoachTeachPage.tsx:9622`
-- `src/services/computedVoiceAudit.report.test.ts:309`
-- `src/services/openingAnnouncement.test.ts:10`
-- `src/services/openingAnnouncement.test.ts:13`
-- `src/services/openingAnnouncement.test.ts:16`
+- `src/components/Coach/CoachTeachPage.tsx:7798`
+- `src/components/Coach/CoachTeachPage.tsx:9630`
+- `src/services/computedVoiceAudit.report.test.ts:310`
+- `src/services/openingAnnouncement.test.ts:14`
+- `src/services/openingAnnouncement.test.ts:17`
 - `src/services/openingAnnouncement.test.ts:20`
-- `src/services/openingAnnouncement.test.ts:21`
-- `src/services/openingAnnouncement.test.ts:28`
+- `src/services/openingAnnouncement.test.ts:22`
+- `src/services/openingAnnouncement.test.ts:26`
+- `src/services/openingAnnouncement.test.ts:27`
 
 ## Tests
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**835 lines · 2 exports · 31 importers · 11 tests · 0 audits**
+**844 lines · 2 exports · 31 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,15 +50,15 @@
 ### `TacticsDetectionResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectTactics` (function) — 89 call sites
+### `detectTactics` (function) — 91 call sites
 - `src/components/Board/BoardPageLayout.tsx:124`
 - `src/services/boardConcepts.ts:303`
 - `src/services/coachPrompts.ts:1097`
 - `src/services/coachPrompts.ts:1103`
 - `src/services/computerAccuracy.audit.test.ts:117`
-- `src/services/conceptEngine.ts:417`
-- `src/services/conceptEngine.ts:585`
-- `src/services/danyaBehaviors.ts:279`
+- `src/services/conceptEngine.ts:425`
+- `src/services/conceptEngine.ts:593`
+- `src/services/danyaBehaviors.ts:301`
 - `src/services/discussionPractice.ts:55`
 - `src/services/discussionPractice.ts:100`
 - `src/services/discussionPractice.ts:143`
@@ -135,6 +135,8 @@
 - `src/services/tacticsDetector.test.ts:362`
 - `src/services/tacticsDetector.test.ts:372`
 - `src/services/tacticsDetector.test.ts:380`
+- `src/services/tacticsDetector.test.ts:388`
+- `src/services/tacticsDetector.test.ts:393`
 - `src/services/weaknessAnalyzer.ts:1185`
 - `src/services/weaknessAnalyzer.ts:1283`
 - `src/services/weaknessAnalyzer.ts:1444`
