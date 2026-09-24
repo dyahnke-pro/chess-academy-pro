@@ -712,7 +712,7 @@ function tempoTarget(
   fenBefore: string, after: Chess, from: string, to: string, mover: 'w' | 'b',
 ): { name: string; square: string } | null {
   const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
-  if (!landingIsSafe(after.fen(), to)) return null;
+  if (!landingIsSafe(after.fen(), to as Square)) return null;
   let before: Chess;
   try { before = new Chess(fenBefore); } catch { return null; }
   for (const row of after.board()) {
