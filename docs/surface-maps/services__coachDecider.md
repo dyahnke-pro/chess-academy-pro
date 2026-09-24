@@ -138,9 +138,9 @@
 - `src/services/liveNeedGate.test.ts:65`
 - `src/services/liveNeedGate.test.ts:77`
 - `src/services/positionFacts.ts:712`
-- `src/services/supportedFacts.test.ts:78`
-- `src/services/supportedFacts.test.ts:88`
-- `src/services/supportedFacts.test.ts:98`
+- `src/services/supportedFacts.test.ts:77`
+- `src/services/supportedFacts.test.ts:87`
+- `src/services/supportedFacts.test.ts:97`
 - `src/services/teachingLayers.test.ts:67`
 - `src/services/teachingLayers.test.ts:76`
 - `src/services/teachingLayers.test.ts:78`

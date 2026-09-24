@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**310 lines · 9 exports · 4 importers · 2 tests · 1 audits**
+**312 lines · 9 exports · 4 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -70,12 +70,12 @@
 
 ### `supportedFacts` (function) — 7 call sites
 - `src/services/coachDecider.ts:361`
-- `src/services/supportedFacts.test.ts:22`
-- `src/services/supportedFacts.test.ts:28`
-- `src/services/supportedFacts.test.ts:35`
-- `src/services/supportedFacts.test.ts:42`
-- `src/services/supportedFacts.test.ts:49`
-- `src/services/supportedFacts.test.ts:55`
+- `src/services/supportedFacts.test.ts:21`
+- `src/services/supportedFacts.test.ts:27`
+- `src/services/supportedFacts.test.ts:34`
+- `src/services/supportedFacts.test.ts:41`
+- `src/services/supportedFacts.test.ts:48`
+- `src/services/supportedFacts.test.ts:54`
 
 ## Tests
 

@@ -24,7 +24,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `detectConcept` (function) — 26 call sites
-- `src/services/coachFeatureService.ts:3700`
+- `src/services/coachFeatureService.ts:4109`
 - `src/services/reviewConcepts.test.ts:23`
 - `src/services/reviewConcepts.test.ts:26`
 - `src/services/reviewConcepts.test.ts:34`
@@ -57,4 +57,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Audits that reach it
 
-_No audit script names this file or its exports. Runtime behaviour here is unproven._
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
+
+_No audit script names this file or its exports. Runtime behaviour here is unproven — but see the caveat above before concluding it is unaudited._

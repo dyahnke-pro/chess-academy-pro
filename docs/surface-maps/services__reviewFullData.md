@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**922 lines · 6 exports · 4 importers · 4 tests · 0 audits**
+**949 lines · 6 exports · 4 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,26 +40,26 @@
 - `src/services/reviewFullData.test.ts:19`
 - `src/services/reviewFullData.test.ts:53`
 - `src/services/reviewFullData.test.ts:84`
-- `src/services/reviewFullData.test.ts:98`
-- `src/services/reviewFullData.test.ts:115`
-- `src/services/reviewFullData.test.ts:126`
-- `src/services/reviewFullData.test.ts:137`
-- `src/services/reviewFullData.test.ts:155`
-- `src/services/reviewFullData.test.ts:184`
-- `src/services/reviewFullData.test.ts:225`
-- `src/services/reviewFullData.test.ts:239`
-- `src/services/reviewFullData.test.ts:260`
-- `src/services/reviewFullData.test.ts:284`
-- `src/services/reviewFullData.test.ts:312`
-- `src/services/reviewFullData.test.ts:341`
-- `src/services/reviewFullData.test.ts:361`
+- `src/services/reviewFullData.test.ts:99`
+- `src/services/reviewFullData.test.ts:116`
+- `src/services/reviewFullData.test.ts:127`
+- `src/services/reviewFullData.test.ts:138`
+- `src/services/reviewFullData.test.ts:156`
+- `src/services/reviewFullData.test.ts:185`
+- `src/services/reviewFullData.test.ts:226`
+- `src/services/reviewFullData.test.ts:240`
+- `src/services/reviewFullData.test.ts:261`
+- `src/services/reviewFullData.test.ts:285`
+- `src/services/reviewFullData.test.ts:313`
+- `src/services/reviewFullData.test.ts:342`
+- `src/services/reviewFullData.test.ts:362`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4676`
-- `src/services/reviewFullData.test.ts:203`
-- `src/services/reviewFullData.test.ts:206`
-- `src/services/reviewFullData.test.ts:214`
-- `src/services/reviewFullData.test.ts:218`
+- `src/services/coachFeatureService.ts:4649`
+- `src/services/reviewFullData.test.ts:204`
+- `src/services/reviewFullData.test.ts:207`
+- `src/services/reviewFullData.test.ts:215`
+- `src/services/reviewFullData.test.ts:219`
 
 ### `describeMoveInfluence` (function) — 2 call sites
 - `src/services/reviewNarrationFidelity.test.ts:129`
