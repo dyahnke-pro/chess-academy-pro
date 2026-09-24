@@ -1467,6 +1467,14 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
           new Promise<null>((r) => setTimeout(() => r(null), 12000)),
         ])) ?? undefined;
       }
+      // Observable (the algo-audit rule): which stage answered or refused.
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.pieceOptions',
+        summary: `piece=${pieceRef.piece} seat=${pieceRef.seat ?? pieceRef.color ?? 'unsaid'} resolved=${resolved ? `${resolved.seat}@${resolved.pieceSquare}${resolved.playedUci ? ` played=${resolved.playedUci}` : ''}` : 'no'} options=${pieceOptions ? pieceOptions.options.length : 'none'} narrowedBy=${pieceOptions?.narrowedBy ?? '-'}`,
+        fen: input.liveState.fen,
+      });
     }
     const candidateMoveEngage = isCandidateMoveQuestion(askForIntents);
     const candidateMoveSan = candidateMoveEngage ? (extractCandidateSan(askForIntents) ?? undefined) : undefined;

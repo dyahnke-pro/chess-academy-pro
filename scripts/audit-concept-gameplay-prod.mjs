@@ -433,15 +433,17 @@ async function main() {
         await input.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => {});
         await input.pressSequentially(ask, { delay: 12 }).catch(() => {});
         await page.keyboard.press('Enter');
-        const by = Date.now() + 45_000;
+        const by = Date.now() + 60_000;
         while (Date.now() < by && (await page.locator('[data-testid="chat-message-assistant"]').count()) <= before) await page.waitForTimeout(1000);
         await page.waitForTimeout(1500);
-        const last = page.locator('[data-testid="chat-message-assistant"]').last();
+        // The transcript renders NEWEST FIRST — `.last()` is the greeting.
+        const last = page.locator('[data-testid="chat-message-assistant"]').first();
         const text = (await last.innerText().catch(() => '')).replace(/\s+/g, ' ');
         const walks = await last.locator('[data-testid^="message-walk-line-"]').count();
         console.log(`[piece] ask="${ask}" walks=${walks} → ${text.slice(0, 260)}`);
         if (walks > 0) { answered = { ask, text, walks, last }; break; }
       }
+      for (const e of listener.getCapturedEvents().filter((x) => x.source === 'coachService.pieceOptions')) console.log(`[piece-stage] ${e.summary}`);
       record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|square that holds|gives up its guard|is attacked)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
       record('H2. the answer carries a Walk button per calculated line', !!answered && answered.walks > 0, answered ? `${answered.walks} walk button(s)` : '0');
       if (answered) {
