@@ -53,13 +53,14 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     for (const k of slots) {
       const v = mem[k];
       if (v instanceof Set) v.add('x');
+      else if (v instanceof Map) v.set('x', 1);
       else if (typeof v === 'number') (mem as unknown as Record<string, unknown>)[k] = 42;
       else (mem as unknown as Record<string, unknown>)[k] = 'x';
     }
     // Every slot is now dirty.
     for (const k of slots) {
       const v = mem[k];
-      const dirty = v instanceof Set ? v.size > 0 : v !== null && v !== '' && v !== NEVER_FIRED;
+      const dirty = v instanceof Set || v instanceof Map ? v.size > 0 : v !== null && v !== '' && v !== NEVER_FIRED;
       expect(dirty, `slot ${k} could not be dirtied — widen this test`).toBe(true);
     }
 
@@ -67,7 +68,7 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
 
     for (const k of slots) {
       const v = mem[k];
-      const clean = v instanceof Set
+      const clean = v instanceof Set || v instanceof Map
         ? v.size === 0
         : v === null || v === '' || v === NEVER_FIRED;
       expect(clean, `newGame() did not forget "${k}" — add it to newGame()`).toBe(true);

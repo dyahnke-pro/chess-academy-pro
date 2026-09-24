@@ -179,6 +179,32 @@ export const STANDING_REFRAINS: StandingRefrain[] = [
     keyOf: (m) => m[1],
     refrain: (m) => `still ${m[1]} further developed`,
   },
+  // MATERIAL and KING SAFETY (WO-TEACH-02 S4) — the count is the instance, the
+  // same as the development lead: up a pawn and up a piece are different facts.
+  {
+    id: 'my-material',
+    re: /you're up (a pawn|a piece|\d+ points of material)/g,
+    keyOf: (m) => m[1],
+    refrain: (m) => `still up ${m[1]}`,
+  },
+  {
+    id: 'their-material',
+    re: /they're up (a pawn|a piece|\d+ points of material)/g,
+    keyOf: (m) => m[1],
+    refrain: (m) => `they're still up ${m[1]}`,
+  },
+  {
+    id: 'my-king-safer',
+    re: /your king is tucked away and theirs is still in the centre/g,
+    keyOf: () => 'king',
+    refrain: () => 'their king is still in the centre',
+  },
+  {
+    id: 'their-king-safer',
+    re: /their king is tucked away and yours is still in the centre/g,
+    keyOf: () => 'king',
+    refrain: () => 'your king is still in the centre',
+  },
 ];
 
 /** The ledger — which (refrain, key) pairs have had their full form spoken. */

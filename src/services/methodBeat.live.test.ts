@@ -30,14 +30,14 @@ describe('liveMethodBeatFor', () => {
 
   it('teaches the forcing scan when the move that is there is forcing', () => {
     for (const san of ['Qxh7+', 'Rxe8#', 'Nxd5']) {
-      const beat = liveMethodBeatFor({ ...base, bestSan: san });
+      const beat = liveMethodBeatFor({ ...base, tier: 'critical' as const, bestSan: san });
       expect(beat, san).toBeTruthy();
       expect(beat!).toMatch(/check|captur|forcing/i);
     }
   });
 
   it('never hands over the move', () => {
-    const beat = liveMethodBeatFor({ ...base, bestSan: 'Qxh7+' });
+    const beat = liveMethodBeatFor({ ...base, tier: 'critical' as const, bestSan: 'Qxh7+' });
     expect(beat!).not.toContain('Qxh7');
     expect(beat!).not.toMatch(/h7/);
   });
@@ -45,7 +45,7 @@ describe('liveMethodBeatFor', () => {
   it('is PRESENT tense — never the review register', () => {
     const beats = [
       liveMethodBeatFor({ ...base, threatStanding: true }),
-      liveMethodBeatFor({ ...base, bestSan: 'Qxh7+' }),
+      liveMethodBeatFor({ ...base, tier: 'critical' as const, bestSan: 'Qxh7+' }),
     ].filter((b): b is string => !!b);
     expect(beats.length).toBe(2);
     for (const b of beats) {
