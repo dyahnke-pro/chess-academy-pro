@@ -57,5 +57,14 @@ export function threatStoppedBy(
   } catch { return null; }
   if (after.isGameOver()) return null;
   if (stillWorks(threat, after)) return null;
-  return { threat, reply: replySan, text: `${replySan} has a point: it stops your ${threat.san}, which ${threat.detail}.` };
+  // Named by its KIND, never by `threat.detail`: the detail names the squares
+  // the threat hit on the board BEFORE the reply, and the reply often moved
+  // the very piece that was hit — "stops your Qf3, which forks their queen on
+  // f2" was spoken about a queen that had just left f2 (the corpus sweep,
+  // board-truth). The kind is true on either board.
+  const san = threat.san.replace(/[+#]+$/, '');
+  const what = threat.kind === 'mate' ? `the mate with ${san}`
+    : threat.kind === 'fork' ? `your ${san} fork`
+      : `your ${san}, which was winning material`;
+  return { threat, reply: replySan, text: `${replySan} has a point: it stops ${what}.` };
 }

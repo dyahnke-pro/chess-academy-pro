@@ -34,7 +34,7 @@ const facetsAt = (ply: number, sans: string[], f: string[], player: 'white' | 'b
 describe('review — the four facts are facets, so they go through the door', () => {
   it('[stopped] names the threat the opponent\'s reply took off the board', () => {
     const f = facetsAt(6, SCH, S, 'white', { ...NO_TEACHING_CONTEXT, prevFenBefore: S[4] });
-    expect(f.find((x) => x.startsWith('[stopped]'))).toMatch(/g6 has a point: it stops your Qxf7/);
+    expect(f.find((x) => x.startsWith('[stopped]'))).toMatch(/g6 has a point: it stops the mate with Qxf7\./);
   });
   it('NEGATIVE: with no previous board there is no [stopped]', () => {
     const f = facetsAt(6, SCH, S, 'white', NO_TEACHING_CONTEXT);
@@ -72,7 +72,7 @@ describe('live — the same four facts are clauses of the composer', () => {
       lastMove: { fenBefore: S[4], san: 'Qh5', cpLoss: 0, reads: null },
       opponentLastMove: { fenBefore: S[5], san: 'g6' },
     });
-    expect(r.clauses.find((c) => c.kind === 'stopped')?.text).toMatch(/g6 has a point: it stops your Qxf7/);
+    expect(r.clauses.find((c) => c.kind === 'stopped')?.text).toMatch(/g6 has a point: it stops the mate with Qxf7\./);
   });
   it('NEGATIVE: a reply that leaves the threat on stops nothing', async () => {
     const f2 = fens(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'a6']);

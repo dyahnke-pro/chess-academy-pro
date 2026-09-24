@@ -17,6 +17,7 @@
 import { andList } from '../utils/andList';
 import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
@@ -126,8 +127,7 @@ function assetsFor(
   // 0. MATERIAL — the first thing a strong player counts (WO-TEACH-02 S4:
   // "who's better and why" had no material in it at all). Only an edge the
   // side actually holds; a level count says nothing.
-  const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-  const count = (c: Color): number => all.filter((p) => p.color === c).reduce((n, p) => n + VALUE[p.type], 0);
+  const count = (c: Color): number => all.filter((p) => p.color === c).reduce((n, p) => n + (MATERIAL_VALUE[p.type] ?? 0), 0);
   const up = count(side) - count(other);
   if (up >= 1) reasons.push(`${youre} up ${up === 1 ? 'a pawn' : up === 3 ? 'a piece' : `${up} points of material`}`);
 

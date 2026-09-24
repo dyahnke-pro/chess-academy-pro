@@ -8724,12 +8724,6 @@ export function CoachTeachPage(): JSX.Element {
                       // absent, never a guess.
                       lastMove: {
                         fenBefore, san: move.san, cpLoss: studentCpLoss,
-                        // RAW DATA for the refuted alternative (WO-TEACH-02
-                        // S2): what players at this level play at the board
-                        // the student moved from (cache-only) and the fan
-                        // already read there. The composer does the costing.
-                        popular: getCachedAmateurPlay(fenBefore)?.moves ?? null,
-                        fanBefore: preStudentRead?.topLines ?? null,
                         reads: preStudentRead ? {
                           historySans: move.history,
                           bestMoveUci: preStudentRead.bestMove || null,
@@ -8740,6 +8734,12 @@ export function CoachTeachPage(): JSX.Element {
                           missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
                           allowedMate: midReadForFacts?.isMate ? midReadForFacts.mateIn : null,
                         } : null,
+                        // RAW DATA for the refuted alternative (WO-TEACH-02
+                        // S2): what players at this level play at the board
+                        // the student moved from (cache-only) and the fan
+                        // already read there. The composer does the costing.
+                        popular: getCachedAmateurPlay(fenBefore)?.moves ?? null,
+                        fanBefore: preStudentRead?.topLines ?? null,
                       },
                       // The CONTEXT — the composer derives the ply from the FEN
                       // and owns the mover guard, so this surface decides none

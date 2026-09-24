@@ -16,7 +16,7 @@ describe('threatStoppedBy — why did they play that?', () => {
     const r = threatStoppedBy(f[4], f[5], 'g6', 'w');
     expect(r).not.toBeNull();
     expect(r!.threat.san).toMatch(/^Qxf7#?$/);
-    expect(r!.text).toMatch(/^g6 has a point: it stops your Qxf7/);
+    expect(r!.text).toMatch(/^g6 has a point: it stops the mate with Qxf7\.$/);
   });
 
   it('NEGATIVE CONTROL: a reply that leaves the threat on stops nothing', () => {
