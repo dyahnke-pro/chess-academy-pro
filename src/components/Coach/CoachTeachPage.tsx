@@ -7594,8 +7594,16 @@ export function CoachTeachPage(): JSX.Element {
       // the piece DELIVERING it is itself hanging (his e2 queen "forking"
       // two pieces while en prise: the lesson is take it, not fear it).
       const theirLoose = new Set(theirHanging.map((h) => h.square));
+      // A PINNED PAWN IS NOT NEWS EITHER WAY (hand walk 2026-09-24): "a pin
+      // for you" on b7 behind the a8 rook (called back on move 20 as "the same
+      // idea"), and "Watch out — their queen on d5 pins your pawn on g2 against
+      // your rook on h1" on move 2. Nothing is won or lost by it here.
+      const pinnedPawn = (t: { type: string; squares: readonly string[] }): boolean => {
+        if (t.type !== 'pin' || t.squares.length < 2) return false;
+        try { return new Chess(args.fenAfterReply).get(t.squares[1] as Square)?.type === 'p'; } catch { return false; }
+      };
       const againstMe = tctx.immediate.filter(
-        (t) => t.side === 'opponent' && !theirLoose.has(t.squares[0] ?? ''),
+        (t) => t.side === 'opponent' && !theirLoose.has(t.squares[0] ?? '') && !pinnedPawn(t),
       );
       // TACTIC (an opportunity FOR the student) and THREAT (danger TO them) are
       // computed SEPARATELY. They were one `alert` in a single if/else chain,
@@ -7633,14 +7641,6 @@ export function CoachTeachPage(): JSX.Element {
         tacticSquares = [prize.square];
         tacticLine = `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} has nothing defending it — there's something to win here.`;
       } else {
-        // A PINNED PAWN IS NOT "A PIN FOR YOU" (hand walk 2026-09-24: the g2
-        // bishop "pinning" b7 to the a8 rook was offered as an opportunity on
-        // move 5 and called back as "the same idea" on move 20). Nothing is won
-        // by pinning a pawn, so the opportunity lane skips it.
-        const pinnedPawn = (t: { type: string; squares: readonly string[] }): boolean => {
-          if (t.type !== 'pin' || t.squares.length < 2) return false;
-          try { return new Chess(args.fenAfterReply).get(t.squares[1] as Square)?.type === 'p'; } catch { return false; }
-        };
         const mine = tctx.immediate.filter((t) => t.side === 'student' && !pinnedPawn(t));
         if (mine.length > 0) {
           const t = mine[0];
@@ -10254,14 +10254,19 @@ export function CoachTeachPage(): JSX.Element {
                         : null;
                   if (declineReason) {
                     void logAppAudit({
-                      kind: 'coach-narration-spoken',
+                      // A diagnostic — not a spoken line (it was read as speech
+                      // by the hand-walk instrument).
+                      kind: 'coach-surface-migrated',
                       category: 'subsystem',
                       source: 'CoachTeachPage.coachVerdict.declined',
                       summary: `coach verdict skipped: ${declineReason}`,
                       fen: fenAfterReply,
                     });
                   }
-                  if (cm && mid && samePosition(cm.fenAfter, fenAfterReply)) {
+                  // THE DECLINE DECIDES. This re-tested its own conditions and
+                  // ignored the reason above, so a DICTATED move still got "I've
+                  // taken a defender off b7…" in the coach's first person.
+                  if (!declineReason && cm && mid && samePosition(cm.fenAfter, fenAfterReply)) {
                     coachMoveRef.current = null;
                     const coachColor = playerColor === 'white' ? 'black' : 'white';
                     const sign = coachColor === 'white' ? 1 : -1;
