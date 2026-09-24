@@ -302,14 +302,15 @@ describe('nothing is called against a move the engine says gained', () => {
 // here", which is exactly the move where both fire.
 describe('why the move failed complements what it cost', () => {
   it('opens on the attempt, not the cost', () => {
-    // Rook to a5 hits the guarded pawn on d5 — the geometry lane fires, and
+    // Bishop to f3 hits the guarded pawn on d5 (a bishop for a pawn — the
+    // tempting swap; a rook or queen for a pawn is never named) — the geometry lane fires, and
     // the sentence has to START there: the cost sounds arbitrary until the
     // reason for paying it has been said.
     const out = backwardLook({
-      fenBefore: '4k3/8/2p5/3p4/8/8/4K3/R7 w - - 0 1',
-      fenAfter: '4k3/8/2p5/R2p4/8/8/4K3/8 b - - 1 1',
-      playedSan: 'Ra5',
-      bestSan: 'Kd3',
+      fenBefore: '4k3/8/2p5/3p4/8/8/4BK2/8 w - - 0 1',
+      fenAfter: '4k3/8/2p5/3p4/8/5B2/5K2/8 b - - 1 1',
+      playedSan: 'Bf3',
+      bestSan: 'Ke3',
       cpLoss: 120,
       studentColor: 'white',
     });

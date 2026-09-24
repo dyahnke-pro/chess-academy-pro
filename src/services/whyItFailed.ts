@@ -258,7 +258,10 @@ export function whyItFailed(args: {
   let studentBoard: Chess | null = null;
   try { studentBoard = new Chess(withTurn(after.fen(), me)); } catch { studentBoard = null; }
   const swap = guards.length > 0 && studentBoard ? seeInitiate(studentBoard, target.sq) : 0;
-  if (swap < 0) {
+  // ONLY A TEMPTING SWAP IS WORTH NAMING (David 2026-09-24: "No one is going
+  // to take a pawn for a queen"). Past two pawns down the capture was never a
+  // real option, so explaining why it fails states the obvious.
+  if (swap < 0 && swap >= -2) {
     const guard = leastValuableAttackerOf(after, target.sq);
     if (guard) {
       // The COMPUTED cost of the swap-off, never "the exchange" — that term

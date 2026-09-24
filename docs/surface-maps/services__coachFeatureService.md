@@ -131,8 +131,8 @@
 - `src/services/coachFeatureService.test.ts:784`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:805`
-- `src/services/whyItFailed.test.ts:236`
-- `src/services/whyItFailed.test.ts:274`
+- `src/services/whyItFailed.test.ts:240`
+- `src/services/whyItFailed.test.ts:278`
 
 ### `frameTeachingForOpponent` (function) — 2 call sites
 - `src/services/coachFeatureService.test.ts:15`

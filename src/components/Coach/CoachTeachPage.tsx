@@ -3165,7 +3165,7 @@ export function CoachTeachPage(): JSX.Element {
       // source of truth — and the parser returning null for a bare "undo" is
       // what keeps this router's real job intact.
       const correctionNamesAMove = routed?.kind === 'take_back_move'
-        && parseCoachMoveCommand(text, liveFenRef.current)?.corrects === true;
+        && parseCoachMoveCommand(text, liveFenRef.current, playerColor === 'white' ? 'black' : 'white')?.corrects === true;
       if (routed && !correctionNamesAMove && (routed.kind === 'take_back_move' || routed.kind === 'reset_board')) {
         setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);
         const outcome = routed.kind === 'take_back_move'
@@ -3681,7 +3681,7 @@ export function CoachTeachPage(): JSX.Element {
       opts?.coachReplyPlayed === undefined &&
       !walkthrough.isActive
     ) {
-      const cmd = parseCoachMoveCommand(trimmedText, liveFenRef.current);
+      const cmd = parseCoachMoveCommand(trimmedText, liveFenRef.current, playerColor === 'white' ? 'black' : 'white');
       if (cmd) {
         const cmdTurnId = freshTurnId('coach-move-command');
         const appendTurn = (ack: string): void => {
