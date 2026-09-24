@@ -4,15 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**312 lines · 2 exports · 7 importers · 2 tests · 5 audits**
+**336 lines · 2 exports · 8 importers · 3 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
-- **Test Data Factories** (CLAUDE.md:4820) — names `ChatMessage`
+- **Test Data Factories** (CLAUDE.md:5144) — names `ChatMessage`
 
 ## Who calls in
 
 - `src/components/Coach/ChatMessage.test.tsx`
+- `src/components/Coach/ChatMessage.walkLines.test.tsx`
 - `src/components/Coach/CoachChatPage.tsx`
 - `src/components/Coach/CoachGamePage.tsx`
 - `src/components/Coach/CoachGameReview.tsx`
@@ -31,9 +32,14 @@
 ## Tests
 
 - `src/components/Coach/ChatMessage.test.tsx`
+- `src/components/Coach/ChatMessage.walkLines.test.tsx`
 - `src/components/Openings/MasterclassCoachChat.boardaware.test.tsx`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-new-lanes-prod.mjs`
 - `scripts/audit-coach-polyglot-loop.mjs`

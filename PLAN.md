@@ -484,15 +484,26 @@ ON move 3, fragments. Learn ≈ 40% of the video, review ≈ 60%.
   "White's their king" seated; grade line names its move; "Qf5? Then …".
 - [ ] **B. Subsumption, not a cap** — raised with David: a per-move limit violates
   G4.5; same-claim facts (material ×3, open king ×3) collapse instead.
-- [ ] **C. "Couldn't X just move" lane** — the piece's duty → moves that keep it →
-  engine reply line per option → verdict; arrows + walk button; both seats.
+- [x] **C. "Couldn't X just move" lane** — `pieceOptions.ts`: the piece's duty
+  (friendly pieces it guards that the enemy attacks) → its moves that keep it
+  (else the moves out of attack, else all) → one engine read per option, the
+  reply line cut to its proof → verdict vs the move played. `pieceOptionsRef`
+  parses both seats + a colour ("White's queen"); `resolvePieceQuestion` picks
+  the decision (the side to move → now; else the position before its last
+  move). coachService computes (12s box), coachApi speaks raw ahead of every
+  move lane, `consumeCoachLines` carries `WalkableLine[]` to the page: the static
+  board shows the question's position, each option's line is drawn as its
+  sentence plays, and a Walk button steps it and returns to the game. Audit:
+  Learn audit rows H1–H3.
 - [ ] **D. Review lines** — arrows for every spoken line (refuted alt has none today;
   one line per segment), walk button narrated.
 
 **Red on main, NOT from this WO (found 2026-09-24, logged not widened):**
 `gemPunishLessons.test.ts` ×4 time out at 120s, `punishGems.test.ts` arrow rows
 time out at the default 5s (ship-check runs 20s), `section14RecordPath.test.ts`
-no-plan returns undefined (since 4a9614f).
+no-plan returns undefined (since 4a9614f) — its fixture's "quiet" 16.Bc6 hangs
+to Rxc6 (the c-file opened on 15…bxc5), so the planless premise no longer holds
+once hangs are attributed; the fixture needs a quiet move that hangs nothing.
 
 ## 🎓 WO-LAYERS-01 — teach in LAYERS, the way Naroditsky does, chosen by the student's record (David 2026-09-23: "take those two different teaching styles and algo them in … all 7" · "default should be lowest setting. This app attacks beginner players")
 

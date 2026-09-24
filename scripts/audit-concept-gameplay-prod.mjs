@@ -419,6 +419,44 @@ async function main() {
     const e = await askAndPlay(page, listener, ASK_TYPO, 'typo');
     record('E. a misspelled play ask still starts a GAME (G7 off-canonical input)', e.started && e.plies > 0, `ask="${ASK_TYPO}" started=${e.started} plies=${e.plies}${e.walkthrough ? ` WALKTHROUGH=${e.walkthrough}` : ''} after ${e.secs}s`);
 
+    // ── H: "COULDN'T THEY JUST MOVE X?" (WO-DANYA-01 C, David 2026-09-24) ───
+    // Asked in the chat of the game just played. The answer is COMPUTED (the
+    // piece's job → the squares that keep it → each refuted by its line → a
+    // verdict), the lines come back as Walk buttons, and a walk shows the line
+    // on the board and returns to the game. Tries pieces in turn, because the
+    // one asked about may already be off the board.
+    {
+      const input = page.locator('[data-testid="chat-text-input"]');
+      let answered = null;
+      for (const ask of ["couldn't they just move their queen?", "couldn't they just move their rook?", 'could I just move my knight?', "couldn't they just move their bishop?"]) {
+        const before = await page.locator('[data-testid="chat-message-assistant"]').count();
+        await input.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => {});
+        await input.pressSequentially(ask, { delay: 12 }).catch(() => {});
+        await page.keyboard.press('Enter');
+        const by = Date.now() + 45_000;
+        while (Date.now() < by && (await page.locator('[data-testid="chat-message-assistant"]').count()) <= before) await page.waitForTimeout(1000);
+        await page.waitForTimeout(1500);
+        const last = page.locator('[data-testid="chat-message-assistant"]').last();
+        const text = (await last.innerText().catch(() => '')).replace(/\s+/g, ' ');
+        const walks = await last.locator('[data-testid^="message-walk-line-"]').count();
+        console.log(`[piece] ask="${ask}" walks=${walks} → ${text.slice(0, 260)}`);
+        if (walks > 0) { answered = { ask, text, walks, last }; break; }
+      }
+      record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|square that holds|gives up its guard|is attacked)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
+      record('H2. the answer carries a Walk button per calculated line', !!answered && answered.walks > 0, answered ? `${answered.walks} walk button(s)` : '0');
+      if (answered) {
+        const live = await readPlacement(page);
+        await answered.last.locator('[data-testid="message-walk-line-0"]').click({ force: true }).catch(() => {});
+        let moved = false;
+        const byWalk = Date.now() + 8000;
+        while (Date.now() < byWalk && !moved) { await page.waitForTimeout(500); moved = !samePlacement(await readPlacement(page), live); }
+        let back = false;
+        const byBack = Date.now() + 30_000;
+        while (moved && Date.now() < byBack && !back) { await page.waitForTimeout(1000); back = samePlacement(await readPlacement(page), live); }
+        record('H3. Walk plays the line on the board and returns to the game', moved && back, `moved=${moved} returned=${back}`);
+      }
+    }
+
     // ── F: vacuity + instrument hygiene ────────────────────────────────────
     const all = spokenLines(listener);
     record('F1. vacuity guard: ≥3 spoken lines across the run', all.length >= 3, `${all.length}`);

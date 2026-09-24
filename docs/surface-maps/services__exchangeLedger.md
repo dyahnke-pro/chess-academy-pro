@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**214 lines · 9 exports · 7 importers · 2 tests · 0 audits**
+**214 lines · 9 exports · 8 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gemCrushLines.ts`
 - `src/services/lineProof.test.ts`
+- `src/services/pieceOptions.ts`
 - `src/services/refutedAlternativeCore.ts`
 
 ## Exports and every call site
@@ -52,17 +53,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 6 call sites
+### `proofCut` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:3295`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
+- `src/services/pieceOptions.ts:105`
 - `src/services/refutedAlternativeCore.ts:145`
 
-### `describeProofResult` (function) — 3 call sites
+### `describeProofResult` (function) — 4 call sites
 - `src/services/coachFeatureService.ts:3282`
 - `src/services/lineProof.test.ts:27`
+- `src/services/pieceOptions.ts:109`
 - `src/services/refutedAlternativeCore.ts:147`
 
 ### `proofAgainstMover` (function) — 2 call sites

@@ -620,6 +620,38 @@ const CANDIDATE_MOVE_RE = anyOf([
   String.raw`\bwhy\s+(?:play|playing|go|going|move|moving|put|putting|develop|developing|take|taking|castle|castling|push|pushing|trade|trading)\b`,
   String.raw`^\s*why\s+(?:the\s+)?(?:[NBRQK]?[a-h][1-8]|[NBRQK]?x?[a-h][1-8](?:=[NBRQ])?[+#]?|O-O(?:-O)?|(?:knight|bishop|rook|queen|king|pawn|night)\s*(?:to\s*)?[a-h]\s*[1-8])\s*\??\s*$`,
 ]);
+/** "Couldn't he just move the queen?" / "why didn't I move my knight?" /
+ *  "what if the rook ran?" — a question about a PIECE'S options, not a named
+ *  move (WO-DANYA-01 C, David 2026-09-24). Answered by `pieceOptions`: the
+ *  piece's job, the squares that keep it, each refuted by its line, a verdict.
+ *  A named DESTINATION ("move the queen to f5") is a candidate move, not this. */
+const PIECE_WORD = String.raw`(queen|rook|bishop|knight|night|king|pawn)`;
+const PIECE_OPTIONS_RE = anyOf([
+  String.raw`\b(?:couldn'?t|could|can'?t|cant|can|why\s+(?:didn'?t|did\s+not|not|doesn'?t|don'?t|wouldn'?t)|what\s+if|what\s+about|shouldn'?t|should|wouldn'?t|would)\b[\s\S]{0,40}\b(?:move|moving|moved|retreat|retreating|retreated|run|running|ran|save|saving|step|pull|go|going|went|escape|escaping)\b[\s\S]{0,25}\b${PIECE_WORD}\b`,
+  String.raw`\b(?:couldn'?t|could|can'?t|can|why\s+(?:didn'?t|did\s+not|doesn'?t|don'?t)|what\s+if|what\s+about)\b[\s\S]{0,30}\b${PIECE_WORD}\b[\s\S]{0,20}\b(?:move|moved|moving|go|went|retreat|retreated|run|ran|escape|escaped|step|stepped)\b`,
+]);
+const PIECE_LETTER: Record<string, 'q' | 'r' | 'b' | 'n' | 'k' | 'p'> = {
+  queen: 'q', rook: 'r', bishop: 'b', knight: 'n', night: 'n', king: 'k', pawn: 'p',
+};
+export function pieceOptionsRef(ask: string | undefined): import('../services/pieceOptions').PieceQuestionRef | null {
+  if (!ask) return null;
+  const a = ask.toLowerCase();
+  if (!PIECE_OPTIONS_RE.test(a)) return null;
+  // A destination square after the verb names a MOVE — the candidate lane.
+  if (/\b(?:to|onto|into)\s+[a-h]\s*[1-8]\b/.test(a)) return null;
+  const pm = new RegExp(`\\b${PIECE_WORD}\\b(?:\\s+on\\s+([a-h][1-8]))?`).exec(a);
+  if (!pm) return null;
+  const opp = /\b(?:he|his|him|they|their|them|opponent'?s?|the\s+other\s+side)\b/.test(a);
+  const me = /\b(?:i|i'?d|my|me|mine)\b/.test(a);
+  let seat: 'student' | 'opponent' | null = null;
+  if (me && !opp) seat = 'student';
+  else if (opp && !me) seat = 'opponent';
+  // "White's queen" names a COLOUR, not a seat — the resolver maps it once the
+  // student's colour is known.
+  const cm = /\b(white|black)(?:'s)?\s+(?:queen|rook|bishop|knight|night|king|pawn)\b/.exec(a);
+  return { seat, color: cm ? (cm[1] as 'white' | 'black') : null, piece: PIECE_LETTER[pm[1]], square: pm[2] ?? null };
+}
+
 export function isCandidateMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   if (isWhyBestMoveQuestion(ask)) return false; // "why is X best" is engine-reasoning

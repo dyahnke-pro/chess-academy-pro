@@ -271,7 +271,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { getFavoriteOpenings, getOpeningById, searchOpenings } from '../../services/openingService';
 import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
-import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight } from '../../types';
+import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseText } from '../../services/positionFacts';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
@@ -1629,6 +1629,45 @@ export function CoachTeachPage(): JSX.Element {
   const reviewFen = reviewing
     ? (reviewIndex === -1 ? STARTING_FEN : historyFens[reviewIndex] ?? game.fen)
     : null;
+
+  /** A CALCULATED LINE ON THE BOARD (WO-DANYA-01 C, David 2026-09-24: "arrows
+   *  draw the lines, button press to walk it"). While an answer that calculated
+   *  lines is spoken, the board shows the position the question is about with
+   *  each option's line drawn as its sentence plays; the Walk button steps a
+   *  line move by move. Both render through the STATIC board, so a line is
+   *  never played into the real game, and both return to the live position. */
+  const [lineWalkFen, setLineWalkFen] = useState<string | null>(null);
+  const [lineWalkArrows, setLineWalkArrows] = useState<BoardArrow[]>([]);
+  const lineWalkTokenRef = useRef(0);
+  const lineArrowsOf = useCallback((line: WalkableLine): BoardArrow[] => line.plies.map((p, i) => ({
+    startSquare: p.uci.slice(0, 2),
+    endSquare: p.uci.slice(2, 4),
+    // The option in green, the reply that answers it in red, and so on.
+    color: i % 2 === 0 ? 'green' : 'red',
+  })), []);
+  const clearLineWalk = useCallback((): void => {
+    lineWalkTokenRef.current += 1;
+    setLineWalkFen(null);
+    setLineWalkArrows([]);
+  }, []);
+  const walkLine = useCallback((line: WalkableLine): void => {
+    const token = ++lineWalkTokenRef.current;
+    void (async () => {
+      setLineWalkFen(line.startFen);
+      setLineWalkArrows([]);
+      await new Promise((r) => window.setTimeout(r, 600));
+      for (const ply of line.plies) {
+        if (lineWalkTokenRef.current !== token) return;
+        setLineWalkFen(ply.fenAfter);
+        setLineWalkArrows([{ startSquare: ply.uci.slice(0, 2), endSquare: ply.uci.slice(2, 4), color: 'green' }]);
+        await new Promise((r) => window.setTimeout(r, 1000));
+      }
+      await new Promise((r) => window.setTimeout(r, 900));
+      if (lineWalkTokenRef.current === token) { setLineWalkFen(null); setLineWalkArrows([]); }
+    })();
+  }, []);
+  /** Any new move ends a line on the board — the game is the ground truth. */
+  useEffect(() => { clearLineWalk(); }, [game.history.length, clearLineWalk]);
 
   /** Traps/gems already announced this game (openingFactChains dedup) — the
    *  same lurking line isn't re-announced on every ply it stays live. */
@@ -6906,7 +6945,39 @@ export function CoachTeachPage(): JSX.Element {
         // on the new position. If the live board has moved past this turn's
         // fen, the arrows are history: skip the paint (the chat text still
         // lands; only the board decoration is dropped).
-        if (liveFenRef.current === fen) {
+        // An answer that CALCULATED lines (WO-DANYA-01 C) draws those lines on
+        // the position the question is about — its moves are named at THAT
+        // position, so resolving them against the live board would arrow the
+        // wrong squares. The lines replace the prose-arrow pass for this turn.
+        const calcLines = result.lines && result.lines.length > 0 ? result.lines : null;
+        if (calcLines) {
+          const token = ++lineWalkTokenRef.current;
+          const said = spokenDisplayText.trim() || displayText;
+          const sentences = said.split(/(?<=[.!?])\s+/);
+          const total = sentences.reduce((n, x) => n + x.length, 0) || 1;
+          const estMs = Math.max(total * 55, 1200);
+          setArrows([]);
+          setHighlights([]);
+          setLineWalkFen(calcLines[0].startFen);
+          setLineWalkArrows([]);
+          void beatSpeechStarted.then(() => {
+            let acc = 0;
+            for (const sent of sentences) {
+              const at = (acc / total) * estMs;
+              acc += sent.length;
+              // A sentence that opens on an option ("Qf5? Then …") draws THAT
+              // option's line; any other sentence clears the drawing.
+              const hit = calcLines.find((l) => sent.startsWith(`${l.label}?`));
+              window.setTimeout(() => {
+                if (lineWalkTokenRef.current !== token) return;
+                setLineWalkArrows(hit ? lineArrowsOf(hit) : []);
+              }, at);
+            }
+            window.setTimeout(() => {
+              if (lineWalkTokenRef.current === token) { setLineWalkFen(null); setLineWalkArrows([]); }
+            }, estMs + 2500);
+          });
+        } else if (liveFenRef.current === fen) {
           // THE MERGED SET IS UNCAPPED. It used to be `.slice(0, 4)`, added when
           // two passes together put five arrows on David's board (2026-08-07).
           // The ceiling was the wrong cure: it does not decide WHICH arrow is
@@ -6995,6 +7066,7 @@ export function CoachTeachPage(): JSX.Element {
           ...(result.actionOffer && result.actionOffer.length > 0
             ? { metadata: { actions: result.actionOffer } }
             : {}),
+          ...(result.lines && result.lines.length > 0 ? { lines: result.lines } : {}),
         }]);
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach',
@@ -11493,9 +11565,10 @@ export function CoachTeachPage(): JSX.Element {
               // mode does not take the controlled-mode chrome (flip / undo /
               // reset / eval bar / mic), and spreading them in only
               // type-checks by accident.
-              reviewFen ? (
+              (lineWalkFen ?? reviewFen) ? (
                 <ConsistentChessboard
-                  fen={reviewFen}
+                  fen={(lineWalkFen ?? reviewFen) as string}
+                  arrows={lineWalkFen ? lineWalkArrows : undefined}
                   interactive={false}
                   boardOrientation={playerColor}
                   showLastMoveHighlight
@@ -12335,7 +12408,7 @@ export function CoachTeachPage(): JSX.Element {
                   : { opacity: 0.7 }
               }
             >
-              <ChatMessage message={msg} onPickChoice={pickCoachChoice} />
+              <ChatMessage message={msg} onPickChoice={pickCoachChoice} onWalkLine={walkLine} />
             </div>
           ))}
 

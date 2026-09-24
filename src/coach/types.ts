@@ -920,4 +920,7 @@ export interface CoachAnswer {
    *  Empty/absent when the turn fired no grounded block that attaches
    *  an offer. Populated from `consumeCoachActionOffer()` on coachApi. */
   actionOffer?: { type: string; id: string }[];
+  /** Lines the grounded answer calculated — the surface draws them as arrows
+   *  while it speaks and walks them on a button (WO-DANYA-01 C). */
+  lines?: import('../types').WalkableLine[];
 }
