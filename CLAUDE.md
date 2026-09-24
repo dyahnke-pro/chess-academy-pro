@@ -5544,6 +5544,31 @@ gated `__playMove`/`__seed*` hook that lets you drive a surface deterministicall
 driven by hand otherwise. Combine with the three instruments (Playwright +
 audit-stream + narration listener) per §G1.
 
+### 🔒🔒 WALK IT, FLAG EVERYTHING, THEN FIX — THE HAND-WALK AUDIT (David 2026-09-24: "I want you walking the test. Not a bot" → "This is a much more reliable audit. From now on do it like this. Finish the walkthrough first flagging all that's wrong, then make the fixes at the end").
+
+The session DRIVES the app itself, one step at a time, through
+`scripts/audit-lib/hand-driver.mjs` (a live MUTED browser: `/open`, `/type`,
+`/move?san=`, `/state`, `/shot`, `/setline`), and reads the board + every
+spoken line after EACH step — never a scripted loop that plays a whole game
+and reports at the end. Reference game: replay a real Naroditsky game from the
+voiced corpus (`vc-<video>-*` notes) with the student's moves on the board and
+the opponent's moves DICTATED to the coach ("play b6"), so every coach line can
+be read against HIS note at the same position.
+
+The order is locked:
+1. **WALK THE WHOLE GAME FIRST, FLAGGING ONLY.** No code edits mid-walk: a
+   code change hot-reloads the page and throws the game away (it did, once),
+   and a fix made on move 5 hides what move 20 would have shown.
+2. **Tell David what you see as you go** — each move: what the coach said,
+   what he said there, and what is wrong.
+3. **Then fix everything**, worst first, each with a test on the exact game
+   position that FAILS before the fix and passes after.
+4. **Then walk it again** to confirm.
+
+Save the flag list to `audit-reports/hand-walk-<topic>-<date>.md`. Before
+blaming the coach for a "repeat", check the instrument: the page logs each line
+once in SAN and the voice logs it once spoken — two events, one utterance.
+
 ### 🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").
 
 🔴 **REFERENCE CORRECTED 2026-09-16 — clone `scripts/audit-review-overhaul-prod.mjs`,

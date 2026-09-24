@@ -2202,6 +2202,11 @@ export function CoachTeachPage(): JSX.Element {
       // Re-derive the post-takeback FEN from the live game object so
       // subsequent trips see the rolled-back state.
       liveFenRef.current = gameRef.current.fen;
+      // Marks drawn for a move that has been taken back are claims about a
+      // board that no longer exists (hand walk 2026-09-24: the red e5/c3/a1
+      // pin highlights stayed after "no, play b6 instead").
+      setArrows([]);
+      setHighlights([]);
       return finish({ ok: true });
     } catch (err) {
       return finish({ ok: false, reason: err instanceof Error ? err.message : String(err) });

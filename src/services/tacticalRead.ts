@@ -16,6 +16,7 @@
  * PURE assemblers (verdict, key-tactic pick, tempting pick) are exported and
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
+import { rotateStem } from '../utils/rotateStem';
 import { Chess } from 'chess.js';
 import { computePvLine, computePlyFacts, type PvEngine, type PvLine, type PvPly } from './pvPlayback';
 import { detectTactics } from './tacticsDetector';
@@ -558,7 +559,15 @@ export function candidateCompareClause(
     }
     // Case 2 — best is the forcing one, the alt is quiet.
     if ((bestMv.captured || bestMv.san.includes('+')) && !altMv.captured && !altMv.san.includes('+')) {
-      return `Prefer ${sayN(bestMv.san)} to ${sayN(altMv.san)} — it forces the issue while the edge is there.`;
+      // ROTATED on the move number (hand walk 2026-09-24: the same stem three
+      // moves running). Stable per ply, so resume-safe — never Math.random.
+      const b = sayN(bestMv.san);
+      const q = sayN(altMv.san);
+      return rotateStem([
+        `Prefer ${b} to ${q} — it forces the issue while the edge is there.`,
+        `${b} before ${q}: the forcing move first, while it still works.`,
+        `${q} can wait — ${b} forces matters now.`,
+      ], Number(fen.split(' ')[5] ?? '0') || 0);
     }
     // Case 3 — two different plans and no board-read reason: SILENT. "It keeps
     // more of the edge" is the eval bar read aloud, not a reason (G0, the
