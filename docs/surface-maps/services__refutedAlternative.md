@@ -38,20 +38,22 @@
 - `src/services/refutedAlternative.test.ts:128`
 - `src/services/refutedAlternative.test.ts:130`
 
-### `pickAlternative` (re-export) — 6 call sites
+### `pickAlternative` (re-export) — 7 call sites
 - `src/services/refutedAlternative.test.ts:41`
 - `src/services/refutedAlternative.test.ts:42`
 - `src/services/refutedAlternative.test.ts:45`
 - `src/services/refutedAlternative.test.ts:46`
-- `src/services/refutedAlternativeCore.ts:50`
-- `src/services/refutedAlternativeCore.ts:125`
+- `src/services/refutedAlternative.test.ts:139`
+- `src/services/refutedAlternativeCore.ts:56`
+- `src/services/refutedAlternativeCore.ts:138`
 
-### `renderRefutedAlternative` (re-export) — 5 call sites
+### `renderRefutedAlternative` (re-export) — 6 call sites
 - `src/services/refutedAlternative.test.ts:115`
 - `src/services/refutedAlternative.test.ts:120`
 - `src/services/refutedAlternative.test.ts:132`
-- `src/services/refutedAlternativeCore.ts:61`
-- `src/services/refutedAlternativeCore.ts:147`
+- `src/services/refutedAlternative.test.ts:140`
+- `src/services/refutedAlternativeCore.ts:68`
+- `src/services/refutedAlternativeCore.ts:160`
 
 ### `candidatesFromMasters` (re-export) — 6 call sites
 - `src/services/refutedAlternative.test.ts:39`
@@ -59,7 +61,7 @@
 - `src/services/refutedAlternative.test.ts:62`
 - `src/services/refutedAlternative.test.ts:85`
 - `src/services/refutedAlternative.test.ts:111`
-- `src/services/refutedAlternativeCore.ts:77`
+- `src/services/refutedAlternativeCore.ts:90`
 
 ## Tests
 

@@ -49,19 +49,31 @@ describe('review — the four facts are facets, so they go through the door', ()
   });
 
   it('[refuted] speaks the engine-computed alternative on the student\'s ply', () => {
-    const alt: RefutedAlternative = { alt: 'Qh4', games: 40, pct: 40, costCp: 700, line: null, concept: null, lineSans: [], proofResult: null, source: 'amateur', text: 'Most players at your level play Qh4 here (40% of players at your level), and it costs about 7.0 points.' };
+    const alt: RefutedAlternative = { alt: 'Qh4', games: 40, pct: 40, costCp: 700, line: null, concept: null, lineSans: [], proofResult: null, source: 'amateur', text: '40% of players at your level play Qh4 here, and it costs about 7.0 points.' };
     const f = facetsAt(4, SCH, S, 'black', { ...NO_TEACHING_CONTEXT, refutedAlt: alt });
     expect(f).toContain(`[refuted] ${alt.text}`);
     // NEGATIVE: never on the opponent's ply.
     const opp = facetsAt(4, SCH, S, 'white', { ...NO_TEACHING_CONTEXT, refutedAlt: alt });
-    expect(opp.some((x) => x.startsWith('[refuted] Most players'))).toBe(false);
+    expect(opp.some((x) => x.startsWith('[refuted] 40% of players'))).toBe(false);
   });
 
   it('[stock] takes stock at the turn of the game, and only there', () => {
+    // White castles a piece up; Black's king is still on e8 with queens on.
+    const before = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 8';
+    const after = 'rnbqk2r/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 8';
+    const at = (teaching: MoveTeachingContext): string[] => computeMoveFacets({
+      seenFundamentals: new Set(), teaching, fenBefore: before, fenAfter: after, san: 'O-O', ply: 15,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w', evaluation: 300, preMoveEval: 300,
+      classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0 }, allSans: [], forcedRunStartPly: null,
+    });
+    expect(at({ ...NO_TEACHING_CONTEXT, phaseTurn: 'middlegame' }).find((x) => x.startsWith('[stock]')))
+      .toMatch(/^\[stock\] Taking stock as the middlegame begins: you're clearly better — you're up a piece/);
+    expect(at(NO_TEACHING_CONTEXT).some((x) => x.startsWith('[stock]'))).toBe(false);
+  });
+
+  it('NEGATIVE: a verdict with no reason is not a lesson — the level Scholar\'s board stays silent', () => {
     const turn = facetsAt(6, SCH, S, 'white', { ...NO_TEACHING_CONTEXT, phaseTurn: 'middlegame' }, 300);
-    expect(turn.find((x) => x.startsWith('[stock]'))).toMatch(/^\[stock\] Taking stock as the middlegame begins: you're clearly better/);
-    const not = facetsAt(6, SCH, S, 'white', NO_TEACHING_CONTEXT, 300);
-    expect(not.some((x) => x.startsWith('[stock]'))).toBe(false);
+    expect(turn.some((x) => x.startsWith('[stock]'))).toBe(false);
   });
 });
 
@@ -91,7 +103,7 @@ describe('live — the same four facts are clauses of the composer', () => {
     const popular = [{ san: 'Nf6', games: 60, pct: 60 }, { san: 'Qh4', games: 40, pct: 40 }];
     const base = { posture: 'walk' as const, fen: f3[7], moverColor: 'b' as const, studentColor: 'b' as const, analysis: flat };
     const r = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, reads: null, popular, fanBefore: fan } });
-    expect(r.clauses.find((c) => c.kind === 'refuted')?.text).toBe('Most players at your level play Qh4 here (40% of players at your level), and it loses material: Qh4 and Nxh4 — they win a queen. Nf6 avoids that.');
+    expect(r.clauses.find((c) => c.kind === 'refuted')?.text).toBe('40% of players at your level play Qh4 here, and it loses material: Qh4 and Nxh4 — they win a queen. Nf6 avoids that.');
     // NEGATIVE: the engine never read the popular move → no cost to state.
     const none = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, reads: null, popular, fanBefore: [fan[0]] } });
     expect(none.clauses.some((c) => c.kind === 'refuted')).toBe(false);

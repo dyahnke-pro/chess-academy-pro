@@ -155,3 +155,22 @@ describe('ONE door — no surface composes the decision itself', () => {
     expect(src).not.toMatch(/posture\?: SurfacePosture/);
   });
 });
+
+describe('a row closed as unsupported files every quiet fact under that gate (B9, 2026-09-24)', () => {
+  // Two DESCRIPTIONS of one geometry: one subsumes the other, then the winner
+  // has no teaching point to support it — so nothing from the claim speaks.
+  const A = '[delta] Their rook on f1\'s line just opened — it now reaches f7.';
+  const B = '[delta] Your rook on f8\'s line just opened — it now reaches f2.';
+  const sq = new Map<string, readonly string[]>([[A, ['f1', 'f7', 'f8', 'f2']], [B, ['f8', 'f2', 'f1', 'f7']]]);
+  it('the subsumed loser is filed unsupported, like its winner', () => {
+    const d = decide(quiet, student, { facts: [A, B], squares: sq }, 'walk');
+    expect(d.speak).toBe(false);
+    expect(d.reason).toBe('unsupported');
+    expect(d.quiet.every((q) => q.why === 'unsupported')).toBe(true);
+  });
+  it('NEGATIVE CONTROL: on a row that SPEAKS, a subsumed fact keeps its own name', () => {
+    const d = decide(blunder, student, bundle, 'walk');
+    expect(d.speak).toBe(true);
+    expect(d.quiet.some((q) => q.why === 'subsumed')).toBe(true);
+  });
+});

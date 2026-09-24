@@ -39,7 +39,7 @@
 ### `EVAL_FACET_MIN_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 21 call sites
+### `computeMoveFacets` (function) — 22 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
 - `src/services/coachFeatureService.ts:1734`
@@ -61,6 +61,7 @@
 - `src/services/reviewFullData.test.ts:342`
 - `src/services/reviewFullData.test.ts:362`
 - `src/test/teach02Wired.test.ts:26`
+- `src/test/teach02Wired.test.ts:64`
 
 ### `computeThroughLine` (function) — 5 call sites
 - `src/services/coachFeatureService.ts:4761`

@@ -66,7 +66,7 @@ describe('refutedAlternative', () => {
     expect(r!.costCp).toBeGreaterThan(1000);
     expect(r!.lineSans).toEqual(['Nf6', 'Qxf7#']);
     expect(r!.concept).not.toBeNull();
-    expect(r!.text).toMatch(/Most people play Nf6 here \(38% of players\)/);
+    expect(r!.text).toMatch(/^38% of masters play Nf6 here/);
     expect(r!.text).toMatch(/g6 keeps that off the board/);
   });
 
@@ -113,7 +113,7 @@ describe('refutedAlternative', () => {
 
   it('renderRefutedAlternative is a template over the facts (pure)', () => {
     const t = renderRefutedAlternative({ alt: 'Nf6', games: 300, pct: 38, costCp: 900, line: null, concept: { id: 'mate', name: 'Checkmate', full: 'The queen lands on f7 with the bishop covering it — mate.', short: 'mate' }, lineSans: ['Nf6', 'Qxf7#'], proofResult: "it's mate" }, 'g6');
-    expect(t).toBe("Most people play Nf6 here (38% of players), and it walks into a checkmate: Nf6 and Qxf7# — it's mate. The queen lands on f7 with the bishop covering it — mate. g6 keeps that off the board.");
+    expect(t).toBe("38% of masters play Nf6 here, and it walks into a checkmate: Nf6 and Qxf7# — it's mate. The queen lands on f7 with the bishop covering it — mate. g6 keeps that off the board.");
   });
 
   it('a line that proves nothing is not recited (the line as proof)', () => {
@@ -130,7 +130,15 @@ describe('refutedAlternative', () => {
     const c = candidatesForPosition(FEN, MASTERS);
     expect(c[0]).toEqual({ san: 'Nf6', games: 60, pct: 60, source: 'amateur' });
     const t = renderRefutedAlternative({ alt: 'Nf6', games: 60, pct: 60, costCp: 150, line: null, concept: null, lineSans: [], source: 'amateur' }, 'g6');
-    expect(t).toMatch(/^Most players at your level play Nf6 here \(60% of players at your level\)/);
+    expect(t).toMatch(/^Most players at your level play Nf6 here \(60%\)/);
     __clearAmateurPlayCache();
+  });
+
+  it('NEGATIVE CONTROL: a stray move is not what people reach for, and "most" means most', () => {
+    // 1% alternative → no alternative at all (the prod "Most people … (1%)").
+    expect(pickAlternative('e6', [{ san: 'e6', games: 990, pct: 99 }, { san: 'Bg6', games: 10, pct: 1 }])).toBeNull();
+    const t = renderRefutedAlternative({ alt: 'Nf6', games: 30, pct: 30, costCp: 150, line: null, concept: null, lineSans: [], source: 'amateur' }, 'g6');
+    expect(t).toMatch(/^30% of players at your level play Nf6 here/);
+    expect(t).not.toMatch(/^Most/);
   });
 });

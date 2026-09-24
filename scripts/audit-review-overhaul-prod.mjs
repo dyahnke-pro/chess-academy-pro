@@ -1753,7 +1753,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // name `reason` carries — never under 'below-bar', which is the FLOOR's
     // name and a different diagnosis. A silent row whose facts are filed
     // elsewhere is the collapse this emission exists to prevent.
-    const misfiled = silent.filter((d) => (d.quietCount ?? 0) > 0 && (d.quietBy?.[d.reason] ?? 0) !== d.quietCount);
+    // `proven` is the one exception, and a deliberate one: a fact in a layer the
+    // student has PROVEN is quieted BEFORE the door's gates by the green-layer
+    // step (WO-LAYERS-01), so it keeps its own name on any row — relabelling it
+    // would erase the heat map's only visible trace in the decision row.
+    const misfiled = silent.filter((d) => (d.quietCount ?? 0) > 0
+      && ((d.quietBy?.[d.reason] ?? 0) + (d.reason === 'proven' ? 0 : (d.quietBy?.proven ?? 0))) !== d.quietCount);
     await add('DECIDER door-closed-rows-file-facts-under-their-gate', misfiled.length === 0,
       `${silent.length} silent rows; ${misfiled.length} file facts under a mechanism other than their own gate${misfiled[0] ? ` (e.g. reason=${misfiled[0].reason} quietBy=${JSON.stringify(misfiled[0].quietBy)})` : ''}`);
     // Every subsumption names BOTH sides. A pair with no winner means a fact

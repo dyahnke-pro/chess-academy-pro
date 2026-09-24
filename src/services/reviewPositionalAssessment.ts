@@ -210,8 +210,9 @@ export function phaseVerdictLine(
   phase: 'middlegame' | 'endgame',
 ): string | null {
   const a = assessPositionalEdge(fen, studentColorWB, studentPovEvalCp);
-  if (!a.verdict) return null;
-  if (a.verdict === 'balanced' && a.reasons.length === 0) return null;
+  // WHO'S BETTER *AND WHY*: a verdict with no reason is a description, not a
+  // lesson (a prod review said "you were a bit worse" and nothing else).
+  if (!a.verdict || a.reasons.length === 0) return null;
   const standing = a.verdict === 'balanced' ? "it's level" : `you're ${a.verdict}`;
   const why = a.reasons.length === 0 ? '' : ` — ${andList(a.reasons)}`;
   return `Taking stock as the ${phase} begins: ${standing}${why}.`;
