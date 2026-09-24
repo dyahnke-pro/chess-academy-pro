@@ -62,7 +62,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:25`
 - `src/services/principleVoice.test.ts:31`
 - `src/services/principleVoice.test.ts:32`
-- `src/services/reviewFullData.ts:379`
+- `src/services/reviewFullData.ts:380`
 
 ### `renderPvEvidence` (function) — 3 call sites
 - `src/services/coachFeatureService.ts:2212`

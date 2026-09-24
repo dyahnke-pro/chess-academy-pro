@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**220 lines · 4 exports · 7 importers · 5 tests · 0 audits**
+**226 lines · 4 exports · 7 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,7 +39,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:84`
 - `src/services/planPrescriptions.test.ts:91`
-- `src/services/reviewFullData.ts:565`
+- `src/services/reviewFullData.ts:566`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:8`
@@ -58,12 +58,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/standingRefrains.test.ts:80`
 - `src/services/standingRefrains.test.ts:110`
 
-### `phaseVerdictLine` (function) — 5 call sites
+### `phaseVerdictLine` (function) — 6 call sites
 - `src/services/phaseVerdict.test.ts:16`
-- `src/services/phaseVerdict.test.ts:22`
-- `src/services/phaseVerdict.test.ts:27`
-- `src/services/positionFacts.ts:705`
-- `src/services/reviewFullData.ts:810`
+- `src/services/phaseVerdict.test.ts:18`
+- `src/services/phaseVerdict.test.ts:23`
+- `src/services/phaseVerdict.test.ts:28`
+- `src/services/positionFacts.ts:706`
+- `src/services/reviewFullData.ts:811`
 
 ## Tests
 

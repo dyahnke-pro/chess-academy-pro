@@ -18,6 +18,7 @@ import { andList } from '../utils/andList';
 import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { MATERIAL_VALUE } from './pieceValues';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 export interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
@@ -215,5 +216,10 @@ export function phaseVerdictLine(
   if (!a.verdict || a.reasons.length === 0) return null;
   const standing = a.verdict === 'balanced' ? "it's level" : `you're ${a.verdict}`;
   const why = a.reasons.length === 0 ? '' : ` — ${andList(a.reasons)}`;
-  return `Taking stock as the ${phase} begins: ${standing}${why}.`;
+  // Rotated on the board — the verdict and its reasons never vary.
+  return rotateStem([
+    `Taking stock as the ${phase} begins: ${standing}${why}.`,
+    `The ${phase} starts here, so take stock: ${standing}${why}.`,
+    `Before the ${phase} gets going, the balance sheet: ${standing}${why}.`,
+  ], stemKeyOf(fen));
 }

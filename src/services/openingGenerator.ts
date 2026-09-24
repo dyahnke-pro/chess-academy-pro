@@ -397,7 +397,10 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // and no arrows on spoken-form moves forever. ONE bump for both changes — a
 // gen-rev bump regenerates every lesson's prose into new strings, which miss the
 // /api/tts clip cache and re-synthesise, so they are batched per deploy.
-const WALKTHROUGH_GEN_REV = '2026-09-22-computed-beats-g0';
+// 2026-09-24 (WO-TEACH-02): the refuted-alternative beat now states its real
+// share and source (never "most" on a 1% stray — cached trees could still say
+// so), a 10% floor, the line as proof, and rotated DNA stems. ONE bump.
+const WALKTHROUGH_GEN_REV = '2026-09-24-refuted-share-stems';
 
 export async function getCachedOpening(
   name: string,

@@ -10,6 +10,7 @@ import type { ComputedConcept } from './conceptEngine';
 import { criticalityThresholds } from './criticalityScan';
 import { proofCut, describeProofResult } from './exchangeLedger';
 import { andList } from '../utils/andList';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 function stripGlyphs(s: string): string { return s.replace(/[+#!?]+$/, ''); }
 
@@ -65,25 +66,53 @@ function pawns(cp: number): string { return (cp / 100).toFixed(1); }
 
 /** The DNA-register sentence over the computed facts. Pure; exported for the
  *  review, which supplies its own cost + line from the stored analysis. */
-export function renderRefutedAlternative(f: Omit<RefutedAlternative, 'text'>, taughtSan: string): string {
+export function renderRefutedAlternative(
+  f: Omit<RefutedAlternative, 'text'>,
+  taughtSan: string,
+  /** THE ROTATION KEY — required, and stable about the moment (the board the
+   *  move was chosen on, via `stemKeyOf`). The wrapper varies; the share, the
+   *  source, the cost and the proven line never do (rotate the stem, never the
+   *  claim — `rotateStem`). */
+  stemKey: number,
+): string {
   // THE SHARE IS STATED, NEVER ROUNDED UP TO "MOST" — and the source is named
   // as what it is: the amateur band is "players at your level", the masters
   // database is "masters".
   const who = f.source === 'amateur' ? 'players at your level' : 'masters';
   const lead = f.pct === null
-    ? `${f.alt} is a common choice here (${f.games} games)`
+    ? rotateStem([
+      `${f.alt} is a common choice here (${f.games} games)`,
+      `Plenty of games go ${f.alt} here (${f.games} of them)`,
+    ], stemKey)
     : f.pct >= 50
-      ? `Most ${who} play ${f.alt} here (${f.pct}%)`
-      : `${f.pct}% of ${who} play ${f.alt} here`;
+      ? rotateStem([
+        `Most ${who} play ${f.alt} here (${f.pct}%)`,
+        `More than half of ${who} play ${f.alt} here (${f.pct}%)`,
+      ], stemKey)
+      : rotateStem([
+        `${f.pct}% of ${who} play ${f.alt} here`,
+        `${f.alt} is what ${f.pct}% of ${who} reach for here`,
+      ], stemKey);
   // THE LINE AS PROOF (WO-LAYERS-01): the moves are spoken only as far as the
   // point they prove, then the result — never a recital of a line that proves
   // nothing.
   const proven = f.lineSans.length > 0 && f.proofResult ? ` ${andList(f.lineSans)} — ${f.proofResult}.` : '';
   if (f.concept) {
-    return `${lead}, and it walks into a ${f.concept.name.toLowerCase()}:${proven} ${f.concept.full} ${taughtSan} keeps that off the board.`;
+    const close = rotateStem([`${taughtSan} keeps that off the board.`, `${taughtSan} doesn't allow it.`, `That's what ${taughtSan} rules out.`], stemKey);
+    return `${lead}, and it walks into a ${f.concept.name.toLowerCase()}:${proven} ${f.concept.full} ${close}`;
   }
-  if (proven) return `${lead}, and it loses material:${proven} ${taughtSan} avoids that.`;
-  return `${lead}, and it costs about ${pawns(f.costCp)} points — nothing forcing, just a worse position. ${taughtSan} holds the balance.`;
+  if (proven) {
+    const close = rotateStem([`${taughtSan} avoids that.`, `${taughtSan} sidesteps it.`, `${taughtSan} keeps that from happening.`], stemKey);
+    return `${lead}, and it loses material:${proven} ${close}`;
+  }
+  // "holds the balance" was the old close, and it is only true of a level
+  // position — the claim here is the COST, so the close names the cost.
+  const cost = rotateStem([
+    `it costs about ${pawns(f.costCp)} points — nothing forcing, just a worse position`,
+    `it gives away about ${pawns(f.costCp)} points — no tactic, just a worse position`,
+  ], stemKey);
+  const close = rotateStem([`${taughtSan} doesn't pay that.`, `${taughtSan} keeps those points.`, `${taughtSan} avoids that cost.`], stemKey);
+  return `${lead}, and ${cost}. ${close}`;
 }
 
 /** Candidates from a masters-DB move list (`mastersMovesSync`). */
@@ -157,5 +186,5 @@ export function refutedFromFan(input: {
   } catch { /* the playable prefix is what we have */ }
   const { lineSans, proofResult } = provenPrefix(input.fenBefore, sans, input.moverWB);
   const facts = { alt: alt.san, games: alt.games, pct: alt.pct, costCp, line: null, concept: null, lineSans, proofResult, source: alt.source ?? 'masters' as const };
-  return { ...facts, text: renderRefutedAlternative(facts, input.playedSan) };
+  return { ...facts, text: renderRefutedAlternative(facts, input.playedSan, stemKeyOf(input.fenBefore)) };
 }

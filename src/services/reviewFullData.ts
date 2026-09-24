@@ -41,6 +41,7 @@ import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBish
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { andList } from '../utils/andList';
+import { stemKeyOf } from '../utils/rotateStem';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -786,7 +787,7 @@ export function computeMoveFacets(
   if (isStudent && ply <= 24 && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
     const lead = principleToTeach(fenBefore, san, moverColor, ctx.teaching.principlesTaught);
     if (lead) {
-      const f = `[rule] ${principleOnceLine(san, lead)}`;
+      const f = `[rule] ${principleOnceLine(san, lead, stemKeyOf(fenBefore))}`;
       facets.push(f);
       outIdentity?.set(f, `rule:${lead.id}`);
       recSquares(f, lead.squares);

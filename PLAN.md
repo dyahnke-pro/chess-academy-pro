@@ -436,6 +436,28 @@ attacked and nothing's defending it. There's a pin here for you — have a look.
 The run is 5 plies, so the new live clauses (refuted / stopped / rule / stock) were
 not posed on it — a longer live game is owed to hear them on prod.
 
+**DETERMINISTIC → DNA-WORDED → HANDED TO THE LLM (David 2026-09-24: "everything
+built needs to be deterministic, worded by the dna, and handed to LLm").** Checked
+every WO-TEACH-02 line against it:
+- The five new shapes (refuted alternative, principle kept, stopped threat, phase
+  verdict, transfer) had ONE fixed stem each. Now 2–4 hand-written DNA stems per
+  shape through the one `rotateStem`, keyed on a stable fact of the moment
+  (`stemKeyOf` of the board, or the move number) — rotated, never rolled; the
+  claim (share, source, move, proven line, reasons) never varies. The rotation
+  key is a REQUIRED parameter where a caller supplies it.
+- Review already reached `voiceFacts` (raw register). Learn's Track A called
+  `speakForced(line)` directly — it now speaks `voiceFacts(line, { preferRaw })`,
+  gated by `coachLaneWiring` ("every Track A line reaches the voice THROUGH
+  voiceFacts"). Raw = no model call, no latency.
+- OWED (a sweep, raised with David, not done here): 30 OTHER direct
+  `voiceService.speak*` calls in CoachTeachPage (acks, intros, results) that
+  predate this build and bypass `voiceFacts` the same way.
+- `WALKTHROUGH_GEN_REV` bumped ONCE (`2026-09-24-refuted-share-stems`): cached
+  lessons still baked the old refuted-alternative text, including the "most … (1%)"
+  wording. Expect one synthesis bill as lessons regenerate.
+- Two `coachLaneWiring` tests were red on main (stale patterns after 8ab0c5f and
+  WO-LOOP-01's recurrence clause) — updated to the current shape, same assertions.
+
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.
 

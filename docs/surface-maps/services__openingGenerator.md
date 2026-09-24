@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4365 lines · 38 exports · 18 importers · 16 tests · 10 audits**
+**4368 lines · 38 exports · 18 importers · 16 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -87,7 +87,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5633`
 - `src/components/Coach/CoachTeachPage.tsx:5707`
 - `src/components/Coach/CoachTeachPage.tsx:6464`
-- `src/components/Coach/CoachTeachPage.tsx:10436`
+- `src/components/Coach/CoachTeachPage.tsx:10444`
 - `src/services/lessonCacheKey.test.ts:58`
 - `src/services/lessonCacheKey.test.ts:63`
 - `src/services/lessonCacheKey.test.ts:72`
@@ -242,7 +242,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:5588`
 - `src/components/Coach/CoachTeachPage.tsx:5701`
 - `src/components/Coach/CoachTeachPage.tsx:6459`
-- `src/components/Coach/CoachTeachPage.tsx:10430`
+- `src/components/Coach/CoachTeachPage.tsx:10438`
 - `src/services/openingGenerator.computedBeats.test.ts:59`
 - `src/services/openingGenerator.test.ts:933`
 - `src/services/openingGenerator.test.ts:936`

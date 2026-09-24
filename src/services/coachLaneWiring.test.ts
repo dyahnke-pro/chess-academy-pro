@@ -82,7 +82,9 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // text is now `line`, not `look.line` directly — same rank, same square.
     expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, line, look\.kind,/);
     // …and the fundamental verdict is what leads that line.
-    expect(TEACH).toMatch(/const line = fundamental \? `\$\{fundamental\.verdict\} \$\{look\.line\}` : look\.line/);
+    // (WO-LOOP-01 put the recurrence clause between the verdict and the
+    // look — the verdict still LEADS, which is what this pins.)
+    expect(TEACH).toMatch(/const line = fundamental\s*\?\s*`\$\{fundamental\.verdict\}[\s\S]{0,120}?\$\{look\.line\}`\s*:\s*look\.line/);
     // A fundamental with NO material drawback still speaks, on its own.
     expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'drawback', \[\]\)/);
   });
@@ -173,6 +175,17 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
 
   it('the queued package is actually spoken', () => {
     expect(TEACH).toMatch(/speakTrackA\(hintPkg\.spoken\)/);
+  });
+
+  it('every Track A line reaches the voice THROUGH voiceFacts (G0 — handed to the model seam)', () => {
+    // David 2026-09-24: "everything built needs to be deterministic, worded by
+    // the DNA, and handed to LLM". Track A used to call speakForced(line)
+    // directly, so Learn's computed lines never met the one chokepoint.
+    const body = TEACH.slice(TEACH.indexOf('const speakTrackA = (line: string)'), TEACH.indexOf('instantSpokenText = instantSpokenText'));
+    expect(body.length).toBeGreaterThan(0);
+    expect(body).toMatch(/voiceFacts\(line, \{ preferRaw: true, intent: 'learn-live' \}\)/);
+    expect(body).toMatch(/speakForced\(voiced\)/);
+    expect(body).not.toMatch(/speakForced\(line\)/);
   });
 });
 
@@ -359,9 +372,12 @@ describe('the couplings that make the wiring safe', () => {
     // BEFORE the Stockfish fast path (else the engine always wins) and AFTER
     // the opening book (else a slip breaks the line the student asked to
     // practise).
+    // Since 8ab0c5f the surface asks the ONE composer, `pickTeachingReply`,
+    // which consults the shared `pickTaughtSlip` FIRST (asserted below) — so
+    // the order rule reads the composer call on the surface.
     const PLAY = code(read('src/components/Coach/CoachGamePage.tsx'));
-    expect(PLAY, 'play never asks for a slip').toMatch(/pickTaughtSlip\(/);
-    const slipAt = PLAY.indexOf('pickTaughtSlip(');
+    expect(PLAY, 'play never asks for a slip').toMatch(/pickTeachingReply\(/);
+    const slipAt = PLAY.indexOf('pickTeachingReply(');
     const engineAt = PLAY.indexOf('resolvePlayConfig(difficulty');
     const bookAt = PLAY.indexOf('getOpeningMoves(intendedOpeningName)');
     expect(slipAt, 'the slip sits below the engine — the engine always wins')
@@ -370,8 +386,13 @@ describe('the couplings that make the wiring safe', () => {
       .toBeGreaterThan(bookAt);
     // And it is the SHARED picker, so the matrix and the once-per-game budget
     // cannot drift between the two surfaces.
-    expect(PLAY).toMatch(/pickTaughtSlip\s*\(\s*game\.fen/);
-    expect(PLAY, 'the slip is not told who the student is').toMatch(/studentElo: playerRating/);
+    expect(PLAY).toMatch(/pickTeachingReply\s*\(\s*game\.fen/);
+    expect(PLAY, 'the slip is not told who the student is').toMatch(/studentElo: liveElo/);
+    // The composer's FIRST layer is the shared slip picker.
+    const ENGINE = code(read('src/services/coachGameEngine.ts'));
+    const composer = ENGINE.slice(ENGINE.indexOf('export async function pickTeachingReply('));
+    expect(composer.indexOf('pickTaughtSlip(')).toBeGreaterThan(-1);
+    expect(composer.indexOf('pickTaughtSlip(')).toBeLessThan(composer.indexOf('if (opts?.steerHomeFor)'));
   });
 
   it('the coach does not admit the same move twice', () => {

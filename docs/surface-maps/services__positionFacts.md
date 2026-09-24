@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1250 lines · 9 exports · 14 importers · 12 tests · 3 audits**
+**1251 lines · 9 exports · 14 importers · 12 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -138,11 +138,11 @@
 - `src/test/teach02Wired.test.ts:82`
 - `src/test/teach02Wired.test.ts:91`
 - `src/test/teach02Wired.test.ts:105`
-- `src/test/teach02Wired.test.ts:108`
-- `src/test/teach02Wired.test.ts:113`
-- `src/test/teach02Wired.test.ts:120`
-- `src/test/teach02Wired.test.ts:130`
-- `src/test/teach02Wired.test.ts:132`
+- `src/test/teach02Wired.test.ts:112`
+- `src/test/teach02Wired.test.ts:117`
+- `src/test/teach02Wired.test.ts:124`
+- `src/test/teach02Wired.test.ts:134`
+- `src/test/teach02Wired.test.ts:136`
 
 ## Tests
 

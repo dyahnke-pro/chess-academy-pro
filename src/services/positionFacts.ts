@@ -23,6 +23,7 @@ import { strategicWhyImperative, principleToTeach, principleOnceLine } from './m
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy, type StoppedThreat } from './opponentMovePurpose';
 import { phaseVerdictLine } from './reviewPositionalAssessment';
+import { stemKeyOf } from '../utils/rotateStem';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
 import type { QuietFact } from './factSelector';
@@ -706,7 +707,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     : null;
 
   const composed = applyWeaknessBoost(
-    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere ? { text: principleOnceLine(lm?.san ?? '', ruleHere), squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null }),
+    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: principleOnceLine(lm.san, ruleHere, stemKeyOf(lm.fenBefore)), squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null }),
     input.studentWeaknesses ?? [],
   );
 

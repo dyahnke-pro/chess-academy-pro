@@ -14,7 +14,8 @@ describe('phaseVerdictLine', () => {
 
   it('speaks the band and the reasons, never the number', () => {
     const t = phaseVerdictLine(FEN, 'w', 300, 'middlegame')!;
-    expect(t).toMatch(/^Taking stock as the middlegame begins: you're clearly better — you're up a piece/);
+    expect(t).toMatch(/middlegame.*: you're clearly better — you're up a piece/);
+    expect(phaseVerdictLine(FEN, 'w', 300, 'middlegame')).toBe(t); // same board, same words
     expect(t).not.toMatch(/\d{2,}|centipawn|points? of eval/);
   });
 
