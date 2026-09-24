@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**333 lines · 12 exports · 7 importers · 3 tests · 1 audits**
+**328 lines · 12 exports · 7 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,11 +37,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2266`
-- `src/services/positionFacts.ts:717`
+- `src/services/coachFeatureService.ts:2269`
+- `src/services/positionFacts.ts:723`
 
 ### `methodBeatFor` (function) — 43 call sites
-- `src/services/coachDecider.ts:373`
+- `src/services/coachDecider.ts:381`
 - `src/services/methodBeat.need.test.ts:19`
 - `src/services/methodBeat.need.test.ts:23`
 - `src/services/methodBeat.need.test.ts:29`
@@ -102,7 +102,7 @@
 - `src/services/methodBeat.live.test.ts:111`
 - `src/services/methodBeat.live.test.ts:115`
 - `src/services/methodBeat.live.test.ts:118`
-- `src/services/positionFacts.ts:680`
+- `src/services/positionFacts.ts:686`
 
 ### `liveMethodBeatFor` (function) — 21 call sites
 - `src/services/groundedAnswer.ts:3138`

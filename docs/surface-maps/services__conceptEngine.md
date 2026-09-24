@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6012) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6024) — names `conceptEngine`
 
 ## Who calls in
 
@@ -113,7 +113,7 @@
 - `src/services/narratedContinuation.test.ts:17`
 - `src/services/narratedContinuation.test.ts:19`
 - `src/services/narratedContinuation.ts:18`
-- `src/services/narratedContinuation.ts:94`
+- `src/services/narratedContinuation.ts:95`
 
 ### `strongerSide` (function) — 3 call sites
 - `src/services/conceptEngine.test.ts:32`
@@ -154,7 +154,7 @@
 - `src/services/conceptEngine.test.ts:199`
 - `src/services/conceptEngine.test.ts:217`
 - `src/services/liveTacticsContext.ts:108`
-- `src/services/positionFacts.ts:666`
+- `src/services/positionFacts.ts:672`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -189,7 +189,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7622`
+- `src/components/Coach/CoachTeachPage.tsx:7621`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`

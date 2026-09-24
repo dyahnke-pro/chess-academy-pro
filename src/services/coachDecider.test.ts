@@ -14,7 +14,7 @@ const bundle = { facts: [PIN, BATTERY, TRIVIA], squares: SQ, incoming: new Set([
 // type says so because making it optional is exactly how review ended up
 // never supplying it. The fixture omitted it, so this gate never once
 // exercised the absent-need path it documents (found 2026-09-19).
-const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST, layers: ALL_GREY };
+const student = { rating: 1500, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY };
 
 const quiet: ImportanceSignals = {
   decision: null, cpLossCp: null, threatNet: 0, teachingBeat: false,

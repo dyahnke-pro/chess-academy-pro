@@ -64,7 +64,7 @@ describe('factStakes — what a fact is worth, from the board', () => {
 });
 
 describe('the door orders every surface by computed value', () => {
-  const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST, layers: ALL_GREY };
+  const student = { rating: 1500, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY };
   const blunder: ImportanceSignals = { decision: null, cpLossCp: 300, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
   const run = (facts: Array<[string, string, FactStakes | null]>) => decide(blunder, student, {
     facts: facts.map(([t]) => t),

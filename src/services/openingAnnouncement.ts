@@ -12,7 +12,7 @@
 //
 // One function, so the two Learn lanes that build this sentence cannot drift.
 
-import type { BookDeparture } from './bookDeparture';
+import { bookDeparture, type BookDeparture } from './bookDeparture';
 import { sayMoveNoun } from './spokenMove';
 
 export interface DetectedName {
@@ -42,4 +42,16 @@ export function openingAnnouncement(
     ? `; the usual move there was ${sayMoveNoun(departure.mainSan)}`
     : '';
   return `${who} left the book with ${sayMoveNoun(departure.san)}${main}. The line was the ${det.name}.`;
+}
+
+/** The same announcement read straight off the game's move history — the
+ *  departure is computed here, so a surface composes ONE computer, not two
+ *  (the surface-composition ceiling). */
+export function openingAnnouncementForGame(
+  det: DetectedName | null,
+  history: readonly string[],
+  spokenName: string | null,
+  studentColor: 'w' | 'b',
+): string | null {
+  return openingAnnouncement(det, bookDeparture(history), spokenName, studentColor);
 }

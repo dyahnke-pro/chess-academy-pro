@@ -38,7 +38,8 @@ export function nonPawnMaterial(fen: string): number {
   return total;
 }
 
-export type GamePhase = 'opening' | 'middlegame' | 'endgame';
+import type { GamePhase } from '../types';
+export type { GamePhase };
 
 /** Classify the phase from the position. Endgame once the queens are off OR
  *  heavy material is low; middlegame once development is done (by ply). */

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1264 lines · 9 exports · 14 importers · 12 tests · 3 audits**
+**1288 lines · 9 exports · 14 importers · 12 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,8 +13,8 @@
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:907) — names `positionFacts`
 - **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:3833) — names `ClauseKind`, `positionFacts`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3985) — names `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5905) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6012) — names `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5917) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6024) — names `positionFacts`
 
 ## Who calls in
 
@@ -64,7 +64,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8960`
+- `src/components/Coach/CoachTeachPage.tsx:8968`
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:647`
 - `src/services/computerAccuracy.audit.test.ts:113`
@@ -77,7 +77,7 @@
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 66 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8902`
+- `src/components/Coach/CoachTeachPage.tsx:8908`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:622`

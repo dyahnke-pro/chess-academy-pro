@@ -31,7 +31,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:130`
 
 ### `assessPositionalEdge` (function) — 26 call sites
-- `src/services/coachFeatureService.ts:2703`
+- `src/services/coachFeatureService.ts:2706`
 - `src/services/exchangeLedger.test.ts:97`
 - `src/services/exchangeLedger.test.ts:98`
 - `src/services/exchangeLedger.test.ts:105`
@@ -63,7 +63,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:18`
 - `src/services/phaseVerdict.test.ts:23`
 - `src/services/phaseVerdict.test.ts:28`
-- `src/services/positionFacts.ts:713`
+- `src/services/positionFacts.ts:719`
 - `src/services/reviewFullData.ts:820`
 
 ## Tests

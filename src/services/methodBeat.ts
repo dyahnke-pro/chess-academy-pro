@@ -17,6 +17,7 @@
 // it broke second, and the method is the closing takeaway — "and here is the
 // habit that finds it next time." Leading with the habit would preach before
 // the student has seen the evidence.
+import { isDecidingMoment } from './nextMoveAdvice';
 import type { ImportanceTier } from './narrationImportance';
 
 export interface MethodSignals {
@@ -261,12 +262,6 @@ export interface LiveMethodSignals {
  * intent first (the most common gap and the most teachable), then the forcing
  * scan when the move that is there is forcing.
  */
-/** The tiers where the choice decides something — one list for every live
- *  habit that must not fire on routine plies. */
-function isDecidingTier(t: ImportanceTier | undefined): boolean {
-  return t === 'critical' || t === 'only-move' || t === 'blunder' || t === 'swing';
-}
-
 /** The three live habits. Each is taught ONCE per game: the 2026-09-24 hand
  *  walk heard "their threat first, your idea second" three times in six moves —
  *  the stems rotate, so a text dedupe never matched. Keyed on the HABIT. */
@@ -298,7 +293,7 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
   // of them. It teaches only where the forcing move DECIDES the moment: a
   // critical or only-move position (or one the student can swing). Elsewhere
   // the recapture is obvious and the prompt is nagging.
-  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && isDecidingTier(s.tier) && owed('forcing-scan')) {
+  if (s.bestSan && /^[^O]*[x+#]/.test(s.bestSan) && isDecidingMoment(s.tier) && owed('forcing-scan')) {
     return beat('forcing-scan', [
       'Start with the forcing moves here — every check, every capture, before you look at anything quiet.',
       'List the checks and the captures first. Something in this position is forcing, and quiet moves can wait.',
@@ -311,7 +306,7 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
   // this teaches the routine of finding them yourself, which is the half the
   // student has to own. It is last because it is the most general of the three,
   // and it is the narrowest-gated for the same reason — see `tier` above.
-  if (s.realChoice && isDecidingTier(s.tier) && owed('candidates')) {
+  if (s.realChoice && isDecidingMoment(s.tier) && owed('candidates')) {
     return beat('candidates', [
       'Name your candidates before you calculate: two or three moves you would consider, then compare them. Picking first and checking after is how good moves get missed.',
       'Two or three candidate moves, written down in your head, before any calculation — then work out which one holds up.',

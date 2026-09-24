@@ -62,7 +62,7 @@ describe('decide — teaching points first on the LIVE vocabulary too', async ()
   const { decide } = await import('./coachDecider');
   const { NO_BOOST } = await import('./studentMomentBoost');
   const { CLAUSE_ROLE } = await import('./reviewFacetRank');
-  const student = { rating: 1500, weaknesses: [], need: null, momentBoost: NO_BOOST, layers: ALL_GREY };
+  const student = { rating: 1500, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY };
   const blunder = { decision: null, cpLossCp: 300, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
   const HANG = 'Your knight on f3 is hanging to the bishop on g4.';
   const LEANS_HERE = 'Their bishop on g4 is doing all the work.';

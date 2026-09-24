@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**927 lines · 32 exports · 928 importers · 206 tests · 39 audits**
+**927 lines · 32 exports · 930 importers · 206 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,10 +16,10 @@
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4035) — names `types`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4074) — names `CoachSurface`
 - **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4534) — names `types`
-- **Naming** (CLAUDE.md:5127) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5172) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5239) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:6015) — names `TacticsLiveContext`
+- **Naming** (CLAUDE.md:5139) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5184) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5251) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:6027) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -810,9 +810,11 @@
 - `src/services/mistakePuzzleService.ts`
 - `src/services/modelGameService.ts`
 - `src/services/moveRating.ts`
+- `src/services/narratedContinuation.ts`
 - `src/services/narrationI18n.test.ts`
 - `src/services/narrationI18n.ts`
 - `src/services/needScore.ts`
+- `src/services/nextMoveAdvice.ts`
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/openingCourse.ts`
 - `src/services/openingDetectionService.ts`

@@ -31,6 +31,7 @@ import { Chess, type Square } from 'chess.js';
 import { planFromUci } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -71,10 +72,9 @@ function whyBetter(
     const u = bestUci[0];
     const first = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
     const NAME: Record<string, string> = { q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
-    const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
     // Only when it takes MORE than the capturer is worth — an even trade is not
     // the reason a move is better.
-    if (first?.captured && NAME[first.captured] && VAL[first.captured] > VAL[first.piece]) {
+    if (first?.captured && NAME[first.captured] && MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece]) {
       return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to };
     }
   } catch { /* fall through to the plan read */ }

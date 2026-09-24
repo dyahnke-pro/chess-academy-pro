@@ -12,8 +12,8 @@
 - **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:927) — names `factSelector`
 - **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:997) — names `factSelector`, `selectFacts`, `supportedFacts`
 - **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3944) — names `factSelector`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5918) — names `factSelector`
-- **The standard post-deploy ritual** (CLAUDE.md:6014) — names `factSelector`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5930) — names `factSelector`
+- **The standard post-deploy ritual** (CLAUDE.md:6026) — names `factSelector`
 
 ## Who calls in
 
@@ -37,7 +37,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `barForTier` (function) — 5 call sites
-- `src/services/coachDecider.ts:349`
+- `src/services/coachDecider.ts:357`
 - `src/services/factSelector.test.ts:81`
 - `src/services/factSelector.test.ts:82`
 - `src/services/factSelector.test.ts:83`
@@ -50,7 +50,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `selectFacts` (function) — 17 call sites
-- `src/services/coachDecider.ts:341`
+- `src/services/coachDecider.ts:349`
 - `src/services/factSelector.test.ts:23`
 - `src/services/factSelector.test.ts:33`
 - `src/services/factSelector.test.ts:41`
@@ -69,7 +69,7 @@
 - `src/services/factSelector.test.ts:160`
 
 ### `supportedFacts` (function) — 7 call sites
-- `src/services/coachDecider.ts:361`
+- `src/services/coachDecider.ts:369`
 - `src/services/supportedFacts.test.ts:21`
 - `src/services/supportedFacts.test.ts:27`
 - `src/services/supportedFacts.test.ts:34`

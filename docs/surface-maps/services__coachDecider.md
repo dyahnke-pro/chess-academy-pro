@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**514 lines · 11 exports · 10 importers · 9 tests · 18 audits**
+**522 lines · 11 exports · 10 importers · 9 tests · 18 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,8 +27,9 @@
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4041) — names `decide`
 - **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5036) — names `decide`
 - **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5072) — names `decide`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5904) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:6013) — names `coachDecider`
+- **🔒🔒 LEARN NAMES THE MOVE — WITH ITS REASON (David 2026-09-24: "Rules can change. That was an old rule when we asked questions. We don't do that anymore.").** (CLAUDE.md:5111) — names `decide`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5916) — names `coachDecider`
+- **The standard post-deploy ritual** (CLAUDE.md:6025) — names `coachDecider`
 
 ## Who calls in
 
@@ -64,7 +65,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:602`
+- `src/services/positionFacts.ts:608`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -139,7 +140,7 @@
 - `src/services/liveNeedGate.test.ts:56`
 - `src/services/liveNeedGate.test.ts:65`
 - `src/services/liveNeedGate.test.ts:77`
-- `src/services/positionFacts.ts:775`
+- `src/services/positionFacts.ts:797`
 - `src/services/supportedFacts.test.ts:77`
 - `src/services/supportedFacts.test.ts:87`
 - `src/services/supportedFacts.test.ts:97`
@@ -163,7 +164,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:717`
+- `src/services/positionFacts.ts:723`
 
 ### `habitForCluster` (function) — 9 call sites
 - `src/services/habitJoin.test.ts:17`

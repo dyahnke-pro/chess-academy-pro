@@ -60,7 +60,7 @@ const PLAN = '[plan-now] Your plan is to push the queenside majority.';
 const LOOSE = '[loose] Your knight on c6 is loose.';
 const PRINCIPLE = '[principle] You developed a knight before the bishop.';
 const bundle = { facts: [PLAN, PRINCIPLE, LOOSE], squares: new Map<string, readonly string[]>() };
-const student = (layers = ALL_GREY) => ({ rating: 400, weaknesses: [], need: null, momentBoost: NO_BOOST, layers });
+const student = (layers = ALL_GREY) => ({ rating: 400, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers });
 
 describe('the door teaches by layer', () => {
   it('grey: the plan comes after safety and principle (the fundamental still leads — locked 2026-09-05)', () => {

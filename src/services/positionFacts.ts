@@ -80,6 +80,8 @@ import { computeNeed, type StudentNeedContext } from './needScore';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { readCriticalMoment, criticalMomentStatement, type CriticalMomentRead } from './criticalMoment';
 import { costStakes, exchangeStakes, forkPoints, lineTacticPoints, type FactStakes } from './factStakes';
+import { nextMoveAdvice, type MoveAdviceVerdict } from './nextMoveAdvice';
+import { classifyPhase } from './gamePhaseService';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -240,6 +242,10 @@ export interface PositionFactsResult {
   /** The id of the opening principle that SPOKE this ply (S2), or null — the
    *  surface adds it to `taughtPrinciples` so it is never taught twice. */
   principleSpoken: string | null;
+  /** Did this moment earn naming the student's next move, and why — null on
+   *  the opponent's ply. Surfaces gate their own move-choice lines on it (the
+   *  but-turn / hedge / compare), so there is one decision, not one per lane. */
+  moveAdvice: MoveAdviceVerdict | null;
 }
 
 export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'latent-chance' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method' | 'bluff'
@@ -713,7 +719,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? phaseVerdictLine(fen, studentColor, evalCpWhitePov * sSign, input.phaseTurn)
     : null;
 
-  const composed = applyWeaknessBoost(
+  const composedAll = applyWeaknessBoost(
     buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: principleOnceLine(lm.san, ruleHere, stemKeyOf(lm.fenBefore)), squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null }),
     input.studentWeaknesses ?? [],
   );
@@ -744,7 +750,23 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // THIS STUDENT need teaching here", which is only ever a question about their
   // own decision; on the opponent's ply it is null and importance decides.
   const studentIsMoving = input.moverColor === input.studentColor;
-  const needFor = needClauseFor(composed, input.studentWeaknesses ?? []);
+  const needFor = needClauseFor(composedAll, input.studentWeaknesses ?? []);
+  // THE MOVE IS NAMED WHERE IT IS EARNED (David 2026-09-24: "I don't want to
+  // hear the best move on every ply … key moments where the user generally
+  // makes mistakes"). The weighing + "the move is X" speaks on a deciding
+  // moment, or where THIS student's own record says they go wrong (their phase,
+  // or a hole these facts hit — the join just above). Never the rating.
+  const moveAdvice: MoveAdviceVerdict | null = studentIsMoving
+    ? nextMoveAdvice({
+      tier: importance.tier,
+      phase: classifyPhase(fen, plyNumber),
+      weaknesses: input.studentWeaknesses ?? [],
+      motifHole: needFor.hole,
+    })
+    : null;
+  const composed = moveAdvice && !moveAdvice.speak
+    ? composedAll.filter((c) => c.kind !== 'deliberation')
+    : composedAll;
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({
       ply: plyNumber,
@@ -792,6 +814,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // THIS STUDENT need teaching here", which is only a question about their
       // own move; on the opponent's ply it is null and importance decides.
       need: needVerdict,
+      moveAdvice,
       // The student's standing per teaching layer — the same record that
       // feeds the boost above, read as layers (WO-LAYERS-01).
       layers: layerStandings(input.studentWeaknesses ?? [], input.studentNeedContext?.capabilities),
@@ -837,6 +860,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ],
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
+    moveAdvice,
   };
 }
 

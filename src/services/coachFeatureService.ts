@@ -2013,6 +2013,9 @@ export function buildReviewSegments(
           // its importance step already is. Until it is, review keeps the
           // narrow gate it was tuned with and says so here.
           need: null,
+          // Review is retrospective: it names the move that WAS the one, not the
+          // student's next move, so the live advice gate does not apply.
+          moveAdvice: null,
         },
         {
           facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes,

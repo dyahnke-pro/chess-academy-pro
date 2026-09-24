@@ -30,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10445`
+- `src/components/Coach/CoachTeachPage.tsx:10453`
 - `src/services/voicePackage.test.ts:419`
 - `src/services/voicePackage.test.ts:428`
 - `src/services/voicePackage.test.ts:438`
@@ -44,11 +44,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `buildVoicePackage` (function) — 68 call sites
 - `src/components/Coach/CoachGameReview.tsx:1983`
 - `src/components/Coach/CoachGameReview.tsx:2021`
-- `src/components/Coach/CoachTeachPage.tsx:7504`
-- `src/components/Coach/CoachTeachPage.tsx:8189`
-- `src/components/Coach/CoachTeachPage.tsx:8244`
-- `src/components/Coach/CoachTeachPage.tsx:10411`
-- `src/components/Coach/CoachTeachPage.tsx:10423`
+- `src/components/Coach/CoachTeachPage.tsx:7503`
+- `src/components/Coach/CoachTeachPage.tsx:8188`
+- `src/components/Coach/CoachTeachPage.tsx:8243`
+- `src/components/Coach/CoachTeachPage.tsx:10419`
+- `src/components/Coach/CoachTeachPage.tsx:10431`
 - `src/hooks/usePhaseNarration.ts:417`
 - `src/hooks/usePhaseNarration.ts:867`
 - `src/hooks/usePositionNarration.ts:314`
@@ -112,15 +112,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:572`
 
 ### `spokenSentenceKeys` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10019`
-- `src/components/Coach/CoachTeachPage.tsx:10433`
+- `src/components/Coach/CoachTeachPage.tsx:10027`
+- `src/components/Coach/CoachTeachPage.tsx:10441`
 - `src/services/voicePackage.test.ts:525`
 - `src/services/voicePackage.test.ts:534`
 - `src/services/voicePackage.test.ts:546`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10011`
-- `src/components/Coach/CoachTeachPage.tsx:10457`
+- `src/components/Coach/CoachTeachPage.tsx:10019`
+- `src/components/Coach/CoachTeachPage.tsx:10465`
 - `src/services/voicePackage.test.ts:38`
 
 ## Tests

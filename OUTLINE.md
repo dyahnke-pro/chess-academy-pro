@@ -30,7 +30,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🔴 Plan arc / one thread per move (B).
 - 🟠 Phase narration still phrases chess facts through the model — David's call.
 - 🔴 Leftovers: rook template m17, "either works … with it", duplicate break lanes, transposition name.
-- 🟠 Hand-walks owed: moves 23-27 again; 1380 (xoS71OW-Re0), 2340 (pXBR9CxK3lQ), 2000 Black (7f2sPY2U204).
+- ✅ Hand-walk 1380 (xoS71OW-Re0): 30 moves flagged, 6 fix batches; open flags in `audit-reports/hand-walk-1380-2026-09-24.md` (king-attack lane, 2-move threat computer, engine-unverified claims).
+- 🟠 Hand-walks owed: re-walk the 1380 flags; 2340 (pXBR9CxK3lQ), 2000 Black (7f2sPY2U204).
+- ✅ The next move is named only where EARNED — `nextMoveAdvice`: a deciding moment or the student's own open record (phase / motif), never the rating; audited as `moveAdvice` on the decision row (G-MA) (David 2026-09-24: "I don't want to hear the best move on every ply").
 - 🔴 The fade: one fact, two phrasings — full teaching on grey/red tags, his 2100 shorthand on proven-green ones, per tag not per player, gradual, and back to full on a red regression (David 2026-09-24: "fade transitions into the 2100 narration style as the user gets better").
 - 🔴 Rules + theory lane: state a development rule when the board earns it — followed, broken at a cost, or broken on purpose (the exception); theory as the IDEA of the book move, the left-book move, and the common wrong move; both fade once proven (David 2026-09-24: "the rules of development for beginners … theory included").
 - ✅ Pre-commit check (`scripts/precommit-check.mjs`): typecheck ‖ test typecheck ‖ staged lint ‖ co-located tests, only when TS is staged; negative-controlled on a staged type error (blocked in ~80s).

@@ -39,6 +39,7 @@ import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, 
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision } from './coachDecisionEvents';
+import type { MoveAdviceVerdict } from './nextMoveAdvice';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
@@ -70,6 +71,12 @@ export interface StudentContext {
    *
    *  🚨 REQUIRED, and `null` is a real answer. See `momentBoost`. */
   need: { speak: boolean } | null;
+  /** Whether this moment earned naming the student's NEXT move (the weighing,
+   *  "the move is X", the but-turn), and which arm earned it — `nextMoveAdvice`.
+   *  REQUIRED; `null` = not a live next-move question (review is retrospective,
+   *  and the opponent's ply names no move of the student's). Emitted on the
+   *  decision row so an audit can see which reason carried it. */
+  moveAdvice: MoveAdviceVerdict | null;
   /** HOW MUCH THIS STUDENT'S OWN HISTORY RAISES THIS MOMENT — `boostFor(match)`
    *  for the best-matching fact here, computed by the SURFACE with the existing
    *  fine-grained join (`matchTacticPattern(conceptId) ?? matchClauseKind(kind)`).
@@ -237,6 +244,7 @@ function emit(
     reason: d.reason,
     teaches: d.teaches,
     needSpeak: student.need?.speak ?? null,
+    moveAdvice: student.moveAdvice ? (student.moveAdvice.reason ?? 'none') : null,
     spokenCount: d.spoken.length,
     quietCount: d.quiet.length,
     quietBy: d.quiet.reduce<Record<string, number>>((acc, q) => {

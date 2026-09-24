@@ -501,6 +501,18 @@ async function main() {
         unattributed.length === 0,
         `${silent.length}/${decisions.length} silent — importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} empty=${silent.filter((d) => d.reason === 'empty').length} proven=${silent.filter((d) => d.reason === 'proven').length}${unattributed.length ? ` UNATTRIBUTED=${unattributed.length}` : ''}`,
       );
+      // THE MOVE IS NAMED WHERE IT IS EARNED (David 2026-09-24: "I don't want
+      // to hear the best move on every ply"). Every live next-move row names
+      // WHY it spoke or held back, and over a real game the held-back case must
+      // appear — a gate that earns every ply is no gate.
+      const adviceRows = decisions.filter((d) => d.moveAdvice != null);
+      const heldBack = adviceRows.filter((d) => d.moveAdvice === 'none').length;
+      const byReason = adviceRows.reduce((acc, d) => { acc[d.moveAdvice] = (acc[d.moveAdvice] ?? 0) + 1; return acc; }, {});
+      record(
+        'G-MA. the next move is named only where earned (not every ply)',
+        adviceRows.length === 0 || (adviceRows.every((d) => ['deciding', 'phase-record', 'motif-record', 'none'].includes(d.moveAdvice)) && (adviceRows.length < 5 || heldBack > 0)),
+        `${adviceRows.length} next-move rows — ${JSON.stringify(byReason)}`,
+      );
       // POSTURE. A live game legitimately produces BOTH: the running
       // commentary (`useLiveCoach`, `usePhaseNarration`) declares 'interrupt'
       // because silence is its default, while "read this position" and

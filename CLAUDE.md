@@ -5106,6 +5106,18 @@ copy-the-coach):
    hedge carries no COUNT stem because the critical-moment read owns the count.
 Withholding stays only where a surface is literally a QUESTION the student is
 answering (a drill, a find-the-move, a gem before it is played).
+4. **The move is named WHERE IT IS EARNED, never every ply (David 2026-09-24:
+   "I don't want to hear the best move on every ply … key moments where the
+   user generally makes mistakes").** `nextMoveAdvice` decides for every lane
+   that names the student's next move (the weighing + "the move is X", the
+   but-turn, the hedge, the compare, "your strongest reply"): a DECIDING moment
+   (importance tier critical / only-move / swing / blunder / mate), or THIS
+   student's own open record — mistakes in this phase (`classifyPhase`, the
+   same classifier the spine files them under) or a hole these facts hit (the
+   need join, pre-matched). Never the rating: "beginners err in the opening" is
+   true of a population; the RECORD says it about this person. Emitted on the
+   `coach-decision` row as `moveAdvice`; asserted by `audit-concept-gameplay-prod`
+   row G-MA (the held-back case must appear over a real game).
 
 **KEPT in Learn** because none of them stop the board: in-place drills, live
 gem detection (names the opportunity, withholds the square), fork-in-the-road

@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:6038) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:6050) — names `refutedAlternative`
 
 ## Who calls in
 
@@ -25,7 +25,7 @@
 
 ### `refutedAlternative` (function) — 7 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/coachFeatureService.ts:3210`
+- `src/services/coachFeatureService.ts:3213`
 - `src/services/openingGenerator.ts:2160`
 - `src/services/refutedAlternative.test.ts:62`
 - `src/services/refutedAlternative.test.ts:88`
@@ -33,7 +33,7 @@
 - `src/services/refutedAlternative.test.ts:114`
 
 ### `candidatesForPosition` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3192`
+- `src/services/coachFeatureService.ts:3195`
 - `src/services/openingGenerator.ts:2157`
 - `src/services/refutedAlternative.test.ts:131`
 - `src/services/refutedAlternative.test.ts:133`

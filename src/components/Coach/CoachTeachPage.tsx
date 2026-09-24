@@ -89,9 +89,8 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
-import { openingAnnouncement } from '../../services/openingAnnouncement';
+import { openingAnnouncementForGame } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn } from '../../utils/justCaptured';
-import { bookDeparture } from '../../services/bookDeparture';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
@@ -7795,7 +7794,7 @@ export function CoachTeachPage(): JSX.Element {
       // (`openingAnnouncement`): first identification, then the settled
       // name once, where the game leaves book — never every refinement.
       const announce = det && det.name !== learnMemRef.current.queuedOpeningName
-        ? openingAnnouncement(det, bookDeparture(history), learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b')
+        ? openingAnnouncementForGame(det, history, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b')
         : null;
       if (det && announce) {
         const firstResolve = learnMemRef.current.spokenOpeningName === null;
@@ -8700,6 +8699,13 @@ export function CoachTeachPage(): JSX.Element {
                 // teaching. A modest but-turn rate on a live engine beats a high
                 // one on a dead one. Board-true (G0); guarded to student-to-move.
                 let turnRead: ReturnType<typeof tacticalReadFromLines> = null;
+                // THE MOVE IS NAMED ONLY WHERE IT IS EARNED (David 2026-09-24:
+                // "I don't want to hear the best move on every ply"). The pre-move
+                // register (but-turn / hedge / compare) and the plain
+                // recommendation wait for the position read's `moveAdvice` —
+                // a deciding moment, or this student's own record — below.
+                let pendingRegister: string | null = null;
+                let moveAdviceHere: Awaited<ReturnType<typeof computePositionFacts>>['moveAdvice'] = null;
                 try {
                   if (studentBest?.topLines && probe.turn() === (playerColor === 'white' ? 'w' : 'b')) {
                     turnRead = tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 });
@@ -8728,7 +8734,7 @@ export function CoachTeachPage(): JSX.Element {
                         : null;
                       const reg = [butTurn, hedge, compare].filter(Boolean).join(' ');
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
-                      if (gradedReg) queueSpokenHint(probe.fen(), gradedReg);
+                      pendingRegister = gradedReg || null;
                     }
                     // TAKE-ADVANTAGE-OF-THE-GAP (David 2026-08-27): the throttled
                     // opponent under-played its ideal and handed you a gift.
@@ -8953,6 +8959,8 @@ export function CoachTeachPage(): JSX.Element {
                       // Each opening principle is taught once per game (S2).
                       taughtPrinciples: learnMemRef.current.principleTaught,
                     });
+                    moveAdviceHere = pf.moveAdvice;
+                    if (pendingRegister && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), pendingRegister);
                     standingRef.current.rememberAll(pf.remember);
                     if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
                     // The student is to move at `probe`; their coming move is ply history+1.
@@ -9149,7 +9157,7 @@ export function CoachTeachPage(): JSX.Element {
                         learnMemRef.current.thinkAloudLastPly = plyNow;
                         captureEvent('think_aloud_offered', { surface: 'coach-teach', withheld: thinkMoment.withheldSan });
                         facts.push(thinkMoment.facts);
-                      } else if (recUci && recUci.length >= 4) {
+                      } else if (recUci && recUci.length >= 4 && moveAdviceHere?.speak) {
                         // PRIORITY-FIRST (the speedrun's framing beat): when
                         // the best move attacks a structurally weak enemy
                         // pawn, name the PRIORITY and withhold the move —
@@ -9627,7 +9635,7 @@ export function CoachTeachPage(): JSX.Element {
                     try {
                       const det = detectOpening(chainHistory);
                       if (det && det.name) learnMemRef.current.detectedOpeningName = det.name;
-                      const announce = openingAnnouncement(det, bookDeparture(chainHistory), learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b');
+                      const announce = openingAnnouncementForGame(det, chainHistory, learnMemRef.current.spokenOpeningName, playerColor === 'white' ? 'w' : 'b');
                       if (det && announce) {
                         const firstResolve = learnMemRef.current.spokenOpeningName === null;
                         // NOT marked spoken here either. This site pushes into

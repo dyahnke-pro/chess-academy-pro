@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**154 lines · 7 exports · 6 importers · 3 tests · 1 audits**
+**158 lines · 7 exports · 6 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3883) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6013) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:6025) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -32,7 +32,7 @@
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:232`
+- `src/services/coachDecider.ts:239`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

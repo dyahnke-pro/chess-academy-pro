@@ -51,6 +51,10 @@ export interface CoachDecisionRow {
    *  `computeNeed`, where it is actually computed — that is `NeedScoreRow`
    *  below; join the two on the ply rather than faking a score here. */
   needSpeak: boolean | null;
+  /** Which arm earned naming the student's next move here — 'deciding' (the
+   *  board), 'phase-record' / 'motif-record' (their own record), 'none' (it
+   *  was held back), or null when this was not a live next-move question. */
+  moveAdvice: string | null;
   /** How many facts survived, and how many the selector silenced. */
   spokenCount: number;
   quietCount: number;
