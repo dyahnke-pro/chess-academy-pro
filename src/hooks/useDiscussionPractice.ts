@@ -430,13 +430,15 @@ export function useDiscussionPractice(
 
       const followedBook = args.inBook && !!args.bookMoveSan
         && args.playedSan.replace(/[+#]$/, '') === args.bookMoveSan.replace(/[+#]$/, '');
-      if (!followedBook) {
-        if (!dialSeededRef.current) {
-          dialSeededRef.current = true;
-          setHintDial(recordAttempt(startDial(args.studentRating), cpLoss));
-        } else {
-          setHintDial((d) => recordAttempt(d, cpLoss));
-        }
+      // Seed from the rating on the FIRST evaluated move, book or not — a
+      // student who opens with a prepared line must not sit on the unrated
+      // default's register until they leave book.
+      if (!dialSeededRef.current) {
+        dialSeededRef.current = true;
+        const seeded = startDial(args.studentRating);
+        setHintDial(followedBook ? seeded : recordAttempt(seeded, cpLoss));
+      } else if (!followedBook) {
+        setHintDial((d) => recordAttempt(d, cpLoss));
       }
 
       const slip = detectSlip({

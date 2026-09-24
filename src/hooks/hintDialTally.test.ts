@@ -65,7 +65,9 @@ describe('the hint dial reads every evaluated move', () => {
     const { useDiscussionPractice } = await import('./useDiscussionPractice');
     const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach', capabilityOrigin: 'learn' }));
 
-    expect(result.current.hintDial.register).toBe('moderate');
+    // Unrated opens at the lowest setting (DEFAULT_STUDENT_RATING) — this app
+    // attacks beginners.
+    expect(result.current.hintDial.register).toBe('obvious');
 
     for (let i = 0; i < 3; i += 1) {
       // `act` so the dial's state update is flushed into `result.current` —

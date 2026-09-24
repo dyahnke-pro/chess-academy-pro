@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**864 lines · 10 exports · 9 importers · 4 tests · 0 audits**
+**866 lines · 10 exports · 9 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -59,9 +59,9 @@
 - `src/components/Openings/OpeningPlayMode.tsx:274`
 - `src/components/Openings/PlayableLinePlayer.tsx:205`
 - `src/hooks/hintDialTally.test.ts:66`
-- `src/hooks/hintDialTally.test.ts:90`
-- `src/hooks/hintDialTally.test.ts:109`
-- `src/hooks/hintDialTally.test.ts:120`
+- `src/hooks/hintDialTally.test.ts:92`
+- `src/hooks/hintDialTally.test.ts:111`
+- `src/hooks/hintDialTally.test.ts:122`
 - `src/hooks/learnSilentCapture.test.ts:80`
 - `src/hooks/learnSilentCapture.test.ts:115`
 - `src/hooks/learnSilentCapture.test.ts:197`
