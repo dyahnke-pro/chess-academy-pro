@@ -22,8 +22,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingAnnouncement` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7793`
-- `src/components/Coach/CoachTeachPage.tsx:9589`
+- `src/components/Coach/CoachTeachPage.tsx:7790`
+- `src/components/Coach/CoachTeachPage.tsx:9616`
 - `src/services/computedVoiceAudit.report.test.ts:309`
 - `src/services/openingAnnouncement.test.ts:10`
 - `src/services/openingAnnouncement.test.ts:13`

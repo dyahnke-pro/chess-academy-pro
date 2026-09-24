@@ -36,7 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:55`
 - `src/services/exchangeLedger.test.ts:241`
 - `src/services/exchangeLedger.test.ts:242`
-- `src/services/gemCrushLines.ts:285`
+- `src/services/gemCrushLines.ts:286`
 
 ### `describeExchange` (function) — 4 call sites
 - `src/services/exchangeLedger.test.ts:18`

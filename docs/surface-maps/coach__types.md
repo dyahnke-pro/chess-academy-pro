@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**927 lines · 32 exports · 927 importers · 206 tests · 39 audits**
+**927 lines · 32 exports · 928 importers · 206 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -757,6 +757,7 @@
 - `src/services/gameReviewService.test.ts`
 - `src/services/gameStyleClassifier.ts`
 - `src/services/gamesService.ts`
+- `src/services/gemCrushLines.ts`
 - `src/services/groundedAnswer.engineReasoning.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`

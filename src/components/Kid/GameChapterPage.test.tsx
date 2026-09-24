@@ -387,23 +387,25 @@ describe('GameChapterPage', () => {
   });
 
   it('hint button advances through hint levels and reveals nudge text', async () => {
+    // 10s waits: alone this passes in ms, but beside ~300 files in ship-check's
+    // changed-file lane the 1s default ran out (2026-09-24). A budget, not a bug.
     renderChapterPage();
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-begin-btn')).toBeInTheDocument();
-    });
+    }, { timeout: 10_000 });
 
     fireEvent.click(screen.getByTestId('chapter-begin-btn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('chapter-next-btn')).toBeInTheDocument();
-    });
+    }, { timeout: 10_000 });
 
     fireEvent.click(screen.getByTestId('chapter-next-btn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('hint-button')).toBeInTheDocument();
-    });
+    }, { timeout: 10_000 });
 
     // No hint text before clicking
     expect(screen.queryByTestId('chapter-hint-text')).not.toBeInTheDocument();
