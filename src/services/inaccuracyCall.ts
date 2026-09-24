@@ -358,7 +358,8 @@ export function gambitFile(fenBefore: string, playedSan: string, moverColor: 'wh
     let kingFile: string | null = null;
     for (const row of b.board()) for (const c of row) if (c && c.type === 'k' && c.color === them) kingFile = c.square[0];
     if (!kingFile) return null;
-    const near = (f: string): boolean => Math.abs(kingFile!.charCodeAt(0) - f.charCodeAt(0)) <= 1;
+    const kf = kingFile;
+    const near = (f: string): boolean => Math.abs(kf.charCodeAt(0) - f.charCodeAt(0)) <= 1;
     // A LEVER ON THEIR KING'S COVER: the pushed pawn now hits one of their
     // pawns on a file beside the king (Naroditsky's a5 against b6, "prying
     // open the king") — the file it pries is that pawn's.

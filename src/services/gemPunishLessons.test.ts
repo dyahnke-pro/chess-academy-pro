@@ -68,7 +68,7 @@ describe('gem → coach punish lesson', () => {
   }, 120000);
 
   it('every beat speaks — no silent ply reaches the student', () => {
-    for (const { gem, lesson } of CONVERTED) {
+    for (const { lesson } of CONVERTED) {
       if (!lesson) continue;
       expect(lesson.whyBad.trim().length, `${lesson.name}: empty whyBad`).toBeGreaterThan(0);
       expect(lesson.whyPunish.trim().length, `${lesson.name}: empty whyPunish`).toBeGreaterThan(0);
