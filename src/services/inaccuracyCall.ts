@@ -30,7 +30,7 @@
 import { Chess, type Square } from 'chess.js';
 import { planFromUci } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
-import { MISTAKE_CP } from './engineConstants';
+import { MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 import { MATERIAL_VALUE } from './pieceValues';
 
 export interface InaccuracyCall {
@@ -173,6 +173,9 @@ export function callInaccuracyDetailed(args: {
    *  blunder regardless of the centipawns, and so must this. */
   missedMate?: number | null;
   allowedMate?: number | null;
+  /** The mover's eval after the move (their perspective), when a real
+   *  centipawn read — null/absent when unknown or a mate score. */
+  moverEvalAfterCp?: number | null;
   /** Whose move it was. */
   side: 'student' | 'coach';
   moverColor: 'white' | 'black';
@@ -315,6 +318,17 @@ export function callInaccuracyDetailed(args: {
   const gambit = quality === 'blunder' ? null : gambitFile(args.fenBefore, args.playedSan, args.moverColor);
   if (gambit) {
     const said = `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. The engine prefers ${args.bestSan}${better ? `, to ${better.why}` : ''}, so it is a practical try, not a free one.`;
+    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
+  }
+  // STILL WINNING IS SAID FIRST (hand walk 1380, move 22: "gxh5 was a
+  // mistake" — it won two pieces and left White +4). When the mover is still
+  // clearly winning after the move, the teaching is the cleaner way, not a
+  // grade: "gxh5 still wins, but Rxf8+ was cleaner — it would land a fork."
+  const after = args.moverEvalAfterCp;
+  if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
+    const said = better
+      ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — it would ${better.why}.`
+      : `${args.playedSan} still wins, but ${args.bestSan} was cleaner.`;
     return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
   }
   const head = quality === 'blunder'

@@ -10232,6 +10232,7 @@ export function CoachTeachPage(): JSX.Element {
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       replyPvUci: mid.topLines?.[0]?.moves ?? [],
                       cpLoss,
+                      moverEvalAfterCp: bothCp ? mid.evaluation * sign : null,
                       studentColor: playerColor,
                       ...mateContext(preStudentRead, mid, playerColor),
                     });

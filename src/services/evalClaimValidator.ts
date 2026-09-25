@@ -22,6 +22,8 @@
  * spoken or shown.
  */
 
+import { claimSentences } from '../utils/claimSentences';
+
 export interface EvalClaimViolation {
   /** The offending phrase, verbatim. */
   claim: string;
@@ -46,7 +48,7 @@ const BETTER_RE = /\b(white|black)\s+is\s+(?:clearly\s+|much\s+|significantly\s+
 
 /** Split into rough sentence units (mirrors boardClaimValidator). */
 function splitSentences(text: string): string[] {
-  return text.split(/(?<=[.!?])\s+|\n+/).map((s) => s.trim()).filter(Boolean);
+  return claimSentences(text, { newlines: true });
 }
 
 /** Validate evaluation claims in `text` against the engine eval.

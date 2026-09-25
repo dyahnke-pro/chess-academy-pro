@@ -321,3 +321,23 @@ describe('the better move\'s reason is what it TAKES (hand walk 2026-09-24)', ()
     expect(call?.said ?? '').toMatch(/take the queen on d8/);
   });
 });
+
+// Hand walk 1380, move 22: gxh5 won two pieces and left White +4.2 (engine
+// depth 16); Rxf8+ was +6.8. "gxh5 was a mistake" graded a winning move; the
+// teaching is the cleaner way.
+describe('still winning after the move is said first', () => {
+  const fen = '3R1rk1/pp2q1pp/2p1n3/4Pp1n/1b4P1/1BN1BR1P/PPP5/4Q1K1 w - - 1 22';
+  const base = { fenBefore: fen, playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: ['d8f8', 'g8f8'], cpLoss: 261, side: 'student' as const, moverColor: 'white' as const };
+  it('"still wins, but … was cleaner" when the mover stays clearly winning', () => {
+    const call = callInaccuracy({ ...base, moverEvalAfterCp: 418 });
+    expect(call?.said).toMatch(/^gxh5 still wins, but Rxf8\+ was cleaner/);
+    expect(call?.said).not.toMatch(/mistake|blunder/);
+  });
+  it('the grade stands when the position is no longer clearly won', () => {
+    const call = callInaccuracy({ ...base, moverEvalAfterCp: 120 });
+    expect(call?.said).toMatch(/was a (mistake|blunder)/);
+  });
+  it('unknown eval keeps the grade', () => {
+    expect(callInaccuracy({ ...base })?.said).toMatch(/was a (mistake|blunder)/);
+  });
+});

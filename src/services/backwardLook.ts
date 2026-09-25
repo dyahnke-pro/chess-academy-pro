@@ -97,6 +97,10 @@ export function backwardLook(args: {
    *  100,000. */
   missedMate?: number | null;
   allowedMate?: number | null;
+  /** The mover's eval AFTER the move, mover's perspective, when it is a real
+   *  centipawn read — lets the verdict say "still wins, but X was cleaner"
+   *  instead of "was a mistake" when the student is still clearly winning. */
+  moverEvalAfterCp?: number | null;
   /** WHOSE move is being looked back at. Defaults to the student.
    *
    *  The coach's own moves go through the SAME function deliberately. They ask
@@ -250,6 +254,7 @@ export function backwardLook(args: {
             cpLoss: args.cpLoss,
             missedMate: args.missedMate ?? null,
             allowedMate: args.allowedMate ?? null,
+            moverEvalAfterCp: args.moverEvalAfterCp ?? null,
             side: 'student',
             moverColor: args.studentColor,
           });
@@ -277,6 +282,7 @@ export function backwardLook(args: {
         cpLoss: args.cpLoss,
         missedMate: args.missedMate ?? null,
         allowedMate: args.allowedMate ?? null,
+        moverEvalAfterCp: args.moverEvalAfterCp ?? null,
         side: 'student',
         moverColor: args.studentColor,
       });

@@ -180,7 +180,6 @@ function shortfallText(c: Candidate): string {
   if (c.shortfall === 'drops-material' && c.drops) {
     return `${c.san}? That drops the ${PNAME[c.drops.piece] ?? 'piece'} on ${c.drops.square}.`;
   }
-  if (c.shortfall === 'clearly-worse') return `${c.san}? Clearly worse here.`;
   return `${c.san} is playable, but not as precise.`;
 }
 
@@ -200,7 +199,10 @@ export function deliberationFacts(d: Deliberation): string {
   // and teaches nothing about it. An alternative is weighed out loud only when
   // the board says WHY it falls short: a line that proves it, a piece it drops,
   // or a gap big enough to call clearly worse.
-  const reasoned = meaningfulAlternatives(d).filter((a) => a.shortfall !== 'less-precise' || !!a.proof);
+  // "Clearly worse here" is a verdict, not a reason (rule 1, hand walk 1380:
+  // "cxb3? Clearly worse here."). An alternative is ruled out loud only with
+  // the line that proves it or the piece it drops.
+  const reasoned = meaningfulAlternatives(d).filter((a) => !!a.proof || (a.shortfall === 'drops-material' && !!a.drops));
   if (!d.isRealChoice || reasoned.length === 0) return '';
   // THE VERDICT CARRIES ITS REASON, or it is not said (David 2026-09-24:
   // "The move is Rxf3" alone is an order, not teaching). The weighing still
