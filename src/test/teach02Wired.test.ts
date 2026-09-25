@@ -83,7 +83,7 @@ describe('live — the same four facts are clauses of the composer', () => {
   it('stopped: the reply that took the student\'s threat off the board', async () => {
     const r = await computePositionFacts({
       posture: 'walk', fen: S[6], moverColor: 'w', studentColor: 'w', analysis: flat,
-      lastMove: { fenBefore: S[4], san: 'Qh5', cpLoss: 0, inBook: false, reads: null },
+      lastMove: { fenBefore: S[4], san: 'Qh5', cpLoss: 0, historySans: null, reads: null },
       opponentLastMove: { fenBefore: S[5], san: 'g6' },
     });
     expect(r.clauses.find((c) => c.kind === 'stopped')?.text).toMatch(/g6 has a point: it stops the mate with Qxf7\./);
@@ -92,7 +92,7 @@ describe('live — the same four facts are clauses of the composer', () => {
     const f2 = fens(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'a6']);
     const r = await computePositionFacts({
       posture: 'walk', fen: f2[6], moverColor: 'w', studentColor: 'w', analysis: flat,
-      lastMove: { fenBefore: f2[4], san: 'Qh5', cpLoss: 0, inBook: false, reads: null },
+      lastMove: { fenBefore: f2[4], san: 'Qh5', cpLoss: 0, historySans: null, reads: null },
       opponentLastMove: { fenBefore: f2[5], san: 'a6' },
     });
     expect(r.clauses.some((c) => c.kind === 'stopped')).toBe(false);
@@ -104,28 +104,28 @@ describe('live — the same four facts are clauses of the composer', () => {
     const fan = [{ evaluation: 20, mate: null, moves: ['g8f6'] }, { evaluation: 700, mate: null, moves: ['d8h4', 'f3h4'] }];
     const popular = [{ san: 'Nf6', games: 60, pct: 60 }, { san: 'Qh4', games: 40, pct: 40 }];
     const base = { posture: 'walk' as const, fen: f3[7], moverColor: 'b' as const, studentColor: 'b' as const, analysis: flat };
-    const r = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, inBook: false, reads: null, popular, fanBefore: fan } });
+    const r = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, historySans: null, reads: null, popular, fanBefore: fan } });
     // The claim, whichever wrapper the board draws: the share, the move, the
     // proven line and its result.
     const refuted = r.clauses.find((c) => c.kind === 'refuted')?.text ?? '';
     expect(refuted).toMatch(/40% of players at your level/);
     expect(refuted).toMatch(/Qh4 and Nxh4 — they win a queen/);
     // NEGATIVE: the engine never read the popular move → no cost to state.
-    const none = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, inBook: false, reads: null, popular, fanBefore: [fan[0]] } });
+    const none = await computePositionFacts({ ...base, lastMove: { fenBefore: f3[5], san: 'Nf6', cpLoss: 0, historySans: null, reads: null, popular, fanBefore: [fan[0]] } });
     expect(none.clauses.some((c) => c.kind === 'refuted')).toBe(false);
   });
 
   it('rule: the principle is taught once, and the surface is told which', async () => {
     const own = await computePositionFacts({
       posture: 'walk', fen: fens(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'])[5], moverColor: 'b', studentColor: 'b', analysis: flat,
-      lastMove: { fenBefore: fens(['e4', 'e5', 'Nf3'])[3], san: 'Nc6', cpLoss: 0, inBook: false, reads: null }, taughtPrinciples: new Set(),
+      lastMove: { fenBefore: fens(['e4', 'e5', 'Nf3'])[3], san: 'Nc6', cpLoss: 0, historySans: null, reads: null }, taughtPrinciples: new Set(),
     });
     expect(own.clauses.find((c) => c.kind === 'rule')?.text).toMatch(/Nc6/);
     expect(own.principleSpoken).not.toBeNull();
     // NEGATIVE: a surface that does not track principles gets none.
     const untracked = await computePositionFacts({
       posture: 'walk', fen: fens(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'])[5], moverColor: 'b', studentColor: 'b', analysis: flat,
-      lastMove: { fenBefore: fens(['e4', 'e5', 'Nf3'])[3], san: 'Nc6', cpLoss: 0, inBook: false, reads: null },
+      lastMove: { fenBefore: fens(['e4', 'e5', 'Nf3'])[3], san: 'Nc6', cpLoss: 0, historySans: null, reads: null },
     });
     expect(untracked.clauses.some((c) => c.kind === 'rule')).toBe(false);
   });

@@ -9044,7 +9044,7 @@ export function CoachTeachPage(): JSX.Element {
                       // record of it. `reads: null` when no pre-move read landed:
                       // absent, never a guess.
                       lastMove: {
-                        fenBefore, san: move.san, cpLoss: studentCpLoss, inBook: studentMoveInBook,
+                        fenBefore, san: move.san, cpLoss: studentCpLoss, historySans: move.history,
                         reads: preStudentRead ? {
                           historySans: move.history,
                           bestMoveUci: preStudentRead.bestMove || null,

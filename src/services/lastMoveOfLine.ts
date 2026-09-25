@@ -60,15 +60,13 @@ export function lastMoveIfStudent(
   sans: readonly string[],
   studentColor: 'white' | 'black',
   liveFen: string | null,
-  /** Whether the line is still theory after its last move — REQUIRED so no
-   *  surface silently reads a book move as ungraded-and-unteachable. */
-  inBook: boolean,
   cpLoss: number | null = null,
-): { fenBefore: string; san: string; cpLoss: number | null; inBook: boolean; reads: null } | null {
+): { fenBefore: string; san: string; cpLoss: number | null; historySans: readonly string[]; reads: null } | null {
   const lm = lastMoveOfLine(sans);
   if (!lm || lm.mover !== studentColor) return null;
   if (liveFen && boardOf(liveFen) !== boardOf(lm.fenAfter)) return null;
   // `reads: null` — a line replayed from a PGN carries no engine reads, so the
   // composer attributes no fundamental here (C4); an honest gap, not a guess.
-  return { fenBefore: lm.fenBefore, san: lm.san, cpLoss, inBook, reads: null };
+  // The line itself travels as raw data — the composer asks whether it is theory.
+  return { fenBefore: lm.fenBefore, san: lm.san, cpLoss, historySans: sans, reads: null };
 }

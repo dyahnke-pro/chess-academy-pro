@@ -51,7 +51,7 @@ async function needRows(withReads: boolean): Promise<NeedScoreRow[]> {
   try {
     await computePositionFacts({
       posture: 'walk', fen: FEN_NOW, moverColor: 'b', studentColor: 'b', analysis,
-      lastMove: { fenBefore: FEN_BEFORE_NB6, san: 'Nb6', cpLoss: 120, inBook: false, reads: withReads ? reads : null },
+      lastMove: { fenBefore: FEN_BEFORE_NB6, san: 'Nb6', cpLoss: 120, historySans: null, reads: withReads ? reads : null },
       studentNeedContext: ctx,
     });
   } finally { off(); }
@@ -88,7 +88,7 @@ describe('C4 — by statement: the live lane computes the id, and every live sur
 
   it('Learn hands the composer its reads; the two PGN-driven hooks say reads: null through the one replay helper', () => {
     const teach = read('src/components/Coach/CoachTeachPage.tsx');
-    expect(teach).toMatch(/lastMove: \{\s*fenBefore, san: move\.san, cpLoss: studentCpLoss, inBook: studentMoveInBook,\s*reads: preStudentRead \? \{/);
+    expect(teach).toMatch(/lastMove: \{\s*fenBefore, san: move\.san, cpLoss: studentCpLoss, historySans: move\.history,\s*reads: preStudentRead \? \{/);
     expect(read('src/services/lastMoveOfLine.ts')).toMatch(/reads: null \}/);
     expect(read('src/hooks/useLiveCoach.ts')).toMatch(/playedPvUci: n\.replyPvUci,/);
     // Play hands the hook the lines it graded on.

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1367 lines · 11 exports · 17 importers · 15 tests · 3 audits**
+**1371 lines · 11 exports · 17 importers · 15 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -71,8 +71,8 @@
 
 ### `clauseText` (function) — 12 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9083`
-- `src/hooks/useLiveCoach.ts:296`
-- `src/hooks/usePhaseNarration.ts:648`
+- `src/hooks/useLiveCoach.ts:295`
+- `src/hooks/usePhaseNarration.ts:647`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
@@ -80,13 +80,13 @@
 - `src/services/positionFacts.test.ts:306`
 - `src/services/positionFacts.test.ts:364`
 - `src/services/positionFacts.test.ts:365`
-- `src/services/positionReadComposer.ts:117`
+- `src/services/positionReadComposer.ts:116`
 - `src/services/whyBestMove.ts:103`
 
 ### `computePositionFacts` (function) — 77 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9021`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
-- `src/hooks/useLiveCoach.ts:265`
+- `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:622`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
@@ -148,7 +148,7 @@
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
-- `src/services/positionReadComposer.ts:99`
+- `src/services/positionReadComposer.ts:98`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:89`
 - `src/test/computedOrderWired.test.ts:32`

@@ -1,7 +1,7 @@
 // THE STUDENT'S OWN MOVE HAS A WHY (re-walk 1380, 2026-09-25). Two causes of
 // silence, both fixed at the root:
 //  1. a BOOK move is never graded (cpLoss null) and the principle lane wanted a
-//     graded clean move — so 1.e4, 2.Nf3, 3.d4 said nothing. `inBook` is now a
+//     graded clean move — so 1.e4, 2.Nf3, 3.d4 said nothing. `historySans` (the composer tests it with isBookLine) is now a
 //     required field and theory counts as clean.
 //  2. a principle spoke once a game and then went silent — Bc4, Be3 and every
 //     later developing move had nothing. Now: full the first time, a short stem
@@ -20,7 +20,7 @@ async function ruleAt(sans: string[], i: number, taught: Set<string>, inBook: bo
   const fenBefore = c.fen(); c.move(sans[i]); const mid = c.fen(); c.move(sans[i + 1]);
   const r = await computePositionFacts({ posture: 'walk', fen: c.fen(), moverColor: 'w', studentColor: 'w', analysis: flat,
     opponentLastMove: { fenBefore: mid, san: sans[i + 1] },
-    lastMove: { fenBefore, san: sans[i], cpLoss, inBook, reads: null }, taughtPrinciples: taught } as never);
+    lastMove: { fenBefore, san: sans[i], cpLoss, historySans: inBook ? sans.slice(0, i + 1) : null, reads: null }, taughtPrinciples: taught } as never);
   return r.clauses.find((x) => x.kind === 'rule')?.text ?? null;
 }
 
@@ -34,7 +34,7 @@ describe('the student\'s own move has a why', () => {
     expect(await ruleAt(PHILIDOR, 0, new Set(), false, null)).toBeNull();
   });
   it('a principle already taught returns as a short stem about THIS move', async () => {
-    expect(await ruleAt(PHILIDOR, 10, new Set(['development', 'center']), true, null)).toMatch(/^Bc4 develops into the game/);
+    expect(await ruleAt(PHILIDOR, 10, new Set(['development', 'center']), false, 0)).toMatch(/^Bc4 develops into the game/);
   });
   it('a pawn pushed into contact OPENS the center — true after the exchange', async () => {
     expect(await ruleAt(PHILIDOR, 4, new Set(['center', 'development']), true, null)).toBe('d4 opens up the center.');

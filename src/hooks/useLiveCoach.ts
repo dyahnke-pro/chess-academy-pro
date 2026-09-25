@@ -29,7 +29,6 @@ import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { logAppAudit } from '../services/appAuditor';
 import { useAppStore } from '../stores/appStore';
 import { computePositionFacts, clauseText, type LastMoveInput } from '../services/positionFacts';
-import { isBookLine } from '../services/openingDetectionService';
 import { rememberSpokenSquares } from '../services/spokenSquares';
 import { actuate } from '../services/coachActuator';
 import { useWeaknessSignals } from './useWeaknessSignals';
@@ -434,7 +433,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
           fenBefore: n.fenBefore,
           san: n.san,
           cpLoss: Math.max(0, (studentBestEval ?? studentEvalBefore) - studentEvalAfter),
-          inBook: isBookLine(n.historySans),
+          historySans: n.historySans,
           // THE RAW READS, forwarded whole (C4) — the composer attributes the
           // fundamental; this hook composes no fact-computer for it. The
           // notification's evals are WHITE-POV cp, a mate as the sentinel, which
