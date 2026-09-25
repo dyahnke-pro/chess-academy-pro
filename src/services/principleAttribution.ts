@@ -1128,7 +1128,12 @@ const DETECTORS: Detector[] = [
     if (targets.squares.size === 0 && targets.files.size === 0) return no(c, 'no-plan', `${plans.length} plan(s) but none names a square or file to aim at`);
     const serves = (sq: string): boolean => targets.squares.has(sq) || targets.files.has(sq[0]);
     if (serves(last.to) || serves(last.from)) return no(c, 'no-plan', `${last.san} DOES serve the plan (${planHeadline(plans[0])})`);
-    if (!(isForcing(best.san) || serves(best.to))) return no(c, 'no-plan', `the best move ${best.san} does not serve the plan either — the plan is not what this position was about`);
+    // The best move must SERVE the plan — the sentence says "${best} goes
+    // there". A forcing best move that lands elsewhere means the position was
+    // about the tactic, not the plan (re-walk 1380, 30.Qe2: "the target was to
+    // get your passed pawn on e5 promoting; hxg6 goes there" — hxg6 is a
+    // capture on the other wing).
+    if (!serves(best.to)) return no(c, 'no-plan', `the best move ${best.san} does not serve the plan either — the plan is not what this position was about`);
     const headline = planHeadline(plans[0]);
     return att('no-plan', 1, { squares: [best.to], moves: [best.san], pvMoves: [] }, { played: last.san, better: best.san, plan: headline });
   },

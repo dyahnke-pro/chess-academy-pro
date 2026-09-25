@@ -191,3 +191,16 @@ describe('passive-when-forcing-existed judges the capture, not the recapture', (
     }
   });
 });
+
+describe('no-plan needs the best move to SERVE the plan (re-walk 1380, 30.Qe2)', () => {
+  // "the target was to get your passed pawn on e5 promoting; hxg6 goes there,
+  // Qe2 does not" — hxg6 is a capture on the other wing. A forcing best move
+  // that lands off the plan means the position was about the tactic.
+  const LINE = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6 Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3 Rxf3 Rd8 g4 f5 Rxd8 Qe7 gxh5 Qxd8 Bxe6+ Kh8 Bg5 f4 Bxf4 Bc5+ Kg2 Qe7 Bc4 b5 Bd3 g6 Ne4 b4 Qe2'.split(' ');
+  it('an off-plan capture as the best move does not file the played move under no-plan', () => {
+    const c = new Chess(); for (const s of LINE) expect(c.move(s), s).toBeTruthy();
+    const why: string[] = [];
+    const attrs = attributePrinciples({ historySans: LINE, bestSan: 'hxg6', classification: 'mistake', evalBefore: 849, evalAfterPlayed: 700 }, why);
+    expect(attrs.find((a) => a.id === 'no-plan'), why.filter((w) => /no-plan/.test(w)).join(' | ')).toBeUndefined();
+  });
+});
