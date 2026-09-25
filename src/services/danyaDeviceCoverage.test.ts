@@ -24,7 +24,8 @@ const BEHAVIOR_CASES: Array<{ id: string; fen: string; student: 'white' | 'black
   { id: 'prophylaxis', fen: 'r3k3/8/8/8/6b1/5N2/8/4K3 w - - 0 1', student: 'white' },
   { id: 'tactics', fen: '8/2r1k3/8/3N4/8/8/8/4K3 w - - 0 1', student: 'white' },
   { id: 'outpost', fen: '4k3/8/8/3N4/4P3/8/8/4K3 w - - 0 1', student: 'white' },
-  { id: 'material', fen: '4k3/8/8/8/8/8/8/QQ2K3 w - - 0 1', student: 'white' },
+  // DOWN material — being up is owned by `conversionMethod` (re-walk 1380).
+  { id: 'material', fen: '1qq1k3/8/8/8/8/8/8/4K3 w - - 0 1', student: 'white' },
   { id: 'passed-pawn', fen: '6k1/5ppp/8/P7/8/8/5PPP/6K1 w - - 0 1', student: 'white' },
   { id: 'bishop-pair', fen: '6k1/8/8/8/8/8/1B3B2/6K1 w - - 0 1', student: 'white' },
   { id: 'pressure', fen: '4r1k1/8/8/8/8/8/4R3/6K1 b - - 0 1', student: 'black' },

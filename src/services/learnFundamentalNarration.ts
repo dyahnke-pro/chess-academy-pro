@@ -50,6 +50,11 @@ export interface LearnFundamental {
    *  only recorded games are THIS one. Present tense — the live register,
    *  never the review's. */
   recurrence: string | null;
+  /** The square the fundamental is about, when it names one (the loose piece,
+   *  the rim knight) — so a caller can tell when its own evidence line is the
+   *  same fact (re-walk 1380, 24.Bg5: "the bishop on g5 hangs" and "that left
+   *  your bishop on g5 hanging" in one breath). */
+  square: string | null;
 }
 
 /**
@@ -86,5 +91,6 @@ export function learnFundamentalVerdict(
       currentGameId: input.currentGameId,
     })
     : null;
-  return { id: attrs[0].id, tag: attrs[0].tag, verdict, recurrence };
+  const sq = attrs[0].facts.square;
+  return { id: attrs[0].id, tag: attrs[0].tag, verdict, recurrence, square: typeof sq === 'string' ? sq : null };
 }

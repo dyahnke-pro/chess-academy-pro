@@ -402,22 +402,18 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'material',
     weight: 302,
-    detect: ({ fen, student, isEndgame }) => {
+    detect: ({ fen, student }) => {
       const { advantage } = countMaterial(fen);
       // advantage is WHITE-positive; convert to the student's side. Require ≥2
       // so a mid-exchange transient (one side has captured, recapture pending)
       // doesn't read as a durable material edge.
       const studentAdv = student === 'w' ? advantage : -advantage;
-      if (studentAdv >= 2) {
-        // Don't say "steer FOR the endgame" when you are already IN it (David
-        // 2026-08-23) — there the job is to convert the edge, not head toward it.
-        return {
-          fact: isEndgame
-            ? `You're up material — trade the last pieces down and convert; keep your pawns and push.`
-            : `You're up material — trade pieces, keep pawns, and steer for the endgame.`,
-          squares: [],
-        };
-      }
+      // UP MATERIAL HAS ONE OWNER — `conversionMethod`, through the live
+      // composer (re-walk 1380, 2026-09-25: "you're a rook up — trade pieces,
+      // not pawns" and "you're up material — trade pieces, keep pawns" were
+      // two computers stating one fact, on consecutive moves). It says WHICH
+      // step of the conversion the board is on; this said only the task.
+      if (studentAdv >= 2) return null;
       if (studentAdv <= -2) {
         return { fact: `You're down material — don't trade; look for activity and counterplay.`, squares: [] };
       }

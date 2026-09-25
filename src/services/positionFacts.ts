@@ -759,7 +759,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     : null;
 
   const composedAll = applyWeaknessBoost(
-    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: principleOnceLine(lm.san, ruleHere, stemKeyOf(lm.fenBefore)), squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null }),
+    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: principleOnceLine(lm.san, ruleHere, stemKeyOf(lm.fenBefore)), squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null, alreadySaid: input.alreadySaid }),
     input.studentWeaknesses ?? [],
   );
 
@@ -910,6 +910,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       ...clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
       ...(methodKey && clauses.some((c) => c.kind === 'method') ? [methodKey] : []),
       ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey] : []),
+      ...convertRemember(clauses, input.fen, studentSeat),
     ],
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
@@ -1021,9 +1022,21 @@ function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSig
  *  whose move it is: the STUDENT's ("your critical moment") or, when the opponent
  *  is to move, the opponent's INTENT ("they have a real decision") — so the coach
  *  explains both sides. Empty when nothing earns voice. */
+/** The say-once key for a conversion step — the step, never the text. */
+export function convertKey(step: string): string { return `convert:${step}`; }
+
+function convertRemember(clauses: readonly { kind: string }[], fen: string, seat: 'white' | 'black'): string[] {
+  if (!clauses.some((c) => c.kind === 'convert')) return [];
+  const conv = readConversion(fen, seat === 'white' ? 'w' : 'b');
+  return conv ? [convertKey(conv.step)] : [];
+}
+
 function buildClauses(a: {
   /** The board the clauses describe — the stakes computer reads it. */
   fen: string;
+  /** What the student already heard — a conversion STEP is said once (its
+   *  text changes with the edge: "a rook up" → "a piece up"). */
+  alreadySaid?: ReadonlySet<string>;
   /** Does this student's own record still owe them the slow-down teaching?
    *  Computed by the caller from the weakness lifecycle (`habitNeedFrom`), not
    *  re-derived here — one door, one answer. */
@@ -1220,7 +1233,11 @@ function buildClauses(a: {
   // it, cut off the king. Only on the student's move, when they are a piece or
   // more up. The old generic line stays for a decided game with no such edge.
   const conversion = studentToMove ? readConversion(a.fen, studentSeat === 'white' ? 'w' : 'b') : null;
-  if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text });
+  // SAID ONCE PER STEP (re-walk 1380, 2026-09-25): keyed on the text, "a rook
+  // up — trade pieces" and "a piece up — trade pieces" were two facts, and the
+  // same step spoke on three moves running. The step is the idea.
+  if (conversion && a.alreadySaid?.has(convertKey(conversion.step))) { /* heard this step already */ }
+  else if (conversion) ranked.push({ kind: 'convert', rank: 36, text: conversion.text });
   else if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
   if (openingPhase) return ranked;
 

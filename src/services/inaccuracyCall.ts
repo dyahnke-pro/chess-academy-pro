@@ -57,6 +57,46 @@ const WORTH_SAYING: ReadonlySet<MoveQuality> = new Set(['inaccuracy', 'mistake',
  *  move actually produces: the piece it wins, the file it opens, the square it
  *  takes. Null when the line is too short to describe, in which case the call
  *  still names the move and simply stops there. */
+/**
+ * CHECKS FIRST — the move-order lesson (David 2026-09-25, on 22.gxh5 / Rxf8+:
+ * "checks captures threats"). When the better move is a CHECK and the move the
+ * student played comes back as their own move later in that check's line, the
+ * reason is the ORDER: the check forces a reply, and the capture is still there
+ * afterwards — they get both. Proven from the engine line by coordinates (a
+ * pawn capture reads "gxh5" or "g4xh5"; the squares do not change). Null when
+ * the better move is not a check, or the played move never returns in its line.
+ */
+export function checksFirst(
+  fenBefore: string, playedSan: string, bestSan: string, bestLineUci: readonly string[],
+): string | null {
+  let played: { from: string; to: string };
+  let reply: string | null = null;
+  try {
+    const p = new Chess(fenBefore).move(playedSan);
+    if (!p) return null;
+    played = { from: p.from, to: p.to };
+    const b = new Chess(fenBefore);
+    const best = b.move(bestSan);
+    if (!best || !b.isCheck()) return null;
+    if (best.from === played.from && best.to === played.to) return null;
+    // The line must START with the best move, then walk it.
+    const first = bestLineUci[0];
+    if (!first || first.slice(0, 2) !== best.from || first.slice(2, 4) !== best.to) return null;
+    for (let i = 1; i < bestLineUci.length && i <= 4; i += 1) {
+      const u = bestLineUci[i];
+      const mv = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.slice(4, 5) || undefined });
+      if (!mv) return null;
+      if (i === 1) reply = mv.san;
+      // The mover's own moves sit at even indices; the played move returning
+      // there is the proof that it was still available.
+      if (i % 2 === 0 && mv.from === played.from && mv.to === played.to) {
+        return `checks first: ${bestSan}, ${reply ?? 'they answer'}, and ${playedSan} is still there — you get both`;
+      }
+    }
+  } catch { return null; }
+  return null;
+}
+
 function whyBetter(
   fenBefore: string,
   bestUci: readonly string[],
@@ -324,11 +364,15 @@ export function callInaccuracyDetailed(args: {
   // mistake" — it won two pieces and left White +4). When the mover is still
   // clearly winning after the move, the teaching is the cleaner way, not a
   // grade: "gxh5 still wins, but Rxf8+ was cleaner — it would land a fork."
+  // THE ORDER IS THE REASON when the check comes first and the capture waits.
+  const order = args.bestLineUci ? checksFirst(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci) : null;
   const after = args.moverEvalAfterCp;
   if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
-    const said = better
-      ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — it would ${better.why}.`
-      : `${args.playedSan} still wins, but ${args.bestSan} was cleaner.`;
+    const said = order
+      ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${order}.`
+      : better
+        ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — it would ${better.why}.`
+        : `${args.playedSan} still wins, but ${args.bestSan} was cleaner.`;
     return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
   }
   const head = quality === 'blunder'
@@ -336,7 +380,9 @@ export function callInaccuracyDetailed(args: {
     : quality === 'mistake'
       ? `${args.playedSan} was a mistake.`
       : `${args.playedSan} was a little loose.`;
-  const should = better ? ` ${args.bestSan} was the move — it would ${better.why}.` : ` ${args.bestSan} was the move.`;
+  const should = order
+    ? ` ${args.bestSan} was the move — ${order}.`
+    : better ? ` ${args.bestSan} was the move — it would ${better.why}.` : ` ${args.bestSan} was the move.`;
   return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '' } };
 }
 

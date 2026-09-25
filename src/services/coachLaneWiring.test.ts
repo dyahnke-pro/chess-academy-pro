@@ -84,7 +84,11 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // …and the fundamental verdict is what leads that line.
     // (WO-LOOP-01 put the recurrence clause between the verdict and the
     // look — the verdict still LEADS, which is what this pins.)
-    expect(TEACH).toMatch(/const line = fundamental\s*\?\s*`\$\{fundamental\.verdict\}[\s\S]{0,120}?\$\{look\.line\}`\s*:\s*look\.line/);
+    // (Re-walk 1380, 2026-09-25: the evidence is the look line, or the line
+    // WITHOUT its opening loss when the verdict already named that loss — one
+    // fact once. The verdict still leads.)
+    expect(TEACH).toMatch(/const evidence = sameLoss && look\.withoutAttempt \? look\.withoutAttempt\.line : look\.line;/);
+    expect(TEACH).toMatch(/const line = fundamental\s*\?\s*`\$\{fundamental\.verdict\}[\s\S]{0,160}?\$\{evidence\}[\s\S]{0,20}?`\s*:\s*look\.line/);
     // A fundamental with NO material drawback still speaks, on its own.
     expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'drawback', \[\]\)/);
   });

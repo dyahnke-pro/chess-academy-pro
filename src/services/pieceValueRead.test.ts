@@ -343,3 +343,27 @@ describe('a piece the student can simply take is not "their best piece" (hand wa
     expect(defended.find((l) => l.kind === 'their-best-piece')?.text).toMatch(/rook on d8/);
   });
 });
+
+describe('one idea, said once a phase — not once per square (re-walk 1380, 2026-09-25)', () => {
+  // "their X is the piece doing the most work" spoke on six moves, a different
+  // piece each time, because say-once was keyed on the square.
+  const at = (theirBest: string, myIdle: string): PieceValue[] => [
+    { square: theirBest, piece: 'n', color: 'b', value: -4.5 },
+    { square: 'a8', piece: 'n', color: 'b', value: -1.0 },
+    { square: myIdle, piece: 'B', color: 'w', value: 1.0 },
+    { square: 'd4', piece: 'B', color: 'w', value: 4.5 },
+  ];
+  it('a new square on the same phase does not re-speak the advice', () => {
+    const said = new Set<string>();
+    const first = pieceQualityLines(at('e6', 'b2'), 'white', said, { isMiddlegame: true });
+    expect(first.map((l) => l.kind).sort()).toEqual(['their-best-piece', 'your-worst-piece']);
+    const next = pieceQualityLines(at('c5', 'a3'), 'white', said, { isMiddlegame: true });
+    expect(next, 'a different piece is not a different idea').toHaveLength(0);
+  });
+  it('the piece the student just moved is never "doing the least"', () => {
+    const lines = pieceQualityLines(at('e6', 'b2'), 'white', undefined, { isMiddlegame: true, justMovedTo: 'b2' });
+    expect(lines.find((l) => l.kind === 'your-worst-piece')).toBeUndefined();
+    // …and without that, the same board does name it (non-vacuous).
+    expect(pieceQualityLines(at('e6', 'b2'), 'white', undefined, { isMiddlegame: true }).find((l) => l.kind === 'your-worst-piece')?.text).toMatch(/bishop on b2/);
+  });
+});
