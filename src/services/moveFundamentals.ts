@@ -365,7 +365,21 @@ export function computeMoveFundamentals(
   // ── CENTER — a central pawn advance (space), or a piece already in play newly
   //    contesting the core center. (A developing minor already carries the
   //    center in its own clause above, so it does not double-count here.)
-  if (mv.piece === 'p' && CENTER.includes(mv.to) && relRank(mv.to, mover) >= 4) {
+  // A PAWN CAPTURE into the center is the "take toward the centre" rule, not
+  // a space grab — …fxe5 recapturing was "stake out the center and grab space
+  // with the pawn to e5" (hand walk 800).
+  const towardCenter = mv.piece === 'p' && !!mv.captured && CENTER.includes(mv.to)
+    && Math.abs(mv.to.charCodeAt(0) - 100.5) < Math.abs(mv.from.charCodeAt(0) - 100.5);
+  if (towardCenter) {
+    out.push({
+      id: 'center',
+      weight: 66,
+      led: `takes toward the center`,
+      selfContained: `takes toward the center with the ${mv.from[0]}-pawn`,
+      imperative: `take toward the center — the ${mv.from[0]}-pawn capture keeps your pawns near the middle`,
+      squares: [mv.to],
+    });
+  } else if (mv.piece === 'p' && CENTER.includes(mv.to) && relRank(mv.to, mover) >= 4) {
     out.push({
       id: 'center',
       weight: 66,

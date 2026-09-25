@@ -18,3 +18,13 @@ describe('the center clause needs the core four', () => {
     expect(text).toMatch(/center on d4 and e5/);
   });
 });
+
+describe('a pawn recapture toward the middle is the take-toward-the-centre rule', () => {
+  it('…fxe5 is not "grab space with the pawn to e5"', () => {
+    const c = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6', 'dxc6', 'O-O', 'f6', 'd4', 'Bg4', 'c3', 'Bd6', 'Nbd2', 'Ne7', 'h3', 'Bh5', 'dxe5']) c.move(m);
+    const f = computeMoveFundamentals(c.fen(), 'fxe5', 'black').find((x) => x.id === 'center');
+    expect(f?.imperative ?? '').toMatch(/take toward the center/);
+    expect(JSON.stringify(f)).not.toMatch(/grab space/);
+  });
+});

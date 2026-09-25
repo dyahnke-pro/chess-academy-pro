@@ -262,6 +262,10 @@ export function pieceQualityLines(
     // 2026-09-24) the rook that had just castled to f8, behind its own f7-pawn,
     // was crowned "the piece doing the most work for them".
     .filter((v) => opts?.isMiddlegame === true || v.piece.toLowerCase() !== 'r' || rookFileFree(opts?.fen, v))
+    // …and a piece the student can simply TAKE is not one to "trade off"
+    // (hand walk 2000: Rxd8 just took, nothing defended it, and the coach said
+    // "their rook on d8 is the piece doing the most work — trade it off").
+    .filter((v) => !takeableFree(opts?.fen, v.square, me))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => b.d - a.d)[0];
   if (best && best.d >= 0.3) {
@@ -388,6 +392,16 @@ export function evalSplitLine(
  *  a bishop to the queen, and the g2-bishop raking the long diagonal onto b7,
  *  "your worst piece". Attacking a non-pawn, or standing behind one that shields
  *  something bigger, is work the table cannot see. */
+/** The student attacks `square` and nothing of theirs defends it. */
+function takeableFree(fen: string | undefined, square: string, me: 'w' | 'b'): boolean {
+  if (!fen) return false;
+  try {
+    const b = new Chess(fen);
+    const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+    return b.attackers(square as Square, me).length > 0 && b.attackers(square as Square, them).length === 0;
+  } catch { return false; }
+}
+
 function atWork(fen: string | undefined, square: string, me: 'w' | 'b'): boolean {
   if (!fen) return false;
   const VAL = CAPTURE_VALUE;
