@@ -45,6 +45,12 @@ export interface BackwardLook {
    *  One lane for the coach because it is one voice — owning a blunder and
    *  owning a positional concession are the same act at different scales. */
   kind: 'mistake' | 'drawback' | 'coachMistake';
+  /** The line WITHOUT its opening "that left your X on Y hanging" sentence,
+   *  and the square that sentence is about — set only when the line has one.
+   *  A caller that already named that loss (the live fundamental verdict)
+   *  speaks this instead, so the loss is said once and the rest — the cost,
+   *  the better move — still speaks (re-walk 1380, 24.Bg5). */
+  withoutAttempt?: { line: string; square: string };
 }
 
 /**
@@ -218,7 +224,7 @@ export function backwardLook(args: {
       if (f && args.cpLoss >= INACCURACY_CP) { attempt = f.line; attemptSquare = f.squares[0] ?? ''; }
     } catch { /* a lane that throws must not silence the rest */ }
 
-    let cost: { said: string; opening: string; square: string } | null = null;
+    let cost: { kind: string; said: string; opening: string; square: string } | null = null;
     if (args.bestSan) {
       try {
         cost = findStudentDrawback({
@@ -228,6 +234,16 @@ export function backwardLook(args: {
           studentColor: args.studentColor,
         });
       } catch { /* fall through */ }
+      // A SQUARE LEFT UNGUARDED IS A COST ONLY IF THEY USE IT (re-walk 1380,
+      // 2026-09-25). "That took your last defender off d4 / h4 / f5" spoke on
+      // six flagged moves — 24.Bg5 hung a bishop and the coach named d4 — because
+      // the detector asks only whether a piece COULD land there. The engine
+      // says whether one WILL: the square must be where one of their next three
+      // moves in the reply line lands. No reply line, no claim.
+      if (cost && cost.kind === 'defender-left') {
+        const theirLandings = (args.replyPvUci ?? []).filter((_, i) => i % 2 === 0).slice(0, 3).map((u) => u.slice(2, 4));
+        if (!theirLandings.includes(cost.square)) cost = null;
+      }
     }
 
     if (attempt || cost) {
@@ -272,7 +288,11 @@ export function backwardLook(args: {
         .filter(Boolean).join(' ');
       // The mark follows the same order: the square the ATTEMPT is about when
       // there is one, because that is what the sentence opens on.
-      return { line, square: attemptSquare || cost?.square || '', kind: 'drawback' };
+      const rest = [cost ? `${cost.said} ${cost.opening}` : '', instead ?? ''].filter(Boolean).join(' ');
+      return {
+        line, square: attemptSquare || cost?.square || '', kind: 'drawback',
+        ...(attempt && attemptSquare ? { withoutAttempt: { line: rest, square: attemptSquare } } : {}),
+      };
     }
   }
 

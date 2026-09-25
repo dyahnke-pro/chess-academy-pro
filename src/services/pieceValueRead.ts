@@ -223,7 +223,15 @@ export function pieceQualityLines(
   values: readonly PieceValue[],
   studentColor: 'white' | 'black',
   said?: Set<string>,
-  opts?: { isMiddlegame?: boolean; fen?: string },
+  opts?: {
+    isMiddlegame?: boolean;
+    fen?: string;
+    /** The square the student's own last move landed on. That piece is never
+     *  "doing the least" — telling them to move the piece they just placed
+     *  contradicts their move (hand walk 1380, 10.Nf3: "your knight on f3 is
+     *  doing the least — find it a better square"). */
+    justMovedTo?: string;
+  },
 ): PieceQualityLine[] {
   const out: PieceQualityLine[] = [];
   if (values.length === 0) return out;
@@ -268,8 +276,14 @@ export function pieceQualityLines(
     .filter((v) => !takeableFree(opts?.fen, v.square, me))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => b.d - a.d)[0];
+  // SAY-ONCE ON THE KIND, PER PHASE — not per square (re-walk 1380,
+  // 2026-09-25: keyed on the square, "their X is the piece doing the most
+  // work" spoke on six moves, a different piece each time). The advice is
+  // one idea — trade off their best piece — and a new square is not a new
+  // idea. It returns once when the game changes phase.
+  const phase = opts?.isMiddlegame === true ? 'middlegame' : 'opening';
   if (best && best.d >= 0.3) {
-    const key = `best-${best.v.square}`;
+    const key = `best:${phase}`;
     if (!said?.has(key)) {
       said?.add(key);
       out.push({
@@ -291,10 +305,11 @@ export function pieceQualityLines(
   // isn't developed YET, not because it is misplaced (the caller passes phase).
   const worst = mine.filter((v) => v.piece.toLowerCase() === 'n' || v.piece.toLowerCase() === 'b')
     .filter((v) => !atWork(opts?.fen, v.square, me))
+    .filter((v) => v.square !== opts?.justMovedTo)
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => a.d - b.d)[0];
   if (opts?.isMiddlegame !== false && worst && worst.d <= -0.3) {
-    const key = `worst-${worst.v.square}`;
+    const key = `worst:${phase}`;
     if (!said?.has(key)) {
       said?.add(key);
       out.push({

@@ -28,7 +28,7 @@ import { transferClause, recordMotif, withTransfer } from '../../services/motifL
 import { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint } from '../../services/playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint, gainedBishopPair } from '../../services/playCommentary';
 import type { CommentaryKind } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -8211,7 +8211,20 @@ export function CoachTeachPage(): JSX.Element {
           studentColor: args.studentColor,
           studentLastTo: studentLastSan?.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/)?.[1] ?? null,
         });
-        const eligible = quietTurn ? allHits : allHits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
+        // The move that WON the bishop pair already says so (the move point,
+        // "now you have the two bishops") — the standing read stands aside
+        // that turn: one fact, one owner (re-walk 1380, 19.Rxf3).
+        const pairJustWon = (() => {
+          const h = args.historyAfterReply;
+          if (h.length < 2) return false;
+          try {
+            const c = new Chess();
+            for (const san of h.slice(0, -2)) c.move(san);
+            return gainedBishopPair(c.fen(), h[h.length - 2]);
+          } catch { return false; }
+        })();
+        const hits = pairJustWon ? allHits.filter((x) => x.id !== 'bishop-pair') : allHits;
+        const eligible = quietTurn ? hits : hits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) { behaviorLine = hit.fact; behaviorSquares = hit.squares; factLines.push(`Behavior (${hit.id}): ${hit.fact}`); }
       } catch { /* never a blocker */ }
@@ -8969,7 +8982,7 @@ export function CoachTeachPage(): JSX.Element {
                     // on the phase so it never fires on an undeveloped opening
                     // piece (David 2026-08-23).
                     const isMiddlegame = Number(probe.fen().split(' ')[5] ?? '0') >= 10;
-                    for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, learnMemRef.current.pieceQualitySaid, { isMiddlegame, fen: probe.fen() })) {
+                    for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, learnMemRef.current.pieceQualitySaid, { isMiddlegame, fen: probe.fen(), justMovedTo: move.to })) {
                       queueSpokenHint(probe.fen(), q.text, 'computed', q.squares);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }
@@ -10365,8 +10378,16 @@ export function CoachTeachPage(): JSX.Element {
                       // over leaves nothing to re-derive and nothing to check.
                       // The recurrence clause rides between the verdict and the
                       // evidence, as in review — the loop's own sentence.
+                      // ONE FACT ONCE: when the fundamental IS the lost piece
+                      // on the look's own square, the look's "that left your
+                      // bishop on g5 hanging" restates it — the verdict stands
+                      // alone (re-walk 1380, 24.Bg5).
+                      const sameLoss = !!fundamental && !!look.withoutAttempt
+                        && (fundamental.id === 'loose-piece' || fundamental.id === 'ignored-threat')
+                        && fundamental.square === look.withoutAttempt.square;
+                      const evidence = sameLoss && look.withoutAttempt ? look.withoutAttempt.line : look.line;
                       const line = fundamental
-                        ? `${fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''} ${look.line}`
+                        ? `${fundamental.verdict}${fundamental.recurrence ? ` ${fundamental.recurrence}` : ''}${evidence ? ` ${evidence}` : ''}`
                         : look.line;
                       queueSpokenHint(fenAfterReply, line, look.kind,
                         /^[a-h][1-8]$/.test(look.square) ? [look.square] : []);
