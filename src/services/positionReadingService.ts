@@ -911,11 +911,16 @@ export function namedPawnStructure(
   const fileCount = (set: Set<string>, file: string): number => [...set].filter((s) => s[0] === file).length;
   // FRENCH / ADVANCE CHAIN — White d4+e5 vs Black d5+e6, the locked chain.
   if (w('d4') && w('e5') && b('d5') && b('e6')) {
-    return { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — Black hits d4 with …c5 and …f6, White defends the head on e5 and plays on the kingside' };
+    // SEATED (hand walk 1600, Caro-Kann as Black: "Black hits d4 with …c5").
+    return studentColor === 'w'
+      ? { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — they hit d4 with …c5 and …f6; you defend the head on e5 and play on the kingside' }
+      : { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — you hit d4 with …c5 and …f6; they defend the head on e5 and play on the kingside' };
   }
   // KING'S-INDIAN CLOSED CENTRE — White d5+e4 vs Black d6+e5.
   if (w('d5') && w('e4') && b('d6') && b('e5')) {
-    return { name: 'King’s-Indian closed centre', plan: 'the wings decide: Black storms the kingside with …f5-f4 and a pawn avalanche, White breaks on the queenside with c5' };
+    return studentColor === 'w'
+      ? { name: 'King’s-Indian closed centre', plan: 'the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with c5' }
+      : { name: 'King’s-Indian closed centre', plan: 'the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with c5' };
   }
   // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
   const holder = (white: boolean): string => ((white ? 'w' : 'b') === studentColor ? 'You hold' : 'They hold');

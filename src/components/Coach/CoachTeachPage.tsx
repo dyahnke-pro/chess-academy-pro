@@ -7802,6 +7802,33 @@ export function CoachTeachPage(): JSX.Element {
           .filter((cm) => cm.to === worst.square && cm.isCapture())
           .sort((a, b) => (AV[a.piece] ?? 1) - (AV[b.piece] ?? 1))[0];
         if (cap) alertArrow = { startSquare: cap.from, endSquare: cap.to, color: 'red' };
+      } else {
+        // ATTACKED BY A SMALLER PIECE — defended or not, it has to move (hand
+        // walk 1200, French Advance: …c4 hit the d3-bishop and the coach said
+        // only "castle"). A defender does not help when the attacker is worth
+        // less than the piece.
+        try {
+          const board = new Chess(args.fenAfterReply);
+          const foe: 'w' | 'b' = studentCC === 'w' ? 'b' : 'w';
+          let hit: { sq: string; piece: string; by: string; bySq: string } | null = null;
+          for (const row of board.board()) for (const cell of row) {
+            if (!cell || cell.color !== studentCC || (AV[cell.type] ?? 0) < 3) continue;
+            const low = board.attackers(cell.square, foe)
+              .map((a) => ({ a, t: board.get(a)?.type ?? 'k' }))
+              .filter((x) => x.t !== 'k' && (x.t === 'p' ? 1 : (AV[x.t] ?? 0)) < (AV[cell.type] ?? 0))
+              .sort((x, y) => (x.t === 'p' ? 1 : AV[x.t] ?? 0) - (y.t === 'p' ? 1 : AV[y.t] ?? 0))[0];
+            // …unless the attacker is simply free to take — then the answer
+            // is to take it, not to move away.
+            const attackerFree = !!low && board.attackers(low.a, studentCC).length > 0 && board.attackers(low.a, foe).length === 0;
+            if (low && !attackerFree && (!hit || (AV[cell.type] ?? 0) > (AV[hit.piece] ?? 0))) hit = { sq: cell.square, piece: cell.type, by: low.t, bySq: low.a };
+          }
+          if (hit) {
+            threatKey = `hit:${hit.piece}${hit.sq}:${hit.bySq}`;
+            threatSquares = [hit.sq, hit.bySq];
+            threatLine = `Careful — their ${NAME[hit.by] ?? 'piece'} on ${hit.bySq} hits your ${NAME[hit.piece] ?? 'piece'} on ${hit.sq}; it has to move.`;
+            alertArrow = { startSquare: hit.bySq, endSquare: hit.sq, color: 'red' };
+          }
+        } catch { /* the warning is a bonus */ }
       }
       // One callout per danger — a persisting threat must not nag every ply.
       // Two keys now, because one lane's repeat must not silence the other's
