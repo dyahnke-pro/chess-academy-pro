@@ -461,6 +461,100 @@ every WO-TEACH-02 line against it:
 **Order:** S0 → S1 → S8 → S2 → S3 → S4 → S5 → S7 → S6. Verify: the meter,
 ship-check, both prod audits muted, narrations read and quoted here.
 
+## 🎙️ WO-DANYA-01 — Learn free play taught like the video (David 2026-09-24: "I want to be taught like the video I sent you! That's the only reason I'm making this app.")
+
+### Hand-walk 1 — Naroditsky's Scandinavian (vc-1zfJ7ABoh8k), 2026-09-24
+
+Walked by hand (`scripts/audit-lib/hand-driver.mjs`), his moves as White, his
+Black replies dictated. Flags + fixes: `audit-reports/hand-walk-danya-2026-09-24.md`.
+
+**Fixed (all computers, all games):** mate verdicts read by side (`mateContext`);
+"play X" on the student's turn arms the coach reply (was the play-move tool);
+pinned guards / pinning moves (`whyItFailed`); "falls apart" only when the edge
+is lost (`pickTempting`); defenders = attackers (`concessionBeat.coverage`);
+trapped = no block/capture saves it; dictated replies never self-graded (and
+the decline is honoured); seated detector text (`utils/seatPieces`); alignment
+contest on the line, from a square it can hold; working minors never "doing the
+least"; hole = their half; open file = no attacker pawn; captures are not
+breaks; d3/g3 name the bishop (`open-diagonal`); gambit/lever taught from both
+sides (`gambitFile`); pinned pawns are no news; phase thesis past-tense and
+turns only; pin said once per game by target; "b-file" speech; stem rotation;
+takeback clears marks; SEE generates attackers' moves only (gem build 2x).
+
+**Open (next):**
+- quiet-move PURPOSE computer: Nc3 hits the queen (tempo), Ne2-not-Nf3 keeps
+  the g2 diagonal, h3 prepares g4 to break the pin, Qa1 backs the a-file rook;
+- plan ARC (b4-b5-a4-a5 storm as one story) — ties to B (one thread/move);
+- phase narration still hands tactic facts to a phrasing model (bare "Bishop on
+  h5 pins knight…") — David's rule says chess is computer-worded; needs his go;
+- rook template still fired on Rd7+Qd6 (move 17) with d3 blocking the file;
+- "either works: g4 is right there with it" — unnamed "it";
+- two lanes both say "b5 is the pawn break"; standing latent pin still a second
+  mention; "nothing covers c3" with a knight on c3;
+- opening name after transposition (1.e4 Nc6 2.Nf3 e5 → still "Nimzowitsch").
+- Walk moves 23-27 again; then the 1380 and 2340 speedruns (xoS71OW-Re0,
+  pXBR9CxK3lQ) and the 2000 Black game (7f2sPY2U204).
+
+
+Target: `MWMloBpKuVg` (Nimzo-Larsen master class) + the 700/2300 speedruns
+(`docs/plans/2026-09-24-speedrun-target.md`). His unit is the DECISION, not the
+move: plans for both sides, "what's his next move — prepare the answer", options
+at a hard moment each with its line and drawback, move orders re-checked, arrows
+drawn along the line he calculates. Scoped to Learn free play (+ review lines).
+
+**David's calls (2026-09-24):** the "couldn't he just move X?" question lane
+answers for BOTH seats, ANY time (mid-game included); arrows draw the line, a
+button walks it on the board. Review lines get arrows + a walk button.
+
+**Prod tapes that set the baseline:** review 79% teach (15/19), 53/54; Learn free
+play 17/17 on a 47-ply game but piles of 5–8 separate facts per move, the banned
+"playable, but not as precise" register, "left the book" ×4, "same idea as move 3"
+ON move 3, fragments. Learn ≈ 40% of the video, review ≈ 60%.
+
+- [x] **A. Clean-up** — weighing speaks only real forks; "left the book" = no book
+  line continues the game (`isBookLine`), said once; transfer is instance-aware,
+  inline, recorded only when spoken; review gem share honest ("often" only ≥10%);
+  "White's their king" seated; grade line names its move; "Qf5? Then …".
+- [ ] **B. Subsumption, not a cap** — raised with David: a per-move limit violates
+  G4.5; same-claim facts (material ×3, open king ×3) collapse instead.
+- [x] **C. "Couldn't X just move" lane** — `pieceOptions.ts`: the piece's duty
+  (friendly pieces it guards that the enemy attacks) → its moves that keep it
+  (else the moves out of attack, else all) → one engine read per option, the
+  reply line cut to its proof → verdict vs the move played. `pieceOptionsRef`
+  parses both seats + a colour ("White's queen"); `resolvePieceQuestion` picks
+  the decision (the side to move → now; else the position before its last
+  move). coachService computes (12s box), coachApi speaks raw ahead of every
+  move lane, `consumeCoachLines` carries `WalkableLine[]` to the page: the static
+  board shows the question's position, each option's line is drawn as its
+  sentence plays, and a Walk button steps it and returns to the game. Audit:
+  Learn audit rows H1–H3.
+- [x] **C2. The student is in control (David 2026-09-24: "stop calculations and
+  answer question" · "even just the question should immediately cause coach to
+  stop").** `stockfishEngine.holdForQuestion`: the search in flight stops (its
+  result is not cached), background reads wait — including ones already queued
+  — and the question's reads skip the line on the same warm engine (the pool
+  cost ~14s cold). The first keystroke / a mic tap stops the voice and drops
+  queued commentary (`ChatInput.onStartAsking` → `stopCoachNow`); "stop / wait /
+  hold on" is a command answered by silence (`isStopCommand`). Local audit: the
+  lane answered in ~2s warm.
+- [x] **A2. Tape fixes (local run 2026-09-24):** principle praise only on a GRADED
+  clean move; the next-move hedge framed "As for your next move"; warnings seated
+  ("their queen on e1 pins your bishop"); every packaged line ends as a
+  sentence; "taking there gives up your queen for the pawn", not "8 points";
+  an alternative is weighed aloud only with a reason.
+- OPEN (seen on the same tape, this is build B): same-claim pairs still both
+  speak — "the e-file is open — your rook belongs there" + "the e-file is open —
+  that is where a rook wants to be"; the open-king pair; the doubled-pawn pair.
+- [ ] **D. Review lines** — arrows for every spoken line (refuted alt has none today;
+  one line per segment), walk button narrated.
+
+**Red on main, NOT from this WO (found 2026-09-24, logged not widened):**
+`gemPunishLessons.test.ts` ×4 time out at 120s, `punishGems.test.ts` arrow rows
+time out at the default 5s (ship-check runs 20s), `section14RecordPath.test.ts`
+no-plan returns undefined (since 4a9614f) — its fixture's "quiet" 16.Bc6 hangs
+to Rxc6 (the c-file opened on 15…bxc5), so the planless premise no longer holds
+once hangs are attributed; the fixture needs a quiet move that hangs nothing.
+
 ## 🎓 WO-LAYERS-01 — teach in LAYERS, the way Naroditsky does, chosen by the student's record (David 2026-09-23: "take those two different teaching styles and algo them in … all 7" · "default should be lowest setting. This app attacks beginner players")
 
 **The finding (read 424 narrated moves across 10 videos, then 8 low-Elo vs 7 high-Elo speedruns).** Length does not change with level — median ~25–30 words per move at both ends; ours ran 120–300. What changes is the LAYER:

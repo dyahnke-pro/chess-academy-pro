@@ -17,6 +17,33 @@ import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { findHangingPieces } from './tacticClassifier';
 import { proofAgainstMover } from './exchangeLedger';
+import { strategicWhyLed } from './moveFundamentals';
+import { legalSeeGainFor } from './positionReadingService';
+
+const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+
+/** A capture that WINS material, the exchange counted out — that is the move's
+ *  reason, ahead of any positional gloss. Hand walk 2340: dxe5 "stakes out the
+ *  center" when his line was "that's a free pawn" (…Nxe5 loses the knight to
+ *  Nxe5). Null for a trade or a sacrifice. */
+function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    // MATE IS THE REASON. "The move is Qxd6# — it wins the bishop on d6" (hand
+    // walk 1200) named the capture and missed the point.
+    if (c.isCheckmate()) return 'ends the game';
+    if (!m?.captured) return null;
+    // A recapture is the trade finishing, never material won — and taking back
+    // IS the reason ("The move is Rexd8 — it takes the open d-file" after Qxd8).
+    if (opponentLastSan && new RegExp(`x${m.to}(?![1-8])`).test(opponentLastSan)) return `takes back the ${PIECE_NOUN[m.captured] ?? 'piece'}`;
+    // SEE counts the recaptures: a positive net is material won, not a trade.
+    if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
+    return `wins the ${PIECE_NOUN[m.captured] ?? 'piece'} on ${m.to}`;
+  } catch {
+    return null;
+  }
+}
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -58,6 +85,9 @@ export interface Deliberation {
   alternatives: Candidate[];
   /** True when there's a genuine choice to weigh out loud (≥1 real alternative). */
   isRealChoice: boolean;
+  /** Why the best move is best, from the board (`strategicWhyLed`). Null when
+   *  the board gives no reason — then the verdict is not spoken. */
+  bestWhy: string | null;
 }
 
 function uciToSan(fen: string, uci: string): string | null {
@@ -73,10 +103,14 @@ function uciToSan(fen: string, uci: string): string | null {
  *  hanging piece, or null. */
 function dropsAfter(fen: string, uci: string, moverColor: 'w' | 'b'): { piece: string; square: string; value: number } | null {
   let after: Chess;
+  let captured = 0;
+  let landed = '';
   try {
     after = new Chess(fen);
     const m = after.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
     if (!m) return null;
+    captured = m.captured ? VAL[m.captured] ?? 0 : 0;
+    landed = m.to;
   } catch { return null; }
   let worst: { piece: string; square: string; value: number } | null = null;
   try {
@@ -86,7 +120,12 @@ function dropsAfter(fen: string, uci: string, moverColor: 'w' | 'b'): { piece: s
       if (!worst || value > worst.value) worst = { piece: h.piece.toLowerCase(), square: h.square, value };
     }
   } catch { return null; }
-  return worst && worst.value >= 2 ? worst : null;
+  if (!worst || worst.value < 2) return null;
+  // AN EXCHANGE IS NOT A DROP. The capturing piece standing en prise on the
+  // square it took on is a trade when it took at least as much (hand walk
+  // 2026-09-24: "Rxd8? That drops the rook on d8." — rook for rook).
+  if (worst.square === landed && captured >= worst.value - 1) return null;
+  return worst;
 }
 
 /**
@@ -106,6 +145,10 @@ export function buildDeliberation(input: {
    *  the move being played as a weaker option — which reads as a
    *  self-contradiction on the board (G3). */
   excludeSan?: string;
+  /** The opponent's move just before (SAN), or null at the start. REQUIRED: a
+   *  capture back on the square they just took on is the trade finishing, so
+   *  "it wins the queen on d8" after …Qxd8 is false (hand walk 2026-09-25). */
+  opponentLastSan: string | null;
 }): Deliberation | null {
   const { fenBefore, moverColor, excludeSan } = input;
   const sign = moverColor === 'w' ? 1 : -1;
@@ -141,7 +184,8 @@ export function buildDeliberation(input: {
     });
   }
 
-  return { best, alternatives, isRealChoice: alternatives.length > 0 };
+  const bestWhy = materialWhy(fenBefore, bestSan, moverColor, input.opponentLastSan) ?? strategicWhyLed(fenBefore, bestSan, moverColor === 'w' ? 'white' : 'black');
+  return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy };
 }
 
 
@@ -150,11 +194,22 @@ export function buildDeliberation(input: {
  *  never an invented positional reason. */
 function shortfallText(c: Candidate): string {
   // The proof leads: the line that shows WHY beats a label for it.
-  if (c.proof && c.shortfall !== 'less-precise') return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
+  // …for EVERY shortfall with a proof. `deliberationFacts` lets a less-precise
+  // move through only BECAUSE it has one, and this branch used to skip it for
+  // exactly that category — so the move fell to the filler line below (hand
+  // walk 2026-09-24: "Bb3 is playable, but not as precise").
+  if (c.proof) {
+    // The proof line starts with the candidate itself; asked as a question it
+    // is already named, so the answer starts with the REPLY — "Qf5? Then
+    // castles, and the rook on e8 falls", never "Qf5? Qf5, castles…".
+    const esc = c.san.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const rest = c.proof.replace(new RegExp(`^${esc}(?:, | and )`), '');
+    if (rest !== c.proof) return `${c.san}? Then ${rest}.`;
+    return `${c.san}? ${c.proof[0].toUpperCase()}${c.proof.slice(1)}.`;
+  }
   if (c.shortfall === 'drops-material' && c.drops) {
     return `${c.san}? That drops the ${PNAME[c.drops.piece] ?? 'piece'} on ${c.drops.square}.`;
   }
-  if (c.shortfall === 'clearly-worse') return `${c.san}? Clearly worse here.`;
   return `${c.san} is playable, but not as precise.`;
 }
 
@@ -165,9 +220,25 @@ function shortfallText(c: Candidate): string {
  * Returns '' when there's nothing to weigh.
  */
 export function deliberationFacts(d: Deliberation): string {
-  if (!d.isRealChoice) return '';
-  const weigh = d.alternatives.map(shortfallText);
-  return `${weigh.join(' ')} The move is ${d.best.san}.`;
+  // Only a REAL fork is weighed out loud (the 2026-09-24 Learn tape: "h5 is
+  // playable, but not as precise. g6 is playable, but not as precise. The move
+  // is Rg8." on a quiet endgame move). Coin-flip alternatives are the banned
+  // filler register; with none left there is no choice to narrate — silence.
+  // …and only with a REASON. "g6 is playable, but not as precise" came back on
+  // a real 40–150cp gap (same tape): true, and still filler — it names a move
+  // and teaches nothing about it. An alternative is weighed out loud only when
+  // the board says WHY it falls short: a line that proves it, a piece it drops,
+  // or a gap big enough to call clearly worse.
+  // "Clearly worse here" is a verdict, not a reason (rule 1, hand walk 1380:
+  // "cxb3? Clearly worse here."). An alternative is ruled out loud only with
+  // the line that proves it or the piece it drops.
+  const reasoned = meaningfulAlternatives(d).filter((a) => !!a.proof || (a.shortfall === 'drops-material' && !!a.drops));
+  if (!d.isRealChoice || reasoned.length === 0) return '';
+  // THE VERDICT CARRIES ITS REASON, or it is not said (David 2026-09-24:
+  // "The move is Rxf3" alone is an order, not teaching). The weighing still
+  // stands on its own — ruling the bad moves out IS the thinking out loud.
+  const verdict = d.bestWhy ? ` The move is ${d.best.san} — it ${d.bestWhy}.` : '';
+  return `${reasoned.map(shortfallText).join(' ')}${verdict}`;
 }
 
 /** The alternatives that are a real fork in the road — they drop material or

@@ -1295,6 +1295,25 @@ export interface BoardHighlight {
   color: string;
 }
 
+/** One move of a line the board can draw and walk. */
+export interface WalkPly {
+  san: string;
+  uci: string;
+  fenBefore: string;
+  fenAfter: string;
+}
+
+/** A computed line the board DRAWS (arrows) and WALKS (a button) — one shape
+ *  across Learn chat and review, so a spoken line is never re-derived for the
+ *  board (WO-DANYA-01, David 2026-09-24: "arrows draw the lines, button press
+ *  to walk it"). */
+export interface WalkableLine {
+  /** What the walk button names — the line's first move. */
+  label: string;
+  startFen: string;
+  plies: WalkPly[];
+}
+
 export interface GhostMoveData {
   fromSquare: string;
   toSquare: string;
@@ -1349,6 +1368,9 @@ export interface ChatMessage {
    * fields mean a new picker cannot quietly reuse the label as the command.
    */
   choices?: ChatChoice[];
+  /** Lines this answer calculated — drawn as arrows while it is spoken and
+   *  walkable on the board with a button (WO-DANYA-01 C). */
+  lines?: WalkableLine[];
   metadata?: {
     actions?: { type: string; id: string }[];
     annotations?: BoardAnnotationCommand[];

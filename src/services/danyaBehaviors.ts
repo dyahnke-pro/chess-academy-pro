@@ -25,14 +25,18 @@
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
+import { attackerCanUseFile, rookReachesFile } from './positionalRead';
+import { seatBare } from '../utils/seatPieces';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import {
   strongestWeakestPiece,
   kingSafetyRead,
   findWeakPawns,
+  namedPawnStructure,
   developmentRead,
   findPieceQuality,
+  goodPieceClause,
   countMaterial,
   findPassedPawns,
   findPawnBreaks,
@@ -81,6 +85,11 @@ export interface BehaviorContext {
   studentColor: Color | 'white' | 'black';
   /** Already-computed MultiPV lines for this FEN (latency-safe reuse). */
   topLines?: ReadonlyArray<BehaviorLine>;
+  /** The square the student's last move landed on, when known. A static swap
+   *  count about the piece that just arrived is either a blunder the engine
+   *  verdict names better or a deliberate offer it cannot judge (hand walk
+   *  2026-09-25: …Bh3, the textbook x-ray, read as "they win your bishop"). */
+  studentLastTo?: string | null;
 }
 
 export interface BehaviorHit {
@@ -113,6 +122,7 @@ interface NormalizedCtx {
    *  (David 2026-08-23: no phase-inapplicable teaching). */
   phase: Phase | null;
   isEndgame: boolean;
+  studentLastTo: string | null;
 }
 
 function normalize(ctx: BehaviorContext): NormalizedCtx | null {
@@ -130,6 +140,7 @@ function normalize(ctx: BehaviorContext): NormalizedCtx | null {
     chess,
     phase,
     isEndgame: phase === 'endgame',
+    studentLastTo: ctx.studentLastTo ?? null,
   };
 }
 
@@ -153,7 +164,13 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const good = notes.find((n) => n.quality === 'good' && (n.piece === 'n' || n.piece === 'b' || n.piece === 'r'));
       if (good) {
         // A good outpost / rook on the open file is worth praising any time.
-        return { fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} — ${good.reason}. Build around it.`, squares: [good.square] };
+        // A sentence per reason, not a noun phrase glued to a dash (hand walk
+        // 2026-09-24: "Your rook on f1 — rook on a semi-open file. Build around
+        // it." read like a label).
+        return {
+          fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} ${goodPieceClause(good.reason, good.square).replace(/^it /, '')} — build your play around it.`,
+          squares: [good.square],
+        };
       }
       // "Reroute your worst piece" is a MIDDLEGAME idea — in the opening a piece
       // is passive because it isn't developed yet (David 2026-08-23).
@@ -185,8 +202,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // only past the opening so it isn't just "the uncastled starting king".
       const moveNo = Number(fen.split(' ')[5] ?? '0');
       const theirs = kingSafetyRead(fen, opp);
-      if (theirs?.exposed && theirs.openFilesNearKing.length >= 1 && theirs.shieldPawns <= 1 && moveNo >= 8) {
-        const files = theirs.openFilesNearKing.join(', ');
+      const roads = (theirs?.openFilesNearKing ?? []).filter((f) => attackerCanUseFile(fen, f, student));
+      if (theirs?.exposed && roads.length >= 1 && theirs.shieldPawns <= 1 && moveNo >= 8) {
+        const files = roads.join(', ');
         return { fact: `The enemy king on ${theirs.square} is exposed — the ${files}-file is open toward it. Play for the attack.`, squares: [sq(theirs.square)] };
       }
       // Your own king stuck in the center is only a real problem once pieces are
@@ -201,10 +219,27 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'prophylaxis',
     weight: 927,
-    detect: ({ fen, studentWord }) => {
+    detect: ({ fen, studentWord, student, studentLastTo }) => {
       const intent = opponentIntentRead(fen, studentWord);
       if (!intent) return null;
       if (intent.kind === 'capture') {
+        if (studentLastTo && intent.target === studentLastTo) return null;
+        // THE STUDENT'S OWN LEVER IS NOT A THREAT TO "DEAL WITH" (hand walk
+        // 2026-09-24: after a5 hit b6 beside the long-castled king, "the
+        // opponent is eyeing bxa5 … deal with that first" — the pawn is there
+        // to pry the king open, and his plan was Bf4 first, then axb6).
+        if (intent.targetPiece === 'p' && isLeverOnKing(fen, intent.target, student)) return null;
+        // A DEFENDED PAWN "WON" BY A SWAP-OFF IS A COUNT, NOT A THREAT. The
+        // count is static; the swaps are where the deeper tactic hides. In the
+        // King's Indian main line (hand walk 2026-09-25) "the opponent is eyeing
+        // dxe5 — it would win your pawn on e5" was false: dxe5 dxe5 Qxd8 Rxd8
+        // Nxe5 runs into …Nxe4. An UNDEFENDED pawn is a clean win and stays
+        // (walk 2340's "eyeing Rxc3", which his Rac1 answered).
+        if (intent.targetPiece === 'p') {
+          try {
+            if (new Chess(fen).attackers(intent.target, student).length > 0) return null;
+          } catch { return null; }
+        }
         // The piece is NAMED from the board, never "the piece" — a pawn on e4
         // is a pawn (D-7, prod tape 2026-09-22).
         const what = intent.targetPiece ? `your ${PIECE_NAME[intent.targetPiece]} on ${intent.target}` : `what sits on ${intent.target}`;
@@ -223,14 +258,39 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // actually be attacked — the side already bears on it, OR its file is
       // half-open for that side so a rook can pile on. A backward pawn defended
       // three times behind a closed file is not a target.
+      // The isolani is the STRUCTURE lane's (it names it with its plan), so a
+      // d-pawn isolani is not also "a weak pawn" here — hand walk 2340 heard
+      // "watch your isolated pawn on d4" beside "you hold the isolated queen's
+      // pawn". One owner per fact.
+      const isolaniFile = /isolated queen/i.test(namedPawnStructure(fen, student)?.name ?? '') ? 'd' : null;
+      const noIsolani = (w: ReturnType<typeof findWeakPawns>): ReturnType<typeof findWeakPawns> =>
+        (isolaniFile ? { ...w, isolated: w.isolated.filter((sq) => sq[0] !== isolaniFile) } : w);
+      // Only the STUDENT's own isolani is said by the structure line ("you
+      // hold…") — THEIR isolani with a piece bearing on it is the concrete
+      // plan ("pile up on it"), not a repeat of the name.
       const theirs = findWeakPawns(fen, opp);
+      // A DOUBLED PAIR IN FLUX IS NOT A STRUCTURE. After 3.d4 exd4 the d6 and
+      // d4 pawns are "doubled" for exactly one move — White is about to take
+      // the one on d4 (hand walk 2026-09-24: "The doubled pawn on d6 is a
+      // weakness — pile up on it"). If either pawn on that file can be taken
+      // right now, the doubling is about to end and is not advice.
+      const inFlux = (sq: Square): boolean => {
+        const file = sq[0];
+        for (let r = 1; r <= 8; r += 1) {
+          const at = `${file}${r}` as Square;
+          const c = chess.get(at);
+          if (c && c.type === 'p' && c.color === opp && chess.attackers(at, student).length > 0) return true;
+        }
+        return false;
+      };
       const theirsPick = [theirs.backward[0], theirs.isolated[0], theirs.doubled[0]]
-        .find((p): p is Square => !!p && pawnIsAttackable(chess, p, student));
+        .find((p): p is Square => !!p && pawnIsAttackable(chess, p, student)
+          && !(theirs.doubled.includes(p) && inFlux(p)));
       if (theirsPick) {
         const kind = theirs.backward.includes(theirsPick) ? 'backward' : theirs.isolated.includes(theirsPick) ? 'isolated' : 'doubled';
         return { fact: `The ${kind} pawn on ${theirsPick} is a weakness — pile up on it.`, squares: [theirsPick] };
       }
-      const mine = findWeakPawns(fen, student);
+      const mine = noIsolani(findWeakPawns(fen, student));
       const minePick = [mine.backward[0], mine.isolated[0]]
         .find((p): p is Square => !!p && pawnIsAttackable(chess, p, opp));
       if (minePick) {
@@ -305,7 +365,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       });
       if (meaningful.length > 0) {
         const p = meaningful[0];
-        return { fact: p.description, squares: p.involvedSquares.map(sq) };
+        return { fact: seatBare(p.description, fen, student), squares: p.involvedSquares.map(sq) };
       }
       return null;
     },
@@ -331,7 +391,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const notes = findPieceQuality(fen);
       const out = notes.find((n) => n.color === student && n.reason.includes('outpost'));
       if (out) {
-        return { fact: `${out.square} is an outpost — a knight there can't be chased by a pawn and dominates.`, squares: [out.square] };
+        // The note is about a piece STANDING on the outpost — say whose
+        // (hand walk 1600: "e4 is an outpost — a knight there…" with the
+        // student's own knight already on e4).
+        return { fact: `Your knight on ${out.square} sits on an outpost — no pawn can chase it away, and from there it dominates.`, squares: [out.square] };
       }
       return null;
     },
@@ -451,7 +514,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
           sound = landingIsSafe(probe.fen(), dest);
         } catch { sound = false; }
         if (sound) {
-          return { fact: `${dest} is the pawn break that cracks the position open — prepare it.`, squares: [dest] };
+          // It only reaches here when the push is legal NOW and the pawn is
+          // safe where it lands — so it is READY, not something to prepare
+          // (hand walk 2026-09-24: after 11.Qe1 prepared e5 the coach still
+          // said "prepare it"; his line was "now you can go e5").
+          return { fact: `${dest} is the pawn break that cracks the position open — and it's ready now.`, squares: [dest] };
         }
       }
       return null;
@@ -476,17 +543,18 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const mine = student === 'w' ? files.whiteSemiOpen : files.blackSemiOpen;
       const all = [...files.open, ...mine];
       if (all.length === 0) return null;
-      // Only speak if the student has a rook NOT yet on that file.
-      const file = all[0];
-      let hasRookOnIt = false; let hasRook = false;
+      // Speak only when a rook of the student's can step ONTO the file in one
+      // move — the ONE predicate (`rookReachesFile`) the positional read uses
+      // too (hand walk 2026-09-24). A rook already on one of them: job done.
+      let onOne = false;
       for (const row of chess.board()) for (const cell of row) {
-        if (cell && cell.type === 'r' && cell.color === student) {
-          hasRook = true;
-          if (cell.square[0] === file) hasRookOnIt = true;
-        }
+        if (cell && cell.type === 'r' && cell.color === student && all.includes(cell.square[0])) onOne = true;
       }
-      if (hasRook && !hasRookOnIt) {
-        return { fact: `The ${file}-file is open — your rook belongs there.`, squares: [] };
+      if (onOne) return null;
+      for (const file of all) {
+        if (!rookReachesFile(fen, student, file)) continue;
+        const kind = files.open.includes(file) ? 'open' : 'half-open';
+        return { fact: `The ${file}-file is ${kind} — your rook belongs there.`, squares: [] };
       }
       return null;
     },
@@ -533,7 +601,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // EXPLOITABILITY (David 2026-08-23): only name a hole a student MINOR can
       // actually reach and hold in ~2 moves. "Plant a knight or bishop there"
       // when the student has neither able to arrive is geometry — silence it.
-      const hole = holes.find((h) => minorCanReachSquare(fen, h, student));
+      // "IN THEIR CAMP" MEANS THEIR HALF (hand walk 2026-09-24: "c4 is a hole in
+      // their camp" — Black's weak c4 sits on White's side of the board).
+      const inTheirHalf = (sq: string): boolean => (opp === 'b' ? Number(sq[1]) >= 5 : Number(sq[1]) <= 4);
+      const hole = holes.find((h) => inTheirHalf(h) && minorCanReachSquare(fen, h, student));
       if (hole) {
         return { fact: `${hole} is a hole in their camp — a piece planted there can't be kicked.`, squares: [hole] };
       }
@@ -681,4 +752,24 @@ export class BehaviorScheduler {
   }
 
   reset(): void { this.pass.clear(); }
+}
+
+/** The student's pawn on `sq` attacks an enemy pawn on a file beside the enemy
+ *  king — a lever against the king's cover, not a loose pawn. */
+function isLeverOnKing(fen: string, sq: string, student: Color): boolean {
+  try {
+    const b = new Chess(fen);
+    const them: Color = student === 'w' ? 'b' : 'w';
+    let kingFile = -1;
+    for (const row of b.board()) for (const c of row) if (c && c.type === 'k' && c.color === them) kingFile = c.square.charCodeAt(0);
+    if (kingFile < 0) return false;
+    const dir = student === 'w' ? 1 : -1;
+    for (const df of [-1, 1]) {
+      const f = sq.charCodeAt(0) + df;
+      const target = `${String.fromCharCode(f)}${Number(sq[1]) + dir}` as Square;
+      const p = b.get(target);
+      if (p && p.type === 'p' && p.color === them && Math.abs(f - kingFile) <= 1) return true;
+    }
+    return false;
+  } catch { return false; }
 }

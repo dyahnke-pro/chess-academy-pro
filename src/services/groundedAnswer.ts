@@ -12,6 +12,8 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { isSacrifice } from './factStakes';
+import { seatPieceReferences } from '../utils/seatPieces';
 import { deriveNextPlans } from './nextPlans';
 import { Chess } from 'chess.js';
 import { isRealPin } from './pinGeometry';
@@ -1275,7 +1277,7 @@ export function assemblePositionAssessment(opts: {
     if (tactics.boardFacts?.mateInOne) {
       parts.push(`There is checkmate in one on the board: ${tactics.boardFacts.mateInOne}.`);
     } else if (tactics.immediate[0]?.description) {
-      parts.push(`${tactics.immediate[0].description}.`);
+      parts.push(`${seatedSentence(tactics.immediate[0].description, tactics.fen, sc)}.`);
     } else {
       // Verified against the package's OWN fen — unconditional, no parameter to
       // forget (see `TacticsLiveContext.fen`). This catches a claim the
@@ -1284,7 +1286,7 @@ export function assemblePositionAssessment(opts: {
       // stale package passes this check by construction.
       const myHang = tactics.hanging.find((h) => h.color === sc && pieceIsOn(tactics.fen, h.square, h.piece, h.color));
       if (myHang) parts.push(`Your ${REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece} on ${myHang.square} is hanging.`);
-      else if (tactics.threats[0]?.description) parts.push(`Watch out — ${tactics.threats[0].description}.`);
+      else if (tactics.threats[0]?.description) parts.push(`Watch out — ${seatedDescription(tactics.threats[0].description, tactics.fen, sc)}.`);
     }
   }
 
@@ -2590,11 +2592,9 @@ export function describeSacrifice(
     const b = new Chess(fenBefore);
     const mv = b.move(san);
     if (!mv) return null;
-    const capturedVal = mv.captured ? (REVIEW_PIECE_VALUE[mv.captured] ?? 0) : 0;
-    const opponentWins = legalSeeGain(b.fen(), mv.to); // material the opponent (to move) wins back on `to` (pin-aware)
-    // Net material handed over. ≥ 2 (a minor piece's worth) so a 1-pawn poke
-    // isn't dressed up as a "sacrifice".
-    if (opponentWins - capturedVal >= 2) {
+    // ONE RULE (`factStakes.isSacrifice`) — with no engine reply in hand it
+    // asks for a piece's worth handed over, as this always did.
+    if (isSacrifice(fenBefore, san, null)) {
       return `sacrifices the ${REVIEW_PIECE_NAME[mv.piece]} on ${mv.to}`;
     }
     return null;
@@ -3256,11 +3256,11 @@ export function assembleTacticsAnswer(
   // supersedes the bare description of the same tactic below (no double-speak).
   const leadConcept = tactics.concepts?.[0];
   const spokenConceptId = leadConcept?.source === 'tactic' ? leadConcept.id : null;
-  if (leadConcept && leadConcept.source !== 'positional') parts.push(leadConcept.full);
+  if (leadConcept && leadConcept.source !== 'positional') parts.push(seatedSentence(leadConcept.full, leadConcept.boardFen ?? tactics.fen, sc));
   // Immediate tactics on the board now — voice the engine's own descriptions
   // (skipping the one the concept sentence already taught).
   for (const t of tactics.immediate) {
-    if (t.description && t.type !== spokenConceptId) parts.push(`${t.description}.`);
+    if (t.description && t.type !== spokenConceptId) parts.push(`${seatedSentence(t.description, tactics.fen, sc)}.`);
   }
   // The STUDENT's pieces left hanging — warn concretely. Every claim is
   // verified against the package's own fen before it is made: a hanging entry
@@ -3270,10 +3270,10 @@ export function assembleTacticsAnswer(
   }
   // Nothing concrete yet → surface the top threat, then the top opportunity.
   if (parts.length === 0 && tactics.threats[0]?.description) {
-    parts.push(`Watch out — ${tactics.threats[0].description}.`);
+    parts.push(`Watch out — ${seatedDescription(tactics.threats[0].description, tactics.fen, sc)}.`);
   }
   if (parts.length === 0 && tactics.opportunities[0]?.description) {
-    parts.push(`You have a shot: ${tactics.opportunities[0].description}.`);
+    parts.push(`You have a shot: ${seatedDescription(tactics.opportunities[0].description, tactics.fen, sc)}.`);
   }
 
   if (parts.length === 0) return null;
@@ -5988,7 +5988,7 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
   }
 
   if (topic === 'structure-name') {
-    const s = namedPawnStructure(fen);
+    const s = namedPawnStructure(fen, myC);
     if (s) return { facts: `This is ${s.name}. ${s.plan}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     // Not a textbook-named structure — still describe it board-truthfully from
     // the pawn faults on each side rather than declining.
@@ -6181,6 +6181,21 @@ export function assembleCounterRepertoireAnswer(opts: {
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:counter-repertoire'] };
 }
 
+/** A detector's description, mid-sentence and seated: "Capturing knight on
+ *  f3…" after "Watch out —" read raw, with nobody's knight (hand walk 2340). */
+/** A detector description seated and standing as its own sentence ("Your
+ *  bishop on g4 pins their knight on f3 against their queen on d1"). The raw
+ *  text ("Bishop on g4 pins knight on f3…") was spoken as-is (hand walk 800). */
+function seatedSentence(description: string, fen: string, studentColorWB: 'w' | 'b'): string {
+  const s = seatedDescription(description, fen, studentColorWB);
+  return `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
+}
+
+function seatedDescription(description: string, fen: string, studentColorWB: 'w' | 'b'): string {
+  const lowered = `${description.charAt(0).toLowerCase()}${description.slice(1)}`;
+  return seatPieceReferences(lowered, fen, studentColorWB);
+}
+
 /**
  * seatPieceReferences — the deterministic MINE/YOURS layer (David 2026-07-21:
  * "ship the correct answer to the LLM — build the deterministic mine/yours
@@ -6194,61 +6209,7 @@ export function assembleCounterRepertoireAnswer(opts: {
  * are left untouched. Pure chess.js; on any parse problem the text ships
  * unchanged.
  */
-export function seatPieceReferences(
-  text: string,
-  fen: string,
-  studentColorWB: 'w' | 'b',
-): string {
-  try {
-    const board = new Chess(fen);
-    const WANT: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
-    // Structural adjectives the composed facets place BETWEEN a possessive and
-    // the piece noun ("your PASSED pawn", "their WEAK pawn"). Captured as part of
-    // the lead so a possessive already present isn't re-stamped into a
-    // double-possessive — "your passed YOUR pawn on c2" (preview line-read,
-    // 2026-07-22).
-    const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
-    return text.replace(
-      new RegExp(
-        `(\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
-        'g',
-      ),
-      (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string) => {
-        const leadLower = (lead ?? '').toLowerCase().trim();
-        // Already seated — leave the author's possessive (and any adjective it
-        // introduced) alone.
-        if (leadLower.startsWith('your') || leadLower.startsWith('their')) return whole;
-        // An INDEFINITE article ("creates a passed pawn on c2") is already
-        // grammatical — stamping a possessive after it produced "a your passed
-        // pawn on c2" (prod line-read, 2026-07-23). Leave indefinite phrases be.
-        if (leadLower === 'a' || leadLower === 'an') return whole;
-        // A DEMONSTRATIVE is a determiner, so a possessive cannot follow it —
-        // it REPLACES it. Until 2026-09-16 `that|this` was missing from the lead
-        // alternation entirely, so the regex matched the bare noun, captured no
-        // lead, and stamped the possessive in front of the noun instead of the
-        // determiner: "make that your knight on d4 the boss" (prod line-read of
-        // David's Alapin, plies 34 and 44). Replacing keeps BOTH the grammar and
-        // the seat, which dropping the possessive would have lost.
-        if (/^th(at|is|ose|ese)$/.test(leadLower)) {
-          const cellD = board.get(sq as Square);
-          if (!cellD || cellD.type !== WANT[piece.toLowerCase()]) return whole;
-          const ownerD = cellD.color === studentColorWB ? 'your' : 'their';
-          return `${ownerD} ${adj ?? ''}${piece} on ${sq}`;
-        }
-        const cell = board.get(sq as Square);
-        if (!cell || cell.type !== WANT[piece.toLowerCase()]) return whole;
-        const owner = cell.color === studentColorWB ? 'your' : 'their';
-        const firstChar = (lead && lead.length > 0 ? lead : (adj && adj.length > 0 ? adj : piece)).charAt(0);
-        const sentenceStart = firstChar === firstChar.toUpperCase();
-        const ownerWord = sentenceStart ? cap(owner) : owner;
-        // Preserve a bare adjective (rare "the passed pawn" form) after the owner.
-        return `${ownerWord} ${adj ? adj.toLowerCase() : ''}${piece.toLowerCase()} on ${sq}`;
-      },
-    );
-  } catch {
-    return text;
-  }
-}
+export { seatPieceReferences } from '../utils/seatPieces';
 
 /**
  * describeStudentThreat — THE THREAT CALL-OUT (David 2026-07-21, emphatic:

@@ -33,9 +33,11 @@ export const SURFACE_CONTRACT: Record<CoachSurface, SurfaceContract> = {
   review: { register: 'retrospective', withholds: 'thesis-until-answer', speaks: 'always' },
   // Learn / Watch / Learn-the-line: present-tense live teaching as the line unfolds.
   teach: { register: 'present', withholds: 'none', speaks: 'always' },
-  // Play (`/coach/play`): the phase-transition narrator — present tense, and
-  // ONLY at a transition or when the student asks.
-  'phase-narration': { register: 'present', withholds: 'none', speaks: 'transitions-only' },
+  // The phase-transition narrator — ONLY at a transition or when the student
+  // asks. RETROSPECTIVE: its thesis is about the game SO FAR, moves already on
+  // the board (hand walk 2026-09-24: "Watch move 7, Bh5 — that is where the pin
+  // lands" was said at move 8, as if move 7 were still coming).
+  'phase-narration': { register: 'retrospective', withholds: 'none', speaks: 'transitions-only' },
   hint: { register: 'present', withholds: 'none', speaks: 'on-request' },
   'move-selector': { register: 'present', withholds: 'none', speaks: 'on-request' },
   'home-chat': { register: 'present', withholds: 'none', speaks: 'on-request' },

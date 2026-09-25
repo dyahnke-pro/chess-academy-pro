@@ -25,6 +25,7 @@
  * arrow squares via chess.js. Only surfaceable (weapon-tier + narrated) gems
  * qualify.
  */
+import type { WalkableLine, WalkPly } from '../types';
 import { computeExchangeLedger } from './exchangeLedger';
 import { Chess } from 'chess.js';
 import {
@@ -819,4 +820,49 @@ export function findLivePunishment(
     continuation,
     punishSeq: gem.punishSeq ?? [gem.punish],
   };
+}
+
+// gemResolution — what the coach says, draws and offers to walk AFTER the
+// student meets a gem the coach called out (David 2026-09-24: "include a
+// walkthrough of the gem, instead of loading. Just include in the narration
+// using arrows then offer the walk button" → "After you've played it (or
+// missed it): then the full narration, arrows, and Walk button. Yes!").
+//
+// Nothing is computed here that the gem did not already carry: the punish, its
+// curated continuation and the reveal sentence all come from
+// `findLivePunishment`. chess.js only turns the stored SANs into the plies the
+// board walks — no engine, no lesson build, nothing to load.
+//
+// The honesty contract is why this runs AFTER the move: while the student is
+// still looking, the coach only says there is something to find.
+export interface GemResolution {
+  /** Did the student play the punish? */
+  found: boolean;
+  /** The spoken + written line. */
+  say: string;
+  /** The punish and its continuation, walkable from the gem position. */
+  line: WalkableLine;
+}
+
+const bare = (san: string): string => san.replace(/[+#!?]+$/g, '');
+
+/** Null when the stored line does not replay from `fenBefore` — the gem is
+ *  about a different board, and saying it would be a claim about nothing. */
+export function gemResolution(gem: LivePunishment, fenBefore: string, playedSan: string): GemResolution | null {
+  const plies: WalkPly[] = [];
+  try {
+    const c = new Chess(fenBefore);
+    for (const san of gem.punishSeq) {
+      const before = c.fen();
+      const mv = c.move(san);
+      if (!mv) break;
+      plies.push({ san: mv.san, uci: `${mv.from}${mv.to}${mv.promotion ?? ''}`, fenBefore: before, fenAfter: c.fen() });
+    }
+  } catch { /* a line that stops replaying stops here */ }
+  if (plies.length === 0 || bare(plies[0].san) !== bare(gem.punish)) return null;
+  const found = bare(playedSan) === bare(gem.punish);
+  const say = found
+    ? `That's the punish. ${gem.reveal}`
+    : `That was the chance — ${gem.reveal}`;
+  return { found, say, line: { label: plies[0].san, startFen: fenBefore, plies } };
 }

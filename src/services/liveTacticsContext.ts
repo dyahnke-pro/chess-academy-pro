@@ -1,4 +1,5 @@
 import { logAppAudit } from './appAuditor';
+import { isScenicPawnPin } from './factStakes';
 import type { PerspectiveMode } from './perspectiveRule';
 /**
  * Live tactics context builder — turns the surface's Stockfish read
@@ -353,6 +354,10 @@ function detectImmediateTactics(
     const result = detectTactics(fen);
     return result.tactics
       .filter((t) => t.type !== 'none')
+      // A pawn pin that wins nothing is scenery — the ONE rule review uses too
+      // (`isScenicPawnPin`), applied where the live package is built so no
+      // Learn lane has to remember it.
+      .filter((t) => !isScenicPawnPin(fen, t.type, t.involvedSquares, t.beneficiary))
       .map((t) => tacticPatternToEntry(t, playerColor, fen))
       .slice(0, 5);
   } catch {
@@ -469,6 +474,9 @@ const THREAT_STEM: Record<LookaheadSeat, (pattern: string, depth: number, line: 
   'coach-is-opponent': (pattern, depth, line) => `Look ahead — I'm lining up a ${pattern} in ${depth}: ${line}. Spot it before it lands.`,
 };
 
+/** How far the live board's spoken foresight reaches — "a couple of moves". */
+const SPOKEN_LOOKAHEAD_PLIES = 4;
+
 export function speakDeepestLookahead(
   ctx: TacticsLiveContext,
   seat: LookaheadSeat,
@@ -488,7 +496,11 @@ export function speakDeepestLookahead(
   const deep = (
     list: TacticsLiveContext['threats'],
   ): TacticsLiveContext['threats'] =>
-    list.filter((e) => e.depthAhead >= 2 && e.line.length > 0);
+    // …and "a couple of moves ahead" means a couple: two moves each side. "A
+    // removal of guard coming, 9 deep" and "a skewer coming, 7 deep" over quiet
+    // shuffles (hand walk 2340, moves 15-16) are not foresight a listener can
+    // follow; the deep line belongs to the review, where the board replays it.
+    list.filter((e) => e.depthAhead >= 2 && e.depthAhead <= SPOKEN_LOOKAHEAD_PLIES && e.line.length > 0);
   // e.type is widened to string on TacticsLiveContext; the runtime value is a
   // real TacticPatternType (from UpcomingTactic.pattern.type). An unknown motif
   // would map to null in the bridge anyway, so the cast is safe.
@@ -508,7 +520,8 @@ export function speakDeepestLookahead(
   // the engine line (chess.js-legal), so naming them is grounded, not invented
   // — and they are SPELLED (D-10): a bare "Bg5" beside the TTS sanitizer's own
   // expansion of it spoke every move twice.
-  const walk = pick.line.slice(0, 4);
+  // Walked to the horizon, which is where the tactic lands.
+  const walk = pick.line.slice(0, SPOKEN_LOOKAHEAD_PLIES);
   const spoken = walk.map(sayMoveNoun);
   const lineProse =
     spoken.length === 1
@@ -519,15 +532,20 @@ export function speakDeepestLookahead(
   const holeTag = isHole(pick)
     ? (isOpportunity ? ` This is exactly the kind you tend to miss — grab it.` : ` This is a pattern that keeps catching you — watch for it.`)
     : '';
-  if (isOpportunity) {
-    return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${lineProse}.${holeTag}`;
-  }
   // WHOSE MOVE OPENS THE LINE. The PV starts at `ctx.fen`, so ply 0 belongs to
   // the side to move there. When that is the STUDENT, the threat is what the
   // opponent gets IF the student plays that move — "they're lining up" would
   // hand the student's own move to the other seat.
   const toMove = (ctx.fen.split(' ')[1] ?? 'w') as 'w' | 'b';
   const studentOpens = toMove === studentColor;
+  if (isOpportunity) {
+    // Every ply names its owner — "the bishop taking on c3, then the pawn to
+    // e4" left the student to work out which moves were theirs (hand walk 2340).
+    const theirs = seat === 'student' ? 'their' : 'my';
+    const owned = spoken.map((m, i) => (/^the /.test(m) ? `${(i % 2 === 0) === studentOpens ? 'your' : theirs} ${m.slice(4)}` : m));
+    const ownedProse = owned.length === 1 ? owned[0] : `${owned[0]}, then ${owned.slice(1).join(', ')}`;
+    return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${ownedProse}.${holeTag}`;
+  }
   if (studentOpens && spoken.length >= 2) {
     const reply = spoken.slice(1);
     const replyProse = reply.length === 1 ? reply[0] : `${reply[0]}, then ${reply.slice(1).join(', ')}`;

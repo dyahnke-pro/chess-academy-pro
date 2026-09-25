@@ -144,6 +144,12 @@ const MATE_CP = 100_000;
 export function provenPrefix(fenBefore: string, sans: readonly string[], moverWB: 'w' | 'b'): { lineSans: string[]; proofResult: string | null } {
   const proof = sans.length > 0 ? proofCut(fenBefore, sans, moverWB) : null;
   if (!proof) return { lineSans: [], proofResult: null };
+  // THE PROOF MUST BE AGAINST THE MOVER. The line starts with the alternative
+  // itself, so a recapture counts its own capture: "31% play bxc6 here, and it
+  // loses material: bxc6 — you win a bishop" (hand walk 800, Ruy Exchange).
+  // Only a mate OF the mover (even ply) or a settled net loss proves the point.
+  const against = proof.mate ? proof.plies % 2 === 0 : (proof.ledger?.netPawns ?? 0) < 0;
+  if (!against) return { lineSans: [], proofResult: null };
   const proofResult = proof.mate ? "it's mate" : proof.ledger ? describeProofResult(proof.ledger) : null;
   return { lineSans: proofResult ? sans.slice(0, proof.plies) : [], proofResult };
 }

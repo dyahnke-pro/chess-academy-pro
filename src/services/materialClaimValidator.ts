@@ -24,6 +24,7 @@
  *     about compensation/structure get fuzzy fast.
  */
 import { Chess } from 'chess.js';
+import { claimSentences } from '../utils/claimSentences';
 
 const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
@@ -47,7 +48,6 @@ export function materialBalance(fen: string): number | null {
   }
 }
 
-const SENTENCE_SPLIT_RE = /(?<=[.!?])\s+/;
 
 /** "material is level/even/equal/balanced" style claims. */
 const LEVEL_RE = /\bmaterial\s+(?:is|stays|remains|is\s+back\s+to|comes?\s+back\s+to)\s+(?:dead[-\s])?(?:level|even|equal|balanced)\b|\bmaterial\s+equality\b/i;
@@ -82,7 +82,7 @@ export function stripDisprovenMaterialSentences(text: string, fen: string): Mate
 
   const kept: string[] = [];
   const dropped: string[] = [];
-  for (const sentence of text.split(SENTENCE_SPLIT_RE)) {
+  for (const sentence of claimSentences(text)) {
     // HYPOTHETICAL-CAPTURE ACCOUNTING (the exact class David heard, hp-54v):
     // "After White takes the Benko pawn, he's down a pawn…" is future-marked,
     // so the present-tense rules below never see it. But one arithmetic fact

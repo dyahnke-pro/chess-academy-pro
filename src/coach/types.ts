@@ -517,6 +517,11 @@ export interface CoachConcept {
   full: string;
   short: string;
   importance: number;
+  /** The board the concept is ABOUT — a concept found down the engine's line
+   *  describes that board, not this one, and seats on it (the sibling
+   *  `ComputedConcept` field; chat dropped it and said "Bishop on g4 pins…"
+   *  with no owner, 2026-09-25). */
+  boardFen?: string;
 }
 
 export interface TacticsLiveContext {
@@ -920,4 +925,7 @@ export interface CoachAnswer {
    *  Empty/absent when the turn fired no grounded block that attaches
    *  an offer. Populated from `consumeCoachActionOffer()` on coachApi. */
   actionOffer?: { type: string; id: string }[];
+  /** Lines the grounded answer calculated — the surface draws them as arrows
+   *  while it speaks and walks them on a button (WO-DANYA-01 C). */
+  lines?: import('../types').WalkableLine[];
 }

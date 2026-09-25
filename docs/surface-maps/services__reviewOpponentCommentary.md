@@ -20,10 +20,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `buildOpponentMoveTeaching` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2880`
+- `src/services/coachFeatureService.ts:2950`
 - `src/services/planBeatShape.test.ts:39`
 - `src/services/planBeatShape.test.ts:53`
-- `src/services/reviewFullData.ts:612`
+- `src/services/reviewFullData.ts:908`
 - `src/services/reviewOpponentCommentary.test.ts:12`
 - `src/services/reviewOpponentCommentary.test.ts:20`
 - `src/services/reviewOpponentCommentary.test.ts:33`
@@ -32,9 +32,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpponentCommentary.test.ts:60`
 
 ### `buildOpponentDevelopmentRead` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:2857`
+- `src/services/coachFeatureService.ts:2927`
 - `src/services/planBeatShape.test.ts:69`
-- `src/services/reviewFullData.ts:624`
+- `src/services/reviewFullData.ts:920`
 - `src/services/reviewOpponentCommentary.test.ts:73`
 - `src/services/reviewOpponentCommentary.test.ts:77`
 - `src/services/reviewOpponentCommentary.test.ts:89`

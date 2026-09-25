@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import type { ChatMessage as ChatMessageType } from '../../types';
+import type { ChatMessage as ChatMessageType, WalkableLine } from '../../types';
 import { stripCoachMarkup } from '../../services/sanitizeCoachText';
 import { useLocalizedContent } from '../../services/coachChatText';
 
@@ -56,6 +56,9 @@ interface ChatMessageProps {
    *  (`message.choices`). When absent, chips don't render (e.g. the
    *  streaming placeholder bubble). */
   onPickChoice?: (choice: string) => void;
+  /** Walk one of the lines this answer calculated on the board (WO-DANYA-01 C).
+   *  When absent, no walk buttons render. */
+  onWalkLine?: (line: WalkableLine) => void;
 }
 
 function ActionButton({ action, onClick }: {
@@ -101,7 +104,7 @@ function ActionButton({ action, onClick }: {
  *  reasoning that put `stripCoachMarkup` here puts this here: it is the one
  *  component every coach bubble renders through, so one call covers all six
  *  surfaces and the seventh. See `services/coachChatText.ts`. */
-export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageProps): JSX.Element {
+export function ChatMessage({ message, isStreaming, onPickChoice, onWalkLine }: ChatMessageProps): JSX.Element {
   const shownContent = useLocalizedContent(message.content, message.role, { streaming: isStreaming });
   const navigate = useNavigate();
   const isUser = message.role === 'user';
@@ -281,6 +284,27 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
           </div>
         )}
 
+        {!isUser && message.lines && message.lines.length > 0 && onWalkLine && (
+          <div
+            className="flex flex-wrap gap-2 mt-2"
+            data-testid="message-walk-lines"
+            role="group"
+            aria-label="Walk a line on the board"
+          >
+            {message.lines.map((line, i) => (
+              <button
+                key={`walk-${i}-${line.label}`}
+                type="button"
+                onClick={() => onWalkLine(line)}
+                className="px-3 py-1.5 rounded-full border-2 border-theme-accent/40 bg-theme-accent/10 text-sm text-theme-text hover:bg-theme-accent/20 hover:border-theme-accent transition-colors min-h-[36px]"
+                data-testid={`message-walk-line-${i}`}
+                data-line={line.label}
+              >
+                Walk {line.label}
+              </button>
+            ))}
+          </div>
+        )}
         {choices.length > 0 && onPickChoice && !isVoiceAssistant && (
           <div
             className="flex flex-wrap gap-2 mt-2"

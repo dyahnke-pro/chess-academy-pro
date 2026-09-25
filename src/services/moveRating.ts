@@ -10,6 +10,7 @@
  * mode (empty/illegal history, engine unavailable) returns null so the caller
  * falls through to the LLM — it never fabricates a rating.
  */
+import { mateContext } from '../utils/mateContext';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { isMateEval, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP, EXCELLENT_WIN_PCT } from './engineConstants';
@@ -278,11 +279,7 @@ export async function computeMoveRatingAt(moveHistory: readonly string[], plyInd
   const cpLoss = Math.max(0, Math.round(preStudent - postStudent));
   const wasBest = !!pre.bestMove && pre.bestMove.toLowerCase() === playedUci.toLowerCase();
 
-  // Mate context — flip White-POV mateIn to the student's POV.
-  const preMate = pre.isMate && pre.mateIn !== null ? pre.mateIn * sign : null;   // > 0 = student mating
-  const postMate = post.isMate && post.mateIn !== null ? post.mateIn * sign : null; // < 0 = student getting mated
-  const missedMate = preMate !== null && preMate > 0 && !wasBest ? Math.abs(preMate) : null;
-  const allowedMate = postMate !== null && postMate < 0 ? Math.abs(postMate) : null;
+  const { missedMate, allowedMate } = mateContext(pre, post, studentColor, wasBest);
 
   // The better move (SAN + from/to for an arrow) when the student missed best.
   let betterSan: string | null = null;
@@ -313,7 +310,7 @@ export async function computeMoveRatingAt(moveHistory: readonly string[], plyInd
     cpLossFromBestCp: cpLoss,
     evalBeforeStudentCp: preStudent,
     evalAfterStudentCp: postStudent,
-    postForcedMateForStudent: postMate !== null && postMate > 0,
+    postForcedMateForStudent: post.isMate && post.mateIn !== null && post.mateIn * sign > 0,
     fenBefore: preFen,
     san: playedSan,
   });
@@ -332,3 +329,5 @@ export async function computeMoveRatingAt(moveHistory: readonly string[], plyInd
     brilliancyWhy: describeBrilliancy(brilliancy, playedSan),
   };
 }
+
+export { mateContext };

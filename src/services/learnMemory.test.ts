@@ -53,7 +53,7 @@ describe('learnMemory — one per-game memory, one newGame()', () => {
     for (const k of slots) {
       const v = mem[k];
       if (v instanceof Set) v.add('x');
-      else if (v instanceof Map) v.set('x', 1);
+      else if (v instanceof Map) (v as Map<string, unknown>).set('x', 1);
       else if (typeof v === 'number') (mem as unknown as Record<string, unknown>)[k] = 42;
       else (mem as unknown as Record<string, unknown>)[k] = 'x';
     }

@@ -42,7 +42,7 @@ import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
 import { loadProGameReferenceData } from '../services/proGameReferenceData';
-import { consumeCoachActionOffer, consumeCoachKeySquares, translateToEnglish } from '../services/coachApi';
+import { consumeCoachActionOffer, consumeCoachKeySquares, consumeCoachLines, translateToEnglish } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
 import { chosenOrTypedLanguageName, detectStudentLanguage } from '../services/spokenLanguage';
 import { deepseekProvider } from './providers/deepseek';
@@ -208,10 +208,12 @@ import {
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
-  retrospectiveMoveRef, isMethodQuestion, stripQuestionFiller,
+  retrospectiveMoveRef, isMethodQuestion, stripQuestionFiller, pieceOptionsRef,
   isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
 } from './questionIntents';
 import { isAnyBoardQuestion } from './boardQuestions';
+import { computePieceOptions, pieceAbsentAnswer, resolvePieceQuestion } from '../services/pieceOptions';
+import { stockfishEngine } from '../services/stockfishEngine';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFundamentalLessonQuestion, isFamousGameQuestion,
@@ -500,6 +502,7 @@ export function stripInjectedBlocks(ask: string): string {
 }
 
 async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}): Promise<CoachAnswer> {
+  const askStartedAt = Date.now();
   // WO-COACH-UNIFY-01 visibility: include task + maxTokens in the
   // ask-received audit so paste-back audit logs show which surface
   // picked which model. Surfaces migrated onto the spine are
@@ -1135,6 +1138,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   // after each provider.call so the set→read pair runs in one tick;
   // held to the end and attached to the returned CoachAnswer.
   let actionOffer: CoachActionOffer[] | null = null;
+  let calculatedLines: import('../types').WalkableLine[] | null = null;
   // Key squares the grounded read NAMED this turn (typed, from
   // `answer.keySquares`). Captured beside the action offer; re-appended as
   // the highlight marker AFTER the arrow pass strips every marker, so the
@@ -1437,6 +1441,61 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     if (alternativesEngage && input.liveState.fen) {
       alternativesLines = await buildAlternativesContext(input.liveState.fen);
     }
+    // "COULDN'T HE JUST MOVE THE QUEEN?" (WO-DANYA-01 C, David 2026-09-24:
+    // both seats, any time). The piece's job, the squares that keep it, each
+    // refuted by the engine's reply line, a verdict — computed here, voiced by
+    // coachApi, and the lines ride back to the board as arrows + a walk button.
+    // Time-boxed: a stuck engine answers nothing rather than holding the turn.
+    let pieceOptions: import('../services/pieceOptions').PieceOptionsAnswer | undefined;
+    let pieceEngine = '-';
+    const pieceRef = pieceOptionsRef(askForIntents);
+    const pieceStartedAt = Date.now();
+    if (pieceRef && input.liveState.fen) {
+      const resolved = resolvePieceQuestion({
+        ref: pieceRef,
+        fen: input.liveState.fen,
+        history: input.liveState.moveHistory ?? [],
+        studentColor: input.liveState.studentColor ?? ((input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white'),
+      });
+      const absent = resolved ? null : pieceAbsentAnswer({
+        ref: pieceRef,
+        fen: input.liveState.fen,
+        studentColor: input.liveState.studentColor ?? 'white',
+      });
+      if (absent) {
+        pieceOptions = {
+          seat: pieceRef.seat ?? 'opponent', piece: pieceRef.piece, from: '', duty: [], narrowedBy: 'all',
+          options: [], playedSan: null, lines: [], facts: absent,
+        };
+      }
+      if (resolved) {
+        // STOP THE CALCULATIONS AND ANSWER THE QUESTION (David 2026-09-24).
+        // The live engine is HELD — its search in flight stops and background
+        // reads wait — and the question runs on that same warm engine, so the
+        // answer never queues behind the game's own analysis.
+        pieceEngine = 'held-live-engine';
+        pieceOptions = (await Promise.race([
+          stockfishEngine.holdForQuestion((engine) => computePieceOptions({
+            fen: resolved.fen,
+            pieceSquare: resolved.pieceSquare,
+            seat: resolved.seat,
+            studentColor: input.liveState.studentColor ?? 'white',
+            playedUci: resolved.playedUci,
+            engine,
+            depth: 10,
+          }).catch(() => null)),
+          new Promise<null>((r) => setTimeout(() => r(null), 12000)),
+        ])) ?? undefined;
+      }
+      // Observable (the algo-audit rule): which stage answered or refused.
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.pieceOptions',
+        summary: `piece=${pieceRef.piece} seat=${pieceRef.seat ?? pieceRef.color ?? 'unsaid'} resolved=${resolved ? `${resolved.seat}@${resolved.pieceSquare}${resolved.playedUci ? ` played=${resolved.playedUci}` : ''}` : 'no'} options=${pieceOptions ? pieceOptions.options.length : 'none'} narrowedBy=${pieceOptions?.narrowedBy ?? '-'} engine=${pieceEngine} ms=${Date.now() - pieceStartedAt} sinceAsk=${Date.now() - askStartedAt}`,
+        fen: input.liveState.fen,
+      });
+    }
     const candidateMoveEngage = isCandidateMoveQuestion(askForIntents);
     const candidateMoveSan = candidateMoveEngage ? (extractCandidateSan(askForIntents) ?? undefined) : undefined;
     let candidateEvalCp: number | null = null;
@@ -1571,6 +1630,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // alternatives comparison wins over the generic reasoning walk.
             alternativesQuestion: alternativesEngage,
             alternativesLines: alternativesLines ?? undefined,
+            pieceOptions,
             candidateMoveQuestion: candidateMoveEngage && !retrospectiveEngage,
             candidateMoveSan,
             candidateEvalCp,
@@ -1762,6 +1822,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       offeredThisTrip = null;
     }
     if (offeredThisTrip) actionOffer = offeredThisTrip;
+    try {
+      const linesThisTrip = consumeCoachLines();
+      if (linesThisTrip) calculatedLines = linesThisTrip;
+    } catch { /* lines are additive UX — never break the answer */ }
     let keySquaresThisTrip: string[] | null = null;
     try {
       keySquaresThisTrip = consumeCoachKeySquares();
@@ -2247,6 +2311,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     dispatchedToolNames,
     provider: provider.name,
     ...(actionOffer && actionOffer.length > 0 ? { actionOffer } : {}),
+    ...(calculatedLines && calculatedLines.length > 0 ? { lines: calculatedLines } : {}),
   };
 }
 

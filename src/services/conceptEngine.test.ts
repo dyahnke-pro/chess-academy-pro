@@ -52,7 +52,7 @@ describe('conceptEngine — renderer (computed invariant, not authored blob)', (
       description: 'Knight on d5 forks queen on c7 and rook on f6',
       beneficiary: 'w',
     };
-    const c = renderTacticConcept(pattern);
+    const c = renderTacticConcept(pattern, '8/8/8/8/8/8/8/8 w - - 0 1');
     expect(c).not.toBeNull();
     expect(c!.name).toBe('Fork');
     expect(c!.source).toBe('tactic');
@@ -64,7 +64,7 @@ describe('conceptEngine — renderer (computed invariant, not authored blob)', (
   });
 
   it('renderTacticConcept returns null for the no-tactic sentinel', () => {
-    expect(renderTacticConcept({ type: 'none', involvedSquares: [], description: '' })).toBeNull();
+    expect(renderTacticConcept({ type: 'none', involvedSquares: [], description: '' }, '8/8/8/8/8/8/8/8 w - - 0 1')).toBeNull();
   });
 
   it('renderMatchupConcept teaches the governing principle of the ending', () => {
@@ -87,7 +87,7 @@ describe('conceptEngine — renderer (computed invariant, not authored blob)', (
     const samples: string[] = [];
     const tacticTypes = ['fork', 'pin', 'skewer', 'discovery', 'double_check', 'back_rank', 'removal_of_guard', 'trapped_piece', 'mate_threat', 'overload', 'battery'] as const;
     for (const t of tacticTypes) {
-      const c = renderTacticConcept({ type: t, involvedSquares: [], description: '' });
+      const c = renderTacticConcept({ type: t, involvedSquares: [], description: '' }, '8/8/8/8/8/8/8/8 w - - 0 1');
       if (c) samples.push(c.full, c.short);
     }
     const fens = [

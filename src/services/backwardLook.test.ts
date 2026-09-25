@@ -176,7 +176,7 @@ describe('the coach side runs the same model, in the first person', () => {
   });
 
   it('owns it in the first person', () => {
-    expect(coachCall!.line).toMatch(/\bfrom me\b|\bI\b/);
+    expect(coachCall!.line).toMatch(/\bfrom me\b|\bI\b|\bmy\b/);
   });
 
   it('never apologises for it', () => {
@@ -302,14 +302,15 @@ describe('nothing is called against a move the engine says gained', () => {
 // here", which is exactly the move where both fire.
 describe('why the move failed complements what it cost', () => {
   it('opens on the attempt, not the cost', () => {
-    // Rook to a5 hits the guarded pawn on d5 — the geometry lane fires, and
+    // Bishop to f3 hits the guarded pawn on d5 (a bishop for a pawn — the
+    // tempting swap; a rook or queen for a pawn is never named) — the geometry lane fires, and
     // the sentence has to START there: the cost sounds arbitrary until the
     // reason for paying it has been said.
     const out = backwardLook({
-      fenBefore: '4k3/8/2p5/3p4/8/8/4K3/R7 w - - 0 1',
-      fenAfter: '4k3/8/2p5/R2p4/8/8/4K3/8 b - - 1 1',
-      playedSan: 'Ra5',
-      bestSan: 'Kd3',
+      fenBefore: '4k3/8/2p5/3p4/8/8/4BK2/8 w - - 0 1',
+      fenAfter: '4k3/8/2p5/3p4/8/5B2/5K2/8 b - - 1 1',
+      playedSan: 'Bf3',
+      bestSan: 'Ke3',
       cpLoss: 120,
       studentColor: 'white',
     });
@@ -368,5 +369,16 @@ describe('why the move failed complements what it cost', () => {
     // Either lane may answer or neither may; what must NOT happen is a
     // geometry sentence about a move that attacks nothing.
     if (out) expect(out.line).not.toContain('is holding it');
+  });
+});
+
+describe('a static swap count never overrules the engine (hand walk 2026-09-25)', () => {
+  it('King\'s Indian …e5 costs nothing, so it is not "left hanging"', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2'.split(' ')) c.move(m);
+    const fenBefore = c.fen();
+    c.move('e5');
+    const look = backwardLook({ fenBefore, fenAfter: c.fen(), playedSan: 'e5', bestSan: 'e5', cpLoss: 0, studentColor: 'black' });
+    expect(look?.line ?? '').not.toMatch(/hanging/);
   });
 });

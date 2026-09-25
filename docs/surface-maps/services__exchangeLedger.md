@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**214 lines · 9 exports · 7 importers · 2 tests · 0 audits**
+**220 lines · 9 exports · 9 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,9 +15,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.ts`
 - `src/services/criticalMoment.ts`
 - `src/services/deliberation.ts`
+- `src/services/exchangeLedger.horizon.test.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/gemCrushLines.ts`
 - `src/services/lineProof.test.ts`
+- `src/services/pieceOptions.ts`
 - `src/services/refutedAlternativeCore.ts`
 
 ## Exports and every call site
@@ -35,7 +37,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeLedger.test.ts:55`
 - `src/services/exchangeLedger.test.ts:241`
 - `src/services/exchangeLedger.test.ts:242`
-- `src/services/gemCrushLines.ts:285`
+- `src/services/gemCrushLines.ts:286`
 
 ### `describeExchange` (function) — 4 call sites
 - `src/services/exchangeLedger.test.ts:18`
@@ -52,25 +54,30 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LineProof` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `proofCut` (function) — 6 call sites
-- `src/services/coachFeatureService.ts:3294`
+### `proofCut` (function) — 7 call sites
+- `src/services/coachFeatureService.ts:3317`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
 - `src/services/lineProof.test.ts:37`
+- `src/services/pieceOptions.ts:110`
 - `src/services/refutedAlternativeCore.ts:145`
 
-### `describeProofResult` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:3281`
+### `describeProofResult` (function) — 4 call sites
+- `src/services/coachFeatureService.ts:3304`
 - `src/services/lineProof.test.ts:27`
-- `src/services/refutedAlternativeCore.ts:147`
+- `src/services/pieceOptions.ts:118`
+- `src/services/refutedAlternativeCore.ts:153`
 
-### `proofAgainstMover` (function) — 2 call sites
-- `src/services/criticalMoment.ts:196`
-- `src/services/deliberation.ts:136`
+### `proofAgainstMover` (function) — 4 call sites
+- `src/services/criticalMoment.ts:200`
+- `src/services/deliberation.ts:179`
+- `src/services/exchangeLedger.horizon.test.ts:16`
+- `src/services/exchangeLedger.horizon.test.ts:21`
 
 ## Tests
 
+- `src/services/exchangeLedger.horizon.test.ts`
 - `src/services/exchangeLedger.test.ts`
 - `src/services/lineProof.test.ts`
 

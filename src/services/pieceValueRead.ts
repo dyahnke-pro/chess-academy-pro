@@ -23,7 +23,8 @@
 // number the engine will hand over.
 //
 // This lane REMOVES judgement rather than adding it.
-import type { Square } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
+import { CAPTURE_VALUE } from './pieceValues';
 
 export interface PieceValue {
   square: string;
@@ -184,6 +185,24 @@ const HOME_SQUARES: Record<'w' | 'b', Record<string, readonly string[]>> = {
   b: { r: ['a8', 'h8'], n: ['b8', 'g8'], b: ['c8', 'f8'], q: ['d8'], k: ['e8'], p: [] },
 };
 
+/** No pawn of the rook's own colour stands on its file. Unknown board → false. */
+function rookFileFree(fen: string | undefined, v: PieceValue): boolean {
+  if (!fen) return false;
+  const file = v.square.toLowerCase()[0];
+  const pawn = v.color === 'w' ? 'P' : 'p';
+  const rows = fen.split(' ')[0].split('/');
+  const col = file.charCodeAt(0) - 97;
+  for (const row of rows) {
+    let c = 0;
+    for (const ch of row) {
+      if (/\d/.test(ch)) { c += Number(ch); continue; }
+      if (c === col && ch === pawn) return false;
+      c += 1;
+    }
+  }
+  return true;
+}
+
 function onHomeSquare(v: PieceValue): boolean {
   const side = v.color === 'w' ? 'w' : 'b';
   return (HOME_SQUARES[side][v.piece.toLowerCase()] ?? []).includes(v.square.toLowerCase());
@@ -204,7 +223,7 @@ export function pieceQualityLines(
   values: readonly PieceValue[],
   studentColor: 'white' | 'black',
   said?: Set<string>,
-  opts?: { isMiddlegame?: boolean },
+  opts?: { isMiddlegame?: boolean; fen?: string },
 ): PieceQualityLine[] {
   const out: PieceQualityLine[] = [];
   if (values.length === 0) return out;
@@ -238,6 +257,15 @@ export function pieceQualityLines(
   const best = theirs.filter((v) => v.piece.toLowerCase() !== 'p')
     .filter((v) => opts?.isMiddlegame === true || !onHomeSquare(v))
     .filter((v) => opts?.isMiddlegame === true || !'nb'.includes(v.piece.toLowerCase()))
+    // …and a pre-middlegame ROOK counts as "doing work" only on a file free of
+    // its own pawns. Castling is not work: on move six of a Philidor (hand walk
+    // 2026-09-24) the rook that had just castled to f8, behind its own f7-pawn,
+    // was crowned "the piece doing the most work for them".
+    .filter((v) => opts?.isMiddlegame === true || v.piece.toLowerCase() !== 'r' || rookFileFree(opts?.fen, v))
+    // …and a piece the student can simply TAKE is not one to "trade off"
+    // (hand walk 2000: Rxd8 just took, nothing defended it, and the coach said
+    // "their rook on d8 is the piece doing the most work — trade it off").
+    .filter((v) => !takeableFree(opts?.fen, v.square, me))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => b.d - a.d)[0];
   if (best && best.d >= 0.3) {
@@ -262,6 +290,7 @@ export function pieceQualityLines(
   // Also a MIDDLEGAME idea only — in the opening a minor is idle because it
   // isn't developed YET, not because it is misplaced (the caller passes phase).
   const worst = mine.filter((v) => v.piece.toLowerCase() === 'n' || v.piece.toLowerCase() === 'b')
+    .filter((v) => !atWork(opts?.fen, v.square, me))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => a.d - b.d)[0];
   if (opts?.isMiddlegame !== false && worst && worst.d <= -0.3) {
@@ -271,7 +300,14 @@ export function pieceQualityLines(
       out.push({
         kind: 'your-worst-piece',
         squares: [worst.v.square],
-        text: `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing the least of anything you own — finding it a better square is worth more than a new plan.`,
+        // Still on its home square it is UNDEVELOPED, not misplaced — the
+        // advice is the development rule, not a reroute (hand walk
+        // 2026-09-24: the c1-bishop at move nine; his line a few moves later
+        // was "never forget about development — you still have a whole side
+        // to finish").
+        text: onHomeSquare(worst.v)
+          ? `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} hasn't moved yet — in general, finish your development before starting anything new.`
+          : `Your ${NAME[worst.v.piece.toLowerCase()]} on ${worst.v.square} is doing the least of anything you own — finding it a better square is worth more than a new plan.`,
       });
     }
   }
@@ -349,4 +385,60 @@ export function evalSplitLine(
   return key === 'edge-positional'
     ? 'Your edge here is not material — it is where your pieces are. Keep them on the board; trading down would hand it back.'
     : 'Your edge here is material rather than position, so simplifying is the plan: every trade makes the extra count for more.';
+}
+
+/** A MINOR THAT IS ATTACKING OR PINNING AN ENEMY PIECE IS NOT "DOING THE
+ *  LEAST" (hand walk 2026-09-24): the value table called the f4-bishop pinning
+ *  a bishop to the queen, and the g2-bishop raking the long diagonal onto b7,
+ *  "your worst piece". Attacking a non-pawn, or standing behind one that shields
+ *  something bigger, is work the table cannot see. */
+/** The student attacks `square` and nothing of theirs defends it. */
+function takeableFree(fen: string | undefined, square: string, me: 'w' | 'b'): boolean {
+  if (!fen) return false;
+  try {
+    const b = new Chess(fen);
+    const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+    return b.attackers(square as Square, me).length > 0 && b.attackers(square as Square, them).length === 0;
+  } catch { return false; }
+}
+
+function atWork(fen: string | undefined, square: string, me: 'w' | 'b'): boolean {
+  if (!fen) return false;
+  const VAL = CAPTURE_VALUE;
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return false; }
+  const sq = square as Square;
+  // PRESSURE ON THE KING'S SQUARES IS WORK (hand walk 2026-09-24: 23.Bxe6+ —
+  // the bishop that had just checked, raking g8 beside the h8-king, was "doing
+  // the least of anything you own").
+  for (const row of board.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== them || cell.type !== 'k') continue;
+      const kf = cell.square.charCodeAt(0);
+      const kr = Number(cell.square[1]);
+      for (let df = -1; df <= 1; df += 1) for (let dr = -1; dr <= 1; dr += 1) {
+        if (df === 0 && dr === 0) continue;
+        const f = kf + df; const r = kr + dr;
+        if (f < 97 || f > 104 || r < 1 || r > 8) continue;
+        if (board.attackers(`${String.fromCharCode(f)}${r}` as Square, me).includes(sq)) return true;
+      }
+    }
+  }
+  for (const row of board.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== them || cell.type === 'p') continue;
+      if (board.attackers(cell.square, me).includes(sq)) return true;
+      // X-RAY: lift the enemy piece — does this minor now hit something bigger?
+      let lifted: Chess;
+      try { lifted = new Chess(fen); lifted.remove(cell.square); } catch { continue; }
+      for (const row2 of lifted.board()) {
+        for (const c2 of row2) {
+          if (!c2 || c2.color !== them || (VAL[c2.type] ?? 0) <= (VAL[cell.type] ?? 0)) continue;
+          if (lifted.attackers(c2.square, me).includes(sq) && !board.attackers(c2.square, me).includes(sq)) return true;
+        }
+      }
+    }
+  }
+  return false;
 }

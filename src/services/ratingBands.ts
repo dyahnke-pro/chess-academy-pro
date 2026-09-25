@@ -182,3 +182,30 @@ export const ADAPTIVE_DECIDERS: Record<AdaptiveDeciderId, AdaptiveDecider> = {
     answers: 'how long the student is left to struggle before help is offered',
   },
 };
+
+/** The deepest line the coach ever spells out or holds a student to — the
+ *  depth-14 reliable window. A diagnosis about a deeper line is not one a
+ *  student at any level could have been expected to see. */
+export const MAX_PV_DEPTH_PLIES = 7;
+
+/**
+ * How many plies to SPELL a threat/idea line out for a student of this rating —
+ * deeper for stronger (David 2026-09-07: "the more advanced player should get a
+ * DEEPER calculation. 1400 get 3-4, 1800 get 4-6"). Capped at 7 (FOUR of the
+ * student's moves), the depth-14 reliable window — never spell past what the
+ * engine can honestly stand behind (David 2026-07-22: "don't push the engine
+ * past its natural limits!!! Solid and honest is paramount"). Floor 3 so a line
+ * is always long enough to teach (David: "minimum 1 but 3 is best").
+ *
+ * THE single PV-depth-by-rating source (unified-coach principle 8). The P7
+ * consolidation folds the other rating-scaled depth deciders (pvBandForRating,
+ * getTacticLookahead, causalChainVoice depthFor) into this one; until then this
+ * is the canonical one for spelled PV lines. Do NOT add a parallel curve.
+ */
+export function pvDepthForRating(rating: number): number {
+  if (rating < 1200) return 3;
+  if (rating < 1500) return 4;
+  if (rating < 1800) return 5;
+  if (rating < 2100) return 6;
+  return MAX_PV_DEPTH_PLIES;
+}

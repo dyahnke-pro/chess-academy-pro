@@ -43,22 +43,19 @@ describe('the beat fires only on a drawback code can NAME', () => {
     // Non-conditional on purpose. A beat that MIGHT fire is not a wire — the
     // earlier draft of this file wrapped every assertion in `if (c)` and would
     // have passed against a function that always returned null.
-    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
-    const c = findConcession({ fen, playedSan: 'Bb3', bestSan: 'O-O', coachColor: 'white' });
-    expect(c, 'the bishop stopped covering b4 and the beat said nothing').not.toBeNull();
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5';
+    const c = findConcession({ fen, playedSan: 'Ne1', bestSan: 'd3', coachColor: 'white' });
+    expect(c, 'the knight stopped covering d4 and the beat said nothing').not.toBeNull();
     expect(c?.kind).toBe('defender-left');
-    expect(c?.square).toBe('b4');
-    // Re-derived independently: b4 really is uncovered by White afterwards.
+    expect(c?.square).toBe('d4');
+    // Re-derived independently: d4 really is unguarded by White afterwards.
     const board = new Chess(fen);
-    board.move('Bb3');
-    const parts = board.fen().split(' ');
-    parts[1] = 'w';
-    parts[3] = '-';
-    const white = new Chess(parts.join(' '));
-    expect(
-      white.moves({ verbose: true }).some((m) => m.to === 'b4'),
-      'White still covers b4, so the concession was invented',
-    ).toBe(false);
+    board.move('Ne1');
+    // DEFENCE IS ATTACK: re-derived with attackers(), never with moves() —
+    // the old fixture here (Bb3 "leaving" b4) was a pawn that could no longer
+    // PUSH to b4, which is not a defender (hand walk 2026-09-24).
+    expect(board.attackers('d4', 'w'), 'White still guards d4, so the concession was invented')
+      .toHaveLength(0);
   });
 
   it('FIRES on a piece that wanders offside', () => {
@@ -81,11 +78,11 @@ describe('the beat fires only on a drawback code can NAME', () => {
   });
 
   it('does not frame a retreat as playing on the other wing', () => {
-    // "I don't rate your play over there, so I've taken a defender off b4" is a
+    // "I don't rate your play over there, so I've taken a defender off d4" is a
     // non-sequitur when the bishop just stepped backwards. The wing is checked,
     // not assumed.
-    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
-    const c = findConcession({ fen, playedSan: 'Bb3', bestSan: 'O-O', coachColor: 'white' });
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5';
+    const c = findConcession({ fen, playedSan: 'Ne1', bestSan: 'd3', coachColor: 'white' });
     expect(c?.said).not.toContain('other wing');
   });
 
@@ -93,7 +90,7 @@ describe('the beat fires only on a drawback code can NAME', () => {
     // They may well be worse than the engine's move, but "I gave something up"
     // is the wrong frame — the student is looking at a threat, not a hole. A
     // bishop sacrifice on f7 was reported as the piece wandering offside.
-    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5';
     expect(findConcession({ fen, playedSan: 'Bxf7+', bestSan: 'O-O', coachColor: 'white' })).toBeNull();
   });
 
@@ -105,7 +102,7 @@ describe('the beat fires only on a drawback code can NAME', () => {
       { fen: 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3', played: 'Nh4', best: 'Nc3', color: 'white' },
       { fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3', played: 'Na5', best: 'Nf6', color: 'black' },
       { fen: 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', played: 'f3', best: 'exd5', color: 'white' },
-      { fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5', played: 'g4', best: 'O-O', color: 'white' },
+      { fen: 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5', played: 'g4', best: 'O-O', color: 'white' },
     ];
     for (const c of cases) {
       const found = findConcession({ fen: c.fen, playedSan: c.played, bestSan: c.best, coachColor: c.color });
@@ -191,23 +188,23 @@ describe('the backward look — why the STUDENT\'s move was bad', () => {
   // so a move already played is behind it. The comparison that names a drawback
   // does not care which direction it points: give it the student's move and it
   // says what THEY gave up, by the same rule (only when code can name it).
-  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5';
 
   it('names what the student\'s own move handed over', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
     expect(d, 'the backward look said nothing about a real concession').not.toBeNull();
-    expect(d?.square).toBe('b4');
-    expect(d?.said).toContain('b4');
+    expect(d?.square).toBe('d4');
+    expect(d?.said).toContain('d4');
   });
 
   it('speaks to the student, not as them', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
     expect(d?.said).toMatch(/\byour\b/i);
     expect(d?.said, 'the coach spoke as if it had played the move').not.toMatch(/^I\b|\bmy\b/i);
   });
 
   it('never scolds and never apologises', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
     const whole = `${d?.said} ${d?.opening}`.toLowerCase();
     for (const word of ['blunder', 'careless', 'mistake', 'bad move', 'sorry', 'should have']) {
       expect(whole, `the coach lectured: ${whole}`).not.toContain(word);
@@ -215,7 +212,7 @@ describe('the backward look — why the STUDENT\'s move was bad', () => {
   });
 
   it('never hands over the punishing move', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
     for (const part of [d?.said ?? '', d?.opening ?? '']) {
       expect(part, `a move leaked: ${part}`).not.toMatch(/\b[NBRQK][a-h]?[1-8]?x?[a-h][1-8]\b/);
     }
@@ -233,30 +230,30 @@ describe('tense: retroactive is past, what is coming is future', () => {
   // needed." Both halves matter, and they live in the SAME beat — the drawback
   // has happened, what it will cost has not. Present tense on a finished action
   // is the drift this guards; so is losing the future clause while fixing it.
-  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5';
+  const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5';
   const PRESENT_ACTIONS = /\b(takes|leaves|hands|opens|goes)\b/;
 
   it('the student-facing drawback speaks of the move in the past', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
     expect(d?.said).toMatch(/\b(took|left|opened|went|handed)\b/);
     expect(d?.said, `present tense on a finished move: ${d?.said}`).not.toMatch(PRESENT_ACTIONS);
   });
 
   it('…and of what it will cost in the future', () => {
-    const d = findStudentDrawback({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', studentColor: 'white' });
+    const d = findStudentDrawback({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', studentColor: 'white' });
     expect(d?.opening, 'the future half was lost').toMatch(/\bwill\b|\bbefore it\b/);
   });
 
   it('the coach\'s own concession is past for the action too', () => {
-    const c = findConcession({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', coachColor: 'white' });
+    const c = findConcession({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', coachColor: 'white' });
     expect(c?.said, `present tense on the coach's own played move: ${c?.said}`).not.toMatch(PRESENT_ACTIONS);
   });
 
   it('a consequence still true of the board stays present', () => {
-    // "Nothing of mine is watching b4 now" is not a past event — it is the
+    // "Nothing of mine is watching d4 now" is not a past event — it is the
     // board as it stands, and past-tensing it would be wrong in the other
     // direction.
-    const c = findConcession({ fen: FEN, playedSan: 'Bb3', bestSan: 'O-O', coachColor: 'white' });
+    const c = findConcession({ fen: FEN, playedSan: 'Ne1', bestSan: 'd3', coachColor: 'white' });
     expect(c?.opening).toMatch(/\bis\b|\bare\b/);
   });
 
@@ -356,5 +353,24 @@ describe('the rear-facing PV — what the move let them do', () => {
     expect(() => whatItAllowed({
       fenAfter: 'not a fen', opponentPv: lineFrom(AFTER_SLIP), studentColor: 'white', cpLoss: 300,
     })).not.toThrow();
+  });
+});
+
+describe('a move that BLOCKS a guard is named as a block (hand walk 2026-09-24)', () => {
+  // 10.Nf3 in the Philidor: the knight steps onto the d1–g4 diagonal.
+  const fen = 'r1bq1rk1/pppnbppp/3p1n2/8/3NPP2/1BN5/PPP3PP/R1BQ1RK1 w - - 1 10';
+  it('does not say the knight "took your last defender off g4"', () => {
+    const d = findStudentDrawback({ fen, playedSan: 'Nf3', bestSan: 'Qe1', studentColor: 'white' });
+    expect(d?.square).toBe('g4');
+    expect(d?.said).toMatch(/^That shut your queen on d1 off from g4/);
+  });
+});
+
+describe('a weakness the move did not create is not its fault (hand walk 2340, move 21)', () => {
+  it('no "that left your pawn on a2 isolated" when a2 was isolated before the move', () => {
+    // a2 has no b-pawn beside it already; axb3 (best) would have mended it.
+    const fen = '4k3/8/8/8/8/1b6/P3PPPP/2B1K3 w - - 0 21';
+    const found = findStudentDrawback({ fen, playedSan: 'Be3', bestSan: 'axb3', studentColor: 'white' });
+    expect(found?.kind).not.toBe('pawn-weakened');
   });
 });

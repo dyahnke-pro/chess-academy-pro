@@ -77,10 +77,17 @@ function lineKind(dr: number, dc: number): LatentDanger['line'] {
  * enemy rook/bishop/queen's rays; a ray that meets student piece P1 then student
  * piece P2 (consecutive, only empties between) with value(P2) > value(P1) and P2
  * a KING or QUEEN is a pin geometry. At most ONE shield may sit between the enemy
- * and P1 — 0 = the line is already open (live-ish), 1 = LATENT (opens if the
- * shield trades). Returns the highest-value exposure, or null.
+ * and P1, and it must be the STUDENT's own piece — 0 = the line is already open,
+ * 1 = LATENT (opens if the student moves or trades that piece). Returns the
+ * highest-value exposure, or null.
  */
-export function detectLatentDanger(fen: string, studentColor: 'w' | 'b'): LatentDanger | null {
+export function detectLatentDanger(
+  fen: string,
+  studentColor: 'w' | 'b',
+  /** Skip lines already open — a standing pin is a live tactic the tactic lanes
+   *  name; the prevention clause only warns about the one in waiting. */
+  opts: { latentOnly?: boolean } = {},
+): LatentDanger | null {
   const g = grid(fen);
   const at = (r: number, c: number): Cell | null => (r >= 0 && r < 8 && c >= 0 && c < 8 ? g[r][c] : null);
   const enemy: 'w' | 'b' = studentColor === 'w' ? 'b' : 'w';
@@ -91,40 +98,32 @@ export function detectLatentDanger(fen: string, studentColor: 'w' | 'b'): Latent
       const cell = g[r][c];
       if (!cell || cell.color !== enemy || !'rbq'.includes(cell.piece)) continue;
       for (const [dr, dc] of dirsFor(cell.piece)) {
-        let rr = r + dr, cc = c + dc;
-        let shields = 0;       // blockers between the enemy and P1
-        let shieldColor: 'w' | 'b' | null = null; // the (single) blocker's color
-        let front: Cell | null = null;
-        // Walk to the first STUDENT piece (P1), counting shields on the way.
-        while (rr >= 0 && rr < 8 && cc >= 0 && cc < 8) {
+        // The first three pieces on the ray (only empties between them).
+        const onRay: Cell[] = [];
+        for (let rr = r + dr, cc = c + dc; rr >= 0 && rr < 8 && cc >= 0 && cc < 8 && onRay.length < 3; rr += dr, cc += dc) {
           const cur = at(rr, cc);
-          if (cur) {
-            if (cur.color === studentColor) { front = cur; break; }
-            shields++;             // an enemy/own blocker between the ray and P1
-            shieldColor = cur.color;
-            if (shields > 1) break; // too remote to be a real warning
-          }
-          rr += dr; cc += dc;
+          if (cur) onRay.push(cur);
         }
-        if (!front || shields > 1) continue;
-        // B#2: a LATENT (shields===1) danger is only a student concern when the
-        // shield is the STUDENT's OWN piece — something they might trade/move and
-        // OPEN the line onto themselves ("mind it before you open the line"). An
-        // ENEMY shield is not the student's to open; that would be the opponent
-        // creating a threat (a different, incoming concern), so this ray is not a
-        // student prophylaxis warning. (A shields===0 ray is already open — kept.)
-        if (shields === 1 && shieldColor === enemy) continue;
-        // Continue past P1 to the next piece (P2) — only empties may sit between.
-        rr += dr; cc += dc;
-        let back: Cell | null = null;
-        while (rr >= 0 && rr < 8 && cc >= 0 && cc < 8) {
-          const cur = at(rr, cc);
-          if (cur) { back = cur; break; }
-          rr += dr; cc += dc;
-        }
-        if (!back || back.color !== studentColor) continue;
-        if (!(back.piece === 'k' || back.piece === 'q')) continue;
-        if ((VAL[back.piece] ?? 0) <= (VAL[front.piece] ?? 0)) continue;
+        // An ENEMY piece first is not the student's line to open (B#2) — that
+        // is the opponent's discovery, a different concern.
+        if (!onRay[0] || onRay[0].color !== studentColor) continue;
+        const guards = (f: Cell | undefined, b: Cell | undefined): boolean =>
+          !!f && !!b && f.color === studentColor && b.color === studentColor
+          && (b.piece === 'k' || b.piece === 'q')
+          && (VAL[b.piece] ?? 0) > (VAL[f.piece] ?? 0)
+          // A PAWN PINNED DOWN ITS OWN FILE IS NOT FROZEN: every push keeps it
+          // on the file (hand walk 2026-09-24).
+          && !(f.piece === 'p' && dc === 0);
+        // 0 shields = the line is open now; 1 = the student's OWN piece shields
+        // it, and moving or trading that piece opens the line onto them.
+        let front: Cell, back: Cell, shields: number;
+        if (guards(onRay[0], onRay[1])) { front = onRay[0]; back = onRay[1]; shields = 0; }
+        // A pawn shield on a FILE can only leave by capturing; it is not a line
+        // the student opens by accident (and e4-Be2-Ke1 is every Italian).
+        else if (guards(onRay[1], onRay[2]) && !(onRay[0].piece === 'p' && dc === 0)) {
+          front = onRay[1]; back = onRay[2]; shields = 1;
+        } else continue;
+        if (opts.latentOnly && shields === 0) continue;
         const danger: LatentDanger = {
           frontSquare: front.sq, frontPiece: front.piece,
           backSquare: back.sq, backPiece: back.piece,

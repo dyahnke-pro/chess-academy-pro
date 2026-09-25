@@ -6,7 +6,7 @@
  * restates a claim the briefing already makes as a fact.
  */
 import { describe, it, expect } from 'vitest';
-import { liveMethodBeatFor } from './methodBeat';
+import { liveMethodBeat, liveMethodBeatFor, liveHabitKey } from './methodBeat';
 
 const base = { bestSan: null as string | null, threatStanding: false, isStudentMove: true };
 
@@ -103,5 +103,19 @@ describe('liveMethodBeatFor', () => {
     const beat = liveMethodBeatFor({ ...base, bestSan: 'Qxh7+', threatStanding: true, realChoice: true });
     expect(beat).toBeTruthy();
     expect(beat!.split(/(?<=[.!?])\s+/).length).toBeLessThanOrEqual(2);
+  });
+
+  // Hand walk 2026-09-24: "their threat first, your idea second" three times in
+  // six moves. The stems rotate, so only a HABIT key can hold it to once.
+  it('says each habit once per game, whatever stem it would rotate to', () => {
+    const first = liveMethodBeat({ ...base, threatStanding: true }, 3);
+    expect(first?.key).toBe(liveHabitKey('opponent-threat'));
+    const said = new Set([first!.key]);
+    for (const ply of [4, 5, 6, 7]) {
+      expect(liveMethodBeat({ ...base, threatStanding: true }, ply, said)).toBeNull();
+    }
+    // A DIFFERENT habit is still owed.
+    const next = liveMethodBeat({ ...base, threatStanding: true, bestSan: 'Qxh7+', tier: 'critical' as const }, 5, said);
+    expect(next?.key).toBe(liveHabitKey('forcing-scan'));
   });
 });

@@ -31,6 +31,7 @@
  * shape, and inventing a geometry for them would teach the student to distrust
  * the ones that are real.
  */
+import { gambitFile } from './inaccuracyCall';
 import { Chess, type Square, type Color, type Move } from 'chess.js';
 
 export interface WhyItFailed {
@@ -106,6 +107,28 @@ function seeInitiate(board: Chess, sq: Square): number {
   return (VALUE[victim.type] ?? 0) - Math.max(0, seeInitiate(next, sq));
 }
 
+/** THE PIECE ON `sq` IS PINNED TO SOMETHING WORTH MORE (David's hand walk
+ *  2026-09-24). Lift it off the board: if `by` now attacks a piece of the other
+ *  side worth more than it that `by` did not attack before, it stands in front
+ *  of that piece — a RELATIVE pin chess.js's legality cannot see (the knight on
+ *  b6 may legally recapture on d5; it just hands over the queen behind it). */
+export function pinnedToMore(board: Chess, sq: Square, by: 'w' | 'b'): boolean {
+  const piece = board.get(sq);
+  if (!piece || piece.color === by) return false;
+  const worth = VALUE[piece.type] ?? 0;
+  let lifted: Chess;
+  try { lifted = new Chess(board.fen()); lifted.remove(sq); } catch { return false; }
+  for (const row of board.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== piece.color || cell.square === sq) continue;
+      if ((VALUE[cell.type] ?? 0) <= worth) continue;
+      const before = new Set(board.attackers(cell.square, by));
+      if (lifted.attackers(cell.square, by).some((a) => !before.has(a))) return true;
+    }
+  }
+  return false;
+}
+
 /** Material the side to move actually WINS by capturing on `sq` (floored — it
  *  won't start a losing capture). Use for "can the opponent win my piece here". */
 function seeGain(board: Chess, sq: Square): number {
@@ -169,6 +192,10 @@ export function whyItFailed(args: {
   // down (held-by-defender — name the recapturer) vs a piece simply left
   // hanging (lost-the-piece). The upstream caller only asks about moves already
   // graded as errors, so naming the loss is the lesson, not an over-claim.
+  // A PAWN OFFERED TO PRY THEIR KING OPEN IS NOT "LEFT HANGING" (hand walk
+  // 2026-09-24: Naroditsky's a5 against b6 beside the long-castled king was
+  // "That left your pawn on a5 hanging"). The gambit wording names it instead.
+  if (mv.piece === 'p' && gambitFile(args.fenBefore, args.playedSan, args.studentColor)) return null;
   const netOnLanding = captureNet(after, mv.to, mv.captured ?? null);
   if (netOnLanding < 0) {
     const recap = leastValuableAttackerOf(after, mv.to);
@@ -258,17 +285,42 @@ export function whyItFailed(args: {
   let studentBoard: Chess | null = null;
   try { studentBoard = new Chess(withTurn(after.fen(), me)); } catch { studentBoard = null; }
   const swap = guards.length > 0 && studentBoard ? seeInitiate(studentBoard, target.sq) : 0;
-  if (swap < 0) {
+  // ONLY A TEMPTING SWAP IS WORTH NAMING (David 2026-09-24: "No one is going
+  // to take a pawn for a queen"). Past two pawns down the capture was never a
+  // real option, so explaining why it fails states the obvious.
+  // A GUARD THAT IS PINNED DOES NOT HOLD, and a move that PINS its target was
+  // never "eyeing" it for a swap (hand walk 2026-09-24: Ra6 pinning Nb6 to the
+  // queen was called "eyed the knight … the queen holds it"; Nc3 hitting d5,
+  // whose only guard was that pinned knight, was called a knight for a pawn —
+  // and Nxd5 won the game).
+  const realGuards = guards.filter((g) => !pinnedToMore(after, g, me));
+  const pinsTarget = pinnedToMore(after, target.sq, me);
+  if (swap < 0 && swap >= -2 && realGuards.length > 0 && !pinsTarget) {
     const guard = leastValuableAttackerOf(after, target.sq);
     if (guard) {
       // The COMPUTED cost of the swap-off, never "the exchange" — that term
       // means rook for minor piece, and walk 6 (L2) heard it said of a bishop
       // taking a guarded pawn.
       const down = -swap;
+      // IN PIECES, NOT POINTS (2026-09-24 Learn tape: "taking there comes out 8
+      // points down" meant the queen for a pawn). The first capture is made by
+      // the cheapest attacker, so that is the piece given up for the target.
+      let taker: { type: string } | null = null;
+      if (studentBoard) {
+        let bestVal = Infinity;
+        for (const a of studentBoard.attackers(target.sq, me)) {
+          const p = studentBoard.get(a);
+          const v = p ? VALUE[p.type] ?? 0 : Infinity;
+          if (p && v < bestVal) { bestVal = v; taker = { type: p.type }; }
+        }
+      }
+      const cost = taker
+        ? `gives up your ${NAME[taker.type]} for the ${NAME[target.piece.type]}`
+        : `comes out ${down === 1 ? 'a pawn' : `${down} points`} down`;
       return {
         kind: 'held-by-defender',
         squares: [target.sq, guard.sq],
-        line: `That eyed the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.type]} on ${guard.sq} holds it — taking there comes out ${down === 1 ? 'a pawn' : `${down} points`} down.`,
+        line: `That eyed the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.type]} on ${guard.sq} holds it — taking there ${cost}.`,
       };
     }
   }

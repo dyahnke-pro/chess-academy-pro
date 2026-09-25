@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**599 lines · 3 exports · 10 importers · 2 tests · 0 audits**
+**625 lines · 4 exports · 11 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/discussionPractice.ts`
 - `src/services/dnaLineNarrator.ts`
 - `src/services/learnMoveTeaching.ts`
+- `src/services/playCommentary.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/reviewMoveBriefing.ts`
 - `src/services/reviewMoveTeaching.test.ts`
@@ -25,10 +26,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
+### `quietMovePoint` (function) — 1 call site
+- `src/services/playCommentary.ts:931`
+
 ### `buildReviewMoveTeaching` (function) — 26 call sites
-- `src/components/Coach/CoachGameReview.tsx:1758`
-- `src/services/coachFeatureService.ts:1068`
-- `src/services/coachFeatureService.ts:2914`
+- `src/components/Coach/CoachGameReview.tsx:1727`
+- `src/services/coachFeatureService.ts:1078`
+- `src/services/coachFeatureService.ts:2984`
 - `src/services/discussionPractice.ts:169`
 - `src/services/dnaLineNarrator.ts:144`
 - `src/services/learnMoveTeaching.ts:44`
@@ -54,8 +58,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.ts:526`
 
 ### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2825`
-- `src/services/reviewFullData.ts:629`
+- `src/services/coachFeatureService.ts:2895`
+- `src/services/reviewFullData.ts:925`
 - `src/services/reviewMoveTeaching.test.ts:141`
 - `src/services/reviewMoveTeaching.test.ts:143`
 - `src/services/reviewMoveTeaching.test.ts:148`
@@ -63,7 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewMoveTeaching.test.ts:157`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2822`
+- `src/services/coachFeatureService.ts:2892`
 - `src/services/reviewMoveTeaching.test.ts:122`
 - `src/services/reviewMoveTeaching.test.ts:125`
 - `src/services/reviewMoveTeaching.test.ts:131`

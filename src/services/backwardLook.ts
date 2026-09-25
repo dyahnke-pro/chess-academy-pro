@@ -97,6 +97,10 @@ export function backwardLook(args: {
    *  100,000. */
   missedMate?: number | null;
   allowedMate?: number | null;
+  /** The mover's eval AFTER the move, mover's perspective, when it is a real
+   *  centipawn read — lets the verdict say "still wins, but X was cleaner"
+   *  instead of "was a mistake" when the student is still clearly winning. */
+  moverEvalAfterCp?: number | null;
   /** WHOSE move is being looked back at. Defaults to the student.
    *
    *  The coach's own moves go through the SAME function deliberately. They ask
@@ -204,7 +208,14 @@ export function backwardLook(args: {
         playedSan: args.playedSan,
         studentColor: args.studentColor,
       });
-      if (f) { attempt = f.line; attemptSquare = f.squares[0] ?? ''; }
+      // …and only when the move COST something. `whyItFailed` counts a static
+      // swap-off and says so itself: "the upstream caller only asks about moves
+      // already graded as errors". Asked about the King's Indian main line
+      // (…e5, hand walk 2026-09-25) it said "that left your pawn on e5
+      // hanging" — dxe5 dxe5 Qxd8 Rxd8 Nxe5 loses to …Nxe4, which the engine
+      // sees and a swap count cannot. A material loss the engine does not
+      // charge is not a loss.
+      if (f && args.cpLoss >= INACCURACY_CP) { attempt = f.line; attemptSquare = f.squares[0] ?? ''; }
     } catch { /* a lane that throws must not silence the rest */ }
 
     let cost: { said: string; opening: string; square: string } | null = null;
@@ -250,6 +261,7 @@ export function backwardLook(args: {
             cpLoss: args.cpLoss,
             missedMate: args.missedMate ?? null,
             allowedMate: args.allowedMate ?? null,
+            moverEvalAfterCp: args.moverEvalAfterCp ?? null,
             side: 'student',
             moverColor: args.studentColor,
           });
@@ -277,6 +289,7 @@ export function backwardLook(args: {
         cpLoss: args.cpLoss,
         missedMate: args.missedMate ?? null,
         allowedMate: args.allowedMate ?? null,
+        moverEvalAfterCp: args.moverEvalAfterCp ?? null,
         side: 'student',
         moverColor: args.studentColor,
       });
@@ -308,8 +321,11 @@ export function backwardLook(args: {
     // This beat is a pure function of (fenAfter, replyPvUci, cpLoss). Logging
     // those three makes the next occurrence reproducible offline in one call.
     if (allowed) {
+      // A DIAGNOSTIC, NOT A SPOKEN LINE: labelled `coach-narration-spoken` it
+      // landed in every "what did the coach say" inventory with its cpLoss and
+      // raw PV attached (hand walk 2026-09-24 read it as speech).
       void logAppAudit({
-        kind: 'coach-narration-spoken',
+        kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'backwardLook.drawback',
         summary: `"${allowed.line}" · cpLoss=${args.cpLoss} · pv=${(args.replyPvUci ?? []).slice(0, 12).join(' ') || 'none'}`,

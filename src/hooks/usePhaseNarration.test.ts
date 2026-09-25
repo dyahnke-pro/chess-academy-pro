@@ -329,10 +329,13 @@ describe('the COMPUTED CONCEPT speaks at a phase transition (P4c — a wire that
 
 
 describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
-  it('speaks the game-level thesis — the tactic the game turned on — in the present register', async () => {
+  it('does NOT speak a pin that merely "landed" as the story of the game (hand walk 2026-09-24)', async () => {
+    // The Scandinavian Lasker: …Bg4 pins the f3-knight to the queen. With no
+    // eval swing the thesis is a 'landed' tactic — at a phase change it used to
+    // come out as "Watch move 5, Bg4 — that is where the pin lands", present
+    // tense about a move already played. Only a real TURN is spoken now.
     noteText = '';
     const { result } = renderHook(() => usePhaseNarration({
-      // The Scandinavian Lasker: …Bg4 (ply 10) pins the f3-knight to the queen.
       getPgn: () => 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4',
       playerColor: 'black',
       getOpeningName: () => 'Scandinavian Defense: Lasker Variation',
@@ -340,11 +343,8 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       corpusNotes: true,
     }));
     act(() => { void result.current.narrate({ ...EVENT, playerColor: 'black' }, 'full'); });
-    await vi.waitFor(() => {
-      const all = spoken.join(' ');
-      expect(all, 'the thesis was not spoken').toMatch(/Bg4/);
-      expect(all).toMatch(/pin/i);
-    }, { timeout: 2000 });
+    await new Promise((r) => setTimeout(r, 300));
+    expect(spoken.join(' ')).not.toMatch(/that is where the pin lands|Watch move/);
   });
 
   it('stays silent about a thesis when nothing has turned yet (no tactic, no evals)', async () => {

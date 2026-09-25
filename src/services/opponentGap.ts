@@ -80,11 +80,14 @@ export function detectOpponentGap(input: {
  *  "That was a blunder from me … He let you off" in ONE utterance
  *  (WO-STANDARD-01 D-9): the verdict spoke as the coach and the nudge spoke
  *  about a third person. */
-export type GapSeat = 'student' | 'coach-is-opponent';
+export type GapSeat = 'student' | 'coach-is-opponent' | 'dictated';
 
 const GAP_STEM: Record<GapSeat, string> = {
   'coach-is-opponent': 'I let you off there',
   student: 'they let you off there',
+  // The student TOLD the coach to play it (hand walk 2026-09-24: "I let you
+  // off there" after a dictated Qc7). Nobody "let" anyone off — name the move.
+  dictated: 'that reply gives you something',
 };
 
 /** The subtle nudge — guide-don't-tell: names NO move, leads the eye with the

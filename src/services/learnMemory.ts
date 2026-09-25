@@ -63,6 +63,13 @@ export interface LearnMemory {
   gemSeen: string | null;
   /** The board that gem callout was computed on. */
   gemFen: string | null;
+  /** The gem called out at `gemFen`, held until the student moves from that
+   *  board — then it is resolved (found / missed) with narration, arrows and a
+   *  Walk button. Never shown before the move (honesty contract). */
+  gemPending: import('./gemCrushLines').LivePunishment | null;
+  /** The coach's last reply, when the STUDENT dictated it (its SAN) — so
+   *  "that was a mistake from me" would be false (hand walk 2026-09-24). */
+  lastReplyDictated: string | null;
   /** The last computed line, so two consecutive plies never repeat it. */
   lastComputed: string;
   /** Pawn-structure families already NAMED this game. */
@@ -106,7 +113,8 @@ export interface LearnMemory {
   /** Opening principles taught this game (WO-TEACH-02 S2) — each once. */
   readonly principleTaught: Set<string>;
   /** Tactic motif → the move number it was first taught (S6 transfer). */
-  readonly motifFirstMove: Map<string, number>;
+  /** Structurally `MotifLedger` — this module imports nothing (pure memory). */
+  readonly motifFirstMove: Map<string, { move: number; instance: string }>;
   /** The opening name already QUEUED for the voice this game. Queueing is not
    *  saying (see `spokenOpeningName`), but re-queueing the SAME name every turn
    *  spoke "This game is now the Caro-Kann Defense." on two consecutive plies
@@ -209,7 +217,7 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
   const spokenKeys = new Set<string>();
   const conceptTaught = new Set<string>();
   const principleTaught = new Set<string>();
-  const motifFirstMove = new Map<string, number>();
+  const motifFirstMove = new Map<string, { move: number; instance: string }>();
   const spokenTacticLines = new Set<string>();
   const spokenThreatLines = new Set<string>();
   let lastPlies = 0;
@@ -231,6 +239,8 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
     spokenThreatLines,
     gemSeen: null,
     gemFen: null,
+    gemPending: null,
+    lastReplyDictated: null,
     lastComputed: '',
     thinkAloudLastPly: NEVER_FIRED,
     spokenOpeningName: null,
@@ -259,6 +269,8 @@ export function createLearnMemory(onNewGame?: () => void): LearnMemory {
       mem.lastThreatKey = '';
       mem.gemSeen = null;
       mem.gemFen = null;
+      mem.gemPending = null;
+      mem.lastReplyDictated = null;
       mem.lastComputed = '';
       mem.thinkAloudLastPly = NEVER_FIRED;
       mem.spokenOpeningName = null;

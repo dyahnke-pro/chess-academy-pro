@@ -1580,7 +1580,9 @@ describe('groundedAnswer — Learn voices the computed concept, not just the bar
     expect(out).not.toBeNull();
     expect(out!.facts).toContain('a fork hits two targets at once');
     // The bare description of the SAME fork must not be spoken a second time.
-    expect(out!.facts.match(/Knight on d5 forks/g)?.length ?? 0).toBe(1);
+    expect(out!.facts.match(/knight on d5 forks/gi)?.length ?? 0).toBe(1);
+    // …and it is seated: whose knight, whose queen (2026-09-25, one seater).
+    expect(out!.facts).toContain('Your knight on d5 forks their queen on c7');
   });
 });
 

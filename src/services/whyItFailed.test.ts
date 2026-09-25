@@ -20,8 +20,10 @@ function before(sans: string[]): string {
 
 describe('held by a defender', () => {
   it('names the guard when the attack was never a threat', () => {
-    // Rook to a5 hits the pawn on d5, and the c6-pawn is holding it. A rook
-    // for a pawn is not a threat, so the "attack" was never one.
+    // Bishop to f3 hits the pawn on d5, and the c6-pawn is holding it. A
+    // bishop for a pawn is the tempting-but-losing swap this lane names.
+    // (A rook or queen for a pawn is never a real option, so it stays silent —
+    // David 2026-09-24: "No one is going to take a pawn for a queen".)
     //
     // 🔒 THE FIRST VERSION OF THIS TEST USED THE RUY LOPEZ, and it failed —
     // correctly. Bb5 hits a knight guarded twice, but a bishop for a knight is
@@ -29,17 +31,39 @@ describe('held by a defender', () => {
     // it a failed idea would have taught the student something untrue. The
     // code was right and the fixture was wrong; a losing trade is the shape
     // this lane is actually about.
-    const fen = '4k3/8/2p5/3p4/8/8/4K3/R7 w - - 0 1';
-    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ra5', studentColor: 'white' });
+    const fen = '4k3/8/2p5/3p4/8/8/4BK2/8 w - - 0 1';
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Bf3', studentColor: 'white' });
     expect(out, 'said nothing about a guarded target').not.toBeNull();
     expect(out!.kind).toBe('held-by-defender');
     expect(out!.line).toContain('d5');
     // The guard it names must really be defending d5 on the real board.
     const board = new Chess(fen);
-    board.move('Ra5');
+    board.move('Bf3');
     const guardSquare = out!.squares[1];
     expect(board.attackers('d5', 'b'), `${guardSquare} does not defend d5`)
       .toContain(guardSquare);
+  });
+
+  it('says nothing when the swap was never a real option (a queen for a pawn)', () => {
+    const fen = before(['e4', 'e5', 'd3', 'Nc6']);
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Qh5', studentColor: 'white' });
+    if (out) expect(out.kind).not.toBe('held-by-defender');
+  });
+
+  it('a PINNED guard does not hold (Nc3 hitting d5, guarded only by the pinned b6-knight)', () => {
+    // Naroditsky's game, move 22 (hand walk 2026-09-24): the knight on b6 is
+    // pinned to the queen on d6 by the rook on a6. The coach said "the knight
+    // on b6 holds it — taking there gives up your knight for the pawn"; his
+    // next move was Nxd5 and it won.
+    const fen = '2k4r/1r3ppp/Rn1q2b1/1Ppp4/6P1/3P3P/2P1NPB1/Q4RK1 w - - 3 22';
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Nc3', studentColor: 'white' });
+    if (out) expect(out.kind).not.toBe('held-by-defender');
+  });
+
+  it('a move that PINS its target was not "eyeing" it (Ra6 pinning Nb6 to the queen)', () => {
+    const fen = '2k4r/R2r1ppp/1n1qpn2/1Pp4b/8/2NP2PP/2P1NPB1/3Q1RK1 w - - 1 18';
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ra6', studentColor: 'white' });
+    if (out) expect(out.kind).not.toBe('held-by-defender');
   });
 
   it('says nothing about an equal trade — that is a real option, not a failure', () => {
@@ -84,7 +108,7 @@ describe('answered by a tactic', () => {
     const out = whyItFailed({ fenBefore: fen, playedSan: 'Ra5', studentColor: 'white' });
     if (out?.kind === 'answered-by-tactic') {
       const board = new Chess(fen);
-      board.move('Ra5');
+      board.move('Bf3');
       const reply = /\b([NBRQK]?[a-h]?[1-8]?x?[a-h][1-8][+#])/.exec(out.line)?.[1];
       const probe = new Chess(board.fen());
       const played = probe.move(reply!);
@@ -203,20 +227,16 @@ import { buildReviewCitations, type ReviewMoveInput } from './coachFeatureServic
 
 describe('the review actually carries the reason', () => {
   it('puts a why-it-failed line on a flagged move that has one', () => {
-    // 1.e4 e5 2.d3 Nc6 3.Qh5 — the queen comes out hitting f7 and e5, and
-    // both are held. A queen for a pawn is not a threat, which is the whole
-    // lesson of the move and exactly what a bare "the engine preferred Bc4"
-    // leaves out.
-    //
-    // (`d3` is not filler: after Nf3 the queen's diagonal to h5 is blocked by
-    // its own knight, so the first version of this line was simply illegal.)
+    // 1.e4 e5 2.Nf3 Nc6 3.Ng5 — the knight hops in hitting f7, and the king
+    // holds it: a knight for a pawn, the tempting swap a bare "the engine
+    // preferred Bc4" leaves out.
     //
     // 🔒 THE FIRST VERSION OF THIS TEST PASSED `true` FOR THE COLOUR. The
     // parameter is `'white' | 'black'`, so `true` matched neither, every white
     // move was filtered out, and the builder returned nothing — a wiring test
     // that proved the wiring was absent because the TEST was wrong. Vitest
     // does not typecheck, so nothing said so.
-    const sans = ['e4', 'e5', 'd3', 'Nc6', 'Qh5'];
+    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'Ng5'];
     const c = new Chess();
     const moves: ReviewMoveInput[] = sans.map((san, i) => {
       c.move(san);
@@ -236,7 +256,7 @@ describe('the review actually carries the reason', () => {
     const cited = buildReviewCitations(moves, 'white');
     expect(cited.length, 'the flagged move was not cited at all').toBe(1);
     const cite = cited[0];
-    expect(cite.playedSan).toBe('Qh5');
+    expect(cite.playedSan).toBe('Ng5');
     // THE POINT OF THE WHOLE MODULE: a real sentence, out of the real builder.
     expect(cite.whyItFailedLine, 'the citation carries no reason for the failure')
       .toBeTruthy();

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**191 lines · 10 exports · 3 importers · 1 tests · 0 audits**
+**197 lines · 10 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/positionFacts.ts`
 - `src/services/refutedAlternative.ts`
+- `src/services/refutedAlternativeCore.test.ts`
+- `src/services/reviewFullData.ts`
 - `src/test/teach02Wired.test.ts`
 
 ## Exports and every call site
@@ -53,20 +55,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/refutedAlternative.ts:143`
 
 ### `candidatesFromAmateur` (function) — 2 call sites
-- `src/services/positionFacts.ts:692`
+- `src/services/positionFacts.ts:741`
 - `src/services/refutedAlternative.ts:142`
 
 ### `FanLine` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `provenPrefix` (function) — 1 call site
+### `provenPrefix` (function) — 2 call sites
 - `src/services/refutedAlternative.ts:126`
+- `src/services/refutedAlternativeCore.test.ts:34`
 
-### `refutedFromFan` (function) — 1 call site
-- `src/services/positionFacts.ts:692`
+### `refutedFromFan` (function) — 2 call sites
+- `src/services/positionFacts.ts:741`
+- `src/services/refutedAlternativeCore.test.ts:14`
 
 ## Tests
 
+- `src/services/refutedAlternativeCore.test.ts`
 - `src/test/teach02Wired.test.ts`
 
 ## Audits that reach it

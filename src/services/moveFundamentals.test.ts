@@ -75,7 +75,11 @@ describe('a quiet pawn move that SUPPORTS the center has a why (prod hint audit 
     expect(strategicWhyLed(FRENCH, 'c3', 'white')).toBe('supports the center, guarding d4');
   });
   it('e3 from the start guards d4 (f4 is extended center, not core — filtered out)', () => {
-    expect(strategicWhyLed(START, 'e3', 'white')).toBe('supports the center, guarding d4');
+    // The centre clause is present and core-only (d4, never f4). Since
+    // 2026-09-24 e3 LEADS with freeing the f1-bishop — the other true reason.
+    const center = computeMoveFundamentals(START, 'e3', 'white').find((f) => f.id === 'center');
+    expect(center?.led).toBe('supports the center, guarding d4');
+    expect(strategicWhyLed(START, 'e3', 'white')).toContain('opens the diagonal for the bishop on f1');
   });
   it('a wing pawn (a3 guards only b4) is NOT center support — keeps the a3 contract null', () => {
     expect(strategicWhyLed(START, 'a3', 'white')).toBeNull();
@@ -171,5 +175,60 @@ describe('computeMoveFundamentals — positional fundamentals (audit 2026-09-11)
     const luft = funds.find((f) => f.id === 'luft');
     expect(luft, 'h3 in front of the castled king makes luft').toBeTruthy();
     expect(luft!.led).toContain('luft');
+  });
+});
+
+describe('a pawn move that opens a bishop (hand walk 2026-09-24)', () => {
+  it('Naroditsky\'s d3 opens the c1-bishop — and says so, not only "guards e4"', () => {
+    // After 8.O-O Nbd7 in his game; White to play d3.
+    const fen = 'r3kb1r/pp1npppp/2p2n2/q6b/8/2N3PP/PPPPNPB1/R1BQ1RK1 w kq - 3 9';
+    const funds = computeMoveFundamentals(fen, 'd3', 'white');
+    const top = funds.slice().sort((a, b) => b.weight - a.weight)[0];
+    expect(top?.led).toContain('bishop on c1');
+  });
+  it('NEGATIVE CONTROL: a pawn move that frees nothing names no bishop', () => {
+    const funds = computeMoveFundamentals('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'a3', 'white');
+    expect(funds.some((f) => f.led.includes('bishop on'))).toBe(false);
+  });
+});
+
+describe('g3 prepares the fianchetto (hand walk 2026-09-24)', () => {
+  it('names the fianchetto — his "special setup, g3, preparing to fianchetto"', () => {
+    // 1.e4 d5 2.exd5 Qxd5 3.Nc3 Qa5 — White plays g3.
+    const fen = 'rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4';
+    const top = computeMoveFundamentals(fen, 'g3', 'white').sort((a, b) => b.weight - a.weight)[0];
+    expect(top?.led).toBe('prepares to fianchetto the bishop to g2');
+  });
+});
+
+describe('development with tempo (hand walk 2026-09-24)', () => {
+  it('3.Nc3 against the Scandinavian queen says it hits the queen', () => {
+    // 1.e4 d5 2.exd5 Qxd5 — White plays Nc3.
+    const fen = 'rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3';
+    const dev = computeMoveFundamentals(fen, 'Nc3', 'white').find((f) => f.id === 'development');
+    expect(dev?.led).toContain('with tempo, hitting the queen on d5');
+  });
+  it('NEGATIVE CONTROL: 2.Nf3 hits nothing and says nothing about tempo', () => {
+    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const dev = computeMoveFundamentals(fen, 'Nf3', 'white').find((f) => f.id === 'development');
+    expect(dev?.led ?? '').not.toContain('tempo');
+  });
+});
+
+describe('a pawn that kicks a piece gains a tempo (hand walk 2026-09-24)', () => {
+  it('9.f4 against …Ne5 in the Philidor: the reason is the kick, not "grab space"', () => {
+    const fen = 'r1bq1rk1/ppp1bppp/3p1n2/4n3/3NP3/1BN5/PPP2PPP/R1BQ1RK1 w - - 5 9';
+    const top = computeMoveFundamentals(fen, 'f4', 'white').sort((a, b) => b.weight - a.weight)[0];
+    expect(top?.id).toBe('tempo');
+    expect(top?.led).toBe('kicks their knight off e5, gaining time');
+  });
+  it('NEGATIVE CONTROL: a pawn push that hits nothing is not tempo', () => {
+    expect(computeMoveFundamentals(START, 'e4', 'white').some((f) => f.id === 'tempo')).toBe(false);
+  });
+});
+
+describe('a capture is not "planting on an outpost" (hand walk 2026-09-24)', () => {
+  it('23.Bxe6+ takes a knight with check', () => {
+    expect(computeMoveFundamentals('3q1rk1/pp4pp/2p1n3/4Pp1P/1b6/1BN1BR1P/PPP5/4Q1K1 w - - 0 23', 'Bxe6+', 'white').some((f) => f.id === 'outpost')).toBe(false);
   });
 });

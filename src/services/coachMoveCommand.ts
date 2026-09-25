@@ -14,6 +14,7 @@
 //     before the student has moved). The caller arms it as the coach's
 //     next reply.
 
+import { Chess } from 'chess.js';
 import { parseSpokenMove, type ParsedSpokenMove } from './spokenMoveParser';
 
 export interface CoachMoveCommand extends ParsedSpokenMove {
@@ -74,7 +75,11 @@ function flipTurn(fen: string): string | null {
  * text isn't a command or names no unambiguous legal move — the caller then
  * falls through to normal routing (opening requests, Q&A, etc.).
  */
-export function parseCoachMoveCommand(text: string, fen: string): CoachMoveCommand | null {
+export function parseCoachMoveCommand(
+  text: string,
+  fen: string,
+  coachColor?: 'white' | 'black',
+): CoachMoveCommand | null {
   const trimmed = text.trim();
   if (!trimmed || trimmed.length > 80) return null;
   if (REPORT_RE.test(trimmed) || /\?\s*$/.test(trimmed)) return null;
@@ -113,13 +118,37 @@ export function parseCoachMoveCommand(text: string, fen: string): CoachMoveComma
   }
   if (!phrase) return null;
 
-  const now = parseSpokenMove(phrase, fen);
+  // ON THE STUDENT'S TURN THE COACH'S SIDE IS READ FIRST (David 2026-09-24
+  // match game: "play c6" with White to move parsed as White's Bc6+ — legal,
+  // and not the move he was telling the coach to make). The student's side is
+  // still tried last, for the game-start hand-over ("you play d4").
+  const studentsTurn = coachColor !== undefined
+    && (fen.split(' ')[1] === 'w' ? 'white' : 'black') !== coachColor;
+  const now = studentsTurn ? null : parseSpokenMove(phrase, fen);
   if (now) return { ...now, playableNow: true, corrects };
 
   const flipped = flipTurn(fen);
   if (flipped) {
     const later = parseSpokenMove(phrase, flipped);
     if (later) return { ...later, playableNow: false, corrects };
+  }
+  // A REPLY THAT ONLY EXISTS AFTER THE STUDENT'S MOVE — "play Qxd5" before
+  // exd5 has put anything on d5 to take (David 2026-09-24: "tell coach what to
+  // play against you through the opening. It should be able to do that"). The
+  // flipped board cannot see it, so try the position after each legal student
+  // move; it is armed as pending and re-checked for legality when it is due.
+  try {
+    const board = new Chess(fen);
+    for (const m of board.moves()) {
+      const probe = new Chess(fen);
+      probe.move(m);
+      const after = parseSpokenMove(phrase, probe.fen());
+      if (after) return { ...after, playableNow: false, corrects };
+    }
+  } catch { /* an unreadable FEN arms nothing */ }
+  if (studentsTurn) {
+    const handOver = parseSpokenMove(phrase, fen);
+    if (handOver) return { ...handOver, playableNow: true, corrects };
   }
   return null;
 }

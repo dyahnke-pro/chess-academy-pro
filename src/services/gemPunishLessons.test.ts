@@ -4,19 +4,27 @@
 // These RUN the conversion over the whole shipped gem set rather than
 // typechecking it — `tsc --noEmit` reported green on a real ReferenceError
 // earlier in this build, so only execution is evidence.
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
 import { gemToPunishLesson, gemPunishLessonsForOpening, gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { getAllPunishGems, isSurfaceableGem } from '../data/lessons/punishGems';
+
+// CONVERT ONCE, ASSERT MANY (2026-09-24). Three tests each converted all 388
+// surfaceable gems from scratch (~70s apiece after the SEE speed-up, 200s+
+// before it, over the 120s budget under ship-check load). The conversion is
+// pure, so one pass feeds every assertion.
+type Converted = { gem: ReturnType<typeof getAllPunishGems>[number]; lesson: ReturnType<typeof gemToPunishLesson> };
+let CONVERTED: Converted[] = [];
+beforeAll(() => {
+  CONVERTED = getAllPunishGems().filter(isSurfaceableGem).map((gem) => ({ gem, lesson: gemToPunishLesson(gem) }));
+}, 600_000);
 
 describe('gem → coach punish lesson', () => {
   it('every surfaceable gem converts, and every move replays legally (G3)', () => {
     let converted = 0;
     let withPlayout = 0;
     let forced = 0;
-    for (const gem of getAllPunishGems()) {
-      if (!isSurfaceableGem(gem)) continue;
-      const lesson = gemToPunishLesson(gem);
+    for (const { gem, lesson } of CONVERTED) {
       if (!lesson) {
         // The ONLY legitimate reason to drop a gem here: the refutation is
         // FORCED, so there is no second legal move to offer. A multiple-choice
@@ -60,9 +68,7 @@ describe('gem → coach punish lesson', () => {
   }, 120000);
 
   it('every beat speaks — no silent ply reaches the student', () => {
-    for (const gem of getAllPunishGems()) {
-      if (!isSurfaceableGem(gem)) continue;
-      const lesson = gemToPunishLesson(gem);
+    for (const { lesson } of CONVERTED) {
       if (!lesson) continue;
       expect(lesson.whyBad.trim().length, `${lesson.name}: empty whyBad`).toBeGreaterThan(0);
       expect(lesson.whyPunish.trim().length, `${lesson.name}: empty whyPunish`).toBeGreaterThan(0);
@@ -73,9 +79,7 @@ describe('gem → coach punish lesson', () => {
   }, 120000);
 
   it('tiers map to the locked trap taxonomy — only a confirmed crush is a red TRAP', () => {
-    for (const gem of getAllPunishGems()) {
-      if (!isSurfaceableGem(gem)) continue;
-      const lesson = gemToPunishLesson(gem);
+    for (const { gem, lesson } of CONVERTED) {
       if (!lesson) continue;
       expect(lesson.kind).toBe(gem.tier === 'confirmed' ? 'trap' : 'mistake');
     }
@@ -114,7 +118,9 @@ describe('gemPunishLessonsForOpeningName — joins on the opening, not the spell
       expect(b.length, `${british} should have weapons`).toBeGreaterThan(0);
       expect(a.map((l) => l.name)).toEqual(b.map((l) => l.name));
     }
-  });
+  // Six conversions of up to five gems each — the same 30s budget as its
+  // sibling above, not the 5s default it ran out of under load.
+  }, 30000);
 
   it('tolerates a missing apostrophe', () => {
     expect(gemPunishLessonsForOpeningName('Kings Gambit').length)

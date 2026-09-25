@@ -7,7 +7,7 @@
  * played-out detour with narration + arrows, the generator attaches it to the
  * node, and the tree-wide dedupe never bakes the same gem twice.
  */
-import { describe, it, expect } from 'vitest';
+import { vi, describe, it, expect } from 'vitest';
 import { attachBakedGems } from './openingGenerator';
 import { buildGemDetour, gemsForPosition, bakeGemsIntoTree } from './gemCrushLines';
 import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punishGems';
@@ -21,6 +21,11 @@ function bareNode(san: string): WalkthroughTreeNode {
 function firstSurfaceableGem() {
   return getPunishGemsForOpening('caro-kann').filter(isSurfaceableGem)[0] ?? null;
 }
+
+// Each case builds real played-out detours through chess.js; alone they take
+// ~1s, but beside other files in ship-check's parallel lane one took 5.3s and
+// tripped vitest's 5s default. A budget, not a product failure.
+vi.setConfig({ testTimeout: 30_000 });
 
 describe('buildGemDetour', () => {
   it('builds a legal played-out detour from a real gem, with narration + arrows', () => {

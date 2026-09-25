@@ -18,8 +18,10 @@ import { readPosition, buildPositionalRead } from './positionalRead';
  *  its own pawns on light squares, both kings are home, play is quiet. */
 const FRENCH = 'r1bqk2r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 8';
 
-/** Black king still in the centre, White castled — an asymmetric read. */
-const BLACK_KING_CENTRE = 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4';
+/** Black king still in the centre with castling one move away, White castled
+ *  — an asymmetric read. (…Be7 is in: until then the f8-bishop blocks castling
+ *  and the student version rightly stays quiet.) */
+const BLACK_KING_CENTRE = 'r1bqk2r/ppppbppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5';
 
 describe('the read describes both sides of the board', () => {
   it('returns observations about the opponent, not only the student', () => {
@@ -33,13 +35,16 @@ describe('the read describes both sides of the board', () => {
 
   it('reads the SAME board differently depending on which side the student is', () => {
     // The strongest available proof of symmetry: flip who is asking and the
-    // student/opponent labels must swap, not vanish.
-    const asWhite = readPosition(BLACK_KING_CENTRE, 'white');
-    const asBlack = readPosition(BLACK_KING_CENTRE, 'black');
+    // student/opponent labels must swap, not vanish. Each seat has its own
+    // gate (the student's: castling one move away; theirs: stuck, past the
+    // opening), so the board is one where Black lost the right on move twelve
+    // — stuck for a White student, and not advice a Black student can take.
+    const STUCK = 'rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQ - 0 12';
+    const asWhite = readPosition(STUCK, 'white');
     const centreAsWhite = asWhite.find((o) => o.key.endsWith('king-centre'));
-    const centreAsBlack = asBlack.find((o) => o.key.endsWith('king-centre'));
     expect(centreAsWhite?.side, "Black's uncastled king is the OPPONENT's, for a White student").toBe('opponent');
-    expect(centreAsBlack?.side, "…and the STUDENT's, for a Black student").toBe('student');
+    const centreAsBlack = readPosition(BLACK_KING_CENTRE, 'black').find((o) => o.key.endsWith('king-centre'));
+    expect(centreAsBlack?.side, "…and the STUDENT's, for a Black student who can castle").toBe('student');
   });
 
   it('addresses the student as "you" and the opponent as "they"', () => {
@@ -197,7 +202,10 @@ describe('the widened board-awareness pool surfaces the new rungs', () => {
   });
 
   it('surfaces a fully-open file when the side has a rook to use it', () => {
-    const obs = readPosition('r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1', 'white');
+    // Rooks behind their own a- and h-pawns, so the open files are b–g and the
+    // a1-rook can step onto them — the claim is advice, not a description of
+    // a rook already there.
+    const obs = readPosition('r3k2r/p6p/8/8/8/8/P6P/R3K2R w KQkq - 0 1', 'white');
     expect(obs.some((o) => o.kind === 'file')).toBe(true);
   });
 
@@ -268,5 +276,105 @@ describe('a problem piece is joined to the pawn that BLOCKS it, once (WO-STANDAR
     const joins = readPosition(fen, 'white').filter((o) => /would fix it/.test(o.text) && /d2/.test(o.text));
     expect(joins.length).toBeLessThanOrEqual(1);
     for (const j of joins) expect(j.text).toMatch(/pawn to (c4|e4)/);
+  });
+});
+
+describe('"get castled" only when castling is one move away (hand walk 2026-09-24)', () => {
+  // 1.e4 e5 2.Nf3 d6 3.d4 exd4: the f1-bishop still blocks White's castling.
+  const MOVE_THREE = 'rnbqkbnr/ppp2ppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4';
+  it('does not tell the student to castle while their own pieces block it', () => {
+    const obs = readPosition(MOVE_THREE, 'white');
+    expect(obs.some((o) => o.key === 'student-king-centre')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: once the kingside is clear, it does', () => {
+    const clear = 'rnbqkbnr/ppp2ppp/3p4/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5';
+    expect(readPosition(clear, 'white').some((o) => o.key === 'student-king-centre')).toBe(true);
+  });
+});
+
+describe("their king in the centre is a weakness only when it is stuck (hand walk 2026-09-24)", () => {
+  it('move five, …O-O one move away — silent', () => {
+    const fen = 'rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6';
+    expect(readPosition(fen, 'white').some((o) => o.key === 'opponent-king-centre')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: rights gone, move twelve — it speaks', () => {
+    const fen = 'rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQ - 0 12';
+    expect(readPosition(fen, 'white').some((o) => o.key === 'opponent-king-centre')).toBe(true);
+  });
+});
+
+describe('"the d-file is open" only when a rook can get there (hand walk 2026-09-24)', () => {
+  it('move twelve: the e1-queen and c1-bishop wall both rooks off — silent', () => {
+    const fen = 'r2q1rk1/ppp1bppp/5n2/2n1p3/5Pb1/1BN2N2/PPP3PP/R1B1QRK1 w - - 0 13';
+    expect(readPosition(fen, 'white').some((o) => o.kind === 'file')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: a rook with a clear rank to the file hears it', () => {
+    const fen = 'r4rk1/ppp2ppp/8/4p3/4P3/8/PPP2PPP/R4RK1 w - - 0 20';
+    expect(readPosition(fen, 'white').some((o) => o.kind === 'file')).toBe(true);
+  });
+});
+
+describe('the isolani is named once (hand walk 2340)', () => {
+  it('the positional read leaves an isolated d-pawn to the structure lane', () => {
+    // White d4 isolani, Black has no d-pawn: the structure line owns it.
+    const obs = readPosition('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 20', 'white');
+    expect(obs.some((o) => /pawn on d4 is isolated/.test(o.text))).toBe(false);
+  });
+});
+
+describe('their good piece is a fact, not a second "best piece" (hand walk 2340)', () => {
+  it('names why it is good without crowning it or trailing a plan sentence', () => {
+    // Black rook on the open d-file.
+    const obs = readPosition('3r2k1/pp3ppp/8/8/8/8/PP3PPP/4R1K1 w - - 0 25', 'white');
+    const good = obs.find((o) => o.key === 'opponent-good-d8');
+    expect(good?.text).toBe('Their rook on d8 is well placed — it owns the open d-file.');
+  });
+});
+
+describe('queens off, the king reads stay quiet (hand walk 2340)', () => {
+  it('no "king still in the centre" or "open toward your king" once the queens are traded', () => {
+    // Rook endgame, both kings central, d/e files open.
+    const obs = readPosition('3r4/pp3kpp/8/8/8/8/PP3PPP/3RK3 w - - 0 32', 'white');
+    expect(obs.some((o) => o.kind === 'king')).toBe(false);
+  });
+  it('with queens on, the same central king is still read', () => {
+    const obs = readPosition('3rq3/pp3kpp/8/8/8/8/PP3PPP/3RKQ2 w - - 0 32', 'white');
+    expect(obs.some((o) => o.kind === 'king')).toBe(true);
+  });
+});
+
+describe('a problem-piece read is one sentence (hand walk 2026-09-25)', () => {
+  it('never leaves "Keeping it bad…" or "Improving it…" as a sentence of its own', () => {
+    // The King's Indian position from the walk, where "their bishop on e2 is
+    // their problem piece" fired (Black student).
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3'.split(' ')) c.move(m);
+    const reads = readPosition(c.fen(), 'black');
+    expect(reads.some((o) => /problem piece/.test(o.text))).toBe(true);
+    for (const o of reads.filter((r) => /problem piece/.test(r.text))) {
+      expect(o.text.split(/(?<=[.!?])\s+/).length).toBe(1);
+    }
+  });
+});
+
+describe('queens off, no development read (hand walk 2026-09-25, move 36)', () => {
+  it('"2 minor pieces at home" is not said in a rook-and-minor endgame', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8 Raxd8 Kf2 Nc5 Rd1 a5 Rxd8 Rxd8 Ke1 Kf7 Be2 g5 h3 h5 b3 Kf6 Nd1 g4 hxg4 hxg4 Nf2 g3 Nd1 Rh8 Nc3 Rh2 Bf1 Bh3 Ne2 Bxg2 Ng1'.split(' ')) c.move(m);
+    const obs = readPosition(c.fen(), 'black');
+    expect(obs.some((o) => o.kind === 'development')).toBe(false);
+  });
+});
+
+describe('one tempo is not a development lead (hand walk 1600, Caro-Kann)', () => {
+  it('after 1.e4 c6 2.Nf3 d5 3.e5 Black is not "behind in development"', () => {
+    const c = new Chess();
+    for (const m of 'e4 c6 Nf3 d5 e5'.split(' ')) c.move(m);
+    expect(readPosition(c.fen(), 'black').some((o) => o.kind === 'development')).toBe(false);
+  });
+  it('two pieces behind still is', () => {
+    const c = new Chess();
+    for (const m of 'e4 a6 Nf3 h6 Bc4 a5'.split(' ')) c.move(m);
+    expect(readPosition(c.fen(), 'black').some((o) => o.kind === 'development')).toBe(true);
   });
 });

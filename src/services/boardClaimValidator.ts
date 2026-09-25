@@ -41,6 +41,7 @@
  */
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
+import { claimSentences } from '../utils/claimSentences';
 
 export type BoardClaimKind = 'piece-on-square' | 'pin-geometry' | 'piece-absent';
 
@@ -204,7 +205,7 @@ function resolveTargetSquare(chess: Chess, ref: PieceRef, pinnedColor: 'w' | 'b'
 
 /** Split into rough sentence units for clause-level future-marker gating. */
 function splitSentences(text: string): string[] {
-  return text.split(/(?<=[.!?])\s+|\n+/).map((s) => s.trim()).filter(Boolean);
+  return claimSentences(text, { newlines: true });
 }
 
 /** Validate every board-fact claim in `text` against `fen`. */
@@ -500,7 +501,7 @@ export function stripDisprovenSentences(
   fen: string,
   options?: BoardClaimOptions,
 ): { clean: string; dropped: Array<{ sentence: string; violations: BoardClaimViolation[] }> } {
-  const sentences = text.split(/(?<=[.!?])\s+/);
+  const sentences = claimSentences(text);
   const kept: string[] = [];
   const dropped: Array<{ sentence: string; violations: BoardClaimViolation[] }> = [];
   for (const s of sentences) {

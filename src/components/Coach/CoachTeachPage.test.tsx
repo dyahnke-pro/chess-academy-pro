@@ -101,11 +101,19 @@ import { coachService } from '../../coach/coachService';
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
+// THIS PAGE IS HEAVY TO MOUNT (a 12,000-line component). Alone each test runs
+// in ~0.5s; beside nine other files in ship-check's parallel lane one render
+// took 11.4s and tripped vitest's 10s default — a budget, not a product bug.
+vi.setConfig({ testTimeout: 30_000, hookTimeout: 30_000 });
+
 describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bug)', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
-    await db.delete();
-    await db.open();
+    // CLEAR, don't delete: a delete waits for every open connection, and under
+    // ship-check load the previous test's still-settling page kept one open
+    // long enough to time the hook out (10s) — a race, not a product failure.
+    if (!db.isOpen()) await db.open();
+    await Promise.all(db.tables.map((t) => t.clear()));
     useAppStore.getState().reset();
     // ChatInput gates sends on AI data-sharing consent (Apple 5.1.1);
     // grant it so the send actually reaches the coach in the test.

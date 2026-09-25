@@ -4,22 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**924 lines · 32 exports · 920 importers · 203 tests · 39 audits**
+**932 lines · 32 exports · 931 importers · 207 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
 - **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:457) — names `types`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3052) — names `Provider`, `ProviderName`, `types`
-- **TypeScript** (CLAUDE.md:3509) — names `types`
-- **React** (CLAUDE.md:3519) — names `types`
-- **File Organization** (CLAUDE.md:3530) — names `types`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4018) — names `types`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4057) — names `CoachSurface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4527) — names `types`
-- **Naming** (CLAUDE.md:5093) — names `CoachPersonality`
-- **Testing Best Practices** (CLAUDE.md:5138) — names `Provider`
-- **Shared types / services** (CLAUDE.md:5205) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:5955) — names `TacticsLiveContext`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3069) — names `Provider`, `ProviderName`, `types`
+- **TypeScript** (CLAUDE.md:3526) — names `types`
+- **React** (CLAUDE.md:3536) — names `types`
+- **File Organization** (CLAUDE.md:3547) — names `types`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4035) — names `types`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4074) — names `CoachSurface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:4534) — names `types`
+- **Naming** (CLAUDE.md:5139) — names `CoachPersonality`
+- **Testing Best Practices** (CLAUDE.md:5184) — names `Provider`
+- **Shared types / services** (CLAUDE.md:5251) — names `types`
+- **The standard post-deploy ritual** (CLAUDE.md:6027) — names `TacticsLiveContext`
 
 ## Who calls in
 
@@ -100,6 +100,7 @@
 - `src/components/BoardTest/BoardTestPage.tsx`
 - `src/components/Coach/ChatMessage.test.tsx`
 - `src/components/Coach/ChatMessage.tsx`
+- `src/components/Coach/ChatMessage.walkLines.test.tsx`
 - `src/components/Coach/ClassificationBar.test.tsx`
 - `src/components/Coach/ClassificationBar.tsx`
 - `src/components/Coach/ClassificationPills.tsx`
@@ -155,6 +156,7 @@
 - `src/components/Games/GameDatabasePage.tsx`
 - `src/components/Games/GameViewer.tsx`
 - `src/components/Games/ImportPage.tsx`
+- `src/components/Insights/EnhancedGameCard.test.tsx`
 - `src/components/Insights/EnhancedGameCard.tsx`
 - `src/components/Insights/GameInsightsPage.test.tsx`
 - `src/components/Insights/GameInsightsPage.tsx`
@@ -755,6 +757,7 @@
 - `src/services/gameReviewService.test.ts`
 - `src/services/gameStyleClassifier.ts`
 - `src/services/gamesService.ts`
+- `src/services/gemCrushLines.ts`
 - `src/services/groundedAnswer.engineReasoning.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
@@ -807,9 +810,11 @@
 - `src/services/mistakePuzzleService.ts`
 - `src/services/modelGameService.ts`
 - `src/services/moveRating.ts`
+- `src/services/narratedContinuation.ts`
 - `src/services/narrationI18n.test.ts`
 - `src/services/narrationI18n.ts`
 - `src/services/needScore.ts`
+- `src/services/nextMoveAdvice.ts`
 - `src/services/oneOpeningKey.test.ts`
 - `src/services/openingCourse.ts`
 - `src/services/openingDetectionService.ts`
@@ -827,6 +832,8 @@
 - `src/services/opponentIntent.ts`
 - `src/services/phaseScopedReview.test.ts`
 - `src/services/pieceMazeService.ts`
+- `src/services/pieceOptions.test.ts`
+- `src/services/pieceOptions.ts`
 - `src/services/pieceRaceService.ts`
 - `src/services/pieceSweepService.ts`
 - `src/services/planMarks.ts`
@@ -856,6 +863,8 @@
 - `src/services/pvPlayback.ts`
 - `src/services/ratingIdempotence.test.ts`
 - `src/services/refutedAlternative.test.ts`
+- `src/services/reviewGameAdapter.ts`
+- `src/services/reviewNarrationBuild.ts`
 - `src/services/reviewSampleGames.ts`
 - `src/services/section14RecordPath.test.ts`
 - `src/services/sessionGenerator.test.ts`
@@ -935,12 +944,14 @@
 - `src/stores/userContext.ts`
 - `src/test/benchmarks/dexie.perf.test.ts`
 - `src/test/benchmarks/stockfish.perf.test.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/factories.ts`
 - `src/utils/arrowGrounding.test.ts`
 - `src/utils/arrowGrounding.ts`
 - `src/utils/coachNarration.ts`
 - `src/utils/commonMistakeLine.test.ts`
 - `src/utils/commonMistakeLine.ts`
+- `src/utils/computerOpponent.ts`
 - `src/utils/wlppLadder.test.ts`
 - `src/utils/wlppLadder.ts`
 
@@ -1055,6 +1066,7 @@
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts`
 - `src/components/Board/GhostPieceOverlay.test.tsx`
 - `src/components/Coach/ChatMessage.test.tsx`
+- `src/components/Coach/ChatMessage.walkLines.test.tsx`
 - `src/components/Coach/ClassificationBar.test.tsx`
 - `src/components/Coach/CoachChatPage.test.tsx`
 - `src/components/Coach/CoachGamePage.test.tsx`
@@ -1072,6 +1084,7 @@
 - `src/components/Coach/TrainingPlanRolodexPage.test.tsx`
 - `src/components/Dashboard/DashboardPage.test.tsx`
 - `src/components/Games/GameDatabasePage.test.tsx`
+- `src/components/Insights/EnhancedGameCard.test.tsx`
 - `src/components/Insights/GameInsightsPage.test.tsx`
 - `src/components/Insights/MistakesTab.test.tsx`
 - `src/components/Insights/OpeningsTab.test.tsx`
@@ -1198,6 +1211,7 @@
 - `src/services/openingTrapDetector.test.ts`
 - `src/services/openingVolumeFloor.test.ts`
 - `src/services/phaseScopedReview.test.ts`
+- `src/services/pieceOptions.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionReadingService.test.ts`
@@ -1244,6 +1258,7 @@
 - `src/stores/coachSessionStore.test.ts`
 - `src/test/benchmarks/dexie.perf.test.ts`
 - `src/test/benchmarks/stockfish.perf.test.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 - `src/utils/arrowGrounding.test.ts`
 - `src/utils/commonMistakeLine.test.ts`
 - `src/utils/wlppLadder.test.ts`

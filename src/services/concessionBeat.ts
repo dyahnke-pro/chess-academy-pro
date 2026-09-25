@@ -22,7 +22,7 @@
 // what that hands over — a strong player showing you the hole they just made,
 // not a teacher confessing. The coach's weakness becomes the lesson instead of
 // something to excuse.
-import { Chess, type Color } from 'chess.js';
+import { Chess, type Color, type Square } from 'chess.js';
 import { findWeakPawns, findPieceQuality } from './positionReadingService';
 import { planFromUci } from './lookaheadPlan';
 
@@ -41,6 +41,10 @@ export interface Concession {
   said: string;
   /** What the student is being pointed toward, WITHOUT the move. */
   opening: string;
+  /** Set when the moved piece never guarded the square itself but STEPPED
+   *  INTO the line of the piece that did (10.Nf3 shutting the d1-queen off
+   *  g4) — "took your defender off" would be false there. */
+  blockedGuard?: { piece: string; square: string };
 }
 
 /** How close to the coach's own king an abandoned square has to be before it
@@ -55,19 +59,20 @@ const NAME: Record<string, string> = {
 
 /** Which squares a side's pieces defend or attack, by square. */
 function coverage(fen: string, color: Color): Map<string, number> {
+  // DEFENCE IS ATTACK, NOT MOBILITY (hand walk 2026-09-24). This used to count
+  // the squares `color` could MOVE to — so a pawn push "covered" the square in
+  // front of it and a king stepping somewhere counted as a guard. After g3–g4
+  // the coach said "that took your last defender off h2": no pawn on g3 ever
+  // defended h2. `attackers()` is what guards a square.
   const out = new Map<string, number>();
   let board: Chess;
   try { board = new Chess(fen); } catch { return out; }
-  // Force the colour to move so `moves()` reports its coverage, and clear en
-  // passant + castling so the probe cannot invent a move the real position
-  // does not allow.
-  const parts = board.fen().split(' ');
-  parts[1] = color;
-  parts[3] = '-';
-  let probe: Chess;
-  try { probe = new Chess(parts.join(' ')); } catch { return out; }
-  for (const mv of probe.moves({ verbose: true })) {
-    out.set(mv.to, (out.get(mv.to) ?? 0) + 1);
+  for (const file of 'abcdefgh') {
+    for (const rank of '12345678') {
+      const sq = `${file}${rank}` as Square;
+      const n = board.attackers(sq, color).length;
+      if (n > 0) out.set(sq, n);
+    }
   }
   return out;
 }
@@ -183,6 +188,29 @@ export function findConcession(args: {
     }
   }
   if (abandoned) {
+    // WHO stopped guarding it. The mover itself, or a piece whose line the
+    // mover stepped into (hand walk 2026-09-24: 10.Nf3 put the knight on the
+    // d1–g4 diagonal and the coach said "that took your last defender off
+    // g4" — the knight never guarded g4).
+    let blockedGuard: Concession['blockedGuard'];
+    try {
+      const pre = new Chess(args.fen);
+      const guardsBefore = pre.attackers(abandoned as Square, me);
+      if (!guardsBefore.includes(moved.from) && guardsBefore.length > 0) {
+        const g = guardsBefore[0];
+        const c = pre.get(g);
+        if (c) blockedGuard = { piece: NAME[c.type] ?? 'piece', square: g };
+      }
+    } catch { /* keep the plain statement */ }
+    if (blockedGuard) {
+      return {
+        kind: 'defender-left',
+        square: abandoned,
+        blockedGuard,
+        said: `That shut my ${blockedGuard.piece} on ${blockedGuard.square} off from ${abandoned}.`,
+        opening: `Nothing of mine is watching ${abandoned} now.`,
+      };
+    }
     // David's framing — "I do not take your attack seriously so I remove one
     // defender to attack over here" — only fits when the piece actually went
     // to the OTHER WING. On a retreat it would be a non-sequitur, so the wing
@@ -202,7 +230,11 @@ export function findConcession(args: {
   // 2. A PAWN BECAME WEAK that the engine's move would have kept healthy.
   const weakNow = findWeakPawns(after.fen(), me);
   const weakAlt = findWeakPawns(alt.fen(), me);
-  const newIsolated = weakNow.isolated.find((sq) => !weakAlt.isolated.includes(sq));
+  // …and it must be NEW: a pawn already isolated before the move was not left
+  // that way by it (hand walk 2340, move 21: a2 had been isolated since the
+  // c-pawn traded; the best move only would have MENDED it).
+  const weakBefore = findWeakPawns(args.fen, me);
+  const newIsolated = weakNow.isolated.find((sq) => !weakAlt.isolated.includes(sq) && !weakBefore.isolated.includes(sq));
   if (newIsolated) {
     return {
       kind: 'pawn-weakened',
@@ -325,7 +357,9 @@ export function findStudentDrawback(args: {
   // ACTION is finished; a consequence that is still true of the board stays in
   // the present, which is why the second clauses read as they do.
   const said = ({
-    'defender-left': `That took your last defender off ${found.square}.`,
+    'defender-left': found.blockedGuard
+      ? `That shut your ${found.blockedGuard.piece} on ${found.blockedGuard.square} off from ${found.square} — nothing of yours watches it now.`
+      : `That took your last defender off ${found.square}.`,
     'pawn-weakened': `That left your pawn on ${found.square} isolated — no pawn of yours can defend it now.`,
     'file-opened': `That opened the file next to your own king.`,
     'piece-offside': `Your piece went a long way from your king, to ${found.square}.`,

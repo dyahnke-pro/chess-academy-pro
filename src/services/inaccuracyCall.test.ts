@@ -11,7 +11,7 @@
 // "inaccuracy" in review.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { callInaccuracy } from './inaccuracyCall';
+import { callInaccuracy, gambitFile } from './inaccuracyCall';
 import { classifyMove } from './moveRating';
 import { MISTAKE_CP } from './engineConstants';
 
@@ -281,5 +281,63 @@ describe('a coach MISS is not a giveaway (walk 6, L4)', () => {
     const call = callInaccuracy({ fenBefore: fen, playedSan: 'd6', bestSan: 'Qxg5', cpLoss: 400, side: 'coach', moverColor: 'black' });
     expect(call?.said).toMatch(/knight on g5 is still hanging/);
     expect(call?.said).not.toMatch(/go and take it/);
+  });
+});
+
+describe('a gambit is taught from both sides (hand walk 2026-09-24)', () => {
+  // Naroditsky's 10.b4 against the long-castled king: "if Black takes, the
+  // b-file opens straight onto the king". The coach said "b4 was a mistake".
+  const fen = '2kr1b1r/pp1npppp/2p2n2/q6b/8/2NP2PP/PPP1NPB1/R1BQ1RK1 w - - 1 10';
+  it('names the file the pawn offers to open, then the engine\'s preference', () => {
+    const call = callInaccuracy({ fenBefore: fen, playedSan: 'b4', bestSan: 'a3', cpLoss: 120, side: 'student', moverColor: 'white' });
+    expect(call?.said).toContain('b-file opens toward their king');
+    expect(call?.said).not.toMatch(/was a mistake/);
+    expect(call?.said).toContain('a3');
+  });
+  it('NEGATIVE CONTROL: a push nobody can take is graded as before', () => {
+    const call = callInaccuracy({ fenBefore: fen, playedSan: 'a3', bestSan: 'b4', cpLoss: 120, side: 'student', moverColor: 'white' });
+    expect(call?.said ?? '').not.toContain('offers a pawn');
+  });
+});
+
+describe('a defended pawn is not a gambit (hand walk 2026-09-24)', () => {
+  it('18.h3 against …Bg4: g2 guards h3, so nothing is offered', () => {
+    const fen = 'r3qrk1/pp3ppp/2p1n3/4P2n/1b4b1/1BN1BN2/PPP3PP/3RQRK1 w - - 2 18';
+    expect(gambitFile(fen, 'h3', 'white')).toBeNull();
+  });
+  it('NEGATIVE CONTROL: an undefended pawn a piece can take still is', () => {
+    // g4 pushed with nothing guarding it and their bishop on f5 able to take.
+    const fen = '6k1/5ppp/8/5b2/8/8/5PPP/6K1 w - - 0 20';
+    expect(gambitFile(fen, 'g4', 'white')).not.toBeNull();
+  });
+});
+
+describe('the better move\'s reason is what it TAKES (hand walk 2026-09-24)', () => {
+  it('25.Bxf4 missed Bxd8, which takes the queen — not "win a rook"', () => {
+    const call = callInaccuracy({
+      fenBefore: '3q1r1k/pp4pp/2p1B3/4P1BP/1b3p2/2N2R1P/PPP5/4Q1K1 w - - 0 25', playedSan: 'Bxf4', bestSan: 'Bxd8', cpLoss: 600, moverColor: 'white', side: 'student',
+      bestLineUci: ['g5d8', 'f8d8', 'f3f4', 'b4c5'],
+    } as never);
+    expect(call?.said ?? '').toMatch(/take the queen on d8/);
+  });
+});
+
+// Hand walk 1380, move 22: gxh5 won two pieces and left White +4.2 (engine
+// depth 16); Rxf8+ was +6.8. "gxh5 was a mistake" graded a winning move; the
+// teaching is the cleaner way.
+describe('still winning after the move is said first', () => {
+  const fen = '3R1rk1/pp2q1pp/2p1n3/4Pp1n/1b4P1/1BN1BR1P/PPP5/4Q1K1 w - - 1 22';
+  const base = { fenBefore: fen, playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: ['d8f8', 'g8f8'], cpLoss: 261, side: 'student' as const, moverColor: 'white' as const };
+  it('"still wins, but … was cleaner" when the mover stays clearly winning', () => {
+    const call = callInaccuracy({ ...base, moverEvalAfterCp: 418 });
+    expect(call?.said).toMatch(/^gxh5 still wins, but Rxf8\+ was cleaner/);
+    expect(call?.said).not.toMatch(/mistake|blunder/);
+  });
+  it('the grade stands when the position is no longer clearly won', () => {
+    const call = callInaccuracy({ ...base, moverEvalAfterCp: 120 });
+    expect(call?.said).toMatch(/was a (mistake|blunder)/);
+  });
+  it('unknown eval keeps the grade', () => {
+    expect(callInaccuracy({ ...base })?.said).toMatch(/was a (mistake|blunder)/);
   });
 });

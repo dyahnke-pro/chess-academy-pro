@@ -29,6 +29,7 @@
 //   5. ORDER — most-important-first, with the student's weaknesses raised.
 // Steps 1–2 decide WHETHER, 3–5 decide WHAT. Silence at any step is a computed
 // verdict with a reason attached — never an absence.
+import { boardVeto, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
 import { factKind, factValue, FACT_ROLE, FACT_LAYER, type FactKind, type FacetRole } from './reviewFacetRank';
@@ -39,6 +40,7 @@ import { methodBeatFor, type MethodSignals, type HabitNeed, type HabitStanding, 
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WeaknessSignal } from './weaknessSignal';
 import { emitCoachDecision } from './coachDecisionEvents';
+import type { MoveAdviceVerdict } from './nextMoveAdvice';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
@@ -70,6 +72,12 @@ export interface StudentContext {
    *
    *  🚨 REQUIRED, and `null` is a real answer. See `momentBoost`. */
   need: { speak: boolean } | null;
+  /** Whether this moment earned naming the student's NEXT move (the weighing,
+   *  "the move is X", the but-turn), and which arm earned it — `nextMoveAdvice`.
+   *  REQUIRED; `null` = not a live next-move question (review is retrospective,
+   *  and the opponent's ply names no move of the student's). Emitted on the
+   *  decision row so an audit can see which reason carried it. */
+  moveAdvice: MoveAdviceVerdict | null;
   /** HOW MUCH THIS STUDENT'S OWN HISTORY RAISES THIS MOMENT — `boostFor(match)`
    *  for the best-matching fact here, computed by the SURFACE with the existing
    *  fine-grained join (`matchTacticPattern(conceptId) ?? matchClauseKind(kind)`).
@@ -123,6 +131,11 @@ export const GREEN_QUIET_BELOW = STAKED_FLOOR + 150;
  *  the computers that produced them (never scraped from the prose). */
 export interface FactBundle {
   facts: readonly string[];
+  /** THE BOARD THE FACTS ARE ABOUT — required, so no surface can forget it
+   *  (David 2026-09-25: "Root cause fixes this time"). A standing claim on a
+   *  board in flux, and anything beside a mate but the mate, never speak.
+   *  `CALM_BOARD` is an explicit answer, not a default. */
+  board: BoardState;
   squares: ReadonlyMap<string, readonly string[]>;
   /** Facts describing what the OPPONENT is doing TO the student. */
   incoming?: ReadonlySet<string>;
@@ -195,7 +208,9 @@ export interface CoachDecision {
   /** Why it does or does not — the observability trail. */
   /** `empty`: the moment cleared both gates but its caller handed no facts —
    *  nothing was dropped, so it must not read as `unsupported` (walk 6, D1). */
-  reason: 'importance' | 'need' | 'unsupported' | 'empty' | 'proven' | 'spoken';
+  /** `board`: every fact was one the board forbids here (`boardState`) — a
+   *  recapture pending or a mate on the board. */
+  reason: 'importance' | 'need' | 'unsupported' | 'empty' | 'proven' | 'board' | 'spoken';
   tier: ImportanceTier;
   /** Moment-level weight, for ordering moments against each other. */
   rank: number;
@@ -237,6 +252,7 @@ function emit(
     reason: d.reason,
     teaches: d.teaches,
     needSpeak: student.need?.speak ?? null,
+    moveAdvice: student.moveAdvice ? (student.moveAdvice.reason ?? 'none') : null,
     spokenCount: d.spoken.length,
     quietCount: d.quiet.length,
     quietBy: d.quiet.reduce<Record<string, number>>((acc, q) => {
@@ -331,6 +347,10 @@ export function decide(
   const provenQuiet: QuietFact[] = [];
   const live = bundle.facts.filter((t) => {
     const k = kindOf(t);
+    // 2a — THE BOARD (`boardState`), before anything is weighed: a claim the
+    // board forbids here is not a candidate at all.
+    const veto = boardVeto(k, bundle.board, bundle.squares.get(t));
+    if (veto) { provenQuiet.push({ text: t, why: veto }); return false; }
     if (k === null || k === 'method') return true;
     if (student.layers[FACT_LAYER[k]] !== 'green') return true;
     if ((value.get(t) ?? 0) >= GREEN_QUIET_BELOW) return true;
@@ -380,8 +400,9 @@ export function decide(
   // support says nothing — and says WHICH gate closed it, rather than
   // reporting `speak: true` over an empty list.
   if (spoken.length === 0) {
+    const boardQuiet = provenQuiet.filter((q) => q.why === 'in-flux' || q.why === 'beside-mate').length;
     const reason = bundle.facts.length === 0 ? 'empty'
-      : live.length === 0 ? 'proven'
+      : live.length === 0 ? (boardQuiet === provenQuiet.length ? 'board' : 'proven')
         : 'unsupported';
     // THE GATE THAT CLOSED THE ROW NAMES EVERY FACT ON IT (B9). A fact that
     // lost a subsumption to a description — which then had no teaching point

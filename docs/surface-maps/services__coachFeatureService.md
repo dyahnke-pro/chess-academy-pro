@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4814 lines · 33 exports · 33 importers · 30 tests · 5 audits**
+**4837 lines · 33 exports · 36 importers · 33 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:57) — names `coachFeatureService`
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3749) — names `buildReviewSegments`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4069) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:5996) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6056) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -26,8 +26,10 @@
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
+- `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.test.ts`
+- `src/services/coachFeatureService.trade.test.ts`
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gameThemeClassifier.ts`
@@ -48,6 +50,7 @@
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
 
@@ -131,14 +134,14 @@
 - `src/services/coachFeatureService.test.ts:784`
 - `src/services/coachFeatureService.test.ts:793`
 - `src/services/coachFeatureService.test.ts:805`
-- `src/services/whyItFailed.test.ts:236`
-- `src/services/whyItFailed.test.ts:274`
+- `src/services/whyItFailed.test.ts:256`
+- `src/services/whyItFailed.test.ts:294`
 
 ### `frameTeachingForOpponent` (function) — 2 call sites
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 55 call sites
+### `buildReviewSegments` (function) — 58 call sites
 - `src/components/Coach/CoachGameReview.tsx:1881`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
@@ -151,6 +154,7 @@
 - `src/services/coachFeatureService.cpLossSign.test.ts:40`
 - `src/services/coachFeatureService.cpLossSign.test.ts:47`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:37`
+- `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.recurrence.test.ts:37`
 - `src/services/coachFeatureService.recurrence.test.ts:46`
 - `src/services/coachFeatureService.recurrence.test.ts:53`
@@ -180,6 +184,7 @@
 - `src/services/coachFeatureService.test.ts:719`
 - `src/services/coachFeatureService.test.ts:854`
 - `src/services/coachFeatureService.test.ts:914`
+- `src/services/coachFeatureService.trade.test.ts:15`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
 - `src/services/reviewCorpusNote.test.ts:40`
@@ -194,6 +199,7 @@
 - `src/services/reviewNeedGate.test.ts:88`
 - `src/services/reviewNeedGate.test.ts:94`
 - `src/test/computedOrderWired.test.ts:59`
+- `src/test/everySurfaceSpeaks.test.ts:94`
 
 ### `reviewOpeningRecord` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -259,9 +265,16 @@
 - `src/services/reviewNarrationFidelity.test.ts:112`
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
-### `pendingRecapture` (function) — 2 call sites
+### `pendingRecapture` (function) — 9 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7528`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
+- `src/utils/justCaptured.test.ts:20`
+- `src/utils/justCaptured.test.ts:22`
+- `src/utils/justCaptured.test.ts:25`
+- `src/utils/justCaptured.test.ts:27`
+- `src/utils/justCaptured.test.ts:30`
+- `src/utils/justCaptured.ts:24`
 
 ### `pastTenseReviewNarration` (function) — 1 call site
 - `src/services/reviewRegister.test.ts:32`
@@ -288,7 +301,7 @@
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:4909`
+- `src/services/coachApi.ts:4937`
 - `src/services/coachFeatureService.test.ts:126`
 - `src/services/coachFeatureService.test.ts:147`
 - `src/services/coachFeatureService.test.ts:166`
@@ -305,8 +318,10 @@
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
+- `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.test.ts`
+- `src/services/coachFeatureService.trade.test.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
@@ -327,6 +342,7 @@
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 
 ## Audits that reach it
 

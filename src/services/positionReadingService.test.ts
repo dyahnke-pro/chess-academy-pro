@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import {
+import { findMinorityAttack,
   seeGain,
   seeSequence,
   findHangingBySee,
@@ -85,11 +85,15 @@ describe('findHangingBySee', () => {
 
 describe('findPawnBreaks', () => {
   it('finds a pawn push that makes contact with an enemy pawn', () => {
-    // White c-pawn on c4 can push c4-c5? No — pick d4 vs black c5/e5: white pawn d4,
-    // black pawns c5 and e5 → d4 is already in contact; instead test a real lever:
-    // White pawn e4, black pawn d5 → exd5 (capture of a pawn = a break) is listed.
-    const breaks = findPawnBreaks('4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1');
-    expect(breaks).toContain('d5'); // exd5 captures the black pawn
+    // c2-c4 hits the d5-pawn, supported by b3 so it survives the trade — a
+    // real lever.
+    const breaks = findPawnBreaks('4k3/8/8/3p4/8/1P6/2P5/4K3 w - - 0 1');
+    expect(breaks).toContain('c4');
+  });
+
+  it('a CAPTURE is not a break (hand walk 2026-09-24: "a pawn break on a5" meant …bxa5)', () => {
+    // exd5 resolves the tension; it is named as a capture, never a lever.
+    expect(findPawnBreaks('4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1')).not.toContain('d5');
   });
 
   it('returns [] when no pawn lever exists', () => {
@@ -843,17 +847,28 @@ describe('findFianchetto + findRookLift + findBlockade (2026-08-23, the rest of 
 })
 
 describe('namedPawnStructure (his "catalogue the structures", 2026-08-23)', () => {
+  it('seats the chain plan — a Black student hits d4, never "Black hits d4" (hand walk 1600)', () => {
+    const fen = 'r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1';
+    expect(namedPawnStructure(fen, 'b')?.plan).toMatch(/you hit d4/);
+    expect(namedPawnStructure(fen, 'w')?.plan).toMatch(/you defend the head on e5/);
+    expect(`${namedPawnStructure(fen, 'b')?.plan}${namedPawnStructure(fen, 'w')?.plan}`).not.toMatch(/\b(White|Black)\b/);
+  });
   it('names the French-type chain (d4+e5 vs d5+e6)', () => {
-    const s = namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1');
+    const s = namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1', 'w');
     expect(s?.name).toMatch(/French/);
   });
   it('names an isolated queen pawn', () => {
     // White d4 with no c/e pawns; Black has no d-pawn.
-    const s = namedPawnStructure('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1');
+    const s = namedPawnStructure('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1', 'w');
     expect(s?.name).toMatch(/isolated queen/i);
   });
+  it('is seat-relative: White\'s isolani is THEIRS to a Black student', () => {
+    const fen = '4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1';
+    expect(namedPawnStructure(fen, 'w')?.name).toMatch(/^You hold/);
+    expect(namedPawnStructure(fen, 'b')?.name).toMatch(/^They hold/);
+  });
   it('returns null on a normal symmetric structure', () => {
-    expect(namedPawnStructure('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')).toBeNull();
+    expect(namedPawnStructure('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w')).toBeNull();
   });
 });
 
@@ -887,5 +902,25 @@ describe('findPawnBreaks — a break that just drops the pawn is not a plan (wal
     expect(findPawnBreaks('rnbqkb1r/pp2pppp/3p1n2/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 3 4')).not.toContain('d5');
     // Open Sicilian after 1.e4 c5 2.Nf3 d6: 3.d4 trades evenly (…cxd4 Nxd4) — still a break.
     expect(findPawnBreaks('rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3')).toContain('d4');
+  });
+});
+
+describe('an isolated pawn is not backward (hand walk 2026-09-24)', () => {
+  it('the lone e5-pawn after 13.fxe5 is isolated only', () => {
+    const fen = 'r2q1rk1/ppp1bppp/4n3/4P2n/6b1/1BN1BN2/PPP3PP/R3QRK1 w - - 3 15';
+    const wp = findWeakPawns(fen, 'w');
+    expect(wp.isolated).toContain('e5');
+    expect(wp.backward).not.toContain('e5');
+  });
+  it('NEGATIVE CONTROL: a pawn its neighbour left behind is still backward', () => {
+    // d6 with the c-pawn gone ahead to c5 and d5 controlled by a white pawn on e4.
+    const fen = '4k3/8/3p4/2p5/4P3/8/8/4K3 b - - 0 1';
+    expect(findWeakPawns(fen, 'b').backward).toContain('d6');
+  });
+});
+
+describe('doubled pawns are not a minority attack (hand walk 2026-09-24)', () => {
+  it('h3+h5 against f5-g7-h7 after 23.Bxe6+', () => {
+    expect(findMinorityAttack('3q1r1k/pp4pp/2p1B3/4Pp1P/1b6/2N1BR1P/PPP5/4Q1K1 w - - 1 24', 'w')).toBeNull();
   });
 });

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { vi, describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import gems from './punish-gems.json';
 import { longestAnchorPly, MIN_DB_ANCHOR_PLY } from '../utils/dbAnchor';
@@ -12,6 +12,11 @@ import { GEM_NARRATION } from './lessons/punishGemNarration';
 import openingManifests from './opening-manifests.json';
 import gemNarrationBaseline from './punishGemNarration.baseline.json';
 import { sourcesAreValid } from './narrationSources';
+
+// Each gem row converts a whole played line through chess.js; after the
+// 2026-09-24 SEE speed-up most take ~1-2s, but under ship-check's parallel load
+// a few crossed vitest's 5s default. A budget, not a product failure.
+vi.setConfig({ testTimeout: 30_000 });
 
 // Gate for the mined punish-gems (WO: docs/plans/2026-05-23-punish-gems-wo.md).
 // Every gem is DB-grounded by construction (it comes from the explorer), and

@@ -572,6 +572,11 @@ class StockfishEngine {
   // mutex (they are dropped when a brain is in flight, or supersede
   // an in-flight prefetch).
   private _brainMutex: Promise<void> = Promise.resolve();
+  /** A STUDENT'S QUESTION HOLDS THE ENGINE (WO-DANYA-01, David 2026-09-24:
+   *  "stop calculations and answer question"). While set, every new analysis
+   *  on this singleton waits for it to clear, so the question — worked out on a
+   *  dedicated pool worker — has the device to itself. */
+  private _questionHold: Promise<void> | null = null;
   // Sticky once the multi-thread bundle has failed at runtime in
   // this app session OR on this device in a previous session. Once
   // true, every subsequent initialize() call goes straight to the
@@ -1379,6 +1384,8 @@ class StockfishEngine {
     options?: Record<string, string | number>,
     priority: AnalysisPriority = 'brain',
     onStart?: () => void,
+    /** Internal: the question holding the engine runs through the hold. */
+    bypassQuestionHold = false,
   ): Promise<StockfishAnalysis> {
     // FEN cache short-circuit — if we've already analyzed this exact
     // position+depth, return the cached result without invoking the
@@ -1464,6 +1471,17 @@ class StockfishEngine {
     }
 
     const run = async (): Promise<StockfishAnalysis> => {
+      // A question is being answered: background work waits its turn.
+      while (this._questionHold && !bypassQuestionHold) {
+        try { await this._questionHold; } catch { /* the hold settles either way */ }
+      }
+      // THE QUESTION SKIPS THE LINE: its reads never join the brain chain (the
+      // background entries in it are waiting on the hold), and dispatch
+      // directly on the engine the hold has already stopped.
+      if (bypassQuestionHold) {
+        onStart?.();
+        return this._dispatchAnalysis(fen, depth, options, priority);
+      }
       if (priority === 'brain') {
         // Append to the brain serialization chain. The previous entry
         // resolves either when the prior brain eval finishes or when it
@@ -1480,6 +1498,12 @@ class StockfishEngine {
           /* prior brain rejected — we still proceed */
         }
         try {
+          // Already in line when a question arrived: hold off again here, so a
+          // queue that formed BEFORE the question never runs ahead of it (the
+          // first local question waited ~14s behind exactly such a queue).
+          while (this._questionHold) {
+            try { await this._questionHold; } catch { /* settles either way */ }
+          }
           onStart?.();
           return await this._dispatchAnalysis(fen, depth, options, priority);
         } finally {
@@ -1798,6 +1822,44 @@ class StockfishEngine {
     if (this.worker && this.isReady) {
       this.send('stop');
     }
+  }
+
+  /**
+   * Run `work` (a student's question) with this engine held: the search in
+   * flight is stopped — it settles with the depth it reached, uncached — and
+   * every background analysis that arrives meanwhile waits until the answer
+   * is done. `work` gets an engine whose reads pass through the hold. The hold
+   * is released however `work` ends.
+   */
+  async holdForQuestion<T>(work: (engine: { analyzePosition(fen: string, depth: number): Promise<StockfishAnalysis> }) => Promise<T>): Promise<T> {
+    let release!: () => void;
+    const hold = new Promise<void>((r) => { release = r; });
+    this._questionHold = hold;
+    // The search in flight is cut short; its caller still gets the depth it
+    // reached, but that shallower result must never be cached under the depth
+    // it asked for.
+    if (this.pending) {
+      this.pending.cacheFen = undefined;
+      this.pending.cacheDepth = undefined;
+    }
+    this.stop();
+    // The question's own reads go THROUGH the hold, on this same warm engine —
+    // no cold worker to spawn (the pool cost ~14s on a first question).
+    const questionEngine = {
+      analyzePosition: (fen: string, depth: number): Promise<StockfishAnalysis> =>
+        this.analyzePosition(fen, depth, undefined, 'brain', undefined, true),
+    };
+    try {
+      return await work(questionEngine);
+    } finally {
+      if (this._questionHold === hold) this._questionHold = null;
+      release();
+    }
+  }
+
+  /** True while a question holds the engine (tests + the audit read this). */
+  isHeldForQuestion(): boolean {
+    return this._questionHold !== null;
   }
 
   /**

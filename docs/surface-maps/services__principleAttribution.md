@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1302 lines · 11 exports · 37 importers · 21 tests · 1 audits**
+**1315 lines · 11 exports · 37 importers · 22 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:5991) — names `FundamentalId`
+- **The standard post-deploy ritual** (CLAUDE.md:6057) — names `FundamentalId`
 
 ## Who calls in
 
@@ -74,28 +74,31 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planTargets` (function) — 2 call sites
-- `src/services/principleAttribution.section14.test.ts:110`
-- `src/services/principleAttribution.section14.test.ts:122`
+- `src/services/principleAttribution.section14.test.ts:120`
+- `src/services/principleAttribution.section14.test.ts:132`
 
 ### `planHeadline` (function) — 1 call site
-- `src/services/principleAttribution.section14.test.ts:113`
+- `src/services/principleAttribution.section14.test.ts:123`
 
-### `attributePrinciples` (function) — 53 call sites
-- `src/services/coachFeatureService.ts:823`
+### `attributePrinciples` (function) — 56 call sites
+- `src/services/coachFeatureService.ts:836`
 - `src/services/liveFundamental.ts:132`
 - `src/services/misconceptionClassifier.ts:261`
 - `src/services/principleAttribution.section14.test.ts:22`
 - `src/services/principleAttribution.section14.test.ts:30`
 - `src/services/principleAttribution.section14.test.ts:47`
 - `src/services/principleAttribution.section14.test.ts:57`
-- `src/services/principleAttribution.section14.test.ts:61`
-- `src/services/principleAttribution.section14.test.ts:62`
-- `src/services/principleAttribution.section14.test.ts:87`
-- `src/services/principleAttribution.section14.test.ts:98`
-- `src/services/principleAttribution.section14.test.ts:102`
-- `src/services/principleAttribution.section14.test.ts:130`
-- `src/services/principleAttribution.section14.test.ts:134`
-- `src/services/principleAttribution.section14.test.ts:143`
+- `src/services/principleAttribution.section14.test.ts:65`
+- `src/services/principleAttribution.section14.test.ts:68`
+- `src/services/principleAttribution.section14.test.ts:71`
+- `src/services/principleAttribution.section14.test.ts:72`
+- `src/services/principleAttribution.section14.test.ts:97`
+- `src/services/principleAttribution.section14.test.ts:108`
+- `src/services/principleAttribution.section14.test.ts:112`
+- `src/services/principleAttribution.section14.test.ts:140`
+- `src/services/principleAttribution.section14.test.ts:144`
+- `src/services/principleAttribution.section14.test.ts:153`
+- `src/services/principleAttribution.section14.test.ts:189`
 - `src/services/principleAttribution.test.ts:20`
 - `src/services/principleAttribution.test.ts:39`
 - `src/services/principleAttribution.test.ts:47`
@@ -140,8 +143,8 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
 - `src/services/autoAnalyzeGame.ts:373`
 - `src/services/autoAnalyzeGame.ts:376`
-- `src/services/coachFeatureService.ts:827`
-- `src/services/coachFeatureService.ts:829`
+- `src/services/coachFeatureService.ts:840`
+- `src/services/coachFeatureService.ts:842`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
 - `src/services/liveFundamental.ts:122`
@@ -165,6 +168,7 @@
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`
 - `src/services/principleVoice.test.ts`
+- `src/services/reviewFullData.test.ts`
 - `src/services/section14Coverage.measure.test.ts`
 - `src/services/section14Diagnosis.test.ts`
 - `src/services/sweepCarriesPv.test.ts`

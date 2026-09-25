@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6606 lines · 147 exports · 58 importers · 30 tests · 8 audits**
+**6567 lines · 147 exports · 60 importers · 32 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,7 @@
 - **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:885) — names `groundedAnswer`
 - **🔒🔒 THE SEAT IS PART OF THE SELECTION — a position alone never identifies a teaching claim (found reading a real prod game, 2026-09-17).** (CLAUDE.md:3663) — names `describeThreatRecognition`
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3751) — names `explainBestMoveGrounded`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5857) — names `describeThreatRecognition`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5917) — names `describeThreatRecognition`
 
 ## Who calls in
 
@@ -53,6 +53,7 @@
 - `src/services/groundedAnswer.opponentMove.test.ts`
 - `src/services/groundedAnswer.positional.test.ts`
 - `src/services/groundedAnswer.routerE.test.ts`
+- `src/services/groundedAnswer.seatedTactic.test.ts`
 - `src/services/groundedAnswer.settings.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
@@ -75,6 +76,7 @@
 - `src/services/tacticsContextIdentity.test.ts`
 - `src/services/thinkAloud.ts`
 - `src/services/whyBestMove.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
 
@@ -105,7 +107,7 @@
 - `src/services/answerBoardQuestion.test.ts:79`
 - `src/services/answerBoardQuestion.test.ts:86`
 - `src/services/answerBoardQuestion.test.ts:87`
-- `src/services/coachApi.ts:5558`
+- `src/services/coachApi.ts:5586`
 - `src/services/groundedAnswer.routerE.test.ts:134`
 - `src/services/pieceActivity.test.ts:32`
 
@@ -116,9 +118,9 @@
 - `src/services/computedVoiceGrounding.test.ts:91`
 
 ### `assembleBoardPlanAnswer` (function) — 3 call sites
-- `src/services/groundedAnswer.test.ts:1591`
-- `src/services/groundedAnswer.test.ts:1602`
-- `src/services/groundedAnswer.test.ts:1609`
+- `src/services/groundedAnswer.test.ts:1593`
+- `src/services/groundedAnswer.test.ts:1604`
+- `src/services/groundedAnswer.test.ts:1611`
 
 ### `assemblePieceSafetyAnswer` (function) — 1 call site
 - `src/services/computedVoiceGrounding.test.ts:85`
@@ -133,7 +135,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleOpponentMoveAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:5433`
+- `src/services/coachApi.ts:5461`
 - `src/services/groundedAnswer.opponentMove.test.ts:13`
 - `src/services/groundedAnswer.opponentMove.test.ts:24`
 - `src/services/groundedAnswer.opponentMove.test.ts:30`
@@ -143,7 +145,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleLastMoveAnswer` (function) — 6 call sites
-- `src/services/coachApi.ts:5453`
+- `src/services/coachApi.ts:5481`
 - `src/services/groundedAnswer.test.ts:1543`
 - `src/services/groundedAnswer.test.ts:1547`
 - `src/services/groundedAnswer.test.ts:1555`
@@ -162,7 +164,7 @@
 - `src/services/piecePurpose.test.ts:57`
 
 ### `assemblePiecePlanAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:5554`
+- `src/services/coachApi.ts:5582`
 - `src/services/groundedAnswer.routerE.test.ts:113`
 - `src/services/groundedAnswer.routerE.test.ts:121`
 - `src/services/groundedAnswer.routerE.test.ts:127`
@@ -173,10 +175,11 @@
 - `src/services/pieceActivity.test.ts:40`
 - `src/services/pieceActivity.test.ts:48`
 
-### `assemblePositionAssessment` (function) — 17 call sites
-- `src/services/coachApi.ts:2330`
-- `src/services/coachApi.ts:2492`
-- `src/services/coachApi.ts:6024`
+### `assemblePositionAssessment` (function) — 19 call sites
+- `src/services/coachApi.ts:2342`
+- `src/services/coachApi.ts:2504`
+- `src/services/coachApi.ts:6052`
+- `src/services/groundedAnswer.seatedTactic.test.ts:14`
 - `src/services/groundedAnswer.test.ts:956`
 - `src/services/groundedAnswer.test.ts:961`
 - `src/services/groundedAnswer.test.ts:970`
@@ -191,18 +194,19 @@
 - `src/services/liveVoiceDefects.test.ts:103`
 - `src/services/liveVoiceDefects.test.ts:144`
 - `src/services/tacticsContextIdentity.test.ts:106`
+- `src/test/everySurfaceSpeaks.test.ts:127`
 
 ### `assembleAttackAssessment` (function) — 7 call sites
 - `src/services/attackAssessment.test.ts:30`
 - `src/services/attackAssessment.test.ts:37`
 - `src/services/attackAssessment.test.ts:44`
 - `src/services/attackAssessment.test.ts:49`
-- `src/services/coachApi.ts:5779`
+- `src/services/coachApi.ts:5807`
 - `src/services/computedVoiceGrounding.test.ts:120`
 - `src/services/computedVoiceGrounding.test.ts:127`
 
 ### `assembleSettingsAnswer` (function) — 6 call sites
-- `src/services/coachApi.ts:5228`
+- `src/services/coachApi.ts:5256`
 - `src/services/groundedAnswer.settings.test.ts:45`
 - `src/services/groundedAnswer.settings.test.ts:60`
 - `src/services/groundedAnswer.settings.test.ts:66`
@@ -210,17 +214,17 @@
 - `src/services/groundedAnswer.settings.test.ts:71`
 
 ### `assembleAppHelpAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:5294`
+- `src/services/coachApi.ts:5322`
 - `src/services/groundedAnswer.test.ts:1223`
 - `src/services/groundedAnswer.test.ts:1236`
 - `src/services/groundedAnswer.test.ts:1237`
 - `src/services/kidGameCoach.ts:307`
 
 ### `assembleCapabilitiesOverview` (function) — 1 call site
-- `src/services/coachApi.ts:5303`
+- `src/services/coachApi.ts:5331`
 
 ### `assembleTeachingAnswer` (function) — 6 call sites
-- `src/services/coachApi.ts:5212`
+- `src/services/coachApi.ts:5240`
 - `src/services/groundedAnswer.teaching.test.ts:24`
 - `src/services/groundedAnswer.teaching.test.ts:38`
 - `src/services/groundedAnswer.teaching.test.ts:49`
@@ -228,8 +232,8 @@
 - `src/services/kidGameCoach.ts:292`
 
 ### `assembleMoveEvalAnswer` (function) — 18 call sites
-- `src/services/coachApi.ts:2312`
-- `src/services/coachApi.ts:5596`
+- `src/services/coachApi.ts:2324`
+- `src/services/coachApi.ts:5624`
 - `src/services/coachSideAwareness.test.ts:67`
 - `src/services/coachSideAwareness.test.ts:77`
 - `src/services/coachSideAwareness.test.ts:88`
@@ -248,7 +252,7 @@
 - `src/services/groundedAnswer.test.ts:56`
 
 ### `assembleCandidateMoveAnswer` (function) — 10 call sites
-- `src/services/coachApi.ts:5495`
+- `src/services/coachApi.ts:5523`
 - `src/services/groundedAnswer.test.ts:1249`
 - `src/services/groundedAnswer.test.ts:1254`
 - `src/services/groundedAnswer.test.ts:1261`
@@ -263,7 +267,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleAlternativesAnswer` (function) — 7 call sites
-- `src/services/coachApi.ts:5340`
+- `src/services/coachApi.ts:5368`
 - `src/services/groundedAnswer.test.ts:1326`
 - `src/services/groundedAnswer.test.ts:1349`
 - `src/services/groundedAnswer.test.ts:1363`
@@ -272,17 +276,17 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8464`
-- `src/services/coachApi.ts:3319`
-- `src/services/coachApi.ts:5367`
+- `src/components/Coach/CoachTeachPage.tsx:8756`
+- `src/services/coachApi.ts:3331`
+- `src/services/coachApi.ts:5395`
 - `src/services/coachFeatureService.test.ts:40`
 - `src/services/coachFeatureService.test.ts:48`
 - `src/services/coachFeatureService.test.ts:56`
 - `src/services/coachFeatureService.test.ts:66`
 - `src/services/coachFeatureService.test.ts:80`
 - `src/services/coachFeatureService.test.ts:87`
-- `src/services/coachFeatureService.ts:2221`
-- `src/services/coachFeatureService.ts:2232`
+- `src/services/coachFeatureService.ts:2244`
+- `src/services/coachFeatureService.ts:2255`
 - `src/services/coachMoveCommentary.ts:222`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/groundedAnswer.test.ts:1043`
@@ -323,7 +327,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1039`
+- `src/services/coachFeatureService.ts:1040`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -336,7 +340,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:96`
 - `src/services/coachFeatureService.test.ts:102`
-- `src/services/coachFeatureService.ts:1039`
+- `src/services/coachFeatureService.ts:1040`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -358,9 +362,9 @@
 - `src/services/describeEscape.test.ts:17`
 
 ### `assembleEngineReasoning` (function) — 13 call sites
-- `src/services/coachApi.ts:3306`
-- `src/services/coachApi.ts:5382`
-- `src/services/coachApi.ts:5403`
+- `src/services/coachApi.ts:3318`
+- `src/services/coachApi.ts:5410`
+- `src/services/coachApi.ts:5431`
 - `src/services/computerAccuracy.audit.test.ts:115`
 - `src/services/describeEscape.test.ts:20`
 - `src/services/discussionPractice.ts:150`
@@ -376,7 +380,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:907`
+- `src/services/coachFeatureService.ts:908`
 - `src/services/groundedAnswer.test.ts:1064`
 - `src/services/groundedAnswer.test.ts:1072`
 - `src/services/groundedAnswer.test.ts:1079`
@@ -386,32 +390,32 @@
 - `src/services/groundedAnswer.test.ts:1103`
 
 ### `assemblePlanAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:5638`
+- `src/services/coachApi.ts:5666`
 - `src/services/groundedAnswer.test.ts:830`
 - `src/services/groundedAnswer.test.ts:838`
 - `src/services/groundedAnswer.test.ts:843`
 - `src/services/groundedAnswer.test.ts:844`
 
 ### `assembleMethodAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:3934`
+- `src/services/coachApi.ts:3962`
 - `src/services/groundedAnswer.routerE.test.ts:68`
 - `src/services/groundedAnswer.routerE.test.ts:81`
 - `src/services/groundedAnswer.routerE.test.ts:86`
 - `src/services/groundedAnswer.routerE.test.ts:179`
 
 ### `assembleHintAnswer` (function) — 3 call sites
-- `src/services/coachApi.ts:5532`
+- `src/services/coachApi.ts:5560`
 - `src/services/groundedAnswer.routerE.test.ts:93`
 - `src/services/groundedAnswer.routerE.test.ts:100`
 
 ### `hintUnavailableReason` (function) — 4 call sites
-- `src/services/coachApi.ts:5535`
+- `src/services/coachApi.ts:5563`
 - `src/services/groundedAnswer.routerE.test.ts:103`
 - `src/services/groundedAnswer.routerE.test.ts:104`
 - `src/services/groundedAnswer.routerE.test.ts:105`
 
-### `assembleTacticsAnswer` (function) — 17 call sites
-- `src/services/coachApi.ts:5795`
+### `assembleTacticsAnswer` (function) — 18 call sites
+- `src/services/coachApi.ts:5823`
 - `src/services/groundedAnswer.test.ts:69`
 - `src/services/groundedAnswer.test.ts:73`
 - `src/services/groundedAnswer.test.ts:77`
@@ -428,15 +432,16 @@
 - `src/services/tacticsContextIdentity.test.ts:103`
 - `src/services/tacticsContextIdentity.test.ts:105`
 - `src/services/tacticsContextIdentity.test.ts:114`
+- `src/test/everySurfaceSpeaks.test.ts:129`
 
 ### `assembleMasterPlayAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:5842`
+- `src/services/coachApi.ts:5870`
 - `src/services/groundedAnswer.test.ts:811`
 - `src/services/groundedAnswer.test.ts:820`
 - `src/services/groundedAnswer.test.ts:821`
 
 ### `assemblePlayerGamesAnswer` (function) — 6 call sites
-- `src/services/coachApi.ts:5860`
+- `src/services/coachApi.ts:5888`
 - `src/services/groundedAnswer.test.ts:909`
 - `src/services/groundedAnswer.test.ts:920`
 - `src/services/groundedAnswer.test.ts:924`
@@ -444,9 +449,9 @@
 - `src/services/groundedAnswer.test.ts:1316`
 
 ### `assembleEndgameAnswer` (function) — 9 call sites
-- `src/services/coachApi.ts:2479`
-- `src/services/coachApi.ts:5814`
-- `src/services/coachApi.ts:5914`
+- `src/services/coachApi.ts:2491`
+- `src/services/coachApi.ts:5842`
+- `src/services/coachApi.ts:5942`
 - `src/services/groundedAnswer.test.ts:934`
 - `src/services/groundedAnswer.test.ts:939`
 - `src/services/groundedAnswer.test.ts:943`
@@ -455,18 +460,18 @@
 - `src/services/groundedAnswer.test.ts:948`
 
 ### `assembleEndgameTechniqueAnswer` (function) — 2 call sites
-- `src/services/coachApi.ts:2103`
-- `src/services/coachApi.ts:5983`
+- `src/services/coachApi.ts:2115`
+- `src/services/coachApi.ts:6011`
 
 ### `assembleTheoryAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:2097`
-- `src/services/coachApi.ts:4318`
-- `src/services/coachApi.ts:5161`
-- `src/services/coachApi.ts:5188`
-- `src/services/coachApi.ts:5945`
+- `src/services/coachApi.ts:2109`
+- `src/services/coachApi.ts:4346`
+- `src/services/coachApi.ts:5189`
+- `src/services/coachApi.ts:5216`
+- `src/services/coachApi.ts:5973`
 
 ### `assembleConceptAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:5148`
+- `src/services/coachApi.ts:5176`
 - `src/services/groundedAnswer.test.ts:876`
 - `src/services/groundedAnswer.test.ts:891`
 - `src/services/groundedAnswer.test.ts:896`
@@ -476,7 +481,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleFundamentalLessonAnswer` (function) — 2 call sites
-- `src/services/coachApi.ts:5095`
+- `src/services/coachApi.ts:5123`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:99`
 
 ### `WeakFundamental` (interface) — 0 call sites
@@ -485,7 +490,7 @@
 ### `assembleFundamentalsAnswer` (function) — 14 call sites
 - `src/components/Coach/FundamentalsPage.tsx:75`
 - `src/components/Coach/FundamentalsPage.tsx:161`
-- `src/services/coachApi.ts:5126`
+- `src/services/coachApi.ts:5154`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:56`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:63`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:68`
@@ -502,12 +507,12 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleFamousGameAnswer` (function) — 3 call sites
-- `src/services/coachApi.ts:5066`
+- `src/services/coachApi.ts:5094`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:147`
 - `src/services/fundamentalsAndWeaknessTeaching.test.ts:156`
 
 ### `assembleProgressAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:4909`
+- `src/services/coachApi.ts:4937`
 - `src/services/groundedAnswer.test.ts:124`
 - `src/services/groundedAnswer.test.ts:129`
 - `src/services/groundedAnswer.test.ts:130`
@@ -516,7 +521,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `weaknessTopicFromText` (function) — 5 call sites
-- `src/services/coachApi.ts:4900`
+- `src/services/coachApi.ts:4928`
 - `src/services/groundedAnswer.test.ts:786`
 - `src/services/groundedAnswer.test.ts:788`
 - `src/services/groundedAnswer.test.ts:789`
@@ -526,9 +531,9 @@
 - `src/services/coachApi.currentAsk.test.ts:49`
 - `src/services/coachApi.currentAsk.test.ts:51`
 - `src/services/coachApi.currentAsk.test.ts:56`
-- `src/services/coachApi.ts:3543`
-- `src/services/coachApi.ts:6326`
-- `src/services/coachApi.ts:6424`
+- `src/services/coachApi.ts:3571`
+- `src/services/coachApi.ts:6354`
+- `src/services/coachApi.ts:6452`
 - `src/services/groundedAnswer.test.ts:1474`
 - `src/services/groundedAnswer.test.ts:1475`
 - `src/services/groundedAnswer.test.ts:1476`
@@ -551,9 +556,9 @@
 - `src/services/groundedAnswer.test.ts:1508`
 
 ### `explainSanNotation` (function) — 9 call sites
-- `src/services/coachApi.ts:3545`
-- `src/services/coachApi.ts:6328`
-- `src/services/coachApi.ts:6426`
+- `src/services/coachApi.ts:3573`
+- `src/services/coachApi.ts:6356`
+- `src/services/coachApi.ts:6454`
 - `src/services/groundedAnswer.test.ts:1516`
 - `src/services/groundedAnswer.test.ts:1520`
 - `src/services/groundedAnswer.test.ts:1521`
@@ -565,9 +570,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `trainingAreaFromText` (function) — 17 call sites
-- `src/services/coachApi.ts:1836`
-- `src/services/coachApi.ts:4281`
-- `src/services/coachApi.ts:4883`
+- `src/services/coachApi.ts:1848`
+- `src/services/coachApi.ts:4309`
+- `src/services/coachApi.ts:4911`
 - `src/services/groundedAnswer.test.ts:1449`
 - `src/services/groundedAnswer.test.ts:1450`
 - `src/services/groundedAnswer.test.ts:1451`
@@ -584,7 +589,7 @@
 - `src/services/groundedAnswer.test.ts:1468`
 
 ### `assembleTrainingRecommendation` (function) — 3 call sites
-- `src/services/coachApi.ts:4885`
+- `src/services/coachApi.ts:4913`
 - `src/services/groundedAnswer.test.ts:1530`
 - `src/services/groundedAnswer.test.ts:1537`
 
@@ -592,9 +597,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleWeaknessRecommendation` (function) — 9 call sites
-- `src/services/coachApi.ts:2108`
-- `src/services/coachApi.ts:4903`
-- `src/services/coachApi.ts:4904`
+- `src/services/coachApi.ts:2120`
+- `src/services/coachApi.ts:4931`
+- `src/services/coachApi.ts:4932`
 - `src/services/groundedAnswer.test.ts:137`
 - `src/services/groundedAnswer.test.ts:153`
 - `src/services/groundedAnswer.test.ts:164`
@@ -606,7 +611,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleOpeningProfileAnswer` (function) — 8 call sites
-- `src/services/coachApi.ts:5040`
+- `src/services/coachApi.ts:5068`
 - `src/services/groundedAnswer.routerE.test.ts:164`
 - `src/services/groundedAnswer.routerE.test.ts:168`
 - `src/services/groundedAnswer.test.ts:181`
@@ -619,7 +624,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleStatsAnswer` (function) — 9 call sites
-- `src/services/coachApi.ts:4002`
+- `src/services/coachApi.ts:4030`
 - `src/services/groundedAnswer.test.ts:213`
 - `src/services/groundedAnswer.test.ts:219`
 - `src/services/groundedAnswer.test.ts:223`
@@ -630,7 +635,7 @@
 - `src/services/groundedAnswer.test.ts:239`
 
 ### `assembleStrengthsAnswer` (function) — 6 call sites
-- `src/services/coachApi.ts:3986`
+- `src/services/coachApi.ts:4014`
 - `src/services/groundedAnswer.test.ts:245`
 - `src/services/groundedAnswer.test.ts:258`
 - `src/services/groundedAnswer.test.ts:262`
@@ -641,7 +646,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleOpeningAccuracyAnswer` (function) — 8 call sites
-- `src/services/coachApi.ts:4064`
+- `src/services/coachApi.ts:4092`
 - `src/services/groundedAnswer.test.ts:274`
 - `src/services/groundedAnswer.test.ts:280`
 - `src/services/groundedAnswer.test.ts:284`
@@ -654,7 +659,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleOpeningTrapsAnswer` (function) — 10 call sites
-- `src/services/coachApi.ts:4197`
+- `src/services/coachApi.ts:4225`
 - `src/services/groundedAnswer.test.ts:312`
 - `src/services/groundedAnswer.test.ts:322`
 - `src/services/groundedAnswer.test.ts:326`
@@ -669,7 +674,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleReviewDueAnswer` (function) — 6 call sites
-- `src/services/coachApi.ts:4243`
+- `src/services/coachApi.ts:4271`
 - `src/services/groundedAnswer.test.ts:360`
 - `src/services/groundedAnswer.test.ts:371`
 - `src/services/groundedAnswer.test.ts:380`
@@ -677,14 +682,14 @@
 - `src/services/groundedAnswer.test.ts:390`
 
 ### `assembleOpeningNameAnswer` (function) — 1 call site
-- `src/services/coachApi.ts:5280`
+- `src/services/coachApi.ts:5308`
 
 ### `MistakesLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleMistakesAnswer` (function) — 6 call sites
-- `src/services/coachApi.ts:4359`
-- `src/services/coachApi.ts:4937`
+- `src/services/coachApi.ts:4387`
+- `src/services/coachApi.ts:4965`
 - `src/services/groundedAnswer.test.ts:402`
 - `src/services/groundedAnswer.test.ts:411`
 - `src/services/groundedAnswer.test.ts:416`
@@ -697,16 +702,16 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleWeaknessBriefingAnswer` (function) — 1 call site
-- `src/services/coachApi.ts:4304`
+- `src/services/coachApi.ts:4332`
 
 ### `assembleWeaknessLifecycleAnswer` (function) — 1 call site
-- `src/services/coachApi.ts:4305`
+- `src/services/coachApi.ts:4333`
 
 ### `LastGameErrorLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleLastGameMistakeAnswer` (function) — 8 call sites
-- `src/services/coachApi.ts:5755`
+- `src/services/coachApi.ts:5783`
 - `src/services/groundedAnswer.test.ts:427`
 - `src/services/groundedAnswer.test.ts:437`
 - `src/services/groundedAnswer.test.ts:443`
@@ -719,7 +724,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleRecentGamesMistakeAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:5740`
+- `src/services/coachApi.ts:5768`
 - `src/services/groundedAnswer.test.ts:467`
 - `src/services/groundedAnswer.test.ts:475`
 - `src/services/groundedAnswer.test.ts:479`
@@ -728,7 +733,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleErrorsBySituationAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:4392`
+- `src/services/coachApi.ts:4420`
 - `src/services/groundedAnswer.test.ts:535`
 - `src/services/groundedAnswer.test.ts:537`
 - `src/services/groundedAnswer.test.ts:543`
@@ -738,7 +743,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleMisconceptionsAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:4413`
+- `src/services/coachApi.ts:4441`
 - `src/services/groundedAnswer.test.ts:552`
 - `src/services/groundedAnswer.test.ts:554`
 - `src/services/groundedAnswer.test.ts:566`
@@ -748,20 +753,20 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleTacticsProfileAnswer` (function) — 8 call sites
-- `src/services/coachApi.ts:4441`
+- `src/services/coachApi.ts:4469`
 - `src/services/groundedAnswer.test.ts:490`
 - `src/services/groundedAnswer.test.ts:497`
 - `src/services/groundedAnswer.test.ts:508`
 - `src/services/groundedAnswer.test.ts:509`
 - `src/services/groundedAnswer.test.ts:525`
 - `src/services/groundedAnswer.test.ts:1429`
-- `src/services/groundedAnswer.test.ts:1616`
+- `src/services/groundedAnswer.test.ts:1618`
 
 ### `PhaseProfileLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assemblePhaseProfileAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:4474`
+- `src/services/coachApi.ts:4502`
 - `src/services/groundedAnswer.test.ts:591`
 - `src/services/groundedAnswer.test.ts:598`
 - `src/services/groundedAnswer.test.ts:1394`
@@ -770,7 +775,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleTrendAnswer` (function) — 7 call sites
-- `src/services/coachApi.ts:4831`
+- `src/services/coachApi.ts:4859`
 - `src/services/groundedAnswer.test.ts:1156`
 - `src/services/groundedAnswer.test.ts:1168`
 - `src/services/groundedAnswer.test.ts:1181`
@@ -782,7 +787,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleRepertoireGapAnswer` (function) — 10 call sites
-- `src/services/coachApi.ts:4594`
+- `src/services/coachApi.ts:4622`
 - `src/services/groundedAnswer.routerE.test.ts:143`
 - `src/services/groundedAnswer.routerE.test.ts:152`
 - `src/services/groundedAnswer.test.ts:605`
@@ -797,7 +802,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleAccuracyAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:4623`
+- `src/services/coachApi.ts:4651`
 - `src/services/groundedAnswer.test.ts:634`
 - `src/services/groundedAnswer.test.ts:642`
 - `src/services/groundedAnswer.test.ts:1405`
@@ -806,7 +811,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleConsistencyAnswer` (function) — 3 call sites
-- `src/services/coachApi.ts:4653`
+- `src/services/coachApi.ts:4681`
 - `src/services/groundedAnswer.test.ts:645`
 - `src/services/groundedAnswer.test.ts:1413`
 
@@ -814,7 +819,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleConvertingAnswer` (function) — 3 call sites
-- `src/services/coachApi.ts:4710`
+- `src/services/coachApi.ts:4738`
 - `src/services/groundedAnswer.test.ts:654`
 - `src/services/groundedAnswer.test.ts:661`
 
@@ -822,7 +827,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleColorAnswer` (function) — 3 call sites
-- `src/services/coachApi.ts:4733`
+- `src/services/coachApi.ts:4761`
 - `src/services/groundedAnswer.test.ts:667`
 - `src/services/groundedAnswer.test.ts:673`
 
@@ -830,14 +835,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleRecordsAnswer` (function) — 2 call sites
-- `src/services/coachApi.ts:4748`
+- `src/services/coachApi.ts:4776`
 - `src/services/groundedAnswer.test.ts:676`
 
 ### `OpeningRecordLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleOpeningRecordAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:3732`
+- `src/services/coachApi.ts:3760`
 - `src/services/groundedAnswer.test.ts:681`
 - `src/services/groundedAnswer.test.ts:688`
 - `src/services/groundedAnswer.test.ts:692`
@@ -846,7 +851,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleOpponentRecordAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:3746`
+- `src/services/coachApi.ts:3774`
 - `src/services/groundedAnswer.test.ts:695`
 - `src/services/groundedAnswer.test.ts:700`
 - `src/services/groundedAnswer.test.ts:703`
@@ -855,7 +860,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleMoveRatingAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:3953`
+- `src/services/coachApi.ts:3981`
 - `src/services/groundedAnswer.test.ts:706`
 - `src/services/groundedAnswer.test.ts:712`
 - `src/services/groundedAnswer.test.ts:718`
@@ -865,7 +870,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleRetrospectiveAnswer` (function) — 9 call sites
-- `src/services/coachApi.ts:3898`
+- `src/services/coachApi.ts:3926`
 - `src/services/groundedAnswer.routerE.test.ts:21`
 - `src/services/groundedAnswer.routerE.test.ts:29`
 - `src/services/groundedAnswer.routerE.test.ts:39`
@@ -885,7 +890,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assemblePuzzleStatsAnswer` (function) — 3 call sites
-- `src/services/coachApi.ts:4766`
+- `src/services/coachApi.ts:4794`
 - `src/services/groundedAnswer.test.ts:751`
 - `src/services/groundedAnswer.test.ts:1422`
 
@@ -893,17 +898,17 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleTransferGapAnswer` (function) — 5 call sites
-- `src/services/coachApi.ts:4785`
+- `src/services/coachApi.ts:4813`
 - `src/services/groundedAnswer.test.ts:757`
 - `src/services/groundedAnswer.test.ts:762`
 - `src/services/groundedAnswer.test.ts:763`
-- `src/services/groundedAnswer.test.ts:1626`
+- `src/services/groundedAnswer.test.ts:1628`
 
 ### `SkillRadarLike` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleSkillRadarAnswer` (function) — 3 call sites
-- `src/services/coachApi.ts:4799`
+- `src/services/coachApi.ts:4827`
 - `src/services/groundedAnswer.test.ts:769`
 - `src/services/groundedAnswer.test.ts:775`
 
@@ -919,7 +924,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleTimeTroubleAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:4679`
+- `src/services/coachApi.ts:4707`
 - `src/services/groundedAnswer.dataCapture.test.ts:6`
 - `src/services/groundedAnswer.dataCapture.test.ts:9`
 - `src/services/groundedAnswer.dataCapture.test.ts:14`
@@ -928,7 +933,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assembleLastGameAnswer` (function) — 4 call sites
-- `src/services/coachApi.ts:4694`
+- `src/services/coachApi.ts:4722`
 - `src/services/groundedAnswer.dataCapture.test.ts:22`
 - `src/services/groundedAnswer.dataCapture.test.ts:24`
 - `src/services/groundedAnswer.dataCapture.test.ts:28`
@@ -937,7 +942,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `assemblePositionalAnswer` (function) — 18 call sites
-- `src/services/coachApi.ts:6009`
+- `src/services/coachApi.ts:6037`
 - `src/services/groundedAnswer.positional.test.ts:6`
 - `src/services/groundedAnswer.positional.test.ts:12`
 - `src/services/groundedAnswer.positional.test.ts:16`
@@ -968,7 +973,7 @@
 - `src/coach/questionIntents.counterRepertoire.test.ts:142`
 - `src/coach/questionIntents.counterRepertoire.test.ts:145`
 - `src/coach/questionIntents.counterRepertoire.test.ts:146`
-- `src/services/coachApi.ts:4542`
+- `src/services/coachApi.ts:4570`
 
 ### `assembleCounterRepertoireAnswer` (function) — 6 call sites
 - `src/coach/questionIntents.counterRepertoire.test.ts:79`
@@ -976,24 +981,7 @@
 - `src/coach/questionIntents.counterRepertoire.test.ts:111`
 - `src/coach/questionIntents.counterRepertoire.test.ts:122`
 - `src/coach/questionIntents.counterRepertoire.test.ts:135`
-- `src/services/coachApi.ts:4532`
-
-### `seatPieceReferences` (function) — 15 call sites
-- `src/services/coachFeatureService.ts:4684`
-- `src/services/reviewBoardAwareness.test.ts:70`
-- `src/services/reviewBoardAwareness.test.ts:74`
-- `src/services/reviewBoardAwareness.test.ts:78`
-- `src/services/reviewBoardAwareness.test.ts:83`
-- `src/services/reviewFullData.ts:279`
-- `src/services/reviewFullData.ts:300`
-- `src/services/reviewFullData.ts:476`
-- `src/services/reviewNarrationFidelity.test.ts:85`
-- `src/services/reviewNarrationFidelity.test.ts:95`
-- `src/services/reviewNarrationFidelity.test.ts:101`
-- `src/services/reviewNarrationFidelity.test.ts:291`
-- `src/services/reviewNarrationFidelity.test.ts:298`
-- `src/services/reviewNarrationFidelity.test.ts:304`
-- `src/services/reviewNarrationFidelity.test.ts:305`
+- `src/services/coachApi.ts:4560`
 
 ### `DetectedThreat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -1001,13 +989,13 @@
 ### `detectNewThreat` (function) — 15 call sites
 - `src/data/patternRegistry.ts:43`
 - `src/data/patternRegistry.ts:123`
-- `src/services/bluffDetector.ts:63`
+- `src/services/bluffDetector.ts:72`
 - `src/services/captureThreatAnswerable.test.ts:13`
-- `src/services/coachFeatureService.ts:2549`
+- `src/services/coachFeatureService.ts:2572`
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:52`
-- `src/services/reviewFullData.ts:548`
+- `src/services/reviewFullData.ts:585`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1020,7 +1008,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2471`
+- `src/services/coachFeatureService.ts:2494`
 - `src/services/reviewNarrationFidelity.test.ts:184`
 - `src/services/reviewNarrationFidelity.test.ts:196`
 - `src/services/reviewNarrationFidelity.test.ts:204`
@@ -1036,8 +1024,34 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2569`
+- `src/services/coachFeatureService.ts:2592`
 - `src/services/reviewNarrationFidelity.test.ts:254`
+
+### `seatPieceReferences` (re-export) — 24 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7749`
+- `src/components/Coach/CoachTeachPage.tsx:7783`
+- `src/services/coachFeatureService.ts:4707`
+- `src/services/reviewBoardAwareness.test.ts:70`
+- `src/services/reviewBoardAwareness.test.ts:74`
+- `src/services/reviewBoardAwareness.test.ts:78`
+- `src/services/reviewBoardAwareness.test.ts:83`
+- `src/services/reviewBoardAwareness.test.ts:107`
+- `src/services/reviewBoardAwareness.test.ts:108`
+- `src/services/reviewBoardAwareness.test.ts:109`
+- `src/services/reviewFullData.ts:287`
+- `src/services/reviewFullData.ts:325`
+- `src/services/reviewFullData.ts:501`
+- `src/services/reviewNarrationFidelity.test.ts:85`
+- `src/services/reviewNarrationFidelity.test.ts:95`
+- `src/services/reviewNarrationFidelity.test.ts:101`
+- `src/services/reviewNarrationFidelity.test.ts:291`
+- `src/services/reviewNarrationFidelity.test.ts:298`
+- `src/services/reviewNarrationFidelity.test.ts:304`
+- `src/services/reviewNarrationFidelity.test.ts:305`
+- `src/services/reviewNarrationFidelity.test.ts:312`
+- `src/services/reviewNarrationFidelity.test.ts:326`
+- `src/utils/seatPieces.ts:11`
+- `src/utils/seatPieces.ts:18`
 
 ## Tests
 
@@ -1060,6 +1074,7 @@
 - `src/services/groundedAnswer.opponentMove.test.ts`
 - `src/services/groundedAnswer.positional.test.ts`
 - `src/services/groundedAnswer.routerE.test.ts`
+- `src/services/groundedAnswer.seatedTactic.test.ts`
 - `src/services/groundedAnswer.settings.test.ts`
 - `src/services/groundedAnswer.teaching.test.ts`
 - `src/services/groundedAnswer.test.ts`
@@ -1071,6 +1086,7 @@
 - `src/services/reviewBoardAwareness.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/tacticsContextIdentity.test.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 
 ## Audits that reach it
 

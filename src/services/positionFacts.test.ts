@@ -81,9 +81,10 @@ describe('computePositionFacts — the composer', () => {
   // SAY-ONCE. The repetition these surfaces actually suffer from is a STANDING
   // fact re-earned every ply, not duplicate geometry.
   it('says a standing fact once and hands the caller what to remember', async () => {
-    // Alapin, after 10...Rd8 — the isolated d-pawn AND the d-file pin geometry
-    // (David's own game; the walk that measured this repetition).
-    const fen = '3rkb1r/pp3ppp/2n1pn2/3q3b/3P4/4BN1P/PP2BPP1/RN1Q1RK1 w k - 1 11';
+    // A standing pin: …Bg4 holds the f3-knight to the d1-queen. (The Alapin
+    // fixture this used measured a PAWN pinned down its own file, which is not
+    // a pin — it can still push — and stopped speaking 2026-09-24.)
+    const fen = 'r2qk2r/ppp2ppp/2np1n2/2b1p3/2B1P1b1/2NP1N2/PPP2PPP/R1BQ1RK1 w kq - 2 12';
     const first = await computePositionFacts({ posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat });
     const standing = first.clauses.filter((c) => c.kind === 'structure-plan' || c.kind === 'latent-danger' || c.kind === 'student-leans' || c.kind === 'opponent-leans');
     // The fixture must actually produce one, or this test proves nothing.
@@ -285,16 +286,24 @@ describe('the concrete opponent-intent clause (fires through positionFacts)', ()
 });
 
 describe('the latent-danger prevention clause (fires through positionFacts)', () => {
-  it('warns when the student\'s own bishop is pinned to the king — even in a quiet spot', async () => {
-    // White (student) to move, move 14. Bishop e5 lined in front of Ke1 down the
-    // e-file, Black rook on e8. Flat/quiet analysis — the warning fires anyway.
+  it('warns about a pin IN WAITING — the student\'s own knight shields bishop and king', async () => {
+    // White (student) to move, move 14. Black rook e8; white knight e5 shields
+    // the bishop on e3 in front of Ke1. Moving the knight opens the pin.
+    const r = await computePositionFacts({ posture: 'walk',
+      fen: '4r1k1/8/8/4N3/8/4B3/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat,
+    });
+    expect(r.latentDanger).toMatchObject({ frontSquare: 'e3', backPiece: 'k', latent: true });
+    const texts = clauseText(r.clauses);
+    expect(texts.some((t) => /bishop on e3.*king.*file.*open the line/i.test(t))).toBe(true);
+  });
+
+  it('a STANDING pin is not restated as a latent danger (hand walk 2340: said twice)', async () => {
+    // Bishop e5 already pinned to Ke1 by the rook — the tactic/threat lanes own it.
     const r = await computePositionFacts({ posture: 'walk',
       fen: '4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat,
     });
-    expect(r.latentDanger).not.toBeNull();
-    const texts = clauseText(r.clauses);
-    expect(texts.some((t) => /bishop on e5.*king.*file|share that file/i.test(t))).toBe(true);
-    expect(r.clauses.some((c) => c.kind === 'latent-danger')).toBe(true);
+    expect(r.latentDanger).toBeNull();
+    expect(clauseText(r.clauses).some((t) => /share that file/i.test(t))).toBe(false);
   });
 
   it('does not warn when it is the opponent\'s move (not the student\'s concern)', async () => {
@@ -377,5 +386,58 @@ describe('positionFacts — the computed CONCEPT joins the spoken briefing (one 
   it('speaks no concept in the opening (nothing but a real threat speaks there)', async () => {
     const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis });
     expect(r.clauses.find((c) => c.kind === 'concept')).toBeUndefined();
+  });
+});
+
+describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
+  const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
+  const analysis = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5'), line(3, 10, 'd2d3')] } as never;
+  const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 14';
+  const hole = [{ clusterId: 'analysis:phase:middlegame', bucket: 'middlegame', label: 'x', openCount: 2, severity: 50, puzzleThemes: [], total: 3 }] as never;
+
+  it('where "The move is O-O — it castles…" speaks, "The plan here: castle…" does not', async () => {
+    const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: hole });
+    const kinds = r.clauses.map((c) => c.kind);
+    expect(kinds).toContain('deliberation');
+    expect(kinds).not.toContain('fundamental');
+  });
+
+  it('where the verdict is held back, the plan still teaches the idea', async () => {
+    const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
+    expect(r.clauses.map((c) => c.kind)).toEqual(expect.arrayContaining(['fundamental']));
+    expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
+  });
+});
+
+describe('a structure plan is said once by its PLAN, not its words (hand walk 1200)', () => {
+  const flatAnalysis = { evaluation: 0, bestMove: '', depth: 12, topLines: [], nodesPerSecond: 0 } as unknown as Parameters<typeof computePositionFacts>[0]['analysis'];
+  it('the pawn race does not repeat when only the counts move', async () => {
+    // White passer d4→d5, Black passer a7; queens on. Same verdict both plies.
+    const a = '4r1k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
+    const b = '4r1k1/p4ppp/8/3P4/8/8/5PPP/3Q2K1 w - - 0 31';
+    const first = await computePositionFacts({ posture: 'walk', fen: a, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true });
+    const plan = first.clauses.find((c) => c.kind === 'structure-plan');
+    expect(plan, 'fixture must speak a plan').toBeTruthy();
+    const second = await computePositionFacts({ posture: 'walk', fen: b, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: new Set(first.remember) });
+    expect(second.clauses.some((c) => c.kind === 'structure-plan')).toBe(false);
+  });
+});
+
+describe('when the structure plan changes, the coach says so (David 2026-09-25)', () => {
+  const flatAnalysis = { evaluation: 0, bestMove: '', depth: 12, topLines: [], nodesPerSecond: 0 } as unknown as Parameters<typeof computePositionFacts>[0]['analysis'];
+  it('a different plan is framed as a change; the same plan stays quiet', async () => {
+    // Race (both runners) → then only THEIR passer is left.
+    const race = '4r1k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
+    const theirsOnly = '4r1k1/p4ppp/8/8/8/8/5PPP/3Q2K1 w - - 0 32';
+    const first = await computePositionFacts({ posture: 'walk', fen: race, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true });
+    const firstPlan = first.clauses.find((c) => c.kind === 'structure-plan');
+    expect(firstPlan?.text).not.toMatch(/plan changes/);
+    const said = new Set(first.remember);
+    const second = await computePositionFacts({ posture: 'walk', fen: theirsOnly, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: said });
+    const changed = second.clauses.find((c) => c.kind === 'structure-plan');
+    expect(changed?.text).toMatch(/^The plan changes here: their passed pawn on a7/);
+    for (const k of second.remember) said.add(k);
+    const third = await computePositionFacts({ posture: 'walk', fen: theirsOnly, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: said });
+    expect(third.clauses.some((c) => c.kind === 'structure-plan')).toBe(false);
   });
 });

@@ -4,12 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**185 lines · 10 exports · 48 importers · 4 tests · 0 audits**
+**212 lines · 12 exports · 52 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:877) — names `pvDepthForRating`
 - **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3959) — names `explorerBandFor`, `ratingBands`
 - **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:3989) — names `explorerBandFor`, `ratingBands`
+- **🔒🔒 ONE PUSH, NOT FIVE — ship-check remembers, and you check BEFORE you push (David 2026-09-24, furious: "You NEED TO FIGURE THIS SHIT OUT!! LOCK THIS IN FOR FUTURE SESSIONS").** (CLAUDE.md:6257) — names `ratingBands`
 
 ## Who calls in
 
@@ -23,6 +25,7 @@
 - `src/components/Openings/MiddlegamePractice.tsx`
 - `src/components/Openings/OpeningPlayMode.tsx`
 - `src/components/Play/OpeningChallenge.tsx`
+- `src/components/Puzzles/AdaptivePuzzlePage.test.tsx`
 - `src/components/Puzzles/AdaptivePuzzlePage.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
@@ -47,6 +50,7 @@
 - `src/services/conceptEngine.ts`
 - `src/services/dbService.test.ts`
 - `src/services/dbService.ts`
+- `src/services/exchangeLedger.ts`
 - `src/services/hintRegister.ts`
 - `src/services/homeOpeningPlan.ts`
 - `src/services/needScore.ts`
@@ -55,6 +59,8 @@
 - `src/services/playerRatingService.ts`
 - `src/services/positionFacts.ts`
 - `src/services/positionReadingService.ts`
+- `src/services/principleAttribution.ts`
+- `src/services/pvPlayback.ts`
 - `src/services/ratingBands.test.ts`
 - `src/services/slipDetector.ts`
 - `src/services/teachingSelector.ts`
@@ -114,8 +120,24 @@
 ### `ADAPTIVE_DECIDERS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `MAX_PV_DEPTH_PLIES` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `pvDepthForRating` (function) — 10 call sites
+- `src/services/coachFeatureService.ts:3291`
+- `src/services/conceptEngine.ts:408`
+- `src/services/pvPlayback.test.ts:31`
+- `src/services/pvPlayback.test.ts:32`
+- `src/services/pvPlayback.test.ts:33`
+- `src/services/pvPlayback.test.ts:34`
+- `src/services/pvPlayback.test.ts:35`
+- `src/services/pvPlayback.test.ts:38`
+- `src/services/pvPlayback.test.ts:39`
+- `src/services/pvPlayback.test.ts:43`
+
 ## Tests
 
+- `src/components/Puzzles/AdaptivePuzzlePage.test.tsx`
 - `src/services/coachGameEngine.test.ts`
 - `src/services/dbService.test.ts`
 - `src/services/oneStudentRating.test.ts`

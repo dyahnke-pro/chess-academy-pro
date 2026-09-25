@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1031 lines · 8 exports · 5 importers · 5 tests · 0 audits**
+**1082 lines · 8 exports · 5 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,7 +21,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:987`
+- `src/services/coachFeatureService.ts:988`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -42,7 +42,7 @@
 ### `computeMoveFacets` (function) — 22 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
-- `src/services/coachFeatureService.ts:1734`
+- `src/services/coachFeatureService.ts:1737`
 - `src/services/reviewFullData.test.ts:15`
 - `src/services/reviewFullData.test.ts:19`
 - `src/services/reviewFullData.test.ts:53`
@@ -56,15 +56,15 @@
 - `src/services/reviewFullData.test.ts:226`
 - `src/services/reviewFullData.test.ts:240`
 - `src/services/reviewFullData.test.ts:261`
-- `src/services/reviewFullData.test.ts:285`
-- `src/services/reviewFullData.test.ts:313`
-- `src/services/reviewFullData.test.ts:342`
-- `src/services/reviewFullData.test.ts:362`
+- `src/services/reviewFullData.test.ts:286`
+- `src/services/reviewFullData.test.ts:314`
+- `src/services/reviewFullData.test.ts:343`
+- `src/services/reviewFullData.test.ts:363`
 - `src/test/teach02Wired.test.ts:26`
 - `src/test/teach02Wired.test.ts:64`
 
 ### `computeThroughLine` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4761`
+- `src/services/coachFeatureService.ts:4784`
 - `src/services/reviewFullData.test.ts:204`
 - `src/services/reviewFullData.test.ts:207`
 - `src/services/reviewFullData.test.ts:215`

@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**145 lines · 6 exports · 4 importers · 1 tests · 0 audits**
+**145 lines · 6 exports · 4 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:25) — names `refutedAlternative`
-- **The standard post-deploy ritual** (CLAUDE.md:5990) — names `refutedAlternative`
+- **The standard post-deploy ritual** (CLAUDE.md:6050) — names `refutedAlternative`
 
 ## Who calls in
 
@@ -25,7 +25,7 @@
 
 ### `refutedAlternative` (function) — 7 call sites
 - `src/coach/surfaceContract.scan.test.ts:62`
-- `src/services/coachFeatureService.ts:3209`
+- `src/services/coachFeatureService.ts:3232`
 - `src/services/openingGenerator.ts:2160`
 - `src/services/refutedAlternative.test.ts:62`
 - `src/services/refutedAlternative.test.ts:88`
@@ -33,7 +33,7 @@
 - `src/services/refutedAlternative.test.ts:114`
 
 ### `candidatesForPosition` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3191`
+- `src/services/coachFeatureService.ts:3214`
 - `src/services/openingGenerator.ts:2157`
 - `src/services/refutedAlternative.test.ts:131`
 - `src/services/refutedAlternative.test.ts:133`
@@ -45,7 +45,7 @@
 - `src/services/refutedAlternative.test.ts:46`
 - `src/services/refutedAlternative.test.ts:142`
 - `src/services/refutedAlternativeCore.ts:57`
-- `src/services/refutedAlternativeCore.ts:167`
+- `src/services/refutedAlternativeCore.ts:173`
 
 ### `renderRefutedAlternative` (re-export) — 8 call sites
 - `src/services/refutedAlternative.test.ts:118`
@@ -55,7 +55,7 @@
 - `src/services/refutedAlternative.test.ts:150`
 - `src/services/refutedAlternative.test.ts:151`
 - `src/services/refutedAlternativeCore.ts:69`
-- `src/services/refutedAlternativeCore.ts:189`
+- `src/services/refutedAlternativeCore.ts:195`
 
 ### `candidatesFromMasters` (re-export) — 6 call sites
 - `src/services/refutedAlternative.test.ts:39`
@@ -68,6 +68,7 @@
 ## Tests
 
 - `src/services/refutedAlternative.test.ts`
+- `src/services/refutedAlternativeCore.test.ts`
 
 ## Audits that reach it
 

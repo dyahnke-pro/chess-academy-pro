@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**712 lines · 19 exports · 21 importers · 7 tests · 28 audits**
+**720 lines · 19 exports · 21 importers · 7 tests · 29 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:5952) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6024) — names `conceptEngine`
 
 ## Who calls in
 
@@ -30,9 +30,9 @@
 - `src/services/puzzleDifficulty.ts`
 - `src/services/puzzleGenerator.ts`
 - `src/services/refutedAlternative.ts`
+- `src/services/refutedAlternativeCore.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticTypeUnification.test.ts`
-- `src/services/thinkAloud.ts`
 - `src/test/auditConceptGameplayCues.test.ts`
 
 ## Exports and every call site
@@ -40,7 +40,7 @@
 ### `Side` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sideToMove` (function) — 10 call sites
+### `sideToMove` (function) — 9 call sites
 - `src/data/endgame-side-correctness.test.ts:27`
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
@@ -49,8 +49,7 @@
 - `src/services/conceptEngine.test.ts:13`
 - `src/services/groundedMoveWhy.ts:73`
 - `src/services/groundedMoveWhy.ts:99`
-- `src/services/mistakeNarration.ts:369`
-- `src/services/thinkAloud.ts:123`
+- `src/services/mistakeNarration.ts:373`
 
 ### `solvingSide` (function) — 2 call sites
 - `src/services/conceptEngine.test.ts:19`
@@ -108,13 +107,13 @@
 - `src/services/conceptEngine.test.ts:28`
 - `src/services/materialClaimValidator.test.ts:24`
 - `src/services/materialClaimValidator.test.ts:25`
-- `src/services/materialClaimValidator.ts:34`
+- `src/services/materialClaimValidator.ts:35`
 - `src/services/materialClaimValidator.ts:80`
 - `src/services/narratedContinuation.test.ts:15`
 - `src/services/narratedContinuation.test.ts:17`
 - `src/services/narratedContinuation.test.ts:19`
 - `src/services/narratedContinuation.ts:18`
-- `src/services/narratedContinuation.ts:94`
+- `src/services/narratedContinuation.ts:95`
 
 ### `strongerSide` (function) — 3 call sites
 - `src/services/conceptEngine.test.ts:32`
@@ -154,8 +153,8 @@
 - `src/services/conceptEngine.test.ts:163`
 - `src/services/conceptEngine.test.ts:199`
 - `src/services/conceptEngine.test.ts:217`
-- `src/services/liveTacticsContext.ts:108`
-- `src/services/positionFacts.ts:616`
+- `src/services/liveTacticsContext.ts:109`
+- `src/services/positionFacts.ts:708`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -169,7 +168,7 @@
 - `src/services/puzzleConceptExplanation.ts:111`
 - `src/services/puzzleConceptHint.ts:110`
 - `src/services/puzzleGenerator.ts:206`
-- `src/services/refutedAlternative.ts:143`
+- `src/services/refutedAlternative.ts:112`
 - `src/services/tacticTypeUnification.test.ts:57`
 
 ### `ConceptForSolutionOptions` (interface) — 0 call sites
@@ -190,10 +189,10 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7496`
-- `src/services/dnaLineNarrator.ts:175`
-- `src/services/dnaLineNarrator.ts:206`
-- `src/services/dnaLineNarrator.ts:242`
+- `src/components/Coach/CoachTeachPage.tsx:7671`
+- `src/services/dnaLineNarrator.ts:185`
+- `src/services/dnaLineNarrator.ts:216`
+- `src/services/dnaLineNarrator.ts:252`
 - `src/services/puzzleConceptExplanation.ts:100`
 - `src/services/tacticAlertService.ts:141`
 - `src/services/tacticTypeUnification.test.ts:199`
@@ -239,6 +238,7 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-reading-upgrades-loop.mjs`
 - `scripts/audit-repertoire-orientation.mjs`
 - `scripts/audit-review-overhaul-prod.mjs`
+- `scripts/audit-review-prep-timing.mjs`
 - `scripts/audit-teach-bridge-prod.mjs`
 - `scripts/audit-teach-play-picker-prod.mjs`
 - `scripts/audit-trap-orientation.mjs`

@@ -13,6 +13,7 @@
 //
 // A REPORT, not a wall. It writes audit-reports/computed-voice-audit.json.
 import { openingAnnouncement } from './openingAnnouncement';
+import { bookDeparture } from './bookDeparture';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -306,7 +307,7 @@ describe('computed voice audit', () => {
         let announceLine: string | null = null;
         const det = (() => { try { return detectOpening(history); } catch { return null; } })();
         // The surface's ONE rule (openingAnnouncement), not a copy of it.
-        const announced = openingAnnouncement(det, history.length, openingName);
+        const announced = openingAnnouncement(det, bookDeparture(history), openingName, game.student === 'white' ? 'w' : 'b');
         if (det && announced) { openingName = det.name; announceLine = announced; }
 
         let noteLine: string | null = null;

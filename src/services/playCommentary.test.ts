@@ -3,7 +3,7 @@
 // nothing (the locked voice law: speak when it instructs).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from './playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint } from './playCommentary';
 
 describe('buildPlayCommentary', () => {
   // The "trade off their best piece" beat was REMOVED 2026-08-26 — the
@@ -60,7 +60,10 @@ describe('buildPlayCommentary', () => {
   it('seeding observation: enemy queen and rook on one file, student owns a rook', () => {
     // Black Qd6 + Rd8 share the d-file (d7 empty, luft on h6 so no back-rank
     // flag); White owns Ra1. Not a tactic — the noticing that precedes one.
-    const beat = buildPlayCommentary({ fen: '3r2k1/5pp1/3q3p/8/8/8/6PP/R5K1 w - - 0 20', studentColor: 'white' });
+    // (The rook starts on a2 and the king on c1: its road to the d-file is d2,
+    // guarded by the king. From a1 the only road was d1, where the queen just
+    // takes it — that was never a contest.)
+    const beat = buildPlayCommentary({ fen: '3r2k1/5pp1/3q3p/8/8/8/R5PP/2K5 w - - 0 20', studentColor: 'white' });
     expect(beat?.kind).toBe('seeding-observation');
     expect(beat?.facts[0]).toContain('d-file');
     expect(beat?.facts[0]).toContain('rook');
@@ -238,6 +241,19 @@ describe('back-rank alignment after castling long', () => {
     expect(fact).toContain('king on c8');
     expect(fact).toContain('queen on f8');
     expect(fact).toContain('8th rank');
+  });
+
+  it('stays silent when no rook or queen can get ON the line (Scandinavian Qa5)', () => {
+    // Hand walk 2026-09-24: "rook on a8 and queen on a5 line up on the a-file,
+    // and you have a rook that moves along it" — the a1-rook is buried behind
+    // a2, and the only contest was the queen hitting a5 diagonally from d2.
+    const fact = seed('rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4');
+    expect(fact ?? '').not.toContain('a-file');
+  });
+
+  it('an alignment is not "contested" by capturing one of the pair (Rd7 + Qd6, move 17)', () => {
+    const fact = seed('2k4r/R2r1ppp/1n1qpn2/1Pp4b/8/2NP2PP/2P1NPB1/3Q1RK1 w - - 1 18');
+    expect(fact ?? '').not.toContain('d-file');
   });
 
   it('still says nothing about the untouched starting huddle', () => {
@@ -557,5 +573,53 @@ describe('describeMoveConsequence — the material claim survives the recapture'
     // A pawn guards d5, so Qxd5?? is not "winning the pawn" — it loses a queen.
     const clause = describeMoveConsequence('rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'Qh5');
     expect(clause).not.toMatch(/winning/);
+  });
+});
+
+describe('mid-exchange: a piece that just took is not "undefended"', () => {
+  it('skips the recapture square (walk 2340, move 24: Bxb3 before axb3)', () => {
+    const fen = new Chess();
+    for (const s of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3 Bxc3 Nge7 dxe5 Bg4 Be2 Qe4 O-O Rd8 Qe1 Nd5 Bd1 Qxe1 Rxe1 Nxc3 bxc3 O-O h3 Be6 Bc2 Rd1 Bb3 Rdd8 Bd1 Bb3 Bc2 Be6 Bb3 Rd3 Rac1 a6 Ng5 Bxb3'.split(' ')) fen.move(s);
+    const beat = buildPlayCommentary({ fen: fen.fen(), studentColor: 'white', midExchangeOn: 'b3' });
+    expect(beat?.spoken ?? '').not.toMatch(/b3 is undefended/);
+  });
+});
+
+describe('studentMovePoint — the point of a sound move, only when the board proves one (hand walk 2340)', () => {
+  const after = (sans: string): string => { const c = new Chess(); for (const m of sans.split(' ')) c.move(m); return c.fen(); };
+  const LINE = 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3';
+
+  it('Bxc3 — the bishop pair', () => {
+    expect(studentMovePoint(after(LINE), 'Bxc3', 'Bxc3')).toMatch(/two bishops/);
+  });
+  it('dxe5 — a free pawn', () => {
+    expect(studentMovePoint(after(`${LINE} Bxc3 Nge7`), 'dxe5', 'Nge7')).toBe('That wins the pawn on e5 — nothing takes it back safely.');
+  });
+  it('Bd2 — the unpin', () => {
+    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4'), 'Bd2', 'Bb4')).toMatch(/^Unpins your knight on c3/);
+  });
+  it('a routine move has no point to say', () => {
+    expect(studentMovePoint(new Chess().fen(), 'e4', null)).toBeNull();
+    expect(studentMovePoint(after('e4 c5'), 'Nf3', 'c5')).toBeNull();
+  });
+  it('a recapture is the trade finishing, not material won', () => {
+    // cxd4 after …cxd4: even trade.
+    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4'), 'cxd4', 'cxd4')).toBeNull();
+  });
+});
+
+describe('studentMovePoint — a trade that nets material is not a free piece (hand walk 2026-09-25)', () => {
+  it('Nxf1 with Bxf1 coming is the exchange', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4'.split(' ')) c.move(m);
+    expect(studentMovePoint(c.fen(), 'Nxf1', 'Bd4')).toBe('That wins the exchange — your knight for their rook on f1.');
+  });
+});
+
+describe('a capture is never described as its side effect (hand walk 2026-09-25)', () => {
+  it('Raxd8 taking the queen back is not "unpins your rook"', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8'.split(' ')) c.move(m);
+    expect(studentMovePoint(c.fen(), 'Raxd8', 'Qxd8')).toBeNull();
   });
 });

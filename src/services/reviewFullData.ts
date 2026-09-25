@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { inFluxAfter } from './boardState';
 import { readTiming, timingClause } from './moveTiming';
 import { contrastMoves, contrastClause } from './moveContrast';
 import { detectBluff, bluffClause } from './bluffDetector';
@@ -18,14 +19,15 @@ import { computeGemCrush } from './gemCrushLines';
 import { getPunishGemById } from '../data/lessons/punishGems';
 import { Chess, type Color, type Square } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
-import { legalSeeGainOn, findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
+import { findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
-import { costStakes, exchangeStakes, forkPoints, piecesOn, MATE_POINTS, type FactStakes } from './factStakes';
+import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, isSacrifice, MATE_POINTS, type FactStakes } from './factStakes';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
+import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { principleToTeach, principleOnceLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { isMateEval } from './engineConstants';
@@ -142,6 +144,10 @@ export interface MoveFactContext {
   preMoveEval: number | null;
   classification: string | null;
   bestMoveSan: string | null;
+  /** The engine's best REPLY at `fenAfter` (the next ply's best move), SAN, or
+   *  null when there is none. REQUIRED: whether a move gave material depends
+   *  on whether the opponent should take it (`isSacrifice`). */
+  replyBestSan: string | null;
   prevCap: { square: string | null; capturedValue: number };
   /** Full SAN list of the game (for opening ID + forced-run + sac mechanism). */
   allSans: string[];
@@ -246,7 +252,9 @@ export function computeMoveFacets(
   const recStakes = (facet: string, stakes: FactStakes | null | undefined): void => {
     if (outStakes && stakes && stakes.points > 0) outStakes.set(facet, stakes);
   };
-  const recMotif = (facet: string, motif: string): void => { outIdentity?.set(facet, `motif:${motif}`); };
+  // …and on WHOSE idea it is: "your rook pins their pawn — you saw this idea on
+  // move 15" referred back to THEIR pin of move 15 (hand walk 2000 review).
+  const recMotif = (facet: string, motif: string, squares: readonly string[], side?: 'w' | 'b' | null): void => { outIdentity?.set(facet, `motif:${motif}@${side ?? '-'}:${squares.join('')}`); };
   const recSquares = (facet: string, squares: ReadonlyArray<string | null | undefined>): void => {
     if (!outSquares) return;
     const clean = squares.filter((s): s is string => typeof s === 'string' && /^[a-h][1-8]$/.test(s));
@@ -282,7 +290,24 @@ export function computeMoveFacets(
   // d5" alone is the board's scenery, not why the move was played (walk 6, R3:
   // "Their pawn on c6 now fights for d5" on ~20 plies), so it rides as a
   // description — heard only beside a teaching point on the same squares.
-  if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
+  // A CAPTURE THEY CAN TAKE BACK IS A TRADE, and the trade is the move's
+  // reason (2026-09-25). What the capturing piece "now eyes" describes a piece
+  // about to be taken — the door drops it (`boardState`, in flux) — so without
+  // this the ply went silent: 4…cxd4 in the Alapin had nothing left to say.
+  const tradeSq = inFluxAfter(fenBefore, san);
+  if (tradeSq) {
+    try {
+      const mv = new Chess(fenBefore).move(san);
+      const NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+      const mine = NOUN[mv.piece] ?? 'piece';
+      const theirs = NOUN[mv.captured ?? ''] ?? 'piece';
+      const what = mine === theirs ? `a ${mine} trade` : isStudent ? `your ${mine} for their ${theirs}` : `their ${mine} for your ${theirs}`;
+      const f = isStudent
+        ? `[trade] You take on ${tradeSq}, and they can take back — ${what}.`
+        : `[trade] They take on ${tradeSq}, and you can take back — ${what}.`;
+      facets.push(f);
+    } catch { /* no trade line */ }
+  } else if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
 
   // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
   // (David 2026-07-22: "the package must contain every relevant change that
@@ -471,8 +496,8 @@ export function computeMoveFacets(
     const seat = (s: string): string => {
       if (!ctx.studentColorWB) return s;
       const me = ctx.studentColorWB === 'w' ? 'White' : 'Black';
-      const seated = s.replace(/^(White|Black) has a checkmate available from\b/,
-        (_m, side: string) => (side === me ? 'You have a checkmate available from' : 'They have a checkmate available from'));
+      const seated = s.replace(/^(White|Black) has mate in one\b/,
+        (_m, side: string) => (side === me ? 'You have mate in one' : 'They have mate in one'));
       return seatPieceReferences(seated, fenAfter, ctx.studentColorWB);
     };
     for (const tac of t.tactics) {
@@ -493,11 +518,11 @@ export function computeMoveFacets(
         if (v.status === 'live') {
           const f = `[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-          recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type);
+          recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         } else if (v.status === 'threat') {
           const f = `[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-          recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type);
+          recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         }
         // status 'none' → unproven fork shape, say nothing (G0).
         continue;
@@ -509,11 +534,10 @@ export function computeMoveFacets(
         // queen on d5 pins your pawn on g2 against your rook on h1" on move
         // two, and the fianchetto bishop "pinning" b7 for thirty moves). It
         // teaches only when the pin actually costs material.
-        const front = tac.type === 'pin' ? piecesOn(fenAfter, [tac.involvedSquares[1]])[0] ?? null : null;
-        if (front === 'p' && stakes === null) continue;
+        if (isScenicPawnPin(fenAfter, tac.type, tac.involvedSquares, tac.beneficiary)) continue;
         const f = `[tactic] ${seat(tac.description)}.`;
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-        recStakes(f, stakes); recMotif(f, tac.type);
+        recStakes(f, stakes); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
       }
     }
     // ONLY THE DELTA SPEAKS (WO-STANDARD-01 D-8, prod tape 2026-09-22:
@@ -529,9 +553,22 @@ export function computeMoveFacets(
       // R4: "Newly undefended: your pawn on e4" on move one, and a queen that
       // was merely attacked). A pawn is undefended half the opening and a
       // queen answers an attack by moving; neither is a loose-piece lesson.
+      // ONE OWNER PER CLAIM (review tape 2026-09-25: "Newly undefended: your
+      // bishop on g4" then "Watch out — that pawn leaves your bishop on g4
+      // loose", back to back). A student piece the opponent's move ATTACKS is
+      // stated by the opponent read below, which names the attacker.
+      let attackedByMover: (sq: string) => boolean = () => false;
+      if (!isStudent && studentColorWB) {
+        try {
+          const b = new Chess(fenAfter);
+          const to = new Chess(fenBefore).move(san).to;
+          attackedByMover = (sq) => b.get(sq as Square)?.color === studentColorWB && b.attackers(sq as Square, studentColorWB === 'w' ? 'b' : 'w').includes(to);
+        } catch { attackedByMover = () => false; }
+      }
       const fresh = t.hangingPieces.filter((h) => !before.has(`${h.piece}${h.square}`)
         && 'nbr'.includes(h.piece.toLowerCase())
-        && exchangeStakes(fenAfter, [h.square]) !== null);
+        && exchangeStakes(fenAfter, [h.square]) !== null
+        && !attackedByMover(h.square));
       if (fresh.length > 0) {
         const desc = fresh.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
         const f = `[loose] Newly undefended: ${seat(desc)}.`;
@@ -668,9 +705,9 @@ export function computeMoveFacets(
     const sb = new Chess(fenBefore);
     const smv = sb.move(san);
     if (smv) {
-      const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
-      const oppWins = legalSeeGainOn(sb, smv.to); // pin-aware: opponent's legal recapture
-      if (oppWins - capVal >= 1 && studentColorWB) {
+      // ONE RULE (`isSacrifice`): material handed over AND, when the engine's
+      // reply is known, the opponent actually takes it.
+      if (isSacrifice(fenBefore, san, ctx.replyBestSan) && studentColorWB) {
         // MOVER's POV, not the student's — the function judges the SAC from
         // the side that made it. Handing it the student's number flipped the
         // sign on every opponent sacrifice (D-4, 2026-09-22).
@@ -751,8 +788,21 @@ export function computeMoveFacets(
         const played = strip(san) === strip(crush.inaccuracy);
         const moverSlips = moverColor === crush.opponentSide;
         if (isStudent && moverSlips && !played) {
-          const freq = gem && gem.freqPct > 0 ? ` in ${Math.round(gem.freqPct)}% of games` : '';
-          facets.push(`[refuted] Players at your level often play ${crush.inaccuracy} here${freq} — it loses to ${crush.punish}, ${crush.payoff}.`);
+          // "Often" only when it IS often. The prod tape said "often play c4
+          // here in 2% of games" — gems are mined from 2% up, so the share
+          // decides the wording; the claim (the slip, its refutation) does not.
+          const pct = gem && gem.freqPct > 0 ? Math.round(gem.freqPct) : null;
+          const lead = pct !== null && pct >= MIN_ALTERNATIVE_SHARE
+            ? `${pct}% of players at your level play ${crush.inaccuracy} here`
+            : pct !== null
+              ? `The trap here is ${crush.inaccuracy} (${pct}% of games at your level)`
+              : `The trap here is ${crush.inaccuracy}`;
+          const rf = `[refuted] ${lead} — it loses to ${crush.punish}, ${crush.payoff}.`;
+          facets.push(rf);
+          // SAID ONCE PER GAME by the alternative itself (review tape
+          // 2026-09-25: "Bg5 loses to Nxe4" on two consecutive moves, once from
+          // the gem and once from the engine).
+          outIdentity?.set(rf, `refuted:${strip(crush.inaccuracy)}`);
           gemRefuted = true;
         } else if (!isStudent && moverSlips && played) {
           const next = ctx.allSans[ply];
@@ -772,6 +822,7 @@ export function computeMoveFacets(
     const r = ctx.teaching.refutedAlt;
     const f = `[refuted] ${r.text}`;
     facets.push(f);
+    outIdentity?.set(f, `refuted:${r.alt.replace(/[+#!?]+$/, '')}`);
     recStakes(f, costStakes(r.costCp));
     try {
       const am = new Chess(fenBefore).move(r.alt);

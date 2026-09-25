@@ -555,3 +555,50 @@ describe('cross-turn novelty (priorKeys) — no lane repeats a phrase all game',
     expect(pkg.spoken).toBe('You want to win a pawn.');
   });
 });
+
+describe('a move question is never left bare (hand walk 2026-09-24)', () => {
+  it('when the answer was already said, the question goes with it', () => {
+    const pkg = buildVoicePackage(
+      [fact('computed', 'gxf3? Then Nf4, and it falls apart. Rd2? Clearly worse here.')],
+      'Then Nf4, and it falls apart.',
+    );
+    expect(pkg.spoken).not.toMatch(/gxf3\?(?! Then)/);
+    expect(pkg.spoken).toContain('Rd2? Clearly worse here.');
+  });
+});
+
+describe('"Here\'s how" never opens a line on its own (hand walk 2026-09-24)', () => {
+  it('when the sentence it explains was already said, the method goes with it', () => {
+    const pkg = buildVoicePackage(
+      [fact('computed', "Watch what they threaten. Here's how: their move first, always.")],
+      'Watch what they threaten.',
+    );
+    expect(pkg.spoken).not.toMatch(/^Here['’]s how/);
+  });
+});
+
+describe('a frame is not part of the claim (hand walk 1380, move 25)', () => {
+  it('"Watch out — X" and "X" are one claim', () => {
+    const pin = 'their rook on f8 pins your bishop on f4 against your rook on f3.';
+    const pkg = buildVoicePackage([
+      { kind: 'computed', text: `Watch out — ${pin}` },
+      { kind: 'computed', text: pin[0].toUpperCase() + pin.slice(1) },
+    ] as Parameters<typeof buildVoicePackage>[0]);
+    expect(pkg.spoken.match(/pins your bishop/g)?.length).toBe(1);
+  });
+  it('a bare "Check." still keys as itself', () => {
+    const pkg = buildVoicePackage([{ kind: 'computed', text: 'Check.' }] as Parameters<typeof buildVoicePackage>[0]);
+    expect(pkg.spoken).toBe('Check.');
+  });
+});
+
+describe('"Remember —" is a frame too (walk 2340, move 28)', () => {
+  it('the definition is said once', () => {
+    const def = 'a discovered attack unveils a second attacker by moving the piece in front, so two threats land at once.';
+    const pkg = buildVoicePackage([
+      { kind: 'computed', text: `There's a discovered attack here for you — have a look. Remember — ${def}` },
+      { kind: 'computed', text: def[0].toUpperCase() + def.slice(1) },
+    ] as Parameters<typeof buildVoicePackage>[0]);
+    expect(pkg.spoken.match(/unveils a second attacker/g)?.length).toBe(1);
+  });
+});

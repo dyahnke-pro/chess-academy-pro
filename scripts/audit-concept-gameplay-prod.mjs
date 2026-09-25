@@ -419,6 +419,61 @@ async function main() {
     const e = await askAndPlay(page, listener, ASK_TYPO, 'typo');
     record('E. a misspelled play ask still starts a GAME (G7 off-canonical input)', e.started && e.plies > 0, `ask="${ASK_TYPO}" started=${e.started} plies=${e.plies}${e.walkthrough ? ` WALKTHROUGH=${e.walkthrough}` : ''} after ${e.secs}s`);
 
+    // ── H: "COULDN'T THEY JUST MOVE X?" (WO-DANYA-01 C, David 2026-09-24) ───
+    // Asked in the chat of the game just played. The answer is COMPUTED (the
+    // piece's job → the squares that keep it → each refuted by its line → a
+    // verdict), the lines come back as Walk buttons, and a walk shows the line
+    // on the board and returns to the game. Tries pieces in turn, because the
+    // one asked about may already be off the board.
+    {
+      const input = page.locator('[data-testid="chat-text-input"]');
+      let answered = null;
+      for (const ask of ["couldn't they just move their queen?", "couldn't they just move their rook?", 'could I just move my knight?', "couldn't they just move their bishop?"]) {
+        const before = await page.locator('[data-testid="chat-message-assistant"]').count();
+        await input.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => {});
+        // The input is disabled while the previous turn is busy — typing into
+        // it then sends nothing (the local run's "knight" ask vanished).
+        for (let t = Date.now(); Date.now() - t < 60_000 && await input.isDisabled().catch(() => false);) await page.waitForTimeout(500);
+        await input.pressSequentially(ask, { delay: 12 }).catch(() => {});
+        await page.keyboard.press('Enter');
+        const askedAt = Date.now();
+        const by = askedAt + 60_000;
+        // The transcript renders NEWEST FIRST — `.last()` is the greeting. A new
+        // bubble can land EMPTY (the streaming placeholder), so wait for text.
+        const last = page.locator('[data-testid="chat-message-assistant"]').first();
+        let text = '';
+        while (Date.now() < by) {
+          await page.waitForTimeout(500);
+          if ((await page.locator('[data-testid="chat-message-assistant"]').count()) <= before) continue;
+          text = (await last.innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+          if (text.replace(/^C\s*/, '').length > 10) break;
+        }
+        console.log(`[piece-latency] ${Date.now() - askedAt}ms`);
+        const walks = await last.locator('[data-testid^="message-walk-line-"]').count();
+        console.log(`[piece] ask="${ask}" walks=${walks} → ${text.slice(0, 260)}`);
+        if (walks > 0) { answered = { ask, text, walks, last }; break; }
+      }
+      for (const e of listener.getCapturedEvents().filter((x) => x.source === 'coachService.pieceOptions')) console.log(`[piece-stage] ${e.summary}`);
+      record('H1. a "couldn\'t they just move X?" ask is answered by the COMPUTER (job → squares → refutation → verdict)', !!answered && /\b(Where can|So (yes|no)|So [A-Z][a-z]?[a-h1-8x+]* was about as good|comes down to the best square|square that holds|gives up its guard|is attacked|holds?\.)\b/.test(answered.text), answered ? answered.text.slice(0, 200) : 'no ask produced walkable lines');
+      record('H2. the answer carries a Walk button per calculated line', !!answered && answered.walks > 0, answered ? `${answered.walks} walk button(s)` : '0');
+      if (answered) {
+        // While the answer is spoken the board SHOWS the question's position
+        // (`line-walk-active`). Baseline only once it has handed back.
+        const active = page.locator('[data-testid="line-walk-active"]');
+        for (let t = Date.now(); Date.now() - t < 45_000 && (await active.count()) > 0;) await page.waitForTimeout(500);
+        const live = await readPlacement(page);
+        await answered.last.locator('[data-testid="message-walk-line-0"]').click({ force: true }).catch(() => {});
+        let moved = false;
+        for (let t = Date.now(); Date.now() - t < 8000 && !moved;) { await page.waitForTimeout(300); moved = (await active.count()) > 0; }
+        let back = false;
+        for (let t = Date.now(); moved && Date.now() - t < 30_000 && !back;) {
+          await page.waitForTimeout(500);
+          back = (await active.count()) === 0 && samePlacement(await readPlacement(page), live);
+        }
+        record('H3. Walk plays the line on the board and returns to the game', moved && back, `moved=${moved} returned=${back}`);
+      }
+    }
+
     // ── F: vacuity + instrument hygiene ────────────────────────────────────
     const all = spokenLines(listener);
     record('F1. vacuity guard: ≥3 spoken lines across the run', all.length >= 3, `${all.length}`);
@@ -440,11 +495,23 @@ async function main() {
       // are different diagnoses, and a posture bug hides the moment they are
       // collapsed into an un-attributed quiet.
       const silent = decisions.filter((d) => d.speak === false);
-      const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need' && d.reason !== 'unsupported' && d.reason !== 'empty' && d.reason !== 'proven');
+      const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need' && d.reason !== 'unsupported' && d.reason !== 'empty' && d.reason !== 'proven' && d.reason !== 'board');
       record(
         'G2. every silence names WHICH gate closed it',
         unattributed.length === 0,
-        `${silent.length}/${decisions.length} silent — importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} empty=${silent.filter((d) => d.reason === 'empty').length} proven=${silent.filter((d) => d.reason === 'proven').length}${unattributed.length ? ` UNATTRIBUTED=${unattributed.length}` : ''}`,
+        `${silent.length}/${decisions.length} silent — importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} empty=${silent.filter((d) => d.reason === 'empty').length} proven=${silent.filter((d) => d.reason === 'proven').length} board=${silent.filter((d) => d.reason === 'board').length}${unattributed.length ? ` UNATTRIBUTED=${unattributed.length}` : ''}`,
+      );
+      // THE MOVE IS NAMED WHERE IT IS EARNED (David 2026-09-24: "I don't want
+      // to hear the best move on every ply"). Every live next-move row names
+      // WHY it spoke or held back, and over a real game the held-back case must
+      // appear — a gate that earns every ply is no gate.
+      const adviceRows = decisions.filter((d) => d.moveAdvice != null);
+      const heldBack = adviceRows.filter((d) => d.moveAdvice === 'none').length;
+      const byReason = adviceRows.reduce((acc, d) => { acc[d.moveAdvice] = (acc[d.moveAdvice] ?? 0) + 1; return acc; }, {});
+      record(
+        'G-MA. the next move is named only where earned (not every ply)',
+        adviceRows.length === 0 || (adviceRows.every((d) => ['deciding', 'phase-record', 'motif-record', 'none'].includes(d.moveAdvice)) && (adviceRows.length < 5 || heldBack > 0)),
+        `${adviceRows.length} next-move rows — ${JSON.stringify(byReason)}`,
       );
       // POSTURE. A live game legitimately produces BOTH: the running
       // commentary (`useLiveCoach`, `usePhaseNarration`) declares 'interrupt'

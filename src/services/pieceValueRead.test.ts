@@ -100,6 +100,22 @@ describe('the engine\'s per-piece table', () => {
     expect(pieceQualityLines(parseEvalTable(REAL), 'black')).toHaveLength(0);
   });
 
+  it('never calls a minor that is PINNING or attacking a piece "doing the least"', () => {
+    // Naroditsky's game after 14.Bf4 Bd6 (hand walk 2026-09-24): the f4-bishop
+    // pins the d6-bishop to the queen on c7. The table scored it lowest.
+    const fen = '2kr3r/p1qn1ppp/1p1bpn2/PPp4b/5B2/2NP2PP/2P1NPB1/R2Q1RK1 w - - 2 15';
+    const values = [
+      { square: 'f4', piece: 'B', color: 'w' as const, value: 1 },
+      { square: 'g2', piece: 'B', color: 'w' as const, value: 4 },
+      { square: 'd6', piece: 'b', color: 'b' as const, value: -4 },
+    ];
+    const lines = pieceQualityLines(values, 'white', undefined, { isMiddlegame: true, fen });
+    expect(lines.some((l) => /bishop on f4/.test(l.text))).toBe(false);
+    // NEGATIVE CONTROL: without the board, the table alone still names it.
+    expect(pieceQualityLines(values, 'white', undefined, { isMiddlegame: true })
+      .some((l) => /bishop on f4/.test(l.text))).toBe(true);
+  });
+
   const BAD_MINOR = [
     { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },   // idle bishop → worst
     { square: 'c8', piece: 'b', color: 'b' as const, value: 4 },
@@ -228,7 +244,10 @@ describe('pieceQualityLines — worst piece only in the middlegame (David 2026-0
 
     it('STILL crowns a rook that has actually moved — this is not a rook ban', () => {
       const moved = openingValues.map((v) => (v.square === 'a1' ? { ...v, square: 'd1' } : v));
-      const lines = pieceQualityLines(moved, 'black', undefined, { isMiddlegame: false });
+      // …on a file its own pawns have left: that is what "doing work" means
+      // before the middlegame (castling alone is not).
+      const fen = '4k3/8/8/3q4/8/2N5/PPP2PPP/3RK2R b K - 0 8';
+      const lines = pieceQualityLines(moved, 'black', undefined, { isMiddlegame: false, fen });
       const best = lines.find((l) => l.kind === 'their-best-piece');
       expect(best?.text ?? '', 'an open-file rook IS real teaching — do not delete it').toMatch(/rook on d1/);
     });
@@ -254,5 +273,73 @@ describe('their best piece is never a freshly developed minor in the opening (wa
     expect(opening.find((l) => l.kind === 'their-best-piece')).toBeUndefined();
     const middlegame = pieceQualityLines(values, 'white', undefined, { isMiddlegame: true });
     expect(middlegame.find((l) => l.kind === 'their-best-piece')?.text ?? '').toMatch(/knight on c6/);
+  });
+});
+
+describe('a rook that only castled is not "doing the most work" (hand walk 2026-09-24)', () => {
+  // 6.Bc4 O-O in the Philidor: the f8-rook sits behind its own f7-pawn.
+  const fen = 'rnbq1rk1/ppp1bppp/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R w KQ - 4 7';
+  const values: PieceValue[] = [
+    { square: 'f8', piece: 'r', color: 'b', value: -5.6 },
+    { square: 'a8', piece: 'r', color: 'b', value: -4.4 },
+    { square: 'a1', piece: 'R', color: 'w', value: 4.5 },
+    { square: 'h1', piece: 'R', color: 'w', value: 4.5 },
+  ];
+  it('stays silent before the middlegame when its file still holds its own pawn', () => {
+    const lines = pieceQualityLines(values, 'white', new Set(), { isMiddlegame: false, fen });
+    expect(lines.find((l) => l.kind === 'their-best-piece')).toBeUndefined();
+  });
+  it('NEGATIVE CONTROL: the same rook on a pawn-free file is named', () => {
+    const open = 'rnbq1rk1/ppp1bp1p/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R w KQ - 4 7'.replace('ppp1bp1p', 'ppp1b1pp');
+    const lines = pieceQualityLines(values, 'white', new Set(), { isMiddlegame: false, fen: open });
+    expect(lines.find((l) => l.kind === 'their-best-piece')?.text ?? '').toMatch(/rook on f8/);
+  });
+});
+
+describe('an undeveloped minor gets the development rule, not a reroute (hand walk 2026-09-24)', () => {
+  const values: PieceValue[] = [
+    { square: 'c1', piece: 'B', color: 'w', value: 2.4 },
+    { square: 'b3', piece: 'B', color: 'w', value: 4.6 },
+    { square: 'e7', piece: 'b', color: 'b', value: -4.0 },
+  ];
+  it('the home-square bishop is told to develop', () => {
+    const line = pieceQualityLines(values, 'white', new Set(), { isMiddlegame: true }).find((l) => l.kind === 'your-worst-piece');
+    expect(line?.text).toMatch(/bishop on c1 hasn't moved yet — in general, finish your development/);
+  });
+  it('NEGATIVE CONTROL: a developed bishop doing little is still told to find a better square', () => {
+    const moved = values.map((v) => (v.square === 'c1' ? { ...v, square: 'd2' } : v));
+    const line = pieceQualityLines(moved, 'white', new Set(), { isMiddlegame: true }).find((l) => l.kind === 'your-worst-piece');
+    expect(line?.text).toMatch(/finding it a better square/);
+  });
+});
+
+describe('a bishop raking the king\'s squares is at work (hand walk 2026-09-24)', () => {
+  it('after 23.Bxe6+ Kh8 the e6-bishop is never "doing the least"', () => {
+    const values: PieceValue[] = [
+      { square: 'e6', piece: 'B', color: 'w', value: 2.0 },
+      { square: 'e3', piece: 'B', color: 'w', value: 4.8 },
+      { square: 'b4', piece: 'b', color: 'b', value: -4.0 },
+    ];
+    const line = pieceQualityLines(values, 'white', new Set(), { isMiddlegame: true, fen: '3q1r1k/pp4pp/2p1B3/4Pp1P/1b6/2N1BR1P/PPP5/4Q1K1 w - - 1 24' }).find((l) => l.kind === 'your-worst-piece');
+    expect(line?.text ?? '').not.toMatch(/e6/);
+  });
+});
+
+describe('a piece the student can simply take is not "their best piece" (hand walk 2000)', () => {
+  it('an undefended rook that just took on d8 is taken, not traded off', () => {
+    // White rook on d8, Black to move, knight on c5 does not defend it; Black's
+    // king on f7 cannot reach it — the black knight on b6 hits d7 not d8, so we
+    // give Black a rook on f8 that takes it. Nothing white defends d8.
+    const fen = '3R1r2/5k2/1n6/8/8/8/5K2/8 b - - 0 40';
+    const values = [
+      { square: 'd8', piece: 'R', color: 'w' as const, value: 5 },
+      { square: 'f8', piece: 'r', color: 'b' as const, value: -2 },
+      { square: 'b6', piece: 'n', color: 'b' as const, value: -2 },
+    ];
+    const withFen = pieceQualityLines(values, 'black', undefined, { isMiddlegame: true, fen });
+    expect(withFen.find((l) => l.kind === 'their-best-piece')).toBeUndefined();
+    // Same numbers, rook defended by its king on e7 → it IS the piece to trade.
+    const defended = pieceQualityLines(values, 'black', undefined, { isMiddlegame: true, fen: '3R1r2/4Kk2/1n6/8/8/8/8/8 b - - 0 40' });
+    expect(defended.find((l) => l.kind === 'their-best-piece')?.text).toMatch(/rook on d8/);
   });
 });

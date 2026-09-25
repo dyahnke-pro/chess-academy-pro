@@ -145,6 +145,14 @@ export function isRealPin(args: {
 }): boolean {
   if (!(args.behindValue > args.frontValue)) return false;
   if (!canLeaveLine(args.chess, args.pinned, args.dir)) return false;
+  // A FRONT PIECE THAT CAN TAKE THE PINNER, AT A PROFIT OR EVEN, IS NOT PINNED
+  // IN ANY WAY THAT MATTERS — it answers the pin by capturing it (hand walk
+  // 2340: "bishop on c3 pins pawn on b2 against rook on a1" with bxc3 on).
+  const front = args.chess.get(args.pinned);
+  const pinner = args.chess.get(args.attacker);
+  if (front && pinner
+    && args.chess.attackers(args.attacker, front.color).includes(args.pinned)
+    && CAPTURE_VALUE[front.type] <= CAPTURE_VALUE[pinner.type]) return false;
   return pinBites(args.chess, args.attacker, args.pinned, args.behind);
 }
 

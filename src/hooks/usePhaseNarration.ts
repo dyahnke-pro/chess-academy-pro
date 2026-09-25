@@ -530,7 +530,10 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       try {
         const sans = (argsRef.current.getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
         const pkg = selectTeaching({ plies: pliesFromSans(sans), studentColor: event.playerColor, kind: 'live', surface: 'phase-narration' });
-        const thesis = renderThesis(pkg.thesis, registerFor('phase-narration'));
+        // Only a real TURN (an eval swing) is a game-level fact at a phase
+        // change; a pin that merely "landed" — here a bishop retreat keeping an
+        // old pin — is a detector event, not the story of the game.
+        const thesis = pkg.thesis.kind === 'turned' ? renderThesis(pkg.thesis, registerFor('phase-narration')) : '';
         if (thesis) {
           sentenceBuffer += ` ${thesis}`;
           flushCompletedSentences();

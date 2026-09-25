@@ -86,6 +86,7 @@ describe('criticalMoment — the stake is computed, never templated', () => {
   it('bands off the best line, mover-POV', () => {
     expect(at(600)).toBe('win');
     expect(at(150)).toBe('on-top');
+    expect(at(70)).toBe('edge');
     expect(at(0)).toBe('level');
     expect(at(-200)).toBe('in-it');
     expect(at(-500)).toBe('damage');

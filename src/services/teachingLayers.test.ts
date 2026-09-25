@@ -1,4 +1,5 @@
 // WO-LAYERS-01 — the teaching layers, from the student's record, through the door.
+import { CALM_BOARD } from './boardState';
 import { describe, it, expect } from 'vitest';
 import { layerStandings, leadLayer, layerBonus, ALL_GREY, TAG_LAYER } from './teachingLayers';
 import { decide, GREEN_QUIET_BELOW } from './coachDecider';
@@ -59,8 +60,8 @@ const quiet: ImportanceSignals = { decision: null, cpLossCp: null, threatNet: 0,
 const PLAN = '[plan-now] Your plan is to push the queenside majority.';
 const LOOSE = '[loose] Your knight on c6 is loose.';
 const PRINCIPLE = '[principle] You developed a knight before the bishop.';
-const bundle = { facts: [PLAN, PRINCIPLE, LOOSE], squares: new Map<string, readonly string[]>() };
-const student = (layers = ALL_GREY) => ({ rating: 400, weaknesses: [], need: null, momentBoost: NO_BOOST, layers });
+const bundle = { board: CALM_BOARD, facts: [PLAN, PRINCIPLE, LOOSE], squares: new Map<string, readonly string[]>() };
+const student = (layers = ALL_GREY) => ({ rating: 400, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers });
 
 describe('the door teaches by layer', () => {
   it('grey: the plan comes after safety and principle (the fundamental still leads — locked 2026-09-05)', () => {
@@ -72,7 +73,7 @@ describe('the door teaches by layer', () => {
 
   it('a RED plan layer lifts the plan over grey principle facts of lower tie rank', () => {
     const OPENING = '[opening] This is the Caro-Kann.';
-    const b = { facts: [PLAN, OPENING], squares: new Map<string, readonly string[]>() };
+    const b = { board: CALM_BOARD, facts: [PLAN, OPENING], squares: new Map<string, readonly string[]>() };
     const grey = decide(quiet, student(), b, 'walk');
     expect(grey.spoken[0]).toBe(OPENING);
     const red = decide(quiet, student({ safety: 'grey', principle: 'grey', plan: 'red' }), b, 'walk');

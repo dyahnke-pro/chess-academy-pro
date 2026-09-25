@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import {
+import { candidateCompareClause,
   computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, tacticalReadFromLines, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, voiceNamesUngroundedMove, groundedMoveKeys, namedTacticClause, temptingTurnClause, uncertaintyClause,
   type TacticalRead,
 } from './tacticalRead';
@@ -69,6 +69,13 @@ describe('pickTempting', () => {
     ], 300, 120);
     expect(t?.san).toBe('Qxb2');
     expect(t?.evalDropCp).toBe(350);
+  });
+  it('a capture that is worse than a mate but still wins big has not "fallen apart"', () => {
+    // Naroditsky's 25.Rxb6 (hand walk 2026-09-24): a queen for a rook, ~+4,
+    // while the engine had a forced mate. Not a warning.
+    expect(pickTempting([{ san: 'Rxb6', uci: 'a6b6', appeal: 'capture', appealScore: 5, studentCp: 420 }], 10000, 120)).toBeNull();
+    // NEGATIVE CONTROL: the same drop into a level position IS the warning.
+    expect(pickTempting([{ san: 'Rxb6', uci: 'a6b6', appeal: 'capture', appealScore: 5, studentCp: 20 }], 10000, 120)?.san).toBe('Rxb6');
   });
   it('returns null when nothing eye-catching is inferior', () => {
     expect(pickTempting([{ san: 'Nf3', uci: 'g1f3', appeal: 'central-develop', appealScore: 2, studentCp: 300 }], 300, 120)).toBeNull();
@@ -326,7 +333,7 @@ describe('pickKeyTactic mate_threat downgrade (false-claim audit)', () => {
     };
     const key = pickKeyTactic([ply]);
     expect(key?.type).toBe('mate_threat');
-    expect(key?.description.toLowerCase()).not.toContain('has a checkmate available');
+    expect(key?.description.toLowerCase()).not.toContain('has mate in one');
     expect(key?.description.toLowerCase()).toContain('threatens mate');
   });
 });
@@ -426,7 +433,7 @@ describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08
   it('builds the but-turn: affirm the tempting move, then refute it', () => {
     const c = temptingTurnClause(read)!;
     expect(c).toContain('Nxe5');
-    expect(c).toMatch(/but Qa4 and it falls apart/);
+    expect(c).toMatch(/but they answer Qa4 and it falls apart/);
   });
 
   it('builds the honest hedge naming the close alternative', () => {
@@ -541,11 +548,11 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
       ] },
     } as TacticalRead, { spoken: true });
     expect(out).not.toMatch(AFTER_PREPOSITION);
-    expect(out).toContain('with the knight taking on f3');
+    expect(out).toContain('play the knight taking on f3');
     // The refutation is a genuine CLAUSE slot and must keep the finite verb —
     // this is what stops the fix over-correcting into "but the knight taking
     // on f3 and it falls apart".
-    expect(out).toMatch(/but the knight takes f3 and it falls apart/);
+    expect(out).toMatch(/love to play the knight taking on f3 — but they take back and it falls apart/);
   });
 });
 
@@ -570,5 +577,20 @@ describe('uncertaintyClause rotates its stem on a stable key (WO-STANDARD-01 D-8
     expect(uncertaintyClause(read, { rotation: 2 })).toBe(uncertaintyClause(read, { rotation: 2 }));
     expect(uncertaintyClause(read, { rotation: 4 })).toBe(uncertaintyClause(read, { rotation: 0 }));
     expect(uncertaintyClause(read)).toBe(uncertaintyClause(read, { rotation: 0 }));
+  });
+});
+
+describe('a recapture is not "the forcing move first" (hand walk 2026-09-24)', () => {
+  // 1.e4 e5 2.Nf3 d6 3.d4 exd4 — White to move; Nxd4 takes back, Bd3 is quiet.
+  const fen = 'rnbqkbnr/ppp2ppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4';
+  const lines = [
+    { moves: ['f3d4'], evaluation: 40 },
+    { moves: ['f1d3'], evaluation: -30 },
+  ];
+  it('stays silent when the best move just takes back on the square they captured on', () => {
+    expect(candidateCompareClause(fen, lines, 'white', { spoken: true, recaptureOn: 'd4' })).toBeNull();
+  });
+  it('NEGATIVE CONTROL: the same pair still compares when it is not a recapture', () => {
+    expect(candidateCompareClause(fen, lines, 'white', { spoken: true, recaptureOn: null })).not.toBeNull();
   });
 });

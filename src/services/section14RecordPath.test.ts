@@ -89,22 +89,27 @@ describe('section 14 on the record path — left-book-early', () => {
 });
 
 describe('section 14 on the record path — no-plan', () => {
-  // Fischer–Spassky 1972, game 6 (QGD Tartakower), the first 30 plies from
-  // `model-games.json`; at move 16 White's structure earns a plan and Qa5 serves
-  // it. Bc6 is quiet, serves nothing, and no other fundamental claims it.
-  const PREFIX = '1. c4 e6 2. Nf3 d5 3. d4 Nf6 4. Nc3 Be7 5. Bg5 O-O 6. e3 h6 7. Bh4 b6 8. cxd5 Nxd5 9. Bxe7 Qxe7 10. Nxd5 exd5 11. Rc1 Be6 12. Qa4 c5 13. Qa3 Rc8 14. Bb5 a6 15. dxc5 bxc5';
-  const white16 = (san: string): MoveAnnotation => ({
-    moveNumber: 16, color: 'white', san, evaluation: -120, bestMove: 'a3a5', bestMoveEval: 20, classification: 'mistake', comment: null,
+  // 🔴 FIXTURE REPLACED 2026-09-24. The Fischer–Spassky prefix this used sat on
+  // a board where Black's a6 pawn attacks the bishop on b5 — a whole piece en
+  // prise — and `deriveNextPlans` correctly states NO plan while material is
+  // the story (walk 5, R7). The detector declined honestly; the fixture had
+  // stopped being a planless position. This one is: a Tarrasch isolated queen's
+  // pawn out of book, where White's structure earns "win their weak pawn on d5 —
+  // plant your knight on d4", nothing is hanging, and 14.b3 touches none of it
+  // while the best move Nd4 is the plan.
+  const PREFIX = '1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. dxc5 Bxc5 10. a3 a5 11. Bg5 Be6 12. Rc1 h6 13. Bxf6 Qxf6';
+  const white14 = (san: string, best = 'f3d4'): MoveAnnotation => ({
+    moveNumber: 14, color: 'white', san, evaluation: -80, bestMove: best, bestMoveEval: 40, classification: 'mistake', comment: null,
   });
 
   it('LANDS on a quiet, planless move where the best move serves the earned plan', async () => {
-    const r = await rowFor(buildGameRecord({ id: 's14-np', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: `${PREFIX} 16. Bc6`, annotations: [white16('Bc6')] }));
+    const r = await rowFor(buildGameRecord({ id: 's14-np', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: `${PREFIX} 14. b3`, annotations: [white14('b3')] }));
     expect(r.fundamentalId).toBe('no-plan');
-    expect(r.bestSan).toBe('Qa5');
+    expect(r.bestSan).toBe('Nd4');
   });
 
-  it('NEGATIVE CONTROL: castling on the same move is never planless, whatever it cost', async () => {
-    const r = await rowFor(buildGameRecord({ id: 's14-np-castle', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: `${PREFIX} 16. O-O`, annotations: [white16('O-O')] }));
+  it('NEGATIVE CONTROL: when the best move does not serve the plan either, it is never planless', async () => {
+    const r = await rowFor(buildGameRecord({ id: 's14-np-offplan', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: `${PREFIX} 14. b3`, annotations: [white14('b3', 'c3a4')] }));
     expect(r.fundamentalId).not.toBe('no-plan');
   });
 });

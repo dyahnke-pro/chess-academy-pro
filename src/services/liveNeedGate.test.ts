@@ -1,3 +1,4 @@
+import { CALM_BOARD } from './boardState';
 /**
  * THE LIVE SURFACES SEE THE STUDENT'S NEED — and only on the student's own ply.
  *
@@ -39,6 +40,7 @@ const LOUD: ImportanceSignals = {
 };
 
 const bundle = {
+  board: CALM_BOARD,
   facts: ['Your knight on f3 is hanging.'],
   squares: new Map<string, readonly string[]>([['Your knight on f3 is hanging.', ['f3']]]),
   incoming: new Set<string>(),
@@ -47,13 +49,13 @@ const bundle = {
 
 describe('the live need gate', () => {
   it('SILENCES a ply the student demonstrably does not need', () => {
-    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: false }, momentBoost: NO_BOOST, layers: ALL_GREY }, bundle, 'interrupt');
+    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: false }, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY }, bundle, 'interrupt');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('need');
   });
 
   it('SPEAKS when need clears the bar', () => {
-    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: true }, momentBoost: NO_BOOST, layers: ALL_GREY }, bundle, 'interrupt');
+    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: true }, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY }, bundle, 'interrupt');
     expect(d.speak).toBe(true);
   });
 
@@ -62,7 +64,7 @@ describe('the live need gate', () => {
     // answer) — so the cast is not a silenced mismatch, it pins the RUNTIME
     // behaviour for an untyped caller that can still hand one over.
     for (const need of [undefined, null] as Array<{ speak: boolean } | null>) {
-      const d = decide(LOUD, { rating: 1500, weaknesses: [], need, momentBoost: NO_BOOST, layers: ALL_GREY }, bundle, 'interrupt');
+      const d = decide(LOUD, { rating: 1500, weaknesses: [], need, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY }, bundle, 'interrupt');
       expect(d.speak, `need=${JSON.stringify(need) ?? 'undefined'} must not mute`).toBe(true);
     }
   });
@@ -74,7 +76,7 @@ describe('the live need gate', () => {
     // book moves" (David 2026-09-15). The two must not be conflated: a walk
     // silenced by importance would be the 46-plies-to-six bug; a walk silenced
     // by NEED is the feature.
-    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: false }, momentBoost: NO_BOOST, layers: ALL_GREY }, bundle, 'walk');
+    const d = decide(LOUD, { rating: 1500, weaknesses: [], need: { speak: false }, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY }, bundle, 'walk');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('need'); // names the real decider, never blames importance
   });

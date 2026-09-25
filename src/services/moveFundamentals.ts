@@ -36,7 +36,12 @@ export type MoveFundamentalId =
   | 'passed-pawn'
   | 'luft'
   | 'space'
-  | 'prophylaxis';
+  | 'prophylaxis'
+  /** A pawn move that frees a home-square bishop's diagonal (d3 opens c1; g3
+   *  prepares the fianchetto). Its own idea, so "develop" taught on move 3 does
+   *  not silence it on move 9 (hand walk 2026-09-24). */
+  | 'open-diagonal'
+  | 'tempo';
 
 export interface MoveFundamental {
   id: MoveFundamentalId;
@@ -85,6 +90,9 @@ export interface MoveFundamental {
  */
 export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId | null> = {
   development: 'neglected-development',
+  // A bishop left blocked behind its own pawn is an undeveloped bishop — the
+  // same habit, from the other side.
+  'open-diagonal': 'neglected-development',
   'king-safety': 'weakened-king-safety',
   space: 'space-conceded',
   // A promotion is a THING DONE, not a habit neglected — there is no
@@ -100,6 +108,8 @@ export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId 
   center: null,
   // Making luft is not the inverse of any hole we track.
   luft: null,
+  // Kicking a piece with a pawn GAINS a tempo — the inverse of handing one over.
+  tempo: 'tempo-handed',
 };
 
 const PIECE_NAME: Record<string, string> = {
@@ -258,8 +268,43 @@ export function computeMoveFundamentals(
     });
   }
 
+  // ── TEMPO — a pawn that kicks an enemy piece (hand walk 2026-09-24: 9.f4
+  //    against …Ne5 was read as "stake out the center and grab space"; his
+  //    reason was "chasing the knight away"). The kicked piece must be worth
+  //    more than the pawn and the pawn must be safe where it lands (checked
+  //    above), so the piece really has to move.
+  if (mv.piece === 'p') {
+    const dir = mover === 'w' ? 1 : -1;
+    const f = mv.to.charCodeAt(0);
+    const r = Number(mv.to[1]) + dir;
+    const VALUE: Record<string, number> = { n: 3, b: 3, r: 5, q: 9 };
+    let hit: { sq: string; type: string } | null = null;
+    for (const df of [-1, 1]) {
+      const file = String.fromCharCode(f + df);
+      if (file < 'a' || file > 'h' || r < 1 || r > 8) continue;
+      const sq = `${file}${r}`;
+      const c = after.get(sq as Square);
+      if (!c || c.color === mover || !(c.type in VALUE)) continue;
+      if (!hit || VALUE[c.type] > VALUE[hit.type]) hit = { sq, type: c.type };
+    }
+    if (hit) {
+      const name = PIECE_NAME[hit.type] ?? 'piece';
+      out.push({
+        id: 'tempo',
+        weight: 88,
+        led: `kicks their ${name} off ${hit.sq}, gaining time`,
+        selfContained: `the pawn kicks their ${name} off ${hit.sq}, so they spend a move while you gain one`,
+        imperative: `kick their ${name} off ${hit.sq} with a pawn and gain the time`,
+        squares: [mv.to, hit.sq],
+      });
+    }
+  }
+
   // ── OUTPOST — a minor planted where no enemy pawn can ever evict it.
-  if ((mv.piece === 'n' || mv.piece === 'b') && relRank(mv.to, mover) >= 5 && isOutpost(after, mv.to, mover)) {
+  // Not on a CAPTURE: taking a piece is its own reason, and the hanging-piece
+  // and tactic lanes name it (hand walk 2026-09-24: 23.Bxe6+ was "plant the
+  // bishop on the e6 outpost" — it takes a knight with check).
+  if ((mv.piece === 'n' || mv.piece === 'b') && !mv.captured && relRank(mv.to, mover) >= 5 && isOutpost(after, mv.to, mover)) {
     const name = PIECE_NAME[mv.piece];
     out.push({
       id: 'outpost',
@@ -288,7 +333,11 @@ export function computeMoveFundamentals(
     // hole or a king-zone square in that list makes the sentence false, which
     // is the same defect the 2026-07-22 wing-pawn fix removed. Each kind of
     // square gets the clause that is true of it.
-    const central = eyes.filter((s) => CENTRAL_SQUARES.includes(s));
+    // …and a lone flank square is not "the center": Bg4 eyeing f5 alone was
+    // "fighting for the center on f5" (hand walk 800). The list speaks only
+    // when it reaches the core four.
+    const centralAll = eyes.filter((s) => CENTRAL_SQUARES.includes(s));
+    const central = centralAll.some((s) => CORE_CENTER.includes(s)) ? centralAll : [];
     // "leaning on e6", not "the hole on e6" — at move three Black's e-pawn is
     // still home, so e6 is an empty square, not yet a hole. Say what is true.
     const holes = eyes.filter((s) => standingHoles(seat).includes(s) && !nearKing.includes(s));
@@ -297,20 +346,40 @@ export function computeMoveFundamentals(
     const centerTail = (central.length ? `, fighting for the center on ${andList(central)}` : '')
       + (holes.length ? `, leaning on ${andList(holes)}` : '')
       + kingZoneClause(nearKing);
+    // WITH TEMPO (hand walk 2026-09-24: 3.Nc3 against the Scandinavian queen on
+    // d5 — "you hit the queen with the knight"; the coach said only "develop
+    // into the game"). A developing move that newly attacks their queen or a
+    // rook, from a square it can hold, gains a move: they must answer it.
+    const hit = tempoTarget(fenBefore, after, mv.from, mv.to, mover);
+    const tempo = hit ? ` with tempo, hitting the ${hit.name} on ${hit.square}` : '';
     out.push({
       id: 'development',
-      weight,
-      led: `develops into the game${centerTail}`,
-      selfContained: `develops the ${name} into the game${centerTail}`,
-      imperative: `develop into the game${centerTail}`,
-      squares: [mv.to, ...eyes],
+      weight: hit ? weight + 10 : weight,
+      led: `develops into the game${tempo}${centerTail}`,
+      selfContained: `develops the ${name} into the game${tempo}${centerTail}`,
+      imperative: `develop into the game${tempo}${centerTail}`,
+      squares: hit ? [mv.to, hit.square, ...eyes] : [mv.to, ...eyes],
     });
   }
 
   // ── CENTER — a central pawn advance (space), or a piece already in play newly
   //    contesting the core center. (A developing minor already carries the
   //    center in its own clause above, so it does not double-count here.)
-  if (mv.piece === 'p' && CENTER.includes(mv.to) && relRank(mv.to, mover) >= 4) {
+  // A PAWN CAPTURE into the center is the "take toward the centre" rule, not
+  // a space grab — …fxe5 recapturing was "stake out the center and grab space
+  // with the pawn to e5" (hand walk 800).
+  const towardCenter = mv.piece === 'p' && !!mv.captured && CENTER.includes(mv.to)
+    && Math.abs(mv.to.charCodeAt(0) - 100.5) < Math.abs(mv.from.charCodeAt(0) - 100.5);
+  if (towardCenter) {
+    out.push({
+      id: 'center',
+      weight: 66,
+      led: `takes toward the center`,
+      selfContained: `takes toward the center with the ${mv.from[0]}-pawn`,
+      imperative: `take toward the center — the ${mv.from[0]}-pawn capture keeps your pawns near the middle`,
+      squares: [mv.to],
+    });
+  } else if (mv.piece === 'p' && CENTER.includes(mv.to) && relRank(mv.to, mover) >= 4) {
     out.push({
       id: 'center',
       weight: 66,
@@ -325,6 +394,30 @@ export function computeMoveFundamentals(
     // the French guards d4). Caught live by the prod hint audit 2026-09-06: the
     // coach had no why for c3 and fell to the bare "that's the strongest move".
     // A wing pawn (a3 guards only b4) never qualifies — b4 is not the center.
+    // OPENS A BISHOP (hand walk 2026-09-24: Naroditsky's d3 is "the modest d3,
+    // opening the bishop"; the coach said only "d3 guards e4" — true and not
+    // the point). A home-square bishop whose squares grow by ≥2 when this pawn
+    // steps off its diagonal has just been developed by the pawn move.
+    const freed = bishopFreedBy(new Chess(fenBefore), after, mover, mv.from);
+    if (freed) {
+      // g2/b2 (g7/b7) vacated = the fianchetto square: "g3 — preparing to
+      // fianchetto" is how he names it.
+      const fianchetto = ['g2', 'b2', 'g7', 'b7'].includes(mv.from) ? mv.from : null;
+      out.push({
+        id: 'open-diagonal',
+        weight: 60,
+        led: fianchetto
+          ? `prepares to fianchetto the bishop to ${fianchetto}`
+          : `opens the diagonal for the bishop on ${freed}`,
+        selfContained: fianchetto
+          ? `prepares to fianchetto the bishop to ${fianchetto} with the pawn to ${mv.to}`
+          : `opens the diagonal for the bishop on ${freed} with the pawn to ${mv.to}`,
+        imperative: fianchetto
+          ? `fianchetto the bishop to ${fianchetto}`
+          : `open the diagonal for the bishop on ${freed}`,
+        squares: fianchetto ? [mv.to, fianchetto] : [mv.to, freed],
+      });
+    }
     const guards = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s));
     if (guards.length > 0) {
       const g = andList(guards); // no slice (G4.5) — CORE_CENTER is four squares
@@ -622,6 +715,7 @@ export function principleOnceLine(
  *  `Record` so a new fundamental fails to compile until someone answers. */
 const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
   development: true,
+  'open-diagonal': true,
   center: true,
   'king-safety': true,
   outpost: true,
@@ -632,6 +726,9 @@ const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
   luft: false,
   space: false,
   prophylaxis: false,
+  // Kicking a piece with a pawn to gain time is taught as a rule of the
+  // opening — his 9.f4 "chasing the knight away".
+  tempo: true,
 };
 
 /** The first opening principle this move follows that has not been taught
@@ -639,6 +736,51 @@ const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
 export function principleToTeach(
   fenBefore: string, san: string, mover: 'white' | 'black', taught: ReadonlySet<string>,
 ): MoveFundamental | null {
+  // The WEIGHTIEST untaught principle, not the first one pushed.
   return computeMoveFundamentals(fenBefore, san, mover)
-    .find((f) => IS_OPENING_PRINCIPLE[f.id] && !taught.has(f.id)) ?? null;
+    .filter((f) => IS_OPENING_PRINCIPLE[f.id] && !taught.has(f.id))
+    .sort((a, b) => b.weight - a.weight)[0] ?? null;
+}
+
+/** The home-square bishop (c1/f1 or c8/f8) whose MOVES grew by at least two
+ *  because a pawn left `vacated` — counted from the board, never assumed. */
+function bishopFreedBy(before: Chess, after: Chess, mover: 'w' | 'b', vacated: string): string | null {
+  const homes = mover === 'w' ? ['c1', 'f1'] : ['c8', 'f8'];
+  const count = (board: Chess, sq: string): number => {
+    try {
+      const parts = board.fen().split(' ');
+      parts[1] = mover; parts[3] = '-';
+      return new Chess(parts.join(' ')).moves({ square: sq as Square, verbose: true }).length;
+    } catch { return 0; }
+  };
+  for (const home of homes) {
+    const p = after.get(home as Square);
+    if (!p || p.type !== 'b' || p.color !== mover) continue;
+    // the vacated square must sit on one of the bishop's diagonals
+    const df = Math.abs(home.charCodeAt(0) - vacated.charCodeAt(0));
+    const dr = Math.abs(Number(home[1]) - Number(vacated[1]));
+    if (df !== dr || df === 0) continue;
+    if (count(after, home) - count(before, home) >= 2) return home;
+  }
+  return null;
+}
+
+/** The enemy queen or rook the moved piece NEWLY attacks from a square where it
+ *  cannot simply be taken — a developing move that gains a tempo. */
+function tempoTarget(
+  fenBefore: string, after: Chess, from: string, to: string, mover: 'w' | 'b',
+): { name: string; square: string } | null {
+  const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  if (!landingIsSafe(after.fen(), to as Square)) return null;
+  let before: Chess;
+  try { before = new Chess(fenBefore); } catch { return null; }
+  for (const row of after.board()) {
+    for (const c of row) {
+      if (!c || c.color !== them || (c.type !== 'q' && c.type !== 'r')) continue;
+      if (!after.attackers(c.square, mover).includes(to as Square)) continue;
+      if (before.attackers(c.square, mover).includes(from as Square)) continue;
+      return { name: c.type === 'q' ? 'queen' : 'rook', square: c.square };
+    }
+  }
+  return null;
 }

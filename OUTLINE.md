@@ -21,6 +21,30 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000. WO-DANYA-01 — Learn free play taught like his speedruns (David 2026-09-24)
+
+- ✅ Hand-walk 1 (his Scandinavian, vc-1zfJ7ABoh8k): ~25 board-false/misframed lines fixed at the computer (PLAN §WO-DANYA-01 "Hand-walk 1").
+- ✅ Hand-walk audit locked as the standard (CLAUDE.md "WALK IT, FLAG EVERYTHING, THEN FIX").
+- ✅ Gem tests: SEE 2x faster, convert-once, budgets.
+- 🔴 Quiet-move purpose computer (Nc3 tempo, Ne2 not Nf3, h3 for g4, Qa1 behind the rook).
+- 🔴 Plan arc / one thread per move (B).
+- 🟠 Phase narration still phrases chess facts through the model — David's call.
+- 🔴 Leftovers: rook template m17, "either works … with it", duplicate break lanes, transposition name.
+- ✅ Hand-walk 1380 (xoS71OW-Re0): 30 moves flagged, 6 fix batches; open flags in `audit-reports/hand-walk-1380-2026-09-24.md` (king-attack lane, 2-move threat computer, engine-unverified claims).
+- ✅ Hand-walks 2340 (pXBR9CxK3lQ, White) + 2000 (7f2sPY2U204, Black KID): walked, flagged, fixed, re-walked; flags in `audit-reports/hand-walk-2340-2026-09-25.md` / `hand-walk-2000-2026-09-25.md`.
+- 🟠 Re-walk the 1380 flags on current code (owed).
+- ✅ The next move is named only where EARNED — `nextMoveAdvice`: a deciding moment or the student's own open record (phase / motif), never the rating; audited as `moveAdvice` on the decision row (G-MA) (David 2026-09-24: "I don't want to hear the best move on every ply").
+- ✅ Leaving book read from the live masters explorer, cached per position (no 37 MB file on the phone).
+- ✅ Walk-1380 fix hour: no orphaned "X?" (one shared claim splitter), ruled-out moves need a reason, "still wins, but Y was cleaner", framed repeats deduped, forcing-win judged on the capture not the recapture (engine-checked), calculation-depth capped at the 7-ply horizon, hedge dropped when the count speaks.
+- ✅ Hand-walks 800 (Ruy Exchange, Black), 1200 (French Advance, White), 1600 (Caro-Kann, Black) + KID 2000 re-walk: flagged, fixed, re-walked; flags in `audit-reports/hand-walk-multi-2026-09-25.md`.
+- ✅ Root cause, all surfaces: board-state rules in the shared door (`boardState`, required `FactBundle.board`), one seater, one pawn-pin rule, one sacrifice rule, one loose-piece owner; gate `everySurfaceSpeaks.test.ts` sweeps review + live composer + positional read + Learn commentary + read-position + chat over 298 walk positions.
+- ✅ Walk 800/1200/1600 fixes: a refuted alternative's proof must be against the mover; no "find the pin" for the tactic the student just made; mate is the reason ("is checkmate") and outranks every threat, habit and second mate line; a recapture's why is "takes back"; smaller-piece attacks warned; seats in named structures, outposts and chat tactic text; filler opening tails dropped; structure plan said once by plan id; no one-tempo development nag; heavy pieces are never an "anchor".
+- ✅ Walk-2340/2000 fixes: one owner per fact (isolani, verdict vs plan, best piece), seats (IQP, colour possessives, raw detector text), horizons (proofs ≤7 plies, spoken lookahead ≤4), engine over static counts (no "hanging"/"they win it" the engine doesn't charge; recaptures never "won"), queens-off endgame guards, the student's own move point (free pawn, exchange, bishop pair, unpin, luft), variation/family naming in book, "let's play, I'll be black" starts a game.
+- 🔴 From the walk, still open: king-attack lane (g6 exposure, "closing in"), 2-move threat computer (fork trick), h3 vs Qh4 ranking (→ B).
+- 🔴 The fade: one fact, two phrasings — full teaching on grey/red tags, his 2100 shorthand on proven-green ones, per tag not per player, gradual, and back to full on a red regression (David 2026-09-24: "fade transitions into the 2100 narration style as the user gets better").
+- 🔴 Rules + theory lane: state a development rule when the board earns it — followed, broken at a cost, or broken on purpose (the exception); theory as the IDEA of the book move, the left-book move, and the common wrong move; both fade once proven (David 2026-09-24: "the rules of development for beginners … theory included").
+- ✅ Pre-commit check (`scripts/precommit-check.mjs`): typecheck ‖ test typecheck ‖ staged lint ‖ co-located tests, only when TS is staged; negative-controlled on a staged type error (blocked in ~80s).
+
 ## 00. WO-STANDARD-01 — THE FULL BOARD (David 2026-09-22: "get my app up to standard")
 - 🔴 A. The personal coach — WO-HOME-OPENING-01 (section 0 below, A1–A11)
 - ✅ B. The deciding path (one line per item; ✅ carries its proof)

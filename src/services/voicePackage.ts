@@ -39,6 +39,7 @@
 //      log at all.
 import { gradeNarrationText } from './coachAnswerGates';
 import { falseConfigurationClaim } from './configurationClaims';
+import { claimSentences } from '../utils/claimSentences';
 
 /** What produced this line. Also its priority — see `RANK`. */
 export type VoiceFactKind =
@@ -317,12 +318,23 @@ function sharedPrefix(a: string, b: string): number {
 /** Sentences, for dedupe purposes. Our prose is generated, so a full stop
  *  followed by whitespace is a sentence boundary and nothing else is. */
 function sentencesOf(text: string): string[] {
-  return text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+  // The move-question glue lives in the ONE splitter every stripper shares.
+  return claimSentences(text);
 }
 
 /** The comparison key: letters and digits only, so punctuation and casing
  *  cannot make two identical claims look different. */
-const sayKey = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+const sayKey = (s: string): string => {
+  const full = s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  // A FRAME IS NOT PART OF THE CLAIM (hand walk 1380, move 25: "Watch out —
+  // their rook on f8 pins your bishop…" and the same pin without the frame
+  // were spoken back to back, because the prefix twin-check never saw them
+  // as one). The key drops a leading "watch out / careful / check" so one
+  // claim is one key however it is introduced — never down to nothing.
+  const bare = s.replace(/^\s*(?:(?:watch out|careful|check|look out|heads up|remember|note)\s*[—–:,.!-]*\s*)+/i, '');
+  const key = bare.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return key.length >= 12 ? key : full;
+};
 
 export function buildVoicePackage(
   facts: VoiceFact[],
@@ -536,7 +548,10 @@ export function buildVoicePackage(
   // no bearing on whether it starts with a capital; only whether it opens with
   // a move name does.
   const sentence = (t: string): string => {
-    const trimmed = t.trim();
+    // Every line ENDS as a sentence before the join — the 2026-09-24 Learn tape
+    // ran "…against king on e1 Your king is still in the centre" together.
+    const bare = t.trim();
+    const trimmed = bare && !/[.!?…]["'’”)\]]*$/.test(bare) ? `${bare}.` : bare;
     if (!trimmed) return trimmed;
     // Leave an intentional lowercase opener alone when it is a SAN token
     // ("dxe5 wins a pawn") — capitalising a move name would be wrong.

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**32 lines · 2 exports · 3 importers · 3 tests · 1 audits**
+**98 lines · 4 exports · 3 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,15 +21,29 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `DetectedName` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingAnnouncement` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7641`
-- `src/components/Coach/CoachTeachPage.tsx:9430`
-- `src/services/computedVoiceAudit.report.test.ts:309`
-- `src/services/openingAnnouncement.test.ts:9`
-- `src/services/openingAnnouncement.test.ts:12`
+### `openingAnnouncement` (function) — 15 call sites
+- `src/services/computedVoiceAudit.report.test.ts:310`
 - `src/services/openingAnnouncement.test.ts:15`
-- `src/services/openingAnnouncement.test.ts:19`
-- `src/services/openingAnnouncement.test.ts:20`
+- `src/services/openingAnnouncement.test.ts:18`
+- `src/services/openingAnnouncement.test.ts:21`
+- `src/services/openingAnnouncement.test.ts:25`
+- `src/services/openingAnnouncement.test.ts:26`
+- `src/services/openingAnnouncement.test.ts:29`
+- `src/services/openingAnnouncement.test.ts:30`
+- `src/services/openingAnnouncement.test.ts:31`
+- `src/services/openingAnnouncement.test.ts:34`
+- `src/services/openingAnnouncement.test.ts:38`
+- `src/services/openingAnnouncement.test.ts:41`
+- `src/services/openingAnnouncement.test.ts:43`
+- `src/services/openingAnnouncement.test.ts:47`
+- `src/services/openingAnnouncement.test.ts:48`
+
+### `openingAnnouncementForGame` (function) — 2 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7885`
+- `src/components/Coach/CoachTeachPage.tsx:9744`
+
+### `warmOpeningBook` (function) — 1 call site
+- `src/components/Coach/CoachTeachPage.tsx:978`
 
 ## Tests
 

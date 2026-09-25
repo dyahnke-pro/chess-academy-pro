@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import { describe, it, expect } from 'vitest';
 import { parseCoachMoveCommand } from './coachMoveCommand';
 
@@ -123,3 +124,38 @@ describe('correction intent', () => {
     expect(parseCoachMoveCommand('undo', AFTER_1E4)).toBeNull();
   });
 });
+
+describe('parseCoachMoveCommand — a reply that only exists after the student moves', () => {
+  it('"play Qxd5" before exd5 is armed (nothing on d5 to take yet)', () => {
+    // 1.e4 d5 — White to move; Qxd5 only becomes legal after 2.exd5.
+    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2';
+    const cmd = parseCoachMoveCommand('play Qxd5', fen);
+    expect(cmd?.san).toBe('Qxd5');
+    expect(cmd?.playableNow).toBe(false);
+  });
+  it('NEGATIVE CONTROL: a move no reply can ever reach arms nothing', () => {
+    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2';
+    expect(parseCoachMoveCommand('play Qh1', fen)).toBeNull();
+  });
+});
+
+describe('parseCoachMoveCommand — the coach\'s side is read first on the student\'s turn', () => {
+  // Naroditsky's Scandinavian, after 5...Bg4 — White to move. "play c6" was
+  // parsed as White's Bc6+ (legal on this board) instead of Black's pawn.
+  const board = new Chess();
+  for (const m of ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qa5', 'g3', 'Nf6', 'Bg2', 'Bg4']) board.move(m);
+  it('"play c6" arms Black\'s pawn, not White\'s bishop check', () => {
+    const cmd = parseCoachMoveCommand('play c6', board.fen(), 'black');
+    expect(cmd?.san).toBe('c6');
+    expect(cmd?.playableNow).toBe(false);
+  });
+  it('NEGATIVE CONTROL: without the coach\'s colour the old reading returns', () => {
+    expect(parseCoachMoveCommand('play c6', board.fen())?.san).toBe('Bc6+');
+  });
+  it('the game-start hand-over still works ("you play d4" gives the coach White)', () => {
+    const cmd = parseCoachMoveCommand('you play d4', new Chess().fen(), 'black');
+    expect(cmd?.san).toBe('d4');
+    expect(cmd?.playableNow).toBe(true);
+  });
+});
+

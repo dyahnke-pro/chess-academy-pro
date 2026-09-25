@@ -20,7 +20,7 @@ import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGround
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { refutedAlternative, candidatesForPosition, type RefutedAlternative } from './refutedAlternative';
-import { transferClause, recordMotif } from './motifLedger';
+import { transferClause, recordMotif, withTransfer, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -33,6 +33,7 @@ import { classifyPhase } from './gamePhaseService';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
+import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { habitIsOwed, type MethodHabit } from './methodBeat';
 import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
@@ -1353,7 +1354,7 @@ export function buildReviewSegments(
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
   const seenConversionSteps = new Set<ConversionStep>();
   /** S6 transfer: tactic motif → the move it was first SPOKEN this game. */
-  const motifFirstMove = new Map<string, number>();
+  const motifFirstMove: MotifLedger = new Map();
   /** S2: opening principles SPOKEN this game — committed after the door. */
   const principlesTaught = new Set<string>();
   /** S4: the first ply of each phase the game reaches after the opening. */
@@ -1433,6 +1434,8 @@ export function buildReviewSegments(
   // ply later. Square specifics are stripped from the key so "attack the king on
   // e8" and "attack the king on e8 before it runs" collapse to one goal.
   const planGoalsSeen = new Set<string>();
+  /** Refuted alternatives already SPOKEN this game, by the move refuted. */
+  const refutedSaid = new Set<string>();
   // The RACE verdict last spoken. Keyed on WHO ARRIVES FIRST, not on the counts:
   // the counts change on every push, so keying on them would re-announce the race
   // each ply. A flip — you were winning the race and now you are not — IS the
@@ -1751,6 +1754,7 @@ export function buildReviewSegments(
         preMoveEval: m.preMoveEval ?? null,
         classification: m.classification ?? null,
         bestMoveSan,
+        replyBestSan: i + 1 < moves.length ? uciToSanAt(moves[i + 1].bestMove ?? null, fenPair.fenAfter) : null,
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
@@ -1815,6 +1819,8 @@ export function buildReviewSegments(
       const keep = (raw: string, commit?: () => void): void => { keptRaw.push(raw); if (commit) commitByRaw.set(raw, commit); };
       let verdictWordThisPly: string | null = null;
       for (const f of facets) {
+        // A refuted alternative is said once per game (identity `refuted:<move>`).
+        { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
         // Positional VERDICT — atom-diffed. Speak the verdict WORD when it
         // changes, and only the REASONS not yet stated, so a growing edge adds
         // the new asset instead of re-reciting the pile every ply.
@@ -1842,7 +1848,15 @@ export function buildReviewSegments(
             ? gm[1].toLowerCase().replace(/\b[a-h][1-8]\b/g, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim()
             : f;
           if (planGoalsSeen.has(goalKey) || !claim(`plan:${goalKey}`)) continue;
-          keep(f, () => planGoalsSeen.add(goalKey));
+          // A NEW goal after plans the student already heard is a CHANGE, and
+          // the change is the teaching (David 2026-09-25: "If the structure
+          // plan changes then coach should say so"). Once per ply.
+          const changed = planGoalsSeen.size > 0 && claim('plan-changed');
+          const said = !changed ? f
+            : /^\[plan-now\]\s*The plan from here is to /i.test(f)
+              ? f.replace(/^\[plan-now\]\s*The plan from here is to /i, '[plan-now] The plan changes here — now it\'s to ')
+              : f.replace(/^\[plan-now\]\s*(.)/, (_m, c: string) => `[plan-now] The plan changes here: ${c.toLowerCase()}`);
+          keep(said, () => planGoalsSeen.add(goalKey));
           continue;
         }
         // The RACE — once, then only when the verdict FLIPS (see lastRaceVerdict).
@@ -2013,9 +2027,16 @@ export function buildReviewSegments(
           // its importance step already is. Until it is, review keeps the
           // narrow gate it was tuned with and says so here.
           need: null,
+          // Review is retrospective: it names the move that WAS the one, not the
+          // student's next move, so the live advice gate does not apply.
+          moveAdvice: null,
         },
         {
           facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes,
+          // THE BOARD AFTER THIS PLY — a recapture pending, or mate for the
+          // side to move (`boardState`). Review had no such guard at all: "You're
+          // a piece up" one ply before the piece was taken back.
+          board: boardStateAfter(fenPair.fenBefore, m.san, m.fenAfter, m.evaluation ?? null),
           // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
           // `[principle]` facet IS the attributed fundamental, so ranking it by
           // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse
@@ -2135,10 +2156,12 @@ export function buildReviewSegments(
           const identity = facetIdentity.get(raw);
           if (!identity) continue;
           if (identity.startsWith('rule:')) { principlesTaught.add(identity.slice(5)); continue; }
-          const motif = identity.slice('motif:'.length);
-          const ref = transferClause(motif, fullMove, motifFirstMove);
-          if (ref) uncappedParts[k] = `${uncappedParts[k].replace(/\.$/, '')}.${ref}`;
-          recordMotif(motif, fullMove, motifFirstMove);
+          if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
+          // `motif:<type>:<squares>` — the squares make it THIS instance, so a
+          // standing tactic is never "the same idea as move N" of itself.
+          const [motif, instance = ''] = identity.slice('motif:'.length).split(':');
+          uncappedParts[k] = withTransfer(uncappedParts[k], transferClause(motif, instance, fullMove, motifFirstMove));
+          recordMotif(motif, instance, fullMove, motifFirstMove);
         }
       }
       segments.push({

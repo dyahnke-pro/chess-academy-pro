@@ -92,7 +92,11 @@ const PRE_COMMIT_BODY = `#!/usr/bin/env bash
 #
 # To re-install: \`node scripts/install-git-hooks.mjs\`
 
-node scripts/plan-guard.mjs
+node scripts/plan-guard.mjs || exit 1
+
+# The fast check: typecheck + staged lint + co-located tests, only when TS is
+# staged. Catches in ~2 min what the pre-push ship-check found 10 min in.
+node scripts/precommit-check.mjs
 `;
 
 writeFileSync(HOOK_PATH, HOOK_BODY);
@@ -108,4 +112,5 @@ console.log('');
 console.log('✓ Installed pre-commit hook at .git/hooks/pre-commit');
 console.log('  A wholesale PLAN.md overwrite is blocked unless the same commit archives');
 console.log('  the prior plan to docs/plans/. Bypass with `git commit --no-verify`.');
+console.log('  It also runs scripts/precommit-check.mjs (typecheck + staged lint + co-located tests).');
 console.log('');

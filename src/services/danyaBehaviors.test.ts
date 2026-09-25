@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import {
   DANYA_BEHAVIORS,
   detectBehaviors,
@@ -202,5 +203,75 @@ describe('the threatened piece is NAMED from the board — D-7 (WO-STANDARD-01, 
     const hits = detectBehaviors({ fen: 'r3k3/8/8/8/6b1/5N2/8/4K3 w - - 0 1', studentColor: 'white' });
     const proph = hits.find((h) => h.id === 'prophylaxis');
     expect(proph!.fact).toMatch(/win your knight on f3/);
+  });
+});
+
+describe('a tactic fact names whose pieces they are (hand walk 2026-09-24)', () => {
+  it('"Your rook on a6 pins their knight on b6 against their queen on d6", never the bare form', () => {
+    // After 19.Nxd5 exd5 in Naroditsky's game, student White. The walk heard
+    // "Rook on a6 pins knight on b6 against queen on d6."
+    const fen = '2k4r/3r1ppp/Rn1q4/1Ppp3b/8/3P2PP/2P1NPB1/3Q1RK1 w - - 0 20';
+    const tac = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'tactics');
+    expect(tac?.fact).toBe('Your rook on a6 pins their knight on b6 against their queen on d6');
+  });
+});
+
+describe('open-file only when a rook can step onto it (hand walk 2026-09-24)', () => {
+  it('move five of the Philidor: queen and bishop block the a1-rook — silent', () => {
+    const fen = 'rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6';
+    expect(detectBehaviors({ fen, studentColor: 'white' }).some((h) => h.id === 'open-file')).toBe(false);
+  });
+  it('NEGATIVE CONTROL: a clear back rank reaches the file, and a half-open file says so', () => {
+    const fen = 'r3k3/ppp2ppp/3p4/8/8/8/PPP2PPP/R3K3 w - - 0 20';
+    const hit = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'open-file');
+    expect(hit?.fact).toMatch(/is (open|half-open) — your rook belongs there/);
+  });
+});
+
+describe('piece-activity speaks a sentence, not a label (hand walk 2026-09-24)', () => {
+  it('13.fxe5: the f1-rook on the half-open f-file', () => {
+    const fen = 'r2q1rk1/ppp1bppp/8/2n1P2n/6b1/1BN2N2/PPP3PP/R1B1QRK1 w - - 1 14';
+    const hit = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'piece-activity');
+    expect(hit?.fact).toBe('Your rook on f1 has the half-open f-file — build your play around it.');
+  });
+});
+
+describe('a doubled pair about to be undone is not a weakness (hand walk 2026-09-24)', () => {
+  it('3.d4 exd4: d6+d4 are "doubled" only until Nxd4', () => {
+    const fen = 'rnbqkbnr/ppp2ppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4';
+    const hit = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'pawn-structure');
+    expect(hit?.fact ?? '').not.toMatch(/doubled pawn on d6/);
+  });
+  it('NEGATIVE CONTROL: a settled doubled pair still is', () => {
+    const fen = '4k3/ppp3pp/3p4/3p4/8/8/PPP3PP/R3K3 w - - 0 20';
+    const hit = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'pawn-structure');
+    expect(hit?.fact ?? '').toMatch(/doubled pawn on d/);
+  });
+});
+
+describe('the isolani has one owner (hand walk 2340, move 6)', () => {
+  it('the weak-pawn behaviour does not also name an isolated d-pawn', () => {
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5'.split(' ')) c.move(m);
+    const hits = detectBehaviors({ fen: c.fen(), studentColor: 'white' });
+    expect(hits.some((h) => /isolated pawn on d4/.test(h.fact))).toBe(false);
+  });
+});
+
+describe('a defended pawn "won" by a swap-off is not a threat (hand walk 2026-09-25)', () => {
+  it('King\'s Indian main line: no "eyeing dxe5 — it would win your pawn"', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O'.split(' ')) c.move(m);
+    const hits = detectBehaviors({ fen: c.fen(), studentColor: 'black' });
+    expect(hits.some((h) => /eyeing dxe5/.test(h.fact))).toBe(false);
+  });
+});
+
+describe('the piece that just arrived is not a static "they win it" (hand walk 2026-09-25, …Bh3)', () => {
+  it('no "eyeing gxh3" about the bishop the student just put there', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8 Raxd8 Kf2 Nc5 Rd1 a5 Rxd8 Rxd8 Ke1 Kf7 Be2 g5 h3 h5 b3 Kf6 Nd1 g4 hxg4 hxg4 Nf2 g3 Nd1 Rh8 Nc3 Rh2 Bf1 Bh3 Ne2'.split(' ')) c.move(m);
+    const hits = detectBehaviors({ fen: c.fen(), studentColor: 'black', studentLastTo: 'h3' });
+    expect(hits.some((h) => /eyeing gxh3/.test(h.fact))).toBe(false);
   });
 });

@@ -27,10 +27,11 @@
 // G0 throughout: severity is arithmetic, the better move comes from the engine,
 // and the reason comes from replaying the engine's own line. Nothing here asks a
 // model what it thinks.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { planFromUci } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
-import { MISTAKE_CP } from './engineConstants';
+import { MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -62,6 +63,21 @@ function whyBetter(
   moverColor: 'white' | 'black',
 ): { why: string; square: string } | null {
   if (bestUci.length < 4) return null;
+  // THE CAPTURE IS THE REASON. When the better move itself takes a real piece,
+  // say what it takes — the plan's material read is the NET over the line
+  // ("win a rook" for Bxd8, which takes the QUEEN and gives the bishop back;
+  // hand walk 2026-09-24).
+  try {
+    const b = new Chess(fenBefore);
+    const u = bestUci[0];
+    const first = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+    const NAME: Record<string, string> = { q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
+    // Only when it takes MORE than the capturer is worth — an even trade is not
+    // the reason a move is better.
+    if (first?.captured && NAME[first.captured] && MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece]) {
+      return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to };
+    }
+  } catch { /* fall through to the plan read */ }
   const plan = planFromUci(fenBefore, bestUci, moverColor);
   const text = plan?.mine.text?.trim();
   if (!text) return null;
@@ -157,6 +173,9 @@ export function callInaccuracyDetailed(args: {
    *  blunder regardless of the centipawns, and so must this. */
   missedMate?: number | null;
   allowedMate?: number | null;
+  /** The mover's eval after the move (their perspective), when a real
+   *  centipawn read — null/absent when unknown or a mate score. */
+  moverEvalAfterCp?: number | null;
   /** Whose move it was. */
   side: 'student' | 'coach';
   moverColor: 'white' | 'black';
@@ -290,6 +309,28 @@ export function callInaccuracyDetailed(args: {
   // past tense, second person, no scolding. `whatItAllowed` already says what
   // the move LET THEM DO; this is the half that was missing — what should have
   // been played, and what it would have done.
+  // A GAMBIT IS TAUGHT FROM BOTH SIDES, NOT GRADED (hand walk 2026-09-24:
+  // Naroditsky's b4 against the long-castled king was called "a mistake. a3
+  // was the move"; his point — "if Black takes, the b-file opens straight onto
+  // the king" — never came up). When the pushed pawn can be taken and taking
+  // it opens a file beside their king, name the idea first and the engine's
+  // preference second. A blunder is still called a blunder.
+  const gambit = quality === 'blunder' ? null : gambitFile(args.fenBefore, args.playedSan, args.moverColor);
+  if (gambit) {
+    const said = `${args.playedSan} offers a pawn — if they take, the ${gambit}-file opens toward their king. The engine prefers ${args.bestSan}${better ? `, to ${better.why}` : ''}, so it is a practical try, not a free one.`;
+    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
+  }
+  // STILL WINNING IS SAID FIRST (hand walk 1380, move 22: "gxh5 was a
+  // mistake" — it won two pieces and left White +4). When the mover is still
+  // clearly winning after the move, the teaching is the cleaner way, not a
+  // grade: "gxh5 still wins, but Rxf8+ was cleaner — it would land a fork."
+  const after = args.moverEvalAfterCp;
+  if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
+    const said = better
+      ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — it would ${better.why}.`
+      : `${args.playedSan} still wins, but ${args.bestSan} was cleaner.`;
+    return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
+  }
   const head = quality === 'blunder'
     ? `${args.playedSan} was a blunder.`
     : quality === 'mistake'
@@ -327,5 +368,49 @@ function missedCaptureStillOn(fenBefore: string, playedSan: string, bestSan: str
     const again = new Chess(parts.join(' '));
     const stillOn = again.moves({ verbose: true }).some((m) => m.to === best.to && !!m.captured);
     return stillOn ? { piece: PIECE_NAME[victim.type] ?? 'piece', square: best.to } : null;
+  } catch { return null; }
+}
+
+/** The file a pawn push offers to open toward the enemy king: the pushed pawn
+ *  can be captured, and after that capture the mover has no pawn left on the
+ *  file, which lies within one file of their king. Null otherwise. Computed
+ *  from the board — never inferred from the move's name. */
+export function gambitFile(fenBefore: string, playedSan: string, moverColor: 'white' | 'black'): string | null {
+  try {
+    const b = new Chess(fenBefore);
+    const mv = b.move(playedSan);
+    if (!mv || mv.piece !== 'p' || mv.captured) return null;
+    const me = moverColor === 'white' ? 'w' : 'b';
+    const them = me === 'w' ? 'b' : 'w';
+    const takers = b.moves({ verbose: true }).filter((m) => m.to === mv.to && m.captured === 'p');
+    if (takers.length === 0) return null;
+    // A DEFENDED pawn is not offered: taking it costs them the taker (hand walk
+    // 2026-09-24: 18.h3 against …Bg4 was called "h3 offers a pawn" — g2
+    // guards h3, so …Bxh3 gxh3 is a bishop for a pawn).
+    if (b.attackers(mv.to, me).length > 0) return null;
+    const file = mv.to[0];
+    let kingFile: string | null = null;
+    for (const row of b.board()) for (const c of row) if (c && c.type === 'k' && c.color === them) kingFile = c.square[0];
+    if (!kingFile) return null;
+    const kf = kingFile;
+    const near = (f: string): boolean => Math.abs(kf.charCodeAt(0) - f.charCodeAt(0)) <= 1;
+    // A LEVER ON THEIR KING'S COVER: the pushed pawn now hits one of their
+    // pawns on a file beside the king (Naroditsky's a5 against b6, "prying
+    // open the king") — the file it pries is that pawn's.
+    const dir = me === 'w' ? 1 : -1;
+    for (const df of [-1, 1]) {
+      const f = String.fromCharCode(file.charCodeAt(0) + df);
+      const sq = `${f}${Number(mv.to[1]) + dir}` as Square;
+      const hit = b.get(sq);
+      if (hit && hit.type === 'p' && hit.color === them && near(f)) return f;
+    }
+    if (!near(file)) return null;
+    const after = new Chess(b.fen());
+    after.move({ from: takers[0].from, to: takers[0].to });
+    for (let r = 1; r <= 8; r += 1) {
+      const p = after.get(`${file}${r}` as Square);
+      if (p && p.type === 'p' && p.color === me) return null;
+    }
+    return file;
   } catch { return null; }
 }

@@ -122,9 +122,15 @@ function seeCaptureValue(chess: Chess, square: Square, depth = 0): number {
   // the legal capturers, so if the side to move has NONE, no legal capture
   // exists and we can skip the expensive full `moves()` generation. This is the
   // common case in per-ply review loops (a queried square with no attacker).
-  if (chess.attackers(square, chess.turn()).length === 0) return 0;
-  const caps = chess
-    .moves({ verbose: true })
+  const attackerSquares = chess.attackers(square, chess.turn());
+  if (attackerSquares.length === 0) return 0;
+  // ONLY THE ATTACKERS' MOVES (2026-09-24 perf): generating every legal move on
+  // the board at each ply of the exchange was ~70% of the gem-lesson build (the
+  // punish-gem tests ran 200s+). `moves({ square })` is still LEGAL — pins and
+  // checks are filtered exactly as before — for just the pieces that can reach
+  // this square, which `attackers()` already names.
+  const caps = attackerSquares
+    .flatMap((from) => chess.moves({ square: from, verbose: true }))
     .filter((m) => m.to === square && m.captured);
   if (caps.length === 0) return 0;
   caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
@@ -312,6 +318,10 @@ export function findPawnBreaks(fen: string): Square[] {
   const breaks = new Set<Square>();
   for (const mv of chess.moves({ verbose: true })) {
     if (mv.piece !== 'p') continue;
+    // A CAPTURE IS NOT A BREAK (hand walk 2026-09-24: "they have a pawn break
+    // available on a5" meant …bxa5). The break is the PUSH that creates the
+    // tension; taking resolves it and is named as a capture wherever it matters.
+    if (mv.captured) continue;
     // Play the push, then check whether the new pawn touches an enemy pawn.
     const probe = new Chess(fen);
     try { probe.move(mv); } catch { continue; }
@@ -319,7 +329,7 @@ export function findPawnBreaks(fen: string): Square[] {
     const file = to.charCodeAt(0) - 97;
     const rank = Number(to[1]);
     const forward = mover === 'w' ? 1 : -1;
-    let contact = mv.captured === 'p'; // a capture of a pawn is itself a break
+    let contact = false;
     for (const df of [-1, 1]) {
       const af = file + df;
       const ar = rank + forward;
@@ -635,6 +645,10 @@ export function findMinorityAttack(fen: string, color: Color): MinorityAttack | 
     const mine = pawnsOn(color, flank.files);
     const theirs = pawnsOn(enemy, flank.files);
     if (mine.length < 2 || theirs.length < 3 || mine.length >= theirs.length) continue; // a real minority only
+    // DOUBLED PAWNS ARE NOT A MINORITY — they are a weakness (hand walk
+    // 2026-09-24: White's h3+h5 after 22.gxh5 was read as "a minority attack
+    // on the kingside").
+    if (new Set(mine.map((sq) => sq[0])).size < mine.length) continue;
     // A legal pawn push on the flank that lands diagonally adjacent to an enemy
     // pawn on the flank = the contact lever (…b5 hitting c6).
     for (const push of chess.moves({ verbose: true })) {
@@ -879,7 +893,13 @@ export function findBlockade(fen: string, color: Color): { blocker: Square; pawn
  *  the pawn SKELETON, not the move order, names the family. Recognises the few
  *  clearest, highest-frequency skeletons; returns null otherwise (empty > vague).
  *  Pure pawn geometry (G3). */
-export function namedPawnStructure(fen: string): { name: string; plan: string } | null {
+export function namedPawnStructure(
+  fen: string,
+  /** The student's seat — REQUIRED: "you hold the isolani" is seat-relative, and
+   *  it used to be hardcoded to White (a Black student was told they held
+   *  White's pawn). */
+  studentColor: Color,
+): { name: string; plan: string } | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const wp = new Set<string>(); const bp = new Set<string>();
@@ -891,30 +911,37 @@ export function namedPawnStructure(fen: string): { name: string; plan: string } 
   const fileCount = (set: Set<string>, file: string): number => [...set].filter((s) => s[0] === file).length;
   // FRENCH / ADVANCE CHAIN — White d4+e5 vs Black d5+e6, the locked chain.
   if (w('d4') && w('e5') && b('d5') && b('e6')) {
-    return { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — Black hits d4 with …c5 and …f6, White defends the head on e5 and plays on the kingside' };
+    // SEATED (hand walk 1600, Caro-Kann as Black: "Black hits d4 with …c5").
+    return studentColor === 'w'
+      ? { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — they hit d4 with …c5 and …f6; you defend the head on e5 and play on the kingside' }
+      : { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — you hit d4 with …c5 and …f6; they defend the head on e5 and play on the kingside' };
   }
   // KING'S-INDIAN CLOSED CENTRE — White d5+e4 vs Black d6+e5.
   if (w('d5') && w('e4') && b('d6') && b('e5')) {
-    return { name: 'King’s-Indian closed centre', plan: 'the wings decide: Black storms the kingside with …f5-f4 and a pawn avalanche, White breaks on the queenside with c5' };
+    return studentColor === 'w'
+      ? { name: 'King’s-Indian closed centre', plan: 'the wings decide: they storm the kingside with …f5-f4 and a pawn avalanche; you break on the queenside with c5' }
+      : { name: 'King’s-Indian closed centre', plan: 'the wings decide: you storm the kingside with …f5-f4 and a pawn avalanche; they break on the queenside with c5' };
   }
   // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
-  for (const [set, name] of [[wp, 'You hold the isolated queen’s pawn'], [bp, 'They hold the isolated queen’s pawn']] as const) {
+  const holder = (white: boolean): string => ((white ? 'w' : 'b') === studentColor ? 'You hold' : 'They hold');
+  for (const [set, white] of [[wp, true], [bp, false]] as const) {
     const dRank = [...set].find((s) => s[0] === 'd');
-    if (dRank && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0
-      && (name.startsWith('You') ? (bp.has('d5') || bp.has('d4') || true) : true)) {
-      // Only call it when the opponent has NO d-pawn on the same file mass — a true isolani.
-      const enemy = set === wp ? bp : wp;
-      if (fileCount(enemy, 'd') === 0) {
-        return { name, plan: 'the isolani gives active pieces and the d5/d4 outpost now, but becomes a target in the endgame — the owner attacks, the blockader trades down' };
-      }
+    // A true isolani: no friendly c/e-pawn, and no enemy d-pawn on the file.
+    const enemy = white ? bp : wp;
+    if (dRank && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0 && fileCount(enemy, 'd') === 0) {
+      return { name: `${holder(white)} the isolated queen’s pawn`, plan: 'the isolani gives active pieces and the d5/d4 outpost now, but becomes a target in the endgame — the owner attacks, the blockader trades down' };
     }
   }
   // HANGING PAWNS — c- and d-pawns abreast on the 4th/5th with no b/e neighbours.
   if (w('c4') && w('d4') && fileCount(wp, 'b') === 0 && fileCount(wp, 'e') === 0) {
-    return { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with d5 or c5 — but if they’re fixed and blockaded they turn into two weaknesses' };
+    return studentColor === 'w'
+      ? { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with d5 or c5 — but if they’re fixed and blockaded they turn into two weaknesses' }
+      : { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a d5 or c5 lunge — provoke and blockade them to make them targets' };
   }
   if (b('c5') && b('d5') && fileCount(bp, 'b') === 0 && fileCount(bp, 'e') === 0) {
-    return { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a …d4 or …c4 lunge — provoke and blockade them to make them targets' };
+    return studentColor === 'w'
+      ? { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a …d4 or …c4 lunge — provoke and blockade them to make them targets' }
+      : { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with …d4 or …c4 — but if they’re fixed and blockaded they turn into two weaknesses' };
   }
   return null;
 }
@@ -941,6 +968,21 @@ export function strongestWeakestPiece(fen: string, color: Color): { strongest: A
  *  can ever support it advancing, AND the square directly ahead is already
  *  controlled by an enemy pawn — so it can neither be defended by a pawn nor
  *  safely pushed). The squares the opponent targets. */
+/** WHY a good piece is good, as a clause after "is your/their best-placed
+ *  piece" — ONE wording per reason, shared by every computer that reads
+ *  `findPieceQuality` (hand walk 2026-09-24: "rook on f1 — rook on a semi-open
+ *  file" was a label glued on with a dash, in two computers). */
+export function goodPieceClause(reason: string, square: string): string {
+  const file = square[0];
+  const said: Record<string, string> = {
+    'knight outpost': 'it sits on an outpost no pawn can kick',
+    'rook on the open file': `it owns the open ${file}-file`,
+    'rook on a semi-open file': `it has the half-open ${file}-file`,
+    'rook on the seventh rank': 'it has reached the seventh rank',
+  };
+  return said[reason] ?? reason;
+}
+
 export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; doubled: Square[]; backward: Square[] } {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return { isolated: [], doubled: [], backward: [] }; }
@@ -967,6 +1009,10 @@ export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; 
     if (!hasNeighbor) isolated.push(...ranks.map((r) => squareByFileRank[`${f}:${r}`]));
 
     for (const r of ranks) {
+      // No neighbour at all is ISOLATED, never backward — backward means the
+      // neighbours ADVANCED and left it behind (hand walk 2026-09-24: the lone
+      // e5-pawn after 13.fxe5 was called "your backward pawn on e5").
+      if (!hasNeighbor) continue;
       // A neighboring pawn on an adjacent file, level with or behind this one,
       // could one day advance to guard it — that rules out "backward".
       const neighborCouldSupport = [f - 1, f + 1].some((nf) =>

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**514 lines · 11 exports · 10 importers · 9 tests · 18 audits**
+**535 lines · 11 exports · 10 importers · 9 tests · 18 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,8 +27,9 @@
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4041) — names `decide`
 - **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5036) — names `decide`
 - **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5072) — names `decide`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5856) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:5965) — names `coachDecider`
+- **🔒🔒 LEARN NAMES THE MOVE — WITH ITS REASON (David 2026-09-24: "Rules can change. That was an old rule when we asked questions. We don't do that anymore.").** (CLAUDE.md:5111) — names `decide`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5916) — names `coachDecider`
+- **The standard post-deploy ritual** (CLAUDE.md:6025) — names `coachDecider`
 
 ## Who calls in
 
@@ -64,7 +65,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `judgeMoment` (function) — 12 call sites
-- `src/services/positionFacts.ts:601`
+- `src/services/positionFacts.ts:623`
 - `src/test/latentForkOpensTheDoor.test.ts:47`
 - `src/test/latentForkOpensTheDoor.test.ts:51`
 - `src/test/latentForkOpensTheDoor.test.ts:55`
@@ -109,51 +110,51 @@
 - `src/services/accessPolicy.test.ts:108`
 - `src/services/accessPolicy.test.ts:112`
 - `src/services/accessPolicy.test.ts:121`
-- `src/services/coachDecider.test.ts:30`
-- `src/services/coachDecider.test.ts:38`
-- `src/services/coachDecider.test.ts:44`
-- `src/services/coachDecider.test.ts:59`
-- `src/services/coachDecider.test.ts:67`
-- `src/services/coachDecider.test.ts:77`
-- `src/services/coachDecider.test.ts:79`
-- `src/services/coachDecider.test.ts:84`
-- `src/services/coachDecider.test.ts:92`
-- `src/services/coachDecider.test.ts:98`
-- `src/services/coachDecider.test.ts:107`
-- `src/services/coachDecider.test.ts:112`
-- `src/services/coachDecider.test.ts:116`
-- `src/services/coachDecider.test.ts:166`
-- `src/services/coachDecider.test.ts:172`
-- `src/services/coachDecisionEmits.test.ts:46`
-- `src/services/coachDecisionEmits.test.ts:53`
-- `src/services/coachDecisionEmits.test.ts:63`
-- `src/services/coachDecisionEmits.test.ts:73`
-- `src/services/coachDecisionEmits.test.ts:80`
-- `src/services/coachDecisionEmits.test.ts:88`
-- `src/services/coachDecisionEmits.test.ts:95`
-- `src/services/coachDecisionEmits.test.ts:104`
+- `src/services/coachDecider.test.ts:31`
+- `src/services/coachDecider.test.ts:39`
+- `src/services/coachDecider.test.ts:45`
+- `src/services/coachDecider.test.ts:60`
+- `src/services/coachDecider.test.ts:68`
+- `src/services/coachDecider.test.ts:78`
+- `src/services/coachDecider.test.ts:80`
+- `src/services/coachDecider.test.ts:85`
+- `src/services/coachDecider.test.ts:93`
+- `src/services/coachDecider.test.ts:99`
+- `src/services/coachDecider.test.ts:108`
+- `src/services/coachDecider.test.ts:113`
+- `src/services/coachDecider.test.ts:117`
+- `src/services/coachDecider.test.ts:167`
+- `src/services/coachDecider.test.ts:173`
+- `src/services/coachDecisionEmits.test.ts:47`
+- `src/services/coachDecisionEmits.test.ts:54`
+- `src/services/coachDecisionEmits.test.ts:64`
+- `src/services/coachDecisionEmits.test.ts:74`
+- `src/services/coachDecisionEmits.test.ts:81`
+- `src/services/coachDecisionEmits.test.ts:89`
+- `src/services/coachDecisionEmits.test.ts:96`
+- `src/services/coachDecisionEmits.test.ts:105`
 - `src/services/coachFeatureService.cpLossSign.test.ts:57`
-- `src/services/coachFeatureService.ts:1985`
-- `src/services/factStakes.test.ts:69`
-- `src/services/liveNeedGate.test.ts:50`
-- `src/services/liveNeedGate.test.ts:56`
-- `src/services/liveNeedGate.test.ts:65`
-- `src/services/liveNeedGate.test.ts:77`
-- `src/services/positionFacts.ts:768`
-- `src/services/supportedFacts.test.ts:77`
-- `src/services/supportedFacts.test.ts:87`
-- `src/services/supportedFacts.test.ts:97`
-- `src/services/teachingLayers.test.ts:67`
-- `src/services/teachingLayers.test.ts:76`
-- `src/services/teachingLayers.test.ts:78`
-- `src/services/teachingLayers.test.ts:84`
-- `src/services/teachingLayers.test.ts:88`
-- `src/services/teachingLayers.test.ts:94`
-- `src/services/teachingLayers.test.ts:97`
-- `src/services/teachingLayers.test.ts:104`
+- `src/services/coachFeatureService.ts:1999`
+- `src/services/factStakes.test.ts:70`
+- `src/services/liveNeedGate.test.ts:52`
+- `src/services/liveNeedGate.test.ts:58`
+- `src/services/liveNeedGate.test.ts:67`
+- `src/services/liveNeedGate.test.ts:79`
+- `src/services/positionFacts.ts:846`
+- `src/services/supportedFacts.test.ts:79`
+- `src/services/supportedFacts.test.ts:89`
+- `src/services/supportedFacts.test.ts:99`
+- `src/services/teachingLayers.test.ts:68`
+- `src/services/teachingLayers.test.ts:77`
+- `src/services/teachingLayers.test.ts:79`
+- `src/services/teachingLayers.test.ts:85`
+- `src/services/teachingLayers.test.ts:89`
+- `src/services/teachingLayers.test.ts:95`
+- `src/services/teachingLayers.test.ts:98`
+- `src/services/teachingLayers.test.ts:105`
 
 ### `habitNeedFrom` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1520`
+- `src/services/coachFeatureService.ts:1523`
 - `src/services/habitJoin.test.ts:63`
 - `src/services/habitJoin.test.ts:66`
 - `src/services/habitJoin.test.ts:69`
@@ -163,7 +164,7 @@
 - `src/services/habitJoin.test.ts:92`
 - `src/services/habitJoin.test.ts:99`
 - `src/services/habitJoin.test.ts:100`
-- `src/services/positionFacts.ts:710`
+- `src/services/positionFacts.ts:762`
 
 ### `habitForCluster` (function) — 9 call sites
 - `src/services/habitJoin.test.ts:17`

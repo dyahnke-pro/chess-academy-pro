@@ -47,3 +47,23 @@ describe('the bluff reaches the LIVE composer (a wire that does not fire is not 
     expect([...r.clauses, ...r.quiet].map((c) => c.text).join(' ')).not.toMatch(/looks aggressive/);
   });
 });
+
+// Hand walk 2340 (Alapin): four moves where "it wins nothing — no need to
+// react" contradicted a real threat said on the same move.
+describe('never a bluff when something real is there', () => {
+  const G = 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3 Bxc3 Nge7 dxe5 Bg4 Be2 Qe4 O-O Rd8 Qe1 Nd5 Bd1 Qxe1 Rxe1 Nxc3 bxc3 O-O h3 Be6 Bc2 Rd1 Bb3 Rdd8 Bd1 Bb3 Bc2 Be6 Bb3 Rd3'.split(' ');
+  const before = (upTo: number): string => { const c = new Chess(); for (const s of G.slice(0, upTo)) c.move(s); return c.fen(); };
+  const at = (san: string, nth = 1): number => { let seen = 0; for (let i = 0; i < G.length; i++) if (G[i] === san && ++seen === nth) return i; return -1; };
+  it('a pin on the knight to the king (7…Bb4)', () => {
+    expect(detectBluff(before(at('Bb4')), 'Bb4')).toBeNull();
+  });
+  it('a pin on the knight to the queen (10…Bg4)', () => {
+    expect(detectBluff(before(at('Bg4')), 'Bg4')).toBeNull();
+  });
+  it('a piece that can simply be taken (20…Bb3, axb3 wins it)', () => {
+    expect(detectBluff(before(at('Bb3', 2)), 'Bb3')).toBeNull();
+  });
+  it('a rook that wins a pawn (22…Rd3 takes c3)', () => {
+    expect(detectBluff(before(at('Rd3')), 'Rd3')).toBeNull();
+  });
+});

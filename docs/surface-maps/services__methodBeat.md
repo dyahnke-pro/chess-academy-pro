@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**315 lines · 8 exports · 7 importers · 3 tests · 1 audits**
+**331 lines · 12 exports · 7 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -37,11 +37,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:2265`
-- `src/services/positionFacts.ts:710`
+- `src/services/coachFeatureService.ts:2288`
+- `src/services/positionFacts.ts:762`
 
 ### `methodBeatFor` (function) — 43 call sites
-- `src/services/coachDecider.ts:373`
+- `src/services/coachDecider.ts:393`
 - `src/services/methodBeat.need.test.ts:19`
 - `src/services/methodBeat.need.test.ts:23`
 - `src/services/methodBeat.need.test.ts:29`
@@ -88,6 +88,22 @@
 ### `LiveMethodSignals` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `LiveHabit` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `LiveMethodBeat` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `liveHabitKey` (function) — 2 call sites
+- `src/services/methodBeat.live.test.ts:112`
+- `src/services/methodBeat.live.test.ts:119`
+
+### `liveMethodBeat` (function) — 4 call sites
+- `src/services/methodBeat.live.test.ts:111`
+- `src/services/methodBeat.live.test.ts:115`
+- `src/services/methodBeat.live.test.ts:118`
+- `src/services/positionFacts.ts:725`
+
 ### `liveMethodBeatFor` (function) — 22 call sites
 - `src/services/groundedAnswer.ts:3138`
 - `src/services/methodBeat.live.test.ts:15`
@@ -110,7 +126,7 @@
 - `src/services/methodBeat.live.test.ts:103`
 - `src/services/methodBeat.test.ts:79`
 - `src/services/methodBeat.test.ts:83`
-- `src/services/positionFacts.ts:678`
+- `src/services/methodBeat.test.ts:90`
 
 ## Tests
 

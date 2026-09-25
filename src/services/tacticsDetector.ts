@@ -283,7 +283,16 @@ function findSkewers(chess: Chess): TacticPattern[] {
           // validation the sibling detectors already do.
           PIECE_VALUE[first.type] > PIECE_VALUE[piece.type] &&
           PIECE_VALUE[first.type] > PIECE_VALUE[second.type] &&
-          PIECE_VALUE[second.type] >= 3
+          PIECE_VALUE[second.type] >= 3 &&
+          // …and the front piece cannot simply TAKE an undefended attacker —
+          // then it is a trade offer, not a skewer (hand walk 2026-09-24: after
+          // 21.Rxd8 the queen on e8 just takes back on d8; his idea was the
+          // deflection, dragging the queen off e8).
+          // Only when it is THEIR move: with the attacker's side to move, the
+          // front piece is simply taken first.
+          !(chess.turn() === enemyColor
+            && chess.attackers(sq, enemyColor).includes(first.square)
+            && chess.attackers(sq, piece.color).length === 0)
         ) {
           skewers.push({
             type: 'skewer',
@@ -336,7 +345,9 @@ function findMateThreats(chess: Chess): TacticPattern[] {
       type: 'mate_threat',
       beneficiary: color,
       involvedSquares: [mate.from, mate.to],
-      description: `${color === 'w' ? 'White' : 'Black'} has a checkmate available from ${mate.from}`,
+      // Names the PIECE, not a bare square: "has a checkmate available from a1"
+      // (review tape 2026-09-25) told the student nothing they could picture.
+      description: `${color === 'w' ? 'White' : 'Black'} has mate in one with the ${PIECE_NAMES[mate.piece] ?? 'piece'} on ${mate.from}`,
     });
   }
   return out;
@@ -398,7 +409,7 @@ function findBackRankWeakness(chess: Chess): TacticPattern[] {
         type: 'back_rank',
         beneficiary: enemy,
         involvedSquares: [kingSq, invader.to, invader.from],
-        description: `${color === 'w' ? "White's" : "Black's"} king on ${kingSq} has no escape square and the back rank can be invaded from ${invader.from}`,
+        description: `The king on ${kingSq} has no escape square and the back rank can be invaded from ${invader.from}`,
       });
     }
   }
@@ -447,7 +458,23 @@ function findTrappedPieces(chess: Chess): TacticPattern[] {
           return after.attackers(m.to, p.color).some((d) => d !== m.to);
         } catch { return true; }
       });
-      if (!hasSafeSquare) {
+      // NOTHING ELSE SAVES IT EITHER (David's Learn walk 2026-09-24: after
+      // ...Bg4 the coach said "your queen on d1 … is trapped", and his move was
+      // Nge2 — the block). A piece with no square to run to is still not
+      // trapped when another move BLOCKS the attack or TAKES the attacker, so
+      // "won whoever is to move" is only true when no move at all rescues it.
+      const rescued = !hasSafeSquare && myView.moves({ verbose: true }).some((m) => {
+        if (m.from === sq) return false;
+        try {
+          const after = new Chess(myView.fen());
+          after.move({ from: m.from, to: m.to, promotion: 'q' });
+          const attackers = attackersOfSquare(after, sq, enemy);
+          if (attackers.length === 0) return true;
+          if (attackers.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type])) return false;
+          return after.attackers(sq, p.color).some((d) => d !== sq);
+        } catch { return false; }
+      });
+      if (!hasSafeSquare && !rescued) {
         out.push({
           type: 'trapped_piece',
           beneficiary: enemy,

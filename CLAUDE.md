@@ -5080,9 +5080,44 @@ keeps its real job — deciding whether to interrupt — and loses the one it
 should never have had. Gate: `learnSilentCapture.test.ts`.
 
 **Still true, and still the standard** — everything above about the VOICE
-(concept-first, facts then the point, warm but rigorous, grounded per G0),
-the honesty contract (never hand over the answer), and PLAY staying a pure
-playing surface. What changed is only the delivery: commentary, not cards.
+(concept-first, facts then the point, warm but rigorous, grounded per G0), and
+PLAY staying a pure playing surface. What changed is only the delivery:
+commentary, not cards.
+
+### 🔒🔒 LEARN NAMES THE MOVE — WITH ITS REASON (David 2026-09-24: "Rules can change. That was an old rule when we asked questions. We don't do that anymore.").
+
+🔴 **The "honesty contract — never hand over the answer" is DELETED for Learn**
+(it stood in the line above; removed, not annotated, per the Lake Butler rule).
+It belonged to the why-did-you-play-that card: a probe that must not leak its
+own answer. The card is gone, so on Learn's live commentary a session that
+withholds the move is enforcing a dead rule — and the 1380 hand walk did exactly
+that, stripping the hedge, the compare and "The move is X" as "leaks". What
+replaces it, stress-tested against the failure it risks (Learn turning into
+copy-the-coach):
+1. **The move is said WITH its reason, never as a bare verdict.** "The move is
+   Rxf3." alone is an order; "The move is Rxf3 — it takes the half-open f-file"
+   teaches. No computed reason → the verdict is not said
+   (`deliberation.bestWhy`, `deliberationFacts`).
+2. **Rule the bad moves OUT first, then name the good one.** The weighing
+   ("gxf3? Then Bxc3 and it falls apart") IS his thinking out loud — the part
+   worth hearing. The but-turn, the hedge and the compare all speak.
+3. **One fact once per move.** Two computers stating the same claim back to
+   back ("two good moves here…" + "two moves keep you level") is a defect: the
+   hedge carries no COUNT stem because the critical-moment read owns the count.
+Withholding stays only where a surface is literally a QUESTION the student is
+answering (a drill, a find-the-move, a gem before it is played).
+4. **The move is named WHERE IT IS EARNED, never every ply (David 2026-09-24:
+   "I don't want to hear the best move on every ply … key moments where the
+   user generally makes mistakes").** `nextMoveAdvice` decides for every lane
+   that names the student's next move (the weighing + "the move is X", the
+   but-turn, the hedge, the compare, "your strongest reply"): a DECIDING moment
+   (importance tier critical / only-move / swing / blunder / mate), or THIS
+   student's own open record — mistakes in this phase (`classifyPhase`, the
+   same classifier the spine files them under) or a hole these facts hit (the
+   need join, pre-matched). Never the rating: "beginners err in the opening" is
+   true of a population; the RECORD says it about this person. Emitted on the
+   `coach-decision` row as `moveAdvice`; asserted by `audit-concept-gameplay-prod`
+   row G-MA (the held-back case must appear over a real game).
 
 **KEPT in Learn** because none of them stop the board: in-place drills, live
 gem detection (names the opportunity, withholds the square), fork-in-the-road
@@ -5543,6 +5578,31 @@ gated `__playMove`/`__seed*` hook that lets you drive a surface deterministicall
 (e.g. `OpeningPlayMode`) is the right investment — build it when a surface can't be
 driven by hand otherwise. Combine with the three instruments (Playwright +
 audit-stream + narration listener) per §G1.
+
+### 🔒🔒 WALK IT, FLAG EVERYTHING, THEN FIX — THE HAND-WALK AUDIT (David 2026-09-24: "I want you walking the test. Not a bot" → "This is a much more reliable audit. From now on do it like this. Finish the walkthrough first flagging all that's wrong, then make the fixes at the end").
+
+The session DRIVES the app itself, one step at a time, through
+`scripts/audit-lib/hand-driver.mjs` (a live MUTED browser: `/open`, `/type`,
+`/move?san=`, `/state`, `/shot`, `/setline`), and reads the board + every
+spoken line after EACH step — never a scripted loop that plays a whole game
+and reports at the end. Reference game: replay a real Naroditsky game from the
+voiced corpus (`vc-<video>-*` notes) with the student's moves on the board and
+the opponent's moves DICTATED to the coach ("play b6"), so every coach line can
+be read against HIS note at the same position.
+
+The order is locked:
+1. **WALK THE WHOLE GAME FIRST, FLAGGING ONLY.** No code edits mid-walk: a
+   code change hot-reloads the page and throws the game away (it did, once),
+   and a fix made on move 5 hides what move 20 would have shown.
+2. **Tell David what you see as you go** — each move: what the coach said,
+   what he said there, and what is wrong.
+3. **Then fix everything**, worst first, each with a test on the exact game
+   position that FAILS before the fix and passes after.
+4. **Then walk it again** to confirm.
+
+Save the flag list to `audit-reports/hand-walk-<topic>-<date>.md`. Before
+blaming the coach for a "repeat", check the instrument: the page logs each line
+once in SAN and the voice logs it once spoken — two events, one utterance.
 
 ### 🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").
 

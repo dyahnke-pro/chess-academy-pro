@@ -104,7 +104,7 @@ import { buildNarrationGroundingBlock } from './narrationGrounding';
 import { buildLessonReferenceBlock, getLessonScript } from '../data/lessons';
 import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punishGems';
 import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
-import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
+import type { CoachTask, CoachVerbosity, AiProvider, WalkableLine } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion, type RetrospectiveMoveRef } from '../coach/questionIntents';
 import { pureBoardAspect } from './boardQuestionRouter';
@@ -706,6 +706,16 @@ let lastCoachActionOffer: CoachActionOffer[] | null = null;
 
 /** Read + clear the action offer from the most recent grounded answer.
  *  Returns null when the last turn attached none. */
+/** Lines the last grounded answer CALCULATED (WO-DANYA-01 C) — same
+ *  set→read-in-one-tick scratch as `lastCoachActionOffer`. The surface draws
+ *  them while the answer is spoken and walks them on a button. */
+let lastCoachLines: WalkableLine[] | null = null;
+export function consumeCoachLines(): WalkableLine[] | null {
+  const l = lastCoachLines;
+  lastCoachLines = null;
+  return l;
+}
+
 export function consumeCoachActionOffer(): CoachActionOffer[] | null {
   const o = lastCoachActionOffer;
   lastCoachActionOffer = null;
@@ -1183,6 +1193,8 @@ export interface MasterGroundingOptions {
    *  position AFTER the candidate (the dispatch flips to side-to-move POV, like
    *  the best-move branch). `masterFreqPct` is how often masters play it here,
    *  when the explorer has it. */
+  /** "Couldn't he just move the queen?" — the computed answer (coachService). */
+  pieceOptions?: import('./pieceOptions').PieceOptionsAnswer;
   candidateMoveQuestion?: boolean;
   candidateMoveSan?: string;
   candidateEvalCp?: number | null;
@@ -3435,6 +3447,7 @@ export async function getCoachChatResponse(
   // follow-up chip). See `consumeCoachActionOffer`.
   lastCoachActionOffer = null;
   lastCoachKeySquares = null;
+  lastCoachLines = null;
 
   // A forced provider with NO resolvable key (e.g. Anthropic after the
   // 2026-06-25 key removal) must not dead-end the call — fall back to the
@@ -3466,6 +3479,21 @@ export async function getCoachChatResponse(
   // mode (and any future "neutral voice" surface) can guarantee no
   // adult personality leaks in — see comment on the parameter above.
   const personalityAddition = skipPersonality ? '' : await loadPersonalityAddition();
+
+  // ── "COULDN'T HE JUST MOVE THE QUEEN?" (WO-DANYA-01 C) ──
+  // Computed whole in coachService (`computePieceOptions`): the piece's job,
+  // the squares that keep it, each refuted by its reply line, a verdict. Spoken
+  // raw (G0 — computer-worded), and the lines go back to the board through
+  // `consumeCoachLines` to be drawn and walked. Ahead of every move lane: the
+  // question is about a PIECE'S options, which no move lane answers.
+  if (grounding?.pieceOptions && grounding.pieceOptions.facts.trim()) {
+    const askText = [...messages].reverse().find((m) => m.role === 'user')?.content;
+    const voiced = await voice(grounding.pieceOptions.facts, { studentMessage: askText, providerConfig: config, intent: 'piece-options', preferRaw: true });
+    if (voiced) {
+      lastCoachLines = grounding.pieceOptions.lines.length > 0 ? grounding.pieceOptions.lines : null;
+      return voiced;
+    }
+  }
 
   // ── STEP-BY-STEP MOVE NARRATION — computed facts, voiced directly ──
   // The engine-driven Learn turn is INTERNAL: the surface already played the

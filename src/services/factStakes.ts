@@ -22,7 +22,7 @@
 // habit) ranks below every fact that has them — the door orders those by the
 // one tie table, teaching before description. Pure: chess.js + seeGain only.
 import { Chess, type Square } from 'chess.js';
-import { seeGain } from './positionReadingService';
+import { seeGain, legalSeeGain } from './positionReadingService';
 
 export interface FactStakes {
   /** Material at stake, in pawns (a knight is 3). A forced mate is `MATE_POINTS`. */
@@ -125,4 +125,51 @@ export function lineTacticPoints(frontPiece: string, backPiece: string): number 
   const front = worth(frontPiece);
   const back = worth(backPiece);
   return back > front ? piecePoints(frontPiece) : piecePoints(backPiece);
+}
+
+/**
+ * A PIN ON A PAWN THAT WINS NOTHING IS SCENERY — one rule for every surface
+ * (David 2026-09-25: root causes). Review taught a pawn pin only when it cost
+ * material; Learn dropped every pawn pin; the same board got two answers.
+ * `squares` are the detector's [attacker, pinned, behind]; `beneficiary` the
+ * side the pin favours.
+ */
+export function isScenicPawnPin(
+  fen: string,
+  type: string,
+  squares: readonly string[],
+  beneficiary: 'w' | 'b' | null | undefined,
+): boolean {
+  if (type !== 'pin' || squares.length < 2) return false;
+  if (piecesOn(fen, [squares[1]])[0]?.toLowerCase() !== 'p') return false;
+  const victim = beneficiary ? (beneficiary === 'w' ? 'b' : 'w') : null;
+  return exchangeStakes(fen, squares, victim) === null;
+}
+
+/**
+ * IS THIS MOVE A SACRIFICE — ONE rule for every surface (2026-09-25). Review
+ * called anything that handed over a pawn by static exchange a sacrifice; chat
+ * wanted two pawns; neither asked whether the opponent would take. …e5 in the
+ * King's Indian (dxe5 dxe5 Nxe5 loses to …Nxe4) was "Your move is a
+ * sacrifice".
+ *
+ * Material must be handed over by the static exchange (net ≥ 1), and:
+ *  - with the engine's best REPLY known, that reply must actually take on the
+ *    landing square — a pawn the opponent should not take was not given;
+ *  - without it, only a net of two or more (a piece) counts, the conservative
+ *    bar chat always used.
+ */
+export function isSacrifice(fenBefore: string, san: string, replyBestSan: string | null): boolean {
+  let c: Chess;
+  try { c = new Chess(fenBefore); } catch { return false; }
+  let mv: ReturnType<Chess['move']>;
+  try { mv = c.move(san); } catch { return false; }
+  const captured = mv.captured ? piecePoints(mv.captured) : 0;
+  const net = legalSeeGain(c.fen(), mv.to) - captured;
+  if (net < 1) return false;
+  if (replyBestSan === null) return net >= 2;
+  try {
+    const reply = new Chess(c.fen()).move(replyBestSan);
+    return !!reply.captured && reply.to === mv.to;
+  } catch { return false; }
 }

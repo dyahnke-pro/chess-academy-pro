@@ -40,6 +40,16 @@ describe('expanded tactic geometries', () => {
     expect(types('6k1/8/8/8/4N3/8/6PP/6K1 w - - 0 1').has('trapped_piece')).toBe(false);
   });
 
+  it('trapped_piece: a piece whose attack can be BLOCKED is not trapped', () => {
+    // Naroditsky's Scandinavian after 5...Bg4 (David's Learn walk 2026-09-24):
+    // the queen on d1 has no square to run to, but Nge2 blocks — his move. The
+    // coach called it trapped and "won whoever is to move". Not a trap.
+    const fen = 'rn2kb1r/ppp1pppp/5n2/q7/6b1/2N3P1/PPPP1PBP/R1BQK1NR w KQkq - 3 6';
+    expect(types(fen).get('trapped_piece')?.some((d) => d.includes('d1')) ?? false).toBe(false);
+    // NEGATIVE CONTROL: the stranded knight above still flags.
+    expect(types('6k1/8/8/8/7p/4p3/6p1/1K5N w - - 0 1').has('trapped_piece')).toBe(true);
+  });
+
   it('discovery: fires only WITH TEMPO — the unveiling move must check or win material', () => {
     // Rd1–Nd4–Qd8: the knight can capture the e6-bishop, unveiling the rook
     // on the queen at the same time. A real discovered attack.

@@ -16,6 +16,7 @@
  * PURE assemblers (verdict, key-tactic pick, tempting pick) are exported and
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
+import { rotateStem } from '../utils/rotateStem';
 import { Chess } from 'chess.js';
 import { computePvLine, computePlyFacts, type PvEngine, type PvLine, type PvPly } from './pvPlayback';
 import { detectTactics } from './tacticsDetector';
@@ -164,7 +165,7 @@ export function pickKeyTactic(line: PvPly[]): KeyTactic | null {
     // cannot force. (David 2026-08-21 false-claim audit.)
     const rawDesc = named ? named.description : `${t} on ${line[i].san}`;
     const description = t === 'mate_threat'
-      ? rawDesc.replace(/\bhas a checkmate available from\b/i, 'threatens mate from')
+      ? rawDesc.replace(/\bhas mate in one with\b/i, 'threatens mate with')
       : rawDesc;
     return {
       type: t,
@@ -193,6 +194,10 @@ export function appealScore(mv: {
 
 /** From scored candidates, the seductive-but-wrong one: the highest-appeal move
  *  that is clearly inferior to best (≥ `dropThresholdCp` worse, student POV). */
+/** A tempting move that still leaves the student this far ahead has not
+ *  fallen apart, however much better the engine's best move was. */
+export const STILL_WINNING_CP = 200;
+
 export function pickTempting(
   candidates: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number }>,
   bestStudentCp: number,
@@ -200,6 +205,11 @@ export function pickTempting(
 ): { san: string; uci: string; appeal: string; evalDropCp: number } | null {
   const inferior = candidates
     .filter((c) => bestStudentCp - c.studentCp >= dropThresholdCp)
+    // "…AND IT FALLS APART" MUST BE TRUE. A move that is merely worse than a
+    // forced mate but still leaves the student clearly winning is not a trap
+    // (hand walk 2026-09-24: Rxb6 won a queen for a rook, ~+4, and was called
+    // "falls apart" because the engine had a mate).
+    .filter((c) => c.studentCp < STILL_WINNING_CP)
     .sort((a, b) => b.appealScore - a.appealScore || (bestStudentCp - a.studentCp) - (bestStudentCp - b.studentCp));
   const top = inferior.length > 0 ? inferior[0] : undefined;
   if (!top || top.appealScore <= 0) return null;
@@ -404,6 +414,30 @@ const APPEAL_AFFIRM: Record<string, string> = {
   natural: 'play the natural move',
 };
 
+/** The destination square written in a SAN, or null. */
+function sanTo(san: string): string | null {
+  const m = san.replace(/[+#!?]+$/, '').replace(/=[QRBN]$/, '').match(/([a-h][1-8])$/);
+  return m ? m[1] : null;
+}
+
+/** The affirm→but→refute turn, one wording for every caller. The capture names
+ *  its square and the reply names its mover: "You'd love to grab it with the
+ *  knight taking on e4 — but the knight takes e4" (hand walk 2000) left the
+ *  student asking whose knight took what. */
+function temptingTurn(san: string, appeal: string, replySan: string | null, say: (s: string) => string, sayN: (s: string) => string): string {
+  const to = sanTo(san);
+  // A capture already says its square ("the knight taking on e4") — the old
+  // "grab it" named nothing.
+  const lead = appeal === 'capture' ? `You’d love to play ${sayN(san)}` : `You’d love to ${APPEAL_AFFIRM[appeal] ?? 'play it'} with ${sayN(san)}`;
+  const takesBack = replySan !== null && to !== null && replySan.includes('x') && sanTo(replySan) === to;
+  const refutation = replySan === null
+    ? ' — but it doesn’t hold'
+    : takesBack
+      ? ' — but they take back and it falls apart'
+      : ` — but they answer ${say(replySan)} and it falls apart`;
+  return `${lead}${refutation}.`;
+}
+
 /**
  * THE COMPUTED VOICE — turn a TacticalRead fact package into a coach line in the
  * Danya register, composed ENTIRELY from the computed facts (G0: nothing here
@@ -421,11 +455,9 @@ export function narrateTacticalRead(read: TacticalRead, opts: { spoken?: boolean
 
   // BUT-TURN — affirm the seductive move, then refute it with the computed line.
   if (read.tempting) {
-    const affirm = APPEAL_AFFIRM[read.tempting.appeal] ?? 'play it';
     const ref = read.tempting.refutation;
     const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
-    const refutation = reply ? ` — but ${say(reply.san)} and it falls apart` : ' — but it doesn’t hold';
-    parts.push(`You’d love to ${affirm} with ${sayN(read.tempting.san)}${refutation}.`);
+    parts.push(temptingTurn(read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN));
   }
 
   // THE MOVE + the forcing line to the tactic.
@@ -461,11 +493,9 @@ export function temptingTurnClause(read: TacticalRead, opts: { spoken?: boolean 
   const say = (san: string): string => (opts.spoken ? sayMoveClause(san) : san);
   // NOUN slot — subject, or object of a preposition. See `sayMoveNoun`.
   const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
-  const affirm = APPEAL_AFFIRM[read.tempting.appeal] ?? 'play it';
   const ref = read.tempting.refutation;
   const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
-  const refutation = reply ? ` — but ${say(reply.san)} and it falls apart` : ' — but it doesn’t hold';
-  return `You’d love to ${affirm} with ${sayN(read.tempting.san)}${refutation}.`;
+  return temptingTurn(read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN);
 }
 
 /**
@@ -487,7 +517,10 @@ export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean; 
     `It’s genuinely close — ${alt} is about as good, so don’t agonise.`,
     `${alt.charAt(0).toUpperCase()}${alt.slice(1)} is a fine alternative here; the two are within a whisker.`,
     `Nothing to lose sleep over — ${alt} does the same job.`,
-    `Either works: ${alt} is right there with it.`,
+    // No COUNT stem ("there are two good moves here…"): the critical-moment
+    // read already counts the moves that hold, and the two spoke back to back
+    // as one fact said twice (hand walk 2026-09-24).
+    `${alt.charAt(0).toUpperCase()}${alt.slice(1)} works just as well here.`,
   ];
   return stems[Math.abs(opts.rotation ?? 0) % stems.length];
 }
@@ -509,7 +542,7 @@ export function candidateCompareClause(
   fen: string,
   topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
   studentColor: 'white' | 'black',
-  opts: { spoken?: boolean } = {},
+  opts: { spoken?: boolean; recaptureOn?: string | null } = {},
 ): string | null {
   if (topLines.length < 2) return null;
   // Comparison clauses put BOTH moves in noun slots ("X over Y", "X reads
@@ -549,7 +582,19 @@ export function candidateCompareClause(
     }
     // Case 2 — best is the forcing one, the alt is quiet.
     if ((bestMv.captured || bestMv.san.includes('+')) && !altMv.captured && !altMv.san.includes('+')) {
-      return `Prefer ${sayN(bestMv.san)} to ${sayN(altMv.san)} — it forces the issue while the edge is there.`;
+      // Taking back what they just took is not "forcing the issue" — it only
+      // restores the material (hand walk 2026-09-24: 3.d4 exd4 heard "the knight
+      // taking on d4 before the bishop to d3: the forcing move first").
+      if (bestMv.captured && opts.recaptureOn && bestMv.to === opts.recaptureOn) return null;
+      // ROTATED on the move number (hand walk 2026-09-24: the same stem three
+      // moves running). Stable per ply, so resume-safe — never Math.random.
+      const b = sayN(bestMv.san);
+      const q = sayN(altMv.san);
+      return rotateStem([
+        `Prefer ${b} to ${q} — it forces the issue while the edge is there.`,
+        `${b} before ${q}: the forcing move first, while it still works.`,
+        `${q} can wait — ${b} forces matters now.`,
+      ], Number(fen.split(' ')[5] ?? '0') || 0);
     }
     // Case 3 — two different plans and no board-read reason: SILENT. "It keeps
     // more of the edge" is the eval bar read aloud, not a reason (G0, the
@@ -620,9 +665,7 @@ export function speakTemptingTurn(
   const say = (san: string): string => (opts.spoken ? sayMoveClause(san) : san);
   // NOUN slot — subject, or object of a preposition. See `sayMoveNoun`.
   const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
-  const affirm = APPEAL_AFFIRM[t.appeal] ?? 'play it';
-  const refutation = t.replySan ? ` — but ${say(t.replySan)} and it falls apart` : ' — but it doesn’t hold';
-  return `You’d love to ${affirm} with ${sayN(t.san)}${refutation}.`;
+  return temptingTurn(t.san, t.appeal, t.replySan, say, sayN);
 }
 
 // ── THE FACT PACKAGE FOR THE VOICE MODEL ─────────────────────────────────────

@@ -18,6 +18,10 @@ import type { Square, PieceSymbol } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { phaseOfFen } from './boardConcepts';
 import { packageForRegister, type HintPackage } from './hintRegister';
+import { CAPTURE_VALUE } from './pieceValues';
+import { quietMovePoint } from './reviewMoveTeaching';
+import { legalSeeGainFor } from './positionReadingService';
+import { seatBare } from '../utils/seatPieces';
 
 export type CommentaryKind =
   | 'tactic'
@@ -103,28 +107,65 @@ function withTurn(fen: string, color: 'w' | 'b'): string {
  *  actually be exploited"). Can a student slider of `types` reach a square from
  *  which it ATTACKS one of the aligned pieces — already, or within ~2 moves? An
  *  alignment no slider can contest is tidy geometry, not a threat. */
-function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[]): boolean {
+function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[]): PieceSymbol | null {
+  // A move that TAKES one of the aligned pair has destroyed the alignment, not
+  // exploited it (hand walk 2026-09-24: Rd7 + Qd6 "line up on the d-file" was
+  // "contested" by Rxd7 then Rxd6 — the rook ate the geometry it was naming).
   const gen = (f: string): { from: Square; to: Square }[] => {
-    try { return new Chess(f).moves({ verbose: true }).filter((m) => types.includes(m.piece)); } catch { return []; }
+    try {
+      return new Chess(f).moves({ verbose: true })
+        .filter((m) => types.includes(m.piece) && m.to !== aSq && m.to !== bSq);
+    } catch { return []; }
   };
-  const contests = (c: Chess): boolean => c.attackers(aSq, me).length > 0 || c.attackers(bSq, me).length > 0;
+  // ALONG THE LINE, not from anywhere (hand walk 2026-09-24: queen a5 + rook a8
+  // "line up on the a-file, and you have a rook that moves along it" — the only
+  // contest was the QUEEN hitting a5 diagonally from d2; no rook could reach the
+  // a-file). The attacker must stand on the same line as the pair.
+  const fa = aSq.charCodeAt(0); const ra = Number(aSq[1]);
+  const fb = bSq.charCodeAt(0); const rb = Number(bSq[1]);
+  const onLine = (sq: Square): boolean => {
+    const f = sq.charCodeAt(0); const r = Number(sq[1]);
+    if (fa === fb) return f === fa;
+    if (ra === rb) return r === ra;
+    // diagonal through a and b: same slope
+    const slope = (rb - ra) / (fb - fa);
+    return f !== fa && (r - ra) / (f - fa) === slope;
+  };
+  // …and from a square it can STAND on: a queen "contesting" from a6 where the
+  // b7-pawn takes it contests nothing. Returns the piece that can do it, so
+  // the sentence names THAT piece rather than whichever one the student owns.
+  const VAL = CAPTURE_VALUE;
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const contests = (c: Chess): PieceSymbol | null => {
+    for (const sq of [...c.attackers(aSq, me), ...c.attackers(bSq, me)]) {
+      const p = c.get(sq);
+      if (!p || !types.includes(p.type) || !onLine(sq)) continue;
+      const hitters = c.attackers(sq, them);
+      const hitByCheaper = hitters.some((e) => (VAL[c.get(e)?.type ?? 'k'] ?? 100) < (VAL[p.type] ?? 0));
+      const hangs = hitters.length > 0 && c.attackers(sq, me).filter((d) => d !== sq).length === 0;
+      if (hitByCheaper || hangs) continue;
+      return p.type;
+    }
+    return null;
+  };
   const start = withTurn(fen, me);
   let c0: Chess;
-  try { c0 = new Chess(start); } catch { return false; }
-  if (contests(c0)) return true;
+  try { c0 = new Chess(start); } catch { return null; }
+  const now = contests(c0);
+  if (now) return now;
   const m1 = gen(start);
   for (const m of m1) {
-    try { const mid = new Chess(start); mid.move({ from: m.from, to: m.to }); if (contests(mid)) return true; } catch { /* skip */ }
+    try { const mid = new Chess(start); mid.move({ from: m.from, to: m.to }); const t = contests(mid); if (t) return t; } catch { /* skip */ }
   }
   for (const m of m1.slice(0, 18)) {
     let mid: Chess;
     try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
     const nf = withTurn(mid.fen(), me);
     for (const mm of gen(nf)) {
-      try { const c2 = new Chess(nf); c2.move({ from: mm.from, to: mm.to }); if (contests(c2)) return true; } catch { /* skip */ }
+      try { const c2 = new Chess(nf); c2.move({ from: mm.from, to: mm.to }); const t = contests(c2); if (t) return t; } catch { /* skip */ }
     }
   }
-  return false;
+  return null;
 }
 
 function findAlignmentSeed(
@@ -172,6 +213,20 @@ function findAlignmentSeed(
     return n;
   };
 
+  const pawnAt = new Set(all.filter((p) => p.color === them && p.type === 'p').map((p) => p.square));
+  const pawnBetween = (a: Piece, b: Piece): boolean => {
+    const df = Math.sign(fileOf(b.square) - fileOf(a.square));
+    const dr = Math.sign(rankOf(b.square) - rankOf(a.square));
+    let f = fileOf(a.square) + df;
+    let r = rankOf(a.square) + dr;
+    while (f !== fileOf(b.square) || r !== rankOf(b.square)) {
+      if (pawnAt.has(`${String.fromCharCode(97 + f)}${r}`)) return true;
+      f += df;
+      r += dr;
+    }
+    return false;
+  };
+
   /** Is there an empty square just beyond either end of the pair, on their
    *  shared line, for a slider to stand on? That is what makes an alignment
    *  exploitable rather than merely tidy. */
@@ -217,10 +272,17 @@ function findAlignmentSeed(
       }
       if (!line || !tool) continue;
       if (betweenCount(a, b) > 1) continue;
+      // …and not through one of THEIR PAWNS (hand walk 2026-09-24): with the
+      // a7-pawn between queen a5 and rook a8 there is no pin or skewer to set
+      // up — a pawn is structure, not an x-ray target. A PIECE between stays
+      // allowed (the c8-king / d8-rook / f8-queen back rank, David 2026-08-07).
+      if (pawnBetween(a, b)) continue;
       // EXPLOITABILITY (David 2026-08-23): the tool must be able to CONTEST the
       // line — attack an aligned piece now or within ~2 moves. "You have a rook
       // that moves along it" is a lie if no rook can ever get onto that line.
-      if (!toolCanContest(fen, a.square as Square, b.square as Square, me, toolKinds)) continue;
+      const contester = toolCanContest(fen, a.square as Square, b.square as Square, me, toolKinds);
+      if (!contester) continue;
+      tool = NAME[contester as string] ?? tool;
       // An alignment is only worth a word if a slider can actually GET on the
       // line. This replaced a flat "adjacent pieces are a huddle" skip, which
       // threw away the sharpest version of the pattern: David 2026-08-07 —
@@ -584,6 +646,11 @@ export function buildPlayCommentary(args: {
    *  already board-verified. Passed in rather than recomputed so this file
    *  stays a composer, not a second source of truth. */
   bestMoveWhy?: string | null;
+  /** The square of a capture the student is about to take back (the position
+   *  is mid-exchange) — a piece standing there is a trade coming back, never
+   *  "undefended" (hand walk 2340, move 24: "Their bishop on b3 is undefended"
+   *  as axb3 recaptured). `pendingRecapture` computes it. */
+  midExchangeOn?: string | null;
   /** Generic teaching clauses already used this game. See `once` below — the
    *  principle behind a beat is worth saying ONCE; repeating it every time the
    *  same pattern appears is what makes a coach drone. Caller owns the set for
@@ -701,7 +768,9 @@ export function buildPlayCommentary(args: {
       const found: PlayCommentary = {
         kind: 'tactic',
         key: `tactic:${tac.type}:${tac.involvedSquares.join('')}`,
-        spoken: `${tac.description}.${once('find-it', ' See if you can find it.')}`,
+        // SEATED — the detector names pieces bare ("Knight on g3 forks rook on
+        // f1…", hand walk 2026-09-25), and whose each piece is IS the lesson.
+        spoken: `${seatBare(tac.description, args.fen, args.studentColor === 'white' ? 'w' : 'b')}.${once('find-it', ' See if you can find it.')}`,
         facts: [
           `TACTIC ON THE BOARD for the student: ${tac.description}. Name the PATTERN and why the geometry works. Do NOT name the winning move — let them find it.`,
         ],
@@ -712,7 +781,7 @@ export function buildPlayCommentary(args: {
     // gambit itself (measured: 7.9% of theory plies have a pawn en prise,
     // 3.3% a real piece). Narrating every loose pawn is the tuned-out
     // failure, and calling a gambit pawn a tactic-seed is wrong teaching.
-    const theirHanging = t.hangingPieces.filter((h) => h.color === them && h.piece !== 'p');
+    const theirHanging = t.hangingPieces.filter((h) => h.color === them && h.piece !== 'p' && h.square !== args.midExchangeOn);
     if (theirHanging.length > 0) {
       const h = theirHanging[0];
       const loose: PlayCommentary = {
@@ -806,4 +875,58 @@ export function buildPlayCommentary(args: {
   }
 
   return null; // unremarkable — silence teaches better than filler
+}
+
+/**
+ * THE POINT OF THE STUDENT'S OWN SOUND MOVE, when the board proves a notable
+ * one (hand walk 2340 — his lines on those moves: "that's a free pawn", "now
+ * you have the two bishops", "you unpin yourself"). Only these, in this order:
+ *   1. material won — a capture whose exchange, counted out, nets material;
+ *   2. the bishop pair gained — their second bishop just came off and you keep
+ *      both of yours;
+ *   3. an unpin or luft — the review walk's own clauses.
+ * Null otherwise: a routine move has no point worth saying (not every ply).
+ */
+export function studentMovePoint(
+  fenBefore: string,
+  san: string,
+  /** The opponent's move just before (SAN), or null at the start. REQUIRED:
+   *  a capture on the square they just captured on is a RECAPTURE — the trade
+   *  finishing, never material won (Bxc3 after …Bxc3). */
+  opponentLastSan: string | null,
+): string | null {
+  let before: Chess;
+  let after: Chess;
+  try {
+    before = new Chess(fenBefore);
+    after = new Chess(fenBefore);
+  } catch {
+    return null;
+  }
+  let mv;
+  try { mv = after.move(san); } catch { return null; }
+  if (!mv) return null;
+  const recapture = !!opponentLastSan && new RegExp(`x${mv.to}(?![1-8])`).test(opponentLastSan);
+  const net = mv.captured && !recapture ? legalSeeGainFor(fenBefore, mv.to, mv.color) : 0;
+  if (mv.captured && net > 0) {
+    const takenVal = CAPTURE_VALUE[mv.captured] ?? 0;
+    // Free only when the whole piece is kept; otherwise they take back and the
+    // gain is what the trade nets (hand walk 2026-09-25: Nxf1 Bxf1 is the
+    // exchange, not a free rook).
+    if (net >= takenVal) return `That wins the ${NAME[mv.captured] ?? 'piece'} on ${mv.to} — nothing takes it back safely.`;
+    const exchange = mv.captured === 'r' && (mv.piece === 'n' || mv.piece === 'b');
+    return exchange
+      ? `That wins the exchange — your ${NAME[mv.piece]} for their rook on ${mv.to}.`
+      : `That takes the ${NAME[mv.captured] ?? 'piece'} on ${mv.to}, and even after they take back you come out ahead.`;
+  }
+  const bishops = (c: Chess, color: 'w' | 'b'): number =>
+    c.board().flat().filter((x) => x && x.type === 'b' && x.color === color).length;
+  const them = mv.color === 'w' ? 'b' : 'w';
+  if (mv.captured === 'b' && bishops(before, them) === 2 && bishops(after, them) === 1 && bishops(after, mv.color) === 2) {
+    return 'Now you have the two bishops — open the position and they get stronger.';
+  }
+  // A capture's point is the capture — Raxd8 taking the queen back is not
+  // "unpins your rook on e8" (hand walk 2026-09-25).
+  if (mv.captured) return null;
+  return quietMovePoint(fenBefore, san);
 }
