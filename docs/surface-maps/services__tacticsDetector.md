@@ -77,8 +77,8 @@
 - `src/services/pinGeometry.test.ts:115`
 - `src/services/pinGeometry.test.ts:122`
 - `src/services/playCommentary.ts:736`
-- `src/services/pvPlayback.ts:341`
-- `src/services/pvPlayback.ts:361`
+- `src/services/pvPlayback.ts:323`
+- `src/services/pvPlayback.ts:343`
 - `src/services/relationClaimCost.report.test.ts:52`
 - `src/services/reviewCorpusNote.test.ts:61`
 - `src/services/reviewFullData.ts:468`

@@ -83,8 +83,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2952`
 - `src/services/groundedAnswer.ts:6376`
 - `src/services/moveTiming.ts:27`
-- `src/services/pvPlayback.ts:428`
-- `src/services/pvPlayback.ts:475`
+- `src/services/pvPlayback.ts:410`
+- `src/services/pvPlayback.ts:457`
 - `src/services/reviewQuestionPlan.ts:67`
 - `src/services/reviewTrapQuestion.ts:113`
 
@@ -135,7 +135,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
-- `src/services/principleAttribution.ts:256`
+- `src/services/principleAttribution.ts:257`
 
 ### `capturesWinMaterial` (function) — 6 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:136`
@@ -195,7 +195,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:877`
-- `src/services/principleAttribution.ts:952`
+- `src/services/principleAttribution.ts:958`
 - `src/services/reviewTeachingPoints.ts:201`
 
 ### `findPieceQuality` (function) — 25 call sites
@@ -308,7 +308,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8779`
+- `src/components/Coach/CoachTeachPage.tsx:8786`
 - `src/services/danyaDeviceCoverage.test.ts:106`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/groundedAnswer.ts:5991`

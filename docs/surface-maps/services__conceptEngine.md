@@ -107,7 +107,7 @@
 - `src/services/conceptEngine.test.ts:28`
 - `src/services/materialClaimValidator.test.ts:24`
 - `src/services/materialClaimValidator.test.ts:25`
-- `src/services/materialClaimValidator.ts:34`
+- `src/services/materialClaimValidator.ts:35`
 - `src/services/materialClaimValidator.ts:80`
 - `src/services/narratedContinuation.test.ts:15`
 - `src/services/narratedContinuation.test.ts:17`
