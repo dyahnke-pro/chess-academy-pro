@@ -3,7 +3,7 @@
 // nothing (the locked voice law: speak when it instructs).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from './playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint } from './playCommentary';
 
 describe('buildPlayCommentary', () => {
   // The "trade off their best piece" beat was REMOVED 2026-08-26 — the
@@ -582,5 +582,28 @@ describe('mid-exchange: a piece that just took is not "undefended"', () => {
     for (const s of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3 Bxc3 Nge7 dxe5 Bg4 Be2 Qe4 O-O Rd8 Qe1 Nd5 Bd1 Qxe1 Rxe1 Nxc3 bxc3 O-O h3 Be6 Bc2 Rd1 Bb3 Rdd8 Bd1 Bb3 Bc2 Be6 Bb3 Rd3 Rac1 a6 Ng5 Bxb3'.split(' ')) fen.move(s);
     const beat = buildPlayCommentary({ fen: fen.fen(), studentColor: 'white', midExchangeOn: 'b3' });
     expect(beat?.spoken ?? '').not.toMatch(/b3 is undefended/);
+  });
+});
+
+describe('studentMovePoint — the point of a sound move, only when the board proves one (hand walk 2340)', () => {
+  const after = (sans: string): string => { const c = new Chess(); for (const m of sans.split(' ')) c.move(m); return c.fen(); };
+  const LINE = 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3';
+
+  it('Bxc3 — the bishop pair', () => {
+    expect(studentMovePoint(after(LINE), 'Bxc3', 'Bxc3')).toMatch(/two bishops/);
+  });
+  it('dxe5 — a free pawn', () => {
+    expect(studentMovePoint(after(`${LINE} Bxc3 Nge7`), 'dxe5', 'Nge7')).toBe('That wins the pawn on e5 — nothing takes it back safely.');
+  });
+  it('Bd2 — the unpin', () => {
+    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4'), 'Bd2', 'Bb4')).toMatch(/^Unpins your knight on c3/);
+  });
+  it('a routine move has no point to say', () => {
+    expect(studentMovePoint(new Chess().fen(), 'e4', null)).toBeNull();
+    expect(studentMovePoint(after('e4 c5'), 'Nf3', 'c5')).toBeNull();
+  });
+  it('a recapture is the trade finishing, not material won', () => {
+    // cxd4 after …cxd4: even trade.
+    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4'), 'cxd4', 'cxd4')).toBeNull();
   });
 });

@@ -28,7 +28,7 @@ import { transferClause, recordMotif, withTransfer } from '../../services/motifL
 import { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence, studentMovePoint } from '../../services/playCommentary';
 import type { CommentaryKind } from '../../services/playCommentary';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
@@ -10301,6 +10301,17 @@ export function CoachTeachPage(): JSX.Element {
                       captureEvent('coach_fundamental_named', {
                         surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
+                    } else if (cpLoss < 50) {
+                      // A SOUND MOVE WITH A POINT — named when the board proves
+                      // one (material won, the bishop pair, an unpin, luft), and
+                      // only then (hand walk 2340: dxe5 "that's a free pawn",
+                      // Bxc3 "now you have the two bishops", Bd2 "you unpin
+                      // yourself"). The review walk's own clauses.
+                      const point = studentMovePoint(fenBefore, move.san, move.history.length >= 2 ? move.history[move.history.length - 2] : null);
+                      if (point) {
+                        queueSpokenHint(fenAfterReply, point, 'computed', []);
+                        captureEvent('coach_move_point_named', { surface: 'coach-teach' });
+                      }
                     }
                   }
                 } catch { /* the backward look is a bonus, never a blocker */ }

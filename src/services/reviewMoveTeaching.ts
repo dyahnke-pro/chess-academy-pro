@@ -194,6 +194,56 @@ function pinnedSquares(fen: string, color: 'w' | 'b'): Set<string> {
   return out;
 }
 
+/** UNPIN — a friendly piece pinned before the move and free after it (still on
+ *  its square). The sentence names what was freed, and what the moved piece now
+ *  eyes. Shared by the review walk and Learn's own-move point. */
+function unpinPoint(fenBefore: string, chessAfter: Chess, mv: Move, moverIsStudent: boolean): string | null {
+  const pinnedBefore = pinnedSquares(fenBefore, mv.color);
+  if (!pinnedBefore.size) return null;
+  const pinnedAfter = pinnedSquares(chessAfter.fen(), mv.color);
+  for (const sq of pinnedBefore) {
+    if (sq === mv.from || pinnedAfter.has(sq)) continue;
+    const freed = chessAfter.get(sq as Sq);
+    if (!freed) continue;
+    const base = `Unpins ${moverIsStudent ? 'your' : 'their'} ${PIECE_NOUN[freed.type]} on ${sq}`;
+    const eyed = pieceEyes(chessAfter, mv.to, mv.piece, mv.color).enemies.find((e) => e.type !== 'k');
+    return eyed
+      ? `${base} — and the ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyed.type]} on ${eyed.sq}.`
+      : `${base}, freeing it to join the game.`;
+  }
+  return null;
+}
+
+/** LUFT — a quiet pawn step beside the CASTLED king that makes an escape square. */
+function luftPoint(chessAfter: Chess, mv: Move): string | null {
+  if (mv.piece !== 'p' || mv.captured) return null;
+  const king = chessAfter.board().flat().find((c) => c && c.type === 'k' && c.color === mv.color);
+  const backRank = mv.color === 'w' ? '1' : '8';
+  const luftRank = mv.color === 'w' ? '3' : '6';
+  if (
+    king
+    && king.square[1] === backRank
+    && (king.square[0] === 'g' || king.square[0] === 'b' || king.square[0] === 'c') // a castled king
+    && Math.abs(mv.to.charCodeAt(0) - king.square.charCodeAt(0)) <= 1
+    && mv.to[1] === luftRank
+  ) {
+    return 'Makes luft — a breathing hole for the king, so a back-rank check can never turn into mate.';
+  }
+  return null;
+}
+
+/** The POINT of a student's own sound move, when it has a notable one the
+ *  board can prove — an unpin or luft (the review walk's own clauses). Null for
+ *  anything else: most moves have no point worth interrupting play for, and
+ *  Learn names the move's point only when there is one (David 2026-09-24: not
+ *  every ply). The caller adds the material and bishop-pair cases it counts. */
+export function quietMovePoint(fenBefore: string, san: string): string | null {
+  const chess = new Chess(fenBefore);
+  let mv: Move;
+  try { mv = chess.move(san); } catch { return null; }
+  return unpinPoint(fenBefore, chess, mv, true) ?? luftPoint(chess, mv);
+}
+
 /**
  * Build a grounded review note for ONE move. `fenBefore` is the position
  * before the move; `san` is the move played. Returns a concrete, board-true
@@ -264,20 +314,8 @@ export function buildReviewMoveTeaching(
   // square) was unpinned. Leads over the generic developing gloss, but not over
   // a concrete winnable threat.
   if (!winnableTarget) {
-    const pinnedBefore = pinnedSquares(fenBefore, mv.color);
-    if (pinnedBefore.size) {
-      const pinnedAfter = pinnedSquares(chess.fen(), mv.color);
-      for (const sq of pinnedBefore) {
-        if (sq === mv.from || pinnedAfter.has(sq)) continue;
-        const freed = chess.get(sq as Sq);
-        if (!freed) continue;
-        const base = `Unpins ${moverIsStudent ? 'your' : 'their'} ${PIECE_NOUN[freed.type]} on ${sq}`;
-        const eyed = moverEyes.enemies.find((e) => e.type !== 'k');
-        return eyed
-          ? `${base} — and the ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyed.type]} on ${eyed.sq}.`
-          : `${base}, freeing it to join the game.`;
-      }
-    }
+    const unpin = unpinPoint(fenBefore, chess, mv, moverIsStudent);
+    if (unpin) return unpin;
   }
 
   // Minor-piece development — carry what the picture doesn't: the squares it
@@ -363,20 +401,8 @@ export function buildReviewMoveTeaching(
     // the king sits on its castled back-rank square and this pawn just advanced
     // one rank on an adjacent file. That's back-rank insurance, a real teaching
     // point currently spoken as silence.
-    if (!mv.captured) {
-      const king = chess.board().flat().find((c) => c && c.type === 'k' && c.color === mv.color);
-      const backRank = mv.color === 'w' ? '1' : '8';
-      const luftRank = mv.color === 'w' ? '3' : '6';
-      if (
-        king
-        && king.square[1] === backRank
-        && (king.square[0] === 'g' || king.square[0] === 'b' || king.square[0] === 'c') // a castled king
-        && Math.abs(mv.to.charCodeAt(0) - king.square.charCodeAt(0)) <= 1
-        && mv.to[1] === luftRank
-      ) {
-        return 'Makes luft — a breathing hole for the king, so a back-rank check can never turn into mate.';
-      }
-    }
+    const luft = luftPoint(chess, mv);
+    if (luft) return luft;
     // quiet pawn with no structural point → fall through to the universal teacher
   }
 

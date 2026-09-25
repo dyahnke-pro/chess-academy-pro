@@ -36,7 +36,18 @@ export function openingAnnouncement(
 ): string | null {
   if (!det || !det.name || det.name === spokenName) return null;
   if (spokenName === null) return `This game is the ${det.name}.`;
-  if (!departure) return null;
+  if (!departure) {
+    // STILL IN BOOK, BUT THE NAME SHARPENED — "Sicilian Defense" became
+    // "Sicilian Defense: Alapin Variation" on c3. That is the variation name,
+    // and the student heard only the family (hand walk 2340: his "c3 — the
+    // Alapin"). A name that is not a refinement of the one spoken stays quiet:
+    // that is a transposition, not news.
+    if (!det.name.startsWith(spokenName)) return null;
+    const tail = det.name.slice(spokenName.length).replace(/^[\s:,]+/, '').trim();
+    // "Main Line" names nothing the student can look up — the family is enough.
+    if (!tail || /^main line\b/i.test(tail)) return null;
+    return `It's the ${tail}.`;
+  }
   const who = departure.mover === studentColor ? 'You' : 'They';
   const main = departure.mainSan
     ? `; the usual move there was ${sayMoveNoun(departure.mainSan)}`

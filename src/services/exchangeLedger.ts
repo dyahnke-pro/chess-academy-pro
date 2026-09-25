@@ -18,6 +18,7 @@
 import { andList } from '../utils/andList';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
+import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
 export type PieceLetter = 'p' | 'n' | 'b' | 'r' | 'q';
 
@@ -204,6 +205,11 @@ export function proofAgainstMover(fen: string, uci: readonly string[], moverWB: 
   if (sans.length === 0) return null;
   const proof = proofCut(fen, sans, moverWB);
   if (!proof) return null;
+  // A PROOF IS HEARD, SO IT HAS A HORIZON. "Qd2? Then e4, Ne5, Nxe5, dxe5,
+  // O-O, Qf4, Ng6, Qg3, h5, Be2, h4, Qe3 and Nxe5" (hand walk 2340, 13 plies)
+  // proves nothing to a listener. Past the horizon the line is not a reason,
+  // and a move without a reason is not ruled out loud.
+  if (proof.plies > MAX_PV_DEPTH_PLIES) return null;
   const moves = andList(sans.slice(0, proof.plies));
   // The line starts with the mover's move, so a mate of the MOVER ends on an
   // even ply; an odd-length mate is the mover mating, which explains nothing.

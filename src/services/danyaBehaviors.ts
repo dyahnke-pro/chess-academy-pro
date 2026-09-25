@@ -33,6 +33,7 @@ import {
   strongestWeakestPiece,
   kingSafetyRead,
   findWeakPawns,
+  namedPawnStructure,
   developmentRead,
   findPieceQuality,
   goodPieceClause,
@@ -238,7 +239,14 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // actually be attacked — the side already bears on it, OR its file is
       // half-open for that side so a rook can pile on. A backward pawn defended
       // three times behind a closed file is not a target.
-      const theirs = findWeakPawns(fen, opp);
+      // The isolani is the STRUCTURE lane's (it names it with its plan), so a
+      // d-pawn isolani is not also "a weak pawn" here — hand walk 2340 heard
+      // "watch your isolated pawn on d4" beside "you hold the isolated queen's
+      // pawn". One owner per fact.
+      const isolaniFile = /isolated queen/i.test(namedPawnStructure(fen, student)?.name ?? '') ? 'd' : null;
+      const noIsolani = (w: ReturnType<typeof findWeakPawns>): ReturnType<typeof findWeakPawns> =>
+        (isolaniFile ? { ...w, isolated: w.isolated.filter((sq) => sq[0] !== isolaniFile) } : w);
+      const theirs = noIsolani(findWeakPawns(fen, opp));
       // A DOUBLED PAIR IN FLUX IS NOT A STRUCTURE. After 3.d4 exd4 the d6 and
       // d4 pawns are "doubled" for exactly one move — White is about to take
       // the one on d4 (hand walk 2026-09-24: "The doubled pawn on d6 is a
@@ -260,7 +268,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         const kind = theirs.backward.includes(theirsPick) ? 'backward' : theirs.isolated.includes(theirsPick) ? 'isolated' : 'doubled';
         return { fact: `The ${kind} pawn on ${theirsPick} is a weakness — pile up on it.`, squares: [theirsPick] };
       }
-      const mine = findWeakPawns(fen, student);
+      const mine = noIsolani(findWeakPawns(fen, student));
       const minePick = [mine.backward[0], mine.isolated[0]]
         .find((p): p is Square => !!p && pawnIsAttackable(chess, p, opp));
       if (minePick) {

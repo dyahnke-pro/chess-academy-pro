@@ -19,6 +19,8 @@ import { detectTactics } from './tacticsDetector';
 import { phaseOfFen } from './boardConcepts';
 import { packageForRegister, type HintPackage } from './hintRegister';
 import { CAPTURE_VALUE } from './pieceValues';
+import { quietMovePoint } from './reviewMoveTeaching';
+import { legalSeeGainFor } from './positionReadingService';
 
 export type CommentaryKind =
   | 'tactic'
@@ -870,4 +872,46 @@ export function buildPlayCommentary(args: {
   }
 
   return null; // unremarkable — silence teaches better than filler
+}
+
+/**
+ * THE POINT OF THE STUDENT'S OWN SOUND MOVE, when the board proves a notable
+ * one (hand walk 2340 — his lines on those moves: "that's a free pawn", "now
+ * you have the two bishops", "you unpin yourself"). Only these, in this order:
+ *   1. material won — a capture whose exchange, counted out, nets material;
+ *   2. the bishop pair gained — their second bishop just came off and you keep
+ *      both of yours;
+ *   3. an unpin or luft — the review walk's own clauses.
+ * Null otherwise: a routine move has no point worth saying (not every ply).
+ */
+export function studentMovePoint(
+  fenBefore: string,
+  san: string,
+  /** The opponent's move just before (SAN), or null at the start. REQUIRED:
+   *  a capture on the square they just captured on is a RECAPTURE — the trade
+   *  finishing, never material won (Bxc3 after …Bxc3). */
+  opponentLastSan: string | null,
+): string | null {
+  let before: Chess;
+  let after: Chess;
+  try {
+    before = new Chess(fenBefore);
+    after = new Chess(fenBefore);
+  } catch {
+    return null;
+  }
+  let mv;
+  try { mv = after.move(san); } catch { return null; }
+  if (!mv) return null;
+  const recapture = !!opponentLastSan && new RegExp(`x${mv.to}(?![1-8])`).test(opponentLastSan);
+  if (mv.captured && !recapture && legalSeeGainFor(fenBefore, mv.to, mv.color) > 0) {
+    return `That wins the ${NAME[mv.captured] ?? 'piece'} on ${mv.to} — nothing takes it back safely.`;
+  }
+  const bishops = (c: Chess, color: 'w' | 'b'): number =>
+    c.board().flat().filter((x) => x && x.type === 'b' && x.color === color).length;
+  const them = mv.color === 'w' ? 'b' : 'w';
+  if (mv.captured === 'b' && bishops(before, them) === 2 && bishops(after, them) === 1 && bishops(after, mv.color) === 2) {
+    return 'Now you have the two bishops — open the position and they get stronger.';
+  }
+  return quietMovePoint(fenBefore, san);
 }

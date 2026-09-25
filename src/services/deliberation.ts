@@ -18,6 +18,26 @@ import type { StockfishAnalysis } from '../types';
 import { findHangingPieces } from './tacticClassifier';
 import { proofAgainstMover } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
+import { legalSeeGainFor } from './positionReadingService';
+
+const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+
+/** A capture that WINS material, the exchange counted out — that is the move's
+ *  reason, ahead of any positional gloss. Hand walk 2340: dxe5 "stakes out the
+ *  center" when his line was "that's a free pawn" (…Nxe5 loses the knight to
+ *  Nxe5). Null for a trade or a sacrifice. */
+function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | null {
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    if (!m?.captured) return null;
+    // SEE counts the recaptures: a positive net is material won, not a trade.
+    if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
+    return `wins the ${PIECE_NOUN[m.captured] ?? 'piece'} on ${m.to}`;
+  } catch {
+    return null;
+  }
+}
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -154,7 +174,7 @@ export function buildDeliberation(input: {
     });
   }
 
-  const bestWhy = strategicWhyLed(fenBefore, bestSan, moverColor === 'w' ? 'white' : 'black');
+  const bestWhy = materialWhy(fenBefore, bestSan, moverColor) ?? strategicWhyLed(fenBefore, bestSan, moverColor === 'w' ? 'white' : 'black');
   return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy };
 }
 

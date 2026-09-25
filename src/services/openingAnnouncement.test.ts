@@ -14,8 +14,15 @@ describe('openingAnnouncement — name it once, then once more where theory ends
   it('names the first identification', () => {
     expect(openingAnnouncement({ name: 'Scandinavian Defense' }, null, null, 'w')).toBe('This game is the Scandinavian Defense.');
   });
-  it('a refinement while still in book says nothing', () => {
+  it('a "Main Line" refinement while still in book says nothing', () => {
     expect(openingAnnouncement({ name: 'Scandinavian Defense: Main Line' }, null, 'Scandinavian Defense', 'w')).toBeNull();
+  });
+  it('a NAMED variation while still in book is named (hand walk 2340: "c3 — the Alapin")', () => {
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Alapin Variation' }, null, 'Sicilian Defense', 'w'))
+      .toBe("It's the Alapin Variation.");
+  });
+  it('a name that is not a refinement of the spoken one stays quiet in book (a transposition)', () => {
+    expect(openingAnnouncement({ name: 'French Defense' }, null, 'Sicilian Defense', 'w')).toBeNull();
   });
   it('says WHO left the book and the usual move there', () => {
     expect(openingAnnouncement({ name: 'Philidor Defense' }, dep(8, 'Be7', 'b', 'Nf6'), 'King\'s Pawn Game', 'w'))

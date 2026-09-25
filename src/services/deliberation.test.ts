@@ -143,3 +143,20 @@ describe('a less-precise move with a proof speaks the proof, never the filler (h
     expect(facts).toMatch(/d3\? Then Nxe4 and the pawn on e4 falls\./);
   });
 });
+
+describe('a capture that wins material says so (hand walk 2340, move 9)', () => {
+  it('dxe5 "wins the pawn on e5" — not "stakes out the center"', async () => {
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3 Bxc3 Nge7'.split(' ')) c.move(m);
+    const analysis = { topLines: [line(1, 120, 'd4e5'), line(2, -150, 'd1d2')] };
+    const d = buildDeliberation({ analysis, fenBefore: c.fen(), moverColor: 'w' })!;
+    expect(d.bestWhy).toBe('wins the pawn on e5');
+  });
+
+  it('a plain recapture is a trade, not a win', () => {
+    // O-O is best in the Italian fixture — no capture, so the positional why stands.
+    const d = buildDeliberation({ analysis: { topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5')] }, fenBefore: FEN, moverColor: 'w' })!;
+    expect(d.bestWhy).toMatch(/castles/);
+  });
+});

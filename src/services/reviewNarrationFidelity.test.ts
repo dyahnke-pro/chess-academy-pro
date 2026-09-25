@@ -314,3 +314,15 @@ describe('a lowercased colour possessive is a determiner too (hand walk 2340, mo
     expect(out).not.toMatch(/white's/i);
   });
 });
+
+describe('a detector description is seat-free at the source (hand walk 2340)', () => {
+  it('the back-rank description names "the king", which the seater then owns', async () => {
+    const { detectTactics } = await import('./tacticsDetector');
+    // White king g1 boxed by f2/g2/h2, black rook on e8 can check on e1 (the
+    // d1 rook covers it, so it is a weakness, not a mate).
+    const fen = '4r1k1/5ppp/8/8/8/8/5PPP/3R2K1 b - - 0 20';
+    const br = detectTactics(fen).tactics.find((t) => t.type === 'back_rank');
+    expect(br?.description).toMatch(/^The king on g1/);
+    expect(seatPieceReferences(br!.description, fen, 'w')).toMatch(/^Your king on g1/);
+  });
+});

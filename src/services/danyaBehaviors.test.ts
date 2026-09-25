@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import {
   DANYA_BEHAVIORS,
   detectBehaviors,
@@ -245,5 +246,14 @@ describe('a doubled pair about to be undone is not a weakness (hand walk 2026-09
     const fen = '4k3/ppp3pp/3p4/3p4/8/8/PPP3PP/R3K3 w - - 0 20';
     const hit = detectBehaviors({ fen, studentColor: 'white' }).find((h) => h.id === 'pawn-structure');
     expect(hit?.fact ?? '').toMatch(/doubled pawn on d/);
+  });
+});
+
+describe('the isolani has one owner (hand walk 2340, move 6)', () => {
+  it('the weak-pawn behaviour does not also name an isolated d-pawn', () => {
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5'.split(' ')) c.move(m);
+    const hits = detectBehaviors({ fen: c.fen(), studentColor: 'white' });
+    expect(hits.some((h) => /isolated pawn on d4/.test(h.fact))).toBe(false);
   });
 });

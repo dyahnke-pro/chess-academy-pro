@@ -43,7 +43,6 @@ import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/
 import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 import { conceptForBoard } from './conceptEngine';
 import { sayMoveNoun } from './spokenMove';
-import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 import { verifyForkOnBoard } from './tacticVerification';
 
 /**
@@ -470,6 +469,9 @@ const THREAT_STEM: Record<LookaheadSeat, (pattern: string, depth: number, line: 
   'coach-is-opponent': (pattern, depth, line) => `Look ahead — I'm lining up a ${pattern} in ${depth}: ${line}. Spot it before it lands.`,
 };
 
+/** How far the live board's spoken foresight reaches — "a couple of moves". */
+const SPOKEN_LOOKAHEAD_PLIES = 4;
+
 export function speakDeepestLookahead(
   ctx: TacticsLiveContext,
   seat: LookaheadSeat,
@@ -489,10 +491,11 @@ export function speakDeepestLookahead(
   const deep = (
     list: TacticsLiveContext['threats'],
   ): TacticsLiveContext['threats'] =>
-    // …and inside the horizon a line can be followed by ear. "A removal of
-    // guard coming, 9 deep" over four spoken plies promised a landing the
-    // student never heard (hand walk 2340, move 15).
-    list.filter((e) => e.depthAhead >= 2 && e.depthAhead <= MAX_PV_DEPTH_PLIES && e.line.length > 0);
+    // …and "a couple of moves ahead" means a couple: two moves each side. "A
+    // removal of guard coming, 9 deep" and "a skewer coming, 7 deep" over quiet
+    // shuffles (hand walk 2340, moves 15-16) are not foresight a listener can
+    // follow; the deep line belongs to the review, where the board replays it.
+    list.filter((e) => e.depthAhead >= 2 && e.depthAhead <= SPOKEN_LOOKAHEAD_PLIES && e.line.length > 0);
   // e.type is widened to string on TacticsLiveContext; the runtime value is a
   // real TacticPatternType (from UpcomingTactic.pattern.type). An unknown motif
   // would map to null in the bridge anyway, so the cast is safe.
@@ -512,8 +515,8 @@ export function speakDeepestLookahead(
   // the engine line (chess.js-legal), so naming them is grounded, not invented
   // — and they are SPELLED (D-10): a bare "Bg5" beside the TTS sanitizer's own
   // expansion of it spoke every move twice.
-  // Walked to where the tactic LANDS, so the depth named is the depth heard.
-  const walk = pick.line.slice(0, Math.max(4, pick.depthAhead));
+  // Walked to the horizon, which is where the tactic lands.
+  const walk = pick.line.slice(0, SPOKEN_LOOKAHEAD_PLIES);
   const spoken = walk.map(sayMoveNoun);
   const lineProse =
     spoken.length === 1

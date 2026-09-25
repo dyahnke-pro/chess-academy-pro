@@ -314,7 +314,8 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     expect(speakDeepestLookahead(ctx, 'student', 'b')).toMatch(/they're lining up/);
   });
 
-  it('stays inside the horizon — a tactic 9 plies out is not promised over 4 spoken moves', () => {
+  it('stays inside "a couple of moves" — a tactic 5 or 9 plies out is not spoken live', () => {
+    expect(speakDeepestLookahead(ctxWith([{ type: 'skewer', description: 's', depthAhead: 5, line: ['bxc3', 'Ke7', 'h3', 'Be6', 'Bc2'] }], []), 'student', 'w')).toBeNull();
     const ctx = ctxWith(
       [{ type: 'removal_of_guard', description: 'r', depthAhead: 9, line: ['bxc3', 'Ke7', 'h3', 'Be6', 'Rd1', 'Rd8', 'Rxd8', 'Kxd8', 'Bxa7'] }],
       [],

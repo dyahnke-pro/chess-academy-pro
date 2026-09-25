@@ -1284,7 +1284,7 @@ export function assemblePositionAssessment(opts: {
       // stale package passes this check by construction.
       const myHang = tactics.hanging.find((h) => h.color === sc && pieceIsOn(tactics.fen, h.square, h.piece, h.color));
       if (myHang) parts.push(`Your ${REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece} on ${myHang.square} is hanging.`);
-      else if (tactics.threats[0]?.description) parts.push(`Watch out — ${tactics.threats[0].description}.`);
+      else if (tactics.threats[0]?.description) parts.push(`Watch out — ${seatedDescription(tactics.threats[0].description, tactics.fen, sc)}.`);
     }
   }
 
@@ -3270,7 +3270,7 @@ export function assembleTacticsAnswer(
   }
   // Nothing concrete yet → surface the top threat, then the top opportunity.
   if (parts.length === 0 && tactics.threats[0]?.description) {
-    parts.push(`Watch out — ${tactics.threats[0].description}.`);
+    parts.push(`Watch out — ${seatedDescription(tactics.threats[0].description, tactics.fen, sc)}.`);
   }
   if (parts.length === 0 && tactics.opportunities[0]?.description) {
     parts.push(`You have a shot: ${tactics.opportunities[0].description}.`);
@@ -6179,6 +6179,13 @@ export function assembleCounterRepertoireAnswer(opts: {
     `${styleReason}${statClause(pick.stat)}.${matchup}` +
     ` Want to learn it? I have the full line ready for you.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:counter-repertoire'] };
+}
+
+/** A detector's description, mid-sentence and seated: "Capturing knight on
+ *  f3…" after "Watch out —" read raw, with nobody's knight (hand walk 2340). */
+function seatedDescription(description: string, fen: string, studentColorWB: 'w' | 'b'): string {
+  const lowered = `${description.charAt(0).toLowerCase()}${description.slice(1)}`;
+  return seatPieceReferences(lowered, fen, studentColorWB);
 }
 
 /**
