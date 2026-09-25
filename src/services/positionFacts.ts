@@ -703,10 +703,13 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // `fundamental`, it IS the teaching idea). Positional leads are excluded here:
   // `fundamental` / `structure-plan` already carry them — no walk-over. Never
   // fails the briefing.
-  let concept: { id: string; source: string; full: string; squares: readonly string[] } | null = null;
+  let concept: { id: string; source: string; full: string; squares: readonly string[]; boardFen?: string } | null = null;
   try {
     const lead = conceptForBoard(fen, { analysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
-    if (lead && lead.source !== 'positional') concept = { id: lead.id, source: lead.source, full: lead.full, squares: lead.squares };
+    // The board the concept is ABOUT travels with it — a concept found on the
+    // board after the best move ("Rook on f5 forks king on f8") seats on THAT
+    // board; seated on this one it came out half-owned (the rook not there yet).
+    if (lead && lead.source !== 'positional') concept = { id: lead.id, source: lead.source, full: lead.full, squares: lead.squares, boardFen: lead.boardFen };
   } catch { concept = null; }
 
   // THE METHOD BEAT — the same computer the review path uses, in its live
