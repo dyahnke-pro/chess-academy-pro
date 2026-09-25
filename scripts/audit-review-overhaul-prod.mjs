@@ -610,8 +610,16 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
           if (confirmUp) {
             await page.locator(confirmSel).first().click({ timeout: 2000, force: true }).catch(() => undefined);
           }
-          const spoke = await until(revealed, 8000, 250);
-          log(`  [turning] attempt ${attempt}: confirm=${confirmUp} reveal=${spoke}`);
+          // TIME IT, don't just time out on it: the reveal is a state change
+          // after the tap, so how long it takes is itself the reading. A prod
+          // run (2026-09-25) timed out at 8s where the isolated probe saw it
+          // land — report when the element rendered and when the line spoke.
+          const t0 = Date.now();
+          const elUp = await until(() => has(page, '[data-testid="review-turning-point-reveal"]'), 20000, 250);
+          const elMs = Date.now() - t0;
+          const spoke = await until(revealed, 20000, 250);
+          const spokeMs = Date.now() - t0;
+          log(`  [turning] attempt ${attempt}: confirm=${confirmUp} revealEl=${elUp}@${elMs}ms reveal=${spoke}@${spokeMs}ms cardStill=${await has(page, '[data-testid="review-turning-point-card"]')}`);
           // ANSWERED means the reveal SPOKE, never "we tapped something".
           if (spoke) { turningAnswered = true; turningSeenUnanswered = false; break; }
         }
