@@ -265,7 +265,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const isolaniFile = /isolated queen/i.test(namedPawnStructure(fen, student)?.name ?? '') ? 'd' : null;
       const noIsolani = (w: ReturnType<typeof findWeakPawns>): ReturnType<typeof findWeakPawns> =>
         (isolaniFile ? { ...w, isolated: w.isolated.filter((sq) => sq[0] !== isolaniFile) } : w);
-      const theirs = noIsolani(findWeakPawns(fen, opp));
+      // Only the STUDENT's own isolani is said by the structure line ("you
+      // hold…") — THEIR isolani with a piece bearing on it is the concrete
+      // plan ("pile up on it"), not a repeat of the name.
+      const theirs = findWeakPawns(fen, opp);
       // A DOUBLED PAIR IN FLUX IS NOT A STRUCTURE. After 3.d4 exd4 the d6 and
       // d4 pawns are "doubled" for exactly one move — White is about to take
       // the one on d4 (hand walk 2026-09-24: "The doubled pawn on d6 is a
