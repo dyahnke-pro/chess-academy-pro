@@ -1842,7 +1842,15 @@ export function buildReviewSegments(
             ? gm[1].toLowerCase().replace(/\b[a-h][1-8]\b/g, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim()
             : f;
           if (planGoalsSeen.has(goalKey) || !claim(`plan:${goalKey}`)) continue;
-          keep(f, () => planGoalsSeen.add(goalKey));
+          // A NEW goal after plans the student already heard is a CHANGE, and
+          // the change is the teaching (David 2026-09-25: "If the structure
+          // plan changes then coach should say so"). Once per ply.
+          const changed = planGoalsSeen.size > 0 && claim('plan-changed');
+          const said = !changed ? f
+            : /^\[plan-now\]\s*The plan from here is to /i.test(f)
+              ? f.replace(/^\[plan-now\]\s*The plan from here is to /i, '[plan-now] The plan changes here — now it\'s to ')
+              : f.replace(/^\[plan-now\]\s*(.)/, (_m, c: string) => `[plan-now] The plan changes here: ${c.toLowerCase()}`);
+          keep(said, () => planGoalsSeen.add(goalKey));
           continue;
         }
         // The RACE — once, then only when the verdict FLIPS (see lastRaceVerdict).

@@ -422,3 +422,22 @@ describe('a structure plan is said once by its PLAN, not its words (hand walk 12
     expect(second.clauses.some((c) => c.kind === 'structure-plan')).toBe(false);
   });
 });
+
+describe('when the structure plan changes, the coach says so (David 2026-09-25)', () => {
+  const flatAnalysis = { evaluation: 0, bestMove: '', depth: 12, topLines: [], nodesPerSecond: 0 } as unknown as Parameters<typeof computePositionFacts>[0]['analysis'];
+  it('a different plan is framed as a change; the same plan stays quiet', async () => {
+    // Race (both runners) → then only THEIR passer is left.
+    const race = '6k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
+    const theirsOnly = '6k1/p4ppp/8/8/8/8/5PPP/3Q2K1 w - - 0 32';
+    const first = await computePositionFacts({ posture: 'walk', fen: race, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true });
+    const firstPlan = first.clauses.find((c) => c.kind === 'structure-plan');
+    expect(firstPlan?.text).not.toMatch(/plan changes/);
+    const said = new Set(first.remember);
+    const second = await computePositionFacts({ posture: 'walk', fen: theirsOnly, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: said });
+    const changed = second.clauses.find((c) => c.kind === 'structure-plan');
+    expect(changed?.text).toMatch(/^The plan changes here: their passed pawn on a7/);
+    for (const k of second.remember) said.add(k);
+    const third = await computePositionFacts({ posture: 'walk', fen: theirsOnly, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: said });
+    expect(third.clauses.some((c) => c.kind === 'structure-plan')).toBe(false);
+  });
+});

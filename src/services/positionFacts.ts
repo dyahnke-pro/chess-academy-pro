@@ -37,6 +37,7 @@ import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDan
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { structurePlanFact } from './boardPlan';
+import { stepPlan, EMPTY_PLAN_STATE } from './planMemory';
 import { matchClauseKind, matchTacticPattern, boostFor, type WeaknessSignal } from './weaknessSignal';
 import { studentMomentBoost } from './studentMomentBoost';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
@@ -322,6 +323,18 @@ export interface ClauseItem {
  *  move-specific — `concept`, `deliberation`, `fundamental`, `opponent-intent`,
  *  `key-moment`, `method` (which rotates its own stems), `convert`, `status`
  *  (already fires only on a band CHANGE). */
+/** A structure plan that REPLACES the one the student last heard is said as a
+ *  change — the plan moving is itself the teaching. */
+function plyNumberForPlan(fen: string): number {
+  const parts = fen.split(' ');
+  const move = Number(parts[5] ?? '1') || 1;
+  return (move - 1) * 2 + (parts[1] === 'b' ? 1 : 0);
+}
+
+export function planChangedText(text: string): string {
+  return `The plan changes here: ${text.charAt(0).toLowerCase()}${text.slice(1)}`;
+}
+
 const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>([
   'structure-plan', 'latent-danger', 'student-leans', 'opponent-leans',
 ]);
@@ -627,9 +640,26 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // "both sides have a runner: yours on d4 is 4…" then "…on d5 is 3…" were two
   // sentences to a text dedupe and one claim to the ear (hand walk 1200). The
   // plan id carries the verdict (`passer-race:you`), so a FLIP still speaks.
+  //
+  // AND WHEN THE PLAN CHANGES, SAY SO (David 2026-09-25: "If the structure plan
+  // changes then coach should say so"). The memory keeps each spoken plan as
+  // `plan:<id>#<n>`, n counting up, so the LAST plan spoken is recoverable from
+  // a set: the same plan stays quiet, a different one — including a return to
+  // an earlier one — speaks as a change.
   const planFact = (!openingPhase && importance.speak) ? structurePlanFact(fen, studentColor) : null;
-  const planKey = planFact ? `plan:${planFact.id}` : null;
-  const structureText = planFact && planKey && !input.alreadySaid?.has(planKey) ? planFact.text : '';
+  const priorPlans = [...(input.alreadySaid ?? [])]
+    .map((k) => /^plan:(.+)#(\d+)$/.exec(k))
+    .filter((m): m is RegExpExecArray => m !== null)
+    .map((m) => ({ id: m[1], n: Number(m[2]) }))
+    .sort((a, b) => b.n - a.n);
+  const lastPlan = priorPlans[0] ?? null;
+  // ONE identity rule for "the same plan" — `planMemory.stepPlan`, the fold
+  // review's selector already runs — so the two surfaces cannot disagree.
+  const planEvent = stepPlan(lastPlan ? { plan: null, id: lastPlan.id, announcedAt: null } : EMPTY_PLAN_STATE, plyNumberForPlan(fen), planFact).event;
+  const planKey = planFact && (planEvent === 'announce' || planEvent === 'changed') ? `plan:${planFact.id}#${(lastPlan?.n ?? 0) + 1}` : null;
+  const structureText = planFact && planEvent === 'announce' ? planFact.text
+    : planFact && planEvent === 'changed' ? planChangedText(planFact.text)
+      : '';
 
   // FUNDAMENTAL — the teaching idea the STUDENT's best move serves (development /
   // king safety / outpost / center / open file / king activity / passed pawn),
