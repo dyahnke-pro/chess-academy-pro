@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6568 lines · 147 exports · 60 importers · 32 tests · 8 audits**
+**6567 lines · 147 exports · 60 importers · 32 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -276,7 +276,7 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8769`
+- `src/components/Coach/CoachTeachPage.tsx:8765`
 - `src/services/coachApi.ts:3331`
 - `src/services/coachApi.ts:5395`
 - `src/services/coachFeatureService.test.ts:40`

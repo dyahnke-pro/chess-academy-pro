@@ -93,6 +93,9 @@ const BESIDE_MATE: ReadonlySet<FactKind> = new Set<FactKind>([
 const ABOUT_THE_FLUX_SQUARE: ReadonlySet<FactKind> = new Set<FactKind>([
   'quality', 'praise', 'move', 'forced', 'refuted', 'deliberation', 'key-moment',
   'method', 'sac', 'sac-why', 'timing', 'trade',
+  // The principle the move just played follows — about the MOVE, like its
+  // verdict ("d4 opens up the center" stays true after …exd4).
+  'rule',
 ]);
 
 export type BoardVeto = 'in-flux' | 'beside-mate';

@@ -88,7 +88,7 @@ import { stageArrayHasUsableEntry } from '../../services/stageEntryValidity';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
-import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
+import { findSiblingExtensionBranches, resolveOpeningEntry, isBookLine } from '../../services/openingDetectionService';
 import { openingAnnouncementForGame, warmOpeningBook } from '../../services/openingAnnouncement';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
@@ -8576,11 +8576,7 @@ export function CoachTeachPage(): JSX.Element {
     // pure eval noise, because this call hardcoded inBook:false). If the
     // position INCLUDING this move still matches the opening trie, the move
     // is theory and detectSlip's book exemption gets the real signal.
-    let studentMoveInBook = false;
-    try {
-      const bookDet = detectOpening(move.history);
-      studentMoveInBook = !!bookDet && bookDet.plyCount >= move.history.length;
-    } catch { /* book check is a bonus; default stays not-in-book */ }
+    const studentMoveInBook = isBookLine(move.history);
     // POST-MOVE GRADE — the coach reacts to the move you JUST played, by NAME of
     // the thing (David 2026-08-27: "safe to always narrate when there is
     // something to say"). Graded cheaply from the paid-for fan at fenBefore
@@ -9048,7 +9044,7 @@ export function CoachTeachPage(): JSX.Element {
                       // record of it. `reads: null` when no pre-move read landed:
                       // absent, never a guess.
                       lastMove: {
-                        fenBefore, san: move.san, cpLoss: studentCpLoss,
+                        fenBefore, san: move.san, cpLoss: studentCpLoss, inBook: studentMoveInBook,
                         reads: preStudentRead ? {
                           historySans: move.history,
                           bestMoveUci: preStudentRead.bestMove || null,

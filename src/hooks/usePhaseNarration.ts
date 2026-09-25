@@ -17,7 +17,7 @@ import { transitionTeachingSourceForGame } from '../services/danyaTeachingServic
 import { selectTeaching, renderThesis, pliesFromSans } from '../services/teachingSelector';
 import { registerFor } from '../coach/surfaceContract';
 import { buildVoicePackage } from '../services/voicePackage';
-import { detectOpening } from '../services/openingDetectionService';
+import { detectOpening, isBookLine } from '../services/openingDetectionService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import type { PhaseNarrationVerbosity, StockfishAnalysis } from '../types';
 import type { PhaseTransitionEvent } from '../services/phaseTransitionDetector';
@@ -634,7 +634,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             // PGN really produces `event.fen`; otherwise absent. `cpLoss: null`
             // — this surface never graded the move.
             ...((): { lastMove?: LastMoveInput } => {
-              const lm = lastMoveIfStudent(sansOfPgn(argsRef.current.getPgn() ?? ''), event.playerColor, event.fen);
+              const lineSans = sansOfPgn(argsRef.current.getPgn() ?? '');
+              const lm = lastMoveIfStudent(lineSans, event.playerColor, event.fen, isBookLine(lineSans));
               return lm ? { lastMove: lm } : {};
             })(),
             studentNeedContext: studentNeedRef.current,

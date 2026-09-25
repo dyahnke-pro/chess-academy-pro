@@ -32,15 +32,15 @@ describe('lastMoveOfLine', () => {
 describe('lastMoveIfStudent', () => {
   const line = ['e4', 'e5', 'Nf3'];
   it('the student\'s own move, on the board it produced', () => {
-    expect(lastMoveIfStudent(line, 'white', fenAfter(line))).toEqual({ fenBefore: fenAfter(['e4', 'e5']), san: 'Nf3', cpLoss: null, reads: null });
+    expect(lastMoveIfStudent(line, 'white', fenAfter(line), true)).toEqual({ fenBefore: fenAfter(['e4', 'e5']), san: 'Nf3', cpLoss: null, inBook: true, reads: null });
   });
   it('the OPPONENT\'s move is never handed over as the student\'s', () => {
-    expect(lastMoveIfStudent(line, 'black', fenAfter(line))).toBeNull();
+    expect(lastMoveIfStudent(line, 'black', fenAfter(line), true)).toBeNull();
   });
   it('a PGN that does not produce the live board is not evidence about it', () => {
-    expect(lastMoveIfStudent(line, 'white', fenAfter(['d4', 'd5', 'c4']))).toBeNull();
+    expect(lastMoveIfStudent(line, 'white', fenAfter(['d4', 'd5', 'c4']), true)).toBeNull();
   });
   it('a graded cost rides through unchanged', () => {
-    expect(lastMoveIfStudent(line, 'white', null, 40)?.cpLoss).toBe(40);
+    expect(lastMoveIfStudent(line, 'white', null, false, 40)?.cpLoss).toBe(40);
   });
 });

@@ -28,7 +28,7 @@ import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
-import { principleToTeach, principleOnceLine } from './moveFundamentals';
+import { principleLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { isMateEval } from './engineConstants';
 import { computeBoardDelta } from './boardDelta';
@@ -846,11 +846,15 @@ export function computeMoveFacets(
   // game (the ledger is committed after the door, so a principle the door
   // silenced may speak later).
   if (isStudent && ply <= 24 && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
-    const lead = principleToTeach(fenBefore, san, moverColor, ctx.teaching.principlesTaught);
+    // Full the first time a principle speaks this game, a short stem after —
+    // the one helper Learn's composer reads (`principleLine`).
+    const lead = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore));
     if (lead) {
-      const f = `[rule] ${principleOnceLine(san, lead, stemKeyOf(fenBefore))}`;
+      const f = `[rule] ${lead.text}`;
       facets.push(f);
-      outIdentity?.set(f, `rule:${lead.id}`);
+      // The FIRST statement of a principle carries its say-once identity; a
+      // stem is its own move's fact and must not be eaten by that ledger.
+      outIdentity?.set(f, lead.first ? `rule:${lead.id}` : `rule-stem:${ply}`);
       recSquares(f, lead.squares);
     }
   }

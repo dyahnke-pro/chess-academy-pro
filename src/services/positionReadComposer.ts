@@ -17,6 +17,7 @@ import { lastMoveIfStudent, sansOfPgn } from './lastMoveOfLine';
 import type { StudentNeedContext } from './needScore';
 import type { StockfishAnalysis } from '../types';
 import type { WeaknessSignal } from './weaknessSignal';
+import { isBookLine } from './openingDetectionService';
 
 /** The seat every sentence of the read is computed in. The facts computers
  *  write "you / they", so the read speaks that seat end to end and the phraser
@@ -94,7 +95,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   let positionFactsBlock = '';
   try {
     if (i.analysis?.topLines?.length) {
-      const lm = lastMoveIfStudent(sans, i.playerColor, i.fen);
+      const lm = lastMoveIfStudent(sans, i.playerColor, i.fen, isBookLine(sans));
       const pf = await computePositionFacts({
         // The student TAPPED "read this position". Silence would be a dead
         // button — the same reasoning that exempts this surface from the

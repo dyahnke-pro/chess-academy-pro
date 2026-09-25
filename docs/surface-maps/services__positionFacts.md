@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1361 lines · 11 exports · 16 importers · 14 tests · 3 audits**
+**1367 lines · 11 exports · 17 importers · 15 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/loopCloses.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
+- `src/services/positionFacts.moveWhy.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionReadComposer.ts`
@@ -69,9 +70,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9087`
-- `src/hooks/useLiveCoach.ts:295`
-- `src/hooks/usePhaseNarration.ts:647`
+- `src/components/Coach/CoachTeachPage.tsx:9083`
+- `src/hooks/useLiveCoach.ts:296`
+- `src/hooks/usePhaseNarration.ts:648`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
@@ -79,13 +80,13 @@
 - `src/services/positionFacts.test.ts:306`
 - `src/services/positionFacts.test.ts:364`
 - `src/services/positionFacts.test.ts:365`
-- `src/services/positionReadComposer.ts:116`
+- `src/services/positionReadComposer.ts:117`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 76 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9025`
+### `computePositionFacts` (function) — 77 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9021`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
-- `src/hooks/useLiveCoach.ts:264`
+- `src/hooks/useLiveCoach.ts:265`
 - `src/hooks/usePhaseNarration.ts:622`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
@@ -100,6 +101,7 @@
 - `src/services/loopCloses.test.ts:112`
 - `src/services/positionFacts.convertOnce.test.ts:16`
 - `src/services/positionFacts.liveFundamental.test.ts:52`
+- `src/services/positionFacts.moveWhy.test.ts:21`
 - `src/services/positionFacts.test.ts:24`
 - `src/services/positionFacts.test.ts:37`
 - `src/services/positionFacts.test.ts:52`
@@ -146,19 +148,19 @@
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`
 - `src/services/positionFacts.weakness.test.ts:63`
-- `src/services/positionReadComposer.ts:98`
+- `src/services/positionReadComposer.ts:99`
 - `src/services/whyBestMove.needWire.test.ts:10`
 - `src/services/whyBestMove.ts:89`
 - `src/test/computedOrderWired.test.ts:32`
 - `src/test/everySurfaceSpeaks.test.ts:117`
-- `src/test/teach02Wired.test.ts:82`
-- `src/test/teach02Wired.test.ts:91`
-- `src/test/teach02Wired.test.ts:105`
-- `src/test/teach02Wired.test.ts:112`
-- `src/test/teach02Wired.test.ts:117`
-- `src/test/teach02Wired.test.ts:124`
-- `src/test/teach02Wired.test.ts:134`
+- `src/test/teach02Wired.test.ts:84`
+- `src/test/teach02Wired.test.ts:93`
+- `src/test/teach02Wired.test.ts:107`
+- `src/test/teach02Wired.test.ts:114`
+- `src/test/teach02Wired.test.ts:119`
+- `src/test/teach02Wired.test.ts:126`
 - `src/test/teach02Wired.test.ts:136`
+- `src/test/teach02Wired.test.ts:138`
 
 ### `convertKey` (function) — 1 call site
 - `src/services/positionFacts.convertOnce.test.ts:24`
@@ -173,6 +175,7 @@
 - `src/services/loopCloses.test.ts`
 - `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
+- `src/services/positionFacts.moveWhy.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/whyBestMove.needWire.test.ts`

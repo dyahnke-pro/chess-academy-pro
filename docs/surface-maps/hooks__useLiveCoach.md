@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**492 lines · 5 exports · 3 importers · 2 tests · 1 audits**
+**494 lines · 5 exports · 3 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1237) — names `useLiveCoach`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3902) — names `useLiveCoach`
-- **The standard post-deploy ritual** (CLAUDE.md:5954) — names `useLiveCoach`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1252) — names `useLiveCoach`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3919) — names `useLiveCoach`
+- **The standard post-deploy ritual** (CLAUDE.md:6029) — names `useLiveCoach`
 
 ## Who calls in
 
@@ -33,7 +33,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `useLiveCoach` (function) — 8 call sites
-- `src/components/Coach/CoachGamePage.tsx:1020`
+- `src/components/Coach/CoachGamePage.tsx:1043`
 - `src/hooks/useLiveCoach.needWire.test.tsx:68`
 - `src/hooks/useLiveCoach.needWire.test.tsx:81`
 - `src/hooks/useLiveCoach.needWire.test.tsx:93`
