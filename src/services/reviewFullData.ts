@@ -42,6 +42,7 @@ import { planRaceClause } from './planRace';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
+import { betterMoveReason } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 
@@ -144,6 +145,10 @@ export interface MoveFactContext {
   preMoveEval: number | null;
   classification: string | null;
   bestMoveSan: string | null;
+  /** The engine's line FROM the best move (UCI, the best move first). REQUIRED
+   *  so the reason the better move is better is the same computer on every
+   *  surface (`betterMoveReason`) — pass [] when the line is unknown. */
+  bestLineUci: readonly string[];
   /** The engine's best REPLY at `fenAfter` (the next ply's best move), SAN, or
    *  null when there is none. REQUIRED: whether a move gave material depends
    *  on whether the opponent should take it (`isSacrifice`). */
@@ -376,7 +381,12 @@ export function computeMoveFacets(
     // a hair, and naming it as "stronger" contradicts the verdict in the same
     // breath. The comparison earns voice only on a class that cost something.
     const fellShort = costsPoints || ctx.classification === 'miss';
-    const better = ctx.bestMoveSan && fellShort ? `the stronger move was ${ctx.bestMoveSan}` : '';
+    // THE REASON, from the one computer Learn's verdict uses (checks first,
+    // then what the line wins) — review used to name the move and stop.
+    const reason = ctx.bestMoveSan && fellShort
+      ? betterMoveReason(fenBefore, san, ctx.bestMoveSan, ctx.bestLineUci, ctx.moverColor)
+      : null;
+    const better = ctx.bestMoveSan && fellShort ? `the stronger move was ${ctx.bestMoveSan}${reason ? ` — ${reason}` : ''}` : '';
     const tail = [whyBad, better].filter(Boolean).join('; ');
     const betterBit = tail ? ` — ${tail}` : '';
     // CARRY THE MOVER'S SUBJECT (David 2026-07-20 opera-ply-14 bug): a quiet move

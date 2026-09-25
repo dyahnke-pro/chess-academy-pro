@@ -68,7 +68,7 @@ const WORTH_SAYING: ReadonlySet<MoveQuality> = new Set(['inaccuracy', 'mistake',
  */
 export function checksFirst(
   fenBefore: string, playedSan: string, bestSan: string, bestLineUci: readonly string[],
-): string | null {
+): { best: string; reply: string | null; played: string } | null {
   let played: { from: string; to: string };
   let reply: string | null = null;
   try {
@@ -90,11 +90,56 @@ export function checksFirst(
       // The mover's own moves sit at even indices; the played move returning
       // there is the proof that it was still available.
       if (i % 2 === 0 && mv.from === played.from && mv.to === played.to) {
-        return `checks first: ${bestSan}, ${reply ?? 'they answer'}, and ${playedSan} is still there — you get both`;
+        return { best: bestSan, reply, played: playedSan };
       }
     }
   } catch { return null; }
   return null;
+}
+
+/** The reason a better move is better, as a FACT — computed once, worded by
+ *  each surface in its own register (the two-register rule: share the
+ *  computer, never the phrasing). */
+export type BetterMoveFact =
+  | { kind: 'checks-first'; best: string; reply: string | null; played: string }
+  | { kind: 'line-wins'; why: string };
+
+/**
+ * WHY THE BETTER MOVE IS BETTER — the one computer every coach surface reads
+ * (David 2026-09-25: "this is a unified coach so whatever changes on one coach
+ * are made to all of them"). Learn's verdict, the review walk's "the stronger
+ * move was X" and review's key moments all take their reason from here: the
+ * move order first (checks first — you get both), then what the line wins or
+ * threatens. Null when neither can be proved.
+ */
+export function betterMoveFact(
+  fenBefore: string, playedSan: string, bestSan: string, bestLineUci: readonly string[], moverColor: 'white' | 'black',
+): BetterMoveFact | null {
+  const order = checksFirst(fenBefore, playedSan, bestSan, bestLineUci);
+  if (order) return { kind: 'checks-first', ...order };
+  const better = whyBetter(fenBefore, bestLineUci, moverColor);
+  return better ? { kind: 'line-wins', why: better.why } : null;
+}
+
+/** The fact, worded. A verdict on a move already PLAYED is retrospective on
+ *  every surface — Learn says it the moment after the move, review says it
+ *  after the game, and both are about a decision that has been made — so there
+ *  is one wording, not a register switch. */
+export function phraseBetterMove(f: BetterMoveFact): string {
+  switch (f.kind) {
+    case 'checks-first':
+      return `checks first: ${f.best}, ${f.reply ?? 'they answer'}, and ${f.played} would still have been there — you'd have had both`;
+    case 'line-wins':
+      return `it would ${f.why}`;
+  }
+}
+
+/** Convenience: the fact, computed and worded — or null. */
+export function betterMoveReason(
+  fenBefore: string, playedSan: string, bestSan: string, bestLineUci: readonly string[], moverColor: 'white' | 'black',
+): string | null {
+  const f = betterMoveFact(fenBefore, playedSan, bestSan, bestLineUci, moverColor);
+  return f ? phraseBetterMove(f) : null;
 }
 
 function whyBetter(
@@ -364,15 +409,16 @@ export function callInaccuracyDetailed(args: {
   // mistake" — it won two pieces and left White +4). When the mover is still
   // clearly winning after the move, the teaching is the cleaner way, not a
   // grade: "gxh5 still wins, but Rxf8+ was cleaner — it would land a fork."
-  // THE ORDER IS THE REASON when the check comes first and the capture waits.
-  const order = args.bestLineUci ? checksFirst(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci) : null;
+  // THE REASON — the one computer every surface speaks (`betterMoveReason`):
+  // checks first, then what the line wins. A mate stop overrides it.
+  const reason = stopsMate
+    ? 'it would stop the mate'
+    : args.bestLineUci ? betterMoveReason(args.fenBefore, args.playedSan, args.bestSan, args.bestLineUci, args.moverColor) : null;
   const after = args.moverEvalAfterCp;
   if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
-    const said = order
-      ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${order}.`
-      : better
-        ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — it would ${better.why}.`
-        : `${args.playedSan} still wins, but ${args.bestSan} was cleaner.`;
+    const said = reason
+      ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${reason}.`
+      : `${args.playedSan} still wins, but ${args.bestSan} was cleaner.`;
     return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
   }
   const head = quality === 'blunder'
@@ -380,9 +426,7 @@ export function callInaccuracyDetailed(args: {
     : quality === 'mistake'
       ? `${args.playedSan} was a mistake.`
       : `${args.playedSan} was a little loose.`;
-  const should = order
-    ? ` ${args.bestSan} was the move — ${order}.`
-    : better ? ` ${args.bestSan} was the move — it would ${better.why}.` : ` ${args.bestSan} was the move.`;
+  const should = reason ? ` ${args.bestSan} was the move — ${reason}.` : ` ${args.bestSan} was the move.`;
   return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '' } };
 }
 

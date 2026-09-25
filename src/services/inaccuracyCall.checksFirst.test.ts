@@ -12,14 +12,14 @@ const BEST_LINE = ['d8f8', 'g8f8', 'g4h5', 'g7g6', 'e1g3', 'b4c5'];
 
 describe('checks first — the move order is the reason', () => {
   it('22.gxh5 vs Rxf8+: the check, their reply, and the capture is still there', () => {
-    expect(checksFirst(fen(), 'gxh5', 'Rxf8+', BEST_LINE)).toBe('checks first: Rxf8+, Kxf8, and gxh5 is still there — you get both');
+    expect(checksFirst(fen(), 'gxh5', 'Rxf8+', BEST_LINE)).toEqual({ best: 'Rxf8+', reply: 'Kxf8', played: 'gxh5' });
   });
   it('the still-wins verdict speaks the order, not "it would land a fork"', () => {
     const said = callInaccuracy({
       fenBefore: fen(), playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: BEST_LINE,
       cpLoss: 261, moverEvalAfterCp: 418, side: 'student', moverColor: 'white',
     } as never)?.said ?? '';
-    expect(said).toBe('gxh5 still wins, but Rxf8+ was cleaner — checks first: Rxf8+, Kxf8, and gxh5 is still there — you get both.');
+    expect(said).toBe("gxh5 still wins, but Rxf8+ was cleaner — checks first: Rxf8+, Kxf8, and gxh5 would still have been there — you'd have had both.");
   });
   it('negative controls: not a check, or the capture does not come back', () => {
     // The best move is not a check.

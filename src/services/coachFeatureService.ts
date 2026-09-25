@@ -54,6 +54,7 @@ import { voiceFacts } from './coachApi';
 // LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
+import { betterMoveReason } from './inaccuracyCall';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
 import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
@@ -904,14 +905,23 @@ export function buildReviewCitations(
     // Grounded "why the engine's move was better" — same position, the
     // suggestion is the better order, the played move the worse. Pure board
     // geometry (pin/tempo/check/material); null when no concrete mechanism.
-    const whyBetter = suggestedSan
-      ? explainMoveOrder({
-          fenBefore,
-          betterSan: suggestedSan,
-          worseSan: m.san,
-          moverColor: isWhiteMove ? 'white' : 'black',
-        })?.text ?? null
+    // ONE COACH (David 2026-09-25): the reason comes from the computer Learn's
+    // verdict and the review walk speak (`betterMoveReason` — the engine-proven
+    // order, then what the line wins). The board-only mechanism is the fallback
+    // when the engine line cannot name one.
+    const shared = suggestedSan && m.bestMove
+      ? betterMoveReason(fenBefore, m.san, suggestedSan, [m.bestMove, ...(m.pv?.afterBest ?? [])], isWhiteMove ? 'white' : 'black')
       : null;
+    const whyBetter = shared
+      ? `${suggestedSan} was better — ${shared}.`
+      : suggestedSan
+        ? explainMoveOrder({
+            fenBefore,
+            betterSan: suggestedSan,
+            worseSan: m.san,
+            moverColor: isWhiteMove ? 'white' : 'black',
+          })?.text ?? null
+        : null;
 
     // WHY THE PLAYED MOVE FAILED — the companion to `whyBetter` above. Pure
     // chess.js geometry, no engine, so it costs nothing and cannot invent.
@@ -1754,6 +1764,7 @@ export function buildReviewSegments(
         preMoveEval: m.preMoveEval ?? null,
         classification: m.classification ?? null,
         bestMoveSan,
+        bestLineUci: m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])] : [],
         replyBestSan: i + 1 < moves.length ? uciToSanAt(moves[i + 1].bestMove ?? null, fenPair.fenAfter) : null,
         prevCap,
         allSans: sansForRun,

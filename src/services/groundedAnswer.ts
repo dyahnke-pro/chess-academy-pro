@@ -2912,7 +2912,6 @@ export function explainMoveOrder(opts: {
   worseRefutationSan?: string | null;
 }): MoveOrderExplanation | null {
   const { fenBefore, betterSan, worseSan, moverColor, worseRefutationSan } = opts;
-  const mc = moverColor === 'white' ? 'w' : 'b';
 
   let mv;
   const c = new Chess(fenBefore);
@@ -2971,13 +2970,14 @@ export function explainMoveOrder(opts: {
       if (w.move(worseSan)) {
         const reply = w.move(worseRefutationSan);
         if (reply) {
-          const opp = mc === 'w' ? 'Black' : 'White';
+          // Seated: the opponent is "they", never a colour (the one
+          // perspective — a colour as the subject is the kind-A defect).
           if (w.inCheck()) {
-            cost = `play ${worseSan} first and ${opp} hits back with ${worseRefutationSan}, check`;
+            cost = `play ${worseSan} first and they hit back with ${worseRefutationSan}, check`;
           } else if (reply.captured) {
-            cost = `play ${worseSan} first and ${opp} gets ${worseRefutationSan}, taking the ${REVIEW_PIECE_NAME[reply.captured]}`;
+            cost = `play ${worseSan} first and they get ${worseRefutationSan}, taking the ${REVIEW_PIECE_NAME[reply.captured]}`;
           } else {
-            cost = `play ${worseSan} first and ${opp} equalizes with ${worseRefutationSan}`;
+            cost = `play ${worseSan} first and they equalize with ${worseRefutationSan}`;
           }
         }
       }
