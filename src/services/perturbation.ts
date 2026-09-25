@@ -64,6 +64,11 @@ export async function computeLeansOn(
     const cc = new Chess(fen);
     const removed = cc.remove(dsq as Square);
     if (!removed || removed.type === 'k') continue; // never "remove the king"
+    // A heavy piece is not an anchor: "your bishop on c5 leans on the queen on
+    // c7" was said the move the queen was attacked (hand walk 1600), and "your
+    // rook on e1 leans on the queen on d1" of a back-rank defence. The lesson
+    // is a pawn or minor that HOLDS the piece on its square.
+    if (removed.type === 'q' || removed.type === 'r') continue;
     let t2: PieceValue[];
     try { t2 = parseEvalTable(await evalBoard(cc.fen())); } catch { continue; }
     const after = t2.find((v) => v.square === star.square);

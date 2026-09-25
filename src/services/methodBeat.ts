@@ -277,7 +277,10 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
   // 1 — THREAT IDENTIFICATION AS A HABIT. The board already names the threat
   // elsewhere in the briefing; this names the ROUTINE that finds it unprompted
   // next time, which is the thing the app was not teaching at all.
-  if (s.threatStanding && owed('opponent-threat')) {
+  // …unless the student has mate: "their threat first, your idea second" was
+  // said with Qxd6# on the board (hand walk 1200). Mate answers every threat.
+  const mateOnBoard = (s.bestSan ?? '').endsWith('#');
+  if (s.threatStanding && !mateOnBoard && owed('opponent-threat')) {
     return beat('opponent-threat', [
       'Before you pick a move: what is their last move doing? Answer that first, every time — their idea comes before yours.',
       'Run the question now — what are they threatening? Deal with the answer before you look at your own plan.',

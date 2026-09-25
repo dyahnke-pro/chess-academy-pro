@@ -323,7 +323,10 @@ function observationsFor(
       squares: [passers[0]],
       text: own
         ? `Your passed pawn on ${passers[0]} is a long-term trump — every trade that clears its path makes it stronger.`
-        : `Their passed pawn on ${passers[0]} is the danger here — blockade it with a piece before it runs.`,
+        // WORD FOR WORD the structure plan's sentence (boardPlan), so the two
+        // lanes that both read this passer are one claim to the dedupe — they
+        // were heard back to back in two wordings (hand walk 1200).
+        : `Their passed pawn on ${passers[0]} is the danger — get a piece in front of it and blockade before it runs.`,
     });
   }
 

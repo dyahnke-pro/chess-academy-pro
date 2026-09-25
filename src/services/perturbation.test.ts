@@ -56,3 +56,14 @@ describe('computeLeansOn — the perturbation why-probe', () => {
     expect(await computeLeansOn(FEN, 'w', flat)).toBeNull(); // drop 0.2 < 0.5
   });
 });
+
+describe('a heavy piece is not the anchor (hand walk 1600: "bishop on c5 leans on the queen on c7")', () => {
+  // White Ne5 defended ONLY by a queen on e2; removing the queen drops it hard.
+  const FEN = '4k3/8/8/4N3/8/8/4Q3/1N2K3 w - - 0 1';
+  const base = renderTable({ e5: { piece: 'N', value: 4.5 }, b1: { piece: 'N', value: 3.0 }, e2: { piece: 'Q', value: 9 }, e1: { piece: 'K', value: 0 }, e8: { piece: 'k', value: 0 } });
+  const noQ = renderTable({ e5: { piece: 'N', value: 3.0 }, b1: { piece: 'N', value: 3.0 }, e1: { piece: 'K', value: 0 }, e8: { piece: 'k', value: 0 } });
+  it('stays silent rather than naming the queen', async () => {
+    const evalBoard = (fen: string): Promise<string> => Promise.resolve(fen.includes('4Q3') ? base : noQ);
+    expect(await computeLeansOn(FEN, 'w', evalBoard)).toBeNull();
+  });
+});

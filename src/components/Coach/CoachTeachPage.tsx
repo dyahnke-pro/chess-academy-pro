@@ -7570,6 +7570,9 @@ export function CoachTeachPage(): JSX.Element {
     const leadEyeArrows: BoardArrow[] = [];
     let tacticLine: string | null = null;
     let threatLine: string | null = null;
+    /** A mate was named by the alert lane this turn — the composer below must
+     *  not announce it a second time in other words. */
+    let mateNamedThisTurn = false;
     let alertArrow: BoardArrow | null = null;
     let announceLine: string | null = null;
     let gemLine: string | null = null;
@@ -7683,9 +7686,12 @@ export function CoachTeachPage(): JSX.Element {
       const forcedMateN = engineMateN ?? (tctx.boardFacts?.mateInOne ? 1 : null);
       if (forcedMateN) {
         tacticKey = `mate:${forcedMateN}`;
+        // No "see if you can find it": at a mate the move is named with its
+        // reason (the deliberation — "The move is Qxd6# — it is checkmate"),
+        // and the two together contradicted each other (hand walk 1200).
         tacticLine = forcedMateN === 1
-          ? "There's a mate in one here — see if you can find it."
-          : `There's a forced mate here — mate in ${forcedMateN}. See if you can find the start.`;
+          ? "There's a mate in one here."
+          : `There's a forced mate here — mate in ${forcedMateN}.`;
       } else if (theirHanging.length > 0) {
         const prize = theirHanging[0];
         tacticKey = `win:${prize.piece}${prize.square}`;
@@ -7851,6 +7857,9 @@ export function CoachTeachPage(): JSX.Element {
         if (pendingMotif) recordMotif(pendingMotif.type, pendingMotif.instance, pendingMotif.moveNo, learnMemRef.current.motifFirstMove);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
       }
+      // MATE OUTRANKS EVERY THREAT: "Careful — your bishop on f4 is attacked"
+      // beside a mate in one (hand walk 1200) sent the student to defend.
+      if (tacticKey.startsWith('mate:')) { mateNamedThisTurn = true; threatLine = null; alertArrow = null; threatSquares = []; }
       if (threatLine && (threatKey === learnMemRef.current.lastThreatKey || learnMemRef.current.spokenThreatLines.has(threatLine) || learnMemRef.current.spokenThreatLines.has(threatKey))) {
         threatLine = null;
         alertArrow = null;
@@ -7994,7 +8003,7 @@ export function CoachTeachPage(): JSX.Element {
         // thing, so the turn GAINS a beat rather than losing one to a filter.
         skipSquares: spokenSquaresThisTurn,
       });
-      if (beat) {
+      if (beat && !(mateNamedThisTurn && beat.key === 'tactic:mate_threat')) {
         // `spoken`, NOT `facts`. The facts are written at a phrasing model —
         // shouted header, then an instruction ("Do NOT name the winning move")
         // — so once the package started refusing scaffolding this lane was

@@ -173,3 +173,13 @@ describe('a recapture is the trade finishing (hand walk 2026-09-25, Qxd8 Rexd8)'
     expect(d.bestWhy).toBe('takes back the queen');
   });
 });
+
+describe('mate is the reason (hand walk 1200: "Qxd6# — it wins the bishop on d6")', () => {
+  it('a mating capture says it is checkmate', async () => {
+    const { Chess } = await import('chess.js');
+    const c = new Chess('6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1');
+    const analysis = { topLines: [{ rank: 1, evaluation: 0, mate: 1, moves: ['d1d8'] }, line(2, 300, 'g1f1')] };
+    const d = buildDeliberation({ analysis, fenBefore: c.fen(), moverColor: 'w', opponentLastSan: null })!;
+    expect(d.bestWhy).toBe('is checkmate');
+  });
+});

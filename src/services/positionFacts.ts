@@ -36,7 +36,7 @@ import { detectLatentFork, latentForkClause, type LatentFork } from './latentFor
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
-import { structurePlan } from './boardPlan';
+import { structurePlanFact } from './boardPlan';
 import { matchClauseKind, matchTacticPattern, boostFor, type WeaknessSignal } from './weaknessSignal';
 import { studentMomentBoost } from './studentMomentBoost';
 import { capabilitiesPosed, movePlayedCleanly } from './capabilityEvidence';
@@ -623,9 +623,13 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // STRUCTURE→PLAN — the campaign line, from a CLEAR pawn structure (passed pawn
   // / IQP). Board-true, textbook, conservative (null when ambiguous). Only when
   // the moment already earns voice, so it rides notable beats, not every ply.
-  const structureText = (!openingPhase && importance.speak)
-    ? (structurePlan(fen, studentColor) ?? '')
-    : '';
+  // SAID ONCE BY ITS PLAN, NOT ITS WORDS. The race counts change every push, so
+  // "both sides have a runner: yours on d4 is 4…" then "…on d5 is 3…" were two
+  // sentences to a text dedupe and one claim to the ear (hand walk 1200). The
+  // plan id carries the verdict (`passer-race:you`), so a FLIP still speaks.
+  const planFact = (!openingPhase && importance.speak) ? structurePlanFact(fen, studentColor) : null;
+  const planKey = planFact ? `plan:${planFact.id}` : null;
+  const structureText = planFact && planKey && !input.alreadySaid?.has(planKey) ? planFact.text : '';
 
   // FUNDAMENTAL — the teaching idea the STUDENT's best move serves (development /
   // king safety / outpost / center / open file / king activity / passed pawn),
@@ -863,6 +867,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     remember: [
       ...clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
       ...(methodKey && clauses.some((c) => c.kind === 'method') ? [methodKey] : []),
+      ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey] : []),
     ],
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
@@ -1269,7 +1274,7 @@ function buildClauses(a: {
   // The campaign — the student's asset, and the opponent's (with the counter).
   if (leansOn) ranked.push({
     kind: 'student-leans', rank: 40,
-    text: `Your ${leansOn.piece} on ${leansOn.square} is doing the work — it leans on the ${leansOn.leansOn.piece} on ${leansOn.leansOn.square}, so keep that support in place.`,
+    text: `Your ${leansOn.piece} on ${leansOn.square} does its work because your ${leansOn.leansOn.piece} on ${leansOn.leansOn.square} holds it there — keep that ${leansOn.leansOn.piece} in place.`,
     squares: [leansOn.square, leansOn.leansOn.square],
   });
   if (opponentLeansOn) ranked.push({
