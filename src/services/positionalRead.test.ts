@@ -365,3 +365,16 @@ describe('queens off, no development read (hand walk 2026-09-25, move 36)', () =
     expect(obs.some((o) => o.kind === 'development')).toBe(false);
   });
 });
+
+describe('one tempo is not a development lead (hand walk 1600, Caro-Kann)', () => {
+  it('after 1.e4 c6 2.Nf3 d5 3.e5 Black is not "behind in development"', () => {
+    const c = new Chess();
+    for (const m of 'e4 c6 Nf3 d5 e5'.split(' ')) c.move(m);
+    expect(readPosition(c.fen(), 'black').some((o) => o.kind === 'development')).toBe(false);
+  });
+  it('two pieces behind still is', () => {
+    const c = new Chess();
+    for (const m of 'e4 a6 Nf3 h6 Bc4 a5'.split(' ')) c.move(m);
+    expect(readPosition(c.fen(), 'black').some((o) => o.kind === 'development')).toBe(true);
+  });
+});

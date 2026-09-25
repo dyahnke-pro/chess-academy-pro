@@ -408,3 +408,17 @@ describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
     expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
   });
 });
+
+describe('a structure plan is said once by its PLAN, not its words (hand walk 1200)', () => {
+  const flatAnalysis = { evaluation: 0, bestMove: '', depth: 12, topLines: [], nodesPerSecond: 0 } as unknown as Parameters<typeof computePositionFacts>[0]['analysis'];
+  it('the pawn race does not repeat when only the counts move', async () => {
+    // White passer d4→d5, Black passer a7; queens on. Same verdict both plies.
+    const a = '6k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
+    const b = '6k1/p4ppp/8/3P4/8/8/5PPP/3Q2K1 w - - 0 31';
+    const first = await computePositionFacts({ posture: 'walk', fen: a, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true });
+    const plan = first.clauses.find((c) => c.kind === 'structure-plan');
+    expect(plan, 'fixture must speak a plan').toBeTruthy();
+    const second = await computePositionFacts({ posture: 'walk', fen: b, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true, alreadySaid: new Set(first.remember) });
+    expect(second.clauses.some((c) => c.kind === 'structure-plan')).toBe(false);
+  });
+});

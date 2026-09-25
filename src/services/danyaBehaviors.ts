@@ -388,7 +388,10 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const notes = findPieceQuality(fen);
       const out = notes.find((n) => n.color === student && n.reason.includes('outpost'));
       if (out) {
-        return { fact: `${out.square} is an outpost — a knight there can't be chased by a pawn and dominates.`, squares: [out.square] };
+        // The note is about a piece STANDING on the outpost — say whose
+        // (hand walk 1600: "e4 is an outpost — a knight there…" with the
+        // student's own knight already on e4).
+        return { fact: `Your knight on ${out.square} sits on an outpost — no pawn can chase it away, and from there it dominates.`, squares: [out.square] };
       }
       return null;
     },

@@ -83,3 +83,10 @@ describe('S7 — the forcing scan is taught where the forcing move decides', () 
     expect(liveMethodBeatFor({ isStudentMove: true, threatStanding: false, bestSan: 'Nxe5', tier: 'none' })).toBeNull();
   });
 });
+
+describe('mate answers every threat (hand walk 1200: "their threat first" beside Qxd6#)', () => {
+  it('no threat-first habit when the best move mates', async () => {
+    const { liveMethodBeatFor } = await import('./methodBeat');
+    expect(liveMethodBeatFor({ isStudentMove: true, threatStanding: true, bestSan: 'Qxd6#', tier: 'critical' }) ?? '').not.toMatch(/their threat first|what are they threatening|their last move doing/i);
+  });
+});

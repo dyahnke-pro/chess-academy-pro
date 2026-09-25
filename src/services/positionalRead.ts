@@ -214,7 +214,12 @@ function observationsFor(
   // "at home" is an endgame piece, not a lag (hand walk 2026-09-25, move 36).
   if (queensOn && mine && other && mine.totalMinors > 0) {
     const asleep = mine.totalMinors - mine.developedMinors;
-    if (asleep >= 2 && other.developedMinors > mine.developedMinors) {
+    // One tempo is not a lead in the first moves — White moves first, and
+    // "they are ahead in development" after 1.e4 c6 2.Nf3 d5 3.e5 is a nag
+    // about one knight (hand walk 1600). Two pieces, or one past move five.
+    const lead = other.developedMinors - mine.developedMinors;
+    const moveNo = Number(fen.split(' ')[5] ?? '1') || 1;
+    if (asleep >= 2 && (lead >= 2 || (lead >= 1 && moveNo >= 6))) {
       out.push({
         key: `${side}-development`, side, kind: 'development', rank: rank('development'),
         text: own
@@ -318,7 +323,10 @@ function observationsFor(
       squares: [passers[0]],
       text: own
         ? `Your passed pawn on ${passers[0]} is a long-term trump — every trade that clears its path makes it stronger.`
-        : `Their passed pawn on ${passers[0]} is the danger here — blockade it with a piece before it runs.`,
+        // WORD FOR WORD the structure plan's sentence (boardPlan), so the two
+        // lanes that both read this passer are one claim to the dedupe — they
+        // were heard back to back in two wordings (hand walk 1200).
+        : `Their passed pawn on ${passers[0]} is the danger — get a piece in front of it and blockade before it runs.`,
     });
   }
 

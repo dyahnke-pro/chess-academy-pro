@@ -847,6 +847,12 @@ describe('findFianchetto + findRookLift + findBlockade (2026-08-23, the rest of 
 })
 
 describe('namedPawnStructure (his "catalogue the structures", 2026-08-23)', () => {
+  it('seats the chain plan — a Black student hits d4, never "Black hits d4" (hand walk 1600)', () => {
+    const fen = 'r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1';
+    expect(namedPawnStructure(fen, 'b')?.plan).toMatch(/you hit d4/);
+    expect(namedPawnStructure(fen, 'w')?.plan).toMatch(/you defend the head on e5/);
+    expect(`${namedPawnStructure(fen, 'b')?.plan}${namedPawnStructure(fen, 'w')?.plan}`).not.toMatch(/\b(White|Black)\b/);
+  });
   it('names the French-type chain (d4+e5 vs d5+e6)', () => {
     const s = namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1', 'w');
     expect(s?.name).toMatch(/French/);
