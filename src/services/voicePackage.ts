@@ -324,7 +324,17 @@ function sentencesOf(text: string): string[] {
 
 /** The comparison key: letters and digits only, so punctuation and casing
  *  cannot make two identical claims look different. */
-const sayKey = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+const sayKey = (s: string): string => {
+  const full = s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  // A FRAME IS NOT PART OF THE CLAIM (hand walk 1380, move 25: "Watch out —
+  // their rook on f8 pins your bishop…" and the same pin without the frame
+  // were spoken back to back, because the prefix twin-check never saw them
+  // as one). The key drops a leading "watch out / careful / check" so one
+  // claim is one key however it is introduced — never down to nothing.
+  const bare = s.replace(/^\s*(?:(?:watch out|careful|check|look out|heads up)\s*[—–:,.!-]*\s*)+/i, '');
+  const key = bare.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return key.length >= 12 ? key : full;
+};
 
 export function buildVoicePackage(
   facts: VoiceFact[],
