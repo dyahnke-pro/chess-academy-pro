@@ -31,8 +31,9 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentL
     const c = new Chess(fenBefore);
     const m = c.move(san);
     if (!m?.captured) return null;
-    // A recapture is the trade finishing, never material won.
-    if (opponentLastSan && new RegExp(`x${m.to}(?![1-8])`).test(opponentLastSan)) return null;
+    // A recapture is the trade finishing, never material won — and taking back
+    // IS the reason ("The move is Rexd8 — it takes the open d-file" after Qxd8).
+    if (opponentLastSan && new RegExp(`x${m.to}(?![1-8])`).test(opponentLastSan)) return `takes back the ${PIECE_NOUN[m.captured] ?? 'piece'}`;
     // SEE counts the recaptures: a positive net is material won, not a trade.
     if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
     return `wins the ${PIECE_NOUN[m.captured] ?? 'piece'} on ${m.to}`;

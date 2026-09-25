@@ -333,7 +333,11 @@ export function computeMoveFundamentals(
     // hole or a king-zone square in that list makes the sentence false, which
     // is the same defect the 2026-07-22 wing-pawn fix removed. Each kind of
     // square gets the clause that is true of it.
-    const central = eyes.filter((s) => CENTRAL_SQUARES.includes(s));
+    // …and a lone flank square is not "the center": Bg4 eyeing f5 alone was
+    // "fighting for the center on f5" (hand walk 800). The list speaks only
+    // when it reaches the core four.
+    const centralAll = eyes.filter((s) => CENTRAL_SQUARES.includes(s));
+    const central = centralAll.some((s) => CORE_CENTER.includes(s)) ? centralAll : [];
     // "leaning on e6", not "the hole on e6" — at move three Black's e-pawn is
     // still home, so e6 is an empty square, not yet a hole. Say what is true.
     const holes = eyes.filter((s) => standingHoles(seat).includes(s) && !nearKing.includes(s));

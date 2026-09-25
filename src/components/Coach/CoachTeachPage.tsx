@@ -90,7 +90,7 @@ import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { openingAnnouncementForGame, warmOpeningBook } from '../../services/openingAnnouncement';
-import { lastMoveCapturedOn, pendingRecapture } from '../../utils/justCaptured';
+import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
@@ -7698,7 +7698,12 @@ export function CoachTeachPage(): JSX.Element {
           ? `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} just took and nothing defends it — the material comes back.`
           : `Their ${NAME[prize.piece] ?? 'piece'} on ${prize.square} has nothing defending it — there's something to win here.`;
       } else {
-        const mine = tctx.immediate.filter((t) => t.side === 'student' && !pinnedPawn(t));
+        // THE STUDENT ALREADY FOUND IT (hand walks 800 + 2000): "There's a pin
+        // here for you — have a look" right after they played …Bg4 themselves,
+        // and "a fork here for you" right after …Ng3+. A tactic delivered by
+        // the piece they just moved is theirs, not a hint to find.
+        const justPlayedTo = landingSquare(history, 2);
+        const mine = tctx.immediate.filter((t) => t.side === 'student' && !pinnedPawn(t) && t.squares[0] !== justPlayedTo);
         if (mine.length > 0) {
           const t = mine[0];
           tacticKey = `opp:${t.type}:${t.squares.join('')}`;

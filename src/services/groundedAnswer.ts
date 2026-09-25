@@ -1275,7 +1275,7 @@ export function assemblePositionAssessment(opts: {
     if (tactics.boardFacts?.mateInOne) {
       parts.push(`There is checkmate in one on the board: ${tactics.boardFacts.mateInOne}.`);
     } else if (tactics.immediate[0]?.description) {
-      parts.push(`${tactics.immediate[0].description}.`);
+      parts.push(`${seatedSentence(tactics.immediate[0].description, tactics.fen, sc)}.`);
     } else {
       // Verified against the package's OWN fen — unconditional, no parameter to
       // forget (see `TacticsLiveContext.fen`). This catches a claim the
@@ -3260,7 +3260,7 @@ export function assembleTacticsAnswer(
   // Immediate tactics on the board now — voice the engine's own descriptions
   // (skipping the one the concept sentence already taught).
   for (const t of tactics.immediate) {
-    if (t.description && t.type !== spokenConceptId) parts.push(`${t.description}.`);
+    if (t.description && t.type !== spokenConceptId) parts.push(`${seatedSentence(t.description, tactics.fen, sc)}.`);
   }
   // The STUDENT's pieces left hanging — warn concretely. Every claim is
   // verified against the package's own fen before it is made: a hanging entry
@@ -3273,7 +3273,7 @@ export function assembleTacticsAnswer(
     parts.push(`Watch out — ${seatedDescription(tactics.threats[0].description, tactics.fen, sc)}.`);
   }
   if (parts.length === 0 && tactics.opportunities[0]?.description) {
-    parts.push(`You have a shot: ${tactics.opportunities[0].description}.`);
+    parts.push(`You have a shot: ${seatedDescription(tactics.opportunities[0].description, tactics.fen, sc)}.`);
   }
 
   if (parts.length === 0) return null;
@@ -6183,6 +6183,14 @@ export function assembleCounterRepertoireAnswer(opts: {
 
 /** A detector's description, mid-sentence and seated: "Capturing knight on
  *  f3…" after "Watch out —" read raw, with nobody's knight (hand walk 2340). */
+/** A detector description seated and standing as its own sentence ("Your
+ *  bishop on g4 pins their knight on f3 against their queen on d1"). The raw
+ *  text ("Bishop on g4 pins knight on f3…") was spoken as-is (hand walk 800). */
+function seatedSentence(description: string, fen: string, studentColorWB: 'w' | 'b'): string {
+  const s = seatedDescription(description, fen, studentColorWB);
+  return `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
+}
+
 function seatedDescription(description: string, fen: string, studentColorWB: 'w' | 'b'): string {
   const lowered = `${description.charAt(0).toLowerCase()}${description.slice(1)}`;
   return seatPieceReferences(lowered, fen, studentColorWB);

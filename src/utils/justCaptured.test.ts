@@ -33,3 +33,13 @@ describe('pendingRecapture', () => {
     expect(lastMoveCapturedOn(['e4', 'd5', 'exd5'], 'd5')).toBe(true);
   });
 });
+
+describe('landingSquare — where a move in the history landed', () => {
+  it('names the student move one ply before the reply (…Bg4, then c3)', async () => {
+    const { landingSquare } = await import('./justCaptured');
+    const h = ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6', 'dxc6', 'O-O', 'f6', 'd4', 'Bg4', 'c3'];
+    expect(landingSquare(h, 2)).toBe('g4');
+    expect(landingSquare(h, 1)).toBe('c3');
+    expect(landingSquare(['e4'], 2)).toBeNull();
+  });
+});

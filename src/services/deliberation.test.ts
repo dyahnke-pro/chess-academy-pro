@@ -169,5 +169,7 @@ describe('a recapture is the trade finishing (hand walk 2026-09-25, Qxd8 Rexd8)'
     const analysis = { topLines: [line(1, -250, 'e8d8'), line(2, -900, 'a7a6')] };
     const d = buildDeliberation({ analysis, fenBefore: c.fen(), moverColor: 'b', opponentLastSan: 'Qxd8' })!;
     expect(d.bestWhy ?? '').not.toMatch(/wins the queen/);
+    // …and taking back IS the reason, not "it takes the open d-file".
+    expect(d.bestWhy).toBe('takes back the queen');
   });
 });

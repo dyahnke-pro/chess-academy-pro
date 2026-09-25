@@ -31,6 +31,16 @@ export interface DetectedName {
 /** Lichess filler labels that name no line a student can look up. */
 const GENERIC_TAIL = /^(?:main line|normal variation|rare (?:defen[cs]es?|variations?|lines?)|other (?:variations?|lines?))\b/i;
 
+/** The name as it is SAID: a filler tail is dropped ("Indian Defense: Normal
+ *  Variation" → "Indian Defense"), a real one kept. */
+function spoken(name: string): string {
+  const [family, ...rest] = name.split(':');
+  const tail = rest.join(':').trim();
+  if (!tail) return name.trim();
+  const parts = tail.split(',').map((p) => p.trim()).filter((p) => p && !GENERIC_TAIL.test(p));
+  return parts.length ? `${family.trim()}: ${parts.join(', ')}` : family.trim();
+}
+
 export function openingAnnouncement(
   det: DetectedName | null,
   departure: BookDeparture | null,
@@ -38,7 +48,7 @@ export function openingAnnouncement(
   studentColor: 'w' | 'b',
 ): string | null {
   if (!det || !det.name || det.name === spokenName) return null;
-  if (spokenName === null) return `This game is the ${det.name}.`;
+  if (spokenName === null) return `This game is the ${spoken(det.name)}.`;
   if (!departure) {
     // STILL IN BOOK, BUT THE NAME SHARPENED — "Sicilian Defense" became
     // "Sicilian Defense: Alapin Variation" on c3. That is the variation name,
@@ -65,7 +75,7 @@ export function openingAnnouncement(
   const main = departure.mainSan
     ? `; the usual move there was ${sayMoveNoun(departure.mainSan)}`
     : '';
-  return `${who} left the book with ${sayMoveNoun(departure.san)}${main}. The line was the ${det.name}.`;
+  return `${who} left the book with ${sayMoveNoun(departure.san)}${main}. The line was the ${spoken(det.name)}.`;
 }
 
 /** The same announcement read straight off the game's move history — the
