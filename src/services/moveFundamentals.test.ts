@@ -68,17 +68,23 @@ describe('a quiet pawn move that SUPPORTS the center has a why (prod hint audit 
   // 1.e4 e6 — the engine gave 2.c3. The hint fell to the bare "that's the
   // strongest move here" because nothing modelled a pawn GUARDING the center.
   const FRENCH = 'rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
-  it('c3 supports the center by guarding d4', () => {
+  it('c3 prepares d4 — the d-pawn arrives supported (2026-09-25: the better statement of guarding d4)', () => {
     const funds = computeMoveFundamentals(FRENCH, 'c3', 'white');
-    expect(funds[0].id).toBe('center');
-    expect(funds[0].squares).toEqual(['c3', 'd4']);
-    expect(strategicWhyLed(FRENCH, 'c3', 'white')).toBe('supports the center, guarding d4');
+    expect(funds[0].id).toBe('prepare-break');
+    expect(funds[0].squares).toEqual(['c3', 'd4', 'd2']);
+    expect(strategicWhyLed(FRENCH, 'c3', 'white')).toBe('prepares d4 — when the d-pawn goes forward, it will be supported');
+    // the support clause about the same square steps aside
+    expect(funds.some((f) => f.id === 'center')).toBe(false);
   });
   it('e3 from the start guards d4 (f4 is extended center, not core — filtered out)', () => {
     // The centre clause is present and core-only (d4, never f4). Since
     // 2026-09-24 e3 LEADS with freeing the f1-bishop — the other true reason.
-    const center = computeMoveFundamentals(START, 'e3', 'white').find((f) => f.id === 'center');
-    expect(center?.led).toBe('supports the center, guarding d4');
+    // Since 2026-09-25 the d4 clause is "prepares d4" (d2–d4 arrives
+    // supported), the better statement of guarding it — still core-only.
+    const funds = computeMoveFundamentals(START, 'e3', 'white');
+    const prep = funds.find((f) => f.id === 'prepare-break');
+    expect(prep?.led).toBe('prepares d4 — when the d-pawn goes forward, it will be supported');
+    expect(funds.some((f) => f.squares.includes('f4'))).toBe(false);
     expect(strategicWhyLed(START, 'e3', 'white')).toContain('opens the diagonal for the bishop on f1');
   });
   it('a wing pawn (a3 guards only b4) is NOT center support — keeps the a3 contract null', () => {
