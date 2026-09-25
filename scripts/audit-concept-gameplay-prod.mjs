@@ -495,11 +495,11 @@ async function main() {
       // are different diagnoses, and a posture bug hides the moment they are
       // collapsed into an un-attributed quiet.
       const silent = decisions.filter((d) => d.speak === false);
-      const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need' && d.reason !== 'unsupported' && d.reason !== 'empty' && d.reason !== 'proven');
+      const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need' && d.reason !== 'unsupported' && d.reason !== 'empty' && d.reason !== 'proven' && d.reason !== 'board');
       record(
         'G2. every silence names WHICH gate closed it',
         unattributed.length === 0,
-        `${silent.length}/${decisions.length} silent — importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} empty=${silent.filter((d) => d.reason === 'empty').length} proven=${silent.filter((d) => d.reason === 'proven').length}${unattributed.length ? ` UNATTRIBUTED=${unattributed.length}` : ''}`,
+        `${silent.length}/${decisions.length} silent — importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} empty=${silent.filter((d) => d.reason === 'empty').length} proven=${silent.filter((d) => d.reason === 'proven').length} board=${silent.filter((d) => d.reason === 'board').length}${unattributed.length ? ` UNATTRIBUTED=${unattributed.length}` : ''}`,
       );
       // THE MOVE IS NAMED WHERE IT IS EARNED (David 2026-09-24: "I don't want
       // to hear the best move on every ply"). Every live next-move row names

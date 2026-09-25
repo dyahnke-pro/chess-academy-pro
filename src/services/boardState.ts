@@ -92,7 +92,7 @@ const BESIDE_MATE: ReadonlySet<FactKind> = new Set<FactKind>([
  *  ("their queen on e1 pins your bishop" one move before Rxe1). */
 const ABOUT_THE_FLUX_SQUARE: ReadonlySet<FactKind> = new Set<FactKind>([
   'quality', 'praise', 'move', 'forced', 'refuted', 'deliberation', 'key-moment',
-  'method', 'sac', 'sac-why', 'timing',
+  'method', 'sac', 'sac-why', 'timing', 'trade',
 ]);
 
 export type BoardVeto = 'in-flux' | 'beside-mate';

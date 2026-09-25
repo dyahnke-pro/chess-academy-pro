@@ -208,7 +208,9 @@ export interface CoachDecision {
   /** Why it does or does not — the observability trail. */
   /** `empty`: the moment cleared both gates but its caller handed no facts —
    *  nothing was dropped, so it must not read as `unsupported` (walk 6, D1). */
-  reason: 'importance' | 'need' | 'unsupported' | 'empty' | 'proven' | 'spoken';
+  /** `board`: every fact was one the board forbids here (`boardState`) — a
+   *  recapture pending or a mate on the board. */
+  reason: 'importance' | 'need' | 'unsupported' | 'empty' | 'proven' | 'board' | 'spoken';
   tier: ImportanceTier;
   /** Moment-level weight, for ordering moments against each other. */
   rank: number;
@@ -398,8 +400,9 @@ export function decide(
   // support says nothing — and says WHICH gate closed it, rather than
   // reporting `speak: true` over an empty list.
   if (spoken.length === 0) {
+    const boardQuiet = provenQuiet.filter((q) => q.why === 'in-flux' || q.why === 'beside-mate').length;
     const reason = bundle.facts.length === 0 ? 'empty'
-      : live.length === 0 ? 'proven'
+      : live.length === 0 ? (boardQuiet === provenQuiet.length ? 'board' : 'proven')
         : 'unsupported';
     // THE GATE THAT CLOSED THE ROW NAMES EVERY FACT ON IT (B9). A fact that
     // lost a subsumption to a description — which then had no teaching point
