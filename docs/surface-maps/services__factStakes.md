@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**129 lines · 11 exports · 6 importers · 1 tests · 1 audits**
+**176 lines · 13 exports · 9 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,9 +15,12 @@
 - `src/services/coachDecider.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/factStakes.test.ts`
+- `src/services/groundedAnswer.ts`
+- `src/services/liveTacticsContext.ts`
 - `src/services/positionFacts.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/reviewFullData.ts`
+- `src/services/teachingLayers.test.ts`
 
 ## Exports and every call site
 
@@ -37,54 +40,75 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `stakeValue` (function) — 5 call sites
-- `src/services/factStakes.test.ts:48`
-- `src/services/factStakes.test.ts:49`
 - `src/services/factStakes.test.ts:50`
-- `src/services/factStakes.test.ts:53`
-- `src/services/reviewFacetRank.ts:250`
+- `src/services/factStakes.test.ts:51`
+- `src/services/factStakes.test.ts:52`
+- `src/services/factStakes.test.ts:55`
+- `src/services/reviewFacetRank.ts:330`
 
-### `costStakes` (function) — 7 call sites
-- `src/services/factStakes.test.ts:59`
-- `src/services/factStakes.test.ts:60`
+### `costStakes` (function) — 11 call sites
 - `src/services/factStakes.test.ts:61`
-- `src/services/positionFacts.ts:933`
-- `src/services/positionFacts.ts:1093`
-- `src/services/reviewFullData.ts:322`
-- `src/services/reviewFullData.ts:331`
+- `src/services/factStakes.test.ts:62`
+- `src/services/factStakes.test.ts:63`
+- `src/services/positionFacts.ts:1100`
+- `src/services/positionFacts.ts:1202`
+- `src/services/positionFacts.ts:1293`
+- `src/services/reviewFullData.ts:399`
+- `src/services/reviewFullData.ts:408`
+- `src/services/reviewFullData.ts:826`
+- `src/services/teachingLayers.test.ts:94`
+- `src/services/teachingLayers.test.ts:97`
 
-### `exchangeStakes` (function) — 8 call sites
-- `src/services/factStakes.test.ts:24`
-- `src/services/factStakes.test.ts:27`
-- `src/services/factStakes.test.ts:31`
-- `src/services/positionFacts.ts:1051`
-- `src/services/reviewFullData.ts:450`
-- `src/services/reviewFullData.ts:467`
-- `src/services/reviewFullData.ts:537`
-- `src/services/reviewFullData.ts:539`
+### `exchangeStakes` (function) — 9 call sites
+- `src/services/factStakes.test.ts:26`
+- `src/services/factStakes.test.ts:29`
+- `src/services/factStakes.test.ts:33`
+- `src/services/positionFacts.ts:1251`
+- `src/services/reviewFullData.ts:532`
+- `src/services/reviewFullData.ts:570`
+- `src/services/reviewFullData.ts:576`
+- `src/services/reviewFullData.ts:646`
+- `src/services/reviewFullData.ts:648`
 
 ### `forkPoints` (function) — 6 call sites
-- `src/services/factStakes.test.ts:35`
-- `src/services/factStakes.test.ts:36`
 - `src/services/factStakes.test.ts:37`
-- `src/services/positionFacts.ts:978`
-- `src/services/reviewFullData.ts:441`
-- `src/services/reviewFullData.ts:485`
+- `src/services/factStakes.test.ts:38`
+- `src/services/factStakes.test.ts:39`
+- `src/services/positionFacts.ts:1148`
+- `src/services/reviewFullData.ts:525`
+- `src/services/reviewFullData.ts:594`
 
 ### `piecesOn` (function) — 2 call sites
-- `src/services/reviewFullData.ts:441`
-- `src/services/reviewFullData.ts:485`
+- `src/services/reviewFullData.ts:525`
+- `src/services/reviewFullData.ts:594`
 
 ### `lineTacticPoints` (function) — 6 call sites
-- `src/services/factStakes.test.ts:41`
-- `src/services/factStakes.test.ts:42`
 - `src/services/factStakes.test.ts:43`
 - `src/services/factStakes.test.ts:44`
-- `src/services/positionFacts.ts:946`
-- `src/services/positionFacts.ts:954`
+- `src/services/factStakes.test.ts:45`
+- `src/services/factStakes.test.ts:46`
+- `src/services/positionFacts.ts:1113`
+- `src/services/positionFacts.ts:1124`
+
+### `isScenicPawnPin` (function) — 5 call sites
+- `src/services/factStakes.test.ts:112`
+- `src/services/factStakes.test.ts:117`
+- `src/services/factStakes.test.ts:121`
+- `src/services/liveTacticsContext.ts:360`
+- `src/services/reviewFullData.ts:537`
+
+### `isSacrifice` (function) — 6 call sites
+- `src/services/factStakes.test.ts:131`
+- `src/services/factStakes.test.ts:133`
+- `src/services/factStakes.test.ts:141`
+- `src/services/factStakes.test.ts:142`
+- `src/services/groundedAnswer.ts:2597`
+- `src/services/reviewFullData.ts:710`
 
 ## Tests
 
 - `src/services/factStakes.test.ts`
+- `src/services/teachingLayers.test.ts`
 
 ## Audits that reach it
 

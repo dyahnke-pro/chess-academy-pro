@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**844 lines · 2 exports · 31 importers · 12 tests · 0 audits**
+**846 lines · 2 exports · 31 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -63,7 +63,7 @@
 - `src/services/discussionPractice.ts:100`
 - `src/services/discussionPractice.ts:143`
 - `src/services/liveNoteTruth.test.ts:59`
-- `src/services/liveTacticsContext.ts:353`
+- `src/services/liveTacticsContext.ts:354`
 - `src/services/lookaheadPlan.ts:1092`
 - `src/services/lookaheadPlan.ts:1155`
 - `src/services/misconceptionClassifier.ts:123`
@@ -82,8 +82,8 @@
 - `src/services/pvPlayback.ts:343`
 - `src/services/relationClaimCost.report.test.ts:52`
 - `src/services/reviewCorpusNote.test.ts:61`
-- `src/services/reviewFullData.ts:468`
-- `src/services/reviewFullData.ts:528`
+- `src/services/reviewFullData.ts:492`
+- `src/services/reviewFullData.ts:551`
 - `src/services/reviewMoveBriefing.ts:64`
 - `src/services/reviewMoveBriefing.ts:65`
 - `src/services/reviewNarrationFidelity.test.ts:324`

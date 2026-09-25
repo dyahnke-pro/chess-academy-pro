@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**796 lines · 26 exports · 5 importers · 3 tests · 0 audits**
+**814 lines · 26 exports · 5 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -77,7 +77,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:81`
 
 ### `namedTacticClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9333`
+- `src/components/Coach/CoachTeachPage.tsx:9368`
 - `src/services/danyaBehaviors.ts:377`
 - `src/services/danyaDeviceCoverage.test.ts:101`
 - `src/services/tacticalRead.test.ts:141`
@@ -88,7 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:123`
 
 ### `tacticalReadFromLines` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8774`
+- `src/components/Coach/CoachTeachPage.tsx:8809`
 - `src/services/danyaBehaviors.ts:375`
 - `src/services/danyaDeviceCoverage.test.ts:72`
 - `src/services/liveVoiceDefects.test.ts:46`
@@ -109,15 +109,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:543`
 
 ### `temptingTurnClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8785`
-- `src/components/Coach/CoachTeachPage.tsx:9352`
+- `src/components/Coach/CoachTeachPage.tsx:8820`
+- `src/components/Coach/CoachTeachPage.tsx:9387`
 - `src/services/danyaDeviceCoverage.test.ts:78`
 - `src/services/tacticalRead.test.ts:434`
 - `src/services/tacticalRead.test.ts:447`
 
 ### `uncertaintyClause` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8790`
-- `src/components/Coach/CoachTeachPage.tsx:9355`
+- `src/components/Coach/CoachTeachPage.tsx:8825`
+- `src/components/Coach/CoachTeachPage.tsx:9390`
 - `src/services/danyaDeviceCoverage.test.ts:83`
 - `src/services/liveVoiceDefects.test.ts:281`
 - `src/services/tacticalRead.test.ts:419`
@@ -132,7 +132,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:579`
 
 ### `candidateCompareClause` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8796`
+- `src/components/Coach/CoachTeachPage.tsx:8831`
 - `src/services/danyaDeviceCoverage.test.ts:88`
 - `src/services/tacticalRead.test.ts:452`
 - `src/services/tacticalRead.test.ts:460`

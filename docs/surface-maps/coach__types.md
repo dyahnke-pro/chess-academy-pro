@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**927 lines · 32 exports · 930 importers · 206 tests · 39 audits**
+**932 lines · 32 exports · 931 importers · 207 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -944,6 +944,7 @@
 - `src/stores/userContext.ts`
 - `src/test/benchmarks/dexie.perf.test.ts`
 - `src/test/benchmarks/stockfish.perf.test.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/factories.ts`
 - `src/utils/arrowGrounding.test.ts`
 - `src/utils/arrowGrounding.ts`
@@ -1257,6 +1258,7 @@
 - `src/stores/coachSessionStore.test.ts`
 - `src/test/benchmarks/dexie.perf.test.ts`
 - `src/test/benchmarks/stockfish.perf.test.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 - `src/utils/arrowGrounding.test.ts`
 - `src/utils/commonMistakeLine.test.ts`
 - `src/utils/wlppLadder.test.ts`

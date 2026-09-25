@@ -27,31 +27,31 @@
 
 ### `onCoachDecision` (function) — 4 call sites
 - `src/services/appAuditor.ts:2158`
-- `src/services/coachDecisionEmits.test.ts:31`
-- `src/services/coachDecisionEmits.test.ts:94`
+- `src/services/coachDecisionEmits.test.ts:32`
+- `src/services/coachDecisionEmits.test.ts:95`
 - `src/test/computedOrderWired.test.ts:26`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:239`
+- `src/services/coachDecider.ts:247`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
 - `src/services/appAuditor.ts:2110`
-- `src/services/coachDecisionEmits.test.ts:119`
-- `src/services/coachDecisionEmits.test.ts:146`
+- `src/services/coachDecisionEmits.test.ts:120`
+- `src/services/coachDecisionEmits.test.ts:147`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
 
 ### `emitNeedScore` (function) — 1 call site
 - `src/services/needScore.ts:474`
 
 ### `resetCoachDecisionListeners` (function) — 5 call sites
-- `src/services/coachDecisionEmits.test.ts:30`
-- `src/services/coachDecisionEmits.test.ts:33`
-- `src/services/coachDecisionEmits.test.ts:93`
-- `src/services/coachDecisionEmits.test.ts:119`
+- `src/services/coachDecisionEmits.test.ts:31`
+- `src/services/coachDecisionEmits.test.ts:34`
+- `src/services/coachDecisionEmits.test.ts:94`
 - `src/services/coachDecisionEmits.test.ts:120`
+- `src/services/coachDecisionEmits.test.ts:121`
 
 ## Tests
 

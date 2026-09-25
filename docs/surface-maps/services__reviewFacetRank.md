@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**414 lines · 14 exports · 4 importers · 2 tests · 0 audits**
+**418 lines · 14 exports · 5 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@
 
 ## Who calls in
 
+- `src/services/boardState.ts`
 - `src/services/coachDecider.ts`
 - `src/services/factSelector.ts`
 - `src/services/reviewFacetRank.test.ts`
@@ -49,19 +50,19 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `factKind` (function) — 1 call site
-- `src/services/coachDecider.ts:325`
+- `src/services/coachDecider.ts:333`
 
 ### `factValue` (function) — 1 call site
-- `src/services/coachDecider.ts:332`
+- `src/services/coachDecider.ts:340`
 
 ### `facetTag` (function) — 4 call sites
 - `src/services/reviewFacetRank.test.ts:19`
 - `src/services/reviewFacetRank.test.ts:20`
 - `src/services/reviewFacetRank.test.ts:21`
-- `src/services/supportedFacts.test.ts:8`
+- `src/services/supportedFacts.test.ts:9`
 
 ### `facetRank` (function) — 4 call sites
-- `src/services/factSelector.ts:216`
+- `src/services/factSelector.ts:219`
 - `src/services/reviewFacetRank.test.ts:51`
 - `src/services/reviewFacetRank.test.ts:55`
 - `src/services/reviewFacetRank.test.ts:61`

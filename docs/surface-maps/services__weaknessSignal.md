@@ -76,15 +76,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `boostFor` (function) — 26 call sites
-- `src/services/coachDecider.ts:80`
+- `src/services/coachDecider.ts:81`
 - `src/services/fundamentalReachesDecider.test.ts:136`
 - `src/services/fundamentalReachesDecider.test.ts:137`
 - `src/services/needScore.ts:301`
 - `src/services/needScore.ts:315`
-- `src/services/positionFacts.ts:940`
-- `src/services/positionFacts.ts:962`
-- `src/services/reviewFacetRank.ts:330`
-- `src/services/reviewFacetRank.ts:378`
+- `src/services/positionFacts.ts:987`
+- `src/services/positionFacts.ts:1009`
+- `src/services/reviewFacetRank.ts:334`
+- `src/services/reviewFacetRank.ts:382`
 - `src/services/studentMomentBoost.ts:119`
 - `src/services/teachingSelector.ts:170`
 - `src/services/weaknessSignal.test.ts:56`
@@ -110,9 +110,9 @@
 - `src/services/fundamentalReachesDecider.test.ts:130`
 - `src/services/fundamentalReachesDecider.test.ts:157`
 - `src/services/needScore.ts:312`
-- `src/services/positionFacts.ts:906`
-- `src/services/reviewFacetRank.ts:329`
-- `src/services/reviewFacetRank.ts:377`
+- `src/services/positionFacts.ts:953`
+- `src/services/reviewFacetRank.ts:333`
+- `src/services/reviewFacetRank.ts:381`
 - `src/services/weaknessSignal.test.ts:77`
 - `src/services/weaknessSignal.test.ts:80`
 - `src/services/weaknessSignal.test.ts:83`
@@ -122,9 +122,9 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:120`
 
 ### `matchTacticPattern` (function) — 9 call sites
-- `src/services/liveTacticsContext.ts:503`
+- `src/services/liveTacticsContext.ts:508`
 - `src/services/needScore.ts:310`
-- `src/services/positionFacts.ts:905`
+- `src/services/positionFacts.ts:952`
 - `src/services/teachingSelector.ts:169`
 - `src/services/teachingSelector.ts:305`
 - `src/services/weaknessSignal.test.ts:100`
@@ -133,7 +133,7 @@
 - `src/services/weaknessSignal.test.ts:107`
 
 ### `matchTag` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1696`
+- `src/services/coachFeatureService.ts:1699`
 - `src/services/needScore.ts:299`
 - `src/services/teachingSelector.ts:306`
 - `src/services/weaknessSignal.test.ts:116`
@@ -142,7 +142,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts:119`
 
 ### `matchFundamental` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2036`
+- `src/services/coachFeatureService.ts:2054`
 - `src/services/fundamentalReachesDecider.test.ts:88`
 - `src/services/fundamentalReachesDecider.test.ts:99`
 - `src/services/fundamentalReachesDecider.test.ts:129`

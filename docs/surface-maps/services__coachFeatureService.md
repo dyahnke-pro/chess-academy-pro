@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4818 lines · 33 exports · 33 importers · 30 tests · 5 audits**
+**4837 lines · 33 exports · 36 importers · 33 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,8 +26,10 @@
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
+- `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.test.ts`
+- `src/services/coachFeatureService.trade.test.ts`
 - `src/services/gameAnalysisService.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/gameThemeClassifier.ts`
@@ -48,6 +50,7 @@
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
 
@@ -138,7 +141,7 @@
 - `src/services/coachFeatureService.test.ts:15`
 - `src/services/coachFeatureService.test.ts:24`
 
-### `buildReviewSegments` (function) — 55 call sites
+### `buildReviewSegments` (function) — 58 call sites
 - `src/components/Coach/CoachGameReview.tsx:1881`
 - `src/services/coachFeatureService.causalChain.test.ts:27`
 - `src/services/coachFeatureService.causalChain.test.ts:41`
@@ -151,6 +154,7 @@
 - `src/services/coachFeatureService.cpLossSign.test.ts:40`
 - `src/services/coachFeatureService.cpLossSign.test.ts:47`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts:37`
+- `src/services/coachFeatureService.planChange.test.ts:14`
 - `src/services/coachFeatureService.recurrence.test.ts:37`
 - `src/services/coachFeatureService.recurrence.test.ts:46`
 - `src/services/coachFeatureService.recurrence.test.ts:53`
@@ -180,6 +184,7 @@
 - `src/services/coachFeatureService.test.ts:719`
 - `src/services/coachFeatureService.test.ts:854`
 - `src/services/coachFeatureService.test.ts:914`
+- `src/services/coachFeatureService.trade.test.ts:15`
 - `src/services/loopCloses.review.integration.test.ts:89`
 - `src/services/methodBeat.test.ts:70`
 - `src/services/reviewCorpusNote.test.ts:40`
@@ -194,6 +199,7 @@
 - `src/services/reviewNeedGate.test.ts:88`
 - `src/services/reviewNeedGate.test.ts:94`
 - `src/test/computedOrderWired.test.ts:59`
+- `src/test/everySurfaceSpeaks.test.ts:94`
 
 ### `reviewOpeningRecord` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -312,8 +318,10 @@
 - `src/services/coachFeatureService.causalChain.test.ts`
 - `src/services/coachFeatureService.cpLossSign.test.ts`
 - `src/services/coachFeatureService.ledgerAfterDoor.test.ts`
+- `src/services/coachFeatureService.planChange.test.ts`
 - `src/services/coachFeatureService.recurrence.test.ts`
 - `src/services/coachFeatureService.test.ts`
+- `src/services/coachFeatureService.trade.test.ts`
 - `src/services/gameThemeClassifier.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/mapConcurrent.test.ts`
@@ -334,6 +342,7 @@
 - `src/services/reviewRegister.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 
 ## Audits that reach it
 
