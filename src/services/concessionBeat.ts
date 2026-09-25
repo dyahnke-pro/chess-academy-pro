@@ -230,7 +230,11 @@ export function findConcession(args: {
   // 2. A PAWN BECAME WEAK that the engine's move would have kept healthy.
   const weakNow = findWeakPawns(after.fen(), me);
   const weakAlt = findWeakPawns(alt.fen(), me);
-  const newIsolated = weakNow.isolated.find((sq) => !weakAlt.isolated.includes(sq));
+  // …and it must be NEW: a pawn already isolated before the move was not left
+  // that way by it (hand walk 2340, move 21: a2 had been isolated since the
+  // c-pawn traded; the best move only would have MENDED it).
+  const weakBefore = findWeakPawns(args.fen, me);
+  const newIsolated = weakNow.isolated.find((sq) => !weakAlt.isolated.includes(sq) && !weakBefore.isolated.includes(sq));
   if (newIsolated) {
     return {
       kind: 'pawn-weakened',

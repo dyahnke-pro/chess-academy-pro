@@ -121,6 +121,18 @@ function withMover(fen: string, mover: 'w' | 'b'): string {
   return parts.join(' ');
 }
 
+/** Can this knight move at all? A knight pinned to its own king has no legal
+ *  move, so no route starts from it (hand walk 2340: "your knight has a fork
+ *  waiting on c7" with Nc3 pinned by …Bb4). Judged with the knight's side to
+ *  move; a board that will not load answers false. */
+function knightCanMove(fen: string, from: string, me: 'w' | 'b'): boolean {
+  try {
+    return new Chess(withMover(fen, me)).moves({ square: from as Square }).length > 0;
+  } catch {
+    return false;
+  }
+}
+
 /** A one-hop waypoint from `from` that reaches `target` next, and on which
  *  the knight is not simply lost. */
 function hasSafeWaypoint(chess: Chess, from: string, target: string, me: 'w' | 'b', them: 'w' | 'b'): boolean {
@@ -166,6 +178,8 @@ export function detectLatentFork(fen: string, forker: 'white' | 'black'): Latent
     }
   }
   if (knights.length === 0) return null;
+  const mobileKnights = knights.filter((k) => knightCanMove(fen, k, me));
+  if (mobileKnights.length === 0) return null;
 
   // Gate (a) as a CHEAP PRE-FILTER. Rather than scanning 64 squares against the
   // whole board, walk OUT from each valuable enemy piece: only a square that
@@ -194,7 +208,7 @@ export function detectLatentFork(fen: string, forker: 'white' | 'black'): Latent
     // "king plus a major" (detectNewThreat's own bar) needs no special case.
     if (hit.length < 2) continue;
 
-    for (const from of knights) {
+    for (const from of mobileKnights) {
       // Gate (c). N >= 2 is the whole domain: at N = 1 this is a live threat and
       // the threat lane owns it.
       const moves = movesToReach(chess.fen(), from as Square, square as Square, MAX_TEMPO);

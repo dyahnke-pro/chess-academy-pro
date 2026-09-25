@@ -305,3 +305,12 @@ describe('seatPieceReferences and determiners', () => {
     expect(seatPieceReferences('creates a passed pawn on d4', FEN, 'b')).toContain('a passed pawn on d4');
   });
 });
+
+describe('a lowercased colour possessive is a determiner too (hand walk 2340, move 14)', () => {
+  it('"white\'s king on g1" becomes "your king on g1", never "white\'s your king"', () => {
+    const fen = '4r1k1/5ppp/8/8/8/8/5PPP/6K1 w - - 0 20';
+    const out = seatPieceReferences("watch out — white's king on g1 has no escape square", fen, 'w');
+    expect(out).toContain('your king on g1');
+    expect(out).not.toMatch(/white's/i);
+  });
+});

@@ -38,6 +38,7 @@ import {
   findPassedPawns,
   findOpenFiles,
   bishopBlockingPawns,
+  namedPawnStructure,
 } from './positionReadingService';
 
 const NAME: Record<string, string> = {
@@ -155,7 +156,12 @@ function observationsFor(
   const your = own ? 'Your' : 'Their';
   const you = own ? 'you' : 'they';
 
-  const king = kingSafetyRead(fen, color);
+  // QUEENS OFF, THE KING IS A FIGHTING PIECE. A centralised king in an
+  // endgame is right, not a weakness, and "lines open toward your king" is the
+  // middlegame worry (hand walk 2340, moves 32-34: both read with the queens
+  // traded). No queen on the board → the king reads stay quiet.
+  const queensOn = /[qQ]/.test(fen.split(' ')[0] ?? '');
+  const king = queensOn ? kingSafetyRead(fen, color) : null;
   // "Get castled" is advice only when castling is ONE move away: the right is
   // still held and the squares between king and rook are empty. At move three
   // (1.e4 e5 2.Nf3 d6 3.d4) the f1-bishop still blocks it, so the line told the
@@ -224,7 +230,12 @@ function observationsFor(
       squares: [outpost.square],
       text: own
         ? `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${goodPieceClause(outpost.reason, outpost.square)}.`
-        : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is their best-placed piece — ${goodPieceClause(outpost.reason, outpost.square)}. Trading it off is a plan in itself.`,
+        // Not "their best-placed piece": the engine's piece read owns THEIR best
+        // ("the piece doing the most work for them"), and two computers crowning
+        // two different pieces on one move contradicted each other (hand walk
+        // 2340: rook d8 "best-placed", then knight c6 "most work"). This names
+        // the fact about the piece, which is true whichever wins that ranking.
+        : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is well placed — ${goodPieceClause(outpost.reason, outpost.square)}.`,
     });
   }
   // Same rule as the join: a piece still on its starting square is not a
@@ -242,6 +253,11 @@ function observationsFor(
   }
 
   const weak = findWeakPawns(fen, color);
+  // An isolated d-pawn IS the isolani — the structure lane names it with its
+  // plan ("you hold the isolated queen's pawn…"), so this read stays off it
+  // (hand walk 2340: both said it on one move).
+  const isolani = /isolated queen/i.test(namedPawnStructure(fen, color)?.name ?? '');
+  if (isolani) weak.isolated = weak.isolated.filter((sq) => sq[0] !== 'd');
   if (weak.isolated.length > 0) {
     out.push({
       key: `${side}-iso-${weak.isolated[0]}`, side, kind: 'structure', rank: rank('structure'),

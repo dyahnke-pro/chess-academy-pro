@@ -158,7 +158,9 @@ describe('it reaches the LIVE composer', () => {
     // subsume it behind a same-geometry tactic, so accept either, but never
     // "the detector never ran".
     expect(`${spoken} ${quiet}`).toContain('c7');
-  });
+    // The cold import of the composer's module graph is ~3.4s on its own, so
+    // the default 5s left no room under a loaded pre-commit run.
+  }, 20_000);
 
   it('ranks BELOW must-defend — foresight never speaks over live material', async () => {
     // The rank trap this build was warned about: `latent-danger` sits at 80–82,
@@ -182,5 +184,14 @@ describe('gate (e) — the route must survive the first hop (walk 6, L3)', () =>
     // but the only route square, g5, hangs to the queen on d8 (e5 is occupied).
     const fen = 'r1bqk2r/pppp2pp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5';
     expect(detectLatentFork(fen, 'white')?.square).not.toBe('f7');
+  });
+});
+
+describe('a pinned knight has no route (hand walk 2340, move 7)', () => {
+  it('no fork "waiting on c7" through Nc3 while …Bb4 pins it to the king', () => {
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4'.split(' ')) c.move(m);
+    const f = detectLatentFork(c.fen(), 'white');
+    expect(f?.from).not.toBe('c3');
   });
 });

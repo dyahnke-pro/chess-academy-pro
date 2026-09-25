@@ -893,7 +893,13 @@ export function findBlockade(fen: string, color: Color): { blocker: Square; pawn
  *  the pawn SKELETON, not the move order, names the family. Recognises the few
  *  clearest, highest-frequency skeletons; returns null otherwise (empty > vague).
  *  Pure pawn geometry (G3). */
-export function namedPawnStructure(fen: string): { name: string; plan: string } | null {
+export function namedPawnStructure(
+  fen: string,
+  /** The student's seat — REQUIRED: "you hold the isolani" is seat-relative, and
+   *  it used to be hardcoded to White (a Black student was told they held
+   *  White's pawn). */
+  studentColor: Color,
+): { name: string; plan: string } | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const wp = new Set<string>(); const bp = new Set<string>();
@@ -912,23 +918,25 @@ export function namedPawnStructure(fen: string): { name: string; plan: string } 
     return { name: 'King’s-Indian closed centre', plan: 'the wings decide: Black storms the kingside with …f5-f4 and a pawn avalanche, White breaks on the queenside with c5' };
   }
   // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
-  for (const [set, name] of [[wp, 'You hold the isolated queen’s pawn'], [bp, 'They hold the isolated queen’s pawn']] as const) {
+  const holder = (white: boolean): string => ((white ? 'w' : 'b') === studentColor ? 'You hold' : 'They hold');
+  for (const [set, white] of [[wp, true], [bp, false]] as const) {
     const dRank = [...set].find((s) => s[0] === 'd');
-    if (dRank && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0
-      && (name.startsWith('You') ? (bp.has('d5') || bp.has('d4') || true) : true)) {
-      // Only call it when the opponent has NO d-pawn on the same file mass — a true isolani.
-      const enemy = set === wp ? bp : wp;
-      if (fileCount(enemy, 'd') === 0) {
-        return { name, plan: 'the isolani gives active pieces and the d5/d4 outpost now, but becomes a target in the endgame — the owner attacks, the blockader trades down' };
-      }
+    // A true isolani: no friendly c/e-pawn, and no enemy d-pawn on the file.
+    const enemy = white ? bp : wp;
+    if (dRank && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0 && fileCount(enemy, 'd') === 0) {
+      return { name: `${holder(white)} the isolated queen’s pawn`, plan: 'the isolani gives active pieces and the d5/d4 outpost now, but becomes a target in the endgame — the owner attacks, the blockader trades down' };
     }
   }
   // HANGING PAWNS — c- and d-pawns abreast on the 4th/5th with no b/e neighbours.
   if (w('c4') && w('d4') && fileCount(wp, 'b') === 0 && fileCount(wp, 'e') === 0) {
-    return { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with d5 or c5 — but if they’re fixed and blockaded they turn into two weaknesses' };
+    return studentColor === 'w'
+      ? { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with d5 or c5 — but if they’re fixed and blockaded they turn into two weaknesses' }
+      : { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a d5 or c5 lunge — provoke and blockade them to make them targets' };
   }
   if (b('c5') && b('d5') && fileCount(bp, 'b') === 0 && fileCount(bp, 'e') === 0) {
-    return { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a …d4 or …c4 lunge — provoke and blockade them to make them targets' };
+    return studentColor === 'w'
+      ? { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a …d4 or …c4 lunge — provoke and blockade them to make them targets' }
+      : { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with …d4 or …c4 — but if they’re fixed and blockaded they turn into two weaknesses' };
   }
   return null;
 }

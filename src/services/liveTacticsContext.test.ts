@@ -258,8 +258,8 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     expect(say!.toLowerCase()).toContain('fork');
     // D-10 (2026-09-22): every ply is SPELLED. A bare "Nd5" next to the TTS
     // sanitizer's own expansion of it spoke every move twice on prod.
-    expect(say).toContain('the knight to d5');
-    expect(say).toContain('the knight taking on e7');
+    // Each ply names its owner (hand walk 2340): white to move, student white.
+    expect(say).toContain('your knight to d5, then their bishop to d6, your knight taking on e7');
     expect(say).not.toMatch(/\b[NBRQK]x?[a-h][1-8]\b/); // no piece-letter SAN token survives
     expect(say).toMatch(/you've got/i); // student-seat (opportunity)
   });
@@ -314,6 +314,14 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     expect(speakDeepestLookahead(ctx, 'student', 'b')).toMatch(/they're lining up/);
   });
 
+  it('stays inside the horizon — a tactic 9 plies out is not promised over 4 spoken moves', () => {
+    const ctx = ctxWith(
+      [{ type: 'removal_of_guard', description: 'r', depthAhead: 9, line: ['bxc3', 'Ke7', 'h3', 'Be6', 'Rd1', 'Rd8', 'Rxd8', 'Kxd8', 'Bxa7'] }],
+      [],
+    );
+    expect(speakDeepestLookahead(ctx, 'student', 'w')).toBeNull();
+  });
+
   it('is the DEEP scan only — ignores depth-1 (shallow) upcoming tactics', () => {
     const ctx = ctxWith(
       [{ type: 'fork', description: 'f', depthAhead: 1, line: ['Nd5'] }],
@@ -339,7 +347,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     }];
     const say = speakDeepestLookahead(ctx, 'student', 'w', holeSignals)!;
     expect(say.toLowerCase()).toContain('discovery');   // the hole motif won the pick
-    expect(say).toContain('the knight to e4');
+    expect(say).toContain('your knight to e4');
     expect(say).toMatch(/tend to miss/i);               // honest recurring-hole tag
     // With NO profile, the FIRST deep tactic (fork) is picked — prior behavior, no tag.
     const plain = speakDeepestLookahead(ctx, 'student', 'w')!;

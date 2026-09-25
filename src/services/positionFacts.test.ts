@@ -388,3 +388,23 @@ describe('positionFacts — the computed CONCEPT joins the spoken briefing (one 
     expect(r.clauses.find((c) => c.kind === 'concept')).toBeUndefined();
   });
 });
+
+describe('the verdict and its plan echo are one fact (hand walk 2340)', () => {
+  const line = (rank: number, evaluation: number, uci: string) => ({ rank, evaluation, moves: [uci], mate: null });
+  const analysis = { evaluation: 30, bestMove: 'e1g1', depth: 16, topLines: [line(1, 30, 'e1g1'), line(2, -250, 'f3e5'), line(3, 10, 'd2d3')] } as never;
+  const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 14';
+  const hole = [{ clusterId: 'analysis:phase:middlegame', bucket: 'middlegame', label: 'x', openCount: 2, severity: 50, puzzleThemes: [], total: 3 }] as never;
+
+  it('where "The move is O-O — it castles…" speaks, "The plan here: castle…" does not', async () => {
+    const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: hole });
+    const kinds = r.clauses.map((c) => c.kind);
+    expect(kinds).toContain('deliberation');
+    expect(kinds).not.toContain('fundamental');
+  });
+
+  it('where the verdict is held back, the plan still teaches the idea', async () => {
+    const r = await computePositionFacts({ posture: 'interrupt', fen, moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true, studentWeaknesses: [] });
+    expect(r.clauses.map((c) => c.kind)).toEqual(expect.arrayContaining(['fundamental']));
+    expect(r.clauses.some((c) => c.kind === 'deliberation')).toBe(false);
+  });
+});

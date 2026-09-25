@@ -5988,7 +5988,7 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
   }
 
   if (topic === 'structure-name') {
-    const s = namedPawnStructure(fen);
+    const s = namedPawnStructure(fen, myC);
     if (s) return { facts: `This is ${s.name}. ${s.plan}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     // Not a textbook-named structure — still describe it board-truthfully from
     // the pawn faults on each side rather than declining.
@@ -6210,7 +6210,7 @@ export function seatPieceReferences(
     const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
     return text.replace(
       new RegExp(
-        `(\\b(?:White|Black)'s\\s+|\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
+        `(\\b(?:[Ww]hite|[Bb]lack)'s\\s+|\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
         'g',
       ),
       (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string, offset: number, all: string) => {

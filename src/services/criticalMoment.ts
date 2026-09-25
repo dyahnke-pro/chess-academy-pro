@@ -48,7 +48,7 @@ export interface CriticalFanLine {
 /** What the best line PRESERVES, mover-POV. Never "equality" by default: that
  *  claim is false when they are winning (it keeps the WIN) and false when they
  *  are lost (it promises a draw that is not there). */
-export type StakeId = 'mate' | 'win' | 'on-top' | 'level' | 'in-it' | 'damage';
+export type StakeId = 'mate' | 'win' | 'on-top' | 'edge' | 'level' | 'in-it' | 'damage';
 
 /** Why a read could not be trusted to a count. Named rather than swallowed: an
  *  instrument that goes quiet without saying why is indistinguishable from one
@@ -98,6 +98,9 @@ function stakeFor(bestCp: number): StakeId | null {
   if (bestCp <= -MATE_CP) return null;
   if (bestCp >= 300) return 'win';
   if (bestCp >= 100) return 'on-top';
+  // Half a pawn and up is an EDGE, not "level" — a student a pawn up heard "two
+  // moves keep you level" (hand walk 2340, moves 12 and 15).
+  if (bestCp >= 50) return 'edge';
   if (bestCp > -100) return 'level';
   if (bestCp >= -300) return 'in-it';
   return 'damage';
@@ -118,6 +121,7 @@ const STAKE_TEXT: Record<StakeId, { verb: string; verbs: string; past: string; r
   mate: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the forced mate' },
   win: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'the win' },
   'on-top': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you on top' },
+  edge: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'your edge' },
   level: { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you level' },
   'in-it': { verb: 'keep', verbs: 'keeps', past: 'kept', rest: 'you in it' },
   damage: { verb: 'limit', verbs: 'limits', past: 'limited', rest: 'the damage' },

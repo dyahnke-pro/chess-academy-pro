@@ -103,7 +103,7 @@ describe('Danya device coverage — every device fires on its trigger position (
   });
 
   it('structure-family names the French chain and the IQP', () => {
-    expect(namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1')?.name).toMatch(/French/);
-    expect(namedPawnStructure('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1')?.name).toMatch(/isolated queen/i);
+    expect(namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1', 'w')?.name).toMatch(/French/);
+    expect(namedPawnStructure('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1', 'w')?.name).toMatch(/isolated queen/i);
   });
 });

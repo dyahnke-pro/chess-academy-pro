@@ -123,3 +123,12 @@ describe('the detector no longer reports the file alignment', () => {
     expect(pins.some((p) => /bishop on c5 pins pawn on f2 against king on g1/i.test(p.description))).toBe(true);
   });
 });
+
+describe('a front piece that can take the pinner is not pinned (hand walk 2340, move 8)', () => {
+  it('no "bishop on c3 pins pawn on b2 against rook on a1" while bxc3 is on', () => {
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3'.split(' ')) c.move(m);
+    const pins = detectTactics(c.fen()).tactics.filter((t) => t.type === 'pin');
+    expect(pins.some((p) => p.involvedSquares.includes('c3') && p.involvedSquares.includes('b2'))).toBe(false);
+  });
+});

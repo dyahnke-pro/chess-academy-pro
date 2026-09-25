@@ -8788,7 +8788,7 @@ export function CoachTeachPage(): JSX.Element {
                     // behaviour scheduler that shadowed it: the family is stable, so
                     // it is announced once as it appears and then referred back to.
                     try {
-                      const struct = namedPawnStructure(probe.fen());
+                      const struct = namedPawnStructure(probe.fen(), playerColor === 'white' ? 'w' : 'b');
                       if (struct && !learnMemRef.current.structureSaid.has(struct.name)) {
                         learnMemRef.current.structureSaid.add(struct.name);
                         const line = gradeNarrationText(`${struct.name} — ${struct.plan}.`, probe.fen(), 'CoachTeachPage.structure')?.trim();

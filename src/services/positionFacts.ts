@@ -764,9 +764,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       motifHole: needFor.hole,
     })
     : null;
-  const composed = moveAdvice && !moveAdvice.speak
+  const adviceDropped = moveAdvice && !moveAdvice.speak
     ? composedAll.filter((c) => c.kind !== 'deliberation')
     : composedAll;
+  // ONE FACT ONCE: the verdict ("The move is Nf3 — it takes aim at the
+  // center…") and the fundamental ("The plan here: take aim at the center…")
+  // are the same computer on the same move. Where the verdict speaks, the plan
+  // line is its echo (hand walk 2340: said back to back).
+  const verdictSpeaks = !!deliberation?.bestWhy && adviceDropped.some((c) => c.kind === 'deliberation' && / The move is /.test(` ${c.text}`));
+  const composed = verdictSpeaks ? adviceDropped.filter((c) => c.kind !== 'fundamental') : adviceDropped;
   const needVerdict = studentIsMoving && input.studentNeedContext
     ? computeNeed({
       ply: plyNumber,

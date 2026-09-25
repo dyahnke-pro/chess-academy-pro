@@ -365,3 +365,12 @@ describe('a move that BLOCKS a guard is named as a block (hand walk 2026-09-24)'
     expect(d?.said).toMatch(/^That shut your queen on d1 off from g4/);
   });
 });
+
+describe('a weakness the move did not create is not its fault (hand walk 2340, move 21)', () => {
+  it('no "that left your pawn on a2 isolated" when a2 was isolated before the move', () => {
+    // a2 has no b-pawn beside it already; axb3 (best) would have mended it.
+    const fen = '4k3/8/8/8/8/1b6/P3PPPP/2B1K3 w - - 0 21';
+    const found = findStudentDrawback({ fen, playedSan: 'Be3', bestSan: 'axb3', studentColor: 'white' });
+    expect(found?.kind).not.toBe('pawn-weakened');
+  });
+});

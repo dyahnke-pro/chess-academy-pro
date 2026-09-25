@@ -313,3 +313,32 @@ describe('"the d-file is open" only when a rook can get there (hand walk 2026-09
     expect(readPosition(fen, 'white').some((o) => o.kind === 'file')).toBe(true);
   });
 });
+
+describe('the isolani is named once (hand walk 2340)', () => {
+  it('the positional read leaves an isolated d-pawn to the structure lane', () => {
+    // White d4 isolani, Black has no d-pawn: the structure line owns it.
+    const obs = readPosition('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 20', 'white');
+    expect(obs.some((o) => /pawn on d4 is isolated/.test(o.text))).toBe(false);
+  });
+});
+
+describe('their good piece is a fact, not a second "best piece" (hand walk 2340)', () => {
+  it('names why it is good without crowning it or trailing a plan sentence', () => {
+    // Black rook on the open d-file.
+    const obs = readPosition('3r2k1/pp3ppp/8/8/8/8/PP3PPP/4R1K1 w - - 0 25', 'white');
+    const good = obs.find((o) => o.key === 'opponent-good-d8');
+    expect(good?.text).toBe('Their rook on d8 is well placed — it owns the open d-file.');
+  });
+});
+
+describe('queens off, the king reads stay quiet (hand walk 2340)', () => {
+  it('no "king still in the centre" or "open toward your king" once the queens are traded', () => {
+    // Rook endgame, both kings central, d/e files open.
+    const obs = readPosition('3r4/pp3kpp/8/8/8/8/PP3PPP/3RK3 w - - 0 32', 'white');
+    expect(obs.some((o) => o.kind === 'king')).toBe(false);
+  });
+  it('with queens on, the same central king is still read', () => {
+    const obs = readPosition('3rq3/pp3kpp/8/8/8/8/PP3PPP/3RKQ2 w - - 0 32', 'white');
+    expect(obs.some((o) => o.kind === 'king')).toBe(true);
+  });
+});

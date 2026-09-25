@@ -848,16 +848,21 @@ describe('findFianchetto + findRookLift + findBlockade (2026-08-23, the rest of 
 
 describe('namedPawnStructure (his "catalogue the structures", 2026-08-23)', () => {
   it('names the French-type chain (d4+e5 vs d5+e6)', () => {
-    const s = namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1');
+    const s = namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1', 'w');
     expect(s?.name).toMatch(/French/);
   });
   it('names an isolated queen pawn', () => {
     // White d4 with no c/e pawns; Black has no d-pawn.
-    const s = namedPawnStructure('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1');
+    const s = namedPawnStructure('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1', 'w');
     expect(s?.name).toMatch(/isolated queen/i);
   });
+  it('is seat-relative: White\'s isolani is THEIRS to a Black student', () => {
+    const fen = '4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1';
+    expect(namedPawnStructure(fen, 'w')?.name).toMatch(/^You hold/);
+    expect(namedPawnStructure(fen, 'b')?.name).toMatch(/^They hold/);
+  });
   it('returns null on a normal symmetric structure', () => {
-    expect(namedPawnStructure('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')).toBeNull();
+    expect(namedPawnStructure('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'w')).toBeNull();
   });
 });
 
