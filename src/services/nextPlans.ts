@@ -194,7 +194,11 @@ export function deriveNextPlans(
   // 1. Enemy king exposed in the centre → open lines and attack it, HOW spelled out.
   const enemyKing = all.find((c) => c.type === 'k' && c.color === enemy);
   const openCentralFile = struct.pawns.openFiles.find((f) => f === 'd' || f === 'e') ?? null;
-  if (enemyKing && fullmove >= 8 && 'cdef'.includes(enemyKing.square[0])
+  // …and only with queens on: a central king is the ENDGAME's right square, and
+  // "attack their king stuck on f2" in a rook ending (review tape 2026-09-25)
+  // is the middlegame worry the king reads already drop without queens.
+  const queensOn = all.some((c) => c.type === 'q');
+  if (enemyKing && queensOn && fullmove >= 8 && 'cdef'.includes(enemyKing.square[0])
     && (enemy === 'w' ? '12'.includes(enemyKing.square[1]) : '78'.includes(enemyKing.square[1]))
     && openCentralFile) {
     // The soft squares in front of a stuck king — where a sac usually lands.

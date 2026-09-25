@@ -1,3 +1,4 @@
+import { CALM_BOARD } from './boardState';
 import { ALL_GREY } from './teachingLayers';
 import { describe, it, expect } from 'vitest';
 import { decide } from './coachDecider';
@@ -8,7 +9,7 @@ const PIN = '[tactic] Your bishop on g4 pins their bishop on e2 against their qu
 const BATTERY = '[tactic] Their queen on d1 and their bishop on e2 form a battery on the diagonal, bearing down on your bishop on g4.';
 const TRIVIA = '[consequence] It nudged the balance your way.';
 const SQ = new Map<string, readonly string[]>([[PIN, ['g4', 'e2', 'd1']], [BATTERY, ['d1', 'e2', 'g4']]]);
-const bundle = { facts: [PIN, BATTERY, TRIVIA], squares: SQ, incoming: new Set([BATTERY]) };
+const bundle = { board: CALM_BOARD, facts: [PIN, BATTERY, TRIVIA], squares: SQ, incoming: new Set([BATTERY]) };
 // `need` AND `momentBoost` are both REQUIRED on StudentContext, and null/0
 // are real answers — the
 // type says so because making it optional is exactly how review ended up
@@ -163,7 +164,7 @@ describe('a row closed as unsupported files every quiet fact under that gate (B9
   const B = '[delta] Your rook on f8\'s line just opened — it now reaches f2.';
   const sq = new Map<string, readonly string[]>([[A, ['f1', 'f7', 'f8', 'f2']], [B, ['f8', 'f2', 'f1', 'f7']]]);
   it('the subsumed loser is filed unsupported, like its winner', () => {
-    const d = decide(quiet, student, { facts: [A, B], squares: sq }, 'walk');
+    const d = decide(quiet, student, { board: CALM_BOARD, facts: [A, B], squares: sq }, 'walk');
     expect(d.speak).toBe(false);
     expect(d.reason).toBe('unsupported');
     expect(d.quiet.every((q) => q.why === 'unsupported')).toBe(true);

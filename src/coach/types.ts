@@ -517,6 +517,11 @@ export interface CoachConcept {
   full: string;
   short: string;
   importance: number;
+  /** The board the concept is ABOUT — a concept found down the engine's line
+   *  describes that board, not this one, and seats on it (the sibling
+   *  `ComputedConcept` field; chat dropped it and said "Bishop on g4 pins…"
+   *  with no owner, 2026-09-25). */
+  boardFen?: string;
 }
 
 export interface TacticsLiveContext {

@@ -1,3 +1,4 @@
+import { CALM_BOARD } from './boardState';
 /**
  * EVERY ALGO DECISION IS OBSERVABLE — the gate behind David's 2026-09-20
  * standing order, "I want audit tools on all algo based builds".
@@ -39,7 +40,7 @@ const quietSignals = { cpLoss: 0, gapCp: 0, contested: false } as never;
 const loudSignals = { cpLoss: 400, gapCp: 400, contested: true } as never;
 const student = (need: { speak: boolean } | null) =>
   ({ rating: 1500, weaknesses: [], need, layers: { safety: 'grey', principle: 'grey', plan: 'grey' } } as never);
-const bundle = (facts: string[]) => ({ facts, squares: new Map(), alreadySaid: new Set<string>() } as never);
+const bundle = (facts: string[]) => ({ board: CALM_BOARD, facts, squares: new Map(), alreadySaid: new Set<string>() } as never);
 
 describe('every decision path is observable', () => {
   it('emits when IMPORTANCE closes the door', () => {

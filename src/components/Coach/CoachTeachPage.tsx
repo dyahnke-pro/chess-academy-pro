@@ -7648,16 +7648,10 @@ export function CoachTeachPage(): JSX.Element {
       // the piece DELIVERING it is itself hanging (his e2 queen "forking"
       // two pieces while en prise: the lesson is take it, not fear it).
       const theirLoose = new Set(theirHanging.map((h) => h.square));
-      // A PINNED PAWN IS NOT NEWS EITHER WAY (hand walk 2026-09-24): "a pin
-      // for you" on b7 behind the a8 rook (called back on move 20 as "the same
-      // idea"), and "Watch out — their queen on d5 pins your pawn on g2 against
-      // your rook on h1" on move 2. Nothing is won or lost by it here.
-      const pinnedPawn = (t: { type: string; squares: readonly string[] }): boolean => {
-        if (t.type !== 'pin' || t.squares.length < 2) return false;
-        try { return new Chess(args.fenAfterReply).get(t.squares[1] as Square)?.type === 'p'; } catch { return false; }
-      };
+      // A pawn pin that wins nothing never reaches `tctx.immediate` — the live
+      // package drops it at the source (`isScenicPawnPin`, the rule review uses).
       const againstMe = tctx.immediate.filter(
-        (t) => t.side === 'opponent' && !theirLoose.has(t.squares[0] ?? '') && !pinnedPawn(t),
+        (t) => t.side === 'opponent' && !theirLoose.has(t.squares[0] ?? ''),
       );
       // TACTIC (an opportunity FOR the student) and THREAT (danger TO them) are
       // computed SEPARATELY. They were one `alert` in a single if/else chain,
@@ -7709,7 +7703,7 @@ export function CoachTeachPage(): JSX.Element {
         // and "a fork here for you" right after …Ng3+. A tactic delivered by
         // the piece they just moved is theirs, not a hint to find.
         const justPlayedTo = landingSquare(history, 2);
-        const mine = tctx.immediate.filter((t) => t.side === 'student' && !pinnedPawn(t) && t.squares[0] !== justPlayedTo);
+        const mine = tctx.immediate.filter((t) => t.side === 'student' && t.squares[0] !== justPlayedTo);
         if (mine.length > 0) {
           const t = mine[0];
           tacticKey = `opp:${t.type}:${t.squares.join('')}`;

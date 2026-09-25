@@ -50,7 +50,10 @@ import type { WeaknessSignal } from './weaknessSignal';
  *  `'unsupported'` (2026-09-23) — a DESCRIPTION of the board that pointed at
  *  none of the squares a teaching point on the same ply named (see
  *  `supportedFacts`). */
-export type QuietReason = 'subsumed' | 'below-bar' | 'said-already' | 'importance' | 'need' | 'unsupported' | 'proven';
+export type QuietReason = 'subsumed' | 'below-bar' | 'said-already' | 'importance' | 'need' | 'unsupported' | 'proven'
+  /** The BOARD forbids it here (`boardState`): a standing claim on a board in
+   *  flux, or anything beside a mate but the mate. */
+  | 'in-flux' | 'beside-mate';
 
 export interface QuietFact {
   text: string;

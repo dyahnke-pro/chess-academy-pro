@@ -1,3 +1,4 @@
+import { CALM_BOARD } from './boardState';
 /**
  * THE LIVE SURFACES SEE THE STUDENT'S NEED — and only on the student's own ply.
  *
@@ -39,6 +40,7 @@ const LOUD: ImportanceSignals = {
 };
 
 const bundle = {
+  board: CALM_BOARD,
   facts: ['Your knight on f3 is hanging.'],
   squares: new Map<string, readonly string[]>([['Your knight on f3 is hanging.', ['f3']]]),
   incoming: new Set<string>(),

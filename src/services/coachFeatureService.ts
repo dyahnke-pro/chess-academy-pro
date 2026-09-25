@@ -33,6 +33,7 @@ import { classifyPhase } from './gamePhaseService';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
+import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { habitIsOwed, type MethodHabit } from './methodBeat';
 import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
@@ -1433,6 +1434,8 @@ export function buildReviewSegments(
   // ply later. Square specifics are stripped from the key so "attack the king on
   // e8" and "attack the king on e8 before it runs" collapse to one goal.
   const planGoalsSeen = new Set<string>();
+  /** Refuted alternatives already SPOKEN this game, by the move refuted. */
+  const refutedSaid = new Set<string>();
   // The RACE verdict last spoken. Keyed on WHO ARRIVES FIRST, not on the counts:
   // the counts change on every push, so keying on them would re-announce the race
   // each ply. A flip — you were winning the race and now you are not — IS the
@@ -1751,6 +1754,7 @@ export function buildReviewSegments(
         preMoveEval: m.preMoveEval ?? null,
         classification: m.classification ?? null,
         bestMoveSan,
+        replyBestSan: i + 1 < moves.length ? uciToSanAt(moves[i + 1].bestMove ?? null, fenPair.fenAfter) : null,
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
@@ -1815,6 +1819,8 @@ export function buildReviewSegments(
       const keep = (raw: string, commit?: () => void): void => { keptRaw.push(raw); if (commit) commitByRaw.set(raw, commit); };
       let verdictWordThisPly: string | null = null;
       for (const f of facets) {
+        // A refuted alternative is said once per game (identity `refuted:<move>`).
+        { const id = facetIdentity.get(f); if (id?.startsWith('refuted:') && (refutedSaid.has(id) || !claim(id))) continue; }
         // Positional VERDICT — atom-diffed. Speak the verdict WORD when it
         // changes, and only the REASONS not yet stated, so a growing edge adds
         // the new asset instead of re-reciting the pile every ply.
@@ -2027,6 +2033,10 @@ export function buildReviewSegments(
         },
         {
           facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes,
+          // THE BOARD AFTER THIS PLY — a recapture pending, or mate for the
+          // side to move (`boardState`). Review had no such guard at all: "You're
+          // a piece up" one ply before the piece was taken back.
+          board: boardStateAfter(fenPair.fenBefore, m.san, m.fenAfter, m.evaluation ?? null),
           // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
           // `[principle]` facet IS the attributed fundamental, so ranking it by
           // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse
@@ -2146,6 +2156,7 @@ export function buildReviewSegments(
           const identity = facetIdentity.get(raw);
           if (!identity) continue;
           if (identity.startsWith('rule:')) { principlesTaught.add(identity.slice(5)); continue; }
+          if (identity.startsWith('refuted:')) { refutedSaid.add(identity); continue; }
           // `motif:<type>:<squares>` — the squares make it THIS instance, so a
           // standing tactic is never "the same idea as move N" of itself.
           const [motif, instance = ''] = identity.slice('motif:'.length).split(':');
