@@ -22,9 +22,9 @@
 import { Chess } from 'chess.js';
 import { landingIsSafe } from './positionReadingService';
 import { flipSideToMove } from './threatOut';
+import { MATERIAL_VALUE as VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 export interface ForkTrick {
