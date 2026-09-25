@@ -396,7 +396,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // queen (the heartbreak class). Pure board geometry, no engine. Prophylactic,
   // so it's the student's concern on their move, out of the opening.
   const latentDanger = (!openingPhase && studentToMove)
-    ? detectLatentDanger(fen, studentColor)
+    ? detectLatentDanger(fen, studentColor, { latentOnly: true })
     : null;
   // v2 — a TRADE that would CREATE a pin on your own king/queen (the more
   // actionable warning: "before you trade on X…").
@@ -1060,12 +1060,15 @@ function buildClauses(a: {
       stakes: { points: lineTacticPoints(tradeDanger.frontPiece, tradeDanger.backPiece), plies: 2 },
     });
   } else if (latentDanger) {
+    // Only the pin IN WAITING. A standing one (the line already open) is a live
+    // pin the tactic lanes name — hand walk 2340: "their bishop on g4 pins your
+    // knight" followed by "your knight on f3 and your queen share that diagonal
+    // — that diagonal is a pin". One fact once.
     ranked.push({
       kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger),
       squares: [latentDanger.enemySquare, latentDanger.frontSquare, latentDanger.backSquare],
-      // A LATENT line needs their piece to arrive first (3 plies); a standing one
-      // can be cashed on their next move.
-      stakes: { points: lineTacticPoints(latentDanger.frontPiece, latentDanger.backPiece), plies: latentDanger.latent ? 3 : 2 },
+      // A LATENT line needs their piece to arrive first.
+      stakes: { points: lineTacticPoints(latentDanger.frontPiece, latentDanger.backPiece), plies: 3 },
     });
   }
 

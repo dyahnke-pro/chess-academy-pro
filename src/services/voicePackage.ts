@@ -331,7 +331,7 @@ const sayKey = (s: string): string => {
   // were spoken back to back, because the prefix twin-check never saw them
   // as one). The key drops a leading "watch out / careful / check" so one
   // claim is one key however it is introduced — never down to nothing.
-  const bare = s.replace(/^\s*(?:(?:watch out|careful|check|look out|heads up)\s*[—–:,.!-]*\s*)+/i, '');
+  const bare = s.replace(/^\s*(?:(?:watch out|careful|check|look out|heads up|remember|note)\s*[—–:,.!-]*\s*)+/i, '');
   const key = bare.toLowerCase().replace(/[^a-z0-9]/g, '');
   return key.length >= 12 ? key : full;
 };

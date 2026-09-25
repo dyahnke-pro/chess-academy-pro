@@ -90,7 +90,7 @@ import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { openingAnnouncementForGame, warmOpeningBook } from '../../services/openingAnnouncement';
-import { lastMoveCapturedOn } from '../../utils/justCaptured';
+import { lastMoveCapturedOn, pendingRecapture } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
@@ -7492,6 +7492,7 @@ export function CoachTeachPage(): JSX.Element {
     borrowedLine: string | null;
     factLines: string[];
   } => {
+    const midExchangeOn = pendingRecapture(args.historyAfterReply);
     // THE GAME IS OVER — SAY NOTHING MORE. David's 2026-08-08 run ended in
     // checkmate and the coach said: "Checkmate. Watch out — black has a
     // checkmate available from b8. Their rook on h8 and queen on h4 line up on
@@ -7908,6 +7909,7 @@ export function CoachTeachPage(): JSX.Element {
       const beat = buildPlayCommentary({
         fen: args.fenAfterReply,
         studentColor: args.studentColor,
+        midExchangeOn,
         saidExplainers: learnMemRef.current.saidExplainers,
         // ROOT CAUSE, not the gate. Both this composer and the tactics alert
         // above read `detectTactics` off THIS board, and neither knew the
@@ -8121,7 +8123,10 @@ export function CoachTeachPage(): JSX.Element {
     // genuinely quiet turn, so a plan + a soft observation never double up.
     const BEHAVIOR_ALWAYS_RIDE = new Set(['prophylaxis', 'pressure', 'x-ray', 'passed-pawn', 'knight-maneuver', 'weak-square', 'outpost']);
     const quietTurn = !computedLine && !curatedLine && !planLine;
-    if (!gemLine && !tacticLine && !threatLine && !announceLine) {
+    // STANDING READS WAIT OUT AN EXCHANGE (hand walk 2340): mid-exchange the
+    // board is about to change, so "doubled", "no bishop of that colour", "weak
+    // back rank" describe a position that will not exist next move.
+    if (!gemLine && !tacticLine && !threatLine && !announceLine && !midExchangeOn) {
       try {
         const allHits = detectBehaviors({ fen: args.fenAfterReply, studentColor: args.studentColor });
         const eligible = quietTurn ? allHits : allHits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));

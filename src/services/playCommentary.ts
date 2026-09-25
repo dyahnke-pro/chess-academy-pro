@@ -643,6 +643,11 @@ export function buildPlayCommentary(args: {
    *  already board-verified. Passed in rather than recomputed so this file
    *  stays a composer, not a second source of truth. */
   bestMoveWhy?: string | null;
+  /** The square of a capture the student is about to take back (the position
+   *  is mid-exchange) — a piece standing there is a trade coming back, never
+   *  "undefended" (hand walk 2340, move 24: "Their bishop on b3 is undefended"
+   *  as axb3 recaptured). `pendingRecapture` computes it. */
+  midExchangeOn?: string | null;
   /** Generic teaching clauses already used this game. See `once` below — the
    *  principle behind a beat is worth saying ONCE; repeating it every time the
    *  same pattern appears is what makes a coach drone. Caller owns the set for
@@ -771,7 +776,7 @@ export function buildPlayCommentary(args: {
     // gambit itself (measured: 7.9% of theory plies have a pawn en prise,
     // 3.3% a real piece). Narrating every loose pawn is the tuned-out
     // failure, and calling a gambit pawn a tactic-seed is wrong teaching.
-    const theirHanging = t.hangingPieces.filter((h) => h.color === them && h.piece !== 'p');
+    const theirHanging = t.hangingPieces.filter((h) => h.color === them && h.piece !== 'p' && h.square !== args.midExchangeOn);
     if (theirHanging.length > 0) {
       const h = theirHanging[0];
       const loose: PlayCommentary = {

@@ -13,14 +13,28 @@ describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)',
 
   it('does NOT flag an ENEMY-shielded alignment as a standing latent danger (B#2)', () => {
     // Black rook e8, black pawn e6 (the shield), white bishop e5, white king e1.
-    // The shield is the OPPONENT's pawn — by construction a shield is always an
-    // enemy piece (a student piece would be caught as P1). The student cannot
+    // The shield is the OPPONENT's pawn. The student cannot
     // "open the line" by trading their opponent's pawn, so "mind it before you
     // open the line" was a false prophylaxis warning. The student-OPENS-it case
     // (a capture that creates the pin) is detectTradeCreatesPin's job, framed
     // correctly ("before you trade on X…"). Standing detection returns null.
     const d = detectLatentDanger('4r1k1/8/4p3/4B3/8/8/8/4K3 w - - 0 1', 'w');
     expect(d).toBeNull();
+  });
+
+  it('flags a LATENT pin behind the student\'s own shield', () => {
+    // Rook e8, white knight e5 (the shield), white bishop e3, white king e1.
+    const d = detectLatentDanger('4r1k1/8/8/4N3/8/4B3/8/4K3 w - - 0 1', 'w');
+    expect(d).toMatchObject({ frontSquare: 'e3', backSquare: 'e1', latent: true });
+    expect(latentDangerClause(d!)).toMatch(/mind it before you open the line/);
+  });
+
+  it('a pawn shield on a file is not a line the student opens (e4-Be2-Ke1)', () => {
+    expect(detectLatentDanger('4r1k1/8/8/8/4P3/8/4B3/4K3 w - - 0 1', 'w')).toBeNull();
+  });
+
+  it('latentOnly skips a line that is already open', () => {
+    expect(detectLatentDanger('4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 1', 'w', { latentOnly: true })).toBeNull();
   });
 
   it('flags a queen behind a minor on a diagonal (bishop skewer geometry)', () => {

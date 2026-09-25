@@ -591,3 +591,14 @@ describe('a frame is not part of the claim (hand walk 1380, move 25)', () => {
     expect(pkg.spoken).toBe('Check.');
   });
 });
+
+describe('"Remember —" is a frame too (walk 2340, move 28)', () => {
+  it('the definition is said once', () => {
+    const def = 'a discovered attack unveils a second attacker by moving the piece in front, so two threats land at once.';
+    const pkg = buildVoicePackage([
+      { kind: 'computed', text: `There's a discovered attack here for you — have a look. Remember — ${def}` },
+      { kind: 'computed', text: def[0].toUpperCase() + def.slice(1) },
+    ] as Parameters<typeof buildVoicePackage>[0]);
+    expect(pkg.spoken.match(/unveils a second attacker/g)?.length).toBe(1);
+  });
+});

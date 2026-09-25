@@ -286,16 +286,24 @@ describe('the concrete opponent-intent clause (fires through positionFacts)', ()
 });
 
 describe('the latent-danger prevention clause (fires through positionFacts)', () => {
-  it('warns when the student\'s own bishop is pinned to the king — even in a quiet spot', async () => {
-    // White (student) to move, move 14. Bishop e5 lined in front of Ke1 down the
-    // e-file, Black rook on e8. Flat/quiet analysis — the warning fires anyway.
+  it('warns about a pin IN WAITING — the student\'s own knight shields bishop and king', async () => {
+    // White (student) to move, move 14. Black rook e8; white knight e5 shields
+    // the bishop on e3 in front of Ke1. Moving the knight opens the pin.
+    const r = await computePositionFacts({ posture: 'walk',
+      fen: '4r1k1/8/8/4N3/8/4B3/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat,
+    });
+    expect(r.latentDanger).toMatchObject({ frontSquare: 'e3', backPiece: 'k', latent: true });
+    const texts = clauseText(r.clauses);
+    expect(texts.some((t) => /bishop on e3.*king.*file.*open the line/i.test(t))).toBe(true);
+  });
+
+  it('a STANDING pin is not restated as a latent danger (hand walk 2340: said twice)', async () => {
+    // Bishop e5 already pinned to Ke1 by the rook — the tactic/threat lanes own it.
     const r = await computePositionFacts({ posture: 'walk',
       fen: '4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat,
     });
-    expect(r.latentDanger).not.toBeNull();
-    const texts = clauseText(r.clauses);
-    expect(texts.some((t) => /bishop on e5.*king.*file|share that file/i.test(t))).toBe(true);
-    expect(r.clauses.some((c) => c.kind === 'latent-danger')).toBe(true);
+    expect(r.latentDanger).toBeNull();
+    expect(clauseText(r.clauses).some((t) => /share that file/i.test(t))).toBe(false);
   });
 
   it('does not warn when it is the opponent\'s move (not the student\'s concern)', async () => {

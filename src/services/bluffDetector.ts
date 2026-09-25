@@ -14,7 +14,7 @@
 // Pure chess.js, no engine (G0/G3). Dual-use: the same computer that teaches
 // "no need to react" is the one that can see a student spend a move answering
 // nothing.
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
 import { legalSeeGainFor } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -46,16 +46,25 @@ export function detectBluff(fenBefore: string, san: string): Bluff | null {
   const rank = Number(mv.to[1]);
   if (mover === 'w' ? rank < 5 : rank > 4) return null;
   // Whatever it now hits that it did not hit before.
+  // A PIECE THAT CAN SIMPLY BE TAKEN IS NOT A BLUFF — it is a gift (hand walk
+  // 2340, move 20: "their bishop on b3 has nothing defending it" and "it wins
+  // nothing — no need to react" on one move). The other lane says take it.
+  if (legalSeeGainFor(after.fen(), mv.to, victim) > 0) return null;
   const targets: Bluff['targets'] = [];
   for (const row of after.board()) {
     for (const cell of row) {
-      if (!cell || cell.color !== victim || cell.type === 'k' || cell.type === 'p') continue;
+      if (!cell || cell.color !== victim || cell.type === 'k') continue;
       const sq = cell.square;
       const hitsNow = after.attackers(sq, mover).includes(mv.to);
       if (!hitsNow) continue;
-      // Can the mover win it? Then it is a threat, not a bluff.
+      // Can the mover win it? Then it is a threat, not a bluff — PAWNS
+      // INCLUDED (walk 2340, move 22: "Rd3 wins nothing" while it won c3).
       if (legalSeeGainFor(after.fen(), sq, mover) > 0) return null;
-      targets.push({ piece: cell.type, square: sq });
+      // A PIN IS NOT A BLUFF (walk 2340, moves 7 and 10: "Bb4 wins nothing —
+      // no need to react" beside "watch out — it pins your knight"). A slider
+      // with the victim's king or a bigger piece behind its target binds it.
+      if (pinsBehind(after, mv.to, sq, victim)) return null;
+      if (cell.type !== 'p') targets.push({ piece: cell.type, square: sq });
     }
   }
   if (targets.length === 0) return null;
@@ -63,6 +72,30 @@ export function detectBluff(fenBefore: string, san: string): Bluff | null {
   if (detectNewThreat(fenBefore, after.fen(), mover)) return null;
   targets.sort((a, b) => (MATERIAL_VALUE[b.piece] ?? 0) - (MATERIAL_VALUE[a.piece] ?? 0));
   return { piece: mv.piece, square: mv.to, targets };
+}
+
+/** Does the slider on `from` see, through `target`, a victim king or a victim
+ *  piece worth more than the target — i.e. is `target` pinned (absolute or
+ *  relative) by it? */
+function pinsBehind(board: Chess, from: Square, target: Square, victim: 'w' | 'b'): boolean {
+  const slider = board.get(from);
+  if (!slider || (slider.type !== 'b' && slider.type !== 'r' && slider.type !== 'q')) return false;
+  const df = Math.sign(target.charCodeAt(0) - from.charCodeAt(0));
+  const dr = Math.sign(Number(target[1]) - Number(from[1]));
+  const diagonal = df !== 0 && dr !== 0;
+  if (diagonal ? slider.type === 'r' : slider.type === 'b') return false;
+  const front = board.get(target);
+  let f = target.charCodeAt(0) + df;
+  let r = Number(target[1]) + dr;
+  while (f >= 97 && f <= 104 && r >= 1 && r <= 8) {
+    const p = board.get(`${String.fromCharCode(f)}${r}` as Square);
+    if (p) {
+      if (p.color !== victim) return false;
+      return p.type === 'k' || (MATERIAL_VALUE[p.type] ?? 0) > (MATERIAL_VALUE[front?.type ?? 'p'] ?? 0);
+    }
+    f += df; r += dr;
+  }
+  return false;
 }
 
 const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', p: 'pawn', k: 'king' };

@@ -575,3 +575,12 @@ describe('describeMoveConsequence — the material claim survives the recapture'
     expect(clause).not.toMatch(/winning/);
   });
 });
+
+describe('mid-exchange: a piece that just took is not "undefended"', () => {
+  it('skips the recapture square (walk 2340, move 24: Bxb3 before axb3)', () => {
+    const fen = new Chess();
+    for (const s of 'e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4 Bd2 Bxc3 Bxc3 Nge7 dxe5 Bg4 Be2 Qe4 O-O Rd8 Qe1 Nd5 Bd1 Qxe1 Rxe1 Nxc3 bxc3 O-O h3 Be6 Bc2 Rd1 Bb3 Rdd8 Bd1 Bb3 Bc2 Be6 Bb3 Rd3 Rac1 a6 Ng5 Bxb3'.split(' ')) fen.move(s);
+    const beat = buildPlayCommentary({ fen: fen.fen(), studentColor: 'white', midExchangeOn: 'b3' });
+    expect(beat?.spoken ?? '').not.toMatch(/b3 is undefended/);
+  });
+});
