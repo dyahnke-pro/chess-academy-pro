@@ -41,7 +41,21 @@ export type MoveFundamentalId =
    *  prepares the fianchetto). Its own idea, so "develop" taught on move 3 does
    *  not silence it on move 9 (hand walk 2026-09-24). */
   | 'open-diagonal'
-  | 'tempo';
+  | 'tempo'
+  /** A piece that goes after the DEFENDER of something you already attack —
+   *  the Ruy's Bb5 hitting the knight that guards e5. */
+  | 'attack-defender'
+  /** A piece a pawn kicked, stepping out of reach to a square where it still
+   *  works (Ba4 keeping the pressure on c6). */
+  | 'keep-working'
+  /** A quiet pawn move that backs up a central push still to come (c3 before
+   *  d4). */
+  | 'prepare-break'
+  /** The last minor piece off its home square — development is finished. */
+  | 'development-complete'
+  /** A rook behind its own central pawn on a closed file: it guards the pawn
+   *  now and stands on the file that opens when the centre does. */
+  | 'rook-behind-pawn';
 
 export interface MoveFundamental {
   id: MoveFundamentalId;
@@ -110,6 +124,14 @@ export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId 
   luft: null,
   // Kicking a piece with a pawn GAINS a tempo — the inverse of handing one over.
   tempo: 'tempo-handed',
+  // Pressure on a defender is a plan, and 'no-plan' is the hole it answers.
+  'attack-defender': 'no-plan',
+  // A kicked piece that keeps working is the inverse of a misplaced one.
+  'keep-working': 'misplaced-piece',
+  // Preparing the break is the inverse of mistiming it.
+  'prepare-break': 'mistimed-pawn-break',
+  'development-complete': 'neglected-development',
+  'rook-behind-pawn': 'passive-rook',
 };
 
 const PIECE_NAME: Record<string, string> = {
@@ -604,7 +626,163 @@ export function computeMoveFundamentals(
     }
   }
 
-  return out.sort((a, b) => b.weight - a.weight);
+  const ideas = openingIdeas(fenBefore, after, mv, mover);
+  // "Prepares d4" is the better statement of "supports the center, guarding
+  // d4" — the same pawn, the same square — so the support clause steps aside.
+  const prepared = ideas.find((f) => f.id === 'prepare-break');
+  const kept = prepared ? out.filter((f) => !(f.id === 'center' && f.led.startsWith('supports the center'))) : out;
+  kept.push(...ideas);
+  return kept.sort((a, b) => b.weight - a.weight);
+}
+
+/** THE OPENING IDEAS BEYOND "DEVELOP / CENTER" (review audit 2026-09-25,
+ *  Carlsen–Caruana Ruy Lopez). Each principle is taught once a game, so after
+ *  e4 and Nf3 the moves that followed — Bb5, Ba4, c3, Nbd2, Bc2, Re1 — had no
+ *  NEW principle to name and went silent, six owed plies out of twelve. Every
+ *  one of them has its own idea, and each is a board test here, never a guess
+ *  from the move's name. */
+function openingIdeas(
+  fenBefore: string,
+  after: Chess,
+  mv: ReturnType<Chess['move']>,
+  mover: 'w' | 'b',
+): MoveFundamental[] {
+  const out: MoveFundamental[] = [];
+  const them: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  let before: Chess;
+  try { before = new Chess(fenBefore); } catch { return out; }
+  const homeRank = mover === 'w' ? 1 : 8;
+  const isPiece = mv.piece !== 'p' && mv.piece !== 'k';
+
+  // ATTACK THE DEFENDER — the moved piece newly hits an enemy piece that is
+  // the ONLY guard of something another of your pieces already attacks.
+  if (isPiece && !mv.captured) {
+    for (const row of after.board()) {
+      let done = false;
+      for (const c of row) {
+        if (!c || c.color !== them || c.type === 'k' || c.type === 'p') continue;
+        if (!after.attackers(c.square, mover).includes(mv.to)) continue;
+        if (before.attackers(c.square, mover).includes(mv.from)) continue;
+        for (const r2 of after.board()) {
+          for (const y of r2) {
+            if (!y || y.color !== them || y.type === 'k') continue;
+            const guards = after.attackers(y.square, them);
+            if (guards.length !== 1 || guards[0] !== c.square) continue;
+            const hitters = after.attackers(y.square, mover).filter((sq) => sq !== mv.to);
+            if (hitters.length === 0) continue;
+            const xName = PIECE_NAME[c.type];
+            const yName = y.type === 'p' ? `pawn on ${y.square}` : `${PIECE_NAME[y.type]} on ${y.square}`;
+            out.push({
+              id: 'attack-defender',
+              weight: 78,
+              led: `goes after their ${xName} on ${c.square}, the only piece guarding the ${yName}`,
+              selfContained: `puts pressure on their ${xName} on ${c.square}, the only guard of the ${yName}`,
+              imperative: `go after their ${xName} on ${c.square}, the only guard of the ${yName}`,
+              squares: [mv.to, c.square, y.square],
+            });
+            done = true;
+            break;
+          }
+          if (done) break;
+        }
+        if (done) break;
+      }
+      if (done) break;
+    }
+  }
+
+  // KEEP IT WORKING — a pawn attacked the piece; it steps out of every pawn's
+  // reach, and still hits what it hit before.
+  if (isPiece && !mv.captured) {
+    const pawnHits = (b: Chess, sq: string): boolean =>
+      b.attackers(sq as Square, them).some((a) => b.get(a)?.type === 'p');
+    if (pawnHits(before, mv.from) && !pawnHits(after, mv.to)) {
+      let kept: { name: string; sq: string } | null = null;
+      for (const row of after.board()) {
+        for (const c of row) {
+          if (!c || c.color !== them || c.type === 'p' || c.type === 'k') continue;
+          if (after.attackers(c.square, mover).includes(mv.to)
+            && before.attackers(c.square, mover).includes(mv.from)) {
+            kept = { name: PIECE_NAME[c.type], sq: c.square };
+          }
+        }
+      }
+      const name = PIECE_NAME[mv.piece];
+      const tail = kept ? ` and keeps the pressure on the ${kept.name} on ${kept.sq}` : `, keeping the ${name} rather than letting the pawn win it`;
+      out.push({
+        id: 'keep-working',
+        weight: 58,
+        led: `steps out of the pawn's reach${tail}`,
+        selfContained: `steps the ${name} out of the pawn's reach${tail}`,
+        imperative: `when a pawn kicks a piece, step it back to a square where it still works`,
+        squares: kept ? [mv.to, kept.sq] : [mv.to],
+      });
+    }
+  }
+
+  // PREPARE THE BREAK — a quiet pawn move that guards the square in front of
+  // your own central pawn, so that pawn can advance supported.
+  if (mv.piece === 'p' && !mv.captured && relRank(mv.to, mover) <= 3) {
+    const dir = mover === 'w' ? 1 : -1;
+    for (const s of pawnAttackSquares(mv.to, mover)) {
+      if (!CORE_CENTER.includes(s) || after.get(s as Square)) continue;
+      const behind = `${s[0]}${Number(s[1]) - dir}`;
+      const b2 = `${s[0]}${Number(s[1]) - 2 * dir}`;
+      const own = (sq: string): boolean => { const p = after.get(sq as Square); return !!p && p.type === 'p' && p.color === mover; };
+      const pusher = own(behind) ? behind : (!after.get(behind as Square) && own(b2) && relRank(b2, mover) === 2 ? b2 : null);
+      if (!pusher) continue;
+      out.push({
+        id: 'prepare-break',
+        weight: 64,
+        led: `prepares ${s[0]}${s[1]} — when the ${s[0]}-pawn goes forward, it will be supported`,
+        selfContained: `prepares the push to ${s} with the pawn to ${mv.to}, so the ${s[0]}-pawn arrives supported`,
+        imperative: `guard ${s} before the push, so the ${s[0]}-pawn arrives supported`,
+        squares: [mv.to, s, pusher],
+      });
+      break;
+    }
+  }
+
+  // DEVELOPMENT COMPLETE — the last minor off its home square.
+  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && countHomeMinors(after, mover) === 0) {
+    out.push({
+      id: 'development-complete',
+      weight: 70,
+      led: 'completes your development — every minor piece is out, so the rooks come next',
+      selfContained: `brings out the last minor piece — development is done, and the rooks come next`,
+      imperative: 'get the last minor piece out, then bring the rooks',
+      squares: [mv.to],
+    });
+  }
+
+  // ROOK BEHIND THE PAWN — a rook on a closed central file, directly guarding
+  // its own pawn there: it holds the pawn now and owns the file when it opens.
+  if (mv.piece === 'r' && !mv.captured && 'cdef'.includes(mv.to[0]) && fileOpenness(after, mv.to[0], mover) === null) {
+    const dir = mover === 'w' ? 1 : -1;
+    let r = Number(mv.to[1]) + dir;
+    let pawnSq: string | null = null;
+    while (r >= 1 && r <= 8) {
+      const sq = `${mv.to[0]}${r}`;
+      const p = after.get(sq as Square);
+      if (p) { if (p.type === 'p' && p.color === mover) pawnSq = sq; break; }
+      r += dir;
+    }
+    const enemyPawnOnFile = [1, 2, 3, 4, 5, 6, 7, 8].some((k) => {
+      const p = after.get(`${mv.to[0]}${k}` as Square);
+      return !!p && p.type === 'p' && p.color === them;
+    });
+    if (pawnSq && enemyPawnOnFile) {
+      out.push({
+        id: 'rook-behind-pawn',
+        weight: 62,
+        led: `puts the rook behind your ${pawnSq} pawn — it guards it now, and owns the ${mv.to[0]}-file when it opens`,
+        selfContained: `puts the rook behind the ${pawnSq} pawn, guarding it and waiting for the ${mv.to[0]}-file to open`,
+        imperative: `put a rook behind your ${mv.to[0]}-pawn, where it guards the pawn and owns the file once it opens`,
+        squares: [mv.to, pawnSq],
+      });
+    }
+  }
+  return out;
 }
 
 /**
@@ -729,6 +907,11 @@ const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
   // Kicking a piece with a pawn to gain time is taught as a rule of the
   // opening — his 9.f4 "chasing the knight away".
   tempo: true,
+  'attack-defender': true,
+  'keep-working': true,
+  'prepare-break': true,
+  'development-complete': true,
+  'rook-behind-pawn': true,
 };
 
 /** The first opening principle this move follows that has not been taught

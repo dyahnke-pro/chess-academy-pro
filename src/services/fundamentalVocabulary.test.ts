@@ -58,8 +58,15 @@ describe('the fundamentals vocabularies reconcile', () => {
     // 12 → 13 on 2026-09-24: `tempo` (a pawn that kicks a piece — 9.f4 against
     // …Ne5). It files under `tempo-handed`: gaining a tempo is the same habit
     // as handing one over, from the other side.
+    //
+    // 13 → 18 on 2026-09-25: the opening ideas past develop/center (review
+    // audit, Carlsen–Caruana Ruy: six owed plies silent). `attack-defender` →
+    // `no-plan`, `keep-working` → `misplaced-piece`, `prepare-break` →
+    // `mistimed-pawn-break`, `development-complete` → `neglected-development`,
+    // `rook-behind-pawn` → `passive-rook` — each the same habit from the other
+    // side.
     const mapped = Object.keys(MOVE_FUNDAMENTAL_TAG).length;
-    expect(mapped).toBe(13);
+    expect(mapped).toBe(18);
   });
 
   it('THE STRUCTURE CROSSES THE BOUNDARY — ids reach a caller, not just prose', () => {
