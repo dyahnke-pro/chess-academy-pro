@@ -32,3 +32,15 @@ export function pendingRecapture(history: readonly string[]): string | null {
     return legalSeeGainFor(c.fen(), last.to, c.turn()) >= 0 ? last.to : null;
   } catch { return null; }
 }
+
+/** The square the move `back` plies from the end of `history` landed on
+ *  (`back = 1` is the last move), or null when the history does not replay. */
+export function landingSquare(history: readonly string[], back: number): string | null {
+  if (history.length < back) return null;
+  try {
+    const c = new Chess();
+    let hit: string | null = null;
+    history.forEach((san, i) => { const m = c.move(san); if (i === history.length - back) hit = m.to; });
+    return hit;
+  } catch { return null; }
+}

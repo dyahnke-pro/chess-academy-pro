@@ -433,7 +433,7 @@ describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08
   it('builds the but-turn: affirm the tempting move, then refute it', () => {
     const c = temptingTurnClause(read)!;
     expect(c).toContain('Nxe5');
-    expect(c).toMatch(/but Qa4 and it falls apart/);
+    expect(c).toMatch(/but they answer Qa4 and it falls apart/);
   });
 
   it('builds the honest hedge naming the close alternative', () => {
@@ -548,11 +548,11 @@ describe('a spoken move never reads as a clause where a noun belongs', () => {
       ] },
     } as TacticalRead, { spoken: true });
     expect(out).not.toMatch(AFTER_PREPOSITION);
-    expect(out).toContain('with the knight taking on f3');
+    expect(out).toContain('play the knight taking on f3');
     // The refutation is a genuine CLAUSE slot and must keep the finite verb —
     // this is what stops the fix over-correcting into "but the knight taking
     // on f3 and it falls apart".
-    expect(out).toMatch(/but the knight takes f3 and it falls apart/);
+    expect(out).toMatch(/love to play the knight taking on f3 — but they take back and it falls apart/);
   });
 });
 

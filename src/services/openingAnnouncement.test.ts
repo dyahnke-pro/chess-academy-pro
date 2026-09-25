@@ -21,6 +21,15 @@ describe('openingAnnouncement — name it once, then once more where theory ends
     expect(openingAnnouncement({ name: 'Sicilian Defense: Alapin Variation' }, null, 'Sicilian Defense', 'w'))
       .toBe("It's the Alapin Variation.");
   });
+  it('filler tails are not variations (hand walk 2026-09-25)', () => {
+    expect(openingAnnouncement({ name: 'Indian Defense: Normal Variation' }, null, 'Indian Defense', 'b')).toBeNull();
+    expect(openingAnnouncement({ name: "King's Indian Defense: Rare Defenses" }, null, "King's Indian Defense", 'b')).toBeNull();
+  });
+  it('the first naming drops a filler tail, keeps a real one', () => {
+    expect(openingAnnouncement({ name: 'Indian Defense: Normal Variation' }, null, null, 'b')).toBe('This game is the Indian Defense.');
+    expect(openingAnnouncement({ name: 'Sicilian Defense: Alapin Variation' }, null, null, 'w')).toBe('This game is the Sicilian Defense: Alapin Variation.');
+    expect(openingAnnouncement({ name: 'Ruy Lopez: Exchange Variation, Normal Variation' }, null, null, 'b')).toBe('This game is the Ruy Lopez: Exchange Variation.');
+  });
   it('a family that sharpens is named (hand walk 2026-09-25: Indian → King\'s Indian)', () => {
     expect(openingAnnouncement({ name: "King's Indian Defense: Normal Variation" }, null, 'Indian Defense: Normal Variation', 'b'))
       .toBe("It's the King's Indian Defense.");

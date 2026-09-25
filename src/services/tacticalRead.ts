@@ -414,6 +414,30 @@ const APPEAL_AFFIRM: Record<string, string> = {
   natural: 'play the natural move',
 };
 
+/** The destination square written in a SAN, or null. */
+function sanTo(san: string): string | null {
+  const m = san.replace(/[+#!?]+$/, '').replace(/=[QRBN]$/, '').match(/([a-h][1-8])$/);
+  return m ? m[1] : null;
+}
+
+/** The affirm→but→refute turn, one wording for every caller. The capture names
+ *  its square and the reply names its mover: "You'd love to grab it with the
+ *  knight taking on e4 — but the knight takes e4" (hand walk 2000) left the
+ *  student asking whose knight took what. */
+function temptingTurn(san: string, appeal: string, replySan: string | null, say: (s: string) => string, sayN: (s: string) => string): string {
+  const to = sanTo(san);
+  // A capture already says its square ("the knight taking on e4") — the old
+  // "grab it" named nothing.
+  const lead = appeal === 'capture' ? `You’d love to play ${sayN(san)}` : `You’d love to ${APPEAL_AFFIRM[appeal] ?? 'play it'} with ${sayN(san)}`;
+  const takesBack = replySan !== null && to !== null && replySan.includes('x') && sanTo(replySan) === to;
+  const refutation = replySan === null
+    ? ' — but it doesn’t hold'
+    : takesBack
+      ? ' — but they take back and it falls apart'
+      : ` — but they answer ${say(replySan)} and it falls apart`;
+  return `${lead}${refutation}.`;
+}
+
 /**
  * THE COMPUTED VOICE — turn a TacticalRead fact package into a coach line in the
  * Danya register, composed ENTIRELY from the computed facts (G0: nothing here
@@ -431,11 +455,9 @@ export function narrateTacticalRead(read: TacticalRead, opts: { spoken?: boolean
 
   // BUT-TURN — affirm the seductive move, then refute it with the computed line.
   if (read.tempting) {
-    const affirm = APPEAL_AFFIRM[read.tempting.appeal] ?? 'play it';
     const ref = read.tempting.refutation;
     const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
-    const refutation = reply ? ` — but ${say(reply.san)} and it falls apart` : ' — but it doesn’t hold';
-    parts.push(`You’d love to ${affirm} with ${sayN(read.tempting.san)}${refutation}.`);
+    parts.push(temptingTurn(read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN));
   }
 
   // THE MOVE + the forcing line to the tactic.
@@ -471,11 +493,9 @@ export function temptingTurnClause(read: TacticalRead, opts: { spoken?: boolean 
   const say = (san: string): string => (opts.spoken ? sayMoveClause(san) : san);
   // NOUN slot — subject, or object of a preposition. See `sayMoveNoun`.
   const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
-  const affirm = APPEAL_AFFIRM[read.tempting.appeal] ?? 'play it';
   const ref = read.tempting.refutation;
   const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
-  const refutation = reply ? ` — but ${say(reply.san)} and it falls apart` : ' — but it doesn’t hold';
-  return `You’d love to ${affirm} with ${sayN(read.tempting.san)}${refutation}.`;
+  return temptingTurn(read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN);
 }
 
 /**
@@ -645,9 +665,7 @@ export function speakTemptingTurn(
   const say = (san: string): string => (opts.spoken ? sayMoveClause(san) : san);
   // NOUN slot — subject, or object of a preposition. See `sayMoveNoun`.
   const sayN = (san: string): string => (opts.spoken ? sayMoveNoun(san) : san);
-  const affirm = APPEAL_AFFIRM[t.appeal] ?? 'play it';
-  const refutation = t.replySan ? ` — but ${say(t.replySan)} and it falls apart` : ' — but it doesn’t hold';
-  return `You’d love to ${affirm} with ${sayN(t.san)}${refutation}.`;
+  return temptingTurn(t.san, t.appeal, t.replySan, say, sayN);
 }
 
 // ── THE FACT PACKAGE FOR THE VOICE MODEL ─────────────────────────────────────

@@ -324,3 +324,22 @@ describe('a bishop raking the king\'s squares is at work (hand walk 2026-09-24)'
     expect(line?.text ?? '').not.toMatch(/e6/);
   });
 });
+
+describe('a piece the student can simply take is not "their best piece" (hand walk 2000)', () => {
+  it('an undefended rook that just took on d8 is taken, not traded off', () => {
+    // White rook on d8, Black to move, knight on c5 does not defend it; Black's
+    // king on f7 cannot reach it — the black knight on b6 hits d7 not d8, so we
+    // give Black a rook on f8 that takes it. Nothing white defends d8.
+    const fen = '3R1r2/5k2/1n6/8/8/8/5K2/8 b - - 0 40';
+    const values = [
+      { square: 'd8', piece: 'R', color: 'w' as const, value: 5 },
+      { square: 'f8', piece: 'r', color: 'b' as const, value: -2 },
+      { square: 'b6', piece: 'n', color: 'b' as const, value: -2 },
+    ];
+    const withFen = pieceQualityLines(values, 'black', undefined, { isMiddlegame: true, fen });
+    expect(withFen.find((l) => l.kind === 'their-best-piece')).toBeUndefined();
+    // Same numbers, rook defended by its king on e7 → it IS the piece to trade.
+    const defended = pieceQualityLines(values, 'black', undefined, { isMiddlegame: true, fen: '3R1r2/4Kk2/1n6/8/8/8/8/8 b - - 0 40' });
+    expect(defended.find((l) => l.kind === 'their-best-piece')?.text).toMatch(/rook on d8/);
+  });
+});

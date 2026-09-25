@@ -276,8 +276,8 @@ function observationsFor(
     out.push({
       key: `${side}-doubled-${weak.doubled[0][0]}`, side, kind: 'structure', rank: rank('structure'),
       text: own
-        ? `Your pawns on the ${weak.doubled[0][0]}-file are doubled — they cannot defend each other, so the file matters more than the count.`
-        : `Their pawns on the ${weak.doubled[0][0]}-file are doubled — the file in front of them is the weakness, not the pawn count.`,
+        ? `Your pawns on the ${weak.doubled[0][0]}-file are doubled — they can't defend each other, so each one needs a neighbour or a piece to guard it.`
+        : `Their pawns on the ${weak.doubled[0][0]}-file are doubled — they can't defend each other, which makes them targets.`,
     });
   }
 

@@ -333,7 +333,11 @@ export function computeMoveFundamentals(
     // hole or a king-zone square in that list makes the sentence false, which
     // is the same defect the 2026-07-22 wing-pawn fix removed. Each kind of
     // square gets the clause that is true of it.
-    const central = eyes.filter((s) => CENTRAL_SQUARES.includes(s));
+    // …and a lone flank square is not "the center": Bg4 eyeing f5 alone was
+    // "fighting for the center on f5" (hand walk 800). The list speaks only
+    // when it reaches the core four.
+    const centralAll = eyes.filter((s) => CENTRAL_SQUARES.includes(s));
+    const central = centralAll.some((s) => CORE_CENTER.includes(s)) ? centralAll : [];
     // "leaning on e6", not "the hole on e6" — at move three Black's e-pawn is
     // still home, so e6 is an empty square, not yet a hole. Say what is true.
     const holes = eyes.filter((s) => standingHoles(seat).includes(s) && !nearKing.includes(s));
@@ -361,7 +365,21 @@ export function computeMoveFundamentals(
   // ── CENTER — a central pawn advance (space), or a piece already in play newly
   //    contesting the core center. (A developing minor already carries the
   //    center in its own clause above, so it does not double-count here.)
-  if (mv.piece === 'p' && CENTER.includes(mv.to) && relRank(mv.to, mover) >= 4) {
+  // A PAWN CAPTURE into the center is the "take toward the centre" rule, not
+  // a space grab — …fxe5 recapturing was "stake out the center and grab space
+  // with the pawn to e5" (hand walk 800).
+  const towardCenter = mv.piece === 'p' && !!mv.captured && CENTER.includes(mv.to)
+    && Math.abs(mv.to.charCodeAt(0) - 100.5) < Math.abs(mv.from.charCodeAt(0) - 100.5);
+  if (towardCenter) {
+    out.push({
+      id: 'center',
+      weight: 66,
+      led: `takes toward the center`,
+      selfContained: `takes toward the center with the ${mv.from[0]}-pawn`,
+      imperative: `take toward the center — the ${mv.from[0]}-pawn capture keeps your pawns near the middle`,
+      squares: [mv.to],
+    });
+  } else if (mv.piece === 'p' && CENTER.includes(mv.to) && relRank(mv.to, mover) >= 4) {
     out.push({
       id: 'center',
       weight: 66,
