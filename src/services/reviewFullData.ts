@@ -30,6 +30,7 @@ import type { RefutedAlternative } from './refutedAlternative';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
 import { principleLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
+import { trickSidestepped } from './forkTrick';
 import { isMateEval } from './engineConstants';
 import { computeBoardDelta } from './boardDelta';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
@@ -861,12 +862,22 @@ export function computeMoveFacets(
 
   // ── 7d. WHY DID THEY PLAY THAT? (S3) — on the opponent's move, the threat of
   // the student's it took off the board. The same static computer Learn reads.
-  if (!isStudent && studentColorWB && ctx.teaching.prevFenBefore) {
-    const stop = threatStoppedBy(ctx.teaching.prevFenBefore, fenBefore, san, studentColorWB);
-    if (stop) {
-      const f = `[stopped] ${stop.text}`;
+  const stop = !isStudent && studentColorWB && ctx.teaching.prevFenBefore
+    ? threatStoppedBy(ctx.teaching.prevFenBefore, fenBefore, san, studentColorWB)
+    : null;
+  if (stop) {
+    const f = `[stopped] ${stop.text}`;
+    facets.push(f);
+    recSquares(f, [stop.threat.from, stop.threat.landing]);
+  }
+  // …and the fork trick, both seats — the same computer Learn's composer reads
+  // (re-walk 1380: 7.Bb3 sidestepping …Nxe4 Nxe4 d5 said nothing).
+  if (studentColorWB && !stop) {
+    const trick = trickSidestepped(fenBefore, san, moverWB, isStudent ? 'their' : 'your');
+    if (trick) {
+      const f = `[stopped] ${trick.text}`;
       facets.push(f);
-      recSquares(f, [stop.threat.from, stop.threat.landing]);
+      recSquares(f, [...trick.squares]);
     }
   }
 

@@ -23,7 +23,8 @@ import { Chess } from 'chess.js';
 import { strategicWhyImperative, principleLine } from './moveFundamentals';
 import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
-import { threatStoppedBy, type StoppedThreat } from './opponentMovePurpose';
+import { threatStoppedBy } from './opponentMovePurpose';
+import { trickSidestepped } from './forkTrick';
 import { phaseVerdictLine } from './reviewPositionalAssessment';
 import { stemKeyOf } from '../utils/rotateStem';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
@@ -760,9 +761,22 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))
     : null;
   // S3 — the opponent's reply took the student's threat off the board.
-  const stoppedHere = studentToMove && lm && input.opponentLastMove
+  const stoppedReply = studentToMove && lm && input.opponentLastMove
     ? threatStoppedBy(lm.fenBefore, input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor)
     : null;
+  // The fork trick, both seats (re-walk 1380: 7.Bb3 sidestepping …Nxe4 Nxe4
+  // d5 said nothing): the student's own move took theirs off the board, or
+  // their reply took the student's.
+  const stoppedHere: Array<{ text: string; squares: readonly string[] }> = [];
+  if (stoppedReply) stoppedHere.push({ text: stoppedReply.text, squares: [stoppedReply.threat.from, stoppedReply.threat.landing] });
+  if (studentToMove && lm) {
+    const own = trickSidestepped(lm.fenBefore, lm.san, studentColor, 'their');
+    if (own) stoppedHere.push(own);
+  }
+  if (studentToMove && input.opponentLastMove && !stoppedReply) {
+    const theirs = trickSidestepped(input.opponentLastMove.fenBefore, input.opponentLastMove.san, opponentColor, 'your');
+    if (theirs) stoppedHere.push(theirs);
+  }
   // S4 — who's better, and why, at the turn of the game.
   const stockHere = input.phaseTurn && !analysis.isMate
     ? phaseVerdictLine(fen, studentColor, evalCpWhitePov * sSign, input.phaseTurn)
@@ -1068,7 +1082,7 @@ function buildClauses(a: {
    *  (the student's pre-move board — coupled there, never from prose). */
   refuted: { fact: RefutedAlternative; squares: readonly string[] } | null;
   rule: { text: string; squares: readonly string[] } | null;
-  stopped: StoppedThreat | null;
+  stopped: ReadonlyArray<{ text: string; squares: readonly string[] }>;
   stock: string | null;
   leansOn: LeansOn | null;
   opponentLeansOn: LeansOn | null;
@@ -1225,7 +1239,7 @@ function buildClauses(a: {
     ranked.push({ kind: 'refuted', rank: 82, text: a.refuted.fact.text, stakes: costStakes(a.refuted.fact.costCp) ?? undefined, squares: [...a.refuted.squares] });
   }
   if (a.rule) ranked.push({ kind: 'rule', rank: 29, text: a.rule.text, squares: [...a.rule.squares] });
-  if (a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: a.stopped.text, squares: [a.stopped.threat.from, a.stopped.threat.landing] });
+  for (const st of a.stopped) ranked.push({ kind: 'stopped', rank: 27, text: st.text, squares: [...st.squares] });
   if (a.stock) ranked.push({ kind: 'stock', rank: 35, text: a.stock });
   // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
   // ranked just under a live hanging threat. Its gate (central king + tension +
