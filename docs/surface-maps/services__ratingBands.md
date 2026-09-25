@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**212 lines · 12 exports · 51 importers · 5 tests · 0 audits**
+**212 lines · 12 exports · 52 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,6 +50,7 @@
 - `src/services/conceptEngine.ts`
 - `src/services/dbService.test.ts`
 - `src/services/dbService.ts`
+- `src/services/exchangeLedger.ts`
 - `src/services/hintRegister.ts`
 - `src/services/homeOpeningPlan.ts`
 - `src/services/needScore.ts`

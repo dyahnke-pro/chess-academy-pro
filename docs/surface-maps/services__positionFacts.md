@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1288 lines · 9 exports · 14 importers · 12 tests · 3 audits**
+**1297 lines · 9 exports · 14 importers · 12 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -63,21 +63,22 @@
 ### `ClauseItem` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `clauseText` (function) — 11 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8987`
+### `clauseText` (function) — 12 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9039`
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:647`
 - `src/services/computerAccuracy.audit.test.ts:113`
 - `src/services/positionFacts.test.ts:254`
 - `src/services/positionFacts.test.ts:255`
 - `src/services/positionFacts.test.ts:296`
-- `src/services/positionFacts.test.ts:356`
-- `src/services/positionFacts.test.ts:357`
+- `src/services/positionFacts.test.ts:306`
+- `src/services/positionFacts.test.ts:364`
+- `src/services/positionFacts.test.ts:365`
 - `src/services/positionReadComposer.ts:116`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 66 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8925`
+### `computePositionFacts` (function) — 69 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8977`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:622`
@@ -122,11 +123,14 @@
 - `src/services/positionFacts.test.ts:276`
 - `src/services/positionFacts.test.ts:292`
 - `src/services/positionFacts.test.ts:302`
-- `src/services/positionFacts.test.ts:311`
-- `src/services/positionFacts.test.ts:334`
-- `src/services/positionFacts.test.ts:355`
-- `src/services/positionFacts.test.ts:371`
+- `src/services/positionFacts.test.ts:310`
+- `src/services/positionFacts.test.ts:319`
+- `src/services/positionFacts.test.ts:342`
+- `src/services/positionFacts.test.ts:363`
 - `src/services/positionFacts.test.ts:379`
+- `src/services/positionFacts.test.ts:387`
+- `src/services/positionFacts.test.ts:399`
+- `src/services/positionFacts.test.ts:406`
 - `src/services/positionFacts.weakness.test.ts:22`
 - `src/services/positionFacts.weakness.test.ts:48`
 - `src/services/positionFacts.weakness.test.ts:62`

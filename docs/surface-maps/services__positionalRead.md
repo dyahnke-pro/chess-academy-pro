@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**508 lines · 6 exports · 6 importers · 2 tests · 1 audits**
+**529 lines · 6 exports · 6 importers · 2 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -28,9 +28,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:522`
+- `src/services/danyaBehaviors.ts:549`
 
-### `readPosition` (function) — 33 call sites
+### `readPosition` (function) — 39 call sites
 - `src/services/groundedAnswer.ts:1307`
 - `src/services/lookaheadPlan.ts:881`
 - `src/services/lookaheadPlan.ts:1150`
@@ -64,9 +64,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:302`
 - `src/services/positionalRead.test.ts:309`
 - `src/services/positionalRead.test.ts:313`
+- `src/services/positionalRead.test.ts:320`
+- `src/services/positionalRead.test.ts:328`
+- `src/services/positionalRead.test.ts:337`
+- `src/services/positionalRead.test.ts:341`
+- `src/services/positionalRead.test.ts:352`
+- `src/services/positionalRead.test.ts:364`
 
 ### `buildPositionalRead` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8143`
+- `src/components/Coach/CoachTeachPage.tsx:8195`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
 - `src/services/positionalRead.test.ts:164`
@@ -76,7 +82,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:192`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:197`
+- `src/services/danyaBehaviors.ts:205`
 
 ## Tests
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**844 lines · 2 exports · 31 importers · 11 tests · 0 audits**
+**844 lines · 2 exports · 31 importers · 12 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,7 +50,7 @@
 ### `TacticsDetectionResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectTactics` (function) — 91 call sites
+### `detectTactics` (function) — 93 call sites
 - `src/components/Board/BoardPageLayout.tsx:124`
 - `src/services/boardConcepts.ts:303`
 - `src/services/coachPrompts.ts:1097`
@@ -58,7 +58,7 @@
 - `src/services/computerAccuracy.audit.test.ts:117`
 - `src/services/conceptEngine.ts:425`
 - `src/services/conceptEngine.ts:593`
-- `src/services/danyaBehaviors.ts:301`
+- `src/services/danyaBehaviors.ts:328`
 - `src/services/discussionPractice.ts:55`
 - `src/services/discussionPractice.ts:100`
 - `src/services/discussionPractice.ts:143`
@@ -76,7 +76,8 @@
 - `src/services/pinGeometry.test.ts:109`
 - `src/services/pinGeometry.test.ts:115`
 - `src/services/pinGeometry.test.ts:122`
-- `src/services/playCommentary.ts:736`
+- `src/services/pinGeometry.test.ts:131`
+- `src/services/playCommentary.ts:744`
 - `src/services/pvPlayback.ts:323`
 - `src/services/pvPlayback.ts:343`
 - `src/services/relationClaimCost.report.test.ts:52`
@@ -85,6 +86,7 @@
 - `src/services/reviewFullData.ts:528`
 - `src/services/reviewMoveBriefing.ts:64`
 - `src/services/reviewMoveBriefing.ts:65`
+- `src/services/reviewNarrationFidelity.test.ts:324`
 - `src/services/reviewOpponentCommentary.ts:67`
 - `src/services/tacticClaimValidator.test.ts:200`
 - `src/services/tacticClaimValidator.ts:151`
@@ -151,6 +153,7 @@
 - `src/services/pinGeometry.test.ts`
 - `src/services/relationClaimCost.report.test.ts`
 - `src/services/reviewCorpusNote.test.ts`
+- `src/services/reviewNarrationFidelity.test.ts`
 - `src/services/tacticClaimValidator.test.ts`
 - `src/services/tacticLaneVocabulary.test.ts`
 - `src/services/tacticsDetector.expansion.test.ts`

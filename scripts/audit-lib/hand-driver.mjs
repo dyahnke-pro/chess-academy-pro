@@ -97,6 +97,27 @@ const routes = {
     for (const m of (q.get('moves') ?? '').split(/\s+/).filter(Boolean)) chess.move(m);
     return state();
   },
+  /** Set the student's rating the way the app reads it (the profile rung of
+   *  getPlayerRatingEstimate), then reload so boot calibration picks it up.
+   *  `/rating?elo=2340` — a walk at a different level. */
+  async rating(q) {
+    const elo = Number(q.get('elo'));
+    const wrote = await page.evaluate((e) => new Promise((res) => {
+      const req = indexedDB.open('ChessAcademyDB');
+      req.onsuccess = () => {
+        const tx = req.result.transaction('profiles', 'readwrite');
+        const st = tx.objectStore('profiles');
+        const all = st.getAll();
+        all.onsuccess = () => {
+          for (const p of all.result) { p.currentRating = e; p.ratingBaseline = e; st.put(p); }
+          tx.oncomplete = () => res(all.result.length);
+        };
+      };
+      req.onerror = () => res(-1);
+    }), elo);
+    const out = await routes.open();
+    return { wrote, ...out };
+  },
   async wait(q) { await sleep(Number(q.get('ms') ?? 5000)); return state(); },
   state,
   async shot(q) {

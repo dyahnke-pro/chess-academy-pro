@@ -30,7 +30,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10473`
+- `src/components/Coach/CoachTeachPage.tsx:10536`
 - `src/services/voicePackage.test.ts:419`
 - `src/services/voicePackage.test.ts:428`
 - `src/services/voicePackage.test.ts:438`
@@ -41,14 +41,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `VoicePackage` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildVoicePackage` (function) — 70 call sites
+### `buildVoicePackage` (function) — 71 call sites
 - `src/components/Coach/CoachGameReview.tsx:1983`
 - `src/components/Coach/CoachGameReview.tsx:2021`
-- `src/components/Coach/CoachTeachPage.tsx:7513`
-- `src/components/Coach/CoachTeachPage.tsx:8198`
-- `src/components/Coach/CoachTeachPage.tsx:8253`
-- `src/components/Coach/CoachTeachPage.tsx:10439`
-- `src/components/Coach/CoachTeachPage.tsx:10451`
+- `src/components/Coach/CoachTeachPage.tsx:7547`
+- `src/components/Coach/CoachTeachPage.tsx:8250`
+- `src/components/Coach/CoachTeachPage.tsx:8305`
+- `src/components/Coach/CoachTeachPage.tsx:10502`
+- `src/components/Coach/CoachTeachPage.tsx:10514`
 - `src/hooks/usePhaseNarration.ts:417`
 - `src/hooks/usePhaseNarration.ts:867`
 - `src/hooks/usePositionNarration.ts:314`
@@ -112,17 +112,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:572`
 - `src/services/voicePackage.test.ts:583`
 - `src/services/voicePackage.test.ts:590`
+- `src/services/voicePackage.test.ts:598`
 
 ### `spokenSentenceKeys` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10046`
-- `src/components/Coach/CoachTeachPage.tsx:10461`
+- `src/components/Coach/CoachTeachPage.tsx:10098`
+- `src/components/Coach/CoachTeachPage.tsx:10524`
 - `src/services/voicePackage.test.ts:525`
 - `src/services/voicePackage.test.ts:534`
 - `src/services/voicePackage.test.ts:546`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10038`
-- `src/components/Coach/CoachTeachPage.tsx:10485`
+- `src/components/Coach/CoachTeachPage.tsx:10090`
+- `src/components/Coach/CoachTeachPage.tsx:10548`
 - `src/services/voicePackage.test.ts:38`
 
 ## Tests

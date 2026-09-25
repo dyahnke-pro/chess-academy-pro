@@ -140,7 +140,7 @@
 - `src/services/liveNeedGate.test.ts:56`
 - `src/services/liveNeedGate.test.ts:65`
 - `src/services/liveNeedGate.test.ts:77`
-- `src/services/positionFacts.ts:797`
+- `src/services/positionFacts.ts:803`
 - `src/services/supportedFacts.test.ts:77`
 - `src/services/supportedFacts.test.ts:87`
 - `src/services/supportedFacts.test.ts:97`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6617 lines · 147 exports · 58 importers · 30 tests · 8 audits**
+**6624 lines · 147 exports · 58 importers · 30 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -272,7 +272,7 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8669`
+- `src/components/Coach/CoachTeachPage.tsx:8721`
 - `src/services/coachApi.ts:3331`
 - `src/services/coachApi.ts:5395`
 - `src/services/coachFeatureService.test.ts:40`
@@ -978,8 +978,9 @@
 - `src/coach/questionIntents.counterRepertoire.test.ts:135`
 - `src/services/coachApi.ts:4560`
 
-### `seatPieceReferences` (function) — 19 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7701`
+### `seatPieceReferences` (function) — 22 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7744`
+- `src/components/Coach/CoachTeachPage.tsx:7778`
 - `src/services/coachFeatureService.ts:4688`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
@@ -998,6 +999,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:298`
 - `src/services/reviewNarrationFidelity.test.ts:304`
 - `src/services/reviewNarrationFidelity.test.ts:305`
+- `src/services/reviewNarrationFidelity.test.ts:312`
+- `src/services/reviewNarrationFidelity.test.ts:326`
 
 ### `DetectedThreat` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -1005,7 +1008,7 @@
 ### `detectNewThreat` (function) — 15 call sites
 - `src/data/patternRegistry.ts:43`
 - `src/data/patternRegistry.ts:123`
-- `src/services/bluffDetector.ts:63`
+- `src/services/bluffDetector.ts:72`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/coachFeatureService.ts:2553`
 - `src/services/engineDeltaLines.ts:54`

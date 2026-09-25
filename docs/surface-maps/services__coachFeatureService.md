@@ -259,9 +259,16 @@
 - `src/services/reviewNarrationFidelity.test.ts:112`
 - `src/services/reviewNarrationFidelity.test.ts:118`
 
-### `pendingRecapture` (function) — 2 call sites
+### `pendingRecapture` (function) — 9 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7528`
 - `src/services/coachFeatureService.test.ts:929`
 - `src/services/coachFeatureService.test.ts:930`
+- `src/utils/justCaptured.test.ts:20`
+- `src/utils/justCaptured.test.ts:22`
+- `src/utils/justCaptured.test.ts:25`
+- `src/utils/justCaptured.test.ts:27`
+- `src/utils/justCaptured.test.ts:30`
+- `src/utils/justCaptured.ts:24`
 
 ### `pastTenseReviewNarration` (function) — 1 call site
 - `src/services/reviewRegister.test.ts:32`

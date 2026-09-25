@@ -31,10 +31,12 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🟠 Phase narration still phrases chess facts through the model — David's call.
 - 🔴 Leftovers: rook template m17, "either works … with it", duplicate break lanes, transposition name.
 - ✅ Hand-walk 1380 (xoS71OW-Re0): 30 moves flagged, 6 fix batches; open flags in `audit-reports/hand-walk-1380-2026-09-24.md` (king-attack lane, 2-move threat computer, engine-unverified claims).
-- 🟠 Hand-walks owed: re-walk the 1380 flags; 2340 (pXBR9CxK3lQ), 2000 Black (7f2sPY2U204).
+- ✅ Hand-walks 2340 (pXBR9CxK3lQ, White) + 2000 (7f2sPY2U204, Black KID): walked, flagged, fixed, re-walked; flags in `audit-reports/hand-walk-2340-2026-09-25.md` / `hand-walk-2000-2026-09-25.md`.
+- 🟠 Re-walk the 1380 flags on current code (owed).
 - ✅ The next move is named only where EARNED — `nextMoveAdvice`: a deciding moment or the student's own open record (phase / motif), never the rating; audited as `moveAdvice` on the decision row (G-MA) (David 2026-09-24: "I don't want to hear the best move on every ply").
 - ✅ Leaving book read from the live masters explorer, cached per position (no 37 MB file on the phone).
 - ✅ Walk-1380 fix hour: no orphaned "X?" (one shared claim splitter), ruled-out moves need a reason, "still wins, but Y was cleaner", framed repeats deduped, forcing-win judged on the capture not the recapture (engine-checked), calculation-depth capped at the 7-ply horizon, hedge dropped when the count speaks.
+- ✅ Walk-2340/2000 fixes: one owner per fact (isolani, verdict vs plan, best piece), seats (IQP, colour possessives, raw detector text), horizons (proofs ≤7 plies, spoken lookahead ≤4), engine over static counts (no "hanging"/"they win it" the engine doesn't charge; recaptures never "won"), queens-off endgame guards, the student's own move point (free pawn, exchange, bishop pair, unpin, luft), variation/family naming in book, "let's play, I'll be black" starts a game.
 - 🔴 From the walk, still open: king-attack lane (g6 exposure, "closing in"), 2-move threat computer (fork trick), h3 vs Qh4 ranking (→ B).
 - 🔴 The fade: one fact, two phrasings — full teaching on grey/red tags, his 2100 shorthand on proven-green ones, per tag not per player, gradual, and back to full on a red regression (David 2026-09-24: "fade transitions into the 2100 narration style as the user gets better").
 - 🔴 Rules + theory lane: state a development rule when the board earns it — followed, broken at a cost, or broken on purpose (the exception); theory as the IDEA of the book move, the left-book move, and the common wrong move; both fade once proven (David 2026-09-24: "the rules of development for beginners … theory included").

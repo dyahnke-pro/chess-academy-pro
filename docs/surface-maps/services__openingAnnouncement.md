@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**64 lines · 4 exports · 3 importers · 3 tests · 1 audits**
+**83 lines · 4 exports · 3 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,18 +21,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `DetectedName` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingAnnouncement` (function) — 7 call sites
+### `openingAnnouncement` (function) — 10 call sites
 - `src/services/computedVoiceAudit.report.test.ts:310`
 - `src/services/openingAnnouncement.test.ts:15`
 - `src/services/openingAnnouncement.test.ts:18`
 - `src/services/openingAnnouncement.test.ts:21`
-- `src/services/openingAnnouncement.test.ts:23`
-- `src/services/openingAnnouncement.test.ts:27`
-- `src/services/openingAnnouncement.test.ts:28`
+- `src/services/openingAnnouncement.test.ts:25`
+- `src/services/openingAnnouncement.test.ts:29`
+- `src/services/openingAnnouncement.test.ts:32`
+- `src/services/openingAnnouncement.test.ts:34`
+- `src/services/openingAnnouncement.test.ts:38`
+- `src/services/openingAnnouncement.test.ts:39`
 
 ### `openingAnnouncementForGame` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7807`
-- `src/components/Coach/CoachTeachPage.tsx:9657`
+- `src/components/Coach/CoachTeachPage.tsx:7850`
+- `src/components/Coach/CoachTeachPage.tsx:9709`
 
 ### `warmOpeningBook` (function) — 1 call site
 - `src/components/Coach/CoachTeachPage.tsx:978`

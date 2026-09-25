@@ -77,8 +77,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:81`
 
 ### `namedTacticClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9281`
-- `src/services/danyaBehaviors.ts:350`
+- `src/components/Coach/CoachTeachPage.tsx:9333`
+- `src/services/danyaBehaviors.ts:377`
 - `src/services/danyaDeviceCoverage.test.ts:101`
 - `src/services/tacticalRead.test.ts:141`
 - `src/services/tacticalRead.test.ts:150`
@@ -88,8 +88,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:123`
 
 ### `tacticalReadFromLines` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8722`
-- `src/services/danyaBehaviors.ts:348`
+- `src/components/Coach/CoachTeachPage.tsx:8774`
+- `src/services/danyaBehaviors.ts:375`
 - `src/services/danyaDeviceCoverage.test.ts:72`
 - `src/services/liveVoiceDefects.test.ts:46`
 - `src/services/tacticalRead.test.ts:346`
@@ -109,15 +109,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:543`
 
 ### `temptingTurnClause` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8733`
-- `src/components/Coach/CoachTeachPage.tsx:9300`
+- `src/components/Coach/CoachTeachPage.tsx:8785`
+- `src/components/Coach/CoachTeachPage.tsx:9352`
 - `src/services/danyaDeviceCoverage.test.ts:78`
 - `src/services/tacticalRead.test.ts:434`
 - `src/services/tacticalRead.test.ts:447`
 
 ### `uncertaintyClause` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8738`
-- `src/components/Coach/CoachTeachPage.tsx:9303`
+- `src/components/Coach/CoachTeachPage.tsx:8790`
+- `src/components/Coach/CoachTeachPage.tsx:9355`
 - `src/services/danyaDeviceCoverage.test.ts:83`
 - `src/services/liveVoiceDefects.test.ts:281`
 - `src/services/tacticalRead.test.ts:419`
@@ -132,7 +132,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/tacticalRead.test.ts:579`
 
 ### `candidateCompareClause` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8744`
+- `src/components/Coach/CoachTeachPage.tsx:8796`
 - `src/services/danyaDeviceCoverage.test.ts:88`
 - `src/services/tacticalRead.test.ts:452`
 - `src/services/tacticalRead.test.ts:460`
