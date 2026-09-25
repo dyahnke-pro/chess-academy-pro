@@ -33,6 +33,7 @@ import { classifyPhase } from './gamePhaseService';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
+import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { habitIsOwed, type MethodHabit } from './methodBeat';
 import { recurrenceFor, recurrenceLine } from './misconceptionCallbacks';
@@ -2027,6 +2028,10 @@ export function buildReviewSegments(
         },
         {
           facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes,
+          // THE BOARD AFTER THIS PLY — a recapture pending, or mate for the
+          // side to move (`boardState`). Review had no such guard at all: "You're
+          // a piece up" one ply before the piece was taken back.
+          board: boardStateAfter(fenPair.fenBefore, m.san, m.fenAfter, m.evaluation ?? null),
           // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
           // `[principle]` facet IS the attributed fundamental, so ranking it by
           // `clauseKindForTag('principle') → 'structure-plan'` asked the coarse

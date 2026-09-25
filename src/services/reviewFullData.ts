@@ -22,7 +22,7 @@ import { legalSeeGainOn, findMinorityAttack, findColorComplexWeakness } from './
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
-import { costStakes, exchangeStakes, forkPoints, piecesOn, MATE_POINTS, type FactStakes } from './factStakes';
+import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, MATE_POINTS, type FactStakes } from './factStakes';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
@@ -247,7 +247,9 @@ export function computeMoveFacets(
   const recStakes = (facet: string, stakes: FactStakes | null | undefined): void => {
     if (outStakes && stakes && stakes.points > 0) outStakes.set(facet, stakes);
   };
-  const recMotif = (facet: string, motif: string, squares: readonly string[]): void => { outIdentity?.set(facet, `motif:${motif}:${squares.join('')}`); };
+  // …and on WHOSE idea it is: "your rook pins their pawn — you saw this idea on
+  // move 15" referred back to THEIR pin of move 15 (hand walk 2000 review).
+  const recMotif = (facet: string, motif: string, squares: readonly string[], side?: 'w' | 'b' | null): void => { outIdentity?.set(facet, `motif:${motif}@${side ?? '-'}:${squares.join('')}`); };
   const recSquares = (facet: string, squares: ReadonlyArray<string | null | undefined>): void => {
     if (!outSquares) return;
     const clean = squares.filter((s): s is string => typeof s === 'string' && /^[a-h][1-8]$/.test(s));
@@ -472,8 +474,8 @@ export function computeMoveFacets(
     const seat = (s: string): string => {
       if (!ctx.studentColorWB) return s;
       const me = ctx.studentColorWB === 'w' ? 'White' : 'Black';
-      const seated = s.replace(/^(White|Black) has a checkmate available from\b/,
-        (_m, side: string) => (side === me ? 'You have a checkmate available from' : 'They have a checkmate available from'));
+      const seated = s.replace(/^(White|Black) has mate in one\b/,
+        (_m, side: string) => (side === me ? 'You have mate in one' : 'They have mate in one'));
       return seatPieceReferences(seated, fenAfter, ctx.studentColorWB);
     };
     for (const tac of t.tactics) {
@@ -494,11 +496,11 @@ export function computeMoveFacets(
         if (v.status === 'live') {
           const f = `[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-          recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type, tac.involvedSquares);
+          recStakes(f, { points: v.winsPoints, plies: 1 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         } else if (v.status === 'threat') {
           const f = `[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`;
           facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-          recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type, tac.involvedSquares);
+          recStakes(f, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 }); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
         }
         // status 'none' → unproven fork shape, say nothing (G0).
         continue;
@@ -510,11 +512,10 @@ export function computeMoveFacets(
         // queen on d5 pins your pawn on g2 against your rook on h1" on move
         // two, and the fianchetto bishop "pinning" b7 for thirty moves). It
         // teaches only when the pin actually costs material.
-        const front = tac.type === 'pin' ? piecesOn(fenAfter, [tac.involvedSquares[1]])[0] ?? null : null;
-        if (front === 'p' && stakes === null) continue;
+        if (isScenicPawnPin(fenAfter, tac.type, tac.involvedSquares, tac.beneficiary)) continue;
         const f = `[tactic] ${seat(tac.description)}.`;
         facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
-        recStakes(f, stakes); recMotif(f, tac.type, tac.involvedSquares);
+        recStakes(f, stakes); recMotif(f, tac.type, tac.involvedSquares, tac.beneficiary);
       }
     }
     // ONLY THE DELTA SPEAKS (WO-STANDARD-01 D-8, prod tape 2026-09-22:

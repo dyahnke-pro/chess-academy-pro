@@ -35,3 +35,14 @@ describe('findWorstPlacedPiece — a back-rank rook is not misplaced (walk 6, R1
     expect(w?.type === 'r' && w.sq[1] === '1').toBe(false);
   });
 });
+
+describe('no king attack without queens (review tape 2026-09-25)', () => {
+  it('a king on f2 in a rook ending is not "stuck" — it is where it belongs', async () => {
+    // The KID walk (student Black) after the queen trade and 22.Kf2.
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8 Raxd8 Kf2'.split(' ')) c.move(m);
+    const plans = deriveNextPlans(c.fen(), 'b', { studentPovCp: 200 });
+    expect(plans.join(' ')).not.toMatch(/attack their king/);
+  });
+});

@@ -27,6 +27,8 @@ import { phaseVerdictLine } from './reviewPositionalAssessment';
 import { stemKeyOf } from '../utils/rotateStem';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
+import { isMateEval } from './engineConstants';
+import { boardStateAfter, mateInOneOnBoard, type BoardState } from './boardState';
 import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
@@ -834,6 +836,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
 
   const clauseByText = new Map<string, ClauseItem>();
   for (const c of composed) if (!clauseByText.has(c.text)) clauseByText.set(c.text, c);
+  const producedBy = studentToMove ? input.opponentLastMove : input.lastMove;
+  const boardHere: BoardState = producedBy
+    ? boardStateAfter(producedBy.fenBefore, producedBy.san, fen, evalCpWhitePov)
+    : { inFlux: null, mateOnBoard: (isMateEval(evalCpWhitePov) && Math.sign(evalCpWhitePov) === (fen.split(' ')[1] === 'w' ? 1 : -1)) || mateInOneOnBoard(fen) };
   const decision = decide(
     momentSignals,
     {
@@ -877,6 +883,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // produced them; a must-defend and a pin-in-waiting on the same three
       // squares are two claims (now / next move) and both speak.
       family: new Map(composed.map((c) => [c.text, c.kind] as const)),
+      // THE BOARD (`boardState`) — the move that produced it is the opponent's
+      // when the student is to move, the student's otherwise.
+      board: boardHere,
       alreadySaid: input.alreadySaid,
     },
     input.posture,

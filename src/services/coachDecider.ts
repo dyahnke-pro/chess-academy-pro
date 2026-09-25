@@ -29,6 +29,7 @@
 //   5. ORDER — most-important-first, with the student's weaknesses raised.
 // Steps 1–2 decide WHETHER, 3–5 decide WHAT. Silence at any step is a computed
 // verdict with a reason attached — never an absence.
+import { boardVeto, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
 import { factKind, factValue, FACT_ROLE, FACT_LAYER, type FactKind, type FacetRole } from './reviewFacetRank';
@@ -130,6 +131,11 @@ export const GREEN_QUIET_BELOW = STAKED_FLOOR + 150;
  *  the computers that produced them (never scraped from the prose). */
 export interface FactBundle {
   facts: readonly string[];
+  /** THE BOARD THE FACTS ARE ABOUT — required, so no surface can forget it
+   *  (David 2026-09-25: "Root cause fixes this time"). A standing claim on a
+   *  board in flux, and anything beside a mate but the mate, never speak.
+   *  `CALM_BOARD` is an explicit answer, not a default. */
+  board: BoardState;
   squares: ReadonlyMap<string, readonly string[]>;
   /** Facts describing what the OPPONENT is doing TO the student. */
   incoming?: ReadonlySet<string>;
@@ -339,6 +345,10 @@ export function decide(
   const provenQuiet: QuietFact[] = [];
   const live = bundle.facts.filter((t) => {
     const k = kindOf(t);
+    // 2a — THE BOARD (`boardState`), before anything is weighed: a claim the
+    // board forbids here is not a candidate at all.
+    const veto = boardVeto(k, bundle.board);
+    if (veto) { provenQuiet.push({ text: t, why: veto }); return false; }
     if (k === null || k === 'method') return true;
     if (student.layers[FACT_LAYER[k]] !== 'green') return true;
     if ((value.get(t) ?? 0) >= GREEN_QUIET_BELOW) return true;

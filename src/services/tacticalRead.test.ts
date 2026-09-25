@@ -333,7 +333,7 @@ describe('pickKeyTactic mate_threat downgrade (false-claim audit)', () => {
     };
     const key = pickKeyTactic([ply]);
     expect(key?.type).toBe('mate_threat');
-    expect(key?.description.toLowerCase()).not.toContain('has a checkmate available');
+    expect(key?.description.toLowerCase()).not.toContain('has mate in one');
     expect(key?.description.toLowerCase()).toContain('threatens mate');
   });
 });

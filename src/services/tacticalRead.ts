@@ -165,7 +165,7 @@ export function pickKeyTactic(line: PvPly[]): KeyTactic | null {
     // cannot force. (David 2026-08-21 false-claim audit.)
     const rawDesc = named ? named.description : `${t} on ${line[i].san}`;
     const description = t === 'mate_threat'
-      ? rawDesc.replace(/\bhas a checkmate available from\b/i, 'threatens mate from')
+      ? rawDesc.replace(/\bhas mate in one with\b/i, 'threatens mate with')
       : rawDesc;
     return {
       type: t,

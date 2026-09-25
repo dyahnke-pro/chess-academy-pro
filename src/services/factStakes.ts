@@ -126,3 +126,22 @@ export function lineTacticPoints(frontPiece: string, backPiece: string): number 
   const back = worth(backPiece);
   return back > front ? piecePoints(frontPiece) : piecePoints(backPiece);
 }
+
+/**
+ * A PIN ON A PAWN THAT WINS NOTHING IS SCENERY — one rule for every surface
+ * (David 2026-09-25: root causes). Review taught a pawn pin only when it cost
+ * material; Learn dropped every pawn pin; the same board got two answers.
+ * `squares` are the detector's [attacker, pinned, behind]; `beneficiary` the
+ * side the pin favours.
+ */
+export function isScenicPawnPin(
+  fen: string,
+  type: string,
+  squares: readonly string[],
+  beneficiary: 'w' | 'b' | null | undefined,
+): boolean {
+  if (type !== 'pin' || squares.length < 2) return false;
+  if (piecesOn(fen, [squares[1]])[0]?.toLowerCase() !== 'p') return false;
+  const victim = beneficiary ? (beneficiary === 'w' ? 'b' : 'w') : null;
+  return exchangeStakes(fen, squares, victim) === null;
+}

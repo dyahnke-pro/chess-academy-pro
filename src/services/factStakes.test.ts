@@ -8,6 +8,7 @@
 // that a queen outweighs a knight, or that a bigger cost should lead. The
 // pawn-pin and no-stakes tests still pass then: the unified tie order already
 // puts a hanging piece over a coming pin (the old live table did not).
+import { CALM_BOARD } from './boardState';
 import { ALL_GREY } from './teachingLayers';
 import { describe, it, expect } from 'vitest';
 import {
@@ -67,6 +68,7 @@ describe('the door orders every surface by computed value', () => {
   const student = { rating: 1500, weaknesses: [], need: null, moveAdvice: null, momentBoost: NO_BOOST, layers: ALL_GREY };
   const blunder: ImportanceSignals = { decision: null, cpLossCp: 300, threatNet: 0, teachingBeat: false, evalCpWhitePov: 20, wdl: null };
   const run = (facts: Array<[string, string, FactStakes | null]>) => decide(blunder, student, {
+    board: CALM_BOARD,
     facts: facts.map(([t]) => t),
     squares: new Map(),
     family: new Map(facts.map(([t, k]) => [t, k] as const)),
@@ -100,5 +102,22 @@ describe('the door orders every surface by computed value', () => {
   it('a fact with no stakes follows every fact that has them', () => {
     const d = run([[PLAN, 'structure-plan', null], [PAWN_PIN, 'latent-danger', { points: 1, plies: 3 }]]);
     expect(d.spoken).toEqual([PAWN_PIN, PLAN]);
+  });
+});
+
+describe('one pawn-pin rule for every surface (2026-09-25)', () => {
+  it('a pawn pinned against a rook, winning nothing, is scenery', async () => {
+    const { isScenicPawnPin } = await import('./factStakes');
+    // 1.e4 …Qd5-style: Black queen d5 pins g2 to the h1 rook; the king guards g2, nothing to win.
+    expect(isScenicPawnPin('4k3/8/8/3q4/8/8/6P1/5K1R w - - 0 1', 'pin', ['d5', 'g2', 'h1'], 'b')).toBe(true);
+  });
+  it('a pawn pin that lets a piece win it is news', async () => {
+    const { isScenicPawnPin } = await import('./factStakes');
+    // Rook h2 pins g2 to the c2 knight; Black's bishop on h3 takes g2 for free.
+    expect(isScenicPawnPin('6k1/8/8/8/8/7b/2N3Pr/6K1 w - - 0 1', 'pin', ['h2', 'g2', 'c2'], 'b')).toBe(false);
+  });
+  it('a pin on a piece is never scenery by this rule', async () => {
+    const { isScenicPawnPin } = await import('./factStakes');
+    expect(isScenicPawnPin('4k3/8/8/b7/8/8/3N4/4K3 w - - 0 1', 'pin', ['a5', 'd2', 'e1'], 'b')).toBe(false);
   });
 });

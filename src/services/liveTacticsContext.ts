@@ -1,4 +1,5 @@
 import { logAppAudit } from './appAuditor';
+import { isScenicPawnPin } from './factStakes';
 import type { PerspectiveMode } from './perspectiveRule';
 /**
  * Live tactics context builder — turns the surface's Stockfish read
@@ -353,6 +354,10 @@ function detectImmediateTactics(
     const result = detectTactics(fen);
     return result.tactics
       .filter((t) => t.type !== 'none')
+      // A pawn pin that wins nothing is scenery — the ONE rule review uses too
+      // (`isScenicPawnPin`), applied where the live package is built so no
+      // Learn lane has to remember it.
+      .filter((t) => !isScenicPawnPin(fen, t.type, t.involvedSquares, t.beneficiary))
       .map((t) => tacticPatternToEntry(t, playerColor, fen))
       .slice(0, 5);
   } catch {

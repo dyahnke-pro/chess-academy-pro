@@ -345,7 +345,9 @@ function findMateThreats(chess: Chess): TacticPattern[] {
       type: 'mate_threat',
       beneficiary: color,
       involvedSquares: [mate.from, mate.to],
-      description: `${color === 'w' ? 'White' : 'Black'} has a checkmate available from ${mate.from}`,
+      // Names the PIECE, not a bare square: "has a checkmate available from a1"
+      // (review tape 2026-09-25) told the student nothing they could picture.
+      description: `${color === 'w' ? 'White' : 'Black'} has mate in one with the ${PIECE_NAMES[mate.piece] ?? 'piece'} on ${mate.from}`,
     });
   }
   return out;

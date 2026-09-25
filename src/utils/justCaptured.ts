@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { legalSeeGainFor } from '../services/positionReadingService';
+import { inFluxAfter } from '../services/boardState';
 
 /** Did the LAST move of `history` capture onto `square`? A piece that just took
  *  and stands undefended is a trade coming back, not a prize (hand walk
@@ -22,14 +22,14 @@ export function lastMoveCapturedOn(history: readonly string[], square: string): 
  *  back; "their pawns on the d-file are doubled" as cxd4 recaptured). Standing
  *  reads wait a ply; if they are real they are still true then. */
 export function pendingRecapture(history: readonly string[]): string | null {
+  // ONE DEFINITION (`boardState.inFluxAfter`) — the door that review and the
+  // live composer read uses the same one, so Learn's lanes and every other
+  // surface agree on when a board is in flux.
+  if (history.length === 0) return null;
   try {
     const c = new Chess();
-    let last: ReturnType<Chess['move']> | null = null;
-    for (const san of history) last = c.move(san);
-    if (!last?.captured) return null;
-    const retake = c.moves({ verbose: true }).some((m) => m.to === last.to && m.captured);
-    if (!retake) return null;
-    return legalSeeGainFor(c.fen(), last.to, c.turn()) >= 0 ? last.to : null;
+    for (const san of history.slice(0, -1)) c.move(san);
+    return inFluxAfter(c.fen(), history[history.length - 1]);
   } catch { return null; }
 }
 
