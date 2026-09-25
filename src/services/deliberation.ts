@@ -32,7 +32,7 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentL
     const m = c.move(san);
     // MATE IS THE REASON. "The move is Qxd6# — it wins the bishop on d6" (hand
     // walk 1200) named the capture and missed the point.
-    if (c.isCheckmate()) return 'is checkmate';
+    if (c.isCheckmate()) return 'ends the game';
     if (!m?.captured) return null;
     // A recapture is the trade finishing, never material won — and taking back
     // IS the reason ("The move is Rexd8 — it takes the open d-file" after Qxd8).
