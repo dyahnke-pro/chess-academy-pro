@@ -31,8 +31,12 @@ describe('boardState — the board decides what may be said (hand walks 2026-09-
     const quiet = new Chess('4r1k1/5ppp/8/8/8/8/5PPP/3R2K1 b - - 0 1');
     const st = boardStateAfter(quiet.fen(), 'Kf8', '4rk2/5ppp/8/8/8/8/5PPP/3R2K1 w - - 1 2', 30000);
     expect(st.mateOnBoard).toBe(true); // engine mate for White, White to move
-    const noMate = boardStateAfter(quiet.fen(), 'Kf8', '4rk2/5ppp/8/8/8/8/5PPP/3R2K1 w - - 1 2', -30000);
-    expect(noMate.mateOnBoard).toBe(false); // the mate is for the side NOT to move
+    // A forced mate for the side NOT to move is just as decided (after Bf4+
+    // with mate coming, review said "trade pieces, not pawns").
+    const theirs = boardStateAfter(quiet.fen(), 'Kf8', '4rk2/5ppp/8/8/8/8/5PPP/3R2K1 w - - 1 2', -30000);
+    expect(theirs.mateOnBoard).toBe(true);
+    const none = boardStateAfter(quiet.fen(), 'Kf8', '4rk2/5ppp/8/8/8/8/5PPP/3R2K1 w - - 1 2', 120);
+    expect(none.mateOnBoard).toBe(false);
   });
 
   it('standing claims wait on a board in flux; the tactic and the verdict do not', () => {
@@ -42,6 +46,16 @@ describe('boardState — the board decides what may be said (hand walks 2026-09-
     expect(boardVeto('opp-target', flux)).toBe('in-flux');
     expect(boardVeto('tactic', flux)).toBeNull();
     expect(boardVeto('quality', flux)).toBeNull();
+  });
+
+  it('a claim ABOUT the piece in flux waits; the verdict on the capture does not', () => {
+    // …Qxe1 with Rxe1 coming: "their queen on e1 pins your bishop" describes a
+    // queen about to be taken (review tape 2026-09-25).
+    const flux = { inFlux: 'e1', mateOnBoard: false };
+    expect(boardVeto('tactic', flux, ['e1', 'd1', 'a1'])).toBe('in-flux');
+    expect(boardVeto('does', flux, ['e1', 'e5'])).toBe('in-flux');
+    expect(boardVeto('tactic', flux, ['c3', 'd2', 'e1'].slice(0, 2))).toBeNull();
+    expect(boardVeto('quality', flux, ['e1'])).toBeNull();
   });
 
   it('beside a mate only the mate and the verdict speak', () => {

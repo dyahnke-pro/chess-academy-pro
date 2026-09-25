@@ -842,7 +842,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const producedBy = studentToMove ? input.opponentLastMove : input.lastMove;
   const boardHere: BoardState = producedBy
     ? boardStateAfter(producedBy.fenBefore, producedBy.san, fen, evalCpWhitePov)
-    : { inFlux: null, mateOnBoard: (isMateEval(evalCpWhitePov) && Math.sign(evalCpWhitePov) === (fen.split(' ')[1] === 'w' ? 1 : -1)) || mateInOneOnBoard(fen) };
+    : { inFlux: null, mateOnBoard: isMateEval(evalCpWhitePov) || mateInOneOnBoard(fen) };
   const decision = decide(
     momentSignals,
     {

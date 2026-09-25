@@ -347,7 +347,7 @@ export function decide(
     const k = kindOf(t);
     // 2a — THE BOARD (`boardState`), before anything is weighed: a claim the
     // board forbids here is not a candidate at all.
-    const veto = boardVeto(k, bundle.board);
+    const veto = boardVeto(k, bundle.board, bundle.squares.get(t));
     if (veto) { provenQuiet.push({ text: t, why: veto }); return false; }
     if (k === null || k === 'method') return true;
     if (student.layers[FACT_LAYER[k]] !== 'green') return true;

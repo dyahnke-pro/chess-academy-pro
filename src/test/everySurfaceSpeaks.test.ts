@@ -10,7 +10,9 @@
 //   C. a standing claim on a board in flux (a recapture pending);
 //   D. a plan beside a mate on the board;
 //   E. the same sentence twice in one utterance;
-//   F. we / our / us.
+//   F. we / our / us;
+//   G. one loose piece stated twice on one move;
+//   H. one refuted alternative repeated across a review.
 // Surfaces: review (buildReviewSegments), the live composer that Learn, phase
 // narration, read-position and the live coach share (computePositionFacts), the
 // positional read, the Learn commentary composer, "read this position"
@@ -66,6 +68,8 @@ function check(v: Violation[], game: string, ply: number, surface: string, text:
     if (board.inFlux && /\b(?:a|an|the) (?:piece|pawn|rook|queen|exchange|knight|bishop) up\b|\bNewly undefended\b|\bup \d+ points? of material\b/i.test(s)) push('C standing claim in flux', s);
     if (board.mateOnBoard && /\bplan\b/i.test(s)) push('D plan beside mate', s);
   }
+  const loose = /Newly undefended: (?:your|their) \w+ on ([a-h][1-8])/.exec(t);
+  if (loose && new RegExp(`(?:attacks|leaves) (?:your|their) \\w+ on ${loose[1]}`).test(t)) push('G one piece, two loose claims', t.slice(0, 160));
   const seen = new Set<string>();
   for (const s of sentences(t)) {
     const k = s.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -88,6 +92,15 @@ export async function sweep(): Promise<Violation[]> {
       bestMove: uciToSan(p.fenBefore, p.before.topLines[0]?.moves[0]),
     }) as unknown as ReviewMoveInput);
     const segs = buildReviewSegments(inputs, g.side, null as unknown as string, true, rating);
+    // H — a refuted alternative is said once per game.
+    const refuted = new Map<string, number>();
+    for (const s of segs) {
+      for (const m of strip(s.narration ?? '').matchAll(/The trap here is ([A-Za-z0-9+#=-]+)|\bplay ([A-Za-z0-9+#=-]+) here|([A-Za-z0-9+#=-]+) is what \d+% of/g)) {
+        const alt = m[1] ?? m[2] ?? m[3];
+        if (refuted.has(alt)) v.push({ game, ply: s.ply, surface: 'review', kind: 'H refuted twice', text: `${alt} (first at ply ${refuted.get(alt)})` });
+        else refuted.set(alt, s.ply);
+      }
+    }
     for (const s of segs) {
       const p = g.plies[s.ply - 1];
       if (!p || !s.narration) continue;

@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { isSacrifice } from './factStakes';
 import { seatPieceReferences } from '../utils/seatPieces';
 import { deriveNextPlans } from './nextPlans';
 import { Chess } from 'chess.js';
@@ -2591,11 +2592,9 @@ export function describeSacrifice(
     const b = new Chess(fenBefore);
     const mv = b.move(san);
     if (!mv) return null;
-    const capturedVal = mv.captured ? (REVIEW_PIECE_VALUE[mv.captured] ?? 0) : 0;
-    const opponentWins = legalSeeGain(b.fen(), mv.to); // material the opponent (to move) wins back on `to` (pin-aware)
-    // Net material handed over. ≥ 2 (a minor piece's worth) so a 1-pawn poke
-    // isn't dressed up as a "sacrifice".
-    if (opponentWins - capturedVal >= 2) {
+    // ONE RULE (`factStakes.isSacrifice`) — with no engine reply in hand it
+    // asks for a piece's worth handed over, as this always did.
+    if (isSacrifice(fenBefore, san, null)) {
       return `sacrifices the ${REVIEW_PIECE_NAME[mv.piece]} on ${mv.to}`;
     }
     return null;

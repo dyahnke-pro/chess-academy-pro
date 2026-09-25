@@ -70,7 +70,7 @@ export function buildOpponentMoveTeaching(
       if (attackers.includes(to as Square)) {
         return {
           id: 'opponent-move',
-          text: `Watch out — that ${movedLabel} leaves your ${PIECE_LABEL[hp.piece] ?? 'piece'} on ${hp.square} loose.`,
+          text: `Watch out — that ${movedLabel} attacks your ${PIECE_LABEL[hp.piece] ?? 'piece'} on ${hp.square}, and nothing defends it.`,
           arrows: [{ startSquare: to, endSquare: hp.square, color: OPP_AMBER }],
           squares: [to, hp.square],
         };

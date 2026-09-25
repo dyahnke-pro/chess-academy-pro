@@ -18,11 +18,11 @@ import { computeGemCrush } from './gemCrushLines';
 import { getPunishGemById } from '../data/lessons/punishGems';
 import { Chess, type Color, type Square } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
-import { legalSeeGainOn, findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
+import { findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
-import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, MATE_POINTS, type FactStakes } from './factStakes';
+import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, isSacrifice, MATE_POINTS, type FactStakes } from './factStakes';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
@@ -143,6 +143,10 @@ export interface MoveFactContext {
   preMoveEval: number | null;
   classification: string | null;
   bestMoveSan: string | null;
+  /** The engine's best REPLY at `fenAfter` (the next ply's best move), SAN, or
+   *  null when there is none. REQUIRED: whether a move gave material depends
+   *  on whether the opponent should take it (`isSacrifice`). */
+  replyBestSan: string | null;
   prevCap: { square: string | null; capturedValue: number };
   /** Full SAN list of the game (for opening ID + forced-run + sac mechanism). */
   allSans: string[];
@@ -531,9 +535,22 @@ export function computeMoveFacets(
       // R4: "Newly undefended: your pawn on e4" on move one, and a queen that
       // was merely attacked). A pawn is undefended half the opening and a
       // queen answers an attack by moving; neither is a loose-piece lesson.
+      // ONE OWNER PER CLAIM (review tape 2026-09-25: "Newly undefended: your
+      // bishop on g4" then "Watch out — that pawn leaves your bishop on g4
+      // loose", back to back). A student piece the opponent's move ATTACKS is
+      // stated by the opponent read below, which names the attacker.
+      let attackedByMover: (sq: string) => boolean = () => false;
+      if (!isStudent && studentColorWB) {
+        try {
+          const b = new Chess(fenAfter);
+          const to = new Chess(fenBefore).move(san).to;
+          attackedByMover = (sq) => b.get(sq as Square)?.color === studentColorWB && b.attackers(sq as Square, studentColorWB === 'w' ? 'b' : 'w').includes(to);
+        } catch { attackedByMover = () => false; }
+      }
       const fresh = t.hangingPieces.filter((h) => !before.has(`${h.piece}${h.square}`)
         && 'nbr'.includes(h.piece.toLowerCase())
-        && exchangeStakes(fenAfter, [h.square]) !== null);
+        && exchangeStakes(fenAfter, [h.square]) !== null
+        && !attackedByMover(h.square));
       if (fresh.length > 0) {
         const desc = fresh.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
         const f = `[loose] Newly undefended: ${seat(desc)}.`;
@@ -670,9 +687,9 @@ export function computeMoveFacets(
     const sb = new Chess(fenBefore);
     const smv = sb.move(san);
     if (smv) {
-      const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
-      const oppWins = legalSeeGainOn(sb, smv.to); // pin-aware: opponent's legal recapture
-      if (oppWins - capVal >= 1 && studentColorWB) {
+      // ONE RULE (`isSacrifice`): material handed over AND, when the engine's
+      // reply is known, the opponent actually takes it.
+      if (isSacrifice(fenBefore, san, ctx.replyBestSan) && studentColorWB) {
         // MOVER's POV, not the student's — the function judges the SAC from
         // the side that made it. Handing it the student's number flipped the
         // sign on every opponent sacrifice (D-4, 2026-09-22).
@@ -762,7 +779,12 @@ export function computeMoveFacets(
             : pct !== null
               ? `The trap here is ${crush.inaccuracy} (${pct}% of games at your level)`
               : `The trap here is ${crush.inaccuracy}`;
-          facets.push(`[refuted] ${lead} — it loses to ${crush.punish}, ${crush.payoff}.`);
+          const rf = `[refuted] ${lead} — it loses to ${crush.punish}, ${crush.payoff}.`;
+          facets.push(rf);
+          // SAID ONCE PER GAME by the alternative itself (review tape
+          // 2026-09-25: "Bg5 loses to Nxe4" on two consecutive moves, once from
+          // the gem and once from the engine).
+          outIdentity?.set(rf, `refuted:${strip(crush.inaccuracy)}`);
           gemRefuted = true;
         } else if (!isStudent && moverSlips && played) {
           const next = ctx.allSans[ply];
@@ -782,6 +804,7 @@ export function computeMoveFacets(
     const r = ctx.teaching.refutedAlt;
     const f = `[refuted] ${r.text}`;
     facets.push(f);
+    outIdentity?.set(f, `refuted:${r.alt.replace(/[+#!?]+$/, '')}`);
     recStakes(f, costStakes(r.costCp));
     try {
       const am = new Chess(fenBefore).move(r.alt);

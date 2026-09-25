@@ -121,3 +121,24 @@ describe('one pawn-pin rule for every surface (2026-09-25)', () => {
     expect(isScenicPawnPin('4k3/8/8/b7/8/8/3N4/4K3 w - - 0 1', 'pin', ['a5', 'd2', 'e1'], 'b')).toBe(false);
   });
 });
+
+describe('one sacrifice rule (review tape 2026-09-25: KID …e5 was "a sacrifice")', () => {
+  it('…e5 is not a sacrifice when the engine would not take it', async () => {
+    const { isSacrifice } = await import('./factStakes');
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2'.split(' ')) c.move(m);
+    expect(isSacrifice(c.fen(), 'e5', 'O-O')).toBe(false);
+    // with no engine reply, a pawn's worth is never enough to call it one
+    expect(isSacrifice(c.fen(), 'e5', null)).toBe(false);
+  });
+  it('a piece left where the best reply takes it is a sacrifice', async () => {
+    const { isSacrifice } = await import('./factStakes');
+    // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.Ng5 d5 5.exd5 Nxd5 6.Nxf7 — the Fried Liver knight.
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5'.split(' ')) c.move(m);
+    expect(isSacrifice(c.fen(), 'Nxf7', 'Kxf7')).toBe(true);
+    expect(isSacrifice(c.fen(), 'Nxf7', 'Qe7')).toBe(false);
+  });
+});

@@ -23,8 +23,8 @@ export interface BoardState {
   /** A capture just landed on this square and the side to move can take back
    *  without losing material; null otherwise. */
   inFlux: string | null;
-  /** The side to move has a forced mate (engine mate score, or a mate in one
-   *  on the board). */
+  /** A forced mate is on the board for either side (engine mate score), or
+   *  the side to move has a mate in one. */
   mateOnBoard: boolean;
 }
 
@@ -59,8 +59,10 @@ export function mateInOneOnBoard(fen: string): boolean {
  *  the engine's number for the position after (a mate sentinel when forced);
  *  pass null when there is none and the board alone decides. */
 export function boardStateAfter(fenBefore: string, san: string, fenAfter: string, evalWhitePov: number | null): BoardState {
-  const toMove = fenAfter.split(' ')[1] === 'w' ? 1 : -1;
-  const engineMate = evalWhitePov !== null && isMateEval(evalWhitePov) && Math.sign(evalWhitePov) === toMove;
+  // A forced mate for EITHER side: the side not to move with an unstoppable
+  // mate is just as decided ("You're a piece up — trade pieces" after Bf4+
+  // with mate coming, review tape 2026-09-25).
+  const engineMate = evalWhitePov !== null && isMateEval(evalWhitePov);
   return {
     inFlux: inFluxAfter(fenBefore, san),
     mateOnBoard: engineMate || mateInOneOnBoard(fenAfter),
@@ -84,14 +86,25 @@ const BESIDE_MATE: ReadonlySet<FactKind> = new Set<FactKind>([
   'refuted', 'sac', 'sac-why',
 ]);
 
+/** What may still be said ABOUT the square in flux: the verdict on the move
+ *  that captured, and the exchange itself. Everything else about that piece —
+ *  what it pins, eyes, threatens — describes a piece about to be taken
+ *  ("their queen on e1 pins your bishop" one move before Rxe1). */
+const ABOUT_THE_FLUX_SQUARE: ReadonlySet<FactKind> = new Set<FactKind>([
+  'quality', 'praise', 'move', 'forced', 'refuted', 'deliberation', 'key-moment',
+  'method', 'sac', 'sac-why', 'timing',
+]);
+
 export type BoardVeto = 'in-flux' | 'beside-mate';
 
 /** Why the board forbids this claim here, or null when it may be said. A fact
- *  of unknown kind is never vetoed — silence must never be a guess. */
-export function boardVeto(kind: FactKind | null, state: BoardState): BoardVeto | null {
+ *  of unknown kind is never vetoed — silence must never be a guess. `squares`
+ *  are the ones the fact is about, coupled at emission (never scraped). */
+export function boardVeto(kind: FactKind | null, state: BoardState, squares?: readonly string[]): BoardVeto | null {
   if (kind === null) return null;
   if (state.mateOnBoard && !BESIDE_MATE.has(kind)) return 'beside-mate';
   if (state.inFlux && STANDING.has(kind)) return 'in-flux';
+  if (state.inFlux && squares?.includes(state.inFlux) && !ABOUT_THE_FLUX_SQUARE.has(kind)) return 'in-flux';
   return null;
 }
 
