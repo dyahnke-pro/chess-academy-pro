@@ -97,7 +97,10 @@ describe('read this position — the provider is dead', () => {
     // The provider 401'd; what was SPOKEN is the raw computed register.
     const spoken = speakRecords.join(' ');
     expect(spoken).toMatch(/This is the endgame now\./);
-    expect(spoken).toMatch(/open toward your king/);
+    // No queens: a king in the open is the ENDGAME's right square, not a
+    // weakness — "files open toward your king" is the middlegame worry and
+    // the positional read drops it without queens (hand walk 2340, moves 32-34).
+    expect(spoken).not.toMatch(/open toward your king/);
     expect(spoken).not.toMatch(/⚠️/);
     expect(result.current.currentText).toMatch(/This is the endgame now\./);
   }, 30_000);
