@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1344 lines · 10 exports · 15 importers · 13 tests · 3 audits**
+**1361 lines · 11 exports · 16 importers · 14 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -24,6 +24,7 @@
 - `src/services/computerAccuracy.audit.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
+- `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
@@ -68,7 +69,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `clauseText` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9074`
+- `src/components/Coach/CoachTeachPage.tsx:9087`
 - `src/hooks/useLiveCoach.ts:295`
 - `src/hooks/usePhaseNarration.ts:647`
 - `src/services/computerAccuracy.audit.test.ts:113`
@@ -81,8 +82,8 @@
 - `src/services/positionReadComposer.ts:116`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 75 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9012`
+### `computePositionFacts` (function) — 76 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9025`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
 - `src/hooks/usePhaseNarration.ts:622`
@@ -97,6 +98,7 @@
 - `src/services/liveNeedWire.test.ts:22`
 - `src/services/liveNeedWire.test.ts:31`
 - `src/services/loopCloses.test.ts:112`
+- `src/services/positionFacts.convertOnce.test.ts:16`
 - `src/services/positionFacts.liveFundamental.test.ts:52`
 - `src/services/positionFacts.test.ts:24`
 - `src/services/positionFacts.test.ts:37`
@@ -158,6 +160,9 @@
 - `src/test/teach02Wired.test.ts:134`
 - `src/test/teach02Wired.test.ts:136`
 
+### `convertKey` (function) — 1 call site
+- `src/services/positionFacts.convertOnce.test.ts:24`
+
 ## Tests
 
 - `src/hooks/useLiveCoach.needWire.test.tsx`
@@ -166,6 +171,7 @@
 - `src/services/latentFork.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`
+- `src/services/positionFacts.convertOnce.test.ts`
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
