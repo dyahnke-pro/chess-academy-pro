@@ -85,6 +85,11 @@ export interface BehaviorContext {
   studentColor: Color | 'white' | 'black';
   /** Already-computed MultiPV lines for this FEN (latency-safe reuse). */
   topLines?: ReadonlyArray<BehaviorLine>;
+  /** The square the student's last move landed on, when known. A static swap
+   *  count about the piece that just arrived is either a blunder the engine
+   *  verdict names better or a deliberate offer it cannot judge (hand walk
+   *  2026-09-25: …Bh3, the textbook x-ray, read as "they win your bishop"). */
+  studentLastTo?: string | null;
 }
 
 export interface BehaviorHit {
@@ -117,6 +122,7 @@ interface NormalizedCtx {
    *  (David 2026-08-23: no phase-inapplicable teaching). */
   phase: Phase | null;
   isEndgame: boolean;
+  studentLastTo: string | null;
 }
 
 function normalize(ctx: BehaviorContext): NormalizedCtx | null {
@@ -134,6 +140,7 @@ function normalize(ctx: BehaviorContext): NormalizedCtx | null {
     chess,
     phase,
     isEndgame: phase === 'endgame',
+    studentLastTo: ctx.studentLastTo ?? null,
   };
 }
 
@@ -212,15 +219,27 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'prophylaxis',
     weight: 927,
-    detect: ({ fen, studentWord, student }) => {
+    detect: ({ fen, studentWord, student, studentLastTo }) => {
       const intent = opponentIntentRead(fen, studentWord);
       if (!intent) return null;
       if (intent.kind === 'capture') {
+        if (studentLastTo && intent.target === studentLastTo) return null;
         // THE STUDENT'S OWN LEVER IS NOT A THREAT TO "DEAL WITH" (hand walk
         // 2026-09-24: after a5 hit b6 beside the long-castled king, "the
         // opponent is eyeing bxa5 … deal with that first" — the pawn is there
         // to pry the king open, and his plan was Bf4 first, then axb6).
         if (intent.targetPiece === 'p' && isLeverOnKing(fen, intent.target, student)) return null;
+        // A DEFENDED PAWN "WON" BY A SWAP-OFF IS A COUNT, NOT A THREAT. The
+        // count is static; the swaps are where the deeper tactic hides. In the
+        // King's Indian main line (hand walk 2026-09-25) "the opponent is eyeing
+        // dxe5 — it would win your pawn on e5" was false: dxe5 dxe5 Qxd8 Rxd8
+        // Nxe5 runs into …Nxe4. An UNDEFENDED pawn is a clean win and stays
+        // (walk 2340's "eyeing Rxc3", which his Rac1 answered).
+        if (intent.targetPiece === 'p') {
+          try {
+            if (new Chess(fen).attackers(intent.target, student).length > 0) return null;
+          } catch { return null; }
+        }
         // The piece is NAMED from the board, never "the piece" — a pawn on e4
         // is a pawn (D-7, prod tape 2026-09-22).
         const what = intent.targetPiece ? `your ${PIECE_NAME[intent.targetPiece]} on ${intent.target}` : `what sits on ${intent.target}`;

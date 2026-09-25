@@ -389,7 +389,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // fan we already have.
   const studentToMove = moverColor === studentColor;
   const deliberation = (!openingPhase && studentToMove)
-    ? buildDeliberation({ analysis, fenBefore: fen, moverColor })
+    ? buildDeliberation({ analysis, fenBefore: fen, moverColor, opponentLastSan: input.opponentLastMove?.san ?? null })
     : null;
 
   // The prevention layer — a pin/skewer in waiting on the student's own king or

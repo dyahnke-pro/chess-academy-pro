@@ -208,7 +208,14 @@ export function backwardLook(args: {
         playedSan: args.playedSan,
         studentColor: args.studentColor,
       });
-      if (f) { attempt = f.line; attemptSquare = f.squares[0] ?? ''; }
+      // …and only when the move COST something. `whyItFailed` counts a static
+      // swap-off and says so itself: "the upstream caller only asks about moves
+      // already graded as errors". Asked about the King's Indian main line
+      // (…e5, hand walk 2026-09-25) it said "that left your pawn on e5
+      // hanging" — dxe5 dxe5 Qxd8 Rxd8 Nxe5 loses to …Nxe4, which the engine
+      // sees and a swap count cannot. A material loss the engine does not
+      // charge is not a loss.
+      if (f && args.cpLoss >= INACCURACY_CP) { attempt = f.line; attemptSquare = f.squares[0] ?? ''; }
     } catch { /* a lane that throws must not silence the rest */ }
 
     let cost: { said: string; opening: string; square: string } | null = null;

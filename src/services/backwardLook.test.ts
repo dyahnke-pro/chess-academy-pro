@@ -371,3 +371,14 @@ describe('why the move failed complements what it cost', () => {
     if (out) expect(out.line).not.toContain('is holding it');
   });
 });
+
+describe('a static swap count never overrules the engine (hand walk 2026-09-25)', () => {
+  it('King\'s Indian …e5 costs nothing, so it is not "left hanging"', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2'.split(' ')) c.move(m);
+    const fenBefore = c.fen();
+    c.move('e5');
+    const look = backwardLook({ fenBefore, fenAfter: c.fen(), playedSan: 'e5', bestSan: 'e5', cpLoss: 0, studentColor: 'black' });
+    expect(look?.line ?? '').not.toMatch(/hanging/);
+  });
+});

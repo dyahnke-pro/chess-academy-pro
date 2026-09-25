@@ -607,3 +607,19 @@ describe('studentMovePoint — the point of a sound move, only when the board pr
     expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4'), 'cxd4', 'cxd4')).toBeNull();
   });
 });
+
+describe('studentMovePoint — a trade that nets material is not a free piece (hand walk 2026-09-25)', () => {
+  it('Nxf1 with Bxf1 coming is the exchange', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4'.split(' ')) c.move(m);
+    expect(studentMovePoint(c.fen(), 'Nxf1', 'Bd4')).toBe('That wins the exchange — your knight for their rook on f1.');
+  });
+});
+
+describe('a capture is never described as its side effect (hand walk 2026-09-25)', () => {
+  it('Raxd8 taking the queen back is not "unpins your rook"', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8'.split(' ')) c.move(m);
+    expect(studentMovePoint(c.fen(), 'Raxd8', 'Qxd8')).toBeNull();
+  });
+});

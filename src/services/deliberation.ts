@@ -26,11 +26,13 @@ const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  *  reason, ahead of any positional gloss. Hand walk 2340: dxe5 "stakes out the
  *  center" when his line was "that's a free pawn" (…Nxe5 loses the knight to
  *  Nxe5). Null for a trade or a sacrifice. */
-function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b'): string | null {
+function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
   try {
     const c = new Chess(fenBefore);
     const m = c.move(san);
     if (!m?.captured) return null;
+    // A recapture is the trade finishing, never material won.
+    if (opponentLastSan && new RegExp(`x${m.to}(?![1-8])`).test(opponentLastSan)) return null;
     // SEE counts the recaptures: a positive net is material won, not a trade.
     if (legalSeeGainFor(fenBefore, m.to, mover) <= 0) return null;
     return `wins the ${PIECE_NOUN[m.captured] ?? 'piece'} on ${m.to}`;
@@ -139,6 +141,10 @@ export function buildDeliberation(input: {
    *  the move being played as a weaker option — which reads as a
    *  self-contradiction on the board (G3). */
   excludeSan?: string;
+  /** The opponent's move just before (SAN), or null at the start. REQUIRED: a
+   *  capture back on the square they just took on is the trade finishing, so
+   *  "it wins the queen on d8" after …Qxd8 is false (hand walk 2026-09-25). */
+  opponentLastSan: string | null;
 }): Deliberation | null {
   const { fenBefore, moverColor, excludeSan } = input;
   const sign = moverColor === 'w' ? 1 : -1;
@@ -174,7 +180,7 @@ export function buildDeliberation(input: {
     });
   }
 
-  const bestWhy = materialWhy(fenBefore, bestSan, moverColor) ?? strategicWhyLed(fenBefore, bestSan, moverColor === 'w' ? 'white' : 'black');
+  const bestWhy = materialWhy(fenBefore, bestSan, moverColor, input.opponentLastSan) ?? strategicWhyLed(fenBefore, bestSan, moverColor === 'w' ? 'white' : 'black');
   return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy };
 }
 

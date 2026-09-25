@@ -342,3 +342,26 @@ describe('queens off, the king reads stay quiet (hand walk 2340)', () => {
     expect(obs.some((o) => o.kind === 'king')).toBe(true);
   });
 });
+
+describe('a problem-piece read is one sentence (hand walk 2026-09-25)', () => {
+  it('never leaves "Keeping it bad…" or "Improving it…" as a sentence of its own', () => {
+    // The King's Indian position from the walk, where "their bishop on e2 is
+    // their problem piece" fired (Black student).
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3'.split(' ')) c.move(m);
+    const reads = readPosition(c.fen(), 'black');
+    expect(reads.some((o) => /problem piece/.test(o.text))).toBe(true);
+    for (const o of reads.filter((r) => /problem piece/.test(r.text))) {
+      expect(o.text.split(/(?<=[.!?])\s+/).length).toBe(1);
+    }
+  });
+});
+
+describe('queens off, no development read (hand walk 2026-09-25, move 36)', () => {
+  it('"2 minor pieces at home" is not said in a rook-and-minor endgame', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8 Raxd8 Kf2 Nc5 Rd1 a5 Rxd8 Rxd8 Ke1 Kf7 Be2 g5 h3 h5 b3 Kf6 Nd1 g4 hxg4 hxg4 Nf2 g3 Nd1 Rh8 Nc3 Rh2 Bf1 Bh3 Ne2 Bxg2 Ng1'.split(' ')) c.move(m);
+    const obs = readPosition(c.fen(), 'black');
+    expect(obs.some((o) => o.kind === 'development')).toBe(false);
+  });
+});

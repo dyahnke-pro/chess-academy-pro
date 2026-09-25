@@ -4666,8 +4666,41 @@ export function CoachTeachPage(): JSX.Element {
         // Same shape as the deictic case beside it: a remainder that names no
         // opening must resolve to the lesson in front of the student, not to
         // whatever the DB thinks "more" sounds like.
+        // "LET'S PLAY A GAME, I'LL BE BLACK" names a SEAT, not an opening
+        // (hand walk 2026-09-25: it opened the picker at "Did you mean Italian
+        // Game?"). The seat phrase and the bare "a game" are stripped before
+        // asking whether anything names an opening.
+        const seatAsked = /\b(?:i'?ll\s+(?:be|play|take)|i'?m|i\s+am|as)\s+(white|black)\b/i.exec(stageStrippedInput)?.[1]?.toLowerCase() as 'white' | 'black' | undefined;
+        const withoutSeat = stageStrippedInput
+          .replace(/[,;]?\s*\b(?:i'?ll\s+(?:be|play|take)|i'?m|i\s+am|as)\s+(?:white|black)\b/gi, '')
+          .replace(/^(?:a\s+|another\s+|some\s+)?(?:new\s+)?(?:game|match)\b[\s,.]*/i, '')
+          .trim();
+        if (stageHint === 'play-real' && seatAsked && withoutSeat === '' && !walkthrough.isActive && gameRef.current.history.length === 0) {
+          const seatTurn = freshTurnId('free-game-seat');
+          setMessages((prev) => [...prev, { id: `${seatTurn}-u`, role: 'user', content: text, timestamp: Date.now() }]);
+          const sayLine = (line: string): void => {
+            setMessages((prev) => [...prev, { id: freshTurnId('free-game-seat'), role: 'assistant', content: line, timestamp: Date.now() }]);
+            void speakComputed(line, { forced: true, intent: 'learn' }).catch(() => undefined);
+          };
+          setPlayerColor(seatAsked);
+          gameRef.current.setOrientation(seatAsked);
+          captureEvent('coach_free_game_seat', { surface: 'coach-teach', seat: seatAsked });
+          if (seatAsked === 'white') {
+            sayLine("You're White — your move.");
+          } else {
+            sayLine("You're Black — I'll open.");
+            void (async () => {
+              const opener = await resolveCoachReplyMoveRef.current?.(liveFenRef.current);
+              if (opener && gameRef.current.history.length === 0 && liveFenRef.current.split(' ')[1] === 'w' && playDictatedMove(opener)) {
+                sayLine(`${sanToSpeech(opener)} — your move.`);
+              }
+            })();
+          }
+          return;
+        }
         const namesNoOpening = /^(?:(?:this|that|the|current|my)\s+)?(?:position|board|game|line|here|it)$/i.test(stageStrippedInput)
-          || /^(?:some\s+|any\s+|a\s+few\s+)?(?:more|another|other|others|again|next|else|extra)(?:\s+(?:one|ones))?$/i.test(stageStrippedInput);
+          || /^(?:some\s+|any\s+|a\s+few\s+)?(?:more|another|other|others|again|next|else|extra)(?:\s+(?:one|ones))?$/i.test(stageStrippedInput)
+          || withoutSeat === '';
         if (namesNoOpening) {
           const activeName = walkthrough.tree?.openingName ?? null;
           if (activeName) {
@@ -7593,8 +7626,17 @@ export function CoachTeachPage(): JSX.Element {
        *  The detector already returns the squares involved, so this is drawing
        *  what was computed, not computing something new. */
 
+      // MID-EXCHANGE, the attacker standing on the square the student is about
+      // to take back on is not a threat — it is the piece being recaptured
+      // (hand walk 2026-09-25: "your rook on e8 is attacked" as Rxd8 came back).
+      const midBoard = midExchangeOn ? (() => { try { return new Chess(args.fenAfterReply); } catch { return null; } })() : null;
+      const onlyTheRecaptured = (sq: string): boolean => {
+        if (!midBoard || !midExchangeOn) return false;
+        const by = midBoard.attackers(sq as Square, studentCC === 'w' ? 'b' : 'w');
+        return by.length > 0 && by.every((a) => a === midExchangeOn);
+      };
       const myHanging = tctx.hanging
-        .filter((h) => h.color === studentCC && AV[h.piece] !== undefined)
+        .filter((h) => h.color === studentCC && AV[h.piece] !== undefined && !onlyTheRecaptured(h.square))
         .sort((a, b) => (AV[b.piece] ?? 0) - (AV[a.piece] ?? 0));
       const theirHanging = tctx.hanging
         .filter((h) => h.color !== studentCC && AV[h.piece] !== undefined)
@@ -7733,7 +7775,7 @@ export function CoachTeachPage(): JSX.Element {
         if (up) {
           threatKey = `soon:${up.type}:${theirs ?? ''}`;
           threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
-          const desc = `${up.description.charAt(0).toLowerCase()}${up.description.slice(1)}`;
+          const desc = seatPieceReferences(`${up.description.charAt(0).toLowerCase()}${up.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b');
           threatLine = theirs
             ? `Watch out — their idea is ${theirs}: ${desc}.`
             : `Watch out — ${desc} is coming.`;
@@ -8128,7 +8170,12 @@ export function CoachTeachPage(): JSX.Element {
     // back rank" describe a position that will not exist next move.
     if (!gemLine && !tacticLine && !threatLine && !announceLine && !midExchangeOn) {
       try {
-        const allHits = detectBehaviors({ fen: args.fenAfterReply, studentColor: args.studentColor });
+        const studentLastSan = args.historyAfterReply.length >= 2 ? args.historyAfterReply[args.historyAfterReply.length - 2] : null;
+        const allHits = detectBehaviors({
+          fen: args.fenAfterReply,
+          studentColor: args.studentColor,
+          studentLastTo: studentLastSan?.match(/([a-h][1-8])(?:=[NBRQ])?[+#]?$/)?.[1] ?? null,
+        });
         const eligible = quietTurn ? allHits : allHits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) { behaviorLine = hit.fact; behaviorSquares = hit.squares; factLines.push(`Behavior (${hit.id}): ${hit.fact}`); }

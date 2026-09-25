@@ -42,7 +42,15 @@ export function openingAnnouncement(
     // and the student heard only the family (hand walk 2340: his "c3 — the
     // Alapin"). A name that is not a refinement of the one spoken stays quiet:
     // that is a transposition, not news.
-    if (!det.name.startsWith(spokenName)) return null;
+    // A FAMILY that sharpens is news too: "Indian Defense: Normal Variation"
+    // → "King's Indian Defense" (hand walk 2026-09-25 — his "another King's
+    // Indian" was never named). The new family CONTAINS the spoken one.
+    const spokenFamily = spokenName.split(':')[0].trim();
+    const newFamily = det.name.split(':')[0].trim();
+    if (!det.name.startsWith(spokenName)) {
+      if (newFamily === spokenFamily || !newFamily.includes(spokenFamily)) return null;
+      return `It's the ${det.name.replace(/:\s*(?:Normal Variation|Main Line)\b.*$/i, '')}.`;
+    }
     const tail = det.name.slice(spokenName.length).replace(/^[\s:,]+/, '').trim();
     // "Main Line" names nothing the student can look up — the family is enough.
     if (!tail || /^main line\b/i.test(tail)) return null;

@@ -21,6 +21,7 @@ import { packageForRegister, type HintPackage } from './hintRegister';
 import { CAPTURE_VALUE } from './pieceValues';
 import { quietMovePoint } from './reviewMoveTeaching';
 import { legalSeeGainFor } from './positionReadingService';
+import { seatBare } from '../utils/seatPieces';
 
 export type CommentaryKind =
   | 'tactic'
@@ -767,7 +768,9 @@ export function buildPlayCommentary(args: {
       const found: PlayCommentary = {
         kind: 'tactic',
         key: `tactic:${tac.type}:${tac.involvedSquares.join('')}`,
-        spoken: `${tac.description}.${once('find-it', ' See if you can find it.')}`,
+        // SEATED — the detector names pieces bare ("Knight on g3 forks rook on
+        // f1…", hand walk 2026-09-25), and whose each piece is IS the lesson.
+        spoken: `${seatBare(tac.description, args.fen, args.studentColor === 'white' ? 'w' : 'b')}.${once('find-it', ' See if you can find it.')}`,
         facts: [
           `TACTIC ON THE BOARD for the student: ${tac.description}. Name the PATTERN and why the geometry works. Do NOT name the winning move — let them find it.`,
         ],
@@ -904,8 +907,17 @@ export function studentMovePoint(
   try { mv = after.move(san); } catch { return null; }
   if (!mv) return null;
   const recapture = !!opponentLastSan && new RegExp(`x${mv.to}(?![1-8])`).test(opponentLastSan);
-  if (mv.captured && !recapture && legalSeeGainFor(fenBefore, mv.to, mv.color) > 0) {
-    return `That wins the ${NAME[mv.captured] ?? 'piece'} on ${mv.to} — nothing takes it back safely.`;
+  const net = mv.captured && !recapture ? legalSeeGainFor(fenBefore, mv.to, mv.color) : 0;
+  if (mv.captured && net > 0) {
+    const takenVal = CAPTURE_VALUE[mv.captured] ?? 0;
+    // Free only when the whole piece is kept; otherwise they take back and the
+    // gain is what the trade nets (hand walk 2026-09-25: Nxf1 Bxf1 is the
+    // exchange, not a free rook).
+    if (net >= takenVal) return `That wins the ${NAME[mv.captured] ?? 'piece'} on ${mv.to} — nothing takes it back safely.`;
+    const exchange = mv.captured === 'r' && (mv.piece === 'n' || mv.piece === 'b');
+    return exchange
+      ? `That wins the exchange — your ${NAME[mv.piece]} for their rook on ${mv.to}.`
+      : `That takes the ${NAME[mv.captured] ?? 'piece'} on ${mv.to}, and even after they take back you come out ahead.`;
   }
   const bishops = (c: Chess, color: 'w' | 'b'): number =>
     c.board().flat().filter((x) => x && x.type === 'b' && x.color === color).length;
@@ -913,5 +925,8 @@ export function studentMovePoint(
   if (mv.captured === 'b' && bishops(before, them) === 2 && bishops(after, them) === 1 && bishops(after, mv.color) === 2) {
     return 'Now you have the two bishops — open the position and they get stronger.';
   }
+  // A capture's point is the capture — Raxd8 taking the queen back is not
+  // "unpins your rook on e8" (hand walk 2026-09-25).
+  if (mv.captured) return null;
   return quietMovePoint(fenBefore, san);
 }

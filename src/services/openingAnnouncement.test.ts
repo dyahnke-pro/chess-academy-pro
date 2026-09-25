@@ -21,6 +21,10 @@ describe('openingAnnouncement — name it once, then once more where theory ends
     expect(openingAnnouncement({ name: 'Sicilian Defense: Alapin Variation' }, null, 'Sicilian Defense', 'w'))
       .toBe("It's the Alapin Variation.");
   });
+  it('a family that sharpens is named (hand walk 2026-09-25: Indian → King\'s Indian)', () => {
+    expect(openingAnnouncement({ name: "King's Indian Defense: Normal Variation" }, null, 'Indian Defense: Normal Variation', 'b'))
+      .toBe("It's the King's Indian Defense.");
+  });
   it('a name that is not a refinement of the spoken one stays quiet in book (a transposition)', () => {
     expect(openingAnnouncement({ name: 'French Defense' }, null, 'Sicilian Defense', 'w')).toBeNull();
   });

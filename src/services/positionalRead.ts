@@ -210,7 +210,9 @@ function observationsFor(
 
   const mine = developmentRead(fen, color);
   const other = developmentRead(fen, color === 'w' ? 'b' : 'w');
-  if (mine && other && mine.totalMinors > 0) {
+  // Development is an opening/middlegame read: with the queens off, a knight
+  // "at home" is an endgame piece, not a lag (hand walk 2026-09-25, move 36).
+  if (queensOn && mine && other && mine.totalMinors > 0) {
     const asleep = mine.totalMinors - mine.developedMinors;
     if (asleep >= 2 && other.developedMinors > mine.developedMinors) {
       out.push({
@@ -247,8 +249,11 @@ function observationsFor(
       key: `${side}-bad-${bad.square}`, side, kind: 'piece', rank: rank('piece'),
       squares: [bad.square],
       text: own
-        ? `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece — ${bad.reason}. Improving it is a plan in itself.`
-        : `Their ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is their problem piece — ${bad.reason}. Keeping it bad is worth as much as winning a pawn.`,
+        // ONE sentence each: the say-once dedupe works per sentence, and a
+        // tail left standing alone ("Keeping it bad is worth as much as
+        // winning a pawn.", hand walk 2026-09-25) names nothing.
+        ? `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece — ${bad.reason}, so improving it is a plan in itself.`
+        : `Their ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is their problem piece — ${bad.reason}, and keeping it bad is worth as much as winning a pawn.`,
     });
   }
 
@@ -434,8 +439,8 @@ function joinsFor(
         rank: RANK.plan - (side === 'opponent' ? OPPONENT_PENALTY : 0),
         squares: [b.square, mv.to],
         text: side === 'student'
-          ? `Your ${NAME[b.piece] ?? 'piece'} on ${b.square} is your problem piece — ${b.reason} — and the pawn move to ${mv.to} is what fixes it. That pairing is the plan: the pawn move is not about the pawn.`
-          : `Their ${NAME[b.piece] ?? 'piece'} on ${b.square} is their problem piece — ${b.reason} — and a pawn to ${mv.to} would fix it. Stopping that pawn is worth more than it looks.`,
+          ? `Your ${NAME[b.piece] ?? 'piece'} on ${b.square} is your problem piece — ${b.reason} — and the pawn move to ${mv.to} is what fixes it — that pairing is the plan, and the pawn move is not about the pawn.`
+          : `Their ${NAME[b.piece] ?? 'piece'} on ${b.square} is their problem piece — ${b.reason} — and a pawn to ${mv.to} would fix it, so stopping that pawn is worth more than it looks.`,
       });
       break; // one join per bad piece; the first proved fix is enough to teach
     }

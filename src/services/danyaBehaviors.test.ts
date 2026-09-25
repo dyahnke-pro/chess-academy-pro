@@ -257,3 +257,21 @@ describe('the isolani has one owner (hand walk 2340, move 6)', () => {
     expect(hits.some((h) => /isolated pawn on d4/.test(h.fact))).toBe(false);
   });
 });
+
+describe('a defended pawn "won" by a swap-off is not a threat (hand walk 2026-09-25)', () => {
+  it('King\'s Indian main line: no "eyeing dxe5 — it would win your pawn"', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O'.split(' ')) c.move(m);
+    const hits = detectBehaviors({ fen: c.fen(), studentColor: 'black' });
+    expect(hits.some((h) => /eyeing dxe5/.test(h.fact))).toBe(false);
+  });
+});
+
+describe('the piece that just arrived is not a static "they win it" (hand walk 2026-09-25, …Bh3)', () => {
+  it('no "eyeing gxh3" about the bishop the student just put there', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 c6 Kh1 Nh5 Be3 f5 Qd2 f4 Bf2 Be5 Nc2 Ng3+ Kg1 Qh4 Bd4 Nxf1 Bxf1 Be6 Bxe5 dxe5 Qd6 Nd7 Qc7 Qd8 Qxd8 Raxd8 Kf2 Nc5 Rd1 a5 Rxd8 Rxd8 Ke1 Kf7 Be2 g5 h3 h5 b3 Kf6 Nd1 g4 hxg4 hxg4 Nf2 g3 Nd1 Rh8 Nc3 Rh2 Bf1 Bh3 Ne2'.split(' ')) c.move(m);
+    const hits = detectBehaviors({ fen: c.fen(), studentColor: 'black', studentLastTo: 'h3' });
+    expect(hits.some((h) => /eyeing gxh3/.test(h.fact))).toBe(false);
+  });
+});

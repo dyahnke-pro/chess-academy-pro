@@ -27,3 +27,11 @@ describe('a future fact is seated on its OWN board (hand walk 2026-09-24)', () =
     expect(seatBare(s, '3rqrk1/pp4pp/2p1n3/4Pp1n/1b4P1/1BN1BR1P/PPP5/3RQ1K1 w - f6 0 21', 'w')).toMatch(/^Their rook on d8/);
   });
 });
+
+describe('a colour possessive is replaced, never stacked (hand walk 2340)', () => {
+  it('"White\'s king on g1" → "Your king on g1"; "Knight on g3 forks…" is seated', () => {
+    const fen = '4r1k1/5ppp/8/8/8/6n1/5PPP/3R1RK1 w - - 0 20';
+    expect(seatBare("White's king on g1 has no escape square", fen, 'w')).toBe('Your king on g1 has no escape square');
+    expect(seatBare('Knight on g3 forks rook on f1 and king on g1', fen, 'b')).toBe('Your knight on g3 forks their rook on f1 and their king on g1');
+  });
+});
