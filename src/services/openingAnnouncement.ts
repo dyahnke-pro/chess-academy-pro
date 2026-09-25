@@ -28,6 +28,9 @@ export interface DetectedName {
  * WHO left and the usual move there, so the line teaches instead of blaming.
  * `studentColor` is REQUIRED: "you left" and "they left" are different claims.
  */
+/** Lichess filler labels that name no line a student can look up. */
+const GENERIC_TAIL = /^(?:main line|normal variation|rare (?:defen[cs]es?|variations?|lines?)|other (?:variations?|lines?))\b/i;
+
 export function openingAnnouncement(
   det: DetectedName | null,
   departure: BookDeparture | null,
@@ -49,11 +52,13 @@ export function openingAnnouncement(
     const newFamily = det.name.split(':')[0].trim();
     if (!det.name.startsWith(spokenName)) {
       if (newFamily === spokenFamily || !newFamily.includes(spokenFamily)) return null;
-      return `It's the ${det.name.replace(/:\s*(?:Normal Variation|Main Line)\b.*$/i, '')}.`;
+      return `It's the ${newFamily}.`;
     }
     const tail = det.name.slice(spokenName.length).replace(/^[\s:,]+/, '').trim();
     // "Main Line" names nothing the student can look up — the family is enough.
-    if (!tail || /^main line\b/i.test(tail)) return null;
+    // (nor do the DB's filler labels — "Normal Variation", "Rare Defenses",
+    // hand walk 2026-09-25).
+    if (!tail || GENERIC_TAIL.test(tail)) return null;
     return `It's the ${tail}.`;
   }
   const who = departure.mover === studentColor ? 'You' : 'They';
