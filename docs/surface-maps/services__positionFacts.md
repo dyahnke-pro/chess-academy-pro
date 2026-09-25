@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1371 lines · 11 exports · 17 importers · 15 tests · 3 audits**
+**1385 lines · 11 exports · 17 importers · 16 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -83,7 +83,7 @@
 - `src/services/positionReadComposer.ts:116`
 - `src/services/whyBestMove.ts:103`
 
-### `computePositionFacts` (function) — 77 call sites
+### `computePositionFacts` (function) — 78 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9021`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:264`
@@ -91,6 +91,7 @@
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
 - `src/services/computerAccuracy.audit.test.ts:112`
+- `src/services/forkTrick.test.ts:48`
 - `src/services/latentFork.test.ts:150`
 - `src/services/liveNeedGate.test.ts:132`
 - `src/services/liveNeedGate.test.ts:137`
@@ -170,6 +171,7 @@
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/services/bluffDetector.test.ts`
 - `src/services/computerAccuracy.audit.test.ts`
+- `src/services/forkTrick.test.ts`
 - `src/services/latentFork.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/loopCloses.test.ts`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1096 lines · 8 exports · 6 importers · 6 tests · 0 audits**
+**1107 lines · 8 exports · 6 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,10 +40,11 @@
 ### `EVAL_FACET_MIN_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 23 call sites
+### `computeMoveFacets` (function) — 24 call sites
 - `src/services/boardDelta.test.ts:13`
 - `src/services/boardDelta.test.ts:66`
 - `src/services/coachFeatureService.ts:1747`
+- `src/services/forkTrick.test.ts:60`
 - `src/services/reviewFullData.test.ts:15`
 - `src/services/reviewFullData.test.ts:19`
 - `src/services/reviewFullData.test.ts:53`
@@ -79,6 +80,7 @@
 ## Tests
 
 - `src/services/boardDelta.test.ts`
+- `src/services/forkTrick.test.ts`
 - `src/services/prematureBreak.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewNarrationFidelity.test.ts`
