@@ -33,7 +33,7 @@ export type FacetTag =
   | 'verdict' | 'opening' | 'opp-dev' | 'opp-target' | 'endgame'
   | 'plan-now' | 'plan-race' | 'plan-opening' | 'plan-middlegame' | 'plan-line' | 'consequence'
   | 'note' | 'method' | 'refuted' | 'bluff' | 'technique' | 'contrast' | 'timing' | 'praise'
-  | 'rule' | 'stopped' | 'stock';
+  | 'rule' | 'stopped' | 'stock' | 'trade';
 
 /**
  * What a fact is worth on ANY board, highest first. The ordering principle,
@@ -53,6 +53,9 @@ export const FACET_RANK: Record<FacetTag, number> = {
   // reason, and Voice Rule 5 bans the bare acknowledgment).
   praise: 93,
   move: 90,       // the mechanics: what it captured, checked, promoted
+  // A capture they can take back — the move's reason is the trade itself
+  // (2026-09-25: a board in flux describes nothing else about that piece).
+  trade: 89,
   // Forcing and losing material beats every quiet consideration.
   forced: 88,
   threat: 85,
@@ -145,6 +148,7 @@ export const FACET_RANK: Record<FacetTag, number> = {
 export type FacetRole = 'teach' | 'describe';
 export const FACET_ROLE: Record<FacetTag, FacetRole> = {
   principle: 'teach',
+  trade: 'teach',
   quality: 'teach',
   forced: 'teach',
   threat: 'teach',
@@ -251,7 +255,7 @@ export const FACT_ROLE: Record<FactKind, FacetRole> = { ...FACET_ROLE, ...CLAUSE
  */
 export const FACT_LAYER: Record<FactKind, TeachingLayer> = {
   // SAFETY — the verdict on the move and what is forcing on the board.
-  quality: 'safety', praise: 'safety', move: 'safety', forced: 'safety', threat: 'safety',
+  quality: 'safety', praise: 'safety', move: 'safety', forced: 'safety', threat: 'safety', trade: 'safety',
   tactic: 'safety', trapped: 'safety', refuted: 'safety', bluff: 'safety', loose: 'safety', count: 'safety',
   stopped: 'safety',
   royal: 'safety', sac: 'safety', 'sac-why': 'safety', method: 'safety',

@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { inFluxAfter } from './boardState';
 import { readTiming, timingClause } from './moveTiming';
 import { contrastMoves, contrastClause } from './moveContrast';
 import { detectBluff, bluffClause } from './bluffDetector';
@@ -289,7 +290,24 @@ export function computeMoveFacets(
   // d5" alone is the board's scenery, not why the move was played (walk 6, R3:
   // "Their pawn on c6 now fights for d5" on ~20 plies), so it rides as a
   // description — heard only beside a teaching point on the same squares.
-  if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
+  // A CAPTURE THEY CAN TAKE BACK IS A TRADE, and the trade is the move's
+  // reason (2026-09-25). What the capturing piece "now eyes" describes a piece
+  // about to be taken — the door drops it (`boardState`, in flux) — so without
+  // this the ply went silent: 4…cxd4 in the Alapin had nothing left to say.
+  const tradeSq = inFluxAfter(fenBefore, san);
+  if (tradeSq) {
+    try {
+      const mv = new Chess(fenBefore).move(san);
+      const NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+      const mine = NOUN[mv.piece] ?? 'piece';
+      const theirs = NOUN[mv.captured ?? ''] ?? 'piece';
+      const what = mine === theirs ? `a ${mine} trade` : isStudent ? `your ${mine} for their ${theirs}` : `their ${mine} for your ${theirs}`;
+      const f = isStudent
+        ? `[trade] You take on ${tradeSq}, and they can take back — ${what}.`
+        : `[trade] They take on ${tradeSq}, and you can take back — ${what}.`;
+      facets.push(f);
+    } catch { /* no trade line */ }
+  } else if (influence) { const f = `[${influenceShape.hitsPiece ? 'does' : 'delta'}] ${influence}`; facets.push(f); recSquares(f, influenceSquares); }
 
   // ── 1c. THE FULL BOARD DELTA — every other relevant change the move caused
   // (David 2026-07-22: "the package must contain every relevant change that

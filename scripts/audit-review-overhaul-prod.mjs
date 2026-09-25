@@ -1728,9 +1728,9 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     await add('DECIDER walk-posture-never-gated-by-importance', importanceClosed.length === 0,
       `${walk.length}/${decisions.length} rows judged as walk; ${importanceClosed.length} closed on importance (must be 0 — that is the 46-ply-to-6 bug)`);
     const silent = decisions.filter((d) => d.speak === false);
-    const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need' && d.reason !== 'unsupported' && d.reason !== 'empty' && d.reason !== 'proven');
+    const unattributed = silent.filter((d) => d.reason !== 'importance' && d.reason !== 'need' && d.reason !== 'unsupported' && d.reason !== 'empty' && d.reason !== 'proven' && d.reason !== 'board');
     await add('DECIDER every-silence-names-its-gate', unattributed.length === 0,
-      `silent=${silent.length} importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} empty=${silent.filter((d) => d.reason === 'empty').length} proven=${silent.filter((d) => d.reason === 'proven').length} unattributed=${unattributed.length}`);
+      `silent=${silent.length} importance=${silent.filter((d) => d.reason === 'importance').length} need=${silent.filter((d) => d.reason === 'need').length} unsupported=${silent.filter((d) => d.reason === 'unsupported').length} empty=${silent.filter((d) => d.reason === 'empty').length} proven=${silent.filter((d) => d.reason === 'proven').length} board=${silent.filter((d) => d.reason === 'board').length} unattributed=${unattributed.length}`);
     // THE COMPUTED ORDER (2026-09-23): facts carry STAKES from the computer that
     // made them and the door orders by them. A run where no row ever carried
     // stakes means the wire does not fire and every ply fell back to the tie table.
@@ -1759,7 +1759,11 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     // would erase the heat map's only visible trace in the decision row.
     // `said-already` likewise: the say-once verdict is on the fact (the student
     // already heard it), not on the row.
-    const ownVerdict = (d) => (d.reason === 'proven' ? 0 : (d.quietBy?.proven ?? 0)) + (d.quietBy?.['said-already'] ?? 0);
+    // The BOARD's verdicts (`in-flux`, `beside-mate`, 2026-09-25) are on the
+    // fact too — a recapture pending or a mate on the board — and a row they
+    // empty says so with reason 'board'.
+    const ownVerdict = (d) => (d.reason === 'proven' ? 0 : (d.quietBy?.proven ?? 0)) + (d.quietBy?.['said-already'] ?? 0)
+      + (d.quietBy?.['in-flux'] ?? 0) + (d.quietBy?.['beside-mate'] ?? 0);
     const misfiled = silent.filter((d) => (d.quietCount ?? 0) > 0
       && ((d.quietBy?.[d.reason] ?? 0) + ownVerdict(d)) !== d.quietCount);
     await add('DECIDER door-closed-rows-file-facts-under-their-gate', misfiled.length === 0,
