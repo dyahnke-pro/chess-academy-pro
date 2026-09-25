@@ -57,6 +57,16 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
     const attrs = attributePrinciples({ ...base, evalBefore: 900, evalAfterPlayed: 700, pvAfterPlayed: PV });
     expect(attrs.find((a) => a.id === 'calculation-depth')).toBeUndefined();
   });
+  // Hand walk 1380, move 10: a 1380 was told the punishment "arrives on their
+  // 7th move" — ply 13. A blow past the coach's own horizon is not a
+  // calculation lapse anyone could be held to.
+  it('negative control: a blow past the 7-ply horizon is not a depth error', () => {
+    const deep = ['Nf3', 'd6', 'Bd3', 'g6', 'O-O', 'Bg7', 'h3', 'O-O', 'exd6'];   // lands at ply 9
+    expect(attributePrinciples({ ...base, pvAfterPlayed: deep }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
+    // …and ply 7 still counts.
+    const edge = ['Nf3', 'd6', 'Bd3', 'g6', 'O-O', 'Bg7', 'exd6'];
+    expect(attributePrinciples({ ...base, pvAfterPlayed: edge }).find((a) => a.id === 'calculation-depth')?.facts.depth).toBe(7);
+  });
   it('negative control: no real cost → silent; no PV → silent (live path)', () => {
     expect(attributePrinciples({ ...base, evalAfterPlayed: 0, pvAfterPlayed: ['Nf3', 'd6', 'Bg5', 'Qd7', 'Bxf6'] }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
     expect(attributePrinciples({ ...base }).find((a) => a.id === 'calculation-depth')).toBeUndefined();
@@ -165,5 +175,19 @@ describe('section 14 — every exhaustive record answers for the three (compile-
     const short = renderFundamentalVerdict([attr], { ply: 12, seen: new Set(['calculation-depth']) });
     expect(short).toMatch(/Stopped calculating early again/);
     expect(full).not.toMatch(/\b(we|our|us)\b/i);
+  });
+});
+
+// Hand walk 1380, move 17: after …c6 the engine prefers Nxe7+ (+1.8 vs +1.0 for
+// Nc3, depth 16), but Nxe7+ Qxe7 is a TRADE — the engine's own 18-ply line wins
+// no material. The rule read the capture's safety on the board advanced past
+// the recapture, i.e. the queen's, and called it "wins by force".
+describe('passive-when-forcing-existed judges the capture, not the recapture', () => {
+  const H = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6 Rd1 Qe8 Nd5 c6 Nc3'.split(' ');
+  it('an even trade is not a forcing win', () => {
+    for (const pv of [undefined, ['Qxe7', 'h3', 'Bxf3', 'Rxf3', 'g6', 'Qf2']]) {
+      const attrs = attributePrinciples({ historySans: H, bestSan: 'Nxe7+', classification: 'inaccuracy', evalBefore: 181, evalAfterPlayed: 88, pvAfterBest: pv });
+      expect(attrs.find((a) => a.id === 'passive-when-forcing-existed'), JSON.stringify(attrs.map((a) => a.id))).toBeUndefined();
+    }
   });
 });

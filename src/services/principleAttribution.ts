@@ -31,6 +31,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlans } from './nextPlans';
 import { winPercent, bandForWinPctLost } from './accuracyService';
+import { MAX_PV_DEPTH_PLIES } from './ratingBands';
 
 export const FUNDAMENTAL_IDS = [
   // opening
@@ -763,8 +764,13 @@ const DETECTORS: Detector[] = [
     let wins = false;
     if (c.pvB && c.pvB.length) wins = pvWinsMaterial(c.afterBest, c.pvB, other(mover)) ? false : pvWinsMaterial(c.before, [best.san, ...c.pvB], mover);
     if (!wins && best.captured) {
-      const a = c.afterBest;
-      wins = (VAL[best.captured] - Math.max(0, hangsBy(a, best.to))) >= 2 || a.isCheckmate();
+      // Judged on the board RIGHT AFTER the capture, never `afterBest`: that
+      // board is advanced past the natural recapture, so `best.to` holds the
+      // RECAPTURER and "does it hang?" read the wrong piece (hand walk 1380,
+      // move 17: Nxe7+ Qxe7 is a trade, and it was called "wins by force"
+      // because the queen on e7 was safe).
+      const a = applied(c.before, best.san);
+      if (a) wins = (VAL[best.captured] - Math.max(0, hangsBy(a, best.to))) >= 2 || a.isCheckmate();
     }
     if (!wins && c.afterBest.isCheckmate()) wins = true;
     if (!wins) return null;
@@ -1073,6 +1079,13 @@ const DETECTORS: Detector[] = [
     if (firstForcing < 2) {
       return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,
         `the punishment ${pvP[firstForcing]} is immediate (ply ${firstForcing + 1}) — another fundamental owns it`);
+    }
+    // A BLOW DEEPER THAN ANY LINE THE COACH EVER SPELLS IS NOT A CALCULATION
+    // LAPSE (hand walk 1380, move 10: a 1380 told the punishment "arrives on
+    // their 7th move" — ply 13). Nobody is held to a line past the coach's own
+    // horizon; that loss is positional, and another fundamental owns it.
+    if (firstForcing + 1 > MAX_PV_DEPTH_PLIES) {
+      return no(c, 'calculation-depth', `the punishment ${pvP[firstForcing]} lands at ply ${firstForcing + 1}, past the ${MAX_PV_DEPTH_PLIES}-ply horizon`);
     }
     return att('calculation-depth', 2, { squares: [last.to], moves: [pvP[firstForcing]], pvMoves: pvP.slice(0, firstForcing + 1) },
       { played: last.san, punish: pvP[firstForcing], depth: firstForcing + 1 });

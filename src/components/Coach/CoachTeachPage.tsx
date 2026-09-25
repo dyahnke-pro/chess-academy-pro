@@ -8715,6 +8715,7 @@ export function CoachTeachPage(): JSX.Element {
                 // recommendation wait for the position read's `moveAdvice` —
                 // a deciding moment, or this student's own record — below.
                 let pendingRegister: string | null = null;
+                let pendingRegisterNoHedge: string | null = null;
                 let moveAdviceHere: Awaited<ReturnType<typeof computePositionFacts>>['moveAdvice'] = null;
                 try {
                   if (studentBest?.topLines && probe.turn() === (playerColor === 'white' ? 'w' : 'b')) {
@@ -8745,6 +8746,12 @@ export function CoachTeachPage(): JSX.Element {
                       const reg = [butTurn, hedge, compare].filter(Boolean).join(' ');
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
                       pendingRegister = gradedReg || null;
+                      // ONE FACT ONCE (rule 3): the hedge ("X works just as well")
+                      // and the critical-moment count ("two moves keep you level")
+                      // are one fact from two lanes. Kept ready without the hedge
+                      // for the ply where the position read speaks the count.
+                      const regNoHedge = hedge ? [butTurn, compare].filter(Boolean).join(' ') : reg;
+                      pendingRegisterNoHedge = regNoHedge ? (gradeNarrationText(regNoHedge, probe.fen(), 'CoachTeachPage.register')?.trim() || null) : null;
                     }
                     // TAKE-ADVANTAGE-OF-THE-GAP (David 2026-08-27): the throttled
                     // opponent under-played its ideal and handed you a gift.
@@ -8970,7 +8977,9 @@ export function CoachTeachPage(): JSX.Element {
                       taughtPrinciples: learnMemRef.current.principleTaught,
                     });
                     moveAdviceHere = pf.moveAdvice;
-                    if (pendingRegister && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), pendingRegister);
+                    const countSpoken = pf.clauses.some((c) => c.kind === 'key-moment');
+                    const registerNow = countSpoken ? pendingRegisterNoHedge : pendingRegister;
+                    if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow);
                     standingRef.current.rememberAll(pf.remember);
                     if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
                     // The student is to move at `probe`; their coming move is ply history+1.
