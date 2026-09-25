@@ -118,6 +118,15 @@ const routes = {
     const out = await routes.open();
     return { wrote, ...out };
   },
+  /** The last N captured app events (kind + source + summary) — to see what
+   *  a turn COMPUTED and DROPPED, not only what it spoke. `/events?n=40&grep=pkg` */
+  async events(q) {
+    const n = Number(q.get('n') ?? 40);
+    const re = q.get('grep') ? new RegExp(q.get('grep'), 'i') : null;
+    return listener.getCapturedEvents().slice(-400)
+      .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.summary ?? '').slice(0, 300)}`)
+      .filter((l) => !re || re.test(l)).slice(-n);
+  },
   async wait(q) { await sleep(Number(q.get('ms') ?? 5000)); return state(); },
   state,
   async shot(q) {

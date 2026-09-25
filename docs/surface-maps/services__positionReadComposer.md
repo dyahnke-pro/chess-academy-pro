@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**149 lines · 3 exports · 1 importers · 0 tests · 0 audits**
+**149 lines · 3 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@
 ## Who calls in
 
 - `src/hooks/usePositionNarration.ts`
+- `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
 
@@ -22,12 +23,13 @@
 ### `PositionReadInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `composePositionRead` (function) — 1 call site
+### `composePositionRead` (function) — 2 call sites
 - `src/hooks/usePositionNarration.ts:225`
+- `src/test/everySurfaceSpeaks.test.ts:131`
 
 ## Tests
 
-_No test file references this module. A change here is unguarded._
+- `src/test/everySurfaceSpeaks.test.ts`
 
 ## Audits that reach it
 

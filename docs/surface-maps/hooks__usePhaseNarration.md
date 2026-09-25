@@ -11,7 +11,7 @@
 - **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:3920) — names `usePhaseNarration`
 - **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4253) — names `usePhaseNarration`
 - **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5062) — names `usePhaseNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:6026) — names `usePhaseNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:6029) — names `usePhaseNarration`
 
 ## Who calls in
 

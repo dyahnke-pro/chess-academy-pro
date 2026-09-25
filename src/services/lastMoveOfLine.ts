@@ -61,11 +61,12 @@ export function lastMoveIfStudent(
   studentColor: 'white' | 'black',
   liveFen: string | null,
   cpLoss: number | null = null,
-): { fenBefore: string; san: string; cpLoss: number | null; reads: null } | null {
+): { fenBefore: string; san: string; cpLoss: number | null; historySans: readonly string[]; reads: null } | null {
   const lm = lastMoveOfLine(sans);
   if (!lm || lm.mover !== studentColor) return null;
   if (liveFen && boardOf(liveFen) !== boardOf(lm.fenAfter)) return null;
   // `reads: null` — a line replayed from a PGN carries no engine reads, so the
   // composer attributes no fundamental here (C4); an honest gap, not a guess.
-  return { fenBefore: lm.fenBefore, san: lm.san, cpLoss, reads: null };
+  // The line itself travels as raw data — the composer asks whether it is theory.
+  return { fenBefore: lm.fenBefore, san: lm.san, cpLoss, historySans: sans, reads: null };
 }

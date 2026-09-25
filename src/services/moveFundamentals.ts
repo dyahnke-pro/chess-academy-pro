@@ -402,7 +402,20 @@ export function computeMoveFundamentals(
       squares: [mv.to],
     });
   } else if (mv.piece === 'p' && CENTER.includes(mv.to) && relRank(mv.to, mover) >= 4) {
-    out.push({
+    // INTO CONTACT — an enemy pawn attacks the square it lands on, so the
+    // exchange is coming and the move OPENS the center rather than holding it
+    // (his "d4, opening up the center"; re-walk 1380: "stakes out the center"
+    // was said of a pawn …exd4 took the next move).
+    const contact = after.attackers(mv.to, mover === 'w' ? 'b' : 'w')
+      .some((sq) => after.get(sq)?.type === 'p');
+    out.push(contact ? {
+      id: 'center',
+      weight: 66,
+      led: `opens up the center`,
+      selfContained: `opens up the center with the pawn to ${mv.to}`,
+      imperative: `open up the center with the pawn to ${mv.to}`,
+      squares: [mv.to],
+    } : {
       id: 'center',
       weight: 66,
       led: `stakes out the center and grabs space`,
@@ -923,6 +936,28 @@ export function principleToTeach(
   return computeMoveFundamentals(fenBefore, san, mover)
     .filter((f) => IS_OPENING_PRINCIPLE[f.id] && !taught.has(f.id))
     .sort((a, b) => b.weight - a.weight)[0] ?? null;
+}
+
+/**
+ * THE PRINCIPLE A CLEAN OPENING MOVE FOLLOWS — full the first time, a short
+ * stem after (the same shape the NEGATIVE side already has: a neglected
+ * fundamental's verdict is full once a game and a stem after). Before this the
+ * positive side spoke once per principle and then went silent: "develop" was
+ * taught at Nc3 and Bc4, Be3 and every later developing move said nothing
+ * (re-walk 1380, 2026-09-25). The stem is the move and what it does —
+ * "Bc4 develops into the game, leaning on f7" — board-true, no rule restated.
+ * One helper for every surface (Learn's composer and review's [rule] facet).
+ */
+export function principleLine(
+  fenBefore: string, san: string, mover: 'white' | 'black', taught: ReadonlySet<string>, stemKey: number,
+): { id: MoveFundamental['id']; text: string; squares: string[]; first: boolean } | null {
+  const fresh = principleToTeach(fenBefore, san, mover, taught);
+  if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true };
+  const lead = computeMoveFundamentals(fenBefore, san, mover)
+    .filter((f) => IS_OPENING_PRINCIPLE[f.id])
+    .sort((a, b) => b.weight - a.weight)[0];
+  if (!lead) return null;
+  return { id: lead.id, text: `${san} ${lead.led}.`, squares: lead.squares, first: false };
 }
 
 /** The home-square bishop (c1/f1 or c8/f8) whose MOVES grew by at least two

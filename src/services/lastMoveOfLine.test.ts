@@ -32,7 +32,7 @@ describe('lastMoveOfLine', () => {
 describe('lastMoveIfStudent', () => {
   const line = ['e4', 'e5', 'Nf3'];
   it('the student\'s own move, on the board it produced', () => {
-    expect(lastMoveIfStudent(line, 'white', fenAfter(line))).toEqual({ fenBefore: fenAfter(['e4', 'e5']), san: 'Nf3', cpLoss: null, reads: null });
+    expect(lastMoveIfStudent(line, 'white', fenAfter(line))).toEqual({ fenBefore: fenAfter(['e4', 'e5']), san: 'Nf3', cpLoss: null, historySans: line, reads: null });
   });
   it('the OPPONENT\'s move is never handed over as the student\'s', () => {
     expect(lastMoveIfStudent(line, 'black', fenAfter(line))).toBeNull();

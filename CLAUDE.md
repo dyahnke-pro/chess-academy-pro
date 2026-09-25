@@ -5342,6 +5342,9 @@ the log. Don't let it rot.
 
 ## Deployment Policy
 
+🔒 **WORK ON A BRANCH WHILE MAKING CHANGES; QUICK AUDITS OVER FULL PROD AUDITS (David 2026-09-25: "Remember to send to a branch while making changes. We don't need full production audits as much as we need quick audits with efficient fix").** Commit and push work-in-progress to the session's branch, and KEEP SHIPPING IT LIVE: merge to `main` as each fix is done and green (David: "Continue pushing your changes live though"). Verify with the fastest check that proves the change (a targeted test, a localhost hand-walk of the affected moves, one scoped audit), fix, and move on — reserve the full 3-instrument prod audit for when David asks or a change can only be proven on prod.
+**Stay reachable:** anything longer than a minute (ship-check, audits, walks, deploy polls) runs in the BACKGROUND with a monitor, so David's messages are read at the next tool boundary instead of waiting behind a blocking command.
+
 **🚨 PUSH TO `main` (PRODUCTION) BY DEFAULT — PREVIEWS ARE OPT-IN ONLY.**
 David, 2026-05-21, emphatic: *"I HATE USING THE FUCKING PREVIEWS!! Push
 to main unless told otherwise."* Do NOT develop on a feature branch / open

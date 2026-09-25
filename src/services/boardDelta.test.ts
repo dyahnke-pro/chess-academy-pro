@@ -24,7 +24,7 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
       bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 },
       allSans: ['e4'],
-      forcedRunStartPly: null, replyBestSan: null,
+      forcedRunStartPly: null, bestLineUci: [], replyBestSan: null,
       ...over,
     });
   };
@@ -77,7 +77,7 @@ describe('[eval] attribution — the bar never moves unexplained (David 2026-07-
       bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 },
       allSans: ['Qxd4'],
-      forcedRunStartPly: null, replyBestSan: null,
+      forcedRunStartPly: null, bestLineUci: [], replyBestSan: null,
     });
     const evalFacet = facets.find((f) => f.startsWith('[eval]'));
     expect(evalFacet).toBeTruthy();

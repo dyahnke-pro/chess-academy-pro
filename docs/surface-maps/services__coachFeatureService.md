@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4837 lines · 33 exports · 36 importers · 33 tests · 5 audits**
+**4848 lines · 33 exports · 36 importers · 33 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
 - **Why determinism** (CLAUDE.md:57) — names `coachFeatureService`
 - **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:3749) — names `buildReviewSegments`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4069) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6056) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6059) — names `coachFeatureService`
 
 ## Who calls in
 

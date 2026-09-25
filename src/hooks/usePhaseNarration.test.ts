@@ -70,7 +70,7 @@ vi.mock('../services/liveTacticsContext', () => ({
   buildFedTacticsContext: () => Promise.resolve(undefined),
   speakDeepestLookahead: () => null,
 }));
-vi.mock('../services/openingDetectionService', () => ({ detectOpening: () => null }));
+vi.mock('../services/openingDetectionService', () => ({ detectOpening: () => null, isBookLine: () => false }));
 
 /** The corpus. One note, filed at the transition position. */
 let noteText = 'Black should trade the light-squared bishops.';

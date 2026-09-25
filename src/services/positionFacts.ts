@@ -20,7 +20,8 @@ import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
-import { strategicWhyImperative, principleToTeach, principleOnceLine } from './moveFundamentals';
+import { strategicWhyImperative, principleLine } from './moveFundamentals';
+import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy, type StoppedThreat } from './opponentMovePurpose';
 import { phaseVerdictLine } from './reviewPositionalAssessment';
@@ -66,6 +67,15 @@ export interface LastMoveInput {
   fenBefore: string;
   san: string;
   cpLoss: number | null;
+  /** RAW DATA: every SAN of the game up to AND INCLUDING this move, or null
+   *  when the surface has no move list. REQUIRED. The composer asks the ONE
+   *  book test (`isBookLine`) whether the move is theory — a book move is never
+   *  graded (`cpLoss` stays null, and the heat map must keep reading it as
+   *  ungraded), yet it is by definition not a mistake, so the principle it
+   *  follows may be taught. Before this, every book move was silent: 1.e4,
+   *  2.Nf3, 3.d4 carried no "why" (re-walk 1380, 2026-09-25). Raw data, not a
+   *  verdict, so no surface imports the book test (the composition ceiling). */
+  historySans: readonly string[] | null;
   reads: LiveMoveReads | null;
   /** RAW DATA, not a computed answer (WO-TEACH-02 S2): the moves players at
    *  the student's level play at `fenBefore` (the amateur cache's entry), and
@@ -746,8 +756,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // GRADED clean only — an ungraded move is not a clean one. The 2026-09-24
     // Learn tape praised "O-O-O does what the opening asks" one line after
     // another lane called O-O-O a mistake: the grade had not reached here yet.
-    && lm.cpLoss !== null && lm.cpLoss < 50
-    ? principleToTeach(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples)
+    && ((lm.historySans !== null && isBookLine(lm.historySans)) || (lm.cpLoss !== null && lm.cpLoss < 50))
+    ? principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))
     : null;
   // S3 — the opponent's reply took the student's threat off the board.
   const stoppedHere = studentToMove && lm && input.opponentLastMove
@@ -759,7 +769,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     : null;
 
   const composedAll = applyWeaknessBoost(
-    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: principleOnceLine(lm.san, ruleHere, stemKeyOf(lm.fenBefore)), squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null, alreadySaid: input.alreadySaid }),
+    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null, alreadySaid: input.alreadySaid }),
     input.studentWeaknesses ?? [],
   );
 

@@ -433,6 +433,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
           fenBefore: n.fenBefore,
           san: n.san,
           cpLoss: Math.max(0, (studentBestEval ?? studentEvalBefore) - studentEvalAfter),
+          historySans: n.historySans,
           // THE RAW READS, forwarded whole (C4) — the composer attributes the
           // fundamental; this hook composes no fact-computer for it. The
           // notification's evals are WHITE-POV cp, a mate as the sentinel, which

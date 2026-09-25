@@ -113,6 +113,7 @@ vi.mock('../../services/coachPrompts', () => ({
 
 vi.mock('../../services/openingDetectionService', () => ({
   detectOpening: vi.fn().mockReturnValue(null),
+  isBookLine: vi.fn().mockReturnValue(false),
   getOpeningMoves: vi.fn().mockReturnValue(null),
 }));
 
