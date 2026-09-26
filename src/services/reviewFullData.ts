@@ -28,7 +28,7 @@ import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
 import { MIN_ALTERNATIVE_SHARE } from './refutedAlternativeCore';
-import { principleLine, openingWindowOpen } from './moveFundamentals';
+import { principleLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
 import { isMateEval } from './engineConstants';
@@ -841,12 +841,13 @@ export function computeMoveFacets(
     } catch { /* no squares → it cannot be collapsed with another claim */ }
   }
 
-  // ── 7c. THE PRINCIPLE A QUIET OPENING MOVE FOLLOWS — once per game (S2).
-  // Only where there is nothing to correct: a book/good/unclassified student
-  // move inside the opening window, and only a principle not yet SPOKEN this
+  // ── 7c. THE WHY OF A CLEAN MOVE (S2) — the opening principle it kept, or
+  // past the opening its lead fundamental (`principleLine` decides, from the
+  // board). Only where there is nothing to correct: a book/good/unclassified
+  // student move, and in the opening only a principle not yet SPOKEN this
   // game (the ledger is committed after the door, so a principle the door
   // silenced may speak later).
-  if (isStudent && openingWindowOpen(fenBefore, moverColor) && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
+  if (isStudent && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
     // Full the first time a principle speaks this game, a short stem after —
     // the one helper Learn's composer reads (`principleLine`).
     const lead = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore));
