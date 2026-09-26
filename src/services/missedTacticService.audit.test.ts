@@ -89,8 +89,11 @@ describe('audit: pin', () => {
 // ── Skewer ─────────────────────────────────────────────────────────────────
 describe('audit: skewer', () => {
   it('detects rook skewer (queen in front, rook behind)', () => {
-    // Rb1-a1 skewers queen a4 (value 9) through to rook a8 (value 5)
-    expect(detectTacticType('r6k/8/8/8/q7/8/8/1R5K w - - 0 1', 'b1a1')).toBe('skewer');
+    // Rb1-a1 skewers queen a4 (value 9) through to rook a8 (value 5). The
+    // king on b2 guards a1 — without it (the old fixture, king on h1) Ra1
+    // simply hangs to …Qxa1+, which is no skewer, and the engine-backed
+    // classifier rightly refused to call it one.
+    expect(detectTacticType('r6k/8/8/8/q7/8/1K6/1R6 w - - 0 1', 'b1a1')).toBe('skewer');
   });
 
   it('does NOT detect skewer when less valuable piece is in front', () => {

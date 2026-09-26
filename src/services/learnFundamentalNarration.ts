@@ -18,7 +18,9 @@
 
 import { type FundamentalId } from './principleAttribution';
 import { attributeLiveFundamental, LEARN_FUNDAMENTAL_CP_FLOOR, type LiveFundamentalReads } from './liveFundamental';
-import { renderFundamentalVerdict } from './principleVoice';
+import { renderFundamentalVerdict, isMethodSentence } from './principleVoice';
+import { habitForCluster } from './coachDecider';
+import { liveHabitKey, type LiveHabit } from './methodBeat';
 import { fundamentalRecurrenceLine } from './fundamentalRecurrence';
 import type { WeaknessSignal } from './weaknessSignal';
 
@@ -69,6 +71,14 @@ export function learnFundamentalVerdict(
   seen: Set<FundamentalId>,
   /** The student's spine, joined — absent means a cold student (no recurrence). */
   studentWeaknesses: readonly WeaknessSignal[] = [],
+  /** The live say-once set the composer's method beat reads (`method:<habit>`).
+   *  A habit already taught this game is not taught again in the verdict's
+   *  "how" sentence, and a "how" that speaks marks its habit as taught — so
+   *  the method beat and the fundamental never teach one habit on two moves
+   *  running (walk 3, 2026-09-26: 21.Rxd8 "Run the question now…" then
+   *  22.gxh5 "Before you look for your own idea, answer what their last move
+   *  threatens…"). */
+  said?: Set<string>,
 ): LearnFundamental | null {
   const attrs = attributeLiveFundamental(input);
   if (attrs.length === 0) return null;
@@ -77,11 +87,19 @@ export function learnFundamentalVerdict(
   // verdict; a repeat within the game already got its short stem and says
   // nothing about other games twice.
   const firstThisGame = !seen.has(attrs[0].id);
-  const verdict = renderFundamentalVerdict(attrs.slice(0, 1), {
+  const rendered = renderFundamentalVerdict(attrs.slice(0, 1), {
     ply: input.historySans.length,
     seen,
   });
+  const habit = habitForCluster(attrs[0].tag);
+  const habitKey = habit && habit !== 'slow-down' ? liveHabitKey(habit as LiveHabit) : null;
+  const sentences = rendered.split(/(?<=[.!?])\s+/);
+  const hasHow = sentences.some(isMethodSentence);
+  const verdict = habitKey && said?.has(habitKey) && hasHow
+    ? sentences.filter((x) => !isMethodSentence(x)).join(' ')
+    : rendered;
   if (!verdict.trim()) return null;
+  if (habitKey && hasHow && verdict === rendered) said?.add(habitKey);
   const recurrence = firstThisGame
     ? fundamentalRecurrenceLine({
       ids: [attrs[0].id],

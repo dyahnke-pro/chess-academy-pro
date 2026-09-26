@@ -25,7 +25,7 @@
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
-import { attackerCanUseFile, rookReachesFile } from './positionalRead';
+import { attackerCanUseFile, castleIsOneMoveAway, rookReachesFile } from './positionalRead';
 import { seatBare } from '../utils/seatPieces';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
@@ -210,7 +210,12 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // Your own king stuck in the center is only a real problem once pieces are
       // out and the center can open — not on move 3 with everything at home.
       const mine = kingSafetyRead(fen, student);
-      if (mine && !mine.castled && mine.inCenter && moveNo >= 8 && mine.openFilesNearKing.length >= 1) {
+      // ONE OWNER while castling is a move away: the positional read says
+      // "castling is ready" then (walk 3, 2026-09-26: 6.Bc4 and 7.Bb3 heard
+      // the same claim from both computers on consecutive moves). This line
+      // speaks only when the king is stuck AND cannot castle next move.
+      if (mine && !mine.castled && mine.inCenter && moveNo >= 8 && mine.openFilesNearKing.length >= 1
+        && !castleIsOneMoveAway(fen, student)) {
         return { fact: `Your king on ${mine.square} is still in the center with lines opening — castle before anything sharp.`, squares: [sq(mine.square)] };
       }
       return null;

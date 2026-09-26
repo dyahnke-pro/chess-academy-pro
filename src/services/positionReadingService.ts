@@ -506,7 +506,17 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
             notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on the seventh rank' });
           }
         }
-        if (ownPawns === 0 && enemyPawns === 0) notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on the open file' });
+        // A file with an ENEMY rook or queen on it is CONTESTED — nobody owns
+        // it (walk 3, 2026-09-26: "your rook on f3 owns the open f-file" and
+        // "their rook on f8 … owns the open f-file" in one breath).
+        const foe: Color = color === 'w' ? 'b' : 'w';
+        // Only a fully OPEN file can be contested this way: behind its own
+        // pawn on a half-open file an enemy rook contests nothing (13.fxe5's
+        // f8-rook behind f7).
+        const contested = ownPawns === 0 && enemyPawns === 0
+          && chess.board().flat().some((c2) => !!c2 && c2.color === foe && (c2.type === 'r' || c2.type === 'q') && c2.square[0] === square[0]);
+        if (contested) { /* neither side's rook owns a file they share */ }
+        else if (ownPawns === 0 && enemyPawns === 0) notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on the open file' });
         else if (ownPawns === 0 && enemyPawns > 0) notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on a semi-open file' });
       }
     }

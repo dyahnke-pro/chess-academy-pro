@@ -10364,7 +10364,7 @@ export function CoachTeachPage(): JSX.Element {
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       playedPvUci: mid.topLines?.[0]?.moves ?? [],
                       ...mateContext(preStudentRead, mid, playerColor),
-                    }, fundamentalSeenRef.current, weaknessSignalsRef.current);
+                    }, fundamentalSeenRef.current, weaknessSignalsRef.current, standingRef.current.said);
                     if (look) {
                       // THE SQUARE TRAVELS WITH THE SENTENCE, and is drawn below
                       // only if the package KEPT it. Not `look.line.includes(sq)`
