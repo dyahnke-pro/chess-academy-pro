@@ -88,7 +88,7 @@ describe('the recording path passes the engine lines to the attributor', () => {
       // SAN, not UCI — the attributor reads SAN.
       expect((input.pvAfterPlayed ?? [])[0]).not.toMatch(/^[a-h][1-8][a-h][1-8]$/);
       // And the attributor's own diagnostic must no longer say the line is empty.
-      attributePrinciples({
+      attributePrinciples({ replySan: null,
         historySans: SANS.slice(0, 24),
         bestSan: 'Bd7',
         classification: 'blunder',

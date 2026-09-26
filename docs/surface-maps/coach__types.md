@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**932 lines · 32 exports · 931 importers · 207 tests · 39 audits**
+**946 lines · 32 exports · 931 importers · 207 tests · 39 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,7 +19,7 @@
 - **Naming** (CLAUDE.md:5139) — names `CoachPersonality`
 - **Testing Best Practices** (CLAUDE.md:5184) — names `Provider`
 - **Shared types / services** (CLAUDE.md:5251) — names `types`
-- **The standard post-deploy ritual** (CLAUDE.md:6027) — names `TacticsLiveContext`
+- **The standard post-deploy ritual** (CLAUDE.md:6030) — names `TacticsLiveContext`
 
 ## Who calls in
 

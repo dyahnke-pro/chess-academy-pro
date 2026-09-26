@@ -171,6 +171,14 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'tempo-handed': {
+      // They already PLAYED the kick — say what happened, not what could.
+      if (Number(f.played) === 1) {
+        const p = [
+          `That handed them a tempo: ${kick} came at once, hitting your ${f.target}, and your next move has to answer it.`,
+          `Tempo lost — ${kick} hit your ${f.target} straight away, so your next move goes on the same piece again.`,
+        ];
+        return p[v % p.length];
+      }
       const s = [
         `That hands them a tempo: ${kick} comes with a threat on your ${f.target}, and you have to spend a move answering it instead of building.`,
         `Tempo lost — after this they get ${kick} for free, hitting your ${f.target}, and your next move is forced to react.`,
@@ -444,9 +452,9 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
     }
     case 'calculation-depth': {
       const s = [
-        `The move looks fine for two moves — then ${f.punish} lands. The line had to be followed ${f.depth} plies deep, and the calculation stopped early.`,
-        `Nothing hangs right away, which is the trap: ${f.punish} arrives on their ${nth(Math.ceil(Number(f.depth) / 2))} move.`,
-        `Shallow read: ${f.played} survives the first replies and breaks on ${f.punish}. That is a thread lost deeper in the line, not a piece left loose.`,
+        `The move looks fine for two moves — then, after ${f.path}, ${f.punish} lands. The line had to be followed ${f.depth} plies deep, and the calculation stopped early.`,
+        `Nothing hangs right away, which is the trap: after ${f.path}, ${f.punish} arrives on their ${nth(Math.ceil(Number(f.depth) / 2))} move.`,
+        `Shallow read: ${f.played} survives the first replies — after ${f.path}, ${f.punish} breaks it. The thread was lost deeper in the line.`,
       ];
       return s[v % s.length];
     }

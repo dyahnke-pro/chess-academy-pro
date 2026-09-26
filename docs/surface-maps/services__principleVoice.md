@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**653 lines · 6 exports · 10 importers · 6 tests · 3 audits**
+**661 lines · 6 exports · 10 importers · 7 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,8 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `isMethodSentence` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:4343`
-- `src/services/learnFundamentalNarration.ts:107`
+- `src/services/coachFeatureService.ts:4372`
+- `src/services/learnFundamentalNarration.ts:105`
 
 ### `fundamentalHow` (function) — 10 call sites
 - `src/services/fundamentalHow.test.ts:25`
@@ -44,15 +44,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `renderFundamentalVerdict` (function) — 19 call sites
-- `src/services/coachFeatureService.ts:2236`
+### `renderFundamentalVerdict` (function) — 20 call sites
+- `src/services/coachFeatureService.ts:2245`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
 - `src/services/fundamentalHow.test.ts:81`
-- `src/services/learnFundamentalNarration.ts:97`
-- `src/services/misconceptionClassifier.ts:263`
+- `src/services/learnFundamentalNarration.ts:95`
+- `src/services/learnWalkBlumenfeld.test.ts:75`
+- `src/services/misconceptionClassifier.ts:259`
 - `src/services/principleAttribution.section14.test.ts:179`
 - `src/services/principleAttribution.section14.test.ts:182`
 - `src/services/principleAttributionEndgame.test.ts:49`
@@ -63,15 +64,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:25`
 - `src/services/principleVoice.test.ts:31`
 - `src/services/principleVoice.test.ts:32`
-- `src/services/reviewFullData.ts:398`
+- `src/services/reviewFullData.ts:401`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2247`
+- `src/services/coachFeatureService.ts:2256`
 - `src/services/principleVoice.test.ts:38`
 - `src/services/principleVoice.test.ts:40`
 
 ### `renderFundamentalsRecap` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:4801`
+- `src/services/coachFeatureService.ts:4836`
 - `src/services/principleVoice.test.ts:48`
 - `src/services/principleVoice.test.ts:53`
 - `src/services/principleVoice.test.ts:57`
@@ -85,6 +86,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/fundLeadStems.test.ts`
 - `src/services/fundamentalHow.test.ts`
+- `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`
 - `src/services/principleAttributionEvalPv.test.ts`

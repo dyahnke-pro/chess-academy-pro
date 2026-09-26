@@ -1286,7 +1286,7 @@ export function assemblePositionAssessment(opts: {
       // stale package passes this check by construction.
       const myHang = tactics.hanging.find((h) => h.color === sc && pieceIsOn(tactics.fen, h.square, h.piece, h.color));
       if (myHang) parts.push(`Your ${REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece} on ${myHang.square} is hanging.`);
-      else if (tactics.threats[0]?.description) parts.push(`Watch out — ${seatedDescription(tactics.threats[0].description, tactics.fen, sc)}.`);
+      else if (tactics.threats[0]?.spoken) parts.push(`Watch out — ${tactics.threats[0].spoken}.`);
     }
   }
 
@@ -2674,8 +2674,11 @@ export function assembleMovePurpose(opts: {
   }
 
   // 3) THE POINT — the threat/opportunity the move creates (computed tactics).
-  const point = opts.tactics?.opportunities?.[0] ?? opts.tactics?.immediate?.[0];
-  if (point?.description) clauses.push(`The point: ${lowerFirst(point.description)}.`);
+  // A future shot is said with the moves that build it (`spoken`); a tactic
+  // already on the board is said as it stands (F9).
+  const nextShot = opts.tactics?.opportunities?.[0];
+  const point = nextShot ? nextShot.spoken : (opts.tactics?.immediate?.[0]?.description ?? null);
+  if (point) clauses.push(`The point: ${lowerFirst(point)}.`);
 
   // 4) THE PLAN — the mover's follow-up in the engine PV (index 1; index 0 is
   //    the opponent's reply).
@@ -3201,7 +3204,7 @@ export function assembleTacticsAnswer(
     // collapsed — that is subsumption (one claim, said once), not a cap.
     const said = new Set(parts);
     const push = (d: string | undefined) => { if (!d) return; const line = `${d}.`; if (!said.has(line)) { said.add(line); parts.push(line); } };
-    for (const o of tactics.opportunities) push(o.description);
+    for (const o of tactics.opportunities) push(o.spoken ?? undefined);
     for (const im of tactics.immediate) push(im.description);
     if (parts.length > 0) {
       return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'] };
@@ -3242,11 +3245,13 @@ export function assembleTacticsAnswer(
     parts.push(`Your ${REVIEW_PIECE_NAME[h.piece] ?? h.piece} on ${h.square} is hanging.`);
   }
   // Nothing concrete yet → surface the top threat, then the top opportunity.
-  if (parts.length === 0 && tactics.threats[0]?.description) {
-    parts.push(`Watch out — ${seatedDescription(tactics.threats[0].description, tactics.fen, sc)}.`);
+  // Future tactics speak their `spoken` form — the moves that build them —
+  // never the bare description re-seated on the CURRENT board (F9).
+  if (parts.length === 0 && tactics.threats[0]?.spoken) {
+    parts.push(`Watch out — ${tactics.threats[0].spoken}.`);
   }
-  if (parts.length === 0 && tactics.opportunities[0]?.description) {
-    parts.push(`You have a shot: ${seatedDescription(tactics.opportunities[0].description, tactics.fen, sc)}.`);
+  if (parts.length === 0 && tactics.opportunities[0]?.spoken) {
+    parts.push(`You have a shot: ${tactics.opportunities[0].spoken}.`);
   }
 
   if (parts.length === 0) return null;

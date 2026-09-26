@@ -126,7 +126,7 @@ describe('the sweep carries its own engine line', () => {
   it('and the attributor stops reporting an empty PV — the reason this exists', async () => {
     const anns = await annotate(true);
     const withPv: string[] = [];
-    attributePrinciples({
+    attributePrinciples({ replySan: null,
       historySans: SANS.slice(0, FLAGGED + 1),
       bestSan: 'Rc8',
       classification: 'blunder',
@@ -140,7 +140,7 @@ describe('the sweep carries its own engine line', () => {
     // NEGATIVE CONTROL — the same call on a run that dropped the line says so.
     const anns2 = await annotate(false);
     const without: string[] = [];
-    attributePrinciples({
+    attributePrinciples({ replySan: null,
       historySans: SANS.slice(0, FLAGGED + 1),
       bestSan: 'Rc8',
       classification: 'blunder',

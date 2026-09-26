@@ -203,7 +203,7 @@ import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
 import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalReadLine, tacticWord } from '../../services/lookaheadPlan';
-import { tacticInvariant } from '../../services/conceptEngine';
+import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
 import { backwardLook, lastCoachVerdictDecline } from '../../services/backwardLook';
@@ -275,7 +275,7 @@ import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, ChatChoice, BoardArrow, BoardHighlight, WalkableLine } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { computePositionFacts, clauseText } from '../../services/positionFacts';
+import { computePositionFacts, clauseText, mustKey } from '../../services/positionFacts';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
@@ -7669,11 +7669,15 @@ export function CoachTeachPage(): JSX.Element {
       /** The engine's invariant for this pattern, the FIRST time the game
        *  meets it. Concept only — no squares, so nothing the student is meant
        *  to find is handed over. */
+      // ONE DEFINITION LEDGER (F30): the composer's concept clause writes the
+      // same `definitionKey` to the standing memory, so a definition either lane
+      // already taught is not taught again here.
       const conceptTail = (type: string | null | undefined): string => {
-        if (!type || learnMemRef.current.conceptTaught.has(type)) return '';
+        if (!type || learnMemRef.current.conceptTaught.has(type) || standingRef.current.said.has(definitionKey(type))) return '';
         const inv = tacticInvariant(type);
         if (!inv) return '';
         learnMemRef.current.conceptTaught.add(type);
+        standingRef.current.remember(definitionKey(type));
         return ` Remember — ${inv.full}`;
       };
       const engineMateN = pendingEngineMateRef.current
@@ -7785,15 +7789,15 @@ export function CoachTeachPage(): JSX.Element {
         // (walk 6, L1: the PV starts with the STUDENT's move, so "if they play
         // Bb3" named White's own bishop move to a White student). And a pin on
         // a pawn is recaptured scenery, not a warning.
-        const up = tctx.threats.find((t) => !(t.type === 'pin' && / pins pawn /i.test(t.description))) ?? null;
+        // Said through the entry's ONE spoken form (the moves that build it,
+        // seated on the board where it lands) — never the bare description
+        // re-seated on today's board (Blumenfeld walk F9).
+        const up = tctx.threats.find((t) => t.spoken && !(t.type === 'pin' && / pins pawn /i.test(t.description))) ?? null;
         const theirs = up?.line?.[up.line.length - 1];
-        if (up) {
+        if (up?.spoken) {
           threatKey = `soon:${up.type}:${theirs ?? ''}`;
           threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
-          const desc = seatPieceReferences(`${up.description.charAt(0).toLowerCase()}${up.description.slice(1)}`, args.fenAfterReply, args.studentColor === 'white' ? 'w' : 'b');
-          threatLine = theirs
-            ? `Watch out — their idea is ${theirs}: ${desc}.`
-            : `Watch out — ${desc} is coming.`;
+          threatLine = `Watch out — ${up.spoken}.`;
         }
       } else if (myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) {
         // Only a real PIECE (minor or better) earns the interrupt. A hanging pawn
@@ -7864,7 +7868,10 @@ export function CoachTeachPage(): JSX.Element {
       // MATE OUTRANKS EVERY THREAT: "Careful — your bishop on f4 is attacked"
       // beside a mate in one (hand walk 1200) sent the student to defend.
       if (tacticKey.startsWith('mate:')) { mateNamedThisTurn = true; threatLine = null; alertArrow = null; threatSquares = []; }
-      if (threatLine && (threatKey === learnMemRef.current.lastThreatKey || learnMemRef.current.spokenThreatLines.has(threatLine) || learnMemRef.current.spokenThreatLines.has(threatKey))) {
+      // The piece-under-fire warning shares ONE key with the composer's
+      // must-defend clause, so the two packages never say it twice (F28).
+      const mustHere = threatKey.startsWith('hang:') ? mustKey(threatSquares[0] ?? '', args.fenAfterReply) : null;
+      if (threatLine && (threatKey === learnMemRef.current.lastThreatKey || learnMemRef.current.spokenThreatLines.has(threatLine) || learnMemRef.current.spokenThreatLines.has(threatKey) || (mustHere !== null && standingRef.current.said.has(mustHere)))) {
         threatLine = null;
         alertArrow = null;
         threatSquares = [];
@@ -7872,6 +7879,7 @@ export function CoachTeachPage(): JSX.Element {
         learnMemRef.current.lastThreatKey = threatKey;
         learnMemRef.current.spokenThreatLines.add(threatLine);
         learnMemRef.current.spokenThreatLines.add(threatKey);
+        if (mustHere) standingRef.current.remember(mustHere);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: threatKey });
       }
       // What the alert lane has CLAIMED this turn. The keys carry their squares

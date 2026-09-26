@@ -49,6 +49,9 @@ export interface ComputedConcept {
   /** ≤8-word cue — the pattern named. Spoken on brief verbosity / shown below
    *  the board. */
   short: string;
+  /** The board-true INSTANCE alone, without the invariant — what a live surface
+   *  says once the definition has been taught this game (`definitionKey`). */
+  instance?: string;
   /** Ranking score, filled by the router (0..1). */
   importance: number;
   /** The board the INSTANCE sentence is true on, for a tactic concept. A tactic
@@ -204,6 +207,7 @@ export function renderTacticConcept(pattern: TacticPattern, boardFen: string): C
     squares: pattern.involvedSquares,
     full: desc ? `${cap(desc)} — ${inv.full}` : cap(inv.full),
     short: inv.short,
+    ...(desc ? { instance: cap(desc) } : {}),
     importance: 0,
     boardFen,
     ...(desc ? {} : { bare: true as const }),
@@ -727,6 +731,14 @@ export function positionalConcepts(fen: string): ComputedConcept[] {
  *  engine deltas) can teach the idea once where the tactic lands instead of a
  *  bare "lands a fork". Same vocabulary the concept engine speaks (one voice).
  *  Null for the no-tactic sentinel / an unknown type. */
+/** THE ONE say-once key for a tactic's DEFINITION ("a battery stacks two
+ *  pieces…"). Two lanes taught it with two memories — the instant alert's
+ *  "Remember —" tail and the composer's concept clause — and the Blumenfeld walk
+ *  heard the battery defined three times (F30). Both read and write this key. */
+export function definitionKey(type: string): string {
+  return `def:${type}`;
+}
+
 export function tacticInvariant(type: string): Register | null {
   if (type === 'none') return null;
   return (TACTIC_INVARIANT as Record<string, Register | undefined>)[type] ?? null;

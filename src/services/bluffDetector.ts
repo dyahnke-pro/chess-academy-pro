@@ -31,9 +31,10 @@ export interface Bluff {
 /**
  * The bluff in the move just played, from the MOVER's side, or null.
  * Null when the move gives check, makes a real threat, lands on its own half,
- * or hits nothing of the other side's.
+ * hits nothing of the other side's, or the engine's best reply (`bestReplySan`,
+ * null when unknown) answers the piece.
  */
-export function detectBluff(fenBefore: string, san: string): Bluff | null {
+export function detectBluff(fenBefore: string, san: string, bestReplySan: string | null): Bluff | null {
   let after: Chess;
   try { after = new Chess(fenBefore); } catch { return null; }
   let mv;
@@ -70,6 +71,16 @@ export function detectBluff(fenBefore: string, san: string): Bluff | null {
   if (targets.length === 0) return null;
   // The one door for real threats: forks, mates, winning captures elsewhere.
   if (detectNewThreat(fenBefore, after.fen(), mover)) return null;
+  // "No need to react" is false when the best reply IS a reaction — it takes
+  // the piece, or moves one it hits (Blumenfeld walk F25: "take on h5, it
+  // forces matters" and "their knight on h5 wins nothing — no need to react"
+  // on one move). REQUIRED, so a caller cannot forget to ask the engine.
+  if (bestReplySan) {
+    try {
+      const reply = new Chess(after.fen()).move(bestReplySan);
+      if (reply.to === mv.to || targets.some((t) => t.square === reply.from)) return null;
+    } catch { /* an unplayable reply says nothing about the bluff */ }
+  }
   targets.sort((a, b) => (MATERIAL_VALUE[b.piece] ?? 0) - (MATERIAL_VALUE[a.piece] ?? 0));
   return { piece: mv.piece, square: mv.to, targets };
 }

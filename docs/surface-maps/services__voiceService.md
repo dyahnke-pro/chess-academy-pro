@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2901 lines · 16 exports · 101 importers · 82 tests · 23 audits**
+**2906 lines · 16 exports · 101 importers · 82 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,7 +17,7 @@
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3326) — names `voiceService`
 - **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3635) — names `voiceService`
 - **Shared types / services** (CLAUDE.md:5262) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6038) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6041) — names `voiceService`
 
 ## Who calls in
 
@@ -167,7 +167,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolvePollyVoice` (function) — 1 call site
-- `src/components/Coach/CoachGamePage.tsx:3675`
+- `src/components/Coach/CoachGamePage.tsx:3677`
 
 ### `resolvePollySecondaryVoice` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -200,16 +200,16 @@
 
 ### `detectSanitizerLeak` (function) — 6 call sites
 - `src/services/coachAgentRunner.ts:266`
-- `src/services/sanitizeForTTS.test.ts:76`
-- `src/services/sanitizeForTTS.test.ts:125`
-- `src/services/sanitizeForTTS.test.ts:138`
-- `src/services/sanitizeForTTS.test.ts:156`
+- `src/services/sanitizeForTTS.test.ts:79`
+- `src/services/sanitizeForTTS.test.ts:128`
+- `src/services/sanitizeForTTS.test.ts:141`
+- `src/services/sanitizeForTTS.test.ts:159`
 - `src/utils/descriptiveNotation.test.ts:32`
 
 ### `normalizePieceShorthand` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sanitizeForTTS` (function) — 48 call sites
+### `sanitizeForTTS` (function) — 49 call sites
 - `src/components/Openings/MiddlegamePractice.tsx:305`
 - `src/components/Openings/MiddlegamePractice.tsx:349`
 - `src/components/Openings/MiddlegamePractice.tsx:354`
@@ -227,37 +227,38 @@
 - `src/services/sanitizeForTTS.test.ts:65`
 - `src/services/sanitizeForTTS.test.ts:68`
 - `src/services/sanitizeForTTS.test.ts:71`
-- `src/services/sanitizeForTTS.test.ts:76`
+- `src/services/sanitizeForTTS.test.ts:74`
 - `src/services/sanitizeForTTS.test.ts:79`
-- `src/services/sanitizeForTTS.test.ts:84`
+- `src/services/sanitizeForTTS.test.ts:82`
 - `src/services/sanitizeForTTS.test.ts:87`
 - `src/services/sanitizeForTTS.test.ts:90`
 - `src/services/sanitizeForTTS.test.ts:93`
 - `src/services/sanitizeForTTS.test.ts:96`
 - `src/services/sanitizeForTTS.test.ts:99`
 - `src/services/sanitizeForTTS.test.ts:102`
-- `src/services/sanitizeForTTS.test.ts:120`
-- `src/services/sanitizeForTTS.test.ts:163`
-- `src/services/sanitizeForTTS.test.ts:167`
-- `src/services/sanitizeForTTS.test.ts:171`
-- `src/services/sanitizeForTTS.test.ts:175`
-- `src/services/sanitizeForTTS.test.ts:183`
-- `src/services/sanitizeForTTS.test.ts:184`
-- `src/services/sanitizeForTTS.test.ts:188`
-- `src/services/sanitizeForTTS.test.ts:196`
-- `src/services/sanitizeForTTS.test.ts:203`
-- `src/services/sanitizeForTTS.test.ts:219`
-- `src/services/sanitizeForTTS.test.ts:227`
+- `src/services/sanitizeForTTS.test.ts:105`
+- `src/services/sanitizeForTTS.test.ts:123`
+- `src/services/sanitizeForTTS.test.ts:166`
+- `src/services/sanitizeForTTS.test.ts:170`
+- `src/services/sanitizeForTTS.test.ts:174`
+- `src/services/sanitizeForTTS.test.ts:178`
+- `src/services/sanitizeForTTS.test.ts:186`
+- `src/services/sanitizeForTTS.test.ts:187`
+- `src/services/sanitizeForTTS.test.ts:191`
+- `src/services/sanitizeForTTS.test.ts:199`
+- `src/services/sanitizeForTTS.test.ts:206`
+- `src/services/sanitizeForTTS.test.ts:222`
 - `src/services/sanitizeForTTS.test.ts:230`
-- `src/services/sanitizeForTTS.test.ts:241`
-- `src/services/sanitizeForTTS.test.ts:245`
-- `src/services/sanitizeForTTS.test.ts:249`
-- `src/services/sanitizeForTTS.test.ts:253`
-- `src/services/sanitizeForTTS.test.ts:257`
-- `src/services/sanitizeForTTS.test.ts:261`
-- `src/services/sanitizeForTTS.test.ts:262`
-- `src/services/sanitizeForTTS.test.ts:268`
+- `src/services/sanitizeForTTS.test.ts:233`
+- `src/services/sanitizeForTTS.test.ts:244`
+- `src/services/sanitizeForTTS.test.ts:248`
+- `src/services/sanitizeForTTS.test.ts:252`
+- `src/services/sanitizeForTTS.test.ts:256`
+- `src/services/sanitizeForTTS.test.ts:260`
+- `src/services/sanitizeForTTS.test.ts:264`
+- `src/services/sanitizeForTTS.test.ts:265`
 - `src/services/sanitizeForTTS.test.ts:271`
+- `src/services/sanitizeForTTS.test.ts:274`
 
 ### `voiceService` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

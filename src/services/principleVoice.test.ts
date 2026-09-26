@@ -6,7 +6,7 @@ import { renderFundamentalVerdict, renderFundamentalsRecap, renderPvEvidence } f
 
 const ALAPIN = '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6';
 const SANS = (() => { const c = new Chess(); c.loadPgn(ALAPIN); return c.history(); })();
-const attrs = attributePrinciples({ historySans: SANS, bestSan: 'e6', classification: 'mistake' });
+const attrs = attributePrinciples({ replySan: null, historySans: SANS, bestSan: 'e6', classification: 'mistake' });
 
 describe('principleVoice — deterministic DNA-register verdicts', () => {
   it('names only squares and moves the attributor proved', () => {

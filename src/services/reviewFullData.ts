@@ -761,7 +761,7 @@ export function computeMoveFacets(
   // move: their piece lands in the student's half hitting things, and wins
   // nothing. Beginners spend tempo after tempo answering these.
   if (!isStudent && studentColorWB) {
-    const bluff = detectBluff(fenBefore, san);
+    const bluff = detectBluff(fenBefore, san, ctx.replyBestSan);
     if (bluff) {
       const t = `[bluff] ${bluffClause(bluff, ply <= 20)}.`;
       facets.push(t);

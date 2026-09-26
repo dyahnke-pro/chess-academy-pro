@@ -49,6 +49,9 @@ export interface LiveFundamentalReads {
   missedMate?: number | null;
   /** A mate the played move now allows the opponent (plies), or null. */
   allowedMate?: number | null;
+  /** The opponent's ACTUAL reply to `playedSan`, or null when it has not been
+   *  played yet. REQUIRED — see `AttributionInput.replySan`. */
+  replySan: string | null;
 }
 
 /** A move under this mover-POV loss is not worth naming a fundamental on — a
@@ -137,5 +140,6 @@ export function attributeLiveFundamental(input: LiveFundamentalReads): Principle
     pvAfterBest,
     evalBefore: evalBeforeMover,
     evalAfterPlayed: evalAfterMover,
+    replySan: input.replySan,
   });
 }

@@ -7,7 +7,7 @@ const fen = (moves: string[]): string => { const c = new Chess(); for (const m o
 
 describe('detectBluff', () => {
   it("Rubinstein …Nd4: hits the b5-bishop and the f3-knight, wins nothing — a bluff", () => {
-    const b = detectBluff(fen(['e4', 'e5', 'Nf3', 'Nf6', 'Nc3', 'Nc6', 'Bb5']), 'Nd4');
+    const b = detectBluff(fen(['e4', 'e5', 'Nf3', 'Nf6', 'Nc3', 'Nc6', 'Bb5']), 'Nd4', null);
     expect(b).not.toBeNull();
     expect(b!.square).toBe('d4');
     expect(b!.targets.map((t) => t.square).sort()).toEqual(['b5', 'f3']);
@@ -16,12 +16,12 @@ describe('detectBluff', () => {
 
   it('negative control: the same jump onto a LOOSE piece is a real threat, not a bluff', () => {
     // Without Nc3 the b5-bishop is loose: …Nd4 hits it for real.
-    expect(detectBluff(fen(['e4', 'e5', 'Nf3', 'Nf6', 'Bb5', 'Nc6', 'O-O']), 'Nd4')).toBeNull();
+    expect(detectBluff(fen(['e4', 'e5', 'Nf3', 'Nf6', 'Bb5', 'Nc6', 'O-O']), 'Nd4', null)).toBeNull();
   });
 
   it('a check is never a bluff, and a move on its own half never looks aggressive', () => {
-    expect(detectBluff(fen(['e4', 'e5', 'Nf3', 'd6']), 'Bb5+')).toBeNull();
-    expect(detectBluff(new Chess().fen(), 'Nf3')).toBeNull();
+    expect(detectBluff(fen(['e4', 'e5', 'Nf3', 'd6']), 'Bb5+', null)).toBeNull();
+    expect(detectBluff(new Chess().fen(), 'Nf3', null)).toBeNull();
   });
 });
 
@@ -55,15 +55,15 @@ describe('never a bluff when something real is there', () => {
   const before = (upTo: number): string => { const c = new Chess(); for (const s of G.slice(0, upTo)) c.move(s); return c.fen(); };
   const at = (san: string, nth = 1): number => { let seen = 0; for (let i = 0; i < G.length; i++) if (G[i] === san && ++seen === nth) return i; return -1; };
   it('a pin on the knight to the king (7…Bb4)', () => {
-    expect(detectBluff(before(at('Bb4')), 'Bb4')).toBeNull();
+    expect(detectBluff(before(at('Bb4')), 'Bb4', null)).toBeNull();
   });
   it('a pin on the knight to the queen (10…Bg4)', () => {
-    expect(detectBluff(before(at('Bg4')), 'Bg4')).toBeNull();
+    expect(detectBluff(before(at('Bg4')), 'Bg4', null)).toBeNull();
   });
   it('a piece that can simply be taken (20…Bb3, axb3 wins it)', () => {
-    expect(detectBluff(before(at('Bb3', 2)), 'Bb3')).toBeNull();
+    expect(detectBluff(before(at('Bb3', 2)), 'Bb3', null)).toBeNull();
   });
   it('a rook that wins a pawn (22…Rd3 takes c3)', () => {
-    expect(detectBluff(before(at('Rd3')), 'Rd3')).toBeNull();
+    expect(detectBluff(before(at('Rd3')), 'Rd3', null)).toBeNull();
   });
 });

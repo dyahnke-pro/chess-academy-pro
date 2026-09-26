@@ -75,7 +75,7 @@ describe('E-10 — section-14 coverage on a real game, with the reason per ply',
       if (cost < 100) return;                  // only real mistakes, by the engine's number
       const why: string[] = [];
       const got = attributePrinciples(
-        { historySans, bestSan, classification: cost >= 300 ? 'blunder' : 'mistake', evalBefore, evalAfterPlayed },
+        { replySan: null, historySans, bestSan, classification: cost >= 300 ? 'blunder' : 'mistake', evalBefore, evalAfterPlayed },
         why,
       );
       const all = got.map((g) => g.id);
