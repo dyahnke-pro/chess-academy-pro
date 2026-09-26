@@ -55,7 +55,7 @@ function render(id: (typeof FUNDAMENTAL_IDS)[number], ply: number): string {
     id, tag: FUNDAMENTAL_TAG[id], weight: 3, coOccurrence: false,
     evidence: { squares: ['d5'], moves: ['Nf3'], pvMoves: ['Nf3'] }, facts: FACTS,
   } as unknown as PrincipleAttribution;
-  return renderFundamentalVerdict([attr], { ply, seen: new Set() });
+  return renderFundamentalVerdict([attr], { replySan: null, ply, seen: new Set() });
 }
 
 describe('FUNDLEAD stems cover every fundamental', () => {

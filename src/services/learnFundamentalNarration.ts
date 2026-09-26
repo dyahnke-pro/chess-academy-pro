@@ -38,6 +38,13 @@ export interface LearnFundamentalInput extends LiveFundamentalReads {
    * self-count.
    */
   currentGameId: string | null;
+  /**
+   * The opponent's reply, when it is already on the board (Learn speaks after
+   * it). REQUIRED, `null` when not yet known: a loose piece they did NOT take
+   * is "they missed it", never "is free material" (re-walk 1380, 24.Bg5 f4 —
+   * "the bishop on g5 hangs; Qxg5+ is free" beside "you win the queen").
+   */
+  replySan: string | null;
 }
 
 export interface LearnFundamental {
@@ -90,6 +97,7 @@ export function learnFundamentalVerdict(
   const rendered = renderFundamentalVerdict(attrs.slice(0, 1), {
     ply: input.historySans.length,
     seen,
+    replySan: input.replySan,
   });
   const habit = habitForCluster(attrs[0].tag);
   const habitKey = habit && habit !== 'slow-down' ? liveHabitKey(habit as LiveHabit) : null;

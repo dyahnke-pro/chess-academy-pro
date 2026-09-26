@@ -169,10 +169,10 @@ describe('section 14 — every exhaustive record answers for the three (compile-
       expect(fundamentalHow(id)?.length ?? 0).toBeGreaterThan(40);
     }
     const attr = { id: 'calculation-depth' as const, tag: 'calculation-depth' as const, weight: 2, coOccurrence: false, evidence: { squares: ['b6'], moves: ['Bxf6'], pvMoves: [], counterfactualClean: true as const }, facts: { played: 'Nb6', punish: 'Bxf6', depth: 5 } };
-    const full = renderFundamentalVerdict([attr], { ply: 12, seen: new Set() });
+    const full = renderFundamentalVerdict([attr], { replySan: null, ply: 12, seen: new Set() });
     expect(full).toMatch(/Bxf6/);
     expect(full).toMatch(/Here's how:/);
-    const short = renderFundamentalVerdict([attr], { ply: 12, seen: new Set(['calculation-depth']) });
+    const short = renderFundamentalVerdict([attr], { replySan: null, ply: 12, seen: new Set(['calculation-depth']) });
     expect(short).toMatch(/Stopped calculating early again/);
     expect(full).not.toMatch(/\b(we|our|us)\b/i);
   });

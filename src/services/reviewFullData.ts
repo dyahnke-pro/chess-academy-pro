@@ -413,7 +413,7 @@ export function computeMoveFacets(
   // the flagged move crossed, proven on the board; stated as its own facet so
   // the uncapped inventory carries it and the capped cascade can lead with it.
   if (ctx.fundamentals && ctx.fundamentals.length > 0) {
-    const pf = `[principle] ${renderFundamentalVerdict(ctx.fundamentals, { ply, seen: ctx.seenFundamentals })}`;
+    const pf = `[principle] ${renderFundamentalVerdict(ctx.fundamentals, { ply, seen: ctx.seenFundamentals, replySan: ctx.allSans[ply] ?? null })}`;
     facets.push(pf);
     // The rule explains the cost the move paid, so it is worth that cost.
     if (negativeClass) recStakes(pf, costStakes(swing));

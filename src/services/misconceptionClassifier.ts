@@ -271,7 +271,7 @@ function classifyMisconceptionImpl(
       return {
         tag: attrs[0].tag,
         fundamentalId: attrs[0].id,
-        coachNote: renderFundamentalVerdict(attrs.slice(0, 1), { ply: input.historySans.length, seen: new Set() }),
+        coachNote: renderFundamentalVerdict(attrs.slice(0, 1), { ply: input.historySans.length, seen: new Set(), replySan: null }),
       };
     }
   }

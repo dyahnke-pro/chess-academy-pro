@@ -44,15 +44,15 @@ describe('fundamentalHow — no diagnosis without a remedy', () => {
 
   it('the how rides the FIRST appearance and never repeats', () => {
     const seen = new Set<FundamentalId>();
-    const first = renderFundamentalVerdict([attr('same-piece-twice')], { ply: 12, seen });
+    const first = renderFundamentalVerdict([attr('same-piece-twice')], { replySan: null, ply: 12, seen });
     expect(first).toContain("Here's how:");
-    const again = renderFundamentalVerdict([attr('same-piece-twice')], { ply: 20, seen });
+    const again = renderFundamentalVerdict([attr('same-piece-twice')], { replySan: null, ply: 20, seen });
     expect(again).not.toContain("Here's how:");
   });
 
   it('two NEW fundamentals on one ply both teach — the board earned both (G4.5)', () => {
     const seen = new Set<FundamentalId>();
-    const out = renderFundamentalVerdict([attr('same-piece-twice'), attr('loose-piece')], { ply: 12, seen });
+    const out = renderFundamentalVerdict([attr('same-piece-twice'), attr('loose-piece')], { replySan: null, ply: 12, seen });
     // Both HOWs speak (G4.5), under different stems (walk 5, R10).
     expect(out).toContain(fundamentalHow('same-piece-twice') ?? '__');
     expect(out).toContain(fundamentalHow('loose-piece') ?? '__');
@@ -78,7 +78,7 @@ describe('the remedy follows the fact (WO-STANDARD-01 D-5, 2026-09-22)', () => {
   });
   it('the king-walk verdict names castling as the loss', () => {
     const a = { id: 'king-left-in-centre', facts: { walked: 'e2', better: 'c3' }, evidence: { moves: ['c3'], pvMoves: [] } } as never as PrincipleAttribution;
-    const out = renderFundamentalVerdict([a], { ply: 8, seen: new Set() });
+    const out = renderFundamentalVerdict([a], { replySan: null, ply: 8, seen: new Set() });
     expect(out).toMatch(/castl/i);
     expect(out).toMatch(/e2/);
     expect(out).not.toMatch(/undefined/);

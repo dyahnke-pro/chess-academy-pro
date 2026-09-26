@@ -519,6 +519,11 @@ export interface FundamentalVerdictOptions {
   ply: number;
   /** Fundamentals already spoken in full this game — mutated as verdicts are issued. */
   seen: Set<FundamentalId>;
+  /** The opponent's reply when the surface knows it (Learn after it lands,
+   *  review from the next ply). REQUIRED, `null` when unknown: a hung piece
+   *  they did not take is a MISS, never "is free material" (re-walk 1380,
+   *  24.Bg5 f4 — said beside "you win the queen"). */
+  replySan: string | null;
 }
 
 /**
@@ -530,6 +535,8 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
   const parts: string[] = [];
   let hows = 0;
   attrs.forEach((a, i) => {
+    const missed = missedPunish(a, opts.replySan);
+    if (missed) { opts.seen.add(a.id); parts.push(missed); return; }
     const first = !opts.seen.has(a.id);
     opts.seen.add(a.id);
     if (!first) { parts.push(shortVerdict(a)); return; }
@@ -545,6 +552,17 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
     parts.push(how ? `${fullVerdict(a, opts.ply + i)} ${HOW_STEMS[hows++ % HOW_STEMS.length]} ${how}` : fullVerdict(a, opts.ply + i));
   });
   return parts.join(' ');
+}
+
+/** A hung piece the reply did not take — said as a miss, in the past. */
+function missedPunish(a: PrincipleAttribution, replySan: string | null): string | null {
+  if (replySan === null) return null;
+  if (a.id !== 'loose-piece' && a.id !== 'ignored-threat') return null;
+  const cap = a.evidence.moves[0];
+  const sq = a.facts.square;
+  if (!cap || typeof sq !== 'string') return null;
+  if (replySan.replace(/[+#]+$/, '').includes(`x${sq}`)) return null;
+  return `That left your ${a.facts.piece} on ${sq} hanging to ${cap} — they missed it this time.`;
 }
 
 /** The engine-line corroboration, spoken as evidence after the verdict. Only

@@ -10355,6 +10355,7 @@ export function CoachTeachPage(): JSX.Element {
                       // THIS game's id, so its own live-captured rows are never
                       // counted as a prior game (C4) — the spine reloads mid-game.
                       currentGameId: learnMemRef.current.gameId,
+                      replySan: reply ?? null,
                       historySans: move.history,
                       playedSan: move.san,
                       bestSan: studentBestSan ?? null,

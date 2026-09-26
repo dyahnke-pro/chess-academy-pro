@@ -2232,7 +2232,7 @@ export function buildReviewSegments(
     // concession → the eval cost → the better move and why. Deterministic:
     // same board, same words, every open.
     if (fundamentalLed) {
-      const verdict = renderFundamentalVerdict(fundamentals, { ply: m.ply, seen: seenFundamentals });
+      const verdict = renderFundamentalVerdict(fundamentals, { ply: m.ply, seen: seenFundamentals, replySan: moves[i + 1]?.san ?? null });
       // THE LOOP, OUT LOUD (WO-LOOP-01, 2026-09-20). The fundamental this move
       // neglected is joined to the student's own record: when their spine says
       // they have done this in ANOTHER game, the beat says so — count and the

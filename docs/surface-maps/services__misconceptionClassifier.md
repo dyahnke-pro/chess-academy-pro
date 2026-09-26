@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**474 lines · 3 exports · 3 importers · 2 tests · 1 audits**
+**486 lines · 3 exports · 5 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,9 +12,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/autoAnalyzeGame.ts`
 - `src/services/discussionPractice.test.ts`
 - `src/services/discussionPractice.ts`
 - `src/services/misconceptionClassifier.test.ts`
+- `src/services/section14Diagnosis.test.ts`
 
 ## Exports and every call site
 
@@ -24,8 +26,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `MisconceptionClassification` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `classifyMisconception` (function) — 23 call sites
-- `src/services/discussionPractice.ts:245`
+### `classifyMisconception` (function) — 25 call sites
+- `src/services/autoAnalyzeGame.ts:488`
+- `src/services/discussionPractice.ts:250`
 - `src/services/misconceptionClassifier.test.ts:11`
 - `src/services/misconceptionClassifier.test.ts:20`
 - `src/services/misconceptionClassifier.test.ts:38`
@@ -48,12 +51,19 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionClassifier.test.ts:220`
 - `src/services/misconceptionClassifier.test.ts:232`
 - `src/services/misconceptionClassifier.test.ts:240`
+- `src/services/section14Diagnosis.test.ts:74`
 
 ## Tests
 
 - `src/services/discussionPractice.test.ts`
 - `src/services/misconceptionClassifier.test.ts`
+- `src/services/section14Diagnosis.test.ts`
+- `src/services/sweepPassesEngineLines.test.ts`
 
 ## Audits that reach it
+
+_Matched by NAME: audits that textually reference this file or its exports.
+A browser-driven prod audit that exercises this surface through the UI will NOT
+appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-coach-play-full.mjs`

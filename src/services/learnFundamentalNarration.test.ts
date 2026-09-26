@@ -20,6 +20,7 @@ const fenBefore = (ply: number): string => { const c = new Chess(); for (const s
 // after → a flagged mover-POV loss (white-POV: −30 → +90).
 const NB6: LearnFundamentalInput = {
   currentGameId: 'live-now',
+  replySan: null,
   fenBefore: fenBefore(12),
   historySans: upTo(12),
   playedSan: SANS[11],       // 'Nb6'
@@ -134,5 +135,24 @@ describe('learnFundamentalVerdict — recurrence excludes the game being played 
     const at = src.indexOf('learnFundamentalVerdict({');
     expect(at).toBeGreaterThan(0);
     expect(src.slice(at, at + 400)).toMatch(/currentGameId: learnMemRef\.current\.gameId,/);
+  });
+});
+
+describe('a hung piece they did not take is a miss, not free material (re-walk 1380, 24.Bg5 f4)', () => {
+  // 1.e4 d5 2.Bc4?? — dxc4 wins the bishop.
+  const c = new Chess(); c.move('e4'); c.move('d5');
+  const BC4: LearnFundamentalInput = {
+    currentGameId: 'live-now', replySan: null, fenBefore: c.fen(), historySans: ['e4', 'd5', 'Bc4'],
+    playedSan: 'Bc4', bestSan: 'exd5', studentColor: 'white', evalBeforeWhiteCp: 30, evalAfterWhiteCp: -300,
+  };
+  it('names the miss when their reply does not take', () => {
+    const out = learnFundamentalVerdict({ ...BC4, replySan: 'Nf6' }, new Set());
+    expect(out?.verdict ?? '').toMatch(/they missed it/);
+    expect(out?.verdict ?? '').not.toMatch(/free material/);
+  });
+  it('keeps the plain verdict when they take it', () => {
+    const out = learnFundamentalVerdict({ ...BC4, replySan: 'dxc4' }, new Set());
+    expect(out).not.toBeNull();
+    expect(out?.verdict ?? '').not.toMatch(/missed/);
   });
 });
