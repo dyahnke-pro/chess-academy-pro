@@ -604,7 +604,7 @@ describe('studentMovePoint — the point of a sound move, only when the board pr
     expect(studentMovePoint(after(`${LINE} Bxc3 Nge7`), 'dxe5', 'Nge7')).toBe('That wins the pawn on e5 — nothing takes it back safely.');
   });
   it('Bd2 — the unpin', () => {
-    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4'), 'Bd2', 'Bb4')).toMatch(/^Unpins your knight on c3/);
+    expect(studentMovePoint(after('e4 c5 Nf3 Nc6 c3 e5 d4 cxd4 cxd4 d5 exd5 Qxd5 Nc3 Bb4'), 'Bd2', 'Bb4')).toMatch(/^Bd2 unpins your knight on c3/);
   });
   it('a routine move has no point to say', () => {
     expect(studentMovePoint(new Chess().fen(), 'e4', null)).toBeNull();

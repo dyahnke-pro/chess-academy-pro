@@ -8241,10 +8241,19 @@ export function CoachTeachPage(): JSX.Element {
             return gainedBishopPair(c.fen(), h[h.length - 2]);
           } catch { return false; }
         })();
-        const hits = pairJustWon ? allHits.filter((x) => x.id !== 'bishop-pair') : allHits;
+        // ONE KEY FOR A BREAK (Blumenfeld re-walk): the positional read said "a6
+        // is a pawn break for you now" and the behaviour re-taught "a6 is the
+        // pawn break that cracks the position open" three moves later. Both
+        // read and write `student-break-<square>`.
+        const breakHeard = (x: { id: string; squares: readonly string[] }): boolean =>
+          x.id === 'pawn-break' && x.squares.some((sq) => standingRef.current.said.has(`student-break-${sq}`) || positionalSaidRef.current.has(`student-break-${sq}`));
+        const hits = (pairJustWon ? allHits.filter((x) => x.id !== 'bishop-pair') : allHits).filter((x) => !breakHeard(x));
         const eligible = quietTurn ? hits : hits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
         const hit = behaviorSchedulerRef.current.pick(eligible);
-        if (hit) { behaviorLine = hit.fact; behaviorSquares = hit.squares; factLines.push(`Behavior (${hit.id}): ${hit.fact}`); }
+        if (hit) {
+          behaviorLine = hit.fact; behaviorSquares = hit.squares; factLines.push(`Behavior (${hit.id}): ${hit.fact}`);
+          if (hit.id === 'pawn-break') for (const sq of hit.squares) standingRef.current.remember(`student-break-${sq}`);
+        }
       } catch { /* never a blocker */ }
       // THE POSITIONAL READ IS CHECKED EVERY (non-urgent) TURN (David 2026-09-13:
       // "loud and proud on learn … checking every turn for new and different
