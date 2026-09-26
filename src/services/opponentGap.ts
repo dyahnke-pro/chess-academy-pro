@@ -109,7 +109,11 @@ export function opponentGapClause(
   const san = uciToSanAt(fen, gap.opportunityUci);
   const why = san ? moveWhy(fen, san, studentColor, opponentLastSan) : null;
   if (!san || !why) return null;
-  return `${cap(GAP_STEM[seat])}: ${san} — it ${why}.`;
+  // THE DICTATED REPLY IS NAMED, NEVER "THAT REPLY" (Learn walk, fresh Nimzo
+  // game, 2026-09-26): after "You'd love to play Nc5 — but they answer Nxc6",
+  // "That reply gives you something" read as Nxc6 when it meant their Nd4.
+  const stem = seat === 'dictated' && opponentLastSan ? `${opponentLastSan} gives you something` : GAP_STEM[seat];
+  return `${cap(stem)}: ${san} — it ${why}.`;
 }
 
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);

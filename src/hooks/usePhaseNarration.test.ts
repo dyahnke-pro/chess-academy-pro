@@ -123,6 +123,7 @@ const setup = (getLiveFen?: () => string, corpusNotes = true) => renderHook(() =
   getOpeningName: () => 'French Defense',
   getLiveFen,
   corpusNotes,
+  getStanding: null,
 }));
 
 beforeEach(() => {
@@ -341,6 +342,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       getOpeningName: () => 'Scandinavian Defense: Lasker Variation',
       getLiveFen: () => FEN,
       corpusNotes: true,
+      getStanding: null,
     }));
     act(() => { void result.current.narrate({ ...EVENT, playerColor: 'black' }, 'full'); });
     await new Promise((r) => setTimeout(r, 300));
@@ -355,6 +357,7 @@ describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
       getOpeningName: () => 'French Defense',
       getLiveFen: () => FEN,
       corpusNotes: true,
+      getStanding: null,
     }));
     act(() => { void result.current.narrate(EVENT, 'full'); });
     await new Promise((r) => setTimeout(r, 300));

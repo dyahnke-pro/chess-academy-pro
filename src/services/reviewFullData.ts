@@ -873,7 +873,8 @@ export function computeMoveFacets(
   // ── 7e. WHO'S BETTER, AND WHY — at the turn of the game (S4).
   if (studentColorWB && ctx.teaching.phaseTurn) {
     const cp = ctx.evaluation === null ? null : (studentColorWB === 'w' ? ctx.evaluation : -ctx.evaluation);
-    const line = phaseVerdictLine(fenAfter, studentColorWB, cp, ctx.teaching.phaseTurn);
+    // Review's own say-once ledger decides repeats downstream; nothing heard here.
+    const line = phaseVerdictLine(fenAfter, studentColorWB, cp, ctx.teaching.phaseTurn, new Set());
     if (line) facets.push(`[stock] ${line}`);
   }
 

@@ -62,13 +62,16 @@ describe('it names the better move AND what it was for', () => {
     expect(call?.said, 'named the move but never said why').toMatch(/it would .+/);
   });
 
-  it('still speaks when the line is too short to explain', () => {
-    // Naming the move alone is worth more than silence.
+  it('still grades the move when the line is too short to explain — but names no move', () => {
+    // NAMED WITH ITS REASON, OR NOT NAMED (David 2026-09-24; Learn walk
+    // 2026-09-26 heard "exd5 was a mistake. e5 was the move." with no why).
+    // The grade stands; an unexplained move is an order, not teaching.
     const call = callInaccuracy({
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     });
-    expect(call?.said).toContain('Bg5 was the move.');
+    expect(call?.said).toMatch(/^a3 was/);
+    expect(call?.said).not.toContain('Bg5');
   });
 });
 
@@ -328,10 +331,12 @@ describe('the better move\'s reason is what it TAKES (hand walk 2026-09-24)', ()
 describe('still winning after the move is said first', () => {
   const fen = '3R1rk1/pp2q1pp/2p1n3/4Pp1n/1b4P1/1BN1BR1P/PPP5/4Q1K1 w - - 1 22';
   const base = { fenBefore: fen, playedSan: 'gxh5', bestSan: 'Rxf8+', bestLineUci: ['d8f8', 'g8f8'], cpLoss: 261, side: 'student' as const, moverColor: 'white' as const };
-  it('"still wins, but … was cleaner" when the mover stays clearly winning', () => {
+  it('"still wins" when the mover stays clearly winning — no grade, and no unexplained move', () => {
+    // The two-ply line proves no reason, so Rxf8+ is not named (named with its
+    // reason, or not named — David 2026-09-24).
     const call = callInaccuracy({ ...base, moverEvalAfterCp: 418 });
-    expect(call?.said).toMatch(/^gxh5 still wins, but Rxf8\+ was cleaner/);
-    expect(call?.said).not.toMatch(/mistake|blunder/);
+    expect(call?.said).toMatch(/^gxh5 still wins/);
+    expect(call?.said).not.toMatch(/mistake|blunder|Rxf8/);
   });
   it('the grade stands when the position is no longer clearly won', () => {
     const call = callInaccuracy({ ...base, moverEvalAfterCp: 120 });

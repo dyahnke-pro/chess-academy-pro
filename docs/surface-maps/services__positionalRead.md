@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**537 lines · 7 exports · 7 importers · 3 tests · 1 audits**
+**540 lines · 7 exports · 8 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,6 +15,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/danyaBehaviors.ts`
 - `src/services/groundedAnswer.ts`
+- `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionReadComposer.ts`
 - `src/services/positionalRead.test.ts`
@@ -29,16 +30,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:563`
+- `src/services/danyaBehaviors.ts:568`
 
 ### `castleIsOneMoveAway` (function) — 1 call site
 - `src/services/danyaBehaviors.ts:221`
 
 ### `readPosition` (function) — 42 call sites
 - `src/services/groundedAnswer.ts:1309`
-- `src/services/lookaheadPlan.ts:881`
-- `src/services/lookaheadPlan.ts:1150`
-- `src/services/lookaheadPlan.ts:1504`
+- `src/services/lookaheadPlan.ts:916`
+- `src/services/lookaheadPlan.ts:1185`
+- `src/services/lookaheadPlan.ts:1539`
 - `src/services/narrationAdversarial.test.ts:87`
 - `src/services/narrationAdversarial.test.ts:173`
 - `src/services/positionReadComposer.ts:128`
@@ -78,8 +79,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:378`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
-### `buildPositionalRead` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8250`
+### `buildPositionalRead` (function) — 9 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8253`
+- `src/services/learnWalkNimzo.test.ts:34`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
 - `src/services/positionalRead.test.ts:164`
@@ -93,6 +95,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionalRead.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`

@@ -509,12 +509,15 @@ export function buildPositionalRead(
    *  ladder SKIPS what has been said and descends to the next true observation
    *  instead. Caller owns the set for the game. */
   said?: Set<string>,
+  /** Keys another lane already spoke this game (the phase turn's balance
+   *  sheet names the same facts under the same keys). Read, never written. */
+  heard?: ReadonlySet<string>,
 ): PositionalObservation | null {
   // Returns the whole observation (not just its text) so the caller can mark the
   // squares it named (David 2026-09-13: "add highlights to all spoken key
   // squares"). `.text` is the line; `.squares` are what to highlight.
   for (const o of readPosition(fen, studentColor)) {
-    if (said?.has(o.key)) continue;
+    if (said?.has(o.key) || heard?.has(o.key)) continue;
     said?.add(o.key);
     return o;
   }
