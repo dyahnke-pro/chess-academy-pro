@@ -116,6 +116,17 @@ describe('the engine\'s per-piece table', () => {
       .some((l) => /bishop on f4/.test(l.text))).toBe(true);
   });
 
+  it('never crowns a knight on the rim their best piece (walk 900, 9…a6: Na3)', () => {
+    const values = [
+      { square: 'a3', piece: 'N', color: 'w' as const, value: 4 },
+      { square: 'f6', piece: 'n', color: 'b' as const, value: 1 },
+      { square: 'b3', piece: 'B', color: 'w' as const, value: 3 },
+      { square: 'c4', piece: 'B', color: 'w' as const, value: 3 },
+    ];
+    const lines = pieceQualityLines(values, 'black', undefined, { isMiddlegame: true });
+    expect(lines.some((l) => /knight on a3/.test(l.text))).toBe(false);
+  });
+
   const BAD_MINOR = [
     { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },   // idle bishop → worst
     { square: 'c8', piece: 'b', color: 'b' as const, value: 4 },

@@ -197,7 +197,7 @@ describe('L4 — a refusal names the guard that refused', () => {
   });
 
   it('backwardLook publishes the reason its coach lane declined', () => {
-    const got = backwardLook({
+    const got = backwardLook({ replySan: null,
       fenBefore, fenAfter: fenBefore, playedSan: 'Nf6', bestSan: null,
       cpLoss: 184, studentColor: 'black', side: 'coach',
     });

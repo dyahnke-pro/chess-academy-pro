@@ -1804,7 +1804,7 @@ export function CoachTeachPage(): JSX.Element {
    *  pass flags it here (keyed by the FEN it read) so the instant package can call
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
    *  (David 2026-08-23). Cleared when there is no student mate. */
-  const pendingEngineMateRef = useRef<{ fen: string; movesToMate: number } | null>(null);
+  const pendingEngineMateRef = useRef<{ fen: string; movesToMate: number; firstUci: string | null } | null>(null);
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -7680,12 +7680,17 @@ export function CoachTeachPage(): JSX.Element {
       const forcedMateN = engineMateN ?? (tctx.boardFacts?.mateInOne ? 1 : null);
       if (forcedMateN) {
         tacticKey = `mate:${forcedMateN}`;
-        // No "see if you can find it": at a mate the move is named with its
-        // reason (the deliberation — "The move is Qxd6# — it is checkmate"),
-        // and the two together contradicted each other (hand walk 1200).
+        // THE MATE IS NAMED (David 2026-09-24: Learn names the move). "There's
+        // a mate in one here." withheld it and nothing else named it (walk
+        // 1500, 53.Ke2). The first move is the engine's (or the board's own
+        // mate-in-one); no move in hand → the count alone.
+        const engineFirst = engineMateN && pendingEngineMateRef.current?.firstUci
+          ? (() => { try { const u = pendingEngineMateRef.current.firstUci; return new Chess(args.fenAfterReply).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san; } catch { return null; } })()
+          : null;
+        const firstSan = engineFirst ?? tctx.boardFacts?.mateInOne ?? null;
         tacticLine = forcedMateN === 1
-          ? "There's a mate in one here."
-          : `There's a forced mate here — mate in ${forcedMateN}.`;
+          ? (firstSan ? `${firstSan} is mate.` : "There's a mate in one here.")
+          : (firstSan ? `There's a forced mate here — mate in ${forcedMateN}, starting with ${firstSan}.` : `There's a forced mate here — mate in ${forcedMateN}.`);
       } else if (theirHanging.length > 0) {
         const prize = theirHanging[0];
         tacticKey = `win:${prize.piece}${prize.square}`;
@@ -7721,7 +7726,9 @@ export function CoachTeachPage(): JSX.Element {
           const moveNo = Number.parseInt(args.fenAfterReply.split(' ')[5] ?? '0', 10) || 0;
           const instance = t.squares.join('');
           tacticLine = word
-            ? withTransfer(`There's a ${word} here for you — have a look.${conceptTail(t.type)}`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifFirstMove))
+            // NAMED from the detector's own description (Learn names the
+            // move; "have a look" withheld it — walk 1500, 21.Rab1/38.Ne3).
+            ? withTransfer(`You have a ${word}: ${t.description ? t.description.charAt(0).toLowerCase() + t.description.slice(1).replace(/[.!]$/, '') : `on ${t.squares.join(', ')}`}.${conceptTail(t.type)}`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifFirstMove))
             : null;
           if (word) pendingMotif = { type: t.type, instance, moveNo };
           myTacticType = word ? t.type : null;
@@ -8931,7 +8938,7 @@ export function CoachTeachPage(): JSX.Element {
                 if (studentBest?.isMate && typeof studentBest.mateIn === 'number' && studentBest.mateIn !== 0) {
                   const studentMates = playerColor === 'white' ? studentBest.mateIn > 0 : studentBest.mateIn < 0;
                   pendingEngineMateRef.current = studentMates
-                    ? { fen: probe.fen(), movesToMate: Math.abs(studentBest.mateIn) }
+                    ? { fen: probe.fen(), movesToMate: Math.abs(studentBest.mateIn), firstUci: studentBest.bestMove || null }
                     : null;
                 } else {
                   pendingEngineMateRef.current = null;
@@ -10342,6 +10349,7 @@ export function CoachTeachPage(): JSX.Element {
                       bestSan: studentBestSan,
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       replyPvUci: mid.topLines?.[0]?.moves ?? [],
+                      replySan: reply ?? null,
                       cpLoss,
                       moverEvalAfterCp: bothCp ? mid.evaluation * sign : null,
                       studentColor: playerColor,
@@ -10480,6 +10488,8 @@ export function CoachTeachPage(): JSX.Element {
                       playedSan: cm.playedSan,
                       bestSan: uciSanAt(cm.fenBefore, mid.bestMove),
                       bestPvUci: mid.topLines?.[0]?.moves ?? [],
+                      // The student has not answered the coach's move yet.
+                      replySan: null,
                       cpLoss,
                       studentColor: coachColor,
                       ...mateContext(mid, { isMate: cm.afterIsMate, mateIn: cm.afterMateIn }, coachColor),

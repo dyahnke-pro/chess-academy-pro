@@ -63,6 +63,11 @@ export interface ComputedConcept {
    *  instance); a live surface must not speak it alone (re-walk 1380, 16.Rxf3:
    *  "A trapped piece has no safe square…" about no piece). */
   bare?: true;
+  /** The moves (SAN) from the board on screen to `boardFen`, when the concept
+   *  lives on a future board. A live surface says them first — "After cxb3+,
+   *  …" — or it states a future fact as present (walk 900, 27…Ba4+: "moving
+   *  your pawn on b3" before any pawn stood there). */
+  line?: string[];
 }
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
@@ -541,13 +546,15 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
 
   try {
     const c = new Chess(fen);
-    let best: { fenAfter: string; tactic: string | null; isMate: boolean; to: string; material: number } | null = null;
+    let best: { fenAfter: string; tactic: string | null; isMate: boolean; to: string; material: number; line: string[] } | null = null;
     let bestScore = -Infinity;
     let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
+    const path: string[] = [];
     for (const u of uci) {
       const fenBefore = c.fen();
       const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
       if (!mv) break;
+      path.push(mv.san);
       const fenAfter = c.fen();
       const facts = computePlyFacts(fenBefore, fenAfter, { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev);
       prev = mv.captured ? { square: mv.to, capturedValue: VAL[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
@@ -557,7 +564,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       const score = facts.isMate ? 1000 : (facts.tacticLanded ? 10 : 0) + facts.materialGained;
       if (score > bestScore) {
         bestScore = score;
-        best = { fenAfter, tactic: facts.tacticLanded, isMate: facts.isMate, to: mv.to, material: facts.materialGained };
+        best = { fenAfter, tactic: facts.tacticLanded, isMate: facts.isMate, to: mv.to, material: facts.materialGained, line: [...path] };
       }
       if (!techConcept && wants('technique')) {
         const tech = endgameConceptFor(fenAfter);
@@ -604,6 +611,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
         ? renderTacticConcept(pattern, best.fenAfter)
         : renderTacticConcept({ type: type as TacticPatternType, involvedSquares: [best.to], description: '' }, best.fenAfter);
       if (concept && !seen.has(concept.id)) {
+        concept.line = best.line;
         const fromEngine = importanceFromSwing(input);
         concept.importance = best.isMate
           ? 0.98

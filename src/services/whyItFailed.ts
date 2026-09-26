@@ -39,6 +39,10 @@ export interface WhyItFailed {
   line: string;
   /** Squares worth marking: the target, then the piece that refutes it. */
   squares: string[];
+  /** For a piece left hanging: the same fact when the reply did NOT take it
+   *  (walk 900, 17…Bg1 — "the rook on f1 just takes it" after they played
+   *  Nxg4). The caller that knows the reply chooses. */
+  missed?: string;
   kind:
     | 'held-by-defender'    // the capture loses the exchange after recaptures
     | 'answered-by-tactic'  // an in-between check hits the attacker
@@ -213,6 +217,7 @@ export function whyItFailed(args: {
         kind: 'lost-the-piece',
         squares: [mv.to, recap.sq],
         line: `That left your ${NAME[mv.piece]} on ${mv.to} hanging — the ${NAME[recap.type]} on ${recap.sq} just takes it.`,
+        missed: `That left your ${NAME[mv.piece]} on ${mv.to} hanging to the ${NAME[recap.type]} on ${recap.sq} — they missed it this time.`,
       };
     }
   }

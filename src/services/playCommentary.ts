@@ -771,7 +771,10 @@ export function buildPlayCommentary(args: {
         key: `tactic:${tac.type}:${tac.involvedSquares.join('')}`,
         // SEATED — the detector names pieces bare ("Knight on g3 forks rook on
         // f1…", hand walk 2026-09-25), and whose each piece is IS the lesson.
-        spoken: `${seatBare(tac.description, args.fen, args.studentColor === 'white' ? 'w' : 'b')}.${once('find-it', ' See if you can find it.')}`,
+        // No "See if you can find it" — Learn names the move (David
+        // 2026-09-24), and the stem survived alone once its sentence was
+        // deduped (walk 900, 28…cxb3+).
+        spoken: `${seatBare(tac.description, args.fen, args.studentColor === 'white' ? 'w' : 'b')}.`,
         facts: [
           `TACTIC ON THE BOARD for the student: ${tac.description}. Name the PATTERN and why the geometry works. Do NOT name the winning move — let them find it.`,
         ],
@@ -783,7 +786,10 @@ export function buildPlayCommentary(args: {
     // 3.3% a real piece). Narrating every loose pawn is the tuned-out
     // failure, and calling a gambit pawn a tactic-seed is wrong teaching.
     const theirHanging = t.hangingPieces.filter((h) => h.color === them && h.piece !== 'p' && h.square !== args.midExchangeOn);
-    lootOnBoard = theirHanging.length > 0;
+    // …or any real tactic for EITHER side (walk 1500, 11.c5 Nd5: the seed
+    // spoke beside their fork of bishop and knight).
+    lootOnBoard = theirHanging.length > 0
+      || t.tactics.some((x) => x.type in EVENT_ORDER || x.type === 'pin' || x.type === 'skewer');
     if (theirHanging.length > 0) {
       const h = theirHanging[0];
       const loose: PlayCommentary = {

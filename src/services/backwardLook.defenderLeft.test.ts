@@ -11,7 +11,7 @@ const BEFORE = 'r1bq1rk1/pppnbppp/3p1n2/8/3NPP2/1BN5/PPP3PP/R1BQ1RK1 w - - 1 10'
 const after = (): string => { const c = new Chess(BEFORE); c.move('Nf3'); return c.fen(); };
 const look = (replyPvUci: string[]) => backwardLook({
   fenBefore: BEFORE, fenAfter: after(), playedSan: 'Nf3', bestSan: 'Qe1',
-  bestPvUci: ['d1e1'], replyPvUci, cpLoss: 80, moverEvalAfterCp: 40, studentColor: 'white',
+  bestPvUci: ['d1e1'], replyPvUci, replySan: null, cpLoss: 80, moverEvalAfterCp: 40, studentColor: 'white',
 } as never);
 
 describe('the defender-left cost needs their reply to use the square', () => {

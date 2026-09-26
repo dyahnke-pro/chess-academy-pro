@@ -204,8 +204,12 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const theirs = kingSafetyRead(fen, opp);
       const roads = (theirs?.openFilesNearKing ?? []).filter((f) => attackerCanUseFile(fen, f, student));
       if (theirs?.exposed && roads.length >= 1 && theirs.shieldPawns <= 1 && moveNo >= 8) {
-        const files = roads.join(', ');
-        return { fact: `The enemy king on ${theirs.square} is exposed — the ${files}-file is open toward it. Play for the attack.`, squares: [sq(theirs.square)] };
+        // "the b- and c-files are", never "the b, c-file is" (walk 900, 33…Qxf2
+        // — the voice read it as "the bishop, c-file").
+        const lines = roads.length === 1
+          ? `the ${roads[0]}-file is`
+          : `the ${roads.slice(0, -1).map((f) => `${f}-`).join(', ')} and ${roads[roads.length - 1]}-files are`;
+        return { fact: `The enemy king on ${theirs.square} is exposed — ${lines} open toward it. Play for the attack.`, squares: [sq(theirs.square)] };
       }
       // Your own king stuck in the center is only a real problem once pieces are
       // out and the center can open — not on move 3 with everything at home.

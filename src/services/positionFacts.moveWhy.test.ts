@@ -63,6 +63,14 @@ describe('the opening window is the board, not the move number (re-walk 1380, 14
     // Every white minor out, castled: the opening is over for White.
     expect(openingWindowOpen(c.fen(), 'white')).toBe(false);
   });
+
+  it('castling rights alone do not hold it open past the opening (walk 900, 16…Bh2+)', async () => {
+    const { openingWindowOpen } = await import('./moveFundamentals');
+    const c = new Chess();
+    for (const s of 'e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7 Bc4 Bc6 O-O e6 Na3 a6 Bb3 b5 Nc2 Bd6 c4 h5 d4 bxc4 Bxc4 Ng4 h3 Qc7 Ne3'.split(' ')) c.move(s);
+    expect(c.getCastlingRights('b').k).toBe(true);
+    expect(openingWindowOpen(c.fen(), 'black')).toBe(false);
+  });
 });
 
 describe('the queen steps off the file before it opens (re-walk 1380, 11.Qe1)', () => {

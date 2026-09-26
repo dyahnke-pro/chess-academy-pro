@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import { describe, it, expect } from 'vitest';
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger } from './kingSafety';
 
@@ -35,7 +36,7 @@ describe('detectCentralKingDanger — the delayed-castling "castle now" moment',
   it('fires: uncastled central king + central tension + an enemy rook down the king file', () => {
     // White Ke1; e4 pawn in contact with Black d5; Black rook on e8 aimed down
     // the e-file that opening the centre would unmask.
-    const d = detectCentralKingDanger('4r1k1/8/8/3p4/4P3/8/8/4K3 w - - 0 12', 'w');
+    const d = detectCentralKingDanger('4r1k1/8/8/3p4/4P3/8/8/4K2R w K - 0 12', 'w');
     expect(d).not.toBeNull();
     expect(d?.kingSquare).toBe('e1');
     expect(d?.aimedFrom).toBe('e8');
@@ -43,12 +44,20 @@ describe('detectCentralKingDanger — the delayed-castling "castle now" moment',
 
   it('silent when no enemy heavy is aimed down the king file (calm development)', () => {
     // Same tension, but the rook is on the a-file — opening the centre exposes nothing.
-    expect(detectCentralKingDanger('r5k1/8/8/3p4/4P3/8/8/4K3 w - - 0 12', 'w')).toBeNull();
+    expect(detectCentralKingDanger('r5k1/8/8/3p4/4P3/8/8/4K2R w K - 0 12', 'w')).toBeNull();
   });
 
   it('silent on a LOCKED centre — no pawn contact to crack open (KID/French class)', () => {
     // e4 vs e5 are blocked head-to-head, not in capturing contact → no tension.
-    expect(detectCentralKingDanger('4r1k1/8/8/4p3/4P3/8/8/4K3 w - - 0 12', 'w')).toBeNull();
+    expect(detectCentralKingDanger('4r1k1/8/8/4p3/4P3/8/8/4K2R w K - 0 12', 'w')).toBeNull();
+  });
+
+  it('silent when castling is gone — the remedy does not exist (walk 900, 27…Ba4+, king on f8)', () => {
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7 Bc4 Bc6 O-O e6 Na3 a6 Bb3 b5 Nc2 Bd6 c4 h5 d4 bxc4 Bxc4 Ng4 h3 Qc7 Ne3 Bh2+ Kh1 Bg1 Nxg4 hxg4 Kxg1 gxh3 d5 hxg2 Kxg2 Qh2+ Kf3 Rh3+ Ke2 exd5 Bd3 Kf8 Kd2 Re8 Kc2 c4 Bf5 Ba4+ b3'.split(' ')) c.move(m);
+    expect(detectCentralKingDanger(c.fen(), 'b')).toBeNull();
+    // Same geometry with the right still held → it speaks.
+    expect(detectCentralKingDanger('4r1k1/8/8/3p4/4P3/8/8/4K3 w - - 0 12', 'w')).toBeNull();
   });
 
   it('silent once the king has castled out of the centre', () => {

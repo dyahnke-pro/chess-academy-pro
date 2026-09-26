@@ -422,6 +422,8 @@ export function useDiscussionPractice(
         bestSan: bestSan ?? null,
         bestPvUci,
         replyPvUci,
+        // Recorded before the reply exists.
+        replySan: null,
         cpLoss,
         studentColor: args.playerColor,
         missedMate: bestLineMate ?? null,

@@ -730,7 +730,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // `fundamental`, it IS the teaching idea). Positional leads are excluded here:
   // `fundamental` / `structure-plan` already carry them — no walk-over. Never
   // fails the briefing.
-  let concept: { id: string; source: string; full: string; squares: readonly string[]; boardFen?: string } | null = null;
+  let concept: { id: string; source: string; full: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null = null;
   try {
     const lead = conceptForBoard(fen, { analysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
     // The board the concept is ABOUT travels with it — a concept found on the
@@ -738,7 +738,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // board; seated on this one it came out half-owned (the rook not there yet).
     // A rule with no pieces named is not spoken live (16.Rxf3 "A trapped piece
     // has no safe square…" about nothing on the board).
-    if (lead && lead.source !== 'positional' && !lead.bare) concept = { id: lead.id, source: lead.source, full: lead.full, squares: lead.squares, boardFen: lead.boardFen };
+    if (lead && lead.source !== 'positional' && !lead.bare) concept = { id: lead.id, source: lead.source, full: lead.full, squares: lead.squares, boardFen: lead.boardFen, line: lead.line };
   } catch { concept = null; }
 
   // THE METHOD BEAT — the same computer the review path uses, in its live
@@ -1126,7 +1126,7 @@ function buildClauses(a: {
   /** The lead COMPUTED CONCEPT of the position (conceptEngine, from the same
    *  analysis) — the teachable idea, joined to the briefing as a ranked fact.
    *  Null when nothing teachable / positional-only (no walk-over). */
-  concept: { id: string; source: string; full: string; squares: readonly string[]; boardFen?: string } | null;
+  concept: { id: string; source: string; full: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null;
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
 }): ClauseItem[] {
@@ -1302,7 +1302,7 @@ function buildClauses(a: {
     ranked.push({
       // SEATED — the detector's instance names bare pieces (hand walk
       // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
-      kind: 'concept', rank, text: concept.source === 'tactic' ? seatBare(concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b') : concept.full,
+      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, seatBare(concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : concept.full,
       conceptId: concept.source === 'tactic' ? concept.id : undefined,
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.
@@ -1400,4 +1400,16 @@ function buildClauses(a: {
   if (a.methodBeat) ranked.push({ kind: 'method', rank: 10, text: a.methodBeat });
 
   return ranked.sort((a2, b2) => b2.rank - a2.rank);
+}
+
+/** A concept that lives on a FUTURE board is said with the moves that reach
+ *  it — "After cxb3+, moving your pawn on b3…" — never as a fact about the
+ *  board on screen (walk 900, 27…Ba4+). */
+function afterLine(line: readonly string[] | undefined, boardFen: string | undefined, fenNow: string, text: string): string {
+  if (!line || line.length === 0 || !boardFen || samePlacementFen(boardFen, fenNow)) return text;
+  return `After ${line.join(', ')}, ${text.charAt(0).toLowerCase()}${text.slice(1)}`;
+}
+
+function samePlacementFen(a: string, b: string): boolean {
+  return a.split(' ')[0] === b.split(' ')[0];
 }

@@ -274,6 +274,11 @@ export function pieceQualityLines(
     // (hand walk 2000: Rxd8 just took, nothing defended it, and the coach said
     // "their rook on d8 is the piece doing the most work — trade it off").
     .filter((v) => !takeableFree(opts?.fen, v.square, me))
+    // …and never a knight on the rim: the fundamentals call that knight
+    // misplaced ("knight-to-the-rim"), and one vocabulary cannot crown it
+    // their best piece in the next breath (walk 900, 9…a6: "their knight on
+    // a3 is the piece doing the most work").
+    .filter((v) => !(v.piece.toLowerCase() === 'n' && 'ah'.includes(v.square[0])))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => b.d - a.d)[0];
   // SAY-ONCE ON THE KIND, PER PHASE — not per square (re-walk 1380,

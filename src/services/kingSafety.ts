@@ -132,6 +132,10 @@ export function detectCentralKingDanger(fen: string, studentColor: 'w' | 'b'): C
   const homeRank = studentColor === 'w' ? 1 : 8;
   if (Number.parseInt(kingSq[1], 10) !== homeRank) return null; // marched-up king is another story
   if (kf < 3 || kf > 5) return null; // must be central: d/e/f (excludes castled g / c)
+  // The remedy is "get castled" — so castling must still exist (walk 900,
+  // 27…Ba4+: the king had already walked to f8 and the coach said it anyway).
+  const rights = game.getCastlingRights(studentColor);
+  if (!rights.k && !rights.q) return null;
 
   const tension = centralTensionSquare(game, studentColor);
   if (!tension) return null; // centre is locked / no contact → no imminent opening

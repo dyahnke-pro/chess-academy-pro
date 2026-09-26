@@ -91,6 +91,10 @@ export function backwardLook(args: {
   bestPvUci?: readonly string[];
   /** The opponent's best line from `fenAfter`, UCI — what the move allowed. */
   replyPvUci?: readonly string[];
+  /** The reply actually played, when it is on the board already. REQUIRED,
+   *  `null` when not yet known: a piece they did not take is "they missed it",
+   *  never "just takes it" (walk 900, 17…Bg1). */
+  replySan: string | null;
   /** Centipawns the move cost, from the MOVER's own perspective. */
   cpLoss: number;
   /** The MOVER's colour — the student's on the default path, the coach's when
@@ -221,7 +225,12 @@ export function backwardLook(args: {
       // hanging" — dxe5 dxe5 Qxd8 Rxd8 Nxe5 loses to …Nxe4, which the engine
       // sees and a swap count cannot. A material loss the engine does not
       // charge is not a loss.
-      if (f && args.cpLoss >= INACCURACY_CP) { attempt = f.line; attemptSquare = f.squares[0] ?? ''; }
+      if (f && args.cpLoss >= INACCURACY_CP) {
+        const reply = args.replySan ?? null;
+        const tookIt = reply !== null && reply.replace(/[+#]+$/, '').includes(`x${f.squares[0]}`);
+        attempt = f.missed && reply !== null && !tookIt ? f.missed : f.line;
+        attemptSquare = f.squares[0] ?? '';
+      }
     } catch { /* a lane that throws must not silence the rest */ }
 
     let cost: { kind: string; said: string; opening: string; square: string } | null = null;

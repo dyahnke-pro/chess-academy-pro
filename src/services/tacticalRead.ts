@@ -181,6 +181,10 @@ export function pickKeyTactic(line: PvPly[]): KeyTactic | null {
  *  Higher = more tempting. Pure heuristic over chess.js move flags. */
 export function appealScore(mv: {
   isCapture: boolean; isPromotion: boolean; san: string; piece: string; to: string;
+  /** Where the piece stands now — "develop" is said only when it leaves home
+   *  (walk 2065, 12…h6: "develop right into the middle with Bc4" about a
+   *  bishop that had moved four times). */
+  from: string;
 }): { score: number; appeal: string } {
   let score = 0; let appeal = 'natural';
   if (mv.san.includes('#')) return { score: 100, appeal: 'mate' };
@@ -188,7 +192,10 @@ export function appealScore(mv: {
   if (mv.san.includes('+')) { score += 4; appeal = mv.isCapture ? 'capture' : 'check'; }
   if (mv.isPromotion) { score += 6; appeal = 'promotion'; }
   // central knight/bishop development is visually "the natural move"
-  if ((mv.piece === 'n' || mv.piece === 'b') && /^[cdef][3456]$/.test(mv.to)) { score += 2; if (appeal === 'natural') appeal = 'central-develop'; }
+  if ((mv.piece === 'n' || mv.piece === 'b') && /^[cdef][3456]$/.test(mv.to)) {
+    score += 2;
+    if (appeal === 'natural' && /^[bcfg][18]$/.test(mv.from)) appeal = 'central-develop';
+  }
   return { score, appeal };
 }
 
@@ -267,7 +274,7 @@ export async function computeTacticalRead(
     const maxProbe = opts.maxTemptingProbe ?? 6;
     const candidates = board.moves({ verbose: true })
       .map((mv) => {
-        const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to });
+        const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to, from: mv.from });
         return { mv, score, appeal, uci: mv.from + mv.to + (mv.promotion ?? '') };
       })
       .filter((c) => c.score > 0 && c.uci !== first.uci)
@@ -639,7 +646,7 @@ export function temptingFromAnalysis(
     // requireForcing: only a capture or a check may be flagged tempting — the
     // conservative free-play contract (matches the retired buildRejectedTempting).
     if (opts.requireForcing && !(mv.captured != null || probe.inCheck())) continue;
-    const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to });
+    const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to, from: mv.from });
     if (score <= 0) continue;
     let replySan: string | null = null;
     const replyUci = line.moves.at(1);

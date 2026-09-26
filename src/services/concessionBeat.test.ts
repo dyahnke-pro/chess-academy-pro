@@ -374,3 +374,12 @@ describe('a weakness the move did not create is not its fault (hand walk 2340, m
     expect(found?.kind).not.toBe('pawn-weakened');
   });
 });
+
+describe('a rook on the seventh in an endgame is not a piece gone astray (walk 2065, 33.Rh7)', () => {
+  it('no piece-offside drawback once the queens are off', () => {
+    const c = new Chess();
+    for (const m of 'e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf3 Qh5 Ng5 Ke7 Bxf7 Qxd1 Rxd1 h6 Bxg8 Rxg8 Nf3 Bg4 Re1 g5 Nd2 Raf8 Nb3 Bb6 Bd2 Bc7 e5 dxe5 Bb4+ Kd7 Bxf8 Rxf8 Nc5+ Kc8 Ne4 b6 f3 Be6 Re2 Bd5 Rae1 Bxe4 Rxe4 Kd7 h4 c5 hxg5 hxg5 Kf2 Rf4 Rxf4 gxf4 Rh1 Kc6'.split(' ')) c.move(m);
+    const d = findStudentDrawback({ fen: c.fen(), playedSan: 'Rh7', bestSan: 'a3', studentColor: 'white' });
+    expect(d?.kind).not.toBe('piece-offside');
+  });
+});

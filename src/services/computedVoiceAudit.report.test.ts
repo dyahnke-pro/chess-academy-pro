@@ -180,7 +180,7 @@ describe('computed voice audit', () => {
         };
 
         // ── THE BACKWARD LOOK on the student's own move ────────────────────
-        const look = backwardLook({
+        const look = backwardLook({ replySan: null,
           fenBefore,
           fenAfter: fenAfterStudent,
           playedSan: studentMove.san,
@@ -205,7 +205,7 @@ describe('computed voice audit', () => {
 
         const coachColor = game.student === 'white' ? 'black' : 'white';
         const cSign = coachColor === 'white' ? 1 : -1;
-        const coachLook = backwardLook({
+        const coachLook = backwardLook({ replySan: null,
           fenBefore: fenAfterStudent,
           fenAfter: fenAfterReply,
           playedSan: coachMove.san,
