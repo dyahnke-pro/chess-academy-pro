@@ -266,6 +266,12 @@ export function openingWindowOpen(fenBefore: string, mover: 'white' | 'black'): 
   try { board = new Chess(fenBefore); } catch { return false; }
   const wb: 'w' | 'b' = mover === 'white' ? 'w' : 'b';
   if (countHomeMinors(board, wb) > 0) return true;
+  // CASTLING RIGHTS HOLD IT OPEN ONLY IN THE OPENING — an uncastled king kept
+  // it open all game, so 16…Bh2+ and 21…Qh2+ "did what the opening asks"
+  // (walk 900). The one phase classifier decides.
+  const fullmove = Number(fenBefore.split(' ')[5] ?? '1') || 1;
+  const ply = (fullmove - 1) * 2 + (board.turn() === 'b' ? 2 : 1);
+  if (classifyPhase(fenBefore, ply) !== 'opening') return false;
   const rights = board.getCastlingRights(wb);
   return rights.k || rights.q;
 }

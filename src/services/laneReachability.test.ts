@@ -132,7 +132,7 @@ describe('no dead lanes — every lane can fire', () => {
     for (const m of ['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3', 'g6', 'Nxe5']) board.move(m);
     const before = board.fen();
     board.move('Bxd1');
-    const look = backwardLook({
+    const look = backwardLook({ replySan: null,
       fenBefore: before, fenAfter: board.fen(), playedSan: 'Bxd1', bestSan: 'dxe5',
       bestPvUci: ['d6e5', 'g1f3', 'b8c6', 'd2d4'], cpLoss: 400, studentColor: 'black', allowedMate: 2,
     });

@@ -1304,6 +1304,11 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
   const opp: Color = student === 'w' ? 'b' : 'w';
   const parts = fen.split(' ');
   if (parts.length < 6) return null;
+  // IN CHECK, THE CHECK IS THE ANSWER. Flipping the move to the opponent
+  // with the student's king attacked hands chess.js a "capture" of the king,
+  // and the coach said "the opponent is eyeing gxh2 — it would win your king
+  // on h2" (walk 1500, 41…g3+).
+  try { if (new Chess(fen).inCheck()) return null; } catch { return null; }
   parts[1] = opp;                 // make it the opponent's move
   parts[3] = '-';                 // clear en-passant (side flip invalidates it)
   let chess: Chess;
@@ -1316,7 +1321,7 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
   // the swap-off net FROM THE OPPONENT's side (they capture first). >0 ⇒ winnable.
   const seen = new Set<string>();
   for (const mv of chess.moves({ verbose: true })) {
-    if (!mv.captured || seen.has(mv.to)) continue;
+    if (!mv.captured || mv.captured === 'k' || seen.has(mv.to)) continue;
     seen.add(mv.to);
     // Opponent is to move here — legal SEE so a pinned student defender can't
     // mask a real win and a pinned opponent attacker can't invent one.

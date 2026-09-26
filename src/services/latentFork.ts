@@ -82,6 +82,8 @@ export interface LatentFork {
   targets: Array<{ square: string; piece: string }>;
   /** Whose opportunity this is. */
   forker: 'white' | 'black';
+  /** The safe first hop on the way (N = 2) — the route, named on Learn. */
+  via: string;
 }
 
 function squaresHitFrom(sq: string): string[] {
@@ -135,7 +137,7 @@ function knightCanMove(fen: string, from: string, me: 'w' | 'b'): boolean {
 
 /** A one-hop waypoint from `from` that reaches `target` next, and on which
  *  the knight is not simply lost. */
-function hasSafeWaypoint(chess: Chess, from: string, target: string, me: 'w' | 'b', them: 'w' | 'b'): boolean {
+function safeWaypoint(chess: Chess, from: string, target: string, me: 'w' | 'b', them: 'w' | 'b'): string | null {
   const next = new Set(squaresHitFrom(target));
   for (const w of squaresHitFrom(from)) {
     if (!next.has(w)) continue;
@@ -144,9 +146,9 @@ function hasSafeWaypoint(chess: Chess, from: string, target: string, me: 'w' | '
     const at = boardWithKnightOn(chess, from, w, me);
     if (!at) continue;
     // The opponent moves next: judge the waypoint with them on move.
-    if (landingIsSafe(withMover(at, them), w as Square)) return true;
+    if (landingIsSafe(withMover(at, them), w as Square)) return w;
   }
-  return false;
+  return null;
 }
 
 /**
@@ -220,10 +222,11 @@ export function detectLatentFork(fen: string, forker: 'white' | 'black'): Latent
       // knight has a fork waiting on f7" when the only way there, g5, hangs
       // to the queen). At N = 2 the route is one intermediate square; at least
       // one must be a square the knight can stand on without being lost.
-      if (!hasSafeWaypoint(chess, from, square, me, them)) continue;
+      const via = safeWaypoint(chess, from, square, me, them);
+      if (!via) continue;
 
       hit.sort((a, b) => (VAL[b.piece] ?? 0) - (VAL[a.piece] ?? 0));
-      const found: LatentFork = { square, from, moves, targets: hit, forker };
+      const found: LatentFork = { square, from, moves, targets: hit, forker, via };
       // Nearest first, then richest — two moves away teaches more urgently than
       // four, and this is foresight, not a catalogue.
       if (!best
@@ -257,8 +260,9 @@ export function latentForkClause(fork: LatentFork, studentSide: 'white' | 'black
   const list = names.length === 2
     ? `${names[0]} and ${names[1]}`
     : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
-  const tempo = fork.moves === 2 ? 'two moves away' : `${fork.moves} moves away`; // MAX_TEMPO is 2 today
   return fork.forker === studentSide
-    ? `Your knight has a fork waiting on ${fork.square} — from there it hits their ${list}. It is ${tempo}; the route is yours to find.`
+    // THE ROUTE IS NAMED (David 2026-09-24: Learn names the move; "the route
+    // is yours to find" belonged to the old question cards — walk 1500, 38.Ne3).
+    ? `Your knight has a fork waiting on ${fork.square} — via ${fork.via}, then ${fork.square}, it hits their ${list}.`
     : `Watch ${fork.square} — a knight lands there in ${fork.moves} and forks your ${list}. Take the square away before it arrives.`;
 }

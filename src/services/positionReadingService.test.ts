@@ -789,6 +789,13 @@ describe('Danya positional detectors (2026-08-23 — pressure / passer / preserv
     expect(bishopPair(two, 'b')).toBe(false);
   });
 
+  it('opponentIntentRead never reads a check as winning the king (walk 1500, 41…g3+)', () => {
+    const c = new Chess();
+    for (const m of ['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6', 'c4', 'Nb6', 'f4', 'dxe5', 'fxe5', 'Nc6', 'Be3', 'Bf5', 'Nc3', 'Qd7', 'Nf3', 'Bg4', 'Be2', 'O-O-O', 'c5', 'Nd5', 'Nxd5', 'Qxd5', 'Kf2', 'e6', 'h3', 'Bf5', 'Qa4', 'Qe4', 'Qa3', 'Qc2', 'b4', 'Be7', 'b5', 'Nb8', 'Qxa7', 'Bd3', 'Rhe1', 'Bxb5', 'Rab1', 'Qa4', 'Qxa4', 'Bxa4', 'Nd2', 'f6', 'Nc4', 'Bc6', 'Bf3', 'fxe5', 'Nxe5', 'Rhf8', 'Kg3', 'Bxf3', 'Nxf3', 'Nc6', 'Bf2', 'Rf6', 'Re4', 'Rd5', 'Rbe1', 'Kd7', 'Kh2', 'h6', 'Bg3', 'g5', 'Be5', 'Nxe5', 'Nxe5+', 'Kd8', 'Ng4', 'Rg6', 'Rf1', 'h5', 'Ne3', 'Rd7', 'Rb1', 'Kc8', 'Nc4', 'g4', 'Ne5', 'g3+']) c.move(m);
+    expect(c.inCheck()).toBe(true);
+    expect(opponentIntentRead(c.fen(), 'white')).toBeNull();
+  });
+
   it('opponentIntentRead names a material-winning capture threat (prophylaxis backing)', () => {
     // Black to be anticipated: white knight f3 is hanging to black bishop g4? Build: student=white, black Bg4 attacks Nf3 (undefended).
     const fen = 'r3k3/8/8/8/6b1/5N2/8/4K3 w - - 0 1';

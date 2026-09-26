@@ -12,7 +12,7 @@ describe('backwardLook — the line without its opening loss', () => {
   it('24.Bg5 (hangs to …Qxg5+): the rest keeps the better move, drops the loss', () => {
     const look = backwardLook({
       fenBefore: BEFORE, fenAfter: AFTER, playedSan: 'Bg5', bestSan: 'Bxf5',
-      bestPvUci: ['e6f5', 'f8f5', 'f3f5'], replyPvUci: ['d8g5'],
+      bestPvUci: ['e6f5', 'f8f5', 'f3f5'], replyPvUci: ['d8g5'], replySan: null,
       cpLoss: 285, moverEvalAfterCp: 281, studentColor: 'white',
     } as never);
     expect(look, 'the look speaks on a 2.8-pawn slip').not.toBeNull();

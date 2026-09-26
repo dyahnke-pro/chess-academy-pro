@@ -51,13 +51,16 @@ describe('summarizeVerdict', () => {
 
 describe('appealScore', () => {
   it('ranks a capture-with-check above a quiet developing move', () => {
-    const cap = appealScore({ san: 'Nxe3+', isCapture: true, isPromotion: false, piece: 'n', to: 'e3' });
-    const dev = appealScore({ san: 'Be2', isCapture: false, isPromotion: false, piece: 'b', to: 'e2' });
+    const cap = appealScore({ san: 'Nxe3+', isCapture: true, isPromotion: false, piece: 'n', to: 'e3', from: 'd5' });
+    const dev = appealScore({ san: 'Be2', isCapture: false, isPromotion: false, piece: 'b', to: 'e2', from: 'f1' });
     expect(cap.score).toBeGreaterThan(dev.score);
     expect(cap.appeal).toBe('capture');
   });
   it('flags a promotion as high appeal', () => {
-    expect(appealScore({ san: 'e8=Q', isCapture: false, isPromotion: true, piece: 'p', to: 'e8' }).appeal).toBe('promotion');
+    // "develop" only from home (walk 2065, 12…h6: Bf7-c4 was no development).
+    expect(appealScore({ san: 'Bc4', isCapture: false, isPromotion: false, piece: 'b', to: 'c4', from: 'f7' }).appeal).not.toBe('central-develop');
+    expect(appealScore({ san: 'Bc4', isCapture: false, isPromotion: false, piece: 'b', to: 'c4', from: 'f1' }).appeal).toBe('central-develop');
+    expect(appealScore({ san: 'e8=Q', isCapture: false, isPromotion: true, piece: 'p', to: 'e8', from: 'e7' }).appeal).toBe('promotion');
   });
 });
 

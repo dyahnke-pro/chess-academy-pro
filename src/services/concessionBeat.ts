@@ -25,6 +25,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { findWeakPawns, findPieceQuality } from './positionReadingService';
 import { planFromUci } from './lookaheadPlan';
+import { isEndgameByMaterial } from './gamePhaseService';
 
 export type DrawbackKind =
   | 'defender-left'
@@ -263,7 +264,10 @@ export function findConcession(args: {
 
   // 4. THE PIECE WENT OFFSIDE — further from its own king than the engine's
   //    move, with the student's pieces already reaching where it left.
-  if (moved.piece !== 'p' && moved.piece !== 'k') {
+  // Not in an ENDGAME: with the queens off there is no king to shield, and a
+  // rook on the seventh is the goal, not a piece gone astray (walk 2065,
+  // 33.Rh7 "your piece went a long way from your king, to h7").
+  if (moved.piece !== 'p' && moved.piece !== 'k' && !isEndgameByMaterial(args.fen)) {
     const wentTo = ranksFromHome(moved.to, me);
     const altTo = alt.history({ verbose: true })[0];
     const altRank = altTo ? ranksFromHome(altTo.to, me) : wentTo;

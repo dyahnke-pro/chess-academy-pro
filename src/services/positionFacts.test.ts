@@ -133,7 +133,7 @@ describe('computePositionFacts — the composer', () => {
   it('speaks the delayed-castling warning IN the opening when the king is stuck in the centre (§9)', async () => {
     // Move 8, White king still on e1, e4/d5 tension, Black rook aimed down the
     // e-file — the "castle now" moment must speak even inside the opening window.
-    const r = await computePositionFacts({ posture: 'walk', fen: '4r1k1/8/8/3p4/4P3/8/8/4K3 w - - 0 8', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ posture: 'walk', fen: '4r1k1/8/8/3p4/4P3/8/8/4K2R w K - 0 8', moverColor: 'w', studentColor: 'w', analysis: flat });
     const ck = r.clauses.find((c) => /king is still in the centre/i.test(c.text));
     expect(ck).toBeTruthy();
     expect(ck?.text).toMatch(/e-file/);
