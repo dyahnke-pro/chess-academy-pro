@@ -276,7 +276,7 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8765`
+- `src/components/Coach/CoachTeachPage.tsx:8772`
 - `src/services/coachApi.ts:3331`
 - `src/services/coachApi.ts:5395`
 - `src/services/coachFeatureService.test.ts:40`
@@ -995,7 +995,7 @@
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:52`
-- `src/services/reviewFullData.ts:595`
+- `src/services/reviewFullData.ts:596`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1028,8 +1028,8 @@
 - `src/services/reviewNarrationFidelity.test.ts:254`
 
 ### `seatPieceReferences` (re-export) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7749`
-- `src/components/Coach/CoachTeachPage.tsx:7783`
+- `src/components/Coach/CoachTeachPage.tsx:7756`
+- `src/components/Coach/CoachTeachPage.tsx:7790`
 - `src/services/coachFeatureService.ts:4718`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
@@ -1038,9 +1038,9 @@
 - `src/services/reviewBoardAwareness.test.ts:107`
 - `src/services/reviewBoardAwareness.test.ts:108`
 - `src/services/reviewBoardAwareness.test.ts:109`
-- `src/services/reviewFullData.ts:292`
-- `src/services/reviewFullData.ts:330`
-- `src/services/reviewFullData.ts:511`
+- `src/services/reviewFullData.ts:293`
+- `src/services/reviewFullData.ts:331`
+- `src/services/reviewFullData.ts:512`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`

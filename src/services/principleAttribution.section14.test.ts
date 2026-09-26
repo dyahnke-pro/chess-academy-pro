@@ -26,6 +26,13 @@ describe('section 14 — calculation-depth (PV-gated)', () => {
     expect(hit?.facts.depth).toBe(5);
     expect(hit?.tag).toBe('calculation-depth');
   });
+  it('the blow is THEIR move — a capture of the student\'s own inside the line is not it (walk 700, 16…a6)', () => {
+    // Student's (Black) own capture sits at ply 4 (odd = theirs); their only
+    // forcing move comes later at ply 5.
+    const attrs = attributePrinciples({ ...base, pvAfterPlayed: ['Nf3', 'd6', 'Bg5', 'Qxd4', 'Bxf6'] });
+    expect(attrs.find((a) => a.id === 'calculation-depth')?.facts.punish).toBe('Bxf6');
+  });
+
   it('negative control: an IMMEDIATE punishment is not a depth error', () => {
     const attrs = attributePrinciples({ ...base, pvAfterPlayed: ['Bxf6', 'gxf6'] });
     expect(attrs.find((a) => a.id === 'calculation-depth')).toBeUndefined();

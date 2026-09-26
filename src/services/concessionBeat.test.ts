@@ -383,3 +383,12 @@ describe('a rook on the seventh in an endgame is not a piece gone astray (walk 2
     expect(d?.kind).not.toBe('piece-offside');
   });
 });
+
+describe('only a real outpost is "handed" (walk 700, 30…Nb6 — not the rook Qxc1+ takes)', () => {
+  it('no outpost-conceded for a rook on an open file', () => {
+    const c = new Chess();
+    for (const m of 'd4 Nf6 c4 g6 Nc3 Bg7 Bg5 d6 Nf3 O-O e3 c5 Be2 Nc6 O-O h6 Bh4 Bf5 a3 g5 Bg3 Ne4 Nxe4 Bxe4 d5 Nb8 Qb3 Nd7 Rad1 a6 Nd2 Bg6 Bf3 b5 Rfe1 Rb8 Be4 bxc4 Qxc4 Rxb2 Bxg6 fxg6 h3 Qa5 a4 Rxd2 Rxd2 Qxd2 Rc1 Nb6 Qc2 Nc4 Qb3'.split(' ')) c.move(m);
+    const d = findStudentDrawback({ fen: c.fen(), playedSan: 'Nb6', bestSan: 'Qxc1+', studentColor: 'black' });
+    expect(d?.kind).not.toBe('outpost-conceded');
+  });
+});

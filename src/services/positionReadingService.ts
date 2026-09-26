@@ -15,6 +15,7 @@
  * cheaper attacker wins the exchange (David's 2026-06-27 catch: "attacked-and-
  * undefended is *sufficient*, not *necessary* — it's not an iff").
  */
+import { fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
 import type { TacticsLiveContext } from '../coach/types';
@@ -356,9 +357,14 @@ export interface PieceQualityNote {
   piece: PieceSymbol;
   color: Color;
   quality: 'good' | 'bad';
-  /** Short reason: 'knight outpost' | 'bad bishop' | 'rook on the open file' | 'rook on a semi-open file'. */
+  /** WHAT the note is, as a type — consumers test this, never the prose
+   *  (walk 700: a regex on `reason` was how "outpost" got decided). */
+  kind: PieceQualityKind;
+  /** Short reason, for speech: 'knight outpost' | 'bad bishop' | 'rook on the open file' | …. */
   reason: string;
 }
+
+export type PieceQualityKind = 'outpost' | 'bad-bishop' | 'rim-knight' | 'seventh-rank' | 'open-file' | 'semi-open-file';
 
 /** Square colour: 'light' | 'dark' (a1 is dark). */
 function squareColor(sq: Square): 'light' | 'dark' {
@@ -433,6 +439,13 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
       const rank = Number(square[1]);
 
       if (type === 'n') {
+        // A KNIGHT ON THE RIM is a poor piece — the same verdict the
+        // knight-to-the-rim fundamental speaks, so no other lane can call it
+        // "the piece doing the most work" (walk 900, Na3).
+        if (file === 0 || file === 7) {
+          notes.push({ square, piece: 'n', color, quality: 'bad', kind: 'rim-knight', reason: 'knight on the rim' });
+          continue;
+        }
         const inEnemyHalf = color === 'w' ? rank >= 4 && rank <= 6 : rank >= 3 && rank <= 5;
         if (!inEnemyHalf) continue;
         const pawnDefends = chess.attackers(square, color).some((s) => chess.get(s)?.type === 'p');
@@ -452,7 +465,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
             }
           }
         }
-        if (!challengeable) notes.push({ square, piece: 'n', color, quality: 'good', reason: 'knight outpost' });
+        if (!challengeable) notes.push({ square, piece: 'n', color, quality: 'good', kind: 'outpost', reason: 'knight outpost' });
       }
 
       if (type === 'b') {
@@ -474,7 +487,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
           }
         }
         if (ownPawnsOnColor < 4) continue;
-        if (bishopHemmedByOwnPawns(chess, square, color)) notes.push({ square, piece: 'b', color, quality: 'bad', reason: 'bad bishop (hemmed in behind its own pawns)' });
+        if (bishopHemmedByOwnPawns(chess, square, color)) notes.push({ square, piece: 'b', color, quality: 'bad', kind: 'bad-bishop', reason: 'bad bishop (hemmed in behind its own pawns)' });
       }
 
       if (type === 'r') {
@@ -503,7 +516,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
           const enemyKing = chess.board().flat().find((c2) => c2 && c2.type === 'k' && c2.color === enemy);
           const kingOnBack = !!enemyKing && Number(enemyKing.square[1]) === backRank;
           if ((enemyPawnOnRank || kingOnBack) && legalSeeGainFor(fen, square, enemy) <= 0) {
-            notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on the seventh rank' });
+            notes.push({ square, piece: 'r', color, quality: 'good', kind: 'seventh-rank', reason: 'rook on the seventh rank' });
           }
         }
         // A file with an ENEMY rook or queen on it is CONTESTED — nobody owns
@@ -516,8 +529,8 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
         const contested = ownPawns === 0 && enemyPawns === 0
           && chess.board().flat().some((c2) => !!c2 && c2.color === foe && (c2.type === 'r' || c2.type === 'q') && c2.square[0] === square[0]);
         if (contested) { /* neither side's rook owns a file they share */ }
-        else if (ownPawns === 0 && enemyPawns === 0) notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on the open file' });
-        else if (ownPawns === 0 && enemyPawns > 0) notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on a semi-open file' });
+        else if (ownPawns === 0 && enemyPawns === 0) notes.push({ square, piece: 'r', color, quality: 'good', kind: 'open-file', reason: 'rook on the open file' });
+        else if (ownPawns === 0 && enemyPawns > 0) notes.push({ square, piece: 'r', color, quality: 'good', kind: 'semi-open-file', reason: 'rook on a semi-open file' });
       }
     }
   }
@@ -982,15 +995,18 @@ export function strongestWeakestPiece(fen: string, color: Color): { strongest: A
  *  piece" — ONE wording per reason, shared by every computer that reads
  *  `findPieceQuality` (hand walk 2026-09-24: "rook on f1 — rook on a semi-open
  *  file" was a label glued on with a dash, in two computers). */
-export function goodPieceClause(reason: string, square: string): string {
+export function goodPieceClause(kind: PieceQualityKind, square: string): string {
   const file = square[0];
-  const said: Record<string, string> = {
-    'knight outpost': 'it sits on an outpost no pawn can kick',
-    'rook on the open file': `it owns the open ${file}-file`,
-    'rook on a semi-open file': `it has the half-open ${file}-file`,
-    'rook on the seventh rank': 'it has reached the seventh rank',
+  // Exhaustive over the kind: a new kind fails to compile until it has words.
+  const said: Record<PieceQualityKind, string> = {
+    outpost: 'it sits on an outpost no pawn can kick',
+    'open-file': `it owns the open ${file}-file`,
+    'semi-open-file': `it has the half-open ${file}-file`,
+    'seventh-rank': 'it has reached the seventh rank',
+    'bad-bishop': 'it is hemmed in behind its own pawns',
+    'rim-knight': 'it is on the rim, where it covers little',
   };
-  return said[reason] ?? reason;
+  return said[kind];
 }
 
 export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; doubled: Square[]; backward: Square[] } {
@@ -2094,7 +2110,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
       negative: false,
     });
     // Knight-outpost variant (a distinct, click-gradable positional read).
-    const outpost = quality.find((q) => q.reason === 'knight outpost' && q.color === me);
+    const outpost = quality.find((q) => q.kind === 'outpost' && q.color === me);
     if (outpost) {
       out.push({
         id: 'outpost', type: 'outpost', bucket: 'positional',
@@ -2239,7 +2255,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     const why = ks.inCenter
       ? 'your king is still in the center — castle before it gets opened up'
       : ks.openFilesNearKing.length >= 2
-        ? `the ${ks.openFilesNearKing.join('- and ')}-file${ks.openFilesNearKing.length > 1 ? 's are' : ' is'} open toward your king`
+        ? `${fileList(ks.openFilesNearKing)} ${ks.openFilesNearKing.length > 1 ? 'are' : 'is'} open toward your king`
         : 'your king has lost its pawn shield';
     out.push({
       id: 'king-safety', type: 'king-safety', bucket: ks.inCenter ? 'openings' : 'positional',
