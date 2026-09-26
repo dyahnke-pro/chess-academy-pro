@@ -103,7 +103,9 @@ export function checksFirst(
  *  computer, never the phrasing). */
 export type BetterMoveFact =
   | { kind: 'checks-first'; best: string; reply: string | null; played: string }
-  | { kind: 'line-wins'; why: string };
+  /** `own`: the reason is the move's own work (a cost, or a clause on its
+   *  squares). Otherwise it is the plan the move serves, and says so. */
+  | { kind: 'line-wins'; why: string; own: boolean };
 
 /**
  * WHY THE BETTER MOVE IS BETTER — the one computer every coach surface reads
@@ -119,7 +121,7 @@ export function betterMoveFact(
   const order = checksFirst(fenBefore, playedSan, bestSan, bestLineUci);
   if (order) return { kind: 'checks-first', ...order };
   const better = whyBetter(fenBefore, bestLineUci, moverColor);
-  return better ? { kind: 'line-wins', why: better.why } : null;
+  return better ? { kind: 'line-wins', why: better.why, own: better.own } : null;
 }
 
 /** The fact, worded. A verdict on a move already PLAYED is retrospective on
@@ -131,7 +133,10 @@ export function phraseBetterMove(f: BetterMoveFact): string {
     case 'checks-first':
       return `checks first: ${f.best}, ${f.reply ?? 'they answer'}, and ${f.played} would still have been there — you'd have had both`;
     case 'line-wins':
-      return `it would ${f.why}`;
+      // A plan clause about another piece is the IDEA the move serves, never
+      // something the move itself does (Blumenfeld re-walk: "Rad8 was the move —
+      // it would walk the knight round to e5").
+      return f.own ? `it would ${f.why}` : `the idea is to ${f.why}`;
   }
 }
 
@@ -147,7 +152,7 @@ function whyBetter(
   fenBefore: string,
   bestUci: readonly string[],
   moverColor: 'white' | 'black',
-): { why: string; square: string } | null {
+): { why: string; square: string; own: boolean } | null {
   if (bestUci.length < 4) return null;
   // THE CAPTURE IS THE REASON. When the better move itself takes a real piece,
   // say what it takes — the plan's material read is the NET over the line
@@ -165,7 +170,7 @@ function whyBetter(
     // hanging queen and the line's net read called it "win a rook").
     const winsOutright = first?.captured ? legalSeeGain(fenBefore, first.to) >= MATERIAL_VALUE[first.captured] : false;
     if (first?.captured && NAME[first.captured] && (MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece] || winsOutright)) {
-      return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to };
+      return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to, own: true };
     }
   } catch { /* fall through to the plan read */ }
   const plan = planFromUci(fenBefore, bestUci, moverColor);
@@ -200,19 +205,29 @@ function whyBetter(
   // selection from ranked data, and it reads the STRUCTURE rather than
   // re-splitting the joined prose — which cannot be split safely anyway, since a
   // clause carries its own commas ("walk the bishop round to b3, by way of f7").
-  const lead = plan?.mine.spokenClauses[0];
+  // THE REASON IS ABOUT THE MOVE (Blumenfeld re-walk: "Rad8 was the move — it
+  // would walk the knight round to e5", "f5 was the move — it would walk the
+  // rook round to c8"). A cost counts wherever it lands; any other clause must
+  // touch the move's own squares, or it describes some other piece's journey.
+  const firstFrom = bestUci[0].slice(0, 2);
+  const firstTo = bestUci[0].slice(2, 4);
+  const lead = plan?.mine.spokenClauses.find((c) => !c.drift && (isCostClause(c.text) || c.squares.includes(firstFrom) || c.squares.includes(firstTo)))
+    ?? plan?.mine.spokenClauses[0];
   // WHERE THE PIECES END UP IS NOT WHY THE MOVE WAS BETTER (review walks 900 +
   // 2065, 2026-09-26: "the stronger move was c6 — it would bring pieces to a5
   // and c6 over the next few moves"). With nothing but drift, name the move
   // and give no reason — empty beats a reason that says nothing.
   if (lead?.drift) return null;
-  if (lead?.text) return { why: lead.text, square: lead.squares[0] ?? '' };
+  if (lead?.text) {
+    const own = isCostClause(lead.text) || lead.squares.includes(firstFrom) || lead.squares.includes(firstTo);
+    return { why: lead.text, square: lead.squares[0] ?? '', own };
+  }
   // No clause carried a square (anything square-less that outranked the rest)
   // — fall back to the sentence, which in that case IS one clause.
   const want = /^You want to ([^.]+)\./.exec(text);
   if (!want) return null;
   const square = plan?.mine.spokenClauses.flatMap((c) => c.squares)[0] ?? '';
-  return { why: want[1], square };
+  return { why: want[1], square, own: false };
 }
 
 /**
@@ -375,7 +390,7 @@ export function callInaccuracyDetailed(args: {
   })();
 
   const better = stopsMate
-    ? { why: 'stop the mate', square: '' }
+    ? { why: 'stop the mate', square: '', own: true }
     : args.bestLineUci
       ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor)
       : null;

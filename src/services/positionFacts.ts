@@ -20,7 +20,7 @@ import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
-import { strategicWhyImperative, principleLine } from './moveFundamentals';
+import { strategicWhyImperative, principleLine, isForcedReply } from './moveFundamentals';
 import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -816,7 +816,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     : [];
 
   const composedAll = applyWeaknessBoost(
-    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }),
+    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }),
     input.studentWeaknesses ?? [],
   );
 
@@ -1113,7 +1113,10 @@ function buildClauses(a: {
   alreadySaid?: ReadonlySet<string>;
   /** Does this student's own record still owe them the slow-down teaching?
    *  Computed by the caller from the weakness lifecycle (`habitNeedFrom`), not
-   *  re-derived here — one door, one answer. */
+   *  re-derived here — one door, one answer. False when the one move that holds
+   *  is a FORCED reply (a plain recapture, a check escape): "slow down —
+   *  exactly one move keeps you level" before …dxe5 is not a decision
+   *  (Blumenfeld re-walk). */
   slowDownOwed: boolean;
   /** THE ONE CRITICAL-MOMENT READ (`criticalMoment`) — how many moves still
    *  hold and what they hold. Null when the fan carried nothing to count. */

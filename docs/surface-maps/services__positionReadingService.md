@@ -91,8 +91,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2175`
 - `src/services/groundedAnswer.ts:2927`
 - `src/services/groundedAnswer.ts:6305`
-- `src/services/inaccuracyCall.ts:166`
-- `src/services/inaccuracyCall.ts:481`
+- `src/services/inaccuracyCall.ts:171`
+- `src/services/inaccuracyCall.ts:496`
 - `src/services/moveTiming.ts:27`
 - `src/services/pvPlayback.ts:411`
 - `src/services/pvPlayback.ts:458`
@@ -331,7 +331,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:128`
 
 ### `namedPawnStructure` (function) — 15 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8906`
+- `src/components/Coach/CoachTeachPage.tsx:8915`
 - `src/services/danyaBehaviors.ts:279`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/danyaDeviceCoverage.test.ts:108`

@@ -201,3 +201,16 @@ describe('F37 — nobody is tempted by an underpromotion', () => {
     expect(t?.san ?? '').not.toMatch(/=B/);
   });
 });
+
+describe('re-walk — the better move\'s reason is about the move', () => {
+  it('Rad8 is not credited with a knight journey', async () => {
+    const { betterMoveReason } = await import('./inaccuracyCall');
+    const why = betterMoveReason(fenAt(29), 'Qd7', 'Rad8', ['a8d8', 'd2f1', 'f6d7', 'a2a4', 'c7b8', 'f1g3'], 'black');
+    expect(why ?? '').not.toMatch(/it would [^.]*knight/);
+  });
+  it('the own-move point names its move, so it cannot answer someone else\'s question', async () => {
+    const { studentMovePoint } = await import('./playCommentary');
+    const p = studentMovePoint(fenAt(33), 'Qf5', 'a4');
+    if (p) expect(p).toMatch(/^Qf5 /);
+  });
+});

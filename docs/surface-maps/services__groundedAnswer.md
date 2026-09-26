@@ -276,7 +276,7 @@
 - `src/services/groundedAnswer.test.ts:1379`
 
 ### `explainBestMoveGrounded` (function) — 20 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8784`
+- `src/components/Coach/CoachTeachPage.tsx:8793`
 - `src/services/coachApi.ts:3331`
 - `src/services/coachApi.ts:5395`
 - `src/services/coachFeatureService.test.ts:40`

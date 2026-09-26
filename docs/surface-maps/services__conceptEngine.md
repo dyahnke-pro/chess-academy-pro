@@ -196,7 +196,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:7680`
 - `src/services/learnWalkBlumenfeld.test.ts:131`
 - `src/services/positionFacts.ts:973`
-- `src/services/positionFacts.ts:1346`
+- `src/services/positionFacts.ts:1349`
 
 ### `tacticInvariant` (function) — 8 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7677`

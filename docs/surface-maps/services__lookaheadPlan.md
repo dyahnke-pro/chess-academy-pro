@@ -158,7 +158,7 @@
 - `src/services/lookaheadPlan.test.ts:1258`
 
 ### `positionReadLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9483`
+- `src/components/Coach/CoachTeachPage.tsx:9492`
 - `src/services/coachLaneWiring.test.ts:38`
 - `src/services/computedVoiceAudit.report.test.ts:225`
 - `src/services/lookaheadPlan.test.ts:541`
@@ -177,7 +177,7 @@
 - `src/services/narrationAdversarial.test.ts:67`
 
 ### `lineShapeLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9487`
+- `src/components/Coach/CoachTeachPage.tsx:9496`
 - `src/services/coachLaneWiring.test.ts:39`
 - `src/services/computedVoiceAudit.report.test.ts:226`
 - `src/services/lookaheadPlan.test.ts:881`
@@ -196,7 +196,7 @@
 - `src/services/lookaheadPlan.test.ts:1015`
 
 ### `terminalReadLine` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9490`
+- `src/components/Coach/CoachTeachPage.tsx:9499`
 - `src/services/coachLaneWiring.test.ts:40`
 - `src/services/computedVoiceAudit.report.test.ts:230`
 - `src/services/lookaheadPlan.test.ts:988`
@@ -210,7 +210,7 @@
 - `src/services/lookaheadPlan.test.ts:1016`
 
 ### `keySquareLine` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9478`
+- `src/components/Coach/CoachTeachPage.tsx:9487`
 - `src/services/coachLaneWiring.test.ts:37`
 - `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/forkNarration.ts:108`
@@ -229,22 +229,24 @@
 - `src/services/narrationAdversarial.test.ts:66`
 - `src/services/planMarks.test.ts:37`
 
-### `isCostClause` (function) — 6 call sites
+### `isCostClause` (function) — 8 call sites
 - `src/services/concessionBeat.ts:430`
-- `src/services/inaccuracyCall.ts:493`
+- `src/services/inaccuracyCall.ts:214`
+- `src/services/inaccuracyCall.ts:222`
+- `src/services/inaccuracyCall.ts:508`
 - `src/services/learnWalkBlumenfeld.test.ts:174`
 - `src/services/learnWalkBlumenfeld.test.ts:175`
 - `src/services/learnWalkBlumenfeld.test.ts:176`
 - `src/services/learnWalkBlumenfeld.test.ts:177`
 
 ### `planFromUci` (function) — 29 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9475`
+- `src/components/Coach/CoachTeachPage.tsx:9484`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:220`
 - `src/services/concessionBeat.ts:424`
 - `src/services/forkNarration.ts:106`
-- `src/services/inaccuracyCall.ts:171`
-- `src/services/inaccuracyCall.ts:491`
+- `src/services/inaccuracyCall.ts:176`
+- `src/services/inaccuracyCall.ts:506`
 - `src/services/lookaheadPlan.test.ts:262`
 - `src/services/lookaheadPlan.test.ts:270`
 - `src/services/lookaheadPlan.test.ts:275`
