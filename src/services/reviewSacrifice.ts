@@ -19,6 +19,7 @@
  */
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { developmentScore } from './development';
 
 /** The mover's-perspective clauses explaining what the sacrifice BUYS. Ordered
  *  most-telling first; empty when no board-true compensation can be named. */
@@ -66,6 +67,19 @@ export function sacrificeCompensation(
   let board: Chess;
   try { board = new Chess(fenAfter); } catch { return clauses; }
   const enemy: 'w' | 'b' = moverColorWB === 'w' ? 'b' : 'w';
+
+  // 0. THE SAC THAT CASHES OUT (review walk 2065, 2026-09-26: Rxc7+ gave the
+  //    exchange to reach a won pawn ending, and the review could only say "the
+  //    position holds up completely"). When the sacrificing piece is the
+  //    mover's last and the enemy has none, the recapture leaves kings and
+  //    pawns — that ending IS what the material bought.
+  const heavy = (c: 'w' | 'b'): number => board.board().flat()
+    .filter((x) => !!x && x.color === c && x.type !== 'k' && x.type !== 'p').length;
+  if (heavy(moverColorWB) <= 1 && heavy(enemy) === 0) {
+    const won = moverPovEvalCp !== null && moverPovEvalCp >= 200;
+    clauses.push(won ? 'it forces a king-and-pawn ending, and that ending is won' : 'it forces a king-and-pawn ending');
+    return clauses;
+  }
 
   // 1. Enemy king stuck in the CENTRE — the keystone concept (extracted as a
   //    reusable predicate so a standalone beat can teach it too).
@@ -145,6 +159,13 @@ export function describeSacBreaksKingShield(fenBefore: string, san: string): str
   const df = Math.abs(mv.to.charCodeAt(0) - kingSq.charCodeAt(0));
   const dr = Math.abs(Number(mv.to[1]) - Number(kingSq[1]));
   if (df > 1 || dr > 1 || (df === 0 && dr === 0)) return null; // must be adjacent to the king
+  // AN ATTACK NEEDS ATTACKERS (review walk 2065, 2026-09-26: Rxc7+ with the
+  // rook as White's last piece — after Kxc7 it was a pawn ending, and the coach
+  // said "the attack rolls straight on"). The sac rips the shield only if some
+  // piece other than the one given up is still there to use the hole.
+  const attackersLeft = board.board().flat().some((c) =>
+    !!c && c.color === mv.color && c.type !== 'k' && c.type !== 'p' && c.square !== mv.to);
+  if (!attackersLeft) return null;
   const capName = PIECE_NOUN[mv.captured] ?? 'piece';
   const isExchange = mv.piece === 'r' && (mv.captured === 'n' || mv.captured === 'b');
   const give = isExchange
@@ -163,18 +184,8 @@ function findKing(board: Chess, color: 'w' | 'b'): string | null {
   return null;
 }
 
-/** How many pieces `color` has "in play": minor pieces (knight/bishop) off their
- *  own back rank, plus one for having castled (king off the e-file). Board-true. */
+/** How many pieces `color` has "in play": minors off their starting squares
+ *  (the one reading, `development.ts`), plus one for a king that has left e1/e8. */
 function developedCount(board: Chess, color: 'w' | 'b'): number {
-  const backRank = color === 'w' ? '1' : '8';
-  let n = 0;
-  for (const row of board.board()) {
-    for (const cell of row) {
-      if (!cell || cell.color !== color) continue;
-      if ((cell.type === 'n' || cell.type === 'b') && cell.square[1] !== backRank) n += 1;
-    }
-  }
-  const king = findKing(board, color);
-  if (king && king[0] !== 'e') n += 1; // castled (or king walked off the e-file)
-  return n;
+  return developmentScore(board.board().flat().filter((c): c is NonNullable<typeof c> => !!c), color);
 }

@@ -1312,9 +1312,13 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // flagged it).
   const showPly = [...flaggedLeads.keys()][0] ?? FUND_PLY;
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
-  await goTo(showPly);
+  const showArrived = await goTo(showPly);
   await settle();
   const showBtn = await has(page, '[data-testid="walk-show-me-btn"]');
+  // WHEN THE BUTTON IS MISSING, SAY WHAT WAS ON SCREEN INSTEAD (2026-09-26:
+  // two runs red with "no Show-me button" and no way to tell a product gap
+  // from a walk that never reached the ply or a card sitting on top of it).
+  const showWhy = showBtn ? '' : ` — arrived=${showArrived} readout=${(await readWalkPly(page))?.n ?? 'none'} badge="${await txt(page, '[data-testid="review-classification-badge"]')}" exploring=${await has(page, '[data-testid="walk-resume-game-btn"]')} shotCard=${await has(page, '[data-testid="review-find-shot-card"]')}`;
   const spokenBeforeShow = spokenAt();
   let showLines = 0; let showPaused = null;
   if (showBtn) {
@@ -1330,7 +1334,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     await add('SHOW better-move-narrated-then-paused', true,
       `n/a — no flagged student ply in this game, so no Show-me is owed (probe ply ${FUND_PLY} graded good)`);
   } else {
-    await add('SHOW better-move-narrated-then-paused', showBtn && showLines >= 2 && showPaused === 'paused', showBtn ? `ply ${showPly}: ${showLines} lines spoken; state after=${showPaused}` : `no Show-me button on FLAGGED ply ${showPly}`);
+    await add('SHOW better-move-narrated-then-paused', showBtn && showLines >= 2 && showPaused === 'paused', showBtn ? `ply ${showPly}: ${showLines} lines spoken; state after=${showPaused}` : `no Show-me button on FLAGGED ply ${showPly}${showWhy}`);
   }
   const showStarts = events().filter((e) => e.kind === 'review-show-me-started').length;
   await add('SHOW never-auto-played', showStarts === (showBtn ? 1 : 0), `${showStarts} show-me start(s) — must equal the one tap`);

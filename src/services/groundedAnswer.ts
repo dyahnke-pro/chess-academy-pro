@@ -2398,33 +2398,6 @@ export function describeMoveGeometry(
 // CENTRAL_SQUARES / keyTargetSquares / kingZoneAmong live in `keySquares.ts` —
 // TWO vocabularies for TWO questions, shared by all four sites that had the bug.
 
-/** True when NO enemy pawn can ever advance to attack `sq` — the classic
- *  outpost test. For a white piece on (file, rank) the attacking squares are
- *  (file±1, rank+1); a black pawn reaches them from any higher rank on those
- *  files. So it's an outpost iff neither adjacent file carries an enemy pawn
- *  that could still push to the attacking rank. Pure chess.js board read. */
-function isOutpostSquare(board: Chess, sq: string, moverColor: 'white' | 'black'): boolean {
-  const file = sq.charCodeAt(0); // 'a'..'h'
-  const rank = parseInt(sq[1], 10);
-  const enemy = moverColor === 'white' ? 'b' : 'w';
-  const attackRank = moverColor === 'white' ? rank + 1 : rank - 1;
-  if (attackRank < 1 || attackRank > 8) return false;
-  for (const df of [-1, 1]) {
-    const f = file + df;
-    if (f < 97 || f > 104) continue; // off-board file
-    const adjFile = String.fromCharCode(f);
-    for (let r = 1; r <= 8; r += 1) {
-      const p = board.get(`${adjFile}${r}` as Square);
-      if (!p || p.type !== 'p' || p.color !== enemy) continue;
-      // Can this enemy pawn ever reach (adjFile, attackRank)? White pawns move
-      // up (increasing rank), black down. Enemy = the side NOT moverColor.
-      const canReach = enemy === 'w' ? r <= attackRank : r >= attackRank;
-      if (canReach) return false;
-    }
-  }
-  return true;
-}
-
 /**
  * quietPurposePhrase — the POSITIONAL merit of a NON-forcing move, as a
  * sub-clause ("develops the bishop to c4, eyeing d5 and e6", "plants a knight
@@ -2469,7 +2442,7 @@ export function quietPurposePhrase(
     // and a landing defended only by a pinned piece is NOT safe.
     if (!landingIsSafe(b.fen(), mv.to)) return null;
     // Outpost — a minor piece planted where no enemy pawn can ever attack it.
-    if ((mv.piece === 'n' || mv.piece === 'b') && isOutpostSquare(b, mv.to, moverColor)) {
+    if ((mv.piece === 'n' || mv.piece === 'b') && isOutpost(b, mv.to, moverColor === 'white' ? 'w' : 'b', false)) {
       const rank = parseInt(mv.to[1], 10);
       const advanced = moverColor === 'white' ? rank >= 5 : rank <= 4;
       if (advanced) {
@@ -2694,7 +2667,7 @@ export function assembleMovePurpose(opts: {
   }
 
   // 2) OUTPOST — a minor piece planted where no pawn can chase it.
-  if ((mv.piece === 'n' || mv.piece === 'b') && isOutpostSquare(afterBoard, mv.to, opts.moverColor)) {
+  if ((mv.piece === 'n' || mv.piece === 'b') && isOutpost(afterBoard, mv.to, opts.moverColor === 'white' ? 'w' : 'b', false)) {
     const rank = parseInt(mv.to[1], 10);
     const advanced = opts.moverColor === 'white' ? rank >= 5 : rank <= 4;
     if (advanced) clauses.push(`It's an outpost on ${mv.to} — no enemy pawn covers the square, so it sits there unchallenged.`);
@@ -5741,6 +5714,7 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // ─────────────────────────────────────────────────────────────────────────────
 import { findPieceQuality, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
 import { rotateStem } from '../utils/rotateStem';
+import { isOutpost } from './outpost';
 
 export type PositionalTopic =
   | 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece'

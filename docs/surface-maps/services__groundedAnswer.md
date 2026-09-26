@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6567 lines · 147 exports · 60 importers · 32 tests · 8 audits**
+**6541 lines · 147 exports · 60 importers · 32 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -285,8 +285,8 @@
 - `src/services/coachFeatureService.test.ts:66`
 - `src/services/coachFeatureService.test.ts:80`
 - `src/services/coachFeatureService.test.ts:87`
-- `src/services/coachFeatureService.ts:2256`
-- `src/services/coachFeatureService.ts:2267`
+- `src/services/coachFeatureService.ts:2264`
+- `src/services/coachFeatureService.ts:2275`
 - `src/services/coachMoveCommentary.ts:222`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/groundedAnswer.test.ts:1043`
@@ -327,7 +327,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1051`
+- `src/services/coachFeatureService.ts:1052`
 - `src/services/keySquares.test.ts:81`
 - `src/services/keySquares.test.ts:90`
 - `src/services/keySquares.test.ts:94`
@@ -340,7 +340,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:96`
 - `src/services/coachFeatureService.test.ts:102`
-- `src/services/coachFeatureService.ts:1051`
+- `src/services/coachFeatureService.ts:1052`
 
 ### `MovePurpose` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -380,7 +380,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:919`
+- `src/services/coachFeatureService.ts:920`
 - `src/services/groundedAnswer.test.ts:1064`
 - `src/services/groundedAnswer.test.ts:1072`
 - `src/services/groundedAnswer.test.ts:1079`
@@ -991,11 +991,11 @@
 - `src/data/patternRegistry.ts:123`
 - `src/services/bluffDetector.ts:72`
 - `src/services/captureThreatAnswerable.test.ts:13`
-- `src/services/coachFeatureService.ts:2584`
+- `src/services/coachFeatureService.ts:2592`
 - `src/services/engineDeltaLines.ts:54`
 - `src/services/learnMoveTeaching.ts:125`
 - `src/services/opponentMovePurpose.ts:52`
-- `src/services/reviewFullData.ts:578`
+- `src/services/reviewFullData.ts:581`
 - `src/services/reviewMoveBriefing.ts:237`
 - `src/services/reviewNarrationFidelity.test.ts:218`
 - `src/services/reviewNarrationFidelity.test.ts:227`
@@ -1008,7 +1008,7 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:2506`
+- `src/services/coachFeatureService.ts:2514`
 - `src/services/reviewNarrationFidelity.test.ts:184`
 - `src/services/reviewNarrationFidelity.test.ts:196`
 - `src/services/reviewNarrationFidelity.test.ts:204`
@@ -1024,13 +1024,13 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/coachFeatureService.ts:2604`
+- `src/services/coachFeatureService.ts:2612`
 - `src/services/reviewNarrationFidelity.test.ts:254`
 
 ### `seatPieceReferences` (re-export) — 24 call sites
 - `src/components/Coach/CoachTeachPage.tsx:7756`
 - `src/components/Coach/CoachTeachPage.tsx:7790`
-- `src/services/coachFeatureService.ts:4718`
+- `src/services/coachFeatureService.ts:4752`
 - `src/services/reviewBoardAwareness.test.ts:70`
 - `src/services/reviewBoardAwareness.test.ts:74`
 - `src/services/reviewBoardAwareness.test.ts:78`
@@ -1038,9 +1038,9 @@
 - `src/services/reviewBoardAwareness.test.ts:107`
 - `src/services/reviewBoardAwareness.test.ts:108`
 - `src/services/reviewBoardAwareness.test.ts:109`
-- `src/services/reviewFullData.ts:275`
-- `src/services/reviewFullData.ts:313`
-- `src/services/reviewFullData.ts:494`
+- `src/services/reviewFullData.ts:278`
+- `src/services/reviewFullData.ts:316`
+- `src/services/reviewFullData.ts:497`
 - `src/services/reviewNarrationFidelity.test.ts:85`
 - `src/services/reviewNarrationFidelity.test.ts:95`
 - `src/services/reviewNarrationFidelity.test.ts:101`

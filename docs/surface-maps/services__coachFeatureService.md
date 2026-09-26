@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4848 lines · 33 exports · 36 importers · 33 tests · 5 audits**
+**4913 lines · 34 exports · 38 importers · 35 tests · 5 audits**
 
 ## Locked rules that govern this surface
 
@@ -48,6 +48,8 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
+- `src/services/reviewWalk1500.test.ts`
+- `src/services/reviewWalk900.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
@@ -276,8 +278,9 @@
 - `src/utils/justCaptured.test.ts:30`
 - `src/utils/justCaptured.ts:24`
 
-### `pastTenseReviewNarration` (function) — 1 call site
+### `pastTenseReviewNarration` (function) — 2 call sites
 - `src/services/reviewRegister.test.ts:32`
+- `src/services/reviewWalk1500.test.ts:17`
 
 ### `openingNameForKey` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:213`
@@ -297,6 +300,11 @@
 - `src/services/reviewRefuted.test.ts:26`
 - `src/services/reviewRefuted.test.ts:33`
 - `src/services/reviewRefuted.test.ts:40`
+
+### `moveMeetsThreat` (function) — 3 call sites
+- `src/services/reviewWalk1500.test.ts:33`
+- `src/services/reviewWalk900.test.ts:38`
+- `src/services/reviewWalk900.test.ts:43`
 
 ### `detectBadHabits` (re-export) — 8 call sites
 - `src/components/Stats/StatsPage.tsx:65`
@@ -340,6 +348,8 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
+- `src/services/reviewWalk1500.test.ts`
+- `src/services/reviewWalk900.test.ts`
 - `src/services/whyItFailed.test.ts`
 - `src/test/computedOrderWired.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`

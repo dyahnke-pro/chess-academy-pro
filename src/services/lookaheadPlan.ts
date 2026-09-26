@@ -59,6 +59,32 @@ const TACTIC_WORD: Record<string, string> = {
  * the sentence: "walk the queen round to c2, by way of c2 and b3." Real
  * journey, nonsense sentence, and it happened twice in one game.
  */
+/** Could the piece on `from` step to `to` in ONE move on this board — its own
+ *  geometry, with the squares between clear? Unreadable board → false, so the
+ *  caller's reroute survives rather than being dropped on a guess. */
+export function reachesInOneMove(fen: string | undefined, from: string, to: string): boolean {
+  if (!fen) return false;
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return false; }
+  const piece = board.get(from as Square);
+  if (!piece) return false;
+  const df = to.charCodeAt(0) - from.charCodeAt(0);
+  const dr = Number(to[1]) - Number(from[1]);
+  const adf = Math.abs(df); const adr = Math.abs(dr);
+  if (piece.type === 'n') return (adf === 1 && adr === 2) || (adf === 2 && adr === 1);
+  if (piece.type === 'k') return Math.max(adf, adr) === 1;
+  const straight = df === 0 || dr === 0;
+  const diagonal = adf === adr && adf > 0;
+  const shapeOk = piece.type === 'q' ? straight || diagonal : piece.type === 'r' ? straight : piece.type === 'b' ? diagonal : false;
+  if (!shapeOk) return false;
+  const sf = Math.sign(df); const sr = Math.sign(dr);
+  for (let i = 1; i < Math.max(adf, adr); i++) {
+    const sq = `${String.fromCharCode(from.charCodeAt(0) + sf * i)}${Number(from[1]) + sr * i}`;
+    if (board.get(sq as Square)) return false;
+  }
+  return true;
+}
+
 export function waypointsOf(path: readonly string[]): string[] {
   if (path.length < 3) return [];
   const start = path[0];
@@ -221,7 +247,9 @@ export interface SidePlan {
    *  wrong. Keep new producers to the contract rather than teaching consumers to
    *  detect the violation — a validator on prose is the thing G0 says to stop
    *  writing. */
-  spokenClauses: Array<{ text: string; squares: string[] }>;
+  /** `drift` marks the fallback "bring pieces to X and Y" — where the pieces
+   *  end up, not why a move is good. A reason-seeking caller skips it. */
+  spokenClauses: Array<{ text: string; squares: string[]; drift?: true }>;
 }
 
 /** What is TRUE OF THE BOARD RIGHT NOW, as opposed to what the line does next.
@@ -552,6 +580,13 @@ function planFor(plies: readonly PvPly[], color: 'white' | 'black'): SidePlan {
     // engine marking time; either way it is not the regrouping this clause is
     // for.
     .filter((j) => j.path[0] !== j.path[j.path.length - 1])
+    // A ROUTE THE PIECE DID NOT NEED IS NOT A REGROUPING (review walk 900,
+    // 2026-09-26): "…Bh2+ — it would walk the bishop round to c7, by way of
+    // h2". The bishop checked, then dropped back to c7 — a square it reached
+    // from d6 in one move. A reroute is the long way to a square the short way
+    // cannot reach; when the start sees the destination on the ROOT board,
+    // the waypoints are incident (a check, a chase), not the idea.
+    .filter((j) => !reachesInOneMove(mine[0]?.fenBefore, j.path[0], j.path[j.path.length - 1]))
     .sort((a, b) => b.path.length - a.path.length)[0] ?? null;
 
   const headingFor = [...destinations.entries()]
@@ -777,7 +812,7 @@ export function describePlan(
     // on a real Two Knights blunder: "Na5 was the move — it would You're
     // bringing pieces to c6 and a5 over the next few moves.." Board-true in
     // every part, so no gate could see it; it is simply not English.
-    plan.spokenClauses = [{ text: `bring pieces to ${squares} over the next few moves`, squares: heading }];
+    plan.spokenClauses = [{ text: `bring pieces to ${squares} over the next few moves`, squares: heading, drift: true }];
     return line;
   }
 

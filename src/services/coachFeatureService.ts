@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js';
+import { FUNDAMENTAL_CLAIM_FAMILY, type MoveFundamentalId } from './moveFundamentals';
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
@@ -996,7 +997,7 @@ function buildDeterministicNarration(params: {
   // THEN names the better move — so we prepend it to the negative-class stems.
   // Grounded + gated (never overstated); null when it doesn't genuinely apply.
   const whyBad = (classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder')
-    ? prematureBreakWhy(fenBefore, playedSan)
+    ? prematureBreakWhy(fenBefore, playedSan, isStudentMove ? 'student' : 'opponent')
     : null;
   const whyLead = whyBad ? `That's ${whyBad}. ` : '';
   const w = (s: string): string => whyLead + s; // prepend the proven why to a stem
@@ -1949,8 +1950,15 @@ export function buildReviewSegments(
       const keptSquares = new Map<string, readonly string[]>();
       const keptStakes = new Map<string, FactStakes>();
       const keptIncoming = new Set<string>();
+      // A [rule] fact that restates a facet (the passed-pawn rule beside the
+      // [passer] read of the same pawn) joins that facet's claim family, so the
+      // door's subsumption sees ONE claim. The join is FUNDAMENTAL_CLAIM_FAMILY.
+      const keptFamily = new Map<string, string>();
       kept.forEach((k, i) => {
         const raw = keptRaw[i];
+        const ruleId = /^rule(?:-stem:\d+)?:(.+)$/.exec(facetIdentity.get(raw) ?? '')?.[1];
+        const fam = ruleId ? FUNDAMENTAL_CLAIM_FAMILY[ruleId as MoveFundamentalId] : null;
+        if (fam) keptFamily.set(k, fam);
         const sq = facetSquares.get(raw); if (sq) keptSquares.set(k, sq);
         const st = facetStakes.get(raw); if (st) keptStakes.set(k, st);
         if (facetIncoming.has(raw)) keptIncoming.add(k);
@@ -2044,7 +2052,7 @@ export function buildReviewSegments(
           moveAdvice: null,
         },
         {
-          facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes,
+          facts: kept, squares: keptSquares, incoming: keptIncoming, stakes: keptStakes, family: keptFamily,
           // THE BOARD AFTER THIS PLY — a recapture pending, or mate for the
           // side to move (`boardState`). Review had no such guard at all: "You're
           // a piece up" one ply before the piece was taken back.
@@ -3303,7 +3311,14 @@ async function augmentWithProjections(
   const deepThreatPlies = pvDepthForRating(rating);
   // Render a projected line — computed in code, no LLM (G0). `rich` is kept
   // for call-site compatibility.
-  const render = (line: PvLine, _rich = false): string => {
+  // `forSide` — WHOSE point the caller offers this line as proof of. Required:
+  // a line cut at its first settled material point can prove the opposite of
+  // the sentence around it, and the walk of 2026-09-26 said exactly that three
+  // ways — "Watch what THEY'RE building … YOU come out ahead", "Here's how you
+  // take advantage … you come out BEHIND", "Why Nd6+ was better … you come out
+  // behind". A result that cuts against `forSide` is not proof; the caller
+  // then says only what it can (the first move, the why) — never the ledger.
+  const render = (line: PvLine, forSide: 'student' | 'opponent' | 'either'): string => {
     // 🔒 THE LINE AS PROOF (WO-LAYERS-01). A line is spoken only as far as the
     // point it proves: mate, or a finished trade that wins something — the
     // moves, then the result, no description per move ("Qxd4, Qxd4, and the
@@ -3312,6 +3327,8 @@ async function augmentWithProjections(
     const sans = line.plies.map((p) => p.san);
     const proof = linePlies(line);
     if (proof.proof) {
+      const net = proof.proof.ledger?.netPawns ?? 0;
+      if (!proof.proof.mate && ((forSide === 'student' && net < 0) || (forSide === 'opponent' && net > 0))) return '';
       const moves = andList(sans.slice(0, proof.plies));
       return proof.proof.mate ? `${moves} — and it's mate` : `${moves} — ${describeProofResult(proof.proof.ledger as NonNullable<typeof proof.proof.ledger>)}`;
     }
@@ -3613,7 +3630,7 @@ async function augmentWithProjections(
     flaggedForPunish.forEach((s, i) => {
       const line = lines[i];
       const isStudentSlip = s.playerColor === studentColorName;
-      const proof = line && line.delivers && line.plies.length >= 2 ? render(line, true) : '';
+      const proof = line && line.delivers && line.plies.length >= 2 ? render(line, isStudentSlip ? 'opponent' : 'student') : '';
       if (line && proof) {
         const frame = isStudentSlip
           ? `Here's how it gets punished from here: ${proof}.`
@@ -3647,7 +3664,7 @@ async function augmentWithProjections(
     if (line && line.plies.length >= 3) {
       const bestName = line.plies[0].san;
       const why = got?.why ?? null;
-      const proof = render(line, true);
+      const proof = render(line, 'student');
       // The why, and the line only where it PROVES something. Neither → the
       // move's own verdict ("X keeps the edge") has already said it.
       const parts = [why, proof ? `the line runs ${proof}` : null].filter((x): x is string => !!x);
@@ -3698,7 +3715,7 @@ async function augmentWithProjections(
       // AGREEMENT — extend the claim with the engine's continuation when it
       // has real follow-up teaching (2+ further plies).
       if (line.plies.length >= 3 && s.narration) {
-        const tail = render({ ...line, plies: line.plies.slice(1) });
+        const tail = render({ ...line, plies: line.plies.slice(1) }, 'either');
         if (tail) s.narration = `${s.narration} The engine confirms it — and if they try to run, it continues ${tail}.`;
         attachLineArrows(s, line, 3); // confirmed threat continuation
       }
@@ -3780,7 +3797,7 @@ async function augmentWithProjections(
       // only describes where the game could go, and a long engine line speaks
       // only when it proves a point, so it stays quiet.
       if (!isForcingProjection(line)) continue;
-      const deep = render(line);
+      const deep = render(line, 'student');
       s.narration = deep
         ? `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${deep}.`.trim()
         : `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it starts with ${line.plies[0].san}.`.trim();
@@ -3842,7 +3859,7 @@ async function augmentWithProjections(
       const oppDeepKind = isForcingProjection(line) ? 'threat' : 'idea';
       // A proof when the line settles something; otherwise the IDEA is still
       // the teaching (what they want) — named by its first move, not recited.
-      const oppRun = render(line);
+      const oppRun = render(line, 'opponent');
       let callOut = oppRun
         ? `Watch what they're building — left alone, their ${oppDeepKind} runs ${oppRun}.`
         : `Watch what they're building — left alone, their ${oppDeepKind} starts with ${line.plies[0].san}.`;
@@ -3909,7 +3926,7 @@ async function augmentWithProjections(
       if (s.narration) continue;                            // fill only silent moves
       if (s.playerColor !== studentColorName) continue;     // the student's own prophylaxis
       if (s.ply < 10) continue;                             // middlegame onward
-      if (/[x+=]/.test(s.san)) continue;                    // quiet: no capture / check / promotion
+      if (/[x+#=]/.test(s.san)) continue;                   // quiet: no capture / check / mate / promotion
       if (s.evalBefore === null || s.evalAfter === null) continue;
       const parts = s.fenBefore.split(' ');
       if (parts.length < 4) continue;
@@ -3925,6 +3942,11 @@ async function augmentWithProjections(
       if (beforeEval - freeMoveEval < 150) continue;         // no real threat → not prophylaxis
       if (afterEval < beforeEval - 40) continue;             // the move conceded → it didn't neutralise
       const threatSan = threatLine.plies[0].san;
+      // THE MOVE MUST TOUCH THE THREAT (review walk 900, 2026-09-26: …Ng4 was
+      // called prophylaxis against dxc5 — dxc5 was still on after it; the
+      // knight held the eval by making a threat of its own). "Takes the sting
+      // out of it" is a causal claim, so it needs a causal link on the board.
+      if (!moveMeetsThreat(s.fenBefore, s.san, threatSan)) continue;
       s.narration = `A quiet, preventive move — this is prophylaxis. Your opponent was set up for ${threatSan}, and this takes the sting out of it before it starts. Stopping their idea is often worth more than making one of your own.`;
       s.narrationSource = 'orientation';
       prophyBudget -= 1;
@@ -4332,15 +4354,21 @@ const SERIES_VERB = new RegExp(`, ${V_ALT}\\b`, 'g');
 // one happened to sit after it: the same walk said "Watch what they're building"
 // on one ply and "Watch what they were building" on another, purely on ordering.
 // Registers don't take turns in one string, so the decision is made PER SENTENCE.
-const PRESCRIPTIVE = /(the plan (?:from here|is)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run)/i;
+const PRESCRIPTIVE = /(the plan (?:from here|is|changes)|so the plan is|here's (?:exactly )?how|your defense starts with|watch what they|follow it up|don't play|spend two or three tempi|that's your cue|is your cue|your whole job|wants to run)/i;
 /** Case-preserving contraction rewrite: "You're" → "You were", never "you were"
  *  mid-narration with a lowercase head (the `/gi` replacement used to lowercase
  *  every sentence it opened). */
 function sub(h: string, re: RegExp, past: string): string {
   return h.replace(re, (m) => (m[0] === m[0].toUpperCase() ? past[0].toUpperCase() + past.slice(1) : past));
 }
+/** A sentence that already says "is"/"are" in full is framed in the present —
+ *  a rule or a standing state ("this is a race, and it's won by…"). Rewriting
+ *  its contractions alone splits one sentence across two tenses: the review
+ *  walk of 2026-09-26 heard "this is a race, and it was won by throwing your
+ *  pawns". Tense is decided per sentence, so the explicit verb decides it. */
+const PRESENT_FRAMED = /\b(?:is|are)\b/i;
 function toPastSentence(sentence: string): string {
-  if (PRESCRIPTIVE.test(sentence) || isMethodSentence(sentence)) return sentence;
+  if (PRESCRIPTIVE.test(sentence) || isMethodSentence(sentence) || PRESENT_FRAMED.test(sentence)) return sentence;
   let h = sentence;
   // contractions / state-of-being → past
   h = sub(h, /\bthat's\b/gi, 'that was');
@@ -4365,6 +4393,12 @@ function toPastHead(head: string): string {
 export function pastTenseReviewNarration(segments: ReviewMoveSegment[]): void {
   for (const s of segments) {
     if (!s.narration) continue;
+    // ORIENTATION IS TEACHING, NOT HISTORY. The concept and orientation
+    // computers speak rules and standing states ("It's a target now; look to
+    // trade it off", "Improve your worst piece, trade when it's offered") —
+    // past-tensing them produced "It was a target now" and "traded when it
+    // was offered" (review walk 1500, 2026-09-26).
+    if (s.narrationSource === 'orientation') continue;
     const m = PROJECTION_MARKER.exec(s.narration);
     const cut = m ? m.index : s.narration.length;
     const head = s.narration.slice(0, cut);
@@ -4844,4 +4878,35 @@ export async function generateReviewNarration(params: {
   });
 
   return { intro, segments, closing };
+}
+
+/** Does the student's move `san` (played from `fenBefore`) actually meet the
+ *  opponent's threat `threatSan` (their best move had they moved instead)? Yes
+ *  when the threat is no longer legal afterwards, or when the moved piece now
+ *  covers the square the threat lands on. Anything else held the eval some
+ *  other way — a counter-threat, a tempo — and is not prophylaxis. Two shapes
+ *  that LOOK like it and are not (review walk 1500, 2026-09-26): the threatened
+ *  piece simply stepping away (Rh7 out of Kxf7) is rescuing a piece, and any
+ *  move made while IN CHECK is forced, not preventive. */
+export function moveMeetsThreat(fenBefore: string, san: string, threatSan: string): boolean {
+  let threat: { from: string; to: string } | null = null;
+  try {
+    const parts = fenBefore.split(' ');
+    parts[1] = parts[1] === 'w' ? 'b' : 'w';
+    parts[3] = '-';
+    const t = new Chess(parts.join(' ')).move(threatSan);
+    threat = { from: t.from, to: t.to };
+  } catch { return false; }
+  let after: Chess;
+  let moved: { from: string; to: string; color: 'w' | 'b' };
+  try {
+    if (new Chess(fenBefore).inCheck()) return false;                 // forced, not preventive
+    after = new Chess(fenBefore);
+    const m = after.move(san);
+    moved = { from: m.from, to: m.to, color: m.color };
+  } catch { return false; }
+  if (moved.from === threat.to) return false;                          // a rescue, not prevention
+  const stillLegal = after.moves({ verbose: true }).some((m) => m.from === threat.from && m.to === threat.to);
+  if (!stillLegal) return true;                                        // the threat is gone
+  return after.attackers(threat.to as Square, moved.color).includes(moved.to as Square);
 }

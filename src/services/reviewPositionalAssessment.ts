@@ -19,6 +19,7 @@ import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { developmentScore } from './development';
 
 export interface PositionalAssessment {
   /** Student-perspective verdict word from the eval, or null when unclear. */
@@ -36,17 +37,9 @@ function pieces(chess: Chess): Located[] {
   return out;
 }
 
-/** Minor pieces developed off the back rank + a castled/walked king (board-true). */
+/** Minors off their starting squares + a castled/walked king (the one reading). */
 function developedCount(all: Located[], color: Color): number {
-  const backRank = color === 'w' ? '1' : '8';
-  let n = 0;
-  for (const p of all) {
-    if (p.color !== color) continue;
-    if ((p.type === 'n' || p.type === 'b') && p.square[1] !== backRank) n += 1;
-  }
-  const king = all.find((p) => p.type === 'k' && p.color === color);
-  if (king && king.square[0] !== 'e') n += 1;
-  return n;
+  return developmentScore(all, color);
 }
 
 /**

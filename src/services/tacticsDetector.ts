@@ -443,8 +443,20 @@ function findTrappedPieces(chess: Chess): TacticPattern[] {
       if (!attackedByCheaper && defendedHere) continue;
       const myView = withTurn(chess, p.color);
       if (!myView) continue;
+      // A SIDE IN CHECK IS NOT TRAPPED, IT IS BUSY (review walk 900,
+      // 2026-09-26: after …bxa2+ "their queen on d1 … has no safe square — it
+      // is trapped", while Qd2 and Qg4 were both safe). In check, no piece but
+      // the answer to the check may move, so "no legal escape" measures the
+      // check, not the cage — and the piece is lost to the tempo, a different
+      // idea that this detector does not name.
+      if (myView.inCheck()) continue;
       const escapes = myView.moves({ square: sq, verbose: true });
       const hasSafeSquare = escapes.some((m) => {
+        // AN ESCAPE THAT TAKES AS MUCH AS IT RISKS IS SAFE (review walk 1500,
+        // 2026-09-26: "your queen on a7 … is trapped" when Qxa4 traded queens).
+        // Landing on a defended square is a loss only when the capture there
+        // is worth less than the piece.
+        if (m.captured && PIECE_VALUE[m.captured] >= PIECE_VALUE[p.type]) return true;
         try {
           const after = new Chess(myView.fen());
           after.move({ from: m.from, to: m.to, promotion: 'q' });

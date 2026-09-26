@@ -22,6 +22,7 @@ import type { TacticsLiveContext } from '../coach/types';
 import type { WeaknessCategory } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { developedMinorCount, totalMinorCount } from './development';
+import { isOutpost } from './outpost';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -447,26 +448,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
           notes.push({ square, piece: 'n', color, quality: 'bad', kind: 'rim-knight', reason: 'knight on the rim' });
           continue;
         }
-        const inEnemyHalf = color === 'w' ? rank >= 4 && rank <= 6 : rank >= 3 && rank <= 5;
-        if (!inEnemyHalf) continue;
-        const pawnDefends = chess.attackers(square, color).some((s) => chess.get(s)?.type === 'p');
-        if (!pawnDefends) continue;
-        // Can an enemy pawn ever attack this square? Enemy pawns on an adjacent
-        // file, ahead of the knight (from their advance direction), could.
-        let challengeable = false;
-        for (const df of [-1, 1]) {
-          const af = file + df;
-          if (af < 0 || af > 7) continue;
-          const fileLetter = String.fromCharCode(97 + af);
-          for (let r = 1; r <= 8; r += 1) {
-            const occ = chess.get(`${fileLetter}${r}` as Square);
-            if (occ && occ.type === 'p' && occ.color !== color) {
-              // white knight challenged by a black pawn on a higher rank; black knight by a white pawn on a lower rank
-              if (color === 'w' ? r > rank : r < rank) challengeable = true;
-            }
-          }
-        }
-        if (!challengeable) notes.push({ square, piece: 'n', color, quality: 'good', kind: 'outpost', reason: 'knight outpost' });
+        if (isOutpost(chess, square, color, true)) notes.push({ square, piece: 'n', color, quality: 'good', kind: 'outpost', reason: 'knight outpost' });
       }
 
       if (type === 'b') {
