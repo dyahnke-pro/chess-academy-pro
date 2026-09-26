@@ -279,6 +279,8 @@ import { computePositionFacts, clauseText } from '../../services/positionFacts';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
+import { moveWhy } from '../../services/deliberation';
+import { uciToSanAt } from '../../services/liveFundamental';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainArrows, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
@@ -8813,6 +8815,9 @@ export function CoachTeachPage(): JSX.Element {
                 let pendingRegister: string | null = null;
                 let pendingRegisterNoHedge: string | null = null;
                 let moveAdviceHere: Awaited<ReturnType<typeof computePositionFacts>>['moveAdvice'] = null;
+                // The gift line NAMES the student's next move, so it waits for
+                // the one decision on where a move is named (`nextMoveAdvice`).
+                let gapPending: { text: string; square: string } | null = null;
                 try {
                   if (studentBest?.topLines && probe.turn() === (playerColor === 'white' ? 'w' : 'b')) {
                     turnRead = tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 });
@@ -8867,8 +8872,12 @@ export function CoachTeachPage(): JSX.Element {
                         });
                         if (gap) {
                           // Learn: the coach IS the opponent, so the nudge says "I".
-                          const nudge = gradeNarrationText(opponentGapClause(gap, learnMemRef.current.lastReplyDictated !== null ? 'dictated' : 'coach-is-opponent'), probe.fen(), 'CoachTeachPage.opponentGap')?.trim();
-                          if (nudge) queueSpokenHint(probe.fen(), nudge, 'computed', [gap.toSquare]);
+                          const gapSan = uciToSanAt(probe.fen(), gap.opportunityUci);
+                          const gapWhy = gapSan ? moveWhy(probe.fen(), gapSan, playerColor === 'white' ? 'w' : 'b', m.san) : null;
+                          const clause = opponentGapClause(gap, learnMemRef.current.lastReplyDictated !== null ? 'dictated' : 'coach-is-opponent',
+                            gapSan && gapWhy ? { san: gapSan, why: gapWhy } : null);
+                          const nudge = clause ? gradeNarrationText(clause, probe.fen(), 'CoachTeachPage.opponentGap')?.trim() : null;
+                          if (nudge) gapPending = { text: nudge, square: gap.toSquare };
                           captureEvent('opponent_gap_nudged', { surface: 'coach-teach', gain_cp: Math.round(gap.gainCp) });
                         }
                       }
@@ -9076,6 +9085,7 @@ export function CoachTeachPage(): JSX.Element {
                     const countSpoken = pf.clauses.some((c) => c.kind === 'key-moment');
                     const registerNow = countSpoken ? pendingRegisterNoHedge : pendingRegister;
                     if (registerNow && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), registerNow);
+                    if (gapPending && moveAdviceHere?.speak) queueSpokenHint(probe.fen(), gapPending.text, 'computed', [gapPending.square]);
                     standingRef.current.rememberAll(pf.remember);
                     if (pf.principleSpoken) learnMemRef.current.principleTaught.add(pf.principleSpoken);
                     // The student is to move at `probe`; their coming move is ply history+1.

@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**720 lines · 19 exports · 21 importers · 7 tests · 29 audits**
+**726 lines · 19 exports · 21 importers · 7 tests · 29 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:24) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6024) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:6027) — names `conceptEngine`
 
 ## Who calls in
 
@@ -126,16 +126,18 @@
 - `src/services/conceptEngine.test.ts:41`
 - `src/services/conceptEngine.test.ts:43`
 
-### `renderTacticConcept` (function) — 3 call sites
+### `renderTacticConcept` (function) — 5 call sites
 - `src/services/conceptEngine.test.ts:55`
 - `src/services/conceptEngine.test.ts:67`
-- `src/services/conceptEngine.test.ts:90`
+- `src/services/conceptEngine.test.ts:86`
+- `src/services/conceptEngine.test.ts:88`
+- `src/services/conceptEngine.test.ts:97`
 
 ### `renderMatchupConcept` (function) — 4 call sites
 - `src/services/conceptEngine.test.ts:71`
 - `src/services/conceptEngine.test.ts:77`
 - `src/services/conceptEngine.test.ts:82`
-- `src/services/conceptEngine.test.ts:100`
+- `src/services/conceptEngine.test.ts:107`
 
 ### `endgameConceptFor` (function) — 2 call sites
 - `src/services/endgameTechnique.test.ts:63`
@@ -145,24 +147,24 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptForBoard` (function) — 10 call sites
-- `src/services/conceptEngine.test.ts:112`
 - `src/services/conceptEngine.test.ts:119`
-- `src/services/conceptEngine.test.ts:125`
-- `src/services/conceptEngine.test.ts:129`
-- `src/services/conceptEngine.test.ts:137`
-- `src/services/conceptEngine.test.ts:163`
-- `src/services/conceptEngine.test.ts:199`
-- `src/services/conceptEngine.test.ts:217`
+- `src/services/conceptEngine.test.ts:126`
+- `src/services/conceptEngine.test.ts:132`
+- `src/services/conceptEngine.test.ts:136`
+- `src/services/conceptEngine.test.ts:144`
+- `src/services/conceptEngine.test.ts:170`
+- `src/services/conceptEngine.test.ts:206`
+- `src/services/conceptEngine.test.ts:224`
 - `src/services/liveTacticsContext.ts:109`
-- `src/services/positionFacts.ts:708`
+- `src/services/positionFacts.ts:735`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `conceptForLine` (function) — 10 call sites
-- `src/services/conceptEngine.test.ts:224`
-- `src/services/conceptEngine.test.ts:228`
-- `src/services/conceptEngine.test.ts:237`
+- `src/services/conceptEngine.test.ts:231`
+- `src/services/conceptEngine.test.ts:235`
+- `src/services/conceptEngine.test.ts:244`
 - `src/services/endgameDrillService.test.ts:160`
 - `src/services/missedTacticService.ts:787`
 - `src/services/puzzleConceptExplanation.ts:111`
@@ -176,20 +178,20 @@
 
 ### `conceptForSolution` (function) — 7 call sites
 - `src/services/conceptCoverage.report.test.ts:61`
-- `src/services/conceptEngine.test.ts:147`
-- `src/services/conceptEngine.test.ts:152`
-- `src/services/conceptEngine.test.ts:156`
-- `src/services/conceptEngine.test.ts:175`
-- `src/services/conceptEngine.test.ts:246`
-- `src/services/conceptEngine.test.ts:258`
+- `src/services/conceptEngine.test.ts:154`
+- `src/services/conceptEngine.test.ts:159`
+- `src/services/conceptEngine.test.ts:163`
+- `src/services/conceptEngine.test.ts:182`
+- `src/services/conceptEngine.test.ts:253`
+- `src/services/conceptEngine.test.ts:265`
 
 ### `positionalConcepts` (function) — 3 call sites
-- `src/services/conceptEngine.test.ts:186`
-- `src/services/conceptEngine.test.ts:190`
+- `src/services/conceptEngine.test.ts:193`
+- `src/services/conceptEngine.test.ts:197`
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7671`
+- `src/components/Coach/CoachTeachPage.tsx:7673`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`

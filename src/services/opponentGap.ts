@@ -90,8 +90,13 @@ const GAP_STEM: Record<GapSeat, string> = {
   dictated: 'that reply gives you something',
 };
 
-/** The subtle nudge — guide-don't-tell: names NO move, leads the eye with the
- *  arrow the caller draws from `toSquare`. */
-export function opponentGapClause(_gap: OpponentGap, seat: GapSeat): string {
-  return `${GAP_STEM[seat]} — there's a chance right here if you can spot it.`;
+/** The gift, NAMED with its reason (David 2026-09-24: Learn names the move
+ *  with its reason; the withholding "there's a chance here if you can spot
+ *  it" belonged to the old question cards). REQUIRED `named`: no computed
+ *  reason → null, never a vague hint (re-walk 1380, 13.Be3). */
+export function opponentGapClause(_gap: OpponentGap, seat: GapSeat, named: { san: string; why: string } | null): string | null {
+  if (!named) return null;
+  return `${cap(GAP_STEM[seat])}: ${named.san} — it ${named.why}.`;
 }
+
+const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);

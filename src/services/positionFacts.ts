@@ -736,7 +736,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // The board the concept is ABOUT travels with it — a concept found on the
     // board after the best move ("Rook on f5 forks king on f8") seats on THAT
     // board; seated on this one it came out half-owned (the rook not there yet).
-    if (lead && lead.source !== 'positional') concept = { id: lead.id, source: lead.source, full: lead.full, squares: lead.squares, boardFen: lead.boardFen };
+    // A rule with no pieces named is not spoken live (16.Rxf3 "A trapped piece
+    // has no safe square…" about nothing on the board).
+    if (lead && lead.source !== 'positional' && !lead.bare) concept = { id: lead.id, source: lead.source, full: lead.full, squares: lead.squares, boardFen: lead.boardFen };
   } catch { concept = null; }
 
   // THE METHOD BEAT — the same computer the review path uses, in its live
