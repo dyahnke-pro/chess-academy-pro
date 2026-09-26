@@ -66,7 +66,7 @@ describe('the fundamentals vocabularies reconcile', () => {
     // `rook-behind-pawn` → `passive-rook` — each the same habit from the other
     // side.
     const mapped = Object.keys(MOVE_FUNDAMENTAL_TAG).length;
-    expect(mapped).toBe(18);
+    expect(mapped).toBe(19);
   });
 
   it('THE STRUCTURE CROSSES THE BOUNDARY — ids reach a caller, not just prose', () => {

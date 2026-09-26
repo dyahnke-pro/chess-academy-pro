@@ -51,3 +51,33 @@ describe('the student\'s own move has a why', () => {
     expect(again?.text).toMatch(/^Bc4 /);
   });
 });
+
+describe('the opening window is the board, not the move number (re-walk 1380, 14.Be3)', () => {
+  it('open while a minor is home; closed once developed and castled', async () => {
+    const { openingWindowOpen } = await import('./moveFundamentals');
+    const c = new Chess();
+    for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5'.split(' ')) c.move(s);
+    // Move 14, ply 27 — past both old caps; the c1 bishop is still home.
+    expect(openingWindowOpen(c.fen(), 'white')).toBe(true);
+    c.move('Be3');
+    // Every white minor out, castled: the opening is over for White.
+    expect(openingWindowOpen(c.fen(), 'white')).toBe(false);
+  });
+});
+
+describe('the queen steps off the file before it opens (re-walk 1380, 11.Qe1)', () => {
+  const PRE = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5'.split(' ');
+  it('Qe1 leaves the d-file the queens share, with only the d6 pawn between', () => {
+    const c = new Chess(); for (const s of PRE) c.move(s);
+    const f = computeMoveFundamentals(c.fen(), 'Qe1', 'white').find((x) => x.id === 'queen-off-file');
+    expect(f?.led).toMatch(/off the d-file/);
+  });
+  it('the Learn composer speaks it on 11.Qe1', async () => {
+    expect(await ruleAt([...PRE, 'Qe1', 'Bg4'], 20, new Set(['development', 'center', 'king-safety', 'tempo', 'open-diagonal']), false, 0)).toMatch(/d-file opens with the queens facing/);
+  });
+  it('negative control: a queen move that stays in line says nothing', () => {
+    const c = new Chess(); for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6'.split(' ')) c.move(s);
+    // Qd3 stays on the d-file with their queen.
+    expect(computeMoveFundamentals(c.fen(), 'Qd3', 'white').some((x) => x.id === 'queen-off-file')).toBe(false);
+  });
+});
