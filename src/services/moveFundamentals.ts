@@ -55,7 +55,11 @@ export type MoveFundamentalId =
   | 'development-complete'
   /** A rook behind its own central pawn on a closed file: it guards the pawn
    *  now and stands on the file that opens when the centre does. */
-  | 'rook-behind-pawn';
+  | 'rook-behind-pawn'
+  /** The queen steps off a file it shares with the enemy queen, only pawns
+   *  between — so when that file opens the queens stay on (his 11.Qe1: "not
+   *  e5 immediately, which would allow the queen trade"). */
+  | 'queen-off-file';
 
 export interface MoveFundamental {
   id: MoveFundamentalId;
@@ -132,6 +136,9 @@ export const MOVE_FUNDAMENTAL_TAG: Record<MoveFundamentalId, MisconceptionTagId 
   'prepare-break': 'mistimed-pawn-break',
   'development-complete': 'neglected-development',
   'rook-behind-pawn': 'passive-rook',
+  // Opening the file with the queens facing hands them the trade — the break
+  // came too early.
+  'queen-off-file': 'mistimed-pawn-break',
 };
 
 const PIECE_NAME: Record<string, string> = {
@@ -244,6 +251,23 @@ function countHomeMinors(board: Chess, mover: 'w' | 'b'): number {
     if (p && p.color === mover && (p.type === 'n' || p.type === 'b')) n += 1;
   }
   return n;
+}
+
+/**
+ * Is the mover still in the OPENING — by the board, not by the move number?
+ * True while a minor piece sits on its home square, or the king is uncastled
+ * and still may castle. One test for both surfaces: Learn's rule lane and
+ * review's [rule] facet had two hand-typed caps (ply 26 and ply 24) standing
+ * in for this, and both silenced 14.Be3 in the 1380 speedrun — "never forget
+ * development, you still have a whole side to finish".
+ */
+export function openingWindowOpen(fenBefore: string, mover: 'white' | 'black'): boolean {
+  let board: Chess;
+  try { board = new Chess(fenBefore); } catch { return false; }
+  const wb: 'w' | 'b' = mover === 'white' ? 'w' : 'b';
+  if (countHomeMinors(board, wb) > 0) return true;
+  const rights = board.getCastlingRights(wb);
+  return rights.k || rights.q;
 }
 
 /**
@@ -733,6 +757,56 @@ function openingIdeas(
     }
   }
 
+  // STEP THE QUEEN OFF THE FILE — the queens face each other on a file with
+  // only pawns between; one pawn exchange there opens it and trades them off.
+  // Leaving the file first keeps them on (his 11.Qe1 before e5). Board-only:
+  // the file before, the pawns between, the queen off it after.
+  if (mv.piece === 'q' && !mv.captured && mv.from[0] !== mv.to[0]) {
+    const file = mv.from[0];
+    const theirQueen = before.board().flat().find((c) => c && c.type === 'q' && c.color !== mover && c.square[0] === file);
+    if (theirQueen) {
+      const [lo, hi] = [Number(mv.from[1]), Number(theirQueen.square[1])].sort((a, b) => a - b);
+      const between: string[] = [];
+      for (let r = lo + 1; r < hi; r += 1) {
+        const p = before.get(`${file}${r}` as Square);
+        if (p) between.push(p.type);
+      }
+      const stillFacing = after.board().flat().some((c) => c && c.type === 'q' && c.color !== mover
+        && (c.square[0] === mv.to[0] || c.square[1] === mv.to[1]));
+      // The file is about to OPEN: exactly one pawn between, and a pawn of the
+      // other colour hits it now or after one push. A queen that was itself
+      // attacked is fleeing, not planning (the Scandinavian's Qa5).
+      const opens = (): boolean => {
+        if (between.length !== 1 || between[0] !== 'p') return false;
+        let sq = '';
+        for (let r = lo + 1; r < hi; r += 1) if (before.get(`${file}${r}` as Square)) sq = `${file}${r}`;
+        const owner = before.get(sq as Square)?.color;
+        const hitter: 'w' | 'b' = owner === 'w' ? 'b' : 'w';
+        const dir = hitter === 'w' ? 1 : -1;
+        const rank = Number(sq[1]);
+        for (const df of [-1, 1]) {
+          const f = String.fromCharCode(sq.charCodeAt(0) + df);
+          if (f < 'a' || f > 'h') continue;
+          const now = before.get(`${f}${rank - dir}` as Square);
+          if (now && now.type === 'p' && now.color === hitter) return true;
+          const pushFrom = before.get(`${f}${rank - 2 * dir}` as Square);
+          if (pushFrom && pushFrom.type === 'p' && pushFrom.color === hitter && !before.get(`${f}${rank - dir}` as Square)) return true;
+        }
+        return false;
+      };
+      if (!before.isAttacked(mv.from, them) && opens() && !stillFacing) {
+        out.push({
+          id: 'queen-off-file',
+          weight: 60,
+          led: `steps the queen off the ${file}-file, out of line with their queen — when that file opens, the queens stay on`,
+          selfContained: `takes the queen off the ${file}-file first, so opening it will not trade the queens`,
+          imperative: `before the ${file}-file opens with the queens facing, step your queen off it — unless you want the trade`,
+          squares: [mv.from, mv.to, theirQueen.square],
+        });
+      }
+    }
+  }
+
   // PREPARE THE BREAK — a quiet pawn move that guards the square in front of
   // your own central pawn, so that pawn can advance supported.
   if (mv.piece === 'p' && !mv.captured && relRank(mv.to, mover) <= 3) {
@@ -925,6 +999,7 @@ const IS_OPENING_PRINCIPLE: Record<MoveFundamental['id'], boolean> = {
   'prepare-break': true,
   'development-complete': true,
   'rook-behind-pawn': true,
+  'queen-off-file': true,
 };
 
 /** The first opening principle this move follows that has not been taught

@@ -20,7 +20,7 @@ import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
-import { strategicWhyImperative, principleLine } from './moveFundamentals';
+import { strategicWhyImperative, principleLine, openingWindowOpen } from './moveFundamentals';
 import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -753,7 +753,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     : null;
   // S2 — otherwise the opening principle the move kept, once per game, only on
   // a move with nothing to correct (a clean or ungraded move).
-  const ruleHere = !refutedHere && studentToMove && lm && input.taughtPrinciples && plyNumber <= 26
+  const ruleHere = !refutedHere && studentToMove && lm && input.taughtPrinciples && openingWindowOpen(lm.fenBefore, studentSeat)
     // GRADED clean only — an ungraded move is not a clean one. The 2026-09-24
     // Learn tape praised "O-O-O does what the opening asks" one line after
     // another lane called O-O-O a mistake: the grade had not reached here yet.
