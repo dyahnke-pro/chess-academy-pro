@@ -26,7 +26,7 @@ describe('one habit, taught once a game (walk 3, 21.Rxd8 → 22.gxh5)', () => {
     const pre = GAME.split(' ').slice(0, 42);
     const c = new Chess(); for (const s of pre) c.move(s);
     const input = {
-      currentGameId: 'walk3', fenBefore: c.fen(), historySans: [...pre, 'gxh5'], playedSan: 'gxh5', bestSan: 'Rxf8+',
+      currentGameId: 'walk3', replySan: null, fenBefore: c.fen(), historySans: [...pre, 'gxh5'], playedSan: 'gxh5', bestSan: 'Rxf8+',
       studentColor: 'white' as const, evalBeforeWhiteCp: 681, evalAfterWhiteCp: 418,
       bestPvUci: ['d8f8', 'g8f8', 'f3f5', 'f8g8', 'g4h5', 'g8h8', 'e1g3', 'b4c5'],
       playedPvUci: ['f8d8', 'e1g3', 'g8h8', 'b3e6', 'e7e6', 'g3g5', 'd8f8', 'g5f4'],

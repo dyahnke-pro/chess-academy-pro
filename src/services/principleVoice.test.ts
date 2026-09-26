@@ -10,7 +10,7 @@ const attrs = attributePrinciples({ historySans: SANS, bestSan: 'e6', classifica
 
 describe('principleVoice — deterministic DNA-register verdicts', () => {
   it('names only squares and moves the attributor proved', () => {
-    const text = renderFundamentalVerdict(attrs, { ply: 12, seen: new Set() });
+    const text = renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() });
     expect(text.length).toBeGreaterThan(40);
     // The proven squares/moves are in the words; nothing else is invented.
     expect(text).toMatch(/d5/);
@@ -21,15 +21,15 @@ describe('principleVoice — deterministic DNA-register verdicts', () => {
   });
 
   it('is byte-identical for identical input (David: "this all needs to be deterministic")', () => {
-    const a = renderFundamentalVerdict(attrs, { ply: 12, seen: new Set() });
-    const b = renderFundamentalVerdict(attrs, { ply: 12, seen: new Set() });
+    const a = renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() });
+    const b = renderFundamentalVerdict(attrs, { replySan: null, ply: 12, seen: new Set() });
     expect(a).toBe(b);
   });
 
   it('repeats a fundamental in a SHORT stem after it has spoken in full (G.4 — accumulate, do not nag)', () => {
     const seen = new Set<FundamentalId>();
-    const first = renderFundamentalVerdict(attrs.slice(0, 1), { ply: 12, seen });
-    const again = renderFundamentalVerdict(attrs.slice(0, 1), { ply: 20, seen });
+    const first = renderFundamentalVerdict(attrs.slice(0, 1), { replySan: null, ply: 12, seen });
+    const again = renderFundamentalVerdict(attrs.slice(0, 1), { replySan: null, ply: 20, seen });
     expect(again.length).toBeLessThan(first.length);
     expect(again).toMatch(/again/i);
   });

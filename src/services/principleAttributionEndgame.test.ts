@@ -46,7 +46,7 @@ describe('endgame fundamentals — Wave 1 detectors fire on real legal games', (
       expect(a!.evidence.moves).toContain(best);
       expect(a!.evidence.counterfactualClean).toBe(true);
       // it speaks, in the student's perspective (you/your, never we/our)
-      const text = renderFundamentalVerdict([a!], { ply: hist.length, seen: new Set() });
+      const text = renderFundamentalVerdict([a!], { replySan: null, ply: hist.length, seen: new Set() });
       expect(text.length).toBeGreaterThan(20);
       expect(text).not.toMatch(/\b(we|our|us)\b/i);
     });

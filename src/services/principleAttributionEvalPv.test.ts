@@ -63,7 +63,7 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
       const a = out.find((x) => x.id === name);
       expect(a, `${name} not in [${out.map((x) => x.id).join(', ')}]`).toBeTruthy();
       expect(a!.evidence.counterfactualClean).toBe(true);
-      const text = renderFundamentalVerdict([a!], { ply: input.historySans.length, seen: new Set() });
+      const text = renderFundamentalVerdict([a!], { replySan: null, ply: input.historySans.length, seen: new Set() });
       expect(text.length).toBeGreaterThan(20);
       expect(text).not.toMatch(/\b(we|our|us)\b/i);
     });
@@ -76,7 +76,7 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
     const out = attributePrinciples(thrownMate);
     const a = out.find((x) => x.id === 'botched-conversion');
     expect(a, 'botched-conversion did not fire on a thrown mate').toBeTruthy();
-    const text = renderFundamentalVerdict([a!], { ply: thrownMate.historySans.length, seen: new Set() });
+    const text = renderFundamentalVerdict([a!], { replySan: null, ply: thrownMate.historySans.length, seen: new Set() });
     expect(text).not.toMatch(/\b\d{3,}\b/);        // no 100+ figure
     expect(text).not.toMatch(/pawns/i);            // points, never pawns (David)
     expect(text).toMatch(/winning position/i);
