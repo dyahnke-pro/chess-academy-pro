@@ -43,6 +43,8 @@ describe('configuration claims', () => {
     expect(falseConfigurationClaim('Those doubled pawns are weak.', start)).toBe('doubled pawns');
     expect(falseConfigurationClaim('The isolated pawn is the target.', start)).toBe('isolated pawn');
     expect(falseConfigurationClaim('With queens off, the king walks up.', start)).toBe('queens off');
+    // One queen stepping off a file is an instruction, not a claim of the trade.
+    expect(falseConfigurationClaim('Before the d-file opens with the queens facing, step your queen off it — unless you want the trade.', start)).toBeNull();
     // …but the bishop pair IS there at the start, so that one passes.
     expect(falseConfigurationClaim('The bishop pair gives long-term pressure.', start)).toBeNull();
   });

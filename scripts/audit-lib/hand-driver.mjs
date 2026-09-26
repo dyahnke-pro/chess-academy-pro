@@ -33,6 +33,10 @@ await ctx.addInitScript(stampAuditRunId(`hand-${Math.random().toString(36).slice
 const page = await ctx.newPage();
 const errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));
+// The page's console, so a walk can read a debug line without a new audit
+// event (`/console?grep=…`).
+const consoleLines = [];
+page.on('console', (m) => { consoleLines.push(m.text()); if (consoleLines.length > 2000) consoleLines.shift(); });
 
 const chess = new Chess();
 let seen = 0;
@@ -126,6 +130,12 @@ const routes = {
     return listener.getCapturedEvents().slice(-400)
       .map((e) => `${e.kind} | ${e.source ?? ''} | ${(e.summary ?? '').slice(0, 300)}`)
       .filter((l) => !re || re.test(l)).slice(-n);
+  },
+  /** The page's console lines — `/console?n=40&grep=pf-debug`. */
+  async console(q) {
+    const n = Number(q.get('n') ?? 40);
+    const re = q.get('grep') ? new RegExp(q.get('grep'), 'i') : null;
+    return consoleLines.filter((l) => !re || re.test(l)).slice(-n);
   },
   async wait(q) { await sleep(Number(q.get('ms') ?? 5000)); return state(); },
   state,

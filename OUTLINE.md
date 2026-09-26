@@ -28,6 +28,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ Gem tests: SEE 2x faster, convert-once, budgets.
 - 🟠 Quiet-move purpose: h3/g4 kicks, Rd1 open file, Qe1 off the file, Bb3 fork trick, Be3 development now speak (#955–#957); still owed: Ne2-not-Nf3 choice, Qa1 behind the rook.
 - ✅ Walk 3 of the 1380 (2026-09-26): Qe1 graded by its cost when outside the fan (`gradedLoss`), captures never get a principle, one owner for the uncastled-king claim, a shared file is contested, one habit taught once across method beat + fundamental verdict. Report `audit-reports/hand-walk-1380-walk3-2026-09-26.md`.
+- ✅ Walk 3 round 2 (2026-09-26): a singular "queen off" is not a queens-off claim (Qe1 speaks), a castling gap alone is not "behind in development", conversion counts SETTLED material (no "a rook up" mid-exchange), the alignment seed stands down while an enemy piece is loose, and "took your last defender off X" stays quiet while still clearly winning.
 - 🔴 Plan arc / one thread per move (B) — SUBSUMPTION, not a cap (G4.5): same-claim facts collapse. Walking 1380 on current code to measure (2026-09-26).
 - 🟠 Phase narration still phrases chess facts through the model — David's call.
 - 🔴 Leftovers: rook template m17, "either works … with it", duplicate break lanes, transposition name.

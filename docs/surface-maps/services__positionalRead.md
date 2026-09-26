@@ -29,7 +29,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:556`
+- `src/services/danyaBehaviors.ts:560`
 
 ### `castleIsOneMoveAway` (function) — 1 call site
 - `src/services/danyaBehaviors.ts:218`

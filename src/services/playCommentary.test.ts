@@ -69,6 +69,14 @@ describe('buildPlayCommentary', () => {
     expect(beat?.facts[0]).toContain('rook');
   });
 
+  it('seeding observation stands down while an enemy piece is loose, even once another lane named it (1380 re-walk, 13.Rxd8)', () => {
+    // The d-file seed above, plus an undefended black knight on a4, hit by the rook.
+    const fen = '3r2k1/5pp1/3q3p/8/n7/8/R5PP/2K5 w - - 0 20';
+    expect(buildPlayCommentary({ fen, studentColor: 'white' })?.kind).toBe('tactic');
+    const after = buildPlayCommentary({ fen, studentColor: 'white', skipSquares: new Set(['a4']) });
+    expect(after?.kind).not.toBe('seeding-observation');
+  });
+
   it('seeding observation stays silent without a matching slider for the line', () => {
     // Same alignment, but White\'s only piece is a bishop — wrong geometry.
     const beat = buildPlayCommentary({ fen: '3r2k1/5pp1/3q3p/8/8/8/6PP/B5K1 w - - 0 20', studentColor: 'white' });

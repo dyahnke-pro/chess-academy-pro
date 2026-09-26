@@ -19,6 +19,7 @@
 // engine; the eval gate belongs to the caller that already holds one.
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
+import { findHangingBySee } from './positionReadingService';
 
 export type ConversionStep = 'finish-development' | 'trade-pieces' | 'make-passer' | 'escort-passer' | 'cut-off-king';
 
@@ -49,7 +50,13 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   try { c = new Chess(fen); } catch { return null; }
   const s = describeStructure(fen);
   if (!s) return null;
-  const edge = student === 'w' ? s.material.balance : -s.material.balance;
+  const raw = student === 'w' ? s.material.balance : -s.material.balance;
+  // SETTLED, not counted mid-exchange (re-walk 1380, 13.Rxd8 Qe7: "You're a
+  // rook up" with the rook on d8 about to be taken back). Take off the most
+  // the opponent wins by capturing a student piece now — the undercount is
+  // deliberate: a smaller edge costs a sentence, a bigger one is a false claim.
+  const owed = Math.max(0, ...findHangingBySee(fen).filter((h) => h.color === student).map((h) => h.gain));
+  const edge = raw - owed;
   if (edge < CONVERSION_EDGE) return null;
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
   const pieces = (side: 'w' | 'b'): number => {
