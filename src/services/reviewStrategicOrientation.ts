@@ -568,17 +568,25 @@ export function buildMiddlegameOrientation(
   const parts: string[] = [];
   const arrows: PlanArrow[] = [];
 
+  // A PAWN RACE NEEDS PAWNS TO RACE WITH, AND A MIDDLEGAME TO RACE IN (review
+  // walk 900, 2026-09-26: "The kings castled on opposite wings — this is a
+  // race" with neither king castled, queens and rooks hunting a bare king, and
+  // one a-pawn to "throw" at it). Kings on opposite wings is a storm only when
+  // the storming side still owns two pawns on the enemy king's wing.
+  const enemyKingWingNow = struct.kings.kingWing[enemyWB] === 'queenside' ? 'queenside' : 'kingside';
   const oppositeCastling =
     struct.kings.oppositeWings &&
     struct.kings.kingWing[studentColorWB] !== 'center' &&
-    struct.kings.kingWing[enemyWB] !== 'center';
+    struct.kings.kingWing[enemyWB] !== 'center' &&
+    phaseOfFen(fen) === 'middlegame' &&
+    counts[studentColorWB][enemyKingWingNow] >= 2;
   if (oppositeCastling && seat !== 'opponent') {
-    const enemyKingWing = struct.kings.kingWing[enemyWB] === 'queenside' ? 'queenside' : 'kingside';
+    const enemyKingWing = enemyKingWingNow;
     const myKingWing = struct.kings.kingWing[studentColorWB] === 'queenside' ? 'queenside' : 'kingside';
     // Name the concrete TARGET, not a generic race (David 2026-07-24): storm the
     // pawns at the enemy king's actual wing and rip the files open — that's where
     // the mate comes from.
-    let raceLine = `The kings castled on opposite wings — this is a race, and it's won by throwing your pawns at their king on the ${enemyKingWing} and tearing open the files around it before they do the same to you`;
+    let raceLine = `The kings are on opposite wings — this is a race, and it's won by throwing your pawns at their king on the ${enemyKingWing} and tearing open the files around it before they do the same to you`;
     // If THIS move pushes a pawn toward the student's OWN king, it goes the wrong
     // way — the storm belongs at the enemy king, not in front of yours.
     const pawnMove = moveSan && /^[a-h]x?[a-h]?[1-8]/.test(moveSan) && !/^[KQRBNO]/.test(moveSan);

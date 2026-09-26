@@ -86,10 +86,11 @@ describe('reviewConcepts — open-lines-at-king', () => {
 
 describe('reviewConcepts — two-bishops', () => {
   it('fires when a knight captures an enemy bishop in an even trade, leaving the pair', () => {
-    // White knight on d5 captures a black bishop on f6; White keeps Bc1+Be2 (two
-    // bishops), Black is left with Bc8 only → the pair, and it's an even minor
-    // trade (eval steady).
-    const fen = 'r1bqk2r/pppp1ppp/5b2/3N4/8/8/PPPP1PPP/R1BQKB1R w KQkq - 0 1';
+    // White knight on d5 captures a black bishop on f6; White keeps Bc1+Bf1 (two
+    // bishops), Black keeps Nb8+Bc8 → the pair against an equal count of minors
+    // once the knight is recaptured, an even trade (eval steady). Black's knight
+    // matters: without it White would simply be a piece up, not "the pair".
+    const fen = 'rnbqk2r/pppp1ppp/5b2/3N4/8/8/PPPP1PPP/R1BQKB1R w KQkq - 0 1';
     // white bishops: c1 + f1 = 2; black bishops: c8 + f6 = 2. Nxf6 removes one.
     const beat = detectConcept(ctx(fen, 'Nxf6+', { evalBefore: 15, evalAfter: 10, studentColor: 'w' }));
     expect(beat?.concept).toBe('two-bishops');

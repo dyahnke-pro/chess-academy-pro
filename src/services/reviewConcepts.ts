@@ -25,6 +25,9 @@
  */
 import { Chess, type Square, type PieceSymbol } from 'chess.js';
 import type { ReviewConceptId } from './conceptVocabulary';
+import { totalMinorCount } from './development';
+import { centreDistance } from '../utils/centreDistance';
+import { isOutpost } from './outpost';
 
 export interface ConceptCtx {
   fenBefore: string;
@@ -112,43 +115,9 @@ function detectOutpost(ctx: ConceptCtx): ConceptBeat | null {
   } catch { return null; }
   if (!dest || (piece !== 'n' && piece !== 'b')) return null;
 
-  const file = dest.charCodeAt(0) - 97;       // 0..7 (a..h)
-  const rank = parseInt(dest[1], 10);          // 1..8
   const mover = ctx.moverColor;
-  // Outpost zone: advanced into enemy half (white ranks 4-6, black ranks 3-5).
-  if (mover === 'w' && !(rank >= 4 && rank <= 6)) return null;
-  if (mover === 'b' && !(rank >= 3 && rank <= 5)) return null;
-
   const board = new Chess(ctx.fenAfter);
-  const enemy: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
-
-  // No enemy pawn on an ADJACENT file can ever advance to attack the square
-  // (i.e. no enemy pawn currently sits on an adjacent file on a rank from which
-  // it could still reach the two squares that guard `dest`).
-  for (const df of [-1, 1]) {
-    const f = file + df;
-    if (f < 0 || f > 7) continue;
-    const fileLetter = String.fromCharCode(97 + f);
-    for (let r = 1; r <= 8; r++) {
-      const sq = `${fileLetter}${r}` as Square;
-      const p = board.get(sq);
-      if (!p || p.type !== 'p' || p.color !== enemy) continue;
-      // An enemy pawn can challenge `dest` if it is still BEHIND the outpost
-      // (can advance toward it): white outpost is challenged by black pawns on a
-      // higher rank; black outpost by white pawns on a lower rank.
-      if (mover === 'w' && r > rank) return null;
-      if (mover === 'b' && r < rank) return null;
-    }
-  }
-
-  // Must be supported by a friendly pawn (a real outpost, not a loose leap).
-  const supporters = board.attackers ? board.attackers(dest, mover) : [];
-  let pawnGuard = false;
-  for (const sq of supporters) {
-    const p = board.get(sq);
-    if (p && p.type === 'p' && p.color === mover) { pawnGuard = true; break; }
-  }
-  if (!pawnGuard) return null;
+  if (!isOutpost(board, dest, mover, true)) return null;
 
   const pieceWord = piece === 'n' ? 'knight' : 'bishop';
   const mine = MINE(mover, ctx.studentColor);
@@ -241,6 +210,16 @@ function detectTwoBishops(ctx: ConceptCtx): ConceptBeat | null {
   const myB = countBishops(ctx.fenAfter, ctx.moverColor);
   const enemyB = countBishops(ctx.fenAfter, enemy);
   if (myB !== 2 || enemyB > 1) return null;                              // clean pair asymmetry now
+  // A PAIR IS ONLY AN EDGE AGAINST AN EQUAL NUMBER OF MINORS (review walk 900,
+  // 2026-09-26: "the two bishops against your single minor" said to a side
+  // with NO minor left). Two bishops against nothing is extra material, a
+  // different fact; against one bishop plus a spare knight it is not "their
+  // single minor" either.
+  // Counted AFTER the recapture the trade implies: a capturing minor that can
+  // be taken back is already spent.
+  const afterBoard = new Chess(ctx.fenAfter);
+  const pendingRecapture = mv.piece === 'n' && afterBoard.isAttacked(mv.to, enemy) ? 1 : 0;
+  if (totalMinorCount(afterBoard, ctx.moverColor) - pendingRecapture !== totalMinorCount(afterBoard, enemy)) return null;
   // Even trade — the imbalance is the PAIR, not a won piece (a capture that
   // wins material makes the eval jump; that's a different, bigger story).
   const before = moverPovCp(ctx.evalBefore, ctx.moverColor);
@@ -369,13 +348,6 @@ function detectCastle(ctx: ConceptCtx): ConceptBeat | null {
 }
 
 /** Chebyshev distance from a square to the central 4 (d4/e4/d5/e5). */
-function distToCentre(square: Square): number {
-  const f = square.charCodeAt(0) - 97;
-  const r = parseInt(square[1], 10) - 1;
-  const df = Math.min(Math.abs(f - 3), Math.abs(f - 4));
-  const dr = Math.min(Math.abs(r - 3), Math.abs(r - 4));
-  return Math.max(df, dr);
-}
 
 /**
  * CENTRALIZE THE KING — in the endgame, a king move toward the centre (it gets
@@ -387,7 +359,7 @@ function detectCentralizeKing(ctx: ConceptCtx): ConceptBeat | null {
   try { const c = new Chess(ctx.fenBefore); mv = c.move(ctx.san); } catch { return null; }
   if (!mv || mv.piece !== 'k' || mv.san.startsWith('O-O')) return null;
   if (pieceCount(ctx.fenAfter) > 12) return null;                        // endgame
-  if (distToCentre(mv.to) >= distToCentre(mv.from)) return null; // must get MORE central
+  if (centreDistance(mv.to) >= centreDistance(mv.from)) return null; // must get MORE central
   const mine = MINE(ctx.moverColor, ctx.studentColor);
   const text = mine
     ? `In the endgame the king is a fighting piece — you're marching it to the centre where it shepherds your pawns and pressures theirs. Activating the king is often the whole plan.`

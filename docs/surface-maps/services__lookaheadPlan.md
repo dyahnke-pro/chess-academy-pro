@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1570 lines · 19 exports · 10 importers · 4 tests · 0 audits**
+**1605 lines · 20 exports · 11 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,22 +21,27 @@
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/planMarks.test.ts`
 - `src/services/planMarks.ts`
+- `src/services/reviewWalk900.test.ts`
 - `src/test/factories.ts`
 
 ## Exports and every call site
+
+### `reachesInOneMove` (function) — 2 call sites
+- `src/services/reviewWalk900.test.ts:47`
+- `src/services/reviewWalk900.test.ts:49`
 
 ### `waypointsOf` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `tacticWord` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7715`
-- `src/components/Coach/CoachTeachPage.tsx:7762`
+- `src/components/Coach/CoachTeachPage.tsx:7720`
+- `src/components/Coach/CoachTeachPage.tsx:7769`
 - `src/services/computedVoiceAudit.report.test.ts:262`
 - `src/services/dnaLineNarrator.ts:129`
 - `src/services/dnaLineNarrator.ts:218`
-- `src/services/groundedAnswer.ts:4702`
-- `src/services/groundedAnswer.ts:4714`
-- `src/services/groundedAnswer.ts:5468`
+- `src/services/groundedAnswer.ts:4675`
+- `src/services/groundedAnswer.ts:4687`
+- `src/services/groundedAnswer.ts:5441`
 - `src/services/pvPlayback.test.ts:291`
 - `src/services/pvPlayback.test.ts:292`
 - `src/services/pvPlayback.test.ts:293`
@@ -45,11 +50,11 @@
 - `src/services/pvPlayback.test.ts:297`
 - `src/services/pvPlayback.test.ts:299`
 - `src/services/pvPlayback.test.ts:300`
-- `src/services/pvPlayback.ts:234`
-- `src/services/pvPlayback.ts:644`
-- `src/services/pvPlayback.ts:664`
-- `src/services/pvPlayback.ts:701`
-- `src/services/pvPlayback.ts:794`
+- `src/services/pvPlayback.ts:235`
+- `src/services/pvPlayback.ts:645`
+- `src/services/pvPlayback.ts:665`
+- `src/services/pvPlayback.ts:702`
+- `src/services/pvPlayback.ts:795`
 - `src/services/reviewMoveBriefing.ts:250`
 - `src/services/tacticVocabulary.ts:95`
 - `src/services/teachingSelector.ts:347`
@@ -153,7 +158,7 @@
 - `src/services/lookaheadPlan.test.ts:1258`
 
 ### `positionReadLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9449`
+- `src/components/Coach/CoachTeachPage.tsx:9471`
 - `src/services/coachLaneWiring.test.ts:38`
 - `src/services/computedVoiceAudit.report.test.ts:225`
 - `src/services/lookaheadPlan.test.ts:541`
@@ -172,7 +177,7 @@
 - `src/services/narrationAdversarial.test.ts:67`
 
 ### `lineShapeLine` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9453`
+- `src/components/Coach/CoachTeachPage.tsx:9475`
 - `src/services/coachLaneWiring.test.ts:39`
 - `src/services/computedVoiceAudit.report.test.ts:226`
 - `src/services/lookaheadPlan.test.ts:881`
@@ -191,7 +196,7 @@
 - `src/services/lookaheadPlan.test.ts:1015`
 
 ### `terminalReadLine` (function) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9456`
+- `src/components/Coach/CoachTeachPage.tsx:9478`
 - `src/services/coachLaneWiring.test.ts:40`
 - `src/services/computedVoiceAudit.report.test.ts:230`
 - `src/services/lookaheadPlan.test.ts:988`
@@ -205,7 +210,7 @@
 - `src/services/lookaheadPlan.test.ts:1016`
 
 ### `keySquareLine` (function) — 18 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9444`
+- `src/components/Coach/CoachTeachPage.tsx:9466`
 - `src/services/coachLaneWiring.test.ts:37`
 - `src/services/computedVoiceAudit.report.test.ts:224`
 - `src/services/forkNarration.ts:108`
@@ -225,12 +230,12 @@
 - `src/services/planMarks.test.ts:37`
 
 ### `planFromUci` (function) — 28 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9441`
+- `src/components/Coach/CoachTeachPage.tsx:9463`
 - `src/services/coachLaneWiring.test.ts:36`
 - `src/services/computedVoiceAudit.report.test.ts:220`
-- `src/services/concessionBeat.ts:415`
+- `src/services/concessionBeat.ts:424`
 - `src/services/forkNarration.ts:106`
-- `src/services/inaccuracyCall.ts:81`
+- `src/services/inaccuracyCall.ts:171`
 - `src/services/lookaheadPlan.test.ts:262`
 - `src/services/lookaheadPlan.test.ts:270`
 - `src/services/lookaheadPlan.test.ts:275`
@@ -260,6 +265,7 @@
 - `src/services/lookaheadPlan.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/planMarks.test.ts`
+- `src/services/reviewWalk900.test.ts`
 
 ## Audits that reach it
 

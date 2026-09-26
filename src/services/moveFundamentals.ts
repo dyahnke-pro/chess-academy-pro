@@ -25,6 +25,8 @@ import { landingIsSafe } from './positionReadingService';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { homeMinorCount, homeSquaresOf } from './development';
+import { centreDistance } from '../utils/centreDistance';
+import { isOutpost } from './outpost';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -61,6 +63,35 @@ export type MoveFundamentalId =
    *  between — so when that file opens the queens stay on (his 11.Qe1: "not
    *  e5 immediately, which would allow the queen trade"). */
   | 'queen-off-file';
+
+/** Which review facet family each fundamental RESTATES, when it does — the
+ *  join that lets the door see two lanes saying one thing (review walk 2065,
+ *  2026-09-26: on g4, "your passed pawn on g4 wants to run — passed pawns are
+ *  meant to be pushed" [passer] and "g4 pushes your passed pawn — passed pawns
+ *  must be pushed" [rule], one breath apart). A `Record`, so a new fundamental
+ *  fails to compile until someone says whether it duplicates a facet. `null`
+ *  = no facet makes this claim; the rule speaks alone. */
+export const FUNDAMENTAL_CLAIM_FAMILY: Record<MoveFundamentalId, string | null> = {
+  'king-safety': null,
+  outpost: null,
+  development: null,
+  center: null,
+  'open-file': null,
+  'king-activity': null,
+  promotion: null,
+  'passed-pawn': 'passer',
+  luft: null,
+  space: null,
+  prophylaxis: null,
+  'open-diagonal': null,
+  tempo: null,
+  'attack-defender': null,
+  'keep-working': null,
+  'prepare-break': null,
+  'development-complete': null,
+  'rook-behind-pawn': null,
+  'queen-off-file': null,
+};
 
 export interface MoveFundamental {
   id: MoveFundamentalId;
@@ -157,26 +188,6 @@ function relRank(sq: string, color: 'w' | 'b'): number {
 }
 
 /** No enemy pawn can ever advance to attack `sq` — the classic outpost test. */
-function isOutpost(board: Chess, sq: string, mover: 'w' | 'b'): boolean {
-  const file = sq.charCodeAt(0);
-  const rank = rankOf(sq);
-  const enemy = mover === 'w' ? 'b' : 'w';
-  const attackRank = mover === 'w' ? rank + 1 : rank - 1;
-  if (attackRank < 1 || attackRank > 8) return false;
-  for (const df of [-1, 1]) {
-    const f = file + df;
-    if (f < 97 || f > 104) continue;
-    const adjFile = String.fromCharCode(f);
-    for (let r = 1; r <= 8; r += 1) {
-      const p = board.get(`${adjFile}${r}` as Square);
-      if (!p || p.type !== 'p' || p.color !== enemy) continue;
-      const canReach = enemy === 'w' ? r <= attackRank : r >= attackRank;
-      if (canReach) return false;
-    }
-  }
-  return true;
-}
-
 /** Central squares the piece on `to` now attacks (from the after-move board). */
 function eyesCenter(after: Chess, to: string, mover: 'w' | 'b'): string[] {
   // Q2 — the centre AND the squares beside their king. Filtering the Q1 list
@@ -345,7 +356,7 @@ export function computeMoveFundamentals(
   // Not on a CAPTURE: taking a piece is its own reason, and the hanging-piece
   // and tactic lanes name it (hand walk 2026-09-24: 23.Bxe6+ was "plant the
   // bishop on the e6 outpost" — it takes a knight with check).
-  if ((mv.piece === 'n' || mv.piece === 'b') && !mv.captured && relRank(mv.to, mover) >= 5 && isOutpost(after, mv.to, mover)) {
+  if ((mv.piece === 'n' || mv.piece === 'b') && !mv.captured && relRank(mv.to, mover) >= 5 && isOutpost(after, mv.to, mover, false)) {
     const name = PIECE_NAME[mv.piece];
     out.push({
       id: 'outpost',
@@ -520,10 +531,10 @@ export function computeMoveFundamentals(
   // ── KING ACTIVITY — in the endgame the king is a fighting piece. A king step
   //    toward the center (higher relative rank, or toward the d/e files).
   if (mv.piece === 'k' && phase === 'endgame') {
-    const towardCentreRank = relRank(mv.to, mover) > relRank(mv.from, mover);
-    const centreFileDist = (sq: string) => Math.min(Math.abs(sq.charCodeAt(0) - 100), Math.abs(sq.charCodeAt(0) - 101)); // dist to d/e
-    const towardCentreFile = centreFileDist(mv.to) < centreFileDist(mv.from);
-    if (towardCentreRank || towardCentreFile) {
+    // TOWARD THE CENTRE means CLOSER TO IT — king steps to d4/e4/d5/e5
+    // (review walk 1500, 2026-09-26: Kf2-g3 "marches your king toward the
+    // center"; it moved up a rank and away by a file, no nearer at all).
+    if (centreDistance(mv.to) < centreDistance(mv.from)) {
       out.push({
         id: 'king-activity',
         weight: 88,

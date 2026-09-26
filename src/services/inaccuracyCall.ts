@@ -32,6 +32,7 @@ import { planFromUci } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
 import { MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 import { MATERIAL_VALUE } from './pieceValues';
+import { legalSeeGain } from './positionReadingService';
 
 export interface InaccuracyCall {
   /** Straight from `moveRating.classifyMove` — never re-derived here. */
@@ -159,7 +160,11 @@ function whyBetter(
     const NAME: Record<string, string> = { q: 'queen', r: 'rook', b: 'bishop', n: 'knight' };
     // Only when it takes MORE than the capturer is worth — an even trade is not
     // the reason a move is better.
-    if (first?.captured && NAME[first.captured] && MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece]) {
+    // …or when it wins the piece OUTRIGHT: an undefended queen taken by a
+    // queen is not an even trade (review walk 2065, 2026-09-26: Qxh5 took a
+    // hanging queen and the line's net read called it "win a rook").
+    const winsOutright = first?.captured ? legalSeeGain(fenBefore, first.to) >= MATERIAL_VALUE[first.captured] : false;
+    if (first?.captured && NAME[first.captured] && (MATERIAL_VALUE[first.captured] > MATERIAL_VALUE[first.piece] || winsOutright)) {
       return { why: `take the ${NAME[first.captured]} on ${first.to}`, square: first.to };
     }
   } catch { /* fall through to the plan read */ }
@@ -196,9 +201,14 @@ function whyBetter(
   // re-splitting the joined prose — which cannot be split safely anyway, since a
   // clause carries its own commas ("walk the bishop round to b3, by way of f7").
   const lead = plan?.mine.spokenClauses[0];
+  // WHERE THE PIECES END UP IS NOT WHY THE MOVE WAS BETTER (review walks 900 +
+  // 2065, 2026-09-26: "the stronger move was c6 — it would bring pieces to a5
+  // and c6 over the next few moves"). With nothing but drift, name the move
+  // and give no reason — empty beats a reason that says nothing.
+  if (lead?.drift) return null;
   if (lead?.text) return { why: lead.text, square: lead.squares[0] ?? '' };
-  // No clause carried a square (the drift line, and anything square-less that
-  // outranked it) — fall back to the sentence, which in that case IS one clause.
+  // No clause carried a square (anything square-less that outranked the rest)
+  // — fall back to the sentence, which in that case IS one clause.
   const want = /^You want to ([^.]+)\./.exec(text);
   if (!want) return null;
   const square = plan?.mine.spokenClauses.flatMap((c) => c.squares)[0] ?? '';

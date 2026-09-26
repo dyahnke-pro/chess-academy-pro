@@ -81,7 +81,10 @@ function openCentralFiles(chess: Chess): number {
  * real on the board (G3 + David 2026-07-19: never overstate a non-applicable
  * why). Returns the clause, or null when it doesn't genuinely apply.
  */
-export function prematureBreakWhy(fenBefore: string, san: string): string | null {
+/** `seat` is required: the reason is spoken to the student about THEIR break or
+ *  about the opponent's, and the review walk of 2026-09-26 told a student their
+ *  OPPONENT's …dxe5 opened the centre "before you're ready". */
+export function prematureBreakWhy(fenBefore: string, san: string, seat: 'student' | 'opponent'): string | null {
   try {
     const before = new Chess(fenBefore);
     const mover = before.turn();
@@ -111,7 +114,7 @@ export function prematureBreakWhy(fenBefore: string, san: string): string | null
     const reason = behindDev
       ? (homePiece ? `with ${homePiece} still at home` : 'still behind in development')
       : 'with the king still uncastled';
-    return `a central break ${reason} — premature, opening the centre before you're ready for it`;
+    return `a central break ${reason} — premature, opening the centre before ${seat === 'student' ? "you're" : "they're"} ready for it`;
   } catch { return null; }
 }
 
@@ -356,7 +359,7 @@ export function computeMoveFacets(
     // WHY it's a mistake, when we can prove it (a premature central break). Danya
     // leads with the positional reason, THEN names the better move — so does this.
     const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')
-      ? prematureBreakWhy(fenBefore, san)
+      ? prematureBreakWhy(fenBefore, san, isStudent ? 'student' : 'opponent')
       : null;
     // A "STRONGER MOVE" ONLY WHEN THE MOVE FELL SHORT (walk 2026-09-23, prod
     // tape: "You: that was a great move — the stronger move was Kd7" on a GREAT
@@ -738,7 +741,10 @@ export function computeMoveFacets(
 
   // ── 7d. TIMING (WO-LAYERS-01 step 7) — the student's move, played a turn
   // early, would have lost material to a reply that no longer works.
-  if (isStudent && ply >= 3 && ctx.allSans.length >= ply) {
+  // Never on a move graded as a mistake: "the timing of Bxf7 matters" beside
+  // "that was a blunder" (review walk 2065) credits the move the same breath
+  // it condemns it.
+  if (isStudent && !negativeClass && ctx.classification !== 'miss' && ply >= 3 && ctx.allSans.length >= ply) {
     try {
       const early = new Chess();
       for (const m of ctx.allSans.slice(0, ply - 3)) early.move(m);
@@ -838,7 +844,7 @@ export function computeMoveFacets(
       facets.push(f);
       // The FIRST statement of a principle carries its say-once identity; a
       // stem is its own move's fact and must not be eaten by that ledger.
-      outIdentity?.set(f, lead.first ? `rule:${lead.id}` : `rule-stem:${ply}`);
+      outIdentity?.set(f, lead.first ? `rule:${lead.id}` : `rule-stem:${ply}:${lead.id}`);
       recSquares(f, lead.squares);
     }
   }
