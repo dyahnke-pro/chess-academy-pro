@@ -3,8 +3,27 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { execSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from 'node:fs';
 import { join, relative, resolve as resolvePath, sep } from 'node:path';
+
+/** Legacy auto-annotations live in src/ (tests and scripts read them there)
+ *  but are SERVED as `/data/annotations/<id>.json`, fetched per opening on
+ *  demand — no longer compiled into 1,889 JS chunks. See
+ *  src/data/annotations/index.ts. */
+const ANNOTATIONS_SRC = 'src/data/annotations';
+/** Directories whose files share ONE version entry, so the per-session
+ *  version file stays small (1,889 annotation files would otherwise add 1,889
+ *  entries). A change to any file re-versions the directory. */
+const VERSIONED_AS_DIRECTORY = ['/data/annotations/'];
+
+function copyAnnotations(root: string, outDir: string): void {
+  const from = join(root, ANNOTATIONS_SRC);
+  const to = join(outDir, 'data', 'annotations');
+  mkdirSync(to, { recursive: true });
+  for (const name of readdirSync(from)) {
+    if (name.endsWith('.json')) copyFileSync(join(from, name), join(to, name));
+  }
+}
 
 /** Content hash of every file under `<outDir>/data`, keyed by its `/data/...`
  *  path. Written to `<outDir>/data-versions.json` so the native app can tell
@@ -15,15 +34,23 @@ function writeDataVersions(outDir: string): void {
   const dataDir = join(outDir, 'data');
   if (!existsSync(dataDir)) return;
   const versions: Record<string, string> = {};
+  const dirHashes = new Map(VERSIONED_AS_DIRECTORY.map((d) => [d, createHash('sha256')]));
   const walk = (dir: string): void => {
-    for (const name of readdirSync(dir)) {
+    for (const name of readdirSync(dir).sort()) {
       const full = join(dir, name);
       if (statSync(full).isDirectory()) { walk(full); continue; }
       const path = '/' + relative(outDir, full).split(sep).join('/');
-      versions[path] = createHash('sha256').update(readFileSync(full)).digest('hex').slice(0, 16);
+      const bytes = readFileSync(full);
+      const group = VERSIONED_AS_DIRECTORY.find((d) => path.startsWith(d));
+      if (group) {
+        dirHashes.get(group)!.update(path).update(bytes);
+        continue;
+      }
+      versions[path] = createHash('sha256').update(bytes).digest('hex').slice(0, 16);
     }
   };
   walk(dataDir);
+  for (const [dir, h] of dirHashes) versions[dir] = h.digest('hex').slice(0, 16);
   const sorted = Object.fromEntries(Object.entries(versions).sort(([a], [b]) => a.localeCompare(b)));
   writeFileSync(join(outDir, 'data-versions.json'), JSON.stringify(sorted));
 }
@@ -88,21 +115,57 @@ export default defineConfig(({ mode }) => {
     // already changes on every build, so the stamp costs nothing there.
     // Read back by `appAuditor.getBuildId()`. Gate: buildIdNotInJs.test.ts.
     (() => {
-      // The native app downloads data files once and keeps them; this map is
-      // how it knows a kept copy went stale. See writeDataVersions above.
+      // Served data files: copy the annotations in, then write the version
+      // map the native app uses to tell a kept copy went stale. ONE plugin so
+      // the order is guaranteed (Rollup runs closeBundle hooks in parallel).
       // closeBundle, not writeBundle: `public/` must already be copied in.
       let outDir = 'dist';
+      let root = process.cwd();
+      let isBuild = false;
       return {
-        name: 'data-versions',
-        apply: 'build' as const,
-        configResolved(c: { root: string; build: { outDir: string } }) {
+        name: 'data-files',
+        configResolved(c: { root: string; command: string; build: { outDir: string } }) {
+          root = c.root;
+          isBuild = c.command === 'build';
           outDir = resolvePath(c.root, c.build.outDir);
         },
+        configureServer(server: { middlewares: { use: (fn: (req: { url?: string }, res: { setHeader: (k: string, v: string) => void; end: (b: Buffer) => void }, next: () => void) => void) => void } }) {
+          // Dev server: serve /data/annotations/<id>.json straight from src.
+          server.middlewares.use((req, res, next) => {
+            const m = /^\/data\/annotations\/([A-Za-z0-9_.-]+\.json)(?:\?.*)?$/.exec(req.url ?? '');
+            const file = m ? join(root, ANNOTATIONS_SRC, m[1]) : '';
+            if (!m || !existsSync(file)) { next(); return; }
+            res.setHeader('content-type', 'application/json');
+            res.end(readFileSync(file));
+          });
+        },
         closeBundle() {
+          if (!isBuild) return;
+          copyAnnotations(root, outDir);
           writeDataVersions(outDir);
         },
       };
     })(),
+    {
+      // A data chunk must never import the entry chunk: the entry imports the
+      // data chunks statically, so that would be an import cycle, and a cycle
+      // across chunks can evaluate a module before its dependency is ready
+      // (a TDZ crash at boot). Rollup places a shared helper wherever it
+      // likes, so this is checked on the output, and it FAILS the build.
+      name: 'appdata-no-entry-import',
+      apply: 'build',
+      generateBundle(_opts, bundle) {
+        const entry = Object.values(bundle).find((c) => c.type === 'chunk' && c.isEntry);
+        if (!entry || entry.type !== 'chunk') return;
+        const offenders = Object.values(bundle)
+          .filter((c) => c.type === 'chunk' && c.name.startsWith('appdata-'))
+          .filter((c) => c.type === 'chunk' && c.imports.includes(entry.fileName))
+          .map((c) => c.fileName);
+        if (offenders.length > 0) {
+          this.error(`data chunk(s) import the entry chunk (init-order cycle): ${offenders.join(', ')}`);
+        }
+      },
+    },
     {
       name: 'build-id-meta',
       transformIndexHtml() {
@@ -192,6 +255,19 @@ export default defineConfig(({ mode }) => {
             handler: 'CacheFirst' as const,
             options: {
               cacheName: 'lichess-piece-cache',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Legacy per-opening annotations (`/data/annotations/<id>.json`,
+            // 2026-09-26). Their OWN cache, listed BEFORE the /data/ rule: up
+            // to 1,889 small files would otherwise evict the masters DB from
+            // that rule's 20-entry cache.
+            urlPattern: /\/data\/annotations\/.*\.json$/i,
+            handler: 'CacheFirst' as const,
+            options: {
+              cacheName: 'annotation-cache',
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 90 },
               cacheableResponse: { statuses: [0, 200] },
             },
@@ -327,12 +403,28 @@ export default defineConfig(({ mode }) => {
             // FETCHED from `public/data/`, so neither needs a rule.
             if (id.includes('/lessons/sublineNarration')) return 'appdata-subline-narration';
             if (id.includes('model-games.json')) return 'appdata-modelgames';
+            // 2026-09-26 (app-size plan, Fix E). The curated lesson scripts
+            // (~2.2 MB, ~100 files importing only types / JSON / chess.js) and
+            // the rest of src/data's JSON (~0.5 MB) sat INSIDE the entry chunk,
+            // so every code fix re-shipped them in each OTA. Their own chunks
+            // change only when content changes. `lessons/index.ts` and
+            // `punishGems.ts` import services, so they stay with the code.
+            // Boot bytes are unchanged — these chunks are still preloaded.
+            // Guard: `appdata-no-entry-import` below fails the build if a
+            // data chunk ever imports the entry (an init-order cycle).
+            if (/\/src\/data\/lessons\//.test(id) && !/\/lessons\/(index|punishGems)\.ts$/.test(id)) {
+              return 'appdata-lessons';
+            }
+            if (id.includes('/src/data/openingWalkthroughs/')) return 'appdata-lessons';
+            if (/\/src\/data\/[^/]+\.json$/.test(id)) return 'appdata-misc';
           }
           if (id.includes('/node_modules/')) {
             if (/\/node_modules\/(react|react-dom|react-router-dom)\//.test(id)) return 'react-vendor';
             if (/\/node_modules\/(chess\.js|react-chessboard)\//.test(id)) return 'chess-vendor';
             if (/\/node_modules\/(framer-motion|recharts|lucide-react)\//.test(id)) return 'ui-vendor';
             if (/\/node_modules\/(dexie|zustand)\//.test(id)) return 'data-vendor';
+            // Stable third-party code that sat in the entry (Fix E).
+            if (/\/node_modules\/(openai|@capacitor|posthog-js)\//.test(id)) return 'app-vendor';
           }
           return undefined;
         },

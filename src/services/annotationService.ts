@@ -1,4 +1,4 @@
-import { ANNOTATION_MODULES } from '../data/annotations';
+import { ANNOTATION_KEYS, loadAnnotationFile } from '../data/annotations';
 import { Chess } from 'chess.js';
 import { getBestNarration, shouldUseClaudeFallback, pickNarration } from './openingNarrationService';
 import type { OpeningMoveAnnotation, OpeningAnnotations } from '../types';
@@ -161,12 +161,12 @@ const LEGACY_ID_TO_BASE: Record<string, string> = {
 };
 
 function resolveAnnotationId(openingId: string): string {
-  if (Object.hasOwn(ANNOTATION_MODULES, openingId)) return openingId;
+  if (ANNOTATION_KEYS.has(openingId)) return openingId;
 
   // Legacy-id alias map first — covers repertoire/gambits IDs whose
   // slug style pre-dates the May-2026 orphan-rename pass.
   const legacyBase = LEGACY_ID_TO_BASE[openingId];
-  if (legacyBase && Object.hasOwn(ANNOTATION_MODULES, legacyBase)) {
+  if (legacyBase && ANNOTATION_KEYS.has(legacyBase)) {
     return legacyBase;
   }
 
@@ -175,7 +175,7 @@ function resolveAnnotationId(openingId: string): string {
   if (match) {
     const suffix = match[1];
     const baseId = PRO_SUFFIX_TO_BASE[suffix];
-    if (baseId && Object.hasOwn(ANNOTATION_MODULES, baseId)) return baseId;
+    if (baseId && ANNOTATION_KEYS.has(baseId)) return baseId;
   }
 
   // dataLoader builds opening IDs as slugify(`${eco}-${name}`) — e.g.
@@ -187,11 +187,11 @@ function resolveAnnotationId(openingId: string): string {
   const ecoStripped = /^[a-e]\d{2}-(.+)$/.exec(openingId);
   if (ecoStripped) {
     const bare = ecoStripped[1];
-    if (Object.hasOwn(ANNOTATION_MODULES, bare)) return bare;
+    if (ANNOTATION_KEYS.has(bare)) return bare;
     // Last-chance: the legacy-id alias map covers any post-ECO-strip
     // legacy slug (e.g. ECO entries whose name slugifies the old way).
     const ecoLegacy = LEGACY_ID_TO_BASE[bare];
-    if (ecoLegacy && Object.hasOwn(ANNOTATION_MODULES, ecoLegacy)) {
+    if (ecoLegacy && ANNOTATION_KEYS.has(ecoLegacy)) {
       return ecoLegacy;
     }
   }
@@ -206,11 +206,8 @@ async function loadModule(openingId: string): Promise<OpeningAnnotations | null>
   const cached = cache.get(resolvedId);
   if (cached) return cached;
 
-  const loader = ANNOTATION_MODULES[resolvedId] as (() => Promise<{ default: OpeningAnnotations }>) | undefined;
-  if (!loader) return null;
-
-  const mod = await loader();
-  const data = mod.default;
+  const data = await loadAnnotationFile(resolvedId);
+  if (!data) return null;
   cache.set(resolvedId, data);
   return data;
 }

@@ -134,7 +134,8 @@ export async function loadDataJson(path: string, opts: LoadDataOptions = {}): Pr
     persist ? readKept(path) : Promise.resolve(undefined),
     remoteDataVersions(),
   ]);
-  const current = versions?.[path];
+  // Some directories (the 1,889 annotation files) share one version entry.
+  const current = versions?.[path] ?? versions?.[path.slice(0, path.lastIndexOf('/') + 1)];
 
   // 1. Kept and current (or we cannot tell, because we are offline).
   if (kept && (!current || kept.version === current)) {
