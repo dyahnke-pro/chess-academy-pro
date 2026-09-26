@@ -41,7 +41,7 @@ describe('the shared voiceService mock', () => {
     // so it silently rots when the code starts calling something else. New test
     // files use buildVoiceServiceMock; this ceiling lets the existing ones be
     // migrated over time and never lets a new one be added.
-    const HAND_ROLLED_CEILING = 63;
+    const HAND_ROLLED_CEILING = 61;
     const files = walk(join(REPO, 'src'));
     expect(files.length, 'the walk found no test files — vacuous').toBeGreaterThan(100);
     const handRolled = files.filter((f) => {

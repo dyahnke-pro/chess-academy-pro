@@ -24,6 +24,7 @@ import type { Square } from 'chess.js';
 import { landingIsSafe } from './positionReadingService';
 import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { homeMinorCount, homeSquaresOf } from './development';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -241,18 +242,6 @@ function pawnAttackSquares(sq: string, mover: 'w' | 'b'): string[] {
   return out;
 }
 
-function countHomeMinors(board: Chess, mover: 'w' | 'b'): number {
-  const home: Square[] = mover === 'w'
-    ? (['b1', 'g1', 'c1', 'f1'] as Square[])
-    : (['b8', 'g8', 'c8', 'f8'] as Square[]);
-  let n = 0;
-  for (const sq of home) {
-    const p = board.get(sq);
-    if (p && p.color === mover && (p.type === 'n' || p.type === 'b')) n += 1;
-  }
-  return n;
-}
-
 /**
  * Is the mover still in the OPENING — by the board, not by the move number?
  * True while a minor piece sits on its home square, or the king is uncastled
@@ -265,7 +254,7 @@ export function openingWindowOpen(fenBefore: string, mover: 'white' | 'black'): 
   let board: Chess;
   try { board = new Chess(fenBefore); } catch { return false; }
   const wb: 'w' | 'b' = mover === 'white' ? 'w' : 'b';
-  if (countHomeMinors(board, wb) > 0) return true;
+  if (homeMinorCount(board, wb) > 0) return true;
   // CASTLING RIGHTS HOLD IT OPEN ONLY IN THE OPENING — an uncastled king kept
   // it open all game, so 16…Bh2+ and 21…Qh2+ "did what the opening asks"
   // (walk 900). The one phase classifier decides.
@@ -393,7 +382,7 @@ export function computeMoveFundamentals(
     // "leaning on e6", not "the hole on e6" — at move three Black's e-pawn is
     // still home, so e6 is an empty square, not yet a hole. Say what is true.
     const holes = eyes.filter((s) => standingHoles(seat).includes(s) && !nearKing.includes(s));
-    const homeAfter = countHomeMinors(after, mover);
+    const homeAfter = homeMinorCount(after, mover);
     const weight = Math.min(82, 55 + 6 * (homeAfter + 1));
     const centerTail = (central.length ? `, fighting for the center on ${andList(central)}` : '')
       + (holes.length ? `, leaning on ${andList(holes)}` : '')
@@ -838,7 +827,7 @@ function openingIdeas(
   }
 
   // DEVELOPMENT COMPLETE — the last minor off its home square.
-  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && countHomeMinors(after, mover) === 0) {
+  if ((mv.piece === 'n' || mv.piece === 'b') && rankOf(mv.from) === homeRank && homeMinorCount(after, mover) === 0) {
     out.push({
       id: 'development-complete',
       weight: 70,
@@ -1076,7 +1065,7 @@ export function principleLine(
 /** The home-square bishop (c1/f1 or c8/f8) whose MOVES grew by at least two
  *  because a pawn left `vacated` — counted from the board, never assumed. */
 function bishopFreedBy(before: Chess, after: Chess, mover: 'w' | 'b', vacated: string): string | null {
-  const homes = mover === 'w' ? ['c1', 'f1'] : ['c8', 'f8'];
+  const homes = homeSquaresOf('b', mover);
   const count = (board: Chess, sq: string): number => {
     try {
       const parts = board.fen().split(' ');
@@ -1085,7 +1074,7 @@ function bishopFreedBy(before: Chess, after: Chess, mover: 'w' | 'b', vacated: s
     } catch { return 0; }
   };
   for (const home of homes) {
-    const p = after.get(home as Square);
+    const p = after.get(home);
     if (!p || p.type !== 'b' || p.color !== mover) continue;
     // the vacated square must sit on one of the bishop's diagonals
     const df = Math.abs(home.charCodeAt(0) - vacated.charCodeAt(0));

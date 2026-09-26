@@ -17,6 +17,7 @@ import { Chess, type Color } from 'chess.js';
 import { attributePrinciples } from './principleAttribution';
 import { renderFundamentalVerdict } from './principleVoice';
 import { detectTactics } from './tacticsDetector';
+import { homeMinorCount } from './development';
 
 export interface ClassifyMisconceptionInput {
   /** Position BEFORE the played move (FEN). */
@@ -98,18 +99,6 @@ function kingSquare(chess: Chess, color: Color): string | null {
 function isWingedKing(square: string): boolean {
   const f = square[0];
   return f === 'a' || f === 'b' || f === 'c' || f === 'g' || f === 'h';
-}
-
-/** Count a colour's minor pieces still sitting on their home squares — the
- *  signal for "pieces undeveloped" in the opening. */
-function homeMinorCount(chess: Chess, color: Color): number {
-  const homes = color === 'w' ? ['b1', 'g1', 'c1', 'f1'] : ['b8', 'g8', 'c8', 'f8'];
-  let n = 0;
-  for (const sq of homes) {
-    const p = chess.get(sq as never);
-    if (p && p.color === color && (p.type === 'n' || p.type === 'b')) n += 1;
-  }
-  return n;
 }
 
 /** Does the best move land a concrete tactic the played (quiet) move passed
