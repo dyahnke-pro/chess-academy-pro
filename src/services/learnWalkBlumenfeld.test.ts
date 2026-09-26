@@ -188,3 +188,16 @@ describe('F18 / F32 — the price of a move is one cost, never a want-list', () 
     }
   });
 });
+
+describe('F37 — nobody is tempted by an underpromotion', () => {
+  it('a d1=B line in the fan is never the tempting move', async () => {
+    const { temptingFromAnalysis } = await import('./tacticalRead');
+    // After 32.Rc8, Black to move: d1=Q+ mates in two; d1=B is a fan line.
+    const t = temptingFromAnalysis(fenAt(65), [
+      { moves: ['d2d1q', 'g4d1', 'd6d1'], evaluation: -100000 },
+      { moves: ['d2d1b', 'h2h3'], evaluation: 500 },
+    ], 'black');
+    expect(t, 'the fan must be legal here or the test proves nothing').not.toBeUndefined();
+    expect(t?.san ?? '').not.toMatch(/=B/);
+  });
+});

@@ -280,7 +280,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:5883`
 - `src/services/groundedAnswer.ts:5885`
 - `src/services/learnWalkBlumenfeld.test.ts:109`
-- `src/services/minorityLeverCheck.test.ts:7`
+- `src/services/minorityLeverCheck.test.ts:9`
 - `src/services/positionReadingService.test.ts:931`
 - `src/services/positionalRead.ts:307`
 - `src/services/positionalTruth.corpus.test.ts:108`
