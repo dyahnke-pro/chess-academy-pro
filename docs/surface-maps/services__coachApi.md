@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6595 lines · 37 exports · 50 importers · 54 tests · 19 audits**
+**6591 lines · 37 exports · 50 importers · 54 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,9 +17,9 @@
 - **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:3763) — names `coachApi`, `voiceFacts`
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4072) — names `voiceFacts`
 - **Do NOT** (CLAUDE.md:5222) — names `coachApi`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5917) — names `voiceFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:6052) — names `coachApi`, `voiceFacts`
-- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6067) — names `coachApi`, `translateToEnglish`, `voiceFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:5920) — names `voiceFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:6055) — names `coachApi`, `voiceFacts`
+- **🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").** (CLAUDE.md:6070) — names `coachApi`, `translateToEnglish`, `voiceFacts`
 
 ## Who calls in
 
@@ -270,13 +270,13 @@
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
 - `src/hooks/usePositionNarration.ts:256`
 - `src/services/coachChatText.ts:221`
-- `src/services/coachFeatureService.ts:132`
-- `src/services/coachFeatureService.ts:382`
-- `src/services/coachFeatureService.ts:517`
-- `src/services/coachFeatureService.ts:518`
-- `src/services/coachFeatureService.ts:4597`
-- `src/services/coachFeatureService.ts:4750`
-- `src/services/coachLaneWiring.test.ts:180`
+- `src/services/coachFeatureService.ts:134`
+- `src/services/coachFeatureService.ts:384`
+- `src/services/coachFeatureService.ts:519`
+- `src/services/coachFeatureService.ts:520`
+- `src/services/coachFeatureService.ts:4608`
+- `src/services/coachFeatureService.ts:4761`
+- `src/services/coachLaneWiring.test.ts:184`
 - `src/services/coachMoveCommentary.ts:236`
 - `src/services/coachMoveCommentary.ts:293`
 - `src/services/contentGenerationService.ts:133`

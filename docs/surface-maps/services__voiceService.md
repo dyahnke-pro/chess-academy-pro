@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2901 lines · 16 exports · 101 importers · 82 tests · 23 audits**
+**2895 lines · 16 exports · 101 importers · 82 tests · 23 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,7 +17,7 @@
 - **🧒 Kids section — non-negotiables** (CLAUDE.md:3326) — names `voiceService`
 - **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:3635) — names `voiceService`
 - **Shared types / services** (CLAUDE.md:5262) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6038) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:6041) — names `voiceService`
 
 ## Who calls in
 
