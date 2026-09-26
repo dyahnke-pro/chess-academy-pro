@@ -56,6 +56,11 @@ jobs:
       - name: Build web bundle
         run: npm run build
 
+      # iOS never loads the WASM engines, and downloads the large data files
+      # once on first use — see scripts/ci/strip-native-bundle.mjs.
+      - name: Strip native bundle
+        run: node scripts/ci/strip-native-bundle.mjs dist
+
       - name: Add + sync iOS project (regenerates the gitignored ios/)
         run: |
           # ios/App/ci_scripts/ is committed (Xcode Cloud needs it), so ios/
