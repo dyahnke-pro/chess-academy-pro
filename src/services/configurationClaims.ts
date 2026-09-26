@@ -116,7 +116,10 @@ const CLAIMS: Array<{ re: RegExp; holds: (b: Board) => boolean; label: string }>
   { re: /\bdoubled pawns?\b/i, holds: hasDoubledPawns, label: 'doubled pawns' },
   { re: /\bisolated pawn\b|\bisolani\b/i, holds: hasIsolatedPawn, label: 'isolated pawn' },
   { re: /\bbishop pair\b|\btwo bishops\b/i, holds: hasBishopPair, label: 'bishop pair' },
-  { re: /\bqueens? (?:are )?(?:off|traded|exchanged)\b/i, holds: hasQueensOff, label: 'queens off' },
+  // PLURAL only: "the queens are off" claims the trade; "step your queen off
+  // the d-file" is an instruction about ONE queen and claims nothing (1380
+  // re-walk, 11.Qe1 — the singular match refused a true principle line).
+  { re: /\bqueens (?:are )?(?:off|traded|exchanged)\b/i, holds: hasQueensOff, label: 'queens off' },
 ];
 
 /** The first structural claim the text makes that is FALSE here, or null when

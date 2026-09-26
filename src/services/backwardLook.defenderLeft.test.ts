@@ -21,4 +21,11 @@ describe('the defender-left cost needs their reply to use the square', () => {
   it('stays quiet about g4 when their reply never goes there', () => {
     expect(look(['d7c5', 'd1e1', 'a7a6', 'a2a3', 'b7b5'])?.line ?? '').not.toMatch(/g4/);
   });
+  it('stays quiet while still clearly winning — the cleaner move is the teaching (29.Qe2 at +7)', () => {
+    const won = backwardLook({
+      fenBefore: BEFORE, fenAfter: after(), playedSan: 'Nf3', bestSan: 'Qe1',
+      bestPvUci: ['d1e1'], replyPvUci: ['d7c5', 'd1e1', 'c8g4'], cpLoss: 80, moverEvalAfterCp: 700, studentColor: 'white',
+    } as never);
+    expect(won?.line ?? '').not.toMatch(/g4/);
+  });
 });

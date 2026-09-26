@@ -322,7 +322,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // "uncastled", which was true for both sides every opening ply.
       const iLag = mine.developedMinors + (mine.castled ? 2 : 0);
       const theyLead = theirs.developedMinors + (theirs.castled ? 2 : 0);
-      if (theyLead - iLag >= 2 && !mine.castled) {
+      // AND fewer minors out than them. Castling counts toward the lead, but a
+      // castling gap alone is not "behind in development": at 7.Bb3 in the
+      // 1380 re-walk both sides had three minors out and only Black had
+      // castled, and the coach told White to get the pieces out.
+      if (theyLead - iLag >= 2 && !mine.castled && theirs.developedMinors > mine.developedMinors) {
         return { fact: `You're behind in development — get the minor pieces out and castle before the position sharpens.`, squares: [] };
       }
       return null;

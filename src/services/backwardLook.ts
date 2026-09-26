@@ -30,7 +30,7 @@
 import { findConcession, findStudentDrawback, whatItAllowed } from './concessionBeat';
 import { callInaccuracy, callInaccuracyDetailed, type InaccuracyDecline } from './inaccuracyCall';
 import { whyItFailed } from './whyItFailed';
-import { INACCURACY_CP } from './engineConstants';
+import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 
 export interface BackwardLook {
@@ -243,6 +243,11 @@ export function backwardLook(args: {
       if (cost && cost.kind === 'defender-left') {
         const theirLandings = (args.replyPvUci ?? []).filter((_, i) => i % 2 === 0).slice(0, 3).map((u) => u.slice(2, 4));
         if (!theirLandings.includes(cost.square)) cost = null;
+        // …and not while still clearly winning (re-walk 1380, 29.Qe2 at +7):
+        // there `callInaccuracy` says "still wins, but Bg5 was cleaner", the
+        // square is not what the engine charged for, and the warning took the
+        // cleaner move's place.
+        else if (typeof args.moverEvalAfterCp === 'number' && args.moverEvalAfterCp >= BLUNDER_CP) cost = null;
       }
     }
 

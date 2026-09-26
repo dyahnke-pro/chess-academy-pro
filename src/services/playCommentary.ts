@@ -740,6 +740,7 @@ export function buildPlayCommentary(args: {
   // TacticsLiveContext block, which does carry sides. Only the OPPONENT'S
   // hanging pieces: pointing out the student's own would be handing the
   // opponent's game plan to the student's ears mid-game.
+  let lootOnBoard = false;
   try {
     const t = detectTactics(args.fen);
     // The 2026-08-06 expansion put a beneficiary on every pattern, so the
@@ -782,6 +783,7 @@ export function buildPlayCommentary(args: {
     // 3.3% a real piece). Narrating every loose pawn is the tuned-out
     // failure, and calling a gambit pawn a tactic-seed is wrong teaching.
     const theirHanging = t.hangingPieces.filter((h) => h.color === them && h.piece !== 'p' && h.square !== args.midExchangeOn);
+    lootOnBoard = theirHanging.length > 0;
     if (theirHanging.length > 0) {
       const h = theirHanging[0];
       const loose: PlayCommentary = {
@@ -811,7 +813,12 @@ export function buildPlayCommentary(args: {
   // tuned-out failure the narration rules name outright. `once` here is keyed
   // on the LINE alone, so a genuinely new geometry — a different file, a
   // diagonal — still speaks.
-  const seed = findAlignmentSeed(all, me, them, args.fen);
+  // …and never while there is material to WIN (re-walk 1380, 13.Rxd8 Qe7:
+  // the knight on h5 hung, another lane had said so, and this fell through to
+  // "their rook and queen line up on the same diagonal"). The seed is the
+  // noticing BEFORE a tactic; with a piece already loose the question on the
+  // board is taking it, whoever said so first.
+  const seed = lootOnBoard ? null : findAlignmentSeed(all, me, them, args.fen);
   if (seed && once(`alignment-${seed.line}`, 'x') === '') {
     // Already taught this line's alignment — fall through to a quieter beat.
   } else if (seed) {
