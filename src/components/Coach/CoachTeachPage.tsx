@@ -7572,6 +7572,9 @@ export function CoachTeachPage(): JSX.Element {
     const factLines: string[] = [];
     const leadEyeArrows: BoardArrow[] = [];
     let tacticLine: string | null = null;
+    /** The tactic whose definition may ride on `tacticLine` — attached only
+     *  when no threat on the same move already carries one (one lecture per move). */
+    let tacticTailType: string | null = null;
     let threatLine: string | null = null;
     /** A mate was named by the alert lane this turn — the composer below must
      *  not announce it a second time in other words. */
@@ -7735,9 +7738,9 @@ export function CoachTeachPage(): JSX.Element {
           tacticLine = word
             // NAMED from the detector's own description (Learn names the
             // move; "have a look" withheld it — walk 1500, 21.Rab1/38.Ne3).
-            ? withTransfer(`You have a ${word}: ${t.description ? t.description.charAt(0).toLowerCase() + t.description.slice(1).replace(/[.!]$/, '') : `on ${t.squares.join(', ')}`}.${conceptTail(t.type)}`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifFirstMove))
+            ? withTransfer(`You have a ${word}: ${t.description ? t.description.charAt(0).toLowerCase() + t.description.slice(1).replace(/[.!]$/, '') : `on ${t.squares.join(', ')}`}.`, transferClause(t.type, instance, moveNo, learnMemRef.current.motifFirstMove))
             : null;
-          if (word) pendingMotif = { type: t.type, instance, moveNo };
+          if (word) { pendingMotif = { type: t.type, instance, moveNo }; tacticTailType = t.type; }
           myTacticType = word ? t.type : null;
           if (word) tacticSquares = t.squares.filter((sq) => /^[a-h][1-8]$/.test(sq));
         }
@@ -7773,7 +7776,8 @@ export function CoachTeachPage(): JSX.Element {
         if (myTacticType && myTacticType === t.type) {
           // The concept has just been taught on the threat line above, so this
           // one refers back to it rather than repeating the lesson.
-          tacticLine = `You've got a ${tacticWord(myTacticType) ?? 'chance'} of your own here — a different one. See it?${conceptTail(myTacticType)}`;
+          tacticLine = `You've got a ${tacticWord(myTacticType) ?? 'chance'} of your own here — a different one. See it?`;
+          tacticTailType = myTacticType;
         }
       } else if (tctx.threats.length > 0) {
         // NOT ON THE BOARD YET — AND THAT IS THE POINT. The branch above warns
@@ -7864,6 +7868,15 @@ export function CoachTeachPage(): JSX.Element {
         learnMemRef.current.spokenTacticLines.add(tacticLine);
         if (pendingMotif) recordMotif(pendingMotif.type, pendingMotif.instance, pendingMotif.moveNo, learnMemRef.current.motifFirstMove);
         captureEvent('tactics_alert_spoken', { surface: 'coach-teach', alert: tacticKey });
+      }
+      // ONE DEFINITION PER MOVE, ON THE LEAD (Blumenfeld walk, move 24: "Watch
+      // out — their queen forks … Remember — a fork … You have a removal of the
+      // defender … Remember — removing the guard …"). The threat outranks the
+      // tactic, so when the threat carries its definition the tactic is named
+      // without one — and its definition is NOT marked taught, so it is taught
+      // the first time that pattern leads a move of its own.
+      if (tacticLine && tacticTailType && !(threatLine && threatLine.includes(' Remember — '))) {
+        tacticLine = `${tacticLine}${conceptTail(tacticTailType)}`;
       }
       // MATE OUTRANKS EVERY THREAT: "Careful — your bishop on f4 is attacked"
       // beside a mate in one (hand walk 1200) sent the student to defend.
