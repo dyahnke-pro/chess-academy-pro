@@ -1074,7 +1074,11 @@ const DETECTORS: Detector[] = [
         `cost ${eb - ea}cp is ${lostWinPct.toFixed(1)} win% — under an inaccuracy, so the position barely moved`);
     }
     if (!pvP || pvP.length < 3) return no(c, 'calculation-depth', `punishing PV is ${pvP?.length ?? 0} plies, needs 3`);
-    const firstForcing = pvP.findIndex((san) => isForcing(san));
+    // THEIR blow, not a forcing move of the student's own further down the
+    // line — pvP opens on the opponent's reply, so their moves are the even
+    // plies (walk 700, 16…a6: "Qxb6 was waiting deeper" beside "Qb6 was the
+    // move" — the capture was a queen trade inside the student's own line).
+    const firstForcing = pvP.findIndex((san, i) => i % 2 === 0 && isForcing(san));
     if (firstForcing < 0) return no(c, 'calculation-depth', `no forcing move anywhere in the PV (${pvP.slice(0, 4).join(' ')})`);
     if (firstForcing < 2) {
       return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,

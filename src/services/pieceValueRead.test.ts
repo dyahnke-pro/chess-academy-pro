@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import { describe, it, expect } from 'vitest';
 import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine, type PieceValue } from './pieceValueRead';
 
@@ -123,8 +124,12 @@ describe('the engine\'s per-piece table', () => {
       { square: 'b3', piece: 'B', color: 'w' as const, value: 3 },
       { square: 'c4', piece: 'B', color: 'w' as const, value: 3 },
     ];
-    const lines = pieceQualityLines(values, 'black', undefined, { isMiddlegame: true });
+    const c = new Chess();
+    for (const m of 'e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7 Bc4 Bc6 O-O e6 Na3 a6 Bb3'.split(' ')) c.move(m);
+    const lines = pieceQualityLines(values, 'black', undefined, { isMiddlegame: true, fen: c.fen() });
     expect(lines.some((l) => /knight on a3/.test(l.text))).toBe(false);
+    // NEGATIVE CONTROL: without the board the table alone would crown it.
+    expect(pieceQualityLines(values, 'black', undefined, { isMiddlegame: true }).some((l) => /knight on a3/.test(l.text))).toBe(true);
   });
 
   const BAD_MINOR = [

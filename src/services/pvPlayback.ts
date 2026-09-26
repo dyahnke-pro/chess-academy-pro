@@ -16,6 +16,7 @@
  * root promise is truncated/refused (`delivers=false`): a line we can't
  * verify is a line we don't teach.
  */
+import { fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
@@ -665,7 +666,7 @@ export function plyFactsString(ply: PvPly): string | null {
   if (f.outpostGained) parts.push(`outpost established on ${f.outpostGained}`);
   if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
   if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
-  if (f.newOpenFiles.length > 0) parts.push(`opens the ${f.newOpenFiles.join(' and ')}-file`);
+  if (f.newOpenFiles.length > 0) parts.push(`opens ${fileList(f.newOpenFiles)}`);
   if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
   // Say "wins material" — NEVER the point count (David 2026-07-24: "we don't need
   // to call out how many points were gained with each capture. Sounds bad").
@@ -703,7 +704,7 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
     if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
   if (f.passedPawnsHanded.length > 0) parts.push(`leaves the other side a passed pawn on ${f.passedPawnsHanded.join(', ')}`);
-    if (f.newOpenFiles.length > 0) parts.push(`opens the ${f.newOpenFiles.join(' and ')}-file`);
+    if (f.newOpenFiles.length > 0) parts.push(`opens ${fileList(f.newOpenFiles)}`);
     if (f.shieldLost > 0) parts.push(`strips ${f.shieldLost} pawn${f.shieldLost > 1 ? 's' : ''} from the king's cover`);
     // "wins material", never the point count (David 2026-07-24 — sounds bad).
     if (f.materialGained >= 1) parts.push('wins material');
