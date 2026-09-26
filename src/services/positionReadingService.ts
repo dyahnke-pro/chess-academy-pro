@@ -21,6 +21,7 @@ import type { Square, Color, PieceSymbol } from 'chess.js';
 import type { TacticsLiveContext } from '../coach/types';
 import type { WeaknessCategory } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
+import { developedMinorCount, totalMinorCount } from './development';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -1593,14 +1594,8 @@ export interface DevelopmentNote { developedMinors: number; totalMinors: number;
 export function developmentRead(fen: string, color: Color): DevelopmentNote | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
-  const homes: Record<Color, Square[]> = { w: ['b1', 'g1', 'c1', 'f1'], b: ['b8', 'g8', 'c8', 'f8'] };
-  let developedMinors = 0;
-  let totalMinors = 0;
-  for (const row of chess.board()) for (const cell of row) {
-    if (!cell || cell.color !== color || (cell.type !== 'n' && cell.type !== 'b')) continue;
-    totalMinors += 1;
-    if (!homes[color].includes(cell.square)) developedMinors += 1;
-  }
+  const developedMinors = developedMinorCount(chess, color);
+  const totalMinors = totalMinorCount(chess, color);
   // Castled ≈ king off its home square toward a corner.
   const ks = kingSafetyRead(fen, color);
   return { developedMinors, totalMinors, castled: ks?.castled ?? false };

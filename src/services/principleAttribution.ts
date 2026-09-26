@@ -32,6 +32,7 @@ import { findContinuationsAtPly } from './openingDetectionService';
 import { deriveNextPlans } from './nextPlans';
 import { winPercent, bandForWinPctLost } from './accuracyService';
 import { MAX_PV_DEPTH_PLIES } from './ratingBands';
+import { developedMinorCount, homeMinorCount, isMinorAtHome, minorsAtHome } from './development';
 
 export const FUNDAMENTAL_IDS = [
   // opening
@@ -157,7 +158,6 @@ const OPENING_PLIES = 24;
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const MINOR_HOME: Record<Color, Square[]> = { w: ['b1', 'g1', 'c1', 'f1'], b: ['b8', 'g8', 'c8', 'f8'] };
 
 // ─── board helpers (all pure chess.js) ──────────────────────────────────────
 
@@ -174,12 +174,6 @@ function pieces(chess: Chess, color: Color, type?: PieceSymbol): { type: PieceSy
     if (c && c.color === color && (!type || c.type === type)) out.push({ type: c.type, square: c.square });
   }
   return out;
-}
-function developedMinors(chess: Chess, color: Color): number {
-  return pieces(chess, color).filter((p) => (p.type === 'n' || p.type === 'b') && !MINOR_HOME[color].includes(p.square)).length;
-}
-function homeMinors(chess: Chess, color: Color): number {
-  return pieces(chess, color).filter((p) => (p.type === 'n' || p.type === 'b') && MINOR_HOME[color].includes(p.square)).length;
 }
 function kingSquare(chess: Chess, color: Color): Square | null {
   return pieces(chess, color, 'k')[0]?.square ?? null;
@@ -293,7 +287,7 @@ function tempoTargets(chess: Chess, m: Move, attacker: Color): Square[] {
  *  move that attacks a `mover` piece with tempo. Returns the first such move. */
 function kickAvailable(chess: Chess, opp: Color, targetSq?: string): { san: string; hits: Square[] } | null {
   for (const m of legalMovesFor(chess, opp)) {
-    const developing = (m.piece === 'n' || m.piece === 'b') && MINOR_HOME[opp].includes(m.from);
+    const developing = isMinorAtHome(m.piece, opp, m.from);
     const centrePawn = m.piece === 'p' && (m.to[0] === 'd' || m.to[0] === 'e' || m.to[0] === 'c' || m.to[0] === 'f');
     const anyPawn = m.piece === 'p';
     if (!developing && !centrePawn && !anyPawn) continue;
@@ -518,12 +512,12 @@ const DETECTORS: Detector[] = [
     if (last.piece === 'p' || last.piece === 'k' || last.captured) return null;
     const times = movedBefore(c.history.slice(0, -1), mover, last);
     if (times === 0) return null;
-    if (homeMinors(c.before, mover) < 2) return null;
+    if (homeMinorCount(c.before, mover) < 2) return null;
     const bestRemoves = best.piece === last.piece && best.from === last.from && !best.captured;
     if (bestRemoves) return null;
     const kick = kickAvailable(c.after, opp) ?? null;
     const two = twoStepKick(c.after, opp, last.to);
-    const devGap = developedMinors(c.after, opp) + 1 > developedMinors(c.after, mover) && homeMinors(c.after, mover) >= 2;
+    const devGap = developedMinorCount(c.after, opp) + 1 > developedMinorCount(c.after, mover) && homeMinorCount(c.after, mover) >= 2;
     if (!kick && !two && !devGap) return null;
     const kickBest = kickAvailable(c.afterBest, opp);
     if (kick && kickBest && kickBest.san === kick.san) {
@@ -534,7 +528,7 @@ const DETECTORS: Detector[] = [
     return att('same-piece-twice', 2 + (moves.length ? 1 : 0), {
       squares: [last.from, last.to], moves,
       pvMoves: pvHas(c.pvP, (s) => moves.some((m) => m.split(' ').includes(s))),
-    }, { piece: PNAME[last.piece], nth: times + 1, homeMinors: homeMinors(c.after, mover) });
+    }, { piece: PNAME[last.piece], nth: times + 1, homeMinors: homeMinorCount(c.after, mover) });
   },
   // 2. Tempo handed — after the move the opponent has a SAFE developing move or
   // pawn advance that attacks a piece with tempo (it must move again), or a
@@ -590,14 +584,14 @@ const DETECTORS: Detector[] = [
     const { last, best, mover, opp } = c;
     if (last.piece !== 'p' && last.piece !== 'q') return null;
     if (last.captured) return null;
-    if (homeMinors(c.before, mover) < 2) return null;
-    const bestDevelops = ((best.piece === 'n' || best.piece === 'b') && MINOR_HOME[mover].includes(best.from)) || best.san.startsWith('O-O');
+    if (homeMinorCount(c.before, mover) < 2) return null;
+    const bestDevelops = isMinorAtHome(best.piece, mover, best.from) || best.san.startsWith('O-O');
     if (!bestDevelops) return null;
-    if (developedMinors(c.after, opp) < developedMinors(c.after, mover)) return null;
+    if (developedMinorCount(c.after, opp) < developedMinorCount(c.after, mover)) return null;
     return att('neglected-development', 2, {
-      squares: pieces(c.after, mover).filter((p) => (p.type === 'n' || p.type === 'b') && MINOR_HOME[mover].includes(p.square)).map((p) => p.square),
+      squares: minorsAtHome(c.after, mover).map((p) => p.square),
       moves: [best.san], pvMoves: [],
-    }, { homeMinors: homeMinors(c.after, mover), better: best.san });
+    }, { homeMinors: homeMinorCount(c.after, mover), better: best.san });
   },
   // 5. Early queen sortie — queen off the back rank with <3 minors developed,
   // and the opponent can attack it with a developing move / pawn safely.
@@ -605,7 +599,7 @@ const DETECTORS: Detector[] = [
     if (!c.opening) return null;
     const { last, mover, opp } = c;
     if (last.piece !== 'q' || last.captured) return null;
-    if (relRank(last.to, mover) === 1 || developedMinors(c.before, mover) >= 3) return null;
+    if (relRank(last.to, mover) === 1 || developedMinorCount(c.before, mover) >= 3) return null;
     const kick = kickAvailable(c.after, opp, last.to);
     if (!kick) return null;
     if (c.best.piece === 'q' && kickAvailable(c.afterBest, opp, c.best.to)) return null;
@@ -649,7 +643,7 @@ const DETECTORS: Detector[] = [
   (c) => {
     const { last, best, mover, opp } = c;
     if (last.captured !== 'p') return null;
-    if (!kingOnHome(c.before, mover) && homeMinors(c.before, mover) < 2) return null;
+    if (!kingOnHome(c.before, mover) && homeMinorCount(c.before, mover) < 2) return null;
     if (best.captured === 'p') return null;
     const kick = kickAvailable(c.after, opp) ?? null;
     const check = legalMovesFor(c.after, opp).find((m) => m.san.includes('+') && landsSafely(c.after, m)) ?? null;
@@ -665,8 +659,8 @@ const DETECTORS: Detector[] = [
     if (!c.opening) return null;
     const { last, best, mover } = c;
     if (last.piece !== 'p' || last.captured || (last.to[0] !== 'a' && last.to[0] !== 'h')) return null;
-    if (homeMinors(c.before, mover) < 3) return null;
-    const bestCentral = (best.piece === 'p' && (best.to[0] === 'd' || best.to[0] === 'e')) || ((best.piece === 'n' || best.piece === 'b') && MINOR_HOME[mover].includes(best.from));
+    if (homeMinorCount(c.before, mover) < 3) return null;
+    const bestCentral = (best.piece === 'p' && (best.to[0] === 'd' || best.to[0] === 'e')) || isMinorAtHome(best.piece, mover, best.from);
     if (!bestCentral) return null;
     return att('early-edge-pawns', 1, { squares: [last.to], moves: [best.san], pvMoves: [] }, { pawn: last.to, better: best.san });
   },
@@ -710,7 +704,7 @@ const DETECTORS: Detector[] = [
     if (last.piece !== 'p' || (last.to[0] !== 'd' && last.to[0] !== 'e')) return null;
     const r = relRank(last.to, mover);
     if (r !== 4 && r !== 5) return null;
-    const behind = developedMinors(c.before, mover) < developedMinors(c.before, opp);
+    const behind = developedMinorCount(c.before, mover) < developedMinorCount(c.before, opp);
     const kingLag = kingOnHome(c.before, mover) && !kingOnHome(c.before, opp);
     if (!behind && !kingLag) return null;
     if (best.piece === 'p' && best.to[0] === last.to[0]) return null;

@@ -24,8 +24,10 @@ const CI_POST_CLONE = 'ios/App/ci_scripts/ci_post_clone.sh';
 
 function shippedMarketingVersion(): string {
   const sh = readFileSync(CI_POST_CLONE, 'utf8');
-  const m = sh.match(/^IOS_MARKETING_VERSION="([0-9]+(?:\.[0-9]+)*)"/m);
-  if (!m) throw new Error(`Could not find IOS_MARKETING_VERSION in ${CI_POST_CLONE}`);
+  // The literal lives on PINNED_MARKETING_VERSION since the 2026-09-09
+  // preflight; IOS_MARKETING_VERSION is now resolved from it at build time.
+  const m = sh.match(/^PINNED_MARKETING_VERSION="([0-9]+(?:\.[0-9]+)*)"/m);
+  if (!m) throw new Error(`Could not find PINNED_MARKETING_VERSION in ${CI_POST_CLONE}`);
   return m[1];
 }
 
