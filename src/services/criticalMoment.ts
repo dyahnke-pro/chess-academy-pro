@@ -91,6 +91,10 @@ function moverCp(line: CriticalFanLine, moverColor: 'w' | 'b'): number {
   return raw * sign;
 }
 
+/** Best to worst — a move keeps a stake when its own band is at least as
+ *  good. Held as a Record so a new stake fails to compile until it is placed. */
+const STAKE_ORDER: Record<StakeId, number> = { mate: 6, win: 5, 'on-top': 4, edge: 3, level: 2, 'in-it': 1, damage: 0 };
+
 function stakeFor(bestCp: number): StakeId | null {
   if (bestCp >= MATE_CP) return 'mate';
   // Being mated is not a stake. There is nothing for the move to KEEP, so the
@@ -169,7 +173,22 @@ export function readCriticalMoment(input: {
   const lines = scored.map((x) => x.line);
   const cps = scored.map((x) => x.cp);
   const bestCp = cps[0];
-  const within = cps.filter((cp) => bestCp - cp <= tolerance).length;
+  // A move HOLDS when it keeps the STAKE the sentence names, not when it sits
+  // within a centipawn tolerance of the best (re-walk 1380, 2026-09-26: at +8
+  // every move "kept the win" by 100 cp, and the coach still said "two moves
+  // keep the win — the rest concede" on eight moves running). The band IS the
+  // claim, so a move that stays in the band holds.
+  const bestStake = stakeFor(bestCp);
+  // Within tolerance still holds (near equality the bands are a few cp wide
+  // and would split hairs); the band only ever ADDS holders, so this can only
+  // remove a false "the rest concede", never invent a new critical moment.
+  const holds = (cp: number): boolean => {
+    if (bestCp - cp <= tolerance) return true;
+    if (bestStake === null || bestStake === 'damage') return false;
+    const s = stakeFor(cp);
+    return s !== null && s !== 'damage' && STAKE_ORDER[s] >= STAKE_ORDER[bestStake];
+  };
+  const within = cps.filter(holds).length;
   const gapCp = cps.length >= 2 ? bestCp - cps[1] : 0;
 
   // A BOUND is not a score. An upper-bounded runner-up may truly be worse than

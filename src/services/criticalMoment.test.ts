@@ -242,3 +242,16 @@ describe('S5 — the reveal names why the failing candidates fail', () => {
     expect(t).toContain("Qh4 didn't work: Qh4 and Nxh4 — they win a queen.");
   });
 });
+
+describe('a move holds when it keeps the STAKE (re-walk 1380, 2026-09-26)', () => {
+  it('at +8 every winning line keeps the win — nothing hinges, SILENT', () => {
+    // The fan the engine gave at 30…b3: all three lines win by 7+ pawns.
+    const r = readCriticalMoment({ topLines: fan(819, 814, 750), moverColor: 'w' });
+    expect(criticalMomentSpeaks(r)).toBe(false);
+  });
+  it('a line that drops the win still counts as conceding — the claim stays when it is true', () => {
+    const r = readCriticalMoment({ topLines: fan(600, 500, 150), moverColor: 'w' });
+    expect(r?.count).toBe(2);
+    expect(criticalMomentSpeaks(r)).toBe(true);
+  });
+});
