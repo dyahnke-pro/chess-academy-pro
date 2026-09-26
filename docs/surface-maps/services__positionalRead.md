@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**537 lines · 6 exports · 7 importers · 3 tests · 1 audits**
+**537 lines · 7 exports · 7 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,7 +29,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:555`
+- `src/services/danyaBehaviors.ts:556`
+
+### `castleIsOneMoveAway` (function) — 1 call site
+- `src/services/danyaBehaviors.ts:218`
 
 ### `readPosition` (function) — 42 call sites
 - `src/services/groundedAnswer.ts:1309`
@@ -76,7 +79,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8230`
+- `src/components/Coach/CoachTeachPage.tsx:8243`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
 - `src/services/positionalRead.test.ts:164`

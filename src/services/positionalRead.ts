@@ -133,7 +133,7 @@ export function rookReachesFile(fen: string, color: Color, file: string): boolea
 }
 
 /** The castling right is held and every square between king and rook is empty. */
-function castleIsOneMoveAway(fen: string, color: Color): boolean {
+export function castleIsOneMoveAway(fen: string, color: Color): boolean {
   let b: Chess;
   try { b = new Chess(fen); } catch { return false; }
   const rights = fen.split(' ')[2] ?? '-';
@@ -179,7 +179,7 @@ function observationsFor(
       key: `${side}-king-centre`, side, kind: 'king', rank: rank('king'),
       squares: [king.square],
       text: own
-        ? 'Your king is still in the centre and castling is ready — getting it tucked away is worth more than another pawn move right now.'
+        ? 'Your king is still in the centre and castling is ready — getting it tucked away is worth more than anything else right now.'
         : 'Their king is still in the centre — every line that opens toward it is worth looking at.',
     });
   }

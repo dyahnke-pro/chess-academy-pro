@@ -26,8 +26,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ Hand-walk 1 (his Scandinavian, vc-1zfJ7ABoh8k): ~25 board-false/misframed lines fixed at the computer (PLAN §WO-DANYA-01 "Hand-walk 1").
 - ✅ Hand-walk audit locked as the standard (CLAUDE.md "WALK IT, FLAG EVERYTHING, THEN FIX").
 - ✅ Gem tests: SEE 2x faster, convert-once, budgets.
-- 🔴 Quiet-move purpose computer (Nc3 tempo, Ne2 not Nf3, h3 for g4, Qa1 behind the rook).
-- 🔴 Plan arc / one thread per move (B).
+- 🟠 Quiet-move purpose: h3/g4 kicks, Rd1 open file, Qe1 off the file, Bb3 fork trick, Be3 development now speak (#955–#957); still owed: Ne2-not-Nf3 choice, Qa1 behind the rook.
+- ✅ Walk 3 of the 1380 (2026-09-26): Qe1 graded by its cost when outside the fan (`gradedLoss`), captures never get a principle, one owner for the uncastled-king claim, a shared file is contested, one habit taught once across method beat + fundamental verdict. Report `audit-reports/hand-walk-1380-walk3-2026-09-26.md`.
+- 🔴 Plan arc / one thread per move (B) — SUBSUMPTION, not a cap (G4.5): same-claim facts collapse. Walking 1380 on current code to measure (2026-09-26).
 - 🟠 Phase narration still phrases chess facts through the model — David's call.
 - 🔴 Leftovers: rook template m17, "either works … with it", duplicate break lanes, transposition name.
 - ✅ Hand-walk 1380 (xoS71OW-Re0): 30 moves flagged, 6 fix batches; open flags in `audit-reports/hand-walk-1380-2026-09-24.md` (king-attack lane, 2-move threat computer, engine-unverified claims).

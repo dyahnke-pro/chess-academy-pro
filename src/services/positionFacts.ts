@@ -64,6 +64,22 @@ export interface LiveMoveReads extends Pick<LiveFundamentalReads, 'historySans' 
  * move (a phase transition, "read this position"), and a new surface must say
  * so rather than inherit a silent gap the way the live lane did until C4.
  */
+/** The played move's cost, student POV: the fan's grade when the move was in
+ *  it, else the SAME cost read off the two evaluations the surface already
+ *  holds (best before the move, the position after it). A move outside a
+ *  3-line fan is not a mistake by that fact — 11.Qe1 in the 1380 speedrun sat
+ *  4th at the page's depth, cost ~20 cp, and was silenced as "ungraded" while
+ *  its point (off the d-file before e5) was the lesson. Null only when neither
+ *  source exists — a mate on either side is not a centipawn cost. */
+export function gradedLoss(lm: Pick<LastMoveInput, 'cpLoss' | 'reads'>, studentColor: 'w' | 'b'): number | null {
+  if (lm.cpLoss !== null) return lm.cpLoss;
+  const before = lm.reads?.evalBeforeWhiteCp;
+  const after = lm.reads?.evalAfterWhiteCp;
+  if (before === undefined || after === undefined) return null;
+  const sign = studentColor === 'w' ? 1 : -1;
+  return Math.max(0, (before - after) * sign);
+}
+
 export interface LastMoveInput {
   fenBefore: string;
   san: string;
@@ -758,7 +774,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // GRADED clean only — an ungraded move is not a clean one. The 2026-09-24
     // Learn tape praised "O-O-O does what the opening asks" one line after
     // another lane called O-O-O a mistake: the grade had not reached here yet.
-    && ((lm.historySans !== null && isBookLine(lm.historySans)) || (lm.cpLoss !== null && lm.cpLoss < 50))
+    && ((lm.historySans !== null && isBookLine(lm.historySans)) || ((gradedLoss(lm, studentColor) ?? Infinity) < 50))
     ? principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore))
     : null;
   // S3 — the opponent's reply took the student's threat off the board.

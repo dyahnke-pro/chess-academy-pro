@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1386 lines · 11 exports · 17 importers · 16 tests · 3 audits**
+**1402 lines · 12 exports · 17 importers · 16 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,6 +40,12 @@
 
 ### `LiveMoveReads` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `gradedLoss` (function) — 4 call sites
+- `src/services/positionFacts.moveWhy.test.ts:111`
+- `src/services/positionFacts.moveWhy.test.ts:112`
+- `src/services/positionFacts.moveWhy.test.ts:113`
+- `src/services/positionFacts.moveWhy.test.ts:114`
 
 ### `LastMoveInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

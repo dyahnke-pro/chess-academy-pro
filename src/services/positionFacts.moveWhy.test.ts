@@ -104,3 +104,18 @@ describe('middlegame stems: said once, never on a capture, honest about the quee
     expect(principleLine(board('Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3'.split(' ')).fen(), 'Rxf3', 'white', new Set(), 0)).toBeNull();
   });
 });
+
+describe('a move outside the fan is graded by its cost (walk 3, 11.Qe1)', () => {
+  it('gradedLoss reads the two evals the surface holds', async () => {
+    const { gradedLoss } = await import('./positionFacts');
+    expect(gradedLoss({ cpLoss: null, reads: { evalBeforeWhiteCp: -13, evalAfterWhiteCp: -31 } as never }, 'w')).toBe(18);
+    expect(gradedLoss({ cpLoss: null, reads: { evalBeforeWhiteCp: 50, evalAfterWhiteCp: 250 } as never }, 'b')).toBe(200);
+    expect(gradedLoss({ cpLoss: null, reads: null }, 'w')).toBeNull();
+    expect(gradedLoss({ cpLoss: 7, reads: null }, 'w')).toBe(7);
+  });
+  it('a recapture is never credited with a principle, even in the opening (13.fxe5)', () => {
+    const c = new Chess();
+    for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5'.split(' ')) c.move(s);
+    expect(principleLine(c.fen(), 'fxe5', 'white', new Set(), 0)).toBeNull();
+  });
+});

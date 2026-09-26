@@ -1043,9 +1043,11 @@ export function principleLine(
   // wording), so "takes the open c-file" is heard once a game while each new
   // kick or each new file still speaks — the Scotch ending said "marches your
   // king toward the center" on eight moves running before this. A CAPTURE is
-  // never credited: its point is the capture (Rxf7 "takes the open f-file").
+  // never credited, in or out of the opening: its point is the capture (Rxf7
+  // "takes the open f-file"; 13.fxe5 "kicks their knight" — a recapture's
+  // why is "takes back", which its own lane says).
+  if (san.includes('x')) return null;
   if (!openingWindowOpen(fenBefore, mover)) {
-    if (san.includes('x')) return null;
     // In an ENDGAME "takes aim at the center" and "grabs space" are not the
     // why of anything — kings, passers and rooks are (the Scotch ending's
     // Qd8 "takes aim at the center").
