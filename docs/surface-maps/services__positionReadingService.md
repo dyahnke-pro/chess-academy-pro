@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2450 lines · 75 exports · 47 importers · 12 tests · 2 audits**
+**2461 lines · 76 exports · 48 importers · 12 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -41,6 +41,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveTiming.ts`
 - `src/services/nextPlans.ts`
 - `src/services/opponentMovePurpose.ts`
+- `src/services/pieceValueRead.ts`
 - `src/services/playCommentary.ts`
 - `src/services/positionReadingGrader.test.ts`
 - `src/services/positionReadingGrader.ts`
@@ -89,13 +90,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:2951`
 - `src/services/groundedAnswer.ts:6326`
 - `src/services/moveTiming.ts:27`
-- `src/services/pvPlayback.ts:410`
-- `src/services/pvPlayback.ts:457`
+- `src/services/pvPlayback.ts:411`
+- `src/services/pvPlayback.ts:458`
 - `src/services/reviewQuestionPlan.ts:67`
 - `src/services/reviewTrapQuestion.ts:113`
 
 ### `legalSeeGainOn` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:2401`
+- `src/services/coachFeatureService.ts:2402`
 - `src/services/groundedAnswer.ts:6372`
 - `src/services/opponentMovePurpose.ts:33`
 - `src/services/reviewTeachingPoints.ts:98`
@@ -107,7 +108,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `landingIsSafe` (function) — 13 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:160`
 - `src/services/computedVoiceGrounding.test.ts:75`
-- `src/services/danyaBehaviors.ts:523`
+- `src/services/danyaBehaviors.ts:522`
 - `src/services/forkTrick.ts:64`
 - `src/services/groundedAnswer.ts:2200`
 - `src/services/groundedAnswer.ts:2330`
@@ -116,14 +117,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6304`
 - `src/services/latentFork.ts:149`
 - `src/services/latentFork.ts:220`
-- `src/services/moveFundamentals.ts:302`
-- `src/services/moveFundamentals.ts:1105`
+- `src/services/moveFundamentals.ts:291`
+- `src/services/moveFundamentals.ts:1094`
 
 ### `legalSeeGainFor` (function) — 20 call sites
 - `src/services/bluffDetector.ts:52`
 - `src/services/bluffDetector.ts:62`
 - `src/services/boardState.ts:42`
-- `src/services/causalChain.ts:41`
+- `src/services/causalChain.ts:42`
 - `src/services/computedMaterialTruth.corpus.test.ts:120`
 - `src/services/computedMaterialTruth.corpus.test.ts:145`
 - `src/services/deliberation.ts:41`
@@ -136,8 +137,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/moveTiming.ts:50`
 - `src/services/nextPlans.ts:46`
 - `src/services/playCommentary.ts:940`
-- `src/services/pvPlayback.ts:201`
-- `src/services/pvPlayback.ts:205`
+- `src/services/pvPlayback.ts:202`
+- `src/services/pvPlayback.ts:206`
 - `src/services/tacticAlertService.ts:329`
 - `src/services/tacticVerification.ts:101`
 
@@ -145,7 +146,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
-- `src/services/principleAttribution.ts:257`
+- `src/services/principleAttribution.ts:251`
 
 ### `capturesWinMaterial` (function) — 6 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:136`
@@ -161,7 +162,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewTrapQuestion.ts:136`
 
 ### `minorCanReachSquare` (function) — 3 call sites
-- `src/services/danyaBehaviors.ts:616`
+- `src/services/danyaBehaviors.ts:615`
 - `src/services/danyaExploitability.test.ts:51`
 - `src/services/danyaExploitability.test.ts:55`
 
@@ -171,7 +172,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `findHangingBySee` (function) — 11 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
-- `src/services/conversionMethod.ts:58`
+- `src/services/conversionMethod.ts:51`
 - `src/services/drillReasons.ts:40`
 - `src/services/groundedAnswer.ts:3093`
 - `src/services/positionReadingService.test.ts:70`
@@ -182,7 +183,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/kingIsNeverHanging.test.ts:54`
 
 ### `findPawnBreaks` (function) — 12 call sites
-- `src/services/danyaBehaviors.ts:511`
+- `src/services/danyaBehaviors.ts:510`
 - `src/services/groundedAnswer.ts:355`
 - `src/services/groundedAnswer.ts:380`
 - `src/services/groundedAnswer.ts:3121`
@@ -198,6 +199,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PieceQualityNote` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `PieceQualityKind` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `bishopBlockingPawns` (function) — 4 call sites
 - `src/services/positionReadingService.test.ts:889`
 - `src/services/positionReadingService.test.ts:894`
@@ -206,15 +210,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `bishopHemmedByOwnPawns` (function) — 3 call sites
 - `src/services/positionReadingService.test.ts:895`
-- `src/services/principleAttribution.ts:958`
+- `src/services/principleAttribution.ts:952`
 - `src/services/reviewTeachingPoints.ts:201`
 
-### `findPieceQuality` (function) — 26 call sites
-- `src/services/concessionBeat.ts:286`
-- `src/services/concessionBeat.ts:288`
-- `src/services/danyaBehaviors.ts:163`
-- `src/services/danyaBehaviors.ts:404`
+### `findPieceQuality` (function) — 27 call sites
+- `src/services/concessionBeat.ts:291`
+- `src/services/concessionBeat.ts:293`
+- `src/services/danyaBehaviors.ts:164`
+- `src/services/danyaBehaviors.ts:403`
 - `src/services/groundedAnswer.ts:6058`
+- `src/services/pieceValueRead.ts:467`
 - `src/services/positionReadingService.test.ts:106`
 - `src/services/positionReadingService.test.ts:114`
 - `src/services/positionReadingService.test.ts:121`
@@ -239,7 +244,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `findWeakSquares` (function) — 11 call sites
 - `src/services/computedTruth.fuzz.test.ts:114`
-- `src/services/danyaBehaviors.ts:608`
+- `src/services/danyaBehaviors.ts:607`
 - `src/services/groundedAnswer.ts:388`
 - `src/services/groundedAnswer.ts:5863`
 - `src/services/groundedAnswer.ts:5967`
@@ -259,8 +264,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:335`
 - `src/services/positionalTruth.corpus.test.ts:95`
 - `src/services/positionalTruth.corpus.test.ts:100`
-- `src/services/reviewFullData.ts:688`
-- `src/services/reviewFullData.ts:692`
+- `src/services/reviewFullData.ts:670`
+- `src/services/reviewFullData.ts:674`
 
 ### `MinorityAttack` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -274,8 +279,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.ts:307`
 - `src/services/positionalTruth.corpus.test.ts:108`
 - `src/services/positionalTruth.corpus.test.ts:113`
-- `src/services/reviewFullData.ts:684`
-- `src/services/reviewFullData.ts:686`
+- `src/services/reviewFullData.ts:666`
+- `src/services/reviewFullData.ts:668`
 
 ### `pieceScope` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -284,7 +289,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findXrays` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:640`
+- `src/services/danyaBehaviors.ts:639`
 - `src/services/danyaExploitability.test.ts:24`
 - `src/services/danyaExploitability.test.ts:29`
 - `src/services/danyaExploitability.test.ts:32`
@@ -293,26 +298,26 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:824`
 
 ### `findKnightReroute` (function) — 5 call sites
-- `src/services/danyaBehaviors.ts:628`
+- `src/services/danyaBehaviors.ts:627`
 - `src/services/groundedAnswer.ts:6023`
 - `src/services/positionReadingService.test.ts:813`
 - `src/services/positionReadingService.test.ts:829`
 - `src/services/positionReadingService.test.ts:834`
 
 ### `findFianchetto` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:673`
+- `src/services/danyaBehaviors.ts:672`
 - `src/services/groundedAnswer.ts:6025`
 - `src/services/positionReadingService.test.ts:840`
 - `src/services/positionReadingService.test.ts:843`
 
 ### `findRookLift` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:659`
+- `src/services/danyaBehaviors.ts:658`
 - `src/services/groundedAnswer.ts:6024`
 - `src/services/positionReadingService.test.ts:846`
 - `src/services/positionReadingService.test.ts:849`
 
 ### `findBlockade` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:684`
+- `src/services/danyaBehaviors.ts:683`
 - `src/services/groundedAnswer.ts:6026`
 - `src/services/positionReadingService.test.ts:838`
 - `src/services/positionReadingService.test.ts:852`
@@ -321,7 +326,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `namedPawnStructure` (function) — 15 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8894`
-- `src/services/danyaBehaviors.ts:274`
+- `src/services/danyaBehaviors.ts:273`
 - `src/services/danyaDeviceCoverage.test.ts:107`
 - `src/services/danyaDeviceCoverage.test.ts:108`
 - `src/services/groundedAnswer.ts:5991`
@@ -340,7 +345,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `strongestWeakestPiece` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:184`
+- `src/services/danyaBehaviors.ts:185`
 - `src/services/groundedAnswer.ts:347`
 - `src/services/groundedAnswer.ts:392`
 - `src/services/groundedAnswer.ts:3124`
@@ -349,7 +354,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionReadingService.test.ts:400`
 
 ### `goodPieceClause` (function) — 3 call sites
-- `src/services/danyaBehaviors.ts:171`
+- `src/services/danyaBehaviors.ts:172`
 - `src/services/positionalRead.ts:239`
 - `src/services/positionalRead.ts:245`
 
@@ -357,8 +362,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/concessionBeat.ts:232`
 - `src/services/concessionBeat.ts:233`
 - `src/services/concessionBeat.ts:237`
-- `src/services/danyaBehaviors.ts:280`
-- `src/services/danyaBehaviors.ts:302`
+- `src/services/danyaBehaviors.ts:279`
+- `src/services/danyaBehaviors.ts:301`
 - `src/services/groundedAnswer.ts:5836`
 - `src/services/groundedAnswer.ts:5964`
 - `src/services/groundedAnswer.ts:5995`
@@ -386,14 +391,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `pressuredTargets` (function) — 5 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:178`
-- `src/services/danyaBehaviors.ts:579`
+- `src/services/danyaBehaviors.ts:578`
 - `src/services/groundedAnswer.ts:5945`
 - `src/services/groundedAnswer.ts:5946`
 - `src/services/positionReadingService.test.ts:761`
 
 ### `findPassedPawns` (function) — 9 call sites
 - `src/services/computedTruth.fuzz.test.ts:138`
-- `src/services/danyaBehaviors.ts:442`
+- `src/services/danyaBehaviors.ts:441`
 - `src/services/groundedAnswer.ts:5923`
 - `src/services/groundedAnswer.ts:5924`
 - `src/services/positionReadingService.test.ts:769`
@@ -403,21 +408,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalTruth.corpus.test.ts:125`
 
 ### `kingActivation` (function) — 5 call sites
-- `src/services/danyaBehaviors.ts:469`
+- `src/services/danyaBehaviors.ts:468`
 - `src/services/danyaExploitability.test.ts:138`
 - `src/services/danyaExploitability.test.ts:142`
 - `src/services/danyaExploitability.test.ts:145`
 - `src/services/groundedAnswer.ts:6044`
 
 ### `rookBehindPasser` (function) — 5 call sites
-- `src/services/danyaBehaviors.ts:479`
+- `src/services/danyaBehaviors.ts:478`
 - `src/services/danyaExploitability.test.ts:151`
 - `src/services/danyaExploitability.test.ts:155`
 - `src/services/danyaExploitability.test.ts:158`
 - `src/services/groundedAnswer.ts:6046`
 
 ### `oppositionRead` (function) — 6 call sites
-- `src/services/danyaBehaviors.ts:494`
+- `src/services/danyaBehaviors.ts:493`
 - `src/services/danyaExploitability.test.ts:164`
 - `src/services/danyaExploitability.test.ts:167`
 - `src/services/danyaExploitability.test.ts:171`
@@ -425,12 +430,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/groundedAnswer.ts:6045`
 
 ### `bestMinorToKeep` (function) — 3 call sites
-- `src/services/danyaBehaviors.ts:700`
+- `src/services/danyaBehaviors.ts:699`
 - `src/services/groundedAnswer.ts:6047`
 - `src/services/positionReadingService.test.ts:781`
 
 ### `bishopPair` (function) — 5 call sites
-- `src/services/danyaBehaviors.ts:540`
+- `src/services/danyaBehaviors.ts:539`
 - `src/services/groundedAnswer.ts:5912`
 - `src/services/groundedAnswer.ts:5913`
 - `src/services/positionReadingService.test.ts:788`
@@ -440,7 +445,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `opponentIntentRead` (function) — 5 call sites
-- `src/services/danyaBehaviors.ts:232`
+- `src/services/danyaBehaviors.ts:231`
 - `src/services/groundedAnswer.ts:327`
 - `src/services/positionReadingService.test.ts:796`
 - `src/services/positionReadingService.test.ts:802`
@@ -450,7 +455,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findOpenFiles` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:551`
+- `src/services/danyaBehaviors.ts:550`
 - `src/services/groundedAnswer.ts:349`
 - `src/services/groundedAnswer.ts:384`
 - `src/services/groundedAnswer.ts:5974`
@@ -462,7 +467,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `computeSpace` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:595`
+- `src/services/danyaBehaviors.ts:594`
 - `src/services/groundedAnswer.ts:5880`
 - `src/services/positionReadingService.test.ts:193`
 - `src/services/positionReadingService.test.ts:198`
@@ -483,9 +488,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `kingSafetyRead` (function) — 9 call sites
-- `src/services/danyaBehaviors.ts:204`
-- `src/services/danyaBehaviors.ts:216`
-- `src/services/danyaBehaviors.ts:664`
+- `src/services/danyaBehaviors.ts:205`
+- `src/services/danyaBehaviors.ts:215`
+- `src/services/danyaBehaviors.ts:663`
 - `src/services/groundedAnswer.ts:5850`
 - `src/services/positionReadingService.test.ts:508`
 - `src/services/positionReadingService.test.ts:515`
@@ -497,7 +502,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `countMaterial` (function) — 7 call sites
-- `src/services/danyaBehaviors.ts:419`
+- `src/services/danyaBehaviors.ts:418`
 - `src/services/gamePhaseService.test.ts:9`
 - `src/services/gamePhaseService.test.ts:15`
 - `src/services/gamePhaseService.test.ts:21`
@@ -512,8 +517,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `developmentRead` (function) — 9 call sites
+- `src/services/danyaBehaviors.ts:321`
 - `src/services/danyaBehaviors.ts:322`
-- `src/services/danyaBehaviors.ts:323`
 - `src/services/groundedAnswer.ts:5824`
 - `src/services/groundedAnswer.ts:5827`
 - `src/services/positionReadingService.test.ts:526`

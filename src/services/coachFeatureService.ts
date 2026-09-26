@@ -67,6 +67,7 @@ import { departureRecordSentence, openingRecordClause } from './openingRecordBea
 import { ecoOfKey, openingEntryForKey, openingFamily, openingKeyFromSans } from './openingKey';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { describeEvalCp, isMateEval } from './engineConstants';
+import { isMinorAtHome } from './development';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -3944,7 +3945,6 @@ async function augmentWithProjections(
 async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<void> {
   const seg = segments.find((s) => s.narrationSource === 'opening-plan' && s.planArrows && s.planArrows.length > 0);
   if (!seg) return;
-  const HOME = new Set(['b1', 'g1', 'b8', 'g8', 'c1', 'f1', 'c8', 'f8']);
   const collect = (steps: Array<{ san: string; fenAfter: string }>): Map<string, { to: string; piece: string }> => {
     const targets = new Map<string, { to: string; piece: string }>();
     let fen = seg.fenBefore;
@@ -3954,7 +3954,7 @@ async function groundOpeningPlanInBook(segments: ReviewMoveSegment[]): Promise<v
         const mv = c.move(p.san);
         if (!mv) break;
         fen = p.fenAfter;
-        if (HOME.has(mv.from) && (mv.piece === 'n' || mv.piece === 'b') && !targets.has(mv.from)) {
+        if (isMinorAtHome(mv.piece, mv.color, mv.from) && !targets.has(mv.from)) {
           targets.set(mv.from, { to: mv.to, piece: mv.piece === 'n' ? 'knight' : 'bishop' });
         }
       } catch { break; }

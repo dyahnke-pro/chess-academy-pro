@@ -345,7 +345,9 @@ export interface OpeningVariation {
 export interface ModelGameCriticalMoment {
   moveNumber: number;
   color: 'white' | 'black';
-  fen: string;
+  // NO `fen`: stripped from the data 2026-07-22 ("replay is the truth"). The
+  // type said it was required while no moment had one, so a reader compiled
+  // and found nothing (the model-game cameo, dead two months). Replay the pgn.
   annotation: string;
   concept: string;
   arrows?: AnnotationArrow[];

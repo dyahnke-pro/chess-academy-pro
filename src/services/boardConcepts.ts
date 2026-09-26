@@ -22,6 +22,7 @@ import {
   countDevelopedMinors,
   hasMajorPieceCaptured,
 } from './phaseTransitionDetector';
+import { isMinor, isMinorAtHome } from './development';
 
 export type Phase = 'opening' | 'middlegame' | 'endgame';
 
@@ -318,12 +319,7 @@ export function boardConcepts(fen: string): BoardConcepts | null {
   if (phase !== 'endgame') {
     const devLead = developmentCount(all, fen, 'w') - developmentCount(all, fen, 'b');
     const laggard = devLead > 0 ? 'b' : 'w';
-    const laggardHome = laggard === 'w'
-      ? new Set(['b1', 'g1', 'c1', 'f1'])
-      : new Set(['b8', 'g8', 'c8', 'f8']);
-    const asleep = all.filter(
-      (p) => p.color === laggard && (p.type === 'n' || p.type === 'b') && laggardHome.has(p.square),
-    ).length;
+    const asleep = all.filter((p) => p.color === laggard && isMinorAtHome(p.type, laggard, p.square)).length;
     if (Math.abs(devLead) >= 2 && asleep >= 2) concepts.add('development');
   }
 
@@ -372,10 +368,7 @@ export function boardConcepts(fen: string): BoardConcepts | null {
  *  castled king. Queens/rooks deliberately uncounted — early queen sorties
  *  are not "development" and rook lifts are a different idea. */
 function developmentCount(all: Sq[], fen: string, c: 'w' | 'b'): number {
-  const home = c === 'w'
-    ? new Set(['b1', 'g1', 'c1', 'f1'])
-    : new Set(['b8', 'g8', 'c8', 'f8']);
-  let n = all.filter((p) => p.color === c && (p.type === 'n' || p.type === 'b') && !home.has(p.square)).length;
+  let n = all.filter((p) => p.color === c && isMinor(p.type) && !isMinorAtHome(p.type, c, p.square)).length;
   if (hasCastled(fen, c === 'w' ? 'white' : 'black')) n += 1;
   return n;
 }

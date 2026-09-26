@@ -22,6 +22,7 @@
  * here; the vibe concepts (initiative, counterplay, coordination, conversion,
  * flexibility) have none and are deliberately absent (empty > invented).
  */
+import { fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
@@ -168,7 +169,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // 2026-09-24: "Your rook on f1 — rook on a semi-open file. Build around
         // it." read like a label).
         return {
-          fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} ${goodPieceClause(good.reason, good.square).replace(/^it /, '')} — build your play around it.`,
+          fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} ${goodPieceClause(good.kind, good.square).replace(/^it /, '')} — build your play around it.`,
           squares: [good.square],
         };
       }
@@ -206,9 +207,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (theirs?.exposed && roads.length >= 1 && theirs.shieldPawns <= 1 && moveNo >= 8) {
         // "the b- and c-files are", never "the b, c-file is" (walk 900, 33…Qxf2
         // — the voice read it as "the bishop, c-file").
-        const lines = roads.length === 1
-          ? `the ${roads[0]}-file is`
-          : `the ${roads.slice(0, -1).map((f) => `${f}-`).join(', ')} and ${roads[roads.length - 1]}-files are`;
+        const lines = `${fileList(roads)} ${roads.length === 1 ? 'is' : 'are'}`;
         return { fact: `The enemy king on ${theirs.square} is exposed — ${lines} open toward it. Play for the attack.`, squares: [sq(theirs.square)] };
       }
       // Your own king stuck in the center is only a real problem once pieces are

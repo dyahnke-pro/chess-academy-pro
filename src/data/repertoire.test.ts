@@ -55,8 +55,8 @@ function isLichessImport(explanation?: string): boolean {
 describe('repertoire.json — PGN legality', () => {
   const entries = repertoire as RepertoireEntry[];
 
-  it('has 40 openings', () => {
-    expect(entries).toHaveLength(42);
+  it('has 43 openings', () => {
+    expect(entries).toHaveLength(43);
   });
 
   describe('all PGN lines contain only legal moves', () => {
@@ -196,6 +196,15 @@ describe('repertoire.json — development depth (main lines)', () => {
         // development (kings central, sacrificed/advanced pawns drive play).
         'schliemann-defence',
         'albin-countergambit',
+        // Data-chosen spines (2026-05-29 doctrine: the most-played master
+        // move at each ply, stopped where games thin) that end one bishop
+        // short — extending them would invent moves (G3). KID: the c8 bishop
+        // waits for ...f4-g5 (Mar del Plata); Alekhine / Bird's: White's c1
+        // bishop; Glek: Black's c8 bishop, after ...Ne7-c6 shapes the centre.
+        'kings-indian-defence',
+        'alekhine-defence',
+        'birds-opening',
+        'glek-system',
       ];
       if (!developmentExceptions.includes(entry.id)) {
         const undeveloped = getUndevelopedMinors(chess);

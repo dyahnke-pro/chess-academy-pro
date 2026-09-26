@@ -16,6 +16,7 @@
  * French chains surface "undermine the chain" moments, and an R+B ending
  * with no matching conversion moment in the corpus surfaces NOTHING.
  */
+import { fileList } from '../utils/andList';
 import { Chess } from 'chess.js';
 import modelGamesJson from '../data/model-games.json';
 import {
@@ -85,6 +86,29 @@ function truncFen(fen: string): string {
 
 /** Moment signatures are static data — compute once. */
 const momentSigCache = new Map<string, StructureSignature | null>();
+/** The position AFTER a critical moment's move, replayed from the game's own
+ *  pgn. Moments carry no FEN since 2026-07-22 ("replay is the truth", stale
+ *  fens stripped), and reading `m.fen` left this matcher finding nothing for
+ *  two months. The pgn is the one source. */
+const momentFenCache = new Map<string, string | null>();
+function momentFen(gameId: string, pgn: string, moveNumber: number, color: string | undefined): string | null {
+  const key = `${gameId}#${moveNumber}${color ?? ''}`;
+  const hit = momentFenCache.get(key);
+  if (hit !== undefined) return hit;
+  const target = (moveNumber - 1) * 2 + (color === 'black' ? 1 : 0);
+  const chess = new Chess();
+  let ply = 0;
+  let out: string | null = null;
+  for (const tok of pgn.split(/\s+/)) {
+    if (!tok || /^\d+\.(\.\.)?$/.test(tok) || /^(1-0|0-1|1\/2-1\/2|\*)$/.test(tok)) continue;
+    try { chess.move(tok.replace(/^\d+\.(\.\.)?/, '')); } catch { break; }
+    if (ply === target) { out = chess.fen(); break; }
+    ply += 1;
+  }
+  momentFenCache.set(key, out);
+  return out;
+}
+
 function momentSig(fen: string): StructureSignature | null {
   let sig = momentSigCache.get(fen);
   if (sig === undefined) {
@@ -135,7 +159,7 @@ export function sharedFeatureLines(a: StructureSignature, b: StructureSignature)
   }
   const sharedOpen = a.openFiles.filter((f) => b.openFiles.includes(f));
   if (sharedOpen.length > 0) {
-    out.push(`the open ${sharedOpen.join('- and ')}-file in both positions`);
+    out.push(`${fileList(sharedOpen).replace(/^the /, 'the open ')} in both positions`);
   }
   if (a.doubled && b.doubled) {
     out.push('doubled pawns in both positions');
@@ -206,8 +230,10 @@ export function matchModelGameCameo(
   for (const g of games) {
     if (!g.id || !g.white || !g.black || !g.pgn) continue;
     for (const m of g.criticalMoments ?? []) {
-      if (!m.fen || typeof m.moveNumber !== 'number' || m.moveNumber <= 1) continue;
-      const msig = momentSig(m.fen);
+      if (typeof m.moveNumber !== 'number' || m.moveNumber <= 1) continue;
+      const mFen = m.fen ?? momentFen(g.id, g.pgn, m.moveNumber, m.color);
+      if (!mFen) continue;
+      const msig = momentSig(mFen);
       if (!msig) continue;
       const d = structureMatchDetail(reviewSig, msig);
       if (d.weight <= 0) continue;
@@ -230,7 +256,7 @@ export function matchModelGameCameo(
           event: g.event ?? null,
           result: g.result ?? null,
           pgn: g.pgn,
-          momentFen: m.fen,
+          momentFen: mFen,
           momentMoveNumber: m.moveNumber,
           momentConcept: m.concept ?? null,
           matched: d.score,

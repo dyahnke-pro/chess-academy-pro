@@ -13,6 +13,7 @@
 // no engine required. Empty result > speculative result.
 
 import { Chess, type Color, type Square } from 'chess.js';
+import { developedMinorCount } from './development';
 
 export interface PrincipleViolation {
   /** Stable id — concept-corpus adjacent tag. */
@@ -26,23 +27,6 @@ export interface PrincipleViolation {
   principle: string;
   /** The concrete, square-anchored observation on THIS board. */
   observed: string;
-}
-
-const MINOR_HOMES: Record<Color, Square[]> = {
-  w: ['b1', 'g1', 'c1', 'f1'],
-  b: ['b8', 'g8', 'c8', 'f8'],
-};
-
-function developedMinorCount(chess: Chess, color: Color): number {
-  let developed = 0;
-  for (const row of chess.board()) {
-    for (const cell of row) {
-      if (!cell || cell.color !== color) continue;
-      if (cell.type !== 'n' && cell.type !== 'b') continue;
-      if (!MINOR_HOMES[color].includes(cell.square)) developed += 1;
-    }
-  }
-  return developed;
 }
 
 /** Replay `historySans` and report principle violations committed by the

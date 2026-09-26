@@ -40,3 +40,12 @@ export function countedList(xs: readonly string[], nounSingular: string, nounPlu
   if (xs.length === 1) return `${nounSingular} ${xs[0]}`;
   return `${countWord(xs.length)} ${nounPlural}: ${andList(xs)}`;
 }
+
+/** Files as SAID: "the c-file", "the b- and c-files", "the a-, b- and c-files".
+ *  The one wording for a list of files — "the b, c-file" was read aloud as
+ *  "the bishop, c-file" (walk 900). Empty → ''. */
+export function fileList(files: readonly string[]): string {
+  if (files.length === 0) return '';
+  if (files.length === 1) return `the ${files[0]}-file`;
+  return `the ${andList(files.map((f) => `${f}-`)).replace(/-$/, '')}-files`;
+}

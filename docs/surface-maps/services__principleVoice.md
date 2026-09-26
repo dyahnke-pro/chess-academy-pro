@@ -39,22 +39,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/fundamentalHow.test.ts:71`
 - `src/services/fundamentalHow.test.ts:76`
 - `src/services/fundamentalHow.test.ts:77`
-- `src/services/principleAttribution.section14.test.ts:169`
+- `src/services/principleAttribution.section14.test.ts:176`
 
 ### `FundamentalVerdictOptions` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderFundamentalVerdict` (function) — 19 call sites
-- `src/services/coachFeatureService.ts:2235`
+- `src/services/coachFeatureService.ts:2236`
 - `src/services/fundLeadStems.test.ts:58`
 - `src/services/fundamentalHow.test.ts:47`
 - `src/services/fundamentalHow.test.ts:49`
 - `src/services/fundamentalHow.test.ts:55`
 - `src/services/fundamentalHow.test.ts:81`
 - `src/services/learnFundamentalNarration.ts:97`
-- `src/services/misconceptionClassifier.ts:274`
-- `src/services/principleAttribution.section14.test.ts:172`
-- `src/services/principleAttribution.section14.test.ts:175`
+- `src/services/misconceptionClassifier.ts:263`
+- `src/services/principleAttribution.section14.test.ts:179`
+- `src/services/principleAttribution.section14.test.ts:182`
 - `src/services/principleAttributionEndgame.test.ts:49`
 - `src/services/principleAttributionEvalPv.test.ts:66`
 - `src/services/principleAttributionEvalPv.test.ts:79`
@@ -63,10 +63,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/principleVoice.test.ts:25`
 - `src/services/principleVoice.test.ts:31`
 - `src/services/principleVoice.test.ts:32`
-- `src/services/reviewFullData.ts:416`
+- `src/services/reviewFullData.ts:398`
 
 ### `renderPvEvidence` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2246`
+- `src/services/coachFeatureService.ts:2247`
 - `src/services/principleVoice.test.ts:38`
 - `src/services/principleVoice.test.ts:40`
 

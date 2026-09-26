@@ -30,12 +30,10 @@ vi.mock('../Board/ChessBoard', () => ({
   },
 }));
 
-vi.mock('../../services/voiceService', () => ({
-  voiceService: {
-    speak: vi.fn().mockResolvedValue(undefined),
-    stop: vi.fn(),
-  },
-}));
+vi.mock('../../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../../test/mocks/voice-service');
+  return { voiceService: buildVoiceServiceMock() };
+});
 
 describe('KingEscapeGame', () => {
   beforeEach(() => {

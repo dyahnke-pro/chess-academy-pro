@@ -393,7 +393,8 @@
       "book:italian-game",
       "concept:pos-center",
       "https://www.chess.com/openings/Italian-Game"
-    ]
+    ],
+    "variation": "Giuoco Pianissimo: Closed Italian with a4/Ba2"
   },
   {
     "id": "mg-lichess-6YRWrSqn",
@@ -489,7 +490,7 @@
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Vienna_Game"
     ],
-    "variation": "Vienna Gambit"
+    "variation": "Vienna Gambit: Qf3"
   },
   {
     "id": "mg-caro-classical",
@@ -1177,7 +1178,7 @@
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/London_System"
     ],
-    "variation": "London vs King's Indian"
+    "variation": "London vs Grunfeld Setup"
   },
   {
     "id": "mg-carlsen-london-jobava",
@@ -1468,7 +1469,8 @@
       "concept:pos-center",
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/English_Opening"
-    ]
+    ],
+    "variation": "Mikenas Attack"
   },
   {
     "id": "mg-kramnik-reti-main",
@@ -2122,7 +2124,8 @@
       "book:scandinavian-defence",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ]
+    ],
+    "variation": "Qa5 Main Line"
   },
   {
     "id": "mg-scandi-modern",
@@ -3351,7 +3354,7 @@
     "criticalMoments": [],
     "middlegameTheme": "System, Flexible",
     "lessonSummary": "Naroditsky vs 0gZPanda (3200), 49-ply KIA mainline. Clean d4 transposition + kingside attack converting in under 25 moves.",
-    "variation": "d5 KIA mainline"
+    "variation": "g6 Modern setup"
   },
   {
     "id": "mg-pro-naroditsky-rossolimo",
@@ -3442,7 +3445,8 @@
     "criticalMoments": [],
     "middlegameTheme": "London System",
     "lessonSummary": "Gotham vs Hope_6 (2643) — a textbook London System grind. Levy plays his usual Bf4 + e3 + Nf3 + Nbd2 setup, trades the dark-squared bishop on c7-b6 to open the queenside, and outplays his opponent in the endgame after the Ne4-d6 fork wins material. The masterclass London plan in one game: hold the centre, attack the queenside, convert the small advantage.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …c6 (via 2.Bf4)"
   },
   {
     "id": "mg-pro-gothamchess-caro-kann-0",
@@ -3517,7 +3521,8 @@
     "criticalMoments": [],
     "middlegameTheme": "English Opening",
     "lessonSummary": "Levy's English Opening with the classical Botvinnik setup — Nc3 + e4 + d4 vs Black's KID structure. The g4-g5 kingside attack arrives faster than Black's queenside counterplay. Classic flank-attack-with-closed-centre conversion.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …c6 (Slav-style)"
   },
   {
     "id": "mg-pro-gothamchess-kia-0",
@@ -4805,7 +4810,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The …c6 line: build the e4 centre, break with d5, attack the king.",
     "lessonSummary": "Against …c6, take the centre with e4, break with d5, and storm through.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …c6 (Slav-style)"
   },
   {
     "id": "mg-pro-gothamchess-vie-soprano-gambit",
@@ -4880,7 +4886,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The gambit accepted: e5 wedge, rapid development, kingside attack.",
     "lessonSummary": "Against …exf4, cramp with e5, develop fast, and attack the king.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "Vienna Gambit Accepted"
   },
   {
     "id": "mg-pro-gothamchess-italian-petriashvili-giuoco",
@@ -4898,7 +4905,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The Giuoco: Bg5 pin, f4 storm, Bxf7+ sacrifice.",
     "lessonSummary": "Pin with Bg5, storm with f4, and sacrifice on f7 when the king weakens.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "Two Knights (…Nf6)"
   },
   {
     "id": "mg-pro-gothamchess-italian-khatanbaatar-fpush",
@@ -4916,7 +4924,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The f4-f5 plan: clamp e6, storm, invade the f-file.",
     "lessonSummary": "Pin with Bg5, play f4-f5, open the f-file, and attack the king.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "Two Knights (…Nf6)"
   },
   {
     "id": "mg-pro-gothamchess-italian-zackyy-twoknights",
@@ -4934,7 +4943,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The Two Knights d4: Re1 pin, Bxd5 to expose the king.",
     "lessonSummary": "Play d4 and Re1, sacrifice on d5 to expose the king, convert the ending.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "Two Knights (…Nf6)"
   },
   {
     "id": "mg-pro-gothamchess-italian-gummyfox-evans",
@@ -4971,7 +4981,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The Jobava: Nb5 raid, dynamic sacrifices, a crushing attack.",
     "lessonSummary": "Play the Jobava Nb5 raid and convert the dynamic complications.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …c6 (via 2.Bf4)"
   },
   {
     "id": "mg-pro-gothamchess-london-kacparov-kid",
@@ -4989,7 +5000,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The London vs KID: queenside pawn rollers, a passed b-pawn.",
     "lessonSummary": "Against the KID setup, roll the queenside pawns and push the passer.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …c6 (via 2.Bf4)"
   },
   {
     "id": "mg-pro-gothamchess-london-tigran-c6",
@@ -5007,7 +5019,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The c4 break vs …c6: open the centre, dominate with outposts.",
     "lessonSummary": "Against …c6, break with c4 and use the central outposts.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …c6 (via 2.Bf4)"
   },
   {
     "id": "mg-pro-gothamchess-london-khatanbaatar-e6",
@@ -5025,7 +5038,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The London with O-O-O: opposite-wings attack, Nf5 breakthrough.",
     "lessonSummary": "Castle queenside, weather the storm, and break with Nf5 to the king.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …c6 (via 2.Bf4)"
   },
   {
     "id": "mg-pro-gothamchess-london-deeprabbit-standard",
@@ -5043,7 +5057,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The Nb5-Nc7 fork: win the exchange, convert the edge.",
     "lessonSummary": "When Black allows it, play Nb5-Nc7 to fork the rook and king.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …c6 (via 2.Bf4)"
   },
   {
     "id": "mg-pro-gothamchess-ponziani-aryantari-main",
@@ -5080,7 +5095,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The 4…Nxe4 line: recover the pawn, grind the better minor piece.",
     "lessonSummary": "Against 4…Nxe4, regain the pawn with d5/Nxe5 and grind the ending.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "4…Nxe4 (dxc6)"
   },
   {
     "id": "mg-pro-gothamchess-ponziani-chess123-qa4",
@@ -5285,7 +5301,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The 3…Qb6 line: gambit for development, d5 break, mate the king.",
     "lessonSummary": "Against …Qb6, gambit for development, break d5, and hunt the king.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "Counter 3...Qb6"
   },
   {
     "id": "mg-pro-gothamchess-stafford-imrosen",
@@ -5487,7 +5504,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The vs …e6 line: O-O-O, Nb5/Bxe5 sacrifices, win the ending.",
     "lessonSummary": "Castle queenside, sacrifice to open lines, and convert the passers.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …e6"
   },
   {
     "id": "mg-pro-gothamchess-closedsic-tran-d6",
@@ -5505,7 +5523,8 @@
     "criticalMoments": [],
     "middlegameTheme": "The …d6 attack: O-O-O, h4-h5-g4-g5 storm, Rxh6 sacrifice.",
     "lessonSummary": "Castle queenside, storm with h4-g4, and sacrifice on h6.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "variation": "vs …d6"
   },
   {
     "id": "mg-pro-gothamchess-closedsic-roberto-g6",
@@ -5579,7 +5598,7 @@
     "middlegameTheme": "The modern …Nf6: …Bg4/…Qh5, O-O-O, kingside attack.",
     "lessonSummary": "Develop …Bg4/…Qh5, castle queenside, and attack the king.",
     "studentSide": "black",
-    "variation": "2...Nf6 Scandinavian"
+    "variation": "Portuguese …Bg4"
   },
   {
     "id": "mg-pro-gothamchess-scand-barcenilla-nf6nc3",
@@ -5598,7 +5617,7 @@
     "middlegameTheme": "The Nc3 line: …Bxf3 trade, solid structure, outplay in complications.",
     "lessonSummary": "Trade with …Bxf3, stay solid, and outplay in the middlegame.",
     "studentSide": "black",
-    "variation": "2...Nf6 Scandinavian"
+    "variation": "vs Nc3 (Nxd5)"
   },
   {
     "id": "mg-pro-gothamchess-scand-dogsofwar-bb5",
@@ -5617,7 +5636,7 @@
     "middlegameTheme": "The Bb5+ line: …a6/…b5 expansion, bishop pair, dynamic play.",
     "lessonSummary": "Block with …Nbd7, expand …a6/…b5, and play dynamically.",
     "studentSide": "black",
-    "variation": "2...Nf6 Scandinavian"
+    "variation": "vs Bb5+"
   },
   {
     "id": "mg-pro-gothamchess-qgd-finegold-bf4",
@@ -6569,7 +6588,7 @@
     "sources": [
       "https://lichess.org/umSRLHgD"
     ],
-    "variation": "Main Line (a4 Bf5)"
+    "variation": "Winawer Countergambit (...e5!?)"
   },
   {
     "id": "mg-slav-geller",
@@ -6611,7 +6630,7 @@
     "sources": [
       "https://lichess.org/1vkjoAU8"
     ],
-    "variation": "Schlechter Variation (...g6 Fianchetto)"
+    "variation": "Winawer Countergambit (...e5!?)"
   },
   {
     "id": "mg-semislav-main",
@@ -9879,7 +9898,8 @@
     "sources": [
       "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
       "https://www.pgnmentor.com/players/Caruana.html"
-    ]
+    ],
+    "variation": "English Attack 6.Be3"
   },
   {
     "id": "mg-pro-caruana-najdorf-otb-b",
@@ -9897,7 +9917,8 @@
     "sources": [
       "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
       "https://www.pgnmentor.com/players/Caruana.html"
-    ]
+    ],
+    "variation": "English Attack 6.Be3"
   },
   {
     "id": "mg-pro-caruana-najdorf-otb-c",
@@ -11564,7 +11585,6 @@
     "event": "Masters",
     "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 g6 Bg2 Bg7 O-O O-O h3 Bd7 Be3 Nc6 Kh2 Rc8 Nxc6 Bxc6 Qd2 Nd7 Bh6 Qb6 Bxg7 Kxg7 Rab1 Qc5 f4 b5 Ne2 Nf6 Qd3 e5 b4 Qa7 Qxd6 Rfe8 fxe5 Nxe4 Bxe4 Bxe4 Nd4 Kg8 Rbd1 Bxc2 Rd2 Be4 e6 Rcd8 Qe5 Rxe6 Qc5 Qxc5 bxc5 Re5 Re1 f5 c6 Rc5 Red1 Bxc6 g4 fxg4 hxg4 Rcd5 Kg3 b4 Kf4 Ba4",
     "studentSide": "black",
-    "variation": "",
     "overview": "A 2730 Black win in the Dragodorf main line: Black fianchettoes with …a6 and …g6, seizes the c-file, and grinds the queenside majority home in a long technical battle — the positional Dragon plan in its purest form.",
     "criticalMoments": [],
     "middlegameTheme": "c-file pressure and the queenside majority",
@@ -11582,7 +11602,6 @@
     "event": "Masters",
     "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 g6 Bg2 Bg7 O-O O-O h3 Nc6 Nde2 Bd7 Nd5 b5 c3 Rb8 Be3 Ne5 b3 Bc6 f4 Ned7 Qd2 e6 Nb4 Bxe4 Bxe4 Nxe4 Qc2 d5 Nc6 Qc7 Nxb8 Rxb8 Rac1 Rc8 c4 bxc4 bxc4 Qxc4 Qxc4 dxc4 Rfd1 Ndf6 Bd4 Nd5 Bxg7 Kxg7 Rd4 Nd6 g4 c3 Rd3 Ne4 Kg2 f5 gxf5 gxf5 Kf3 Kf6 Ng3 Nd2+ Kf2 Rc4 Ne2 Nxf4 Nxf4 Rxf4+ Ke3 Re4+ Kf2 Ra4 Ke3 Ne4 Rc2 Ke5 Kf3 h5 Re2 Kf6 Rc2 h4 Re2 e5 Rc2 Ke6 Kg2 Rd4",
     "studentSide": "black",
-    "variation": "",
     "overview": "A high-level Black win in the Dragodorf: the g7-bishop dominates the long diagonal while Black expands on the queenside, and the dark-square pressure decides a sharp middlegame — a model of the counterattacking Dragon idea.",
     "criticalMoments": [],
     "middlegameTheme": "long-diagonal pressure and the queenside storm",
@@ -11647,8 +11666,7 @@
       "book:four-knights-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Four_Knights_Game"
-    ],
-    "variation": "Main Line: 4...Bc5"
+    ]
   },
   {
     "id": "mg-gleksystem-amonatov-fressinet",
@@ -12083,20 +12101,6 @@
     "overview": "Vachier Lagrave defeats Peralta in the 2020 game, showcasing clamping the centre and converting the space edge in the endgame."
   },
   {
-    "id": "mg-antipirc-austrian-karjakin-ivanchuk-2011",
-    "openingId": "anti-pirc-austrian",
-    "studentSide": "white",
-    "white": "Karjakin, Sergey",
-    "black": "Ivanchuk, Vassily",
-    "whiteElo": 2776,
-    "blackElo": 2776,
-    "result": "1-0",
-    "year": 2011,
-    "event": "Bazna Kings 5th",
-    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 Nc7 a4 b6 Qe1 e6 dxe6 fxe6 e5 Nfd5 Ne4 dxe5 fxe5 Bb7 Bg5 Qd7 Qh4 Nb4 Rad1 Qc6 Nf6+ Bxf6 Bxg6 hxg6 Bxf6 Rxf6 exf6 Rf8 Qg5",
-    "overview": "Karjakin defeats Ivanchuk out of the Austrian Attack against the Pirc, illustrating the big pawn centre and the f4-f5 kingside pawn storm."
-  },
-  {
     "id": "mg-antipirc-austrian-anand-ivanchuk-2017",
     "openingId": "anti-pirc-austrian",
     "studentSide": "white",
@@ -12293,20 +12297,6 @@
     "overview": "Morozevich converts against Grischuk in the 2012 game, showcasing opening the a-file and grinding the queenside."
   },
   {
-    "id": "mg-antigrunfeld-exchange-carlsen-grischuk-2019",
-    "openingId": "anti-grunfeld-exchange",
-    "studentSide": "white",
-    "white": "Carlsen, M.",
-    "black": "Grischuk, A.",
-    "whiteElo": 2875,
-    "blackElo": 2775,
-    "result": "1-0",
-    "year": 2019,
-    "event": "7th Norway Chess 2019",
-    "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Be3 c5 Rc1 Qa5 Qd2 O-O Nf3 Bg4 d5 b5 Be2 Nd7 O-O Bxf3 Bxf3 c4 Be2 Rfd8 f4 Nb6 Bf3 Qa3 h4 e6 h5 Na4 hxg6 hxg6 f5 exf5 exf5 Qd6 Bf4 Qb6+ Kh1 gxf5 d6 Rab8 Bd5 Nc5 Bg3 Ne6 Rxf5 Rxd6 Bxd6 Qxd6 Qe3 Qb6 Qf3 Rf8 Rf1 Nd8 Rh5 Qc7 Qe4",
-    "overview": "Carlsen defeats Grischuk out of the Exchange Grünfeld, illustrating the classical d4-e4 pawn centre against Black's piece pressure."
-  },
-  {
     "id": "mg-antigrunfeld-exchange-carlsen-mamedyarov-2019",
     "openingId": "anti-grunfeld-exchange",
     "studentSide": "white",
@@ -12475,20 +12465,6 @@
     "overview": "Anand defeats Karpov out of the anti-Catalan, illustrating the freeing …e5 break to open the position for the pieces."
   },
   {
-    "id": "mg-anticatalan-black-ding-grischuk-2020",
-    "openingId": "anti-catalan-black",
-    "studentSide": "black",
-    "white": "Ding, Liren",
-    "black": "Grischuk, Alexander",
-    "whiteElo": 2791,
-    "blackElo": 2777,
-    "result": "0-1",
-    "year": 2020,
-    "event": "Lindores Abbey Prelim",
-    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Qa4+ Bd7 Qxc4 c5 dxc5 Bc6 Nf3 Nbd7 Be3 Bd5 Qc2 Be4 Qc1 Nd5 c6 bxc6 O-O Nxe3 Qxe3 Bd5 Nbd2 Be7 Qf4 e5 Qf5 O-O Rfd1 Qc7 Rac1 Rad8 Nc4 e4 Ne3 Bxa2 Qxe4 Nf6 Rxd8 Nxe4 Rxf8+ Bxf8 Nd4 Qb6",
-    "overview": "Grischuk beats Ding in the 2020 game, showcasing active piece play after the central break."
-  },
-  {
     "id": "mg-antitrompowsky-black-sjugirov-niemann-2022",
     "openingId": "anti-trompowsky-black",
     "studentSide": "black",
@@ -12557,20 +12533,6 @@
     "event": "BdF/Gold 2008 (GER)",
     "pgn": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O b5 Bb3 Bb7 Qe2 Nge7 Bg5 h6 Be3 Na5 Ne5 Nec6 Nxc6 Bxc6 Bd5 Qc7 Bxc6 dxc6 b3 Bb4 Rac1 O-O Qg4 Kh8 Bd4 Rg8 Qh5 f6 Ne2 Rge8 Be3 Kg8 Qg4 c5 Bxh6 Nc6 Bf4 Qf7 Rfd1 Rac8 h4 f5 Qf3 e5 Bg5 Ba3 Rc2 fxe4 Qxe4 Nd4 Rcd2 Bb4 Rb2 a5 Rf1 Qd7 Rbb1 c4 Rbd1 c3 Rd3 Qc6 Qg4 Nxe2+ Qxe2 e4 Rg3 c2 Be3 Red8 h5 Rc7 h6 g6 h7+ Kxh7 Qg4 Kg8 Rh3 Bc3 g3 Rd6 Kg2 Bd4 Qh4 Bb2 Rhh1 Rcd7 Qg4 Rd3 Re1 Rxe3 Rxe3 Rh7 Rhe1 Re7 Qh4 Re8 Rh1 c1=Q Qh7+ Kf8 Rxc1 Bxc1 Qh8+ Kf7 Rc3 Rxh8 Rxc6 Ba3 Ra6 Bb4 a3 Be1 Rd6 Rh5 g4 Rc5 Rd4 e3 fxe3 Rc3 Kf3 Rxb3 a4 b4 Ke2 Bc3 Rc4 Ra3 Rc7+ Kf6 Rc5 Rxa4 Kd3 Ra2 g5+ Ke6 Ke4 b3 Rxc3 b2 Rc6+ Ke7 Rb6 Ra4+ Kd3 Rb4 Rxb4 axb4 Kc2 Ke6 Kxb2 Ke5",
     "overview": "Moll converts against Ohtake in the 2008 game, showcasing consolidating the extra pawn and defusing White's initiative."
-  },
-  {
-    "id": "mg-antialapin-black-mamedyarov-giri-2020",
-    "openingId": "anti-alapin-black",
-    "studentSide": "black",
-    "white": "Mamedyarov, Shakhriyar",
-    "black": "Giri, Anish",
-    "whiteElo": 2764,
-    "blackElo": 2763,
-    "result": "0-1",
-    "year": 2020,
-    "event": "Online Olym Div Top-B",
-    "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 Nf3 Nc6 Bc4 Nb6 Bb3 dxe5 d5 Na5 Nc3 Nxb3 Qxb3 e6 Nxe5 exd5 Be3 Bd6 Qb5+ Kf8 f4 Be6 O-O Kg8 Rad1 h5 Kh1 h4 h3 Rh5 Qe2 Rf5 Nf3 Nc4 Bc1 Bxf4 b3 Nd6 Bxf4 Rxf4 Nxd5 Bxd5 Rxd5 Qf6 Re5 Nf5 Kh2 Nd4 Qe3 g6 Re4 Nxf3+ Rxf3 Rxf3 Qxf3 Qxf3 gxf3 Rd8 Rxh4 Rd2+ Kg3 Rxa2 Rd4 Rb2 b4 Kg7 h4 Kf6 f4 Kf5 Rd5+ Ke6 Re5+ Kd6 b5 f6 Re8 Rxb5 Rg8 Ke6 Rxg6 Kf7 Rg4 a5 Kf3 a4 Rg1 a3 Ra1 Rb3+ Ke4 b5",
-    "overview": "Giri defeats Mamedyarov out of the anti-Alapin, illustrating clean development, central files, and rock-solid equality."
   },
   {
     "id": "mg-antialapin-black-sevian-dominguezperez-2025",
@@ -12661,7 +12623,8 @@
     "sources": [
       "https://lichess.org/P7ehWlIy",
       "concept:pos-center"
-    ]
+    ],
+    "variation": "Alapin: 2...Nf6 Main Line (Endgame)"
   },
   {
     "id": "mg-pro-samayraina-kings-gambit-ivanchuk-ding-2016",

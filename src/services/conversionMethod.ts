@@ -20,6 +20,7 @@
 import { Chess } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { findHangingBySee } from './positionReadingService';
+import { homeMinorCount } from './development';
 
 export type ConversionStep = 'finish-development' | 'trade-pieces' | 'make-passer' | 'escort-passer' | 'cut-off-king';
 
@@ -36,14 +37,6 @@ export interface ConversionRead {
  *  won game, and the method would be the wrong advice. */
 export const CONVERSION_EDGE = 3;
 
-
-function undevelopedMinors(c: Chess, side: 'w' | 'b'): number {
-  const home = side === 'w' ? ['b1', 'g1', 'c1', 'f1'] : ['b8', 'g8', 'c8', 'f8'];
-  return home.filter((sq) => {
-    const p = c.get(sq as 'a1');
-    return !!p && p.color === side && (p.type === 'n' || p.type === 'b');
-  }).length;
-}
 
 export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead | null {
   let c: Chess;
@@ -71,7 +64,7 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
 
   let step: ConversionStep;
   let text: string;
-  if (undevelopedMinors(c, student) >= 2 || (!castled && theirPieces >= 3)) {
+  if (homeMinorCount(c, student) >= 2 || (!castled && theirPieces >= 3)) {
     step = 'finish-development';
     text = `You're ${edgeWords(edge)} up — before any plan, finish developing and get your king safe. Up material, the only way to lose is to get careless.`;
   } else if (theirPieces === 0 && theirPawns === 0) {

@@ -29,10 +29,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:560`
+- `src/services/danyaBehaviors.ts:563`
 
 ### `castleIsOneMoveAway` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:218`
+- `src/services/danyaBehaviors.ts:221`
 
 ### `readPosition` (function) — 42 call sites
 - `src/services/groundedAnswer.ts:1309`
@@ -79,7 +79,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8243`
+- `src/components/Coach/CoachTeachPage.tsx:8250`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
 - `src/services/positionalRead.test.ts:164`
@@ -89,7 +89,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:192`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:205`
+- `src/services/danyaBehaviors.ts:206`
 
 ## Tests
 

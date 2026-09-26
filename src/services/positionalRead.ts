@@ -236,13 +236,13 @@ function observationsFor(
       key: `${side}-good-${outpost.square}`, side, kind: 'piece', rank: rank('piece'),
       squares: [outpost.square],
       text: own
-        ? `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${goodPieceClause(outpost.reason, outpost.square)}.`
+        ? `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${goodPieceClause(outpost.kind, outpost.square)}.`
         // Not "their best-placed piece": the engine's piece read owns THEIR best
         // ("the piece doing the most work for them"), and two computers crowning
         // two different pieces on one move contradicted each other (hand walk
         // 2340: rook d8 "best-placed", then knight c6 "most work"). This names
         // the fact about the piece, which is true whichever wins that ranking.
-        : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is well placed — ${goodPieceClause(outpost.reason, outpost.square)}.`,
+        : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is well placed — ${goodPieceClause(outpost.kind, outpost.square)}.`,
     });
   }
   // Same rule as the join: a piece still on its starting square is not a

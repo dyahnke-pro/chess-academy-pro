@@ -1,0 +1,40 @@
+name: Full test suite (nightly)
+
+# ship-check runs the content gates plus the tests of CHANGED files — the
+# right shape for a fast pre-push, and a blind spot for everything else. On
+# 2026-09-26 a full run found TEN test files red on main that no push had
+# touched since they broke: a schema version, an App Store version pin, an
+# orphaned corpus file, duplicate model games, a resolver so slow its own
+# test timed out. Nothing reported any of it. This job is the instrument that
+# does: the whole suite, every night, sharded, red when anything is red.
+
+on:
+  schedule:
+    - cron: '17 7 * * *'   # 02:17 America/Chicago
+  workflow_dispatch:
+
+concurrency:
+  group: full-suite
+  cancel-in-progress: true
+
+jobs:
+  vitest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+      # swHandover.test.ts reads the BUILT worker (dist/sw.js).
+      - name: Build
+        run: npm run build
+      - name: Vitest shard ${{ matrix.shard }}/4
+        run: npx vitest run --shard=${{ matrix.shard }}/4

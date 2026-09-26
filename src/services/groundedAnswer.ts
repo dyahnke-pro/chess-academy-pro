@@ -42,7 +42,7 @@ import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
-import { andList, orList } from '../utils/andList';
+import { andList, orList, fileList } from '../utils/andList';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { pieceIsOn } from './tacticsContextIdentity';
 import { clearsVolumeFloor } from './openingVolumeFloor';
@@ -5974,8 +5974,8 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     const f = findOpenFiles(fen);
     const mySemi = myC === 'w' ? f.whiteSemiOpen : f.blackSemiOpen;
     if (f.open.length === 0 && mySemi.length === 0) return { facts: 'No open or half-open files for your rooks yet — a pawn break can create one.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
-    const openTxt = f.open.length ? `open ${f.open.join(', ')}-file${f.open.length > 1 ? 's' : ''}` : '';
-    const semiTxt = mySemi.length ? `half-open ${mySemi.join(', ')}-file${mySemi.length > 1 ? 's' : ''}` : '';
+    const openTxt = f.open.length ? `open: ${fileList(f.open)}` : '';
+    const semiTxt = mySemi.length ? `half-open: ${fileList(mySemi)}` : '';
     return { facts: `Rook files: ${[openTxt, semiTxt].filter(Boolean).join('; ')}. Put a rook there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 

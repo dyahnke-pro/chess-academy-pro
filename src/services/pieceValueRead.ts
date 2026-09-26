@@ -25,6 +25,8 @@
 // This lane REMOVES judgement rather than adding it.
 import { Chess, type Square } from 'chess.js';
 import { CAPTURE_VALUE } from './pieceValues';
+import { findPieceQuality } from './positionReadingService';
+import { isOnHomeSquare } from './development';
 
 export interface PieceValue {
   square: string;
@@ -180,10 +182,6 @@ export interface PieceQualityLine {
  * actually moved, or once the game reaches a middlegame where a home-square rook
  * can genuinely own an open file.
  */
-const HOME_SQUARES: Record<'w' | 'b', Record<string, readonly string[]>> = {
-  w: { r: ['a1', 'h1'], n: ['b1', 'g1'], b: ['c1', 'f1'], q: ['d1'], k: ['e1'], p: [] },
-  b: { r: ['a8', 'h8'], n: ['b8', 'g8'], b: ['c8', 'f8'], q: ['d8'], k: ['e8'], p: [] },
-};
 
 /** No pawn of the rook's own colour stands on its file. Unknown board → false. */
 function rookFileFree(fen: string | undefined, v: PieceValue): boolean {
@@ -205,7 +203,7 @@ function rookFileFree(fen: string | undefined, v: PieceValue): boolean {
 
 function onHomeSquare(v: PieceValue): boolean {
   const side = v.color === 'w' ? 'w' : 'b';
-  return (HOME_SQUARES[side][v.piece.toLowerCase()] ?? []).includes(v.square.toLowerCase());
+  return isOnHomeSquare(v.piece, side, v.square);
 }
 
 /**
@@ -274,11 +272,10 @@ export function pieceQualityLines(
     // (hand walk 2000: Rxd8 just took, nothing defended it, and the coach said
     // "their rook on d8 is the piece doing the most work — trade it off").
     .filter((v) => !takeableFree(opts?.fen, v.square, me))
-    // …and never a knight on the rim: the fundamentals call that knight
-    // misplaced ("knight-to-the-rim"), and one vocabulary cannot crown it
-    // their best piece in the next breath (walk 900, 9…a6: "their knight on
-    // a3 is the piece doing the most work").
-    .filter((v) => !(v.piece.toLowerCase() === 'n' && 'ah'.includes(v.square[0])))
+    // …and never a piece the board-reading computer rates POOR — one
+    // vocabulary: a rim knight, a hemmed-in bishop cannot be "the piece doing
+    // the most work" in the next breath (walk 900, 9…a6: Na3).
+    .filter((v) => !ratedPoor(opts?.fen, v.square))
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => b.d - a.d)[0];
   // SAY-ONCE ON THE KIND, PER PHASE — not per square (re-walk 1380,
@@ -461,4 +458,11 @@ function atWork(fen: string | undefined, square: string, me: 'w' | 'b'): boolean
     }
   }
   return false;
+}
+
+/** Does `findPieceQuality` — the one board read of good and bad pieces — rate
+ *  the piece on `square` poor? No board, no verdict. */
+function ratedPoor(fen: string | undefined, square: string): boolean {
+  if (!fen) return false;
+  return findPieceQuality(fen).some((q) => q.square === square && q.quality === 'bad');
 }

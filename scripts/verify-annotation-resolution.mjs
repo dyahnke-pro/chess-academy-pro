@@ -49,7 +49,7 @@ const LESSONS_DIR = join(REPO, 'src/data/lessons');
 const curatedLessonIds = new Set();
 for (const f of readdirSync(LESSONS_DIR).filter((f) => f.endsWith('.ts'))) {
   const text = readFileSync(join(LESSONS_DIR, f), 'utf8');
-  for (const m of text.matchAll(/openingId:\s*'([^']+)'/g)) {
+  for (const m of text.matchAll(/openingId:\s*['"]([^'"]+)['"]/g)) {
     curatedLessonIds.add(m[1]);
   }
 }

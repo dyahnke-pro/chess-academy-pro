@@ -30,6 +30,7 @@ import { describeStructure } from './boardStructure';
 import { phaseOfFen } from './boardConcepts';
 import { hisGroundedPlanSync, lookupHisPlaySync, HIS_PLAN_MIN_GAMES } from './hisPlayLookup';
 import { mastersMovesSync, type LocalDbMove } from './masterPlayLookup';
+import { isMinorAtHome } from './development';
 
 /**
  * GROUNDED per-move opening detail (David 2026-07-24: "we already attached his
@@ -177,9 +178,6 @@ function fianchettoDiagonalTarget(square: string): string | null {
   }
 }
 
-/** Home squares for the bishops — a bishop still standing here is undeveloped. */
-const BISHOP_HOMES = new Set(['c1', 'f1', 'c8', 'f8']);
-
 interface SideDev {
   hasCentre: boolean;
   fianchettoSquare: string | null;
@@ -200,7 +198,7 @@ function assessDevelopment(all: Located[], color: 'w' | 'b', castlingField: stri
   const hasCentre = mine.some((p) => p.type === 'p' && (fileOf(p.square) === 'd' || fileOf(p.square) === 'e') && centreRanks.includes(rankOf(p.square)));
   const fianchettoSquare = mine.find((p) => p.type === 'b' && fianchettoDiagonalTarget(p.square) !== null)?.square ?? null;
   const undevelopedKnights = mine.filter((p) => p.type === 'n' && KNIGHT_HOME_TO_NATURAL[p.square] !== undefined).map((p) => p.square);
-  const undevelopedBishops = mine.filter((p) => p.type === 'b' && BISHOP_HOMES.has(p.square)).map((p) => p.square);
+  const undevelopedBishops = mine.filter((p) => p.type === 'b' && isMinorAtHome('b', color, p.square)).map((p) => p.square);
   const king = mine.find((p) => p.type === 'k');
   const castled = king ? (fileOf(king.square) === 'g' || fileOf(king.square) === 'c') : false;
   const castledShort = king ? fileOf(king.square) === 'g' : false;

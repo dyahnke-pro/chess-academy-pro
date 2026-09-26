@@ -382,7 +382,6 @@ export function buildModelGame(overrides?: Partial<ModelGame>): ModelGame {
       {
         moveNumber: 10,
         color: 'white',
-        fen: 'rn1qkb1r/ppp2ppp/5n2/1B2p3/4P3/1QN5/PPP2PPP/R1B1K2R b KQkq - 1 10',
         annotation: 'White has a commanding lead in development. The queen and bishop battery targets f7.',
         concept: 'Development advantage',
       },

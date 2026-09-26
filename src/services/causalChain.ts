@@ -27,6 +27,7 @@ import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'che
 import type { FundamentalId } from './principleAttribution';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { legalSeeGainFor } from './positionReadingService';
+import { developedMinorCount, homeMinorCount } from './development';
 
 /** Pin/legality-aware "is the piece on `square` winnable by its enemy?" — the
  *  exact semantics `seeGain` had here (net material the side NOT owning the piece
@@ -158,17 +159,6 @@ function pieces(chess: Chess, color: Color, type?: PieceSymbol): { type: PieceSy
     if (cell && cell.color === color && (!type || cell.type === type)) out.push({ type: cell.type, square: cell.square });
   }
   return out;
-}
-function developedMinors(chess: Chess, color: Color): number {
-  const home: Square[] = color === 'w' ? ['b1', 'g1', 'c1', 'f1'] : ['b8', 'g8', 'c8', 'f8'];
-  return pieces(chess, color).filter((p) => (p.type === 'n' || p.type === 'b') && !home.includes(p.square)).length;
-}
-/** Minors still sitting on their home squares — the "genuinely undeveloped"
- *  signal that distinguishes an early opening from a traded-down middlegame
- *  (where developedMinors is also low, but because pieces were exchanged). */
-function homeMinors(chess: Chess, color: Color): number {
-  const home: Square[] = color === 'w' ? ['b1', 'g1', 'c1', 'f1'] : ['b8', 'g8', 'c8', 'f8'];
-  return pieces(chess, color).filter((p) => (p.type === 'n' || p.type === 'b') && home.includes(p.square)).length;
 }
 function fullmoveOf(chess: Chess): number { return Number.parseInt(chess.fen().split(' ')[5] ?? '1', 10) || 1; }
 
@@ -373,8 +363,8 @@ function wasPrematureQueen(boardBefore: Chess, move: Move): boolean {
   // opening phase AND minors still HOME (traded-off minors also read as "few
   // developed", which is the loophole that mislabelled a move-29 queen as early).
   if (fullmoveOf(boardBefore) > 12) return false;
-  if (developedMinors(boardBefore, move.color) >= 3) return false;
-  if (homeMinors(boardBefore, move.color) < 2) return false;
+  if (developedMinorCount(boardBefore, move.color) >= 3) return false;
+  if (homeMinorCount(boardBefore, move.color) < 2) return false;
   return true;
 }
 

@@ -283,9 +283,14 @@ export function findConcession(args: {
 
   // 5. AN OUTPOST CONCEDED — the student gains a square the engine's move
   //    would have denied them.
-  const goodNow = findPieceQuality(after.fen()).filter((q) => q.color === them && q.quality === 'good');
+  // Only a real OUTPOST: the sentence says "a square my pawns can never
+  // challenge", which is the outpost's definition — a rook rated good for an
+  // open file is not one (walk 700, 30…Nb6: "That handed me c1" about the rook
+  // Qxc1+ was about to take).
+  const isOutpost = (q: { kind: string }): boolean => q.kind === 'outpost';
+  const goodNow = findPieceQuality(after.fen()).filter((q) => q.color === them && isOutpost(q));
   const goodAlt = new Set(
-    findPieceQuality(alt.fen()).filter((q) => q.color === them && q.quality === 'good').map((q) => q.square as string),
+    findPieceQuality(alt.fen()).filter((q) => q.color === them && isOutpost(q)).map((q) => q.square as string),
   );
   const conceded = goodNow.find((q) => !goodAlt.has(q.square as string));
   if (conceded) {

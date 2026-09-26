@@ -39,6 +39,32 @@ function commonPrefix(a: string[], b: string[]): number {
 }
 
 const MIN_IDENT_PLIES = 3; // a match on <3 plies is too generic to trust
+
+interface TabSpine { label: string; moves: string[]; need: number }
+interface MasterclassSpine { id: string; main: string[]; tabs: TabSpine[] }
+
+/** The masterclasses' spines, built ONCE. The data is static, and building a
+ *  masterclass's tab set replays its lessons through chess.js — doing that for
+ *  every masterclass on every call made one page view cost a full rebuild and
+ *  the ECO-wide sweep in the test run for minutes. */
+let spines: MasterclassSpine[] | null = null;
+function masterclassSpines(): MasterclassSpine[] {
+  if (spines) return spines;
+  spines = MASTERCLASSES.map((M) => {
+    const main = toMoves(M.pgn);
+    const tabs: TabSpine[] = [];
+    for (const t of buildVariationTabs(M.id, M.variations ?? null)) {
+      const v = toMoves(M.variations?.[t.index]?.pgn);
+      if (v.length === 0) continue;
+      // first ply V diverges from main, plus the variation-defining move
+      const need = commonPrefix(v, main) + 1;
+      if (need < MIN_IDENT_PLIES || need > v.length) continue;
+      tabs.push({ label: t.label, moves: v, need });
+    }
+    return { id: M.id, main, tabs };
+  });
+  return spines;
+}
 const MIN_MAIN_PLIES = 5; // a main-line redirect needs a deep shared prefix
 
 // Curated TRANSPOSITION aliases — lines that reach a taught masterclass
@@ -107,9 +133,8 @@ export function resolveMasterclassRedirect(
 
   const candidates: Array<{ to: string; line: string | null; spec: number }> = [];
 
-  for (const M of MASTERCLASSES) {
-    const main = toMoves(M.pgn);
-    const tabs = buildVariationTabs(M.id, M.variations ?? null);
+  for (const M of masterclassSpines()) {
+    const { main } = M;
     // Tier 3 — DEDICATED MAIN: E lies on M's own main line (one is a prefix of
     // the other, deep enough). M is the masterclass FOR this opening, so it wins
     // over any OTHER masterclass that merely carries this line as a variation tab
@@ -119,13 +144,7 @@ export function resolveMasterclassRedirect(
       candidates.push({ to: M.id, line: null, spec: 2000 + cm });
     }
     // Tier 2 — VARIATION TAB: E agrees with V through V's defining move.
-    for (const t of tabs) {
-      const V = M.variations?.[t.index];
-      const v = toMoves(V?.pgn);
-      if (v.length === 0) continue;
-      const identPly = commonPrefix(v, main); // first ply V diverges from main
-      const need = identPly + 1; // include the variation-defining move
-      if (need < MIN_IDENT_PLIES || need > v.length) continue;
+    for (const { label, moves: v, need } of M.tabs) {
       const cE = commonPrefix(E, v);
       if (E.length >= need && cE >= need) {
         // A terminal-short stub must genuinely lie ON V's line (one is a prefix
@@ -136,7 +155,7 @@ export function resolveMasterclassRedirect(
         const isPrefixMatch = cE === v.length || cE === E.length;
         if (eIsShort && !isPrefixMatch) continue;
         // Deeper agreement with V's actual line = more specific.
-        candidates.push({ to: M.id, line: t.label, spec: 1000 + cE });
+        candidates.push({ to: M.id, line: label, spec: 1000 + cE });
       }
     }
   }

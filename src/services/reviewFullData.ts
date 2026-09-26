@@ -46,24 +46,10 @@ import { renderFundamentalVerdict } from './principleVoice';
 import { betterMoveReason } from './inaccuracyCall';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
+import { developedMinorCount, minorsAtHome } from './development';
 
 interface Located { type: string; color: Color; square: string; }
 
-const MINOR_HOME: Record<Color, Record<'n' | 'b', string[]>> = {
-  w: { n: ['b1', 'g1'], b: ['c1', 'f1'] },
-  b: { n: ['b8', 'g8'], b: ['c8', 'f8'] },
-};
-/** How many of `color`'s knights + bishops have left their home squares. */
-function developedMinors(chess: Chess, color: Color): number {
-  let dev = 0;
-  for (const row of chess.board()) {
-    for (const sq of row) {
-      if (!sq || sq.color !== color || (sq.type !== 'n' && sq.type !== 'b')) continue;
-      if (!MINOR_HOME[color][sq.type].includes(sq.square)) dev += 1;
-    }
-  }
-  return dev;
-}
 /** Has `color`'s king reached a castled square (g/c file on its back rank)? */
 function kingCastled(chess: Chess, color: Color): boolean {
   const back = color === 'w' ? '1' : '8';
@@ -110,7 +96,7 @@ export function prematureBreakWhy(fenBefore: string, san: string): string | null
     if ((mv.to[0] !== 'd' && mv.to[0] !== 'e') || (destRank !== 4 && destRank !== 5)) return null;
     // Also honour a genuine immediate file-open, but don't require it.
     void openCentralFiles;
-    const behindDev = developedMinors(before, mover) < developedMinors(before, enemy);
+    const behindDev = developedMinorCount(before, mover) < developedMinorCount(before, enemy);
     const kingLag = !kingCastled(before, mover) && kingCastled(before, enemy);
     if (!behindDev && !kingLag) return null;                     // the lag must be real
     // Name the CONCRETE lag Danya names ("he doesn't have his bishop out"),
@@ -118,11 +104,7 @@ export function prematureBreakWhy(fenBefore: string, san: string): string | null
     // bishop (his emphasis); never claim a home piece that isn't there.
     let homePiece: string | null = null;
     if (behindDev) {
-      const homeMinors = before.board().flat().filter(
-        (p): p is NonNullable<typeof p> => !!p && p.color === mover
-          && (p.type === 'b' || p.type === 'n')
-          && MINOR_HOME[mover][p.type].includes(p.square),
-      );
+      const homeMinors = minorsAtHome(before, mover);
       const pick = homeMinors.find((p) => p.type === 'b') ?? homeMinors[0];
       if (pick) homePiece = pick.type === 'b' ? 'a bishop' : 'a knight';
     }

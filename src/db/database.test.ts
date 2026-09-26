@@ -15,7 +15,7 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(31);
+    expect(db.verno).toBe(36);
   });
 
   it('has srsOpeningCards table', () => {
