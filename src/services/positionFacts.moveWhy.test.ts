@@ -81,3 +81,26 @@ describe('the queen steps off the file before it opens (re-walk 1380, 11.Qe1)', 
     expect(computeMoveFundamentals(c.fen(), 'Qd3', 'white').some((x) => x.id === 'queen-off-file')).toBe(false);
   });
 });
+
+describe('past the opening a clean move still has a why (re-walk 1380, 15.Rd1 / 20.g4)', () => {
+  it('Rd1 takes the open d-file; g4 goes after the knight on h5', () => {
+    const c = new Chess();
+    for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
+    expect(principleLine(c.fen(), 'Rd1', 'white', new Set(), 0)?.text).toBe('Rd1 takes the open d-file, where the rook belongs.');
+    for (const s of 'Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3 Rxf3 Rd8'.split(' ')) c.move(s);
+    expect(principleLine(c.fen(), 'g4', 'white', new Set(), 0)?.text).toMatch(/^g4 kicks their knight off h5/);
+  });
+});
+
+describe('middlegame stems: said once, never on a capture, honest about the queen', () => {
+  const PRE = 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ');
+  const board = (extra: string[]): Chess => { const c = new Chess(); for (const s of [...PRE, ...extra]) c.move(s); return c; };
+  it('the same idea is heard once a game', () => {
+    const first = principleLine(board([]).fen(), 'Rd1', 'white', new Set(), 0);
+    expect(first?.first).toBe(true);
+    expect(principleLine(board([]).fen(), 'Rd1', 'white', new Set([first?.id ?? '']), 0)).toBeNull();
+  });
+  it('a capture is never credited with a file (Rxf3 is a recapture)', () => {
+    expect(principleLine(board('Rd1 Qe8 Nd5 c6 Nc3 Bb4 h3 Bxf3'.split(' ')).fen(), 'Rxf3', 'white', new Set(), 0)).toBeNull();
+  });
+});

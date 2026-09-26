@@ -22,7 +22,7 @@ import { CENTRAL_SQUARES, CORE_CENTER, keyTargetSquares, kingZoneAmong, kingZone
 import { andList } from '../utils/andList';
 import type { Square } from 'chess.js';
 import { landingIsSafe } from './positionReadingService';
-import { classifyPhase } from './gamePhaseService';
+import { classifyPhase, isEndgameByMaterial } from './gamePhaseService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 export type MoveFundamentalId =
@@ -513,9 +513,10 @@ export function computeMoveFundamentals(
       out.push({
         id: 'open-file',
         weight: phase === 'endgame' ? 60 : 72,
-        led: `takes the ${openness} ${fileName}, where the ${name} belongs`,
+        // A file is where a ROOK belongs; a queen merely uses it.
+        led: mv.piece === 'r' ? `takes the ${openness} ${fileName}, where the rook belongs` : `takes the ${openness} ${fileName}`,
         selfContained: `brings the ${name} to the ${openness} ${fileName}`,
-        imperative: `take the ${openness} ${fileName}, where the ${name} belongs`,
+        imperative: mv.piece === 'r' ? `take the ${openness} ${fileName}, where the rook belongs` : `take the ${openness} ${fileName} with the queen`,
         squares: [mv.to],
       });
     }
@@ -1013,6 +1014,12 @@ export function principleToTeach(
     .sort((a, b) => b.weight - a.weight)[0] ?? null;
 }
 
+/** The say-once key of a middlegame fact: the idea as worded, so the same
+ *  idea on a new file or a new target is a new fact. */
+function middlegameKey(f: MoveFundamental): string {
+  return `mg:${f.id}:${f.led}`;
+}
+
 /**
  * THE PRINCIPLE A CLEAN OPENING MOVE FOLLOWS — full the first time, a short
  * stem after (the same shape the NEGATIVE side already has: a neglected
@@ -1025,7 +1032,30 @@ export function principleToTeach(
  */
 export function principleLine(
   fenBefore: string, san: string, mover: 'white' | 'black', taught: ReadonlySet<string>, stemKey: number,
-): { id: MoveFundamental['id']; text: string; squares: string[]; first: boolean } | null {
+): { id: string; text: string; squares: string[]; first: boolean } | null {
+  // PAST THE OPENING a clean move still has a why — its lead fundamental as a
+  // stem, every time (Rd1 "takes the open d-file", g4 "kicks their knight off
+  // h5"). Before this, the rule lane closed with the opening and every quiet
+  // middlegame move in the 1380 speedrun went silent. The window is decided
+  // HERE, so Learn and review cannot disagree about it.
+  //
+  // Said ONCE per idea: the say-once key is the fact itself (`mg:` + its
+  // wording), so "takes the open c-file" is heard once a game while each new
+  // kick or each new file still speaks — the Scotch ending said "marches your
+  // king toward the center" on eight moves running before this. A CAPTURE is
+  // never credited: its point is the capture (Rxf7 "takes the open f-file").
+  if (!openingWindowOpen(fenBefore, mover)) {
+    if (san.includes('x')) return null;
+    // In an ENDGAME "takes aim at the center" and "grabs space" are not the
+    // why of anything — kings, passers and rooks are (the Scotch ending's
+    // Qd8 "takes aim at the center").
+    const endgame = isEndgameByMaterial(fenBefore);
+    const lead = computeMoveFundamentals(fenBefore, san, mover)
+      .filter((f) => !(endgame && (f.id === 'center' || f.id === 'space')))
+      .sort((a, b) => b.weight - a.weight)
+      .find((f) => !taught.has(middlegameKey(f)));
+    return lead ? { id: middlegameKey(lead), text: `${san} ${lead.led}.`, squares: lead.squares, first: true } : null;
+  }
   const fresh = principleToTeach(fenBefore, san, mover, taught);
   if (fresh) return { id: fresh.id, text: principleOnceLine(san, fresh, stemKey), squares: fresh.squares, first: true };
   const lead = computeMoveFundamentals(fenBefore, san, mover)

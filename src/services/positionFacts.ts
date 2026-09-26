@@ -20,7 +20,7 @@ import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
-import { strategicWhyImperative, principleLine, openingWindowOpen } from './moveFundamentals';
+import { strategicWhyImperative, principleLine } from './moveFundamentals';
 import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
@@ -751,9 +751,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const refutedHere = studentToMove && lm && lm.popular && lm.popular.length >= 2 && lm.fanBefore && lm.fanBefore.length > 0 && plyNumber <= 26
     ? refutedFromFan({ fenBefore: lm.fenBefore, playedSan: lm.san, candidates: candidatesFromAmateur(lm.popular), fan: lm.fanBefore, moverWB: studentColor })
     : null;
-  // S2 — otherwise the opening principle the move kept, once per game, only on
-  // a move with nothing to correct (a clean or ungraded move).
-  const ruleHere = !refutedHere && studentToMove && lm && input.taughtPrinciples && openingWindowOpen(lm.fenBefore, studentSeat)
+  // S2 — otherwise the why of a clean move: in the opening the principle it
+  // kept (full once, a stem after); past it, its lead fundamental as a stem.
+  // `principleLine` decides which, from the board.
+  const ruleHere = !refutedHere && studentToMove && lm && input.taughtPrinciples
     // GRADED clean only — an ungraded move is not a clean one. The 2026-09-24
     // Learn tape praised "O-O-O does what the opening asks" one line after
     // another lane called O-O-O a mistake: the grade had not reached here yet.
