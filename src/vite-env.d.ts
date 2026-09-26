@@ -21,6 +21,5 @@ interface ImportMetaEnv {
 
 // __ANTHROPIC_KEY__ / __DEEPSEEK_KEY__ removed 2026-06-09 — provider keys no
 // longer ship to the client (server-side proxy api/llm-proxy.ts).
-declare const __BUILD_ID__: string;
 declare const __AUDIT_STREAM_URL__: string;
 declare const __AUDIT_STREAM_SECRET__: string;

@@ -987,14 +987,24 @@ export interface AuditEntry {
   feedbackRating?: number | null;
 }
 
-/** Build identifier injected at vite-build time. Falls back to
- *  'unknown' in test / SSR contexts where the define isn't applied.
+let cachedBuildId: string | null = null;
+
+/** Build identifier stamped into index.html at vite-build time as
+ *  `<meta name="app-build-id">` — deliberately NOT a JS `define`, which
+ *  renamed ~142 chunks on every build (see vite.config.ts `build-id-meta`).
+ *  Falls back to 'unknown' in test / SSR contexts with no such tag.
  *  Exported so the BuildVersionWidget (and any debug surface) can
  *  display the running bundle hash without rummaging in audit rows. */
 export function getBuildId(): string {
+  if (cachedBuildId !== null) return cachedBuildId;
   try {
-
-    return typeof __BUILD_ID__ !== 'undefined' ? __BUILD_ID__ : 'unknown';
+    const meta = typeof document !== 'undefined'
+      ? document.querySelector('meta[name="app-build-id"]')
+      : null;
+    const content = meta?.getAttribute('content')?.trim();
+    if (!content) return 'unknown';
+    cachedBuildId = content;
+    return content;
   } catch {
     return 'unknown';
   }

@@ -282,3 +282,59 @@ describe('OTA update check', () => {
     vi.resetModules();
   });
 });
+
+describe('iOS-only bundle + served-path telemetry (2026-09-26)', () => {
+  afterEach(() => {
+    delete process.env.VITE_POSTHOG_KEY;
+    delete process.env.OTA_DELTA;
+    vi.unstubAllGlobals();
+  });
+
+  it('serves Android nothing — the published bundle has the WASM engines stripped', async () => {
+    const out = await check({ version_name: 'd2d10d06', device_id: 'x', platform: 'android' });
+    expect(out.body.kind).toBe('up_to_date');
+    expect(out.body.url).toBe('');
+  });
+
+  it('still serves iOS', async () => {
+    const out = await check({ version_name: 'd2d10d06', device_id: 'x', platform: 'ios' });
+    expect(out.body.url).toContain('ff5ed1a2.zip');
+  });
+
+  async function captured(body: Record<string, unknown>): Promise<Record<string, unknown> | null> {
+    process.env.VITE_POSTHOG_KEY = 'phc_test';
+    let sent: Record<string, unknown> | null = null;
+    const ptr = pointer();
+    vi.stubGlobal('fetch', vi.fn(async (url: string, init?: RequestInit) => {
+      if (String(url).includes('/capture/')) {
+        sent = JSON.parse(String(init?.body)) as Record<string, unknown>;
+        return { ok: true } as unknown as Response;
+      }
+      if (String(url).includes('/ota/manifests/')) return { ok: true, json: async () => MANIFEST } as unknown as Response;
+      return { ok: true, text: async () => JSON.stringify(ptr) } as unknown as Response;
+    }));
+    const { req, res } = drive(body);
+    await handler(req, res);
+    return sent;
+  }
+
+  it('records a whole-zip update as delta:false', async () => {
+    const sent = await captured({ version_name: 'd2d10d06', device_id: 'dev-1', platform: 'ios' });
+    expect(sent?.event).toBe('ota_manifest_served');
+    expect((sent?.properties as Record<string, unknown>).delta).toBe(false);
+    expect((sent?.properties as Record<string, unknown>).device_id).toBe('dev-1');
+  });
+
+  it('records a delta update as delta:true with its file count', async () => {
+    process.env.OTA_DELTA = 'on';
+    const sent = await captured({ version_name: 'd2d10d06', device_id: 'dev-1', platform: 'ios' });
+    const props = sent?.properties as Record<string, unknown>;
+    expect(props.delta).toBe(true);
+    expect(props.manifest_files).toBe(MANIFEST.length);
+  });
+
+  it('records nothing on the every-launch no-op check', async () => {
+    const sent = await captured({ version_name: 'ff5ed1a2', device_id: 'dev-1', platform: 'ios' });
+    expect(sent).toBeNull();
+  });
+});

@@ -14,6 +14,7 @@
  * in the review resolver is clean.
  */
 import { positionFen } from './masterPlayCache';
+import { loadDataJson } from './dataFile';
 
 export interface HisPlayMove {
   san: string;
@@ -84,9 +85,9 @@ export async function getHisPlayDb(): Promise<HisPlayDb | null> {
   dbInflight = (async () => {
     try {
       if (typeof fetch !== 'function') { dbCache = null; return null; }
-      const resp = await fetch(HIS_PLAY_DB_URL);
-      if (!resp.ok) { dbCache = null; return null; }
-      const raw = (await resp.json()) as unknown;
+      // Web: same-origin fetch. Native: kept copy → app bundle → web origin
+      // (downloaded once, ~1 MB compressed, then kept) — see dataFile.ts.
+      const raw = await loadDataJson(HIS_PLAY_DB_URL);
       if (raw && typeof raw === 'object' && !Array.isArray(raw) && Object.keys(raw).length > 0) {
         dbCache = raw as HisPlayDb;
         return dbCache;

@@ -2,6 +2,31 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { readdirSync, readFileSync, statSync, writeFileSync, existsSync } from 'node:fs';
+import { join, relative, resolve as resolvePath, sep } from 'node:path';
+
+/** Content hash of every file under `<outDir>/data`, keyed by its `/data/...`
+ *  path. Written to `<outDir>/data-versions.json` so the native app can tell
+ *  whether a data file it downloaded and kept is still current
+ *  (src/services/dataFile.ts). Pure function of the file bytes — an
+ *  unchanged file keeps its hash across builds. */
+function writeDataVersions(outDir: string): void {
+  const dataDir = join(outDir, 'data');
+  if (!existsSync(dataDir)) return;
+  const versions: Record<string, string> = {};
+  const walk = (dir: string): void => {
+    for (const name of readdirSync(dir)) {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) { walk(full); continue; }
+      const path = '/' + relative(outDir, full).split(sep).join('/');
+      versions[path] = createHash('sha256').update(readFileSync(full)).digest('hex').slice(0, 16);
+    }
+  };
+  walk(dataDir);
+  const sorted = Object.fromEntries(Object.entries(versions).sort(([a], [b]) => a.localeCompare(b)));
+  writeFileSync(join(outDir, 'data-versions.json'), JSON.stringify(sorted));
+}
 
 // WO-DEEP-DIAGNOSTICS — generate a build identifier at config time so
 // every build embeds a unique stamp the audit log can attribute findings
@@ -35,7 +60,6 @@ export default defineConfig(({ mode }) => {
   return {
   envPrefix: ['VITE_'],
   define: {
-    __BUILD_ID__: JSON.stringify(buildId),
     // Baked-in audit-stream defaults. These no longer ENABLE anything —
     // streaming is opt-in and OFF by default as of 2026-09-11 (David: "i only
     // want the live audit stream to send to redis when i turn it on"). They are
@@ -56,6 +80,35 @@ export default defineConfig(({ mode }) => {
   },
   plugins: [
     react(),
+    // The build id lives in index.html, NEVER in a JS chunk (2026-09-26).
+    // It changes on every build (`Date.now()`), so while it was a `define`
+    // inlined into appAuditor's chunk it renamed that chunk and every chunk
+    // importing it by hashed name — 142 files / 8.7 MB — on a build whose
+    // code had not changed at all, and every OTA shipped them. index.html
+    // already changes on every build, so the stamp costs nothing there.
+    // Read back by `appAuditor.getBuildId()`. Gate: buildIdNotInJs.test.ts.
+    (() => {
+      // The native app downloads data files once and keeps them; this map is
+      // how it knows a kept copy went stale. See writeDataVersions above.
+      // closeBundle, not writeBundle: `public/` must already be copied in.
+      let outDir = 'dist';
+      return {
+        name: 'data-versions',
+        apply: 'build' as const,
+        configResolved(c: { root: string; build: { outDir: string } }) {
+          outDir = resolvePath(c.root, c.build.outDir);
+        },
+        closeBundle() {
+          writeDataVersions(outDir);
+        },
+      };
+    })(),
+    {
+      name: 'build-id-meta',
+      transformIndexHtml() {
+        return [{ tag: 'meta', attrs: { name: 'app-build-id', content: buildId }, injectTo: 'head' }];
+      },
+    },
     VitePWA({
       // 🔒 'prompt', NOT 'autoUpdate' — and the name is load-bearing, not a
       // preference. vite-plugin-pwa FORCES `workbox.skipWaiting = true` and

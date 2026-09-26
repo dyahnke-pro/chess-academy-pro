@@ -23,6 +23,8 @@
 // large to bundle. Until the fetch resolves the lookup returns undefined and
 // callers fall back to the original prose, which is the pre-bake behaviour.
 
+import { loadDataJson } from './dataFile';
+
 export interface BakedNote {
   /** The spoken rewrite. Absent when the note is deliberately unspeakable. */
   spoken?: string;
@@ -55,8 +57,8 @@ export async function loadSpokenBake(): Promise<Map<string, BakedNote>> {
   inflight = (async () => {
     try {
       if (typeof fetch !== 'function') { cache = new Map(); return cache; }
-      const resp = await fetch(URL);
-      cache = resp.ok ? toMap(await resp.json()) : new Map();
+      // Web: same-origin fetch. Native: kept copy → app bundle → web origin.
+      cache = toMap(await loadDataJson(URL));
       return cache;
     } catch {
       cache = new Map();

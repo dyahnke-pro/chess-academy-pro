@@ -1,4 +1,4 @@
-import { Capacitor } from '@capacitor/core';
+import { withWebOrigin } from '../utils/webOrigin';
 import type { LichessExplorerResult, LichessCloudEval } from '../types';
 import { logAppAudit } from './appAuditor';
 
@@ -48,20 +48,7 @@ const GAME_EXPORT_PROXY_PATH = '/api/lichess-game-export';
  *  `/api/...`. Web stays on relative paths so the same-origin proxy
  *  CORS short-circuit applies. Mirrors `getTtsUrl()` in
  *  voiceService.ts. */
-const VERCEL_ORIGIN = 'https://chess-academy-pro.vercel.app';
-// Robust native detection — Capacitor's official API is scheme-independent;
-// the protocol sniff is a fallback (it silently broke when the WKWebView
-// served under a non-`capacitor:` scheme, sending /api calls to the local
-// bundle instead of VERCEL_ORIGIN). Mirrors voiceService.detectNativeApp.
-function isCapacitor(): boolean {
-  try {
-    if (Capacitor.isNativePlatform()) return true;
-  } catch { /* @capacitor/core unavailable — fall through */ }
-  return typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
-}
-function withApiBase(path: string): string {
-  return isCapacitor() ? `${VERCEL_ORIGIN}${path}` : path;
-}
+const withApiBase = withWebOrigin;
 
 export type ExplorerSource = 'lichess' | 'masters';
 

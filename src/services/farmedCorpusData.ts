@@ -35,6 +35,7 @@
  * never wrong teaching. Empty beats invented (CLAUDE.md). Coverage self-heals
  * within a second or two of the first coach lookup.
  */
+import { loadDataJson } from './dataFile';
 import type { TeachingsBundle } from './secondaryCorpus';
 import { loadSpokenBake } from './spokenNoteBake';
 import registry from '../data/corpora.json';
@@ -115,10 +116,9 @@ const isBundle = (raw: unknown): raw is TeachingsBundle =>
 
 async function fetchOne(url: string): Promise<TeachingsBundle> {
   try {
-    if (typeof fetch !== 'function') return EMPTY;
-    const resp = await fetch(url);
-    if (!resp.ok) return EMPTY;
-    const raw = (await resp.json()) as unknown;
+    // Web: same-origin fetch. Native: kept copy → app bundle → web origin
+    // (downloaded once and kept) — see dataFile.ts.
+    const raw = await loadDataJson(url);
     return isBundle(raw) ? raw : EMPTY;
   } catch {
     // Missing file / offline / parse error — the gap tier simply stays quiet.

@@ -50,6 +50,7 @@ import {
   writePersistedMasterPlay,
 } from './masterPlayPersistence';
 import { logAppAudit } from './appAuditor';
+import { loadDataJson } from './dataFile';
 import type { LichessExplorerResult } from '../types';
 
 /** Sparse local-DB shape produced by `scripts/enrich-openings-db.mjs`.
@@ -131,8 +132,14 @@ const MASTERS_DB_URL = '/data/openings-masters-db.json';
 
 let localDbCache: LocalDb | null | undefined;
 let localDbInflight: Promise<LocalDb | null> | null = null;
+/** When a load came back empty (offline on the native app's first use — the
+ *  file now downloads once instead of shipping inside the app), try again
+ *  after this long rather than never again this session. */
+const LOCAL_DB_RETRY_MS = 60_000;
+let localDbMissAt = 0;
 
 async function getLocalDb(): Promise<LocalDb | null> {
+  if (localDbCache === null && Date.now() - localDbMissAt > LOCAL_DB_RETRY_MS) localDbCache = undefined;
   if (localDbCache !== undefined) return localDbCache;
   if (localDbInflight) return localDbInflight;
   localDbInflight = (async () => {
@@ -143,12 +150,9 @@ async function getLocalDb(): Promise<LocalDb | null> {
         localDbCache = null;
         return null;
       }
-      const resp = await fetch(MASTERS_DB_URL);
-      if (!resp.ok) {
-        localDbCache = null;
-        return null;
-      }
-      const raw = (await resp.json()) as unknown;
+      // Web: same-origin fetch. Native: kept copy → app bundle → web origin
+      // (downloaded once, ~3.5 MB compressed, then kept) — see dataFile.ts.
+      const raw = await loadDataJson(MASTERS_DB_URL);
       if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
         const obj = raw as Record<string, unknown>;
         // Detect the "empty placeholder" case.
@@ -169,6 +173,7 @@ async function getLocalDb(): Promise<LocalDb | null> {
       localDbCache = null;
       return null;
     } finally {
+      if (localDbCache === null) localDbMissAt = Date.now();
       localDbInflight = null;
     }
   })();
@@ -179,6 +184,7 @@ async function getLocalDb(): Promise<LocalDb | null> {
 export function __resetLocalDbForTests(): void {
   localDbCache = undefined;
   localDbInflight = null;
+  localDbMissAt = 0;
 }
 
 /** Warm the local masters DB so mastersMovesSync can read it synchronously
@@ -212,6 +218,7 @@ export function masterMovesCachedSync(fen: string): LocalDbMove[] | null {
 export function __setLocalDbForTests(db: LocalDb | null): void {
   localDbCache = db;
   localDbInflight = null;
+  localDbMissAt = db === null ? Number.MAX_SAFE_INTEGER : 0;
 }
 
 // ─── Resolver ──────────────────────────────────────────────────────

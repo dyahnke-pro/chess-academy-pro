@@ -27,6 +27,7 @@ import type {
 import type { WalkthroughTree } from '../types/walkthroughTree';
 import type { MasterPlayResult } from '../services/masterPlayTypes';
 import type { CapabilityEvidenceRecord } from '../services/capabilityEvidence';
+import type { DataFileRecord } from '../services/dataFile';
 
 /** A cached LLM-generated opening walkthrough tree. Once an opening
  *  is requested via "Teach me [opening]" and successfully generated,
@@ -199,6 +200,7 @@ class ChessAcademyDB extends Dexie {
   coachCurriculum!: EntityTable<CoachCurriculumRecord, 'id'>;
   positionEvals!: EntityTable<PositionEvalRecord, 'fen'>;
   capabilityEvidence!: EntityTable<CapabilityEvidenceRecord, 'id'>;
+  dataFiles!: EntityTable<DataFileRecord, 'path'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -956,6 +958,12 @@ class ChessAcademyDB extends Dexie {
     // instance of, so there was no path to "they can do this" and real play
     // contributed nothing positive. Additive store, no migration.
     this.version(36).stores({ capabilityEvidence: 'id, tag, outcome, recordedAt, origin, [tag+outcome]' });
+
+    // v37 — large data files KEPT on the phone after one download (David
+    // 2026-09-26, app-size plan). The iOS app no longer ships public/data;
+    // `services/dataFile.ts` downloads a file once and keeps it here. Additive
+    // store keyed by the `/data/...` path, no migration.
+    this.version(37).stores({ dataFiles: 'path' });
   }
 }
 

@@ -1,3 +1,4 @@
+import { loadDataJson } from './dataFile';
 import { db } from '../db/schema';
 import { safeRatingKey } from '../utils/ratingKey';
 import { calculateNextInterval, createDefaultSrsFields } from './srsEngine';
@@ -168,12 +169,14 @@ export async function isMasterPoolSeeded(): Promise<boolean> {
  */
 export async function seedMasterPuzzles(): Promise<number> {
   if (!(await isMasterPoolSeeded())) {
-    let raw: RawPuzzle[] = [];
-    try {
-      const res = await fetch(`${import.meta.env.BASE_URL ?? '/'}data/master-puzzles.json`);
-      if (res.ok) raw = (await res.json()) as RawPuzzle[];
-    } catch (err) {
-      console.warn('[puzzleService] master pool fetch failed:', err);
+    // Web: same-origin fetch. Native: app bundle → web origin (the pool is
+    // kept in the `puzzles` store below, so dataFile need not keep it too).
+    const loaded = await loadDataJson('/data/master-puzzles.json', { persist: false });
+    const raw: RawPuzzle[] = Array.isArray(loaded) ? (loaded as RawPuzzle[]) : [];
+    // An unreachable pool must NOT mark the pool seeded — that used to leave
+    // Master Level permanently empty after one offline open.
+    if (raw.length === 0) {
+      console.warn('[puzzleService] master pool unavailable — will retry next open');
       return db.puzzles.filter((p) => p.source === 'master').count();
     }
 
