@@ -384,7 +384,9 @@ export function callInaccuracyDetailed(args: {
       : quality === 'mistake'
         ? `That was a mistake from me. ${args.playedSan} is not what the position wanted.`
         : `A touch inaccurate from me — ${args.playedSan} is not quite right.`;
-    const should = better ? ` ${args.bestSan} was the move, to ${better.why}.` : ` ${args.bestSan} was the move.`;
+    // NAMED WITH ITS REASON, OR NOT NAMED (the Learn rule, 2026-09-24): a move
+    // with no computed reason is an order, not teaching.
+    const should = better ? ` ${args.bestSan} was the move, to ${better.why}.` : '';
     // WHICH KIND OF SLIP, read off the board (walk 6, L4). The coach's move can
     // cost by GIVING something (the student now has a capture to find) or by
     // MISSING a capture of the student's piece — and then that piece is still
@@ -428,7 +430,7 @@ export function callInaccuracyDetailed(args: {
   if (typeof after === 'number' && after >= BLUNDER_CP && (args.allowedMate ?? null) === null) {
     const said = reason
       ? `${args.playedSan} still wins, but ${args.bestSan} was cleaner — ${reason}.`
-      : `${args.playedSan} still wins, but ${args.bestSan} was cleaner.`;
+      : `${args.playedSan} still wins.`;
     return { call: { quality, side: 'student', cost, said, square: better?.square ?? '' } };
   }
   const head = quality === 'blunder'
@@ -436,7 +438,9 @@ export function callInaccuracyDetailed(args: {
     : quality === 'mistake'
       ? `${args.playedSan} was a mistake.`
       : `${args.playedSan} was a little loose.`;
-  const should = reason ? ` ${args.bestSan} was the move — ${reason}.` : ` ${args.bestSan} was the move.`;
+  // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, fresh Nimzo game,
+  // 2026-09-26: "exd5 was a mistake. e5 was the move." — nothing said why).
+  const should = reason ? ` ${args.bestSan} was the move — ${reason}.` : '';
   return { call: { quality, side: 'student', cost, said: `${head}${should}`, square: better?.square ?? '' } };
 }
 

@@ -7429,6 +7429,9 @@ export function CoachTeachPage(): JSX.Element {
     getLiveFen: () => liveFenRef.current,
     // Learn free play carries no corpus notes (David 2026-09-23).
     corpusNotes: false,
+    // ONE say-once ledger for the game: the phase turn's balance sheet and the
+    // positional read below share it.
+    getStanding: () => standingRef.current,
     onReport: (text) => setMessages((prev) => [...prev, {
       id: uid('phase'), role: 'assistant', content: text, timestamp: Date.now(),
     }]),
@@ -8247,7 +8250,7 @@ export function CoachTeachPage(): JSX.Element {
       // has already offered, so a fresh, different observation — drawn from the
       // full board-awareness pool — surfaces each turn instead of repeating.
       try {
-        const pr = buildPositionalRead(args.fenAfterReply, args.studentColor, positionalSaidRef.current);
+        const pr = buildPositionalRead(args.fenAfterReply, args.studentColor, positionalSaidRef.current, standingRef.current.said);
         const prSquares = (pr?.squares ?? []).filter((s) => /^[a-h][1-8]$/.test(s));
         // ONE CLAIM, ONE VOICE (hand walk 2026-09-24: "b5 is the pawn break …
         // prepare it. A pawn break is available on b5 …" on one turn). When the
@@ -8255,6 +8258,7 @@ export function CoachTeachPage(): JSX.Element {
         // same claim — the behaviour already said it.
         const sameClaim = prSquares.length > 0 && prSquares.some((sq) => behaviorSquares.includes(sq));
         if (pr && !sameClaim) {
+          standingRef.current.remember(pr.key);
           positionalLine = pr.text;
           positionalSquares = prSquares;
           factLines.push(`Positional read: ${pr.text}`);

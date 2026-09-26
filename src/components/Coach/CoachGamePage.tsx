@@ -1853,6 +1853,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     getLiveFen: () => game.fen,
     // Play is out of scope for the 2026-09-23 corpus removal — unchanged.
     corpusNotes: true,
+    // Play keeps the hook's own ledger (it volunteers nothing, 2026-09-23).
+    getStanding: null,
     // Persist the phase-transition report in the chat messages under the board
     // (David 2026-07-01) instead of the transient narration banner that pops
     // up then disappears. Voice still plays live via the hook.

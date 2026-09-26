@@ -1078,6 +1078,15 @@ const DETECTORS: Detector[] = [
       return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,
         `the punishment ${pvP[firstForcing]} is immediate (ply ${firstForcing + 1}) — another fundamental owns it`);
     }
+    // A BLOW THAT WAS ALREADY ON IS NOT "DEEPER" (Learn walk, fresh Nimzo
+    // game, 2026-09-26: "c6 survives the first replies and breaks on dxc6" —
+    // and dxc6 was legal the very next move, and was played). The engine's line
+    // may order the blow later, but a punishment available at once is an
+    // immediate one, and another fundamental owns it.
+    if (c.after.moves().includes(pvP[firstForcing])) {
+      return yieldTo(c, 'calculation-depth', CALC_DEPTH_CLAIMANTS,
+        `the punishment ${pvP[firstForcing]} is already legal as the immediate reply — not a depth lapse`);
+    }
     // A BLOW DEEPER THAN ANY LINE THE COACH EVER SPELLS IS NOT A CALCULATION
     // LAPSE (hand walk 1380, move 10: a 1380 told the punishment "arrives on
     // their 7th move" — ply 13). Nobody is held to a line past the coach's own

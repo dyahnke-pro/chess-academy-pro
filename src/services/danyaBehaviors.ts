@@ -251,7 +251,12 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         // The piece is NAMED from the board, never "the piece" — a pawn on e4
         // is a pawn (D-7, prod tape 2026-09-22).
         const what = intent.targetPiece ? `your ${PIECE_NAME[intent.targetPiece]} on ${intent.target}` : `what sits on ${intent.target}`;
-        return { fact: `The opponent is eyeing ${intent.san} — it would win ${what}. Deal with that first.`, squares: [intent.target] };
+        // THE FACT, NOT THE ORDER (Learn walk, fresh Nimzo game, 2026-09-26: "The
+        // opponent is eyeing Nxf5 — deal with that first", while the only move
+        // that kept Black on top was Bxa4, which ignores it). This lane speaks
+        // before the engine has read the position, so it cannot know whether
+        // meeting the threat is right; the late package does, and names it.
+        return { fact: `The opponent is eyeing ${intent.san} — it would win ${what}.`, squares: [intent.target] };
       }
       return { fact: `The opponent wants ${intent.san}, forking on ${intent.target} — take the square away from them.`, squares: [intent.target] };
     },

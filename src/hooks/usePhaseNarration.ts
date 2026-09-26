@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createStandingFactMemory, fullmoveOf } from '../services/standingFactMemory';
+import { createStandingFactMemory, fullmoveOf, type StandingFactMemory } from '../services/standingFactMemory';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
@@ -58,6 +58,13 @@ export interface UsePhaseNarrationArgs {
    *  free play and review — "teach me X opening" keeps them). Learn passes
    *  false; Play decides for itself. */
   corpusNotes: boolean;
+  /** The page's say-once memory for THIS game, or null to keep the hook's own.
+   *  Required so a surface decides: Learn passes its memory, so the balance
+   *  sheet at the phase turn and the page's positional read are ONE ledger
+   *  (Learn walk, fresh Nimzo game, 2026-09-26: "their king is still in the
+   *  centre" and "a3 is isolated" said on three moves through two lanes that
+   *  each kept their own memory). */
+  getStanding: (() => StandingFactMemory) | null;
 }
 
 export interface UsePhaseNarrationResult {
@@ -152,7 +159,8 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
   // …and the set FORGETS when the board goes backwards. The rule (and the
   // reasoning) lives in `standingFactMemory` — CoachTeachPage carried its own
   // copy of it, under different ref names, with a comment admitting as much.
-  const standingRef = useRef(createStandingFactMemory());
+  const ownStandingRef = useRef(createStandingFactMemory());
+  const standingRef = { get current(): StandingFactMemory { return argsRef.current.getStanding?.() ?? ownStandingRef.current; } };
   const [isNarrating, setIsNarrating] = useState(false);
   const [currentText, setCurrentText] = useState('');
   const [error, setError] = useState<string | null>(null);

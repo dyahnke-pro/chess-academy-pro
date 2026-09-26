@@ -25,7 +25,7 @@ import { isBookLine } from './openingDetectionService';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
-import { phaseVerdictLine } from './reviewPositionalAssessment';
+import { phaseVerdictLine, phaseVerdictKeys } from './reviewPositionalAssessment';
 import { stemKeyOf } from '../utils/rotateStem';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, decide, type SurfacePosture } from './coachDecider';
@@ -798,8 +798,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   }
   // S4 — who's better, and why, at the turn of the game.
   const stockHere = input.phaseTurn && !analysis.isMate
-    ? phaseVerdictLine(fen, studentColor, evalCpWhitePov * sSign, input.phaseTurn)
+    ? phaseVerdictLine(fen, studentColor, evalCpWhitePov * sSign, input.phaseTurn, input.alreadySaid ?? new Set())
     : null;
+  const stockKeys = stockHere
+    ? phaseVerdictKeys(fen, studentColor, evalCpWhitePov * sSign, input.alreadySaid ?? new Set())
+    : [];
 
   const composedAll = applyWeaknessBoost(
     buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null, alreadySaid: input.alreadySaid }),
@@ -954,6 +957,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       ...(methodKey && clauses.some((c) => c.kind === 'method') ? [methodKey] : []),
       ...(planKey && clauses.some((c) => c.kind === 'structure-plan') ? [planKey] : []),
       ...convertRemember(clauses, input.fen, studentSeat),
+      // The balance sheet's reasons, under the keys the positional read uses.
+      ...(clauses.some((c) => c.kind === 'stock') ? stockKeys : []),
     ],
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
