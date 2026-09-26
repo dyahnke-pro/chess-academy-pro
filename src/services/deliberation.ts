@@ -184,7 +184,7 @@ export function buildDeliberation(input: {
     });
   }
 
-  const bestWhy = materialWhy(fenBefore, bestSan, moverColor, input.opponentLastSan) ?? strategicWhyLed(fenBefore, bestSan, moverColor === 'w' ? 'white' : 'black');
+  const bestWhy = moveWhy(fenBefore, bestSan, moverColor, input.opponentLastSan);
   return { best, alternatives, isRealChoice: alternatives.length > 0, bestWhy };
 }
 
@@ -268,4 +268,11 @@ export function deliberationAlternativesFacts(d: Deliberation): string {
   const meaningful = meaningfulAlternatives(d);
   if (meaningful.length === 0) return '';
   return meaningful.map(shortfallText).join(' ');
+}
+
+/** Why `san` is the move, phrased to follow "it" ("…— it wins the pawn on
+ *  d5"). The ONE reason computer behind "The move is X" — shared so every lane
+ *  that names a move gives the same reason. Null when nothing is computable. */
+export function moveWhy(fenBefore: string, san: string, mover: 'w' | 'b', opponentLastSan: string | null): string | null {
+  return materialWhy(fenBefore, san, mover, opponentLastSan) ?? strategicWhyLed(fenBefore, san, mover === 'w' ? 'white' : 'black');
 }

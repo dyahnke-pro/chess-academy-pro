@@ -82,6 +82,13 @@ describe('conceptEngine — renderer (computed invariant, not authored blob)', (
     expect(renderMatchupConcept(classifyMatchup('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))).toBeNull();
   });
 
+  it('a rule with no board instance is marked bare, so a live surface can refuse it (16.Rxf3)', () => {
+    const bare = renderTacticConcept({ type: 'trapped_piece', involvedSquares: [], description: '' }, '8/8/8/8/8/8/8/8 w - - 0 1');
+    expect(bare?.bare).toBe(true);
+    const named = renderTacticConcept({ type: 'fork', involvedSquares: ['e5', 'c6', 'g6'], description: 'Knight on e5 forks rook on c6 and queen on g6' }, '8/8/8/8/8/8/8/8 w - - 0 1');
+    expect(named?.bare).toBeUndefined();
+  });
+
   it('no template uses the banned we/our/us perspective', () => {
     // Guard the whole module's rendered output against the perspectiveVoice ban.
     const samples: string[] = [];

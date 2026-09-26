@@ -58,6 +58,11 @@ export interface ComputedConcept {
    *  the current board a BLACK rook stands on d8, so it was read "Their rook on
    *  d8 skewers their queen"). */
   boardFen?: string;
+  /** The rule with no board instance — the detector could not name the
+   *  pieces. A puzzle can teach it (the board in front of the student IS the
+   *  instance); a live surface must not speak it alone (re-walk 1380, 16.Rxf3:
+   *  "A trapped piece has no safe square…" about no piece). */
+  bare?: true;
 }
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
@@ -196,6 +201,7 @@ export function renderTacticConcept(pattern: TacticPattern, boardFen: string): C
     short: inv.short,
     importance: 0,
     boardFen,
+    ...(desc ? {} : { bare: true as const }),
   };
 }
 

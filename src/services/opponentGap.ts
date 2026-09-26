@@ -12,6 +12,8 @@
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0b.
 import type { StockfishAnalysis } from '../types';
 import type { OpponentIntent } from './opponentIntent';
+import { moveWhy } from './deliberation';
+import { uciToSanAt } from './liveFundamental';
 
 /** A gift of at least this many pawns (student POV) is worth pointing at. */
 const GIFT_CP = 120;
@@ -90,8 +92,24 @@ const GAP_STEM: Record<GapSeat, string> = {
   dictated: 'that reply gives you something',
 };
 
-/** The subtle nudge — guide-don't-tell: names NO move, leads the eye with the
- *  arrow the caller draws from `toSquare`. */
-export function opponentGapClause(_gap: OpponentGap, seat: GapSeat): string {
-  return `${GAP_STEM[seat]} — there's a chance right here if you can spot it.`;
+/** The gift, NAMED with its reason (David 2026-09-24: Learn names the move
+ *  with its reason; the withholding "there's a chance here if you can spot
+ *  it" belonged to the old question cards). The move and its reason come from
+ *  the one reason computer (`deliberation.moveWhy`); no computed reason → null,
+ *  never a vague hint (re-walk 1380, 13.Be3). */
+export function opponentGapClause(
+  gap: OpponentGap,
+  seat: GapSeat,
+  /** The board the student is to move on. */
+  fen: string,
+  studentColor: 'w' | 'b',
+  /** The opponent's reply that made the gift. */
+  opponentLastSan: string | null,
+): string | null {
+  const san = uciToSanAt(fen, gap.opportunityUci);
+  const why = san ? moveWhy(fen, san, studentColor, opponentLastSan) : null;
+  if (!san || !why) return null;
+  return `${cap(GAP_STEM[seat])}: ${san} — it ${why}.`;
 }
+
+const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
