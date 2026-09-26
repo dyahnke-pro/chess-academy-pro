@@ -279,8 +279,6 @@ import { computePositionFacts, clauseText } from '../../services/positionFacts';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
-import { moveWhy } from '../../services/deliberation';
-import { uciToSanAt } from '../../services/liveFundamental';
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainArrows, causalChainHighlights } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
@@ -8872,10 +8870,8 @@ export function CoachTeachPage(): JSX.Element {
                         });
                         if (gap) {
                           // Learn: the coach IS the opponent, so the nudge says "I".
-                          const gapSan = uciToSanAt(probe.fen(), gap.opportunityUci);
-                          const gapWhy = gapSan ? moveWhy(probe.fen(), gapSan, playerColor === 'white' ? 'w' : 'b', m.san) : null;
                           const clause = opponentGapClause(gap, learnMemRef.current.lastReplyDictated !== null ? 'dictated' : 'coach-is-opponent',
-                            gapSan && gapWhy ? { san: gapSan, why: gapWhy } : null);
+                            probe.fen(), playerColor === 'white' ? 'w' : 'b', m.san);
                           const nudge = clause ? gradeNarrationText(clause, probe.fen(), 'CoachTeachPage.opponentGap')?.trim() : null;
                           if (nudge) gapPending = { text: nudge, square: gap.toSquare };
                           captureEvent('opponent_gap_nudged', { surface: 'coach-teach', gain_cp: Math.round(gap.gainCp) });
