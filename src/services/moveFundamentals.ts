@@ -27,6 +27,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { homeMinorCount, homeSquaresOf } from './development';
 import { centreDistance } from '../utils/centreDistance';
 import { isOutpost } from './outpost';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export type MoveFundamentalId =
   | 'king-safety'
@@ -436,14 +437,18 @@ export function computeMoveFundamentals(
     // exchange is coming and the move OPENS the center rather than holding it
     // (his "d4, opening up the center"; re-walk 1380: "stakes out the center"
     // was said of a pawn …exd4 took the next move).
-    const contact = after.attackers(mv.to, mover === 'w' ? 'b' : 'w')
-      .some((sq) => after.get(sq)?.type === 'p');
+    const contactBy = after.attackers(mv.to, mover === 'w' ? 'b' : 'w')
+      .filter((sq) => after.get(sq)?.type === 'p');
+    const contact = contactBy.length > 0;
     out.push(contact ? {
       id: 'center',
       weight: 66,
       led: `opens up the center`,
       selfContained: `opens up the center with the pawn to ${mv.to}`,
-      imperative: `open up the center with the pawn to ${mv.to}`,
+      // The rule names what the push CHALLENGES, never the push itself: "There's
+      // a rule behind c5: open up the center with the pawn to c5" said the move
+      // twice and taught nothing (Blumenfeld walk F2).
+      imperative: `open up the center — challenge their pawn on ${andList(contactBy)}`,
       squares: [mv.to],
     } : {
       id: 'center',
@@ -496,14 +501,18 @@ export function computeMoveFundamentals(
       });
     }
   } else if (mv.piece !== 'p' && mv.piece !== 'k' && rankOf(mv.from) !== homeRank && !out.some((f) => f.id === 'development' || f.id === 'outpost')) {
-    const eyes = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s));
+    // A square holding the mover's OWN piece is defended, not "hit" — "Qf5
+    // takes aim at the center, hitting d5 and e4 and e5" named three of Black's
+    // own pawns (Blumenfeld walk F19).
+    const eyes = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s) && after.get(s as Square)?.color !== mover);
     if (eyes.length >= 2) { // a THRESHOLD, not a cap — two core squares is the bar
+      const hit = andList(eyes);
       out.push({
         id: 'center',
         weight: 52,
-        led: `takes aim at the center, hitting ${eyes.join(' and ')}`,
-        selfContained: `repositions the ${PIECE_NAME[mv.piece]} to take aim at ${eyes.join(' and ')}`,
-        imperative: `take aim at the center, hitting ${eyes.join(' and ')}`,
+        led: `takes aim at the center, hitting ${hit}`,
+        selfContained: `repositions the ${PIECE_NAME[mv.piece]} to take aim at ${hit}`,
+        imperative: `take aim at the center, hitting ${hit}`,
         squares: [mv.to, ...eyes],
       });
     }
@@ -921,12 +930,36 @@ export function leadingFundamentals(
 /** Woven, fundamental-first render of the leading fundamental(s). `form` picks
  *  the led clause (append after an already-named move) or the self-contained
  *  clause (names the piece). Returns null when nothing fires. */
+/**
+ * A move the board FORCES — an escape from check, or a capture that only wins
+ * back material just lost. Its why is the force ("get out of check", "take
+ * back"), never a plan: Blumenfeld walk F36 heard the check-escape …Kg7
+ * "marches your king toward the center", and F14 heard the recapture …dxe5
+ * called "stake out the center and grab space".
+ */
+export function isForcedReply(fenBefore: string, san: string): boolean {
+  let c: Chess;
+  try { c = new Chess(fenBefore); } catch { return false; }
+  if (c.inCheck()) return true;
+  const mover = c.turn();
+  let diff = 0;
+  for (const row of c.board()) for (const p of row) {
+    if (!p || p.type === 'k') continue;
+    diff += (p.color === mover ? 1 : -1) * (MATERIAL_VALUE[p.type] ?? 0);
+  }
+  let m;
+  try { m = c.move(san); } catch { return false; }
+  if (!m?.captured) return false;
+  return diff < 0 && diff + (MATERIAL_VALUE[m.captured] ?? 0) <= 0;
+}
+
 function renderStrategic(
   fenBefore: string,
   moveSan: string,
   moverColor: 'white' | 'black',
   form: 'led' | 'selfContained' | 'imperative',
 ): string | null {
+  if (isForcedReply(fenBefore, moveSan)) return null;
   const lead = leadingFundamentals(fenBefore, moveSan, moverColor);
   if (lead.length === 0) return null;
   return lead.map((f) => f[form]).join(', and ');
@@ -1053,6 +1086,7 @@ export function principleLine(
   // "takes the open f-file"; 13.fxe5 "kicks their knight" — a recapture's
   // why is "takes back", which its own lane says).
   if (san.includes('x')) return null;
+  if (isForcedReply(fenBefore, san)) return null;
   if (!openingWindowOpen(fenBefore, mover)) {
     // In an ENDGAME "takes aim at the center" and "grabs space" are not the
     // why of anything — kings, passers and rooks are (the Scotch ending's

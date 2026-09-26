@@ -839,6 +839,7 @@ function attributeGameFundamentals(
       fundamentals = attributePrinciples({
         historySans: sansForRun.slice(0, m.ply),
         bestSan: bestMoveSan,
+        replySan: sansForRun[m.ply] ?? null,
         classification: m.classification,
         pvAfterPlayed: m.pv?.afterPlayed?.length ? pvUciToSan(fenPair.fenAfter, m.pv.afterPlayed) : undefined,
         pvAfterBest: m.pv?.afterBest?.length && bestMoveSan

@@ -245,6 +245,8 @@ function classifyMisconceptionImpl(
       historySans: input.historySans,
       bestSan: input.bestSan,
       classification: 'mistake',
+      // Classified at the moment of the move — the reply is not played yet.
+      replySan: null,
       pvAfterPlayed: input.pvAfterPlayed,
       pvAfterBest: input.pvAfterBest,
       evalBefore: input.evalBefore,

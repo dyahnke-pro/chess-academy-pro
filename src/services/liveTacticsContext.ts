@@ -45,6 +45,7 @@ import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 import { conceptForBoard } from './conceptEngine';
 import { sayMoveNoun } from './spokenMove';
 import { verifyForkOnBoard } from './tacticVerification';
+import { seatPieceReferences } from '../utils/seatPieces';
 
 /**
  * Build the `TacticsLiveContext` block for the brain envelope.
@@ -89,7 +90,7 @@ export function buildTacticsLiveContext(
       lookaheadDepth,
     );
     for (const u of upcoming) {
-      const entry = upcomingToEntry(u);
+      const entry = upcomingToEntry(u, fen, playerColor);
       if (u.beneficiary === 'opponent') threats.push(entry);
       else opportunities.push(entry);
     }
@@ -412,13 +413,43 @@ function tacticPatternToEntry(
   };
 }
 
-function upcomingToEntry(u: UpcomingTactic): TacticsLiveContext['threats'][number] {
+function upcomingToEntry(
+  u: UpcomingTactic,
+  rootFen: string,
+  student: 'w' | 'b',
+): TacticsLiveContext['threats'][number] {
   return {
     type: u.pattern.type,
     description: u.pattern.description,
     depthAhead: u.depthAhead,
     line: u.line,
+    spoken: spokenUpcoming(u.line, u.pattern.description, u.fen, rootFen, student),
   };
+}
+
+/**
+ * A tactic that is NOT on the board yet, said the only honest way: with the
+ * moves that build it. The detector describes the geometry of the FUTURE board
+ * ("moving from a4 to b5 reveals rook on a1 attacking rook on a8"), so said
+ * bare it is false now — Blumenfeld walk F9 heard exactly that with no piece on
+ * a4. Seated on the board where it happens (`tacticFen`), because whose pieces
+ * they are is read there. A line longer than one move each is not a warning a
+ * student can follow; it is silent rather than half-said.
+ */
+export function spokenUpcoming(
+  line: readonly string[],
+  description: string,
+  tacticFen: string,
+  rootFen: string,
+  student: 'w' | 'b',
+): string | null {
+  if (line.length === 0 || line.length > 2) return null;
+  const desc = seatPieceReferences(`${description.charAt(0).toLowerCase()}${description.slice(1)}`.replace(/[.!]$/, ''), tacticFen, student);
+  const first = rootFen.split(' ')[1] === student ? 'you' : 'they';
+  const second = first === 'you' ? 'they' : 'you';
+  return line.length === 1
+    ? `if ${first} play ${line[0]}, ${desc}`
+    : `if ${first} play ${line[0]} and ${second} answer ${line[1]}, ${desc}`;
 }
 
 /** Map a single-letter piece type to its full word for prose. */

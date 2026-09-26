@@ -87,7 +87,7 @@ describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)'
     expect(assembleTacticsAnswer(tactics({ fen: empty, hanging: [{ square: 'b4', piece: 'b', color: 'w' }] }), 'white')).toBeNull();
   });
   it('falls to the top threat when nothing immediate', () => {
-    const a = assembleTacticsAnswer(tactics({ threats: [{ type: 'fork', description: 'Black threatens Nxe4', depthAhead: 2, line: [] }] }), 'white');
+    const a = assembleTacticsAnswer(tactics({ threats: [{ spoken: 'if they play Nxe4, their knight takes on e4', type: 'fork', description: 'Black threatens Nxe4', depthAhead: 2, line: ['Nxe4'] }] }), 'white');
     expect(a!.facts).toContain('Watch out');
   });
   it('returns null when there is no concrete tactic (caller falls back)', () => {
@@ -97,7 +97,7 @@ describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)'
   // Question-aware (David 2026-09-09 critical audit)
   it('answers an opportunity ask with the student\'s shot, not a hanging deflection', () => {
     const a = assembleTacticsAnswer(
-      tactics({ fen: '4k3/8/8/4P3/8/8/8/4K3 w - - 0 1', opportunities: [{ type: 'fork', description: 'Nd5 forks the queen and rook', depthAhead: 2, line: [] } as unknown as TacticsLiveContext['opportunities'][number]],
+      tactics({ fen: '4k3/8/8/4P3/8/8/8/4K3 w - - 0 1', opportunities: [{ spoken: 'if you play Nd5, Nd5 forks the queen and rook', type: 'fork', description: 'Nd5 forks the queen and rook', depthAhead: 2, line: ['Nd5'] } as unknown as TacticsLiveContext['opportunities'][number]],
         hanging: [{ square: 'e5', piece: 'p', color: 'w' }] }),
       'white', 'is there a fork available?');
     expect(a!.facts).toContain('Nd5 forks');

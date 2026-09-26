@@ -17,7 +17,7 @@ const fenBefore = (ply: number) => { const c = new Chess(); for (const s of upTo
 
 describe('attributePrinciples — the Alapin fixture', () => {
   it('6...Nb6 attaches same-piece-twice, tempo-handed and space-conceded — and proves each', () => {
-    const out = attributePrinciples({ historySans: upTo(12), bestSan: 'e6', classification: 'mistake' });
+    const out = attributePrinciples({ replySan: null, historySans: upTo(12), bestSan: 'e6', classification: 'mistake' });
     const ids = out.map((a) => a.id);
     expect(ids).toContain('same-piece-twice');
     expect(ids).toContain('tempo-handed');
@@ -36,7 +36,7 @@ describe('attributePrinciples — the Alapin fixture', () => {
   });
 
   it('holds with the depth-14 best move too (6...Nxc3) — the fundamentals do not depend on which best the engine picked', () => {
-    const out = attributePrinciples({ historySans: upTo(12), bestSan: 'Nxc3', classification: 'mistake' });
+    const out = attributePrinciples({ replySan: null, historySans: upTo(12), bestSan: 'Nxc3', classification: 'mistake' });
     const ids = out.map((a) => a.id);
     expect(ids).toContain('same-piece-twice');
     expect(ids).toContain('tempo-handed');
@@ -44,7 +44,7 @@ describe('attributePrinciples — the Alapin fixture', () => {
 
   it('corroborates from the engine line when one is persisted', () => {
     const pvAfterPlayed = pvUciToSan(new Chess(fenBefore(13)).fen(), ['g1f3', 'd7d5', 'a2a4', 'a7a5', 'f1b5']);
-    const out = attributePrinciples({ historySans: upTo(12), bestSan: 'e6', classification: 'mistake', pvAfterPlayed });
+    const out = attributePrinciples({ replySan: null, historySans: upTo(12), bestSan: 'e6', classification: 'mistake', pvAfterPlayed });
     const tempo = out.find((a) => a.id === 'tempo-handed')!;
     expect(tempo).toBeTruthy();
     // a4 → a5 is the kick the line plays; the weight reflects the corroboration.
@@ -52,17 +52,17 @@ describe('attributePrinciples — the Alapin fixture', () => {
   });
 
   it('attaches NOTHING to a move that was not flagged (3...Nd5, book) — "if there is one"', () => {
-    expect(attributePrinciples({ historySans: upTo(6), bestSan: 'Nd5', classification: 'book' })).toEqual([]);
-    expect(attributePrinciples({ historySans: upTo(6), bestSan: 'Ne4', classification: 'good' })).toEqual([]);
+    expect(attributePrinciples({ replySan: null, historySans: upTo(6), bestSan: 'Nd5', classification: 'book' })).toEqual([]);
+    expect(attributePrinciples({ replySan: null, historySans: upTo(6), bestSan: 'Ne4', classification: 'good' })).toEqual([]);
   });
 
   it('attaches NOTHING to the engine-best move (11...Nd5) even if mis-flagged upstream', () => {
-    expect(attributePrinciples({ historySans: upTo(22), bestSan: 'Nd5', classification: 'inaccuracy' })).toEqual([]);
+    expect(attributePrinciples({ replySan: null, historySans: upTo(22), bestSan: 'Nd5', classification: 'inaccuracy' })).toEqual([]);
   });
 
   it('is deterministic — identical inputs, identical output', () => {
-    const a = attributePrinciples({ historySans: upTo(12), bestSan: 'e6', classification: 'mistake' });
-    const b = attributePrinciples({ historySans: upTo(12), bestSan: 'e6', classification: 'mistake' });
+    const a = attributePrinciples({ replySan: null, historySans: upTo(12), bestSan: 'e6', classification: 'mistake' });
+    const b = attributePrinciples({ replySan: null, historySans: upTo(12), bestSan: 'e6', classification: 'mistake' });
     expect(JSON.stringify(a)).toBe(JSON.stringify(b));
   });
 });
@@ -71,7 +71,7 @@ describe('attributePrinciples — the other fundamentals, on synthetic boards', 
   it('loose-piece: a knight that can be taken for free, where the best move hung nothing', () => {
     // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.d3 Bc5 5.Bg5 h6 6.Bh4 g5 7.Bg3 Nh5 8.Nxg5?? — hxg5 wins the knight.
     const hist = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3', 'Bc5', 'Bg5', 'h6', 'Bh4', 'g5', 'Bg3', 'Nh5', 'Nxg5'];
-    const out = attributePrinciples({ historySans: hist, bestSan: 'Nc3', classification: 'blunder' });
+    const out = attributePrinciples({ replySan: null, historySans: hist, bestSan: 'Nc3', classification: 'blunder' });
     const loose = out.find((a) => a.id === 'loose-piece');
     expect(loose).toBeTruthy();
     expect(loose!.evidence.squares).toEqual(['g5']);
@@ -81,26 +81,26 @@ describe('attributePrinciples — the other fundamentals, on synthetic boards', 
   });
 
   it('early-queen-sortie: 2.Qh5 is kicked by a developing knight for free', () => {
-    const out = attributePrinciples({ historySans: ['e4', 'e5', 'Qh5'], bestSan: 'Nf3', classification: 'inaccuracy' });
+    const out = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Qh5'], bestSan: 'Nf3', classification: 'inaccuracy' });
     const q = out.find((a) => a.id === 'early-queen-sortie');
     expect(q).toBeTruthy();
     expect(q!.evidence.moves[0]).toMatch(/^N/);
   });
 
   it('neglected-development: a rook-pawn nudge with three minors home while the best move develops', () => {
-    const out = attributePrinciples({ historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'a6'], bestSan: 'Nf6', classification: 'inaccuracy' });
+    const out = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'a6'], bestSan: 'Nf6', classification: 'inaccuracy' });
     expect(out.map((a) => a.id)).toContain('neglected-development');
   });
 
   it('passive-when-forcing-existed: a quiet move when the best move is mate', () => {
-    const out = attributePrinciples({ historySans: ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'Nf6', 'Qf3'], bestSan: 'Qxf7#', classification: 'blunder' });
+    const out = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Bc4', 'Nc6', 'Qh5', 'Nf6', 'Qf3'], bestSan: 'Qxf7#', classification: 'blunder' });
     expect(out.map((a) => a.id)).toContain('passive-when-forcing-existed');
   });
 
   it('a pattern that is present but NOT punished stays silent', () => {
     // 1.e4 e5 2.Nf3 Nc6 3.Nc3 Nf6 4.Bb5 Nd4?! — the knight re-moves, but nothing kicks it for free and
     // the best move (Bc5) leaves the same development picture: no same-piece-twice story to tell.
-    const out = attributePrinciples({ historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'Bb5', 'Nd4'], bestSan: 'Bc5', classification: 'inaccuracy' });
+    const out = attributePrinciples({ replySan: null, historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'Bb5', 'Nd4'], bestSan: 'Bc5', classification: 'inaccuracy' });
     expect(out.find((a) => a.id === 'knight-to-the-rim')).toBeUndefined();
   });
 
@@ -118,7 +118,7 @@ describe('the king walk is the lesson, not the bishop it happened to block (WO-S
   it('Ke2 with castling rights in hand attributes king-left-in-centre FIRST, with the walk named', () => {
     // Prod: 4.Ke2?? was recorded as "buried your own bishop" (the king stands in
     // front of Bf1) and the method beat talked about pawn moves.
-    const out = attributePrinciples({
+    const out = attributePrinciples({ replySan: null,
       historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'Ke2'], bestSan: 'c3', classification: 'mistake',
     });
     expect(out[0]?.id).toBe('king-left-in-centre');
@@ -131,7 +131,7 @@ describe('the king walk is the lesson, not the bishop it happened to block (WO-S
     }
   });
   it('NEGATIVE CONTROL: a king move with the rights ALREADY gone is not charged with losing castling', () => {
-    const out = attributePrinciples({
+    const out = attributePrinciples({ replySan: null,
       historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'Kf1', 'd6', 'Ke2'], bestSan: 'd3', classification: 'mistake',
     });
     expect(out.find((a) => a.id === 'king-left-in-centre' && a.facts.walked)).toBeUndefined();
@@ -140,7 +140,7 @@ describe('the king walk is the lesson, not the bishop it happened to block (WO-S
 
 describe('a piece hung outright is a LOOSE PIECE, never an "overvalued attack" (walks 2+3, 2026-09-23)', () => {
   it('3...Bg4?? into Qxg4 is attributed as the hang it is', () => {
-    const out = attributePrinciples({ historySans: ['e4', 'c5', 'Bc4', 'd6', 'd4', 'Bg4'], bestSan: 'cxd4', classification: 'blunder' });
+    const out = attributePrinciples({ replySan: null, historySans: ['e4', 'c5', 'Bc4', 'd6', 'd4', 'Bg4'], bestSan: 'cxd4', classification: 'blunder' });
     const ids = out.map((a) => a.id);
     expect(ids).not.toContain('overvalued-attack');
     expect(ids).toContain('loose-piece');

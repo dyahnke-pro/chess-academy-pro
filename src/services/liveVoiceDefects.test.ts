@@ -160,7 +160,7 @@ describe('L4 — a refusal names the guard that refused', () => {
     // The backlog concluded the floor was "mis-scaled or inverted" from a log
     // line reading "under the floor". It is neither — MISTAKE_CP is 100.
     for (const cpLoss of [122, 184]) {
-      expect(callInaccuracy({
+      expect(callInaccuracy({ replyLineUci: [], replySan: null,
         fenBefore, playedSan: 'Nf6', bestSan: 'Bc5', bestLineUci: ['f8c5', 'c2c3'],
         cpLoss, missedMate: null, allowedMate: null, side: 'coach', moverColor: 'black',
       })).not.toBeNull();
@@ -178,22 +178,22 @@ describe('L4 — a refusal names the guard that refused', () => {
     // not even an inaccuracy. The floor band is 50..<100: an inaccuracy the
     // coach deliberately does not stop for. That these two report differently
     // is the whole point of the change.
-    expect(callInaccuracyDetailed({ ...base, cpLoss: 40 }).declined).toBe('quality-not-worth-saying');
-    expect(callInaccuracyDetailed({ ...base, cpLoss: 60 }).declined).toBe('under-the-floor');
-    expect(callInaccuracyDetailed({ ...base, cpLoss: 184, bestSan: null }).declined).toBe('no-better-move-supplied');
+    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 40 }).declined).toBe('quality-not-worth-saying');
+    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 60 }).declined).toBe('under-the-floor');
+    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: null }).declined).toBe('no-better-move-supplied');
     // PLAYING THE BEST MOVE is SHADOWED by the quality guard and never reaches
     // its own arm: `classifyMove({ wasBest: true })` returns 'best', which is
     // not in WORTH_SAYING, so the first guard answers. Asserted as it ACTUALLY
     // behaves rather than as the arm reads — a test written to the code's
     // apparent shape instead of its measured one is how a dead branch acquires
     // a green test and outlives the reason it was added.
-    expect(callInaccuracyDetailed({ ...base, cpLoss: 184, playedSan: 'Bc5' }).declined).toBe('quality-not-worth-saying');
+    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 184, playedSan: 'Bc5' }).declined).toBe('quality-not-worth-saying');
     // Bh6 needs the g7 pawn out of the way, so it is illegal here. (Qh4 is
     // NOT — the e-pawn is on e5, so the d8-h4 diagonal is open. Checked against
     // chess.js rather than eyeballed, which is the same discipline this whole
     // work order is about.)
-    expect(callInaccuracyDetailed({ ...base, cpLoss: 184, bestSan: 'Bh6' }).declined).toBe('best-move-illegal-here');
-    expect(callInaccuracyDetailed({ ...base, cpLoss: 184 }).declined).toBeUndefined();
+    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: 'Bh6' }).declined).toBe('best-move-illegal-here');
+    expect(callInaccuracyDetailed({ replyLineUci: [], replySan: null, ...base, cpLoss: 184 }).declined).toBeUndefined();
   });
 
   it('backwardLook publishes the reason its coach lane declined', () => {

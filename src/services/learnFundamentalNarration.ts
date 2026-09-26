@@ -38,13 +38,11 @@ export interface LearnFundamentalInput extends LiveFundamentalReads {
    * self-count.
    */
   currentGameId: string | null;
-  /**
-   * The opponent's reply, when it is already on the board (Learn speaks after
-   * it). REQUIRED, `null` when not yet known: a loose piece they did NOT take
-   * is "they missed it", never "is free material" (re-walk 1380, 24.Bg5 f4 —
-   * "the bishop on g5 hangs; Qxg5+ is free" beside "you win the queen").
-   */
-  replySan: string | null;
+  // `replySan` is inherited from `LiveFundamentalReads` — ONE field for both
+  // readers: the attributor names the kick they PLAYED (F17), and this verdict
+  // says "they missed it" of a loose piece they did not take (re-walk 1380,
+  // 24.Bg5 f4 — "the bishop on g5 hangs; Qxg5+ is free" beside "you win the
+  // queen").
 }
 
 export interface LearnFundamental {

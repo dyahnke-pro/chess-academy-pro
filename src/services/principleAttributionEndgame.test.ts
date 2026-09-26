@@ -40,7 +40,7 @@ const FIXTURES: { id: FundamentalId; best: string; hist: string[] }[] = [
 describe('endgame fundamentals — Wave 1 detectors fire on real legal games', () => {
   for (const { id, best, hist } of FIXTURES) {
     it(`${id} is attributed and proven`, () => {
-      const out = attributePrinciples({ historySans: hist, bestSan: best, classification: 'mistake' });
+      const out = attributePrinciples({ replySan: null, historySans: hist, bestSan: best, classification: 'mistake' });
       const a = out.find((x) => x.id === id);
       expect(a, `${id} not in [${out.map((x) => x.id).join(', ')}]`).toBeTruthy();
       expect(a!.evidence.moves).toContain(best);
@@ -54,6 +54,6 @@ describe('endgame fundamentals — Wave 1 detectors fire on real legal games', (
 
   it('attaches nothing when the move is not flagged', () => {
     const { hist, best } = FIXTURES[0];
-    expect(attributePrinciples({ historySans: hist, bestSan: best, classification: 'good' })).toEqual([]);
+    expect(attributePrinciples({ replySan: null, historySans: hist, bestSan: best, classification: 'good' })).toEqual([]);
   });
 });

@@ -293,7 +293,7 @@ function observationsFor(
       key: `${side}-break-${breaks[0]}`, side, kind: 'lever', rank: rank('lever'),
       squares: [breaks[0]],
       text: own
-        ? `A pawn break is available on ${breaks[0]} — in a quiet position the pawn levers are where the play comes from.`
+        ? `A pawn break is available on ${breaks[0]} — the pawn levers are where the play comes from.`
         : `${you.charAt(0).toUpperCase()}${you.slice(1)} have a pawn break available on ${breaks[0]} — that is where their play comes from.`,
     });
   }
@@ -516,12 +516,24 @@ export function buildPositionalRead(
   // Returns the whole observation (not just its text) so the caller can mark the
   // squares it named (David 2026-09-13: "add highlights to all spoken key
   // squares"). `.text` is the line; `.squares` are what to highlight.
+  // THE LEVER IDEA IS TAUGHT ONCE (Blumenfeld walk F1/F13/F15/F22): the key is
+  // per square, so every new break square re-said "in a quiet position the pawn
+  // levers are where the play comes from" — five times in one game. The next
+  // break square is still news; the lesson around it is not.
+  const leverTaught = (side: string): boolean => [...(said ?? []), ...(heard ?? [])].some((k) => k.startsWith(`${side}-break-`));
   for (const o of readPosition(fen, studentColor)) {
     if (said?.has(o.key) || heard?.has(o.key)) continue;
+    const stem = o.kind === 'lever' && leverTaught(o.side) ? leverStem(o) : null;
     said?.add(o.key);
-    return o;
+    return stem ? { ...o, text: stem } : o;
   }
   return null;
+}
+
+/** The short form of a pawn break once the idea has been taught this game. */
+function leverStem(o: PositionalObservation): string {
+  const sq = o.squares?.[0] ?? '';
+  return o.side === 'student' ? `${sq} is a pawn break for you now.` : `They can break with ${sq} now.`;
 }
 
 /** A file is a ROAD toward a king only if the ATTACKER has no pawn on it (hand

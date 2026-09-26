@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**540 lines · 7 exports · 8 importers · 4 tests · 1 audits**
+**552 lines · 7 exports · 8 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,10 +30,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `rookReachesFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:568`
+- `src/services/danyaBehaviors.ts:578`
 
 ### `castleIsOneMoveAway` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:221`
+- `src/services/danyaBehaviors.ts:222`
 
 ### `readPosition` (function) — 42 call sites
 - `src/services/groundedAnswer.ts:1309`
@@ -79,8 +79,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:378`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
-### `buildPositionalRead` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8253`
+### `buildPositionalRead` (function) — 10 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8261`
+- `src/services/learnWalkBlumenfeld.test.ts:116`
 - `src/services/learnWalkNimzo.test.ts:34`
 - `src/services/narrationAdversarial.test.ts:106`
 - `src/services/narrationAdversarial.test.ts:174`
@@ -91,10 +92,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:192`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:206`
+- `src/services/danyaBehaviors.ts:207`
 
 ## Tests
 
+- `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/positionalRead.test.ts`

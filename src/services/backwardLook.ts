@@ -168,6 +168,8 @@ export function backwardLook(args: {
         allowedMate: args.allowedMate ?? null,
         side: 'coach',
         moverColor: mover,
+        replyLineUci: args.replyPvUci ?? [],
+        replySan: args.replySan ?? null,
       });
       // THE REASON TRAVELS WITH THE REFUSAL. The caller logs why the coach said
       // nothing, and until now it printed "under the floor" for all five
@@ -294,6 +296,8 @@ export function backwardLook(args: {
             moverEvalAfterCp: args.moverEvalAfterCp ?? null,
             side: 'student',
             moverColor: args.studentColor,
+            replyLineUci: args.replyPvUci ?? [],
+            replySan: args.replySan ?? null,
           });
           instead = call?.said ?? null;
         } catch { /* the alternative is a bonus; the read still stands */ }
@@ -326,6 +330,8 @@ export function backwardLook(args: {
         moverEvalAfterCp: args.moverEvalAfterCp ?? null,
         side: 'student',
         moverColor: args.studentColor,
+        replyLineUci: args.replyPvUci ?? [],
+        replySan: args.replySan ?? null,
       });
       if (call) return { line: call.said, square: call.square, kind: 'mistake' };
     } catch { /* fall through */ }

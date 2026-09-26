@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1327 lines · 11 exports · 37 importers · 22 tests · 1 audits**
+**1343 lines · 11 exports · 37 importers · 23 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -80,9 +80,10 @@
 ### `planHeadline` (function) — 1 call site
 - `src/services/principleAttribution.section14.test.ts:130`
 
-### `attributePrinciples` (function) — 58 call sites
+### `attributePrinciples` (function) — 59 call sites
 - `src/services/coachFeatureService.ts:839`
-- `src/services/liveFundamental.ts:132`
+- `src/services/learnWalkBlumenfeld.test.ts:65`
+- `src/services/liveFundamental.ts:135`
 - `src/services/misconceptionClassifier.ts:244`
 - `src/services/principleAttribution.section14.test.ts:22`
 - `src/services/principleAttribution.section14.test.ts:32`
@@ -145,12 +146,12 @@
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:92`
 - `src/services/autoAnalyzeGame.ts:373`
 - `src/services/autoAnalyzeGame.ts:376`
-- `src/services/coachFeatureService.ts:843`
-- `src/services/coachFeatureService.ts:845`
+- `src/services/coachFeatureService.ts:844`
+- `src/services/coachFeatureService.ts:846`
 - `src/services/discussionPractice.ts:353`
 - `src/services/discussionPractice.ts:361`
-- `src/services/liveFundamental.ts:122`
-- `src/services/liveFundamental.ts:129`
+- `src/services/liveFundamental.ts:125`
+- `src/services/liveFundamental.ts:132`
 - `src/services/principleAttribution.test.ts:46`
 
 ## Tests
@@ -165,6 +166,7 @@
 - `src/services/fundamentalsCatalog.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/learnFundamentalNarration.test.ts`
+- `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/principleAttribution.section14.test.ts`
 - `src/services/principleAttribution.test.ts`
 - `src/services/principleAttributionEndgame.test.ts`

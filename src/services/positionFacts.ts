@@ -103,7 +103,7 @@ export interface LastMoveInput {
   fanBefore?: readonly FanLine[] | null;
 }
 import type { TacticPatternType } from '../types/tacticTypes';
-import { conceptForBoard } from './conceptEngine';
+import { conceptForBoard, definitionKey } from './conceptEngine';
 import { liveMethodBeat, habitIsOwed } from './methodBeat';
 import { habitNeedFrom } from './coachDecider';
 import { computeNeed, type StudentNeedContext } from './needScore';
@@ -578,9 +578,20 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const lm = input.lastMove;
     if (!lm?.reads) return null;
     try {
+      // Their reply, when the move that produced this board answered `lm`.
+      const olm = input.opponentLastMove;
+      let replySan: string | null = null;
+      if (olm) {
+        try {
+          const c = new Chess(lm.fenBefore);
+          c.move(lm.san);
+          if (c.fen().split(' ').slice(0, 4).join(' ') === olm.fenBefore.split(' ').slice(0, 4).join(' ')) replySan = olm.san;
+        } catch { replySan = null; }
+      }
       const attrs = attributeLiveFundamental({
         fenBefore: lm.fenBefore,
         playedSan: lm.san,
+        replySan,
         studentColor: input.studentColor === 'w' ? 'white' : 'black',
         bestSan: uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci),
         historySans: lm.reads.historySans,
@@ -730,7 +741,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // `fundamental`, it IS the teaching idea). Positional leads are excluded here:
   // `fundamental` / `structure-plan` already carry them — no walk-over. Never
   // fails the briefing.
-  let concept: { id: string; source: string; full: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null = null;
+  let concept: { id: string; source: string; full: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null = null;
   try {
     const lead = conceptForBoard(fen, { analysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
     // The board the concept is ABOUT travels with it — a concept found on the
@@ -805,7 +816,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     : [];
 
   const composedAll = applyWeaknessBoost(
-    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san) : null, alreadySaid: input.alreadySaid }),
+    buildClauses({ refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt) } : null, rule: ruleHere && lm ? { text: ruleHere.text, squares: ruleHere.squares } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down'), criticalRead, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, studentSeat, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept, methodBeat, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: input.alreadySaid }),
     input.studentWeaknesses ?? [],
   );
 
@@ -959,11 +970,26 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       ...convertRemember(clauses, input.fen, studentSeat),
       // The balance sheet's reasons, under the keys the positional read uses.
       ...(clauses.some((c) => c.kind === 'stock') ? stockKeys : []),
+      ...(concept?.source === 'tactic' && clauses.some((c) => c.kind === 'concept') ? [definitionKey(concept.id), conceptInstanceKey(concept.id, concept.squares)] : []),
     ],
     // Only a principle the door actually SPOKE is committed as taught.
     principleSpoken: ruleHere && clauses.some((c) => c.kind === 'rule') ? ruleHere.id : null,
     moveAdvice,
   };
+}
+
+/** The say-once key for one tactic INSTANCE — its type on its squares. */
+export function conceptInstanceKey(id: string, squares: readonly string[]): string {
+  return `concept:${id}:${[...squares].sort().join('')}`;
+}
+
+/** The say-once key for "this piece must be answered", shared by every lane
+ *  that warns about a piece under fire (instant alert + composer). Keyed to
+ *  the BOARD as well as the square: two lanes on one position say it once, and
+ *  a piece still hanging on the next move says so again (urgency is not a
+ *  standing fact). */
+export function mustKey(square: string, fen: string): string {
+  return `must:${square}:${fen.split(' ')[0]}`;
 }
 
 /**
@@ -1131,7 +1157,7 @@ function buildClauses(a: {
   /** The lead COMPUTED CONCEPT of the position (conceptEngine, from the same
    *  analysis) — the teachable idea, joined to the briefing as a ranked fact.
    *  Null when nothing teachable / positional-only (no walk-over). */
-  concept: { id: string; source: string; full: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null;
+  concept: { id: string; source: string; full: string; instance?: string; squares: readonly string[]; boardFen?: string; line?: string[] } | null;
   /** The habit to run in this position, present tense. Null when none earned. */
   methodBeat: string | null;
 }): ClauseItem[] {
@@ -1224,7 +1250,12 @@ function buildClauses(a: {
   // intent, and the student's must-defend). Board-true, named. This is the ONE
   // fact that speaks in the opening: a genuinely dropped piece is worth saying
   // even on move two.
-  if (mustDefend.net >= 3 && mustDefend.pieces[0]) {
+  // ONE CLAIM, ONE KEY (Blumenfeld walk F28): the instant lane's "Careful —
+  // your rook on c8 is attacked" and this clause are the same warning. The
+  // instant lane speaks first and records `must:<square>:<board>`; this clause
+  // stands aside on that board. It never records the key itself — a piece
+  // still hanging must be able to say so again.
+  if (mustDefend.net >= 3 && mustDefend.pieces[0] && !a.alreadySaid?.has(mustKey(mustDefend.pieces[0].square, a.fen))) {
     const p = mustDefend.pieces[0];
     // PROPHYLAXIS FRAMING (§9 "ignored threat / prophylaxis"): the material fact
     // is the same standing threat, but when the student is clearly WINNING the
@@ -1302,12 +1333,17 @@ function buildClauses(a: {
   // Positional supports are excluded here on purpose: `fundamental` and
   // `structure-plan` already carry them — no walk-over. Text is the engine's
   // gate-clean sentence, spoken verbatim (G0).
-  if (concept) {
+  // THE SAME IDEA ON THE SAME SQUARES is not news on the next move (Blumenfeld
+  // walk F26: "After Qe6, your queen on e6 and your rook on d6 form a battery…"
+  // on two moves running). A tactic concept is keyed by type + squares.
+  if (concept && !(concept.source === 'tactic' && a.alreadySaid?.has(conceptInstanceKey(concept.id, concept.squares)))) {
     const rank = concept.source === 'tactic' ? 70 : 39;
     ranked.push({
       // SEATED — the detector's instance names bare pieces (hand walk
       // 2026-09-24: "Bishop on h5 pins knight on e2 against queen on d1").
-      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, seatBare(concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : concept.full,
+      // The definition is taught once a game (`definitionKey`); after that the
+      // board fact speaks alone.
+      kind: 'concept', rank, text: concept.source === 'tactic' ? afterLine(concept.line, concept.boardFen, a.fen, seatBare(concept.instance && a.alreadySaid?.has(definitionKey(concept.id)) ? `${concept.instance}.` : concept.full, concept.boardFen ?? a.fen, studentSeat === 'white' ? 'w' : 'b')) : concept.full,
       conceptId: concept.source === 'tactic' ? concept.id : undefined,
       // `ComputedConcept.squares` is the engine's own lead-the-eye set (agent
       // first, then targets) — exactly the geometry the sentence names.

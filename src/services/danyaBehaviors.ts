@@ -30,6 +30,7 @@ import { attackerCanUseFile, castleIsOneMoveAway, rookReachesFile } from './posi
 import { seatBare } from '../utils/seatPieces';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
 import { phaseOfFen, type Phase } from './boardConcepts';
+import { homeMinorCount } from './development';
 import {
   strongestWeakestPiece,
   kingSafetyRead,
@@ -431,7 +432,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // two computers stating one fact, on consecutive moves). It says WHICH
       // step of the conversion the board is on; this said only the task.
       if (studentAdv >= 2) return null;
-      if (studentAdv <= -2) {
+      // A PASSED PAWN CHANGES THE ADVICE (Blumenfeld walk F35): down material
+      // with a passer, trades clear its path — "don't trade" and "every trade
+      // makes your passer stronger" were both said on one move. The passer
+      // lane owns the trade advice then.
+      if (studentAdv <= -2 && findPassedPawns(fen, student).length === 0) {
         return { fact: `You're down material — don't trade; look for activity and counterplay.`, squares: [] };
       }
       return null;
@@ -512,6 +517,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (!chess) return null;
       // Only when it's the student to move (the break is theirs to make).
       if (chess.turn() !== student) return null;
+      // DEVELOPMENT FIRST (Blumenfeld walk F10): "a6 is the pawn break … ready
+      // now" beside "your knight on b8 hasn't moved — finish your development
+      // before starting anything new". A break with a minor still at home is
+      // not ready, whatever the phase is called; the development lane owns it.
+      if (homeMinorCount(chess, student) > 0) return null;
       const breaks = findPawnBreaks(fen);
       // EXPLOITABILITY (David 2026-08-23): the break must be SOUND, not merely
       // legal — after the push the pawn can't simply be won (SEE on the break

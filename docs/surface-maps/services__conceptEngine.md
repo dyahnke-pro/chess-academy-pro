@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**734 lines · 19 exports · 21 importers · 7 tests · 29 audits**
+**746 lines · 20 exports · 21 importers · 8 tests · 29 audits**
 
 ## Locked rules that govern this surface
 
@@ -126,12 +126,13 @@
 - `src/services/conceptEngine.test.ts:41`
 - `src/services/conceptEngine.test.ts:43`
 
-### `renderTacticConcept` (function) — 5 call sites
+### `renderTacticConcept` (function) — 6 call sites
 - `src/services/conceptEngine.test.ts:55`
 - `src/services/conceptEngine.test.ts:67`
 - `src/services/conceptEngine.test.ts:86`
 - `src/services/conceptEngine.test.ts:88`
 - `src/services/conceptEngine.test.ts:97`
+- `src/services/learnWalkBlumenfeld.test.ts:128`
 
 ### `renderMatchupConcept` (function) — 4 call sites
 - `src/services/conceptEngine.test.ts:71`
@@ -155,8 +156,8 @@
 - `src/services/conceptEngine.test.ts:170`
 - `src/services/conceptEngine.test.ts:206`
 - `src/services/conceptEngine.test.ts:224`
-- `src/services/liveTacticsContext.ts:109`
-- `src/services/positionFacts.ts:735`
+- `src/services/liveTacticsContext.ts:110`
+- `src/services/positionFacts.ts:746`
 
 ### `LineInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -190,8 +191,15 @@
 - `src/services/conceptEngine.test.ts:197`
 - `src/services/conceptVocabulary.test.ts:63`
 
+### `definitionKey` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:7676`
+- `src/components/Coach/CoachTeachPage.tsx:7680`
+- `src/services/learnWalkBlumenfeld.test.ts:131`
+- `src/services/positionFacts.ts:973`
+- `src/services/positionFacts.ts:1346`
+
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:7671`
+- `src/components/Coach/CoachTeachPage.tsx:7677`
 - `src/services/dnaLineNarrator.ts:185`
 - `src/services/dnaLineNarrator.ts:216`
 - `src/services/dnaLineNarrator.ts:252`
@@ -207,6 +215,7 @@
 - `src/services/conceptVocabulary.test.ts`
 - `src/services/endgameDrillService.test.ts`
 - `src/services/endgameTechnique.test.ts`
+- `src/services/learnWalkBlumenfeld.test.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/test/auditConceptGameplayCues.test.ts`
 

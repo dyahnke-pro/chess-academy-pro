@@ -32,7 +32,7 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
     // disagreeing about the name.
     for (const cpLoss of [0, 19, 20, 49, 50, 99, 100, 199, 200, 399, 400, 900]) {
       const expected = classifyMove({ wasBest: false, cpLoss, missedMate: null, allowedMate: null });
-      const call = callInaccuracy({
+      const call = callInaccuracy({ replyLineUci: [], replySan: null,
         fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
         cpLoss, side: 'student', moverColor: 'white',
       });
@@ -44,7 +44,7 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
   });
 
   it('treats a walked-into mate as a blunder however small the swing', () => {
-    const call = callInaccuracy({
+    const call = callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 5,
       allowedMate: 2, side: 'student', moverColor: 'white',
     });
@@ -54,7 +54,7 @@ describe('the severity bands are the review\'s, not this file\'s', () => {
 
 describe('it names the better move AND what it was for', () => {
   it('gives the student the move and the reason', () => {
-    const call = callInaccuracy({
+    const call = callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 150, side: 'student', moverColor: 'white',
     });
@@ -66,7 +66,7 @@ describe('it names the better move AND what it was for', () => {
     // NAMED WITH ITS REASON, OR NOT NAMED (David 2026-09-24; Learn walk
     // 2026-09-26 heard "exd5 was a mistake. e5 was the move." with no why).
     // The grade stands; an unexplained move is an order, not teaching.
-    const call = callInaccuracy({
+    const call = callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 150,
       side: 'student', moverColor: 'white',
     });
@@ -77,7 +77,7 @@ describe('it names the better move AND what it was for', () => {
 
 describe('the coach owns its own mistakes', () => {
   it('speaks in the first person and hands over the punishment', () => {
-    const call = callInaccuracy({
+    const call = callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 250, side: 'coach', moverColor: 'white',
     });
@@ -93,12 +93,12 @@ describe('the coach owns its own mistakes', () => {
     // no: an inaccuracy below the floor says nothing at all, so the honest test
     // of this rule is that a mistake DOES promise and the quality is what draws
     // the line.
-    const inaccurate = callInaccuracy({
+    const inaccurate = callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 60, side: 'coach', moverColor: 'white',
     });
     expect(inaccurate, 'an inaccuracy under the floor is silent, not chatty').toBeNull();
-    const mistake = callInaccuracy({
+    const mistake = callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
       cpLoss: 120, side: 'coach', moverColor: 'white',
     });
@@ -111,7 +111,7 @@ describe('the coach owns its own mistakes', () => {
     // The honesty contract withholds the STUDENT's move so they have something
     // to find. A move the coach has already played is visible; hiding it would
     // be coyness, not teaching.
-    const call = callInaccuracy({
+    const call = callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: 250,
       side: 'coach', moverColor: 'white',
     });
@@ -121,14 +121,14 @@ describe('the coach owns its own mistakes', () => {
 
 describe('it stays silent rather than guessing', () => {
   it('says nothing when the move WAS the best move', () => {
-    expect(callInaccuracy({
+    expect(callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'Bg5', bestSan: 'Bg5', cpLoss: 300,
       side: 'student', moverColor: 'white',
     })).toBeNull();
   });
 
   it('says nothing when the engine offered no alternative', () => {
-    expect(callInaccuracy({
+    expect(callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: null, cpLoss: 300,
       side: 'student', moverColor: 'white',
     })).toBeNull();
@@ -137,14 +137,14 @@ describe('it stays silent rather than guessing', () => {
   it('refuses a best move that is not legal here', () => {
     // A mismatched pair from the caller must never become a phantom move in
     // the student's ear.
-    expect(callInaccuracy({
+    expect(callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Qh8', cpLoss: 300,
       side: 'student', moverColor: 'white',
     })).toBeNull();
   });
 
   it('survives an unreadable board', () => {
-    expect(() => callInaccuracy({
+    expect(() => callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: 'not a fen', playedSan: 'a3', bestSan: 'Bg5', cpLoss: 300,
       side: 'student', moverColor: 'white',
     })).not.toThrow();
@@ -154,7 +154,7 @@ describe('it stays silent rather than guessing', () => {
     const board = new Chess(FEN);
     for (const cp of [120, 250, 600]) {
       for (const side of ['student', 'coach'] as const) {
-        const call = callInaccuracy({
+        const call = callInaccuracy({ replyLineUci: [], replySan: null,
           fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', bestLineUci: BEST_LINE,
           cpLoss: cp, side, moverColor: 'white',
         });
@@ -195,7 +195,7 @@ describe('the sign convention — the classic way this goes wrong', () => {
 
   it('a coach that IMPROVES its position shows a negative cost, and says nothing', () => {
     expect(coachCpLoss(0, 120, 'white')).toBeLessThan(0);
-    expect(callInaccuracy({
+    expect(callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5',
       cpLoss: coachCpLoss(0, 120, 'white'), side: 'coach', moverColor: 'white',
     }), 'the coach apologised for a good move').toBeNull();
@@ -204,7 +204,7 @@ describe('the sign convention — the classic way this goes wrong', () => {
   it('speaks when the cost is real, whichever colour the coach is', () => {
     for (const color of ['white', 'black'] as const) {
       const cp = color === 'white' ? coachCpLoss(50, -200, 'white') : coachCpLoss(-50, 200, 'black');
-      const call = callInaccuracy({
+      const call = callInaccuracy({ replyLineUci: [], replySan: null,
         fenBefore: FEN, playedSan: 'a3', bestSan: 'Bg5', cpLoss: cp,
         side: 'coach', moverColor: 'white',
       });
@@ -233,7 +233,7 @@ describe('the callout gives one reason, the highest-ranked one', () => {
   // so the want-list has more than one clause to choose between.
   const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5';
 
-  const said = (): string => callInaccuracy({
+  const said = (): string => callInaccuracy({ replyLineUci: [], replySan: null,
     fenBefore: FEN,
     playedSan: 'a3',
     bestSan: 'O-O',
@@ -260,7 +260,7 @@ describe('the callout gives one reason, the highest-ranked one', () => {
   });
 
   it('the coach half is held to the same bar', () => {
-    const c = callInaccuracy({
+    const c = callInaccuracy({ replyLineUci: [], replySan: null,
       fenBefore: FEN,
       playedSan: 'a3',
       bestSan: 'O-O',
@@ -281,7 +281,7 @@ describe('a coach MISS is not a giveaway (walk 6, L4)', () => {
     // Black (the coach) could take the White knight on g5 with the queen and
     // played …d6 instead; the knight is still hanging.
     const fen = 'r1bqkbnr/pppp1ppp/2n5/6N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5';
-    const call = callInaccuracy({ fenBefore: fen, playedSan: 'd6', bestSan: 'Qxg5', cpLoss: 400, side: 'coach', moverColor: 'black' });
+    const call = callInaccuracy({ replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'd6', bestSan: 'Qxg5', cpLoss: 400, side: 'coach', moverColor: 'black' });
     expect(call?.said).toMatch(/knight on g5 is still hanging/);
     expect(call?.said).not.toMatch(/go and take it/);
   });
@@ -292,13 +292,13 @@ describe('a gambit is taught from both sides (hand walk 2026-09-24)', () => {
   // b-file opens straight onto the king". The coach said "b4 was a mistake".
   const fen = '2kr1b1r/pp1npppp/2p2n2/q6b/8/2NP2PP/PPP1NPB1/R1BQ1RK1 w - - 1 10';
   it('names the file the pawn offers to open, then the engine\'s preference', () => {
-    const call = callInaccuracy({ fenBefore: fen, playedSan: 'b4', bestSan: 'a3', cpLoss: 120, side: 'student', moverColor: 'white' });
+    const call = callInaccuracy({ replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'b4', bestSan: 'a3', cpLoss: 120, side: 'student', moverColor: 'white' });
     expect(call?.said).toContain('b-file opens toward their king');
     expect(call?.said).not.toMatch(/was a mistake/);
     expect(call?.said).toContain('a3');
   });
   it('NEGATIVE CONTROL: a push nobody can take is graded as before', () => {
-    const call = callInaccuracy({ fenBefore: fen, playedSan: 'a3', bestSan: 'b4', cpLoss: 120, side: 'student', moverColor: 'white' });
+    const call = callInaccuracy({ replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'a3', bestSan: 'b4', cpLoss: 120, side: 'student', moverColor: 'white' });
     expect(call?.said ?? '').not.toContain('offers a pawn');
   });
 });
@@ -319,7 +319,7 @@ describe('the better move\'s reason is what it TAKES (hand walk 2026-09-24)', ()
   it('25.Bxf4 missed Bxd8, which takes the queen — not "win a rook"', () => {
     const call = callInaccuracy({
       fenBefore: '3q1r1k/pp4pp/2p1B3/4P1BP/1b3p2/2N2R1P/PPP5/4Q1K1 w - - 0 25', playedSan: 'Bxf4', bestSan: 'Bxd8', cpLoss: 600, moverColor: 'white', side: 'student',
-      bestLineUci: ['g5d8', 'f8d8', 'f3f4', 'b4c5'],
+      bestLineUci: ['g5d8', 'f8d8', 'f3f4', 'b4c5'], replyLineUci: [], replySan: null,
     } as never);
     expect(call?.said ?? '').toMatch(/take the queen on d8/);
   });
@@ -334,15 +334,15 @@ describe('still winning after the move is said first', () => {
   it('"still wins" when the mover stays clearly winning — no grade, and no unexplained move', () => {
     // The two-ply line proves no reason, so Rxf8+ is not named (named with its
     // reason, or not named — David 2026-09-24).
-    const call = callInaccuracy({ ...base, moverEvalAfterCp: 418 });
+    const call = callInaccuracy({ replyLineUci: [], replySan: null, ...base, moverEvalAfterCp: 418 });
     expect(call?.said).toMatch(/^gxh5 still wins/);
     expect(call?.said).not.toMatch(/mistake|blunder|Rxf8/);
   });
   it('the grade stands when the position is no longer clearly won', () => {
-    const call = callInaccuracy({ ...base, moverEvalAfterCp: 120 });
+    const call = callInaccuracy({ replyLineUci: [], replySan: null, ...base, moverEvalAfterCp: 120 });
     expect(call?.said).toMatch(/was a (mistake|blunder)/);
   });
   it('unknown eval keeps the grade', () => {
-    expect(callInaccuracy({ ...base })?.said).toMatch(/was a (mistake|blunder)/);
+    expect(callInaccuracy({ replyLineUci: [], replySan: null, ...base })?.said).toMatch(/was a (mistake|blunder)/);
   });
 });

@@ -13,7 +13,7 @@ import { renderFundamentalVerdict } from './principleVoice';
 // These detectors are SILENT without the eval/PV — that is the contract: they
 // fire on the review path (persisted deep analysis) and stay quiet live.
 
-const OVERVALUED: AttributionInput = {
+const OVERVALUED: AttributionInput = { replySan: null,
   historySans: ['c4', 'Nc6', 'b4', 'Nxb4', 'h3', 'g5', 'f4', 'gxf4', 'h4', 'c5', 'Qa4', 'Nd5', 'e4', 'fxe3', 'Qa3', 'exd2+', 'Ke2', 'd1=B+', 'Kxd1', 'Ne3+'],
   bestSan: 'Rb8',
   classification: 'blunder',
@@ -22,7 +22,7 @@ const OVERVALUED: AttributionInput = {
   evalAfterPlayed: -340,
 };
 
-const POISONED: AttributionInput = {
+const POISONED: AttributionInput = { replySan: null,
   historySans: ['f3', 'c5', 'b4', 'cxb4', 'Na3', 'bxa3', 'g3', 'Na6', 'Bxa3', 'e5', 'Kf2', 'Bxa3', 'h3', 'e4', 'fxe4', 'Nc7', 'c4', 'Nf6', 'Rh2', 'Nxe4+', 'Ke1', 'Nxg3', 'Qc2', 'Kf8', 'Qxh7'],
   bestSan: 'c5',
   classification: 'blunder',
@@ -31,7 +31,7 @@ const POISONED: AttributionInput = {
   evalAfterPlayed: -550,
 };
 
-const CAPTURE: AttributionInput = {
+const CAPTURE: AttributionInput = { replySan: null,
   historySans: ['a3', 'h6', 'g4', 'c6', 'h3', 'g5', 'Bg2', 'Rh7', 'Bxc6', 'bxc6'],
   bestSan: 'dxc6',
   classification: 'mistake',
@@ -42,7 +42,7 @@ const CAPTURE: AttributionInput = {
 // A quiet Italian — the played pawn move is fine on the board (no concrete
 // fundamental fires), but the eval says a clearly-winning position was thrown
 // away. Only botched-conversion should attach.
-const BOTCHED: AttributionInput = {
+const BOTCHED: AttributionInput = { replySan: null,
   historySans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'Nc3', 'Nf6', 'O-O', 'O-O', 'h3', 'a6'],
   bestSan: 'Re8',
   classification: 'mistake',
@@ -88,7 +88,7 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
     // purely board-provable (best is the away-recapture opening a rook lane), so
     // it fires on any path where the move is flagged, live or review.
     const stripped = (i: AttributionInput): AttributionInput =>
-      ({ historySans: i.historySans, bestSan: i.bestSan, classification: i.classification });
+      ({ replySan: null, historySans: i.historySans, bestSan: i.bestSan, classification: i.classification });
     for (const { name, input } of cases) {
       if (name === 'capture-toward-centre') continue;
       const out = attributePrinciples(stripped(input));

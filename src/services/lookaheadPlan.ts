@@ -1553,6 +1553,16 @@ function shortLineRead(
  * than guessed, so `describe` falls back to the squares the pieces are heading
  * for — less to say, and nothing invented (G0).
  */
+/** Is this plan clause a COST — something that was taken or broken, as opposed
+ *  to where pieces go? The one test both backward readers use ("that let them
+ *  …", "it let them …"): Blumenfeld walk F32 heard "That let them walk the rook
+ *  round to h5, by way of c5, pull the pawns away, win a pawn, prise open the
+ *  c-file and trade off the rook", and F18 "That gave them the run of b4 and
+ *  c3" — plans and drift said as if they were the price of the move. */
+export function isCostClause(text: string): boolean {
+  return /^(win|take|mate|checkmate|trap|pull the pawns)\b/.test(text.trim());
+}
+
 export function planFromUci(
   fen: string,
   uciMoves: readonly string[],

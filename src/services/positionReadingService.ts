@@ -650,7 +650,11 @@ export function findMinorityAttack(fen: string, color: Color): MinorityAttack | 
   for (const flank of flanks) {
     const mine = pawnsOn(color, flank.files);
     const theirs = pawnsOn(enemy, flank.files);
-    if (mine.length < 2 || theirs.length < 3 || mine.length >= theirs.length) continue; // a real minority only
+    // A MAJORITY IS COUNTED IN FILES, not pawns: doubled pawns are one file's
+    // worth of pawn (Blumenfeld walk F4: White's b3+b5 after cxb5 made "a
+    // minority attack on the queenside" out of two pawns against two files).
+    const theirFiles = new Set(theirs.map((sq) => sq[0])).size;
+    if (mine.length < 2 || theirFiles < 3 || mine.length >= theirFiles) continue; // a real minority only
     // DOUBLED PAWNS ARE NOT A MINORITY — they are a weakness (hand walk
     // 2026-09-24: White's h3+h5 after 22.gxh5 was read as "a minority attack
     // on the kingside").
@@ -1915,7 +1919,7 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     out.push({
       id: 'threat', type: 'threat', bucket: 'tactics', misconceptionTag: 'missed-opponents-threat',
       prompt: "What is your opponent threatening?",
-      answer: th.description,
+      answer: th.spoken ?? `${th.description} (after ${th.line.join(' ')})`,
       acceptTokens: [th.type.replace(/_/g, ' '), ...th.type.split('_'), ...(th.line[0] ? [sq(th.line[0])] : [])],
       negative: false,
     });

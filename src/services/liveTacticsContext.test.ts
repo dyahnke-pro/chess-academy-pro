@@ -250,7 +250,7 @@ describe('buildTacticsLiveContext — boardFacts', () => {
 describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', () => {
   it('voices the student opportunity, walks the line, states the depth', () => {
     const ctx = ctxWith(
-      [{ type: 'fork', description: 'knight fork', depthAhead: 2, line: ['Nd5', 'Bd6', 'Nxe7'] }],
+      [{ spoken: null, type: 'fork', description: 'knight fork', depthAhead: 2, line: ['Nd5', 'Bd6', 'Nxe7'] }],
       [],
     );
     const say = speakDeepestLookahead(ctx, 'student', 'w');
@@ -266,8 +266,8 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
 
   it('prefers the student opportunity over an opponent threat when both exist', () => {
     const ctx = ctxWith(
-      [{ type: 'fork', description: 'f', depthAhead: 2, line: ['Nd5', 'a6', 'Nxe7'] }],
-      [{ type: 'pin', description: 'p', depthAhead: 3, line: ['Bg5', 'h6', 'Bxf6'] }],
+      [{ spoken: null, type: 'fork', description: 'f', depthAhead: 2, line: ['Nd5', 'a6', 'Nxe7'] }],
+      [{ spoken: null, type: 'pin', description: 'p', depthAhead: 3, line: ['Bg5', 'h6', 'Bxf6'] }],
     );
     expect(speakDeepestLookahead(ctx, 'student', 'w')!).toMatch(/you've got/i);
   });
@@ -275,7 +275,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
   it('warns on an opponent threat (heads-up seat) when no opportunity exists', () => {
     const ctx = ctxWith(
       [],
-      [{ type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }],
+      [{ spoken: null, type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }],
     );
     // The fixture is WHITE to move. With the student as BLACK the whole line is
     // the opponent's: "they're lining up".
@@ -298,7 +298,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     // white, so ply 0 (Re1) is theirs and the threat is the reply.
     const ctx = ctxWith(
       [],
-      [{ type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }],
+      [{ spoken: null, type: 'skewer', description: 's', depthAhead: 3, line: ['Re1', 'Qd7', 'Rxe8'] }],
     );
     const say = speakDeepestLookahead(ctx, 'student', 'w')!;
     expect(say).toMatch(/if you play the rook to e1, they have the queen to d7, then the rook taking on e8/);
@@ -315,9 +315,9 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
   });
 
   it('stays inside "a couple of moves" — a tactic 5 or 9 plies out is not spoken live', () => {
-    expect(speakDeepestLookahead(ctxWith([{ type: 'skewer', description: 's', depthAhead: 5, line: ['bxc3', 'Ke7', 'h3', 'Be6', 'Bc2'] }], []), 'student', 'w')).toBeNull();
+    expect(speakDeepestLookahead(ctxWith([{ spoken: null, type: 'skewer', description: 's', depthAhead: 5, line: ['bxc3', 'Ke7', 'h3', 'Be6', 'Bc2'] }], []), 'student', 'w')).toBeNull();
     const ctx = ctxWith(
-      [{ type: 'removal_of_guard', description: 'r', depthAhead: 9, line: ['bxc3', 'Ke7', 'h3', 'Be6', 'Rd1', 'Rd8', 'Rxd8', 'Kxd8', 'Bxa7'] }],
+      [{ spoken: null, type: 'removal_of_guard', description: 'r', depthAhead: 9, line: ['bxc3', 'Ke7', 'h3', 'Be6', 'Rd1', 'Rd8', 'Rxd8', 'Kxd8', 'Bxa7'] }],
       [],
     );
     expect(speakDeepestLookahead(ctx, 'student', 'w')).toBeNull();
@@ -325,7 +325,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
 
   it('is the DEEP scan only — ignores depth-1 (shallow) upcoming tactics', () => {
     const ctx = ctxWith(
-      [{ type: 'fork', description: 'f', depthAhead: 1, line: ['Nd5'] }],
+      [{ spoken: null, type: 'fork', description: 'f', depthAhead: 1, line: ['Nd5'] }],
       [],
     );
     expect(speakDeepestLookahead(ctx, 'student', 'w')).toBeNull();
@@ -336,8 +336,8 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     // keeps missing DISCOVERIES → the discovery is picked over the earlier fork.
     const ctx = ctxWith(
       [
-        { type: 'fork', description: 'f', depthAhead: 2, line: ['Nd5', 'a6', 'Nxe7'] },
-        { type: 'discovery', description: 'd', depthAhead: 2, line: ['Ne4', 'Qd8', 'Nxc5'] },
+        { spoken: null, type: 'fork', description: 'f', depthAhead: 2, line: ['Nd5', 'a6', 'Nxe7'] },
+        { spoken: null, type: 'discovery', description: 'd', depthAhead: 2, line: ['Ne4', 'Qd8', 'Nxc5'] },
       ],
       [],
     );
@@ -359,7 +359,7 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
   it('Phase 1b: tags an opponent-threat motif that keeps catching the student', () => {
     const ctx = ctxWith(
       [],
-      [{ type: 'pin', description: 'p', depthAhead: 3, line: ['Bg5', 'h6', 'Bxf6'] }],
+      [{ spoken: null, type: 'pin', description: 'p', depthAhead: 3, line: ['Bg5', 'h6', 'Bxf6'] }],
     );
     const holeSignals = [{
       clusterId: 'analysis:tactic:pin', capabilityTag: null, proven: false, bucket: 'tactical' as const, label: 'Walks into pins',
